@@ -407,7 +407,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
-		if ( trim( $form_name ) == '' ) {
+		if ( is_null( $form_name ) || trim( $form_name ) == '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
 		$form_name = FrmAppHelper::kses( $form_name );
