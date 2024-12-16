@@ -259,6 +259,7 @@ class FrmAppController {
 		$grey_pages = array(
 			'formidable-applications',
 			'formidable-dashboard',
+			'formidable-views',
 		);
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );

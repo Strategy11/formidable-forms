@@ -113,7 +113,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div>
 
-		<hr style="margin-top:35px;" />
+		<hr style="margin-top:35px;border-bottom:0;border-top:1px solid var(--grey-300);" />
 
 		<div class="frm_grid_container frm-views-reviews">
 			<div class="frm4">
@@ -169,6 +169,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 
 <style>
+	.frm-video-wrapper iframe {
+		border-radius: 16px;
+	}
 	.frm-views-info-page .frm_grid_container {
 		grid-gap: 16px;
 	}
@@ -181,6 +184,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		padding: 16px 24px;
 		text-align: left;
 		border-radius: 8px;
+		background-color: #fff;
 	}
 	.frm-views-feature__icon {
 		height: 40px;
@@ -219,6 +223,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		text-align: left;
 		padding: 10px 15px;
 		border-radius: 8px;
+		background-color: #fff;
 	}
 	.frm-views-review__rating {
 		line-height: 1;
@@ -245,7 +250,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		visibility: hidden;
 		clear: both;
 	}
-	.frm-views-guarantee > svg {
+	.frm-views-guarantee > svg,
+	.frm-views-guarantee > img {
 		float: left;
 		margin-top: 9px;
 		margin-right: 20px;
