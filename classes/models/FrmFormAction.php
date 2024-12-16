@@ -585,7 +585,9 @@ class FrmFormAction {
 	 *
 	 * @since x.x This logic from moved from FrmFormAction::get_action_for_form.
 	 *
-	 * @param int|string $limit The unfiltered limit value.
+	 * @param int|string $form_id
+	 * @param int|string $limit   The unfiltered limit value.
+	 *
 	 * @return int The filtered limit value.
 	 */
 	public static function get_action_limit( $form_id, $limit = 99 ) {
