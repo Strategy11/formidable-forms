@@ -349,7 +349,7 @@ class FrmFormActionsController {
 			return;
 		}
 
-		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-quiz-outcome-form-action-limit';
+		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
 
 		echo '<div class="frm_warning_style">';
 		FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
