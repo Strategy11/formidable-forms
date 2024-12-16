@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'medium' => 'views-info',
 			'plan'   => 'view',
 			'class'  => 'frm-mb-md frm-button-primary frm-gradient',
+			'text'   => __( 'Get Formidable Views', 'formidable' ),
 		);
 		FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
 		?>

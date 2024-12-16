@@ -1411,6 +1411,7 @@ class FrmAddonsController {
 	public static function addon_upgrade_link( $addon, $upgrade_link ) {
 		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
 		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
+		$text         = ! empty( $atts['text'] ) ? $atts['text'] : __( 'Upgrade Now', 'formidable' );
 
 		if ( $addon ) {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
@@ -1427,7 +1428,7 @@ class FrmAddonsController {
 		}
 		?>
 		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
-			<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
 	}
