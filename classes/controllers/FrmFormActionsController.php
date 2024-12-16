@@ -329,6 +329,11 @@ class FrmFormActionsController {
 	}
 
 	/**
+	 * Show a warning before the form actions list if there are 99 actions, and the limit is set to 99.
+	 * If it is filtered, the warning is still shown when applicable, just using the new limit.
+	 *
+	 * @since x.x
+	 *
 	 * @param int|string $form_id
 	 * @param array      $form_actions
 	 * @return void
