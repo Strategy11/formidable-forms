@@ -1625,10 +1625,12 @@ class FrmAppHelper {
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args = self::preformat_selection_args( $args );
+		var_dump( $args );
 
 		$pages_count = wp_count_posts( $args['post_type'] );
+		var_dump( $pages_count );
 
-		if ( $pages_count->publish <= 50 ) {
+		if ( isset( $pages_count->publish ) && $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
 			return;
 		}
@@ -1651,6 +1653,16 @@ class FrmAppHelper {
 			class="frm_autocomplete_value_input"
 			value="<?php echo esc_attr( $selected ); ?>" />
 		<?php
+	}
+
+	public static function maybe_autocomplete_options( $args ) {
+		if ( ! empty( $args['source'] ) && is_callable( $args['source'] ) ) {
+			$options = call_user_func( $args['source'], $args );
+			var_dump( $options );
+			return;
+		}
+
+		self::maybe_autocomplete_pages_options( $args );
 	}
 
 	/**
