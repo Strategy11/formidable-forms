@@ -426,7 +426,7 @@ describe("Form Templates page", () => {
         cy.log("Validate that there are no custom templates yet");
         cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "You currently have no templates.");
         cy.get('.frm-page-skeleton-text').should("contain", "You haven't created any form templates. Begin now to simplify your workflow and save time.");
-        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click({force: true});
         cy.get('#frm-create-template-modal > .frm_modal_footer > .button-secondary').should("contain", "Cancel").click();
 
         cy.log("Create a new template");
