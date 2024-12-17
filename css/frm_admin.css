@@ -486,6 +486,11 @@ td.column-title .frm_actions_dropdown {
 	border: 0 !important;
 }
 
+.frm-gradient.frm-button-primary:not([disabled]):hover,
+.frm-gradient.frm-button-primary:not([disabled]):focus {
+	background: linear-gradient(90deg, #2871E6, #9989FB) !important;
+}
+
 .frm-upgrade-bar {
 	border-bottom: 1px solid var(--sidebar-hover);
 	padding: 9px 0;
