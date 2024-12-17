@@ -73,7 +73,10 @@ class FrmApplicationsController {
 	 */
 	public static function get_applications_data( $is_ajax_request = true ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
-		$is_ajax_request = $is_ajax_request || is_string( $is_ajax_request ); // $is_ajax_request may be an empty string as it is by default for ajax calls.
+		/**
+		 * $is_ajax_request may be an empty string as it is by default for ajax calls.
+		 */
+		$is_ajax_request = $is_ajax_request || is_string( $is_ajax_request );
 		if ( $is_ajax_request ) {
 			check_ajax_referer( 'frm_ajax', 'nonce' );
 		}
