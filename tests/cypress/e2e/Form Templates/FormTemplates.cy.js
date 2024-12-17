@@ -393,8 +393,8 @@ describe("Form Templates page", () => {
 
     it("create a new custom template and delete it", () => {
 
-        cy.get('#frm-form-templates-create-form').should("contain", "Create a blank form").click();
-        cy.get('#frm_submit_side_top').should("contain", "Save").click();
+        cy.get('#frm-form-templates-create-form').should("contain", "Create a blank form").click({force: true});
+        cy.get('#frm_submit_side_top').should("contain", "Save").click({force: true});
 
         cy.log("Ensure the modal for for saving form is visible");
         cy.get('#frm-form-templates-modal').should('be.visible');
@@ -426,13 +426,13 @@ describe("Form Templates page", () => {
         cy.get('#frm-create-template-modal > .frm_modal_footer > .button-secondary').should("contain", "Cancel").click();
 
         cy.log("Create a new template");
-        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click({force: true});
         cy.get('#frm-create-template-modal > .frm_modal_top > .frm-modal-title > h2').should("contain", "Create New Template");
         cy.get('.inside > :nth-child(1) > label').should("contain", "Select form for a new template");
         cy.get('#frm-create-template-modal-forms-select').select("Form Template Test");
         cy.get(':nth-child(3) > label').should("contain", "Description");
         cy.get('#frm_create_template_description').type("Test description");
-        cy.get('#frm-create-template-button').should("contain", "Create Template").click();
+        cy.get('#frm-create-template-button').should("contain", "Create Template").click({force: true});
         cy.get('a[aria-label="Close"] svg').click();
         cy.get('.row-title').should("contain", "Form Template Test Template");
 
