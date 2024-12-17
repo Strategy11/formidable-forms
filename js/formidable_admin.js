@@ -6701,7 +6701,7 @@ function frmAdminBuildJS() {
 		const valueMap = {
 			none: '',
 			international: 'international',
-			number: 'number'
+			number: 'currency'
 		};
 
 		formatTypes.forEach( formatType => {
