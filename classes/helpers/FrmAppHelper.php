@@ -1656,13 +1656,16 @@ class FrmAppHelper {
 	}
 
 	public static function maybe_autocomplete_options( $args ) {
-		if ( ! empty( $args['source'] ) && is_callable( $args['source'] ) ) {
-			$options = call_user_func( $args['source'], $args );
-			var_dump( $options );
-			return;
-		}
+		$defaults = array(
+			'truncate'                 => false,
+			'placeholder'              => ' ',
+			'name'                     => '',
+			'selected'                 => '',
+			'source' 				   => array(),
+			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
+		);
 
-		self::maybe_autocomplete_pages_options( $args );
+		$args = wp_parse_args( $args, $defaults );
 	}
 
 	/**
