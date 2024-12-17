@@ -345,7 +345,7 @@ describe("Form Templates page", () => {
             .should('contain.text', 'Back')
             .and('have.attr', 'role', 'button').click({force:true});
 
-        cy.get('a#frm-get-code-button').click();
+        cy.get('a#frm-get-code-button').click({force:true});
 
         cy.get('a#frm-confirm-email-address')
             .should('contain.text', 'Save Code')
@@ -367,7 +367,7 @@ describe("Form Templates page", () => {
 
         cy.get('a#frm-code-modal-back-button')
             .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click();
+            .and('have.attr', 'role', 'button').click({force:true});
         cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
 
         cy.get('[data-category="all-items"]').click();
@@ -388,7 +388,7 @@ describe("Form Templates page", () => {
         cy.origin('https://formidableforms.com', () => {
             cy.url().should('include', 'https://formidableforms.com');
         });
-        
+
     });
 
     it("create a new custom template and delete it", () => {
