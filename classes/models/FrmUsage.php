@@ -101,6 +101,10 @@ class FrmUsage {
 			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
+		if ( method_exists( 'FrmProAddonsController', 'get_readable_license_type' ) ) {
+			$snap['active_license'] = FrmProAddonsController::get_readable_license_type();
+		}
+
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
@@ -139,6 +143,10 @@ class FrmUsage {
 	private function payments( $table = 'frm_payments' ) {
 		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
 		if ( ! in_array( $table, $allowed_tables, true ) ) {
+			return array();
+		}
+
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			return array();
 		}
 
@@ -197,18 +205,19 @@ class FrmUsage {
 		);
 		$pass_settings = array(
 			'load_style',
-			'use_html',
 			'fade_form',
-			'jquery_css',
 			're_type',
 			're_lang',
 			're_multi',
 			'menu',
 			'mu_menu',
 			'no_ips',
+			'custom_header_ip',
 			'btsp_css',
-			'btsp_errors',
+			'btsp_version',
 			'admin_bar',
+			'summary_emails',
+			'active_captcha',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -372,7 +381,7 @@ class FrmUsage {
 	private function form_field_count( $form_id ) {
 		global $wpdb;
 
-		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
+		$join = $wpdb->prefix . 'frm_fields fi JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
 			'or'             => 1,
@@ -448,8 +457,7 @@ class FrmUsage {
 	 * @return bool
 	 */
 	private function tracking_allowed() {
-		$settings = FrmAppHelper::get_settings();
-		return $settings->tracking;
+		return FrmUsageController::tracking_allowed();
 	}
 
 	/**

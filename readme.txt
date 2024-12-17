@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.7
+Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 6.16.1.2
+Stable tag: 6.16.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,8 +371,25 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.16.1.2 =
-* The tested to version was updated.
+= 6.16.3 =
+* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
+* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
+* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
+* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
+* Fix: An unsupported operand types: array + string fatal error has been fixed.
+* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
+* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
+* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
+* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
+* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
+* The section for form button settings has been removed as all of the settings had been moved.
+* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
+* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
+* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
+
+= 6.16.2 =
+* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
+* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 = 6.16.1 =
 * New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
@@ -389,32 +406,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
 * The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
 
-= 6.16 =
-* New: The sanitizing for layout classes has been updated to allow `[` and `]` characters, enabling the use of basic shortcodes.
-* Fix: JavaScript validation would get skipped when a form included an invisible reCAPTCHA field.
-* Fix: Submit buttons would appear out of place after saving a form.
-* Fix: Nothing would copy when trying to click the icon to copy a style class name.
-* Fix: A white element would appear at the bottom of the plugins page.
-* Fix: A Cannot read properties of undefined at removeFieldError error has been fixed.
-* Fix: Captcha fields would fail to validate in forms with conditional logic that fade in on page load in some cases.
-* Fix: Some JavaScript strings were not configured for translations, and a text domain was missing in one case.
-* Fix: The font size setting for form descriptions has been added back.
-* Fix: Missing for attributes have been added to labels in the visual styler to improve accessibility and user experience.
-* Some old browser specific CSS and deprecated CSS has been removed.
-* New name fields will now use more descriptive "First Name" and "Last Name" descriptions by default instead of "First" and "Last". This is to help improve accessibility.
-* The way assigned style updates are sent when updating global settings has been modified to help avoid conflicts with server input variable limits.
-* The function FrmInboxController::dismiss_all_button has been deprecated. In addition, the functions FrmInboxController::menu and FrmInboxController::inbox have been removed.
-
-= 6.15 =
-* New: The add-ons page has been redesigned. Now plugins are enabled and disabled using toggles instead of buttons, and plugins can be filtered by category.
-* New: Confirmation fields will no longer validate immediately when the main field loses focus, validating now only on form submit and and when the confirmation field is changed.
-* New: New email actions will now use new [default-email] and [default-from-email] shortcodes that use email settings defined during onboarding. When these are unavailable, the admin email is used by default.
-* Fix: Confirmation fields would not validate with JavaScript when empty, allowing a form to submit with a blank confirmation when the main field had a value set.
-* Fix: Backslashes in field format setting would get stripped in some cases when using the setting to Load and save form builder page with AJAX. This would cause regex statements to break.
-* Fix: A Trying to access array offset on value of type bool PHP warning when loading the Gutenberg editor with no API data available has been fixed.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.8 =
+= 6.16.2 =
 This version fixes a security-related bug. Upgrade immediately.

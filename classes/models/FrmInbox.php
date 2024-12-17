@@ -209,13 +209,16 @@ class FrmInbox extends FrmFormApi {
 			return true;
 		}
 		$who = (array) $message['who'];
-		if ( in_array( 'all', $who, true ) || in_array( 'everyone', $who, true ) ) {
+		if ( $this->is_for_everyone( $who ) ) {
 			return true;
 		}
-		if ( in_array( $this->get_user_type(), $who, true ) ) {
+		if ( $this->is_user_type( $who ) ) {
 			return true;
 		}
 		if ( in_array( 'free_first_30', $who, true ) && $this->is_free_first_30() ) {
+			return true;
+		}
+		if ( in_array( 'free_not_first_30', $who, true ) && $this->is_free_not_first_30() ) {
 			return true;
 		}
 		/**
@@ -228,6 +231,26 @@ class FrmInbox extends FrmFormApi {
 		 * @param array $message
 		 */
 		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $who, $message );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param array $who
+	 * @return bool
+	 */
+	private function is_for_everyone( $who ) {
+		return in_array( 'all', $who, true ) || in_array( 'everyone', $who, true );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param array $who
+	 * @return bool
+	 */
+	private function is_user_type( $who ) {
+		return in_array( $this->get_user_type(), $who, true );
 	}
 
 	private function get_user_type() {
@@ -378,18 +401,43 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function is_free_first_30() {
+		return $this->is_free() && $this->is_first_30();
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @return bool
+	 */
+	private function is_first_30() {
 		$activation_timestamp = get_option( 'frm_first_activation' );
 		if ( false === $activation_timestamp ) {
 			// If the option does not exist, assume that it is
 			// because the user was active before this option was introduced.
 			return false;
 		}
-		if ( FrmAppHelper::pro_is_included() ) {
-			// Not free.
-			return false;
-		}
 		$cutoff = strtotime( '-30 days' );
 		return $activation_timestamp > $cutoff;
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @return bool
+	 */
+	private function is_free_not_first_30() {
+		return $this->is_free() && ! $this->is_first_30();
+	}
+
+	/**
+	 * Check if the Pro plugin is active. If not, consider the user to be on the free version.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return bool
+	 */
+	private function is_free() {
+		return ! FrmAppHelper::pro_is_included();
 	}
 
 	/**

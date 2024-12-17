@@ -185,6 +185,10 @@
 	overflow-y: auto;
 }
 
+#frm_view_application_modal .postbox {
+	max-height: 800px !important;
+}
+
 .frm-application-modal-label {
 	opacity: 0.65;
 	margin-bottom: 5px;
@@ -239,6 +243,16 @@
 
 #frm_custom_applications_placeholder > div a {
 	margin-top: var(--gap-md);
+}
+
+.frm-application-modal-label ~ .frm-application-modal-label {
+	margin-top: var(--gap-md);
+}
+
+ul.frm-application-item-list {
+	margin-top: 0;
+	list-style: disc;
+	list-style-position: inside;
 }
 
 @media only screen and (max-width: 1200px) {

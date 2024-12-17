@@ -1,7 +1,6 @@
 @font-face {
 	font-family: 's11-fp';
-	src: url('../fonts/s11-fp.woff?v=7') format('woff'),
-		url('../fonts/s11-fp.svg?v=7#s11-fp') format('svg');
+	src: url('../fonts/s11-fp.woff?v=7') format('woff');
 	font-weight: normal;
 	font-style: normal;
 }
@@ -16,8 +15,7 @@
 }
 
 .frmfont,
-.frm_icon_font,
-.frm_dashicon_font{
+.frm_icon_font{
 	text-decoration:none;
 	text-shadow: none;
 	font-weight:normal;
@@ -26,7 +24,6 @@
 	-moz-osx-font-smoothing: grayscale;
 	text-rendering: auto;
 	line-height: 1.5;
-	-webkit-transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	transition: color .1s ease-in-out, opacity .1s ease-in-out;
 	font-size: 18px;
 }
@@ -59,8 +56,7 @@ a.frm_icon_font:hover{
 }
 
 .frmfont:focus,
-.frm_icon_font:focus,
-.frm_dashicon_font:focus{
+.frm_icon_font:focus{
 	box-shadow:none;
 }
 

@@ -241,6 +241,7 @@ function frmAdminBuildJS() {
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -4850,7 +4851,10 @@ function frmAdminBuildJS() {
 					// prevent "More Options" tooltips from staying around after their target field is deleted.
 					deleteTooltips();
 				});
-				wp.hooks.doAction( 'frm_after_delete_field', $thisField[0] );
+
+				if ( $thisField.length ) {
+					wp.hooks.doAction( 'frm_after_delete_field', $thisField[0] );
+				}
 			}
 		});
 	}
@@ -8371,6 +8375,89 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	/**
+	 * Handles 'change' event on the document.
+	 *
+	 * @since 6.16.3
+	 * 
+	 * @param {Event} event
+	 * @returns {Void}
+	 */
+	function handleBuilderChangeEvent( event ) {
+		maybeShowSaveAndReloadModal( event.target );
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal if the target field's type is changed.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} target
+	 * @returns {Void}
+	 */
+	function maybeShowSaveAndReloadModal( target ) {
+		if ( ! target.id.startsWith( 'field_options_type_' ) ) {
+			return;
+		}
+		const idParts = target.id.split( '_' );
+		const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+
+		if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
+			return;
+		}
+		showSaveAndReloadModal();
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal with the given message.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {string} message
+	 * @returns {Void}
+	 */
+	function showSaveAndReloadModal( message ) {
+		if ( 'undefined' === typeof message ) {
+			message = __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' );
+		}
+		frmDom.modal.maybeCreateModal(
+			'frmSaveAndReloadModal',
+			{
+				title: __( 'Save and Reload?', 'formidable' ),
+				content: getModalContent(),
+				footer: getModalFooter()
+			}
+		);
+
+		function getModalContent() {
+			const modalContent = div( message );
+			modalContent.style.padding = 'var(--gap-md)';
+			return modalContent;
+		}
+
+		function getModalFooter() {
+			const continueButton = frmDom.modal.footerButton({
+				text: __( 'Save and Reload', 'formidable' ),
+				buttonType: 'primary'
+			});
+
+			onClickPreventDefault( continueButton, () => {
+				saveAndReloadFormBuilder();
+			} );
+	
+			const cancelButton = frmDom.modal.footerButton({
+				text: __( 'Cancel', 'formidable' ),
+				buttonType: 'cancel'
+			});
+			cancelButton.classList.add( 'dismiss' );
+
+			return frmDom.div({
+				children: [ cancelButton, continueButton ]
+			});
+		}
+	}
+
 	function updateShortcodesPopupPosition( target ) {
 		let moreIcon;
 		if ( target instanceof Event ) {
@@ -8443,7 +8530,102 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
+			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Returns true if a shortcode could be shown in the search result.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function checkContextualShortcode( item ) {
+		if ( frmAdminJs.contextualShortcodes.length === 0 ) {
+			return true;
+		}
+		return ! isContextualShortcode( item ) || canShowContextualShortcode( item );
+	}
+
+	/**
+	 * Returns true if a shortcode is contextual to fields.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function isContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function canShowContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
+		const input   = document.getElementById( inputId );
+		const contextualShortcodes = frmAdminJs.contextualShortcodes;
+		if ( contextualShortcodes.address.includes( shortcode ) ) {
+			return input.matches( contextualShortcodes.addressSelector );
+		}
+		return input.matches( contextualShortcodes.bodySelector );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
+	function showOrHideContextualShortcodes( input ) {
+		[ 'address', 'body' ].forEach( type => {
+			toggleContextualShortcodes( input, type );
+		});
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} input
+	 * @param {string}      type
+	 *
+	 * @returns {Void}
+	 */
+	function toggleContextualShortcodes( input, type ) {
+		let selector, contextualShortcodes;
+		selector             = frmAdminJs.contextualShortcodes[ type + 'Selector' ];
+		contextualShortcodes = frmAdminJs.contextualShortcodes[ type ];
+		let shouldShowShortcodes = input.matches( selector );
+		for ( let shortcode of contextualShortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			shortcodeLi?.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
+		}
+	}
+
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @returns {Array}
+	 */
+	function getContextualShortcodes() {
+		let contextualShortcodes = document.getElementById( 'frm_adv_info' )?.dataset.contextualShortcodes;
+		if ( ! contextualShortcodes) {
+			return [];
+		}
+		contextualShortcodes = JSON.parse( contextualShortcodes );
+		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
+		contextualShortcodes.bodySelector    = '[id^=email_message_]';
+		return contextualShortcodes;
 	}
 
 	function fieldUpdated() {
@@ -8567,6 +8749,10 @@ function frmAdminBuildJS() {
 		closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
 		for ( u = 0; u < closeSvg.length; u++ ) {
 			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
+				if ( closeSvg[u].closest( '.frm_remove_field' ) ) {
+					// Don't change the icon for the email fields remove button.
+					continue;
+				}
 				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
 			}
 		}
@@ -9451,12 +9637,12 @@ function frmAdminBuildJS() {
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.add( 'frm-search-result' );
@@ -10517,6 +10703,7 @@ function frmAdminBuildJS() {
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
+			document.addEventListener( 'change', handleBuilderChangeEvent );
 		},
 
 		settingsInit: function() {
@@ -11054,7 +11241,8 @@ function frmAdminBuildJS() {
 		toggleAddonState,
 		purifyHtml,
 		loadApiEmailForm,
-		addMyEmailAddress
+		addMyEmailAddress,
+		showSaveAndReloadModal
 	};
 }
 

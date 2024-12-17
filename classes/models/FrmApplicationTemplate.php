@@ -39,7 +39,7 @@ class FrmApplicationTemplate {
 		 */
 		self::$keys             = apply_filters(
 			'frm_application_data_keys',
-			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms' )
+			array( 'key', 'name', 'description', 'link', 'categories', 'views', 'forms', 'used_addons' )
 		);
 		self::$keys_with_images = array_merge(
 			self::get_template_keys_with_local_png_images(),
@@ -197,6 +197,13 @@ class FrmApplicationTemplate {
 		}
 
 		$application['isNew'] = $this->is_new();
+
+		$application['usedAddons'] = array();
+		if ( isset( $application['used_addons'] ) ) {
+			// Change key to camel case.
+			$application['usedAddons'] = $application['used_addons'];
+			unset( $application['used_addons'] );
+		}
 
 		return $application;
 	}

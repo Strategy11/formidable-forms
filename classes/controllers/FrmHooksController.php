@@ -59,8 +59,10 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		// Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
+		add_action( 'init', 'FrmAppController::load_lang', 0 );
+
 		add_action( 'rest_api_init', 'FrmAppController::create_rest_routes', 0 );
-		add_action( 'plugins_loaded', 'FrmAppController::load_lang' );
 		add_filter( 'widget_text', 'do_shortcode' );
 
 		// Entries controller.
@@ -104,7 +106,6 @@ class FrmHooksController {
 
 		// Elementor.
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
-		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
@@ -136,14 +137,15 @@ class FrmHooksController {
 		// Form Actions Controller.
 		if ( FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			add_action( 'frm_before_update_form_settings', 'FrmFormActionsController::update_settings' );
-			add_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		}
+
 		add_action( 'frm_after_duplicate_form', 'FrmFormActionsController::duplicate_form_actions', 20, 3 );
 
 		// Forms Controller.
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
+		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
