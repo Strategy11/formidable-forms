@@ -103,7 +103,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm6">
 				<div class="frm-views-learn-more">
 					<h3><?php esc_html_e( 'Learn more', 'formidable' ); ?></h3>
-					<p><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
+					<p style="margin-bottom: var(--gap-md);"><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
 					<a href="https://formidableforms.com/features/display-form-data-views/" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
 				</div>
 			</div>
@@ -163,7 +163,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<div class="frm-views-guarantee">
 			<?php FrmAddonsHelper::guarantee_icon(); ?>
-			<h4><?php esc_html_e( '100% No-Risk, Money Back Guarantee!', 'formidable' ); ?></h4>
+			<h4 style="font-weight: 600;"><?php esc_html_e( '100% No-Risk, Money Back Guarantee!', 'formidable' ); ?></h4>
 			<p><?php esc_html_e( 'We\'re excited to have you experience the power of Formidable Forms. Over the next 14 days, if Formidable Forms isn’t the best fit for your project, simply reach out! We’ll happily refund 100% of your money. No questions asked.', 'formidable' ); ?></p>
 		</div>
 	</div>
@@ -201,7 +201,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		width: 24px;
 	}
 	.frm-views-feature__title {
-		font-weight: 700;
+		font-weight: 600;
+		color: var(--grey-900);
 		margin-bottom: 2px;
 	}
 	.frm-views-feature__desc {
