@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm-views-feature__title"><?php esc_html_e( 'Calendar', 'formidable' ); ?></div>
 					<div class="frm-views-feature__desc">
-						<?php esc_html_e( 'Create a view and write less code', 'formidable' ); ?>
+						<?php esc_html_e( 'Insert entries into a calendar', 'formidable' ); ?>
 					</div>
 				</div>
 			</div>
@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm-views-feature__title"><?php esc_html_e( 'Table', 'formidable' ); ?></div>
 					<div class="frm-views-feature__desc">
-						<?php esc_html_e( 'Create a view and write less code', 'formidable' ); ?>
+						<?php esc_html_e( 'Insert and display entries into a table', 'formidable' ); ?>
 					</div>
 				</div>
 			</div>
@@ -71,7 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm-views-feature__title"><?php esc_html_e( 'Map', 'formidable' ); ?></div>
 					<div class="frm-views-feature__desc">
-						<?php esc_html_e( 'Create a view and write less code', 'formidable' ); ?>
+						<?php esc_html_e( 'Show your entries on a map', 'formidable' ); ?>
 					</div>
 				</div>
 			</div>
@@ -82,7 +82,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm-views-feature__title"><?php esc_html_e( 'Classic', 'formidable' ); ?></div>
 					<div class="frm-views-feature__desc">
-						<?php esc_html_e( 'Create a view and write less code', 'formidable' ); ?>
+						<?php esc_html_e( 'Create a new view from scratch', 'formidable' ); ?>
 					</div>
 				</div>
 			</div>
@@ -93,7 +93,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 					<div class="frm-views-feature__title"><?php esc_html_e( 'Ready made solution', 'formidable' ); ?></div>
 					<div class="frm-views-feature__desc">
-						<?php esc_html_e( 'Create a view and write less code', 'formidable' ); ?>
+						<?php esc_html_e( 'Start from an application template', 'formidable' ); ?>
 					</div>
 				</div>
 			</div>
