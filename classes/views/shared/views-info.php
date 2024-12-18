@@ -126,7 +126,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm-views-review__desc">
-						<?php esc_html_e( 'Based on 1.200+ reviews on WordPress.org', 'formidable' ); ?>
+						<?php echo esc_html( FrmAddonsHelper::get_reviews_text( '1.200+', 'WordPress.org' ) ); ?>
 					</div>
 				</div><!-- End .frm-views-review -->
 			</div>
@@ -141,7 +141,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm-views-review__desc">
-						<?php esc_html_e( 'Based on 87 reviews on G2', 'formidable' ); ?>
+						<?php echo esc_html( FrmAddonsHelper::get_reviews_text( 87, 'G2' ) ); ?>
 					</div>
 				</div><!-- End .frm-views-review -->
 			</div>
@@ -155,7 +155,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					</div>
 
 					<div class="frm-views-review__desc">
-						<?php esc_html_e( 'Based on 99 reviews on Capterra', 'formidable' ); ?>
+						<?php echo esc_html( FrmAddonsHelper::get_reviews_text( 99, 'Capterra' ) ); ?>
 					</div>
 				</div><!-- End .frm-views-review -->
 			</div>

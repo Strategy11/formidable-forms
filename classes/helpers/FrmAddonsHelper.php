@@ -266,6 +266,14 @@ class FrmAddonsHelper {
 		return self::$plan_required;
 	}
 
+	/**
+	 * Shows five star rating, used on Views page if only Lite plugins are installed.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color Star color.
+	 * @return void
+	 */
 	public static function show_five_star_rating( $color = 'black' ) {
 		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
 		?>
@@ -279,9 +287,34 @@ class FrmAddonsHelper {
 		<?php
 	}
 
+	/**
+	 * Shows the guarantee icon.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	public static function guarantee_icon() {
 		?>
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
 		<?php
+	}
+
+	/**
+	 * Gets reviews text.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $count Review count.
+	 * @param string $site  Site name.
+	 * @return string
+	 */
+	public static function get_reviews_text( $count, $site ) {
+		return sprintf(
+			// Translators: %1$s is the number of reviews, %2$s is the site name.
+			__( 'Based on %1$s reviews on %2$s', 'formidable' ),
+			$count,
+			$site
+		);
 	}
 }
