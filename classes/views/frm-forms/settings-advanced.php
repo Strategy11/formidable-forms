@@ -44,6 +44,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</p>
 
 <?php
+/**
+ * Fires after the form description field.
+ *
+ * @since x.x
+ */
+do_action( 'frm_settings_after_form_description' );
+
 if ( ! $values['is_template'] ) {
 	$first_h3 = '';
 
