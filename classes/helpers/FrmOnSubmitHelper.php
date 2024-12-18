@@ -392,10 +392,15 @@ class FrmOnSubmitHelper {
 	public static function get_fallback_action( $event = 'create' ) {
 		$action = new stdClass();
 
+		$default_msg = self::get_default_msg();
+		if ( current_user_can( 'frm_edit_forms' ) ) {
+			$default_msg .= '<br />' . __( 'This is the fallback message. There are no confirmation actions that match your conditional logic, or they are invalid.', 'formidable' );
+		}
+
 		$action->post_content = array(
 			'event'          => (array) $event,
 			'success_action' => 'message',
-			'success_msg'    => self::get_default_msg(),
+			'success_msg'    => $default_msg,
 		);
 
 		return $action;
