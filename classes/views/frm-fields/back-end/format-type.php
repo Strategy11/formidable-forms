@@ -53,7 +53,7 @@ $format          = FrmField::get_option( $field, 'format' );
 		?>
 
 		<?php if ( 'text' === $field_type ) { ?>
-			<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'number' !== $format, true ); ?>>
+			<option value="custom" data-dependency="#frm-field-format-custom-<?php echo esc_attr( $field_id ); ?>" <?php selected( ! empty( $format ) && 'currency' !== $format, true ); ?>>
 				<?php esc_html_e( 'Custom', 'formidable' ); ?>
 			</option>
 		<?php } ?>
