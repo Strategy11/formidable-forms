@@ -2853,6 +2853,8 @@ class FrmFormsController {
 	 * @param array  $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
+		$success_msg  = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
+		$success_msg  = do_shortcode( FrmAppHelper::use_wpautop( $success_msg ) );
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
 			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
