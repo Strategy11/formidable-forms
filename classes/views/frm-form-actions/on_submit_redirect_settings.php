@@ -25,6 +25,27 @@ $id_attr = $args['action_control']->get_field_id( 'success_url' );
 </div>
 
 <?php
+$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
+$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
+?>
+<div class="frm_form_field">
+	<?php
+	FrmHtmlHelper::toggle(
+		$id_attr,
+		$name_attr,
+		array(
+			'div_class' => 'with_frm_style frm_toggle',
+			'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
+			'echo'      => true,
+		)
+	);
+	?>
+	<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
+		<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
+	</label>
+</div>
+
+<?php
 $id_attr        = $args['action_control']->get_field_id( 'redirect_delay' );
 $redirect_delay = ! empty( $args['form_action']->post_content['redirect_delay'] );
 ?>
@@ -63,18 +84,18 @@ if ( ! $redirect_delay ) {
 	}
 	?>
 	<div class="frm_form_field">
-		<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Duration', 'formidable' ); ?></label>
+		<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Delay time', 'formidable' ); ?></label>
 		<span class="frm_input_with_suffix">
-				<input
-					type="number"
-					min="1"
-					step="1"
-					id="<?php echo esc_attr( $id_attr ); ?>"
-					name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_delay_time' ) ); ?>"
-					value="<?php echo intval( $delay_time ); ?>"
-				/>
-				<span class="frm_suffix"><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
-			</span>
+			<input
+				type="number"
+				min="1"
+				step="1"
+				id="<?php echo esc_attr( $id_attr ); ?>"
+				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'redirect_delay_time' ) ); ?>"
+				value="<?php echo intval( $delay_time ); ?>"
+				style="width:60px;"
+			/><span class="frm_suffix"><?php esc_html_e( 'seconds', 'formidable' ); ?></span>
+		</span>
 	</div>
 
 	<?php
@@ -97,25 +118,4 @@ if ( ! $redirect_delay ) {
 		);
 		?>
 	</div>
-</div>
-
-<?php
-$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
-$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
-?>
-<div class="frm_form_field">
-	<?php
-	FrmHtmlHelper::toggle(
-		$id_attr,
-		$name_attr,
-		array(
-			'div_class' => 'with_frm_style frm_toggle',
-			'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
-			'echo'      => true,
-		)
-	);
-	?>
-	<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
-		<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
-	</label>
 </div>
