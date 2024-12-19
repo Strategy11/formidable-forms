@@ -1625,10 +1625,8 @@ class FrmAppHelper {
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
 		$args = self::preformat_selection_args( $args );
-		var_dump( $args );
 
 		$pages_count = wp_count_posts( $args['post_type'] );
-		var_dump( $pages_count );
 
 		if ( isset( $pages_count->publish ) && $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
