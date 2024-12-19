@@ -1660,12 +1660,50 @@ class FrmAppHelper {
 			'truncate'                 => false,
 			'placeholder'              => ' ',
 			'name'                     => '',
+			'id'                       => '',
 			'selected'                 => '',
 			'source' 				   => array(),
+			'dropdown_limit'           => 50,
 			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
 		);
 
 		$args = wp_parse_args( $args, $defaults );
+
+		$html_attrs = array();
+		if ( ! empty( $args['name'] ) ) {
+			$html_attrs['name'] = $args['name'];
+		}
+
+		if ( ! empty( $args['id'] ) ) {
+			$html_attrs['id'] = $args['id'];
+		}
+
+		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
+			?>
+			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
+				<?php foreach ( $args['source'] as $value => $label ) : ?>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['selected'] ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php
+		} else {
+			$options = array();
+			foreach ( $args['source'] as $value => $label ) {
+				$options[] = array(
+					'value' => $value,
+					'label' => $label,
+				);
+			}
+			?>
+			<input type="text" class="frm-custom-search"
+				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
+				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
+				   value="<?php echo esc_attr( $args['source'][ $args['selected'] ] ); ?>" />
+			<input type="hidden" name="<?php echo esc_attr( $args['name'] ); ?>"
+				   class="frm_autocomplete_value_input"
+				   value="<?php echo esc_attr( $args['selected'] ); ?>" />
+			<?php
+		}
 	}
 
 	/**
@@ -1678,7 +1716,6 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
