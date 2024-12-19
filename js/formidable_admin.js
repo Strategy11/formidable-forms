@@ -4392,7 +4392,6 @@ function frmAdminBuildJS() {
 
 				++numberOfSelectedGroups;
 			} else if ( shiftKeyIsDown && ! groupIsActive ) {
-				e.stopPropagation();
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
 
