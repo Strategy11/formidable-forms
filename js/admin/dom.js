@@ -253,6 +253,7 @@
 			if ( jQuery.fn.autocomplete ) {
 				autocomplete.initAutocomplete( 'page' );
 				autocomplete.initAutocomplete( 'user' );
+				autocomplete.initAutocomplete( 'custom' );
 			}
 		},
 		/**
@@ -278,10 +279,19 @@
 					urlParams += '&post_type=' + element.attr( 'data-post-type' );
 				}
 
+				let source = ajaxurl + urlParams;
+
+				if ( this.dataset.source ) {
+					const sourceData = JSON.parse( this.dataset.source );
+					if ( sourceData ) {
+						source = sourceData;
+					}
+				}
+
 				element.autocomplete({
 					delay: 100,
 					minLength: 0,
-					source: ajaxurl + urlParams,
+					source: source,
 					change: autocomplete.selectBlank,
 					select: autocomplete.completeSelectFromResults,
 					focus: () => false,

@@ -5,6 +5,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm_wrap">
 	<?php
+	if ( method_exists( 'FrmAppHelper', 'maybe_autocomplete_options' ) ) {
+		$posts = get_posts(
+			array(
+				'posts_per_page' => -1,
+				'post_type'      => 'any',
+				'order'          => 'DESC',
+			)
+		);
+		$source = array();
+		foreach ( $posts as $post ) {
+			$source[ $post->ID ] = $post->post_title;
+		}
+		FrmAppHelper::maybe_autocomplete_options( array(
+			'source' => $source,
+			'selected' => 1,
+			'dropdown_limit' => 30,
+		) );
+	}
 	FrmAppHelper::get_admin_header(
 		array(
 			'label' => __( 'Views', 'formidable' ),
