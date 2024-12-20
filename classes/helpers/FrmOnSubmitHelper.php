@@ -394,7 +394,10 @@ class FrmOnSubmitHelper {
 
 		$default_msg = self::get_default_msg();
 		if ( current_user_can( 'frm_edit_forms' ) ) {
-			$default_msg .= '<br />' . __( 'This is the fallback message. No confirmation actions that match your conditional logic, or they are invalid.', 'formidable' );
+			$default_msg .= '<br />';
+			$default_msg .= '<span style="font-weight: 600; font-style: italic;">';;
+			$default_msg .= __( 'This is the fallback message. No confirmation actions that match your conditional logic, or they are invalid.', 'formidable' );
+			$default_msg .= '</span>';
 		}
 
 		$action->post_content = array(
