@@ -5424,22 +5424,22 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Update the phone format input based on the selected phone type.
-	 *
-	 * This function is triggered when a phone type is selected.
-	 * If the selected type is 'custom' and the current format is 'international',
-	 * the format input value is cleared to allow for custom input.
+	 * Update the format input based on the selected format type.
 	 *
 	 * @since 6.9
 	 *
-	 * @param {Event} event The event object from the phone type selection.
+	 * @param {Event} event The event object from the format type selection.
 	 * @return {void}
 	 */
-	function maybeUpdatePhoneFormatInput( event ) {
-		const phoneType = event.target;
-		if ( 'custom' === phoneType.value ) {
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'international' === formatInput.value ) {
+	function maybeUpdateFormatInput( event ) {
+		const formatElement = event.target;
+		const type = formatElement.value
+
+		if ( 'custom' === type ) {
+			const fieldId = formatElement.dataset.fieldId;
+			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
+
+			if ( 'international' === formatInput.value || 'currency' === formatInput.value ) {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
@@ -6691,12 +6691,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Updates the format input based on the selected phone type from dropdowns during the form save process.
-	 *
-	 * Triggered within the preFormSave function, this function iterates through all phone type dropdown elements
-	 * and adjusts the format input value accordingly. Specifically, if the phone type is 'custom' but the format input
-	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
-	 * before the form is saved.
+	 * Updates the format input based on the selected format type from dropdowns during the form save process.
 	 *
 	 * @since 6.9
 	 *
@@ -6704,19 +6699,18 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function adjustFormatInputBeforeSave( submitButton ) {
-		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
-		phoneTypes.forEach( phoneType => {
-			const value = phoneType.value;
-			if ( ! [ 'none', 'international' ].includes( value ) ) {
-				return;
-			}
+		const formatTypes = document.querySelectorAll( '.frm_format_type_dropdown, .frm_phone_type_dropdown' );
+		const valueMap = {
+			none: '',
+			international: 'international',
+			currency: 'currency'
+		};
 
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'none' === value ) {
-				formatInput.setAttribute( 'value', '' );
-			}
-			if ( 'international' === value ) {
-				formatInput.setAttribute( 'value', 'international' );
+		formatTypes.forEach( formatType => {
+			const value = formatType.value;
+			if ( value in valueMap ) {
+				const formatInput = document.getElementById( `frm-field-format-custom-${formatType.dataset.fieldId}` ).querySelector( '.frm_format_opt' );
+				formatInput.setAttribute( 'value', valueMap[value] );
 			}
 		});
 	}
@@ -8381,7 +8375,7 @@ function frmAdminBuildJS() {
 	 * Handles 'change' event on the document.
 	 *
 	 * @since 6.16.3
-	 * 
+	 *
 	 * @param {Event} event
 	 * @returns {Void}
 	 */
@@ -8447,7 +8441,7 @@ function frmAdminBuildJS() {
 			onClickPreventDefault( continueButton, () => {
 				saveAndReloadFormBuilder();
 			} );
-	
+
 			const cancelButton = frmDom.modal.footerButton({
 				text: __( 'Cancel', 'formidable' ),
 				buttonType: 'cancel'
@@ -10696,7 +10690,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
-			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
+			frmDom.util.documentOn( 'change', 'select.frm_format_type_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
