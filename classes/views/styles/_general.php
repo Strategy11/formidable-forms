@@ -170,7 +170,7 @@ new FrmBackgroundImageStyleComponent(
 			$frm_style->get_field_name( 'center_form' ),
 			array(
 				'div_class'       => 'with_frm_style frm_toggle',
-				'checked'         => ! empty( $style->post_content['important_style'] ),
+				'checked'         => ! empty( $style->post_content['center_form'] ),
 				'echo'            => true,
 				'aria-label-attr' => __( 'Center Form', 'formidable' ),
 			)

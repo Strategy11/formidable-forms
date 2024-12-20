@@ -31,6 +31,55 @@ class FrmShortcodeHelper {
 	}
 
 	/**
+	 * Returns shortcodes that are shown/hidden based on the context.
+	 *
+	 * @since 6.16.3
+	 * @return array
+	 */
+	public static function get_contextual_shortcodes() {
+		return array(
+			'address' => array(
+				'admin_email'        => __( 'Admin email', 'formidable' ),
+				'default-from-email' => __( 'Default from email', 'formidable' ),
+				'default-email'      => __( 'Default email', 'formidable' ),
+			),
+			'body'    => array(
+				'default-message' => __( 'Default Msg', 'formidable' ),
+				'default-html'    => __( 'Default HTML', 'formidable' ),
+				'default-plain'   => __( 'Default Plain', 'formidable' ),
+			),
+		);
+	}
+
+	/**
+	 * Get contextual shortcodes.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return array
+	 */
+	public static function get_contextual_shortcode_values() {
+		$contextual_shortcodes = self::get_contextual_shortcodes();
+		return array_merge( $contextual_shortcodes['address'], $contextual_shortcodes['body'] );
+	}
+
+	/**
+	 * Get flattened format of contextual shortcodes.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return array
+	 */
+	public static function get_contextual_codes() {
+		$contextual_shortcodes = self::get_contextual_shortcodes();
+		$result                = array();
+		foreach ( $contextual_shortcodes as $type => $shortcodes ) {
+			$result[ $type ] = array_keys( $shortcodes );
+		}
+		return $result;
+	}
+
+	/**
 	 * Get the name of the shortcode from the regEx
 	 *
 	 * @since 3.0

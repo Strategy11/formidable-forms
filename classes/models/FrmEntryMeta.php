@@ -400,6 +400,35 @@ class FrmEntryMeta {
 	}
 
 	/**
+	 * Returns true if the where clause refers to a field table column that is not form_id. It also updates
+	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
+	 *
+	 * @since 6.16.1
+	 * @param array|string $where
+	 * @return bool
+	 */
+	private static function should_join_fields_table( &$where ) {
+		if ( is_string( $where ) ) {
+			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
+				return true;
+			}
+			$where = str_ireplace( 'fi.form_id', 'e.form_id', $where );
+			return false;
+		}
+		$where_fields = array_keys( $where );
+		foreach ( $where_fields as $where_field ) {
+			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
+				return true;
+			}
+		}
+		if ( isset( $where['fi.form_id'] ) ) {
+			$where['e.form_id'] = $where['fi.form_id'];
+			unset( $where['fi.form_id'] );
+		}
+		return false;
+	}
+
+	/**
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
@@ -425,8 +454,15 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$query[] = 'FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 
+		$should_join_fields_table__where    = self::should_join_fields_table( $where );
+		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
+			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
+		}
+
+		$query[] = $from;
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
 		if ( is_array( $where ) ) {
 			if ( ! $args['is_draft'] ) {

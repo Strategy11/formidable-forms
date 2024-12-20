@@ -295,13 +295,18 @@
 			);
 			const header = div({
 				children: [
-					titleWrapper,
-					getUseThisTemplateControl( data )
+					titleWrapper
 				]
 			});
 
+			const templateControl = getUseThisTemplateControl( data );
+			if ( templateControl.classList.contains('frm-delete-application-trigger' ) ) {
+				header.appendChild( templateControl );
+			} else {
+				titleWrapper.appendChild( templateControl );
+			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
 			}
 
 			const counter = getItemCounter();
@@ -369,7 +374,7 @@
 
 	function getUseThisTemplateControl( data ) {
 		let control = a({
-			className: 'button frm-button-secondary frm-button-sm',
+			className: 'button frm-button-secondary frm-button-sm frm-fadein',
 			text: __( 'Learn More', 'formidable' )
 		});
 		control.setAttribute( 'role', 'button' );
@@ -437,6 +442,24 @@
 			placeholderImage.addEventListener( 'load', maybeCenterViewApplicationModal );
 		}
 
+		const detailsChildren = [
+			div({
+				className: 'frm-application-modal-label',
+				text: __( 'Description', 'formidable' )
+			}),
+			div( data.description )
+		];
+
+		if ( data.usedAddons && data.usedAddons.length ) {
+			detailsChildren.push(
+				div({
+					className: 'frm-application-modal-label',
+					text: __( 'Required Add-ons', 'formidable-pro' )
+				}),
+				getBasicList( data.usedAddons )
+			);
+		}
+
 		children.push(
 			div({
 				className: 'frm-application-image-wrapper',
@@ -444,13 +467,7 @@
 			}),
 			div({
 				className: 'frm-application-modal-details',
-				children: [
-					div({
-						className: 'frm-application-modal-label',
-						text: __( 'Description', 'formidable' )
-					}),
-					div( data.description )
-				]
+				children: detailsChildren
 			})
 		);
 
@@ -461,6 +478,16 @@
 		wp.hooks.doAction( hookName, output, args );
 
 		return output;
+	}
+
+	function getBasicList( data ) {
+		return tag(
+			'ul',
+			{
+				className: 'frm-application-item-list',
+				children: data.map( text => tag( 'li', text ) )
+			}
+		);
 	}
 
 	function maybeCenterViewApplicationModal() {

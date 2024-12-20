@@ -96,7 +96,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function disable_form_css() {
-		add_filter( 'get_frm_stylesheet', '__return_false' );
+		add_filter( 'get_frm_stylesheet', '__return_empty_array' );
 	}
 
 	/**
@@ -1260,16 +1260,22 @@ class FrmStylesController {
 							$first_open = true;
 							$open_class = 'open';
 						}
+
+						$accordion_content_id = 'frm_style_section_' . $box['id'];
 						?>
 						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
-							<h3 class="accordion-section-title hndle" tabindex="0">
+							<h3 class="accordion-section-title hndle">
 								<?php
 								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
 								echo esc_html( $box['title'] );
-								FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
 								?>
+								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>">
+									<?php
+									FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
+									?>
+								</button>
 							</h3>
-							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>">
+							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
 								<div class="inside">
 									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
 								</div><!-- .inside -->

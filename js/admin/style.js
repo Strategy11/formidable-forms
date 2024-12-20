@@ -1309,19 +1309,15 @@
 			radio.closest( '.dropdown-item' ).classList.add( 'active' );
 		});
 
-		document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
-			el.setAttribute( 'aria-expanded', el.parentElement.classList.contains( 'open' ) );
-			el.setAttribute( 'role', 'button' );
-			el.addEventListener( 'click', event => {
-				maybeCollapseSettings( event );
+		if ( frm_admin_js.requireAccordionTitleClickListener ) {
+			document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
+				el.addEventListener( 'click', event => {
+					if ( ! event.target.closest( 'button' ) ) {
+						el.querySelector( 'button' ).click();
+					}
+				});
 			});
-			el.addEventListener( 'keydown', event => {
-				if ( event.key === ' ' ) {
-					event.preventDefault();
-					maybeCollapseSettings( event );
-				}
-			});
-		});
+		}
 	}
 
 	/**
