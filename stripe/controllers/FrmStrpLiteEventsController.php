@@ -206,7 +206,6 @@ class FrmStrpLiteEventsController {
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
 			// This isn't a subscription.
-			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since this is not a subscription.' );
 			echo json_encode(
 				array(
 					'response' => 'Invoice missing',
