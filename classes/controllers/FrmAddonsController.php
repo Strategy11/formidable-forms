@@ -69,6 +69,7 @@ class FrmAddonsController {
 		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/addons-page.js', $js_dependencies, $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmAddonsVars', self::get_js_variables() );
 		wp_enqueue_script( self::SCRIPT_HANDLE );
+		wp_set_script_translations( self::SCRIPT_HANDLE, 'formidable' );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
 	}
@@ -110,7 +111,10 @@ class FrmAddonsController {
 				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
-				'FrmAddonsController::upgrade_to_pro'
+				function () {
+					// This function doesn't need to do anything.
+					// The redirect is handled earlier to avoid issues with the headers being sent.
+				}
 			);
 		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
@@ -866,25 +870,6 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * Handle when the Upgrade submenu item is clicked.
-	 *
-	 * @since x.x This function was changed to no longer render a page, redirecting directly to the upgrade page instead.
-	 *
-	 * @return void
-	 */
-	public static function upgrade_to_pro() {
-		wp_redirect(
-			FrmAppHelper::admin_upgrade_link(
-				array(
-					'medium'  => 'upgrade',
-					'content' => 'submenu-upgrade',
-				)
-			)
-		);
-		die();
-	}
-
-	/**
 	 * @since 5.5.2
 	 *
 	 * @param string $plugin
@@ -1518,33 +1503,5 @@ class FrmAddonsController {
 		}
 
 		return $requires;
-	}
-
-	/**
-	 * @since 4.02.05
-	 * @deprecated 6.8.3
-	 *
-	 * @codeCoverageIgnore
-	 *
-	 * @return void
-	 */
-	public static function connect_pro() {
-		_deprecated_function( __METHOD__, '6.8.3' );
-	}
-
-	/**
-	 * @since 4.08
-	 * @deprecated 6.11.1
-	 *
-	 * @return bool|int false or the number of days until expiration.
-	 */
-	public static function is_license_expiring() {
-		_deprecated_function( __METHOD__, '6.11.1', 'FrmProAddonsController::is_license_expiring' );
-
-		if ( is_callable( 'FrmProAddonsController::is_license_expiring' ) ) {
-			return FrmProAddonsController::is_license_expiring();
-		}
-
-		return false;
 	}
 }

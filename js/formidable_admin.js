@@ -241,6 +241,7 @@ function frmAdminBuildJS() {
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
 	const { doJsonFetch, doJsonPost } = frmDom.ajax;
+	frmAdminJs.contextualShortcodes = getContextualShortcodes();
 	const icons = {
 		save: svg({ href: '#frm_save_icon' }),
 		drag: svg({ href: '#frm_drag_icon', classList: [ 'frm_drag_icon', 'frm-drag' ] })
@@ -716,17 +717,21 @@ function frmAdminBuildJS() {
 
 	function clickNewTab() {
 		/*jshint validthis:true */
-		const t = this.getAttribute( 'href' ),
-			c = t.replace( '#', '.' ),
-			$link = jQuery( this );
-
+		const t = this.getAttribute( 'href' );
 		if ( typeof t === 'undefined' ) {
 			return false;
 		}
 
+		const c     = t.replace( '#', '.' );
+		const $link = jQuery( this );
+
 		$link.closest( 'li' ).addClass( 'frm-tabs active' ).siblings( 'li' ).removeClass( 'frm-tabs active starttab' );
 		$link.closest( 'div' ).children( '.tabs-panel' ).not( t ).not( c ).hide();
-		document.getElementById( t.replace( '#', '' ) ).style.display = 'block';
+
+		const tabContent = document.getElementById( t.replace( '#', '' ) );
+		if ( tabContent ) {
+			tabContent.style.display = 'block';
+		}
 
 		// clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
 		if ( this.id === 'frm_insert_fields_tab' && ! this.closest( '#frm_adv_info' ) ) {
@@ -866,7 +871,7 @@ function frmAdminBuildJS() {
 		if ( isFieldGroup( draggable ) ) {
 			const newTextFieldClone = document.getElementById( 'frm-insert-fields' ).querySelector( '.frm_ttext' ).cloneNode( true );
 			newTextFieldClone.querySelector( 'use' ).setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_field_group_layout_icon' );
-			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group' );
+			newTextFieldClone.querySelector( 'span' ).textContent = __( 'Field Group', 'formidable' );
 			newTextFieldClone.classList.add( 'frm_field_box' );
 			newTextFieldClone.classList.add( 'ui-sortable-helper' );
 			return newTextFieldClone;
@@ -3640,7 +3645,7 @@ function frmAdminBuildJS() {
 
 	function confirmFieldsDeleteMessage( numberOfFields ) {
 		/* translators: %1$s: Number of fields that are selected to be deleted. */
-		return __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ).replace( '%1$s', numberOfFields );
+		return sprintf( __( 'Are you sure you want to delete these %1$s selected field(s)?', 'formidable' ), numberOfFields );
 	}
 
 	function clickDeleteField() {
@@ -4846,7 +4851,10 @@ function frmAdminBuildJS() {
 					// prevent "More Options" tooltips from staying around after their target field is deleted.
 					deleteTooltips();
 				});
-				wp.hooks.doAction( 'frm_after_delete_field', $thisField[0] );
+
+				if ( $thisField.length ) {
+					wp.hooks.doAction( 'frm_after_delete_field', $thisField[0] );
+				}
 			}
 		});
 	}
@@ -6110,7 +6118,8 @@ function frmAdminBuildJS() {
 		);
 
 		if ( conflicts.length ) {
-			infoModal( __( 'Duplicate option value "%s" detected', 'formidable' ).replace( '%s', purifyHtml( targetInput.value ) ) );
+			/* translators: %s: The detected option value. */
+			infoModal( sprintf( __( 'Duplicate option value "%s" detected', 'formidable' ), purifyHtml( targetInput.value ) ) );
 		}
 	}
 
@@ -6141,8 +6150,10 @@ function frmAdminBuildJS() {
 			}
 
 			if ( showSelect || showText ) {
+				const comparison = document.querySelector( `#frm_logic_${fieldID}_${metaKey} [name="field_options[hide_field_cond_${fieldID}][]"]` ).value;
 				fill.innerHTML = '';
-				if ( showSelect ) {
+				const creatingValuesDropdown = showSelect && ! [ 'LIKE', 'not LIKE', 'LIKE%', '%LIKE' ].includes( comparison );
+				if ( creatingValuesDropdown ) {
 					input = document.createElement( 'select' );
 				} else {
 					input = document.createElement( 'input' );
@@ -6152,7 +6163,7 @@ function frmAdminBuildJS() {
 				input.id = optionID + '_' + metaKey;
 				fill.appendChild( input );
 
-				if ( showSelect ) {
+				if ( creatingValuesDropdown ) {
 					const fillField = document.getElementById( input.id );
 					fillDropdownOpts( fillField, {
 						sourceID: val,
@@ -6606,7 +6617,8 @@ function frmAdminBuildJS() {
 		if ( formNameInput && formNameInput.value.trim() !== '' ) {
 			return false;
 		}
-		return 'true' === urlParams.get( 'new_template' );
+
+		return 'true' === urlParams.get( 'new_template' ) && document.querySelector( '#frm_top_bar #frm_bs_dropdown .frm_bstooltip' )?.textContent.trim() === frm_admin_js.noTitleText; // eslint-disable-line camelcase
 	}
 
 	/**
@@ -6851,7 +6863,7 @@ function frmAdminBuildJS() {
 		h2.style.borderBottom = 'none';
 
 		/* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
-		h2.textContent = __( '%s are not installed', 'formidable' ).replace( '%s', title );
+		h2.textContent = sprintf( __( '%s are not installed', 'formidable' ), title );
 
 		container.classList.add( 'frmcenter' );
 
@@ -7630,16 +7642,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function formatEmailSetting() {
-		/*jshint validthis:true */
-		/*var val = jQuery( this ).val();
-		var email = val.match( /(\s[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+)/gi );
-		if(email !== null && email.length) {
-			//has email
-			//TODO: add < > if they aren't there
-		}*/
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
@@ -8375,6 +8377,89 @@ function frmAdminBuildJS() {
 		showShortcodeBox( this );
 	}
 
+	/**
+	 * Handles 'change' event on the document.
+	 *
+	 * @since 6.16.3
+	 * 
+	 * @param {Event} event
+	 * @returns {Void}
+	 */
+	function handleBuilderChangeEvent( event ) {
+		maybeShowSaveAndReloadModal( event.target );
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal if the target field's type is changed.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} target
+	 * @returns {Void}
+	 */
+	function maybeShowSaveAndReloadModal( target ) {
+		if ( ! target.id.startsWith( 'field_options_type_' ) ) {
+			return;
+		}
+		const idParts = target.id.split( '_' );
+		const fieldId = idParts.length && idParts[ idParts.length - 1 ];
+
+		if ( document.querySelector( `#frm-single-settings-${fieldId}` )?.classList.contains( `frm-type-${target.value}` ) ) {
+			// Do not show modal if the field type is reverted back to the original type when builder is loaded.
+			return;
+		}
+		showSaveAndReloadModal();
+	}
+
+	/**
+	 * Shows 'Save and Reload' modal with the given message.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {string} message
+	 * @returns {Void}
+	 */
+	function showSaveAndReloadModal( message ) {
+		if ( 'undefined' === typeof message ) {
+			message = __( 'You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable' );
+		}
+		frmDom.modal.maybeCreateModal(
+			'frmSaveAndReloadModal',
+			{
+				title: __( 'Save and Reload?', 'formidable' ),
+				content: getModalContent(),
+				footer: getModalFooter()
+			}
+		);
+
+		function getModalContent() {
+			const modalContent = div( message );
+			modalContent.style.padding = 'var(--gap-md)';
+			return modalContent;
+		}
+
+		function getModalFooter() {
+			const continueButton = frmDom.modal.footerButton({
+				text: __( 'Save and Reload', 'formidable' ),
+				buttonType: 'primary'
+			});
+
+			onClickPreventDefault( continueButton, () => {
+				saveAndReloadFormBuilder();
+			} );
+	
+			const cancelButton = frmDom.modal.footerButton({
+				text: __( 'Cancel', 'formidable' ),
+				buttonType: 'cancel'
+			});
+			cancelButton.classList.add( 'dismiss' );
+
+			return frmDom.div({
+				children: [ cancelButton, continueButton ]
+			});
+		}
+	}
+
 	function updateShortcodesPopupPosition( target ) {
 		let moreIcon;
 		if ( target instanceof Event ) {
@@ -8447,7 +8532,102 @@ function frmAdminBuildJS() {
 					jQuery( tinymce.get( input.id ) ).trigger( 'focus' );
 				}
 			}
+			showOrHideContextualShortcodes( input );
 		}
+	}
+
+	/**
+	 * Returns true if a shortcode could be shown in the search result.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function checkContextualShortcode( item ) {
+		if ( frmAdminJs.contextualShortcodes.length === 0 ) {
+			return true;
+		}
+		return ! isContextualShortcode( item ) || canShowContextualShortcode( item );
+	}
+
+	/**
+	 * Returns true if a shortcode is contextual to fields.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function isContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} item
+	 * @returns {Boolean}
+	 */
+	function canShowContextualShortcode( item ) {
+		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const inputId = document.getElementById( 'frm_adv_info' ).dataset.fills;
+		const input   = document.getElementById( inputId );
+		const contextualShortcodes = frmAdminJs.contextualShortcodes;
+		if ( contextualShortcodes.address.includes( shortcode ) ) {
+			return input.matches( contextualShortcodes.addressSelector );
+		}
+		return input.matches( contextualShortcodes.bodySelector );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} input
+	 * @returns {Void}
+	 */
+	function showOrHideContextualShortcodes( input ) {
+		[ 'address', 'body' ].forEach( type => {
+			toggleContextualShortcodes( input, type );
+		});
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} input
+	 * @param {string}      type
+	 *
+	 * @returns {Void}
+	 */
+	function toggleContextualShortcodes( input, type ) {
+		let selector, contextualShortcodes;
+		selector             = frmAdminJs.contextualShortcodes[ type + 'Selector' ];
+		contextualShortcodes = frmAdminJs.contextualShortcodes[ type ];
+		let shouldShowShortcodes = input.matches( selector );
+		for ( let shortcode of contextualShortcodes ) {
+			const shortcodeLi = document.querySelector( '#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]' )?.closest( 'li');
+			shortcodeLi?.classList.toggle( 'frm_hidden', ! shouldShowShortcodes );
+		}
+	}
+
+	/**
+	 * Returns shortcodes that are contextual to the current input field.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @returns {Array}
+	 */
+	function getContextualShortcodes() {
+		let contextualShortcodes = document.getElementById( 'frm_adv_info' )?.dataset.contextualShortcodes;
+		if ( ! contextualShortcodes) {
+			return [];
+		}
+		contextualShortcodes = JSON.parse( contextualShortcodes );
+		contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
+		contextualShortcodes.bodySelector    = '[id^=email_message_]';
+		return contextualShortcodes;
 	}
 
 	function fieldUpdated() {
@@ -8571,6 +8751,10 @@ function frmAdminBuildJS() {
 		closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
 		for ( u = 0; u < closeSvg.length; u++ ) {
 			if ( closeSvg[u].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
+				if ( closeSvg[u].closest( '.frm_remove_field' ) ) {
+					// Don't change the icon for the email fields remove button.
+					continue;
+				}
 				closeSvg[u].setAttributeNS( 'http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon' );
 			}
 		}
@@ -9455,12 +9639,12 @@ function frmAdminBuildJS() {
 
 			const itemCanBeShown = ! ( getExportOption() === 'xml' && items[i].classList.contains( 'frm-is-repeater' ) );
 			if ( searchText === '' ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.remove( 'frm-search-result' );
 			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
-				if ( itemCanBeShown ) {
+				if ( itemCanBeShown && checkContextualShortcode( items[i] ) ) {
 					items[i].classList.remove( 'frm_hidden' );
 				}
 				items[i].classList.add( 'frm-search-result' );
@@ -10228,8 +10412,8 @@ function frmAdminBuildJS() {
 			} else if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 				// only load on views settings page
 				frmAdminBuild.viewInit();
-			} else if ( document.getElementById( 'frm_inbox_page' ) !== null || null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
-				// Inbox page
+			} else if ( null !== document.querySelector( '.frm-inbox-wrapper' ) ) {
+				// Dashboard page inbox.
 				frmAdminBuild.inboxInit();
 			} else if ( document.getElementById( 'frm-welcome' ) !== null ) {
 				// Solution install page
@@ -10521,6 +10705,7 @@ function frmAdminBuildJS() {
 			toggleSectionHolder();
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
+			document.addEventListener( 'change', handleBuilderChangeEvent );
 		},
 
 		settingsInit: function() {
@@ -10562,7 +10747,6 @@ function frmAdminBuildJS() {
 
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
-			formSettings.on( 'blur', '.frm_email_blur', formatEmailSetting );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
 			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
@@ -10794,7 +10978,7 @@ function frmAdminBuildJS() {
 		},
 
 		inboxInit: function() {
-			jQuery( '.frm_inbox_dismiss, footer .frm-button-secondary, footer .frm-button-primary' ).on( 'click', function( e ) {
+			jQuery( '.frm_inbox_dismiss' ).on( 'click', function( e ) {
 				const message                  = this.parentNode.parentNode;
 				const key                      = message.getAttribute( 'data-message' );
 				const href                     = this.getAttribute( 'href' );
@@ -10843,25 +11027,13 @@ function frmAdminBuildJS() {
 								if ( 1 === message.parentNode.querySelectorAll( '.frm-inbox-message-container' ).length ) {
 									document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
 									message.parentNode.closest( '.frm-active' ).classList.add( 'frm-empty-inbox' );
+									showActiveCampaignForm();
 								}
 								message.parentNode.removeChild( message );
 							}
 						);
 					}
 				);
-			});
-			jQuery( '#frm-dismiss-inbox' ).on( 'click', function() {
-				data = {
-					action: 'frm_inbox_dismiss',
-					key: 'all',
-					nonce: frmGlobal.nonce
-				};
-				postAjax( data, function() {
-					fadeOut( document.getElementById( 'frm_message_list' ), function() {
-						document.getElementById( 'frm_empty_inbox' ).classList.remove( 'frm_hidden' );
-						showActiveCampaignForm();
-					});
-				});
 			});
 
 			if ( false === document.getElementById( 'frm_empty_inbox' )?.classList.contains( 'frm_hidden' ) ) {
@@ -10926,6 +11098,21 @@ function frmAdminBuildJS() {
 
 			// Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
 			frmDom.util.documentOn( 'submit', '.frm_settings_form', () => fieldsUpdated = 0 );
+
+			const manageStyleSettings = document.getElementById( 'manage_styles_settings' );
+			if ( manageStyleSettings ) {
+				manageStyleSettings.addEventListener(
+					'change',
+					event => {
+						const target = event.target;
+						if ( 'SELECT' !== target.nodeName || ! target.dataset.name || target.getAttribute( 'name' ) ) {
+							return;
+						}
+
+						target.setAttribute( 'name', target.dataset.name );
+					}
+				);
+			}
 		},
 
 		exportInit: function() {
@@ -11056,7 +11243,9 @@ function frmAdminBuildJS() {
 		toggleAddonState,
 		purifyHtml,
 		loadApiEmailForm,
-		addMyEmailAddress
+		addMyEmailAddress,
+		fillDropdownOpts,
+		showSaveAndReloadModal
 	};
 }
 

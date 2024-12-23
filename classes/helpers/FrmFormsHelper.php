@@ -63,7 +63,7 @@ class FrmFormsHelper {
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
-					<?php echo esc_html( '' === $form->name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
+					<?php echo esc_html( '' === $form->name ? self::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -127,7 +127,7 @@ class FrmFormsHelper {
 		}
 
 		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name           = '' === $name ? __( '(no title)', 'formidable' ) : strip_tags( $name );
+		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		if ( count( $forms ) < 2 ) {
@@ -183,7 +183,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? __( '(no title)', 'formidable' ) : $form->name;
+					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -216,6 +216,9 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|string $field_type
+	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
 		if ( is_array( $field_type ) ) {
@@ -229,6 +232,9 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|string $field_type
+	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
 		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
@@ -1125,13 +1131,24 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Returns a text used when no title is set.
+	 *
+	 * @since 6.16.1
+	 *
+	 * @return string
+	 */
+	public static function get_no_title_text() {
+		return __( '(no title)', 'formidable' );
+	}
+
+	/**
 	 * @param int|object|string $data
 	 * @return string
 	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
 		if ( ! $name ) {
-			return __( '(no title)', 'formidable' );
+			return self::get_no_title_text();
 		}
 		return FrmAppHelper::truncate( $name, 40 );
 	}
@@ -1825,7 +1842,7 @@ BEFORE_HTML;
 	 * Strip characters similar to the WordPress sanitize_html_class function, but allow for [ and ].
 	 * This allows shortcodes inside of the layout classes setting.
 	 *
-	 * @since x.x
+	 * @since 6.16
 	 *
 	 * @param string $classname
 	 * @return string
@@ -1859,19 +1876,5 @@ BEFORE_HTML;
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
-	}
-
-	/**
-	 * Retrieves the list of template categories to ignore.
-	 *
-	 * @since 4.03.01
-	 * @deprecated 6.15
-	 *
-	 * @return string[] Array of categories to ignore.
-	 */
-	public static function ignore_template_categories() {
-		_deprecated_function( __METHOD__, '6.15' );
-
-		return self::get_license_types();
 	}
 }

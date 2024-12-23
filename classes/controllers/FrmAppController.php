@@ -16,8 +16,6 @@ class FrmAppController {
 
 		$menu_name = FrmAppHelper::get_menu_name();
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
-
-		self::maybe_add_black_friday_submenu_item();
 	}
 
 	/**
@@ -40,73 +38,6 @@ class FrmAppController {
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 
 		return apply_filters( 'frm_icon', $icon );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	private static function maybe_add_black_friday_submenu_item() {
-		if ( ! current_user_can( 'frm_change_settings' ) ) {
-			return;
-		}
-
-		$is_black_friday = self::is_black_friday();
-		$is_cyber_monday = self::is_cyber_monday();
-
-		if ( ! $is_black_friday && ! $is_cyber_monday ) {
-			return;
-		}
-
-		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
-		$black_friday_menu_label = '<span class="frm-orange-text">' . esc_html( $black_friday_menu_label ) . '</span>';
-
-		add_action(
-			'admin_menu',
-			function () use ( $black_friday_menu_label ) {
-				add_submenu_page( 'formidable', 'Formidable', $black_friday_menu_label, 'frm_change_settings', 'formidable-black-friday', 'FrmAppController::redirect_blackfriday' );
-			},
-			1000
-		);
-	}
-
-	/**
-	 * Black Friday sale is from November 25 to 29.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool
-	 */
-	private static function is_black_friday() {
-		return self::within_sale_date_range( '2024-11-25', '2024-11-29' );
-	}
-
-	/**
-	 * Cyber Monday sale rules from November 30 to December 4.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool
-	 */
-	private static function is_cyber_monday() {
-		return self::within_sale_date_range( '2024-11-30', '2024-12-04' );
-	}
-
-	/**
-	 * Check if the current time is within a sale date range.
-	 * Our sales are based on Eastern Time, so we use New York's timezone.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $from The beginning of the date range. Y-m-d format is expected.
-	 * @param string $to   The end of the date range. Y-m-d format is expected.
-	 * @return bool
-	 */
-	private static function within_sale_date_range( $from, $to ) {
-		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
-		$today = $date->format( 'Y-m-d' );
-		return $today >= $from && $today <= $to;
 	}
 
 	/**
@@ -534,7 +465,6 @@ class FrmAppController {
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
-		remove_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
@@ -620,6 +550,18 @@ class FrmAppController {
 			FrmStylesController::save_style();
 		}
 
+		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
+			wp_redirect(
+				FrmAppHelper::admin_upgrade_link(
+					array(
+						'medium'  => 'upgrade',
+						'content' => 'submenu-upgrade',
+					)
+				)
+			);
+			die();
+		}
+
 		// Register personal data hooks.
 		new FrmPersonalData();
 
@@ -649,8 +591,6 @@ class FrmAppController {
 
 			FrmInbox::maybe_disable_screen_options();
 		}
-
-		self::maybe_add_ip_warning();
 	}
 
 	/**
@@ -674,65 +614,6 @@ class FrmAppController {
 		if ( class_exists( $class ) && method_exists( $class, 'load_page' ) ) {
 			call_user_func( array( $class, 'load_page' ) );
 		}
-	}
-
-	/**
-	 * Show a warning for the IP address setting if it hasn't been set.
-	 *
-	 * @since 6.1
-	 *
-	 * @return void
-	 */
-	private static function maybe_add_ip_warning() {
-		$settings = FrmAppHelper::get_settings();
-		if ( false !== $settings->custom_header_ip ) {
-			// The setting has been changed from the false default (to either 1 or 0), so stop showing the message.
-			return;
-		}
-
-		if ( ! self::is_behind_proxy() ) {
-			// This message is only applicable when using a reverse proxy.
-			return;
-		}
-
-		if ( FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_text_field' ) ) {
-			// Avoid the message on a POST action. We don't want to show the message if we're saving global settings.
-			return;
-		}
-
-		$global_settings_link = admin_url( 'admin.php?page=formidable-settings' ) . '#frm_custom_header_ip';
-		$message              = sprintf(
-			// Translators: 1: Global Settings Link
-			__( 'IP addresses in form submissions may no longer be accurate! If you are experiencing issues, we recommend going to %1$s and enabling the "Use custom headers when retrieving IPs with form submissions." setting.', 'formidable' ),
-			'<a href="' . esc_url( $global_settings_link ) . '">' . __( 'Global Settings', 'formidable' ) . '</a>'
-		);
-		$option_name = 'frm_dismiss_ip_address_notice';
-		FrmAppHelper::add_dismissable_warning_message( $message, $option_name );
-	}
-
-	/**
-	 * Check if any reverse proxy headers are set.
-	 *
-	 * @since 6.1
-	 *
-	 * @return bool
-	 */
-	private static function is_behind_proxy() {
-		$custom_headers = FrmAppHelper::get_custom_header_keys_for_ip();
-		foreach ( $custom_headers as $header ) {
-			if ( 'REMOTE_ADDR' === $header ) {
-				// We want to check every key but REMOTE_ADDR. REMOTE_ATTR is not unique to reverse proxy servers.
-				continue;
-			}
-
-			$ip = trim( FrmAppHelper::get_server_value( $header ) );
-			// Return true for anything that isn't empty but ignoring values like ::1.
-			if ( $ip && 0 !== strpos( $ip, '::' ) ) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	/**
@@ -819,7 +700,9 @@ class FrmAppController {
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
 			wp_enqueue_script( 'formidable_admin' );
+			wp_set_script_translations( 'formidable_admin', 'formidable' );
 			wp_enqueue_script( 'formidable_embed' );
+			wp_set_script_translations( 'formidable_embed', 'formidable' );
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-animations' );
@@ -913,6 +796,7 @@ class FrmAppController {
 	public static function admin_enqueue_scripts() {
 		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
+		FrmUsageController::load_scripts();
 	}
 
 	/**
@@ -1318,6 +1202,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function show_error_modal( $error_args ) {
+		add_filter( 'frm_show_footer_links', '__return_false' );
+
 		$defaults = array(
 			'title'            => '',
 			'body'             => '',
@@ -1383,21 +1269,25 @@ class FrmAppController {
 	}
 
 	/**
-	 * @deprecated 3.0 This is still referenced in https://formidableforms.com/knowledgebase/php-examples/ as of May 8, 2024.
-	 * @codeCoverageIgnore
-	 */
-	public static function page_route( $content ) {
-		return FrmDeprecated::page_route( $content );
-	}
-
-	/**
 	 * Check if we are in our admin pages.
 	 *
 	 * @return bool
 	 */
 	private static function in_our_pages() {
-		global $current_screen;
-		return FrmAppHelper::is_formidable_admin() || ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type );
+		global $current_screen, $pagenow;
+		if ( FrmAppHelper::is_formidable_admin() ) {
+			return true;
+		}
+
+		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
+			return true;
+		}
+
+		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -1457,25 +1347,5 @@ class FrmAppController {
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
-	}
-
-	/**
-	 * Redirect to Black Friday sales page when the menu item is clicked.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function redirect_blackfriday() {
-		wp_redirect(
-			FrmAppHelper::admin_upgrade_link(
-				array(
-					'medium'  => 'black-friday-submenu',
-					'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
-				),
-				'black-friday'
-			)
-		);
-		die();
 	}
 }

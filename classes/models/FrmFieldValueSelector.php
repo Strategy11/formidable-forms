@@ -75,6 +75,15 @@ class FrmFieldValueSelector {
 	protected $db_row;
 
 	/**
+	 * Field dropdowns will truncate at 25 characters by default.
+	 *
+	 * @var int|null
+	 *
+	 * @since 6.16.2
+	 */
+	protected $truncate;
+
+	/**
 	 * FrmFieldValueSelector constructor
 	 *
 	 * @param int|string $field_id
@@ -83,6 +92,7 @@ class FrmFieldValueSelector {
 		$this->set_html_name( $args );
 		$this->set_value( $args );
 		$this->set_source( $args );
+		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
 		if ( $this->field_id === 0 ) {
@@ -197,6 +207,19 @@ class FrmFieldValueSelector {
 	}
 
 	/**
+	 * @since 6.16.2
+	 *
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	protected function set_truncate( $args ) {
+		if ( isset( $args['truncate'] ) && is_numeric( $args['truncate'] ) ) {
+			$this->truncate = (int) $args['truncate'];
+		}
+	}
+
+	/**
 	 * Check if object has any options
 	 *
 	 * @since 2.03.05
@@ -256,13 +279,15 @@ class FrmFieldValueSelector {
 		echo '<option value="">' . esc_html( $this->blank_option_label ) . '</option>';
 
 		if ( ! empty( $this->options ) ) {
+			$truncate = isset( $this->truncate ) ? $this->truncate : 25;
+
 			foreach ( $this->options as $key => $value ) {
 				if ( $value == '' ) {
 					continue;
 				}
 
 				$option = $this->get_single_field_option( $key, $value );
-				$option->print_single_option( $this->value, 25 );
+				$option->print_single_option( $this->value, $truncate );
 			}
 		}
 

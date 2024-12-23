@@ -94,6 +94,10 @@
 	color: #ff4a00;
 }
 
+.plugin-card-twilio .frm-border-icon svg {
+	color: #F22F46;
+}
+
 .plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
 	pointer-events: none;
 }

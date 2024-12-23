@@ -108,9 +108,14 @@ class FrmFormsController {
 	 * @since 2.02.11
 	 *
 	 * @param int|object $form
+	 * @return void
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
+
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 		if ( $create_email ) {
@@ -128,9 +133,13 @@ class FrmFormsController {
 	 * @since 6.0.0
 	 *
 	 * @param int|object $form Form object or ID.
+	 * @return void
 	 */
 	private static function create_default_on_submit_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		/**
 		 * Enable or disable the default On Submit action.
@@ -157,9 +166,13 @@ class FrmFormsController {
 	 * @since 6.9
 	 *
 	 * @param int|object $form Form ID or object.
+	 * @return void
 	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		if ( FrmSubmitHelper::get_submit_field( $form->id ) ) {
 			// Do not create submit button field if it exists.
@@ -170,7 +183,7 @@ class FrmFormsController {
 			array(
 				'type'          => FrmSubmitHelper::FIELD_TYPE,
 				'name'          => __( 'Submit', 'formidable' ),
-				'field_order'   => 9999,
+				'field_order'   => FrmSubmitHelper::DEFAULT_ORDER,
 				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
@@ -764,6 +777,10 @@ class FrmFormsController {
 			if ( FrmForm::trash( $id ) ) {
 				++$count;
 			}
+		}
+
+		if ( ! $count ) {
+			return '';
 		}
 
 		$current_page = FrmAppHelper::get_simple_request(
@@ -1409,6 +1426,10 @@ class FrmFormsController {
 			),
 		);
 
+		if ( ! has_action( 'frm_add_form_style_tab_options' ) && ! has_action( 'frm_add_form_button_options' ) ) {
+			unset( $sections['buttons'] );
+		}
+
 		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
 			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
 				unset( $sections[ $feature ] );
@@ -1646,17 +1667,12 @@ class FrmFormsController {
 			''           => '',
 			'siteurl'    => __( 'Site URL', 'formidable' ),
 			'sitename'   => __( 'Site Name', 'formidable' ),
+			'form_name'  => __( 'Form Name', 'formidable' ),
 		);
 
+		$entry_shortcodes = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
-		}
-
-		if ( $settings_tab ) {
-			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
-			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
-			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
-			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
 		/**
@@ -1974,16 +1990,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
-	}
-
-	/**
 	 * Add education about views.
 	 *
 	 * @since 4.07
@@ -2090,7 +2096,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
+					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
@@ -3271,12 +3277,15 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 6.7
+	 * Education for premium features.
 	 *
-	 * @return bool
+	 * @since 4.05
+	 * @deprecated 6.16.3
+	 *
+	 * @return void
 	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, '6.7' );
-		return FrmAddonsController::is_license_expired();
+	public static function add_form_style_tab_options() {
+		_deprecated_function( __METHOD__, '6.16.3' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }
