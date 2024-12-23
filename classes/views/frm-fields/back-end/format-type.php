@@ -44,7 +44,7 @@ $format          = FrmField::get_option( $field, 'format' );
 		 *
 		 * @since x.x
 		 *
-		 * @param string $number_option      The HTML for the number option.
+		 * @param string $number_option       The HTML for the number option.
 		 * @param string $number_option_text The text for the number option.
 		 * @param array  $field              The field array.
 		 * @return string The filtered HTML for the number option.
