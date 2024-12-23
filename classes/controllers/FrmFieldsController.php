@@ -468,15 +468,17 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
+	 * @param array $field Field array.
+	 * @param bool  $is_hidden Whether the format option should be hidden.
 	 * @return void
 	 */
-	public static function show_format_option( $field ) {
-		$attributes          = array();
-		$attributes['class'] = 'frm-has-modal';
+	public static function show_format_option( $field, $is_hidden = false ) {
+		$attributes          = array(
+			'class' => 'frm-has-modal',
+			'id'    => 'frm-field-format-custom-' . $field['id'],
+		);
 
-		if ( 'phone' === $field['type'] ) {
-			$attributes['id']     = 'frm-phone-field-custom-format-' . $field['id'];
+		if ( $is_hidden ) {
 			$attributes['class'] .= ' frm_hidden';
 		}
 
@@ -526,6 +528,13 @@ class FrmFieldsController {
 
 		if ( isset( $field['size'] ) && $field['size'] > 0 ) {
 			$class[] = 'auto_width';
+		}
+
+		if (
+			in_array( $field['type'], array( 'text', 'textarea', 'number', 'hidden' ) )
+			&& isset( $field['format'] ) && 'currency' === $field['format'] && empty( $field['calc'] )
+		) {
+			$class[] = 'frm-has-number-format';
 		}
 	}
 
