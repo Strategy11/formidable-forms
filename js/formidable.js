@@ -1678,7 +1678,7 @@ function frmFrontFormJS() {
 		 * Render a captcha field.
 		 *
 		 * @param {HTMLElement} captcha
-		 * @param {string} captchaSelector
+		 * @param {string}      captchaSelector
 		 * @return {void}
 		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
