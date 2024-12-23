@@ -1674,32 +1674,42 @@ function frmFrontFormJS() {
 
 		getFieldId,
 
+		/**
+		 * Render a captcha field.
+		 *
+		 * @param {HTMLElement} captcha
+		 * @param {string}      captchaSelector
+		 * @return {void}
+		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
-			let formID, captchaID,
-				size = captcha.getAttribute( 'data-size' ),
-				rendered = captcha.getAttribute( 'data-rid' ) !== null,
-				params = {
-					'sitekey': captcha.getAttribute( 'data-sitekey' ),
-					'size': size,
-					'theme': captcha.getAttribute( 'data-theme' )
-				},
-				activeCaptcha = getSelectedCaptcha( captchaSelector ),
-				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-
+			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
 			}
 
+			const size   = captcha.getAttribute( 'data-size' );
+			const params = {
+				sitekey: captcha.getAttribute( 'data-sitekey' ),
+				size: size,
+				theme: captcha.getAttribute( 'data-theme' )
+			};
+
 			if ( size === 'invisible' ) {
-				formID = jQuery( captcha ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
-				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
+				const formID = captcha.closest( 'form' )?.querySelector( 'input[name="form_id"]' )?.value;
+
+				const captchaLabel = captcha.closest( '.frm_form_field' )?.querySelector( '.frm_primary_label' );
+				if ( captchaLabel ) {
+					captchaLabel.style.display = 'none';
+				}
+
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
 				};
 			}
 
-
-			captchaID = activeCaptcha.render( captchaContainer, params );
+			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaID        = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
