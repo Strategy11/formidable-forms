@@ -6695,10 +6695,9 @@ function frmAdminBuildJS() {
 	 *
 	 * @since 6.9
 	 *
-	 * @param {HTMLButtonElement} submitButton The button that was submitted.
 	 * @return {void}
 	 */
-	function adjustFormatInputBeforeSave( submitButton ) {
+	function adjustFormatInputBeforeSave() {
 		const formatTypes = document.querySelectorAll( '.frm_format_type_dropdown, .frm_phone_type_dropdown' );
 		const valueMap = {
 			none: '',
@@ -6709,7 +6708,7 @@ function frmAdminBuildJS() {
 		formatTypes.forEach( formatType => {
 			const value = formatType.value;
 			if ( value in valueMap ) {
-				const formatInput = document.getElementById( `frm-field-format-custom-${formatType.dataset.fieldId}` ).querySelector( '.frm_format_opt' );
+				const formatInput = document.getElementById( `frm_format_${formatType.dataset.fieldId}` );
 				formatInput.setAttribute( 'value', valueMap[value] );
 			}
 		});
