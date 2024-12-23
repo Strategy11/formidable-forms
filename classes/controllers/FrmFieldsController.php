@@ -529,6 +529,13 @@ class FrmFieldsController {
 		if ( isset( $field['size'] ) && $field['size'] > 0 ) {
 			$class[] = 'auto_width';
 		}
+
+		if (
+			in_array( $field['type'], array( 'text', 'textarea', 'number', 'hidden' ) )
+			&& isset( $field['format'] ) && 'currency' === $field['format'] && empty( $field['calc'] )
+		) {
+			$class[] = 'frm-has-number-format';
+		}
 	}
 
 	/**
