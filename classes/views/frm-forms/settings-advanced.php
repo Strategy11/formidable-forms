@@ -47,9 +47,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Fires after the form description field.
  *
+ * @param array $values The form values.
+ *
  * @since x.x
  */
-do_action( 'frm_settings_after_form_description' );
+do_action( 'frm_settings_after_form_description', $values );
 
 if ( ! $values['is_template'] ) {
 	$first_h3 = '';

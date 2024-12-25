@@ -69,6 +69,8 @@ class FrmApplicationsController {
 	/**
 	 * Get information about applications via AJAX action.
 	 *
+	 * @since x.x Added $is_ajax_request parameter.
+	 *
 	 * @return array|void
 	 */
 	public static function get_applications_data( $is_ajax_request = true ) {
