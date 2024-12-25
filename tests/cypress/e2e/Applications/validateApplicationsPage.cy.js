@@ -11,7 +11,8 @@ describe("Applications page", () => {
         cy.get('#frm-publishing > .button').should("contain", "Upgrade");
         cy.get('.frm-h2 > span').should('contain', 'My Applications');
         cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > img').should('exist');
-        cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(2) > div').should('contain', 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.');
+        cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > h3').should('contain', 'Improve your workflow with applications');
+        cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > div').should('contain', 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.');
         cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(2) > .button').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
 
         cy.origin('https://formidableforms.com', () => {
