@@ -47,7 +47,7 @@ describe("Applications page", () => {
             .should('be.visible')
             .within(() => {
                 cy.get('.frm-modal-title').should('contain.text', 'Business Directory');
-                cy.get('.frm_warning_style span')
+                cy.get('.frm_note_style2 span')
                     .should('contain.text', 'Access to this application requires the Elite plan.');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
@@ -175,7 +175,7 @@ describe("Applications page", () => {
             .should('be.visible')
             .within(() => {
                 cy.get('.frm-modal-title').should('contain.text', 'Letter of Recommendation');
-                cy.get('.frm_warning_style span')
+                cy.get('.frm_note_style2 span')
                     .should('contain.text', 'Access to this application requires the Business plan');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
@@ -292,7 +292,7 @@ describe("Applications page", () => {
             .should('be.visible')
             .within(() => {
                 cy.get('.frm-modal-title').should('contain.text', 'Testimonials');
-                cy.get('.frm_warning_style span')
+                cy.get('.frm_note_style2 span')
                     .should('contain.text', 'Access to this application requires the Business plan');
                 cy.get('.frm-application-image-wrapper img')
                     .should('have.attr', 'src')
