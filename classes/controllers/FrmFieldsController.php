@@ -970,7 +970,8 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
-		$has_format   = FrmField::is_option_true_in_array( $field, 'format' );
+		$format_value = FrmField::get_option( $field, 'format' );
+		$has_format   = $format_value && 'currency' !== $format_value;
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
 		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
