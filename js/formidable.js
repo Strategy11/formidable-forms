@@ -293,12 +293,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Validate a field with JS.
+	 *
+	 * @param {HTMLElement} field
+	 *
+	 * @return {void}
+	 */
 	function validateField( field ) {
-		let key,
-			errors = [],
-			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
+		let errors, key;
 
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
+		errors               = [];
+		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -306,6 +314,7 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
+		const $fieldCont = jQuery( fieldContainer );
 		removeFieldError( $fieldCont );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
