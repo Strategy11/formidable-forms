@@ -1663,6 +1663,8 @@ class FrmAppHelper {
 			'source' 				   => array(),
 			'dropdown_limit'           => 50,
 			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
+			'value_key'                => 'value',
+			'label_key'                => 'label',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -1679,24 +1681,43 @@ class FrmAppHelper {
 		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
 			?>
 			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
-				<?php foreach ( $args['source'] as $value => $label ) : ?>
+				<?php
+				foreach ( $args['source'] as $key => $source ) :
+					if ( is_array( $source ) ) {
+						$value = isset( $source[ $args['value_key'] ] ) ? $source[ $args['value_key'] ] : '';
+						$label = isset( $source[ $args['label_key'] ] ) ? $source[ $args['label_key'] ] : '';
+					} else {
+						$value = $key;
+						$label = $source;
+					}
+					?>
 					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['selected'] ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			<?php
 		} else {
 			$options = array();
-			foreach ( $args['source'] as $value => $label ) {
-				$options[] = array(
-					'value' => $value,
-					'label' => $label,
-				);
+			$autocomplete_value = '';
+			foreach ( $args['source'] as $key => $source ) {
+				if ( is_array( $source ) ) {
+					$value = isset( $source[ $args['value_key'] ] ) ? $source[ $args['value_key'] ] : '';
+					$label = isset( $source[ $args['label_key'] ] ) ? $source[ $args['label_key'] ] : '';
+				} else {
+					$value = $key;
+					$label = $source;
+				}
+
+				if ( $value === $args['selected'] ) {
+					$autocomplete_value = $label;
+				}
+
+				$options[] = compact( 'value', 'label' );
 			}
 			?>
 			<input type="text" class="frm-custom-search"
 				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
 				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
-				   value="<?php echo esc_attr( $args['source'][ $args['selected'] ] ); ?>" />
+				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
 			<input type="hidden" name="<?php echo esc_attr( $args['name'] ); ?>"
 				   class="frm_autocomplete_value_input"
 				   value="<?php echo esc_attr( $args['selected'] ); ?>" />

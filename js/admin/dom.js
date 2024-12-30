@@ -249,11 +249,11 @@
 	};
 
 	const autocomplete = {
-		initSelectionAutocomplete: function() {
+		initSelectionAutocomplete: function( container ) {
 			if ( jQuery.fn.autocomplete ) {
-				autocomplete.initAutocomplete( 'page' );
-				autocomplete.initAutocomplete( 'user' );
-				autocomplete.initAutocomplete( 'custom' );
+				autocomplete.initAutocomplete( 'page', container );
+				autocomplete.initAutocomplete( 'user', container );
+				autocomplete.initAutocomplete( 'custom', container );
 			}
 		},
 		/**
@@ -344,6 +344,13 @@
 			e.preventDefault();
 			this.value = ui.item.value === '' ? '' : ui.item.label;
 			this.nextElementSibling.value = ui.item.value;
+
+			/**
+			 * Fires when an autocomplete item is selected.
+			 *
+			 * @since x.x
+			 */
+			wp.hooks.doAction( 'frm_autocomplete_select', e, ui, this );
 		}
 	};
 
