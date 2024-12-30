@@ -9272,7 +9272,7 @@ Responsive Design
 }
 
 .frm-sortable-helper,
-.frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
+.frm-multiselect-key-is-down li.form-field {
 	pointer-events: none;
 }
 
