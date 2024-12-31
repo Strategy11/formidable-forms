@@ -2692,7 +2692,7 @@
 * Pro: Fix exporting multiple entries with the bulk CSV export option
 * Pro: Fix Entry ID filter in views when using a comma separated list of ids
 * Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
-* Pro: Fix apostraphes in form action logic
+* Pro: Fix apostrophes in form action logic
 
 = 2.0.03 =
 * Use frm_clear instead of clear to minimize conflicts
