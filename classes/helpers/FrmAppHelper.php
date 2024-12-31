@@ -1653,6 +1653,13 @@ class FrmAppHelper {
 		<?php
 	}
 
+	/**
+	 * Maybe show an HTML select or autocomplete input based on the number of options.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Args. See the method for details.
+	 */
 	public static function maybe_autocomplete_options( $args ) {
 		$defaults = array(
 			'truncate'                 => false,
@@ -1683,15 +1690,9 @@ class FrmAppHelper {
 			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
 				<?php
 				foreach ( $args['source'] as $key => $source ) :
-					if ( is_array( $source ) ) {
-						$value = isset( $source[ $args['value_key'] ] ) ? $source[ $args['value_key'] ] : '';
-						$label = isset( $source[ $args['label_key'] ] ) ? $source[ $args['label_key'] ] : '';
-					} else {
-						$value = $key;
-						$label = $source;
-					}
+					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
 					?>
-					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $args['selected'] ); ?>><?php echo esc_html( $label ); ?></option>
+					<option value="<?php echo esc_attr( $value_label['value'] ); ?>" <?php selected( $value_label['value'], $args['selected'] ); ?>><?php echo esc_html( $value_label['label'] ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			<?php
@@ -1699,30 +1700,48 @@ class FrmAppHelper {
 			$options = array();
 			$autocomplete_value = '';
 			foreach ( $args['source'] as $key => $source ) {
-				if ( is_array( $source ) ) {
-					$value = isset( $source[ $args['value_key'] ] ) ? $source[ $args['value_key'] ] : '';
-					$label = isset( $source[ $args['label_key'] ] ) ? $source[ $args['label_key'] ] : '';
-				} else {
-					$value = $key;
-					$label = $source;
+				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+
+				if ( $value_label['value'] === $args['selected'] ) {
+					$autocomplete_value = $value_label['label'];
 				}
 
-				if ( $value === $args['selected'] ) {
-					$autocomplete_value = $label;
-				}
-
-				$options[] = compact( 'value', 'label' );
+				$options[] = $value_label;
 			}
+
+			$html_attrs['type'] = 'hidden';
+			$html_attrs['class'] = 'frm_autocomplete_value_input';
+			$html_attrs['value'] = $args['selected'];
 			?>
 			<input type="text" class="frm-custom-search"
 				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
 				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
 				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
-			<input type="hidden" name="<?php echo esc_attr( $args['name'] ); ?>"
-				   class="frm_autocomplete_value_input"
-				   value="<?php echo esc_attr( $args['selected'] ); ?>" />
+			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
 			<?php
 		}
+	}
+
+	/**
+	 * Gets dropdown value and label from autodropdown option.
+	 *
+	 * @since x.x
+	 *
+	 * @param string|array $option Autocomplete option.
+	 * @param string       $key    Array key of the option.
+	 * @param array        $args   See {@see FrmAppHelper::maybe_autocomplete_options()}.
+	 * @return array
+	 */
+	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
+		if ( is_array( $option ) ) {
+			$value = isset( $option[ $args['value_key'] ] ) ? $option[ $args['value_key'] ] : '';
+			$label = isset( $option[ $args['label_key'] ] ) ? $option[ $args['label_key'] ] : '';
+		} else {
+			$value = $key;
+			$label = $option;
+		}
+
+		return compact( 'value', 'label' );
 	}
 
 	/**
