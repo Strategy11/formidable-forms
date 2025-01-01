@@ -6698,7 +6698,7 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function adjustFormatInputBeforeSave() {
-		const formatTypes = document.querySelectorAll( '.frm_format_type_dropdown, .frm_phone_type_dropdown' );
+		const formatTypes = document.querySelectorAll( '.frm_format_dropdown, .frm_phone_type_dropdown' );
 		const valueMap = {
 			none: '',
 			international: 'international',
@@ -10689,7 +10689,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
-			frmDom.util.documentOn( 'change', 'select.frm_format_type_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
+			frmDom.util.documentOn( 'change', 'select.frm_format_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();

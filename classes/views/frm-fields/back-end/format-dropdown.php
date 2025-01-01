@@ -3,7 +3,7 @@
  * @package Formidable
  * @since x.x
  *
- * @var array        $field Field array.
+ * @var array        $field Field data.
  * @var array        $args  Includes 'field', 'display', and 'values' settings.
  * @var FrmFieldType $this  Field type object.
  */
@@ -12,20 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$field_id        = $field['id'];
-$field_type      = $field['type'];
-$is_number_field = 'number' === $field_type;
-$format          = FrmField::get_option( $field, 'format' );
+$field_id   = $field['id'];
+$field_type = $field['type'];
+$format     = FrmField::get_option( $field, 'format' );
 ?>
-<p class="frm6 frm_form_field frm-format-type">
-	<label for="format_type_<?php echo esc_attr( $field_id ); ?>">
+<p class="frm6 frm_form_field frm-format-dropdown">
+	<label for="format_dropdown_<?php echo esc_attr( $field_id ); ?>">
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 
 	<select
-		name="field_options[format_type_<?php echo esc_attr( $field_id ); ?>]"
-		id="format_type_<?php echo esc_attr( $field_id ); ?>"
-		class="frm_format_type_dropdown frm_select_with_upgrade frm_select_with_dependency"
+		name="field_options[format_dropdown_<?php echo esc_attr( $field_id ); ?>]"
+		id="frm_format_dropdown_<?php echo esc_attr( $field_id ); ?>"
+		class="frm_format_dropdown frm_select_with_upgrade frm_select_with_dependency"
 		data-field-id="<?php echo intval( $field_id ); ?>"
 	>
 		<option value="none" <?php selected( $format, '' ); ?>>
@@ -62,11 +61,11 @@ $format          = FrmField::get_option( $field, 'format' );
 
 <?php
 /**
- * Fires after the format type template is rendered.
+ * Fires after the format dropdown template is rendered.
  *
  * @since x.x
  *
  * @param array $field The field array.
  */
-do_action( 'frm_after_format_type_template', $field );
+do_action( 'frm_after_format_dropdown_template', $field );
 ?>

@@ -468,12 +468,12 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field Field array.
+	 * @param array $field Field data.
 	 * @param bool  $is_hidden Whether the format option should be hidden.
 	 * @return void
 	 */
 	public static function show_format_option( $field, $is_hidden = false ) {
-		$attributes          = array(
+		$attributes = array(
 			'class' => 'frm-has-modal',
 			'id'    => 'frm-field-format-custom-' . $field['id'],
 		);
@@ -530,10 +530,7 @@ class FrmFieldsController {
 			$class[] = 'auto_width';
 		}
 
-		if (
-			in_array( $field['type'], array( 'text', 'textarea', 'number', 'hidden' ) )
-			&& isset( $field['format'] ) && 'currency' === $field['format'] && empty( $field['calc'] )
-		) {
+		if ( isset( $field['format'] ) && 'currency' === $field['format'] && empty( $field['calc'] ) && 'range' !== $field['type'] ) {
 			$class[] = 'frm-has-number-format';
 		}
 	}

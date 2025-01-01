@@ -319,11 +319,11 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 }
 
 .frm_form_field.frm-phone-type ~ [id*="frm-field-format-custom-"] > label,
-.frm_form_field.frm-format-type ~ [id*="frm-field-format-custom-"] > label {
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] > label {
 	opacity: 0; /* Hide the label for the format input in the phone field. */
 }
 
-.frm_form_field.frm-format-type ~ [id*="frm-field-format-custom-"] {
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] {
 	grid-column: span 6 / span 6;
 }
 

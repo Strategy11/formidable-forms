@@ -108,7 +108,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 
 		if ( $display['format'] ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-type.php';
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
 
 			FrmFieldsController::show_format_option( $field, true );
 		}
