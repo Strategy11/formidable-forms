@@ -1878,16 +1878,13 @@ input.frm_insert_in_template {
 	display: inline-block !important;
 }
 
-.frm-inline-flex {
+.frm-inline-flex,
+#wpbody-content .frm-inline-flex {
 	display: inline-flex;
 }
 
 .frm-flex {
 	display: flex;
-}
-
-#wpbody-content .frm-inline-flex {
-	display: inline-flex;
 }
 
 .frm_hidden,

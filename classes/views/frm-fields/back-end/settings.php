@@ -109,7 +109,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		if ( $display['format'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
-
 			FrmFieldsController::show_format_option( $field, true );
 		}
 		?>
