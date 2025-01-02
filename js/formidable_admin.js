@@ -686,7 +686,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						frmDom.autocomplete.initAutocomplete( 'page', inside );
+						frmDom.autocomplete.initSelectionAutocomplete( inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 
 						/**
@@ -8381,7 +8381,7 @@ function frmAdminBuildJS() {
 	 * Handles 'change' event on the document.
 	 *
 	 * @since 6.16.3
-	 * 
+	 *
 	 * @param {Event} event
 	 * @returns {Void}
 	 */
@@ -8447,7 +8447,7 @@ function frmAdminBuildJS() {
 			onClickPreventDefault( continueButton, () => {
 				saveAndReloadFormBuilder();
 			} );
-	
+
 			const cancelButton = frmDom.modal.footerButton({
 				text: __( 'Cancel', 'formidable' ),
 				buttonType: 'cancel'
