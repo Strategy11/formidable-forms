@@ -258,15 +258,15 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 		if ( $submit_margin ) {
 			$_submit_margin = explode( ' ', $submit_margin );
 			if ( count( $_submit_margin ) < 3 ) {
-				$bottom_margin = $_submit_margin[0];
+				$submit_bottom_margin = $_submit_margin[0];
 			} else {
-				$bottom_margin = $_submit_margin[2];
+				$submit_bottom_margin = $_submit_margin[2];
 			}
 		} else {
-			$bottom_margin = $submit_margin;
+			$submit_bottom_margin = $submit_margin;
 		}
 		?>
-	margin-bottom:<?php echo esc_html( $bottom_margin ); ?>;
+	margin-bottom:<?php echo esc_html( $submit_bottom_margin ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
