@@ -207,7 +207,7 @@ class FrmSimpleBlocksController {
 
 		$form .= FrmFormsController::get_form_shortcode( $params );
 		if ( ! empty( $attributes['className'] ) ) {
-			$form = str_replace( 'frm_forms ', 'frm_forms ' . $attributes['className'] . ' ', $form );
+			$form = preg_replace( '/\bfrm_forms\b/', 'frm_forms ' . $attributes['className'], $form, 1 );
 		}
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
 	}
