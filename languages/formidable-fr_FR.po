@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-12-10T14:59:49+00:00\n"
-"PO-Revision-Date: 2024-12-11 00:12\n"
+"PO-Revision-Date: 2025-01-02 21:02\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -24,23 +24,23 @@ msgstr ""
 #: js/src/addons-page/ui/showEmptyState.js:30
 #: js/addons-page.js:2107
 msgid "No add-ons found"
-msgstr ""
+msgstr "Aucun module trouvé"
 
 #: js/src/addons-page/ui/showEmptyState.js:31
 #: js/addons-page.js:2108
 msgid "Sorry, we didn't find any add-ons that match your criteria."
-msgstr ""
+msgstr "Désolé, nous n’avons trouvé aucun module correspondant à vos critères."
 
 #: js/src/addons-page/ui/showEmptyState.js:36
 #: classes/views/addons/list.php:20
 #: js/addons-page.js:2113
 msgid "Request Add-On"
-msgstr ""
+msgstr "Demander un module"
 
 #: js/src/admin/styles.js:29
 #: js/formidable_styles.js:3395
 msgid "The class name has been copied."
-msgstr ""
+msgstr "Le nom de la classe a été copié."
 
 #: js/src/common/components/itemselect.js:26
 #: js/formidable_blocks.js:92
@@ -296,7 +296,7 @@ msgstr "Ce site n’a pas de modales surgissantes."
 #: js/src/form/views.js:18
 #: js/formidable_blocks.js:705
 msgid "Display a Visual View"
-msgstr ""
+msgstr "Afficher une vue visuelle"
 
 #: js/src/form/views.js:32
 #: classes/controllers/FrmSMTPController.php:321
@@ -322,14 +322,14 @@ msgstr "Activer"
 #: js/formidable_blocks.js:704
 #: js/formidable_blocks.js:739
 msgid "Formidable Views"
-msgstr ""
+msgstr "Formidable Views"
 
 #: js/src/form/views.js:86
 #: js/src/form/views.js:74
 #: js/formidable_blocks.js:761
 #: js/formidable_blocks.js:773
 msgid "Effortlessly transform form data into webpages with Views, the only integrated form & application builder."
-msgstr ""
+msgstr "Transformez sans effort les données de formulaire en pages web avec les vues, le seul constructeur intégré de formulaires et d’applications."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -382,7 +382,7 @@ msgstr "Actif"
 
 #: classes/controllers/FrmAddonsController.php:209
 msgid "All Add-Ons"
-msgstr ""
+msgstr "Tous les modules"
 
 #: classes/controllers/FrmAddonsController.php:260
 msgid "There are no plugins on your site that require a license"
@@ -675,11 +675,11 @@ msgstr "Ce formulaire est à la poubelle et est prévu pour être définitivemen
 
 #: classes/controllers/FrmEntriesController.php:540
 msgid "You can't view the entry"
-msgstr ""
+msgstr "Vous ne pouvez pas voir l’entrée"
 
 #: classes/controllers/FrmEntriesController.php:541
 msgid "You are trying to view an entry that does not exist"
-msgstr ""
+msgstr "Vous essayez de voir une entrée qui n’existe pas"
 
 #: classes/controllers/FrmEntriesController.php:569
 #: classes/controllers/FrmFormActionsController.php:429
@@ -989,7 +989,7 @@ msgstr "N’ajouter automatiquement aucun saut de paragraphe ou de ligne"
 #: classes/controllers/FrmFormsController.php:1628
 #: classes/models/FrmField.php:62
 msgid "User ID"
-msgstr "Identifiant"
+msgstr "ID Utilisateur"
 
 #: classes/controllers/FrmFormsController.php:1629
 #: classes/models/fields/FrmFieldName.php:36
@@ -1015,7 +1015,7 @@ msgstr "Identifiant de connexion"
 #: classes/models/FrmField.php:34
 #: stripe/views/action-settings/payments-options.php:105
 msgid "Email"
-msgstr "E-mail"
+msgstr "Email"
 
 #: classes/controllers/FrmFormsController.php:1634
 msgid "Avatar"
@@ -1436,11 +1436,11 @@ msgstr "Modifier le style"
 
 #: classes/controllers/FrmStylesController.php:329
 msgid "No styles"
-msgstr ""
+msgstr "Aucun style"
 
 #: classes/controllers/FrmStylesController.php:330
 msgid "You must have a style to use the Visual Styler."
-msgstr ""
+msgstr "Aucun module trouvé"
 
 #: classes/controllers/FrmStylesController.php:346
 msgid "No forms"
@@ -1448,7 +1448,7 @@ msgstr "Aucun formulaire"
 
 #: classes/controllers/FrmStylesController.php:347
 msgid "You must have a form to use the Visual Styler."
-msgstr ""
+msgstr "Désolé, nous n’avons trouvé aucun module correspondant à vos critères."
 
 #: classes/controllers/FrmStylesController.php:470
 msgid "Invalid target style"
@@ -1571,11 +1571,11 @@ msgstr "Il n’y a pas d’entrée pour ce formulaire."
 #: classes/helpers/FrmAddonsHelper.php:56
 #: classes/helpers/FrmAddonsHelper.php:74
 msgid "Unlock Add-on library"
-msgstr ""
+msgstr "Déverrouillez la bibliothèque de modules"
 
 #: classes/helpers/FrmAddonsHelper.php:57
 msgid "Renew your subscription today and access our library of add-ons to supercharge your forms."
-msgstr ""
+msgstr "Renouvelez votre abonnement aujourd’hui et accédez à notre bibliothèque de modules pour dynamiser vos formulaires."
 
 #: classes/helpers/FrmAddonsHelper.php:58
 #: classes/helpers/FrmFormTemplatesHelper.php:175
@@ -1585,7 +1585,7 @@ msgstr "Renouveler maintenant"
 
 #: classes/helpers/FrmAddonsHelper.php:75
 msgid "Upgrade to Pro and access our library of add-ons to supercharge your forms."
-msgstr ""
+msgstr "Passez à la version Pro et accédez à notre bibliothèque de modules pour dynamiser vos formulaires."
 
 #: classes/helpers/FrmAddonsHelper.php:76
 #: classes/helpers/FrmAddonsHelper.php:104
@@ -1596,12 +1596,12 @@ msgstr "Passez à la version PRO"
 
 #: classes/helpers/FrmAddonsHelper.php:97
 msgid "Unlock Even More Add-ons"
-msgstr ""
+msgstr "Déverrouillez encore plus de modules"
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/helpers/FrmAddonsHelper.php:100
 msgid "Your plan includes %1$s%2$s add-ons. Upgrade to take your forms even farther"
-msgstr ""
+msgstr "Votre offre inclut %1$s%2$s modules. Passez à la mise à niveau pour aller encore plus loin avec vos formulaires."
 
 #: classes/helpers/FrmAddonsHelper.php:128
 msgid "Missing add-ons?"
@@ -1619,7 +1619,7 @@ msgstr "Importer"
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
 #: classes/helpers/FrmAppHelper.php:1385
 msgid "You're using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s."
-msgstr ""
+msgstr "Vous utilisez Formidable Forms Lite. Pour déverrouiller plus de fonctionnalités, envisagez de %1$smettre à niveau vers PRO%2$s."
 
 #: classes/helpers/FrmAppHelper.php:1435
 msgid "Add New"
@@ -2644,7 +2644,7 @@ msgstr "L’état de l’entrée doit être renvoyé au format tableau."
 
 #: classes/helpers/FrmEntriesListHelper.php:22
 msgid "Entries list"
-msgstr ""
+msgstr "Liste des entrées"
 
 #: classes/helpers/FrmEntriesListHelper.php:191
 msgid "No Entries Found"
@@ -2660,7 +2660,7 @@ msgstr "Apprenez comment les empêcher."
 
 #: classes/helpers/FrmEntriesListHelper.php:250
 msgid "Filter by form"
-msgstr ""
+msgstr "Filtrer par formulaire"
 
 #: classes/helpers/FrmEntriesListHelper.php:252
 #: stripe/helpers/FrmTransLiteListHelper.php:197
@@ -2674,7 +2674,7 @@ msgstr "Filtre"
 #. translators: %d: Entry id
 #: classes/helpers/FrmEntriesListHelper.php:292
 msgid "Entry %d"
-msgstr ""
+msgstr "Entrée %d"
 
 #. translators: %s: Form name
 #. translators: Form title
@@ -4167,7 +4167,7 @@ msgstr "Créer un formulaire"
 
 #: classes/helpers/FrmFormsHelper.php:1520
 msgid "Plan required:"
-msgstr ""
+msgstr "Offre requise :"
 
 #: classes/helpers/FrmFormsHelper.php:1677
 msgid "Is this intentional?"
@@ -4191,7 +4191,7 @@ msgstr "Enregistrer"
 
 #: classes/helpers/FrmFormsListHelper.php:17
 msgid "Forms list"
-msgstr ""
+msgstr "Liste des formulaires"
 
 #: classes/helpers/FrmFormsListHelper.php:117
 msgid "No forms found in the trash."
@@ -4366,7 +4366,7 @@ msgstr "Ouvrir dans un nouvel onglet"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "NOTE: The selected page content will be displayed, but the full page will not be loaded. Traditional URL tracking in Google Analytics and similar tools won't register a page load event. If precise tracking is essential, consider using the 'Redirect to URL' option."
-msgstr ""
+msgstr "NOTE : Le contenu de la page sélectionnée sera affiché, mais la page complète ne sera pas chargée. Le suivi des URLs traditionnel dans Google Analytics et les outils similaires ne comptabilisera pas un évènement de chargement de page. Si un suivi précis est essentiel, envisagez d’utiliser l’option « Rediriger vers URL »."
 
 #: classes/helpers/FrmOnSubmitHelper.php:142
 msgid "Select a page"
@@ -4383,15 +4383,15 @@ msgstr "Veuillez patienter pendant la redirection."
 
 #: classes/helpers/FrmShortcodeHelper.php:42
 msgid "Admin email"
-msgstr ""
+msgstr "E-mail administrateur"
 
 #: classes/helpers/FrmShortcodeHelper.php:43
 msgid "Default from email"
-msgstr ""
+msgstr "Adresse e-mail de l’expéditeur par défaut"
 
 #: classes/helpers/FrmShortcodeHelper.php:44
 msgid "Default email"
-msgstr ""
+msgstr "E-mail par défaut"
 
 #: classes/helpers/FrmShortcodeHelper.php:47
 msgid "Default Msg"
@@ -4461,7 +4461,7 @@ msgstr "Texte par défaut au sein du champ"
 #: classes/helpers/FrmStylesHelper.php:774
 #: classes/views/styles/_quick-settings.php:7
 msgid "Quick Settings"
-msgstr ""
+msgstr "Réglages rapides"
 
 #. translators: %1$s: Anchor tag open, %2$s: Anchor tag close.
 #: classes/helpers/FrmStylesPreviewHelper.php:202
@@ -4474,7 +4474,7 @@ msgstr "Vous utilisez une version obsolète de Formidable Pro. Veuillez passer �
 
 #: classes/helpers/FrmStylesPreviewHelper.php:231
 msgid "Not all JavaScript is loaded in this preview. Some features will appear differently on the front end."
-msgstr ""
+msgstr "Tout le JavaScript n’est pas chargé dans cet aperçu. Certaines fonctionnalités apparaîtront différemment sur le public."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:241
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
@@ -4845,11 +4845,11 @@ msgstr "Description"
 
 #: classes/models/fields/FrmFieldName.php:37
 msgid "Middle Name"
-msgstr ""
+msgstr "Deuxième prénom"
 
 #: classes/models/fields/FrmFieldName.php:277
 msgid "Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like \"First Name\" instead of \"First\"."
-msgstr ""
+msgstr "Les descriptions des sous-champs sont lues par les lecteurs d’écran. Améliorez l’accessibilité en utilisant des libellés complets, comme « Prénom » au lieu de « First »."
 
 #: classes/models/fields/FrmFieldNumber.php:76
 msgid "Please select a higher number"
@@ -5078,7 +5078,7 @@ msgstr "Liste déroulante"
 
 #: classes/models/FrmField.php:38
 msgid "Website/URL"
-msgstr "Site/URL"
+msgstr "Site Web/URL"
 
 #: classes/models/FrmField.php:42
 msgid "Number"
@@ -5106,15 +5106,15 @@ msgstr "Paiement"
 
 #: classes/models/FrmField.php:98
 msgid "File Upload"
-msgstr "Téléversement de fichiers"
+msgstr "Téléversement de fichier"
 
 #: classes/models/FrmField.php:100
 msgid "Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more."
-msgstr ""
+msgstr "Ajoutez des téléversements de fichiers pour gagner du temps et réduire les allers-retours. Passez à la version Pro pour obtenir des champs de téléversement et plus encore."
 
 #: classes/models/FrmField.php:104
 msgid "Rich Text"
-msgstr "Texte riche"
+msgstr "Texte enrichi"
 
 #: classes/models/FrmField.php:112
 msgid "Time"
@@ -5126,11 +5126,11 @@ msgstr "Échelle"
 
 #: classes/models/FrmField.php:118
 msgid "Add a set of radio buttons with whatever range you choose."
-msgstr ""
+msgstr "Ajoutez un ensemble de boutons radio avec la plage que vous choisissez."
 
 #: classes/models/FrmField.php:118
 msgid "Scale Field"
-msgstr ""
+msgstr "Champ d’échelle"
 
 #: classes/models/FrmField.php:121
 msgid "Star Rating"
@@ -5142,7 +5142,7 @@ msgstr "Curseur"
 
 #: classes/models/FrmField.php:129
 msgid "Toggle"
-msgstr "Commutateur"
+msgstr "Interrupteur"
 
 #: classes/models/FrmField.php:133
 msgid "Dynamic"
@@ -5150,7 +5150,7 @@ msgstr "Champ dynamique"
 
 #: classes/models/FrmField.php:135
 msgid "Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more."
-msgstr ""
+msgstr "Créez des relations entre plusieurs formulaires. Vous pouvez lier un membre à une équipe, une évaluation à un produit, un commentaire à un envoi, et bien plus encore."
 
 #: classes/models/FrmField.php:138
 msgid "Lookup"
@@ -5158,11 +5158,11 @@ msgstr "Champ de recherche"
 
 #: classes/models/FrmField.php:140
 msgid "Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more."
-msgstr ""
+msgstr "Filtrez les options dans le champ suivant et ajoutez automatiquement des valeurs à d’autres champs. Passez à la version Pro pour obtenir des champs de recherche et plus encore."
 
 #: classes/models/FrmField.php:140
 msgid "cascading lookup fields"
-msgstr ""
+msgstr "champs de recherche hiérarchiques"
 
 #: classes/models/FrmField.php:143
 msgid "Repeater"
@@ -5170,11 +5170,11 @@ msgstr "Répétiteur"
 
 #: classes/models/FrmField.php:145
 msgid "Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources."
-msgstr ""
+msgstr "Permettez à vos internautes d’ajouter de nouveaux ensembles de champs lors du remplissage des formulaires. Augmentez les conversions tout en enregistrant du temps de construction et des ressources serveur."
 
 #: classes/models/FrmField.php:145
 msgid "Dynamically Add Form Fields with repeatable sections"
-msgstr ""
+msgstr "Ajoutez dynamiquement des champs de formulaire avec des sections répétables"
 
 #: classes/models/FrmField.php:148
 #: classes/models/FrmFormMigrator.php:302
@@ -5191,7 +5191,7 @@ msgstr "Saut de page"
 
 #: classes/models/FrmField.php:158
 msgid "Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?"
-msgstr ""
+msgstr "Obtenez des formulaires à plusieurs pages avec des barres de progression. Saviez-vous que vous pouvez mettre à niveau vers PRO pour déverrouiller des formulaires multi-étapes avec encore plus de fonctionnalités impressionnantes ?"
 
 #: classes/models/FrmField.php:165
 msgid "Likert Scale"
@@ -5207,7 +5207,7 @@ msgstr "Mot de passe"
 
 #: classes/models/FrmField.php:179
 msgid "Tags"
-msgstr "Étiquettes"
+msgstr "Mots-clés"
 
 #: classes/models/FrmField.php:189
 msgid "Address"
@@ -5219,7 +5219,7 @@ msgstr "Récapitulatif"
 
 #: classes/models/FrmField.php:195
 msgid "Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more."
-msgstr ""
+msgstr "Permettez aux internautes de revoir leurs réponses avant l’envoi d’un formulaire. Mettez à niveau vers Pro pour obtenir des champs de récapitulatif et plus encore."
 
 #: classes/models/FrmField.php:198
 msgid "Signature"
@@ -5231,7 +5231,7 @@ msgstr "IA"
 
 #: classes/models/FrmField.php:206
 msgid "Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields."
-msgstr ""
+msgstr "Rationalisez les flux de travail et récupérez un temps précieux grâce à la puissance de l’IA. Vous pouvez répondre sans effort à vos internautes en temps réel avec ChatGPT comme assistant automatisé. Mettez à niveau vers Pro et déverrouillez des champs alimentés par l’IA."
 
 #: classes/models/FrmField.php:209
 msgid "Appointment"
@@ -5240,11 +5240,11 @@ msgstr "Rendez-vous"
 #. translators: %1$s: Link opening HTML, %2$s: Link tag closing
 #: classes/models/FrmField.php:214
 msgid "Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms."
-msgstr ""
+msgstr "Les champs de rendez-vous sont une intégration avec %1$sSimply Schedule Appointments%2$s. Premiers pas maintenant pour planifier des rendez-vous directement depuis vos formulaires."
 
 #: classes/models/FrmField.php:217
 msgid "Scheduling"
-msgstr ""
+msgstr "Planification"
 
 #: classes/models/FrmField.php:221
 msgid "Product"
@@ -5260,7 +5260,7 @@ msgstr "Classement"
 
 #: classes/models/FrmField.php:241
 msgid "Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options."
-msgstr ""
+msgstr "Permettez aux internautes de recueillir sans effort des informations, des préférences et des opinions en autorisant les utilisateurs à classer les options."
 
 #: classes/models/FrmFieldValue.php:193
 msgid "The display value has not been prepared. Please use the prepare_display_value() method before calling get_displayed_value()."
@@ -5380,7 +5380,7 @@ msgstr "reCAPTCHA est un service CAPTCHA gratuit et accessible qui permet de num
 #. translators: %s: User name, %2$d: number of entries
 #: classes/models/FrmReviews.php:114
 msgid "Congratulations %1$s! You have collected %2$d form submissions."
-msgstr ""
+msgstr "Félicitations %1$s ! Vous avez collecté %2$d envois de formulaire."
 
 #: classes/models/FrmReviews.php:157
 msgid "If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?"
@@ -5594,11 +5594,11 @@ msgstr "Formidable Add-Ons"
 
 #: classes/views/addons/index.php:30
 msgid "Search Add-Ons"
-msgstr ""
+msgstr "Rechercher des Add-Ons"
 
 #: classes/views/addons/list.php:19
 msgid "Not finding what you need?"
-msgstr ""
+msgstr "Vous ne trouvez pas ce dont vous avez besoin ?"
 
 #: classes/views/addons/settings.php:23
 msgid "Good to go!"
@@ -5902,7 +5902,7 @@ msgstr "Référent :"
 
 #: classes/views/frm-entries/_sidebar-shared-pub.php:22
 msgid "M j, Y"
-msgstr ""
+msgstr "F j, Y"
 
 #. translators: %1$s: Entry status %2$s: The date
 #: classes/views/frm-entries/_sidebar-shared-pub.php:27
@@ -6355,7 +6355,7 @@ msgstr "Envoyer les e-mails au format texte"
 
 #: classes/views/frm-forms/actions-dropdown.php:8
 msgid "Dropdown toggle"
-msgstr ""
+msgstr "Basculer la liste déroulante"
 
 #: classes/views/frm-forms/actions-dropdown.php:8
 msgid "Show options"
@@ -6691,11 +6691,11 @@ msgstr "L’adresse e-mail par défaut pour recevoir les notifications de nouvea
 
 #: classes/views/frm-settings/general.php:27
 msgid "Default From Address"
-msgstr ""
+msgstr "Adresse e-mail de l’administrateur par défaut"
 
 #: classes/views/frm-settings/general.php:28
 msgid "The \"From\" address for emails sent from this site."
-msgstr ""
+msgstr "L’adresse « From » pour les e-mails envoyés depuis ce site."
 
 #: classes/views/frm-settings/general.php:60
 msgid "Do not store IPs with form submissions. Check this box for to assist with GDPR compliance."
@@ -6883,7 +6883,7 @@ msgstr "Ignorer"
 
 #: classes/views/onboarding-wizard/index.php:33
 msgid "Exit Onboarding"
-msgstr ""
+msgstr "Quitter l’intégration initiale"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:14
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:14
@@ -6898,7 +6898,7 @@ msgstr "Ne manquez jamais une mise à jour importante"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:20
 msgid "Get key updates, tips, and occasional offers to enhance your WordPress experience. Opt in and help us improve compatibility with your site!"
-msgstr ""
+msgstr "Recevez des mises à jour clés, des astuces et des offres occasionnelles pour améliorer votre expérience WordPress. Optez pour l’inscription et aidez-nous à améliorer la compatibilité avec votre site !"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:27
 msgid "Allow & Continue"
@@ -6906,7 +6906,7 @@ msgstr "Autoriser et continuer"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:40
 msgid "Allow Formidable Forms to"
-msgstr ""
+msgstr "Autorisez Formidable Forms à"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:53
 msgid "View Basic Profile Info"
@@ -6918,7 +6918,7 @@ msgstr "Ne ratez aucune mise à jour importante ! Recevez des avertissements de
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:63
 msgid "Your WordPress user’s: first & last name and email address"
-msgstr ""
+msgstr "Le nom de famille, le prénom et l’adresse e-mail associés à votre compte WordPress"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:73
 msgid "View Basic Website Info"
@@ -6926,11 +6926,11 @@ msgstr "Voir les infos générales du site"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:76
 msgid "To provide additional functionality that’s relevant to your website, avoid WordPress or PHP incompatibilities that can break your website, and recognize which languages & regions the plugin should be translated and tailored to."
-msgstr ""
+msgstr "Pour fournir des fonctionnalités supplémentaires pertinentes pour votre site web, éviter les incompatibilités entre les versions de WordPress ou PHP qui peuvent endommager votre site web et reconnaître quelles langues et régions l’extension doit être traduite et adaptée à."
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:83
 msgid "Homepage URL & title, WP & PHP versions, site language"
-msgstr ""
+msgstr "URL et titre de la page d’accueil, versions de WP et PHP, langue du site"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:92
 msgid "View Basic Plugin Info"
@@ -6981,7 +6981,7 @@ msgstr "Consultez-les tous sur la page des %1$smodules%2$s."
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:78
 msgid "Already have Pro?"
-msgstr ""
+msgstr "Vous avez déjà la version Pro ?"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:92
 msgid "Install & Finish Setup"
@@ -6993,7 +6993,7 @@ msgstr "Vous êtes prêt·e !"
 
 #: classes/views/onboarding-wizard/steps/success-step.php:20
 msgid "Congratulations on completing the onboarding process! We hope you enjoy using Formidable Forms."
-msgstr ""
+msgstr "Félicitations pour avoir terminé le processus d’intégration ! Nous espérons que vous apprécierez l’utilisation de Formidable Forms."
 
 #: classes/views/onboarding-wizard/steps/success-step.php:29
 #: classes/views/onboarding-wizard/steps/unsuccessful-step.php:29
@@ -7006,15 +7006,15 @@ msgstr "Créer un formulaire"
 
 #: classes/views/onboarding-wizard/steps/unsuccessful-step.php:18
 msgid "Oops, Something Went Wrong"
-msgstr ""
+msgstr "Oups, quelque chose s’est mal passé"
 
 #: classes/views/onboarding-wizard/steps/unsuccessful-step.php:20
 msgid "We couldn't complete Pro onboarding due to a connection issue. You can perform a manual install or jump to the Formidable Dashboard and try again later."
-msgstr ""
+msgstr "Nous n’avons pas pu terminer l’intégration Pro en raison d’un problème de connexion. Vous pouvez effectuer une installation manuelle ou passer au Tableau de bord Formidable et réessayer ultérieurement."
 
 #: classes/views/onboarding-wizard/steps/unsuccessful-step.php:32
 msgid "Install Manually"
-msgstr ""
+msgstr "Installer manuellement"
 
 #. translators: %1$s: Heart icon
 #: classes/views/shared/admin-footer-links.php:18
@@ -7130,7 +7130,7 @@ msgstr "Ignorer cette notification"
 #. translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag.
 #: classes/views/shared/upgrade_overlay.php:22
 msgid "%1$s %2$sare not available%3$s"
-msgstr ""
+msgstr "%1$s %2$ssont pas disponibles%3$s"
 
 #. translators: %s: Feature name
 #: classes/views/shared/upgrade_overlay.php:40
@@ -7161,7 +7161,7 @@ msgstr "Téléverser l’image d’arrière-plan"
 
 #: classes/views/styles/components/templates/slider.php:19
 msgid "Vertical value"
-msgstr ""
+msgstr "Valeur verticale"
 
 #: classes/views/styles/components/templates/slider.php:20
 #: classes/views/styles/components/templates/slider.php:42
@@ -7173,33 +7173,33 @@ msgstr ""
 #: classes/views/styles/components/templates/slider.php:184
 #: classes/views/styles/components/templates/slider.php:212
 msgid "Value unit"
-msgstr ""
+msgstr "Unité de valeur"
 
 #: classes/views/styles/components/templates/slider.php:41
 msgid "Top value"
-msgstr ""
+msgstr "Valeur supérieure"
 
 #: classes/views/styles/components/templates/slider.php:63
 msgid "Bottom value"
-msgstr ""
+msgstr "Valeur inférieure"
 
 #: classes/views/styles/components/templates/slider.php:85
 msgid "Horizontal value"
-msgstr ""
+msgstr "Valeur horizontale"
 
 #: classes/views/styles/components/templates/slider.php:107
 msgid "Left value"
-msgstr ""
+msgstr "Valeur gauche"
 
 #: classes/views/styles/components/templates/slider.php:129
 msgid "Right value"
-msgstr ""
+msgstr "Valeur droite"
 
 #: classes/views/styles/components/templates/slider.php:158
 #: classes/views/styles/components/templates/slider.php:183
 #: classes/views/styles/components/templates/slider.php:210
 msgid "Field value"
-msgstr ""
+msgstr "Valeur du champ"
 
 #: classes/views/styles/custom_css.php:8
 msgid "You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded."
@@ -7247,7 +7247,7 @@ msgstr "Image d’arrière-plan"
 #: classes/views/styles/_form-messages.php:59
 #: classes/views/styles/_form-messages.php:135
 msgid "Font Color"
-msgstr ""
+msgstr "Couleur de la police"
 
 #: classes/views/styles/_buttons.php:57
 #: classes/views/styles/_check-box-radio-fields.php:27
@@ -7317,7 +7317,7 @@ msgstr "Marge"
 
 #: classes/views/styles/_buttons.php:204
 msgid "Used for navigation buttons too"
-msgstr ""
+msgstr "Également utilisé pour les boutons de navigation"
 
 #: classes/views/styles/_buttons.php:225
 #: classes/views/styles/_field-labels.php:131
@@ -7388,7 +7388,7 @@ msgstr "Arrière-plan"
 #: classes/views/styles/_field-colors.php:277
 #: classes/views/styles/_quick-settings.php:50
 msgid "Field Text"
-msgstr ""
+msgstr "Texte du champ"
 
 #: classes/views/styles/_field-colors.php:61
 #: classes/views/styles/_field-colors.php:161
@@ -7424,11 +7424,11 @@ msgstr "double"
 #: classes/views/styles/_field-colors.php:120
 #: classes/views/styles/_field-colors.php:177
 msgid "Remove Box Shadow"
-msgstr ""
+msgstr "Retirer l’ombre de la boîte"
 
 #: classes/views/styles/_field-colors.php:188
 msgid "Toggle box shadow"
-msgstr ""
+msgstr "Commutateur d’ombre de la boîte"
 
 #: classes/views/styles/_field-description.php:73
 msgid "normal"
@@ -7453,7 +7453,7 @@ msgstr "Position"
 
 #: classes/views/styles/_field-sizes.php:133
 msgid "Auto Drop-downs Width"
-msgstr ""
+msgstr "Largeur automatique des listes déroulantes"
 
 #: classes/views/styles/_form-messages.php:12
 msgid "Success"
@@ -7465,7 +7465,7 @@ msgstr "Famille de police"
 
 #: classes/views/styles/_general.php:12
 msgid "Inherit from theme"
-msgstr ""
+msgstr "Hériter du thème"
 
 #: classes/views/styles/_general.php:34
 msgid "Alignment"
@@ -7473,7 +7473,7 @@ msgstr "Alignement"
 
 #: classes/views/styles/_general.php:106
 msgid "Form Width"
-msgstr ""
+msgstr "Largeur du formulaire"
 
 #: classes/views/styles/_general.php:124
 msgid "Direction"
@@ -7482,16 +7482,16 @@ msgstr "Sens"
 #: classes/views/styles/_general.php:142
 #: classes/views/styles/_general.php:155
 msgid "Override Theme"
-msgstr ""
+msgstr "Surcharger le thème"
 
 #: classes/views/styles/_general.php:143
 msgid "This will add !important to many of the lines in the Formidable styling to make sure it will be used"
-msgstr ""
+msgstr "Cela ajoutera !important à de nombreuses lignes dans le style Formidable pour assurer qu’il sera utilisé"
 
 #: classes/views/styles/_general.php:164
 #: classes/views/styles/_general.php:175
 msgid "Center Form"
-msgstr ""
+msgstr "Centrer le formulaire"
 
 #: classes/views/styles/_general.php:183
 msgid "Style Class"
@@ -7507,7 +7507,7 @@ msgstr "Style désactivé"
 
 #: classes/views/styles/_quick-settings.php:9
 msgid "Essential presets for a quick start. Explore advanced settings for more options"
-msgstr ""
+msgstr "Préréglages essentiels pour un démarrage rapide. Explorez les réglages avancés pour plus d’options."
 
 #: classes/views/styles/_quick-settings.php:14
 msgid "Primary"
@@ -7523,19 +7523,19 @@ msgstr "Texte du bouton"
 
 #: classes/views/styles/_quick-settings.php:123
 msgid "Vertical Spacing"
-msgstr ""
+msgstr "Espacement vertical"
 
 #: classes/views/styles/_quick-settings.php:144
 msgid "Input Field Padding"
-msgstr ""
+msgstr "Marge interne du champ de saisie"
 
 #: classes/views/styles/_quick-settings.php:165
 msgid "Base Font Size"
-msgstr ""
+msgstr "Taille de police de base"
 
 #: classes/views/styles/_quick-settings.php:194
 msgid "Field Shape"
-msgstr ""
+msgstr "Forme du champ"
 
 #: classes/views/styles/_quick-settings.php:231
 msgid "Show advanced settings"
@@ -7803,7 +7803,7 @@ msgstr "Afficher un formulaire Formidable"
 
 #: classes/widgets/FrmShowForm.php:10
 msgid "Formidable Form"
-msgstr "Formulaire 'Formidable'"
+msgstr "Formulaire ’Formidable’"
 
 #: classes/widgets/FrmShowForm.php:61
 msgid "Title"
@@ -7879,12 +7879,12 @@ msgstr "Abonnement"
 #. translators: %s: Transaction type
 #: stripe/controllers/FrmTransLiteCRUDController.php:44
 msgid "You can't view the %s"
-msgstr ""
+msgstr "Vous ne pouvez pas voir le %s"
 
 #. translators: %s: Transaction type
 #: stripe/controllers/FrmTransLiteCRUDController.php:46
 msgid "You are trying to view a %s that does not exist"
-msgstr ""
+msgstr "Vous essayez de voir un %s qui n’existe pas"
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:102
 msgid "Payment was Successfully Deleted"
@@ -8090,7 +8090,7 @@ msgstr "En direct"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:34
 msgid "Payments list"
-msgstr ""
+msgstr "Liste des paiements"
 
 #: stripe/helpers/FrmTransLiteListHelper.php:106
 msgid "No payments found."
@@ -8202,7 +8202,7 @@ msgstr "Répéter chaque"
 
 #: stripe/views/action-settings/payments-options.php:62
 msgid "Recurring Payment Limit"
-msgstr ""
+msgstr "Limite de paiement récurrent"
 
 #: stripe/views/action-settings/payments-options.php:69
 msgid "Trial Period"
@@ -8531,7 +8531,7 @@ msgstr "Le style a bien été réinitialisé"
 
 #: js/formidable_admin.js:874
 msgid "Field Group"
-msgstr ""
+msgstr "Groupe de champs"
 
 #: js/formidable_admin.js:1377
 msgid "Set Row Layout"
@@ -8590,7 +8590,7 @@ msgstr "%s ne sont pas installés"
 
 #: js/formidable_admin.js:6986
 msgid "This plugin is not activated. Would you like to activate it now?"
-msgstr ""
+msgstr "Cette extension n’est pas activée. Voulez-vous l’activer maintenant ?"
 
 #: js/formidable_admin.js:6989
 msgid "That add-on is not installed. Would you like to install it now?"
@@ -8598,11 +8598,11 @@ msgstr "Ce module n’est pas installé. Voulez-vous l’installer maintenant ?
 
 #: js/formidable_admin.js:8422
 msgid "You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?"
-msgstr ""
+msgstr "Vous modifiez le type de champ. Tous les réglages des champs ne s’afficheront pas comme prévu jusqu’à ce que vous rechargiez la page. Voulez-vous recharger la page maintenant ?"
 
 #: js/formidable_admin.js:8427
 msgid "Save and Reload?"
-msgstr ""
+msgstr "Enregistrer et recharger ?"
 
 #: js/formidable_admin.js:8441
 #: js/formidable_admin.js:9414
