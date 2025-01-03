@@ -293,12 +293,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Validate a field with JS.
+	 *
+	 * @param {HTMLElement} field
+	 *
+	 * @return {void}
+	 */
 	function validateField( field ) {
-		let key,
-			errors = [],
-			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
+		let errors, key;
 
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
+		errors               = [];
+		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -306,6 +314,7 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
+		const $fieldCont = jQuery( fieldContainer );
 		removeFieldError( $fieldCont );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
@@ -1128,7 +1137,7 @@ function frmFrontFormJS() {
 	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
-		if ( isNaN( key ) || ! input.id ) {
+		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
@@ -1674,32 +1683,42 @@ function frmFrontFormJS() {
 
 		getFieldId,
 
+		/**
+		 * Render a captcha field.
+		 *
+		 * @param {HTMLElement} captcha
+		 * @param {string}      captchaSelector
+		 * @return {void}
+		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
-			let formID, captchaID,
-				size = captcha.getAttribute( 'data-size' ),
-				rendered = captcha.getAttribute( 'data-rid' ) !== null,
-				params = {
-					'sitekey': captcha.getAttribute( 'data-sitekey' ),
-					'size': size,
-					'theme': captcha.getAttribute( 'data-theme' )
-				},
-				activeCaptcha = getSelectedCaptcha( captchaSelector ),
-				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-
+			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
 			}
 
+			const size   = captcha.getAttribute( 'data-size' );
+			const params = {
+				sitekey: captcha.getAttribute( 'data-sitekey' ),
+				size: size,
+				theme: captcha.getAttribute( 'data-theme' )
+			};
+
 			if ( size === 'invisible' ) {
-				formID = jQuery( captcha ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
-				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
+				const formID = captcha.closest( 'form' )?.querySelector( 'input[name="form_id"]' )?.value;
+
+				const captchaLabel = captcha.closest( '.frm_form_field' )?.querySelector( '.frm_primary_label' );
+				if ( captchaLabel ) {
+					captchaLabel.style.display = 'none';
+				}
+
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
 				};
 			}
 
-
-			captchaID = activeCaptcha.render( captchaContainer, params );
+			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaID        = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
