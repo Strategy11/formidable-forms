@@ -804,12 +804,12 @@ class FrmField {
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
-			$where = array(
-				'or'        => 1,
-				'id'        => $id,
-				'field_key' => $id,
-			);
-			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+			if ( is_numeric( $id ) ) {
+				$where = array( 'id' => $id );
+			} else {
+				$where = array( 'field_key' => $id );
+			}
+			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 
 		return $type;
