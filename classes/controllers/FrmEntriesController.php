@@ -341,6 +341,7 @@ class FrmEntriesController {
 			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
 
 			if ( $inbox_badge_off ) {
+				// When the badge is disabled, the unread count is not included in the menu name.
 				$unread_count = 0;
 			}
 		}
