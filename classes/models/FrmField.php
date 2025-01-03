@@ -809,7 +809,7 @@ class FrmField {
 			} else {
 				$where = array( 'field_key' => $id );
 			}
-			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 
 		return $type;
