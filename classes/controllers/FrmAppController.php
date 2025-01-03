@@ -17,8 +17,7 @@ class FrmAppController {
 		$menu_name = FrmAppHelper::get_menu_name();
 
 		if ( in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
-			$inbox      = new FrmInbox();
-			$menu_name .= wp_kses_post( $inbox->unread_html( false ) );
+			$menu_name .= wp_kses_post( FrmInboxController::get_notice_count() );
 		}
 
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
