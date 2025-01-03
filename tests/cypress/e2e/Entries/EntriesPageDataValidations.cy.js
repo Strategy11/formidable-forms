@@ -107,7 +107,7 @@ describe("Entries submitted from a form", () => {
         cy.get('.wrap > h2').should("contain", "Form Entries");
         cy.get('.displaying-num').should("contain", "1 item");
 
-        cy.log("Verify column names in the entries forms page");
+        cy.log("Verify column names in the entries forms page:");
         cy.get('th[id$="_id"] > a').should("contain", "ID");
         cy.get('th[id$="_item_key"] > a').should("contain", "Entry Key");
         cy.get('th').contains('a', 'Text').should("contain", "Text");
