@@ -336,6 +336,15 @@ class FrmEntriesController {
 		$inbox        = new FrmInbox();
 		$unread_count = count( $inbox->unread() );
 
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			$settings        = FrmProAppHelper::get_settings();
+			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
+
+			if ( $inbox_badge_off ) {
+				$unread_count = 0;
+			}
+		}
+
 		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}
 
