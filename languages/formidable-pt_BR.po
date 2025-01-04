@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-12-10T14:59:49+00:00\n"
-"PO-Revision-Date: 2025-01-02 21:02\n"
+"PO-Revision-Date: 2025-01-04 03:04\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -35,7 +35,7 @@ msgstr "Desculpe, não encontramos nenhum complemento que corresponda aos seus c
 #: classes/views/addons/list.php:20
 #: js/addons-page.js:2113
 msgid "Request Add-On"
-msgstr "Solicitação complemento"
+msgstr "Solicitar complemento"
 
 #: js/src/admin/styles.js:29
 #: js/formidable_styles.js:3395
@@ -296,7 +296,7 @@ msgstr "Este site não possui modais pop-up."
 #: js/src/form/views.js:18
 #: js/formidable_blocks.js:705
 msgid "Display a Visual View"
-msgstr "Exibir uma visualização visual"
+msgstr "Mostrar uma exibição visual"
 
 #: js/src/form/views.js:32
 #: classes/controllers/FrmSMTPController.php:321
@@ -322,7 +322,7 @@ msgstr "Ativar"
 #: js/formidable_blocks.js:704
 #: js/formidable_blocks.js:739
 msgid "Formidable Views"
-msgstr "Vistas formidáveis"
+msgstr "Formidable Views"
 
 #: js/src/form/views.js:86
 #: js/src/form/views.js:74
@@ -675,11 +675,11 @@ msgstr "Esse formulário está na lixeira e está programado para ser excluído 
 
 #: classes/controllers/FrmEntriesController.php:540
 msgid "You can't view the entry"
-msgstr "Você não pode visualização a post"
+msgstr "Você não pode visualizar a entrada"
 
 #: classes/controllers/FrmEntriesController.php:541
 msgid "You are trying to view an entry that does not exist"
-msgstr "Você está tentando visualização uma post que não existe"
+msgstr "Você está tentando visualizar uma entrada que não existe"
 
 #: classes/controllers/FrmEntriesController.php:569
 #: classes/controllers/FrmFormActionsController.php:429
@@ -1440,7 +1440,7 @@ msgstr "Sem estilos"
 
 #: classes/controllers/FrmStylesController.php:330
 msgid "You must have a style to use the Visual Styler."
-msgstr "Deve ter um estilo para usar o Visual Styler."
+msgstr "Você precisa ter um estilo para usar o Estilizador visual."
 
 #: classes/controllers/FrmStylesController.php:346
 msgid "No forms"
@@ -1448,7 +1448,7 @@ msgstr "Nenhum formulário"
 
 #: classes/controllers/FrmStylesController.php:347
 msgid "You must have a form to use the Visual Styler."
-msgstr "Deve ter um formulário para usar o Visual Styler."
+msgstr "Você precisa ter um formulário para usar o Estilizador visual."
 
 #: classes/controllers/FrmStylesController.php:470
 msgid "Invalid target style"
@@ -1571,7 +1571,7 @@ msgstr "Não há entradas para esse formulário."
 #: classes/helpers/FrmAddonsHelper.php:56
 #: classes/helpers/FrmAddonsHelper.php:74
 msgid "Unlock Add-on library"
-msgstr "Desbloquear biblioteca de complemento"
+msgstr "Desbloquear a biblioteca de complementos"
 
 #: classes/helpers/FrmAddonsHelper.php:57
 msgid "Renew your subscription today and access our library of add-ons to supercharge your forms."
@@ -1585,7 +1585,7 @@ msgstr "Renove Agora"
 
 #: classes/helpers/FrmAddonsHelper.php:75
 msgid "Upgrade to Pro and access our library of add-ons to supercharge your forms."
-msgstr "Atualize para o Pro e acesse nossa biblioteca de complementos para turbinar seus formulários."
+msgstr "Renove sua assinatura hoje mesmo e acesse nossa biblioteca de complementos para turbinar seus formulários."
 
 #: classes/helpers/FrmAddonsHelper.php:76
 #: classes/helpers/FrmAddonsHelper.php:104
@@ -1596,7 +1596,7 @@ msgstr "Atualize para Pro"
 
 #: classes/helpers/FrmAddonsHelper.php:97
 msgid "Unlock Even More Add-ons"
-msgstr "Desbloqueie ainda mais complementos"
+msgstr "Acesse ainda mais complementos"
 
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/helpers/FrmAddonsHelper.php:100
@@ -1619,7 +1619,7 @@ msgstr "Importar"
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
 #: classes/helpers/FrmAppHelper.php:1385
 msgid "You're using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s."
-msgstr "Você está usando o Formidable Forms Lite. Para desbloquear mais recursos, considere %1$spara o PRO%2$s."
+msgstr "Você está usando o Formidable Forms Lite. Para acessar mais recursos, %1$satualize para a versão Pro%2$s."
 
 #: classes/helpers/FrmAppHelper.php:1435
 msgid "Add New"
@@ -2674,7 +2674,7 @@ msgstr "Filtro"
 #. translators: %d: Entry id
 #: classes/helpers/FrmEntriesListHelper.php:292
 msgid "Entry %d"
-msgstr "Post %d"
+msgstr "Entrada %d"
 
 #. translators: %s: Form name
 #. translators: Form title
@@ -4167,7 +4167,7 @@ msgstr "Criar formulário"
 
 #: classes/helpers/FrmFormsHelper.php:1520
 msgid "Plan required:"
-msgstr "Plano obrigatório:"
+msgstr "Plano exigido:"
 
 #: classes/helpers/FrmFormsHelper.php:1677
 msgid "Is this intentional?"
@@ -4366,7 +4366,7 @@ msgstr "Abrir em uma nova aba"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "NOTE: The selected page content will be displayed, but the full page will not be loaded. Traditional URL tracking in Google Analytics and similar tools won't register a page load event. If precise tracking is essential, consider using the 'Redirect to URL' option."
-msgstr "OBSERVAÇÃO: O conteúdo da página selecionada será exibido, mas a página completa não será carregada. O rastreamento de URL tradicional no Google Analytics e ferramentas semelhantes não cadastrar um evento de carregamento de página. Se o rastreamento preciso for essencial, considere usar a opção ' Redirecionamento para URL'."
+msgstr "OBSERVAÇÃO: O conteúdo da página selecionada será exibido, mas a página inteira não será carregada. O rastreamento tradicional de URL no Google Analytics e em ferramentas semelhantes não registrará um evento de carregamento de página. Se o rastreamento preciso for essencial, avalie usar a opção “Redirecionar para URL”."
 
 #: classes/helpers/FrmOnSubmitHelper.php:142
 msgid "Select a page"
@@ -4383,15 +4383,15 @@ msgstr "Aguarde enquanto você é redirecionado."
 
 #: classes/helpers/FrmShortcodeHelper.php:42
 msgid "Admin email"
-msgstr "e-mail do administrador"
+msgstr "E-mail do administrador"
 
 #: classes/helpers/FrmShortcodeHelper.php:43
 msgid "Default from email"
-msgstr "Padrão E-mail do remetente"
+msgstr "E-mail do remetente padrão"
 
 #: classes/helpers/FrmShortcodeHelper.php:44
 msgid "Default email"
-msgstr "e-mail padrão"
+msgstr "E-mail padrão"
 
 #: classes/helpers/FrmShortcodeHelper.php:47
 msgid "Default Msg"
@@ -4474,7 +4474,7 @@ msgstr "Você está usando uma versão desatualizada do Formidable Pro. Atualize
 
 #: classes/helpers/FrmStylesPreviewHelper.php:231
 msgid "Not all JavaScript is loaded in this preview. Some features will appear differently on the front end."
-msgstr "Nem todo JavaScript é carregado nesta pré-visualizar. Alguns recursos aparecerão de forma diferente no front end."
+msgstr "Nem todo o JavaScript é carregado nesta visualização. Alguns recursos serão exibidos de forma diferente na interface."
 
 #: classes/helpers/FrmStylesPreviewHelper.php:241
 msgid "This form is being previewed because no form was selected. Use the form dropdown to select a new preview target."
@@ -4849,7 +4849,7 @@ msgstr "Nome do meio"
 
 #: classes/models/fields/FrmFieldName.php:277
 msgid "Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like \"First Name\" instead of \"First\"."
-msgstr "As descrições de subcampos são lidas por leitores de tela. Melhore a acessibilidade usando rótulos concluído , como \"Nome\" em vez de \"First\"."
+msgstr "As descrições dos subcampos são lidas pelos leitores de tela. Melhore a acessibilidade usando rótulos completos, como “Primeiro nome” em vez de “Nome”."
 
 #: classes/models/fields/FrmFieldNumber.php:76
 msgid "Please select a higher number"
@@ -5110,7 +5110,7 @@ msgstr "Envio de arquivo"
 
 #: classes/models/FrmField.php:100
 msgid "Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more."
-msgstr "Adicione uploads de arquivo para salvar tempo e reduzir o vai e vem. Atualize para Pro para obter campos de Enviar e mais."
+msgstr "Complemente os uploads de arquivos para economizar tempo e reduzir o tempo perdido. Faça upgrade para a versão Pro e obtenha campos de upload e muito mais."
 
 #: classes/models/FrmField.php:104
 msgid "Rich Text"
@@ -5130,7 +5130,7 @@ msgstr "Adicione um conjunto de botões de opção com o intervalo que você esc
 
 #: classes/models/FrmField.php:118
 msgid "Scale Field"
-msgstr "Campo de Escala"
+msgstr "Campo de escala"
 
 #: classes/models/FrmField.php:121
 msgid "Star Rating"
@@ -5158,7 +5158,7 @@ msgstr "Pesquisa"
 
 #: classes/models/FrmField.php:140
 msgid "Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more."
-msgstr "Filtre as opções no próximo campo e adicione valores automaticamente a outros campos. Atualize para Pro para obter campos de Lookup e mais."
+msgstr "Filtre as opções no próximo campo e adicione valores automaticamente a outros campos. Faça upgrade para a versão Pro e obtenha campos de pesquisa e muito mais."
 
 #: classes/models/FrmField.php:140
 msgid "cascading lookup fields"
@@ -5170,7 +5170,7 @@ msgstr "Repetidor"
 
 #: classes/models/FrmField.php:145
 msgid "Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources."
-msgstr "Permita que seus visitantes adicionem novos conjuntos de campos enquanto preenchem formulários. Aumente as conversões enquanto economiza tempo de construção e recursos do servidor."
+msgstr "Permita que seus visitantes adicionem novos conjuntos de campos durante o preenchimento de formulários. Aumente as conversões e economize tempo de desenvolvimento e recursos do servidor."
 
 #: classes/models/FrmField.php:145
 msgid "Dynamically Add Form Fields with repeatable sections"
@@ -5219,7 +5219,7 @@ msgstr "Sumário"
 
 #: classes/models/FrmField.php:195
 msgid "Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more."
-msgstr "Permita que os visitantes avaliação suas respostas antes que um formulário seja enviado. Atualize para Pro para obter campos de Resumo e mais."
+msgstr "Permita que os visitantes avaliação suas resentradaas antes que um formulário seja enviado. Atualize para Pro para obter campos de Resumo e mais."
 
 #: classes/models/FrmField.php:198
 msgid "Signature"
