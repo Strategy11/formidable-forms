@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-12-10T14:59:49+00:00\n"
-"PO-Revision-Date: 2025-01-02 21:02\n"
+"PO-Revision-Date: 2025-01-05 16:21\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -296,7 +296,7 @@ msgstr "Auf dieser Website gibt es keine Popup-Modale."
 #: js/src/form/views.js:18
 #: js/formidable_blocks.js:705
 msgid "Display a Visual View"
-msgstr "Eine visuelle Ansicht anzeigen"
+msgstr "Visuelle Ansicht anzeigen"
 
 #: js/src/form/views.js:32
 #: classes/controllers/FrmSMTPController.php:321
@@ -322,14 +322,14 @@ msgstr "Aktivieren"
 #: js/formidable_blocks.js:704
 #: js/formidable_blocks.js:739
 msgid "Formidable Views"
-msgstr "Formidable Aufrufe"
+msgstr "Formidable Views"
 
 #: js/src/form/views.js:86
 #: js/src/form/views.js:74
 #: js/formidable_blocks.js:761
 #: js/formidable_blocks.js:773
 msgid "Effortlessly transform form data into webpages with Views, the only integrated form & application builder."
-msgstr "Mit Views, dem einzigen integrierten Formular- und Anwendungsentwickler, kannst du Formulardaten mühelos in Webseiten umwandeln."
+msgstr "Mit Views, dem einzigen integrierten Formular- und Anwendungs-Builder, kannst du Formulardaten mühelos in Webseiten umwandeln."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -1575,7 +1575,7 @@ msgstr "Add-on Bibliothek freischalten"
 
 #: classes/helpers/FrmAddonsHelper.php:57
 msgid "Renew your subscription today and access our library of add-ons to supercharge your forms."
-msgstr "Verlängere dein Abonnement noch heute und erhalte Zugang zu unserer Bibliothek mit Add-ons, um deine Formulare zu verbessern."
+msgstr "Verlängere dein Abonnement noch heute und erhalte Zugriff auf unsere Bibliothek mit Add-ons, um deine Formulare zu optimieren."
 
 #: classes/helpers/FrmAddonsHelper.php:58
 #: classes/helpers/FrmFormTemplatesHelper.php:175
@@ -1601,7 +1601,7 @@ msgstr "Schalte noch mehr Add-ons frei"
 #. translators: %1$s: Open span tag, %2$s: Close span tag
 #: classes/helpers/FrmAddonsHelper.php:100
 msgid "Your plan includes %1$s%2$s add-ons. Upgrade to take your forms even farther"
-msgstr "Dein Plan enthält %1$s%2$s Add-ons. Mit einem Upgrade kannst du deine Formulare noch weiter ausbauen"
+msgstr "Dein Plan enthält %1$s%2$s Add-ons. Upgrade, um deine Formulare noch weiter zu verbessern"
 
 #: classes/helpers/FrmAddonsHelper.php:128
 msgid "Missing add-ons?"
@@ -4366,7 +4366,7 @@ msgstr "In neuem Tab öffnen"
 
 #: classes/helpers/FrmOnSubmitHelper.php:139
 msgid "NOTE: The selected page content will be displayed, but the full page will not be loaded. Traditional URL tracking in Google Analytics and similar tools won't register a page load event. If precise tracking is essential, consider using the 'Redirect to URL' option."
-msgstr "HINWEIS: Der Inhalt der ausgewählten Seite wird angezeigt, aber die Seite wird nicht vollständig geladen. Das herkömmliche URL-Tracking in Google Analytics und ähnlichen Werkzeugen registriert kein Ereignis beim Laden einer Seite. Wenn eine genaue Nachverfolgung wichtig ist, solltest du die Option \"Weiterleitung zur URL\" verwenden."
+msgstr "HINWEIS: Der ausgewählte Seiteninhalt wird angezeigt, aber die vollständige Seite wird nicht geladen. Beim herkömmlichen URL-Tracking in Google Analytics und ähnlichen Werkzeugen wird das Laden einer Seite nicht registriert. Wenn eine genaue Nachverfolgung erforderlich ist, sollte die Option „Weiterleitung zur URL“ in Betracht gezogen werden."
 
 #: classes/helpers/FrmOnSubmitHelper.php:142
 msgid "Select a page"
@@ -4383,11 +4383,11 @@ msgstr "Bitte warte, während Du weiter geleitet wirst."
 
 #: classes/helpers/FrmShortcodeHelper.php:42
 msgid "Admin email"
-msgstr "E-Mail der Verwaltung"
+msgstr "Administrator-E-Mail"
 
 #: classes/helpers/FrmShortcodeHelper.php:43
 msgid "Default from email"
-msgstr "Standard von E-Mails"
+msgstr "Standard-E-Mail-Adresse des Absenders"
 
 #: classes/helpers/FrmShortcodeHelper.php:44
 msgid "Default email"
@@ -4845,11 +4845,11 @@ msgstr "Beschreibung"
 
 #: classes/models/fields/FrmFieldName.php:37
 msgid "Middle Name"
-msgstr "Mittlerer Name"
+msgstr "Zweiter Vorname"
 
 #: classes/models/fields/FrmFieldName.php:277
 msgid "Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like \"First Name\" instead of \"First\"."
-msgstr "Die Beschreibungen der Unterfelder werden von Screenreadern gelesen. Verbessere die Zugänglichkeit, indem du vollständige Bezeichnungen verwendest, z. B. \"Vorname\" anstelle von \"Vorname\"."
+msgstr "Die Beschreibungen der Unterfelder werden von Screenreadern gelesen. Verbessere die Zugänglichkeit, indem du vollständige Bezeichnungen verwendest, z. B. \"Vorname\" anstelle von \"Name\"."
 
 #: classes/models/fields/FrmFieldNumber.php:76
 msgid "Please select a higher number"
@@ -6883,7 +6883,7 @@ msgstr "Verwerfen"
 
 #: classes/views/onboarding-wizard/index.php:33
 msgid "Exit Onboarding"
-msgstr "Beenden Onboarding"
+msgstr "Onboarding beenden"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:14
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:14
@@ -6906,7 +6906,7 @@ msgstr "Erlauben & Fortfahren"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:40
 msgid "Allow Formidable Forms to"
-msgstr "Erlauben Sie Formidable Forms zu"
+msgstr "Erlaube Formidable Forms zu"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:53
 msgid "View Basic Profile Info"
@@ -6926,7 +6926,7 @@ msgstr "Grundlegende Website-Informationen anzeigen"
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:76
 msgid "To provide additional functionality that’s relevant to your website, avoid WordPress or PHP incompatibilities that can break your website, and recognize which languages & regions the plugin should be translated and tailored to."
-msgstr "Sie bieten zusätzliche Funktionen, die für deine Website relevant sind, vermeiden WordPress- oder PHP-Inkompatibilitäten, die deine Website zerstören können, und erkennen, für welche Sprachen und Regionen das Plugin übersetzt und angepasst werden sollte."
+msgstr "Um zusätzliche Funktionen bereitzustellen, die für deine Website relevant sind, vermeide WordPress- oder PHP-Inkompatibilitäten, die deine Website beschädigen können, und erkenne, in welche Sprachen und Regionen das Plugin übersetzt und angepasst werden sollte."
 
 #: classes/views/onboarding-wizard/steps/consent-tracking-step.php:83
 msgid "Homepage URL & title, WP & PHP versions, site language"
@@ -6981,7 +6981,7 @@ msgstr "Sieh Dir alle auf der Seite %1$sadd-ons%2$s an."
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:78
 msgid "Already have Pro?"
-msgstr "Du hast bereits Pro?"
+msgstr "Hast du schon Pro?"
 
 #: classes/views/onboarding-wizard/steps/install-addons-step.php:92
 msgid "Install & Finish Setup"
@@ -7879,12 +7879,12 @@ msgstr "Abonnement"
 #. translators: %s: Transaction type
 #: stripe/controllers/FrmTransLiteCRUDController.php:44
 msgid "You can't view the %s"
-msgstr "Du kannst die %snicht anzeigen lassen."
+msgstr "Du kannst %s nicht anzeigen"
 
 #. translators: %s: Transaction type
 #: stripe/controllers/FrmTransLiteCRUDController.php:46
 msgid "You are trying to view a %s that does not exist"
-msgstr "Du versuchst, eine %s anzuzeigen, die nicht existiert."
+msgstr "Du versuchst, einen %s anzuzeigen, der nicht existiert"
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:102
 msgid "Payment was Successfully Deleted"
@@ -8598,7 +8598,7 @@ msgstr "Dieses Add-on ist nicht installiert. Möchtest du es jetzt installieren?
 
 #: js/formidable_admin.js:8422
 msgid "You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?"
-msgstr "Du änderst den Feldtyp. Nicht alle Feldeinstellungen werden wie erwartet angezeigt, bis du die Seite neu geladen hast. Möchtest du die Seite jetzt neu laden?"
+msgstr "Du änderst den Feldtyp. Nicht alle Feldeinstellungen werden wie erwartet angezeigt, bis du die Seite neu lädst. Möchtest du die Seite jetzt neu laden?"
 
 #: js/formidable_admin.js:8427
 msgid "Save and Reload?"
