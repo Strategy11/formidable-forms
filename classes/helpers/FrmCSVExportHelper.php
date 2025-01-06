@@ -145,8 +145,19 @@ class FrmCSVExportHelper {
 
 		self::prepare_csv_headings();
 
-		// fetch 20 posts at a time rather than loading the entire table into memory
-		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
+		/**
+		 * For a target form with 50k entries (Locations List, with 7 fields), batch sizes of 100
+		 * were significantly faster and used less memory, so a filter was added.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $batch_size
+		 * @param int $form_id
+		 */
+		$csv_export_batch_size = (int) apply_filters( 'frm_csv_export_batch_size', 20, self::$form_id );
+
+		// Fetch posts in batches rather than loading the entire table into memory.
+		while ( $next_set = array_splice( $atts['entry_ids'], 0, $csv_export_batch_size ) ) {
 			self::prepare_next_csv_rows( $next_set );
 		}
 
