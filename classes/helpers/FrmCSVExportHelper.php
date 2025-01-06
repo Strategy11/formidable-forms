@@ -415,13 +415,24 @@ class FrmCSVExportHelper {
 	}
 
 	private static function prepare_next_csv_rows( $next_set ) {
-		// order by parent_item_id so children will be first
-		$where   = array(
-			'or'             => 1,
-			'id'             => $next_set,
-			'parent_item_id' => $next_set,
-		);
-		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			// Order by parent_item_id so children will be first.
+			$where    = array(
+				'or'             => 1,
+				'id'             => $next_set,
+				'parent_item_id' => $next_set,
+			);
+			$order_by = ' ORDER BY parent_item_id DESC';
+		} else {
+			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
+			// matches and the more simplified query is faster.
+			$where    = array(
+				'id' => $next_set,
+			);
+			$order_by = ' ORDER BY id DESC';
+		}
+
+		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
 
 		foreach ( $entries as $entry ) {
 			self::$entry = $entry;
