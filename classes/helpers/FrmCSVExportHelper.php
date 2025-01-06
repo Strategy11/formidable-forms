@@ -429,7 +429,7 @@ class FrmCSVExportHelper {
 			$where    = array(
 				'id' => $next_set,
 			);
-			$order_by = ' ORDER BY id DESC';
+			$order_by = '';
 		}
 
 		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
