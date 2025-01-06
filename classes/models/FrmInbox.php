@@ -234,7 +234,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array $who
 	 * @return bool
@@ -244,7 +244,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array $who
 	 * @return bool
@@ -405,7 +405,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return bool
 	 */
@@ -421,7 +421,7 @@ class FrmInbox extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return bool
 	 */
@@ -432,7 +432,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Check if the Pro plugin is active. If not, consider the user to be on the free version.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return bool
 	 */

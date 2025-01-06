@@ -6,6 +6,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntry {
 
 	/**
+	 * @since 6.16.3
+	 *
+	 * @var array
+	 */
+	private static $unique_id_match_checks = array();
+
+	/**
 	 * Create a new entry
 	 *
 	 * @param array $values
@@ -40,6 +47,21 @@ class FrmEntry {
 	}
 
 	/**
+	 * Flag the memoized unique id check after a new entry is created.
+	 * This prevents possibly DB requests and helps avoid issues when creating repeater entries.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param string $unique_id
+	 * @return void
+	 */
+	private static function flag_new_unique_key( $unique_id ) {
+		if ( ! isset( self::$unique_id_match_checks[ $unique_id ] ) ) {
+			self::$unique_id_match_checks[ $unique_id ] = false;
+		}
+	}
+
+	/**
 	 * Check for duplicate entries created in the last minute
 	 *
 	 * @return bool
@@ -49,6 +71,10 @@ class FrmEntry {
 
 		if ( false === self::is_duplicate_check_needed( $values, $duplicate_entry_time ) ) {
 			return false;
+		}
+
+		if ( self::maybe_check_for_unique_id_match( $values, $new_values['created_at'] ) ) {
+			return true;
 		}
 
 		$check_val                 = $new_values;
@@ -80,6 +106,9 @@ class FrmEntry {
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 			foreach ( $metas as $meta ) {
+				if ( 0 === (int) $meta->field_id ) {
+					continue;
+				}
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
@@ -121,6 +150,65 @@ class FrmEntry {
 		$frm_vars['checking_duplicates'] = false;
 
 		return $is_duplicate;
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param array  $values     POST request data.
+	 * @param string $created_at The timestamp of the entry we are checking for.
+	 * @return bool
+	 */
+	private static function maybe_check_for_unique_id_match( $values, $created_at ) {
+		if ( ! self::should_check_for_unique_id_match() ) {
+			return false;
+		}
+
+		if ( empty( $values['unique_id'] ) ) {
+			return false;
+		}
+
+		$unique_id = sanitize_key( $values['unique_id'] );
+		if ( ! $unique_id ) {
+			// Only continue if a unique ID was generated on form submit.
+			return false;
+		}
+
+		if ( isset( self::$unique_id_match_checks[ $unique_id ] ) ) {
+			return self::$unique_id_match_checks[ $unique_id ];
+		}
+
+		$timestamp = strtotime( $created_at );
+		if ( false === $timestamp ) {
+			$timestamp = time();
+		}
+
+		self::$unique_id_match_checks[ $unique_id ] = (bool) FrmDb::get_var(
+			'frm_item_metas',
+			array(
+				'field_id'     => 0,
+				'meta_value'   => serialize( compact( 'unique_id' ) ),
+				'created_at >' => gmdate( 'Y-m-d H:i:s', $timestamp - MONTH_IN_SECONDS ),
+			),
+			'id'
+		);
+
+		return self::$unique_id_match_checks[ $unique_id ];
+	}
+
+	/**
+	 * @since 6.16.3
+	 */
+	private static function should_check_for_unique_id_match() {
+		/**
+		 * Allow users to opt out of the DB query, in case it causes performance issues.
+		 *
+		 * @since 6.16.3
+		 *
+		 * @param bool $should_extend
+		 */
+		$should_check = apply_filters( 'frm_check_for_unique_id_match', true );
+		return (bool) $should_check;
 	}
 
 	/**
@@ -897,8 +985,30 @@ class FrmEntry {
 	private static function maybe_add_entry_metas( $values, $entry_id ) {
 		if ( isset( $values['item_meta'] ) ) {
 			FrmEntryMeta::update_entry_metas( $entry_id, $values['item_meta'] );
+			self::maybe_add_unique_id_meta( $values, $entry_id );
 		}
 		self::maybe_add_captcha_meta( (int) $values['form_id'], (int) $entry_id );
+	}
+
+	/**
+	 * @since 6.16.3
+	 *
+	 * @param array $values
+	 * @param int   $entry_id
+	 * @return void
+	 */
+	private static function maybe_add_unique_id_meta( $values, $entry_id ) {
+		if ( ! empty( $values['parent_form_id'] ) || empty( $values['unique_id'] ) || ! self::should_check_for_unique_id_match() ) {
+			return;
+		}
+
+		// This unique ID is inserted with JS on form submit.
+		// It is used to check for duplicate entries.
+		$unique_id = sanitize_key( $values['unique_id'] );
+		if ( $unique_id ) {
+			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
+			self::flag_new_unique_key( $unique_id );
+		}
 	}
 
 	/**

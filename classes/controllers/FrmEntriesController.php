@@ -333,7 +333,10 @@ class FrmEntriesController {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
-		return sanitize_title( $menu_name ) . '_page_formidable-entries';
+		$inbox        = new FrmInbox();
+		$unread_count = count( $inbox->unread() );
+
+		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}
 
 	public static function save_per_page( $save, $option, $value ) {

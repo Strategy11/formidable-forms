@@ -26,7 +26,16 @@ class FrmUsageController {
 	 * @return void
 	 */
 	public static function schedule_send() {
-		if ( wp_next_scheduled( 'formidable_send_usage' ) ) {
+		$timestamp = wp_next_scheduled( 'formidable_send_usage' );
+		if ( ! self::tracking_allowed() ) {
+			if ( $timestamp ) {
+				// Remove the scheduled event if it's not allowed and it's scheduled.
+				wp_unschedule_event( $timestamp, 'formidable_send_usage' );
+			}
+			return;
+		}
+
+		if ( $timestamp ) {
 			return;
 		}
 
@@ -54,6 +63,18 @@ class FrmUsageController {
 			'display'  => __( 'Once Weekly', 'formidable' ),
 		);
 		return $schedules;
+	}
+
+	/**
+	 * Checks if tracking is allowed.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @return bool
+	 */
+	public static function tracking_allowed() {
+		$settings = FrmAppHelper::get_settings();
+		return $settings->tracking;
 	}
 
 	/**

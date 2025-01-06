@@ -80,7 +80,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Set the aria-invalid attribute for subfields.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param array $shortcode_atts
 	 * @param array $args

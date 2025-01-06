@@ -11,8 +11,6 @@ FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_
 
 $important = empty( $important_style ) ? '' : ' !important';
 
-$minus_icons   = FrmStylesHelper::minus_icons();
-$arrow_icons   = FrmStylesHelper::arrow_icons();
 $submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js = FrmStylesHelper::use_chosen_js();
 
@@ -366,10 +364,6 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
-}
-
-.<?php echo esc_html( $style_class ); ?> .frm_error,
-.<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	color:<?php echo esc_html( $text_color_error . $important ); ?>;
 }
 

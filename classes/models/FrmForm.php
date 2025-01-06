@@ -849,7 +849,7 @@ class FrmForm {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
-			if ( isset( $where['is_template'] ) && $where['is_template'] && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
+			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
 				// don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
 			}
@@ -1091,7 +1091,7 @@ class FrmForm {
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
-		if ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 
@@ -1140,7 +1140,7 @@ class FrmForm {
 			$frm_vars['load_css'] = true;
 		}
 
-		return ( ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) && $global_load );
+		return empty( $frm_vars['css_loaded'] ) && $global_load;
 	}
 
 	/**

@@ -4,21 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
+
 	/**
 	 * Version of the database we are moving to.
 	 *
 	 * @var int
 	 */
-	public static $db_version = 101;
+	public static $db_version = 103;
 
 	/**
-	 * Deprecated.
+	 * Used by the API add-on.
 	 *
-	 * @var int
-	 */
-	public static $pro_db_version = 37;
-
-	/**
 	 * @var float
 	 */
 	public static $font_version = 7;
@@ -33,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.16.2';
+	public static $plug_version = '6.16.3';
 
 	/**
 	 * @var bool
