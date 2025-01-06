@@ -416,12 +416,12 @@ class FrmCSVExportHelper {
 
 	private static function prepare_next_csv_rows( $next_set ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
-			// Order by parent_item_id so children will be first.
 			$where    = array(
 				'or'             => 1,
 				'id'             => $next_set,
 				'parent_item_id' => $next_set,
 			);
+			// Order by parent_item_id so children will be first.
 			$order_by = ' ORDER BY parent_item_id DESC';
 		} else {
 			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
