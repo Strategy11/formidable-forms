@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2024-12-10T14:59:49+00:00\n"
-"PO-Revision-Date: 2025-01-02 21:02\n"
+"PO-Revision-Date: 2025-01-06 16:16\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
@@ -296,7 +296,7 @@ msgstr "Ce site n’a pas de modales surgissantes."
 #: js/src/form/views.js:18
 #: js/formidable_blocks.js:705
 msgid "Display a Visual View"
-msgstr "Afficher une vue visuelle"
+msgstr "Afficher une mise en page visuelle"
 
 #: js/src/form/views.js:32
 #: classes/controllers/FrmSMTPController.php:321
@@ -329,7 +329,7 @@ msgstr "Formidable Views"
 #: js/formidable_blocks.js:761
 #: js/formidable_blocks.js:773
 msgid "Effortlessly transform form data into webpages with Views, the only integrated form & application builder."
-msgstr "Transformez sans effort les données de formulaire en pages web avec les vues, le seul constructeur intégré de formulaires et d’applications."
+msgstr "Transformez sans effort les données de formulaire en pages web avec Views, le seul constructeur intégré de formulaires et d’applications."
 
 #. Plugin Name of the plugin
 #: formidable.php
@@ -1440,7 +1440,7 @@ msgstr "Aucun style"
 
 #: classes/controllers/FrmStylesController.php:330
 msgid "You must have a style to use the Visual Styler."
-msgstr "Aucun module trouvé"
+msgstr "Vous devez avoir un style pour pouvoir utiliser l’éditeur de style."
 
 #: classes/controllers/FrmStylesController.php:346
 msgid "No forms"
@@ -1448,7 +1448,7 @@ msgstr "Aucun formulaire"
 
 #: classes/controllers/FrmStylesController.php:347
 msgid "You must have a form to use the Visual Styler."
-msgstr "Désolé, nous n’avons trouvé aucun module correspondant à vos critères."
+msgstr "Vous devez avoir un formulaire pour pouvoir utiliser l’éditeur de style."
 
 #: classes/controllers/FrmStylesController.php:470
 msgid "Invalid target style"
@@ -1571,7 +1571,7 @@ msgstr "Il n’y a pas d’entrée pour ce formulaire."
 #: classes/helpers/FrmAddonsHelper.php:56
 #: classes/helpers/FrmAddonsHelper.php:74
 msgid "Unlock Add-on library"
-msgstr "Déverrouillez la bibliothèque de modules"
+msgstr "Débloquer la bibliothèque de modules"
 
 #: classes/helpers/FrmAddonsHelper.php:57
 msgid "Renew your subscription today and access our library of add-ons to supercharge your forms."
