@@ -114,4 +114,4 @@ class FrmApiHelper {
 	private static function is_free() {
 		return ! FrmAppHelper::pro_is_included();
 	}
-
+}
