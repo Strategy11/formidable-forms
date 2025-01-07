@@ -329,7 +329,7 @@ class FrmSalesApi extends FrmFormApi {
 		if ( ! is_numeric( $option ) ) {
 			// Generate either 0 or 1.
 			$option = mt_rand( 0, 1 );
-			update_option(  'frm_sale_ab_group', $option );
+			update_option( 'frm_sale_ab_group', $option );
 		}
 		return (int) $option;
 	}
