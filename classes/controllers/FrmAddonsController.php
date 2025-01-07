@@ -105,7 +105,7 @@ class FrmAddonsController {
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$cta_text = FrmSalesAPI::get_best_sale_value( 'menu_cta_text' );
+			$cta_text = FrmSalesApi::get_best_sale_value( 'menu_cta_text' );
 			if ( ! $cta_text ) {
 				$cta_text = __( 'Upgrade', 'formidable' );
 			}

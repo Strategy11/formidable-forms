@@ -6,10 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * @since x.x
  */
-class FrmSalesAPI extends FrmFormApi {
+class FrmSalesApi extends FrmFormApi {
 
 	/**
-	 * @var FrmSalesAPI|null
+	 * @var FrmSalesApi|null
 	 */
 	private static $instance;
 
@@ -259,6 +259,10 @@ class FrmSalesAPI extends FrmFormApi {
 				continue;
 			}
 
+			if ( ! $this->matches_ab_group( $sale ) ) {
+				continue;
+			}
+
 			if ( ! $best_sale || $sale['discount_percent'] > $best_sale['discount_percent'] ) {
 				$best_sale = $sale;
 			}
@@ -291,10 +295,30 @@ class FrmSalesAPI extends FrmFormApi {
 	 */
 	public static function get_best_sale_value( $key ) {
 		if ( ! isset( self::$instance ) ) {
-			self::$instance = new FrmSalesAPI();
+			self::$instance = new FrmSalesApi();
 		}
 
 		$sale = self::$instance->get_best_sale();
 		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $sale
+	 * @return bool True if the sale is a match for the applicable group (if one is defined).
+	 */
+	private function matches_ab_group( $sale ) {
+		if ( ! is_numeric( $sale['test_group'] ) ) {
+			// No test group, so return true.
+			return true;
+		}
+
+		$ab_group = $this->get_ab_group_for_current_site();
+		return $ab_group === $sale['test_group'];
+	}
+
+	private function get_ab_group_for_current_site() {
+		return 1;
 	}
 }

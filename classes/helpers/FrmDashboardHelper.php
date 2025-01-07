@@ -196,12 +196,12 @@ class FrmDashboardHelper {
 	 * @return array
 	 */
 	public static function get_license_buttons() {
-		$cta_text = FrmSalesAPI::get_best_sale_value( 'dashboard_license_cta_text' );
+		$cta_text = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_text' );
 		if ( ! $cta_text ) {
 			$cta_text = __( 'Get Formidable PRO', 'formidable' );
 		}
 
-		$upgrade_link = FrmSalesAPI::get_best_sale_value( 'dashboard_license_cta_link' );
+		$upgrade_link = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_link' );
 		if ( ! $upgrade_link ) {
 			$upgrade_link = FrmAppHelper::admin_upgrade_link(
 				array(

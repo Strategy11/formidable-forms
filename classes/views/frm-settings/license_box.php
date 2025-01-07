@@ -3,12 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$button_upgrade_text = FrmSalesAPI::get_best_sale_value( 'global_settings_license_cta_text' );
+$button_upgrade_text = FrmSalesApi::get_best_sale_value( 'global_settings_license_cta_text' );
 if ( ! $button_upgrade_text ) {
 	$button_upgrade_text = __( 'Get Formidable Now', 'formidable' );
 }
 
-$button_upgrade_link = FrmSalesAPI::get_best_sale_value( 'global_settings_license_cta_link' );
+$button_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_license_cta_link' );
 if ( ! $button_upgrade_link ) {
 	$button_upgrade_link      = FrmAppHelper::admin_upgrade_link(
 		array(
@@ -18,12 +18,12 @@ if ( ! $button_upgrade_link ) {
 	);
 }
 
-$unlock_more_upgrade_text = FrmSalesAPI::get_best_sale_value( 'global_settings_unlock_more_cta_text' );
+$unlock_more_upgrade_text = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_text' );
 if ( ! $unlock_more_upgrade_text ) {
 	$unlock_more_upgrade_text = __( 'upgrading to PRO', 'formidable' );
 }
 
-$unlock_more_upgrade_link = FrmSalesAPI::get_best_sale_value( 'global_settings_unlock_more_cta_link' );
+$unlock_more_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_link' );
 if ( ! $unlock_more_upgrade_link ) {
 	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link(
 		array(
