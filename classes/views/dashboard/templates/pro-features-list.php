@@ -10,7 +10,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$discount_text = __( 'Upgrade to Pro & Get 50% Off', 'formidable' );
+$best_discount = FrmSalesAPI::get_best_sale_value( 'discount_percent' );
+$use_discount  = $best_discount > 50 ? $best_discount : 50;
+$discount_text = sprintf(
+	// translators: %s is the discount percentage (ie 50%).
+	__( 'Upgrade to Pro & Get %1$s Off', 'formidable' ),
+	$use_discount . '%'
+);
 
 $discount_link = FrmSalesAPI::get_best_sale_value( 'global_settings_upgrade_cta_link' );
 if ( ! $discount_link ) {
