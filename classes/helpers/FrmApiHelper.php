@@ -9,16 +9,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmApiHelper {
 
 	/**
+	 * Check if an API item matches the current site license target.
+	 *
 	 * @since x.x
 	 *
-	 * @param array $sale
+	 * @param array $item Inbox or Sale item.
 	 * @return bool
 	 */
-	public static function is_for_user( $sale ) {
-		if ( ! isset( $sale['who'] ) || $sale['who'] === 'all' ) {
+	public static function is_for_user( $item ) {
+		if ( ! isset( $item['who'] ) || $item['who'] === 'all' ) {
 			return true;
 		}
-		$who = (array) $sale['who'];
+		$who = (array) $item['who'];
 		if ( self::is_for_everyone( $who ) ) {
 			return true;
 		}
