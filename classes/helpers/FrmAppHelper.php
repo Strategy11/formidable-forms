@@ -1370,6 +1370,15 @@ class FrmAppHelper {
 		?>
 		<div class="frm-upgrade-bar">
 				<?php
+				$sales_api = new FrmSalesAPI();
+				$sale      = $sales_api->get_best_sale();
+
+				if ( is_array( $sale ) && ! empty( $sale['lite_banner_cta_text'] ) ) {
+					$cta_text = $sale['lite_banner_cta_text'];
+				} else {
+					$cta_text = __( 'upgrading to PRO', 'formidable' );
+				}
+
 				$upgrade_link = self::admin_upgrade_link(
 					array(
 						'medium'  => 'settings-license',
@@ -1377,9 +1386,10 @@ class FrmAppHelper {
 					)
 				);
 				printf(
-					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
+					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
 					'<a href="' . esc_url( $upgrade_link ) . '">',
+					esc_html( $cta_text ),
 					'</a>'
 				);
 				?>
