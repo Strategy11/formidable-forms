@@ -173,19 +173,6 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * This is just here for testing so skip the API.
-	 * Remove this before launching (and inherit from the base class instead).
-	 *
-	 * @return array
-	 */
-	public function get_api_info() {
-		return json_decode(
-			'[{"key":"no-brainer","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":50,"test_group":1,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"},{"key":"anniversary","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":60,"test_group":0,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"}]',
-			true
-		);
-	}
-
-	/**
 	 * Get text for best sale if applicable.
 	 *
 	 * @since x.x
@@ -232,5 +219,18 @@ class FrmSalesApi extends FrmFormApi {
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
 		return (int) $option;
+	}
+
+	/**
+	 * This is just here for testing so skip the API.
+	 * Remove this before launching (and inherit from the base class instead).
+	 *
+	 * @return array
+	 */
+	public function get_api_info() {
+		return json_decode(
+			'[{"key":"no-brainer","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":50,"test_group":1,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"},{"key":"anniversary","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":60,"test_group":0,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"}]', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			true
+		);
 	}
 }
