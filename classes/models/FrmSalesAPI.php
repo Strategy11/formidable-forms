@@ -85,7 +85,7 @@ class FrmSalesApi extends FrmFormApi {
 			return;
 		}
 
-		if ( $this->is_expired( $sale ) ) {
+		if ( ! $this->sale_is_active( $sale ) ) {
 			return;
 		}
 
@@ -129,12 +129,19 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param array $sale
+	 * Check if a sale is within the active period.
 	 *
+	 * @since x.x
+	 *
+	 * @param array $sale
 	 * @return bool
 	 */
-	private function is_expired( $sale ) {
-		return $sale['expires'] < time();
+	private function sale_is_active( $sale ) {
+		$starts  = $sale['starts'];
+		$expires = $sale['expires'];
+		$date    = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
+		$today   = $date->getTimestamp();
+		return $today >= $starts && $today <= $expires;
 	}
 
 	/**
