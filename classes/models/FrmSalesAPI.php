@@ -8,6 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmSalesAPI extends FrmFormApi {
 
+	/**
+	 * @var FrmSalesAPI|null
+	 */
+	private static $instance;
+
 	protected $cache_key;
 
 	/**
@@ -284,9 +289,12 @@ class FrmSalesAPI extends FrmFormApi {
 	 * @param string $key
 	 * @return string|false False if no sale is active.
 	 */
-	public static function get_best_sale_text( $key ) {
-		$api  = new FrmSalesAPI();
-		$sale = $api->get_best_sale();
+	public static function get_best_sale_value( $key ) {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new FrmSalesAPI();
+		}
+
+		$sale = self::$instance->get_best_sale();
 		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
 	}
 }
