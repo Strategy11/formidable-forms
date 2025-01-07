@@ -105,10 +105,15 @@ class FrmAddonsController {
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$cta_text = FrmSalesAPI::get_best_sale_value( 'menu_cta_text' );
+			if ( ! $cta_text ) {
+				$cta_text = __( 'Upgrade', 'formidable' );
+			}
+
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade', 'formidable' ),
-				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
+				'<span class="frm-upgrade-submenu">' . esc_html( $cta_text ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				function () {
