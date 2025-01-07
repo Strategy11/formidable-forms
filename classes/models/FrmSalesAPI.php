@@ -275,4 +275,18 @@ class FrmSalesAPI extends FrmFormApi {
 			true
 		);
 	}
+
+	/**
+	 * Get text for best sale if applicable.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key
+	 * @return string|false False if no sale is active.
+	 */
+	public static function get_best_sale_text( $key ) {
+		$api  = new FrmSalesAPI();
+		$sale = $api->get_best_sale();
+		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
+	}
 }

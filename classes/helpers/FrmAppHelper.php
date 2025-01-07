@@ -1370,12 +1370,8 @@ class FrmAppHelper {
 		?>
 		<div class="frm-upgrade-bar">
 				<?php
-				$sales_api = new FrmSalesAPI();
-				$sale      = $sales_api->get_best_sale();
-
-				if ( is_array( $sale ) && ! empty( $sale['lite_banner_cta_text'] ) ) {
-					$cta_text = $sale['lite_banner_cta_text'];
-				} else {
+				$cta_text = FrmSalesApi::get_best_sale_text( 'lite_banner_cta_text' );
+				if ( ! $cta_text ) {
 					$cta_text = __( 'upgrading to PRO', 'formidable' );
 				}
 
