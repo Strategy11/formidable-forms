@@ -89,11 +89,6 @@ class FrmSalesApi extends FrmFormApi {
 			return;
 		}
 
-		if ( isset( self::$sales[ $sale['key'] ] ) ) {
-			// Move up and mark as new.
-			unset( self::$sales[ $sale['key'] ] );
-		}
-
 		self::$sales[ $sale['key'] ] = $this->fill_sale( $sale );
 	}
 
