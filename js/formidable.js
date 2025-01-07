@@ -7,7 +7,6 @@ function frmFrontFormJS() {
 	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
-	let action = '';
 	let jsErrors = [];
 
 	/**
@@ -88,7 +87,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( jQuery( 'input[name="item_meta[' + fieldId + '][form]"]' ).length ) {
+		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
 
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[2].replace( '[', '' );
@@ -277,7 +276,8 @@ function frmFrontFormJS() {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
-		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
+		const form = field.closest( 'form' );
+		if ( form && hasClass( form, 'frm_js_validate' ) ) {
 			validateField( field );
 		}
 	}
@@ -293,12 +293,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Validate a field with JS.
+	 *
+	 * @param {HTMLElement} field
+	 *
+	 * @return {void}
+	 */
 	function validateField( field ) {
-		let key,
-			errors = [],
-			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
+		let errors, key;
 
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
+		errors               = [];
+		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -306,6 +314,7 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
+		const $fieldCont = jQuery( fieldContainer );
 		removeFieldError( $fieldCont );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
@@ -792,16 +801,12 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement}      object
-	 * @param {string|undefined} action
+	 * @param {HTMLElement} object
+	 * @param {string}      action
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
-
-		if ( typeof action === 'undefined' ) {
-			jQuery( object ).find( 'input[name="frm_action"]' ).val();
-		}
 
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
@@ -1132,7 +1137,7 @@ function frmFrontFormJS() {
 	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
-		if ( isNaN( key ) || ! input.id ) {
+		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
@@ -1211,7 +1216,7 @@ function frmFrontFormJS() {
 		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
-	function removeSubmitLoading( $object, enable, processesRunning ) {
+	function removeSubmitLoading( _, enable, processesRunning ) {
 		let loadingForm;
 
 		if ( processesRunning > 0 ) {
@@ -1319,6 +1324,29 @@ function frmFrontFormJS() {
 		});
 	}
 
+	/**
+	 * Sets focus on a the first subfield of a combo field that has an error.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param {HTMLElement} element
+	 * @return {boolean} True if the focus was set on a combo field.
+	 */
+	function maybeFocusOnComboSubField( element ) {
+		if ( 'FIELDSET' !== element.nodeName ) {
+			return false;
+		}
+		if ( ! element.querySelector( '.frm_combo_inputs_container' ) ) {
+			return false;
+		}
+		const comboSubfield = element.querySelector( '[aria-invalid="true"]' );
+		if ( comboSubfield ) {
+			focusInput( comboSubfield );
+			return true;
+		}
+		return false;
+	}
+
 	function checkForErrorsAndMaybeSetFocus() {
 		let errors, element, timeoutCallback;
 
@@ -1336,6 +1364,10 @@ function frmFrontFormJS() {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
 				focusInput( element );
+				break;
+			}
+
+			if ( maybeFocusOnComboSubField( element ) ) {
 				break;
 			}
 
@@ -1364,7 +1396,7 @@ function frmFrontFormJS() {
 	/**
 	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
 	 * @return {void}
@@ -1594,6 +1626,19 @@ function frmFrontFormJS() {
 		window.hcaptcha = null;
 	}
 
+	/**
+	 * @since 6.16.3
+	 *
+	 * @return {string} Unique key, used for duplicate checks.
+	 */
+	function getUniqueKey() {
+		const uniqueKey = Array.from( window.crypto.getRandomValues( new Uint8Array( 8 ) ) )
+			.map( b => b.toString( 16 ).padStart( 2, '0' ) )
+			.join( '' );
+		const timestamp = Date.now().toString( 16 );
+		return uniqueKey + '-' + timestamp;
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1636,36 +1681,44 @@ function frmFrontFormJS() {
 			);
 		},
 
-		getFieldId: function( field, fullID ) {
-			return getFieldId( field, fullID );
-		},
+		getFieldId,
 
+		/**
+		 * Render a captcha field.
+		 *
+		 * @param {HTMLElement} captcha
+		 * @param {string}      captchaSelector
+		 * @return {void}
+		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
-			let formID, captchaID,
-				size = captcha.getAttribute( 'data-size' ),
-				rendered = captcha.getAttribute( 'data-rid' ) !== null,
-				params = {
-					'sitekey': captcha.getAttribute( 'data-sitekey' ),
-					'size': size,
-					'theme': captcha.getAttribute( 'data-theme' )
-				},
-				activeCaptcha = getSelectedCaptcha( captchaSelector ),
-				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-
+			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
 			}
 
+			const size   = captcha.getAttribute( 'data-size' );
+			const params = {
+				sitekey: captcha.getAttribute( 'data-sitekey' ),
+				size: size,
+				theme: captcha.getAttribute( 'data-theme' )
+			};
+
 			if ( size === 'invisible' ) {
-				formID = jQuery( captcha ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
-				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
+				const formID = captcha.closest( 'form' )?.querySelector( 'input[name="form_id"]' )?.value;
+
+				const captchaLabel = captcha.closest( '.frm_form_field' )?.querySelector( '.frm_primary_label' );
+				if ( captchaLabel ) {
+					captchaLabel.style.display = 'none';
+				}
+
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
 				};
 			}
 
-
-			captchaID = activeCaptcha.render( captchaContainer, params );
+			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaID        = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
@@ -1740,12 +1793,19 @@ function frmFrontFormJS() {
 				object.appendChild( antispamInput );
 			}
 
+			// Add a unique ID, used for duplicate checks.
+			const uniqueIDInput = document.createElement( 'input' );
+			uniqueIDInput.type  = 'hidden';
+			uniqueIDInput.name  = 'unique_id';
+			uniqueIDInput.value = getUniqueKey();
+			object.appendChild( uniqueIDInput );
+
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;
 				}).length;
 				if ( hasFileFields < 1 ) {
-					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+					const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
 				} else {
 					object.submit();
@@ -1787,7 +1847,7 @@ function frmFrontFormJS() {
 
 			jsErrors = validateForm( object );
 			if ( typeof frmThemeOverride_jsErrors === 'function' ) { // eslint-disable-line camelcase
-				action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+				const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 				customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys( customErrors ).length  ) {
 					for ( key in customErrors ) {
@@ -1827,21 +1887,10 @@ function frmFrontFormJS() {
 			checkForErrorsAndMaybeSetFocus();
 		},
 
-		checkFormErrors: function( object, action ) {
-			getFormErrors( object, action );
-		},
-
-		checkRequiredField: function( field, errors ) {
-			return checkRequiredField( field, errors );
-		},
-
-		showSubmitLoading: function( $object ) {
-			showSubmitLoading( $object );
-		},
-
-		removeSubmitLoading: function( $object, enable, processesRunning ) {
-			removeSubmitLoading( $object, enable, processesRunning );
-		},
+		checkFormErrors: getFormErrors,
+		checkRequiredField,
+		showSubmitLoading,
+		removeSubmitLoading,
 
 		scrollToID: function( id ) {
 			const object = jQuery( document.getElementById( id ) );
@@ -1911,6 +1960,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )
@@ -1919,11 +1969,25 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		invisible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.invisible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		visible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.visible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 

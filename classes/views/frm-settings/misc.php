@@ -41,16 +41,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } ?>
 </p>
 
-<?php
-/*
-Deprecated setting. This is always on now.
-Leave this for now for backward compatibility.
-This is to prevent this from being disabled.
-Pro could possibly check for `use_html` and think it is still false.
-*/
-?>
-<input type="hidden" name="frm_use_html" value="1" />
-
 <p class="frm_uninstall">
 	<label>
 		<input type="checkbox" id="frm-uninstall-box" value="1" onchange="frm_show_div('frm_uninstall_now',this.checked,true,'#')" />

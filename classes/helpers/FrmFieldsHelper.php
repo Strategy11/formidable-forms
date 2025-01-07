@@ -913,6 +913,7 @@ class FrmFieldsHelper {
 			'updated[-|_]at',
 			'updated[-|_]by',
 			'parent[-|_]id',
+			'form_name',
 		);
 
 		foreach ( $fields as $field ) {
@@ -2110,7 +2111,7 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function convert_field_object_to_flat_array( $field ) {
-		$field_options = $field->field_options;
+		$field_options = is_array( $field->field_options ) ? $field->field_options : array();
 		$field_array   = get_object_vars( $field );
 		unset( $field_array['field_options'] );
 
@@ -2142,7 +2143,7 @@ class FrmFieldsHelper {
 		$install_data           = '';
 		$requires               = '';
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$has_show_upgrade_class = isset( $field_type['icon'] ) && strpos( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
 
 		if ( $has_show_upgrade_class ) {

@@ -1,4 +1,20 @@
 == Changelog ==
+= 6.16.3 =
+* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
+* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
+* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
+* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
+* Fix: An unsupported operand types: array + string fatal error has been fixed.
+* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
+* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
+* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
+* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
+* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
+* The section for form button settings has been removed as all of the settings had been moved.
+* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
+* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
+* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
+
 = 6.16.2 =
 * Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
 * Fix: JSON default values are no longer decoded for field types that expect string values only.
@@ -2676,7 +2692,7 @@
 * Pro: Fix exporting multiple entries with the bulk CSV export option
 * Pro: Fix Entry ID filter in views when using a comma separated list of ids
 * Pro: Fix 3+ level dynamic fields to hide the last field when the first is changed
-* Pro: Fix apostraphes in form action logic
+* Pro: Fix apostrophes in form action logic
 
 = 2.0.03 =
 * Use frm_clear instead of clear to minimize conflicts

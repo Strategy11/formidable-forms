@@ -333,7 +333,22 @@ class FrmEntriesController {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
-		return sanitize_title( $menu_name ) . '_page_formidable-entries';
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			$settings        = FrmProAppHelper::get_settings();
+			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
+
+			if ( $inbox_badge_off ) {
+				// When the badge is disabled, the unread count is not included in the menu name.
+				$unread_count = 0;
+			}
+		}
+
+		if ( ! isset( $unread_count ) ) {
+			$inbox        = new FrmInbox();
+			$unread_count = count( $inbox->unread() );
+		}
+
+		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}
 
 	public static function save_per_page( $save, $option, $value ) {

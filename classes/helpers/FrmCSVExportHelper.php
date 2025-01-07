@@ -145,8 +145,19 @@ class FrmCSVExportHelper {
 
 		self::prepare_csv_headings();
 
-		// fetch 20 posts at a time rather than loading the entire table into memory
-		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
+		/**
+		 * For a target form with 50k entries (Locations List, with 7 fields), batch sizes of 100
+		 * were significantly faster and used less memory, so a filter was added.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $batch_size
+		 * @param int $form_id
+		 */
+		$csv_export_batch_size = (int) apply_filters( 'frm_csv_export_batch_size', 20, self::$form_id );
+
+		// Fetch posts in batches rather than loading the entire table into memory.
+		while ( $next_set = array_splice( $atts['entry_ids'], 0, $csv_export_batch_size ) ) {
 			self::prepare_next_csv_rows( $next_set );
 		}
 
@@ -404,13 +415,24 @@ class FrmCSVExportHelper {
 	}
 
 	private static function prepare_next_csv_rows( $next_set ) {
-		// order by parent_item_id so children will be first
-		$where   = array(
-			'or'             => 1,
-			'id'             => $next_set,
-			'parent_item_id' => $next_set,
-		);
-		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$where    = array(
+				'or'             => 1,
+				'id'             => $next_set,
+				'parent_item_id' => $next_set,
+			);
+			// Order by parent_item_id so children will be first.
+			$order_by = ' ORDER BY parent_item_id DESC';
+		} else {
+			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
+			// matches and the more simplified query is faster.
+			$where    = array(
+				'id' => $next_set,
+			);
+			$order_by = '';
+		}
+
+		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
 
 		foreach ( $entries as $entry ) {
 			self::$entry = $entry;

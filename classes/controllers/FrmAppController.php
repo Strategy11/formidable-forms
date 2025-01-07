@@ -15,9 +15,12 @@ class FrmAppController {
 		}
 
 		$menu_name = FrmAppHelper::get_menu_name();
-		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 
-		self::maybe_add_black_friday_submenu_item();
+		if ( in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+			$menu_name .= wp_kses_post( FrmInboxController::get_notice_count() );
+		}
+
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
 	/**
@@ -40,82 +43,6 @@ class FrmAppController {
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 
 		return apply_filters( 'frm_icon', $icon );
-	}
-
-	/**
-	 * @since 6.16
-	 *
-	 * @return void
-	 */
-	private static function maybe_add_black_friday_submenu_item() {
-		if ( ! current_user_can( 'frm_change_settings' ) ) {
-			return;
-		}
-
-		$is_black_friday = self::is_black_friday();
-		$is_cyber_monday = self::is_cyber_monday();
-
-		if ( ! $is_black_friday && ! $is_cyber_monday ) {
-			return;
-		}
-
-		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
-		$black_friday_menu_label = '<span class="frm-orange-text">' . esc_html( $black_friday_menu_label ) . '</span>';
-
-		add_action(
-			'admin_menu',
-			function () use ( $black_friday_menu_label ) {
-				add_submenu_page(
-					'formidable',
-					'Formidable',
-					$black_friday_menu_label,
-					'frm_change_settings',
-					'formidable-black-friday',
-					function () {
-						// This function should do nothing. The redirect is handled earlier to avoid header conflicts.
-					}
-				);
-			},
-			1000
-		);
-	}
-
-	/**
-	 * Black Friday sale is from November 25 to 29.
-	 *
-	 * @since 6.16
-	 *
-	 * @return bool
-	 */
-	private static function is_black_friday() {
-		return self::within_sale_date_range( '2024-11-25', '2024-11-29' );
-	}
-
-	/**
-	 * Cyber Monday sale rules from November 30 to December 4.
-	 *
-	 * @since 6.16
-	 *
-	 * @return bool
-	 */
-	private static function is_cyber_monday() {
-		return self::within_sale_date_range( '2024-11-30', '2024-12-04' );
-	}
-
-	/**
-	 * Check if the current time is within a sale date range.
-	 * Our sales are based on Eastern Time, so we use New York's timezone.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $from The beginning of the date range. Y-m-d format is expected.
-	 * @param string $to   The end of the date range. Y-m-d format is expected.
-	 * @return bool
-	 */
-	private static function within_sale_date_range( $from, $to ) {
-		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
-		$today = $date->format( 'Y-m-d' );
-		return $today >= $from && $today <= $to;
 	}
 
 	/**
@@ -544,7 +471,6 @@ class FrmAppController {
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
 		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
-		remove_action( 'frm_add_form_style_tab_options', 'FrmFormsController::add_form_style_tab_options' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
@@ -637,19 +563,6 @@ class FrmAppController {
 						'medium'  => 'upgrade',
 						'content' => 'submenu-upgrade',
 					)
-				)
-			);
-			die();
-		}
-
-		if ( 'formidable-black-friday' === FrmAppHelper::get_param( 'page' ) && current_user_can( 'frm_change_settings' ) ) {
-			wp_redirect(
-				FrmAppHelper::admin_upgrade_link(
-					array(
-						'medium'  => 'black-friday-submenu',
-						'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
-					),
-					'black-friday'
 				)
 			);
 			die();
@@ -1300,6 +1213,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function show_error_modal( $error_args ) {
+		add_filter( 'frm_show_footer_links', '__return_false' );
+
 		$defaults = array(
 			'title'            => '',
 			'body'             => '',

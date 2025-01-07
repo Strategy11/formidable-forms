@@ -996,6 +996,20 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Set the aria-invalid attribute for field.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
@@ -1074,6 +1088,9 @@ DEFAULT_HTML;
 	 */
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
+		if ( is_null( $value ) ) {
+			return '';
+		}
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
@@ -1434,7 +1451,11 @@ DEFAULT_HTML;
 		$this->fill_default_atts( $atts );
 
 		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			$unsanitized_value = $value;
+
 			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+
+			$value = $this->maintain_option_values( $value, $unsanitized_value );
 		}
 
 		$value = $this->prepare_display_value( $value, $atts );
@@ -1634,7 +1655,61 @@ DEFAULT_HTML;
 	 * @since 4.0.04
 	 */
 	public function sanitize_value( &$value ) {
+		$unsanitized_value = $value;
+
 		FrmAppHelper::sanitize_with_html( $value );
+
+		$value = $this->maintain_option_values( $value, $unsanitized_value );
+	}
+
+	/**
+	 * Allow a tags (and other things that normally get stripped) in user input, if there is an option match.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|string $value
+	 * @param array|string $unsanitized_value
+	 * @return array|string
+	 */
+	private function maintain_option_values( $value, $unsanitized_value ) {
+		if ( $value === $unsanitized_value ) {
+			// Nothing was stripped, so return early.
+			return $value;
+		}
+
+		$options = $this->get_options( array() );
+		if ( ! $options || ! is_array( $options ) ) {
+			// No options to match, so return early.
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			if ( ! is_array( $unsanitized_value ) ) {
+				return $value;
+			}
+
+			$return_value = array();
+			foreach ( $unsanitized_value as $v ) {
+				foreach ( $options as $option ) {
+					$option_value = is_array( $option ) ? $option['value'] : $option;
+					if ( $v === $option_value ) {
+						$return_value[] = $option_value;
+						break;
+					}
+				}
+			}
+			return $return_value;
+		}
+
+		// $value is a string.
+		foreach ( $options as $option ) {
+			$option_value = is_array( $option ) ? $option['value'] : $option;
+			if ( $unsanitized_value === $option_value ) {
+				return $option_value;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
