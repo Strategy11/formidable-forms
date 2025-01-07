@@ -10,7 +10,19 @@ class FrmSalesAPI extends FrmFormApi {
 
 	protected $cache_key;
 
+	/**
+	 * All sales from API data.
+	 *
+	 * @var array|false
+	 */
 	private static $sales = false;
+
+	/**
+	 * Best sale from API data.
+	 *
+	 * @var array|false|null
+	 */
+	private static $best_sale;
 
 	public function __construct( $for_parent = null ) {
 		$this->set_cache_key();
@@ -35,17 +47,7 @@ class FrmSalesAPI extends FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		return 'http://dev-site.local/wp-json/s11-sales/v1/list/';
-//		return 'https://formidableforms.com/wp-json/s11-sales/v1/list/';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	public function get_sales( ) {
-		return self::$sales;
+		return 'https://formidableforms.com/wp-json/s11-sales/v1/list/';
 	}
 
 	/**
@@ -53,7 +55,7 @@ class FrmSalesAPI extends FrmFormApi {
 	 *
 	 * @return void
 	 */
-	public function set_sales() {
+	private function set_sales() {
 		self::$sales = array();
 
 		$api = $this->get_api_info();
@@ -71,7 +73,7 @@ class FrmSalesAPI extends FrmFormApi {
 	 *
 	 * @return void
 	 */
-	public function add_sale( $sale ) {
+	private function add_sale( $sale ) {
 		if ( ! is_array( $sale ) || ! isset( $sale['key'] ) ) {
 			// if the API response is invalid, $sale may not be an array.
 			// if there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
@@ -242,6 +244,10 @@ class FrmSalesAPI extends FrmFormApi {
 			return false;
 		}
 
+		if ( isset( self::$best_sale ) ) {
+			return self::$best_sale;
+		}
+
 		$best_sale = false;
 		foreach ( self::$sales as $sale ) {
 			if ( ! $this->is_for_user( $sale ) ) {
@@ -253,7 +259,8 @@ class FrmSalesAPI extends FrmFormApi {
 			}
 		}
 
-		return $best_sale;
+		self::$best_sale = $best_sale;
+		return self::$best_sale;
 	}
 
 	/**
