@@ -280,7 +280,7 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	public function get_api_info() {
 		return json_decode(
-			'[{"key":"no-brainer","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":50,"test_group":"Group One","lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"},{"key":"anniversary","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":60,"test_group":"Group One","lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"}]',
+			'[{"key":"no-brainer","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":50,"test_group":1,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"},{"key":"anniversary","starts":1735689600,"expires":1738281600,"who":["all"],"discount_percent":60,"test_group":0,"lite_banner_cta_link":"https://formidableforms.com/cta1","lite_banner_cta_text":"Lite Banner Text","menu_cta_link":"https://formidableforms.com/cta2","menu_cta_text":"Menu Text","dashboard_license_cta_link":"https://formidableforms.com/cta3","dashboard_license_cta_text":"Dashboard License Text","global_settings_license_cta_link":"https://formidableforms.com/cta4","global_settings_license_cta_text":"License Text","global_settings_unlock_more_cta_link":"https://formidableforms.com/cta5","global_settings_unlock_more_cta_text":"Unlock More Text","global_settings_upgrade_cta_link":"https://formidableforms.com/cta6","builder_sidebar_cta_link":"https://formidableforms.com/cta7","builder_sidebar_cta_text":"Form Builder Text","footer_cta_link":"https://formidableforms.com/cta8","footer_cta_text":"Footer Text"}]',
 			true
 		);
 	}
@@ -299,6 +299,10 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$sale = self::$instance->get_best_sale();
+
+		var_dump( $sale['key'] );
+		die();
+
 		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
 	}
 
@@ -318,7 +322,18 @@ class FrmSalesApi extends FrmFormApi {
 		return $ab_group === $sale['test_group'];
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return int 1 or 0.
+	 */
 	private function get_ab_group_for_current_site() {
-		return 1;
+		$option = get_option( 'frm_sale_ab_group' );
+		if ( ! is_numeric( $option ) ) {
+			// Generate either 0 or 1.
+			$option = mt_rand( 0, 1 );
+			update_option(  'frm_sale_ab_group', $option );
+		}
+		return (int) $option;
 	}
 }
