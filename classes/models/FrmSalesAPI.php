@@ -291,7 +291,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since x.x
 	 *
 	 * @param string $key
-	 * @return string|false False if no sale is active.
+	 * @return false|string False if no sale is active.
 	 */
 	public static function get_best_sale_value( $key ) {
 		if ( ! isset( self::$instance ) ) {
