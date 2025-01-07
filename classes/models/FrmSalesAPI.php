@@ -300,9 +300,6 @@ class FrmSalesApi extends FrmFormApi {
 
 		$sale = self::$instance->get_best_sale();
 
-		var_dump( $sale['key'] );
-		die();
-
 		return is_array( $sale ) && ! empty( $sale[ $key ] ) ? $sale[ $key ] : false;
 	}
 
