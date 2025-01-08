@@ -100,6 +100,16 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 <?php } ?>
 
+.<?php echo esc_html( $style_class ); ?> .frm_left_container select.auto_width,
+.<?php echo esc_html( $style_class ); ?> .frm_right_container select.auto_width {
+	width: max-content<?php echo esc_html( $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_right_container .frm_primary_label,
+.<?php echo esc_html( $style_class ); ?> .frm_right_container select.auto_width {
+	margin-left: auto<?php echo esc_html( $important ); ?>;
+}
+
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_left_container{
 	grid-template-columns: <?php echo esc_html( $width ); ?> auto;
 }
