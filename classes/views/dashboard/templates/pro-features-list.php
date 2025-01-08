@@ -29,7 +29,7 @@ $discount_link = FrmAppHelper::admin_upgrade_link(
 					</li>
 				<?php endforeach; ?>
 			</ul>
-			<a target="_blank" href="<?php echo esc_url( $discount_link ); ?>" title="Upgrade" class="frm-button-primary">
+			<a target="_blank" href="<?php echo esc_url( $discount_link ); ?>" title="Upgrade" class="frm-button-primary frm-gradient">
 				<?php esc_html_e( 'Upgrade to Pro & Get 50% Off', 'formidable' ); ?>
 			</a>
 		</div>
