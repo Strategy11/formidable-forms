@@ -9550,10 +9550,6 @@ Responsive Design
 	color: var(--primary-500);
 }
 
-.frm-tip-cta:hover  {
-	color: var(--primary-500);
-}
-
 .nav-tab-wrapper .frm_pro_tip {
 	float: right;
 }
