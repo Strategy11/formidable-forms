@@ -209,6 +209,8 @@ class FrmInbox extends FrmFormApi {
 			return true;
 		}
 
+		$who = (array) $message['who'];
+
 		/**
 		 * Allow for other special inbox cases in other add-ons.
 		 *
