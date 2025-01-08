@@ -591,4 +591,15 @@ class FrmInbox extends FrmFormApi {
 			array()
 		);
 	}
+
+	/**
+	 * Clear the inbox cache by deleting the associated option from the database.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function clear_cache() {
+		delete_option( 'frm_inbox' );
+	}
 }
