@@ -1688,6 +1688,7 @@ class FrmAppHelper {
 		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
 			?>
 			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
+				<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
 				<?php
 				foreach ( $args['source'] as $key => $source ) :
 					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
