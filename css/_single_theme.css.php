@@ -254,19 +254,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ); ?>.frm_center_submit .frm_submit .frm_ajax_loading{
-		<?php
-		if ( $submit_margin ) {
-			$_submit_margin = explode( ' ', $submit_margin );
-			if ( count( $_submit_margin ) < 3 ) {
-				$submit_bottom_margin = $_submit_margin[0];
-			} else {
-				$submit_bottom_margin = $_submit_margin[2];
-			}
-		} else {
-			$submit_bottom_margin = $submit_margin;
-		}
-		?>
-	margin-bottom:<?php echo esc_html( $submit_bottom_margin ); ?>;
+	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
