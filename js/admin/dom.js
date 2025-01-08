@@ -337,6 +337,13 @@
 		selectBlank: function( e, ui ) {
 			if ( ui.item === null ) {
 				this.nextElementSibling.value = '';
+
+				/**
+				 * Fires when an autocomplete value is cleared.
+				 *
+				 * @since x.x
+				 */
+				wp.hooks.doAction( 'frm_autocomplete_clear_value', e, ui, this );
 			}
 		},
 

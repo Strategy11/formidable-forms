@@ -1691,6 +1691,9 @@ class FrmAppHelper {
 				<?php
 				foreach ( $args['source'] as $key => $source ) :
 					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+					if ( ! empty( $args['truncate'] ) ) {
+						$value_label['label'] = self::truncate( $value_label['label'], $args['truncate'] );
+					}
 					?>
 					<option value="<?php echo esc_attr( $value_label['value'] ); ?>" <?php selected( $value_label['value'], $args['selected'] ); ?>><?php echo esc_html( $value_label['label'] ); ?></option>
 				<?php endforeach; ?>
