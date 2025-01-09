@@ -8249,6 +8249,18 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
+.frm_input_with_suffix {
+	border-radius: var(--small-radius);
+	border: 1px solid var(--grey-300);
+	display: inline-block;
+	padding-right: 14px;
+}
+
+.frm_input_with_suffix input {
+	border: 0 !important;
+	padding-right: 5px !important;
+}
+
 .frm_wrap ::-webkit-datetime-edit {
 	line-height: var(--leading);
 }
@@ -9373,7 +9385,7 @@ Responsive Design
 
 /* On Submit action */
 .frm_single_on_submit_settings .frm_form_field {
-	margin: 8px 0;
+	margin: 22px 0;
 }
 
 .frm_on_submit_type_setting {
