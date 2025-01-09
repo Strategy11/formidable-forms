@@ -2101,11 +2101,28 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function canDuplicateField( field ) {
+		const fieldGroup = field.closest( 'li.frm_field_box:not(.form-field)' );
+		if ( ! fieldGroup ) {
+			return true;
+		}
+		const fieldsInGroup = fieldGroup.querySelectorAll( 'li.form-field' ).length;
+		return fieldsInGroup < 6;
+	}
+
+	function showFieldGroupLimitModal() {
+		alert( __( 'You can only have a maximum of 6 fields in a field group.', 'formidable' ) );
+	}
+
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
+		if ( ! canDuplicateField( $field[0] ) ) {
+			showFieldGroupLimitModal();
+			return;
+		}
 		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
 			return false;
 		}
