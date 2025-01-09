@@ -4411,9 +4411,6 @@ function frmAdminBuildJS() {
 						}
 					}
 				);
-
-				// when holding shift and clicking, text gets selected. unselect it.
-				document.getSelection().removeAllRanges();
 			}
 		} else {
 			// not multi-selecting
@@ -10706,6 +10703,9 @@ function frmAdminBuildJS() {
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
+			document.onselectstart = function( e ) {
+				return e.target.closest( '.frm_form_builder' );
+			};
 		},
 
 		settingsInit: function() {
