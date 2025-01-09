@@ -254,7 +254,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ); ?>.frm_center_submit .frm_submit .frm_ajax_loading{
-	margin-bottom:<?php echo esc_html( $submit_margin ); ?>;
+	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
