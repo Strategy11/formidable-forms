@@ -959,7 +959,6 @@ a.frm_save_draft{
 }
 
 .with_frm_style :invalid,
-.with_frm_style :-moz-submit-invalid,
 .with_frm_style :-moz-ui-invalid{
 	box-shadow:none;
 }
@@ -1317,7 +1316,8 @@ select.frm_loading_lookup{
 .frm_grid_first .frm_checkbox label,
 .frm_grid .frm_checkbox label,
 .frm_grid_odd .frm_checkbox label{
-	visibility:hidden;
+	color:transparent;
+	text-indent: -9999px;
 	white-space:nowrap;
 	text-align:left;
 }

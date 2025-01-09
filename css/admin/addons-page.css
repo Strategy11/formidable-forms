@@ -1,0 +1,146 @@
+/**
+ * Add-Ons Page Styles
+ *
+ * This file includes all CSS rules specifically for the Add-Ons page.
+ */
+
+/**
+ * Page General Styles
+ *
+ * This section defines the basic typography and layout styles for the Form Templates page.
+ */
+#frm-addons-page .frm-upgrade-bar {
+	display: none;
+}
+
+.frm-list-grid-layout {
+	grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
+
+#post-body-content[data-category="active-addons"] .frm-addons-request-addon,
+#post-body-content[data-category="available-addons"] .frm-addons-request-addon {
+	display: none;
+}
+
+/* Card */
+#frm-addons-page .frm-card-item {
+	padding: var(--gap-sm) var(--gap-md);
+	gap: 12px;
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-sm);
+	transition: box-shadow 200ms ease-in-out;
+}
+
+#frm-addons-page .frm-card-item:hover {
+	box-shadow: var(--box-shadow-md);
+}
+
+.frm-card-item p,
+.frm-card-item h3 {
+	margin: 0;
+}
+
+.frm-border-icon > svg {
+	width: 24px;
+}
+
+.frm-card-lock-icon svg {
+	width: 13px;
+	height: 13px;
+	color: var(--grey-800);
+}
+
+.plugin-card-activecampaign-wordpress-plugin .frm-border-icon svg {
+	color: #004cff;
+}
+
+.plugin-card-aweber .frm-border-icon svg {
+	color: #246be8;
+}
+
+.plugin-card-campaign-monitor .frm-border-icon svg {
+	color: #7856FF;
+}
+
+.plugin-card-constant-contact .frm-border-icon svg {
+	color: #1856ed;
+}
+
+.plugin-card-getresponse-wordpress-plugin .frm-border-icon svg {
+	color: #00baff;
+}
+
+.plugin-card-google-sheets .frm-border-icon svg {
+	color: #34a853;
+}
+
+.plugin-card-hubspot-wordpress .frm-border-icon svg {
+	color: #ff7a59;
+}
+
+.plugin-card-mailchimp .frm-border-icon svg {
+	color: #000;
+}
+
+.plugin-card-mailpoet-newsletters .frm-border-icon svg {
+	color: #fe5301;
+}
+
+.plugin-card-paypal-standard .frm-border-icon svg {
+	color: #0070e0;
+}
+
+.plugin-card-zapier .frm-border-icon svg {
+	color: #ff4a00;
+}
+
+.plugin-card-twilio .frm-border-icon svg {
+	color: #F22F46;
+}
+
+.plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
+	pointer-events: none;
+}
+
+#frm-addons-page .frm-addon-button {
+	display: none;
+}
+
+.frm-addon-error {
+	border-radius: 0;
+	background-color: var(--error-100);
+	left: 0;
+	right: 0;
+}
+
+.frm-addon-error p {
+	color: var(--grey-900);
+}
+
+.frm_loading_button ~ .frm_toggle {
+	pointer-events: none;
+}
+
+.frm_loading_button ~ .frm_toggle .frm_toggle_slider {
+	opacity: 0.7;
+	background: linear-gradient(
+		90deg,
+		var(--grey-200) 25%,
+		var(--grey-300) 50%,
+		var(--grey-200) 75%
+	);
+	background-size: 400% 100%;
+	animation: skeleton-animation 3s infinite ease-in-out;
+}
+
+@keyframes skeleton-animation {
+	0% {
+		background-position: 0% 0%;
+	}
+	50% {
+		background-position: 100% 100%;
+	}
+	100% {
+		background-position: 0% 0%;
+	}
+}

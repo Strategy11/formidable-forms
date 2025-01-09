@@ -47,12 +47,16 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function get_defaults() {
 		return array(
-			'success_action'  => FrmOnSubmitHelper::get_default_action_type(),
-			'success_msg'     => FrmOnSubmitHelper::get_default_msg(),
-			'show_form'       => '',
-			'success_url'     => '',
-			'success_page_id' => '',
-			'open_in_new_tab' => '',
+			'success_action'      => FrmOnSubmitHelper::get_default_action_type(),
+			'success_msg'         => FrmOnSubmitHelper::get_default_msg(),
+			'show_form'           => '',
+			'success_url'         => '',
+			'success_page_id'     => '',
+			'open_in_new_tab'     => '',
+			'redirect_delay'      => '',
+			// Value in second.
+			'redirect_delay_time' => 8,
+			'redirect_delay_msg'  => FrmOnSubmitHelper::get_default_redirect_msg(),
 		);
 	}
 

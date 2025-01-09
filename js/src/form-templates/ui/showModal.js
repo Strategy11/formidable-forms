@@ -4,11 +4,15 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { hideElements, show } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
 import { MODAL_SIZES, PLANS, upgradeLink } from '../shared';
-import { hideElements, show } from '../utils';
 import { getModalWidget } from './';
 
 /**

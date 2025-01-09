@@ -702,11 +702,6 @@ class FrmFieldsController {
 				'data-placeholder' => 'true',
 			);
 
-			if ( $autocomplete && empty( $use_chosen ) ) {
-				// This is required for Slim Select.
-				$placeholder_attributes['data-placeholder'] = 'true';
-			}
-
 			FrmHtmlHelper::echo_dropdown_option( $use_placeholder, false, $placeholder_attributes );
 			return true;
 		}
@@ -915,6 +910,16 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
+			if ( isset( $field['subfield_name'] ) && 0 === strpos( $k, 'aria-invalid' ) ) {
+				$subfield_name = $field['subfield_name'];
+				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
+					continue;
+				}
+				// Change the key to the correct aria-invalid value so that $add_html is set correctly for the current subfield of a combo field.
+				$k = 'aria-invalid';
+				$v = $field['shortcodes'][ 'aria-invalid-' . $subfield_name ];
+				unset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] );
+			}
 			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
@@ -928,7 +933,7 @@ class FrmFieldsController {
 			}
 
 			unset( $k, $v );
-		}
+		}//end foreach
 	}
 
 	/**

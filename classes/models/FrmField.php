@@ -444,7 +444,7 @@ class FrmField {
 		}
 
 		if ( ! empty( $options['classes'] ) ) {
-			$options['classes'] = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $options['classes'] ) ) );
+			$options['classes'] = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $options['classes'] ) ) );
 		}
 
 		return $options;
@@ -804,12 +804,12 @@ class FrmField {
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
-			$where = array(
-				'or'        => 1,
-				'id'        => $id,
-				'field_key' => $id,
-			);
-			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+			if ( is_numeric( $id ) ) {
+				$where = array( 'id' => $id );
+			} else {
+				$where = array( 'field_key' => $id );
+			}
+			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 
 		return $type;
@@ -1004,7 +1004,7 @@ class FrmField {
 
 		$limit = FrmDb::esc_limit( $limit );
 
-		$query      = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
+		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
 		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
 
 		if ( is_array( $where ) ) {
@@ -1012,7 +1012,7 @@ class FrmField {
 				'order_by' => $order_by,
 				'limit'    => $limit,
 			);
-			$results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
+			$results = FrmDb::get_var( $table_name . ' fi JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
@@ -1035,6 +1035,8 @@ class FrmField {
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
 			foreach ( $results as $r_key => $result ) {
+				self::add_slashes_to_format_before_setting_field_cache( $result );
+
 				FrmDb::set_cache( $result->id, $result, 'frm_field' );
 				FrmDb::set_cache( $result->field_key, $result, 'frm_field' );
 
@@ -1054,6 +1056,24 @@ class FrmField {
 	}
 
 	/**
+	 * When $result->field_options is an array and not a serialized string there is only a single backslash.
+	 * Cached results are unslashed in FrmField::getAll, so we need to make sure that the cached object has an extra backslash.
+	 * Otherwise the backslash is stripped away on load.
+	 *
+	 * @since 6.15
+	 *
+	 * @param stdClass $result
+	 * @return void
+	 */
+	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
+		if ( ! isset( $result->field_options ) || ! is_array( $result->field_options ) || empty( $result->field_options['format'] ) ) {
+			return;
+		}
+
+		$result->field_options['format'] = addslashes( $result->field_options['format'] );
+	}
+
+	/**
 	 * Unserialize all the serialized field data
 	 *
 	 * @since 2.0
@@ -1064,9 +1084,14 @@ class FrmField {
 
 		// Allow a single box to be checked for the default value.
 		$before = $results->default_value;
-		FrmAppHelper::unserialize_or_decode( $results->default_value );
-		if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
-			$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
+
+		$field_object = FrmFieldFactory::get_field_type( $results->type );
+
+		if ( $field_object->should_unserialize_value() ) {
+			FrmAppHelper::unserialize_or_decode( $results->default_value );
+			if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
+				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
+			}
 		}
 	}
 

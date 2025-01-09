@@ -74,7 +74,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 			$options = array( '' => '' );
 
 			foreach ( $forms as $form ) {
-				$form_title           = '' === $form->name ? __( '(no title)', 'formidable' ) : FrmAppHelper::truncate( $form->name, 50 );
+				$form_title           = '' === $form->name ? FrmFormsHelper::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 );
 				$options[ $form->id ] = esc_html( $form_title );
 			}
 

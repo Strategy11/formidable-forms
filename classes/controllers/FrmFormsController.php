@@ -108,9 +108,14 @@ class FrmFormsController {
 	 * @since 2.02.11
 	 *
 	 * @param int|object $form
+	 * @return void
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
+
 		$create_email = apply_filters( 'frm_create_default_email_action', true, $form );
 
 		if ( $create_email ) {
@@ -128,9 +133,13 @@ class FrmFormsController {
 	 * @since 6.0.0
 	 *
 	 * @param int|object $form Form object or ID.
+	 * @return void
 	 */
 	private static function create_default_on_submit_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		/**
 		 * Enable or disable the default On Submit action.
@@ -157,9 +166,13 @@ class FrmFormsController {
 	 * @since 6.9
 	 *
 	 * @param int|object $form Form ID or object.
+	 * @return void
 	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		if ( FrmSubmitHelper::get_submit_field( $form->id ) ) {
 			// Do not create submit button field if it exists.
@@ -170,7 +183,7 @@ class FrmFormsController {
 			array(
 				'type'          => FrmSubmitHelper::FIELD_TYPE,
 				'name'          => __( 'Submit', 'formidable' ),
-				'field_order'   => 9999,
+				'field_order'   => FrmSubmitHelper::DEFAULT_ORDER,
 				'form_id'       => $form->id,
 				'field_options' => FrmFieldsHelper::get_default_field_options( FrmSubmitHelper::FIELD_TYPE ),
 				'description'   => '',
@@ -764,6 +777,10 @@ class FrmFormsController {
 			if ( FrmForm::trash( $id ) ) {
 				++$count;
 			}
+		}
+
+		if ( ! $count ) {
+			return '';
 		}
 
 		$current_page = FrmAppHelper::get_simple_request(
@@ -1409,6 +1426,10 @@ class FrmFormsController {
 			),
 		);
 
+		if ( ! has_action( 'frm_add_form_style_tab_options' ) && ! has_action( 'frm_add_form_button_options' ) ) {
+			unset( $sections['buttons'] );
+		}
+
 		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
 			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
 				unset( $sections[ $feature ] );
@@ -1646,17 +1667,12 @@ class FrmFormsController {
 			''           => '',
 			'siteurl'    => __( 'Site URL', 'formidable' ),
 			'sitename'   => __( 'Site Name', 'formidable' ),
+			'form_name'  => __( 'Form Name', 'formidable' ),
 		);
 
+		$entry_shortcodes = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
-		}
-
-		if ( $settings_tab ) {
-			$entry_shortcodes['default-message'] = __( 'Default Msg', 'formidable' );
-			$entry_shortcodes['default-html']    = __( 'Default HTML', 'formidable' );
-			$entry_shortcodes['default-plain']   = __( 'Default Plain', 'formidable' );
-			$entry_shortcodes['form_name']       = __( 'Form Name', 'formidable' );
 		}
 
 		/**
@@ -1974,16 +1990,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
-	}
-
-	/**
 	 * Add education about views.
 	 *
 	 * @since 4.07
@@ -2090,7 +2096,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? __( '(no title)', 'formidable' ) : $name,
+					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
@@ -2380,7 +2386,7 @@ class FrmFormsController {
 	 */
 	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
-			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) ) {
+			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $conf_method[0] ) && empty( $conf_method[0]->post_content['redirect_delay'] ) ) {
 				$event = FrmOnSubmitHelper::current_event( $params );
 				FrmOnSubmitHelper::populate_on_submit_data( $form->options, $conf_method[0], $event );
 				$conf_method = 'redirect';
@@ -2717,7 +2723,7 @@ class FrmFormsController {
 			wp_die();
 		}
 
-		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) ) {
+		if ( ! headers_sent() && empty( $args['force_delay_redirect'] ) && empty( $args['form']->options['redirect_delay'] ) ) {
 			// Not AJAX submit, no headers sent, and there is just one Redirect action runs.
 			if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 				self::print_open_in_new_tab_js_with_fallback_handler( $success_url, $args );
@@ -2766,25 +2772,33 @@ class FrmFormsController {
 	private static function get_ajax_redirect_response_data( $args ) {
 		$response_data = array( 'redirect' => $args['success_url'] );
 
+		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
+			$response_data['delay']    = $args['form']->options['redirect_delay_time'];
+			$response_data['content'] .= self::get_redirect_message( $args['success_url'], $args['form']->options['redirect_delay_msg'], $args );
+		}
+
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$response_data['openInNewTab'] = 1;
 
-			$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
+			// Only show open in new tab text if there is no delay.
+			if ( empty( $response_data['content'] ) ) {
+				$args['message'] = FrmOnSubmitHelper::get_default_new_tab_msg();
 
-			$args['form']->options['success_msg'] = $args['message'];
-			$args['form']->options['edit_msg']    = $args['message'];
-			if ( ! isset( $args['fields'] ) ) {
-				$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
-			}
+				$args['form']->options['success_msg'] = $args['message'];
+				$args['form']->options['edit_msg']    = $args['message'];
+				if ( ! isset( $args['fields'] ) ) {
+					$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
+				}
 
-			$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
+				$args['message'] = self::prepare_submit_message( $args['form'], $args['entry_id'], $args );
 
-			ob_start();
-			self::show_lone_success_message( $args );
-			$response_data['content'] = ob_get_clean();
+				ob_start();
+				self::show_lone_success_message( $args );
+				$response_data['content'] .= ob_get_clean();
+			}//end if
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
-		}
+		}//end if
 
 		return $response_data;
 	}
@@ -2797,7 +2811,7 @@ class FrmFormsController {
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
-		$success_msg  = FrmOnSubmitHelper::get_default_redirect_msg();
+		$success_msg  = $args['form']->options['redirect_delay_msg'];
 		$redirect_msg = self::get_redirect_message( $args['success_url'], $success_msg, $args );
 		$success_url  = esc_url_raw( $args['success_url'] );
 
@@ -2808,7 +2822,7 @@ class FrmFormsController {
 		 *
 		 * @param int $delay_time Delay time in milliseconds.
 		 */
-		$delay_time = apply_filters( 'frm_redirect_delay_time', 8000 );
+		$delay_time = apply_filters( 'frm_redirect_delay_time', 1000 * $args['form']->options['redirect_delay_time'] );
 
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$redirect_js = 'window.open("' . $success_url . '", "_blank")';
@@ -2839,6 +2853,8 @@ class FrmFormsController {
 	 * @param array  $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
+		$success_msg  = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
+		$success_msg  = do_shortcode( FrmAppHelper::use_wpautop( $success_msg ) );
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
 			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
@@ -3271,12 +3287,15 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @deprecated 6.7
+	 * Education for premium features.
 	 *
-	 * @return bool
+	 * @since 4.05
+	 * @deprecated 6.16.3
+	 *
+	 * @return void
 	 */
-	public static function expired() {
-		_deprecated_function( __METHOD__, '6.7' );
-		return FrmAddonsController::is_license_expired();
+	public static function add_form_style_tab_options() {
+		_deprecated_function( __METHOD__, '6.16.3' );
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

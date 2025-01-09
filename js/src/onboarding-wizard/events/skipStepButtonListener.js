@@ -1,8 +1,13 @@
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { navigateToNextStep, onClickPreventDefault } from '../utils';
+import { navigateToNextStep } from '../utils';
 
 /**
  * Manages event handling for the "Skip" step button.
@@ -22,7 +27,6 @@ function addSkipStepButtonEvents() {
  * Handles the click event on a "Skip" step button.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onSkipStepButtonClick = () => {

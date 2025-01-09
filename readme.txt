@@ -1,11 +1,11 @@
 === Formidable Forms - Contact Form Plugin, Survey, Quiz, Payment, Calculator Form & Custom Form Builder ===
 Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for WordPress
 Contributors: formidableforms, sswells, srwells
-Tags: forms, form builder, survey, free, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, payment form, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form
+Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.6.2
+Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 6.14.1
+Stable tag: 6.16.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,98 +371,43 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.14.1 =
-* Security: Extra escaping and sanitizing has been put in place to prevent an XSS vulnerability when setting layout classes for fields in the form builder. This is only an issue if you allow untrusted users to create forms on your website.
-* New: When a Name field is mapped to a Stripe action included in this plugin, the (First) and (Last) descriptions are now included in the dropdown option label to make it more clear how the values are mapped.
-* New: Redirects have been added to detect dead URLs resulting in permission errors after activating or deactivating the Formidable Views add-on.
-* New: Visual styler unit dropdowns now include a blank option. This helps improve support for using CSS variables as input values like var(--font-size-base), where appending additional unit to the value introduces CSS errors.
-* Fix: Checkbox styling was not properly getting applied on the edit entry admin page, causing checkboxes to always appear unchecked.
-* Fix: A check for invisible fields before rendering CAPTCHA elements added in last update introduced issues in conversational forms. This check has been updated now to check for hidden forms instead of hidden fields to improve compatibility with conversational forms.
-* Fix: A flex styling rule would cause HTML code used in checkbox options to appear in a way that doesn't look good.
-* Fix: Base font size calculations were occurring too frequently, causing text to become smaller than intended.
-* Fix: The box shadow styling value would flip to the opposite of the intended setting on load.
+= 6.16.3 =
+* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
+* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
+* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
+* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
+* Fix: An unsupported operand types: array + string fatal error has been fixed.
+* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
+* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
+* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
+* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
+* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
+* The section for form button settings has been removed as all of the settings had been moved.
+* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
+* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
+* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
 
-= 6.14 =
-* New: The visual styler has gotten a major update. Many components have been redesigned, and a new quick settings page has been added.
-* New: The code for moving fields in the builder has been optimized for large forms.
-* New: Field keys will now work in place of field ids when creating or updating repeater entries using API actions or when calling FrmEntryMeta::update_entry_metas directly.
-* Fix: In some cases it was possible for non-customizable fields such as radio buttons and dropdowns to be used for Akismet guest info.
-* Fix: Forms would not duplicate as expected when one of the fields had "description" as a field key value.
-* Fix: A fatal error would occur when failing to search for plugins due to internet connection problems.
-* Fix: A JavaScript error would occur when trying to validate a read only time field.
-* Fix: A Trying to access array offset on value of type bool PHP Warning that could happen in rare edge cases when working in th Gutenberg editor has been fixed.
-* Fix: A layering issue would show section fields on top of the pop up for merging fields into groups.
-* Fix: Turnstile elements are now only rendered when the field is visible.
-* Fix: Some new checkbox and radio button styles were being overwritten by certain themes, resulting in various styling issues.
+= 6.16.2 =
+* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
+* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
-= 6.13 =
-* Fix: A JavaScript error triggered after detecting an error with a form field before processing the payment would cause the form to stop responding.
-* Fix: A Call to undefined method FrmProAppHelper::use_chosen_js fatal error would happen when using versions of Formidable Pro older than version 6.8.
-
-= 6.12 =
-* New: Many default form style settings have been updated. Existing sites will continue to use their existing default settings. To experience the new default style settings, access the list of styles from the style tab in form settings and select Reset to Defaults from the dropdown menu for a target style.
-* New: Hidden screen reader labels have been added to the entries list admin pages bulk checkboxes to improve accessibility.
-* Fix: Turnstile captcha widgets were rendering twice.
-* Fix: An extra check has been added to improve compatibility with older versions of WordPress before version 6.5.
-* Fix: The submit button would appear as an entry table row on the entry view admin page.
-* Fix: When validating field length limits, some characters including types with accents were not getting counted as expected and could fail validation.
-* Checks have been added to no longer include fields with form state on servers where open SSL is not installed. This is to improve compatibility.
-* Some updates have been made to improve the syncing of field option updates and conditional logic settings.
-* The option to use HTML5 has been removed. HTML5 is now enforced for all sites.
-* Some old deprecated PHP functions have been removed including FrmAppController::include_embed_form_icons and FrmAppController::get_form_shortcode.
-* The deprecated JavaScript function frmFrontForm.savingDraft has been removed.
-
-= 6.11.2 =
-* Security: Additional checks have been added to prevent unsafe HTML when using [input] shortcodes. A new frm_input_key_is_safe filter has been added to allow or disallow additional options when required.
-* New: Some small accessibility improvements were made on the Import/Export admin page.
-* Fix: A width limit has been removed from admin page h1 tags to help avoid issues with translated page titles that overflow their expected space.
-* Fix: The prompt to name your form will no longer pop up on save if the form already has a name set.
-* Fix: Additional checks have been added to prevent warnings while onboarding when using a Plus license.
-* Fix: Save draft buttons would remain disabled after a look up was completed, or after a file was uploaded.
-* Fix: Scripts were not loading properly on a few pages, causing issues with editing an Application and with some features in the Legacy Views editor.
-* Fix: HTML entities are now decoded when used for phone format validation to prevent issues where & is converted to &amp; for the regex check.
-* Fix: Email summaries would include repeater forms in the top 10 list.
-* Fix: Some entries lists would appear empty in some cases where item meta is stored using 0 as a field ID value.
-* Fix: The wrong variable was sent to the frm_trigger_create_action filter, preventing access to some expected data.
-* Fix: Several incorrect text domains and untranslatable strings have been corrected.
-* The function FrmFieldType::get_select_atributes has been deprecated because of a typo in its name.
-* Several old deprecated view files have been removed.
-
-= 6.11.1 =
-* New: Screen reader text has been updated on some admin pages to improve accessibility.
-* New: Hover styling has been updated for modal close icons to improve user experience.
-* Fix: The way Popper scripts are registered have been updated to help avoid a new conflict introduced in a recent WP Bakery update.
-* Fix: The reCaptcha settings name was missing in a global settings string.
-* The minimum supported version of Formidable Pro has been bumped to version 6.0.
-* The function FrmAddonsController::is_license_expiring has been deprecated.
-
-= 6.11 =
-* New: Field errors added when validating with JavaScript would use field IDs instead of field keys. This has been updated to use field keys for consistency.
-* New: When a layout class option is selected, any previous layout classes that would cause a conflict will now be automatically removed.
-* New: An optimization has been added to help reduce form builder load times for forms with many HTML or Rich Text fields.
-* New: A styling update has been made to make field placeholder font sizes more consistent.
-* New: Stripe actions included in this plugin now support a Recurring Payment Limit setting. When this setting is defined, and the number of payments has been reached, the subscription will be cancelled automatically.
-* Fix: References to JavaScript map files have been removed from bootstrap and popper scripts to prevent 404 error messages that appear when using Safari.
-* Fix: An Undefined array key PHP Warning would get logged when trying to remove fields using the frm_available_fields or frm_pro_available_fields filters.
-* Fix: Form previews would include two conflicting title tags in the source HTML.
-* Fix: A small update has been made to properly support sending data for repeated API actions.
-* Some old CSS styles have been removed, helping to reduce file size.
-* An old TTF file used for icon fonts has been removed as it was only required for supporting Internet Explorer and is no longer required, helping to reduce overall file size.
-
-= 6.10 =
-* New: Field data for shortcodes is now stored in memory and reused on the settings page and form builder page for a significant page load speed improvement for forms with a lot of fields.
-* New: XML import has been updated to support mapping field ID changes when importing a map view and new calendar view settings.
-* Fix: Payments using a currency that uses a comma as the decimal separator would have an incorrect amount value when the amount value had a single decimal point like 11,5.
-* Fix: Field error elements would inconsistently use either IDs or field keys in their ID values. An update has been made to use always use field keys.
-* Fix: In some cases, a Stripe redirect would happen after failing to create an entry, resulting in an unexpected redirect to stripe.com.
-* The minimum supported PHP version has been updated to 7.0, ending official support for PHP 5.6.
-* The frm_summary_email_content_args hook has been moved to where it is now filtered for all types of email summaries.
-* Several deprecated PHP functions have been removed including FrmFormsHelper::template_install_html, FrmFormsHelper::available_count, FrmFormsHelper::builder_submit_button, FrmFieldsHelper::get_shortcode_tag, FrmFieldsController::include_single_field, and FrmFormsController::new_form.
-* Several deprecated front end JavaScript functions have been removed including frmFrontForm.goingToPreviousPage, frmFrontForm.hideOrShowFields, frmFrontForm.hidePreviouslyHiddenFields, frmFrontForm.checkDependentDynamicFields, frmFrontForm.checkDependentLookupFields, and frmFrontForm.loadGoogle.
-* Some front end JavaScript code for supporting Internet Explorer has been dropped, helping to reduce the size of JavaScript required on the front end.
+= 6.16.1 =
+* New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
+* Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
+* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
+* Fix: The slider to set field margin for section fields wouldn't properly save.
+* Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
+* Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
+* Fix: A str_replace(): Passing null to parameter #3 deprecated message has been fixed.
+* Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
+* Fix: An array to string conversion PHP warning has been fixed.
+* Fix: The center form styling toggle would not properly save.
+* Fix: Form fields would appear broken when the Payment forms by Paystack plugin was active due to a shortcode conflict.
+* Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
+* The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.8 =
+= 6.16.2 =
 This version fixes a security-related bug. Upgrade immediately.

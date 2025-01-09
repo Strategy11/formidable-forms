@@ -291,9 +291,9 @@ DEFAULT_HTML;
 		$html_id    = $this->html_id();
 		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
 
-		$field['html_name'] = $field_name;
-		$field['html_id']   = $html_id;
-		FrmAppHelper::unserialize_or_decode( $field['default_value'] );
+		$field['html_name']     = $field_name;
+		$field['html_id']       = $html_id;
+		$field['default_value'] = $this->maybe_decode_value( $field['default_value'] );
 
 		$display = $this->display_field_settings();
 		include $this->include_form_builder_file();
@@ -996,6 +996,20 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Set the aria-invalid attribute for field.
+	 *
+	 * @since 6.16.3
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 *
+	 * @return void
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		$shortcode_atts['aria-invalid'] = isset( $args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+	}
+
+	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
@@ -1074,6 +1088,9 @@ DEFAULT_HTML;
 	 */
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
+		if ( is_null( $value ) ) {
+			return '';
+		}
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
@@ -1434,17 +1451,21 @@ DEFAULT_HTML;
 		$this->fill_default_atts( $atts );
 
 		if ( $this->should_strip_most_html_before_preparing_display_value( $atts ) ) {
+			$unsanitized_value = $value;
+
 			FrmAppHelper::sanitize_value( 'FrmAppHelper::strip_most_html', $value );
+
+			$value = $this->maintain_option_values( $value, $unsanitized_value );
 		}
 
 		$value = $this->prepare_display_value( $value, $atts );
 
 		if ( is_array( $value ) ) {
-			if ( isset( $atts['show'] ) && $atts['show'] && isset( $value[ $atts['show'] ] ) ) {
+			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
-			} elseif ( ! isset( $atts['return_array'] ) || ! $atts['return_array'] ) {
+			} elseif ( empty( $atts['return_array'] ) ) {
 				$sep   = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
-				$value = implode( $sep, $value );
+				$value = FrmAppHelper::safe_implode( $sep, $value );
 			}
 		}
 
@@ -1634,7 +1655,61 @@ DEFAULT_HTML;
 	 * @since 4.0.04
 	 */
 	public function sanitize_value( &$value ) {
+		$unsanitized_value = $value;
+
 		FrmAppHelper::sanitize_with_html( $value );
+
+		$value = $this->maintain_option_values( $value, $unsanitized_value );
+	}
+
+	/**
+	 * Allow a tags (and other things that normally get stripped) in user input, if there is an option match.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|string $value
+	 * @param array|string $unsanitized_value
+	 * @return array|string
+	 */
+	private function maintain_option_values( $value, $unsanitized_value ) {
+		if ( $value === $unsanitized_value ) {
+			// Nothing was stripped, so return early.
+			return $value;
+		}
+
+		$options = $this->get_options( array() );
+		if ( ! $options || ! is_array( $options ) ) {
+			// No options to match, so return early.
+			return $value;
+		}
+
+		if ( is_array( $value ) ) {
+			if ( ! is_array( $unsanitized_value ) ) {
+				return $value;
+			}
+
+			$return_value = array();
+			foreach ( $unsanitized_value as $v ) {
+				foreach ( $options as $option ) {
+					$option_value = is_array( $option ) ? $option['value'] : $option;
+					if ( $v === $option_value ) {
+						$return_value[] = $option_value;
+						break;
+					}
+				}
+			}
+			return $return_value;
+		}
+
+		// $value is a string.
+		foreach ( $options as $option ) {
+			$option_value = is_array( $option ) ? $option['value'] : $option;
+			if ( $unsanitized_value === $option_value ) {
+				return $option_value;
+			}
+		}
+
+		return $value;
 	}
 
 	/**
@@ -1655,25 +1730,14 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @deprecated 6.8.3
+	 * Only some field types should unserialize or decode values. This is based on the value of the array_allowed property.
 	 *
-	 * @return string
-	 */
-	protected function default_unique_msg() {
-		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_unique_msg' );
-		$frm_settings = FrmAppHelper::get_settings();
-		$message      = $frm_settings->unique_msg;
-		return $message;
-	}
-
-	/**
-	 * @deprecated 6.8.3
+	 * @since 6.16.2
 	 *
-	 * @return string
+	 * @return bool
 	 */
-	protected function default_invalid_msg() {
-		_deprecated_function( __METHOD__, '6.8.3', 'FrmFieldsHelper::default_invalid_msg' );
-		return FrmFieldsHelper::default_invalid_msg();
+	public function should_unserialize_value() {
+		return $this->array_allowed;
 	}
 
 	/**

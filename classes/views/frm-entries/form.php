@@ -3,6 +3,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+// Temporarily remove the [input] shortcode if it exists to avoid conflicts.
+// This includes the Payment form by Paystack plugin.
+global $shortcode_tags;
+
+// Store the current callbacks for the shortcode
+$original_input_shortcode_callback = isset( $shortcode_tags['input'] ) ? $shortcode_tags['input'] : false;
+
+// Remove the shortcode
+remove_shortcode( 'input' );
+
 $only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
 if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
@@ -138,3 +148,9 @@ if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_cur
 <?php if ( has_action( 'frm_entries_footer_scripts' ) ) { ?>
 <script type="text/javascript"><?php do_action( 'frm_entries_footer_scripts', $values['fields'], $form ); ?></script>
 <?php } ?>
+
+<?php
+// Add the shortcode back with the original callbacks
+if ( $original_input_shortcode_callback ) {
+	add_shortcode( 'input', $original_input_shortcode_callback );
+}

@@ -40,4 +40,19 @@ class FrmEmailHelper {
 	public static function remove_mandrill_br() {
 		return false;
 	}
+
+	/**
+	 * Gets default from email address in header for emails.
+	 *
+	 * @since 6.15
+	 *
+	 * @return string
+	 */
+	public static function get_default_from_email() {
+		$settings = FrmAppHelper::get_settings();
+		if ( $settings->from_email && is_email( $settings->from_email ) ) {
+			return $settings->from_email;
+		}
+		return get_option( 'admin_email' );
+	}
 }

@@ -394,7 +394,7 @@ class FrmFieldFormHtml {
 			unset( $shortcode_atts['class'] );
 		}
 
-		$shortcode_atts['aria-invalid'] = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? 'true' : 'false';
+		$this->field_obj->set_aria_invalid_error( $shortcode_atts, $this->pass_args );
 
 		$this->field_obj->set_field_column( 'shortcodes', $shortcode_atts );
 
@@ -430,9 +430,10 @@ class FrmFieldFormHtml {
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
 
-		if ( $this->field_obj->get_field_column( 'type' ) === 'html' && strpos( $this->html, '[error_class]' ) === false ) {
+		if ( in_array( $this->field_obj->get_field_column( 'type' ), array( 'html', 'summary' ), true ) && strpos( $this->html, '[error_class]' ) === false ) {
 			// there is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . esc_attr( $classes ), $this->html );
+			return;
 		}
 
 		$this->html = str_replace( '[error_class]', esc_attr( $classes ), $this->html );
@@ -476,7 +477,7 @@ class FrmFieldFormHtml {
 		$classes = apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 
 		// Remove unexpected characters from class.
-		$classes = implode( ' ', array_map( 'sanitize_html_class', explode( ' ', $classes ) ) );
+		$classes = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
 
 		return $classes;
 	}

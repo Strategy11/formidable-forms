@@ -120,6 +120,8 @@ FrmTipsHelper::pro_tip( 'get_form_settings_tip', 'p' );
 	</tr>
 </table>
 
+<input type="hidden" name="options[custom_style]" value="<?php echo esc_attr( $values['custom_style'] ); ?>" />
+
 <!--Permissions Section-->
 <?php
 do_action( 'frm_add_form_perm_options', $values );
