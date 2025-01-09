@@ -268,7 +268,7 @@ class FrmCSVExportHelper {
 		header( 'Pragma: no-cache' );
 
 		if ( self::$include_bom ) {
-			echo chr(239) . chr(187) . chr(191);
+			echo chr( 239 ) . chr( 187 ) . chr( 191 );
 		}
 
 		do_action(
