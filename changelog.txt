@@ -5,6 +5,7 @@
 * New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
 * New: A database query has been optimized when exporting entries as CSV when Pro is not active.
 * New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
+* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
 * Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
 * Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
 * Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
