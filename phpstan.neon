@@ -52,7 +52,6 @@ parameters:
 			message: '#has an unused parameter#'
 			paths:
 				- classes/models/FrmFieldOption.php
-				- classes/models/FrmInbox.php
 				- classes/models/FrmSolution.php
 				- stubs.php
 		-
