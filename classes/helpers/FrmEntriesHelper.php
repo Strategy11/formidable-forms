@@ -866,4 +866,24 @@ class FrmEntriesHelper {
 
 		return $existing_entry_statuses;
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	public static function get_visible_unread_inbox_count() {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			$settings        = FrmProAppHelper::get_settings();
+			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
+
+			if ( $inbox_badge_off ) {
+				// When the badge is disabled, the unread count is not included in the menu name.
+				return 0;
+			}
+		}
+
+		$inbox        = new FrmInbox();
+		return count( $inbox->unread() );
+	}
 }
