@@ -44,11 +44,13 @@ class FrmFieldEmail extends FrmFieldType {
 	 * @return array
 	 */
 	public function validate( $args ) {
+		if ( ! $args['value'] ) {
+			return array();
+		}
 		$errors = array();
-		if ( $args['value'] != '' && ! is_email( $args['value'] ) ) {
+		if ( false !== strpos( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
-
 		return $errors;
 	}
 
