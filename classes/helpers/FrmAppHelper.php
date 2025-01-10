@@ -1095,6 +1095,10 @@ class FrmAppHelper {
 			'legend'     => array(
 				'class' => true,
 			),
+			'option'     => array(
+				'value'    => true,
+				'selected' => true,
+			),
 		);
 	}
 

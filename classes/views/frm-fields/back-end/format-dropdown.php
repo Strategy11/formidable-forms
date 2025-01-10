@@ -48,7 +48,16 @@ $format     = FrmField::get_option( $field, 'format' );
 		 * @param array  $field              The field array.
 		 * @return string The filtered HTML for the number option.
 		 */
-		echo apply_filters( 'frm_print_format_number_option', $number_option, $number_option_text, $field ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$number_option = apply_filters( 'frm_print_format_number_option', $number_option, $number_option_text, $field );
+
+		$add_allowed_html = function ( $allowed_html ) {
+			$allowed_html['option']['data-dependency'] = true;
+			return $allowed_html;
+		};
+
+		add_filter( 'frm_striphtml_allowed_tags', $add_allowed_html );
+		FrmAppHelper::kses( $number_option, array( 'option' ), true );
+		remove_filter( 'frm_striphtml_allowed_tags', $add_allowed_html );
 		?>
 
 		<?php if ( 'text' === $field_type ) { ?>
@@ -68,4 +77,3 @@ $format     = FrmField::get_option( $field, 'format' );
  * @param array $field The field array.
  */
 do_action( 'frm_after_format_dropdown_template', $field );
-?>
