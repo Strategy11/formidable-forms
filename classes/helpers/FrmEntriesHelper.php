@@ -883,7 +883,7 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$inbox        = new FrmInbox();
+		$inbox = new FrmInbox();
 		return count( $inbox->unread() );
 	}
 }
