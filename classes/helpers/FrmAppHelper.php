@@ -870,7 +870,7 @@ class FrmAppHelper {
 		$sanitized_value = wp_kses( $value, $allowed_html );
 
 		if ( ! $echo ) {
-			return wp_kses( $value, $allowed_html );
+			return $sanitized_value;
 		}
 
 		echo $sanitized_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
