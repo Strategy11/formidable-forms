@@ -12,8 +12,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			<div class="cta-inside">
 				<?php
-				$dashboard_helper = new FrmDashboardHelper( array() );
-				$dashboard_helper->get_bottom_widget();
+				if ( ! FrmAppHelper::pro_is_installed() ) {
+					$dashboard_helper = FrmDashboardController::get_dashboard_helper();
+					$dashboard_helper->get_bottom_widget();
+				}
 				?>
 			</div>
 		</div>

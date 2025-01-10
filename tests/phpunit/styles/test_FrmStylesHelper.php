@@ -234,4 +234,21 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	private function assert_color_brightness( $expected, $color ) {
 		$this->assertEquals( $expected, FrmStylesHelper::get_color_brightness( $color ) );
 	}
+
+	/**
+	 * @covers FrmStylesHelper::get_bottom_value
+	 */
+	public function test_get_bottom_value() {
+		$expected = array(
+			''                   => '',
+			'10px'               => '10px',
+			'5em 10px'           => '5em',
+			'5em 10px 5px'       => '5px',
+			'5em 10px 15px 20px' => '15px',
+		);
+
+		foreach ( $expected as $input => $output ) {
+			$this->assertEquals( $output, FrmStylesHelper::get_bottom_value( $input ) );
+		}
+	}
 }

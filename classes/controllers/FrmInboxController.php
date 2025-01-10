@@ -123,8 +123,8 @@ class FrmInboxController {
 		$message->add_message(
 			array(
 				'key'     => 'free_templates',
-				'message' => 'Add your email address to get a code for 20+ free form templates.',
-				'subject' => 'Get 20+ Free Form Templates',
+				'message' => 'Add your email address to get a code for 30+ free form templates.',
+				'subject' => 'Get 30+ Free Form Templates',
 				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
 				'type'    => 'feedback',
 			)

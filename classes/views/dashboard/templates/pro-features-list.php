@@ -40,7 +40,7 @@ if ( ! $discount_link ) {
 					</li>
 				<?php endforeach; ?>
 			</ul>
-			<a target="_blank" href="<?php echo esc_url( $discount_link ); ?>" title="Upgrade" class="frm-button-primary">
+			<a target="_blank" href="<?php echo esc_url( $discount_link ); ?>" title="Upgrade" class="frm-button-primary frm-gradient">
 				<?php echo esc_html( $discount_text ); ?>
 			</a>
 		</div>

@@ -320,7 +320,7 @@ describe("Form Templates page", () => {
             .click({ force: true });
 
         cy.get('#frm-leave-email-modal').should('be.visible');
-        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 20+ Free Form Templates');
+        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 30+ Free Form Templates');
         cy.get('#frm-leave-email-modal p')
             .should('contain.text', "Just add your email address and we'll send you a code for free form templates!");
 
