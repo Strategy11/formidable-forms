@@ -19,7 +19,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private static $banner_messages;
 
-	public function __construct( $for_parent = null ) {
+	public function __construct() {
 		$this->set_cache_key();
 
 		if ( false === self::$messages ) {

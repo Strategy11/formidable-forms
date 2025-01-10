@@ -29,7 +29,7 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private static $best_sale;
 
-	public function __construct( $for_parent = null ) {
+	public function __construct() {
 		$this->set_cache_key();
 
 		if ( false === self::$sales ) {
