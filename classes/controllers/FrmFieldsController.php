@@ -529,10 +529,6 @@ class FrmFieldsController {
 		if ( isset( $field['size'] ) && $field['size'] > 0 ) {
 			$class[] = 'auto_width';
 		}
-
-		if ( isset( $field['format'] ) && 'currency' === $field['format'] && empty( $field['calc'] ) && 'range' !== $field['type'] ) {
-			$class[] = 'frm-has-number-format';
-		}
 	}
 
 	/**
