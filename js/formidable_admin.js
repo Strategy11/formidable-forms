@@ -2922,7 +2922,7 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function shouldShowFieldLabelShortcode( fieldType, fieldId ) {
-		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && document.getElementById( `separate_value_${fieldId}` )?.checked;
+		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && !! document.getElementById( `separate_value_${fieldId}` )?.checked;
 	}
 
 	/**
