@@ -1,9 +1,15 @@
 /**
+ * External dependencies
+ */
+import { showElements, hideElements, show, hide } from 'core/utils';
+import { VIEWS as SKELETON_VIEWS } from 'core/page-skeleton';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { PREFIX, VIEW_SLUGS, getAppState } from '../shared';
-import { show, hide, showElements, hideElements, isFavoriteTemplate } from '../utils';
+import { PREFIX, VIEW_SLUGS, getState } from '../shared';
+import { isFavoriteTemplate } from '../utils';
 import { categorizedTemplates } from '../templates';
 import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState, showAvailableTemplatesEmptyState } from './';
 
@@ -16,7 +22,7 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
 export function showSelectedCategory( selectedCategory ) {
 	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems } = getElements();
 
-	if ( VIEW_SLUGS.ALL_TEMPLATES !== selectedCategory ) {
+	if ( SKELETON_VIEWS.ALL_ITEMS !== selectedCategory ) {
 		hideElements( bodyContentChildren );
 	}
 
@@ -25,7 +31,7 @@ export function showSelectedCategory( selectedCategory ) {
 	show( pageTitle );
 
 	switch ( selectedCategory ) {
-		case VIEW_SLUGS.ALL_TEMPLATES:
+		case SKELETON_VIEWS.ALL_ITEMS:
 			showAllTemplates();
 			break;
 		case VIEW_SLUGS.AVAILABLE_TEMPLATES:
@@ -73,7 +79,7 @@ export function showAllTemplates() {
  * @return {void}
  */
 export function showFavoriteTemplates() {
-	const { favoritesCount } = getAppState();
+	const { favoritesCount } = getState();
 
 	if ( 0 === favoritesCount.total ) {
 		showFavoritesEmptyState();
@@ -131,7 +137,7 @@ export function showFavoriteTemplates() {
  * @return {void}
  */
 export function showCustomTemplates() {
-	const { customCount } = getAppState();
+	const { customCount } = getState();
 
 	if ( 0 === customCount ) {
 		showCustomTemplatesEmptyState();
@@ -157,7 +163,7 @@ export function showCustomTemplates() {
  * @return {void}
  */
 export function showAvailableTemplates() {
-	const { availableTemplatesCount } = getAppState();
+	const { availableTemplatesCount } = getState();
 
 	if ( 0 === availableTemplatesCount ) {
 		showAvailableTemplatesEmptyState();

@@ -16,7 +16,7 @@ if ( ! isset( $args ) ) {
 
 $defaults = array(
 	'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css',
-	'title'       => esc_html__( 'Get 20+ Free Form Templates', 'formidable' ),
+	'title'       => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
 	'description' => esc_html__( 'Just add your email address and we\'ll send you a code for free form templates!', 'formidable' ),
 );
 
@@ -50,10 +50,18 @@ $args = wp_parse_args( $args, $defaults );
 				<input id="frm_leave_email" type="email" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
 			</span>
 
-			<span id="frm_leave_email_error" class="frm-validation-error frm-justify-center frm-items-center frm-mt-xs frm_hidden">
-				<span frm-error="invalid"><?php esc_html_e( 'Email is invalid', 'formidable' ); ?></span>
-				<span frm-error="empty"><?php esc_html_e( 'Email is empty', 'formidable' ); ?></span>
-			</span>
+			<?php
+			FrmAppHelper::print_setting_error(
+				array(
+					'id'     => 'frm_leave_email_error',
+					'errors' => array(
+						'invalid' => __( 'Email is invalid', 'formidable' ),
+						'empty'   => __( 'Email is empty', 'formidable' ),
+					),
+					'class'  => 'frm-justify-center frm-items-center',
+				)
+			);
+			?>
 		</div>
 	</div>
 

@@ -52,7 +52,7 @@ class FrmSimpleBlocksController {
 				'link'      => is_array( $views_addon_info ) && isset( $views_addon_info['link'] ) ? FrmAppHelper::admin_upgrade_link( 'block', $views_addon_info['link'] ) : '',
 				'hasAccess' => is_array( $views_addon_info ) && ! empty( $views_addon_info['url'] ),
 				'url'       => ! empty( $views_addon_info['url'] ) ? $views_addon_info['url'] : '',
-				'installed' => 'installed' === $views_addon['status']['type'],
+				'installed' => is_array( $views_addon ) && 'installed' === $views_addon['status']['type'],
 			),
 			'chartsAddon' => array(
 				'link'      => is_array( $charts_addon ) && isset( $charts_addon['link'] ) ? FrmAppHelper::admin_upgrade_link( 'block', $charts_addon['link'] ) : '',
@@ -199,6 +199,11 @@ class FrmSimpleBlocksController {
 		$params       = array_filter( $attributes );
 		$params['id'] = $params['formId'];
 		unset( $params['formId'] );
+
+		// Still pass false for title and description options if nothing is set,
+		// so a default doesn't overwrite the block option.
+		$params['title']       = ! empty( $params['title'] );
+		$params['description'] = ! empty( $params['description'] );
 
 		$form .= FrmFormsController::get_form_shortcode( $params );
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );

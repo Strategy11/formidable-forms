@@ -514,9 +514,12 @@ class FrmForm {
 			'name'        => '',
 		);
 		foreach ( $field_cols as $col => $default ) {
-			$default = $default === '' ? $field->{$col} : $default;
-
+			$default           = $default === '' ? $field->{$col} : $default;
 			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+		}
+
+		if ( $field->type === 'submit' && isset( $new_field['field_order'] ) && (int) $new_field['field_order'] === FrmSubmitHelper::DEFAULT_ORDER ) {
+			$new_field['field_order'] = $field->field_order;
 		}
 
 		// Don't save the template option.
@@ -598,6 +601,10 @@ class FrmForm {
 
 		$form = self::getOne( $id );
 		if ( ! $form ) {
+			return false;
+		}
+
+		if ( $form->status === 'trash' ) {
 			return false;
 		}
 
@@ -842,7 +849,7 @@ class FrmForm {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && ! empty( $where ) ) {
-			if ( isset( $where['is_template'] ) && $where['is_template'] && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
+			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
 				// don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
 			}
@@ -1084,7 +1091,7 @@ class FrmForm {
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
-		if ( isset( $frm_vars['current_form'] ) && $frm_vars['current_form'] && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 
@@ -1133,7 +1140,7 @@ class FrmForm {
 			$frm_vars['load_css'] = true;
 		}
 
-		return ( ( ! isset( $frm_vars['css_loaded'] ) || ! $frm_vars['css_loaded'] ) && $global_load );
+		return empty( $frm_vars['css_loaded'] ) && $global_load;
 	}
 
 	/**

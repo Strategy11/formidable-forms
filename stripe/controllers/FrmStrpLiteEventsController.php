@@ -206,7 +206,6 @@ class FrmStrpLiteEventsController {
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
 			// This isn't a subscription.
-			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since this is not a subscription.' );
 			echo json_encode(
 				array(
 					'response' => 'Invoice missing',
@@ -487,7 +486,7 @@ class FrmStrpLiteEventsController {
 		if ( $failed_count >= $maximum_retries ) {
 			$this->track_handled_event( $event_id );
 		} else {
-			set_transient( $transient_name, $failed_count );
+			set_transient( $transient_name, $failed_count, 4 * DAY_IN_SECONDS );
 		}
 	}
 

@@ -4,10 +4,14 @@
 import { __ } from '@wordpress/i18n';
 
 /**
+ * External dependencies
+ */
+import { onClickPreventDefault } from 'core/utils';
+
+/**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { onClickPreventDefault } from '../utils';
 
 /**
  * Manages event handling for the "Create a blank form" button.

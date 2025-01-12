@@ -8,11 +8,7 @@ class FrmSettings {
 	public $option_name = 'frm_options';
 	public $menu;
 	public $mu_menu;
-	public $use_html;
-	public $jquery_css;
-	public $accordion_js;
 	public $fade_form;
-	public $old_css;
 	public $admin_bar;
 
 	public $success_msg;
@@ -84,6 +80,7 @@ class FrmSettings {
 	public $summary_emails_recipients;
 
 	public $default_email;
+	public $from_email;
 	public $currency;
 
 	/**
@@ -135,11 +132,7 @@ class FrmSettings {
 		return array(
 			'menu'                      => apply_filters( 'frm_default_menu', 'Formidable' ),
 			'mu_menu'                   => 0,
-			'use_html'                  => true,
-			'jquery_css'                => false,
-			'accordion_js'              => false,
 			'fade_form'                 => false,
-			'old_css'                   => false,
 			'admin_bar'                 => false,
 
 			're_multi'                  => 1,
@@ -158,8 +151,7 @@ class FrmSettings {
 
 			'email_to'                  => '[admin_email]',
 			'no_ips'                    => 0,
-			// Use false by default. We show a warning when this is unset. Once global settings have been saved, this gets saved.
-			'custom_header_ip'          => false,
+			'custom_header_ip'          => 0,
 			'tracking'                  => FrmAppHelper::pro_is_installed(),
 			// Only enable this by default for the main site.
 			'summary_emails'            => get_current_blog_id() === get_main_site_id(),
@@ -403,9 +395,10 @@ class FrmSettings {
 		$this->load_style        = $params['frm_load_style'];
 		$this->custom_css        = $params['frm_custom_css'];
 		$this->default_email     = $params['frm_default_email'];
+		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'use_html', 'jquery_css', 'accordion_js', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}

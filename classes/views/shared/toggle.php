@@ -20,9 +20,9 @@ $off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
 $on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
 $value        = isset( $args['value'] ) ? $args['value'] : $on_label;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
+$disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
 $input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
-$aria_label   = empty( $args['aria-label-attr'] ) ? '' : 'aria-label="' . $args['aria-label-attr'] . '"';
 
 $use_container = false;
 
@@ -57,6 +57,9 @@ if ( $use_container ) {
 			<?php if ( $show_labels && $off_label ) { ?>
 				data-off="<?php echo esc_attr( $off_label ); ?>"
 			<?php } ?>
+			<?php if ( $disabled ) { ?>
+				disabled
+			<?php } ?>
 			<?php
 			if ( is_array( $input_html ) ) {
 				FrmAppHelper::array_to_html_params( $input_html, true );
@@ -66,7 +69,11 @@ if ( $use_container ) {
 			?>
 		/>
 
-		<span class="frm_toggle" tabindex="0" role="switch" <?php echo esc_attr( $aria_label ); ?> aria-labelledby="<?php echo esc_attr( $id ); ?>_label" aria-checked="<?php echo esc_attr( $aria_checked ); ?>">
+		<span class="frm_toggle" tabindex="0" role="switch"
+			<?php echo ! empty( $args['aria-label-attr'] ) ? 'aria-label="' . esc_attr( $args['aria-label-attr'] ) . '"' : ''; ?>
+			aria-labelledby="<?php echo esc_attr( $id ); ?>_label"
+			aria-checked="<?php echo esc_attr( $aria_checked ); ?>"
+		>
 			<span class="frm_toggle_slider"></span>
 		</span>
 
