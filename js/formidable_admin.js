@@ -10703,9 +10703,9 @@ function frmAdminBuildJS() {
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
-			document.onselectstart = function( e ) {
-				return e.target.closest( '.frm_form_builder' );
-			};
+			document.querySelector( '.frm_form_builder' ).addEventListener( 'selectstart', function( e ) {
+				e.preventDefault();
+			});
 		},
 
 		settingsInit: function() {
