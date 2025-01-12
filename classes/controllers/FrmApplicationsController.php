@@ -69,19 +69,11 @@ class FrmApplicationsController {
 	/**
 	 * Get information about applications via AJAX action.
 	 *
-	 * @since x.x Added $is_ajax_request parameter.
-	 *
-	 * @return array|void
+	 * @return void
 	 */
-	public static function get_applications_data( $is_ajax_request = true ) {
+	public static function get_applications_data() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
-		/**
-		 * $is_ajax_request may be an empty string as it is by default for ajax calls.
-		 */
-		$is_ajax_request = $is_ajax_request || is_string( $is_ajax_request );
-		if ( $is_ajax_request ) {
-			check_ajax_referer( 'frm_ajax', 'nonce' );
-		}
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$view = FrmAppHelper::get_param( 'view', '', 'get', 'sanitize_text_field' );
 		$data = array();
@@ -101,11 +93,7 @@ class FrmApplicationsController {
 		 */
 		$data = apply_filters( 'frm_applications_data', $data );
 
-		if ( $is_ajax_request ) {
-			wp_send_json_success( $data );
-		}
-
-		return $data;
+		wp_send_json_success( $data );
 	}
 
 	/**
