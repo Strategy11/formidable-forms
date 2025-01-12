@@ -2546,6 +2546,8 @@ function frmAdminBuildJS() {
 		deselectFields();
 		initiateMultiselect();
 
+		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+
 		const addedEvent      = new Event( 'frm_added_field', { bubbles: false });
 		addedEvent.frmField   = field;
 		addedEvent.frmSection = section;

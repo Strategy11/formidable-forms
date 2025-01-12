@@ -6747,10 +6747,13 @@ tr.frm_options_heading td {
 	font-size: var(--text-md);
 	box-sizing: border-box;
 	border: 1px dashed var(--grey-300);
+	outline: 2px solid transparent;
 }
 
 .frm-over-droppable + .frm_no_fields {
 	border-style: solid;
+	border-color: var(--primary-500);
+	outline-color: var(--primary-500);
 }
 
 .frm_no_section_fields {
@@ -6777,7 +6780,8 @@ tr.frm_options_heading td {
 	visibility: hidden;
 }
 
-.frm-has-fields .frm_no_fields {
+.frm-has-fields .frm_no_fields,
+#frm_form_editor_container:not(.frm-has-fields) #frm_drag_placeholder {
 	display: none;
 }
 
