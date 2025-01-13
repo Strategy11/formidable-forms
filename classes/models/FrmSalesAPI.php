@@ -139,7 +139,7 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private function sale_is_active( $sale ) {
 		$starts  = $sale['starts'];
-		$expires = $sale['expires'];
+		$expires = $sale['expires'] + DAY_IN_SECONDS;
 		$date    = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
 		$today   = $date->getTimestamp();
 		return $today >= $starts && $today <= $expires;
