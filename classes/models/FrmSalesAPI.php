@@ -52,7 +52,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		return 'https://formidableforms.com/wp-json/s11-sales/v1/list/';
+		return 'https://plapi.formidableforms.com/sales/';
 	}
 
 	/**
