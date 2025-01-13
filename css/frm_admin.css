@@ -478,11 +478,32 @@ td.column-title .frm_actions_dropdown {
 }
 /** End Temporary View CSS */
 
+.frm-gradient,
 .frm-upgrade-bar {
-	background: rgba(188, 224, 253, 0.23);
+	background: linear-gradient(90deg, #388CF3, #1961D5, #8C7FD8) !important;
+	color: #fff !important;
+	border: 0 !important;
+}
+
+.frm-gradient.frm-button-primary:not([disabled]):hover,
+.frm-gradient.frm-button-primary:not([disabled]):focus {
+	background: linear-gradient(90deg, #2871E6, #9989FB) !important;
+}
+
+.frm-upgrade-bar {
 	border-bottom: 1px solid var(--sidebar-hover);
-	padding: 3px 0 3px 40px;
-	font-size: 95%;
+	padding: 9px 0;
+	font-size: 12px;
+	text-align: center;
+}
+
+.frm-upgrade-bar a {
+	color: currentColor !important;
+	text-decoration: underline;
+}
+
+.frm-upgrade-bar a:focus {
+	outline: 1px dotted var(--sidebar-hover);
 }
 
 .frm-upgrade-bar span {
@@ -2269,6 +2290,7 @@ form .frm_blank_field label {
 
 .frm_error_style,
 .frm_warning_style,
+.frm_note_style2,
 .frm_note_style,
 .frm_message,
 #post-body-content .frm_updated_message,
@@ -2280,6 +2302,12 @@ div.frm_updated_message {
 	font-size: var(--text-sm);
 	margin: var(--gap-sm) 0;
 	text-align: left;
+}
+
+.frm_note_style2 {
+	background: linear-gradient(90deg, #e9effa, #fcf6fe) padding-box,
+				linear-gradient(90deg, #1961D5, #E8ABEF) border-box;
+	border: 1px solid transparent;
 }
 
 #frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
@@ -9449,6 +9477,34 @@ Responsive Design
 	border-color: var(--error-100);
 }
 
+.frm-cta-icon {
+	padding: 3px 15px 3px 0;
+	border-right: 1px solid currentColor;
+}
+
+#frm-upgrade-banner {
+	gap: 0;
+}
+
+#frm-upgrade-banner .frm-cta-icon + .frm-cta-content {
+	margin-right: auto;
+	padding-left: 15px;
+}
+
+#frm-upgrade-banner.frm-gradient h4,
+#frm-upgrade-banner.frm-gradient p {
+	color: currentColor;
+}
+
+#frm-upgrade-banner.frm-gradient h4 {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+#frm-upgrade-banner.frm-gradient p {
+	font-size: 14px;
+}
+
 .frm-right-panel .inside .frm_pro_tip,
 .frm_pro_tip {
 	color: var(--grey-700);
@@ -9463,6 +9519,7 @@ Responsive Design
 	position: relative;
 	width: calc(100% - 30px);
 	box-sizing: border-box;
+	font-size: 14px;
 }
 
 .frm_pro_tip .frmsvg,
@@ -9479,6 +9536,22 @@ Responsive Design
 	color: var(--orange);
 }
 
+.frm-gradient .frm-tip-cta {
+	color: currentColor;
+	font-weight: 700;
+}
+
+.frm-tip-badge {
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #1E63D5;
+	background-color: #fff;
+	line-height: 1;
+	border-radius: 4px;
+	padding: 3px 4px;
+}
+
 .frm-light-tip .frm_pro_tip {
 	background: var(--primary-25);
 }
@@ -9486,10 +9559,6 @@ Responsive Design
 .frm-light-tip .frm_pro_tip .frmsvg,
 .frm-light-tip .frm_pro_tip i,
 .frm-light-tip .frm-tip-cta {
-	color: var(--primary-500);
-}
-
-.frm-tip-cta:hover  {
 	color: var(--primary-500);
 }
 
