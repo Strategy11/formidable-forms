@@ -79,6 +79,12 @@ class FrmSalesApi extends FrmFormApi {
 	 * @return void
 	 */
 	private function add_sale( $sale ) {
+		if ( ! is_array( self::$sales ) ) {
+			// This gets set in the constructor.
+			// This check is just here for Psalm analysis.
+			return;
+		}
+
 		if ( ! is_array( $sale ) || ! isset( $sale['key'] ) ) {
 			// if the API response is invalid, $sale may not be an array.
 			// if there are no sales from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
