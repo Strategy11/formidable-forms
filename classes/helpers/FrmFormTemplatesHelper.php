@@ -184,14 +184,16 @@ class FrmFormTemplatesHelper {
 		if ( ! in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) ) {
 			FrmTipsHelper::show_admin_cta(
 				array(
+					'class'       => 'frm-gradient',
+					'icon'        => 'frmfont frm_speaker_icon',
 					'title'       => sprintf(
 						/* translators: %1$s: Open span tag, %2$s: Close span tag */
-						esc_html__( 'Get Super Powers with %1$s%2$s More Pre-built Forms', 'formidable' ) . ' 🦸',
+						esc_html__( 'Upgrade to get all %1$s%2$s templates', 'formidable' ),
 						'<span class="frm-form-templates-extra-templates-count">',
 						'</span>'
 					),
-					'description' => esc_html__( 'Unleash the potential of hundreds of additional form templates and save precious time. Upgrade today for unparalleled form-building capabilities.', 'formidable' ),
-					'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
+					'description' => esc_html__( 'Upgrade to PRO to get access to all of our templates and unlock the full potential of your forms.', 'formidable' ),
+					'link_text'   => esc_html__( 'Get More Templates', 'formidable' ),
 					'link_url'    => $args['upgrade_link'],
 					'id'          => 'frm-upgrade-banner',
 				)

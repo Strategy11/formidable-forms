@@ -186,6 +186,7 @@ class FrmAppController {
 		$grey_pages = array(
 			'formidable-applications',
 			'formidable-dashboard',
+			'formidable-views',
 		);
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );
@@ -801,6 +802,11 @@ class FrmAppController {
 	public static function admin_enqueue_scripts() {
 		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
+			wp_enqueue_style( FrmDashboardController::PAGE_SLUG, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+		}
+
 		FrmUsageController::load_scripts();
 	}
 
