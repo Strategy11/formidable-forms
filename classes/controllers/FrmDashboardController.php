@@ -44,7 +44,9 @@ class FrmDashboardController {
 		self::remove_admin_notices_on_dashboard();
 		self::load_assets();
 
-		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
+		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
+		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
 		add_filter( 'frm_show_footer_links', '__return_false' );
 		add_filter( 'screen_options_show_screen', '__return_false' );
 	}
