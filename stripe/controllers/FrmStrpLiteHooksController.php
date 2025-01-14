@@ -53,10 +53,6 @@ class FrmStrpLiteHooksController {
 		add_action( 'frm_form_classes', 'FrmStrpLiteLinkController::add_form_classes' );
 	}
 
-	public static function remove_screen_options() {
-		return false;
-	}
-
 	/**
 	 * @return void
 	 */
