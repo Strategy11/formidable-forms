@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.17
  */
 class FrmSalesApi extends FrmFormApi {
 
@@ -38,7 +38,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return void
 	 */
@@ -47,7 +47,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return string
 	 */
@@ -56,7 +56,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return void
 	 */
@@ -132,7 +132,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Check if a sale is within the active period.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array $sale
 	 * @return bool
@@ -146,7 +146,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return array|false
 	 */
@@ -181,7 +181,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Get text for best sale if applicable.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param string $key
 	 * @return false|string False if no sale is active.
@@ -197,7 +197,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array $sale
 	 * @return bool True if the sale is a match for the applicable group (if one is defined).
@@ -213,7 +213,7 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return int 1 or 0.
 	 */

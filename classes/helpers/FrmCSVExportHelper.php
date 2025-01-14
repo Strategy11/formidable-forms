@@ -94,7 +94,7 @@ class FrmCSVExportHelper {
 	 * Whether to include the BOM (Byte Order Mark) in the CSV file.
 	 * Only applicable for UTF-8 exports.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @var bool
 	 */
@@ -103,7 +103,7 @@ class FrmCSVExportHelper {
 	/**
 	 * Get all options for the CSV export format dropdown.
 	 *
-	 * @since x.x The UTF-8 with BOM option was added.
+	 * @since 6.17 The UTF-8 with BOM option was added.
 	 *
 	 * @return array
 	 */
@@ -175,7 +175,7 @@ class FrmCSVExportHelper {
 		 * For a target form with 50k entries (Locations List, with 7 fields), batch sizes of 100
 		 * were significantly faster and used less memory, so a filter was added.
 		 *
-		 * @since x.x
+		 * @since 6.17
 		 *
 		 * @param int $batch_size
 		 * @param int $form_id

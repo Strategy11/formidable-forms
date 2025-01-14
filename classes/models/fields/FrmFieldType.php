@@ -1665,7 +1665,7 @@ DEFAULT_HTML;
 	/**
 	 * Allow a tags (and other things that normally get stripped) in user input, if there is an option match.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array|string $value
 	 * @param array|string $unsanitized_value

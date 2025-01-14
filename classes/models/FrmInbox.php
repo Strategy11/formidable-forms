@@ -509,7 +509,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Clear the inbox cache by deleting the associated option from the database.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return void
 	 */
