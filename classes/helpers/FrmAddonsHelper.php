@@ -269,7 +269,7 @@ class FrmAddonsHelper {
 	/**
 	 * Shows five star rating, used on Views page if only Lite plugins are installed.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param string $color Star color.
 	 * @return void
@@ -290,7 +290,7 @@ class FrmAddonsHelper {
 	/**
 	 * Shows the guarantee icon.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return void
 	 */
@@ -303,7 +303,7 @@ class FrmAddonsHelper {
 	/**
 	 * Gets reviews text.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param string $count Review count.
 	 * @param string $site  Site name.

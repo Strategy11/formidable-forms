@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.17
  */
 class FrmApiHelper {
 
 	/**
 	 * Check if an API item matches the current site license target.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array $item Inbox or Sale item.
 	 * @return bool
@@ -37,7 +37,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array $who
 	 * @return bool
@@ -47,7 +47,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param array $who
 	 * @return bool
@@ -57,7 +57,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return string
 	 */
@@ -73,7 +73,7 @@ class FrmApiHelper {
 	 * Check if user is still using the Lite version only, and within
 	 * the first 30 days of activation.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return bool
 	 */
@@ -82,7 +82,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return bool
 	 */
@@ -98,7 +98,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return bool
 	 */
@@ -109,7 +109,7 @@ class FrmApiHelper {
 	/**
 	 * Check if the Pro plugin is active. If not, consider the user to be on the free version.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return bool
 	 */

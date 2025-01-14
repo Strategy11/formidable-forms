@@ -948,7 +948,7 @@ class FrmStylesHelper {
 	/**
 	 * Returns the bottom part from a margin/padding value.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param string $value The margin/padding value.
 	 * @return string
