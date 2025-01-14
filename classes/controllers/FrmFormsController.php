@@ -2770,7 +2770,10 @@ class FrmFormsController {
 	 * @return array
 	 */
 	private static function get_ajax_redirect_response_data( $args ) {
-		$response_data = array( 'redirect' => $args['success_url'] );
+		$response_data = array(
+			'redirect' => $args['success_url'],
+			'content'  => '',
+		);
 
 		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
 			$response_data['delay']    = $args['form']->options['redirect_delay_time'];
