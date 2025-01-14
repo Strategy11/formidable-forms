@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 6.17
+Stable tag: 6.17.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.17.1 =
+* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+
 = 6.17 =
 * New: New redirect delay duration and delay message settings have been added to confirmation actions.
 * New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
@@ -402,21 +405,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.16.2 =
 * Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
 * Fix: JSON default values are no longer decoded for field types that expect string values only.
-
-= 6.16.1 =
-* New: Database queries for entry ID data have been optimized, removing a JOIN in cases where it is not required. This should significantly improve performance when searching for entries in a View.
-* Fix: Collapsible sections in the styler settings would no longer open after the recent WordPress 6.7 update.
-* Fix: The label position setting and CSS layout classes for summary fields were not working. Since None is also the default value for Summary field label positions, this means that Summary field labels that previously were visible likely are no longer visible.
-* Fix: The slider to set field margin for section fields wouldn't properly save.
-* Fix: Checkbox selection would not work on iPhones when using frm_grid classes.
-* Fix: An automatic conversion of false to array deprecated message that would occur when loading the visual styler with the Authorize.Net add-on active has been fixed.
-* Fix: A str_replace(): Passing null to parameter #3 deprecated message has been fixed.
-* Fix: Stripe payments using the action included in this plugin would fail to initialize when using shortcode amount values for many currency types including Mexican Pesos.
-* Fix: An array to string conversion PHP warning has been fixed.
-* Fix: The center form styling toggle would not properly save.
-* Fix: Form fields would appear broken when the Payment forms by Paystack plugin was active due to a shortcode conflict.
-* Several deprecated functions have been removed including FrmAppController::page_route, FrmFieldType::default_invalid_msg, FrmFieldType::default_unique_msg, FrmStylesHelper::maybe_include_font_icon_css, FrmFormsHelper::ignore_template_categories, FrmFormActionsHelper::default_action_opts, and FrmAppHelper::maybe_full_screen_link.
-* The unused FrmEDD_SL_Plugin_Updater class has been deprecated and is no longer functional.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
