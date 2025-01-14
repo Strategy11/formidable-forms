@@ -321,6 +321,12 @@ namespace {
 	}
 	class FrmPaymentsController {
 		public static $db_opt_name = 'frm_pay_db_version';
+		/**
+		 * @param array $cols
+		 * @return array
+		 */
+		public static function payment_columns( $cols = array() ) {
+		}
 	}
 	class FrmProDashboardHelper {
 		/**
@@ -401,14 +407,6 @@ namespace {
 	 * @return void
 	 */
 	function w3tc_flush_all( $extras = null ) {
-	}
-	class FrmPaymentsController {
-		/**
-		 * @param array $cols
-		 * @return array
-		 */
-		public static function payment_columns( $cols = array() ) {
-		}
 	}
 	class FrmTransListsController {
 		/**
