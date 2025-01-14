@@ -868,7 +868,7 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return int
 	 */
