@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.17.1 =
+* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+
 = 6.17 =
 * New: New redirect delay duration and delay message settings have been added to confirmation actions.
 * New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.

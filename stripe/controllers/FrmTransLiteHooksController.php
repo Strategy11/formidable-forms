@@ -68,7 +68,7 @@ class FrmTransLiteHooksController {
 	/**
 	 * Make sure that Payments appear when there are inbox items for all Payments plugins.
 	 *
-	 * @since x.x
+	 * @since 6.17.1
 	 *
 	 * @return void
 	 */
