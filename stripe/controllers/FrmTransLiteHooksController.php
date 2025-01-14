@@ -36,7 +36,7 @@ class FrmTransLiteHooksController {
 	public static function load_admin_hooks() {
 		add_action(
 			'admin_init',
-			function() {
+			function () {
 				self::fix_addon_hooks();
 			}
 		);
