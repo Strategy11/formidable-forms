@@ -337,16 +337,31 @@ class FrmAppController {
 		return (array) apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
 	}
 
-	// Adds a settings link to the plugins page
 	/**
+	 * Adds a settings link to the plugins page
+	 *
+	 * @param array $links
 	 * @return array
 	 */
 	public static function settings_link( $links ) {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$label      = FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro', 'formidable' );
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
+			if ( FrmAddonsController::is_license_expired() ) {
+				$label = __( 'Renew', 'formidable' );
+			} else {
+				$label = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_text' );
+				if ( ! $label ) {
+					$label = __( 'Upgrade to Pro', 'formidable' );
+				}
+			}
+
+			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+			if ( ! $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
+			}
+
+			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
