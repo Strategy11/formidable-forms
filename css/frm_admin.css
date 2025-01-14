@@ -1706,6 +1706,10 @@ input.frm_insert_in_template {
 	margin-right: auto;
 }
 
+.frm-mr-2xs {
+	margin-right: var(--gap-2xs) !important;
+}
+
 .frm-mx-0 {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
@@ -1771,6 +1775,10 @@ input.frm_insert_in_template {
 	padding-top: var(--gap-sm) !important;
 }
 
+.frm-pt-md {
+	padding-top: var(--gap-md) !important;
+}
+
 .frm-pt-xl {
 	padding-top: var(--gap-xl) !important;
 }
@@ -1781,6 +1789,12 @@ input.frm_insert_in_template {
 .frm-pb-sm {
 	padding-bottom: var(--gap-sm) !important;
 }
+
+.frm-px-sm {
+	padding-right: var(--gap-sm) !important;
+	padding-left: var(--gap-sm) !important;
+}
+
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
@@ -1846,6 +1860,10 @@ input.frm_insert_in_template {
 	width: 100% !important;
 }
 
+.frm-w-half {
+	width: 50% !important;
+}
+
 .frm_block, /* deprecated */
 .frm-block {
 	display: block;
@@ -1876,7 +1894,6 @@ input.frm_insert_in_template {
 	display: flex;
 	gap: var(--gap-sm);
 }
-
 
 .frm-flex-col {
 	display: flex;
@@ -1976,6 +1993,10 @@ input.frm_insert_in_template {
 
 .frm-cursor-pointer {
 	cursor: pointer;
+}
+
+.frm-align-baseline {
+	vertical-align: baseline !important;
 }
 
 /* End Generic Classes, Start Forced Generic Classes */
