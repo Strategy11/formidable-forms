@@ -171,7 +171,7 @@ class FrmMigrate {
 	 *
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
-	 * @since x.x idx_form_id_type was also added to frm_fields.
+	 * @since 6.17 idx_form_id_type was also added to frm_fields.
 	 *
 	 * @return void
 	 */

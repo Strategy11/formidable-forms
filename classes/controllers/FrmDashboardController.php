@@ -66,7 +66,7 @@ class FrmDashboardController {
 	/**
 	 * Gets dashboard helper instance.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return FrmDashboardHelper
 	 */

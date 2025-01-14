@@ -1970,7 +1970,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )
