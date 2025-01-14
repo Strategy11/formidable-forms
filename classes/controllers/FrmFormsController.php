@@ -2803,6 +2803,10 @@ class FrmFormsController {
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
 		}//end if
 
+		if ( '' === $response['content'] ) {
+			unset( $response['content'] );
+		}
+
 		return $response_data;
 	}
 
