@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 6.16.3
+Stable tag: 6.17
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,18 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.17 =
+* New: New redirect delay duration and delay message settings have been added to confirmation actions.
+* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
+* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
+* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
+* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
+* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
+* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
+* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
+* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
+* The global JS function frmFrontForm.escapeHtml has been deprecated.
+
 = 6.16.3 =
 * New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
 * New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
