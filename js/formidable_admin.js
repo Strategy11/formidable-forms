@@ -10704,7 +10704,7 @@ function frmAdminBuildJS() {
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
 			document.querySelector( '.frm_form_builder' ).addEventListener( 'selectstart', function( e ) {
-				e.preventDefault();
+				return false;
 			});
 		},
 
