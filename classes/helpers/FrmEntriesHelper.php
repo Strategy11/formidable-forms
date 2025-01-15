@@ -868,11 +868,16 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @return int
 	 */
 	public static function get_visible_unread_inbox_count() {
+		$menu_name = FrmAppHelper::get_menu_name();
+		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+			return 0;
+		}
+
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
 			$settings        = FrmProAppHelper::get_settings();
 			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );

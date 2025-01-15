@@ -64,11 +64,13 @@ class FrmDashboardController {
 	}
 
 	/**
-	 * Init dashboard page.
+	 * Gets dashboard helper instance.
 	 *
-	 * @return void
+	 * @since 6.17
+	 *
+	 * @return FrmDashboardHelper
 	 */
-	public static function route() {
+	public static function get_dashboard_helper() {
 		$latest_available_form = FrmForm::get_latest_form();
 		$total_payments        = self::view_args_payments();
 		$counters_value        = array(
@@ -76,7 +78,7 @@ class FrmDashboardController {
 			'entries' => FrmEntry::get_entries_count(),
 		);
 
-		$dashboard_view = new FrmDashboardHelper(
+		return new FrmDashboardHelper(
 			array(
 				'counters' => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
@@ -113,6 +115,15 @@ class FrmDashboardController {
 				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
+	}
+
+	/**
+	 * Init dashboard page.
+	 *
+	 * @return void
+	 */
+	public static function route() {
+		$dashboard_view = self::get_dashboard_helper();
 
 		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
 
