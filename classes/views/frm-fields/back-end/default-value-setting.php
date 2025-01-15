@@ -12,7 +12,11 @@ id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
 	</label>
 	<span class="frm-with-right-icon">
 		<?php
-		$field_obj->display_smart_values_modal_trigger_icon( $field );
+		$display_smart_values_icon = isset( $display_smart_values_icon ) ? $display_smart_values_icon : true;
+
+		if ( $display_smart_values_icon ) {
+			$field_obj->display_smart_values_modal_trigger_icon( $field );
+		}
 
 		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
