@@ -330,6 +330,9 @@ class FrmAddon {
 
 		$api = new FrmApplicationApi( $this->license );
 		$api->reset_cached();
+
+		$api = new FrmSalesApi();
+		$api->reset_cached();
 	}
 
 	/**

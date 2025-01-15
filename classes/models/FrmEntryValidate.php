@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValidate {
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @var array|null
 	 */
@@ -653,7 +653,7 @@ class FrmEntryValidate {
 	/**
 	 * Returns fields that have 'Name' and 'Last' as their name.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param int $form_id
 	 * @return array
