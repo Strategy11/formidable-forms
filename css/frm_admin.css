@@ -9536,7 +9536,8 @@ Responsive Design
 	color: var(--orange);
 }
 
-.frm-gradient .frm-tip-cta {
+.frm-gradient .frm-tip-cta,
+.frm-light-tip .frm-gradient .frm-tip-cta {
 	color: currentColor;
 	font-weight: 700;
 }
