@@ -127,6 +127,7 @@ class FrmHooksController {
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
 		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
+		add_action( 'current_screen', 'FrmAppController::remember_custom_sort', 0 );
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
