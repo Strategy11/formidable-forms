@@ -170,12 +170,10 @@ class FrmApiHelper {
 			return false;
 		}
 
-		// Days from $activation_timestamp to today.
-		$days_since_activating = (int) floor( ( time() - $activation_timestamp ) / DAY_IN_SECONDS );
+		$current_day = (int) floor( ( time() - $activation_timestamp ) / DAY_IN_SECONDS ) + 1;
+		$start       = (int) $range_parts[0];
+		$end         = 1 === count( $range_parts ) ? $start : (int) $range_parts[1];
 
-		$start = (int) $range_parts[0];
-		$end   = 1 === count( $range_parts ) ? $start : (int) $range_parts[1];
-
-		return $days_since_activating >= $start && $days_since_activating <= $end;
+		return $current_day >= $start && $current_day <= $end;
 	}
 }
