@@ -10703,8 +10703,10 @@ function frmAdminBuildJS() {
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
-			document.querySelector( '.frm_form_builder' ).addEventListener( 'selectstart', function( e ) {
-				return false;
+			document.querySelector( '.frm_form_builder' ).addEventListener( 'mousedown', event => {
+				if ( event.shiftKey ) {
+				  event.preventDefault();
+				}
 			});
 		},
 
