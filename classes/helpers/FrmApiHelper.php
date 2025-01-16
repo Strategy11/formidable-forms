@@ -127,7 +127,7 @@ class FrmApiHelper {
 	 * @return bool
 	 */
 	private static function check_free_segments( $who ) {
-		$segments = array(
+		$segments          = array(
 			'free_first_1',
 			'free_first_2_3',
 			'free_first_4_7',
