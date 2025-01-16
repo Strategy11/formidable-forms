@@ -867,7 +867,7 @@ class FrmEntriesHelper {
 		return $existing_entry_statuses;
 	}
 
-		/**
+	/**
 	 * @since 6.17
 	 *
 	 * @return int
