@@ -127,10 +127,6 @@ class FrmApiHelper {
 	 * @return bool
 	 */
 	private static function check_free_segments( $who ) {
-		if ( ! self::is_free() || ! self::is_first_30() ) {
-			return false;
-		}
-
 		$segments = array(
 			'free_first_1',
 			'free_first_2_3',
@@ -142,6 +138,10 @@ class FrmApiHelper {
 		$intersecting_keys = array_intersect( $segments, $who );
 
 		if ( ! $intersecting_keys ) {
+			return false;
+		}
+
+		if ( ! self::is_free() || ! self::is_first_30() ) {
 			return false;
 		}
 
