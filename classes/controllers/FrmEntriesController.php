@@ -133,8 +133,10 @@ class FrmEntriesController {
 	 * @since 3.0
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
-		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
-		if ( $screen->id == $menu_name . '_page_formidable-entries' ) {
+		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
+		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
+		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
 			$show_screen = false;
 		}
 
@@ -333,20 +335,7 @@ class FrmEntriesController {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
-			$settings        = FrmProAppHelper::get_settings();
-			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
-
-			if ( $inbox_badge_off ) {
-				// When the badge is disabled, the unread count is not included in the menu name.
-				$unread_count = 0;
-			}
-		}
-
-		if ( ! isset( $unread_count ) ) {
-			$inbox        = new FrmInbox();
-			$unread_count = count( $inbox->unread() );
-		}
+		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}

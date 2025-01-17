@@ -97,7 +97,7 @@ class FrmAddonsController {
 		}
 
 		$label = __( 'Add-Ons', 'formidable' );
-		$label = '<span style="color:#3FCA89">' . $label . '</span>';
+		$label = '<span style="color:#3FCA89">' . esc_html( $label ) . '</span>';
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
@@ -105,10 +105,15 @@ class FrmAddonsController {
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$cta_text = FrmSalesApi::get_best_sale_value( 'menu_cta_text' );
+			if ( ! $cta_text ) {
+				$cta_text = __( 'Upgrade', 'formidable' );
+			}
+
 			add_submenu_page(
 				'formidable',
 				'Formidable | ' . __( 'Upgrade', 'formidable' ),
-				'<span class="frm-upgrade-submenu">' . __( 'Upgrade', 'formidable' ) . '</span>',
+				'<span class="frm-upgrade-submenu">' . esc_html( $cta_text ) . '</span>',
 				'frm_view_forms',
 				'formidable-pro-upgrade',
 				function () {
@@ -119,7 +124,7 @@ class FrmAddonsController {
 		} elseif ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) ) {
 			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
 			exit;
-		}
+		}//end if
 	}
 
 	/**
@@ -1411,6 +1416,7 @@ class FrmAddonsController {
 	public static function addon_upgrade_link( $addon, $upgrade_link ) {
 		$atts         = is_array( $upgrade_link ) ? $upgrade_link : array();
 		$upgrade_link = is_array( $upgrade_link ) ? $upgrade_link['link'] : $upgrade_link;
+		$text         = ! empty( $atts['text'] ) ? $atts['text'] : __( 'Upgrade Now', 'formidable' );
 
 		if ( $addon ) {
 			$upgrade_link .= '&utm_content=' . $addon['slug'];
@@ -1427,7 +1433,7 @@ class FrmAddonsController {
 		}
 		?>
 		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
-			<?php esc_html_e( 'Upgrade Now', 'formidable' ); ?>
+			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
 	}

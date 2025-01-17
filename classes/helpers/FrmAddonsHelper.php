@@ -53,6 +53,8 @@ class FrmAddonsHelper {
 	private static function show_expired_cta() {
 		FrmTipsHelper::show_admin_cta(
 			array(
+				'class'       => 'frm-gradient',
+				'icon'        => 'frmfont frm_speaker_icon',
 				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
 				'description' => esc_html__( 'Renew your subscription today and access our library of add-ons to supercharge your forms.', 'formidable' ),
 				'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
@@ -71,6 +73,8 @@ class FrmAddonsHelper {
 	private static function show_lite_cta() {
 		FrmTipsHelper::show_admin_cta(
 			array(
+				'class'       => 'frm-gradient',
+				'icon'        => 'frmfont frm_speaker_icon',
 				'title'       => esc_html__( 'Unlock Add-on library', 'formidable' ),
 				'description' => esc_html__( 'Upgrade to Pro and access our library of add-ons to supercharge your forms.', 'formidable' ),
 				'link_text'   => esc_html__( 'Upgrade to PRO', 'formidable' ),
@@ -260,5 +264,57 @@ class FrmAddonsHelper {
 	 */
 	public static function get_plan() {
 		return self::$plan_required;
+	}
+
+	/**
+	 * Shows five star rating, used on Views page if only Lite plugins are installed.
+	 *
+	 * @since 6.17
+	 *
+	 * @param string $color Star color.
+	 * @return void
+	 */
+	public static function show_five_star_rating( $color = 'black' ) {
+		$icon = file_get_contents( FrmAppHelper::plugin_path() . '/images/star.svg' );
+		?>
+		<span style="color: <?php echo esc_attr( $color ); ?>;">
+			<?php
+			for ( $i = 0; $i < 5; $i++ ) {
+				echo $icon; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
+			?>
+		</span>
+		<?php
+	}
+
+	/**
+	 * Shows the guarantee icon.
+	 *
+	 * @since 6.17
+	 *
+	 * @return void
+	 */
+	public static function guarantee_icon() {
+		?>
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/guarantee.svg' ); ?>" alt="" />
+		<?php
+	}
+
+	/**
+	 * Gets reviews text.
+	 *
+	 * @since 6.17
+	 *
+	 * @param string $count Review count.
+	 * @param string $site  Site name.
+	 * @return string
+	 */
+	public static function get_reviews_text( $count, $site ) {
+		return sprintf(
+			// Translators: %1$s is the number of reviews, %2$s is the site name.
+			__( 'Based on %1$s reviews on %2$s', 'formidable' ),
+			$count,
+			$site
+		);
 	}
 }

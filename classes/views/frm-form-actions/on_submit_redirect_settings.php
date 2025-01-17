@@ -3,7 +3,7 @@
  * On Submit redirect settings
  *
  * @package Formidable
- * @since x.x
+ * @since 6.17
  *
  * @var array $args See {@see FrmOnSubmitHelper::show_redirect_settings()}.
  */

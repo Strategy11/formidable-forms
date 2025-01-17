@@ -2770,11 +2770,16 @@ class FrmFormsController {
 	 * @return array
 	 */
 	private static function get_ajax_redirect_response_data( $args ) {
-		$response_data = array( 'redirect' => $args['success_url'] );
+		$response_data = array(
+			'redirect' => $args['success_url'],
+			'content'  => '',
+		);
+		$unset_content = true;
 
 		if ( ! empty( $args['form']->options['redirect_delay'] ) ) {
 			$response_data['delay']    = $args['form']->options['redirect_delay_time'];
 			$response_data['content'] .= self::get_redirect_message( $args['success_url'], $args['form']->options['redirect_delay_msg'], $args );
+			$unset_content             = false;
 		}
 
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
@@ -2795,10 +2800,15 @@ class FrmFormsController {
 				ob_start();
 				self::show_lone_success_message( $args );
 				$response_data['content'] .= ob_get_clean();
+				$unset_content             = false;
 			}//end if
 
 			$response_data['fallbackMsg'] = self::get_redirect_fallback_message( $args['success_url'], $args );
 		}//end if
+
+		if ( $unset_content && '' === $response_data['content'] ) {
+			unset( $response_data['content'] );
+		}
 
 		return $response_data;
 	}
