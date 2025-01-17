@@ -1496,7 +1496,8 @@ body.frm-hidden-overflow {
 .wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
-.frm_wrap .preview > .button:hover {
+.frm_wrap .preview > .button:hover,
+.frm-white-body #search-submit:hover {
 	border-color: var(--grey-300) !important;
 	color: var(--grey-800);
 	background: var(--grey-50) !important;
