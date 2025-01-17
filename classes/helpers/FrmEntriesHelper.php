@@ -878,17 +878,20 @@ class FrmEntriesHelper {
 			return 0;
 		}
 
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_settings' ) ) {
-			$settings        = FrmProAppHelper::get_settings();
-			$inbox_badge_off = ! empty( $settings->inbox ) && ! isset( $settings->inbox['badge'] );
+		$inbox       = new FrmInbox();
+		$inbox_count = count( $inbox->unread() );
 
-			if ( $inbox_badge_off ) {
-				// When the badge is disabled, the unread count is not included in the menu name.
+		if ( ! $inbox_count ) {
+			return 0;
+		}
+
+		if ( is_callable( 'FrmProSettingsController::inbox_badge' ) ) {
+			$inbox_count = FrmProSettingsController::inbox_badge( $inbox_count );
+			if ( ! $inbox_count ) {
 				return 0;
 			}
 		}
 
-		$inbox = new FrmInbox();
-		return count( $inbox->unread() );
+		return $inbox_count;
 	}
 }

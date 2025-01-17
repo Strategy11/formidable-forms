@@ -133,8 +133,10 @@ class FrmEntriesController {
 	 * @since 3.0
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
-		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
-		if ( $screen->id == $menu_name . '_page_formidable-entries' ) {
+		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
+		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
+		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
 			$show_screen = false;
 		}
 

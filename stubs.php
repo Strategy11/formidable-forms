@@ -416,6 +416,14 @@ namespace {
 		public static function payment_columns( $columns = array() ) {
 		}
 	}
+	class FrmProSettingsController {
+		/**
+		 * @param string $count
+		 * @return string
+		 */
+		public static function inbox_badge( $count ) {
+		}
+	}
 }
 
 namespace Elementor {
