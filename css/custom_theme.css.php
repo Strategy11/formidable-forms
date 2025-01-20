@@ -1445,6 +1445,16 @@ select.frm_loading_lookup{
 	padding-top:4px;
 }
 
+.with_frm_style .frm_left_container select.auto_width,
+.with_frm_style .frm_right_container select.auto_width {
+	width: max-content<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style .frm_right_container .frm_primary_label,
+.with_frm_style .frm_right_container select.auto_width {
+	margin-left: auto<?php echo esc_html( $important ); ?>;
+}
+
 .with_frm_style .frm_inline_container.frm_grid_first .frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid .frm_primary_label,
 .with_frm_style .frm_inline_container.frm_grid_odd .frm_primary_label,
