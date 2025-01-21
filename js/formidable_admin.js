@@ -10339,7 +10339,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-
 	/**
 	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
 	 * It sets up initial visibility at page load and updates it on each dropdown change.
@@ -10372,7 +10371,33 @@ function frmAdminBuildJS() {
 
 		// Update dependencies visibility on dropdown change
 		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
-	};
+	}
+
+	/**
+	 * Handles "Enter" key navigation by processing the given choiceField
+	 * and then focusing on the next field in the sequence.
+	 *
+	 * @param {HTMLElement} choiceField The currently selected choice field element.
+	 */
+	function handleEnterKeyNavigation( choiceField ) {
+		const singleSettings = choiceField.closest( '.frm-single-settings' );
+		const fields = singleSettings.querySelectorAll( '[name^="field_options["]' );
+		const fieldsArray = Array.from( fields );
+
+		// Find the index of the current choiceField
+		const currentIndex = fieldsArray.indexOf( choiceField );
+
+		if ( currentIndex >= 0 ) {
+			if ( choiceField.type === 'checkbox' || choiceField.type === 'radio' ) {
+				choiceField.checked = ! choiceField.checked;
+			}
+
+			// Focus on the next field if it exists
+			if ( currentIndex < fieldsArray.length - 1 ) {
+				fieldsArray[ currentIndex + 1 ].focus();
+			}
+		}
+	}
 
 	return {
 		init: function() {
@@ -10705,6 +10730,17 @@ function frmAdminBuildJS() {
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
 			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
+
+			// Handle Enter key navigation on a choice field
+			$builderForm.on(
+				'keydown',
+				'.frm-single-settings input[type="checkbox"][name^="field_options"], .frm-single-settings input[type="radio"][name^="field_options"], .frm-single-settings select[name^="field_options"]',
+				( event ) => {
+					if ( 'Enter' === event.key ) {
+						handleEnterKeyNavigation( event.currentTarget );
+					}
+				}
+			);
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
