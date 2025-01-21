@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php do_action( 'frm_before_settings' ); ?>
 </div>
 
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Defaults', 'formidable' ); ?></h3>
 
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
@@ -54,19 +54,40 @@ unset( $more_html );
 	<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ); ?>"/>
 <?php } ?>
 
-<p>
-	<label>
-		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> data-frmhide=".frm_custom_header_ip_cont" />
-		<?php esc_html_e( 'Do not store IPs with form submissions. Check this box for to assist with GDPR compliance.', 'formidable' ); ?>
-	</label>
-</p>
-
+<h3><?php esc_html_e( 'GDPR', 'formidable' ); ?></h3>
 <?php
+$gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
+if ( ! $frm_settings->enable_gdpr ) {
+	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
+}
 $custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont' );
 if ( $frm_settings->no_ips ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }
 ?>
+<p>
+	<label>
+		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr, 1 ); ?> data-frmshow=".frm_gdpr_options" />
+		<?php esc_html_e( 'Enable GDPR related features and enhancements.', 'formidable' ); ?>
+	</label>
+</p>
+
+<p <?php FrmAppHelper::array_to_html_params( $gdpr_options_wrapper_params, true ); ?>>
+	<label>
+		<input type="checkbox" name="frm_no_gdpr_cookies" id="frm_no_gdpr_cookies" value="1" <?php checked( $frm_settings->no_gdpr_cookies, 1 ); ?> />
+		<?php esc_html_e( 'Disable user tracking cookies. This will disable the user tracking feature as well as the ability to limit form entries to one per user by cookie.', 'formidable' ); ?>
+	</label>
+</p>
+
+<p <?php FrmAppHelper::array_to_html_params( $gdpr_options_wrapper_params, true ); ?>>
+	<label>
+		<input type="checkbox" name="frm_no_ips" id="frm_no_ips" value="1" <?php checked( $frm_settings->no_ips, 1 ); ?> data-frmhide=".frm_custom_header_ip_cont" />
+		<?php esc_html_e( 'Do not store user IPs with form submissions.', 'formidable' ); ?>
+	</label>
+</p>
+
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+
 <p <?php FrmAppHelper::array_to_html_params( $custom_header_ip_wrapper_params, true ); ?>>
 	<label>
 		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
