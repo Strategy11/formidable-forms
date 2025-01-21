@@ -41,6 +41,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } ?>
 </p>
 
+<p>
+	<label>
+		<input type="checkbox" name="frm_admin_bar" id="frm_admin_bar" value="1" <?php checked( $frm_settings->admin_bar, 1 ); ?> />
+		<?php esc_html_e( 'Do not include Formidable in the admin bar.', 'formidable' ); ?>
+	</label>
+</p>
+
 <p class="frm_uninstall">
 	<label>
 		<input type="checkbox" id="frm-uninstall-box" value="1" onchange="frm_show_div('frm_uninstall_now',this.checked,true,'#')" />

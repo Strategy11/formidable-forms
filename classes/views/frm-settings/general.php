@@ -76,10 +76,3 @@ if ( $frm_settings->no_ips ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
-
-<p>
-	<label>
-		<input type="checkbox" name="frm_admin_bar" id="frm_admin_bar" value="1" <?php checked( $frm_settings->admin_bar, 1 ); ?> />
-		<?php esc_html_e( 'Do not include Formidable in the admin bar.', 'formidable' ); ?>
-	</label>
-</p>

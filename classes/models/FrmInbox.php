@@ -19,7 +19,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private static $banner_messages;
 
-	public function __construct( $for_parent = null ) {
+	public function __construct() {
 		$this->set_cache_key();
 
 		if ( false === self::$messages ) {
@@ -205,22 +205,12 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function is_for_user( $message ) {
-		if ( ! isset( $message['who'] ) || $message['who'] === 'all' ) {
+		if ( FrmApiHelper::is_for_user( $message ) ) {
 			return true;
 		}
+
 		$who = (array) $message['who'];
-		if ( $this->is_for_everyone( $who ) ) {
-			return true;
-		}
-		if ( $this->is_user_type( $who ) ) {
-			return true;
-		}
-		if ( in_array( 'free_first_30', $who, true ) && $this->is_free_first_30() ) {
-			return true;
-		}
-		if ( in_array( 'free_not_first_30', $who, true ) && $this->is_free_not_first_30() ) {
-			return true;
-		}
+
 		/**
 		 * Allow for other special inbox cases in other add-ons.
 		 *
@@ -231,34 +221,6 @@ class FrmInbox extends FrmFormApi {
 		 * @param array $message
 		 */
 		return (bool) apply_filters( 'frm_inbox_message_is_for_user', false, $who, $message );
-	}
-
-	/**
-	 * @since 6.16.3
-	 *
-	 * @param array $who
-	 * @return bool
-	 */
-	private function is_for_everyone( $who ) {
-		return in_array( 'all', $who, true ) || in_array( 'everyone', $who, true );
-	}
-
-	/**
-	 * @since 6.16.3
-	 *
-	 * @param array $who
-	 * @return bool
-	 */
-	private function is_user_type( $who ) {
-		return in_array( $this->get_user_type(), $who, true );
-	}
-
-	private function get_user_type() {
-		if ( ! FrmAppHelper::pro_is_installed() ) {
-			return 'free';
-		}
-
-		return FrmAddonsController::license_type();
 	}
 
 	/**
@@ -390,54 +352,6 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function update_list() {
 		update_option( $this->option, self::$messages, 'no' );
-	}
-
-	/**
-	 * Check if user is still using the Lite version only, and within
-	 * the first 30 days of activation.
-	 *
-	 * @since 6.16
-	 *
-	 * @return bool
-	 */
-	private function is_free_first_30() {
-		return $this->is_free() && $this->is_first_30();
-	}
-
-	/**
-	 * @since 6.16.3
-	 *
-	 * @return bool
-	 */
-	private function is_first_30() {
-		$activation_timestamp = get_option( 'frm_first_activation' );
-		if ( false === $activation_timestamp ) {
-			// If the option does not exist, assume that it is
-			// because the user was active before this option was introduced.
-			return false;
-		}
-		$cutoff = strtotime( '-30 days' );
-		return $activation_timestamp > $cutoff;
-	}
-
-	/**
-	 * @since 6.16.3
-	 *
-	 * @return bool
-	 */
-	private function is_free_not_first_30() {
-		return $this->is_free() && ! $this->is_first_30();
-	}
-
-	/**
-	 * Check if the Pro plugin is active. If not, consider the user to be on the free version.
-	 *
-	 * @since 6.16.3
-	 *
-	 * @return bool
-	 */
-	private function is_free() {
-		return ! FrmAppHelper::pro_is_included();
 	}
 
 	/**
@@ -590,5 +504,16 @@ class FrmInbox extends FrmFormApi {
 			},
 			array()
 		);
+	}
+
+	/**
+	 * Clear the inbox cache by deleting the associated option from the database.
+	 *
+	 * @since 6.17
+	 *
+	 * @return void
+	 */
+	public static function clear_cache() {
+		delete_option( 'frm_inbox' );
 	}
 }

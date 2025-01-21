@@ -24,42 +24,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div id="post-body-content" class="frm-fields">
 
-								<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
-								<input type="hidden" name="frm_action" value="process-form"/>
-								<input type="hidden" name="action" value="process-form"/>
-								<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
+					<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/errors.php'; ?>
+					<input type="hidden" name="frm_action" value="process-form"/>
+					<input type="hidden" name="action" value="process-form"/>
+					<?php wp_nonce_field( 'process_form_nonce', 'process_form' ); ?>
 
+					<?php
+					foreach ( $sections as $section ) {
+						if ( $current === $section['anchor'] ) {
+							?>
+							<style type="text/css">.<?php echo esc_attr( $section['anchor'] ); ?> {
+								display: block;
+							}</style>
+						<?php } ?>
+						<div id="<?php echo esc_attr( $section['anchor'] ); ?>"
+								class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
+								<h2 class="frm-h2">
+									<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								</h2>
+							<?php if ( isset( $section['ajax'] ) ) { ?>
+								<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">
+									<span class="frm-wait"></span>
+								</div>
+							<?php } else { ?>
 								<?php
-								foreach ( $sections as $section ) {
-									if ( $current === $section['anchor'] ) {
-										?>
-										<style type="text/css">.<?php echo esc_attr( $section['anchor'] ); ?> {
-											display: block;
-										}</style>
-									<?php } ?>
-									<div id="<?php echo esc_attr( $section['anchor'] ); ?>"
-											class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
-											<h2 class="frm-h2">
-												<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-											</h2>
-										<?php if ( isset( $section['ajax'] ) ) { ?>
-											<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">
-												<span class="frm-wait"></span>
-											</div>
-										<?php } else { ?>
-											<?php
-											if ( isset( $section['class'] ) ) {
-												call_user_func( array( $section['class'], $section['function'] ) );
-											} elseif ( isset( $section['function'] ) ) {
-												call_user_func( $section['function'] );
-											}
-										}
-										do_action( 'frm_' . $section['anchor'] . '_form', $frm_settings );
-										?>
-									</div>
-									<?php
-								}//end foreach
-								?>
+								if ( isset( $section['class'] ) ) {
+									call_user_func( array( $section['class'], $section['function'] ) );
+								} elseif ( isset( $section['function'] ) ) {
+									call_user_func( $section['function'] );
+								}
+							}
+							do_action( 'frm_' . $section['anchor'] . '_form', $frm_settings );
+							?>
+						</div>
+						<?php
+					}//end foreach
+
+					do_action( 'frm_after_settings_tabs' );
+					?>
 				</div>
 			</div>
 		</div>

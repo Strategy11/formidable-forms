@@ -944,4 +944,23 @@ class FrmStylesHelper {
 			? FrmProAppHelper::use_chosen_js()
 			: true;
 	}
+
+	/**
+	 * Returns the bottom part from a margin/padding value.
+	 *
+	 * @since 6.17
+	 *
+	 * @param string $value The margin/padding value.
+	 * @return string
+	 */
+	public static function get_bottom_value( $value ) {
+		if ( ! $value ) {
+			return $value;
+		}
+		$parts = explode( ' ', $value );
+		if ( count( $parts ) < 3 ) {
+			return $parts[0];
+		}
+		return $parts[2];
+	}
 }

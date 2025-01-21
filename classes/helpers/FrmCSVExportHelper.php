@@ -90,8 +90,34 @@ class FrmCSVExportHelper {
 	 */
 	protected static $meta = array();
 
+	/**
+	 * Whether to include the BOM (Byte Order Mark) in the CSV file.
+	 * Only applicable for UTF-8 exports.
+	 *
+	 * @since 6.17
+	 *
+	 * @var bool
+	 */
+	private static $include_bom = false;
+
+	/**
+	 * Get all options for the CSV export format dropdown.
+	 *
+	 * @since 6.17 The UTF-8 with BOM option was added.
+	 *
+	 * @return array
+	 */
 	public static function csv_format_options() {
 		$formats = array( 'UTF-8', 'ISO-8859-1', 'windows-1256', 'windows-1251', 'macintosh' );
+
+		// Do not add the UTF-8 with BOM option if this function is called on Global Settings.
+		// This is to improve compatibility with the Export View as CSV add-on (v1.10).
+		// Otherwise, the option will appear twice since it is added in the add-on as well.
+		$on_global_settings_page = 'formidable-settings' === FrmAppHelper::get_param( 'page' );
+		if ( ! $on_global_settings_page ) {
+			array_splice( $formats, 1, 0, 'UTF-8 with BOM' );
+		}
+
 		$formats = apply_filters( 'frm_csv_format_options', $formats );
 
 		return $formats;
@@ -145,8 +171,19 @@ class FrmCSVExportHelper {
 
 		self::prepare_csv_headings();
 
-		// fetch 20 posts at a time rather than loading the entire table into memory
-		while ( $next_set = array_splice( $atts['entry_ids'], 0, 20 ) ) {
+		/**
+		 * For a target form with 50k entries (Locations List, with 7 fields), batch sizes of 100
+		 * were significantly faster and used less memory, so a filter was added.
+		 *
+		 * @since 6.17
+		 *
+		 * @param int $batch_size
+		 * @param int $form_id
+		 */
+		$csv_export_batch_size = (int) apply_filters( 'frm_csv_export_batch_size', 20, self::$form_id );
+
+		// Fetch posts in batches rather than loading the entire table into memory.
+		while ( $next_set = array_splice( $atts['entry_ids'], 0, $csv_export_batch_size ) ) {
 			self::prepare_next_csv_rows( $next_set );
 		}
 
@@ -230,6 +267,10 @@ class FrmCSVExportHelper {
 		header( 'Cache-Control: no-cache, must-revalidate' );
 		header( 'Pragma: no-cache' );
 
+		if ( self::$include_bom ) {
+			echo esc_html( chr( 239 ) . chr( 187 ) . chr( 191 ) );
+		}
+
 		do_action(
 			'frm_csv_headers',
 			array(
@@ -239,8 +280,19 @@ class FrmCSVExportHelper {
 		);
 	}
 
+	/**
+	 * Check the POST request data for the CSV format to use.
+	 *
+	 * @return void
+	 */
 	public static function get_csv_format() {
-		$csv_format        = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
+		$csv_format = FrmAppHelper::get_post_param( 'csv_format', 'UTF-8', 'sanitize_text_field' );
+
+		if ( 'UTF-8 with BOM' === $csv_format ) {
+			self::$include_bom = true;
+			$csv_format        = 'UTF-8';
+		}
+
 		$csv_format        = apply_filters( 'frm_csv_format', $csv_format, self::get_standard_filter_args() );
 		self::$to_encoding = $csv_format;
 	}
@@ -404,13 +456,24 @@ class FrmCSVExportHelper {
 	}
 
 	private static function prepare_next_csv_rows( $next_set ) {
-		// order by parent_item_id so children will be first
-		$where   = array(
-			'or'             => 1,
-			'id'             => $next_set,
-			'parent_item_id' => $next_set,
-		);
-		$entries = FrmEntry::getAll( $where, ' ORDER BY parent_item_id DESC', '', true, false );
+		if ( FrmAppHelper::pro_is_installed() ) {
+			$where    = array(
+				'or'             => 1,
+				'id'             => $next_set,
+				'parent_item_id' => $next_set,
+			);
+			// Order by parent_item_id so children will be first.
+			$order_by = ' ORDER BY parent_item_id DESC';
+		} else {
+			// When Pro is not installed, only query for direct ID matches only as we do not expect parent item id
+			// matches and the more simplified query is faster.
+			$where    = array(
+				'id' => $next_set,
+			);
+			$order_by = '';
+		}
+
+		$entries = FrmEntry::getAll( $where, $order_by, '', true, false );
 
 		foreach ( $entries as $entry ) {
 			self::$entry = $entry;
