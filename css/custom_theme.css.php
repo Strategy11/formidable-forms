@@ -1445,8 +1445,8 @@ select.frm_loading_lookup{
 	padding-top:4px;
 }
 
-.with_frm_style .frm_left_container select.auto_width,
-.with_frm_style .frm_right_container select.auto_width {
+.with_frm_style .frm_left_container > select.auto_width,
+.with_frm_style .frm_right_container > select.auto_width {
 	width: max-content<?php echo esc_html( $important ); ?>;
 }
 
