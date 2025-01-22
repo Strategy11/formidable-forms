@@ -8569,7 +8569,7 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function isContextualShortcode( item ) {
-		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const shortcode = item.querySelector( 'a' )?.dataset?.code;
 		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
 	}
 
@@ -10374,27 +10374,32 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Handles "Enter" key navigation by processing the given choiceField
-	 * and then focusing on the next field in the sequence.
+	 * Moves the focus to the next single option input field in the list and positions the cursor at the end of the text.
 	 *
-	 * @param {HTMLElement} choiceField The currently selected choice field element.
+	 * @param {HTMLElement} currentInput The currently focused input element.
 	 */
-	function handleEnterKeyNavigation( choiceField ) {
-		const singleSettings = choiceField.closest( '.frm-single-settings' );
-		const fields = singleSettings.querySelectorAll( '[name^="field_options["]' );
-		const fieldsArray = Array.from( fields );
+	function focusNextSingleOptionInput( currentInput ) {
+		const optionsList = currentInput.closest( '.frm_single_option' ).parentElement;
+		const inputs = optionsList.querySelectorAll( '.frm_single_option input[name^="field_options[" ], .frm_single_option input[name^="rows_"]' );
+		const inputsArray = Array.from( inputs );
 
-		// Find the index of the current choiceField
-		const currentIndex = fieldsArray.indexOf( choiceField );
+		// Find the index of the currently focused input
+		const currentIndex = inputsArray.indexOf( currentInput );
 
 		if ( currentIndex >= 0 ) {
-			if ( choiceField.type === 'checkbox' || choiceField.type === 'radio' ) {
-				choiceField.checked = ! choiceField.checked;
-			}
+			// Find the next visible input field
+			const nextInput = inputsArray.slice( currentIndex + 1 ).find( input =>
+				input.offsetParent !== null &&
+				input.offsetWidth > 0 &&
+				input.offsetHeight > 0
+			);
 
-			// Focus on the next field if it exists
-			if ( currentIndex < fieldsArray.length - 1 ) {
-				fieldsArray[ currentIndex + 1 ].focus();
+			if ( nextInput ) {
+				nextInput.focus();
+
+				// Move the cursor to the end of the text in the next input field
+				const textLength = nextInput.value.length;
+				nextInput.setSelectionRange( textLength, textLength );
 			}
 		}
 	}
@@ -10731,16 +10736,12 @@ function frmAdminBuildJS() {
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
 			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
 
-			// Handle Enter key navigation on a choice field
-			$builderForm.on(
-				'keydown',
-				'.frm-single-settings input[type="checkbox"][name^="field_options"], .frm-single-settings input[type="radio"][name^="field_options"], .frm-single-settings select[name^="field_options"]',
-				( event ) => {
-					if ( 'Enter' === event.key ) {
-						handleEnterKeyNavigation( event.currentTarget );
-					}
+			// Navigate to the next input field on pressing Enter in a single option field
+			$builderForm.on( 'keydown', '.frm_single_option input[name^="field_options["], .frm_single_option input[name^="rows_"]', event => {
+				if ( 'Enter' === event.key ) {
+					focusNextSingleOptionInput( event.currentTarget );
 				}
-			);
+			});
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
