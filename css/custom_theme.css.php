@@ -1450,8 +1450,8 @@ select.frm_loading_lookup{
 	width: max-content<?php echo esc_html( $important ); ?>;
 }
 
-.with_frm_style .frm_right_container .frm_primary_label,
-.with_frm_style .frm_right_container select.auto_width {
+.with_frm_style .frm_right_container > .frm_primary_label,
+.with_frm_style .frm_right_container > select.auto_width {
 	margin-left: auto<?php echo esc_html( $important ); ?>;
 }
 
