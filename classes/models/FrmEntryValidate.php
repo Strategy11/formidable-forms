@@ -228,7 +228,8 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type === 'phone' || ( $field->type === 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		$format_value = FrmField::get_option( $field, 'format' );
+		if ( $field->type === 'phone' || ( $field->type === 'text' && $format_value && 'currency' !== $format_value ) ) {
 
 			$pattern = self::phone_format( $field );
 
