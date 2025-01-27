@@ -861,13 +861,19 @@ class FrmAppHelper {
 	 *
 	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults.
+	 * @param bool         $echo    Whether to output the sanitized value directly.
 	 *
 	 * @return string
 	 */
-	public static function kses( $value, $allowed = array() ) {
-		$allowed_html = self::allowed_html( $allowed );
+	public static function kses( $value, $allowed = array(), $echo = false ) {
+		$allowed_html    = self::allowed_html( $allowed );
+		$sanitized_value = wp_kses( $value, $allowed_html );
 
-		return wp_kses( $value, $allowed_html );
+		if ( ! $echo ) {
+			return $sanitized_value;
+		}
+
+		echo $sanitized_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1088,6 +1094,10 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}
