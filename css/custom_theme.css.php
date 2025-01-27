@@ -871,8 +871,8 @@ a.frm_save_draft{
 	border-radius:50%;
 }
 
-.with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius: calc(var(--border-radius) / 2);
+.with_frm_style .frm_checkbox input[type=checkbox] {
+	border-radius: calc(var(--border-radius) / 2) !important;
 }
 
 .with_frm_style .frm_radio input[type=radio],
