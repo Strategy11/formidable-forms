@@ -1,4 +1,5 @@
 ( function() {
+	// TODO This needs to support a global var so we can switch between sandbox and production.
 	const appId		 = 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
 	const locationId = 'L7Q1NBZ6SSJ79';
 
@@ -46,6 +47,7 @@
 	// Required in SCA Mandated Regions: Learn more at https://developer.squareup.com/docs/sca-overview
 	async function verifyBuyer( payments, token ) {
 		const verificationDetails = {
+			// TODO How do we best handle amount in this case? Usually this isn't set with JS.
 			amount: '1.00',
 			// TODO Use form data instead of hard coded test values.
 			billingContact: {
@@ -74,7 +76,7 @@
 
 	document.addEventListener( 'DOMContentLoaded', async function () {
 		if ( ! window.Square ) {
-			throw new Error('Square.js failed to load properly');
+			throw new Error( 'Square.js failed to load properly' );
 		}
 
 		let payments;
