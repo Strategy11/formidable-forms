@@ -457,7 +457,9 @@
 			</errorLevel>
 		</InvalidMethodCall>
 		<MissingClassConstType>
-			<directory name="classes" />
+			<errorLevel type="suppress">
+				<directory name="classes" />
+			</errorLevel
 		</MissingClassConstType>
 	</issueHandlers>
 </psalm>
