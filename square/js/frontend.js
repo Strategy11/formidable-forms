@@ -8,7 +8,7 @@
 		return card;
 	}
 
-	async function createPayment( token, verificationToken ) {
+	async function createPayment( event, token, verificationToken ) {
 		const tokenInput = document.createElement( 'input' );
 		tokenInput.type = 'hidden';
 		tokenInput.value = token;
@@ -24,8 +24,7 @@
 		form.appendChild( verificationInput );
 
 		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			const e = new Event( 'submit' );
-			frmFrontForm.submitFormManual( e, form );
+			frmFrontForm.submitFormManual( event, form );
 		}
 	}
 
@@ -119,17 +118,10 @@
 				cardButton.disabled     = true;
 				const token             = await tokenize(card);
 				const verificationToken = await verifyBuyer(payments, token);
-				const paymentResults    = await createPayment(
-					token,
-					verificationToken,
-				);
-				displayPaymentResults( 'SUCCESS' );
-
-				console.debug( 'Payment Success', paymentResults );
+				await createPayment( event, token, verificationToken );
 			} catch ( e ) {
 				cardButton.disabled = false;
 				displayPaymentResults( 'FAILURE' );
-				console.error( e.message );
 			}
 		}
 
