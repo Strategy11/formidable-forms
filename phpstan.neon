@@ -99,9 +99,6 @@ parameters:
 			message: '#Foreach overwrites \$ip with its value variable.#'
 			path: classes/helpers/FrmAppHelper.php
 		-
-			message: '#Foreach overwrites \$opt_key with its key variable.#'
-			path: classes/helpers/FrmFieldsHelper.php
-		-
 			message: '#Only numeric types are allowed#'
 			paths:
 				- classes/helpers/FrmCSVExportHelper.php
