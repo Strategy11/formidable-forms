@@ -315,44 +315,22 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
-		if ( ! $stripe_connect_is_setup ) {
-			return;
-		}
-
 		if ( ! $form_id || ! is_int( $form_id ) ) {
-			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', '6.5' );
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
 			return;
 		}
-
-		$settings    = FrmStrpLiteAppHelper::get_settings();
-		$publishable = $settings->get_active_publishable_key();
 
 		wp_register_script(
-			'stripe',
-			'https://js.stripe.com/v3/',
+			'square',
+			// TODO This will need to change for live payments.
+			'https://sandbox.web.squarecdn.com/v1/square.js',
 			array(),
-			'3.0',
+			'1.0',
 			false
 		);
 
-		$suffix       = FrmAppHelper::js_suffix();
-		$dependencies = array( 'stripe', 'formidable' );
-
-		if ( '.min' === $suffix && is_readable( FrmAppHelper::plugin_path() . '/js/frmstrp.min.js' ) ) {
-			// Use the combined file if it is available.
-			$script_url = FrmAppHelper::plugin_url() . '/js/frmstrp.min.js';
-		} else {
-			if ( ! $suffix && ! is_readable( FrmStrpLiteAppHelper::plugin_path() . 'js/frmstrp.js' ) ) {
-				// The unminified file is not included in releases so force the minified script.
-				$suffix = '.min';
-			}
-			$script_url = FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js';
-		}
-
-		if ( class_exists( 'FrmProStrpLiteController' ) && ( ! $suffix || ! FrmProAppController::has_combo_js_file() ) ) {
-			$dependencies[] = 'formidablepro';
-		}
+		$dependencies = array( 'square', 'formidable' );
+		$script_url = FrmSquareLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(
 			'formidable-square',
@@ -364,7 +342,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$square_vars     = array(
-			'publishable_key' => $publishable,
 			'form_id'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_square_ajax' ),
 			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
