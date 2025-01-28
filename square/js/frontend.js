@@ -2,56 +2,50 @@
 	const appId		 = 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
 	const locationId = 'L7Q1NBZ6SSJ79';
 
-	async function initializeCard(payments) {
+	async function initializeCard( payments ) {
 		const card = await payments.card();
-		await card.attach('#card-container');
-
+		await card.attach( '#card-container' );
 		return card;
 	}
 
-	async function createPayment(token, verificationToken) {
-		const body = JSON.stringify({
-			locationId,
-			sourceId: token,
-			verificationToken,
-			idempotencyKey: window.crypto.randomUUID(),
-		});
+	async function createPayment( token, verificationToken ) {
+		const tokenInput = document.createElement( 'input' );
+		tokenInput.type = 'hidden';
+		tokenInput.value = token;
+		tokenInput.setAttribute( 'name', 'square-token' );
 
-		const paymentResponse = await fetch('/payment', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body,
-		});
+		const verificationInput = document.createElement( 'input' );
+		verificationInput.type = 'hidden';
+		verificationInput.value = verificationToken;
+		verificationInput.setAttribute( 'name', 'square-verification-token' );
 
-		if ( paymentResponse.ok ) {
-			return paymentResponse.json();
+		const form = document.getElementById( 'card-button' ).closest( 'form' );
+		form.appendChild( tokenInput );
+		form.appendChild( verificationInput );
+
+		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
+			const e = new Event( 'submit' );
+			frmFrontForm.submitFormManual( e, form );
 		}
-
-		const errorBody = await paymentResponse.text();
-		throw new Error( errorBody );
 	}
 
 	async function tokenize(paymentMethod) {
 		const tokenResult = await paymentMethod.tokenize();
 
-		if (tokenResult.status === 'OK') {
+		if ( tokenResult.status === 'OK' ) {
 			return tokenResult.token;
 		}
 
 		let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
-		if (tokenResult.errors) {
-		errorMessage += ` and errors: ${JSON.stringify(
-			tokenResult.errors,
-		)}`;
+		if ( tokenResult.errors ) {
+			errorMessage += ` and errors: ${JSON.stringify( tokenResult.errors )}`;
 		}
 
-		throw new Error(errorMessage);
+		throw new Error( errorMessage );
 	}
 
 	// Required in SCA Mandated Regions: Learn more at https://developer.squareup.com/docs/sca-overview
-	async function verifyBuyer(payments, token) {
+	async function verifyBuyer( payments, token ) {
 		const verificationDetails = {
 			amount: '1.00',
 			billingContact: {
@@ -70,7 +64,7 @@
 
 		const verificationResults = await payments.verifyBuyer(
 			token,
-			verificationDetails,
+			verificationDetails
 		);
 		return verificationResults.token;
 	}
@@ -102,7 +96,7 @@
 			payments = window.Square.payments( appId, locationId );
 		} catch {
 			const statusContainer = document.getElementById(
-			'payment-status-container',
+				'payment-status-container',
 			);
 			statusContainer.className = 'missing-credentials';
 			statusContainer.style.visibility = 'visible';
@@ -140,7 +134,7 @@
 		}
 
 		const cardButton = document.getElementById( 'card-button' );
-		cardButton.addEventListener('click', async function ( event ) {
+		cardButton.addEventListener( 'click', async function ( event ) {
 			await handlePaymentMethodSubmission( event, card );
 		});
 	});

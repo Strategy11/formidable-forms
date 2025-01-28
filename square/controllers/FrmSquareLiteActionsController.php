@@ -22,7 +22,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		echo '
 			<button id="card-button" type="button">Pay $1.00</button>
 			<div id="card-container"></div>
-			<div id="payment-status-container"></div>
+			<div id="payment-status-container">Payment Status</div>
 		';
 		return;
 
@@ -344,7 +344,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'formidable-square',
 			$script_url,
 			$dependencies,
-			FrmAppHelper::plugin_version(),
+			uniqid(),
 			false
 		);
 
