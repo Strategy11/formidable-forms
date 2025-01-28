@@ -456,5 +456,8 @@
 				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</InvalidMethodCall>
+		<MissingClassConstType>
+			<directory name="classes" />
+		</MissingClassConstType>
 	</issueHandlers>
 </psalm>
