@@ -24,8 +24,6 @@ parameters:
 		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
-		- '#Call to protected method+#'
-		- '#Call to function compact\(\) contains possibly undefined variable#'
 		- '#Cannot access (offset|property)+#'
 		- '#Cannot (call method|cast|assign offset)+#'
 		- '#Function (apply_filters)+ invoked with#'
@@ -33,7 +31,6 @@ parameters:
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
 		- '#is always (false|true)+.#'
-		- '#might not be defined.#'
 		- '#no (typehint|value type|return typehint)+ specified.#'
 		- '#of echo cannot be converted to string.#'
 		- '#only iterables are supported#'
@@ -117,3 +114,23 @@ parameters:
 		-
 			message: '#Access to protected property FrmFieldType::\$field#'
 			path: classes/controllers/FrmFieldsController.php
+		-
+			message: '#might not be defined.#'
+			paths:
+				- classes/views/*
+				- stripe/views/*
+				- css/*
+				- classes/controllers/FrmApplicationsController.php
+				- classes/controllers/FrmFieldsController.php
+				- classes/controllers/FrmStylesController.php
+		-
+			message: '#Call to protected method+#'
+			paths:
+				- classes/views/frm-fields/back-end/combo-field/sub-field-options.php
+				- classes/views/frm-fields/back-end/phone/phone-type.php
+				- classes/views/frm-fields/front-end/combo-field/combo-field.php
+		-
+			message: '#Call to function compact\(\) contains possibly undefined variable#'
+			paths:
+				- classes/views/*
+				- stripe/views/action-settings/payments-options.php
