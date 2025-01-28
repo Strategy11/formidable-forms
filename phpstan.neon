@@ -77,9 +77,6 @@ parameters:
 				- classes/helpers/FrmFormMigratorsHelper.php
 				- classes/models/FrmEntryMeta.php
 		-
-			message: '#of method FrmFieldName::\_\_construct#'
-			path: classes/models/fields/FrmFieldName.php
-		-
 			message: '#callback of function spl_autoload_register expects#'
 			path: formidable.php
 		-
