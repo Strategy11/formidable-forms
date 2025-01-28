@@ -10,12 +10,12 @@
 
 	async function createPayment( event, token, verificationToken ) {
 		const tokenInput = document.createElement( 'input' );
-		tokenInput.type = 'hidden';
+		tokenInput.type  = 'hidden';
 		tokenInput.value = token;
 		tokenInput.setAttribute( 'name', 'square-token' );
 
 		const verificationInput = document.createElement( 'input' );
-		verificationInput.type = 'hidden';
+		verificationInput.type  = 'hidden';
 		verificationInput.value = verificationToken;
 		verificationInput.setAttribute( 'name', 'square-verification-token' );
 
@@ -28,7 +28,7 @@
 		}
 	}
 
-	async function tokenize(paymentMethod) {
+	async function tokenize( paymentMethod ) {
 		const tokenResult = await paymentMethod.tokenize();
 
 		if ( tokenResult.status === 'OK' ) {
@@ -47,6 +47,7 @@
 	async function verifyBuyer( payments, token ) {
 		const verificationDetails = {
 			amount: '1.00',
+			// TODO Use form data instead of hard coded test values.
 			billingContact: {
 				givenName: 'John',
 				familyName: 'Doe',
@@ -58,53 +59,38 @@
 				countryCode: 'GB',
 			},
 			currencyCode: 'GBP',
-			intent: 'CHARGE',
+			intent: 'CHARGE'
 		};
 
-		const verificationResults = await payments.verifyBuyer(
-			token,
-			verificationDetails
-		);
+		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 		return verificationResults.token;
 	}
 
-	// status is either SUCCESS or FAILURE;
-	function displayPaymentResults( status ) {
-		const statusContainer = document.getElementById(
-			'payment-status-container',
-		);
-		if ( status === 'SUCCESS' ) {
-			statusContainer.classList.remove( 'is-failure' );
-			statusContainer.classList.add( 'is-success' );
-		} else {
-			statusContainer.classList.remove( 'is-success' );
-			statusContainer.classList.add( 'is-failure' );
-		}
-
+	function displayPaymentFailure() {
+		const statusContainer = document.getElementById( 'payment-status-container', );
+		statusContainer.classList.add( 'is-failure' );
 		statusContainer.style.visibility = 'visible';
 	}
 
-	document.addEventListener('DOMContentLoaded', async function () {
+	document.addEventListener( 'DOMContentLoaded', async function () {
 		if ( ! window.Square ) {
 			throw new Error('Square.js failed to load properly');
 		}
 
 		let payments;
 		try {
-			// This requires HTTPS to work.
+			// Square requires HTTPS to work.
 			payments = window.Square.payments( appId, locationId );
 		} catch {
-			const statusContainer = document.getElementById(
-				'payment-status-container',
-			);
-			statusContainer.className = 'missing-credentials';
+			const statusContainer            = document.getElementById( 'payment-status-container' );
+			statusContainer.className        = 'missing-credentials';
 			statusContainer.style.visibility = 'visible';
 			return;
 		}
 
 		let card;
 		try {
-			card = await initializeCard(payments);
+			card = await initializeCard( payments );
 		} catch ( e ) {
 			console.error( 'Initializing Card failed', e );
 			return;
@@ -121,7 +107,7 @@
 				await createPayment( event, token, verificationToken );
 			} catch ( e ) {
 				cardButton.disabled = false;
-				displayPaymentResults( 'FAILURE' );
+				displayPaymentFailure();
 			}
 		}
 
