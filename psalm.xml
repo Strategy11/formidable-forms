@@ -459,7 +459,7 @@
 		<MissingClassConstType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
-			</errorLevel
+			</errorLevel>
 		</MissingClassConstType>
 	</issueHandlers>
 </psalm>
