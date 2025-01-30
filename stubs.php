@@ -155,6 +155,9 @@ namespace {
 		public static function get_readable_license_type() {
 		}
 	}
+	class FrmProCurrencyHelper {
+		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
+	}
 	class FrmProDb {
 		public static $plug_version;
 	}
