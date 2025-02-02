@@ -17,14 +17,32 @@ jobs:
     strategy:
       matrix:
         include:
+          # Run tests starting with test_FrmA through test_FrmF
+          # Tests are split into 2 groups to run in half the time.
           - php: 7.4
             wordpress: trunk
             multisite: 0
+            filter: '/^(test_Frm){1}[A-F]/'
+            group: 1
           - php: 8.0
             wordpress: trunk
             multisite: 0
+            filter: '/^(test_Frm){1}[A-F]/'
+            group: 1
+          # Run tests that do not start with test_FrmA through test_FrmF
+          # This includes the tests that do not start with test_Frm at all.
+          - php: 7.4
+            wordpress: trunk
+            multisite: 0
+            filter: '/^(?!test_Frm[A-F]).*/'
+            group: 2
+          - php: 8.0
+            wordpress: trunk
+            multisite: 0
+            filter: '/^(?!test_Frm[A-F]).*/'
+            group: 2
 
-    name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
+    name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }} (${{ matrix.group }}/2)
     steps:
       - uses: actions/checkout@v3.5.0
 
@@ -54,7 +72,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
           pwd
-          phpunit --coverage-clover=coverage.xml
+          phpunit --coverage-clover=coverage.xml --filter '${{ matrix.filter }}'
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v2
         with:
