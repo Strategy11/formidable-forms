@@ -7,6 +7,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
+<?php
+if ( $form_action->post_excerpt === 'email') {
+	?>
+<div class="frm_grid_container frm_no_p_margin frm_default_email_notice">
+	<p class="frm10" style="">
+		<b><?php esc_html_e( 'Heads up!', 'formidable' ); ?></b>
+		<?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?>
+	</p>
+	<p class="frm2">
+		<a href="#" class="button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
+		<a href="#" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
+	</p>
+</div>
+	<?php
+}
+?>
 <div class="frm_grid_container frm_no_p_margin">
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
