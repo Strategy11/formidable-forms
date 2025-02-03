@@ -76,3 +76,11 @@ if ( $frm_settings->no_ips ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
+
+<?php
+/**
+ * Trigger an action so Pro can display additional General settings in the Other section.
+ *
+ * @param FrmSettings $frm_settings
+ */
+do_action( 'frm_other_settings_form', $frm_settings );
