@@ -17,7 +17,7 @@ if ( $form_action->post_excerpt === 'email') {
 	</p>
 	<p class="frm2">
 		<a href="#" onclick="this.closest( '.frm_default_email_notice' ).remove();" class="button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-smtp' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
 	</p>
 </div>
 	<?php
