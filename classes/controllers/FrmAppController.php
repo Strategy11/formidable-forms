@@ -1354,6 +1354,51 @@ class FrmAppController {
 	}
 
 	/**
+	 * Remembers and applies user-specific sorting preferences.
+	 *
+	 * @return void
+	 */
+	public static function remember_custom_sort() {
+		$screen = get_current_screen();
+
+		if ( ! $screen || ! self::in_our_pages() ) {
+			return;
+		}
+
+		$orderby = FrmAppHelper::get_param( 'orderby' );
+		$order   = FrmAppHelper::get_param( 'order' );
+
+		$user_id  = get_current_user_id();
+		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
+
+		// Save custom sort if specified.
+		if ( $orderby ) {
+			$preferred_list_sort = array(
+				'orderby' => $orderby,
+				'order'   => $order,
+			);
+
+			update_user_meta( $user_id, $meta_key, $preferred_list_sort );
+			return;
+		}
+
+		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+
+		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
+			$orderby = $preferred_list_sort['orderby'];
+			$order   = ! empty( $preferred_list_sort['order'] ) ? $preferred_list_sort['order'] : 'asc';
+		} else {
+			$orderby = FrmAppHelper::get_param( 'orderby', 'name' );
+			$order   = FrmAppHelper::get_param( 'order', 'desc' );
+		}
+
+		$_GET['orderby']     = $orderby;
+		$_GET['order']       = $order;
+		$_REQUEST['orderby'] = $orderby;
+		$_REQUEST['order']   = $order;
+	}
+
+	/**
 	 * Validate that the callback name is ours not from third-party.
 	 *
 	 * @param string $callback_name WordPress callback name.

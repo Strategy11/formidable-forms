@@ -1496,7 +1496,8 @@ body.frm-hidden-overflow {
 .wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
-.frm_wrap .preview > .button:hover {
+.frm_wrap .preview > .button:hover,
+.frm-white-body #search-submit:hover {
 	border-color: var(--grey-300) !important;
 	color: var(--grey-800);
 	background: var(--grey-50) !important;
@@ -1727,6 +1728,10 @@ input.frm_insert_in_template {
 	margin-right: auto;
 }
 
+.frm-mr-2xs {
+	margin-right: var(--gap-2xs) !important;
+}
+
 .frm-mx-0 {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
@@ -1792,6 +1797,10 @@ input.frm_insert_in_template {
 	padding-top: var(--gap-sm) !important;
 }
 
+.frm-pt-md {
+	padding-top: var(--gap-md) !important;
+}
+
 .frm-pt-xl {
 	padding-top: var(--gap-xl) !important;
 }
@@ -1802,6 +1811,12 @@ input.frm_insert_in_template {
 .frm-pb-sm {
 	padding-bottom: var(--gap-sm) !important;
 }
+
+.frm-px-sm {
+	padding-right: var(--gap-sm) !important;
+	padding-left: var(--gap-sm) !important;
+}
+
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
@@ -1867,6 +1882,10 @@ input.frm_insert_in_template {
 	width: 100% !important;
 }
 
+.frm-w-half {
+	width: 50% !important;
+}
+
 .frm_block, /* deprecated */
 .frm-block {
 	display: block;
@@ -1897,7 +1916,6 @@ input.frm_insert_in_template {
 	display: flex;
 	gap: var(--gap-sm);
 }
-
 
 .frm-flex-col {
 	display: flex;
@@ -1997,6 +2015,10 @@ input.frm_insert_in_template {
 
 .frm-cursor-pointer {
 	cursor: pointer;
+}
+
+.frm-align-baseline {
+	vertical-align: baseline !important;
 }
 
 /* End Generic Classes, Start Forced Generic Classes */
@@ -6759,10 +6781,13 @@ tr.frm_options_heading td {
 	font-size: var(--text-md);
 	box-sizing: border-box;
 	border: 1px dashed var(--grey-300);
+	outline: 2px solid transparent;
 }
 
 .frm-over-droppable + .frm_no_fields {
 	border-style: solid;
+	border-color: var(--primary-500);
+	outline-color: var(--primary-500);
 }
 
 .frm_no_section_fields {
@@ -6789,7 +6814,8 @@ tr.frm_options_heading td {
 	visibility: hidden;
 }
 
-.frm-has-fields .frm_no_fields {
+.frm-has-fields .frm_no_fields,
+#frm_form_editor_container:not(.frm-has-fields) #frm_drag_placeholder {
 	display: none;
 }
 
