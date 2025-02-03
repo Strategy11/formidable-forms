@@ -18,7 +18,7 @@ $format     = FrmField::get_option( $field, 'format' );
 FrmHtmlHelper::echo_dropdown_option( __( 'None', 'formidable' ), '' === $format, array( 'value' => 'none' ) );
 
 FrmHtmlHelper::echo_dropdown_option(
-	in_array( $field_type, array( 'number', 'range' ) ) ? __( 'Custom', 'formidable' ) : __( 'Number', 'formidable' ),
+	in_array( $field_type, array( 'number', 'range' ), true ) ? __( 'Custom', 'formidable' ) : __( 'Number', 'formidable' ),
 	false,
 	array(
 		'value'        => '',
