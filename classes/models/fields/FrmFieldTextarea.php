@@ -26,7 +26,6 @@ class FrmFieldTextarea extends FrmFieldType {
 		return array(
 			'size'           => true,
 			'clear_on_focus' => true,
-			'format'         => true,
 		);
 	}
 

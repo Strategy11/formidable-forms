@@ -41,7 +41,6 @@ class FrmFieldHidden extends FrmFieldType {
 		$settings            = parent::field_settings_for_type();
 		$settings['css']     = false;
 		$settings['default'] = true;
-		$settings['format']  = true;
 
 		return $settings;
 	}

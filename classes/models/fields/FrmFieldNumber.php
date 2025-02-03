@@ -28,7 +28,6 @@ class FrmFieldNumber extends FrmFieldType {
 			'clear_on_focus' => true,
 			'invalid'        => true,
 			'range'          => true,
-			'format'         => true,
 		);
 
 		$settings['max'] = false;
