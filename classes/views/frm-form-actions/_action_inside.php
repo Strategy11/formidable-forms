@@ -16,8 +16,8 @@ if ( $form_action->post_excerpt === 'email') {
 		<?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?>
 	</p>
 	<p class="frm2">
-		<a href="#" class="button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
-		<a href="#" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
+		<a href="#" onclick="this.closest( '.frm_default_email_notice' ).remove();" class="button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
+		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-smtp' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
 	</p>
 </div>
 	<?php
