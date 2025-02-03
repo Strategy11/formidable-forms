@@ -2101,13 +2101,34 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns true if a field can be duplicated.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field
+	 * @returns {Boolean}
+	 */
+	function canDuplicateField( field ) {
+		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+		const fieldGroup = field.closest( 'li.frm_field_box:not(.form-field)' );
+		if ( ! fieldGroup ) {
+			return true;
+		}
+		const fieldsInGroup = fieldGroup.querySelectorAll( 'li.form-field' ).length;
+		return fieldsInGroup < 6;
+	}
+
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
-			return false;
+		if ( ! canDuplicateField( $field[0] ) ) {
+			infoModal( __( 'You can only have a maximum of 6 fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ) );
+			return;
 		}
 
 		closeOpenFieldDropdowns();
