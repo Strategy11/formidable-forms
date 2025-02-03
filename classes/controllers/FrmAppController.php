@@ -15,9 +15,12 @@ class FrmAppController {
 		}
 
 		$menu_name = FrmAppHelper::get_menu_name();
-		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 
-		self::maybe_add_black_friday_submenu_item();
+		if ( in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+			$menu_name .= wp_kses_post( FrmInboxController::get_notice_count() );
+		}
+
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
 	/**
@@ -40,82 +43,6 @@ class FrmAppController {
 		$icon = 'data:image/svg+xml;base64,' . base64_encode( $icon );
 
 		return apply_filters( 'frm_icon', $icon );
-	}
-
-	/**
-	 * @since 6.16
-	 *
-	 * @return void
-	 */
-	private static function maybe_add_black_friday_submenu_item() {
-		if ( ! current_user_can( 'frm_change_settings' ) ) {
-			return;
-		}
-
-		$is_black_friday = self::is_black_friday();
-		$is_cyber_monday = self::is_cyber_monday();
-
-		if ( ! $is_black_friday && ! $is_cyber_monday ) {
-			return;
-		}
-
-		$black_friday_menu_label = $is_black_friday ? __( 'Black Friday!', 'formidable' ) : __( 'Cyber Monday!', 'formidable' );
-		$black_friday_menu_label = '<span class="frm-orange-text">' . esc_html( $black_friday_menu_label ) . '</span>';
-
-		add_action(
-			'admin_menu',
-			function () use ( $black_friday_menu_label ) {
-				add_submenu_page(
-					'formidable',
-					'Formidable',
-					$black_friday_menu_label,
-					'frm_change_settings',
-					'formidable-black-friday',
-					function () {
-						// This function should do nothing. The redirect is handled earlier to avoid header conflicts.
-					}
-				);
-			},
-			1000
-		);
-	}
-
-	/**
-	 * Black Friday sale is from November 25 to 29.
-	 *
-	 * @since 6.16
-	 *
-	 * @return bool
-	 */
-	private static function is_black_friday() {
-		return self::within_sale_date_range( '2024-11-25', '2024-11-29' );
-	}
-
-	/**
-	 * Cyber Monday sale rules from November 30 to December 4.
-	 *
-	 * @since 6.16
-	 *
-	 * @return bool
-	 */
-	private static function is_cyber_monday() {
-		return self::within_sale_date_range( '2024-11-30', '2024-12-04' );
-	}
-
-	/**
-	 * Check if the current time is within a sale date range.
-	 * Our sales are based on Eastern Time, so we use New York's timezone.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $from The beginning of the date range. Y-m-d format is expected.
-	 * @param string $to   The end of the date range. Y-m-d format is expected.
-	 * @return bool
-	 */
-	private static function within_sale_date_range( $from, $to ) {
-		$date  = new DateTime( 'now', new DateTimeZone( 'America/New_York' ) );
-		$today = $date->format( 'Y-m-d' );
-		return $today >= $from && $today <= $to;
 	}
 
 	/**
@@ -259,6 +186,7 @@ class FrmAppController {
 		$grey_pages = array(
 			'formidable-applications',
 			'formidable-dashboard',
+			'formidable-views',
 		);
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );
@@ -409,16 +337,31 @@ class FrmAppController {
 		return (array) apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
 	}
 
-	// Adds a settings link to the plugins page
 	/**
+	 * Adds a settings link to the plugins page
+	 *
+	 * @param array $links
 	 * @return array
 	 */
 	public static function settings_link( $links ) {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$label      = FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro', 'formidable' );
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
+			if ( FrmAddonsController::is_license_expired() ) {
+				$label = __( 'Renew', 'formidable' );
+			} else {
+				$label = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_text' );
+				if ( ! $label ) {
+					$label = __( 'Upgrade to Pro', 'formidable' );
+				}
+			}
+
+			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+			if ( ! $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
+			}
+
+			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
@@ -629,27 +572,17 @@ class FrmAppController {
 		}
 
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
-			wp_redirect(
-				FrmAppHelper::admin_upgrade_link(
+			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
+			if ( ! $redirect ) {
+				$redirct = FrmAppHelper::admin_upgrade_link(
 					array(
 						'medium'  => 'upgrade',
 						'content' => 'submenu-upgrade',
 					)
-				)
-			);
-			die();
-		}
+				);
+			}
 
-		if ( 'formidable-black-friday' === FrmAppHelper::get_param( 'page' ) && current_user_can( 'frm_change_settings' ) ) {
-			wp_redirect(
-				FrmAppHelper::admin_upgrade_link(
-					array(
-						'medium'  => 'black-friday-submenu',
-						'content' => self::is_cyber_monday() ? 'cyber-monday-submenu' : 'black-friday-submenu',
-					),
-					'black-friday'
-				)
-			);
+			wp_redirect( $redirect );
 			die();
 		}
 
@@ -887,6 +820,11 @@ class FrmAppController {
 	public static function admin_enqueue_scripts() {
 		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
+			wp_enqueue_style( FrmDashboardController::PAGE_SLUG, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+		}
+
 		FrmUsageController::load_scripts();
 	}
 
@@ -1293,6 +1231,8 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function show_error_modal( $error_args ) {
+		add_filter( 'frm_show_footer_links', '__return_false' );
+
 		$defaults = array(
 			'title'            => '',
 			'body'             => '',

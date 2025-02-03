@@ -7,7 +7,6 @@ function frmFrontFormJS() {
 	/*global jQuery:false, frm_js, grecaptcha, hcaptcha, turnstile, frmProForm, tinyMCE */
 	/*global frmThemeOverride_jsErrors, frmThemeOverride_frmPlaceError, frmThemeOverride_frmAfterSubmit */
 
-	let action = '';
 	let jsErrors = [];
 
 	/**
@@ -88,7 +87,7 @@ function frmFrontFormJS() {
 		}
 
 		// Check if 'this' is in a repeating section
-		if ( jQuery( 'input[name="item_meta[' + fieldId + '][form]"]' ).length ) {
+		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
 
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
 			fieldId = nameParts[2].replace( '[', '' );
@@ -277,7 +276,8 @@ function frmFrontFormJS() {
 		if ( field.type === 'url' ) {
 			maybeAddHttpToUrl( field );
 		}
-		if ( jQuery( field ).closest( 'form' ).hasClass( 'frm_js_validate' ) ) {
+		const form = field.closest( 'form' );
+		if ( form && hasClass( form, 'frm_js_validate' ) ) {
 			validateField( field );
 		}
 	}
@@ -293,12 +293,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Validate a field with JS.
+	 *
+	 * @param {HTMLElement} field
+	 *
+	 * @return {void}
+	 */
 	function validateField( field ) {
-		let key,
-			errors = [],
-			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
+		let errors, key;
 
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
+		errors               = [];
+		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -306,6 +314,7 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
+		const $fieldCont = jQuery( fieldContainer );
 		removeFieldError( $fieldCont );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
@@ -792,16 +801,12 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @param {HTMLElement}      object
-	 * @param {string|undefined} action
+	 * @param {HTMLElement} object
+	 * @param {string}      action
 	 * @return {void}
 	 */
 	function getFormErrors( object, action ) {
 		let fieldset, data, success, error, shouldTriggerEvent;
-
-		if ( typeof action === 'undefined' ) {
-			jQuery( object ).find( 'input[name="frm_action"]' ).val();
-		}
 
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
@@ -809,9 +814,25 @@ function frmFrontFormJS() {
 		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
+		const doRedirect = response => {
+			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
+
+			if ( ! response.openInNewTab ) {
+				// We return here because we're redirecting there is no need to update content.
+				window.location = response.redirect;
+				return;
+			}
+
+			// We don't return here because we're opening in a new tab, the old tab will still update.
+			const newTab = window.open( response.redirect, '_blank' );
+			if ( ! newTab && response.fallbackMsg && response.content ) {
+				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+			}
+		};
+
 		success = function( response ) {
 			let defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
+				$fieldCont, key, inCollapsedSection, frmTrigger;
 
 			defaultResponse = {
 				content: '',
@@ -821,13 +842,14 @@ function frmFrontFormJS() {
 
 			if ( response === null ) {
 				response = defaultResponse;
-			}
-
-			response = response.replace( /^\s+|\s+$/g, '' );
-			if ( response.indexOf( '{' ) === 0 ) {
-				response = JSON.parse( response );
 			} else {
-				response = defaultResponse;
+				// Response is a string. Convert it to an object.
+				response = response.replace( /^\s+|\s+$/g, '' );
+				if ( response.indexOf( '{' ) === 0 ) {
+					response = JSON.parse( response );
+				} else {
+					response = defaultResponse;
+				}
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
@@ -836,22 +858,16 @@ function frmFrontFormJS() {
 					return;
 				}
 
-				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-
-				if ( ! response.openInNewTab ) {
-					// We return here because we're redirecting there is no need to update content.
-					window.location = response.redirect;
-					return;
-				}
-
-				// We don't return here because we're opening in a new tab, the old tab will still update.
-				newTab = window.open( response.redirect, '_blank' );
-				if ( ! newTab && response.fallbackMsg && response.content ) {
-					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				if ( response.delay ) {
+					setTimeout( function() {
+						doRedirect( response );
+					}, 1000 * response.delay );
+				} else {
+					doRedirect( response );
 				}
 			}
 
-			if ( response.content !== '' ) {
+			if ( 'string' === typeof response.content && response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -1132,7 +1148,7 @@ function frmFrontFormJS() {
 	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
-		if ( isNaN( key ) || ! input.id ) {
+		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
@@ -1211,7 +1227,7 @@ function frmFrontFormJS() {
 		return ( typeof frmProForm !== 'undefined' && frmProForm.goingToPreviousPage( $object ) );
 	}
 
-	function removeSubmitLoading( $object, enable, processesRunning ) {
+	function removeSubmitLoading( _, enable, processesRunning ) {
 		let loadingForm;
 
 		if ( processesRunning > 0 ) {
@@ -1322,7 +1338,7 @@ function frmFrontFormJS() {
 	/**
 	 * Sets focus on a the first subfield of a combo field that has an error.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} element
 	 * @return {boolean} True if the focus was set on a combo field.
@@ -1391,7 +1407,7 @@ function frmFrontFormJS() {
 	/**
 	 * Focus a visible input, or possibly delay the focus event until the form has faded in.
 	 *
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
 	 * @return {void}
@@ -1622,7 +1638,7 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.16.3
 	 *
 	 * @return {string} Unique key, used for duplicate checks.
 	 */
@@ -1676,36 +1692,44 @@ function frmFrontFormJS() {
 			);
 		},
 
-		getFieldId: function( field, fullID ) {
-			return getFieldId( field, fullID );
-		},
+		getFieldId,
 
+		/**
+		 * Render a captcha field.
+		 *
+		 * @param {HTMLElement} captcha
+		 * @param {string}      captchaSelector
+		 * @return {void}
+		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
-			let formID, captchaID,
-				size = captcha.getAttribute( 'data-size' ),
-				rendered = captcha.getAttribute( 'data-rid' ) !== null,
-				params = {
-					'sitekey': captcha.getAttribute( 'data-sitekey' ),
-					'size': size,
-					'theme': captcha.getAttribute( 'data-theme' )
-				},
-				activeCaptcha = getSelectedCaptcha( captchaSelector ),
-				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-
+			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
 			}
 
+			const size   = captcha.getAttribute( 'data-size' );
+			const params = {
+				sitekey: captcha.getAttribute( 'data-sitekey' ),
+				size: size,
+				theme: captcha.getAttribute( 'data-theme' )
+			};
+
 			if ( size === 'invisible' ) {
-				formID = jQuery( captcha ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
-				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
+				const formID = captcha.closest( 'form' )?.querySelector( 'input[name="form_id"]' )?.value;
+
+				const captchaLabel = captcha.closest( '.frm_form_field' )?.querySelector( '.frm_primary_label' );
+				if ( captchaLabel ) {
+					captchaLabel.style.display = 'none';
+				}
+
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
 				};
 			}
 
-
-			captchaID = activeCaptcha.render( captchaContainer, params );
+			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaID        = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
@@ -1792,7 +1816,7 @@ function frmFrontFormJS() {
 					return !! this.value;
 				}).length;
 				if ( hasFileFields < 1 ) {
-					action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+					const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
 				} else {
 					object.submit();
@@ -1834,7 +1858,7 @@ function frmFrontFormJS() {
 
 			jsErrors = validateForm( object );
 			if ( typeof frmThemeOverride_jsErrors === 'function' ) { // eslint-disable-line camelcase
-				action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
+				const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 				customErrors = frmThemeOverride_jsErrors( action, object );
 				if ( Object.keys( customErrors ).length  ) {
 					for ( key in customErrors ) {
@@ -1874,21 +1898,10 @@ function frmFrontFormJS() {
 			checkForErrorsAndMaybeSetFocus();
 		},
 
-		checkFormErrors: function( object, action ) {
-			getFormErrors( object, action );
-		},
-
-		checkRequiredField: function( field, errors ) {
-			return checkRequiredField( field, errors );
-		},
-
-		showSubmitLoading: function( $object ) {
-			showSubmitLoading( $object );
-		},
-
-		removeSubmitLoading: function( $object, enable, processesRunning ) {
-			removeSubmitLoading( $object, enable, processesRunning );
-		},
+		checkFormErrors: getFormErrors,
+		checkRequiredField,
+		showSubmitLoading,
+		removeSubmitLoading,
 
 		scrollToID: function( id ) {
 			const object = jQuery( document.getElementById( id ) );
@@ -1958,6 +1971,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )
@@ -1966,11 +1980,25 @@ function frmFrontFormJS() {
 				.replace( /'/g, '&#039;' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		invisible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.invisible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'hidden' );
 		},
 
+		/**
+		 * This function was used in old back end code in v2.0.
+		 *
+		 * @param {string} classes
+		 * @return {void}
+		 */
 		visible: function( classes ) {
+			console.warn( 'DEPRECATED: function frmFrontForm.visible in v6.16.3' );
 			jQuery( classes ).css( 'visibility', 'visible' );
 		},
 

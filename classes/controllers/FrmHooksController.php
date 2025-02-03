@@ -106,7 +106,6 @@ class FrmHooksController {
 
 		// Elementor.
 		add_action( 'elementor/widgets/register', 'FrmElementorController::register_elementor_hooks' );
-		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		// Summary emails.
 		add_action( 'frm_daily_event', 'FrmEmailSummaryController::maybe_send_emails' );
@@ -146,6 +145,7 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
+		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
@@ -162,7 +162,7 @@ class FrmHooksController {
 		// Settings Controller.
 		add_action( 'admin_menu', 'FrmSettingsController::menu', 45 );
 		add_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-		add_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
+		add_action( 'frm_after_settings_tabs', 'FrmSettingsController::settings_cta' );
 
 		// Styles Controller.
 		add_action( 'admin_menu', 'FrmStylesController::menu', 14 );

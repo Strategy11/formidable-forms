@@ -804,12 +804,12 @@ class FrmField {
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
-			$where = array(
-				'or'        => 1,
-				'id'        => $id,
-				'field_key' => $id,
-			);
-			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+			if ( is_numeric( $id ) ) {
+				$where = array( 'id' => $id );
+			} else {
+				$where = array( 'field_key' => $id );
+			}
+			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 
 		return $type;
@@ -1004,7 +1004,7 @@ class FrmField {
 
 		$limit = FrmDb::esc_limit( $limit );
 
-		$query      = "SELECT fi.*, fr.name as form_name  FROM {$table_name} fi LEFT OUTER JOIN {$form_table_name} fr ON fi.form_id=fr.id";
+		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
 		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
 
 		if ( is_array( $where ) ) {
@@ -1012,7 +1012,7 @@ class FrmField {
 				'order_by' => $order_by,
 				'limit'    => $limit,
 			);
-			$results = FrmDb::get_var( $table_name . ' fi LEFT OUTER JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
+			$results = FrmDb::get_var( $table_name . ' fi JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
 			// if the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;

@@ -913,6 +913,7 @@ class FrmFieldsHelper {
 			'updated[-|_]at',
 			'updated[-|_]by',
 			'parent[-|_]id',
+			'form_name',
 		);
 
 		foreach ( $fields as $field ) {
@@ -1389,7 +1390,7 @@ class FrmFieldsHelper {
 			 * For radio buttons and dropdowns
 			 * Check if saved value equals any of the options. If not, set it as the other value.
 			 */
-			foreach ( $field['options'] as $opt_key => $opt_val ) {
+			foreach ( $field['options'] as $opt_val ) {
 				$temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
 				// Multi-select dropdowns - key is not preserved
 				if ( is_array( $field['value'] ) ) {
@@ -1403,7 +1404,7 @@ class FrmFieldsHelper {
 				} else {
 					$other_val = $field['value'];
 				}
-				unset( $opt_key, $opt_val, $temp_val );
+				unset( $opt_val, $temp_val );
 			}
 			// For multi-select dropdowns only
 			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
@@ -2142,7 +2143,7 @@ class FrmFieldsHelper {
 		$install_data           = '';
 		$requires               = '';
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$has_show_upgrade_class = strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$has_show_upgrade_class = isset( $field_type['icon'] ) && strpos( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
 
 		if ( $has_show_upgrade_class ) {

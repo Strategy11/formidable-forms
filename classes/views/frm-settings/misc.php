@@ -41,15 +41,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } ?>
 </p>
 
-<?php
-/*
-Deprecated setting. This is always on now.
-Leave this for now for backward compatibility.
-This is to prevent this from being disabled.
-Pro could possibly check for `use_html` and think it is still false.
-*/
-?>
-<input type="hidden" name="frm_use_html" value="1" />
+<p>
+	<label>
+		<input type="checkbox" name="frm_admin_bar" id="frm_admin_bar" value="1" <?php checked( $frm_settings->admin_bar, 1 ); ?> />
+		<?php esc_html_e( 'Do not include Formidable in the admin bar.', 'formidable' ); ?>
+	</label>
+</p>
 
 <p class="frm_uninstall">
 	<label>

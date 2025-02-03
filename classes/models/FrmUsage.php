@@ -101,6 +101,10 @@ class FrmUsage {
 			'subscriptions'     => $this->payments( 'frm_subscriptions' ),
 		);
 
+		if ( method_exists( 'FrmProAddonsController', 'get_readable_license_type' ) ) {
+			$snap['active_license'] = FrmProAddonsController::get_readable_license_type();
+		}
+
 		return apply_filters( 'frm_usage_snapshot', $snap );
 	}
 
@@ -139,6 +143,10 @@ class FrmUsage {
 	private function payments( $table = 'frm_payments' ) {
 		$allowed_tables = array( 'frm_payments', 'frm_subscriptions' );
 		if ( ! in_array( $table, $allowed_tables, true ) ) {
+			return array();
+		}
+
+		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			return array();
 		}
 
@@ -197,9 +205,7 @@ class FrmUsage {
 		);
 		$pass_settings = array(
 			'load_style',
-			'use_html',
 			'fade_form',
-			'jquery_css',
 			're_type',
 			're_lang',
 			're_multi',
@@ -208,7 +214,7 @@ class FrmUsage {
 			'no_ips',
 			'custom_header_ip',
 			'btsp_css',
-			'btsp_errors',
+			'btsp_version',
 			'admin_bar',
 			'summary_emails',
 			'active_captcha',
@@ -248,9 +254,11 @@ class FrmUsage {
 			'admin_permission',
 		);
 
+		$default = $settings_list->default_options();
+
 		$message_settings = array();
 		foreach ( $messages as $message ) {
-			$message_settings[ $message ] = $settings_list->$message;
+			$message_settings[ 'changed-' . $message ] = $settings_list->$message === $default[ $message ] ? 0 : 1;
 		}
 
 		return $message_settings;
@@ -375,7 +383,7 @@ class FrmUsage {
 	private function form_field_count( $form_id ) {
 		global $wpdb;
 
-		$join = $wpdb->prefix . 'frm_fields fi LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
+		$join = $wpdb->prefix . 'frm_fields fi JOIN ' . $wpdb->prefix . 'frm_forms fo ON (fi.form_id=fo.id)';
 
 		$field_query = array(
 			'or'             => 1,

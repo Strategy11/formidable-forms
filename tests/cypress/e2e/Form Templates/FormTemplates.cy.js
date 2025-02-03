@@ -320,7 +320,7 @@ describe("Form Templates page", () => {
             .click({ force: true });
 
         cy.get('#frm-leave-email-modal').should('be.visible');
-        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 20+ Free Form Templates');
+        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 30+ Free Form Templates');
         cy.get('#frm-leave-email-modal p')
             .should('contain.text', "Just add your email address and we'll send you a code for free form templates!");
 
@@ -345,7 +345,7 @@ describe("Form Templates page", () => {
             .should('contain.text', 'Back')
             .and('have.attr', 'role', 'button').click({force:true});
 
-        cy.get('a#frm-get-code-button').click();
+        cy.get('a#frm-get-code-button').click({force:true});
 
         cy.get('a#frm-confirm-email-address')
             .should('contain.text', 'Save Code')
@@ -367,7 +367,7 @@ describe("Form Templates page", () => {
 
         cy.get('a#frm-code-modal-back-button')
             .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click();
+            .and('have.attr', 'role', 'button').click({force:true});
         cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
 
         cy.get('[data-category="all-items"]').click();
@@ -388,15 +388,19 @@ describe("Form Templates page", () => {
         cy.origin('https://formidableforms.com', () => {
             cy.url().should('include', 'https://formidableforms.com');
         });
-        
+
     });
 
     it("create a new custom template and delete it", () => {
 
-        cy.get('#frm-form-templates-create-form').should("contain", "Create a blank form").click();
-        cy.get('#frm_submit_side_top').should("contain", "Save").click();
+        cy.get('#frm-form-templates-create-form')
+            .should("contain", "Create a blank form")
+            .scrollIntoView()
+            .click({ force: true });
 
-        cy.log("Ensure the modal for for saving form is visible");
+        cy.get('#frm_submit_side_top').should("contain", "Save").click({ force: true });
+
+        cy.log("Ensure the modal for saving form is visible");
         cy.get('#frm-form-templates-modal').should('be.visible');
         cy.get('a.frm-modal-close.dismiss')
             .should('have.attr', 'title', 'Close')
@@ -422,17 +426,17 @@ describe("Form Templates page", () => {
         cy.log("Validate that there are no custom templates yet");
         cy.get('.frmcenter > .frm-page-skeleton-title').should("contain", "You currently have no templates.");
         cy.get('.frm-page-skeleton-text').should("contain", "You haven't created any form templates. Begin now to simplify your workflow and save time.");
-        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click({force: true});
         cy.get('#frm-create-template-modal > .frm_modal_footer > .button-secondary').should("contain", "Cancel").click();
 
         cy.log("Create a new template");
-        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click();
+        cy.get('#frm-page-skeleton-empty-state > .button').should("contain", "Create Template").click({ force: true });
         cy.get('#frm-create-template-modal > .frm_modal_top > .frm-modal-title > h2').should("contain", "Create New Template");
         cy.get('.inside > :nth-child(1) > label').should("contain", "Select form for a new template");
         cy.get('#frm-create-template-modal-forms-select').select("Form Template Test");
         cy.get(':nth-child(3) > label').should("contain", "Description");
         cy.get('#frm_create_template_description').type("Test description");
-        cy.get('#frm-create-template-button').should("contain", "Create Template").click();
+        cy.get('#frm-create-template-button').should("contain", "Create Template").click({ force: true });
         cy.get('a[aria-label="Close"] svg').click();
         cy.get('.row-title').should("contain", "Form Template Test Template");
 
@@ -440,8 +444,10 @@ describe("Form Templates page", () => {
         cy.get('[data-category="custom"]').click();
 
         cy.log("Validate creation of the form template");
-        cy.get('#frm-form-templates-custom-list > .frm-card-item > .frm-form-templates-item-body > .frm-form-templates-item-title > .frm-form-templates-item-title-text > .frm-form-template-name').should("contain", "Form Template Test Template");
-        cy.get('#frm-form-templates-custom-list > .frm-card-item > .frm-form-templates-item-body > .frm-form-templates-item-content > .frm-form-templates-item-description').should("contain", "Test description");
+        cy.get('#frm-form-templates-custom-list > .frm-card-item > .frm-form-templates-item-body > .frm-form-templates-item-title > .frm-form-templates-item-title-text > .frm-form-template-name')
+            .should("contain", "Form Template Test Template");
+        cy.get('#frm-form-templates-custom-list > .frm-card-item > .frm-form-templates-item-body > .frm-form-templates-item-content > .frm-form-templates-item-description')
+            .should("contain", "Test description");
 
         cy.log("Edit template");
         cy.get('li[frm-search-text="form template test template"]')
