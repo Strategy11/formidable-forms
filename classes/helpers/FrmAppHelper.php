@@ -1103,6 +1103,7 @@ class FrmAppHelper {
 				'class' => true,
 			),
 			'option'     => array(
+				'class'    => true,
 				'value'    => true,
 				'selected' => true,
 			),
