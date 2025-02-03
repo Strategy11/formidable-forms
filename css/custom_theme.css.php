@@ -871,8 +871,8 @@ a.frm_save_draft{
 	border-radius:50%;
 }
 
-.with_frm_style .frm_checkbox input[type=checkbox]{
-	border-radius: calc(var(--border-radius) / 2);
+.with_frm_style .frm_checkbox input[type=checkbox] {
+	border-radius: calc(var(--border-radius) / 2) !important;
 }
 
 .with_frm_style .frm_radio input[type=radio],
@@ -1443,6 +1443,16 @@ select.frm_loading_lookup{
 .frm_form_field.frm_right_container .frm_opt_container,
 .frm_form_field.frm_left_container .frm_opt_container{
 	padding-top:4px;
+}
+
+.with_frm_style .frm_left_container > select.auto_width,
+.with_frm_style .frm_right_container > select.auto_width {
+	width: max-content<?php echo esc_html( $important ); ?>;
+}
+
+.with_frm_style .frm_right_container > .frm_primary_label,
+.with_frm_style .frm_right_container > select.auto_width {
+	margin-left: auto<?php echo esc_html( $important ); ?>;
 }
 
 .with_frm_style .frm_inline_container.frm_grid_first .frm_primary_label,
