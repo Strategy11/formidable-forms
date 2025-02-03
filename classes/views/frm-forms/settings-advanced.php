@@ -47,9 +47,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Fires after the form description field.
  *
- * @param array $values The form values.
- *
  * @since x.x
+ *
+ * @param array $values The form values.
  */
 do_action( 'frm_settings_after_form_description', $values );
 
