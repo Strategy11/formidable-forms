@@ -112,6 +112,7 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+		FrmSquareLiteHooksController::load_hooks();
 	}
 
 	/**
@@ -201,6 +202,7 @@ class FrmHooksController {
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
+		FrmSquareLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
