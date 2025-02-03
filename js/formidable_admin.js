@@ -6709,7 +6709,7 @@ function frmAdminBuildJS() {
 			const value = formatType.value;
 			if ( value in valueMap ) {
 				const formatInput = document.getElementById( `frm_format_${formatType.dataset.fieldId}` );
-				formatInput.setAttribute( 'value', valueMap[value] );
+				formatInput.value = valueMap[ value ];
 			}
 		});
 	}
