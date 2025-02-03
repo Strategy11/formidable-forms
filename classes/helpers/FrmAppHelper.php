@@ -861,19 +861,26 @@ class FrmAppHelper {
 	 *
 	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults.
-	 * @param bool         $echo    Whether to output the sanitized value directly.
 	 *
 	 * @return string
 	 */
-	public static function kses( $value, $allowed = array(), $echo = false ) {
-		$allowed_html    = self::allowed_html( $allowed );
-		$sanitized_value = wp_kses( $value, $allowed_html );
+	public static function kses( $value, $allowed = array() ) {
+		$allowed_html = self::allowed_html( $allowed );
 
-		if ( ! $echo ) {
-			return $sanitized_value;
-		}
+		return wp_kses( $value, $allowed_html );
+	}
 
-		echo $sanitized_value; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

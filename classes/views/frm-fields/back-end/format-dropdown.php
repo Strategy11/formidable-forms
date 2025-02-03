@@ -56,7 +56,7 @@ $format     = FrmField::get_option( $field, 'format' );
 		};
 
 		add_filter( 'frm_striphtml_allowed_tags', $add_allowed_html );
-		FrmAppHelper::kses( $number_option, array( 'option' ), true );
+		FrmAppHelper::kses_echo( $number_option, array( 'option' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $add_allowed_html );
 		?>
 
