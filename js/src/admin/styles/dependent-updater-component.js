@@ -45,6 +45,7 @@ export default class frmStyleDependentUpdaterComponent {
 	 * @param {string} value - The value to update the dependent elements with.
 	 */
 	updateAllDependentElements( value ) {
+		console.log( this.data.propagateInputs );
 		this.data.propagateInputs.forEach( ( input ) => {
 			input.value = value;
 		});
