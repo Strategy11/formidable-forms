@@ -27,6 +27,16 @@ class FrmCurrencyHelper {
 	}
 
 	/**
+	 * Checks if the given format is a valid currency format.
+	 *
+	 * @param string $format_value The format value to check.
+	 * @return bool
+	 */
+	public static function is_currency_format( $format_value ) {
+		return ! empty( $format_value ) && in_array( $format_value, array( 'currency', 'number' ), true );
+	}
+
+	/**
 	 * Get a list of all supported currencies.
 	 *
 	 * @since 6.5.

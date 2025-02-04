@@ -28,10 +28,21 @@ FrmHtmlHelper::echo_dropdown_option(
 	)
 );
 
+FrmHtmlHelper::echo_dropdown_option(
+	__( 'Currency', 'formidable' ),
+	false,
+	array(
+		'value'        => '',
+		'class'        => 'frm_show_upgrade frm_noallow',
+		'data-upgrade' => __( 'Format currency field', 'formidable' ),
+		'data-medium'  => 'format-currency-field',
+	)
+);
+
 if ( 'text' === $field_type ) {
 	FrmHtmlHelper::echo_dropdown_option(
 		__( 'Custom', 'formidable' ),
-		! empty( $format ) && 'currency' !== $format,
+		! empty( $format ) && ! FrmCurrencyHelper::is_currency_format( $format ),
 		array(
 			'value'           => 'custom',
 			'data-dependency' => '#frm-field-format-custom-' . $field_id,

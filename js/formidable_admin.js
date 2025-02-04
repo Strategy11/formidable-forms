@@ -5439,7 +5439,7 @@ function frmAdminBuildJS() {
 			const fieldId = formatElement.dataset.fieldId;
 			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
 
-			if ( 'international' === formatInput.value || 'currency' === formatInput.value ) {
+			if ( 'international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value ) {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
@@ -6702,7 +6702,8 @@ function frmAdminBuildJS() {
 		const valueMap = {
 			none: '',
 			international: 'international',
-			currency: 'currency'
+			currency: 'currency',
+			number: 'number'
 		};
 
 		formatTypes.forEach( formatType => {
