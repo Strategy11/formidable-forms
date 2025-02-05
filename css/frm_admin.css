@@ -2662,7 +2662,7 @@ h2.frm-h2 + .howto {
 	margin-top: 0;
 }
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert):not(.frm_small_device_message_container),
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
@@ -8620,6 +8620,10 @@ span.clear {
 	display: block;
 }
 
+.frm_small_device_message_container {
+	display: none;
+}
+
 /* End hide from IE-mac */
 
 /*-----------------------------------------------------------------
@@ -8644,6 +8648,16 @@ Responsive Design
 
 	.frm_actions_list {
 		margin-left: 0;
+	}
+
+	#frm_bs_dropdown {
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none !important;
 	}
 }
 
@@ -8675,20 +8689,10 @@ Responsive Design
 }
 
 @media only screen and (max-width: 850px) {
-	#frm_bs_dropdown {
-		/* There isn't enough room for the title on a screen this size so just hide it. */
-		display: none;
-	}
-
 	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 350px;
 		--big-sidebar: 350px;
-	}
-
-	#frm_bs_dropdown .frm_bstooltip {
-		/* There isn't enough room for the title on a screen this size so just hide it. */
-		display: none !important;
 	}
 
 	.frm_col_one {
@@ -8769,6 +8773,32 @@ Responsive Design
 		margin-bottom: 20px;
 		border-radius: var(--small-radius);
 		border-top-width: 1px;
+	}
+
+	#frm_top_bar ul.frm_form_nav {
+		padding: 1em 0;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		background: white;
+		z-index: 99;
+		transform: translate(-50%, 0);
+		left: 50%;
+	}
+
+	#frm-publishing {
+		margin-left: auto;
+	}
+
+	#frm_top_bar > .frm-full-close:last-child {
+		margin-left: 0;
+	}
+	#frm_bs_dropdown {
+		display: block;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+		display: block !important;
 	}
 }
 
@@ -8890,8 +8920,6 @@ Responsive Design
 	.frm-admin-page-styles .frm_page_container,
 	.frm_wrap .frm_page_container {
 		left: 0 !important;
-		top: 46px !important;
-		height: calc( 100vh - 46px ) !important;
 	}
 
 	.frm_single_entry_page.frm_wrap .columns-2 {
@@ -8926,6 +8954,9 @@ Responsive Design
 	.frm_wrap {
 		--biggest-sidebar: 50%;
 		--big-sidebar: 50%;
+	}
+	#frm_top_bar h1 {
+		min-width: unset; /* Reset the min-width to prevent menu items from stacking vertically */
 	}
 }
 
@@ -9030,6 +9061,48 @@ Responsive Design
 
 	#frm-nav-tabs a {
 		margin-right: 0;
+	}
+	.frm_small_device_message_container {
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		position: fixed;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		z-index: 100;
+		background: var(--primary-500);
+	}
+
+	.frm_small_device_message {
+		text-align: center;
+		display: flex;
+		flex-direction: column;
+		align-items: center;
+		width: 80%;
+		padding: 1rem;
+		background: #fff;
+		border: solid 1px #fff;
+		border-radius: var(--medium-radius);
+	}
+
+	.frm_small_device_message::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-78%, -65%);
+		width: 900px;
+		height: 900px;
+		background-color: #0D7DFC;
+		border-radius: 50%;
+		z-index: -1;
+		opacity: 0.3;
+	}
+
+	.frm_small_device_message > svg {
+		padding-bottom: 1rem;
 	}
 }
 
