@@ -1872,7 +1872,7 @@ class FrmFormsController {
 	 * @since x.x
 	 * @return void
 	 */
-	private static function include_device_too_small_message() {
+	public static function include_device_too_small_message() {
 		?>
 		<div class="frm_small_device_message_container">
 			<div class="frm_small_device_message">
