@@ -2662,7 +2662,7 @@ h2.frm-h2 + .howto {
 	margin-top: 0;
 }
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert):not(.frm_small_device_message_container),
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
