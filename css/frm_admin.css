@@ -8770,6 +8770,25 @@ Responsive Design
 		border-radius: var(--small-radius);
 		border-top-width: 1px;
 	}
+
+	#frm_top_bar ul.frm_form_nav {
+		padding: 1em 0;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		background: white;
+		z-index: 99;
+		transform: translate(-50%, 0);
+		left: 50%;
+	}
+
+	#frm-publishing {
+		margin-left: auto;
+	}
+
+	#frm_top_bar > .frm-full-close:last-child {
+		margin-left: 0;
+	}
 }
 
 @media only screen and (max-width: 782px) {
@@ -8890,8 +8909,6 @@ Responsive Design
 	.frm-admin-page-styles .frm_page_container,
 	.frm_wrap .frm_page_container {
 		left: 0 !important;
-		top: 46px !important;
-		height: calc( 100vh - 46px ) !important;
 	}
 
 	.frm_single_entry_page.frm_wrap .columns-2 {
