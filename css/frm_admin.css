@@ -8645,6 +8645,16 @@ Responsive Design
 	.frm_actions_list {
 		margin-left: 0;
 	}
+
+	#frm_bs_dropdown {
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none !important;
+	}
 }
 
 @media only screen and (max-width: 960px) {
@@ -8675,20 +8685,10 @@ Responsive Design
 }
 
 @media only screen and (max-width: 850px) {
-	#frm_bs_dropdown {
-		/* There isn't enough room for the title on a screen this size so just hide it. */
-		display: none;
-	}
-
 	.frm-white-body,
 	.frm_wrap {
 		--biggest-sidebar: 350px;
 		--big-sidebar: 350px;
-	}
-
-	#frm_bs_dropdown .frm_bstooltip {
-		/* There isn't enough room for the title on a screen this size so just hide it. */
-		display: none !important;
 	}
 
 	.frm_col_one {
@@ -8788,6 +8788,13 @@ Responsive Design
 
 	#frm_top_bar > .frm-full-close:last-child {
 		margin-left: 0;
+	}
+	#frm_bs_dropdown {
+		display: block;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+		display: block !important;
 	}
 }
 
