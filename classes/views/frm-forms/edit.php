@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</svg>
 			<b><?php esc_html_e( 'More on bigger devices', 'formidable' ); ?></b>
 			<p><?php esc_html_e( 'For the best experience, we recommend using Formidable Forms on larger devices such as a desktop or tablet.', 'formidable' ); ?></p>
-			<a href="#" class="frm-button-primary"><?php esc_html_e( 'Go back', 'formidable' ); ?></a>
+			<a href="javascript:history.back()" class="frm-button-primary"><?php esc_html_e( 'Go back', 'formidable' ); ?></a>
 		</div>
 	</div>
 	<?php
