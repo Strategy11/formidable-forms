@@ -8955,6 +8955,9 @@ Responsive Design
 		--biggest-sidebar: 50%;
 		--big-sidebar: 50%;
 	}
+	#frm_top_bar h1 {
+		min-width: unset; /* Reset the min-width to prevent menu items from stacking vertically */
+	}
 }
 
 @media only screen and (max-width: 600px) {
