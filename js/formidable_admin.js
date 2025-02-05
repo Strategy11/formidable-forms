@@ -10358,7 +10358,7 @@ function frmAdminBuildJS() {
 		 */
 		function toggleDependencyVisibility( select ) {
 			const selectedOption = select.options[ select.selectedIndex ];
-			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
+			select.querySelectorAll( 'option[data-dependency]:not([data-dependency-skip])' ).forEach( option => {
 				const dependencyElement = document.querySelector( option.dataset.dependency );
 				dependencyElement?.classList.toggle( 'frm_hidden', selectedOption !== option );
 			});
