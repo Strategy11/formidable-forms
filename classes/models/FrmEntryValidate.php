@@ -136,6 +136,8 @@ class FrmEntryValidate {
 			$value = $values;
 		}
 
+		self::maybe_normalize_formatted_numbers( $posted_field, $value );
+
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
 
@@ -228,8 +230,9 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type === 'phone' || ( $field->type === 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		$format_value = FrmField::get_option( $field, 'format' );
 
+		if ( $field->type === 'phone' || ( $field->type === 'text' && ! FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
 			$pattern = self::phone_format( $field );
 
 			if ( ! preg_match( $pattern, $value ) ) {
@@ -333,6 +336,24 @@ class FrmEntryValidate {
 
 		if ( self::is_akismet_enabled_for_user( $values['form_id'] ) && self::is_akismet_spam( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+		}
+	}
+
+	/**
+	 * Normalizes formatted numbers in a value based on the field format settings, if applicable
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $field The field settings.
+	 * @param string $value The value to be normalized (passed by reference).
+	 * @return void
+	 */
+	private static function maybe_normalize_formatted_numbers( $field, &$value ) {
+		if (
+			is_callable( 'FrmProCurrencyHelper::normalize_formatted_numbers' )
+			&& FrmCurrencyHelper::is_currency_format( FrmField::get_option( $field, 'format' ) )
+		) {
+			$value = FrmProCurrencyHelper::normalize_formatted_numbers( $field, $value );
 		}
 	}
 

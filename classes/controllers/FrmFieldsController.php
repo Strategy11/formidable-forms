@@ -468,15 +468,17 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
+	 * @param array $field Field data.
+	 * @param bool  $is_hidden Whether the format option should be hidden.
 	 * @return void
 	 */
-	public static function show_format_option( $field ) {
-		$attributes          = array();
-		$attributes['class'] = 'frm-has-modal';
+	public static function show_format_option( $field, $is_hidden = false ) {
+		$attributes = array(
+			'class' => 'frm-has-modal',
+			'id'    => 'frm-field-format-custom-' . $field['id'],
+		);
 
-		if ( 'phone' === $field['type'] ) {
-			$attributes['id']     = 'frm-phone-field-custom-format-' . $field['id'];
+		if ( $is_hidden ) {
 			$attributes['class'] .= ' frm_hidden';
 		}
 
@@ -961,7 +963,8 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
-		$has_format   = FrmField::is_option_true_in_array( $field, 'format' );
+		$format_value = FrmField::get_option( $field, 'format' );
+		$has_format   = $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value );
 		$format_field = FrmField::is_field_type( $field, 'text' );
 
 		if ( $field['type'] === 'phone' || ( $has_format && $format_field ) ) {
