@@ -2107,9 +2107,11 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} field
+	 * @param {number}      maxFieldsInGroup
+	 *
 	 * @returns {Boolean}
 	 */
-	function canDuplicateField( field ) {
+	function canDuplicateField( field, maxFieldsInGroup ) {
 		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
 			return false;
 		}
@@ -2118,16 +2120,18 @@ function frmAdminBuildJS() {
 			return true;
 		}
 		const fieldsInGroup = fieldGroup.querySelectorAll( 'li.form-field' ).length;
-		return fieldsInGroup < 6;
+		return fieldsInGroup < maxFieldsInGroup;
 	}
 
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
+		const maxFieldsInGroup = 6;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( ! canDuplicateField( $field[0] ) ) {
-			infoModal( __( 'You can only have a maximum of 6 fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ) );
+		if ( ! canDuplicateField( $field[0], maxFieldsInGroup ) ) {
+			/* translators: %1$d: Maximum number of fields allowed in a field group. */
+			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
 			return;
 		}
 
