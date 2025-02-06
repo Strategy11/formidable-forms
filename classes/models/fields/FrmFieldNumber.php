@@ -65,22 +65,21 @@ class FrmFieldNumber extends FrmFieldType {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
-		// validate number settings
-		if ( $args['value'] != '' ) {
-			// only check if options are available in settings
-			$minnum = FrmField::get_option( $this->field, 'minnum' );
-			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $maxnum !== '' && $minnum !== '' ) {
-				$value = (float) $args['value'];
-				if ( $value < $minnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
-				} elseif ( $value > $maxnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
-				}
-			}
-
-			$this->validate_step( $errors, $args );
+		if ( $args['value'] === '' ) {
+			return $errors;
 		}
+
+		$value  = (float) $args['value'];
+		$minnum = FrmField::get_option( $this->field, 'minnum' );
+		$maxnum = FrmField::get_option( $this->field, 'maxnum' );
+
+		if ( $minnum !== '' && $value < $minnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
+		} elseif ( $maxnum !== '' && $value > $maxnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
+		}
+
+		$this->validate_step( $errors, $args );
 
 		return $errors;
 	}
