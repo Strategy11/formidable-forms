@@ -10394,13 +10394,9 @@ function frmAdminBuildJS() {
 		if ( currentIndex < 0 ) {
 			return;
 		}
-		
+
 		// Find the next visible input field
-		const nextInput = inputsArray.slice( currentIndex + 1 ).find( input =>
-			input.offsetParent !== null &&
-			input.offsetWidth > 0 &&
-			input.offsetHeight > 0
-		);
+		const nextInput = inputsArray.slice( currentIndex + 1 ).find( input => input.offsetParent !== null );
 
 		if ( nextInput ) {
 			nextInput.focus();
