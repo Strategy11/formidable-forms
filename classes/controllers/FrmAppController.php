@@ -1320,15 +1320,27 @@ class FrmAppController {
 	}
 
 	/**
-	 * Hide all third-parties admin notices only in our admin pages.
+	 * Handles actions related to the current screen.
 	 *
+	 * @since x.x
+	 * 
 	 * @return void
 	 */
-	public static function filter_admin_notices() {
+	public static function handle_current_screen() {
 		if ( ! self::in_our_pages() ) {
 			return;
 		}
 
+		self::filter_admin_notices();
+		self::remember_custom_sort();
+	}
+
+	/**
+	 * Hide all third-parties admin notices only in our admin pages.
+	 *
+	 * @return void
+	 */
+	private static function filter_admin_notices() {
 		$actions = array(
 			'admin_notices',
 			'network_admin_notices',
@@ -1358,10 +1370,10 @@ class FrmAppController {
 	 *
 	 * @return void
 	 */
-	public static function remember_custom_sort() {
+	private static function remember_custom_sort() {
 		$screen = get_current_screen();
 
-		if ( ! $screen || ! self::in_our_pages() ) {
+		if ( ! $screen ) {
 			return;
 		}
 
