@@ -10391,21 +10391,23 @@ function frmAdminBuildJS() {
 		// Find the index of the currently focused input
 		const currentIndex = inputsArray.indexOf( currentInput );
 
-		if ( currentIndex >= 0 ) {
-			// Find the next visible input field
-			const nextInput = inputsArray.slice( currentIndex + 1 ).find( input =>
-				input.offsetParent !== null &&
-				input.offsetWidth > 0 &&
-				input.offsetHeight > 0
-			);
+		if ( currentIndex < 0 ) {
+			return;
+		}
+		
+		// Find the next visible input field
+		const nextInput = inputsArray.slice( currentIndex + 1 ).find( input =>
+			input.offsetParent !== null &&
+			input.offsetWidth > 0 &&
+			input.offsetHeight > 0
+		);
 
-			if ( nextInput ) {
-				nextInput.focus();
+		if ( nextInput ) {
+			nextInput.focus();
 
-				// Move the cursor to the end of the text in the next input field
-				const textLength = nextInput.value.length;
-				nextInput.setSelectionRange( textLength, textLength );
-			}
+			// Move the cursor to the end of the text in the next input field
+			const textLength = nextInput.value.length;
+			nextInput.setSelectionRange( textLength, textLength );
 		}
 	}
 
