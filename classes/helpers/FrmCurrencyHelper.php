@@ -300,7 +300,7 @@ class FrmCurrencyHelper {
 			'TRY' => array(
 				'name'               => __( 'Turkish Liras', 'formidable' ),
 				'symbol_left'        => '',
-				'symbol_right'       => '&#8364;',
+				'symbol_right'       => '&#8378;',
 				'symbol_padding'     => ' ',
 				'thousand_separator' => '.',
 				'decimal_separator'  => ',',
