@@ -29,6 +29,8 @@ class FrmCurrencyHelper {
 	/**
 	 * Checks if the given format is a valid currency format.
 	 *
+	 * @since x.x
+	 *
 	 * @param string $format_value The format value to check.
 	 * @return bool
 	 */
