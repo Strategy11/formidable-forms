@@ -335,7 +335,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	protected function column_shortcode( $form ) {
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
-		$val .= $this->view_form_icon( $form );
+		$val .= $this->column_views( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
@@ -372,16 +372,21 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * Generate the HTML for the "view form icon" action link.
+	 * Generate the HTML for the form Views page.
 	 *
 	 * @since x.x
 	 *
 	 * @param stdClass $form Form object.
-	 * @return string HTML string for the view icon link.
+	 * @return string
 	 */
-	protected function view_form_icon( $form ) {
-		$href = FrmFormsHelper::get_direct_link( $form->form_key, $form );
-		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr__( 'View Form', 'formidable' ) . '" target="_blank">
+	protected function column_views( $form ) {
+		$attributes = array(
+			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) ),
+			'title'  => __( 'View Form', 'formidable' ),
+			'target' => '_blank',
+		);
+
+		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
 	}
