@@ -1,8 +1,11 @@
 ( function() {
 
+	const { doJsonPost } = frmDom.ajax;
+
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
+		document.addEventListener( 'click', handleClickEvent );
 	}
 
 	function handleChangeEvent( e ) {
@@ -16,6 +19,18 @@
 			case ' ':
 				handleSpaceDownEvent( e );
 				break;
+		}
+	}
+
+	function handleClickEvent( e ) {
+		if ( e.target.classList.contains( 'frm_dismiss_default_email_message' ) ) {
+			e.preventDefault();
+			const formData = new FormData();
+			formData.append( 'action', 'frm_dismiss_default_email_message' );
+			formData.append( 'nonce', frmGlobal.nonce );
+			doJsonPost( 'dismiss_default_email_message', formData ).then(
+				e.target.closest( '.frm_default_email_message' ).remove()
+			);
 		}
 	}
 

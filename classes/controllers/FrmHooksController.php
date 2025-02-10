@@ -300,6 +300,8 @@ class FrmHooksController {
 
 		// Reviews.
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
+
+		add_action( 'wp_ajax_frm_dismiss_default_email_message', 'FrmAppController::dismiss_default_email_message' );
 	}
 
 	/**

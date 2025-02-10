@@ -175,6 +175,11 @@ class FrmAppController {
 		return $is_white_page;
 	}
 
+	public static function dismiss_default_email_message() {
+		check_ajax_referer( 'frm_ajax',  'nonce' );
+		update_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', 1 );
+	}
+
 	/**
 	 * Add a grey bg instead of white.
 	 *
