@@ -92,32 +92,32 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$this->data['vertical'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (int) $top,
+			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (float) $top,
 		);
 
 		$this->data['horizontal'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (int) $right,
+			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (float) $right,
 		);
 
 		$this->data['top'] = array(
 			'unit'  => $this->detect_unit_measurement( $top ),
-			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (int) $top,
+			'value' => empty( $this->detect_unit_measurement( $top ) ) ? $top : (float) $top,
 		);
 
 		$this->data['bottom'] = array(
 			'unit'  => $this->detect_unit_measurement( $bottom ),
-			'value' => empty( $this->detect_unit_measurement( $bottom ) ) ? $bottom : (int) $bottom,
+			'value' => empty( $this->detect_unit_measurement( $bottom ) ) ? $bottom : (float) $bottom,
 		);
 
 		$this->data['left'] = array(
 			'unit'  => $this->detect_unit_measurement( $left ),
-			'value' => empty( $this->detect_unit_measurement( $left ) ) ? $left : (int) $left,
+			'value' => empty( $this->detect_unit_measurement( $left ) ) ? $left : (float) $left,
 		);
 
 		$this->data['right'] = array(
 			'unit'  => $this->detect_unit_measurement( $right ),
-			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (int) $right,
+			'value' => empty( $this->detect_unit_measurement( $right ) ) ? $right : (float) $right,
 		);
 	}
 
