@@ -478,11 +478,63 @@ td.column-title .frm_actions_dropdown {
 }
 /** End Temporary View CSS */
 
+.frm-gradient,
 .frm-upgrade-bar {
-	background: rgba(188, 224, 253, 0.23);
+	background: linear-gradient(90deg, #388CF3, #1961D5, #8C7FD8) !important;
+	color: #fff !important;
+	border: 0 !important;
+}
+
+.frm-gradient.frm-button-primary:not([disabled]),
+.frm-gradient.frm-button-primary:not([disabled]):hover,
+.frm-gradient.frm-button-primary:not([disabled]):focus {
+	background: linear-gradient(90deg, #1961D5, #816CFA) !important;
+}
+
+.frm-upgrade-bar,
+.frm-gradient {
+	position: relative;
+}
+
+.frm-upgrade-bar:before,
+.frm-gradient:before {
+	content: '';
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(255, 255, 255, 0.1);
+	z-index: 0;
+}
+
+.frm-upgrade-bar:hover:before,
+.frm-gradient:hover:before,
+.frm-gradient:focus:before {
+	display: block;
+}
+
+.frm-upgrade-bar-inner,
+.frm-gradient > * {
+	position: relative;
+	z-index: 1;
+}
+
+.frm-upgrade-bar {
 	border-bottom: 1px solid var(--sidebar-hover);
-	padding: 3px 0 3px 40px;
-	font-size: 95%;
+	padding: 9px 0;
+	font-size: 12px;
+	text-align: center;
+}
+
+.frm-upgrade-bar a {
+	color: currentColor !important;
+	text-decoration: underline;
+}
+
+.frm-upgrade-bar a:focus {
+	outline: 1px dotted var(--sidebar-hover);
 }
 
 .frm-upgrade-bar span {
@@ -1410,7 +1462,7 @@ body.frm-hidden-overflow {
 .post-type-frm_display.wp-core-ui .button-primary,
 .frm-button-primary,
 .wp-core-ui .button-primary.frm-button-primary,
-.frm_single_entry_page .button-primary {
+.frm_single_entry_page #frm-publishing .button-primary {
 	background-color: var(--primary-500) !important;
 	color: #fff !important;
 }
@@ -2269,6 +2321,7 @@ form .frm_blank_field label {
 
 .frm_error_style,
 .frm_warning_style,
+.frm_note_style2,
 .frm_note_style,
 .frm_message,
 #post-body-content .frm_updated_message,
@@ -2280,6 +2333,12 @@ div.frm_updated_message {
 	font-size: var(--text-sm);
 	margin: var(--gap-sm) 0;
 	text-align: left;
+}
+
+.frm_note_style2 {
+	background: linear-gradient(90deg, #e9effa, #fcf6fe) padding-box,
+				linear-gradient(90deg, #1961D5, #E8ABEF) border-box;
+	border: 1px solid transparent;
 }
 
 #frm_top_bar + .wrap > .frm_updated_message, #frm_top_bar + .wrap > .frm_warning_style {
@@ -3853,21 +3912,18 @@ input[type="checkbox"] {
 }
 
 .frm-white-body input[type="checkbox"]:checked,
-.frm_wrap input[type="checkbox"]:checked,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked {
-	background-color: var(--primary-500);
-	border-color: var(--primary-500) !important;
+.frm_wrap input[type="checkbox"]:checked {
+	background-color: var(--border-color-active, var(--primary-500)) !important;
+	border-color: var(--border-color-active, var(--primary-500)) !important;
 }
 
 .frm-white-body input[type="checkbox"]:checked:focus,
-.frm_wrap input[type="checkbox"]:checked:focus,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked:focus {
-	border-color: var(--primary-500);
+.frm_wrap input[type="checkbox"]:checked:focus {
+	border-color: var(--border-color-active, var(--primary-500));
 }
 
 .frm-white-body input[type="checkbox"]:checked::before,
-.frm_wrap input[type="checkbox"]:checked::before,
-body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked::before {
+.frm_wrap input[type="checkbox"]:checked::before {
 	content: '';
 	display: block;
 	width: 100% !important;
@@ -3882,19 +3938,6 @@ body[class*="frm-admin"] #wpbody-content input[type="checkbox"]:checked::before 
 .frm_radio input[type="radio"],
 .frm_checkbox input[type="checkbox"] {
 	margin-right: 5px;
-}
-
-.frm_single_entry_page .with_frm_style .frm_radio input[type=radio] {
-	margin: 5px 0;
-	width: 18px;
-	position: relative; /* override Bootstrap */
-}
-
-.frm_single_entry_page .with_frm_style .frm_radio input[type=radio]:before {
-	position: relative !important;
-	left: calc(50% - 6px);
-	top: calc(50% - 6px);
-	margin: 0 !important;
 }
 
 .frm_inner_field_container {
@@ -4534,7 +4577,7 @@ li.frm_field_box > ul.frm_grid_container {
 
 /* Image options for Radio and Checkbox */
 
-.frm_image_options .frm_image_option_container {
+body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) .frm_image_options .frm_image_option_container {
 	--field-border-width: 1px;
 	--border-color: var(--grey-300);
 	--border-color-active: var(--primary-500);
@@ -8221,13 +8264,25 @@ button.frm_choose_image_box,
 	line-height: var(--leading);
 }
 
+.frm_input_with_suffix {
+	border-radius: var(--small-radius);
+	border: 1px solid var(--grey-300);
+	display: inline-block;
+	padding-right: 14px;
+}
+
+.frm_input_with_suffix input {
+	border: 0 !important;
+	padding-right: 5px !important;
+}
+
 .frm_wrap ::-webkit-datetime-edit {
 	line-height: var(--leading);
 }
 
-.frm-white-body textarea:focus,
-.frm-white-body input:focus,
-.frm-white-body select:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) textarea:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) input:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) select:focus,
 .frm_wrap input:focus,
 .frm_wrap select:focus,
 .wp-core-ui .frm_wrap select:focus,
@@ -8236,6 +8291,17 @@ button.frm_choose_image_box,
 .frm_wrap textarea:focus {
 	border-color: var(--primary-500) !important;
 	box-shadow: none !important;
+}
+
+/*
+Pages like Entries and Styles need the border-color and box-shadow properties without the !important flag.
+To achieve this, we exclude them above and duplicate these rules specifically for those pages without using !important.
+*/
+.wp-admin .frm_fields_container textarea:focus,
+.wp-admin .frm_fields_container input:focus,
+.wp-admin .frm_fields_container select:focus {
+	border-color: var(--primary-500);
+	box-shadow: none;
 }
 
 #postbox-container-2 textarea,
@@ -8883,7 +8949,6 @@ Responsive Design
 	.frm_wrap input[type="checkbox"]:checked::before {
 		width: 1.2rem;
 		height: 1.2rem;
-		margin: 0.125rem;
 	}
 }
 
@@ -9345,7 +9410,7 @@ Responsive Design
 
 /* On Submit action */
 .frm_single_on_submit_settings .frm_form_field {
-	margin: 8px 0;
+	margin: 22px 0;
 }
 
 .frm_on_submit_type_setting {
@@ -9437,6 +9502,34 @@ Responsive Design
 	border-color: var(--error-100);
 }
 
+.frm-cta-icon {
+	padding: 3px 15px 3px 0;
+	border-right: 1px solid currentColor;
+}
+
+#frm-upgrade-banner {
+	gap: 0;
+}
+
+#frm-upgrade-banner .frm-cta-icon + .frm-cta-content {
+	margin-right: auto;
+	padding-left: 15px;
+}
+
+#frm-upgrade-banner.frm-gradient h4,
+#frm-upgrade-banner.frm-gradient p {
+	color: currentColor;
+}
+
+#frm-upgrade-banner.frm-gradient h4 {
+	font-size: 16px;
+	font-weight: 600;
+}
+
+#frm-upgrade-banner.frm-gradient p {
+	font-size: 14px;
+}
+
 .frm-right-panel .inside .frm_pro_tip,
 .frm_pro_tip {
 	color: var(--grey-700);
@@ -9451,6 +9544,7 @@ Responsive Design
 	position: relative;
 	width: calc(100% - 30px);
 	box-sizing: border-box;
+	font-size: 14px;
 }
 
 .frm_pro_tip .frmsvg,
@@ -9467,6 +9561,23 @@ Responsive Design
 	color: var(--orange);
 }
 
+.frm-gradient .frm-tip-cta,
+.frm-light-tip .frm-gradient .frm-tip-cta {
+	color: currentColor;
+	font-weight: 700;
+}
+
+.frm-tip-badge {
+	font-size: 9px;
+	font-weight: 700;
+	text-transform: uppercase;
+	color: #1E63D5;
+	background-color: #fff;
+	line-height: 1;
+	border-radius: 4px;
+	padding: 3px 4px;
+}
+
 .frm-light-tip .frm_pro_tip {
 	background: var(--primary-25);
 }
@@ -9474,10 +9585,6 @@ Responsive Design
 .frm-light-tip .frm_pro_tip .frmsvg,
 .frm-light-tip .frm_pro_tip i,
 .frm-light-tip .frm-tip-cta {
-	color: var(--primary-500);
-}
-
-.frm-tip-cta:hover  {
 	color: var(--primary-500);
 }
 

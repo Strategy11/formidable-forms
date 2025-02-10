@@ -330,28 +330,9 @@ class FrmSettingsController {
 	 * @since 3.04.02
 	 */
 	public static function settings_cta( $view ) {
-
 		if ( get_option( 'frm_lite_settings_upgrade', false ) ) {
 			return;
 		}
-
-		$features = array(
-			__( 'Extra form features like file uploads, pagination, etc', 'formidable' ),
-			__( 'Repeaters & cascading fields for advanced forms', 'formidable' ),
-			__( 'Flexibly view, search, edit, and delete entries anywhere', 'formidable' ),
-			__( 'Display entries with virtually limitless Formidable views', 'formidable' ),
-			__( 'Create surveys & polls', 'formidable' ),
-			__( 'WordPress user registration and login forms', 'formidable' ),
-			__( 'Create Stripe, PayPal or Authorize.net payment forms', 'formidable' ),
-			__( 'Powerful conditional logic for smart forms', 'formidable' ),
-			__( 'Integrations with 1000+ marketing & payment services', 'formidable' ),
-			__( 'Collect digital signatures', 'formidable' ),
-			__( 'Accept user-submitted content with Post submissions', 'formidable' ),
-			__( 'Email routing', 'formidable' ),
-			__( 'Create calculator forms', 'formidable' ),
-			__( 'Save draft entries and return later', 'formidable' ),
-			__( 'Analyze form data with graphs & stats', 'formidable' ),
-		);
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php';
 	}
