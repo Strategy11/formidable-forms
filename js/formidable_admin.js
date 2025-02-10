@@ -2119,7 +2119,7 @@ function frmAdminBuildJS() {
 		if ( ! fieldGroup ) {
 			return true;
 		}
-		const fieldsInGroup = fieldGroup.querySelectorAll( 'li.form-field' ).length;
+		const fieldsInGroup = getFieldsInRow( jQuery( fieldGroup.querySelector( 'ul' ) ) ).length;
 		return fieldsInGroup < maxFieldsInGroup;
 	}
 
