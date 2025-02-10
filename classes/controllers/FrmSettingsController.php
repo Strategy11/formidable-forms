@@ -207,8 +207,8 @@ class FrmSettingsController {
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
-		if ( is_callable( 'FrmProSettingsController::render_currency_selector' ) ) {
-			FrmProSettingsController::render_currency_selector();
+		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
+			FrmProSettingsController::add_currency_settings();
 			return;
 		}
 

@@ -428,7 +428,7 @@ namespace {
 		/**
 		 * @return void
 		 */
-		public static function render_currency_selector() {}
+		public static function add_currency_settings() {}
 	}
 }
 
