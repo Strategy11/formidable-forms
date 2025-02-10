@@ -1369,6 +1369,7 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
+			<div class="frm-upgrade-bar-inner">
 				<?php
 				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 				if ( ! $cta_text ) {
@@ -1393,6 +1394,7 @@ class FrmAppHelper {
 					'</a>'
 				);
 				?>
+			</div>
 		</div>
 		<?php
 	}
