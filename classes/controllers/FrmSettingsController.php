@@ -212,12 +212,6 @@ class FrmSettingsController {
 			return;
 		}
 
-		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
-			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
-			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
-			return;
-		}
-
 		$currencies = FrmCurrencyHelper::get_currencies();
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/_currency.php';
 	}

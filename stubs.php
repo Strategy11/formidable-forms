@@ -425,6 +425,9 @@ namespace {
 		 * @return string
 		 */
 		public static function inbox_badge( $count ) {}
+		/**
+		 * @return void
+		 */
 		public static function render_currency_selector() {}
 	}
 }

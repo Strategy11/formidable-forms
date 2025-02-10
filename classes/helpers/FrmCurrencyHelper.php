@@ -33,7 +33,7 @@ class FrmCurrencyHelper {
 	 * @return bool
 	 */
 	public static function is_currency_format( $format_value ) {
-		return ! empty( $format_value ) && in_array( $format_value, array( 'currency', 'number' ), true );
+		return in_array( $format_value, array( 'currency', 'number' ), true );
 	}
 
 	/**

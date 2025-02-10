@@ -11,7 +11,7 @@
 		}
 
 		if ( 'frm_currency' === e.target.id) {
-			syncCurrencyOptoins( e.target );
+			syncCurrencyOptions( e.target );
 		}
 	}
 
@@ -32,7 +32,7 @@
 	 *
 	 * @param {HTMLSelectElement} currencySelect The currency select element.
 	 */
-	function syncCurrencyOptoins( currencySelect ) {
+	function syncCurrencyOptions( currencySelect ) {
 		const currency = frmSettings.currencies[ currencySelect.value ];
 
 		document.getElementById( 'frm_thousand_separator' ).setAttribute( 'value', currency.thousand_separator );

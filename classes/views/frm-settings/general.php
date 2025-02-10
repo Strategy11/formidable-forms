@@ -81,6 +81,8 @@ if ( $frm_settings->no_ips ) {
 /**
  * Trigger an action so Pro can display additional General settings in the Other section.
  *
+ * @since x.x
+ *
  * @param FrmSettings $frm_settings
  */
 do_action( 'frm_other_settings_form', $frm_settings );
