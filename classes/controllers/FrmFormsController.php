@@ -2532,7 +2532,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function dismiss_default_email_message() {
-		check_ajax_referer( 'frm_ajax',  'nonce' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		update_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', 1 );
 	}
 
