@@ -871,6 +871,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * The regular kses function strips [button_action] from submit button HTML.
 	 *
 	 * @since 5.0.13
@@ -1088,6 +1101,11 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'class'    => true,
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}

@@ -313,9 +313,23 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	grid-column: span 6 / span 6;
 }
 
-.frm_form_field.frm-phone-type + p > label,
-.frm_form_field.frm-phone-type + div > label {
+.frm_form_field.frm12_followed + p,
+.frm_form_field.frm12_followed + div {
+	grid-column: span 12 / span 12 !important;
+}
+
+.frm_form_field.frm-phone-type ~ [id*="frm-field-format-custom-"] > label,
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] > label {
 	opacity: 0; /* Hide the label for the format input in the phone field. */
+}
+
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] {
+	grid-column: span 6 / span 6;
+}
+
+/* Adjust "CSS Layout Classes" to full width when the "Format" setting is present. */
+.frm-single-settings.frm-type-textarea > .frm_grid_container [id*="frm-field-format-custom-"] + p {
+	grid-column: span 12/span 12;
 }
 
 .frm-short-list {
@@ -1773,6 +1787,11 @@ input.frm_insert_in_template {
 	margin-right: var(--gap-sm) !important;
 }
 
+.frm-my-xs {
+	margin-top: var(--gap-xs) !important;
+	margin-bottom: var(--gap-xs) !important;
+}
+
 .frm-p-0 {
 	padding: 0 !important;
 }
@@ -1911,7 +1930,8 @@ input.frm_insert_in_template {
 	display: inline-block !important;
 }
 
-.frm-inline-flex {
+.frm-inline-flex,
+#wpbody-content .frm-inline-flex {
 	display: inline-flex;
 }
 
@@ -1989,6 +2009,10 @@ input.frm_insert_in_template {
 	align-items: center;
 }
 
+#wpbody-content .frm-flex-wrap {
+	flex-wrap: wrap;
+}
+
 .frm-transition-ease {
 	transition: all .2s ease;
 }
@@ -2033,6 +2057,7 @@ input.frm_insert_in_template {
 /* End Generic Classes, Start Forced Generic Classes */
 
 .frm-fields p > label.frm_hidden,
+#wpbody-content label.frm_hidden,
 .frm-lookup-modal .dismiss,
 .frm-right-panel .inside a.frm_hidden,
 #form_global_settings .frm_hidden,
