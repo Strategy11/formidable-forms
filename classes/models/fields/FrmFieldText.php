@@ -60,12 +60,9 @@ class FrmFieldText extends FrmFieldType {
 		if ( is_null( $value ) ) {
 			return '';
 		}
-		if ( is_array( $value ) ) {
-			$value = implode( ', ', $value );
-		}
 		if ( strpos( $value, '&lt;' ) !== false ) {
-			$value = htmlentities( $value );
+			$value = str_replace( '&amp;', '&', htmlentities( $value ) );
 		}
-		return str_replace( '&amp;', '&', $value );
+		return $value;
 	}
 }
