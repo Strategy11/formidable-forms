@@ -873,7 +873,7 @@ class FrmAppHelper {
 	/**
 	 * Sanitizes and echoes a given value.
 	 *
-	 * @since x.x
+	 * @since 6.18
 	 *
 	 * @param string       $value   The value to sanitize and output.
 	 * @param array|string $allowed Allowed HTML tags and attributes.
