@@ -47,4 +47,25 @@ class FrmFieldText extends FrmFieldType {
 
 		return $errors;
 	}
+
+	/**
+	 * If the value includes intentional entities, don't lose them.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	protected function prepare_esc_value() {
+		$value = $this->field['value'];
+		if ( is_null( $value ) ) {
+			return '';
+		}
+		if ( is_array( $value ) ) {
+			$value = implode( ', ', $value );
+		}
+		if ( strpos( $value, '&lt;' ) !== false ) {
+			$value = htmlentities( $value );
+		}
+		return str_replace( '&amp;', '&', $value );
+	}
 }

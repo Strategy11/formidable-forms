@@ -94,7 +94,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 		return '<textarea name="' . esc_attr( $args['field_name'] ) . '" id="' . esc_attr( $args['html_id'] ) . '" ' .
 			$rows . $input_html . '>' .
-			FrmAppHelper::esc_textarea( $this->field['value'] ) .
+			str_replace( '&amp;', '&', FrmAppHelper::esc_textarea( $this->field['value'] ) ) .
 			'</textarea>';
 	}
 }
