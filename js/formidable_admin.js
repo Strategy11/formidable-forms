@@ -2124,7 +2124,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateField() {
-		let $field, fieldId, children, newRowId, fieldOrder;
+		let $field, fieldId, children, newRowId, fieldOrder, fieldClasses;
 		const maxFieldsInGroup = 6;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
@@ -2144,6 +2144,11 @@ function frmAdminBuildJS() {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
 		}
 
+		const hoverTarget = $field.get(0).closest( '.frm-field-group-hover-target' );
+		if ( hoverTarget && isFieldGroup( hoverTarget.parentElement ) ) {
+			fieldClasses = document.getElementById( 'frm_classes_' + fieldId ).value;
+		}
+	
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -2152,13 +2157,14 @@ function frmAdminBuildJS() {
 				field_id: fieldId,
 				form_id: thisFormId,
 				children: children,
-				nonce: frmGlobal.nonce
+				nonce: frmGlobal.nonce,
+				field_classes : fieldClasses
 			},
 			success: function( msg ) {
 				let newRow;
 
 				let replaceWith;
-
+				
 				if ( null !== newRowId ) {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
@@ -2176,6 +2182,13 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
+						if ( hoverTarget && isFieldGroup( hoverTarget.parentElement ) ) {
+							fieldClasses = document.getElementById( 'frm_classes_' + fieldId ).value;
+							if ( ! replaceWith.get( 0 ).className.includes( fieldClasses ) ) {
+								replaceWith.get( 0 ).className += ' ' + fieldClasses;
+								document.getElementById( 'frm_classes_' + replaceWith.get( 0 ).dataset.fid ).value = fieldClasses;
+							}
+						}
 						return;
 					}
 				}
@@ -2197,6 +2210,13 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
+				if ( hoverTarget && isFieldGroup( hoverTarget.parentElement ) ) {
+					fieldClasses = document.getElementById( 'frm_classes_' + fieldId ).value;
+					if ( ! replaceWith.get( 0 ).className.includes( fieldClasses ) ) {
+						replaceWith.get( 0 ).className += ' ' + fieldClasses;
+						document.getElementById( 'frm_classes_' + replaceWith.get( 0 ).dataset.fid ).value = fieldClasses;
+					}
+				}
 			}
 		});
 		return false;

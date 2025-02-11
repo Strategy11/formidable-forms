@@ -200,8 +200,10 @@ class FrmFieldsController {
 		$li_classes  = $field_info->form_builder_classes( $display['type'] );
 		$li_classes .= ' frm_form_field frmstart ';
 
-		if ( isset( $field['classes'] ) ) {
+		if ( ! empty( $field['classes'] ) ) {
 			$li_classes .= trim( $field['classes'] ) . ' ';
+		} else {
+			$li_classes .= FrmAppHelper::get_param( 'field_classes', '', 'post', 'sanitize_text_field' ) . ' ';
 		}
 
 		$li_classes .= 'frmend';
