@@ -114,7 +114,7 @@ class FrmFieldNumber extends FrmFieldType {
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
 			is_numeric( $result[0] ) ? floatval( $result[0] ) : $result[0],
-			is_numeric( $result[1] ) ? floatval( $result[1] ) : $result[1],
+			is_numeric( $result[1] ) ? floatval( $result[1] ) : $result[1]
 		);
 	}
 
