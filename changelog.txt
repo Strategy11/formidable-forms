@@ -3,6 +3,8 @@
 * New: Invalid checkbox fields will now properly show a red outline to improve user experience.
 * Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
 * Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
+* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
+* Fix: Some style setting values would result in invalid undefined or NaN values.
 * Text will no longer be selected when multi-selecting fields while holding the shift key.
 * The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
 * The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
