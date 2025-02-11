@@ -113,8 +113,8 @@ class FrmFieldNumber extends FrmFieldType {
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
-			floatval( $result[0] ),
-			floatval( $result[1] )
+			is_numeric( $result[0] ) ? floatval( $result[0] ) : $result[0],
+			is_numeric( $result[1] ) ? floatval( $result[1] ) : $result[1],
 		);
 	}
 
@@ -127,7 +127,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @param numeric $step  The step.
 	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
-	private function check_value_is_valid_with_step( $value, $step ) {
+	protected function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.
 		$decimals = max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
 
