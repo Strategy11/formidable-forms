@@ -2129,7 +2129,7 @@ function frmAdminBuildJS() {
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 
-		if ( ! canDuplicateField( $field[0], maxFieldsInGroup ) ) {
+		if ( ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
 			/* translators: %1$d: Maximum number of fields allowed in a field group. */
 			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
 			return;
