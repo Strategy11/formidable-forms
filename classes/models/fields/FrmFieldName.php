@@ -28,7 +28,11 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected $holds_email_values = true;
 
-	public function __construct( $field = '', $type = '' ) {
+	/**
+	 * @param array|int|object $field
+	 * @param string           $type
+	 */
+	public function __construct( $field = 0, $type = '' ) {
 		parent::__construct( $field, $type );
 
 		$this->register_sub_fields(

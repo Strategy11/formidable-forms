@@ -814,9 +814,25 @@ function frmFrontFormJS() {
 		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
+		const doRedirect = response => {
+			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
+
+			if ( ! response.openInNewTab ) {
+				// We return here because we're redirecting there is no need to update content.
+				window.location = response.redirect;
+				return;
+			}
+
+			// We don't return here because we're opening in a new tab, the old tab will still update.
+			const newTab = window.open( response.redirect, '_blank' );
+			if ( ! newTab && response.fallbackMsg && response.content ) {
+				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+			}
+		};
+
 		success = function( response ) {
 			let defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
+				$fieldCont, key, inCollapsedSection, frmTrigger;
 
 			defaultResponse = {
 				content: '',
@@ -826,13 +842,14 @@ function frmFrontFormJS() {
 
 			if ( response === null ) {
 				response = defaultResponse;
-			}
-
-			response = response.replace( /^\s+|\s+$/g, '' );
-			if ( response.indexOf( '{' ) === 0 ) {
-				response = JSON.parse( response );
 			} else {
-				response = defaultResponse;
+				// Response is a string. Convert it to an object.
+				response = response.replace( /^\s+|\s+$/g, '' );
+				if ( response.indexOf( '{' ) === 0 ) {
+					response = JSON.parse( response );
+				} else {
+					response = defaultResponse;
+				}
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
@@ -841,22 +858,16 @@ function frmFrontFormJS() {
 					return;
 				}
 
-				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-
-				if ( ! response.openInNewTab ) {
-					// We return here because we're redirecting there is no need to update content.
-					window.location = response.redirect;
-					return;
-				}
-
-				// We don't return here because we're opening in a new tab, the old tab will still update.
-				newTab = window.open( response.redirect, '_blank' );
-				if ( ! newTab && response.fallbackMsg && response.content ) {
-					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				if ( response.delay ) {
+					setTimeout( function() {
+						doRedirect( response );
+					}, 1000 * response.delay );
+				} else {
+					doRedirect( response );
 				}
 			}
 
-			if ( response.content !== '' ) {
+			if ( 'string' === typeof response.content && response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -1960,7 +1971,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )

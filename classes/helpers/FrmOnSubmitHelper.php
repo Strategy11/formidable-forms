@@ -83,39 +83,7 @@ class FrmOnSubmitHelper {
 	 * }
 	 */
 	public static function show_redirect_settings( $args ) {
-		$id_attr = $args['action_control']->get_field_id( 'success_url' );
-		?>
-		<div class="frm_form_field frm_has_shortcodes">
-			<label for="<?php echo esc_attr( $id_attr ); ?>"><?php esc_html_e( 'Redirect URL', 'formidable' ); ?></label>
-			<input
-				type="text"
-				id="<?php echo esc_attr( $id_attr ); ?>"
-				name="<?php echo esc_attr( $args['action_control']->get_field_name( 'success_url' ) ); ?>"
-				value="<?php echo esc_attr( $args['form_action']->post_content['success_url'] ); ?>"
-			/>
-		</div>
-
-		<?php
-		$id_attr   = $args['action_control']->get_field_id( 'open_in_new_tab' );
-		$name_attr = $args['action_control']->get_field_name( 'open_in_new_tab' );
-		?>
-		<div class="frm_form_field">
-			<?php
-			FrmHtmlHelper::toggle(
-				$id_attr,
-				$name_attr,
-				array(
-					'div_class' => 'with_frm_style frm_toggle',
-					'checked'   => ! empty( $args['form_action']->post_content['open_in_new_tab'] ),
-					'echo'      => true,
-				)
-			);
-			?>
-			<label for="<?php echo esc_attr( $id_attr ); ?>" <?php FrmAppHelper::maybe_add_tooltip( 'new_tab' ); ?>>
-				<?php esc_html_e( 'Open in new tab', 'formidable' ); ?>
-			</label>
-		</div>
-		<?php
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_redirect_settings.php';
 	}
 
 	/**
@@ -264,8 +232,11 @@ class FrmOnSubmitHelper {
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ]    = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
-				$form_options['open_in_new_tab'] = ! empty( $action->post_content['open_in_new_tab'] );
+				$form_options[ $opt . 'url' ]        = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options['open_in_new_tab']     = ! empty( $action->post_content['open_in_new_tab'] );
+				$form_options['redirect_delay']      = ! empty( $action->post_content['redirect_delay'] );
+				$form_options['redirect_delay_time'] = $action->post_content['redirect_delay_time'];
+				$form_options['redirect_delay_msg']  = $action->post_content['redirect_delay_msg'];
 				break;
 
 			case 'page':
@@ -421,10 +392,18 @@ class FrmOnSubmitHelper {
 	public static function get_fallback_action( $event = 'create' ) {
 		$action = new stdClass();
 
+		$default_msg = self::get_default_msg();
+		if ( current_user_can( 'frm_edit_forms' ) ) {
+			$default_msg .= '<br />';
+			$default_msg .= '<span style="font-weight: 600; font-style: italic;">';
+			$default_msg .= __( 'This is the fallback message. No confirmation actions that match your conditional logic, or they are invalid.', 'formidable' );
+			$default_msg .= '</span>';
+		}
+
 		$action->post_content = array(
 			'event'          => (array) $event,
 			'success_action' => 'message',
-			'success_msg'    => self::get_default_msg(),
+			'success_msg'    => $default_msg,
 		);
 
 		return $action;

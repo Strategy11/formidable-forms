@@ -6,8 +6,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 // Determine the support link based on lite vs pro.
 $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/support/plugin/formidable/' : 'https://formidableforms.com/new-topic/';
 
-// Determine the upgrade link based on lite vs pro.
-$upgrade_link = ! FrmAppHelper::pro_is_installed() ? 'https://formidableforms.com/lite-upgrade/' : 'https://formidableforms.com/account/downloads/';
+$upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
+if ( ! $upgrade_link ) {
+	// Determine the upgrade link based on lite vs pro.
+	$upgrade_link = ! FrmAppHelper::pro_is_installed() ? 'https://formidableforms.com/lite-upgrade/' : 'https://formidableforms.com/account/downloads/';
+}
 ?>
 
 <div class="frm-admin-footer-links frm_hidden">
@@ -26,8 +29,14 @@ $upgrade_link = ! FrmAppHelper::pro_is_installed() ? 'https://formidableforms.co
 		<span>/</span>
 		<a href="https://formidableforms.com/knowledgebase/" target="_blank"><?php esc_html_e( 'Docs', 'formidable' ); ?></a>
 		<?php if ( 'elite' !== FrmAddonsController::license_type() ) : ?>
+			<?php
+			$cta_text = FrmSalesApi::get_best_sale_value( 'footer_cta_text' );
+			if ( ! $cta_text ) {
+				$cta_text = __( 'Upgrade', 'formidable' );
+			}
+			?>
 			<span>/</span>
-			<a href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank"><?php esc_html_e( 'Upgrade', 'formidable' ); ?></a>
+			<a href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank"><?php echo esc_html( $cta_text ); ?></a>
 		<?php endif; ?>
 	</div><!-- .frm-admin-footer-links-nav -->
 

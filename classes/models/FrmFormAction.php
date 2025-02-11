@@ -583,7 +583,7 @@ class FrmFormAction {
 	 * Get the limit for the number of actions for a single form. By default, this is 99, but
 	 * it can be modified with a code snippet.
 	 *
-	 * @since x.x This logic from moved from FrmFormAction::get_action_for_form.
+	 * @since 6.17 This logic from moved from FrmFormAction::get_action_for_form.
 	 *
 	 * @param int|string $form_id
 	 * @param int|string $limit   The unfiltered limit value.

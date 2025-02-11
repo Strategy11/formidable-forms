@@ -866,4 +866,32 @@ class FrmEntriesHelper {
 
 		return $existing_entry_statuses;
 	}
+
+	/**
+	 * @since 6.17
+	 *
+	 * @return int
+	 */
+	public static function get_visible_unread_inbox_count() {
+		$menu_name = FrmAppHelper::get_menu_name();
+		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+			return 0;
+		}
+
+		$inbox       = new FrmInbox();
+		$inbox_count = count( $inbox->unread() );
+
+		if ( ! $inbox_count ) {
+			return 0;
+		}
+
+		if ( is_callable( 'FrmProSettingsController::inbox_badge' ) ) {
+			$inbox_count = FrmProSettingsController::inbox_badge( $inbox_count );
+			if ( ! $inbox_count ) {
+				return 0;
+			}
+		}
+
+		return $inbox_count;
+	}
 }
