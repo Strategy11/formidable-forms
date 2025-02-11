@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Formidable
- * @since x.x
+ * @since 6.18
  *
  * @var array        $field Field data.
  * @var array        $args  Includes 'field', 'display', and 'values' settings.
@@ -31,7 +31,7 @@ $field_id = $field['id'];
 		/**
 		 * Includes the formatted options view file.
 		 *
-		 * @since x.x
+		 * @since 6.18
 		 *
 		 * @param string $options_view_path The path to the options view file.
 		 */
@@ -44,7 +44,7 @@ $field_id = $field['id'];
 /**
  * Fires after the format dropdown template is rendered.
  *
- * @since x.x
+ * @since 6.18
  *
  * @param array $field The field array.
  */

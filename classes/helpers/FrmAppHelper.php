@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.17.1';
+	public static $plug_version = '6.18';
 
 	/**
 	 * @var bool
@@ -873,7 +873,7 @@ class FrmAppHelper {
 	/**
 	 * Sanitizes and echoes a given value.
 	 *
-	 * @since x.x
+	 * @since 6.18
 	 *
 	 * @param string       $value   The value to sanitize and output.
 	 * @param array|string $allowed Allowed HTML tags and attributes.

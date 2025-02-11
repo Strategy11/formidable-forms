@@ -1,7 +1,7 @@
 <?php
 /**
  * @package Formidable
- * @since x.x
+ * @since 6.18
  *
  * @var array        $field Field data.
  * @var array        $args  Includes 'field', 'display', and 'values' settings.

@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Fires after the form description field.
  *
- * @since x.x
+ * @since 6.18
  *
  * @param array $values The form values.
  */
