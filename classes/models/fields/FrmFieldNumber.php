@@ -94,7 +94,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @return void
 	 */
-	private function validate_step( &$errors, $args ) {
+	protected function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
 			// Don't need to check if value is invalid before.
 			return;
