@@ -2205,7 +2205,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Sets the layout classes for a field that is duplicated copying it from the original field.
+	 * Sets the layout classes for a duplicated field in a field group from the layout classes of the original field.
 	 *
 	 * @param {HTMLElement} field    The original field.
 	 * @param {HTMLElement} newField The duplicated field.
