@@ -2143,7 +2143,7 @@ function frmAdminBuildJS() {
 		if ( null !== newRowId ) {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
 		}
-	
+
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
@@ -2158,7 +2158,7 @@ function frmAdminBuildJS() {
 				let newRow;
 
 				let replaceWith;
-				
+
 				if ( null !== newRowId ) {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
