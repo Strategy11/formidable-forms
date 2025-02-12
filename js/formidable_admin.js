@@ -2124,7 +2124,7 @@ function frmAdminBuildJS() {
 	}
 
 	function duplicateField() {
-		let $field, fieldId, children, newRowId, fieldOrder, fieldClasses;
+		let $field, fieldId, children, newRowId, fieldOrder;
 		const maxFieldsInGroup = 6;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
@@ -2152,8 +2152,7 @@ function frmAdminBuildJS() {
 				field_id: fieldId,
 				form_id: thisFormId,
 				children: children,
-				nonce: frmGlobal.nonce,
-				field_classes : fieldClasses
+				nonce: frmGlobal.nonce
 			},
 			success: function( msg ) {
 				let newRow;
