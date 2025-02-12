@@ -2176,7 +2176,7 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
-						setLayoutClassesForFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
+						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -2198,7 +2198,7 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
-				setLayoutClassesForFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
+				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 			}
 		});
 		return false;
@@ -2212,7 +2212,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @returns {void}
 	 */
-	function setLayoutClassesForFieldInGroup( field, newField ) {
+	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
 		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
 			return;
