@@ -2177,7 +2177,7 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
-						setLayoutClassesForField( $field.get( 0 ), replaceWith.get( 0 ) );
+						setLayoutClassesForFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -2199,19 +2199,31 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
-				setLayoutClassesForField( $field.get( 0 ), replaceWith.get( 0 ) );
+				setLayoutClassesForFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 			}
 		});
 		return false;
 	}
 
-	function setLayoutClassesForField( field, newField ) {
+	/**
+	 * Sets the layout classes for a field that is duplicated copying it from the original field.
+	 *
+	 * @param {HTMLElement} field    The original field.
+	 * @param {HTMLElement} newField The duplicated field.
+	 *
+	 * @returns {void}
+	 */
+	function setLayoutClassesForFieldInGroup( field, newField ) {
 		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
 		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
 			return;
 		}
-		const fieldId = field.dataset.fid;
-		const fieldClasses = document.getElementById( 'frm_classes_' + fieldId ).value;
+		const fieldId    = field.dataset.fid;
+		let fieldClasses = document.getElementById( 'frm_classes_' + fieldId )?.value;
+		if ( ! fieldClasses ) {
+			return;
+		}
+		fieldClasses = fieldClasses.replace( 'frm_first', '' );
 		if ( ! newField.className.includes( fieldClasses ) ) {
 			newField.className += ' ' + fieldClasses;
 			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
