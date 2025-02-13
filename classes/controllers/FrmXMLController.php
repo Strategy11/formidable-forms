@@ -118,7 +118,7 @@ class FrmXMLController {
 		}//end if
 
 		/**
-		 * @since x.x Added `url` to the $args.
+		 * @since 6.18 Added `url` to the $args.
 		 */
 		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported', 'url' ) );
 
