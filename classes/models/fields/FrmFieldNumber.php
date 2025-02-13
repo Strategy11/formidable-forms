@@ -65,22 +65,21 @@ class FrmFieldNumber extends FrmFieldType {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 
-		// validate number settings
-		if ( $args['value'] != '' ) {
-			// only check if options are available in settings
-			$minnum = FrmField::get_option( $this->field, 'minnum' );
-			$maxnum = FrmField::get_option( $this->field, 'maxnum' );
-			if ( $maxnum !== '' && $minnum !== '' ) {
-				$value = (float) $args['value'];
-				if ( $value < $minnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
-				} elseif ( $value > $maxnum ) {
-					$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
-				}
-			}
-
-			$this->validate_step( $errors, $args );
+		if ( $args['value'] === '' ) {
+			return $errors;
 		}
+
+		$value  = (float) $args['value'];
+		$minnum = FrmField::get_option( $this->field, 'minnum' );
+		$maxnum = FrmField::get_option( $this->field, 'maxnum' );
+
+		if ( $minnum !== '' && $value < $minnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a higher number', 'formidable' );
+		} elseif ( $maxnum !== '' && $value > $maxnum ) {
+			$errors[ 'field' . $args['id'] ] = __( 'Please select a lower number', 'formidable' );
+		}
+
+		$this->validate_step( $errors, $args );
 
 		return $errors;
 	}
@@ -95,7 +94,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @return void
 	 */
-	private function validate_step( &$errors, $args ) {
+	protected function validate_step( &$errors, $args ) {
 		if ( isset( $errors[ 'field' . $args['id'] ] ) ) {
 			// Don't need to check if value is invalid before.
 			return;
@@ -114,8 +113,8 @@ class FrmFieldNumber extends FrmFieldType {
 		$errors[ 'field' . $args['id'] ] = sprintf(
 			// Translators: %1$s: the first nearest value; %2$s: the second nearest value.
 			__( 'Please enter a valid value. Two nearest valid values are %1$s and %2$s', 'formidable' ),
-			floatval( $result[0] ),
-			floatval( $result[1] )
+			is_numeric( $result[0] ) ? floatval( $result[0] ) : $result[0],
+			is_numeric( $result[1] ) ? floatval( $result[1] ) : $result[1]
 		);
 	}
 
@@ -128,7 +127,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @param numeric $step  The step.
 	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
-	private function check_value_is_valid_with_step( $value, $step ) {
+	protected function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.
 		$decimals = max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
 

@@ -9,6 +9,10 @@
 		if ( 'INPUT' === e.target.nodeName && 'checkbox' === e.target.type && e.target.parentNode.classList.contains( 'frm_toggle_block' ) ) {
 			handleToggleChangeEvent( e );
 		}
+
+		if ( 'frm_currency' === e.target.id) {
+			syncCurrencyOptions( e.target );
+		}
 	}
 
 	function handleKeyDownEvent( e ) {
@@ -21,6 +25,19 @@
 
 	function handleToggleChangeEvent( e ) {
 		e.target.nextElementSibling.setAttribute( 'aria-checked', e.target.checked ? 'true' : 'false' );
+	}
+
+	/**
+	 * Updates the currency formatting options based on the selected currency.
+	 *
+	 * @param {HTMLSelectElement} currencySelect The currency select element.
+	 */
+	function syncCurrencyOptions( currencySelect ) {
+		const currency = frmSettings.currencies[ currencySelect.value ];
+
+		document.getElementById( 'frm_thousand_separator' ).setAttribute( 'value', currency.thousand_separator );
+		document.getElementById( 'frm_decimal_separator' ).setAttribute( 'value', currency.decimal_separator );
+		document.getElementById( 'frm_decimals' ).setAttribute( 'value', currency.decimals );
 	}
 
 	function handleSpaceDownEvent( e ) {
