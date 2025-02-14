@@ -147,7 +147,7 @@ class FrmEntryValidate {
 		}
 
 		if ( ! is_array( $value ) ) {
-			$value = trim( $value );
+			$value = FrmAppHelper::trim_if_not_blank( $value );
 		}
 
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
