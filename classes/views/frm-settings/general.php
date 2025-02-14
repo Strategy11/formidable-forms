@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php do_action( 'frm_before_settings' ); ?>
 </div>
 
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Defaults', 'formidable' ); ?></h3>
 
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
@@ -49,6 +49,8 @@ unset( $more_html );
 
 <div class="clear"></div>
 
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+
 <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 	<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ); ?>"/>
 	<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ); ?>"/>
@@ -74,3 +76,13 @@ if ( $frm_settings->no_ips ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
+
+<?php
+/**
+ * Trigger an action so Pro can display additional General settings in the Other section.
+ *
+ * @since 6.18
+ *
+ * @param FrmSettings $frm_settings
+ */
+do_action( 'frm_other_settings_form', $frm_settings );
