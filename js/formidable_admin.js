@@ -2101,19 +2101,44 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns true if a field can be duplicated.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field
+	 * @param {number}      maxFieldsInGroup
+	 *
+	 * @returns {Boolean}
+	 */
+	function canDuplicateField( field, maxFieldsInGroup ) {
+		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+		const fieldGroup = field.closest( 'li.frm_field_box:not(.form-field)' );
+		if ( ! fieldGroup ) {
+			return true;
+		}
+		const fieldsInGroup = getFieldsInRow( jQuery( fieldGroup.querySelector( 'ul' ) ) ).length;
+		return fieldsInGroup < maxFieldsInGroup;
+	}
+
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
+		const maxFieldsInGroup = 6;
 
-		$field = jQuery( this ).closest( 'li.form-field' );
+		$field   = jQuery( this ).closest( 'li.form-field' );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
 
-		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
-			return false;
+		if ( ! ( newRowId && newRowId.startsWith( 'frm_field_group_' ) ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
+			/* translators: %1$d: Maximum number of fields allowed in a field group. */
+			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
+			return;
 		}
 
 		closeOpenFieldDropdowns();
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
-		newRowId = this.getAttribute( 'frm-target-row-id' );
 
 		if ( null !== newRowId ) {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
@@ -2151,6 +2176,7 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
+						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -2172,9 +2198,35 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
+				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 			}
 		});
 		return false;
+	}
+
+	/**
+	 * Sets the layout classes for a duplicated field in a field group from the layout classes of the original field.
+	 *
+	 * @param {HTMLElement} field    The original field.
+	 * @param {HTMLElement} newField The duplicated field.
+	 *
+	 * @returns {void}
+	 */
+	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
+		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
+		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
+			return;
+		}
+		const fieldId    = field.dataset.fid;
+		let fieldClasses = document.getElementById( 'frm_classes_' + fieldId )?.value;
+		if ( ! fieldClasses ) {
+			return;
+		}
+		fieldClasses = fieldClasses.replace( 'frm_first', '' );
+		if ( ! newField.className.includes( fieldClasses ) ) {
+			newField.className += ' ' + fieldClasses;
+			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
+		}
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
