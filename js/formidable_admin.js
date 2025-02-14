@@ -2127,9 +2127,10 @@ function frmAdminBuildJS() {
 		let $field, fieldId, children, newRowId, fieldOrder;
 		const maxFieldsInGroup = 6;
 
-		$field = jQuery( this ).closest( 'li.form-field' );
+		$field   = jQuery( this ).closest( 'li.form-field' );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
 
-		if ( ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
+		if ( ! ( newRowId && newRowId.startsWith( 'frm_field_group_' ) ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
 			/* translators: %1$d: Maximum number of fields allowed in a field group. */
 			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
 			return;
@@ -2138,7 +2139,6 @@ function frmAdminBuildJS() {
 		closeOpenFieldDropdowns();
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
-		newRowId = this.getAttribute( 'frm-target-row-id' );
 
 		if ( null !== newRowId ) {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
