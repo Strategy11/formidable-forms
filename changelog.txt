@@ -1,4 +1,29 @@
 == Changelog ==
+= 6.18 =
+* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
+* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
+* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
+* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
+* Fix: Some style setting values would result in invalid undefined or NaN values.
+* Text will no longer be selected when multi-selecting fields while holding the shift key.
+* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
+* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
+
+= 6.17.1 =
+* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+
+= 6.17 =
+* New: New redirect delay duration and delay message settings have been added to confirmation actions.
+* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
+* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
+* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
+* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
+* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
+* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
+* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
+* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
+* The global JS function frmFrontForm.escapeHtml has been deprecated.
+
 = 6.16.3 =
 * New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
 * New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.

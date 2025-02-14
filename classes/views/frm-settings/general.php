@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php do_action( 'frm_before_settings' ); ?>
 </div>
 
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+<h3><?php esc_html_e( 'Defaults', 'formidable' ); ?></h3>
 
 <p class="frm_grid_container">
 	<label class="frm4 frm_form_field" for="frm_default_email">
@@ -49,6 +49,8 @@ unset( $more_html );
 
 <div class="clear"></div>
 
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+
 <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 	<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ); ?>"/>
 	<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ); ?>"/>
@@ -75,9 +77,12 @@ if ( $frm_settings->no_ips ) {
 	</label>
 </p>
 
-<p>
-	<label>
-		<input type="checkbox" name="frm_admin_bar" id="frm_admin_bar" value="1" <?php checked( $frm_settings->admin_bar, 1 ); ?> />
-		<?php esc_html_e( 'Do not include Formidable in the admin bar.', 'formidable' ); ?>
-	</label>
-</p>
+<?php
+/**
+ * Trigger an action so Pro can display additional General settings in the Other section.
+ *
+ * @since 6.18
+ *
+ * @param FrmSettings $frm_settings
+ */
+do_action( 'frm_other_settings_form', $frm_settings );

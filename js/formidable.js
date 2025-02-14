@@ -842,13 +842,14 @@ function frmFrontFormJS() {
 
 			if ( response === null ) {
 				response = defaultResponse;
-			}
-
-			response = response.replace( /^\s+|\s+$/g, '' );
-			if ( response.indexOf( '{' ) === 0 ) {
-				response = JSON.parse( response );
 			} else {
-				response = defaultResponse;
+				// Response is a string. Convert it to an object.
+				response = response.replace( /^\s+|\s+$/g, '' );
+				if ( response.indexOf( '{' ) === 0 ) {
+					response = JSON.parse( response );
+				} else {
+					response = defaultResponse;
+				}
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
@@ -866,7 +867,7 @@ function frmFrontFormJS() {
 				}
 			}
 
-			if ( response.content !== '' ) {
+			if ( 'string' === typeof response.content && response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -1970,7 +1971,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )

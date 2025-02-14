@@ -13,7 +13,7 @@ describe("Forms page", () => {
     it("should validate all data in list view", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
-        cy.get('.frm-upgrade-bar > a')
+        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a')
             .should('have.text', 'upgrading to PRO').click();
         cy.origin('https://formidableforms.com', () => { 
             cy.get('h1').then(($h1) => {

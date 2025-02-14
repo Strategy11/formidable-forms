@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmEntryValidate {
 
 	/**
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @var array|null
 	 */
@@ -228,8 +228,9 @@ class FrmEntryValidate {
 	}
 
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
-		if ( $field->type === 'phone' || ( $field->type === 'text' && FrmField::is_option_true_in_object( $field, 'format' ) ) ) {
+		$format_value = FrmField::get_option( $field, 'format' );
 
+		if ( $field->type === 'phone' || ( $field->type === 'text' && $format_value && ! FrmCurrencyHelper::is_currency_format( $format_value ) ) ) {
 			$pattern = self::phone_format( $field );
 
 			if ( ! preg_match( $pattern, $value ) ) {
@@ -653,7 +654,7 @@ class FrmEntryValidate {
 	/**
 	 * Returns fields that have 'Name' and 'Last' as their name.
 	 *
-	 * @since x.x
+	 * @since 6.17
 	 *
 	 * @param int $form_id
 	 * @return array
