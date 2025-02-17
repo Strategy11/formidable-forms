@@ -477,6 +477,7 @@
 		<InaccessibleProperty>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmFieldsController.php" />
+			</errorLevel>
 		</InaccessibleProperty>
 	</issueHandlers>
 </psalm>
