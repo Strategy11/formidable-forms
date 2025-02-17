@@ -39,6 +39,21 @@ class FrmCurrencyHelper {
 	}
 
 	/**
+	 * Replaces the given custom decimal character in a number string with '.'.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $number        The number string that may contain a custom decimal character.
+	 * @param string $decimal_char  The custom decimal character to be replaced.
+	 * @return string
+	 */
+	public static function replace_custom_decimal_char( $number, $decimal_char ) {
+		return '' === $number || '' === $decimal_char || '.' === $decimal_char
+			? $number
+			: str_replace( $decimal_char, '.', $number );
+	}
+
+	/**
 	 * Get a list of all supported currencies.
 	 *
 	 * @since 6.5.
