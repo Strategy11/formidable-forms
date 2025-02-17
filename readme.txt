@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7.1
 Requires PHP: 7.0
-Stable tag: 6.17.1
+Stable tag: 6.18
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -371,6 +371,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.18 =
+* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
+* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
+* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
+* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
+* Fix: Some style setting values would result in invalid undefined or NaN values.
+* Text will no longer be selected when multi-selecting fields while holding the shift key.
+* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
+* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
+
 = 6.17.1 =
 * Fix: The payments table admin page would appear empty when there were unread inbox notices.
 
@@ -385,26 +395,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
 * Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
 * The global JS function frmFrontForm.escapeHtml has been deprecated.
-
-= 6.16.3 =
-* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
-* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
-* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
-* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
-* Fix: An unsupported operand types: array + string fatal error has been fixed.
-* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
-* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
-* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
-* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
-* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
-* The section for form button settings has been removed as all of the settings had been moved.
-* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
-* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
-* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
-
-= 6.16.2 =
-* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
-* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.17.1';
+	public static $plug_version = '6.18';
 
 	/**
 	 * @var bool
@@ -871,6 +871,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * The regular kses function strips [button_action] from submit button HTML.
 	 *
 	 * @since 5.0.13
@@ -1088,6 +1101,11 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'class'    => true,
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}
@@ -1369,6 +1387,7 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
+			<div class="frm-upgrade-bar-inner">
 				<?php
 				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 				if ( ! $cta_text ) {
@@ -1393,6 +1412,7 @@ class FrmAppHelper {
 					'</a>'
 				);
 				?>
+			</div>
 		</div>
 		<?php
 	}
