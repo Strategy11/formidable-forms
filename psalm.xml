@@ -461,5 +461,16 @@
 				<directory name="classes" />
 			</errorLevel>
 		</MissingClassConstType>
+		<ClassMustBeFinal>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</ClassMustBeFinal>
+		<MissingOverrideAttribute>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+			</errorLevel>
+		</MissingOverrideAttribute>
 	</issueHandlers>
 </psalm>
