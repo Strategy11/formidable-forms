@@ -20,12 +20,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		FrmAppHelper::maybe_autocomplete_options(
 			array(
-				'source' => $source,
-				'selected' => 1,
+				'source'         => $source,
+				'selected'       => 1,
 				'dropdown_limit' => 30,
 			)
 		);
-	}
+	}//end if
+
 	FrmAppHelper::get_admin_header(
 		array(
 			'label' => __( 'Views', 'formidable' ),

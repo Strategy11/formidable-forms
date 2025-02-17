@@ -1701,7 +1701,7 @@ class FrmAppHelper {
 			</select>
 			<?php
 		} else {
-			$options = array();
+			$options            = array();
 			$autocomplete_value = '';
 			foreach ( $args['source'] as $key => $source ) {
 				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
@@ -1723,7 +1723,7 @@ class FrmAppHelper {
 				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
 			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
 			<?php
-		} //end if
+		}//end if
 	}
 
 	/**
