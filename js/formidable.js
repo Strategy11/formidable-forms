@@ -1285,7 +1285,7 @@ function frmFrontFormJS() {
 		document.addEventListener( 'keydown', handleKeyUp );
 
 		function handleKeyUp( event ) {
-			if ( 'undefined' !== typeof event.key && 'Tab' === event.key ) {
+			if ( 'Tab' === event.key ) {
 				makeHoneypotFieldsUntabbable();
 				document.removeEventListener( 'keydown', handleKeyUp );
 			}
