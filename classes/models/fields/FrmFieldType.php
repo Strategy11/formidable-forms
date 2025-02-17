@@ -1116,14 +1116,12 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_min_max( $args, &$input_html ) {
-		$decimal_separator = FrmField::get_option( $this->field, 'custom_decimal_separator' );
-
-		$min = FrmCurrencyHelper::replace_custom_decimal_char( FrmField::get_option( $this->field, 'minnum' ), $decimal_separator );
+		$min = FrmField::get_option( $this->field, 'minnum' );
 		if ( ! is_numeric( $min ) ) {
 			$min = 0;
 		}
 
-		$max = FrmCurrencyHelper::replace_custom_decimal_char( FrmField::get_option( $this->field, 'maxnum' ), $decimal_separator );
+		$max = FrmField::get_option( $this->field, 'maxnum' );
 		if ( ! is_numeric( $max ) ) {
 			$max = 9999999;
 		}
