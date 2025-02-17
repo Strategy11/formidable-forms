@@ -1667,7 +1667,7 @@ class FrmAppHelper {
 			'name'                     => '',
 			'id'                       => '',
 			'selected'                 => '',
-			'source' 				   => array(),
+			'source'                   => array(),
 			'dropdown_limit'           => 50,
 			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
 			'value_key'                => 'value',
@@ -1713,7 +1713,7 @@ class FrmAppHelper {
 				$options[] = $value_label;
 			}
 
-			$html_attrs['type'] = 'hidden';
+			$html_attrs['type']  = 'hidden';
 			$html_attrs['class'] = 'frm_autocomplete_value_input';
 			$html_attrs['value'] = $args['selected'];
 			?>
@@ -1723,7 +1723,7 @@ class FrmAppHelper {
 				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
 			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
 			<?php
-		}
+		} //end if
 	}
 
 	/**
