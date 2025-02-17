@@ -474,5 +474,9 @@
 				<directory name="stripe" />
 			</errorLevel>
 		</MissingOverrideAttribute>
+		<InaccessibleProperty>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFieldsController.php" />
+		</InaccessibleProperty>
 	</issueHandlers>
 </psalm>
