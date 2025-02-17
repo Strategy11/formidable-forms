@@ -1874,8 +1874,8 @@ class FrmFormsController {
 	 */
 	public static function include_device_too_small_message() {
 		?>
-		<div class="frm_small_device_message_container">
-			<div class="frm_small_device_message">
+		<div id="frm_small_device_message_container">
+			<div id="frm_small_device_message">
 				<svg width="32" height="49" viewBox="0 0 32 49" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<rect x="1" y="1" width="30" height="47" rx="3" fill="#F5FAFF" stroke="#4199FD" stroke-width="2"/>
 					<rect x="12" y="5" width="8" height="2" rx="1" fill="#C0DDFE"/>

@@ -2662,7 +2662,7 @@ h2.frm-h2 + .howto {
 	margin-top: 0;
 }
 
-.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert):not(.frm_small_device_message_container),
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
 #wpbody-content > .updated,
 #wpbody-content > #update-nag,
 #wpbody-content > .update-nag,
@@ -8620,10 +8620,6 @@ span.clear {
 	display: block;
 }
 
-.frm_small_device_message_container {
-	display: none;
-}
-
 /* End hide from IE-mac */
 
 /*-----------------------------------------------------------------
@@ -9057,7 +9053,8 @@ Responsive Design
 	#frm-nav-tabs a {
 		margin-right: 0;
 	}
-	.frm_small_device_message_container {
+
+	.frm-admin-page-formidableedit #wpbody-content #frm_small_device_message_container {
 		display: flex;
 		flex-direction: column;
 		align-items: center;
@@ -9070,7 +9067,7 @@ Responsive Design
 		background: var(--primary-500);
 	}
 
-	.frm_small_device_message {
+	#frm_small_device_message {
 		text-align: center;
 		display: flex;
 		flex-direction: column;
@@ -9082,7 +9079,7 @@ Responsive Design
 		border-radius: var(--medium-radius);
 	}
 
-	.frm_small_device_message::before {
+	#frm_small_device_message::before {
 		content: '';
 		position: absolute;
 		top: 50%;
@@ -9096,7 +9093,7 @@ Responsive Design
 		opacity: 0.3;
 	}
 
-	.frm_small_device_message > svg {
+	#frm_small_device_message > svg {
 		padding-bottom: 1rem;
 	}
 }
