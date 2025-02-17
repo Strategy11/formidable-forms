@@ -57,18 +57,18 @@ class FrmTipsHelper {
 
 		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
 		?>
-		<span class="frm_pro_tip">
-			<?php FrmAppHelper::icon_by_class( 'frmfont frm_lightning', array( 'aria-hidden' => 'true' ) ); ?>
+		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip frm-gradient">
+			<span class="frm-tip-badge"><?php esc_html_e( 'PRO TIP', 'formidable' ); ?></span>
 
 			<?php if ( isset( $tip['call'] ) ) { ?>
 				<span class="frm-tip-info">
 					<?php echo esc_html( $tip['tip'] ); ?>
 				</span>
 			<?php } ?>
-			<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm-tip-cta">
+			<span class="frm-tip-cta">
 				<?php echo esc_html( $tip['call'] ? $tip['call'] : $tip['tip'] ); ?>
-			</a>
-		</span>
+			</span>
+		</a>
 		<?php
 
 		if ( 'p' === $html ) {

@@ -128,12 +128,14 @@
 	margin-top: var(--gap-xs);
 }
 
-#frm_view_application_modal .frm_warning_style {
-	border: none aliceblue;
-	margin-top: 0;
-	padding: 20px;
-	border-radius: 0;
+#frm_view_application_modal .frm_note_style2 {
+	margin-right: var(--gap-md);
+	margin-left: var(--gap-md);
+	padding: 10px;
+	border-radius: 8px;
 	display: flex;
+	justify-content: space-between;
+	align-items: center;
 }
 
 #frm_view_application_modal .frm_warning_style span {
@@ -156,7 +158,7 @@
 }
 
 .frm-application-modal-details {
-	padding: 25px 30px;
+	padding: 25px var(--gap-md);
 }
 
 .frm-admin-page-applications .ui-widget-overlay {
@@ -173,7 +175,7 @@
 
 #frm_view_application_modal .frm-application-image-wrapper {
 	background-color: #F6F7FB;
-	padding: 20px 30px 15px;
+	padding: 20px var(--gap-md) 15px;
 }
 
 #frm_view_application_modal img {
@@ -230,19 +232,45 @@
 	margin-right: 0;
 }
 
-#frm_custom_applications_placeholder > div:first-child {
-	position: absolute;
-}
-
-#frm_custom_applications_placeholder > div:last-child {
-	text-align: center;
-	max-width: 500px;
-	margin: var(--gap-md) auto;
+#frm_custom_applications_placeholder {
+	border-radius: 16px;
+	overflow: hidden;
 	position: relative;
+	margin-top: 40px;
+	margin-bottom: 25px;
+	background-color: #fff;
+	padding: 11px 8px;
 }
 
-#frm_custom_applications_placeholder > div a {
+#frm_custom_applications_placeholder:before {
+	content: '';
+	display: block;
+	background: linear-gradient(90deg, #1961D5 0.76%, #E8ABEF 100%);
+	height: 4px;
+	margin: auto;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+#frm_custom_applications_placeholder img {
+	margin-right: 5px;
+	float: left;
+}
+
+#frm_custom_applications_placeholder div a {
 	margin-top: var(--gap-md);
+}
+
+#frm_custom_applications_placeholder .frm2 {
+	text-align: right;
+	padding-right: 24px;
+}
+
+#frm_custom_applications_placeholder h3 {
+	font-weight: 700;
+	margin-bottom: 4px;
 }
 
 .frm-application-modal-label ~ .frm-application-modal-label {

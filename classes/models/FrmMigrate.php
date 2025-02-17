@@ -171,6 +171,7 @@ class FrmMigrate {
 	 *
 	 * @since 6.6
 	 * @since 6.16.3 idx_form_id_is_draft was also added to frm_items.
+	 * @since 6.17 idx_form_id_type was also added to frm_fields.
 	 *
 	 * @return void
 	 */
@@ -196,6 +197,13 @@ class FrmMigrate {
 
 		if ( ! self::index_exists( $table_name, $index_name ) ) {
 			$wpdb->query( "CREATE INDEX idx_form_id_is_draft ON `{$wpdb->prefix}frm_items` (form_id, is_draft)" );
+		}
+
+		$table_name = "{$wpdb->prefix}frm_fields";
+		$index_name = 'idx_form_id_type';
+
+		if ( ! self::index_exists( $table_name, $index_name ) ) {
+			$wpdb->query( "CREATE INDEX idx_form_id_type ON `{$wpdb->prefix}frm_fields` (form_id, type(30))" );
 		}
 	}
 

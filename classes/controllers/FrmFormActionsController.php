@@ -316,6 +316,8 @@ class FrmFormActionsController {
 			$action_map[ $control->id_base ] = $key;
 		}
 
+		self::maybe_show_limit_warning( $form->id, $form_actions );
+
 		foreach ( $form_actions as $action ) {
 			if ( ! isset( $action_map[ $action->post_excerpt ] ) ) {
 				// don't try and show settings if action no longer exists
@@ -324,6 +326,40 @@ class FrmFormActionsController {
 
 			self::action_control( $action, $form, $action->ID, $action_controls[ $action_map[ $action->post_excerpt ] ], $values );
 		}
+	}
+
+	/**
+	 * Show a warning before the form actions list if there are 99 actions, and the limit is set to 99.
+	 * If it is filtered, the warning is still shown when applicable, just using the new limit.
+	 *
+	 * @since 6.17
+	 *
+	 * @param int|string $form_id
+	 * @param array      $form_actions
+	 * @return void
+	 */
+	private static function maybe_show_limit_warning( $form_id, $form_actions ) {
+		$count = count( $form_actions );
+		if ( $count < 99 ) {
+			return;
+		}
+
+		$limit = FrmFormAction::get_action_limit( $form_id );
+		if ( $limit < 99 || $count < $limit ) {
+			return;
+		}
+
+		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
+
+		echo '<div class="frm_warning_style">';
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
+		echo '&nbsp;';
+		printf(
+			// translators: %s: URL to documentation
+			esc_html__( 'You have reached your form action limit. To increase this limit, you will require additional code. Visit our documentation at %s.', 'formidable' ),
+			'<a href="' . esc_url( $documentation_url ) . '" target="_blank">' . esc_html( $documentation_url ) . '</a>'
+		);
+		echo '</div>';
 	}
 
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {

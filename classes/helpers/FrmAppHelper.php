@@ -4,21 +4,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmAppHelper {
+
 	/**
 	 * Version of the database we are moving to.
 	 *
 	 * @var int
 	 */
-	public static $db_version = 102;
+	public static $db_version = 103;
 
 	/**
-	 * Deprecated.
+	 * Used by the API add-on.
 	 *
-	 * @var int
-	 */
-	public static $pro_db_version = 37;
-
-	/**
 	 * @var float
 	 */
 	public static $font_version = 7;
@@ -33,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.16.3';
+	public static $plug_version = '6.18';
 
 	/**
 	 * @var bool
@@ -875,6 +871,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * The regular kses function strips [button_action] from submit button HTML.
 	 *
 	 * @since 5.0.13
@@ -1092,6 +1101,11 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'class'    => true,
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}
@@ -1373,20 +1387,32 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
+			<div class="frm-upgrade-bar-inner">
 				<?php
-				$upgrade_link = self::admin_upgrade_link(
-					array(
-						'medium'  => 'settings-license',
-						'content' => 'lite-banner',
-					)
-				);
+				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
+				if ( ! $cta_text ) {
+					$cta_text = __( 'upgrading to PRO', 'formidable' );
+				}
+
+				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
+				if ( ! $upgrade_link ) {
+					$upgrade_link = self::admin_upgrade_link(
+						array(
+							'medium'  => 'settings-license',
+							'content' => 'lite-banner',
+						)
+					);
+				}
+
 				printf(
-					/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$supgrading to PRO%2$s.', 'formidable' ),
+					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
+					esc_html__( 'You\'re using Formidable Forms Lite. To unlock more features consider %1$s%2$s%3$s.', 'formidable' ),
 					'<a href="' . esc_url( $upgrade_link ) . '">',
+					esc_html( $cta_text ),
 					'</a>'
 				);
 				?>
+			</div>
 		</div>
 		<?php
 	}

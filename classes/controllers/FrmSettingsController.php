@@ -207,9 +207,8 @@ class FrmSettingsController {
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
-		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
-			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
-			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
+		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
+			FrmProSettingsController::add_currency_settings();
 			return;
 		}
 
@@ -330,28 +329,9 @@ class FrmSettingsController {
 	 * @since 3.04.02
 	 */
 	public static function settings_cta( $view ) {
-
 		if ( get_option( 'frm_lite_settings_upgrade', false ) ) {
 			return;
 		}
-
-		$features = array(
-			__( 'Extra form features like file uploads, pagination, etc', 'formidable' ),
-			__( 'Repeaters & cascading fields for advanced forms', 'formidable' ),
-			__( 'Flexibly view, search, edit, and delete entries anywhere', 'formidable' ),
-			__( 'Display entries with virtually limitless Formidable views', 'formidable' ),
-			__( 'Create surveys & polls', 'formidable' ),
-			__( 'WordPress user registration and login forms', 'formidable' ),
-			__( 'Create Stripe, PayPal or Authorize.net payment forms', 'formidable' ),
-			__( 'Powerful conditional logic for smart forms', 'formidable' ),
-			__( 'Integrations with 1000+ marketing & payment services', 'formidable' ),
-			__( 'Collect digital signatures', 'formidable' ),
-			__( 'Accept user-submitted content with Post submissions', 'formidable' ),
-			__( 'Email routing', 'formidable' ),
-			__( 'Create calculator forms', 'formidable' ),
-			__( 'Save draft entries and return later', 'formidable' ),
-			__( 'Analyze form data with graphs & stats', 'formidable' ),
-		);
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/settings_cta.php';
 	}

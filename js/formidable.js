@@ -293,12 +293,20 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Validate a field with JS.
+	 *
+	 * @param {HTMLElement} field
+	 *
+	 * @return {void}
+	 */
 	function validateField( field ) {
-		let key,
-			errors = [],
-			$fieldCont = jQuery( field ).closest( '.frm_form_field' );
+		let errors, key;
 
-		if ( $fieldCont.hasClass( 'frm_required_field' ) && ! jQuery( field ).hasClass( 'frm_optional' ) ) {
+		errors               = [];
+		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
 
@@ -306,6 +314,7 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
+		const $fieldCont = jQuery( fieldContainer );
 		removeFieldError( $fieldCont );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
@@ -805,9 +814,25 @@ function frmFrontFormJS() {
 		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
+		const doRedirect = response => {
+			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
+
+			if ( ! response.openInNewTab ) {
+				// We return here because we're redirecting there is no need to update content.
+				window.location = response.redirect;
+				return;
+			}
+
+			// We don't return here because we're opening in a new tab, the old tab will still update.
+			const newTab = window.open( response.redirect, '_blank' );
+			if ( ! newTab && response.fallbackMsg && response.content ) {
+				response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+			}
+		};
+
 		success = function( response ) {
 			let defaultResponse, formID, replaceContent, pageOrder, formReturned, contSubmit, delay,
-				$fieldCont, key, inCollapsedSection, frmTrigger, newTab;
+				$fieldCont, key, inCollapsedSection, frmTrigger;
 
 			defaultResponse = {
 				content: '',
@@ -817,13 +842,14 @@ function frmFrontFormJS() {
 
 			if ( response === null ) {
 				response = defaultResponse;
-			}
-
-			response = response.replace( /^\s+|\s+$/g, '' );
-			if ( response.indexOf( '{' ) === 0 ) {
-				response = JSON.parse( response );
 			} else {
-				response = defaultResponse;
+				// Response is a string. Convert it to an object.
+				response = response.replace( /^\s+|\s+$/g, '' );
+				if ( response.indexOf( '{' ) === 0 ) {
+					response = JSON.parse( response );
+				} else {
+					response = defaultResponse;
+				}
 			}
 
 			if ( typeof response.redirect !== 'undefined' ) {
@@ -832,22 +858,16 @@ function frmFrontFormJS() {
 					return;
 				}
 
-				jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
-
-				if ( ! response.openInNewTab ) {
-					// We return here because we're redirecting there is no need to update content.
-					window.location = response.redirect;
-					return;
-				}
-
-				// We don't return here because we're opening in a new tab, the old tab will still update.
-				newTab = window.open( response.redirect, '_blank' );
-				if ( ! newTab && response.fallbackMsg && response.content ) {
-					response.content = response.content.trim().replace( /(<\/div><\/div>)$/, ' ' + response.fallbackMsg + '</div></div>' );
+				if ( response.delay ) {
+					setTimeout( function() {
+						doRedirect( response );
+					}, 1000 * response.delay );
+				} else {
+					doRedirect( response );
 				}
 			}
 
-			if ( response.content !== '' ) {
+			if ( 'string' === typeof response.content && response.content !== '' ) {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
@@ -1128,7 +1148,7 @@ function frmFrontFormJS() {
 	 * @return {string} The ID to use for the error element.
 	 */
 	function getErrorElementId( key, input ) {
-		if ( isNaN( key ) || ! input.id ) {
+		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
@@ -1674,32 +1694,42 @@ function frmFrontFormJS() {
 
 		getFieldId,
 
+		/**
+		 * Render a captcha field.
+		 *
+		 * @param {HTMLElement} captcha
+		 * @param {string}      captchaSelector
+		 * @return {void}
+		 */
 		renderCaptcha: function( captcha, captchaSelector ) {
-			let formID, captchaID,
-				size = captcha.getAttribute( 'data-size' ),
-				rendered = captcha.getAttribute( 'data-rid' ) !== null,
-				params = {
-					'sitekey': captcha.getAttribute( 'data-sitekey' ),
-					'size': size,
-					'theme': captcha.getAttribute( 'data-theme' )
-				},
-				activeCaptcha = getSelectedCaptcha( captchaSelector ),
-				captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-
+			const rendered = captcha.getAttribute( 'data-rid' ) !== null;
 			if ( rendered ) {
 				return;
 			}
 
+			const size   = captcha.getAttribute( 'data-size' );
+			const params = {
+				sitekey: captcha.getAttribute( 'data-sitekey' ),
+				size: size,
+				theme: captcha.getAttribute( 'data-theme' )
+			};
+
 			if ( size === 'invisible' ) {
-				formID = jQuery( captcha ).closest( 'form' ).find( 'input[name="form_id"]' ).val();
-				jQuery( captcha ).closest( '.frm_form_field .frm_primary_label' ).hide();
+				const formID = captcha.closest( 'form' )?.querySelector( 'input[name="form_id"]' )?.value;
+
+				const captchaLabel = captcha.closest( '.frm_form_field' )?.querySelector( '.frm_primary_label' );
+				if ( captchaLabel ) {
+					captchaLabel.style.display = 'none';
+				}
+
 				params.callback = function( token ) {
 					frmFrontForm.afterRecaptcha( token, formID );
 				};
 			}
 
-
-			captchaID = activeCaptcha.render( captchaContainer, params );
+			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
+			const captchaID        = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
@@ -1941,7 +1971,7 @@ function frmFrontFormJS() {
 		},
 
 		escapeHtml: function( text ) {
-			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in vx.x' );
+			console.warn( 'DEPRECATED: function frmFrontForm.escapeHtml in v6.17' );
 			return text
 				.replace( /&/g, '&amp;' )
 				.replace( /</g, '&lt;' )

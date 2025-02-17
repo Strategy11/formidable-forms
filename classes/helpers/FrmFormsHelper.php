@@ -127,7 +127,7 @@ class FrmFormsHelper {
 		}
 
 		$name           = $selected === false ? __( 'Switch Form', 'formidable' ) : $selected;
-		$name           = '' === $name ? self::get_no_title_text() : strip_tags( $name );
+		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
 		if ( count( $forms ) < 2 ) {

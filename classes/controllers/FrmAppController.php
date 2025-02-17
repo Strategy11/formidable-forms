@@ -15,6 +15,11 @@ class FrmAppController {
 		}
 
 		$menu_name = FrmAppHelper::get_menu_name();
+
+		if ( in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
+			$menu_name .= wp_kses_post( FrmInboxController::get_notice_count() );
+		}
+
 		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
 	}
 
@@ -181,6 +186,7 @@ class FrmAppController {
 		$grey_pages = array(
 			'formidable-applications',
 			'formidable-dashboard',
+			'formidable-views',
 		);
 
 		$is_grey_page = self::is_page_in_list( $grey_pages );
@@ -331,16 +337,31 @@ class FrmAppController {
 		return (array) apply_filters( 'frm_form_nav_list', $nav_items, $nav_args );
 	}
 
-	// Adds a settings link to the plugins page
 	/**
+	 * Adds a settings link to the plugins page
+	 *
+	 * @param array $links
 	 * @return array
 	 */
 	public static function settings_link( $links ) {
 		$settings = array();
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
-			$label      = FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro', 'formidable' );
-			$settings[] = '<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( 'plugin-row' ) ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
+			if ( FrmAddonsController::is_license_expired() ) {
+				$label = __( 'Renew', 'formidable' );
+			} else {
+				$label = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_text' );
+				if ( ! $label ) {
+					$label = __( 'Upgrade to Pro', 'formidable' );
+				}
+			}
+
+			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
+			if ( ! $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
+			}
+
+			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}
 
 		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
@@ -551,14 +572,17 @@ class FrmAppController {
 		}
 
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
-			wp_redirect(
-				FrmAppHelper::admin_upgrade_link(
+			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
+			if ( ! $redirect ) {
+				$redirct = FrmAppHelper::admin_upgrade_link(
 					array(
 						'medium'  => 'upgrade',
 						'content' => 'submenu-upgrade',
 					)
-				)
-			);
+				);
+			}
+
+			wp_redirect( $redirect );
 			die();
 		}
 
@@ -644,7 +668,12 @@ class FrmAppController {
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
 		self::register_popper1();
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+
+		$settings_js_vars = array(
+			'currencies' => FrmCurrencyHelper::get_currencies(),
+		);
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 
 		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
@@ -796,6 +825,11 @@ class FrmAppController {
 	public static function admin_enqueue_scripts() {
 		self::load_wp_admin_style();
 		self::maybe_force_formidable_block_on_gutenberg_page();
+
+		if ( FrmAppHelper::is_admin_page( 'formidable-settings' ) ) {
+			wp_enqueue_style( FrmDashboardController::PAGE_SLUG, FrmAppHelper::plugin_url() . '/css/admin/dashboard.css', array(), FrmAppHelper::plugin_version() );
+		}
+
 		FrmUsageController::load_scripts();
 	}
 

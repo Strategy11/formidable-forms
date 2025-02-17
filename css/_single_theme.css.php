@@ -254,7 +254,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ); ?>.frm_center_submit .frm_submit .frm_ajax_loading{
-	margin-bottom:<?php echo esc_html( $submit_margin ); ?>;
+	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
@@ -338,6 +338,8 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=tel],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=number],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=email],
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=checkbox],
+.<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=radio],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .mce-edit-area iframe,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field select:not(.ui-datepicker-month):not(.ui-datepicker-year),
