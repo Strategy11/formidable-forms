@@ -46,6 +46,21 @@ class FrmFormsListHelper extends FrmListHelper {
 				'default' => 'ASC',
 			)
 		);
+
+		$screen = get_current_screen();
+		if ( $screen ) {
+			$user_id             = get_current_user_id();
+			$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+
+			if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
+				$orderby = $preferred_list_sort['orderby'];
+
+				if ( ! empty( $preferred_list_sort['order'] ) ) {
+					$order = $preferred_list_sort['order'];
+				}
+			}
+		}
+
 		$start   = self::get_param(
 			array(
 				'param'   => 'start',
