@@ -1394,6 +1394,37 @@ class FrmAppController {
 	}
 
 	/**
+	 * Retrieve and apply any saved sorting preferences for the current screen.
+	 *
+	 * @since x.x
+	 *
+	 * @param string &$orderby Reference to the current 'orderby' parameter.
+	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @return void
+	 */
+	public static function apply_saved_sort_preference( &$orderby, &$order ) {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		$user_id             = get_current_user_id();
+		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+
+		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
+			$orderby = $preferred_list_sort['orderby'];
+
+			if ( ! empty( $preferred_list_sort['order'] ) ) {
+				$order = $preferred_list_sort['order'];
+			}
+		}
+	}
+
+	/**
 	 * Validate that the callback name is ours not from third-party.
 	 *
 	 * @param string $callback_name WordPress callback name.
