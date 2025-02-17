@@ -464,12 +464,14 @@
 		<ClassMustBeFinal>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 				<directory name="deprecated" />
 			</errorLevel>
 		</ClassMustBeFinal>
 		<MissingOverrideAttribute>
 			<errorLevel type="suppress">
 				<directory name="classes" />
+				<directory name="stripe" />
 			</errorLevel>
 		</MissingOverrideAttribute>
 	</issueHandlers>
