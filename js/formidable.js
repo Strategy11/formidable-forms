@@ -1285,15 +1285,7 @@ function frmFrontFormJS() {
 		document.addEventListener( 'keydown', handleKeyUp );
 
 		function handleKeyUp( event ) {
-			let code;
-
-			if ( 'undefined' !== typeof event.key ) {
-				code = event.key;
-			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
-				code = 'Tab';
-			}
-
-			if ( 'Tab' === code ) {
+			if ( 'undefined' !== typeof event.key && 'Tab' === event.key ) {
 				makeHoneypotFieldsUntabbable();
 				document.removeEventListener( 'keydown', handleKeyUp );
 			}
