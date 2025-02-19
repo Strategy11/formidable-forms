@@ -110,7 +110,6 @@ class FrmEntriesController {
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
 		FrmAppHelper::include_svg();
-		FrmFormsController::include_device_too_small_message();
 
 		switch ( $action ) {
 			case 'show':
