@@ -1345,7 +1345,7 @@ class FrmAppController {
 	 *
 	 * @return void
 	 */
-	private static function filter_admin_notices() {
+	public static function filter_admin_notices() {
 		$actions = array(
 			'admin_notices',
 			'network_admin_notices',
