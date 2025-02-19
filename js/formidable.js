@@ -201,27 +201,28 @@ function frmFrontFormJS() {
 			}
 		);
 
-		fields = jQuery( object ).find( 'input,select,textarea' );
+		fields = vanillaJsObject?.querySelectorAll( 'input,select,textarea' );
 		if ( fields.length ) {
-			for ( n = 0, nl = fields.length; n < nl; n++ ) {
-				field = fields[n];
-				if ( '' === field.value ) {
-					if ( 'number' === field.type ) {
-						// A number field will return an empty string when it is invalid.
-						checkValidity( field, errors );
+			fields.forEach(
+				field => {
+					if ( '' === field.value ) {
+						if ( 'number' === field.type ) {
+							// A number field will return an empty string when it is invalid.
+							checkValidity( field, errors );
+						}
+
+						const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
+						if ( ! isConfirmationField ) {
+							// Allow a blank confirmation field to still call validateFieldValue.
+							// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
+							return;
+						}
 					}
 
-					const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
-					if ( ! isConfirmationField ) {
-						// Allow a blank confirmation field to still call validateFieldValue.
-						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
-						continue;
-					}
+					validateFieldValue( field, errors, true );
+					checkValidity( field, errors );
 				}
-
-				validateFieldValue( field, errors, true );
-				checkValidity( field, errors );
-			}
+			);
 		}
 
 		// Invisible captchas are processed after validation.
