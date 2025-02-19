@@ -1376,6 +1376,10 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
+		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+			return;
+		}
+
 		$screen  = get_current_screen();
 		$orderby = FrmAppHelper::get_param( 'orderby' );
 
