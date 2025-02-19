@@ -907,6 +907,8 @@ class FrmListHelper {
 			$current_order = 'asc';
 		}
 
+		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
+
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
 			$columns['cb']     = '<label class="screen-reader-text" for="cb-select-all-' . $cb_counter . '">' . __( 'Select All', 'formidable' ) . '</label>';
