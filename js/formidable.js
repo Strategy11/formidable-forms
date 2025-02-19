@@ -174,9 +174,7 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors.
 	 */
 	function validateForm( object ) {
-		let errors, n, nl, fields, field;
-
-		errors = [];
+		let errors = [];
 
 		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
 
@@ -201,29 +199,26 @@ function frmFrontFormJS() {
 			}
 		);
 
-		fields = vanillaJsObject?.querySelectorAll( 'input,select,textarea' );
-		if ( fields.length ) {
-			fields.forEach(
-				field => {
-					if ( '' === field.value ) {
-						if ( 'number' === field.type ) {
-							// A number field will return an empty string when it is invalid.
-							checkValidity( field, errors );
-						}
-
-						const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
-						if ( ! isConfirmationField ) {
-							// Allow a blank confirmation field to still call validateFieldValue.
-							// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
-							return;
-						}
+		vanillaJsObject?.querySelectorAll( 'input,select,textarea' ).forEach(
+			field => {
+				if ( '' === field.value ) {
+					if ( 'number' === field.type ) {
+						// A number field will return an empty string when it is invalid.
+						checkValidity( field, errors );
 					}
 
-					validateFieldValue( field, errors, true );
-					checkValidity( field, errors );
+					const isConfirmationField = field.name && 0 === field.name.indexOf( 'item_meta[conf_' );
+					if ( ! isConfirmationField ) {
+						// Allow a blank confirmation field to still call validateFieldValue.
+						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
+						return;
+					}
 				}
-			);
-		}
+
+				validateFieldValue( field, errors, true );
+				checkValidity( field, errors );
+			}
+		);
 
 		// Invisible captchas are processed after validation.
 		// We only want to validate a visible captcha on submit.
