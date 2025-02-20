@@ -302,6 +302,11 @@ function frmFrontFormJS() {
 		errors               = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
 
+		if ( ! fieldContainer ) {
+			// Hidden fields do not have a field container and do not require JS validation.
+			return;
+		}
+
 		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
