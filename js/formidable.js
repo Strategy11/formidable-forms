@@ -947,7 +947,7 @@ function frmFrontFormJS() {
 					}
 				}
 
-				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha, .h-captcha, .cf-turnstile' ).each( function() {
+				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).each( function() {
 					const $recaptcha  = jQuery( this ),
 						recaptchaID = $recaptcha.data( 'rid' );
 
@@ -961,10 +961,13 @@ function frmFrontFormJS() {
 					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
 						hcaptcha.reset();
 					}
-					if ( this.classList.contains( 'cf-turnstile' ) && window.turnstile && recaptchaID ) {
-						turnstile.reset( recaptchaID );
-					}
 				});
+
+				if ( window.turnstile ) {
+					object.querySelectorAll( '.cf-turnstile' ).forEach(
+						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
+					);
+				}
 
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
