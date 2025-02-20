@@ -961,7 +961,7 @@ function frmFrontFormJS() {
 					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
 						hcaptcha.reset();
 					}
-					if ( typeof turnstile !== 'undefined' && turnstile && recaptchaID ) {
+					if ( this.classList.contains( 'cf-turnstile' ) && typeof turnstile !== 'undefined' && turnstile && recaptchaID ) {
 						turnstile.reset( recaptchaID );
 					}
 				});
