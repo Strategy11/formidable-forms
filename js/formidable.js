@@ -963,6 +963,12 @@ function frmFrontFormJS() {
 					}
 				});
 
+				if ( window.turnstile ) {
+					object.querySelectorAll( '.cf-turnstile' ).forEach(
+						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
+					);
+				}
+
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
 				fieldset.removeClass( 'frm_doing_ajax' );
