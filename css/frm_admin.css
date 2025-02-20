@@ -964,7 +964,7 @@ p.frm_has_shortcodes {
 
 #form_global_settings .columns-2 > div {
 	overflow: auto;
-    height: calc(100vh - 32px);
+	height: calc(100vh - 32px);
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
