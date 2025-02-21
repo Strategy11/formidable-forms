@@ -1325,15 +1325,27 @@ class FrmAppController {
 	}
 
 	/**
+	 * Handles actions related to the current screen.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function handle_current_screen() {
+		if ( ! self::in_our_pages() ) {
+			return;
+		}
+
+		self::filter_admin_notices();
+		self::remember_custom_sort();
+	}
+
+	/**
 	 * Hide all third-parties admin notices only in our admin pages.
 	 *
 	 * @return void
 	 */
 	public static function filter_admin_notices() {
-		if ( ! self::in_our_pages() ) {
-			return;
-		}
-
 		$actions = array(
 			'admin_notices',
 			'network_admin_notices',
@@ -1354,6 +1366,64 @@ class FrmAppController {
 					}
 					unset( $wp_filter[ $action ]->callbacks[ $priority ][ $callback_name ] );
 				}
+			}
+		}
+	}
+
+	/**
+	 * Remembers and applies user-specific sorting preferences.
+	 *
+	 * @return void
+	 */
+	private static function remember_custom_sort() {
+		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+			return;
+		}
+
+		$screen  = get_current_screen();
+		$orderby = FrmAppHelper::get_param( 'orderby' );
+
+		if ( ! $screen || ! $orderby ) {
+			return;
+		}
+
+		update_user_meta(
+			get_current_user_id(),
+			'frm_preferred_list_sort_' . $screen->id,
+			array(
+				'orderby' => $orderby,
+				'order'   => FrmAppHelper::get_param( 'order' ),
+			)
+		);
+	}
+
+	/**
+	 * Retrieve and apply any saved sorting preferences for the current screen.
+	 *
+	 * @since x.x
+	 *
+	 * @param string &$orderby Reference to the current 'orderby' parameter.
+	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @return void
+	 */
+	public static function apply_saved_sort_preference( &$orderby, &$order ) {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		$user_id             = get_current_user_id();
+		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+
+		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
+			$orderby = $preferred_list_sort['orderby'];
+
+			if ( ! empty( $preferred_list_sort['order'] ) ) {
+				$order = $preferred_list_sort['order'];
 			}
 		}
 	}
