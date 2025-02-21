@@ -136,7 +136,7 @@ class FrmTransLiteActionsController {
 
 		return $message;
 	}
-	
+
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
@@ -273,9 +273,15 @@ class FrmTransLiteActionsController {
 
 		$total = 0;
 		foreach ( (array) $amount as $a ) {
-			$this_amount = self::get_amount_from_string( $a );
-			self::maybe_use_decimal( $this_amount, $currency );
-			self::normalize_number( $this_amount, $currency );
+			if ( is_callable( 'FrmProCurrencyHelper::get_currency' ) ) {
+				$format_config                   = FrmProCurrencyHelper::get_formatting_config( null, $currency );
+				$format_config['number_pattern'] = FrmProCurrencyHelper::build_number_pattern( $format_config );
+				$this_amount                     = FrmProCurrencyHelper::unformat_number( str_replace( ' ', '', $a ), $format_config );
+			} else {
+				$this_amount = self::get_amount_from_string( $a );
+				self::maybe_use_decimal( $this_amount, $currency );
+				self::normalize_number( $this_amount, $currency );
+			}
 
 			$total += $this_amount;
 			unset( $a, $this_amount );
@@ -296,6 +302,10 @@ class FrmTransLiteActionsController {
 			$currency = $atts['action']->post_content['currency'];
 		} elseif ( isset( $atts['currency'] ) ) {
 			$currency = $atts['currency'];
+		}
+
+		if ( is_callable( 'FrmProCurrencyHelper::get_currency' ) ) {
+			return FrmProCurrencyHelper::get_currency( $atts['form'] );
 		}
 
 		return FrmCurrencyHelper::get_currency( $currency );
