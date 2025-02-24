@@ -262,7 +262,7 @@ function frmFrontFormJS() {
 	 * @return {boolean} True if the element has the target class.
 	 */
 	function hasClass( element, targetClass ) {
-		return element.classList && element.classList.contains( targetClass );
+		return element && element.classList && element.classList.contains( targetClass );
 	}
 
 	/**
