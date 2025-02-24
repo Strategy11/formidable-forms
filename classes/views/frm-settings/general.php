@@ -49,8 +49,6 @@ unset( $more_html );
 
 <div class="clear"></div>
 
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
-
 <?php if ( ! FrmAppHelper::pro_is_installed() ) { ?>
 	<input type="hidden" name="frm_menu" id="frm_menu" value="<?php echo esc_attr( $frm_settings->menu ); ?>"/>
 	<input type="hidden" name="frm_mu_menu" id="frm_mu_menu" value="<?php echo esc_attr( $frm_settings->mu_menu ); ?>"/>
