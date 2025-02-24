@@ -84,8 +84,8 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	protected function extra_field_opts() {
 		return array(
-			'gdpr_agreement_text' => 'Agreement text',
-			'gdpr_description'    => 'Field description',
+			'gdpr_agreement_text' => __( 'Agreement text', 'formidable' ),
+			'gdpr_description'    => '',
 		);
 	}
 
