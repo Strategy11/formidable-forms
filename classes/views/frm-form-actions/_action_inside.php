@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( $form_action->post_excerpt === 'email' && ! get_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', true ) ) {
 	?>
 	<div class="frm_grid_container frm_no_p_margin frm_default_email_message">
-		<p class="frm10">
+		<p class="frm10" style="align-content:center;">
 			<b><?php esc_html_e( 'Heads up!', 'formidable' ); ?></b>
 			<?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?>
 		</p>
 		<p class="frm2">
-			<a href="#" class="frm_dismiss_default_email_message button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
+			<a href="#" class="frm_dismiss_default_email_message button frm-button-secondary frm-mt-xs frm-mb-xs"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
 		</p>
 	</div>
