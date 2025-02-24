@@ -2101,19 +2101,44 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns true if a field can be duplicated.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field
+	 * @param {number}      maxFieldsInGroup
+	 *
+	 * @returns {Boolean}
+	 */
+	function canDuplicateField( field, maxFieldsInGroup ) {
+		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+		const fieldGroup = field.closest( 'li.frm_field_box:not(.form-field)' );
+		if ( ! fieldGroup ) {
+			return true;
+		}
+		const fieldsInGroup = getFieldsInRow( jQuery( fieldGroup.querySelector( 'ul' ) ) ).length;
+		return fieldsInGroup < maxFieldsInGroup;
+	}
+
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
+		const maxFieldsInGroup = 6;
 
-		$field = jQuery( this ).closest( 'li.form-field' );
+		$field   = jQuery( this ).closest( 'li.form-field' );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
 
-		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
-			return false;
+		if ( ! ( newRowId && newRowId.startsWith( 'frm_field_group_' ) ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
+			/* translators: %1$d: Maximum number of fields allowed in a field group. */
+			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
+			return;
 		}
 
 		closeOpenFieldDropdowns();
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
-		newRowId = this.getAttribute( 'frm-target-row-id' );
 
 		if ( null !== newRowId ) {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
@@ -2151,6 +2176,7 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
+						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -2172,9 +2198,35 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
+				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 			}
 		});
 		return false;
+	}
+
+	/**
+	 * Sets the layout classes for a duplicated field in a field group from the layout classes of the original field.
+	 *
+	 * @param {HTMLElement} field    The original field.
+	 * @param {HTMLElement} newField The duplicated field.
+	 *
+	 * @returns {void}
+	 */
+	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
+		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
+		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
+			return;
+		}
+		const fieldId    = field.dataset.fid;
+		let fieldClasses = document.getElementById( 'frm_classes_' + fieldId )?.value;
+		if ( ! fieldClasses ) {
+			return;
+		}
+		fieldClasses = fieldClasses.replace( 'frm_first', '' );
+		if ( ! newField.className.includes( fieldClasses ) ) {
+			newField.className += ' ' + fieldClasses;
+			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
+		}
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
@@ -4411,9 +4463,6 @@ function frmAdminBuildJS() {
 						}
 					}
 				);
-
-				// when holding shift and clicking, text gets selected. unselect it.
-				document.getSelection().removeAllRanges();
 			}
 		} else {
 			// not multi-selecting
@@ -5424,22 +5473,22 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Update the phone format input based on the selected phone type.
-	 *
-	 * This function is triggered when a phone type is selected.
-	 * If the selected type is 'custom' and the current format is 'international',
-	 * the format input value is cleared to allow for custom input.
+	 * Update the format input based on the selected format type.
 	 *
 	 * @since 6.9
 	 *
-	 * @param {Event} event The event object from the phone type selection.
+	 * @param {Event} event The event object from the format type selection.
 	 * @return {void}
 	 */
-	function maybeUpdatePhoneFormatInput( event ) {
-		const phoneType = event.target;
-		if ( 'custom' === phoneType.value ) {
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'international' === formatInput.value ) {
+	function maybeUpdateFormatInput( event ) {
+		const formatElement = event.target;
+		const type = formatElement.value
+
+		if ( 'custom' === type ) {
+			const fieldId = formatElement.dataset.fieldId;
+			const formatInput = document.getElementById( `frm-field-format-custom-${fieldId}` ).querySelector( '.frm_format_opt' );
+
+			if ( 'international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value ) {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
@@ -6691,32 +6740,26 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Updates the format input based on the selected phone type from dropdowns during the form save process.
-	 *
-	 * Triggered within the preFormSave function, this function iterates through all phone type dropdown elements
-	 * and adjusts the format input value accordingly. Specifically, if the phone type is 'custom' but the format input
-	 * is empty, it sets it to 'none'. If the phone type is 'international', it sets the format input value to 'international'
-	 * before the form is saved.
+	 * Updates the format input based on the selected format type from dropdowns during the form save process.
 	 *
 	 * @since 6.9
 	 *
-	 * @param {HTMLButtonElement} submitButton The button that was submitted.
 	 * @return {void}
 	 */
-	function adjustFormatInputBeforeSave( submitButton ) {
-		const phoneTypes = document.querySelectorAll( '.frm_phone_type_dropdown' );
-		phoneTypes.forEach( phoneType => {
-			const value = phoneType.value;
-			if ( ! [ 'none', 'international' ].includes( value ) ) {
-				return;
-			}
+	function adjustFormatInputBeforeSave() {
+		const formatTypes = document.querySelectorAll( '.frm_format_dropdown, .frm_phone_type_dropdown' );
+		const valueMap = {
+			none: '',
+			international: 'international',
+			currency: 'currency',
+			number: 'number'
+		};
 
-			const formatInput = phoneType.parentElement.nextElementSibling.querySelector( '.frm_format_opt' );
-			if ( 'none' === value ) {
-				formatInput.setAttribute( 'value', '' );
-			}
-			if ( 'international' === value ) {
-				formatInput.setAttribute( 'value', 'international' );
+		formatTypes.forEach( formatType => {
+			const value = formatType.value;
+			if ( value in valueMap ) {
+				const formatInput = document.getElementById( `frm_format_${formatType.dataset.fieldId}` );
+				formatInput.value = valueMap[ value ];
 			}
 		});
 	}
@@ -8567,7 +8610,12 @@ function frmAdminBuildJS() {
 	 * @returns {Boolean}
 	 */
 	function isContextualShortcode( item ) {
-		const shortcode = item.querySelector( 'a' ).dataset.code;
+		const anchor = item.querySelector( 'a' );
+		if ( ! anchor ) {
+			return false;
+		}
+
+		const shortcode = anchor.dataset.code;
 		return frmAdminJs.contextualShortcodes.address.includes( shortcode ) || frmAdminJs.contextualShortcodes.body.includes( shortcode );
 	}
 
@@ -10359,7 +10407,7 @@ function frmAdminBuildJS() {
 		 */
 		function toggleDependencyVisibility( select ) {
 			const selectedOption = select.options[ select.selectedIndex ];
-			select.querySelectorAll( 'option[data-dependency]' ).forEach( option => {
+			select.querySelectorAll( 'option[data-dependency]:not([data-dependency-skip])' ).forEach( option => {
 				const dependencyElement = document.querySelector( option.dataset.dependency );
 				dependencyElement?.classList.toggle( 'frm_hidden', selectedOption !== option );
 			});
@@ -10702,7 +10750,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur );
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
-			frmDom.util.documentOn( 'change', 'select.frm_phone_type_dropdown', maybeUpdatePhoneFormatInput );
+			frmDom.util.documentOn( 'change', 'select.frm_format_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
@@ -10712,6 +10760,11 @@ function frmAdminBuildJS() {
 			handleShowPasswordLiveUpdate();
 			document.addEventListener( 'scroll', updateShortcodesPopupPosition, true );
 			document.addEventListener( 'change', handleBuilderChangeEvent );
+			document.querySelector( '.frm_form_builder' ).addEventListener( 'mousedown', event => {
+				if ( event.shiftKey ) {
+				  event.preventDefault();
+				}
+			});
 		},
 
 		settingsInit: function() {

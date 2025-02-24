@@ -33,6 +33,9 @@ class FrmApiHelper {
 		if ( in_array( 'free_not_first_30', $who, true ) && self::is_free_not_first_30() ) {
 			return true;
 		}
+		if ( self::check_free_segments( $who ) ) {
+			return true;
+		}
 		return false;
 	}
 
@@ -115,5 +118,62 @@ class FrmApiHelper {
 	 */
 	private static function is_free() {
 		return ! FrmAppHelper::pro_is_included();
+	}
+
+	/**
+	 * @since 6.18
+	 *
+	 * @param array $who
+	 * @return bool
+	 */
+	private static function check_free_segments( $who ) {
+		$segments          = array(
+			'free_first_1',
+			'free_first_2_3',
+			'free_first_4_7',
+			'free_first_8_11',
+			'free_first_12_19',
+			'free_first_20_30',
+		);
+		$intersecting_keys = array_intersect( $segments, $who );
+
+		if ( ! $intersecting_keys ) {
+			return false;
+		}
+
+		if ( ! self::is_free() || ! self::is_first_30() ) {
+			return false;
+		}
+
+		$activation_timestamp = get_option( 'frm_first_activation' );
+
+		foreach ( $intersecting_keys as $key ) {
+			if ( self::matches_segment( $key, $activation_timestamp ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * @since 6.18
+	 *
+	 * @param string $key
+	 * @param int    $activation_timestamp
+	 * @return bool
+	 */
+	private static function matches_segment( $key, $activation_timestamp ) {
+		$range_part  = str_replace( 'free_first_', '', $key );
+		$range_parts = explode( '_', $range_part );
+		if ( ! $range_parts ) {
+			return false;
+		}
+
+		$current_day = (int) floor( ( time() - $activation_timestamp ) / DAY_IN_SECONDS ) + 1;
+		$start       = (int) $range_parts[0];
+		$end         = 1 === count( $range_parts ) ? $start : (int) $range_parts[1];
+
+		return $current_day >= $start && $current_day <= $end;
 	}
 }

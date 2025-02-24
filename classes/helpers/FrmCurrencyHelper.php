@@ -27,6 +27,18 @@ class FrmCurrencyHelper {
 	}
 
 	/**
+	 * Checks if the given format is a valid currency format.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string $format_value The format value to check.
+	 * @return bool
+	 */
+	public static function is_currency_format( $format_value ) {
+		return in_array( $format_value, array( 'currency', 'number' ), true );
+	}
+
+	/**
 	 * Get a list of all supported currencies.
 	 *
 	 * @since 6.5.
@@ -290,7 +302,7 @@ class FrmCurrencyHelper {
 			'TRY' => array(
 				'name'               => __( 'Turkish Liras', 'formidable' ),
 				'symbol_left'        => '',
-				'symbol_right'       => '&#8364;',
+				'symbol_right'       => '&#8378;',
 				'symbol_padding'     => ' ',
 				'thousand_separator' => '.',
 				'decimal_separator'  => ',',

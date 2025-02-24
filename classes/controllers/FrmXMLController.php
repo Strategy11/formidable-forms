@@ -117,7 +117,10 @@ class FrmXMLController {
 
 		}//end if
 
-		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported' ) );
+		/**
+		 * @since 6.18 Added `url` to the $args.
+		 */
+		$response = apply_filters( 'frm_xml_response', $response, compact( 'form', 'imported', 'url' ) );
 
 		echo wp_json_encode( $response );
 		wp_die();

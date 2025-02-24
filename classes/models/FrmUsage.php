@@ -254,9 +254,11 @@ class FrmUsage {
 			'admin_permission',
 		);
 
+		$default = $settings_list->default_options();
+
 		$message_settings = array();
 		foreach ( $messages as $message ) {
-			$message_settings[ $message ] = $settings_list->$message;
+			$message_settings[ 'changed-' . $message ] = $settings_list->$message === $default[ $message ] ? 0 : 1;
 		}
 
 		return $message_settings;

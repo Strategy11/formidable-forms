@@ -574,7 +574,7 @@ class FrmAppController {
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
 			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
 			if ( ! $redirect ) {
-				$redirct = FrmAppHelper::admin_upgrade_link(
+				$redirect = FrmAppHelper::admin_upgrade_link(
 					array(
 						'medium'  => 'upgrade',
 						'content' => 'submenu-upgrade',
@@ -668,7 +668,12 @@ class FrmAppController {
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
 		self::register_popper1();
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+
+		$settings_js_vars = array(
+			'currencies' => FrmCurrencyHelper::get_currencies(),
+		);
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 
 		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );

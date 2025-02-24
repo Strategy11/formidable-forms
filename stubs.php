@@ -155,6 +155,9 @@ namespace {
 		public static function get_readable_license_type() {
 		}
 	}
+	class FrmProCurrencyHelper {
+		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
+	}
 	class FrmProDb {
 		public static $plug_version;
 	}
@@ -415,6 +418,17 @@ namespace {
 		 */
 		public static function payment_columns( $columns = array() ) {
 		}
+	}
+	class FrmProSettingsController {
+		/**
+		 * @param string $count
+		 * @return string
+		 */
+		public static function inbox_badge( $count ) {}
+		/**
+		 * @return void
+		 */
+		public static function add_currency_settings() {}
 	}
 }
 

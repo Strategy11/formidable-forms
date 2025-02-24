@@ -43,6 +43,7 @@ class FrmSettings {
 	public $re_type;
 	public $re_msg;
 	public $re_multi;
+	public $re_threshold;
 
 	/**
 	 * Settings for hCaptcha.

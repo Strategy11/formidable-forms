@@ -134,6 +134,10 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
+		if ( '' === $value ) {
+			// Allow for an empty User ID. Return early to prevent it from getting set to 0.
+			return;
+		}
 		FrmAppHelper::sanitize_value( 'intval', $value );
 	}
 }

@@ -456,5 +456,28 @@
 				<file name="classes/controllers/FrmFormActionsController.php" />
 			</errorLevel>
 		</InvalidMethodCall>
+		<MissingClassConstType>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+			</errorLevel>
+		</MissingClassConstType>
+		<ClassMustBeFinal>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+				<directory name="deprecated" />
+			</errorLevel>
+		</ClassMustBeFinal>
+		<MissingOverrideAttribute>
+			<errorLevel type="suppress">
+				<directory name="classes" />
+				<directory name="stripe" />
+			</errorLevel>
+		</MissingOverrideAttribute>
+		<InaccessibleProperty>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmFieldsController.php" />
+			</errorLevel>
+		</InaccessibleProperty>
 	</issueHandlers>
 </psalm>
