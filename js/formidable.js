@@ -302,6 +302,11 @@ function frmFrontFormJS() {
 		errors               = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
 
+		if ( ! fieldContainer ) {
+			// Hidden fields do not have a field container and do not require JS validation.
+			return;
+		}
+
 		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
@@ -962,6 +967,12 @@ function frmFrontFormJS() {
 						hcaptcha.reset();
 					}
 				});
+
+				if ( window.turnstile ) {
+					object.querySelectorAll( '.cf-turnstile' ).forEach(
+						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
+					);
+				}
 
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
