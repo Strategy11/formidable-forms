@@ -34,7 +34,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	public function get_new_field_defaults() {
 		$field = array(
-			'name'          => $this->get_new_field_name(),
+			'name'          => $this->get_new_field_name() . ' Agreement',
 			'description'   => '',
 			'type'          => $this->type,
 			'options'       => '',
@@ -84,7 +84,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	protected function extra_field_opts() {
 		return array(
-			'gdpr_agreement_text' => __( 'Agreement text', 'formidable' ),
+			'gdpr_agreement_text' => __( 'I consent to having this website store my submitted information so they can respond to my inquiry.', 'formidable' ),
 			'gdpr_description'    => '',
 		);
 	}
