@@ -1376,25 +1376,42 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
+		$screen  = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
 		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
 			return;
 		}
 
-		$screen  = get_current_screen();
 		$orderby = FrmAppHelper::get_param( 'orderby' );
 
-		if ( ! $screen || ! $orderby ) {
+		if ( ! $orderby ) {
 			return;
 		}
 
-		update_user_meta(
-			get_current_user_id(),
-			'frm_preferred_list_sort_' . $screen->id,
-			array(
-				'orderby' => $orderby,
-				'order'   => FrmAppHelper::get_param( 'order' ),
-			)
+		$user_id  = get_current_user_id();
+		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
+		$order    = FrmAppHelper::get_param( 'order' );
+
+		$new_sort = array(
+			'orderby' => $orderby,
+			'order'   => $order,
 		);
+
+		$current_sort = get_user_meta( $user_id, $meta_key, true );
+
+		if ( $new_sort !== $current_sort ) {
+			update_user_meta(
+				$user_id,
+				$meta_key,
+				array(
+					'orderby' => $orderby,
+					'order'   => $order,
+				)
+			);
+		}
 	}
 
 	/**
