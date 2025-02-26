@@ -574,7 +574,7 @@ class FrmAppController {
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
 			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
 			if ( ! $redirect ) {
-				$redirct = FrmAppHelper::admin_upgrade_link(
+				$redirect = FrmAppHelper::admin_upgrade_link(
 					array(
 						'medium'  => 'upgrade',
 						'content' => 'submenu-upgrade',

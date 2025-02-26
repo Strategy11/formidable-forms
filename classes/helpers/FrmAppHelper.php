@@ -37,6 +37,11 @@ class FrmAppHelper {
 	private static $included_svg = false;
 
 	/**
+	 * @var array Keys are locations and values are true or false.
+	 */
+	private static $localized_script_locations = array();
+
+	/**
 	 * @since 1.07.02
 	 *
 	 * @return string The version of this plugin
@@ -3347,6 +3352,10 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function localize_script( $location ) {
+		if ( ! empty( self::$localized_script_locations[ $location ] ) ) {
+			return;
+		}
+
 		global $wp_scripts, $wp_version;
 
 		$script_strings = array(
@@ -3450,6 +3459,8 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+
+		self::$localized_script_locations[ $location ] = true;
 	}
 
 	/**
