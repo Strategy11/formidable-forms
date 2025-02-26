@@ -8788,6 +8788,10 @@ Responsive Design
 		left: 50%;
 	}
 
+	#frm_builder_page .frm_page_container > .columns-2 {
+		padding-bottom: var(--gap-md);
+	}
+
 	#frm-publishing {
 		margin-left: auto;
 	}
