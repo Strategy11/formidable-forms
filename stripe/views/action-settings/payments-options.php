@@ -10,8 +10,6 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 }
 ?>
 
-<input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
-
 <div class="frm_grid_container">
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
@@ -84,6 +82,31 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 			}
 			?>
 		</select>
+	</p>
+
+	<p>
+		<?php
+			esc_html_e( 'Gateway(s)', 'formidable-payments' );
+
+			foreach ( $gateways as $gateway_name => $gateway ) {
+				$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+				$gateway_classes .= ( $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring']  ) ? ' frm_hidden' : '';
+				$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
+
+				$radio_atts = array(
+					'type'  => 'radio',
+					'value' => $gateway_name,
+					'name'  => $this->get_field_name( 'gateway' ),
+					'id'    => $gateway_id,
+				);
+			?>
+				<label for="<?php echo esc_attr( $gateway_id ); ?>" class="frm_gateway_opt <?php echo esc_attr( $gateway_classes ); ?>">
+					<input <?php FrmAppHelper::array_to_html_params( $radio_atts, true ); echo ' '; FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name ); ?>/>
+					<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
+				</label>
+			<?php
+			}
+		?>
 	</p>
 
 	<?php

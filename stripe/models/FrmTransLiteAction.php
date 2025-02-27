@@ -36,6 +36,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
 		$currencies          = FrmCurrencyHelper::get_currencies();
 		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
+		$gateways            = FrmTransLiteAppHelper::get_gateways();
 
 		if ( ! isset( $form_action->post_content['payment_limit'] ) ) {
 			$form_action->post_content['payment_limit'] = '';

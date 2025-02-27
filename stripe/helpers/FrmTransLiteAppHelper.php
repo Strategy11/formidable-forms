@@ -510,4 +510,9 @@ class FrmTransLiteAppHelper {
 
 		return $count;
 	}
+
+	public static function get_gateways() {
+		$gateways = apply_filters( 'frm_payment_gateways', array() );
+		return $gateways;
+	}
 }
