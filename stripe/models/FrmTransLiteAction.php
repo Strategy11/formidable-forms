@@ -52,9 +52,10 @@ class FrmTransLiteAction extends FrmFormAction {
 	 *
 	 * @since 6.5
 	 *
+	 * @param string $selected_gateway The selected gateway for the given payment action.
 	 * @return void
 	 */
-	public function echo_capture_payment_upsell() {
+	public function echo_capture_payment_upsell( $selected_gateway = 'stripe' ) {
 		// Add an upsell placeholder for the capture payment setting.
 		$upgrading      = FrmAddonsController::install_link( 'stripe' );
 		$upgrade_params = array();
