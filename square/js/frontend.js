@@ -3,10 +3,42 @@
 	const appId		 = 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
 	const locationId = 'L7Q1NBZ6SSJ79';
 
+	// Track the state of the Square card element
+	let squareCardElementIsComplete = false;
+
+	// Track the state of each field in the card form
+	const cardFields = {
+		cardNumber: false,
+		expirationDate: false,
+		cvv: false,
+		postalCode: false
+	};
+
 	async function initializeCard( payments ) {
 		const card = await payments.card();
 		await card.attach( '#card-container' );
+
+		// Add event listener to track when the card form is valid
+		card.addEventListener('focusClassRemoved', (e) => {
+			let field = e.detail.field;
+			let value = e.detail.currentState.isCompletelyValid;
+			cardFields[field] = value;
+
+			// Check if all fields are valid
+			squareCardElementIsComplete = Object.values(cardFields).every(item => item === true);
+
+			// Update button state based on form validity
+			updateButtonState();
+		});
+
 		return card;
+	}
+
+	function updateButtonState() {
+		const cardButton = document.getElementById('card-button');
+		if (cardButton) {
+			cardButton.disabled = !squareCardElementIsComplete;
+		}
 	}
 
 	async function createPayment( event, token, verificationToken ) {
