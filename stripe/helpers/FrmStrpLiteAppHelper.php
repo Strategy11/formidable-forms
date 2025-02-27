@@ -35,6 +35,7 @@ class FrmStrpLiteAppHelper {
 	 * @return bool
 	 */
 	public static function is_debug() {
+		// TODO: Deprecate this.
 		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
 
