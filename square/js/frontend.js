@@ -22,8 +22,8 @@
 
 		// Add event listener to track when the card form is valid
 		card.addEventListener('focusClassRemoved', (e) => {
-			let field = e.detail.field;
-			let value = e.detail.currentState.isCompletelyValid;
+			const field = e.detail.field;
+			const value = e.detail.currentState.isCompletelyValid;
 			cardFields[field] = value;
 
 			// Check if all fields are valid
@@ -64,7 +64,7 @@
 	 * Disable submit button for a target form.
 	 *
 	 * @param {Element} form
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function disableSubmit(form) {
 		jQuery(form).find('input[type="submit"],input[type="button"],button[type="submit"]').not('.frm_prev_page').attr('disabled', 'disabled');
