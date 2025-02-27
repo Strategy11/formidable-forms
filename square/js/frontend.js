@@ -5,6 +5,8 @@
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
+	let thisForm = null;
+	let running = 0;
 
 	// Track the state of each field in the card form
 	const cardFields = {
@@ -27,37 +29,75 @@
 			// Check if all fields are valid
 			squareCardElementIsComplete = Object.values(cardFields).every(item => item === true);
 
-			// Update button state based on form validity
-			updateButtonState();
+			// Update form submit button based on form validity
+			if (thisForm) {
+				if (squareCardElementIsComplete) {
+					enableSubmit();
+				} else {
+					disableSubmit(thisForm);
+				}
+			}
 		});
 
 		return card;
 	}
 
-	function updateButtonState() {
-		const cardButton = document.getElementById('card-button');
-		if (cardButton) {
-			cardButton.disabled = !squareCardElementIsComplete;
+	/**
+	 * Enable the submit button for the form.
+	 */
+	function enableSubmit() {
+		if (running > 0) {
+			return;
 		}
+
+		thisForm.classList.add('frm_loading_form');
+		frmFrontForm.removeSubmitLoading(jQuery(thisForm), 'enable', 0);
+
+		// Trigger custom event for other scripts to hook into
+		const event = new CustomEvent('frmSquareLiteEnableSubmit', { 
+			detail: { form: thisForm }
+		});
+		document.dispatchEvent(event);
 	}
 
-	async function createPayment( event, token, verificationToken ) {
-		const tokenInput = document.createElement( 'input' );
-		tokenInput.type  = 'hidden';
+	/**
+	 * Disable submit button for a target form.
+	 *
+	 * @param {Element} form
+	 * @returns {void}
+	 */
+	function disableSubmit(form) {
+		jQuery(form).find('input[type="submit"],input[type="button"],button[type="submit"]').not('.frm_prev_page').attr('disabled', 'disabled');
+		
+		// Trigger custom event for other scripts to hook into
+		const event = new CustomEvent('frmSquareLiteDisableSubmit', { 
+			detail: { form: form }
+		});
+		document.dispatchEvent(event);
+	}
+
+	async function createPayment(event, token, verificationToken) {
+		const tokenInput = document.createElement('input');
+		tokenInput.type = 'hidden';
 		tokenInput.value = token;
-		tokenInput.setAttribute( 'name', 'square-token' );
+		tokenInput.setAttribute('name', 'square-token');
 
-		const verificationInput = document.createElement( 'input' );
-		verificationInput.type  = 'hidden';
+		const verificationInput = document.createElement('input');
+		verificationInput.type = 'hidden';
 		verificationInput.value = verificationToken;
-		verificationInput.setAttribute( 'name', 'square-verification-token' );
+		verificationInput.setAttribute('name', 'square-verification-token');
 
-		const form = document.getElementById( 'card-button' ).closest( 'form' );
-		form.appendChild( tokenInput );
-		form.appendChild( verificationInput );
+		// Use the thisForm variable that we set earlier
+		if (thisForm) {
+			thisForm.appendChild(tokenInput);
+			thisForm.appendChild(verificationInput);
 
-		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( event, form );
+			if (typeof frmFrontForm.submitFormManual === 'function') {
+				frmFrontForm.submitFormManual(event, thisForm);
+			} else {
+				// Fallback if submitFormManual is not available
+				thisForm.submit();
+			}
 		}
 	}
 
@@ -111,6 +151,34 @@
 			throw new Error( 'Square.js failed to load properly' );
 		}
 
+		// Find the form containing the Square payment element
+		const cardContainer = document.getElementById('card-container');
+		if (cardContainer) {
+			thisForm = cardContainer.closest('form');
+			if (thisForm) {
+				// Initially disable the submit button until card is valid
+				disableSubmit(thisForm);
+				
+				// Add event listener for form submission
+				thisForm.addEventListener('submit', function(event) {
+					// If we have a Square card element and it's not complete, prevent submission
+					if (!squareCardElementIsComplete) {
+						event.preventDefault();
+						event.stopPropagation();
+						
+						// Show error message
+						const statusContainer = document.getElementById('payment-status-container');
+						if (statusContainer) {
+							statusContainer.textContent = 'Please complete all card details before submitting.';
+							statusContainer.classList.add('is-failure');
+							statusContainer.style.visibility = 'visible';
+						}
+						return false;
+					}
+				});
+			}
+		}
+
 		let payments;
 		try {
 			// Square requires HTTPS to work.
@@ -134,20 +202,45 @@
 			event.preventDefault();
 
 			try {
-				// disable the submit button as we await tokenization and make a payment request.
-				cardButton.disabled     = true;
-				const token             = await tokenize(card);
+				// Increment running counter and disable the submit button
+				running++;
+				if (thisForm) {
+					disableSubmit(thisForm);
+				}
+				
+				const token = await tokenize(card);
 				const verificationToken = await verifyBuyer(payments, token);
-				await createPayment( event, token, verificationToken );
-			} catch ( e ) {
-				cardButton.disabled = false;
+				await createPayment(event, token, verificationToken);
+				
+				// Decrement running counter after successful payment
+				running--;
+				if (running === 0 && thisForm) {
+					enableSubmit();
+				}
+			} catch (e) {
+				// Decrement running counter and re-enable submit if appropriate
+				running--;
+				if (running === 0 && thisForm && squareCardElementIsComplete) {
+					enableSubmit();
+				}
 				displayPaymentFailure();
 			}
 		}
 
-		const cardButton = document.getElementById( 'card-button' );
-		cardButton.addEventListener( 'click', async function ( event ) {
-			await handlePaymentMethodSubmission( event, card );
+		const cardButton = document.getElementById('card-button');
+		cardButton.addEventListener('click', async function(event) {
+			// Only proceed if the card element is complete
+			if (squareCardElementIsComplete) {
+				await handlePaymentMethodSubmission(event, card);
+			} else {
+				// Optionally show an error message
+				const statusContainer = document.getElementById('payment-status-container');
+				if (statusContainer) {
+					statusContainer.textContent = 'Please complete all card details before submitting.';
+					statusContainer.classList.add('is-failure');
+					statusContainer.style.visibility = 'visible';
+				}
+			}
 		});
 	});
 }() );
