@@ -101,8 +101,6 @@ class FrmMigrate {
 	}
 
 	/**
-	 * @since x.x
-	 *
 	 * @return string
 	 */
 	public function collation() {
