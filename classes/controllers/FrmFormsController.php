@@ -3295,39 +3295,6 @@ class FrmFormsController {
 	}
 
 	/**
-	 * In some cases, the DB tables may fail to install.
-	 * This function tries to add them again when the user clicks the link to try again
-	 * from the given inbox notice.
-	 *
-	 * @since x.x
-	 */
-	public static function add_missing_tables() {
-		FrmAppHelper::permission_check( 'frm_view_forms' );
-
-		$inbox = new FrmInbox();
-		$error = $inbox->check_for_error();
-
-		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
-			// Confirm the inbox item with this CTA exists.
-			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
-			exit;
-		}
-
-		global $wpdb;
-		$exists = $wpdb->get_results( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'frm_forms' ) );
-
-		if ( $exists ) {
-			// Exit early if the table already exists.
-			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
-			exit;
-		}
-
-		delete_option( 'frm_db_version' );
-		wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
-		exit;
-	}
-
-	/**
 	 * @deprecated 4.0
 	 */
 	public static function create( $values = array() ) {
