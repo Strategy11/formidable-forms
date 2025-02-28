@@ -566,6 +566,10 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && FrmAppHelper::simple_get( 'frm_add_tables' ) ) {
+			FrmFormsController::add_missing_tables();
+		}
+
 		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
 			FrmStylesController::save_style();

@@ -1050,7 +1050,7 @@ class FrmFormsController {
 	 * @param array  $errors
 	 * @return void
 	 */
-	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
+	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {		
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		global $wpdb, $frm_vars;
@@ -1075,6 +1075,14 @@ class FrmFormsController {
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			wp_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
 			die();
+		}
+
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+		if ( $error ) {
+			$show_messages = array(
+				$error['subject'] . '. ' . $error['message'],
+			);
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
@@ -3286,6 +3294,25 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function add_missing_tables() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+
+		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
+		}
+
+		delete_option( 'frm_db_version' );
+		wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+		exit;
 	}
 
 	/**
