@@ -1050,7 +1050,7 @@ class FrmFormsController {
 	 * @param array  $errors
 	 * @return void
 	 */
-	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {		
+	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		global $wpdb, $frm_vars;
@@ -1080,9 +1080,7 @@ class FrmFormsController {
 		$inbox = new FrmInbox();
 		$error = $inbox->check_for_error();
 		if ( $error ) {
-			$show_messages = array(
-				$error['subject'] . '. ' . $error['message'],
-			);
+			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
