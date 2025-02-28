@@ -74,7 +74,7 @@ class FrmMigrate {
 	 *
 	 * @return void
 	 */
-	public function check_that_tables_exist() {
+	private function check_that_tables_exist() {
 		// Check the DB that the table $this->forms exists.
 		global $wpdb;
 		$exists = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLES LIKE %s', $this->forms ) );
