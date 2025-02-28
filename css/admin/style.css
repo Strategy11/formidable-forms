@@ -515,7 +515,7 @@ body.rtl .frm-style-card-separator {
 }
 #frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
-	padding: 17px 15px;
+	padding: 17px 15px !important;
 	background: transparent;
 	line-height: var(--leading);
 	color: var(--grey-500);
