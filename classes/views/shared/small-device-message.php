@@ -3,7 +3,9 @@
  * Small device message.
  *
  * @since x.x
+ * @package Formidable
  */
+
 ?>
 <div id="frm_small_device_message_container">
 	<div id="frm_small_device_message">
