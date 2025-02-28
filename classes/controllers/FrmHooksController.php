@@ -58,7 +58,7 @@ class FrmHooksController {
 	/**
 	 * @return void
 	 */
-	public static function load_hooks() {		
+	public static function load_hooks() {
 		// Use 0 so this gets triggered before FrmFormActionsController::register_post_types.
 		add_action( 'init', 'FrmAppController::load_lang', 0 );
 

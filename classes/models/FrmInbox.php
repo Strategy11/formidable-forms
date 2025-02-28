@@ -517,6 +517,13 @@ class FrmInbox extends FrmFormApi {
 		delete_option( 'frm_inbox' );
 	}
 
+	/**
+	 * Check inbox for an "error" type. This is displayed on the form list page if one exists.
+	 *
+	 * @since x.x
+	 *
+	 * @return array|false
+	 */
 	public static function check_for_error() {
 		$inbox    = new self();
 		$messages = $inbox->get_messages( 'filter' );
