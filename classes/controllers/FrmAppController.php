@@ -1407,7 +1407,7 @@ class FrmAppController {
 		}
 
 		global $wpdb;
-		$exists = $wpdb->get_results( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'frm_forms' ) );
+		$exists = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'frm_forms' ) );
 
 		if ( $exists ) {
 			// Exit early if the table already exists.
