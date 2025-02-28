@@ -23,9 +23,3 @@ $field_id = $field['id'];
 	</label>
 	<input type="text" name="field_options[gdpr_agreement_text_<?php echo esc_attr( $field_id ); ?>]" id="gdpr_agreement_text_<?php echo esc_attr( $field_id ); ?>" value="<?php echo esc_attr( FrmField::get_option( $field, 'gdpr_agreement_text' ) ); ?>">
 </p>
-<p>
-	<label for="gdpr_description_<?php echo esc_attr( $field_id ); ?>">
-		<?php esc_html_e( 'Field description', 'formidable' ); ?>
-	</label>
-	<textarea name="field_options[gdpr_description_<?php echo esc_attr( $field_id ); ?>]" id="gdpr_description_<?php echo esc_attr( $field_id ); ?>" class="large-text code"><?php echo esc_textarea( FrmField::get_option( $field, 'gdpr_description' ) ); ?></textarea>
-</p>

@@ -57,8 +57,9 @@ class FrmFieldGdpr extends FrmFieldType {
 	protected function field_settings_for_type() {
 		return array(
 			'size'           => true,
-			'clear_on_focus' => true,
-			'invalid'        => true,
+			'clear_on_focus' => false,
+			'invalid'        => false,
+			'max'            => false,
 		);
 	}
 
@@ -71,9 +72,6 @@ class FrmFieldGdpr extends FrmFieldType {
 	public function show_primary_options( $args ) {
 		$field = $args['field'];
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/gdpr/primary-options.php';
-		FrmFieldsController::show_format_option( $field );
-
-		parent::show_primary_options( $args );
 	}
 
 	/**
@@ -85,7 +83,6 @@ class FrmFieldGdpr extends FrmFieldType {
 	protected function extra_field_opts() {
 		return array(
 			'gdpr_agreement_text' => __( 'I consent to having this website store my submitted information so they can respond to my inquiry.', 'formidable' ),
-			'gdpr_description'    => '',
 		);
 	}
 

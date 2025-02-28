@@ -8,7 +8,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-$field_desc     = $field['gdpr_description'];
 $agreement_text = $field['gdpr_agreement_text'];
 $field_id       = $field['id'];
 $checked        = FrmAppHelper::check_selected( $field['value'], 1 ) ? ' checked="checked"' : '';
@@ -24,8 +23,4 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 		/>
 		<?php echo esc_html( $agreement_text ); ?>
 	</label>
-</div>
-
-<div class="frm_gdpr_field_description">
-	<?php echo esc_html( $field_desc ); ?>
 </div>
