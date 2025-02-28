@@ -3314,7 +3314,8 @@ class FrmFormsController {
 		}
 
 		global $wpdb;
-		$exists = $wpdb->get_results( "SHOW TABLES LIKE '$wpdb->prefix . 'frm_forms''" );
+		$exists = $wpdb->get_results( $wpdb->prepare( "SHOW TABLES LIKE %s", $wpdb->prefix . 'frm_forms' ) );
+
 		if ( $exists ) {
 			// Exit early if the table already exists.
 			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
