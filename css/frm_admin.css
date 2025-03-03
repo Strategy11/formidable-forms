@@ -1746,12 +1746,12 @@ input.frm_insert_in_template {
 	margin-bottom: var(--gap-2xs) !important;
 }
 
-.frm-mb-xs {
-	margin-bottom: var(--gap-xs) !important;
-}
-
 .frm-mb-sm {
 	margin-bottom: var(--gap-sm) !important;
+}
+
+.frm-mb-xs {
+	margin-bottom: var(--gap-xs) !important;
 }
 
 .frm-mb-md {
