@@ -8651,6 +8651,9 @@ Responsive Design
 	.frm_actions_list {
 		margin-left: 0;
 	}
+	.frm_default_email_message {
+		flex-direction: column;
+	}
 }
 
 @media only screen and (max-width: 960px) {
