@@ -5,11 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-review-notice frm-dismissible frm-card-item frm-compact-card-item frm-box-shadow-xxl">
 	<div class="frm-satisfied">
-		<p>
-			<?php echo esc_html( $title ); ?>
-			<br/>
-			<?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?>
-		</p>
+		<span class="frm-inline-flex frm-text-success-500 frm-mb-md">
+			<?php
+			FrmAppHelper::icon_by_class(
+				'frmfont frm-flag frm_svg40',
+				array(
+					'echo'        => true,
+					'aria-hidden' => 'true',
+				)
+			);
+			?>
+		</span>
+		<h3 class="frm-font-semibold frm-mt-0 frm-mb-xs"><?php esc_html_e( 'Congratulations!', 'formidable' ); ?></h3>
+		<p class="frm-mb-md"><span><?php echo esc_html( $title ); ?></span> <span><?php esc_html_e( 'Are you enjoying Formidable Forms?', 'formidable' ); ?></span></p>
 		<a href="#" class="show-frm-feedback button frm-button-secondary" data-link="feedback">
 			<?php esc_html_e( 'Not Really', 'formidable' ); ?>
 		</a>
