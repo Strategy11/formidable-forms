@@ -8653,9 +8653,6 @@ Responsive Design
 	}
 	.frm_default_email_message {
 		flex-direction: column;
-	}
-
-	.frm_default_email_message p {
 		justify-content: start;
 	}
 }
