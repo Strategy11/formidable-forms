@@ -566,6 +566,10 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && FrmAppHelper::simple_get( 'frm_add_tables' ) ) {
+			self::add_missing_tables();
+		}
+
 		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
 			FrmStylesController::save_style();
@@ -1468,5 +1472,38 @@ class FrmAppController {
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+	}
+
+	/**
+	 * In some cases, the DB tables may fail to install.
+	 * This function tries to add them again when the user clicks the link to try again
+	 * from the given inbox notice.
+	 *
+	 * @since x.x
+	 */
+	private static function add_missing_tables() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+
+		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
+			// Confirm the inbox item with this CTA exists.
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
+		}
+
+		global $wpdb;
+		$exists = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'frm_forms' ) );
+
+		if ( $exists ) {
+			// Exit early if the table already exists.
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
+		}
+
+		delete_option( 'frm_db_version' );
+		wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+		exit;
 	}
 }
