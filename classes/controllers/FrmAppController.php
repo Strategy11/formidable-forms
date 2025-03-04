@@ -1199,6 +1199,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
+		FrmFormsController::include_device_too_small_message();
 		if ( self::should_show_footer_links() ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 		}
