@@ -391,7 +391,19 @@ class FrmListHelper {
 			$verify = $this->confirm_bulk_delete();
 
 			if ( $verify ) {
-				echo "<a id='confirm-bulk-delete-" . esc_attr( $which ) . "' class='frm-hidden' href='confirm-bulk-delete' data-loaded-from='" . esc_attr( $this->loaded_from() ) . "' data-frmverify='" . esc_attr( $verify ) . "' data-frmverify-btn='frm-button-red'></a>";
+				$confirm_delete_attributes = array(
+					'id'                 => 'confirm-bulk-delete-' . $which,
+					'class'              => 'frm-hidden',
+					'tabindex'           => '-1',
+					'aria-hidden'        => 'true',
+					'href'               => 'confirm-bulk-delete',
+					'data-loaded-from'   => $this->loaded_from(),
+					'data-frmverify'     => $verify,
+					'data-frmverify-btn' => 'frm-button-red',
+				);
+
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '<a ' . FrmAppHelper::array_to_html_params( $confirm_delete_attributes ) . '></a>';
 			}
 		}
 
@@ -894,6 +906,8 @@ class FrmListHelper {
 		} else {
 			$current_order = 'asc';
 		}
+
+		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
 
 		if ( ! empty( $columns['cb'] ) ) {
 			static $cb_counter = 1;
