@@ -384,7 +384,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	protected function column_views( $form ) {
 		$attributes = array(
-			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) ),
+			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
 			'title'  => __( 'View Form', 'formidable' ),
 			'target' => '_blank',
 		);
