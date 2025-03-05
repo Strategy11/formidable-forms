@@ -53,6 +53,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 		?>
+
+		<?php
+		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
+			?>
+			<div class="frm_note_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'GDPR field is disabled. Please enable it in the Formidable %1$sSettings%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
+			</div>
+			<?php
+		}
+		?>
+
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -68,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $display['required'] ) { ?>
 				<div class="frm_form_field">
 					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
-						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php disabled( $display['readonly_required'], 1 ); ?> <?php checked( $field['required'], 1 ); ?> />
 						<?php esc_html_e( 'Required', 'formidable' ); ?>
 					</label>
 				</div>

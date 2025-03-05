@@ -32,17 +32,14 @@ class FrmFieldGdprHelper {
 	const FIELD_CLASS = 'FrmFieldGdpr';
 
 	/**
-	 * Load hooks
+	 * Hide GDPR field
 	 *
 	 * @since x.x
-	 * @return void
+	 * @return bool
 	 */
-	public static function load_hooks() {
+	public static function hide_gdpr_field() {
 		$settings = FrmAppHelper::get_settings();
-		if ( $settings->enable_gdpr ) {
-			add_filter( 'frm_available_fields', array( __CLASS__, 'add_gdpr_field' ), 10, 1 );
-			add_filter( 'frm_get_field_type_class', array( __CLASS__, 'init_gdpr_field_class' ), 10, 2 );
-		}
+		return ! $settings->enable_gdpr;
 	}
 
 	/**
@@ -64,14 +61,13 @@ class FrmFieldGdprHelper {
 	 * Initialize GDPR field Class name
 	 *
 	 * @since x.x
-	 * @param string $class
 	 * @param string $field_type
 	 * @return string
 	 */
-	public static function init_gdpr_field_class( $class, $field_type = '' ) {
+	public static function get_gdpr_field_class( $field_type = '' ) {
 		if ( self::FIELD_TYPE === $field_type ) {
 			return self::FIELD_CLASS;
 		}
-		return $class;
+		return '';
 	}
 }

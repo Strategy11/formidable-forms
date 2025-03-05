@@ -112,7 +112,6 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
-		FrmFieldGdprHelper::load_hooks();
 	}
 
 	/**

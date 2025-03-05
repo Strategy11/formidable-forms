@@ -4420,6 +4420,6 @@ class FrmAppHelper {
 	 */
 	public static function no_gdpr_cookies() {
 		$frm_settings = self::get_settings();
-		return (bool) $frm_settings->no_gdpr_cookies;
+		return (bool) ( $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies );
 	}
 }

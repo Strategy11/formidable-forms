@@ -60,14 +60,14 @@ $gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
 if ( ! $frm_settings->enable_gdpr ) {
 	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
 }
-$custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont' );
-if ( $frm_settings->no_ips ) {
+$custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont frm_gdpr_options' );
+if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }
 ?>
 <p>
 	<label>
-		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr, 1 ); ?> data-frmshow=".frm_gdpr_options" />
+		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr, 1 ); ?> data-frmshow=".frm_gdpr_options" data-frmuncheck="#frm_no_gdpr_cookies, #frm_no_ips, #frm_custom_header_ip" />
 		<?php esc_html_e( 'Enable GDPR related features and enhancements.', 'formidable' ); ?>
 	</label>
 </p>
@@ -85,9 +85,6 @@ if ( $frm_settings->no_ips ) {
 		<?php esc_html_e( 'Do not store user IPs with form submissions.', 'formidable' ); ?>
 	</label>
 </p>
-
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
-
 <p <?php FrmAppHelper::array_to_html_params( $custom_header_ip_wrapper_params, true ); ?>>
 	<label>
 		<input type="checkbox" name="frm_custom_header_ip" id="frm_custom_header_ip" value="1" <?php checked( $frm_settings->custom_header_ip, 1 ); ?> />
@@ -95,6 +92,8 @@ if ( $frm_settings->no_ips ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
+
+<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 
 <?php
 /**

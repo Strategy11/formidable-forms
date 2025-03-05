@@ -7586,7 +7586,10 @@ ul.frm_two_col {
 	gap: var(--gap-xs);
 	align-items: center;
 }
-
+.multiselect-container button.multiselect-option.disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
 	margin-right: var(--gap-xs);

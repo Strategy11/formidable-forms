@@ -33,19 +33,25 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * @return array
 	 */
 	public function get_new_field_defaults() {
-		$field = array(
-			'name'          => $this->get_new_field_name() . ' Agreement',
+		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return array(
+				'name'          => false,
+				'description'   => false,
+				'type'          => $this->type,
+				'options'       => false,
+				'required'      => false,
+				'field_options' => false,
+			);
+		}
+
+		return array(
+			'name'          => $this->get_new_field_name() . ' Consent',
 			'description'   => '',
 			'type'          => $this->type,
 			'options'       => '',
-			'default_value' => '',
 			'required'      => true,
 			'field_options' => $this->get_default_field_options(),
 		);
-
-		$field_options = $this->new_field_settings();
-
-		return array_merge( $field, $field_options );
 	}
 
 	/**
@@ -55,11 +61,29 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * @return bool[]
 	 */
 	protected function field_settings_for_type() {
+		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return array(
+				'size'              => false,
+				'clear_on_focus'    => false,
+				'default'           => false,
+				'invalid'           => false,
+				'max'               => false,
+				'readonly_required' => false,
+				'required'          => false,
+				'label'             => false,
+				'css'               => false,
+				'label_position'    => false,
+				'description'       => false,
+			);
+		}
+
 		return array(
-			'size'           => true,
-			'clear_on_focus' => false,
-			'invalid'        => false,
-			'max'            => false,
+			'size'              => true,
+			'clear_on_focus'    => false,
+			'default'           => false,
+			'invalid'           => false,
+			'max'               => false,
+			'readonly_required' => true,
 		);
 	}
 
@@ -70,8 +94,18 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * @param array $args The arguments.
 	 */
 	public function show_primary_options( $args ) {
+		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return;
+		}
 		$field = $args['field'];
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/gdpr/primary-options.php';
+	}
+
+	public function show_label_on_form_builder() {
+		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
+			return;
+		}
+		parent::show_label_on_form_builder();
 	}
 
 	/**

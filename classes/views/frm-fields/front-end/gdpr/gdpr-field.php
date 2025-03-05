@@ -14,7 +14,7 @@ $checked        = FrmAppHelper::check_selected( $field['value'], 1 ) ? ' checked
 $label_id       = 'frm-gdpr-accept-' . $field_id;
 ?>
 
-
+<?php if ( ! FrmFieldGdprHelper::hide_gdpr_field() ) : ?>
 <div class="frm_checkbox" role="group" aria-labelledby="<?php echo esc_attr( $label_id ); ?>">
 	<label for="<?php echo esc_attr( $label_id ); ?>">
 		<input type="checkbox" aria-required="true" name="item_meta[<?php echo esc_attr( $field_id ); ?>]" id="<?php echo esc_attr( $label_id ); ?>" value="1" 
@@ -24,3 +24,13 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 		<?php echo esc_html( $agreement_text ); ?>
 	</label>
 </div>
+<?php elseif ( current_user_can( 'frm_edit_forms' ) ) : ?>
+	<div class="frm_checkbox" role="group" aria-labelledby="<?php echo esc_attr( $label_id ); ?>">
+		<label for="<?php echo esc_attr( $label_id ); ?>">
+			<?php
+			/* translators: %1$s: Link HTML, %2$s: End link */
+			printf( esc_html__( 'GDPR field is disabled. Please enable it in the Formidable %1$sSettings%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+			?>
+		</label>
+	</div>
+<?php endif; ?>

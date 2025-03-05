@@ -91,24 +91,25 @@ class FrmFieldFactory {
 	 */
 	private static function get_field_type_class( $field_type ) {
 		$type_classes = array(
-			'text'                      => 'FrmFieldText',
-			'textarea'                  => 'FrmFieldTextarea',
-			'select'                    => 'FrmFieldSelect',
-			'radio'                     => 'FrmFieldRadio',
-			'checkbox'                  => 'FrmFieldCheckbox',
-			'number'                    => 'FrmFieldNumber',
-			'phone'                     => 'FrmFieldPhone',
-			'url'                       => 'FrmFieldUrl',
-			'website'                   => 'FrmFieldUrl',
-			'email'                     => 'FrmFieldEmail',
-			'user_id'                   => 'FrmFieldUserID',
-			'html'                      => 'FrmFieldHTML',
-			'hidden'                    => 'FrmFieldHidden',
-			'captcha'                   => 'FrmFieldCaptcha',
-			'name'                      => 'FrmFieldName',
-			'credit_card'               => 'FrmFieldCreditCard',
+			'text'                         => 'FrmFieldText',
+			'textarea'                     => 'FrmFieldTextarea',
+			'select'                       => 'FrmFieldSelect',
+			'radio'                        => 'FrmFieldRadio',
+			'checkbox'                     => 'FrmFieldCheckbox',
+			'number'                       => 'FrmFieldNumber',
+			'phone'                        => 'FrmFieldPhone',
+			'url'                          => 'FrmFieldUrl',
+			'website'                      => 'FrmFieldUrl',
+			'email'                        => 'FrmFieldEmail',
+			'user_id'                      => 'FrmFieldUserID',
+			'html'                         => 'FrmFieldHTML',
+			'hidden'                       => 'FrmFieldHidden',
+			'captcha'                      => 'FrmFieldCaptcha',
+			'name'                         => 'FrmFieldName',
+			'credit_card'                  => 'FrmFieldCreditCard',
 			// Submit button field.
-			FrmSubmitHelper::FIELD_TYPE => 'FrmFieldSubmit',
+			FrmSubmitHelper::FIELD_TYPE    => 'FrmFieldSubmit',
+			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
 		);
 
 		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
