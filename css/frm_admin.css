@@ -1634,31 +1634,32 @@ input.frm_insert_in_template {
 	border-radius: var(--medium-radius);
 	box-shadow: var(--box-shadow-lg) !important;
 	z-index: 999;
+	box-sizing: border-box;
 
+	--gap-sm: 16px;
 	--gap-md: 24px;
+	--gap-2xl: 48px;
 }
 
-.frm-review-notice a {
-	margin: 0 var(--gap-2xs) !important;
+.frm-review-notice-icon {
+	display: inline-flex;
+	margin-bottom: var(--gap-sm);
+}
+
+.wp-admin .frm-review-notice-title {
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: var(--gap-xs);
+}
+
+.wp-admin .frm-review-notice-text {
+	margin-top: 0;
+	margin-bottom: var(--gap-md);
 }
 
 .frm-dismissible a.dismiss {
 	top: 16px;
-	right: 15px;
-}
-
-.frm-review-notice .frm-button-primary,
-.frm-review-notice .frm-button-secondary {
-	min-width: 100px;
-}
-
-.frm-review-notice p {
-	margin: 0 0 10px 0;
-}
-
-.frm-review-notice p > span {
-	font-size: 13px;
-	opacity: 0.75;
+	right: 19px;
 }
 
 .frm-review-notice #frmapi-feedback {
