@@ -390,18 +390,18 @@ class FrmListHelper {
 		if ( isset( $this->_actions['bulk_delete'] ) ) {
 			$verify = $this->confirm_bulk_delete();
 
-			$confirm_delete_attributes = array(
-				'id'                 => 'confirm-bulk-delete-' . $which,
-				'class'              => 'frm-hidden',
-				'tabindex'           => '-1',
-				'aria-hidden'        => 'true',
-				'href'               => 'confirm-bulk-delete',
-				'data-loaded-from'   => $this->loaded_from(),
-				'data-frmverify'     => $verify,
-				'data-frmverify-btn' => 'frm-button-red',
-			);
-
 			if ( $verify ) {
+				$confirm_delete_attributes = array(
+					'id'                 => 'confirm-bulk-delete-' . $which,
+					'class'              => 'frm-hidden',
+					'tabindex'           => '-1',
+					'aria-hidden'        => 'true',
+					'href'               => 'confirm-bulk-delete',
+					'data-loaded-from'   => $this->loaded_from(),
+					'data-frmverify'     => $verify,
+					'data-frmverify-btn' => 'frm-button-red',
+				);
+
 				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo '<a ' . FrmAppHelper::array_to_html_params( $confirm_delete_attributes ) . '></a>';
 			}
