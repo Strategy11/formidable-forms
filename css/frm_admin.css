@@ -36,6 +36,7 @@
 	--error-25: #FFF5F4;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
+	--warning-500: #F79009;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--success-900: #054F31;
@@ -1641,6 +1642,10 @@ input.frm_insert_in_template {
 	--gap-2xl: 48px;
 }
 
+.wp-admin .frm-review-notice * {
+	box-sizing: border-box;
+}
+
 .frm-review-notice-icon {
 	display: inline-flex;
 	margin-bottom: var(--gap-sm);
@@ -1657,7 +1662,20 @@ input.frm_insert_in_template {
 	margin-bottom: var(--gap-md);
 }
 
-.frm-dismissible a.dismiss {
+.frm-review-notice-signature {
+	text-align: left;
+	margin: var(--gap-md) 0;
+}
+
+.frm-review-notice-signature img {
+	width: 40px;
+	height: 40px;
+	padding: 3px;
+	box-shadow: var(--box-shadow-md);
+	border-radius: 100%;
+}
+
+.frm-dismiss-review-notice {
 	top: 16px;
 	right: 19px;
 }
@@ -1707,6 +1725,10 @@ input.frm_insert_in_template {
 
 .frm-text-success-500 {
 	color: var(--success-500);
+}
+
+.frm-text-warning-500 {
+	color: var(--warning-500);
 }
 
 .frm_no_margin, /* deprecated */

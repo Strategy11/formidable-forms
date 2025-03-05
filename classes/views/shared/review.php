@@ -27,20 +27,32 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-review-request frm_hidden">
-		<p><?php esc_html_e( 'Awesome! Could you do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
-		<p>- Steph Wells<br/>
-			<span><?php esc_html_e( 'Co-Founder and CTO of Formidable Forms', 'formidable' ); ?><span>
-		</p>
-		<a href="#" class="frm-dismiss-review-notice button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
-			<?php esc_html_e( 'No thanks, maybe later', 'formidable' ); ?>
-		</a>
-		<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-primary" data-link="yes" target="_blank" rel="noopener">
-			<?php esc_html_e( 'Ok, you deserve it', 'formidable' ); ?>
-		</a>
-		<br/>
-		<a href="#" class="frm-dismiss-review-notice" data-link="done" target="_blank" rel="noopener noreferrer">
-			<?php esc_html_e( 'I already did', 'formidable' ); ?>
-		</a>
+		<?php
+		FrmAppHelper::icon_by_class(
+			'frmfont frm-star-feedback-icon frm_svg40 frm-review-notice-icon frm-text-warning-500',
+			array(
+				'echo'        => true,
+				'aria-hidden' => 'true',
+			)
+		);
+		?>
+		<h3 class="frm-review-notice-title"><?php esc_html_e( 'Awesome!', 'formidable' ); ?></h3>
+		<p class="frm-review-notice-text"><?php esc_html_e( 'Could you do me a BIG favor and give Formidable Forms a review to help me grow my little business and boost our motivation?', 'formidable' ); ?></p>
+		<div class="frm-review-notice-signature frm-flex frm-gap-xs">
+			<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/steph-wells.png" alt="<?php esc_attr_e( 'Steph Wells', 'formidable' ); ?>" />
+			<div class="frm-flex-col">
+				<span class="frm-font-medium frm-text-grey-900">Steph Wells</span>
+				<span class="frm-text-xs"><?php esc_html_e( 'Co-Founder and CTO of Formidable Forms', 'formidable' ); ?><span>
+			</div>
+		</div>
+		<div class="frm-flex frm-flex-center frm-gap-sm">
+			<a href="#" class="frm-dismiss-review-notice button frm-button-secondary" data-link="no" target="_blank" rel="noopener noreferrer">
+				<?php esc_html_e( 'Maybe Later', 'formidable' ); ?>
+			</a>
+			<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-primary" data-link="yes" target="_blank" rel="noopener">
+				<?php esc_html_e( 'Ok, you deserve it', 'formidable' ); ?>
+			</a>
+		</div>
 	</div>
 
 	<div class="frm-feedback-request frm_hidden">
