@@ -43,6 +43,7 @@
 	--success-800: #065F46;
 	--success-500: #12b76a;
 	--success-100: #D1FAE5;
+	--success-200: #A6F4C5;
 	--success-50: #ECFDF3;
 	--success-25: #f6fef9;
 	--border-radius: 35px;
@@ -1675,17 +1676,49 @@ input.frm_insert_in_template {
 	border-radius: 100%;
 }
 
-.frm-dismiss-review-notice {
+#wpwrap .frm-dismiss-review-notice {
 	top: 16px;
 	right: 19px;
 }
 
-.frm-review-notice #frmapi-feedback {
-	margin-top: var(--gap-lg);
-}
-
 .frm-review-notice #frmapi-feedback [class^="frm__"] {
 	display: none;
+}
+
+.frm-review-notice #frmapi-feedback input,
+.frm-review-notice #frmapi-feedback textarea {
+	border-color: var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm-review-notice #frmapi-feedback input {
+	min-height: unset;
+	max-height: 36px;
+}
+
+.frm-review-notice #frmapi-feedback textarea {
+	max-height: 80px;
+	padding-top: var(--gap-xs)
+}
+
+.frm-review-notice #frmapi-feedback .frm_message {
+	text-align: center;
+	color: var(--success-900);
+	background-color: var(--success-25);
+	border: 1px solid var(--success-200);
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit {
+	background-color: var(--primary-500);
+	border-color: var(--primary-500) !important;
+	cursor: pointer;
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit:hover,
+.frm-review-notice #frmapi-feedback .frm_button_submit:focus {
+	color: var(--primary-500);
+	background-color: transparent;
+	border-color: var(--primary-500) !important;
 }
 
 .frm-review-notice .frm_error,
@@ -1711,6 +1744,10 @@ input.frm_insert_in_template {
 }
 
 /* Generic Classes */
+.frm-text-primary-500 {
+	color: var(--primary-500);
+}
+
 .frm-text-grey-500 {
 	color: var(--grey-500);
 }

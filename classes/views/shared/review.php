@@ -56,8 +56,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<div class="frm-feedback-request frm_hidden">
-		<p><?php esc_html_e( 'Sorry to hear you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
-
+		<?php
+		FrmAppHelper::icon_by_class(
+			'frmfont frm-pencil-message-icon frm_svg40 frm-review-notice-icon frm-text-primary-500',
+			array(
+				'echo'        => true,
+				'aria-hidden' => 'true',
+			)
+		);
+		?>
+		<p class="frm-review-notice-text"><?php esc_html_e( 'Sorry to hear you aren\'t enjoying building with Formidable. We would love a chance to improve. Could you take a minute and let us know what we can do better?', 'formidable' ); ?></p>
 		<div id="frmapi-feedback" class="frmapi-form" data-url="https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/feedback?return=html&exclude_script=jquery&exclude_style=formidable-css">
 			<span class="frm-wait frm_visible_spinner"></span>
 		</div>
