@@ -12,8 +12,8 @@ if ( $form_action->post_excerpt === 'email' && ! get_user_meta( wp_get_current_u
 	?>
 	<div class="frm_no_p_margin frm_default_email_message frm-flex frm-gap-sm">
 		<p>
-			<b><?php esc_html_e( 'Heads up!', 'formidable' ); ?></b>
-			<?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?>
+			<b style="color:var(--grey-800);"><?php esc_html_e( 'Heads up!', 'formidable' ); ?></b>
+			<span><?php esc_html_e( 'Using the same \'To\' and \'From\' email address can sometimes cause delivery issues. We recommend updating your default email addresses to maximize deliverability.', 'formidable' ); ?></span>
 		</p>
 		<p class="frm-flex-box frm-flex-center" style="white-space:nowrap;">
 			<a href="#" class="frm_dismiss_default_email_message button frm-button-secondary"><?php esc_html_e( 'Got it', 'formidable' ); ?></a>
