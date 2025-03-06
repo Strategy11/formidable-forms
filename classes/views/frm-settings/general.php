@@ -92,8 +92,13 @@ if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Only turn this on if IP addresses are incorrect in entries. Some server setups may require spoofable headers to determine an accurate IP address.', 'formidable' ) ); ?>
 	</label>
 </p>
-
-<h3><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
+<p class="frm-text-xs frm-mb-0">
+	<?php
+	// translators: %s: Knowledge base URL
+	printf( 'Learn more about our GDPR settings <a href="%s" target="_blank">%s</a>', 'https://formidableforms.com/knowledgebase/gdpr-settings/', esc_html__( 'here', 'formidable' ) );
+	?>
+</p>
+<h3 class="frm-mt-xs"><?php esc_html_e( 'Other', 'formidable' ); ?></h3>
 
 <?php
 /**

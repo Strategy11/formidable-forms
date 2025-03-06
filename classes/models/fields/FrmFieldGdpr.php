@@ -63,17 +63,16 @@ class FrmFieldGdpr extends FrmFieldType {
 	protected function field_settings_for_type() {
 		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
 			return array(
-				'size'              => false,
-				'clear_on_focus'    => false,
-				'default'           => false,
-				'invalid'           => false,
-				'max'               => false,
-				'readonly_required' => false,
-				'required'          => false,
-				'label'             => false,
-				'css'               => false,
-				'label_position'    => false,
-				'description'       => false,
+				'size'           => false,
+				'clear_on_focus' => false,
+				'default'        => false,
+				'invalid'        => false,
+				'max'            => false,
+				'required'       => false,
+				'label'          => false,
+				'css'            => false,
+				'label_position' => false,
+				'description'    => false,
 			);
 		}
 
@@ -84,6 +83,7 @@ class FrmFieldGdpr extends FrmFieldType {
 			'invalid'           => false,
 			'max'               => false,
 			'readonly_required' => true,
+			'required'          => true,
 		);
 	}
 
@@ -138,5 +138,21 @@ class FrmFieldGdpr extends FrmFieldType {
 	 */
 	protected function include_front_form_file() {
 		return FrmAppHelper::plugin_path() . self::VIEW_PATH;
+	}
+
+	/**
+	 * Hide the field name/label if the GDPR field is disabled.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $args The arguments.
+	 * @param string $html The HTML.
+	 * @return string
+	 */
+	protected function before_replace_html_shortcodes( $args, $html ) {
+		if ( FrmFieldGdprHelper::hide_gdpr_field() && ! current_user_can( 'frm_edit_forms' ) ) {
+			return '';
+		}
+		return $html;
 	}
 }
