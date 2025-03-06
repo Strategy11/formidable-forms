@@ -2609,6 +2609,8 @@ function frmAdminBuildJS() {
 		deselectFields();
 		initiateMultiselect();
 
+		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+
 		const addedEvent      = new Event( 'frm_added_field', { bubbles: false });
 		addedEvent.frmField   = field;
 		addedEvent.frmSection = section;
@@ -10396,7 +10398,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-
 	/**
 	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
 	 * It sets up initial visibility at page load and updates it on each dropdown change.
@@ -10429,7 +10430,36 @@ function frmAdminBuildJS() {
 
 		// Update dependencies visibility on dropdown change
 		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
-	};
+	}
+
+	/**
+	 * Moves the focus to the next single option input field in the list and positions the cursor at the end of the text.
+	 *
+	 * @param {HTMLElement} currentInput The currently focused input element.
+	 */
+	function focusNextSingleOptionInput( currentInput ) {
+		const optionsList = currentInput.closest( '.frm_single_option' ).parentElement;
+		const inputs = optionsList.querySelectorAll( '.frm_single_option input[name^="field_options[" ], .frm_single_option input[name^="rows_"]' );
+		const inputsArray = Array.from( inputs );
+
+		// Find the index of the currently focused input
+		const currentIndex = inputsArray.indexOf( currentInput );
+
+		if ( currentIndex < 0 ) {
+			return;
+		}
+
+		// Find the next visible input field
+		const nextInput = inputsArray.slice( currentIndex + 1 ).find( input => input.offsetParent !== null );
+
+		if ( nextInput ) {
+			nextInput.focus();
+
+			// Move the cursor to the end of the text in the next input field
+			const textLength = nextInput.value.length;
+			nextInput.setSelectionRange( textLength, textLength );
+		}
+	}
 
 	return {
 		init: function() {
@@ -10762,6 +10792,13 @@ function frmAdminBuildJS() {
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
 			frmDom.util.documentOn( 'change', 'select.frm_format_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
+
+			// Navigate to the next input field on pressing Enter in a single option field
+			$builderForm.on( 'keydown', '.frm_single_option input[name^="field_options["], .frm_single_option input[name^="rows_"]', event => {
+				if ( 'Enter' === event.key ) {
+					focusNextSingleOptionInput( event.currentTarget );
+				}
+			});
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
