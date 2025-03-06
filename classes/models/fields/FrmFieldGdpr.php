@@ -45,7 +45,7 @@ class FrmFieldGdpr extends FrmFieldType {
 		}
 
 		return array(
-			'name'          => $this->get_new_field_name() . ' Consent',
+			'name'          => $this->get_new_field_name() . __( ' Consent', 'formidable' ),
 			'description'   => '',
 			'type'          => $this->type,
 			'options'       => '',

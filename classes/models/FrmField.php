@@ -383,7 +383,9 @@ class FrmField {
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
-			$new_values[ $col ] = $values[ $col ];
+			if ( isset( $values[ $col ] ) ) {
+				$new_values[ $col ] = $values[ $col ];
+			}
 		}
 
 		$new_values['options']       = self::maybe_filter_options( $values['options'] );
