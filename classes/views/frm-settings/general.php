@@ -67,7 +67,7 @@ if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
 ?>
 <p>
 	<label>
-		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr, 1 ); ?> data-frmshow=".frm_gdpr_options" data-frmuncheck="#frm_no_gdpr_cookies, #frm_no_ips, #frm_custom_header_ip" />
+		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr || $frm_settings->no_ips, 1 ); ?> data-frmshow=".frm_gdpr_options" data-frmuncheck="#frm_no_gdpr_cookies, #frm_no_ips, #frm_custom_header_ip" />
 		<?php esc_html_e( 'Enable GDPR related features and enhancements.', 'formidable' ); ?>
 	</label>
 </p>
