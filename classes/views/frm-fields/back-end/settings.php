@@ -229,6 +229,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}
 
+		/**
+		 * Fires after displaying the field description in a form settings.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $args {
+		 *     Array containing the field data.
+		 *
+		 *     @type array  $field   The field settings.
+		 *     @type array  $display The display settings for the field.
+		 *     @type array  $values  The values associated with the field.
+		 * }
+		 */
+		do_action( 'frm_field_options_after_description', compact( 'field', 'display', 'values' ) );
+
 		// Field Size
 		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ), true ) ) {
 			$display_max = $display['max'];
