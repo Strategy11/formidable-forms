@@ -1702,10 +1702,15 @@ input.frm_insert_in_template {
 }
 
 .frm-review-notice #frmapi-feedback .frm_message {
-	text-align: center;
 	color: var(--success-900);
 	background-color: var(--success-25);
 	border: 1px solid var(--success-200);
+	padding: var(--gap-sm) var(--gap-md);
+	margin: 0;
+}
+
+.frm-review-notice #frmapi-feedback .frm_message p {
+	margin: 0
 }
 
 .frm-review-notice #frmapi-feedback .frm_button_submit {
@@ -1716,9 +1721,9 @@ input.frm_insert_in_template {
 
 .frm-review-notice #frmapi-feedback .frm_button_submit:hover,
 .frm-review-notice #frmapi-feedback .frm_button_submit:focus {
-	color: var(--primary-500);
-	background-color: transparent;
-	border-color: var(--primary-500) !important;
+	color: #fff;
+	background-color: var(--primary-700);
+	border-color: var(--primary-700) !important;
 }
 
 .frm-review-notice .frm_error,
