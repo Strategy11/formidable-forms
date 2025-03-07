@@ -37,6 +37,11 @@ class FrmAppHelper {
 	private static $included_svg = false;
 
 	/**
+	 * @var array Keys are locations and values are true or false.
+	 */
+	private static $localized_script_locations = array();
+
+	/**
 	 * @since 1.07.02
 	 *
 	 * @return string The version of this plugin
@@ -329,6 +334,29 @@ class FrmAppHelper {
 		}
 
 		return $is_formidable;
+	}
+
+	/**
+	 * Checks if is a list page.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $page The name of the page to check.
+	 * @return bool
+	 */
+	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( ! self::is_admin_page( $page ) ) {
+			return false;
+		}
+
+		// Check Trash page.
+		$form_type = self::simple_get( 'form_type' );
+		if ( $form_type && 'published' !== $form_type ) {
+			return false;
+		}
+
+		// Check edit or settings page.
+		return ! self::simple_get( 'frm_action' );
 	}
 
 	/**
@@ -3418,6 +3446,10 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function localize_script( $location ) {
+		if ( ! empty( self::$localized_script_locations[ $location ] ) ) {
+			return;
+		}
+
 		global $wp_scripts, $wp_version;
 
 		$script_strings = array(
@@ -3521,6 +3553,8 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+
+		self::$localized_script_locations[ $location ] = true;
 	}
 
 	/**
