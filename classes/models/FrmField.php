@@ -10,69 +10,74 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = array(
-			'text'                      => array(
+			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_text2_icon',
 			),
-			'textarea'                  => array(
+			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
 				'icon' => 'frm_icon_font frm_paragraph_icon',
 			),
-			'checkbox'                  => array(
+			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
 				'icon' => 'frm_icon_font frm_check_square_icon',
 			),
-			'radio'                     => array(
+			'radio'                        => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
 				'icon' => 'frm_icon_font frm_radio_checked_icon',
 			),
-			'select'                    => array(
+			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
 				'icon' => 'frm_icon_font frm_caret_square_down_icon',
 			),
-			'email'                     => array(
+			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
 				'icon' => 'frm_icon_font frm_email_icon',
 			),
-			'url'                       => array(
+			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
 				'icon' => 'frm_icon_font frm_link_icon',
 			),
-			'number'                    => array(
+			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
-			'name'                      => array(
+			'name'                         => array(
 				'name' => __( 'Name', 'formidable' ),
 				'icon' => 'frm_icon_font frm_user_name_icon',
 			),
-			'phone'                     => array(
+			'phone'                        => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
 			),
-			'html'                      => array(
+			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
 				'icon' => 'frm_icon_font frm_code_icon',
 			),
-			'hidden'                    => array(
+			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
 				'icon' => 'frm_icon_font frm_eye_slash_icon',
 			),
-			'user_id'                   => array(
+			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
 				'icon' => 'frm_icon_font frm_user_icon',
 			),
-			'captcha'                   => array(
+			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
 				'icon' => 'frm_icon_font frm_shield_check_icon',
 			),
-			'credit_card'               => array(
+			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
 				'icon' => 'frm_icon_font frm_credit_card_icon',
 			),
-			FrmSubmitHelper::FIELD_TYPE => array(
+			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
+			),
+			FrmFieldGdprHelper::FIELD_TYPE => array(
+				'name' => __( 'GDPR', 'formidable' ),
+				'icon' => 'frm_icon_font frm-gdpr-icon',
+				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
 		);
 
@@ -378,7 +383,9 @@ class FrmField {
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
-			$new_values[ $col ] = $values[ $col ];
+			if ( isset( $values[ $col ] ) ) {
+				$new_values[ $col ] = $values[ $col ];
+			}
 		}
 
 		$new_values['options']       = self::maybe_filter_options( $values['options'] );
