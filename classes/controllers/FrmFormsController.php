@@ -2532,7 +2532,11 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function dismiss_default_email_message() {
-		check_ajax_referer( 'frm_ajax', 'nonce' );
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'nonce', 'frm_ajax' );
+
+		if ( $permission_error !== false ) {
+			wp_send_json_error( $permission_error, 403 );
+		}
 		update_user_meta( get_current_user_id(), 'frm_dismiss_default_email_message', 1 );
 	}
 
