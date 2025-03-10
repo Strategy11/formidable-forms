@@ -8788,8 +8788,18 @@ Responsive Design
 		left: 50%;
 	}
 
-	#frm_builder_page .frm_page_container > .columns-2 {
-		padding-bottom: var(--gap-md);
+	#frm_builder_page .frm_page_container > .columns-2,
+	#frm_styler_wrapper {
+		padding-bottom: 64px;
+	}
+
+	#frm_styler_wrapper #frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
+		position: static;
+		display: inline-block;
+	}
+
+	#frm_builder_page.frm_wrap .columns-2 .frm-right-panel {
+		padding-bottom: 0;
 	}
 
 	#frm-publishing {
@@ -8865,7 +8875,7 @@ Responsive Design
 		box-sizing: border-box;
 	}
 
-	a.frm_add_logic_link .frmsvg,
+	a.frm_add_logic_link:not([id^=logic_]) .frmsvg,
 	a.frm_add_logic_link i {
 		display: none;
 	}
