@@ -2,6 +2,8 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+$is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
+
 ?>
 <div class="frm_license_box">
 	<h3 class="frm-no-border frm-mt-0"><?php esc_html_e( 'License Key', 'formidable' ); ?></h3>
@@ -57,17 +59,17 @@ unset( $more_html );
 <h3><?php esc_html_e( 'GDPR', 'formidable' ); ?></h3>
 <?php
 $gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
-if ( ! $frm_settings->enable_gdpr ) {
+if ( ! $is_gdpr_enabled ) {
 	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
 }
 $custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont frm_gdpr_options' );
-if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
+if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }
 ?>
 <p>
 	<label>
-		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $frm_settings->enable_gdpr || $frm_settings->no_ips, 1 ); ?> data-frmshow=".frm_gdpr_options" data-frmuncheck="#frm_no_gdpr_cookies, #frm_no_ips, #frm_custom_header_ip" />
+		<input type="checkbox" name="frm_enable_gdpr" id="frm_enable_gdpr" value="1" <?php checked( $is_gdpr_enabled, 1 ); ?> data-frmshow=".frm_gdpr_options" data-frmuncheck="#frm_no_gdpr_cookies, #frm_no_ips, #frm_custom_header_ip" />
 		<?php esc_html_e( 'Enable GDPR related features and enhancements.', 'formidable' ); ?>
 	</label>
 </p>
@@ -75,7 +77,7 @@ if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
 <p <?php FrmAppHelper::array_to_html_params( $gdpr_options_wrapper_params, true ); ?>>
 	<label>
 		<input type="checkbox" name="frm_no_gdpr_cookies" id="frm_no_gdpr_cookies" value="1" <?php checked( $frm_settings->no_gdpr_cookies, 1 ); ?> />
-		<?php esc_html_e( 'Disable user tracking cookies. This will disable the user tracking feature as well as the ability to limit form entries to one per user by cookie.', 'formidable' ); ?>
+		<?php esc_html_e( 'This will disable the option to limit form entries to one per user by cookie.', 'formidable' ); ?>
 	</label>
 </p>
 
@@ -95,7 +97,7 @@ if ( $frm_settings->no_ips || ! $frm_settings->enable_gdpr ) {
 <p class="frm-text-xs frm-mb-0">
 	<?php
 	// translators: %s: Knowledge base URL
-	printf( 'Learn more about our GDPR settings <a href="%s" target="_blank">%s</a>', 'https://formidableforms.com/knowledgebase/gdpr-settings/', esc_html__( 'here', 'formidable' ) );
+	printf( esc_html__( 'Learn more about our GDPR settings', 'formidable' ) . ' <a href="%s" target="_blank">%s</a>', 'https://formidableforms.com/knowledgebase/gdpr-settings/', esc_html__( 'here', 'formidable' ) );
 	?>
 </p>
 <h3 class="frm-mt-xs"><?php esc_html_e( 'Other', 'formidable' ); ?></h3>

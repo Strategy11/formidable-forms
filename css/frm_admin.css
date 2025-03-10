@@ -5968,6 +5968,10 @@ p.frm-inline-select,
 .frm-single-settings .frm_single_option .frm_remove_tag:before {
 	content: "";
 }
+.frm-single-settings input[type="checkbox"][readonly] {
+	opacity: 0.5;
+	pointer-events: none;
+}
 
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
