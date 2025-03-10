@@ -8788,12 +8788,12 @@ Responsive Design
 		left: 50%;
 	}
 
-	#frm_builder_page .frm_page_container > .columns-2,
+	.frm_page_container > .columns-2,
 	#frm_styler_wrapper {
 		padding-bottom: 64px;
 	}
 
-	#frm_styler_wrapper #frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
+	#frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
 		position: static;
 		display: inline-block;
 	}
