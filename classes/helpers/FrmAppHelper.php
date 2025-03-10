@@ -337,6 +337,29 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Checks if is a list page.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $page The name of the page to check.
+	 * @return bool
+	 */
+	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( ! self::is_admin_page( $page ) ) {
+			return false;
+		}
+
+		// Check Trash page.
+		$form_type = self::simple_get( 'form_type' );
+		if ( $form_type && 'published' !== $form_type ) {
+			return false;
+		}
+
+		// Check edit or settings page.
+		return ! self::simple_get( 'frm_action' );
+	}
+
+	/**
 	 * Check for certain page in Formidable settings
 	 *
 	 * @since 2.0
