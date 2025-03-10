@@ -8798,7 +8798,7 @@ Responsive Design
 		display: inline-block;
 	}
 
-	#frm_builder_page.frm_wrap .columns-2 .frm-right-panel {
+	.frm_wrap .columns-2 .frm-right-panel {
 		padding-bottom: 0;
 	}
 
