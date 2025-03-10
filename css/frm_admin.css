@@ -7623,7 +7623,6 @@ ul.frm_two_col {
 }
 .multiselect-container button.multiselect-option.disabled {
 	opacity: 0.5;
-	pointer-events: none;
 }
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
