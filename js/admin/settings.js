@@ -28,9 +28,13 @@
 			const formData = new FormData();
 			formData.append( 'action', 'frm_dismiss_default_email_message' );
 			formData.append( 'nonce', frmGlobal.nonce );
-			doJsonPost( 'dismiss_default_email_message', formData ).then(
-				e.target.closest( '.frm_default_email_message' ).remove()
-			);
+			doJsonPost( 'dismiss_default_email_message', formData ).then( () => {
+					e.target.closest( '.frm_default_email_message' ).remove();
+				}
+			)
+			.catch( ( error ) => {
+				console.error( error );
+			} );
 		}
 	}
 

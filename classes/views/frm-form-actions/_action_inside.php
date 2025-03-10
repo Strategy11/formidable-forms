@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
 <?php
-if ( $form_action->post_excerpt === 'email' && ! get_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', true ) ) {
+if ( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_email( $form_action ) ) {
 	?>
 	<div class="frm_no_p_margin frm_default_email_message frm-flex frm-gap-sm">
 		<p>

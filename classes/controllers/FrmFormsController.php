@@ -2538,6 +2538,7 @@ class FrmFormsController {
 			wp_send_json_error( $permission_error, 403 );
 		}
 		update_user_meta( get_current_user_id(), 'frm_dismiss_default_email_message', 1 );
+		wp_send_json_success();
 	}
 
 	/**
