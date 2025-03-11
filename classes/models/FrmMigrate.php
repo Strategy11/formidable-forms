@@ -73,7 +73,7 @@ class FrmMigrate {
 	 * If we fail to create the database tables, add an inbox notice.
 	 * This informs the user that they need to correct the issue and try again.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return void
 	 */

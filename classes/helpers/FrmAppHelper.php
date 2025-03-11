@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.18';
+	public static $plug_version = '6.19';
 
 	/**
 	 * @var bool
@@ -334,7 +334,7 @@ class FrmAppHelper {
 	/**
 	 * Checks if is a list page.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param string $page The name of the page to check.
 	 * @return bool
@@ -4437,7 +4437,7 @@ class FrmAppHelper {
 	/**
 	 * Check if GDPR is enabled.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return bool
 	 */
@@ -4449,7 +4449,7 @@ class FrmAppHelper {
 	/**
 	 * Check if GDPR cookies are disabled.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return bool
 	 */

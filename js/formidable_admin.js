@@ -2115,7 +2115,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if a field can be duplicated.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param {HTMLElement} field
 	 * @param {number}      maxFieldsInGroup

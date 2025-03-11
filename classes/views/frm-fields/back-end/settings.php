@@ -232,7 +232,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		/**
 		 * Fires after displaying the field description in a form settings.
 		 *
-		 * @since x.x
+		 * @since 6.19
 		 *
 		 * @param array $args {
 		 *     Array containing the field data.
