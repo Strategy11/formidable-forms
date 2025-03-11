@@ -667,6 +667,7 @@ class FrmAppController {
 
 		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
+		wp_register_style( 'formidable-settings-components', $plugin_url . '/css/admin/frm-settings-components.css', array( 'formidable-admin', 'formidable-grids' ), $version );
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
@@ -704,6 +705,7 @@ class FrmAppController {
 		}
 
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
+		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
 
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
@@ -734,12 +736,16 @@ class FrmAppController {
 			self::maybe_deregister_popper2();
 			wp_enqueue_script( 'formidable_admin' );
 			wp_set_script_translations( 'formidable_admin', 'formidable' );
+			// TODO: Add condition.
+			wp_enqueue_script( 'formidable-settings-components' );
 			wp_enqueue_script( 'formidable_embed' );
 			wp_set_script_translations( 'formidable_embed', 'formidable' );
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-animations' );
 			wp_enqueue_style( 'formidable-admin' );
+			// TODO: Add condition.
+			wp_enqueue_style( 'formidable-settings-components' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				self::maybe_enqueue_dropzone_css( $page );

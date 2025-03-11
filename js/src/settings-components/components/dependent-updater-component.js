@@ -4,10 +4,10 @@
  * It is primarily used in components from Style/Quick Settings.
  * For instance, when the "FrmPrimaryColorStyleComponent" is changed, it simultaneously updates various style elements like border color, text color, and button backgrounds.
  */
-export default class frmStyleDependentUpdaterComponent {
+export default class frmDependentUpdaterComponent {
 
 	/**
-	 * Creates an instance of frmStyleDependentUpdaterComponent.
+	 * Creates an instance of frmDependentUpdaterComponent.
 	 * @param {HTMLElement} component - The component element.
 	 */
 	constructor( component ) {

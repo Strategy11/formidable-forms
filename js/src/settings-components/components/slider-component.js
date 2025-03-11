@@ -1,9 +1,9 @@
-import frmStyleDependentUpdaterComponent from './dependent-updater-component';
+import frmDependentUpdaterComponent from './dependent-updater-component';
 /**
- * Represents a slider style component.
- * @class frmSliderStyleComponent
+ * Represents a slider component.
+ * @class frmSliderComponent
  */
-export default class frmSliderStyleComponent {
+export default class frmSliderComponent {
 
 	constructor() {
 		this.sliderElements = document.querySelectorAll( '.frm-slider-component' );
@@ -24,7 +24,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the options for the slider style component.
+	 * Initializes the options for the slider component.
 	 */
 	initOptions() {
 		this.options = [];
@@ -38,13 +38,13 @@ export default class frmSliderStyleComponent {
 				element: element,
 				index: index,
 				value: 0,
-				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmStyleDependentUpdaterComponent( parentWrapper ) : null
+				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			});
 		});
 	}
 
 	/**
-	 * Initializes the slider style component.
+	 * Initializes the slider component.
 	 */
 	init() {
 		this.initSlidersPosition();
@@ -52,11 +52,11 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the draggable functionality for the slider style component.
+	 * Initializes the draggable functionality for the slider component.
 	 */
 	initDraggable() {
 		this.sliderElements.forEach( ( element, index ) => {
-			this.eventsChange[ index ] = new Event( 'change', { 
+			this.eventsChange[ index ] = new Event( 'change', {
 				bubbles: true,
 				cancelable: true
 			});
@@ -207,7 +207,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the position of sliders when a style accordion section is opened.
+	 * Initializes the position of sliders when a accordion section is opened.
 	 */
 	initSlidersPosition() {
 		const accordionitems  = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
@@ -379,7 +379,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Enables dragging for the slider style component.
+	 * Enables dragging for the slider component.
 	 *
 	 * @param {Event}  event - The event object.
 	 * @param {number} index - The index of the option being dragged.

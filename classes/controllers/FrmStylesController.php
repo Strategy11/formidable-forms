@@ -120,7 +120,6 @@ class FrmStylesController {
 			return;
 		}
 
-		FrmStyleComponent::register_assets();
 		self::load_pro_hooks();
 
 		$version = FrmAppHelper::plugin_version();

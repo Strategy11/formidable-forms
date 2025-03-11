@@ -1,14 +1,14 @@
 import { __ } from '@wordpress/i18n';
-import frmRadioStyleComponent from './styles/radio-style-component.js';
-import frmSliderStyleComponent from './styles/slider-style-component.js';
-import frmTabsStyleComponent from './styles/tabs-style-component.js';
-import frmStyleDependentUpdaterComponent from './styles/dependent-updater-component.js';
+import frmRadioComponent from './components/radio-component.js';
+import frmSliderComponent from './components/slider-component.js';
+import frmTabsComponent from './components/tabs-component.js';
+import frmDependentUpdaterComponent from './components/dependent-updater-component.js';
 
 /**
- * Represents the frmStyleOptions class.
+ * Represents the frmSettingsComponents class.
  * @class
  */
-class frmStyleOptions {
+class frmSettingsComponents  {
 
 	constructor() {
 		this.success = frmDom.success;
@@ -17,13 +17,13 @@ class frmStyleOptions {
 	}
 
 	/**
-	 * Initializes the style components: frmRadioStyleComponent, frmSliderStyleComponent, and frmTabsStyleComponent.
-	 * Init the dependent 
+	 * Initializes the components: frmRadioComponent, frmSliderComponent, and frmTabsComponent.
+	 * Init the dependent
 	 */
 	init() {
-		new frmRadioStyleComponent();
-		new frmSliderStyleComponent();
-		new frmTabsStyleComponent();
+		new frmRadioComponent();
+		new frmSliderComponent();
+		new frmTabsComponent();
 
 		this.initColorPickerDependentUpdaterComponents();
 		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
@@ -45,7 +45,7 @@ class frmStyleOptions {
 			if ( null !== id ) {
 				elements.push({
 					id: id,
-					dependentUpdaterClass: new frmStyleDependentUpdaterComponent( component, 'colorpicker' )
+					dependentUpdaterClass: new frmDependentUpdaterComponent( component, 'colorpicker' )
 				});
 			}
 		});
@@ -65,7 +65,7 @@ class frmStyleOptions {
 	}
 
 	/**
-	 * Initializes the hover functionality for the style options.
+	 * Initializes the hover functionality for the options.
 	 * Creates a hover element and appends it to the settingsWrapper.
 	 * Adds event listeners for mouseover and click events.
 	 */
@@ -99,13 +99,17 @@ class frmStyleOptions {
 	}
 
 	/**
-	 * Initializes the copy to clipboard functionality for style classes.
+	 * Initializes the copy to clipboard functionality for classes.
 	 * Adds a click event listener to the copyLabel element.
 	 * Copies the class name to the clipboard and displays a success message.
 	 * @param {string} successMessage - The success message to display.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
 		const copyLabel = document.querySelector( '.frm-copy-text' );
+		if ( ! copyLabel ) {
+			return;
+		}
+
 		copyLabel.addEventListener( 'click', ( event ) => {
 			const className = event.currentTarget.innerText;
 			navigator.clipboard.writeText( className ).then( () => {
@@ -115,4 +119,4 @@ class frmStyleOptions {
 	}
 }
 
-new frmStyleOptions();
+new frmSettingsComponents();

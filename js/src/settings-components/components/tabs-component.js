@@ -1,9 +1,9 @@
 import { frmTabsNavigator } from '../../components/class-tabs-navigator';
 /**
- * Represents a Tabs Style Component.
+ * Represents a Tabs Component.
  * @class
  */
-export default class frmTabsStyleComponent {
+export default class frmTabsComponent {
 
 	constructor() {
 		this.elements = document.querySelectorAll( '.frm-style-tabs-wrapper' );
@@ -13,7 +13,7 @@ export default class frmTabsStyleComponent {
 	}
 
 	/**
-	 * Initializes the Tabs Style Component.
+	 * Initializes the Tabs Component.
 	 */
 	init() {
 		this.elements.forEach( ( element ) => {

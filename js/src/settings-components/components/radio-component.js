@@ -1,10 +1,10 @@
 import { show, hide } from 'core/utils';
 
 /**
- * Represents a radio style component.
+ * Represents a radio component.
  * @class
  */
-export default class frmRadioStyleComponent {
+export default class frmRadioComponent {
 
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
@@ -14,7 +14,7 @@ export default class frmRadioStyleComponent {
 	}
 
 	/**
-	 * Initializes the radio style component.
+	 * Initializes the radio component.
 	 */
 	init() {
 		this.radioElements.forEach( ( element ) => {
