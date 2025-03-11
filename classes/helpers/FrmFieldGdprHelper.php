@@ -2,7 +2,7 @@
 /**
  * GDPR field helper
  *
- * @since x.x
+ * @since 6.19
  * @package Formidable
  */
 
@@ -18,7 +18,7 @@ class FrmFieldGdprHelper {
 	/**
 	 * Field type
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 * @var string
 	 */
 	const FIELD_TYPE = 'gdpr';
@@ -26,7 +26,7 @@ class FrmFieldGdprHelper {
 	/**
 	 * Field class
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 * @var string
 	 */
 	const FIELD_CLASS = 'FrmFieldGdpr';
@@ -34,7 +34,7 @@ class FrmFieldGdprHelper {
 	/**
 	 * Hide GDPR field
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 * @return bool
 	 */
 	public static function hide_gdpr_field() {
@@ -45,7 +45,7 @@ class FrmFieldGdprHelper {
 	/**
 	 * Add GDPR field to form builder
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 * @param array $fields
 	 * @return array
 	 */
@@ -60,7 +60,7 @@ class FrmFieldGdprHelper {
 	/**
 	 * Initialize GDPR field Class name
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 * @param string $field_type
 	 * @return string
 	 */
