@@ -6047,6 +6047,10 @@ p.frm-inline-select,
 .frm-single-settings .frm_single_option .frm_remove_tag:before {
 	content: "";
 }
+.frm-single-settings input[type="checkbox"][readonly] {
+	opacity: 0.5;
+	pointer-events: none;
+}
 
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
@@ -7696,7 +7700,9 @@ ul.frm_two_col {
 	gap: var(--gap-xs);
 	align-items: center;
 }
-
+.multiselect-container button.multiselect-option.disabled {
+	opacity: 0.5;
+}
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
 	margin-right: var(--gap-xs);
