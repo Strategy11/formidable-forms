@@ -77,7 +77,7 @@ if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 <p <?php FrmAppHelper::array_to_html_params( $gdpr_options_wrapper_params, true ); ?>>
 	<label>
 		<input type="checkbox" name="frm_no_gdpr_cookies" id="frm_no_gdpr_cookies" value="1" <?php checked( $frm_settings->no_gdpr_cookies, 1 ); ?> />
-		<?php esc_html_e( 'This will disable the option to limit form entries to one per user by cookie.', 'formidable' ); ?>
+		<?php esc_html_e( 'Disable user tracking cookies. This will disable the option to limit form entries to one per user by cookie.', 'formidable' ); ?>
 	</label>
 </p>
 
