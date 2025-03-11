@@ -285,6 +285,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * User ID
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
+* GDPR field - Great for compliance with General Data Protection Regulation (GDPR).
 
 Here is a list of our advanced premium fields that will come in handy:
 
