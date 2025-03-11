@@ -5,7 +5,7 @@
 **/formidable_overlay.js
 **/formidable_dashboard.js
 **/formidable-templates.js
-**/settings-components.js
+**/formidable-settings-components.js
 
 **/node_modules/**
 **/vendor/**
