@@ -919,7 +919,7 @@ function frmFrontFormJS() {
 					},
 					delay
 				);
-			} else if ( Object.keys( response.errors ).length ) {
+			} else if ( typeof response.errors !== 'undefined' && Object.keys( response.errors ).length ) {
 				// errors were returned
 				removeSubmitLoading( jQuery( object ), 'enable' );
 
