@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-03-11T16:27:06+00:00\n"
+"POT-Creation-Date: 2025-03-11T16:57:32+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -6723,7 +6723,7 @@ msgid "Enable GDPR related features and enhancements."
 msgstr ""
 
 #: classes/views/frm-settings/general.php:80
-msgid "This will disable the option to limit form entries to one per user by cookie."
+msgid "Disable user tracking cookies. This will disable the option to limit form entries to one per user by cookie."
 msgstr ""
 
 #: classes/views/frm-settings/general.php:87
