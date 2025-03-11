@@ -4394,13 +4394,7 @@ label input[type="checkbox"], label input[type="radio"] {
 	font-size: inherit;
 }
 
-#frm-options-panel {
-	padding: 0 var(--gap-sm);
-	color: var(--grey-900);
-}
-
-.frm-right-panel a.frm_add_logic_link,
-#frm-options-panel h3 {
+.frm-right-panel a.frm_add_logic_link {
 	padding: 15px 0;
 	margin-top: -2px;
 }
@@ -7796,7 +7790,6 @@ ul.frm_two_col {
 
 .field_type_list.frm_grid_container {
 	gap: var(--gap-xs) var(--gap-sm);
-	margin: var(--gap-xs);
 }
 
 .field_type_list li {
@@ -7806,7 +7799,7 @@ ul.frm_two_col {
 
 #frm-insert-fields .frm-search {
 	float: none;
-	margin: 15px 20px;
+	margin: 0 0 var(--gap-md);
 	width: auto;
 }
 
@@ -7932,7 +7925,7 @@ input[disabled],
 	gap: var(--gap-xs);
 	align-items: center;
 	border-radius: var(--border-radius) !important;
-	padding: var(--gap-xs) var(--gap-sm) !important;
+	padding: var(--gap-xs) !important;
 	color: var(--grey-900) !important;
 }
 
