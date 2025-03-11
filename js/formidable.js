@@ -866,6 +866,7 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
+				return;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
