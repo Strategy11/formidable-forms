@@ -39,8 +39,7 @@ class FrmFormTemplatesHelper {
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
 		} elseif ( ! $template['plan_required'] ) {
-			$plan_required = $template['plan_required'];
-			$link          = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type', 'plan_required' ) );
+			$link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
 
 			$template['use_template'] = esc_url( $link['url'] );
 		}
