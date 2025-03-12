@@ -29,7 +29,7 @@
 		"npm": ">=10.0.0"
 	},
 	"dependencies": {
-		"@babel/runtime": "7.0.0-beta.55",
+		"@babel/runtime": "7.26.10",
 		"@wordpress/api-fetch": "^2.2.8",
 		"@wordpress/api-request": "^1.0.0",
 		"@wordpress/components": "^6.0.1",
