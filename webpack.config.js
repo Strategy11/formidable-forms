@@ -25,7 +25,8 @@ const config = {
 		formidable_dashboard: './js/src/dashboard.js',
 		'onboarding-wizard': './js/src/onboarding-wizard/index.js',
 		'addons-page': './js/src/addons-page/index.js',
-		'formidable-settings-components': './js/src/settings-components/settings-components.js',
+		formidable_styles: './js/src/admin/styles.js',
+		'formidable-settings-components': './js/src/settings-components/index.js',
 	},
 	output: {
 		filename: '[name].js',
