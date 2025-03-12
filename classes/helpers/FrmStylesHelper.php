@@ -444,11 +444,39 @@ class FrmStylesHelper {
 				$defaults[ $var ] = '';
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show ) {
+			if ( $show && self::css_value_is_valid( $var ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
+
+	/**
+	 * Confirm a CSS value is valid.
+	 * If it appears to contain JavaScript, it will not be added.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $var
+	 * @return bool
+	 */
+	private static function css_value_is_valid( $var ) {
+		// None of these substrings should be present in any CSS value.
+		$invalid_substrings = array(
+			'function(',
+			';userAgent',
+			';stopPropagation',
+			'{const',
+		);
+
+		foreach ( $invalid_substrings as $substring ) {
+			if ( strpos( $var, $substring ) !== false ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	/**
 	 * Remove anything that isn't used as a CSS variable name.
