@@ -520,7 +520,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Check inbox for an "error" type. This is displayed on the form list page if one exists.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return array|false
 	 */

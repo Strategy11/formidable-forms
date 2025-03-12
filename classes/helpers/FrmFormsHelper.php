@@ -1457,11 +1457,6 @@ BEFORE_HTML;
 				'href'  => 'rel',
 				'atts'  => '',
 			);
-		} elseif ( self::plan_is_allowed( $args ) ) {
-			$link = array(
-				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
-				'label' => __( 'Renew', 'formidable' ),
-			);
 		} else {
 			$link = array(
 				'url'   => $args['pricing'],

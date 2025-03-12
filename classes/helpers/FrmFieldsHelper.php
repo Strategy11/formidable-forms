@@ -1291,6 +1291,7 @@ class FrmFieldsHelper {
 			'time',
 			'tag',
 			'password',
+			'gdpr',
 		);
 		return apply_filters( 'frm_single_input_fields', $fields );
 	}
