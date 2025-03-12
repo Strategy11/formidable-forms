@@ -444,10 +444,23 @@ class FrmStylesHelper {
 				$defaults[ $var ] = '';
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show && self::css_value_is_valid( $var ) ) {
+			if ( $show && self::css_key_is_valid( $var ) && self::css_value_is_valid( $var ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * Prevent invalid CSS keys from getting added to the generated CSS.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	private static function css_key_is_valid( $key ) {
+		// Any key that is abnormaly large is not valid.
+		return strlen( $key ) < 100;
 	}
 
 	/**
