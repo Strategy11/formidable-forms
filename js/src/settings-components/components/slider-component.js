@@ -1,4 +1,4 @@
-import frmDependentUpdaterComponent from './dependent-updater-component';
+import frmDependentUpdaterComponent from '../../admin/styles/dependent-updater-component';
 /**
  * Represents a slider component.
  * @class frmSliderComponent
