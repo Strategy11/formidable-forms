@@ -444,7 +444,7 @@ class FrmStylesHelper {
 				$defaults[ $var ] = '';
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show && self::css_key_is_valid( $var ) && self::css_value_is_valid( $var ) ) {
+			if ( $show && self::css_key_is_valid( $var ) && self::css_value_is_valid( $settings[ $var ] ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
