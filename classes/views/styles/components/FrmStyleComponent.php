@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmStyleComponent {
 
 	/**
+	 * The CSS and JS scripts slug.
+	 *
+	 * @since 6.14
+	 *
+	 * @var string
+	 */
+	const ASSETS_SLUG = 'formidable-style-components';
+
+	/**
 	 * The folder name where views files are located.
 	 *
 	 * @since 6.14
@@ -61,6 +70,21 @@ class FrmStyleComponent {
 	private function __construct() {
 		$this->load_css();
 		$this->load_js();
+	}
+
+	/**
+	 * Register CSS & JS style components assets.
+	 *
+	 * @since 6.14
+	 *
+	 * @return void
+	 */
+	public static function register_assets() {
+		$plugin_url = FrmAppHelper::plugin_url();
+		$version    = FrmAppHelper::plugin_version();
+
+		wp_register_style( self::ASSETS_SLUG, $plugin_url . '/css/admin/style-components.css', array(), $version );
+		wp_register_script( self::ASSETS_SLUG, $plugin_url . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
 	}
 
 	/**
@@ -209,6 +233,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	private function load_css() {
+		wp_enqueue_style( self::ASSETS_SLUG );
 		wp_enqueue_style( 'formidable-settings-components' );
 	}
 
@@ -220,18 +245,7 @@ class FrmStyleComponent {
 	 * @return void
 	 */
 	private function load_js() {
+		wp_enqueue_script( self::ASSETS_SLUG );
 		wp_enqueue_script( 'formidable-settings-components' );
-	}
-
-	/**
-	 * Register CSS & JS style components assets.
-	 *
-	 * @since 6.14
-	 * @deprecated x.x
-	 *
-	 * @return void
-	 */
-	public static function register_assets() {
-		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
