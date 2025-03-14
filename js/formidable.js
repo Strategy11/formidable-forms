@@ -866,7 +866,6 @@ function frmFrontFormJS() {
 				} else {
 					doRedirect( response );
 				}
-				return;
 			}
 
 			if ( 'string' === typeof response.content && response.content !== '' ) {
@@ -986,7 +985,7 @@ function frmFrontFormJS() {
 					object.insertAdjacentHTML( 'afterbegin', response.error_message );
 					checkForErrorsAndMaybeSetFocus();
 				}
-			} else {
+			} else if ( typeof response.redirect === 'undefined' ) {
 				// there may have been a plugin conflict, or the form is not set to submit with ajax
 
 				showFileLoading( object );
