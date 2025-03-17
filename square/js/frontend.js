@@ -8,6 +8,8 @@
 	let thisForm = null;
 	let running = 0;
 
+	let cardGlobal;
+
 	// Track the state of each field in the card form
 	const cardFields = {
 		cardNumber: false,
@@ -21,23 +23,23 @@
 		await card.attach( '#card-container' );
 
 		// Add event listener to track when the card form is valid
-		card.addEventListener('focusClassRemoved', (e) => {
+		card.addEventListener( 'focusClassRemoved', ( e ) => {
 			const field = e.detail.field;
 			const value = e.detail.currentState.isCompletelyValid;
 			cardFields[field] = value;
 
 			// Check if all fields are valid
-			squareCardElementIsComplete = Object.values(cardFields).every(item => item === true);
+			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
 
 			// Update form submit button based on form validity
-			if (thisForm) {
-				if (squareCardElementIsComplete) {
+			if ( thisForm ) {
+				if ( squareCardElementIsComplete ) {
 					enableSubmit();
 				} else {
-					disableSubmit(thisForm);
+					disableSubmit( thisForm );
 				}
 			}
-		});
+		} );
 
 		return card;
 	}
@@ -46,7 +48,7 @@
 	 * Enable the submit button for the form.
 	 */
 	function enableSubmit() {
-		if (running > 0) {
+		if ( running > 0 ) {
 			return;
 		}
 
@@ -68,7 +70,7 @@
 	 */
 	function disableSubmit(form) {
 		jQuery(form).find('input[type="submit"],input[type="button"],button[type="submit"]').not('.frm_prev_page').attr('disabled', 'disabled');
-		
+
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent('frmSquareLiteDisableSubmit', { 
 			detail: { form: form }
@@ -76,7 +78,7 @@
 		document.dispatchEvent(event);
 	}
 
-	async function createPayment(event, token, verificationToken) {
+	async function createPayment( event, token, verificationToken ) {
 		const tokenInput = document.createElement('input');
 		tokenInput.type = 'hidden';
 		tokenInput.value = token;
@@ -85,14 +87,14 @@
 		const verificationInput = document.createElement('input');
 		verificationInput.type = 'hidden';
 		verificationInput.value = verificationToken;
-		verificationInput.setAttribute('name', 'square-verification-token');
+		verificationInput.setAttribute( 'name', 'square-verification-token' );
 
 		// Use the thisForm variable that we set earlier
-		if (thisForm) {
+		if ( thisForm ) {
 			thisForm.appendChild(tokenInput);
 			thisForm.appendChild(verificationInput);
 
-			if (typeof frmFrontForm.submitFormManual === 'function') {
+			if ( typeof frmFrontForm.submitFormManual === 'function' ) {
 				frmFrontForm.submitFormManual(event, thisForm);
 			} else {
 				// Fallback if submitFormManual is not available
@@ -153,28 +155,30 @@
 
 		// Find the form containing the Square payment element
 		const cardContainer = document.getElementById('card-container');
-		if (cardContainer) {
+		if ( cardContainer ) {
 			thisForm = cardContainer.closest('form');
-			if (thisForm) {
+			if ( thisForm ) {
 				// Initially disable the submit button until card is valid
-				disableSubmit(thisForm);
-				
+				disableSubmit( thisForm );
+
 				// Add event listener for form submission
-				thisForm.addEventListener('submit', function(event) {
-					// If we have a Square card element and it's not complete, prevent submission
-					if (!squareCardElementIsComplete) {
-						event.preventDefault();
-						event.stopPropagation();
-						
+				thisForm.addEventListener( 'submit', function( event ) {
+					event.preventDefault();
+					event.stopPropagation();
+
+					if ( ! squareCardElementIsComplete ) {
 						// Show error message
 						const statusContainer = document.getElementById('payment-status-container');
-						if (statusContainer) {
+						if ( statusContainer ) {
 							statusContainer.textContent = 'Please complete all card details before submitting.';
 							statusContainer.classList.add('is-failure');
 							statusContainer.style.visibility = 'visible';
 						}
-						return false;
+					} else {
+						handlePaymentMethodSubmission( event, cardGlobal );
 					}
+
+					return false;
 				});
 			}
 		}
@@ -198,17 +202,19 @@
 			return;
 		}
 
+		cardGlobal = card;
+
 		async function handlePaymentMethodSubmission( event, card ) {
 			event.preventDefault();
 
 			try {
 				// Increment running counter and disable the submit button
 				running++;
-				if (thisForm) {
-					disableSubmit(thisForm);
+				if ( thisForm ) {
+					disableSubmit( thisForm );
 				}
-				
-				const token = await tokenize(card);
+
+				const token             = await tokenize(card);
 				const verificationToken = await verifyBuyer(payments, token);
 				await createPayment(event, token, verificationToken);
 				
