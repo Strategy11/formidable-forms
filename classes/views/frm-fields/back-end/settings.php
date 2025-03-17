@@ -53,6 +53,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 		?>
+
+		<?php
+		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
+			?>
+			<div class="frm_note_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'GDPR field is disabled. Please enable it in the Formidable %1$sSettings%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
+			</div>
+			<?php
+		}
+		?>
+
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -68,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $display['required'] ) { ?>
 				<div class="frm_form_field">
 					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
-						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php echo $display['readonly_required'] ? 'readonly onclick="return false;"' : ''; ?> <?php checked( $field['required'], 1 ); ?> />
 						<?php esc_html_e( 'Required', 'formidable' ); ?>
 					</label>
 				</div>
@@ -211,6 +228,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		if ( $display['description'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}
+
+		/**
+		 * Fires after displaying the field description in a form settings.
+		 *
+		 * @since 6.19
+		 *
+		 * @param array $args {
+		 *     Array containing the field data.
+		 *
+		 *     @type array  $field   The field settings.
+		 *     @type array  $display The display settings for the field.
+		 *     @type array  $values  The values associated with the field.
+		 * }
+		 */
+		do_action( 'frm_field_options_after_description', compact( 'field', 'display', 'values' ) );
 
 		// Field Size
 		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ), true ) ) {

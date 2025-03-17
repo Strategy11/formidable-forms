@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.18';
+	public static $plug_version = '6.19';
 
 	/**
 	 * @var bool
@@ -329,6 +329,29 @@ class FrmAppHelper {
 		}
 
 		return $is_formidable;
+	}
+
+	/**
+	 * Checks if is a list page.
+	 *
+	 * @since 6.19
+	 *
+	 * @param string $page The name of the page to check.
+	 * @return bool
+	 */
+	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( ! self::is_admin_page( $page ) ) {
+			return false;
+		}
+
+		// Check Trash page.
+		$form_type = self::simple_get( 'form_type' );
+		if ( $form_type && 'published' !== $form_type ) {
+			return false;
+		}
+
+		// Check edit or settings page.
+		return ! self::simple_get( 'frm_action' );
 	}
 
 	/**
@@ -4409,5 +4432,29 @@ class FrmAppHelper {
 			?>
 		</span>
 		<?php
+	}
+
+	/**
+	 * Check if GDPR is enabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function is_gdpr_enabled() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr || $frm_settings->no_ips || $frm_settings->custom_header_ip || $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if GDPR cookies are disabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function no_gdpr_cookies() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
 	}
 }

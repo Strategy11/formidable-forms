@@ -409,6 +409,8 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		let hide = this.getAttribute( 'data-frmhide' );
 		let show = this.getAttribute( 'data-frmshow' );
+		let uncheckList = this.getAttribute( 'data-frmuncheck' );
+		let uncheckListArray = uncheckList ? uncheckList.split( ',' ) : [];
 
 		// Flip unchecked checkboxes so an off value undoes the on value.
 		if ( isUncheckedCheckbox( this ) ) {
@@ -439,6 +441,15 @@ function frmAdminBuildJS() {
 				current[ i ].classList.remove( 'current' );
 			}
 			this.classList.add( 'current' );
+		}
+
+		if ( uncheckListArray.length ) {
+			uncheckListArray.forEach( function( uncheckItem ) {
+				const uncheckItemElement = document.querySelector( uncheckItem );
+				if ( uncheckItemElement ) {
+					uncheckItemElement.checked = false;
+				}
+			});
 		}
 
 		return false;
@@ -2101,19 +2112,44 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Returns true if a field can be duplicated.
+	 *
+	 * @since 6.19
+	 *
+	 * @param {HTMLElement} field
+	 * @param {number}      maxFieldsInGroup
+	 *
+	 * @returns {Boolean}
+	 */
+	function canDuplicateField( field, maxFieldsInGroup ) {
+		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
+			return false;
+		}
+		const fieldGroup = field.closest( 'li.frm_field_box:not(.form-field)' );
+		if ( ! fieldGroup ) {
+			return true;
+		}
+		const fieldsInGroup = getFieldsInRow( jQuery( fieldGroup.querySelector( 'ul' ) ) ).length;
+		return fieldsInGroup < maxFieldsInGroup;
+	}
+
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
+		const maxFieldsInGroup = 6;
 
-		$field = jQuery( this ).closest( 'li.form-field' );
+		$field   = jQuery( this ).closest( 'li.form-field' );
+		newRowId = this.getAttribute( 'frm-target-row-id' );
 
-		if ( $field.hasClass( 'frm-page-collapsed' ) ) {
-			return false;
+		if ( ! ( newRowId && newRowId.startsWith( 'frm_field_group_' ) ) && ! canDuplicateField( $field.get( 0 ), maxFieldsInGroup ) ) {
+			/* translators: %1$d: Maximum number of fields allowed in a field group. */
+			infoModal( sprintf( __( 'You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable' ), maxFieldsInGroup ) );
+			return;
 		}
 
 		closeOpenFieldDropdowns();
 		fieldId = $field.data( 'fid' );
 		children = fieldsInSection( fieldId );
-		newRowId = this.getAttribute( 'frm-target-row-id' );
 
 		if ( null !== newRowId ) {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
@@ -2151,6 +2187,7 @@ function frmAdminBuildJS() {
 							}
 						);
 						afterAddField( msg, false );
+						setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 						return;
 					}
 				}
@@ -2172,9 +2209,35 @@ function frmAdminBuildJS() {
 				maybeDuplicateUnsavedSettings( fieldId, msg );
 				toggleOneSectionHolder( replaceWith.find( '.start_divider' ) );
 				$field[0].querySelector( '.frm-dropdown-menu.dropdown-menu-right' )?.classList.remove( 'show' );
+				setLayoutClassesForDuplicatedFieldInGroup( $field.get( 0 ), replaceWith.get( 0 ) );
 			}
 		});
 		return false;
+	}
+
+	/**
+	 * Sets the layout classes for a duplicated field in a field group from the layout classes of the original field.
+	 *
+	 * @param {HTMLElement} field    The original field.
+	 * @param {HTMLElement} newField The duplicated field.
+	 *
+	 * @returns {void}
+	 */
+	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
+		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
+		if ( ! hoverTarget || ! isFieldGroup( hoverTarget.parentElement ) ) {
+			return;
+		}
+		const fieldId    = field.dataset.fid;
+		let fieldClasses = document.getElementById( 'frm_classes_' + fieldId )?.value;
+		if ( ! fieldClasses ) {
+			return;
+		}
+		fieldClasses = fieldClasses.replace( 'frm_first', '' );
+		if ( ! newField.className.includes( fieldClasses ) ) {
+			newField.className += ' ' + fieldClasses;
+			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
+		}
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
@@ -2545,6 +2608,8 @@ function frmAdminBuildJS() {
 
 		deselectFields();
 		initiateMultiselect();
+
+		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
 
 		const addedEvent      = new Event( 'frm_added_field', { bubbles: false });
 		addedEvent.frmField   = field;
@@ -10333,7 +10398,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-
 	/**
 	 * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
 	 * It sets up initial visibility at page load and updates it on each dropdown change.
@@ -10366,7 +10430,36 @@ function frmAdminBuildJS() {
 
 		// Update dependencies visibility on dropdown change
 		frmDom.util.documentOn( 'change', 'select.frm_select_with_dependency', ( event ) => toggleDependencyVisibility( event.target ) );
-	};
+	}
+
+	/**
+	 * Moves the focus to the next single option input field in the list and positions the cursor at the end of the text.
+	 *
+	 * @param {HTMLElement} currentInput The currently focused input element.
+	 */
+	function focusNextSingleOptionInput( currentInput ) {
+		const optionsList = currentInput.closest( '.frm_single_option' ).parentElement;
+		const inputs = optionsList.querySelectorAll( '.frm_single_option input[name^="field_options[" ], .frm_single_option input[name^="rows_"]' );
+		const inputsArray = Array.from( inputs );
+
+		// Find the index of the currently focused input
+		const currentIndex = inputsArray.indexOf( currentInput );
+
+		if ( currentIndex < 0 ) {
+			return;
+		}
+
+		// Find the next visible input field
+		const nextInput = inputsArray.slice( currentIndex + 1 ).find( input => input.offsetParent !== null );
+
+		if ( nextInput ) {
+			nextInput.focus();
+
+			// Move the cursor to the end of the text in the next input field
+			const textLength = nextInput.value.length;
+			nextInput.setSelectionRange( textLength, textLength );
+		}
+	}
 
 	return {
 		init: function() {
@@ -10699,6 +10792,13 @@ function frmAdminBuildJS() {
 
 			frmDom.util.documentOn( 'click', '.frm-show-field-settings', clickVis );
 			frmDom.util.documentOn( 'change', 'select.frm_format_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput );
+
+			// Navigate to the next input field on pressing Enter in a single option field
+			$builderForm.on( 'keydown', '.frm_single_option input[name^="field_options["], .frm_single_option input[name^="rows_"]', event => {
+				if ( 'Enter' === event.key ) {
+					focusNextSingleOptionInput( event.currentTarget );
+				}
+			});
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
