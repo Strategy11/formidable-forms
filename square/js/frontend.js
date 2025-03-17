@@ -52,11 +52,11 @@
 			return;
 		}
 
-		thisForm.classList.add('frm_loading_form');
-		frmFrontForm.removeSubmitLoading(jQuery(thisForm), 'enable', 0);
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
 		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent('frmSquareLiteEnableSubmit', { 
+		const event = new CustomEvent( 'frmSquareLiteEnableSubmit', { 
 			detail: { form: thisForm }
 		});
 		document.dispatchEvent(event);
@@ -68,14 +68,14 @@
 	 * @param {Element} form
 	 * @return {void}
 	 */
-	function disableSubmit(form) {
-		jQuery(form).find('input[type="submit"],input[type="button"],button[type="submit"]').not('.frm_prev_page').attr('disabled', 'disabled');
+	function disableSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
 
 		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent('frmSquareLiteDisableSubmit', { 
+		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', { 
 			detail: { form: form }
 		});
-		document.dispatchEvent(event);
+		document.dispatchEvent( event );
 	}
 
 	async function createPayment( event, token, verificationToken ) {
@@ -91,11 +91,11 @@
 
 		// Use the thisForm variable that we set earlier
 		if ( thisForm ) {
-			thisForm.appendChild(tokenInput);
-			thisForm.appendChild(verificationInput);
+			thisForm.appendChild( tokenInput );
+			thisForm.appendChild( verificationInput );
 
 			if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-				frmFrontForm.submitFormManual(event, thisForm);
+				frmFrontForm.submitFormManual( event, thisForm );
 			} else {
 				// Fallback if submitFormManual is not available
 				thisForm.submit();
@@ -214,19 +214,19 @@
 					disableSubmit( thisForm );
 				}
 
-				const token             = await tokenize(card);
-				const verificationToken = await verifyBuyer(payments, token);
-				await createPayment(event, token, verificationToken);
+				const token             = await tokenize( card );
+				const verificationToken = await verifyBuyer( payments, token );
+				await createPayment( event, token, verificationToken );
 				
 				// Decrement running counter after successful payment
 				running--;
-				if (running === 0 && thisForm) {
+				if ( running === 0 && thisForm ) {
 					enableSubmit();
 				}
-			} catch (e) {
+			} catch ( e ) {
 				// Decrement running counter and re-enable submit if appropriate
 				running--;
-				if (running === 0 && thisForm && squareCardElementIsComplete) {
+				if ( running === 0 && thisForm && squareCardElementIsComplete ) {
 					enableSubmit();
 				}
 				displayPaymentFailure();
