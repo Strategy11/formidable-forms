@@ -20,7 +20,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		// TODO Fix this.
 		echo '
-			<button id="card-button" type="button">Pay $1.00</button>
 			<div id="card-container"></div>
 			<div id="payment-status-container">Payment Status</div>
 		';

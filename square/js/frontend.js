@@ -232,21 +232,5 @@
 				displayPaymentFailure();
 			}
 		}
-
-		const cardButton = document.getElementById('card-button');
-		cardButton.addEventListener('click', async function(event) {
-			// Only proceed if the card element is complete
-			if (squareCardElementIsComplete) {
-				await handlePaymentMethodSubmission(event, card);
-			} else {
-				// Optionally show an error message
-				const statusContainer = document.getElementById('payment-status-container');
-				if (statusContainer) {
-					statusContainer.textContent = 'Please complete all card details before submitting.';
-					statusContainer.classList.add('is-failure');
-					statusContainer.style.visibility = 'visible';
-				}
-			}
-		});
 	});
 }() );
