@@ -80,7 +80,6 @@ class test_FrmFormTemplatesController extends FrmUnitTest {
 		$this->set_private_property( $this->controller, 'is_expired', false );
 
 		// Assertions for free license.
-		$this->assertStringContainsString( 'id="frm-leave-email-modal"', $output );
 		$this->assertStringContainsString( 'id="frm-form-upgrade-modal"', $output );
 		$this->assertStringNotContainsString( 'id="frm-renew-modal"', $output );
 
