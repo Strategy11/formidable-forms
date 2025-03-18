@@ -19,6 +19,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$actions = self::get_actions_before_submit( $field['form_id'] );
 
 		if ( $actions ) {
+			// TODO This likely overwrites Stripe.
+			// We'll need to check $actions for a credit card field match.
 			echo '
 				<div id="card-container"></div>
 				<div id="payment-status-container">Payment Status</div>
@@ -80,7 +82,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
+			$response['error'] = __( 'There was a problem communicating with Square. Please try again.', 'formidable' );
 			return $response;
 		}
 
@@ -127,7 +129,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function set_customer_with_token( $atts ) {
 		if ( isset( self::$customer ) ) {
-			// It's an object if this isn't the first Stripe action running.
+			// It's an object if this isn't the first Square action running.
 			return self::$customer;
 		}
 
