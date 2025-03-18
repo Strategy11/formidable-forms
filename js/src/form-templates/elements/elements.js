@@ -30,9 +30,7 @@ addElements({
 	templatesList,
 	templateItems: templatesList.querySelectorAll( '.frm-card-item' ),
 	availableTemplateItems: templatesList.querySelectorAll( `.frm-card-item:not(.${PREFIX}-locked-item)` ),
-	freeTemplateItems: templatesList.querySelectorAll( '.frm-card-item.frm-free-template' ),
 	twinFeaturedTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-featured-item` ),
-	firstLockedFreeTemplate: templatesList.querySelector( '.frm-free-template' ),
 	featuredTemplatesList: document.getElementById( `${PREFIX}-featured-list` ),
 
 	// Custom Templates Section elements
@@ -48,9 +46,6 @@ addElements({
 	),
 	availableTemplatesCategory: document.querySelector(
 		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
-	),
-	freeTemplatesCategory: document.querySelector(
-		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
 	),
 
 	// Modal elements

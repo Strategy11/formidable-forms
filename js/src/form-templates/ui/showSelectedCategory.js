@@ -37,9 +37,6 @@ export function showSelectedCategory( selectedCategory ) {
 		case VIEW_SLUGS.AVAILABLE_TEMPLATES:
 			showAvailableTemplates();
 			break;
-		case VIEW_SLUGS.FREE_TEMPLATES:
-			showFreeTemplates();
-			break;
 		case VIEW_SLUGS.FAVORITES:
 			showFavoriteTemplates();
 			break;
@@ -174,18 +171,6 @@ export function showAvailableTemplates() {
 
 	hideElements( templateItems ); // Clear the view for new content
 	showElements([ templatesList, ...availableTemplateItems ]);
-}
-
-/**
- * Shows free templates.
- *
- * @return {void}
- */
-export function showFreeTemplates() {
-	const { templatesList, templateItems, freeTemplateItems } = getElements();
-
-	hideElements( templateItems ); // Clear the view for new content
-	showElements([ templatesList, ...freeTemplateItems ]);
 }
 
 export default showSelectedCategory;

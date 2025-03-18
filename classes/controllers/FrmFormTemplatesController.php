@@ -520,11 +520,6 @@ class FrmFormTemplatesController {
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);
-		$special_categories['free-templates'] = array(
-			'name'  => __( 'Free Templates', 'formidable' ),
-			// Assigned via JavaScript.
-			'count' => 0,
-		);
 
 		self::$categories = array_merge(
 			$special_categories,
