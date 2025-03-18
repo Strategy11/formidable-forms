@@ -61,14 +61,20 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
+	 * AJAX Hook for signing free users up for a template API key
+	 *
+	 * @return void
+	 */
+	public static function signup() {
+		_deprecated_function( __METHOD__, 'x.x' );
+	}
+
+	/**
 	 * @return string
 	 */
 	public function get_free_license() {
-		if ( ! isset( self::$free_license ) ) {
-			self::$free_license = get_option( self::$code_option_name );
-		}
-
-		return self::$free_license;
+		_deprecated_function( __METHOD__, 'x.x' );
+		return '';
 	}
 
 	/**
@@ -79,22 +85,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @return bool
 	 */
 	public function has_free_access() {
-		$free_access = $this->get_free_license();
-		if ( ! $free_access ) {
-			return false;
-		}
-
-		$templates    = $this->get_api_info();
-		$contact_form = 20872734;
-		return isset( $templates[ $contact_form ] ) && ! empty( $templates[ $contact_form ]['url'] );
-	}
-
-	/**
-	 * AJAX Hook for signing free users up for a template API key
-	 *
-	 * @return void
-	 */
-	public static function signup() {
 		_deprecated_function( __METHOD__, 'x.x' );
+		return true;
 	}
 }
