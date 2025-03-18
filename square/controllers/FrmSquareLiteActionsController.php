@@ -18,16 +18,17 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	public static function show_card( $field, $field_name, $atts ) {
 		$actions = self::get_actions_before_submit( $field['form_id'] );
 
-		// TODO Fix this.
-		echo '
-			<div id="card-container"></div>
-			<div id="payment-status-container">Payment Status</div>
-		';
-		return;
+		if ( $actions ) {
+			echo '
+				<div id="card-container"></div>
+				<div id="payment-status-container">Payment Status</div>
+			';
+			return;
+		}
 
 		// Use the Pro function when there are no Stripe actions.
 		// This is required for other gateways like Authorize.Net.
-		if ( ! $actions && is_callable( 'FrmProCreditCardsController::show_in_form' ) ) {
+		if ( is_callable( 'FrmProCreditCardsController::show_in_form' ) ) {
 			FrmProCreditCardsController::show_in_form( $field, $field_name, $atts );
 		}
 
