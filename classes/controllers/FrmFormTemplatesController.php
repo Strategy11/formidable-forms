@@ -479,6 +479,13 @@ class FrmFormTemplatesController {
 				++self::$categories[ $category_slug ]['count'];
 			}
 
+			if ( ! isset( $template['id'] ) ) {
+				echo 'Template is missing ID: ' . PHP_EOL;
+				var_dump( $template );
+				echo PHP_EOL;
+				die();
+			}
+
 			// Mark the template as favorite if it's in the favorite templates list.
 			$template['is_favorite'] = in_array( $template['id'], self::$favorite_templates['default'], true );
 		}//end foreach
