@@ -282,9 +282,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );
 
-		// Templates API.
-		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
-
 		// Dashboard Controller.
 		add_action( 'wp_ajax_dashboard_ajax_action', 'FrmDashboardController::ajax_requests' );
 
