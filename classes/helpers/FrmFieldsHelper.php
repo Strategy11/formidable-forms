@@ -1526,7 +1526,7 @@ class FrmFieldsHelper {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $args['field']['type'] === 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] === 'select' && ! empty( $args['field']['multiple'] ) ) {
 			$classes[] = 'frm_other_full';
 		}
 
