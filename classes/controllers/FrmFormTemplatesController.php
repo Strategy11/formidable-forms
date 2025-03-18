@@ -226,12 +226,6 @@ class FrmFormTemplatesController {
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
 
-			// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
-			if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
-				$view_parts[] = 'modals/leave-email-modal.php';
-				$view_parts[] = 'modals/code-from-email-modal.php';
-			}
-
 			// Add 'upgrade' modal view for non-elite users.
 			if ( 'elite' !== FrmAddonsController::license_type() ) {
 				$view_parts[] = 'modals/upgrade-modal.php';

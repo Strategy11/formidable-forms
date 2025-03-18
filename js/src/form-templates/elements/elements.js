@@ -65,11 +65,6 @@ addElements({
 	createTemplateButton: document.getElementById( 'frm-create-template-button' ),
 	// Renew Account Modal
 	renewAccountModal: document.getElementById( 'frm-renew-modal' ),
-	// Leave Email Modal
-	leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
-	leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
-	leaveEmailModalApiEmailForm: document.getElementById( 'frmapi-email-form' ),
-	leaveEmailModalGetCodeButton: document.getElementById( 'frm-get-code-button' ),
 	// Code from Email Modal
 	codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
 	codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
