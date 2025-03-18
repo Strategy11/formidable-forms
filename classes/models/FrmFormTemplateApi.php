@@ -32,10 +32,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		if ( ! empty( $this->license ) ) {
 			$this->cache_key .= md5( $this->license );
 		} else {
-			$free_license = $this->get_free_license();
-			if ( $free_license ) {
-				$this->cache_key .= md5( $free_license );
-			}
+			$this->cache_key .= '01fd72122f4a90f15684915c729d4368';
 		}
 	}
 
@@ -48,12 +45,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 		$url = self::$base_api_url . 'list';
 
 		if ( empty( $this->license ) ) {
-			$free_license = $this->get_free_license();
-
-			if ( $free_license ) {
-				$url .= '?l=' . urlencode( base64_encode( $free_license ) );
-				$url .= '&v=' . FrmAppHelper::plugin_version();
-			}
+			$url .= '?l=RlJFRVRFTVBMQVRFUyEhIQ%3D%3D&v=' . FrmAppHelper::plugin_version();
 		}
 
 		return $url;
