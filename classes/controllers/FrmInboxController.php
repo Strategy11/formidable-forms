@@ -31,7 +31,7 @@ class FrmInboxController {
 	 */
 	public static function get_inbox_messages() {
 		self::add_tracking_request();
-		self::add_free_template_message();
+		self::remove_free_template_message();
 
 		$inbox              = new FrmInbox();
 		$unread_messages    = $inbox->get_messages();
@@ -107,7 +107,7 @@ class FrmInboxController {
 	 *
 	 * @return void
 	 */
-	private static function add_free_template_message() {
+	private static function remove_free_template_message() {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$message = new FrmInbox();
 			$message->dismiss( 'free_templates' );
