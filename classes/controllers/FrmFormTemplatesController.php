@@ -454,7 +454,7 @@ class FrmFormTemplatesController {
 		// Iterate through templates to assign categories.
 		foreach ( self::$templates as $key => &$template ) {
 			// Skip the template if the categories are not set.
-			if ( ! isset( $template['categories'] ) ) {
+			if ( ! isset( $template['categories'] ) || ! isset( $template['id'] ) ) {
 				unset( self::$templates[ $key ] );
 				continue;
 			}
@@ -477,13 +477,6 @@ class FrmFormTemplatesController {
 				}
 
 				++self::$categories[ $category_slug ]['count'];
-			}
-
-			if ( ! isset( $template['id'] ) ) {
-				echo 'Template is missing ID: ' . PHP_EOL;
-				var_dump( $template );
-				echo PHP_EOL;
-				die();
 			}
 
 			// Mark the template as favorite if it's in the favorite templates list.
