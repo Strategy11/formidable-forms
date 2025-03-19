@@ -21,17 +21,8 @@ describe("Form Templates page", () => {
             cy.get('.frm-page-skeleton-cat-count').should("have.text", "0");
         });
 
-        cy.get('li[data-category="available-templates"]').within(() => {
-            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Available Templates");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "0");
-        });
-
         cy.get('li[data-category="all-items"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "All Templates");
-        });
-
-        cy.get('li[data-category="free-templates"]').within(() => {
-            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Free Templates");
         });
 
         cy.log("Check the items on the All Templates page");
@@ -310,18 +301,25 @@ describe("Form Templates page", () => {
             .find('.frm-form-templates-use-template-button')
             .should("contain", "Use Template");
 
-        cy.log("Try to use free templates");
-        cy.get('[data-category="free-templates"]').should("contain", "Free Templates").click();
-        cy.get('#frm-form-templates-page-title-text').should("contain", "Free Templates");
+        cy.log("Try to use available templates");
+        cy.get('[data-category="available-templates"]').should("contain", "Available Templates").click();
+        cy.get('#frm-form-templates-page-title-text').should("contain", "Available Templates");
         cy.get('li[frm-search-text="contact us"]').first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should('contain', 'Use Template')
             .click({ force: true });
 
-        cy.get('[data-category="all-items"]').click();
+        cy.get('li[frm-search-text="contact us"]').first()
+            .trigger('mouseover', { force: true })
+            .find('.frm-form-templates-use-template-button')
+            .should('contain', 'Use Template')
+            .click({ force: true });
 
-        cy.log("Try to use templates which require upgrade");
+		cy.get('a[aria-label="Close"] svg').click();
+
+        cy.visit('/wp-admin/admin.php?page=formidable-form-templates');
+
         cy.get('[frm-search-text="user registration"]')
             .first()
             .trigger('mouseover')
