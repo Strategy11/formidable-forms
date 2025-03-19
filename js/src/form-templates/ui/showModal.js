@@ -110,16 +110,6 @@ export const showRenewAccountModal = showModal( () => {
 });
 
 /**
- * Display the modal dialog to prompt the user to save the code sent to their email address.
- *
- * @return {void}
- */
-export const showCodeFromEmailModal = showModal( () => {
-	const { codeFromEmailModal } = getElements();
-	show( codeFromEmailModal );
-});
-
-/**
  * Displays a modal dialog prompting the user to create a new template.
  *
  * @return {void}

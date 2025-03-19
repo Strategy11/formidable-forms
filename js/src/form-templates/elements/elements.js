@@ -60,9 +60,6 @@ addElements({
 	createTemplateButton: document.getElementById( 'frm-create-template-button' ),
 	// Renew Account Modal
 	renewAccountModal: document.getElementById( 'frm-renew-modal' ),
-	// Code from Email Modal
-	codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
-	codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
 	// Upgrade Modal
 	upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
 	upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
