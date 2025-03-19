@@ -23,9 +23,12 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	protected function is_option_on() {
+		return self::is_enabled();
+	}
+
+	private static function is_enabled() {
 		$frm_settings = FrmAppHelper::get_settings();
-		$key          = $this->get_option_key();
-		return $frm_settings->$key;
+		return $frm_settings->honeypot;
 	}
 
 	/**
@@ -85,15 +88,6 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @return string
-	 */
-	private function check_honeypot_setting() {
-		$form = $this->get_form();
-		$key  = $this->get_option_key();
-		return $form->options[ $key ];
-	}
-
-	/**
 	 * @param int        $form_id Form ID.
 	 * @param array|null $fields  Array of fields.
 	 *
@@ -104,6 +98,34 @@ class FrmHoneypot extends FrmValidate {
 		if ( $honeypot->should_render_field() ) {
 			$honeypot->render_field();
 		}
+	}
+
+	public static function maybe_print_honeypot_js() {
+		if ( ! self::is_enabled() ) {
+			return;
+		}
+		global $frm_vars;
+		if ( empty( $frm_vars['honeypot_selectors'] ) ) {
+			return;
+		}
+
+		$styles = sprintf(
+			'%s {overflow:hidden;width:0;height:0;position:absolute;}',
+			implode( ',', $frm_vars['honeypot_selectors'] )
+		);
+
+		// There must be no empty lines inside the script. Otherwise, wpautop adds <p> tags which break script execution.
+		printf(
+			"<script>
+				( function() {
+					const style = document.createElement( 'style' );
+					style.appendChild( document.createTextNode( '%s' ) );
+					document.head.appendChild( style );
+					document.currentScript?.remove();
+				} )();
+			</script>",
+			esc_js( $styles )
+		);
 	}
 
 	/**
@@ -126,14 +148,26 @@ class FrmHoneypot extends FrmValidate {
 			'name'  => 'item_meta[' . $field_id . ']',
 			'value' => $this->get_honeypot_field_value( $field_id ),
 		);
+
+		$container_id = 'frm_field_' . $field_id . '_container';
+		$this->track_html_id( $container_id );
 		?>
-			<div class="frm_field_<?php echo intval( $field_id ); ?>_container">
-				<label for="<?php echo esc_attr( $input_attrs['id'] ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
-					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
-				</label>
-				<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
-			</div>
+		<div id="<?php echo esc_attr( $container_id ); ?>">
+			<label for="<?php echo esc_attr( $input_attrs['id'] ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
+				<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
+			</label>
+			<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
+		</div>
 		<?php
+	}
+
+	private function track_html_id( $html_id ) {
+		global $frm_vars;
+		if ( ! isset( $frm_vars['honeypot_selectors'] ) ) {
+			$frm_vars['honeypot_selectors'] = array();
+		}
+
+		$frm_vars['honeypot_selectors'][] = '#' . $html_id;
 	}
 
 	/**
