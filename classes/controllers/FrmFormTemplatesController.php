@@ -226,12 +226,6 @@ class FrmFormTemplatesController {
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
 
-			// Add 'leave-email' and 'code-from-email' modals views for users without Pro or free access.
-			if ( ! FrmAppHelper::pro_is_installed() && ! self::$form_template_api->has_free_access() ) {
-				$view_parts[] = 'modals/leave-email-modal.php';
-				$view_parts[] = 'modals/code-from-email-modal.php';
-			}
-
 			// Add 'upgrade' modal view for non-elite users.
 			if ( 'elite' !== FrmAddonsController::license_type() ) {
 				$view_parts[] = 'modals/upgrade-modal.php';
@@ -460,7 +454,7 @@ class FrmFormTemplatesController {
 		// Iterate through templates to assign categories.
 		foreach ( self::$templates as $key => &$template ) {
 			// Skip the template if the categories are not set.
-			if ( ! isset( $template['categories'] ) ) {
+			if ( ! isset( $template['categories'] ) || ! isset( $template['id'] ) ) {
 				unset( self::$templates[ $key ] );
 				continue;
 			}
@@ -525,11 +519,6 @@ class FrmFormTemplatesController {
 		$special_categories['all-items']      = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
-		);
-		$special_categories['free-templates'] = array(
-			'name'  => __( 'Free Templates', 'formidable' ),
-			// Assigned via JavaScript.
-			'count' => 0,
 		);
 
 		self::$categories = array_merge(
