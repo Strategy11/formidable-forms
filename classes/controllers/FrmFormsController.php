@@ -1492,7 +1492,7 @@ class FrmFormsController {
 		if ( function_exists( 'akismet_http_post' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
 		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
+//		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
 	}
 

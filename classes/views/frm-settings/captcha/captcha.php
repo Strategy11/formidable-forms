@@ -103,3 +103,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
 	?>
 </div>
+
+<h2 class="frm-h2"><?php esc_html_e( 'Spam', 'formidable' ); ?></h2>
+
+<p>
+	<label for="frm-honeypot">
+		<input type="checkbox" id="frm-honeypot" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
+		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+</p>
