@@ -30,9 +30,7 @@ addElements({
 	templatesList,
 	templateItems: templatesList.querySelectorAll( '.frm-card-item' ),
 	availableTemplateItems: templatesList.querySelectorAll( `.frm-card-item:not(.${PREFIX}-locked-item)` ),
-	freeTemplateItems: templatesList.querySelectorAll( '.frm-card-item.frm-free-template' ),
 	twinFeaturedTemplateItems: templatesList.querySelectorAll( `.${PREFIX}-featured-item` ),
-	firstLockedFreeTemplate: templatesList.querySelector( '.frm-free-template' ),
 	featuredTemplatesList: document.getElementById( `${PREFIX}-featured-list` ),
 
 	// Custom Templates Section elements
@@ -49,9 +47,6 @@ addElements({
 	availableTemplatesCategory: document.querySelector(
 		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
 	),
-	freeTemplatesCategory: document.querySelector(
-		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.FREE_TEMPLATES}"]`
-	),
 
 	// Modal elements
 	modal,
@@ -65,14 +60,6 @@ addElements({
 	createTemplateButton: document.getElementById( 'frm-create-template-button' ),
 	// Renew Account Modal
 	renewAccountModal: document.getElementById( 'frm-renew-modal' ),
-	// Leave Email Modal
-	leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
-	leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
-	leaveEmailModalApiEmailForm: document.getElementById( 'frmapi-email-form' ),
-	leaveEmailModalGetCodeButton: document.getElementById( 'frm-get-code-button' ),
-	// Code from Email Modal
-	codeFromEmailModal: document.getElementById( 'frm-code-from-email-modal' ),
-	codeFromEmailModalInput: document.getElementById( 'frm_code_from_email' ),
 	// Upgrade Modal
 	upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
 	upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),

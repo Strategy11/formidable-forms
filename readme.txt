@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 7.0
-Stable tag: 6.17.1
+Stable tag: 6.19
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -285,6 +285,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * User ID
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
+* GDPR - Great for compliance with General Data Protection Regulation (GDPR).
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -371,40 +372,29 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.19 =
+* New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
+* New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
+* New: A quick link to the views tab for is now available on the form list admin page.
+* New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
+* New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
+* Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
+* Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
+* Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
+* Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
+
+= 6.18 =
+* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
+* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
+* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
+* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
+* Fix: Some style setting values would result in invalid undefined or NaN values.
+* Text will no longer be selected when multi-selecting fields while holding the shift key.
+* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
+* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
+
 = 6.17.1 =
 * Fix: The payments table admin page would appear empty when there were unread inbox notices.
-
-= 6.17 =
-* New: New redirect delay duration and delay message settings have been added to confirmation actions.
-* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
-* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
-* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
-* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
-* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
-* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
-* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
-* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
-* The global JS function frmFrontForm.escapeHtml has been deprecated.
-
-= 6.16.3 =
-* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
-* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
-* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
-* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
-* Fix: An unsupported operand types: array + string fatal error has been fixed.
-* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
-* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
-* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
-* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
-* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
-* The section for form button settings has been removed as all of the settings had been moved.
-* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
-* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
-* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
-
-= 6.16.2 =
-* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
-* Fix: JSON default values are no longer decoded for field types that expect string values only.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

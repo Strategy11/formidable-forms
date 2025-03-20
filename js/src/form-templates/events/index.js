@@ -11,8 +11,6 @@ import addFavoriteButtonEvents from './favoriteButtonListener';
 import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addSearchEvents from './searchListener';
 import addCreateTemplateEvents from './createTemplateListeners';
-import addGetCodeButtonEvents from './getCodeButtonListener';
-import addSaveCodeButtonEvents from './saveCodeButtonListener';
 import { showSelectedCategory } from '../ui';
 
 /**
@@ -32,8 +30,6 @@ export function addEventListeners() {
 	addUseTemplateButtonEvents();
 	addSearchEvents();
 	addCreateTemplateEvents();
-	addGetCodeButtonEvents();
-	addSaveCodeButtonEvents();
 }
 
 export { addApplicationTemplateEvents } from './applicationTemplateListener';

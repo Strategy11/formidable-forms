@@ -36,12 +36,14 @@
 	--error-25: #FFF5F4;
 	--green: rgb(63, 172, 37);
 	--orange: #F15A24;
+	--warning-500: #F79009;
 	--pink: rgb(226, 42, 110);
 	--purple: rgb(141, 53, 245);
 	--success-900: #054F31;
 	--success-800: #065F46;
 	--success-500: #12b76a;
 	--success-100: #D1FAE5;
+	--success-200: #A6F4C5;
 	--success-50: #ECFDF3;
 	--success-25: #f6fef9;
 	--border-radius: 35px;
@@ -313,9 +315,23 @@ body.frm-white-body ul#adminmenu > li.current > a.current:after {
 	grid-column: span 6 / span 6;
 }
 
-.frm_form_field.frm-phone-type + p > label,
-.frm_form_field.frm-phone-type + div > label {
+.frm_form_field.frm12_followed + p,
+.frm_form_field.frm12_followed + div {
+	grid-column: span 12 / span 12 !important;
+}
+
+.frm_form_field.frm-phone-type ~ [id*="frm-field-format-custom-"] > label,
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] > label {
 	opacity: 0; /* Hide the label for the format input in the phone field. */
+}
+
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] {
+	grid-column: span 6 / span 6;
+}
+
+/* Adjust "CSS Layout Classes" to full width when the "Format" setting is present. */
+.frm-single-settings.frm-type-textarea > .frm_grid_container [id*="frm-field-format-custom-"] + p {
+	grid-column: span 12/span 12;
 }
 
 .frm-short-list {
@@ -485,9 +501,40 @@ td.column-title .frm_actions_dropdown {
 	border: 0 !important;
 }
 
+.frm-gradient.frm-button-primary:not([disabled]),
 .frm-gradient.frm-button-primary:not([disabled]):hover,
 .frm-gradient.frm-button-primary:not([disabled]):focus {
-	background: linear-gradient(90deg, #2871E6, #9989FB) !important;
+	background: linear-gradient(90deg, #1961D5, #816CFA) !important;
+}
+
+.frm-upgrade-bar,
+.frm-gradient {
+	position: relative;
+}
+
+.frm-upgrade-bar:before,
+.frm-gradient:before {
+	content: '';
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(255, 255, 255, 0.1);
+	z-index: 0;
+}
+
+.frm-upgrade-bar:hover:before,
+.frm-gradient:hover:before,
+.frm-gradient:focus:before {
+	display: block;
+}
+
+.frm-upgrade-bar-inner,
+.frm-gradient > * {
+	position: relative;
+	z-index: 1;
 }
 
 .frm-upgrade-bar {
@@ -915,6 +962,11 @@ p.frm_has_shortcodes {
 	min-height: 200px;
 	overflow-y: scroll;
 	z-index: 100;
+}
+
+#form_global_settings .columns-2 > div {
+	overflow: auto;
+	height: calc(100vh - 32px);
 }
 
 #form_global_settings .columns-2 .frm-right-panel,
@@ -1496,7 +1548,8 @@ body.frm-hidden-overflow {
 .wp-core-ui.frm-white-body .button-secondary:hover,
 .wp-core-ui.frm-white-body .button-secondary:focus,
 .wp-core-ui.frm-white-body .tablenav .button:hover,
-.frm_wrap .preview > .button:hover {
+.frm_wrap .preview > .button:hover,
+.frm-white-body #search-submit:hover {
 	border-color: var(--grey-300) !important;
 	color: var(--grey-800);
 	background: var(--grey-50) !important;
@@ -1573,40 +1626,105 @@ input.frm_insert_in_template {
 }
 
 /* Review request */
-.frm-review-notice {
-	text-align: center;
+.wp-admin .frm-review-notice {
 	position: fixed !important;
+	bottom: var(--gap-2xl);
+	right: var(--gap-lg);
+	width: 380px;
+	text-align: center;
+	border-color: var(--grey-100);
+	padding: var(--gap-lg);
+	border-radius: var(--medium-radius);
+	box-shadow: var(--box-shadow-lg) !important;
 	z-index: 999;
-	bottom: 0;
-	right: 0;
-	width: 400px;
-	box-shadow: var(--box-shadow-xxl) !important;
+	box-sizing: border-box;
+
+	--gap-sm: 16px;
+	--gap-md: 24px;
+	--gap-2xl: 48px;
 }
 
-.frm-review-notice a {
-	margin: 0 var(--gap-xs) !important;
+.wp-admin .frm-review-notice * {
+	box-sizing: border-box;
 }
 
-.frm-review-notice .frm-button-primary,
-.frm-review-notice .frm-button-secondary {
-	min-width: 100px;
+.frm-review-notice-icon {
+	display: inline-flex;
+	margin-bottom: var(--gap-sm);
 }
 
-.frm-review-notice p {
-	margin: 0 0 10px 0;
+.wp-admin .frm-review-notice-title {
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: var(--gap-xs);
 }
 
-.frm-review-notice p > span {
-	font-size: 13px;
-	opacity: 0.75;
+.wp-admin .frm-review-notice-text {
+	margin-top: 0;
+	margin-bottom: var(--gap-md);
 }
 
-.frm-review-notice #frmapi-feedback {
-	margin-top: var(--gap-lg);
+.frm-review-notice-signature {
+	text-align: left;
+	margin: var(--gap-md) 0;
+}
+
+.frm-review-notice-signature img {
+	width: 40px;
+	height: 40px;
+	padding: 3px;
+	box-shadow: var(--box-shadow-md);
+	border-radius: 100%;
+}
+
+#wpwrap .frm-dismiss-review-notice {
+	top: 16px;
+	right: 19px;
 }
 
 .frm-review-notice #frmapi-feedback [class^="frm__"] {
 	display: none;
+}
+
+.frm-review-notice #frmapi-feedback input,
+.frm-review-notice #frmapi-feedback textarea {
+	border-color: var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm-review-notice #frmapi-feedback input {
+	min-height: unset;
+	max-height: 36px;
+}
+
+.frm-review-notice #frmapi-feedback textarea {
+	max-height: 80px;
+	padding-top: var(--gap-xs)
+}
+
+.frm-review-notice #frmapi-feedback .frm_message {
+	color: var(--success-900);
+	background-color: var(--success-25);
+	border: 1px solid var(--success-200);
+	padding: var(--gap-sm) var(--gap-md);
+	margin: 0;
+}
+
+.frm-review-notice #frmapi-feedback .frm_message p {
+	margin: 0
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit {
+	background-color: var(--primary-500);
+	border-color: var(--primary-500) !important;
+	cursor: pointer;
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit:hover,
+.frm-review-notice #frmapi-feedback .frm_button_submit:focus {
+	color: #fff;
+	background-color: var(--primary-700);
+	border-color: var(--primary-700) !important;
 }
 
 .frm-review-notice .frm_error,
@@ -1632,6 +1750,10 @@ input.frm_insert_in_template {
 }
 
 /* Generic Classes */
+.frm-text-primary-500 {
+	color: var(--primary-500);
+}
+
 .frm-text-grey-500 {
 	color: var(--grey-500);
 }
@@ -1642,6 +1764,14 @@ input.frm_insert_in_template {
 
 .frm-text-grey-900 {
 	color: var(--grey-900);
+}
+
+.frm-text-success-500 {
+	color: var(--success-500);
+}
+
+.frm-text-warning-500 {
+	color: var(--warning-500);
 }
 
 .frm_no_margin, /* deprecated */
@@ -1695,12 +1825,12 @@ input.frm_insert_in_template {
 	margin-bottom: var(--gap-2xs) !important;
 }
 
-.frm-mb-xs {
-	margin-bottom: var(--gap-xs) !important;
-}
-
 .frm-mb-sm {
 	margin-bottom: var(--gap-sm) !important;
+}
+
+.frm-mb-xs {
+	margin-bottom: var(--gap-xs) !important;
 }
 
 .frm-mb-md {
@@ -1727,6 +1857,10 @@ input.frm_insert_in_template {
 	margin-right: auto;
 }
 
+.frm-mr-2xs {
+	margin-right: var(--gap-2xs) !important;
+}
+
 .frm-mx-0 {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
@@ -1740,6 +1874,11 @@ input.frm_insert_in_template {
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;
+}
+
+.frm-my-xs {
+	margin-top: var(--gap-xs) !important;
+	margin-bottom: var(--gap-xs) !important;
 }
 
 .frm-p-0 {
@@ -1792,6 +1931,10 @@ input.frm_insert_in_template {
 	padding-top: var(--gap-sm) !important;
 }
 
+.frm-pt-md {
+	padding-top: var(--gap-md) !important;
+}
+
 .frm-pt-xl {
 	padding-top: var(--gap-xl) !important;
 }
@@ -1802,6 +1945,12 @@ input.frm_insert_in_template {
 .frm-pb-sm {
 	padding-bottom: var(--gap-sm) !important;
 }
+
+.frm-px-sm {
+	padding-right: var(--gap-sm) !important;
+	padding-left: var(--gap-sm) !important;
+}
+
 .frm-px-md {
 	padding-right: var(--gap-md) !important;
 	padding-left: var(--gap-md) !important;
@@ -1867,6 +2016,10 @@ input.frm_insert_in_template {
 	width: 100% !important;
 }
 
+.frm-w-half {
+	width: 50% !important;
+}
+
 .frm_block, /* deprecated */
 .frm-block {
 	display: block;
@@ -1880,7 +2033,8 @@ input.frm_insert_in_template {
 	display: inline-block !important;
 }
 
-.frm-inline-flex {
+.frm-inline-flex,
+#wpbody-content .frm-inline-flex {
 	display: inline-flex;
 }
 
@@ -1897,7 +2051,6 @@ input.frm_insert_in_template {
 	display: flex;
 	gap: var(--gap-sm);
 }
-
 
 .frm-flex-col {
 	display: flex;
@@ -1958,6 +2111,10 @@ input.frm_insert_in_template {
 	align-items: center;
 }
 
+#wpbody-content .frm-flex-wrap {
+	flex-wrap: wrap;
+}
+
 .frm-transition-ease {
 	transition: all .2s ease;
 }
@@ -1999,9 +2156,14 @@ input.frm_insert_in_template {
 	cursor: pointer;
 }
 
+.frm-align-baseline {
+	vertical-align: baseline !important;
+}
+
 /* End Generic Classes, Start Forced Generic Classes */
 
 .frm-fields p > label.frm_hidden,
+#wpbody-content label.frm_hidden,
 .frm-lookup-modal .dismiss,
 .frm-right-panel .inside a.frm_hidden,
 #form_global_settings .frm_hidden,
@@ -5885,6 +6047,10 @@ p.frm-inline-select,
 .frm-single-settings .frm_single_option .frm_remove_tag:before {
 	content: "";
 }
+.frm-single-settings input[type="checkbox"][readonly] {
+	opacity: 0.5;
+	pointer-events: none;
+}
 
 .advanced_settings .frm_logic_row {
 	margin: 14px 0;
@@ -6759,10 +6925,13 @@ tr.frm_options_heading td {
 	font-size: var(--text-md);
 	box-sizing: border-box;
 	border: 1px dashed var(--grey-300);
+	outline: 2px solid transparent;
 }
 
 .frm-over-droppable + .frm_no_fields {
 	border-style: solid;
+	border-color: var(--primary-500);
+	outline-color: var(--primary-500);
 }
 
 .frm_no_section_fields {
@@ -6789,7 +6958,8 @@ tr.frm_options_heading td {
 	visibility: hidden;
 }
 
-.frm-has-fields .frm_no_fields {
+.frm-has-fields .frm_no_fields,
+#frm_form_editor_container:not(.frm-has-fields) #frm_drag_placeholder {
 	display: none;
 }
 
@@ -7530,7 +7700,9 @@ ul.frm_two_col {
 	gap: var(--gap-xs);
 	align-items: center;
 }
-
+.multiselect-container button.multiselect-option.disabled {
+	opacity: 0.5;
+}
 .frm_code_list.frm-full-hover a span {
 	max-width: 83px;
 	margin-right: var(--gap-xs);
@@ -7693,6 +7865,11 @@ ul.frm_two_col {
 input[disabled],
 .frmsvg svg {
 	pointer-events: none;
+}
+
+.frmsvg.frm_svg40 {
+	width: 40px;
+	height: 40px;
 }
 
 .frmsvg.frm_svg20 {
@@ -7918,7 +8095,8 @@ h2 .frm-sub-label {
 .frm-views-editor-body .ui-widget-overlay,
 .frm-white-body .ui-widget-overlay,
 .toplevel_page_formidable .ui-widget-overlay,
-body[class*=formidable-payments] .ui-widget-overlay {
+body[class*=formidable-payments] .ui-widget-overlay,
+body.plugins-php .ui-widget-overlay {
 	position: fixed;
 	width: 100%;
 	height: 100%;
@@ -9617,7 +9795,8 @@ Responsive Design
 	color: var(--orange);
 }
 
-.frm-gradient .frm-tip-cta {
+.frm-gradient .frm-tip-cta,
+.frm-light-tip .frm-gradient .frm-tip-cta {
 	color: currentColor;
 	font-weight: 700;
 }

@@ -9,7 +9,7 @@ import { getState, getSingleState, setState, setSingleState } from 'core/page-sk
 import { getElements } from '../elements';
 
 const { templatesCount, favoritesCount, customCount } = window.frmFormTemplatesVars;
-const { availableTemplateItems, freeTemplateItems, firstLockedFreeTemplate } = getElements();
+const { availableTemplateItems } = getElements();
 const availableTemplatesCount = availableTemplateItems.length;
 
 setState({
@@ -17,8 +17,7 @@ setState({
 	customCount: Number( customCount ),
 	extraTemplatesCount: templatesCount - availableTemplatesCount,
 	favoritesCount,
-	freeTemplatesCount: freeTemplateItems.length,
-	selectedTemplate: firstLockedFreeTemplate,
+	selectedTemplate: false,
 });
 
 export { getState, getSingleState, setState, setSingleState };

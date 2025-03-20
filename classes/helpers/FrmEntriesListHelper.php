@@ -109,6 +109,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
+		FrmAppController::apply_saved_sort_preference( $orderby, $order );
+
 		return FrmDb::esc_order( $orderby . ' ' . $order );
 	}
 

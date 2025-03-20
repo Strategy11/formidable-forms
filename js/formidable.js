@@ -174,9 +174,7 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors.
 	 */
 	function validateForm( object ) {
-		let errors, n, nl, fields, field;
-
-		errors = [];
+		let errors = [];
 
 		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
 
@@ -201,10 +199,8 @@ function frmFrontFormJS() {
 			}
 		);
 
-		fields = jQuery( object ).find( 'input,select,textarea' );
-		if ( fields.length ) {
-			for ( n = 0, nl = fields.length; n < nl; n++ ) {
-				field = fields[n];
+		vanillaJsObject?.querySelectorAll( 'input,select,textarea' ).forEach(
+			field => {
 				if ( '' === field.value ) {
 					if ( 'number' === field.type ) {
 						// A number field will return an empty string when it is invalid.
@@ -215,14 +211,14 @@ function frmFrontFormJS() {
 					if ( ! isConfirmationField ) {
 						// Allow a blank confirmation field to still call validateFieldValue.
 						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
-						continue;
+						return;
 					}
 				}
 
 				validateFieldValue( field, errors, true );
 				checkValidity( field, errors );
 			}
-		}
+		);
 
 		// Invisible captchas are processed after validation.
 		// We only want to validate a visible captcha on submit.
@@ -305,6 +301,11 @@ function frmFrontFormJS() {
 
 		errors               = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
+
+		if ( ! fieldContainer ) {
+			// Hidden fields do not have a field container and do not require JS validation.
+			return;
+		}
 
 		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
@@ -967,6 +968,12 @@ function frmFrontFormJS() {
 					}
 				});
 
+				if ( window.turnstile ) {
+					object.querySelectorAll( '.cf-turnstile' ).forEach(
+						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
+					);
+				}
+
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
 				fieldset.removeClass( 'frm_doing_ajax' );
@@ -1285,15 +1292,7 @@ function frmFrontFormJS() {
 		document.addEventListener( 'keydown', handleKeyUp );
 
 		function handleKeyUp( event ) {
-			let code;
-
-			if ( 'undefined' !== typeof event.key ) {
-				code = event.key;
-			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
-				code = 'Tab';
-			}
-
-			if ( 'Tab' === code ) {
+			if ( 'Tab' === event.key ) {
 				makeHoneypotFieldsUntabbable();
 				document.removeEventListener( 'keydown', handleKeyUp );
 			}
