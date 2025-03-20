@@ -200,7 +200,7 @@ class FrmAppHelper {
 	 */
 	public static function is_formidable_branding() {
 		if ( ! self::pro_is_installed() ) {
-			return false;
+			return true;
 		}
 
 		$menu_icon = self::get_menu_icon_class();
