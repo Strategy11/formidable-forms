@@ -1331,7 +1331,7 @@ class FrmAppController {
 	/**
 	 * Handles actions related to the current screen.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return void
 	 */
@@ -1421,7 +1421,7 @@ class FrmAppController {
 	/**
 	 * Retrieve and apply any saved sorting preferences for the current screen.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param string &$orderby Reference to the current 'orderby' parameter.
 	 * @param string &$order   Reference to the current 'order' parameter.
@@ -1479,7 +1479,7 @@ class FrmAppController {
 	 * This function tries to add them again when the user clicks the link to try again
 	 * from the given inbox notice.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 */
 	private static function add_missing_tables() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );

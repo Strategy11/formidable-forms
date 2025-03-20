@@ -409,6 +409,8 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		let hide = this.getAttribute( 'data-frmhide' );
 		let show = this.getAttribute( 'data-frmshow' );
+		let uncheckList = this.getAttribute( 'data-frmuncheck' );
+		let uncheckListArray = uncheckList ? uncheckList.split( ',' ) : [];
 
 		// Flip unchecked checkboxes so an off value undoes the on value.
 		if ( isUncheckedCheckbox( this ) ) {
@@ -439,6 +441,15 @@ function frmAdminBuildJS() {
 				current[ i ].classList.remove( 'current' );
 			}
 			this.classList.add( 'current' );
+		}
+
+		if ( uncheckListArray.length ) {
+			uncheckListArray.forEach( function( uncheckItem ) {
+				const uncheckItemElement = document.querySelector( uncheckItem );
+				if ( uncheckItemElement ) {
+					uncheckItemElement.checked = false;
+				}
+			});
 		}
 
 		return false;
@@ -2104,7 +2115,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if a field can be duplicated.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param {HTMLElement} field
 	 * @param {number}      maxFieldsInGroup

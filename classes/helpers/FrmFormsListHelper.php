@@ -377,7 +377,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * Generate the HTML for the form Views page.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param stdClass $form Form object.
 	 * @return string

@@ -11,7 +11,7 @@ name: PHPUnit
 jobs:
   build-test:
     if: contains(github.event.pull_request.labels.*.name, 'run tests')
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
     env:
       WP_MULTISITE: ${{ matrix.multisite }}
     strategy:
