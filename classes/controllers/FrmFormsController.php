@@ -1077,6 +1077,12 @@ class FrmFormsController {
 			die();
 		}
 
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+		if ( $error ) {
+			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
+		}
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
 	}
 

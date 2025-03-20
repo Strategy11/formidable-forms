@@ -35,9 +35,9 @@
 	function syncCurrencyOptions( currencySelect ) {
 		const currency = frmSettings.currencies[ currencySelect.value ];
 
-		document.getElementById( 'frm_thousand_separator' ).setAttribute( 'value', currency.thousand_separator );
-		document.getElementById( 'frm_decimal_separator' ).setAttribute( 'value', currency.decimal_separator );
-		document.getElementById( 'frm_decimals' ).setAttribute( 'value', currency.decimals );
+		document.getElementById( 'frm_thousand_separator' ).value = currency.thousand_separator;
+		document.getElementById( 'frm_decimal_separator' ).value = currency.decimal_separator;
+		document.getElementById( 'frm_decimals' ).value = currency.decimals;
 	}
 
 	function handleSpaceDownEvent( e ) {
