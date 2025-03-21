@@ -20,7 +20,7 @@
 
 	async function initializeCard( payments ) {
 		const card = await payments.card();
-		await card.attach( '#card-container' );
+		await card.attach( '.frm-card-element' );
 
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', ( e ) => {
@@ -143,7 +143,7 @@
 	}
 
 	function displayPaymentFailure() {
-		const statusContainer = document.getElementById( 'payment-status-container', );
+		const statusContainer = document.querySelector( '.frm-card-errors', );
 		statusContainer.classList.add( 'is-failure' );
 		statusContainer.style.visibility = 'visible';
 	}
@@ -154,7 +154,7 @@
 		}
 
 		// Find the form containing the Square payment element
-		const cardContainer = document.getElementById('card-container');
+		const cardContainer = document.querySelector( '.frm-card-element' );
 		if ( cardContainer ) {
 			thisForm = cardContainer.closest('form');
 			if ( thisForm ) {
@@ -168,7 +168,7 @@
 
 					if ( ! squareCardElementIsComplete ) {
 						// Show error message
-						const statusContainer = document.getElementById('payment-status-container');
+						const statusContainer = document.querySelector( '.frm-card-errors' );
 						if ( statusContainer ) {
 							statusContainer.textContent = 'Please complete all card details before submitting.';
 							statusContainer.classList.add('is-failure');
@@ -188,7 +188,7 @@
 			// Square requires HTTPS to work.
 			payments = window.Square.payments( appId, locationId );
 		} catch {
-			const statusContainer            = document.getElementById( 'payment-status-container' );
+			const statusContainer            = document.querySelector( '.frm-card-errors' );
 			statusContainer.className        = 'missing-credentials';
 			statusContainer.style.visibility = 'visible';
 			return;

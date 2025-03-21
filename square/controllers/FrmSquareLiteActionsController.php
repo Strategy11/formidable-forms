@@ -21,6 +21,11 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( $actions ) {
 			// TODO This likely overwrites Stripe.
 			// We'll need to check $actions for a credit card field match.
+
+			$html_id = $atts['html_id'];
+			include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
+			return;
+
 			echo '
 				<div id="card-container"></div>
 				<div id="payment-status-container">Payment Status</div>
@@ -33,9 +38,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( is_callable( 'FrmProCreditCardsController::show_in_form' ) ) {
 			FrmProCreditCardsController::show_in_form( $field, $field_name, $atts );
 		}
-
-		$html_id = $atts['html_id'];
-		include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
 	}
 
 	/**
