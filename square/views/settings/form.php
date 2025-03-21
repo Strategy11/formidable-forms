@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	// Sandbox uses connect.squareupsandbox.com
 	const baseUrl = 'https://connect.squareupsandbox.com';
 //	const baseUrl = 'https://connect.squareup.com';
-	const url = baseUrl + '/oauth2/authorize?client_id=' + appId + '&scope=CUSTOMERS_WRITE+CUSTOMERS_READ&session=false&state=' + state;	
+	const url = baseUrl + '/oauth2/authorize?client_id=' + appId + '&scope=CUSTOMERS_WRITE+CUSTOMERS_READ&session=false&state=' + state;
 
 	alert( url );
 </script>
