@@ -71,7 +71,7 @@ export default class frmSliderStyleComponent {
 				}
 
 				this.initSliderWidth( element );
-				this.updateValue( element, valueInput.value + unit );
+				this.options[ index ].fullValue = this.updateValue( element, valueInput.value + unit );
 				this.triggerValueChange( index );
 			});
 

@@ -158,7 +158,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * Show the dropdown fields for custom form fields.
 	 * This is used for first and last name fields.
 	 *
-	 * @since x.x The `$field_atts` might contain `skipped_fields`. By default, the submit field is skipped.
+	 * @since 6.18 The `$field_atts` might contain `skipped_fields`. By default, the submit field is skipped.
 	 *
 	 * @param  array $form_atts
 	 * @param  array $field_atts

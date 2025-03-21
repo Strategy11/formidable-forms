@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.17.1';
+	public static $plug_version = '6.19';
 
 	/**
 	 * @var bool
@@ -329,6 +329,29 @@ class FrmAppHelper {
 		}
 
 		return $is_formidable;
+	}
+
+	/**
+	 * Checks if is a list page.
+	 *
+	 * @since 6.19
+	 *
+	 * @param string $page The name of the page to check.
+	 * @return bool
+	 */
+	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( ! self::is_admin_page( $page ) ) {
+			return false;
+		}
+
+		// Check Trash page.
+		$form_type = self::simple_get( 'form_type' );
+		if ( $form_type && 'published' !== $form_type ) {
+			return false;
+		}
+
+		// Check edit or settings page.
+		return ! self::simple_get( 'frm_action' );
 	}
 
 	/**
@@ -871,6 +894,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * The regular kses function strips [button_action] from submit button HTML.
 	 *
 	 * @since 5.0.13
@@ -1088,6 +1124,11 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'class'    => true,
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}
@@ -1369,6 +1410,7 @@ class FrmAppHelper {
 		}
 		?>
 		<div class="frm-upgrade-bar">
+			<div class="frm-upgrade-bar-inner">
 				<?php
 				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 				if ( ! $cta_text ) {
@@ -1393,6 +1435,7 @@ class FrmAppHelper {
 					'</a>'
 				);
 				?>
+			</div>
 		</div>
 		<?php
 	}
@@ -4389,5 +4432,29 @@ class FrmAppHelper {
 			?>
 		</span>
 		<?php
+	}
+
+	/**
+	 * Check if GDPR is enabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function is_gdpr_enabled() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr || $frm_settings->no_ips || $frm_settings->custom_header_ip || $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if GDPR cookies are disabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function no_gdpr_cookies() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
 	}
 }

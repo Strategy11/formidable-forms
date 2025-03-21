@@ -46,6 +46,9 @@ class FrmFormsListHelper extends FrmListHelper {
 				'default' => 'ASC',
 			)
 		);
+
+		FrmAppController::apply_saved_sort_preference( $orderby, $order );
+
 		$start   = self::get_param(
 			array(
 				'param'   => 'start',
@@ -335,6 +338,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	protected function column_shortcode( $form ) {
 		$val  = '<a href="#" class="frm-embed-form" role="button" aria-label="' . esc_attr__( 'Embed Form', 'formidable' ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_code_icon', array( 'echo' => false ) ) . '</a>';
 		$val .= $this->column_style( $form );
+		$val .= $this->column_views( $form );
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
@@ -368,6 +372,26 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$href = FrmStylesHelper::get_edit_url( $style, $form->id );
 		return '<a href="' . esc_url( $href ) . '" title="' . esc_attr( $style->post_title ) . '">' . FrmAppHelper::icon_by_class( 'frmfont frm_pallet_icon', array( 'echo' => false ) ) . '</a>';
+	}
+
+	/**
+	 * Generate the HTML for the form Views page.
+	 *
+	 * @since 6.19
+	 *
+	 * @param stdClass $form Form object.
+	 * @return string
+	 */
+	protected function column_views( $form ) {
+		$attributes = array(
+			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
+			'title'  => __( 'View Form', 'formidable' ),
+			'target' => '_blank',
+		);
+
+		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
+					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
+				'</a>';
 	}
 
 	/**

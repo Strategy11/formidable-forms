@@ -126,7 +126,7 @@ class FrmHooksController {
 		add_filter( 'plugin_action_links_' . FrmAppHelper::plugin_folder() . '/formidable.php', 'FrmAppController::settings_link' );
 		add_filter( 'admin_footer_text', 'FrmAppController::set_footer_text' );
 		add_action( 'admin_footer', 'FrmAppController::add_admin_footer_links' );
-		add_action( 'current_screen', 'FrmAppController::filter_admin_notices' );
+		add_action( 'current_screen', 'FrmAppController::handle_current_screen' );
 
 		// Entries Controller.
 		add_action( 'admin_menu', 'FrmEntriesController::menu', 12 );
@@ -281,9 +281,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );
-
-		// Templates API.
-		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
 
 		// Dashboard Controller.
 		add_action( 'wp_ajax_dashboard_ajax_action', 'FrmDashboardController::ajax_requests' );

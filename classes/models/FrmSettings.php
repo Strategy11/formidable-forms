@@ -43,6 +43,7 @@ class FrmSettings {
 	public $re_type;
 	public $re_msg;
 	public $re_multi;
+	public $re_threshold;
 
 	/**
 	 * Settings for hCaptcha.
@@ -150,6 +151,8 @@ class FrmSettings {
 			'new_tab_msg'               => __( 'The page has been opened in a new tab.', 'formidable' ),
 
 			'email_to'                  => '[admin_email]',
+			'enable_gdpr'               => 0,
+			'no_gdpr_cookies'           => 0,
 			'no_ips'                    => 0,
 			'custom_header_ip'          => 0,
 			'tracking'                  => FrmAppHelper::pro_is_installed(),
@@ -398,7 +401,7 @@ class FrmSettings {
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
+		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'no_gdpr_cookies', 'enable_gdpr', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}

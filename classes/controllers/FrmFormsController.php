@@ -1077,6 +1077,12 @@ class FrmFormsController {
 			die();
 		}
 
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+		if ( $error ) {
+			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
+		}
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-forms/list.php';
 	}
 
@@ -1702,7 +1708,7 @@ class FrmFormsController {
 			self::add_js_validate_form_to_global_vars( $form );
 		}
 
-		if ( ! FrmFormsHelper::should_use_pro_for_ajax_submit() && FrmForm::is_ajax_on( $form ) ) {
+		if ( FrmForm::is_ajax_on( $form ) ) {
 			echo ' frm_ajax_submit ';
 		}
 	}

@@ -53,6 +53,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 		?>
+
+		<?php
+		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
+			?>
+			<div class="frm_note_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'GDPR field is disabled. Please enable it in the Formidable %1$sSettings%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
+			</div>
+			<?php
+		}
+		?>
+
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -64,35 +81,41 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input type="hidden" name="field_options[name_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['name'] ); ?>" id="frm_name_<?php echo esc_attr( $field['id'] ); ?>" />
 		<?php } ?>
 
-		<p class="frm-hide-empty">
+		<div class="frm-hide-empty frm-inline-flex frm-gap-sm frm-flex-wrap frm-items-center frm-my-xs">
 			<?php if ( $display['required'] ) { ?>
-				<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label">
-					<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
-					<?php esc_html_e( 'Required', 'formidable' ); ?>
-				</label>
+				<div class="frm_form_field">
+					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php echo $display['readonly_required'] ? 'readonly onclick="return false;"' : ''; ?> <?php checked( $field['required'], 1 ); ?> />
+						<?php esc_html_e( 'Required', 'formidable' ); ?>
+					</label>
+				</div>
 				<?php
 			}
 
 			if ( $display['unique'] ) {
 				?>
-				<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
-					<?php esc_html_e( 'Unique', 'formidable' ); ?>
-				</label>
+				<div class="frm_form_field">
+					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+						<?php esc_html_e( 'Unique', 'formidable' ); ?>
+					</label>
+				</div>
 				<?php
 			}
 
 			if ( $display['read_only'] ) {
 				?>
-				<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_inline_label frm_help" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
-					<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
-					<?php esc_html_e( 'Read Only', 'formidable' ); ?>
-				</label>
+				<div class="frm_form_field">
+					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
+						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
+						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
+					</label>
+				</div>
 				<?php
 			}
 
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
-		</p>
+		</div>
 
 		<?php
 		if ( $display['range'] ) {
@@ -101,6 +124,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 
+		if ( $display['format'] ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
+			FrmFieldsController::show_format_option( $field, true );
+		}
 		?>
 
 		<?php if ( $display['css'] ) { ?>
@@ -202,6 +229,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}
 
+		/**
+		 * Fires after displaying the field description in a form settings.
+		 *
+		 * @since 6.19
+		 *
+		 * @param array $args {
+		 *     Array containing the field data.
+		 *
+		 *     @type array  $field   The field settings.
+		 *     @type array  $display The display settings for the field.
+		 *     @type array  $values  The values associated with the field.
+		 * }
+		 */
+		do_action( 'frm_field_options_after_description', compact( 'field', 'display', 'values' ) );
+
 		// Field Size
 		if ( $display['size'] && ! in_array( $field['type'], array( 'select', 'data', 'time' ), true ) ) {
 			$display_max = $display['max'];
@@ -254,13 +296,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 		<?php } ?>
 
-		<?php
-		if ( $display['format'] ) {
-			FrmFieldsController::show_format_option( $field );
-		}
-
-		do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) );
-		?>
+		<?php do_action( 'frm_field_options', compact( 'field', 'display', 'values' ) ); ?>
 
 		<?php if ( $display['required'] ) { ?>
 			<p class="frm6 frm_form_field frm_required_details<?php echo esc_attr( $field['id'] . ( $field['required'] ? '' : ' frm_hidden' ) ); ?>">

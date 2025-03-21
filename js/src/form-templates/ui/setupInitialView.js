@@ -24,8 +24,7 @@ function setupInitialView() {
 		searchInput,
 		bodyContent,
 		twinFeaturedTemplateItems,
-		availableTemplatesCategory,
-		freeTemplatesCategory
+		availableTemplatesCategory
 	} = getElements();
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
@@ -39,13 +38,6 @@ function setupInitialView() {
 	if ( availableTemplatesCategory ) {
 		const { availableTemplatesCount } = getState();
 		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
-	}
-
-	// Update the 'Free Templates' count and hide the category if count is zero
-	const { freeTemplatesCount } = getState();
-	freeTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = freeTemplatesCount;
-	if ( 0 === freeTemplatesCount ) {
-		hide( freeTemplatesCategory );
 	}
 
 	// Update extra templates count
