@@ -25,12 +25,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			$html_id = $atts['html_id'];
 			include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
 			return;
-
-			echo '
-				<div id="card-container"></div>
-				<div id="payment-status-container">Payment Status</div>
-			';
-			return;
 		}
 
 		// Use the Pro function when there are no Stripe actions.
