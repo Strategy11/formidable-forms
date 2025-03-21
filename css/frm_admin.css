@@ -7659,6 +7659,11 @@ ul.frm_two_col {
 
 #frm-insert-fields li a span {
 	vertical-align: middle;
+	white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: 100%;
+	text-align: left;
 }
 
 .frmbutton.ui-draggable-dragging a,
