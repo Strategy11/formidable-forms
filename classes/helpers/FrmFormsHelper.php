@@ -1806,18 +1806,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * Check if Pro isn't up to date yet.
-	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
-	 *
-	 * @since 6.2
-	 *
-	 * @return bool
-	 */
-	public static function should_use_pro_for_ajax_submit() {
-		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProFormsHelper::lite_supports_ajax_submit' );
-	}
-
-	/**
 	 * Outputs the appropriate button text in the publish box.
 	 *
 	 * @return void
@@ -1871,5 +1859,19 @@ BEFORE_HTML;
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
+	}
+
+	/**
+	 * Check if Pro isn't up to date yet.
+	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
+	 *
+	 * @since 6.2
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function should_use_pro_for_ajax_submit() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return false;
 	}
 }
