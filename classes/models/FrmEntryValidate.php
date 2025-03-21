@@ -307,25 +307,36 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Check for spam
+	 * Check for spam.
+	 *
+	 * @since x.x Added the `$posted_fields` parameter.
 	 *
 	 * @param bool  $exclude
 	 * @param array $values
 	 * @param array $errors By reference.
+	 * @param array $posted_fields Validate fields.
 	 */
-	public static function spam_check( $exclude, $values, &$errors ) {
+	public static function spam_check( $exclude, $values, &$errors, $posted_fields = false ) {
 		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
+		$spam_msg       = __( 'Your entry appears to be spam!', 'formidable' );
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+			$errors['spam'] = $spam_msg;
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+		} else {
+			if ( false === $posted_fields ) {
+				$posted_fields = self::get_fields_to_validate( $values, $exclude );
+			}
+			if ( self::is_stopforumspam_spam( $values, $posted_fields ) ) {
+				$errors['spam'] = $spam_msg;
+			}
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
@@ -368,6 +379,13 @@ class FrmEntryValidate {
 	private static function is_honeypot_spam( $values ) {
 		$honeypot = new FrmHoneypot( $values['form_id'] );
 		return ! $honeypot->validate();
+	}
+
+	private static function is_stopforumspam_spam( $values, $posted_fields ) {
+		$sfs = new FrmStopforumspam( $values['form_id'] );
+		$sfs->set_values( $values );
+		$sfs->set_posted_fields( $posted_fields );
+		return $sfs->validate();
 	}
 
 	/**

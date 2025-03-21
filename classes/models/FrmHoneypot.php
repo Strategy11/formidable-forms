@@ -7,6 +7,8 @@ class FrmHoneypot extends FrmValidate {
 
 	protected $fields;
 
+	protected $option_type = 'global';
+
 	public function __construct( $form_id, $fields = null ) {
 		parent::__construct( $form_id );
 		if ( is_null( $fields ) ) {
@@ -20,10 +22,6 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	protected function get_option_key() {
 		return 'honeypot';
-	}
-
-	protected function is_option_on() {
-		return self::is_enabled();
 	}
 
 	private static function is_enabled() {

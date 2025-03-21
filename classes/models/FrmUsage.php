@@ -305,6 +305,7 @@ class FrmUsage {
 			'form_class',
 			'akismet',
 			'antispam',
+			'stopforumspam',
 			'custom_style',
 			'success_action',
 			'show_form',

@@ -394,6 +394,7 @@ class FrmFormsHelper {
 			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
+			'stopforumspam'    => 0,
 			'antispam'         => 0,
 			'no_save'          => 0,
 			'ajax_load'        => 0,
