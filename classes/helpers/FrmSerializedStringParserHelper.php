@@ -43,7 +43,7 @@ class FrmSerializedStringParserHelper {
 	public function parse( $string ) {
 		$unserialized_data = $this->do_parse( new FrmStringReaderHelper( $string ) );
 
-		if ( $this->serialized_string_is_invalid( $string ) ) {
+		if ( is_array( $unserialized_data ) && $this->serialized_string_is_invalid( $string ) ) {
 			return array_filter( $unserialized_data, array( $this, 'serialized_value_is_valid' ) );
 		}
 
