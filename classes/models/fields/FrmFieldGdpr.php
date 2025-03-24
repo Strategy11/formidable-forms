@@ -171,7 +171,8 @@ class FrmFieldGdpr extends FrmFieldType {
 			$required = FrmField::get_option( $this->field, 'required' );
 
 			if ( ! $required && empty( $args['value'] ) ) {
-				$errors[ 'field' . $args['id'] ] = sprintf( __( '%s cannot be blank.', 'formidable' ), is_object( $this->field ) ? $this->field->name : $this->field['name'] );
+				$frm_settings                    = FrmAppHelper::get_settings();
+				$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'],  $frm_settings->blank_msg );
 			}
 		}
 
