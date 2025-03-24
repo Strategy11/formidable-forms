@@ -63,17 +63,7 @@ class FrmSerializedStringParserHelper {
 			return true;
 		}
 
-		$invalid_substrings = array(
-			';s:',
-		);
-
-		foreach ( $invalid_substrings as $invalid ) {
-			if ( strpos( $value, $invalid ) !== false ) {
-				return false;
-			}
-		}
-
-		return true;
+		return strpos( $value, ';s:' ) === false;
 	}
 
 	/**
