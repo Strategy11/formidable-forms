@@ -59,11 +59,7 @@ class FrmSerializedStringParserHelper {
 	 * @return bool
 	 */
 	private function serialized_value_is_valid( $value ) {
-		if ( ! is_string( $value ) ) {
-			return true;
-		}
-
-		return strpos( $value, ';s:' ) === false;
+		return ! is_string( $value ) || strpos( $value, ';s:' ) === false;
 	}
 
 	/**
