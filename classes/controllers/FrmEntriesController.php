@@ -617,7 +617,7 @@ class FrmEntriesController {
 		}
 
 		if ( $errors == '' && ! $ajax ) {
-			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$errors = FrmEntryValidate::validate( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
 		/**
@@ -635,7 +635,7 @@ class FrmEntriesController {
 			$do_success               = false;
 			if ( $params['action'] === 'create' ) {
 				if ( apply_filters( 'frm_continue_to_create', true, $form_id ) && ! isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ) {
-					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+					$frm_vars['created_entries'][ $form_id ]['entry_id'] = FrmEntry::create( wp_slash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 					$params['id'] = $frm_vars['created_entries'][ $form_id ]['entry_id'];
 					$do_success   = true;
