@@ -7,13 +7,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="frm_field_list">
 		<div class="frm-style-tabs-wrapper">
 			<div class="frm-tabs-delimiter">
-				<span data-initial-width="206" class="frm-tabs-active-underline frm-first"></span>
+				<span data-initial-width="190" class="frm-tabs-active-underline frm-first"></span>
 			</div>
 
 			<div class="frm-tabs-navs">
 				<ul class="frm-flex-box">
-					<li class="frm-active"><?php esc_html_e( 'Add Fields', 'formidable' ); ?></li>
-					<li><?php esc_html_e( 'Field Options', 'formidable' ); ?></li>
+					<li class="frm-active">
+						<a href="#frm-insert-fields" id="frm_insert_fields_tab">
+							<?php esc_html_e( 'Add Fields', 'formidable' ); ?>
+						</a>
+					</li>
+					<li class="hide-if-no-js">
+						<a href="#frm-options-panel" id="frm-options-panel-tab">
+							<?php esc_html_e( 'Field Options', 'formidable' ); ?>
+						</a>
+					</li>
 					<?php do_action( 'frm_extra_form_instruction_tabs' ); ?>
 				</ul>
 			</div>
