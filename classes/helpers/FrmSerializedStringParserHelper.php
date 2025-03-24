@@ -56,8 +56,8 @@ class FrmSerializedStringParserHelper {
 	 */
 	private function serialized_string_is_invalid( $string ) {
 		$invalid_substrings = array(
-			';s:10:"a"',
-			';s:"',
+			';s:10:\"a"',
+			';s:";',
 		);
 
 		foreach ( $invalid_substrings as $invalid ) {
