@@ -41,7 +41,32 @@ class FrmSerializedStringParserHelper {
 	 * @return mixed
 	 */
 	public function parse( $string ) {
+		if ( $this->serialized_string_is_invalid( $string ) ) {
+			return array();
+		}
+
 		return $this->do_parse( new FrmStringReaderHelper( $string ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $string
+	 * @return bool
+	 */
+	private function serialized_string_is_invalid( $string ) {
+		$invalid_substrings = array(
+			';s:10:"a"',
+			';s:"',
+		);
+
+		foreach ( $invalid_substrings as $invalid ) {
+			if ( strpos( $string, $invalid ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
