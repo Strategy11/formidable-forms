@@ -3151,8 +3151,7 @@ class FrmAppHelper {
 		}
 
 		if ( is_serialized( $value ) ) {
-			$value = maybe_unserialize( $value );
-			//$value = self::maybe_unserialize_array( $value );
+			$value = self::maybe_unserialize_array( $value );
 		} else {
 			$value = self::maybe_json_decode( $value, false );
 		}
