@@ -85,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $display['required'] ) { ?>
 				<div class="frm_form_field">
 					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
-						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php echo $display['readonly_required'] ? 'readonly onclick="return false;"' : ''; ?> <?php checked( $field['required'], 1 ); ?> />
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php echo $display['readonly_required'] ? 'readonly onclick="return false;"' : ''; ?> <?php checked( ! empty( $field['required'] ) || ! empty( $display['readonly_required'] ) ); ?> />
 						<?php esc_html_e( 'Required', 'formidable' ); ?>
 					</label>
 				</div>

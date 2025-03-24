@@ -155,4 +155,47 @@ class FrmFieldGdpr extends FrmFieldType {
 		}
 		return $html;
 	}
+
+	/**
+	 * Make sure the GDPR field is required even if the required setting is disabled.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	public function validate( $args ) {
+		$errors = parent::validate( $args );
+
+		if ( ! $errors && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
+			$required = FrmField::get_option( $this->field, 'required' );
+
+			if ( ! $required && empty( $args['value'] ) ) {
+				$errors[ 'field' . $args['id'] ] = sprintf( __( '%s cannot be blank.', 'formidable' ), is_object( $this->field ) ? $this->field->name : $this->field['name'] );
+			}
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * Make sure the GDPR field is required even if the required setting is disabled.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool   $required
+	 * @param array  $field
+	 * @return bool
+	 */
+	public static function force_required_field( $required, $field ) {
+		if ( $required ) {
+			return $required;
+		}
+
+		if ( ! $required && 'gdpr' === $field['type'] && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
+			$required = true;
+		}
+
+		return $required;
+	}
 }
