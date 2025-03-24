@@ -184,8 +184,8 @@ class FrmFieldGdpr extends FrmFieldType {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool   $required
-	 * @param array  $field
+	 * @param bool  $required
+	 * @param array $field
 	 * @return bool
 	 */
 	public static function force_required_field( $required, $field ) {
