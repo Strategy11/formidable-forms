@@ -10143,3 +10143,9 @@ Responsive Design
 	display: none !important;
 }
 /* End always hide submit field button */
+
+/* Prevent additional accordion arrows from appearing */
+#frm_style_sidebar .accordion-section-title::after,
+#frm_view_editor_left .accordion-section-title::after {
+	content: "";
+}
