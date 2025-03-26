@@ -692,9 +692,10 @@ class FrmFormsController {
 		$block_preview = apply_filters( 'frm_block_preview', $block_preview, $key );
 
 		if ( $block_preview ) {
+			$error = __( 'You do not have permission to view this form', 'formidable' );
 			wp_die(
-				'<h1>' . esc_html__( 'You do not have permission to view this form', 'formidable' ) . '</h1>',
-				'<p>' . esc_html__( 'You do not have permission to view this form', 'formidable' ) . '</p>',
+				'<h1>' . esc_html( $error ) . '</h1>',
+				'<p>' . esc_html( $error ) . '</p>',
 				403
 			);
 		}
