@@ -1865,7 +1865,6 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 * @deprecated 6.11
-	 * @deprecated 6.11
 	 *
 	 * @param array $atts
 	 * @return void
