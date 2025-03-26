@@ -1492,7 +1492,8 @@ class FrmFormsController {
 		if ( function_exists( 'akismet_http_post' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
 		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
+//		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
 	}
 
@@ -3158,7 +3159,13 @@ class FrmFormsController {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
 		}
+
+		if ( ! FrmAppHelper::is_admin() ) {
+			FrmHoneypot::maybe_print_honeypot_js();
+		}
 	}
+
+
 
 	/**
 	 * @since 2.0.8

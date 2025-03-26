@@ -218,6 +218,7 @@ class FrmUsage {
 			'admin_bar',
 			'summary_emails',
 			'active_captcha',
+			'honeypot',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -303,8 +304,8 @@ class FrmUsage {
 		$settings    = array(
 			'form_class',
 			'akismet',
-			'honeypot',
 			'antispam',
+			'stopforumspam',
 			'custom_style',
 			'success_action',
 			'show_form',
