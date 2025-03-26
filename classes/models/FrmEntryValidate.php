@@ -385,7 +385,7 @@ class FrmEntryValidate {
 		$sfs = new FrmStopforumspam( $values['form_id'] );
 		$sfs->set_values( $values );
 		$sfs->set_posted_fields( $posted_fields );
-		return $sfs->validate();
+		return ! $sfs->validate();
 	}
 
 	/**

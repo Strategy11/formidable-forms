@@ -39,30 +39,37 @@ class FrmStopforumspam extends FrmValidate {
 			$request_data['ip'] = $ip_address;
 		}
 
+		$response = $this->send_request( $request_data );
+
+		if ( $this->response_is_spam( $response ) ) {
+			return true;
+		}
+
+		$emails = $this->extract_emails_from_string( json_encode( $this->values['item_meta'] ) );
+		if ( ! $emails ) {
+			return false;
+		}
+
+		unset( $request_data['ip'] );
+		$request_data['email'] = $emails;
+		$response = $this->send_request( $request_data );
+		return $this->response_is_spam( $response );
+	}
+
+	private function send_request( $request_data ) {
 		$response = wp_remote_get(
 			'http://api.stopforumspam.org/api',
 			array(
 				'body' => $request_data,
 			)
 		);
-		$body     = wp_remote_retrieve_body( $response );
+		return wp_remote_retrieve_body( $response );
 
-		if ( $this->response_is_spam( $body ) ) {
-			$errors['spam'] = 'Your entry appears to be spam!';
-		}
+	}
 
-		foreach ( $values['item_meta'] as $value ) {
-			if ( is_string( $value ) && is_email( $value ) ) {
-				$response = wp_remote_get( 'http://api.stopforumspam.org/api?email=' . $value );
-				$body     = wp_remote_retrieve_body( $response );
-
-				if ( false !== strpos( $body, '<appears>yes</appears>' ) ) {
-					$errors['spam'] = 'Your entry appears to be spam!';
-				}
-			}
-		}
-
-		return $errors;
+	private function extract_emails_from_string( $str ) {
+		preg_match_all( '/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i', $str, $matches );
+		return isset( $matches[0] ) ? $matches[0] : array();
 	}
 
 	private function add_email_to_request( &$request_data ) {
