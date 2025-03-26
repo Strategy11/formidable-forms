@@ -13,6 +13,7 @@ describe( 'Run some accessibility tests', function() {
     };
 
     it('Check the form list has valid HTML', () => {
+        cy.login();
         cy.visit( '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form' );
         cy.injectAxe();
         configureAxeWithBaselineIgnoredRuleset();
