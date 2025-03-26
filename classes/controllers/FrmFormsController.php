@@ -680,6 +680,15 @@ class FrmFormsController {
 	private static function maybe_block_preview( $key ) {
 		// Automatically block the contact form preview since this key exists by default.
 		$block_preview = 'contact-form' === $key && ! current_user_can( 'frm_view_forms' );
+
+		/**
+		 * Filters whether to block a form preview.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $block_preview
+		 * @param string $key
+		 */
 		$block_preview = apply_filters( 'frm_block_preview', $block_preview, $key );
 
 		if ( $block_preview ) {
