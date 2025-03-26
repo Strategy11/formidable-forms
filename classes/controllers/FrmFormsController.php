@@ -432,6 +432,9 @@ class FrmFormsController {
 		global $frm_vars;
 		$frm_vars['preview'] = true;
 
+		// print_emoji_styles is deprecated.
+		remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
 			self::set_preview_query();
@@ -668,9 +671,6 @@ class FrmFormsController {
 		}
 
 		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
-
-		// print_emoji_styles is deprecated.
-		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
 		self::fix_deprecated_null_param_warning();
 
