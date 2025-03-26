@@ -677,6 +677,17 @@ class FrmFormsController {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php';
 	}
 
+	/**
+	 * Block the form preview for the contact form by default if the user cannot view forms.
+	 * This is to prevent the contact form being exploited.
+	 * Since this form is added by default and every site uses the same key, it is too easy
+	 * to guess this form.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $key
+	 * @return void
+	 */
 	private static function maybe_block_preview( $key ) {
 		// Automatically block the contact form preview since this key exists by default.
 		$block_preview = 'contact-form' === $key && ! current_user_can( 'frm_view_forms' );
