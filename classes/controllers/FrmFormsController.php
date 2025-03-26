@@ -390,9 +390,11 @@ class FrmFormsController {
 	 */
 	public static function page_preview() {
 		$params = FrmForm::list_page_params();
-		if ( ! $params['form'] ) {
+		if ( ! $params['form'] || is_numeric( $params['form'] ) ) {
 			return null;
 		}
+
+		self::maybe_block_preview( $params['form'] );
 
 		$form = FrmForm::getOne( $params['form'] );
 		if ( ! $form ) {
@@ -408,7 +410,16 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function show_page_preview() {
-		echo self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$preview = self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( is_null( $preview ) ) {
+			wp_die(
+				'<h1>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</h1>',
+				'<p>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</p>',
+				404
+			);
+		}
+
+		echo $preview;
 	}
 
 	/**
@@ -630,24 +641,54 @@ class FrmFormsController {
 	 * @since 3.0
 	 */
 	private static function load_direct_preview() {
-		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
-
-		// print_emoji_styles is deprecated.
-		remove_action( 'wp_print_styles', 'print_emoji_styles' );
-
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
 		if ( $key == '' ) {
 			$key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_title' );
 		}
 
-		$form = FrmForm::getAll( array( 'form_key' => $key ), '', 1 );
-		if ( empty( $form ) ) {
-			$form = FrmForm::getAll( array(), '', 1 );
+		if ( ! $key ) {
+			$error = __( 'Form key is missing', 'formidable' );
+			wp_die(
+				'<h1>' . esc_html( $error ) . '</h1>',
+				'<p>' . esc_html( $error ) . '</p>',
+				404
+			);
 		}
+
+		self::maybe_block_preview( $key );
+
+		$form = FrmForm::getAll( array( 'form_key' => $key ), '', 1 );
+		if ( ! $form ) {
+			$error = __( 'Form does not exist', 'formidable' );
+			wp_die(
+				'<h1>' . esc_html( $error ) . '</h1>',
+				'<p>' . esc_html( $error ) . '</p>',
+				404
+			);
+		}
+
+		header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
+
+		// print_emoji_styles is deprecated.
+		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
 		self::fix_deprecated_null_param_warning();
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/direct.php';
+	}
+
+	private static function maybe_block_preview( $key ) {
+		// Automatically block the contact form preview since this key exists by default.
+		$block_preview = 'contact-form' === $key && ! current_user_can( 'frm_view_forms' );
+		$block_preview = apply_filters( 'frm_block_preview', $block_preview, $key );
+
+		if ( $block_preview ) {
+			wp_die(
+				'<h1>' . esc_html__( 'You do not have permission to view this form', 'formidable' ) . '</h1>',
+				'<p>' . esc_html__( 'You do not have permission to view this form', 'formidable' ) . '</p>',
+				403
+			);
+		}
 	}
 
 	/**
