@@ -389,6 +389,7 @@ class FrmFormsController {
 	 * @return string|null
 	 */
 	public static function page_preview() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$params = FrmForm::list_page_params();
 		if ( ! $params['form'] ) {
 			return null;
@@ -415,6 +416,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function preview() {
+		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		do_action( 'frm_wp' );
 		FrmAppHelper::set_current_screen_and_hook_suffix();
 
