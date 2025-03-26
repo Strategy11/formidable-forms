@@ -685,24 +685,11 @@ class FrmFormsController {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $key
+	 * @param string $form_key Form key.
 	 * @return void
 	 */
-	public static function maybe_block_preview( $key ) {
-		// Automatically block the contact form preview since this key exists by default.
-		$block_preview = 'contact-form' === $key && ! current_user_can( 'frm_view_forms' );
-
-		/**
-		 * Filters whether to block a form preview.
-		 *
-		 * @since x.x
-		 *
-		 * @param bool   $block_preview
-		 * @param string $key
-		 */
-		$block_preview = apply_filters( 'frm_block_preview', $block_preview, $key );
-
-		if ( $block_preview ) {
+	public static function maybe_block_preview( $form_key ) {
+		if ( FrmFormsHelper::should_block_preview( $form_key ) ) {
 			$error = __( 'You do not have permission to view this form', 'formidable' );
 			wp_die(
 				'<h1>' . esc_html( $error ) . '</h1>',

@@ -607,8 +607,7 @@ class FrmEntriesController {
 
 		$is_preview = 'frm_forms_preview' === FrmAppHelper::simple_get( 'action' );
 		if ( $is_preview ) {
-			$block_preview = 'contact-form' === $form->form_key && ! current_user_can( 'frm_view_forms' );
-			$block_preview = apply_filters( 'frm_block_preview', $block_preview, $form->form_key );
+			$block_preview = FrmFormsHelper::should_block_preview( $form->form_key );
 			if ( $block_preview ) {
 				return;
 			}
