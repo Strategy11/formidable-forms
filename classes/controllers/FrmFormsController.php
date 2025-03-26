@@ -410,7 +410,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function show_page_preview() {
-		$preview = self::page_preview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$preview = self::page_preview();
 		if ( is_null( $preview ) ) {
 			wp_die(
 				'<h1>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</h1>',
@@ -419,7 +419,7 @@ class FrmFormsController {
 			);
 		}
 
-		echo $preview;
+		echo $preview; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
