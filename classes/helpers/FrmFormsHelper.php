@@ -1841,6 +1841,28 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Returns true if the preview should be blocked.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $form_key
+	 * @return bool
+	 */
+	public static function should_block_preview( $form_key ) {
+		$should_block = 'contact-form' === $form_key && ! current_user_can( 'frm_view_forms' );
+		/**
+		 * Filters whether the form preview should be blocked.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $should_block
+		 * @param string $form_key
+		 */
+		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
+		return $should_block;
+	}
+
+	/**
 	 * @since 3.0
 	 * @deprecated 6.11
 	 *
