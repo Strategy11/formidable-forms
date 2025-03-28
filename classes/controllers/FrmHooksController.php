@@ -112,6 +112,9 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+
+		// GDPR
+		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
 	}
 
 	/**
