@@ -429,6 +429,21 @@ class FrmFormActionsController {
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param object $form_action
+	 *
+	 * @return bool
+	 */
+	public static function should_show_notice_about_using_the_same_to_from_email( $form_action ) {
+		$settings = new FrmSettings();
+		if ( ! empty( $settings->default_email ) && $settings->default_email !== $settings->from_email ) {
+			return false;
+		}
+		return $form_action->post_excerpt === 'email' && ! get_user_meta( wp_get_current_user()->ID, 'frm_dismiss_default_email_message', true );
+	}
+
 	private static function fields_to_values( $form_id, array &$values ) {
 		$form = FrmForm::getOne( $form_id );
 
