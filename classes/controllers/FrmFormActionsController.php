@@ -675,7 +675,7 @@ class FrmFormActionsController {
 	 * @return bool|null
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {
-		if ( 'frm_form_actions' === $post_type ) {
+		if ( self::$action_post_type === $post_type ) {
 			return false;
 		}
 		return $null;
