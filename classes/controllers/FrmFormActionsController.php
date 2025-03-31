@@ -693,4 +693,20 @@ class Frm_Form_Action_Factory {
 			}
 		}
 	}
+
+	/**
+	 * Prevent WPML from filtering form actions based on the active language.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool|null $null
+	 * @param string    $post_type
+	 * @return bool|null
+	 */
+	public static function prevent_wpml_translations( $null, $post_type ) {
+		if ( 'frm_form_actions' === $post_type ) {
+			return false;
+		}
+		return $null;
+	}
 }
