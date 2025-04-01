@@ -45,7 +45,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
 					<p class="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
-						<?php echo FrmAppHelper::kses( $message, array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php FrmAppHelper::kses_echo( $message, array( 'span' ) ); ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
 						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" data-default="<?php echo esc_url( $default_link ); ?>">

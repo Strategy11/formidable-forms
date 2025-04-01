@@ -17,8 +17,7 @@ if ( ! empty( $template['message'] ) ) {
 	?>
 	<li class="frm_error_style inline">
 		<?php
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		echo FrmAppHelper::kses( $template['message'], array( 'a', 'b', 'strong', 'br' ) );
+		FrmAppHelper::kses_echo( $template['message'], array( 'a', 'b', 'strong', 'br' ) );
 		?>
 	</li>
 	<?php
@@ -81,7 +80,7 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 			<p class="frm-form-templates-item-description frm-line-clamp-2">
 				<?php
 				if ( $template['description'] ) {
-					echo FrmAppHelper::kses( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					FrmAppHelper::kses_echo( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) );
 				} elseif ( $template['is_custom'] ) {
 					echo '<i>';
 					printf(

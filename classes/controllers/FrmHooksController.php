@@ -72,6 +72,7 @@ class FrmHooksController {
 		// Form Actions Controller.
 		add_action( 'init', 'FrmFormActionsController::register_post_types', 1 );
 		add_action( 'frm_after_create_entry', 'FrmFormActionsController::trigger_create_actions', 20, 3 );
+		add_filter( 'pre_wpml_is_translated_post_type', 'FrmFormActionsController::prevent_wpml_translations', 10, 2 );
 
 		// Forms Controller.
 		add_action( 'widgets_init', 'FrmFormsController::register_widgets' );
@@ -112,6 +113,9 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+
+		// GDPR
+		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
 	}
 
 	/**
@@ -281,9 +285,6 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_nopriv_frm_entries_csv', 'FrmXMLController::csv' );
 		add_action( 'wp_ajax_frm_export_xml', 'FrmXMLController::export_xml' );
-
-		// Templates API.
-		add_action( 'wp_ajax_template_api_signup', 'FrmFormTemplateApi::signup' );
 
 		// Dashboard Controller.
 		add_action( 'wp_ajax_dashboard_ajax_action', 'FrmDashboardController::ajax_requests' );

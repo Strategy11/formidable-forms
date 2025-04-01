@@ -61,7 +61,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 	</div>
 
 	<p class="frm-line-clamp-2">
-		<?php echo FrmAppHelper::kses( $addon['excerpt'], array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<?php FrmAppHelper::kses_echo( $addon['excerpt'], array( 'a' ) ); ?>
 	</p>
 
 	<span class="frm-page-skeleton-divider frm-mt-auto"></span>

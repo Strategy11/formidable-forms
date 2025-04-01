@@ -21,7 +21,7 @@ $label_id       = 'frm-gdpr-accept-' . $field_id;
 		<?php echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php do_action( 'frm_field_input_html', $field ); ?>
 		/>
-		<?php echo esc_html( $agreement_text ); ?>
+		<?php FrmAppHelper::kses_echo( $agreement_text, array( 'a' ) ); ?>
 	</label>
 </div>
 <?php elseif ( current_user_can( 'frm_edit_forms' ) ) : ?>

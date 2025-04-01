@@ -375,7 +375,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 = 6.19 =
 * New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
 * New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
-* New: A quick link to the views tab for is now available on the form list admin page.
+* New: A quick link to the views tab is now available on the form list admin page.
 * New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
 * New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
 * Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.

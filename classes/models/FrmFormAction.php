@@ -853,48 +853,17 @@ class FrmFormAction {
 		return $post_id;
 	}
 
+	/**
+	 * @param WP_Post  $action
+	 * @param stdClass $entry
+	 * @return bool
+	 */
 	public static function action_conditions_met( $action, $entry ) {
 		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
 			return FrmProFormActionsController::action_conditions_met( $action, $entry );
 		}
 
-		// This is here for reverse compatibility.
-		$notification = $action->post_content;
-		$stop         = false;
-		$met          = array();
-
-		if ( empty( $notification['conditions'] ) ) {
-			return $stop;
-		}
-
-		foreach ( $notification['conditions'] as $k => $condition ) {
-			if ( ! is_numeric( $k ) ) {
-				continue;
-			}
-
-			if ( $stop && 'any' == $notification['conditions']['any_all'] && 'stop' == $notification['conditions']['send_stop'] ) {
-				continue;
-			}
-
-			self::prepare_logic_value( $condition['hide_opt'], $action, $entry );
-
-			$observed_value = self::get_value_from_entry( $entry, $condition['hide_field'] );
-
-			$stop = FrmFieldsHelper::value_meets_condition( $observed_value, $condition['hide_field_cond'], $condition['hide_opt'] );
-
-			if ( $notification['conditions']['send_stop'] === 'send' ) {
-				$stop = $stop ? false : true;
-			}
-
-			$met[ $stop ] = $stop;
-		}//end foreach
-
-		if ( $notification['conditions']['any_all'] === 'all' && ! empty( $met ) && isset( $met[0] ) && isset( $met[1] ) ) {
-			$stop = ( $notification['conditions']['send_stop'] === 'send' );
-		} elseif ( $notification['conditions']['any_all'] === 'any' && $notification['conditions']['send_stop'] === 'send' && isset( $met[0] ) ) {
-			$stop = false;
-		}
-
+		$stop = false;
 		return $stop;
 	}
 
