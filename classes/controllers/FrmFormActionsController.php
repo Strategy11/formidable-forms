@@ -549,6 +549,9 @@ class FrmFormActionsController {
 		}
 
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		$link_settings = self::get_form_actions( $type );
 		if ( 'all' !== $type ) {
@@ -580,7 +583,7 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( ( is_object( $form ) && is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ( isset( $args['is_child'] ) && $args['is_child'] ) );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
