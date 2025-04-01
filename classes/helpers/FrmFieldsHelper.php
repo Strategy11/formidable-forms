@@ -2201,7 +2201,7 @@ class FrmFieldsHelper {
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
-		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) );
 		?>
 		</li>
 		<?php
