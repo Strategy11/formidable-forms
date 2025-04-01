@@ -41,7 +41,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php } ?>
 					/>
 					<div class="frm_image_option_container frm_label_with_image">
-						<?php echo FrmAppHelper::kses( $info['img'], array( 'svg', 'rect', 'path' ) );  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php FrmAppHelper::kses_echo( $info['img'], array( 'svg', 'rect', 'path' ) ); ?>
 						<span class="frm_text_label_for_image">
 							<?php
 							if ( ! empty( $disabled ) ) {
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							}
 
 							if ( $importing === 'form' && $disabled ) {
-								echo FrmAppHelper::kses( FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] ), array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								FrmAppHelper::kses_echo( FrmFormsHelper::edit_form_link( $imported[ $info['form'] ] ), array( 'a' ) );
 							} else {
 								echo esc_html( $info['name'] );
 							}
