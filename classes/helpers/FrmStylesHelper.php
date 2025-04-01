@@ -973,6 +973,7 @@ class FrmStylesHelper {
 
 		return wp_get_attachment_url( (int) $background_image );
 	}
+
 	/**
 	 * Determines if the chosen JavaScript library should be used.
 	 *
