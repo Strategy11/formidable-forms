@@ -437,14 +437,11 @@ class FrmStylesHelper {
 		$vars   = array_diff( $vars, $remove );
 
 		foreach ( $vars as $var ) {
-			if ( ! isset( $settings[ $var ] ) ) {
+			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
 			}
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
-			}
-			if ( ! self::css_key_is_valid( $var ) ) {
-				continue;
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
 			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
