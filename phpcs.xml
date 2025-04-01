@@ -209,6 +209,7 @@
 		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
 		<exclude-pattern>tests/phpunit/entries/test_FrmShowEntryShortcode.php</exclude-pattern>
 		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->
