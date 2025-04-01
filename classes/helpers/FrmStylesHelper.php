@@ -459,7 +459,7 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	private static function css_key_is_valid( $key ) {
-		// Any key that is abnormaly large is not valid.
+		// Any key that is abnormally large is not valid.
 		// Any key that contains a '{' is not valid.
 		return strlen( $key ) < 100 && false === strpos( $key, '{' );
 	}
