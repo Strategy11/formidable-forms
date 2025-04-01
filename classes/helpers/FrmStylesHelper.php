@@ -443,8 +443,11 @@ class FrmStylesHelper {
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
+			if ( ! self::css_key_is_valid( $var ) ) {
+				continue;
+			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show && self::css_key_is_valid( $var ) && self::css_value_is_valid( $settings[ $var ] ) ) {
+			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
@@ -460,7 +463,8 @@ class FrmStylesHelper {
 	 */
 	private static function css_key_is_valid( $key ) {
 		// Any key that is abnormaly large is not valid.
-		return strlen( $key ) < 100;
+		// Any key that contains a '{' is not valid.
+		return strlen( $key ) < 100 && false === strpos( $key, '{' );
 	}
 
 	/**
@@ -479,6 +483,9 @@ class FrmStylesHelper {
 			';userAgent',
 			';stopPropagation',
 			'{const',
+			'window[',
+			'navigator[',
+			'Array;',
 		);
 
 		foreach ( $invalid_substrings as $substring ) {
