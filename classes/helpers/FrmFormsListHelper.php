@@ -474,7 +474,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function add_form_description( $item, &$val ) {
 		global $mode;
-		if ( 'excerpt' === $mode ) {
+		if ( 'excerpt' === $mode && ! is_null( $item->description ) ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}
 	}
