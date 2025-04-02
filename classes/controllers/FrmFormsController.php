@@ -1921,11 +1921,20 @@ class FrmFormsController {
 		return $errors;
 	}
 
+	/**
+	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
+	 *
+	 * @since x.x
+	 * @return void
+	 */
+	public static function include_device_too_small_message() {
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
+	}
+
 	public static function route() {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
 		FrmAppHelper::include_svg();
-
 		if ( isset( $_POST['frm_compact_fields'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 
