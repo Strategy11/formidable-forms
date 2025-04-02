@@ -381,8 +381,8 @@ function frmFrontFormJS() {
 				}
 
 				const checkedInputs = requiredField.querySelectorAll( 'input:checked' );
-				checkedInputs.forEach( function( input ) {
-					val = input.value;
+				checkedInputs.forEach( function( checkedInput ) {
+					val = checkedInput.value;
 				} );
 			} );
 		} else if ( field.type === 'file' || fileID ) {
