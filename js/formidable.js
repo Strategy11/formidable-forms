@@ -1672,6 +1672,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
+		/* eslint-disable compat/compat */
 		const startTime = performance.now();
 		const step      = ( currentTime ) => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
@@ -1681,6 +1682,7 @@ function frmFrontFormJS() {
 			}
 		};
 		requestAnimationFrame( step );
+		/* eslint-enable compat/compat */
 	}
 
 	return {
