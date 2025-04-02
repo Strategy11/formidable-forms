@@ -9301,6 +9301,10 @@ Responsive Design
 	#frm_small_device_message > svg {
 		padding-bottom: 1rem;
 	}
+
+	#posts-filter {
+		display: none;
+	}
 }
 
 /* PRINT */
