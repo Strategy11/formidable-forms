@@ -1667,6 +1667,11 @@ function frmFrontFormJS() {
 	 * @return {void}
 	 */
 	function animateScroll( start, end, duration ) {
+		if ( ! window.hasOwnProperty( 'performance' ) || ! window.hasOwnProperty( 'requestAnimationFrame' ) ) {
+			document.documentElement.scrollTop = end;
+			return;
+		}
+
 		const startTime = performance.now();
 		const step      = ( currentTime ) => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
