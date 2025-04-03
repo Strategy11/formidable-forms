@@ -38,6 +38,6 @@ class FrmSquareLiteHooksController {
 	 * @return void
 	 */
 	private static function load_ajax_hooks() {
-
+		add_action( 'wp_ajax_frm_square_oauth', 'FrmSquareLiteAppController::handle_oauth' );
 	}
 }
