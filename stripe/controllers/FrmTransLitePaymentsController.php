@@ -101,7 +101,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$link = apply_filters( 'frm_pay_' . $paysys . '_receipt', $link );
 		}
 
-		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 	}
 
 	/**
