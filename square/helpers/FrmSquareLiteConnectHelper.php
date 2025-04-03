@@ -40,7 +40,7 @@ class FrmSquareLiteConnectHelper {
 		);
 
 		// Clear the transient so it doesn't fail.
-		delete_option( 'frm_stripe_lite_last_verify_attempt' );
+		delete_option( 'frm_square_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
