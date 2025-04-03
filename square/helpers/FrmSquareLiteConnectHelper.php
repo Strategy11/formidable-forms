@@ -6,6 +6,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSquareLiteConnectHelper {
 
 	/**
+	 * Track the latest error when calling stripe connect.
+	 *
+	 * @since 6.5
+	 *
+	 * @var string|null
+	 */
+	public static $latest_error_from_square_api;
+
+	/**
 	 * @return void
 	 */
 	public static function render_settings_container() {
@@ -337,5 +346,56 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		return false;
+	}
+
+	public static function create_payment( $amount, $currency, $square_token, $verification_token ) {
+		return self::post_with_authenticated_body(
+			'create_payment',
+			array(
+				'amount'             => $amount,
+				'currency'           => $currency,
+				'square_token'       => $square_token,
+				'verification_token' => $verification_token,
+			)
+		);
+	}
+
+	/**
+	 * @param string $action
+	 * @param array  $additional_body
+	 *
+	 * @return false|object
+	 */
+	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
+		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
+		$response = self::post_to_connect_server( $action, $body );
+		if ( is_object( $response ) ) {
+			return $response;
+		}
+		if ( is_array( $response ) ) {
+			// reformat empty arrays as empty objects
+			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			return new stdClass();
+		}
+		if ( is_string( $response ) ) {
+			self::$latest_error_from_square_api = $response;
+			FrmTransLiteLog::log_message( 'Square API Error', $response );
+		} else {
+			self::$latest_error_from_square_api = '';
+		}
+		return false;
+	}
+
+	private static function get_standard_authenticated_body() {
+		$mode = 'live';//self::get_mode_value_from_post();
+		return array(
+			'merchant_id'      => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
+		);
+	}
+
+	public static function get_latest_error_from_square_api() {
+		return self::$latest_error_from_square_api;
 	}
 }

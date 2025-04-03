@@ -82,17 +82,11 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		$customer = self::set_customer_with_token( $atts );
-		if ( ! is_object( $customer ) ) {
-			$response['error'] = $customer;
-			return $response;
-		}
-
-		$one_time_payment_args = compact( 'customer', 'form', 'entry', 'action', 'amount' );
+		$one_time_payment_args = compact( 'form', 'entry', 'action', 'amount' );
 
 		// attempt to charge the customer's card
 		if ( 'recurring' === $action->post_content['type'] ) {
-			$charge = self::trigger_recurring_payment( compact( 'customer', 'entry', 'action', 'amount' ) );
+			$charge = self::trigger_recurring_payment( compact( 'entry', 'action', 'amount' ) );
 		} else {
 			$charge                   = self::trigger_one_time_payment( $one_time_payment_args );
 			$response['run_triggers'] = true;
@@ -108,43 +102,42 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Trigger a one time payment.
+	 *
+	 * @param array $atts {
+	 *     @type stdClass $form
+	 *     @type stdClass $entry
+	 *     @type WP_Post  $action
+	 *     @type string   $amount
+	 * }
+	 * @return string|true string on error, true on success.
+	 */
+	private static function trigger_one_time_payment( $atts ) {
+		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) {
+			return __( 'Please enter a valid credit card', 'formidable' );
+		}
+
+		$currency           = strtoupper( $atts['action']->post_content['currency'] );
+		$square_token       = sanitize_text_field( $_POST['square-token'] );
+		$verification_token = sanitize_text_field( $_POST['square-verification-token'] );
+
+		// TODO We'll need to send the square tokens to our API.
+		$result = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token );
+
+		if ( false === $result ) {
+			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();
+		}
+
+		return true;
+	}
+
+	/**
 	 * Check if Square integration is enabled.
 	 *
 	 * @return bool true if Square is set up.
 	 */
 	private static function square_is_configured() {
-		// TODO
-		return false;
-	}
-
-	/**
-	 * Set a customer object to $_POST['customer'] to use later.
-	 *
-	 * @param array $atts
-	 * @return object|string
-	 */
-	private static function set_customer_with_token( $atts ) {
-		if ( isset( self::$customer ) ) {
-			// It's an object if this isn't the first Square action running.
-			return self::$customer;
-		}
-
-		$payment_info = array(
-			'user_id' => FrmTransLiteAppHelper::get_user_id_for_current_payment(),
-		);
-
-		if ( ! empty( $atts['action']->post_content['email'] ) ) {
-			$payment_info['email'] = apply_filters( 'frm_content', $atts['action']->post_content['email'], $atts['form'], $atts['entry'] );
-			$payment_info['email'] = self::replace_email_shortcode( $payment_info['email'] );
-		}
-
-		self::add_customer_name( $atts, $payment_info );
-
-		$customer = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
-		// Set for later use.
-		self::$customer = $customer;
-
-		return $customer;
+		return (bool) FrmSquareLiteConnectHelper::get_merchant_id();
 	}
 
 	/**

@@ -85,11 +85,35 @@ class FrmTransLiteActionsController {
 	 */
 	public static function trigger_action( $action, $entry, $form ) {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
-		$response = FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
+
+		$gateway = self::get_gateway_for_action( $action );
+		if ( ! $gateway ) {
+			return;
+		}
+
+		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+		if ( ! $class_name ) {
+			return;
+		}
+
+		$class_name = 'Frm' . $class_name . 'ActionsController';
+		$response   = $class_name::trigger_gateway( $action, $entry, $form );
+
 		if ( ! $response['success'] && $response['show_errors'] ) {
 			// the payment failed
 			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
+	}
+
+	/**
+	 * @param WP_Post  $action
+	 * @return string
+	 */
+	private static function get_gateway_for_action( $action ) {
+		if ( isset( $action->post_content['gateway'] ) ) {
+			return $action->post_content['gateway'];
+		}
+		return 'stripe';
 	}
 
 	/**

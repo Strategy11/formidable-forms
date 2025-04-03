@@ -515,4 +515,17 @@ class FrmTransLiteAppHelper {
 		$gateways = apply_filters( 'frm_payment_gateways', array() );
 		return $gateways;
 	}
+
+	/**
+	 * @param string $gateway
+	 * @param string $setting
+	 */
+	public static function get_setting_for_gateway( $gateway, $setting ) {
+		$gateways = self::get_gateways();
+		$value = '';
+		if ( isset( $gateways[ $gateway ] ) ) {
+			$value = $gateways[ $gateway ][ $setting ];
+		}
+		return $value;
+	}
 }
