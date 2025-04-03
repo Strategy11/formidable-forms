@@ -10,11 +10,16 @@ class FrmSquareLiteConnectHelper {
 	 */
 	public static function render_settings_container() {
 		self::register_settings_scripts();
-		?>
-		<a id="frm_connect_square_with_oauth" class="button-primary frm-button-primary">
-			<?php esc_html_e( 'Connect to Square', 'formidable' ); ?>
-		</a>
-		<?php
+
+		if ( self::get_merchant_id() ) {
+			echo 'Connected';
+		} else {
+			?>
+			<a id="frm_connect_square_with_oauth" class="button-primary frm-button-primary">
+				<?php esc_html_e( 'Connect to Square', 'formidable' ); ?>
+			</a>
+			<?php
+		}
 	}
 
 	/**
@@ -28,7 +33,7 @@ class FrmSquareLiteConnectHelper {
 	public static function get_oauth_redirect_url() {
 		$mode = self::get_mode_value();
 
-		if ( self::get_account_id( $mode ) ) {
+		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured account id.
 			return false;
 		}
@@ -248,20 +253,21 @@ class FrmSquareLiteConnectHelper {
 	 * @param string $mode
 	 * @return bool|string
 	 */
-	public static function get_account_id( $mode = 'auto' ) {
-		return get_option( self::get_account_id_option_name( $mode ) );
+	public static function get_merchant_id( $mode = 'auto' ) {
+		$mode = 'live';
+		return get_option( self::get_merchant_id_option_name( $mode ) );
 	}
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
-	private static function get_account_id_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'account_id', $mode );
+	private static function get_merchant_id_option_name( $mode = 'auto' ) {
+		return self::get_square_connect_option_name( 'merchant_id', $mode );
 	}
 
 	/**
-	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted'.
+	 * @param string $key 'merchant_id', 'client_password', 'server_password', 'details_submitted'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
@@ -278,5 +284,58 @@ class FrmSquareLiteConnectHelper {
 			return '_' . $mode;
 		}
 		return '_' . FrmSquareLiteAppHelper::active_mode();
+	}
+
+	public static function check_for_redirects() {
+		if ( self::user_landed_on_the_oauth_return_url() ) {
+			self::redirect_oauth();
+		}
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function user_landed_on_the_oauth_return_url() {
+		return isset( $_GET['frm_square_api_return_oauth'] );
+	}
+
+	private static function redirect_oauth() {
+		$connected = self::check_server_for_oauth_merchant_id();
+		header( 'Location: ' . self::get_url_for_square_settings( $connected ), true, 302 );
+		exit;
+	}
+
+	/**
+	 * @param bool $connected
+	 * @return string
+	 */
+	private static function get_url_for_square_settings( $connected ) {
+		return admin_url( 'admin.php?page=formidable-settings&t=square_settings&connected=' . intval( $connected ) );
+	}
+
+	/**
+	 * @return bool
+	 */
+	private static function check_server_for_oauth_merchant_id() {
+		$mode = 'live';
+
+		if ( self::get_merchant_id( $mode ) ) {
+			// Do not allow for initialize if there is already a configured merchant id.
+			return false;
+		}
+
+		$body = array(
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'frm_square_api_mode' => $mode,
+		);
+		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
+
+		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
+			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+			return true;
+		}
+
+		return false;
 	}
 }

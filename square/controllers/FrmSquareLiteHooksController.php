@@ -14,6 +14,8 @@ class FrmSquareLiteHooksController {
 
 		add_filter( 'frm_payment_gateways', 'FrmSquareLiteAppController::add_gateway' );
 
+		add_action( 'init', 'FrmSquareLiteConnectHelper::check_for_redirects' );
+
 		// This filter flags the Pro credit card field that Stripe is enabled.
 		add_filter(
 			'frm_pro_show_card_callback',
