@@ -391,11 +391,19 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css         = $this->get_css_content( $filename );
+		$css = $this->get_css_content( $filename );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param string $file_path
+		 */
+		$file_path = apply_filters( 'frm_css_file_path', FrmAppHelper::plugin_path() . '/css' );
+
 		$create_file = new FrmCreateFile(
 			array(
 				'file_name'     => FrmStylesController::get_file_name(),
-				'new_file_path' => FrmAppHelper::plugin_path() . '/css',
+				'new_file_path' => $file_path,
 			)
 		);
 		$create_file->create_file( $css );
