@@ -213,6 +213,8 @@ class FrmUsage {
 			'mu_menu',
 			'no_ips',
 			'custom_header_ip',
+			'enable_gdpr',
+			'no_gdpr_cookies',
 			'btsp_css',
 			'btsp_version',
 			'admin_bar',
