@@ -2390,10 +2390,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since x.x This is changed from `private` to `public`.
+	 *
 	 * @param int $num_chars
 	 * @return string
 	 */
-	private static function generate_new_key( $num_chars ) {
+	public static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
 
 		// We want to have at least 2 characters in the slug.
