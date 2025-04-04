@@ -2,7 +2,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
 if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() || ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 	?>
 	<span class="frm-with-icon frm-not-set frm_note_style">
