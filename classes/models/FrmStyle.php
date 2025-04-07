@@ -444,13 +444,12 @@ class FrmStyle {
 	 * @return bool
 	 */
 	public static function add_css_to_uploads_dir() {
-
 		/**
 		 * @since x.x
 		 *
 		 * @param bool $add_css_to_uploads_dir
 		 */
-		return apply_filters( 'frm_add_css_to_uploads_dir', false );
+		return apply_filters( 'frm_add_css_to_uploads_dir', ! wp_is_file_mod_allowed() );
 	}
 
 	/**
