@@ -393,23 +393,50 @@ class FrmStyle {
 
 		$css = $this->get_css_content( $filename );
 
-		/**
-		 * @since x.x
-		 *
-		 * @param string $file_path
-		 */
-		$file_path = apply_filters( 'frm_css_file_path', FrmAppHelper::plugin_path() . '/css' );
-
-		$create_file = new FrmCreateFile(
-			array(
-				'file_name'     => FrmStylesController::get_file_name(),
-				'new_file_path' => $file_path,
-			)
-		);
+		$create_file = new FrmCreateFile( self::get_create_style_file_args() );
 		$create_file->create_file( $css );
 
 		update_option( 'frmpro_css', $css, 'no' );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private function get_create_style_file_args() {
+		$create_file_args = array(
+			'file_name' => FrmStylesController::get_file_name(),
+		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $add_css_to_uploads_dir
+		 */
+		$add_css_to_uploads_dir = apply_filters( 'frm_add_css_to_uploads_dir', false );
+
+		if ( $add_css_to_uploads_dir ) {
+			$generated_css_location = self::target_css_uploads_dir();
+			$path_args              = array(
+				'new_file_path' => $generated_css_location,
+				'folder_name'   => 'formidable/css',
+			);
+		} else {
+			$path_args = array(
+				'new_file_path' => self::target_css_plugin_dir(),
+			);
+		}
+		return array_merge( $create_file_args, $path_args );
+	}
+
+	private static function target_css_uploads_dir() {
+		return  wp_upload_dir()['basedir'] . '/formidable/css';
+	}
+
+	private static function target_css_plugin_dir() {
+		return FrmAppHelper::plugin_path() . '/css';
 	}
 
 	/**
