@@ -391,8 +391,7 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css = $this->get_css_content( $filename );
-
+		$css         = $this->get_css_content( $filename );
 		$create_file = new FrmCreateFile( self::get_create_style_file_args() );
 		$create_file->create_file( $css );
 
