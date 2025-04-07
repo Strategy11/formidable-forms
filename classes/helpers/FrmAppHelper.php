@@ -340,18 +340,32 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( 'formidable' === $page ) {
+			return self::on_form_listing_page();
+		}
+
 		if ( ! self::is_admin_page( $page ) ) {
 			return false;
 		}
 
-		// Check Trash page.
-		$form_type = self::simple_get( 'form_type' );
-		if ( $form_type && 'published' !== $form_type ) {
-			return false;
+		if ( 'formidable-entries' === $page ) {
+			$action = self::simple_get( 'frm_action' );
+			if ( ! $action || in_array( $action, self::get_entries_listing_page_form_actions(), true ) ) {
+				return true;
+			}
 		}
 
 		// Check edit or settings page.
 		return ! self::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_entries_listing_page_form_actions() {
+		return array( 'list', 'destroy' );
 	}
 
 	/**
