@@ -405,7 +405,7 @@ class FrmStyle {
 	 *
 	 * @return array
 	 */
-	private function get_create_style_file_args() {
+	private static function get_create_style_file_args() {
 		$add_css_to_uploads_dir = self::add_css_to_uploads_dir();
 		$create_file_args       = array(
 			'file_name'     => FrmStylesController::get_file_name(),
@@ -433,12 +433,17 @@ class FrmStyle {
 	 * @return string
 	 */
 	public static function get_generated_css_file_path( $add_css_to_uploads_dir ) {
-		if ( self::add_css_to_uploads_dir() ) {
+		if ( $add_css_to_uploads_dir ) {
 			return self::target_css_uploads_dir();
 		}
 		return self::target_css_plugin_dir();
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
 	public static function add_css_to_uploads_dir() {
 
 		/**
@@ -449,10 +454,20 @@ class FrmStyle {
 		return apply_filters( 'frm_add_css_to_uploads_dir', false );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	private static function target_css_uploads_dir() {
 		return  wp_upload_dir()['basedir'] . '/formidable/css';
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	private static function target_css_plugin_dir() {
 		return FrmAppHelper::plugin_path() . '/css';
 	}
