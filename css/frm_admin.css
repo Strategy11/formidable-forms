@@ -9302,7 +9302,7 @@ Responsive Design
 		padding-bottom: 1rem;
 	}
 
-	#posts-filter {
+	.toplevel_page_formidable #posts-filter {
 		display: none;
 	}
 }
