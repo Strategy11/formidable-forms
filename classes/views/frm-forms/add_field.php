@@ -54,7 +54,7 @@ if ( $field['type'] === 'divider' ) {
 	</div>
 	<?php if ( $display['description'] || in_array( $field['type'], array( 'address', 'credit_card' ), true ) ) { ?>
 		<div class="frm_description" id="field_description_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['description'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['description'] ), 'all' ); ?>
 		</div>
 	<?php } ?>
 </div>
@@ -84,7 +84,7 @@ if ( $display['conf_field'] ) {
 				?>
 			</div>
 			<div id="conf_field_description_<?php echo esc_attr( $field['id'] ); ?>" class="frm_description"><?php
-				echo FrmAppHelper::kses( force_balance_tags( $field['conf_desc'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::kses_echo( force_balance_tags( $field['conf_desc'] ), 'all' );
 			?></div>
 	</div>
 	</div>

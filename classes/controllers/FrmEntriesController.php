@@ -605,6 +605,11 @@ class FrmEntriesController {
 			return;
 		}
 
+		$is_preview = 'frm_forms_preview' === FrmAppHelper::simple_get( 'action' );
+		if ( $is_preview && FrmFormsHelper::should_block_preview( $form->form_key ) ) {
+			return;
+		}
+
 		$params = FrmForm::get_params( $form );
 
 		if ( ! isset( $frm_vars['form_params'] ) ) {

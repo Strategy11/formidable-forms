@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( isset( $message ) && '' !== $message ) {
 	if ( FrmAppHelper::is_admin() ) {
 		echo '<div class="frm_updated_message">';
-		echo FrmAppHelper::kses( $message, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $message, 'all' );
 		echo '</div>';
 	} else {
 		echo FrmAppHelper::maybe_kses( $message ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

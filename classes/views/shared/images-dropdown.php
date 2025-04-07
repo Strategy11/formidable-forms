@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input value="<?php echo esc_attr( $option['key'] ); ?>" <?php checked( $option['key'], $args['selected'] ); ?> <?php echo $input_attrs_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> />
 				<div class="frm_image_option_container frm_grid_container">
 					<span class="frm_images_dropdown__image frm4">
-						<?php echo FrmAppHelper::kses( $image_details['image'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php FrmAppHelper::kses_echo( $image_details['image'], 'all' ); ?>
 					</span>
 					<span class="frm_text_label_for_image frm8">
 						<?php echo esc_html( $option['text'] ); ?>

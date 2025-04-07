@@ -9,6 +9,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php } ?>
 	<strong class="frm-banner-title"><?php echo esc_html( $message['subject'] ); ?></strong>
 	<span class="frm-banner-content"><?php echo esc_html( $message['banner'] ); ?></span>
-	<span class="frm-banner-cta"><?php echo FrmAppHelper::kses( $cta, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+	<span class="frm-banner-cta"><?php FrmAppHelper::kses_echo( $cta, 'all' ); ?></span>
 	<span class="frm-banner-dismiss frmsvg"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?></span>
 </div>
