@@ -9302,7 +9302,8 @@ Responsive Design
 		padding-bottom: 1rem;
 	}
 
-	.toplevel_page_formidable #posts-filter {
+	.toplevel_page_formidable #posts-filter,
+	.post-type-frm_display #posts-filter {
 		display: none;
 	}
 }
