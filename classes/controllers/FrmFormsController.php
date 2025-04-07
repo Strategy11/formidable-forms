@@ -1928,6 +1928,10 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function include_device_too_small_message() {
+		if ( ! FrmAppHelper::is_formidable_admin() ) {
+			return;
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 
