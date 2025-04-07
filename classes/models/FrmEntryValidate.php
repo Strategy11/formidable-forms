@@ -388,6 +388,12 @@ class FrmEntryValidate {
 		return ! $sfs->validate();
 	}
 
+	private static function is_blacklist_spam( $values ) {
+		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
+		$check->set_values( $values );
+		return ! $check->validate();
+	}
+
 	/**
 	 * @return bool
 	 */
