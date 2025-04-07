@@ -230,17 +230,13 @@ class FrmStylesController {
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
 		$add_css_to_uploads_dir = FrmStyle::add_css_to_uploads_dir();
 		$file_path              = FrmStyle::get_generated_css_file_path( $add_css_to_uploads_dir ) . '/' . self::get_file_name();
-		if ( is_readable( $file_path ) ) {
-			if ( $add_css_to_uploads_dir ) {
-				$base_url = wp_upload_dir()['baseurl'] . '/formidable/css/';
-			} else {
-				$base_url = FrmAppHelper::plugin_url() . '/css/';
-			}
-			$url = $base_url . self::get_file_name();
-		} else {
-			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
+		if ( ! is_readable( $file_path ) ) {
+			$stylesheet_urls['formidable'] = admin_url( 'admin-ajax.php?action=frmpro_css' );
+			return;
 		}
-		$stylesheet_urls['formidable'] = $url;
+		$base_url = $add_css_to_uploads_dir ? wp_upload_dir()['baseurl'] . '/formidable/css/' : FrmAppHelper::plugin_url() . '/css/';
+
+		$stylesheet_urls['formidable'] = $base_url . self::get_file_name();
 	}
 
 	/**
