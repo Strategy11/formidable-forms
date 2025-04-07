@@ -54,7 +54,8 @@ class FrmFieldTextarea extends FrmFieldType {
 			'class'       => 'dyn_default_value',
 			'placeholder' => FrmField::get_option( $this->field, 'placeholder' ),
 		);
-		echo '<textarea' . FrmAppHelper::array_to_html_params( $html_atts );
+		echo '<textarea';
+		FrmAppHelper::array_to_html_params( $html_atts, true );
 
 		if ( $size ) {
 			if ( is_numeric( $size ) ) {
