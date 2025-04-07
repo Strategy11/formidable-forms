@@ -406,29 +406,47 @@ class FrmStyle {
 	 * @return array
 	 */
 	private function get_create_style_file_args() {
-		$create_file_args = array(
-			'file_name' => FrmStylesController::get_file_name(),
+		$add_css_to_uploads_dir = self::add_css_to_uploads_dir();
+		$create_file_args       = array(
+			'file_name'     => FrmStylesController::get_file_name(),
+			'new_file_path' => self::get_generated_css_file_path( $add_css_to_uploads_dir ),
 		);
+
+		if ( ! $add_css_to_uploads_dir ) {
+			return $create_file_args;
+		}
+		$path_args = array(
+			'folder_name' => 'formidable/css',
+		);
+		return array_merge(
+			$create_file_args,
+			array(
+				'folder_name' => 'formidable/css',
+			)
+		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool $add_css_to_uploads_dir
+	 * @return string
+	 */
+	public static function get_generated_css_file_path( $add_css_to_uploads_dir ) {
+		if ( self::add_css_to_uploads_dir() ) {
+			return self::target_css_uploads_dir();
+		}
+		return self::target_css_plugin_dir();
+	}
+
+	public static function add_css_to_uploads_dir() {
 
 		/**
 		 * @since x.x
 		 *
 		 * @param bool $add_css_to_uploads_dir
 		 */
-		$add_css_to_uploads_dir = apply_filters( 'frm_add_css_to_uploads_dir', false );
-
-		if ( $add_css_to_uploads_dir ) {
-			$generated_css_location = self::target_css_uploads_dir();
-			$path_args              = array(
-				'new_file_path' => $generated_css_location,
-				'folder_name'   => 'formidable/css',
-			);
-		} else {
-			$path_args = array(
-				'new_file_path' => self::target_css_plugin_dir(),
-			);
-		}
-		return array_merge( $create_file_args, $path_args );
+		return apply_filters( 'frm_add_css_to_uploads_dir', false );
 	}
 
 	private static function target_css_uploads_dir() {
