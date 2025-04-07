@@ -439,6 +439,8 @@ class FrmStyle {
 	}
 
 	/**
+	 * Returns true if generated css file should be saved in the uploads directory.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
