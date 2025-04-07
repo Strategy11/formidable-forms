@@ -1931,9 +1931,6 @@ class FrmFormsController {
 		if ( ! FrmAppHelper::is_formidable_admin() ) {
 			return;
 		}
-		if ( 'frm_logs' !== FrmAppHelper::simple_get( 'post_type', 'sanitize_title' ) ) {
-			return;
-		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
