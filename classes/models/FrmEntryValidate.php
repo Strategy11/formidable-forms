@@ -388,12 +388,6 @@ class FrmEntryValidate {
 		return ! $sfs->validate();
 	}
 
-	private static function is_blacklist_spam( $values ) {
-		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
-		$check->set_values( $values );
-		return ! $check->validate();
-	}
-
 	/**
 	 * @return bool
 	 */
@@ -424,6 +418,10 @@ class FrmEntryValidate {
 	}
 
 	public static function blacklist_check( $values ) {
+		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
+		$check->set_values( $values );
+		return ! $check->validate();
+
 		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
 			return false;
 		}
@@ -454,21 +452,6 @@ class FrmEntryValidate {
 		}
 		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
 		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function get_disallowed_words() {
-		$keys = get_option( 'disallowed_keys' );
-		if ( false === $keys ) {
-			// Fallback for WP < 5.5.
-			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
-			$keys = get_option( 'blacklist_keys' );
-		}
-		return $keys;
 	}
 
 	/**
@@ -545,7 +528,7 @@ class FrmEntryValidate {
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
 	 */
-	private static function get_spam_check_user_info( $values ) {
+	public static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
@@ -843,7 +826,7 @@ class FrmEntryValidate {
 	 *
 	 * @param array $values Entry values.
 	 */
-	private static function prepare_values_for_spam_check( &$values ) {
+	public static function prepare_values_for_spam_check( &$values ) {
 		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
 		$values['form_ids'] = $form_ids;
 	}
