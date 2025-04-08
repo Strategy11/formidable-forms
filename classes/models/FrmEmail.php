@@ -416,8 +416,6 @@ class FrmEmail {
 
 		$this->message = $mail_body;
 
-		$this->message = do_shortcode( $this->message );
-
 		if ( $this->is_plain_text ) {
 			$this->message = wp_specialchars_decode( strip_tags( $this->message ), ENT_QUOTES );
 			$this->message = str_replace( '&nbsp;', '', $this->message );
