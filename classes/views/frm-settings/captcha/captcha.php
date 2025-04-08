@@ -113,3 +113,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots. Setting to strict will catch more spam but issues with autocomplete may prevent real people from submitting on some browsers.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
+
+<p>
+	<label for="frm-blacklist">
+		<?php esc_html_e( 'Custom blacklist words', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Each word or regex is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+	<textarea id="frm-blacklist" name="frm_blacklist"><?php echo esc_textarea( $frm_settings->blacklist ); ?></textarea>
+</p>
+
+<p>
+	<label for="frm-whitelist">
+		<?php esc_html_e( 'Custom whitelist words', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Each word or regex is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+	<textarea id="frm-whitelist" name="frm_whitelist"><?php echo esc_textarea( $frm_settings->whitelist ); ?></textarea>
+</p>

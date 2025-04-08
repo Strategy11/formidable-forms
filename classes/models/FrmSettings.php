@@ -93,6 +93,10 @@ class FrmSettings {
 
 	public $honeypot;
 
+	public $blacklist;
+
+	public $whitelist;
+
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -166,6 +170,8 @@ class FrmSettings {
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css'                => false,
 			'honeypot'                  => 1,
+			'blacklist'          => '',
+			'whitelist'          => '',
 		);
 	}
 

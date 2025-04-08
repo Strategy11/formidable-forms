@@ -24,7 +24,18 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 	private function get_blacklist() {
 		return array(
 			'domain' => FrmAppHelper::plugin_path() . '/blacklist/toxic_domain_partial.txt',
+			'custom' => $this->get_custom_words( 'blacklist' ),
 		);
+	}
+
+	private function get_custom_words( $setting_key ) {
+		$frm_settings = FrmAppHelper::get_settings();
+		$custom_words = isset( $frm_settings->$setting_key ) ? $frm_settings->$setting_key : '';
+		if ( ! $custom_words ) {
+			return array();
+		}
+
+		return explode( "\n", $custom_words );
 	}
 
 	/**
@@ -43,7 +54,8 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 			return false;
 		}
 
-		$blacklist = $this->get_blacklist();
+		$blacklist  = $this->get_blacklist();
+		$whitelist  = $this->get_custom_words( 'whitelist' );
 		$values_str = FrmAppHelper::maybe_json_encode( $this->values );
 
 		foreach ( $blacklist as $key => $value ) {
@@ -53,6 +65,12 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 					if ( $fp ) {
 						while ( ( $line = fgets( $fp ) ) !== false ) {
 							$line = trim( $line );
+
+							// Do not check if this word is in the whitelist.
+							if ( in_array( $line, $whitelist, true ) ) {
+								continue;
+							}
+
 							if ( strpos( $values_str, $line ) !== false ) {
 								fclose( $fp );
 								return false;
@@ -63,6 +81,11 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 				}
 			} elseif ( is_array( $value ) ) {
 				foreach ( $value as $line ) {
+					// Do not check if this word is in the whitelist.
+					if ( in_array( $line, $whitelist, true ) ) {
+						continue;
+					}
+
 					if ( strpos( $values_str, $line ) !== false ) {
 						return false;
 					}
