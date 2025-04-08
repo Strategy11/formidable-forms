@@ -159,7 +159,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	/**
 	 * Make sure the GDPR field is required even if the required setting is disabled.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param array $args
 	 * @return array
@@ -182,7 +182,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	/**
 	 * Make sure the GDPR field is required even if the required setting is disabled.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param bool  $required
 	 * @param array $field
