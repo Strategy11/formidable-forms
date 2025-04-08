@@ -377,8 +377,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
 * New: Admin pages have been modified to work better on smaller screen sizes.
 * New: The GDPR field agreement text now supports links.
-* Fix: Calculations based on currency formatted values would break using thousand separators that are not a decimal or a comma.
-* Fix: The symbol padding currency setting would not apply to currency formatted calculations.
 * Fix: Additional checks have been added to ensure that a GDPR field is always required.
 * Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
 * Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
