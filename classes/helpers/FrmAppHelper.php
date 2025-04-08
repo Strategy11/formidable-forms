@@ -360,7 +360,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @return array<string>
 	 */

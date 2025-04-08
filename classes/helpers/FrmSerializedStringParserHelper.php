@@ -53,7 +53,7 @@ class FrmSerializedStringParserHelper {
 	/**
 	 * Check if an unserialized value is valid.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param mixed $value
 	 * @return bool
@@ -63,7 +63,7 @@ class FrmSerializedStringParserHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $string
 	 * @return bool
