@@ -307,25 +307,36 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Check for spam
+	 * Check for spam.
+	 *
+	 * @since x.x Added the `$posted_fields` parameter.
 	 *
 	 * @param bool  $exclude
 	 * @param array $values
 	 * @param array $errors By reference.
+	 * @param array $posted_fields Validate fields.
 	 */
-	public static function spam_check( $exclude, $values, &$errors ) {
+	public static function spam_check( $exclude, $values, &$errors, $posted_fields = false ) {
 		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
+		$spam_msg       = __( 'Your entry appears to be spam!', 'formidable' );
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
+			$errors['spam'] = $spam_msg;
 		} elseif ( self::blacklist_check( $values ) ) {
 			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+		} else {
+			if ( false === $posted_fields ) {
+				$posted_fields = self::get_fields_to_validate( $values, $exclude );
+			}
+			if ( self::is_stopforumspam_spam( $values, $posted_fields ) ) {
+				$errors['spam'] = $spam_msg;
+			}
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
@@ -370,6 +381,13 @@ class FrmEntryValidate {
 		return ! $honeypot->validate();
 	}
 
+	private static function is_stopforumspam_spam( $values, $posted_fields ) {
+		$sfs = new FrmStopforumspam( $values['form_id'] );
+		$sfs->set_values( $values );
+		$sfs->set_posted_fields( $posted_fields );
+		return ! $sfs->validate();
+	}
+
 	/**
 	 * @return bool
 	 */
@@ -400,6 +418,10 @@ class FrmEntryValidate {
 	}
 
 	public static function blacklist_check( $values ) {
+		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
+		$check->set_values( $values );
+		return ! $check->validate();
+
 		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
 			return false;
 		}
@@ -430,21 +452,6 @@ class FrmEntryValidate {
 		}
 		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
 		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function get_disallowed_words() {
-		$keys = get_option( 'disallowed_keys' );
-		if ( false === $keys ) {
-			// Fallback for WP < 5.5.
-			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
-			$keys = get_option( 'blacklist_keys' );
-		}
-		return $keys;
 	}
 
 	/**
@@ -521,7 +528,7 @@ class FrmEntryValidate {
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
 	 */
-	private static function get_spam_check_user_info( $values ) {
+	public static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
@@ -819,7 +826,7 @@ class FrmEntryValidate {
 	 *
 	 * @param array $values Entry values.
 	 */
-	private static function prepare_values_for_spam_check( &$values ) {
+	public static function prepare_values_for_spam_check( &$values ) {
 		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
 		$values['form_ids'] = $form_ids;
 	}
