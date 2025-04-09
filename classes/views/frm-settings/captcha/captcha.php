@@ -115,6 +115,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p>
+	<label for="frm-wp-spam-check">
+		<input type="checkbox" id="frm-wp-spam-check" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
+		<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
+	</label>
+</p>
+
+<p>
 	<label for="frm-blacklist">
 		<?php esc_html_e( 'Custom blacklist words', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Each word or regex is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>

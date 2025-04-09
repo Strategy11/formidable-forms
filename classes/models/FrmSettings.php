@@ -93,6 +93,8 @@ class FrmSettings {
 
 	public $honeypot;
 
+	public $wp_spam_check;
+
 	public $blacklist;
 
 	public $whitelist;
@@ -170,6 +172,7 @@ class FrmSettings {
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css'                => false,
 			'honeypot'                  => 1,
+			'wp_spam_check'             => 0,
 			'blacklist'          => '',
 			'whitelist'          => '',
 		);
@@ -422,6 +425,7 @@ class FrmSettings {
 			'admin_bar',
 			'summary_emails',
 			'honeypot',
+			'wp_spam_check',
 		);
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
