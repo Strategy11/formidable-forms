@@ -457,7 +457,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	private static function target_css_uploads_dir() {
-		return  wp_upload_dir()['basedir'] . '/formidable/css';
+		return wp_upload_dir()['basedir'] . '/formidable/css';
 	}
 
 	/**
