@@ -2,7 +2,7 @@
 /**
  * Small device message.
  *
- * @since x.x
+ * @since 6.20
  * @package Formidable
  */
 

@@ -671,7 +671,7 @@ class FrmFormActionsController {
 	/**
 	 * Prevent WPML from filtering form actions based on the active language.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param bool|null $null
 	 * @param string    $post_type

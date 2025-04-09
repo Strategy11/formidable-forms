@@ -683,7 +683,7 @@ class FrmFormsController {
 	 * Since this form is added by default and every site uses the same key, it is too easy
 	 * to guess this form.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $form_key Form key.
 	 * @return void
@@ -1924,10 +1924,14 @@ class FrmFormsController {
 	/**
 	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 * @return void
 	 */
 	public static function include_device_too_small_message() {
+		if ( ! FrmAppHelper::is_formidable_admin() ) {
+			return;
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 
