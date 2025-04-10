@@ -10639,6 +10639,14 @@ function frmAdminBuildJS() {
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
+
+			const smallScreenProceedButton = document.getElementById( 'frm_small_screen_proceed_button' );
+			if ( smallScreenProceedButton ) {
+				onClickPreventDefault( smallScreenProceedButton, () => {
+					document.getElementById( 'frm_small_device_message_container' )?.remove();
+					doJsonPost( 'small_screen_proceed', new FormData() );
+				});
+			}
 		},
 
 		buildInit: function() {
