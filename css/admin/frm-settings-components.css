@@ -1,14 +1,7 @@
-.frm-settings-panel {
-	padding: var(--gap-md);
-}
-
 .formidable_page_formidable-styles.js .control-section .accordion-section-title:focus {
 	background: none;
 }
-.formidable_page_formidable-styles .frm-right-panel .accordion-section-title svg.frmsvg:nth-child(1) {
-	width: 24px;
-	height: 24px;
-}
+
 .formidable_page_formidable-styles .frm-right-panel h3.accordion-section-title:hover > svg:last-child,
 .formidable_page_formidable-styles .frm-right-panel .open h3.accordion-section-title > svg:first-child,
 .formidable_page_formidable-styles .frm-right-panel .open h3.accordion-section-title > svg:last-child {

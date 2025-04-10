@@ -172,7 +172,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 ?>
 	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Advanced Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
-		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
 	<div class="frm_grid_container frm-collapse-me" role="group">
 
@@ -186,7 +186,8 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		$field_obj->show_after_default( compact( 'field', 'display' ) );
 
-		if ( $display['clear_on_focus'] ) { ?>
+		if ( $display['clear_on_focus'] ) {
+			?>
 			<p>
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
 					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
@@ -205,7 +206,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				}
 				?>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 
 		<?php
 		if ( $display['description'] ) {
@@ -383,7 +386,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">
 				<?php
 				esc_html_e( 'Validation Messages', 'formidable' );
-				FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
+				FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) );
 				?>
 			</h3>
 
