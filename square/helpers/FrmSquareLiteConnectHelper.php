@@ -411,8 +411,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return bool
 	 */
 	private static function check_server_for_oauth_merchant_id() {
-		$code = FrmAppHelper::simple_get( 'code' );
-		$mode = 0 === strpos( $code, 'sandbox-' ) ? 'test' : 'live';
+		$mode = 'test' === FrmAppHelper::simple_get( 'mode' ) ? 'test' : 'live';
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured merchant id.
