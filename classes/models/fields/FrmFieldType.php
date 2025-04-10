@@ -639,7 +639,7 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
-			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) );
 			?>
 		</h3>
 		<?php
