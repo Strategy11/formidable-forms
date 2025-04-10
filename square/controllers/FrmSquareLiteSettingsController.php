@@ -17,7 +17,7 @@ class FrmSquareLiteSettingsController {
 		$sections['square'] = array(
 			'class'    => __CLASS__,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_credit_card_icon',
+			'icon'     => 'frm_icon_font frm_square_icon',
 		);
 
 		return $sections;

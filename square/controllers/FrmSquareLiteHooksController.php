@@ -30,6 +30,7 @@ class FrmSquareLiteHooksController {
 	 */
 	public static function load_admin_hooks() {
 		add_filter( 'frm_add_settings_section', 'FrmSquareLiteSettingsController::add_settings_section' );
+		add_action( 'frm_update_settings', 'FrmSquareLiteSettingsController::process_form' );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();

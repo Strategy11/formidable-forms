@@ -9927,6 +9927,14 @@ Responsive Design
 .frm-compact-card-item {
 	padding: var(--gap-sm) 35px 10px 35px;
 }
+.frm-card-bottom {
+	background-color: var(--grey-50);
+	margin-left: calc( var(--gap-sm) * -1 );
+	margin-bottom: calc( var(--gap-sm) * -1 );
+	margin-right: calc( var(--gap-sm) * -1 );
+	padding: var(--gap-sm);
+	border-radius: 0 0 var(--small-radius) var(--small-radius);
+}
 /* End card layout */
 
 /* Pirate forms importer */
@@ -10153,4 +10161,9 @@ Responsive Design
 #frm_style_sidebar .accordion-section-title::after,
 #frm_view_editor_left .accordion-section-title::after {
 	content: "";
+}
+
+a[href="#square_settings"] svg.frmsvg {
+	width: 23px !important;
+	height: 22px !important;
 }

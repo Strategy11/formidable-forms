@@ -18,17 +18,91 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	public static function render_settings_container() {
+		$settings = FrmSquareLiteAppHelper::get_settings();
+
 		self::register_settings_scripts();
 
-		if ( self::get_merchant_id() ) {
-			echo 'Connected';
-		} else {
-			?>
-			<a id="frm_connect_square_with_oauth" class="button-primary frm-button-primary">
-				<?php esc_html_e( 'Connect to Square', 'formidable' ); ?>
-			</a>
+		?>
+
+		<label>
+			<input type="checkbox" name="frm_square_test_mode" id="frm_square_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
+			<?php esc_html_e( 'Use the Square test mode', 'formidable' ); ?>
+		</label>
+
+		<div>
+			<div class="frm_grid_container">
 			<?php
-		}
+
+			$modes = array( 'live', 'test' );
+			foreach ( $modes as $mode ) {
+				self::render_settings_for_mode( $mode );
+			}
+			?>
+			</div>
+		</div>
+		<?php if ( ! is_ssl() ) { ?>
+			<div><em><?php esc_html_e( 'Your site is not using SSL. Before using Square to collect live payments, you will need to install an SSL certificate on your site.', 'formidable' ); ?></em></div>
+		<?php } ?>
+		<?php
+	}
+
+	/**
+	 * @param string $mode
+	 * @return void
+	 */
+	private static function render_settings_for_mode( $mode ) {
+		?>
+		<div class="frm-card-item frm4">
+			<div class="frm-flex-col">
+				<div>
+					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
+						<?php
+						echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
+						?>
+					</span>
+					<?php
+
+					$connected = (bool) self::get_merchant_id( $mode );
+
+					$tag_classes = '';
+					if ( $connected ) {
+						$tag_classes = 'frm-lt-green-tag';
+					} else {
+						$tag_classes = 'frm-grey-tag';
+					}
+					?>
+					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
+						<?php
+						if ( $connected ) {
+							FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
+							echo 'Connected';
+						} else {
+							echo 'Not configured';
+						}
+						?>
+					</div>
+				</div>
+				<div style="margin-top: 5px; flex: 1;">
+					<?php
+					if ( 'live' === $mode ) {
+						esc_html_e( 'Live version to process real customer transactions', 'formidable' );
+					} else {
+						esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
+					}
+					?>
+				</div>
+				<div class="frm-card-bottom">
+					<?php if ( $connected ) { ?>
+						<a id="frm_disconnect_square" class="button-secondary frm-button-secondary" href="#"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
+					<?php } else { ?>
+						<a id="frm_connect_square_with_oauth" class="button-secondary frm-button-secondary" href="#">
+							<?php esc_html_e( 'Connect', 'formidable' ); ?>
+						</a>
+					<?php } ?>
+				</div>
+			</div>
+		</div>
+		<?php
 	}
 
 	/**
@@ -255,7 +329,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_mode_value() {
-		return 'live';
+		$settings = FrmSquareLiteAppHelper::get_settings();
+		return $settings->settings->test_mode ? 'test' : 'live';
 	}
 
 	/**
@@ -263,7 +338,9 @@ class FrmSquareLiteConnectHelper {
 	 * @return bool|string
 	 */
 	public static function get_merchant_id( $mode = 'auto' ) {
-		$mode = 'live';
+		if ( 'auto' === $mode ) {
+			$mode = self::get_mode_value();
+		}
 		return get_option( self::get_merchant_id_option_name( $mode ) );
 	}
 
