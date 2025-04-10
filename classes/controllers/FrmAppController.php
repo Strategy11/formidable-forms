@@ -1517,6 +1517,7 @@ class FrmAppController {
 	 */
 	public static function small_screen_proceed() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
 		update_user_option( get_current_user_id(), 'frm_ignore_small_screen_warning', true );
 		wp_send_json_success();
 	}
