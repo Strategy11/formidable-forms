@@ -1,8 +1,8 @@
 ( function() {
 	// TODO This needs to support a global var so we can switch between sandbox and production.
 	const appId		 = 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
-//	const locationId = 'L7Q1NBZ6SSJ79'; // Sandbox
-	const locationId = 'L2GZQYSMGEKK0'; // Production
+	const locationId = 'L7Q1NBZ6SSJ79'; // Sandbox
+//	const locationId = 'L2GZQYSMGEKK0'; // Production
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;

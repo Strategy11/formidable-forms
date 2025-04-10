@@ -517,12 +517,15 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @param string $gateway
-	 * @param string $setting
+	 * @param array|string $gateway
+	 * @param string       $setting
 	 */
 	public static function get_setting_for_gateway( $gateway, $setting ) {
 		$gateways = self::get_gateways();
-		$value = '';
+		$value    = '';
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
 		if ( isset( $gateways[ $gateway ] ) ) {
 			$value = $gateways[ $gateway ][ $setting ];
 		}

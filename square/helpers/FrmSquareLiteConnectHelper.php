@@ -472,12 +472,26 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	private static function get_standard_authenticated_body() {
-		$mode = 'live';//self::get_mode_value_from_post();
+		$mode = self::get_mode_value_from_post();
 		return array(
 			'merchant_id'      => get_option( self::get_merchant_id_option_name( $mode ) ),
 			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
 			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
 		);
+	}
+
+	/**
+	 * Check $_POST for live or test mode value as it can be updated in real time from Stripe Settings and can be configured before the update is saved.
+	 *
+	 * @return string 'test' or 'live'
+	 */
+	private static function get_mode_value_from_post() {
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
+			return FrmSquareLiteAppHelper::active_mode();
+		}
+		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
+		return $test_mode ? 'test' : 'live';
 	}
 
 	public static function get_latest_error_from_square_api() {
