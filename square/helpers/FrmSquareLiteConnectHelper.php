@@ -23,11 +23,19 @@ class FrmSquareLiteConnectHelper {
 		self::register_settings_scripts();
 
 		?>
-
-		<label>
-			<input type="checkbox" name="frm_square_test_mode" id="frm_square_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
-			<?php esc_html_e( 'Use the Square test mode', 'formidable' ); ?>
-		</label>
+		<table class="form-table" style="width: 400px;">
+			<tr class="form-field">
+				<td>
+					<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
+				</td>
+				<td>
+					<label>
+						<input type="checkbox" name="frm_square_test_mode" id="frm_square_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
+						<?php esc_html_e( 'Use the Square test mode', 'formidable' ); ?>
+					</label>
+				</td>
+			</tr>
+		</table>
 
 		<div>
 			<div class="frm_grid_container">
@@ -95,7 +103,7 @@ class FrmSquareLiteConnectHelper {
 					<?php if ( $connected ) { ?>
 						<a id="frm_disconnect_square" class="button-secondary frm-button-secondary" href="#"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
 					<?php } else { ?>
-						<a id="frm_connect_square_with_oauth" class="button-secondary frm-button-secondary" href="#">
+						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
 							<?php esc_html_e( 'Connect', 'formidable' ); ?>
 						</a>
 					<?php } ?>
@@ -114,7 +122,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	public static function get_oauth_redirect_url() {
-		$mode = self::get_mode_value();
+		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured account id.
@@ -403,7 +411,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return bool
 	 */
 	private static function check_server_for_oauth_merchant_id() {
-		$mode = 'live';
+		$code = FrmAppHelper::simple_get( 'code' );
+		$mode = 0 === strpos( $code, 'sandbox-' ) ? 'test' : 'live';
 
 		if ( self::get_merchant_id( $mode ) ) {
 			// Do not allow for initialize if there is already a configured merchant id.
