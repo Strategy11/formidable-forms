@@ -44,4 +44,124 @@ class FrmSquareLiteAppController {
 		);
 		wp_send_json_success( $response_data );
 	}
+
+	/**
+	 * Handle the verify buyer action.
+	 *
+	 * @return void
+	 */
+	public static function verify_buyer() {
+		check_ajax_referer( 'frm_square_ajax', 'nonce' );
+		// TODO Fill this in based on form data.
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		if ( ! $form_id ) {
+			wp_send_json_error( __( 'Invalid form ID', 'formidable' ) );
+		}
+
+		$actions = FrmSquareLiteActionsController::get_actions_before_submit( $form_id );
+		if ( empty( $actions ) ) {
+			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
+		}
+
+		$action               = reset( $actions );
+		$verification_details = array(
+			'amount'         => self::get_amount_value_for_verification( $action ),
+			'billingContact' => self::get_billing_contact( $action ),
+			'currencyCode'   => strtoupper( $action->post_content['currency'] ),
+			'intent'         => 'CHARGE'
+		);
+
+		wp_send_json_success(
+			array(
+				'verificationDetails' => $verification_details,
+			)
+		);
+	}
+
+	/**
+	 * @param array<WP_Post> $actions
+	 * @return string
+	 */
+	private static function get_amount_value_for_verification( $action ) {
+		$amount = $action->post_content['amount'];
+		if ( strpos( $amount, '[' ) === false ) {
+			return $amount;
+		}
+
+		// Update amount based on field shortcodes.
+		$entry  = self::generate_false_entry();
+		$amount = FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+
+		return $amount;
+	}
+
+	/**
+	 * @param WP_Post $action
+	 * @return array
+	 */
+	private static function get_billing_contact( $action ) {
+		$first_name_setting = $action->post_content['billing_first_name'];
+		$last_name_setting  = $action->post_content['billing_last_name'];
+		$address_setting    = $action->post_content['billing_address'];
+
+		$entry = self::generate_false_entry();
+		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
+		$last_name  = $last_name_setting && isset( $entry->metas[ $last_name_setting ] ) ? $entry->metas[ $last_name_setting ] : '';
+		$address    = $address_setting && isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
+
+		if ( is_array( $first_name ) && isset( $first_name['first'] ) ) {
+			$first_name = $first_name['first'];
+		}
+
+		if ( is_array( $last_name ) && isset( $last_name['last'] ) ) {
+			$last_name = $last_name['last'];
+		}
+
+		// TODO
+		return array(
+			'givenName'    => $first_name,
+			'familyName'   => $last_name,
+			// TODO
+			'email'        => 'john.doe@square.example',
+			// TODO Does this mean we need a phone setting?
+			'phone'        => '3214563987',
+			// TODO
+			'addressLines' => array( '123 Main Street', 'Apartment 1' ),
+			'city'         => 'London',
+			'state'        => 'LND',
+			'countryCode'  => 'GB',
+		);
+	}
+
+	/**
+	 * Create an entry object with posted values.
+	 *
+	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 * @return stdClass
+	 */
+	private static function generate_false_entry() {
+		$entry          = new stdClass();
+		$entry->post_id = 0;
+		$entry->id      = 0;
+		$entry->metas   = array();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		foreach ( $_POST as $k => $v ) {
+			$k = sanitize_text_field( stripslashes( $k ) );
+			$v = wp_unslash( $v );
+
+			if ( $k === 'item_meta' ) {
+				foreach ( $v as $f => $value ) {
+					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+					$entry->metas[ absint( $f ) ] = $value;
+				}
+			} else {
+				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );
+				$entry->{$k} = $v;
+			}
+		}
+
+		return $entry;
+	}
 }

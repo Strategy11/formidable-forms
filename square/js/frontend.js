@@ -123,24 +123,24 @@
 
 	// Required in SCA Mandated Regions: Learn more at https://developer.squareup.com/docs/sca-overview
 	async function verifyBuyer( payments, token ) {
-		const verificationDetails = {
-			// TODO How do we best handle amount in this case? Usually this isn't set with JS.
-			amount: '1.00',
-			// TODO Use form data instead of hard coded test values.
-			billingContact: {
-				givenName: 'John',
-				familyName: 'Doe',
-				email: 'john.doe@square.example',
-				phone: '3214563987',
-				addressLines: [ '123 Main Street', 'Apartment 1' ],
-				city: 'London',
-				state: 'LND',
-				countryCode: 'GB',
-			},
-			currencyCode: 'GBP',
-			intent: 'CHARGE'
-		};
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_verify_buyer' );
+		formData.append( 'nonce', frmSquareVars.nonce );
+		const response = await fetch( frmSquareVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
 
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to verify buyer' );
+		}
+
+		const verificationData = await response.json();
+		if ( ! verificationData.success ) {
+			throw new Error( verificationData.data );
+		}
+
+		const verificationDetails = verificationData.data.verificationDetails;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
 		return verificationResults.token;
 	}
