@@ -1785,7 +1785,7 @@ class FrmAppHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param string|array $option Autocomplete option.
+	 * @param array|string $option Autocomplete option.
 	 * @param string       $key    Array key of the option.
 	 * @param array        $args   See {@see FrmAppHelper::maybe_autocomplete_options()}.
 	 * @return array
