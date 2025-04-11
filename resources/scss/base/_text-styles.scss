@@ -1,0 +1,15 @@
+.frm-white-body,
+.frm-white-body p,
+.frm_wrap,
+.frm_wrap p,
+.frm-modal,
+.frm-white-body .postbox .inside {
+	font-size: var(--text-sm);
+	color: var(--grey-500);
+	line-height: var(--leading);
+}
+
+.frm-white-body p,
+.frm_wrap p {
+	margin: var(--gap-sm) 0;
+}

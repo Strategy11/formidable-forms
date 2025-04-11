@@ -1,0 +1,37 @@
+.post-type-frm_display .tablenav,
+.frm_wrap .tablenav {
+	margin-bottom: 10px;
+}
+
+.frm-white-body .tablenav .actions select,
+.wp-admin .frm_wrap .tablenav select {
+	margin-right: var(--gap-xs);
+}
+
+.tablenav .actions .button {
+	margin-top: 1px;
+}
+
+.frm-white-body table.widefat {
+	background: var(--lightest-grey);
+	border-width: 0;
+	box-shadow: none;
+	margin: 20px 0;
+}
+
+.frm-white-body table.widefat tfoot,
+.frm-white-body table.widefat thead {
+	background: #fff;
+}
+
+.frm-white-body table.widefat th {
+	font-size: var(--text-md);
+}
+
+.frm-white-body table.widefat th a {
+	color: var(--grey-700);
+}
+
+.frm-white-body table.widefat strong a {
+	color: var(--primary-700);
+}
