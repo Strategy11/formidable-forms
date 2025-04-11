@@ -128,7 +128,44 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();
 		}
 
+		$atts['status'] = $result->status === 'COMPLETED' ? 'complete' : 'failed';
+
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $result->id;
+		$atts['charge']->amount = $atts['amount'];
+
+		self::create_new_payment( $atts );
+
 		return true;
+	}
+
+	/**
+	 * Add a payment row for the payments table.
+	 *
+	 * @param array $atts {
+	 *     @type object  $charge
+	 *     @type object  $entry
+	 *     @type WP_Post $action
+	 * }
+	 * @return int
+	 */
+	private static function create_new_payment( $atts ) {
+		$atts['charge'] = (object) $atts['charge'];
+
+		$new_values = array(
+			'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
+			'status'     => $atts['status'],
+			'paysys'     => 'square',
+			'item_id'    => $atts['entry']->id,
+			'action_id'  => $atts['action']->ID,
+			'receipt_id' => $atts['charge']->id,
+			'sub_id'     => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'test'       => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_payment = new FrmTransLitePayment();
+		$payment_id  = $frm_payment->create( $new_values );
+		return $payment_id;
 	}
 
 	/**
