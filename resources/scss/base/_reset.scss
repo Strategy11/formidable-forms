@@ -1,0 +1,11 @@
+body:not(.frm-admin-page-styles):not(.frm-admin-page-style) .with_frm_style .frm_form_fields > fieldset {
+	--fieldset-padding: 15px 0;
+}
+
+a,
+.widget .widget-top,
+.stuffbox h3,
+.frm-collapsed {
+	cursor: pointer;
+	text-decoration: none;
+}
