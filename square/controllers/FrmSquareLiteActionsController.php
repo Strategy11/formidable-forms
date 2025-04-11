@@ -378,28 +378,41 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$square_vars     = array(
-			'form_id'         => $form_id,
+			'formId'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_square_ajax' ),
 			'ajax'            => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings'        => $action_settings,
-			'locale'          => self::get_locale(),
+			'appId'           => self::get_app_id(),
+			'locationId'      => self::get_location_id(),
 		);
 
-		wp_localize_script( 'formidable-square', 'frm_square_vars', $square_vars );
+		wp_localize_script( 'formidable-square', 'frmSquareVars', $square_vars );
 	}
 
 	/**
-	 * Get the language to use for Stripe elements.
+	 * Get the app ID for the Square app.
 	 *
-	 * @since x.x
 	 * @return string
 	 */
-	private static function get_locale() {
-		$allowed = array( 'ar', 'da', 'de', 'en', 'es', 'fi', 'fr', 'he', 'it', 'ja', 'nl', 'no', 'pl', 'ru', 'sv', 'zh' );
-		$current = get_locale();
-		$parts   = explode( '_', $current );
-		$part    = strtolower( $parts[0] );
-		return in_array( $part, $allowed, true ) ? $part : 'auto';
+	private static function get_app_id() {
+		$mode = FrmSquareLiteAppHelper::active_mode();
+		if ( 'live' === $mode ) {
+			return 'sq0idp-eR4XI1xgNduJAXcBvjemTg';
+		}
+		return 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
+	}
+
+	/**
+	 * Get the location ID for the Square app.
+	 *
+	 * @return string
+	 */
+	private static function get_location_id() {
+		$mode = FrmSquareLiteAppHelper::active_mode();
+		if ( 'live' === $mode ) {
+			return 'L2GZQYSMGEKK0';
+		}
+		return 'L7Q1NBZ6SSJ79';
 	}
 
 	/**
