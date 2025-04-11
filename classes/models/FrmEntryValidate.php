@@ -879,7 +879,9 @@ class FrmEntryValidate {
 						$values['name_field_ids'][] = $subsubindex;
 					}
 
-					$values['item_meta'][ $subsubindex ][] = $subsubvalue;
+					if ( is_array( $values['item_meta'][ $subsubindex ] ) ) {
+						$values['item_meta'][ $subsubindex ][] = $subsubvalue;
+					}
 				}
 			}//end foreach
 
