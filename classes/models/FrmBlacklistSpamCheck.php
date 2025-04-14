@@ -23,7 +23,7 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 
 	private function get_blacklist() {
 		return array(
-			'domain' => FrmAppHelper::plugin_path() . '/blacklist/toxic_domain_partial.txt',
+			'domain' => FrmAppHelper::plugin_path() . '/blacklist/toxic_domains_partial.txt',
 			'custom' => $this->get_custom_words( 'blacklist' ),
 		);
 	}
@@ -65,6 +65,9 @@ class FrmBlacklistSpamCheck extends FrmValidate {
 					if ( $fp ) {
 						while ( ( $line = fgets( $fp ) ) !== false ) {
 							$line = trim( $line );
+							if ( ! $line ) {
+								continue;
+							}
 
 							// Do not check if this word is in the whitelist.
 							if ( in_array( $line, $whitelist, true ) ) {
