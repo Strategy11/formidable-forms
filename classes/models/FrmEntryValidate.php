@@ -443,24 +443,6 @@ class FrmEntryValidate {
 		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
 		$check->set_values( $values );
 		return ! $check->validate();
-
-		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
-			return false;
-		}
-
-		$mod_keys = trim( self::get_disallowed_words() );
-		if ( empty( $mod_keys ) ) {
-			return false;
-		}
-
-		$content = FrmEntriesHelper::entry_array_to_string( $values );
-
-		self::prepare_values_for_spam_check( $values );
-		$ip         = FrmAppHelper::get_ip_address();
-		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
-		$user_info  = self::get_spam_check_user_info( $values );
-
-		return self::check_disallowed_words( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
 	}
 
 	/**
