@@ -8,7 +8,7 @@
 @import 'base/external-imports';
 @import 'base/variables';
 @import 'base/typography/font';
-@import 'utilities/display/z-index';
+@import 'utilities/layout/z-index';
 @import 'base/typography/text';
 @import 'base/reset';
 
@@ -25,20 +25,80 @@
 @import 'components/table/tablenav';
 @import 'components/table/widefat';
 @import 'components/scroll-box';
-@import 'utilities/grid';
+@import 'utilities/layout/grid';
 @import 'components/list/short-list';
 @import 'components/table/elements';
 @import 'layout/top-bar/index';
 @import 'base/headings';
 @import 'layout/page/editor-overrides';
-@import 'components/upgrade-bar';
+@import 'components/upgrade/upgrade-bar';
 @import 'components/links';
 @import 'layout/top-bar/navigation';
 @import 'components/full-close';
 @import 'layout/top-bar/elements';
 @import 'layout/postbox';
 @import 'components/table/row';
-@import 'utilities/animate';
+@import 'utilities/effects/animate';
 @import 'components/list/subsubsub';
 @import 'layout/container/index';
 @import 'layout/container/columns-elements';
+@import 'components/default-switcher';
+@import 'components/form/has-shortcodes';
+@import 'layout/adv-info';
+@import 'components/modal/inline-modal';
+@import 'components/nav-tabs';
+@import 'components/modal/bulk-modal';
+@import 'layout/sidebar/index';
+@import 'components/admin_footer';
+@import 'layout/page/list-entry-page';
+@import 'layout/sidebar/elements';
+@import 'components/publish-actions';
+@import 'components/button';
+@import 'components/review-request';
+
+/**
+ * Utilities
+ */
+@import 'utilities/effects/box-shadow';
+@import 'utilities/typography/text-color';
+@import 'utilities/spacing/margin';
+@import 'utilities/spacing/padding';
+@import 'utilities/typography/font-size';
+@import 'utilities/typography/text-transform';
+@import 'utilities/typography/text-overflow';
+@import 'utilities/border/border-radius';
+@import 'utilities/sizing/width';
+@import 'utilities/layout/display';
+@import 'utilities/layout/flex';
+@import 'utilities/effects/transition';
+@import 'utilities/layout/visibility';
+@import 'utilities/layout/float';
+@import 'utilities/typography/text-align';
+@import 'utilities/border/index';
+@import 'utilities/effects/opacity';
+@import 'utilities/layout/z-index-helpers';
+@import 'utilities/effects/transform';
+@import 'utilities/forced-generic-classes';
+@import 'utilities/helper-classes';
+
+/**
+ * Components
+ */
+@import 'components/general-form-styles';
+@import 'components/form/form-field';
+@import 'components/form/field-loading';
+@import 'components/form/form-error';
+@import 'components/form/mce';
+@import 'components/license';
+@import 'components/upgrade/upgrade-pro';
+@import 'components/notifications/message-styles';
+@import 'components/upgrade/upgrade-bar-elements';
+@import 'components/table/table-styles';
+@import 'base/typography/howto';
+@import 'components/card';
+@import 'utilities/effects/fade';
+@import 'components/addon-tiles';
+@import 'components/form-templates';
+@import 'layout/page/admin-page';
+@import 'components/modal/modal';
+@import 'components/template-list';

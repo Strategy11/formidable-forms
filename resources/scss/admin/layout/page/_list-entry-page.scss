@@ -1,0 +1,7 @@
+.frm_list_entry_page h2 {
+	float: left;
+}
+
+.frm_list_entry_page h2 + .error {
+	clear: both;
+}
