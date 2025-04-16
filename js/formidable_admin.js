@@ -6235,12 +6235,13 @@ function frmAdminBuildJS() {
 				}
 			} else {
 				const thisType = this.getAttribute( 'data-type' );
-
-				frmGetFieldValues( val, fieldID, metaKey, thisType, undefined, function() {
+				const callback = () => {
 					const event   = new CustomEvent( 'frm_logic_options_loaded' );
 					event.frmData = { valueFieldType, fieldID, metaKey };
 					document.dispatchEvent( event );
-				} );
+				};
+
+				frmGetFieldValues( val, fieldID, metaKey, thisType, undefined, callback );
 			}
 		}
 	}
@@ -11373,20 +11374,21 @@ function frmCheckAllLevel( checked, n, level ) {
 }
 
 function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName, callback ) {
-
-	if ( fieldId ) {
-		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
-			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
-			success: function( msg ) {
-				document.getElementById( 'frm_show_selected_values_' + cur + '_' + rowNumber ).innerHTML = msg;
-
-				if ( 'function' === typeof callback ) {
-					callback();
-				}
-			}
-		});
+	if ( ! fieldId ) {
+		return;
 	}
+
+	jQuery.ajax({
+		type: 'POST', url: ajaxurl,
+		data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
+		success: function( msg ) {
+			document.getElementById( 'frm_show_selected_values_' + cur + '_' + rowNumber ).innerHTML = msg;
+
+			if ( 'function' === typeof callback ) {
+				callback();
+			}
+		}
+	});
 }
 
 function frmImportCsv( formID ) {
