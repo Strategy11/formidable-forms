@@ -7401,9 +7401,7 @@ function frmAdminBuildJS() {
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
 
-		singleField.querySelectorAll( '.frm_logic_field_opts' ).forEach( field => {
-			jQuery( field ).trigger( 'change' );
-		} );
+		singleField.querySelectorAll( '.frm_logic_field_opts' ).forEach( field => triggerChange( field ) );
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
