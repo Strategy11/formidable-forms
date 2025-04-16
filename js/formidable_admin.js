@@ -6235,7 +6235,12 @@ function frmAdminBuildJS() {
 				}
 			} else {
 				const thisType = this.getAttribute( 'data-type' );
-				frmGetFieldValues( val, fieldID, metaKey, thisType );
+
+				frmGetFieldValues( val, fieldID, metaKey, thisType, undefined, function() {
+					const event   = new CustomEvent( 'frm_logic_options_loaded' );
+					event.frmData = { valueFieldType, fieldID, metaKey };
+					document.dispatchEvent( event );
+				} );
 			}
 		}
 	}
@@ -7395,6 +7400,10 @@ function frmAdminBuildJS() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
+
+		singleField.querySelectorAll( '.frm_logic_field_opts' ).forEach( field => {
+			jQuery( field ).trigger( 'change' );
+		} );
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
@@ -7653,6 +7662,56 @@ function frmAdminBuildJS() {
 			}
 		});
 		return false;
+	}
+
+	function toggleSubmitLogic() {
+		/*jshint validthis:true */
+		if ( this.checked ) {
+			addSubmitLogic();
+		} else {
+			jQuery( '.frm_logic_row_submit' ).remove();
+			document.getElementById( 'frm_submit_logic_rows' ).style.display = 'none';
+		}
+	}
+
+	/**
+	 * Adds submit button Conditional Logic row and reveals submit button Conditional Logic
+	 *
+	 * @returns {boolean}
+	 */
+	function addSubmitLogic() {
+		/*jshint validthis:true */
+		const formId = thisFormId,
+			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
+		jQuery.ajax({
+			type: 'POST',
+			url: ajaxurl,
+			data: {
+				action: 'frm_add_submit_logic_row',
+				form_id: formId,
+				meta_name: getNewRowId( logicRows, 'frm_logic_submit_' ),
+				nonce: frmGlobal.nonce
+			},
+			success: function( html ) {
+				const $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
+				$logicRow.append( html );
+				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
+			}
+		});
+		return false;
+	}
+
+	/**
+	 *  When the user selects a field for a submit condition, update corresponding options field accordingly.
+	 */
+	function addSubmitLogicOpts() {
+		const fieldOpt = jQuery( this );
+		const fieldId = fieldOpt.find( ':selected' ).val();
+
+		if ( fieldId ) {
+			const row = fieldOpt.data( 'row' );
+			frmGetFieldValues( fieldId, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
+		}
 	}
 
 	function checkDupPost() {
@@ -10814,6 +10873,10 @@ function frmAdminBuildJS() {
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
 
+			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
+			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
+			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
+
 			document.addEventListener(
 				'click',
 				function handleImageUploadClickEvents( event ) {
@@ -11365,7 +11428,7 @@ function frmCheckAllLevel( checked, n, level ) {
 	$kids.children( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
 }
 
-function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName ) {
+function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName, callback ) {
 
 	if ( fieldId ) {
 		jQuery.ajax({
@@ -11373,6 +11436,10 @@ function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName ) {
 			data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery( 'input[name="frm_action"]' ).val() + '&nonce=' + frmGlobal.nonce,
 			success: function( msg ) {
 				document.getElementById( 'frm_show_selected_values_' + cur + '_' + rowNumber ).innerHTML = msg;
+
+				if ( 'function' === typeof callback ) {
+					callback();
+				}
 			}
 		});
 	}
