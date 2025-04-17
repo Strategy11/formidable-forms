@@ -323,7 +323,7 @@ class FrmEntryValidate {
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
-		$spam_msg       = __( 'Your entry appears to be spam!', 'formidable' );
+		$spam_msg       = FrmAntiSpamController::get_spam_message();
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
@@ -334,9 +334,8 @@ class FrmEntryValidate {
 			if ( false === $posted_fields ) {
 				$posted_fields = self::get_fields_to_validate( $values, $exclude );
 			}
-			if ( self::is_stopforumspam_spam( $values, $posted_fields ) ) {
-				$errors['spam'] = $spam_msg;
-			} elseif ( self::is_wp_comment_spam( $values, $posted_fields ) ) {
+
+			if ( FrmAntiSpamController::is_spam( $values, $posted_fields ) ) {
 				$errors['spam'] = $spam_msg;
 			}
 		}
