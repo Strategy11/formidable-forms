@@ -64,7 +64,6 @@ class FrmSalesApi extends FrmFormApi {
 		self::$sales = array();
 
 		$api = $this->get_api_info();
-
 		if ( empty( $api ) ) {
 			return;
 		}
@@ -261,6 +260,10 @@ class FrmSalesApi extends FrmFormApi {
 			return false;
 		}
 
+		if ( self::is_banner_dismissed( $sale['key'] ) ) {
+			return false;
+		}
+
 		$banner_icon           = ! empty( $sale['banner_icon'] ) ? $sale['banner_icon'] : 'generic';
 		$banner_bg_color       = ! empty( $sale['banner_bg_color'] ) ? $sale['banner_bg_color'] : false;
 		$banner_text_color     = ! empty( $sale['banner_text_color'] ) ? $sale['banner_text_color'] : false;
@@ -335,5 +338,43 @@ class FrmSalesApi extends FrmFormApi {
 		<?php
 
 		return true;
+	}
+
+	/**
+	 * Dismiss a banner via AJAX hook.
+	 *
+	 * @since x.x
+	 */
+	public static function dismiss_banner() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new FrmSalesApi();
+		}
+
+		$sale = self::$instance->get_best_sale();
+		if ( ! $sale || ! is_array( $sale ) ) {
+			wp_send_json_error();
+		}
+
+		$dismissed_sales = get_user_option( 'frm_dismissed_sales', get_current_user_id() );
+		if ( ! is_array( $dismissed_sales ) ) {
+			$dismissed_sales = array();
+		}
+
+		$dismissed_sales[] = $sale['key'];
+		update_user_option( get_current_user_id(), 'frm_dismissed_sales', $dismissed_sales );
+
+		wp_send_json_success();
+	}
+
+	/**
+	 * @param string $key
+	 * @return bool
+	 */
+	private static function is_banner_dismissed( $key ) {
+		$dismissed_sales = get_user_option( 'frm_dismissed_sales', get_current_user_id() );
+		return is_array( $dismissed_sales ) && in_array( $key, $dismissed_sales, true );
 	}
 }

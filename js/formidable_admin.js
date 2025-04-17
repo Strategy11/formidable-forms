@@ -10616,6 +10616,9 @@ function frmAdminBuildJS() {
 				if ( saleDismiss ) {
 					onClickPreventDefault( saleDismiss, () => {
 						saleBanner.remove();
+
+						const formData = new FormData();
+						doJsonPost( 'sale_banner_dismiss', formData );
 					});
 				}
 			}
