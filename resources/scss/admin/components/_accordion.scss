@@ -1,0 +1,73 @@
+/**
+ * Accordion
+ */
+
+#post-body-content + .frm-right-panel h3.accordion-section-title {
+	padding: 7px 10px 8px 14px;
+	font-size: var(--text-md);
+	color: var(--grey-700);
+}
+
+.frm-with-line,
+.accordion-section-content h4 {
+	font-size: var(--text-md);
+	font-weight: 400;
+	margin: 20px -20px 10px;
+	padding: 0 20px;
+	color: var(--grey-700);
+	position: relative;
+	border: none !important;
+}
+
+.frm-with-line span,
+.accordion-section-content h4 span {
+	background: #fff;
+	padding: 0 10px;
+	position: relative;
+	display: inline-block;
+	z-index: 2;
+}
+
+.accordion-section-content h4 span {
+	background: var(--sidebar-color);
+}
+
+.frm-right-panel .frm-with-line span {
+	background: var(--sidebar-color) !important;
+	margin-left: -4px;
+}
+
+.frm-right-panel .frm-inline-modal .frm-with-line span {
+	background: #fff !important;
+}
+
+.frm-with-line::before,
+.accordion-section-content h4::before {
+	content: '';
+	display: block;
+	position: absolute;
+	border-bottom: 1px solid var(--grey-300);
+	left: 0;
+	width: 100%;
+	top: 50%;
+}
+
+.control-section .accordion-section-title::after, /** Form template list */
+.customize-pane-child .accordion-section-title::after {
+	top: 15px;
+}
+
+.accordion-container .frm-dropdown-menu {
+	min-width: 40px;
+}
+
+.frm-btn-group .multiselect.dropdown-toggle {
+	box-sizing: border-box;
+	min-height: unset;
+	cursor: pointer;
+}
+
+.accordion-container .frm-dropdown-menu::before,
+.accordion-container .multiselect.dropdown-toggle::before {
+	font-family: "s11-fp" !important;
+}

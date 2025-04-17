@@ -1,0 +1,34 @@
+/**
+ * List Entry Page
+ */
+
+.frm_list_entry_page .frm_file_link,
+.frm_list_entry_page .frm_image_option_container.frm_label_with_image {
+	display: block;
+	text-align: center;
+}
+
+.frm_list_entry_page .frm_image_option_container img {
+	width: 75px;
+	height: 75px;
+	object-fit: cover;
+}
+
+.frm_list_entry_page img {
+	max-width: 100%;
+	height: auto;
+}
+
+.frm_image_option_container .frm_empty_url {
+	background-color: var(--sidebar-color);
+}
+
+.frm_list_entry_page .frm_image_option_container .frm_text_label_for_image {
+	display: block;
+	padding: 5px 0 10px;
+}
+
+.frm_list_entry_page .frm_upload_label,
+.frm-summary-page-wrapper .frm_text_label_for_image {
+	display: block;
+}

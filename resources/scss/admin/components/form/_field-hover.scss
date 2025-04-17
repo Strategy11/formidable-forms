@@ -1,0 +1,14 @@
+/**
+ * Field Hover Effects
+ */
+
+.frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > .frm-show-hover,
+.frm_field_box .divider_section_only:hover > .frm_inner_field_container > .frm-show-hover,
+li.ui-state-default.selected > .frm_inner_field_container > .frm-show-hover,
+li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
+	opacity: 100;
+}
+
+li.frm_field_box > ul.frm_grid_container {
+	position: relative;
+}
