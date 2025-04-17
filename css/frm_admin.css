@@ -10156,6 +10156,7 @@ Responsive Design
 	align-items: center;
 	gap: var(--gap-sm);
 	cursor: pointer;
+	position: relative;
 }
 
 #frm_sale_banner > div:first-child {
@@ -10168,12 +10169,16 @@ Responsive Design
 	vertical-align: bottom;
 }
 
-#frm_sale_banner > div:last-child {
+#frm_sale_banner > div:nth-child(3) {
 	margin-left: auto;
 	margin-right: 50px;
 }
 
-#frm_sale_banner a {
+#frm_sale_banner > div:nth-child(2) > div:last-child {
+	opacity: 0.8;
+}
+
+#frm_sale_banner a:not(.dismiss) {
 	text-shadow: none;
 	border-radius: 30px;
 	border: 1px transparent;
@@ -10189,4 +10194,12 @@ Responsive Design
 	font-weight: 700;
 	background-color: #fff;
 	color: #000;
+}
+
+#frm_sale_banner .dismiss {
+	position: absolute;
+	color: #fff;
+	opacity: 0.6;
+	right: 15px;
+	top: 10px;
 }

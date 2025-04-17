@@ -64,6 +64,7 @@ class FrmSalesApi extends FrmFormApi {
 		self::$sales = array();
 
 		$api = $this->get_api_info();
+
 		if ( empty( $api ) ) {
 			return;
 		}
@@ -278,8 +279,8 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$banner_attrs = array(
-			'id'      => 'frm_sale_banner',
-			'onclick' => 'window.location.href = "' . esc_attr( $banner_cta_link ) . '"',
+			'id'       => 'frm_sale_banner',
+			'data-url' => $banner_cta_link,
 		);
 
 		if ( false === $banner_bg_color || 'gradient' === $banner_bg_color ) {
@@ -299,23 +300,28 @@ class FrmSalesApi extends FrmFormApi {
 			$cta_attrs['style'] .= 'background-color: ' . esc_attr( $banner_cta_bg_color ) . ';';
 		}
 
-		$title_attrs = array();
-		$body_attrs  = array();
+		$dismiss_attrs = array(
+			'href'  => '#',
+			'class' => 'dismiss',
+		);
+
+		$content_attrs = array();
 
 		if ( false !== $banner_text_color ) {
-			$title_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
-			$body_attrs['style']  = 'color: ' . esc_attr( $banner_text_color ) . '; opacity: 0.8;';
+			$content_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
+			$dismiss_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
 		}
+
 		?>
 		<div <?php echo FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
 				<img src="<?php echo FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg'; ?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
 			</div>
-			<div>
-				<div <?php echo FrmAppHelper::array_to_html_params( $title_attrs, true ); ?>>
+			<div <?php echo FrmAppHelper::array_to_html_params( $content_attrs, true ); ?>>
+				<div>
 					<?php echo esc_html( $banner_title ); ?>
 				</div>
-				<div <?php echo FrmAppHelper::array_to_html_params( $body_attrs, true ); ?>>
+				<div>
 					<?php echo esc_html( $banner_body ); ?>
 				</div>
 			</div>
@@ -324,6 +330,7 @@ class FrmSalesApi extends FrmFormApi {
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
+			<a <?php echo FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
 		</div>
 		<?php
 
