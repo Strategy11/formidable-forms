@@ -10148,3 +10148,45 @@ Responsive Design
 #frm_view_editor_left .accordion-section-title::after {
 	content: "";
 }
+
+#frm_sale_banner {
+	display: flex;
+	height: 90px;
+	flex-direction: row;
+	align-items: center;
+	gap: var(--gap-sm);
+	cursor: pointer;
+}
+
+#frm_sale_banner > div:first-child {
+	align-self: flex-end;
+	width: 150px;
+	text-align: center;
+}
+
+#frm_sale_banner > div:first-child img {
+	vertical-align: bottom;
+}
+
+#frm_sale_banner > div:last-child {
+	margin-left: auto;
+	margin-right: 50px;
+}
+
+#frm_sale_banner a {
+	text-shadow: none;
+	border-radius: 30px;
+	border: 1px transparent;
+	font-size: var(--text-sm);
+	padding: 7px 16px;
+	height: auto;
+	min-height: 28px;
+	outline: none;
+	line-height: var(--leading);
+	box-sizing: border-box;
+	margin-bottom: 0;
+	display: inline-block;
+	font-weight: 700;
+	background-color: #fff;
+	color: #000;
+}

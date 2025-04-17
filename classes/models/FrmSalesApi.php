@@ -124,6 +124,15 @@ class FrmSalesApi extends FrmFormApi {
 			'global_settings_upgrade_cta_link'     => '',
 			'builder_sidebar_cta_link'             => '',
 			'builder_sidebar_cta_text'             => '',
+			'banner_title'                         => '',
+			'banner_body'                          => '',
+			'banner_icon'                          => '',
+			'banner_text_color'                    => '',
+			'banner_bg_color'                      => '',
+			'banner_cta_link'                      => '',
+			'banner_cta_text'                      => '',
+			'banner_cta_text_color'                => '',
+			'banner_cta_bg_color'                  => '',
 		);
 
 		return array_merge( $defaults, $sale );
@@ -225,5 +234,99 @@ class FrmSalesApi extends FrmFormApi {
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
 		return (int) $option;
+	}
+
+	/**
+	 * Maybe show banner for the best sale.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function maybe_show_banner() {
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new FrmSalesApi();
+		}
+
+		$sale = self::$instance->get_best_sale();
+		if ( ! $sale || ! is_array( $sale ) ) {
+			return false;
+		}
+
+		$banner_title = ! empty( $sale['banner_title'] ) ? $sale['banner_title'] : false;
+		$banner_body  = ! empty( $sale['banner_body'] ) ? $sale['banner_body'] : false;
+
+		if ( false === $banner_title || false === $banner_body ) {
+			return false;
+		}
+
+		$banner_icon           = ! empty( $sale['banner_icon'] ) ? $sale['banner_icon'] : 'generic';
+		$banner_bg_color       = ! empty( $sale['banner_bg_color'] ) ? $sale['banner_bg_color'] : false;
+		$banner_text_color     = ! empty( $sale['banner_text_color'] ) ? $sale['banner_text_color'] : false;
+		$banner_cta_link       = ! empty( $sale['banner_cta_link'] ) ? $sale['banner_cta_link'] : false;
+		$banner_cta_text       = ! empty( $sale['banner_cta_text'] ) ? $sale['banner_cta_text'] : sprintf( __( 'GET %s OFF NOW', 'formidable' ), $sale['discount_percent'] . '%' );
+		$banner_cta_text_color = ! empty( $sale['banner_cta_text_color'] ) ? $sale['banner_cta_text_color'] : false;
+		$banner_cta_bg_color   = ! empty( $sale['banner_cta_bg_color'] ) ? $sale['banner_cta_bg_color'] : false;
+
+		if ( false === $banner_cta_link ) {
+			$banner_cta_link = FrmAppHelper::admin_upgrade_link(
+				array(
+					'medium'  => 'sales-api-banner',
+					'content' => $sale['key'],
+				)
+			);
+		}
+
+		$banner_attrs = array(
+			'id'      => 'frm_sale_banner',
+			'onclick' => 'window.location.href = "' . esc_attr( $banner_cta_link ) . '"',
+		);
+
+		if ( false === $banner_bg_color || 'gradient' === $banner_bg_color ) {
+			$banner_attrs['class'] = 'frm-gradient';
+		} else {
+			$banner_attrs['style'] = 'background-color: ' . esc_attr( $banner_bg_color ) . ';';
+		}
+
+		$cta_attrs = array(
+			'href'  => '#',
+			'style' => '',
+		);
+		if ( false !== $banner_cta_text_color ) {
+			$cta_attrs['style'] .= 'color: ' . esc_attr( $banner_cta_text_color ) . ';';
+		}
+		if ( false !== $banner_cta_bg_color ) {
+			$cta_attrs['style'] .= 'background-color: ' . esc_attr( $banner_cta_bg_color ) . ';';
+		}
+
+		$title_attrs = array();
+		$body_attrs = array();
+
+		if ( false !== $banner_text_color ) {
+			$title_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
+			$body_attrs['style']  = 'color: ' . esc_attr( $banner_text_color ) . '; opacity: 0.8;';
+		}
+		?>
+		<div <?php echo FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
+			<div>
+				<img src="<?php echo FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg'; ?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
+			</div>
+			<div>
+				<div <?php echo FrmAppHelper::array_to_html_params( $title_attrs, true ); ?>>
+					<?php echo esc_html( $banner_title ); ?>
+				</div>
+				<div <?php echo FrmAppHelper::array_to_html_params( $body_attrs, true ); ?>>
+					<?php echo esc_html( $banner_body ); ?>
+				</div>
+			</div>
+			<div>
+				<a <?php echo FrmAppHelper::array_to_html_params( $cta_attrs, true ); ?>>
+					<?php echo esc_html( $banner_cta_text ); ?>
+				</a>
+			</div>
+		</div>
+		<?php
+
+		return true;
 	}
 }
