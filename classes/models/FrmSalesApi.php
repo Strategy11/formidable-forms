@@ -300,7 +300,7 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$title_attrs = array();
-		$body_attrs = array();
+		$body_attrs  = array();
 
 		if ( false !== $banner_text_color ) {
 			$title_attrs['style'] = 'color: ' . esc_attr( $banner_text_color ) . ';';
