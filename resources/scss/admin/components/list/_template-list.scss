@@ -198,3 +198,11 @@
 .frm-hover-icons .frm-delete-form:hover .frmsvg {
 	color: var(--primary-700) !important;
 }
+
+.frm-application-card h4 .frmsvg,
+.frm-locked-template h3 .frmsvg {
+	height: var(--text-sm);
+	width: var(--text-sm);
+	vertical-align: text-top;
+	color: var(--grey-500);
+}

@@ -53,7 +53,7 @@
 @import 'layout/page/list-entry-page';
 @import 'layout/sidebar/elements';
 @import 'components/publish-actions';
-@import 'components/button';
+@import 'components/button/button';
 @import 'components/review-request';
 
 /**
@@ -101,4 +101,19 @@
 @import 'components/form-templates';
 @import 'layout/page/admin-page';
 @import 'components/modal/modal';
-@import 'components/template-list';
+@import 'components/list/template-list';
+@import 'components/modal/modal-actions';
+@import 'components/meta-tag';
+@import 'components/list/upgrade-list';
+@import 'components/modal/embed-modal';
+@import 'components/modal/bulk-options';
+@import 'components/button/small-add';
+@import 'components/image/image-from-url';
+@import 'components/select/dropdown';
+@import 'components/select/multiselect';
+@import 'components/cipied-frontend';
+@import 'components/form/fields-part2';
+@import 'utilities/typography/text-align-part2';
+@import 'components/image/frm-help';
+@import 'components/loading';
+@import 'components/form/fields-part3';
