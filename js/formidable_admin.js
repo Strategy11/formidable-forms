@@ -2236,7 +2236,11 @@ function frmAdminBuildJS() {
 		fieldClasses = fieldClasses.replace( 'frm_first', '' );
 		if ( ! newField.className.includes( fieldClasses ) ) {
 			newField.className += ' ' + fieldClasses;
-			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
+
+			const classesInput = document.getElementById( 'frm_classes_' + newField.dataset.fid );
+			if ( classesInput ) {
+				classesInput.value = fieldClasses;
+			}
 		}
 	}
 
