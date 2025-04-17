@@ -1417,11 +1417,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( FrmSalesApi::maybe_show_banner() ) {
-			return;
-		}
-
-		if ( self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
+		if ( FrmSalesApi::maybe_show_banner() || self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
 			// Print license warning or inbox banner and exit if either prints.
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
