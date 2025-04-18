@@ -1,0 +1,64 @@
+/**
+ * Notification Settings Additional styles
+ */
+
+#frm_notification_settings .frm_left_label {
+	float: none; /* For add-ons that haven't been updated for 4.0 */
+	width: auto !important;
+}
+
+.frm-fields .frm_autoresponder_rows select {
+	width: auto;
+}
+
+#frm_notification_settings .frm_with_left_label,
+#frm_notification_settings .frm_left_label + textarea,
+#frm_notification_settings .frm_left_label + select,
+#frm_notification_settings .frm_left_label + input[type="text"] {
+	width: 100%;
+}
+
+#frm_notification_settings .frm_email_buttons {
+	padding: var(--gap-2xs);
+	background: var(--light-blue);
+	color: var(--primary-700);
+	border-radius: var(--small-radius);
+	border-color: var(--blue-border);
+	line-height: 1;
+	height: auto;
+	min-height: 12px;
+	font-size: var(--text-xs);
+	box-shadow: none;
+}
+
+p.frm_bcc_cc_container,
+p.frm_reply_to_container {
+	float: right;
+	z-index: 1;
+	position: relative;
+}
+
+p.frm_bcc_cc_container {
+	margin: 14px 0 0;
+}
+
+p.frm_reply_to_container {
+	margin: -4px 0 0;
+}
+
+.frm_email_row .frm_cancel1_icon::before {
+	vertical-align: bottom;
+}
+
+.frm_cc_row.frm_email_row .frm-with-right-icon,
+.frm_bcc_row.frm_email_row .frm-with-right-icon,
+.frm_reply_to_row.frm_email_row .frm-with-right-icon {
+	width: calc(100% - 20px);
+	display: inline-block;
+}
+
+.frm_email_row .frm_remove_field .frm_close_icon {
+	position: relative;
+	fill: var(--grey-500);
+	vertical-align: middle;
+}

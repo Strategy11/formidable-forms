@@ -1,0 +1,53 @@
+/**
+ * Notification Table styles
+ */
+
+table td, .form-table tr td {
+	vertical-align: top;
+}
+
+#new_fields .form-table tr td {
+	display: block;
+	padding: 7px 0 0;
+}
+
+#new_fields .form-table tr td:first-child {
+	margin: 0;
+}
+
+#new_fields .form-table tr td:last-child {
+	margin-bottom: 9px;
+}
+
+.form-table #list-table th {
+	text-align: center;
+}
+
+#form_settings_page th,
+#form_settings_page td,
+.frm_settings_form td,
+#frm_notification_settings .frm_form_action_settings td p {
+	padding: 7px 0;
+}
+
+#permissions_settings_settings .frm_grid_container {
+	align-items: center;
+}
+
+#frm_notification_settings .form-table > tbody > tr > th {
+	width: 150px;
+	font-weight: 400;
+	padding-right: 10px;
+}
+
+#frm_notification_settings .frm_single_email_settings .form-table > tbody > tr > th {
+	width: 80px;
+}
+
+#frm_notification_settings table tr td:first-child {
+	padding-left: 0;
+}
+
+#frm_notification_settings table tr td:last-child {
+	padding-right: 0;
+}
