@@ -1145,7 +1145,9 @@ class FrmFormsController {
 		$columns['entries']    = esc_html__( 'Entries', 'formidable' );
 		$columns['id']         = 'ID';
 		$columns['form_key']   = esc_html__( 'Key', 'formidable' );
-		$columns['shortcode']  = esc_html__( 'Actions', 'formidable' );
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
+		}
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		add_screen_option(
