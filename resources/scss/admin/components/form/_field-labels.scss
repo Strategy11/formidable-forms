@@ -1,0 +1,49 @@
+/**
+ * Field Labels
+ */
+
+.frm-fields p > .frm_inline_label,
+.frm_inline_label {
+	padding-left: 3px;
+	margin-right: 12px;
+	display: inline-block;
+}
+
+.frm_left_label {
+	clear: both;
+	float: left;
+	width: 32% !important;
+	margin-right: 2% !important;
+	line-height: 2em;
+}
+
+table td.frm_left_label {
+	float: none;
+	line-height: inherit;
+	padding: 5px 0 5px 2%;
+}
+
+.frm_left_label.frm_alignright {
+	padding-right: 10px;
+	text-align: right;
+}
+
+.frm-fields .frm_left_label + textarea,
+.frm-fields .frm_left_label + select,
+.frm-fields .frm_left_label + input[type="text"],
+.frm_with_left_label {
+	width: 66%;
+}
+
+td.frm_left_label + td {
+	width: 66%;
+	padding-top: 0;
+}
+
+#html_settings label {
+	display: block;
+}
+
+#html_settings .frm_field_html_box {
+	width: 100%;
+}
