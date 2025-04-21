@@ -1140,11 +1140,11 @@ class FrmFormsController {
 	 * @return array<string,string>
 	 */
 	public static function get_columns( $columns ) {
-		$columns['cb']         = '<input type="checkbox" />';
-		$columns['name']       = esc_html__( 'Form Title', 'formidable' );
-		$columns['entries']    = esc_html__( 'Entries', 'formidable' );
-		$columns['id']         = 'ID';
-		$columns['form_key']   = esc_html__( 'Key', 'formidable' );
+		$columns['cb']       = '<input type="checkbox" />';
+		$columns['name']     = esc_html__( 'Form Title', 'formidable' );
+		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
+		$columns['id']       = 'ID';
+		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
