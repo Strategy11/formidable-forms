@@ -11,7 +11,8 @@ class FrmAntiSpamController {
 	 * @return bool Return `true` if is spam.
 	 */
 	public static function is_spam( $values, $posted_fields) {
-		return self::is_blacklist_spam( $values, $posted_fields ) ||
+		return self::contains_wp_disallowed_words( $values, $posted_fields ) ||
+			self::is_blacklist_spam( $values, $posted_fields ) ||
 			self::is_stopforumspam_spam( $values, $posted_fields ) ||
 			self::is_wp_comment_spam( $values, $posted_fields );
 	}
@@ -23,6 +24,11 @@ class FrmAntiSpamController {
 
 	private static function is_wp_comment_spam( $values, $posted_fields ) {
 		$spam_check = new FrmSpamCheckUseWPComments( $values, $posted_fields );
+		return $spam_check->is_spam();
+	}
+
+	private static function contains_wp_disallowed_words( $values, $posted_fields ) {
+		$spam_check = new FrmSpamCheckWPDisallowedWords( $values, $posted_fields );
 		return $spam_check->is_spam();
 	}
 
@@ -52,6 +58,11 @@ class FrmAntiSpamController {
 		return isset( $matches[0] ) ? $matches[0] : array();
 	}
 
+	/**
+	 * Gets whitelist IP addresses.
+	 *
+	 * @return string[]
+	 */
 	public static function get_whitelist_ip() {
 		return array( '', '127.0.0.1' );
 	}
