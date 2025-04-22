@@ -95,9 +95,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'param'   => 'orderby',
 				'default' => 'id',
 			)
-		);		
-
-		$order = self::get_param(
+		);
+		$order   = self::get_param(
 			array(
 				'param'   => 'order',
 				'default' => 'DESC',
