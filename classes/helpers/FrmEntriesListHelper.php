@@ -95,12 +95,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'param'   => 'orderby',
 				'default' => 'id',
 			)
-		);
-
-		if ( strpos( $orderby, 'meta' ) !== false ) {
-			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
-			$orderby         .= in_array( $order_field_type, array( 'number', 'scale', 'star' ) ) ? '+0' : '';
-		}
+		);		
 
 		$order = self::get_param(
 			array(
@@ -110,6 +105,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 		);
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
+
+		if ( strpos( $orderby, 'meta' ) !== false ) {
+			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+
+			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
+				$orderby .= '+0';
+			}
+		}
 
 		return FrmDb::esc_order( $orderby . ' ' . $order );
 	}
