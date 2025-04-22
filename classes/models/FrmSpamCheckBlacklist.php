@@ -37,7 +37,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 				'words'        => array(),
 				'field_type'   => array(),
 				'compare'      => self::COMPARE_CONTAINS, // Regex won't work if compare is `equals`.
-				'extract_value' => self::EXTRACT_EMAIL,
+				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
 		);
 	}
@@ -82,7 +82,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 					}
 				}
 			} elseif ( file_exists( $blacklist['file'] ) ) {
-				$is_spam = $this->read_lines_and_check( $blacklist['file'], array( $this, 'single_line_check_values'), $blacklist );
+				$is_spam = $this->read_lines_and_check( $blacklist['file'], array( $this, 'single_line_check_values' ), $blacklist );
 				if ( $is_spam ) {
 					return true;
 				}
@@ -108,8 +108,73 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			return false;
 		}
 
-		$values_to_check = FrmAppHelper::maybe_json_encode( $this->values );
-		return strpos( $values_to_check, $line ) !== false; // TODO: check compare and extract value.
+		$values_to_check = $this->get_values_to_check( $args );
+
+		if ( self::COMPARE_EQUALS === $args['compare'] ) {
+			foreach ( $values_to_check as $value ) {
+				if ( $line === $value ) {
+					return true;
+				}
+			}
+			return false;
+		}
+
+		$values_str = FrmAppHelper::maybe_json_encode( $values_to_check );
+		return strpos( $values_str, $line ) !== false;
+	}
+
+	/**
+	 * Get the field IDs to check.
+	 *
+	 * @param array $blacklist The blacklist data.
+	 *
+	 * @return array|false Return array of field IDs or false if do not need to check.
+	 */
+	private function get_field_ids_to_check( $blacklist ) {
+		if ( empty( $blacklist['fields'] ) || ! is_array( $blacklist['fields'] ) ) {
+			return false;
+		}
+
+		$field_ids_to_check = array();
+		foreach ( $this->posted_fields as $field ) {
+			$field_type = FrmField::get_field_type( $field->id );
+			if ( in_array( $field_type, $blacklist['fields'], true ) ) {
+				$field_ids_to_check[] = $field->id;
+			}
+		}
+
+		return $field_ids_to_check;
+	}
+
+	private function get_values_to_check( $blacklist ) {
+		$field_ids_to_check = $this->get_field_ids_to_check( $blacklist );
+		if ( array() === $field_ids_to_check ) {
+			return false; // No values need to check.
+		}
+
+		$values_to_check = array();
+		foreach ( $this->values->item_meta as $key => $value ) {
+			if ( is_array( $value ) && isset( $value['form'] ) ) {
+				// This is a repeater value, loop through sub values.
+				unset( $value['form'] );
+				unset( $value['row_ids'] );
+
+				foreach ( $value as $sub_key => $sub_value ) {
+					if ( false === $field_ids_to_check || in_array( $sub_key, $field_ids_to_check, true ) ) {
+						continue;
+					}
+					$values_to_check[] = is_array( $sub_value ) ? implode( ' ', $sub_value ) : $sub_value;
+				}
+			} elseif ( false === $field_ids_to_check || in_array( $value['field'], $field_ids_to_check, true ) ) {
+				$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+			}
+		}
+
+		if ( isset( $blacklist['extract_value'] ) && is_callable( $blacklist['extract_value'] ) ) {
+			$values_to_check = call_user_func( $blacklist['extract_value'], $values_to_check, $blacklist );
+		}
+
+		return $values_to_check;
 	}
 
 	private function check_ip() {

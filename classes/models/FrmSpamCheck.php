@@ -6,9 +6,10 @@ abstract class FrmSpamCheck {
 
 	protected $posted_fields;
 
-	public function __construct( $values, $posted_fields ) {
+	public function __construct( $values ) {
 		$this->values = $values;
-		$this->posted_fields = $posted_fields;
+		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
+//		error_log( print_r( $this->posted_fields, true ) );
 	}
 
 	public function is_spam() {
