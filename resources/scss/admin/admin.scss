@@ -1,5 +1,7 @@
 /**
  * Formidable Admin Styles
+ *
+ * Note: Do not modify the import order unless the change is part of a deliberate refactor.
  */
 
 /**
@@ -10,12 +12,9 @@
 @import 'base/typography/font';
 @import 'utilities/layout/z-index';
 @import 'base/typography/text';
-@import 'base/reset';
 
 /**
  * Layout & Components
- *
- * Note: Preserve import order unless intentionally refactoring
  */
 @import 'layout/page/wrap';
 @import 'components/full-screen';
@@ -28,8 +27,8 @@
 @import 'utilities/layout/grid';
 @import 'components/list/short-list';
 @import 'components/table/elements';
-@import 'layout/top-bar/index';
-@import 'base/headings';
+@import 'layout/top-bar/top-bar';
+@import 'base/typography/headings';
 @import 'layout/page/editor-overrides';
 @import 'components/upgrade/upgrade-bar';
 @import 'components/links';
@@ -40,18 +39,18 @@
 @import 'components/table/row';
 @import 'utilities/effects/animate';
 @import 'components/list/subsubsub';
-@import 'layout/container/index';
+@import 'layout/container/container';
 @import 'layout/container/columns-elements';
 @import 'components/default-switcher';
-@import 'components/form/has-shortcodes';
-@import 'layout/adv-info';
+@import 'components/settings/has-shortcodes';
+@import 'components/settings/adv-info';
 @import 'components/modal/inline-modal';
 @import 'components/nav-tabs';
 @import 'components/modal/bulk-modal';
-@import 'layout/sidebar/index';
+@import 'layout/sidebar/sidebar';
 @import 'components/admin_footer';
 @import 'layout/page/list-entry-page';
-@import 'layout/sidebar/elements';
+@import 'layout/sidebar/sidebar-elements';
 @import 'components/publish-actions';
 @import 'components/button/button';
 @import 'components/review-request';
