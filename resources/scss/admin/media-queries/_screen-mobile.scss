@@ -146,8 +146,8 @@
 		padding-bottom: 1rem;
 	}
 
-	.toplevel_page_formidable #posts-filter,
-	.post-type-frm_display #posts-filter {
+	.toplevel_page_formidable:has(#frm_small_device_message_container) #posts-filter,
+	.post-type-frm_display:has(#frm_small_device_message_container) #posts-filter {
 		display: none;
 	}
 }

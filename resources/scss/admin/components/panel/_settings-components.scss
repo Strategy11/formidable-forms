@@ -98,16 +98,11 @@ select.frm_cancelnew, input.frm_enternew {
 	width: 175px;
 }
 
-.frm_posttax_opt_list,
-.frm_submit_logic_rows {
+.frm_posttax_opt_list {
 	border: 1px solid var(--grey-300);
 	padding: var(--gap-md);
 	border-radius: var(--small-radius);
 	margin: 5px 0 5px var(--gap-md);
-}
-
-.frm_submit_logic_rows .frm_grid_container > p.frm_form_field {
-	margin: 0;
 }
 
 /* Color picker CSS */
