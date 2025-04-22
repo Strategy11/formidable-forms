@@ -1,6 +1,11 @@
 /**
- * Message Styles
+ * Components - Message Styles
  */
+
+.toplevel_page_formidable #wpbody-content > .error {
+	margin: 1px;
+	padding: 5px 12px;
+}
 
 .frm_error_style,
 .frm_warning_style,

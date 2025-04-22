@@ -73,7 +73,7 @@
 @import 'utilities/layout/visibility';
 @import 'utilities/layout/float';
 @import 'utilities/typography/text-align';
-@import 'utilities/border/index';
+@import 'utilities/border/border';
 @import 'utilities/effects/opacity';
 @import 'utilities/layout/z-index-helpers';
 @import 'utilities/effects/transform';
@@ -83,7 +83,7 @@
 /**
  * Components
  */
-@import 'components/general-form-styles';
+@import 'components/form/general-form-styles';
 @import 'components/form/form-field';
 @import 'components/form/field-loading';
 @import 'components/form/form-error';
@@ -110,7 +110,7 @@
 @import 'components/image/image-from-url';
 @import 'components/select/dropdown';
 @import 'components/select/multiselect';
-@import 'components/cipied-frontend';
+@import 'components/copied-frontend';
 @import 'components/form/fields-part2';
 @import 'utilities/typography/text-align-part2';
 @import 'components/image/frm-help';
