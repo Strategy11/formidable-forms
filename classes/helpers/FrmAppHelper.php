@@ -1691,7 +1691,7 @@ class FrmAppHelper {
 
 		$pages_count = wp_count_posts( $args['post_type'] );
 
-		if ( isset( $pages_count->publish ) && $pages_count->publish <= 50 ) {
+		if ( ! isset( $pages_count->publish ) || $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
 			return;
 		}
