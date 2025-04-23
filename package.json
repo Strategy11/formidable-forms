@@ -78,11 +78,16 @@
 		"eslint-plugin-react": "^7.20.6",
 		"eslint-plugin-sonarjs": "^1.0.3",
 		"html-validate": "^8.20.0",
+		"ignore-emit-webpack-plugin": "^2.0.6",
+		"mini-css-extract-plugin": "^2.9.2",
+		"sass": "^1.87.0",
+		"sass-loader": "^16.0.5",
 		"serialize-javascript": "^6.0.1",
 		"style-loader": "^3.3.4",
 		"webpack": "^5.94.0",
 		"webpack-cli": "^5.1.4",
-		"webpack-dev-server": "^4.15.1"
+		"webpack-dev-server": "^4.15.1",
+		"webpack-remove-empty-scripts": "^1.0.4"
 	},
 	"repository": {
 		"type": "git",
