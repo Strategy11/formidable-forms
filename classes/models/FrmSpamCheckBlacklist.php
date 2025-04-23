@@ -3,19 +3,13 @@
 class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	const COMPARE_CONTAINS = '';
+
 	const COMPARE_EQUALS = 'equals';
-	const COMPARE_DOMAIN = 'domain';
-
-	const EXTRACT_NO = '';
-
-	const EXTRACT_SINGLE = 'single';
-
-	const EXTRACT_EMAIL = 'email';
 
 	protected $blacklist;
 
-	public function __construct( $values, $posted_fields ) {
-		parent::__construct( $values, $posted_fields );
+	public function __construct( $values ) {
+		parent::__construct( $values );
 
 		$this->blacklist = $this->get_blacklist_array();
 	}
@@ -153,7 +147,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		}
 
 		$values_to_check = array();
-		foreach ( $this->values->item_meta as $key => $value ) {
+		foreach ( $this->values['item_meta'] as $key => $value ) {
 			if ( is_array( $value ) && isset( $value['form'] ) ) {
 				// This is a repeater value, loop through sub values.
 				unset( $value['form'] );
@@ -165,7 +159,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 					}
 					$values_to_check[] = is_array( $sub_value ) ? implode( ' ', $sub_value ) : $sub_value;
 				}
-			} elseif ( false === $field_ids_to_check || in_array( $value['field'], $field_ids_to_check, true ) ) {
+			} elseif ( false === $field_ids_to_check || in_array( $key, $field_ids_to_check, true ) ) {
 				$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
 			}
 		}

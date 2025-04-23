@@ -6,36 +6,34 @@ class FrmAntiSpamController {
 	 * Checks if given entry values is spam.
 	 *
 	 * @param array $values Entry values.
-	 * @param array $posted_fields Posted fields.
 	 *
 	 * @return bool Return `true` if is spam.
 	 */
-	public static function is_spam( $values, $posted_fields) {
-		return self::contains_wp_disallowed_words( $values, $posted_fields ) ||
-			self::is_blacklist_spam( $values, $posted_fields ) ||
-			self::is_stopforumspam_spam( $values, $posted_fields ) ||
-			self::is_wp_comment_spam( $values, $posted_fields );
+	public static function is_spam( $values ) {
+		return self::contains_wp_disallowed_words( $values ) ||
+			self::is_blacklist_spam( $values ) ||
+			self::is_stopforumspam_spam( $values ) ||
+			self::is_wp_comment_spam( $values );
 	}
 
-	private static function is_stopforumspam_spam( $values, $posted_fields ) {
-		$spam_check = new FrmSpamCheckStopforumspam( $values, $posted_fields );
+	private static function is_stopforumspam_spam( $values ) {
+		$spam_check = new FrmSpamCheckStopforumspam( $values );
 		return $spam_check->is_spam();
 	}
 
-	private static function is_wp_comment_spam( $values, $posted_fields ) {
-		$spam_check = new FrmSpamCheckUseWPComments( $values, $posted_fields );
+	private static function is_wp_comment_spam( $values ) {
+		$spam_check = new FrmSpamCheckUseWPComments( $values );
 		return $spam_check->is_spam();
 	}
 
-	private static function contains_wp_disallowed_words( $values, $posted_fields ) {
-		$spam_check = new FrmSpamCheckWPDisallowedWords( $values, $posted_fields );
+	private static function contains_wp_disallowed_words( $values ) {
+		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
 		return $spam_check->is_spam();
 	}
 
-	private static function is_blacklist_spam( $values, $posted_fields ) {
-		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
-		$check->set_values( $values );
-		return ! $check->validate();
+	private static function is_blacklist_spam( $values ) {
+		$spam_check = new FrmSpamCheckBlacklist( $values );
+		return $spam_check->is_spam();
 	}
 
 	/**

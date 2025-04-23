@@ -328,16 +328,8 @@ class FrmEntryValidate {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
-		} elseif ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
-		} else {
-			if ( false === $posted_fields ) {
-				$posted_fields = self::get_fields_to_validate( $values, $exclude );
-			}
-
-			if ( FrmAntiSpamController::is_spam( $values, $posted_fields ) ) {
-				$errors['spam'] = $spam_msg;
-			}
+		} elseif ( FrmAntiSpamController::is_spam( $values ) ) {
+			$errors['spam'] = $spam_msg; // TODO: maybe restore old blacklist spam message.
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
@@ -380,33 +372,6 @@ class FrmEntryValidate {
 	private static function is_honeypot_spam( $values ) {
 		$honeypot = new FrmHoneypot( $values['form_id'] );
 		return ! $honeypot->validate();
-	}
-
-	private static function is_stopforumspam_spam( $values, $posted_fields ) {
-		$sfs = new FrmStopforumspam( $values['form_id'] );
-		$sfs->set_values( $values );
-		$sfs->set_posted_fields( $posted_fields );
-		return ! $sfs->validate();
-	}
-
-	private static function is_wp_comment_spam( $values, $posted_fields ) {
-		$spam_comments = get_comments( array( 'status' => 'spam' ) );
-		$ip_address    = FrmAppHelper::get_ip_address();
-		$values        = FrmAppHelper::array_flatten( $values );
-
-		foreach ( $spam_comments as $comment ) {
-			if ( $ip_address === $comment->comment_author_IP ) {
-				return true;
-			}
-
-			foreach ( $values as $value ) {
-				if ( $value === $comment->comment_author_email || $value === $comment->comment_author_url ) {
-					return true;
-				}
-			}
-		}
-
-		return false;
 	}
 
 	/**

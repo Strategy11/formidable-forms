@@ -7,9 +7,8 @@ abstract class FrmSpamCheck {
 	protected $posted_fields;
 
 	public function __construct( $values ) {
-		$this->values = $values;
+		$this->values        = $values;
 		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
-//		error_log( print_r( $this->posted_fields, true ) );
 	}
 
 	public function is_spam() {
@@ -29,21 +28,5 @@ abstract class FrmSpamCheck {
 
 	protected function is_enabled() {
 		return true;
-	}
-
-	protected function check_whole_values_contain_spam_words() {
-
-	}
-
-	protected function check_single_value_exactly_spam_words() {
-
-	}
-
-	protected function check_domain_in_email_address() {
-
-	}
-
-	protected function check_ip_address() {
-
 	}
 }
