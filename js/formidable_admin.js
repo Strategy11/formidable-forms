@@ -697,7 +697,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						frmDom.autocomplete.initAutocomplete( 'page', inside );
+						frmDom.autocomplete.initSelectionAutocomplete( inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 
 						/**
