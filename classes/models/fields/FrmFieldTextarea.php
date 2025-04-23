@@ -47,7 +47,15 @@ class FrmFieldTextarea extends FrmFieldType {
 		$size = FrmField::get_option( $this->field, 'size' );
 		$max  = FrmField::get_option( $this->field, 'max' );
 
-		echo '<textarea name="' . esc_attr( $this->html_name( $name ) ) . '" rows="' . esc_attr( $max ) . '" id="' . esc_attr( $this->html_id() ) . '" class="dyn_default_value"';
+		$html_atts = array(
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'rows'        => $max,
+			'class'       => 'dyn_default_value',
+			'placeholder' => FrmField::get_option( $this->field, 'placeholder' ),
+		);
+		echo '<textarea';
+		FrmAppHelper::array_to_html_params( $html_atts, true );
 
 		if ( $size ) {
 			if ( is_numeric( $size ) ) {

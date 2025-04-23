@@ -41,7 +41,7 @@ FrmAppHelper::print_admin_banner( ! $has_nav && empty( $atts['switcher'] ) );
 	}//end if
 
 	if ( isset( $atts['nav'] ) ) {
-		echo FrmAppHelper::kses( $atts['nav'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $atts['nav'], 'all' );
 	}
 
 	echo '<div id="frm-publishing">';

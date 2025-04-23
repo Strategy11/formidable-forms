@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.7.1
+Tested up to: 6.7.2
 Requires PHP: 7.0
-Stable tag: 6.18
+Stable tag: 6.20
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -285,6 +285,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * User ID
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
+* GDPR - Great for compliance with General Data Protection Regulation (GDPR).
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -371,6 +372,29 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.20 =
+* Security: Shortcodes in emails would process more than once.
+* New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
+* New: Admin pages have been modified to work better on smaller screen sizes.
+* New: The GDPR field agreement text now supports links.
+* Fix: Additional checks have been added to ensure that a GDPR field is always required.
+* Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
+* Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
+* Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
+* Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
+* The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
+
+= 6.19 =
+* New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
+* New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
+* New: A quick link to the views tab is now available on the form list admin page.
+* New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
+* New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
+* Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
+* Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
+* Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
+* Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
+
 = 6.18 =
 * New: Invalid checkbox fields will now properly show a red outline to improve user experience.
 * Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
@@ -381,23 +405,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
 * The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
 
-= 6.17.1 =
-* Fix: The payments table admin page would appear empty when there were unread inbox notices.
-
-= 6.17 =
-* New: New redirect delay duration and delay message settings have been added to confirmation actions.
-* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
-* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
-* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
-* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
-* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
-* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
-* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
-* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
-* The global JS function frmFrontForm.escapeHtml has been deprecated.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.16.2 =
+= 6.20 =
 This version fixes a security-related bug. Upgrade immediately.

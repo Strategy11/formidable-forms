@@ -1199,6 +1199,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
+		FrmFormsController::include_device_too_small_message();
 		if ( self::should_show_footer_links() ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 		}
@@ -1331,7 +1332,7 @@ class FrmAppController {
 	/**
 	 * Handles actions related to the current screen.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @return void
 	 */
@@ -1421,7 +1422,7 @@ class FrmAppController {
 	/**
 	 * Retrieve and apply any saved sorting preferences for the current screen.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param string &$orderby Reference to the current 'orderby' parameter.
 	 * @param string &$order   Reference to the current 'order' parameter.
@@ -1479,7 +1480,7 @@ class FrmAppController {
 	 * This function tries to add them again when the user clicks the link to try again
 	 * from the given inbox notice.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 */
 	private static function add_missing_tables() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
@@ -1505,5 +1506,19 @@ class FrmAppController {
 		delete_option( 'frm_db_version' );
 		wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
 		exit;
+	}
+
+	/**
+	 * Handles the small screen proceed action.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function small_screen_proceed() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		update_user_option( get_current_user_id(), 'frm_ignore_small_screen_warning', true );
+		wp_send_json_success();
 	}
 }

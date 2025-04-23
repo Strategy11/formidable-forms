@@ -409,6 +409,8 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		let hide = this.getAttribute( 'data-frmhide' );
 		let show = this.getAttribute( 'data-frmshow' );
+		let uncheckList = this.getAttribute( 'data-frmuncheck' );
+		let uncheckListArray = uncheckList ? uncheckList.split( ',' ) : [];
 
 		// Flip unchecked checkboxes so an off value undoes the on value.
 		if ( isUncheckedCheckbox( this ) ) {
@@ -439,6 +441,15 @@ function frmAdminBuildJS() {
 				current[ i ].classList.remove( 'current' );
 			}
 			this.classList.add( 'current' );
+		}
+
+		if ( uncheckListArray.length ) {
+			uncheckListArray.forEach( function( uncheckItem ) {
+				const uncheckItemElement = document.querySelector( uncheckItem );
+				if ( uncheckItemElement ) {
+					uncheckItemElement.checked = false;
+				}
+			});
 		}
 
 		return false;
@@ -2104,7 +2115,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if a field can be duplicated.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param {HTMLElement} field
 	 * @param {number}      maxFieldsInGroup
@@ -2225,7 +2236,11 @@ function frmAdminBuildJS() {
 		fieldClasses = fieldClasses.replace( 'frm_first', '' );
 		if ( ! newField.className.includes( fieldClasses ) ) {
 			newField.className += ' ' + fieldClasses;
-			document.getElementById( 'frm_classes_' + newField.dataset.fid ).value = fieldClasses;
+
+			const classesInput = document.getElementById( 'frm_classes_' + newField.dataset.fid );
+			if ( classesInput ) {
+				classesInput.value = fieldClasses;
+			}
 		}
 	}
 
@@ -7644,56 +7659,6 @@ function frmAdminBuildJS() {
 		return false;
 	}
 
-	function toggleSubmitLogic() {
-		/*jshint validthis:true */
-		if ( this.checked ) {
-			addSubmitLogic();
-		} else {
-			jQuery( '.frm_logic_row_submit' ).remove();
-			document.getElementById( 'frm_submit_logic_rows' ).style.display = 'none';
-		}
-	}
-
-	/**
-	 * Adds submit button Conditional Logic row and reveals submit button Conditional Logic
-	 *
-	 * @returns {boolean}
-	 */
-	function addSubmitLogic() {
-		/*jshint validthis:true */
-		const formId = thisFormId,
-			logicRows = document.getElementById( 'frm_submit_logic_row' ).querySelectorAll( '.frm_logic_row' );
-		jQuery.ajax({
-			type: 'POST',
-			url: ajaxurl,
-			data: {
-				action: 'frm_add_submit_logic_row',
-				form_id: formId,
-				meta_name: getNewRowId( logicRows, 'frm_logic_submit_' ),
-				nonce: frmGlobal.nonce
-			},
-			success: function( html ) {
-				const $logicRow = jQuery( document.getElementById( 'frm_submit_logic_row' ) );
-				$logicRow.append( html );
-				$logicRow.parent( '.frm_submit_logic_rows' ).fadeIn( 'slow' );
-			}
-		});
-		return false;
-	}
-
-	/**
-	 *  When the user selects a field for a submit condition, update corresponding options field accordingly.
-	 */
-	function addSubmitLogicOpts() {
-		const fieldOpt = jQuery( this );
-		const fieldId = fieldOpt.find( ':selected' ).val();
-
-		if ( fieldId ) {
-			const row = fieldOpt.data( 'row' );
-			frmGetFieldValues( fieldId, 'submit', row, '', 'options[submit_conditions][hide_opt][]' );
-		}
-	}
-
 	function checkDupPost() {
 		/*jshint validthis:true */
 		const postField = jQuery( 'select.frm_single_post_field' );
@@ -10628,6 +10593,14 @@ function frmAdminBuildJS() {
 					maybeAddSaveAndDragIcons( fieldId );
 				});
 			});
+
+			const smallScreenProceedButton = document.getElementById( 'frm_small_screen_proceed_button' );
+			if ( smallScreenProceedButton ) {
+				onClickPreventDefault( smallScreenProceedButton, () => {
+					document.getElementById( 'frm_small_device_message_container' )?.remove();
+					doJsonPost( 'small_screen_proceed', new FormData() );
+				});
+			}
 		},
 
 		buildInit: function() {
@@ -10844,10 +10817,6 @@ function frmAdminBuildJS() {
 			formSettings = jQuery( '.frm_form_settings' );
 			formSettings.on( 'click', '.frm_add_form_logic', addFormLogicRow );
 			formSettings.on( 'click', '.frm_already_used', actionLimitMessage );
-
-			formSettings.on( 'change', '#logic_link_submit', toggleSubmitLogic );
-			formSettings.on( 'click', '.frm_add_submit_logic', addSubmitLogic );
-			formSettings.on( 'change', '.frm_submit_logic_field_opts', addSubmitLogicOpts );
 
 			document.addEventListener(
 				'click',

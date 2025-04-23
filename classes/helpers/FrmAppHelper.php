@@ -29,17 +29,12 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.18';
+	public static $plug_version = '6.20';
 
 	/**
 	 * @var bool
 	 */
 	private static $included_svg = false;
-
-	/**
-	 * @var array Keys are locations and values are true or false.
-	 */
-	private static $localized_script_locations = array();
 
 	/**
 	 * @since 1.07.02
@@ -339,24 +334,38 @@ class FrmAppHelper {
 	/**
 	 * Checks if is a list page.
 	 *
-	 * @since x.x
+	 * @since 6.19
 	 *
 	 * @param string $page The name of the page to check.
 	 * @return bool
 	 */
 	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( 'formidable' === $page ) {
+			return self::on_form_listing_page();
+		}
+
 		if ( ! self::is_admin_page( $page ) ) {
 			return false;
 		}
 
-		// Check Trash page.
-		$form_type = self::simple_get( 'form_type' );
-		if ( $form_type && 'published' !== $form_type ) {
-			return false;
+		if ( 'formidable-entries' === $page ) {
+			$action = self::simple_get( 'frm_action' );
+			if ( ! $action || in_array( $action, self::get_entries_listing_page_form_actions(), true ) ) {
+				return true;
+			}
 		}
 
 		// Check edit or settings page.
 		return ! self::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * @since 6.20
+	 *
+	 * @return array<string>
+	 */
+	private static function get_entries_listing_page_form_actions() {
+		return array( 'list', 'destroy' );
 	}
 
 	/**
@@ -2302,7 +2311,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function use_wpautop( $content ) {
-		if ( apply_filters( 'frm_use_wpautop', true ) && ! is_array( $content ) ) {
+		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
 			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
@@ -3446,10 +3455,6 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function localize_script( $location ) {
-		if ( ! empty( self::$localized_script_locations[ $location ] ) ) {
-			return;
-		}
-
 		global $wp_scripts, $wp_version;
 
 		$script_strings = array(
@@ -3553,8 +3558,6 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
-
-		self::$localized_script_locations[ $location ] = true;
 	}
 
 	/**
@@ -4537,5 +4540,29 @@ class FrmAppHelper {
 			?>
 		</span>
 		<?php
+	}
+
+	/**
+	 * Check if GDPR is enabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function is_gdpr_enabled() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr || $frm_settings->no_ips || $frm_settings->custom_header_ip || $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if GDPR cookies are disabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function no_gdpr_cookies() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
 	}
 }

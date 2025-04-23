@@ -31,7 +31,7 @@ class FrmInboxController {
 	 */
 	public static function get_inbox_messages() {
 		self::add_tracking_request();
-		self::add_free_template_message();
+		self::remove_free_template_message();
 
 		$inbox              = new FrmInbox();
 		$unread_messages    = $inbox->get_messages();
@@ -107,28 +107,11 @@ class FrmInboxController {
 	 *
 	 * @return void
 	 */
-	private static function add_free_template_message() {
-		if ( FrmAppHelper::pro_is_installed() ) {
-			return;
+	private static function remove_free_template_message() {
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			$message = new FrmInbox();
+			$message->dismiss( 'free_templates' );
 		}
-
-		$api = new FrmFormTemplateApi();
-		if ( $api->has_free_access() ) {
-			return;
-		}
-
-		$link = admin_url( 'admin.php?page=' . FrmFormTemplatesController::PAGE_SLUG . '&free-templates=1' );
-
-		$message = new FrmInbox();
-		$message->add_message(
-			array(
-				'key'     => 'free_templates',
-				'message' => 'Add your email address to get a code for 30+ free form templates.',
-				'subject' => 'Get 30+ Free Form Templates',
-				'cta'     => '<a href="#" class="frm-button-secondary frm_inbox_dismiss">Dismiss</a> <a href="' . esc_url( $link ) . '" class="button-primary frm-button-primary">Get Now</a>',
-				'type'    => 'feedback',
-			)
-		);
 	}
 
 	/**
