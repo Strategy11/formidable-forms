@@ -1,4 +1,7 @@
-/* Chrome Scrollbars for Windows */
+/**
+ * Component: Scrollbars
+ */
+
 .windows::-webkit-scrollbar,
 .windows ::-webkit-scrollbar {
 	width: 7px;
@@ -49,5 +52,3 @@
 .frm-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
 	background: var(--grey-400); /* Show scrollbar on hover */
 }
-
-/* End scrollbar */
