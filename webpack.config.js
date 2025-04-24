@@ -36,7 +36,8 @@ const entries = {
   },
   // SCSS entries
   scss: {
-    frm_admin: './resources/scss/admin/frm_admin.scss'
+    frm_admin: './resources/scss/admin/frm_admin.scss',
+    font_icons: './resources/scss/font_icons.scss'
   }
 };
 
@@ -119,7 +120,7 @@ const jsConfig = {
 };
 
 /**
- * SCSS/CSS specific config 
+ * SCSS/CSS specific config
  */
 const cssConfig = {
   ...sharedConfig,
