@@ -404,9 +404,7 @@ class FrmEntryValidate {
 	}
 
 	public static function blacklist_check( $values ) {
-		$check = new FrmBlacklistSpamCheck( $values['form_id'] );;
-		$check->set_values( $values );
-		return ! $check->validate();
+		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_blacklist_spam( $values );
 	}
 
 	/**

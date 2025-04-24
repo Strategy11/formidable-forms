@@ -6,12 +6,15 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	const COMPARE_EQUALS = 'equals';
 
+	protected $posted_fields;
+
 	protected $blacklist;
 
 	public function __construct( $values ) {
 		parent::__construct( $values );
 
-		$this->blacklist = $this->get_blacklist_array();
+		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
+		$this->blacklist     = $this->get_blacklist_array();
 	}
 
 	protected function is_enabled() {

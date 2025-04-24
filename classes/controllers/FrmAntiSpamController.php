@@ -26,12 +26,12 @@ class FrmAntiSpamController {
 		return $spam_check->is_spam();
 	}
 
-	private static function contains_wp_disallowed_words( $values ) {
+	public static function contains_wp_disallowed_words( $values ) {
 		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
 		return $spam_check->is_spam();
 	}
 
-	private static function is_blacklist_spam( $values ) {
+	public static function is_blacklist_spam( $values ) {
 		$spam_check = new FrmSpamCheckBlacklist( $values );
 		return $spam_check->is_spam();
 	}

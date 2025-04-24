@@ -17,7 +17,7 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 			return true;
 		}
 
-		$emails = FrmAntiSpamController::extract_emails_from_string( json_encode( $this->values['item_meta'] ) );
+		$emails = FrmAntiSpamController::extract_emails_from_values( $this->values['item_meta'] );
 		if ( ! $emails ) {
 			return false;
 		}
