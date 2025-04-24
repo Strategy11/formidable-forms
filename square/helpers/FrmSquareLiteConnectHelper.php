@@ -501,4 +501,8 @@ class FrmSquareLiteConnectHelper {
 	public static function refund_payment( $receipt_id ) {
 		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
 	}
+
+	public static function create_subscription( $info ) {
+		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );
+	}
 }

@@ -100,7 +100,7 @@ class FrmSquareLiteAppController {
 	 * @param WP_Post $action
 	 * @return array
 	 */
-	private static function get_billing_contact( $action ) {
+	public static function get_billing_contact( $action ) {
 		$email_setting      = $action->post_content['email'];
 		$first_name_setting = $action->post_content['billing_first_name'];
 		$last_name_setting  = $action->post_content['billing_last_name'];
@@ -137,6 +137,7 @@ class FrmSquareLiteAppController {
 			$details['addressLines'] = array( $address['line1'], $address['line2'] );
 			$details['city']         = $address['city'];
 			$details['state']        = $address['state'];
+			$details['postalCode']   = $address['zip'];
 			$details['countryCode']  = FrmProAddressesController::get_country_code( $address['country'] );
 		}
 

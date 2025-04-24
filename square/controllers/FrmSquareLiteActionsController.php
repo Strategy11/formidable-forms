@@ -82,13 +82,13 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $response;
 		}
 
-		$one_time_payment_args = compact( 'form', 'entry', 'action', 'amount' );
+		$payment_args = compact( 'form', 'entry', 'action', 'amount' );
 
-		// attempt to charge the customer's card
+		// Attempt to charge the customer's card.
 		if ( 'recurring' === $action->post_content['type'] ) {
-			$charge = self::trigger_recurring_payment( compact( 'entry', 'action', 'amount' ) );
+			$charge = self::trigger_recurring_payment( $payment_args );
 		} else {
-			$charge                   = self::trigger_one_time_payment( $one_time_payment_args );
+			$charge                   = self::trigger_one_time_payment( $payment_args );
 			$response['run_triggers'] = true;
 		}
 
@@ -166,6 +166,51 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$frm_payment = new FrmTransLitePayment();
 		$payment_id  = $frm_payment->create( $new_values );
 		return $payment_id;
+	}
+
+	/**
+	 * Create a new Square subscription and a subscription and payment for the payments tables.
+	 *
+	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
+	 * @return bool|string True on success, error message on failure
+	 */
+	private static function trigger_recurring_payment( $atts ) {
+		// We can put this all behind our API.
+		// It will require that we pass the customer info and the catalog info.
+		// 1. Call the API with the customer and catalog info.
+		// 2. Add the database rows.
+
+		$action          = $atts['action'];;
+		$billing_contact = FrmSquareLiteAppController::get_billing_contact( $action );
+
+		$info = array(
+			'customer' => array(
+				'givenName'    => $billing_contact['givenName'],
+				'familyName'   => $billing_contact['familyName'],
+				'emailAddress' => $billing_contact['email'],
+			),
+			'catalog'  => array(
+				'name'           => $action->post_content['description'],
+				'trial_days'     => $action->post_content['trial_interval_count'],
+				'limit'          => $action->post_content['payment_limit'],
+				'amount'         => $atts['amount'],
+				'interval'       => $action->post_content['interval'],
+				'interval_count' => $action->post_content['interval_count'],
+			),
+		);
+
+		if ( isset( $billing_contact['addressLines'] ) ) {
+			$info['customer']['address'] = array(
+				'addressLine1'                 => $billing_contact['addressLines'][0],
+				'addressLine2'                 => $billing_contact['addressLines'][1],
+				'locality'                     => $billing_contact['city'],
+				'administrativeDistrictLevel1' => $billing_contact['state'],
+				'postalCode'                   => $billing_contact['postalCode'],
+				'country'                      => $billing_contact['countryCode'],
+			);
+		}
+
+		FrmSquareLiteConnectHelper::create_subscription( $info );
 	}
 
 	/**

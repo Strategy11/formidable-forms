@@ -219,7 +219,7 @@
 				const token             = await tokenize( card );
 				const verificationToken = await verifyBuyer( payments, token );
 				await createPayment( event, token, verificationToken );
-				
+
 				// Decrement running counter after successful payment
 				running--;
 				if ( running === 0 && thisForm ) {
