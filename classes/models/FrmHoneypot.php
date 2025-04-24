@@ -200,7 +200,7 @@ class FrmHoneypot extends FrmValidate {
 			array(
 				'param'   => 'item_meta',
 				'default' => array(),
-				'type'    => 'request',
+				'type'    => 'post',
 			)
 		);
 
