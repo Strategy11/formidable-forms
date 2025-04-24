@@ -47,3 +47,12 @@
 #frm-fake-page .frm-page-break {
 	border-color: var(--grey);
 }
+
+#frm-fake-page {
+	padding: 0 5px;
+}
+
+.frm_sorting li.edit_field_type_divider:hover,
+.frm_sorting li.edit_field_type_divider.selected {
+	border-left-color: var(--primary-500);
+}

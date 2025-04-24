@@ -36,7 +36,7 @@
 @import 'components/modal/error-modal';
 @import 'layout/page/editor-overrides';
 @import 'components/upgrade/upgrade-bar';
-@import 'components/links';
+@import 'components/links/links';
 @import 'layout/top-bar/navigation';
 @import 'components/full-close';
 @import 'layout/top-bar/elements';
@@ -59,7 +59,7 @@
 @import 'layout/page/single-entry-page';
 @import 'components/publish-actions';
 @import 'components/button/button';
-@import 'components/review-request';
+@import 'components/notifications/review-request';
 
 /**
  * Utility Classes
@@ -98,7 +98,7 @@
  */
 @import 'components/form/general-form-styles';
 @import 'components/form/form-field';
-@import 'components/form/field-loading';
+@import 'components/loading/field-loading';
 @import 'components/form/form-error';
 @import 'components/form/mce';
 @import 'components/license';
@@ -107,10 +107,10 @@
 @import 'components/upgrade/upgrade-bar-elements';
 @import 'components/table/table-styles';
 @import 'base/typography/howto';
-@import 'components/card';
+@import 'components/card/card';
 @import 'utilities/effects/fade';
 @import 'components/addon-tiles';
-@import 'components/form-templates';
+@import 'components/form-templates/form-templates';
 @import 'layout/page/admin-page';
 @import 'components/modal/modal';
 @import 'components/list/template-list';
@@ -129,12 +129,12 @@
 @import 'components/form/fields-part2';
 @import 'utilities/typography/text-align-part2';
 @import 'components/image/frm-help';
-@import 'components/loading';
+@import 'components/loading/loading';
 @import 'components/form/fields-part3';
 @import 'utilities/background';
 @import 'utilities/border/border-light';
 @import 'components/form/form-inputs';
-@import 'components/affiliate-link';
+@import 'components/links/affiliate-link';
 @import 'components/select/select-box';
 @import 'components/panel/options-panel';
 @import 'components/form/field-key';
@@ -165,38 +165,37 @@
 @import 'components/panel/tabs-panel';
 @import 'components/notifications/feature-banner';
 @import 'components/addon-compat';
-@import 'components/form/form-settings';
+@import 'components/settings/form-settings';
 @import 'components/panel/customization-panel';
 @import 'components/form/html-tab';
 @import 'components/form/form-actions';
-@import 'components/form/notification-table';
-@import 'components/form/notification-settings';
-@import 'components/form/logic-fields';
-@import 'components/form/form-settings-widget';
+@import 'components/notifications/notification-settings';
+@import 'components/builder/logic-fields';
+@import 'components/settings/form-settings-widget';
 @import 'components/icons/icon-font';
 @import 'base/typography/howto-extends';
-@import 'components/form/sorting-form';
+@import 'components/sorting/sorting-form';
 @import 'components/list/tag-checklist';
 @import 'layout/page/no-entries';
 @import 'layout/page/reports-page';
 @import 'layout/page/views-page';
 @import 'components/modal/field-popup';
 @import 'components/form/form-editor-container';
-@import 'components/form/widget-sorting';
+@import 'components/sorting/widget-sorting';
 @import 'components/form/field-group-controls';
-@import 'components/form/field-sorting';
+@import 'components/sorting/field-sorting';
 @import 'components/button/frm-button';
 @import 'components/builder/dividers';
 @import 'components/builder/form-rows';
 @import 'components/builder/divider-icons';
-@import 'components/form/page-breaks';
+@import 'components/page-collapsed';
 @import 'components/builder/divider-labels';
 @import 'components/form/empty-fields';
 @import 'components/settings/product-fields';
 @import 'components/settings/field-choices';
 @import 'components/form/field-labels';
-@import 'components/form/category-tabs';
-@import 'components/form/ui-state-defaults';
+@import 'components/settings/category-tabs';
+@import 'components/builder/ui-state-defaults';
 @import 'components/notifications/update-msg';
 @import 'components/table/admin-columns';
 @import 'components/search/admin-search';
@@ -211,22 +210,22 @@
 @import 'layout/page/views-page-admin';
 @import 'layout/page/views-admin-icons';
 @import 'layout/page/views-admin-tabs';
-@import 'components/form/order-where-rows';
+@import 'components/settings/order-where-rows';
 @import 'components/form/editor-elements';
 @import 'components/info/advanced-info-panel';
 @import 'layout/grid/column-layout';
 @import 'components/modal/info-modals';
-@import 'components/code-list';
+@import 'components/list/code-list';
 @import 'components/builder/insert-fields';
 @import 'components/builder/field-dragging';
 @import 'components/upgrade/upgrade-modal';
 @import 'layout/page/reports-info';
 @import 'components/modal/dialog';
 @import 'components/icons/circled-icons';
-@import 'components/link-styles';
+@import 'components/links/link-styles';
 @import 'components/tooltip';
 @import 'components/form/inputs';
-@import 'components/welcome-page';
+@import 'components/button/button-grey';
 @import 'utilities/scrollbars';
 @import 'utilities/rtl';
 @import 'utilities/clearfix';
@@ -247,7 +246,7 @@
  *
  * Additional components loaded after the main layout
  */
-@import 'components/publishing';
+@import 'layout/top-bar/publishing';
 @import 'components/modal/field-group-popup';
 @import 'components/select/multiselect-popup';
 @import 'components/notifications/banner';
@@ -256,12 +255,12 @@
 @import 'components/notifications/call-to-action';
 @import 'components/modal/form-templates';
 @import 'components/builder/field-group-message';
-@import 'components/cards';
+@import 'components/card/card-item';
 @import 'components/pirate-forms';
 @import 'components/form/option-box';
 @import 'components/form/validation-error';
 @import 'utilities/layout/box';
-@import 'components/external-links';
+@import 'components/links/external-links';
 @import 'layout/page-skeleton';
 @import 'components/builder/submit-field';
 @import 'components/accordion/accordion-title';
