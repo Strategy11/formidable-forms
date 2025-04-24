@@ -364,43 +364,6 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
-	/**
-	 * @return array
-	 */
-	public static function get_banner_tip() {
-		$tips       = array(
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'professional-results',
-				),
-				'tip'  => __( 'Looking for more ways to get professional results?', 'formidable' ),
-				'call' => __( 'Take your forms to the next level.', 'formidable' ),
-			),
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'increase-conversions',
-				),
-				'tip'  => __( 'Increase conversions in long forms.', 'formidable' ),
-				'call' => __( 'Add conditional logic, page breaks, and section headings.', 'formidable' ),
-			),
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'automate',
-				),
-				'tip'  => __( 'Automate your business and increase revenue.', 'formidable' ),
-				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
-			),
-		);
-		$random     = rand( 0, count( $tips ) - 1 );
-		$tip        = $tips[ $random ];
-		$tip['num'] = $random;
-
-		return $tip;
-	}
-
 	public static function get_random_tip( $tips ) {
 		$random = rand( 0, count( $tips ) - 1 );
 
@@ -453,5 +416,15 @@ class FrmTipsHelper {
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return array
+	 */
+	public static function get_banner_tip() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return array();
 	}
 }
