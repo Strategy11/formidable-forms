@@ -37,7 +37,7 @@
 	opacity: .5;
 }
 
-#frm-insert-fields li span {
+#frm-insert-fields li span:not(.frm-new-pill) {
 	vertical-align: middle;
 	white-space: nowrap;
 	overflow: hidden;
