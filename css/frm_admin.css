@@ -123,6 +123,13 @@
 	margin: var(--gap-sm) 0;
 }
 
+#frm-confirmed-click.button.frm-btn-inactive {
+	background-color: var(--error-300) !important;
+	border: 1px solid var(--error-300);
+}
+#frm-confirmed-click.button.frm-btn-inactive:hover {
+	border-color: var(--error-300) !important;
+}
 
 body:not(.frm-admin-page-styles):not(.frm-admin-page-style) .with_frm_style .frm_form_fields > fieldset {
 	--fieldset-padding: 15px 0;

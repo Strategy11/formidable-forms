@@ -519,6 +519,23 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
 	}
 
+	public function get_bulk_actions() {
+		$actions = array(
+			'bulk_delete' => __( 'Delete', 'formidable-pro' ),
+		);
+
+		if ( ! current_user_can( 'frm_delete_entries' ) ) {
+			unset( $actions['bulk_delete'] );
+		}
+
+		//$actions['bulk_export'] = __( 'Export to XML', 'formidable-pro' );
+		if ( $this->params['form'] ) {
+			$actions['bulk_csv'] = __( 'Export to CSV', 'formidable-pro' );
+		}
+
+		return $actions;
+	}
+
 	/**
 	 * @return string
 	 */

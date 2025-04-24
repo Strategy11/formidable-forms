@@ -104,6 +104,58 @@ class FrmEntriesController {
 		}
 	}
 
+	public static function bulk_actions( $action = 'list-form' ) {
+		$params = FrmForm::get_admin_params();
+		$errors = array();
+
+		if ( $action == 'list-form' ) {
+			$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
+			$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
+
+			$bulkaction = $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
+		} else {
+			$bulkaction = str_replace( 'bulk_', '', $action );
+		}
+
+		$items = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
+		if ( empty( $items ) ) {
+			$errors[] = __( 'No entries were specified', 'formidable-pro' );
+		} else {
+			$frm_settings = FrmAppHelper::get_settings();
+
+			if ( ! is_array( $items ) ) {
+				$items = explode( ',', $items );
+			}
+
+			if ( $bulkaction === 'delete' ) {
+				if ( ! current_user_can( 'frm_delete_entries' ) ) {
+					$errors[] = $frm_settings->admin_permission;
+				} elseif ( is_array( $items ) ) {
+					foreach ( $items as $item_id ) {
+						FrmEntry::destroy( $item_id );
+					}
+				}
+			} elseif ( $bulkaction === 'csv' ) {
+				FrmAppHelper::permission_check( 'frm_view_entries' );
+
+				$form_id = $params['form'];
+				if ( ! $form_id ) {
+					$form = FrmForm::get_published_forms( array(), 1 );
+					if ( ! empty( $form ) ) {
+						$form_id = $form->id;
+					} else {
+						$errors[] = __( 'No form was found', 'formidable-pro' );
+					}
+				}
+
+				if ( $form_id && is_array( $items ) ) {
+					echo '<script type="text/javascript">window.onload=function(){location.href="' . esc_url_raw( admin_url( 'admin-ajax.php?form=' . $form_id . '&action=frm_entries_csv&item_id=' . implode( ',', $items ) ) ) . '";}</script>';
+				}
+			}
+		}
+		FrmEntriesController::display_list( '', $errors );
+	}
+
 	/**
 	 * Display in Back End.
 	 */
@@ -117,6 +169,15 @@ class FrmEntriesController {
 				return self::$action();
 
 			default:
+				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
+				if ( $action == -1 ) {
+					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
+				}
+
+				if ( strpos( $action, 'bulk_' ) === 0 ) {
+					FrmAppHelper::remove_get_action();
+					return self::bulk_actions( $action );
+				}
 				do_action( 'frm_entry_action_route', $action );
 				if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
 					return;
@@ -146,7 +207,7 @@ class FrmEntriesController {
 	public static function manage_columns( $columns ) {
 		global $frm_vars;
 		$form_id = FrmForm::get_current_form_id();
-
+		$columns['cb']                     = '<input type="checkbox" />';
 		$columns[ $form_id . '_id' ]       = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
 
