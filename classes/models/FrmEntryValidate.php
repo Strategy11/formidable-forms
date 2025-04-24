@@ -408,19 +408,6 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function check_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
-		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
-		}
-		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
-		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
-	}
-
-	/**
 	 * Check entries for Akismet spam
 	 *
 	 * @return bool true if is spam
