@@ -5,7 +5,9 @@
  */
 
 /**
- * Base Styles
+ * Base & Foundation
+ *
+ * Core variables, typography, and essential base styles
  */
 @import '../font_icons';
 @import 'base/variables';
@@ -14,7 +16,9 @@
 @import 'base/typography/text';
 
 /**
- * Layout & Components
+ * Layout & Primary Components
+ *
+ * Core structure and primary UI elements
  */
 @import 'layout/page/wrap';
 @import 'components/full-screen';
@@ -58,7 +62,9 @@
 @import 'components/review-request';
 
 /**
- * Utilities
+ * Utility Classes
+ *
+ * Reusable helper classes for spacing, typography, effects, etc.
  */
 @import 'utilities/effects/box-shadow';
 @import 'utilities/typography/text-color';
@@ -86,7 +92,9 @@
 @import 'utilities/helper-classes';
 
 /**
- * Components
+ * Forms & UI Components
+ *
+ * Form elements, inputs, fields, modals and interactive components
  */
 @import 'components/form/general-form-styles';
 @import 'components/form/form-field';
@@ -224,7 +232,9 @@
 @import 'utilities/clearfix';
 
 /**
- * Media Queries
+ * Responsive Styles
+ *
+ * Media queries for desktop, tablet, and mobile devices
  */
 @import 'media-queries/screen-desktop';
 @import 'media-queries/screen-laptop';
@@ -233,7 +243,9 @@
 @import 'media-queries/print';
 
 /**
- * Components
+ * Extended Components
+ *
+ * Additional components loaded after the main layout
  */
 @import 'components/publishing';
 @import 'components/modal/field-group-popup';
