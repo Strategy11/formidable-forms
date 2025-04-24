@@ -497,4 +497,8 @@ class FrmSquareLiteConnectHelper {
 	public static function get_latest_error_from_square_api() {
 		return self::$latest_error_from_square_api;
 	}
+
+	public static function refund_payment( $receipt_id ) {
+		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
+	}
 }
