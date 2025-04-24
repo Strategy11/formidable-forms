@@ -141,8 +141,12 @@ const cssConfig = {
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: { url: false }
+            options: { 
+              url: false,
+              sourceMap: isDevelopment
+            }
           },
+          'css-unicode-loader', // Handle unicode escape sequences in CSS
           {
             loader: 'sass-loader',
             options: sassLoaderOptions
