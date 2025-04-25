@@ -182,7 +182,7 @@ class FrmEntriesController {
 
 				if ( strpos( $action, 'bulk_' ) === 0 ) {
 					FrmAppHelper::remove_get_action();
-					return self::bulk_actions( $action );
+					self::bulk_actions( $action );
 				}
 				do_action( 'frm_entry_action_route', $action );
 				if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
