@@ -538,9 +538,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color_active'],
 			),
 			'.Label'              => array(
-				'color'      => $settings['label_color'],
-				'fontSize'   => $settings['font_size'],
-				'fontWeight' => $settings['weight'],
+				'color'        => $settings['label_color'],
+				'fontSize'     => $settings['font_size'],
+				'fontWeight'   => $settings['weight'],
+				'padding'      => $settings['label_padding'],
+				'marginBottom' => 0,
 			),
 			'.Error'              => array(
 				'color' => $settings['border_color_error'],
@@ -549,6 +551,17 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		if ( isset( $settings['field_shape_type'] ) && 'circle' === $settings['field_shape_type'] ) {
 			$rules['.Input']['borderRadius'] = '30px';
 		}
+
+		/*
+		 * Filters the appearance rules for Stripe elements.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $rules
+		 * @param array $settings
+		 * @param mixed $form_id
+		 */
+		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings, $form_id );
 		return $rules;
 	}
 
