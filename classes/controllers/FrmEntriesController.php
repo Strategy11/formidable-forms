@@ -107,7 +107,7 @@ class FrmEntriesController {
 	/**
 	 * Summary of bulk_actions
 	 *
-	 * @since x.x
+	 * @since x.x Moved from FrmProEntriesController to FrmEntriesController
 	 *
 	 * @param string $action
 	 * @return void

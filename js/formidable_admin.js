@@ -315,7 +315,6 @@ function frmAdminBuildJS() {
 
 		if ( 'entries-list' === loadedFrom ) {
 			return confirmDeleteAllEntriesModal( { link, initModal } );
-			// return wp.hooks.applyFilters( 'frm_on_multiple_entries_delete', { link, initModal });
 		}
 
 		return confirmModal( link );

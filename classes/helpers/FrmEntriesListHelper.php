@@ -519,6 +519,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
 	}
 
+	/**
+	 * @since x.x Moved from FrmProEntriesListHelper to FrmEntriesListHelper
+	 *
+	 * @return array
+	 */
 	public function get_bulk_actions() {
 		$actions = array(
 			'bulk_delete' => __( 'Delete', 'formidable-pro' ),
