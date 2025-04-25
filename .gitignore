@@ -13,6 +13,7 @@ js/*.js.LICENSE.txt
 
 # Ignore map files
 **/*.css.map
+**/*.js.map
 
 # Node
 node_modules
