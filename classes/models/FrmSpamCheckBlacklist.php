@@ -28,7 +28,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	 */
 	protected function get_blacklist_array() {
 		// TODO: add the filter.
-		return array(
+		$blacklist_data = array(
 			array(
 				'file'         => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
 				'words'        => array(),
@@ -37,6 +37,15 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
 		);
+
+		$custom_blacklist = $this->get_words_from_setting( 'blacklist' );
+		if ( $custom_blacklist ) {
+			$blacklist_data['custom'] = array(
+				'words' => $custom_blacklist,
+			);
+		}
+
+		return apply_filters( 'frm_blacklist_data', $blacklist_data );
 	}
 
 	/**
@@ -45,12 +54,14 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	 * @return array
 	 */
 	protected function get_blacklist_ip() {
-		// TODO: add the filter.
-		return array(
-			'files' => array(
-				FrmAppHelper::plugin_path() . '/blacklist/ip.txt',
-			),
-			'custom' => array(),
+		return apply_filters(
+			'frm_blacklist_ip_data',
+			array(
+				'files' => array(
+					FrmAppHelper::plugin_path() . '/blacklist/ip.txt',
+				),
+				'custom' => array(),
+			)
 		);
 	}
 
@@ -64,12 +75,14 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	private function check_values() {
 		$whitelist = $this->get_words_from_setting( 'whitelist' );
+		$whitelist = array_map( array( $this, 'convert_to_lowercase' ), $whitelist );
 
 		foreach ( $this->blacklist as $blacklist ) {
 			if ( empty( $blacklist['file'] ) && empty( $blacklist['words'] ) ) {
 				continue;
 			}
 
+			$this->fill_default_blacklist_data( $blacklist );
 			$blacklist['whitelist'] = $whitelist;
 
 			if ( ! empty( $blacklist['words'] ) ) {
@@ -89,6 +102,19 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		return false;
 	}
 
+	private function fill_default_blacklist_data( &$blacklist ) {
+		$blacklist = wp_parse_args(
+			$blacklist,
+			array(
+				'file'          => '',
+				'words'         => array(),
+				'field_type'    => array(),
+				'compare'       => self::COMPARE_CONTAINS,
+				'extract_value' => '',
+			)
+		);
+	}
+
 	private function get_words_from_setting( $setting_key ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		$words        = isset( $frm_settings->$setting_key ) ? $frm_settings->$setting_key : '';
@@ -100,6 +126,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	}
 
 	private function single_line_check_values( $line, $args ) {
+		$line = $this->convert_to_lowercase( $line );
 		// Do not check if this word is in the whitelist.
 		if ( ! empty( $args['whitelist'] ) && in_array( $line, $args['whitelist'], true ) ) {
 			return false;
@@ -109,6 +136,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 		if ( self::COMPARE_EQUALS === $args['compare'] ) {
 			foreach ( $values_to_check as $value ) {
+				$value = $this->convert_to_lowercase( $value );
 				if ( $line === $value ) {
 					return true;
 				}
@@ -116,8 +144,12 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			return false;
 		}
 
-		$values_str = FrmAppHelper::maybe_json_encode( $values_to_check );
+		$values_str = strtolower( FrmAppHelper::maybe_json_encode( $values_to_check ) );
 		return strpos( $values_str, $line ) !== false;
+	}
+
+	private function convert_to_lowercase( $str ) {
+		return strtolower( $str );
 	}
 
 	/**
@@ -128,16 +160,17 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */
 	private function get_field_ids_to_check( $blacklist ) {
-		if ( empty( $blacklist['fields'] ) || ! is_array( $blacklist['fields'] ) ) {
+		if ( empty( $blacklist['field_type'] ) || ! is_array( $blacklist['field_type'] ) ) {
 			return false;
 		}
 
 		$field_ids_to_check = array();
 		foreach ( $this->posted_fields as $field ) {
-			$field_type = FrmField::get_field_type( $field->id );
-			if ( in_array( $field_type, $blacklist['fields'], true ) ) {
-				$field_ids_to_check[] = $field->id;
+			$field_type = FrmField::get_field_type( $field );
+			if ( in_array( $field_type, $blacklist['field_type'], true ) ) {
+				$field_ids_to_check[] = intval( $field->id );
 			}
+			unset( $field );
 		}
 
 		return $field_ids_to_check;
