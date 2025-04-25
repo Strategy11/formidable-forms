@@ -190,12 +190,11 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'emailAddress' => $billing_contact['email'],
 			),
 			'catalog'  => array(
-				'name'           => $action->post_content['description'],
-				'trial_days'     => $action->post_content['trial_interval_count'],
-				'limit'          => $action->post_content['payment_limit'],
-				'amount'         => $atts['amount'],
-				'interval'       => $action->post_content['interval'],
-				'interval_count' => $action->post_content['interval_count'],
+				'name'       => $action->post_content['description'],
+				'trial_days' => $action->post_content['trial_interval_count'],
+				'limit'      => $action->post_content['payment_limit'],
+				'amount'     => $atts['amount'],
+				'cadence'    => $action->post_content['repeat_cadence'],
 			),
 		);
 

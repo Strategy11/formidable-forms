@@ -50,4 +50,28 @@ class FrmSquareLiteAppHelper {
 		$settings = self::get_settings();
 		return $settings->settings->test_mode ? 'test' : 'live';
 	}
+
+	/**
+	 * Square does not support the typical recurring payment repeat settings.
+	 * Instead, we have the choice of the following "cadence" options.
+	 *
+	 * @return array
+	 */
+	public static function get_repeat_cadence_options() {
+		return array(
+			'DAILY'             => 'Daily',
+			'WEEKLY'            => 'Weekly',
+			'EVERY_TWO_WEEKS'   => 'Every Two Weeks',
+			'THIRTY_DAYS'       => 'Every Thirty Days',
+			'SIXTY_DAYS'        => 'Every Sixty Days',
+			'NINETY_DAYS'       => 'Every Ninety Days',
+			'MONTHLY'           => 'Monthly',
+			'EVERY_TWO_MONTHS'  => 'Every Two Months',
+			'QUARTERLY'         => 'Quarterly',
+			'EVERY_FOUR_MONTHS' => 'Every Four Months',
+			'EVERY_SIX_MONTHS'  => 'Every Six Months',
+			'ANNUAL'            => 'Annual',
+			'EVERY_TWO_YEARS'   => 'Every Two Years',
+		);
+	}
 }
