@@ -141,7 +141,7 @@ const cssConfig = {
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: {
+            options: { 
               url: false,
               sourceMap: isDevelopment
             }
