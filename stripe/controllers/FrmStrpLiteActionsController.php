@@ -521,7 +521,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	private static function get_appearance_rules( $settings ) {
-		return array(
+		$rules = array(
 			'.Input'              => array(
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
@@ -546,6 +546,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color' => $settings['border_color_error'],
 			),
 		);
+		if ( isset( $settings['field_shape_type'] ) && 'circle' === $settings['field_shape_type'] ) {
+			$rules['.Input']['borderRadius'] = '30px';
+		}
+		return $rules;
 	}
 
 	/**
