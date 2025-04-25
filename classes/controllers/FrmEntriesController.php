@@ -194,6 +194,105 @@ class FrmEntriesController {
 	}
 
 	/**
+	 * Delete all entries in a form when the 'delete all' button is clicked.
+	 *
+	 * @since 4.02.04
+	 */
+	public static function destroy_all() {
+		if ( ! current_user_can( 'frm_delete_entries' ) || ! wp_verify_nonce( FrmAppHelper::simple_get( '_wpnonce', '', 'sanitize_text_field' ), '-1' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			wp_die( esc_html( $frm_settings->admin_permission ) );
+		}
+
+		$params  = FrmForm::get_admin_params();
+		$message = '';
+		$form_id = (int) $params['form'];
+
+		if ( $form_id ) {
+			$entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
+
+			if ( self::should_trigger_on_delete_entry_actions( $form_id ) ) {
+				// This action takes a while, so only trigger it if there are posts to delete.
+				foreach ( $entry_ids as $entry_id ) {
+					$entry = FrmEntry::getOne( $entry_id, true );
+					do_action( 'frm_before_destroy_entry', $entry_id, $entry );
+					unset( $entry_id, $entry );
+				}
+			}
+
+			$results = self::delete_form_entries( $form_id );
+			if ( $results ) {
+				$message = 'destroy_all';
+				FrmEntry::clear_cache();
+			}
+		} else {
+			$message = 'no_entries_selected';
+		}
+
+		$url = admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $form_id ) );
+
+		if ( $message ) {
+			$url .= '&message=' . $message;
+		}
+
+		wp_safe_redirect( $url );
+		die();
+	}
+
+	/**
+	 * @since 4.02.04
+	 *
+	 * @param int $form_id
+	 */
+	private static function delete_form_entries( $form_id ) {
+		global $wpdb;
+
+		$form_ids = self::get_child_form_ids( $form_id );
+
+		$meta_query  = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) WHERE form_id=%d", $form_id );
+		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
+
+		if ( ! empty( $form_ids ) ) {
+			$form_query   = ' OR form_id in (' . $form_ids . ')';
+			$meta_query  .= $form_query;
+			$entry_query .= $form_query;
+		}
+
+		$wpdb->query( $meta_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return $wpdb->query( $entry_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+
+	/**
+	 * @since 4.02.04
+	 *
+	 * @param int $form_id
+	 * @param bool|string $implode
+	 */
+	private static function get_child_form_ids( $form_id, $implode = ',' ) {
+		$form_ids = FrmForm::get_child_form_ids( $form_id );
+		if ( $implode ) {
+			$form_ids = implode( $implode, $form_ids );
+		}
+
+		return $form_ids;
+	}
+
+	/**
+	 * @since 6.9.1
+	 *
+	 * @param int $form_id
+	 *
+	 * @return bool
+	 */
+	private static function should_trigger_on_delete_entry_actions( $form_id ) {
+		if ( FrmFormAction::form_has_action_type( $form_id, 'wppost' ) ) {
+			return true;
+		}
+		return FrmAppHelper::get_param( 'trigger_on_delete_entry_actions', false ) === 'delete';
+	}
+
+	/**
 	 * Prevent the "screen options" tab from showing when
 	 * editing or creating an entry
 	 *

@@ -558,6 +558,10 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function admin_init() {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && 'destroy_all' === FrmAppHelper::get_param( 'frm_action' ) ) {
+			FrmEntriesController::destroy_all();
+			die();
+		}
 		if ( FrmAppHelper::get_param( 'delete_all' ) && FrmAppHelper::is_admin_page( 'formidable' ) && 'trash' === FrmAppHelper::get_param( 'form_type' ) ) {
 			FrmFormsController::delete_all();
 		}
