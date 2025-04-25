@@ -1,0 +1,28 @@
+/**
+ * Utilities - Helper Classes
+ */
+
+.frm-vertical-line {
+	display: inline-block;
+	width: 1px;
+	height: 12px;
+	background-color: var(--grey-300);
+}
+
+.frm-admin-full-screen #adminmenumain,
+.frm-admin-full-screen #wpadminbar,
+.frm-admin-full-screen #adminmenuback,
+.frm-admin-full-screen #adminmenuwrap,
+.frm-admin-full-screen #wpfooter {
+	display: none;
+}
+
+.frm-admin-full-screen #wpcontent,
+.frm-admin-full-screen.auto-fold #wpcontent {
+	margin: 0;
+	padding: 0;
+}
+
+.frm-admin-full-screen.appearance_page_starter-templates #wpbody-content {
+	padding: 0;
+}

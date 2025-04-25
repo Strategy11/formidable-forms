@@ -1,0 +1,32 @@
+/**
+ * Component: Select Box
+ */
+
+.frm_select_box {
+	text-align: center;
+	font-weight: 700;
+	width: 100%;
+	background-color: transparent !important;
+}
+
+.wp-list-table input.frm_select_box {
+	text-align: left;
+	font-weight: 400;
+	font-size: inherit !important;
+	border: none;
+	padding: 0 !important;
+	background-color: transparent !important;
+}
+
+.wp-list-table input.frm_select_box:focus {
+	outline: none;
+	box-shadow: none;
+}
+
+.wp-list-table .frm_no_items.frm_select_box {
+	text-align: center;
+	font-weight: 700;
+	width: 500px;
+	max-width: 100%;
+	font-size: inherit;
+}

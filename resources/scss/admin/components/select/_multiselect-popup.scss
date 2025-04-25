@@ -1,0 +1,79 @@
+/**
+ * Field multiselect popup
+ */
+
+ #frm_field_multiselect_popup {
+	background: white;
+	height: 48px;
+	position: fixed;
+	border-radius: 4px;
+	box-shadow: 0 8px 24px rgba(40, 47, 54, 0.15);
+	color: rgba(40, 47, 54, 0.85);
+	font-size: 13px;
+	right: 30px;
+	bottom: 10px;
+	z-index: 2;
+}
+
+#frm_field_multiselect_popup > div {
+	display: inline-block;
+	line-height: 48px;
+	vertical-align: top;
+}
+
+#frm_field_multiselect_popup.frm-unmergable > .frm-merge-fields-into-row,
+#frm_field_multiselect_popup.frm-unmergable > .frm-multiselect-popup-separator {
+	display: none;
+}
+
+#frm_field_multiselect_popup > div:not(.frm-multiselect-popup-separator) {
+	padding: 0 20px;
+	cursor: pointer;
+}
+
+#frm_field_multiselect_popup > div:not(.frm-multiselect-popup-separator):hover {
+	background: #f5f5f5f5;
+}
+
+.frm-builder-popup-heading {
+	font-weight: 600;
+	font-size: 11px;
+	line-height: 15px;
+	text-transform: uppercase;
+	color: rgba(40, 47, 54, 0.45);
+	margin-bottom: 7px;
+}
+
+.frm-builder-popup-subheading {
+	font-size: 12px;
+	line-height: 16px;
+	color: rgba(40, 47, 54, 0.45);
+}
+
+#frm_field_group_popup input[type="text"] {
+	height: 30px;
+	border-radius: 3px;
+	font-size: 14px;
+	padding: 8px;
+	color: rgba(84, 95, 110, 1);
+	border-color: rgba(40, 47, 54, 0.2);
+}
+
+.frm-multiselect-popup-separator {
+	height: 36px;
+	width: 1px;
+	position: relative;
+	top: 6px;
+	background: #C4C4C4;
+}
+
+.frm-sortable-helper,
+.frm-multiselect-key-is-down li.form-field:not(.edit_field_type_divider) {
+	pointer-events: none;
+}
+
+.frm-sortable-helper {
+
+	/* Make sure the item being dragged appears above other form builder fields */
+	z-index: 99;
+}

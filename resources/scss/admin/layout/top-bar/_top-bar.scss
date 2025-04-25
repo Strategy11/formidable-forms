@@ -1,0 +1,25 @@
+/**
+ * Layout - Top Bar
+ */
+
+#frm_top_bar {
+	display: flex;
+	gap: var(--gap-sm);
+	width: 100%;
+	height: 72px;
+	margin: 0;
+	box-sizing: border-box;
+	text-align: center;
+	padding: 0 var(--gap-md);
+}
+
+#frm_top_bar > .frm-full-close:last-child,
+#frm_top_bar > #frm-publishing:last-child {
+	margin-left: auto;
+}
+
+#frm_top_bar {
+	border-bottom: 1px solid var(--grey-300);
+	padding: 0 var(--gap-md);
+	overflow: visible;
+}

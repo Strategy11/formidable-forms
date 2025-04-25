@@ -1,0 +1,57 @@
+/**
+ * Field Sorting
+ */
+
+ .frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider {
+	display: none !important;
+}
+
+.frm-right-panel .ui-state-default,
+#postbox-container-1 .ui-state-default,
+.frm_sorting > li.ui-state-default,
+.frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover {
+	border: 1px solid transparent;
+	font-weight: 400 !important;
+	background-color: transparent;
+	background-image: none;
+	padding: 5px;
+	margin: 0;
+	box-shadow: none;
+	display: block;
+	text-align: inherit !important;
+	overflow: visible;
+	position: relative;
+}
+
+#frm-show-fields li.frm_cancel_sort {
+
+	/* If a section gets dropped into a section, hide it */
+	display: none;
+}
+
+.divider_drop {
+	text-align: center;
+}
+
+.divider_drop .howto .frm_icon_font {
+	font-style: normal;
+}
+
+.show_repeat_sec {
+	display: none;
+}
+
+.repeat_section .show_repeat_sec {
+	display: inline-block;
+	margin: 5px 0 0;
+}
+
+.repeat_section tr.show_repeat_sec {
+	display: table-row;
+}
+
+.repeat_format .frm_repeat_label,
+.repeat_formattext .frmsvg,
+.repeat_formattext i {
+	display: none;
+}

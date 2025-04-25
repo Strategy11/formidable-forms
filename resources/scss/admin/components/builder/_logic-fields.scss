@@ -1,0 +1,58 @@
+/**
+ * Component: Logic Fields
+ */
+
+.frm_logic_field_opts {
+	max-width: 35%;
+}
+
+.frm-inline-select,
+p.frm-inline-select,
+.frm_logic_rows .frm-collapse-me {
+	line-height: var(--h-md) !important;
+}
+
+.frm_logic_row {
+	padding: var(--gap-xs) 0 0;
+	align-items: center;
+}
+
+.frm-single-settings ul.frm_sortable_field_opts {
+	margin-bottom: 5px;
+}
+
+.frm-single-settings .frm_add_opt_container svg.frm_add_tag,
+.frm-single-settings .frm-add-other svg.frm_add_tag {
+	position: relative;
+	top: 5px;
+	margin-right: 4px;
+}
+
+.frm-single-settings .frm_single_option .frm_remove_tag {
+	position: relative;
+	bottom: 3px;
+}
+
+.frm-single-settings .frm_single_option .frm_remove_tag::before {
+	content: "";
+}
+
+.frm-single-settings input[type="checkbox"][readonly] {
+	opacity: 0.5;
+	pointer-events: none;
+}
+
+.advanced_settings .frm_logic_row {
+	margin: 14px 0;
+}
+
+.advanced_settings .frm_logic_row select,
+.advanced_settings .frm_logic_row input {
+	max-width: 30% !important;
+}
+
+.frm_form_action_settings .frm_logic_row p {
+	margin-top: 0;
+	margin-bottom: 0;
+	padding: 0;
+}

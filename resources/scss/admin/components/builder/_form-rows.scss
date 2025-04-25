@@ -1,0 +1,37 @@
+/**
+ * Components - Form Rows
+ */
+
+#frm_builder_page .frm_remove_form_row.frm_button,
+#frm_builder_page .frm_add_form_row.frm_button {
+	border-radius: var(--small-radius);
+	border: 1px solid var(--blue-border);
+}
+
+#frm_builder_page .frm_remove_form_row .frmsvg,
+#frm_builder_page .frm_remove_form_row i::before,
+#frm_builder_page .frm_add_form_row .frmsvg,
+#frm_builder_page .frm_add_form_row i::before {
+	color: var(--primary-700);
+}
+
+.frm-preview-buttons .frm_button_submit {
+	margin: 0 5px;
+}
+
+.frm-page-break {
+	border-top: 1px dashed var(--primary-700);
+	margin-top: var(--gap-lg);
+	position: relative;
+}
+
+.frm-page-break::before,
+.frm-page-break::after {
+	content: '';
+	position: absolute;
+	background-color: #fff;
+	border-radius: 50%;
+	border: 1px solid var(--primary-700);
+	text-rendering: auto;
+	-webkit-font-smoothing: antialiased;
+}

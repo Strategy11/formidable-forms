@@ -1,0 +1,52 @@
+/**
+ * Component: Form Settings Widget
+ */
+
+#poststuff .widgets-holder-wrap .frm_form_action_settings .widget-inside {
+	padding-bottom: 0;
+}
+
+#poststuff .frm_form_settings .widgets-holder-wrap .widget-inside {
+	padding-left: 15px;
+	padding-right: 15px;
+}
+
+#form_global_settings h3 {
+	font-size: var(--text-sm);
+	margin-top: 25px;
+}
+
+#form_global_settings .tabs-panel + h3 {
+	margin-top: 0;
+	border: none;
+}
+
+#poststuff .frm_form_settings .widget-inside h3,
+#poststuff .frm_form_settings .advanced_settings h3,
+#poststuff .frm_settings_form h3,
+#frm_advanced .inside h3 {
+	border-top: 1px solid #eee;
+	border-bottom: none;
+	margin: 15px -15px 0;
+	padding: 8px 15px;
+	font-size: var(--text-sm);
+}
+
+#poststuff .frm_form_settings h3.frm_first_h3,
+#poststuff h3.frm_first_h3 {
+	border: none;
+	margin-top: 0;
+}
+
+h3.frm_add_logic_link {
+	margin-bottom: 0 !important;
+}
+
+a.frm_add_logic_link.frm_hidden {
+	display: none;
+}
+
+.frm_add_logic_link .frmsvg,
+.frm_add_logic_link i {
+	margin-right: 5px;
+}

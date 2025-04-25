@@ -1,0 +1,190 @@
+/**
+ * Toggle Components
+ *
+ * These are the styles for the "Enable Formidable styling" toggle in the visual styler.
+ * To use this element, you can call the FrmHtmlHelper::toggle function.
+ */
+
+.frm_toggle_opt {
+	padding: 0;
+	white-space: normal;
+	display: inline;
+	vertical-align: middle;
+	font-weight: 400;
+}
+
+.frm_on_label,
+.frm_off_label {
+	color: var(--grey-700);
+}
+
+.frm_toggle {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: var(--h-xs);
+	vertical-align: middle;
+}
+
+.frm_toggle_block {
+	display: inline-flex !important;
+	gap: var(--gap-sm);
+	align-items: center;
+}
+
+.frm_toggle input, /* Reverse compatibility */
+.frm_toggle_block input {
+	display:none !important;
+}
+
+.frm_toggle_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--grey-border);
+	transition: .4s;
+	border-radius: 30px;
+}
+
+.frm_toggle_slider::before {
+	border-radius: 50%;
+	position: absolute;
+	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 20 20%27><path d=%27M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z%27 fill=%27%2398A2B3%27/%3E</svg>");
+	height: 22px;
+	width: 22px;
+	padding: 0 5.5px;
+	left: 1px;
+	bottom: 1px;
+	background-color: #fff;
+	transition: .4s;
+	box-sizing: border-box;
+	box-shadow: var(--box-shadow-md);
+	font-size: 21px;
+	line-height: 18px;
+}
+
+input:checked + .frm_toggle .frm_toggle_slider {
+	background-color: var(--primary-500);
+}
+
+input:focus + .frm_toggle .frm_toggle_slider {
+	box-shadow: var(--box-shadow-md);
+}
+
+input:checked + .frm_toggle .frm_toggle_slider::before {
+	padding: 0 6px;
+	transform: translateX(16px);
+	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
+}
+
+input[disabled] + .frm_toggle_slider,
+input[disabled] + .frm_toggle .frm_toggle_slider {
+	pointer-events: none;
+	cursor: text;
+	opacity: .5;
+}
+
+.frm_toggle_opt ~ .frm_toggle .frm_toggle_slider::before {
+	content: '' !important; /* Don't show x/check if off label included or on builder page */
+}
+
+.rtl .frm_toggle_opt {
+	padding: 0 8px;
+}
+
+.rtl .frm_toggle_slider::before {
+	left: 17px;
+}
+
+.rtl input:checked + .frm_toggle .frm_toggle_slider::before {
+	transform: none!important;
+	left: 1px;
+}
+
+/* Deprecated admin toggle */
+.frm_toggle_off,
+.frm_toggle_on {
+	display: none;
+	color: #fff;
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	line-height: 20px;
+	left: 6px;
+}
+
+.frm_toggle_off {
+	display: inline;
+	left: auto;
+	right: 5px;
+	color: var(--dark-grey);
+}
+
+.frm_toggle_long {
+	width: 80% !important;
+	height: 28px;
+	display: inline-block !important;
+}
+
+.frm_toggle_long .frm_toggle_slider {
+	background: var(--primary-700);
+	box-shadow: 0 0 0 2px var(--primary-700);
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long .frm_toggle_on {
+	width: 50%;
+	text-align: center;
+	font-size: 13px;
+	line-height: 28px;
+}
+
+.frm_toggle_long .frm_toggle_on {
+	left: 0;
+}
+
+.frm_toggle_long .frm_toggle_off {
+	right: 0;
+}
+
+.frm_toggle_long .frm_toggle_slider::before {
+	width: 50%;
+	left: 0;
+	top: 0;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+	height: 100%;
+	background-color: #fff;
+	color: var(--primary-color);
+	content: '' !important;
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider::before {
+	transform: translateX(101%);
+	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on {
+	display: inline;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: none;
+}
+
+.frm_toggle_long .frm_toggle_on,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: inline;
+	color: var(--primary-500);
+	font-weight: 400;
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on {
+	color: #fff;
+	font-weight: 700;
+}
+
+/* End toggle styling */

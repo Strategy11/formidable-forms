@@ -1,0 +1,47 @@
+/**
+ * Components : UI State Defaults
+ */
+
+.frm-right-panel .ui-state-default, #postbox-container-1 .ui-state-default {
+	color: var(--grey-900);
+}
+
+.no_repeat_section .frm_sorting > li.ui-state-default.edit_field_type_end_divider:hover {
+	box-shadow: none;
+}
+
+.frm-selected-field-group li.ui-state-default,
+.start_divider.frm_sorting li.ui-state-default.frm_not_divider.selected,
+.start_divider.frm_sorting li.ui-state-default.frm_not_divider:hover,
+.frm_sorting li.ui-state-default.frm_not_divider:hover,
+.frm_sorting li.ui-state-default.ui-sortable-helper,
+.frm_sorting li.ui-state-default.edit_field_type_divider .divider_section_only:hover,
+.frm_sorting .repeat_section li.ui-state-default.edit_field_type_end_divider:hover,
+.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only,
+.frm_update_msg,
+.frm_sorting li.ui-state-default.frm_not_divider.selected,
+.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only {
+	border-color: var(--primary-500);
+	transition: .5s border-color ease-in-out;
+}
+
+.frm_sorting li.ui-state-default.frm_not_divider.selected {
+	box-shadow: 0 0 1px 0 var(--primary-500);
+}
+
+.frm_sorting li.ui-state-default {
+	transition: .7s box-shadow ease-in-out, .7s height linear;
+}
+
+.frm_sorting li.ui-state-default.frm-newly-added {
+	box-shadow: inset 0 0 2px 1px var(--blue-border);
+}
+
+.frm_sorting li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
+	visibility: visible !important;
+	display: inline !important;
+}
+
+.edit_field_type_end_divider > label {
+	display: none !important;
+}

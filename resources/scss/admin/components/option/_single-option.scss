@@ -1,0 +1,67 @@
+/**
+ * Component: Single Option
+ */
+
+.frm_single_option {
+	clear: both;
+	margin: 0;
+	padding-bottom: 5px;
+}
+
+.frm_product_price_wrapper,
+.frm_image_preview_wrapper,
+#new_fields .frm_single_option select,
+#new_fields .frm_single_option input[type="text"] {
+	width: calc(100% - 73px);
+}
+
+.frm-right-panel .frm_single_option a.frm_remove_tag,
+.frm_single_option a {
+	padding-left: 7px;
+}
+
+.frm_single_option:hover .frm_single_visible_hover {
+	opacity: 100;
+}
+
+.frm_single_option .frm-drag {
+	font-size: 23px;
+	width: 22px;
+	height: 19px;
+	margin-left: -6px;
+	color: var(--grey);
+}
+
+.frm_single_option .frm-drag::before {
+	vertical-align: middle;
+}
+
+.frm-drag,
+.frm_single_option.ui-sortable-helper {
+	cursor: move;
+}
+
+.frm_single_option .frm_option_key {
+	margin-left: 19px !important;
+}
+
+.frm_option_key input[type="text"] {
+	margin-top: 15px !important;
+}
+
+li.ui-state-default.selected .frm-show-click,
+li.ui-state-default.selected.edit_field_type_divider .frm-show-click {
+	display: inline;
+	vertical-align: top;
+}
+
+.frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > .frm-show-hover,
+.frm_field_box .divider_section_only:hover > .frm_inner_field_container > .frm-show-hover,
+li.ui-state-default.selected > .frm_inner_field_container > .frm-show-hover,
+li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-show-hover {
+	opacity: 100;
+}
+
+li.frm_field_box > ul.frm_grid_container {
+	position: relative;
+}

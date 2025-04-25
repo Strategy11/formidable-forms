@@ -1,0 +1,40 @@
+/**
+ * Components - Bulk Options
+ */
+
+#frm-bulk-modal .frm_grid_container {
+	grid-template-columns: repeat(12, 8.33%);
+	grid-gap: 0;
+}
+
+#frm-bulk-modal .frm8 {
+	border-right: 1px solid var(--grey-300);
+	padding: 10px 20px 10px var(--gap-lg);
+}
+
+#frm-bulk-modal .frm4 {
+	padding: 10px 0;
+}
+
+.frm-inline-modal .howto {
+	margin: 5px 0 10px;
+	color: var(--grey);
+}
+
+.frm-inline-modal .frm_code_list + .howto {
+	margin-bottom: 0;
+}
+
+#frm_bulk_options {
+	height: 240px;
+	width: 100%;
+	border: none;
+	box-shadow: none;
+	padding: 0;
+}
+
+.frm-bulk-edit-link {
+	text-align: right;
+	font-size: var(--text-sm);
+	padding: 0 5px 10px;
+}
