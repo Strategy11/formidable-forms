@@ -405,7 +405,7 @@ class FrmTransLiteAppHelper {
 	public static function echo_confirmation_link( $link ) {
 		$filter = __CLASS__ . '::allow_deleteconfirm_data_attribute';
 		add_filter( 'frm_striphtml_allowed_tags', $filter );
-		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $filter );
 	}
 

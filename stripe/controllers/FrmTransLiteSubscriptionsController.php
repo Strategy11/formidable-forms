@@ -40,7 +40,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 			$link = apply_filters( 'frm_sub_' . $subscription->paysys . '_receipt', $link );
 		}
 
-		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 	}
 
 	/**

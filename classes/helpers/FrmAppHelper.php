@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.19';
+	public static $plug_version = '6.20';
 
 	/**
 	 * @var bool
@@ -340,18 +340,32 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( 'formidable' === $page ) {
+			return self::on_form_listing_page();
+		}
+
 		if ( ! self::is_admin_page( $page ) ) {
 			return false;
 		}
 
-		// Check Trash page.
-		$form_type = self::simple_get( 'form_type' );
-		if ( $form_type && 'published' !== $form_type ) {
-			return false;
+		if ( 'formidable-entries' === $page ) {
+			$action = self::simple_get( 'frm_action' );
+			if ( ! $action || in_array( $action, self::get_entries_listing_page_form_actions(), true ) ) {
+				return true;
+			}
 		}
 
 		// Check edit or settings page.
 		return ! self::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * @since 6.20
+	 *
+	 * @return array<string>
+	 */
+	private static function get_entries_listing_page_form_actions() {
+		return array( 'list', 'destroy' );
 	}
 
 	/**
@@ -1677,7 +1691,7 @@ class FrmAppHelper {
 
 		$pages_count = wp_count_posts( $args['post_type'] );
 
-		if ( $pages_count->publish <= 50 ) {
+		if ( ! isset( $pages_count->publish ) || $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
 			return;
 		}
@@ -1703,6 +1717,101 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Maybe show an HTML select or autocomplete input based on the number of options.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Args. See the method for details.
+	 */
+	public static function maybe_autocomplete_options( $args ) {
+		$defaults = array(
+			'truncate'                 => false,
+			'placeholder'              => ' ',
+			'name'                     => '',
+			'id'                       => '',
+			'selected'                 => '',
+			'source'                   => array(),
+			'dropdown_limit'           => 50,
+			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
+			'value_key'                => 'value',
+			'label_key'                => 'label',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$html_attrs = array();
+		if ( ! empty( $args['name'] ) ) {
+			$html_attrs['name'] = $args['name'];
+		}
+
+		if ( ! empty( $args['id'] ) ) {
+			$html_attrs['id'] = $args['id'];
+		}
+
+		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
+			?>
+			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
+				<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
+				<?php
+				foreach ( $args['source'] as $key => $source ) :
+					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+					if ( ! empty( $args['truncate'] ) ) {
+						$value_label['label'] = self::truncate( $value_label['label'], $args['truncate'] );
+					}
+					?>
+					<option value="<?php echo esc_attr( $value_label['value'] ); ?>" <?php selected( $value_label['value'], $args['selected'] ); ?>><?php echo esc_html( $value_label['label'] ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php
+		} else {
+			$options            = array();
+			$autocomplete_value = '';
+			foreach ( $args['source'] as $key => $source ) {
+				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+
+				if ( $value_label['value'] === $args['selected'] ) {
+					$autocomplete_value = $value_label['label'];
+				}
+
+				$options[] = $value_label;
+			}
+
+			$html_attrs['type']  = 'hidden';
+			$html_attrs['class'] = 'frm_autocomplete_value_input';
+			$html_attrs['value'] = $args['selected'];
+			?>
+			<input type="text" class="frm-custom-search"
+				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
+				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
+				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
+			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
+			<?php
+		}//end if
+	}
+
+	/**
+	 * Gets dropdown value and label from autodropdown option.
+	 *
+	 * @since x.x
+	 *
+	 * @param array|string $option Autocomplete option.
+	 * @param string       $key    Array key of the option.
+	 * @param array        $args   See {@see FrmAppHelper::maybe_autocomplete_options()}.
+	 * @return array
+	 */
+	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
+		if ( is_array( $option ) ) {
+			$value = isset( $option[ $args['value_key'] ] ) ? $option[ $args['value_key'] ] : '';
+			$label = isset( $option[ $args['label_key'] ] ) ? $option[ $args['label_key'] ] : '';
+		} else {
+			$value = $key;
+			$label = $option;
+		}
+
+		return compact( 'value', 'label' );
+	}
+
+	/**
 	 * @param array  $args
 	 * @param string $page_id Deprecated.
 	 * @param bool   $truncate Deprecated.
@@ -1712,7 +1821,6 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
@@ -2203,7 +2311,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function use_wpautop( $content ) {
-		if ( apply_filters( 'frm_use_wpautop', true ) && ! is_array( $content ) ) {
+		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
 			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 

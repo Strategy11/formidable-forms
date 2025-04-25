@@ -106,7 +106,13 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	private static function is_forms_list_page() {
-		return FrmAppHelper::is_admin_list_page();
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
+			return false;
+		}
+
+		// Exclude Trash page.
+		$form_type = FrmAppHelper::simple_get( 'form_type' );
+		return $form_type && 'published' === $form_type;
 	}
 
 	/**

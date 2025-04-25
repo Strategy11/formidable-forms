@@ -433,22 +433,67 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon' );
+		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size' );
 		$vars   = array_diff( $vars, $remove );
 
 		foreach ( $vars as $var ) {
-			if ( ! isset( $settings[ $var ] ) ) {
+			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
 			}
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
 			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show ) {
+			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
+
+	/**
+	 * Prevent invalid CSS keys from getting added to the generated CSS.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	private static function css_key_is_valid( $key ) {
+		// Any key that is abnormally large is not valid.
+		// Any key that contains a '{' is not valid.
+		return strlen( $key ) < 100 && false === strpos( $key, '{' );
+	}
+
+	/**
+	 * Confirm a CSS value is valid.
+	 * If it appears to contain JavaScript, it will not be added.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $var
+	 * @return bool
+	 */
+	private static function css_value_is_valid( $var ) {
+		// None of these substrings should be present in any CSS value.
+		$invalid_substrings = array(
+			'function(',
+			';userAgent',
+			';stopPropagation',
+			'{const',
+			'window[',
+			'navigator[',
+			'Array;',
+		);
+
+		foreach ( $invalid_substrings as $substring ) {
+			if ( strpos( $var, $substring ) !== false ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	/**
 	 * Remove anything that isn't used as a CSS variable name.
@@ -928,6 +973,7 @@ class FrmStylesHelper {
 
 		return wp_get_attachment_url( (int) $background_image );
 	}
+
 	/**
 	 * Determines if the chosen JavaScript library should be used.
 	 *

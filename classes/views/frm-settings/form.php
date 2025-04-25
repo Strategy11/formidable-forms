@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<div id="<?php echo esc_attr( $section['anchor'] ); ?>"
 								class="<?php echo esc_attr( $section['anchor'] ); ?> tabs-panel <?php echo esc_attr( $current === $section['anchor'] ? 'frm_block' : 'frm_hidden' ); ?>">
 								<h2 class="frm-h2">
-									<?php echo FrmAppHelper::kses( $section['name'], array( 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+									<?php FrmAppHelper::kses_echo( $section['name'], array( 'span' ) ); ?>
 								</h2>
 							<?php if ( isset( $section['ajax'] ) ) { ?>
 								<div class="frm_ajax_settings_tab frm_<?php echo esc_attr( $section['anchor'] ); ?>_ajax">

@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.7.2
 Requires PHP: 7.0
-Stable tag: 6.19
+Stable tag: 6.20
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,10 +372,22 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.20 =
+* Security: Shortcodes in emails would process more than once.
+* New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
+* New: Admin pages have been modified to work better on smaller screen sizes.
+* New: The GDPR field agreement text now supports links.
+* Fix: Additional checks have been added to ensure that a GDPR field is always required.
+* Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
+* Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
+* Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
+* Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
+* The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
+
 = 6.19 =
 * New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
 * New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
-* New: A quick link to the views tab for is now available on the form list admin page.
+* New: A quick link to the views tab is now available on the form list admin page.
 * New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
 * New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
 * Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
@@ -393,11 +405,8 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
 * The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
 
-= 6.17.1 =
-* Fix: The payments table admin page would appear empty when there were unread inbox notices.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.16.2 =
+= 6.20 =
 This version fixes a security-related bug. Upgrade immediately.

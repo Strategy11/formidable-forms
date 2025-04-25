@@ -267,7 +267,7 @@ DEFAULT_HTML;
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
 			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
@@ -313,7 +313,30 @@ DEFAULT_HTML;
 	protected function builder_text_field( $name = '' ) {
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
-		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" ' . ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' ) . ' />';
+		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
+		if ( is_array( $placeholder ) ) {
+			$placeholder = '';
+		}
+
+		$value = $this->get_field_column( 'default_value' );
+		if ( is_array( $value ) ) {
+			$value = '';
+		}
+
+		$input_atts = array(
+			'type'        => 'text',
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'value'       => $value,
+			'placeholder' => $placeholder,
+		);
+
+		if ( $read_only ) {
+			$input_atts['readonly'] = 'readonly';
+			$input_atts['disabled'] = 'disabled';
+		}
+
+		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
 	}
 
 	protected function html_name( $name = '' ) {

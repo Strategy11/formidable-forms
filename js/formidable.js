@@ -364,7 +364,7 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
-		let checkGroup, tempVal, i, placeholder,
+		let tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
@@ -374,10 +374,17 @@ function frmFrontFormJS() {
 		}
 
 		if ( field.type === 'checkbox' || field.type === 'radio' ) {
-			checkGroup = jQuery( 'input[name="' + field.name + '"]' ).closest( '.frm_required_field' ).find( 'input:checked' );
-			jQuery( checkGroup ).each( function() {
-				val = this.value;
-			});
+			document.querySelectorAll( 'input[name="' + field.name + '"]' ).forEach( function( input ) {
+				const requiredField = input.closest( '.frm_required_field' );
+				if ( ! requiredField ) {
+					return;
+				}
+
+				const checkedInputs = requiredField.querySelectorAll( 'input:checked' );
+				checkedInputs.forEach( function( checkedInput ) {
+					val = checkedInput.value;
+				} );
+			} );
 		} else if ( field.type === 'file' || fileID ) {
 			if ( typeof fileID === 'undefined' ) {
 				fileID = getFieldId( field, true );
@@ -1649,6 +1656,35 @@ function frmFrontFormJS() {
 		return uniqueKey + '-' + timestamp;
 	}
 
+	/**
+	 * Animates the scroll position of the document.
+	 *
+	 * @since 6.20
+	 *
+	 * @param {number} start
+	 * @param {number} end
+	 * @param {number} duration
+	 * @return {void}
+	 */
+	function animateScroll( start, end, duration ) {
+		if ( ! window.hasOwnProperty( 'performance' ) || ! window.hasOwnProperty( 'requestAnimationFrame' ) ) {
+			document.documentElement.scrollTop = end;
+			return;
+		}
+
+		/* eslint-disable compat/compat */
+		const startTime = performance.now();
+		const step      = ( currentTime ) => {
+			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
+			document.documentElement.scrollTop = start + ( end - start ) * progress;
+			if ( progress < 1 ) {
+				requestAnimationFrame( step );
+			}
+		};
+		requestAnimationFrame( step );
+		/* eslint-enable compat/compat */
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1941,9 +1977,9 @@ function frmFrontFormJS() {
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
 					if ( typeof animate === 'undefined' ) {
-						jQuery( window ).scrollTop( newPos );
+						document.documentElement.scrollTop = newPos;
 					} else {
-						jQuery( 'html,body' ).animate({ scrollTop: newPos }, 500 );
+						animateScroll( screenTop, newPos, 500 );
 					}
 					return false;
 				}

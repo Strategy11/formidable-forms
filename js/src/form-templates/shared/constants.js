@@ -5,7 +5,6 @@ export const PREFIX = 'frm-form-templates';
 
 export const VIEW_SLUGS = {
 	AVAILABLE_TEMPLATES: 'available-templates',
-	FREE_TEMPLATES: 'free-templates',
 	FAVORITES: 'favorites',
 	CUSTOM: 'custom',
 	SEARCH: 'search'

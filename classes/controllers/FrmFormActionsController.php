@@ -549,6 +549,9 @@ class FrmFormActionsController {
 		}
 
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		$link_settings = self::get_form_actions( $type );
 		if ( 'all' !== $type ) {
@@ -580,7 +583,7 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( ( is_object( $form ) && is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ( isset( $args['is_child'] ) && $args['is_child'] ) );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
@@ -663,6 +666,22 @@ class FrmFormActionsController {
 		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 
 		return $where;
+	}
+
+	/**
+	 * Prevent WPML from filtering form actions based on the active language.
+	 *
+	 * @since 6.20
+	 *
+	 * @param bool|null $null
+	 * @param string    $post_type
+	 * @return bool|null
+	 */
+	public static function prevent_wpml_translations( $null, $post_type ) {
+		if ( self::$action_post_type === $post_type ) {
+			return false;
+		}
+		return $null;
 	}
 }
 
