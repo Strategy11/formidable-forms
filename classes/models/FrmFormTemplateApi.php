@@ -66,14 +66,14 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @return void
 	 */
 	public static function signup() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.20' );
 	}
 
 	/**
 	 * @return string
 	 */
 	public function get_free_license() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.20' );
 		return '';
 	}
 
@@ -85,7 +85,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 * @return bool
 	 */
 	public function has_free_access() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.20' );
 		return true;
 	}
 }

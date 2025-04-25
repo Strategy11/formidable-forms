@@ -1,0 +1,43 @@
+/**
+ * Component: Banner Notification
+ */
+
+ #frm_banner {
+	width: 100%;
+	color: #fff;
+	background: var(--primary-500);
+	height: 40px;
+	line-height: 40px;
+	text-align: center;
+	position: relative;
+}
+
+.frm-banner-emoji {
+	font-size: 19px;
+}
+
+.frm-banner-emoji,
+.frm-banner-title {
+	margin-right: 5px;
+	vertical-align: top;
+}
+
+.frm-banner-cta a {
+	text-decoration: underline !important;
+}
+
+#frm_banner .frm-banner-cta a.frm_inbox_dismiss {
+	display: none;
+}
+
+.frm-banner-dismiss {
+	cursor: pointer;
+	position: absolute;
+	right: 10px;
+	top: 50%;
+	transform: translateY( -50% );
+}
+
+.frm-banner-dismiss .frmsvg {
+	vertical-align: top;
+}

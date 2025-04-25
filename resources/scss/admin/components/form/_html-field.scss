@@ -1,0 +1,27 @@
+/**
+ * Component: HTML Field
+ */
+
+.button-secondary.frm_html_field {
+	background-color: #ededed;
+	padding: 10px 20px;
+	line-height: inherit;
+	width: auto;
+	height: auto !important;
+	border-radius: 0;
+	box-sizing: content-box;
+}
+
+.frm_html_field_placeholder {
+	margin-bottom: 10px;
+	text-align: center;
+}
+
+.recaptcha_placeholder {
+	border: 1px solid #d3d3d3;
+	width: 300px;
+}
+
+.turnstile_placeholder {
+	width: 300px;
+}

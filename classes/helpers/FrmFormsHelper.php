@@ -1843,7 +1843,7 @@ BEFORE_HTML;
 	/**
 	 * Returns true if the preview should be blocked.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $form_key
 	 * @return bool
@@ -1853,7 +1853,7 @@ BEFORE_HTML;
 		/**
 		 * Filters whether the form preview should be blocked.
 		 *
-		 * @since x.x
+		 * @since 6.20
 		 *
 		 * @param bool   $should_block
 		 * @param string $form_key
@@ -1888,12 +1888,12 @@ BEFORE_HTML;
 	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
 	 *
 	 * @since 6.2
-	 * @deprecated x.x
+	 * @deprecated 6.20
 	 *
 	 * @return bool
 	 */
 	public static function should_use_pro_for_ajax_submit() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.20' );
 		return false;
 	}
 }

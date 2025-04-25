@@ -1,0 +1,49 @@
+/**
+ * Component: Field Dragging
+ */
+
+.frmbutton.ui-draggable-dragging a {
+	border: 1px solid var(--grey-300);
+	box-shadow: var(--box-shadow-md);
+}
+
+.frmbutton.ui-draggable-dragging span {
+	font-size: 15px;
+}
+
+#frm-show-fields .frmbutton.ui-sortable-helper i,
+.frmbutton.ui-draggable-dragging i,
+.frmbutton.ui-draggable-dragging .frmsvg {
+	color: #fff !important;
+}
+
+.frmbutton.ui-draggable-dragging i,
+.frmbutton.ui-draggable-dragging .frmsvg {
+	color: var(--grey-700) !important;
+}
+
+.frm_sorting li.ui-state-default.ui-sortable-helper,
+.frmbutton.ui-sortable-helper {
+	transition: opacity .2s;
+	opacity: 1;
+}
+
+/* End dragging */
+
+li.frm_noallow.button,
+.frm_noallow {
+	opacity: .5;
+}
+
+.frm_actions_list a.frm_show_upgrade.frm_inactive_action::before,
+li.frm_noallow.button.frm_show_upgrade {
+	cursor: pointer;
+}
+
+.field_type_list li.frm_noallow.button.frm_show_upgrade:hover {
+	border-color: inherit;
+}
+
+.frm_noallow a {
+	color: inherit;
+}

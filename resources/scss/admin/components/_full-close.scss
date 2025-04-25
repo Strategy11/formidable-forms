@@ -1,0 +1,28 @@
+/**
+ * Components - Full Close
+ */
+
+.frm-full-close {
+	display: none;
+	padding-left: var(--gap-md);
+	border: 0 solid var(--grey-300);
+	border-left-width: 1px; /* Make RTL a bit less maintenance */
+	height: 100%;
+	box-sizing: border-box;
+}
+
+.frm-full-screen .frm-full-close {
+	display: flex;
+	align-items: center;
+}
+
+.frm-full-close a {
+	display: block;
+}
+
+.frm-full-close .frmsvg {
+	font-size: 20px;
+	width: 20px;
+	height: 20px;
+	color: var(--grey-500);
+}

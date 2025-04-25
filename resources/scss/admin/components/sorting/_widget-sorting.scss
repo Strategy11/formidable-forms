@@ -1,0 +1,50 @@
+/**
+ * Widget Sorting
+ */
+
+.frm_sorting .widget, .frm_settings_page .widget {
+	background: #fff;
+}
+
+.frm_sorting .widget-title h4 {
+	font-weight: 400;
+}
+
+.frm_sorting .widget, #postbox-container-1 .widget, .frm-right-panel .widget, .frm_settings_page .widget {
+	margin-bottom: 0;
+}
+
+.frm_settings_page .widget-inside {
+	padding: 0 5px 5px;
+}
+
+.frm_sorting .widget,
+.widget-inside,
+.frm_sorting .form-field .widget {
+	display: none;
+}
+
+#frm-show-fields {
+	min-height: 350px;
+	padding: 0 0 35px;
+	margin: 0;
+	position: relative;
+}
+
+.frm-has-fields #frm-show-fields {
+	min-height: 50px;
+}
+
+#frm_builder_page .frm-lite-credit-card-element,
+body.frm-admin-page-styles .frm-lite-credit-card-element {
+	position: relative;
+}
+
+#frm_builder_page .frm-lite-credit-card-element > div,
+body.frm-admin-page-styles .frm-lite-credit-card-element > div {
+	position: absolute;
+	top: calc( 50% - 1px);
+	transform: translateY(-50%);
+	right: 10px;
+	color: #d0d4dd;
+}

@@ -1,0 +1,124 @@
+/**
+ * Components - Fields Part 2
+ */
+
+.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
+.frm_wrap .with_frm_style .frm_radio input[type="radio"],
+.frm_wrap input[type="checkbox"],
+.frm-white-body input[type="checkbox"],
+.field-group input[type="checkbox"],
+.frm_scale input[type="radio"],
+.frm_radio input[type="radio"],
+.frm_checkbox input[type="checkbox"] {
+	border: 1px solid var(--grey-300);
+	box-shadow: none;
+	-webkit-appearance: none;
+}
+
+
+.frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
+.frm_wrap input[type="checkbox"],
+.frm-white-body input[type="checkbox"],
+.field-group input[type="checkbox"],
+.frm_checkbox input[type="checkbox"] {
+	border-radius: 4px;
+}
+
+.frm-white-body input[type="checkbox"]:checked,
+.frm_wrap input[type="checkbox"]:checked {
+	background-color: var(--border-color-active, var(--primary-500)) !important;
+	border-color: var(--border-color-active, var(--primary-500)) !important;
+}
+
+.frm-white-body input[type="checkbox"]:checked:focus,
+.frm_wrap input[type="checkbox"]:checked:focus {
+	border-color: var(--border-color-active, var(--primary-500));
+}
+
+.frm-white-body input[type="checkbox"]:checked::before,
+.frm_wrap input[type="checkbox"]:checked::before {
+	content: '';
+	display: block;
+	width: 100% !important;
+	height: 100% !important;
+	background-image: url("data:image/svg+xml,%3Csvg width='12' height='9' viewBox='0 0 12 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.6667 1.5L4.25001 7.91667L1.33334 5' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E%0A") !important;	background-size: 9px !important;
+	background-repeat: no-repeat !important;
+	background-position: center !important;
+	margin: 0;
+}
+
+.frm_radio input[type="radio"],
+.frm_checkbox input[type="checkbox"] {
+	margin-right: 5px;
+}
+
+.frm_inner_field_container {
+	margin-bottom: 10px;
+}
+
+.frm_conf_inline .frm_inner_field_container,
+.frm_conf_inline .frm_inner_conf_container {
+	width: 49%;
+	float: left;
+}
+
+.frm_conf_inline .frm_inner_field_container {
+	margin-right: 2%;
+	clear: both;
+}
+
+.frm_inner_field_container > label {
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.frm_field_box:not(.edit_field_type_divider):hover > .frm_inner_field_container > label,
+.frm_field_box .divider_section_only:hover > .frm_inner_field_container > label,
+li.ui-state-default.selected > .frm_inner_field_container > label {
+	max-width: calc(100% - 100px);
+}
+
+.frm-drag-fade {
+	background-color: var(--lightest-grey) !important;
+	border-radius: 4px;
+}
+
+.frm-drag-fade * {
+	opacity: 0;
+}
+
+.frm-dragging .divider_section_only,
+.frm-dragging .frm_field_box {
+	pointer-events: none;
+}
+
+.frm_form_settings #op-popup, /* 1Password */
+.frm_form_settings com-1password-op-button,
+.frm_conf_below .frm_conf_field_container .frm_primary_label,
+.frm_conf_inline .frm_inner_field_container .frm-show-click a,
+.frm_conf_below .frm_conf_field_container .frm-show-click a {
+	display: none !important;
+}
+
+.frm_conf_inline .frm_inner_field_container .frm-field-action-icons {
+	position: absolute;
+	right: 5px;
+}
+
+.frm_conf_below .frm_conf_field_container {
+	margin-top: 10px;
+}
+
+.frm_calc_dec {
+	width: 50px;
+}
+
+.frm_ext_sc {
+	display: none;
+}
+
+.frm_long_input {
+	width: 100% !important;
+	box-sizing: border-box;
+}

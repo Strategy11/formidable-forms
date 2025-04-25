@@ -11,6 +11,9 @@ languages/formidable-js.pot
 languages/formidable-js-strings.php
 js/*.js.LICENSE.txt
 
+# Ignore map files
+**/*.css.map
+
 # Node
 node_modules
 node_modules/*
@@ -30,3 +33,4 @@ composer.lock
 sonar-project.properties
 .sonar_lock
 report-task.txt
+

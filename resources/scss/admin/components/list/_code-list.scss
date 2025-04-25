@@ -1,0 +1,131 @@
+/**
+ * Component: Code List
+ */
+
+.frm_code_list a.button {
+	display: block;
+	text-align: center;
+	font-size: 11px;
+	overflow: hidden;
+}
+
+#frm-navbarDrop + .frm_code_list.frm-full-hover {
+	margin: var(--gap-xs) 0 0;
+	min-width: 300px;
+	max-height: calc( ( 40px * 5 ) + 56px );
+}
+
+.frm_code_list.frm-full-hover li {
+	margin: 0;
+}
+
+.frm-select-list-item,
+.frm_wrap .ui-autocomplete li > div,
+.multiselect-container button.multiselect-option,
+.frm-dropdown-menu > .dropdown-item > a,
+.frm-dropdown-menu > .dropdown-item > a:visited,
+.frm-dropdown-menu > .dropdown-item > a:link, /* Override jQuery UI */
+.frm-dropdown-menu .frm_dropdown_li,
+.frm_code_list.frm-full-hover a {
+	display: flex;
+	color: var(--grey-700);
+	padding: 5px 10px;
+	font-size: var(--text-md);
+	gap: var(--gap-xs);
+	align-items: center;
+}
+
+.multiselect-container button.multiselect-option.disabled {
+	opacity: 0.5;
+}
+
+.frm_code_list.frm-full-hover a span {
+	max-width: 83px;
+	margin-right: var(--gap-xs);
+	margin-left: auto;
+}
+
+.frm-single-settings .frm_code_list.frm-full-hover a {
+	display: block;
+}
+
+.frm_code_list.frm-full-hover a,
+.frm_code_list.frm-full-hover a span {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.frm_code_list.frm-full-hover.frmcenter a {
+	display: block;
+}
+
+#frm-layout-classes frm-full-hover a span {
+	max-width: 45%;
+}
+
+.frm-select-list-item.active,
+.frm-select-list-item:hover,
+.frm_wrap .ui-autocomplete li div.ui-state-active,
+.frm_wrap .ui-autocomplete li.ui-state-focus,
+.multiselect-container button.multiselect-option.active,
+.multiselect-container button.multiselect-option:hover,
+.frm-dropdown-menu > .dropdown-item > a:hover,
+.frm_code_list.frm-full-hover a:hover span,
+.frm_code_list.frm-full-hover a:hover {
+	background: var(--primary-25);
+	color: var(--primary-500);
+	border-radius: var(--small-radius);
+}
+
+.frm-select-list-item .frmsvg,
+.frm-dropdown-menu > .dropdown-item > a .frmsvg {
+	opacity: .8;
+}
+
+.frm-select-list-item:hover .frmsvg,
+.frm-dropdown-menu > .dropdown-item > a:hover .frmsvg {
+	opacity: 1;
+}
+
+.frm-dropdown-menu.frm_code_list > li > a {
+	padding: 3px 15px;
+	width: 300px;
+}
+
+#frm_edit_box_content_modal .frm-with-search, /* Temp. Add .frm-dropdown-menu in Views */
+.frm-dropdown-menu .frm-with-search {
+	padding: var(--gap-xs) 10px 0;
+}
+
+.frm-dropdown-menu .subsubsub {
+	padding: 0 10px;
+}
+
+.frm_grid_container {
+	overflow: visible;
+}
+
+.frm_code_list.frm_grid_container {
+	grid-gap: 5px;
+}
+
+.frm_code_list.frm_grid_container li {
+	width: auto;
+	margin: 0;
+}
+
+.frm_code_list.frm_grid_container a {
+	padding: 5px 0;
+	text-align: center;
+	background-color: var(--light-blue);
+	border: 1px solid var(--primary-500);
+	color: var(--primary-500);
+	display: block;
+	border-radius: var(--small-radius);
+}
+
+.frm_code_list.frm_grid_container a:hover {
+	background-color: var(--primary-700);
+	color: #fff;
+}

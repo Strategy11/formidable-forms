@@ -1,0 +1,57 @@
+/**
+ * Search Inputs
+ */
+
+.frm-search .frm_search_icon {
+	padding-left: 18px !important;
+	padding-right: 12px !important;
+}
+
+.frm-search input[name="s"],
+.frm-search .dropdown-toggle,
+.frm-search input.frm-search-input {
+	border-radius: var(--small-radius);
+	border-color: var(--grey-300);
+}
+
+.frm-white-body .search-box input[name="s"], /* Views search */
+#wpwrap .frm-search input[type="search"] {
+	flex: 1;
+	font-size: var(--text-sm);
+	line-height: var(--text-lg);
+	padding: var(--gap-xs);
+}
+
+.frm-search input[type="search"],
+.frm-search input[type="text"] {
+	padding-left: var(--gap-xl) !important;
+}
+
+.frm-search .dropdown-toggle {
+	width: 100%;
+	float: none;
+	max-width: 200px;
+	background: transparent;
+	padding: 7px;
+	padding-left: 33px !important;
+	min-height: 32px;
+	text-align: inherit;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+span.multiselect-selected-text {
+	white-space: nowrap;
+	display: inline-block;
+	max-width: 90%;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+.frm-search #search-submit a {
+	color: var(--grey-800);
+}
+
+.frm-search #search-submit .caret {
+	opacity:.7;
+}

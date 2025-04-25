@@ -423,7 +423,7 @@ class FrmUsage {
 			'order_by' => 'id DESC',
 		);
 
-		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
+		$fields = FrmDb::get_results( 'frm_fields', array(), 'id, form_id, name, type, field_options', $args );
 		foreach ( $fields as $k => $field ) {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
 			$fields[ $k ]->field_options = json_encode( $field->field_options );

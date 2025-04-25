@@ -1,0 +1,44 @@
+/**
+ * Component: Option Box
+ */
+
+.frm-option-box {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-size: 14px;
+	font-weight: 500;
+	background-color: #fff;
+	padding: 12px var(--gap-sm);
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	margin-bottom: var(--gap-xs);
+	transition: background-color 100ms ease-out;
+	cursor: pointer;
+}
+
+.frm-option-box:hover {
+	background-color: var(--grey-25);
+}
+
+.frm-option-box.frm-checked {
+	background-color: var(--primary-25);
+	border-color: var(--primary-200);
+}
+
+.frm-option-box.frm-disabled {
+	cursor: default;
+}
+
+.frm-option-box input[type="checkbox"] {
+	margin: 0;
+}
+
+.frm-option-box.frm-disabled input[type="checkbox"] {
+	opacity: 0.5;
+}
+
+.frm-option-box .frm_help .frmsvg {
+	width: 12px;
+	height: 12px;
+}

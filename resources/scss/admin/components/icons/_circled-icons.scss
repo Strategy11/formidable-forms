@@ -1,0 +1,50 @@
+/**
+ * Component: Circled Icons
+ */
+
+.frm-circled-icon {
+	width: 60px;
+	height: 60px;
+	border-radius: 50%;
+	background-color: var(--primary-25);
+}
+
+.frm-circled-icon-large {
+	width: 80px;
+	height: 80px;
+}
+
+.frm-circled-icon-green {
+	background-color: var(--success-50);
+}
+
+.frm-circled-icon .frmsvg {
+	width: 21px;
+	height: 24px;
+}
+
+.frm-circled-icon-large .frmsvg {
+	width: 24px;
+}
+
+.frm-circled-icon .frmsvg use {
+	color: var(--primary-500);
+ }
+
+.frm-circled-icon-green .frmsvg use {
+	color: var(--success-500);
+}
+
+.frm-border-icon {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm-upgrade-message img {
+	max-width: 100%;
+}

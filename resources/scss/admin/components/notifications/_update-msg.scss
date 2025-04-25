@@ -1,0 +1,48 @@
+/**
+ * Update Message
+ */
+
+.frm_email_actions.feature-filter {
+	font-weight: 700;
+	border: 1px solid #DFDFDF;
+	background-color: #EEE;
+	padding: 3px 5px 2px;
+	font-size: var(--text-md);
+	line-height: 20px;
+}
+
+.frm_update_msg {
+	border-style: solid;
+	margin: 10px 0;
+	color: #21759B;
+	padding: 8px 15px;
+	border-radius: 4px;
+}
+
+.frm_update_msg.wrap {
+	margin: 10px 20px 0 2px;
+}
+
+#frm-insert-fields-box .frm_update_msg {
+	margin-right: 0.9em;
+}
+
+.frm_update_msg a {
+	font-weight: 700;
+}
+
+.widefat td {
+	width: auto;
+}
+
+.widefat .column-id {
+	width: 3.7em;
+}
+
+.widefat .column-show_count {
+	width: 5em;
+}
+
+.widefat .column-shortcode {
+	width: 9em;
+}

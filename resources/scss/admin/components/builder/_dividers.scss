@@ -1,0 +1,124 @@
+/**
+ * Components - Divider
+ */
+
+.frm-right-panel .ui-state-default,
+#postbox-container-1 .ui-state-default {
+	padding: 0;
+	margin: 0;
+}
+
+ul.start_divider {
+	padding: 8px 13px 0 8px;
+	min-height: 115px;
+	transition: all 0.4s linear;
+}
+
+.frm-section-collapsed .frm_no_section_fields,
+.frm-section-collapsed ul.start_divider {
+	height: 0;
+	min-height: 0 !important;
+}
+
+.frm-section-collapsed ul.start_divider {
+	overflow: hidden;
+}
+
+.frm-section-collapsed .frm_no_section_fields {
+	overflow: hidden;
+	padding: 0;
+	opacity: 0;
+}
+
+.frm-section-collapsed .divider_section_only .frm-collapsed-label {
+	display: inline;
+}
+
+.frm-page-collapsed .frm_clone_icon,
+.frm-page-collapsed .frm_delete_field,
+.frm-page-collapsed .frm_clone_field,
+.frm-section-collapsed .frm_clone_icon {
+	opacity: .5;
+	cursor: not-allowed;
+}
+
+/* Hide the Duplicate summary option because we are missing the logic that also adds a new page */
+.edit_field_type_summary .frm_more_options_li:nth-child(2) {
+	display: none !important;
+}
+
+.edit_field_type_submit .frm_more_options_li:not(:last-child) {
+	display: none !important;
+}
+
+.frm_no_section_fields:not(.frm_block) + ul.start_divider {
+	padding: 0;
+	min-height: 132px;
+}
+
+.frm_sorting li.ui-state-default .divider_section_only {
+	padding: 6px;
+	margin-top: -10px;
+	border: 2px solid transparent;
+	border-radius: var(--small-radius);
+	z-index: 2;
+	position: relative;
+}
+
+.divider_section_only > .frm_inner_field_container {
+	padding: 5px 0;
+	margin: 0;
+}
+
+.frm-collapsed-label,
+.divider_section_only > .frm_inner_field_container .frm_form_fields {
+	display: none;
+}
+
+.frm-section-collapsed .divider_section_only::after,
+.divider_section_only::before {
+	content: '';
+	display: block;
+	padding: 2px 0;
+	line-height: 1px;
+	border-top: 2px solid var(--grey-300);
+	top: -2px;
+	position: absolute;
+	width: 100%;
+	transition: .5s border-color ease-in-out;
+}
+
+.frm-section-collapsed .divider_section_only::after {
+	top: auto;
+	bottom: -6px;
+}
+
+.frm-section-collapsed .divider_section_only:hover::after,
+li.selected.frm-section-collapsed .divider_section_only::before,
+li.selected.frm-section-collapsed .divider_section_only::after,
+.divider_section_only:hover::before,
+li.selected .divider_section_only::before {
+	border-color: transparent;
+}
+
+.frm_sorting li.ui-state-default.edit_field_type_divider {
+	overflow: visible;
+	position: relative;
+	padding: 0 0 0 20px;
+	margin: 25px 0 0 -5px;
+	border-left: 1px solid var(--primary-700);
+	transition: border 0.7s ease-out;
+}
+
+.frm-section-collapsed {
+	border-left-color: transparent !important;
+}
+
+.frm_sorting li.edit_field_type_end_divider,
+.frm_sorting .no_repeat_section li.ui-state-default.edit_field_type_end_divider:hover {
+	margin: 0 0 var(--gap-sm);
+}
+
+.frm-first-page .frm_prev_page {
+	display: none;
+}

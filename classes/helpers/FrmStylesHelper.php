@@ -453,7 +453,7 @@ class FrmStylesHelper {
 	/**
 	 * Prevent invalid CSS keys from getting added to the generated CSS.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $key
 	 * @return bool
@@ -468,7 +468,7 @@ class FrmStylesHelper {
 	 * Confirm a CSS value is valid.
 	 * If it appears to contain JavaScript, it will not be added.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $var
 	 * @return bool
