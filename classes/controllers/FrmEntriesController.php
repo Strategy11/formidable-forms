@@ -238,29 +238,31 @@ class FrmEntriesController {
 		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
 		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
 		if ( $has_separate_value && ! $is_post_status ) {
-			$columns[ $form_id . '_frmsep_' . $col_id ] = self::maybe_format_field_name_for_title( $field );
+			$columns[ $form_id . '_frmsep_' . $col_id ] = self::maybe_format_field_name_for_title( $field, $has_separate_value );
 		}
 
-		$columns[ $form_id . '_' . $col_id ] = self::maybe_format_field_name_for_title( $field, false );
+		$columns[ $form_id . '_' . $col_id ] = self::maybe_format_field_name_for_title( $field, $has_separate_value, false );
 	}
 
 	/**
-	 * Appends "(Value)" or "(Label)" to the field name if it's an option field.
+	 * Appends "(Value)" or "(Label)" to the field name if it's an option field it it has a separate value/label
 	 *
 	 * @since x.x
 	 *
 	 * @param object $field
+	 * @param bool   $has_separate_value
 	 * @param bool   $is_value
 	 *
 	 * @return string
 	 */
-	private static function maybe_format_field_name_for_title( $field, $is_value = true ) {
-		if ( ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
-			return $field->name;
+	private static function maybe_format_field_name_for_title( $field, $has_separate_value, $is_value = true ) {
+		$field_name = FrmAppHelper::truncate( $field->name, 35 );
+		if ( ! $has_separate_value || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
+			return $field_name;
 		}
 		$append_text = $is_value ? esc_html__( 'Value', 'formidable' ) : esc_html__( 'Label', 'formidable' );
 
-		return sprintf( '%s (%s)', FrmAppHelper::truncate( $field->name, 35 ), $append_text );
+		return sprintf( '%s (%s)', $field_name, $append_text );
 	}
 
 	private static function maybe_add_ip_col( $form_id, &$columns ) {
