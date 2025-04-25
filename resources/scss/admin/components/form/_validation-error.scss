@@ -1,0 +1,25 @@
+/**
+ * Component: Validation Error
+ */
+
+.frm-validation-error:not(.frm_hidden) {
+	display: flex;
+}
+
+.frm-validation-error {
+	gap: calc(var(--gap-xs) + var(--gap-2xs));
+}
+
+.frm-validation-error span {
+	color: var(--error-500);
+}
+
+.frm-validation-error span[frm-error] {
+	display: none;
+}
+
+.frm-validation-error[frm-error="empty"] span[frm-error="empty"],
+.frm-validation-error[frm-error="invalid"] span[frm-error="invalid"],
+.frm-validation-error[frm-error="custom"] span[frm-error="custom"] {
+	display: inline-block;
+}

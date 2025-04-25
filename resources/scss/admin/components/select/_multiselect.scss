@@ -1,0 +1,43 @@
+/**
+ * Components - Multiselect
+ */
+
+.multiselect-container {
+	position: absolute;
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	width: 100%;
+	max-width: 250px;
+}
+
+.multiselect-container button.multiselect-option {
+	width: 100%;
+	text-align: left;
+	border: none;
+	margin-bottom: 4px;
+}
+
+.multiselect-container button.multiselect-option label {
+	margin-left: 5px;
+}
+
+.accordion-container .multiselect-container label {
+	padding: 3px 19px 3px 7px;
+}
+
+.frm-btn-group.btn-group > .btn-group:nth-child(2) > .multiselect.btn {
+	border-top-left-radius: 4px;
+	border-bottom-left-radius: 4px
+}
+
+.frm-btn-group.btn-group, .frm-btn-group.btn-group-vertical {
+	display: block;
+}
+
+.multiselect-option label {
+	max-width: calc(100% - 22px);
+	text-overflow: ellipsis;
+	overflow: hidden;
+	white-space: nowrap;
+}

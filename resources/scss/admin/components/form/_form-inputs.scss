@@ -1,0 +1,11 @@
+/**
+ * Components - Form Input Styles
+ */
+
+#new_fields .form-table input[type="text"],
+#new_fields .form-table select,
+.form-table .form-field input,
+.form-table .form-field .quicktags-toolbar input,
+.form-field input, .form-field .quicktags-toolbar input {
+	width: auto;
+}

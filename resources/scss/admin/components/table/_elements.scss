@@ -1,0 +1,19 @@
+/**
+ * Components - Table Elements
+ */
+
+.frm-white-body table.frm-border td {
+	font-size: var(--text-sm);
+}
+
+.frm-white-body .striped > tbody > :nth-child(odd) {
+	background-color: #fff;
+}
+
+.frm_wrap td.column-title strong {
+	display: inline;
+}
+
+td.column-title .frm_actions_dropdown {
+	float: right;
+}

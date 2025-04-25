@@ -1,0 +1,23 @@
+.frm-white-body .search-box,
+.frm_wrap .frm-search {
+	float: right;
+	margin: 0;
+	clear: right;
+}
+
+.frm-white-body .search-box,
+.frm-search {
+	min-width: 32%;
+	position: relative;
+	display: flex;
+	gap: var(--gap-sm);
+	align-items: center;
+}
+
+.frm-inline-modal .frm-search,
+#frm_adv_info .frm-search {
+	float: none;
+	width: 100%;
+	clear: both;
+	margin: var(--gap-xs) 0;
+}

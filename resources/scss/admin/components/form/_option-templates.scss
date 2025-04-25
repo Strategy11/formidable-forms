@@ -1,0 +1,27 @@
+/**
+ * Component: Option Templates
+ */
+
+/* Style image option container for Directory add on. */
+#frm-new-template .frm_image_option_container svg {
+	height: 50px;
+	margin: 10px auto 0;
+}
+
+/* Show an icon on top */
+.frm_image_option_container {
+	position: relative;
+}
+
+.frm_text_label_for_image > svg {
+	width: 30px;
+	position: absolute;
+	top: 5px;
+	right: calc( 50% - 15px );
+}
+
+/* End show an icon on top */
+
+.frm_single_option .frm_option_key {
+	margin-top: 17px;
+}

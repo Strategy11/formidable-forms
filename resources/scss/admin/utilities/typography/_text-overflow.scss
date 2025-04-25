@@ -1,0 +1,19 @@
+/**
+ * Utilities - Text Overflow
+ */
+
+.frm-truncate {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+[class*="frm-line-clamp-"] {
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+
+.frm-line-clamp-2 {
+	-webkit-line-clamp: 2;
+}

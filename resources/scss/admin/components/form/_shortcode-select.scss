@@ -1,0 +1,25 @@
+/**
+ * Shortcode Select
+ */
+
+.post-type-frm_display select[name="m"] + #post-query-submit,
+select[name="m"] {
+	display: none;
+}
+
+.frm_shortcode_select optgroup option {
+	margin-left: 1em;
+}
+
+.frm_shortcode_select optgroup {
+	padding-top: 5px;
+}
+
+.frm_shortcode_select .frm_subopt {
+	margin-left: 2em;
+}
+
+.misc-pub-section a.edit-frm_shortcode, .misc-pub-section a.edit-form-status {
+	float: none;
+	font-size: 13px;
+}

@@ -1,0 +1,29 @@
+/**
+ * Components - Settings - Has Shortcodes
+ */
+
+#new_fields,
+.frm-has-modal,
+p.frm_has_shortcodes {
+	position: relative;
+}
+
+.frm-inline-modal.postbox {
+	background: #fff;
+}
+
+.frm_has_shortcodes .frmsvg,
+.frm_has_shortcodes i:not([class*="mce-"]) {
+	position: absolute;
+	color: var(--primary-500);
+	border-radius: 50%;
+	border: 1px solid transparent;
+	z-index: 100;
+	text-align: center;
+}
+
+.frm_has_shortcodes input,
+.frm_has_shortcodes textarea {
+	padding-left: 18px;
+	box-sizing: border-box;
+}
