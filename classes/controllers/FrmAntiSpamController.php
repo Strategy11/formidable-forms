@@ -54,7 +54,7 @@ class FrmAntiSpamController {
 	public static function extract_emails_from_values( $values ) {
 		$values = FrmAppHelper::maybe_json_encode( $values );
 		preg_match_all( '/[\._a-zA-Z0-9-]+@[\._a-zA-Z0-9-]+/i', $values, $matches );
-		return isset( $matches[0] ) ? $matches[0] : array();
+		return $matches[0];
 	}
 
 	/**

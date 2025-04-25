@@ -7,8 +7,9 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 		if ( ! is_array( $spam_comments ) ) {
 			return false;
 		}
-		$ip_address    = FrmAppHelper::get_ip_address();
-		$item_meta     = FrmAppHelper::array_flatten( $this->values['item_meta'] );
+
+		$ip_address = FrmAppHelper::get_ip_address();
+		$item_meta  = FrmAppHelper::array_flatten( $this->values['item_meta'] );
 
 		foreach ( $spam_comments as $comment ) {
 			if ( $ip_address === $comment->comment_author_IP ) {

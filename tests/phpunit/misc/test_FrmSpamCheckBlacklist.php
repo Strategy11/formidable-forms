@@ -67,26 +67,26 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		$this->spam_check = new FrmSpamCheckBlacklist( $this->default_values );
 
 		$this->custom_blacklist_data = array(
-			'blacklist_with_all_fields' => array(
+			'blacklist_with_all_fields'      => array(
 				'words' => array( 'spamword' ),
 			),
 			'blacklist_with_name_text_email' => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'text', 'email', 'name' ),
 			),
-			'blacklist_with_name' => array(
+			'blacklist_with_name'            => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'name' ),
 			),
-			'blacklist_with_email' => array(
+			'blacklist_with_email'           => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'email' ),
 			),
-			'blacklist_with_extract_email' => array(
+			'blacklist_with_extract_email'   => array(
 				'words'         => array( 'spamword' ),
 				'field_type'    => array(),
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
-			)
+			),
 		);
 	}
 
@@ -115,7 +115,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 				$this->text_field_id,
 				$this->email_field_id,
 				$this->name_field_id,
-				$this->email_field_id2
+				$this->email_field_id2,
 			),
 			$field_ids_to_check
 		);
@@ -144,7 +144,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
-				'john@doe.com'
+				'john@doe.com',
 			)
 		);
 
@@ -158,7 +158,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 				'test@gmail.com',
 				'this text contains test@domain.com',
 				'WordPress Plugin',
-				'john@doe.com'
+				'john@doe.com',
 			)
 		);
 
@@ -182,7 +182,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 			array(
 				'test@gmail.com',
 				'test@domain.com',
-				'john@doe.com'
+				'john@doe.com',
 			)
 		);
 
@@ -194,7 +194,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 			$values_to_check,
 			array(
 				'test@gmail.com',
-				'john@doe.com'
+				'john@doe.com',
 			)
 		);
 	}

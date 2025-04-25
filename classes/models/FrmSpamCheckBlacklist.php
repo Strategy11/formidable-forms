@@ -33,7 +33,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 				'file'          => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
 				'words'         => array(),
 				'field_type'    => array(),
-				'compare'       => self::COMPARE_CONTAINS, // Regex won't work if compare is `equals`.
+				'compare'       => self::COMPARE_CONTAINS,
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
 		);
