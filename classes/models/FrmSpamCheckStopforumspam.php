@@ -41,7 +41,6 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 			)
 		);
 		return wp_remote_retrieve_body( $response );
-
 	}
 
 	private function response_is_spam( $response ) {

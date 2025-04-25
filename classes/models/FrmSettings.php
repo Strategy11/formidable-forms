@@ -173,8 +173,8 @@ class FrmSettings {
 			'custom_css'                => false,
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
-			'blacklist'          => '',
-			'whitelist'          => '',
+			'blacklist'                 => '',
+			'whitelist'                 => '',
 		);
 	}
 

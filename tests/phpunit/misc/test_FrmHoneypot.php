@@ -16,7 +16,7 @@ class test_FrmHoneypot extends FrmUnitTest {
 	}
 
 	public function test_get_honeypot_field_id() {
-		$fields = $this->get_private_property( $this->honeypot, 'fields' );
+		$fields       = $this->get_private_property( $this->honeypot, 'fields' );
 		$max_field_id = 0;
 		foreach ( $fields as $field ) {
 			$max_field_id = max( $max_field_id, $field->id );
@@ -30,6 +30,7 @@ class test_FrmHoneypot extends FrmUnitTest {
 	 */
 	public function test_validate() {
 		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
+
 		$_POST['item_meta'][ $honeypot_field_id ] = '';
 		$this->assertTrue( $this->honeypot->validate() );
 
@@ -42,6 +43,7 @@ class test_FrmHoneypot extends FrmUnitTest {
 	 */
 	public function test_is_honeypot_spam() {
 		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
+
 		$_POST['item_meta'][ $honeypot_field_id ] = '';
 		$this->assertFalse( $this->is_honeypot_spam() );
 

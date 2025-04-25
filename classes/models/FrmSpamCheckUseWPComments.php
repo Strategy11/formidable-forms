@@ -4,6 +4,9 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 
 	protected function check() {
 		$spam_comments = get_comments( array( 'status' => 'spam' ) );
+		if ( ! is_array( $spam_comments ) ) {
+			return false;
+		}
 		$ip_address    = FrmAppHelper::get_ip_address();
 		$item_meta     = FrmAppHelper::array_flatten( $this->values['item_meta'] );
 

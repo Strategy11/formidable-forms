@@ -309,14 +309,11 @@ class FrmEntryValidate {
 	/**
 	 * Check for spam.
 	 *
-	 * @since x.x Added the `$posted_fields` parameter.
-	 *
 	 * @param bool  $exclude
 	 * @param array $values
 	 * @param array $errors By reference.
-	 * @param array $posted_fields Validate fields.
 	 */
-	public static function spam_check( $exclude, $values, &$errors, $posted_fields = false ) {
+	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
@@ -329,7 +326,8 @@ class FrmEntryValidate {
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
 		} elseif ( FrmAntiSpamController::is_spam( $values ) ) {
-			$errors['spam'] = $spam_msg; // TODO: maybe restore old blacklist spam message.
+			// TODO: maybe restore old blacklist spam message.
+			$errors['spam'] = $spam_msg;
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {

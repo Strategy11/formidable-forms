@@ -30,10 +30,10 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		// TODO: add the filter.
 		$blacklist_data = array(
 			array(
-				'file'         => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
-				'words'        => array(),
-				'field_type'   => array(),
-				'compare'      => self::COMPARE_CONTAINS, // Regex won't work if compare is `equals`.
+				'file'          => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
+				'words'         => array(),
+				'field_type'    => array(),
+				'compare'       => self::COMPARE_CONTAINS, // Regex won't work if compare is `equals`.
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
 		);
@@ -57,7 +57,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		return apply_filters(
 			'frm_blacklist_ip_data',
 			array(
-				'files' => array(
+				'files'  => array(
 					FrmAppHelper::plugin_path() . '/blacklist/ip.txt',
 				),
 				'custom' => array(),
@@ -97,7 +97,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 					return true;
 				}
 			}
-		}
+		}//end foreach
 
 		return false;
 	}
@@ -179,7 +179,8 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	private function get_values_to_check( $blacklist ) {
 		$field_ids_to_check = $this->get_field_ids_to_check( $blacklist );
 		if ( array() === $field_ids_to_check ) {
-			return false; // No values need to check.
+			// No values need to check.
+			return false;
 		}
 
 		$values_to_check = array();
@@ -238,7 +239,9 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	private function single_line_check_ip( $line, $args ) {
 		$ip = $args['ip'];
-		return $ip === $line || 0 === strpos( $ip . '/', $line ); // Maybe IP in line is x.x.x.x/12 format.
+
+		// Maybe IP in line is x.x.x.x/12 format.
+		return $ip === $line || 0 === strpos( $ip . '/', $line );
 	}
 
 	private function read_lines_and_check( $file_path, $callback, $callback_args = array() ) {

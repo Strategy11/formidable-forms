@@ -16,7 +16,14 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
 		$user_info  = FrmEntryValidate::get_spam_check_user_info( $values );
 
-		return $this->do_check_wp_disallowed_words( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
+		return $this->do_check_wp_disallowed_words(
+			$user_info['comment_author'],
+			$user_info['comment_author_email'],
+			$user_info['comment_author_url'],
+			$content,
+			$ip,
+			$user_agent
+		);
 	}
 
 	/**

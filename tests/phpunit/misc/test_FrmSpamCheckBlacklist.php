@@ -18,7 +18,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 	private $default_values;
 
-	public function setUp() : void {
+	public function setUp(): void {
 		parent::setUp();
 
 		$this->form_id = $this->factory->form->create(
@@ -27,7 +27,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 			)
 		);
 
-		$fields = FrmField::getAll( array( 'form_id' => $this->form_id ) );
+		$fields              = FrmField::getAll( array( 'form_id' => $this->form_id ) );
 		$this->text_field_id = $fields[0]->id;
 
 		$this->email_field_id = $this->factory->field->create(
@@ -52,11 +52,11 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		);
 
 		$this->default_values = array(
-			'form_id' => $this->form_id,
+			'form_id'   => $this->form_id,
 			'item_meta' => array(
-				$this->email_field_id => 'test@gmail.com',
-				$this->text_field_id => 'this text contains test@domain.com',
-				$this->name_field_id => array(
+				$this->email_field_id  => 'test@gmail.com',
+				$this->text_field_id   => 'this text contains test@domain.com',
+				$this->name_field_id   => array(
 					'first' => 'WordPress',
 					'last'  => 'Plugin',
 				),
@@ -71,20 +71,20 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 				'words' => array( 'spamword' ),
 			),
 			'blacklist_with_name_text_email' => array(
-				'words' => array( 'spamword' ),
+				'words'      => array( 'spamword' ),
 				'field_type' => array( 'text', 'email', 'name' ),
 			),
 			'blacklist_with_name' => array(
-				'words' => array( 'spamword' ),
+				'words'      => array( 'spamword' ),
 				'field_type' => array( 'name' ),
 			),
 			'blacklist_with_email' => array(
-				'words' => array( 'spamword' ),
+				'words'      => array( 'spamword' ),
 				'field_type' => array( 'email' ),
 			),
 			'blacklist_with_extract_email' => array(
-				'words' => array( 'spamword' ),
-				'field_type' => array(),
+				'words'         => array( 'spamword' ),
+				'field_type'    => array(),
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			)
 		);
@@ -214,17 +214,17 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		$this->set_blacklist_data( array( $blacklist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist['words'] = array( '@' );
+		$blacklist['words']   = array( '@' );
 		$blacklist['compare'] = FrmSpamCheckBlacklist::COMPARE_CONTAINS;
 		$this->set_blacklist_data( array( $blacklist ) );
 		$this->assertTrue( $this->spam_check->check() );
 
-		$blacklist = $this->custom_blacklist_data['blacklist_with_name'];
+		$blacklist          = $this->custom_blacklist_data['blacklist_with_name'];
 		$blacklist['words'] = array( '@' );
 		$this->set_blacklist_data( array( $blacklist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist = $this->custom_blacklist_data['blacklist_with_all_fields'];
+		$blacklist          = $this->custom_blacklist_data['blacklist_with_all_fields'];
 		$blacklist['words'] = array( 'plugin' );
 		$this->set_blacklist_data( array( $blacklist ) );
 		$this->assertTrue( $this->spam_check->check() );
@@ -233,7 +233,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		$this->set_blacklist_data( array( $blacklist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist = $this->custom_blacklist_data['blacklist_with_all_fields'];
+		$blacklist         = $this->custom_blacklist_data['blacklist_with_all_fields'];
 		$blacklist['file'] = __DIR__ . '/blacklist-email-contain.txt';
 		unset( $blacklist['words'] );
 		$this->set_blacklist_data( array( $blacklist ) );
