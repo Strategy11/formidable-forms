@@ -559,9 +559,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		 *
 		 * @param array $rules
 		 * @param array $settings
-		 * @param mixed $form_id
 		 */
-		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings, $form_id );
+		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
 		return $rules;
 	}
 
