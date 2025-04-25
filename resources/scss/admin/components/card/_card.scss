@@ -1,0 +1,77 @@
+/**
+ * Components - Card
+ */
+
+.frm-card {
+	width: 100%;
+	border-radius: 10px;
+	border: 1px solid var(--grey-300);
+	opacity: 1;
+	transition: opacity 1s;
+}
+
+.frm-card-box {
+	max-width: 524px;
+	background-color: #fff;
+	border-radius: var(--medium-radius);
+	padding: var(--gap-xl);
+	border: 1px solid var(--grey-200);
+	box-shadow: var(--box-shadow-md);
+}
+
+.frm-card-box.frm-has-progress-bar {
+	position: relative;
+	overflow: hidden;
+	border-radius: var(--medium-radius);
+}
+
+.frm-card-box-progress-bar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	height: var(--gap-xs);
+	background-color: var(--primary-25);
+}
+
+.frm-card-box-progress-bar > span {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	width: 33%;
+	background-color: var(--primary-500);
+}
+
+.frm-card-box-header  {
+	display: flex;
+	justify-content: center;
+	margin-bottom: var(--gap-sm);
+}
+
+.frm-card-box.frm-has-progress-bar .frm-card-box-header {
+	margin-top: var(--gap-xs);
+}
+
+.frm-card-box-content > :last-child {
+	margin-bottom: 0;
+}
+
+.frm-card-box-footer {
+	display: flex;
+	justify-content: end;
+	gap: var(--gap-sm);
+	margin-top: var(--gap-lg);
+}
+
+.frm-card-box-title {
+	font-size: var(--text-xl) !important;
+	font-weight: 600 !important;
+	margin-bottom: var(--gap-xs);
+}
+
+.frm-card-box-text {
+	font-size: var(--text-md) !important;
+	color: var(--grey-600) !important;
+	margin-top: 0 !important;
+}

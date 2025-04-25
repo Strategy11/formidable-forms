@@ -1,0 +1,23 @@
+/**
+ * Components - Modal - Inline Modal
+ */
+
+.frm-right-panel .frm-inline-modal.postbox .inside {
+	margin: 0;
+	padding-top: 0;
+}
+
+.frm-right-panel .frm-inline-modal .inside p:not(.howto),
+.frm-right-panel .frm-inline-modal .inside a {
+	font-size: 15px;
+}
+
+.frm-inline-modal .inside a.frm_icon_font {
+	font-size: 18px;
+}
+
+.frm-right-panel .frm_field_list #frm-insert-fields {
+	max-height: none;
+	font-size: var(--text-sm);
+	padding: 0;
+}

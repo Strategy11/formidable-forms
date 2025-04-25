@@ -1,0 +1,91 @@
+/**
+ * Page Skeleton
+ *
+ * Manages the layout and appearance of the page's content area.
+ */
+
+/* Core Styles for the Page */
+#wpbody-content .frm-page-skeleton ul,
+#wpbody-content .frm-page-skeleton li {
+	margin: 0;
+}
+
+/* Sidebar Styles */
+#wpbody-content .frm-page-skeleton .frm-right-panel {
+	padding: 2px;
+	overflow-y: initial;
+}
+
+/* Scrollbar */
+#wpbody-content .frm-page-skeleton .frm-scrollbar-wrapper {
+	padding: var(--gap-md) var(--gap-sm);
+}
+
+/* Search */
+#wpbody-content .frm-page-skeleton .frm-search {
+	float: none;
+	padding: 0 var(--gap-2xs);
+}
+
+#wpbody-content .frm-page-skeleton .frm-search > input {
+	width: 100%;
+}
+
+/* Categories */
+.frm-page-skeleton-cat {
+	cursor: pointer;
+	padding: var(--gap-xs);
+	border-radius: var(--small-radius);
+	background-color: transparent;
+	transition: background-color 250ms ease-out;
+}
+
+.frm-page-skeleton-cat:hover {
+	background-color: var(--grey-100);
+}
+
+.frm-page-skeleton-cat > * {
+	z-index: 2;
+}
+
+.frm-page-skeleton-cat-text {
+	color: var(--grey-900);
+	text-transform: capitalize;
+}
+
+.frm-page-skeleton-cat-count {
+	color: var(--grey-400);
+}
+
+.frm-current .frm-page-skeleton-cat-text,
+.frm-current .frm-page-skeleton-cat-count {
+	color: var(--primary-500);
+}
+
+/* Page Content Styles */
+.frm-list-grid-layout {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(303px, 1fr));
+	grid-auto-rows: max-content;
+	gap: var(--gap-sm);
+}
+
+.frm-list-grid-layout > * {
+	grid-column: span 1;
+}
+
+/* Empty State Styles */
+#frm-page-skeleton-empty-state {
+	height: 100%;
+	margin-top: calc(-1 * var(--gap-md));
+}
+
+#frm-page-skeleton-empty-state .frm-page-skeleton-text {
+	max-width: 420px;
+}
+
+/* Helper Classes */
+.frm-page-skeleton-divider {
+	border-top: 1px solid var(--grey-200);
+	margin: 0;
+}

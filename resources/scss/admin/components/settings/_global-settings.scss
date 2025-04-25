@@ -1,0 +1,122 @@
+/**
+ * Global Settings
+ */
+
+.tabs-panel {
+	height: auto !important;
+	min-height: 260px;
+}
+
+.tabs-panel.panel_secondary {
+	min-height: 20px;
+	margin-top: 10px;
+	margin-left: 150px;
+}
+
+label.frm-example-icon {
+	margin-right: 20px !important;
+	display: inline-block !important;
+}
+
+#frm_stripe_icon {
+	border-radius: 5px;
+}
+
+#captcha_settings .frm_primary_label {
+	margin-top: var(--gap-sm);
+}
+
+.frm-long-icon-buttons {
+	display: flex;
+	gap: var(--gap-md);
+}
+
+.frm-long-icon-buttons > label {
+	border: 1px solid var(--grey-300);
+	color: var(--grey-700);
+	border-radius: var(--small-radius);
+	display: flex;
+	padding: var(--gap-sm);
+	gap: var(--gap-sm);
+	justify-content: center;
+	align-items: center;
+	width: calc( 33% - var(--gap-sm) );
+	box-sizing: border-box;
+}
+
+.frm-long-icon-buttons > label:hover {
+	color: var(--primary-500);
+}
+
+.frm-long-icon-buttons input[type="radio"] {
+	display: none;
+}
+
+.frm-long-icon-buttons input[type="radio"]:checked + label {
+	border-color: var(--primary-500);
+	box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+.frm-long-icon-buttons label > svg {
+	height: 21px;
+}
+
+.frm-example-icon .frmsvg,
+.frm-example-icon i {
+	height: 20px;
+	width: 20px;
+	font-size: 20px;
+	color: var(--grey-700);
+}
+
+.frm_license_msg {
+	margin-top: 0;
+}
+
+.frm_authorized_box .frm-show-unauthorized,
+.frm_unauthorized_box .frm-show-authorized {
+	display: none;
+}
+
+.edd_frm_status_icon.frmsvg {
+	margin: 0 5px;
+}
+
+.edd_frm_license_row .frm_action_success .frmsvg {
+	color: green;
+}
+
+.edd_frm_license_row .frm_action_error .frmsvg {
+	color: #D54E21;
+}
+
+/* Hide the install steps for solutions */
+#form_global_settings .tabs-panel .num svg {
+	display: none;
+}
+
+/* Empty List */
+
+.frm_no_items {
+	margin: 0 auto 50px;
+	text-align: center;
+	color: var(--grey-700);
+	max-width: 500px;
+}
+
+.frm-subscribe {
+	margin: var(--gap-lg) 0;
+}
+
+.frm_inbox_count {
+	color: #fff;
+	border-radius: 50%;
+	display: inline-block;
+	margin-right: 8px;
+	font-size: 11px;
+	text-align: center;
+	min-width: 18px;
+	height: 18px;
+	margin-left: 2px;
+	vertical-align: text-bottom;
+}

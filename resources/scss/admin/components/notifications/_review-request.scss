@@ -1,0 +1,122 @@
+/**
+ * Components - Review Request
+ */
+
+.wp-admin .frm-review-notice {
+	position: fixed !important;
+	bottom: var(--gap-2xl);
+	right: var(--gap-lg);
+	width: 380px;
+	text-align: center;
+	border-color: var(--grey-100);
+	padding: var(--gap-lg);
+	border-radius: var(--medium-radius);
+	box-shadow: var(--box-shadow-lg) !important;
+	z-index: 999;
+	box-sizing: border-box;
+
+	--gap-sm: 16px;
+	--gap-md: 24px;
+	--gap-2xl: 48px;
+}
+
+.wp-admin .frm-review-notice * {
+	box-sizing: border-box;
+}
+
+.frm-review-notice-icon {
+	display: inline-flex;
+	margin-bottom: var(--gap-sm);
+}
+
+.wp-admin .frm-review-notice-title {
+	font-weight: 600;
+	margin-top: 0;
+	margin-bottom: var(--gap-xs);
+}
+
+.wp-admin .frm-review-notice-text {
+	margin-top: 0;
+	margin-bottom: var(--gap-md);
+}
+
+.frm-review-notice-signature {
+	text-align: left;
+	margin: var(--gap-md) 0;
+}
+
+.frm-review-notice-signature img {
+	width: 40px;
+	height: 40px;
+	padding: 3px;
+	box-shadow: var(--box-shadow-md);
+	border-radius: 100%;
+}
+
+#wpwrap .frm-dismiss-review-notice {
+	top: 16px;
+	right: 19px;
+}
+
+.frm-review-notice #frmapi-feedback [class^="frm__"] {
+	display: none;
+}
+
+.frm-review-notice #frmapi-feedback input,
+.frm-review-notice #frmapi-feedback textarea {
+	border-color: var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm-review-notice #frmapi-feedback input {
+	min-height: unset;
+	max-height: 36px;
+}
+
+.frm-review-notice #frmapi-feedback textarea {
+	max-height: 80px;
+	padding-top: var(--gap-xs)
+}
+
+.frm-review-notice #frmapi-feedback .frm_message {
+	color: var(--success-900);
+	background-color: var(--success-25);
+	border: 1px solid var(--success-200);
+	padding: var(--gap-sm) var(--gap-md);
+	margin: 0;
+}
+
+.frm-review-notice #frmapi-feedback .frm_message p {
+	margin: 0
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit {
+	background-color: var(--primary-500);
+	border-color: var(--primary-500) !important;
+	cursor: pointer;
+}
+
+.frm-review-notice #frmapi-feedback .frm_button_submit:hover,
+.frm-review-notice #frmapi-feedback .frm_button_submit:focus {
+	color: #fff;
+	background-color: var(--primary-700);
+	border-color: var(--primary-700) !important;
+}
+
+.frm-review-notice .frm_error,
+.frm-review-notice label {
+	color: #444;
+	text-align: left;
+}
+
+.frm-review-notice label {
+	font-size: var(--text-sm);
+}
+
+.frm-floating-success-message {
+	position: fixed;
+	z-index: 999;
+	border-radius: 4px;
+	right: 10px;
+	bottom: 10px;
+}

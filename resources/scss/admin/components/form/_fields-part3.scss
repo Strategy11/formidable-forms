@@ -1,0 +1,79 @@
+/**
+ * Components - Fields Part 3
+ */
+
+label input[type="checkbox"], label input[type="radio"] {
+	vertical-align: inherit;
+}
+
+#editorcontainer #dyncontent {
+	margin: 0;
+	width: 100%;
+	padding: 6px;
+	line-height: var(--leading);
+	border: 0 none;
+	outline: none;
+	box-sizing: border-box;
+}
+
+/*ICONS*/
+.frm_postbox_icon {
+	margin: -6px 0 0 -10px;
+}
+
+.frm_form_builder a:hover {
+	text-decoration: underline;
+}
+
+.frm_form_builder .widget-title h4 {
+	padding: 10px 15px;
+}
+
+.frm_form_builder .widget-top a.widget-action::after {
+	margin: 7px 12px 0;
+}
+
+.frmbutton.frm_tgateway {
+	display: none !important;
+}
+
+.frm_html_legend pre {
+	display: inline;
+}
+
+#ed_fullscreen {
+	display: none !important;
+}
+
+.frm_posttax_opt_list {
+	overflow: auto;
+	max-height: 200px;
+	background-color: #fff;
+}
+
+.frm_posttax_opt_list p.howto {
+	font-size: 12px;
+}
+
+.frm_border_bottom {
+	border-bottom: 1px solid var(--grey-300);
+	margin-bottom: 10px;
+	padding-bottom: 10px;
+}
+
+.frm_posttax_opt_list .frm_border_bottom span.howto {
+	padding-right: 10px;
+}
+
+.frm_posttax_opt_list .frm_border_bottom input {
+	margin-right: 1px;
+}
+
+.frm_add_remove div.frm_form_field {
+	padding-bottom: 5px;
+}
+
+.frm_field_opts_list {
+	max-height: 190px;
+	overflow: auto;
+}

@@ -1,0 +1,84 @@
+/**
+ * Components - Settings - Adv Info
+ */
+
+#form_settings_page #frm_adv_info, #frm_builder_page #frm_adv_info {
+	display: none;
+	top: 0;
+	width: 310px;
+	max-height: 315px;
+	min-height: 200px;
+	overflow-y: scroll;
+	z-index: 100;
+}
+
+#form_global_settings .columns-2 > div {
+	overflow: auto;
+	height: calc(100vh - 32px);
+}
+
+#form_global_settings .columns-2 .frm-right-panel,
+#form_settings_page .columns-2 .frm-right-panel,
+#wpbody-content .frm-page-skeleton .frm-right-panel {
+	flex: 0 0 var(--small-sidebar);
+	width: var(--small-sidebar);
+	min-width: var(--small-sidebar);
+}
+
+#form_global_settings .frm_grid_container {
+	gap: 0 var(--gap-md);
+}
+
+.frm-inner-content {
+	padding: var(--gap-md);
+}
+
+.post-type-frm_display #poststuff {
+	padding: 0 0 10px 40px;
+}
+
+#postbox-container-2 .postbox .inside {
+	padding: 15px 25px;
+}
+
+#postbox-container-2 #frm_advanced .inside h3 {
+	margin: 15px -25px;
+	font-weight: 600;
+}
+
+#form_settings_page .frm-inner-content {
+	padding-top: 0;
+	padding-bottom: 150px;
+	position: relative;
+}
+
+.frm_wrap #submitdiv {
+	margin-bottom: 0;
+	border-width: 0 0 1px;
+	width: 100%;
+	min-width: unset;
+}
+
+.frm_wrap #frm_adv_info .handlediv,
+.frm_wrap #frm_adv_info .hndle {
+	display: none;
+}
+
+.frm_wrap .menu-settings {
+
+	/* for add-on reverse compatibility */
+	border: none;
+	margin-top: 0;
+}
+
+.nodrag a {
+	cursor: pointer;
+}
+
+.frm_wrap #frm_adv_info .inside {
+	margin: 0;
+}
+
+#frm_adv_info > .inside {
+	padding: 0;
+}

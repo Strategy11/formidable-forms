@@ -1,0 +1,90 @@
+@media print {
+
+	a, .misc-pub-section a {
+		color: #000 !important;
+	}
+
+	.add-new-h2, #frm_top_bar, .dashicons,
+	#adminmenuwrap, #adminmenuback, #wphead, #button_bar, #submitdiv, .button-secondary,
+	#screen-metas, #screen-meta-links, #footer, #wpfooter, .inner-sidebar, .frm_form_nav,
+	.frm_flash_graph, .frm_no_print, object, .error {
+		visibility: hidden;
+		display: none !important;
+	}
+
+	.widget, .postbox, .stuffbox, .postbox h3 {
+		border-width: 0 !important;
+		border-color: #fff;
+	}
+
+	.postbox {
+		background: #fff !important;
+		border: none;
+		position: static;
+	}
+
+	.postbox h3, .postbox h4 {
+		background: #fff !important;
+	}
+
+	#wpbody-content {
+		float: none;
+	}
+
+	#wpcontent, #post-body-content,
+	.has-right-sidebar #post-body,
+	#poststuff .columns-2 {
+		margin: 0 !important;
+	}
+
+	.frm_wrap #poststuff .columns-2 {
+		display: block;
+	}
+
+	#post-body-content + .frm-right-panel,
+	.frm_wrap .columns-2 .frm-right-panel,
+	.frm-right-panel {
+		border: none;
+		width: auto;
+		display: block;
+		padding: 20px;
+	}
+
+	.frm_wrap .columns-2,
+	.frm_wrap .frm_page_container {
+		height: auto;
+		display: block;
+	}
+
+	.misc-pub-section > span {
+		padding: 0;
+	}
+
+	.frm-right-panel .postbox .inside {
+		padding-left: 12px;
+		padding-right: 12px;
+	}
+
+	.curtime #timestamp::before {
+		display: none;
+		content: none !important;
+	}
+
+	.frm_charts .alignleft {
+		float: none;
+	}
+
+	.pg_odd, .pg_even {
+		page-break-inside: avoid;
+		max-width: 600px;
+	}
+
+	.form-table td, .form-table th {
+		padding: 0;
+	}
+
+	.frm_file_container a {
+		display: block;
+		width: 100%;
+	}
+}

@@ -1,0 +1,207 @@
+/**
+ * Components - Fields
+ */
+
+.frm_scale {
+	text-align: center;
+	float: left;
+	margin-right: 10px;
+}
+
+.frm_scale input {
+	display: block;
+	margin: 5px
+}
+
+.frm_multi_fields_container {
+	float: left;
+}
+
+.frm_multi_fields_container,
+.frm_form_builder .frm_form_fields input[type="tel"]
+.frm_form_builder .frm_form_fields input[type="range"],
+.frm_form_builder .frm_form_fields input[type="text"] {
+	width: 100%;
+	height: auto;
+}
+
+.frm_form_builder .frm_time_wrap .frm_time_sep {
+	vertical-align: sub;
+	vertical-align: -webkit-baseline-middle;
+}
+
+.frm_form_builder input[type="range"]::-webkit-slider-runnable-track {
+	background-color: var(--blue-border);
+}
+
+.frm_form_builder input[type="range"]::-moz-range-track {
+	background-color: var(--blue-border);
+}
+
+.frm_form_builder input[type="range"]::-ms-fill-lower {
+	background-color: var(--blue-border);
+}
+
+.frm_form_builder input[type="range"]::-ms-fill-upper {
+	background-color: var(--blue-border);
+}
+
+.frm-embed-field-placeholder {
+	text-align: center;
+	height: 145px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm-fake-field {
+	display: block;
+	height: 25px;
+	background-color: var(--light-blue);
+	border: 1px solid var(--grey-300);
+	margin: 10px 0;
+	border-radius: var(--small-radius);
+}
+
+.frm-embed-message {
+	position: absolute;
+	background: #fff;
+	border: 1px solid var(--grey-300);
+	color: var(--grey-700);
+	padding: var(--gap-md);
+	font-size: var(--text-lg);
+	max-width: 200px;
+	min-width: 50%;
+	margin: 0 var(--gap-md);
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.frm-summary-message {
+	top: 50%;
+	left: 50%;
+	padding: 15px 0;
+	font-size: var(--text-md);
+	transform: translate(-50%, -50%);
+}
+
+.frm-summary-learn-more {
+	font-size: inherit !important;
+}
+
+.frm-single-settings .frm-embed-message {
+	width: 100%;
+	position: static;
+	border-radius: var(--small-radius);
+}
+
+#new_fields input[type="text"],
+#new_fields input[type="number"],
+.frm_field_box .frm_form_fields > textarea,
+.frm_form_fields .frm_form_field > textarea,
+.frm_form_fields .frm_form_field > input[type="email"],
+.frm_form_fields .frm_form_field > input[type="url"],
+.frm_form_fields .frm_form_field > input[type="number"],
+.frm_form_fields .frm_form_field > input[type="tel"],
+.frm_form_fields .frm_form_field > input[type="text"],
+.frm_form_fields .frm_form_field > input[type="range"] {
+	width: 100%;
+}
+
+.frm_form_fields textarea.wp-editor-area {
+	width: 100%;
+	border: none;
+}
+
+.frm_form_fields input[type="file"], .frm_form_fields input[type="file"]:disabled {
+	background: transparent;
+	border: none;
+	box-shadow: none;
+	width: auto;
+}
+
+.frm_form_fields select {
+	width: auto;
+	max-width: 100%;
+}
+
+input[type="radio"],
+input[type="checkbox"] {
+	width: 16px;
+	padding: 0;
+}
+
+.frm_wrap .frm-number-range + .frm_last input,
+.frm_wrap .frm-number-range input {
+	text-align: center;
+	font-weight: 600;
+}
+
+.frm_wrap .frm-number-range input[type="number"],
+.frm_wrap .frm-number-range input[type="text"] {
+	color: var(--primary-700);
+}
+
+.frm-range-min {
+	position: relative;
+}
+
+.frm-range-min::after {
+	content: '';
+	height: 3px;
+	width: 10px;
+	border-radius: 30%;
+	background: var(--primary-700);
+	position: absolute;
+	top: 17px;
+	right: -28%;
+}
+
+.frm_grid_container > p,
+.frm_grid_container > p.frm_form_field,
+.frm_grid_container > div.frm_form_field,
+#new_fields .frm_grid_container > p {
+	margin-top: 8px;
+	margin-bottom: 8px;
+	margin-right: 0;
+}
+
+#new_fields div.frm_grid_container > .frm_primary_label {
+	margin-top: 8px;
+}
+
+#new_fields .frm_primary_label + p,
+#new_fields .frm_primary_label + .frm6 + .frm6,
+#new_fields .frm_primary_label + .frm6 + .frm-inline-modal + .frm6 {
+	margin-top: 0;
+}
+
+.frm_catlevel_2, .frm_catlevel_3, .frm_catlevel_4, .frm_catlevel_5 {
+	margin-left: 18px;
+}
+
+.frm_wrap .frm-fields .auto_width,
+.frm_form_fields input.auto_width, .frm_form_fields select.auto_width, .frm_form_fields textarea.auto_width {
+	width: auto !important;
+}
+
+.frm_form_fields select.auto_width {
+	min-width: 60px;
+}
+
+.frm_form_fields input:focus, .frm_form_fields select:focus,
+.frm_form_fields textarea:focus, .frm_focus_field input {
+	background-color: #fff;
+	border-color: #ddd;
+}
+
+.frm_form_builder .frm_radio,
+.frm_form_builder .frm_checkbox {
+	display: block;
+	margin-bottom: 2px;
+}
+
+.frm_form_builder .frm_radio label,
+.frm_form_builder .frm_checkbox label {
+	font-size: var(--text-sm);
+}

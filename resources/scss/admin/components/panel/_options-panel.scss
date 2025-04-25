@@ -1,0 +1,18 @@
+/**
+ * Component: Options Panel
+ */
+
+#frm-options-panel {
+	padding: 0 var(--gap-sm);
+	color: var(--grey-900);
+}
+
+.frm-right-panel a.frm_add_logic_link,
+#frm-options-panel h3 {
+	padding: 15px 0;
+	margin-top: -2px;
+}
+
+.frm-right-panel a.frm_add_logic_link:focus {
+	outline: auto;
+}
