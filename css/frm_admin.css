@@ -123,10 +123,35 @@
 	margin: var(--gap-sm) 0;
 }
 
+/* Delete All Entries Modal Confirmation */
+.frm-delete-all-entries-modal-confirmation {
+	text-align: left;
+}
+
+.frm-modal .postbox .inside .frm-delete-all-entries-modal-confirmation h2 {
+	font-weight: 500;
+	display: block;
+}
+
+.frm-delete-all-entries-modal-confirmation b {
+	color: var(--error-500);
+}
+
+.frm-delete-all-entries-modal-confirmation input[type="text"] {
+	display: block;
+	width: 100%;
+	height: 36px;
+	box-sizing: border-box;
+	margin: var(--gap-sm) 0;
+	border-radius: var(--small-radius);
+	border: 1px solid var(--grey-300);
+}
+
 #frm-confirmed-click.button.frm-btn-inactive {
 	background-color: var(--error-300) !important;
 	border: 1px solid var(--error-300);
 }
+
 #frm-confirmed-click.button.frm-btn-inactive:hover {
 	border-color: var(--error-300) !important;
 }

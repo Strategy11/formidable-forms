@@ -104,6 +104,14 @@ class FrmEntriesController {
 		}
 	}
 
+	/**
+	 * Summary of bulk_actions
+	 *
+	 * @since x.x
+	 *
+	 * @param string $action
+	 * @return void
+	 */
 	public static function bulk_actions( $action = 'list-form' ) {
 		$params = FrmForm::get_admin_params();
 		$errors = array();
