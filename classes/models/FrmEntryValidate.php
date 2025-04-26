@@ -475,6 +475,7 @@ class FrmEntryValidate {
 	 * Gets user info for Akismet spam check.
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
+	 * @since x.x This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
@@ -774,6 +775,7 @@ class FrmEntryValidate {
 	 * Prepares values array for spam check.
 	 *
 	 * @since 5.0.13
+	 * @since x.x This changed from private to public.
 	 *
 	 * @param array $values Entry values.
 	 */

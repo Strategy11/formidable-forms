@@ -1,4 +1,10 @@
 <?php
+/**
+ * Anti-spam controller
+ *
+ * @package Formidable
+ * @since x.x
+ */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );

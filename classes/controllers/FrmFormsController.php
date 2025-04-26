@@ -3228,8 +3228,6 @@ class FrmFormsController {
 		}
 	}
 
-
-
 	/**
 	 * @since 2.0.8
 	 */

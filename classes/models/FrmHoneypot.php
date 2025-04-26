@@ -5,16 +5,21 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
-	protected $fields;
+	/**
+	 * Posted fields.
+	 *
+	 * @var array|null
+	 */
+	protected $fields = null;
 
 	protected $option_type = 'global';
 
-	public function __construct( $form_id, $fields = null ) {
-		parent::__construct( $form_id );
-		if ( is_null( $fields ) ) {
-			$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
+	protected function get_fields() {
+		if ( is_null( $this->fields ) ) {
+			$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'include' );
 		}
-		$this->fields = $fields;
+
+		return $this->fields;
 	}
 
 	/**
@@ -174,8 +179,9 @@ class FrmHoneypot extends FrmValidate {
 	 * @return int
 	 */
 	private function get_honeypot_field_id() {
-		$max = 0;
-		foreach ( $this->fields as $field ) {
+		$max    = 0;
+		$fields = $this->get_fields();
+		foreach ( $fields as $field ) {
 			if ( $field->id > $max ) {
 				$max = $field->id;
 			}

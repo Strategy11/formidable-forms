@@ -33,8 +33,9 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 
 		$ip      = FrmAppHelper::get_ip_address();
 		$wp_test = FrmAntiSpamController::contains_wp_disallowed_words(
-			array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) ) )
-		)
+			array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) )
+		);
+
 		if ( ! $wp_test ) {
 			$this->markTestSkipped( 'WordPress blacklist check is failing in some cases' );
 		}
