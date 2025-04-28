@@ -188,14 +188,12 @@ class FrmHoneypot extends FrmValidate {
 		$frm_vars['honeypot_selectors'][] = '#' . $html_id;
 	}
 
-	/**
-	 * Gets honeypot field ID. This should not exist in the form.
-	 *
-	 * @return int
-	 */
 	private function get_honeypot_field_id() {
 		$max    = 0;
 		$fields = $this->get_fields();
+		if ( ! is_array( $fields ) ) {
+			$fields = array();
+		}
 		foreach ( $fields as $field ) {
 			if ( $field->id > $max ) {
 				$max = $field->id;
