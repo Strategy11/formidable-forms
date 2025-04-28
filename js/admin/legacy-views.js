@@ -7,7 +7,7 @@
 			thisFormId = thisForm.value;
 		}
 
-		// only load on views settings page
+		// Only load on views settings page.
 		if ( document.getElementById( 'frm_dyncontent' ) !== null ) {
 			viewInit();
 		}
