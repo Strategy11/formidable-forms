@@ -39,6 +39,20 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 				'compare'       => self::COMPARE_CONTAINS,
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
+			array(
+				'words'      => array(
+					'moncler|north face|vuitton|handbag|burberry|outlet|prada|cialis|viagra|maillot|oakley|ralph lauren|ray ban|iphone|プラダ',
+				),
+				'field_type' => array( 'name' ),
+				'is_regex'   => true,
+			),
+			array(
+				'words'      => array(
+					'@mail\.ru|@yandex\.',
+				),
+				'field_type' => array( 'email' ),
+				'is_regex'   => true,
+			),
 		);
 
 		$custom_blacklist = $this->get_words_from_setting( 'blacklist' );
@@ -111,8 +125,9 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			array(
 				'file'          => '',
 				'words'         => array(),
+				'is_regex'      => false,
 				'field_type'    => array(),
-				'compare'       => self::COMPARE_CONTAINS,
+				'compare'       => self::COMPARE_CONTAINS, // Is ignore if `is_regex` is `true`.
 				'extract_value' => '',
 			)
 		);
@@ -125,7 +140,9 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			return array();
 		}
 
-		return explode( "\n", $words );
+		return array_filter(
+			array_map( 'trim', explode( "\n", $words ) )
+		);
 	}
 
 	private function single_line_check_values( $line, $args ) {
@@ -136,6 +153,9 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		}
 
 		$values_to_check = $this->get_values_to_check( $args );
+		if ( ! empty( $args['is_regex'] ) ) {
+			return preg_match( '/' . trim( $line, '/' ) . '/i', $this->convert_values_to_string( $values_to_check ) );
+		}
 
 		if ( self::COMPARE_EQUALS === $args['compare'] ) {
 			foreach ( $values_to_check as $value ) {
@@ -147,8 +167,12 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			return false;
 		}
 
-		$values_str = strtolower( FrmAppHelper::maybe_json_encode( $values_to_check ) );
+		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
 		return strpos( $values_str, $line ) !== false;
+	}
+
+	private function convert_values_to_string( $values ) {
+		return FrmAppHelper::maybe_json_encode( $values );
 	}
 
 	private function convert_to_lowercase( $str ) {

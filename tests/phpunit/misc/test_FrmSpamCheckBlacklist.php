@@ -200,6 +200,8 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 	}
 
 	public function test_check() {
+		$spam_check = new FrmSpamCheckBlacklist( $this->default_values );
+		$this->assertFalse( $spam_check->check() );
 		$blacklist = $this->custom_blacklist_data['blacklist_with_all_fields'];
 
 		$this->set_blacklist_data( array( $blacklist ) );
@@ -250,6 +252,17 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		FrmAppHelper::get_settings()->update_setting( 'blacklist', "wordprezz\ndoe.com", 'sanitize_textarea_field' );
 		$spam_check = new FrmSpamCheckBlacklist( $this->default_values );
+		$this->assertTrue( $spam_check->check() );
+
+		// Test with regex.
+		$values = $this->default_values;
+		$values['item_meta'][ $this->email_field_id ] = 'someone@mail.ru';
+		$spam_check = new FrmSpamCheckBlacklist( $values );
+		$this->assertTrue( $spam_check->check() );
+
+		$values = $this->default_values;
+		$values['item_meta'][ $this->text_field_id ] = 'This text contains someone@yandex.com email';
+		$spam_check = new FrmSpamCheckBlacklist( $values );
 		$this->assertTrue( $spam_check->check() );
 	}
 }
