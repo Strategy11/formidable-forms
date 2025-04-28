@@ -10637,8 +10637,6 @@ function frmAdminBuildJS() {
 							htmlTab.siblings().show();
 						}
 					} else if ( viewPage ) {
-
-						// toggleAllowedShortcodes( this.id );
 						const event   = new CustomEvent( 'frm_legacy_views_handle_field_focus' );
 						event.frmData = { idAttrValue: this.id };
 						document.dispatchEvent( event );
