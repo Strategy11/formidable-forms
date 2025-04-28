@@ -231,7 +231,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			if ( ! file_exists( $file ) ) {
 				continue;
 			}
-			$is_spam = $this->read_lines_and_check( $file, array( $this, 'single_line_check_ip' ), array( compact( 'ip' ) ) );
+			$is_spam = $this->read_lines_and_check( $file, array( $this, 'single_line_check_ip' ), compact( 'ip' ) );
 			if ( $is_spam ) {
 				return true;
 			}
