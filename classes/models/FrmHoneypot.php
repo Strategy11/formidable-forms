@@ -107,13 +107,12 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @param int        $form_id Form ID.
-	 * @param array|null $fields  Array of fields.
+	 * @param int $form_id Form ID.
 	 *
 	 * @return void
 	 */
-	public static function maybe_render_field( $form_id, $fields = null ) {
-		$honeypot = new self( $form_id, $fields );
+	public static function maybe_render_field( $form_id ) {
+		$honeypot = new self( $form_id );
 		if ( $honeypot->should_render_field() ) {
 			$honeypot->render_field();
 		}
