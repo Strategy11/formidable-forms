@@ -8,12 +8,28 @@ class FrmHoneypot extends FrmValidate {
 	/**
 	 * Posted fields.
 	 *
+	 * @since x.x
+	 *
 	 * @var array|null
 	 */
 	protected $fields = null;
 
+	/**
+	 * Option type.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
 	protected $option_type = 'global';
 
+	/**
+	 * Gets posted fields.
+	 *
+	 * @since x.x
+	 *
+	 * @return array|null
+	 */
 	protected function get_fields() {
 		if ( is_null( $this->fields ) ) {
 			$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'include' );
