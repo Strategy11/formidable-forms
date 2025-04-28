@@ -111,29 +111,25 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	public static function bulk_actions( $action = 'list-form' ) {
-		$params = FrmForm::get_admin_params();
 		$errors = array();
-
-		if ( $action == 'list-form' ) {
-			$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
-			$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
-
-			$bulkaction = $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
-		} else {
-			$bulkaction = str_replace( 'bulk_', '', $action );
-		}
 
 		$items = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
 		if ( empty( $items ) ) {
 			$errors[] = __( 'No entries were specified', 'formidable-pro' );
 		} else {
-			$frm_settings = FrmAppHelper::get_settings();
-
-			if ( ! is_array( $items ) ) {
-				$items = explode( ',', $items );
+			if ( $action === 'list-form' ) {
+				$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
+				$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
+				$bulkaction          = $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
+			} else {
+				$bulkaction = str_replace( 'bulk_', '', $action );
 			}
-
 			if ( $bulkaction === 'delete' ) {
+				$frm_settings = FrmAppHelper::get_settings();
+
+				if ( ! is_array( $items ) ) {
+					$items = explode( ',', $items );
+				}
 				if ( ! current_user_can( 'frm_delete_entries' ) ) {
 					$errors[] = $frm_settings->admin_permission;
 				} elseif ( is_array( $items ) ) {
@@ -141,25 +137,9 @@ class FrmEntriesController {
 						FrmEntry::destroy( $item_id );
 					}
 				}
-			} elseif ( $bulkaction === 'csv' ) {
-				FrmAppHelper::permission_check( 'frm_view_entries' );
-
-				$form_id = $params['form'];
-				if ( ! $form_id ) {
-					$form = FrmForm::get_published_forms( array(), 1 );
-					if ( ! empty( $form ) ) {
-						$form_id = $form->id;
-					} else {
-						$errors[] = __( 'No form was found', 'formidable-pro' );
-					}
-				}
-
-				if ( $form_id && is_array( $items ) ) {
-					echo '<script type="text/javascript">window.onload=function(){location.href="' . esc_url_raw( admin_url( 'admin-ajax.php?form=' . $form_id . '&action=frm_entries_csv&item_id=' . implode( ',', $items ) ) ) . '";}</script>';
-				}
 			}
-		}
-		FrmEntriesController::display_list( '', $errors );
+		}//end if
+		self::display_list( '', $errors );
 	}
 
 	/**
