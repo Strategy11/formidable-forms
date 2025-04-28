@@ -66,7 +66,7 @@ class FrmStrpLiteAuth {
 		}
 
 		ob_start();
-		FrmFormsController::run_success_action( $atts );
+		FrmFormsController::run_on_submit_actions( $atts );
 		$message = ob_get_contents();
 		ob_end_clean();
 
