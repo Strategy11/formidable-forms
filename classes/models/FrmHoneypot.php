@@ -10,9 +10,9 @@ class FrmHoneypot extends FrmValidate {
 	 *
 	 * @since x.x
 	 *
-	 * @var array|null
+	 * @var array
 	 */
-	protected $fields = null;
+	protected $fields;
 
 	/**
 	 * Option type.
@@ -28,7 +28,7 @@ class FrmHoneypot extends FrmValidate {
 	 *
 	 * @since x.x
 	 *
-	 * @return array|null
+	 * @return array
 	 */
 	protected function get_fields() {
 		if ( is_null( $this->fields ) ) {
