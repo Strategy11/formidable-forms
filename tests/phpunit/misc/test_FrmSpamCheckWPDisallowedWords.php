@@ -18,8 +18,8 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 		);
 
 		update_option( $this->get_disallowed_option_name(), '' );
-		$is_spam = FrmAntiSpamController::contains_wp_disallowed_words( $values );
-		$this->assertFalse( $is_spam );
+		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
+		$this->assertFalse( $spam_check->is_spam() );
 
 		$blocked   = '23.343.12332';
 		$new_block = $blocked . "\nspamemail@example.com";
@@ -27,14 +27,14 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 		$this->assertSame( $new_block, get_option( $this->get_disallowed_option_name() ) );
 
 		$wp_test = $this->run_private_method(
-			array( 'FrmSpamCheckWPDisallowedWords', 'do_check_wp_disallowed_words' ),
+			array( $spam_check, 'do_check_wp_disallowed_words' ),
 			array( 'Author', 'author@gmail.com', '', 'No spam here', FrmAppHelper::get_ip_address(), FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) )
 		);
 		$this->assertFalse( $wp_test );
 
 		$ip      = FrmAppHelper::get_ip_address();
 		$wp_test = $this->run_private_method(
-			array( 'FrmSpamCheckWPDisallowedWords', 'do_check_wp_disallowed_words' ),
+			array( $spam_check, 'do_check_wp_disallowed_words' ),
 			array( 'Author', 'author@gmail.com', '', $blocked, $ip, FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) )
 		);
 
@@ -43,10 +43,9 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 		}
 		$this->assertTrue( $wp_test, 'WordPress missing spam for IP ' . $ip . ' agent ' . FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
 
-		$is_spam = FrmAntiSpamController::contains_wp_disallowed_words( array( 'item_meta' => array( '', '' ) ) );
-		$this->assertFalse( $is_spam );
+		$this->assertFalse( $spam_check->is_spam() );
 
-		$is_spam = FrmAntiSpamController::contains_wp_disallowed_words( $values );
+		$is_spam = FrmAntiSpamController::contains_wp_disallowed_words( array( 'item_meta' => array( '', '' ) ) );
 		$this->assertFalse( $is_spam );
 
 		$values['item_meta']['25'] = $blocked;
