@@ -272,7 +272,7 @@
 
 	function clickContentTab() {
 		/*jshint validthis:true */
-		link = jQuery( this );
+		const link = jQuery( this );
 		const t = link.attr( 'href' );
 		if ( typeof t === 'undefined' ) {
 			return false;
