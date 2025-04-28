@@ -139,9 +139,18 @@ class FrmEntriesController {
 				}
 			}
 		}//end if
-		if ( ! is_callable( 'FrmProEntriesHelper::delete_all_button' ) ) {
+		if ( ! self::has_moved_entries_bulk_delete_from_pro() ) {
 			self::display_list( '', $errors );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function has_moved_entries_bulk_delete_from_pro() {
+		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
 	}
 
 	/**
