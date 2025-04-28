@@ -531,6 +531,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'borderWidth'     => self::get_border_width( $settings ),
 				'borderStyle'     => $settings['field_border_style'],
 				'borderRadius'    => self::get_border_radius( $settings ),
+				'fontWeight'      => $settings['field_weight'],
 			),
 			'.Input::placeholder' => array(
 				'color' => $settings['text_color_disabled'],
