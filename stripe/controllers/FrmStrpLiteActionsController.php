@@ -523,6 +523,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static function get_appearance_rules( $settings ) {
 		$rules = array(
 			'.Input'              => array(
+				'fontFamily'      => $settings['font'],
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
 				'padding'         => $settings['field_pad'],
