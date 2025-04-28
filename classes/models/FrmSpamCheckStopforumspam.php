@@ -14,10 +14,12 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 			$request_data['ip'] = $ip_address;
 		}
 
-		$response = $this->send_request( $request_data );
+		if ( $request_data ) {
+			$response = $this->send_request( $request_data );
 
-		if ( $this->response_is_spam( $response ) ) {
-			return true;
+			if ( $this->response_is_spam( $response ) ) {
+				return true;
+			}
 		}
 
 		$emails = FrmAntiSpamController::extract_emails_from_values( $this->values['item_meta'] );
@@ -28,21 +30,20 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 		unset( $request_data['ip'] );
 		$request_data['email'] = $emails;
 		$response              = $this->send_request( $request_data );
+
 		return $this->response_is_spam( $response );
 	}
 
 	protected function is_enabled() {
-		$frm_settings = FrmAppHelper::get_settings();
-		return ! empty( $frm_settings->stopforumspam ) && apply_filters( 'frm_check_stopforumspam', true, array( 'object' => $this ) );
+		$form = FrmForm::getOne( $this->values['form_id'] );
+		return $form && ! empty( $form->options['stopforumspam'] );
 	}
 
 	private function send_request( $request_data ) {
-		$response = wp_remote_get(
-			'http://api.stopforumspam.org/api',
-			array(
-				'body' => $request_data,
-			)
-		);
+		$url = add_query_arg( $request_data, 'https://api.stopforumspam.org/api' );
+
+		$response = wp_remote_get( $url );
+
 		return wp_remote_retrieve_body( $response );
 	}
 
