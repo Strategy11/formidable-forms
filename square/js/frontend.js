@@ -22,8 +22,11 @@
 	};
 
 	async function initializeCard( payments ) {
-		const card = await payments.card();
+		const card     = await payments.card();
+		const cardStyle = frmSquareVars.style;
 		await card.attach( '.frm-card-element' );
+
+		card.configure( { style: cardStyle } );
 
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', ( e ) => {

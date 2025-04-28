@@ -428,6 +428,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'settings'        => $action_settings,
 			'appId'           => self::get_app_id(),
 			'locationId'      => self::get_location_id(),
+			'style'           => self::get_style( $form_id ),
 		);
 
 		wp_localize_script( 'formidable-square', 'frmSquareVars', $square_vars );
@@ -457,6 +458,55 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return 'L2GZQYSMGEKK0';
 		}
 		return 'L7Q1NBZ6SSJ79';
+	}
+
+	/**
+	 * @param int $form_id
+	 * @return array
+	 */
+	private static function get_style( $form_id ) {
+		$style_settings = self::get_style_settings_for_form( $form_id );
+		return array(
+			'input' => array(
+				'fontSize'        => $style_settings['field_font_size'],
+				'color'           => $style_settings['text_color'],
+				'backgroundColor' => $style_settings['bg_color'],
+				'fontWeight'      => $style_settings['field_weight'],
+			),
+			// How does input placeholder work??
+			'input::placeholder' => array(
+				'color' => $style_settings['text_color_disabled'],
+			),
+		);
+	}
+
+	/**
+	 * Get and format the style settings for JavaScript to use with the get_style function.
+	 *
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return array
+	 */
+	private static function get_style_settings_for_form( $form_id ) {
+		if ( ! $form_id ) {
+			return array();
+		}
+
+		$style = FrmStylesController::get_form_style( $form_id );
+		if ( ! $style ) {
+			return array();
+		}
+
+		$settings   = FrmStylesHelper::get_settings_for_output( $style );
+		$disallowed = array( ';', ':', '!important' );
+		foreach ( $settings as $k => $s ) {
+			if ( is_string( $s ) ) {
+				$settings[ $k ] = str_replace( $disallowed, '', $s );
+			}
+		}
+
+		return $settings;
 	}
 
 	/**
