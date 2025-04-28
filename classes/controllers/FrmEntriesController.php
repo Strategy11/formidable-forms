@@ -105,7 +105,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since x.x Moved from FrmProEntriesController to FrmEntriesController
+	 * @since x.x
 	 *
 	 * @param string $action
 	 * @return void
@@ -139,7 +139,9 @@ class FrmEntriesController {
 				}
 			}
 		}//end if
-		self::display_list( '', $errors );
+		if ( ! is_callable( 'FrmProEntriesHelper::delete_all_button' ) ) {
+			self::display_list( '', $errors );
+		}
 	}
 
 	/**
