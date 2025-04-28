@@ -465,19 +465,55 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	private static function get_style( $form_id ) {
-		$style_settings = self::get_style_settings_for_form( $form_id );
-		return array(
+		$settings = self::get_style_settings_for_form( $form_id );
+		$style    = array(
 			'input' => array(
-				'fontSize'        => $style_settings['field_font_size'],
-				'color'           => $style_settings['text_color'],
-				'backgroundColor' => $style_settings['bg_color'],
-				'fontWeight'      => $style_settings['field_weight'],
+				'fontSize'        => $settings['field_font_size'],
+				'color'           => $settings['text_color'],
+				'backgroundColor' => $settings['bg_color'],
+				'fontWeight'      => $settings['field_weight'],
 			),
 			// How does input placeholder work??
 			'input::placeholder' => array(
-				'color' => $style_settings['text_color_disabled'],
+				'color' => $settings['text_color_disabled'],
+			),
+			'.input-container' => array(
+				'borderRadius' => self::get_border_radius( $settings ),
+			),
+			'.input-container.is-focus' => array(
+				'borderColor' => $settings['border_color_active'],
 			),
 		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array $style
+		 * @param array $settings
+		 * @param int   $form_id
+		 */
+		return apply_filters( 'frm_square_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Get the border radius for Stripe elements.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 * @return string
+	 */
+	private static function get_border_radius( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) ) {
+			switch ( $settings['field_shape_type'] ) {
+				case 'underline':
+				case 'regular':
+					return '0px';
+				case 'circle':
+					return '30px';
+			}
+		}
+		return $settings['border_radius'];
 	}
 
 	/**
