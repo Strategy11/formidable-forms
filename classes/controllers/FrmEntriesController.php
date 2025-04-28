@@ -245,7 +245,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * Appends "(Value)" or "(Label)" to the field name if it's an option field it it has a separate value/label
+	 * Appends "(Value)" or "(Label)" to the field name if it's an option field it has a separate value/label.
 	 *
 	 * @since x.x
 	 *
