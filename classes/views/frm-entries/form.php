@@ -148,6 +148,7 @@ if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_cur
 <?php if ( has_action( 'frm_entries_footer_scripts' ) ) { ?>
 <script type="text/javascript"><?php do_action( 'frm_entries_footer_scripts', $values['fields'], $form ); ?></script>
 <?php } ?>
+
 <?php
 // Add the shortcode back with the original callbacks
 if ( $original_input_shortcode_callback ) {
