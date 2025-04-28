@@ -157,7 +157,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 */
 	private static function get_trial_with_default( $trial ) {
 		if ( ! is_numeric( $trial ) ) {
-			$trial = 1;
+			// Use 0 as this is only ever overwritten when it is non-zero.
+			$trial = 0;
 		}
 		return absint( $trial );
 	}
