@@ -528,8 +528,9 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'padding'         => $settings['field_pad'],
 				'lineHeight'      => 1.3,
 				'borderColor'     => $settings['border_color'],
-				'borderWidth'     => $settings['field_border_width'],
+				'borderWidth'     => self::get_border_width( $settings ),
 				'borderStyle'     => $settings['field_border_style'],
+				'borderRadius'    => self::get_border_radius( $settings ),
 			),
 			'.Input::placeholder' => array(
 				'color' => $settings['text_color_disabled'],
@@ -548,9 +549,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'color' => $settings['border_color_error'],
 			),
 		);
-		if ( isset( $settings['field_shape_type'] ) && 'circle' === $settings['field_shape_type'] ) {
-			$rules['.Input']['borderRadius'] = '30px';
-		}
 
 		/*
 		 * Filters the appearance rules for Stripe elements.
@@ -562,6 +560,42 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		 */
 		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
 		return $rules;
+	}
+
+	/**
+	 * Get the border width for Stripe elements.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 * @return string
+	 */
+	private static function get_border_width( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+			return '0 0 ' . $settings['field_border_width'] . ' 0';
+		}
+		return $settings['field_border_width'];
+	}
+
+	/**
+	 * Get the border radius for Stripe elements.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 * @return string
+	 */
+	private static function get_border_radius( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) ) {
+			switch ( $settings['field_shape_type'] ) {
+				case 'underline':
+				case 'regular':
+					return '0px';
+				case 'circle':
+					return '30px';
+			}
+		}
+		return $settings['border_radius'];
 	}
 
 	/**
