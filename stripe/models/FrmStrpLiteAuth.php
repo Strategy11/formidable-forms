@@ -162,6 +162,14 @@ class FrmStrpLiteAuth {
 		$atts['entry_id']    = $atts['entry']->id;
 		$opt                 = 'success_action';
 		$atts['conf_method'] = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
+
+		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
+		if ( $actions ) {
+			$action = reset( $actions );
+			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
+				$atts['conf_method'] = $action->post_content['success_action'];
+			}
+		}
 	}
 
 	/**
