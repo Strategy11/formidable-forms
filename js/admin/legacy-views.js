@@ -199,7 +199,6 @@
 		}
 	}
 
-	/* View Functions */
 	function showCount() {
 		/*jshint validthis:true */
 		const value = jQuery( this ).val();
