@@ -9,24 +9,31 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 		$spam_comments = get_comments(
 			array(
 				'status'  => 'spam',
-				'number'  => 100, // Reasonable limit to prevent performance issues.
+				// Reasonable limit to prevent performance issues.
+				'number'  => 100,
 				'orderby' => 'comment_date_gmt',
-				'order'   => 'DESC', // Get most recent first.
+				'order'   => 'DESC',
 			)
 		);
 		if ( ! is_array( $spam_comments ) ) {
 			return false;
 		}
 
-		$ip_address = FrmAppHelper::get_ip_address();
-		$item_meta  = FrmAppHelper::array_flatten( $this->values['item_meta'] );
+		$ip_address      = FrmAppHelper::get_ip_address();
+		$whitelist_ip    = FrmAntiSpamController::get_whitelist_ip();
+		$is_whitelist_ip = in_array( $ip_address, $whitelist_ip, true );
+		$item_meta       = FrmAppHelper::array_flatten( $this->values['item_meta'] );
 
 		foreach ( $spam_comments as $comment ) {
-			if ( $ip_address === $comment->comment_author_IP ) {
+			if ( ! $is_whitelist_ip && $ip_address === $comment->comment_author_IP ) {
 				return true;
 			}
 
 			foreach ( $item_meta as $value ) {
+				if ( ! $value ) {
+					continue;
+				}
+
 				if ( $value === $comment->comment_author_email || $value === $comment->comment_author_url ) {
 					return true;
 				}
