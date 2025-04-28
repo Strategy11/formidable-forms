@@ -6,7 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 
 	protected function check() {
-		$spam_comments = get_comments( array( 'status' => 'spam' ) );
+		$spam_comments = get_comments(
+			array(
+				'status'  => 'spam',
+				'number'  => 100, // Reasonable limit to prevent performance issues.
+				'orderby' => 'comment_date_gmt',
+				'order'   => 'DESC', // Get most recent first.
+			)
+		);
 		if ( ! is_array( $spam_comments ) ) {
 			return false;
 		}
