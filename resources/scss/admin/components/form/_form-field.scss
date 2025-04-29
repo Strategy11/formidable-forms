@@ -1,0 +1,89 @@
+/**
+ * Components - Form Field
+ */
+
+.form-field p {
+
+	/* for conflicts */
+	background: none;
+	border: none;
+}
+
+.form-field label.frm_primary_label {
+	display: block;
+	float: none;
+	width: auto;
+}
+
+#frm_view_editor_left label, /* Views */
+#frm_view_editor_left .frm_primary_label, /* Views */
+.frm-dialog .frm-sub-label,
+.frm-dialog label,
+.dropdown .frm_primary_label,
+.accordion-container label,
+.frm-fields td > label,
+.frm-fields td > div > label,
+.frm_form_field > label:first-child,
+.frm-fields p > label,
+.frm_on_submit_type > label,
+.post-type-frm_display .frm_form_field > label,
+#new_fields .frm_primary_label,
+#form_global_settings .frm_primary_label,
+#frm_form_editor_container .frm_primary_label,
+#permissions_settings_settings .frm_primary_label {
+	color: var(--grey-700);
+	margin: 0 0 3px;
+	padding: 0;
+	width: auto;
+	font-size: var(--text-sm);
+	display: block;
+	line-height: var(--leading);
+}
+
+#frm_form_editor_container #frm-show-fields .frm_primary_label {
+	min-height: 21px;
+}
+
+.frm-fields td input + label {
+	display: inline;
+}
+
+#frm_form_editor_container .edit_field_type_end_divider .frm_primary_label,
+#frm_form_editor_container .edit_field_type_break .frm_primary_label {
+	display: none;
+}
+
+form .frm_primary_label input {
+	font-size: 12px;
+}
+
+.with_frm_style form .form-field {
+	margin-bottom: 20px;
+}
+
+#frm_builder_page .with_frm_style form .frm_combo_inputs_container > .form-field {
+	margin-bottom: 0;
+}
+
+.frm_description,
+.with_frm_style form div.description,
+.frm_error,
+.with_frm_style form div.description textarea {
+	padding: 0;
+	font-size: 11px;
+}
+
+.with_frm_style .description {
+	color: inherit;
+}
+
+#frm_form_editor_container .divider_section_only .frm_primary_label {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-xs);
+	font-size: 20px;
+}
+
+#frm_form_editor_container .divider_section_only .frm_primary_label .frm-sub-label {
+	padding: 0;
+}

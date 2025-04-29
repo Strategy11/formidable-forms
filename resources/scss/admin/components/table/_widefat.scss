@@ -1,0 +1,27 @@
+/**
+ * Components - Table Widefat
+ */
+
+.frm-white-body table.widefat {
+	background: var(--lightest-grey);
+	border-width: 0;
+	box-shadow: none;
+	margin: 20px 0;
+}
+
+.frm-white-body table.widefat tfoot,
+.frm-white-body table.widefat thead {
+	background: #fff;
+}
+
+.frm-white-body table.widefat th {
+	font-size: var(--text-md);
+}
+
+.frm-white-body table.widefat th a {
+	color: var(--grey-700);
+}
+
+.frm-white-body table.widefat strong a {
+	color: var(--primary-700);
+}

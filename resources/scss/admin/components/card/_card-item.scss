@@ -1,0 +1,20 @@
+/**
+ * Component - Card Item
+ */
+
+.frm-card-item {
+	display: flex;
+	border: 1px solid var(--grey-200);
+	border-radius: var(--small-radius);
+	padding: var(--gap-sm);
+	box-shadow: var(--box-shadow-xs);
+	background: #FFF;
+}
+
+.frm-card-item:not(.frm-counter-card) {
+	gap: 10px;
+}
+
+.frm-compact-card-item {
+	padding: var(--gap-sm) 35px 10px 35px;
+}

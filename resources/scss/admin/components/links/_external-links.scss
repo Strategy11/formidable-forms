@@ -1,0 +1,16 @@
+/**
+ * External Link styles
+ */
+
+.frm-link-with-external-icon {
+	display: flex;
+	align-items: center;
+	gap: var(--gap-2xs);
+	font-size: var(--text-xs);
+}
+
+.frm-link-with-external-icon .frmsvg {
+	width: 16px;
+	height: 16px;
+	transform: rotate(45deg);
+}

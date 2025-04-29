@@ -1,0 +1,44 @@
+/**
+ * Component: Sortable Placeholder
+ */
+
+.frm_single_option.ui-sortable-placeholder,
+li.sortable-placeholder {
+	border: none;
+	margin: 0;
+	visibility: visible !important;
+	box-shadow: 2px -10px 0 2px var(--primary-500);
+}
+
+#frm_form_editor_container > ul > .frm_single_option.ui-sortable-placeholder,
+#frm_form_editor_container > ul > li.sortable-placeholder {
+	width: calc(100% - 5px) !important;
+	height: 0 !important;
+}
+
+#frm_form_editor_container > ul > li > ul {
+	position: relative;
+}
+
+#frm_form_editor_container > ul > li > ul > li.sortable-placeholder,
+#frm_form_editor_container ul.start_divider > li > ul > li.sortable-placeholder {
+	position: absolute;
+	top: 20px;
+	bottom: 0;
+}
+
+.edit_field_type_divider + li.sortable-placeholder {
+	box-shadow: 2px 5px 0 2px var(--primary-500);
+}
+
+.start_divider li.sortable-placeholder {
+	box-shadow: 2px -5px 0 2px var(--primary-500);
+}
+
+.frm-is-collapsed + .sortable-placeholder {
+	box-shadow: 2px 15px 0 2px var(--primary-500);
+}
+
+.frm_single_option.ui-sortable-placeholder {
+	box-shadow: 0 0 1px 1px var(--primary-500);
+}

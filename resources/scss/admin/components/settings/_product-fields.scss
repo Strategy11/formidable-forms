@@ -1,0 +1,22 @@
+/**
+ * Product Fields
+ */
+
+.frm_product_price_wrapper {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.frm_prod_type_single .frm_product_price_wrapper {
+	width: 100%;
+}
+
+#new_fields .frm_product_price_wrapper input:first-child {
+	width: 60%;
+	float: left;
+}
+
+#new_fields .frm_product_price_wrapper input:nth-child(2) {
+	width: 37%;
+	float: right;
+}

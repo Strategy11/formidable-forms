@@ -1,0 +1,54 @@
+/**
+ * Component: Scrollbars
+ */
+
+.windows::-webkit-scrollbar,
+.windows ::-webkit-scrollbar {
+	width: 7px;
+	background: transparent;
+}
+
+.windows::-webkit-scrollbar-thumb,
+.windows ::-webkit-scrollbar-thumb {
+	background: var(--grey-300);
+	-webkit-border-radius: var(--border-radius);
+	-webkit-box-shadow: none;
+}
+
+.windows::-webkit-scrollbar-corner,
+.windows ::-webkit-scrollbar-corner {
+	background: transparent;
+}
+
+.frm-scrollbar-wrapper {
+	overflow-x: hidden;
+	overflow-y: auto; /* Enable scrolling */
+	-ms-overflow-style: none; /* For IE and Edge */
+	scrollbar-color: transparent transparent; /* Firefox Scrollbar - transparent by default and show on hover */
+	scrollbar-width: thin;
+}
+
+.frm-scrollbar-wrapper:hover {
+	scrollbar-color: var(--grey-300) var(--sidebar-color); /* Firefox Scrollbar - Show on hover */
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar {
+	width: 3px;
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-track {
+	background: var(--sidebar-color);
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-thumb {
+	background: transparent;
+	border-radius: 100vw;
+}
+
+.frm-scrollbar-wrapper:hover::-webkit-scrollbar-thumb {
+	background: var(--grey-300); /* Show scrollbar on hover */
+}
+
+.frm-scrollbar-wrapper::-webkit-scrollbar-thumb:hover {
+	background: var(--grey-400); /* Show scrollbar on hover */
+}

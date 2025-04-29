@@ -1,0 +1,17 @@
+/**
+ * Components - Scroll Box
+ */
+
+.frm-scroll-box {
+	clear: both;
+	overflow: auto;
+	max-height: 405px;
+	border: 1px solid var(--grey-300);
+	border-radius: var(--small-radius);
+}
+
+.frm_form_field.frm_scroll_box .frm_opt_container {
+	height: 100px;
+	overflow: auto;
+	border: 1px solid var(--grey-300);
+}

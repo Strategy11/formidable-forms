@@ -1,0 +1,46 @@
+/**
+ * Component: Info Modals
+ */
+
+.frm-info-modal a,
+.frm-info-modal ul,
+.frm-info-modal p,
+.frm-info-modal,
+.settings-lite-cta a,
+.settings-lite-cta ul,
+.settings-lite-cta {
+	color: var(--grey-500);
+	font-size: var(--text-md);
+	box-shadow: none !important;
+}
+
+.frm-info-modal h3,
+.settings-lite-cta h3 {
+	font-size: 17px !important;
+}
+
+.frm-green-icons .frmsvg {
+	color: var(--green);
+}
+
+.frm-info-modal .postbox .inside,
+.settings-lite-cta .postbox .inside {
+	padding: var(--gap-md);
+	margin: 0;
+}
+
+.cta-inside a {
+	color: var(--orange)
+}
+
+.info-modal-inside a.frm-standard-link {
+	color: var(--primary-500);
+}
+
+.info-modal-inside a.frm-standard-link:hover {
+	color: var(--primary-700);
+}
+
+.frm_no_p_margin > p {
+	margin: 0;
+}
