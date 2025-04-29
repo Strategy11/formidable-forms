@@ -260,18 +260,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @since x.x
-	 *
-	 * @param array   $js_vars
-	 * @param WP_Post $payment_action
-	 * @return array
-	 */
-	public static function update_payment_action_js_vars( $js_vars, $payment_action ) {
-		$js_vars['layout'] = isset( $payment_action->post_content['layout'] ) ? $payment_action->post_content['layout'] : ''; /** @phpstan-ignore-line */
-		return $js_vars;
-	}
-
-	/**
 	 * Filter Stripe action on save.
 	 *
 	 * @param array $settings
