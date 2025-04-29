@@ -73,6 +73,6 @@ class FrmAntiSpamController {
 	 * @return string[]
 	 */
 	public static function get_whitelist_ip() {
-		return array( '', '127.0.0.1' );
+		return apply_filters( 'frm_whitelist_ip', array( '', '127.0.0.1' ) );
 	}
 }
