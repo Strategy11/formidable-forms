@@ -252,7 +252,6 @@ class FrmEntryValidate {
 			}
 
 			if ( ! $match ) {
-				echo 'No match for ' . print_r( $current_value, true ) . ' in ' . $field->name;
 				return self::options_are_dynamic_based_on_hook( $field, $value );
 			}
 		}//end foreach
