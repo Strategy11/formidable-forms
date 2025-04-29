@@ -30,14 +30,10 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	 * @return array[]
 	 */
 	protected function get_blacklist_array() {
-		// TODO: add the filter.
 		$blacklist_data = array(
 			array(
-				'file'          => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
-				'words'         => array(),
-				'field_type'    => array(),
-				'compare'       => self::COMPARE_CONTAINS,
-				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
+				'file'    => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
+				'compare' => self::COMPARE_CONTAINS,
 			),
 			array(
 				'words'      => array(
