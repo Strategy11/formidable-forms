@@ -209,6 +209,8 @@ class FrmEntryValidate {
 	}
 
 	/**
+	 * Validate that value matches one of the options for the field.
+	 *
 	 * @since x.x
 	 *
 	 * @param stdClass     $field
