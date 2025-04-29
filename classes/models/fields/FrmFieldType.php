@@ -1427,10 +1427,7 @@ DEFAULT_HTML;
 			}
 
 			if ( ! $match ) {
-				$match = $this->validate_filtered_option_is_valid( $current_value );
-				if ( ! $match ) {
-					return false;
-				}
+				return $this->options_are_dynamic_based_on_hook();
 			}
 		}
 
@@ -1438,22 +1435,25 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Do not validate options if they have been modified with a hook.
+	 * This is to help avoid issues where the options could be based on a URL param for example.
+	 *
 	 * @since x.x
 	 *
-	 * @param string $value
 	 * @return bool
 	 */
-	private function validate_filtered_option_is_valid( $value ) {
-		$values = apply_filters( 'frm_setup_new_fields_vars', (array) $this->field, FrmField::getOne( ( (array) $this->field )['id'] ), array() );
+	private function options_are_dynamic_based_on_hook() {
+		$field_object = is_object( $this->field ) ? $this->field : FrmField::getOne( $this->field['id'] );
+		$values       = apply_filters( 'frm_setup_new_fields_vars', (array) $this->field, $field_object, array() );
 
-		foreach ( $values['options'] as $option ) {
-			$option_value = is_array( $option ) ? $option['value'] : $option;
-			if ( $option_value === $value ) {
-				return true;
-			}
-		}
+		$map_callback = function ( $option ) {
+			return is_array( $option ) ? $option['value'] : $option;
+		};
 
-		return false;
+		$values_options       = array_map( $map_callback, $values['options'] );
+		$field_object_options = array_map( $map_callback, $field_object->options );
+
+		return $values_options !== $field_object_options;
 	}
 
 	/**
