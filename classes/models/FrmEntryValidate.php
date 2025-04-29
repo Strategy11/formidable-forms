@@ -221,6 +221,11 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
+			// Ignore these field types automatically.
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
@@ -247,6 +252,7 @@ class FrmEntryValidate {
 			}
 
 			if ( ! $match ) {
+				echo 'No match for ' . print_r( $current_value, true ) . ' in ' . $field->name;
 				return self::options_are_dynamic_based_on_hook( $field, $value );
 			}
 		}//end foreach
