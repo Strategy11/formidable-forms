@@ -1427,7 +1427,7 @@ DEFAULT_HTML;
 			}
 
 			if ( ! $match ) {
-				return $this->options_are_dynamic_based_on_hook();
+				return $this->options_are_dynamic_based_on_hook( $value );
 			}
 		}
 
@@ -1442,9 +1442,10 @@ DEFAULT_HTML;
 	 *
 	 * @return bool
 	 */
-	private function options_are_dynamic_based_on_hook() {
-		$field_object = is_object( $this->field ) ? $this->field : FrmField::getOne( $this->field['id'] );
-		$values       = (array) $this->field;
+	private function options_are_dynamic_based_on_hook( $value ) {
+		$field_object    = is_object( $this->field ) ? $this->field : FrmField::getOne( $this->field['id'] );
+		$values          = (array) $this->field;
+		$values['value'] = $value;
 		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 
 		$map_callback = function ( $option ) {
