@@ -1427,11 +1427,33 @@ DEFAULT_HTML;
 			}
 
 			if ( ! $match ) {
-				return false;
+				$match = $this->validate_filtered_option_is_valid( $current_value );
+				if ( ! $match ) {
+					return false;
+				}
 			}
 		}
 
 		return true;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @return bool
+	 */
+	private function validate_filtered_option_is_valid( $value ) {
+		$values = apply_filters( 'frm_setup_new_fields_vars', (array) $this->field, FrmField::getOne( ( (array) $this->field )['id'] ), array() );
+
+		foreach ( $values['options'] as $option ) {
+			$option_value = is_array( $option ) ? $option['value'] : $option;
+			if ( $option_value === $value ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
