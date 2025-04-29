@@ -13,7 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<option value="">
 				<?php esc_html_e( 'Tabs', 'formidable' ); ?>
 			</option>
-			<option value="accordion" <?php isset( $form_action->post_content['layout'] ) ? selected( $form_action->post_content['layout'], 'accordion' ) : ''; ?>>
+			<option value="accordion"
+			<?php
+			if ( isset( $form_action->post_content['layout'] ) ) {
+				selected( $form_action->post_content['layout'], 'accordion' );
+			}
+			?>
+			>
 				<?php esc_html_e( 'Accordion', 'formidable' ); ?>
 			</option>
 		</select>
