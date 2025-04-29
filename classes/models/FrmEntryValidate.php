@@ -180,9 +180,10 @@ class FrmEntryValidate {
 	/**
 	 * @since x.x
 	 *
-	 * @param array  $errors
-	 * @param object $posted_field
-	 * @param array  $args
+	 * @param array        $errors
+	 * @param object       $posted_field
+	 * @param array|string $value
+	 * @param array        $args
 	 *
 	 * @return void
 	 */
@@ -248,7 +249,7 @@ class FrmEntryValidate {
 			if ( ! $match ) {
 				return self::options_are_dynamic_based_on_hook( $field, $value );
 			}
-		}
+		}//end foreach
 
 		return true;
 	}
