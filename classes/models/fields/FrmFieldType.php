@@ -1443,8 +1443,10 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	private function options_are_dynamic_based_on_hook() {
-		$field_object = is_object( $this->field ) ? $this->field : FrmField::getOne( $this->field['id'] );
-		$values       = apply_filters( 'frm_setup_new_fields_vars', (array) $this->field, $field_object, array() );
+		$field_object                 = is_object( $this->field ) ? $this->field : FrmField::getOne( $this->field['id'] );
+		$field_array                  = (array) $this->field;
+		$field_array['original_type'] = isset( $field_object->field_options['original_type'] ) ? $field_object->field_options['original_type'] : $field_object->type;
+		$values                       = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field_object, array() );
 
 		$map_callback = function ( $option ) {
 			return is_array( $option ) ? $option['value'] : $option;
