@@ -1428,6 +1428,13 @@ DEFAULT_HTML;
 				if ( $match ) {
 					break;
 				}
+
+				if ( is_numeric( $current_value ) ) {
+					$match = (int) $current_value === (int) $option_value;
+					if ( $match ) {
+						break;
+					}
+				}
 			}
 
 			if ( ! $match ) {
