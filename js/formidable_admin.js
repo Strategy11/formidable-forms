@@ -7308,8 +7308,6 @@ function frmAdminBuildJS() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
-
-		singleField.querySelectorAll( '.frm_logic_field_opts' ).forEach( triggerChange );
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
