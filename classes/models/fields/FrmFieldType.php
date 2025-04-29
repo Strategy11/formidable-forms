@@ -1408,6 +1408,10 @@ DEFAULT_HTML;
 	 * @return bool
 	 */
 	private function option_is_valid( $value, $options ) {
+		if ( '' === $value ) {
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
