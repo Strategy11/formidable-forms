@@ -203,12 +203,8 @@ class FrmEntryValidate {
 		$option_is_valid = (bool) apply_filters( 'frm_option_is_valid', $option_is_valid, $value, $posted_field );
 
 		if ( ! $option_is_valid ) {
-			$errors = array(
-				'field' . $args['id'] => FrmFieldsHelper::get_error_msg( $posted_field, 'invalid' ),
-			);
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'invalid' );
 		}
-
-		return $errors;
 	}
 
 	/**
