@@ -158,6 +158,7 @@ class FrmEntryValidate {
 
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
+		self::validate_options( $errors, $posted_field, $value, $args );
 		self::validate_field_types( $errors, $posted_field, $value, $args );
 
 		// Field might want to modify value before other parts of the system
@@ -174,6 +175,109 @@ class FrmEntryValidate {
 		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
 			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $errors
+	 * @param object $posted_field
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
+	private static function validate_options( &$errors, $posted_field, $value, $args ) {
+		if ( empty( $posted_field->options ) ) {
+			return;
+		}
+
+		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool         $option_is_valid
+		 * @param array|string $value
+		 * @param object       $field
+		 */
+		$option_is_valid = (bool) apply_filters( 'frm_option_is_valid', $option_is_valid, $value, $posted_field );
+
+		if ( ! $option_is_valid ) {
+			$errors = array(
+				'field' . $args['id'] => FrmFieldsHelper::get_error_msg( $posted_field, 'invalid' ),
+			);
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param stdClass     $field
+	 * @param array|string $value
+	 * @param array        $options
+	 * @return bool
+	 */
+	private static function option_is_valid( $field, $value, $options ) {
+		if ( '' === $value ) {
+			return true;
+		}
+
+		$value = (array) $value;
+
+		foreach ( $value as $current_value ) {
+			$match = false;
+
+			foreach ( $options as $key => $option ) {
+				if ( strpos( $key, 'other_' ) === 0 ) {
+					// Always return true if an other option is found.
+					return true;
+				}
+
+				$option_value = is_array( $option ) ? $option['value'] : $option;
+				$match        = $current_value === $option_value;
+				if ( $match ) {
+					break;
+				}
+
+				if ( is_numeric( $current_value ) ) {
+					$match = (int) $current_value === (int) $option_value;
+					if ( $match ) {
+						break;
+					}
+				}
+			}
+
+			if ( ! $match ) {
+				return self::options_are_dynamic_based_on_hook( $field, $value );
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Do not validate options if they have been modified with a hook.
+	 * This is to help avoid issues where the options could be based on a URL param for example.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function options_are_dynamic_based_on_hook( $field_object, $value ) {
+		$values          = (array) $field_object;
+		$values['value'] = $value;
+		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+
+		$map_callback = function ( $option ) {
+			return is_array( $option ) ? $option['value'] : $option;
+		};
+
+		$values_options       = array_map( $map_callback, $values['options'] );
+		$field_object_options = array_map( $map_callback, $field_object->options );
+
+		return $values_options !== $field_object_options;
 	}
 
 	/**
