@@ -1363,11 +1363,75 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args
-	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
-		return array();
+		$errors = $this->validate_options( $args );
+		return $errors;
+	}
+
+	/**
+	 * @param array $args
+	 * @return array
+	 */
+	private function validate_options( $args ) {
+		$errors  = array();
+		$options = is_object( $this->field ) ? $this->field->options : $this->field['options'];
+
+		if ( empty( $options ) ) {
+			return $errors;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool         $option_is_valid
+		 * @param array|string $value
+		 * @param array|object $field
+		 */
+		$option_is_valid = (bool) apply_filters( 'frm_option_is_valid', $this->option_is_valid( $args['value'], $options ), $args['value'], $this->field );
+
+		if ( ! $option_is_valid ) {
+			$errors = array(
+				'field' . $args['id'] => FrmFieldsHelper::get_error_msg( $this->field, 'invalid' ),
+			);
+		}
+
+		return $errors;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array|string $value
+	 * @param array        $options
+	 * @return bool
+	 */
+	private function option_is_valid( $value, $options ) {
+		$value = (array) $value;
+
+		foreach ( $value as $current_value ) {
+			$match = false;
+
+			foreach ( $options as $key => $option ) {
+				if ( strpos( $key, 'other_' ) === 0 ) {
+					// Always return true if an other option is found.
+					return true;
+				}
+
+				$option_value = is_array( $option ) ? $option['value'] : $option;
+				$match        = $current_value === $option_value;
+				if ( $match ) {
+					break;
+				}
+			}
+
+			if ( ! $match ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
