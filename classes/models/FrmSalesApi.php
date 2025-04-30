@@ -248,6 +248,10 @@ class FrmSalesApi extends FrmFormApi {
 			self::$instance = new FrmSalesApi();
 		}
 
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			return false;
+		}
+
 		$sale = self::$instance->get_best_sale();
 		if ( ! $sale || ! is_array( $sale ) ) {
 			return false;
