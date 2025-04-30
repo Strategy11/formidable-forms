@@ -244,12 +244,12 @@ class FrmSalesApi extends FrmFormApi {
 	 * @return bool
 	 */
 	public static function maybe_show_banner() {
-		if ( ! isset( self::$instance ) ) {
-			self::$instance = new FrmSalesApi();
-		}
-
 		if ( ! current_user_can( 'frm_change_settings' ) ) {
 			return false;
+		}
+
+		if ( ! isset( self::$instance ) ) {
+			self::$instance = new FrmSalesApi();
 		}
 
 		$sale = self::$instance->get_best_sale();
