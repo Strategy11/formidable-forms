@@ -264,10 +264,12 @@ class FrmSalesApi extends FrmFormApi {
 			return false;
 		}
 
-		$banner_icon           = ! empty( $sale['banner_icon'] ) ? $sale['banner_icon'] : 'generic';
-		$banner_bg_color       = ! empty( $sale['banner_bg_color'] ) ? $sale['banner_bg_color'] : false;
-		$banner_text_color     = ! empty( $sale['banner_text_color'] ) ? $sale['banner_text_color'] : false;
-		$banner_cta_link       = ! empty( $sale['banner_cta_link'] ) ? $sale['banner_cta_link'] : false;
+		$banner_icon       = ! empty( $sale['banner_icon'] ) ? $sale['banner_icon'] : 'generic';
+		$banner_bg_color   = ! empty( $sale['banner_bg_color'] ) ? $sale['banner_bg_color'] : false;
+		$banner_text_color = ! empty( $sale['banner_text_color'] ) ? $sale['banner_text_color'] : false;
+		$banner_cta_link   = ! empty( $sale['banner_cta_link'] ) ? $sale['banner_cta_link'] : false;
+
+		// translators: %s is the discount percentage.
 		$banner_cta_text       = ! empty( $sale['banner_cta_text'] ) ? $sale['banner_cta_text'] : sprintf( __( 'GET %s OFF NOW', 'formidable' ), $sale['discount_percent'] . '%' );
 		$banner_cta_text_color = ! empty( $sale['banner_cta_text_color'] ) ? $sale['banner_cta_text_color'] : false;
 		$banner_cta_bg_color   = ! empty( $sale['banner_cta_bg_color'] ) ? $sale['banner_cta_bg_color'] : false;
@@ -316,11 +318,11 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		?>
-		<div <?php echo FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
+		<div <?php FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
-				<img src="<?php echo FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg'; ?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
+				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg' ); 	?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
 			</div>
-			<div <?php echo FrmAppHelper::array_to_html_params( $content_attrs, true ); ?>>
+			<div <?php FrmAppHelper::array_to_html_params( $content_attrs, true ); ?>>
 				<div>
 					<?php echo esc_html( $banner_title ); ?>
 				</div>
@@ -329,11 +331,11 @@ class FrmSalesApi extends FrmFormApi {
 				</div>
 			</div>
 			<div>
-				<a <?php echo FrmAppHelper::array_to_html_params( $cta_attrs, true ); ?>>
+				<a <?php FrmAppHelper::array_to_html_params( $cta_attrs, true ); ?>>
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
-			<a <?php echo FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
+			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
 		</div>
 		<?php
 
