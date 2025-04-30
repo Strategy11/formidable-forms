@@ -86,7 +86,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	private static function delete_all_button( $form, $args = array() ) {
-		if ( ! FrmEntriesController::has_moved_entries_bulk_delete_from_pro() ) {
+		if ( ! self::has_moved_entries_bulk_delete_from_pro() ) {
 			return;
 		}
 		$form_id = is_numeric( $form ) ? $form : $form->id;
@@ -105,6 +105,15 @@ class FrmEntriesHelper {
 			</a>
 		</span>
 		<?php
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function has_moved_entries_bulk_delete_from_pro() {
+		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
 	}
 
 	/**
