@@ -320,7 +320,7 @@ class FrmSalesApi extends FrmFormApi {
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $banner_attrs, true ); ?>>
 			<div>
-				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg' ); 	?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
+				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg' ); ?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
 			</div>
 			<div <?php FrmAppHelper::array_to_html_params( $content_attrs, true ); ?>>
 				<div>
