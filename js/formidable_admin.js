@@ -7308,8 +7308,6 @@ function frmAdminBuildJS() {
 
 		wp.hooks.doAction( 'frmShowedFieldSettings', obj, singleField );
 		maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField );
-
-		singleField.querySelectorAll( '.frm_logic_field_opts' ).forEach( triggerChange );
 	}
 
 	function maybeAddShortcodesModalTriggerIcon( fieldType, fieldId, singleField ) {
@@ -10255,6 +10253,27 @@ function frmAdminBuildJS() {
 					document.getElementById( 'frm_small_device_message_container' )?.remove();
 					doJsonPost( 'small_screen_proceed', new FormData() );
 				});
+			}
+
+			const saleBanner  = document.getElementById( 'frm_sale_banner' );
+			const saleDismiss = saleBanner?.querySelector( '.dismiss' );
+			if ( saleBanner ) {
+				onClickPreventDefault( saleBanner, ( event ) => {
+					const target = event.target;
+					if ( target.closest( '.dismiss' ) ) {
+						return;
+					}
+					window.location.href = saleBanner.getAttribute( 'data-url' );
+				});
+
+				if ( saleDismiss ) {
+					onClickPreventDefault( saleDismiss, () => {
+						saleBanner.remove();
+
+						const formData = new FormData();
+						doJsonPost( 'sale_banner_dismiss', formData );
+					});
+				}
 			}
 		},
 

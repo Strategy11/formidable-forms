@@ -980,7 +980,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param array|bool|object|string $form
+	 * @param array|bool|int|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
