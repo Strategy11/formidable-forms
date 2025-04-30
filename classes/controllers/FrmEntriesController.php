@@ -139,7 +139,10 @@ class FrmEntriesController {
 				}
 			}
 		}//end if
-		self::display_list( '', $errors );
+
+		if ( FrmEntriesHelper::has_moved_entries_bulk_delete_from_pro() ) {
+			self::display_list( '', $errors );
+		}
 	}
 
 	/**
