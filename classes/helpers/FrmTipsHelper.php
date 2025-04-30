@@ -89,8 +89,8 @@ class FrmTipsHelper {
 
 		$cta_link = FrmSalesApi::get_best_sale_value( 'pro_tip_cta_link' );
 		if ( $cta_link ) {
-			if ( is_array( $tip['link'] ) && isset( $tip['link']['content'] ) ) {
-				$cta_link = add_query_arg( 'utm_content', $tip['link']['content'], $cta_link );
+			if ( is_array( $tip['link'] ) ) {
+				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
 			}
 			return $cta_link;
 		}

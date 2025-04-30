@@ -9,13 +9,14 @@ if ( ! $button_upgrade_text ) {
 }
 
 $button_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_license_cta_link' );
-if ( ! $button_upgrade_link ) {
-	$button_upgrade_link      = FrmAppHelper::admin_upgrade_link(
-		array(
-			'medium'  => 'settings-license',
-			'content' => 'global-settings-license-box-get-formidable-button',
-		)
-	);
+$utm                 = array(
+	'medium'  => 'settings-license',
+	'content' => 'global-settings-license-box-get-formidable-button',
+);
+if ( $button_upgrade_link ) {
+	$button_upgrade_link = FrmAppHelper::maybe_add_missing_utm( $button_upgrade_link, $utm );
+} else {
+	$button_upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 }
 
 $unlock_more_upgrade_text = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_text' );
@@ -24,11 +25,36 @@ if ( ! $unlock_more_upgrade_text ) {
 }
 
 $unlock_more_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_link' );
-if ( ! $unlock_more_upgrade_link ) {
-	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link(
-		array(
-			'medium'  => 'settings-license',
-			'content' => 'global-settings-license-box-unlock-more',
+$utm                      = array(
+	'medium'  => 'settings-license',
+	'content' => 'global-settings-license-box-unlock-more',
+);
+if ( $unlock_more_upgrade_link ) {
+	$unlock_more_upgrade_link = FrmAppHelper::maybe_add_missing_utm( $unlock_more_upgrade_link, $utm );
+} else {
+	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
+}
+
+$unlock_more_upgrade_text = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_text' );
+if ( ! $unlock_more_upgrade_text ) {
+	$unlock_more_upgrade_text = __( 'upgrading to PRO', 'formidable' );
+}
+
+$unlock_more_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_link' );
+$utm                      = array(
+	'medium'  => 'settings-license',
+	'content' => 'global-settings-license-box-unlock-more',
+);
+if ( $unlock_more_upgrade_link ) {
+	$unlock_more_upgrade_link = FrmAppHelper::maybe_add_missing_utm( $unlock_more_upgrade_link, $utm );
+} else {
+	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
+}
+?>
+<div id="frm_license_top" class="frm_unauthorized_box">
+	<p id="frm-connect-btns" class="frm-show-unauthorized">
+		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm">
+</ADDITIONAL_METADATA>
 		)
 	);
 }
