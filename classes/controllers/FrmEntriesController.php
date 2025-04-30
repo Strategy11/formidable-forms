@@ -139,9 +139,10 @@ class FrmEntriesController {
 				}
 			}
 		}//end if
-		if ( ! self::has_moved_entries_bulk_delete_from_pro() ) {
-			self::display_list( '', $errors );
-		}
+		self::display_list( '', $errors );
+
+		// if ( ! self::has_moved_entries_bulk_delete_from_pro() ) {
+		// }
 	}
 
 	/**
@@ -170,7 +171,7 @@ class FrmEntriesController {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}
 
-				if ( strpos( $action, 'bulk_' ) === 0 ) {
+				if ( strpos( FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' ), 'bulk_' ) === 0 ) {
 					FrmAppHelper::remove_get_action();
 					self::bulk_actions( $action );
 				}
