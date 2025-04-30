@@ -2,48 +2,57 @@
  * Component: Insert Fields
  */
 
-.frm_field_list #frm-insert-fields .button a {
-	display: block;
-	max-width: 95%;
-	overflow: hidden;
+.frm_field_list {
+
+	#frm-insert-fields .button a {
+		display: block;
+		max-width: 95%;
+		overflow: hidden;
+	}
 }
 
-.field_type_list.frm_grid_container {
-	gap: var(--gap-xs) var(--gap-sm);
-	margin: var(--gap-xs);
+.field_type_list {
+
+	&.frm_grid_container {
+		gap: var(--gap-xs) var(--gap-sm);
+		margin: var(--gap-xs);
+	}
+
+	li {
+		margin: 0;
+		padding: 0;
+	}
 }
 
-.field_type_list li {
-	margin: 0;
-	padding: 0;
-}
+#frm-insert-fields {
 
-#frm-insert-fields .frm-search {
-	float: none;
-	margin: 15px 20px;
-	width: auto;
-}
+	.frm-search {
+		float: none;
+		margin: 0 0 var(--gap-sm);
+		width: auto;
+	}
 
-#frm-insert-fields li,
-#frm-insert-fields li a {
-	text-decoration: none;
-	font-weight: 400;
-	font-size: var(--text-md) !important;
-	color: var(--grey-900);
-}
+	li,
+	li a {
+		text-decoration: none;
+		font-weight: 400;
+		font-size: var(--text-md) !important;
+		color: var(--grey-900);
+	}
 
-#frm-insert-fields li.frm_show_upgrade {
-	cursor: pointer;
-	opacity: .5;
-}
+	li.frm_show_upgrade {
+		cursor: pointer;
+		opacity: .5;
+	}
 
-#frm-insert-fields li span:not(.frm-new-pill) {
-	vertical-align: middle;
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
-	width: 100%;
-	text-align: left;
+	li span:not(.frm-new-pill) {
+		vertical-align: middle;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		width: 100%;
+		text-align: left;
+	}
 }
 
 .frmbutton.ui-draggable-dragging a,
@@ -51,21 +60,27 @@
 	background: var(--grey-100);
 }
 
-#frm-insert-fields li a.disabled:hover {
-	cursor: not-allowed;
-}
+#frm-insert-fields {
 
-#frm-insert-fields li.ui-draggable-disabled {
-	opacity: 0.5;
+	li a.disabled:hover {
+		cursor: not-allowed;
+	}
+
+	li.ui-draggable-disabled {
+		opacity: 0.5;
+	}
 }
 
 .frm_code_list {
 	clear: both;
 }
 
-.frm_code_list.frm-full-hover a.frm_hidden,
-.frm_code_list .frmkeys {
-	display: none;
+.frm_code_list {
+
+	&.frm-full-hover a.frm_hidden,
+	.frmkeys {
+		display: none;
+	}
 }
 
 .frmsvg {
@@ -73,41 +88,44 @@
 	width: 18px;
 	height: 18px;
 	vertical-align: middle;
+
+	svg {
+		pointer-events: none;
+	}
+
+	&.frm_svg40 {
+		width: 40px;
+		height: 40px;
+	}
+
+	&.frm_svg20 {
+		width: 20px;
+		height: 20px;
+	}
+
+	&.frm_svg15 {
+		width: 15px;
+		height: 15px;
+	}
+
+	&.frm_svg14 {
+		width: 14px;
+		height: 14px;
+	}
+
+	&.frm_svg13 {
+		width: 13px;
+		height: 13px;
+	}
+
+	&.frm_svg9 {
+		width: 9px;
+		height: 9px;
+	}
 }
 
-input[disabled],
-.frmsvg svg {
+input[disabled] {
 	pointer-events: none;
-}
-
-.frmsvg.frm_svg40 {
-	width: 40px;
-	height: 40px;
-}
-
-.frmsvg.frm_svg20 {
-	width: 20px;
-	height: 20px;
-}
-
-.frmsvg.frm_svg15 {
-	width: 15px;
-	height: 15px;
-}
-
-.frmsvg.frm_svg14 {
-	width: 14px;
-	height: 14px;
-}
-
-.frmsvg.frm_svg13 {
-	width: 13px;
-	height: 13px;
-}
-
-.frmsvg.frm_svg9 {
-	width: 9px;
-	height: 9px;
 }
 
 .frmbutton.ui-sortable-helper .frmsvg,
@@ -124,18 +142,30 @@ input[disabled],
 }
 
 /* Standardize icon size for field buttons in the builder */
-.field_type_list li.frmbutton .frmsvg {
-	width: var(--text-xl);
-	font-size: var(--text-xl);
+.field_type_list {
+
+	li.frmbutton .frmsvg {
+		width: var(--text-xl);
+		font-size: var(--text-xl);
+	}
 }
 
-.frm_code_list i::before {
-	font-size: inherit;
+.frm_code_list {
+
+	i::before {
+		font-size: inherit;
+	}
 }
 
-#frm-insert-fields li a:not(.disabled):hover .frmsvg,
-#frm-insert-fields li a:not(.disabled):hover i {
-	color: var(--grey-600);
+#frm-insert-fields {
+
+	li a:not(.disabled):hover {
+
+		.frmsvg,
+		i {
+			color: var(--grey-600);
+		}
+	}
 }
 
 /* Icon while dragging */
@@ -143,8 +173,20 @@ input[disabled],
 	pointer-events: none;
 }
 
-#frm-insert-fields li.frm_show_upgrade,
-#frm-insert-fields li a,
+#frm-insert-fields {
+
+	li.frm_show_upgrade,
+	li a {
+		text-decoration: none;
+		display: inline-flex !important;
+		gap: var(--gap-xs);
+		align-items: center;
+		border-radius: var(--border-radius) !important;
+		padding: var(--gap-xs) var(--gap-sm) !important;
+		color: var(--grey-900) !important;
+	}
+}
+
 .frmbutton.ui-draggable-dragging a {
 	text-decoration: none;
 	display: inline-flex !important;
@@ -156,11 +198,14 @@ input[disabled],
 }
 
 /* Adjust field button size to full width in builder */
-#frm-insert-fields li a {
-	display: flex !important;
-}
+#frm-insert-fields {
 
-/* Prevents advanced fields from always appearing in search results */
-#frm-insert-fields li.frm_show_upgrade.frm_hidden {
-	display: none !important;
+	li a {
+		display: flex !important;
+	}
+
+	/* Prevents advanced fields from always appearing in search results */
+	li.frm_show_upgrade.frm_hidden {
+		display: none !important;
+	}
 }
