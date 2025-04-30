@@ -980,7 +980,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param array|bool|object|string $form
+	 * @param array|bool|int|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -998,7 +998,7 @@ BEFORE_HTML;
 			$style = $form['custom_style'];
 		}
 
-		if ( $form && is_string( $form ) ) {
+		if ( $form && ( is_string( $form ) || is_int( $form ) ) ) {
 			$form = FrmForm::getOne( $form );
 		}
 
