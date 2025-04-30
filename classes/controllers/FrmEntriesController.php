@@ -115,7 +115,7 @@ class FrmEntriesController {
 
 		$items = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
 		if ( empty( $items ) ) {
-			$errors[] = __( 'No entries were specified', 'formidable-pro' );
+			$errors[] = __( 'No entries were specified', 'formidable' );
 		} else {
 			if ( $action === 'list-form' ) {
 				$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
@@ -149,7 +149,7 @@ class FrmEntriesController {
 	 *
 	 * @return bool
 	 */
-	private static function has_moved_entries_bulk_delete_from_pro() {
+	public static function has_moved_entries_bulk_delete_from_pro() {
 		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
 	}
 
@@ -166,7 +166,6 @@ class FrmEntriesController {
 				return self::$action();
 
 			default:
-				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
 				if ( $action == -1 ) {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}

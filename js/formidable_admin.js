@@ -418,7 +418,7 @@ function frmAdminBuildJS() {
 			const label = window.frmDom.tag( 'label', {
 				children: [
 					checkbox,
-					document.createTextNode( __( 'Trigger all actions that happen "on entry deleted"', 'formidable-pro' ) ),
+					document.createTextNode( __( 'Trigger all actions that happen "on entry deleted"', 'formidable' ) ),
 				],
 			} );
 			label.for = 'frm_trigger_on_delete_entry_actions';

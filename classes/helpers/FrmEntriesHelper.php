@@ -80,9 +80,15 @@ class FrmEntriesHelper {
 	 * @since 4.0
 	 * @since x.x Moved from FrmProEntriesHelper to FrmEntriesHelper
 	 *
-	 * @param int $form_id
+	 * @param int|object $form The form or form ID.
+	 * @param array      $args Additional arguments.
+	 *
+	 * @return void
 	 */
 	private static function delete_all_button( $form, $args = array() ) {
+		if ( ! FrmEntriesController::has_moved_entries_bulk_delete_from_pro() ) {
+			return;
+		}
 		$form_id = is_numeric( $form ) ? $form : $form->id;
 
 		if ( ! apply_filters( 'frm_show_delete_all', current_user_can( 'frm_delete_entries' ), $form_id ) ) {
@@ -95,7 +101,7 @@ class FrmEntriesHelper {
 		?>
 		<span class="frm_uninstall">
 			<a href="<?php echo esc_url( wp_nonce_url( '?page=formidable-entries&frm_action=destroy_all' . ( $form_id ? '&form=' . absint( $form_id ) : '' ) ) ); ?>" class="button frm-button-secondary" data-loaded-from="entries-list" data-total-entries="<?php echo esc_attr( $entries_count ); ?>" data-frmverify="<?php echo esc_attr( $verify ); ?>" data-frmverify-btn="frm-button-red">
-				<?php esc_html_e( 'Delete All Entries', 'formidable-pro' ); ?>
+				<?php esc_html_e( 'Delete All Entries', 'formidable' ); ?>
 			</a>
 		</span>
 		<?php
