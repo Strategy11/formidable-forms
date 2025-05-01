@@ -54,14 +54,6 @@ if ( $unlock_more_upgrade_link ) {
 <div id="frm_license_top" class="frm_unauthorized_box">
 	<p id="frm-connect-btns" class="frm-show-unauthorized">
 		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm">
-</ADDITIONAL_METADATA>
-		)
-	);
-}
-?>
-<div id="frm_license_top" class="frm_unauthorized_box">
-	<p id="frm-connect-btns" class="frm-show-unauthorized">
-		<a href="<?php echo esc_url( FrmAddonsController::connect_link() ); ?>" class="button-primary frm-button-primary frm-button-sm">
 			<?php esc_html_e( 'Connect an Account', 'formidable' ); ?>
 		</a>
 		<?php esc_html_e( 'or', 'formidable' ); ?>
