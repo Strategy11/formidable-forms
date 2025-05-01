@@ -357,7 +357,9 @@ class FrmAppController {
 			}
 
 			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
-			if ( ! $upgrade_link ) {
+			if ( $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row' ) );
+			} else {
 				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
 			}
 
@@ -577,13 +579,15 @@ class FrmAppController {
 
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
 			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
-			if ( ! $redirect ) {
-				$redirect = FrmAppHelper::admin_upgrade_link(
-					array(
-						'medium'  => 'upgrade',
-						'content' => 'submenu-upgrade',
-					)
-				);
+			$utm      = array(
+				'medium'  => 'upgrade',
+				'content' => 'submenu-upgrade',
+			);
+
+			if ( $redirect ) {
+				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
+			} else {
+				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			wp_redirect( $redirect );

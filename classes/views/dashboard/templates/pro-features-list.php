@@ -19,13 +19,14 @@ $discount_text = sprintf(
 );
 
 $discount_link = FrmSalesApi::get_best_sale_value( 'global_settings_upgrade_cta_link' );
-if ( ! $discount_link ) {
-	$discount_link = FrmAppHelper::admin_upgrade_link(
-		array(
-			'medium'  => 'dashboard-discount',
-			'content' => 'dashboard-defy-limits-cta',
-		)
-	);
+$utm           = array(
+	'medium'  => 'dashboard-discount',
+	'content' => 'dashboard-defy-limits-cta',
+);
+if ( $discount_link ) {
+	$discount_link = FrmAppHelper::maybe_add_missing_utm( $discount_link, $utm );
+} else {
+	$discount_link = FrmAppHelper::admin_upgrade_link( $utm );
 }
 ?>
 <div class="frm-dashboard-widget frm-card-item frm-px-0 frm-p-0">
