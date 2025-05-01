@@ -222,7 +222,13 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			);
 		}
 
-		FrmSquareLiteConnectHelper::create_subscription( $info );
+		$response = FrmSquareLiteConnectHelper::create_subscription( $info );
+
+		if ( is_object( $response ) && isset( $response->id ) ) {
+			return true;
+		}
+
+		return is_string( $response ) ? $response : __( 'There was a problem creating the subscription', 'formidable' );
 	}
 
 	/**
