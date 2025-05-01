@@ -162,6 +162,34 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $cta_link
+	 * @param array  $utm
+	 */
+	public static function maybe_add_missing_utm( $cta_link, $utm ) {
+		$query_args = array();
+
+		if ( false === strpos( $cta_link, 'utm_source' ) ) {
+			$query_args['utm_source'] = 'WordPress';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_campaign' ) ) {
+			$query_args['utm_campaign'] = 'liteplugin';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_medium' ) && isset( $utm['medium'] ) ) {
+			$query_args['utm_medium'] = $utm['medium'];
+		}
+
+		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
+			$query_args['utm_content'] = $utm['content'];
+		}
+
+		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
+	}
+
+	/**
 	 * Get the Formidable settings
 	 *
 	 * @since 2.0
@@ -1432,13 +1460,15 @@ class FrmAppHelper {
 				}
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
-				if ( ! $upgrade_link ) {
-					$upgrade_link = self::admin_upgrade_link(
-						array(
-							'medium'  => 'settings-license',
-							'content' => 'lite-banner',
-						)
-					);
+				$utm          = array(
+					'medium'  => 'settings-license',
+					'content' => 'lite-banner',
+				);
+
+				if ( $upgrade_link ) {
+					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
+				} else {
+					$upgrade_link = self::admin_upgrade_link( $utm );
 				}
 
 				printf(
