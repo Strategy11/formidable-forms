@@ -95,9 +95,9 @@ class FrmSettings {
 
 	public $wp_spam_check;
 
-	public $blacklist;
+	public $disallowed_words;
 
-	public $whitelist;
+	public $allowed_words;
 
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
@@ -173,8 +173,8 @@ class FrmSettings {
 			'custom_css'                => false,
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
-			'blacklist'                 => '',
-			'whitelist'                 => '',
+			'disallowed_words'          => '',
+			'allowed_words'             => '',
 		);
 	}
 

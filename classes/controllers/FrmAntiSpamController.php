@@ -21,7 +21,7 @@ class FrmAntiSpamController {
 	 */
 	public static function is_spam( $values ) {
 		return self::contains_wp_disallowed_words( $values ) ||
-			self::is_blacklist_spam( $values ) ||
+			self::is_denylist_spam( $values ) ||
 			self::is_stopforumspam_spam( $values ) ||
 			self::is_wp_comment_spam( $values );
 	}
@@ -41,8 +41,8 @@ class FrmAntiSpamController {
 		return $spam_check->is_spam();
 	}
 
-	public static function is_blacklist_spam( $values ) {
-		$spam_check = new FrmSpamCheckBlacklist( $values );
+	public static function is_denylist_spam( $values ) {
+		$spam_check = new FrmSpamCheckDenylist( $values );
 		return $spam_check->is_spam();
 	}
 

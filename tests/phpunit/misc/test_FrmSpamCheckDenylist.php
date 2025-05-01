@@ -1,6 +1,6 @@
 <?php
 
-class test_FrmSpamCheckBlacklist extends FrmUnitTest {
+class test_FrmSpamCheckDenylist extends FrmUnitTest {
 
 	private $form_id;
 
@@ -14,7 +14,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 	private $spam_check;
 
-	private $custom_blacklist_data;
+	private $custom_denylist_data;
 
 	private $default_values;
 
@@ -64,25 +64,25 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 			),
 		);
 
-		$this->spam_check = new FrmSpamCheckBlacklist( $this->default_values );
+		$this->spam_check = new FrmSpamCheckDenylist( $this->default_values );
 
-		$this->custom_blacklist_data = array(
-			'blacklist_with_all_fields'      => array(
+		$this->custom_denylist_data = array(
+			'denylist_with_all_fields'      => array(
 				'words' => array( 'spamword' ),
 			),
-			'blacklist_with_name_text_email' => array(
+			'denylist_with_name_text_email' => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'text', 'email', 'name' ),
 			),
-			'blacklist_with_name'            => array(
+			'denylist_with_name'            => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'name' ),
 			),
-			'blacklist_with_email'           => array(
+			'denylist_with_email'           => array(
 				'words'      => array( 'spamword' ),
 				'field_type' => array( 'email' ),
 			),
-			'blacklist_with_extract_email'   => array(
+			'denylist_with_extract_email'   => array(
 				'words'         => array( 'spamword' ),
 				'field_type'    => array(),
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
@@ -90,8 +90,8 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		);
 	}
 
-	private function set_blacklist_data( $blacklist_data ) {
-		$this->set_private_property( $this->spam_check, 'blacklist', $blacklist_data );
+	private function set_denylist_data( $denylist_data ) {
+		$this->set_private_property( $this->spam_check, 'denylist', $denylist_data );
 	}
 
 	private function set_values( $values ) {
@@ -102,13 +102,13 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 		// Test get_field_ids_to_check
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_all_fields'] )
+			array( $this->custom_denylist_data['denylist_with_all_fields'] )
 		);
 		$this->assertFalse( $field_ids_to_check );
 
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_name_text_email'] )
+			array( $this->custom_denylist_data['denylist_with_name_text_email'] )
 		);
 		$this->assertEquals(
 			array(
@@ -122,13 +122,13 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_name'] )
+			array( $this->custom_denylist_data['denylist_with_name'] )
 		);
 		$this->assertEquals( array( $this->name_field_id ), $field_ids_to_check );
 
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_email'] )
+			array( $this->custom_denylist_data['denylist_with_email'] )
 		);
 		$this->assertEquals( array( $this->email_field_id, $this->email_field_id2 ), $field_ids_to_check );
 	}
@@ -136,7 +136,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 	public function test_get_values_to_check() {
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_all_fields'] )
+			array( $this->custom_denylist_data['denylist_with_all_fields'] )
 		);
 		$this->assertEquals(
 			$values_to_check,
@@ -150,7 +150,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_name_text_email'] )
+			array( $this->custom_denylist_data['denylist_with_name_text_email'] )
 		);
 		$this->assertEquals(
 			$values_to_check,
@@ -164,7 +164,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_name'] )
+			array( $this->custom_denylist_data['denylist_with_name'] )
 		);
 		$this->assertEquals(
 			$values_to_check,
@@ -175,7 +175,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_extract_email'] )
+			array( $this->custom_denylist_data['denylist_with_extract_email'] )
 		);
 		$this->assertEquals(
 			$values_to_check,
@@ -188,7 +188,7 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 
 		$values_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_values_to_check' ),
-			array( $this->custom_blacklist_data['blacklist_with_email'] )
+			array( $this->custom_denylist_data['denylist_with_email'] )
 		);
 		$this->assertEquals(
 			$values_to_check,
@@ -200,69 +200,69 @@ class test_FrmSpamCheckBlacklist extends FrmUnitTest {
 	}
 
 	public function test_check() {
-		$spam_check = new FrmSpamCheckBlacklist( $this->default_values );
+		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
 		$this->assertFalse( $spam_check->check() );
-		$blacklist = $this->custom_blacklist_data['blacklist_with_all_fields'];
+		$denylist = $this->custom_denylist_data['denylist_with_all_fields'];
 
-		$this->set_blacklist_data( array( $blacklist ) );
+		$this->set_denylist_data( array( $denylist ) );
 
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist['words'] = array( '.com' );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist['words'] = array( '.com' );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->spam_check->check() );
 
-		$blacklist['compare'] = FrmSpamCheckBlacklist::COMPARE_EQUALS;
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist['compare'] = FrmSpamCheckDenylist::COMPARE_EQUALS;
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist['words']   = array( '@' );
-		$blacklist['compare'] = FrmSpamCheckBlacklist::COMPARE_CONTAINS;
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist['words']   = array( '@' );
+		$denylist['compare'] = FrmSpamCheckDenylist::COMPARE_CONTAINS;
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->spam_check->check() );
 
-		$blacklist          = $this->custom_blacklist_data['blacklist_with_name'];
-		$blacklist['words'] = array( '@' );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist          = $this->custom_denylist_data['denylist_with_name'];
+		$denylist['words'] = array( '@' );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist          = $this->custom_blacklist_data['blacklist_with_all_fields'];
-		$blacklist['words'] = array( 'plugin' );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist          = $this->custom_denylist_data['denylist_with_all_fields'];
+		$denylist['words'] = array( 'plugin' );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->spam_check->check() );
 
-		$blacklist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		$blacklist         = $this->custom_blacklist_data['blacklist_with_all_fields'];
-		$blacklist['file'] = __DIR__ . '/blacklist-email-contain.txt';
-		unset( $blacklist['words'] );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist         = $this->custom_denylist_data['denylist_with_all_fields'];
+		$denylist['file'] = __DIR__ . '/denylist-email-contain.txt';
+		unset( $denylist['words'] );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->spam_check->check() );
 
-		$blacklist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
-		$this->set_blacklist_data( array( $blacklist ) );
+		$denylist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		FrmAppHelper::get_settings()->update_setting( 'whitelist', "wordpress\nplugin", 'sanitize_textarea_field' );
-		unset( $blacklist['extract_value'] );
-		$this->set_blacklist_data( array( $blacklist ) );
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', "wordpress\nplugin", 'sanitize_textarea_field' );
+		unset( $denylist['extract_value'] );
+		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->spam_check->check() );
 
-		FrmAppHelper::get_settings()->update_setting( 'blacklist', "wordprezz\ndoe.com", 'sanitize_textarea_field' );
-		$spam_check = new FrmSpamCheckBlacklist( $this->default_values );
+		FrmAppHelper::get_settings()->update_setting( 'disallowed_words', "wordprezz\ndoe.com", 'sanitize_textarea_field' );
+		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
 		$this->assertTrue( $spam_check->check() );
 
 		// Test with regex.
 		$values = $this->default_values;
 		$values['item_meta'][ $this->email_field_id ] = 'someone@mail.ru';
-		$spam_check = new FrmSpamCheckBlacklist( $values );
+		$spam_check = new FrmSpamCheckDenylist( $values );
 		$this->assertTrue( $spam_check->check() );
 
 		$values = $this->default_values;
 		$values['item_meta'][ $this->text_field_id ] = 'This text contains someone@yandex.com email';
-		$spam_check = new FrmSpamCheckBlacklist( $values );
+		$spam_check = new FrmSpamCheckDenylist( $values );
 		$this->assertTrue( $spam_check->check() );
 	}
 }

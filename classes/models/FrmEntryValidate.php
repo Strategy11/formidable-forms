@@ -402,7 +402,7 @@ class FrmEntryValidate {
 	}
 
 	public static function blacklist_check( $values ) {
-		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_blacklist_spam( $values );
+		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_denylist_spam( $values );
 	}
 
 	/**

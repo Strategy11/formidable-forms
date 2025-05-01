@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmSpamCheckBlacklist extends FrmSpamCheck {
+class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	const COMPARE_CONTAINS = '';
 
@@ -11,26 +11,34 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	protected $posted_fields;
 
-	protected $blacklist;
+	protected $denylist;
 
 	public function __construct( $values ) {
 		parent::__construct( $values );
 
 		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
-		$this->blacklist     = $this->get_blacklist_array();
+		$this->denylist      = $this->get_denylist_array();
 	}
 
 	protected function is_enabled() {
-		return apply_filters( 'frm_check_blacklist', true, $this->values );
+		/**
+		 * Allows to disable the denylist check.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool  $is_enabled Whether the denylist check is enabled.
+		 * @param array $values     The entry values.
+		 */
+		return apply_filters( 'frm_check_denylist', true, $this->values );
 	}
 
 	/**
-	 * Gets blacklist data.
+	 * Gets denylist data.
 	 *
 	 * @return array[]
 	 */
-	protected function get_blacklist_array() {
-		$blacklist_data = array(
+	protected function get_denylist_array() {
+		$denylist_data = array(
 			array(
 				'file'    => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
 				'compare' => self::COMPARE_CONTAINS,
@@ -51,24 +59,31 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			),
 		);
 
-		$custom_blacklist = $this->get_words_from_setting( 'blacklist' );
-		if ( $custom_blacklist ) {
-			$blacklist_data['custom'] = array(
-				'words' => $custom_blacklist,
+		$custom_denylist = $this->get_words_from_setting( 'denylist' );
+		if ( $custom_denylist ) {
+			$denylist_data['custom'] = array(
+				'words' => $custom_denylist,
 			);
 		}
 
-		return apply_filters( 'frm_blacklist_data', $blacklist_data );
+		/**
+		 * Allows to modify the denylist data.
+		 *
+		 * @since x.x
+		 *
+		 * @param array[] $denylist_data The denylist data
+		 */
+		return apply_filters( 'frm_denylist_data', $denylist_data );
 	}
 
 	/**
-	 * Gets blacklist IP.
+	 * Gets denylist IP addresses.
 	 *
 	 * @return array
 	 */
-	protected function get_blacklist_ip() {
+	protected function get_denylist_ips() {
 		return apply_filters(
-			'frm_blacklist_ip_data',
+			'frm_denylist_ips_data',
 			array(
 				'files'  => array(
 					FrmAppHelper::plugin_path() . '/denylist/ip.txt',
@@ -87,25 +102,25 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	}
 
 	private function check_values() {
-		$whitelist = $this->get_words_from_setting( 'whitelist' );
-		$whitelist = array_map( array( $this, 'convert_to_lowercase' ), $whitelist );
+		$allowed_words = $this->get_words_from_setting( 'allowed_words' );
+		$allowed_words = array_map( array( $this, 'convert_to_lowercase' ), $allowed_words );
 
-		foreach ( $this->blacklist as $blacklist ) {
-			if ( empty( $blacklist['file'] ) && empty( $blacklist['words'] ) ) {
+		foreach ( $this->denylist as $denylist ) {
+			if ( empty( $denylist['file'] ) && empty( $denylist['words'] ) ) {
 				continue;
 			}
 
-			$this->fill_default_blacklist_data( $blacklist );
-			$blacklist['whitelist'] = $whitelist;
+			$this->fill_default_denylist_data( $denylist );
+			$denylist['allowed_words'] = $denylist;
 
-			if ( ! empty( $blacklist['words'] ) ) {
-				foreach ( $blacklist['words'] as $word ) {
-					if ( $this->single_line_check_values( $word, $blacklist ) ) {
+			if ( ! empty( $denylist['words'] ) ) {
+				foreach ( $denylist['words'] as $word ) {
+					if ( $this->single_line_check_values( $word, $denylist ) ) {
 						return true;
 					}
 				}
-			} elseif ( file_exists( $blacklist['file'] ) ) {
-				$is_spam = $this->read_lines_and_check( $blacklist['file'], array( $this, 'single_line_check_values' ), $blacklist );
+			} elseif ( file_exists( $denylist['file'] ) ) {
+				$is_spam = $this->read_lines_and_check( $denylist['file'], array( $this, 'single_line_check_values' ), $denylist );
 				if ( $is_spam ) {
 					return true;
 				}
@@ -115,9 +130,9 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		return false;
 	}
 
-	private function fill_default_blacklist_data( &$blacklist ) {
-		$blacklist = wp_parse_args(
-			$blacklist,
+	private function fill_default_denylist_data( &$denylist ) {
+		$denylist = wp_parse_args(
+			$denylist,
 			array(
 				'file'          => '',
 				'words'         => array(),
@@ -143,8 +158,8 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	private function single_line_check_values( $line, $args ) {
 		$line = $this->convert_to_lowercase( $line );
-		// Do not check if this word is in the whitelist.
-		if ( ! empty( $args['whitelist'] ) && in_array( $line, $args['whitelist'], true ) ) {
+		// Do not check if this word is in the allowed words.
+		if ( ! empty( $args['allowed_words'] ) && in_array( $line, $args['allowed_words'], true ) ) {
 			return false;
 		}
 
@@ -178,19 +193,19 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	/**
 	 * Get the field IDs to check.
 	 *
-	 * @param array $blacklist The blacklist data.
+	 * @param array $denylist The denylist data.
 	 *
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */
-	private function get_field_ids_to_check( $blacklist ) {
-		if ( empty( $blacklist['field_type'] ) || ! is_array( $blacklist['field_type'] ) ) {
+	private function get_field_ids_to_check( array $denylist ) {
+		if ( empty( $denylist['field_type'] ) || ! is_array( $denylist['field_type'] ) ) {
 			return false;
 		}
 
 		$field_ids_to_check = array();
 		foreach ( $this->posted_fields as $field ) {
 			$field_type = FrmField::get_field_type( $field );
-			if ( in_array( $field_type, $blacklist['field_type'], true ) ) {
+			if ( in_array( $field_type, $denylist['field_type'], true ) ) {
 				$field_ids_to_check[] = intval( $field->id );
 			}
 			unset( $field );
@@ -199,8 +214,8 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 		return $field_ids_to_check;
 	}
 
-	private function get_values_to_check( $blacklist ) {
-		$field_ids_to_check = $this->get_field_ids_to_check( $blacklist );
+	private function get_values_to_check( $denylist ) {
+		$field_ids_to_check = $this->get_field_ids_to_check( $denylist );
 		if ( array() === $field_ids_to_check ) {
 			// No values need to check.
 			return false;
@@ -224,8 +239,8 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			}
 		}
 
-		if ( isset( $blacklist['extract_value'] ) && is_callable( $blacklist['extract_value'] ) ) {
-			$values_to_check = call_user_func( $blacklist['extract_value'], $values_to_check, $blacklist );
+		if ( isset( $denylist['extract_value'] ) && is_callable( $denylist['extract_value'] ) ) {
+			$values_to_check = call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
 		}
 
 		return $values_to_check;
@@ -237,17 +252,17 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			return false;
 		}
 
-		$blacklist_ip = $this->get_blacklist_ip();
+		$denylist_ips = $this->get_denylist_ips();
 
-		if ( ! empty( $blacklist_ip['custom'] ) && is_array( $blacklist_ip['custom'] ) && in_array( $ip, $blacklist_ip['custom'], true ) ) {
+		if ( ! empty( $denylist_ips['custom'] ) && is_array( $denylist_ips['custom'] ) && in_array( $ip, $denylist_ips['custom'], true ) ) {
 			return true;
 		}
 
-		if ( empty( $blacklist_ip['files'] ) || ! is_array( $blacklist_ip['files'] ) ) {
+		if ( empty( $denylist_ips['files'] ) || ! is_array( $denylist_ips['files'] ) ) {
 			return false;
 		}
 
-		foreach ( $blacklist_ip['files'] as $file ) {
+		foreach ( $denylist_ips['files'] as $file ) {
 			if ( ! file_exists( $file ) ) {
 				continue;
 			}
