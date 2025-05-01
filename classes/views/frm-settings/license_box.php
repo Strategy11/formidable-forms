@@ -34,11 +34,6 @@ if ( $unlock_more_upgrade_link ) {
 } else {
 	$unlock_more_upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 }
-
-$unlock_more_upgrade_text = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_text' );
-if ( ! $unlock_more_upgrade_text ) {
-	$unlock_more_upgrade_text = __( 'upgrading to PRO', 'formidable' );
-}
 ?>
 <div id="frm_license_top" class="frm_unauthorized_box">
 	<p id="frm-connect-btns" class="frm-show-unauthorized">
