@@ -32,7 +32,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 	protected function get_blacklist_array() {
 		$blacklist_data = array(
 			array(
-				'file'    => FrmAppHelper::plugin_path() . '/blacklist/domain-partial.txt',
+				'file'    => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
 				'compare' => self::COMPARE_CONTAINS,
 			),
 			array(
@@ -71,7 +71,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 			'frm_blacklist_ip_data',
 			array(
 				'files'  => array(
-					FrmAppHelper::plugin_path() . '/blacklist/ip.txt',
+					FrmAppHelper::plugin_path() . '/denylist/ip.txt',
 				),
 				'custom' => array(),
 			)
