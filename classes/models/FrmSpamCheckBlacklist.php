@@ -233,7 +233,7 @@ class FrmSpamCheckBlacklist extends FrmSpamCheck {
 
 	private function check_ip() {
 		$ip = FrmAppHelper::get_ip_address();
-		if ( in_array( $ip, FrmAntiSpamController::get_whitelist_ip(), true ) ) {
+		if ( in_array( $ip, FrmAntiSpamController::get_allowed_ips(), true ) ) {
 			return false;
 		}
 

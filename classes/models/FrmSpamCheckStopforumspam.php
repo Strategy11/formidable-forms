@@ -7,7 +7,7 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 
 	protected function check() {
 		$ip_address   = FrmAppHelper::get_ip_address();
-		$whitelist_ip = FrmAntiSpamController::get_whitelist_ip();
+		$whitelist_ip = FrmAntiSpamController::get_allowed_ips();
 		$request_data = array();
 
 		if ( ! in_array( $ip_address, $whitelist_ip, true ) ) {

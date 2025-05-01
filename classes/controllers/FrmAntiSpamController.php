@@ -68,11 +68,18 @@ class FrmAntiSpamController {
 	}
 
 	/**
-	 * Gets whitelist IP addresses.
+	 * Gets allowed IP addresses.
 	 *
 	 * @return string[]
 	 */
-	public static function get_whitelist_ip() {
-		return apply_filters( 'frm_whitelist_ip', array( '', '127.0.0.1' ) );
+	public static function get_allowed_ips() {
+		/**
+		 * Filter the allowed IP addresses.
+		 *
+		 * @since x.x
+		 *
+		 * @params string[] $allowed_ips Allowed IP addresses.
+		 */
+		return apply_filters( 'frm_allowed_ips', array( '', '127.0.0.1' ) );
 	}
 }
