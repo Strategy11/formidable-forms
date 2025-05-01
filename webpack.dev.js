@@ -37,69 +37,62 @@ const config = {
 	publicPath: '/wp-content/plugins/formidable/css/'
 };
 
-/**
- * Webpack configuration
- */
-const webpackConfig = require( './webpack.config' );
-
-/**
- * Gets the CSS configuration from the webpack config array
- *
- * @return {Object} The CSS webpack configuration
- */
-function getCssConfig() {
-	const cssConfig = webpackConfig.find( ( conf ) => conf.name === 'css' );
-
-	if ( ! cssConfig ) {
-		console.error( 'CSS configuration not found in webpack config.' );
-		process.exit( 1 );
-	}
-
-	return cssConfig;
-}
+// Import webpack config
+const [ jsConfig, cssConfig ] = require( './webpack.config' );
 
 /**
  * Initialize development server
  */
-function init() {
-	const compiler = webpack( getCssConfig() );
+const init = () => {
+	// Create separate webpack compilers for CSS and JS
+	const cssCompiler = webpack( cssConfig );
+	const jsCompiler = webpack( jsConfig );
+
+	// Start browser-sync instance
 	const bs = browserSync.create( 'FormidableDev' );
 
+	// Watch JS with webpack
+	jsCompiler.watch(
+		{ aggregateTimeout: 300 },
+		( err, stats ) => err || stats.hasErrors()
+			? console.log( `JS compilation ${err ? 'error: ' + err : 'has errors'}` )
+			: console.log( 'JS compiled successfully' )
+	);
+
 	// Setup browser-sync server
-	bs.init( {
-		/**
-		 * Proxy configuration
-		 */
+	bs.init({
+		// Proxy configuration
 		proxy: {
 			target: config.siteUrl,
 			middleware: [
-				webpackDevMiddleware( compiler, {
+				webpackDevMiddleware( cssCompiler, {
 					publicPath: config.publicPath,
 					writeToDisk: true
 				})
 			]
 		},
 
-		/**
-		 * File watching configuration
-		 */
+		// File watching
 		files: [
-			// CSS changes - inject without full reload
+			// CSS changes - inject without reload
 			{
 				match: [ `${config.cssPath}/**/*.css` ],
-				fn: function( event, file ) {
+				fn: ( event, file ) => {
 					console.log( `CSS updated: ${file}` );
-					this.reload( '*.css' );
+					bs.reload( '*.css' );
 				}
 			},
-			// Other files that need full page reload
+			// JS source changes
+			{
+				match: [ './js/src/**/*.js' ],
+				fn: ( event, file ) => console.log( `JS source updated: ${file}\nRebuilding JS bundles...` )
+			},
+			// Compiled JS and PHP files - full page reload
 			`${config.jsPath}/**/*.js`,
 			`${config.phpPath}/**/*.php`
 		],
 
-		/**
-		 * Server settings
-		 */
+		// Server settings
 		port: config.port,
 		ui: { port: config.uiPort },
 		open: true,
@@ -107,9 +100,7 @@ function init() {
 		injectChanges: true,
 		ghostMode: false,
 
-		/**
-		 * Resource handling
-		 */
+		// Resource handling
 		serveStatic: [{ route: '/css', dir: config.cssPath }],
 		rewriteRules: [{
 			match: new RegExp( config.siteUrl.replace( /^https?:\/\//, '' ), 'g' ),
@@ -118,7 +109,7 @@ function init() {
 	});
 
 	console.log( `Development server running at: http://localhost:${config.port}` );
-}
+};
 
 // Start the server
 init();
