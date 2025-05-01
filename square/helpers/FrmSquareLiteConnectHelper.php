@@ -505,4 +505,15 @@ class FrmSquareLiteConnectHelper {
 	public static function create_subscription( $info ) {
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );
 	}
+
+	/**
+	 * @return string|false
+	 */
+	public static function get_location_id() {
+		$response = self::post_with_authenticated_body( 'get_location_id' );
+		if ( is_object( $response ) ) {
+			return $response->id;
+		}
+		return false;
+	}
 }

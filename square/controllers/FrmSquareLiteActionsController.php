@@ -175,6 +175,14 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
+		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) {
+			return __( 'Please enter a valid credit card', 'formidable' );
+		}
+
+		$currency           = strtoupper( $atts['action']->post_content['currency'] );
+		$square_token       = sanitize_text_field( $_POST['square-token'] );
+		$verification_token = sanitize_text_field( $_POST['square-verification-token'] );
+
 		// We can put this all behind our API.
 		// It will require that we pass the customer info and the catalog info.
 		// 1. Call the API with the customer and catalog info.
@@ -184,6 +192,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$billing_contact = FrmSquareLiteAppController::get_billing_contact( $action );
 
 		$info = array(
+			'payment'  => array(
+				'token'             => $square_token,
+				'verificationToken' => $verification_token,
+			),
 			'customer' => array(
 				'givenName'    => $billing_contact['givenName'],
 				'familyName'   => $billing_contact['familyName'],
@@ -194,6 +206,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'trial_days' => $action->post_content['trial_interval_count'],
 				'limit'      => $action->post_content['payment_limit'],
 				'amount'     => $atts['amount'],
+				'currency'   => $currency,
 				'cadence'    => $action->post_content['repeat_cadence'],
 			),
 		);
@@ -453,11 +466,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_location_id() {
-		$mode = FrmSquareLiteAppHelper::active_mode();
-		if ( 'live' === $mode ) {
-			return 'L2GZQYSMGEKK0';
-		}
-		return 'L7Q1NBZ6SSJ79';
+		// TODO Cache this.
+		return FrmSquareLiteConnectHelper::get_location_id();
 	}
 
 	/**
@@ -472,7 +482,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
-				'fontFamily'      => $settings['font'],
 			),
 			// How does input placeholder work??
 			'input::placeholder' => array(
@@ -485,6 +494,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'borderColor' => $settings['border_color_active'],
 			),
 		);
+
+		if ( ! empty( $settings['font'] ) ) {
+			$style['input']['fontFamily'] = $settings['font'];
+		}
 
 		/**
 		 * @since x.x
