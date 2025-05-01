@@ -1466,7 +1466,7 @@ class FrmAppHelper {
 				);
 
 				if ( $upgrade_link ) {
-					$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
 				} else {
 					$upgrade_link = self::admin_upgrade_link( $utm );
 				}
