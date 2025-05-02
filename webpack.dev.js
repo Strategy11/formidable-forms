@@ -1,7 +1,7 @@
 /**
  * Formidable Forms Development Server
  *
- * Run `npm run dev:hot` to start the development server. You'll be prompted
+ * Run `npm run serve` to start the development server. You'll be prompted
  * for your WordPress site URL, and a development server will start at localhost:3000.
  *
  * Development is streamlined with automatic updates:
