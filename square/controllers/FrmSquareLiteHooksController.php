@@ -16,13 +16,7 @@ class FrmSquareLiteHooksController {
 
 		add_action( 'init', 'FrmSquareLiteConnectHelper::check_for_redirects' );
 
-		// This filter flags the Pro credit card field that Stripe is enabled.
-		add_filter(
-			'frm_pro_show_card_callback',
-			function () {
-				return 'FrmSquareLiteActionsController::show_card';
-			}
-		);
+		add_filter( 'frm_pro_show_card_callback', 'FrmSquareLiteActionsController::maybe_show_card', 10, 2 );
 	}
 
 	/**

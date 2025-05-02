@@ -11,6 +11,23 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string       $callback
+	 * @param array|object $field
+	 * @return string
+	 */
+	public static function maybe_show_card( $callback, $field ) {
+		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
+		$actions = self::get_actions_before_submit( $form_id );
+		if ( empty( $actions ) ) {
+			return $callback;
+		}
+
+		return self::class . '::show_card';
+	}
+
+	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
