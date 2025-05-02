@@ -10,10 +10,12 @@
 	> div:first-child {
 		align-self: flex-end;
 		width: 150px;
-		text-align: center;
+		height: 100%;
+		display: flex;
+		justify-content: center;
 		
 		img {
-			vertical-align: bottom;
+			align-self: center;
 		}
 	}
 	
