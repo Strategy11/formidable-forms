@@ -6,49 +6,57 @@
 	gap: var(--gap-sm);
 	cursor: pointer;
 	position: relative;
-}
+	
+	> div:first-child {
+		align-self: flex-end;
+		width: 150px;
+		text-align: center;
+		
+		img {
+			vertical-align: bottom;
+		}
+	}
+	
+	> div:nth-child(3) {
+		margin-left: auto;
+		margin-right: 50px;
+	}
+	
+	> div:nth-child(2) > div:last-child {
+		opacity: 0.8;
+	}
+	
+	a:not(.dismiss) {
+		text-shadow: none;
+		border-radius: 30px;
+		border: 1px transparent;
+		font-size: var(--text-sm);
+		padding: 7px 16px;
+		height: auto;
+		min-height: 28px;
+		outline: none;
+		line-height: var(--leading);
+		box-sizing: border-box;
+		margin-bottom: 0;
+		display: inline-block;
+		font-weight: 700;
+		background-color: #fff;
+		color: #000;
+	}
 
-#frm_sale_banner > div:first-child {
-	align-self: flex-end;
-	width: 150px;
-	text-align: center;
-}
+	.dismiss {
+		position: absolute;
+		color: #fff;
+		opacity: 0.6;
+		right: 15px;
+		top: 10px;
+	}
 
-#frm_sale_banner > div:first-child img {
-	vertical-align: bottom;
-}
+	&:hover {
+		filter: brightness(90%);
 
-#frm_sale_banner > div:nth-child(3) {
-	margin-left: auto;
-	margin-right: 50px;
-}
-
-#frm_sale_banner > div:nth-child(2) > div:last-child {
-	opacity: 0.8;
-}
-
-#frm_sale_banner a:not(.dismiss) {
-	text-shadow: none;
-	border-radius: 30px;
-	border: 1px transparent;
-	font-size: var(--text-sm);
-	padding: 7px 16px;
-	height: auto;
-	min-height: 28px;
-	outline: none;
-	line-height: var(--leading);
-	box-sizing: border-box;
-	margin-bottom: 0;
-	display: inline-block;
-	font-weight: 700;
-	background-color: #fff;
-	color: #000;
-}
-
-#frm_sale_banner .dismiss {
-	position: absolute;
-	color: #fff;
-	opacity: 0.6;
-	right: 15px;
-	top: 10px;
+		a:not(.dismiss) {
+			filter: brightness(90%);
+		}
+	}
 }
