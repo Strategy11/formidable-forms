@@ -2,7 +2,7 @@
  * Input Icons
  */
 
- .frm_has_textarea .frm-with-right-icon {
+.frm_has_textarea .frm-with-right-icon {
 	display: block;
 }
 
@@ -27,6 +27,12 @@ i.frm-show-inline-modal,
 	left: 0;
 	color: var(--grey-400);
 	font-size: var(--text-xs);
+}
+
+.frm-search > .frmsvg,
+.frm-search span:not(.multiselect-selected-text):not(.multiselect-native-select) {
+	padding-left: var(--gap-xs);
+	padding-right: var(--gap-xs);
 }
 
 .frm-with-right-icon .frmsvg,

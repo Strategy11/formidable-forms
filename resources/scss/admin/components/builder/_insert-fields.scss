@@ -2,12 +2,20 @@
  * Component: Insert Fields
  */
 
-.frm_field_list {
 
-	#frm-insert-fields .button a {
-		display: block;
-		max-width: 95%;
-		overflow: hidden;
+.frm_field_list {
+	padding: var(--gap-xs);
+
+	#frm-insert-fields {
+		max-height: none;
+		font-size: var(--text-sm);
+		padding: 0;
+
+		.button a {
+			display: block;
+			max-width: 95%;
+			overflow: hidden;
+		}
 	}
 }
 
@@ -15,7 +23,7 @@
 
 	&.frm_grid_container {
 		gap: var(--gap-xs) var(--gap-sm);
-		margin: var(--gap-xs);
+		margin: var(--gap-xs) 0;
 	}
 
 	li {
@@ -28,7 +36,7 @@
 
 	.frm-search {
 		float: none;
-		margin: 0 0 var(--gap-sm);
+		margin: 0 0 var(--gap-lg);
 		width: auto;
 	}
 
