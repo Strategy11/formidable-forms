@@ -12,7 +12,12 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array|object $field
 	 * @return string
 	 */
-	public static function maybe_show_card( $callback, $field ) {
+	public static function maybe_show_card( $callback, $field = false ) {
+		if ( false === $field ) {
+			// Pro isn't up to date.
+			return $callback;
+		}
+
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 		if ( empty( $actions ) ) {
