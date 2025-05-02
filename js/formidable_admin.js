@@ -1995,7 +1995,7 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( loadedEvent );
 	}
 
-	function addFieldClick() {
+	function addFieldClick( event ) {
 		/*jshint validthis:true */
 		const $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
@@ -2011,6 +2011,9 @@ function frmAdminBuildJS() {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
+		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+			return;
+		}
 		const formId = thisFormId;
 		jQuery.ajax({
 			type: 'POST',
