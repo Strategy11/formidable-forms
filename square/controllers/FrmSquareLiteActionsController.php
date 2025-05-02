@@ -396,6 +396,11 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
+		$payment_actions = self::get_actions_before_submit( $form->id );
+		if ( ! $payment_actions ) {
+			return;
+		}
+
 		self::load_scripts( (int) $form->id );
 	}
 
