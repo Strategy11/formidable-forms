@@ -21,7 +21,7 @@ class FrmEntryMeta {
 		}
 
 		$new_values = array(
-			'meta_value' => is_array( $meta_value ) ? serialize( array_filter( $meta_value, 'FrmAppHelper::is_not_empty_value' ) ) : trim( $meta_value ),
+			'meta_value' => is_array( $meta_value ) ? serialize( array_filter( $meta_value, 'FrmAppHelper::is_not_empty_value' ) ) : FrmAppHelper::trim_if_not_blank( $meta_value ),
 			'item_id'    => $entry_id,
 			'field_id'   => $field_id,
 			'created_at' => current_time( 'mysql', 1 ),
