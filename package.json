@@ -6,7 +6,7 @@
 		"build": "cross-env NODE_ENV=production webpack --progress",
 		"dev": "cross-env NODE_ENV=default webpack --watch",
 		"watch": "npm run dev",
-		"dev:hot": "node -e \"const prompts=require('prompts');(async()=>{const r=await prompts({type:'text',name:'url',message:'WordPress site URL:',initial:'https://formidableforms.local'});process.env.SITE_URL=r.url;require('./webpack.dev.js')})()\"",
+		"serve": "node -e \"const prompts=require('prompts');(async()=>{const r=await prompts({type:'text',name:'url',message:'WordPress site URL:',initial:'https://formidableforms.local'});process.env.SITE_URL=r.url;require('./webpack.dev.js')})()\"",
 		"lint": "./node_modules/.bin/eslint .; exit 0",
 		"package-plugin": "./bin/build-plugin.sh formidable",
 		"set-version": "./bin/set-version.sh formidable formidable classes/helpers/FrmAppHelper",
