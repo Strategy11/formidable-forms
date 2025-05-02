@@ -42,6 +42,15 @@ class FrmFieldRadio extends FrmFieldType {
 	}
 
 	/**
+	 * @return bool[]
+	 */
+	protected function field_settings_for_type() {
+		return array(
+			'invalid' => true,
+		);
+	}
+
+	/**
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
