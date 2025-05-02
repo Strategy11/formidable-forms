@@ -54,11 +54,21 @@
 		top: 10px;
 	}
 
-	&:hover {
-		filter: brightness(90%);
+	&:hover a:not(.dismiss) {
+		&[style*="background-color: #fff"] {
+			background-color: #F0F0F0 !important;
+		}
 
-		a:not(.dismiss) {
-			filter: brightness(90%);
+		&[style*="background-color: rgba(241, 90, 36, 1)"] {
+			background-color: #E6470F !important;
+		}
+
+		&[style*="background-color: rgba(239, 58, 78, 1)"] {
+			background-color: #ED1D34 !important;
+		}
+
+		&[style*="background-color: rgba(33, 2, 14, 1)"] {
+			background-color: #362630 !important;
 		}
 	}
 }
