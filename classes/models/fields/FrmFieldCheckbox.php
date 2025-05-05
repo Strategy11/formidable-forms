@@ -37,6 +37,15 @@ class FrmFieldCheckbox extends FrmFieldType {
 	}
 
 	/**
+	 * @return bool[]
+	 */
+	protected function field_settings_for_type() {
+		return array(
+			'invalid' => true,
+		);
+	}
+
+	/**
 	 * @return string[]
 	 */
 	protected function new_field_settings() {

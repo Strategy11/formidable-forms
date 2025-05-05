@@ -1363,7 +1363,6 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args
-	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
