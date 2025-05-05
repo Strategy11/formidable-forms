@@ -12,11 +12,11 @@ class FrmField {
 		$fields = array(
 			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_text3_icon',
+				'icon' => 'frm_icon_font frm_text2_icon',
 			),
 			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'frm_icon_font frm_paragraph2_icon',
+				'icon' => 'frm_icon_font frm_paragraph_icon',
 			),
 			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
@@ -28,7 +28,7 @@ class FrmField {
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_dropdown2_icon',
+				'icon' => 'frm_icon_font frm_dropdown_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
@@ -36,7 +36,7 @@ class FrmField {
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link_icon',
+				'icon' => 'frm_icon_font frm_link2_icon',
 			),
 			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
@@ -52,23 +52,23 @@ class FrmField {
 			),
 			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_icon',
+				'icon' => 'frm_icon_font frm_code2_icon',
 			),
 			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash_icon',
+				'icon' => 'frm_icon_font frm_eye_slash2_icon',
 			),
 			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
+				'icon' => 'frm_icon_font frm_user2_icon',
 			),
 			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'icon' => 'frm_icon_font frm_shield_check2_icon',
 			),
 			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card_icon',
+				'icon' => 'frm_icon_font frm_credit_card2_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -101,7 +101,7 @@ class FrmField {
 		$fields     = array(
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload_icon',
+				'icon'    => 'frm_icon_font frm_upload3_icon',
 				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
 			'ranking'         => array(),
@@ -111,7 +111,7 @@ class FrmField {
 			),
 			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar_icon',
+				'icon' => 'frm_icon_font frm_calendar2_icon',
 			),
 			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),

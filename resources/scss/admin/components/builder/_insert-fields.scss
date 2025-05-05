@@ -2,14 +2,11 @@
  * Component: Insert Fields
  */
 
-
 .frm_field_list {
-	padding: var(--gap-xs);
 
 	#frm-insert-fields {
 		max-height: none;
 		font-size: var(--text-sm);
-		padding: 0;
 
 		.button a {
 			display: block;
@@ -19,31 +16,19 @@
 	}
 }
 
-.field_type_list {
-
-	&.frm_grid_container {
-		gap: var(--gap-xs) var(--gap-sm);
-		margin: var(--gap-xs) 0;
-	}
-
-	li {
-		margin: 0;
-		padding: 0;
-	}
-}
-
 #frm-insert-fields {
+	padding: 0 var(--gap-sm);
 
 	.frm-search {
 		float: none;
-		margin: 0 0 var(--gap-lg);
+		margin: 0 0 var(--gap-md);
 		width: auto;
 	}
 
 	li,
 	li a {
 		text-decoration: none;
-		font-weight: 400;
+		font-weight: 500;
 		font-size: var(--text-md) !important;
 		color: var(--grey-900);
 	}
@@ -54,21 +39,11 @@
 	}
 
 	li span:not(.frm-new-pill) {
-		vertical-align: middle;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
-		width: 100%;
 		text-align: left;
 	}
-}
-
-.frmbutton.ui-draggable-dragging a,
-#frm-insert-fields li a:not(.disabled):hover {
-	background: var(--grey-100);
-}
-
-#frm-insert-fields {
 
 	li a.disabled:hover {
 		cursor: not-allowed;
@@ -77,13 +52,60 @@
 	li.ui-draggable-disabled {
 		opacity: 0.5;
 	}
+
+
+	li a:not(.disabled):hover {
+
+		.frmsvg,
+		i {
+			color: var(--grey-600);
+		}
+	}
+
+	li.frm_show_upgrade,
+	li a {
+		text-decoration: none;
+		display: inline-flex !important;
+		gap: var(--gap-xs);
+		align-items: center;
+		border-radius: var(--small-radius) !important;
+		padding: 11px var(--gap-xs) !important;
+		color: var(--grey-900) !important;
+	}
+
+	li a {
+		display: flex !important;
+
+		&:not(.disabled):hover {
+			background: var(--grey-100);
+			box-shadow: var(--box-shadow-md);
+		}
+	}
+
+	/* Prevents advanced fields from always appearing in search results */
+	li.frm_show_upgrade.frm_hidden {
+		display: none !important;
+	}
+
+	.frm-with-line {
+		padding: 12px var(--gap-md);
+		font-weight: 500;
+		font-size: var(--text-sm);
+
+		&::before {
+			margin-left: calc(-1 * var(--gap-sm));
+			width: calc(100% + var(--gap-lg));
+		}
+	}
+}
+
+.frmbutton.ui-draggable-dragging a {
+	background: var(--grey-100);
+	box-shadow: var(--box-shadow-md);
 }
 
 .frm_code_list {
 	clear: both;
-}
-
-.frm_code_list {
 
 	&.frm-full-hover a.frm_hidden,
 	.frmkeys {
@@ -149,12 +171,22 @@ input[disabled] {
 	font-size: var(--text-md);
 }
 
-/* Standardize icon size for field buttons in the builder */
 .field_type_list {
 
+	&.frm_grid_container {
+		gap: 10px;
+		margin: 13px 0;
+	}
+
+	li {
+		margin: 0;
+		padding: 0;
+	}
+
 	li.frmbutton .frmsvg {
-		width: var(--text-xl);
-		font-size: var(--text-xl);
+		width: 24px;
+		height: 24px;
+		font-size: 24px;
 	}
 }
 
@@ -165,34 +197,9 @@ input[disabled] {
 	}
 }
 
-#frm-insert-fields {
-
-	li a:not(.disabled):hover {
-
-		.frmsvg,
-		i {
-			color: var(--grey-600);
-		}
-	}
-}
-
 /* Icon while dragging */
 .frmbutton.ui-draggable-dragging {
 	pointer-events: none;
-}
-
-#frm-insert-fields {
-
-	li.frm_show_upgrade,
-	li a {
-		text-decoration: none;
-		display: inline-flex !important;
-		gap: var(--gap-xs);
-		align-items: center;
-		border-radius: var(--border-radius) !important;
-		padding: var(--gap-xs) var(--gap-sm) !important;
-		color: var(--grey-900) !important;
-	}
 }
 
 .frmbutton.ui-draggable-dragging a {
@@ -200,20 +207,8 @@ input[disabled] {
 	display: inline-flex !important;
 	gap: var(--gap-xs);
 	align-items: center;
-	border-radius: var(--border-radius) !important;
-	padding: var(--gap-xs) var(--gap-sm) !important;
+	border-radius: var(--small-radius) !important;
+	padding: 11px var(--gap-xs) !important;
 	color: var(--grey-900) !important;
 }
 
-/* Adjust field button size to full width in builder */
-#frm-insert-fields {
-
-	li a {
-		display: flex !important;
-	}
-
-	/* Prevents advanced fields from always appearing in search results */
-	li.frm_show_upgrade.frm_hidden {
-		display: none !important;
-	}
-}
