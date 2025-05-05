@@ -303,6 +303,10 @@
 <title>paragraph</title>
 <path d="M424 32H196C109 32 35 99 32 186c-3 91 70 166 160 166h48v104a24 24 0 0 0 48 0V80h48v376a24 24 0 0 0 48 0V80h40a24 24 0 1 0 0-48zM240 304h-48a112 112 0 1 1 0-224h48v224z"/>
 </symbol>
+<symbol id="frm_paragraph2_icon" viewBox="0 0 24 24" fill="none">
+<title>paragraph2</title>
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.75 10.25h-2.5a1 1 0 0 1-1-1v-2.5a1 1 0 0 1 1-1h2.5a1 1 0 0 1 1 1v2.5a1 1 0 0 1-1 1ZM5.25 5.75h6.5M5.25 10.25h6.5M5.25 14.25h14.5M5.25 18.25h14.5"/>
+</symbol>
 <symbol id="frm_checkbox_unchecked_icon" viewBox="0 0 20 20">
 <title>checkbox_unchecked</title>
 <path d="M17.8 2.2v15.6H2.2V2.2h15.6zm0-2.2H2.2C1 0 0 1 0 2.2v15.6C0 19 1 20 2.2 20h15.6c1.2 0 2.2-1 2.2-2.2V2.2C20 1 19 0 17.8 0z"/>
@@ -319,19 +323,23 @@
 <title>dropdown</title>
 <path d="M5.6 7.9h8.8c.5 0 .7.5.4.9l-4.4 4.4c-.2.2-.6.2-.8 0L5.2 8.8a.5.5 0 0 1 .4-1zM20 2V18c0 1.1-1 2.1-2.1 2.1H2C1 20 0 19 0 17.9V2C0 1 1 0 2.1 0H18C19 0 20 1 20 2.1zm-2.1 15.5V2.4l-.3-.3H2.4l-.3.3v15.2l.3.3h15.2l.3-.3z"/>
 </symbol>
+<symbol id="frm_dropdown2_icon" viewBox="0 0 24 24" fill="none">
+<title>dropdown2</title>
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.75 8.75H6.25a1 1 0 0 0-1 1v8.5a1 1 0 0 0 1 1h12.5a1 1 0 0 0 1-1v-8.5a1 1 0 0 0-1-1ZM5.5 14h14"/><path stroke="currentColor" d="M6 5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0Z"/>
+</symbol>
 <symbol id="frm_caret_square_down_icon" viewBox="0 0 448 512">
 <title>caret_square_down</title>
 <path d="m319 207-95 95-96-95a24 24 0 1 0-34 34l112 112c6 5 12 7 18 7s12-2 17-7l112-112a24 24 0 1 0-34-34zm65-175H64C29 32 0 61 0 96v320c0 35 29 64 64 64h320c35 0 64-29 64-64V96c0-35-29-64-64-64zm16 384c0 9-7 16-16 16H64c-9 0-16-7-16-16V96c0-9 7-16 16-16h320c9 0 16 7 16 16v320z"/>
 </symbol>
-<symbol id="frm_check_square_icon" viewBox="0 0 448 512">
-<path d="M212 340a28 28 0 0 1-40 0l-64-64a28 28 0 0 1 40-40l44 44 108-108a28 28 0 0 1 40 40L212 340zM0 96c0-35 29-64 64-64h320c35 0 64 29 64 64v320c0 35-29 64-64 64H64c-35 0-64-29-64-64V96zm48 0v320c0 9 7 16 16 16h320c9 0 16-7 16-16V96c0-9-7-16-16-16H64c-9 0-16 7-16 16z"/>
+<symbol id="frm_check_square_icon" viewBox="0 0 24 24" fill="none">
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.75 19.25H7.25a2 2 0 0 1-2-2V6.75c0-1.1.9-2 2-2h10.5a2 2 0 0 1 2 2v10.5a2 2 0 0 1-2 2Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m9.25 12 2.25 2.25 4.25-4.5"/>
 </symbol>
 <symbol id="frm_radio_unchecked_icon" viewBox="0 0 20 20">
 <title>radio_unchecked</title>
 <path d="M10 0a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm0 18a8 8 0 1 1 0-16 8 8 0 0 1 0 16z"/>
 </symbol>
-<symbol id="frm_radio_checked_icon" viewBox="0 0 512 512">
-<path d="M160 256c0-54 42-96 96-96a96 96 0 1 1-96 96zm352 0a256 256 0 1 1-512 0 256 256 0 0 1 512 0zM256 48a208 208 0 1 0 0 416 208 208 0 0 0 0-416z"/>
+<symbol id="frm_radio_checked_icon" viewBox="0 0 24 24" fill="none">
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19.75 12a7.25 7.25 0 1 1-14.5 0 7.25 7.25 0 0 1 14.5 0Z"/>
 </symbol>
 <symbol id="frm_scrubber_icon" viewBox="0 0 26 20">
 <title>scrubber</title>
@@ -374,6 +382,9 @@
 </symbol>
 <symbol id="frm_email_icon" viewBox="0 0 512 512">
 <path d="M64 112c-9 0-16 7-16 16v22l173 142c20 17 50 17 71 0l172-142v-22c0-9-7-16-16-16H64zM48 212v172c0 9 7 16 16 16h384c9 0 16-7 16-16V212L322 329c-38 31-94 31-132 0L48 212zM0 128c0-35 29-64 64-64h384c35 0 64 29 64 64v256c0 35-29 64-64 64H64c-35 0-64-29-64-64V128z"/>
+</symbol>
+<symbol id="frm_email2_icon" viewBox="0 0 24 24" fill="none">
+<path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 7.75c0-1.1.9-2 2-2h10.5a2 2 0 0 1 2 2v8.5a2 2 0 0 1-2 2H7.25a2 2 0 0 1-2-2v-8.5Z"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m6 6.5 6.5 5.75L19 6.5"/>
 </symbol>
 <symbol id="frm_email_solid_icon" viewBox="0 0 20 20">
 <title>email_solid</title>
@@ -686,6 +697,9 @@
 </symbol>
 <symbol id="frm_text2_icon" viewBox="0 0 640 512">
 <path d="M320 248v48a24 24 0 0 0 48 0v-24h88v160h-32a24 24 0 0 0 0 48h112a24 24 0 0 0 0-48h-32V272h88v24a24 24 0 0 0 48 0v-48c0-13-11-24-24-24H344c-13 0-24 11-24 24zM0 56v80a24 24 0 1 0 48 0V80h120v352h-48c-13 0-24 11-24 24s11 24 24 24h144a24 24 0 1 0 0-48h-48V80h120v56a24 24 0 0 0 48 0V56c0-13-11-24-24-24H24C11 32 0 43 0 56z"/>
+</symbol>
+<symbol id="frm_text3_icon" viewBox="0 0 24 24" fill="none">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M9.21666 6.52824C9.11945 6.21415 8.82899 6 8.5002 6C8.17141 6 7.88095 6.21415 7.78374 6.52824L4.53374 17.0282C4.41126 17.4239 4.63274 17.844 5.02844 17.9665C5.42413 18.0889 5.84419 17.8675 5.96666 17.4718L6.73173 15H10.2687L11.0337 17.4718C11.1562 17.8675 11.5763 18.0889 11.972 17.9665C12.3677 17.844 12.5891 17.4239 12.4667 17.0282L9.21666 6.52824ZM9.80438 13.5L8.5002 9.28649L7.19602 13.5H9.80438ZM17.0002 12.5C15.8956 12.5 15.0002 13.3954 15.0002 14.5C15.0002 15.6046 15.8956 16.5 17.0002 16.5C18.1048 16.5 19.0002 15.6046 19.0002 14.5C19.0002 13.3954 18.1048 12.5 17.0002 12.5ZM19.0092 11.6336C18.4406 11.2344 17.7478 11 17.0002 11C15.0672 11 13.5002 12.567 13.5002 14.5C13.5002 16.433 15.0672 18 17.0002 18C17.7478 18 18.4406 17.7656 19.0092 17.3664C19.0651 17.7253 19.3756 18 19.7502 18C20.1644 18 20.5002 17.6642 20.5002 17.25V14.5V11.75C20.5002 11.3358 20.1644 11 19.7502 11C19.3756 11 19.0651 11.2747 19.0092 11.6336Z" fill="currentColor"/>
 </symbol>
 <symbol id="frm_white_label_icon" viewBox="0 0 20 20">
 <title>white_label</title>

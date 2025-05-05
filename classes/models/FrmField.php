@@ -12,11 +12,11 @@ class FrmField {
 		$fields = array(
 			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_text2_icon',
+				'icon' => 'frm_icon_font frm_text3_icon',
 			),
 			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'frm_icon_font frm_paragraph_icon',
+				'icon' => 'frm_icon_font frm_paragraph2_icon',
 			),
 			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
@@ -28,11 +28,11 @@ class FrmField {
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_caret_square_down_icon',
+				'icon' => 'frm_icon_font frm_dropdown2_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email_icon',
+				'icon' => 'frm_icon_font frm_email2_icon',
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
