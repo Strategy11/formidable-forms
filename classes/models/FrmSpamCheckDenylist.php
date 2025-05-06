@@ -93,6 +93,11 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		);
 	}
 
+	/**
+	 * Checks spam.
+	 *
+	 * @return bool
+	 */
 	public function check() {
 		if ( $this->check_ip() ) {
 			return true;
@@ -101,7 +106,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return $this->check_values();
 	}
 
-	private function check_values() {
+	/**
+	 * Checks entry values.
+	 *
+	 * @return bool
+	 */
+	protected function check_values() {
 		$allowed_words = $this->get_words_from_setting( 'allowed_words' );
 		$allowed_words = array_map( array( $this, 'convert_to_lowercase' ), $allowed_words );
 
@@ -130,7 +140,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return false;
 	}
 
-	private function fill_default_denylist_data( &$denylist ) {
+	/**
+	 * Fills default denylist data.
+	 *
+	 * @param array $denylist Denylist.
+	 */
+	protected function fill_default_denylist_data( &$denylist ) {
 		$denylist = wp_parse_args(
 			$denylist,
 			array(
@@ -144,7 +159,13 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		);
 	}
 
-	private function get_words_from_setting( $setting_key ) {
+	/**
+	 * Gets words from setting.
+	 *
+	 * @param string $setting_key Setting key.
+	 * @return array
+	 */
+	protected function get_words_from_setting( $setting_key ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		$words        = isset( $frm_settings->$setting_key ) ? $frm_settings->$setting_key : '';
 		if ( ! $words ) {
@@ -156,7 +177,14 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		);
 	}
 
-	private function single_line_check_values( $line, $args ) {
+	/**
+	 * Checks the values against each single word.
+	 *
+	 * @param string $line Single line.
+	 * @param array  $args Check args.
+	 * @return bool
+	 */
+	protected function single_line_check_values( $line, $args ) {
 		$line = $this->convert_to_lowercase( $line );
 		// Do not check if this word is in the allowed words.
 		if ( ! empty( $args['allowed_words'] ) && in_array( $line, $args['allowed_words'], true ) ) {
@@ -182,11 +210,23 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return strpos( $values_str, $line ) !== false;
 	}
 
-	private function convert_values_to_string( $values ) {
+	/**
+	 * Converts values to string to check.
+	 *
+	 * @param array $values Values array.
+	 * @return string
+	 */
+	protected function convert_values_to_string( $values ) {
 		return FrmAppHelper::maybe_json_encode( $values );
 	}
 
-	private function convert_to_lowercase( $str ) {
+	/**
+	 * Converts string to lowercase.
+	 *
+	 * @param string $str String.
+	 * @return string
+	 */
+	protected function convert_to_lowercase( $str ) {
 		return strtolower( $str );
 	}
 
@@ -197,7 +237,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */
-	private function get_field_ids_to_check( array $denylist ) {
+	protected function get_field_ids_to_check( array $denylist ) {
 		if ( empty( $denylist['field_type'] ) || ! is_array( $denylist['field_type'] ) ) {
 			return false;
 		}
@@ -214,7 +254,13 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return $field_ids_to_check;
 	}
 
-	private function get_values_to_check( $denylist ) {
+	/**
+	 * Gets values to check.
+	 *
+	 * @param array $denylist Single denylist data.
+	 * @return array|false Return `false` if no values need to check, or return array of values.
+	 */
+	protected function get_values_to_check( $denylist ) {
 		$field_ids_to_check = $this->get_field_ids_to_check( $denylist );
 		if ( array() === $field_ids_to_check ) {
 			// No values need to check.
@@ -229,13 +275,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				unset( $value['row_ids'] );
 
 				foreach ( $value as $sub_key => $sub_value ) {
-					if ( false === $field_ids_to_check || in_array( $sub_key, $field_ids_to_check, true ) ) {
-						continue;
+					if ( $this->should_check_this_field( $sub_key, $field_ids_to_check ) ) {
+						$this->add_to_values_to_check( $values_to_check, $sub_value );
 					}
-					$values_to_check[] = is_array( $sub_value ) ? implode( ' ', $sub_value ) : $sub_value;
 				}
-			} elseif ( false === $field_ids_to_check || in_array( $key, $field_ids_to_check, true ) ) {
-				$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+			} elseif ( $this->should_check_this_field( $key, $field_ids_to_check ) ) {
+				$this->add_to_values_to_check( $values_to_check, $value );
 			}
 		}
 
@@ -246,15 +291,42 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return $values_to_check;
 	}
 
-	private function check_ip() {
+	/**
+	 * Checks if should check the value of the given field ID.
+	 *
+	 * @param int   $field_id           Field ID.
+	 * @param int[] $field_ids_to_check Field IDs to check.
+	 * @return bool
+	 */
+	protected function should_check_this_field( $field_id, $field_ids_to_check ) {
+		// Should check this field if no field types is specific or this field ID is in the field IDs to check array.
+		return false === $field_ids_to_check || in_array( $field_id, $field_ids_to_check, true );
+	}
+
+	/**
+	 * Adds the value to values to check array.
+	 *
+	 * @param array $values_to_check Values to check array.
+	 * @param mixed $value           The value.
+	 */
+	protected function add_to_values_to_check( &$values_to_check, $value ) {
+		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+	}
+
+	/**
+	 * Checks if IP is denied.
+	 *
+	 * @return bool
+	 */
+	protected function check_ip() {
 		$ip = FrmAppHelper::get_ip_address();
-		if ( in_array( $ip, FrmAntiSpamController::get_allowed_ips(), true ) ) {
+		if ( $this->is_allowed_ip( $ip ) ) {
 			return false;
 		}
 
 		$denylist_ips = $this->get_denylist_ips();
 
-		if ( ! empty( $denylist_ips['custom'] ) && is_array( $denylist_ips['custom'] ) && in_array( $ip, $denylist_ips['custom'], true ) ) {
+		if ( ! empty( $denylist_ips['custom'] ) && $this->ip_matches_array( $ip, $denylist_ips['custom'] ) ) {
 			return true;
 		}
 
@@ -266,7 +338,13 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			if ( ! file_exists( $file ) ) {
 				continue;
 			}
-			$is_spam = $this->read_lines_and_check( $file, array( $this, 'single_line_check_ip' ), compact( 'ip' ) );
+
+			$is_spam = $this->read_lines_and_check(
+				$file,
+				array( $this, 'single_line_check_ip' ),
+				compact( 'ip' )
+			);
+
 			if ( $is_spam ) {
 				return true;
 			}
@@ -275,14 +353,15 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return false;
 	}
 
-	private function single_line_check_ip( $line, $args ) {
-		$ip = $args['ip'];
-
-		// Maybe IP in line is x.x.x.x/12 format.
-		return $ip === $line || 0 === strpos( $ip . '/', $line );
-	}
-
-	private function read_lines_and_check( $file_path, $callback, $callback_args = array() ) {
+	/**
+	 * Reads lines in file and do the check.
+	 *
+	 * @param string   $file_path     File path.
+	 * @param callable $callback      Check callback.
+	 * @param array    $callback_args Callback args.
+	 * @return bool
+	 */
+	protected function read_lines_and_check( $file_path, $callback, $callback_args = array() ) {
 		if ( ! is_callable( $callback ) ) {
 			return false;
 		}
@@ -306,6 +385,66 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		fclose( $fp );
+		return false;
+	}
+
+	/**
+	 * Checks if the given IP is allowed.
+	 *
+	 * @param string $ip IP address.
+	 * @return bool
+	 */
+	protected function is_allowed_ip( $ip ) {
+		return $this->ip_matches_array( $ip, FrmAntiSpamController::get_allowed_ips() );
+	}
+
+	protected function single_line_check_ip( $line, $args ) {
+		return $this->ip_matches( $args['ip'], $line );
+	}
+
+	/**
+	 * Checks if the given IP address matches the IP address with CIDR format.
+	 *
+	 * @param string $ip      IP address.
+	 * @param string $cidr_ip IP address with CIDR format (x.x.x.x/24).
+	 * @return bool
+	 */
+	protected function ip_matches( $ip, $cidr_ip ) {
+		$cidr_parts = explode( '/', $cidr_ip );
+
+		// If the second IP doesn't have CIDR format, just use equals comparison.
+		if ( 1 === count( $cidr_parts ) ) {
+			return $ip === $cidr_ip;
+		}
+
+		if ( 0 === strpos( $ip . '/', $cidr_ip ) ) {
+			// 1.1.1.1 and 1.1.1.1/24 matches.
+			return true;
+		}
+
+		list ( $net, $mask ) = explode ( '/', $cidr_ip );
+
+		$ip_net  = ip2long( $net );
+		$ip_mask = ~( ( 1 << ( 32 - $mask ) ) - 1 );
+
+		$ip_ip = ip2long ( $ip );
+
+		return ( $ip_ip & $ip_mask ) === ( $ip_net & $ip_mask );
+	}
+
+	/**
+	 * Checks if the given IP matches an IP in the array.
+	 *
+	 * @param string   $ip       The IP address.
+	 * @param string[] $ip_array Array of IP addresses.
+	 * @return bool
+	 */
+	protected function ip_matches_array( $ip, $ip_array ) {
+		foreach ( $ip_array as $cidr_ip ) {
+			if ( $this->ip_matches( $ip, $cidr_ip ) ) {
+				return true;
+			}
+		}
 		return false;
 	}
 }

@@ -199,70 +199,170 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		);
 	}
 
-	public function test_check() {
+	public function test_check_values() {
 		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
-		$this->assertFalse( $spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
+
 		$denylist = $this->custom_denylist_data['denylist_with_all_fields'];
-
 		$this->set_denylist_data( array( $denylist ) );
-
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist['words'] = array( '.com' );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertTrue( $this->spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist['compare'] = FrmSpamCheckDenylist::COMPARE_EQUALS;
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist['words']   = array( '@' );
 		$denylist['compare'] = FrmSpamCheckDenylist::COMPARE_CONTAINS;
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertTrue( $this->spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist          = $this->custom_denylist_data['denylist_with_name'];
 		$denylist['words'] = array( '@' );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist          = $this->custom_denylist_data['denylist_with_all_fields'];
 		$denylist['words'] = array( 'plugin' );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertTrue( $this->spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist         = $this->custom_denylist_data['denylist_with_all_fields'];
 		$denylist['file'] = __DIR__ . '/denylist-email-contain.txt';
 		unset( $denylist['words'] );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertTrue( $this->spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		$denylist['extract_value'] = array( 'FrmAntiSpamController', 'extract_emails_from_values' );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		FrmAppHelper::get_settings()->update_setting( 'allowed_words', "wordpress\nplugin", 'sanitize_textarea_field' );
 		unset( $denylist['extract_value'] );
 		$this->set_denylist_data( array( $denylist ) );
-		$this->assertFalse( $this->spam_check->check() );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
 		FrmAppHelper::get_settings()->update_setting( 'disallowed_words', "wordprezz\ndoe.com", 'sanitize_textarea_field' );
 		$spam_check = new FrmSpamCheckDenylist( $this->default_values );
-		$this->assertTrue( $spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
 
 		// Test with regex.
 		$values = $this->default_values;
 		$values['item_meta'][ $this->email_field_id ] = 'someone@mail.ru';
 		$spam_check = new FrmSpamCheckDenylist( $values );
-		$this->assertTrue( $spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
 
 		$values = $this->default_values;
 		$values['item_meta'][ $this->text_field_id ] = 'This text contains someone@yandex.com email';
 		$spam_check = new FrmSpamCheckDenylist( $values );
-		$this->assertTrue( $spam_check->check() );
+		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
+	}
+
+	public function test_check_ip() {
+		$current_ip = $_SERVER['REMOTE_ADDR'];
+
+		// Mock IP address.
+		$_SERVER['REMOTE_ADDR'] = '192.168.1.1';
+
+		// Test when IP is blacklisted.
+		function frm_test_filter_denylist_ip_data() {
+			return array(
+				'custom' => array( '192.168.1.1' ),
+				'files'  => array(),
+			);
+		}
+		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
+
+		function frm_test_filter_allowed_ips() {
+			return array( '192.168.1.1' );
+		}
+		// Test when IP is whitelisted.
+		add_filter( 'frm_allowed_ips', 'frm_test_filter_allowed_ips' );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
+		remove_filter( 'frm_allowed_ips_data', 'frm_test_filter_allowed_ips' );
+		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
+
+		// Test IP CIDR format.
+		function frm_test_filter_denylist_ip_data_2() {
+			return array(
+				'custom' => array(),
+				'files' => array( __DIR__ . '/blacklist-ip-test.txt' ),
+			);
+		}
+		// Create temporary test file.
+		file_put_contents( __DIR__ . '/blacklist-ip-test.txt', "192.168.1.0/24\n" );
+		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
+//		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
+		unlink( __DIR__ . '/blacklist-ip-test.txt' );
+		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
+
+		// Reset the IP address.
+		$_SERVER['REMOTE_ADDR'] = $current_ip;
+	}
+
+	public function test_ip_matches() {
+		$this->assertTrue(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.1.1', '192.168.1.1' )
+			)
+		);
+
+		$this->assertFalse(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.1.1', '192.168.1.0' )
+			)
+		);
+
+		$this->assertTrue(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.1.0', '192.168.1.0/24' )
+			)
+		);
+
+		$this->assertTrue(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.1.1', '192.168.1.0/24' )
+			)
+		);
+
+		$this->assertFalse(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.2.1', '192.168.1.0/24' )
+			)
+		);
+
+		$this->assertTrue(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.168.2.1', '192.168.1.0/16' )
+			)
+		);
+
+		$this->assertFalse(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.1.2.1', '192.168.1.0/16' )
+			)
+		);
+
+		$this->assertTrue(
+			$this->run_private_method(
+				array( $this->spam_check, 'ip_matches' ),
+				array( '192.1.2.1', '192.168.1.0/8' )
+			)
+		);
 	}
 }
