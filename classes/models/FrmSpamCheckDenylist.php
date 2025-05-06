@@ -436,10 +436,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return false;
 		}
 
-		list( $net, $mask ) = explode ( '/', $cidr_ip );
+		list( $net, $mask ) = explode( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 );
+		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 ); // phpcs:ignore SlevomatCodingStandard.PHP.UselessParentheses.UselessParentheses
 
 		$ip_ip = ip2long( $ip );
 
