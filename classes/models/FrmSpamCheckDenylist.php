@@ -156,7 +156,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'words'         => array(),
 				'is_regex'      => false,
 				'field_type'    => array(),
-				'compare'       => self::COMPARE_CONTAINS, // Is ignore if `is_regex` is `true`.
+				// Is ignore if `is_regex` is `true`.
+				'compare'       => self::COMPARE_CONTAINS,
 				'extract_value' => '',
 			)
 		);
@@ -196,7 +197,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 		$values_to_check = $this->get_values_to_check( $args );
 		if ( ! $values_to_check ) {
-			return false; // Nothing needs to be checked.
+			// Nothing needs to be checked.
+			return false;
 		}
 
 		if ( ! empty( $args['is_regex'] ) ) {
@@ -434,12 +436,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return false;
 		}
 
-		list ( $net, $mask ) = explode ( '/', $cidr_ip );
+		list( $net, $mask ) = explode ( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
 		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 );
 
-		$ip_ip = ip2long ( $ip );
+		$ip_ip = ip2long( $ip );
 
 		return ( $ip_ip & $ip_mask ) === ( $ip_net & $ip_mask );
 	}

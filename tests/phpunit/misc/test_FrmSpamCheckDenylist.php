@@ -254,13 +254,15 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
 
 		// Test with regex.
-		$values = $this->default_values;
+		$values                                       = $this->default_values;
 		$values['item_meta'][ $this->email_field_id ] = 'someone@mail.ru';
+
 		$spam_check = new FrmSpamCheckDenylist( $values );
 		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
 
-		$values = $this->default_values;
+		$values                                      = $this->default_values;
 		$values['item_meta'][ $this->text_field_id ] = 'This text contains someone@yandex.com email';
+
 		$spam_check = new FrmSpamCheckDenylist( $values );
 		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
 
@@ -298,14 +300,11 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		function frm_test_filter_denylist_ip_data_2() {
 			return array(
 				'custom' => array(),
-				'files' => array( __DIR__ . '/blacklist-ip-test.txt' ),
+				'files'  => array( __DIR__ . '/denylist-ip.txt' ),
 			);
 		}
-		// Create temporary test file.
-		file_put_contents( __DIR__ . '/blacklist-ip-test.txt', "192.168.1.0/24\n" );
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
-		unlink( __DIR__ . '/blacklist-ip-test.txt' );
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
 
 		// Reset the IP address.
