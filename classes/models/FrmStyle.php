@@ -411,15 +411,10 @@ class FrmStyle {
 			'new_file_path' => self::get_generated_css_file_path( $add_css_to_uploads_dir ),
 		);
 
-		if ( ! $add_css_to_uploads_dir ) {
-			return $create_file_args;
+		if ( $add_css_to_uploads_dir ) {
+			$create_file_args['folder_name'] = 'formidable/css';
 		}
-		return array_merge(
-			$create_file_args,
-			array(
-				'folder_name' => 'formidable/css',
-			)
-		);
+		return $create_file_args;
 	}
 
 	/**
