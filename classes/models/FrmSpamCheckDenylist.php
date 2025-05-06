@@ -34,14 +34,17 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	/**
 	 * Gets denylist data.
+	 * See {@see FrmSpamCheckDenylist::fill_default_denylist_data()} for more details.
 	 *
 	 * @return array[]
 	 */
 	protected function get_denylist_array() {
 		$denylist_data = array(
 			array(
-				'file'    => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
-				'compare' => self::COMPARE_CONTAINS,
+				'file' => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
+			),
+			array(
+				'file' => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
 			),
 			array(
 				'words'      => array(
@@ -71,7 +74,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		 *
 		 * @since x.x
 		 *
-		 * @param array[] $denylist_data The denylist data
+		 * @param array[] $denylist_data The denylist data.
 		 */
 		return apply_filters( 'frm_denylist_data', $denylist_data );
 	}
