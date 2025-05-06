@@ -192,6 +192,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$values_to_check = $this->get_values_to_check( $args );
+		if ( ! $values_to_check ) {
+			return false; // Nothing needs to be checked.
+		}
+
 		if ( ! empty( $args['is_regex'] ) ) {
 			return preg_match( '/' . trim( $line, '/' ) . '/i', $this->convert_values_to_string( $values_to_check ) );
 		}
