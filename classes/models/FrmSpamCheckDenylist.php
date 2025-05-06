@@ -59,7 +59,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			),
 		);
 
-		$custom_denylist = $this->get_words_from_setting( 'denylist' );
+		$custom_denylist = $this->get_words_from_setting( 'disallowed_words' );
 		if ( $custom_denylist ) {
 			$denylist_data['custom'] = array(
 				'words' => $custom_denylist,
@@ -111,7 +111,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			}
 
 			$this->fill_default_denylist_data( $denylist );
-			$denylist['allowed_words'] = $denylist;
+			$denylist['allowed_words'] = $allowed_words;
 
 			if ( ! empty( $denylist['words'] ) ) {
 				foreach ( $denylist['words'] as $word ) {
