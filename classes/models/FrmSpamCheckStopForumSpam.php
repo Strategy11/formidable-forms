@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmSpamCheckStopforumspam extends FrmSpamCheck {
+class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 
 	protected function check() {
 		$ip_address   = FrmAppHelper::get_ip_address();
@@ -42,7 +42,7 @@ class FrmSpamCheckStopforumspam extends FrmSpamCheck {
 	private function send_request( $request_data ) {
 		$url = add_query_arg( $request_data, 'https://api.stopforumspam.org/api' );
 
-		$response = wp_remote_get( $url );
+		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
 
 		return wp_remote_retrieve_body( $response );
 	}

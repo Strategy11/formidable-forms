@@ -27,7 +27,7 @@ class FrmAntiSpamController {
 	}
 
 	private static function is_stopforumspam_spam( $values ) {
-		$spam_check = new FrmSpamCheckStopforumspam( $values );
+		$spam_check = new FrmSpamCheckStopForumSpam( $values );
 		return $spam_check->is_spam();
 	}
 
