@@ -39,8 +39,34 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		return $form && ! empty( $form->options['stopforumspam'] );
 	}
 
+	/**
+	 * Sends API request.
+	 *
+	 * @param array $request_data Request data.
+	 * @return string
+	 */
 	private function send_request( $request_data ) {
-		$url = add_query_arg( $request_data, 'https://api.stopforumspam.org/api' );
+		/**
+		 * Filters the data to be passed to the stopforumspam request URL.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $request_data Request data.
+		 * @param array $args         Contains `values`.
+		 */
+		$request_data = apply_filters( 'frm_stopforumspam_request_data', $request_data, array( 'values' => $this->values ) );
+
+		/**
+		 * Filters the stopforumspam API URL.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $api_url API URL.
+		 * @param array  $args    Contains `values`.
+		 */
+		$api_url = apply_filters( 'frm_stopforumspam_api_url', 'https://api.stopforumspam.org/api', array( 'values' => $this->values ) );
+
+		$url = add_query_arg( $request_data, $api_url );
 
 		$response = wp_remote_get( $url, array( 'timeout' => 15 ) );
 
