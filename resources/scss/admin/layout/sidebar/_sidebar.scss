@@ -22,6 +22,40 @@
 
 .frm-settings-panel {
 	padding: var(--gap-sm);
+
+	.frm-style-tabs-wrapper {
+
+		.frm-tabs-delimiter {
+			top: var(--gap-xs);
+			left: var(--gap-xs);
+			width: calc(100% - var(--gap-sm));
+		}
+
+		.frm-tabs-navs {
+			padding: var(--gap-xs) var(--gap-xs) 0;
+		}
+	}
+
+	.frm-embed-field-placeholder {
+		height: unset;
+
+		img {
+			height: 100px;
+		}
+
+		.frm-embed-message {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: var(--gap-sm);
+			max-width: unset;
+			padding: var(--gap-lg);
+			border: 0;
+			box-shadow: var(--box-shadow-sm);
+			margin: 1px;
+		}
+	}
 }
 
 .frm-single-settings > h3:first-of-type {

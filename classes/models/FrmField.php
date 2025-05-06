@@ -124,7 +124,7 @@ class FrmField {
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star_icon',
+				'icon' => 'frm_icon_font frm_star2_icon',
 			),
 			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
@@ -136,7 +136,7 @@ class FrmField {
 			),
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_sitemap_icon',
+				'icon'    => 'frm_icon_font frm_dynamic_icon',
 				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
 			),
 			'lookup'          => array(
@@ -146,7 +146,7 @@ class FrmField {
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_repeater_icon',
+				'icon'    => 'frm_icon_font frm_refresh_icon',
 				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
@@ -164,7 +164,7 @@ class FrmField {
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text_icon',
+				'icon' => 'frm_icon_font frm_file_text2_icon',
 			),
 			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
@@ -178,11 +178,11 @@ class FrmField {
 			),
 			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_open_icon',
+				'icon' => 'frm_icon_font frm_lock_closed2_icon',
 			),
 			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags_icon',
+				'icon' => 'frm_icon_font frm_price_tags2_icon',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -192,11 +192,11 @@ class FrmField {
 			),
 			'address'         => array(
 				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location_icon',
+				'icon' => 'frm_icon_font frm_location2_icon',
 			),
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text_icon',
+				'icon'    => 'frm_icon_font frm_file_text3_icon',
 				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
 			),
 			'signature'       => array(
@@ -212,7 +212,7 @@ class FrmField {
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
@@ -224,7 +224,7 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product_icon',
+				'icon'    => 'frm_icon_font frm_product2_icon',
 				'section' => 'pricing',
 			),
 			'quantity'        => array(
@@ -234,7 +234,7 @@ class FrmField {
 			),
 			'total'           => array(
 				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total_icon',
+				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
 			),
 		);
