@@ -426,10 +426,15 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return true;
 		}
 
+		// Validate IP address format - only IPv4 is supported in the CIDR check
+		if ( ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
+			return false;
+		}
+
 		list ( $net, $mask ) = explode ( '/', $cidr_ip );
 
 		$ip_net  = ip2long( $net );
-		$ip_mask = ~( ( 1 << ( 32 - $mask ) ) - 1 );
+		$ip_mask = ~( ( 1 << ( 32 - intval( $mask ) ) ) - 1 );
 
 		$ip_ip = ip2long ( $ip );
 
