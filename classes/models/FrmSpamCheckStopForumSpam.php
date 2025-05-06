@@ -1,10 +1,26 @@
 <?php
+/**
+ * Check spam using stopforumspam API
+ *
+ * @since x.x
+ *
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * Class FrmSpamCheckStopForumSpam
+ */
 class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 
+	/**
+	 * Checks spam.
+	 *
+	 * @return bool
+	 */
 	protected function check() {
 		$ip_address   = FrmAppHelper::get_ip_address();
 		$whitelist_ip = FrmAntiSpamController::get_allowed_ips();
@@ -34,6 +50,11 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		return $this->response_is_spam( $response );
 	}
 
+	/**
+	 * Checks if this spam check is enabled.
+	 *
+	 * @return bool
+	 */
 	protected function is_enabled() {
 		$form = FrmForm::getOne( $this->values['form_id'] );
 		return $form && ! empty( $form->options['stopforumspam'] );
@@ -73,7 +94,18 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		return wp_remote_retrieve_body( $response );
 	}
 
+	/**
+	 * Checks if the response is spam.
+	 *
+	 * @param string $response Response body.
+	 * @return bool
+	 */
 	private function response_is_spam( $response ) {
+		if ( ! $response ) {
+			// Request failed or error happened.
+			return false;
+		}
+
 		return false !== strpos( $response, '<appears>yes</appears>' ) || false !== strpos( $response, '<appears>1</appears>' );
 	}
 }
