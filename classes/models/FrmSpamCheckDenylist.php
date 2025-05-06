@@ -429,7 +429,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return true;
 		}
 
-		// Validate IP address format - only IPv4 is supported in the CIDR check
+		// Validate IP address format - only IPv4 is supported in the CIDR check.
 		if ( ! filter_var( $ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4 ) ) {
 			return false;
 		}

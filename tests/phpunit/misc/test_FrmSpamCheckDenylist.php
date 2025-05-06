@@ -263,6 +263,10 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$values['item_meta'][ $this->text_field_id ] = 'This text contains someone@yandex.com email';
 		$spam_check = new FrmSpamCheckDenylist( $values );
 		$this->assertTrue( $this->run_private_method( array( $spam_check, 'check_values' ) ) );
+
+		// Reset.
+		FrmAppHelper::get_settings()->update_setting( 'allowed_words', '', 'sanitize_textarea_field' );
+		FrmAppHelper::get_settings()->update_setting( 'disallowed_words', '', 'sanitize_textarea_field' );
 	}
 
 	public function test_check_ip() {
