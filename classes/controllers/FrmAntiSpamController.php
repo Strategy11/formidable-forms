@@ -80,6 +80,6 @@ class FrmAntiSpamController {
 		 *
 		 * @params string[] $allowed_ips Allowed IP addresses.
 		 */
-		return apply_filters( 'frm_allowed_ips', array( '', '127.0.0.1' ) );
+		return apply_filters( 'frm_allowed_ips', array( '', '127.0.0.1', '::1' ) );
 	}
 }
