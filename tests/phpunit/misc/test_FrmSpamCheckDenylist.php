@@ -287,7 +287,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		// Test when IP is whitelisted.
 		add_filter( 'frm_allowed_ips', 'frm_test_filter_allowed_ips' );
 		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
-		remove_filter( 'frm_allowed_ips_data', 'frm_test_filter_allowed_ips' );
+		remove_filter( 'frm_allowed_ips', 'frm_test_filter_allowed_ips' );
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
 
 		// Test IP CIDR format.
@@ -300,7 +300,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		// Create temporary test file.
 		file_put_contents( __DIR__ . '/blacklist-ip-test.txt', "192.168.1.0/24\n" );
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
-//		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 		unlink( __DIR__ . '/blacklist-ip-test.txt' );
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
 
