@@ -151,10 +151,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<div class="frm-embed-field-placeholder">
 									<div class="frm-embed-message">
 										<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/page-skeleton/empty-state.svg' ); ?>" alt="<?php esc_attr_e( 'Empty State', 'formidable' ); ?>" />
-										<span><?php esc_html_e( 'You don’t have any fields yet', 'formidable' ); ?></span>
+										<span><?php esc_html_e( 'Select a field to see the options', 'formidable' ); ?></span>
 										<button type="button" id="frm-form-add-field" class="frm-button-secondary frm-cursor-pointer frm-mt-xs">
-											<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => __( 'Add Field', 'formidable' ) ) ); ?>
-											<span><?php esc_html_e( 'Add Field', 'formidable' ); ?></span>
+											<?php FrmAppHelper::icon_by_class( 'frmfont frm_plus_icon', array( 'aria-label' => __( 'Add Fields', 'formidable' ) ) ); ?>
+											<span><?php esc_html_e( 'Add Fields', 'formidable' ); ?></span>
 										</button>
 									</div>
 								</div>

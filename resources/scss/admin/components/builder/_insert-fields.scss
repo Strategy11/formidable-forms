@@ -94,7 +94,7 @@
 
 		&::before {
 			margin-left: calc(-1 * var(--gap-sm));
-			width: calc(100% + var(--gap-lg));
+			width: calc(100% + var(--gap-md));
 		}
 	}
 }
