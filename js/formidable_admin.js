@@ -2015,18 +2015,20 @@ function frmAdminBuildJS() {
 			return;
 		}
 		const formId = thisFormId;
+		let args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: 0,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		args = wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: 0,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: args,
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
