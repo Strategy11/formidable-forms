@@ -122,9 +122,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php';
 		}
 
-		if ( ! empty( $field['is_dual_range_slider'] ) ) {
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/gap-range.php';
-		}
+		/**
+		 * @since x.x
+		 *
+		 * @param array $field
+		 * @param array $display
+		 * @param array $values
+		 */
+		do_action( 'frm_after_number_range', $field, $display, $values );
 
 		if ( $display['format'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
