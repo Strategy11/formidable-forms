@@ -517,4 +517,49 @@ class FrmTransLiteActionsController {
 
 		self::$entry_ids_to_destroy_later[] = (int) $entry_id;
 	}
+
+	/**
+	 * Filter payment action on save.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 * @param array $action
+	 * @return array
+	 */
+	public static function before_save_settings( $settings, $action ) {
+		$settings['currency'] = strtolower( $settings['currency'] );
+		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		$form_id = absint( $action['menu_order'] );
+
+		if ( empty( $settings['credit_card'] ) ) {
+			$credit_card_field_id = FrmDb::get_var(
+				'frm_fields',
+				array(
+					'type'    => 'credit_card',
+					'form_id' => $form_id,
+				)
+			);
+			if ( ! $credit_card_field_id ) {
+				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
+			}
+			if ( $credit_card_field_id ) {
+				$settings['credit_card'] = $credit_card_field_id;
+			}
+		}
+
+		$gateway_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(
+				'type'    => 'gateway',
+				'form_id' => $form_id,
+			)
+		);
+		if ( ! $gateway_field_id ) {
+			self::add_a_gateway_field( $form_id );
+		}
+
+		return $settings;
+	}
 }
