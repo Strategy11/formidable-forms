@@ -24,7 +24,16 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $callback;
 		}
 
-		return self::class . '::show_card';
+		$field_id = is_object( $field ) ? $field->id : $field['id'];
+
+		// TODO Make sure the field is mapped to the action.
+		foreach ( $actions as $action ) {
+			if ( (int) $action->post_content['credit_card'] === (int) $field_id ) {
+				return self::class . '::show_card';
+			}
+		}
+
+		return $callback;
 	}
 
 	/**

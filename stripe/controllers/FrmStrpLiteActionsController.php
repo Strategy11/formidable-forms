@@ -291,6 +291,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
+		// Gateway is a radio button but it should always be an array in the database for
+		// compatibility with the payments submodule where it is a checkbox.
+		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
 		$settings                = self::create_plans( $settings );

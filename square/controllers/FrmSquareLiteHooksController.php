@@ -16,7 +16,8 @@ class FrmSquareLiteHooksController {
 
 		add_action( 'init', 'FrmSquareLiteConnectHelper::check_for_redirects' );
 
-		add_filter( 'frm_pro_show_card_callback', 'FrmSquareLiteActionsController::maybe_show_card', 10, 2 );
+		// Use 20 so this happens after the Stripe add-on.
+		add_filter( 'frm_pro_show_card_callback', 'FrmSquareLiteActionsController::maybe_show_card', 20, 2 );
 	}
 
 	/**
