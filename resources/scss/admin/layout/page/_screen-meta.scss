@@ -1,0 +1,41 @@
+/**
+ * Layout - Screen Meta
+ */
+
+.frm-white-body #wpbody-content {
+	position: relative; /* For screen meta links */
+	padding-bottom: 0;
+}
+
+.post-new-php.post-type-frm_display #screen-meta-links,
+.post-php.post-type-frm_display #screen-meta-links {
+	display: none;
+}
+
+.frm-white-body #screen-meta-links {
+	position: fixed;
+	bottom: 0;
+	right: 20px;
+}
+
+.frm-full-screen #screen-meta-links .screen-meta-toggle {
+	right: 55px;
+}
+
+.frm-white-body #screen-meta-links .show-settings {
+	border-radius: var(--small-radius) var(--small-radius) 0 0;
+	border: 1px solid var(--grey-300);
+	border-bottom: none;
+}
+
+.frm-white-body.frm-lite #screen-meta-links .screen-meta-toggle {
+	right: 125px; /* Don't cover the lite upgrade button */
+}
+
+.frm-white-body #screen-meta {
+	margin: 0;
+}
+
+.frm-white-body #screen-meta-links .show-settings::after {
+	color: var(--grey);
+}

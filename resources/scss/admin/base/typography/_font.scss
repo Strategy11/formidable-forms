@@ -1,0 +1,27 @@
+/**
+ * Base - Font
+ */
+
+@font-face {
+	font-family: 'Inter';
+	src: url('../fonts/Inter-VariableFont_slnt,wght.ttf?v=1') format('truetype');
+}
+
+.with_frm_style,
+.frm-white-body .wpbody-content,
+.frm_wrap {
+	font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+}
+
+/* Safari 11+ */
+@media not all and (min-resolution:.001dpcm) {
+
+	@supports (-webkit-appearance:none) and (stroke-color:transparent) {
+
+		.with_frm_style,
+		.frm-white-body .wpbody-content,
+		.frm_wrap {
+			-webkit-font-smoothing: antialiased;
+		}
+	}
+}

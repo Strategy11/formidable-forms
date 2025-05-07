@@ -1,0 +1,29 @@
+/**
+ * Field Choices
+ */
+
+.frm_priority_field_choices,
+li.frm_single_option {
+	padding-bottom: 16px;
+	border-bottom: 1px solid var(--sidebar-hover);
+}
+
+.frm_priority_field_choices,
+li.frm_single_option:not(:last-child) {
+	margin-bottom: 16px;
+}
+
+.frm_prod_type_single input[type="radio"],
+.frm_prod_type_single .frm_drag_icon,
+.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ),
+.frm_prod_type_single .frm_sortable_field_opts .frm_remove_tag,
+.frm_prod_type_single .frm_form_field:not(.frm_product_type):not(.frm_sep_val_product),
+.frm_prod_type_single .frm-bulk-edit-link,
+.frm_prod_type_user_def.frm_grid_container,
+.frm_prod_options_heading.frm_prod_user_def {
+	display: none;
+}
+
+.plugin-card-bottom .frm-trash {
+	color: #a00;
+}

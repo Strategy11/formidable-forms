@@ -1,0 +1,29 @@
+/**
+ * Components - Form Error
+ */
+
+.frm_description,
+.with_frm_style form div.description,
+.frm_error {
+	margin: 0;
+}
+
+.frm_error {
+	color: #F04438;
+}
+
+form .frm_blank_field input,
+form .frm_blank_field textarea,
+form .frm_blank_field select,
+form .frm_blank_field .frm-g-recaptcha iframe,
+form .frm_blank_field .g-recaptcha iframe {
+	border-color: #F04438;
+}
+
+form .frm_blank_field label {
+	color: #F04438;
+}
+
+.frm_required {
+	color: #F04438;
+}

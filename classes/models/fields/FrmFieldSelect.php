@@ -31,6 +31,7 @@ class FrmFieldSelect extends FrmFieldType {
 		return array(
 			'clear_on_focus' => true,
 			'size'           => true,
+			'invalid'        => true,
 		);
 	}
 

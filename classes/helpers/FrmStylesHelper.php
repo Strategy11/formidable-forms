@@ -433,7 +433,7 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size' );
+		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
 		$vars   = array_diff( $vars, $remove );
 
 		foreach ( $vars as $var ) {
@@ -453,7 +453,7 @@ class FrmStylesHelper {
 	/**
 	 * Prevent invalid CSS keys from getting added to the generated CSS.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $key
 	 * @return bool
@@ -468,7 +468,7 @@ class FrmStylesHelper {
 	 * Confirm a CSS value is valid.
 	 * If it appears to contain JavaScript, it will not be added.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $var
 	 * @return bool

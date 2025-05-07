@@ -1659,7 +1659,7 @@ function frmFrontFormJS() {
 	/**
 	 * Animates the scroll position of the document.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param {number} start
 	 * @param {number} end

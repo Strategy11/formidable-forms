@@ -1,0 +1,17 @@
+/**
+ * Admin Columns
+ */
+
+.toplevel_page_formidable .column-shortcode div {
+	display: flex;
+	gap: var(--gap-xs);
+}
+
+.widefat .column-entries, .widefat .column-link {
+	width: 10%;
+	text-align: center;
+}
+
+.widefat .column-form_key, .widefat .column-created_at {
+	width: 10%;
+}

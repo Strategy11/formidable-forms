@@ -1,0 +1,33 @@
+/**
+ * Component: Field Group Message
+ */
+
+#frm-field-group-message {
+	position: absolute;
+	bottom: 32px;
+	right: calc(50% - var(--biggest-sidebar));
+	padding: var(--gap-xs) var(--gap-sm);
+	border-radius: 100px;
+	background-color: var(--primary-25);
+}
+
+#frm-field-group-message .frm-field-group-message-text {
+	gap: 10px;
+	color: var(--grey-800);
+}
+
+#frm-field-group-message-dismiss {
+	margin-left: var(--gap-xs)
+}
+
+#frm-field-group-message-dismiss .frmsvg {
+	color: var(--grey-800);
+	width: 15px;
+	height: 15px;
+	cursor: pointer;
+	transition: color 300ms ease-in-out;
+}
+
+#frm-field-group-message-dismiss .frmsvg:hover {
+	color: var(--grey-500);
+}

@@ -1,0 +1,63 @@
+/**
+ * Layout - Editor Overrides
+ */
+
+/* Override CSS in Views plugin. */
+.frm-views-editor-body .frm_page_container #frm_top_bar h1 {
+	padding: 0 !important;
+	color: var(--grey-900);
+	font-size: var(--text-xl) !important;
+}
+
+.post-type-frm_display .frm_top_left {
+	padding-bottom: 0 !important;
+}
+
+.frm-new-table-view-option.frm-selected-table-view-option {
+	border-radius: var(--small-radius);
+	background: var(--primary-25);
+}
+
+.frm-views-editor-body #frm_adv_info .tabs-panel { /* Views sidebar */
+	padding-left: 4px;
+	padding-right: 4px;
+}
+
+#frm_edit_box_content_modal .frm_modal_footer {
+	padding-top: var(--gap-sm);
+	border-top: 1px solid var(--grey-300);
+}
+
+#frm_edit_box_content_modal .frm_modal_footer > div {
+	display: flex;
+	justify-content: space-between;
+}
+
+#frm_edit_box_content_modal #frm_modal_box_select_area,
+#frm_edit_box_content_modal #frm_box_content_wysiwyg_wrapper,
+#frm_edit_box_content_modal .frm_modal_content {
+	max-height: calc(100vh - 176px) !important;
+}
+
+#frm_edit_box_content_modal #frm_modal_box_select_area {
+	height: calc(100vh - 176px) !important;
+}
+
+#frm_edit_box_content_modal #wp-content-editor-tools {
+	padding-top: 0;
+}
+
+#frm_edit_box_content_modal.frm-modal .postbox .frm-modal-title + div:last-child {
+	right: var(--gap-md);
+}
+
+.frm_code_list.frm-full-hover .frm-dropdown-view a {
+	flex-direction: row-reverse; /* Switch in the HTML */
+}
+
+#frm_view_editor_left.frm-right-panel .accordion-section-title::before {
+	content: '' !important;
+	margin: 0;
+}
+
+/** End Temporary View CSS */

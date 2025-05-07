@@ -74,8 +74,9 @@ class FrmStrpLiteLinkController {
 			die();
 		}
 
-		$status             = 'succeeded' === $intent->status ? 'complete' : 'authorized';
-		$new_payment_values = compact( 'status' );
+		$status                       = 'succeeded' === $intent->status ? 'complete' : 'authorized';
+		$new_payment_values           = (array) $payment;
+		$new_payment_values['status'] = $status;
 
 		if ( 'complete' === $status ) {
 			$charge                           = reset( $intent->charges->data );
@@ -256,7 +257,7 @@ class FrmStrpLiteLinkController {
 
 		$customer_has_been_charged = ! empty( $subscription->latest_invoice->charge );
 		$atts['charge']            = FrmStrpLiteSubscriptionHelper::prepare_charge_object_for_subscription( $subscription, $amount );
-		$new_payment_values        = array();
+		$new_payment_values        = (array) $payment;
 
 		if ( $customer_has_been_charged ) {
 			$charge                           = $subscription->latest_invoice->charge;

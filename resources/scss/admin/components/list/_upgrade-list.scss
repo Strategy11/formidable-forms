@@ -1,0 +1,56 @@
+/**
+ * Components - Upgrade List
+ */
+
+/* Start entry statuses */
+.frm-entry-status {
+	font-weight: 500;
+}
+
+.frm-entry-status-1 {
+	color: #7A4D05;
+	background: #FFF2D2;
+}
+
+/* End entry statuses */
+
+#frm-create-footer {
+	padding: 15px 20px;
+}
+
+li .frm-hover-icons .frm-preview-form,
+.frm-hover-icons .frm-unlock-form,
+.frm-locked-template .frm-hover-icons .frm-create-form,
+.frm-modal-back {
+	display: none;
+}
+
+
+.frm-locked-template .frm-hover-icons .frm-unlock-form,
+li[data-preview] .frm-hover-icons .frm-preview-form {
+	display: inline-flex;
+}
+
+.frm-modal-back svg {
+	color: #7F7F7F;
+}
+
+#frm-upgrade-body-list-wrapper > div {
+	display: inline-block;
+	width: calc( 100% / 3 );
+	vertical-align: top;
+	text-align: left;
+	margin-bottom: 10px;
+}
+
+#frm-upgrade-body-list-wrapper ul {
+	padding-left: 40px;
+}
+
+#frm-upgrade-body-list-wrapper ul li::before {
+	content: "\2022";
+	color: var(--primary-500);
+	display: inline-block;
+	width: 1em;
+	margin-left: -1em;
+}

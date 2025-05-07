@@ -683,7 +683,7 @@ class FrmFormsController {
 	 * Since this form is added by default and every site uses the same key, it is too easy
 	 * to guess this form.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 *
 	 * @param string $form_key Form key.
 	 * @return void
@@ -1140,12 +1140,14 @@ class FrmFormsController {
 	 * @return array<string,string>
 	 */
 	public static function get_columns( $columns ) {
-		$columns['cb']         = '<input type="checkbox" />';
-		$columns['name']       = esc_html__( 'Form Title', 'formidable' );
-		$columns['entries']    = esc_html__( 'Entries', 'formidable' );
-		$columns['id']         = 'ID';
-		$columns['form_key']   = esc_html__( 'Key', 'formidable' );
-		$columns['shortcode']  = esc_html__( 'Actions', 'formidable' );
+		$columns['cb']       = '<input type="checkbox" />';
+		$columns['name']     = esc_html__( 'Form Title', 'formidable' );
+		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
+		$columns['id']       = 'ID';
+		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
+		}
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		add_screen_option(
@@ -1924,10 +1926,14 @@ class FrmFormsController {
 	/**
 	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
 	 *
-	 * @since x.x
+	 * @since 6.20
 	 * @return void
 	 */
 	public static function include_device_too_small_message() {
+		if ( ! FrmAppHelper::is_formidable_admin() ) {
+			return;
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 

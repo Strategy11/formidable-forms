@@ -1,0 +1,80 @@
+/**
+ * Components - Nav Tabs
+ */
+
+.frm-nav-tabs {
+	margin: 10px 0 20px;
+	padding: 0 var(--gap-sm);
+	display: block;
+	border-bottom: 1px solid var(--grey-300);
+}
+
+#frm-nav-tabs {
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	background-color: var(--sidebar-color);
+	z-index: 98; /* must be < 99 */
+	margin-top: 0;
+	padding-top: 5px;
+}
+
+.frm_form_settings #frm_adv_info #frm-nav-tabs {
+	background-color: #fff;
+	margin: 0 -4px;
+}
+
+.frm_form_settings span.frm-with-right-icon,
+#frm_builder_page .frm_has_shortcodes span.frm-with-right-icon:not(.frm_hidden) {
+	display: block;
+}
+
+.frm-inline-modal .frm-nav-tabs,
+#frm_adv_info .frm-nav-tabs {
+	margin: 5px 0 0;
+}
+
+#frm_adv_info .frm-nav-tabs.frm-compact-nav {
+	padding-right: 0;
+	padding-left: 20px;
+}
+
+.frm-nav-tabs li {
+	display: inline-block;
+	margin: 0;
+}
+
+.frm-nav-tabs a {
+	color: var(--grey-700);
+	padding: 10px 1px;
+	margin: 0 9px;
+	border-bottom: 2px solid transparent;
+}
+
+.frm_form_settings #frm_adv_info .frm-nav-tabs a {
+	padding: 5px 1px;
+	color: var(--grey-500);
+}
+
+.frm-nav-tabs.frm-compact-nav a {
+	margin: 0 5px;
+}
+
+.frm-nav-tabs a {
+	display: block;
+	opacity: .9;
+}
+
+#frm_adv_info .frm-nav-tabs a {
+	color: var(--grey-700);
+}
+
+.frm-nav-tabs a:hover,
+.frm-nav-tabs .frm-tabs a {
+	color: var(--primary-500) !important;
+	border-color: var(--primary-500);
+}
+
+.frm_form_settings #frm_adv_info .frm-nav-tabs .frm-tabs a {
+	font-weight: 500;
+}

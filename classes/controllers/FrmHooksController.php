@@ -301,6 +301,10 @@ class FrmHooksController {
 
 		// Reviews.
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
+
+		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
+
+		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
 	}
 
 	/**
