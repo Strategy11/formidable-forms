@@ -1995,7 +1995,7 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( loadedEvent );
 	}
 
-	function addFieldClick() {
+	function addFieldClick( event ) {
 		/*jshint validthis:true */
 		const $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
@@ -2011,19 +2011,24 @@ function frmAdminBuildJS() {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
+		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+			return;
+		}
 		const formId = thisFormId;
+		let args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: 0,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		args = wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: 0,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: args,
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
