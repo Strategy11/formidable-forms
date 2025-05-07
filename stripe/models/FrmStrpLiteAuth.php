@@ -336,6 +336,10 @@ class FrmStrpLiteAuth {
 			}
 
 			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+			if ( empty( $saved->metadata->action ) ) {
+				continue;
+			}
+
 			foreach ( $actions as $action ) {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
