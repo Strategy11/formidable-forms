@@ -126,13 +126,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
-	<textarea id="frm-disallowed_words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
+	<textarea id="frm-disallowed-words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
 </p>
 
 <p>
-	<label for="frm-allowed_words">
+	<label for="frm-allowed-words">
 		<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
-	<textarea id="frm-allowed_words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+	<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
 </p>
