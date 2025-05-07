@@ -123,11 +123,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 
 		/**
+		 * Fires after the number range field settings.
+		 *
 		 * @since x.x
 		 *
-		 * @param array $field
-		 * @param array $display
-		 * @param array $values
+		 * @param array $field   The field settings.
+		 * @param array $display The display settings for the field.
+		 * @param array $values  The values associated with the field.
 		 */
 		do_action( 'frm_after_number_range', $field, $display, $values );
 
