@@ -150,7 +150,40 @@ class FrmHoneypot extends FrmValidate {
 	 * @return bool
 	 */
 	public function should_render_field() {
+		if ( $this->form_is_loaded_by_api() ) {
+			return false;
+		}
 		return $this->is_option_on() && $this->check_honeypot_filter();
+	}
+
+	/**
+	 * Prevent the honeypot from appearing for an API loaded form.
+	 * This is because the footer script is not getting added.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function form_is_loaded_by_api() {
+		if ( ! class_exists( 'FrmAPIAppController' ) ) {
+			return false;
+		}
+
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( 0 === strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+			// Prevent the honeypot from appearing for an API loaded form.
+			// This is to prevent conflicts where the script is not working.
+			return true;
+		}
+
+		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
+			$api = FrmProFormState::get_from_request( 'a', 0 );
+			if ( $api ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
