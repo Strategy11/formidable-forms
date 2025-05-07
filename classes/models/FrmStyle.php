@@ -443,7 +443,7 @@ class FrmStyle {
 		 *
 		 * @param bool $add_css_to_uploads_dir
 		 */
-		return apply_filters( 'frm_add_css_to_uploads_dir', ! wp_is_file_mod_allowed( 'frm_can_install_plugin' ) );
+		return apply_filters( 'frm_add_css_to_uploads_dir', ! wp_is_file_mod_allowed( 'frm_save_css_to_plugin_folder' ) );
 	}
 
 	/**
