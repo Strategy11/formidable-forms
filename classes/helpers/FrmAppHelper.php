@@ -128,7 +128,7 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = $args['medium'];
+			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
 			if ( isset( $args['content'] ) ) {
 				$content = $args['content'];
 			}
