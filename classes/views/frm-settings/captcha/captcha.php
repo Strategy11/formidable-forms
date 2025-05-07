@@ -103,3 +103,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 	require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha_keys.php';
 	?>
 </div>
+
+<h2 class="frm-h2"><?php esc_html_e( 'Spam', 'formidable' ); ?></h2>
+
+<p>
+	<label for="frm-honeypot">
+		<input type="checkbox" id="frm-honeypot" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
+		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+</p>
+
+<p>
+	<label for="frm-wp-spam-check">
+		<input type="checkbox" id="frm-wp-spam-check" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
+		<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
+	</label>
+</p>
+
+<p>
+	<label for="frm-disallowed-words">
+		<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+	<textarea id="frm-disallowed_words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
+</p>
+
+<p>
+	<label for="frm-allowed_words">
+		<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+	<textarea id="frm-allowed_words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+</p>
