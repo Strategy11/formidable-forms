@@ -1,6 +1,27 @@
 describe('Run some accessibility tests', function() {
     beforeEach(cy.login);
 
+    const logViolations = violations => {
+        if ( violations.length > 0 ) {
+            cy.task('log', `${violations.length} accessibility violation${violations.length === 1 ? '' : 's'} detected`);
+            violations.forEach(({ id, impact, description, nodes }) => {
+              cy.task('log', `${impact} issue: ${id} - ${description}`);
+              nodes.forEach(({ html }) => {
+                cy.task('log', `Element: ${html}`);
+              });
+            });
+        }
+        expect(violations).to.have.length(0);
+    };
+
+    const checkA11y = () => {
+        cy.checkA11y(
+            null,
+            null,
+            logViolations
+        );
+    };
+
     const configureAxeWithIgnoredRuleset = (rules) => {
         cy.configureAxe({ rules });
     };
@@ -19,7 +40,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'heading-order', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the form list is accessible', () => {
@@ -29,7 +50,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'empty-table-header', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the entries page is accessible', () => {
@@ -39,7 +60,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'empty-table-header', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the styles page is accessible', () => {
@@ -51,7 +72,7 @@ describe('Run some accessibility tests', function() {
             { id: 'label', enabled: false },
             { id: 'label-title-only', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the applications page is accessible', () => {
@@ -61,7 +82,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'image-alt', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the form templates page is accessible', () => {
@@ -71,7 +92,7 @@ describe('Run some accessibility tests', function() {
             { id: 'color-contrast', enabled: false },
             { id: 'aria-allowed-role', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the import/export page is accessible', () => {
@@ -81,7 +102,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'heading-order', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the global settings page is accessible', () => {
@@ -90,7 +111,7 @@ describe('Run some accessibility tests', function() {
         configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the Add-Ons page is accessible', () => {
@@ -100,7 +121,7 @@ describe('Run some accessibility tests', function() {
             ...baselineRules,
             { id: 'heading-order', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the SMTP page is accessible', () => {
@@ -111,7 +132,7 @@ describe('Run some accessibility tests', function() {
             { id: 'landmark-unique', enabled: false },
             { id: 'landmark-complementary-is-top-level', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the form creation is accessible', () => {
@@ -121,7 +142,7 @@ describe('Run some accessibility tests', function() {
             { id: 'color-contrast', enabled: false },
             { id: 'aria-allowed-role', enabled: false }
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 
     it('Check the list of deleted forms is accessible', () => {
@@ -130,6 +151,6 @@ describe('Run some accessibility tests', function() {
         configureAxeWithIgnoredRuleset([
             ...baselineRules
         ]);
-        cy.checkA11y();
+        checkA11y();
     });
 });
