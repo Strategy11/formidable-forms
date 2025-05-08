@@ -41,9 +41,8 @@ describe("Entries submitted from a form", () => {
 
             expect(text).to.be.oneOf([
                 "Want to search submitted entries?",
-                "A site with dynamic, user-generated content is within reach.",
-                "Want to edit form submissions?",
-                "A site with dynamic, user-generated content is within reach.",
+                "Make your site dynamic. Enable front-end editing.",
+                "Edit form entries anytime with entry management.",
                 "Want to import entries into your forms?"
             ]);
         })
@@ -52,10 +51,7 @@ describe("Entries submitted from a form", () => {
         cy.get('.frm-tip-cta').then(($el) => {
             const text = $el.text().trim();
             expect(text).to.be.oneOf([
-                "Upgrade to Pro.",
-                "Add entry management.",
-                "A site with dynamic, user-generated content is within reach.",
-                "Display form data with Views."
+                "Upgrade to Pro."
             ]);
         })
 

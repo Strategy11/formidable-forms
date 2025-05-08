@@ -1,5 +1,4 @@
 describe("Forms page", () => {
-    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin&utm_content=lite-banner';
     const origin = Cypress.config('baseUrl');
     const formTitle = "Test Form";
 
@@ -13,8 +12,19 @@ describe("Forms page", () => {
     it("should validate all data in list view", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
-        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a')
-            .should('have.text', 'upgrading to PRO').click();
+
+        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a, #frm_sale_banner a:not(.dismiss)')
+            .then(($el) => {
+                const text = $el.text().trim();
+                if (text.includes('upgrading to PRO')) {
+                    cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a').click();
+                } else if (text.match(/GET \d+% OFF|SAVE \d+%/)) {
+                    cy.get('#frm_sale_banner a:not(.dismiss)').click();
+                } else {
+                    expect.fail('frm banner CTA text is not valid');
+                }
+            });
+
         cy.origin('https://formidableforms.com', () => { 
             cy.get('h1').then(($h1) => {
                 const text = $h1.text();
