@@ -63,8 +63,9 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'file' => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
 			),
 			array(
-				'file' => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
-				'skip' => FrmAppHelper::current_user_can( 'frm_create_entries' ),
+				'file'             => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
+				'skip'             => FrmAppHelper::current_user_can( 'frm_create_entries' ),
+				'skip_field_types' => array( 'file' ),
 			),
 			array(
 				'words'       => array(
