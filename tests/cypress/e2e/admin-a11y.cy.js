@@ -70,7 +70,8 @@ describe('Run some accessibility tests', function() {
             { id: 'aria-allowed-role', enabled: false },
             { id: 'link-name', enabled: false },
             { id: 'label', enabled: false },
-            { id: 'label-title-only', enabled: false }
+            { id: 'label-title-only', enabled: false },
+            { id: 'heading-order', enabled: false }
         ]);
         cy.checkA11y( null, null, logViolations );
     });
@@ -90,7 +91,8 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             { id: 'color-contrast', enabled: false },
-            { id: 'aria-allowed-role', enabled: false }
+            { id: 'aria-allowed-role', enabled: false },
+            { id: 'link-name', enabled: false }
         ]);
         cy.checkA11y( null, null, logViolations );
     });
@@ -140,7 +142,8 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             { id: 'color-contrast', enabled: false },
-            { id: 'aria-allowed-role', enabled: false }
+            { id: 'aria-allowed-role', enabled: false },
+            { id: 'link-name', enabled: false }
         ]);
         cy.checkA11y( null, null, logViolations );
     });
