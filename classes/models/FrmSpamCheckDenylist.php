@@ -164,7 +164,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				// Is ignore if `is_regex` is `true`.
 				'compare'       => self::COMPARE_CONTAINS,
 				'extract_value' => '',
-				'skip'          => false, // If this is `true`, this denylist will be skipped.
+				// If this is `true`, this denylist will be skipped.
+				'skip'          => false,
 			)
 		);
 	}

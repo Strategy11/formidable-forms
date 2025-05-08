@@ -220,6 +220,10 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
+		$denylist['skip'] = true;
+		$this->set_denylist_data( array( $denylist ) );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
 		$denylist          = $this->custom_denylist_data['denylist_with_name'];
 		$denylist['words'] = array( '@' );
 		$this->set_denylist_data( array( $denylist ) );
