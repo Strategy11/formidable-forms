@@ -75,6 +75,7 @@
 
 	li a {
 		display: flex !important;
+		transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
 
 		&:not(.disabled):hover {
 			background: var(--grey-100);
