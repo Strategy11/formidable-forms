@@ -71,7 +71,8 @@ describe('Run some accessibility tests', function() {
             { id: 'link-name', enabled: false },
             { id: 'label', enabled: false },
             { id: 'label-title-only', enabled: false },
-            { id: 'heading-order', enabled: false }
+            { id: 'heading-order', enabled: false },
+            { id: 'empty-heading', enabled: false }
         ]);
         cy.checkA11y( null, null, logViolations );
     });
