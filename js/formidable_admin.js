@@ -859,16 +859,14 @@ function frmAdminBuildJS() {
 		const settings = {
 			helper: getDraggableHelper,
 			revert: 'invalid',
-			delay: 10,
+			delay: 2,
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
 			refreshPositions: true,
-			cursorAt: {
-				top: 0,
-				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
-			}
+			distance: 3, // Only start drag after 3px of movement for more precision
+			cursorAt: false // Let the helper maintain its original position relative to cursor
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;

@@ -18,6 +18,7 @@
 
 #frm-insert-fields {
 	padding: 0 var(--gap-xs);
+	overflow: hidden;
 
 	.frm-search {
 		float: none;
@@ -53,7 +54,6 @@
 		opacity: 0.5;
 	}
 
-
 	li a:not(.disabled):hover {
 
 		.frmsvg,
@@ -69,8 +69,8 @@
 		gap: var(--gap-xs);
 		align-items: center;
 		border-radius: var(--small-radius) !important;
-		padding: 11px var(--gap-xs) !important;
-		color: var(--grey-900) !important;
+		padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
+		color: var(--grey-900) !important
 	}
 
 	li a {
@@ -97,11 +97,6 @@
 			width: calc(100% + var(--gap-md));
 		}
 	}
-}
-
-.frmbutton.ui-draggable-dragging a {
-	background: var(--grey-100);
-	box-shadow: var(--box-shadow-md);
 }
 
 .frm_code_list {
@@ -200,15 +195,16 @@ input[disabled] {
 /* Icon while dragging */
 .frmbutton.ui-draggable-dragging {
 	pointer-events: none;
-}
 
-.frmbutton.ui-draggable-dragging a {
-	text-decoration: none;
-	display: inline-flex !important;
-	gap: var(--gap-xs);
-	align-items: center;
-	border-radius: var(--small-radius) !important;
-	padding: 11px var(--gap-xs) !important;
-	color: var(--grey-900) !important;
+	a {
+		color: var(--grey-900) !important;
+		background: var(--grey-100);
+		text-decoration: none;
+		display: inline-flex !important;
+		gap: var(--gap-xs);
+		align-items: center;
+		border-radius: var(--small-radius) !important;
+		padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
+		box-shadow: var(--box-shadow-md);
+	}
 }
-

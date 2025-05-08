@@ -93,8 +93,8 @@
 	gap: var(--gap-md);
 	padding: var(--gap-md);
 	border: 0;
-	border-radius: var(--medium-radius);
 	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='99%25' height='99%25' fill='none' stroke='%23D0D5DD' stroke-width='1' stroke-dasharray='8,8' rx='8' ry='8' x='0.5%25' y='0.5%25' stroke-linecap='square' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+	border-radius: var(--medium-radius);
 	margin: var(--gap-sm) 12px;
 
 	img {
@@ -112,4 +112,4 @@
 		font-size: var(--text-md);
 		margin: 0;
 	}
- }
+}
