@@ -468,4 +468,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 		return false;
 	}
+
+	protected function get_spam_message() {
+		return __( 'Your entry appears to be blocked spam!', 'formidable' );
+	}
 }

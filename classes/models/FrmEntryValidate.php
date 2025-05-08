@@ -428,14 +428,16 @@ class FrmEntryValidate {
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
-		$spam_msg       = FrmAntiSpamController::get_spam_message();
+		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
-		} elseif ( FrmAntiSpamController::is_spam( $values ) ) {
-			// TODO: maybe restore old blacklist spam message.
-			$errors['spam'] = $spam_msg;
+		} else {
+			$is_spam = FrmAntiSpamController::is_spam( $values );
+			if ( $is_spam ) {
+				$errors['spam'] = $is_spam;
+			}
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {

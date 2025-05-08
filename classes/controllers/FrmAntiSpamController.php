@@ -17,13 +17,28 @@ class FrmAntiSpamController {
 	 *
 	 * @param array $values Entry values.
 	 *
-	 * @return bool Return `true` if is spam.
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
 	 */
 	public static function is_spam( $values ) {
-		return self::contains_wp_disallowed_words( $values ) ||
-			self::is_denylist_spam( $values ) ||
-			self::is_stopforumspam_spam( $values ) ||
-			self::is_wp_comment_spam( $values );
+		$methods = array(
+			'contains_wp_disallowed_words',
+			'is_denylist_spam',
+			'is_stopforumspam_spam',
+			'is_wp_comment_spam',
+		);
+
+		foreach ( $methods as $method ) {
+			if ( ! is_callable( array( __CLASS__, $method ) ) ) {
+				continue;
+			}
+
+			$is_spam = call_user_func( array( __CLASS__, $method ), $values );
+			if ( $is_spam ) {
+				return $is_spam;
+			}
+		}
+
+		return false;
 	}
 
 	private static function is_stopforumspam_spam( $values ) {
@@ -51,7 +66,7 @@ class FrmAntiSpamController {
 	 *
 	 * @return string
 	 */
-	public static function get_spam_message() {
+	public static function get_default_spam_message() {
 		return __( 'Your entry appears to be spam!', 'formidable' );
 	}
 

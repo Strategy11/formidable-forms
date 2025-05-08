@@ -60,4 +60,8 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	protected function is_enabled() {
 		return apply_filters( 'frm_check_blacklist', true, $this->values );
 	}
+
+	protected function get_spam_message() {
+		return __( 'Your entry appears to be blocked spam!', 'formidable' );
+	}
 }
