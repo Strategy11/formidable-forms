@@ -23,6 +23,7 @@ describe("Forms page", () => {
                 const saleBanner = $el.find('#frm_sale_banner a');
                 if (saleBanner.length > 0) {
                     expect(saleBanner.text()).to.match(/GET \d+% OFF|SAVE \d+%/);
+                    cy.get('#frm_sale_banner a').click();
                     return;
                 }
                 expect.fail('frm banner CTA text is not valid');
