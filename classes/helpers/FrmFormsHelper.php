@@ -1863,6 +1863,36 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Checks if the form is loaded by API.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function form_is_loaded_by_api() {
+		if ( ! class_exists( 'FrmAPIAppController' ) ) {
+			return false;
+		}
+
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( 0 === strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+			// Prevent the honeypot from appearing for an API loaded form.
+			// This is to prevent conflicts where the script is not working.
+			return true;
+		}
+
+		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
+			$api = FrmProFormState::get_from_request( 'a', 0 );
+
+			if ( $api ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @since 3.0
 	 * @deprecated 6.11
 	 *

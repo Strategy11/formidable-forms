@@ -115,22 +115,22 @@ class FrmHoneypot extends FrmValidate {
 		$honeypot = new self( $form_id );
 		if ( $honeypot->should_render_field() ) {
 			$honeypot->render_field();
+			self::maybe_print_honeypot_css();
 		}
 	}
 
+	/**
+	 * Maybe print honeypot JS.
+	 */
 	public static function maybe_print_honeypot_js() {
 		if ( ! self::is_enabled() ) {
 			return;
 		}
-		global $frm_vars;
-		if ( empty( $frm_vars['honeypot_selectors'] ) ) {
+
+		$css = self::get_honeypot_field_css();
+		if ( ! $css ) {
 			return;
 		}
-
-		$styles = sprintf(
-			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
-			implode( ',', $frm_vars['honeypot_selectors'] )
-		);
 
 		// There must be no empty lines inside the script. Otherwise, wpautop adds <p> tags which break script execution.
 		printf(
@@ -142,7 +142,39 @@ class FrmHoneypot extends FrmValidate {
 					document.currentScript?.remove();
 				} )();
 			</script>",
-			esc_js( $styles )
+			esc_js( $css )
+		);
+	}
+
+	/**
+	 * Maybe print honeypot CSS in case JS doesn't run.
+	 */
+	public static function maybe_print_honeypot_css() {
+		// Print the CSS if form is loaded by API.
+		if ( ! FrmFormsHelper::form_is_loaded_by_api() ) {
+			return;
+		}
+
+		$css = self::get_honeypot_field_css();
+		if ( $css ) {
+			echo '<style>' . $css . '</style>';
+		}
+	}
+
+	/**
+	 * Gets honeypot field CSS.
+	 *
+	 * @return string
+	 */
+	private static function get_honeypot_field_css() {
+		global $frm_vars;
+		if ( empty( $frm_vars['honeypot_selectors'] ) ) {
+			return '';
+		}
+
+		return sprintf(
+			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
+			implode( ',', $frm_vars['honeypot_selectors'] )
 		);
 	}
 
