@@ -13,13 +13,13 @@ describe("Forms page", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
 
-        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a, #frm_sale_banner a')
+        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a, #frm_sale_banner a:not(.dismiss)')
             .then(($el) => {
                 const text = $el.text().trim();
                 if (text.includes('upgrading to PRO')) {
                     cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a').click();
                 } else if (text.match(/GET \d+% OFF|SAVE \d+%/)) {
-                    cy.get('#frm_sale_banner a').click();
+                    cy.get('#frm_sale_banner a:not(.dismiss)').click();
                 } else {
                     expect.fail('frm banner CTA text is not valid');
                 }
