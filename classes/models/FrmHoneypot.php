@@ -157,7 +157,7 @@ class FrmHoneypot extends FrmValidate {
 
 		$css = self::get_honeypot_field_css();
 		if ( $css ) {
-			echo '<style>' . $css . '</style>';
+			echo '<style>' . esc_attr( $css ) . '</style>';
 		}
 	}
 
