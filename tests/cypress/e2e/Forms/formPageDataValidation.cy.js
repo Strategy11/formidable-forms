@@ -18,6 +18,7 @@ describe("Forms page", () => {
             .then(($el) => {
                 const text = $el.text().trim();
                 if (text.includes('upgrading to PRO')) {
+                    cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a').click();
                     return;
                 }
                 const saleBanner = $el.find('#frm_sale_banner a');
@@ -28,7 +29,6 @@ describe("Forms page", () => {
                 }
                 expect.fail('frm banner CTA text is not valid');
             });
-        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a').click();
         
         cy.origin('https://formidableforms.com', () => { 
             cy.get('h1').then(($h1) => {
