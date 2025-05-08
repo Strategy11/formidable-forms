@@ -13,8 +13,22 @@ describe("Forms page", () => {
     it("should validate all data in list view", () => {
         cy.log("Validate all header data");
         cy.log("Validate the upgrade link");
+
         cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a')
-            .should('have.text', 'upgrading to PRO').click();
+            .then(($el) => {
+                const text = $el.text().trim();
+                if (text.includes('upgrading to PRO')) {
+                    return;
+                }
+                const saleBanner = $el.find('#frm_sale_banner a');
+                if (saleBanner.length > 0) {
+                    expect(saleBanner.text()).to.match(/GET \d+% OFF|SAVE \d+%/);
+                    return;
+                }
+                expect.fail('frm banner CTA text is not valid');
+            });
+        cy.get('.frm-upgrade-bar .frm-upgrade-bar-inner > a').click();
+        
         cy.origin('https://formidableforms.com', () => { 
             cy.get('h1').then(($h1) => {
                 const text = $h1.text();
