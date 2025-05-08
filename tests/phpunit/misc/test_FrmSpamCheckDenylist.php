@@ -108,7 +108,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->assertFalse( $field_ids_to_check );
 
 		$denylist['skip_field_types'] = array( 'email' );
-		$field_ids_to_check = $this->run_private_method(
+		$field_ids_to_check           = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
 			array( $denylist )
 		);

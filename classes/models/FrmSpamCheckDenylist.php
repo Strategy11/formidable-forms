@@ -27,13 +27,13 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param array $values Spam check values.
 	 */
-	protected function maybe_add_form_id_to_values( &$values) {
+	protected function maybe_add_form_id_to_values( &$values ) {
 		if ( ! empty( $values['form_id'] ) || empty( $values['item_meta'] ) ) {
 			return;
 		}
 
 		$field_id = key( $values['item_meta'] );
-		$field = FrmField::getOne( $field_id );
+		$field    = FrmField::getOne( $field_id );
 		if ( $field ) {
 			$values['form_id'] = $field->form_id;
 		}
