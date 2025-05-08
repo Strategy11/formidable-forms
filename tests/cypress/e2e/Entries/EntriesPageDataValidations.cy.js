@@ -29,7 +29,7 @@ describe("Entries submitted from a form", () => {
         cy.log("Submit form and verify entry is not stored");
         cy.get("#frm-previewDrop", { timeout: 5000 }).should("contain", "Preview").click();
         cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
-        cy.get('[id^="field_"]').filter('input, textarea').type("Entry is not stored");
+        cy.get('[id^="field_"]:not(.frm_verify)').filter('input, textarea').type("Entry is not stored");
         cy.get("button[type='submit']").should("contain", "Submit").click();
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain", "Entries").click();
