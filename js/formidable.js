@@ -1677,7 +1677,7 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
-			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
+			jQuery( document ).on( 'change', '.frm_verify[id^=field_]', onHoneypotFieldChange );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 
