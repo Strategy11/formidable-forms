@@ -67,18 +67,18 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'skip' => FrmAppHelper::current_user_can( 'frm_create_entries' ),
 			),
 			array(
-				'words'      => array(
+				'words'       => array(
 					'moncler|north face|vuitton|handbag|burberry|outlet|prada|cialis|viagra|maillot|oakley|ralph lauren|ray ban|iphone|プラダ',
 				),
-				'field_type' => array( 'name' ),
-				'is_regex'   => true,
+				'field_types' => array( 'name' ),
+				'is_regex'    => true,
 			),
 			array(
-				'words'      => array(
+				'words'       => array(
 					'@mail\.ru|@yandex\.',
 				),
-				'field_type' => array( 'email' ),
-				'is_regex'   => true,
+				'field_types' => array( 'email' ),
+				'is_regex'    => true,
 			),
 		);
 
@@ -176,15 +176,16 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$denylist = wp_parse_args(
 			$denylist,
 			array(
-				'file'          => '',
-				'words'         => array(),
-				'is_regex'      => false,
-				'field_type'    => array(),
+				'file'             => '',
+				'words'            => array(),
+				'is_regex'         => false,
+				'field_types'      => array(),
+				'skip_field_types' => array(),
 				// Is ignore if `is_regex` is `true`.
-				'compare'       => self::COMPARE_CONTAINS,
-				'extract_value' => '',
+				'compare'          => self::COMPARE_CONTAINS,
+				'extract_value'    => '',
 				// If this is `true`, this denylist will be skipped.
-				'skip'          => false,
+				'skip'             => false,
 			)
 		);
 	}
@@ -273,17 +274,26 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */
 	protected function get_field_ids_to_check( array $denylist ) {
-		if ( empty( $denylist['field_type'] ) || ! is_array( $denylist['field_type'] ) ) {
+		$field_types      = isset( $denylist['field_types'] ) && is_array( $denylist['field_types'] ) ? $denylist['field_types'] : array();
+		$skip_field_types = isset( $denylist['skip_field_types'] ) && is_array( $denylist['skip_field_types'] ) ? $denylist['skip_field_types'] : array();
+
+		if ( ! $field_types && ! $skip_field_types ) {
+			// This will check all fields.
 			return false;
 		}
 
 		$field_ids_to_check = array();
 		foreach ( $this->posted_fields as $field ) {
 			$field_type = FrmField::get_field_type( $field );
-			if ( in_array( $field_type, $denylist['field_type'], true ) ) {
-				$field_ids_to_check[] = intval( $field->id );
+			if ( in_array( $field_type, $skip_field_types, true ) ) {
+				continue;
 			}
-			unset( $field );
+
+			if ( $field_types && ! in_array( $field_type, $field_types, true ) ) {
+				continue;
+			}
+
+			$field_ids_to_check[] = intval( $field->id );
 		}
 
 		return $field_ids_to_check;
