@@ -13,14 +13,17 @@ module.exports = defineConfig({
       runMode: 1,
     },
     setupNodeEvents(on) {
-      htmlvalidate.install( on );
-
       on('task', {
         log(message) {
-          console.log(message);
-          return null;
+          console.log(message)
+          return null
         },
+        table(message) {
+          console.table(message)
+          return null
+        }
       });
+      htmlvalidate.install( on );
     },
     experimentalRunAllSpecs: true
   },
