@@ -1,5 +1,4 @@
 describe("Forms page", () => {
-    const formidableFormsUpgradeUrl = 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=settings-license&utm_campaign=liteplugin&utm_content=lite-banner';
     const origin = Cypress.config('baseUrl');
     const formTitle = "Test Form";
 
@@ -25,7 +24,7 @@ describe("Forms page", () => {
                     expect.fail('frm banner CTA text is not valid');
                 }
             });
-        
+
         cy.origin('https://formidableforms.com', () => { 
             cy.get('h1').then(($h1) => {
                 const text = $h1.text();
