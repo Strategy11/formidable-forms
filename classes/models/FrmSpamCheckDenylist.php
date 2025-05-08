@@ -14,10 +14,29 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	protected $denylist;
 
 	public function __construct( $values ) {
+		$this->maybe_add_form_id_to_values( $values );
+
 		parent::__construct( $values );
 
 		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
 		$this->denylist      = $this->get_denylist_array();
+	}
+
+	/**
+	 * Maybe add form ID to values. In file name validation, only item_meta in $values.
+	 *
+	 * @param array $values Spam check values.
+	 */
+	protected function maybe_add_form_id_to_values( &$values) {
+		if ( ! empty( $values['form_id'] ) || empty( $values['item_meta'] ) ) {
+			return;
+		}
+
+		$field_id = key( $values['item_meta'] );
+		$field = FrmField::getOne( $field_id );
+		if ( $field ) {
+			$values['form_id'] = $field->form_id;
+		}
 	}
 
 	protected function is_enabled() {

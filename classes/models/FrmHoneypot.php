@@ -128,7 +128,7 @@ class FrmHoneypot extends FrmValidate {
 		}
 
 		$styles = sprintf(
-			'%s {visibility:hidden:overflow:hidden;width:0;height:0;position:absolute;}',
+			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
 			implode( ',', $frm_vars['honeypot_selectors'] )
 		);
 
