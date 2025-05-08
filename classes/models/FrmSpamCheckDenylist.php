@@ -45,6 +45,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			),
 			array(
 				'file' => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
+				'skip' => FrmAppHelper::current_user_can( 'frm_create_entries' ),
 			),
 			array(
 				'words'      => array(
@@ -119,6 +120,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$allowed_words = array_map( array( $this, 'convert_to_lowercase' ), $allowed_words );
 
 		foreach ( $this->denylist as $denylist ) {
+			if ( ! empty( $denylist['skip'] ) ) {
+				continue;
+			}
+
 			if ( empty( $denylist['file'] ) && empty( $denylist['words'] ) ) {
 				continue;
 			}
@@ -159,6 +164,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				// Is ignore if `is_regex` is `true`.
 				'compare'       => self::COMPARE_CONTAINS,
 				'extract_value' => '',
+				'skip'          => false, // If this is `true`, this denylist will be skipped.
 			)
 		);
 	}
