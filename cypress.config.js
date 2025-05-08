@@ -14,6 +14,13 @@ module.exports = defineConfig({
     },
     setupNodeEvents(on) {
       htmlvalidate.install( on );
+
+      on('task', {
+        log(message) {
+          console.log(message);
+          return null;
+        },
+      });
     },
     experimentalRunAllSpecs: true
   },
