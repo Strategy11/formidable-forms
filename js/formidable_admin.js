@@ -4871,7 +4871,7 @@ function frmAdminBuildJS() {
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
-					document.getElementById( 'frm_insert_fields_tab' ).click();
+					document.querySelector( '.frm-settings-panel .frm-tabs-navs ul > li:first-child' )?.click();
 				}
 				settings.remove();
 
