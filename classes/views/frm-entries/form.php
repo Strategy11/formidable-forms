@@ -60,10 +60,6 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <input type="hidden" name="id" value="<?php echo esc_attr( $id ); ?>" />
 <?php } ?>
 <?php
-if ( ! FrmAppHelper::is_admin() ) {
-	FrmHoneypot::maybe_render_field( $form->id );
-}
-
 if ( ! $only_contain_submit ) {
 	/**
 	 * Allows modifying the list of fields in the frontend form.
@@ -95,6 +91,7 @@ if ( FrmAppHelper::is_admin() ) {
 	?>
 	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 	<?php
+	FrmHoneypot::maybe_render_field( $form->id );
 	FrmFormState::maybe_render_state_field( $form );
 }
 
