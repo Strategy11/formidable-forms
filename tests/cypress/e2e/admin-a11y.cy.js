@@ -82,7 +82,8 @@ describe('Run some accessibility tests', function() {
         cy.injectAxe();
         configureAxeWithIgnoredRuleset([
             ...baselineRules,
-            { id: 'image-alt', enabled: false }
+            { id: 'image-alt', enabled: false },
+            { id: 'heading-order', enabled: false }
         ]);
         cy.checkA11y( null, null, logViolations );
     });

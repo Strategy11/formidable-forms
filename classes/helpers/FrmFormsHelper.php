@@ -1870,9 +1870,32 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function form_is_loaded_by_api() {
-		return self::is_formidable_api_form() || self::is_gutenberg_editor();
+		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_visual_views_preview() {
+		return 'frm_views_process_box_preview' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_elementor_ajax() {
+		return 'elementor_ajax' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
@@ -1887,6 +1910,11 @@ BEFORE_HTML;
 		return false;
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
 	private static function is_formidable_api_form() {
 		if ( ! class_exists( 'FrmAPIAppController' ) ) {
 			return false;
