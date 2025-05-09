@@ -879,7 +879,7 @@ class FrmEntriesHelper {
 		}
 
 		$inbox       = new FrmInbox();
-		$inbox_count = count( $inbox->unread() );
+		$inbox_count = $inbox->get_unread_count();
 
 		if ( ! $inbox_count ) {
 			return 0;

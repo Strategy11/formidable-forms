@@ -315,7 +315,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return string
 	 */
 	public function unread_html( $filtered = true ) {
-		$count = count( $this->unread() );
+		$count = $this->get_unread_count();
 		if ( ! $count ) {
 			return '';
 		}
@@ -332,6 +332,17 @@ class FrmInbox extends FrmFormApi {
 		 * @param string $html
 		 */
 		return (string) apply_filters( 'frm_inbox_badge', $html );
+	}
+
+	/**
+	 * Get unread inbox count.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	public function get_unread_count() {
+		return count( $this->unread() );
 	}
 
 	/**
