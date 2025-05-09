@@ -105,16 +105,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 <h2 class="frm-h2"><?php esc_html_e( 'Spam', 'formidable' ); ?></h2>
 
 <p>
-	<label for="frm-honeypot">
-		<input type="checkbox" id="frm-honeypot" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
+	<label>
+		<input type="checkbox" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
 		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
 
 <p>
-	<label for="frm-wp-spam-check">
-		<input type="checkbox" id="frm-wp-spam-check" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
+	<label>
+		<input type="checkbox" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
 		<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
 	</label>
 </p>
