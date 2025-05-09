@@ -511,6 +511,13 @@ class FrmEntryValidate {
 		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words and Frm denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool
+	 */
 	public static function blacklist_check( $values ) {
 		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_denylist_spam( $values );
 	}

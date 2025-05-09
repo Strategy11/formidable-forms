@@ -41,21 +41,49 @@ class FrmAntiSpamController {
 		return false;
 	}
 
+	/**
+	 * Checks spam using stopforumspam API.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	private static function is_stopforumspam_spam( $values ) {
 		$spam_check = new FrmSpamCheckStopForumSpam( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using WordPress spam comments.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	private static function is_wp_comment_spam( $values ) {
 		$spam_check = new FrmSpamCheckUseWPComments( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	public static function contains_wp_disallowed_words( $values ) {
 		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	public static function is_denylist_spam( $values ) {
 		$spam_check = new FrmSpamCheckDenylist( $values );
 		return $spam_check->is_spam();
