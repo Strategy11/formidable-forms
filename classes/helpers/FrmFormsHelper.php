@@ -1875,7 +1875,7 @@ BEFORE_HTML;
 
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
-		if ( false !== strpos( $url, 'wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
 			return true;
 		}
 
