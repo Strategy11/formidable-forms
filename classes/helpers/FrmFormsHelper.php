@@ -394,7 +394,7 @@ class FrmFormsHelper {
 			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
-			'honeypot'         => 'basic',
+			'stopforumspam'    => 0,
 			'antispam'         => 0,
 			'no_save'          => 0,
 			'ajax_load'        => 0,
@@ -1860,6 +1860,36 @@ BEFORE_HTML;
 		 */
 		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
 		return $should_block;
+	}
+
+	/**
+	 * Checks if the form is loaded by API.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function form_is_loaded_by_api() {
+		if ( ! class_exists( 'FrmAPIAppController' ) ) {
+			return false;
+		}
+
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( 0 === strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+			// Prevent the honeypot from appearing for an API loaded form.
+			// This is to prevent conflicts where the script is not working.
+			return true;
+		}
+
+		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
+			$api = FrmProFormState::get_from_request( 'a', 0 );
+
+			if ( $api ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

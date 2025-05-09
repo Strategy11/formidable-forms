@@ -14,7 +14,6 @@ FrmAntiSpam::maybe_init( $form->id );
 }
 
 $message_placement = isset( $message_placement ) ? $message_placement : 'before';
-
 if ( ! in_array( $message_placement, array( 'after', 'submit' ), true ) ) {
 	include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 }
