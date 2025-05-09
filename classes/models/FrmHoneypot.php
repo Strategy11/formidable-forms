@@ -121,6 +121,8 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * Maybe print honeypot JS.
+	 *
+	 * @since x.x
 	 */
 	public static function maybe_print_honeypot_js() {
 		if ( ! self::is_enabled() ) {
@@ -148,6 +150,8 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * Maybe print honeypot CSS in case JS doesn't run.
+	 *
+	 * @since x.x
 	 */
 	public static function maybe_print_honeypot_css() {
 		// Print the CSS if form is loaded by API.

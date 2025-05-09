@@ -1,4 +1,13 @@
 <?php
+/**
+ * Settings for stopforumspam check
+ *
+ * @since x.x
+ * @package Formidable
+ *
+ * @var array $values Form values.
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

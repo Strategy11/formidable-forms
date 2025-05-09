@@ -1,4 +1,11 @@
 <?php
+/**
+ * Spam check abstract class
+ *
+ * @since x.x
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -40,6 +47,11 @@ abstract class FrmSpamCheck {
 	 */
 	abstract protected function check();
 
+	/**
+	 * Checks if the check is enabled.
+	 *
+	 * @return bool
+	 */
 	protected function is_enabled() {
 		return true;
 	}
