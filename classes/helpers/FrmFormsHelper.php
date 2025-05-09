@@ -1870,12 +1870,30 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function form_is_loaded_by_api() {
+		return self::is_formidable_api_form() || self::is_gutenberg_editor();
+	}
+
+	private static function is_gutenberg_editor() {
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( false !== strpos( $url, 'wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+			return true;
+		}
+
+		global $pagenow;
+		if ( 'post.php' === $pagenow ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	private static function is_formidable_api_form() {
 		if ( ! class_exists( 'FrmAPIAppController' ) ) {
 			return false;
 		}
 
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
-		if ( 0 === strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
 			// Prevent the honeypot from appearing for an API loaded form.
 			// This is to prevent conflicts where the script is not working.
 			return true;
