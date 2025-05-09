@@ -10,8 +10,6 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 }
 ?>
 
-<input type="hidden" value="stripe" name="<?php echo esc_attr( $this->get_field_name( 'gateway' ) ); ?>[]" />
-
 <div class="frm_grid_container">
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
@@ -40,22 +38,30 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 		</select>
 	</p>
 
-	<?php $this->echo_capture_payment_upsell(); ?>
+	<?php $this->echo_capture_payment_upsell( $form_action->post_content['gateway'] ); ?>
 
 	<p class="frm6 frm_trans_sub_opts <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
-			<?php esc_html_e( 'Repeat Every', 'formidable' ); ?>
+			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
 		</label>
-		<span class="frm_grid_container">
-			<input class="frm6" type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
-			<select class="frm6" name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
-				<?php foreach ( $repeat_times as $k => $v ) { ?>
-					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
-				<?php } ?>
+		<?php if ( 'stripe' === $form_action->post_content['gateway'] ) { ?>
+			<span class="frm_grid_container">
+				<input class="frm6" type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
+				<select class="frm6" name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
+					<?php foreach ( $repeat_times as $k => $v ) { ?>
+						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
+					<?php } ?>
 			</select>
 			<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
 		</span>
-	</p>
+		<?php } elseif ( 'square' === $form_action->post_content['gateway'] ) { ?>
+			<select name="<?php echo esc_attr( $this->get_field_name( 'repeat_cadence' ) ); ?>">
+				<?php foreach ( $interval_options as $value => $label ) { ?>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $form_action->post_content['repeat_cadence'], $value ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php } ?>
+			</select>
+		<?php } ?>
+		</p>
 
 	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
@@ -84,6 +90,31 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 			}
 			?>
 		</select>
+	</p>
+
+	<p>
+		<?php
+			esc_html_e( 'Gateway(s)', 'formidable-payments' );
+
+			foreach ( $gateways as $gateway_name => $gateway ) {
+				$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+				$gateway_classes .= ( $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring']  ) ? ' frm_hidden' : '';
+				$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
+
+				$radio_atts = array(
+					'type'  => 'radio',
+					'value' => $gateway_name,
+					'name'  => $this->get_field_name( 'gateway' ),
+					'id'    => $gateway_id,
+				);
+			?>
+				<label for="<?php echo esc_attr( $gateway_id ); ?>" class="frm_gateway_opt <?php echo esc_attr( $gateway_classes ); ?>">
+					<input <?php FrmAppHelper::array_to_html_params( $radio_atts, true ); echo ' '; FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name ); ?>/>
+					<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
+				</label>
+			<?php
+			}
+		?>
 	</p>
 
 	<?php

@@ -11,6 +11,28 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string       $callback
+	 * @param array|object $field
+	 * @return string
+	 */
+	public static function maybe_show_card( $callback, $field = false ) {
+		if ( false === $field ) {
+			// Pro isn't up to date.
+			return $callback;
+		}
+
+		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
+		$actions = self::get_actions_before_submit( $form_id );
+		if ( empty( $actions ) ) {
+			return $callback;
+		}
+
+		return self::class . '::show_card';
+	}
+
+	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
@@ -269,37 +291,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
+		// Gateway is a radio button but it should always be an array in the database for
+		// compatibility with the payments submodule where it is a checkbox.
+		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
+		if ( ! $is_stripe ) {
+			return $settings;
+		}
+
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
 		$settings                = self::create_plans( $settings );
-		$form_id                 = absint( $action['menu_order'] );
-
-		if ( empty( $settings['credit_card'] ) ) {
-			$credit_card_field_id = FrmDb::get_var(
-				'frm_fields',
-				array(
-					'type'    => 'credit_card',
-					'form_id' => $form_id,
-				)
-			);
-			if ( ! $credit_card_field_id ) {
-				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
-			}
-			if ( $credit_card_field_id ) {
-				$settings['credit_card'] = $credit_card_field_id;
-			}
-		}
-
-		$gateway_field_id = FrmDb::get_var(
-			'frm_fields',
-			array(
-				'type'    => 'gateway',
-				'form_id' => $form_id,
-			)
-		);
-		if ( ! $gateway_field_id ) {
-			self::add_a_gateway_field( $form_id );
-		}
 
 		return $settings;
 	}
