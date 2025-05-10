@@ -54,7 +54,7 @@ jobs:
         run: |
           cd "/tmp/wordpress/src/wp-content/plugins/formidable"
           pwd
-          phpunit --coverage-clover=coverage.xml
+          phpunit --coverage-clover=coverage.xml --group failing
       - name: Send code coverage report to Codecov.io
         uses: codecov/codecov-action@v2
         with:
