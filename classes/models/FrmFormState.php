@@ -218,6 +218,8 @@ class FrmFormState {
 				return 'description';
 			case 't':
 				return 'title';
+			case 'h':
+				return 'honeypot_field_id';
 		}
 		return $key;
 	}
