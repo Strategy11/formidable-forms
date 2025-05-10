@@ -362,9 +362,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		$max_field_id = 0;
 		foreach ( $fields as $field ) {
-			if ( $field->id > $max_field_id ) {
-				$max_field_id = $field->id;
-			}
+			$max_field_id = max( (int) $field->id, $max_field_id );
 		}
 		$class::set_initial_value( 'honeypot_field_id', $max_field_id + 1 );
 

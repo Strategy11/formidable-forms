@@ -63,9 +63,7 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 if ( ! $only_contain_submit ) {
 	$max_field_id = 0;
 	foreach ( $values['fields'] as $field ) {
-		if ( $field['id'] > $max_field_id ) {
-			$max_field_id = $field['id'];
-		}
+		$max_field_id = max( (int) $field['id'], $max_field_id );
 	}
 
 	/**
