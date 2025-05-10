@@ -98,7 +98,7 @@ if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !==
 	?>
 	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 	<?php
-	FrmHoneypot::maybe_render_field( $form->id, $max_field_id ? $max_field_id + 1 : 0 );
+	FrmHoneypot::maybe_render_field( $form->id, $max_field_id ? $max_field_id + 2 : 0 );
 	FrmFormState::maybe_render_state_field( $form );
 }
 
