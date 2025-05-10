@@ -371,6 +371,8 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	public function test_redirect_in_new_tab() {
+		add_filter( 'frm_run_honeypot', '__return_false' );
+
 		$form_id = $this->factory->form->create();
 
 		$this->create_on_submit_action(
@@ -395,5 +397,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		// Since headers are sent by phpunit, we will get the js redirect.
 		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
 		$this->assertStringContainsString( 'target="_blank">Click here</a>', $response );
+
+		remove_filter( 'frm_run_honeypot', '__return_false' );
 	}
 }
