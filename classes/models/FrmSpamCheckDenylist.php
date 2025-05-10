@@ -25,8 +25,14 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 		parent::__construct( $values );
 
-		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
-		$this->denylist      = $this->get_denylist_array();
+		$this->denylist = $this->get_denylist_array();
+	}
+
+	protected function get_posted_fields() {
+		if ( is_null( $this->posted_fields ) ) {
+			$this->posted_fields = FrmField::get_all_for_form( $this->values['form_id'] );
+		}
+		return $this->posted_fields;
 	}
 
 	/**
@@ -291,7 +297,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$field_ids_to_check = array();
-		foreach ( $this->posted_fields as $field ) {
+		foreach ( $this->get_posted_fields() as $field ) {
 			$field_type = FrmField::get_field_type( $field );
 			if ( in_array( $field_type, $skip_field_types, true ) ) {
 				continue;
