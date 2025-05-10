@@ -173,6 +173,7 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
+	 * @param int $honeypot_field_id
 	 * @return void
 	 */
 	public function render_field( $honeypot_field_id = 0 ) {

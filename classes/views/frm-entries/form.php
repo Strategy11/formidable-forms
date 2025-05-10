@@ -84,7 +84,7 @@ if ( ! $only_contain_submit ) {
 	}
 
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
-}
+}//end if
 
 $frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
