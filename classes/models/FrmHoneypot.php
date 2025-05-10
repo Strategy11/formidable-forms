@@ -33,6 +33,7 @@ class FrmHoneypot extends FrmValidate {
 	protected function get_fields() {
 		if ( is_null( $this->fields ) ) {
 			$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'include' );
+			self::delete_form_transient( $this->form_id );
 		}
 
 		return $this->fields;
