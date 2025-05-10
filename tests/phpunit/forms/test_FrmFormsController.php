@@ -361,7 +361,6 @@ class test_FrmFormsController extends FrmUnitTest {
 		$_POST['item_key']   = $entry_key;
 		$_POST['frm_action'] = 'create';
 		$_POST['action']     = 'create';
-		unset( $_POST['frm_state'] );
 
 		ob_start();
 		FrmEntriesController::process_entry();
@@ -392,6 +391,18 @@ class test_FrmFormsController extends FrmUnitTest {
 		$response  = $this->post_new_entry( $form, $entry_key );
 
 		$this->assertTrue( headers_sent() );
+
+		if ( ! $response ) {
+			$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+			$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
+
+			echo 'Honeypot field: ';
+			var_dump( $honeypot_field_id );
+			echo 'POST data: ';
+			var_dump( $_POST['item_meta'] );
+
+			$this->fail( 'No response' );
+		}
 
 		// Since headers are sent by phpunit, we will get the js redirect.
 		$this->assertStringContainsString( 'window.open("http://example.com"', $response );
