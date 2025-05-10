@@ -113,7 +113,7 @@ class FrmFormState {
 		$settings_description = ! empty( $form->options['show_description'] ) ? 1 : 0;
 
 		if ( $state_title === $settings_title && $state_description === $settings_description && ! $honeypot_field_id ) {
-			// Avoid state field if it matches form settings.
+			// Avoid state field if it matches form settings and there is no honeypot.
 			return;
 		}
 
