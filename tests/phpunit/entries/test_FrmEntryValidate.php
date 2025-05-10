@@ -180,7 +180,6 @@ class test_FrmEntryValidate extends FrmUnitTest {
 			'frm_submit_entry_1' => '6e70504545',
 			'_wp_http_referer'   => '/wp-admin/admin-ajax.php?action=frm_forms_preview&form=contact-form',
 			'item_key'           => '8wl00',
-			'frm_verify'         => null,
 			'frm_state'          => 'gfMW/S4I1MCpqXn7OnjXQHLIibJNuRkLkCYpp7MWM7Y=',
 		);
 

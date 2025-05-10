@@ -357,6 +357,17 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	private function post_new_entry( $form, $entry_key ) {
+		$fields = FrmField::get_all_for_form( $form->id, '', 'include' );
+		$class  = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+
+		$max_field_id = 0;
+		foreach ( $fields as $field ) {
+			if ( $field->id > $max_field_id ) {
+				$max_field_id = $field->id;
+			}
+		}
+		$class::set_initial_value( 'honeypot_field_id', $max_field_id + 1 );
+
 		$_POST               = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key']   = $entry_key;
 		$_POST['frm_action'] = 'create';

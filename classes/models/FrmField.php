@@ -1150,7 +1150,7 @@ class FrmField {
 			if ( ! $set ) {
 				// the transient didn't save
 				if ( $name != $base_name ) {
-					// if the first saved an others fail, this will show an incmoplete form
+					// if the first saved an others fail, this will show an incomplete form
 					self::delete_form_transient( $form_id );
 				}
 
