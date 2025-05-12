@@ -971,6 +971,7 @@ function frmAdminBuildJS() {
 	}
 
 	function handleFieldDrop( _, ui ) {
+		
 		if ( ! dragState.dragging ) {
 			// dragState.dragging is set to true on drag start.
 			// The deactivate event gets called for every droppable. This check to make sure it happens once.
@@ -995,7 +996,7 @@ function frmAdminBuildJS() {
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
-			insertNewFieldByDragging( draggable.id );
+			insertNewFieldByDragging( draggable.id, _ );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
@@ -1576,7 +1577,10 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {
+	function insertNewFieldByDragging( fieldType, event ) {
+		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+			return;
+		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		const loading      = tag(
@@ -1602,17 +1606,19 @@ function frmAdminBuildJS() {
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]' ).length ? 1 : 0;
 		}
 
+		let args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: 0,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		args = wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: sectionId,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: args,
 			success: function( msg ) {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
