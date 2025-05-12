@@ -57,7 +57,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 		<?php } elseif ( in_array( 'square', (array) $form_action->post_content['gateway'], true ) ) { ?>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'repeat_cadence' ) ); ?>">
 				<?php foreach ( $interval_options as $value => $label ) { ?>
-					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $form_action->post_content['repeat_cadence'], $value ); ?>><?php echo esc_html( $label ); ?></option>
+					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $form_action->post_content['repeat_cadence'] ?? '', $value ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php } ?>
 			</select>
 		<?php } ?>
