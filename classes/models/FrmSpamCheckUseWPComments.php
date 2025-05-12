@@ -1,4 +1,11 @@
 <?php
+/**
+ * Spam check using WordPress spam comments
+ *
+ * @since 6.21
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }

@@ -2,7 +2,7 @@
 /**
  * Check spam using stopforumspam API
  *
- * @since x.x
+ * @since 6.21
  *
  * @package Formidable
  */
@@ -70,7 +70,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		/**
 		 * Filters the data to be passed to the stopforumspam request URL.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param array $request_data Request data.
 		 * @param array $args         Contains `values`.
@@ -80,7 +80,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		/**
 		 * Filters the stopforumspam API URL.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param string $api_url API URL.
 		 * @param array  $args    Contains `values`.

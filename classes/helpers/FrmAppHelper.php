@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.20';
+	public static $plug_version = '6.21';
 
 	/**
 	 * @var bool
@@ -162,7 +162,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param string $cta_link
 	 * @param array  $utm
@@ -1749,7 +1749,7 @@ class FrmAppHelper {
 	/**
 	 * Maybe show an HTML select or autocomplete input based on the number of options.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $args Args. See the method for details.
 	 */
@@ -1822,7 +1822,7 @@ class FrmAppHelper {
 	/**
 	 * Gets dropdown value and label from autodropdown option.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array|string $option Autocomplete option.
 	 * @param string       $key    Array key of the option.
@@ -2528,7 +2528,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x This is changed from `private` to `public`.
+	 * @since 6.21 This is changed from `private` to `public`.
 	 *
 	 * @param int $num_chars
 	 * @return string

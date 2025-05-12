@@ -1,4 +1,11 @@
 <?php
+/**
+ * Spam check using WordPress disallowed words
+ *
+ * @since 6.21
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -59,5 +66,9 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
 	protected function is_enabled() {
 		return apply_filters( 'frm_check_blacklist', true, $this->values );
+	}
+
+	protected function get_spam_message() {
+		return __( 'Your entry appears to be blocked spam!', 'formidable' );
 	}
 }

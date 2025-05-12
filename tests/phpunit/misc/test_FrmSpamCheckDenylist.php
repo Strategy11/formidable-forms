@@ -71,20 +71,20 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 				'words' => array( 'spamword' ),
 			),
 			'denylist_with_name_text_email' => array(
-				'words'      => array( 'spamword' ),
-				'field_type' => array( 'text', 'email', 'name' ),
+				'words'       => array( 'spamword' ),
+				'field_types' => array( 'text', 'email', 'name' ),
 			),
 			'denylist_with_name'            => array(
-				'words'      => array( 'spamword' ),
-				'field_type' => array( 'name' ),
+				'words'       => array( 'spamword' ),
+				'field_types' => array( 'name' ),
 			),
 			'denylist_with_email'           => array(
-				'words'      => array( 'spamword' ),
-				'field_type' => array( 'email' ),
+				'words'       => array( 'spamword' ),
+				'field_types' => array( 'email' ),
 			),
 			'denylist_with_extract_email'   => array(
 				'words'         => array( 'spamword' ),
-				'field_type'    => array(),
+				'field_types'   => array(),
 				'extract_value' => array( 'FrmAntiSpamController', 'extract_emails_from_values' ),
 			),
 		);
@@ -99,12 +99,26 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 	}
 
 	public function test_get_field_ids_to_check() {
-		// Test get_field_ids_to_check
+		$denylist = $this->custom_denylist_data['denylist_with_all_fields'];
+
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
-			array( $this->custom_denylist_data['denylist_with_all_fields'] )
+			array( $denylist )
 		);
 		$this->assertFalse( $field_ids_to_check );
+
+		$denylist['skip_field_types'] = array( 'email' );
+		$field_ids_to_check           = $this->run_private_method(
+			array( $this->spam_check, 'get_field_ids_to_check' ),
+			array( $denylist )
+		);
+		$this->assertEquals(
+			array(
+				$this->text_field_id,
+				$this->name_field_id,
+			),
+			$field_ids_to_check
+		);
 
 		$field_ids_to_check = $this->run_private_method(
 			array( $this->spam_check, 'get_field_ids_to_check' ),
@@ -220,8 +234,20 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$this->set_denylist_data( array( $denylist ) );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 
+		$denylist['skip'] = true;
+		$this->set_denylist_data( array( $denylist ) );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
 		$denylist          = $this->custom_denylist_data['denylist_with_name'];
 		$denylist['words'] = array( '@' );
+		$this->set_denylist_data( array( $denylist ) );
+		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
+		$denylist['words'][] = 'plugin';
+		$this->set_denylist_data( array( $denylist ) );
+		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
+
+		$denylist['skip_field_types'] = array( 'name' );
 		$this->set_denylist_data( array( $denylist ) );
 		$this->assertFalse( $this->run_private_method( array( $this->spam_check, 'check_values' ) ) );
 

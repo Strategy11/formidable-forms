@@ -3,7 +3,7 @@
  * Anti-spam controller
  *
  * @package Formidable
- * @since x.x
+ * @since 6.21
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -17,30 +17,73 @@ class FrmAntiSpamController {
 	 *
 	 * @param array $values Entry values.
 	 *
-	 * @return bool Return `true` if is spam.
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
 	 */
 	public static function is_spam( $values ) {
-		return self::contains_wp_disallowed_words( $values ) ||
-			self::is_denylist_spam( $values ) ||
-			self::is_stopforumspam_spam( $values ) ||
-			self::is_wp_comment_spam( $values );
+		$methods = array(
+			'contains_wp_disallowed_words',
+			'is_denylist_spam',
+			'is_stopforumspam_spam',
+			'is_wp_comment_spam',
+		);
+
+		foreach ( $methods as $method ) {
+			if ( ! is_callable( array( __CLASS__, $method ) ) ) {
+				continue;
+			}
+
+			$is_spam = call_user_func( array( __CLASS__, $method ), $values );
+			if ( $is_spam ) {
+				return $is_spam;
+			}
+		}
+
+		return false;
 	}
 
+	/**
+	 * Checks spam using stopforumspam API.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	private static function is_stopforumspam_spam( $values ) {
 		$spam_check = new FrmSpamCheckStopForumSpam( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using WordPress spam comments.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	private static function is_wp_comment_spam( $values ) {
 		$spam_check = new FrmSpamCheckUseWPComments( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	public static function contains_wp_disallowed_words( $values ) {
 		$spam_check = new FrmSpamCheckWPDisallowedWords( $values );
 		return $spam_check->is_spam();
 	}
 
+	/**
+	 * Checks spam using denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool|string Return spam message if is spam or `false` if is not spam.
+	 */
 	public static function is_denylist_spam( $values ) {
 		$spam_check = new FrmSpamCheckDenylist( $values );
 		return $spam_check->is_spam();
@@ -51,7 +94,7 @@ class FrmAntiSpamController {
 	 *
 	 * @return string
 	 */
-	public static function get_spam_message() {
+	public static function get_default_spam_message() {
 		return __( 'Your entry appears to be spam!', 'formidable' );
 	}
 
@@ -76,7 +119,7 @@ class FrmAntiSpamController {
 		/**
 		 * Filter the allowed IP addresses.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @params string[] $allowed_ips Allowed IP addresses.
 		 */

@@ -1,4 +1,11 @@
 <?php
+/**
+ * Spam check using denylist
+ *
+ * @since 6.21
+ * @package Formidable
+ */
+
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
@@ -14,17 +21,42 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	protected $denylist;
 
 	public function __construct( $values ) {
+		$this->maybe_add_form_id_to_values( $values );
+
 		parent::__construct( $values );
 
-		$this->posted_fields = FrmField::get_all_for_form( $values['form_id'] );
-		$this->denylist      = $this->get_denylist_array();
+		$this->denylist = $this->get_denylist_array();
+	}
+
+	protected function get_posted_fields() {
+		if ( is_null( $this->posted_fields ) ) {
+			$this->posted_fields = FrmField::get_all_for_form( $this->values['form_id'] );
+		}
+		return $this->posted_fields;
+	}
+
+	/**
+	 * Maybe add form ID to values. In file name validation, only item_meta in $values.
+	 *
+	 * @param array $values Spam check values.
+	 */
+	protected function maybe_add_form_id_to_values( &$values ) {
+		if ( ! empty( $values['form_id'] ) || empty( $values['item_meta'] ) ) {
+			return;
+		}
+
+		$field_id = key( $values['item_meta'] );
+		$field    = FrmField::getOne( $field_id );
+		if ( $field ) {
+			$values['form_id'] = $field->form_id;
+		}
 	}
 
 	protected function is_enabled() {
 		/**
 		 * Allows to disable the denylist check.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param bool  $is_enabled Whether the denylist check is enabled.
 		 * @param array $values     The entry values.
@@ -44,21 +76,23 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'file' => FrmAppHelper::plugin_path() . '/denylist/domain-partial.txt',
 			),
 			array(
-				'file' => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
+				'file'             => FrmAppHelper::plugin_path() . '/denylist/splorp-wp-comment.txt',
+				'skip'             => FrmAppHelper::current_user_can( 'frm_create_entries' ),
+				'skip_field_types' => array( 'file' ),
 			),
 			array(
-				'words'      => array(
+				'words'       => array(
 					'moncler|north face|vuitton|handbag|burberry|outlet|prada|cialis|viagra|maillot|oakley|ralph lauren|ray ban|iphone|プラダ',
 				),
-				'field_type' => array( 'name' ),
-				'is_regex'   => true,
+				'field_types' => array( 'name' ),
+				'is_regex'    => true,
 			),
 			array(
-				'words'      => array(
+				'words'       => array(
 					'@mail\.ru|@yandex\.',
 				),
-				'field_type' => array( 'email' ),
-				'is_regex'   => true,
+				'field_types' => array( 'email' ),
+				'is_regex'    => true,
 			),
 		);
 
@@ -72,7 +106,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		/**
 		 * Allows to modify the denylist data.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param array[] $denylist_data The denylist data.
 		 */
@@ -119,6 +153,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$allowed_words = array_map( array( $this, 'convert_to_lowercase' ), $allowed_words );
 
 		foreach ( $this->denylist as $denylist ) {
+			if ( ! empty( $denylist['skip'] ) ) {
+				continue;
+			}
+
 			if ( empty( $denylist['file'] ) && empty( $denylist['words'] ) ) {
 				continue;
 			}
@@ -152,13 +190,16 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$denylist = wp_parse_args(
 			$denylist,
 			array(
-				'file'          => '',
-				'words'         => array(),
-				'is_regex'      => false,
-				'field_type'    => array(),
+				'file'             => '',
+				'words'            => array(),
+				'is_regex'         => false,
+				'field_types'      => array(),
+				'skip_field_types' => array(),
 				// Is ignore if `is_regex` is `true`.
-				'compare'       => self::COMPARE_CONTAINS,
-				'extract_value' => '',
+				'compare'          => self::COMPARE_CONTAINS,
+				'extract_value'    => '',
+				// If this is `true`, this denylist will be skipped.
+				'skip'             => false,
 			)
 		);
 	}
@@ -247,17 +288,26 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */
 	protected function get_field_ids_to_check( array $denylist ) {
-		if ( empty( $denylist['field_type'] ) || ! is_array( $denylist['field_type'] ) ) {
+		$field_types      = isset( $denylist['field_types'] ) && is_array( $denylist['field_types'] ) ? $denylist['field_types'] : array();
+		$skip_field_types = isset( $denylist['skip_field_types'] ) && is_array( $denylist['skip_field_types'] ) ? $denylist['skip_field_types'] : array();
+
+		if ( ! $field_types && ! $skip_field_types ) {
+			// This will check all fields.
 			return false;
 		}
 
 		$field_ids_to_check = array();
-		foreach ( $this->posted_fields as $field ) {
+		foreach ( $this->get_posted_fields() as $field ) {
 			$field_type = FrmField::get_field_type( $field );
-			if ( in_array( $field_type, $denylist['field_type'], true ) ) {
-				$field_ids_to_check[] = intval( $field->id );
+			if ( in_array( $field_type, $skip_field_types, true ) ) {
+				continue;
 			}
-			unset( $field );
+
+			if ( $field_types && ! in_array( $field_type, $field_types, true ) ) {
+				continue;
+			}
+
+			$field_ids_to_check[] = intval( $field->id );
 		}
 
 		return $field_ids_to_check;
@@ -460,5 +510,9 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			}
 		}
 		return false;
+	}
+
+	protected function get_spam_message() {
+		return __( 'Your entry appears to be blocked spam!', 'formidable' );
 	}
 }

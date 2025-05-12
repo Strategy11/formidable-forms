@@ -178,7 +178,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array        $errors
 	 * @param object       $posted_field
@@ -195,7 +195,7 @@ class FrmEntryValidate {
 		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
 
 		/**
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param bool         $option_is_valid
 		 * @param array|string $value
@@ -211,7 +211,7 @@ class FrmEntryValidate {
 	/**
 	 * Validate that value matches one of the options for the field.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param stdClass     $field
 	 * @param array|string $value
@@ -265,7 +265,7 @@ class FrmEntryValidate {
 	 * Do not validate options if they have been modified with a hook.
 	 * This is to help avoid issues where the options could be based on a URL param for example.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -428,14 +428,16 @@ class FrmEntryValidate {
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
-		$spam_msg       = FrmAntiSpamController::get_spam_message();
+		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
-		} elseif ( FrmAntiSpamController::is_spam( $values ) ) {
-			// TODO: maybe restore old blacklist spam message.
-			$errors['spam'] = $spam_msg;
+		} else {
+			$is_spam = FrmAntiSpamController::is_spam( $values );
+			if ( $is_spam ) {
+				$errors['spam'] = $is_spam;
+			}
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
@@ -509,6 +511,13 @@ class FrmEntryValidate {
 		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words and Frm denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool
+	 */
 	public static function blacklist_check( $values ) {
 		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_denylist_spam( $values );
 	}
@@ -583,7 +592,7 @@ class FrmEntryValidate {
 	 * Gets user info for Akismet spam check.
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
-	 * @since x.x This changed from private to public.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
@@ -883,7 +892,7 @@ class FrmEntryValidate {
 	 * Prepares values array for spam check.
 	 *
 	 * @since 5.0.13
-	 * @since x.x This changed from private to public.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
 	 */

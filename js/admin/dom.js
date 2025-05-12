@@ -341,7 +341,7 @@
 				/**
 				 * Fires when an autocomplete value is cleared.
 				 *
-				 * @since x.x
+				 * @since 6.21
 				 */
 				wp.hooks.doAction( 'frm_autocomplete_clear_value', e, ui, this );
 			}
@@ -355,7 +355,7 @@
 			/**
 			 * Fires when an autocomplete item is selected.
 			 *
-			 * @since x.x
+			 * @since 6.21
 			 */
 			wp.hooks.doAction( 'frm_autocomplete_select', e, ui, this );
 		}

@@ -96,12 +96,14 @@ class FrmFormState {
 			return;
 		}
 
-		if ( empty( $form->options['ajax_submit'] ) ) {
-			// This is only required for AJAX submit.
+		if ( empty( self::$instance ) && ! self::get_state_from_request() ) {
 			return;
 		}
 
-		if ( empty( self::$instance ) && ! self::get_state_from_request() ) {
+		$honeypot_field_id = self::$instance->get( 'honeypot_field_id', 0 );
+
+		if ( empty( $form->options['ajax_submit'] ) && ! $honeypot_field_id ) {
+			// This is only required for AJAX submit, or when the honeypot field is on the page.
 			return;
 		}
 
@@ -110,8 +112,8 @@ class FrmFormState {
 		$settings_title       = ! empty( $form->options['show_title'] ) ? 1 : 0;
 		$settings_description = ! empty( $form->options['show_description'] ) ? 1 : 0;
 
-		if ( $state_title === $settings_title && $state_description === $settings_description ) {
-			// Avoid state field if it matches form settings.
+		if ( $state_title === $settings_title && $state_description === $settings_description && ! $honeypot_field_id ) {
+			// Avoid state field if it matches form settings and there is no honeypot.
 			return;
 		}
 
@@ -218,6 +220,8 @@ class FrmFormState {
 				return 'description';
 			case 't':
 				return 'title';
+			case 'h':
+				return 'honeypot_field_id';
 		}
 		return $key;
 	}

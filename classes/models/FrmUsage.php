@@ -221,6 +221,7 @@ class FrmUsage {
 			'summary_emails',
 			'active_captcha',
 			'honeypot',
+			'wp_spam_check',
 		);
 
 		foreach ( $pass_settings as $setting ) {

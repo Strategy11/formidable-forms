@@ -72,11 +72,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p id="frm_captcha_threshold_container" class="frm6 frm_form_field <?php echo 'v3' === $frm_settings->re_type ? '' : 'frm_hidden'; ?>">
 		<label for="frm_re_type">
 			<?php esc_html_e( 'reCAPTCHA Threshold', 'formidable' ); ?>
-			<?php FrmAppHelper::tooltip_icon( __( 'A score of 0 is likely to be a bot and a score of 1 is likely not a bot. Setting a lower threshold will allow more bots, but it will also stop fewer real users.', 'formidable' ) ); ?>
 		</label>
-		<span style="vertical-align:top;">0</span>
-		<input name="frm_re_threshold" id="frm_re_threshold" type="range" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
-		<span style="vertical-align:top;">1</span>
+		<input name="frm_re_threshold" id="frm_re_threshold" class="widefat" type="number" step="0.1" max="1" min="0" value="<?php echo esc_attr( $frm_settings->re_threshold ); ?>" />
+		<span style="font-size: var(--text-xs);"><?php esc_html_e( 'reCAPTCHA v3 returns a score (1.0 is very likely a human, 0.0 is very likely a bot). Default threshold is 0.5.' ); ?></span>
 	</p>
 
 	<p>
@@ -107,16 +105,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 <h2 class="frm-h2"><?php esc_html_e( 'Spam', 'formidable' ); ?></h2>
 
 <p>
-	<label for="frm-honeypot">
-		<input type="checkbox" id="frm-honeypot" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
+	<label>
+		<input type="checkbox" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
 		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>
 
 <p>
-	<label for="frm-wp-spam-check">
-		<input type="checkbox" id="frm-wp-spam-check" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
+	<label>
+		<input type="checkbox" name="frm_wp_spam_check" value="1" <?php checked( $frm_settings->wp_spam_check, 1 ); ?> />
 		<?php esc_html_e( 'Use WordPress spam comments to check entries for spam', 'formidable' ); ?>
 	</label>
 </p>
