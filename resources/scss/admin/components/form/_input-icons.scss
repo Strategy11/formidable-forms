@@ -61,13 +61,14 @@ i.frm-show-inline-modal,
 .frmsvg.frm-show-inline-modal,
 i.frm-show-box,
 i.frm-show-inline-modal {
-	color: var(--primary-500);
-	pointer-events: initial;
-	cursor: pointer;
-	z-index: 1;
-	opacity: 1;
 	top: auto;
-	margin: calc( ( 36px - 18px ) / 2 ); /* input height - svg / 2 */
+	background-color: var(--primary-50);
+	color: var(--primary-500);
+	border-radius: 6px;
+	padding: var(--gap-2xs);
+	margin: calc( ( 36px - 26px ) / 2 ); /* input height - svg / 2 */
 	margin-bottom: 0;
-	padding: 0;
+	z-index: 1;
+	cursor: pointer;
+	pointer-events: initial;
 }

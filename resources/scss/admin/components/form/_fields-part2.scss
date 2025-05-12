@@ -11,7 +11,7 @@
 .frm_radio input[type="radio"],
 .frm_checkbox input[type="checkbox"] {
 	border: 1px solid var(--grey-300);
-	box-shadow: none;
+	box-shadow: var(--box-shadow-xs);
 	-webkit-appearance: none;
 }
 

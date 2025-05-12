@@ -60,9 +60,24 @@
 }
 
 .frm-single-settings > h3:first-of-type {
-	border-bottom: 2px solid var(--sidebar-hover);
+	position: relative;
 	border-top: none;
 	padding-top: 0 !important;
+	background-color: transparent !important;
+
+	&::after {
+		content: '';
+		position: absolute;
+		left: var(--gap-sm);
+		right: var(--gap-sm);
+		bottom: 0;
+		height: 1px;
+		background-color: var(--sidebar-hover);
+	}
+
+	+ div {
+		padding-top: var(--gap-xs) !important;
+	}
 }
 
 .frm-flex-justify,

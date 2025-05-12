@@ -3,14 +3,42 @@
  */
 
 #frm-options-panel {
-	padding: 0 var(--gap-xs);
+	padding: 0 var(--gap-sm);
 	color: var(--grey-900);
 }
 
 .frm-right-panel a.frm_add_logic_link,
 #frm-options-panel h3 {
-	padding: 15px 0;
-	margin-top: -2px;
+	font-size: var(--text-md);
+	font-weight: 500;
+	background-color: #fff;
+	border-radius: var(--small-radius);
+	padding: var(--gap-sm);
+	margin: 0 calc( -1 * var(--gap-sm) );
+	transition: background-color 150ms ease-out;
+
+	.frmsvg {
+		color: var(--grey-500);
+		transition: transform 300ms ease-in;
+	}
+
+	&:not(.frm-collapsed) {
+		color: var(--grey-700);
+		box-shadow: var(--box-shadow-xs);
+
+		.frmsvg {
+			transform: rotate(-180deg);
+		}
+
+		+ div {
+			padding-top: var(--gap-sm);
+		}
+	}
+
+	&.frm-collapsed {
+		color: var(--grey-500);
+		background-color: transparent;
+	}
 }
 
 .frm-right-panel a.frm_add_logic_link:focus {
