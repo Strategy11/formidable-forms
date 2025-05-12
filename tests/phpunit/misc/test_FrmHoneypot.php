@@ -15,16 +15,6 @@ class test_FrmHoneypot extends FrmUnitTest {
 		$this->honeypot = new FrmHoneypot( $this->form_id );
 	}
 
-	public function test_get_honeypot_field_id() {
-		$fields       = $this->run_private_method( array( $this->honeypot, 'get_fields' ) );
-		$max_field_id = 0;
-		foreach ( $fields as $field ) {
-			$max_field_id = max( $max_field_id, $field->id );
-		}
-
-		$this->assertEquals( $max_field_id + 1, $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) ) );
-	}
-
 	/**
 	 * @covers FrmHoneypot::validate
 	 */

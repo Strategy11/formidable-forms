@@ -5,14 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
-	/**
-	 * Posted fields.
-	 *
-	 * @since x.x
-	 *
-	 * @var array
-	 */
-	protected $fields;
 
 	/**
 	 * Option type.
@@ -22,21 +14,6 @@ class FrmHoneypot extends FrmValidate {
 	 * @var string
 	 */
 	protected $option_type = 'global';
-
-	/**
-	 * Gets posted fields.
-	 *
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	protected function get_fields() {
-		if ( is_null( $this->fields ) ) {
-			$this->fields = FrmField::get_all_for_form( $this->form_id, '', 'include' );
-		}
-
-		return $this->fields;
-	}
 
 	/**
 	 * @return string
@@ -67,20 +44,22 @@ class FrmHoneypot extends FrmValidate {
 	private function is_honeypot_spam() {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 		if ( ! $is_honeypot_spam ) {
-			$field_id         = $this->get_honeypot_field_id();
+
+			$field_id = $this->get_honeypot_field_id();
+			if ( ! $field_id ) {
+				return false;
+			}
+
 			$value            = $this->get_honeypot_field_value( $field_id );
 			$is_honeypot_spam = '' !== $value;
 		}
 
 		$atts = array(
-			'form'   => $this->get_form(),
-			'fields' => $this->fields,
+			'form' => $this->get_form(),
 		);
 
 		/**
 		 * Filters the honeypot spam check.
-		 *
-		 * @since x.x The `$atts` now contains `fields`.
 		 *
 		 * @param bool  $is_honeypot_spam Set to `true` if is spam.
 		 * @param array $atts             Contains `form` and `fields`.
@@ -108,13 +87,21 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 *
+	 * @param int $honeypot_field_id
+	 * 
 	 * @return void
 	 */
-	public static function maybe_render_field( $form_id ) {
+	public static function maybe_render_field( $form_id, $honeypot_field_id = 0 ) {
+		if ( ! $honeypot_field_id ) {
+			return;
+		}
+
+		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
+
 		$honeypot = new self( $form_id );
 		if ( $honeypot->should_render_field() ) {
-			$honeypot->render_field();
+			$honeypot->render_field( $honeypot_field_id );
 			self::maybe_print_honeypot_css();
 		}
 	}
@@ -190,10 +177,15 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
+	 * @param int $honeypot_field_id
 	 * @return void
 	 */
-	public function render_field() {
-		$field_id    = $this->get_honeypot_field_id();
+	public function render_field( $honeypot_field_id = 0 ) {
+		if ( ! $honeypot_field_id ) {
+			return;
+		}
+
+		$field_id    = $honeypot_field_id;
 		$field_key   = $this->get_honeypot_field_key();
 		$input_attrs = array(
 			'id'    => 'field_' . $field_key,
@@ -225,18 +217,9 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	private function get_honeypot_field_id() {
-		$max    = 0;
-		$fields = $this->get_fields();
-		if ( ! is_array( $fields ) ) {
-			$fields = array();
-		}
-		foreach ( $fields as $field ) {
-			if ( $field->id > $max ) {
-				$max = $field->id;
-			}
-			unset( $field );
-		}
-		return $max + 1;
+		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
+		return $honeypot_field_id;
 	}
 
 	private function get_honeypot_field_key() {
