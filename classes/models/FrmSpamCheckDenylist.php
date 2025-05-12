@@ -2,7 +2,7 @@
 /**
  * Spam check using denylist
  *
- * @since x.x
+ * @since 6.21
  * @package Formidable
  */
 
@@ -56,7 +56,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		/**
 		 * Allows to disable the denylist check.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param bool  $is_enabled Whether the denylist check is enabled.
 		 * @param array $values     The entry values.
@@ -106,7 +106,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		/**
 		 * Allows to modify the denylist data.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param array[] $denylist_data The denylist data.
 		 */

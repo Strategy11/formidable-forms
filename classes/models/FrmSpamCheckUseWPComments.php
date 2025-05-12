@@ -2,7 +2,7 @@
 /**
  * Spam check using WordPress spam comments
  *
- * @since x.x
+ * @since 6.21
  * @package Formidable
  */
 

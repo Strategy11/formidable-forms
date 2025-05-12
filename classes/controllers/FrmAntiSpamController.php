@@ -3,7 +3,7 @@
  * Anti-spam controller
  *
  * @package Formidable
- * @since x.x
+ * @since 6.21
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -119,7 +119,7 @@ class FrmAntiSpamController {
 		/**
 		 * Filter the allowed IP addresses.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @params string[] $allowed_ips Allowed IP addresses.
 		 */

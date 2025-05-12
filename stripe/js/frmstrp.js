@@ -707,7 +707,7 @@
 	/**
 	 * Returns the layout for the Stripe Link elements.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @returns {string}
 	 */

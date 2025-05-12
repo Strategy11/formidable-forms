@@ -178,7 +178,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array        $errors
 	 * @param object       $posted_field
@@ -195,7 +195,7 @@ class FrmEntryValidate {
 		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
 
 		/**
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param bool         $option_is_valid
 		 * @param array|string $value
@@ -211,7 +211,7 @@ class FrmEntryValidate {
 	/**
 	 * Validate that value matches one of the options for the field.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param stdClass     $field
 	 * @param array|string $value
@@ -265,7 +265,7 @@ class FrmEntryValidate {
 	 * Do not validate options if they have been modified with a hook.
 	 * This is to help avoid issues where the options could be based on a URL param for example.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -592,7 +592,7 @@ class FrmEntryValidate {
 	 * Gets user info for Akismet spam check.
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
-	 * @since x.x This changed from private to public.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
@@ -892,7 +892,7 @@ class FrmEntryValidate {
 	 * Prepares values array for spam check.
 	 *
 	 * @since 5.0.13
-	 * @since x.x This changed from private to public.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
 	 */

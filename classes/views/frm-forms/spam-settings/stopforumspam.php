@@ -2,7 +2,7 @@
 /**
  * Settings for stopforumspam check
  *
- * @since x.x
+ * @since 6.21
  * @package Formidable
  *
  * @var array $values Form values.
