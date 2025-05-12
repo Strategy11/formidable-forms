@@ -61,8 +61,6 @@ class FrmHoneypot extends FrmValidate {
 		/**
 		 * Filters the honeypot spam check.
 		 *
-		 * @since x.x The `$atts` now contains `fields`.
-		 *
 		 * @param bool  $is_honeypot_spam Set to `true` if is spam.
 		 * @param array $atts             Contains `form` and `fields`.
 		 */
