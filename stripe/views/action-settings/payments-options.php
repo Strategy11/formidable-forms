@@ -44,7 +44,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 		<label>
 			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
 		</label>
-		<?php if ( 'stripe' === $form_action->post_content['gateway'] ) { ?>
+		<?php if ( in_array( 'stripe', (array) $form_action->post_content['gateway'], true ) ) { ?>
 			<span class="frm_grid_container">
 				<input class="frm6" type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
 				<select class="frm6" name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
@@ -54,7 +54,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 			</select>
 			<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
 		</span>
-		<?php } elseif ( 'square' === $form_action->post_content['gateway'] ) { ?>
+		<?php } elseif ( in_array( 'square', (array) $form_action->post_content['gateway'], true ) ) { ?>
 			<select name="<?php echo esc_attr( $this->get_field_name( 'repeat_cadence' ) ); ?>">
 				<?php foreach ( $interval_options as $value => $label ) { ?>
 					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $form_action->post_content['repeat_cadence'], $value ); ?>><?php echo esc_html( $label ); ?></option>
