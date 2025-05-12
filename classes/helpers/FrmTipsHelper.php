@@ -77,7 +77,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $tip
 	 * @return string
@@ -445,12 +445,12 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.21
 	 *
 	 * @return array
 	 */
 	public static function get_banner_tip() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.21' );
 		return array();
 	}
 }

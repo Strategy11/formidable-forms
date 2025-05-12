@@ -2,7 +2,7 @@
 /**
  * Spam check abstract class
  *
- * @since x.x
+ * @since 6.21
  * @package Formidable
  */
 

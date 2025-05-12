@@ -16,7 +16,7 @@ abstract class FrmValidate {
 	protected $form;
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 * @var string
 	 */
 	protected $option_type = 'form';

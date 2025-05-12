@@ -1865,7 +1865,7 @@ BEFORE_HTML;
 	/**
 	 * Checks if the form is loaded by API.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -1874,7 +1874,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -1883,7 +1883,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -1892,7 +1892,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -1911,7 +1911,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
