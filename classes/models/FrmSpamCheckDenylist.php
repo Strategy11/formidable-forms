@@ -197,6 +197,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'words'            => array(),
 				'is_regex'         => false,
 				'field_types'      => array(),
+				// Add `other` if you want to skip checking Other values of some field types.
 				'skip_field_types' => array(),
 				// Is ignore if `is_regex` is `true`.
 				'compare'          => self::COMPARE_CONTAINS,
@@ -207,7 +208,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		);
 
 		// Some field types should never be checked.
-		$denylist['skip_field_types'] = array_merge( $denylist['skip_field_types'], array( 'password', 'captcha', 'signature' ) );
+		$denylist['skip_field_types'] = array_merge(
+			$denylist['skip_field_types'],
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select' )
+		);
 	}
 
 	/**
@@ -341,6 +345,13 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 				foreach ( $value as $sub_key => $sub_value ) {
 					if ( $this->should_check_this_field( $sub_key, $field_ids_to_check ) ) {
+						$this->add_to_values_to_check( $values_to_check, $sub_value );
+					}
+				}
+			} elseif ( 'other' === $key ) {
+				if ( ! in_array( 'other', $denylist['skip_field_types'], true ) ) {
+					// This is Other values, loop through this and add sub values.
+					foreach ( $value as $sub_value ) {
 						$this->add_to_values_to_check( $values_to_check, $sub_value );
 					}
 				}
