@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.7.2
+Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.20
+Stable tag: 6.21
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,24 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.21 =
+* New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
+* New: A new setting to validate form entries for spam against the stopforumspam API have been added to form settings. When this is enabled, IPs and email addresses will be validated against a spam database.
+* New: Field data is now compared to a comprehensive denylist during field validation. This significantly helps to block form data that looks like spam. New settings for Custom allowed words and Custom disallowed words have also been added.
+* New: The option to compare submitted form entry data to WordPress spam comments has been added to global settings.
+* New: Option values are now validated by default. If this causes issues with custom logic, this can be reverted using add_filter( 'frm_option_is_valid', '__return_true' );.
+* New: Stripe payment fields will now apply border radius styles to match styling better.
+* New: Stripe payment field label styling has been updated to better reflect label padding style settings.
+* New: Stripe payment fields will now use the input weight style setting to look more consistent with other fields.
+* New: Stripe payment fields now support the font family style setting.
+* New: A new layout setting has been added to Stripe settings that adds support for the accordion layout.
+* Fix: Paragraph fields would not properly display placeholders on the builder page.
+* Fix: A fatal error that could happen on form submit when unexpected data was sent when checking for spam has been fixed.
+* Fix: A Cannot set properties of null JavaScript error when duplicating a field has been fixed.
+* Fix: Sorting entries by a number field value would sort as strings instead of numbers.
+* Fix: Stripe payment fields would incorrectly use the wrong style settings in some cases.
+* The small device message can now be dismissed, allowing people to still edit forms while using a phone.
+
 = 6.20 =
 * Security: Shortcodes in emails would process more than once.
 * New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
@@ -394,16 +412,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
 * Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
 * Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
-
-= 6.18 =
-* New: Invalid checkbox fields will now properly show a red outline to improve user experience.
-* Fix: Additional CSS classes defined in Formidable block settings were not being applied to the Forms containers.
-* Fix: Automatic width would not work for dropdown fields with a field label positioned to the left or right.
-* Fix: Float values used in style settings would lose the decimal places, only allowing whole number values.
-* Fix: Some style setting values would result in invalid undefined or NaN values.
-* Text will no longer be selected when multi-selecting fields while holding the shift key.
-* The setting to not include Formidable in the admin bar has been moved to miscellaneous settings.
-* The deprecated file stripe/views/payments/entry_sidebar.php has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

@@ -19,10 +19,12 @@ class test_FrmHoneypot extends FrmUnitTest {
 	 * @covers FrmHoneypot::validate
 	 */
 	public function test_validate() {
-		$_POST['frm_verify'] = '';
+		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
+
+		$_POST['item_meta'][ $honeypot_field_id ] = '';
 		$this->assertTrue( $this->honeypot->validate() );
 
-		$_POST['frm_verify'] = 'test@email.com';
+		$_POST['item_meta'][ $honeypot_field_id ] = 'test@email.com';
 		$this->assertFalse( $this->honeypot->validate() );
 	}
 
@@ -30,10 +32,12 @@ class test_FrmHoneypot extends FrmUnitTest {
 	 * @covers FrmHoneypot::is_honeypot_spam
 	 */
 	public function test_is_honeypot_spam() {
-		$_POST['frm_verify'] = '';
+		$honeypot_field_id = $this->run_private_method( array( $this->honeypot, 'get_honeypot_field_id' ) );
+
+		$_POST['item_meta'][ $honeypot_field_id ] = '';
 		$this->assertFalse( $this->is_honeypot_spam() );
 
-		$_POST['frm_verify'] = 'test@email.com';
+		$_POST['item_meta'][ $honeypot_field_id ] = 'test@email.com';
 		$this->assertTrue( $this->is_honeypot_spam() );
 	}
 
@@ -47,13 +51,11 @@ class test_FrmHoneypot extends FrmUnitTest {
 	public function test_is_option_on() {
 		$this->assertTrue( $this->is_option_on(), 'Honeypot should be on by default' );
 
-		$this->form_id  = $this->factory->form->create(
-			array(
-				'options' => array(
-					'honeypot' => 'off',
-				),
-			)
-		);
+		$key      = 'honeypot';
+		$value    = '';
+		$sanitize = 'sanitize_text_field';
+
+		FrmAppHelper::get_settings()->update_setting( $key, $value, $sanitize );
 		$this->honeypot = new FrmHoneypot( $this->form_id );
 		$this->assertFalse( $this->is_option_on() );
 	}

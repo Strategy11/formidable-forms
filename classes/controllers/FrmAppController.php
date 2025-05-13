@@ -1515,7 +1515,7 @@ class FrmAppController {
 	/**
 	 * Handles the small screen proceed action.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return void
 	 */

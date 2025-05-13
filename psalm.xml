@@ -479,5 +479,10 @@
 				<file name="classes/controllers/FrmFieldsController.php" />
 			</errorLevel>
 		</InaccessibleProperty>
+		<DeprecatedFunction>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
+			</errorLevel>
+		</DeprecatedFunction>
 	</issueHandlers>
 </psalm>

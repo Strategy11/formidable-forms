@@ -91,6 +91,14 @@ class FrmSettings {
 	 */
 	public $custom_css;
 
+	public $honeypot;
+
+	public $wp_spam_check;
+
+	public $disallowed_words;
+
+	public $allowed_words;
+
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -163,6 +171,10 @@ class FrmSettings {
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css'                => false,
+			'honeypot'                  => 1,
+			'wp_spam_check'             => 0,
+			'disallowed_words'          => '',
+			'allowed_words'             => '',
 		);
 	}
 
@@ -401,7 +413,20 @@ class FrmSettings {
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'no_gdpr_cookies', 'enable_gdpr', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
+		$checkboxes = array(
+			'mu_menu',
+			're_multi',
+			'fade_form',
+			'no_ips',
+			'no_gdpr_cookies',
+			'enable_gdpr',
+			'custom_header_ip',
+			'tracking',
+			'admin_bar',
+			'summary_emails',
+			'honeypot',
+			'wp_spam_check',
+		);
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}

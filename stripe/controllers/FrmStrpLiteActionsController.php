@@ -555,7 +555,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		/*
 		 * Filters the appearance rules for Stripe elements.
 		 *
-		 * @since x.x
+		 * @since 6.21
 		 *
 		 * @param array $rules
 		 * @param array $settings
@@ -567,7 +567,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border width for Stripe elements.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $settings
 	 * @return string
@@ -582,7 +582,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border radius for Stripe elements.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $settings
 	 * @return string

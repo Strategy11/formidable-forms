@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.20';
+	public static $plug_version = '6.21';
 
 	/**
 	 * @var bool
@@ -128,7 +128,7 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = $args['medium'];
+			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
 			if ( isset( $args['content'] ) ) {
 				$content = $args['content'];
 			}
@@ -162,7 +162,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param string $cta_link
 	 * @param array  $utm
@@ -1749,7 +1749,7 @@ class FrmAppHelper {
 	/**
 	 * Maybe show an HTML select or autocomplete input based on the number of options.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $args Args. See the method for details.
 	 */
@@ -1822,7 +1822,7 @@ class FrmAppHelper {
 	/**
 	 * Gets dropdown value and label from autodropdown option.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array|string $option Autocomplete option.
 	 * @param string       $key    Array key of the option.
@@ -2528,10 +2528,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.21 This is changed from `private` to `public`.
+	 *
 	 * @param int $num_chars
 	 * @return string
 	 */
-	private static function generate_new_key( $num_chars ) {
+	public static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
 
 		// We want to have at least 2 characters in the slug.

@@ -239,7 +239,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Maybe show banner for the best sale.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return bool
 	 */
@@ -349,7 +349,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Dismiss a banner via AJAX hook.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 */
 	public static function dismiss_banner() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
