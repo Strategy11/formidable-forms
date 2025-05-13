@@ -1,0 +1,52 @@
+/**
+ * Token Input Component
+ *
+ * Displays space-separated values as selectable tokens
+ */
+
+.frm-token-container {
+	display: block;
+
+	.frm-tokens {
+		position: absolute;
+		top: 0;
+		left: 0;
+		display: flex;
+		align-items: center;
+		flex-wrap: wrap;
+		gap: var(--gap-2xs);
+		padding: 6px var(--gap-xs);
+	}
+
+	.frm-token {
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: var(--gap-xs);
+		height: 24px;
+		color: var(--grey-900);
+		background: var(--grey-100);
+		border-radius: 4px;
+		padding: 0 var(--gap-xs);
+		font-size: var(--text-md);
+		line-height: 1;
+		white-space: nowrap;
+
+		.frm-token-remove {
+			display: flex;
+			cursor: pointer;
+
+			.frmsvg {
+				color: var(--grey-900);
+				position: static;
+				width: 12px;
+				height: 12px;
+				padding: 0;
+			}
+
+			&:hover .frmsvg {
+				color: var(--error-500);
+			}
+		}
+	}
+}
