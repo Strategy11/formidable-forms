@@ -422,6 +422,11 @@ class FrmEntryValidate {
 	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
+		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+			// Do not check spam on importing.
+			return;
+		}
+
 		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
