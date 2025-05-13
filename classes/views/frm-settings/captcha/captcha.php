@@ -120,6 +120,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p>
+	<label>
+		<input type="checkbox" name="frm_denylist_check" value="1" <?php checked( $frm_settings->denylist_check, 1 ); ?> />
+		<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
+	</label>
+</p>
+
+<p>
 	<label for="frm-disallowed-words">
 		<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>

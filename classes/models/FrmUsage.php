@@ -222,6 +222,7 @@ class FrmUsage {
 			'active_captcha',
 			'honeypot',
 			'wp_spam_check',
+			'denylist_check',
 		);
 
 		foreach ( $pass_settings as $setting ) {

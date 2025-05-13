@@ -53,15 +53,18 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	}
 
 	protected function is_enabled() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$is_enabled   = $frm_settings->denylist_check;
+
 		/**
-		 * Allows to disable the denylist check.
+		 * Allows disabling the denylist check.
 		 *
 		 * @since 6.21
 		 *
 		 * @param bool  $is_enabled Whether the denylist check is enabled.
 		 * @param array $values     The entry values.
 		 */
-		return apply_filters( 'frm_check_denylist', true, $this->values );
+		return apply_filters( 'frm_check_denylist', $is_enabled, $this->values );
 	}
 
 	/**
