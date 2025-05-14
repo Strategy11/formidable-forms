@@ -456,7 +456,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 			$is_spam = $callback( $line, $callback_args );
 			if ( $is_spam ) {
-				if ( isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
+				if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
 					self::add_spam_keyword_to_option( $line );
 				}
 
