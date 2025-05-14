@@ -135,6 +135,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 
 <p>
+	<label for="frm-allowed-words">
+		<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+	</label>
+	<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
 	if ( ! empty( $transient ) ) {
@@ -146,9 +151,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 	}
 	?>
-	<label for="frm-allowed-words">
-		<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
-		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
-	</label>
-	<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
 </p>
