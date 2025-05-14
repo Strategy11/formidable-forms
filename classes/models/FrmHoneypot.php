@@ -86,7 +86,6 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 * @param int $honeypot_field_id
 	 * 
 	 * @return void
 	 */
