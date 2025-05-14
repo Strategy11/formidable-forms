@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.21\n"
+"Project-Id-Version: Formidable Forms 6.21.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-12T11:35:44+00:00\n"
+"POT-Creation-Date: 2025-05-14T18:17:24+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -425,7 +425,7 @@ msgid "Upgrade Now"
 msgstr ""
 
 #: classes/controllers/FrmAntiSpamController.php:98
-#: classes/models/FrmEntryValidate.php:448
+#: classes/models/FrmEntryValidate.php:457
 msgid "Your entry appears to be spam!"
 msgstr ""
 
@@ -634,7 +634,7 @@ msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:151
 #: classes/controllers/FrmFormsController.php:1719
-#: classes/views/frm-entries/form.php:91
+#: classes/views/frm-entries/form.php:86
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
 msgstr ""
@@ -763,7 +763,7 @@ msgstr ""
 #: classes/controllers/FrmFormsController.php:185
 #: classes/helpers/FrmSubmitHelper.php:160
 #: classes/models/FrmField.php:74
-#: classes/models/FrmSettings.php:156
+#: classes/models/FrmSettings.php:158
 #: classes/views/frm-forms/form.php:71
 #: classes/views/styles/_sample_form.php:83
 msgid "Submit"
@@ -4346,7 +4346,7 @@ msgid "Select a page"
 msgstr ""
 
 #: classes/helpers/FrmOnSubmitHelper.php:165
-#: classes/models/FrmSettings.php:149
+#: classes/models/FrmSettings.php:151
 msgid "Your responses were successfully submitted. Thank you!"
 msgstr ""
 
@@ -5218,7 +5218,7 @@ msgstr ""
 msgid "hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA."
 msgstr ""
 
-#: classes/models/FrmHoneypot.php:203
+#: classes/models/FrmHoneypot.php:212
 msgid "If you are human, leave this field blank."
 msgstr ""
 
@@ -5304,36 +5304,36 @@ msgid "GET %s OFF NOW"
 msgstr ""
 
 #. translators: %s: [field_name] shortcode.
-#: classes/models/FrmSettings.php:151
+#: classes/models/FrmSettings.php:153
 msgid "%s cannot be blank."
 msgstr ""
 
 #. translators: %s: [field_name] shortcode.
-#: classes/models/FrmSettings.php:153
+#: classes/models/FrmSettings.php:155
 msgid "%s must be unique."
 msgstr ""
 
-#: classes/models/FrmSettings.php:154
+#: classes/models/FrmSettings.php:156
 msgid "There was a problem with your submission. Errors are marked below."
 msgstr ""
 
-#: classes/models/FrmSettings.php:155
+#: classes/models/FrmSettings.php:157
 msgid "We're sorry. It looks like you've already submitted that."
 msgstr ""
 
-#: classes/models/FrmSettings.php:157
+#: classes/models/FrmSettings.php:159
 msgid "You do not have permission to view this form."
 msgstr ""
 
-#: classes/models/FrmSettings.php:158
+#: classes/models/FrmSettings.php:160
 msgid "You do not have permission to do that"
 msgstr ""
 
-#: classes/models/FrmSettings.php:159
+#: classes/models/FrmSettings.php:161
 msgid "The page has been opened in a new tab."
 msgstr ""
 
-#: classes/models/FrmSettings.php:308
+#: classes/models/FrmSettings.php:311
 msgid "The CAPTCHA was not entered correctly"
 msgstr ""
 
@@ -5425,7 +5425,7 @@ msgstr ""
 msgid "Looks like you may not have a current subscription for this solution. Please check your account."
 msgstr ""
 
-#: classes/models/FrmSpamCheckDenylist.php:516
+#: classes/models/FrmSpamCheckDenylist.php:538
 #: classes/models/FrmSpamCheckWPDisallowedWords.php:72
 msgid "Your entry appears to be blocked spam!"
 msgstr ""
@@ -6579,17 +6579,25 @@ msgstr ""
 msgid "Use WordPress spam comments to check entries for spam"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:124
+#: classes/views/frm-settings/captcha/captcha.php:125
+msgid "Check denylist data to validate for spam"
+msgstr ""
+
+#: classes/views/frm-settings/captcha/captcha.php:131
 msgid "Custom disallowed words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:125
-#: classes/views/frm-settings/captcha/captcha.php:133
+#: classes/views/frm-settings/captcha/captcha.php:132
+#: classes/views/frm-settings/captcha/captcha.php:140
 msgid "Each word is on one line."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:132
+#: classes/views/frm-settings/captcha/captcha.php:139
 msgid "Custom allowed words"
+msgstr ""
+
+#: classes/views/frm-settings/captcha/captcha.php:148
+msgid "Spam keywords detected recently:"
 msgstr ""
 
 #. translators: %1$s: Captcha name, %2$s: Start link HTML, %3$s: End link HTML
