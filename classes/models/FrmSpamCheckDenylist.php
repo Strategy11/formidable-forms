@@ -526,6 +526,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			$transient = array();
 		}
 
+		if ( in_array( $keyword, $transient, true ) ) {
+			return;
+		}
+
 		$transient[] = $keyword;
 		set_transient( $transient_name, $transient, DAY_IN_SECONDS );
 	}
