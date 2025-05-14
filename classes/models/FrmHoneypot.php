@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
-
 	/**
 	 * Option type.
 	 *
@@ -87,23 +86,33 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 * @param int $honeypot_field_id
 	 * 
 	 * @return void
 	 */
-	public static function maybe_render_field( $form_id, $honeypot_field_id = 0 ) {
-		if ( ! $honeypot_field_id ) {
+	public static function maybe_render_field( $form_id ) {
+		$honeypot = new self( $form_id );
+		if ( ! $honeypot->should_render_field() ) {
 			return;
 		}
+
+		$max_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(),
+			'id',
+			array(
+				'order_by' => 'id DESC',
+			)
+		);
+
+		global $frm_vars;
+		$offset            = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
+		$honeypot_field_id = $max_field_id ? $max_field_id + $offset : $offset;
 
 		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
-		$honeypot = new self( $form_id );
-		if ( $honeypot->should_render_field() ) {
-			$honeypot->render_field( $honeypot_field_id );
-			self::maybe_print_honeypot_css();
-		}
+		$honeypot->render_field( $honeypot_field_id );
+		self::maybe_print_honeypot_css();
 	}
 
 	/**
