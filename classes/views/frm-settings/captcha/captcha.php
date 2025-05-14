@@ -146,7 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 		<div class="frm_note_style">
 			<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>
-			<i><?php echo esc_html( '&nbsp;' . implode( ', ', $transient ) ); ?></i>
+			<i><?php echo esc_html( implode( ', ', $transient ) ); ?></i>
 		</div>
 		<?php
 	}
