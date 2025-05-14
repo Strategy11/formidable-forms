@@ -228,6 +228,10 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		if ( 'product' === $field->type && 'user_def' === FrmField::get_option( $field, 'data_type' ) ) {
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
