@@ -377,6 +377,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
 * New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
 * New: All spam checks are now disabled when importing forms.
+* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
 
 = 6.21 =
 * New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
