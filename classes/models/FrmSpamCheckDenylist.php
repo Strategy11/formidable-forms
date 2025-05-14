@@ -539,7 +539,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	private function add_spam_keyword_to_option( $keyword ) {
 		$transient_name = 'frm_recent_spam_detected';
 		$transient      = get_transient( $transient_name );
-		if ( ! $transient ) {
+		if ( ! is_array( $transient ) ) {
 			$transient = array();
 		}
 
