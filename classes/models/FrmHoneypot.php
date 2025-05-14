@@ -91,10 +91,16 @@ class FrmHoneypot extends FrmValidate {
 	 * 
 	 * @return void
 	 */
-	public static function maybe_render_field( $form_id, $honeypot_field_id = 0 ) {
-		if ( ! $honeypot_field_id ) {
-			return;
-		}
+	public static function maybe_render_field( $form_id ) {
+		$max_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(),
+			'id',
+			array(
+				'order_by' => 'id DESC',
+			)
+		);
+		$honeypot_field_id = $max_field_id ? $max_field_id + 1 : 0;
 
 		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
