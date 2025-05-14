@@ -30,6 +30,8 @@ function initTokenInputFields() {
 			processedFields.add( field.id );
 		}
 	});
+
+	wp.hooks.addAction( 'frmShowedFieldSettings', 'formidable-token-input', adjustAllTokenInputPaddings );
 }
 
 /**
@@ -79,7 +81,7 @@ function setupTokenInput( field ) {
  * @return {void}
  */
 function createTokensFromValue( value, tokensWrapper ) {
-	if ( ! value || ! value.trim() || ! tokensWrapper ) {
+	if ( ! value?.trim() || ! tokensWrapper ) {
 		return;
 	}
 
@@ -87,12 +89,10 @@ function createTokensFromValue( value, tokensWrapper ) {
 	tokensWrapper.innerHTML = '';
 
 	// Create tokens from space-separated values
-	const tokens = value.trim().split( ' ' );
-	tokens.forEach( token => {
-		if ( token.trim() !== '' ) {
-			createToken( token.trim(), tokensWrapper );
-		}
-	});
+	value.trim()
+		.split( /\s+/ )
+		.filter( Boolean )
+		.forEach( token => createToken( token, tokensWrapper ) );
 }
 
 /**
@@ -118,6 +118,7 @@ function createToken( value, tokensWrapper ) {
 	});
 
 	tokensWrapper.appendChild( tokenElement );
+	adjustTokenInputPadding( tokensWrapper );
 }
 
 /**
@@ -147,7 +148,7 @@ function addTokenEventListeners( hiddenField, displayInput, tokensWrapper ) {
  * @return {void}
  */
 function handleTokenInputKeydown( event, hiddenField, displayInput, tokensWrapper ) {
-	if ( event.key === ' ' || event.key === ',' || event.key === 'Enter' ) {
+	if ( [ ' ', ',', 'Enter' ].includes( event.key ) ) {
 		event.preventDefault();
 
 		const value = displayInput.value.trim();
@@ -172,17 +173,69 @@ function handleTokenInputKeydown( event, hiddenField, displayInput, tokensWrappe
  */
 function handleTokenRemoval( event, hiddenField ) {
 	const removeButton = event.target.closest( '.frm-token-remove' );
-	if ( removeButton ) {
-		const token = removeButton.closest( '.frm-token' );
-		if ( token ) {
-			const value = token.getAttribute( 'data-value' );
-
-			const values = hiddenField.value.split( ' ' );
-			hiddenField.value = values.filter( tokenValue => tokenValue !== value ).join( ' ' );
-
-			token.remove();
-		}
+	if ( ! removeButton ) {
+		return;
 	}
+
+	const token = removeButton.closest( '.frm-token' );
+	if ( ! token ) {
+		return;
+	}
+
+	const tokensWrapper = token.parentElement;
+	const value = token.getAttribute( 'data-value' );
+
+	hiddenField.value = hiddenField.value
+		.split( /\s+/ )
+		.filter( tokenValue => tokenValue && tokenValue !== value )
+		.join( ' ' );
+
+	token.remove();
+	adjustTokenInputPadding( tokensWrapper );
+
+	// Focus the input field after token removal
+	const displayInput = tokensWrapper.closest( '.frm-token-container' )?.querySelector( '.frm-token-display-input' );
+	displayInput?.focus();
+}
+
+/**
+ * Adjust the padding-left of the display input based on the tokens wrapper width
+ *
+ * @private
+ *
+ * @param {HTMLElement} tokensWrapper The wrapper for token display
+ * @return {void}
+ */
+function adjustTokenInputPadding( tokensWrapper ) {
+	if ( ! tokensWrapper ) {
+		return;
+	}
+
+	// Get the display input using its specific class name
+	const displayInput = tokensWrapper.closest( '.frm-token-container' )?.querySelector( '.frm-token-display-input' );
+	if ( ! displayInput ) {
+		return;
+	}
+
+	// Set padding based on whether there are tokens
+	const hasTokens = tokensWrapper.children.length > 0;
+	displayInput.style.paddingLeft = hasTokens ? `${tokensWrapper.offsetWidth - 4}px` : '';
+}
+
+/**
+ * Adjust padding for all token inputs on the page
+ *
+ * @return {void}
+ */
+function adjustAllTokenInputPaddings() {
+	const tokenContainers = document.querySelectorAll( '.frm-token-container' );
+
+	tokenContainers.forEach( container => {
+		const tokensWrapper = container.querySelector( '.frm-tokens' );
+		if ( tokensWrapper ) {
+			adjustTokenInputPadding( tokensWrapper );
+		}
+	});
 }
 
 export { initTokenInputFields };
