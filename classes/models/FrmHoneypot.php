@@ -5,7 +5,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
-
 	/**
 	 * Option type.
 	 *
@@ -100,7 +99,9 @@ class FrmHoneypot extends FrmValidate {
 				'order_by' => 'id DESC',
 			)
 		);
-		$honeypot_field_id = $max_field_id ? $max_field_id + 1 : 0;
+
+		global $frm_vars;
+		$offset = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
 
 		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
