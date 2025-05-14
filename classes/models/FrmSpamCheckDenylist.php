@@ -250,6 +250,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			foreach ( $values_to_check as $value ) {
 				$value = $this->convert_to_lowercase( $value );
 				if ( $line === $value ) {
+					self::add_spam_keyword_to_option( $line );
 					return true;
 				}
 			}
@@ -438,6 +439,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 			$is_spam = $callback( $line, $callback_args );
 			if ( $is_spam ) {
+				self::add_spam_keyword_to_option( $line );
+
 				fclose( $fp );
 				return true;
 			}
@@ -514,5 +517,16 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	protected function get_spam_message() {
 		return __( 'Your entry appears to be blocked spam!', 'formidable' );
+	}
+
+	private function add_spam_keyword_to_option( $keyword ) {
+		$transient_name = 'frm_recent_spam_detected';
+		$transient      = get_transient( $transient_name );
+		if ( ! $transient ) {
+			$transient = array();
+		}
+
+		$transient[] = $keyword;
+		set_transient( $transient_name, $transient, DAY_IN_SECONDS );
 	}
 }
