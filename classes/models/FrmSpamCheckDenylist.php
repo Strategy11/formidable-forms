@@ -170,6 +170,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			if ( ! empty( $denylist['words'] ) ) {
 				foreach ( $denylist['words'] as $word ) {
 					if ( $this->single_line_check_values( $word, $denylist ) ) {
+						self::add_spam_keyword_to_option( $word );
 						return true;
 					}
 				}
@@ -260,7 +261,6 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			foreach ( $values_to_check as $value ) {
 				$value = $this->convert_to_lowercase( $value );
 				if ( $line === $value ) {
-					self::add_spam_keyword_to_option( $line );
 					return true;
 				}
 			}
