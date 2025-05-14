@@ -190,8 +190,6 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	public function render_field( $honeypot_field_id = 0 ) {
 		if ( ! $honeypot_field_id ) {
-			echo 'here';
-			die();
 			return;
 		}
 
