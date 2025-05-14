@@ -170,6 +170,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			if ( ! empty( $denylist['words'] ) ) {
 				foreach ( $denylist['words'] as $word ) {
 					if ( $this->single_line_check_values( $word, $denylist ) ) {
+						self::add_spam_keyword_to_option( $word );
 						return true;
 					}
 				}
@@ -455,6 +456,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 			$is_spam = $callback( $line, $callback_args );
 			if ( $is_spam ) {
+				if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
+					self::add_spam_keyword_to_option( $line );
+				}
+
 				fclose( $fp );
 				return true;
 			}
@@ -531,5 +536,20 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	protected function get_spam_message() {
 		return __( 'Your entry appears to be blocked spam!', 'formidable' );
+	}
+
+	private function add_spam_keyword_to_option( $keyword ) {
+		$transient_name = 'frm_recent_spam_detected';
+		$transient      = get_transient( $transient_name );
+		if ( ! is_array( $transient ) ) {
+			$transient = array();
+		}
+
+		if ( in_array( $keyword, $transient, true ) ) {
+			return;
+		}
+
+		$transient[] = $keyword;
+		set_transient( $transient_name, $transient, DAY_IN_SECONDS );
 	}
 }

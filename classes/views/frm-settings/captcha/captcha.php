@@ -140,4 +140,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 	<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+	<?php
+	$transient = get_transient( 'frm_recent_spam_detected' );
+	if ( ! empty( $transient ) ) {
+		?>
+		<div class="frm_note_style">
+			<strong><?php esc_html_e( 'Spam keywords detected recently:', 'formidable' ); ?></strong>
+			<i><?php echo esc_html( implode( ', ', $transient ) ); ?></i>
+		</div>
+		<?php
+	}
+	?>
 </p>
