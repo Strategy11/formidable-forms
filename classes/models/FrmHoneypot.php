@@ -96,6 +96,15 @@ class FrmHoneypot extends FrmValidate {
 			return;
 		}
 
+		/**
+		 * Allow people to customize the honeypot field ID.
+		 *
+		 * @since x.x
+		 *
+		 * @param int $honeypot_field_id The honeypot field ID.
+		 */
+		$honeypot_field_id = (int) apply_filters( 'frm_honeypot_field_id', $honeypot_field_id );
+
 		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
