@@ -15,6 +15,20 @@ const { span, svg, tag } = window.frmDom;
  * @return {void}
  */
 function initTokenInputFields() {
+	findAndInitializeTokenFields();
+
+	// Adjust padding for all token inputs when field settings are shown
+	wp.hooks.addAction( 'frmShowedFieldSettings', 'formidable-token-input', adjustAllTokenInputPaddings );
+}
+
+/**
+ * Find all token input fields and initialize them
+ *
+ * @private
+ *
+ * @return {void}
+ */
+function findAndInitializeTokenFields() {
 	const tokenInputFields = document.querySelectorAll( '.frm-token-input-field' );
 
 	if ( ! tokenInputFields.length ) {
@@ -30,8 +44,6 @@ function initTokenInputFields() {
 			processedFields.add( field.id );
 		}
 	});
-
-	wp.hooks.addAction( 'frmShowedFieldSettings', 'formidable-token-input', adjustAllTokenInputPaddings );
 }
 
 /**
@@ -42,11 +54,33 @@ function initTokenInputFields() {
  * @param {HTMLElement} field Input field for tokenization
  */
 function setupTokenInput( field ) {
+	const container = createTokenContainer( field );
+
+	if ( ! container ) {
+		return;
+	}
+
+	const tokensWrapper = container.querySelector( '.frm-tokens' );
+	const displayInput = container.querySelector( '.frm-token-display-input' );
+
+	createTokensFromValue( field.value, tokensWrapper );
+	addEventListeners( field, displayInput, tokensWrapper );
+}
+
+/**
+ * Create the token container and input elements
+ *
+ * @private
+ *
+ * @param {HTMLElement} field Input field for tokenization
+ * @return {HTMLElement|null} The container element or null if already initialized
+ */
+function createTokenContainer( field ) {
 	// Get the main container (.frm-with-right-icon) to work with Formidable's modal system
 	const container = field.closest( '.frm-with-right-icon' );
 
 	if ( container.querySelector( '.frm-tokens' ) ) {
-		return;
+		return null;
 	}
 
 	container.classList.add( 'frm-token-container' );
@@ -54,21 +88,20 @@ function setupTokenInput( field ) {
 	const tokensWrapper = span({
 		className: 'frm-tokens'
 	});
+
 	container.insertBefore( tokensWrapper, container.firstChild );
 
 	const displayInput = tag( 'input', {
 		className: 'frm-token-display-input'
 	});
+
 	displayInput.type = 'text';
 
-	field.type = 'hidden';
+	// Inserting displayInput after the field is important to maintain compatibility with Formidable’s modal system
+	field.parentNode.insertBefore( displayInput, field.nextSibling );
+	field.classList.add( 'frm_hidden' );
 
-	field.parentNode.insertBefore( displayInput, field );
-
-	createTokensFromValue( field.value, tokensWrapper );
-
-	// Setup event listeners
-	addTokenEventListeners( field, displayInput, tokensWrapper );
+	return container;
 }
 
 /**
@@ -81,12 +114,16 @@ function setupTokenInput( field ) {
  * @return {void}
  */
 function createTokensFromValue( value, tokensWrapper ) {
-	if ( ! value?.trim() || ! tokensWrapper ) {
+	if ( ! tokensWrapper ) {
 		return;
 	}
 
 	// Clear existing tokens if any
 	tokensWrapper.innerHTML = '';
+
+	if ( ! value?.trim() ) {
+		return;
+	}
 
 	// Create tokens from space-separated values
 	value.trim()
@@ -107,9 +144,11 @@ function createTokensFromValue( value, tokensWrapper ) {
 function createToken( value, tokensWrapper ) {
 	const tokenElement = span({
 		className: 'frm-token',
-		'data-value': value,
 		children: [
-			span( value ),
+			span({
+				text: value,
+				className: 'frm-token-value'
+			}),
 			span({
 				className: 'frm-token-remove',
 				child: svg({ href: '#frm_close_icon' })
@@ -126,14 +165,46 @@ function createToken( value, tokensWrapper ) {
  *
  * @private
  *
- * @param {HTMLElement} hiddenField   The original hidden input field
+ * @param {HTMLElement} field         The original hidden input field
  * @param {HTMLElement} displayInput  The display input field for interaction
  * @param {HTMLElement} tokensWrapper The wrapper for token display
  * @return {void}
  */
-function addTokenEventListeners( hiddenField, displayInput, tokensWrapper ) {
-	displayInput.addEventListener( 'keydown', event => handleTokenInputKeydown( event, hiddenField, displayInput, tokensWrapper ));
-	tokensWrapper.addEventListener( 'click', event => handleTokenRemoval( event, hiddenField ));
+function addEventListeners( field, displayInput, tokensWrapper ) {
+	displayInput.addEventListener( 'keydown', event => handleTokenInputKeydown( event, field, displayInput, tokensWrapper ));
+	tokensWrapper.addEventListener( 'click', event => handleTokenRemoval( event, field ));
+	displayInput.addEventListener( 'blur', () => addTokenFromInput( field, displayInput, tokensWrapper ) );
+	// Use jQuery change event to catch programmatic updates, as "Add Layout Classes" triggers value changes via jQuery
+	jQuery( field ).on( 'change', () => createTokensFromValue( field.value, tokensWrapper ) );
+}
+
+/**
+ * Create a token from the current input value
+ *
+ * @private
+ *
+ * @param {HTMLElement} field         The original hidden input field
+ * @param {HTMLElement} displayInput  The display input field for interaction
+ * @param {HTMLElement} tokensWrapper The wrapper for token display
+ * @return {boolean} Whether a token was added
+ */
+function addTokenFromInput( field, displayInput, tokensWrapper ) {
+	const value = displayInput.value.trim();
+	if ( ! value ) {
+		return false;
+	}
+
+	// Update field value with the new token
+	const currentValue = field.value ? field.value + ' ' : '';
+	field.value = currentValue + value;
+
+	// Trigger jQuery change event to detect changes and update the builder preview
+	jQuery( field ).trigger( 'change' );
+
+	createToken( value, tokensWrapper );
+	displayInput.value = '';
+
+	return true;
 }
 
 /**
@@ -142,24 +213,18 @@ function addTokenEventListeners( hiddenField, displayInput, tokensWrapper ) {
  * @private
  *
  * @param {Event}       event         Keydown event
- * @param {HTMLElement} hiddenField   The original hidden input field
+ * @param {HTMLElement} field         The original hidden input field
  * @param {HTMLElement} displayInput  The display input field for interaction
  * @param {HTMLElement} tokensWrapper The wrapper for token display
  * @return {void}
  */
-function handleTokenInputKeydown( event, hiddenField, displayInput, tokensWrapper ) {
-	if ( [ ' ', ',', 'Enter' ].includes( event.key ) ) {
-		event.preventDefault();
-
-		const value = displayInput.value.trim();
-		if ( value ) {
-			const currentValue = hiddenField.value ? hiddenField.value + ' ' : '';
-			hiddenField.value = currentValue + value;
-
-			createToken( value, tokensWrapper );
-			displayInput.value = '';
-		}
+function handleTokenInputKeydown( event, field, displayInput, tokensWrapper ) {
+	if ( ! [ ' ', ',', 'Enter', 'Tab' ].includes( event.key ) ) {
+		return;
 	}
+
+	event.preventDefault();
+	addTokenFromInput( field, displayInput, tokensWrapper );
 }
 
 /**
@@ -167,11 +232,11 @@ function handleTokenInputKeydown( event, hiddenField, displayInput, tokensWrappe
  *
  * @private
  *
- * @param {Event}       event       Click event
- * @param {HTMLElement} hiddenField The original hidden input field
+ * @param {Event}       event Click event
+ * @param {HTMLElement} field The original hidden input field
  * @return {void}
  */
-function handleTokenRemoval( event, hiddenField ) {
+function handleTokenRemoval( event, field ) {
 	const removeButton = event.target.closest( '.frm-token-remove' );
 	if ( ! removeButton ) {
 		return;
@@ -183,12 +248,15 @@ function handleTokenRemoval( event, hiddenField ) {
 	}
 
 	const tokensWrapper = token.parentElement;
-	const value = token.getAttribute( 'data-value' );
+	const value = token.querySelector( '.frm-token-value' ).textContent;
 
-	hiddenField.value = hiddenField.value
+	field.value = field.value
 		.split( /\s+/ )
 		.filter( tokenValue => tokenValue && tokenValue !== value )
 		.join( ' ' );
+
+	// Must trigger jQuery change event to detect changes and update the builder preview
+	jQuery( field ).trigger( 'change' );
 
 	token.remove();
 	adjustTokenInputPadding( tokensWrapper );
