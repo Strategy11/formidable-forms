@@ -182,7 +182,7 @@ class FrmEntriesController {
 				}
 
 				return self::display_list();
-		}
+		}//end switch
 	}
 
 	/**
@@ -258,7 +258,7 @@ class FrmEntriesController {
 	/**
 	 * @since 4.02.04
 	 *
-	 * @param int $form_id
+	 * @param int         $form_id
 	 * @param bool|string $implode
 	 */
 	private static function get_child_form_ids( $form_id, $implode = ',' ) {
@@ -303,7 +303,7 @@ class FrmEntriesController {
 
 	public static function manage_columns( $columns ) {
 		global $frm_vars;
-		$form_id = FrmForm::get_current_form_id();
+		$form_id                           = FrmForm::get_current_form_id();
 		$columns['cb']                     = '<input type="checkbox" />';
 		$columns[ $form_id . '_id' ]       = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
