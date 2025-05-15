@@ -1,0 +1,103 @@
+/**
+ * Field group popup and related functionality
+ */
+
+#frm_field_group_popup {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 366px;
+	max-height: 231px;
+	border-radius: 8px;
+	background: #fff;
+	box-shadow: 0 20px 48px rgba(40, 47, 54, 0.15);
+	z-index: 3;
+	box-sizing: border-box;
+	padding: 24px 0;
+	text-align: left;
+}
+
+.rtl #frm_field_group_popup {
+	text-align: right;
+}
+
+.frm-merge-fields-into-row #frm_field_group_popup {
+	top: unset;
+	bottom: 50px;
+	height: 196px;
+}
+
+#frm_field_group_popup > hr {
+	margin: 12px 0;
+}
+
+#frm_field_group_popup .frm-cancel-custom-field-group-layout,
+#frm_field_group_popup .frm-save-custom-field-group-layout {
+	padding: 4px 18px;
+}
+
+#frm_field_group_popup .frm-cancel-custom-field-group-layout:hover {
+	border-color: var(--primary-500) !important;
+	color: var(--primary-500);
+	background-color: transparent !important;
+}
+
+.frm-merge-fields-into-row #frm_field_group_popup .frm-break-field-group {
+	display: none;
+}
+
+.frm-merge-fields-into-row > a {
+	color: rgba(40, 47, 54, 0.85);
+	position: relative;
+	top: 2px;
+}
+
+.frm-row-layout-title {
+	font-weight: 600;
+	font-size: 11px;
+	line-height: 15px;
+	text-transform: uppercase;
+	color: rgba(40, 47, 54, 0.45);
+	margin-bottom: 27px;
+}
+
+.frm-row-layout-option {
+	background: #F6F7FB;
+	box-sizing: border-box;
+	border-radius: 2px;
+	padding: 15px 10px;
+}
+
+#frm_field_group_popup .frm-row-layout-option .frm_grid_container {
+	grid-gap: 0 5%;
+	grid-template-columns: repeat(12, auto);
+}
+
+#frm_field_group_popup .frm-row-layout-option {
+	cursor: pointer;
+	border: 2px solid transparent;
+}
+
+#frm_field_group_popup .frm-row-layout-option.frm-active-row-layout,
+#frm_field_group_popup .frm-row-layout-option:hover {
+	border-color: var(--primary-500);
+}
+
+.frm-custom-field-group-layout,
+.frm-break-field-group {
+	padding: 4px 24px;
+	cursor: pointer;
+	font-size: var(--text-sm);
+	line-height: 19px;
+	color: rgba(72, 78, 84, 1);
+}
+
+.frm-custom-field-group-layout:hover,
+.frm-break-field-group:hover {
+	background-color: #f5f5f5f5;
+}
+
+.frm-custom-field-group-layout svg,
+.frm-break-field-group svg {
+	margin-right: 5px;
+}

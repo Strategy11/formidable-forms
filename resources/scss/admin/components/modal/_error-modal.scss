@@ -1,0 +1,29 @@
+/**
+ * Components - Error Modal
+ */
+
+#frm_error_modal .frm_lock_simple {
+	padding: 20px;
+	border-radius: 50%;
+	background-color: var(--primary-25);
+	display: inline-block;
+}
+
+#frm_error_modal #frm_lock_simple {
+	color: var(--primary-500);
+}
+
+#frm_error_modal .frm-modal-title {
+	display: block;
+}
+
+#frm_error_modal .frm-modal-title h2 {
+	font-weight: 600;
+	font-size: var(--text-xl);
+	margin: 0;
+}
+
+#frm_error_modal .frm_modal_content {
+	padding: var(--gap-md);
+	color: var(--grey-900);
+}

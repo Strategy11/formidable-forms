@@ -1,0 +1,11 @@
+/**
+ * Utilities - Border
+ */
+
+.frm-border-b {
+	border-bottom: 1px solid var(--grey-300);
+}
+
+.frm-no-border {
+	border: none !important;
+}

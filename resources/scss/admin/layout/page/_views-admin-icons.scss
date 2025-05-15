@@ -1,0 +1,20 @@
+/**
+ * View Page Admin Icons
+ */
+
+.post-type-frm_display .misc-pub-section .frmsvg,
+.post-type-frm_display #post-body .misc-pub-post-status::before,
+.post-type-frm_display #post-body #visibility::before,
+.post-type-frm_display .curtime #timestamp::before,
+.post-type-frm_display #post-body .misc-pub-revisions::before,
+.post-type-frm_display span.wp-media-buttons-icon::before {
+	color: var( --grey);
+}
+
+.post-type-frm_display #frm_top_bar + #poststuff #submitdiv #publishing-action, /* Hide only if top bar is present */
+.post-type-frm_display #frm_top_bar + #poststuff #submitdiv #minor-publishing-actions,
+.post-type-frm_display #frm_top_bar + #poststuff #edit-slug-box,
+.post-type-frm_display .wrap h1.wp-heading-inline,
+.post-type-frm_display .wrap > .page-title-action {
+	display: none;
+}

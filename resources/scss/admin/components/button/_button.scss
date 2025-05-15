@@ -1,0 +1,304 @@
+/**
+ * Components - Button
+ */
+
+.frm_orange_button,
+.frm_reverse_button {
+	font-size: 12px;
+	border: 1px solid var(--orange);
+	color: var(--orange);
+	font-weight: 600;
+	padding: 1px 4px;
+	border-radius: 4px;
+	background: transparent;
+}
+
+.frm_reverse_button:hover,
+.frm_reverse_button:active,
+.frm_reverse_button:focus {
+	color: #fff;
+	background: var(--orange);
+	border: 1px solid var(--orange);
+}
+
+.frm_reverse_button {
+	font-size: 1em;
+	transition: all .2s ease;
+}
+
+.frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
+.wp-core-ui .button.frm-button-primary,
+.frm-button-secondary,
+.wp-core-ui .button-secondary.frm-button-secondary,
+.wp-core-ui .button.frm-button-secondary,
+.frm-white-body .frm-search .button,
+.frm-white-body .search-box .button, /* Views */
+.frm-white-body .tablenav .button,
+.frm_orange_button,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary,
+.wp-core-ui.frm-white-body .button-primary,
+.wp-core-ui.frm-white-body .button-secondary,
+.frm-white-body .button-primary,
+.frm-white-body .button-secondary,
+#frm-form-button button,
+.frm-form-button button,
+.frm-preview-buttons button,
+.frm-button-red,
+.frm-button-tertiary {
+	text-shadow: none;
+	box-shadow: none;
+	border-radius: 30px;
+	border: 1px solid var(--primary-500);
+	font-size: var(--text-sm);
+	transition: all .2s ease;
+	padding: 7px 16px;
+	height: auto;
+	min-height: 28px;
+	outline: none;
+	line-height: var(--leading);
+	box-sizing: border-box;
+	font-weight: 500;
+	margin-bottom: 0;
+	display: inline-block;
+}
+
+.frm-button-primary.frm-sharp,
+.frm-button-secondary.frm-sharp {
+	border-radius: 12px !important;
+}
+
+.no-js.wp-core-ui .frm-search .button.hide-if-no-js,
+.js.wp-core-ui .frm-search .button.hide-if-js {
+	display: none;
+}
+
+.frm-button-tertiary {
+	border-color: transparent;
+	color: var(--primary-500);
+}
+
+.frm-button-tertiary:focus {
+	outline: none;
+}
+
+.frm-button-tertiary.frm_loading_button::before {
+	border-right-color: var(--grey);
+	border-bottom-color: var(--grey);
+}
+
+.frm-button-red,
+.frm-button-red:focus {
+	--primary-color: var(--error-500);
+	--primary-500: var(--error-500);
+	--primary-700: var(--error-700);
+}
+
+.frm-button-red:not(.frm-button-tertiary),
+.frm-button-red:not(.frm-button-tertiary):focus {
+	color: #fff !important;
+}
+
+.frm-white-body h2 .button,
+.post-type-frm_display h2 .frm-button-primary,
+.frm-white-body .tablenav .button,
+.frm-button-primary.frm-button-sm,
+.frm-button-secondary.frm-button-sm,
+.frm-button-tertiary.frm-button-sm,
+.frm-button-red.frm-button-sm {
+	padding: 4px 12px !important;
+	font-size: var(--text-xs) !important;
+}
+
+.frm_no_style_button {
+	background: transparent;
+}
+
+.frm-with-icon {
+	display: flex;
+	gap: var(--gap-xs);
+	align-items: center;
+}
+
+.frm-with-icon svg {
+	opacity: .65; /* Get close to grey-500 without overriding hover colors */
+}
+
+.frm-with-icon.button svg {
+	height: var(--text-sm);
+	width: var(--text-sm);
+}
+
+.frm-with-icon.frm-button-sm svg {
+	height: var(--text-xs);
+	width: var(--text-xs);
+}
+
+.frm-white-body .button.add_media {
+
+	/* Media buttons above RTE */
+	padding-left: 12px !important;
+	padding-right: 12px !important;
+	font-size: var(--text-xs);
+	border-radius: var(--border-radius);
+}
+
+.wp-core-ui.frm-white-body #post-query-submit.button,
+.wp-core-ui.frm-white-body .button.tablenav-pages-navspan,
+.wp-core-ui.frm-white-body .button.first-page,
+.wp-core-ui.frm-white-body .button.prev-page,
+.wp-core-ui.frm-white-body .button.next-page,
+.wp-core-ui.frm-white-body .button.last-page,
+.wp-core-ui.frm-white-body .button.action {
+	background-color: transparent;
+	border-color: var(--grey-300);
+	color: var(--grey-700);
+	border-radius: var(--border-radius);
+}
+
+.post-type-frm_display.wp-core-ui .button-primary,
+.frm-button-primary,
+.wp-core-ui .button-primary.frm-button-primary,
+.frm_single_entry_page #frm-publishing .button-primary {
+	background-color: var(--primary-500) !important;
+	color: #fff !important;
+}
+
+.frm-button-primary.frm_large,
+.frm-button-secondary.frm_large {
+	height: auto !important;
+	padding: 12px 16px !important;
+}
+
+.frm-button-secondary.frm-small,
+.frm-button-primary.frm-small {
+	font-size: var(--text-xs) !important;
+	height: auto !important;
+	padding: var(--gap-2xs) 12px !important;
+}
+
+.frm-button-primary i::before {
+	color: #fff;
+}
+
+.wp-core-ui .button-primary.frm-button-primary:not([disabled]):hover,
+.frm-button-primary:not([disabled]):hover {
+	background: var(--primary-700) !important;
+	border-color: var(--primary-700) !important;
+}
+
+.wp-core-ui .button-primary.frm-button-primary:active {
+	vertical-align: inherit;
+}
+
+.frm-white-body #search-submit,
+#frm-form-button .frm_button_submit,
+.frm-form-button .frm_button_submit,
+.frm-white-body .frm-preview-buttons button,
+.frm-white-body .button:not(.frm-button-primary),
+.wp-core-ui.frm-white-body .button-secondary,
+.wp-core-ui .button-secondary.frm-button-secondary,
+.wp-core-ui .button.frm-button-secondary,
+.frm-white-body .frm-button-secondary,
+.frm-button-secondary {
+	color: var(--grey-800);
+	border-color: var(--grey-300);
+	background-color: #fff;
+}
+
+#wp-content-media-buttons button,
+#wp-content-media-buttons a.button {
+	border-color: var(--grey-300);
+}
+
+.frm_orange_button {
+	border-color: #da791d !important;
+	background: var(--orange);
+	color: #fff;
+}
+
+.frm-white-body .button:not(.frm-button-primary):focus,
+.frm-white-body .button:not(.frm-button-primary):active,
+.frm-white-body .frm-button-secondary:hover,
+.wp-core-ui.frm-white-body .frm-button-secondary:hover,
+.wp-core-ui.frm-white-body .button-secondary:hover,
+.wp-core-ui.frm-white-body .button-secondary:focus,
+.wp-core-ui.frm-white-body .tablenav .button:hover,
+.frm_wrap .preview > .button:hover,
+.frm-white-body #search-submit:hover {
+	border-color: var(--grey-300) !important;
+	color: var(--grey-800);
+	background: var(--grey-50) !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.frm-button-primary .frmsvg {
+	color: #fff;
+}
+
+.frm_wrap .preview i {
+	font-size: inherit;
+}
+
+.frm-white-body .frm-button-primary:focus,
+.frm-white-body .frm-button-primary:active,
+#frm-addons-page .button-primary:focus,
+#form_global_settings .button-primary:focus,
+#frm_upgrade_modal .button:focus {
+	border-color: var(--primary-700) !important;
+	background-color: var(--primary-700) !important;
+	box-shadow: none !important;
+	outline: none !important;
+}
+
+.frm_wrap .preview > .button:focus,
+.frm_orange_button:hover,
+.frm_orange_button:focus,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary:hover,
+.toplevel_page_formidable #frm_upgrade_modal .button-primary:focus,
+.toplevel_page_formidable .frm_wrap button.button-primary:hover,
+.toplevel_page_formidable .frm_wrap button.button-primary:focus {
+	outline: none;
+}
+
+.frm_orange_button:hover,
+.frm_orange_button:focus {
+	border-color: var(--orange) !important;
+	background: transparent;
+	color: var(--orange);
+	opacity: 1;
+}
+
+.major-publishing-actions.frm_create_form_header {
+	padding: 8px 0;
+}
+
+.major-publishing-actions.frm_create_form_header .frm_create_form_header_inner {
+	font-size: 15px;
+	background: transparent;
+}
+
+.frm-menu-boxes .frm_blank_form_text {
+	padding-bottom: 26px;
+}
+
+input.frm_insert_in_template {
+	font-size: 10px;
+	width: 98%;
+	font-weight: 400
+}
+
+.frm-dismissible a.dismiss:focus {
+	box-shadow: none;
+}
+
+.frm-dismissible a.dismiss {
+	top: 10px;
+	right: 10px;
+	position: absolute;
+}
+
+.frm-dismissible a.dismiss svg {
+	color: var(--grey-800);
+}

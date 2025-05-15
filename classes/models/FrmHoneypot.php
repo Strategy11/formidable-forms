@@ -5,11 +5,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
+
+	/**
+	 * Option type.
+	 *
+	 * @since 6.21
+	 *
+	 * @var string
+	 */
+	protected $option_type = 'global';
+
 	/**
 	 * @return string
 	 */
 	protected function get_option_key() {
 		return 'honeypot';
+	}
+
+	private static function is_enabled() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return $frm_settings->honeypot;
 	}
 
 	/**
@@ -29,14 +44,26 @@ class FrmHoneypot extends FrmValidate {
 	private function is_honeypot_spam() {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 		if ( ! $is_honeypot_spam ) {
-			// Check the newer honeypot input name which is randomly generated so it's more difficult to detect.
-			$class_name       = self::get_honeypot_class_name();
-			$honeypot_value   = FrmAppHelper::get_param( $class_name, '', 'get', 'sanitize_text_field' );
-			$is_honeypot_spam = '' !== $honeypot_value;
+
+			$field_id = $this->get_honeypot_field_id();
+			if ( ! $field_id ) {
+				return false;
+			}
+
+			$value            = $this->get_honeypot_field_value( $field_id );
+			$is_honeypot_spam = '' !== $value;
 		}
 
-		$form = $this->get_form();
-		$atts = compact( 'form' );
+		$atts = array(
+			'form' => $this->get_form(),
+		);
+
+		/**
+		 * Filters the honeypot spam check.
+		 *
+		 * @param bool  $is_honeypot_spam Set to `true` if is spam.
+		 * @param array $atts             Contains `form` and `fields`.
+		 */
 		return apply_filters( 'frm_process_honeypot', $is_honeypot_spam, $atts );
 	}
 
@@ -59,24 +86,87 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
-	 * @return string
+	 * @param int $form_id Form ID.
+	 * @param int $honeypot_field_id
+	 * 
+	 * @return void
 	 */
-	private function check_honeypot_setting() {
-		$form = $this->get_form();
-		$key  = $this->get_option_key();
-		return $form->options[ $key ];
+	public static function maybe_render_field( $form_id, $honeypot_field_id = 0 ) {
+		if ( ! $honeypot_field_id ) {
+			return;
+		}
+
+		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
+
+		$honeypot = new self( $form_id );
+		if ( $honeypot->should_render_field() ) {
+			$honeypot->render_field( $honeypot_field_id );
+			self::maybe_print_honeypot_css();
+		}
 	}
 
 	/**
-	 * @param int $form_id
+	 * Maybe print honeypot JS.
 	 *
-	 * @return void
+	 * @since 6.21
 	 */
-	public static function maybe_render_field( $form_id ) {
-		$honeypot = new self( $form_id );
-		if ( $honeypot->should_render_field() ) {
-			$honeypot->render_field();
+	public static function maybe_print_honeypot_js() {
+		if ( ! self::is_enabled() ) {
+			return;
 		}
+
+		$css = self::get_honeypot_field_css();
+		if ( ! $css ) {
+			return;
+		}
+
+		// There must be no empty lines inside the script. Otherwise, wpautop adds <p> tags which break script execution.
+		printf(
+			"<script>
+				( function() {
+					const style = document.createElement( 'style' );
+					style.appendChild( document.createTextNode( '%s' ) );
+					document.head.appendChild( style );
+					document.currentScript?.remove();
+				} )();
+			</script>",
+			esc_js( $css )
+		);
+	}
+
+	/**
+	 * Maybe print honeypot CSS in case JS doesn't run.
+	 *
+	 * @since 6.21
+	 */
+	public static function maybe_print_honeypot_css() {
+		// Print the CSS if form is loaded by API.
+		if ( ! FrmFormsHelper::form_is_loaded_by_api() ) {
+			return;
+		}
+
+		$css = self::get_honeypot_field_css();
+		if ( $css ) {
+			echo '<style>' . esc_html( $css ) . '</style>';
+		}
+	}
+
+	/**
+	 * Gets honeypot field CSS.
+	 *
+	 * @return string
+	 */
+	private static function get_honeypot_field_css() {
+		global $frm_vars;
+		if ( empty( $frm_vars['honeypot_selectors'] ) ) {
+			return '';
+		}
+
+		return sprintf(
+			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
+			implode( ',', $frm_vars['honeypot_selectors'] )
+		);
 	}
 
 	/**
@@ -87,31 +177,76 @@ class FrmHoneypot extends FrmValidate {
 	}
 
 	/**
+	 * @param int $honeypot_field_id
 	 * @return void
 	 */
-	public function render_field() {
-		$honeypot    = $this->check_honeypot_setting();
-		$form        = $this->get_form();
-		$class_name  = self::get_honeypot_class_name();
+	public function render_field( $honeypot_field_id = 0 ) {
+		if ( ! $honeypot_field_id ) {
+			return;
+		}
+
+		$field_id    = $honeypot_field_id;
+		$field_key   = $this->get_honeypot_field_key();
 		$input_attrs = array(
-			'id'    => 'frm_email_' . absint( $form->id ),
-			'type'  => 'strict' === $honeypot ? 'email' : 'text',
-			'class' => 'frm_verify',
-			'name'  => $class_name,
-			'value' => FrmAppHelper::get_param( $class_name, '', 'get', 'wp_kses_post' ),
+			'id'    => 'field_' . $field_key,
+			'type'  => 'text',
+			'class' => 'frm_form_field form-field frm_verify',
+			'name'  => 'item_meta[' . $field_id . ']',
+			'value' => $this->get_honeypot_field_value( $field_id ),
 		);
 
-		if ( 'strict' !== $honeypot ) {
-			$input_attrs['autocomplete'] = 'off';
-		}
+		$container_id = 'frm_field_' . $field_id . '_container';
+		$this->track_html_id( $container_id );
 		?>
-			<div class="<?php echo esc_attr( $class_name ); ?>">
-				<label for="frm_email_<?php echo esc_attr( $form->id ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
-					<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
-				</label>
-				<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
-			</div>
+		<div id="<?php echo esc_attr( $container_id ); ?>">
+			<label for="<?php echo esc_attr( $input_attrs['id'] ); ?>" <?php FrmFormsHelper::maybe_hide_inline(); ?>>
+				<?php esc_html_e( 'If you are human, leave this field blank.', 'formidable' ); ?>
+			</label>
+			<input <?php FrmAppHelper::array_to_html_params( $input_attrs, true ); ?> <?php FrmFormsHelper::maybe_hide_inline(); ?> />
+		</div>
 		<?php
+	}
+
+	private function track_html_id( $html_id ) {
+		global $frm_vars;
+		if ( ! isset( $frm_vars['honeypot_selectors'] ) ) {
+			$frm_vars['honeypot_selectors'] = array();
+		}
+
+		$frm_vars['honeypot_selectors'][] = '#' . $html_id;
+	}
+
+	private function get_honeypot_field_id() {
+		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
+		return $honeypot_field_id;
+	}
+
+	private function get_honeypot_field_key() {
+		return FrmAppHelper::generate_new_key( 5 );
+	}
+
+	/**
+	 * Gets honeypot field value.
+	 *
+	 * @param string $field_id Field ID.
+	 *
+	 * @return string
+	 */
+	private function get_honeypot_field_value( $field_id ) {
+		$item_meta = FrmAppHelper::get_simple_request(
+			array(
+				'param'   => 'item_meta',
+				'default' => array(),
+				'type'    => 'post',
+			)
+		);
+
+		if ( ! $item_meta || ! is_array( $item_meta ) ) {
+			return '';
+		}
+
+		return isset( $item_meta[ $field_id ] ) ? $item_meta[ $field_id ] : '';
 	}
 
 	/**

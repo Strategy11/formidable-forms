@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.20';
+	public static $plug_version = '6.21';
 
 	/**
 	 * @var bool
@@ -128,7 +128,7 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = $args['medium'];
+			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
 			if ( isset( $args['content'] ) ) {
 				$content = $args['content'];
 			}
@@ -159,6 +159,34 @@ class FrmAppHelper {
 
 		$link = add_query_arg( $query_args, $page ) . $anchor;
 		return self::make_affiliate_url( $link );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @param string $cta_link
+	 * @param array  $utm
+	 */
+	public static function maybe_add_missing_utm( $cta_link, $utm ) {
+		$query_args = array();
+
+		if ( false === strpos( $cta_link, 'utm_source' ) ) {
+			$query_args['utm_source'] = 'WordPress';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_campaign' ) ) {
+			$query_args['utm_campaign'] = 'liteplugin';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_medium' ) && isset( $utm['medium'] ) ) {
+			$query_args['utm_medium'] = $utm['medium'];
+		}
+
+		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
+			$query_args['utm_content'] = $utm['content'];
+		}
+
+		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
 	}
 
 	/**
@@ -1417,7 +1445,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
+		if ( FrmSalesApi::maybe_show_banner() || self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
 			// Print license warning or inbox banner and exit if either prints.
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
@@ -1432,13 +1460,15 @@ class FrmAppHelper {
 				}
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
-				if ( ! $upgrade_link ) {
-					$upgrade_link = self::admin_upgrade_link(
-						array(
-							'medium'  => 'settings-license',
-							'content' => 'lite-banner',
-						)
-					);
+				$utm          = array(
+					'medium'  => 'settings-license',
+					'content' => 'lite-banner',
+				);
+
+				if ( $upgrade_link ) {
+					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
+				} else {
+					$upgrade_link = self::admin_upgrade_link( $utm );
 				}
 
 				printf(
@@ -1719,7 +1749,7 @@ class FrmAppHelper {
 	/**
 	 * Maybe show an HTML select or autocomplete input based on the number of options.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array $args Args. See the method for details.
 	 */
@@ -1792,7 +1822,7 @@ class FrmAppHelper {
 	/**
 	 * Gets dropdown value and label from autodropdown option.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @param array|string $option Autocomplete option.
 	 * @param string       $key    Array key of the option.
@@ -2498,10 +2528,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.21 This is changed from `private` to `public`.
+	 *
 	 * @param int $num_chars
 	 * @return string
 	 */
-	private static function generate_new_key( $num_chars ) {
+	public static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
 
 		// We want to have at least 2 characters in the slug.

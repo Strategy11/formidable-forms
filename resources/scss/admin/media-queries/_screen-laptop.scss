@@ -1,0 +1,161 @@
+@media only screen and (max-width: 960px) {
+
+	.frm-white-body,
+	.frm_wrap {
+		--gap-sm: 8px;
+		--gap-md: 16px;
+		--gap-2xl: 24px;
+	}
+
+	.auto-fold #adminmenuwrap {
+		width: 36px;
+	}
+
+	.frm_wrap #postbox-container-1 #frm_adv_info {
+		min-width: 220px;
+	}
+
+	p.howto {
+		display: inline-block;
+	}
+
+	/* Fix: Issue where the admin page content had extra white space to the left on small screens */
+	.auto-fold.frm-admin-page-styles:not(.frm-full-screen) .frm_page_container,
+	.auto-fold:not(.frm-full-screen) .frm_wrap .frm_page_container {
+		left: 36px;
+	}
+}
+
+@media only screen and (max-width: 850px) {
+
+	.frm-white-body,
+	.frm_wrap {
+		--biggest-sidebar: 350px;
+		--big-sidebar: 350px;
+	}
+
+	.frm_col_one {
+		clear: none;
+	}
+
+	.frm-fields p > .frm_inline_label,
+	.frm_inline_label {
+		display: block;
+		margin: 5px 0;
+	}
+
+	#frm_top_bar h1 {
+		width: auto;
+		max-width: 200px;
+	}
+
+	#frm-publishing {
+		width: auto;
+	}
+
+	#frm_form_editor_container,
+	.frm-entry-container {
+		margin: 0 20px;
+	}
+
+	.frmbutton.ui-sortable-helper .frmsvg,
+	.field_type_list li.frmbutton .frmsvg,
+	.frmbutton.ui-sortable-helper i,
+	.field_type_list li.frmbutton i {
+		margin: .15em 0 .15em .1em;
+		width: 25px;
+	}
+
+	.rtl .frmbutton.ui-sortable-helper .frmsvg,
+	.rtl .field_type_list li.frmbutton .frmsvg,
+	.rtl .frmbutton.ui-sortable-helper i,
+	.rtl .field_type_list li.frmbutton i {
+		margin: .15em .1em .15em 0;
+	}
+
+	.frm_wrap .frm-search {
+		float: none !important;
+		width: auto;
+		clear: both;
+	}
+
+	.post-type-frm_display #frm_adv_info {
+		top: auto !important;
+		position: static;
+		width: auto;
+	}
+
+	.frm_wrap .frm-right-panel #frm_adv_info,
+	.frm_wrap #postbox-container-1 #frm_adv_info {
+		min-width: 275px;
+	}
+
+	.frm_wrap #frm_adv_info ul.category-tabs li,
+	.frm_wrap #frm_adv_info ul.category-tabs li.tabs {
+		border: none;
+	}
+
+	.frm_wrap #frm_adv_info ul.category-tabs li:first-child {
+		margin-left: 12px;
+	}
+
+	.frm_wrap #frm_adv_info ul.category-tabs li.tabs {
+		border-bottom: 2px solid #5b9dd9;
+		padding-bottom: 8px;
+	}
+
+	.post-type-frm_display #poststuff {
+		padding: 10px 25px;
+	}
+
+	.post-type-frm_display #side-sortables .postbox {
+		margin-bottom: 20px;
+		border-radius: var(--small-radius);
+		border-top-width: 1px;
+	}
+
+	#frm_top_bar .frm_form_nav {
+		box-shadow: 0 -0.47px 10px 0 #1018280F;
+	}
+
+	#frm_top_bar ul.frm_form_nav {
+		padding: 1em 0;
+		position: fixed;
+		bottom: 0;
+		width: 100%;
+		background: white;
+		z-index: 99;
+		transform: translate(-50%, 0);
+		left: 50%;
+	}
+
+	.frm_page_container > .columns-2,
+	#frm_styler_wrapper {
+		padding-bottom: 64px;
+	}
+
+	#frm_style_preview .frm_floating_style_button:not(.frm_hidden) {
+		position: static;
+		display: inline-block;
+	}
+
+	.frm_wrap .columns-2 .frm-right-panel {
+		padding-bottom: 0;
+	}
+
+	#frm-publishing {
+		margin-left: auto;
+	}
+
+	#frm_top_bar > .frm-full-close:last-child {
+		margin-left: 0;
+	}
+
+	#frm_bs_dropdown {
+		display: block;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+		display: block !important;
+	}
+}

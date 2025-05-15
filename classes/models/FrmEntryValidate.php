@@ -158,6 +158,7 @@ class FrmEntryValidate {
 
 		FrmEntriesHelper::set_posted_value( $posted_field, $value, $args );
 
+		self::validate_options( $errors, $posted_field, $value, $args );
 		self::validate_field_types( $errors, $posted_field, $value, $args );
 
 		// Field might want to modify value before other parts of the system
@@ -174,6 +175,113 @@ class FrmEntryValidate {
 		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
 			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
 		}
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @param array        $errors
+	 * @param object       $posted_field
+	 * @param array|string $value
+	 * @param array        $args
+	 *
+	 * @return void
+	 */
+	private static function validate_options( &$errors, $posted_field, $value, $args ) {
+		if ( empty( $posted_field->options ) ) {
+			return;
+		}
+
+		$option_is_valid = self::option_is_valid( $posted_field, $value, $posted_field->options );
+
+		/**
+		 * @since 6.21
+		 *
+		 * @param bool         $option_is_valid
+		 * @param array|string $value
+		 * @param object       $field
+		 */
+		$option_is_valid = (bool) apply_filters( 'frm_option_is_valid', $option_is_valid, $value, $posted_field );
+
+		if ( ! $option_is_valid ) {
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'invalid' );
+		}
+	}
+
+	/**
+	 * Validate that value matches one of the options for the field.
+	 *
+	 * @since 6.21
+	 *
+	 * @param stdClass     $field
+	 * @param array|string $value
+	 * @param array        $options
+	 * @return bool
+	 */
+	private static function option_is_valid( $field, $value, $options ) {
+		if ( '' === $value ) {
+			return true;
+		}
+
+		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
+			// Ignore these field types automatically.
+			return true;
+		}
+
+		$value = (array) $value;
+
+		foreach ( $value as $current_value ) {
+			$match = false;
+
+			foreach ( $options as $key => $option ) {
+				if ( strpos( $key, 'other_' ) === 0 ) {
+					// Always return true if an other option is found.
+					return true;
+				}
+
+				$option_value = is_array( $option ) ? $option['value'] : $option;
+				$match        = $current_value === $option_value;
+				if ( $match ) {
+					break;
+				}
+
+				if ( is_numeric( $current_value ) ) {
+					$match = (int) $current_value === (int) $option_value;
+					if ( $match ) {
+						break;
+					}
+				}
+			}
+
+			if ( ! $match ) {
+				return self::options_are_dynamic_based_on_hook( $field, $value );
+			}
+		}//end foreach
+
+		return true;
+	}
+
+	/**
+	 * Do not validate options if they have been modified with a hook.
+	 * This is to help avoid issues where the options could be based on a URL param for example.
+	 *
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function options_are_dynamic_based_on_hook( $field_object, $value ) {
+		$values          = (array) $field_object;
+		$values['value'] = $value;
+		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
+
+		$map_callback = function ( $option ) {
+			return is_array( $option ) ? $option['value'] : $option;
+		};
+
+		$values_options       = array_map( $map_callback, $values['options'] );
+		$field_object_options = array_map( $map_callback, $field_object->options );
+
+		return $values_options !== $field_object_options;
 	}
 
 	/**
@@ -307,7 +415,7 @@ class FrmEntryValidate {
 	}
 
 	/**
-	 * Check for spam
+	 * Check for spam.
 	 *
 	 * @param bool  $exclude
 	 * @param array $values
@@ -320,12 +428,16 @@ class FrmEntryValidate {
 		}
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
+		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
-			$errors['spam'] = __( 'Your entry appears to be spam!', 'formidable' );
-		} elseif ( self::blacklist_check( $values ) ) {
-			$errors['spam'] = __( 'Your entry appears to be blocked spam!', 'formidable' );
+			$errors['spam'] = $spam_msg;
+		} else {
+			$is_spam = FrmAntiSpamController::is_spam( $values );
+			if ( $is_spam ) {
+				$errors['spam'] = $is_spam;
+			}
 		}
 
 		if ( isset( $errors['spam'] ) || self::form_is_in_progress( $values ) ) {
@@ -399,52 +511,15 @@ class FrmEntryValidate {
 		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
 	}
 
+	/**
+	 * Checks spam using WordPress disallowed words and Frm denylist.
+	 *
+	 * @param array $values Entry values.
+	 *
+	 * @return bool
+	 */
 	public static function blacklist_check( $values ) {
-		if ( ! apply_filters( 'frm_check_blacklist', true, $values ) ) {
-			return false;
-		}
-
-		$mod_keys = trim( self::get_disallowed_words() );
-		if ( empty( $mod_keys ) ) {
-			return false;
-		}
-
-		$content = FrmEntriesHelper::entry_array_to_string( $values );
-
-		self::prepare_values_for_spam_check( $values );
-		$ip         = FrmAppHelper::get_ip_address();
-		$user_agent = FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' );
-		$user_info  = self::get_spam_check_user_info( $values );
-
-		return self::check_disallowed_words( $user_info['comment_author'], $user_info['comment_author_email'], $user_info['comment_author_url'], $content, $ip, $user_agent );
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function check_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {
-		if ( function_exists( 'wp_check_comment_disallowed_list' ) ) {
-			return wp_check_comment_disallowed_list( $author, $email, $url, $content, $ip, $user_agent );
-		}
-		// phpcs:ignore WordPress.WP.DeprecatedFunctions.wp_blacklist_checkFound
-		return wp_blacklist_check( $author, $email, $url, $content, $ip, $user_agent );
-	}
-
-	/**
-	 * For WP 5.5 compatibility.
-	 *
-	 * @since 4.06.02
-	 */
-	private static function get_disallowed_words() {
-		$keys = get_option( 'disallowed_keys' );
-		if ( false === $keys ) {
-			// Fallback for WP < 5.5.
-			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
-			$keys = get_option( 'blacklist_keys' );
-		}
-		return $keys;
+		return FrmAntiSpamController::contains_wp_disallowed_words( $values ) || FrmAntiSpamController::is_denylist_spam( $values );
 	}
 
 	/**
@@ -517,11 +592,12 @@ class FrmEntryValidate {
 	 * Gets user info for Akismet spam check.
 	 *
 	 * @since 5.0.13 Separate code for guest. Handle value of embedded|repeater.
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
 	 * @return array
 	 */
-	private static function get_spam_check_user_info( $values ) {
+	public static function get_spam_check_user_info( $values ) {
 		if ( ! is_user_logged_in() ) {
 			return self::get_spam_check_user_info_for_guest( $values );
 		}
@@ -816,10 +892,11 @@ class FrmEntryValidate {
 	 * Prepares values array for spam check.
 	 *
 	 * @since 5.0.13
+	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
 	 */
-	private static function prepare_values_for_spam_check( &$values ) {
+	public static function prepare_values_for_spam_check( &$values ) {
 		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
 		$values['form_ids'] = $form_ids;
 	}

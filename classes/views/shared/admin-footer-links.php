@@ -7,9 +7,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/support/plugin/formidable/' : 'https://formidableforms.com/new-topic/';
 
 $upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
-if ( ! $upgrade_link ) {
-	// Determine the upgrade link based on lite vs pro.
-	$upgrade_link = ! FrmAppHelper::pro_is_installed() ? 'https://formidableforms.com/lite-upgrade/' : 'https://formidableforms.com/account/downloads/';
+$utm          = array(
+	'medium' => 'admin-footer-link',
+);
+if ( $upgrade_link ) {
+	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+} else {
+	if ( FrmAppHelper::pro_is_installed() ) {
+		$upgrade_link = 'https://formidableforms.com/account/downloads/';
+	} else {
+		$upgrade_link = FrmAppHelper::maybe_add_missing_utm( 'https://formidableforms.com/lite-upgrade/', $utm );
+	}
 }
 ?>
 
