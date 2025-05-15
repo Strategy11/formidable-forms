@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesController {
 
+	/**
+	 * Tracks whether self::display_list() has been called to avoid multiple calls.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $has_displayed_list;
+
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
@@ -163,6 +172,7 @@ class FrmEntriesController {
 				}
 
 				if ( strpos( FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' ), 'bulk_' ) === 0 ) {
+					$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
 					FrmAppHelper::remove_get_action();
 					self::bulk_actions( $action );
 				}
@@ -623,6 +633,12 @@ class FrmEntriesController {
 	}
 
 	public static function display_list( $message = '', $errors = array() ) {
+		if ( self::$has_displayed_list ) {
+			return;
+		}
+
+		self::$has_displayed_list = true;
+
 		global $wpdb, $frm_vars;
 
 		$form   = FrmForm::maybe_get_current_form();
