@@ -15,7 +15,7 @@ const { span, svg, tag } = window.frmDom;
  * @param {HTMLElement} field Input field for tokenization
  * @return {HTMLElement|null} The container element or null if already initialized
  */
-export function createTokenContainer( field ) {
+export function createTokenContainerElement( field ) {
 	// Get the main container (.frm-with-right-icon) to work with Formidable's modal system
 	const container = field.closest( `.${ CLASS_NAMES.WITH_RIGHT_ICON }` );
 
@@ -51,7 +51,7 @@ export function createTokenContainer( field ) {
  * @param {HTMLElement} tokensWrapper Wrapper element for tokens
  * @return {void}
  */
-export function createToken( value, tokensWrapper ) {
+export function createTokenElement( value, tokensWrapper ) {
 	const tokenElement = span({
 		className: CLASS_NAMES.TOKEN,
 		children: [

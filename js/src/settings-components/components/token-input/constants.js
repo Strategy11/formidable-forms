@@ -20,7 +20,8 @@ export const KEYS = {
 	SPACE: ' ',
 	ENTER: 'Enter',
 	COMMA: ',',
-	TAB: 'Tab'
+	TAB: 'Tab',
+	BACKSPACE: 'Backspace'
 };
 
 export const HOOKS = {

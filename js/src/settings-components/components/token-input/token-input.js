@@ -8,8 +8,8 @@
  * Internal dependencies
  */
 import { HOOKS, CLASS_NAMES } from './constants';
-import { createTokenContainer } from './token-elements';
-import { createTokensFromValue } from './token-actions';
+import { createTokenContainerElement } from './token-elements';
+import { synchronizeTokensDisplay } from './token-utils';
 import { adjustAllTokenInputStyles } from './token-style';
 import { addEventListeners } from './event-handlers';
 
@@ -58,7 +58,7 @@ function findAndInitializeTokenFields() {
  * @param {HTMLElement} field Input field for tokenization
  */
 function setupTokenInput( field ) {
-	const container = createTokenContainer( field );
+	const container = createTokenContainerElement( field );
 
 	if ( ! container ) {
 		return;
@@ -67,7 +67,7 @@ function setupTokenInput( field ) {
 	const tokensWrapper = container.querySelector( `.${ CLASS_NAMES.TOKENS_WRAPPER }` );
 	const displayInput = container.querySelector( `.${ CLASS_NAMES.TOKEN_DISPLAY_INPUT }` );
 
-	createTokensFromValue( field.value, tokensWrapper );
+	synchronizeTokensDisplay( field.value, tokensWrapper );
 	addEventListeners( field, displayInput, tokensWrapper );
 }
 
