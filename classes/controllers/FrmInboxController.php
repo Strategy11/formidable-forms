@@ -54,7 +54,7 @@ class FrmInboxController {
 	 */
 	public static function dismiss_message() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
-		FrmAppHelper::permission_check( 'frm_change_settings' );
+		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
 		if ( ! empty( $key ) ) {
