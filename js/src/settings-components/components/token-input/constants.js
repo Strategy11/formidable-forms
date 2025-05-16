@@ -26,3 +26,6 @@ export const KEYS = {
 export const HOOKS = {
 	SHOW_FIELD_SETTINGS: 'frmShowedFieldSettings'
 };
+
+export const DISPLAY_INPUT_HEIGHT = 36;
+export const TOKEN_GAP = 4;

@@ -6,7 +6,7 @@
 
 import { CLASS_NAMES, KEYS } from './constants';
 import { addTokenFromInput, createTokensFromValue } from './token-actions';
-import { adjustTokenInputPadding } from './token-style';
+import { adjustTokenInputStyle } from './token-style';
 
 /**
  * Handle keydown events on the display input field
@@ -56,6 +56,7 @@ export function handleTokenRemoval( event, field ) {
 	jQuery( field ).trigger( 'change' );
 
 	token.remove();
+
 	adjustTokenInputPadding( tokensWrapper );
 
 	// Focus the input field after token removal

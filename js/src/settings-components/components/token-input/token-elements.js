@@ -5,7 +5,7 @@
  */
 
 import { CLASS_NAMES } from './constants';
-import { adjustTokenInputPadding } from './token-style';
+import { adjustTokenInputStyle } from './token-style';
 
 const { span, svg, tag } = window.frmDom;
 
@@ -67,5 +67,5 @@ export function createToken( value, tokensWrapper ) {
 	});
 
 	tokensWrapper.appendChild( tokenElement );
-	adjustTokenInputPadding( tokensWrapper );
+	adjustTokenInputStyle( tokensWrapper );
 }

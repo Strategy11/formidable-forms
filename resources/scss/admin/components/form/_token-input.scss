@@ -11,6 +11,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
+		max-width: calc(100% - 38px);
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
@@ -31,6 +32,7 @@
 		font-size: var(--text-md);
 		line-height: 1;
 		white-space: nowrap;
+		z-index: 2;
 
 		.frm-token-remove {
 			display: flex;
@@ -48,5 +50,15 @@
 				color: var(--error-500);
 			}
 		}
+	}
+
+	.frm-show-inline-modal {
+		z-index: 3 !important;
+	}
+
+	.frm-token-display-input {
+		position: relative;
+		z-index: 1;
+		padding-right: 38px !important;
 	}
 }

@@ -10,7 +10,7 @@
 import { HOOKS, CLASS_NAMES } from './constants';
 import { createTokenContainer } from './token-elements';
 import { createTokensFromValue } from './token-actions';
-import { adjustAllTokenInputPaddings } from './token-style';
+import { adjustAllTokenInputStyles } from './token-style';
 import { addEventListeners } from './event-handlers';
 
 /**
@@ -21,8 +21,8 @@ import { addEventListeners } from './event-handlers';
 function initTokenInputFields() {
 	findAndInitializeTokenFields();
 
-	// Adjust padding for all token inputs when field settings are shown
-	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllTokenInputPaddings );
+	// Adjust styling for all token inputs when field settings are shown
+	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllTokenInputStyles );
 }
 
 /**
