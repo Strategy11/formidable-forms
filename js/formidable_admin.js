@@ -970,8 +970,7 @@ function frmAdminBuildJS() {
 		return droppable;
 	}
 
-	function handleFieldDrop( _, ui ) {
-		
+	function handleFieldDrop( event, ui ) {
 		if ( ! dragState.dragging ) {
 			// dragState.dragging is set to true on drag start.
 			// The deactivate event gets called for every droppable. This check to make sure it happens once.
@@ -996,7 +995,7 @@ function frmAdminBuildJS() {
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
-			insertNewFieldByDragging( draggable.id, _ );
+			insertNewFieldByDragging( draggable.id, event );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
@@ -1588,8 +1587,9 @@ function frmAdminBuildJS() {
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
+	 * @param {Event}  event
 	 */
-	function insertNewFieldByDragging( fieldType, event ) {
+	function insertNewFieldByDragging( fieldType, event ) {		
 		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
 			return;
 		}
