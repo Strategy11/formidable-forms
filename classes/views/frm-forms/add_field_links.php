@@ -178,9 +178,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								FrmFieldsHelper::inline_modal(
 									array(
-										'title'    => __( 'Add Layout Classes', 'formidable' ),
-										'callback' => array( 'FrmFieldsHelper', 'layout_classes' ),
-										'id'       => 'frm-layout-classes-box',
+										'callback'   => array( 'FrmFieldsHelper', 'layout_classes' ),
+										'id'         => 'frm-layout-classes-box',
+										'close-icon' => false,
 									)
 								);
 

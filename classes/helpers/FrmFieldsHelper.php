@@ -693,6 +693,7 @@ class FrmFieldsHelper {
 			'args'         => array(),
 			'title'        => '',
 			'inside_class' => 'inside',
+			'close-icon'   => true,
 		);
 		$args     = array_merge( $defaults, $args );
 

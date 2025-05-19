@@ -10,6 +10,9 @@ p.frm_has_shortcodes {
 
 .frm-inline-modal.postbox {
 	background: #fff;
+	border-color: var(--grey-100);
+	border-radius: var(--small-radius);
+	box-shadow: var(--box-shadow-lg);
 }
 
 .frm_has_shortcodes .frmsvg,

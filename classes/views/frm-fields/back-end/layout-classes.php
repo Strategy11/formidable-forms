@@ -4,9 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm-layout-classes">
-	<p class="howto">
-		<?php esc_html_e( 'Click on any box below to set the width for your selected field.', 'formidable' ); ?>
-	</p>
 	<ul class="frm_code_list frm_grid_container">
 		<li class="frm_half frm_form_field">
 			<a href="javascript:void(0);" data-code="frm_half" class="frm_insert_code show_frm_classes">
@@ -27,23 +24,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<h4 class="frm-with-line">
-		<span><?php esc_html_e( 'Other Style Classes', 'formidable' ); ?></span>
-	</h4>
-	<ul class="frm_code_list frm-full-hover">
-		<?php
-		foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
-			$title = ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ? $d['title'] : '';
-			?>
-			<li>
-				<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
-					<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
-					<span><?php echo esc_html( $c ); ?></span>
-				</a>
-			</li>
+	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Other Style Classes', 'formidable' ); ?>" aria-controls="collapsible-section">
+		<?php esc_html_e( 'Other Style Classes', 'formidable' ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
+	</h3>
+
+	<div class="frm_grid_container frm-collapse-me" role="group">
+		<ul class="frm_code_list frm-full-hover">
 			<?php
-			unset( $c, $d );
-		}
-		?>
-	</ul>
+			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
+				$title = ! empty( $d ) && is_array( $d ) && isset( $d['title'] ) ? $d['title'] : '';
+				?>
+				<li>
+					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
+						<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
+						<span><?php echo esc_html( $c ); ?></span>
+					</a>
+				</li>
+				<?php
+				unset( $c, $d );
+			}
+			?>
+		</ul>
+	</div>
 </div>

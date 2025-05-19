@@ -116,16 +116,19 @@
 }
 
 .frm_code_list.frm_grid_container a {
-	padding: 5px 0;
-	text-align: center;
-	background-color: var(--light-blue);
-	border: 1px solid var(--primary-500);
-	color: var(--primary-500);
 	display: block;
+	font-size: var(--text-md) !important;
+	font-weight: 600;
+	text-align: center;
+	color: var(--primary-500);
+	background-color: var(--light-blue);
+	border: 1px solid var(--primary-300);
 	border-radius: var(--small-radius);
+	padding: 10px 0;
+	box-shadow: var(--box-shadow-sm);
 }
 
 .frm_code_list.frm_grid_container a:hover {
-	background-color: var(--primary-700);
+	background-color: var(--primary-500);
 	color: #fff;
 }
