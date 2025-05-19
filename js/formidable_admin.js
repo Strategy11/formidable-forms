@@ -1572,6 +1572,18 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_in_section_' + fieldId ).value = sectionId;
 	}
 
+	function getInsertNewFieldArgs( fieldType, formId, hasBreak ) {
+		let args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: 0,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
+	}
 	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
@@ -1606,19 +1618,9 @@ function frmAdminBuildJS() {
 			hasBreak = jQuery( '.frmbutton_loadingnow#' + loadingID ).prevAll( 'li[data-type="break"]' ).length ? 1 : 0;
 		}
 
-		let args = {
-			action: 'frm_insert_field',
-			form_id: formId,
-			field_type: fieldType,
-			section_id: 0,
-			nonce: frmGlobal.nonce,
-			has_break: hasBreak,
-			last_row_field_ids: getFieldIdsInSubmitRow()
-		};
-		args = wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
 		jQuery.ajax({
 			type: 'POST', url: ajaxurl,
-			data: args,
+			data: getInsertNewFieldArgs( fieldType, formId, hasBreak ),
 			success: function( msg ) {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -2021,20 +2023,11 @@ function frmAdminBuildJS() {
 			return;
 		}
 		const formId = thisFormId;
-		let args = {
-			action: 'frm_insert_field',
-			form_id: formId,
-			field_type: fieldType,
-			section_id: 0,
-			nonce: frmGlobal.nonce,
-			has_break: hasBreak,
-			last_row_field_ids: getFieldIdsInSubmitRow()
-		};
-		args = wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
+
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: args,
+			data: getInsertNewFieldArgs( fieldType, formId, hasBreak ),
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
