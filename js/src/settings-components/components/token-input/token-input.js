@@ -9,8 +9,8 @@
  */
 import { HOOKS, CLASS_NAMES } from './constants';
 import { createTokenContainerElement } from './token-elements';
-import { synchronizeTokensDisplay } from './token-utils';
-import { adjustAllTokenInputStyles } from './token-style';
+import { synchronizeTokensDisplay } from './token-actions';
+import { adjustAllProxyInputStyles } from './proxy-input-style';
 import { addEventListeners } from './event-handlers';
 
 /**
@@ -22,7 +22,7 @@ function initTokenInputFields() {
 	findAndInitializeTokenFields();
 
 	// Adjust styling for all token inputs when field settings are shown
-	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllTokenInputStyles );
+	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllProxyInputStyles );
 }
 
 /**
@@ -64,11 +64,11 @@ function setupTokenInput( field ) {
 		return;
 	}
 
+	const proxyInput = container.querySelector( `.${ CLASS_NAMES.TOKEN_PROXY_INPUT }` );
 	const tokensWrapper = container.querySelector( `.${ CLASS_NAMES.TOKENS_WRAPPER }` );
-	const displayInput = container.querySelector( `.${ CLASS_NAMES.TOKEN_DISPLAY_INPUT }` );
 
-	synchronizeTokensDisplay( field.value, tokensWrapper );
-	addEventListeners( field, displayInput, tokensWrapper );
+	synchronizeTokensDisplay( field.value, proxyInput, tokensWrapper );
+	addEventListeners( field, proxyInput, tokensWrapper );
 }
 
 export { initTokenInputFields };

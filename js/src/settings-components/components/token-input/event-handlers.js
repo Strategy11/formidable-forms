@@ -5,57 +5,52 @@
  */
 
 import { CLASS_NAMES, KEYS } from './constants';
-import { addToken, removeLastToken, removeToken, synchronizeTokensDisplay } from './token-utils';
-import { adjustTokenInputStyle } from './token-style';
+import { addToken, removeToken, synchronizeTokensDisplay } from './token-actions';
+import { adjustProxyInputStyle } from './proxy-input-style';
 
 /**
  * Add event listeners to token input components
  *
  * @param {HTMLElement} field         The original hidden input field
- * @param {HTMLElement} displayInput  The display input field for interaction
+ * @param {HTMLElement} proxyInput    The proxy input field for interaction
  * @param {HTMLElement} tokensWrapper The wrapper for token display
  * @return {void}
  */
-export function addEventListeners( field, displayInput, tokensWrapper ) {
-	// Use jQuery change event to catch programmatic updates, as "Add Layout Classes" triggers value changes via jQuery
-	jQuery( field ).on( 'change', () => synchronizeTokensDisplay( field.value, tokensWrapper ) );
+export function addEventListeners( field, proxyInput, tokensWrapper ) {
+	// The jQuery change event is required to catch programmatic updates, as "Add Layout Classes" modifies the field value via jQuery
+	jQuery( field ).on( 'change', () => synchronizeTokensDisplay( field.value, proxyInput, tokensWrapper ) );
 
-	// Handle display input keydown and blur events
-	displayInput.addEventListener( 'keydown', event => onDisplayInputKeydown( event, field, displayInput ) );
-	displayInput.addEventListener( 'blur', () => addToken( field, displayInput, displayInput.value.trim() ) );
+	proxyInput.addEventListener( 'keydown', event => onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) );
+	proxyInput.addEventListener( 'blur', () => addToken( proxyInput.value.trim(), field, proxyInput ) );
 
-	// Handle token removal
-	tokensWrapper.addEventListener( 'click', event => handleTokenRemoval( event, field ) );
+	tokensWrapper.addEventListener( 'click', event => handleTokenRemoval( event, field, proxyInput ) );
 }
 
 /**
- * Handle keydown events on the display input field
+ * Handle keydown events on the proxy input field
  *
  * @private
  *
- * @param {Event}       event        Keydown event
- * @param {HTMLElement} field        The original hidden input field
- * @param {HTMLElement} displayInput The display input field for interaction
+ * @param {Event}       event         Keydown event
+ * @param {HTMLElement} field         The original hidden input field
+ * @param {HTMLElement} proxyInput    The proxy input field for interaction
+ * @param {HTMLElement} tokensWrapper The wrapper for token display
  * @return {void}
  */
-function onDisplayInputKeydown( event, field, displayInput ) {
+function onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) {
 	const key = event.key;
-	const value = displayInput.value.trim();
+	const value = proxyInput.value.trim();
 
-	// Handle backspace key separately
-	if ( key === KEYS.BACKSPACE && ! value ) {
+	if ( key === KEYS.BACKSPACE && ! value ) { // Handle token removal on backspace
 		event.preventDefault();
-		removeLastToken( field, displayInput );
-		adjustTokenInputStyle( tokensWrapper );
-		return;
+		const lastToken = tokensWrapper.querySelector( `.${ CLASS_NAMES.TOKEN }:last-child` );
+		removeToken( lastToken, field, proxyInput )
+	} else if ( [ KEYS.SPACE, KEYS.COMMA, KEYS.ENTER, KEYS.TAB ].includes( key ) ) { // Handle token creation keys
+		event.preventDefault();
+		addToken( value, field, proxyInput );
 	}
 
-	// Handle token creation keys
-	if ( [ KEYS.SPACE, KEYS.COMMA, KEYS.ENTER, KEYS.TAB ].includes( key ) ) {
-		event.preventDefault();
-		addToken( field, displayInput, value );
-		adjustTokenInputStyle( tokensWrapper );
-	}
+	adjustProxyInputStyle( proxyInput, tokensWrapper );
 }
 
 /**
@@ -63,11 +58,12 @@ function onDisplayInputKeydown( event, field, displayInput ) {
  *
  * @private
  *
- * @param {Event}       event Click event
- * @param {HTMLElement} field The original hidden input field
+ * @param {Event}       event      Click event
+ * @param {HTMLElement} field      The original hidden input field
+ * @param {HTMLElement} proxyInput The proxy input field for interaction
  * @return {void}
  */
-function handleTokenRemoval( event, field ) {
+function handleTokenRemoval( event, field, proxyInput ) {
 	const removeButton = event.target.closest( `.${ CLASS_NAMES.TOKEN_REMOVE }` );
 	if ( ! removeButton ) {
 		return;
@@ -80,6 +76,6 @@ function handleTokenRemoval( event, field ) {
 
 	const tokensWrapper = token.parentElement;
 
-	removeToken( field, token, tokensWrapper );
-	adjustTokenInputStyle( tokensWrapper );
+	removeToken( token, field, proxyInput );
+	adjustProxyInputStyle( proxyInput, tokensWrapper );
 }

@@ -11,7 +11,7 @@ export const CLASS_NAMES = {
 	TOKEN_VALUE: 'frm-token-value',
 	TOKEN_REMOVE: 'frm-token-remove',
 	TOKEN_INPUT_FIELD: 'frm-token-input-field',
-	TOKEN_DISPLAY_INPUT: 'frm-token-display-input',
+	TOKEN_PROXY_INPUT: 'frm-token-proxy-input',
 	HIDDEN: 'frm_hidden',
 	WITH_RIGHT_ICON: 'frm-with-right-icon'
 };
@@ -28,5 +28,5 @@ export const HOOKS = {
 	SHOW_FIELD_SETTINGS: 'frmShowedFieldSettings'
 };
 
-export const DISPLAY_INPUT_HEIGHT = 36;
+export const PROXY_INPUT_HEIGHT = 36;
 export const TOKEN_GAP = 4;

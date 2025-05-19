@@ -5,7 +5,6 @@
  */
 
 import { CLASS_NAMES } from './constants';
-import { adjustTokenInputStyle } from './token-style';
 
 const { span, svg, tag } = window.frmDom;
 
@@ -31,14 +30,14 @@ export function createTokenContainerElement( field ) {
 
 	container.insertBefore( tokensWrapper, container.firstChild );
 
-	const displayInput = tag( 'input', {
-		className: CLASS_NAMES.TOKEN_DISPLAY_INPUT
+	const proxyInput = tag( 'input', {
+		className: CLASS_NAMES.TOKEN_PROXY_INPUT
 	});
 
-	displayInput.type = 'text';
+	proxyInput.type = 'text';
 
-	// Inserting displayInput after the field is important to maintain compatibility with Formidable's modal system
-	field.parentNode.insertBefore( displayInput, field.nextSibling );
+	// Inserting proxyInput after the field is important to maintain compatibility with Formidable's modal system
+	field.parentNode.insertBefore( proxyInput, field.nextSibling );
 	field.classList.add( CLASS_NAMES.HIDDEN );
 
 	return container;
@@ -67,5 +66,4 @@ export function createTokenElement( value, tokensWrapper ) {
 	});
 
 	tokensWrapper.appendChild( tokenElement );
-	adjustTokenInputStyle( tokensWrapper );
 }

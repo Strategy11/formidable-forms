@@ -11,7 +11,7 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		max-width: calc(100% - 38px);
+		max-width: calc(100% - var(--gap-xl));
 		display: flex;
 		align-items: center;
 		flex-wrap: wrap;
@@ -56,9 +56,9 @@
 		z-index: 3 !important;
 	}
 
-	.frm-token-display-input {
+	.frm-token-proxy-input {
 		position: relative;
 		z-index: 1;
-		padding-right: 38px !important;
+		padding-right: var(--gap-xl) !important;
 	}
 }
