@@ -121,25 +121,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <p>
 	<label>
-		<input type="checkbox" name="frm_denylist_check" value="1" <?php checked( $frm_settings->denylist_check, 1 ); ?> />
+		<input type="checkbox" name="frm_denylist_check" data-toggleclass="frm-denylist-settings" value="1" <?php checked( $frm_settings->denylist_check, 1 ); ?> />
 		<?php esc_html_e( 'Check denylist data to validate for spam', 'formidable' ); ?>
 	</label>
 </p>
 
-<p>
-	<label for="frm-disallowed-words">
-		<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
-		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
-	</label>
-	<textarea id="frm-disallowed-words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
-</p>
+<div class="frm-denylist-settings <?php echo $frm_settings->denylist_check ? '' : 'frm_hidden'; ?>">
+	<p>
+		<label for="frm-disallowed-words">
+			<?php esc_html_e( 'Custom disallowed words', 'formidable' ); ?>
+			<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+		</label>
+		<textarea id="frm-disallowed-words" name="frm_disallowed_words"><?php echo esc_textarea( $frm_settings->disallowed_words ); ?></textarea>
+	</p>
 
-<p>
-	<label for="frm-allowed-words">
-		<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
-		<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
-	</label>
-	<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+	<p>
+		<label for="frm-allowed-words">
+			<?php esc_html_e( 'Custom allowed words', 'formidable' ); ?>
+			<?php FrmAppHelper::tooltip_icon( __( 'Each word is on one line.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
+		</label>
+		<textarea id="frm-allowed-words" name="frm_allowed_words"><?php echo esc_textarea( $frm_settings->allowed_words ); ?></textarea>
+	</p>
+
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
 	if ( ! empty( $transient ) ) {
@@ -151,4 +154,4 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 	}
 	?>
-</p>
+</div><!-- End .frm-denylist-settings -->
