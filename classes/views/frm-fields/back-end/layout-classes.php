@@ -24,12 +24,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Other Style Classes', 'formidable' ); ?>" aria-controls="collapsible-section">
+	<h3 class="frm-collapsed" role="button" aria-expanded="false" tabindex="0" aria-label="<?php esc_attr_e( 'Other Style Classes', 'formidable' ); ?>" aria-controls="collapsible-section">
 		<?php esc_html_e( 'Other Style Classes', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
 
-	<div class="frm_grid_container frm-collapse-me" role="group">
+	<div class="frm-collapse-me frm-slide-down" role="group">
 		<ul class="frm_code_list frm-full-hover">
 			<?php
 			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {

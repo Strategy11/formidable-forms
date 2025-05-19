@@ -16,6 +16,12 @@
 }
 /* END fadeIn */
 
+/* slide down */
+.frm-slide-down {
+	animation: slideDown 600ms ease-out forwards;
+}
+/* END slide down */
+
 /* cascadeFadeIn */
 .frm-init-cascade-animation {
 	transform: translateY( 0px );
@@ -91,5 +97,22 @@
 	100% {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+@keyframes slideDown {
+	0% {
+		max-height: 0;
+		opacity: 0;
+		overflow: hidden;
+	}
+
+	50% {
+		opacity: 1;
+	}
+
+	100% {
+		max-height: 1000px;
+		overflow: visible;
 	}
 }

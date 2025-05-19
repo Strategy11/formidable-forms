@@ -79,4 +79,8 @@
 .frm-collapsed + div {
 	height: 0;
 	padding: 0;
+
+	&.frm-slide-down {
+		display: none;
+	}
 }
