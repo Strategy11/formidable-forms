@@ -429,6 +429,7 @@ class FrmSettings {
 			'summary_emails',
 			'honeypot',
 			'wp_spam_check',
+			'denylist_check',
 		);
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
