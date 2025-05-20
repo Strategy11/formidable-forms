@@ -971,6 +971,7 @@ function frmAdminBuildJS() {
 	}
 
 	function handleFieldDrop( event, ui ) {
+		
 		if ( ! dragState.dragging ) {
 			// dragState.dragging is set to true on drag start.
 			// The deactivate event gets called for every droppable. This check to make sure it happens once.

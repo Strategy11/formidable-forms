@@ -131,7 +131,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @param array $display The display settings for the field.
 		 * @param array $values  The values associated with the field.
 		 */
-		do_action( 'frm_after_number_range', $field, $display, $values );
+		do_action( 'frm_after_number_range_option', $field, $display, $values );
 
 		if ( $display['format'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/format-dropdown.php';
