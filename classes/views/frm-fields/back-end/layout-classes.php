@@ -24,10 +24,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</ul>
 
-	<h3 class="frm-collapsed" role="button" aria-expanded="false" tabindex="0" aria-label="<?php esc_attr_e( 'Other Style Classes', 'formidable' ); ?>" aria-controls="collapsible-section">
+	<h4 class="frm-collapsible frm-collapsed" role="button" aria-expanded="false" tabindex="0" aria-label="<?php esc_attr_e( 'Other Style Classes', 'formidable' ); ?>" aria-controls="collapsible-section">
 		<?php esc_html_e( 'Other Style Classes', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
-	</h3>
+	</h4>
 
 	<div class="frm-collapse-me frm-slide-down" role="group">
 		<ul class="frm_code_list frm-full-hover">
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<li>
 					<a href="javascript:void(0);" data-code="<?php echo esc_attr( $c ); ?>" class="frm_insert_code show_frm_classes<?php echo esc_attr( ! empty( $title ) ? ' frm_help' : '' ); ?>" <?php echo ( ! empty( $title ) ? ' title="' . esc_attr( $title ) . '"' : '' ); ?>>
-						<?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?>
+						<span><?php echo esc_html( FrmFormsHelper::style_class_label( $d, $c ) ); ?></span>
 						<span><?php echo esc_html( $c ); ?></span>
 					</a>
 				</li>

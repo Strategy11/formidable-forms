@@ -19,7 +19,10 @@ import { addEventListeners } from './event-handlers';
  * @return {void}
  */
 function initTokenInputFields() {
+	// Initialize for existing fields
 	findAndInitializeTokenFields();
+	// Initialize for newly added fields
+	document.addEventListener( 'frm_added_field', findAndInitializeTokenFields );
 
 	// Adjust styling for all token inputs when field settings are shown
 	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllProxyInputStyles );

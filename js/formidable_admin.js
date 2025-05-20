@@ -10680,8 +10680,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
-			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
-			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
+			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
 				if ( event.key === 'Enter' || event.key === ' ' ) {
 					event.preventDefault();
