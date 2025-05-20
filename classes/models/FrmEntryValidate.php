@@ -232,6 +232,10 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		if ( ! empty( $field->field_options['post_field'] ) ) {
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
