@@ -248,6 +248,7 @@ class FrmEntryValidate {
 				}
 
 				$option_value = is_array( $option ) ? $option['value'] : $option;
+				$option_value = do_shortcode( $option_value );
 				$match        = $current_value === $option_value;
 				if ( $match ) {
 					break;
@@ -283,7 +284,9 @@ class FrmEntryValidate {
 		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 
 		$map_callback = function ( $option ) {
-			return is_array( $option ) ? $option['value'] : $option;
+			$option_value = is_array( $option ) ? $option['value'] : $option;
+			$option_value = do_shortcode( $option_value );
+			return $option_value;
 		};
 
 		$values_options       = array_map( $map_callback, $values['options'] );
