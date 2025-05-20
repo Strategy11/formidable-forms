@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.21
+Stable tag: 6.21.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,14 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.21.1 =
+* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
+* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
+* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
+* New: All spam checks are now disabled when importing forms.
+* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
+* Fix: User defined product fields would fail validation.
+
 = 6.21 =
 * New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
 * New: A new setting to validate form entries for spam against the stopforumspam API have been added to form settings. When this is enabled, IPs and email addresses will be validated against a spam database.

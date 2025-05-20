@@ -61,11 +61,6 @@ echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['befo
 <?php } ?>
 <?php
 if ( ! $only_contain_submit ) {
-	$max_field_id = 0;
-	foreach ( $values['fields'] as $field ) {
-		$max_field_id = max( (int) $field['id'], $max_field_id );
-	}
-
 	/**
 	 * Allows modifying the list of fields in the frontend form.
 	 *
@@ -96,7 +91,7 @@ if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !==
 	?>
 	<input type="hidden" name="item_key" value="<?php echo esc_attr( $values['item_key'] ); ?>" />
 	<?php
-	FrmHoneypot::maybe_render_field( $form->id, $max_field_id ? $max_field_id + 1 : 0 );
+	FrmHoneypot::maybe_render_field( $form->id );
 	FrmFormState::maybe_render_state_field( $form );
 }
 
