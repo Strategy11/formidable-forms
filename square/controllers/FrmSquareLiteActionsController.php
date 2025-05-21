@@ -238,7 +238,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'limit'      => $action->post_content['payment_limit'],
 				'amount'     => $atts['amount'],
 				'currency'   => $currency,
-				'cadence'    => $action->post_content['repeat_cadence'],
+				'cadence'    => $action->post_content['repeat_cadence'] ?? 'DAILY',
 			),
 		);
 
@@ -255,11 +255,46 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$response = FrmSquareLiteConnectHelper::create_subscription( $info );
 
-		if ( is_object( $response ) && isset( $response->id ) ) {
-			return true;
+		if ( is_string( $response ) ) {
+			return $response;
 		}
 
-		return is_string( $response ) ? $response : __( 'There was a problem creating the subscription', 'formidable' );
+		if ( ! is_object( $response ) || ! isset( $response->id ) ) {
+			return __( 'There was a problem creating the subscription', 'formidable' );
+		}
+
+		// Add subscription database row.
+		// We do not add a payment row at this time. This is handled with our webhook handling.
+		$subscription_id = self::create_new_subscription( $response->id, $atts );
+
+		return true;
+	}
+
+	/**
+	 * Create a new subscription and payment for the payments tables.
+	 *
+	 * @param int    $subscription_id
+	 * @param array  $atts
+	 * @return int
+	 */
+	private static function create_new_subscription( $subscription_id, $atts ) {
+		$new_values = array(
+			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['amount'], $atts['action'] ),
+			'paysys'         => 'square',
+			'item_id'        => $atts['entry']->id,
+			'action_id'      => $atts['action']->ID,
+			'sub_id'         => $subscription_id,
+			'interval_count' => $atts['action']->post_content['interval_count'],
+			'time_interval'  => $atts['action']->post_content['interval'],
+			'status'         => 'active',
+			'next_bill_date' => gmdate( 'Y-m-d' ),
+			'test'           => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_payment = new FrmTransLiteSubscription();
+		$payment_id  = $frm_payment->create( $new_values );
+
+		return $payment_id;
 	}
 
 	/**
