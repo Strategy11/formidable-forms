@@ -161,8 +161,30 @@ class FrmSquareLiteEventsController {
 	 * @return void
 	 */
 	private function handle_event() {
+		switch ( $this->event->type ) {
+			case 'payment.created':
+				break;
+			case 'payment.updated':
+				$payment_id   = $this->event->data->id;
+				$subscription = FrmSquareLiteConnectHelper::get_subscription_id_for_payment( $payment_id );
+
+				if ( is_object( $subscription ) && isset( $subscription->id ) ) {
+					$subscription_id = $subscription->id;
+
+					// TODO: Add the payment record to the database. Use the subscription ID as well.
+					echo 'TODO: Handle subscription ' . $subscription_id;
+					die();
+				}
+
+				break;
+			case 'subscription.updated':
+				break;
+		}
+
+		// TODO: Handle the event.
 		echo 'Handle event';
 		echo '<br/>';
+		echo '<pre>';
 		var_dump( $this->event );
 		die();
 	}

@@ -556,4 +556,12 @@ class FrmSquareLiteConnectHelper {
 	public static function process_event( $event_id ) {
 		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
 	}
+
+	public static function get_payment( $payment_id ) {
+		return self::post_with_authenticated_body( 'get_payment', compact( 'payment_id' ) );
+	}
+
+	public static function get_subscription_id_for_payment( $payment_id ) {
+		return self::post_with_authenticated_body( 'get_subscription_id_for_payment', compact( 'payment_id' ) );
+	}
 }
