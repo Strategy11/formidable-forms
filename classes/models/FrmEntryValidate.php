@@ -228,6 +228,14 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		if ( 'product' === $field->type && 'user_def' === FrmField::get_option( $field, 'data_type' ) ) {
+			return true;
+		}
+
+		if ( ! empty( $field->field_options['post_field'] ) ) {
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
@@ -240,6 +248,7 @@ class FrmEntryValidate {
 				}
 
 				$option_value = is_array( $option ) ? $option['value'] : $option;
+				$option_value = do_shortcode( $option_value );
 				$match        = $current_value === $option_value;
 				if ( $match ) {
 					break;
@@ -275,7 +284,9 @@ class FrmEntryValidate {
 		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 
 		$map_callback = function ( $option ) {
-			return is_array( $option ) ? $option['value'] : $option;
+			$option_value = is_array( $option ) ? $option['value'] : $option;
+			$option_value = do_shortcode( $option_value );
+			return $option_value;
 		};
 
 		$values_options       = array_map( $map_callback, $values['options'] );
@@ -422,6 +433,11 @@ class FrmEntryValidate {
 	 * @param array $errors By reference.
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
+		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
+			// Do not check spam on importing.
+			return;
+		}
+
 		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;

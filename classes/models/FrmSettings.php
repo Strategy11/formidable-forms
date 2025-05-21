@@ -95,6 +95,8 @@ class FrmSettings {
 
 	public $wp_spam_check;
 
+	public $denylist_check;
+
 	public $disallowed_words;
 
 	public $allowed_words;
@@ -173,6 +175,7 @@ class FrmSettings {
 			'custom_css'                => false,
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
+			'denylist_check'            => 0,
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
 		);
@@ -426,6 +429,7 @@ class FrmSettings {
 			'summary_emails',
 			'honeypot',
 			'wp_spam_check',
+			'denylist_check',
 		);
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
