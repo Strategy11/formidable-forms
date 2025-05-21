@@ -40,5 +40,9 @@ class FrmSquareLiteHooksController {
 
 		add_action( 'wp_ajax_frm_verify_buyer', 'FrmSquareLiteAppController::verify_buyer' );
 		add_action( 'wp_ajax_nopriv_frm_verify_buyer', 'FrmSquareLiteAppController::verify_buyer' );
+
+		$frm_square_events_controller = new FrmSquareLiteEventsController();
+		add_action( 'wp_ajax_nopriv_frm_square_process_events', array( &$frm_square_events_controller, 'process_events' ) );
+		add_action( 'wp_ajax_frm_square_process_events', array( &$frm_square_events_controller, 'process_events' ) );
 	}
 }

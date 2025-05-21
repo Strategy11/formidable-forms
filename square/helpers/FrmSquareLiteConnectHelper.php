@@ -516,4 +516,44 @@ class FrmSquareLiteConnectHelper {
 		}
 		return false;
 	}
+
+	/**
+	 * @return array
+	 */
+	public static function get_unprocessed_event_ids() {
+		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+		if ( false === $data || empty( $data->event_ids ) ) {
+			return array();
+		}
+		return $data->event_ids;
+	}
+
+	/**
+	 * @param string $event_id
+	 * @return false|object
+	 */
+	public static function get_event( $event_id ) {
+		$event = wp_cache_get( $event_id, 'frm_square' );
+		if ( is_object( $event ) ) {
+			return $event;
+		}
+
+		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+
+		if ( false === $event || empty( $event->event ) ) {
+			return false;
+		}
+
+		wp_cache_set( $event_id, $event->event, 'frm_square' );
+
+		return $event->event;
+	}
+
+	/**
+	 * @param string $event_id
+	 * @return mixed
+	 */
+	public static function process_event( $event_id ) {
+		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
+	}
 }
