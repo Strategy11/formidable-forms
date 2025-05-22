@@ -254,13 +254,18 @@ class FrmEntryValidate {
 					break;
 				}
 
+				$match = $current_value === trim( $option_value );
+				if ( $match ) {
+					break;
+				}
+
 				if ( is_numeric( $current_value ) ) {
 					$match = (int) $current_value === (int) $option_value;
 					if ( $match ) {
 						break;
 					}
 				}
-			}
+			}//end foreach
 
 			if ( ! $match ) {
 				return self::options_are_dynamic_based_on_hook( $field, $value );
