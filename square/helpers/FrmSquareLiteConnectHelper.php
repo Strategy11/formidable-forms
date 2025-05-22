@@ -564,4 +564,8 @@ class FrmSquareLiteConnectHelper {
 	public static function get_subscription_id_for_payment( $payment_id ) {
 		return self::post_with_authenticated_body( 'get_subscription_id_for_payment', compact( 'payment_id' ) );
 	}
+
+	public static function cancel_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+	}
 }
