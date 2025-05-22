@@ -265,7 +265,7 @@ class FrmEntryValidate {
 						break;
 					}
 				}
-			}
+			}//end foreach
 
 			if ( ! $match ) {
 				return self::options_are_dynamic_based_on_hook( $field, $value );
