@@ -170,10 +170,7 @@ class FrmSquareLiteEventsController {
 
 				if ( is_object( $subscription ) && isset( $subscription->id ) ) {
 					$subscription_id = $subscription->id;
-
-					// TODO: Add the payment record to the database. Use the subscription ID as well.
-					echo 'TODO: Handle subscription ' . $subscription_id;
-					die();
+					$this->add_subscription_payment( $subscription_id );
 				}
 
 				break;
@@ -187,5 +184,15 @@ class FrmSquareLiteEventsController {
 		echo '<pre>';
 		var_dump( $this->event );
 		die();
+	}
+
+	/**
+	 * Add a payment row for the payments table.
+	 *
+	 * @param int $subscription_id
+	 * @return void
+	 */
+	private function add_subscription_payment( $subscription_id ) {
+		
 	}
 }
