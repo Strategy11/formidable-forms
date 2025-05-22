@@ -172,17 +172,22 @@ class FrmSquareLiteEventsController {
 				}
 				break;
 			case 'payment.updated':
+				$payment_id  = $this->event->data->id;
+				$frm_payment = new FrmTransLitePayment();
+				$payment     = $frm_payment->get_one_by( $payment_id, 'receipt_id' );
+
+				if ( $payment ) {
+					$status = $this->event->data->object->payment->status;
+
+					if ( 'COMPLETED' === $status ) {
+						$frm_payment->update( $payment->id, array( 'status' => 'complete' ) );
+					}
+					return;
+				}
 				break;
 			case 'subscription.updated':
 				break;
 		}
-
-		// TODO: Handle the event.
-		echo 'Handle event';
-		echo '<br/>';
-		echo '<pre>';
-		var_dump( $this->event );
-		die();
 	}
 
 	/**
