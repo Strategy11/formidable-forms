@@ -180,12 +180,24 @@ class FrmSquareLiteEventsController {
 					$status = $this->event->data->object->payment->status;
 
 					if ( 'COMPLETED' === $status ) {
+						// TODO Trigger "Payment complete" actions.
 						$frm_payment->update( $payment->id, array( 'status' => 'complete' ) );
 					}
 					return;
 				}
 				break;
 			case 'subscription.updated':
+				$subscription_id = $this->event->data->id;
+				$frm_sub = new FrmTransLiteSubscription();
+				$sub     = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
+
+				if ( $sub ) {
+					$status = $this->event->data->object->subscription->status;
+
+					if ( 'DEACTIVATED' === $status ) {
+						// TODO: Mark subscription as cancelled.
+					}
+				}
 				break;
 		}
 	}
