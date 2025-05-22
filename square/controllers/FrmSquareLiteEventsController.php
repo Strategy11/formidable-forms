@@ -163,8 +163,6 @@ class FrmSquareLiteEventsController {
 	private function handle_event() {
 		switch ( $this->event->type ) {
 			case 'payment.created':
-				break;
-			case 'payment.updated':
 				$payment_id   = $this->event->data->id;
 				$subscription = FrmSquareLiteConnectHelper::get_subscription_id_for_payment( $payment_id );
 
@@ -172,7 +170,8 @@ class FrmSquareLiteEventsController {
 					$subscription_id = $subscription->id;
 					$this->add_subscription_payment( $subscription_id );
 				}
-
+				break;
+			case 'payment.updated':
 				break;
 			case 'subscription.updated':
 				break;
@@ -189,10 +188,40 @@ class FrmSquareLiteEventsController {
 	/**
 	 * Add a payment row for the payments table.
 	 *
-	 * @param int $subscription_id
+	 * @param string $subscription_id The Square ID for the current subscription.
 	 * @return void
 	 */
 	private function add_subscription_payment( $subscription_id ) {
-		
+		$payment_id = $this->event->data->id;
+
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one_by( $payment_id, 'receipt_id' );
+
+		if ( $payment ) {
+			// Avoid adding the same payment twice.
+			return;
+		}
+
+		$frm_sub = new FrmTransLiteSubscription();
+		$sub     = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
+		if ( ! $sub ) {
+			return;
+		}
+
+		$payment_object = $this->event->data->object->payment;
+
+		$frm_payment = new FrmTransLitePayment();
+		$frm_payment->create(
+			array(
+				'paysys'     => 'square',
+				'amount'     => $payment_object->amount_money->amount / 100,
+				'status'     => 'pending',
+				'item_id'    => $sub->item_id,
+				'action_id'  => $sub->action_id,
+				'receipt_id' => $payment_id,
+				'sub_id'     => $sub->id,
+				'test'       => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
+			)
+		);
 	}
 }
