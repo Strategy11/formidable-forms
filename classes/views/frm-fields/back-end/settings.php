@@ -172,15 +172,60 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		<?php esc_html_e( 'Advanced', 'formidable' ); ?>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 	</h3>
-	<div class="frm_grid_container frm-collapse-me" role="group">
 
+	<div class="frm_grid_container frm-collapse-me" role="group">
 		<?php if ( $display['default'] ) { ?>
-			<div class="frm-has-modal">
+			<div class="frm-has-modal frm-flex-col">
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
-				<?php do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) ); ?>
+
+				<div class="frm-flex-col frm-gap-sm frm-mb-sm">
+					<?php
+					foreach ( $default_value_types as $type => $default_value_type ) {
+						if ( 'default_value' === $type ) {
+							continue;
+						}
+
+						$toggle_args = array(
+							'echo'        => true,
+							'checked'     => false,
+							'show_labels' => true,
+							'on_label'    => $default_value_type['title'],
+							'input_html'  => array(
+								'data-toggleclass' => 'frm_hidden frm-open',
+								'class'            => 'frm-default-switcher-toggle ' . $default_value_type['class'],
+							),
+						);
+
+						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
+						}
+
+						if ( isset( $default_value_type['data']['frmshow'] ) ) {
+							$toggle_args['input_html']['data-frmhide'] = '.frm-inline-modal,.default-value-section-' . $field['id'];
+						}
+
+						FrmHtmlHelper::toggle(
+							'frm-default-type-toggle-input-' . $field['id'],
+							'default_type_toggle_input[' . $field['id'] . ']',
+							$toggle_args
+						);
+					}//end foreach
+					?>
+				</div>
+
+				<?php
+				/**
+				 * Fires after printing the default value setting.
+				 *
+				 * @param array $field
+				 * @param array $display
+				 * @param array $default_value_types
+				 */
+				do_action( 'frm_default_value_setting', compact( 'field', 'display', 'default_value_types' ) );
+				?>
 			</div>
 			<?php
-		}
+		}//end if
 
 		$field_obj->show_after_default( compact( 'field', 'display' ) );
 
@@ -188,7 +233,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			?>
 			<p>
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
-					<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
+				<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
 				</label>
 				<?php
 				if ( $display['type'] === 'textarea' || $display['type'] === 'rte' ) {
@@ -204,7 +249,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				}
 				?>
 			</p>
-			<?php
+				<?php
 		}//end if
 		?>
 

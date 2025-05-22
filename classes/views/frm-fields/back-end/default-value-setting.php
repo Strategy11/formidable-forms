@@ -4,12 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p
-class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
-<?php $field_obj->echo_field_default_setting_attributes( $field ); ?>
-id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>">
+	class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
+	<?php $field_obj->echo_field_default_setting_attributes( $field ); ?>
+	id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>"
+>
 	<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php esc_html_e( 'Default Value', 'formidable' ); ?>
 	</label>
+
 	<span class="frm-with-right-icon">
 		<?php
 		$field_obj->display_smart_values_modal_trigger_icon( $field );

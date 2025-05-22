@@ -374,14 +374,14 @@ class FrmFieldsController {
 			'default_value'    => array(
 				'class' => '',
 				'icon'  => 'frm_icon_font frm_text2_icon',
-				'title' => __( 'Default Value (Text)', 'formidable' ),
+				'title' => __( 'Default Value', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
 				),
 			),
 			'calc'             => array(
 				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Calculation)', 'formidable' ),
+				'title' => __( 'Calculate Value', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_calculator_icon',
 				'data'  => array(
 					'medium'  => 'calculations',
@@ -390,7 +390,7 @@ class FrmFieldsController {
 			),
 			'get_values_field' => array(
 				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Lookup)', 'formidable' ),
+				'title' => __( 'Lookup', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_search_icon',
 				'data'  => array(
 					'medium'  => 'lookup',

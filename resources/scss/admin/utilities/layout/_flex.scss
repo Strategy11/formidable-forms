@@ -83,3 +83,15 @@
 #wpbody-content .frm-flex-wrap {
 	flex-wrap: wrap;
 }
+
+.frm-order-first {
+	order: calc(-infinity);
+}
+
+.frm-order-last {
+	order: calc(infinity);
+}
+
+.frm-order-none {
+	order: 0;
+}
