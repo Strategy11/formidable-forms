@@ -13,6 +13,7 @@
 		<file name="formidable.php" />
 		<directory name="classes" />
 		<directory name="stripe" />
+		<directory name="square" />
 		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
