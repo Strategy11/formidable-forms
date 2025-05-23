@@ -1077,19 +1077,6 @@ class FrmForm {
 		return $values;
 	}
 
-	/**
-	 * @param int $form_id
-	 * @return array
-	 */
-	public static function get_child_form_ids( $form_id ) {
-		$form_ids       = array();
-		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
-		if ( $child_form_ids ) {
-			$form_ids = $child_form_ids;
-		}
-		return array_filter( $form_ids, 'is_numeric' );
-	}
-
 	public static function get_current_form_id( $default_form = 'none' ) {
 		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();

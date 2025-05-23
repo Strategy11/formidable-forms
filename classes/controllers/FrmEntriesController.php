@@ -260,7 +260,12 @@ class FrmEntriesController {
 	 * @param bool|string $implode
 	 */
 	private static function get_child_form_ids( $form_id, $implode = ',' ) {
-		$form_ids = FrmForm::get_child_form_ids( $form_id );
+		$form_ids       = array();
+		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
+		if ( $child_form_ids ) {
+			$form_ids = $child_form_ids;
+		}
+		$form_ids = array_filter( $form_ids, 'is_numeric' );
 		if ( $implode ) {
 			$form_ids = implode( $implode, $form_ids );
 		}
