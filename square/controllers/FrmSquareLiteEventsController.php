@@ -45,7 +45,7 @@ class FrmSquareLiteEventsController {
 	 * @return void
 	 */
 	public function process_events() {
-	//	$this->flush_response();
+		$this->flush_response();
 
 		$unprocessed_event_ids = FrmSquareLiteConnectHelper::get_unprocessed_event_ids();
 

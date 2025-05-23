@@ -65,7 +65,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get all published payment actions with the Stripe gateway that have an amount set.
 	 *
-	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 * @since x.x
 	 *
 	 * @param int|string $form_id
 	 * @return array
@@ -320,28 +320,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			! empty( $current_user->user_email ) ? $current_user->user_email : '',
 			$email
 		);
-	}
-
-	/**
-	 * Set the customer name based on the mapped first and last name fields in the Stripe action.
-	 *
-	 * @since 6.5, introduced in v2.02 of the Stripe add on.
-	 *
-	 * @param array $atts
-	 * @param array $payment_info
-	 * @return void
-	 */
-	private static function add_customer_name( $atts, &$payment_info ) {
-		if ( empty( $atts['action']->post_content['billing_first_name'] ) ) {
-			return;
-		}
-
-		$name = '[' . $atts['action']->post_content['billing_first_name'] . ' show="first"]';
-		if ( ! empty( $atts['action']->post_content['billing_last_name'] ) ) {
-			$name .= ' [' . $atts['action']->post_content['billing_last_name'] . ' show="last"]';
-		}
-
-		$payment_info['name'] = apply_filters( 'frm_content', $name, $atts['form'], $atts['entry'] );
 	}
 
 	/**

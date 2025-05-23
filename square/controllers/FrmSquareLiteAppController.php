@@ -62,7 +62,6 @@ class FrmSquareLiteAppController {
 	 */
 	public static function verify_buyer() {
 		check_ajax_referer( 'frm_square_ajax', 'nonce' );
-		// TODO Fill this in based on form data.
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		if ( ! $form_id ) {
@@ -164,7 +163,7 @@ class FrmSquareLiteAppController {
 	/**
 	 * Create an entry object with posted values.
 	 *
-	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 * @since x.x
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {

@@ -8,7 +8,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * Track the latest error when calling stripe connect.
 	 *
-	 * @since 6.5
+	 * @since x.x
 	 *
 	 * @var string|null
 	 */
