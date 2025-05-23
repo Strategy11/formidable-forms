@@ -85,11 +85,35 @@ class FrmTransLiteActionsController {
 	 */
 	public static function trigger_action( $action, $entry, $form ) {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
-		$response = FrmStrpLiteActionsController::trigger_gateway( $action, $entry, $form );
+
+		$gateway = self::get_gateway_for_action( $action );
+		if ( ! $gateway ) {
+			return;
+		}
+
+		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+		if ( ! $class_name ) {
+			return;
+		}
+
+		$class_name = 'Frm' . $class_name . 'ActionsController';
+		$response   = $class_name::trigger_gateway( $action, $entry, $form );
+
 		if ( ! $response['success'] && $response['show_errors'] ) {
 			// the payment failed
 			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
+	}
+
+	/**
+	 * @param WP_Post $action
+	 * @return array|string
+	 */
+	private static function get_gateway_for_action( $action ) {
+		if ( isset( $action->post_content['gateway'] ) ) {
+			return $action->post_content['gateway'];
+		}
+		return 'stripe';
 	}
 
 	/**
@@ -492,5 +516,84 @@ class FrmTransLiteActionsController {
 		add_action( 'frm_entry_form', $destroy_callback );
 
 		self::$entry_ids_to_destroy_later[] = (int) $entry_id;
+	}
+
+	/**
+	 * Filter payment action on save.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 * @param array $action
+	 * @return array
+	 */
+	public static function before_save_settings( $settings, $action ) {
+		$settings['currency'] = strtolower( $settings['currency'] );
+		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		$form_id = absint( $action['menu_order'] );
+
+		if ( empty( $settings['credit_card'] ) ) {
+			$credit_card_field_id = FrmDb::get_var(
+				'frm_fields',
+				array(
+					'type'    => 'credit_card',
+					'form_id' => $form_id,
+				)
+			);
+			if ( ! $credit_card_field_id ) {
+				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
+			}
+			if ( $credit_card_field_id ) {
+				$settings['credit_card'] = $credit_card_field_id;
+			}
+		}
+
+		$gateway_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(
+				'type'    => 'gateway',
+				'form_id' => $form_id,
+			)
+		);
+		if ( ! $gateway_field_id ) {
+			self::add_a_gateway_field( $form_id );
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * A credit card field is added automatically if missing before a Stripe action is updated.
+	 *
+	 * @param int $form_id
+	 * @return false|int
+	 */
+	protected static function add_a_credit_card_field( $form_id ) {
+		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
+	}
+
+	/**
+	 * A gateway field is added automatically for compatibility with the Stripe add on.
+	 * The gateway field is not important for the Stripe Lite implementation.
+	 *
+	 * @param int $form_id
+	 * @return false|int
+	 */
+	protected static function add_a_gateway_field( $form_id ) {
+		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
+	}
+
+	/**
+	 * @param int    $form_id
+	 * @param string $field_type
+	 * @param string $field_name
+	 * @return false|int
+	 */
+	protected static function add_a_field( $form_id, $field_type, $field_name ) {
+		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+		$new_values['name'] = $field_name;
+		$field_id           = FrmField::create( $new_values );
+		return $field_id;
 	}
 }
