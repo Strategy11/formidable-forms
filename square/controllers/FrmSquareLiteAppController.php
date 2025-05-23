@@ -90,12 +90,19 @@ class FrmSquareLiteAppController {
 	}
 
 	/**
-	 * @param array<WP_Post> $actions
+	 * Get the amount value for verification.
+	 *
+	 * @param WP_Post $action
 	 * @return string
 	 */
 	private static function get_amount_value_for_verification( $action ) {
 		$amount = $action->post_content['amount'];
 		if ( strpos( $amount, '[' ) === false ) {
+			return $amount;
+		}
+
+		$form = FrmForm::getOne( $action->menu_order );
+		if ( ! $form ) {
 			return $amount;
 		}
 
