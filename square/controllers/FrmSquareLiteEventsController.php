@@ -188,8 +188,8 @@ class FrmSquareLiteEventsController {
 				break;
 			case 'subscription.updated':
 				$subscription_id = $this->event->data->id;
-				$frm_sub = new FrmTransLiteSubscription();
-				$sub     = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
+				$frm_sub         = new FrmTransLiteSubscription();
+				$sub             = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
 
 				if ( $sub ) {
 					$status = $this->event->data->object->subscription->status;
@@ -199,7 +199,7 @@ class FrmSquareLiteEventsController {
 					}
 				}
 				break;
-		}
+		}//end switch
 	}
 
 	/**

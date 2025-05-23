@@ -78,7 +78,7 @@ class FrmSquareLiteAppController {
 			'amount'         => self::get_amount_value_for_verification( $action ),
 			'billingContact' => self::get_billing_contact( $action ),
 			'currencyCode'   => strtoupper( $action->post_content['currency'] ),
-			'intent'         => 'CHARGE'
+			'intent'         => 'CHARGE',
 		);
 
 		wp_send_json_success(
@@ -141,7 +141,7 @@ class FrmSquareLiteAppController {
 		);
 
 		if ( $email_setting ) {
-			$shortcode_atts = array(
+			$shortcode_atts   = array(
 				'entry' => $entry,
 				'form'  => $action->menu_order,
 				'value' => $email_setting,

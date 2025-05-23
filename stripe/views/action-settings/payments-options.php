@@ -97,8 +97,8 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 			esc_html_e( 'Gateway(s)', 'formidable' );
 
 			foreach ( $gateways as $gateway_name => $gateway ) {
-				$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
-				$gateway_classes .= ( $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring']  ) ? ' frm_hidden' : '';
+				$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+				$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
 				$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
 
 				$radio_atts = array(
