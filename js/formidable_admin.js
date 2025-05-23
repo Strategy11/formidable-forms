@@ -6439,7 +6439,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		e.preventDefault();
 		this.parentNode.classList.add( 'frm_hidden' );
-		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );		
+		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );
 	}
 
 	function changeInputtedValue() {
