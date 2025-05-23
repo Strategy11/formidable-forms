@@ -25,8 +25,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$field_id = is_object( $field ) ? $field->id : $field['id'];
-
-		// TODO Make sure the field is mapped to the action.
 		foreach ( $actions as $action ) {
 			if ( (int) $action->post_content['credit_card'] === (int) $field_id ) {
 				return self::class . '::show_card';
@@ -148,9 +146,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
 		$square_token       = sanitize_text_field( $_POST['square-token'] );
 		$verification_token = sanitize_text_field( $_POST['square-verification-token'] );
-
-		// TODO We'll need to send the square tokens to our API.
-		$result = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token );
+		$result             = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token );
 
 		if ( false === $result ) {
 			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();

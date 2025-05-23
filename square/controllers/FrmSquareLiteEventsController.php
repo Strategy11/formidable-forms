@@ -194,9 +194,9 @@ class FrmSquareLiteEventsController {
 				if ( $sub ) {
 					$status = $this->event->data->object->subscription->status;
 
-					if ( 'DEACTIVATED' === $status ) {
+					// if ( 'DEACTIVATED' === $status ) {
 						// TODO: Mark subscription as cancelled.
-					}
+					// }
 				}
 				break;
 		}//end switch

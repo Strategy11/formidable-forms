@@ -22,7 +22,7 @@
 	};
 
 	async function initializeCard( payments ) {
-		const card     = await payments.card();
+		const card      = await payments.card();
 		const cardStyle = frmSquareVars.style;
 		await card.attach( '.frm-card-element' );
 
