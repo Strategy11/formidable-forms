@@ -61,7 +61,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * Get all published payment actions with the Stripe gateway that have an amount set.
+	 * Get all published payment actions with the Square gateway that have an amount set.
 	 *
 	 * @since x.x
 	 *
