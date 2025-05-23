@@ -35,3 +35,5 @@ atributes = "atributes"
 fo = "fo"
 [default.extend-identifiers]
 66afe9 = "66afe9"
+# `Ags` should be `Ages`, `Tags`
+sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ = "sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ"
