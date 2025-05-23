@@ -308,19 +308,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @param int    $form_id
-	 * @param string $field_type
-	 * @param string $field_name
-	 * @return false|int
-	 */
-	private static function add_a_field( $form_id, $field_type, $field_name ) {
-		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$new_values['name'] = $field_name;
-		$field_id           = FrmField::create( $new_values );
-		return $field_id;
-	}
-
-	/**
 	 * Create any required Stripe plans, used for subscriptions.
 	 *
 	 * @param array $settings
