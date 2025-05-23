@@ -101,7 +101,9 @@ class FrmSquareLiteConnectHelper {
 				</div>
 				<div class="frm-card-bottom">
 					<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
+						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
+							<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
+						</a>
 					<?php } else { ?>
 						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
 							<?php esc_html_e( 'Connect', 'formidable' ); ?>
