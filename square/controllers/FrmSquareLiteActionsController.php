@@ -392,8 +392,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		wp_register_script(
 			'square',
-			// TODO This will need to change for live payments.
-			'https://sandbox.web.squarecdn.com/v1/square.js',
+			FrmSquareLiteAppHelper::active_mode() === 'live' ? 'https://web.squarecdn.com/v1/square.js' : 'https://sandbox.web.squarecdn.com/v1/square.js',
 			array(),
 			'1.0',
 			false
