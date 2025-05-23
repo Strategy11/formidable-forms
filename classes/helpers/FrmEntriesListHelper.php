@@ -263,7 +263,53 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'entries_count'                    => $this->total_items,
 				'bulk_delete_confirmation_message' => $this->confirm_bulk_delete(),
 			);
-			FrmEntriesHelper::before_table( $is_footer, $this->params['form'], $entries_args );
+			self::before_table( $is_footer, $this->params['form'], $entries_args );
+		}
+	}
+
+	/**
+	 * @since 4.0
+	 * @since x.x Moved from FrmProEntriesHelper to FrmEntriesHelper
+	 *
+	 * @param int|object $form The form or form ID.
+	 * @param array      $args Additional arguments.
+	 *
+	 * @return void
+	 */
+	private static function delete_all_button( $form, $args = array() ) {
+		$form_id = is_numeric( $form ) ? $form : $form->id;
+
+		if ( ! apply_filters( 'frm_show_delete_all', current_user_can( 'frm_delete_entries' ), $form_id ) ) {
+			return;
+		}
+
+		$entries_count = ( isset( $args['entries_count'] ) ? $args['entries_count'] : 0 );
+		$verify        = ( isset( $args['bulk_delete_confirmation_message'] ) ? $args['bulk_delete_confirmation_message'] : '' );
+
+		?>
+		<span class="frm_uninstall">
+			<a href="<?php echo esc_url( wp_nonce_url( '?page=formidable-entries&frm_action=destroy_all' . ( $form_id ? '&form=' . absint( $form_id ) : '' ) ) ); ?>" class="button frm-button-secondary" data-loaded-from="entries-list" data-total-entries="<?php echo esc_attr( $entries_count ); ?>" data-frmverify="<?php echo esc_attr( $verify ); ?>" data-frmverify-btn="frm-button-red">
+				<?php esc_html_e( 'Delete All Entries', 'formidable' ); ?>
+			</a>
+		</span>
+		<?php
+	}
+
+	/**
+	 * @param bool            $footer
+	 * @param bool|int|object $form
+	 * @param array           $args
+	 *
+	 * @return void
+	 */
+	private static function before_table( $footer, $form = false, $args = array() ) {
+		if ( FrmAppHelper::simple_get( 'page', 'sanitize_title' ) !== 'formidable-entries' || ! $form ) {
+			return;
+		}
+
+		if ( ! $footer ) {
+			$form_id = is_numeric( $form ) ? $form : $form->id;
+			self::delete_all_button( $form_id, $args );
 		}
 	}
 
