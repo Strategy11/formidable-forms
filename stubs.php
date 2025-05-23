@@ -436,12 +436,8 @@ namespace {
 	}
 	class FrmProAddressesController extends FrmProComboFieldsController {
 		/**
-		 * Maps Country name to Country code.
-		 *
-		 * @since 6.11
-		 *
-		 * @param string $country Country name.
-		 * @return string $country_code Country code.
+		 * @param string $country
+		 * @return string
 		 */
 		public static function get_country_code( $country ) {
 		}
@@ -449,7 +445,7 @@ namespace {
 
 	class FrmProComboFieldsController {
 	}
-
+}
 
 namespace Elementor {
 	abstract class Widget_Base {
