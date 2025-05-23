@@ -50,9 +50,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$actions = self::get_actions_before_submit( $field['form_id'] );
 
 		if ( $actions ) {
-			// TODO This likely overwrites Stripe.
-			// We'll need to check $actions for a credit card field match.
-
 			$html_id = $atts['html_id'];
 			include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
 			return;
