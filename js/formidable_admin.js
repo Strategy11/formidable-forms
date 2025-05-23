@@ -4778,6 +4778,14 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
+				const openModal = settings[0].querySelectorAll( '.frm-inline-modal' );
+				if ( openModal.length ) {
+					openModal.forEach( modal => {
+						modal.classList.add( 'frm_hidden' );
+						modal.removeAttribute( 'data-fills' );
+						modal.closest( 'form' ).appendChild( modal );
+					});
+				}
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
@@ -6431,7 +6439,7 @@ function frmAdminBuildJS() {
 		/*jshint validthis:true */
 		e.preventDefault();
 		this.parentNode.classList.add( 'frm_hidden' );
-		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );
+		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );		
 	}
 
 	function changeInputtedValue() {
