@@ -94,7 +94,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 
 	<p>
 		<?php
-			esc_html_e( 'Gateway(s)', 'formidable-payments' );
+			esc_html_e( 'Gateway(s)', 'formidable' );
 
 			foreach ( $gateways as $gateway_name => $gateway ) {
 				$gateway_classes = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
