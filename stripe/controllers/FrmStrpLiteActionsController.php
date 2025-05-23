@@ -13,8 +13,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param string       $callback
-	 * @param array|object $field
+	 * @param string             $callback
+	 * @param array|false|object $field
 	 * @return string
 	 */
 	public static function maybe_show_card( $callback, $field = false ) {
@@ -97,7 +97,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
-	 * @param stdClass $form
+	 * @param mixed    $form
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
