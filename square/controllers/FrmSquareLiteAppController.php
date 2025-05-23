@@ -179,9 +179,11 @@ class FrmSquareLiteAppController {
 			$v = wp_unslash( $v );
 
 			if ( $k === 'item_meta' ) {
-				foreach ( $v as $f => $value ) {
-					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-					$entry->metas[ absint( $f ) ] = $value;
+				if ( is_array( $v ) ) {
+					foreach ( $v as $f => $value ) {
+						FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+						$entry->metas[ absint( $f ) ] = $value;
+					}
 				}
 			} else {
 				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );

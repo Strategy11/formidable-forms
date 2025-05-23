@@ -171,6 +171,7 @@
 		<PossiblyNullPropertyAssignment>
 			<errorLevel type="suppress">
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
+				<file name="square/models/FrmSquareLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -203,6 +204,7 @@
 				<file name="classes/models/FrmMigrate.php" />
 				<file name="classes/models/FrmStyle.php" />
 				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
+				<file name="square/controllers/FrmSquareLiteAppController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
