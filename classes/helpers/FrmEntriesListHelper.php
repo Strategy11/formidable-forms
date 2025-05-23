@@ -257,12 +257,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
-		$is_footer    = $which !== 'top';
-		$entries_args = array(
-			'entries_count'                    => $this->total_items,
-			'bulk_delete_confirmation_message' => $this->confirm_bulk_delete(),
-		);
-		FrmEntriesHelper::before_table( $is_footer, $this->params['form'], $entries_args );
+		if ( FrmEntriesHelper::has_moved_entries_bulk_delete_from_pro() ) {
+			$is_footer    = $which !== 'top';
+			$entries_args = array(
+				'entries_count'                    => $this->total_items,
+				'bulk_delete_confirmation_message' => $this->confirm_bulk_delete(),
+			);
+			FrmEntriesHelper::before_table( $is_footer, $this->params['form'], $entries_args );
+		}
 	}
 
 	/**

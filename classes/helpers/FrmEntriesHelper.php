@@ -86,9 +86,6 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	private static function delete_all_button( $form, $args = array() ) {
-		if ( ! self::has_moved_entries_bulk_delete_from_pro() ) {
-			return;
-		}
 		$form_id = is_numeric( $form ) ? $form : $form->id;
 
 		if ( ! apply_filters( 'frm_show_delete_all', current_user_can( 'frm_delete_entries' ), $form_id ) ) {
