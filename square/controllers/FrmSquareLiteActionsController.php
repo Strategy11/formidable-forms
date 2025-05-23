@@ -270,7 +270,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Create a new subscription and payment for the payments tables.
 	 *
-	 * @param int    $subscription_id
+	 * @param string $subscription_id
 	 * @param array  $atts
 	 * @return int
 	 */
@@ -399,7 +399,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$dependencies = array( 'square', 'formidable' );
-		$script_url = FrmSquareLiteAppHelper::plugin_url() . 'js/frontend.js';
+		$script_url   = FrmSquareLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(
 			'formidable-square',
@@ -453,17 +453,17 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	private static function get_style( $form_id ) {
 		$settings = self::get_style_settings_for_form( $form_id );
 		$style    = array(
-			'input' => array(
+			'input'                     => array(
 				'fontSize'        => $settings['field_font_size'],
 				'color'           => $settings['text_color'],
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
 			),
 			// How does input placeholder work??
-			'input::placeholder' => array(
+			'input::placeholder'        => array(
 				'color' => $settings['text_color_disabled'],
 			),
-			'.input-container' => array(
+			'.input-container'          => array(
 				'borderRadius' => self::get_border_radius( $settings ),
 			),
 			'.input-container.is-focus' => array(

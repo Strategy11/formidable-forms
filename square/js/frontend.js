@@ -3,13 +3,13 @@
 		return;
 	}
 
-	const appId		 = frmSquareVars.appId;
+	const appId      = frmSquareVars.appId;
 	const locationId = frmSquareVars.locationId;
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
-	let thisForm = null;
-	let running = 0;
+	let thisForm                    = null;
+	let running                     = 0;
 
 	let cardGlobal;
 
