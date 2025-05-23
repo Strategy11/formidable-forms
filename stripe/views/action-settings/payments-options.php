@@ -119,7 +119,7 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 					<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
 				</label>
 			<?php
-		}
+		}//end foreach
 		?>
 	</p>
 

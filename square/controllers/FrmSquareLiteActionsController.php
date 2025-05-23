@@ -139,13 +139,13 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
-		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) {
+		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return __( 'Please enter a valid credit card', 'formidable' );
 		}
 
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
-		$square_token       = sanitize_text_field( $_POST['square-token'] );
-		$verification_token = sanitize_text_field( $_POST['square-verification-token'] );
+		$square_token       = sanitize_text_field( $_POST['square-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$verification_token = sanitize_text_field( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$result             = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token );
 
 		if ( false === $result ) {
@@ -199,13 +199,13 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
-		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) {
+		if ( empty( $_POST['square-token'] ) || empty( $_POST['square-verification-token'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return __( 'Please enter a valid credit card', 'formidable' );
 		}
 
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
-		$square_token       = sanitize_text_field( $_POST['square-token'] );
-		$verification_token = sanitize_text_field( $_POST['square-verification-token'] );
+		$square_token       = sanitize_text_field( $_POST['square-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$verification_token = sanitize_text_field( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		// We can put this all behind our API.
 		// It will require that we pass the customer info and the catalog info.
