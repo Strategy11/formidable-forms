@@ -32,14 +32,6 @@ class FrmStrpLiteAppHelper {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public static function is_debug() {
-		// TODO: Deprecate this.
-		return defined( 'WP_DEBUG' ) && WP_DEBUG;
-	}
-
-	/**
 	 * @param string $function
 	 * @param array  ...$params
 	 * @return mixed
@@ -143,5 +135,15 @@ class FrmStrpLiteAppHelper {
 			</span>
 		</div>
 		<?php
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_debug() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
 }
