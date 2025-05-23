@@ -361,7 +361,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $key 'merchant_id', 'client_password', 'server_password'
+	 * @param string $key 'merchant_id', 'client_password', 'server_password'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
