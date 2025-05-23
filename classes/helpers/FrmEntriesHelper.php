@@ -77,15 +77,6 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @since x.x
-	 *
-	 * @return bool
-	 */
-	public static function has_moved_entries_bulk_delete_from_pro() {
-		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
-	}
-
-	/**
 	 * @since 2.05
 	 *
 	 * @param object $field

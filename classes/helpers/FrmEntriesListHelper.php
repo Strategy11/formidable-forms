@@ -241,6 +241,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function has_moved_entries_bulk_delete_from_pro() {
+		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
+	}
+
+	/**
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
@@ -257,7 +266,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
-		if ( FrmEntriesHelper::has_moved_entries_bulk_delete_from_pro() ) {
+		if ( self::has_moved_entries_bulk_delete_from_pro() ) {
 			$is_footer    = $which !== 'top';
 			$entries_args = array(
 				'entries_count'                    => $this->total_items,
