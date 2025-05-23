@@ -122,7 +122,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 				}
 			} else {
 				$message = __( 'That subscription was not found', 'formidable' );
-			}
+			}//end if
 		} else {
 			$message = __( 'Oops! No subscription was selected for cancelation.', 'formidable' );
 		}//end if

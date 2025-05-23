@@ -106,7 +106,7 @@ class FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @param WP_Post  $action
+	 * @param WP_Post $action
 	 * @return array|string
 	 */
 	private static function get_gateway_for_action( $action ) {

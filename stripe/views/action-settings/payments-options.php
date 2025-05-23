@@ -94,19 +94,19 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 
 	<p>
 		<?php
-			esc_html_e( 'Gateway(s)', 'formidable' );
+		esc_html_e( 'Gateway(s)', 'formidable' );
 
-			foreach ( $gateways as $gateway_name => $gateway ) {
-				$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
-				$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
-				$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
+		foreach ( $gateways as $gateway_name => $gateway ) {
+			$gateway_classes  = $gateway['recurring'] ? '' : 'frm_gateway_no_recur';
+			$gateway_classes .= $form_action->post_content['type'] === 'recurring' && ! $gateway['recurring'] ? ' frm_hidden' : '';
+			$gateway_id       = $this->get_field_id( 'gateways' ) . '_' . $gateway_name;
 
-				$radio_atts = array(
-					'type'  => 'radio',
-					'value' => $gateway_name,
-					'name'  => $this->get_field_name( 'gateway' ),
-					'id'    => $gateway_id,
-				);
+			$radio_atts = array(
+				'type'  => 'radio',
+				'value' => $gateway_name,
+				'name'  => $this->get_field_name( 'gateway' ),
+				'id'    => $gateway_id,
+			);
 			?>
 				<label for="<?php echo esc_attr( $gateway_id ); ?>" class="frm_gateway_opt <?php echo esc_attr( $gateway_classes ); ?>">
 					<input <?php FrmAppHelper::array_to_html_params( $radio_atts, true ); echo ' '; FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name ); ?>/>
