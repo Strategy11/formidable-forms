@@ -37,6 +37,7 @@ class FrmSquareLiteHooksController {
 	 */
 	private static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_square_oauth', 'FrmSquareLiteAppController::handle_oauth' );
+		add_action( 'wp_ajax_frm_square_disconnect', 'FrmSquareLiteAppController::handle_disconnect' );
 
 		add_action( 'wp_ajax_frm_verify_buyer', 'FrmSquareLiteAppController::verify_buyer' );
 		add_action( 'wp_ajax_nopriv_frm_verify_buyer', 'FrmSquareLiteAppController::verify_buyer' );

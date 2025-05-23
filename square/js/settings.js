@@ -13,4 +13,24 @@
             );
         } );
     } );
+
+    document.addEventListener(
+        'click',
+        function( event ) {
+            if ( ! event.target.id.startsWith( 'frm_disconnect_square_' ) ) {
+                return;
+            }
+
+            event.preventDefault();
+            const formData = new FormData();
+            formData.append( 'mode', event.target.id.replace( 'frm_disconnect_square_', '' ) );
+            frmDom.ajax.doJsonPost( 'square_disconnect', formData ).then(
+                function( response ) {
+                    if ( 'undefined' !== typeof response.success && response.success ) {
+                        window.location.reload();
+                    }
+                }
+            );
+        }
+    );
 }() );

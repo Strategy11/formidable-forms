@@ -101,7 +101,7 @@ class FrmSquareLiteConnectHelper {
 				</div>
 				<div class="frm-card-bottom">
 					<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_square" class="button-secondary frm-button-secondary" href="#"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
+						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#"><?php esc_html_e( 'Disconnect', 'formidable' ); ?></a>
 					<?php } else { ?>
 						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
 							<?php esc_html_e( 'Connect', 'formidable' ); ?>
@@ -361,7 +361,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $key 'merchant_id', 'client_password', 'server_password', 'details_submitted'.
+	 * @param string $key 'merchant_id', 'client_password', 'server_password'
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
@@ -567,5 +567,36 @@ class FrmSquareLiteConnectHelper {
 
 	public static function cancel_subscription( $subscription_id ) {
 		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+	}
+
+	/**
+	 * @return void
+	 */
+	public static function handle_disconnect() {
+		self::disconnect();
+		self::reset_square_api_integration();
+		wp_send_json_success();
+	}
+
+	/**
+	 * @return false|object
+	 */
+	private static function disconnect() {
+		$additional_body = array(
+			'frm_square_api_mode' => self::get_mode_value_from_post(),
+		);
+		return self::post_with_authenticated_body( 'disconnect', $additional_body );
+	}
+
+	/**
+	 * Delete every Square API option, calling when disconnecting.
+	 *
+	 * @return void
+	 */
+	public static function reset_square_api_integration() {
+		$mode = self::get_mode_value_from_post();
+		delete_option( self::get_merchant_id_option_name( $mode ) );
+		delete_option( self::get_server_side_token_option_name( $mode ) );
+		delete_option( self::get_client_side_token_option_name( $mode ) );
 	}
 }

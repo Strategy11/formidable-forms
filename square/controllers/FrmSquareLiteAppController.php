@@ -45,6 +45,16 @@ class FrmSquareLiteAppController {
 		wp_send_json_success( $response_data );
 	}
 
+	public static function handle_disconnect() {
+		FrmAppHelper::permission_check( 'frm_change_settings' );
+		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
+			wp_send_json_error();
+		}
+
+		FrmSquareLiteConnectHelper::handle_disconnect();
+		wp_send_json_success();
+	}
+
 	/**
 	 * Handle the verify buyer action.
 	 *
