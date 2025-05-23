@@ -216,7 +216,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		// 1. Call the API with the customer and catalog info.
 		// 2. Add the database rows.
 
-		$action          = $atts['action'];;
+		$action          = $atts['action'];
 		$billing_contact = FrmSquareLiteAppController::get_billing_contact( $action );
 
 		$info = array(
