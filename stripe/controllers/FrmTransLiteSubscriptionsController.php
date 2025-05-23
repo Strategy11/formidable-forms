@@ -103,6 +103,9 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 					case 'square':
 						$canceled = FrmSquareLiteConnectHelper::cancel_subscription( $sub->sub_id );
 						break;
+					default:
+						$canceled = false;
+						break;
 				}
 
 				if ( $canceled ) {
