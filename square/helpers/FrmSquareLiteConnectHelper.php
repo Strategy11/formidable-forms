@@ -49,7 +49,11 @@ class FrmSquareLiteConnectHelper {
 			</div>
 		</div>
 		<?php if ( ! is_ssl() ) { ?>
-			<div><em><?php esc_html_e( 'Your site is not using SSL. Before using Square to collect live payments, you will need to install an SSL certificate on your site.', 'formidable' ); ?></em></div>
+			<div>
+				<em>
+					<?php esc_html_e( 'Your site is not using SSL. Before using Square to collect live payments, you will need to install an SSL certificate on your site.', 'formidable' ); ?>
+				</em>
+			</div>
 		<?php } ?>
 		<?php
 	}
