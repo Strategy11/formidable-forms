@@ -130,7 +130,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Trigger a one time payment.
 	 *
-	 * @param array $atts
+	 * @param array $atts The arguments for the payment.
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
@@ -161,7 +161,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Add a payment row for the payments table.
 	 *
-	 * @param array $atts
+	 * @param array $atts The arguments for the payment.
 	 * @return int
 	 */
 	private static function create_new_payment( $atts ) {
