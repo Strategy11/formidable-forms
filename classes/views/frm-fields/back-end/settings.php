@@ -187,12 +187,12 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 						$toggle_args = array(
 							'echo'        => true,
-							'checked'     => false,
+							'checked'     => isset( $default_value_type['current'] ),
 							'show_labels' => true,
 							'on_label'    => $default_value_type['title'],
 							'input_html'  => array(
 								'data-toggleclass' => 'frm_hidden frm-open',
-								'class'            => 'frm-default-switcher-toggle ' . $default_value_type['class'],
+								'class'            => $default_value_type['class'],
 							),
 						);
 
@@ -201,12 +201,12 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 
 						if ( isset( $default_value_type['data']['frmshow'] ) ) {
-							$toggle_args['input_html']['data-frmhide'] = '.frm-inline-modal,.default-value-section-' . $field['id'];
+							$toggle_args['input_html']['data-frmhide'] = '.default-value-section-' . $field['id'];
 						}
 
 						FrmHtmlHelper::toggle(
-							'frm-default-type-toggle-input-' . $field['id'],
-							'default_type_toggle_input[' . $field['id'] . ']',
+							'frm-default-type-' . $type . '-' . $field['id'],
+							'default_type_' . $type . '[' . $field['id'] . ']',
 							$toggle_args
 						);
 					}//end foreach
