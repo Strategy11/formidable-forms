@@ -204,7 +204,7 @@
 				<file name="classes/models/FrmMigrate.php" />
 				<file name="classes/models/FrmStyle.php" />
 				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
-				<file name="square/controllers/FrmSquareLiteAppController.php" />
+				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
