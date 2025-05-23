@@ -358,40 +358,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * @param int    $form_id
-	 * @param string $field_type
-	 * @param string $field_name
-	 * @return false|int
-	 */
-	private static function add_a_field( $form_id, $field_type, $field_name ) {
-		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$new_values['name'] = $field_name;
-		$field_id           = FrmField::create( $new_values );
-		return $field_id;
-	}
-
-	/**
-	 * A credit card field is added automatically if missing before a Stripe action is updated.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_credit_card_field( $form_id ) {
-		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
-	}
-
-	/**
-	 * A gateway field is added automatically for compatibility with the Stripe add on.
-	 * The gateway field is not important for the Stripe Lite implementation.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_gateway_field( $form_id ) {
-		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
-	}
-
-	/**
 	 * If this form submits with ajax, load the scripts on the first page.
 	 *
 	 * @param array $params

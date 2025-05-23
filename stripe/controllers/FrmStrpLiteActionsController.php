@@ -321,27 +321,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
-	 * A credit card field is added automatically if missing before a Stripe action is updated.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_credit_card_field( $form_id ) {
-		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
-	}
-
-	/**
-	 * A gateway field is added automatically for compatibility with the Stripe add on.
-	 * The gateway field is not important for the Stripe Lite implementation.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_gateway_field( $form_id ) {
-		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
-	}
-
-	/**
 	 * Create any required Stripe plans, used for subscriptions.
 	 *
 	 * @param array $settings
