@@ -507,7 +507,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @return string|false
+	 * @return false|string
 	 */
 	public static function get_location_id() {
 		$response = self::post_with_authenticated_body( 'get_location_id' );

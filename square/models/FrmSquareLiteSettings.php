@@ -87,7 +87,7 @@ class FrmSquareLiteSettings {
 			}
 		}
 
-		$this->settings->test_mode = isset( $params['frm_' . $this->param() . '_test_mode'] ) ? absint( $params['frm_' . $this->param() . '_test_mode'] ) : 0;
+		$this->settings->test_mode = isset( $params[ 'frm_' . $this->param() . '_test_mode' ] ) ? absint( $params[ 'frm_' . $this->param() . '_test_mode' ] ) : 0;
 	}
 
 	/**
