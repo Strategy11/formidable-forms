@@ -474,7 +474,7 @@ class FrmSquareLiteConnectHelper {
 	private static function get_standard_authenticated_body() {
 		$mode = self::get_mode_value_from_post();
 		return array(
-			'merchant_id'      => get_option( self::get_merchant_id_option_name( $mode ) ),
+			'merchant_id'     => get_option( self::get_merchant_id_option_name( $mode ) ),
 			'server_password' => get_option( self::get_server_side_token_option_name( $mode ) ),
 			'client_password' => get_option( self::get_client_side_token_option_name( $mode ) ),
 		);

@@ -109,11 +109,17 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 			);
 			?>
 				<label for="<?php echo esc_attr( $gateway_id ); ?>" class="frm_gateway_opt <?php echo esc_attr( $gateway_classes ); ?>">
-					<input <?php FrmAppHelper::array_to_html_params( $radio_atts, true ); echo ' '; FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name ); ?>/>
+					<input
+						<?php
+						FrmAppHelper::array_to_html_params( $radio_atts, true );
+						echo ' ';
+						FrmAppHelper::checked( $form_action->post_content['gateway'], $gateway_name );
+						?>
+					/>
 					<?php echo esc_html( $gateway['label'] ); ?> &nbsp;
 				</label>
 			<?php
-			}
+		}
 		?>
 	</p>
 
