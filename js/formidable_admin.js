@@ -4761,6 +4761,26 @@ function frmAdminBuildJS() {
 		return childLi[0].classList.contains( 'edit_field_type_submit' );
 	}
 
+	/**
+	 * Appends open modals to the field options form.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} settings
+	 * @returns {void}
+	 */
+	function appendOpenModalsToFieldOptionsForm( settings ) {
+		const openModals = settings[0].querySelectorAll( '.frm-inline-modal' );
+		if ( ! openModals.length ) {
+			return;
+		}
+		openModals.forEach( modal => {
+			modal.classList.add( 'frm_hidden' );
+			modal.removeAttribute( 'data-fills' );
+			modal.closest( 'form' ).appendChild( modal );
+		});
+	}
+
 	function deleteField( fieldId ) {
 		jQuery.ajax({
 			type: 'POST',
@@ -4778,14 +4798,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
-				const openModal = settings[0].querySelectorAll( '.frm-inline-modal' );
-				if ( openModal.length ) {
-					openModal.forEach( modal => {
-						modal.classList.add( 'frm_hidden' );
-						modal.removeAttribute( 'data-fills' );
-						modal.closest( 'form' ).appendChild( modal );
-					});
-				}
+				appendOpenModalsToFieldOptionsForm( settings );
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
