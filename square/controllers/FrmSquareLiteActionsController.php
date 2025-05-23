@@ -130,12 +130,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Trigger a one time payment.
 	 *
-	 * @param array $atts {
-	 *     @type stdClass $form
-	 *     @type stdClass $entry
-	 *     @type WP_Post  $action
-	 *     @type string   $amount
-	 * }
+	 * @param array $atts
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
@@ -166,11 +161,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Add a payment row for the payments table.
 	 *
-	 * @param array $atts {
-	 *     @type object  $charge
-	 *     @type object  $entry
-	 *     @type WP_Post $action
-	 * }
+	 * @param array $atts
 	 * @return int
 	 */
 	private static function create_new_payment( $atts ) {
