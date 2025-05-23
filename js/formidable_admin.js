@@ -314,6 +314,10 @@ function frmAdminBuildJS() {
 		}
 
 		if ( 'entries-list' === loadedFrom ) {
+			const confirmModal = wp.hooks.applyFilters( 'frm_on_multiple_entries_delete', { link, initModal });
+			if ( document.querySelector( '.frm-delete-confirmation-input' ) ) {
+				return confirmModal;
+			}
 			return confirmDeleteAllEntriesModal( { link, initModal } );
 		}
 
