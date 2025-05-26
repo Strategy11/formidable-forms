@@ -21,7 +21,7 @@ export class frmTabsNavigator {
 	}
 
 	init() {
-		if ( null === this.wrapper || ! this.navs.length || null === this.trackLine || null === this.slideTrack || ! this.slides.length ) {
+		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || null === this.slideTrack || ! this.slides.length ) {
 			return;
 		}
 
@@ -40,6 +40,12 @@ export class frmTabsNavigator {
 		navItem.classList.add( 'frm-active' );
 		this.initSlideTrackUnderline( navItem, index );
 		this.changeSlide( index );
+
+		// Handle special case for frm_insert_fields_tab
+		const navLink = navItem.querySelector( 'a' );
+		if ( navLink && navLink.id === 'frm_insert_fields_tab' && ! navLink.closest( '#frm_adv_info' ) ) {
+			window.frmAdminBuild?.clearSettingsBox?.();
+		}
 	}
 
 	initDefaultSlideTrackerWidth() {

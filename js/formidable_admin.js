@@ -11317,7 +11317,8 @@ function frmAdminBuildJS() {
 		loadApiEmailForm,
 		addMyEmailAddress,
 		fillDropdownOpts,
-		showSaveAndReloadModal
+		showSaveAndReloadModal,
+		clearSettingsBox
 	};
 }
 
