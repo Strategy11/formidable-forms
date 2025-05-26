@@ -192,10 +192,11 @@
 		try {
 			// Square requires HTTPS to work.
 			payments = window.Square.payments( appId, locationId );
-		} catch {
+		} catch ( e ) {
 			const statusContainer            = document.querySelector( '.frm-card-errors' );
-			statusContainer.className        = 'missing-credentials';
+			statusContainer.className        = 'missing-credentials frm_error';
 			statusContainer.style.visibility = 'visible';
+			statusContainer.textContent      = e.message;
 			return;
 		}
 
