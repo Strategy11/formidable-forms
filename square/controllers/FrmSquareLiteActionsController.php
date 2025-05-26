@@ -429,7 +429,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_location_id() {
-		// TODO Cache this.
 		return FrmSquareLiteConnectHelper::get_location_id();
 	}
 
