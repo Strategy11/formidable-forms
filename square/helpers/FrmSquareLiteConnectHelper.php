@@ -459,6 +459,8 @@ class FrmSquareLiteConnectHelper {
 				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
 			}
 
+			FrmTransLiteAppController::install();
+
 			return true;
 		}
 
