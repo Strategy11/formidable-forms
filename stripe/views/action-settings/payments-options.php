@@ -3,10 +3,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
-	FrmStrpLiteAppHelper::not_connected_warning();
-} else {
+$stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
+$square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+
+if ( $stripe_connected ) {
 	FrmStrpLiteAppHelper::fee_education();
+}
+if ( $square_connected ) {
+	FrmSquareLiteAppHelper::fee_education();
+}
+if ( ! $stripe_connected && ! $square_connected ) {
+	FrmStrpLiteAppHelper::not_connected_warning();
 }
 ?>
 

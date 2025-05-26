@@ -613,4 +613,13 @@ class FrmSquareLiteConnectHelper {
 		}
 		return false;
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function at_least_one_mode_is_setup() {
+		return self::get_merchant_id( 'test' ) || self::get_merchant_id( 'live' );
+	}
 }

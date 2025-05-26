@@ -74,4 +74,29 @@ class FrmSquareLiteAppHelper {
 			'EVERY_TWO_YEARS'   => 'Every Two Years',
 		);
 	}
+
+	/**
+	 * Add education about Stripe fees.
+	 *
+	 * @return void
+	 */
+	public static function fee_education( $medium = 'tip' ) {
+		$license_type = FrmAddonsController::license_type();
+		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
+			return;
+		}
+
+		FrmTipsHelper::show_tip(
+			array(
+				'link'  => array(
+					'content' => 'square-fee',
+					'medium'  => $medium,
+				),
+				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Square fees.',
+				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
+				'class' => 'frm-light-tip',
+			),
+			'p'
+		);
+	}
 }
