@@ -528,8 +528,18 @@ class FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function before_save_settings( $settings, $action ) {
-		$settings['currency'] = strtolower( $settings['currency'] );
 		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		if ( in_array( 'square', $settings['gateway'] ) ) {
+			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
+			if ( false !== $currency ) {
+				$settings['currency'] = strtolower( $currency );
+			} else {
+				$settings['currency'] = 'usd';
+			}
+		} else {
+			$settings['currency'] = strtolower( $settings['currency'] );
+		}
 
 		$form_id = absint( $action['menu_order'] );
 
@@ -559,7 +569,7 @@ class FrmTransLiteActionsController {
 		if ( ! $gateway_field_id ) {
 			self::add_a_gateway_field( $form_id );
 		}
-
+		
 		return $settings;
 	}
 

@@ -605,4 +605,12 @@ class FrmSquareLiteConnectHelper {
 		delete_option( self::get_server_side_token_option_name( $mode ) );
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 	}
+
+	public static function get_merchant_currency() {
+		$response = self::post_with_authenticated_body( 'get_merchant_currency' );
+		if ( is_object( $response ) && ! empty( $response->currency ) ) {
+			return $response->currency;
+		}
+		return false;
+	}
 }

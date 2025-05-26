@@ -82,7 +82,24 @@ if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
 		<label for="<?php echo esc_attr( $this->get_field_id( 'currency' ) ); ?>">
 			<?php esc_html_e( 'Currency', 'formidable' ); ?>
 		</label>
-		<select name="<?php echo esc_attr( $this->get_field_name( 'currency' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'currency' ) ); ?>">
+		<?php
+		$select_attrs = array(
+			'name' => $this->get_field_name( 'currency' ),
+			'id'   => $this->get_field_id( 'currency' ),
+		);
+		if ( in_array( 'square', (array) $form_action->post_content['gateway'], true ) ) {
+			$select_attrs['disabled'] = 'disabled';
+		}
+		?>
+		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
+			<?php
+			if ( in_array( 'square', (array) $form_action->post_content['gateway'], true ) ) {
+				$form_action->post_content['currency'] = 'square';
+				?>
+				<option class="square-currency" value="square" selected><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<?php
+			}
+			?>
 			<?php foreach ( $currencies as $code => $currency ) { ?>
 				<option value="<?php echo esc_attr( strtolower( $code ) ); ?>" <?php selected( $form_action->post_content['currency'], strtolower( $code ) ); ?>><?php echo esc_html( $currency['name'] . ' (' . strtoupper( $code ) . ')' ); ?></option>
 				<?php

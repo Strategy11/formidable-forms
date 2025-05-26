@@ -56,7 +56,7 @@ class FrmTransLiteHooksController {
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
 
 		// Use 9 to run before the Stripe Lite and Square Lite code.
-		add_filter( 'before_save_settings', 'FrmTransLiteActionsController::before_save_settings', 9 );
+		add_filter( 'frm_before_save_payment_action', 'FrmTransLiteActionsController::before_save_settings', 9, 2 );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
