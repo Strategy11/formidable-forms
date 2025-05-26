@@ -367,6 +367,20 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * @return string
+	 */
+	private static function get_location_id_option_name( $mode = 'auto' ) {
+		return self::get_square_connect_option_name( 'merchant_location_id', $mode );
+	}
+
+	/**
+	 * @return string
+	 */
+	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
+		return self::get_square_connect_option_name( 'merchant_currency', $mode );
+	}
+
+	/**
 	 * @param string $key 'merchant_id', 'client_password', 'server_password'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
@@ -433,6 +447,18 @@ class FrmSquareLiteConnectHelper {
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
 			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+
+			$currency    = self::get_merchant_currency( true );
+			$location_id = self::get_location_id( true );
+
+			if ( $currency ) {
+				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
+			}
+
+			if ( $location_id ) {
+				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
+			}
+
 			return true;
 		}
 
@@ -513,13 +539,23 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * @param bool $force
 	 * @return false|string
 	 */
-	public static function get_location_id() {
+	public static function get_location_id( $force = false ) {
+		if ( ! $force ) {
+			$location_id = get_option( self::get_location_id_option_name() );
+			if ( $location_id ) {
+				return $location_id;
+			}
+		}
+
 		$response = self::post_with_authenticated_body( 'get_location_id' );
 		if ( is_object( $response ) ) {
+			update_option( self::get_location_id_option_name(), $response->id, 'no' );
 			return $response->id;
 		}
+
 		return false;
 	}
 
@@ -604,13 +640,28 @@ class FrmSquareLiteConnectHelper {
 		delete_option( self::get_merchant_id_option_name( $mode ) );
 		delete_option( self::get_server_side_token_option_name( $mode ) );
 		delete_option( self::get_client_side_token_option_name( $mode ) );
+		delete_option( self::get_merchant_currency_option_name( $mode ) );
+		delete_option( self::get_location_id_option_name( $mode ) );
 	}
 
-	public static function get_merchant_currency() {
+	/**
+	 * @param bool $force
+	 * @return false\string
+	 */
+	public static function get_merchant_currency( $force = false ) {
+		if ( ! $force ) {
+			$currency = get_option( self::get_merchant_currency_option_name() );
+			if ( $currency ) {
+				return $currency;
+			}
+		}
+
 		$response = self::post_with_authenticated_body( 'get_merchant_currency' );
 		if ( is_object( $response ) && ! empty( $response->currency ) ) {
+			update_option( self::get_merchant_currency_option_name(), $response->currency, 'no' );
 			return $response->currency;
 		}
+
 		return false;
 	}
 
