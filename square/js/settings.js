@@ -1,7 +1,8 @@
 ( function() {
     const buttons = document.querySelectorAll( '.frm-connect-square-with-oauth' );
     buttons.forEach( function( button ) {
-        button.addEventListener( 'click', function() {
+        button.addEventListener( 'click', function( e ) {
+            e.preventDefault();
             const formData = new FormData();
             formData.append( 'mode', button.dataset.mode );
             frmDom.ajax.doJsonPost( 'square_oauth', formData ).then(
