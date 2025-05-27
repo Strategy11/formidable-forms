@@ -147,13 +147,17 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();
 		}
 
-		$atts['status'] = $result->status === 'COMPLETED' ? 'complete' : 'failed';
-
+		$atts['status']         = $result->status === 'COMPLETED' ? 'complete' : 'failed';
 		$atts['charge']         = new stdClass();
 		$atts['charge']->id     = $result->id;
 		$atts['charge']->amount = $atts['amount'];
 
-		self::create_new_payment( $atts );
+		$payment_id  = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 
 		return true;
 	}

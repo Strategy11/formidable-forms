@@ -232,7 +232,7 @@ class FrmSquareLiteEventsController {
 			array(
 				'paysys'     => 'square',
 				'amount'     => $payment_object->amount_money->amount / 100,
-				'status'     => 'pending',
+				'status'     => 'authorized',
 				'item_id'    => $sub->item_id,
 				'action_id'  => $sub->action_id,
 				'receipt_id' => $payment_id,
