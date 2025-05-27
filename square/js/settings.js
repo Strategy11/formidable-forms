@@ -24,7 +24,7 @@
 
             event.preventDefault();
             const formData = new FormData();
-            formData.append( 'mode', event.target.id.replace( 'frm_disconnect_square_', '' ) );
+            formData.append( 'testMode', 'test' === event.target.id.replace( 'frm_disconnect_square_', '' ) ? 1 : 0 );
             frmDom.ajax.doJsonPost( 'square_disconnect', formData ).then(
                 function( response ) {
                     if ( 'undefined' !== typeof response.success && response.success ) {
