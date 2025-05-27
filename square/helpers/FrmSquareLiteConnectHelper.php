@@ -219,7 +219,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		return 'http://dev-site.local/';
+		return 'https://qa.formidableforms.com/mike2/';
+		//return 'http://dev-site.local/';
 		//return 'https://api.strategy11.com/';
 	}
 
