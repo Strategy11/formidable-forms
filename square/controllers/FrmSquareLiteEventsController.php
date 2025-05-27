@@ -231,6 +231,7 @@ class FrmSquareLiteEventsController {
 		$frm_payment->create(
 			array(
 				'paysys'     => 'square',
+				// TODO Do not divide by 100 for JPY.
 				'amount'     => $payment_object->amount_money->amount / 100,
 				'status'     => 'authorized',
 				'item_id'    => $sub->item_id,
