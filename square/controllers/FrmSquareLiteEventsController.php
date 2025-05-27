@@ -227,12 +227,18 @@ class FrmSquareLiteEventsController {
 
 		$payment_object = $this->event->data->object->payment;
 
+		if ( 'JPY' === $payment_object->amount_money->currency ) {
+			// Japanese does not include the additional 2 digits.
+			$amount = $payment_object->amount_money->amount;
+		} else {
+			$amount = floatval( $payment_object->amount_money->amount ) / 100;
+		}
+
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(
 			array(
 				'paysys'     => 'square',
-				// TODO Do not divide by 100 for JPY.
-				'amount'     => $payment_object->amount_money->amount / 100,
+				'amount'     => $amount,
 				'status'     => 'authorized',
 				'item_id'    => $sub->item_id,
 				'action_id'  => $sub->action_id,
