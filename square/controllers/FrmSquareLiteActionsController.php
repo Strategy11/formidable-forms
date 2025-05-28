@@ -141,7 +141,14 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$currency           = strtoupper( $atts['action']->post_content['currency'] );
 		$square_token       = sanitize_text_field( $_POST['square-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$verification_token = sanitize_text_field( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$result             = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token );
+		$description        = FrmTransLiteAppHelper::process_shortcodes(
+			array(
+				'entry' => $atts['entry'],
+				'form'  => $atts['entry']->form_id,
+				'value' => $atts['action']->post_content['description'],
+			)
+		);
+		$result             = FrmSquareLiteConnectHelper::create_payment( $atts['amount'], $currency, $square_token, $verification_token, $description );
 
 		if ( false === $result ) {
 			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();

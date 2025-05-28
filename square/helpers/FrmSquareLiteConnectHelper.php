@@ -468,7 +468,7 @@ class FrmSquareLiteConnectHelper {
 		return false;
 	}
 
-	public static function create_payment( $amount, $currency, $square_token, $verification_token ) {
+	public static function create_payment( $amount, $currency, $square_token, $verification_token, $description ) {
 		return self::post_with_authenticated_body(
 			'create_payment',
 			array(
@@ -476,6 +476,7 @@ class FrmSquareLiteConnectHelper {
 				'currency'           => $currency,
 				'square_token'       => $square_token,
 				'verification_token' => $verification_token,
+				'description'        => $description,
 			)
 		);
 	}
