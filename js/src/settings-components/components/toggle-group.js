@@ -5,6 +5,11 @@
  */
 
 /**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS, DISABLED_CLASS } from 'core/constants';
+
+/**
  * Class names for group toggle component
  *
  * @private
@@ -12,8 +17,6 @@
 const CLASS_NAMES = {
 	GROUP_TOGGLE: 'frm-toggle-group',
 	TOGGLE_BLOCK: 'frm_toggle_block',
-	HIDDEN: 'frm_hidden',
-	DISABLED: 'frm_disabled'
 };
 
 /**
@@ -35,10 +38,44 @@ const DATA_ATTRIBUTES = {
  */
 function initToggleGroupComponents() {
 	// Initialize for existing toggles
-	addEventListeners();
+	initializeToggleGroups();
 
-	// Initialize for newly added fields
+	// Add event listeners for newly added fields
 	document.addEventListener( 'frm_added_field', addEventListeners );
+}
+
+/**
+ * Initialize toggle groups by adding event listeners and applying initial state
+ *
+ * @private
+ * @return {void}
+ */
+function initializeToggleGroups() {
+	applyInitialState();
+	addEventListeners();
+}
+
+/**
+ * Apply the initial state for all toggle buttons on the page
+ *
+ * @private
+ * @return {void}
+ */
+function applyInitialState() {
+	const toggleGroups = document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE }` );
+
+	if ( ! toggleGroups.length ) {
+		return;
+	}
+
+	toggleGroups.forEach( toggleGroup => {
+		const toggleButton = toggleGroup.querySelector( `[${ DATA_ATTRIBUTES.GROUP_NAME }]:checked` );
+		if ( ! toggleButton ) {
+			return;
+		}
+
+		applyToggleState( toggleButton, toggleGroup );
+	} );
 }
 
 /**
@@ -48,13 +85,9 @@ function initToggleGroupComponents() {
  * @return {void}
  */
 function addEventListeners() {
-	const toggleButtons = document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE } [${ DATA_ATTRIBUTES.GROUP_NAME }]` );
-
-	if ( ! toggleButtons.length ) {
-		return;
-	}
-
-	toggleButtons.forEach( toggleButton => toggleButton.addEventListener( 'click', handleToggleClick ) );
+	// Toggle button click events
+	document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE } [${ DATA_ATTRIBUTES.GROUP_NAME }]` )
+		.forEach( toggleButton => toggleButton.addEventListener( 'click', handleToggleClick ) );
 }
 
 /**
@@ -72,26 +105,53 @@ function handleToggleClick( event ) {
 		return;
 	}
 
+	applyToggleState( toggleButton, toggleGroup );
+}
+
+/**
+ * Apply toggle state based on toggle button settings
+ * Shared functionality used by both click handler and initial state
+ *
+ * @private
+ * @param {HTMLElement} toggleButton The toggle button element
+ * @param {HTMLElement} toggleGroup  The toggle group container element
+ * @return {void}
+ */
+function applyToggleState( toggleButton, toggleGroup ) {
 	const fieldId = toggleGroup.getAttribute( DATA_ATTRIBUTES.FIELD_ID );
 	const isChecked = toggleButton.checked;
 
-	let showSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.SHOW );
+	// Handle show/hide elements
+	const showSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.SHOW );
 	if ( showSelectors ) {
-		showSelectors = showSelectors.replace( /{id}/g, fieldId );
-		document.querySelectorAll( showSelectors )?.forEach( element => element.classList.toggle( CLASS_NAMES.HIDDEN, ! isChecked ) );
+		document.querySelectorAll( normalizeSelector( showSelectors, fieldId ) )
+			.forEach( element => element.classList.toggle( HIDDEN_CLASS, ! isChecked ) );
 	}
 
-	let disableSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.DISABLE );
+	// Handle disable/enable elements
+	const disableSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.DISABLE );
 	if ( disableSelectors ) {
-		disableSelectors = disableSelectors.replace( /{id}/g, fieldId );
-		document.querySelectorAll( disableSelectors )?.forEach( element => element.classList.toggle( CLASS_NAMES.DISABLED, isChecked ) );
+		document.querySelectorAll( normalizeSelector( disableSelectors, fieldId ) )
+			.forEach( element => element.classList.toggle( DISABLED_CLASS, isChecked ) );
 	}
 
 	// Toggle disabled state for all other toggle blocks within the group
 	const currentToggleBlock = toggleButton.closest( `.${ CLASS_NAMES.TOGGLE_BLOCK }` );
 	Array.from( toggleGroup.querySelectorAll( `.${ CLASS_NAMES.TOGGLE_BLOCK }` ) )
 		.filter( toggleBlock => toggleBlock !== currentToggleBlock )
-		.forEach( toggleBlock => toggleBlock.classList.toggle( CLASS_NAMES.DISABLED, isChecked ) );
+		.forEach( toggleBlock => toggleBlock.classList.toggle( DISABLED_CLASS, isChecked ) );
+}
+
+/**
+ * Normalize a selector by replacing {id} placeholders with the actual field ID
+ *
+ * @private
+ * @param {string} selector The selector string with potential {id} placeholders
+ * @param {string} fieldId  The field ID to replace placeholders with
+ * @return {string} The normalized selector
+ */
+function normalizeSelector( selector, fieldId ) {
+	return selector.replace( /{id}/g, fieldId );
 }
 
 export { initToggleGroupComponents };

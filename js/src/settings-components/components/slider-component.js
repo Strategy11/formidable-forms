@@ -1,4 +1,10 @@
+
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
 import frmDependentUpdaterComponent from '../../admin/styles/dependent-updater-component';
+
 /**
  * Represents a slider component.
  * @class frmSliderComponent
@@ -121,7 +127,7 @@ export default class frmSliderComponent {
 		const sliderGroupItems = this.getSliderGroupItems( element );
 		svgIcon.addEventListener( 'click', ( ) => {
 			sliderGroupItems.forEach( ( item ) => {
-				item.classList.toggle( 'frm_hidden' );
+				item.classList.toggle( HIDDEN_CLASS );
 			});
 		});
 	}

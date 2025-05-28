@@ -7,7 +7,8 @@
 /**
  * Internal dependencies
  */
-import { HOOKS, CLASS_NAMES } from './constants';
+import { HOOKS } from 'core/constants';
+import { CLASS_NAMES } from './constants';
 import { createTokenContainerElement } from './token-elements';
 import { synchronizeTokensDisplay } from './token-actions';
 import { adjustAllProxyInputStyles } from './proxy-input-style';

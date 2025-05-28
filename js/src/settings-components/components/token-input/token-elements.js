@@ -4,6 +4,10 @@
  * Functions for creating token DOM elements
  */
 
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
 import { CLASS_NAMES } from './constants';
 
 const { span, svg, tag } = window.frmDom;
@@ -38,7 +42,7 @@ export function createTokenContainerElement( field ) {
 
 	// Inserting proxyInput after the field is important to maintain compatibility with Formidable's modal system
 	field.parentNode.insertBefore( proxyInput, field.nextSibling );
-	field.classList.add( CLASS_NAMES.HIDDEN );
+	field.classList.add( HIDDEN_CLASS );
 
 	return container;
 }

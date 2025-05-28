@@ -1,3 +1,7 @@
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
 import { show, hide } from 'core/utils';
 
 /**
@@ -102,7 +106,7 @@ export default class frmRadioComponent {
 		}
 		elements.forEach( ( element ) => {
 			element.classList.remove( 'frm-element-is-visible' );
-			element.classList.add( 'frm_hidden' );
+			element.classList.add( HIDDEN_CLASS );
 			hide( element );
 		});
 	}
