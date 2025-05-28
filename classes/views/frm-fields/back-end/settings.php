@@ -200,11 +200,21 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
 						}
 
-						FrmHtmlHelper::toggle(
-							'frm-default-type-' . $type . '-' . $field['id'],
-							'default_type_' . $type . '[' . $field['id'] . ']',
-							$toggle_args
-						);
+						?>
+						<div class="frm-flex frm-gap-xs frm-items-center">
+							<?php
+							FrmHtmlHelper::toggle(
+								'frm-default-type-' . $type . '-' . $field['id'],
+								'default_type_' . $type . '[' . $field['id'] . ']',
+								$toggle_args
+							);
+
+							if ( ! empty( $default_value_type['tooltip'] ) ) {
+								FrmAppHelper::tooltip_icon( $default_value_type['tooltip'] );
+							}
+							?>
+						</div>
+						<?php
 					}//end foreach
 					?>
 				</div>

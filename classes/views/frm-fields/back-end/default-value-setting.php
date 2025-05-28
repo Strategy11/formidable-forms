@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <p
-	class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] . ( isset( $default_value_types['default_value']['current'] ) ? '' : ' frm_hidden' ) ); ?>"
+	class="frm-has-modal frm-default-value-wrapper default-value-section-<?php echo esc_attr( $field['id'] ); ?>"
 	<?php $field_obj->echo_field_default_setting_attributes( $field ); ?>
 	id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>"
 >
