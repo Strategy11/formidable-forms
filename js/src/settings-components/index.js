@@ -6,7 +6,7 @@ import domReady from '@wordpress/dom-ready';
 /**
  * Internal dependencies
  */
-import { frmRadioComponent, frmSliderComponent, frmTabsComponent, initTokenInputFields } from './components';
+import { frmRadioComponent, frmSliderComponent, frmTabsComponent, initTokenInputFields, initToggleGroupComponents } from './components';
 import { initAddFieldsButtonHandler } from './handlers';
 
 domReady( () => {
@@ -15,4 +15,5 @@ domReady( () => {
 	new frmTabsComponent();
 	initAddFieldsButtonHandler();
 	initTokenInputFields();
+	initToggleGroupComponents();
 } );

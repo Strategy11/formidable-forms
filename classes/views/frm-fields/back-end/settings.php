@@ -178,7 +178,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<div class="frm-has-modal frm-flex-col">
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 
-				<div class="frm-flex-col frm-gap-sm frm-mb-sm">
+				<div class="frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group" data-field-id="<?php echo esc_attr( $field['id'] ); ?>">
 					<?php
 					foreach ( $default_value_types as $type => $default_value_type ) {
 						if ( 'default_value' === $type ) {
@@ -187,21 +187,17 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 						$toggle_args = array(
 							'echo'        => true,
-							'checked'     => isset( $default_value_type['current'] ),
 							'show_labels' => true,
 							'on_label'    => $default_value_type['title'],
+							'checked'     => isset( $default_value_type['current'] ),
 							'input_html'  => array(
-								'data-toggleclass' => 'frm_hidden frm-open',
-								'class'            => $default_value_type['class'],
+								'data-group-name' => 'default-value',
+								'class'           => $default_value_type['class'],
 							),
 						);
 
 						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
 							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
-						}
-
-						if ( isset( $default_value_type['data']['frmshow'] ) ) {
-							$toggle_args['input_html']['data-frmhide'] = '.default-value-section-' . $field['id'];
 						}
 
 						FrmHtmlHelper::toggle(
