@@ -39,8 +39,13 @@ class FrmSquareLiteAppController {
 			wp_send_json_error();
 		}
 
+		$redirect_url = FrmSquareLiteConnectHelper::get_oauth_redirect_url();
+		if ( false === $redirect_url ) {
+			wp_send_json_error( 'Unable to connect to Square successfully' );
+		}
+
 		$response_data = array(
-			'redirect_url' => FrmSquareLiteConnectHelper::get_oauth_redirect_url(),
+			'redirect_url' => $redirect_url,
 		);
 		wp_send_json_success( $response_data );
 	}
