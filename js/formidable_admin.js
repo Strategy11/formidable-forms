@@ -4762,14 +4762,14 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Appends open modals to the field options form.
+	 * Moves open modals out of the field options form.
 	 *
 	 * @since x.x
 	 *
 	 * @param {Object} settings
 	 * @returns {void}
 	 */
-	function appendOpenModalsToFieldOptionsForm( settings ) {
+	function moveOpenModalsOutOfFieldOptions( settings ) {
 		const openModals = settings[0].querySelectorAll( '.frm-inline-modal' );
 		if ( ! openModals.length ) {
 			return;
@@ -4798,7 +4798,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
-				appendOpenModalsToFieldOptionsForm( settings );
+				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {
