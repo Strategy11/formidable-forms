@@ -121,8 +121,8 @@ export default class frmRadioComponent {
 		const width   = activeItem.offsetWidth;
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
-		tracker.style.left = 0;
-		tracker.style.width = `${width}px`;
+		tracker.style.left = width ? 0 : 'var(--gap-2xs)';
+		tracker.style.width = width ? `${width}px` : 'calc(50% - 2px)';
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }
