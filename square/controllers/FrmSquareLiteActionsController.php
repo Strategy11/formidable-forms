@@ -560,4 +560,16 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		return $errors;
 	}
+
+	/**
+	 * @return void
+	 */
+	public static function actions_js() {
+		wp_enqueue_script(
+			'frm_square_admin',
+			FrmSquareLiteAppHelper::plugin_url() . 'js/action.js',
+			array( 'wp-hooks' ),
+			FrmAppHelper::plugin_version()
+		);
+	}
 }

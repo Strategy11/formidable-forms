@@ -9,8 +9,10 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		add_action( 'frm_add_form_option_section', 'FrmSquareLiteActionsController::actions_js' );
+
+		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
-			// Exit early, let the Payments submodule handle everything.
 			return;
 		}
 

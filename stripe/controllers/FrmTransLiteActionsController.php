@@ -35,7 +35,7 @@ class FrmTransLiteActionsController {
 		wp_enqueue_script(
 			'frmtrans_admin',
 			FrmTransLiteAppHelper::plugin_url() . '/js/frmtrans_admin.js',
-			array( 'jquery' ),
+			array( 'jquery', 'wp-hooks' ),
 			FrmAppHelper::plugin_version()
 		);
 		wp_localize_script(

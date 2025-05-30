@@ -531,4 +531,45 @@ class FrmTransLiteAppHelper {
 		}
 		return $value;
 	}
+
+	/**
+	 * Show the currency dropdown for a Payment action.
+	 * When Square is selected, this dropdown is disabled and will always use "Use Square Merchant Currency".
+	 *
+	 * @since x.x
+	 *
+	 * @param string $id
+	 * @param string $name
+	 * @param array  $action_settings
+	 */
+	public static function show_currency_dropdown( $id, $name, $action_settings ) {
+		$selected     = $action_settings['currency'];
+		$gateways     = (array) $action_settings['gateway'];
+		$select_attrs = array(
+			'id'   => $id,
+			'name' => $name,
+		);
+		if ( in_array( 'square', $gateways, true ) ) {
+			$select_attrs['disabled'] = 'disabled';
+			$selected                 = '';
+		}
+		$currencies = FrmCurrencyHelper::get_currencies();
+		?>
+		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
+			<?php
+			if ( in_array( 'square', $gateways, true ) ) {
+				?>
+				<option class="square-currency" value="square" selected><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<?php
+			}
+			?>
+			<?php foreach ( $currencies as $code => $currency ) { ?>
+				<option value="<?php echo esc_attr( strtolower( $code ) ); ?>" <?php selected( $selected, strtolower( $code ) ); ?>><?php echo esc_html( $currency['name'] . ' (' . strtoupper( $code ) . ')' ); ?></option>
+				<?php
+				unset( $currency, $code );
+			}
+			?>
+		</select>
+		<?php
+	}
 }

@@ -34,7 +34,6 @@ class FrmTransLiteAction extends FrmFormAction {
 		$options             = $form_action->post_content;
 		$form_fields         = $this->get_field_options( $args['form']->id );
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
-		$currencies          = FrmCurrencyHelper::get_currencies();
 		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
 		$gateways            = FrmTransLiteAppHelper::get_gateways();
 		$interval_options    = FrmSquareLiteAppHelper::get_repeat_cadence_options();
