@@ -28,11 +28,6 @@ p.frm-inline-select,
 	margin-right: 4px;
 }
 
-.frm-single-settings .frm_single_option .frm_remove_tag {
-	position: relative;
-	bottom: 3px;
-}
-
 .frm-single-settings .frm_single_option .frm_remove_tag::before {
 	content: "";
 }

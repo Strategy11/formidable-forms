@@ -11,9 +11,17 @@
 	display: flex;
 }
 
+.frm-flex\! {
+	display: flex !important;
+}
+
 .frm_hidden,
 .js .frm-hide-js {
 	display: none;
+}
+
+.frm_hidden\! {
+	display: none !important;
 }
 
 .frm-flex-box {

@@ -428,7 +428,7 @@
 </symbol>
 <symbol id="frm_more_horiz_solid_icon" viewBox="0 0 20 20">
 <title>more_horiz_solid</title>
-<path d="M12.5 10a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0zm3.6-2.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4 7.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5z"/>
+<path d="M11.85 10a1.85 1.85 0 1 1-3.7 0 1.85 1.85 0 0 1 3.7 0zm4.25-1.85a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7zM4 8.15a1.85 1.85 0 1 0 0 3.7 1.85 1.85 0 0 0 0-3.7z"/>
 </symbol>
 <symbol id="frm_more_vert_solid_icon" viewBox="0 0 10 20">
 <title>more_vert_solid</title>

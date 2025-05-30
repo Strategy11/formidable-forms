@@ -7,7 +7,7 @@
 /**
  * Internal dependencies
  */
-import { HIDDEN_CLASS, DISABLED_CLASS } from 'core/constants';
+import { HIDDEN_CLASS, DISABLED_CLASS, SINGLE_SETTINGS_CLASS } from 'core/constants';
 
 /**
  * Class names for group toggle component
@@ -26,7 +26,6 @@ const CLASS_NAMES = {
  */
 const DATA_ATTRIBUTES = {
 	GROUP_NAME: 'data-group-name',
-	FIELD_ID: 'data-field-id',
 	SHOW: 'data-show',
 	DISABLE: 'data-disable'
 };
@@ -118,7 +117,9 @@ function handleToggleClick( event ) {
  * @return {void}
  */
 function applyToggleState( toggleButton, toggleGroup ) {
-	const fieldId = toggleGroup.getAttribute( DATA_ATTRIBUTES.FIELD_ID );
+	const fieldId = toggleGroup.closest( `.${ SINGLE_SETTINGS_CLASS }` )?.dataset.fid
+		|| toggleGroup.dataset.fid;
+
 	const isChecked = toggleButton.checked;
 
 	// Handle show/hide elements

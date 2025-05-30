@@ -26,7 +26,7 @@ button.frm_choose_image_box,
 .field-group select,
 .frm-fields .frm-input-field {
 	outline: 0;
-	box-shadow: none;
+	box-shadow: var(--box-shadow-xs);
 	border-radius: var(--small-radius);
 	padding: 5px 14px;
 	border-color: var(--grey-300);
@@ -136,7 +136,6 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 .frm_wrap .frm_form_builder select,
 #frm-form-templates-modal select {
 	height: auto;
-	background-position: right 11px top 55%;
 }
 
 .frm-white-body .tablenav select,

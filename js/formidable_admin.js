@@ -612,8 +612,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		const $fadeEle = jQuery( document.getElementById( id ) );
-		$fadeEle.fadeOut( 400, function() {
+		const fadeEle = document.getElementById( id );
+		const $fadeEle = jQuery( fadeEle );
+		$fadeEle.fadeOut( 300, function() {
 			$fadeEle.remove();
 			fieldUpdated();
 
@@ -643,7 +644,33 @@ function frmAdminBuildJS() {
 			jQuery( this ).closest( '.frm_logic_rows' ).fadeOut( 'slow' );
 		}
 
+		mayToggleWatchLookupLabel( id, fadeEle );
+
 		return false;
+	}
+
+	/**
+	 * Maybe toggle Watch Lookup Fields label visibility
+	 * @param {string}      id      The ID of the removed element
+	 * @param {HTMLElement} fadeEle The removed element
+	 * @return {void}
+	 */
+	function mayToggleWatchLookupLabel( id, fadeEle ) {
+		if ( ! id || ! id.startsWith( 'frm_watch_lookup_' ) ) {
+			return;
+		}
+
+		// If there are other rows, don't hide the label
+		if ( fadeEle.parentElement.children.length > 1 ) {
+			return;
+		}
+
+		const fieldId = fadeEle.closest( '.frm-single-settings' )?.dataset.fid;
+		if ( fieldId ) {
+			setTimeout(() => {
+				document.getElementById( 'frm_watch_lookup_label_' + fieldId )?.classList.add( 'frm_hidden!' );
+			}, 350 );
+		}
 	}
 
 	function afterActionRemoved( type ) {
@@ -4978,6 +5005,9 @@ function frmAdminBuildJS() {
 				const watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
+
+				// Show the "Watch Lookup Fields" label if it was hidden
+				document.getElementById( 'frm_watch_lookup_label_' + id ).classList.remove( 'frm_hidden!' );
 			}
 		});
 		return false;

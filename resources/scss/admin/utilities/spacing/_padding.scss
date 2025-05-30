@@ -6,8 +6,9 @@
 	padding: 0 !important;
 }
 
-.frm-p-1 {
-	padding: 4px;
+.frm-p-1,
+.frm-p-2xs {
+	padding: var(--gap-2xs);
 }
 
 .frm-p-sm,

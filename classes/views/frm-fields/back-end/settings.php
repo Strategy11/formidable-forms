@@ -178,7 +178,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<div class="frm-has-modal frm-flex-col">
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 
-				<div class="frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group" data-field-id="<?php echo esc_attr( $field['id'] ); ?>">
+				<div class="frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group">
 					<?php
 					foreach ( $default_value_types as $type => $default_value_type ) {
 						if ( 'default_value' === $type ) {
@@ -210,7 +210,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							);
 
 							if ( ! empty( $default_value_type['tooltip'] ) ) {
-								FrmAppHelper::tooltip_icon( $default_value_type['tooltip'] );
+								FrmAppHelper::tooltip_icon( $default_value_type['tooltip'], array( 'class' => 'frm-flex' ) );
 							}
 							?>
 						</div>

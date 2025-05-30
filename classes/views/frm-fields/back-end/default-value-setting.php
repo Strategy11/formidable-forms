@@ -8,8 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php $field_obj->echo_field_default_setting_attributes( $field ); ?>
 	id="default-value-for-<?php echo esc_attr( $field['id'] ); ?>"
 >
-	<label for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
-		<?php esc_html_e( 'Default Value', 'formidable' ); ?>
+	<label class="frm-flex! frm-gap-xs frm-items-center" for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
+		<span><?php esc_html_e( 'Default Value', 'formidable' ); ?></span>
+		<?php FrmAppHelper::tooltip_icon( __( 'TODO: Add a tooltip', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 	</label>
 
 	<span class="frm-with-right-icon">
