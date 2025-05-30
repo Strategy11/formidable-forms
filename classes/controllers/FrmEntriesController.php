@@ -265,7 +265,7 @@ class FrmEntriesController {
 	 * @param int         $form_id
 	 * @param bool|string $implode
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	private static function get_child_form_ids( $form_id, $implode = ',' ) {
 		$form_ids       = array();
