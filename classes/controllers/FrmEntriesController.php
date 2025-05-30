@@ -166,7 +166,7 @@ class FrmEntriesController {
 			default:
 				if ( FrmEntriesListHelper::has_moved_entries_bulk_delete_from_pro() ) {
 					if ( $action == -1 ) {
-						// $action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
+						$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 					}
 					$bulk_action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
 					if ( strpos( $bulk_action, 'bulk_' ) === 0 ) {
