@@ -120,35 +120,42 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	public static function bulk_actions( $action = 'list-form' ) {
-		$errors = array();
-
 		$items = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
 		if ( empty( $items ) ) {
-			$errors[] = __( 'No entries were specified', 'formidable' );
-		} else {
-			if ( $action === 'list-form' ) {
-				$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
-				$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
-				$bulkaction          = $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
-			} else {
-				$bulkaction = str_replace( 'bulk_', '', $action );
-			}
-			if ( $bulkaction === 'delete' ) {
+			self::display_list( '', array( __( 'No entries were specified', 'formidable' ) ) );
+			return;
+		}
+		$bulk_action = self::get_bulk_action( $action );
+		if ( $bulk_action === 'delete' ) {
+			if ( ! current_user_can( 'frm_delete_entries' ) ) {
 				$frm_settings = FrmAppHelper::get_settings();
-
-				if ( ! is_array( $items ) ) {
-					$items = explode( ',', $items );
-				}
-				if ( ! current_user_can( 'frm_delete_entries' ) ) {
-					$errors[] = $frm_settings->admin_permission;
-				} elseif ( is_array( $items ) ) {
-					foreach ( $items as $item_id ) {
-						FrmEntry::destroy( $item_id );
-					}
+				self::display_list( '', array( $frm_settings->admin_permission ) );
+				return;
+			}
+			if ( ! is_array( $items ) ) {
+				$items = explode( ',', $items );
+			}
+			if ( is_array( $items ) ) {
+				foreach ( $items as $item_id ) {
+					FrmEntry::destroy( $item_id );
 				}
 			}
-		}//end if
-		self::display_list( '', $errors );
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $action
+	 * @return string
+	 */
+	private static function get_bulk_action( $action ) {
+		if ( $action === 'list-form' ) {
+			$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
+			$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
+			return $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
+		}
+		return str_replace( 'bulk_', '', $action );
 	}
 
 	/**
@@ -186,7 +193,7 @@ class FrmEntriesController {
 	/**
 	 * Delete all entries in a form when the 'delete all' button is clicked.
 	 *
-	 * @since 4.02.04
+	 * @since x.x
 	 */
 	public static function destroy_all() {
 		if ( ! current_user_can( 'frm_delete_entries' ) || ! wp_verify_nonce( FrmAppHelper::simple_get( '_wpnonce', '', 'sanitize_text_field' ), '-1' ) ) {
@@ -199,9 +206,8 @@ class FrmEntriesController {
 		$form_id = (int) $params['form'];
 
 		if ( $form_id ) {
-			$entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
-
 			if ( self::should_trigger_on_delete_entry_actions( $form_id ) ) {
+				$entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
 				// This action takes a while, so only trigger it if there are posts to delete.
 				foreach ( $entry_ids as $entry_id ) {
 					$entry = FrmEntry::getOne( $entry_id, true );
@@ -230,7 +236,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since 4.02.04
+	 * @since x.x
 	 *
 	 * @param int $form_id
 	 */
@@ -258,6 +264,8 @@ class FrmEntriesController {
 	 *
 	 * @param int         $form_id
 	 * @param bool|string $implode
+	 *
+	 * @return string
 	 */
 	private static function get_child_form_ids( $form_id, $implode = ',' ) {
 		$form_ids       = array();
@@ -274,7 +282,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @since 6.9.1
+	 * @since x.x
 	 *
 	 * @param int $form_id
 	 *
