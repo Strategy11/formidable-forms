@@ -132,14 +132,22 @@ class FrmEntriesController {
 				self::display_list( '', array( $frm_settings->admin_permission ) );
 				return;
 			}
-			if ( ! is_array( $items ) ) {
-				$items = explode( ',', $items );
-			}
-			if ( is_array( $items ) ) {
-				foreach ( $items as $item_id ) {
-					FrmEntry::destroy( $item_id );
-				}
-			}
+			self::destroy_items( $items );
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $items
+	 * @return void
+	 */
+	private static function destroy_items( $items ) {
+		if ( ! is_array( $items ) ) {
+			$items = explode( ',', $items );
+		}
+		foreach ( $items as $item_id ) {
+			FrmEntry::destroy( $item_id );
 		}
 	}
 
