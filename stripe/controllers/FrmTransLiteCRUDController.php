@@ -23,18 +23,10 @@ class FrmTransLiteCRUDController {
 			}
 		}
 
-		$payment     = self::get_payment_row( $id );
-		$date_format = get_option( 'date_format' );
-		$user_name   = FrmTransLiteAppHelper::get_user_link( $payment->user_id );
-		$table_name  = self::table_name();
-		$entry       = FrmEntry::getOne( $payment->item_id );
-		$form_id     = $entry ? $entry->form_id : false;
-
-		if ( $table_name !== 'payments' ) {
-			$subscription = $payment;
-		}
-
 		FrmAppHelper::include_svg();
+
+		$table_name = self::table_name();
+		$payment    = self::get_payment_row( $id );
 
 		if ( ! $payment ) {
 			$trans_type = $table_name === 'subscriptions' ? __( 'Subscription', 'formidable' ) : __( 'Payment', 'formidable' );
@@ -49,6 +41,15 @@ class FrmTransLiteCRUDController {
 				)
 			);
 			return;
+		}
+
+		$date_format = get_option( 'date_format' );
+		$user_name   = FrmTransLiteAppHelper::get_user_link( $payment->user_id );
+		$entry       = FrmEntry::getOne( $payment->item_id );
+		$form_id     = $entry ? $entry->form_id : false;
+
+		if ( $table_name !== 'payments' ) {
+			$subscription = $payment;
 		}
 
 		include FrmTransLiteAppHelper::plugin_path() . '/views/' . $table_name . '/show.php';
