@@ -126,14 +126,15 @@ class FrmEntriesController {
 			return;
 		}
 		$bulk_action = self::get_bulk_action( $action );
-		if ( $bulk_action === 'delete' ) {
-			if ( ! current_user_can( 'frm_delete_entries' ) ) {
-				$frm_settings = FrmAppHelper::get_settings();
-				self::display_list( '', array( $frm_settings->admin_permission ) );
-				return;
-			}
-			self::destroy_items( $items );
+		if ( 'delete' !== $bulk_action ) {
+			return;
 		}
+		if ( ! current_user_can( 'frm_delete_entries' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			self::display_list( '', array( $frm_settings->admin_permission ) );
+			return;
+		}
+		self::destroy_items( $items );
 	}
 
 	/**
