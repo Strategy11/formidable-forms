@@ -487,7 +487,7 @@ class FrmAppController {
 	 */
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
+		remove_action( 'frm_after_settings_tabs', 'FrmSettingsController::settings_cta' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
