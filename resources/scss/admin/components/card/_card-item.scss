@@ -18,3 +18,12 @@
 .frm-compact-card-item {
 	padding: var(--gap-sm) 35px 10px 35px;
 }
+
+.frm-card-bottom {
+	background-color: var(--grey-50);
+	margin-left: calc( var(--gap-sm) * -1 );
+	margin-bottom: calc( var(--gap-sm) * -1 );
+	margin-right: calc( var(--gap-sm) * -1 );
+	padding: var(--gap-sm);
+	border-radius: 0 0 var(--small-radius) var(--small-radius);
+}

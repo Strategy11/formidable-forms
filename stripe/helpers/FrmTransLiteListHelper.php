@@ -527,6 +527,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 				return 'Stripe';
 			case 'paypal':
 				return 'PayPal';
+			case 'square':
+				return 'Square';
 		}
 		return $item->paysys;
 	}

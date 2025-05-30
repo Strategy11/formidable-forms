@@ -32,13 +32,6 @@ class FrmStrpLiteAppHelper {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public static function is_debug() {
-		return defined( 'WP_DEBUG' ) && WP_DEBUG;
-	}
-
-	/**
 	 * @param string $function
 	 * @param array  ...$params
 	 * @return mixed
@@ -137,10 +130,20 @@ class FrmStrpLiteAppHelper {
 			<span>
 				<?php
 				/* translators: %1$s: Link HTML, %2$s: End link */
-				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>' );
+				printf( esc_html__( 'Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first.', 'formidable' ), '<a href="?page=formidable-settings&t=stripe_settings" target="_blank">', '</a>', '<a href="?page=formidable-settings&t=square_settings" target="_blank">', '</a>' );
 				?>
 			</span>
 		</div>
 		<?php
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function is_debug() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
 }
