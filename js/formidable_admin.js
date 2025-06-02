@@ -6513,6 +6513,23 @@ function frmAdminBuildJS() {
 		field.className = field.className.replace( replace, replaceWith );
 	}
 
+	/**
+	 * Handle click on insert field button for calculation fields
+	 *
+	 * @since x.x
+	 *
+	 * @param {Event}       event        The click event
+	 * @param {HTMLElement} event.target The target element
+	 * @returns {void}
+	 */
+	const handleCalcFieldInsert = ({ target }) => {
+		const fieldId = target.closest( '.frm-single-settings' ).dataset.fid;
+		const calcBox = document.getElementById( `frm_calc_${fieldId}-search-input` );
+		if ( calcBox ) {
+			popCalcFields( calcBox, true );
+		}
+	};
+
 	function maybeShowInlineModal( e ) {
 		/*jshint validthis:true */
 		e.preventDefault();
@@ -10778,6 +10795,8 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
+
+			frmDom.util.documentOn( 'click', '[id^="frm-insert-field-button-"]', handleCalcFieldInsert );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
 			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
