@@ -1572,6 +1572,17 @@ function frmAdminBuildJS() {
 		document.getElementById( 'frm_in_section_' + fieldId ).value = sectionId;
 	}
 
+	/**
+	 * Get the arguments for inserting a new field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @param {string} formId
+	 * @param {Number} hasBreak
+	 *
+	 * @returns {Object}
+	 */
 	function getInsertNewFieldArgs( fieldType, formId, hasBreak ) {
 		let args = {
 			action: 'frm_insert_field',
@@ -1584,6 +1595,7 @@ function frmAdminBuildJS() {
 		};
 		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
 	}
+
 	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
