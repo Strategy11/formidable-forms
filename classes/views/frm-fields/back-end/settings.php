@@ -122,17 +122,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/number-range.php';
 		}
 
-		/**
-		 * Fires after the number range field settings.
-		 *
-		 * @since x.x
-		 *
-		 * @param array $field   The field settings.
-		 * @param array $display The display settings for the field.
-		 * @param array $values  The values associated with the field.
-		 */
-		do_action( 'frm_after_number_range_option', $field, $display, $values );
-
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 
 		if ( $display['format'] ) {
