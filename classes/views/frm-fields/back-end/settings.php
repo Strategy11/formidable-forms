@@ -132,6 +132,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @param array $values  The values associated with the field.
 		 */
 		do_action( 'frm_after_number_range_option', $field, $display, $values );
+
 		$field_obj->show_primary_options( compact( 'field', 'display', 'values' ) );
 
 		if ( $display['format'] ) {
