@@ -1068,7 +1068,11 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$hidden = $this->maybe_include_hidden_values( $args );
+		if ( ! isset( $shortcode_atts['opt'] ) ) {
+			$hidden = $this->maybe_include_hidden_values( $args );
+		} else {
+			$hidden = '';
+		}
 
 		$field      = $this->field;
 		$html_id    = $args['html_id'];

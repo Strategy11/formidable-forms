@@ -16,8 +16,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
 	$option_index = 0;
+
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			continue;
 		}
 
@@ -69,13 +70,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
-	echo ' aria-required="true" ';
+			echo ' aria-required="true" ';
 		}
 
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-	echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$other_args = array(
