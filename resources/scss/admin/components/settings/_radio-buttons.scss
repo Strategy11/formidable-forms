@@ -19,14 +19,9 @@
 		max-width: unset;
 	}
 
-	&.frm-direction-component .frm-radio-container,
-	&.frm-text-toggle-component .frm-radio-container {
+	&.frm-direction-component .frm-radio-container {
 		gap: var(--gap-xs);
 	}
-
-	&.frm-text-toggle-component .frm-radio-container {
-		max-width: unset;
-   }
 
 	.frm-radio-container svg {
 		width: 16px;
@@ -75,6 +70,18 @@
 	&.frm-direction-component .frm-radio-container > label,
 	&.frm-text-toggle-component .frm-radio-container > label {
 		width: 50%;
+	}
+
+	&.frm-text-toggle-component .frm-radio-container {
+		height: 44px;
+		max-width: unset;
+		gap: var(--gap-xs);
+		padding: var(--gap-xs);
+
+		.frm-radio-active-tracker {
+			height: calc( 100% - var(--gap-sm) );
+			top: var(--gap-xs);
+		}
 	}
 }
 

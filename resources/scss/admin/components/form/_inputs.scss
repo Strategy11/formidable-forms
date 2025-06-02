@@ -107,7 +107,14 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 .frm_wrap select[readonly],
 .frm_wrap textarea[readonly],
 .frm_wrap input::placeholder {
-	color: var(--grey-500);
+	color: var(--grey-400);
+}
+
+
+[id^="frm_calc_"]::placeholder {
+	font-size: 12px;
+	line-height: 1.7;
+	font-style: italic;
 }
 
 .frm_wrap .frm-button-primary.frm-disabled {
