@@ -1068,7 +1068,7 @@ DEFAULT_HTML;
 			return;
 		}
 
-		if ( ! isset( $shortcode_atts['opt'] ) || ! is_numeric( $shortcode_atts['opt'] ) ) {
+		if ( ! isset( $shortcode_atts['opt'] ) ) {
 			$hidden = $this->maybe_include_hidden_values( $args );
 		} else {
 			$hidden = '';
