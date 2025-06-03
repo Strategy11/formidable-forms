@@ -2973,8 +2973,8 @@ function frmAdminBuildJS() {
 			a.setAttribute( 'href', '#' );
 			a.setAttribute( 'data-code', fields[i].fieldId );
 			a.classList.add( 'frm_insert_code' );
-			a.appendChild( span );
 			a.appendChild( document.createTextNode( fields[i].fieldName ) );
+			a.appendChild( span );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( 'frm-field-list-' + fieldId );
@@ -2985,7 +2985,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
-		const exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		const codeList = calcBox.querySelector( '.frm_code_list' ) ?? calcBox.getElementsByClassName( 'frm_code_list' )[0];
+		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
 			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
@@ -6513,23 +6514,6 @@ function frmAdminBuildJS() {
 		field.className = field.className.replace( replace, replaceWith );
 	}
 
-	/**
-	 * Handle click on insert field button for calculation fields
-	 *
-	 * @since x.x
-	 *
-	 * @param {Event}       event        The click event
-	 * @param {HTMLElement} event.target The target element
-	 * @returns {void}
-	 */
-	const handleCalcFieldInsert = ({ target }) => {
-		const fieldId = target.closest( '.frm-single-settings' ).dataset.fid;
-		const calcBox = document.getElementById( `frm_calc_${fieldId}-search-input` );
-		if ( calcBox ) {
-			popCalcFields( calcBox, true );
-		}
-	};
-
 	function maybeShowInlineModal( e ) {
 		/*jshint validthis:true */
 		e.preventDefault();
@@ -6538,7 +6522,7 @@ function frmAdminBuildJS() {
 
 	function showInlineModal( icon, input ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
-			container = jQuery( icon ).closest( 'p' ),
+			container = jQuery( icon ).closest( 'p,ul' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
 		if ( container.hasClass( 'frm-open' ) ) {
@@ -8777,13 +8761,21 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Get the input box for the selected ... icon.
+	 * Get the input box for the selected icon or calculation field.
+	 *
+	 * @param {Element} moreIcon The icon element
+	 * @returns {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
+		// For regular fields
 		let input = moreIcon.nextElementSibling;
-
 		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
 			input = getInputForIcon( input );
+		}
+
+		// For calculation fields
+		if ( ! input ) {
+			input = moreIcon.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-field' );
 		}
 
 		return input;
@@ -10795,8 +10787,6 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
-
-			frmDom.util.documentOn( 'click', '[id^="frm-insert-field-button-"]', handleCalcFieldInsert );
 
 			jQuery( document ).on( 'submit', '#frm_js_build_form', buildSubmittedNoAjax );
 			jQuery( document ).on( 'change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated );
