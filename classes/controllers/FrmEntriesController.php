@@ -140,6 +140,7 @@ class FrmEntriesController {
 					FrmEntry::destroy( $item_id );
 				}
 			}
+			self::display_list();
 		}
 	}
 
