@@ -1172,6 +1172,15 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 
+	/**
+	 * When opt=2 for example is used in the [input] shortcode, only print a single hidden input.
+	 *
+	 * @since x.x
+	 *
+	 * @param array      $args
+	 * @param int|string $opt
+	 * @return string
+	 */
 	private function include_hidden_values_for_single_opt( $args, $opt ) {
 		$hidden         = '';
 		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
@@ -1198,7 +1207,7 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 	
-		/**
+	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
 	 */
