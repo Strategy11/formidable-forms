@@ -126,21 +126,30 @@ class FrmEntriesController {
 			return;
 		}
 		$bulk_action = self::get_bulk_action( $action );
-		if ( $bulk_action === 'delete' ) {
-			if ( ! current_user_can( 'frm_delete_entries' ) ) {
-				$frm_settings = FrmAppHelper::get_settings();
-				self::display_list( '', array( $frm_settings->admin_permission ) );
-				return;
-			}
-			if ( ! is_array( $items ) ) {
-				$items = explode( ',', $items );
-			}
-			if ( is_array( $items ) ) {
-				foreach ( $items as $item_id ) {
-					FrmEntry::destroy( $item_id );
-				}
-			}
-			self::display_list();
+		if ( 'delete' !== $bulk_action ) {
+			return;
+		}
+		if ( ! current_user_can( 'frm_delete_entries' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			self::display_list( '', array( $frm_settings->admin_permission ) );
+			return;
+		}
+		self::destroy_items( $items );
+		self::display_list();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $items
+	 * @return void
+	 */
+	private static function destroy_items( $items ) {
+		if ( ! is_array( $items ) ) {
+			$items = explode( ',', $items );
+		}
+		foreach ( $items as $item_id ) {
+			FrmEntry::destroy( $item_id );
 		}
 	}
 
