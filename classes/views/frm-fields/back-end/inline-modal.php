@@ -2,8 +2,11 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$args['class'] .= ! $args['close-icon'] ? ' frm-modal-no-close' : '';
+$args['class'] .= ! $args['show'] ? ' frm_hidden' : '';
 ?>
-<div class="frm-inline-modal frm-modal postbox <?php echo esc_attr( $args['class'] . ( $args['show'] ? '' : ' frm_hidden' ) ); ?>" id="<?php echo esc_attr( $args['id'] ); ?>">
+<div class="frm-inline-modal frm-modal postbox <?php echo esc_attr( $args['class'] ); ?>" id="<?php echo esc_attr( $args['id'] ); ?>">
 	<?php if ( $args['close-icon'] ) { ?>
 		<a href="#" class="dismiss" title="<?php esc_attr_e( 'Close', 'formidable' ); ?>">
 			<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => __( 'Close', 'formidable' ) ) ); ?>

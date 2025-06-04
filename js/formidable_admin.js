@@ -6561,6 +6561,23 @@ function frmAdminBuildJS() {
 		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );
 	}
 
+	/**
+	 * Close frm-modal-no-close element when clicking outside of it
+	 *
+	 * @param {Event} event The click event
+	 */
+	function closeModalOnOutsideClick( { target } ) {
+		if ( target.closest( '.frm-inline-modal.frm-modal-no-close' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
+			return;
+		}
+
+		// Close all inline modals (without close button) that are not hidden
+		document.querySelectorAll( '.frm-inline-modal.frm-modal-no-close:not(.frm_hidden)' ).forEach( modal => {
+			modal.classList.add( 'frm_hidden' );
+			modal.previousElementSibling.classList.remove( 'frm-open' );
+		});
+	}
+
 	function changeInputtedValue() {
 		/*jshint validthis:true */
 		let i,
@@ -10784,6 +10801,8 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
+
+			document.addEventListener( 'click', closeModalOnOutsideClick );
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );

@@ -8,5 +8,9 @@
 }
 
 .frm_grid_container > .frm-open + .frm-inline-modal {
-	top: 0;
+	top: -4px;
+
+	&.frm-modal-no-close {
+		top: 0 !important;
+	}
 }
