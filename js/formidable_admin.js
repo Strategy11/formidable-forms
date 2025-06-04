@@ -10803,6 +10803,9 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
 			document.addEventListener( 'click', closeModalOnOutsideClick );
+			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', ( { target } ) => {
+				target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
+			} );
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );

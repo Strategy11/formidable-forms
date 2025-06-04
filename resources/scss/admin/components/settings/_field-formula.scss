@@ -33,6 +33,7 @@
 			background-color: #fff;
 			padding: var(--gap-2xs) 6px;
 			border-radius: 4px;
+			box-shadow: var(--box-shadow-xs);
 			margin: 0;
 			cursor: pointer;
 		}
@@ -44,13 +45,12 @@
 		left: 100px;
 
 		> .inside {
-			padding: 14px var(--gap-2xs) !important;
+			padding: 14px var(--gap-2xs) var(--gap-xs) !important;
 		}
 
 		.frm-search {
 			width: initial;
 			margin: 0 9px;
-			max-height: 36px;
 		}
 
 		.frm_code_list {
@@ -60,8 +60,11 @@
 				display: flex;
 				font-size: var(--text-sm);
 				line-height: 1.4;
-				font-weight: 500;
-				padding: 10px;
+				padding: 8px 10px;
+
+				&:hover {
+					font-weight: 500;
+				}
 
 				span {
 					color: var(--grey-500);
