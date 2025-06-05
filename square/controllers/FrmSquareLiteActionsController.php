@@ -367,7 +367,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$found_gateway = false;
 		foreach ( $payment_actions as $action ) {
-			$gateways = $action->post_content['gateways'];
+			$gateways = $action->post_content['gateway'];
 			if ( in_array( 'square', (array) $gateways, true ) ) {
 				$found_gateway = true;
 				break;
