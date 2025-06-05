@@ -651,6 +651,7 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Maybe toggle Watch Lookup Fields label visibility
+	 *
 	 * @param {string}      id      The ID of the removed element
 	 * @param {HTMLElement} fadeEle The removed element
 	 * @return {void}
@@ -4969,10 +4970,10 @@ function frmAdminBuildJS() {
 				fields: getFieldList()
 			},
 			success: function( html ) {
-				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {
+				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
 					const logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
 					logicRow.append( html );
-					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
+					logicRow.closest( '.frm_logic_rows' ).css( 'height', 'auto' ).fadeIn( 'fast' );
 				});
 			}
 		});
