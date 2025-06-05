@@ -365,6 +365,19 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
+		$found_gateway = false;
+		foreach ( $payment_actions as $action ) {
+			$gateways = $action->post_content['gateways'];
+			if ( in_array( 'square', (array) $gateways, true ) ) {
+				$found_gateway = true;
+				break;
+			}
+		}
+
+		if ( ! $found_gateway ) {
+			return;
+		}
+
 		self::load_scripts( (int) $form->id );
 	}
 

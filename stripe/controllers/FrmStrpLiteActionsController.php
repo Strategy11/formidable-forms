@@ -424,6 +424,20 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$dependencies[] = 'formidablepro';
 		}
 
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$found_gateway   = false;
+		foreach ( $action_settings as $action ) {
+			$gateways = $action['gateways'];
+			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
+				$found_gateway = true;
+				break;
+			}
+		}
+
+		if ( ! $found_gateway ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'formidable-stripe',
 			$script_url,
@@ -432,7 +446,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$action_settings = self::prepare_settings_for_js( $form_id );
 		$style_settings  = self::get_style_settings_for_form( $form_id );
 		$stripe_vars     = array(
 			'publishable_key' => $publishable,

@@ -451,6 +451,7 @@ class FrmTransLiteActionsController {
 		// With this here, the value of frm_stripe_vars.settings[0].fields is -1
 		// This is because the amount value is processed and a shortcode is not found in '000'.
 		FrmStrpLiteActionsController::load_scripts( (int) $field->form_id );
+		FrmSquareLiteActionsController::load_scripts( (int) $field->form_id );
 
 		$values['type'] = 'hidden';
 		return $values;
