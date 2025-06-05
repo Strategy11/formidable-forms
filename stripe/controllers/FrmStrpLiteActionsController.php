@@ -446,8 +446,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$style_settings  = self::get_style_settings_for_form( $form_id );
-		$stripe_vars     = array(
+		$style_settings = self::get_style_settings_for_form( $form_id );
+		$stripe_vars    = array(
 			'publishable_key' => $publishable,
 			'form_id'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),
