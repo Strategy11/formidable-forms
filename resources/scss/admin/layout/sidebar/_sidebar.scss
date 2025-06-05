@@ -75,7 +75,7 @@
 		background-color: var(--sidebar-hover);
 	}
 
-	+ div {
+	&:not(.frm-collapsed) + div {
 		padding-top: var(--gap-xs) !important;
 		padding-bottom: var(--gap-sm);
 	}

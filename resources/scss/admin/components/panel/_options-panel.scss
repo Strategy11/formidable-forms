@@ -14,7 +14,7 @@
 	background-color: #fff;
 	border-radius: var(--small-radius);
 	padding: var(--gap-sm);
-	margin: 0 calc( -1 * var(--gap-sm) );
+	margin: var(--gap-2xs) calc( -1 * var(--gap-sm) );
 	transition: background-color 150ms ease-out;
 
 	.frmsvg {

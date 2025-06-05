@@ -39,7 +39,7 @@
 }
 
 .frm-flex-center {
-	display: flex;
+	display: flex !important;
 	justify-content: center;
 	align-items: center;
 }
@@ -72,6 +72,10 @@
 	gap: var(--gap-xl);
 }
 
+.frm-justify-start {
+	justify-content: start !important;
+}
+
 .frm-justify-center {
 	justify-content: center !important;
 }
@@ -86,6 +90,10 @@
 
 .frm-items-center {
 	align-items: center;
+}
+
+.frm-items-stretch {
+	align-items: stretch;
 }
 
 #wpbody-content .frm-flex-wrap {
