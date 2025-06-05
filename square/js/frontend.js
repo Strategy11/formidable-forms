@@ -22,6 +22,11 @@
 	};
 
 	async function initializeCard( payments ) {
+		const cardElement = document.querySelector( '.frm-card-element' );
+		if ( ! cardElement ) {
+			return;
+		}
+
 		const card      = await payments.card();
 		const cardStyle = frmSquareVars.style;
 		await card.attach( '.frm-card-element' );

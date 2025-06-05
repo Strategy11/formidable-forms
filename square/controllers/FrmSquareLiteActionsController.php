@@ -48,6 +48,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$actions = self::get_actions_before_submit( $field['form_id'] );
 
 		if ( $actions ) {
+			self::load_scripts( (int) $field['form_id'] );
+
 			$html_id = $atts['html_id'];
 			include FrmStrpLiteAppHelper::plugin_path() . '/views/payments/card-field.php';
 			return;
