@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSquareLiteConnectHelper {
 
 	/**
-	 * Track the latest error when calling stripe connect.
+	 * Track the latest error when calling the Square API.
 	 *
 	 * @since x.x
 	 *
