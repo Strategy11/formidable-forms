@@ -86,7 +86,7 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_field( $form_id ) {
@@ -121,7 +121,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @since 6.21
 	 */
 	public static function maybe_print_honeypot_js() {
-		if ( ! self::is_enabled() ) {
+		if ( FrmAppHelper::is_admin() || ! self::is_enabled() ) {
 			return;
 		}
 

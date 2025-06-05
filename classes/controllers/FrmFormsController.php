@@ -3222,10 +3222,6 @@ class FrmFormsController {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
 		}
-
-		if ( ! FrmAppHelper::is_admin() ) {
-			FrmHoneypot::maybe_print_honeypot_js();
-		}
 	}
 
 	/**
