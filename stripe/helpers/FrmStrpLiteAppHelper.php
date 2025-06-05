@@ -98,10 +98,15 @@ class FrmStrpLiteAppHelper {
 	 *
 	 * @return void
 	 */
-	public static function fee_education( $medium = 'tip' ) {
+	public static function fee_education( $medium = 'tip', $gateway = false ) {
 		$license_type = FrmAddonsController::license_type();
 		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
 			return;
+		}
+
+		$classes = 'frm-light-tip show_stripe';
+		if ( $gateway && ! array_intersect( (array) $gateway, array( 'stripe' ) ) ) {
+			$classes .= ' frm_hidden';
 		}
 
 		FrmTipsHelper::show_tip(
@@ -112,7 +117,7 @@ class FrmStrpLiteAppHelper {
 				),
 				'tip'   => 'Pay as you go pricing: 3% fee per-transaction + Stripe fees.',
 				'call'  => __( 'Upgrade to save on fees.', 'formidable' ),
-				'class' => 'frm-light-tip',
+				'class' => $classes,
 			),
 			'p'
 		);
