@@ -142,7 +142,7 @@ class FrmSquareLiteConnectHelper {
 		);
 
 		// Clear the transient so it doesn't fail.
-		delete_option( 'frm_square_last_verify_attempt' );
+		delete_option( 'frm_square_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -676,5 +676,28 @@ class FrmSquareLiteConnectHelper {
 	 */
 	public static function at_least_one_mode_is_setup() {
 		return self::get_merchant_id( 'test' ) || self::get_merchant_id( 'live' );
+	}
+
+	/**
+	 * Verify a site identifier is a match.
+	 */
+	public static function verify() {
+		$option_name  = 'frm_square_lite_last_verify_attempt';
+		$last_request = get_option( $option_name );
+
+		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
+			wp_send_json_error( 'Too many requests' );
+		}
+
+		$site_identifier = FrmAppHelper::get_post_param( 'site_identifier' );
+		$usage           = new FrmUsage();
+		$uuid            = $usage->uuid();
+
+		update_option( $option_name, time() );
+
+		if ( $site_identifier === $uuid ) {
+			wp_send_json_success();
+		}
+		wp_send_json_error();
 	}
 }
