@@ -6578,6 +6578,32 @@ function frmAdminBuildJS() {
 		});
 	}
 
+	/**
+	 * Focus on the calculation field when insert field button is clicked
+	 *
+	 * @param {Event}       event        The click event
+	 * @param {HTMLElement} event.target The click target
+	 */
+	function focusOnCalcField( { target } ) {
+		target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
+	}
+
+	/**
+	 * Handle `#` character in formula editor and trigger field insertion
+	 *
+	 * @param {Event}       event        The input event
+	 * @param {HTMLElement} event.target The input target
+	 */
+	function handleFieldInsertShortcut( { target } ) {
+		const value = target.value;
+		if ( ! value.includes( '#' ) ) {
+			return;
+		}
+
+		target.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-insert-field' )?.click();
+		target.value = value.replace( /#$/, '' );
+	}
+
 	function changeInputtedValue() {
 		/*jshint validthis:true */
 		let i,
@@ -10802,10 +10828,9 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
+			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', focusOnCalcField );
+			frmDom.util.documentOn( 'input', '.frm-field-formula-editor', handleFieldInsertShortcut );
 			document.addEventListener( 'click', closeModalOnOutsideClick );
-			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', ( { target } ) => {
-				target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
-			} );
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
