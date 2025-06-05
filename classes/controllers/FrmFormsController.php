@@ -553,6 +553,10 @@ class FrmFormsController {
 			the_content();
 			echo '</div>';
 
+			// Prevent extra unexpected forms in the footer.
+			// For some reason this happens in the Twenty Twenty Five theme.
+			add_filter( 'frm_filter_final_form', '__return_empty_string' );
+
 			self::get_template( 'footer' );
 		}
 	}
