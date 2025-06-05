@@ -158,11 +158,7 @@
 		statusContainer.textContent = errorMessage;
 	}
 
-	document.addEventListener( 'DOMContentLoaded', async function () {
-		if ( ! window.Square ) {
-			throw new Error( 'Square.js failed to load properly' );
-		}
-
+	async function squareInit() {
 		// Find the form containing the Square payment element
 		const cardContainer = document.querySelector( '.frm-card-element' );
 		if ( cardContainer ) {
@@ -243,5 +239,17 @@
 				displayPaymentFailure( e.message );
 			}
 		}
+	}
+
+	document.addEventListener( 'DOMContentLoaded', async function () {
+		if ( ! window.Square ) {
+			throw new Error( 'Square.js failed to load properly' );
+		}
+
+		squareInit();
+
+		jQuery( document ).on( 'frmPageChanged', function() {
+			squareInit();
+		} );
 	});
 }() );
