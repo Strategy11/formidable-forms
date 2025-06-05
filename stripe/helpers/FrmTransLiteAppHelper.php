@@ -558,8 +558,13 @@ class FrmTransLiteAppHelper {
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
 			<?php
 			if ( in_array( 'square', $gateways, true ) ) {
+				$option_params = array(
+					'class'    => 'square-currency',
+					'selected' => 'selected',
+					'value'    => 'square',
+				);
 				?>
-				<option class="square-currency" value="square" selected><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
 				<?php
 			}
 			?>
