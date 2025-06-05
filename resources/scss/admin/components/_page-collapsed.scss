@@ -1,0 +1,83 @@
+/**
+ * Component: Page Collapsed
+ */
+
+.frm-section-collapsed::after {
+	border-color: transparent !important;
+	color: transparent;
+}
+
+.frm-page-break .frm-collapse-page.button {
+	margin-left: 46%;
+	margin-top: calc( -32px / 2 );
+	padding: 6px 12px !important;
+}
+
+#frm-fake-page.frm-page-collapsed {
+	margin-bottom: 0;
+}
+
+.frm-page-collapsed {
+	position: relative;
+	overflow: visible !important;
+	margin-bottom: var(--gap-lg);
+}
+
+.frm-collapse-page .frmsvg,
+.frm-collapse-page .frm_arrowdown6_icon {
+	width: var(--text-sm);
+	height: var(--text-sm);
+	font-size: var(--text-sm);
+	text-align: center;
+	margin-left: 2px;
+	color: currentColor;
+	transition: transform 300ms ease-in-out;
+}
+
+.frm-page-collapsed .frm-collapse-page .frmsvg {
+	transform: rotate(180deg);
+}
+
+#frm-fake-page .frm_arrowdown6_icon {
+	color: currentColor;
+}
+
+.frm-collapsed i::before,
+.frm-page-collapsed .frm_arrowdown6_icon::before {
+	content: '\e913';
+}
+
+.frm-collapse-section svg {
+	fill: var(--primary-color);
+	transition: transform 0.2s ease-out, fill 0.2s ease-out;
+}
+
+.frm-collapse-section:hover svg {
+	fill: var(--primary-700);
+}
+
+.frm-section-collapsed .frm-collapse-section svg {
+	transform: rotate(-90deg);
+}
+
+.open .widget-top .widget-title-action button .frmsvg {
+	transform: rotate(90deg);
+}
+
+.widget-top .widget-title-action button .frmsvg use {
+	color: var(--grey);
+}
+
+.frm-collapsed + .frm-collapse-me {
+	overflow: hidden !important;
+}
+
+.frm-collapse-me {
+	padding-bottom: 10px;
+}
+
+.frm-collapsed + div {
+	height: 0;
+	padding: 0;
+	border-bottom: 2px solid var(--sidebar-hover);
+}

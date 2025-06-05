@@ -1,0 +1,185 @@
+/**
+ * Component: Settings and Panel
+ */
+
+/* Form Settings Tabs */
+.frm-form-setting-tabs {
+	margin-top: var(--gap-sm) !important;
+}
+
+.frm-right-panel > .postbox {
+	background-color: transparent;
+	border: none;
+	box-shadow: none;
+	margin: 0;
+}
+
+.frm-right-panel .postbox.frm_with_icons .inside,
+.frm-right-panel .postbox .inside,
+.frm-right-panel .inside {
+	font-size: var(--text-md);
+	padding: 15px 20px 20px;
+	color: var(--grey-700);
+}
+
+.frm-right-panel .misc-pub-section {
+	padding: var(--gap-xs) 0;
+	position: relative;
+}
+
+.frm-right-panel .inside a,
+.frm-form-setting-tabs a {
+	font-size: var(--text-md);
+	color: var(--grey-700);
+	padding: var(--gap-sm);
+	display: block;
+}
+
+.frm-form-setting-tabs a {
+	color: var(--grey-900);
+	padding: var(--gap-sm) var(--gap-md);
+}
+
+.frm-right-panel .inside a {
+	padding: 0;
+	color: var(--primary-500);
+	display: inline-block;
+}
+
+.frm-right-panel .inside a:hover {
+	color: var(--primary-700);
+}
+
+.frm-form-setting-tabs a:hover {
+	background: var(--sidebar-hover);
+	color: var(--grey-900);
+}
+
+.frm-right-panel .inside i,
+.frm-form-setting-tabs a i,
+.frm-form-setting-tabs a .frmsvg {
+	margin: 0 5px;
+	display: inline-block;
+	width: 20px;
+	height: 20px;
+	color: var(--grey-500);
+}
+
+.frm-form-setting-tabs a .frmsvg {
+	margin: 0;
+}
+
+.frm-right-panel .inside a:hover i,
+.frm-right-panel .inside a:hover .frmsvg,
+.frm-form-setting-tabs a:hover .frmsvg,
+.frm-form-setting-tabs a:hover span {
+	color: var(--grey-700);
+}
+
+.frm_settings_form .tabs-panel {
+	padding: 0 25px;
+}
+
+#form_settings_page .tabs-panel,
+.frm_settings_form .tabs-panel {
+	max-height: initial !important;
+	min-height: 50px !important;
+}
+
+#frm_adv_info .tabs-panel {
+	min-height: 0 !important;
+	overflow-x: hidden;
+	padding: 0;
+	border: none;
+	background: transparent;
+}
+
+select.frm_cancelnew, input.frm_enternew {
+	width: 175px;
+}
+
+.frm_posttax_opt_list {
+	border: 1px solid var(--grey-300);
+	padding: var(--gap-md);
+	border-radius: var(--small-radius);
+	margin: 5px 0 5px var(--gap-md);
+}
+
+/* Color picker CSS */
+.frm-right-panel .wp-picker-open + .wp-picker-input-wrap {
+	position: absolute;
+	margin-left: calc( ( 100% - 35px ) * -1 );
+	margin-top: 1px;
+	width: calc( 100% - 36px );
+}
+
+.frm-right-panel .wp-picker-container input[type="text"].wp-color-picker {
+	border: none;
+	padding: 5px 8px;
+	font-family: inherit;
+	color: var(--grey-700);
+	font-size: var(--text-md);
+	width: 100%;
+	line-height: var(--leading);
+}
+
+.frm-right-panel .wp-picker-input-wrap .wp-picker-clear {
+	display: none !important;
+}
+
+.frm-right-panel .wp-picker-holder {
+	position: absolute;
+	z-index: 999;
+}
+
+.frm-right-panel .wp-picker-input-wrap label {
+	margin-bottom: 0;
+}
+
+.frm-right-panel .wp-picker-container .wp-color-result.button {
+	width: 100%;
+	overflow: hidden;
+	margin: 0 !important;
+	height: var(--h-md) !important;
+	padding: 0 0 0 var(--gap-lg) !important;
+	border-radius: var(--small-radius);
+	border-color: var(--grey-300);
+}
+
+.frm-right-panel .wp-color-result-text {
+	line-height: var(--leading) !important;
+	font-size: var(--text-md);
+	background: #fff !important;
+	color: var(--grey-900);
+	padding: 5px 8px;
+	border-color: var(--grey-300);
+	text-align: left;
+}
+
+.frm-right-panel .color-alpha {
+	width: var(--gap-lg) !important;
+}
+
+.frm_grid_container .wp-picker-container {
+	width: 100%;
+	position: relative;
+}
+
+.wp-picker-container button.wp-color-result {
+	border: 1px solid var(--grey-300) !important;
+}
+
+.wp-picker-container .wp-picker-input-wrap input.hex.wp-color-picker {
+	max-width: 100%;
+	position: relative;
+}
+
+.frm_end .wp-picker-holder {
+	margin-left: -145px;
+}
+
+.frm_end.frm6 .wp-picker-holder {
+	margin-left: -86px;
+}
+
+/* End of color picker CSS */

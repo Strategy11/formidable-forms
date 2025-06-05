@@ -1,0 +1,47 @@
+/**
+ * Component: Form Templates Modal
+ */
+
+/* Start confirm and form templates modals */
+#frm-form-templates-modal textarea {
+	height: 108px;
+}
+
+#frm-form-templates-modal .frm-fields button.btn {
+	border-color: var(--grey-300);
+	color: var(--grey-900);
+	cursor: pointer;
+}
+
+#frm-form-templates-modal .frm-fields button.btn .frmsvg  {
+	color: var(--grey-400);
+	width: 14px;
+	height: 14px;
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-fieldset {
+	position: relative;
+}
+
+#frm-form-templates-modal .frm-form-templates-modal-fieldset .frm-with-left-icon .frmsvg {
+	padding: 0;
+	top: 0;
+	left: 13px;
+}
+
+/* Fixes pro issue #3508, prevent a conflict that hides the postbox in modal */
+#frm-form-templates-modal .postbox {
+	display: block !important;
+}
+
+/* Leave email modal */
+#frm_empty_inbox #frm-leave-email-modal {
+	margin-top: var(--gap-2xl);
+}
+
+/* Name your form modal */
+#frm-name-your-form-modal .frm_modal_top {
+	padding-top: var(--gap-sm);
+}
+
+/* End confirm and form templates modals */

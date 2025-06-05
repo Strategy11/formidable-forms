@@ -1,0 +1,18 @@
+/**
+ * Inline Modals
+ */
+
+.frm-open .frmsvg.frm-show-inline-modal,
+.frm-open i.frm-show-inline-modal {
+	opacity: .5;
+}
+
+.frm-lookup-box-label + .frm-inline-modal,
+.frm-open + .frm-inline-modal {
+	top: -10px;
+	margin-bottom: 0;
+}
+
+.frm_grid_container > .frm-open + .frm-inline-modal {
+	top: -4px;
+}

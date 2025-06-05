@@ -1,0 +1,138 @@
+/**
+ * Icon Font styles
+ */
+
+.frm_icon_font {
+	color: #A0A0A0;
+	color: var(--grey);
+}
+
+.frm-fields label .frm_icon_font {
+	font-size: inherit;
+}
+
+.misc-pub-revisions.frm_icon_font,
+.misc-pub-revisions.frm_icon_font:hover {
+	color: inherit;
+}
+
+.postbox.frm_with_icons .inside {
+	padding: 0;
+	margin: 0;
+}
+
+.frm_add_tag::before {
+	content: '\e602';
+}
+
+.frm_remove_tag::before {
+	content: '\e600';
+}
+
+.frm_logic_row .frm1 > .frm_remove_tag {
+	padding: 0;
+}
+
+.frm_tooltip_icon::before {
+	font-size: 13px;
+	vertical-align: top;
+}
+
+.frm_help svg,
+.frm_help .frmsvg {
+	height: 13px;
+	width: 13px;
+	vertical-align: top;
+	color: #A0A0A0;
+	color: var(--grey);
+}
+
+.form-field input[type="text"].frm_other_input {
+	width: 30%;
+	margin-left: 10px;
+}
+
+.frm-add-other {
+	text-align: right;
+}
+
+.frm_add_opt .frm_add_tag,
+.frm-add-other .frm_add_tag {
+	vertical-align: 20%;
+}
+
+.frm_action_icon {
+	margin: 5px 0 0 5px;
+}
+
+span.frm_action_icon {
+	margin: 0 4px 0 0;
+}
+
+.frm_action_icon:active {
+	outline: none;
+}
+
+a.frm_action_icon:hover {
+	text-decoration: none;
+}
+
+.frm_action_icon.frm_error_icon::before {
+	content: '\e608';
+}
+
+.frm_inactive_icon.frm_action_icon.frm_error_icon::before {
+	content: '\e606';
+}
+
+.frm-field-action-icons {
+	text-align: right;
+	position: absolute;
+	top: 2px;
+	right: 2px;
+	max-width: 100%;
+}
+
+.frm-field-action-icons .frm-field-id {
+	display: inline-block;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	width: 80px;
+	max-width: calc( 100% - 50px );
+	position: relative;
+	top: 2px;
+}
+
+.frm-field-action-icons > a {
+	font-size: var(--text-md);
+	width: 17px;
+}
+
+.frm-field-action-icons a:hover {
+	text-decoration: none;
+}
+
+.frm-field-action-icons .dropdown {
+	display: inline-block;
+}
+
+.frm-field-action-icons > a .frmsvg {
+	color: var(--grey-500) !important;
+	font-size: 17px;
+	width: 17px;
+	height: 17px;
+}
+
+.frm-field-action-icons > a .frmsvg,
+.frm-field-action-icons > div > a .frmsvg {
+	vertical-align: baseline;
+}
+
+.edit_field_type_end_divider .frm-field-action-icons {
+	display: none !important;
+}
+
+.frm-move {
+	cursor: grab;
+}

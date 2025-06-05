@@ -30,7 +30,7 @@ describe("Form Templates page", () => {
         cy.get('[frm-search-text="contact us"] .frm-form-templates-item-title-text')
             .should('contain', 'Contact Us');
         cy.get('[frm-search-text="contact us"] .frm-form-templates-item-description')
-            .should('contain.text', 'A basic contact form that for any WordPress website.');
+            .should('contain.text', 'A basic contact form for any WordPress website.');
         cy.get('[frm-search-text="contact us"] span.frm-category-icon svg use')
             .should('have.attr', 'xlink:href', '#frm_align_right_icon');
 

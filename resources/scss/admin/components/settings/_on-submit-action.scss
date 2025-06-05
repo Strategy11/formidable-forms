@@ -1,0 +1,37 @@
+/**
+ * Component: On Submit Action
+ */
+
+.frm_single_on_submit_settings .frm_form_field {
+	margin: 22px 0;
+}
+
+.frm_on_submit_type_setting {
+	padding: 8px 0;
+}
+
+.frm_on_submit_type label {
+	display: flex;
+	border: 1px solid var(--grey-border);
+	border-radius: var(--small-radius);
+	gap: 16px;
+	padding: 16px;
+	align-items: center;
+	justify-content: center;
+}
+
+.frm_on_submit_type input {
+	opacity: 0 !important;
+	position: absolute;
+	z-index: -1;
+}
+
+.frm_on_submit_type input[type="radio"]:checked + label {
+	border-color: var(--primary-color);
+	box-shadow: 0 0 0 1px var(--primary-color);
+}
+
+#form_settings_page .frm_on_submit_type label:hover,
+.frm_on_submit_type input[type="radio"]:checked + label svg {
+	color: var(--primary-color);
+}

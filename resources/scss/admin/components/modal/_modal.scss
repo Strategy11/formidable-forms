@@ -1,0 +1,103 @@
+/**
+ * Components - Modal
+ */
+
+.frm-modal:not(#frm-dismissable-cta) .postbox {
+	max-height: 600px;
+	overflow: hidden;
+	margin-bottom: 0;
+}
+
+.frm-modal .postbox .frm_modal_top,
+.frm-dialog .frm_common_modal .postbox > div:first-child,
+.frm-error-modal .frm_modal_top {
+	padding: var(--gap-md) var(--gap-md) 0;
+	position: relative;
+}
+
+.frm-modal h2,
+.frm-modal .postbox .inside h2, /* Override WP. */
+.frm-modal .postbox .frm-modal-title,
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:first-child,
+.frm-error-modal .frm-modal-title {
+	display: inline-block;
+	font-size: var(--text-lg);
+	color: var(--grey-900);
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+}
+
+.frm-modal h3 {
+	font-weight: 500;
+}
+
+/* Dismiss icon button */
+
+.frm-inline-modal > a.dismiss,
+.frm-modal .postbox > a.dismiss,
+.frm-modal .postbox .frm-modal-title + div:last-child,
+.frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
+	position: absolute;
+	top: 19px;
+	right: 19px;
+	display: flex;
+	z-index: 2;
+}
+
+body.rtl .frm-inline-modal > a.dismiss,
+body.rtl .frm-modal .postbox > a.dismiss,
+body.rtl .frm-modal .postbox .frm-modal-title + div:last-child,
+body.rtl .frm-dialog .frm_common_modal .postbox > div:first-child > div:last-child {
+	right: unset;
+	left: 30px;
+}
+
+.frm-info-modal .postbox > a.dismiss,
+.frm-inline-modal > a.dismiss {
+	right: 13px;
+	top: 13px;
+}
+
+.frm-modal .postbox .frm-modal-title + div:last-child a,
+.frm-modal a.dismiss .frmsvg,
+.frm_common_modal .frm_modal_top a .frmsvg {
+	color: var(--grey-500);
+}
+
+.frm-modal .postbox .frm-modal-title + div:last-child a:hover,
+.frm-modal a.dismiss .frmsvg:hover,
+.frm_common_modal .frm_modal_top a .frmsvg:hover {
+	color: var(--grey-700);
+}
+
+.frm-modal .frm_modal_content > div.inside,
+.frm_common_modal .frm_modal_content > div.inside {
+	padding: var(--gap-md);
+	margin: 0;
+	font-size: var(--text-sm);
+	color: var(--grey-700);
+}
+
+.frm-modal p {
+	color: var(--grey-900);
+}
+
+.frm_common_modal .postbox {
+	display: flex;
+	flex-direction: column;
+}
+
+.frm-modal .postbox > div.inside .cta-inside {
+	overflow-y: auto;
+	height: auto;
+}
+
+.frm_modal_footer {
+	padding: 0 var(--gap-md) var(--gap-sm);
+	text-align: right;
+}
+
+body.frm-body-with-open-modal {
+	overflow-y: hidden;
+}

@@ -1,0 +1,19 @@
+/**
+ * Components - Field Loading
+ */
+
+form .form-field.frm_field_loading {
+	margin-bottom: 0;
+	min-height: 0;
+	padding: 0;
+	text-align: center;
+}
+
+.frm_sorting > .frm_field_loading .frm_visible_spinner.frm-wait {
+	margin-bottom: 10px;
+}
+
+.frm_sorting > .frm_field_loading ~ .frm_field_loading .frm_visible_spinner.frm-wait {
+	margin-bottom: 0;
+	display: none;
+}

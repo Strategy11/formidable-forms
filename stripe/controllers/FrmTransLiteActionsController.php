@@ -366,6 +366,7 @@ class FrmTransLiteActionsController {
 				'fields'     => self::get_fields_for_price( $payment_action ),
 				'one'        => $payment_action->post_content['type'],
 				'email'      => $payment_action->post_content['email'],
+				'layout'     => isset( $payment_action->post_content['layout'] ) ? $payment_action->post_content['layout'] : '',
 			);
 
 			/**

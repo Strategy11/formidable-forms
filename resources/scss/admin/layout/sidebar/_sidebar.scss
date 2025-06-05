@@ -1,0 +1,102 @@
+/**
+ * Layout - Sidebar
+ */
+
+.frm-right-panel a.frm_add_logic_link,
+.frm-right-panel h3 {
+	color: var(--grey-700);
+	font-size: var(--text-lg);
+	font-weight: 400;
+	margin: 0;
+}
+
+.frm-single-settings > h3:first-of-type {
+	border-bottom: 2px solid var(--sidebar-hover);
+	border-top: none;
+	padding-top: 0 !important;
+}
+
+.frm-flex-justify,
+.frm-right-panel .frm-single-settings h3 {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.frm-right-panel h3 i {
+	color: var(--grey-700);
+	float: right;
+	width: 16px;
+	cursor: pointer;
+}
+
+/* right sidebar */
+#post-body-content + .frm-right-panel {
+	flex: 0 0 var(--medium-sidebar);
+	width: var(--medium-sidebar);
+	min-width: var(--medium-sidebar);
+	border-left: 1px solid var(--sidebar-hover);
+}
+
+.frm-new-entry #post-body-content + .frm-right-panel,
+.frm-new-entry .frm-right-panel {
+	background: none;
+	border: none;
+}
+
+#post-body-content + .frm-right-panel h3 {
+	padding: 20px 20px 0;
+	font-size: 17px;
+}
+
+#post-body-content + .frm-right-panel .frm_with_icons:first-of-type h3 {
+	border: none;
+}
+
+#frm-insert-fields h3 {
+	color: var(--grey);
+	font-size: 15px;
+	font-weight: 400;
+	border-top: none;
+	border-bottom: 1px solid var(--sidebar-hover);
+	margin: 0;
+	padding: 10px 10px 10px 25px;
+}
+
+.frm_wrap #frm_adv_info ul.category-tabs {
+	margin: 0;
+	padding: 10px 0 9px;
+	font-size: 15px;
+	background: transparent;
+}
+
+.frm_wrap #frm_adv_info ul.category-tabs li {
+	padding: 10px;
+	background-color: transparent !important;
+}
+
+.frm_wrap #frm_adv_info ul.category-tabs li:first-child {
+	border: none;
+}
+
+.frm_wrap #frm_adv_info .categorydiv div.tabs-panel {
+	border: none;
+	background: transparent;
+}
+
+.frm_wrap #frm-categorydiv {
+	border-right: none;
+}
+
+#frm_adv_info #frm-conditionals {
+	padding-top: var(--gap-sm);
+}
+
+#postbox-container-1 #taxonomy-linkcategory #frm-html-tags {
+	display: none;
+	max-height: none;
+}
+
+#postbox-container-1 .frm_field_list #frm-insert-fields .frmbutton.dropdown {
+	position: relative;
+}

@@ -1,0 +1,27 @@
+/**
+ * Layout - Admin Page
+ */
+
+.frm-admin-page-formidableedit #wpbody-content > *:not(.frm-review-notice):not(.frm_previous_install):not(.frm-banner-alert),
+#wpbody-content > .updated,
+#wpbody-content > #update-nag,
+#wpbody-content > .update-nag,
+#wpbody-content > .notice,
+#wpbody-content > .error:not(.frm_previous_install),
+.frm-white-body .updated,
+.frm-white-body .notice,
+.frm_wrap > .wrap > .notice,
+.frm-white-body .error:not(.frm_previous_install)
+{
+	display: none;
+}
+
+.frm-admin-page-formidableedit #frm_builder_page {
+	display: block !important;
+}
+
+.frm-white-body .updated,
+.frm-white-body .error {
+	margin: 0;
+	padding: 10px 20px;
+}
