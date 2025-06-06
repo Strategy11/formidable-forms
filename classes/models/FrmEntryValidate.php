@@ -292,6 +292,7 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function is_filtered_match( $value, $option_value ) {
+		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
 		$has_filter = has_filter( 'the_content', 'wpautop' );
 		if ( $has_filter ) {
 			remove_filter( 'the_content', 'wpautop' );
@@ -300,9 +301,7 @@ class FrmEntryValidate {
 		if ( $has_filter ) {
 			add_filter( 'the_content', 'wpautop' );
 		}
-
-		$match = $value === trim( $filtered_option );
-		return $match;
+		return $value === trim( $filtered_option );
 	}
 
 	/**
