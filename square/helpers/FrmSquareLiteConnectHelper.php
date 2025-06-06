@@ -700,4 +700,12 @@ class FrmSquareLiteConnectHelper {
 		}
 		wp_send_json_error();
 	}
+
+	public static function get_subscription( $subscription_id ) {
+		$response = self::post_with_authenticated_body( 'get_subscription', array( 'subscription_id' => $subscription_id ) );
+		if ( is_object( $response ) ) {
+			return $response;
+		}
+		return false;
+	}
 }

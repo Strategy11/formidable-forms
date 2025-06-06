@@ -234,17 +234,31 @@ class FrmSquareLiteEventsController {
 			$amount = floatval( $payment_object->amount_money->amount ) / 100;
 		}
 
+		$begin_date   = gmdate( 'Y-m-d' );
+		$expire_date  = '0000-00-00';
+		$subscription = FrmSquareLiteConnectHelper::get_subscription( $subscription_id );
+		if ( is_object( $subscription ) ) {
+			if ( ! empty( $subscription->start_date ) ) {
+				$begin_date = gmdate( 'Y-m-d', strtotime( $subscription->start_date ) );
+			}
+			if ( ! empty( $subscription->charged_through_date ) ) {
+				$expire_date = gmdate( 'Y-m-d', strtotime( $subscription->charged_through_date ) );
+			}
+		}
+
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(
 			array(
-				'paysys'     => 'square',
-				'amount'     => $amount,
-				'status'     => 'authorized',
-				'item_id'    => $sub->item_id,
-				'action_id'  => $sub->action_id,
-				'receipt_id' => $payment_id,
-				'sub_id'     => $sub->id,
-				'test'       => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
+				'paysys'      => 'square',
+				'amount'      => $amount,
+				'status'      => 'authorized',
+				'item_id'     => $sub->item_id,
+				'action_id'   => $sub->action_id,
+				'receipt_id'  => $payment_id,
+				'sub_id'      => $sub->id,
+				'test'        => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
+				'begin_date'  => $begin_date,
+				'expire_date' => $expire_date,
 			)
 		);
 	}
