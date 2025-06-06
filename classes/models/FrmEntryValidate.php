@@ -259,6 +259,11 @@ class FrmEntryValidate {
 					break;
 				}
 
+				$match = self::is_filtered_match( $current_value, $option_value );
+				if ( $match ) {
+					break;
+				}
+
 				if ( is_numeric( $current_value ) ) {
 					$match = (int) $current_value === (int) $option_value;
 					if ( $match ) {
@@ -273,6 +278,31 @@ class FrmEntryValidate {
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Make an extra check after passing $option_value through the_content filter.
+	 * This is to help catch cases where the option's formatting has been modified using
+	 * the_content filter.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @param string $option_value
+	 * @return bool
+	 */
+	private static function is_filtered_match( $value, $option_value ) {
+		$has_filter = has_filter( 'the_content', 'wpautop' );
+		if ( $has_filter ) {
+			remove_filter( 'the_content', 'wpautop' );
+		}
+		$filtered_option = apply_filters( 'the_content', $option_value );
+		if ( $has_filter ) {
+			add_filter( 'the_content', 'wpautop' );
+		}
+
+		$match = $value === trim( $filtered_option );
+		return $match;
 	}
 
 	/**
