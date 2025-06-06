@@ -1638,6 +1638,13 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 		width:100%;
 	}
 }
+
+.frm-card-element .sq-card-wrapper .sq-card-message {
+	margin-bottom: 0;
+}
+.frm-card-errors:empty {
+	margin: 0;
+}
 <?php
 
 echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

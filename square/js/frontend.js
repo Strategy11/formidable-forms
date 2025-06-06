@@ -162,7 +162,7 @@
 		// Find the form containing the Square payment element
 		const cardContainer = document.querySelector( '.frm-card-element' );
 		if ( cardContainer ) {
-			thisForm = cardContainer.closest('form');
+			thisForm = cardContainer.closest( 'form' );
 			if ( thisForm ) {
 				// Initially disable the submit button until card is valid
 				disableSubmit( thisForm );
@@ -174,10 +174,10 @@
 
 					if ( ! squareCardElementIsComplete ) {
 						// Show error message
-						const statusContainer = document.querySelector( '.frm-card-errors' );
+						const statusContainer = thisForm.querySelector( '.frm-card-errors' );
 						if ( statusContainer ) {
 							statusContainer.textContent = 'Please complete all card details before submitting.';
-							statusContainer.classList.add('is-failure');
+							statusContainer.classList.add( 'is-failure' );
 							statusContainer.style.visibility = 'visible';
 						}
 					} else {
@@ -195,7 +195,7 @@
 			payments = window.Square.payments( appId, locationId );
 		} catch ( e ) {
 			const statusContainer            = document.querySelector( '.frm-card-errors' );
-			statusContainer.className        = 'missing-credentials frm_error';
+			statusContainer.classList.add( 'missing-credentials', 'frm_error' );
 			statusContainer.style.visibility = 'visible';
 			statusContainer.textContent      = e.message;
 			return;
@@ -211,10 +211,32 @@
 
 		cardGlobal = card;
 
-		async function handlePaymentMethodSubmission( event, card ) {
-			event.preventDefault();
+		/**
+		 * @param {Object} $form
+		 * @return {Boolean} false if there are errors.
+		 */
+		function validateFormSubmit( $form ) {
+			var errors, keys;
 
+			errors = frmFrontForm.validateFormSubmit( $form );
+			keys   = Object.keys( errors );
+
+			if ( 1 === keys.length && errors[ keys[0] ] === '' ) {
+				// Pop the empty error that gets added by invisible recaptcha.
+				keys.pop();
+			}
+
+			return 0 === keys.length;
+		}
+
+		async function handlePaymentMethodSubmission( event, card ) {
 			try {
+				if ( ! validateFormSubmit( thisForm ) ) {
+					return;
+				}
+
+				event.preventDefault();
+
 				// Increment running counter and disable the submit button
 				running++;
 				if ( thisForm ) {
