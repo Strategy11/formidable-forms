@@ -153,6 +153,8 @@ class FrmHoneypot extends FrmValidate {
 
 		global $frm_vars;
 		self::$printed_honeypot_selectors = $frm_vars['honeypot_selectors'];
+
+		echo 'Print ' . $css;
 	}
 
 	/**
@@ -183,16 +185,17 @@ class FrmHoneypot extends FrmValidate {
 			return '';
 		}
 
-		if ( ! empty( self::$printed_honeypot_selectors ) ) {
-			$diff = array_diff( $frm_vars['honeypot_selectors'], self::$printed_honeypot_selectors );
-			if ( empty( $diff ) ) {
+		$selectors = $frm_vars['honeypot_selectors'];
+		if ( self::$printed_honeypot_selectors ) {
+			$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+			if ( ! $selectors ) {
 				return '';
 			}
 		}
 
 		return sprintf(
 			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
-			implode( ',', $diff ?? $frm_vars['honeypot_selectors'] )
+			implode( ',', $selectors )
 		);
 	}
 
