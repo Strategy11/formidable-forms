@@ -153,8 +153,6 @@ class FrmHoneypot extends FrmValidate {
 
 		global $frm_vars;
 		self::$printed_honeypot_selectors = $frm_vars['honeypot_selectors'];
-
-		echo 'Print ' . $css;
 	}
 
 	/**
