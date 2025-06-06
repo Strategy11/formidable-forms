@@ -254,13 +254,17 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
-				$option_value = do_shortcode( $option_value );
-				$match        = $current_value === $option_value;
+				$match = trim( $current_value ) === trim( $option_value );
 				if ( $match ) {
 					break;
 				}
 
-				$match = $current_value === trim( $option_value );
+				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
+				if ( $match ) {
+					break;
+				}
+
+				$match = self::is_filtered_match( $current_value, $option_value );
 				if ( $match ) {
 					break;
 				}
@@ -279,6 +283,30 @@ class FrmEntryValidate {
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Make an extra check after passing $option_value through the_content filter.
+	 * This is to help catch cases where the option's formatting has been modified using
+	 * the_content filter.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @param string $option_value
+	 * @return bool
+	 */
+	private static function is_filtered_match( $value, $option_value ) {
+		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
+		$filter_priority = has_filter( 'the_content', 'wpautop' );
+		if ( is_numeric( $filter_priority ) ) {
+			remove_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+		$filtered_option = apply_filters( 'the_content', $option_value );
+		if ( is_numeric( $filter_priority ) ) {
+			add_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+		return trim( $value ) === trim( $filtered_option );
 	}
 
 	/**
