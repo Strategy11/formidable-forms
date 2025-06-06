@@ -254,12 +254,12 @@ class FrmEntryValidate {
 					$option_value = $option;
 				}
 
-				$match = $current_value === do_shortcode( $option_value );
+				$match = trim( $current_value ) === trim( $option_value );
 				if ( $match ) {
 					break;
 				}
 
-				$match = $current_value === trim( $option_value );
+				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
 				if ( $match ) {
 					break;
 				}
@@ -306,7 +306,7 @@ class FrmEntryValidate {
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
-		return $value === trim( $filtered_option );
+		return trim( $value ) === trim( $filtered_option );
 	}
 
 	/**
