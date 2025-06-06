@@ -240,9 +240,7 @@ class FrmHoneypot extends FrmValidate {
 			$frm_vars['honeypot_selectors'] = array();
 		}
 
-		if ( ! in_array( '#' . $html_id, $frm_vars['honeypot_selectors'], true ) ) {
-			$frm_vars['honeypot_selectors'][] = '#' . $html_id;
-		}
+		$frm_vars['honeypot_selectors'][] = '#' . $html_id;
 	}
 
 	private function get_honeypot_field_id() {
