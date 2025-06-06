@@ -3225,6 +3225,8 @@ class FrmFormsController {
 		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
+
+			FrmHoneypot::maybe_print_honeypot_js();
 		}
 	}
 
