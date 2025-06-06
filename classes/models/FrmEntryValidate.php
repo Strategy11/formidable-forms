@@ -293,13 +293,13 @@ class FrmEntryValidate {
 	 */
 	private static function is_filtered_match( $value, $option_value ) {
 		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
-		$has_filter = has_filter( 'the_content', 'wpautop' );
-		if ( $has_filter ) {
-			remove_filter( 'the_content', 'wpautop' );
+		$filter_priority = has_filter( 'the_content', 'wpautop' );
+		if ( is_numeric( $filter_priority ) ) {
+			remove_filter( 'the_content', 'wpautop', $filter_priority );
 		}
 		$filtered_option = apply_filters( 'the_content', $option_value );
-		if ( $has_filter ) {
-			add_filter( 'the_content', 'wpautop' );
+		if ( is_numeric( $filter_priority ) ) {
+			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
 		return $value === trim( $filtered_option );
 	}
