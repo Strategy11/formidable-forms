@@ -248,8 +248,7 @@ class FrmEntryValidate {
 				}
 
 				$option_value = is_array( $option ) ? $option['value'] : $option;
-				$option_value = do_shortcode( $option_value );
-				$match        = $current_value === $option_value;
+				$match        = $current_value === do_shortcode( $option_value );
 				if ( $match ) {
 					break;
 				}
