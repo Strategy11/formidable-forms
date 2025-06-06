@@ -107,25 +107,41 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		return;
 	}
 
-	if ( ! preg_match( '/^FrmStrpLite.+$/', $class_name ) && ! preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
-		// Exit early if the class does not match the Stripe Lite prefix.
+	if ( preg_match( '/^FrmStrpLite.+$/', $class_name ) || preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
+		// Autoload for /stripe/ folder.
+		$filepath = $original_filepath . '/stripe/';
+		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+			$filepath .= 'helpers/';
+		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+			$filepath .= 'controllers/';
+		} else {
+			$filepath .= 'models/';
+		}
+
+		$filepath .= $class_name . '.php';
+
+		if ( file_exists( $filepath ) ) {
+			require $filepath;
+		}
+
 		return;
 	}
 
-	// Autoload for /stripe/ folder.
-	$filepath = $original_filepath . '/stripe/';
-	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-		$filepath .= 'helpers/';
-	} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
-		$filepath .= 'controllers/';
-	} else {
-		$filepath .= 'models/';
-	}
+	if ( preg_match( '/^FrmSquareLite.+$/', $class_name ) ) {
+		$filepath = $original_filepath . '/square/';
+		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+			$filepath .= 'helpers/';
+		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+			$filepath .= 'controllers/';
+		} else {
+			$filepath .= 'models/';
+		}
 
-	$filepath .= $class_name . '.php';
+		$filepath .= $class_name . '.php';
 
-	if ( file_exists( $filepath ) ) {
-		require $filepath;
+		if ( file_exists( $filepath ) ) {
+			require $filepath;
+		}
 	}
 }
 

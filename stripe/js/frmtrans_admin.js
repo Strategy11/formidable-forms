@@ -24,12 +24,39 @@
 		}
 	}
 
+	function toggleGateway() {
+		if ( ! this.checked ) {
+			return;
+		}
+
+		const gateway = this.value;
+		const checked = this.checked;
+
+		toggleOpts( this, checked, '.show_' + gateway );
+
+		const toggleOff       = 'stripe' === gateway ? 'square' : 'stripe';
+		const settings        = jQuery( this ).closest( '.frm_form_action_settings' );
+		const showClass       = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
+		const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + toggleOff );
+
+		gatewaySettings.forEach(
+			setting => {
+				if ( ! setting.classList.contains( showClass ) ) {
+					setting.style.display = 'none';
+				}
+			}
+		);
+
+		wp.hooks.doAction( 'frm_trans_toggled_gateway', { gateway, checked, settings } );
+	}
+
 	function frmTransLiteAdminJS() {
 		return {
 			init: function() {
 				var actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions !== null ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
+					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
 				}
 
 				document.querySelectorAll( '.frm_trans_ajax_link' ).forEach(
