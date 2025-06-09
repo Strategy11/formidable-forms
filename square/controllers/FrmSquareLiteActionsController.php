@@ -230,7 +230,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'emailAddress' => $billing_contact['email'],
 			),
 			'catalog'  => array(
-				'name'      => $action->post_content['description'],
+				'name'      => self::prepare_subscription_description( $action->post_content['description'], $atts ),
 				'trialDays' => $action->post_content['trial_interval_count'],
 				'limit'     => $action->post_content['payment_limit'],
 				'amount'    => $atts['amount'],
@@ -265,6 +265,22 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$subscription_id = self::create_new_subscription( $response->id, $atts );
 
 		return true;
+	}
+
+	/**
+	 * Prepare the description for a subscription.
+	 *
+	 * @param string $description
+	 * @param array  $atts
+	 * @return string
+	 */
+	private static function prepare_subscription_description( $description, $atts ) {
+		$shortcode_atts = array(
+			'entry' => $atts['entry'],
+			'form'  => $atts['entry']->form_id,
+			'value' => $description,
+		);
+		return FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
 	}
 
 	/**
