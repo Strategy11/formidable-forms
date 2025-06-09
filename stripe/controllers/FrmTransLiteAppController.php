@@ -63,6 +63,9 @@ class FrmTransLiteAppController {
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
+			if ( ! $last_payment ) {
+				continue;
+			}
 
 			$log_message = 'Subscription #' . $sub->id . ': ';
 			if ( $sub->status === 'future_cancel' ) {
