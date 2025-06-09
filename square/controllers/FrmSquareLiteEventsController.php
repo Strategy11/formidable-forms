@@ -181,9 +181,15 @@ class FrmSquareLiteEventsController {
 				if ( $payment ) {
 					$status = $this->event->data->object->payment->status;
 
-					if ( 'COMPLETED' === $status ) {
-						// TODO Trigger "Payment complete" actions.
+					if ( 'COMPLETED' === $status && 'complete' !== $payment->status ) {
 						$frm_payment->update( $payment->id, array( 'status' => 'complete' ) );
+
+						FrmTransLiteActionsController::trigger_payment_status_change(
+							array(
+								'status'  => 'complete',
+								'payment' => $payment,
+							)
+						);
 					}
 					return;
 				}
