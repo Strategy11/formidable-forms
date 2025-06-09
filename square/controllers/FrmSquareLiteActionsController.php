@@ -251,6 +251,9 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$response = FrmSquareLiteConnectHelper::create_subscription( $info );
+		if ( false === $response ) {
+			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();
+		}
 
 		if ( is_string( $response ) ) {
 			return $response;
