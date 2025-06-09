@@ -170,6 +170,8 @@ class FrmSquareLiteEventsController {
 					$subscription_id = $subscription->id;
 					$this->add_subscription_payment( $subscription_id );
 				}
+
+				// TODO: Set next billing date.
 				break;
 			case 'payment.updated':
 				$payment_id  = $this->event->data->id;
@@ -194,9 +196,15 @@ class FrmSquareLiteEventsController {
 				if ( $sub ) {
 					$status = $this->event->data->object->subscription->status;
 
-					// if ( 'DEACTIVATED' === $status ) {
-						// TODO: Mark subscription as cancelled.
-					// }
+					if ( 'DEACTIVATED' === $status ) {
+						$status = 'canceled';
+						FrmTransLiteSubscriptionsController::change_subscription_status(
+							array(
+								'status' => $status,
+								'sub'    => $sub,
+							)
+						);
+					}
 				}
 				break;
 		}//end switch
