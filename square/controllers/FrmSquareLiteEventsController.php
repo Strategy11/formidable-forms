@@ -257,6 +257,11 @@ class FrmSquareLiteEventsController {
 			}
 			if ( ! empty( $subscription->charged_through_date ) ) {
 				$expire_date = gmdate( 'Y-m-d', strtotime( $subscription->charged_through_date ) );
+
+				$frm_sub->update(
+					$sub->id,
+					array( 'next_bill_date' => gmdate( 'Y-m-d', strtotime( $expire_date . ' +1 day' ) ) )
+				);
 			}
 		}
 
