@@ -182,7 +182,10 @@ class FrmSquareLiteEventsController {
 					$status = $this->event->data->object->payment->status;
 
 					if ( 'COMPLETED' === $status && 'complete' !== $payment->status ) {
-						$frm_payment->update( $payment->id, array( 'status' => 'complete' ) );
+						$payment_values           = (array) $payment;
+						$payment_values['status'] = 'complete';
+
+						$frm_payment->update( $payment->id, $payment_values );
 
 						FrmTransLiteActionsController::trigger_payment_status_change(
 							array(
@@ -250,20 +253,23 @@ class FrmSquareLiteEventsController {
 
 		$begin_date   = gmdate( 'Y-m-d' );
 		$expire_date  = '0000-00-00';
-		$subscription = FrmSquareLiteConnectHelper::get_subscription( $subscription_id );
+		$subscription = FrmSquareLiteConnectHelper::get_subscription( $sub->sub_id );
+
 		if ( is_object( $subscription ) ) {
 			if ( ! empty( $subscription->start_date ) ) {
 				$begin_date = gmdate( 'Y-m-d', strtotime( $subscription->start_date ) );
 			}
+
 			if ( ! empty( $subscription->charged_through_date ) ) {
 				$expire_date = gmdate( 'Y-m-d', strtotime( $subscription->charged_through_date ) );
 
 				$frm_sub->update(
 					$sub->id,
-					array( 'next_bill_date' => gmdate( 'Y-m-d', strtotime( $expire_date . ' +1 day' ) ) )
+					array( 'next_bill_date' => gmdate( 'Y-m-d', strtotime( $expire_date ) ) )
 				);
 			}
 		}
+
 
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(
