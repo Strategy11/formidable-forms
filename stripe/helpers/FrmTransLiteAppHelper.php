@@ -567,9 +567,8 @@ class FrmTransLiteAppHelper {
 				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
 				<?php
 			}
-			?>
-			<?php foreach ( $currencies as $code => $currency ) { ?>
-				<?php
+
+			foreach ( $currencies as $code => $currency ) {
 				FrmHtmlHelper::echo_dropdown_option(
 					$currency['name'] . ' (' . strtoupper( $code ) . ')',
 					$selected === strtolower( $code ),
