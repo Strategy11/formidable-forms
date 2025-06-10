@@ -18,6 +18,14 @@
 	-webkit-appearance: none;
 }
 
+.frm_wrap input[type="radio"] {
+	border-color: var(--grey-300);
+	box-shadow: var(--box-shadow-xs);
+
+	&:checked::before {
+		background-color: var(--primary-500);
+	}
+}
 
 .frm_wrap .with_frm_style .frm_checkbox input[type="checkbox"],
 .frm_wrap input[type="checkbox"],
