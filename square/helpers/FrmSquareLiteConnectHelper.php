@@ -123,7 +123,10 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		wp_register_script( 'formidable_square_settings', FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js', array( 'formidable_dom' ), FrmAppHelper::plugin_version(), true );
+		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$dependencies   = array( 'formidable_dom' );
+		$plugin_version = FrmAppHelper::plugin_version();
+		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
