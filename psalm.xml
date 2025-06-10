@@ -206,6 +206,7 @@
 				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
 				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
+				<file name="square/controllers/FrmSquareLiteAppController.php"
 			</errorLevel>
 		</InvalidScalarArgument>
 		<PossiblyInvalidIterator>

@@ -648,7 +648,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param bool $force
-	 * @return false\string
+	 * @return false|string
 	 */
 	public static function get_merchant_currency( $force = false ) {
 		if ( ! $force ) {
