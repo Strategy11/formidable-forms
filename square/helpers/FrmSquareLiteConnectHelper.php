@@ -417,7 +417,7 @@ class FrmSquareLiteConnectHelper {
 
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_merchant_id();
-		header( 'Location: ' . self::get_url_for_square_settings( $connected ), true, 302 );
+		wp_safe_redirect( self::get_url_for_square_settings( $connected ) );
 		exit;
 	}
 
