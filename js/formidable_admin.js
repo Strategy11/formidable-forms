@@ -4971,9 +4971,13 @@ function frmAdminBuildJS() {
 			},
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
-					const logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					logicRow.append( html );
-					logicRow.closest( '.frm_logic_rows' ).css( 'height', 'auto' ).fadeIn( 'fast' );
+					const logicRow = document.getElementById( 'frm_logic_row_' + id );
+					logicRow.insertAdjacentHTML( 'beforeend', html );
+					logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' ).textContent = logicRow.dataset.ruleText;
+
+					const logicRows = logicRow.closest( '.frm_logic_rows' );
+					logicRows.style.height = 'auto';
+					jQuery( logicRows ).fadeIn( 'fast' );
 				});
 			}
 		});
