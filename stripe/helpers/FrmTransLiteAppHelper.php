@@ -569,8 +569,14 @@ class FrmTransLiteAppHelper {
 			}
 			?>
 			<?php foreach ( $currencies as $code => $currency ) { ?>
-				<option value="<?php echo esc_attr( strtolower( $code ) ); ?>" <?php selected( $selected, strtolower( $code ) ); ?>><?php echo esc_html( $currency['name'] . ' (' . strtoupper( $code ) . ')' ); ?></option>
 				<?php
+				FrmHtmlHelper::echo_dropdown_option(
+					$currency['name'] . ' (' . strtoupper( $code ) . ')',
+					$selected === strtolower( $code ),
+					array(
+						'value' => strtolower( $code ),
+					)
+				);
 				unset( $currency, $code );
 			}
 			?>
