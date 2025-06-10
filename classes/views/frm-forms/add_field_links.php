@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-right-panel frm-settings-panel">
+<div class="frm-right-panel frm-settings-panel frm-scrollbar-wrapper">
 	<div class="frm_field_list">
 		<div class="frm-style-tabs-wrapper">
 			<div class="frm-tabs-delimiter">
