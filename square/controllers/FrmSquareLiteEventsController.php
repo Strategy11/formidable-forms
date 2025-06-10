@@ -246,7 +246,7 @@ class FrmSquareLiteEventsController {
 			// Japanese does not include the additional 2 digits.
 			$amount = $payment_object->amount_money->amount;
 		} else {
-			$amount = floatval( $payment_object->amount_money->amount ) / 100;
+			$amount = number_format( floatval( $payment_object->amount_money->amount ) / 100, 2 );
 		}
 
 		$begin_date   = gmdate( 'Y-m-d' );
