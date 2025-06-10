@@ -11,6 +11,10 @@
 	margin: var(--gap-2xl);
 }
 
+.frm-m-2xs {
+	margin: var(--gap-2xs) !important;
+}
+
 .frm_no_top_margin, /* deprecated */
 .frm-mt-0 {
 	margin-top: 0 !important;

@@ -111,3 +111,20 @@
 .frm-order-none {
 	order: 0;
 }
+
+%h-stack-base {
+	display: flex;
+	align-items: center;
+}
+
+.frm-h-stack {
+
+	@extend %h-stack-base;
+	gap: var(--gap-2xs);
+}
+
+.frm-h-stack-sm {
+
+	@extend %h-stack-base;
+	gap: var(--gap-xs);
+}

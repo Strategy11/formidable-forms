@@ -21,7 +21,10 @@
 }
 
 .frm-settings-panel {
+
+	/* Right padding reduced to compensate for scrollbar width (~8px) */
 	padding: var(--gap-sm);
+	padding-right: var(--gap-xs);
 
 	.frm-style-tabs-wrapper {
 
