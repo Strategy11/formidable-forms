@@ -422,6 +422,20 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$found_gateway   = false;
+		foreach ( $action_settings as $action ) {
+			$gateways = $action['gateways'];
+			if ( ! $gateways || in_array( 'square', (array) $gateways, true ) ) {
+				$found_gateway = true;
+				break;
+			}
+		}
+
+		if ( ! $found_gateway ) {
+			return;
+		}
+
 		wp_register_script(
 			'square',
 			FrmSquareLiteAppHelper::active_mode() === 'live' ? 'https://web.squarecdn.com/v1/square.js' : 'https://sandbox.web.squarecdn.com/v1/square.js',
@@ -441,7 +455,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$action_settings = self::prepare_settings_for_js( $form_id );
 		$square_vars     = array(
 			'formId'     => $form_id,
 			'nonce'      => wp_create_nonce( 'frm_square_ajax' ),
