@@ -170,8 +170,6 @@ class FrmSquareLiteEventsController {
 					$subscription_id = $subscription->id;
 					$this->add_subscription_payment( $subscription_id );
 				}
-
-				// TODO: Set next billing date.
 				break;
 			case 'payment.updated':
 				$payment_id  = $this->event->data->id;
