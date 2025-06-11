@@ -46,7 +46,7 @@ class FrmSquareLiteHooksController {
 		add_action( 'wp_ajax_nopriv_frm_square_process_events', array( &$frm_square_events_controller, 'process_events' ) );
 		add_action( 'wp_ajax_frm_square_process_events', array( &$frm_square_events_controller, 'process_events' ) );
 
-		// Stripe Lite.
+		// Verify Square Lite sites.
 		add_action( 'wp_ajax_nopriv_frm_square_lite_verify', 'FrmSquareLiteConnectHelper::verify' );
 	}
 }
