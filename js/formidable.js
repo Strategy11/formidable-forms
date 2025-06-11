@@ -369,8 +369,8 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
-		if ( parseInt( field.dataset.requirementShouldBeValidated ) === 0 ) {
-			field.dataset.requirementShouldBeValidated = 1;
+		if ( parseInt( field.dataset.validateRequired ) === 0 ) {
+			field.dataset.validateRequired = 1;
 			return errors;
 		}
 
