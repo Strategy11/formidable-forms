@@ -156,6 +156,7 @@
 			} else {
 				currencySetting.disabled = false;
 				option.remove();
+				currencySetting.value = 'usd';
 			}
 			return;
 		}
