@@ -451,7 +451,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'formidable-square',
 			$script_url,
 			$dependencies,
-			uniqid(),
+			FrmAppHelper::plugin_version(),
 			false
 		);
 
