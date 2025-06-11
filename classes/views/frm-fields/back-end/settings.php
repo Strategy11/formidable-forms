@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 		}
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
-			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>

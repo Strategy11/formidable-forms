@@ -70,13 +70,8 @@ class FrmTransLiteListsController {
 
 		$columns['status']     = esc_html__( 'Status', 'formidable' );
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
-
-		$paypal_is_active = class_exists( 'FrmPaymentsController', false );
-		if ( $paypal_is_active ) {
-			$columns['paysys'] = esc_html__( 'Processor', 'formidable' );
-		}
-
-		$columns['mode'] = esc_html__( 'Mode', 'formidable' );
+		$columns['paysys']     = esc_html__( 'Processor', 'formidable' );
+		$columns['mode']       = esc_html__( 'Mode', 'formidable' );
 
 		return $columns;
 	}
