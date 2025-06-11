@@ -274,7 +274,8 @@
 
 	document.addEventListener( 'DOMContentLoaded', async function () {
 		if ( ! window.Square ) {
-			throw new Error( 'Square.js failed to load properly' );
+			console.error( 'Square.js failed to load properly' );
+			return;
 		}
 
 		squareInit();
