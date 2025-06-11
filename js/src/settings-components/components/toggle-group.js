@@ -27,7 +27,8 @@ const CLASS_NAMES = {
 const DATA_ATTRIBUTES = {
 	GROUP_NAME: 'data-group-name',
 	SHOW: 'data-show',
-	DISABLE: 'data-disable'
+	DISABLE: 'data-disable',
+	ENABLE: 'data-enable',
 };
 
 /**
@@ -129,11 +130,18 @@ function applyToggleState( toggleButton, toggleGroup ) {
 			.forEach( element => element.classList.toggle( HIDDEN_CLASS, ! isChecked ) );
 	}
 
-	// Handle disable/enable elements
+	// Handle disable elements
 	const disableSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.DISABLE );
 	if ( disableSelectors ) {
 		document.querySelectorAll( normalizeSelector( disableSelectors, fieldId ) )
 			.forEach( element => element.classList.toggle( DISABLED_CLASS, isChecked ) );
+	}
+
+	// Handle enable elements
+	const enableSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.ENABLE );
+	if ( enableSelectors ) {
+		document.querySelectorAll( normalizeSelector( enableSelectors, fieldId ) )
+			.forEach( element => element.classList.toggle( DISABLED_CLASS, ! isChecked ) );
 	}
 
 	// Toggle disabled state for all other toggle blocks within the group
