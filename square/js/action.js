@@ -3,6 +3,9 @@
 	wp.hooks.addAction( 'frm_trans_toggled_gateway', hookNamespace, onGatewayToggle );
 	wp.hooks.addAction( 'frm_filled_form_action', hookNamespace, onFilledFormAction );
 
+	const actions = document.getElementById( 'frm_notification_settings' );
+	jQuery( actions ).on( 'change', '.frm_trans_type', onToggleSub );
+
 	const { __ } = wp.i18n;
 
 	function onGatewayToggle( { gateway, settings, checked } ) {
@@ -44,6 +47,22 @@
 		if ( squareIsEnabled ) {
 			syncRepeat( settings );
 		}
+	}
+
+	function onToggleSub() {
+		const target = this;
+		setTimeout( function() {
+			const settings       = target.closest( '.frm_form_action_settings' );
+			const squareIsActive = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
+
+			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+				function( subOpts ) {
+					if ( subOpts.classList.contains( 'show_stripe' ) && ! subOpts.classList.contains( 'show_square' ) && squareIsActive ) {
+						subOpts.style.display = 'none';
+					}
+				}
+			);
+		}, 0 );
 	}
 
 	function syncRepeat( settings ) {
