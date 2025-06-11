@@ -153,9 +153,21 @@
 		return verificationResults.token;
 	}
 
+	/**
+	 * Display an error message in the payment form.
+	 *
+	 * @param {string} errorMessage
+	 * @return {void}
+	 */
 	function displayPaymentFailure( errorMessage ) {
-		const statusContainer = document.querySelector( '.frm-card-errors' );
-		statusContainer.textContent = errorMessage;
+		if ( ! thisForm ) {
+			return;
+		}
+
+		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
+		if ( statusContainer ) {
+			statusContainer.textContent = errorMessage;
+		}
 	}
 
 	async function squareInit() {
@@ -173,12 +185,9 @@
 					event.stopPropagation();
 
 					if ( ! squareCardElementIsComplete ) {
-						// Show error message
 						const statusContainer = thisForm.querySelector( '.frm-card-errors' );
 						if ( statusContainer ) {
 							statusContainer.textContent = 'Please complete all card details before submitting.';
-							statusContainer.classList.add( 'is-failure' );
-							statusContainer.style.visibility = 'visible';
 						}
 					} else {
 						handlePaymentMethodSubmission( event, cardGlobal );
