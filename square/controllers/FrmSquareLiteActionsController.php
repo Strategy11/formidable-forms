@@ -294,14 +294,18 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return int
 	 */
 	private static function create_new_subscription( $subscription_id, $atts ) {
+		$repeat_cadence = $atts['action']->post_content['repeat_cadence'] ?? 'DAILY';
+		$interval_count = self::get_interval_count_from_repeat_cadence( $repeat_cadence );
+		$interval       = self::get_interval_from_repeat_cadence( $repeat_cadence );
+
 		$new_values = array(
 			'amount'         => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['amount'], $atts['action'] ),
 			'paysys'         => 'square',
 			'item_id'        => $atts['entry']->id,
 			'action_id'      => $atts['action']->ID,
 			'sub_id'         => $subscription_id,
-			'interval_count' => $atts['action']->post_content['interval_count'],
-			'time_interval'  => $atts['action']->post_content['interval'],
+			'interval_count' => $interval_count,
+			'time_interval'  => $interval,
 			'status'         => 'active',
 			'next_bill_date' => gmdate( 'Y-m-d' ),
 			'test'           => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
@@ -311,6 +315,67 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$payment_id  = $frm_payment->create( $new_values );
 
 		return $payment_id;
+	}
+
+	/**
+	 * @param string $repeat_cadence
+	 * @return int
+	 */
+	private static function get_interval_count_from_repeat_cadence( $repeat_cadence ) {
+		switch ( $repeat_cadence ) {	
+			case 'NINETY_DAYS':
+				return 90;
+			case 'SIXTY_DAYS':
+				return 60;
+			case 'THIRTY_DAYS':
+				return 30;
+			case 'EVERY_SIX_MONTHS':
+				return 6;
+			case 'EVERY_FOUR_MONTHS':
+				return 4;
+			case 'QUARTERLY':
+				return 3;
+			case 'EVERY_TWO_WEEKS':
+			case 'EVERY_TWO_MONTHS':
+			case 'EVERY_TWO_YEARS':
+				return 2;
+			case 'DAILY':
+			case 'ANNUAL';
+			case 'MONTHLY':
+			case 'WEEKLY':
+			default:
+				return 1;
+		}
+	}
+
+	/**
+	 * @param string $repeat_cadence
+	 * @return string
+	 */
+	private static function get_interval_from_repeat_cadence( $repeat_cadence ) {
+		switch ( $repeat_cadence ) {
+			case 'ANNUAL':
+			case 'EVERY_TWO_YEARS':
+				return 'year';
+
+			case 'MONTHLY':
+			case 'EVERY_TWO_MONTHS':
+			case 'QUARTERLY':
+			case 'EVERY_FOUR_MONTHS':
+			case 'EVERY_SIX_MONTHS':
+				return 'month';
+
+			case 'WEEKLY':
+			case 'EVERY_TWO_WEEKS':
+				return 'week';
+
+			case 'DAILY':
+			case 'THIRTY_DAYS':
+			case 'SIXTY_DAYS':
+			case 'NINETY_DAYS':
+			default:
+				return 'day';
+		}
 	}
 
 	/**
