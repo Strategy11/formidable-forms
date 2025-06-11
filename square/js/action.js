@@ -5,11 +5,11 @@
 
 	const { __ } = wp.i18n;
 
-	function onGatewayToggle( { gateway, $settings, checked } ) {
+	function onGatewayToggle( { gateway, settings, checked } ) {
 		if ( 'square' === gateway && checked ) {
-			syncRepeat( $settings.get( 0 ) );
+			syncRepeat( settings.get( 0 ) );
 		}
-		syncCurrency( gateway, $settings.get( 0 ) );
+		syncCurrency( gateway, settings.get( 0 ) );
 	}
 
 	function onFilledFormAction( $container ) {
