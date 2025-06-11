@@ -44,8 +44,8 @@
 			return;
 		}
 
-		const squareIsEnabled = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
-		if ( squareIsEnabled ) {
+		const squareGatewayOption = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' );
+		if ( squareGatewayOption?.checked ) {
 			syncRepeat( settings );
 		}
 	}
