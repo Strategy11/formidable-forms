@@ -322,10 +322,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return int
 	 */
 	private static function get_interval_count_from_repeat_cadence( $repeat_cadence ) {
-		switch ( $repeat_cadence ) {	
+		switch ( $repeat_cadence ) {
 			case 'NINETY_DAYS':
 				return 90;
-			case 'SIXTY_DAYS':
+			case 'SIXTY_DAYS':	
 				return 60;
 			case 'THIRTY_DAYS':
 				return 30;
@@ -340,12 +340,12 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			case 'EVERY_TWO_YEARS':
 				return 2;
 			case 'DAILY':
-			case 'ANNUAL';
+			case 'ANNUAL':
 			case 'MONTHLY':
 			case 'WEEKLY':
 			default:
 				return 1;
-		}
+		}//end switch
 	}
 
 	/**
@@ -375,7 +375,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			case 'NINETY_DAYS':
 			default:
 				return 'day';
-		}
+		}//end switch
 	}
 
 	/**
