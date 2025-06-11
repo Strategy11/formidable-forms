@@ -369,6 +369,11 @@ function frmFrontFormJS() {
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
 
+		if ( parseInt( field.dataset.shouldBeValidated ) === 0 ) {
+			field.dataset.shouldBeValidated = 1;
+			return errors;
+		}
+
 		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
