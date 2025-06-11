@@ -30,7 +30,8 @@
 			if ( wrapper ) {
 				if ( 'square' === gateway ) {
 					wrapper.style.display = 'none';
-				} else {
+				} else if ( 'recurring' !== typeDropdown.value ) {
+					// Capture appearing with Stripe selected and recurring selected.
 					wrapper.style.removeProperty( 'display' );
 				}
 			}
