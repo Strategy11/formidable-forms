@@ -1,9 +1,107 @@
 ( function() {
 	const hookNamespace = 'formidable-square';
 	wp.hooks.addAction( 'frm_trans_toggled_gateway', hookNamespace, onGatewayToggle );
+	wp.hooks.addAction( 'frm_filled_form_action', hookNamespace, onFilledFormAction );
 
-	function onGatewayToggle( { gateway, settings } ) {
-		const currencySetting = settings.get( 0 ).querySelector( '[name*="[post_content][currency]"]' );
+	const { __ } = wp.i18n;
+
+	function onGatewayToggle( { gateway, $settings, checked } ) {
+		if ( 'square' === gateway && checked ) {
+			syncRepeat( $settings.get( 0 ) );
+		}
+		syncCurrency( gateway, $settings.get( 0 ) );
+	}
+
+	function onFilledFormAction( $container ) {
+		const settings = $container.get( 0 ).closest( '.frm_form_action_settings' );
+		if ( ! settings || ! settings.classList.contains( 'frm_single_payment_settings' ) ) {
+			return;
+		}
+
+		const squareIsEnabled = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
+		if ( squareIsEnabled ) {
+			syncRepeat( settings );
+		}
+	}
+
+	function syncRepeat( settings ) {
+		// Sync recurring payment setting.
+		const repeatCadence = settings.querySelector( '[name*="[post_content][repeat_cadence]"]' );
+		if ( repeatCadence ) {
+			return;
+		}
+
+		const intervalCount = settings.querySelector( '[name*="[post_content][interval_count]"]' );
+		if ( ! intervalCount ) {
+			return;
+		}
+
+		const settingWrapper = intervalCount.closest( '.frm_trans_sub_opts' );
+		if ( ! settingWrapper ) {
+			return;
+		}
+
+		const clone = settingWrapper.cloneNode( true );
+		const intervalCountSetting = clone.querySelector( '[name*="[post_content][interval_count]"]' );
+
+		const repeatCadenceName = intervalCountSetting.name.replace( 'interval_count', 'repeat_cadence' );
+
+		const newDropdown = document.createElement( 'select' );
+		newDropdown.name = repeatCadenceName;
+		const repeatCadenceOptions = {
+			DAILY: __( 'Daily', 'formidable' ),
+			WEEKLY: __( 'Weekly', 'formidable' ),
+			EVERY_TWO_WEEKS: __( 'Every Two Weeks', 'formidable' ),
+			THIRTY_DAYS: __( 'Every Thirty Days', 'formidable' ),
+			SIXTY_DAYS: __( 'Every Sixty Days', 'formidable' ),
+			NINETY_DAYS: __( 'Every Ninety Days', 'formidable' ),
+			MONTHLY: __( 'Monthly', 'formidable' ),
+			EVERY_TWO_MONTHS: __( 'Every Two Months', 'formidable' ),
+			QUARTERLY: __( 'Quarterly', 'formidable' ),
+			EVERY_FOUR_MONTHS: __( 'Every Four Months', 'formidable' ),
+			EVERY_SIX_MONTHS: __( 'Every Six Months', 'formidable' ),
+			ANNUAL: __( 'Annual', 'formidable' ),
+			EVERY_TWO_YEARS: __( 'Every Two Years', 'formidable' )
+		};
+
+		const selectedOption = settings.querySelector( '.frm-repeat-cadence-value' );
+
+		for ( const optionKey in repeatCadenceOptions ) {
+			const option = document.createElement( 'option' );
+			option.value = optionKey;
+			option.textContent = repeatCadenceOptions[ optionKey ];
+
+			if ( selectedOption && selectedOption.value === optionKey ) {
+				option.selected = true;
+			}
+
+			newDropdown.appendChild( option );
+		}
+
+		intervalCountSetting.parentNode.insertBefore( newDropdown, intervalCountSetting.nextSibling );
+
+		intervalCountSetting.remove();
+		clone.querySelector( '[name*="[post_content][interval]"]' )?.remove();
+		settingWrapper.parentNode.insertBefore( clone, settingWrapper.nextSibling );
+
+		const label = newDropdown.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
+		if ( label && label.textContent.includes( 'Repeat Every' ) ) {
+			label.textContent = 'Repeat';
+		}
+
+		newDropdown.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_square' );
+
+		const stripeLabel = intervalCount.closest( '.frm_trans_sub_opts' )?.querySelector( 'label' );
+		if ( stripeLabel && stripeLabel.textContent.includes( 'Repeat Every' ) ) {
+			stripeLabel.textContent = 'Repeat';
+		}
+
+		intervalCount.closest( '.frm_trans_sub_opts' )?.classList.add( 'show_stripe', 'frm_hidden' );
+	}
+
+	function syncCurrency( gateway, settings ) {
+		// Sync currency setting.
+		const currencySetting = settings.querySelector( '[name*="[post_content][currency]"]' );
 		if ( ! currencySetting ) {
 			return;
 		}

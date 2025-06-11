@@ -51,24 +51,26 @@ if ( ! $stripe_connected && ! $square_connected ) {
 		<label>
 			<?php esc_html_e( 'Repeat', 'formidable' ); ?>
 		</label>
-		<?php if ( in_array( 'stripe', (array) $form_action->post_content['gateway'], true ) ) { ?>
+		<span>
 			<span class="frm_grid_container">
 				<input class="frm6" type="number" name="<?php echo esc_attr( $this->get_field_name( 'interval_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['interval_count'] ); ?>" max="90" min="1" step="1" />
 				<select class="frm6" name="<?php echo esc_attr( $this->get_field_name( 'interval' ) ); ?>" class="auto_width">
 					<?php foreach ( $repeat_times as $k => $v ) { ?>
 						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $form_action->post_content['interval'], $k ); ?>><?php echo esc_html( $v ); ?></option>
 					<?php } ?>
-			</select>
-			<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
+				</select>
+				<input type="hidden" name="<?php echo esc_attr( $this->get_field_name( 'payment_count' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['payment_count'] ); ?>" />
+			</span>
 		</span>
-		<?php } elseif ( in_array( 'square', (array) $form_action->post_content['gateway'], true ) ) { ?>
-			<select name="<?php echo esc_attr( $this->get_field_name( 'repeat_cadence' ) ); ?>">
-				<?php foreach ( $interval_options as $value => $label ) { ?>
-					<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $form_action->post_content['repeat_cadence'] ?? '', $value ); ?>><?php echo esc_html( $label ); ?></option>
-				<?php } ?>
-			</select>
-		<?php } ?>
-		</p>
+	</p>
+
+	<?php
+	/*
+	Note: The Repeat Cadence setting is added with JavaScript.
+	This hidden input is added so the JS knows what value is set.
+	*/
+	?>
+	<input type="hidden" class="frm-repeat-cadence-value" value="<?php echo esc_attr( $form_action->post_content['repeat_cadence'] ); ?>" />
 
 	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>

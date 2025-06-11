@@ -44,6 +44,8 @@ class FrmTransLiteHooksController {
 		);
 
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
+			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
+
 			// Exit early, let the Payments submodule handle everything.
 			return;
 		}

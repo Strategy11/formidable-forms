@@ -615,7 +615,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		wp_enqueue_script(
 			'frm_square_admin',
 			FrmSquareLiteAppHelper::plugin_url() . 'js/action.js',
-			array( 'wp-hooks' ),
+			array( 'wp-hooks', 'wp-i18n' ),
 			FrmAppHelper::plugin_version()
 		);
 	}

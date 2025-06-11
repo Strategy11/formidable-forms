@@ -172,4 +172,27 @@ class FrmTransLiteAppController {
 			FrmTransLiteActionsController::trigger_payment_status_change( $atts );
 		}
 	}
+
+	/**
+	 * This is called when the Payments submodule is active.
+	 * It ensures that the hidden repeater cadence input exists even when another add-on is handling the settings.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public static function add_repeat_cadence_value( $args ) {
+		$action = $args['form_action'];
+		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
+			$params = array(
+				'type'  => 'hidden',
+				'class' => 'frm-repeat-cadence-value',
+				'value' => $action->post_content['repeat_cadence'],
+			);
+			echo '<input ';
+			FrmAppHelper::array_to_html_params( $params, true );
+			echo ' />';
+		}
+	}
 }
