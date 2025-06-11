@@ -9,7 +9,29 @@
 		if ( 'square' === gateway && checked ) {
 			syncRepeat( settings.get( 0 ) );
 		}
+
 		syncCurrency( gateway, settings.get( 0 ) );
+
+		const typeDropdown = settings.get( 0 ).querySelector( 'select.frm_trans_type' );
+		if ( typeDropdown && 'recurring' !== typeDropdown.value ) {
+			settings.get( 0 ).querySelectorAll( '.frm_trans_sub_opts' ).forEach(
+				function( subOpts ) {
+					subOpts.style.display = 'none';
+				}
+			);
+		}
+
+		const captureSetting = settings.get( 0 ).querySelector( '[name*="[post_content][capture]"]' );
+		if ( captureSetting ) {
+			const wrapper = captureSetting.closest( '.frm_gateway_no_recur' );
+			if ( wrapper ) {
+				if ( 'square' === gateway ) {
+					wrapper.style.display = 'none';
+				} else {
+					wrapper.style.removeProperty( 'display' );
+				}
+			}
+		}
 	}
 
 	function onFilledFormAction( $container ) {
