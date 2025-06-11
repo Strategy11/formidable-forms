@@ -553,6 +553,10 @@ class FrmFormsController {
 			the_content();
 			echo '</div>';
 
+			// Prevent extra unexpected forms in the footer.
+			// For some reason this happens in the Twenty Twenty Five theme.
+			add_filter( 'frm_filter_final_form', '__return_empty_string' );
+
 			self::get_template( 'footer' );
 		}
 	}
@@ -1543,7 +1547,7 @@ class FrmFormsController {
 		if ( function_exists( 'akismet_http_post' ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/akismet.php';
 		}
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/honeypot.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/stopforumspam.php';
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/spam-settings/antispam.php';
 	}
 
@@ -3221,6 +3225,8 @@ class FrmFormsController {
 		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
 			// load formidable js
 			wp_enqueue_script( 'formidable' );
+
+			FrmHoneypot::maybe_print_honeypot_js();
 		}
 	}
 
