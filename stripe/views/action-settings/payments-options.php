@@ -70,7 +70,7 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	This hidden input is added so the JS knows what value is set.
 	*/
 	?>
-	<input type="hidden" class="frm-repeat-cadence-value" value="<?php echo esc_attr( $form_action->post_content['repeat_cadence'] ); ?>" />
+	<input type="hidden" class="frm-repeat-cadence-value" value="<?php echo esc_attr( $form_action->post_content['repeat_cadence'] ?? 'DAILY' ); ?>" />
 
 	<p class="frm_trans_sub_opts frm6 <?php echo $form_action->post_content['type'] === 'recurring' ? '' : 'frm_hidden'; ?>">
 		<label>
