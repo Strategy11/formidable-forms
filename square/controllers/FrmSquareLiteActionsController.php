@@ -325,7 +325,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		switch ( $repeat_cadence ) {
 			case 'NINETY_DAYS':
 				return 90;
-			case 'SIXTY_DAYS':	
+			case 'SIXTY_DAYS':
 				return 60;
 			case 'THIRTY_DAYS':
 				return 30;
