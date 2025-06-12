@@ -1,10 +1,14 @@
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
 import { show, hide } from 'core/utils';
 
 /**
- * Represents a radio style component.
+ * Represents a radio component.
  * @class
  */
-export default class frmRadioStyleComponent {
+export default class frmRadioComponent {
 
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
@@ -14,7 +18,7 @@ export default class frmRadioStyleComponent {
 	}
 
 	/**
-	 * Initializes the radio style component.
+	 * Initializes the radio component.
 	 */
 	init() {
 		this.radioElements.forEach( ( element ) => {
@@ -102,7 +106,7 @@ export default class frmRadioStyleComponent {
 		}
 		elements.forEach( ( element ) => {
 			element.classList.remove( 'frm-element-is-visible' );
-			element.classList.add( 'frm_hidden' );
+			element.classList.add( HIDDEN_CLASS );
 			hide( element );
 		});
 	}
@@ -117,8 +121,8 @@ export default class frmRadioStyleComponent {
 		const width   = activeItem.offsetWidth;
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
-		tracker.style.left = 0;
-		tracker.style.width = `${width}px`;
+		tracker.style.left = width ? 0 : 'var(--gap-2xs)';
+		tracker.style.width = width ? `${width}px` : 'calc(50% - 2px)';
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }

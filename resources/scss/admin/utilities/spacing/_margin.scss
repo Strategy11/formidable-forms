@@ -11,6 +11,10 @@
 	margin: var(--gap-2xl);
 }
 
+.frm-m-2xs {
+	margin: var(--gap-2xs) !important;
+}
+
 .frm_no_top_margin, /* deprecated */
 .frm-mt-0 {
 	margin-top: 0 !important;
@@ -85,8 +89,16 @@
 	margin-right: auto;
 }
 
+.frm-mr-auto\! {
+	margin-right: auto !important;
+}
+
 .frm-mr-2xs {
 	margin-right: var(--gap-2xs) !important;
+}
+
+.frm-mr-2 {
+	margin-right: 2px !important;
 }
 
 .frm-mx-0 {
@@ -102,6 +114,11 @@
 .frm-mx-sm {
 	margin-left: var(--gap-sm) !important;
 	margin-right: var(--gap-sm) !important;
+}
+
+.frm-my-sm {
+	margin-top: var(--gap-sm) !important;
+	margin-bottom: var(--gap-sm) !important;
 }
 
 .frm-my-xs {

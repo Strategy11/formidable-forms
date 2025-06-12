@@ -21,3 +21,10 @@
 .frm-single-settings.frm-type-textarea > .frm_grid_container [id*="frm-field-format-custom-"] + p {
 	grid-column: span 12/span 12;
 }
+
+.frm-single-settings {
+
+	.frm_grid_container {
+		column-gap: var(--gap-sm);
+	}
+}

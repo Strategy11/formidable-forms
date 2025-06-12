@@ -566,8 +566,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		const $fadeEle = jQuery( document.getElementById( id ) );
-		$fadeEle.fadeOut( 400, function() {
+		const fadeEle = document.getElementById( id );
+		const $fadeEle = jQuery( fadeEle );
+		$fadeEle.fadeOut( 300, function() {
 			$fadeEle.remove();
 			fieldUpdated();
 
@@ -597,7 +598,34 @@ function frmAdminBuildJS() {
 			jQuery( this ).closest( '.frm_logic_rows' ).fadeOut( 'slow' );
 		}
 
+		mayToggleWatchLookupLabel( id, fadeEle );
+
 		return false;
+	}
+
+	/**
+	 * Maybe toggle Watch Lookup Fields label visibility
+	 *
+	 * @param {string}      id      The ID of the removed element
+	 * @param {HTMLElement} fadeEle The removed element
+	 * @return {void}
+	 */
+	function mayToggleWatchLookupLabel( id, fadeEle ) {
+		if ( ! id || ! id.startsWith( 'frm_watch_lookup_' ) ) {
+			return;
+		}
+
+		// If there are other rows, don't hide the label
+		if ( fadeEle.parentElement.children.length > 1 ) {
+			return;
+		}
+
+		const fieldId = fadeEle.closest( '.frm-single-settings' )?.dataset.fid;
+		if ( fieldId ) {
+			setTimeout(() => {
+				document.getElementById( 'frm_watch_lookup_label_' + fieldId )?.classList.add( 'frm_hidden!' );
+			}, 350 );
+		}
 	}
 
 	function afterActionRemoved( type ) {
@@ -813,16 +841,14 @@ function frmAdminBuildJS() {
 		const settings = {
 			helper: getDraggableHelper,
 			revert: 'invalid',
-			delay: 10,
+			delay: 2,
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
 			refreshPositions: true,
-			cursorAt: {
-				top: 0,
-				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
-			}
+			distance: 3, // Only start drag after 3px of movement for more precision
+			cursorAt: false // Let the helper maintain its original position relative to cursor
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
@@ -2851,8 +2877,8 @@ function frmAdminBuildJS() {
 			a.setAttribute( 'href', '#' );
 			a.setAttribute( 'data-code', fields[i].fieldId );
 			a.classList.add( 'frm_insert_code' );
-			a.appendChild( span );
 			a.appendChild( document.createTextNode( fields[i].fieldName ) );
+			a.appendChild( span );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( 'frm-field-list-' + fieldId );
@@ -2863,7 +2889,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
-		const exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		const codeList = calcBox.querySelector( '.frm_code_list' ) ?? calcBox.getElementsByClassName( 'frm_code_list' )[0];
+		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
 			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
@@ -4799,7 +4826,8 @@ function frmAdminBuildJS() {
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
-					document.getElementById( 'frm_insert_fields_tab' ).click();
+					document.querySelector( '.frm-settings-panel .frm-tabs-navs ul > li:first-child' )?.click();
+					document.querySelector( '#frm-options-panel .frm-single-settings' ).classList.remove( 'frm_hidden' );
 				}
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
@@ -4869,10 +4897,14 @@ function frmAdminBuildJS() {
 				fields: getFieldList()
 			},
 			success: function( html ) {
-				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {
-					const logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					logicRow.append( html );
-					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
+				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
+					const logicRow = document.getElementById( 'frm_logic_row_' + id );
+					logicRow.insertAdjacentHTML( 'beforeend', html );
+					logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' ).textContent = logicRow.dataset.ruleText;
+
+					const logicRows = logicRow.closest( '.frm_logic_rows' );
+					logicRows.style.height = 'auto';
+					jQuery( logicRows ).fadeIn( 'fast' );
 				});
 			}
 		});
@@ -4906,6 +4938,9 @@ function frmAdminBuildJS() {
 				const watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
+
+				// Show the "Watch Lookup Fields" label if it was hidden
+				document.getElementById( 'frm_watch_lookup_label_' + id ).classList.remove( 'frm_hidden!' );
 			}
 		});
 		return false;
@@ -6419,7 +6454,7 @@ function frmAdminBuildJS() {
 
 	function showInlineModal( icon, input ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
-			container = jQuery( icon ).closest( 'p' ),
+			container = jQuery( icon ).closest( 'p,ul' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
 		if ( container.hasClass( 'frm-open' ) ) {
@@ -6456,6 +6491,49 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 		this.parentNode.classList.add( 'frm_hidden' );
 		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );
+	}
+
+	/**
+	 * Close frm-modal-no-close element when clicking outside of it
+	 *
+	 * @param {Event} event The click event
+	 */
+	function closeModalOnOutsideClick( { target } ) {
+		if ( target.closest( '.frm-inline-modal.frm-modal-no-close' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
+			return;
+		}
+
+		// Close all inline modals (without close button) that are not hidden
+		document.querySelectorAll( '.frm-inline-modal.frm-modal-no-close:not(.frm_hidden)' ).forEach( modal => {
+			modal.classList.add( 'frm_hidden' );
+			modal.previousElementSibling.classList.remove( 'frm-open' );
+		});
+	}
+
+	/**
+	 * Focus on the calculation field when insert field button is clicked
+	 *
+	 * @param {Event}       event        The click event
+	 * @param {HTMLElement} event.target The click target
+	 */
+	function focusOnCalcField( { target } ) {
+		target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
+	}
+
+	/**
+	 * Handle `#` character in formula editor and trigger field insertion
+	 *
+	 * @param {Event}       event        The input event
+	 * @param {HTMLElement} event.target The input target
+	 */
+	function handleFieldInsertShortcut( { target } ) {
+		const value = target.value;
+		if ( ! value.includes( '#' ) ) {
+			return;
+		}
+
+		target.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-insert-field' )?.click();
+		target.value = value.replace( /#$/, '' );
 	}
 
 	function changeInputtedValue() {
@@ -8493,13 +8571,21 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Get the input box for the selected ... icon.
+	 * Get the input box for the selected icon or calculation field.
+	 *
+	 * @param {Element} moreIcon The icon element
+	 * @returns {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
+		// For regular fields
 		let input = moreIcon.nextElementSibling;
-
 		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
 			input = getInputForIcon( input );
+		}
+
+		// For calculation fields
+		if ( ! input ) {
+			input = moreIcon.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-field' );
 		}
 
 		return input;
@@ -10371,8 +10457,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
-			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
-			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
+			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
 				if ( event.key === 'Enter' || event.key === ' ' ) {
 					event.preventDefault();
@@ -10436,6 +10522,10 @@ function frmAdminBuildJS() {
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
+
+			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', focusOnCalcField );
+			frmDom.util.documentOn( 'input', '.frm-field-formula-editor', handleFieldInsertShortcut );
+			document.addEventListener( 'click', closeModalOnOutsideClick );
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
@@ -10969,7 +11059,8 @@ function frmAdminBuildJS() {
 		loadApiEmailForm,
 		addMyEmailAddress,
 		fillDropdownOpts,
-		showSaveAndReloadModal
+		showSaveAndReloadModal,
+		clearSettingsBox
 	};
 }
 

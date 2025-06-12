@@ -8,18 +8,6 @@
 	padding-bottom: 5px;
 }
 
-.frm_product_price_wrapper,
-.frm_image_preview_wrapper,
-#new_fields .frm_single_option select,
-#new_fields .frm_single_option input[type="text"] {
-	width: calc(100% - 73px);
-}
-
-.frm-right-panel .frm_single_option a.frm_remove_tag,
-.frm_single_option a {
-	padding-left: 7px;
-}
-
 .frm_single_option:hover .frm_single_visible_hover {
 	opacity: 100;
 }
