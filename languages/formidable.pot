@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.21.1\n"
+"Project-Id-Version: Formidable Forms 6.22\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-05-14T18:17:24+00:00\n"
+"POT-Creation-Date: 2025-06-12T12:17:47+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -296,7 +296,7 @@ msgstr ""
 #: classes/helpers/FrmAppHelper.php:3561
 #: classes/helpers/FrmFormMigratorsHelper.php:154
 #: classes/views/shared/upgrade_overlay.php:34
-#: js/formidable_admin.js:6961
+#: js/formidable_admin.js:6985
 #: js/formidable_blocks.js:719
 msgid "Install"
 msgstr ""
@@ -305,7 +305,7 @@ msgstr ""
 #: classes/controllers/FrmSMTPController.php:338
 #: classes/models/FrmPluginSearch.php:322
 #: classes/views/addons/settings.php:33
-#: js/formidable_admin.js:6958
+#: js/formidable_admin.js:6982
 #: js/formidable_blocks.js:719
 msgid "Activate"
 msgstr ""
@@ -425,7 +425,7 @@ msgid "Upgrade Now"
 msgstr ""
 
 #: classes/controllers/FrmAntiSpamController.php:98
-#: classes/models/FrmEntryValidate.php:457
+#: classes/models/FrmEntryValidate.php:508
 msgid "Your entry appears to be spam!"
 msgstr ""
 
@@ -452,7 +452,7 @@ msgstr ""
 #: classes/controllers/FrmAppController.php:296
 #: classes/controllers/FrmEntriesController.php:11
 #: classes/controllers/FrmEntriesController.php:173
-#: classes/controllers/FrmFormsController.php:1145
+#: classes/controllers/FrmFormsController.php:1149
 #: classes/controllers/FrmXMLController.php:313
 #: classes/views/xml/import_form.php:148
 msgid "Entries"
@@ -499,7 +499,7 @@ msgstr ""
 #: js/admin/style.js:855
 #: js/admin/style.js:980
 #: js/formidable_admin.js:4159
-#: js/formidable_admin.js:8215
+#: js/formidable_admin.js:8239
 msgid "Cancel"
 msgstr ""
 
@@ -589,7 +589,7 @@ msgstr ""
 
 #: classes/controllers/FrmDashboardController.php:350
 #: classes/controllers/FrmEntriesController.php:156
-#: classes/controllers/FrmFormsController.php:1013
+#: classes/controllers/FrmFormsController.php:1017
 #: classes/views/xml/import_form.php:179
 #: classes/widgets/FrmElementorWidget.php:37
 #: classes/widgets/FrmShowForm.php:71
@@ -628,12 +628,12 @@ msgstr ""
 #: classes/views/frm-fields/back-end/inline-modal.php:7
 #: classes/views/frm-fields/back-end/inline-modal.php:8
 #: classes/views/shared/admin-header.php:71
-#: js/formidable_admin.js:9108
+#: js/formidable_admin.js:9132
 msgid "Close"
 msgstr ""
 
 #: classes/controllers/FrmEntriesController.php:151
-#: classes/controllers/FrmFormsController.php:1719
+#: classes/controllers/FrmFormsController.php:1723
 #: classes/views/frm-entries/form.php:86
 #: classes/views/frm-entries/sidebar-shared.php:57
 msgid "Entry Key"
@@ -738,7 +738,7 @@ msgid "You have reached your form action limit. To increase this limit, you will
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:29
-#: classes/controllers/FrmFormsController.php:1156
+#: classes/controllers/FrmFormsController.php:1160
 #: classes/controllers/FrmStylesController.php:72
 #: classes/controllers/FrmXMLController.php:312
 #: classes/views/frm-forms/list.php:10
@@ -774,7 +774,7 @@ msgid "Settings Successfully Updated"
 msgstr ""
 
 #: classes/controllers/FrmFormsController.php:303
-#: classes/controllers/FrmFormsController.php:1285
+#: classes/controllers/FrmFormsController.php:1289
 msgid "Form was successfully updated."
 msgstr ""
 
@@ -788,76 +788,76 @@ msgstr ""
 msgid "Form key is invalid"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:622
+#: classes/controllers/FrmFormsController.php:626
 msgid "Form Preview"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:653
+#: classes/controllers/FrmFormsController.php:657
 msgid "Form key is missing"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:665
+#: classes/controllers/FrmFormsController.php:669
 #: classes/controllers/FrmStylesController.php:497
 msgid "Form does not exist"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:693
+#: classes/controllers/FrmFormsController.php:697
 msgid "You do not have permission to view this form"
 msgstr ""
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:746
-#: classes/controllers/FrmFormsController.php:807
+#: classes/controllers/FrmFormsController.php:750
+#: classes/controllers/FrmFormsController.php:811
 msgid "%1$s form restored from the Trash."
 msgid_plural "%1$s forms restored from the Trash."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML
-#: classes/controllers/FrmFormsController.php:810
-#: classes/controllers/FrmFormsController.php:843
+#: classes/controllers/FrmFormsController.php:814
+#: classes/controllers/FrmFormsController.php:847
 msgid "%1$s form moved to the Trash. %2$sUndo%3$s"
 msgid_plural "%1$s forms moved to the Trash. %2$sUndo%3$s"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:866
+#: classes/controllers/FrmFormsController.php:870
 msgid "%1$s Form Permanently Deleted"
 msgid_plural "%1$s Forms Permanently Deleted"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of forms
-#: classes/controllers/FrmFormsController.php:888
-#: classes/controllers/FrmFormsController.php:2020
+#: classes/controllers/FrmFormsController.php:892
+#: classes/controllers/FrmFormsController.php:2024
 msgid "%1$s form permanently deleted."
 msgid_plural "%1$s forms permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/controllers/FrmFormsController.php:995
+#: classes/controllers/FrmFormsController.php:999
 msgid "Add forms and content"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1014
+#: classes/controllers/FrmFormsController.php:1018
 #: classes/views/frm-forms/insert_form_popup.php:33
 msgid "Insert a Form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1067
+#: classes/controllers/FrmFormsController.php:1071
 msgid "Display form title"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1071
+#: classes/controllers/FrmFormsController.php:1075
 msgid "Display form description"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1075
+#: classes/controllers/FrmFormsController.php:1079
 msgid "Minimize form HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1144
+#: classes/controllers/FrmFormsController.php:1148
 #: classes/controllers/FrmStylesController.php:963
 #: classes/views/frm-forms/settings-advanced.php:13
 #: classes/views/styles/manage.php:36
@@ -866,242 +866,242 @@ msgstr ""
 msgid "Form Title"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1147
+#: classes/controllers/FrmFormsController.php:1151
 #: classes/helpers/FrmCSVExportHelper.php:427
 msgid "Key"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1149
+#: classes/controllers/FrmFormsController.php:1153
 msgid "Actions"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1151
+#: classes/controllers/FrmFormsController.php:1155
 #: classes/models/FrmField.php:113
 #: stripe/controllers/FrmTransLiteListsController.php:72
 msgid "Date"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1222
+#: classes/controllers/FrmFormsController.php:1226
 msgid "You can't edit the form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1223
+#: classes/controllers/FrmFormsController.php:1227
 msgid "You are trying to edit a form that does not exist"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1237
+#: classes/controllers/FrmFormsController.php:1241
 msgid "The form you're trying to edit is in trash. You must restore it first before you can make changes"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1247
+#: classes/controllers/FrmFormsController.php:1251
 msgid "Restore form"
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:1254
+#: classes/controllers/FrmFormsController.php:1258
 msgid "You are trying to edit a child form. Please edit from %1$shere%2$s"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1287
+#: classes/controllers/FrmFormsController.php:1291
 msgid "Template was successfully updated."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1314
+#: classes/controllers/FrmFormsController.php:1318
 msgid "Form was Successfully Copied"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1408
+#: classes/controllers/FrmFormsController.php:1412
 #: classes/controllers/FrmStylesController.php:962
 #: classes/views/styles/_field-labels.php:12
 msgid "General"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1409
+#: classes/controllers/FrmFormsController.php:1413
 msgid "General Form Settings"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1414
+#: classes/controllers/FrmFormsController.php:1418
 msgid "Actions & Notifications"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1420
-#: classes/controllers/FrmFormsController.php:1425
+#: classes/controllers/FrmFormsController.php:1424
+#: classes/controllers/FrmFormsController.php:1429
 msgid "Form Permissions"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1426
+#: classes/controllers/FrmFormsController.php:1430
 msgid "Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1431
+#: classes/controllers/FrmFormsController.php:1435
 msgid "Form Scheduling"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1436
+#: classes/controllers/FrmFormsController.php:1440
 msgid "Form scheduling settings"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1441
+#: classes/controllers/FrmFormsController.php:1445
 #: classes/controllers/FrmStylesController.php:970
 #: classes/helpers/FrmFieldsHelper.php:2249
 #: classes/views/frm-forms/settings-buttons.php:20
 msgid "Buttons"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1447
+#: classes/controllers/FrmFormsController.php:1451
 msgid "Form Landing Page"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1453
-#: classes/controllers/FrmFormsController.php:1459
+#: classes/controllers/FrmFormsController.php:1457
+#: classes/controllers/FrmFormsController.php:1463
 msgid "Conversational Forms"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1460
+#: classes/controllers/FrmFormsController.php:1464
 msgid "Ask one question at a time for automated conversations."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1466
+#: classes/controllers/FrmFormsController.php:1470
 msgid "Form Abandonment"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1472
+#: classes/controllers/FrmFormsController.php:1476
 msgid "Form abandonment settings"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1473
+#: classes/controllers/FrmFormsController.php:1477
 msgid "Unlock the power of data capture to boost lead generation and master the art of form optimization."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1479
+#: classes/controllers/FrmFormsController.php:1483
 msgid "Customize HTML"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1634
+#: classes/controllers/FrmFormsController.php:1638
 msgid "Customize field values with the following parameters."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1672
+#: classes/controllers/FrmFormsController.php:1676
 msgid "Separator"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1673
+#: classes/controllers/FrmFormsController.php:1677
 msgid "Use a different separator for checkbox fields"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1676
+#: classes/controllers/FrmFormsController.php:1680
 msgid "Date Format"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1679
+#: classes/controllers/FrmFormsController.php:1683
 #: classes/views/frm-fields/back-end/settings.php:76
 msgid "Field Label"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1682
+#: classes/controllers/FrmFormsController.php:1686
 msgid "No Auto P"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1683
+#: classes/controllers/FrmFormsController.php:1687
 msgid "Do not automatically add any paragraphs or line breaks"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1698
+#: classes/controllers/FrmFormsController.php:1702
 #: classes/models/FrmField.php:62
 msgid "User ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1699
+#: classes/controllers/FrmFormsController.php:1703
 #: classes/models/fields/FrmFieldName.php:40
-#: stripe/views/action-settings/payments-options.php:129
+#: stripe/views/action-settings/payments-options.php:168
 msgid "First Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1700
+#: classes/controllers/FrmFormsController.php:1704
 #: classes/models/fields/FrmFieldName.php:42
-#: stripe/views/action-settings/payments-options.php:135
+#: stripe/views/action-settings/payments-options.php:174
 msgid "Last Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1701
+#: classes/controllers/FrmFormsController.php:1705
 msgid "Display Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1702
+#: classes/controllers/FrmFormsController.php:1706
 msgid "User Login"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1703
+#: classes/controllers/FrmFormsController.php:1707
 #: classes/models/FrmField.php:34
-#: stripe/views/action-settings/payments-options.php:105
+#: stripe/views/action-settings/payments-options.php:144
 msgid "Email"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1704
+#: classes/controllers/FrmFormsController.php:1708
 msgid "Avatar"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1705
+#: classes/controllers/FrmFormsController.php:1709
 msgid "Author Link"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1718
+#: classes/controllers/FrmFormsController.php:1722
 #: classes/views/frm-entries/sidebar-shared.php:51
 msgid "Entry ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1720
+#: classes/controllers/FrmFormsController.php:1724
 msgid "Post ID"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1721
+#: classes/controllers/FrmFormsController.php:1725
 msgid "User IP"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1722
+#: classes/controllers/FrmFormsController.php:1726
 msgid "Entry created"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1723
+#: classes/controllers/FrmFormsController.php:1727
 msgid "Entry updated"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1725
+#: classes/controllers/FrmFormsController.php:1729
 msgid "Site URL"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1726
+#: classes/controllers/FrmFormsController.php:1730
 msgid "Site Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1727
+#: classes/controllers/FrmFormsController.php:1731
 #: classes/helpers/FrmFormsHelper.php:557
 msgid "Form Name"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:1892
+#: classes/controllers/FrmFormsController.php:1896
 msgid "No forms were specified"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:2013
+#: classes/controllers/FrmFormsController.php:2017
 msgid "There was a problem duplicating the form"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:2057
+#: classes/controllers/FrmFormsController.php:2061
 msgid "Abnormal HTML characters prevented your form from saving correctly"
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:2235
-#: classes/controllers/FrmFormsController.php:2257
+#: classes/controllers/FrmFormsController.php:2239
+#: classes/controllers/FrmFormsController.php:2261
 msgid "Please select a valid form"
 msgstr ""
 
 #. translators: %1$s: Start link HTML, %2$s: End link HTML
-#: classes/controllers/FrmFormsController.php:2968
+#: classes/controllers/FrmFormsController.php:2972
 msgid "%1$sClick here%2$s if you are not automatically redirected."
 msgstr ""
 
-#: classes/controllers/FrmFormsController.php:3351
+#: classes/controllers/FrmFormsController.php:3353
 #: classes/helpers/FrmAppHelper.php:1897
 #: classes/helpers/FrmOnSubmitHelper.php:117
 msgid "Select a Page"
@@ -1378,7 +1378,7 @@ msgstr ""
 #: classes/helpers/FrmFormsListHelper.php:416
 #: classes/views/form-templates/template.php:73
 #: classes/views/frm-entries/sidebar-shared.php:40
-#: stripe/helpers/FrmTransLiteListHelper.php:386
+#: stripe/helpers/FrmTransLiteListHelper.php:388
 #: js/admin/style.js:657
 msgid "Edit"
 msgstr ""
@@ -2563,49 +2563,50 @@ msgid "Delete Entry"
 msgstr ""
 
 #: classes/helpers/FrmEntriesHelper.php:692
-msgid "Delete this form entry?"
+#: classes/helpers/FrmEntriesListHelper.php:471
+msgid "Permanently delete this entry?"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:700
+#: classes/helpers/FrmEntriesHelper.php:701
 msgid "Print Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:710
-#: classes/helpers/FrmEntriesHelper.php:713
+#: classes/helpers/FrmEntriesHelper.php:711
+#: classes/helpers/FrmEntriesHelper.php:714
 msgid "Resend Emails"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:723
+#: classes/helpers/FrmEntriesHelper.php:724
 msgid "Download as PDF"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:732
+#: classes/helpers/FrmEntriesHelper.php:733
 msgid "Edit Entry"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:735
+#: classes/helpers/FrmEntriesHelper.php:736
 msgid "Entry edits"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:755
+#: classes/helpers/FrmEntriesHelper.php:756
 msgid "Forms to PDF"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:785
+#: classes/helpers/FrmEntriesHelper.php:786
 msgid "reCAPTCHA Score"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:844
+#: classes/helpers/FrmEntriesHelper.php:845
 msgid "Submitted"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:845
+#: classes/helpers/FrmEntriesHelper.php:846
 #: classes/helpers/FrmFormsHelper.php:1343
 #: classes/helpers/FrmFormsListHelper.php:465
 msgid "Draft"
 msgstr ""
 
-#: classes/helpers/FrmEntriesHelper.php:861
+#: classes/helpers/FrmEntriesHelper.php:862
 msgid "Entry status must be return in array format."
 msgstr ""
 
@@ -2652,21 +2653,17 @@ msgstr ""
 
 #: classes/helpers/FrmEntriesListHelper.php:467
 #: classes/views/frm-entries/sidebar-shared.php:43
-#: stripe/helpers/FrmTransLiteListHelper.php:361
-#: stripe/helpers/FrmTransLiteListHelper.php:382
+#: stripe/helpers/FrmTransLiteListHelper.php:363
+#: stripe/helpers/FrmTransLiteListHelper.php:384
 #: js/admin/applications.js:358
 msgid "View"
-msgstr ""
-
-#: classes/helpers/FrmEntriesListHelper.php:471
-msgid "Permanently delete this entry?"
 msgstr ""
 
 #: classes/helpers/FrmEntriesListHelper.php:471
 #: classes/helpers/FrmFormsHelper.php:1262
 #: classes/helpers/FrmFormsListHelper.php:147
 #: classes/views/frm-form-actions/form_action.php:36
-#: stripe/helpers/FrmTransLiteListHelper.php:389
+#: stripe/helpers/FrmTransLiteListHelper.php:391
 #: stripe/views/payments/show.php:156
 #: stripe/views/subscriptions/show.php:129
 #: js/formidable_admin.js:2443
@@ -4089,7 +4086,7 @@ msgid "If you have many checkbox or radio button options, you may add this class
 msgstr ""
 
 #: classes/helpers/FrmFormsHelper.php:1292
-#: stripe/models/FrmTransLiteAction.php:203
+#: stripe/models/FrmTransLiteAction.php:204
 msgid "First"
 msgstr ""
 
@@ -4738,7 +4735,7 @@ msgstr ""
 
 #: classes/models/fields/FrmFieldCombo.php:215
 #: classes/views/form-templates/modals/create-template-modal.php:58
-#: stripe/views/action-settings/payments-options.php:18
+#: stripe/views/action-settings/payments-options.php:23
 #: js/admin/applications.js:453
 msgid "Description"
 msgstr ""
@@ -4997,9 +4994,10 @@ msgid "Hidden"
 msgstr ""
 
 #: classes/models/FrmField.php:70
-#: stripe/controllers/FrmStrpLiteActionsController.php:327
+#: square/controllers/FrmSquareLiteAppController.php:18
 #: stripe/controllers/FrmStrpLiteAppController.php:83
-#: stripe/controllers/FrmTransLiteCRUDController.php:40
+#: stripe/controllers/FrmTransLiteActionsController.php:584
+#: stripe/controllers/FrmTransLiteCRUDController.php:32
 #: stripe/views/payments/show.php:27
 msgid "Payment"
 msgstr ""
@@ -5218,7 +5216,7 @@ msgstr ""
 msgid "hCaptcha is an anti-bot solution that protects user privacy and rewards websites. It is a privacy-focused drop-in replacement for reCAPTCHA."
 msgstr ""
 
-#: classes/models/FrmHoneypot.php:212
+#: classes/models/FrmHoneypot.php:231
 msgid "If you are human, leave this field blank."
 msgstr ""
 
@@ -5805,7 +5803,7 @@ msgid "Update Options"
 msgstr ""
 
 #: classes/views/frm-fields/back-end/field-captcha.php:10
-#: classes/views/frm-fields/back-end/field-credit-card.php:10
+#: classes/views/frm-fields/back-end/field-credit-card.php:9
 msgid "This field is not set up yet."
 msgstr ""
 
@@ -5827,7 +5825,7 @@ msgstr ""
 
 #: classes/views/frm-fields/back-end/format-dropdown-options.php:32
 #: classes/views/frm-settings/_currency.php:8
-#: stripe/views/action-settings/payments-options.php:77
+#: stripe/views/action-settings/payments-options.php:92
 msgid "Currency"
 msgstr ""
 
@@ -6583,20 +6581,20 @@ msgstr ""
 msgid "Check denylist data to validate for spam"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:131
+#: classes/views/frm-settings/captcha/captcha.php:132
 msgid "Custom disallowed words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:132
-#: classes/views/frm-settings/captcha/captcha.php:140
+#: classes/views/frm-settings/captcha/captcha.php:133
+#: classes/views/frm-settings/captcha/captcha.php:141
 msgid "Each word is on one line."
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:139
+#: classes/views/frm-settings/captcha/captcha.php:140
 msgid "Custom allowed words"
 msgstr ""
 
-#: classes/views/frm-settings/captcha/captcha.php:148
+#: classes/views/frm-settings/captcha/captcha.php:151
 msgid "Spam keywords detected recently:"
 msgstr ""
 
@@ -7845,16 +7843,79 @@ msgstr ""
 msgid "Show Description"
 msgstr ""
 
-#: stripe/controllers/FrmStrpLiteActionsController.php:91
+#: square/controllers/FrmSquareLiteActionsController.php:104
+#: stripe/controllers/FrmStrpLiteActionsController.php:113
 msgid "Please specify an amount for the payment"
 msgstr ""
 
-#: stripe/controllers/FrmStrpLiteActionsController.php:96
-msgid "There was a problem communicating with Stripe. Please try again."
+#: square/controllers/FrmSquareLiteActionsController.php:109
+msgid "There was a problem communicating with Square. Please try again."
 msgstr ""
 
-#: stripe/controllers/FrmStrpLiteActionsController.php:338
-msgid "Payment Method"
+#: square/controllers/FrmSquareLiteActionsController.php:140
+#: square/controllers/FrmSquareLiteActionsController.php:207
+msgid "Please enter a valid credit card"
+msgstr ""
+
+#: square/controllers/FrmSquareLiteActionsController.php:263
+msgid "There was a problem creating the subscription"
+msgstr ""
+
+#: square/controllers/FrmSquareLiteAppController.php:73
+msgid "Invalid form ID"
+msgstr ""
+
+#: square/controllers/FrmSquareLiteAppController.php:78
+msgid "No Square actions found for this form"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteAppHelper.php:77
+#: stripe/helpers/FrmStrpLiteAppHelper.php:119
+msgid "Upgrade to save on fees."
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:29
+#: stripe/views/settings/form.php:11
+msgid "Test Mode"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:34
+msgid "Use the Square test mode"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:54
+msgid "Your site is not using SSL. Before using Square to collect payments, you will need to install an SSL certificate on your site."
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:72
+#: stripe/helpers/FrmTransLiteAppHelper.php:491
+msgid "Test"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:72
+#: stripe/helpers/FrmTransLiteAppHelper.php:491
+msgid "Live"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:100
+msgid "Live version to process real customer transactions"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:102
+msgid "Simulate payments and ensure everything works smoothly before going live."
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:109
+#: stripe/views/settings/connect.php:27
+msgid "Disconnect"
+msgstr ""
+
+#: square/helpers/FrmSquareLiteConnectHelper.php:113
+msgid "Connect"
+msgstr ""
+
+#: stripe/controllers/FrmStrpLiteActionsController.php:118
+msgid "There was a problem communicating with Stripe. Please try again."
 msgstr ""
 
 #. translators: %s: The amount of money that was refunded.
@@ -7893,15 +7954,19 @@ msgstr ""
 msgid "Subscription Canceled and Expired"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteActionsController.php:132
+#: stripe/controllers/FrmTransLiteActionsController.php:156
 msgid "There was an error processing your payment."
+msgstr ""
+
+#: stripe/controllers/FrmTransLiteActionsController.php:595
+msgid "Payment Method"
 msgstr ""
 
 #: stripe/controllers/FrmTransLiteCRUDController.php:22
 msgid "Please select a payment to view"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteCRUDController.php:40
+#: stripe/controllers/FrmTransLiteCRUDController.php:32
 #: stripe/controllers/FrmTransLiteListsController.php:63
 #: stripe/views/payments/show.php:64
 #: stripe/views/subscriptions/show.php:26
@@ -7909,16 +7974,16 @@ msgid "Subscription"
 msgstr ""
 
 #. translators: %s: Transaction type
-#: stripe/controllers/FrmTransLiteCRUDController.php:44
+#: stripe/controllers/FrmTransLiteCRUDController.php:36
 msgid "You can't view the %s"
 msgstr ""
 
 #. translators: %s: Transaction type
-#: stripe/controllers/FrmTransLiteCRUDController.php:46
+#: stripe/controllers/FrmTransLiteCRUDController.php:38
 msgid "You are trying to view a %s that does not exist"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteCRUDController.php:102
+#: stripe/controllers/FrmTransLiteCRUDController.php:103
 msgid "Payment was Successfully Deleted"
 msgstr ""
 
@@ -7955,7 +8020,7 @@ msgid "Receipt ID"
 msgstr ""
 
 #: stripe/controllers/FrmTransLiteListsController.php:62
-#: stripe/views/action-settings/payments-options.php:25
+#: stripe/views/action-settings/payments-options.php:30
 #: stripe/views/payments/show.php:74
 msgid "Amount"
 msgstr ""
@@ -7974,11 +8039,11 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteListsController.php:76
+#: stripe/controllers/FrmTransLiteListsController.php:73
 msgid "Processor"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteListsController.php:79
+#: stripe/controllers/FrmTransLiteListsController.php:74
 #: stripe/views/payments/show.php:80
 #: stripe/views/subscriptions/show.php:61
 msgid "Mode"
@@ -7992,12 +8057,12 @@ msgstr ""
 #. translators: %d: Entry ID.
 #. translators: %d: ID of the deleted entry.
 #: stripe/controllers/FrmTransLitePaymentsController.php:139
-#: stripe/helpers/FrmTransLiteListHelper.php:406
+#: stripe/helpers/FrmTransLiteListHelper.php:408
 msgid "%d (Deleted)"
 msgstr ""
 
 #: stripe/controllers/FrmTransLitePaymentsController.php:158
-#: stripe/controllers/FrmTransLitePaymentsController.php:213
+#: stripe/controllers/FrmTransLitePaymentsController.php:224
 #: stripe/helpers/FrmTransLiteAppHelper.php:95
 msgid "Refunded"
 msgstr ""
@@ -8014,14 +8079,14 @@ msgstr ""
 msgid "Oops! No payment was selected for refund."
 msgstr ""
 
-#: stripe/controllers/FrmTransLitePaymentsController.php:215
-#: stripe/controllers/FrmTransLiteSubscriptionsController.php:110
+#: stripe/controllers/FrmTransLitePaymentsController.php:226
+#: stripe/controllers/FrmTransLiteSubscriptionsController.php:121
 #: stripe/helpers/FrmTransLiteAppHelper.php:94
 msgid "Failed"
 msgstr ""
 
 #: stripe/controllers/FrmTransLiteSubscriptionsController.php:69
-#: stripe/controllers/FrmTransLiteSubscriptionsController.php:108
+#: stripe/controllers/FrmTransLiteSubscriptionsController.php:119
 #: stripe/helpers/FrmTransLiteAppHelper.php:96
 #: stripe/helpers/FrmTransLiteAppHelper.php:108
 #: stripe/helpers/FrmTransLiteAppHelper.php:109
@@ -8032,21 +8097,17 @@ msgstr ""
 msgid "Are you sure you want to cancel that subscription?"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteSubscriptionsController.php:113
+#: stripe/controllers/FrmTransLiteSubscriptionsController.php:124
 msgid "That subscription was not found"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteSubscriptionsController.php:116
+#: stripe/controllers/FrmTransLiteSubscriptionsController.php:127
 msgid "Oops! No subscription was selected for cancelation."
 msgstr ""
 
-#: stripe/helpers/FrmStrpLiteAppHelper.php:121
-msgid "Upgrade to save on fees."
-msgstr ""
-
 #. translators: %1$s: Link HTML, %2$s: End link
-#: stripe/helpers/FrmStrpLiteAppHelper.php:140
-msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s first."
+#: stripe/helpers/FrmStrpLiteAppHelper.php:138
+msgid "Credit Cards will not work without %1$sconnecting Stripe%2$s or %3$sconnecting Square%4$s first."
 msgstr ""
 
 #: stripe/helpers/FrmStrpLiteConnectApiAdapter.php:109
@@ -8092,7 +8153,7 @@ msgid "Void"
 msgstr ""
 
 #: stripe/helpers/FrmTransLiteAppHelper.php:227
-#: stripe/views/action-settings/payments-options.php:72
+#: stripe/views/action-settings/payments-options.php:87
 msgid "day(s)"
 msgstr ""
 
@@ -8112,12 +8173,8 @@ msgstr ""
 msgid "Guest"
 msgstr ""
 
-#: stripe/helpers/FrmTransLiteAppHelper.php:491
-msgid "Test"
-msgstr ""
-
-#: stripe/helpers/FrmTransLiteAppHelper.php:491
-msgid "Live"
+#: stripe/helpers/FrmTransLiteAppHelper.php:567
+msgid "Use Square Merchant Currency"
 msgstr ""
 
 #: stripe/helpers/FrmTransLiteListHelper.php:34
@@ -8137,21 +8194,21 @@ msgstr ""
 msgid "%1$s %2$s(%3$s)%4$s"
 msgstr ""
 
-#: stripe/helpers/FrmTransLiteListHelper.php:389
+#: stripe/helpers/FrmTransLiteListHelper.php:391
 #: stripe/views/payments/show.php:156
 msgid "Permanently delete this payment?"
 msgstr ""
 
-#: stripe/helpers/FrmTransLiteListHelper.php:468
+#: stripe/helpers/FrmTransLiteListHelper.php:470
 msgid "unlimited"
 msgstr ""
 
 #. translators: %1$s: Count, %2$s: Limit.
-#: stripe/helpers/FrmTransLiteListHelper.php:474
+#: stripe/helpers/FrmTransLiteListHelper.php:476
 msgid "%1$s of %2$s"
 msgstr ""
 
-#: stripe/helpers/FrmTransLiteListHelper.php:495
+#: stripe/helpers/FrmTransLiteListHelper.php:497
 msgid "This payment method may take between 4-5 business days to process."
 msgstr ""
 
@@ -8195,64 +8252,68 @@ msgstr ""
 msgid "Collect a Payment"
 msgstr ""
 
-#: stripe/models/FrmTransLiteAction.php:209
+#: stripe/models/FrmTransLiteAction.php:210
 msgid "Last"
 msgstr ""
 
 #. translators: %s: The comma separated field types expected in the form.
-#: stripe/models/FrmTransLiteAction.php:226
+#: stripe/models/FrmTransLiteAction.php:227
 msgid "Oops! You need a %s field in your form."
 msgstr ""
 
-#: stripe/views/action-settings/capture-payments-upsell.php:6
+#: stripe/views/action-settings/capture-payments-upsell.php:9
 msgid "Additional Stripe settings"
 msgstr ""
 
-#: stripe/views/action-settings/capture-payments-upsell.php:8
+#: stripe/views/action-settings/capture-payments-upsell.php:20
 msgid "Capture Payment"
 msgstr ""
 
-#: stripe/views/action-settings/capture-payments-upsell.php:11
+#: stripe/views/action-settings/capture-payments-upsell.php:23
 msgid "When entry is submitted"
 msgstr ""
 
-#: stripe/views/action-settings/options.php:10
+#: stripe/views/action-settings/options.php:16
 msgid "Layout"
 msgstr ""
 
-#: stripe/views/action-settings/options.php:14
+#: stripe/views/action-settings/options.php:20
 msgid "Tabs"
 msgstr ""
 
-#: stripe/views/action-settings/options.php:23
+#: stripe/views/action-settings/options.php:29
 msgid "Accordion"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:35
+#: stripe/views/action-settings/payments-options.php:40
 msgid "Payment Type"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:38
+#: stripe/views/action-settings/payments-options.php:43
 msgid "One-time Payment"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:39
+#: stripe/views/action-settings/payments-options.php:44
 msgid "Recurring"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:47
-msgid "Repeat Every"
+#: stripe/views/action-settings/payments-options.php:52
+msgid "Repeat"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:62
+#: stripe/views/action-settings/payments-options.php:77
 msgid "Recurring Payment Limit"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:69
+#: stripe/views/action-settings/payments-options.php:84
 msgid "Trial Period"
 msgstr ""
 
-#: stripe/views/action-settings/payments-options.php:100
+#: stripe/views/action-settings/payments-options.php:99
+msgid "Gateway(s)"
+msgstr ""
+
+#: stripe/views/action-settings/payments-options.php:139
 msgid "Customer Information"
 msgstr ""
 
@@ -8348,16 +8409,8 @@ msgstr ""
 msgid "Finish Stripe Setup"
 msgstr ""
 
-#: stripe/views/settings/connect.php:27
-msgid "Disconnect"
-msgstr ""
-
 #: stripe/views/settings/connect.php:32
 msgid "Connect to Stripe"
-msgstr ""
-
-#: stripe/views/settings/form.php:11
-msgid "Test Mode"
 msgstr ""
 
 #: stripe/views/settings/form.php:16
@@ -8628,41 +8681,41 @@ msgid "Merge into row"
 msgstr ""
 
 #. translators: %s: The detected option value.
-#: js/formidable_admin.js:6091
+#: js/formidable_admin.js:6115
 msgid "Duplicate option value \"%s\" detected"
 msgstr ""
 
 #. translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling).
-#: js/formidable_admin.js:6835
+#: js/formidable_admin.js:6859
 msgid "%s are not installed"
 msgstr ""
 
-#: js/formidable_admin.js:6957
+#: js/formidable_admin.js:6981
 msgid "This plugin is not activated. Would you like to activate it now?"
 msgstr ""
 
-#: js/formidable_admin.js:6960
+#: js/formidable_admin.js:6984
 msgid "That add-on is not installed. Would you like to install it now?"
 msgstr ""
 
-#: js/formidable_admin.js:8187
+#: js/formidable_admin.js:8211
 msgid "You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?"
 msgstr ""
 
-#: js/formidable_admin.js:8192
+#: js/formidable_admin.js:8216
 msgid "Save and Reload?"
 msgstr ""
 
-#: js/formidable_admin.js:8206
-#: js/formidable_admin.js:9093
+#: js/formidable_admin.js:8230
+#: js/formidable_admin.js:9117
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:9262
+#: js/formidable_admin.js:9286
 msgid "Unable to install template"
 msgstr ""
 
-#: js/formidable_admin.js:9937
+#: js/formidable_admin.js:9961
 msgid "Thank you for signing up!"
 msgstr ""
 
@@ -8672,4 +8725,56 @@ msgstr ""
 
 #: js/packages/floating-links/config.js:79
 msgid "Support & Docs"
+msgstr ""
+
+#: square/js/action.js:94
+msgid "Daily"
+msgstr ""
+
+#: square/js/action.js:95
+msgid "Weekly"
+msgstr ""
+
+#: square/js/action.js:96
+msgid "Every Two Weeks"
+msgstr ""
+
+#: square/js/action.js:97
+msgid "Every Thirty Days"
+msgstr ""
+
+#: square/js/action.js:98
+msgid "Every Sixty Days"
+msgstr ""
+
+#: square/js/action.js:99
+msgid "Every Ninety Days"
+msgstr ""
+
+#: square/js/action.js:100
+msgid "Monthly"
+msgstr ""
+
+#: square/js/action.js:101
+msgid "Every Two Months"
+msgstr ""
+
+#: square/js/action.js:102
+msgid "Quarterly"
+msgstr ""
+
+#: square/js/action.js:103
+msgid "Every Four Months"
+msgstr ""
+
+#: square/js/action.js:104
+msgid "Every Six Months"
+msgstr ""
+
+#: square/js/action.js:105
+msgid "Annual"
+msgstr ""
+
+#: square/js/action.js:106
+msgid "Every Two Years"
 msgstr ""
