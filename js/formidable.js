@@ -367,13 +367,14 @@ function frmFrontFormJS() {
 		let tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
-			fileID = field.getAttribute( 'data-frmfile' );
+			fileID;
 
 		if ( parseInt( field.dataset.validateRequired ) === 0 ) {
 			field.dataset.validateRequired = 1;
 			return errors;
 		}
 
+		fieldId = field.getAttribute( 'data-frmfile' );
 		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
