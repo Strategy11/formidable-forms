@@ -143,12 +143,12 @@ class FrmStrpLiteAppHelper {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.22
 	 *
 	 * @return bool
 	 */
 	public static function is_debug() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.22' );
 		return defined( 'WP_DEBUG' ) && WP_DEBUG;
 	}
 }

@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field
@@ -37,7 +37,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Override the credit card field HTML if there is a Square action.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array  $field
 	 * @param string $field_name
@@ -65,7 +65,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get all published payment actions with the Square gateway that have an amount set.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param int|string $form_id
 	 * @return array
@@ -483,7 +483,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! $form_id || ! is_int( $form_id ) ) {
-			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', 'x.x' );
+			_doing_it_wrong( __METHOD__, '$form_id parameter must be a non-zero integer', '6.22' );
 			return;
 		}
 
@@ -585,7 +585,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.22
 		 *
 		 * @param array $style
 		 * @param array $settings
@@ -597,7 +597,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get the border radius for Stripe elements.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array $settings
 	 * @return string
@@ -618,7 +618,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Get and format the style settings for JavaScript to use with the get_style function.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param int $form_id
 	 * @return array
@@ -648,7 +648,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * If the names are being used on the CC fields,
 	 * make sure it doesn't prevent the submission if Stripe has approved.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array    $errors
 	 * @param stdClass $field

@@ -11,7 +11,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field

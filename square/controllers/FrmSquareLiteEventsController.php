@@ -16,7 +16,7 @@ class FrmSquareLiteEventsController {
 	 * Tell Square Connect API that the request came through by flushing early before processing.
 	 * Flushing early allows the API to end the request earlier.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @return void
 	 */
@@ -56,7 +56,7 @@ class FrmSquareLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array<string> $event_ids
 	 * @return void
@@ -82,7 +82,7 @@ class FrmSquareLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $event_id
 	 * @return bool True if the event should be skipped.
@@ -110,7 +110,7 @@ class FrmSquareLiteEventsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $event_id
 	 * @return void
@@ -136,7 +136,7 @@ class FrmSquareLiteEventsController {
 	 * Track an event to no longer process.
 	 * This is called for successful events, and also for failed events after a number of retries.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $event_id
 	 * @return void

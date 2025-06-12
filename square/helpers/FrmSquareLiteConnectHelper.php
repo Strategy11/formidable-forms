@@ -8,7 +8,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * Track the latest error when calling the Square API.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @var string|null
 	 */
@@ -671,7 +671,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @return bool
 	 */

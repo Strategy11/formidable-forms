@@ -522,7 +522,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * Filter payment action on save.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array $settings
 	 * @param array $action

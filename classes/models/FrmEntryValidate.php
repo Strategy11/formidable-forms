@@ -290,7 +290,7 @@ class FrmEntryValidate {
 	 * This is to help catch cases where the option's formatting has been modified using
 	 * the_content filter.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $value
 	 * @param string $option_value

@@ -177,7 +177,7 @@ class FrmTransLiteAppController {
 	 * This is called when the Payments submodule is active.
 	 * It ensures that the hidden repeater cadence input exists even when another add-on is handling the settings.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array $args
 	 * @return void
