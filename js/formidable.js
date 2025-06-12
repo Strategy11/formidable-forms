@@ -368,13 +368,13 @@ function frmFrontFormJS() {
 			val = '',
 			fieldID = '',
 			fileID;
-
-		if ( parseInt( field.dataset.validateRequired ) === 0 ) {
-			field.dataset.validateRequired = 1;
+			
+		if ( 'undefined' !== typeof field.dataset.skipRequiredValidation ) {
+			field.removeAttribute( 'data-skip-required-validation' );
 			return errors;
 		}
 
-		fieldId = field.getAttribute( 'data-frmfile' );
+		fileID = field.getAttribute( 'data-frmfile' );
 		if ( field.type === 'hidden' && fileID === null && ! isAppointmentField( field ) && ! isInlineDatepickerField( field ) ) {
 			return errors;
 		}
