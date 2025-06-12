@@ -4767,7 +4767,7 @@ function frmAdminBuildJS() {
 	 * When a modal is open, it is moved in the DOM and appended to the parent element of the modal trigger input. That
 	 * creates a problem since deleting the field also deletes the modal and this function fixes that problem.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param {Object} settings
 	 * @returns {void}

@@ -8,7 +8,7 @@ class FrmSquareLiteSettingsController {
 	/**
 	 * Add Square section to Global Settings.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array $sections
 	 * @return array

@@ -168,7 +168,7 @@ class FrmSquareLiteAppController {
 	/**
 	 * Create an entry object with posted values.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {

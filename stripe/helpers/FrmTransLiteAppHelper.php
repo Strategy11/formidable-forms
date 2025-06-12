@@ -536,7 +536,7 @@ class FrmTransLiteAppHelper {
 	 * Show the currency dropdown for a Payment action.
 	 * When Square is selected, this dropdown is disabled and will always use "Use Square Merchant Currency".
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $id
 	 * @param string $name
