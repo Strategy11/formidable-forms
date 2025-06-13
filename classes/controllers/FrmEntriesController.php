@@ -235,29 +235,30 @@ class FrmEntriesController {
 			$col_id .= '-_-form' . $field->form_id;
 		}
 
-		$has_separate_value = ! FrmField::is_option_empty( $field, 'separate_value' );
-		$is_post_status     = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
-		if ( $has_separate_value && ! $is_post_status ) {
-			$columns[ $form_id . '_frmsep_' . $col_id ] = self::maybe_format_field_name_for_title( $field, $has_separate_value );
+		$has_separate_value         = ! FrmField::is_option_empty( $field, 'separate_value' );
+		$is_post_status             = FrmField::is_option_true( $field, 'post_field' ) && $field->field_options['post_field'] === 'post_status';
+		$include_column_for_sep_val = $has_separate_value && ! $is_post_status;
+		if ( $include_column_for_sep_val ) {
+			$columns[ $form_id . '_frmsep_' . $col_id ] = self::maybe_format_field_name_for_column_title( $field, $include_column_for_sep_val );
 		}
 
-		$columns[ $form_id . '_' . $col_id ] = self::maybe_format_field_name_for_title( $field, $has_separate_value, false );
+		$columns[ $form_id . '_' . $col_id ] = self::maybe_format_field_name_for_column_title( $field, $include_column_for_sep_val, false );
 	}
 
 	/**
-	 * Appends "(Value)" or "(Label)" to the field name if it's an option field it has a separate value/label.
+	 * Appends "(Value)" or "(Label)" to the field name if it's an option field that has a separate value/label.
 	 *
 	 * @since x.x
 	 *
 	 * @param object $field
-	 * @param bool   $has_separate_value
+	 * @param bool   $include_column_for_sep_val
 	 * @param bool   $is_value
 	 *
 	 * @return string
 	 */
-	private static function maybe_format_field_name_for_title( $field, $has_separate_value, $is_value = true ) {
+	private static function maybe_format_field_name_for_column_title( $field, $include_column_for_sep_val, $is_value = true ) {
 		$field_name = FrmAppHelper::truncate( $field->name, 35 );
-		if ( ! $has_separate_value || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
+		if ( ! $include_column_for_sep_val || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
 			return $field_name;
 		}
 		$append_text = $is_value ? esc_html__( 'Value', 'formidable' ) : esc_html__( 'Label', 'formidable' );
