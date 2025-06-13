@@ -172,7 +172,7 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Delete entry");
         cy.get('a[href*="frm_action=destroy"] span.frm_link_label').should("contain", "Delete Entry").click();
-        cy.get('.frm-confirm-msg').should("contain", "Delete this form entry?");
+        cy.get('.frm-confirm-msg').should("contain", "Permanently delete this entry?");
         cy.get('.frm-flex-box > .button-secondary').should("contain", "Cancel").click();
         cy.get('a[href*="frm_action=destroy"] span.frm_link_label').should("contain", "Delete Entry").click();
         cy.get('#frm-confirmed-click').should("contain", "Confirm").click();

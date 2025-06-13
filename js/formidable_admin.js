@@ -4778,6 +4778,29 @@ function frmAdminBuildJS() {
 		return childLi[0].classList.contains( 'edit_field_type_submit' );
 	}
 
+	/**
+	 * Moves open modals out of the field options form.
+	 *
+	 * When a modal is open, it is moved in the DOM and appended to the parent element of the modal trigger input. That
+	 * creates a problem since deleting the field also deletes the modal and this function fixes that problem.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object} settings
+	 * @returns {void}
+	 */
+	function moveOpenModalsOutOfFieldOptions( settings ) {
+		const openModals = settings[0].querySelectorAll( '.frm-inline-modal[data-fills]' );
+		if ( ! openModals.length ) {
+			return;
+		}
+		openModals.forEach( modal => {
+			modal.classList.add( 'frm_hidden' );
+			modal.removeAttribute( 'data-fills' );
+			modal.closest( 'form' ).appendChild( modal );
+		});
+	}
+
 	function deleteField( fieldId ) {
 		jQuery.ajax({
 			type: 'POST',
@@ -4795,6 +4818,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
+				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
 				$thisField.fadeOut( 'slow', function() {

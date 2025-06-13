@@ -6,6 +6,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmHoneypot extends FrmValidate {
 
 	/**
+	 * Track the printed selectors so we do not print the same CSS twice.
+	 *
+	 * @since x.x
+	 * @var array
+	 */
+	private static $printed_honeypot_selectors = array();
+
+	/**
 	 * Option type.
 	 *
 	 * @since 6.21
@@ -86,7 +94,7 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_field( $form_id ) {
@@ -121,7 +129,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @since 6.21
 	 */
 	public static function maybe_print_honeypot_js() {
-		if ( ! self::is_enabled() ) {
+		if ( FrmAppHelper::is_admin() || ! self::is_enabled() ) {
 			return;
 		}
 
@@ -142,6 +150,9 @@ class FrmHoneypot extends FrmValidate {
 			</script>",
 			esc_js( $css )
 		);
+
+		global $frm_vars;
+		self::$printed_honeypot_selectors = $frm_vars['honeypot_selectors'];
 	}
 
 	/**
@@ -172,9 +183,17 @@ class FrmHoneypot extends FrmValidate {
 			return '';
 		}
 
+		$selectors = $frm_vars['honeypot_selectors'];
+		if ( self::$printed_honeypot_selectors ) {
+			$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+			if ( ! $selectors ) {
+				return '';
+			}
+		}
+
 		return sprintf(
 			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
-			implode( ',', $frm_vars['honeypot_selectors'] )
+			implode( ',', $selectors )
 		);
 	}
 

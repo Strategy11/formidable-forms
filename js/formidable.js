@@ -1379,6 +1379,12 @@ function frmFrontFormJS() {
 					timeoutCallback = function() {
 						tinyMCE.activeEditor.focus();
 					};
+				} else if ( element.classList.contains( 'frm_opt_container' ) ) {
+					const firstInput = element.querySelector( 'input' );
+					if ( firstInput ) {
+						focusInput( firstInput );
+						break;
+					}
 				}
 
 				if ( 'function' === typeof timeoutCallback ) {

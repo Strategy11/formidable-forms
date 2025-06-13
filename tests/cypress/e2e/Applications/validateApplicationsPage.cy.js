@@ -13,17 +13,22 @@ describe("Applications page", () => {
         cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > img').should('exist');
         cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > h3').should('contain', 'Improve your workflow with applications');
         cy.get('#frm_custom_applications_placeholder > .frm_grid_container > :nth-child(1) > div').should('contain', 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.');
-        cy.get('.frm_grid_container .frm-button-primary').should('contain', 'Upgrade to Pro').invoke('removeAttr', 'target').click();
 
-        cy.origin('https://formidableforms.com', () => {
-            cy.get('h1').should(($h1) => {
-                const text = $h1.text();
-                expect(text).to.satisfy((t) =>
-                    t.includes('The Only WordPress Form Maker & Application Builder Plugin') ||
-                    t.includes('Upgrade Today to Unlock the Full Power of Formidable Forms')
-                );
-            });
-        });
+		cy.get('.frm_grid_container .frm-button-primary')
+			.should('contain', 'Upgrade to Pro')
+			.should('have.attr', 'href')
+			.then((href) => {
+				cy.origin('https://formidableforms.com', { args: { href } }, ({ href }) => {
+					cy.visit(href);
+					cy.get('h1').should(($h1) => {
+						const text = $h1.text();
+						expect(text).to.satisfy((t) =>
+							t.includes('The Only WordPress Form Maker & Application Builder Plugin') ||
+							t.includes('Upgrade Today to Unlock the Full Power of Formidable Forms')
+						);
+					});
+				});
+			});
 
         cy.visit('/wp-admin/admin.php?page=formidable-applications');
 

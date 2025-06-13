@@ -232,6 +232,10 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		if ( ! empty( $field->field_options['post_field'] ) ) {
+			return true;
+		}
+
 		$value = (array) $value;
 
 		foreach ( $value as $current_value ) {
@@ -243,8 +247,24 @@ class FrmEntryValidate {
 					return true;
 				}
 
-				$option_value = is_array( $option ) ? $option['value'] : $option;
-				$match        = $current_value === $option_value;
+				if ( is_array( $option ) ) {
+					$separate_value = FrmField::get_option( $field, 'separate_value' );
+					$option_value   = $separate_value ? $option['value'] : $option['label'];
+				} else {
+					$option_value = $option;
+				}
+
+				$match = trim( $current_value ) === trim( $option_value );
+				if ( $match ) {
+					break;
+				}
+
+				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
+				if ( $match ) {
+					break;
+				}
+
+				$match = self::is_filtered_match( $current_value, $option_value );
 				if ( $match ) {
 					break;
 				}
@@ -255,7 +275,7 @@ class FrmEntryValidate {
 						break;
 					}
 				}
-			}
+			}//end foreach
 
 			if ( ! $match ) {
 				return self::options_are_dynamic_based_on_hook( $field, $value );
@@ -263,6 +283,30 @@ class FrmEntryValidate {
 		}//end foreach
 
 		return true;
+	}
+
+	/**
+	 * Make an extra check after passing $option_value through the_content filter.
+	 * This is to help catch cases where the option's formatting has been modified using
+	 * the_content filter.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @param string $option_value
+	 * @return bool
+	 */
+	private static function is_filtered_match( $value, $option_value ) {
+		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
+		$filter_priority = has_filter( 'the_content', 'wpautop' );
+		if ( is_numeric( $filter_priority ) ) {
+			remove_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+		$filtered_option = apply_filters( 'the_content', $option_value );
+		if ( is_numeric( $filter_priority ) ) {
+			add_filter( 'the_content', 'wpautop', $filter_priority );
+		}
+		return trim( $value ) === trim( $filtered_option );
 	}
 
 	/**
@@ -278,8 +322,15 @@ class FrmEntryValidate {
 		$values['value'] = $value;
 		FrmFieldsHelper::prepare_new_front_field( $values, $field_object );
 
-		$map_callback = function ( $option ) {
-			return is_array( $option ) ? $option['value'] : $option;
+		$separate_value = FrmField::get_option( $field_object, 'separate_value' );
+		$map_callback   = function ( $option ) use ( $separate_value ) {
+			if ( is_array( $option ) ) {
+				$option_value = $separate_value ? $option['value'] : $option['label'];
+			} else {
+				$option_value = $option;
+			}
+			$option_value = do_shortcode( $option_value );
+			return $option_value;
 		};
 
 		$values_options       = array_map( $map_callback, $values['options'] );
