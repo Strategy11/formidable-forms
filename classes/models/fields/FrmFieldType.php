@@ -955,13 +955,17 @@ DEFAULT_HTML;
 		$is_checkbox = FrmField::is_checkbox( $this->field );
 		$align       = FrmField::get_option( $this->field, 'align' );
 
-		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
-			self::prepare_align_class( $align );
-			$class .= ' ' . $align;
+		if ( empty( $align ) || ( ! $is_radio && ! $is_checkbox ) ) {		
+			return '';
 		}
 
-		return $class;
+		$image_options = FrmField::get_option( $this->field, 'image_options' );
+		if ( $image_options ) {
+			return '';
+		}
+
+		self::prepare_align_class( $align );
+		return ' ' . $align;
 	}
 
 	/**
