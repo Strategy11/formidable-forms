@@ -1603,7 +1603,7 @@ function frmAdminBuildJS() {
 	 * @param {Event}  event
 	 */
 	function insertNewFieldByDragging( fieldType, event ) {		
-		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+		if ( 'range' === fieldType && event.originalEvent.detail.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
 			return;
 		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
@@ -2032,7 +2032,7 @@ function frmAdminBuildJS() {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
-		if ( 'range' === fieldType && event.originalEvent.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+		if ( 'range' === fieldType && event.originalEvent.detail.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
 			return;
 		}
 		const formId = thisFormId;
