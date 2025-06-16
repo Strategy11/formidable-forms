@@ -1206,7 +1206,7 @@ DEFAULT_HTML;
 
 		return $hidden;
 	}
-	
+
 	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
