@@ -2,7 +2,7 @@
  * Internal dependencies
  */
 import { HIDDEN_CLASS } from 'core/constants';
-import { show, hide } from 'core/utils';
+import { show, hide, isVisible } from 'core/utils';
 
 /**
  * Represents a radio component.
@@ -23,6 +23,7 @@ export default class frmRadioComponent {
 	init() {
 		this.radioElements.forEach( ( element ) => {
 			this.initOnRadioChange( element );
+			this.initVisibilityObserver( element );
 		});
 		this.initTrackerOnAccordionClick();
 	}
@@ -97,6 +98,40 @@ export default class frmRadioComponent {
 	}
 
 	/**
+	 * Initializes visibility observer for the radio component. This handles cases when components are conditionally shown.
+	 *
+	 * @param {HTMLElement} element The radio component element
+	 * @return {void}
+	 */
+	initVisibilityObserver( element ) {
+		const observer = new MutationObserver( () => {
+			// Check if element is now visible
+			if ( isVisible( element ) ) {
+				const radio = element.querySelector( 'input[type="radio"]:checked' );
+				if ( radio ) {
+					this.onRadioChange( radio );
+				}
+			}
+		});
+
+		// Observe for attribute changes on the component and its ancestors
+		observer.observe( element, {
+			attributes: true,
+			attributeFilter: [ 'class' ]
+		});
+
+		// Also observe parent elements up to a reasonable depth
+		let parent = element.parentElement;
+		for ( let i = 0; i < 3 && parent; i++ ) {
+			observer.observe( parent, {
+				attributes: true,
+				attributeFilter: [ 'class' ]
+			});
+			parent = parent.parentElement;
+		}
+	}
+
+	/**
 	 * Hide the possible opepend extra elements.
 	 */
 	hideExtraElements() {
@@ -121,8 +156,8 @@ export default class frmRadioComponent {
 		const width   = activeItem.offsetWidth;
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
-		tracker.style.left = width ? 0 : 'var(--gap-2xs)';
-		tracker.style.width = width ? `${width}px` : 'calc(50% - 2px)';
+		tracker.style.left = 0;
+		tracker.style.width = `${width}px`;
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }
