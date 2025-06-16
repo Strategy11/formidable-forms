@@ -4,13 +4,8 @@
 
 .frm_priority_field_choices,
 li.frm_single_option {
-	padding-bottom: 16px;
-	border-bottom: 1px solid var(--sidebar-hover);
-}
-
-.frm_priority_field_choices,
-li.frm_single_option:not(:last-child) {
-	margin-bottom: 16px;
+	padding-bottom: var(--gap-sm);
+	border-bottom: 0;
 }
 
 .frm_prod_type_single input[type="radio"],

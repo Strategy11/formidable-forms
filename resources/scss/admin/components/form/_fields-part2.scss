@@ -14,13 +14,13 @@
 	min-width: 15px;
 	height: 15px;
 	border: 1px solid var(--grey-300);
-	box-shadow: var(--box-shadow-xs);
+	box-shadow: var(--box-shadow-sm);
 	-webkit-appearance: none;
 }
 
 .frm_wrap input[type="radio"] {
 	border-color: var(--grey-300);
-	box-shadow: var(--box-shadow-xs);
+	box-shadow: var(--box-shadow-sm);
 
 	&:checked::before {
 		background-color: var(--primary-500);

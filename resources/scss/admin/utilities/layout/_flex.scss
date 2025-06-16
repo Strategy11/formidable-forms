@@ -100,6 +100,10 @@
 	flex-wrap: wrap;
 }
 
+.frm-grow {
+	flex-grow: 1;
+}
+
 .frm-order-first {
 	order: calc(-infinity);
 }
@@ -113,7 +117,7 @@
 }
 
 %h-stack-base {
-	display: flex;
+	display: flex !important;
 	align-items: center;
 }
 

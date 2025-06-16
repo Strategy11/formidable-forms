@@ -13,7 +13,9 @@ p.frm-inline-select,
 }
 
 .frm-single-settings ul.frm_sortable_field_opts {
-	margin-bottom: 5px;
+	border-bottom: 1px solid var(--grey-200);
+	padding-bottom: var(--gap-xs);
+	margin-bottom: var(--gap-xs);
 }
 
 .frm-single-settings .frm_add_opt_container svg.frm_add_tag,

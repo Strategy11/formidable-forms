@@ -24,7 +24,7 @@
 
 	&:not(.frm-collapsed) {
 		color: var(--grey-700);
-		box-shadow: var(--box-shadow-xs);
+		box-shadow: var(--box-shadow-sm);
 
 		.frmsvg {
 			transform: rotate(-180deg);
