@@ -17,11 +17,11 @@ $options = $component['options'] ?? array();
 				'value' => $option['value'] ?? '',
 			);
 
-			if ( isset( $component['input-classname'] ) ) {
+			if ( ! empty( $component['input-classname'] ) ) {
 				$input_attrs['class'] = $component['input-classname'];
 			}
 
-			if ( isset( $component['data-fid'] ) ) {
+			if ( ! empty( $component['data-fid'] ) ) {
 				$input_attrs['data-fid'] = $component['data-fid'];
 			}
 			?>
@@ -32,7 +32,7 @@ $options = $component['options'] ?? array();
 				checked( ( $is_default_checked && 0 === $index ) || $option['value'] === $field_value, true );
 				?>
 			/>
-			<label class="frm-flex-center" for="<?php echo esc_attr( $input_attrs['id'] ); ?>" tabindex="0">
+			<label class="frm-flex-center <?php echo esc_attr( $option['classes'] ?? '' ); ?>" for="<?php echo esc_attr( $input_attrs['id'] ); ?>" tabindex="0" data-value="<?php echo esc_attr( $input_attrs['value'] ); ?>" <?php echo $option['custom_attrs'] ?? ''; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 				<span class="frm-toggle-label"><?php echo esc_html( $option['label'] ?? '' ); ?></span>
 			</label>
 			<?php
