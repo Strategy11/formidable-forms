@@ -434,6 +434,17 @@ namespace {
 		 */
 		public static function add_currency_settings() {}
 	}
+	class FrmProAddressesController extends FrmProComboFieldsController {
+		/**
+		 * @param string $country
+		 * @return string
+		 */
+		public static function get_country_code( $country ) {
+		}
+	}
+
+	class FrmProComboFieldsController {
+	}
 }
 
 namespace Elementor {

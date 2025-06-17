@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.21.1
+Stable tag: 6.22
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -61,7 +61,7 @@ Formidable transcends typical contact form plugin functionality by offering opti
 
 == Seamless Payments and Credit Card Processing ==
 
-Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
+Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, Square, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
 
 == Data-Driven Web Applications Made Easy ==
 
@@ -265,7 +265,7 @@ To get access to more features, integrations, and support, [upgrade to Formidabl
 
 = Can I create a payment form? =
 
-Yes! We make it easy to accept payments using Stripe, PayPal, and Authorize.net.
+Yes! We make it easy to accept payments using Stripe, Square, PayPal, and Authorize.net.
 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal forms allow you to accept PayPal payments, subscriptions, and donations online.
 
@@ -318,7 +318,7 @@ Additionally, our Payment fields will help you create a credit card form, donati
 * Dropdown Items
 * Product Quantity
 * Total
-* Credit Card (Stripe or Authorize.net)
+* Credit Card (Stripe, Square, or Authorize.net)
 
 = Can I import and export submissions? =
 
@@ -372,6 +372,21 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.22 =
+* New: Support for Square payments has been added.
+* Fix: Option validation would fail in some cases where shortcodes were used in options.
+* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
+* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
+* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
+* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
+* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
+* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
+* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
+* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
+* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
+* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
+* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
+
 = 6.21.1 =
 * New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
 * New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
@@ -409,17 +424,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
 * Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
 * The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
-
-= 6.19 =
-* New: A new Enable GDPR related features and enhancements setting has been added to Global Settings. When enabled, a new GDPR field is available in the form builder. The GDPR field is a special required checkbox field that must be checked in order for the form to be submitted.
-* New: Sorting preferences are now remembered on the Forms and Entries list admin pages. Forms are now also automatically sorted with the newest forms at the top.
-* New: A quick link to the views tab is now available on the form list admin page.
-* New: A new setting to disable cookies has been added to Global Settings in the GDPR section.
-* New: The enter key will now quickly jump between inputs when setting options for Radio Button, Checkbox, and Dropdown fields.
-* Fix: The accordions on the visual styler page looked incorrect when using WordPress v6.7.2.
-* Fix: After updating an entry, empty user ID values would convert to 0, causing issues when trying to filter a view with an empty user ID.
-* Fix: Turnstile captcha fields would not properly reset on an error when submitting with AJAX.
-* Fix: A Javascript error would occur when triggering a change event on a hidden field with custom code.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

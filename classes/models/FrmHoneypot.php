@@ -8,7 +8,7 @@ class FrmHoneypot extends FrmValidate {
 	/**
 	 * Track the printed selectors so we do not print the same CSS twice.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 * @var array
 	 */
 	private static $printed_honeypot_selectors = array();

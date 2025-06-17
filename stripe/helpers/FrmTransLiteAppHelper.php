@@ -510,4 +510,76 @@ class FrmTransLiteAppHelper {
 
 		return $count;
 	}
+
+	public static function get_gateways() {
+		$gateways = apply_filters( 'frm_payment_gateways', array() );
+		return $gateways;
+	}
+
+	/**
+	 * @param array|string $gateway
+	 * @param string       $setting
+	 */
+	public static function get_setting_for_gateway( $gateway, $setting ) {
+		$gateways = self::get_gateways();
+		$value    = '';
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+		if ( isset( $gateways[ $gateway ] ) ) {
+			$value = $gateways[ $gateway ][ $setting ];
+		}
+		return $value;
+	}
+
+	/**
+	 * Show the currency dropdown for a Payment action.
+	 * When Square is selected, this dropdown is disabled and will always use "Use Square Merchant Currency".
+	 *
+	 * @since 6.22
+	 *
+	 * @param string $id
+	 * @param string $name
+	 * @param array  $action_settings
+	 */
+	public static function show_currency_dropdown( $id, $name, $action_settings ) {
+		$selected     = $action_settings['currency'];
+		$gateways     = (array) $action_settings['gateway'];
+		$select_attrs = array(
+			'id'   => $id,
+			'name' => $name,
+		);
+		if ( in_array( 'square', $gateways, true ) ) {
+			$select_attrs['disabled'] = 'disabled';
+			$selected                 = '';
+		}
+		$currencies = FrmCurrencyHelper::get_currencies();
+		?>
+		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
+			<?php
+			if ( in_array( 'square', $gateways, true ) ) {
+				$option_params = array(
+					'class'    => 'square-currency',
+					'selected' => 'selected',
+					'value'    => 'square',
+				);
+				?>
+				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<?php
+			}
+
+			foreach ( $currencies as $code => $currency ) {
+				FrmHtmlHelper::echo_dropdown_option(
+					$currency['name'] . ' (' . strtoupper( $code ) . ')',
+					$selected === strtolower( $code ),
+					array(
+						'value' => strtolower( $code ),
+					)
+				);
+				unset( $currency, $code );
+			}
+			?>
+		</select>
+		<?php
+	}
 }
