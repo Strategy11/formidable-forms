@@ -3908,12 +3908,6 @@ class FrmAppHelper {
 		$new_args['options']     = (array) $new_args['options'];
 		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
 
-		// Set the number of columns.
-		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
-		if ( $new_args['col_class'] > 6 ) {
-			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
-		}
-
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
 		 *

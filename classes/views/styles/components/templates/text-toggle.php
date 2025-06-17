@@ -11,21 +11,33 @@ $options = $component['options'] ?? array();
 		$is_default_checked = empty( $field_value );
 
 		foreach ( $options as $index => $option ) {
-			$input_id     = 'frm-text-toggle-' . $field_name . '-' . $index;
-			$option_value = $option['value'] ?? '';
-			$is_checked   = ( $is_default_checked && 0 === $index ) || $option_value === $field_value;
+			$input_attrs = array(
+				'type'  => 'radio',
+				'id'    => 'frm-text-toggle-' . $field_name . '-' . $index,
+				'value' => $option['value'] ?? '',
+			);
+
+			if ( isset( $component['input-classname'] ) ) {
+				$input_attrs['class'] = $component['input-classname'];
+			}
+
+			if ( isset( $component['data-fid'] ) ) {
+				$input_attrs['data-fid'] = $component['data-fid'];
+			}
 			?>
 			<input
-				type="radio"
-				<?php echo esc_attr( $field_name ); ?>
-				id="<?php echo esc_attr( $input_id ); ?>"
-				value="<?php echo esc_attr( $option_value ); ?>"
-				<?php checked( $is_checked, true ); ?>
+				<?php
+				echo $field_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::array_to_html_params( $input_attrs, true );
+				checked( ( $is_default_checked && 0 === $index ) || $option['value'] === $field_value, true );
+				?>
 			/>
-			<label class="frm-flex-center" for="<?php echo esc_attr( $input_id ); ?>" tabindex="0">
+			<label class="frm-flex-center" for="<?php echo esc_attr( $input_attrs['id'] ); ?>" tabindex="0">
 				<span class="frm-toggle-label"><?php echo esc_html( $option['label'] ?? '' ); ?></span>
 			</label>
-		<?php } ?>
+			<?php
+		}//end foreach
+		?>
 
 		<span class="frm-radio-active-tracker"></span>
 	</div>
