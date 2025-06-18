@@ -1597,13 +1597,24 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Returns true if it's a range field type and slider type is not selected.
+	 *
+	 * @param {string} fieldType
+	 * @param {Event}  event
+	 * @returns {boolean}
+	 */
+	function shouldStopInsertingField( fieldType, event ) {
+		return 'range' === fieldType && event.originalEvent?.detail?.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1';
+	}
+
+	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
 	 * @param {Event}  event
 	 */
 	function insertNewFieldByDragging( fieldType, event ) {		
-		if ( 'range' === fieldType && event.originalEvent.detail.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
+		if ( shouldStopInsertingField( fieldType, event ) ) {
 			return;
 		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
@@ -2027,14 +2038,15 @@ function frmAdminBuildJS() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
+		if ( shouldStopInsertingField( fieldType, event ) ) {
+			return;
+		}
+
 		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
-		if ( 'range' === fieldType && event.originalEvent.detail.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1' ) {
-			return;
-		}
 		const formId = thisFormId;
 
 		jQuery.ajax({
