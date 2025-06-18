@@ -9203,6 +9203,7 @@ function frmAdminBuildJS() {
 			}
 		});
 	}
+
 	function initAutocomplete( container ) {
 		frmDom.autocomplete.initSelectionAutocomplete( container );
 	}
