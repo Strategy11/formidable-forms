@@ -82,15 +82,13 @@ FrmFormTemplatesHelper::prepare_template_details( $template, $pricing, $license_
 				if ( $template['description'] ) {
 					FrmAppHelper::kses_echo( $template['description'], array( 'a', 'i', 'span', 'use', 'svg' ) );
 				} elseif ( $template['is_custom'] ) {
-					echo '<i>';
 					printf(
 						/* translators: %s: date */
 						esc_html__( 'Created %s', 'formidable' ),
 						esc_html( date_i18n( get_option( 'date_format' ), strtotime( $template['created_at'] ) ) )
 					);
-					echo '</i>';
 				} else {
-					echo '<i>' . esc_html__( 'No description', 'formidable' ) . '</i>';
+					echo esc_html__( 'No description', 'formidable' );
 				}
 				?>
 			</p>
