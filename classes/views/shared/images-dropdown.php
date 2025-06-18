@@ -31,7 +31,6 @@ new FrmTextToggleStyleComponent(
 	array(
 		'classname'       => $args['classes'],
 		'options'         => $component_options,
-		'input-classname' => $args['input_attrs']['class'] ?? '',
-		'data-fid'        => $args['input_attrs']['data-fid'] ?? '',
+		'input_attrs_str' => $input_attrs_str,
 	)
 );

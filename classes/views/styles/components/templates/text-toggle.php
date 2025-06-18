@@ -12,22 +12,17 @@ $options = $component['options'] ?? array();
 
 		foreach ( $options as $index => $option ) {
 			$input_attrs = array(
-				'type'  => 'radio',
 				'id'    => 'frm-text-toggle-' . $field_name . '-' . $index,
 				'value' => $option['value'] ?? '',
 			);
 
-			if ( ! empty( $component['input-classname'] ) ) {
-				$input_attrs['class'] = $component['input-classname'];
-			}
-
-			if ( ! empty( $component['data-fid'] ) ) {
-				$input_attrs['data-fid'] = $component['data-fid'];
+			if ( ! empty( $component['input_attrs_str'] ) ) {
+				$input_attrs['type'] = 'radio';
 			}
 			?>
 			<input
 				<?php
-				echo $field_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo $component['input_attrs_str'] ?? $field_name; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				FrmAppHelper::array_to_html_params( $input_attrs, true );
 				checked( ( $is_default_checked && 0 === $index ) || $option['value'] === $field_value, true );
 				?>
