@@ -651,7 +651,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						frmDom.autocomplete.initSelectionAutocomplete( inside );
+						initSelectionAutocomplete( inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 
 						/**
@@ -7132,7 +7132,7 @@ function frmAdminBuildJS() {
 		if ( newAction.classList.contains( 'frm_single_on_submit_settings' ) ) {
 			const autocompleteInput = newAction.querySelector( 'input.frm-page-search' );
 			if ( autocompleteInput ) {
-				frmDom.autocomplete.initAutocomplete( 'page', newAction );
+				initSelectionAutocomplete( newAction );
 			}
 		}
 
@@ -7230,7 +7230,7 @@ function frmAdminBuildJS() {
 			showInputIcon( '#frm_form_action_' + actionId );
 
 			initiateMultiselect();
-			frmDom.autocomplete.initAutocomplete( 'page', newAction );
+			initSelectionAutocomplete( newAction );
 
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
@@ -9203,8 +9203,8 @@ function frmAdminBuildJS() {
 			}
 		});
 	}
-	function initSelectionAutocomplete() {
-		frmDom.autocomplete.initSelectionAutocomplete();
+	function initSelectionAutocomplete( container ) {
+		frmDom.autocomplete.initSelectionAutocomplete( container );
 	}
 
 	function nextInstallStep( thisStep ) {
