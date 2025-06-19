@@ -3369,13 +3369,13 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			// Note: The event listener for the new option is still using jQuery, and we can't use vanilla JS to append it
-			jQuery( this ).closest( '.frm_single_option' ).after( newOption.newOption );
+			this.closest( '.frm_single_option' ).after( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
 
 		// Make sure all remove buttons are enabled
-		this.closest( '.frm_sortable_field_opts' )?.querySelector( '.frm_remove_tag.frm_disabled' )?.classList.remove( 'frm_disabled' );
+		this.closest( '.frm_sortable_field_opts' )?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
+			forEach( button => button.classList.remove( 'frm_disabled' ) );
 
 		fieldUpdated();
 	}
@@ -3605,7 +3605,7 @@ function frmAdminBuildJS() {
 		let otherInput,
 			fieldId = this.getAttribute( 'data-fid' );
 
-		jQuery( parentLi ).fadeOut( 'slow', function() {
+		jQuery( parentLi ).fadeOut( 'fast', function() {
 			wp.hooks.doAction( 'frm_before_delete_field_option', this );
 			jQuery( parentLi ).remove();
 
@@ -3615,7 +3615,7 @@ function frmAdminBuildJS() {
 				if ( otherInput !== null ) {
 					otherInput.value = 0;
 				}
-				jQuery( '#other_button_' + fieldId ).fadeIn( 'slow' );
+				jQuery( '#other_button_' + fieldId ).fadeIn( 'fast' );
 			}
 		});
 		fieldUpdated();
