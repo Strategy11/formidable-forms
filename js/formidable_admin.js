@@ -3369,9 +3369,14 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption.newOption );
+			// Note: The event listener for the new option is still using jQuery, and we can't use vanilla JS to append it
+			jQuery( this ).closest( '.frm_single_option' ).after( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
+
+		// Make sure all remove buttons are enabled
+		this.closest( '.frm_sortable_field_opts' )?.querySelector( '.frm_remove_tag.frm_disabled' )?.classList.remove( 'frm_disabled' );
+
 		fieldUpdated();
 	}
 
@@ -3581,11 +3586,23 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 	}
 
+	/**
+	 * Delete a field option.
+	 */
 	function deleteFieldOption() {
+		const parentLi = this.parentNode;
+		const parentUl = parentLi.parentNode;
+
+		// If only 2 visible options, add disabled class to the other delete button
+		const visibleOptions = parentUl.querySelectorAll('li:not(.frm_hidden)');
+		if ( visibleOptions.length === 2 ) {
+			Array.from( visibleOptions )
+				.find( li => li !== parentLi )
+				.querySelector('.frm_remove_tag')?.classList.add( 'frm_disabled' );
+		}
+
 		/*jshint validthis:true */
 		let otherInput,
-			parentLi = this.parentNode,
-			parentUl = parentLi.parentNode,
 			fieldId = this.getAttribute( 'data-fid' );
 
 		jQuery( parentLi ).fadeOut( 'slow', function() {
