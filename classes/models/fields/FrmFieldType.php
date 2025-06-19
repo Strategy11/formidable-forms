@@ -579,13 +579,6 @@ DEFAULT_HTML;
 	/**
 	 * @since 4.04
 	 */
-	protected function get_add_option_string() {
-		return __( 'Add Option', 'formidable' );
-	}
-
-	/**
-	 * @since 4.04
-	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
 	}
@@ -1815,5 +1808,13 @@ DEFAULT_HTML;
 	protected function get_select_atributes( $values ) {
 		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
 		return $this->get_select_attributes( $values );
+	}
+
+	/**
+	 * @since 4.04
+	 * @deprecated x.x
+	 */
+	protected function get_add_option_string() {
+		return __( 'Add Option', 'formidable' );
 	}
 }
