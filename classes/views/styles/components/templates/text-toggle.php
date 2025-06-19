@@ -16,7 +16,7 @@ $options = $component['options'] ?? array();
 				'value' => $option['value'] ?? '',
 			);
 
-			if ( ! empty( $component['input_attrs_str'] ) ) {
+			if ( empty( $component['input_attrs_str'] ) ) {
 				$input_attrs['type'] = 'radio';
 			}
 			?>

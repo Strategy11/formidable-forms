@@ -15,17 +15,37 @@ export default class frmRadioComponent {
 		if ( 0 < this.radioElements.length ) {
 			this.init();
 		}
+
+		/**
+		 * Handles the addition of new fields.
+		 *
+		 * @param {Event}       event          The frm_added_field event.
+		 * @param {HTMLElement} event.frmField The added field object being destructured from the event.
+		 */
+		document.addEventListener( 'frm_added_field', ( { frmField } ) => {
+			this.radioElements = document.getElementById( `frm-single-settings-${ frmField.dataset.fid }` )
+				.querySelectorAll( '.frm-style-component.frm-radio-component' );
+
+			this.initRadio();
+		});
 	}
 
 	/**
 	 * Initializes the radio component.
 	 */
 	init() {
+		this.initRadio();
+		this.initTrackerOnAccordionClick();
+	}
+
+	/**
+	 * Initializes the radio component.
+	 */
+	initRadio() {
 		this.radioElements.forEach( ( element ) => {
 			this.initOnRadioChange( element );
 			this.initVisibilityObserver( element );
 		});
-		this.initTrackerOnAccordionClick();
 	}
 
 	initTrackerOnAccordionClick() {
