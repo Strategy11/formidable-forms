@@ -651,7 +651,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						frmDom.autocomplete.initSelectionAutocomplete( inside );
+						initAutocomplete( inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 
 						/**
@@ -7132,7 +7132,7 @@ function frmAdminBuildJS() {
 		if ( newAction.classList.contains( 'frm_single_on_submit_settings' ) ) {
 			const autocompleteInput = newAction.querySelector( 'input.frm-page-search' );
 			if ( autocompleteInput ) {
-				frmDom.autocomplete.initAutocomplete( 'page', newAction );
+				initAutocomplete( newAction );
 			}
 		}
 
@@ -7230,7 +7230,7 @@ function frmAdminBuildJS() {
 			showInputIcon( '#frm_form_action_' + actionId );
 
 			initiateMultiselect();
-			frmDom.autocomplete.initAutocomplete( 'page', newAction );
+			initAutocomplete( newAction );
 
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
@@ -7697,7 +7697,7 @@ function frmAdminBuildJS() {
 				function( response, optName ) {
 					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
 					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
-					frmDom.autocomplete.initAutocomplete( 'page', postParentField );
+					initAutocomplete( postParentField );
 				}
 			);
 		}
@@ -9203,8 +9203,9 @@ function frmAdminBuildJS() {
 			}
 		});
 	}
-	function initSelectionAutocomplete() {
-		frmDom.autocomplete.initSelectionAutocomplete();
+
+	function initAutocomplete( container ) {
+		frmDom.autocomplete.initSelectionAutocomplete( container );
 	}
 
 	function nextInstallStep( thisStep ) {
@@ -10145,7 +10146,7 @@ function frmAdminBuildJS() {
 				// Solution install page
 				frmAdminBuild.solutionInit();
 			} else {
-				initSelectionAutocomplete();
+				initAutocomplete();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();
@@ -10623,7 +10624,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
 
             // Page Selection Autocomplete
-			initSelectionAutocomplete();
+			initAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 
