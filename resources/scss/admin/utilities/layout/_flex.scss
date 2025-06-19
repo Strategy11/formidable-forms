@@ -60,6 +60,10 @@
 	gap: var(--gap-xs);
 }
 
+.frm-gap-xs\! {
+	gap: var(--gap-xs) !important;
+}
+
 .frm-gap-sm {
 	gap: var(--gap-sm);
 }
