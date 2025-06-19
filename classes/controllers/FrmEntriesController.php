@@ -407,12 +407,11 @@ class FrmEntriesController {
 		global $frm_vars;
 		$i = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
 
+		$max_columns = 11;
+
 		if ( ! empty( $hidden ) ) {
-			$result      = $hidden;
-			$i           = $i - count( $result );
-			$max_columns = 11;
-		} else {
-			$max_columns = 8;
+			$result = $hidden;
+			$i      = $i - count( $result );
 		}
 
 		if ( $i <= $max_columns ) {
