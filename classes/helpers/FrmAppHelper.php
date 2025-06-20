@@ -1578,7 +1578,7 @@ class FrmAppHelper {
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<span class="frmfont frm_search_icon"></span>
+			<?php self::icon_by_class( 'frm_icon_font frm_search_icon frm_svg20' ); ?>
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -3907,12 +3907,6 @@ class FrmAppHelper {
 
 		$new_args['options']     = (array) $new_args['options'];
 		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
-
-		// Set the number of columns.
-		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
-		if ( $new_args['col_class'] > 6 ) {
-			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
-		}
 
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.

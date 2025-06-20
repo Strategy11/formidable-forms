@@ -11,9 +11,17 @@
 	display: flex;
 }
 
+.frm-flex\! {
+	display: flex !important;
+}
+
 .frm_hidden,
 .js .frm-hide-js {
 	display: none;
+}
+
+.frm_hidden\! {
+	display: none !important;
 }
 
 .frm-flex-box {
@@ -31,7 +39,7 @@
 }
 
 .frm-flex-center {
-	display: flex;
+	display: flex !important;
 	justify-content: center;
 	align-items: center;
 }
@@ -52,6 +60,10 @@
 	gap: var(--gap-xs);
 }
 
+.frm-gap-xs\! {
+	gap: var(--gap-xs) !important;
+}
+
 .frm-gap-sm {
 	gap: var(--gap-sm);
 }
@@ -62,6 +74,10 @@
 
 .frm-gap-xl {
 	gap: var(--gap-xl);
+}
+
+.frm-justify-start {
+	justify-content: start !important;
 }
 
 .frm-justify-center {
@@ -80,6 +96,49 @@
 	align-items: center;
 }
 
+.frm-items-stretch {
+	align-items: stretch;
+}
+
 #wpbody-content .frm-flex-wrap {
 	flex-wrap: wrap;
+}
+
+.frm-grow {
+	flex-grow: 1;
+}
+
+.frm-order-first {
+	order: calc(-infinity);
+}
+
+.frm-order-last {
+	order: calc(infinity);
+}
+
+.frm-order-none {
+	order: 0;
+}
+
+%h-stack-base {
+	display: flex !important;
+	align-items: center;
+}
+
+.frm-h-stack {
+
+	@extend %h-stack-base;
+	gap: var(--gap-2xs);
+}
+
+.frm-h-stack-xs {
+
+	@extend %h-stack-base;
+	gap: var(--gap-xs);
+}
+
+.frm-h-stack-sm {
+
+	@extend %h-stack-base;
+	gap: var(--gap-xs);
 }
