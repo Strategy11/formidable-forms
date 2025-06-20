@@ -5011,7 +5011,7 @@ function frmAdminBuildJS() {
 	 * @returns {Object}
 	 */
 	function getChoiceOldValueAndLabel( choiceElement ) {
-		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' )?.checked;
+		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' )?.checked ?? false;
 		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
 
 		let oldValue, oldLabel;
