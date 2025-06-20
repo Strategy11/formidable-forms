@@ -4,6 +4,7 @@
 	+ div,
 	+ span {
 		grid-column: span 6 / span 6;
+		align-content: center;
 	}
 }
 
@@ -13,6 +14,7 @@
 	+ div,
 	+ span {
 		grid-column: span 12 / span 12 !important;
+		align-content: center;
 	}
 }
 
