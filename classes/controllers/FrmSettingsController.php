@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSettingsController {
 
+	/**
+	 * @since x.x
+	 *
+	 * @var array
+	 */
+	private static $removed_payments_sections = array();
+
 	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
@@ -129,6 +136,14 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::remove_payments_sections( $sections );
+
+		$sections['payments'] = array(
+			'name'     => __( 'Payments', 'formidable' ),
+			'icon'     => 'frm_icon_font frm_credit_card_icon',
+			'class'    => __CLASS__,
+			'function' => 'payments_settings',
+		);
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
@@ -162,6 +177,22 @@ class FrmSettingsController {
 		}//end foreach
 
 		return $sections;
+	}
+
+	private static function remove_payments_sections( &$sections ) {
+		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
+
+		foreach ( $sections as $key => $section ) {
+			if ( in_array( $key, $payment_section_keys, true ) ) {
+				self::$removed_payments_sections[ $key ] = $section;
+				unset( $sections[ $key ] );
+			}
+		}
+
+		$order = array( 'stripe', 'square', 'paypal', 'authorize_net' );
+		uksort( self::$removed_payments_sections, function ( $a, $b ) use ( $order ) {
+			return array_search( $a, $order ) - array_search( $b, $order );
+		} );
 	}
 
 	public static function load_settings_tab() {
@@ -243,6 +274,12 @@ class FrmSettingsController {
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
+	}
+
+	public static function payments_settings() {
+		$payment_sections = self::$removed_payments_sections;
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/payments.php';
 	}
 
 	/**
