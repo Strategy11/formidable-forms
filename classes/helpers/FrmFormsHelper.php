@@ -1870,6 +1870,10 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function form_is_loaded_by_api() {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
+			return true;
+		}
 		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 
