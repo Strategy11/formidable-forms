@@ -48,6 +48,11 @@
 	width: 100%;
 }
 
+// Backwards compatibility
+.frm-type-ranking .frm_option_key .frm_choose_image_box {
+	margin-left: 11px !important;
+}
+
 .frm_wrap .frm_choose_image_box:hover {
 	background: #fff;
 }
