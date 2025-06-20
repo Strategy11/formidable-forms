@@ -179,6 +179,15 @@ class FrmSettingsController {
 		return $sections;
 	}
 
+	/**
+	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 * and show them all on the payments section in separate tabs.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $sections
+	 * @return void
+	 */
 	private static function remove_payments_sections( &$sections ) {
 		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
 
