@@ -198,15 +198,26 @@ class FrmSettingsController {
 			}
 		}
 
-		$order = array( 'stripe', 'square', 'paypal', 'authorize_net' );
-		uksort( self::$removed_payments_sections, function ( $a, $b ) use ( $order ) {
-			$first_key  = array_search( $a, $order );
-			$second_key = array_search( $b, $order );
-			if ( false === $first_key || false === $second_key ) {
-				return 0;
-			}
-			return $first_key - $second_key;
-		} );
+		uksort( self::$removed_payments_sections, array( __CLASS__, 'payment_sections_sort_callback' ) );
+	}
+
+	/**
+	 * Sort the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 *
+	 * @since x.x
+	 *
+	 * @param string $a
+	 * @param string $b
+	 * @return int
+	 */
+	private static function payment_sections_sort_callback( $a, $b ) {
+		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
+		$first_key  = array_search( $a, $order );
+		$second_key = array_search( $b, $order );
+		if ( false === $first_key || false === $second_key ) {
+			return 0;
+		}
+		return $first_key - $second_key;
 	}
 
 	public static function load_settings_tab() {
