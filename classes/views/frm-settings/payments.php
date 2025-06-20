@@ -3,6 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+?>
+<p>
+	<?php esc_html_e( 'Configure and manage your payment gateways in one place to control transactions, settings, and more.', 'formidable' ); ?>
+</p>
+<?php
+
 echo '<div class="frm-long-icon-buttons">';
 $first = true;
 foreach ( $payment_sections as $key => $section ) {
