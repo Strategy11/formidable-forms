@@ -17,7 +17,7 @@
 .frm_image_preview_wrapper,
 #new_fields .frm_single_option select,
 #new_fields .frm_single_option input[type="text"] {
-	width: calc(100% - 96px);
+	width: calc(100% - 106px);
 	flex-grow: 1;
 }
 
@@ -32,10 +32,11 @@
 
 .frm_single_option .frm-drag {
 	font-size: 23px;
-	width: 22px;
-	height: 19px;
+	width: 24px;
+	height: 24px;
 	margin-left: -6px;
-	color: var(--grey);
+	margin-right: var(--gap-xs);
+	color: var(--grey-500);
 }
 
 .frm_single_option .frm-drag::before {
@@ -52,7 +53,8 @@
 }
 
 .frm_option_key input[type="text"] {
-	margin-top: 15px !important;
+	margin-top: var(--gap-xs) !important;
+	margin-left: 30px !important;
 }
 
 li.ui-state-default.selected .frm-show-click,
@@ -70,15 +72,4 @@ li.ui-state-default.selected.edit_field_type_divider .divider_section_only .frm-
 
 li.frm_field_box > ul.frm_grid_container {
 	position: relative;
-}
-
-.frm_sortable_field_opts {
-
-	~ p {
-		grid-column: span 12 / span 12 !important;
-
-		> label {
-			margin: 0 !important;
-		}
-	}
 }

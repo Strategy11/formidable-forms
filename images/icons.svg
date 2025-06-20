@@ -248,7 +248,7 @@
 </symbol>
 <symbol id="frm_upload_icon" viewBox="0 0 18 18"><path fill-rule="evenodd" clip-rule="evenodd" d="M8.2 4v8a.8.8 0 001.5 0V4l2.1 2.2A.7.7 0 1013 5L9.5 1.7a.7.7 0 00-1.1 0L5.1 5.2a.8.8 0 001 1l2.1-2zm7.6 4.3c.4 0 .7.3.7.7v6.8c0 .4-.3.7-.8.7H2.3a.8.8 0 01-.8-.8V9A.8.8 0 013 9v6h12V9c0-.4.3-.8.8-.8z"/></symbol>
 <symbol id="frm_upload2_icon" viewBox="0 0 20 20"><title>upload2</title><path d="M15 16.8c0-.4-.3-.7-.7-.7a.7.7 0 1 0 .7.7zm2.9 0c0-.4-.4-.7-.8-.7a.7.7 0 1 0 .8.7zm1.4-2.5v3.6c0 .5-.5 1-1 1H1.7a1 1 0 0 1-1-1v-3.6c0-.6.4-1 1-1h4.8c.3.7 1 1.3 2 1.3h2.8c1 0 1.7-.6 2-1.4h4.8c.6 0 1 .5 1 1zM15.7 7c-.2.2-.4.4-.7.4h-2.9v5c0 .4-.3.7-.7.7H8.6a.7.7 0 0 1-.7-.7v-5H5a.7.7 0 0 1-.7-.4c0-.3 0-.6.2-.8l5-5c.1-.2.3-.2.5-.2l.5.2 5 5c.2.2.3.5.2.8z"/></symbol>
-<symbol id="frm_upload3_icon" viewBox="0 0 24 24" fill="none"><path stroke="#667085" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 14.75v1.5a3 3 0 0 0 3 3h8.5a3 3 0 0 0 3-3v-1.5M12.5 14.25V5M9.25 8.25l3.25-3.5 3.25 3.5"/></symbol>
+<symbol id="frm_upload3_icon" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.25 14.75v1.5a3 3 0 0 0 3 3h8.5a3 3 0 0 0 3-3v-1.5M12.5 14.25V5M9.25 8.25l3.25-3.5 3.25 3.5"/></symbol>
 <symbol id="frm_download2_icon" viewBox="0 0 20 20">
 <title>download2</title>
 <path d="M8.6 1.1h2.8c.5 0 .8.4.8.8v5.9h3c.7 0 1 .7.6 1.2l-5.3 5.2c-.3.3-.7.3-1 0L4.2 9a.7.7 0 0 1 .5-1.2h3V1.9c0-.4.5-.8 1-.8zm10.3 13v4c0 .4-.4.8-.8.8H1.9a.8.8 0 0 1-.8-.8v-4c0-.4.4-.8.8-.8H7L8.7 15c.7.7 1.9.7 2.6 0l1.7-1.7h5c.5 0 .9.4.9.9zm-4.3 3.1c0-.4-.3-.7-.7-.7s-.7.3-.7.7.3.7.7.7.7-.3.7-.7zm2.2 0c0-.4-.3-.7-.7-.7s-.7.3-.7.7.3.7.7.7.7-.3.7-.7z"/>

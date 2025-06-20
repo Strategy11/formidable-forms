@@ -13,8 +13,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmFieldsHelper::show_radio_display_format( $args['field'] );
 ?>
-<p class="frm6 frm_form_field frm6_followed frm-pt-2xs frm_noallow frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Separate Values', 'formidable' ); ?>" data-message="<?php esc_attr_e( 'Add a separate value to use for calculations, email routing, saving to the database, and many other uses. The option values are saved while the option labels are shown in the form.', 'formidable' ); ?>" data-medium="builder" data-content="separate-values">
-	<label class="frm-h-stack frm-gap-xs!">
+<p class="frm6 frm_form_field frm6_followed frm-my-sm frm_noallow frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Separate Values', 'formidable' ); ?>" data-message="<?php esc_attr_e( 'Add a separate value to use for calculations, email routing, saving to the database, and many other uses. The option values are saved while the option labels are shown in the form.', 'formidable' ); ?>" data-medium="builder" data-content="separate-values">
+	<label class="frm-h-stack-xs frm-m-0">
 		<input class="frm-m-0" type="checkbox" value="1" disabled="disabled" />
 		<span><?php esc_html_e( 'Use separate values', 'formidable' ); ?></span>
 	</label>

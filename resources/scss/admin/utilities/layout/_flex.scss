@@ -131,6 +131,12 @@
 	gap: var(--gap-2xs);
 }
 
+.frm-h-stack-xs {
+
+	@extend %h-stack-base;
+	gap: var(--gap-xs);
+}
+
 .frm-h-stack-sm {
 
 	@extend %h-stack-base;
