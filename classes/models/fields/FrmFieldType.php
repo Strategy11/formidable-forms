@@ -1168,7 +1168,7 @@ DEFAULT_HTML;
 	/**
 	 * When opt=2 for example is used in the [input] shortcode, only print a single hidden input.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param array      $args
 	 * @param int|string $opt

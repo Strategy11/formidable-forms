@@ -63,6 +63,9 @@ class FrmTransLiteAppController {
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
+			if ( ! $last_payment ) {
+				continue;
+			}
 
 			$log_message = 'Subscription #' . $sub->id . ': ';
 			if ( $sub->status === 'future_cancel' ) {
@@ -167,6 +170,29 @@ class FrmTransLiteAppController {
 	private static function maybe_trigger_changes( $atts ) {
 		if ( $atts['payment'] ) {
 			FrmTransLiteActionsController::trigger_payment_status_change( $atts );
+		}
+	}
+
+	/**
+	 * This is called when the Payments submodule is active.
+	 * It ensures that the hidden repeater cadence input exists even when another add-on is handling the settings.
+	 *
+	 * @since 6.22
+	 *
+	 * @param array $args
+	 * @return void
+	 */
+	public static function add_repeat_cadence_value( $args ) {
+		$action = $args['form_action'];
+		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
+			$params = array(
+				'type'  => 'hidden',
+				'class' => 'frm-repeat-cadence-value',
+				'value' => $action->post_content['repeat_cadence'],
+			);
+			echo '<input ';
+			FrmAppHelper::array_to_html_params( $params, true );
+			echo ' />';
 		}
 	}
 }
