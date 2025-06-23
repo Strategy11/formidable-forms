@@ -70,6 +70,12 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
+			'payments'      => array(
+				'name'     => __( 'Payments', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_credit_card_icon',
+				'class'    => __CLASS__,
+				'function' => 'payments_settings',
+			),
 			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
@@ -137,13 +143,6 @@ class FrmSettingsController {
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
 		self::remove_payments_sections( $sections );
-
-		$sections['payments'] = array(
-			'name'     => __( 'Payments', 'formidable' ),
-			'icon'     => 'frm_icon_font frm_credit_card_icon',
-			'class'    => __CLASS__,
-			'function' => 'payments_settings',
-		);
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
