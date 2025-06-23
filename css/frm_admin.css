@@ -6503,7 +6503,7 @@ label.frm-example-icon {
 
 .frm-long-icon-buttons {
   display: flex;
-  gap: var(--gap-md);
+  gap: var(--gap-sm);
 }
 
 .frm-long-icon-buttons > label {
