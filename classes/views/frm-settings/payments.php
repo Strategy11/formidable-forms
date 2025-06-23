@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </p>
 <?php
 
-echo '<div class="frm-long-icon-buttons">';
+echo '<div class="frm-long-icon-buttons" role="tablist">';
 $first = true;
 foreach ( $payment_sections as $key => $section ) {
 	$name         = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );
@@ -29,8 +29,9 @@ foreach ( $payment_sections as $key => $section ) {
 	}, $other_sections ) );
 	?>
 	<input <?php echo FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
-	<label for="frm_toggle_<?php echo esc_attr( $key ); ?>_settings" class="frm_payment_settings_tab">
-		<?php echo esc_html( $name ); ?>
+	<label for="frm_toggle_<?php echo esc_attr( $key ); ?>_settings" class="frm_payment_settings_tab" tabindex="0" role="tab" aria-selected="<?php echo $first ? 'true' : 'false'; ?>">
+		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_' . $key . '_full_icon' ); ?>
+		<span class="screen-reader-text"><?php echo esc_attr( $name ); ?></span>
 	</label>
 	<?php
 	$first = false;
@@ -39,8 +40,13 @@ echo '</div>';
 
 $first = true;
 foreach ( $payment_sections as $key => $section ) {
+	$name       = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );
+	$include_h3 = 'authorize_net' !== $key; // Exclude Authorize.Net as the h3 tag is added explicitly.
 	?>
 	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="frm_payments_section <?php if ( ! $first ) { echo 'frm_hidden'; } ?>">
+		<?php if ( $include_h3 ) { ?>
+			<h3 style="margin-bottom: 0;"><?php echo esc_html( $name ) . ' ' . esc_html__( 'Settings', 'formidable' ); ?></h3>
+		<?php } ?>
 		<?php
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
