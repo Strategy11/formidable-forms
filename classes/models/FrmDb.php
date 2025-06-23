@@ -656,8 +656,9 @@ class FrmDb {
 	 * @return mixed $results The cache or query results
 	 */
 	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		$results = wp_cache_get( $cache_key, $group );
-		if ( ! FrmAppHelper::is_empty_value( $results, false ) || empty( $query ) ) {
+		$found = null;
+		$results = wp_cache_get( $cache_key, $group, false, $found );
+		if ( $found !== false || empty( $query ) ) {
 			return $results;
 		}
 
