@@ -72,7 +72,7 @@ class FrmSettingsController {
 			),
 			'payments'      => array(
 				'name'     => __( 'Payments', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_credit_card_icon',
+				'icon'     => 'frm_icon_font frm_simple_cc_icon',
 				'class'    => __CLASS__,
 				'function' => 'payments_settings',
 			),
