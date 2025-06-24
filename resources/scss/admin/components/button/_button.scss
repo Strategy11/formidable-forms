@@ -86,13 +86,14 @@
 			margin: -1px;
 			border-radius: inherit;
 			background: linear-gradient(90deg, #129EFD 0%, #A334FD 100%);
+			transition: opacity 150ms ease-out;
 		}
 	}
 
 	&:hover {
 
 		&::before {
-			opacity: 0.7;
+			opacity: 0.5;
 		}
 	}
 }

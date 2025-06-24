@@ -28,10 +28,11 @@ const config = {
 	port: 3000,
 	uiPort: 3001,
 
-	// Paths
-	cssPath: './css',
-	jsPath: './js',
-	phpPath: './',
+	// Paths to watch for changes
+	cssPath: '../formidable*/**/*.css',
+	jsPath: '../formidable*/**/*.js',
+	jsSrcPath: '../formidable*/*/js/src/**/*.js',
+	phpPath: '../formidable*/**/*.php',
 
 	// Public path for webpack
 	publicPath: '/wp-content/plugins/formidable/css/'
@@ -44,12 +45,11 @@ const [ jsConfig, cssConfig ] = require( './webpack.config' );
  * Initialize development server
  */
 const init = () => {
-	// Create separate webpack compilers for CSS and JS
-	const cssCompiler = webpack( cssConfig );
-	const jsCompiler = webpack( jsConfig );
+	const browserSyncInstance = browserSync.create( 'FormidableDev' );
 
-	// Start browser-sync instance
-	const bs = browserSync.create( 'FormidableDev' );
+	// Create separate webpack compilers for CSS and JS
+	const jsCompiler = webpack( jsConfig );
+	const cssCompiler = webpack( cssConfig );
 
 	// Watch JS with webpack
 	jsCompiler.watch(
@@ -59,9 +59,7 @@ const init = () => {
 			: console.log( 'JS compiled successfully' )
 	);
 
-	// Setup browser-sync server
-	bs.init({
-		// Proxy configuration
+	browserSyncInstance.init({
 		proxy: {
 			target: config.siteUrl,
 			middleware: [
@@ -74,22 +72,22 @@ const init = () => {
 
 		// File watching
 		files: [
-			// CSS changes - inject without reload
+			// CSS changes, inject without reload
 			{
-				match: [ `${config.cssPath}/**/*.css` ],
+				match: [ config.cssPath ],
 				fn: ( event, file ) => {
 					console.log( `CSS updated: ${file}` );
-					bs.reload( '*.css' );
+					browserSyncInstance.reload( '*.css' );
 				}
 			},
 			// JS source changes
 			{
-				match: [ './js/src/**/*.js' ],
+				match: [ config.jsSrcPath ],
 				fn: ( event, file ) => console.log( `JS source updated: ${file}\nRebuilding JS bundles...` )
 			},
-			// Compiled JS and PHP files - full page reload
-			`${config.jsPath}/**/*.js`,
-			`${config.phpPath}/**/*.php`
+			// Compiled JS and PHP files, full page reload
+			config.jsPath,
+			config.phpPath
 		],
 
 		// Server settings
@@ -101,7 +99,7 @@ const init = () => {
 		ghostMode: false,
 
 		// Resource handling
-		serveStatic: [{ route: '/css', dir: config.cssPath }],
+		serveStatic: [{ route: '/css', dir: './css' }],
 		rewriteRules: [{
 			match: new RegExp( config.siteUrl.replace( /^https?:\/\//, '' ), 'g' ),
 			replace: `localhost:${config.port}`
