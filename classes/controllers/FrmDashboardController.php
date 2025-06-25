@@ -246,7 +246,7 @@ class FrmDashboardController {
 	/**
 	 * Init view args for entries placeholder.
 	 *
-	 * @param array $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
+	 * @param int $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
 	 * @return array
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
