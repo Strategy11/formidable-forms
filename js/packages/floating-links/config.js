@@ -54,7 +54,7 @@
 		{
 			title: __( 'Upgrade', 'formidable' ),
 			icon: frmFloatingLinksConfig.upgradeIcon,
-			url: 'https://formidableforms.com/lite-upgrade/',
+			url: 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_campaign=liteplugin&utm_medium=upgrade&utm_content=floating-links',
 			openInNewTab: true
 		},
 		{
