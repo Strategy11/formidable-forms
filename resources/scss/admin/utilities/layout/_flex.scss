@@ -38,10 +38,23 @@
 	flex: 1;
 }
 
-.frm-flex-center {
-	display: flex !important;
+
+%frm-flex-center {
 	justify-content: center;
 	align-items: center;
+}
+
+
+.frm-flex-center {
+	display: flex;
+
+	@extend %frm-flex-center;
+}
+
+.frm-flex-center\! {
+	display: flex !important;
+
+	@extend %frm-flex-center;
 }
 
 .frm-shrink-0 {
