@@ -3456,6 +3456,8 @@ function frmAdminBuildJS() {
 			setAlignment( fieldId, 'block' );
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
+
+		$field[0].querySelector( '.frm-ai-generate-options-modal-trigger' ).classList.toggle( 'frm_hidden!', hasImageOptions );
 	}
 
 	function removeImageSizeClasses( field ) {

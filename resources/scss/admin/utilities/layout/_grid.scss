@@ -1,4 +1,4 @@
-.frm_form_field.frm6_followed:not(.frm_hidden) {
+.frm_form_field.frm6_followed:not(.frm_hidden):not(.frm_hidden\!) {
 
 	+ p,
 	+ div,
@@ -8,7 +8,7 @@
 	}
 }
 
-.frm_form_field.frm12_followed:not(.frm_hidden) {
+.frm_form_field.frm12_followed:not(.frm_hidden):not(.frm_hidden\!) {
 
 	+ p,
 	+ div,
