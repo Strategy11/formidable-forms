@@ -246,7 +246,7 @@ class FrmDashboardController {
 	/**
 	 * Init view args for entries placeholder.
 	 *
-	 * @param array $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
+	 * @param int $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
 	 * @return array
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
@@ -289,7 +289,7 @@ class FrmDashboardController {
 	 * @param string       $counter_type
 	 * @param int          $counter_value
 	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
-	 * @return array
+	 * @return bool
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
 		if ( $counter_value > 0 || ( 'entries' === $counter_type && false === $latest_available_form ) ) {

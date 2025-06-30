@@ -33,9 +33,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_no_entries_text">
 	<?php
 	printf(
-		/* translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML */
-		esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form', 'formidable' ),
-		'<a href="https://formidableforms.com/knowledgebase/publish-your-forms/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin" target="_blank">',
+		/* translators: %1$s: Start link HTML, %2$s: End link HTML */
+		esc_html__( 'See the %1$sentry documentation%2$s for instructions on publishing your form', 'formidable' ),
+		'<a href="https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">',
 		'</a>'
 	);
 	?>
