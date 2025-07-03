@@ -7,6 +7,7 @@
 /**
  * Internal dependencies
  */
+import { documentOn } from 'core/utils';
 import { HIDDEN_CLASS, DISABLED_CLASS, SINGLE_SETTINGS_CLASS } from 'core/constants';
 
 /**
@@ -37,20 +38,6 @@ const DATA_ATTRIBUTES = {
  * @return {void}
  */
 function initToggleGroupComponents() {
-	// Initialize for existing toggles
-	initializeToggleGroups();
-
-	// Add event listeners for newly added fields
-	document.addEventListener( 'frm_added_field', addEventListeners );
-}
-
-/**
- * Initialize toggle groups by adding event listeners and applying initial state
- *
- * @private
- * @return {void}
- */
-function initializeToggleGroups() {
 	applyInitialState();
 	addEventListeners();
 }
@@ -85,9 +72,7 @@ function applyInitialState() {
  * @return {void}
  */
 function addEventListeners() {
-	// Toggle button click events
-	document.querySelectorAll( `.${ CLASS_NAMES.GROUP_TOGGLE } [${ DATA_ATTRIBUTES.GROUP_NAME }]` )
-		.forEach( toggleButton => toggleButton.addEventListener( 'click', handleToggleClick ) );
+	documentOn( 'change', `.${ CLASS_NAMES.GROUP_TOGGLE } [${ DATA_ATTRIBUTES.GROUP_NAME }]`, handleToggleClick );
 }
 
 /**
@@ -98,7 +83,7 @@ function addEventListeners() {
  * @return {void}
  */
 function handleToggleClick( event ) {
-	const toggleButton = event.currentTarget;
+	const toggleButton = event.target;
 	const toggleGroup = toggleButton.closest( `.${ CLASS_NAMES.GROUP_TOGGLE }` );
 
 	if ( ! toggleGroup ) {

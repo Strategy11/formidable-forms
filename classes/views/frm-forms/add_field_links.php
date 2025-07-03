@@ -170,9 +170,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php
 								FrmFieldsHelper::inline_modal(
 									array(
-										'title'    => __( 'Smart Default Values', 'formidable' ),
-										'callback' => array( 'FrmFieldsHelper', 'smart_values' ),
-										'id'       => 'frm-smart-values-box',
+										'callback'   => array( 'FrmFieldsHelper', 'smart_values' ),
+										'id'         => 'frm-smart-values-box',
+										'close-icon' => false,
 									)
 								);
 
@@ -186,9 +186,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 								FrmFieldsHelper::inline_modal(
 									array(
-										'title'    => __( 'Input Mask Format', 'formidable' ),
-										'callback' => array( 'FrmFieldsHelper', 'input_mask' ),
-										'id'       => 'frm-input-mask-box',
+										'callback'   => array( 'FrmFieldsHelper', 'input_mask' ),
+										'id'         => 'frm-input-mask-box',
+										'close-icon' => false,
 									)
 								);
 								?>
