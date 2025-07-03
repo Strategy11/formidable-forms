@@ -45,10 +45,6 @@
 	margin-left: auto;
 }
 
-.frm-single-settings .frm_code_list.frm-full-hover a {
-	display: block;
-}
-
 .frm_code_list.frm-full-hover a,
 .frm_code_list.frm-full-hover a span {
 	white-space: nowrap;
@@ -131,4 +127,43 @@
 .frm_code_list.frm_grid_container a:hover {
 	background-color: var(--primary-500);
 	color: #fff;
+}
+
+.frm-single-settings {
+
+	.frm_code_list.frm-full-hover {
+		margin: 0;
+		padding: 0;
+
+		a {
+			justify-content: space-between;
+			font-size: var(--text-md);
+			padding: var(--gap-xs) 0;
+
+			&:hover,
+			&:hover span {
+				background-color: unset;
+			}
+
+			span {
+				margin: 0;
+				max-width: 50%;
+
+				&:first-child {
+					color: var(--grey-900);
+				}
+
+				&:last-child {
+					color: var(--grey-500);
+				}
+			}
+		}
+
+		&.frm-short-list {
+
+			span:last-child {
+				padding-right: var(--gap-2xs);
+			}
+		}
+	}
 }

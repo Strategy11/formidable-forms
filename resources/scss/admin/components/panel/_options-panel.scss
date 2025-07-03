@@ -22,7 +22,7 @@
 		transition: transform 300ms ease-in;
 	}
 
-	&:not(.frm-collapsed) {
+	&:not(.frm-collapsed):not(:first-of-type) {
 		color: var(--grey-700);
 		box-shadow: var(--box-shadow-sm);
 

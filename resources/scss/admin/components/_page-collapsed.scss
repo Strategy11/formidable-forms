@@ -120,32 +120,5 @@
 	+ .frm-collapse-me {
 		margin-top: 4px;
 		padding-bottom: 0;
-
-		.frm_code_list.frm-full-hover {
-			margin: 0;
-			padding: 0;
-
-			a {
-				display: flex;
-				justify-content: space-between;
-				align-items: center;
-				font-size: var(--text-md);
-				padding: var(--gap-xs) 0;
-
-				&:hover,
-				&:hover span {
-					background-color: unset;
-				}
-
-				span {
-					max-width: unset;
-					margin: 0;
-
-					&:last-child {
-						color: var(--grey-500);
-					}
-				}
-			}
-		}
 	}
 }
