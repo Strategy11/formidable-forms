@@ -623,8 +623,8 @@ function frmAdminBuildJS() {
 		const fieldId = fadeEle.closest( '.frm-single-settings' )?.dataset.fid;
 		if ( fieldId ) {
 			setTimeout(() => {
-				document.getElementById( 'frm_watch_lookup_label_' + fieldId )?.classList.add( 'frm_hidden!' );
-			}, 350 );
+				document.getElementById( `frm_watch_lookup_label_${fieldId}` )?.classList.add( 'frm_hidden!' );
+			}, 190 );
 		}
 	}
 

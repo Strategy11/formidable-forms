@@ -142,7 +142,7 @@ export default class frmRadioComponent {
 
 		// Also observe parent elements up to a reasonable depth
 		let parent = element.parentElement;
-		for ( let i = 0; i < 4 && parent; i++ ) {
+		for ( let i = 0; i < 7 && parent; i++ ) {
 			observer.observe( parent, {
 				attributes: true,
 				attributeFilter: [ 'class' ]
