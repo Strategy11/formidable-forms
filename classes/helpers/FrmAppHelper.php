@@ -1540,6 +1540,7 @@ class FrmAppHelper {
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
 			'value'       => false,
+			'class'       => '',
 		);
 		$atts     = array_merge( $defaults, $atts );
 
@@ -1574,7 +1575,7 @@ class FrmAppHelper {
 			$input_atts['autocomplete'] = 'off';
 		}
 		?>
-		<p class="frm-search">
+		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
