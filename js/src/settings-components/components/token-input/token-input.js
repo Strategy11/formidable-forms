@@ -38,14 +38,12 @@ function initTokenInputFields() {
  */
 function findAndInitializeTokenFields() {
 	const tokenInputFields = document.querySelectorAll( `.${ CLASS_NAMES.TOKEN_INPUT_FIELD }` );
-
 	if ( ! tokenInputFields.length ) {
 		return;
 	}
 
 	// Track processed fields to prevent duplicate initialization
 	const processedFields = new Set();
-
 	tokenInputFields.forEach( field => {
 		if ( ! processedFields.has( field.id ) ) {
 			setupTokenInput( field );
@@ -63,7 +61,6 @@ function findAndInitializeTokenFields() {
  */
 function setupTokenInput( field ) {
 	const container = createTokenContainerElement( field );
-
 	if ( ! container ) {
 		return;
 	}
