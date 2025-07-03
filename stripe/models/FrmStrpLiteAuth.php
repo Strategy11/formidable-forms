@@ -66,7 +66,7 @@ class FrmStrpLiteAuth {
 		}
 
 		ob_start();
-		FrmFormsController::run_success_action( $atts );
+		FrmFormsController::run_on_submit_actions( $atts );
 		$message = ob_get_contents();
 		ob_end_clean();
 
@@ -162,6 +162,14 @@ class FrmStrpLiteAuth {
 		$atts['entry_id']    = $atts['entry']->id;
 		$opt                 = 'success_action';
 		$atts['conf_method'] = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
+
+		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
+		if ( $actions ) {
+			$action = reset( $actions );
+			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
+				$atts['conf_method'] = $action->post_content['success_action'];
+			}
+		}
 	}
 
 	/**
@@ -328,6 +336,10 @@ class FrmStrpLiteAuth {
 			}
 
 			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+			if ( empty( $saved->metadata->action ) ) {
+				continue;
+			}
+
 			foreach ( $actions as $action ) {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;

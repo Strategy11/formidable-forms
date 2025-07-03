@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 		}
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
-			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
@@ -53,6 +53,23 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 		}
 		?>
+
+		<?php
+		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
+			?>
+			<div class="frm_note_style">
+				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<span>
+					<?php
+					/* translators: %1$s: Link HTML, %2$s: End link */
+					printf( esc_html__( 'GDPR field is disabled. Please enable it in the Formidable %1$sSettings%2$s.', 'formidable' ), '<a href="?page=formidable-settings" target="_blank">', '</a>' );
+					?>
+				</span>
+			</div>
+			<?php
+		}
+		?>
+
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
@@ -68,7 +85,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php if ( $display['required'] ) { ?>
 				<div class="frm_form_field">
 					<label for="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm-mb-0">
-						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['required'], 1 ); ?> />
+						<input type="checkbox" id="frm_req_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_req_field" name="field_options[required_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php echo $display['readonly_required'] ? 'readonly onclick="return false;"' : ''; ?> <?php checked( ! empty( $field['required'] ) || ! empty( $display['readonly_required'] ) ); ?> />
 						<?php esc_html_e( 'Required', 'formidable' ); ?>
 					</label>
 				</div>
@@ -215,7 +232,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		/**
 		 * Fires after displaying the field description in a form settings.
 		 *
-		 * @since x.x
+		 * @since 6.19
 		 *
 		 * @param array $args {
 		 *     Array containing the field data.

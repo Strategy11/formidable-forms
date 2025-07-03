@@ -21,17 +21,8 @@ describe("Form Templates page", () => {
             cy.get('.frm-page-skeleton-cat-count').should("have.text", "0");
         });
 
-        cy.get('li[data-category="available-templates"]').within(() => {
-            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Available Templates");
-            cy.get('.frm-page-skeleton-cat-count').should("have.text", "0");
-        });
-
         cy.get('li[data-category="all-items"]').within(() => {
             cy.get('.frm-page-skeleton-cat-text').should("have.text", "All Templates");
-        });
-
-        cy.get('li[data-category="free-templates"]').within(() => {
-            cy.get('.frm-page-skeleton-cat-text').should("have.text", "Free Templates");
         });
 
         cy.log("Check the items on the All Templates page");
@@ -39,7 +30,7 @@ describe("Form Templates page", () => {
         cy.get('[frm-search-text="contact us"] .frm-form-templates-item-title-text')
             .should('contain', 'Contact Us');
         cy.get('[frm-search-text="contact us"] .frm-form-templates-item-description')
-            .should('contain.text', 'A basic contact form that for any WordPress website.');
+            .should('contain.text', 'A basic contact form for any WordPress website.');
         cy.get('[frm-search-text="contact us"] span.frm-category-icon svg use')
             .should('have.attr', 'xlink:href', '#frm_align_right_icon');
 
@@ -310,69 +301,25 @@ describe("Form Templates page", () => {
             .find('.frm-form-templates-use-template-button')
             .should("contain", "Use Template");
 
-        cy.log("Try to use free templates");
-        cy.get('[data-category="free-templates"]').should("contain", "Free Templates").click();
-        cy.get('#frm-form-templates-page-title-text').should("contain", "Free Templates");
+        cy.log("Try to use available templates");
+        cy.get('[data-category="available-templates"]').should("contain", "Available Templates").click();
+        cy.get('#frm-form-templates-page-title-text').should("contain", "Available Templates");
         cy.get('li[frm-search-text="contact us"]').first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should('contain', 'Use Template')
             .click({ force: true });
 
-        cy.get('#frm-leave-email-modal').should('be.visible');
-        cy.get('#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2').should('contain', 'Get 30+ Free Form Templates');
-        cy.get('#frm-leave-email-modal p')
-            .should('contain.text', "Just add your email address and we'll send you a code for free form templates!");
-
-        cy.get('a#frm-get-code-button').should('contain.text', 'Get Code');
-        cy.get('a.frm-modal-close').should('contain.text', 'Close');
-
-        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
-
         cy.get('li[frm-search-text="contact us"]').first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should('contain', 'Use Template')
             .click({ force: true });
-        cy.get('a#frm-get-code-button').click();
-        cy.get('#frm-code-from-email-modal .frm-modal-title h2')
-            .should('contain.text', 'Check Your Inbox');
 
-        cy.get('#frm-code-from-email-modal p')
-            .should('contain.text', 'Enter the code that we sent to your email address.');
+		cy.get('a[aria-label="Close"] svg').click();
 
-        cy.get('a#frm-code-modal-back-button')
-            .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click({force:true});
+        cy.visit('/wp-admin/admin.php?page=formidable-form-templates');
 
-        cy.get('a#frm-get-code-button').click({force:true});
-
-        cy.get('a#frm-confirm-email-address')
-            .should('contain.text', 'Save Code')
-            .and('have.attr', 'role', 'button')
-            .and('have.class', 'button-primary')
-            .click({force:true});
-        cy.get('#frm_code_from_email_error > [frm-error="empty"]').should("contain", "Verification code is empty");
-
-        cy.get('input#frm_code_from_email')
-            .should('have.attr', 'type', 'text')
-            .should('have.attr', 'placeholder', 'Code from email')
-            .type("Invalid code");
-        cy.get('a#frm-confirm-email-address')
-            .should('contain.text', 'Save Code').click();
-        cy.get('#frm_code_from_email_error > [frm-error="custom"]').should('contain.text', "Sorry, that's not the right code.");
-        cy.get('#frm-change-email-address').should('contain.text', "Change email address").click();
-        cy.get('a#frm-get-code-button').click();
-        cy.get('#frm-resend-code').should('contain.text', "Resend code");
-
-        cy.get('a#frm-code-modal-back-button')
-            .should('contain.text', 'Back')
-            .and('have.attr', 'role', 'button').click({force:true});
-        cy.get('#frm-leave-email-modal > .frm_modal_footer > .button-secondary').click();
-
-        cy.get('[data-category="all-items"]').click();
-
-        cy.log("Try to use templates which require upgrade");
         cy.get('[frm-search-text="user registration"]')
             .first()
             .trigger('mouseover')

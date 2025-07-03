@@ -1,0 +1,85 @@
+/**
+ * Utilities - Flex
+ */
+
+.frm-inline-flex,
+#wpbody-content .frm-inline-flex {
+	display: inline-flex;
+}
+
+.frm-flex {
+	display: flex;
+}
+
+.frm_hidden,
+.js .frm-hide-js {
+	display: none;
+}
+
+.frm-flex-box {
+	display: flex;
+	gap: var(--gap-sm);
+}
+
+.frm-flex-col {
+	display: flex;
+	flex-direction: column;
+}
+
+.frm-flex-full {
+	flex: 1;
+}
+
+.frm-flex-center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.frm-shrink-0 {
+	flex-shrink: 0;
+}
+
+.frm-gap-0 {
+	gap: 0 !important;
+}
+
+.frm-gap-2xs {
+	gap: var(--gap-2xs);
+}
+
+.frm-gap-xs {
+	gap: var(--gap-xs);
+}
+
+.frm-gap-sm {
+	gap: var(--gap-sm);
+}
+
+.frm-gap-md {
+	gap: var(--gap-md);
+}
+
+.frm-gap-xl {
+	gap: var(--gap-xl);
+}
+
+.frm-justify-center {
+	justify-content: center !important;
+}
+
+.frm-justify-between {
+	justify-content: space-between;
+}
+
+.frm-justify-end {
+	justify-content: end;
+}
+
+.frm-items-center {
+	align-items: center;
+}
+
+#wpbody-content .frm-flex-wrap {
+	flex-wrap: wrap;
+}

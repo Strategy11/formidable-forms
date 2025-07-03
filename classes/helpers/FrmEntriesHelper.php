@@ -689,7 +689,8 @@ class FrmEntriesHelper {
 				'label' => __( 'Delete Entry', 'formidable' ),
 				'icon'  => 'frm_icon_font frm_delete_icon',
 				'data'  => array(
-					'frmverify' => __( 'Delete this form entry?', 'formidable' ),
+					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
+					'frmverify-btn' => 'frm-button-red',
 				),
 			);
 		}

@@ -78,7 +78,7 @@ if ( $use_container ) {
 		</span>
 
 		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_toggle_opt"><?php echo FrmAppHelper::kses( $on_label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<span class="frm_on_label frm_toggle_opt"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>

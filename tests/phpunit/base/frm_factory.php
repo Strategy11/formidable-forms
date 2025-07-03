@@ -127,7 +127,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		$value        = rand_str();
 		$field_values = array(
 			'email'    => 'admin@example.org',
-			'url'      => 'http://test.com',
+			'url'      => 'http://sometest.com',
 			'number'   => 120,
 			'scale'    => 8,
 			'date'     => '2015-01-01',

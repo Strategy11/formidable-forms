@@ -1,0 +1,53 @@
+/**
+ * Components - Meta Tag
+ */
+
+.frm-meta-tag,
+.frm-meta-tag:hover {
+	padding: var(--gap-2xs) var(--gap-xs);
+	border-radius: var(--small-radius);
+	font-weight: 600;
+	display: inline-flex;
+	background-color: #D9EBFF;
+	gap: 2px;
+}
+
+.frm-meta-tag.frm-grey-tag,
+.frm-meta-tag.frm-grey-tag:hover {
+	background-color: var(--sidebar-hover);
+	color: var(--grey-900);
+}
+
+.frm-meta-tag.frm-red-tag,
+.frm-meta-tag.frm-red-tag:hover {
+	background: var(--error-100);
+	color: var(--error-700);
+}
+
+.frm-meta-tag.frm-orange-tag,
+.frm-meta-tag.frm-orange-tag:hover {
+	background-color: #FEF7F4;
+	color: var(--orange);
+}
+
+.frm-meta-tag.frm-green-tag,
+.frm-meta-tag.frm-green-tag:hover {
+	background-color: var(--success-500);
+	color: #fff;
+}
+
+.frm-entry-status-0,
+.frm-meta-tag.frm-lt-green-tag,
+.frm-meta-tag.frm-lt-green-tag:hover {
+	background-color: var(--success-100);
+	color: var(--success-800);
+}
+
+.frm-meta-tag.frm-new-pill {
+	background-color: var(--success-500);
+	vertical-align: text-bottom;
+}
+
+.frm_add_field span + .frm-meta-tag {
+	margin-left: 0;
+}

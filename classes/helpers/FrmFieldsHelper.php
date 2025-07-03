@@ -1291,6 +1291,7 @@ class FrmFieldsHelper {
 			'time',
 			'tag',
 			'password',
+			'gdpr',
 		);
 		return apply_filters( 'frm_single_input_fields', $fields );
 	}
@@ -1525,7 +1526,7 @@ class FrmFieldsHelper {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
-		if ( $args['field']['type'] === 'select' && $args['field']['multiple'] ) {
+		if ( $args['field']['type'] === 'select' && ! empty( $args['field']['multiple'] ) ) {
 			$classes[] = 'frm_other_full';
 		}
 
@@ -2200,7 +2201,7 @@ class FrmFieldsHelper {
 		if ( $run_filter ) {
 			$field_label = apply_filters( 'frmpro_field_links', $field_label, $args['id'], $field_key );
 		}
-		echo FrmAppHelper::kses( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $field_label, array( 'a', 'i', 'span', 'use', 'svg' ) );
 		?>
 		</li>
 		<?php

@@ -66,13 +66,6 @@ input:-webkit-autofill {
 <?php } ?>
 }
 
-form .<?php echo esc_html( FrmHoneypot::generate_class_name() ); ?> {
-	overflow: hidden;
-	width: 0;
-	height: 0;
-	position: absolute;
-}
-
 .with_frm_style fieldset{
 	min-width:0;
 	display: block; /* Override 2021 theme */
@@ -1644,6 +1637,13 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 	.with_frm_style .frm-g-recaptcha iframe{
 		width:100%;
 	}
+}
+
+.frm-card-element .sq-card-wrapper .sq-card-message {
+	margin-bottom: 0;
+}
+.frm-card-errors:empty {
+	margin: 0;
 }
 <?php
 

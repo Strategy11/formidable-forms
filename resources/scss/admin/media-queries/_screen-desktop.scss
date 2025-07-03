@@ -1,0 +1,32 @@
+@media only screen and (max-width: 1200px) {
+
+	.frm-addons {
+		grid-template-columns: 1fr 1fr;
+	}
+
+	#frm_top_bar h1 {
+		min-width: 0; /* Reset the min-width to prevent menu items from stacking vertically */
+	}
+}
+
+@media only screen and (max-width: 1050px) {
+
+	.frm-white-body,
+	.frm_wrap {
+		--biggest-sidebar: 390px;
+	}
+
+	#form_settings_page .columns-2 {
+		margin: 0;
+	}
+
+	.frm_actions_list {
+		margin-left: 0;
+	}
+
+	#frm_bs_dropdown .frm_bstooltip {
+
+		/* There isn't enough room for the title on a screen this size so just hide it. */
+		display: none !important;
+	}
+}

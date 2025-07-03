@@ -21,6 +21,10 @@ namespace {
 	define( 'WP_IMPORTING', false );
 	define( 'ICL_PLUGIN_INACTIVE', false );
 
+	class FrmProFormState {
+		public static function get_from_request( $key, $default ) {}
+	}
+
 	class FrmProEntryShortcodeFormatter extends FrmEntryShortcodeFormatter {
 	}
 	class FrmProSettings extends FrmSettings {
@@ -429,6 +433,17 @@ namespace {
 		 * @return void
 		 */
 		public static function add_currency_settings() {}
+	}
+	class FrmProAddressesController extends FrmProComboFieldsController {
+		/**
+		 * @param string $country
+		 * @return string
+		 */
+		public static function get_country_code( $country ) {
+		}
+	}
+
+	class FrmProComboFieldsController {
 	}
 }
 

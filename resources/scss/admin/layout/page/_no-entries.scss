@@ -1,0 +1,20 @@
+/**
+ * No Entries Page styles
+ */
+
+.frm_no_entries_form {
+	padding: 60px 0;
+}
+
+.frm_no_entries_form .frm_no_entries_header {
+	font-size: 20px;
+	margin-bottom: 10px;
+}
+
+.frm_no_entries_form .frm_no_entries_text {
+	line-height: var(--leading);
+}
+
+#form_entries_page #the-list .no-items {
+	height: 240px; /* Equals to the max height of search dropdown */
+}

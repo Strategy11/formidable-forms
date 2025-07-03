@@ -14,6 +14,10 @@ check-file = false
 extend-glob = ["*.xml"]
 check-file = false
 
+[type.txt]
+extend-glob = ["denylist/*.txt"]
+check-file = false
+
 [default]
 extend-ignore-re = [
     "/mis'",
@@ -29,5 +33,9 @@ atributes = "atributes"
 # fo is used for the Faroese locale. It is not a typo.
 # fo is also used for a table alias in SQL queries.
 fo = "fo"
+# `Ags` should be `Ages`, `Tags` in sandbox token
+Ags = "Ags"
+
 [default.extend-identifiers]
 66afe9 = "66afe9"
+

@@ -1,0 +1,13 @@
+/**
+ * Welcome and Global Settings Image Options
+ */
+
+#frm-welcome .frm_image_options .frm_image_option_container,
+#form_global_settings .frm_image_options .frm_image_option_container {
+	background: var(--sidebar-color);
+}
+
+#frm-welcome .frm_image_option_container svg,
+#form_global_settings .frm_image_option_container svg {
+	max-width: calc( 100% - 20px );
+}

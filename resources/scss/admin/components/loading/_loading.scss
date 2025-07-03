@@ -1,0 +1,121 @@
+/**
+ * Components - Loading
+ */
+
+.frm_spinner.frm-wait,
+.frm_spinner.spinner {
+	float: left;
+	visibility: hidden;
+	margin: 0 10px;
+}
+
+.frm_visible_spinner.frm-wait,
+.frm_visible_spinner.spinner {
+	visibility: visible;
+	float: none;
+}
+
+.frm_form_action_settings .frm_spinner.frm-wait,
+.frm_form_action_settings .frm_spinner.spinner {
+	visibility: visible;
+	float: none;
+	vertical-align: bottom;
+}
+
+.frm_form_action_settings .frm_loading {
+	font-size: 15px;
+	text-align: center;
+}
+
+.frm_ajax_settings_tab .frm-wait,
+.frm_ajax_settings_tab .spinner {
+	visibility: visible;
+	float: none;
+	margin-top: 20px;
+}
+
+.wp-core-ui .frm_loading_button.button-primary.frm-button-primary,
+.frm_loading_button,
+.frm_loading_form.frm_button_submit {
+	position: relative !important;
+	opacity: .8;
+	color: transparent !important;
+	text-shadow: none !important;
+}
+
+.frm_loading_button:hover,
+.frm_loading_button:active,
+.frm_loading_button:focus,
+.frm_loading_form.frm_button_submit:hover,
+.frm_loading_form.frm_button_submit:active,
+.frm_loading_form.frm_button_submit:focus {
+	cursor: not-allowed;
+	color: transparent !important;
+	outline: none !important;
+	box-shadow: none;
+}
+
+.frm-wait {
+	margin: 20px;
+	width: 20px;
+	height: 20px;
+	position: relative;
+	display: inline-block;
+}
+
+#frm-show-fields .frm-wait:only-child {
+	position: absolute;
+	left: 50px;
+	top: 30px;
+}
+
+.frm-wait::before,
+.frm_loading_button::before,
+.frm_loading_form.frm_button_submit::before {
+	content: '';
+	display: inline-block;
+
+	position: absolute;
+	background: transparent;
+	border: 1px solid #fff;
+	border-top-color: transparent;
+	border-left-color: transparent;
+	border-radius: 50%;
+
+	box-sizing: border-box;
+	top: 50%;
+	left: 50%;
+	margin-top: -10px;
+	margin-left: -10px;
+	width: 20px;
+	height: 20px;
+
+	animation: spin 2s linear infinite;
+}
+
+.frm-wait::before {
+	border-bottom-color: var(--primary-700);
+	border-right-color: var(--primary-700);
+}
+
+.frm_loading_button.frm-button-secondary::before {
+	border-bottom-color: var(--primary-500);
+	border-right-color: var(--primary-500);
+}
+
+input[type="submit"]:focus {
+	outline: none !important;
+}
+
+/* Effects */
+
+@keyframes spin {
+
+	0% {
+		transform: rotate(0deg);
+	}
+
+	100% {
+		transform: rotate(360deg);
+	}
+}

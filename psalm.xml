@@ -13,6 +13,7 @@
 		<file name="formidable.php" />
 		<directory name="classes" />
 		<directory name="stripe" />
+		<directory name="square" />
 		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
@@ -32,6 +33,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidGlobal>
 		<UndefinedDocblockClass>
@@ -85,6 +87,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
@@ -93,12 +96,14 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PropertyNotSetInConstructor>
 		<RiskyTruthyFalsyComparison>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
@@ -107,6 +112,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 			</errorLevel>
 		</MissingReturnType>
@@ -114,6 +120,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidArgument>
 		<PossiblyUndefinedVariable>
@@ -130,41 +137,48 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</MissingClosureParamType>
 		<NullableReturnStatement>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</NullableReturnStatement>
 		<TypeDoesNotContainType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</TypeDoesNotContainType>
 		<InvalidReturnStatement>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidReturnStatement>
 		<InvalidArrayOffset>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidArrayOffset>
 		<PossiblyNullPropertyAssignment>
 			<errorLevel type="suppress">
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
+				<file name="square/models/FrmSquareLiteSettings.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 			</errorLevel>
 		</MissingPropertyType>
@@ -177,6 +191,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PossiblyNullPropertyFetch>
 		<InvalidScalarArgument>
@@ -189,7 +204,9 @@
 				<file name="classes/models/FrmMigrate.php" />
 				<file name="classes/models/FrmStyle.php" />
 				<file name="stripe/controllers/FrmStrpLiteActionsController.php" />
+				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 				<file name="stripe/models/FrmStrpLiteAuth.php" />
+				<file name="square/controllers/FrmSquareLiteAppController.php" />
 			</errorLevel>
 		</InvalidScalarArgument>
 		<PossiblyInvalidIterator>
@@ -206,42 +223,49 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</ArgumentTypeCoercion>
 		<PossiblyUndefinedArrayOffset>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PossiblyUndefinedArrayOffset>
 		<InvalidOperand>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidOperand>
 		<PossiblyInvalidPropertyFetch>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PossiblyInvalidPropertyFetch>
 		<FalsableReturnStatement>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</FalsableReturnStatement>
 		<DocblockTypeContradiction>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</DocblockTypeContradiction>
 		<RedundantConditionGivenDocblockType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
@@ -250,30 +274,35 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidReturnType>
 		<LessSpecificReturnStatement>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</LessSpecificReturnStatement>
 		<PossiblyInvalidPropertyAssignmentValue>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignmentValue>
 		<ReferenceConstraintViolation>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</ReferenceConstraintViolation>
 		<InvalidPropertyFetch>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidPropertyFetch>
@@ -281,12 +310,14 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidStringClass>
 		<RedundantCondition>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantCondition>
@@ -294,12 +325,14 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</MoreSpecificImplementedParamType>
 		<MissingClosureReturnType>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</MissingClosureReturnType>
 		<PossiblyInvalidArrayAssignment>
@@ -315,18 +348,21 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</PossiblyInvalidArrayAccess>
 		<UndefinedPropertyFetch>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</UndefinedPropertyFetch>
 		<RiskyCast>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</RiskyCast>
 		<PossiblyInvalidPropertyAssignment>
@@ -343,18 +379,21 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidPropertyAssignmentValue>
 		<RedundantCast>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</RedundantCast>
 		<InvalidCast>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</InvalidCast>
 		<PropertyTypeCoercion>
@@ -417,12 +456,14 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</UndefinedThisPropertyAssignment>
 		<UnresolvableInclude>
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</UnresolvableInclude>
@@ -465,6 +506,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 				<directory name="deprecated" />
 			</errorLevel>
 		</ClassMustBeFinal>
@@ -472,6 +514,7 @@
 			<errorLevel type="suppress">
 				<directory name="classes" />
 				<directory name="stripe" />
+				<directory name="square" />
 			</errorLevel>
 		</MissingOverrideAttribute>
 		<InaccessibleProperty>
@@ -479,5 +522,10 @@
 				<file name="classes/controllers/FrmFieldsController.php" />
 			</errorLevel>
 		</InaccessibleProperty>
+		<DeprecatedFunction>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
+			</errorLevel>
+		</DeprecatedFunction>
 	</issueHandlers>
 </psalm>

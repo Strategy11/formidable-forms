@@ -1,0 +1,200 @@
+/*!
+ * Bootstrap v4.6.1
+ */
+
+ .tooltip {
+
+	/* Copied from Bootstrap */
+	position: absolute;
+	display: block;
+	margin: 0;
+	font-style: normal;
+	font-weight: 400;
+	line-height: 1.5;
+	text-align: left;
+	text-align: start;
+	text-decoration: none;
+	text-shadow: none;
+	text-transform: none;
+	letter-spacing: normal;
+	word-break: normal;
+	word-spacing: normal;
+	white-space: normal;
+	line-break: auto;
+	font-size: 0.875rem;
+	word-wrap: break-word;
+	opacity: 0;
+
+	/* Custom rules */
+	z-index: 9999999;
+	pointer-events: none;
+}
+
+.tooltip.show {
+	opacity: 0.9;
+}
+
+.tooltip .arrow {
+	position: absolute;
+	display: block;
+	width: 0.8rem;
+	height: 0.4rem;
+	margin-left: 0 !important;
+}
+
+.tooltip .arrow::before {
+	position: absolute;
+	content: "";
+	border-color: transparent;
+	border-style: solid;
+}
+
+.bs-tooltip-top, .bs-tooltip-auto[x-placement^="top"] {
+	padding: 0.4rem 0;
+}
+
+.bs-tooltip-top .arrow, .bs-tooltip-auto[x-placement^="top"] .arrow {
+	bottom: 0;
+}
+
+.bs-tooltip-top .arrow::before, .bs-tooltip-auto[x-placement^="top"] .arrow::before {
+	top: 0;
+	border-width: 0.4rem 0.4rem 0;
+	border-top-color: #000;
+}
+
+.bs-tooltip-right, .bs-tooltip-auto[x-placement^="right"] {
+	padding: 0 0.4rem;
+}
+
+.bs-tooltip-right .arrow, .bs-tooltip-auto[x-placement^="right"] .arrow {
+	left: 0;
+	width: 0.4rem;
+	height: 0.8rem;
+}
+
+.bs-tooltip-right .arrow::before, .bs-tooltip-auto[x-placement^="right"] .arrow::before {
+	right: 0;
+	border-width: 0.4rem 0.4rem 0.4rem 0;
+	border-right-color: #000;
+}
+
+.bs-tooltip-bottom, .bs-tooltip-auto[x-placement^="bottom"] {
+	padding: 0.4rem 0;
+}
+
+.bs-tooltip-bottom .arrow, .bs-tooltip-auto[x-placement^="bottom"] .arrow {
+	top: 0;
+}
+
+.bs-tooltip-bottom .arrow::before, .bs-tooltip-auto[x-placement^="bottom"] .arrow::before {
+	bottom: 0;
+	border-width: 0 0.4rem 0.4rem;
+	border-bottom-color: #000;
+}
+
+.bs-tooltip-left, .bs-tooltip-auto[x-placement^="left"] {
+	padding: 0 0.4rem;
+}
+
+.bs-tooltip-left .arrow, .bs-tooltip-auto[x-placement^="left"] .arrow {
+	right: 0;
+	width: 0.4rem;
+	height: 0.8rem;
+}
+
+.bs-tooltip-left .arrow::before, .bs-tooltip-auto[x-placement^="left"] .arrow::before {
+	left: 0;
+	border-width: 0.4rem 0 0.4rem 0.4rem;
+	border-left-color: #000;
+}
+
+.tooltip-inner {
+	max-width: 200px;
+	padding: 0.25rem 0.5rem;
+	color: #fff;
+	text-align: center;
+	background-color: #000;
+	border-radius: 0.25rem;
+}
+
+.frm-dropdown-menu.show {
+	display: block;
+}
+
+/* End Bootstrap */
+
+.preview.dropdown .dropdown-menu {
+	min-width: 205px;
+}
+
+.frm_clear {
+	clear: both;
+}
+
+.frm_clearfix::after {
+	content: ".";
+	display: block;
+	clear: both;
+	visibility: hidden;
+	line-height: 0;
+	height: 0;
+}
+
+.frm_clearfix {
+	display: block;
+}
+
+.frm_admin_progress {
+	overflow: hidden;
+	height: 20px;
+	margin-bottom: 20px;
+	background-color: #f5f5f5;
+	border-radius: 4px;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.frm_admin_progress_bar {
+	float: left;
+	width: 0;
+	height: 100%;
+	font-size: 12px;
+	line-height: 20px;
+	color: #fff;
+	text-align: center;
+	box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+	transition: width 0.6s ease;
+	background-color: #04A4CC;
+}
+
+.tooltip.frm_tooltip {
+	position: fixed;
+	top: auto !important;
+	bottom: 0 !important;
+	left: 0 !important;
+	max-width: none;
+	width: 100% !important;
+	z-index: 99999;
+}
+
+.tooltip.frm_tooltip.bottom {
+	padding: 0;
+}
+
+.frm_tooltip .tooltip-inner {
+	max-width: none;
+	min-height: 40px !important;
+	text-align: left;
+	box-shadow: 5px 5px 25px rgba(0, 0, 0, 0.5);
+	padding: 10px 40px;
+	border-top-color: #ccc;
+	background: var(--sidebar-color);
+	color: var(--grey-700);
+	border-radius: 0;
+	opacity: 1;
+	font-size: var(--text-sm);
+}
+
+#frm_custom_css_box {
+	width: 100%;
+}
