@@ -1849,7 +1849,7 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
-		$should_block = 'contact-form' === $form_key && ! current_user_can( 'frm_view_forms' );
+		$should_block = in_array( $form_key, array( 'contact-form', 'contact-us' ), true ) && ! current_user_can( 'frm_view_forms' );
 		/**
 		 * Filters whether the form preview should be blocked.
 		 *
