@@ -5,6 +5,7 @@
 #frm-options-panel {
 	padding: 0 var(--gap-sm);
 	color: var(--grey-900);
+	overflow: hidden;
 }
 
 .frm-right-panel a.frm_add_logic_link,

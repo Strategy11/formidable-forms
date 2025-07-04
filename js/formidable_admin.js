@@ -5381,12 +5381,22 @@ function frmAdminBuildJS() {
 		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
 
-		const collapseMe = this.nextElementSibling;
-		if ( collapseMe  ) {
-			let collapseMeHeight = collapseMe.scrollHeight;
-			if ( collapseMeHeight > 0 ) {
-				collapseMe.style.setProperty( '--slide-height', `${collapseMeHeight}px` );
-				collapseMe.style.setProperty( '--slide-time', `${collapseMeHeight - 50}ms` );
+		addSlideAnimationCssVars( this.nextElementSibling )
+	}
+
+	/**
+	 * Add slide animation CSS variables to the element
+	 *
+	 * @param {HTMLElement} element The element to add CSS variables to
+	 * @return {void}
+	 */
+	function addSlideAnimationCssVars( element ) {
+		if ( element ) {
+			let height = element.scrollHeight;
+			if ( height > 0 ) {
+				height += 400;
+				element.style.setProperty( '--slide-height', `${height}px` );
+				element.style.setProperty( '--slide-time', `${height * 0.8}ms` );
 			}
 		}
 	}
@@ -10592,6 +10602,9 @@ function frmAdminBuildJS() {
 				  event.preventDefault();
 				}
 			});
+			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
+				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+			}, 9999 );
 		},
 
 		settingsInit: function() {
