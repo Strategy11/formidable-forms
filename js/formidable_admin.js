@@ -4918,8 +4918,11 @@ function frmAdminBuildJS() {
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
 					const logicRow = document.getElementById( 'frm_logic_row_' + id );
+					const logicRowText = logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' );
 					logicRow.insertAdjacentHTML( 'beforeend', html );
-					logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' ).textContent = logicRow.dataset.ruleText;
+					if ( logicRowText ) {
+						logicRowText.textContent = logicRow.dataset.ruleText;
+					}
 
 					const logicRows = logicRow.closest( '.frm_logic_rows' );
 					logicRows.style.height = 'auto';
@@ -4959,7 +4962,7 @@ function frmAdminBuildJS() {
 				watchRowBlock.fadeIn( 'slow' );
 
 				// Show the "Watch Lookup Fields" label if it was hidden
-				document.getElementById( 'frm_watch_lookup_label_' + id ).classList.remove( 'frm_hidden!' );
+				document.getElementById( `frm_watch_lookup_label_${id}` )?.classList.remove( 'frm_hidden!' );
 			}
 		});
 		return false;
