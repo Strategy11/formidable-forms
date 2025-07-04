@@ -5394,7 +5394,7 @@ function frmAdminBuildJS() {
 		if ( element ) {
 			let height = element.scrollHeight;
 			if ( height > 0 ) {
-				height += 400;
+				height += 250;
 				element.style.setProperty( '--slide-height', `${height}px` );
 				element.style.setProperty( '--slide-time', `${height * 0.8}ms` );
 			}

@@ -137,7 +137,7 @@ export default class frmRadioComponent {
 		// Observe for attribute changes on the component and its ancestors
 		observer.observe( element, {
 			attributes: true,
-			attributeFilter: [ 'class' ]
+			attributeFilter: [ 'class', 'style' ]
 		});
 
 		// Also observe parent elements up to a reasonable depth
@@ -145,7 +145,7 @@ export default class frmRadioComponent {
 		for ( let i = 0; i < 7 && parent; i++ ) {
 			observer.observe( parent, {
 				attributes: true,
-				attributeFilter: [ 'class' ]
+				attributeFilter: [ 'class', 'style' ]
 			});
 			parent = parent.parentElement;
 		}

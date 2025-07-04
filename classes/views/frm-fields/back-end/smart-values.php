@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		printf( esc_html( $message ), '<span class="frm_feature_label">Smart tags</span>' );
 		?>
 	</p>
-	<p class="frm-h-stack frm-justify-between frm-mb-2xs">
+	<p class="frm-h-stack frm-justify-between frm-mt-md frm-mb-2xs">
 		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link ) ); ?>" class="button button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">
 			<?php esc_html_e( 'Upgrade', 'formidable' ); ?>
 		</a>

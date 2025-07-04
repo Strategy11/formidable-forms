@@ -8,7 +8,7 @@ $options = $component['options'] ?? array();
 <div class="frm-text-toggle-component frm-radio-component <?php echo esc_attr( $component_class ); ?>">
 	<div class="frm-radio-container frm-flex-justify">
 		<?php
-		$is_default_checked = empty( $field_value );
+		$is_default_checked = isset( $component['default_value'] ) ? empty( $field_value ) && '' !== $component['default_value'] : empty( $field_value );
 
 		foreach ( $options as $index => $option ) {
 			$input_attrs = array(
