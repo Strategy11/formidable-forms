@@ -185,6 +185,25 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							continue;
 						}
 
+						// Backwards compatibility "@since x.x".
+						if ( ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
+							switch ( $type ) {
+								case 'calc':
+									$default_value_type['data']  = array(
+										'show'    => '#calc-for-{id}',
+										'disable' => '#default-value-for-{id}',
+									);
+									break;
+								case 'get_values_field':
+									$default_value_type['class'] = '';
+									$default_value_type['data']  = array(
+										'show'    => '.frm-lookup-box-{id}',
+										'disable' => '#default-value-for-{id}',
+									);
+									break;
+							}
+						}
+
 						$toggle_args = array(
 							'echo'        => true,
 							'show_labels' => true,

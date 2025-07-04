@@ -387,7 +387,7 @@ class FrmFieldsController {
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
 				),
-				'tooltip' => __( 'TODO: Add a tooltip', 'formidable' ),
+				'tooltip' => __( 'Automatically calculate the value of this field based on values from other fields.', 'formidable' ),
 			),
 			'get_values_field' => array(
 				'class'   => 'frm_show_upgrade frm_noallow',
@@ -407,9 +407,11 @@ class FrmFieldsController {
 		$settings = array_keys( $types );
 		$active   = 'default_value';
 
-		foreach ( $settings as $type ) {
-			if ( ! empty( $field[ $type ] ) ) {
-				$active = $type;
+		if ( FrmAppHelper::pro_is_connected() ) {
+			foreach ( $settings as $type ) {
+				if ( ! empty( $field[ $type ] ) ) {
+					$active = $type;
+				}
 			}
 		}
 
