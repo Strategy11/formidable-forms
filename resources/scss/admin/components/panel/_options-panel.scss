@@ -19,6 +19,8 @@
 	transition: background-color 150ms ease-out;
 
 	.frmsvg {
+		width: 13px;
+		height: 13px;
 		color: var(--grey-500);
 		transition: transform 300ms ease-in;
 	}
