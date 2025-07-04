@@ -24,4 +24,8 @@
 
 .frm_single_option .frm_option_key {
 	margin-top: 17px;
+
+	&.frm_image_preview_wrapper {
+		margin-top: var(--gap-xs);
+	}
 }
