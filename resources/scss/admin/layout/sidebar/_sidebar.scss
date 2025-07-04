@@ -64,9 +64,10 @@
 
 .frm-single-settings > h3:first-of-type {
 	position: relative;
+	background-color: transparent !important;
 	border-top: none;
 	padding-top: 0 !important;
-	background-color: transparent !important;
+	margin-top: 0 !important;
 
 	&::after {
 		content: '';
@@ -76,11 +77,6 @@
 		bottom: 0;
 		height: 1px;
 		background-color: var(--sidebar-hover);
-	}
-
-	&:not(.frm-collapsed) + div {
-		padding-top: var(--gap-xs) !important;
-		padding-bottom: var(--gap-sm);
 	}
 }
 

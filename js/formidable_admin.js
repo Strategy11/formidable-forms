@@ -5380,6 +5380,15 @@ function frmAdminBuildJS() {
 		// Toggles the "aria-expanded" attribute
 		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
+
+		const collapseMe = this.nextElementSibling;
+		if ( collapseMe  ) {
+			let collapseMeHeight = collapseMe.scrollHeight;
+			if ( collapseMeHeight > 0 ) {
+				collapseMe.style.setProperty( '--slide-height', `${collapseMeHeight}px` );
+				collapseMe.style.setProperty( '--slide-time', `${collapseMeHeight - 50}ms` );
+			}
+		}
 	}
 
 	function clickLabel() {
