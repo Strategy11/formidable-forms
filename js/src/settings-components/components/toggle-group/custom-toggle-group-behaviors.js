@@ -11,7 +11,7 @@ import { documentOn } from 'core/utils';
 export function setupCustomToggleGroupHandlers() {
 	documentOn( 'change', '[id^="frm-default-type-calc-"]:not(:checked)', onCalculateValueSettingOff );
 	documentOn( 'change', '[id^="frm-default-type-get_values_field-"]:not(:checked)', onLookupSettingOff );
-	documentOn( 'change', '[id^="frm-enable-conditional-logic-"]', onEnableConditionalLogicChange );
+	documentOn( 'change', '[id^="frm-enable-conditional-logic"]', onEnableConditionalLogicChange );
 }
 
 /**
@@ -93,6 +93,6 @@ function onEnableConditionalLogicChange( event ) {
 
 	const enableConditionalLogicField = document.querySelector( `[name="field_options[enable_conditional_logic_${ fieldId }]"]` );
 	if ( enableConditionalLogicField ) {
-		enableConditionalLogicField.value = toggleButton.checked ? 1 : 0;
+		enableConditionalLogicField.value = toggleButton.checked ? '1' : '0';
 	}
 }
