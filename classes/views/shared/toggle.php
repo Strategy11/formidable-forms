@@ -49,7 +49,7 @@ if ( $use_container ) {
 ?>
 	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
 		<?php if ( $show_labels && $off_label ) { ?>
-			<span class="frm_off_label frm_toggle_opt"><?php echo esc_html( $off_label ); ?></span>
+			<span class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
 		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
@@ -78,7 +78,7 @@ if ( $use_container ) {
 		</span>
 
 		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_toggle_opt"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
+			<span class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>

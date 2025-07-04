@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 	</h4>
 
-	<div class="frm-collapse-me frm-slide-down" role="group">
+	<div class="frm-collapse-me" role="group">
 		<ul class="frm_code_list frm-full-hover">
 			<?php
 			foreach ( FrmFormsHelper::css_classes() as $c => $d ) {
