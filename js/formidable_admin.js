@@ -10838,6 +10838,38 @@ function frmAdminBuildJS() {
 					}
 				);
 			}
+
+			const paymentsSettings    = document.getElementById( 'payments_settings' );
+			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
+			if ( paymentSettingsTabs ) {
+				paymentSettingsTabs.forEach(
+					element => {
+						element.addEventListener( 'change', () => {
+							if ( ! element.checked ) {
+								return;
+							}
+
+							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
+							if ( label ) {
+								label.setAttribute( 'aria-selected', 'true' );
+							}
+
+							paymentSettingsTabs.forEach(
+								tab => {
+									if ( tab === element ) {
+										return;
+									}
+
+									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
+									if ( label ) {
+										label.setAttribute( 'aria-selected', 'false' );
+									}
+								}
+							);
+						});
+					}
+				);
+			}
 		},
 
 		exportInit: function() {
