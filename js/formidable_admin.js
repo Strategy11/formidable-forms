@@ -10849,7 +10849,7 @@ function frmAdminBuildJS() {
 								return;
 							}
 
-							const label = document.querySelector( `label[for="${ element.id }"]` );
+							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
 							if ( label ) {
 								label.setAttribute( 'aria-selected', 'true' );
 							}
@@ -10860,7 +10860,7 @@ function frmAdminBuildJS() {
 										return;
 									}
 
-									const label = document.querySelector( `label[for="${ tab.id }"]` );
+									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
 									if ( label ) {
 										label.setAttribute( 'aria-selected', 'false' );
 									}
