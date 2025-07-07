@@ -31,10 +31,13 @@ foreach ( $payment_sections as $key => $section ) {
 	if ( $is_active ) {
 		$input_params['checked'] = 'checked';
 	}
-	$other_sections               = array_diff( array_keys( $payment_sections ), array( $key ) );
-	$input_params['data-frmhide'] = implode( ',', array_map( function ( $section ) {
-		return "#frm_{$section}_settings_section";
-	}, $other_sections ) );
+	$other_section_selectors      = array_map(
+		function ( $section ) {
+			return "#frm_{$section}_settings_section";
+		},
+		array_diff( array_keys( $payment_sections ), array( $key ) )
+	);
+	$input_params['data-frmhide'] = implode( ',', $other_section_selectors );
 
 	$label_params = array(
 		'for'           => "frm_toggle_{$key}_settings",
@@ -47,10 +50,10 @@ foreach ( $payment_sections as $key => $section ) {
 	<input <?php FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
 	<label <?php FrmAppHelper::array_to_html_params( $label_params, true ); ?>>
 		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_' . $key . '_full_icon' ); ?>
-		<span class="screen-reader-text"><?php echo esc_attr( $name ); ?></span>
+		<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>
 	</label>
 	<?php
-}
+}//end foreach
 echo '</div>';
 
 foreach ( $payment_sections as $key => $section ) {
