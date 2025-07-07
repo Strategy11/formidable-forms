@@ -44,7 +44,7 @@ class FrmSettingsController {
 		$sections = self::get_settings_tabs();
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
-		if ( in_array( $current, array( 'stripe_settings', 'square_settings' ), true ) ) {
+		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$current = 'payments_settings';
 		}
 
