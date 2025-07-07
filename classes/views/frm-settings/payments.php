@@ -55,7 +55,7 @@ foreach ( $payment_sections as $key => $section ) {
 		$section_classes .= ' frm_hidden';
 	}
 	?>
-	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>">
+	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>" role="tabpanel">
 		<?php if ( $include_h3 ) { ?>
 			<h3 style="margin-bottom: 0;"><?php echo esc_html( $name ) . ' ' . esc_html__( 'Settings', 'formidable' ); ?></h3>
 		<?php } ?>
