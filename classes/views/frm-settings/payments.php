@@ -63,7 +63,12 @@ foreach ( $payment_sections as $key => $section ) {
 	?>
 	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>" role="tabpanel">
 		<?php if ( $include_h3 ) { ?>
-			<h3 style="margin-bottom: 0;"><?php echo esc_html( $name ) . ' ' . esc_html__( 'Settings', 'formidable' ); ?></h3>
+			<h3 style="margin-bottom: 0;">
+				<?php
+				// translators: %s is the payment gateway name
+				printf( '%s Settings', esc_html( $name ) );
+				?>
+			</h3>
 		<?php } ?>
 		<?php
 		if ( isset( $section['class'] ) ) {
