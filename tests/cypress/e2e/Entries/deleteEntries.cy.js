@@ -37,7 +37,8 @@ describe("Entries submitted from a form", () => {
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain", "Entries").click();
         cy.get('.wrap > h2').should("contain", "Form Entries");
-        cy.get('.row-title').should("contain", "Entry test").click();
+        cy.get('[data-colname="Text"]').should("contain", "Entry test");
+		cy.get('.row-title').should('exist').click();
 
         cy.log("Verify entry information");
         cy.get('.hndle > :nth-child(1)').should("contain", "Entry");
