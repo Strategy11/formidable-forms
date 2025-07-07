@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 echo '<div class="frm-long-icon-buttons" role="tablist">';
 
 $tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-if ( $tab ) {
+if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings' ), true ) ) {
 	$tab = str_replace( '_settings', '', $tab );
 } else {
 	$tab = 'stripe';
@@ -46,11 +46,16 @@ foreach ( $payment_sections as $key => $section ) {
 echo '</div>';
 
 foreach ( $payment_sections as $key => $section ) {
-	$is_active  = $tab === $key;
-	$name       = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );
-	$include_h3 = 'authorize_net' !== $key; // Exclude Authorize.Net as the h3 tag is added explicitly.
+	$is_active       = $tab === $key;
+	$name            = $section['name'] ?? ucfirst( $key );
+	$include_h3      = 'authorize_net' !== $key; // Exclude Authorize.Net as the h3 tag is added explicitly.
+	$section_classes = 'frm_payments_section';
+
+	if ( ! $is_active ) {
+		$section_classes .= ' frm_hidden';
+	}
 	?>
-	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="frm_payments_section <?php if ( ! $is_active ) { echo 'frm_hidden'; } ?>">
+	<div id="frm_<?php echo esc_attr( $key ); ?>_settings_section" class="<?php echo esc_attr( $section_classes ); ?>">
 		<?php if ( $include_h3 ) { ?>
 			<h3 style="margin-bottom: 0;"><?php echo esc_html( $name ) . ' ' . esc_html__( 'Settings', 'formidable' ); ?></h3>
 		<?php } ?>
