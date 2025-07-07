@@ -11,13 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 echo '<div class="frm-long-icon-buttons" role="tablist">';
 
-$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
-if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
-	$tab = str_replace( '_settings', '', $tab );
-} else {
-	$tab = 'stripe';
-}
-
 foreach ( $payment_sections as $key => $section ) {
 	$is_active    = $tab === $key;
 	$name         = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );

@@ -309,6 +309,13 @@ class FrmSettingsController {
 	public static function payments_settings() {
 		$payment_sections = self::$removed_payments_sections;
 
+		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$tab = str_replace( '_settings', '', $tab );
+		} else {
+			$tab = 'stripe';
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/payments.php';
 	}
 
