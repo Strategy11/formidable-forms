@@ -31,13 +31,21 @@ foreach ( $payment_sections as $key => $section ) {
 	if ( $is_active ) {
 		$input_params['checked'] = 'checked';
 	}
-	$other_sections = array_diff( array_keys( $payment_sections ), array( $key ) );
-	$input_params['data-frmhide'] = implode( ',', array_map( function( $section ) {
+	$other_sections               = array_diff( array_keys( $payment_sections ), array( $key ) );
+	$input_params['data-frmhide'] = implode( ',', array_map( function ( $section ) {
 		return "#frm_{$section}_settings_section";
 	}, $other_sections ) );
+
+	$label_params = array(
+		'for'           => "frm_toggle_{$key}_settings",
+		'class'         => 'frm_payment_settings_tab',
+		'tabindex'      => '0',
+		'role'          => 'tab',
+		'aria-selected' => $is_active ? 'true' : 'false',
+	);
 	?>
-	<input <?php echo FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
-	<label for="frm_toggle_<?php echo esc_attr( $key ); ?>_settings" class="frm_payment_settings_tab" tabindex="0" role="tab" aria-selected="<?php echo $is_active ? 'true' : 'false'; ?>">
+	<input <?php FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
+	<label <?php FrmAppHelper::array_to_html_params( $label_params, true ); ?>>
 		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_' . $key . '_full_icon' ); ?>
 		<span class="screen-reader-text"><?php echo esc_attr( $name ); ?></span>
 	</label>
@@ -48,8 +56,10 @@ echo '</div>';
 foreach ( $payment_sections as $key => $section ) {
 	$is_active       = $tab === $key;
 	$name            = $section['name'] ?? ucfirst( $key );
-	$include_h3      = 'authorize_net' !== $key; // Exclude Authorize.Net as the h3 tag is added explicitly.
 	$section_classes = 'frm_payments_section';
+
+	// Exclude Authorize.Net as the h3 tag is added explicitly.
+	$include_h3      = 'authorize_net' !== $key;
 
 	if ( ! $is_active ) {
 		$section_classes .= ' frm_hidden';
@@ -68,4 +78,4 @@ foreach ( $payment_sections as $key => $section ) {
 		?>
 	</div>
 	<?php
-}
+}//end foreach

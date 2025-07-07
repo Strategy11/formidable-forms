@@ -6,6 +6,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmSettingsController {
 
 	/**
+	 * Payments sections are removed from the top level and added to a payments section.
+	 *
 	 * @since x.x
 	 *
 	 * @var array
