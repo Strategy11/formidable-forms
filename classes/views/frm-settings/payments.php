@@ -55,7 +55,7 @@ foreach ( $payment_sections as $key => $section ) {
 	$section_classes = 'frm_payments_section';
 
 	// Exclude Authorize.Net as the h3 tag is added explicitly.
-	$include_h3      = 'authorize_net' !== $key;
+	$include_h3 = 'authorize_net' !== $key;
 
 	if ( ! $is_active ) {
 		$section_classes .= ' frm_hidden';
