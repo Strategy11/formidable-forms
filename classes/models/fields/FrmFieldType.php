@@ -499,6 +499,7 @@ DEFAULT_HTML;
 		$should_hide_bulk_edit = apply_filters( 'frm_should_hide_bulk_edit', $display_format === '1', $display_format, $args );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/generate-options-with-ai.php';
 	}
 
 	/**

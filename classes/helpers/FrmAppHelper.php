@@ -4220,13 +4220,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Enhances upgrade data parameters with installation link and plan requirement information.
+	 *
 	 * @since 5.0.17
 	 *
-	 * @param string $plugin
-	 * @param array  $params
-	 * @return array
+	 * @param string $plugin   The plugin slug to get installation data for.
+	 * @param array  $params   Initial parameters for the upgrade data.
+	 * @param bool   $detailed Whether to include detailed information.
+	 * @return array Modified parameters with installation data.
 	 */
-	public static function get_upgrade_data_params( $plugin, $params ) {
+	public static function get_upgrade_data_params( $plugin, $params, $detailed = false ) {
 		$link = FrmAddonsController::install_link( $plugin );
 		if ( ! $link ) {
 			return $params;
@@ -4239,7 +4242,11 @@ class FrmAppHelper {
 				$params['medium'] = $plugin;
 			}
 		} else {
-			$params['requires'] = FrmFormsHelper::get_plan_required( $link );
+			$params['requires'] = $params['requires'] ?? FrmFormsHelper::get_plan_required( $link );
+		}
+
+		if ( $detailed ) {
+			$params['plugin-status'] = $link['status'];
 		}
 
 		return $params;
