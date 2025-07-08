@@ -186,7 +186,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						}
 
 						// Backwards compatibility "@since x.x".
-						if ( ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
+						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
 							switch ( $type ) {
 								case 'calc':
 									$default_value_type['data']  = array(

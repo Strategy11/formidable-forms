@@ -2870,15 +2870,12 @@ function frmAdminBuildJS() {
 				continue;
 			}
 
-			const span = document.createElement( 'span' );
-			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
-
 			const a = document.createElement( 'a' );
 			a.setAttribute( 'href', '#' );
 			a.setAttribute( 'data-code', fields[i].fieldId );
 			a.classList.add( 'frm_insert_code' );
-			a.appendChild( document.createTextNode( fields[i].fieldName ) );
-			a.appendChild( span );
+			a.appendChild( span( fields[i].fieldName ) );
+			a.appendChild( span( { className: 'frm-text-sm frm-text-grey-500', text: '[' + fields[i].fieldId + ']' } ) );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( 'frm-field-list-' + fieldId );
@@ -3457,7 +3454,7 @@ function frmAdminBuildJS() {
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
 
-		$field[0].querySelector( '.frm-ai-generate-options-modal-trigger' ).classList.toggle( 'frm_hidden!', hasImageOptions );
+		$field[0].querySelector( '.frm-ai-generate-options-modal-trigger' )?.classList.toggle( 'frm_hidden!', hasImageOptions );
 	}
 
 	function removeImageSizeClasses( field ) {
@@ -6535,17 +6532,17 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Close frm-modal-no-close element when clicking outside of it
+	 * Close frm-modal-no-dismiss element when clicking outside of it
 	 *
 	 * @param {Event} event The click event
 	 */
 	function closeModalOnOutsideClick( { target } ) {
-		if ( target.closest( '.frm-inline-modal.frm-modal-no-close' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
+		if ( target.closest( '.frm-inline-modal.frm-modal-no-dismiss' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
 			return;
 		}
 
 		// Close all inline modals (without close button) that are not hidden
-		document.querySelectorAll( '.frm-inline-modal.frm-modal-no-close:not(.frm_hidden)' ).forEach( modal => {
+		document.querySelectorAll( '.frm-inline-modal.frm-modal-no-dismiss:not(.frm_hidden)' ).forEach( modal => {
 			modal.classList.add( 'frm_hidden' );
 			modal.previousElementSibling.classList.remove( 'frm-open' );
 		});
