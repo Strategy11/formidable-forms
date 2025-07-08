@@ -7,6 +7,10 @@ $attributes = array(
 	'class' => 'frm_form_field frm6 frm6_followed frm-h-stack button frm-button-secondary frm-button-gradient frm-rounded-6 frm-max-w-fit frm-font-normal frm-py-2xs frm-px-xs frm-mt-xs frm-mb-12',
 );
 
+if ( $should_hide_bulk_edit ) {
+	$attributes['class'] .= ' frm_hidden!';
+}
+
 $data = FrmAppHelper::get_upgrade_data_params(
 	'ai',
 	array(
@@ -19,7 +23,7 @@ $data = FrmAppHelper::get_upgrade_data_params(
 );
 
 if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
-	$attributes['class']    = 'frm-ai-generate-options-modal-trigger ' . $attributes['class'];
+	$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
 	$attributes['data-fid'] = $args['field']['id'];
 } else {
 	unset( $data['plugin-status'] );

@@ -58,25 +58,3 @@
 		}
 	}
 }
-
-.frm-scrollbar-wrapper-light,
-.frm-single-settings .frm_code_list.frm-full-hover.frm-short-list {
-
-	&:hover {
-		scrollbar-color: var(--grey-200) transparent; /* Firefox Scrollbar - Show on hover with transparent background */
-
-		&::-webkit-scrollbar-thumb {
-			background: var(--grey-200); /* Show scrollbar on hover */
-		}
-	}
-
-	&::-webkit-scrollbar {
-
-		&-thumb {
-
-			&:hover {
-				background: var(--grey-200); /* Show scrollbar on hover */
-			}
-		}
-	}
-}

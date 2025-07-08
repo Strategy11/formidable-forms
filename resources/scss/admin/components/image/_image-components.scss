@@ -3,7 +3,7 @@
  */
 
 .frm_image_data {
-	margin-left: var(--gap-xs);
+	margin-left: var(--gap-sm);
 	display: flex;
 	flex-direction: column;
 	font-size: var(--text-sm);
@@ -13,7 +13,8 @@
 .frm_image_styling_frame {
 	display: flex;
 	align-items: stretch;
-	margin-left: 1.5rem;
+	margin-left: 36px;
+	margin-bottom: var(--gap-xs);
 }
 
 .frm_image_styling_frame img{
