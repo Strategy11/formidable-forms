@@ -1,4 +1,11 @@
 == Changelog ==
+= 6.22.1 =
+* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
+* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: Field IDs would not properly update when importing a Timeline view.
+* Fix: Database queries would not use cached query data when the query resulted in no results.
+* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+
 = 6.22 =
 * New: Support for Square payments has been added.
 * Fix: Option validation would fail in some cases where shortcodes were used in options.
