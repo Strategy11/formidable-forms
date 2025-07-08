@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.22
+Stable tag: 6.22.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.22.1 =
+* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
+* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: Field IDs would not properly update when importing a Timeline view.
+* Fix: Database queries would not use cached query data when the query resulted in no results.
+* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+
 = 6.22 =
 * New: Support for Square payments has been added.
 * Fix: Option validation would fail in some cases where shortcodes were used in options.
@@ -412,18 +419,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Sorting entries by a number field value would sort as strings instead of numbers.
 * Fix: Stripe payment fields would incorrectly use the wrong style settings in some cases.
 * The small device message can now be dismissed, allowing people to still edit forms while using a phone.
-
-= 6.20 =
-* Security: Shortcodes in emails would process more than once.
-* New: Over 30 free form templates are now available automatically for all users that would previously require a code sent through email.
-* New: Admin pages have been modified to work better on smaller screen sizes.
-* New: The GDPR field agreement text now supports links.
-* Fix: Additional checks have been added to ensure that a GDPR field is always required.
-* Fix: A Passing null to parameter deprecated message when viewing GDPR field settings has been fixed.
-* Fix: A conflict with WPML would cause querying issues resulting in empty results when checking for form actions. This would cause the fallback confirmation action to appear even when there were valid confirmation actions in a form.
-* Additional validation has been checked when outputting CSS variables when generating a stylesheet to help make sure the generated CSS is valid.
-* Some additional validation has been added to help prevent issues where invalid serialized data would cause partial serialized strings to appear in setting values.
-* The preview page for the contact form that gets installed automatically on every site is now automatically blocked from anyone without access to view the forms list. In addition, the preview page will no longer display a form when an incorrect key is used. This is to help prevent spam that targets the default form. A new frm_block_preview filter has been added which can be used to unblock the default form, and to block additional forms.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
