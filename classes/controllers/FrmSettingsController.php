@@ -8,7 +8,7 @@ class FrmSettingsController {
 	/**
 	 * Payments sections are removed from the top level and added to a payments section.
 	 *
-	 * @since x.x
+	 * @since 6.22.1
 	 *
 	 * @var array
 	 */
@@ -188,7 +188,7 @@ class FrmSettingsController {
 	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
 	 * and show them all on the payments section in separate tabs.
 	 *
-	 * @since x.x
+	 * @since 6.22.1
 	 *
 	 * @param array $sections
 	 * @return void
@@ -209,7 +209,7 @@ class FrmSettingsController {
 	/**
 	 * Sort the payments sections (PayPal, Square, Stripe, Authorize.Net)
 	 *
-	 * @since x.x
+	 * @since 6.22.1
 	 *
 	 * @param string $a
 	 * @param string $b

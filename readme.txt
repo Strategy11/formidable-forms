@@ -377,6 +377,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The honeypot field would appear incorrectly when editing in-place.
 * Fix: Field IDs would not properly update when importing a Timeline view.
 * Fix: Database queries would not use cached query data when the query resulted in no results.
+* Fix: Name fields would not work correctly when using the minimize=1 option.
 * Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
 
 = 6.22 =
