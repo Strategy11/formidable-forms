@@ -6947,6 +6947,37 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	/**
+	 * Opens a basic modal with the given title and content.
+	 *
+	 * @param {Event} event The event object.
+	 * @return {void}
+	 */
+	function showBasicModal( event ) {
+		const button = event.target.dataset?.modalTitle ? event.target : event.target.closest( '[data-modal-title]' );
+		if ( ! button ) {
+			return;
+		}
+
+		const { modalTitle, modalContent } = button.dataset;
+		if ( ! modalTitle || ! modalContent ) {
+			return;
+		}
+
+		event.preventDefault();
+
+		frmDom.modal.maybeCreateModal(
+			'frmBasicModal',
+			{
+				title: modalTitle,
+				content: div({
+					className: 'inside',
+					child: span( modalContent ),
+				}),
+			}
+		);
+	}
+
 	function getRequiredLicenseFromTrigger( element ) {
 		if ( element.dataset.requires ) {
 			return element.dataset.requires;
@@ -10290,6 +10321,7 @@ function frmAdminBuildJS() {
 
 			loadTooltips();
 			initUpgradeModal();
+			frmDom.util.documentOn( 'click', '[data-modal-title]', showBasicModal );
 
 			// used on build, form settings, and view settings
 			const $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );

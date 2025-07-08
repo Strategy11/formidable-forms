@@ -23,9 +23,19 @@ $data = FrmAppHelper::get_upgrade_data_params(
 );
 
 if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
-	$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
-	$attributes['data-fid'] = $args['field']['id'];
-} else {
+	// Backwards compatibility "@since x.x".
+	if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+		$data = array(
+			'modal-title'   => __( 'Generate options with AI', 'formidable' ),
+			'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
+		);
+	} else {
+		$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+		$attributes['data-fid'] = $args['field']['id'];
+	}
+}
+
+if ( empty( $attributes['data-fid'] ) ) {
 	unset( $data['plugin-status'] );
 	foreach ( $data as $key => $value ) {
 		$attributes[ 'data-' . $key ] = $value;
