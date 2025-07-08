@@ -132,37 +132,26 @@
 .frm-single-settings {
 
 	.frm_code_list.frm-full-hover {
-		margin: 0;
 		padding: 0;
+		margin: var(--gap-xs) -10px 0;
 
-		a {
+		> li > a {
 			justify-content: space-between;
 			font-size: var(--text-md);
-			padding: var(--gap-xs) 0;
-
-			&:hover,
-			&:hover span {
-				background-color: unset;
-			}
+			color: var(--grey-900);
+			padding: var(--gap-xs) 12px;
 
 			span {
 				margin: 0;
 				max-width: 50%;
-
-				&:first-child {
-					color: var(--grey-900);
-				}
-
-				&:last-child {
-					color: var(--grey-500);
-				}
 			}
-		}
 
-		&.frm-short-list {
+			&:hover {
+				font-weight: 500;
 
-			span:last-child {
-				padding-right: var(--gap-2xs);
+				span {
+					color: var(--primary-500);
+				}
 			}
 		}
 	}

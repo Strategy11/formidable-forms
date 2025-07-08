@@ -23,7 +23,9 @@
 	}
 }
 
-.frm-scrollbar-wrapper {
+.frm-scrollbar-wrapper,
+.frm-single-settings .frm_code_list.frm-full-hover.frm-short-list,
+.frm-single-settings .frm_field_opts_list {
 	overflow-x: hidden;
 	overflow-y: auto !important; /* Enable scrolling */
 	-ms-overflow-style: none; /* For IE and Edge */
@@ -31,7 +33,7 @@
 	scrollbar-width: thin;
 
 	&:hover {
-		scrollbar-color: var(--grey-300) var(--sidebar-color); /* Firefox Scrollbar - Show on hover */
+		scrollbar-color: var(--grey-300) transparent; /* Firefox Scrollbar - Show on hover with transparent background */
 
 		&::-webkit-scrollbar-thumb {
 			background: var(--grey-300); /* Show scrollbar on hover */
@@ -42,7 +44,8 @@
 		width: 3px;
 
 		&-track {
-			background: var(--sidebar-color);
+			background: transparent; /* Transparent background */
+			border-radius: 100vw; /* Consistent radius with thumb */
 		}
 
 		&-thumb {
@@ -50,7 +53,29 @@
 			border-radius: 100vw;
 
 			&:hover {
-				background: var(--grey-400); /* Show scrollbar on hover */
+				background: var(--grey-300); /* Show scrollbar on hover */
+			}
+		}
+	}
+}
+
+.frm-scrollbar-wrapper-light,
+.frm-single-settings .frm_code_list.frm-full-hover.frm-short-list {
+
+	&:hover {
+		scrollbar-color: var(--grey-200) transparent; /* Firefox Scrollbar - Show on hover with transparent background */
+
+		&::-webkit-scrollbar-thumb {
+			background: var(--grey-200); /* Show scrollbar on hover */
+		}
+	}
+
+	&::-webkit-scrollbar {
+
+		&-thumb {
+
+			&:hover {
+				background: var(--grey-200); /* Show scrollbar on hover */
 			}
 		}
 	}

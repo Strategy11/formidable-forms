@@ -44,32 +44,11 @@
 		top: 65px;
 		left: 100px;
 
-		> .inside {
-			padding: 14px var(--gap-2xs) var(--gap-xs) !important;
-		}
-
-		.frm-search {
-			width: initial;
-			margin: 0 9px;
-		}
-
 		.frm_code_list {
-			margin: var(--gap-xs) 0 0;
+			max-height: 150px;
 
 			a {
-				display: flex;
 				font-size: var(--text-sm);
-				line-height: 1.4;
-				padding: 8px 10px;
-
-				&:hover {
-					font-weight: 500;
-				}
-
-				span {
-					color: var(--grey-500);
-					margin-left: auto;
-				}
 			}
 		}
 	}
