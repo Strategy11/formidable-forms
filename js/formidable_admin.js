@@ -4915,8 +4915,9 @@ function frmAdminBuildJS() {
 			success: function( html ) {
 				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
 					const logicRow = document.getElementById( 'frm_logic_row_' + id );
-					const logicRowText = logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' );
 					logicRow.insertAdjacentHTML( 'beforeend', html );
+
+					const logicRowText = logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' );
 					if ( logicRowText ) {
 						logicRowText.textContent = logicRow.dataset.ruleText;
 					}
