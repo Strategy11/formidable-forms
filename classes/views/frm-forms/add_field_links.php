@@ -170,25 +170,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<?php
 								FrmFieldsHelper::inline_modal(
 									array(
-										'callback'   => array( 'FrmFieldsHelper', 'smart_values' ),
-										'id'         => 'frm-smart-values-box',
-										'close-icon' => false,
+										'callback'     => array( 'FrmFieldsHelper', 'smart_values' ),
+										'id'           => 'frm-smart-values-box',
+										'dismiss-icon' => false,
 									)
 								);
 
 								FrmFieldsHelper::inline_modal(
 									array(
-										'callback'   => array( 'FrmFieldsHelper', 'layout_classes' ),
-										'id'         => 'frm-layout-classes-box',
-										'close-icon' => false,
+										'callback'     => array( 'FrmFieldsHelper', 'layout_classes' ),
+										'id'           => 'frm-layout-classes-box',
+										'dismiss-icon' => false,
 									)
 								);
 
 								FrmFieldsHelper::inline_modal(
 									array(
-										'callback'   => array( 'FrmFieldsHelper', 'input_mask' ),
-										'id'         => 'frm-input-mask-box',
-										'close-icon' => false,
+										'callback'     => array( 'FrmFieldsHelper', 'input_mask' ),
+										'id'           => 'frm-input-mask-box',
+										'dismiss-icon' => false,
 									)
 								);
 								?>
