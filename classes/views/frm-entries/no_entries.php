@@ -35,7 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	printf(
 		/* translators: %1$s: Start link HTML, %2$s: End link HTML */
 		esc_html__( 'See the %1$sentry documentation%2$s for instructions on publishing your form', 'formidable' ),
-		'<a href="https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/" target="_blank">',
+		'<a href="https://formidableforms.com/knowledgebase/manage-entries-from-the-back-end/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin" target="_blank">',
 		'</a>'
 	);
 	?>
