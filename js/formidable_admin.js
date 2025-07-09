@@ -10624,6 +10624,7 @@ function frmAdminBuildJS() {
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
+			document.addEventListener( 'frm_added_field', hideEmptyEle );
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
