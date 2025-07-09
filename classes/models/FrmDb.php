@@ -253,10 +253,11 @@ class FrmDb {
 	 * @param array  $args
 	 * @param string $limit
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
-		return self::get_var( $table, $where, $field, $args, $limit, 'col' );
+		$columns = self::get_var( $table, $where, $field, $args, $limit, 'col' );
+		return is_array( $columns ) ? $columns : array();
 	}
 
 	/**
@@ -271,7 +272,6 @@ class FrmDb {
 	 */
 	public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
 		$args['limit'] = 1;
-
 		return self::get_var( $table, $where, $fields, $args, '', 'row' );
 	}
 
@@ -285,10 +285,11 @@ class FrmDb {
 	 * @param string $fields
 	 * @param array  $args
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
-		return self::get_var( $table, $where, $fields, $args, '', 'results' );
+		$results = self::get_var( $table, $where, $fields, $args, '', 'results' );
+		return is_array( $results ) ? $results : array();
 	}
 
 	/**
