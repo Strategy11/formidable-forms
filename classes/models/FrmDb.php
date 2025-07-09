@@ -657,8 +657,9 @@ class FrmDb {
 	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
+		
 		if ( $found !== false || empty( $query ) ) {
-			if ( ! is_array( $results ) && in_array( $type, array( 'get_col', 'get_results' ), true ) ) {
+			if ( ! is_array( $results ) && in_array( $type, array( 'get_col', 'get_results', 'get_posts', 'get_associative_results' ), true ) ) {
 				return array();
 			}
 			return $results;
@@ -666,7 +667,7 @@ class FrmDb {
 
 		if ( 'get_posts' == $type ) {
 			$results = get_posts( $query );
-		} elseif ( 'get_associative_results' == $type ) {
+		} elseif ( 'get_associative_results' === $type ) {
 			global $wpdb;
 			$results = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
