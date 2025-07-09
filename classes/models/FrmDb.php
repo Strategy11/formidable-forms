@@ -256,8 +256,7 @@ class FrmDb {
 	 * @return array
 	 */
 	public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
-		$columns = self::get_var( $table, $where, $field, $args, $limit, 'col' );
-		return is_array( $columns ) ? $columns : array();
+		return self::get_var( $table, $where, $field, $args, $limit, 'col' );
 	}
 
 	/**
@@ -288,8 +287,7 @@ class FrmDb {
 	 * @return array
 	 */
 	public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
-		$results = self::get_var( $table, $where, $fields, $args, '', 'results' );
-		return is_array( $results ) ? $results : array();
+		return self::get_var( $table, $where, $fields, $args, '', 'results' );
 	}
 
 	/**
@@ -660,6 +658,9 @@ class FrmDb {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
 		if ( $found !== false || empty( $query ) ) {
+			if ( ! is_array( $results ) && in_array( $type, array( 'get_col', 'get_results' ), true ) ) {
+				return array();
+			}
 			return $results;
 		}
 
