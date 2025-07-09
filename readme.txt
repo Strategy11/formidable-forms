@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.22.1
+Stable tag: 6.22.2
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.22.2 =
+* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
+
 = 6.22.1 =
 * New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
 * Fix: The honeypot field would appear incorrectly when editing in-place.

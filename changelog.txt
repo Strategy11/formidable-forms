@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.22.2 =
+* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
+
 = 6.22.1 =
 * New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
 * Fix: The honeypot field would appear incorrectly when editing in-place.
