@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.22.2
+Stable tag: 6.22.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,9 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.22.3 =
+* Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
+
 = 6.22.2 =
 * Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
 
@@ -405,24 +408,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * New: All spam checks are now disabled when importing forms.
 * Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
 * Fix: User defined product fields would fail validation.
-
-= 6.21 =
-* New: Honeypot field settings have been moved from form settings to global settings. The new settings can now be found in the Captcha/Spam section. The honeypot implementation has also been updated to make the honeypot more difficult to tell apart from other fields, and the strict option has been removed to help prevent issues with false positives for iOS users.
-* New: A new setting to validate form entries for spam against the stopforumspam API have been added to form settings. When this is enabled, IPs and email addresses will be validated against a spam database.
-* New: Field data is now compared to a comprehensive denylist during field validation. This significantly helps to block form data that looks like spam. New settings for Custom allowed words and Custom disallowed words have also been added.
-* New: The option to compare submitted form entry data to WordPress spam comments has been added to global settings.
-* New: Option values are now validated by default. If this causes issues with custom logic, this can be reverted using add_filter( 'frm_option_is_valid', '__return_true' );.
-* New: Stripe payment fields will now apply border radius styles to match styling better.
-* New: Stripe payment field label styling has been updated to better reflect label padding style settings.
-* New: Stripe payment fields will now use the input weight style setting to look more consistent with other fields.
-* New: Stripe payment fields now support the font family style setting.
-* New: A new layout setting has been added to Stripe settings that adds support for the accordion layout.
-* Fix: Paragraph fields would not properly display placeholders on the builder page.
-* Fix: A fatal error that could happen on form submit when unexpected data was sent when checking for spam has been fixed.
-* Fix: A Cannot set properties of null JavaScript error when duplicating a field has been fixed.
-* Fix: Sorting entries by a number field value would sort as strings instead of numbers.
-* Fix: Stripe payment fields would incorrectly use the wrong style settings in some cases.
-* The small device message can now be dismissed, allowing people to still edit forms while using a phone.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
