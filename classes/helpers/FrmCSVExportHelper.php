@@ -594,6 +594,9 @@ class FrmCSVExportHelper {
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
 			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
+
+			$field_value = apply_filters( 'frm_csv_cols_field_value', $field_value, $col, self::$entry );
+
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
 			$field_value = apply_filters(
