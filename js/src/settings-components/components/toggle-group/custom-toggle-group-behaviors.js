@@ -34,7 +34,7 @@ function onCalculateValueSettingOff( event ) {
 
 	const calcTypeField = document.querySelector( `[name^="field_options[calc_type_${ fieldId }]"]` );
 	if ( calcTypeField ) {
-		calcTypeField.checked = true;
+		calcTypeField.checked = false;
 	}
 }
 
