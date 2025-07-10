@@ -5397,7 +5397,7 @@ function frmAdminBuildJS() {
 			if ( height > 0 ) {
 				height += 250;
 				element.style.setProperty( '--slide-height', `${height}px` );
-				element.style.setProperty( '--slide-time', `${height * 0.8}ms` );
+				element.style.setProperty( '--slide-time', `${Math.ceil( height * 0.8 )}ms` );
 			}
 		}
 	}
@@ -8256,7 +8256,7 @@ function frmAdminBuildJS() {
 		const id = document.getElementById( 'frm-id-condition' ),
 			key = document.getElementById( 'frm-key-condition' );
 
-		if ( this.checked ) {
+		if ( this.value === 'id' ) {
 			id.classList.remove( 'frm_hidden' );
 			key.classList.add( 'frm_hidden' );
 			triggerEvent( key, 'change' );
@@ -8269,7 +8269,7 @@ function frmAdminBuildJS() {
 
 	function setLogicExample() {
 		let field, code,
-			idKey = document.getElementById( 'frm-id-key-condition' ).checked ? 'frm-id-condition' : 'frm-key-condition',
+			idKey = document.getElementById( 'frm-id-key-condition-id' ).checked ? 'frm-id-condition' : 'frm-key-condition',
 			is = document.getElementById( 'frm-is-condition' ).value,
 			text = document.getElementById( 'frm-text-condition' ).value,
 			result = document.getElementById( 'frm-insert-condition' );
@@ -10805,7 +10805,7 @@ function frmAdminBuildJS() {
 				jQuery( this ).val( '' );
 			});
 
-			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
+			jQuery( document ).on( 'click change', '[name="frm-id-key-condition"]', resetLogicBuilder );
 			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
 
 			showInputIcon();
