@@ -657,11 +657,8 @@ class FrmDb {
 	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
-		
-		if ( $found !== false || empty( $query ) ) {
-			if ( ! is_array( $results ) && in_array( $type, array( 'get_col', 'get_results', 'get_posts', 'get_associative_results' ), true ) ) {
-				return array();
-			}
+
+		if ( ( $found === true && $results !== false ) || empty( $query ) ) {
 			return $results;
 		}
 
