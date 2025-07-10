@@ -25,6 +25,8 @@
 
 .frm-scrollbar-wrapper,
 .frm-single-settings .frm_code_list.frm-full-hover.frm-short-list,
+#frm_builder_page #frm_adv_info .frm_code_list,
+#frm_builder_page #frm_adv_info #taxonomy-linkcategory > div,
 .frm-single-settings .frm_field_opts_list {
 	overflow-x: hidden;
 	overflow-y: auto !important; /* Enable scrolling */

@@ -45,11 +45,15 @@
 	margin-left: auto;
 }
 
-.frm_code_list.frm-full-hover a,
-.frm_code_list.frm-full-hover a span {
-	white-space: nowrap;
-	overflow: hidden;
-	text-overflow: ellipsis;
+.frm_code_list.frm-full-hover a {
+	border-radius: var(--small-radius);
+
+	&:not(#frm-insert-condition),
+	span {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
 }
 
 .frm_code_list.frm-full-hover.frmcenter a {
@@ -71,7 +75,6 @@
 .frm_code_list.frm-full-hover a:hover {
 	background: var(--primary-25);
 	color: var(--primary-500);
-	border-radius: var(--small-radius);
 }
 
 .frm-select-list-item .frmsvg,
@@ -129,14 +132,16 @@
 	color: #fff;
 }
 
-.frm-single-settings {
+.frm-single-settings,
+#frm_builder_page #frm_adv_info {
 
 	.frm_code_list.frm-full-hover {
 		padding: 0;
 		margin: var(--gap-xs) -10px 0;
 
 		> li > a {
-			justify-content: space-between;
+			$self: &;
+
 			font-size: var(--text-md);
 			color: var(--grey-900);
 			padding: var(--gap-xs) 12px;
@@ -144,15 +149,30 @@
 			span {
 				margin: 0;
 				max-width: 50%;
+
+				&:last-child {
+					margin-left: auto;
+				}
 			}
 
 			&:hover {
 				font-weight: 500;
 
+				&,
+				.frmsvg,
 				span {
 					color: var(--primary-500);
 				}
 			}
 		}
+	}
+}
+
+#frm_builder_page #frm_adv_info .frm_code_list.frm-full-hover {
+	margin: var(--gap-xs) 0 0;
+
+	a .frmsvg {
+		width: 20px;
+		height: 20px;
 	}
 }
