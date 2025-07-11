@@ -175,7 +175,7 @@ class FrmSettings {
 			'custom_css'                => false,
 			'honeypot'                  => 1,
 			'wp_spam_check'             => 0,
-			'denylist_check'            => 1,
+			'denylist_check'            => 0,
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
 		);
