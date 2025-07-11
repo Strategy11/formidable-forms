@@ -78,6 +78,7 @@ class FrmMigrate {
 	 */
 	private function update_settings_for_new_install() {
 		$settings = FrmAppHelper::get_settings();
+
 		$settings->denylist_check = 1;
 		$settings->store();
 	}
