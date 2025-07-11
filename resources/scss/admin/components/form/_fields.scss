@@ -138,6 +138,10 @@ input[type="checkbox"] {
 	margin-top: 8px;
 	margin-bottom: 8px;
 	margin-right: 0;
+
+	> label:only-child {
+		margin-bottom: 0;
+	}
 }
 
 #new_fields div.frm_grid_container > .frm_primary_label {

@@ -94,11 +94,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div id="frm-conditionals" class="tabs-panel frm-text-grey-700 frm-px-xs">
 		<div class="frm-h-stack-sm">
 			<label class="frm-h-stack-xs" for="frm-id-key-condition-key">
-				<input type="radio" class="frm-m-0" id="frm-id-key-condition-key" name="frm-id-key-condition" value="key">
+				<input type="radio" id="frm-id-key-condition-key" name="frm-id-key-condition" value="key">
 				<span><?php esc_html_e( 'Use Keys', 'formidable' ); ?></span>
 			</label>
 			<label class="frm-h-stack-xs" for="frm-id-key-condition-id">
-				<input type="radio" class="frm-m-0" id="frm-id-key-condition-id" name="frm-id-key-condition" value="id" checked>
+				<input type="radio" id="frm-id-key-condition-id" name="frm-id-key-condition" value="id" checked>
 				<span><?php esc_html_e( 'Use IDs', 'formidable' ); ?></span>
 			</label>
 		</div>

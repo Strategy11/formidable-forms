@@ -28,6 +28,10 @@
 	margin-top: var(--gap-xs) !important;
 }
 
+.-frm-mt-xs {
+	margin-top: calc(-1 * var(--gap-xs)) !important;
+}
+
 .frm-mt-sm {
 	margin-top: var(--gap-sm) !important;
 }

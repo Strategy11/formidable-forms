@@ -132,6 +132,11 @@
 %h-stack-base {
 	display: flex !important;
 	align-items: center;
+
+	> input[type="checkbox"],
+	> input[type="radio"] {
+		margin: 0 !important;
+	}
 }
 
 .frm-h-stack {
