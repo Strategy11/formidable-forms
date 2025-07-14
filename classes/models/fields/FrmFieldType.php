@@ -570,6 +570,21 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function field_type_has_options_settings() {
+		return $this->should_continue_to_field_options(
+			array(
+				'field' => array(
+					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type']
+				),
+			)
+		);
+	}
+
+	/**
 	 * @since 4.04
 	 */
 	protected function get_bulk_edit_string() {
