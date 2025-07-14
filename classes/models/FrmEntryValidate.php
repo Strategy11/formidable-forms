@@ -223,9 +223,13 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		$field_object = FrmFieldFactory::get_field_type( $field->type, $field );
+		if ( ! $field_object->field_type_has_options_settings() ) {
+			return true;
+		}
+
 		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
 			// Ignore these field types automatically.
-			return true;
 		}
 
 		if ( 'product' === $field->type && 'user_def' === FrmField::get_option( $field, 'data_type' ) ) {
