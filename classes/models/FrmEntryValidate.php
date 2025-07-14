@@ -230,6 +230,7 @@ class FrmEntryValidate {
 
 		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
 			// Ignore these field types automatically.
+			return true;
 		}
 
 		if ( 'product' === $field->type && 'user_def' === FrmField::get_option( $field, 'data_type' ) ) {
