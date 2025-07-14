@@ -570,6 +570,9 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Check if a field type includes field options. This should generally match the result of should_continue_to_field_options, but
+	 * this function was added because should_continue_to_field_options uses a protected scope.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
