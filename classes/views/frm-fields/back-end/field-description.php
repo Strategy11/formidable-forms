@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<p>
+<p class="frm-flex-col">
 	<label for="frm_description_<?php echo esc_attr( $field['id'] ); ?>">
 		<?php esc_html_e( 'Field Description', 'formidable' ); ?>
 	</label>

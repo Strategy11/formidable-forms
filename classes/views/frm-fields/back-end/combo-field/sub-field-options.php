@@ -26,9 +26,9 @@ $labels    = $this->get_built_in_option_labels();
 	data-sub-field-name="<?php echo esc_attr( $sub_field['name'] ); ?>"
 	data-field-id="<?php echo intval( $field_id ); ?>"
 >
-	<label id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label frm-font-medium frm-text-grey-600 frm-mb-xs">
+	<h4 id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label frm-font-semibold frm-text-grey-600 frm-mt-xs frm-mb-xs">
 		<?php echo esc_html( $sub_field['label'] ); ?>
-	</label>
+	</h4>
 
 	<?php
 	// Loop through $sub_field['options'] to show options.
@@ -92,7 +92,7 @@ $labels    = $this->get_built_in_option_labels();
 				$input_id    = 'field_options_' . $option . '_' . $uniq_str;
 				$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
 				?>
-				<p class="frm_form_field">
+				<p class="frm_form_field frm-flex-col">
 					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $labels[ $option ] ); ?>
 					</label>

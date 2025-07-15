@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::tooltip_icon( __( 'TODO: Add a tooltip', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 	</label>
 
-	<span class="frm-with-right-icon">
+	<span class="frm-flex-col frm-with-right-icon">
 		<?php
 		$field_obj->display_smart_values_modal_trigger_icon( $field );
 
