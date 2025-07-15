@@ -86,6 +86,8 @@ class FrmFormActionsController {
 	/**
 	 * Remove the Highrise action if it is not registered.
 	 *
+	 * @since x.x
+	 *
 	 * @param array $action_classes
 	 * @return array
 	 */
@@ -151,15 +153,6 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
-		$crm_actions = array(
-			'salesforce',
-			'hubspot',
-		);
-
-		if ( class_exists( 'FrmHrsSettings' ) ) {
-			$crm_actions[] = 'highrise';
-		}
-
 		$groups = array(
 			'misc'      => array(
 				'name'    => '',
@@ -196,11 +189,33 @@ class FrmFormActionsController {
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'actions' => $crm_actions,
+				'actions' => self::get_crm_actions(),
 			),
 		);
 
 		return apply_filters( 'frm_action_groups', $groups );
+	}
+
+	/**
+	 * Get the actions to include in the CRM section.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_crm_actions() {
+		$crm_actions = array(
+			'salesforce',
+			'hubspot',
+		);
+
+		// Only include Highrise when the add-on is active.
+		// This is because Highrise is deprecated. We don't want to show it in Lite.
+		if ( class_exists( 'FrmHrsSettings' ) ) {
+			$crm_actions[] = 'highrise';
+		}
+
+		return $crm_actions;
 	}
 
 	/**
