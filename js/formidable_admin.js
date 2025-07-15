@@ -3593,11 +3593,11 @@ function frmAdminBuildJS() {
 		const parentUl = parentLi.parentNode;
 
 		// If only 2 visible options, add disabled class to the other delete button
-		const visibleOptions = parentUl.querySelectorAll('li:not(.frm_hidden)');
+		const visibleOptions = parentUl.querySelectorAll( 'li:not(.frm_hidden)' );
 		if ( visibleOptions.length === 2 ) {
 			Array.from( visibleOptions )
 				.find( li => li !== parentLi )
-				.querySelector('.frm_remove_tag')?.classList.add( 'frm_disabled' );
+				.querySelector( '.frm_remove_tag' )?.classList.add( 'frm_disabled' );
 		}
 
 		/*jshint validthis:true */
@@ -5382,7 +5382,7 @@ function frmAdminBuildJS() {
 		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
 
-		addSlideAnimationCssVars( this.nextElementSibling )
+		addSlideAnimationCssVars( this.nextElementSibling );
 	}
 
 	/**
@@ -6272,7 +6272,9 @@ function frmAdminBuildJS() {
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					jQuery( '#frm_show_selected_fields_' + fieldId ).html( msg ).show();
+					const $selectedFields = jQuery( '#frm_show_selected_fields_' + fieldId );
+					$selectedFields.toggleClass( 'frm6', ! msg.includes( 'frm-inline-message' ) );
+					$selectedFields.html( msg ).show();
 				}
 			});
 		}
@@ -10529,8 +10531,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
-			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4', maybeCollapseSettings );
-			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4', function( event ) {
+			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
 				if ( event.key === 'Enter' || event.key === ' ' ) {
 					event.preventDefault();
