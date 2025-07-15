@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<?php if ( $display['label'] ) { ?>
-		<p>
+		<p class="frm-mt-xs">
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php echo esc_html( apply_filters( 'frm_builder_field_label', __( 'Field Label', 'formidable' ), $field ) ); ?>
 			</label>
@@ -178,7 +178,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<div class="frm-has-modal frm-flex-col">
 				<?php $field_obj->show_default_value_setting( $field, $field_obj, $default_value_types, $display ); ?>
 
-				<div class="frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group">
+				<div class="frm-hide-empty frm-flex-col frm-gap-sm frm-mb-sm frm-toggle-group">
 					<?php
 					foreach ( $default_value_types as $type => $default_value_type ) {
 						if ( 'default_value' === $type ) {
@@ -256,7 +256,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		if ( $display['clear_on_focus'] ) {
 			?>
-			<p>
+			<p class="frm-flex-col">
 				<label for="frm_placeholder_<?php echo esc_attr( $field['id'] ); ?>">
 				<?php esc_html_e( 'Placeholder Text', 'formidable' ); ?>
 				</label>
@@ -276,9 +276,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			</p>
 				<?php
 		}//end if
-		?>
 
-		<?php
 		if ( $display['description'] ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-description.php';
 		}

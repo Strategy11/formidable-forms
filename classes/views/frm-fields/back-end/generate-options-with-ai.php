@@ -7,7 +7,7 @@ $attributes = array(
 	'class' => 'frm_form_field frm6 frm6_followed frm-h-stack button frm-button-secondary frm-button-gradient frm-rounded-6 frm-max-w-fit frm-font-normal frm-py-2xs frm-px-xs frm-mt-xs frm-mb-12',
 );
 
-if ( $should_hide_bulk_edit ) {
+if ( isset( $should_hide_bulk_edit ) && $should_hide_bulk_edit ) {
 	$attributes['class'] .= ' frm_hidden!';
 }
 
@@ -31,7 +31,7 @@ if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' )
 		);
 	} else {
 		$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
-		$attributes['data-fid'] = $args['field']['id'];
+		$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
 	}
 }
 
