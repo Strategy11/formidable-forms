@@ -10,6 +10,7 @@ import { documentOn } from 'core/utils';
  */
 export function setupCustomToggleGroupHandlers() {
 	documentOn( 'change', '[id^="frm-default-type-calc-"]:not(:checked)', onCalculateValueSettingOff );
+	documentOn( 'change', '[id^="frm-default-type-date_calc-"]:not(:checked)', onDateCalculateValueSettingOff );
 	documentOn( 'change', '[id^="frm-default-type-get_values_field-"]:not(:checked)', onLookupSettingOff );
 	documentOn( 'change', '[id^="frm-enable-conditional-logic"]', onEnableConditionalLogicChange );
 }
@@ -32,9 +33,37 @@ function onCalculateValueSettingOff( event ) {
 		calcField.value = '';
 	}
 
-	const calcTypeField = document.querySelector( `[name^="field_options[calc_type_${ fieldId }]"]` );
-	if ( calcTypeField ) {
-		calcTypeField.checked = false;
+	const calcTextType = document.getElementById( `frm-text-toggle-name=field_options[calc_type_${ fieldId }]-0` );
+	const calcMathType = document.getElementById( `frm-text-toggle-name=field_options[calc_type_${ fieldId }]-1` );
+	if ( calcTextType ) {
+		calcTextType.checked = false;
+	}
+	if ( calcMathType ) {
+		calcMathType.checked = true;
+	}
+}
+
+/**
+ * Reset the "Date Calculation" toggle related fields when it's off
+ *
+ * @private
+ * @param {Event} event The event object.
+ * @return {void}
+ */
+function onDateCalculateValueSettingOff( event ) {
+	const fieldId = event.target.closest( '[data-fid]' )?.dataset.fid;
+	if ( ! fieldId ) {
+		return;
+	}
+
+	const dateCalcField = document.getElementById( `frm_date_calc_${ fieldId }` );
+	if ( dateCalcField ) {
+		dateCalcField.value = '';
+	}
+
+	const dateCalcDiffField = document.getElementById( `frm_date_calc_diff_${ fieldId }` );
+	if ( dateCalcDiffField ) {
+		dateCalcDiffField.value = '';
 	}
 }
 
