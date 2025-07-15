@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @param array $display The display settings for the field.
 		 * @param array $values The values associated with the field.
 		 */
-		do_action( 'frm_before_field_label', $field, $display, $values );
+		do_action( 'frm_field_options_before_label', $field, $display, $values );
 		?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
