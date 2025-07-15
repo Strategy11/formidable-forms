@@ -73,6 +73,7 @@ class FrmFormActionsController {
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
+		$action_classes = self::maybe_unset_highrise( $action_classes );
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
@@ -80,6 +81,21 @@ class FrmFormActionsController {
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+	}
+
+	/**
+	 * Remove the Highrise action if it is not registered.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $action_classes
+	 * @return array
+	 */
+	private static function maybe_unset_highrise( $action_classes ) {
+		if ( 'FrmDefHighriseAction' === ( $action_classes['highrise'] ?? '' ) ) {
+			unset( $action_classes['highrise'] );
+		}
+		return $action_classes;
 	}
 
 	/**
@@ -173,15 +189,33 @@ class FrmFormActionsController {
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'actions' => array(
-					'salesforce',
-					'hubspot',
-					'highrise',
-				),
+				'actions' => self::get_crm_actions(),
 			),
 		);
 
 		return apply_filters( 'frm_action_groups', $groups );
+	}
+
+	/**
+	 * Get the actions to include in the CRM section.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_crm_actions() {
+		$crm_actions = array(
+			'salesforce',
+			'hubspot',
+		);
+
+		// Only include Highrise when the add-on is active.
+		// This is because Highrise is deprecated. We don't want to show it in Lite.
+		if ( class_exists( 'FrmHrsSettings' ) ) {
+			$crm_actions[] = 'highrise';
+		}
+
+		return $crm_actions;
 	}
 
 	/**
