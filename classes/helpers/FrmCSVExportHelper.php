@@ -595,7 +595,6 @@ class FrmCSVExportHelper {
 			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
 
 			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
-
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
 			$field_value = apply_filters(
@@ -675,9 +674,6 @@ class FrmCSVExportHelper {
 				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
 					$row[ $column_key ] = $sub_value;
 				}
-				// if ( isset( self::$headings['lat_lng'] ) && isset( $atts['field_value']['lat_lng'] ) ) {
-				// 	$row['lat_lng'] = $atts['field_value']['lat_lng'];
-				// }
 			}
 		}
 	}
