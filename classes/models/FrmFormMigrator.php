@@ -50,6 +50,7 @@ abstract class FrmFormMigrator {
 	}
 
 	public function import_page() {
+		$forms = $this->get_forms();
 		?>
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
@@ -65,8 +66,7 @@ abstract class FrmFormMigrator {
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
 						<div style="max-width:400px;text-align:left;">
-							<?php
-							$forms = $this->get_forms();
+							<?php							
 							if ( ! $forms ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
 							}
