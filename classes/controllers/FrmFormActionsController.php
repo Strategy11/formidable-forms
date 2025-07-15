@@ -73,6 +73,7 @@ class FrmFormActionsController {
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
+		$action_classes = self::maybe_unset_highrise( $action_classes );
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
@@ -80,6 +81,19 @@ class FrmFormActionsController {
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+	}
+
+	/**
+	 * Remove the Highrise action if it is not registered.
+	 *
+	 * @param array $action_classes
+	 * @return array
+	 */
+	private static function maybe_unset_highrise( $action_classes ) {
+		if ( 'FrmDefHighriseAction' === ( $action_classes['highrise'] ?? '' ) ) {
+			unset( $action_classes['highrise'] );
+		}
+		return $action_classes;
 	}
 
 	/**
@@ -137,6 +151,15 @@ class FrmFormActionsController {
 	 * @return array
 	 */
 	public static function form_action_groups() {
+		$crm_actions = array(
+			'salesforce',
+			'hubspot',
+		);
+
+		if ( class_exists( 'FrmHrsSettings' ) ) {
+			$crm_actions[] = 'highrise';
+		}
+
 		$groups = array(
 			'misc'      => array(
 				'name'    => '',
@@ -173,11 +196,7 @@ class FrmFormActionsController {
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'actions' => array(
-					'salesforce',
-					'hubspot',
-					'highrise',
-				),
+				'actions' => $crm_actions,
 			),
 		);
 
