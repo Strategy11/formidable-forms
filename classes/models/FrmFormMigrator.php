@@ -66,7 +66,7 @@ abstract class FrmFormMigrator {
 						<input type="hidden" name="slug" value="<?php echo esc_attr( $this->slug ); ?>" />
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
 						<div style="max-width:400px;text-align:left;">
-							<?php							
+							<?php
 							if ( ! $forms ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
 							}
@@ -96,7 +96,11 @@ abstract class FrmFormMigrator {
 							$button_atts['disabled'] = 'disabled';
 						}
 						?>
-						<p class="submit"><button <?php FrmAppHelper::array_to_html_params( $button_atts, true ); ?>><?php esc_html_e( 'Start Import', 'formidable' ); ?></button></p>
+						<p class="submit">
+							<button <?php FrmAppHelper::array_to_html_params( $button_atts, true ); ?>>
+								<?php esc_html_e( 'Start Import', 'formidable' ); ?>
+							</button>
+						</p>
 					</form>
 					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
@@ -108,8 +112,8 @@ abstract class FrmFormMigrator {
 
 						<p class="process-completed" class="frm_hidden">
 							<?php
-							// translators: %s is the number of forms that were imported.
 							printf(
+								// translators: %s is the number of forms that were imported.
 								esc_html__( 'The import process has finished! We have successfully imported %s forms. You can review the results below.', 'formidable' ),
 								'<span class="forms-completed"></span>'
 							);
