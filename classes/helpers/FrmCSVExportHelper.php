@@ -499,6 +499,7 @@ class FrmCSVExportHelper {
 				'date_format'   => self::$wp_date_format,
 				'comment_count' => self::$comment_count,
 				'context'       => self::$context,
+				'headings'      => self::$headings,
 			)
 		);
 		self::print_csv_row( $row );
@@ -595,8 +596,6 @@ class FrmCSVExportHelper {
 
 			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
 
-			$field_value = apply_filters( 'frm_csv_cols_field_value', $field_value, $col, self::$entry );
-
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );
 
 			$field_value = apply_filters(
@@ -676,6 +675,9 @@ class FrmCSVExportHelper {
 				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
 					$row[ $column_key ] = $sub_value;
 				}
+				// if ( isset( self::$headings['lat_lng'] ) && isset( $atts['field_value']['lat_lng'] ) ) {
+				// 	$row['lat_lng'] = $atts['field_value']['lat_lng'];
+				// }
 			}
 		}
 	}
