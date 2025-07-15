@@ -15,7 +15,7 @@ p.frm_has_shortcodes {
 	box-shadow: var(--box-shadow-lg);
 }
 
-.frm_has_shortcodes .frmsvg,
+.frm_has_shortcodes .frmsvg:not(.frm_help .frmsvg),
 .frm_has_shortcodes i:not([class*="mce-"]) {
 	position: absolute;
 	color: var(--primary-500);
@@ -23,6 +23,10 @@ p.frm_has_shortcodes {
 	border: 1px solid transparent;
 	z-index: 100;
 	text-align: center;
+}
+
+.frm_has_shortcodes .frmsvg.frm-show-box {
+	border-radius: 6px !important;
 }
 
 .frm_has_shortcodes input,

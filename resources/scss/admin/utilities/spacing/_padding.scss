@@ -49,8 +49,16 @@
 	padding-bottom: var(--gap-sm) !important;
 }
 
+.frm-pt-0 {
+	padding-top: 0 !important;
+}
+
 .frm-pt-2xs {
 	padding-top: var(--gap-2xs) !important;
+}
+
+.frm-pt-xs {
+	padding-top: var(--gap-xs) !important;
 }
 
 .frm-pt-sm {
@@ -79,6 +87,14 @@
 
 .frm-pb-xs {
 	padding-bottom: var(--gap-xs) !important;
+}
+
+.frm-pb-2xs {
+	padding-bottom: var(--gap-2xs) !important;
+}
+
+.frm-pb-0 {
+	padding-bottom: 0 !important;
 }
 
 .frm-px-sm {

@@ -15,25 +15,25 @@
 	align-items: stretch;
 	margin-left: 36px;
 	margin-bottom: var(--gap-xs);
+
+	img {
+		height: 54px;
+		width: 54px;
+		min-width: auto;
+		min-height: auto;
+		border-radius: 3px;
+		object-fit: cover;
+		object-position: center;
+	}
+
+	.frm_email_attachment_icon img {
+		height: auto;
+		width: auto;
+		max-width: 54px;
+	}
 }
 
-.frm_image_styling_frame img{
-	height: 54px;
-	width: 54px;
-	min-width: auto;
-	min-height: auto;
-	border-radius: 3px;
-	object-fit: cover;
-	object-position: center;
-}
-
-.frm_image_styling_frame .frm_email_attachment_icon img {
-	height: auto;
-	width: auto;
-	max-width: 54px;
-}
-
-.frm_image_preview_title{
+.frm_image_preview_title {
 	color: var(--grey-500);
 	overflow: hidden;
 	white-space: nowrap;

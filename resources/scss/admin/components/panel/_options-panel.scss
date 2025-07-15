@@ -43,6 +43,10 @@
 
 			&.frm_grid_container {
 				padding-bottom: 14px;
+
+				> p:first-child {
+					margin-top: var(--gap-sm);
+				}
 			}
 		}
 	}

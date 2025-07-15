@@ -11,6 +11,13 @@
 	input[type="checkbox"] {
 		margin-top: 0;
 	}
+
+	.frm-with-right-icon input[type="text"] + .frmsvg {
+		width: 14px;
+		height: 14px;
+		margin-top: var(--gap-2xs);
+		margin-right: var(--gap-2xs);
+	}
 }
 
 .frm_product_price_wrapper,
@@ -52,9 +59,17 @@
 	margin-left: 19px !important;
 }
 
-.frm_option_key input[type="text"] {
-	margin-top: var(--gap-xs) !important;
-	margin-left: 30px !important;
+.frm_option_key {
+
+	input[type="text"] {
+		margin-top: var(--gap-xs) !important;
+		margin-left: 11px !important;
+	}
+
+	input[type="checkbox"] + input[type="text"],
+	input[type="radio"] + input[type="text"] {
+		margin-left: 30px !important;
+	}
 }
 
 li.ui-state-default.selected .frm-show-click,

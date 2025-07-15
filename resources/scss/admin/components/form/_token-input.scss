@@ -5,6 +5,7 @@
  */
 
 .frm-token-container {
+	position: relative;
 	display: block;
 
 	.frm-tokens {
@@ -17,6 +18,7 @@
 		flex-wrap: wrap;
 		gap: var(--gap-2xs);
 		padding: 6px var(--gap-xs);
+		margin: 0;
 	}
 
 	.frm-token {
@@ -32,6 +34,7 @@
 		font-size: var(--text-md);
 		line-height: 1;
 		white-space: nowrap;
+		margin: 0;
 		z-index: 2;
 
 		.frm-token-remove {

@@ -62,21 +62,43 @@
 	}
 }
 
-.frm-single-settings > h3:first-of-type {
-	position: relative;
-	background-color: transparent !important;
-	border-top: none;
-	padding-top: 0 !important;
-	margin-top: 0 !important;
+.frm-single-settings {
 
-	&::after {
-		content: '';
-		position: absolute;
-		left: var(--gap-sm);
-		right: var(--gap-sm);
-		bottom: 0;
-		height: 1px;
-		background-color: var(--sidebar-hover);
+	.frm-default-value-wrapper {
+
+		> p {
+			margin-bottom: 0;
+		}
+
+		+ p:empty {
+			display: none;
+		}
+	}
+
+	[class*="frm-lookup-box-"] .frm_grid_container p {
+		margin-top: 0 !important;
+	}
+
+	.frm_single_option[id^="frm_watch_lookup_"] {
+		margin-bottom: var(--gap-xs) !important;
+	}
+
+	> h3:first-of-type {
+		position: relative;
+		background-color: transparent !important;
+		border-top: none;
+		padding-top: 0 !important;
+		margin-top: 0 !important;
+
+		&::after {
+			content: '';
+			position: absolute;
+			left: var(--gap-sm);
+			right: var(--gap-sm);
+			bottom: 0;
+			height: 1px;
+			background-color: var(--sidebar-hover);
+		}
 	}
 }
 

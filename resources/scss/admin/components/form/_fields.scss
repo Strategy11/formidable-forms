@@ -144,6 +144,10 @@ input[type="checkbox"] {
 	}
 }
 
+.frm_grid_container > .frm-has-modal > p:only-child {
+	margin-bottom: var(--gap-xs);
+}
+
 #new_fields div.frm_grid_container > .frm_primary_label {
 	margin-top: 8px;
 }

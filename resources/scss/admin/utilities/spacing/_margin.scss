@@ -24,12 +24,12 @@
 	margin-top: var(--gap-2xs) !important;
 }
 
-.frm-mt-xs {
-	margin-top: var(--gap-xs) !important;
+.-frm-mt-2xs {
+	margin-top: calc(-1 * var(--gap-2xs)) !important;
 }
 
-.-frm-mt-xs {
-	margin-top: calc(-1 * var(--gap-xs)) !important;
+.frm-mt-xs {
+	margin-top: var(--gap-xs) !important;
 }
 
 .frm-mt-sm {
@@ -93,6 +93,10 @@
 	margin-left: auto;
 }
 
+.-frm-ml-2xs {
+	margin-left: calc(-1 * var(--gap-2xs)) !important;
+}
+
 .frm-mr-auto {
 	margin-right: auto;
 }
@@ -103,6 +107,10 @@
 
 .frm-mr-2xs {
 	margin-right: var(--gap-2xs) !important;
+}
+
+.frm-mr-xs {
+	margin-right: var(--gap-xs) !important;
 }
 
 .frm-mr-2 {
