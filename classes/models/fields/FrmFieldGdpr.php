@@ -195,4 +195,10 @@ class FrmFieldGdpr extends FrmFieldType {
 
 		return $required;
 	}
+
+	public function translatable_strings() {
+		$strings   = parent::translatable_strings();
+		$strings[] = 'gdpr_agreement_text';
+		return $strings;
+	}
 }
