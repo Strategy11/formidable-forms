@@ -1,4 +1,6 @@
-// Default value setting "@since x.x"
+// Start @since x.x
+
+// Default value setting
 .frm-lookup-box-label {
 	display: none;
 }
@@ -13,3 +15,12 @@
 		display: none;
 	}
 }
+
+// Options setting
+.frm_single_option a.frm_remove_tag svg,
+.frm_single_option a.frm_add_opt svg {
+	width: 15px;
+	height: 15px;
+}
+
+// End @since x.x

@@ -13,10 +13,12 @@
 	}
 
 	.frm-with-right-icon input[type="text"] + .frmsvg {
+		position: relative;
+		right: var(--gap-md);
 		width: 14px;
 		height: 14px;
-		margin-top: var(--gap-2xs);
-		margin-right: var(--gap-2xs);
+		padding: 0;
+		margin: var(--gap-2xs) 0 0;
 	}
 }
 
