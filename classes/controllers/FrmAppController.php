@@ -671,7 +671,6 @@ class FrmAppController {
 
 		wp_register_style( 'formidable-admin', $plugin_url . '/css/frm_admin.css', array(), $version );
 		wp_register_style( 'formidable-grids', $plugin_url . '/css/frm_grids.css', array(), $version );
-		wp_register_style( 'formidable-settings-components', $plugin_url . '/css/admin/frm-settings-components.css', array( 'formidable-admin', 'formidable-grids' ), $version );
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
@@ -709,7 +708,6 @@ class FrmAppController {
 		}
 
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
-		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
 
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
@@ -786,7 +784,8 @@ class FrmAppController {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
 		}
-		self::enqueue_builder_assets();
+
+		self::enqueue_builder_assets( $plugin_url, $version );
 	}
 
 	/**
@@ -794,15 +793,20 @@ class FrmAppController {
 	 *
 	 * @since x.x
 	 *
+	 * @param string $plugin_url The plugin URL.
+	 * @param string $version    The plugin version.
 	 * @return void
 	 */
-	private static function enqueue_builder_assets() {
+	private static function enqueue_builder_assets( $plugin_url, $version ) {
 		if ( ! FrmAppHelper::is_form_builder_page() ) {
 			return;
 		}
 
-		wp_enqueue_script( 'formidable-settings-components' );
+		wp_register_style( 'formidable-settings-components', $plugin_url . '/css/admin/frm-settings-components.css', array( 'formidable-admin', 'formidable-grids' ), $version );
 		wp_enqueue_style( 'formidable-settings-components' );
+
+		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
+		wp_enqueue_script( 'formidable-settings-components' );
 	}
 
 	/**
