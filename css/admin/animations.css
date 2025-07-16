@@ -112,8 +112,12 @@
 		opacity: 1;
 	}
 
-	100% {
+	99% {
 		max-height: var(--slide-height, 10000px);
 		overflow: visible;
+	}
+
+	100% {
+		max-height: none;
 	}
 }
