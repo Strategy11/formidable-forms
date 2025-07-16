@@ -279,7 +279,27 @@ class FrmFormsHelper {
 	 */
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
+
+		// Only autop if the message includes line breaks.
+		$autop = strpos( $message, "\n" ) !== false;
+
+		/**
+		 * Filters whether to autop the success message.
+		 * This is false by default if the message does not include line breaks.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $autop
+		 * @param string $message
+		 * @param object $form
+		 */
+		$autop = (bool) apply_filters( 'frm_wpautop_success_message', $autop, $message, $atts['form'] );
+
+		if ( $autop ) {
+			$message = FrmAppHelper::use_wpautop( $message );
+		}
+
+		$message = do_shortcode( $message );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 		return $message;
 	}
