@@ -739,16 +739,12 @@ class FrmAppController {
 			self::maybe_deregister_popper2();
 			wp_enqueue_script( 'formidable_admin' );
 			wp_set_script_translations( 'formidable_admin', 'formidable' );
-			// TODO: Add condition.
-			wp_enqueue_script( 'formidable-settings-components' );
 			wp_enqueue_script( 'formidable_embed' );
 			wp_set_script_translations( 'formidable_embed', 'formidable' );
 			FrmAppHelper::localize_script( 'admin' );
 
 			wp_enqueue_style( 'formidable-animations' );
 			wp_enqueue_style( 'formidable-admin' );
-			// TODO: Add condition.
-			wp_enqueue_style( 'formidable-settings-components' );
 			if ( 'formidable-styles' !== $page && 'formidable-styles2' !== $page ) {
 				wp_enqueue_style( 'formidable-grids' );
 				self::maybe_enqueue_dropzone_css( $page );
@@ -789,6 +785,11 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			wp_enqueue_script( 'formidable-settings-components' );
+			wp_enqueue_style( 'formidable-settings-components' );
 		}
 	}
 
