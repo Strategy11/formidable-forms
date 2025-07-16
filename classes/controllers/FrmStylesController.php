@@ -540,7 +540,7 @@ class FrmStylesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
 
-		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper', 'use_jquery_datepicker' ) && FrmProAppHelper::use_jquery_datepicker() ) {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::use_jquery_datepicker' ) && FrmProAppHelper::use_jquery_datepicker() ) {
 			$js_dependencies[] = 'jquery-ui-datepicker';
 		}
 
