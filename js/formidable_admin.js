@@ -5066,7 +5066,7 @@ function frmAdminBuildJS() {
 	 * @returns {Object}
 	 */
 	function getChoiceOldValueAndLabel( choiceElement ) {
-		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' )?.checked ?? false;
 		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
 
 		let oldValue, oldLabel;
@@ -5152,7 +5152,7 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' ).checked ) {
+					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' )?.checked ) {
 						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
 					}
 
@@ -11002,6 +11002,38 @@ function frmAdminBuildJS() {
 						}
 
 						target.setAttribute( 'name', target.dataset.name );
+					}
+				);
+			}
+
+			const paymentsSettings    = document.getElementById( 'payments_settings' );
+			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
+			if ( paymentSettingsTabs ) {
+				paymentSettingsTabs.forEach(
+					element => {
+						element.addEventListener( 'change', () => {
+							if ( ! element.checked ) {
+								return;
+							}
+
+							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
+							if ( label ) {
+								label.setAttribute( 'aria-selected', 'true' );
+							}
+
+							paymentSettingsTabs.forEach(
+								tab => {
+									if ( tab === element ) {
+										return;
+									}
+
+									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
+									if ( label ) {
+										label.setAttribute( 'aria-selected', 'false' );
+									}
+								}
+							);
+						});
 					}
 				);
 			}

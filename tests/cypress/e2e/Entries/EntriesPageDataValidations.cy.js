@@ -43,7 +43,8 @@ describe("Entries submitted from a form", () => {
                 "Want to search submitted entries?",
                 "Make your site dynamic. Enable front-end editing.",
                 "Edit form entries anytime with entry management.",
-                "Want to import entries into your forms?"
+                "Want to import entries into your forms?",
+                "Turn entries into dynamic content — no code needed."
             ]);
         })
 
