@@ -974,8 +974,12 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_message p {
-	margin-bottom: 5px;
 	color: var(--success-text-color)<?php echo esc_html( $important ); ?>;
+	margin-bottom: 0;
+}
+
+.with_frm_style .frm_message > p:first-of-type {
+	margin-top: 0;
 }
 
 .with_frm_style .frm_message,
@@ -1637,6 +1641,13 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 	.with_frm_style .frm-g-recaptcha iframe{
 		width:100%;
 	}
+}
+
+.frm-card-element .sq-card-wrapper .sq-card-message {
+	margin-bottom: 0;
+}
+.frm-card-errors:empty {
+	margin: 0;
 }
 <?php
 

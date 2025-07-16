@@ -223,6 +223,11 @@ class FrmEntryValidate {
 			return true;
 		}
 
+		$field_object = FrmFieldFactory::get_field_type( $field->type, $field );
+		if ( ! $field_object->field_type_has_options_settings() ) {
+			return true;
+		}
+
 		if ( in_array( $field->type, array( 'likert', 'ranking' ), true ) ) {
 			// Ignore these field types automatically.
 			return true;
@@ -290,7 +295,7 @@ class FrmEntryValidate {
 	 * This is to help catch cases where the option's formatting has been modified using
 	 * the_content filter.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param string $value
 	 * @param string $option_value

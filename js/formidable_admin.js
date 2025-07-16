@@ -651,7 +651,7 @@ function frmAdminBuildJS() {
 						inside.html( html );
 						initiateMultiselect();
 						showInputIcon( '#' + cont.attr( 'id' ) );
-						frmDom.autocomplete.initSelectionAutocomplete( inside );
+						initAutocomplete( inside );
 						jQuery( b ).trigger( 'frm-action-loaded' );
 
 						/**
@@ -4868,7 +4868,7 @@ function frmAdminBuildJS() {
 	 * When a modal is open, it is moved in the DOM and appended to the parent element of the modal trigger input. That
 	 * creates a problem since deleting the field also deletes the modal and this function fixes that problem.
 	 *
-	 * @since x.x
+	 * @since 6.22
 	 *
 	 * @param {Object} settings
 	 * @returns {void}
@@ -5112,7 +5112,7 @@ function frmAdminBuildJS() {
 	 * @returns {Object}
 	 */
 	function getChoiceOldValueAndLabel( choiceElement ) {
-		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' ).checked;
+		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' )?.checked ?? false;
 		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
 
 		let oldValue, oldLabel;
@@ -5198,7 +5198,7 @@ function frmAdminBuildJS() {
 				optionMatches = valueSelect.querySelectorAll( 'option[value="' + newValue + '"]' );
 
 				if ( ! optionMatches.length ) {
-					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' ).checked ) {
+					if ( ! singleSettingsContainer.querySelector( '.frm_toggle_sep_values' )?.checked ) {
 						option = searchSelectByText( valueSelect, oldValue ); // Find conditional logic option with oldValue
 					}
 
@@ -7233,7 +7233,7 @@ function frmAdminBuildJS() {
 		if ( newAction.classList.contains( 'frm_single_on_submit_settings' ) ) {
 			const autocompleteInput = newAction.querySelector( 'input.frm-page-search' );
 			if ( autocompleteInput ) {
-				frmDom.autocomplete.initAutocomplete( 'page', newAction );
+				initAutocomplete( newAction );
 			}
 		}
 
@@ -7331,7 +7331,7 @@ function frmAdminBuildJS() {
 			showInputIcon( '#frm_form_action_' + actionId );
 
 			initiateMultiselect();
-			frmDom.autocomplete.initAutocomplete( 'page', newAction );
+			initAutocomplete( newAction );
 
 			if ( widgetTop ) {
 				jQuery( widgetTop ).trigger( 'frm-action-loaded' );
@@ -7798,7 +7798,7 @@ function frmAdminBuildJS() {
 				function( response, optName ) {
 					// The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
 					postParentField.querySelector( '.frm_post_parent_opt_wrapper' ).innerHTML = response.replaceAll( 'REPLACETHISNAME', optName );
-					frmDom.autocomplete.initAutocomplete( 'page', postParentField );
+					initAutocomplete( postParentField );
 				}
 			);
 		}
@@ -9304,8 +9304,9 @@ function frmAdminBuildJS() {
 			}
 		});
 	}
-	function initSelectionAutocomplete() {
-		frmDom.autocomplete.initSelectionAutocomplete();
+
+	function initAutocomplete( container ) {
+		frmDom.autocomplete.initSelectionAutocomplete( container );
 	}
 
 	function nextInstallStep( thisStep ) {
@@ -10246,7 +10247,7 @@ function frmAdminBuildJS() {
 				// Solution install page
 				frmAdminBuild.solutionInit();
 			} else {
-				initSelectionAutocomplete();
+				initAutocomplete();
 
 				jQuery( '[data-frmprint]' ).on( 'click', function() {
 					window.print();
@@ -10724,7 +10725,7 @@ function frmAdminBuildJS() {
 			jQuery( document ).on( 'change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated );
 
             // Page Selection Autocomplete
-			initSelectionAutocomplete();
+			initAutocomplete();
 
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 
@@ -10935,6 +10936,38 @@ function frmAdminBuildJS() {
 						}
 
 						target.setAttribute( 'name', target.dataset.name );
+					}
+				);
+			}
+
+			const paymentsSettings    = document.getElementById( 'payments_settings' );
+			const paymentSettingsTabs = paymentsSettings?.querySelectorAll( '[name="frm_payment_section"]' );
+			if ( paymentSettingsTabs ) {
+				paymentSettingsTabs.forEach(
+					element => {
+						element.addEventListener( 'change', () => {
+							if ( ! element.checked ) {
+								return;
+							}
+
+							const label = paymentsSettings.querySelector( `label[for="${ element.id }"]` );
+							if ( label ) {
+								label.setAttribute( 'aria-selected', 'true' );
+							}
+
+							paymentSettingsTabs.forEach(
+								tab => {
+									if ( tab === element ) {
+										return;
+									}
+
+									const label = paymentsSettings.querySelector( `label[for="${ tab.id }"]` );
+									if ( label ) {
+										label.setAttribute( 'aria-selected', 'false' );
+									}
+								}
+							);
+						});
 					}
 				);
 			}
