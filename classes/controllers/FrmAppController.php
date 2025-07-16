@@ -799,13 +799,13 @@ class FrmAppController {
 	 */
 	private static function enqueue_builder_assets( $plugin_url, $version ) {
 		wp_register_style( 'formidable-settings-components', $plugin_url . '/css/admin/frm-settings-components.css', array( 'formidable-admin', 'formidable-grids' ), $version );
-		wp_enqueue_style( 'formidable-settings-components' );
+		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
 
 		if ( ! FrmAppHelper::is_form_builder_page() ) {
 			return;
 		}
 
-		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
+		wp_enqueue_style( 'formidable-settings-components' );
 		wp_enqueue_script( 'formidable-settings-components' );
 	}
 
