@@ -787,10 +787,23 @@ class FrmAppController {
 			wp_enqueue_script( 'formidable_addons' );
 		}
 
-		if ( FrmAppHelper::is_form_builder_page() ) {
-			wp_enqueue_script( 'formidable-settings-components' );
-			wp_enqueue_style( 'formidable-settings-components' );
+		self::enqueue_builder_assets();
+	}
+
+	/**
+	 * Enqueue the Form Builder assets.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function enqueue_builder_assets() {
+		if ( ! FrmAppHelper::is_form_builder_page() ) {
+			return;
 		}
+
+		wp_enqueue_script( 'formidable-settings-components' );
+		wp_enqueue_style( 'formidable-settings-components' );
 	}
 
 	/**
