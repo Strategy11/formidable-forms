@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 >
 	<label class="frm-flex! frm-gap-xs frm-items-center" for="frm_default_value_<?php echo esc_attr( $field['id'] ); ?>">
 		<span><?php esc_html_e( 'Default Value', 'formidable' ); ?></span>
-		<?php FrmAppHelper::tooltip_icon( __( 'TODO: Add a tooltip', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
+		<?php FrmAppHelper::tooltip_icon( __( 'Pre-fill your field with this value. Users can modify it unless the field is read-only.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 	</label>
 
 	<span class="frm-flex-col frm-with-right-icon">
