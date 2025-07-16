@@ -180,6 +180,8 @@ class FrmEntryValidate {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @return bool
 	 */
 	private static function is_test_mode_disabled_required_validation() {
