@@ -975,9 +975,6 @@ a.frm_save_draft{
 
 .with_frm_style .frm_message p {
 	color: var(--success-text-color)<?php echo esc_html( $important ); ?>;
-}
-
-.with_frm_style .frm_message p {
 	margin-bottom: 0;
 }
 
