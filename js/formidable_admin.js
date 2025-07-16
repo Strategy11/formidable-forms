@@ -1599,6 +1599,8 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if it's a range field type and slider type is not selected.
 	 *
+	 * @since x.x
+	 *
 	 * @param {string} fieldType
 	 * @param {Event}  event
 	 * @returns {boolean}
