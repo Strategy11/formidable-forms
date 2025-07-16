@@ -112,7 +112,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<?php
 			}
-
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
 		</div>
@@ -426,7 +425,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 				if ( $display['unique'] ) {
 					?>
-					<p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
+					<p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?> <?php echo 'time' === $field['type'] ? 'frm-has-linked-date-field' : ''; ?>">
 						<label for="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Unique', 'formidable' ); ?>
 						</label>

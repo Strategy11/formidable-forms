@@ -367,6 +367,7 @@ DEFAULT_HTML;
 			'readonly_required' => false,
 			'unique'            => false,
 			'read_only'         => false,
+			'range_field'       => false,
 			'description'       => true,
 			'options'           => true,
 			'label_position'    => true,

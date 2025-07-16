@@ -1446,6 +1446,11 @@
 	 * @returns {void}
 	 */
 	function initDatepickerSample() {
+		// If flatpickr is defined, then is a recent version of Pro which handles the datepicker preview as it's a PRO feature.
+		if ( 'undefined' !== typeof flatpickr ) {
+			return;
+		}
+
 		const $sample = jQuery( '#datepicker_sample' );
 		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
 			$sample.datepicker({ changeMonth: true, changeYear: true });
