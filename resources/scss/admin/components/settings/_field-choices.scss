@@ -18,6 +18,19 @@ li.frm_single_option {
 	display: none;
 }
 
+.frm_prod_type_single .frm-ai-generate-options-modal-trigger {
+	display: none !important;
+}
+
+.frm_prod_type_single .frm_option_key {
+	margin-left: 0 !important;
+
+	input[type="checkbox"] + input[type="text"],
+	input[type="radio"] + input[type="text"] {
+		margin-left: 0 !important;
+	}
+}
+
 .plugin-card-bottom .frm-trash {
 	color: #a00;
 }
