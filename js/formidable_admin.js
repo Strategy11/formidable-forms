@@ -1642,6 +1642,23 @@ function frmAdminBuildJS() {
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 				}
 
+				/**
+				 * Fires after a field is added.
+				 *
+				 * @since x.x
+				 *
+				 * @param {Object} fieldData            The field data.
+				 * @param {String} fieldData.field      The field HTML.
+				 * @param {String} fieldData.field_type The field type.
+				 * @param {String} fieldData.form_id    The form ID.
+				 */
+				wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
+					field: msg,
+					fieldId: msg.match( /data-fid="(\d+)"/ )[1],
+					fieldType: fieldType,
+					form_id: formId,
+				});
+
 			},
 			error: handleInsertFieldError
 		});
@@ -2043,10 +2060,84 @@ function frmAdminBuildJS() {
 						makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
 					}
 				);
+
+				/**
+				 * Fires after a field is added.
+				 *
+				 * @since x.x
+				 *
+				 * @param {Object} fieldData            The field data.
+				 * @param {String} fieldData.field      The field HTML.
+				 * @param {String} fieldData.field_type The field type.
+				 * @param {String} fieldData.form_id    The form ID.
+				 */
+				wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
+					field: msg,
+					fieldId: msg.match( /data-fid="(\d+)"/ )[1],
+					fieldType: fieldType,
+					form_id: formId,
+				});
+
 			},
 			error: handleInsertFieldError
 		});
 		return false;
+	}
+
+	function insertFormField( fieldType, fieldOptions = {} ) {
+
+		return new Promise( ( resolve ) => {			
+			const formId = thisFormId;
+			let hasBreak = 0;
+
+			if ( 'summary' === fieldType ) {
+				hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
+			}
+
+			jQuery.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: {
+					action: 'frm_insert_field',
+					form_id: formId,
+					field_type: fieldType,
+					field_options: fieldOptions,
+					section_id: 0,
+					nonce: frmGlobal.nonce,
+					has_break: hasBreak,
+					last_row_field_ids: getFieldIdsInSubmitRow()
+				},
+				success: function( msg ) {
+					const fieldElement = jQuery( msg );
+					fieldElement[0].style.display = 'none';
+					resolve( fieldElement );
+					setTimeout( () => {
+						updateFieldOrder();
+						afterAddField( msg, true );
+						syncLayoutClasses( jQuery( fieldElement.closest( 'ul' ).children()[0] ) );
+						fieldElement[0].style.display = 'block';
+
+						/**
+						 * Fires after a field is added.
+						 *
+						 * @since x.x
+						 *
+						 * @param {Object} fieldData            The field data.
+						 * @param {String} fieldData.field      The field HTML.
+						 * @param {String} fieldData.field_type The field type.
+						 * @param {String} fieldData.form_id    The form ID.
+						 */
+						wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
+							field: msg,
+							fieldId: msg.match( /data-fid="(\d+)"/ )[1],
+							fieldType: fieldType,
+							form_id: formId,
+						});
+					}, 10 );
+				},
+				error: handleInsertFieldError
+			});
+		} );
 	}
 
 	function maybeHideQuantityProductFieldOption() {
@@ -10969,7 +11060,9 @@ function frmAdminBuildJS() {
 		loadApiEmailForm,
 		addMyEmailAddress,
 		fillDropdownOpts,
-		showSaveAndReloadModal
+		showSaveAndReloadModal,
+		deleteField,
+		insertFormField
 	};
 }
 

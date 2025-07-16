@@ -21,3 +21,7 @@
 #adminmenu .frm-orange-text {
 	color: #F47449;
 }
+.frm-form-field-option-disabled {
+	opacity: 0.5;
+	pointer-events: none;
+}
