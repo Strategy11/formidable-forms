@@ -100,6 +100,12 @@ class FrmSettingsController {
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
+			'email'       => array(
+				'class'    => __CLASS__,
+				'function' => 'email_settings',
+				'name'     => __( 'Email', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_email_icon',
+			),
 			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_ghost_icon',
@@ -294,6 +300,15 @@ class FrmSettingsController {
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php';
+	}
+
+	/**
+	 * @since x.x
+	 */
+	public static function email_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email.php';
 	}
 
 	/**
