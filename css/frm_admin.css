@@ -6668,7 +6668,7 @@ label.frm-example-icon {
   width: 100%;
   height: 100%;
   z-index: 100;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -6680,7 +6680,7 @@ label.frm-example-icon {
 .frm-email-style__buttons button:disabled {
   cursor: not-allowed;
 }
-.frm-email-style:hover .frm-email-style__buttons {
+.frm-email-style:hover .frm-email-style__buttons, .frm-email-style__click:focus + .frm-email-style__buttons {
   display: flex;
 }
 
