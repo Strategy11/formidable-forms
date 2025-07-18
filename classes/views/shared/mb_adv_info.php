@@ -47,7 +47,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 
 		<ul class="subsubsub">
-			<li><a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a> |</li>
+			<li>
+				<a href="javascript:void(0)" class="current frmids"><?php esc_html_e( 'IDs', 'formidable' ); ?></a>
+				<span class="frm-vertical-separator"></span>
+			</li>
 			<li><a href="javascript:void(0)" class="frmkeys"><?php esc_html_e( 'Keys', 'formidable' ); ?></a></li>
 		</ul>
 		<ul class="frm_code_list frm_customize_field_list frm-full-hover">
@@ -88,32 +91,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$show_logic = ! empty( $cond_shortcodes ) && ! empty( $fields );
 	if ( $show_logic ) {
 		?>
-	<div id="frm-conditionals" class="tabs-panel">
-		<div class="frmcenter">
-			<?php
-			FrmHtmlHelper::toggle(
-				'frm-id-key-condition',
-				'',
-				array(
-					'checked'     => true,
-					'on_label'    => __( 'Use IDs', 'formidable' ),
-					'off_label'   => __( 'Use Keys', 'formidable' ),
-					'value'       => 'id',
-					'show_labels' => true,
-					'echo'        => true,
-				)
-			);
-			?>
+	<div id="frm-conditionals" class="tabs-panel frm-text-grey-700 frm-px-xs">
+		<div class="frm-h-stack-sm">
+			<label class="frm-h-stack-xs" for="frm-id-key-condition-key">
+				<input type="radio" id="frm-id-key-condition-key" name="frm-id-key-condition" value="key">
+				<span><?php esc_html_e( 'Use Keys', 'formidable' ); ?></span>
+			</label>
+			<label class="frm-h-stack-xs" for="frm-id-key-condition-id">
+				<input type="radio" id="frm-id-key-condition-id" name="frm-id-key-condition" value="id" checked>
+				<span><?php esc_html_e( 'Use IDs', 'formidable' ); ?></span>
+			</label>
 		</div>
 
-		<div class="frm_grid_container frm-fields frm-mx-sm">
-			<div class="frm1 frm_form_field frm-inline-select">
+		<div class="frm_grid_container frm-fields">
+			<div class="frm-pb-xs">
 				<label for="frm-id-condition">
 					<?php esc_html_e( 'IF', 'formidable' ); ?>
 				</label>
-				</div>
+			</div>
 
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-mt-0">
 				<select id="frm-id-condition" class="frm-build-logic">
 					<option value="x">
 						<?php esc_html_e( 'Select a Field', 'formidable' ); ?>
@@ -148,8 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</select>
 			</div>
 
-			<div class="frm1 frm_form_field"></div>
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-mt-0">
 				<select id="frm-is-condition" class="frm-build-logic">
 					<?php
 					foreach ( $cond_shortcodes as $skey => $sname ) {
@@ -166,21 +162,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</select>
 			</div>
 
-			<div class="frm1 frm_form_field"></div>
-			<div class="frm11 frm_form_field">
+			<div class="frm_form_field frm-m-0">
 				<input id="frm-text-condition" type="text" value="" placeholder="<?php esc_attr_e( 'A blank value', 'formidable' ); ?>" class="frm-build-logic" />
 			</div>
 		</div>
-			<p class="frmcenter frm-mb-0">
-				<?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:
-			</p>
-			<ul class="frm_code_list frm-full-hover frmcenter frm-m-0">
-				<li>
-					<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
-						[if x equals=""][/if x]
-					</a>
-				</li>
-			</ul>
+
+		<p class="frm-m-0 frm-pb-xs"><?php esc_html_e( 'Click to Insert', 'formidable' ); ?>:</p>
+		<ul class="frm_code_list frm-full-hover frm-m-0">
+			<li>
+				<a href="#" id="frm-insert-condition" class="frm_insert_code" data-code="if x equals='']<?php esc_attr_e( 'Conditional content here', 'formidable' ); ?>[/if x">
+					[if x equals=""][/if x]
+				</a>
+			</li>
+		</ul>
 	</div>
 		<?php
 	}//end if
@@ -188,17 +182,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div id="frm-adv-info-tab" class="tabs-panel">
 		<div class="dropdown-item frm-with-search">
-		<?php
-		FrmAppHelper::show_search_box(
-			array(
-				'input_id'    => 'advanced',
-				'placeholder' => __( 'Search', 'formidable' ),
-				'tosearch'    => 'frm-advanced-list',
-			)
-		);
-		?>
+			<?php
+			FrmAppHelper::show_search_box(
+				array(
+					'input_id'    => 'advanced',
+					'placeholder' => __( 'Search', 'formidable' ),
+					'tosearch'    => 'frm-advanced-list',
+				)
+			);
+			?>
 		</div>
-		<ul class="frm_code_list frm-full-hover">
+
+		<ul class="frm_code_list frm-full-hover frm-mt-0">
 		<?php
 		$contextual_codes = FrmShortcodeHelper::get_contextual_codes();
 		foreach ( $entry_shortcodes as $skey => $sname ) {

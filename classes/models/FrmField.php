@@ -28,15 +28,15 @@ class FrmField {
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_caret_square_down_icon',
+				'icon' => 'frm_icon_font frm_dropdown_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email_icon',
+				'icon' => 'frm_icon_font frm_email2_icon',
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link_icon',
+				'icon' => 'frm_icon_font frm_link2_icon',
 			),
 			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
@@ -52,23 +52,23 @@ class FrmField {
 			),
 			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_icon',
+				'icon' => 'frm_icon_font frm_code2_icon',
 			),
 			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash_icon',
+				'icon' => 'frm_icon_font frm_eye_slash2_icon',
 			),
 			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
+				'icon' => 'frm_icon_font frm_user2_icon',
 			),
 			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'icon' => 'frm_icon_font frm_shield_check2_icon',
 			),
 			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card_icon',
+				'icon' => 'frm_icon_font frm_credit_card2_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -101,7 +101,7 @@ class FrmField {
 		$fields     = array(
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload_icon',
+				'icon'    => 'frm_icon_font frm_upload3_icon',
 				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
 			'ranking'         => array(),
@@ -111,7 +111,7 @@ class FrmField {
 			),
 			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar_icon',
+				'icon' => 'frm_icon_font frm_calendar2_icon',
 			),
 			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),
@@ -124,7 +124,7 @@ class FrmField {
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star_icon',
+				'icon' => 'frm_icon_font frm_star2_icon',
 			),
 			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
@@ -136,7 +136,7 @@ class FrmField {
 			),
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_sitemap_icon',
+				'icon'    => 'frm_icon_font frm_dynamic_icon',
 				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
 			),
 			'lookup'          => array(
@@ -146,7 +146,7 @@ class FrmField {
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_repeater_icon',
+				'icon'    => 'frm_icon_font frm_refresh_icon',
 				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
@@ -164,7 +164,7 @@ class FrmField {
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text_icon',
+				'icon' => 'frm_icon_font frm_file_text2_icon',
 			),
 			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
@@ -178,11 +178,11 @@ class FrmField {
 			),
 			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_open_icon',
+				'icon' => 'frm_icon_font frm_lock_closed2_icon',
 			),
 			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags_icon',
+				'icon' => 'frm_icon_font frm_price_tags2_icon',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -192,11 +192,11 @@ class FrmField {
 			),
 			'address'         => array(
 				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location_icon',
+				'icon' => 'frm_icon_font frm_location2_icon',
 			),
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text_icon',
+				'icon'    => 'frm_icon_font frm_file_text3_icon',
 				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
 			),
 			'signature'       => array(
@@ -206,13 +206,13 @@ class FrmField {
 			),
 			'ai'              => array(
 				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm-ai-icon frm_show_upgrade',
 				'addon'   => 'ai',
 				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
@@ -224,7 +224,7 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product_icon',
+				'icon'    => 'frm_icon_font frm_product2_icon',
 				'section' => 'pricing',
 			),
 			'quantity'        => array(
@@ -234,7 +234,7 @@ class FrmField {
 			),
 			'total'           => array(
 				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total_icon',
+				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
 			),
 		);

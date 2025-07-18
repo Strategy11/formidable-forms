@@ -566,8 +566,9 @@ function frmAdminBuildJS() {
 			}
 		}
 
-		const $fadeEle = jQuery( document.getElementById( id ) );
-		$fadeEle.fadeOut( 400, function() {
+		const fadeEle = document.getElementById( id );
+		const $fadeEle = jQuery( fadeEle );
+		$fadeEle.fadeOut( 300, function() {
 			$fadeEle.remove();
 			fieldUpdated();
 
@@ -597,7 +598,34 @@ function frmAdminBuildJS() {
 			jQuery( this ).closest( '.frm_logic_rows' ).fadeOut( 'slow' );
 		}
 
+		mayToggleWatchLookupLabel( id, fadeEle );
+
 		return false;
+	}
+
+	/**
+	 * Maybe toggle Watch Lookup Fields label visibility
+	 *
+	 * @param {string}      id      The ID of the removed element
+	 * @param {HTMLElement} fadeEle The removed element
+	 * @return {void}
+	 */
+	function mayToggleWatchLookupLabel( id, fadeEle ) {
+		if ( ! id || ! id.startsWith( 'frm_watch_lookup_' ) ) {
+			return;
+		}
+
+		// If there are other rows, don't hide the label
+		if ( fadeEle.parentElement.children.length > 1 ) {
+			return;
+		}
+
+		const fieldId = fadeEle.closest( '.frm-single-settings' )?.dataset.fid;
+		if ( fieldId ) {
+			setTimeout(() => {
+				document.getElementById( `frm_watch_lookup_label_${fieldId}` )?.classList.add( 'frm_hidden!' );
+			}, 190 );
+		}
 	}
 
 	function afterActionRemoved( type ) {
@@ -813,16 +841,14 @@ function frmAdminBuildJS() {
 		const settings = {
 			helper: getDraggableHelper,
 			revert: 'invalid',
-			delay: 10,
+			delay: 2,
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
 			refreshPositions: true,
-			cursorAt: {
-				top: 0,
-				left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
-			}
+			distance: 3, // Only start drag after 3px of movement for more precision
+			cursorAt: false // Let the helper maintain its original position relative to cursor
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;
@@ -2844,15 +2870,12 @@ function frmAdminBuildJS() {
 				continue;
 			}
 
-			const span = document.createElement( 'span' );
-			span.appendChild( document.createTextNode( '[' + fields[i].fieldId + ']' ) );
-
 			const a = document.createElement( 'a' );
 			a.setAttribute( 'href', '#' );
 			a.setAttribute( 'data-code', fields[i].fieldId );
 			a.classList.add( 'frm_insert_code' );
-			a.appendChild( span );
-			a.appendChild( document.createTextNode( fields[i].fieldName ) );
+			a.appendChild( span( fields[i].fieldName ) );
+			a.appendChild( span( { className: 'frm-text-sm frm-text-grey-500', text: '[' + fields[i].fieldId + ']' } ) );
 
 			const li = document.createElement( 'li' );
 			li.classList.add( 'frm-field-list-' + fieldId );
@@ -2863,7 +2886,8 @@ function frmAdminBuildJS() {
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
-		const exclude = JSON.parse( calcBox.getElementsByClassName( 'frm_code_list' )[0].getAttribute( 'data-exclude' ) );
+		const codeList = calcBox.querySelector( '.frm_code_list' ) ?? calcBox.getElementsByClassName( 'frm_code_list' )[0];
+		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
 			// includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
@@ -3342,9 +3366,14 @@ function frmAdminBuildJS() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			jQuery( document.getElementById( 'frm_field_' + fieldId + '_opts' ) ).append( newOption.newOption );
+			this.closest( '.frm_single_option' ).after( newOption.newOption );
 			resetDisplayedOpts( fieldId );
 		}
+
+		// Make sure all remove buttons are enabled
+		this.closest( '.frm_sortable_field_opts' )?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
+			forEach( button => button.classList.remove( 'frm_disabled' ) );
+
 		fieldUpdated();
 	}
 
@@ -3424,6 +3453,8 @@ function frmAdminBuildJS() {
 			setAlignment( fieldId, 'block' );
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
+
+		$field[0].querySelector( '.frm-ai-generate-options-modal-trigger' )?.classList.toggle( 'frm_hidden!', hasImageOptions );
 	}
 
 	function removeImageSizeClasses( field ) {
@@ -3554,14 +3585,26 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 	}
 
+	/**
+	 * Delete a field option.
+	 */
 	function deleteFieldOption() {
+		const parentLi = this.parentNode;
+		const parentUl = parentLi.parentNode;
+
+		// If only 2 visible options, add disabled class to the other delete button
+		const visibleOptions = parentUl.querySelectorAll( 'li:not(.frm_hidden)' );
+		if ( visibleOptions.length === 2 ) {
+			Array.from( visibleOptions )
+				.find( li => li !== parentLi )
+				.querySelector( '.frm_remove_tag' )?.classList.add( 'frm_disabled' );
+		}
+
 		/*jshint validthis:true */
 		let otherInput,
-			parentLi = this.parentNode,
-			parentUl = parentLi.parentNode,
 			fieldId = this.getAttribute( 'data-fid' );
 
-		jQuery( parentLi ).fadeOut( 'slow', function() {
+		jQuery( parentLi ).fadeOut( 'fast', function() {
 			wp.hooks.doAction( 'frm_before_delete_field_option', this );
 			jQuery( parentLi ).remove();
 
@@ -3571,7 +3614,7 @@ function frmAdminBuildJS() {
 				if ( otherInput !== null ) {
 					otherInput.value = 0;
 				}
-				jQuery( '#other_button_' + fieldId ).fadeIn( 'slow' );
+				jQuery( '#other_button_' + fieldId ).fadeIn( 'fast' );
 			}
 		});
 		fieldUpdated();
@@ -4799,7 +4842,8 @@ function frmAdminBuildJS() {
 
 				// Remove settings from sidebar.
 				if ( settings.is( ':visible' ) ) {
-					document.getElementById( 'frm_insert_fields_tab' ).click();
+					document.querySelector( '.frm-settings-panel .frm-tabs-navs ul > li:first-child' )?.click();
+					document.querySelector( '#frm-options-panel .frm-single-settings' ).classList.remove( 'frm_hidden' );
 				}
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
@@ -4869,10 +4913,18 @@ function frmAdminBuildJS() {
 				fields: getFieldList()
 			},
 			success: function( html ) {
-				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'slow', function() {
-					const logicRow = jQuery( document.getElementById( 'frm_logic_row_' + id ) );
-					logicRow.append( html );
-					logicRow.closest( '.frm_logic_rows' ).fadeIn( 'slow' );
+				jQuery( document.getElementById( 'logic_' + id ) ).fadeOut( 'fast', function() {
+					const logicRow = document.getElementById( 'frm_logic_row_' + id );
+					logicRow.insertAdjacentHTML( 'beforeend', html );
+
+					const logicRowText = logicRow.querySelector( '.frm_logic_row:last-child .frm-logic-rule-text' );
+					if ( logicRowText ) {
+						logicRowText.textContent = logicRow.dataset.ruleText;
+					}
+
+					const logicRows = logicRow.closest( '.frm_logic_rows' );
+					logicRows.style.height = 'auto';
+					jQuery( logicRows ).fadeIn( 'fast' );
 				});
 			}
 		});
@@ -4906,6 +4958,9 @@ function frmAdminBuildJS() {
 				const watchRowBlock = jQuery( document.getElementById( 'frm_watch_lookup_block_' + id ) );
 				watchRowBlock.append( newRow );
 				watchRowBlock.fadeIn( 'slow' );
+
+				// Show the "Watch Lookup Fields" label if it was hidden
+				document.getElementById( `frm_watch_lookup_label_${id}` )?.classList.remove( 'frm_hidden!' );
 			}
 		});
 		return false;
@@ -5326,6 +5381,25 @@ function frmAdminBuildJS() {
 		// Toggles the "aria-expanded" attribute
 		const expanded = this.getAttribute( 'aria-expanded' ) === 'true' || false;
 		this.setAttribute( 'aria-expanded', ! expanded );
+
+		addSlideAnimationCssVars( this.nextElementSibling );
+	}
+
+	/**
+	 * Add slide animation CSS variables to the element
+	 *
+	 * @param {HTMLElement} element The element to add CSS variables to
+	 * @return {void}
+	 */
+	function addSlideAnimationCssVars( element ) {
+		if ( element ) {
+			let height = element.scrollHeight;
+			if ( height > 0 ) {
+				height += 250;
+				element.style.setProperty( '--slide-height', `${height}px` );
+				element.style.setProperty( '--slide-time', `${Math.ceil( height * 0.8 )}ms` );
+			}
+		}
 	}
 
 	function clickLabel() {
@@ -6198,7 +6272,9 @@ function frmAdminBuildJS() {
 					nonce: frmGlobal.nonce
 				},
 				success: function( msg ) {
-					jQuery( '#frm_show_selected_fields_' + fieldId ).html( msg ).show();
+					const $selectedFields = jQuery( '#frm_show_selected_fields_' + fieldId );
+					$selectedFields.toggleClass( 'frm6', ! msg.includes( 'frm-inline-message' ) );
+					$selectedFields.html( msg ).show();
 				}
 			});
 		}
@@ -6419,7 +6495,7 @@ function frmAdminBuildJS() {
 
 	function showInlineModal( icon, input ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
-			container = jQuery( icon ).closest( 'p' ),
+			container = jQuery( icon ).closest( 'p,ul' ),
 			inputTrigger = ( typeof input !== 'undefined' );
 
 		if ( container.hasClass( 'frm-open' ) ) {
@@ -6456,6 +6532,49 @@ function frmAdminBuildJS() {
 		e.preventDefault();
 		this.parentNode.classList.add( 'frm_hidden' );
 		jQuery( '.frm-open [data-open="' + this.parentNode.id + '"]' ).closest( '.frm-open' ).removeClass( 'frm-open' );
+	}
+
+	/**
+	 * Close frm-modal-no-dismiss element when clicking outside of it
+	 *
+	 * @param {Event} event The click event
+	 */
+	function closeModalOnOutsideClick( { target } ) {
+		if ( target.closest( '.frm-inline-modal.frm-modal-no-dismiss' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
+			return;
+		}
+
+		// Close all inline modals (without close button) that are not hidden
+		document.querySelectorAll( '.frm-inline-modal.frm-modal-no-dismiss:not(.frm_hidden)' ).forEach( modal => {
+			modal.classList.add( 'frm_hidden' );
+			modal.previousElementSibling.classList.remove( 'frm-open' );
+		});
+	}
+
+	/**
+	 * Focus on the calculation field when insert field button is clicked
+	 *
+	 * @param {Event}       event        The click event
+	 * @param {HTMLElement} event.target The click target
+	 */
+	function focusOnCalcField( { target } ) {
+		target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
+	}
+
+	/**
+	 * Handle `#` character in formula editor and trigger field insertion
+	 *
+	 * @param {Event}       event        The input event
+	 * @param {HTMLElement} event.target The input target
+	 */
+	function handleFieldInsertShortcut( { target } ) {
+		const value = target.value;
+		if ( ! value.includes( '#' ) ) {
+			return;
+		}
+
+		target.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-insert-field' )?.click();
+		target.value = value.replace( /#$/, '' );
 	}
 
 	function changeInputtedValue() {
@@ -6828,6 +6947,37 @@ function frmAdminBuildJS() {
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.setAttribute( 'href', link );
 		}
+	}
+
+	/**
+	 * Opens a basic modal with the given title and content.
+	 *
+	 * @param {Event} event The event object.
+	 * @return {void}
+	 */
+	function showBasicModal( event ) {
+		const button = event.target.dataset?.modalTitle ? event.target : event.target.closest( '[data-modal-title]' );
+		if ( ! button ) {
+			return;
+		}
+
+		const { modalTitle, modalContent } = button.dataset;
+		if ( ! modalTitle || ! modalContent ) {
+			return;
+		}
+
+		event.preventDefault();
+
+		frmDom.modal.maybeCreateModal(
+			'frmBasicModal',
+			{
+				title: modalTitle,
+				content: div({
+					className: 'inside',
+					child: span( modalContent ),
+				}),
+			}
+		);
 	}
 
 	function getRequiredLicenseFromTrigger( element ) {
@@ -8108,7 +8258,7 @@ function frmAdminBuildJS() {
 		const id = document.getElementById( 'frm-id-condition' ),
 			key = document.getElementById( 'frm-key-condition' );
 
-		if ( this.checked ) {
+		if ( this.value === 'id' ) {
 			id.classList.remove( 'frm_hidden' );
 			key.classList.add( 'frm_hidden' );
 			triggerEvent( key, 'change' );
@@ -8121,7 +8271,7 @@ function frmAdminBuildJS() {
 
 	function setLogicExample() {
 		let field, code,
-			idKey = document.getElementById( 'frm-id-key-condition' ).checked ? 'frm-id-condition' : 'frm-key-condition',
+			idKey = document.getElementById( 'frm-id-key-condition-id' ).checked ? 'frm-id-condition' : 'frm-key-condition',
 			is = document.getElementById( 'frm-is-condition' ).value,
 			text = document.getElementById( 'frm-text-condition' ).value,
 			result = document.getElementById( 'frm-insert-condition' );
@@ -8493,13 +8643,21 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * Get the input box for the selected ... icon.
+	 * Get the input box for the selected icon or calculation field.
+	 *
+	 * @param {Element} moreIcon The icon element
+	 * @returns {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
+		// For regular fields
 		let input = moreIcon.nextElementSibling;
-
 		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
 			input = getInputForIcon( input );
+		}
+
+		// For calculation fields
+		if ( ! input ) {
+			input = moreIcon.closest( '.frm-field-formula' )?.querySelector( '.frm-calc-field' );
 		}
 
 		return input;
@@ -10165,6 +10323,7 @@ function frmAdminBuildJS() {
 
 			loadTooltips();
 			initUpgradeModal();
+			frmDom.util.documentOn( 'click', '[data-modal-title]', showBasicModal );
 
 			// used on build, form settings, and view settings
 			const $shortCodeDiv = jQuery( document.getElementById( 'frm_shortcodediv' ) );
@@ -10372,8 +10531,8 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-page', maybeCollapsePage );
 			jQuery( builderArea ).on( 'click', '.frm-collapse-section', maybeCollapseSection );
-			$builderForm.on( 'click', '.frm-single-settings h3', maybeCollapseSettings );
-			$builderForm.on( 'keydown', '.frm-single-settings h3', function( event ) {
+			$builderForm.on( 'click', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', maybeCollapseSettings );
+			$builderForm.on( 'keydown', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', function( event ) {
 				// If so, only proceed if the key pressed was 'Enter' or 'Space'
 				if ( event.key === 'Enter' || event.key === ' ' ) {
 					event.preventDefault();
@@ -10438,6 +10597,10 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
+			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', focusOnCalcField );
+			frmDom.util.documentOn( 'input', '.frm-field-formula-editor', handleFieldInsertShortcut );
+			document.addEventListener( 'click', closeModalOnOutsideClick );
+
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );
 			$builderForm.on( 'change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg );
 
@@ -10463,6 +10626,7 @@ function frmAdminBuildJS() {
 
 			initBulkOptionsOverlay();
 			hideEmptyEle();
+			document.addEventListener( 'frm_added_field', hideEmptyEle );
 			maybeHideQuantityProductFieldOption();
 			handleNameFieldOnFormBuilder();
 			toggleSectionHolder();
@@ -10474,6 +10638,9 @@ function frmAdminBuildJS() {
 				  event.preventDefault();
 				}
 			});
+			wp.hooks.addAction( 'frmShowedFieldSettings', 'formidableAdmin', ( showBtn, fieldSettingsEl ) => {
+				fieldSettingsEl.querySelectorAll( '.frm-collapse-me' ).forEach( addSlideAnimationCssVars );
+			}, 9999 );
 		},
 
 		settingsInit: function() {
@@ -10640,7 +10807,7 @@ function frmAdminBuildJS() {
 				jQuery( this ).val( '' );
 			});
 
-			jQuery( document ).on( 'click change', '#frm-id-key-condition', resetLogicBuilder );
+			jQuery( document ).on( 'click change', '[name="frm-id-key-condition"]', resetLogicBuilder );
 			jQuery( document ).on( 'keyup change', '.frm-build-logic', setLogicExample );
 
 			showInputIcon();
@@ -11002,7 +11169,8 @@ function frmAdminBuildJS() {
 		loadApiEmailForm,
 		addMyEmailAddress,
 		fillDropdownOpts,
-		showSaveAndReloadModal
+		showSaveAndReloadModal,
+		clearSettingsBox
 	};
 }
 

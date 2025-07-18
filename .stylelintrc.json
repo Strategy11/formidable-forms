@@ -6,6 +6,7 @@
 		"selector-id-pattern": null,
 		"font-family-name-quotes": null,
 		"function-url-quotes": null,
+		"no-duplicate-selectors": null,
 		"value-keyword-case": [
 			"lower",
 			{
