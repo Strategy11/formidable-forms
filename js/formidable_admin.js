@@ -1583,12 +1583,12 @@ function frmAdminBuildJS() {
 	 *
 	 * @returns {Object}
 	 */
-	function getInsertNewFieldArgs( fieldType, formId, hasBreak ) {
-		let args = {
+	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
+		const args = {
 			action: 'frm_insert_field',
 			form_id: formId,
 			field_type: fieldType,
-			section_id: 0,
+			section_id: sectionId,
 			nonce: frmGlobal.nonce,
 			has_break: hasBreak,
 			last_row_field_ids: getFieldIdsInSubmitRow()
@@ -1645,8 +1645,9 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
-			data: getInsertNewFieldArgs( fieldType, formId, hasBreak ),
+			type: 'POST',
+			url: ajaxurl,
+			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success: function( msg ) {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -2054,7 +2055,7 @@ function frmAdminBuildJS() {
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: getInsertNewFieldArgs( fieldType, formId, hasBreak ),
+			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
