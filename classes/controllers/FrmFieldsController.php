@@ -730,7 +730,7 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function add_frmval_to_input( $field, &$add_html ) {
-		if ( $field['placeholder'] != '' ) {
+		if ( isset( $field['placeholder'] ) && $field['placeholder'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
 
 			if ( 'select' === $field['type'] ) {
@@ -738,7 +738,7 @@ class FrmFieldsController {
 			}
 		}
 
-		if ( $field['default_value'] != '' ) {
+		if ( isset( $field['default_value'] ) && $field['default_value'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
 		}
 	}
