@@ -6827,6 +6827,10 @@ function frmAdminBuildJS() {
 			}
 			link = link.replace( /(content=)[a-z_-]+/ig, '$1' + content );
 			button.setAttribute( 'href', link );
+
+			if ( element.nodeName === 'OPTION' && 'SELECT' === element.parentElement?.nodeName ) {
+				element.parentElement.value = 'none';
+			}
 		}
 	}
 
