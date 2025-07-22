@@ -5436,6 +5436,19 @@ function frmAdminBuildJS() {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
+
+		setTimeout(
+			() => {
+				formatElement.querySelectorAll( 'option' ).forEach(
+					option => {
+						if ( option.selected && option.classList.contains( 'frm_show_upgrade' ) ) {
+							formatElement.value = 'none';
+						}
+					}
+				);
+			},
+			0
+		);
 	}
 
 	/**
