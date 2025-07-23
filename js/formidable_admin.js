@@ -1593,7 +1593,7 @@ function frmAdminBuildJS() {
 			has_break: hasBreak,
 			last_row_field_ids: getFieldIdsInSubmitRow()
 		};
-		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType );
+		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType, formId, sectionId, hasBreak );
 	}
 
 	/**
