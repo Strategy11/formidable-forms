@@ -1762,7 +1762,7 @@ function frmAdminBuildJS() {
 			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
-		if ( droppable.classList.contains( 'start_divider' ) && draggable.classList.contains( 'edit_field_type_gdpr' ) && droppable.closest( '.repeat_section' ) ) {
+		if ( droppable.classList.contains( 'start_divider' ) && ( draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr' ) && droppable.closest( '.repeat_section' ) ) {
 			// Don't allow GDPR fields in repeaters.
 			return false;
 		}
