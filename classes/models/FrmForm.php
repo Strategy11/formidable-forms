@@ -460,13 +460,7 @@ class FrmForm {
 		$allow = array( '<= ', ' >=' );
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
-		$before = $value;
 		$value = strip_tags( $value );
-		if ( $before === $value ) {
-			error_log( 'Match' );
-		} else {
-			error_log( 'Not a match. Before: ' . $before . ' After: ' . $value );
-		}
 		$value = str_replace( $temp, $allow, $value );
 		return $value;
 	}
