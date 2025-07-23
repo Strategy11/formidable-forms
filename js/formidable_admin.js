@@ -1773,6 +1773,10 @@ function frmAdminBuildJS() {
 				// Field group is full and cannot accept another field.
 				return false;
 			}
+
+			if ( draggable.id === 'divider' && droppable.closest( '.start_divider' ) ) {
+				return false;
+			}
 		}
 
 		const isNewField = draggable.classList.contains( 'frm-new-field' );
