@@ -1707,6 +1707,7 @@ function frmAdminBuildJS() {
 	 * Don't allow hidden fields inside of field groups but allow them in sections.
 	 * Don't allow any fields below the submit button field.
 	 * Don't allow submit button field above any fields.
+	 * Don't allow GDPR fields in repeaters.
 	 *
 	 * @param {HTMLElement} draggable
 	 * @param {HTMLElement} droppable
@@ -1759,6 +1760,11 @@ function frmAdminBuildJS() {
 
 			// Allow dropping submit button into the second row from bottom if there is only submit button in the last row.
 			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
+		}
+
+		if ( droppable.classList.contains( 'start_divider' ) && draggable.classList.contains( 'edit_field_type_gdpr' ) && droppable.closest( '.repeat_section' ) ) {
+			// Don't allow GDPR fields in repeaters.
+			return false;
 		}
 
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
