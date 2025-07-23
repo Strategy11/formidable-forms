@@ -1578,6 +1578,7 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 *
 	 * @param {string} fieldType
+	 * @param {string} sectionId
 	 * @param {string} formId
 	 * @param {Number} hasBreak
 	 *
