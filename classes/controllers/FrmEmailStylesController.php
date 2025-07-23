@@ -1,9 +1,9 @@
 <?php
 /**
  * Controller for email styles
- * 
+ *
  * @since x.x
- * 
+ *
  * @package Formidable
  */
 
@@ -56,5 +56,9 @@ class FrmEmailStylesController {
 		 * @return array
 		 */
 		return apply_filters( 'frm_email_styles', $email_styles );
+	}
+
+	public static function get_email_style_preview_url( $style_key ) {
+		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ) );
 	}
 }

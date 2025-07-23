@@ -3,6 +3,7 @@
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
+		document.addEventListener( 'click', handleClickEvent );
 	}
 
 	function handleChangeEvent( e ) {
@@ -25,6 +26,25 @@
 
 	function handleToggleChangeEvent( e ) {
 		e.target.nextElementSibling.setAttribute( 'aria-checked', e.target.checked ? 'true' : 'false' );
+	}
+
+	function handleClickEvent( e ) {
+		if ( 'BUTTON' === e.target.nodeName && 'choose' === e.target.dataset.action && e.target.closest( '.frm-email-style' ) ) {
+			handleClickChooseEmailStyle( e );
+		}
+	}
+
+	function handleClickChooseEmailStyle( e ) {
+		const styleEls = document.querySelectorAll( '.frm-email-style' );
+		styleEls.forEach( ( el ) => {
+			el.classList.remove( 'frm-email-style--selected' );
+		} );
+
+		const styleEl = e.target.closest( '.frm-email-style' );
+		styleEl.classList.add( 'frm-email-style--selected' );
+
+		const styleKey = styleEl.dataset.styleKey;
+		document.getElementById( 'frm-email-style-value' ).value = styleKey;
 	}
 
 	/**
