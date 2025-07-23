@@ -434,7 +434,9 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	private static function retrieve_and_set_templates() {
-		self::$templates = self::$form_template_api->get_api_info();
+		if ( ! self::$templates ) {
+			self::$templates = self::$form_template_api->get_api_info();
+		}
 
 		self::$is_expired   = FrmAddonsController::is_license_expired();
 		self::$license_type = FrmAddonsController::license_type();
