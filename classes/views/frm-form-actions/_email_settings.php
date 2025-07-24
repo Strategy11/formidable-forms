@@ -2,7 +2,28 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$email_styles = FrmEmailStylesController::get_email_styles();
+$selected_style = $form_action->post_content['email_style'] ? $form_action->post_content['email_style'] : 'classic';
+if ( ! empty( $form_action->post_content['plain_text'] ) ) {
+	$selected_style = 'plain';
+}
 ?>
+<p class="frm-email-style-container">
+	<label for="frm-email-style-value">
+		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
+	</label>
+	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value">
+		<?php
+		foreach ( $email_styles as $style_key => $style ) {
+			if ( empty( $style['selectable'] ) ) {
+				continue;
+			}
+			?>
+			<option value="<?php echo esc_attr( $style_key ); ?>" <?php selected( $selected_style, $style_key ); ?>><?php echo esc_html( $style['name'] ); ?></option>
+		<?php } ?>
+	</select>
+</p>
 
 <p class="frm_bcc_cc_container">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo esc_attr( ! empty( $form_action->post_content['cc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="cc">
@@ -122,10 +143,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Append Browser and Referring URL to message', 'formidable' ); ?>
 	<?php } ?>
 </label>
-
-<p>
-	<label for="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>">
-		<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'plain_text' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>" value="1" <?php checked( $form_action->post_content['plain_text'], 1 ); ?> />
-		<?php esc_html_e( 'Send Emails in Plain Text', 'formidable' ); ?>
-	</label>
-</p>
