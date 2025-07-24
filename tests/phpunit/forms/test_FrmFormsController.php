@@ -346,13 +346,13 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
-		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
+		$this->assertStringContainsString( '<div class="frm_message" role="status">Done!</div>', $response );
+		$this->assertStringContainsString( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 
 		if ( $show_form ) {
-			$this->assertNotFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
+			$this->assertStringContainsString( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
 		} else {
-			$this->assertFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
+			$this->assertStringNotContainsString( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
 		}
 	}
 
