@@ -287,7 +287,7 @@ class FrmTableHTMLGenerator {
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
-		$label = '<td role="presentation" ' . $this->td_style . '>' . wp_kses_post( $label ) . '</td>';
+		$label = '<th scope="row" role="presentation" ' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$value = '<td role="presentation" ' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
