@@ -59,6 +59,24 @@ class FrmEmailStylesController {
 	}
 
 	public static function get_email_style_preview_url( $style_key ) {
-		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ) );
+		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ), 'frm_email_style_preview' );
+	}
+
+	public static function ajax_preview() {
+		check_ajax_referer( 'frm_email_style_preview' );
+
+		$style_key = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
+		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
+		if ( ! $style_key ) {
+			die( $not_exist_msg);
+		}
+
+		$styles = self::get_email_styles();
+		if ( ! isset( $styles[ $style_key ] ) ) {
+			die( $not_exist_msg );
+		}
+
+		var_dump( 'asdfsdfds' );
+		die();
 	}
 }

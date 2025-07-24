@@ -308,6 +308,8 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
 
 		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
+
+		add_action( 'wp_ajax_frm_email_style_preview', 'FrmEmailStylesController::ajax_preview' );
 	}
 
 	/**
