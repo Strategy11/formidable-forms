@@ -970,7 +970,8 @@ function frmAdminBuildJS() {
 		return droppable;
 	}
 
-	function handleFieldDrop( _, ui ) {
+	function handleFieldDrop( event, ui ) {
+		
 		if ( ! dragState.dragging ) {
 			// dragState.dragging is set to true on drag start.
 			// The deactivate event gets called for every droppable. This check to make sure it happens once.
@@ -995,7 +996,7 @@ function frmAdminBuildJS() {
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
-			insertNewFieldByDragging( draggable.id );
+			insertNewFieldByDragging( draggable.id, event );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
@@ -1572,11 +1573,53 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Get the arguments for inserting a new field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @param {string} sectionId
+	 * @param {string} formId
+	 * @param {Number} hasBreak
+	 *
+	 * @returns {Object}
+	 */
+	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
+		const args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: sectionId,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType, formId, sectionId, hasBreak );
+	}
+
+	/**
+	 * Returns true if it's a range field type and slider type is not selected.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @param {Event}  event
+	 * @returns {boolean}
+	 */
+	function shouldStopInsertingField( fieldType, event ) {
+		return 'range' === fieldType && event.originalEvent?.detail?.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1';
+	}
+
+	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
+	 * @param {Event}  event
 	 */
-	function insertNewFieldByDragging( fieldType ) {
+	function insertNewFieldByDragging( fieldType, event ) {		
+		if ( shouldStopInsertingField( fieldType, event ) ) {
+			return;
+		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		const loading      = tag(
@@ -1603,16 +1646,9 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: sectionId,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			type: 'POST',
+			url: ajaxurl,
+			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success: function( msg ) {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -2005,7 +2041,7 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( loadedEvent );
 	}
 
-	function addFieldClick() {
+	function addFieldClick( event ) {
 		/*jshint validthis:true */
 		const $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
@@ -2016,24 +2052,21 @@ function frmAdminBuildJS() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
+		if ( shouldStopInsertingField( fieldType, event ) ) {
+			return;
+		}
+
 		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
 		}
 
 		const formId = thisFormId;
+
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: 0,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
