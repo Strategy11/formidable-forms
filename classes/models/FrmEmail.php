@@ -281,9 +281,13 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function set_is_plain_text() {
-		if ( $this->settings['plain_text'] ) {
-			$this->is_plain_text = true;
+		if ( empty( $this->settings['email_style'] ) ) {
+			// If `email_style` isn't set, use the `plain_text` checkbox.
+			$this->is_plain_text = ! empty( $this->settings['plain_text'] );
+			return;
 		}
+
+		$this->is_plain_text = 'plain' === $this->settings['email_style'];
 	}
 
 	/**
