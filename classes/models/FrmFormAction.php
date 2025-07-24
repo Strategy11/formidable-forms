@@ -540,6 +540,9 @@ class FrmFormAction {
 		}
 
 		if ( 'all' !== $type ) {
+			if ( is_array( $action_controls ) ) {
+				return array();
+			}
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
