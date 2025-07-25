@@ -181,7 +181,7 @@ class FrmEntriesController {
 
 			default:
 				if ( FrmEntriesListHelper::has_moved_entries_bulk_delete_from_pro() ) {
-					if ( $action == -1 ) {
+					if ( intval( $action ) === -1 ) {
 						$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 					}
 					$bulk_action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
@@ -254,7 +254,7 @@ class FrmEntriesController {
 
 		$form_ids = self::get_child_form_ids( $form_id );
 
-		$meta_query  = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas as em INNER JOIN {$wpdb->prefix}frm_items as e on (em.item_id=e.id) WHERE form_id=%d", $form_id );
+		$meta_query  = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas AS em INNER JOIN {$wpdb->prefix}frm_items AS e ON (em.item_id=e.id) WHERE form_id=%d", $form_id );
 		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
 
 		if ( ! empty( $form_ids ) ) {
