@@ -1,4 +1,5 @@
-@import 'components/form/toggle-components';
+@import '../admin/base/variables';
+@import '../admin/components/form/toggle-components';
 
 #frm_testing_mode {
     border-radius: 1rem;
@@ -9,20 +10,23 @@
     padding: 16px 20px;
     margin-bottom: 40px;
 
-    & > span:first-child {
-        background-color: rgb(250, 200, 182);
-        border-radius: 200px;
+    h2 {
+        font-size: 18px;
         font-weight: 600;
-        font-size: 12px;
-        padding: 4px 8px;
+        color: rgba(0, 0, 0, 1);
     }
 
-    & label {
+    label {
         font-size: 12px;
         font-weight: 600;
+
+        span.frm_toggle_opt {
+            color: var(--grey-800);
+            font-weight: 600;
+        }
     }
 
-    & input[type="checkbox"] {
+    input[type="checkbox"] {
         margin-top: 3px;
         margin-left: 4px;
     }

@@ -10,11 +10,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div id="frm_testing_mode">
-	<span>Test Mode Controls</span>
+	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
 	<div>
 		<label>
-			Disable Required Fields
-			<input type="checkbox" id="frm_testmode_disable_required_fields" name="frm_testmode[disable_required_fields]" value="1"/>
+			<?php
+			FrmHtmlHelper::toggle(
+				'frm_testmode_disable_required_fields',
+				'frm_testmode[disable_required_fields]',
+				array(
+					'echo'        => true,
+					'off_label'   => __( 'Disable Required Fields', 'formidable' ),
+					'show_labels' => true,
+				)
+			);
+			?>
 		</label>
 	</div>
 </div>
