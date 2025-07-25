@@ -21,6 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'echo'        => true,
 					'off_label'   => __( 'Disable Required Fields', 'formidable' ),
 					'show_labels' => true,
+					'disabled'    => true,
 				)
 			);
 			?>
