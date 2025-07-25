@@ -37,7 +37,8 @@ const entries = {
   // SCSS entries
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
-    font_icons: './resources/scss/font_icons.scss'
+    font_icons: './resources/scss/font_icons.scss',
+    frm_testing_mode: './resources/scss/admin/frm_testing_mode.scss'
   }
 };
 

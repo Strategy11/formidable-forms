@@ -1,0 +1,29 @@
+@import 'components/form/toggle-components';
+
+#frm_testing_mode {
+    border-radius: 1rem;
+    background-color: #fff;
+    border-color: #0000001a;
+    border-width: 1px;
+    border-style: solid;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+
+    & > span:first-child {
+        background-color: rgb(250, 200, 182);
+        border-radius: 200px;
+        font-weight: 600;
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    & label {
+        font-size: 12px;
+        font-weight: 600;
+    }
+
+    & input[type="checkbox"] {
+        margin-top: 3px;
+        margin-left: 4px;
+    }
+}

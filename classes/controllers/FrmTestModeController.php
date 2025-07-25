@@ -21,6 +21,8 @@ class FrmTestModeController {
 			return $html;
 		}
 
+		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
+
 		$html = str_replace(
 			'<div class="frm_form_fields',
 			self::get_testing_mode_container() . '<div class="frm_form_fields',
