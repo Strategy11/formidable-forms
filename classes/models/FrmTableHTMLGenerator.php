@@ -258,7 +258,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_table_header() {
-		return '<table cellspacing="0" role="presentation" ' . $this->table_style . '><tbody>' . "\r\n";
+		return '<table ' . $this->table_style . '><tbody>' . "\r\n";
 	}
 
 	/**
@@ -287,8 +287,8 @@ class FrmTableHTMLGenerator {
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
-		$label = '<th scope="row" role="presentation" ' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td role="presentation" ' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
+		$label = '<th scope="row" ' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
+		$value = '<td ' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
