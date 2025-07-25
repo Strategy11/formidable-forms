@@ -135,6 +135,7 @@ class FrmEntriesController {
 			return;
 		}
 		self::destroy_items( $items );
+		self::display_list();
 	}
 
 	/**
