@@ -8,6 +8,9 @@ $selected_style = ! empty( $form_action->post_content['email_style'] ) ? $form_a
 if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 	$selected_style = 'plain';
 }
+
+$frm_settings  = FrmAppHelper::get_settings();
+$default_style = ! empty( $frm_settings->email_style ) ? $frm_settings->email_style : 'classic';
 ?>
 <p class="frm-email-style-container">
 	<label for="frm-email-style-value">
@@ -16,11 +19,19 @@ if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value">
 		<?php
 		foreach ( $email_styles as $style_key => $style ) {
+			$option_attrs = array( 'value' => $style_key );
+			$option_label = $style['name'];
+
 			if ( empty( $style['selectable'] ) ) {
-				continue;
+				$option_attrs['disabled'] = 'disabled';
+				$option_label            .= ( ' ' . __( '(Pro)', 'formidable' ) );
+			}
+
+			if ( $style_key === $default_style ) {
+				$option_label .= ( ' ' . __( '(Default)', 'formidable' ) );
 			}
 			?>
-			<option value="<?php echo esc_attr( $style_key ); ?>" <?php selected( $selected_style, $style_key ); ?>><?php echo esc_html( $style['name'] ); ?></option>
+			<option <?php FrmAppHelper::array_to_html_params( $option_attrs, true ); ?> <?php selected( $selected_style, $style_key ); ?>><?php echo esc_html( $option_label ); ?></option>
 		<?php } ?>
 	</select>
 </p>
