@@ -62,6 +62,27 @@ class FrmEmailStylesController {
 		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ), 'frm_email_style_preview' );
 	}
 
+	private static function get_fake_entry() {
+		$entry             = new stdClass();
+		$entry->post_id    = 0;
+		$entry->id         = 0;
+		$entry->ip         = '';
+		$entry->form_id    = 1;
+		$entry->metas      = array();
+		$entry->user_id    = get_current_user_id();
+		$entry->updated_by = 0;
+
+		$entry->item_meta = array(
+			2 => 'John',
+			3 => 'Doe',
+			4 => 'john@doe.com',
+			5 => 'Contact subject',
+			6 => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
+		);
+
+		return $entry;
+	}
+
 	public static function ajax_preview() {
 		check_ajax_referer( 'frm_email_style_preview' );
 
@@ -76,7 +97,14 @@ class FrmEmailStylesController {
 			die( $not_exist_msg );
 		}
 
-		var_dump( 'asdfsdfds' );
+		$atts = array(
+			'entry' => self::get_fake_entry(),
+			'plain_text' => false,
+			'user_info' => false,
+		);
+
+		$mail_body = FrmEntriesHelper::replace_default_message( '[default-message]', $atts );
+		echo $mail_body;
 		die();
 	}
 }
