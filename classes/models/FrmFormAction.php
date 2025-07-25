@@ -540,6 +540,9 @@ class FrmFormAction {
 		}
 
 		if ( 'all' !== $type ) {
+			if ( is_array( $action_controls ) ) {
+				return array();
+			}
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
@@ -865,32 +868,6 @@ class FrmFormAction {
 
 		$stop = false;
 		return $stop;
-	}
-
-	/**
-	 * Prepare the logic value for comparison against the entered value
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param array|string $logic_value
-	 *
-	 * @return void
-	 */
-	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
-		if ( is_array( $logic_value ) ) {
-			$logic_value = reset( $logic_value );
-		}
-
-		if ( $logic_value === 'current_user' ) {
-			$logic_value = get_current_user_id();
-		}
-
-		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_order, $entry );
-
-		/**
-		 * @since 4.04.05
-		 */
-		$logic_value = apply_filters( 'frm_action_logic_value', $logic_value );
 	}
 
 	/**
