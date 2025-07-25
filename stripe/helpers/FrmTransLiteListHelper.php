@@ -58,7 +58,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		// @codingStandardsIgnoreStart
 		$this->items = $wpdb->get_results(
 			$wpdb->prepare(
-				'SELECT * ' . $query . $order_query . ' LIMIT %d, %d',
+				'SELECT p.* ' . $query . $order_query . ' LIMIT %d, %d',
 				$start,
 				$per_page
 			)
@@ -87,7 +87,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			// @codingStandardsIgnoreStart
 			$query = $wpdb->prepare(
 				"FROM `{$wpdb->prefix}{$table_name}` p
-				LEFT JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
+				JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
 				WHERE i.form_id = %d",
 				$form_id
 			);
@@ -352,7 +352,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 				'action' => 'show',
 				'id'     => $item->id,
 				'type'   => $this->table,
-			)
+				'page'   => FrmAppHelper::simple_get( 'page' ),
+			),
+			admin_url( 'admin.php' )
 		);
 
 		$link_params = array(
@@ -527,6 +529,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 				return 'Stripe';
 			case 'paypal':
 				return 'PayPal';
+			case 'square':
+				return 'Square';
 		}
 		return $item->paysys;
 	}

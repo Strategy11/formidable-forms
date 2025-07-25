@@ -159,7 +159,7 @@ class FrmCSVExportHelper {
 			array(
 				'item_id'         => $atts['entry_ids'],
 				'field_id'        => 0,
-				'meta_value like' => '{',
+				'meta_value like' => 's:7:"comment";',
 			),
 			array(
 				'group_by' => 'item_id',

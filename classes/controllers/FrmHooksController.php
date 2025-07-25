@@ -81,6 +81,7 @@ class FrmHooksController {
 		add_filter( 'frm_replace_content_shortcodes', 'FrmFormsController::replace_content_shortcodes', 20, 3 );
 		add_action( 'admin_bar_init', 'FrmFormsController::admin_bar_css' );
 		add_action( 'wp_footer', 'FrmFormsController::footer_js', 1, 0 );
+		add_action( 'wp_footer', 'FrmHoneypot::maybe_print_honeypot_js', 99 );
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
@@ -113,6 +114,7 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+		FrmSquareLiteHooksController::load_hooks();
 
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
@@ -205,6 +207,7 @@ class FrmHooksController {
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
+		FrmSquareLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();

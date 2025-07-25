@@ -5,6 +5,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmHoneypot extends FrmValidate {
 
+	/**
+	 * Track the printed selectors so we do not print the same CSS twice.
+	 *
+	 * @since 6.22
+	 * @var array
+	 */
+	private static $printed_honeypot_selectors = array();
 
 	/**
 	 * Option type.
@@ -87,23 +94,33 @@ class FrmHoneypot extends FrmValidate {
 
 	/**
 	 * @param int $form_id Form ID.
-	 * @param int $honeypot_field_id
-	 * 
+	 *
 	 * @return void
 	 */
-	public static function maybe_render_field( $form_id, $honeypot_field_id = 0 ) {
-		if ( ! $honeypot_field_id ) {
+	public static function maybe_render_field( $form_id ) {
+		$honeypot = new self( $form_id );
+		if ( ! $honeypot->should_render_field() ) {
 			return;
 		}
+
+		$max_field_id = FrmDb::get_var(
+			'frm_fields',
+			array(),
+			'id',
+			array(
+				'order_by' => 'id DESC',
+			)
+		);
+
+		global $frm_vars;
+		$offset            = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
+		$honeypot_field_id = $max_field_id ? $max_field_id + $offset : $offset;
 
 		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
-		$honeypot = new self( $form_id );
-		if ( $honeypot->should_render_field() ) {
-			$honeypot->render_field( $honeypot_field_id );
-			self::maybe_print_honeypot_css();
-		}
+		$honeypot->render_field( $honeypot_field_id );
+		self::maybe_print_honeypot_css();
 	}
 
 	/**
@@ -112,7 +129,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @since 6.21
 	 */
 	public static function maybe_print_honeypot_js() {
-		if ( ! self::is_enabled() ) {
+		if ( FrmAppHelper::is_admin() || ! self::is_enabled() ) {
 			return;
 		}
 
@@ -133,6 +150,9 @@ class FrmHoneypot extends FrmValidate {
 			</script>",
 			esc_js( $css )
 		);
+
+		global $frm_vars;
+		self::$printed_honeypot_selectors = $frm_vars['honeypot_selectors'];
 	}
 
 	/**
@@ -163,9 +183,17 @@ class FrmHoneypot extends FrmValidate {
 			return '';
 		}
 
+		$selectors = $frm_vars['honeypot_selectors'];
+		if ( self::$printed_honeypot_selectors ) {
+			$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+			if ( ! $selectors ) {
+				return '';
+			}
+		}
+
 		return sprintf(
 			'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
-			implode( ',', $frm_vars['honeypot_selectors'] )
+			implode( ',', $selectors )
 		);
 	}
 

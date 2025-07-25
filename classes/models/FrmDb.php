@@ -253,7 +253,7 @@ class FrmDb {
 	 * @param array  $args
 	 * @param string $limit
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public static function get_col( $table, $where = array(), $field = 'id', $args = array(), $limit = '' ) {
 		return self::get_var( $table, $where, $field, $args, $limit, 'col' );
@@ -271,7 +271,6 @@ class FrmDb {
 	 */
 	public static function get_row( $table, $where = array(), $fields = '*', $args = array() ) {
 		$args['limit'] = 1;
-
 		return self::get_var( $table, $where, $fields, $args, '', 'row' );
 	}
 
@@ -285,7 +284,7 @@ class FrmDb {
 	 * @param string $fields
 	 * @param array  $args
 	 *
-	 * @return mixed
+	 * @return array
 	 */
 	public static function get_results( $table, $where = array(), $fields = '*', $args = array() ) {
 		return self::get_var( $table, $where, $fields, $args, '', 'results' );
@@ -656,14 +655,16 @@ class FrmDb {
 	 * @return mixed $results The cache or query results
 	 */
 	public static function check_cache( $cache_key, $group = '', $query = '', $type = 'get_var', $time = 300 ) {
-		$results = wp_cache_get( $cache_key, $group );
-		if ( ! FrmAppHelper::is_empty_value( $results, false ) || empty( $query ) ) {
+		$found   = null;
+		$results = wp_cache_get( $cache_key, $group, false, $found );
+
+		if ( ( $found === true && $results !== false ) || empty( $query ) ) {
 			return $results;
 		}
 
 		if ( 'get_posts' == $type ) {
 			$results = get_posts( $query );
-		} elseif ( 'get_associative_results' == $type ) {
+		} elseif ( 'get_associative_results' === $type ) {
 			global $wpdb;
 			$results = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {

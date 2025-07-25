@@ -233,7 +233,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	line-height: var(--line-height);
 }
 
-#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {
 	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
 	width: var(--auto-width);
 	max-width: 100%;

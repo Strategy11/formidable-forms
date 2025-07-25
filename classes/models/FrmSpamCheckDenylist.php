@@ -53,15 +53,18 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	}
 
 	protected function is_enabled() {
+		$frm_settings = FrmAppHelper::get_settings();
+		$is_enabled   = $frm_settings->denylist_check;
+
 		/**
-		 * Allows to disable the denylist check.
+		 * Allows disabling the denylist check.
 		 *
 		 * @since 6.21
 		 *
 		 * @param bool  $is_enabled Whether the denylist check is enabled.
 		 * @param array $values     The entry values.
 		 */
-		return apply_filters( 'frm_check_denylist', true, $this->values );
+		return apply_filters( 'frm_check_denylist', $is_enabled, $this->values );
 	}
 
 	/**
@@ -167,6 +170,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			if ( ! empty( $denylist['words'] ) ) {
 				foreach ( $denylist['words'] as $word ) {
 					if ( $this->single_line_check_values( $word, $denylist ) ) {
+						self::add_spam_keyword_to_option( $word );
 						return true;
 					}
 				}
@@ -194,6 +198,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				'words'            => array(),
 				'is_regex'         => false,
 				'field_types'      => array(),
+				// Add `other` if you want to skip checking Other values of some field types.
 				'skip_field_types' => array(),
 				// Is ignore if `is_regex` is `true`.
 				'compare'          => self::COMPARE_CONTAINS,
@@ -201,6 +206,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				// If this is `true`, this denylist will be skipped.
 				'skip'             => false,
 			)
+		);
+
+		// Some field types should never be checked.
+		$denylist['skip_field_types'] = array_merge(
+			$denylist['skip_field_types'],
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select' )
 		);
 	}
 
@@ -338,10 +349,17 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 						$this->add_to_values_to_check( $values_to_check, $sub_value );
 					}
 				}
+			} elseif ( 'other' === $key ) {
+				if ( ! in_array( 'other', $denylist['skip_field_types'], true ) ) {
+					// This is Other values, loop through this and add sub values.
+					foreach ( $value as $sub_value ) {
+						$this->add_to_values_to_check( $values_to_check, $sub_value );
+					}
+				}
 			} elseif ( $this->should_check_this_field( $key, $field_ids_to_check ) ) {
 				$this->add_to_values_to_check( $values_to_check, $value );
 			}
-		}
+		}//end foreach
 
 		if ( isset( $denylist['extract_value'] ) && is_callable( $denylist['extract_value'] ) ) {
 			$values_to_check = call_user_func( $denylist['extract_value'], $values_to_check, $denylist );
@@ -438,6 +456,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 			$is_spam = $callback( $line, $callback_args );
 			if ( $is_spam ) {
+				if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
+					self::add_spam_keyword_to_option( $line );
+				}
+
 				fclose( $fp );
 				return true;
 			}
@@ -514,5 +536,20 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	protected function get_spam_message() {
 		return __( 'Your entry appears to be blocked spam!', 'formidable' );
+	}
+
+	private function add_spam_keyword_to_option( $keyword ) {
+		$transient_name = 'frm_recent_spam_detected';
+		$transient      = get_transient( $transient_name );
+		if ( ! is_array( $transient ) ) {
+			$transient = array();
+		}
+
+		if ( in_array( $keyword, $transient, true ) ) {
+			return;
+		}
+
+		$transient[] = $keyword;
+		set_transient( $transient_name, $transient, DAY_IN_SECONDS );
 	}
 }

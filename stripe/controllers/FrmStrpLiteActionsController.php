@@ -11,6 +11,28 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	private static $customer;
 
 	/**
+	 * @since 6.22
+	 *
+	 * @param string             $callback
+	 * @param array|false|object $field
+	 * @return string
+	 */
+	public static function maybe_show_card( $callback, $field = false ) {
+		if ( false === $field ) {
+			// Pro isn't up to date.
+			return $callback;
+		}
+
+		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
+		$actions = self::get_actions_before_submit( $form_id );
+		if ( empty( $actions ) ) {
+			return $callback;
+		}
+
+		return self::class . '::show_card';
+	}
+
+	/**
 	 * Override the credit card field HTML if there is a Stripe action.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
@@ -75,7 +97,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
-	 * @param stdClass $form
+	 * @param mixed    $form
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -269,73 +291,20 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
+		// Gateway is a radio button but it should always be an array in the database for
+		// compatibility with the payments submodule where it is a checkbox.
+		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+
+		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
+		if ( ! $is_stripe ) {
+			return $settings;
+		}
+
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
 		$settings                = self::create_plans( $settings );
-		$form_id                 = absint( $action['menu_order'] );
-
-		if ( empty( $settings['credit_card'] ) ) {
-			$credit_card_field_id = FrmDb::get_var(
-				'frm_fields',
-				array(
-					'type'    => 'credit_card',
-					'form_id' => $form_id,
-				)
-			);
-			if ( ! $credit_card_field_id ) {
-				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
-			}
-			if ( $credit_card_field_id ) {
-				$settings['credit_card'] = $credit_card_field_id;
-			}
-		}
-
-		$gateway_field_id = FrmDb::get_var(
-			'frm_fields',
-			array(
-				'type'    => 'gateway',
-				'form_id' => $form_id,
-			)
-		);
-		if ( ! $gateway_field_id ) {
-			self::add_a_gateway_field( $form_id );
-		}
 
 		return $settings;
-	}
-
-	/**
-	 * @param int    $form_id
-	 * @param string $field_type
-	 * @param string $field_name
-	 * @return false|int
-	 */
-	private static function add_a_field( $form_id, $field_type, $field_name ) {
-		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
-		$new_values['name'] = $field_name;
-		$field_id           = FrmField::create( $new_values );
-		return $field_id;
-	}
-
-	/**
-	 * A credit card field is added automatically if missing before a Stripe action is updated.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_credit_card_field( $form_id ) {
-		return self::add_a_field( $form_id, 'credit_card', __( 'Payment', 'formidable' ) );
-	}
-
-	/**
-	 * A gateway field is added automatically for compatibility with the Stripe add on.
-	 * The gateway field is not important for the Stripe Lite implementation.
-	 *
-	 * @param int $form_id
-	 * @return false|int
-	 */
-	private static function add_a_gateway_field( $form_id ) {
-		return self::add_a_field( $form_id, 'gateway', __( 'Payment Method', 'formidable' ) );
 	}
 
 	/**
@@ -455,6 +424,20 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			$dependencies[] = 'formidablepro';
 		}
 
+		$action_settings = self::prepare_settings_for_js( $form_id );
+		$found_gateway   = false;
+		foreach ( $action_settings as $action ) {
+			$gateways = $action['gateways'];
+			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
+				$found_gateway = true;
+				break;
+			}
+		}
+
+		if ( ! $found_gateway ) {
+			return;
+		}
+
 		wp_enqueue_script(
 			'formidable-stripe',
 			$script_url,
@@ -463,9 +446,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$action_settings = self::prepare_settings_for_js( $form_id );
-		$style_settings  = self::get_style_settings_for_form( $form_id );
-		$stripe_vars     = array(
+		$style_settings = self::get_style_settings_for_form( $form_id );
+		$stripe_vars    = array(
 			'publishable_key' => $publishable,
 			'form_id'         => $form_id,
 			'nonce'           => wp_create_nonce( 'frm_strp_ajax' ),

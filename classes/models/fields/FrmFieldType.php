@@ -570,6 +570,24 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * Check if a field type includes field options. This should generally match the result of should_continue_to_field_options, but
+	 * this function was added because should_continue_to_field_options uses a protected scope.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function field_type_has_options_settings() {
+		return $this->should_continue_to_field_options(
+			array(
+				'field' => array(
+					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+				),
+			)
+		);
+	}
+
+	/**
 	 * @since 4.04
 	 */
 	protected function get_bulk_edit_string() {
@@ -1068,7 +1086,11 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$hidden = $this->maybe_include_hidden_values( $args );
+		if ( isset( $shortcode_atts['opt'] ) ) {
+			$hidden = $this->include_hidden_values_for_single_opt( $args, $shortcode_atts['opt'] );
+		} else {
+			$hidden = $this->maybe_include_hidden_values( $args );
+		}
 
 		$field      = $this->field;
 		$html_id    = $args['html_id'];
@@ -1168,6 +1190,41 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 
+	/**
+	 * When opt=2 for example is used in the [input] shortcode, only print a single hidden input.
+	 *
+	 * @since 6.22
+	 *
+	 * @param array      $args
+	 * @param int|string $opt
+	 * @return string
+	 */
+	private function include_hidden_values_for_single_opt( $args, $opt ) {
+		$hidden         = '';
+		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+
+		if ( ! is_array( $selected_value ) ) {
+			return $hidden;
+		}
+
+		$options = array_values( $this->field['options'] );
+		if ( ! isset( $options[ $opt ] ) ) {
+			return $hidden;
+		}
+
+		$option = $options[ $opt ];
+		if ( is_array( $option ) ) {
+			$option = $option['value'];
+		}
+
+		if ( in_array( $option, $selected_value, true ) ) {
+			$args['field_value'] = array( $option );
+			$hidden              = $this->maybe_include_hidden_values( $args );
+		}
+
+		return $hidden;
+	}
+	
 	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
