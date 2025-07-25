@@ -216,16 +216,6 @@ class FrmEntriesController {
 		$form_id = (int) $params['form'];
 
 		if ( $form_id ) {
-			if ( self::should_trigger_on_delete_entry_actions( $form_id ) ) {
-				$entry_ids = FrmDb::get_col( 'frm_items', array( 'form_id' => $form_id ) );
-				// This action takes a while, so only trigger it if there are posts to delete.
-				foreach ( $entry_ids as $entry_id ) {
-					$entry = FrmEntry::getOne( $entry_id, true );
-					do_action( 'frm_before_destroy_entry', $entry_id, $entry );
-					unset( $entry_id, $entry );
-				}
-			}
-
 			$results = self::delete_form_entries( $form_id );
 			if ( $results ) {
 				$message = 'destroy_all';
@@ -289,20 +279,6 @@ class FrmEntriesController {
 		}
 
 		return $form_ids;
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param int $form_id
-	 *
-	 * @return bool
-	 */
-	private static function should_trigger_on_delete_entry_actions( $form_id ) {
-		if ( FrmFormAction::form_has_action_type( $form_id, 'wppost' ) ) {
-			return true;
-		}
-		return FrmAppHelper::get_param( 'trigger_on_delete_entry_actions', false ) === 'delete';
 	}
 
 	/**
