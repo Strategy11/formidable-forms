@@ -100,7 +100,7 @@ foreach ( $pro_fields as $field_key => $field_type ) {
 					<ul class="frm-dropdown-menu" role="menu" aria-labelledby="frm-<?php echo esc_attr( $field_key ); ?>Drop">
 					<?php foreach ( $field_type['types'] as $k => $type ) { ?>
 						<li class="frm_t<?php echo esc_attr( $field_key ); ?>" id="<?php echo esc_attr( $field_key ); ?>|<?php echo esc_attr( $k ); ?>">
-							<?php echo FrmAppHelper::kses( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+							<?php FrmAppHelper::kses_echo( apply_filters( 'frmpro_field_links', $type, $id, $field_key . '|' . $k ), array( 'a', 'i', 'span' ) ); ?>
 						</li>
 						<?php
 						unset( $k, $type );

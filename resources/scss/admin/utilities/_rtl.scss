@@ -1,0 +1,110 @@
+/**
+ * Component: RTL
+ */
+
+.rtl h3 {
+	font-weight: inherit !important;
+}
+
+.rtl.js .accordion-section-title::after {
+	left: 10px;
+	right: auto;
+}
+
+.rtl #frm_top_bar #frm_bs_dropdown {
+	padding-left: 15px;
+}
+
+.rtl .frm-full-close,
+.rtl .frm_wrap .columns-2 .frm-right-panel,
+.rtl .frm-right-panel {
+	border-right-width: 1px;
+	border-left-width: 0;
+}
+
+.rtl .frm-full-close {
+	padding-left: 0;
+	padding-right: var(--gap-md);
+}
+
+.rtl .frm-text-right {
+	text-align: left;
+}
+
+.rtl .frm_wrap #frm_adv_info ul.category-tabs li:first-child {
+	border-left-width: 1px;
+}
+
+.rtl .frm-dropdown-menu {
+	text-align: right;
+}
+
+.rtl .frm_actions_dropdown .frm_icon_font {
+	float: right;
+	margin-right: 0;
+	margin-left: 3px;
+}
+
+.rtl #frm-insert-fields-box,
+.rtl #frm-conditionals {
+	padding-right: .9em;
+}
+
+.rtl #html_settings .frm_field_html_box {
+	margin-right: 0;
+}
+
+.rtl .frm_list_entry_page h2 {
+	float: right;
+}
+
+.rtl .frm_scale {
+	float: right;
+	margin-left: 10px;
+	margin-right: 0;
+}
+
+.rtl .frm-page-break .frm-collapse-page.button {
+	margin-left: 0;
+	margin-right: 46%;
+}
+
+.rtl .frm-field-action-icons {
+	right: unset;
+	left: 2px;
+}
+
+.rtl .frm_has_shortcodes > i {
+	right: auto;
+	left: 5px;
+}
+
+.rtl p.frm_reply_to_container,
+.rtl p.frm_bcc_cc_container {
+	float: left;
+}
+
+.rtl .frm-default-switcher {
+	float: left;
+	position: relative;
+}
+
+.rtl .frm-with-right-icon .frmsvg {
+	right: auto;
+	left: 0;
+}
+
+.rtl .frm-inline-modal > a.dismiss {
+	left: 13px;
+	right: auto;
+}
+
+.rtl.wp-admin .frm_wrap select {
+	padding-left: var(--gap-lg) !important;
+	padding-right: 5px !important;
+	background-position: left 11px top 55%;
+}
+
+.rtl .frm_code_list.frm-full-hover a span {
+	margin-left: var(--gap-xs);
+}

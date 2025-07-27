@@ -1,0 +1,49 @@
+/**
+ * Components - General Form Styles
+ */
+
+.frm_forms.with_frm_style {
+	max-width: 100%;
+}
+
+.post-type-frm_display .wrap > .subsubsub,
+.post-type-frm_display .wrap > .icl_subsubsub,
+.frm_form_settings > p {
+	margin: 6px var(--gap-md);
+	padding: 0;
+}
+
+.frm-entry-container {
+	margin: 0 40px 40px;
+	padding: 0;
+}
+
+#form_reports_page .frm-inner-content {
+	width: calc(100% - 40px);
+	max-width: 900px;
+	margin: 20px auto;
+	padding: 20px;
+}
+
+.frm_inner_field_container > .frm_form_fields {
+	clear: both;
+}
+
+.post-type-frm_display h2,
+.frm_wrap h2 {
+	margin-top: 0 !important;
+	font-size: var(--text-lg);
+	line-height: var(--leading);
+}
+
+.post-type-frm_display .wrap > h2:first-child,
+.frm_wrap .wrap > h2:first-child {
+	padding-top: 0;
+	margin-top: 0 !important;
+	font-size: var(--text-lg);
+}
+
+#frm_form_editor_container {
+	position: relative;
+	margin-top: 28px;
+}

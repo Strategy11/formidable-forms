@@ -705,6 +705,18 @@
 	}
 
 	/**
+	 * Returns the layout for the Stripe Link elements.
+	 *
+	 * @since 6.21
+	 *
+	 * @returns {string}
+	 */
+	function getLayout() {
+		const settings = getStripeSettings()[0];
+		return settings.hasOwnProperty( 'layout' ) && settings.layout || 'tabs';
+	}
+
+	/**
 	 * The Payment element for Stripe link includes credit card, country, and postal code.
 	 * When a new Stripe link account is being set up, it will also include an additional block underneath that asks for Phone Number and Full Name.
 	 *
@@ -723,6 +735,9 @@
 		paymentElement = elements.create(
 			'payment',
 			{
+				layout: {
+					type: getLayout()
+				},
 				defaultValues: {
 					billingDetails: {
 						name: getFullNameValueDefault(),

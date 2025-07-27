@@ -50,6 +50,7 @@ abstract class FrmFormMigrator {
 	}
 
 	public function import_page() {
+		$forms = $this->get_forms();
 		?>
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
@@ -66,11 +67,11 @@ abstract class FrmFormMigrator {
 						<input type="hidden" name="action" value="frm_import_<?php echo esc_attr( $this->slug ); ?>" />
 						<div style="max-width:400px;text-align:left;">
 							<?php
-							if ( empty( $this->get_forms() ) ) {
+							if ( ! $forms ) {
 								esc_html_e( 'No Forms Found.', 'formidable' );
 							}
 							?>
-							<?php foreach ( $this->get_forms() as $form_id => $name ) { ?>
+							<?php foreach ( $forms as $form_id => $name ) { ?>
 								<p>
 									<label>
 										<input type="checkbox" name="form_id[]"
@@ -86,7 +87,20 @@ abstract class FrmFormMigrator {
 								</p>
 							<?php } ?>
 						</div>
-						<p class="submit"><button type="submit" class="button button-primary frm-button-primary">Start Import</button></p>
+						<?php
+						$button_atts = array(
+							'type'  => 'submit',
+							'class' => 'button button-primary frm-button-primary',
+						);
+						if ( ! $forms ) {
+							$button_atts['disabled'] = 'disabled';
+						}
+						?>
+						<p class="submit">
+							<button <?php FrmAppHelper::array_to_html_params( $button_atts, true ); ?>>
+								<?php esc_html_e( 'Start Import', 'formidable' ); ?>
+							</button>
+						</p>
 					</form>
 					<div id="frm-importer-process" class="frm-importer-process frm_hidden">
 
@@ -97,8 +111,13 @@ abstract class FrmFormMigrator {
 						</p>
 
 						<p class="process-completed" class="frm_hidden">
-							The import process has finished! We have successfully imported
-							<span class="forms-completed"></span> forms. You can review the results below.
+							<?php
+							printf(
+								// translators: %s is the number of forms that were imported.
+								esc_html__( 'The import process has finished! We have successfully imported %s forms. You can review the results below.', 'formidable' ),
+								'<span class="forms-completed"></span>'
+							);
+							?>
 						</p>
 
 						<div class="status"></div>

@@ -1,0 +1,92 @@
+/**
+ * Components - Add-on Tiles
+ */
+
+.frm-addons .frm-card.frm-addon-not-installed {
+	position: relative;
+}
+
+.frm-addons .plugin-card-top {
+	min-height: 155px;
+	padding-top: var(--gap-lg);
+	overflow: hidden;
+}
+
+.frm-addons .plugin-card-top h2 {
+	margin-top: 0;
+	font-weight: 400;
+}
+
+.frm-template-row p,
+.frm-addons .plugin-card-top p {
+	opacity: 0.8;
+}
+
+.frm-addons .plugin-card-top > :not(p):not(h2) {
+
+	/* Hide notices from third party plugins */
+	display: none;
+}
+
+.frm-addons .plugin-card-bottom {
+	padding: 5px 20px 20px;
+	text-align: center;
+	background: transparent;
+	border-top: none;
+}
+
+.frm-addons .plugin-card-bottom,
+.frm-addons .plugin-card-bottom .button {
+	font-size: 15px;
+}
+
+.frm-addons .button,
+.frm-addons .frm-button-tertiary {
+	float: right;
+}
+
+.frm-addons .addon-status {
+	float: left;
+	padding-top: 4px;
+}
+
+.frm-addon-not-installed .frm-activate-addon,
+.frm-addon-not-installed .frm-deactivate-addon,
+.frm-addon-not-installed .frm-uninstall-addon,
+.frm-addon-installed .frm-install-addon,
+.frm-addon-installed .frm-deactivate-addon,
+.frm-addon-active  .frm-activate-addon,
+.frm-addon-active  .frm-install-addon,
+.frm-addon-active .frm-uninstall-addon,
+.plugin-card-pro.frm-addon-active .button,
+.plugin-card-pro.frm-addon-active .frm-button-tertiary {
+	display: none !important;
+}
+
+.frm-save-and-reload-options {
+	margin-top: 10px;
+	font-size: 13px;
+}
+
+.frm-save-and-reload,
+.frm-save-and-reload + .frm-button-secondary {
+	visibility: visible !important;
+}
+
+.addon-status-label {
+	opacity: .7;
+}
+
+.frm-addon-active .addon-status-label {
+	color: var(--green);
+	opacity: 1;
+}
+
+.frm-addon-error {
+	position: absolute;
+	top: 55px;
+	left: 10px;
+	right: 10px;
+	font-weight: 700;
+	text-align: center;
+}

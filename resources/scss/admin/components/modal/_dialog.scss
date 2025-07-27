@@ -1,0 +1,60 @@
+/**
+ * Component: Dialog
+ */
+
+.frm-dialog {
+	z-index: 100;
+	padding: 0 !important;
+	border-radius: 16px;
+	border: none;
+	background-color: #fff;
+	max-width: 100% !important;
+}
+
+.frm-dialog .postbox {
+	background: transparent;
+	box-shadow: none;
+	border: none;
+	line-height: var(--leading);
+}
+
+.frm-dialog input[type="text"],
+.frm-dialog textarea {
+	font-size: var(--text-md);
+}
+
+.frm-dialog textarea {
+	height: 75px;
+}
+
+.frm-dialog button.frm-button-primary {
+	margin-right: 10px;
+}
+
+.frm-dialog .frm-sub-label,
+.frm-sub-label {
+	color: var(--grey);
+	text-transform: none;
+	padding-left: 8px;
+}
+
+h2 .frm-sub-label {
+	font-size: var(--text-md);
+}
+
+.frm-views-editor-body .ui-widget-overlay,
+.frm-white-body .ui-widget-overlay,
+.toplevel_page_formidable .ui-widget-overlay,
+body[class*="formidable-payments"] .ui-widget-overlay,
+body.plugins-php .ui-widget-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--grey-500);
+	opacity: .5;
+	z-index: 2;
+}

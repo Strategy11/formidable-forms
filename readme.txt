@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.7.1
+Tested up to: 6.8.1
 Requires PHP: 7.0
-Stable tag: 6.17.1
+Stable tag: 6.22.3
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -61,7 +61,7 @@ Formidable transcends typical contact form plugin functionality by offering opti
 
 == Seamless Payments and Credit Card Processing ==
 
-Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
+Introducing sophisticated payment forms, donation forms, and other credit card forms is fast with integrations with leading payment services like PayPal, Stripe, Square, and Authorize.net. A custom WooCommerce form with custom fields is straightforward, ensuring your eCommerce solutions are as versatile as they are powerful.
 
 == Data-Driven Web Applications Made Easy ==
 
@@ -265,7 +265,7 @@ To get access to more features, integrations, and support, [upgrade to Formidabl
 
 = Can I create a payment form? =
 
-Yes! We make it easy to accept payments using Stripe, PayPal, and Authorize.net.
+Yes! We make it easy to accept payments using Stripe, Square, PayPal, and Authorize.net.
 
 Our Stripe integration helps you quickly accept credit card payments online. Our PayPal forms allow you to accept PayPal payments, subscriptions, and donations online.
 
@@ -285,6 +285,7 @@ Our custom form and quiz builder comes with all the powerful fields that you nee
 * User ID
 * HTML block - Great for custom HTML
 * Captcha for Google reCAPTCHA (invisible V2 or checkbox V2, V3), hCaptcha, or Cloudflare Turnstile.
+* GDPR - Great for compliance with General Data Protection Regulation (GDPR).
 
 Here is a list of our advanced premium fields that will come in handy:
 
@@ -317,7 +318,7 @@ Additionally, our Payment fields will help you create a credit card form, donati
 * Dropdown Items
 * Product Quantity
 * Total
-* Credit Card (Stripe or Authorize.net)
+* Credit Card (Stripe, Square, or Authorize.net)
 
 = Can I import and export submissions? =
 
@@ -371,43 +372,45 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.17.1 =
-* Fix: The payments table admin page would appear empty when there were unread inbox notices.
+= 6.22.3 =
+* Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
 
-= 6.17 =
-* New: New redirect delay duration and delay message settings have been added to confirmation actions.
-* New: A new UTF-8 with BOM format option has been added when exporting entries as CSV.
-* New: A new database index has been added to the fields table to significantly improve the performance of some field queries. In addition, some database queries have been optimized to improve performance.
-* New: A database query has been optimized when exporting entries as CSV when Pro is not active.
-* New: A new frm_csv_export_batch_size filter has been added to fine tune the performance of CSV exporting.
-* New: Additional validation has been added for email fields to prevent email addresses that use periods incorrectly.
-* Fix: The check for name values sent to Akismet has been updated to help reduce the possibility of false positive name values.
-* Fix: Additional checks have been added to allow some HTML tags that would normally get stripped from form data input when the submitted value matches a valid option value exactly.
-* Fix: In some cases, the bottom margin value for centered submit buttons would output an incorrect value.
-* The global JS function frmFrontForm.escapeHtml has been deprecated.
+= 6.22.2 =
+* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
 
-= 6.16.3 =
-* New: Additional duplicate entry check validation has been added. Now, when a form is resubmitted when loading the browser on iOS devices, these requests will trigger a duplicate entry error for a month instead of the default 60 seconds.
-* New: When viewing an entry, the timestamp in the sidebar will now use the WordPress format settings.
-* New: A new database index has been added to the form entries table. This significantly improves performance for entry count queries.
-* Fix: Invalid name field inputs did not always load with a proper aria-invalid value, and error auto-focusing wouldn't work as expected for name fields.
-* Fix: An unsupported operand types: array + string fatal error has been fixed.
-* Fix: The hook used to load translations has been updated to improve compatibility with WordPress 6.7+.
-* Fix: A strpos(): Passing null to parameter PHP Deprecated message has been fixed.
-* Fix: Some additional validation has been added when attempting to view a payment or subscription that does not exist.
-* Fix: Form titles and descriptions would sometimes still appear when the show title and description toggles for Gutenberg Form blocks were disabled.
-* Fix: A cannot access offset of type string on string PHP fatal error has been fixed.
-* The section for form button settings has been removed as all of the settings had been moved.
-* Some old deprecated CSS has been removed, helping to reduce the file size of styles used on the front end.
-* The global JS functions frmFrontForm.invisible and frmFrontForm.visible are now officially deprecated.
-* The s11-fp.svg asset file has been removed, helping to reduce the file size of this plugin.
+= 6.22.1 =
+* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
+* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: Field IDs would not properly update when importing a Timeline view.
+* Fix: Database queries would not use cached query data when the query resulted in no results.
+* Fix: Name fields would not work correctly when using the minimize=1 option.
+* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
 
-= 6.16.2 =
-* Security: Additional context checks and filtering have been added to prevent posted script data from appearing inside of fields.
-* Fix: JSON default values are no longer decoded for field types that expect string values only.
+= 6.22 =
+* New: Support for Square payments has been added.
+* Fix: Option validation would fail in some cases where shortcodes were used in options.
+* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
+* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
+* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
+* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
+* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
+* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
+* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
+* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
+* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
+* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
+* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
+
+= 6.21.1 =
+* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
+* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
+* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
+* New: All spam checks are now disabled when importing forms.
+* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
+* Fix: User defined product fields would fail validation.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
-= 6.16.2 =
+= 6.20 =
 This version fixes a security-related bug. Upgrade immediately.

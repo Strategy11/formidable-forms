@@ -1,0 +1,66 @@
+/**
+ * Components - Upgrade Bar
+ */
+
+.frm-gradient,
+.frm-upgrade-bar {
+	background: linear-gradient(90deg, #388CF3, #1961D5, #8C7FD8) !important;
+	color: #fff !important;
+	border: 0 !important;
+}
+
+.frm-gradient.frm-button-primary:not([disabled]),
+.frm-gradient.frm-button-primary:not([disabled]):hover,
+.frm-gradient.frm-button-primary:not([disabled]):focus {
+	background: linear-gradient(90deg, #1961D5, #816CFA) !important;
+}
+
+.frm-upgrade-bar,
+.frm-gradient {
+	position: relative;
+}
+
+.frm-upgrade-bar::before,
+.frm-gradient::before {
+	content: '';
+	display: none;
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(255, 255, 255, 0.1);
+	z-index: 0;
+}
+
+.frm-upgrade-bar:hover::before,
+.frm-gradient:hover::before,
+.frm-gradient:focus::before {
+	display: block;
+}
+
+.frm-upgrade-bar-inner,
+.frm-gradient > * {
+	position: relative;
+	z-index: 1;
+}
+
+.frm-upgrade-bar {
+	border-bottom: 1px solid var(--sidebar-hover);
+	padding: 9px 0;
+	font-size: 12px;
+	text-align: center;
+}
+
+.frm-upgrade-bar a {
+	color: currentColor !important;
+	text-decoration: underline;
+}
+
+.frm-upgrade-bar a:focus {
+	outline: 1px dotted var(--sidebar-hover);
+}
+
+.frm-upgrade-bar span {
+	opacity: .9;
+}

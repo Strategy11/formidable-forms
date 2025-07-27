@@ -267,7 +267,7 @@ DEFAULT_HTML;
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
 			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
@@ -313,7 +313,30 @@ DEFAULT_HTML;
 	protected function builder_text_field( $name = '' ) {
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
-		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" ' . ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' ) . ' />';
+		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
+		if ( is_array( $placeholder ) ) {
+			$placeholder = '';
+		}
+
+		$value = $this->get_field_column( 'default_value' );
+		if ( is_array( $value ) ) {
+			$value = '';
+		}
+
+		$input_atts = array(
+			'type'        => 'text',
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'value'       => $value,
+			'placeholder' => $placeholder,
+		);
+
+		if ( $read_only ) {
+			$input_atts['readonly'] = 'readonly';
+			$input_atts['disabled'] = 'disabled';
+		}
+
+		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
 	}
 
 	protected function html_name( $name = '' ) {
@@ -338,27 +361,28 @@ DEFAULT_HTML;
 	 */
 	protected function default_field_settings() {
 		return array(
-			'type'           => $this->type,
-			'label'          => true,
-			'required'       => true,
-			'unique'         => false,
-			'read_only'      => false,
-			'description'    => true,
-			'options'        => true,
-			'label_position' => true,
-			'invalid'        => false,
-			'size'           => false,
+			'type'              => $this->type,
+			'label'             => true,
+			'required'          => true,
+			'readonly_required' => false,
+			'unique'            => false,
+			'read_only'         => false,
+			'description'       => true,
+			'options'           => true,
+			'label_position'    => true,
+			'invalid'           => false,
+			'size'              => false,
 			// Shows the placeholder option.
-			'clear_on_focus' => false,
-			'css'            => true,
-			'conf_field'     => false,
-			'max'            => true,
-			'range'          => false,
-			'captcha_size'   => false,
-			'captcha_theme'  => false,
-			'format'         => false,
-			'show_image'     => false,
-			'default'        => true,
+			'clear_on_focus'    => false,
+			'css'               => true,
+			'conf_field'        => false,
+			'max'               => true,
+			'range'             => false,
+			'captcha_size'      => false,
+			'captcha_theme'     => false,
+			'format'            => false,
+			'show_image'        => false,
+			'default'           => true,
 		);
 	}
 
@@ -543,6 +567,24 @@ DEFAULT_HTML;
 	 */
 	protected function should_continue_to_field_options( $args ) {
 		return in_array( $args['field']['type'], array( 'select', 'radio', 'checkbox' ), true );
+	}
+
+	/**
+	 * Check if a field type includes field options. This should generally match the result of should_continue_to_field_options, but
+	 * this function was added because should_continue_to_field_options uses a protected scope.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public function field_type_has_options_settings() {
+		return $this->should_continue_to_field_options(
+			array(
+				'field' => array(
+					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+				),
+			)
+		);
 	}
 
 	/**
@@ -1044,7 +1086,11 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$hidden = $this->maybe_include_hidden_values( $args );
+		if ( isset( $shortcode_atts['opt'] ) ) {
+			$hidden = $this->include_hidden_values_for_single_opt( $args, $shortcode_atts['opt'] );
+		} else {
+			$hidden = $this->maybe_include_hidden_values( $args );
+		}
 
 		$field      = $this->field;
 		$html_id    = $args['html_id'];
@@ -1144,6 +1190,41 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 
+	/**
+	 * When opt=2 for example is used in the [input] shortcode, only print a single hidden input.
+	 *
+	 * @since 6.22
+	 *
+	 * @param array      $args
+	 * @param int|string $opt
+	 * @return string
+	 */
+	private function include_hidden_values_for_single_opt( $args, $opt ) {
+		$hidden         = '';
+		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+
+		if ( ! is_array( $selected_value ) ) {
+			return $hidden;
+		}
+
+		$options = array_values( $this->field['options'] );
+		if ( ! isset( $options[ $opt ] ) ) {
+			return $hidden;
+		}
+
+		$option = $options[ $opt ];
+		if ( is_array( $option ) ) {
+			$option = $option['value'];
+		}
+
+		if ( in_array( $option, $selected_value, true ) ) {
+			$args['field_value'] = array( $option );
+			$hidden              = $this->maybe_include_hidden_values( $args );
+		}
+
+		return $hidden;
+	}
+	
 	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
@@ -1339,7 +1420,6 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args
-	 *
 	 * @return array
 	 */
 	public function validate( $args ) {

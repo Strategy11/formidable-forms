@@ -29,7 +29,7 @@ describe("Entries submitted from a form", () => {
         cy.log("Submit form and verify entry is not stored");
         cy.get("#frm-previewDrop", { timeout: 5000 }).should("contain", "Preview").click();
         cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
-        cy.get('[id^="field_"]').filter('input, textarea').type("Entry is not stored");
+        cy.get('[id^="field_"]:not(.frm_verify)').filter('input, textarea').type("Entry is not stored");
         cy.get("button[type='submit']").should("contain", "Submit").click();
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain", "Entries").click();
@@ -41,10 +41,10 @@ describe("Entries submitted from a form", () => {
 
             expect(text).to.be.oneOf([
                 "Want to search submitted entries?",
-                "A site with dynamic, user-generated content is within reach.",
-                "Want to edit form submissions?",
-                "A site with dynamic, user-generated content is within reach.",
-                "Want to import entries into your forms?"
+                "Make your site dynamic. Enable front-end editing.",
+                "Edit form entries anytime with entry management.",
+                "Want to import entries into your forms?",
+                "Turn entries into dynamic content — no code needed."
             ]);
         })
 
@@ -52,10 +52,7 @@ describe("Entries submitted from a form", () => {
         cy.get('.frm-tip-cta').then(($el) => {
             const text = $el.text().trim();
             expect(text).to.be.oneOf([
-                "Upgrade to Pro.",
-                "Add entry management.",
-                "A site with dynamic, user-generated content is within reach.",
-                "Display form data with Views."
+                "Upgrade to Pro."
             ]);
         })
 
@@ -100,7 +97,7 @@ describe("Entries submitted from a form", () => {
         cy.log("Submit form and verify entry is stored");
         cy.get("#frm-previewDrop", { timeout: 5000 }).should("contain", "Preview").click();
         cy.get('.preview > .frm-dropdown-menu > :nth-child(1) > a').should("contain", "On Blank Page").invoke('removeAttr', 'target').click();
-        cy.get('[id^="field_"]').filter('input, textarea').type("Entry is stored");
+        cy.get('[id^="field_"]:not(.frm_verify)').filter('input, textarea').type("Entry is stored");
         cy.get("button[type='submit']").should("contain", "Submit").click();
         cy.go(-2);
         cy.get('.frm_form_nav > :nth-child(4) > a').should("contain", "Entries").click();
@@ -176,7 +173,7 @@ describe("Entries submitted from a form", () => {
 
         cy.log("Delete entry");
         cy.get('a[href*="frm_action=destroy"] span.frm_link_label').should("contain", "Delete Entry").click();
-        cy.get('.frm-confirm-msg').should("contain", "Delete this form entry?");
+        cy.get('.frm-confirm-msg').should("contain", "Permanently delete this entry?");
         cy.get('.frm-flex-box > .button-secondary').should("contain", "Cancel").click();
         cy.get('a[href*="frm_action=destroy"] span.frm_link_label').should("contain", "Delete Entry").click();
         cy.get('#frm-confirmed-click').should("contain", "Confirm").click();

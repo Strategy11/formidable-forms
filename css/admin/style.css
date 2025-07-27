@@ -233,7 +233,7 @@ Time fields use a div instead of a label, so don't target by the primary label b
 	line-height: var(--line-height);
 }
 
-#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {
 	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
 	width: var(--auto-width);
 	max-width: 100%;
@@ -513,9 +513,8 @@ body.rtl .frm-style-card-separator {
 .frm-right-panel .open.accordion-section {
 	border-bottom: 1px solid var(--grey-300);
 }
-#frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
-	padding: 17px 15px;
+	padding: 17px 15px !important;
 	background: transparent;
 	line-height: var(--leading);
 	color: var(--grey-500);

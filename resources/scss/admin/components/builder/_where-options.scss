@@ -1,0 +1,40 @@
+/**
+ * Component: Where Options
+ */
+
+#frm_where_options select {
+	max-width: 200px;
+}
+
+#frm_where_options select.frm_insert_where_options {
+	width: 30%;
+}
+
+#frm_where_options select.frm_where_is_options {
+	width: 20%;
+}
+
+#frm_where_options span.frm_where_val {
+	width: 32%;
+	display: inline-block;
+	position: relative;
+}
+
+#frm_where_options span.frm_where_val .frm_tooltip_icon,
+#frm_where_options span.frm_where_val .frm_help {
+	left: -4px;
+	position: absolute;
+}
+
+#frm_where_options span.frm_where_val.frm_hidden {
+	display: none;
+}
+
+#frm_where_options span.frm_where_val input, #frm_where_options span.frm_where_val select {
+	width: 90%;
+	margin-left: 10px;
+}
+
+#frm_where_options {
+	min-height: 31px;
+}

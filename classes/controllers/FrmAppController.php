@@ -357,7 +357,9 @@ class FrmAppController {
 			}
 
 			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
-			if ( ! $upgrade_link ) {
+			if ( $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row' ) );
+			} else {
 				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
 			}
 
@@ -485,7 +487,7 @@ class FrmAppController {
 	 */
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
+		remove_action( 'frm_after_settings_tabs', 'FrmSettingsController::settings_cta' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
@@ -566,6 +568,10 @@ class FrmAppController {
 			FrmFormsController::duplicate();
 		}
 
+		if ( FrmAppHelper::is_admin_page( 'formidable' ) && FrmAppHelper::simple_get( 'frm_add_tables' ) ) {
+			self::add_missing_tables();
+		}
+
 		if ( FrmAppHelper::is_style_editor_page() && 'save' === FrmAppHelper::get_param( 'frm_action' ) ) {
 			// Hook in earlier than FrmStylesController::route so we can redirect before the headers have been sent.
 			FrmStylesController::save_style();
@@ -573,13 +579,15 @@ class FrmAppController {
 
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
 			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
-			if ( ! $redirect ) {
-				$redirct = FrmAppHelper::admin_upgrade_link(
-					array(
-						'medium'  => 'upgrade',
-						'content' => 'submenu-upgrade',
-					)
-				);
+			$utm      = array(
+				'medium'  => 'upgrade',
+				'content' => 'submenu-upgrade',
+			);
+
+			if ( $redirect ) {
+				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
+			} else {
+				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			wp_redirect( $redirect );
@@ -668,7 +676,12 @@ class FrmAppController {
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
 		self::register_popper1();
 		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+
+		$settings_js_vars = array(
+			'currencies' => FrmCurrencyHelper::get_currencies(),
+		);
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
+		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 
 		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
@@ -719,7 +732,6 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
-
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
@@ -863,6 +875,7 @@ class FrmAppController {
 			'
 		);
 		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() );
 		FrmAppHelper::localize_script( 'admin' );
 		self::include_info_overlay();
 	}
@@ -1190,6 +1203,7 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function add_admin_footer_links() {
+		FrmFormsController::include_device_too_small_message();
 		if ( self::should_show_footer_links() ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/shared/admin-footer-links.php';
 		}
@@ -1320,15 +1334,27 @@ class FrmAppController {
 	}
 
 	/**
+	 * Handles actions related to the current screen.
+	 *
+	 * @since 6.19
+	 *
+	 * @return void
+	 */
+	public static function handle_current_screen() {
+		if ( ! self::in_our_pages() ) {
+			return;
+		}
+
+		self::filter_admin_notices();
+		self::remember_custom_sort();
+	}
+
+	/**
 	 * Hide all third-parties admin notices only in our admin pages.
 	 *
 	 * @return void
 	 */
 	public static function filter_admin_notices() {
-		if ( ! self::in_our_pages() ) {
-			return;
-		}
-
 		$actions = array(
 			'admin_notices',
 			'network_admin_notices',
@@ -1349,6 +1375,81 @@ class FrmAppController {
 					}
 					unset( $wp_filter[ $action ]->callbacks[ $priority ][ $callback_name ] );
 				}
+			}
+		}
+	}
+
+	/**
+	 * Remembers and applies user-specific sorting preferences.
+	 *
+	 * @return void
+	 */
+	private static function remember_custom_sort() {
+		$screen  = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+			return;
+		}
+
+		$orderby = FrmAppHelper::get_param( 'orderby' );
+
+		if ( ! $orderby ) {
+			return;
+		}
+
+		$user_id  = get_current_user_id();
+		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
+		$order    = FrmAppHelper::get_param( 'order' );
+
+		$new_sort = array(
+			'orderby' => $orderby,
+			'order'   => $order,
+		);
+
+		$current_sort = get_user_meta( $user_id, $meta_key, true );
+
+		if ( $new_sort !== $current_sort ) {
+			update_user_meta(
+				$user_id,
+				$meta_key,
+				array(
+					'orderby' => $orderby,
+					'order'   => $order,
+				)
+			);
+		}
+	}
+
+	/**
+	 * Retrieve and apply any saved sorting preferences for the current screen.
+	 *
+	 * @since 6.19
+	 *
+	 * @param string &$orderby Reference to the current 'orderby' parameter.
+	 * @param string &$order   Reference to the current 'order' parameter.
+	 * @return void
+	 */
+	public static function apply_saved_sort_preference( &$orderby, &$order ) {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return;
+		}
+
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return;
+		}
+
+		$user_id             = get_current_user_id();
+		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+
+		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
+			$orderby = $preferred_list_sort['orderby'];
+
+			if ( ! empty( $preferred_list_sort['order'] ) ) {
+				$order = $preferred_list_sort['order'];
 			}
 		}
 	}
@@ -1376,5 +1477,52 @@ class FrmAppController {
 			is_array( $callback['function'] ) &&
 			! empty( $callback['function'][0] ) &&
 			self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+	}
+
+	/**
+	 * In some cases, the DB tables may fail to install.
+	 * This function tries to add them again when the user clicks the link to try again
+	 * from the given inbox notice.
+	 *
+	 * @since 6.19
+	 */
+	private static function add_missing_tables() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+
+		$inbox = new FrmInbox();
+		$error = $inbox->check_for_error();
+
+		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
+			// Confirm the inbox item with this CTA exists.
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
+		}
+
+		global $wpdb;
+		$exists = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'frm_forms' ) );
+
+		if ( $exists ) {
+			// Exit early if the table already exists.
+			wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+			exit;
+		}
+
+		delete_option( 'frm_db_version' );
+		wp_safe_redirect( admin_url( 'admin.php?page=formidable' ) );
+		exit;
+	}
+
+	/**
+	 * Handles the small screen proceed action.
+	 *
+	 * @since 6.21
+	 *
+	 * @return void
+	 */
+	public static function small_screen_proceed() {
+		FrmAppHelper::permission_check( 'frm_view_forms' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+		update_user_option( get_current_user_id(), 'frm_ignore_small_screen_warning', true );
+		wp_send_json_success();
 	}
 }

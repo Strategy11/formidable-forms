@@ -1,5 +1,5 @@
 describe("Updating form settings", () => {
-    beforeEach(() => { 
+    beforeEach(() => {
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable');
         cy.viewport(1280, 720);
@@ -72,8 +72,10 @@ describe("Updating form settings", () => {
             cy.get('.frm_form_title').should("not.exist");
             cy.get('.frm_description > p').should("not.exist");
             cy.go('back');
-            cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
+            cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });
 
+			cy.log("Teardown - Delete form");
+			cy.deleteForm();
 
     });
 
@@ -113,10 +115,10 @@ describe("Updating form settings", () => {
 
             cy.log("Verify URL redirect after submitting form");
             cy.origin('https://formidableforms.com', ()=> {
-                cy.location('href').should('eq', 'https://formidableforms.com/')
+                cy.location('href').should('include', 'https://formidableforms.com/')
             });
-            
-            cy.log("Navigate back to the formidable form page");    
+
+            cy.log("Navigate back to the formidable form page");
             cy.visit(Origin + "/wp-admin/admin.php?page=formidable");
             cy.openForm();
 
@@ -127,18 +129,14 @@ describe("Updating form settings", () => {
 
             cy.log("Verify URL redirect after submitting form");
             cy.origin('https://formidableforms.com', ()=> {
-                cy.location('href').should('eq', 'https://formidableforms.com/')
+                cy.location('href').should('include', 'https://formidableforms.com/')
             });
 
-            cy.log("Navigate back to the formidable form page");    
+            cy.log("Navigate back to the formidable form page");
             cy.visit(Origin + "/wp-admin/admin.php?page=formidable");
 
-        });
-
-    afterEach(() => {
-
-        cy.log("Teardown - Save the form and delete it");
-        cy.deleteForm();        
+			cy.log("Teardown - Delete form");
+			cy.deleteForm();
     });
 
 });

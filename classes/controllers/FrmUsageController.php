@@ -106,18 +106,13 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	private static function is_forms_list_page() {
-		if ( ! FrmAppHelper::is_admin_page() ) {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
 			return false;
 		}
 
-		// Check Trash page.
+		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		if ( $form_type && 'published' !== $form_type ) {
-			return false;
-		}
-
-		// Check edit or settings page.
-		return ! FrmAppHelper::simple_get( 'frm_action' );
+		return $form_type && 'published' === $form_type;
 	}
 
 	/**

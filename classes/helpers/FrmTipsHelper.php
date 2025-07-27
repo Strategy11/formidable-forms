@@ -55,7 +55,7 @@ class FrmTipsHelper {
 			echo '<p class="frmcenter ' . esc_attr( $tip['class'] ) . '">';
 		}
 
-		$link = empty( $tip['link'] ) ? $tip['page'] : FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
+		$link = self::get_tip_link( $tip );
 		?>
 		<a href="<?php echo esc_url( $link ); ?>" <?php echo empty( $tip['link'] ) ? '' : 'target="_blank"'; ?> class="frm_pro_tip frm-gradient">
 			<span class="frm-tip-badge"><?php esc_html_e( 'PRO TIP', 'formidable' ); ?></span>
@@ -77,6 +77,28 @@ class FrmTipsHelper {
 	}
 
 	/**
+	 * @since 6.21
+	 *
+	 * @param array $tip
+	 * @return string
+	 */
+	private static function get_tip_link( $tip ) {
+		if ( empty( $tip['tip'] ) ) {
+			return $tip['page'];
+		}
+
+		$cta_link = FrmSalesApi::get_best_sale_value( 'pro_tip_cta_link' );
+		if ( $cta_link ) {
+			if ( is_array( $tip['link'] ) ) {
+				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
+			}
+			return $cta_link;
+		}
+
+		return FrmAppHelper::admin_upgrade_link( $tip['link'], $tip['page'] );
+	}
+
+	/**
 	 * Use the correct label for the license.
 	 *
 	 * @since 6.5.1
@@ -84,6 +106,10 @@ class FrmTipsHelper {
 	 * @return string
 	 */
 	private static function cta_label() {
+		$cta_text = FrmSalesApi::get_best_sale_value( 'pro_tip_cta_text' );
+		if ( $cta_text ) {
+			return $cta_text;
+		}
 		return FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro.', 'formidable' );
 	}
 
@@ -105,8 +131,8 @@ class FrmTipsHelper {
 					'content' => 'confirmation-fields',
 					'param'   => 'confirmation-fields-wordpress-forms',
 				),
-				'tip'  => __( 'Want to stop losing leads from email typos?', 'formidable' ),
-				'call' => __( 'Add email confirmation fields.', 'formidable' ),
+				'tip'  => __( 'Eliminate input errors with email confirmation fields.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -121,8 +147,8 @@ class FrmTipsHelper {
 					'content' => 'file-uploads',
 					'param'   => 'wordpress-multi-file-upload-fields',
 				),
-				'tip'  => __( 'Cut down on back-and-forth with clients.', 'formidable' ),
-				'call' => __( 'Allow file uploads in your form.', 'formidable' ),
+				'tip'  => __( 'Skip the follow-ups. Let users upload files.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -137,8 +163,8 @@ class FrmTipsHelper {
 					'content' => 'prefill-fields',
 					'param'   => 'auto-fill-forms',
 				),
-				'tip'  => __( 'Save time.', 'formidable' ),
-				'call' => __( 'Fill out forms automatically!', 'formidable' ),
+				'tip'  => __( 'Save time with autofill forms.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 		);
 
@@ -155,24 +181,24 @@ class FrmTipsHelper {
 					'content' => 'front-edit-b',
 					'param'   => 'wordpress-front-end-editing',
 				),
-				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
-				'call' => __( 'Add front-end editing.', 'formidable' ),
+				'tip'  => __( 'Make your site dynamic. Enable front-end editing.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'save-drafts',
 					'param'   => 'save-drafts-wordpress-form',
 				),
-				'tip'  => __( 'Have long forms?', 'formidable' ),
-				'call' => __( 'Let users save drafts and return later!', 'formidable' ),
+				'tip'  => __( 'Long form? Let users save and finish later', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'form-scheduling',
 					'param'   => 'schedule-forms-wordpress',
 				),
-				'tip'  => __( 'Want your form open only for a certain time period?', 'formidable' ),
-				'call' => __( 'Add form scheduling.', 'formidable' ),
+				'tip'  => __( 'Limit form access with built-in scheduling.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 		);
 
@@ -189,8 +215,8 @@ class FrmTipsHelper {
 					'content' => 'email-routing',
 					'param'   => 'virtually-unlimited-emails',
 				),
-				'tip'  => __( 'Save time by sending the email to the right person automatically.', 'formidable' ),
-				'call' => __( 'Add email routing.', 'formidable' ),
+				'tip'  => __( 'Save time — route emails to the right person automatically.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -213,24 +239,24 @@ class FrmTipsHelper {
 					'content' => 'mailchimp',
 					'page'    => 'mailchimp-tip',
 				),
-				'tip'  => __( 'Grow your business with automated email follow-up.', 'formidable' ),
-				'call' => __( 'Send leads straight to Mailchimp.', 'formidable' ),
+				'tip'  => __( 'Send leads to Mailchimp for instant email follow-up.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'paypal-revenue',
 					'page'    => 'paypal-increase-revenue-tip',
 				),
-				'tip'  => __( 'Increase revenue.', 'formidable' ),
-				'call' => __( 'Use PayPal with this form.', 'formidable' ),
+				'tip'  => __( 'Accept PayPal payments and grow your sales.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'paypal-fast',
 					'page'    => 'paypal-save-time-tip',
 				),
-				'tip'  => __( 'Get paid instantly.', 'formidable' ),
-				'call' => __( 'Use Paypal with this form.', 'formidable' ),
+				'tip'  => __( 'Accept payments now with PayPal integration.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -245,32 +271,32 @@ class FrmTipsHelper {
 					'content' => 'profile',
 					'page'    => 'registration-profile-editing-tip',
 				),
-				'tip'  => __( 'Need front-end profile editing?', 'formidable' ),
-				'call' => __( 'Add user registration.', 'formidable' ),
+				'tip'  => __( 'Enable front-end profile editing with User Registration.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'twilio-payment',
 					'page'    => 'twilio-tip',
 				),
-				'tip'  => __( 'Want an SMS notification when a form is submitted or a payment received?', 'formidable' ),
-				'call' => __( 'Get the Twilio integration.', 'formidable' ),
+				'tip'  => __( 'Get SMS alerts for form submissions and payments—just add Twilio.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'twilio',
 					'page'    => 'twilio-send-tip',
 				),
-				'tip'  => __( 'Send an SMS message when a form is submitted.', 'formidable' ),
-				'call' => __( 'Get the Twilio integration.', 'formidable' ),
+				'tip'  => __( 'Use Twilio to send SMS when forms are submitted.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
 					'content' => 'acf-tip',
 					'param'   => 'acf-tip',
 				),
-				'tip'  => __( 'Fill Advanced Custom Fields from a form.', 'formidable' ),
-				'call' => __( 'Add ACF Integration', 'formidable' ),
+				'tip'  => __( 'Fill Advanced Custom Fields automatically with form entries.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 		);
 
@@ -287,8 +313,8 @@ class FrmTipsHelper {
 					'content' => 'style',
 					'param'   => 'wordpress-visual-form-styler',
 				),
-				'tip'  => __( 'Make your sidebar and footer forms stand out.', 'formidable' ),
-				'call' => __( 'Use multiple style templates.', 'formidable' ),
+				'tip'  => __( 'Make your forms stand out with multiple style templates.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -321,8 +347,8 @@ class FrmTipsHelper {
 					'content' => 'entries',
 					'param'   => 'form-entry-management-wordpress',
 				),
-				'tip'  => __( 'Want to edit form submissions?', 'formidable' ),
-				'call' => __( 'Add entry management.', 'formidable' ),
+				'tip'  => __( 'Edit form entries anytime with entry management.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 			array(
 				'link' => array(
@@ -337,8 +363,8 @@ class FrmTipsHelper {
 					'content' => 'views',
 					'param'   => 'views-display-form-data',
 				),
-				'tip'  => __( 'A site with dynamic, user-generated content is within reach.', 'formidable' ),
-				'call' => __( 'Display form data with Views.', 'formidable' ),
+				'tip'  => __( 'Turn entries into dynamic content — no code needed.', 'formidable' ),
+				'call' => self::cta_label(),
 			),
 		);
 		$tips = array_merge( $tips, self::get_import_tip() );
@@ -362,43 +388,6 @@ class FrmTipsHelper {
 		);
 
 		return $tips;
-	}
-
-	/**
-	 * @return array
-	 */
-	public static function get_banner_tip() {
-		$tips       = array(
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'professional-results',
-				),
-				'tip'  => __( 'Looking for more ways to get professional results?', 'formidable' ),
-				'call' => __( 'Take your forms to the next level.', 'formidable' ),
-			),
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'increase-conversions',
-				),
-				'tip'  => __( 'Increase conversions in long forms.', 'formidable' ),
-				'call' => __( 'Add conditional logic, page breaks, and section headings.', 'formidable' ),
-			),
-			array(
-				'link' => array(
-					'medium'  => 'banner',
-					'content' => 'automate',
-				),
-				'tip'  => __( 'Automate your business and increase revenue.', 'formidable' ),
-				'call' => __( 'Collect instant payments, and send leads to Mailchimp.', 'formidable' ),
-			),
-		);
-		$random     = rand( 0, count( $tips ) - 1 );
-		$tip        = $tips[ $random ];
-		$tip['num'] = $random;
-
-		return $tip;
 	}
 
 	public static function get_random_tip( $tips ) {
@@ -453,5 +442,15 @@ class FrmTipsHelper {
 		}
 
 		require FrmAppHelper::plugin_path() . '/classes/views/shared/admin-cta.php';
+	}
+
+	/**
+	 * @deprecated 6.21
+	 *
+	 * @return array
+	 */
+	public static function get_banner_tip() {
+		_deprecated_function( __METHOD__, '6.21' );
+		return array();
 	}
 }

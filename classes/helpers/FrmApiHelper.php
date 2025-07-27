@@ -121,7 +121,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.18
 	 *
 	 * @param array $who
 	 * @return bool
@@ -157,7 +157,7 @@ class FrmApiHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.18
 	 *
 	 * @param string $key
 	 * @param int    $activation_timestamp

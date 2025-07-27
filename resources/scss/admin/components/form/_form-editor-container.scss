@@ -1,0 +1,51 @@
+/**
+ * Form Editor Container
+ */
+
+#frm_form_editor_container #frm_form_key_box {
+	width: 13em;
+	max-width: 30%
+}
+
+#frm_form_editor_container #frm_form_desc {
+	width: 70%;
+}
+
+#frm_form_editor_container .ui-widget-content {
+	display: none;
+	padding: 15px;
+}
+
+#frm_form_editor_container .ui-widget-content label {
+	float: left;
+	width: 170px;
+	text-align: right;
+	padding-right: 5px;
+	clear: both;
+}
+
+#frm_form_editor_container .ui-widget-content label.nofloat {
+	clear: none;
+	float: none;
+	margin-left: 10px;
+}
+
+#frm_form_editor_container .ui-state-default {
+	color: #333 !important;
+}
+
+.frm_green {
+	color: var(--green) !important;
+}
+
+#frm_form_editor_container .ui-state-default a.frm_orange, .frm-right-panel a.frm_orange, #postbox-container-1 a.frm_orange {
+	color: #D54E21;
+}
+
+#styling_settings input[type="checkbox"], #styling_settings input[type="radio"] {
+	border: solid 1px #bbb;
+}
+
+#styling_settings .widget .widget-top, #frm_form_editor_container .widget .widget-top {
+	cursor: pointer;
+}

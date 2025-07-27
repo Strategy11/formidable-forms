@@ -1,0 +1,42 @@
+/**
+ * Customization Panel styles
+ */
+
+/* Customization Panel */
+#frm-insert-fields-box, #frm-conditionals {
+	max-height: none;
+}
+
+#frm-conditionals, #frm-adv-info-tab {
+	display: none;
+	max-height: 355px;
+}
+
+#frm-insert-fields-box ul.subsubsub,
+#frm-conditionals ul.subsubsub {
+	float: right;
+	margin: 0;
+}
+
+#frm-insert-fields-box ul.alignleft,
+#frm-conditionals ul.alignleft {
+	margin: 5px 0 0;
+}
+
+#frm_adv_info ul.frm_code_list.frm-full-hover {
+	clear: both;
+	max-height: 215px;
+	overflow: auto;
+}
+
+#frm-insert-fields-box ul.frm_code_list li.clear.frm_block {
+	height: 10px;
+}
+
+#frm_adv_info .frm_noallow {
+	display: none;
+}
+
+#frm_adv_info #frm-conditionals .frm_noallow {
+	display: block;
+}

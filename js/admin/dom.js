@@ -249,10 +249,11 @@
 	};
 
 	const autocomplete = {
-		initSelectionAutocomplete: function() {
+		initSelectionAutocomplete: function( container ) {
 			if ( jQuery.fn.autocomplete ) {
-				autocomplete.initAutocomplete( 'page' );
-				autocomplete.initAutocomplete( 'user' );
+				autocomplete.initAutocomplete( 'page', container );
+				autocomplete.initAutocomplete( 'user', container );
+				autocomplete.initAutocomplete( 'custom', container );
 			}
 		},
 		/**
@@ -278,10 +279,19 @@
 					urlParams += '&post_type=' + element.attr( 'data-post-type' );
 				}
 
+				let source = ajaxurl + urlParams;
+
+				if ( this.dataset.source ) {
+					const sourceData = JSON.parse( this.dataset.source );
+					if ( sourceData ) {
+						source = sourceData;
+					}
+				}
+
 				element.autocomplete({
 					delay: 100,
 					minLength: 0,
-					source: ajaxurl + urlParams,
+					source: source,
 					change: autocomplete.selectBlank,
 					select: autocomplete.completeSelectFromResults,
 					focus: () => false,
@@ -327,6 +337,13 @@
 		selectBlank: function( e, ui ) {
 			if ( ui.item === null ) {
 				this.nextElementSibling.value = '';
+
+				/**
+				 * Fires when an autocomplete value is cleared.
+				 *
+				 * @since 6.21
+				 */
+				wp.hooks.doAction( 'frm_autocomplete_clear_value', e, ui, this );
 			}
 		},
 
@@ -334,6 +351,13 @@
 			e.preventDefault();
 			this.value = ui.item.value === '' ? '' : ui.item.label;
 			this.nextElementSibling.value = ui.item.value;
+
+			/**
+			 * Fires when an autocomplete item is selected.
+			 *
+			 * @since 6.21
+			 */
+			wp.hooks.doAction( 'frm_autocomplete_select', e, ui, this );
 		}
 	};
 

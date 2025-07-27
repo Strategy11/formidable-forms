@@ -9,8 +9,10 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	public static function load_hooks() {
+		add_action( 'frm_add_form_option_section', 'FrmSquareLiteActionsController::actions_js' );
+
+		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
-			// Exit early, let the Payments submodule handle everything.
 			return;
 		}
 
@@ -42,6 +44,8 @@ class FrmTransLiteHooksController {
 		);
 
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
+			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
+
 			// Exit early, let the Payments submodule handle everything.
 			return;
 		}
@@ -54,6 +58,9 @@ class FrmTransLiteHooksController {
 
 		// Filters.
 		add_filter( 'set-screen-option', 'FrmTransLiteListsController::save_per_page', 10, 3 );
+
+		// Use 9 to run before the Stripe Lite and Square Lite code.
+		add_filter( 'frm_before_save_payment_action', 'FrmTransLiteActionsController::before_save_settings', 9, 2 );
 
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();

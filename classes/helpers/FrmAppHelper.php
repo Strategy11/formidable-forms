@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.17.1';
+	public static $plug_version = '6.22.3';
 
 	/**
 	 * @var bool
@@ -128,7 +128,7 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = $args['medium'];
+			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
 			if ( isset( $args['content'] ) ) {
 				$content = $args['content'];
 			}
@@ -159,6 +159,34 @@ class FrmAppHelper {
 
 		$link = add_query_arg( $query_args, $page ) . $anchor;
 		return self::make_affiliate_url( $link );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @param string $cta_link
+	 * @param array  $utm
+	 */
+	public static function maybe_add_missing_utm( $cta_link, $utm ) {
+		$query_args = array();
+
+		if ( false === strpos( $cta_link, 'utm_source' ) ) {
+			$query_args['utm_source'] = 'WordPress';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_campaign' ) ) {
+			$query_args['utm_campaign'] = 'liteplugin';
+		}
+
+		if ( false === strpos( $cta_link, 'utm_medium' ) && isset( $utm['medium'] ) ) {
+			$query_args['utm_medium'] = $utm['medium'];
+		}
+
+		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
+			$query_args['utm_content'] = $utm['content'];
+		}
+
+		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
 	}
 
 	/**
@@ -329,6 +357,43 @@ class FrmAppHelper {
 		}
 
 		return $is_formidable;
+	}
+
+	/**
+	 * Checks if is a list page.
+	 *
+	 * @since 6.19
+	 *
+	 * @param string $page The name of the page to check.
+	 * @return bool
+	 */
+	public static function is_admin_list_page( $page = 'formidable' ) {
+		if ( 'formidable' === $page ) {
+			return self::on_form_listing_page();
+		}
+
+		if ( ! self::is_admin_page( $page ) ) {
+			return false;
+		}
+
+		if ( 'formidable-entries' === $page ) {
+			$action = self::simple_get( 'frm_action' );
+			if ( ! $action || in_array( $action, self::get_entries_listing_page_form_actions(), true ) ) {
+				return true;
+			}
+		}
+
+		// Check edit or settings page.
+		return ! self::simple_get( 'frm_action' );
+	}
+
+	/**
+	 * @since 6.20
+	 *
+	 * @return array<string>
+	 */
+	private static function get_entries_listing_page_form_actions() {
+		return array( 'list', 'destroy' );
 	}
 
 	/**
@@ -871,6 +936,19 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Sanitizes and echoes a given value.
+	 *
+	 * @since 6.18
+	 *
+	 * @param string       $value   The value to sanitize and output.
+	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 * @return void
+	 */
+	public static function kses_echo( $value, $allowed = array() ) {
+		echo self::kses( $value, $allowed ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+
+	/**
 	 * The regular kses function strips [button_action] from submit button HTML.
 	 *
 	 * @since 5.0.13
@@ -1088,6 +1166,11 @@ class FrmAppHelper {
 			),
 			'legend'     => array(
 				'class' => true,
+			),
+			'option'     => array(
+				'class'    => true,
+				'value'    => true,
+				'selected' => true,
 			),
 		);
 	}
@@ -1362,13 +1445,14 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
+		if ( FrmSalesApi::maybe_show_banner() || self::maybe_show_license_warning() || FrmInbox::maybe_show_banner() || ! $should_show_lite_upgrade || self::pro_is_installed() ) {
 			// Print license warning or inbox banner and exit if either prints.
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
 		}
 		?>
 		<div class="frm-upgrade-bar">
+			<div class="frm-upgrade-bar-inner">
 				<?php
 				$cta_text = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_text' );
 				if ( ! $cta_text ) {
@@ -1376,13 +1460,15 @@ class FrmAppHelper {
 				}
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
-				if ( ! $upgrade_link ) {
-					$upgrade_link = self::admin_upgrade_link(
-						array(
-							'medium'  => 'settings-license',
-							'content' => 'lite-banner',
-						)
-					);
+				$utm          = array(
+					'medium'  => 'settings-license',
+					'content' => 'lite-banner',
+				);
+
+				if ( $upgrade_link ) {
+					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
+				} else {
+					$upgrade_link = self::admin_upgrade_link( $utm );
 				}
 
 				printf(
@@ -1393,6 +1479,7 @@ class FrmAppHelper {
 					'</a>'
 				);
 				?>
+			</div>
 		</div>
 		<?php
 	}
@@ -1634,7 +1721,7 @@ class FrmAppHelper {
 
 		$pages_count = wp_count_posts( $args['post_type'] );
 
-		if ( $pages_count->publish <= 50 ) {
+		if ( ! isset( $pages_count->publish ) || $pages_count->publish <= 50 ) {
 			self::wp_pages_dropdown( $args );
 			return;
 		}
@@ -1660,6 +1747,101 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Maybe show an HTML select or autocomplete input based on the number of options.
+	 *
+	 * @since 6.21
+	 *
+	 * @param array $args Args. See the method for details.
+	 */
+	public static function maybe_autocomplete_options( $args ) {
+		$defaults = array(
+			'truncate'                 => false,
+			'placeholder'              => ' ',
+			'name'                     => '',
+			'id'                       => '',
+			'selected'                 => '',
+			'source'                   => array(),
+			'dropdown_limit'           => 50,
+			'autocomplete_placeholder' => __( 'Select an option', 'formidable' ),
+			'value_key'                => 'value',
+			'label_key'                => 'label',
+		);
+
+		$args = wp_parse_args( $args, $defaults );
+
+		$html_attrs = array();
+		if ( ! empty( $args['name'] ) ) {
+			$html_attrs['name'] = $args['name'];
+		}
+
+		if ( ! empty( $args['id'] ) ) {
+			$html_attrs['id'] = $args['id'];
+		}
+
+		if ( count( $args['source'] ) <= $args['dropdown_limit'] ) {
+			?>
+			<select <?php self::array_to_html_params( $html_attrs, true ); ?>>
+				<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
+				<?php
+				foreach ( $args['source'] as $key => $source ) :
+					$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+					if ( ! empty( $args['truncate'] ) ) {
+						$value_label['label'] = self::truncate( $value_label['label'], $args['truncate'] );
+					}
+					?>
+					<option value="<?php echo esc_attr( $value_label['value'] ); ?>" <?php selected( $value_label['value'], $args['selected'] ); ?>><?php echo esc_html( $value_label['label'] ); ?></option>
+				<?php endforeach; ?>
+			</select>
+			<?php
+		} else {
+			$options            = array();
+			$autocomplete_value = '';
+			foreach ( $args['source'] as $key => $source ) {
+				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+
+				if ( $value_label['value'] === $args['selected'] ) {
+					$autocomplete_value = $value_label['label'];
+				}
+
+				$options[] = $value_label;
+			}
+
+			$html_attrs['type']  = 'hidden';
+			$html_attrs['class'] = 'frm_autocomplete_value_input';
+			$html_attrs['value'] = $args['selected'];
+			?>
+			<input type="text" class="frm-custom-search"
+				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
+				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
+				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
+			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
+			<?php
+		}//end if
+	}
+
+	/**
+	 * Gets dropdown value and label from autodropdown option.
+	 *
+	 * @since 6.21
+	 *
+	 * @param array|string $option Autocomplete option.
+	 * @param string       $key    Array key of the option.
+	 * @param array        $args   See {@see FrmAppHelper::maybe_autocomplete_options()}.
+	 * @return array
+	 */
+	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
+		if ( is_array( $option ) ) {
+			$value = isset( $option[ $args['value_key'] ] ) ? $option[ $args['value_key'] ] : '';
+			$label = isset( $option[ $args['label_key'] ] ) ? $option[ $args['label_key'] ] : '';
+		} else {
+			$value = $key;
+			$label = $option;
+		}
+
+		return compact( 'value', 'label' );
+	}
+
+	/**
 	 * @param array  $args
 	 * @param string $page_id Deprecated.
 	 * @param bool   $truncate Deprecated.
@@ -1669,7 +1851,6 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
-
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
@@ -2160,7 +2341,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 */
 	public static function use_wpautop( $content ) {
-		if ( apply_filters( 'frm_use_wpautop', true ) && ! is_array( $content ) ) {
+		if ( apply_filters( 'frm_use_wpautop', true ) && is_string( $content ) ) {
 			$content = wpautop( str_replace( '<br>', '<br />', $content ) );
 		}
 
@@ -2347,10 +2528,12 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @since 6.21 This is changed from `private` to `public`.
+	 *
 	 * @param int $num_chars
 	 * @return string
 	 */
-	private static function generate_new_key( $num_chars ) {
+	public static function generate_new_key( $num_chars ) {
 		$max_slug_value = pow( 36, $num_chars );
 
 		// We want to have at least 2 characters in the slug.
@@ -4389,5 +4572,29 @@ class FrmAppHelper {
 			?>
 		</span>
 		<?php
+	}
+
+	/**
+	 * Check if GDPR is enabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function is_gdpr_enabled() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr || $frm_settings->no_ips || $frm_settings->custom_header_ip || $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if GDPR cookies are disabled.
+	 *
+	 * @since 6.19
+	 *
+	 * @return bool
+	 */
+	public static function no_gdpr_cookies() {
+		$frm_settings = self::get_settings();
+		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
 	}
 }

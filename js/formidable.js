@@ -174,9 +174,7 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors.
 	 */
 	function validateForm( object ) {
-		let errors, n, nl, fields, field;
-
-		errors = [];
+		let errors = [];
 
 		const vanillaJsObject = 'function' === typeof object.get ? object.get( 0 ) : object;
 
@@ -201,10 +199,8 @@ function frmFrontFormJS() {
 			}
 		);
 
-		fields = jQuery( object ).find( 'input,select,textarea' );
-		if ( fields.length ) {
-			for ( n = 0, nl = fields.length; n < nl; n++ ) {
-				field = fields[n];
+		vanillaJsObject?.querySelectorAll( 'input,select,textarea' ).forEach(
+			field => {
 				if ( '' === field.value ) {
 					if ( 'number' === field.type ) {
 						// A number field will return an empty string when it is invalid.
@@ -215,14 +211,14 @@ function frmFrontFormJS() {
 					if ( ! isConfirmationField ) {
 						// Allow a blank confirmation field to still call validateFieldValue.
 						// If we continue for a confirmation field there are issues with forms submitting with a blank confirmation field.
-						continue;
+						return;
 					}
 				}
 
 				validateFieldValue( field, errors, true );
 				checkValidity( field, errors );
 			}
-		}
+		);
 
 		// Invisible captchas are processed after validation.
 		// We only want to validate a visible captcha on submit.
@@ -306,6 +302,11 @@ function frmFrontFormJS() {
 		errors               = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
 
+		if ( ! fieldContainer ) {
+			// Hidden fields do not have a field container and do not require JS validation.
+			return;
+		}
+
 		if ( hasClass( fieldContainer, 'frm_required_field' ) && ! hasClass( field, 'frm_optional' ) ) {
 			errors = checkRequiredField( field, errors );
 		}
@@ -363,7 +364,7 @@ function frmFrontFormJS() {
 	 * @return {Array} Errors
 	 */
 	function checkRequiredField( field, errors ) {
-		let checkGroup, tempVal, i, placeholder,
+		let tempVal, i, placeholder,
 			val = '',
 			fieldID = '',
 			fileID = field.getAttribute( 'data-frmfile' );
@@ -373,10 +374,17 @@ function frmFrontFormJS() {
 		}
 
 		if ( field.type === 'checkbox' || field.type === 'radio' ) {
-			checkGroup = jQuery( 'input[name="' + field.name + '"]' ).closest( '.frm_required_field' ).find( 'input:checked' );
-			jQuery( checkGroup ).each( function() {
-				val = this.value;
-			});
+			document.querySelectorAll( 'input[name="' + field.name + '"]' ).forEach( function( input ) {
+				const requiredField = input.closest( '.frm_required_field' );
+				if ( ! requiredField ) {
+					return;
+				}
+
+				const checkedInputs = requiredField.querySelectorAll( 'input:checked' );
+				checkedInputs.forEach( function( checkedInput ) {
+					val = checkedInput.value;
+				} );
+			} );
 		} else if ( field.type === 'file' || fileID ) {
 			if ( typeof fileID === 'undefined' ) {
 				fileID = getFieldId( field, true );
@@ -967,6 +975,12 @@ function frmFrontFormJS() {
 					}
 				});
 
+				if ( window.turnstile ) {
+					object.querySelectorAll( '.cf-turnstile' ).forEach(
+						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
+					);
+				}
+
 				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
 
 				fieldset.removeClass( 'frm_doing_ajax' );
@@ -1281,35 +1295,6 @@ function frmFrontFormJS() {
 		}
 	}
 
-	function maybeMakeHoneypotFieldsUntabbable() {
-		document.addEventListener( 'keydown', handleKeyUp );
-
-		function handleKeyUp( event ) {
-			let code;
-
-			if ( 'undefined' !== typeof event.key ) {
-				code = event.key;
-			} else if ( 'undefined' !== typeof event.keyCode && 9 === event.keyCode ) {
-				code = 'Tab';
-			}
-
-			if ( 'Tab' === code ) {
-				makeHoneypotFieldsUntabbable();
-				document.removeEventListener( 'keydown', handleKeyUp );
-			}
-		}
-
-		function makeHoneypotFieldsUntabbable() {
-			document.querySelectorAll( '.frm_verify' ).forEach(
-				function( input ) {
-					if ( input.id && 0 === input.id.indexOf( 'frm_email_' ) ) {
-						input.setAttribute( 'tabindex', -1 );
-					}
-				}
-			);
-		}
-	}
-
 	/**
 	 * Focus on the first sub field when clicking to the primary label of combo field.
 	 *
@@ -1394,6 +1379,12 @@ function frmFrontFormJS() {
 					timeoutCallback = function() {
 						tinyMCE.activeEditor.focus();
 					};
+				} else if ( element.classList.contains( 'frm_opt_container' ) ) {
+					const firstInput = element.querySelector( 'input' );
+					if ( firstInput ) {
+						focusInput( firstInput );
+						break;
+					}
 				}
 
 				if ( 'function' === typeof timeoutCallback ) {
@@ -1650,6 +1641,35 @@ function frmFrontFormJS() {
 		return uniqueKey + '-' + timestamp;
 	}
 
+	/**
+	 * Animates the scroll position of the document.
+	 *
+	 * @since 6.20
+	 *
+	 * @param {number} start
+	 * @param {number} end
+	 * @param {number} duration
+	 * @return {void}
+	 */
+	function animateScroll( start, end, duration ) {
+		if ( ! window.hasOwnProperty( 'performance' ) || ! window.hasOwnProperty( 'requestAnimationFrame' ) ) {
+			document.documentElement.scrollTop = end;
+			return;
+		}
+
+		/* eslint-disable compat/compat */
+		const startTime = performance.now();
+		const step      = ( currentTime ) => {
+			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
+			document.documentElement.scrollTop = start + ( end - start ) * progress;
+			if ( progress < 1 ) {
+				requestAnimationFrame( step );
+			}
+		};
+		requestAnimationFrame( step );
+		/* eslint-enable compat/compat */
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1663,8 +1683,7 @@ function frmFrontFormJS() {
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
-			jQuery( document ).on( 'change', '[id^=frm_email_]', onHoneypotFieldChange );
-			maybeMakeHoneypotFieldsUntabbable();
+			jQuery( document ).on( 'change', '.frm_verify[id^=field_]', onHoneypotFieldChange );
 
 			jQuery( document ).on( 'click', 'a[data-frmconfirm]', confirmClick );
 
@@ -1942,9 +1961,9 @@ function frmFrontFormJS() {
 				if ( newPos > screenBottom || newPos < screenTop ) {
 					// Not in view
 					if ( typeof animate === 'undefined' ) {
-						jQuery( window ).scrollTop( newPos );
+						document.documentElement.scrollTop = newPos;
 					} else {
-						jQuery( 'html,body' ).animate({ scrollTop: newPos }, 500 );
+						animateScroll( screenTop, newPos, 500 );
 					}
 					return false;
 				}

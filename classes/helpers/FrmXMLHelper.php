@@ -934,7 +934,7 @@ class FrmXMLHelper {
 			$post_id = false;
 			if ( $post['post_type'] === $form_action_type ) {
 				$action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
-				if ( $action_control && is_object( $action_control ) ) {
+				if ( $action_control && is_object( $action_control ) && isset( $imported['form_status'] ) ) {
 					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
 				}
 				unset( $action_control );
@@ -1211,6 +1211,16 @@ class FrmXMLHelper {
 						foreach ( $m['value']['calendar_options'] as $calendar_option_group_key => $calendar_option ) {
 							if ( isset( $frm_duplicate_ids[ $calendar_option['value'] ] ) ) {
 								$m['value']['calendar_options'][ $calendar_option_group_key ]['value'] = $frm_duplicate_ids[ $calendar_option['value'] ];
+							}
+						}
+					}
+
+					if ( ! empty( $m['value']['timeline_options'] ) ) {
+						foreach ( $m['value']['timeline_options'] as $timeline_option_group_key => $timeline_group_option ) {
+							foreach ( $timeline_group_option as $timeline_option_key => $timeline_option ) {
+								if ( isset( $frm_duplicate_ids[ $timeline_option ] ) ) {
+									$m['value']['timeline_options'][ $timeline_option_group_key ][ $timeline_option_key ] = $frm_duplicate_ids[ $timeline_option ];
+								}
 							}
 						}
 					}

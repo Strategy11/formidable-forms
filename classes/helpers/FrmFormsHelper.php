@@ -279,7 +279,27 @@ class FrmFormsHelper {
 	 */
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
+
+		// Only autop if the message includes line breaks.
+		$autop = strpos( $message, "\n" ) !== false;
+
+		/**
+		 * Filters whether to autop the success message.
+		 * This is false by default if the message does not include line breaks.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $autop
+		 * @param string $message
+		 * @param object $form
+		 */
+		$autop = (bool) apply_filters( 'frm_wpautop_success_message', $autop, $message, $atts['form'] );
+
+		if ( $autop ) {
+			$message = FrmAppHelper::use_wpautop( $message );
+		}
+
+		$message = do_shortcode( $message );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 		return $message;
 	}
@@ -394,7 +414,7 @@ class FrmFormsHelper {
 			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
-			'honeypot'         => 'basic',
+			'stopforumspam'    => 0,
 			'antispam'         => 0,
 			'no_save'          => 0,
 			'ajax_load'        => 0,
@@ -980,7 +1000,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param array|bool|object|string $form
+	 * @param array|bool|int|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -998,7 +1018,7 @@ BEFORE_HTML;
 			$style = $form['custom_style'];
 		}
 
-		if ( $form && is_string( $form ) ) {
+		if ( $form && ( is_string( $form ) || is_int( $form ) ) ) {
 			$form = FrmForm::getOne( $form );
 		}
 
@@ -1457,11 +1477,6 @@ BEFORE_HTML;
 				'href'  => 'rel',
 				'atts'  => '',
 			);
-		} elseif ( self::plan_is_allowed( $args ) ) {
-			$link = array(
-				'url'   => FrmAppHelper::admin_upgrade_link( 'addons', 'account/downloads/' ) . '&utm_content=' . $template['slug'],
-				'label' => __( 'Renew', 'formidable' ),
-			);
 		} else {
 			$link = array(
 				'url'   => $args['pricing'],
@@ -1811,18 +1826,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * Check if Pro isn't up to date yet.
-	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
-	 *
-	 * @since 6.2
-	 *
-	 * @return bool
-	 */
-	public static function should_use_pro_for_ajax_submit() {
-		return is_callable( 'FrmProForm::is_ajax_on' ) && ! is_callable( 'FrmProFormsHelper::lite_supports_ajax_submit' );
-	}
-
-	/**
 	 * Outputs the appropriate button text in the publish box.
 	 *
 	 * @return void
@@ -1858,6 +1861,108 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * Returns true if the preview should be blocked.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $form_key
+	 * @return bool
+	 */
+	public static function should_block_preview( $form_key ) {
+		$should_block = in_array( $form_key, array( 'contact-form', 'contact-us' ), true ) && ! current_user_can( 'frm_view_forms' );
+		/**
+		 * Filters whether the form preview should be blocked.
+		 *
+		 * @since 6.20
+		 *
+		 * @param bool   $should_block
+		 * @param string $form_key
+		 */
+		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
+		return $should_block;
+	}
+
+	/**
+	 * Checks if the form is loaded by API.
+	 *
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	public static function form_is_loaded_by_api() {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
+			return true;
+		}
+		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_visual_views_preview() {
+		return 'frm_views_process_box_preview' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_elementor_ajax() {
+		return 'elementor_ajax' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_gutenberg_editor() {
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+			return true;
+		}
+
+		global $pagenow;
+		if ( 'post.php' === $pagenow ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_formidable_api_form() {
+		if ( ! class_exists( 'FrmAPIAppController' ) ) {
+			return false;
+		}
+
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+			// Prevent the honeypot from appearing for an API loaded form.
+			// This is to prevent conflicts where the script is not working.
+			return true;
+		}
+
+		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
+			$api = FrmProFormState::get_from_request( 'a', 0 );
+
+			if ( $api ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * @since 3.0
 	 * @deprecated 6.11
 	 *
@@ -1876,5 +1981,19 @@ BEFORE_HTML;
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
+	}
+
+	/**
+	 * Check if Pro isn't up to date yet.
+	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
+	 *
+	 * @since 6.2
+	 * @deprecated 6.20
+	 *
+	 * @return bool
+	 */
+	public static function should_use_pro_for_ajax_submit() {
+		_deprecated_function( __METHOD__, '6.20' );
+		return false;
 	}
 }

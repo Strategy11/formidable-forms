@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSettingsController {
 
+	/**
+	 * Payments sections are removed from the top level and added to a payments section.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @var array
+	 */
+	private static $removed_payments_sections = array();
+
 	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
@@ -35,6 +44,10 @@ class FrmSettingsController {
 		$sections = self::get_settings_tabs();
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
+		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$current = 'payments_settings';
+		}
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php';
 	}
 
@@ -63,6 +76,12 @@ class FrmSettingsController {
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
 			),
+			'payments'      => array(
+				'name'     => __( 'Payments', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_simple_cc_icon',
+				'class'    => __CLASS__,
+				'function' => 'payments_settings',
+			),
 			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
@@ -78,7 +97,7 @@ class FrmSettingsController {
 			'captcha'       => array(
 				'class'    => __CLASS__,
 				'function' => 'captcha_settings',
-				'name'     => __( 'Captcha', 'formidable' ),
+				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'white_label'   => array(
@@ -129,6 +148,7 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
@@ -162,6 +182,47 @@ class FrmSettingsController {
 		}//end foreach
 
 		return $sections;
+	}
+
+	/**
+	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 * and show them all on the payments section in separate tabs.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param array $sections
+	 * @return void
+	 */
+	private static function remove_payments_sections( &$sections ) {
+		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
+
+		foreach ( $sections as $key => $section ) {
+			if ( in_array( $key, $payment_section_keys, true ) ) {
+				self::$removed_payments_sections[ $key ] = $section;
+				unset( $sections[ $key ] );
+			}
+		}
+
+		uksort( self::$removed_payments_sections, array( __CLASS__, 'payment_sections_sort_callback' ) );
+	}
+
+	/**
+	 * Sort the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param string $a
+	 * @param string $b
+	 * @return int
+	 */
+	private static function payment_sections_sort_callback( $a, $b ) {
+		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
+		$first_key  = array_search( $a, $order );
+		$second_key = array_search( $b, $order );
+		if ( false === $first_key || false === $second_key ) {
+			return 0;
+		}
+		return $first_key - $second_key;
 	}
 
 	public static function load_settings_tab() {
@@ -207,9 +268,8 @@ class FrmSettingsController {
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
-		if ( false !== strpos( $more_html, 'id="frm_currency"' ) ) {
-			// Avoid rendering the Currency setting if it gets rendered from the frm_settings_form hook.
-			// This is for backward compatibility. If Pro is outdated there won't be two currency dropdowns.
+		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
+			FrmProSettingsController::add_currency_settings();
 			return;
 		}
 
@@ -244,6 +304,19 @@ class FrmSettingsController {
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
+	}
+
+	public static function payments_settings() {
+		$payment_sections = self::$removed_payments_sections;
+
+		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$tab = str_replace( '_settings', '', $tab );
+		} else {
+			$tab = 'stripe';
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/payments.php';
 	}
 
 	/**

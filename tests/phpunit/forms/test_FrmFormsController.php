@@ -346,17 +346,26 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
 		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
-		$this->assertNotFalse( strpos( $response, '<div class="frm_message" role="status"><p>Done!</p>' ) );
-		$this->assertNotFalse( strpos( $response, 'frmFrontForm.scrollMsg(' . $form->id . ')' ) );
+		$this->assertStringContainsString( '<div class="frm_message" role="status">Done!</div>', $response );
+		$this->assertStringContainsString( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 
 		if ( $show_form ) {
-			$this->assertNotFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
+			$this->assertStringContainsString( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
 		} else {
-			$this->assertFalse( strpos( $response, '<input type="hidden" name="form_id" value="' . $form->id . '" />' ) );
+			$this->assertStringNotContainsString( '<input type="hidden" name="form_id" value="' . $form->id . '" />', $response );
 		}
 	}
 
 	private function post_new_entry( $form, $entry_key ) {
+		$fields = FrmField::get_all_for_form( $form->id, '', 'include' );
+		$class  = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+
+		$max_field_id = 0;
+		foreach ( $fields as $field ) {
+			$max_field_id = max( (int) $field->id, $max_field_id );
+		}
+		$class::set_initial_value( 'honeypot_field_id', $max_field_id + 1 );
+
 		$_POST               = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key']   = $entry_key;
 		$_POST['frm_action'] = 'create';

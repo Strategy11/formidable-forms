@@ -16,6 +16,12 @@ abstract class FrmValidate {
 	protected $form;
 
 	/**
+	 * @since 6.21
+	 * @var string
+	 */
+	protected $option_type = 'form';
+
+	/**
 	 * @param int $form_id
 	 */
 	public function __construct( $form_id ) {
@@ -36,8 +42,13 @@ abstract class FrmValidate {
 	 * @return bool
 	 */
 	protected function is_option_on() {
+		$key = $this->get_option_key();
+		if ( 'global' === $this->option_type ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			return ! empty( $frm_settings->$key );
+		}
+
 		$form = $this->get_form();
-		$key  = $this->get_option_key();
 		return ! empty( $form->options[ $key ] ) && 'off' !== $form->options[ $key ];
 	}
 

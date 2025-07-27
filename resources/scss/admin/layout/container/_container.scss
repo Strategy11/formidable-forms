@@ -1,0 +1,48 @@
+/**
+ * Layout - Container
+ */
+
+.frm-admin-page-styles .frm_page_container,
+.frm_wrap .frm_page_container { /* Use .frm_wrap to avoid messing up Views editor layout */
+	height: calc( 100vh - 32px );
+	display: flex;
+	flex-direction: column;
+	overflow: hidden;
+	padding-top: 0;
+	position: fixed;
+	top: 32px;
+	bottom: 0;
+	left: 0;
+	right: 0;
+}
+
+.frm-admin-page-translate .frm_wrap .frm_page_container, .frm-admin-page-update_translations .frm_wrap .frm_page_container {
+	position: static;
+}
+
+.auto-fold.frm-admin-page-styles .frm_page_container,
+.auto-fold .frm_wrap .frm_page_container,
+.frm-unfold.frm-admin-page-styles .frm_page_container,
+.frm-unfold .frm_wrap .frm_page_container {
+	left: 160px;
+}
+
+.folded.frm-admin-page-styles .frm_page_container,
+.folded .frm_wrap .frm_page_container {
+	left: 38px;
+}
+
+.frm-full-screen.frm-admin-page-styles .frm_page_container,
+.frm-full-screen .frm_wrap .frm_page_container {
+	height: 100vh;
+	top: 0;
+	left: 0;
+}
+
+.frm-full-screen.frm-admin-page-entries .frm_page_container,
+.frm-new-entry .frm_page_container,
+.frm-admin-page-reports .frm_page_container,
+.frm_list_entry_page .frm_page_container {
+	height: auto;
+	display: block;
+}
