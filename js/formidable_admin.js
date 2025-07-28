@@ -7492,6 +7492,12 @@ function frmAdminBuildJS() {
 			popProductFields( jQuery( singleField ).find( '.frmjs_prod_field_opt' )[0]);
 		}
 
+		// Scroll settings panel to top
+		document.querySelector( '.frm-settings-panel.frm-scrollbar-wrapper' )?.scrollTo({
+			top: 0,
+			behavior: 'instant'
+		});
+
 		singleField.classList.remove( 'frm_hidden' );
 		document.getElementById( 'frm-options-panel-tab' ).click();
 
