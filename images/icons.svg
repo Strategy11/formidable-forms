@@ -490,7 +490,7 @@
 <symbol id="frm_repeater_icon" viewBox="0 0 20 20"><title>repeater</title><path d="M10 5C4.5 5 0 7.2 0 10c0 2.2 3 4.1 7 4.8V18l4-4-4-4v2.7c-3.1-.5-5-1.9-5-2.7 0-1 3-3 8-3s8 2 8 3c0 .7-1.5 1.9-4 2.5v2c3.5-.7 6-2.5 6-4.5 0-2.8-4.5-5-10-5z"/></symbol>
 <symbol id="frm_refresh_icon" viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.75 4.75 9.25 7l2.5 2.25M13.25 19.25l2.5-2.25-2.5-2.25"/><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M10.25 7h3.5a6 6 0 0 1 6 6v.25M14.75 17h-3.5a6 6 0 0 1-6-6v-.25"/></symbol>
 <symbol id="frm_hashtag_icon" viewBox="0 0 24 24" fill="none">
-<g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" clip-path="url(#a)"><path d="M8.75 4.75v14.5M19.75 8.25H5.25M19.75 15.75H5.25M16.25 4.75v14.5"/></g>
+<g stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"><path d="M8.75 4.75v14.5M19.75 8.25H5.25M19.75 15.75H5.25M16.25 4.75v14.5"/></g>
 </symbol>
 <symbol id="frm_save_icon" viewBox="0 0 448 512">
 <title>save</title>
