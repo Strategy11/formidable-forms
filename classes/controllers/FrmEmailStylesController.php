@@ -131,6 +131,10 @@ class FrmEmailStylesController {
 			$content = '<div style="width:640px;">' . $content . '</div>';
 			header( 'Content-Type: text/html; charset=utf-8' );
 		} else {
+			$content = '';
+			foreach ( $table_rows as $row ) {
+				$content .= $row['label'] . ': ' . $row['value'] . "\r\n";
+			}
 			header( 'Content-Type: text/plain' );
 		}
 
