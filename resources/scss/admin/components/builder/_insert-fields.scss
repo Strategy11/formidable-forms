@@ -26,66 +26,69 @@
 		width: auto;
 	}
 
-	li,
-	li a {
-		text-decoration: none;
-		font-weight: 500;
-		font-size: var(--text-md) !important;
-		color: var(--grey-900);
-	}
+	li {
 
-	li.frm_show_upgrade {
-		cursor: pointer;
-		opacity: .5;
-	}
-
-	li span:not(.frm-new-pill) {
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		text-align: left;
-	}
-
-	li a.disabled:hover {
-		cursor: not-allowed;
-	}
-
-	li.ui-draggable-disabled {
-		opacity: 0.5;
-	}
-
-	li a:not(.disabled):hover {
-
-		.frmsvg,
-		i {
-			color: var(--grey-600);
+		&,
+		a {
+			text-decoration: none;
+			font-weight: 500;
+			font-size: var(--text-md) !important;
+			color: var(--grey-900);
 		}
-	}
 
-	li.frm_show_upgrade,
-	li a {
-		text-decoration: none;
-		display: inline-flex !important;
-		gap: var(--gap-xs);
-		align-items: center;
-		border-radius: var(--small-radius) !important;
-		padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
-		color: var(--grey-900) !important
-	}
-
-	li a {
-		display: flex !important;
-		transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
-
-		&:not(.disabled):hover {
-			background: var(--grey-100);
-			box-shadow: var(--box-shadow-md);
+		&.frm_show_upgrade {
+			cursor: pointer;
+			opacity: .5;
 		}
-	}
 
-	/* Prevents advanced fields from always appearing in search results */
-	li.frm_show_upgrade.frm_hidden {
-		display: none !important;
+		span:not(.frm-new-pill) {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			text-align: left;
+		}
+
+		a.disabled:hover {
+			cursor: not-allowed;
+		}
+
+		&.ui-draggable-disabled {
+			opacity: 0.5;
+		}
+
+		a:not(.disabled):hover {
+
+			.frmsvg,
+			i {
+				color: var(--grey-600);
+			}
+		}
+
+		&.frm_show_upgrade,
+		a {
+			text-decoration: none;
+			display: inline-flex !important;
+			gap: var(--gap-xs);
+			align-items: center;
+			border-radius: var(--small-radius) !important;
+			padding: 11px var(--gap-md) 11px var(--gap-xs) !important;
+			color: var(--grey-900) !important
+		}
+
+		a {
+			display: flex !important;
+			transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
+
+			&:not(.disabled):hover {
+				background: var(--grey-100);
+				box-shadow: var(--box-shadow-md);
+			}
+		}
+
+		/* Prevents advanced fields from always appearing in search results */
+		&.frm_show_upgrade.frm_hidden {
+			display: none !important;
+		}
 	}
 
 	.frm-with-line {
