@@ -7,7 +7,7 @@ $attributes = array(
 	'class' => 'frm_form_field frm6 frm6_followed frm-h-stack button frm-button-secondary frm-button-gradient frm-rounded-6 frm-max-w-fit frm-font-normal frm-py-2xs frm-px-xs frm-mt-xs frm-mb-12',
 );
 
-if ( isset( $should_hide_bulk_edit ) && $should_hide_bulk_edit ) {
+if ( ! empty( $should_hide_bulk_edit ) ) {
 	$attributes['class'] .= ' frm_hidden!';
 }
 
