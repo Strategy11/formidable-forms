@@ -97,14 +97,44 @@ class FrmEmailStylesController {
 			die( $not_exist_msg );
 		}
 
-		$atts = array(
-			'entry' => self::get_fake_entry(),
-			'plain_text' => false,
-			'user_info' => false,
+		$table_rows = array(
+			array(
+				'label' => 'Name',
+				'value' => 'John Doe',
+			),
+			array(
+				'label' => 'Email address',
+				'value' => 'john@doe.com',
+			),
+			array(
+				'label' => 'Subject',
+				'value' => 'Contact subject',
+			),
+			array(
+				'label' => 'Message',
+				'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
+			),
 		);
 
-		$mail_body = FrmEntriesHelper::replace_default_message( '[default-message]', $atts );
-		echo $mail_body;
+		if ( 'plain' !== $style_key ) {
+			$atts            = array(
+				'inline_style' => true,
+			);
+			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
+
+			$content = $table_generator->generate_table_header();
+			foreach ( $table_rows as $row ) {
+				$content .= $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+			}
+			$content .= $table_generator->generate_table_footer();
+
+			$content = '<div style="width:640px;">' . $content . '</div>';
+			header( 'Content-Type: text/html; charset=utf-8' );
+		} else {
+			header( 'Content-Type: text/plain' );
+		}
+
+		echo $content;
 		die();
 	}
 }
