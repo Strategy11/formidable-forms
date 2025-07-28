@@ -848,7 +848,10 @@ function frmAdminBuildJS() {
 			cursor: 'grabbing',
 			refreshPositions: true,
 			distance: 3, // Only start drag after 3px of movement for more precision
-			cursorAt: false // Let the helper maintain its original position relative to cursor
+			cursorAt: {
+				top: 1,
+				left: 70 // The width of draggable button is 140. 70 should center the draggable on the cursor.
+			}
 		};
 		if ( 'string' === typeof handle ) {
 			settings.handle = handle;

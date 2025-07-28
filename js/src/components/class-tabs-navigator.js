@@ -64,7 +64,11 @@ export class frmTabsNavigator {
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
 		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * -1 )`;
-		this.slideTrack.style.transform = `translateX(${translate})`;
+		if ( '0px' !== translate ) {
+			this.slideTrack.style.transform = `translateX(${translate})`;
+		} else {
+			this.slideTrack.style.removeProperty( 'transform' );
+		}
 		if ( index in this.slides ) {
 			this.slides[ index ].classList.add( 'frm-active' );
 		}
