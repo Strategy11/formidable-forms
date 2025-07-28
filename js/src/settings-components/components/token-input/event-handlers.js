@@ -44,7 +44,7 @@ function onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) {
 	if ( key === KEYS.BACKSPACE && ! value ) { // Handle token removal on backspace
 		event.preventDefault();
 		const lastToken = tokensWrapper.querySelector( `.${ CLASS_NAMES.TOKEN }:last-child` );
-		removeToken( lastToken, field, proxyInput )
+		removeToken( lastToken, field, proxyInput );
 	} else if ( [ KEYS.SPACE, KEYS.COMMA, KEYS.ENTER, KEYS.TAB ].includes( key ) ) { // Handle token creation keys
 		event.preventDefault();
 		addToken( value, field, proxyInput );
