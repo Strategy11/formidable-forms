@@ -1834,6 +1834,6 @@ DEFAULT_HTML;
 	 * @deprecated x.x
 	 */
 	protected function get_add_option_string() {
-		return __( 'Add Option', 'formidable' );
+		_deprecated_function( __METHOD__, 'x.x' );
 	}
 }
