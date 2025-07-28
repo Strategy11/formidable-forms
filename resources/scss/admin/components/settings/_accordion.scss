@@ -8,13 +8,16 @@
 		background: none;
 	}
 
-	.frm-right-panel h3.accordion-section-title:hover > svg:last-child,
-	.frm-right-panel .open h3.accordion-section-title > svg:first-child,
-	.frm-right-panel .open h3.accordion-section-title > svg:last-child {
-		color: var( --grey-900 );
-	}
+	.frm-right-panel {
 
-	.frm-right-panel .frm-style-component {
-		align-self: center;
+		h3.accordion-section-title:hover > svg:last-child,
+		.open h3.accordion-section-title > svg:first-child,
+		.open h3.accordion-section-title > svg:last-child {
+			color: var( --grey-900 );
+		}
+
+		.frm-style-component {
+			align-self: center;
+		}
 	}
 }
