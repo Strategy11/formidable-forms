@@ -1,5 +1,7 @@
 #frm-deactivation-modal {
 	--padding: 24px;
+
+	overflow-y: auto;
 }
 .frm_screen_reader {
 	border: 0;

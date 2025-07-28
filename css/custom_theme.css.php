@@ -974,8 +974,12 @@ a.frm_save_draft{
 }
 
 .with_frm_style .frm_message p {
-	margin-bottom: 5px;
 	color: var(--success-text-color)<?php echo esc_html( $important ); ?>;
+	margin-bottom: 0;
+}
+
+.with_frm_style .frm_message > p:first-of-type {
+	margin-top: 0;
 }
 
 .with_frm_style .frm_message,

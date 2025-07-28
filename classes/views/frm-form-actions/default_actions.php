@@ -152,14 +152,6 @@ class FrmDefHubspotAction extends FrmFormAction {
 	}
 }
 
-class FrmDefHighriseAction extends FrmFormAction {
-	public function __construct() {
-		$action_ops          = FrmFormAction::default_action_opts( 'frm_building_icon frm_show_upgrade' );
-		$action_ops['color'] = 'var(--purple)';
-		parent::__construct( 'highrise', 'Highrise', $action_ops );
-	}
-}
-
 class FrmDefMailpoetAction extends FrmFormAction {
 	public function __construct() {
 		$action_ops          = FrmFormAction::default_action_opts( 'frm_mailpoet_icon frm_show_upgrade' );
