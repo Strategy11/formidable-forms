@@ -12,6 +12,7 @@ export default class frmRadioComponent {
 
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		this.observers = new Map();
 		if ( 0 < this.radioElements.length ) {
 			this.init();
 		}
@@ -28,6 +29,9 @@ export default class frmRadioComponent {
 
 			this.initRadio();
 		});
+
+		// Cleanup observers when page unloads to prevent memory leaks
+		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
 	}
 
 	/**
@@ -124,6 +128,10 @@ export default class frmRadioComponent {
 	 * @return {void}
 	 */
 	initVisibilityObserver( element ) {
+		if ( this.observers.has( element ) ) {
+			this.observers.get( element ).disconnect();
+		}
+
 		const observer = new MutationObserver( () => {
 			// Check if element is now visible
 			if ( isVisible( element ) ) {
@@ -133,6 +141,8 @@ export default class frmRadioComponent {
 				}
 			}
 		});
+
+		this.observers.set( element, observer );
 
 		// Observe for attribute changes on the component and its ancestors
 		observer.observe( element, {
@@ -149,6 +159,17 @@ export default class frmRadioComponent {
 			});
 			parent = parent.parentElement;
 		}
+	}
+
+	/**
+	 * Cleanup all observers to prevent memory leaks.
+	 */
+	cleanupObservers() {
+		this.observers.forEach( ( observer ) => {
+			observer.disconnect();
+		});
+
+		this.observers.clear();
 	}
 
 	/**
