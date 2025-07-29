@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		FrmHtmlHelper::toggle( 'frm_testmode_disable_required_fields', 'frm_testmode[disable_required_fields]', $disabled_required_fields_toggle_args );
 
 		if ( $roles ) :
+			$selected_role = FrmAppHelper::simple_get( 'frm_testmode_role' );
 			?>
 			<label><?php esc_html_e( 'Preview as:', 'formidable' ); ?></label>
 			<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
@@ -24,7 +25,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				foreach ( $roles as $role => $details ) {
 					FrmHtmlHelper::echo_dropdown_option(
 						$details['name'],
-						false,
+						$selected_role === $role,
 						array(
 							'value' => $role,
 						)
