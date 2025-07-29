@@ -7,6 +7,13 @@
 		--gap-2xl: 24px;
 	}
 
+	/* Revert settings panel gap variables to default */
+	.frm-settings-panel {
+		--gap-sm: 16px;
+		--gap-md: 24px;
+		--gap-2xl: 32px;
+	}
+
 	.auto-fold #adminmenuwrap {
 		width: 36px;
 	}
