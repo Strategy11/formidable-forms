@@ -84,7 +84,7 @@
 	float: left;
 }
 
-.rtl .frm-with-right-icon .frmsvg {
+.rtl .frm-with-right-icon:not(.frm-token-container) .frmsvg {
 	right: auto;
 	left: 0;
 }
