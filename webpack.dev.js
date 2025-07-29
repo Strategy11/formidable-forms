@@ -22,7 +22,7 @@ const webpackDevMiddleware = require( 'webpack-dev-middleware' );
  */
 const config = {
 	// WordPress site URL from environment variable or default
-	siteUrl: process.env.SITE_URL || 'https://formidableforms.local',
+	siteDomain: process.env.SITE_URL || 'formidable.local',
 
 	// Server ports
 	port: 3000,
@@ -61,7 +61,7 @@ const init = () => {
 
 	browserSyncInstance.init({
 		proxy: {
-			target: config.siteUrl,
+			target: config.siteDomain,
 			middleware: [
 				webpackDevMiddleware( cssCompiler, {
 					publicPath: config.publicPath,
@@ -85,9 +85,8 @@ const init = () => {
 				match: [ config.jsSrcPath ],
 				fn: ( event, file ) => console.log( `JS source updated: ${file}\nRebuilding JS bundles...` )
 			},
-			// Compiled JS and PHP files, full page reload
-			config.jsPath,
-			config.phpPath
+			// Conditionally watch compiled JS and PHP files
+			...(process.env.WATCH_FILES && process.env.WATCH_FILES.toLowerCase().startsWith('y') ? [config.jsPath, config.phpPath] : [])
 		],
 
 		// Server settings
@@ -101,7 +100,7 @@ const init = () => {
 		// Resource handling
 		serveStatic: [{ route: '/css', dir: './css' }],
 		rewriteRules: [{
-			match: new RegExp( config.siteUrl.replace( /^https?:\/\//, '' ), 'g' ),
+			match: new RegExp( config.siteDomain.replace( /^https?:\/\//, '' ), 'g' ),
 			replace: `localhost:${config.port}`
 		}]
 	});
