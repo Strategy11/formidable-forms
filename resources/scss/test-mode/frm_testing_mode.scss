@@ -14,6 +14,7 @@
         font-size: 18px;
         font-weight: 600;
         color: rgba(0, 0, 0, 1);
+        margin-bottom: 0;
     }
 
     label {
@@ -60,7 +61,7 @@
 
 #frm_test_mode_pagination {
     display: inline-block;
-    margin-left: var(--gap-2xs);
+    margin-left: var(--gap-xs);
 
     a {
         border: 1px solid var(--grey-300);
