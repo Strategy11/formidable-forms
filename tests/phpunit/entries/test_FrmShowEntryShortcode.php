@@ -784,7 +784,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			return '';
 		}
 
-		$header = '<table ';
+		$header = '<table cellspacing="0"';
 
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$defaults     = $this->get_defaults();
