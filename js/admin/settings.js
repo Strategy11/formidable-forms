@@ -1,5 +1,9 @@
 ( function() {
 
+	const globalVars = {
+		sendTestEmailModal: null
+	}
+
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
@@ -31,6 +35,11 @@
 	function handleClickEvent( e ) {
 		if ( 'BUTTON' === e.target.nodeName && 'choose' === e.target.dataset.action && e.target.closest( '.frm-email-style' ) ) {
 			handleClickChooseEmailStyle( e );
+			return;
+		}
+
+		if ( 'frm-send-test-email' === e.target.id ) {
+			handleClickSendTestEmailBtn( e );
 		}
 	}
 
@@ -45,6 +54,14 @@
 
 		const styleKey = styleEl.dataset.styleKey;
 		document.getElementById( 'frm-email-style-value' ).value = styleKey;
+	}
+
+	function handleClickSendTestEmailBtn( e ) {
+		if ( ! globalVars.sendTestEmailModal ) {
+			globalVars.sendTestEmailModal = frmAdminBuild.initModal( '#frm-send-test-email-modal', '400px' );
+		}
+
+		globalVars.sendTestEmailModal.dialog( 'open' );
 	}
 
 	/**

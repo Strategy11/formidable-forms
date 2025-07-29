@@ -81,3 +81,29 @@ FrmTipsHelper::show_tip(
 	)
 );
 ?>
+
+<hr class="frm-mt-md frm-mb-md" />
+
+<button id="frm-send-test-email" type="button"><?php esc_html_e( 'Send a test email', 'formidable' ); ?></button>
+
+<div id="frm-send-test-email-modal" class="frm_hidden frm-modal">
+	<div class="metabox-holder">
+		<div class="postbox">
+			<a href="javascript:void(0)" class="dismiss" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
+			</a>
+			<div class="inside">
+				<h3><?php esc_html_e( 'Send email test', 'formidable' ); ?></h3>
+
+				<p>
+					<label for="frm-test-email-address"><?php esc_html_e( 'Email address', 'formidable' ); ?></label>
+					<input id="frm-test-email-address" />
+				</p>
+
+				<p class="description"><?php esc_html_e( 'Use commas to separate multiple emails.', 'formidable' ); ?></p>
+
+				<p id="frm-send-test-email-result"></p>
+			</div>
+		</div>
+	</div>
+</div>
