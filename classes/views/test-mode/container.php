@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
-		<a class="frm_button <?php echo $enabled ? '' : 'frm_noallow'; ?>" href="#">
+		<a id="frm_testmode_fill_in_empty_form_fields" class="frm_button <?php echo $enabled ? '' : 'frm_noallow'; ?>" href="#">
 			<?php esc_html_e( 'Fill in empty form fields', 'formidable' ); ?>
 		</a>
 	</div>
