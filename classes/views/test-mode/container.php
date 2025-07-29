@@ -21,14 +21,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<label><?php esc_html_e( 'Preview as:', 'formidable' ); ?></label>
 			<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
 				<?php
-				foreach ( $roles as $role => $details ) :
-					$role_name = $details['name'];
-					?>
-					<option value="<?php echo esc_attr( $role ); ?>">
-						<?php echo esc_html( $role_name ); ?>
-					</option>
-				<?php
-				endforeach;
+				foreach ( $roles as $role => $details ) {
+					FrmHtmlHelper::echo_dropdown_option(
+						$details['name'],
+						false,
+						array(
+							'value' => $role,
+						)
+					);
+				}
 				?>
 			</select>
 		<?php endif; ?>
