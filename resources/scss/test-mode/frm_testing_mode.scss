@@ -65,12 +65,14 @@
 
     input[type="button"] {
         border: 1px solid var(--grey-300);
-        padding: 8px 14px;
+        padding: 8px 12px;
         border-radius: 8px;
         font-size: 12px;
+        background-color: #fff;
     
         &.frm_test_mode_active_page {
             background-color: var(--primary-500);
+            border-color: var(--primary-500);
             color: #fff;
         }
     }
