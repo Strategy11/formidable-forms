@@ -66,20 +66,21 @@ Cypress.Commands.add("openForm", () => {
 
     cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
     cy.get('.current_page').should("contain", "Build");
-    cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
+    cy.xpath("//li[@class='frm-active']//a[@id='frm_insert_fields_tab']").should("contain", "Add Fields");
+
 });
 
 Cypress.Commands.add("getCurrentFormattedDate", () => {
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
     return formattedDate;
-});   
+});
 
 Cypress.Commands.add("emptyTrash", () => {
 cy.log("Precondition - Clear trash if there are deleted forms in the list");
 cy.get('.subsubsub > .trash > a').then(($trashLink) => {
     if ($trashLink.text().includes("Trash")) {
-        cy.wrap($trashLink).click();        
+        cy.wrap($trashLink).click();
         cy.get('body').then($body => {
             if ($body.find('#delete_all').length > 0) {
                 cy.get('#delete_all').should("contain", "Empty Trash").click();
@@ -90,5 +91,5 @@ cy.get('.subsubsub > .trash > a').then(($trashLink) => {
     } else {
         cy.log('No forms in the Trash.');
     }
-});      
-});   
+});
+});
