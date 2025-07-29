@@ -47,6 +47,7 @@ class FrmTestModeController {
 	private static function get_testing_mode_container() {
 		return FrmAppHelper::clip(
 			function () {
+				$enabled = function_exists( 'load_formidable_test_mode' );
 				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 			}
 		);

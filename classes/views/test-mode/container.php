@@ -8,6 +8,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 ?>
 <div id="frm_testing_mode">
 	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
@@ -20,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'echo'        => true,
 				'off_label'   => __( 'Disable Required Fields', 'formidable' ),
 				'show_labels' => true,
-				'disabled'    => true,
+				'disabled'    => ! $enabled,
 			)
 		);
 		?>
@@ -30,7 +31,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $roles ) :
 			?>
 			<label><?php esc_html_e( 'Preview as:', 'formidable' ); ?></label>
-			<select id="frm_testmode_preview_role" disabled="disabled">
+			<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
 				<?php
 				foreach ( $roles as $role => $details ) :
 					$role_name = $details['name'];
@@ -55,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
-		<a class="frm_button frm_noallow" href="#">
+		<a class="frm_button <?php echo $enabled ? '' : 'frm_noallow'; ?>" href="#">
 			<?php esc_html_e( 'Fill in empty form fields', 'formidable' ); ?>
 		</a>
 	</div>
