@@ -47,9 +47,33 @@ class FrmTestModeController {
 	private static function get_testing_mode_container() {
 		return FrmAppHelper::clip(
 			function () {
-				$enabled = function_exists( 'load_formidable_test_mode' );
+				$enabled                              = function_exists( 'load_formidable_test_mode' );
+				$roles                                = get_editable_roles();
+				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
+				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
+
 				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 			}
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_disabled_required_fields_toggle_args() {
+		/**
+		 * @since x.x
+		 *
+		 * @param array $args
+		 */
+		return apply_filters(
+			'frm_test_mode_disable_required_fields_toggle_args',
+			array(
+				'echo'        => true,
+				'off_label'   => __( 'Disable Required Fields', 'formidable' ),
+				'show_labels' => true,
+				'disabled'    => true,
+			)
 		);
 	}
 }

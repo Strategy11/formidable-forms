@@ -151,9 +151,7 @@ class FrmEntryValidate {
 		}
 
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
-			if ( ! self::is_test_mode_disabled_required_validation() ) {
-				$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
-			}
+			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
 		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			self::maybe_add_item_name( $value, $posted_field );
 		}
@@ -177,15 +175,6 @@ class FrmEntryValidate {
 		if ( ! FrmAppHelper::pro_is_installed() && empty( $args['other'] ) ) {
 			FrmEntriesHelper::get_posted_value( $posted_field, $value, $args );
 		}
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return bool
-	 */
-	private static function is_test_mode_disabled_required_validation() {
-		return current_user_can( 'frm_view_forms' ) && ! empty( $_POST['frm_testmode']['disable_required_fields'] );
 	}
 
 	/**

@@ -14,20 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
 	<div>
 		<?php
-		FrmHtmlHelper::toggle(
-			'frm_testmode_disable_required_fields',
-			'frm_testmode[disable_required_fields]',
-			array(
-				'echo'        => true,
-				'off_label'   => __( 'Disable Required Fields', 'formidable' ),
-				'show_labels' => true,
-				'disabled'    => ! $enabled,
-			)
-		);
-		?>
+		FrmHtmlHelper::toggle( 'frm_testmode_disable_required_fields', 'frm_testmode[disable_required_fields]', $disabled_required_fields_toggle_args );
 
-		<?php
-		$roles = get_editable_roles();
 		if ( $roles ) :
 			?>
 			<label><?php esc_html_e( 'Preview as:', 'formidable' ); ?></label>
@@ -50,8 +38,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<label><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>
 
 		<?php
-		$pagination = apply_filters( 'frm_test_mode_pagination_buttons', false );
-		if ( false === $pagination ) {
+		if ( false !== $pagination && is_callable( $pagination ) ) {
+			$pagination();
+		} elseif ( false === $pagination ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/test-mode/pagination-buttons.php';
 		}
 		?>
