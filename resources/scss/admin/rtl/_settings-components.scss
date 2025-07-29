@@ -1,0 +1,28 @@
+.rtl .frm-style-tabs-wrapper {
+
+	.frm-tabs-navs ul li {
+
+		&:first-child {
+			margin-left: unset;
+			margin-right: var(--gap-xs);
+		}
+
+		&:last-child {
+			margin-right: unset;
+			margin-left: var(--gap-xs);
+		}
+	}
+
+	.frm-tabs-active-underline {
+		left: unset !important;
+		right: 0;
+
+		&.frm-first {
+			right: var(--gap-xs);
+		}
+
+		&.frm-last {
+			right: calc( -1 * var(--gap-xs) );
+		}
+	}
+}

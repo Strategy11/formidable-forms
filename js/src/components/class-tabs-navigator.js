@@ -16,6 +16,7 @@ export class frmTabsNavigator {
 		this.slideTrackLine   = this.wrapper.querySelector( '.frm-tabs-active-underline' );
 		this.slideTrack       = this.wrapper.querySelector( '.frm-tabs-slide-track' );
 		this.slides           = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
+		this.isRTL            = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
 
 		this.init();
 	}
@@ -57,13 +58,17 @@ export class frmTabsNavigator {
 	initSlideTrackUnderline( nav, index ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) ) ;
-		this.slideTrackLine.style.transform = `translateX(${activeNav.offsetLeft}px)`;
+		const position = this.isRTL
+			? -( activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth )
+			: activeNav.offsetLeft;
+
+		this.slideTrackLine.style.transform = `translateX(${position}px)`;
 		this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
 	}
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
-		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * -1 )`;
+		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${this.isRTL ? 1 : -1} )`;
 		if ( '0px' !== translate ) {
 			this.slideTrack.style.transform = `translateX(${translate})`;
 		} else {
