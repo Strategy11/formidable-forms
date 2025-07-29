@@ -12,6 +12,12 @@
 	padding-top: 0;
 }
 
+.frm_email_settings .frm_default_email_message {
+	background-color: var(--primary-25);
+	padding:var(--gap-sm) var(--gap-md);
+	border-radius:var(--small-radius);
+}
+
 .frm_email_settings.frm_email_settings.widgets-holder-wrap {
 	overflow: auto;
 	box-shadow: none;
