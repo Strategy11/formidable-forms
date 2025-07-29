@@ -21,6 +21,11 @@ class FrmTestModeController {
 			return $html;
 		}
 
+		/**
+		 * @since x.x
+		 */
+		do_action( 'frm_test_mode_container' );
+
 		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
 
 		$html = str_replace(

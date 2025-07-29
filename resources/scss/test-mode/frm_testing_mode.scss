@@ -63,11 +63,10 @@
     display: inline-block;
     margin-left: var(--gap-xs);
 
-    a {
+    input[type="button"] {
         border: 1px solid var(--grey-300);
         padding: 8px 14px;
         border-radius: 8px;
-        text-decoration: none;
         font-size: 12px;
     
         &.frm_test_mode_active_page {
