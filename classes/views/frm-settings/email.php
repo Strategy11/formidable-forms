@@ -84,7 +84,7 @@ FrmTipsHelper::show_tip(
 
 <hr class="frm-mt-md frm-mb-md" />
 
-<button id="frm-send-test-email" type="button"><?php esc_html_e( 'Send a test email', 'formidable' ); ?></button>
+<button id="frm-send-test-email" type="button" class="frm-button-secondary"><?php esc_html_e( 'Send a test email', 'formidable' ); ?></button>
 
 <div id="frm-send-test-email-modal" class="frm_hidden frm-modal">
 	<div class="metabox-holder">
@@ -95,14 +95,17 @@ FrmTipsHelper::show_tip(
 			<div class="inside">
 				<h3><?php esc_html_e( 'Send email test', 'formidable' ); ?></h3>
 
-				<p>
+				<div>
 					<label for="frm-test-email-address"><?php esc_html_e( 'Email address', 'formidable' ); ?></label>
-					<input id="frm-test-email-address" />
+					<input type="text" id="frm-test-email-address" class="widefat" />
+					<p class="description"><?php esc_html_e( 'Use commas to separate multiple emails.', 'formidable' ); ?></p>
+				</div>
+
+				<div id="frm-send-test-email-result"></div>
+
+				<p style="text-align: right;">
+					<button type="button" class="frm-button-primary" id="frm-send-test-email-btn"><?php esc_html_e( 'Send Email', 'formidable' ); ?></button>
 				</p>
-
-				<p class="description"><?php esc_html_e( 'Use commas to separate multiple emails.', 'formidable' ); ?></p>
-
-				<p id="frm-send-test-email-result"></p>
 			</div>
 		</div>
 	</div>

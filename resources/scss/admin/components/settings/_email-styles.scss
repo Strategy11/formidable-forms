@@ -83,3 +83,18 @@
 		display: flex;
 	}
 }
+
+#frm-send-test-email-modal {
+	.postbox {
+		padding: var(--gap-sm) var(--gap-md);
+
+		* {
+			box-sizing: border-box;
+		}
+	}
+
+	.inside {
+		margin: 0;
+		padding: 0;
+	}
+}

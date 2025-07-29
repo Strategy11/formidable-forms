@@ -83,18 +83,9 @@ class FrmEmailStylesController {
 		return $entry;
 	}
 
-	public static function ajax_preview() {
-		check_ajax_referer( 'frm_email_style_preview' );
-
-		$style_key = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
-		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
+	private static function get_test_email_content( $style_key = false ) {
 		if ( ! $style_key ) {
-			die( $not_exist_msg);
-		}
-
-		$styles = self::get_email_styles();
-		if ( ! isset( $styles[ $style_key ] ) ) {
-			die( $not_exist_msg );
+			$style_key = self::get_email_style();
 		}
 
 		$table_rows = array(
@@ -129,16 +120,87 @@ class FrmEmailStylesController {
 			$content .= $table_generator->generate_table_footer();
 
 			$content = '<div style="width:640px;">' . $content . '</div>';
-			header( 'Content-Type: text/html; charset=utf-8' );
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
 				$content .= $row['label'] . ': ' . $row['value'] . "\r\n";
 			}
+		}
+
+		return $content;
+	}
+
+	public static function ajax_preview() {
+		// Check permission and nonce
+		FrmAppHelper::permission_check( 'manage_options' );
+		check_ajax_referer( 'frm_email_style_preview' );
+
+		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
+		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
+		if ( ! $style_key ) {
+			die( $not_exist_msg);
+		}
+
+		$styles = self::get_email_styles();
+		if ( ! isset( $styles[ $style_key ] ) ) {
+			die( $not_exist_msg );
+		}
+
+		$style_key = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
+		$content   = self::get_test_email_content( $style_key );
+
+		if ( 'plain' !== $style_key ) {
+			header( 'Content-Type: text/html; charset=utf-8' );
+		} else {
 			header( 'Content-Type: text/plain' );
 		}
 
 		echo $content;
 		die();
+	}
+
+	public static function get_email_style() {
+		$frm_settings = FrmAppHelper::get_settings();
+		return ! empty( $frm_settings->email_style ) ? $frm_settings->email_style : 'classic';
+	}
+
+	public static function ajax_send_test_email() {
+		// Check permission and nonce
+		FrmAppHelper::permission_check( 'manage_options' );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$emails_str   = FrmAppHelper::get_post_param( 'emails_str', '', 'sanitize_text_field' );
+		$emails       = explode( ',', $emails_str );
+		$valid_emails = array();
+		foreach ( $emails as $email ) {
+			$email = trim( $email );
+			if ( empty( $email ) || ! is_email( $email ) ) {
+				continue;
+			}
+			$valid_emails[] = $email;
+		}
+
+		if ( empty( $valid_emails ) ) {
+			wp_send_json_error( __( 'Invalid email address', 'formidable' ) );
+		}
+
+		$email_style = self::get_email_style();
+
+		$subject = __( 'Formidable Test Email', 'formidable' );
+		$content = self::get_test_email_content();
+		$headers = array();
+
+		if ( 'plain' === $email_style ) {
+			$headers[] = 'Content-Type: text/plain';
+		} else {
+			$headers[] = 'Content-Type: text/html; charset=utf-8';
+		}
+
+		$result = wp_mail( $valid_emails, $subject, $content, $headers );
+		if ( $result ) {
+			wp_send_json_success( __( 'Test email sent successfully!', 'formidable' ) );
+		}
+
+		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
 	}
 }

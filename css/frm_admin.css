@@ -6698,6 +6698,17 @@ label.frm-example-icon {
   display: flex;
 }
 
+#frm-send-test-email-modal .postbox {
+  padding: var(--gap-sm) var(--gap-md);
+}
+#frm-send-test-email-modal .postbox * {
+  box-sizing: border-box;
+}
+#frm-send-test-email-modal .inside {
+  margin: 0;
+  padding: 0;
+}
+
 /**
  * Import/Export
  */
