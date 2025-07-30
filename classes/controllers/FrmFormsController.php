@@ -437,9 +437,8 @@ class FrmFormsController {
 
 		if ( FrmTestModeController::should_add_test_mode_container() ) {
 			do_action( 'frm_test_mode_init' );
+			add_filter( 'frm_filter_final_form', 'FrmTestModeController::maybe_add_test_mode_container', 99 );
 		}
-
-		add_filter( 'frm_filter_final_form', 'FrmTestModeController::maybe_add_test_mode_container', 99 );
 
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
