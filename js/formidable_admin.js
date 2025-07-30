@@ -4784,7 +4784,7 @@ function frmAdminBuildJS() {
 	 */
 	function moveOpenModalsOutOfFieldOptions( settings ) {
 		const openModals = settings[0].querySelectorAll( '.frm-inline-modal[data-fills]' );
-		if ( ! openModals.length ) {
+		if ( ! openModals || ! openModals.length ) {
 			return;
 		}
 		openModals.forEach( modal => {
