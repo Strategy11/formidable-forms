@@ -92,6 +92,7 @@ class FrmEmailStylesController {
 				'email_style'  => $style_key,
 			);
 
+			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
@@ -110,7 +111,14 @@ class FrmEmailStylesController {
 			}
 
 			foreach ( $table_rows as $index => $row ) {
-				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+				if ( 'compact' === $style_key ) {
+					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+				} else {
+					$row_html = '<div style="font-weight:bold;">' . $row['label'] . '</div>';
+					$row_html .= ( '<div>' . $row['value'] . '</div>' );
+					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
+				}
+
 				if ( ! $index && $should_remove_top_bottom_border ) {
 					$table_row = $table_generator->remove_border( $table_row );
 				}
@@ -119,6 +127,8 @@ class FrmEmailStylesController {
 			}
 
 			$content .= $table_generator->generate_table_footer();
+
+			$content = $table_generator->remove_border( $content, 'top' );
 
 			$content .= '</div></div>';
 
