@@ -26,3 +26,19 @@
 		}
 	}
 }
+
+.rtl .frm-unit-input {
+
+	.frm-input-group-suffix {
+		right: unset;
+		left: 1px;
+		padding-right: unset;
+		padding-left: var(--gap-xs);
+
+		select {
+			text-align: left;
+			background-position: left 0 top 50%;
+			padding-left: 21px !important;
+		}
+	}
+}
