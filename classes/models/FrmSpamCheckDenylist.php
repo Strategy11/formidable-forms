@@ -268,6 +268,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
+
 		return strpos( $values_str, $line ) !== false;
 	}
 
@@ -278,7 +279,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
-		return FrmAppHelper::maybe_json_encode( $values );
+		// Unslash so strings like /joomla/ are not stuck as \/joomla\/.
+		return wp_unslash( FrmAppHelper::maybe_json_encode( $values ) );
 	}
 
 	/**
