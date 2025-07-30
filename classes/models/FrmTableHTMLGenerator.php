@@ -173,6 +173,17 @@ class FrmTableHTMLGenerator {
 		}
 	}
 
+	public function remove_border( $html, $position = 'top' ) {
+		$search = sprintf(
+			'border-%1$s:%2$s solid %3$s;',
+			$position,
+			$this->style_settings['border_width'],
+			$this->style_settings['border_color']
+		);
+
+		return str_replace( $search, '', $html );
+	}
+
 	/**
 	 * Determine if setting is for a color, e.g. text color, background color, or border color
 	 *

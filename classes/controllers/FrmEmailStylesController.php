@@ -62,27 +62,6 @@ class FrmEmailStylesController {
 		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ), 'frm_email_style_preview' );
 	}
 
-	private static function get_fake_entry() {
-		$entry             = new stdClass();
-		$entry->post_id    = 0;
-		$entry->id         = 0;
-		$entry->ip         = '';
-		$entry->form_id    = 1;
-		$entry->metas      = array();
-		$entry->user_id    = get_current_user_id();
-		$entry->updated_by = 0;
-
-		$entry->item_meta = array(
-			2 => 'John',
-			3 => 'Doe',
-			4 => 'john@doe.com',
-			5 => 'Contact subject',
-			6 => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
-		);
-
-		return $entry;
-	}
-
 	private static function get_test_email_content( $style_key = false ) {
 		if ( ! $style_key ) {
 			$style_key = self::get_email_style();
@@ -108,18 +87,42 @@ class FrmEmailStylesController {
 		);
 
 		if ( 'plain' !== $style_key ) {
-			$atts            = array(
+			$atts = array(
 				'inline_style' => true,
+				'email_style'  => $style_key,
 			);
+
+			$should_remove_top_bottom_border = 'classic' !== $style_key;
+
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
 
-			$content = $table_generator->generate_table_header();
-			foreach ( $table_rows as $row ) {
-				$content .= $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+			$content = '<div class="frm-email-wrapper" style="width:640px">';
+
+			if ( 'classic' !== $style_key ) {
+				$content .= '<div class="frm-email-logo" style="text-align:center;margin-bottom:40px;"><img /></div>';
 			}
+
+			$content .= '<div class="frm-email-content" style="padding:40px;border-radius:8px;background-color:#fff;">';
+
+			$content .= $table_generator->generate_table_header();
+			if ( $should_remove_top_bottom_border ) {
+				$content = $table_generator->remove_border( $content, 'bottom' );
+			}
+
+			foreach ( $table_rows as $index => $row ) {
+				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+				if ( ! $index && $should_remove_top_bottom_border ) {
+					$table_row = $table_generator->remove_border( $table_row );
+				}
+
+				$content .= $table_row;
+			}
+
 			$content .= $table_generator->generate_table_footer();
 
-			$content = '<div style="width:640px;">' . $content . '</div>';
+			$content .= '</div></div>';
+
+			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;}</style></head><body>' . $content . '</body>';
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
