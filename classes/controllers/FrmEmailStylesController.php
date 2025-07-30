@@ -95,7 +95,10 @@ class FrmEmailStylesController {
 			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
+			// This needs to run after the filter for styles.
+			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_style_settings' ), 20 );
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
+			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_style_settings' ) );
 
 			$content = '<div class="frm-email-wrapper" style="width:640px">';
 
@@ -114,8 +117,8 @@ class FrmEmailStylesController {
 				if ( 'compact' === $style_key ) {
 					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
-					$row_html = '<div style="font-weight:bold;">' . $row['label'] . '</div>';
-					$row_html .= ( '<div>' . $row['value'] . '</div>' );
+					$row_html = '<div style="font-weight:600;padding-top:9px;">' . $row['label'] . '</div>';
+					$row_html .= ( '<div style="padding-bottom:9px;">' . $row['value'] . '</div>' );
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
 				}
 
@@ -128,11 +131,13 @@ class FrmEmailStylesController {
 
 			$content .= $table_generator->generate_table_footer();
 
-			$content = $table_generator->remove_border( $content, 'top' );
+			if ( $should_remove_border ) {
+				$content = $table_generator->remove_border( $content, 'top' );
+			}
 
 			$content .= '</div></div>';
 
-			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;}</style></head><body>' . $content . '</body>';
+			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;font-family:Inter,sans-serif;}</style></head><body>' . $content . '</body>';
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
@@ -215,5 +220,11 @@ class FrmEmailStylesController {
 		}
 
 		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
+	}
+
+	public static function override_style_settings( $style_settings ) {
+		$style_settings['border_color'] = '#EAECF0';
+		$style_settings['text_color'] = '#1D2939';
+		return $style_settings;
 	}
 }
