@@ -61,13 +61,26 @@ class FrmTestModeController {
 		return FrmAppHelper::clip(
 			function () {
 				$enabled                              = function_exists( 'load_formidable_test_mode' );
-				$roles                                = get_editable_roles();
+				$roles                                = self::get_roles();
 				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
 
 				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 			}
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_roles() {
+		$roles              = get_editable_roles();
+		$roles['loggedout'] = array(
+			'name' => __( 'Logged Out', 'formidable' ),
+		);
+		return $roles;
 	}
 
 	/**
