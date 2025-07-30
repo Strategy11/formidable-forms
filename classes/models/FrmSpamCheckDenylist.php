@@ -268,7 +268,6 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
-
 		return strpos( $values_str, $line ) !== false;
 	}
 
