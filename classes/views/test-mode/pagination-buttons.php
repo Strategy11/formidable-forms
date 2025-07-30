@@ -9,7 +9,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$number_of_pages_to_show = 4; // This is hard coded. In Lite, there is only ever a single page.
+// Show a hard coded 4 page count. In Lite, there is only ever a single page.
+$number_of_pages_to_show = 4;
 ?>
 <div id="frm_test_mode_pagination">
 	<?php for ( $i = 1; $i <= $number_of_pages_to_show; $i++ ) : ?>

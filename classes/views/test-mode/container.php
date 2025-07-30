@@ -60,7 +60,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$start_over_button_attrs = apply_filters( 'frm_testmode_start_over_button_attrs', $start_over_button_attrs );
 	?>
 	<a <?php FrmAppHelper::array_to_html_params( $start_over_button_attrs, true ); ?>>
-		<img src="<?php echo FrmAppHelper::plugin_url(); ?>/images/reset.svg" alt="Reset" />
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/reset.svg" alt="<?php esc_attr_e( 'Reset', 'formidable' ); ?>" />
 		<?php esc_html_e( 'Reset', 'formidable' ); ?>
 	</a>
 </div>
