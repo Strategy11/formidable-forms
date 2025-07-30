@@ -55,4 +55,63 @@ class FrmHtmlHelper {
 		echo esc_html( $option === '' ? ' ' : $option );
 		echo '</option>';
 	}
+
+	/**
+	 * Renders a number input with unit selector.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args {
+	 *     Optional. Arguments to customize the unit input.
+	 *
+	 *     @type array  $field_attrs        Attributes for the hidden input storing the field value.
+	 *     @type array  $input_number_attrs Attributes for the visible number input.
+	 *     @type array  $units              Available units for selection. Default is ['px', '%', 'em'].
+	 *     @type string $value              Initial value with optional unit (e.g. '10px', '50%').
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function echo_unit_input( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'field_attrs'        => array(),
+				'input_number_attrs' => array(),
+				'units'              => array( 'px', '%', 'em' ),
+				'value'              => '',
+			)
+		);
+
+		if ( empty( $args['value'] ) || empty( $args['field_attrs'] ) ) {
+			return;
+		}
+
+		$units = $args['units'];
+		$value = $args['value'];
+
+		// Extract unit if value contains one.
+		if ( '' !== $value && ! is_numeric( $value ) ) {
+			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')$/';
+			if ( preg_match( $pattern, $value, $matches ) ) {
+				$number_value  = $matches[1];
+				$selected_unit = $matches[2];
+			}
+		}
+		?>
+		<span class="frm-unit-input">
+			<input type="hidden" value="<?php echo esc_attr( $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
+			<input type="number" value="<?php echo esc_attr( $number_value ?? $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['input_number_attrs'], true ); ?> />
+			<span class="frm-input-group-suffix">
+				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>">
+					<?php
+					foreach ( $units as $unit ) {
+						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $units[0] ), array( 'value' => $unit ) );
+					}
+					?>
+				</select>
+			</span>
+		</span>
+		<?php
+	}
 }
