@@ -17,7 +17,7 @@ class FrmTestModeController {
 	 * @return string
 	 */
 	public static function maybe_add_test_mode_container( $html ) {
-		if ( '' === $html || ! FrmAppHelper::simple_get( 'testmode' ) || ! current_user_can( 'frm_view_forms' ) ) {
+		if ( '' === $html || ! self::should_add_test_mode_container() ) {
 			return $html;
 		}
 
@@ -35,6 +35,19 @@ class FrmTestModeController {
 		);
 
 		return $html;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function should_add_test_mode_container() {
+		if ( ! current_user_can( 'frm_view_forms' ) ) {
+			return false;
+		}
+
+		return (bool) apply_filters( 'frm_test_mode', (bool) FrmAppHelper::simple_get( 'testmode' ) );
 	}
 
 	/**

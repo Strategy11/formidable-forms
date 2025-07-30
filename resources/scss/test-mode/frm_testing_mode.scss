@@ -9,6 +9,7 @@
     border-style: solid;
     padding: 16px 20px;
     margin-bottom: 40px;
+    position: relative;
 
     h2 {
         font-size: 18px;
@@ -75,6 +76,24 @@
             border-color: var(--primary-500);
             color: #fff;
         }
+    }
+}
+
+#frm_testmode_start_over {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: #fff;
+    color: var(--grey-800);
+    border-radius: 20px;
+    padding: 4px 12px;
+    border-color: var(--grey-300);
+    font-weight: 600;
+
+    img {
+        vertical-align: middle;
+  position: relative;
+  bottom: 2px;
     }
 }
 

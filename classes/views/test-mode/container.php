@@ -51,4 +51,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php esc_html_e( 'Fill in empty form fields', 'formidable' ); ?>
 		</a>
 	</div>
+	<?php
+	$start_over_button_attrs = array(
+		'id'    => 'frm_testmode_start_over',
+		'class' => 'frm_button frm_noallow',
+		'href'  => '#',
+	);
+	$start_over_button_attrs = apply_filters( 'frm_testmode_start_over_button_attrs', $start_over_button_attrs );
+	?>
+	<a <?php FrmAppHelper::array_to_html_params( $start_over_button_attrs, true ); ?>>
+		<img src="<?php echo FrmAppHelper::plugin_url(); ?>/images/reset.svg" alt="Reset" />
+		<?php esc_html_e( 'Reset', 'formidable' ); ?>
+	</a>
 </div>
