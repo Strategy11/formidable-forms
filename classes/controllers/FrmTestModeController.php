@@ -28,11 +28,17 @@ class FrmTestModeController {
 
 		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
 
-		$html = str_replace(
-			'<div class="frm_form_fields',
-			self::get_testing_mode_container() . '<div class="frm_form_fields',
-			$html
-		);
+		if ( false !== strpos( $html, '<div class="frm_form_fields' ) ) {
+			$html = preg_replace(
+				'/<div class="frm_form_fields/',
+				self::get_testing_mode_container() . '<div class="frm_form_fields',
+				$html,
+				1
+			);
+		} else {
+			// If there no form, add before an error message.
+			$html = '<div class="with_frm_style">' . self::get_testing_mode_container() . '</div>' . $html;
+		}
 
 		return $html;
 	}
