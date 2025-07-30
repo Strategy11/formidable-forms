@@ -83,10 +83,6 @@ class FrmHtmlHelper {
 			)
 		);
 
-		if ( empty( $args['value'] ) || empty( $args['field_attrs'] ) ) {
-			return;
-		}
-
 		$units = $args['units'];
 		$value = $args['value'];
 
