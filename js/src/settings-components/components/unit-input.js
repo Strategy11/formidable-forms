@@ -22,9 +22,11 @@ export function setupUnitInputHandlers() {
  */
 function onUnitInputChange( event ) {
 	const unitInput = event.target.closest( '.frm-unit-input' );
+	const numberInputValue = unitInput.querySelector( 'input[type="number"]' ).value.trim();
 
-	// Update the field value
-	unitInput.querySelector( 'input[type="hidden"]' ).value =
-		unitInput.querySelector( 'input[type="number"]' ).value + unitInput.querySelector( 'select' ).value;
+	// Update the actual field value
+	unitInput.querySelector( 'input[type="hidden"]' ).value = numberInputValue !== ''
+		? numberInputValue + unitInput.querySelector( 'select' ).value
+		: '';
 }
 
