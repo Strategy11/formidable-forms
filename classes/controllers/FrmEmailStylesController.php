@@ -115,7 +115,7 @@ class FrmEmailStylesController {
 
 			foreach ( $table_rows as $index => $row ) {
 				if ( 'compact' === $style_key ) {
-					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+					$table_row = $table_generator->generate_two_cell_table_row( '<div style="padding:9px 0;">' . $row['label'] . '</div>', '<div style="padding:9px 0;">' . $row['value'] . '</div>' );
 				} else {
 					$row_html = '<div style="font-weight:600;padding-top:9px;">' . $row['label'] . '</div>';
 					$row_html .= ( '<div style="padding-bottom:9px;">' . $row['value'] . '</div>' );
