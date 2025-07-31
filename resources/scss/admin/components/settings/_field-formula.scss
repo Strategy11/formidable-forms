@@ -24,10 +24,12 @@
 		margin: 0;
 
 		.frm-field-formula-button {
+			box-sizing: border-box;
 			display: inline-flex;
-			gap: 2px;
+			gap: 3px;
 			align-items: center;
-			font-size: 10px;
+			justify-content: center;
+			font-size: var(--text-xs);
 			line-height: 1;
 			color: var(--grey-500);
 			background-color: #fff;
@@ -36,6 +38,20 @@
 			box-shadow: var(--box-shadow-xs);
 			margin: 0;
 			cursor: pointer;
+			transition: color 250ms ease-out;
+
+			&:not(.frm-calc-insert-field) {
+				width: 20px;
+				font-weight: 600;
+			}
+
+			&.frm-calc-insert-field {
+				font-size: 10px;
+			}
+
+			&:hover {
+				color: var(--primary-500);
+			}
 		}
 	}
 
