@@ -19,6 +19,10 @@
 	&__name {
 		margin-top: var(--gap-xs);
 		text-align: center;
+
+		.frmsvg {
+			vertical-align: sub;
+		}
 	}
 
 	&__click {
@@ -36,6 +40,18 @@
 		img {
 			width: 160px;
 			display: block;
+		}
+
+		.frm-email-style--disabled &:after {
+			content: '';
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			background-color: var(--grey-100);
+			opacity: 0.5;
 		}
 	}
 

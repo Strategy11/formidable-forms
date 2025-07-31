@@ -25,7 +25,7 @@ $selected_style = $frm_settings->email_style ? $frm_settings->email_style : 'cla
 	<?php
 	foreach ( $email_styles as $style_key => $style ) :
 		$html_attrs = array(
-			'class' => 'frm-email-style',
+			'class'          => 'frm-email-style frm-mb-md',
 			'data-style-key' => $style_key,
 		);
 
@@ -59,6 +59,9 @@ $selected_style = $frm_settings->email_style ? $frm_settings->email_style : 'cla
 			</div><!-- End .frm-email-style__card -->
 
 			<div class="frm-email-style__name">
+				<?php if ( empty( $style['selectable'] ) ) : ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' ); ?>
+				<?php endif; ?>
 				<?php echo esc_html( $style['name'] ); ?>
 			</div>
 		</div><!-- End .frm-email-style -->
