@@ -47,8 +47,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
-		<a id="frm_testmode_fill_in_empty_form_fields" class="frm_button <?php echo $enabled ? '' : 'frm_noallow'; ?>" href="#">
-			<?php esc_html_e( 'Fill in empty form fields', 'formidable' ); ?>
+		<a id="frm_testmode_fill_in_empty_form_fields" class="frm_button <?php echo $enabled && $ai_enabled ? '' : 'frm_noallow'; ?>" href="#">
+			<?php esc_html_e( 'Fill in empty form fields with AI', 'formidable' ); ?>
 		</a>
 	</div>
 	<?php

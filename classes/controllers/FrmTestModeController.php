@@ -67,6 +67,7 @@ class FrmTestModeController {
 		return FrmAppHelper::clip(
 			function () {
 				$enabled                              = function_exists( 'load_formidable_test_mode' );
+				$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
 				$roles                                = self::get_roles();
 				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
