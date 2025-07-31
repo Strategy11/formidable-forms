@@ -71,6 +71,7 @@ class FrmTestModeController {
 				$roles                                = self::get_roles();
 				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
+				$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
 
 				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 			}
@@ -104,6 +105,26 @@ class FrmTestModeController {
 			array(
 				'echo'        => true,
 				'off_label'   => __( 'Disable Required Fields', 'formidable' ),
+				'show_labels' => true,
+				'disabled'    => true,
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_show_all_hidden_fields_toggle_args() {
+		/**
+		 * @since x.x
+		 *
+		 * @param array $args
+		 */
+		return apply_filters(
+			'frm_test_mode_show_all_hidden_fields_toggle_args',
+			array(
+				'echo'        => true,
+				'off_label'   => __( 'Show All Hidden Fields', 'formidable' ),
 				'show_labels' => true,
 				'disabled'    => true,
 			)

@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div>
 		<?php
 		FrmHtmlHelper::toggle( 'frm_testmode_disable_required_fields', 'frm_testmode[disable_required_fields]', $disabled_required_fields_toggle_args );
+		FrmHtmlHelper::toggle( 'frm_testmode_show_all_hidden_fields', 'frm_testmode[show_all_hidden_fields]', $show_all_hidden_fields_toggle_args );
 
 		if ( $roles ) :
 			$selected_role = $enabled ? FrmAppHelper::simple_get( 'frm_testmode_role' ) : '';
