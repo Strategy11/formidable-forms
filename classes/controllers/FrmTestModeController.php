@@ -49,7 +49,7 @@ class FrmTestModeController {
 	 * @return bool
 	 */
 	public static function should_add_test_mode_container() {
-		if ( ! current_user_can( 'frm_view_forms' ) ) {
+		if ( ! current_user_can( 'frm_edit_forms' ) ) {
 			return false;
 		}
 
