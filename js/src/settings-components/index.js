@@ -14,7 +14,8 @@ import {
 	initTokenInputFields,
 	initToggleGroupComponents,
 	setupCustomToggleGroupHandlers,
-	setupUnitInputHandlers
+	setupUnitInputHandlers,
+	setupFieldFormulaHandlers
 } from './components';
 
 domReady( () => {
@@ -26,4 +27,5 @@ domReady( () => {
 	initToggleGroupComponents();
 	setupCustomToggleGroupHandlers();
 	setupUnitInputHandlers();
+	setupFieldFormulaHandlers();
 });

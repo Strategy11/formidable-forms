@@ -117,7 +117,7 @@ textarea[id^="frm_calc_"]::placeholder {
 	line-height: var(--leading);
 	font-style: italic;
 	color: var(--grey-400);
-	padding-top: var(--gap-2xs);
+	padding-top: 5px;
 }
 
 .frm_wrap .frm-button-primary.frm-disabled {
