@@ -5,7 +5,13 @@
 	border-radius: var(--small-radius);
 
 	textarea {
-		padding: 12px;
+		height: 136px;
+		padding: 12px 12px 32px;
+		resize: none;
+
+		&:focus {
+			outline: 1px solid var(--primary-500) !important;
+		}
 	}
 
 	.frm-field-formula-buttons {
@@ -38,7 +44,6 @@
 			box-shadow: var(--box-shadow-xs);
 			margin: 0;
 			cursor: pointer;
-			transition: color 250ms ease-out;
 
 			&:not(.frm-calc-insert-field) {
 				width: 20px;

@@ -113,9 +113,11 @@ To achieve this, we exclude them above and duplicate these rules specifically fo
 }
 
 textarea[id^="frm_calc_"]::placeholder {
-	font-size: 12px;
-	line-height: 1.78;
+	font-size: var(--text-sm);
+	line-height: var(--leading);
 	font-style: italic;
+	color: var(--grey-400);
+	padding-top: var(--gap-2xs);
 }
 
 .frm_wrap .frm-button-primary.frm-disabled {
