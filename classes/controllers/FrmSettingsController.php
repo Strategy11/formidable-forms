@@ -308,7 +308,7 @@ class FrmSettingsController {
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email.php';
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
 	/**

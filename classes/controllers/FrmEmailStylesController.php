@@ -227,4 +227,8 @@ class FrmEmailStylesController {
 		$style_settings['text_color'] = '#1D2939';
 		return $style_settings;
 	}
+
+	public static function show_upsell_settings() {
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';
+	}
 }

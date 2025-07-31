@@ -71,20 +71,15 @@ $selected_style = $frm_settings->email_style ? $frm_settings->email_style : 'cla
 <hr class="frm-mt-md frm-mb-md" />
 
 <?php
-FrmTipsHelper::show_tip(
-	array(
-		'tip'   => __( 'Make every email match your brand — beautifully and effortlessly.', 'formidable' ),
-		'call'  => __( 'Upgrade to PRO', 'formidable' ),
-		'link'  => array(
-			'url' => 'https://formidableforms.com/knowledgebase/email-styles/',
-		),
-	)
-);
+/**
+ * @since x.x
+ */
+do_action( 'frm_email_styles_extra_settings' );
 ?>
 
-<hr class="frm-mt-md frm-mb-md" />
-
-<button id="frm-send-test-email" type="button" class="frm-button-secondary"><?php esc_html_e( 'Send a test email', 'formidable' ); ?></button>
+<p class="frm-mb-md">
+	<button id="frm-send-test-email" type="button" class="frm-button-secondary"><?php esc_html_e( 'Send a test email', 'formidable' ); ?></button>
+</p>
 
 <div id="frm-send-test-email-modal" class="frm_hidden frm-modal">
 	<div class="metabox-holder">
