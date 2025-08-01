@@ -132,4 +132,23 @@ class FrmTestModeController {
 			)
 		);
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function register_and_enqueue_required_scripts() {
+		// Enqueue multiselect dropdown requirements.
+		$plugin_url = FrmAppHelper::plugin_url();
+		$version    = FrmAppHelper::plugin_version();
+
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
+
+		wp_enqueue_script( 'bootstrap-multiselect' );
+		wp_enqueue_script( 'formidable_dom' );
+	}
 }
