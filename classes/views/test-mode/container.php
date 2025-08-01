@@ -51,7 +51,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 			foreach ( $form_actions as $form_action ) {
 				?>
-				<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>><?php echo esc_html( $form_action->post_title ); ?></option>
+				<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
+					<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
+				</option>
 				<?php
 			}
 			?>
