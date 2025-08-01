@@ -26,7 +26,6 @@
 		}
 	}
 
-
 	if ( document.readyState === 'complete' ) {
 		onReady();
 	} else {
