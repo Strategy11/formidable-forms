@@ -439,7 +439,7 @@ class FrmFormsController {
 			add_action(
 				'wp_enqueue_scripts',
 				function () {
-					// Enqeue multiselect dropdown requirements.
+					// Enqueue multiselect dropdown requirements.
 					$plugin_url = FrmAppHelper::plugin_url();
 					$version    = FrmAppHelper::plugin_version();
 
