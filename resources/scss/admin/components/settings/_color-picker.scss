@@ -1,0 +1,60 @@
+/**
+ * Color picker component styles
+ */
+
+.formidable_page_formidable-styles .frm-right-panel {
+
+	.frm-style-component .wp-picker-container button {
+		position: relative;
+		height: 36px !important;
+		background-image: none !important;
+		overflow: hidden;
+	}
+
+	.frm-style-editor-form.frm-pro .frm-style-component .wp-picker-container button {
+		background-color: #fff !important;
+	}
+
+	.frm-style-component {
+
+		.wp-picker-container::after {
+			content: '';
+			width: 20px;
+			height: 20px;
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 8px;
+			bottom: 0;
+			margin: auto;
+			background: url('../../images/style/small-arrow.svg') no-repeat;
+			background-position: center;
+			z-index: 10;
+		}
+
+		.wp-color-result-text {
+			line-height: 36px !important;
+			padding: 0 12px;
+			border: 0;
+		}
+
+		.color-alpha {
+			width: 20px !important;
+			height: 20px !important;
+			border-radius: 50% !important;
+			border: 1px solid rgba(208, 213, 221, 1);
+			top: 0;
+			left: 0;
+			bottom: 0;
+			margin: auto;
+			margin-left: 12px;
+		}
+
+		.wp-picker-input-wrap input {
+			width: calc( 100% - 10px ) !important;
+			margin: 1px 5px;
+			height: 32px;
+			line-height: 32px;
+		}
+	}
+}

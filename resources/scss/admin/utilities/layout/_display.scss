@@ -2,6 +2,10 @@
  * Utilities - Display
  */
 
+#wpwrap .frm_hidden\! {
+	display: none !important;
+}
+
 .frm_block, /* deprecated */
 .frm-block {
 	display: block;
