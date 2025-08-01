@@ -26,8 +26,6 @@ class FrmTestModeController {
 		 */
 		do_action( 'frm_test_mode_container' );
 
-		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
-
 		if ( false !== strpos( $html, '<div class="frm_form_fields' ) ) {
 			$html = preg_replace(
 				'/<div class="frm_form_fields/',
@@ -139,6 +137,8 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	public static function register_and_enqueue_required_scripts() {
+		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
+
 		self::register_and_enqueue_multiselect_dropdown_requirements();
 	}
 
