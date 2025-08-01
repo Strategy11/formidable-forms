@@ -139,6 +139,15 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	public static function register_and_enqueue_required_scripts() {
+		self::register_and_enqueue_multiselect_dropdown_requirements();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function register_and_enqueue_multiselect_dropdown_requirements() {
 		// Enqueue multiselect dropdown requirements.
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
