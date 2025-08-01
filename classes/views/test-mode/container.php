@@ -59,25 +59,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 			?>
 			</select>
 		</div>
-		<script>
-			( function() {
-				jQuery( document ).ready(function() {
-					frmDom.bootstrap.setupBootstrapDropdowns( function( frmDropdownMenu ) {
-						const toggle = document.querySelector( '.dropdown-toggle' );
-						if ( toggle ) {
-							toggle.classList.add( 'frm-dropdown-toggle' );
-							if ( ! toggle.hasAttribute( 'role' ) ) {
-								toggle.setAttribute( 'role', 'button' );
-							}
-							if ( ! toggle.hasAttribute( 'tabindex' ) ) {
-								toggle.setAttribute( 'tabindex', 0 );
-							}
-						}
-					} );
-					jQuery( '#frm_testmode_enabled_form_actions' ).hide().each( frmDom.bootstrap.multiselect.init );
-				});
-			}() );
-		</script>
 	</div>
 	<hr>
 	<div>

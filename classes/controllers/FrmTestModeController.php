@@ -137,7 +137,10 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	public static function register_and_enqueue_required_scripts() {
-		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), FrmAppHelper::plugin_version() );
+		$version = FrmAppHelper::plugin_version();
+
+		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
+		wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array(), $version, true );
 
 		self::register_and_enqueue_multiselect_dropdown_requirements();
 	}
