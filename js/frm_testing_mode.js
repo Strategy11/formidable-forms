@@ -23,6 +23,10 @@
 		if ( element ) {
 			element.style.display = 'none';
 			frmDom.bootstrap.multiselect.init.bind( element )();
+
+			if ( element.disabled ) {
+				element.parentElement.querySelector( '.dropdown-toggle' ).classList.add( 'frm_noallow' );
+			}
 		}
 	}
 
