@@ -72,6 +72,8 @@ class FrmTestModeController {
 				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
 				$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
+				$form_key                             = FrmAppHelper::simple_get( 'form' );
+				$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
 
 				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 			}

@@ -35,6 +35,47 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 			</select>
 		<?php endif; ?>
+
+		<label><?php esc_html_e( 'Enabled form actions:', 'formidable' ); ?></label>
+		<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
+			<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
+			<?php
+			$form_actions         = FrmFormAction::get_action_for_form( $form_id );
+			$enabled_form_actions = wp_list_pluck( $form_actions, 'ID' );
+			if ( $enabled && ! empty( $_POST ) ) {
+				if ( ! empty( $_POST['frm_testmode']['enabled_form_actions'] ) ) {
+					$enabled_form_actions = array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] );
+				} else {
+					$enabled_form_actions = array();
+				}
+			}
+			foreach ( $form_actions as $form_action ) {
+				?>
+				<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>><?php echo esc_html( $form_action->post_title ); ?></option>
+				<?php
+			}
+			?>
+			</select>
+		</div>
+		<script>
+			( function() {
+				jQuery( document ).ready(function() {
+					frmDom.bootstrap.setupBootstrapDropdowns( function( frmDropdownMenu ) {
+						const toggle = document.querySelector( '.dropdown-toggle' );
+						if ( toggle ) {
+							toggle.classList.add( 'frm-dropdown-toggle' );
+							if ( ! toggle.hasAttribute( 'role' ) ) {
+								toggle.setAttribute( 'role', 'button' );
+							}
+							if ( ! toggle.hasAttribute( 'tabindex' ) ) {
+								toggle.setAttribute( 'tabindex', 0 );
+							}
+						}
+					} );
+					jQuery( '#frm_testmode_enabled_form_actions' ).hide().each( frmDom.bootstrap.multiselect.init );
+				});
+			}() );
+		</script>
 	</div>
 	<hr>
 	<div>

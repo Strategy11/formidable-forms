@@ -1,6 +1,17 @@
 @import '../admin/base/variables';
 @import '../admin/components/form/toggle-components';
 
+// These files are all required for multiselect dropdowns to look correct.
+@import '../admin/components/form/inputs';
+@import '../admin/components/button/button';
+@import '../admin/components/tooltip';
+@import '../admin/components/select/dropdown';
+@import '../admin/components/select/multiselect';
+@import '../admin/components/select/multiselect-popup';
+@import '../admin/components/list/code-list';
+@import '../admin/components/accordion/accordion';
+@import '../admin/components/search/search-inputs';
+
 #frm_testing_mode {
     border-radius: 1rem;
     background-color: #fff;
@@ -58,6 +69,11 @@
         display: flex;
         align-items: center;
     }
+
+    .frm-btn-group {
+        position: relative;
+        top: 6px;
+    }
 }
 
 #frm_test_mode_pagination {
@@ -99,4 +115,9 @@
 
 .frm_noallow {
 	opacity: .5;
+}
+
+#frm_testmode_enabled_form_actions_container {
+    display: inline-block;
+    max-width: 200px;
 }
