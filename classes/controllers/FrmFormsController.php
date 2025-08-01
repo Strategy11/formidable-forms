@@ -438,7 +438,8 @@ class FrmFormsController {
 		if ( FrmTestModeController::should_add_test_mode_container() ) {
 			add_action(
 				'wp_enqueue_scripts',
-				function() {
+				function () {
+					// Enqeue multiselect dropdown requirements.
 					$plugin_url = FrmAppHelper::plugin_url();
 					$version    = FrmAppHelper::plugin_version();
 

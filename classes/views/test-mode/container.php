@@ -42,9 +42,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<?php
 			$form_actions         = FrmFormAction::get_action_for_form( $form_id );
 			$enabled_form_actions = wp_list_pluck( $form_actions, 'ID' );
-			if ( $enabled && ! empty( $_POST ) ) {
-				if ( ! empty( $_POST['frm_testmode']['enabled_form_actions'] ) ) {
-					$enabled_form_actions = array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] );
+			if ( $enabled && ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+				if ( ! empty( $_POST['frm_testmode']['enabled_form_actions'] ) && is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+					$enabled_form_actions = array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				} else {
 					$enabled_form_actions = array();
 				}
