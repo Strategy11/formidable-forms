@@ -1,9 +1,13 @@
 ( function() {
 	function onReady() {
+		setupBootstrapDropdowns();
+	}
+
+	function setupBootstrapDropdowns() {
 		const frmDom = window.frmDom;
 
-		frmDom.bootstrap.setupBootstrapDropdowns( function( frmDropdownMenu ) {
-			const toggle = document.querySelector( '.dropdown-toggle' );
+		frmDom.bootstrap.setupBootstrapDropdowns( function() {
+			const toggle = document.querySelector( '#frm_testmode_enabled_form_actions .dropdown-toggle' );
 			if ( toggle ) {
 				toggle.classList.add( 'frm-dropdown-toggle' );
 				if ( ! toggle.hasAttribute( 'role' ) ) {
@@ -21,6 +25,7 @@
 			frmDom.bootstrap.multiselect.init.bind( element )();
 		}
 	}
+
 
 	if ( document.readyState === 'complete' ) {
 		onReady();
