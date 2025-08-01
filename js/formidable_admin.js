@@ -6577,86 +6577,6 @@ function frmAdminBuildJS() {
 		});
 	}
 
-	/**
-	 * Focus on the calculation field when insert field button is clicked
-	 *
-	 * @param {Event}       event        The click event
-	 * @param {HTMLElement} event.target The click target
-	 */
-	function focusOnCalcField( { target } ) {
-		target.closest( '.frm-field-formula' )?.querySelector( 'input[id^="frm_calc_"]' )?.focus();
-	}
-
-	/**
-	 * Handle focus on formula editor
-	 *
-	 * @param {Event}       event        The focus event
-	 * @param {HTMLElement} event.target The focus target
-	 */
-	function onFieldFormulaFocus( { target: formulaEditor } ) {
-		const { searchChar } = formulaEditor.dataset;
-		if ( ! searchChar ) {
-			return;
-		}
-
-		formulaEditor.dataset.searchChar = '';
-
-		// Find and remove '#' + searchChar before cursor position
-		const pattern = `#${searchChar}`;
-		const cursorPosition = formulaEditor.selectionStart;
-		const textBeforeCursor = formulaEditor.value.slice( 0, cursorPosition );
-		const lastIndex = textBeforeCursor.lastIndexOf( pattern );
-
-		if ( lastIndex === -1 ) {
-			return;
-		}
-
-		formulaEditor.value = `${formulaEditor.value.slice( 0, lastIndex )}${formulaEditor.value.slice( lastIndex + pattern.length )}`;
-
-		// Set cursor position to the end of the content
-		const endPosition = formulaEditor.value.length;
-		formulaEditor.setSelectionRange( endPosition, endPosition );
-
-		// Close the calculation insert field modal
-		formulaEditor.closest( '.frm-field-formula' ).querySelector( '.frm-calc-insert-field' )?.click();
-	}
-
-	/**
-	 * Handle `#` character in formula editor and trigger field insertion
-	 *
-	 * @param {Event}       event        The input event
-	 * @param {HTMLElement} event.target The input target
-	 */
-	function handleFieldInsertShortcut( event ) {
-		// Return early if characters are being deleted rather than added
-		if ( ! event.inputType.startsWith( 'insert' ) ) {
-			return;
-		}
-
-		const formulaEditor = event.target;
-		const fieldFormula = formulaEditor.closest( '.frm-field-formula' );
-		if ( ! fieldFormula ) {
-			return;
-		}
-
-		const cursorPosition = formulaEditor.selectionStart;
-		// Check if character before the previous one is '#' (e.g., typing 'N' after '#')
-		if ( cursorPosition < 2 || formulaEditor.value[cursorPosition - 2] !== '#' ) {
-			return;
-		}
-
-		const searchChar = formulaEditor.value[cursorPosition - 1];
-		formulaEditor.dataset.searchChar = searchChar;
-		fieldFormula.querySelector( '.frm-calc-insert-field' )?.click();
-
-		// Set the search input to the character typed after '#'
-		const searchInput = document.getElementById( `frm_calc_${fieldFormula.dataset.fieldId}-search-input` );
-		if ( searchInput ) {
-			searchInput.value = searchChar;
-			searchInput.dispatchEvent( new Event( 'input', { bubbles: true } ) );
-		}
-	}
-
 	function changeInputtedValue() {
 		/*jshint validthis:true */
 		let i,
@@ -10683,9 +10603,6 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
 
-			frmDom.util.documentOn( 'click', '.frm-calc-insert-field', focusOnCalcField );
-			frmDom.util.documentOn( 'input', '.frm-field-formula-editor', handleFieldInsertShortcut );
-			frmDom.util.documentOn( 'focusin', '.frm-field-formula-editor', onFieldFormulaFocus );
 			document.addEventListener( 'click', closeModalOnOutsideClick );
 
 			$builderForm.on( 'change', '.frm_include_extras_field', rePopCalcFieldsForSummary );

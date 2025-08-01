@@ -46,12 +46,12 @@
 			cursor: pointer;
 			user-select: none;
 
-			&:not(.frm-calc-insert-field) {
+			&:not(.frm-field-formula-insert-field) {
 				width: 20px;
 				font-weight: 600;
 			}
 
-			&.frm-calc-insert-field {
+			&.frm-field-formula-insert-field {
 				font-size: 10px;
 			}
 
