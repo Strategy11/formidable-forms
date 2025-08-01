@@ -470,10 +470,18 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.20
 	 *
-	 * @param string $var
+	 * @param mixed $var
 	 * @return bool
 	 */
 	private static function css_value_is_valid( $var ) {
+		if ( is_numeric( $var ) ) {
+			return true;
+		}
+
+		if ( ! is_string( $var ) ) {
+			return false;
+		}
+
 		// None of these substrings should be present in any CSS value.
 		$invalid_substrings = array(
 			'function(',
