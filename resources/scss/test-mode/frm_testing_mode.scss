@@ -132,7 +132,7 @@
 
 #frm_testmode_upgrade {
     border-radius: 16px;
-    padding: var(--gap-xs) var(--gap-sm);
+    padding: 12px var(--gap-sm);
     text-align: center;
     font-size: var(--text-xs);
     margin-top: var(--gap-sm);
@@ -140,4 +140,10 @@
     font-weight: 500;
     text-decoration: none;
     display: block;
+
+    // If we want to make it fill the to bottom of the test most contaner.
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -20px;
+    border-radius: 0 0 16px 16px;
 }
