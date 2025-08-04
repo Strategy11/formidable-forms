@@ -8,7 +8,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
 ?>
 <div id="frm_testing_mode">
 	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
@@ -88,4 +87,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/reset.svg" alt="<?php esc_attr_e( 'Reset', 'formidable' ); ?>" />
 		<?php esc_html_e( 'Reset', 'formidable' ); ?>
 	</a>
+	<?php if ( ! in_array( FrmAddonsController::license_type(), array( 'plus', 'business', 'eliete' ) ) ) { ?>
+		<?php FrmAppHelper::include_svg(); ?>
+	<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( 'test-mode' ) ); ?>" class="frm-gradient" id="frm_testmode_upgrade">
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_speaker_icon', array( 'aria-hidden' => 'true' ) ); ?>
+		<?php esc_html_e( 'Unlock these powerful, time saving testing features by upgrading!', 'formidable' ); ?>
+	</a>
+	<?php } ?>
 </div>

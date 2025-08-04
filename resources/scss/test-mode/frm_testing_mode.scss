@@ -12,6 +12,10 @@
 @import '../admin/components/accordion/accordion';
 @import '../admin/components/search/search-inputs';
 
+// For upsells
+@import '../admin/components/notifications/call-to-action';
+@import '../admin/components/upgrade/upgrade-bar';
+
 #frm_testing_mode {
     border-radius: 1rem;
     background-color: #fff;
@@ -68,6 +72,15 @@
     .multiselect.dropdown-toggle:after {
         border: none;
     }
+
+    // Used for the upsell "speaker" icon.
+    .frmsvg {
+        width: 11px;
+        height: 11px;
+        margin-right: var(--gap-2xs);
+        position: relative;
+        top: 1px;
+    }
 }
 
 #frm_test_mode_pagination {
@@ -115,4 +128,16 @@
     vertical-align: middle;
     display: inline-block;
     max-width: 200px;
+}
+
+#frm_testmode_upgrade {
+    border-radius: 16px;
+    padding: var(--gap-xs) var(--gap-sm);
+    text-align: center;
+    font-size: var(--text-xs);
+    margin-top: var(--gap-sm);
+    line-height: var(--text-xs);
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
 }
