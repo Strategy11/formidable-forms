@@ -596,9 +596,10 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since x.x
 	 *
+	 * @param string $name Passed by reference, as this is updated if it is too long.
 	 * @return bool
 	 */
-	private static function statement_descriptor_is_valid( $name ) {
+	private static function statement_descriptor_is_valid( &$name ) {
 		if ( strlen( $name ) < 5 ) {
 			return false;
 		}
