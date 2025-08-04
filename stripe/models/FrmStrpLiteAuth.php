@@ -529,16 +529,19 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
+	 * Add the statement descriptor to the intent data, if it is valid.
+	 *
+	 * @param array $intent_data
 	 * @return array
 	 */
-	private static function maybe_add_statement_descriptor( $new_charge ) {
+	private static function maybe_add_statement_descriptor( $intent_data ) {
 		$statement_descriptor = self::get_statement_descriptor();
 		if ( false === $statement_descriptor ) {
-			return $new_charge;
+			return $intent_data;
 		}
 
-		$new_charge['statement_descriptor'] = $statement_descriptor;
-		return $new_charge;
+		$intent_data['statement_descriptor'] = $statement_descriptor;
+		return $intent_data;
 	}
 
 	/**
@@ -589,12 +592,7 @@ class FrmStrpLiteAuth {
 
 	/**
 	 * Stripe includes requirements at https://docs.stripe.com/get-started/account/statement-descriptors
-	 * - Contains only Latin characters.
-	 * - Contains between 5 and 22 characters, inclusive.
-	 * - Contains at least one letter (if using a prefix and a suffix, both require at least one letter).
-	 * - Reflects your Doing Business As (DBA) name.
-	 * - Contains more than a single common term or common website URL.
-	 * - A website URL only is acceptable if it provides a clear and accurate description of a transaction on a customer’s statement.
+	 * We need to make sure that the descriptor contains only Latin characters, and that it is between 5 and 22 characters long.
 	 *
 	 * @since x.x
 	 *
