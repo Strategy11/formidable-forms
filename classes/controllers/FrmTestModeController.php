@@ -86,7 +86,9 @@ class FrmTestModeController {
 		$form_key                             = FrmAppHelper::simple_get( 'form' );
 		$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
 		$should_show_upsell                   = self::should_show_upsell();
-		$should_should_install_message        = ! $enabled && ! $should_show_upsell;
+		$should_suggest_test_mode_install     = ! $enabled && ! $should_show_upsell;
+		$should_suggest_ai_install            = $enabled && ! $ai_enabled;
+		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
 
 		if ( $should_show_upsell ) {
 			// This is required for the speaker icon in the upsell to appear.
