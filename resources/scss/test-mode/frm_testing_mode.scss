@@ -132,7 +132,7 @@
 
 #frm_testmode_upgrade {
     border-radius: 16px;
-    padding: 12px var(--gap-sm);
+    padding: var(--gap-xs) var(--gap-sm);
     text-align: center;
     font-size: var(--text-xs);
     margin-top: var(--gap-sm);
@@ -141,9 +141,10 @@
     text-decoration: none;
     display: block;
 
-    // If we want to make it fill the to bottom of the test most contaner.
+    // These negative margins are to counteract the padding on the parent element.
+    // The upgrade should occupy the bottom area of the card.
     margin-left: -20px;
     margin-right: -20px;
-    margin-bottom: -20px;
+    margin-bottom: -16px;
     border-radius: 0 0 16px 16px;
 }
