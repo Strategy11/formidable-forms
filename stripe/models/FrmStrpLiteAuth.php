@@ -536,11 +536,10 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_add_statement_descriptor( $intent_data ) {
 		$statement_descriptor = self::get_statement_descriptor();
-		if ( false === $statement_descriptor ) {
-			return $intent_data;
+		if ( false !== $statement_descriptor ) {
+			$intent_data['statement_descriptor'] = $statement_descriptor;
 		}
 
-		$intent_data['statement_descriptor'] = $statement_descriptor;
 		return $intent_data;
 	}
 
