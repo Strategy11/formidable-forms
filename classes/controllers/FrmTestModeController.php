@@ -64,24 +64,35 @@ class FrmTestModeController {
 	private static function get_testing_mode_container() {
 		return FrmAppHelper::clip(
 			function () {
-				$enabled                              = self::test_mode_addon_exists();
-				$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
-				$roles                                = self::get_roles();
-				$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
-				$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
-				$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
-				$form_key                             = FrmAppHelper::simple_get( 'form' );
-				$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
-				$should_show_upsell                   = self::should_show_upsell();
-
-				if ( $should_show_upsell ) {
-					// This is required for the speaker icon in the upsell to appear.
-					FrmAppHelper::include_svg();
-				}
-
-				include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
+				self::render_testing_most_container();
 			}
 		);
+	}
+
+	/**
+	 * Render the testing mode container.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function render_testing_most_container() {
+		$enabled                              = self::test_mode_addon_exists();
+		$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
+		$roles                                = self::get_roles();
+		$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
+		$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
+		$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
+		$form_key                             = FrmAppHelper::simple_get( 'form' );
+		$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
+		$should_show_upsell                   = self::should_show_upsell();
+
+		if ( $should_show_upsell ) {
+			// This is required for the speaker icon in the upsell to appear.
+			FrmAppHelper::include_svg();
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 	}
 
 	/**
