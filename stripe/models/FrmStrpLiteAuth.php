@@ -599,7 +599,15 @@ class FrmStrpLiteAuth {
 	 * @return bool
 	 */
 	private static function statement_descriptor_is_valid( $name ) {
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]{5,22}$/', $name ) ) {
+		if ( strlen( $name ) < 5 ) {
+			return false;
+		}
+
+		if ( strlen( $name ) > 22 ) {
+			$name = substr( $name, 0, 22 );
+		}
+
+		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]$/', $name ) ) {
 			return false;
 		}
 
