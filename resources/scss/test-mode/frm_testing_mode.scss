@@ -16,6 +16,9 @@
 @import '../admin/components/notifications/call-to-action';
 @import '../admin/components/upgrade/upgrade-bar';
 
+// For the warning message when the add-on is not active.
+@import '../admin/components/notifications/_message-styles';
+
 #frm_testing_mode {
     border-radius: 1rem;
     background-color: #fff;

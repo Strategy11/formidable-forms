@@ -8,6 +8,13 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+if ( ! empty( $should_should_install_message ) ) {
+	?>
+	<div class="frm_warning_style">
+		<?php esc_html_e( 'To use this feature, please install and activate the Testing Mode add-on.', 'formidable' ); ?>
+	</div>
+	<?php
+}
 ?>
 <div id="frm_testing_mode">
 	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
