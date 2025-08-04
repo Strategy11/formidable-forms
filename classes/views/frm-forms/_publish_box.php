@@ -35,7 +35,10 @@ $preview_link = FrmFormsHelper::get_direct_link( $values['form_key'] );
 				</li>
 				<li>
 					<a href="<?php echo esc_url( $preview_link ); ?>&testmode=1" target="_blank">
-						<?php esc_html_e( 'In Test Mode', 'formidable' ); ?>
+						<?php
+						esc_html_e( 'In Test Mode', 'formidable' );
+						FrmAppHelper::show_pill_text();
+						?>
 					</a>
 				</li>
 				<?php if ( FrmAppHelper::show_landing_pages() ) { ?>
