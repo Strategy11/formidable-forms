@@ -561,7 +561,13 @@ class FrmStrpLiteAuth {
 		 */
 		$name = apply_filters( 'frm_stripe_statement_descriptor', $name );
 
-		if ( ! is_string( $name ) || ! self::statement_descriptor_is_valid( $name ) ) {
+		if ( ! is_string( $name ) ) {
+			return false;
+		}
+
+		$name = self::strip_special_characters_from_statement_descriptor( $name );
+
+		if ( ! self::statement_descriptor_is_valid( $name ) ) {
 			return false;
 		}
 
@@ -569,11 +575,23 @@ class FrmStrpLiteAuth {
 	}
 
 	/**
+	 * Remove the special characters that Stripe doesn't allow in statement descriptors, in case any exist.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $name The name of the site.
+	 * @return string The name with special characters removed.
+	 */
+	private static function strip_special_characters_from_statement_descriptor( $name ) {
+		$special_characters = array( '<', '>', '\\', "'", '"', '*', );
+		return str_replace( $special_characters, '', $name );
+	}
+
+	/**
 	 * Stripe includes requirements at https://docs.stripe.com/get-started/account/statement-descriptors
 	 * - Contains only Latin characters.
 	 * - Contains between 5 and 22 characters, inclusive.
 	 * - Contains at least one letter (if using a prefix and a suffix, both require at least one letter).
-	 * - Doesn’t contain any of the following special characters: <, >, \, ' " *.
 	 * - Reflects your Doing Business As (DBA) name.
 	 * - Contains more than a single common term or common website URL.
 	 * - A website URL only is acceptable if it provides a clear and accurate description of a transaction on a customer’s statement.
