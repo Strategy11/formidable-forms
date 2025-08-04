@@ -39,11 +39,6 @@
         }
     }
 
-    input[type="checkbox"] {
-        margin-top: 3px;
-        margin-left: 4px;
-    }
-
     select {
         width: auto !important;
     }
@@ -73,6 +68,10 @@
     .frm-btn-group {
         position: relative;
         top: 6px;
+    }
+
+    .multiselect.dropdown-toggle:after {
+        border: none;
     }
 }
 
@@ -121,3 +120,4 @@
     display: inline-block;
     max-width: 200px;
 }
+
