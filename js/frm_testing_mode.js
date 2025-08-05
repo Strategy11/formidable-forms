@@ -41,5 +41,12 @@
 		function() {
 			setupBootstrapDropdowns();
 		}
-	)
+	);
+
+	jQuery( document ).on(
+		'frmPageChanged',
+		function() {
+			setupBootstrapDropdowns();
+		}
+	);
 }() );
