@@ -130,6 +130,10 @@ class FrmTestModeController {
 	 * @return array
 	 */
 	private static function get_roles() {
+		if ( ! function_exists( 'get_editable_roles' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/user.php';
+		}
+
 		$roles              = get_editable_roles();
 		$roles['loggedout'] = array(
 			'name' => __( 'Logged Out', 'formidable' ),
