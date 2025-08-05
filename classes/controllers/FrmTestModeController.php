@@ -89,6 +89,8 @@ class FrmTestModeController {
 		$should_suggest_test_mode_install     = ! $enabled && ! $should_show_upsell;
 		$should_suggest_ai_install            = $enabled && ! $ai_enabled;
 		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
+		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
+		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
 
 		if ( $should_show_upsell ) {
 			// This is required for the speaker icon in the upsell to appear.
@@ -96,6 +98,25 @@ class FrmTestModeController {
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $form_actions
+	 * @param bool  $enabled
+	 * @return array
+	 */
+	private static function get_enabled_form_action_ids( $form_actions, $enabled ) {
+		if ( ! $enabled || empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return wp_list_pluck( $form_actions, 'ID' );
+		}
+
+		if ( empty( $_POST['frm_testmode']['enabled_form_actions'] ) || ! is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return array();
+		}
+
+		return array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
 	/**

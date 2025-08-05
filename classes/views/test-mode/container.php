@@ -50,15 +50,6 @@ if ( ! empty( $should_show_warning ) ) {
 		<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
 			<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
 			<?php
-			$form_actions         = FrmFormAction::get_action_for_form( $form_id );
-			$enabled_form_actions = wp_list_pluck( $form_actions, 'ID' );
-			if ( $enabled && ! empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				if ( ! empty( $_POST['frm_testmode']['enabled_form_actions'] ) && is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					$enabled_form_actions = array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				} else {
-					$enabled_form_actions = array();
-				}
-			}
 			foreach ( $form_actions as $form_action ) {
 				?>
 				<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
