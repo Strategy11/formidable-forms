@@ -35,4 +35,11 @@
 	} else {
 		document.addEventListener( 'DOMContentLoaded', onReady );
 	}
+
+	document.addEventListener(
+		'frm_after_start_over',
+		function() {
+			setupBootstrapDropdowns();
+		}
+	)
 }() );

@@ -77,13 +77,18 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	private static function render_testing_most_container() {
+		$form_key = self::get_form_key_from_request();
+
+		if ( ! $form_key ) {
+			return;
+		}
+
 		$enabled                              = self::test_mode_addon_exists();
 		$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
 		$roles                                = self::get_roles();
 		$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 		$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
 		$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
-		$form_key                             = FrmAppHelper::simple_get( 'form' );
 		$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
 		$should_show_upsell                   = self::should_show_upsell();
 		$should_suggest_test_mode_install     = ! $enabled && ! $should_show_upsell;
@@ -103,12 +108,42 @@ class FrmTestModeController {
 	/**
 	 * @since x.x
 	 *
+	 * @return string|false
+	 */
+	private static function get_form_key_from_request() {
+		$form_key = FrmAppHelper::simple_get( 'form' );
+		if ( $form_key ) {
+			return $form_key;
+		}
+
+		$form_key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' );
+		if ( $form_key ) {
+			return $form_key;
+		}
+
+		$form_key = FrmAppHelper::get_post_param( 'form_key', '', 'sanitize_text_field' );
+		if ( $form_key ) {
+			return $form_key;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @since x.x
+	 *
 	 * @param array $form_actions
 	 * @param bool  $enabled
 	 * @return array
 	 */
 	private static function get_enabled_form_action_ids( $form_actions, $enabled ) {
 		if ( ! $enabled || empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			// Default to having all actions selected.
+			return wp_list_pluck( $form_actions, 'ID' );
+		}
+
+		if ( 'frm_load_form' === FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) ) {
+			// If we are starting over, select every form action again.
 			return wp_list_pluck( $form_actions, 'ID' );
 		}
 
