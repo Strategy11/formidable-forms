@@ -152,7 +152,6 @@
 
 		if ( buyerTokens[ verificationData.data.hash ] ) {
 			// Avoid a second verify buyer request if the verification data has not changed.
-			console.log( 'Re-using ' + buyerTokens[ verificationData.data.hash ] );
 			return buyerTokens[ verificationData.data.hash ];
 		}
 
