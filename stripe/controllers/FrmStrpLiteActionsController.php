@@ -23,7 +23,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			// Fallback to Stripe Lite if we do not know the form.
 			// This way we do not display the default credit card field
 			// when Pro is not up to version 6.21.
-			return 'FrmStrpLiteActionsController::show_card';
+			return self::class . '::show_card';
 		}
 
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
