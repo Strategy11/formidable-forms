@@ -1579,7 +1579,7 @@ class FrmAppHelper {
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
 			
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_search_icon' ); ?>
+			<?php self::icon_by_class( 'frm_icon_font frm_search_icon' ); ?>
 			
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
