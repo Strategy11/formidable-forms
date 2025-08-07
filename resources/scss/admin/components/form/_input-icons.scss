@@ -35,6 +35,10 @@ i.frm-show-inline-modal,
 	padding-right: var(--gap-xs);
 }
 
+.frm-search > .frmsvg {
+	box-sizing: unset;
+}
+
 .frm-with-right-icon .frmsvg,
 .frm-with-right-icon i:not([class*="mce-"]) {
 	right: 0;
