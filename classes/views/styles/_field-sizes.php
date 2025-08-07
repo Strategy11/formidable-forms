@@ -139,7 +139,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		$frm_style->get_field_name( 'auto_width' ),
 		array(
 			'div_class' => 'with_frm_style frm_toggle',
-			'checked'   => $style->post_content['auto_width'],
+			'checked'   => ! empty( $style->post_content['auto_width'] ),
 			'echo'      => true,
 		)
 	);

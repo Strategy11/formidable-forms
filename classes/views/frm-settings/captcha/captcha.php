@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p>
 	<label>
 		<input type="checkbox" name="frm_honeypot" value="1" <?php checked( $frm_settings->honeypot, 1 ); ?> />
-		<?php esc_html_e( 'Use Honeypot to check entries for spam', 'formidable' ); ?>
+		<?php esc_html_e( 'Use honeypot to check entries for spam', 'formidable' ); ?>
 		<?php FrmAppHelper::tooltip_icon( __( 'Include an invisible field in your form to trick bots.', 'formidable' ), array( 'data-container' => 'body' ) ); ?>
 	</label>
 </p>

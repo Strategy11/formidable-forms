@@ -270,7 +270,7 @@ function frmFrontFormJS() {
 	 */
 	function maybeValidateChange( field ) {
 		if ( field.type === 'url' ) {
-			maybeAddHttpToUrl( field );
+			maybeAddHttpsToUrl( field );
 		}
 		const form = field.closest( 'form' );
 		if ( form && hasClass( form, 'frm_js_validate' ) ) {
@@ -281,11 +281,11 @@ function frmFrontFormJS() {
 	/**
 	 * @param {HTMLElement} field
 	 */
-	function maybeAddHttpToUrl( field ) {
+	function maybeAddHttpsToUrl( field ) {
 		const url = field.value;
 		const matches = url.match( /^(https?|ftps?|mailto|news|feed|telnet):/ );
 		if ( field.value !== '' && matches === null ) {
-			field.value = 'http://' + url;
+			field.value = 'https://' + url;
 		}
 	}
 

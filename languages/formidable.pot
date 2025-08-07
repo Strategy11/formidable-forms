@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the Formidable Forms plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: Formidable Forms 6.22\n"
+"Project-Id-Version: Formidable Forms 6.22.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/formidable\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2025-06-12T12:17:47+00:00\n"
+"POT-Creation-Date: 2025-07-10T12:45:48+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.11.0\n"
 "X-Domain: formidable\n"
@@ -489,7 +489,7 @@ msgstr ""
 #: classes/controllers/FrmAppController.php:1262
 #: classes/controllers/FrmFormsController.php:233
 #: classes/controllers/FrmFormTemplatesController.php:601
-#: classes/controllers/FrmSettingsController.php:274
+#: classes/controllers/FrmSettingsController.php:348
 #: classes/helpers/FrmAppHelper.php:3521
 #: classes/views/form-templates/modals/create-template-modal.php:66
 #: classes/views/form-templates/modals/name-your-form-modal.php:32
@@ -661,31 +661,31 @@ msgstr ""
 msgid "Entry update date"
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:510
+#: classes/controllers/FrmEntriesController.php:509
 msgid "Your import is complete"
 msgstr ""
 
 #. translators: %1$s: Time string
-#: classes/controllers/FrmEntriesController.php:522
+#: classes/controllers/FrmEntriesController.php:521
 msgid "This form is in the trash and is scheduled to be deleted permanently in %s along with any entries."
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:544
+#: classes/controllers/FrmEntriesController.php:543
 msgid "You can't view the entry"
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:545
+#: classes/controllers/FrmEntriesController.php:544
 msgid "You are trying to view an entry that does not exist"
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:573
+#: classes/controllers/FrmEntriesController.php:572
 #: classes/controllers/FrmFormActionsController.php:465
 #: classes/controllers/FrmFormsController.php:231
-#: classes/controllers/FrmSettingsController.php:272
+#: classes/controllers/FrmSettingsController.php:346
 msgid "Verification failed"
 msgstr ""
 
-#: classes/controllers/FrmEntriesController.php:589
+#: classes/controllers/FrmEntriesController.php:588
 msgid "Entry was successfully deleted"
 msgstr ""
 
@@ -1226,66 +1226,74 @@ msgstr ""
 msgid "Easily migrate your forms from Gravity Forms to Formidable."
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:12
+#: classes/controllers/FrmSettingsController.php:21
 msgid "Global Settings"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:51
+#: classes/controllers/FrmSettingsController.php:64
 msgid "General Settings"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:57
+#: classes/controllers/FrmSettingsController.php:70
 msgid "Message Defaults"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:63
+#: classes/controllers/FrmSettingsController.php:76
 msgid "Permissions"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:69
+#: classes/controllers/FrmSettingsController.php:80
+#: stripe/controllers/FrmTransLiteListsController.php:31
+#: stripe/controllers/FrmTransLitePaymentsController.php:30
+#: stripe/helpers/FrmTransLiteListHelper.php:114
+#: stripe/views/lists/list.php:12
+msgid "Payments"
+msgstr ""
+
+#: classes/controllers/FrmSettingsController.php:88
 msgid "Custom CSS"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:75
+#: classes/controllers/FrmSettingsController.php:94
 msgid "Manage Styles"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:81
+#: classes/controllers/FrmSettingsController.php:100
 msgid "Captcha/Spam"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:85
+#: classes/controllers/FrmSettingsController.php:104
 msgid "White Labeling"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:90
+#: classes/controllers/FrmSettingsController.php:109
 msgid "White labeling options"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:95
+#: classes/controllers/FrmSettingsController.php:114
 #: classes/views/inbox/list.php:11
 msgid "Inbox"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:100
+#: classes/controllers/FrmSettingsController.php:119
 msgid "Inbox settings"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:121
+#: classes/controllers/FrmSettingsController.php:140
 msgid "Plugin Licenses"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:134
+#: classes/controllers/FrmSettingsController.php:154
 #: classes/views/frm-forms/settings-advanced.php:149
 msgid "Miscellaneous"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:290
-#: classes/controllers/FrmSettingsController.php:293
+#: classes/controllers/FrmSettingsController.php:364
+#: classes/controllers/FrmSettingsController.php:367
 msgid "Settings Saved"
 msgstr ""
 
-#: classes/controllers/FrmSettingsController.php:311
+#: classes/controllers/FrmSettingsController.php:385
 #: classes/helpers/FrmFormsHelper.php:1820
 #: classes/helpers/FrmStylesHelper.php:24
 #: classes/views/frm-forms/add_field_links.php:186
@@ -2685,7 +2693,7 @@ msgstr ""
 #. translators: %s: Field name
 #: classes/helpers/FrmFieldsHelper.php:267
 #: classes/helpers/FrmFieldsHelper.php:416
-#: classes/helpers/FrmXMLHelper.php:1605
+#: classes/helpers/FrmXMLHelper.php:1615
 msgid "%s is invalid"
 msgstr ""
 
@@ -4593,26 +4601,26 @@ msgstr ""
 msgid "Your server is missing the simplexml_import_dom function"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1401
+#: classes/helpers/FrmXMLHelper.php:1411
 msgctxt "import xml message"
 msgid "Error details:"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1417
+#: classes/helpers/FrmXMLHelper.php:1427
 #: classes/views/solutions/_import.php:51
 msgid "Imported"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1418
+#: classes/helpers/FrmXMLHelper.php:1428
 msgid "Updated"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1443
+#: classes/helpers/FrmXMLHelper.php:1453
 msgid "Nothing was imported or updated"
 msgstr ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1470
+#: classes/helpers/FrmXMLHelper.php:1480
 msgid "%1$s Form"
 msgid_plural "%1$s Forms"
 msgstr[0] ""
@@ -4620,7 +4628,7 @@ msgstr[1] ""
 
 #. translators: %1$s: Number of items
 #. translators: %1$s - field type
-#: classes/helpers/FrmXMLHelper.php:1472
+#: classes/helpers/FrmXMLHelper.php:1482
 #: classes/models/FrmFormMigrator.php:589
 msgid "%1$s Field"
 msgid_plural "%1$s Fields"
@@ -4628,56 +4636,56 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1474
+#: classes/helpers/FrmXMLHelper.php:1484
 msgid "%1$s Entry"
 msgid_plural "%1$s Entries"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1476
+#: classes/helpers/FrmXMLHelper.php:1486
 msgid "%1$s View"
 msgid_plural "%1$s Views"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1478
+#: classes/helpers/FrmXMLHelper.php:1488
 msgid "%1$s Page/Post"
 msgid_plural "%1$s Pages/Posts"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1480
+#: classes/helpers/FrmXMLHelper.php:1490
 msgid "%1$s Style"
 msgid_plural "%1$s Styles"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1482
+#: classes/helpers/FrmXMLHelper.php:1492
 msgid "%1$s Term"
 msgid_plural "%1$s Terms"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %1$s: Number of items
-#: classes/helpers/FrmXMLHelper.php:1484
+#: classes/helpers/FrmXMLHelper.php:1494
 msgid "%1$s Form Action"
 msgid_plural "%1$s Form Actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: classes/helpers/FrmXMLHelper.php:1522
+#: classes/helpers/FrmXMLHelper.php:1532
 msgid "Go to imported form"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1761
+#: classes/helpers/FrmXMLHelper.php:1771
 msgid "Create Posts"
 msgstr ""
 
-#: classes/helpers/FrmXMLHelper.php:1890
+#: classes/helpers/FrmXMLHelper.php:1900
 msgid "Email Notification"
 msgstr ""
 
@@ -5668,11 +5676,11 @@ msgid "Use Template"
 msgstr ""
 
 #. translators: %s: date
-#: classes/views/form-templates/template.php:88
+#: classes/views/form-templates/template.php:87
 msgid "Created %s"
 msgstr ""
 
-#: classes/views/form-templates/template.php:93
+#: classes/views/form-templates/template.php:91
 msgid "No description"
 msgstr ""
 
@@ -6781,6 +6789,10 @@ msgstr ""
 
 #: classes/views/frm-settings/misc.php:57
 msgid "Uninstall Now"
+msgstr ""
+
+#: classes/views/frm-settings/payments.php:8
+msgid "Configure and manage your payment gateways in one place to control transactions, settings, and more."
 msgstr ""
 
 #: classes/views/frm-settings/permissions.php:7
@@ -7987,13 +7999,6 @@ msgstr ""
 msgid "Payment was Successfully Deleted"
 msgstr ""
 
-#: stripe/controllers/FrmTransLiteListsController.php:31
-#: stripe/controllers/FrmTransLitePaymentsController.php:30
-#: stripe/helpers/FrmTransLiteListHelper.php:114
-#: stripe/views/lists/list.php:12
-msgid "Payments"
-msgstr ""
-
 #: stripe/controllers/FrmTransLiteListsController.php:46
 msgid "Customer"
 msgstr ""
@@ -8711,11 +8716,11 @@ msgstr ""
 msgid "Save and Reload"
 msgstr ""
 
-#: js/formidable_admin.js:9286
+#: js/formidable_admin.js:9287
 msgid "Unable to install template"
 msgstr ""
 
-#: js/formidable_admin.js:9961
+#: js/formidable_admin.js:9962
 msgid "Thank you for signing up!"
 msgstr ""
 

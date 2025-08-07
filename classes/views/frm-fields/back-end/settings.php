@@ -70,6 +70,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 
+		<?php
+		/**
+		 * Fires before the field label in the field settings.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $field The field settings.
+		 * @param array $display The display settings for the field.
+		 * @param array $values The values associated with the field.
+		 */
+		do_action( 'frm_field_options_before_label', $field, $display, $values );
+		?>
 		<?php if ( $display['label'] ) { ?>
 		<p>
 			<label for="frm_name_<?php echo esc_attr( $field['id'] ); ?>">

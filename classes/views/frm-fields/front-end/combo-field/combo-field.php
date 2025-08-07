@@ -57,23 +57,23 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<?php
 				switch ( $sub_field['type'] ) {
 					default:
-						?>
-						<input
-							type="<?php echo esc_attr( $sub_field['type'] ); ?>"
-							id="<?php echo esc_attr( $html_id . '_' . $name ); ?>"
-							value="<?php echo esc_attr( isset( $field_value[ $name ] ) ? $field_value[ $name ] : '' ); ?>"
-							<?php
-							if ( ! empty( $field_value[ $name ] ) ) {
-								echo 'data-frmval="' . esc_attr( $field_value[ $name ] ) . '" ';
-							}
-							if ( empty( $args['remove_names'] ) ) {
-								echo 'name="' . esc_attr( $field_name ) . '[' . esc_attr( $name ) . ']" ';
-							}
+						$attrs = array(
+							'type'  => $sub_field['type'],
+							'id'    => $html_id . '_' . $name,
+							'value' => isset( $field_value[ $name ] ) ? $field_value[ $name ] : '',
+						);
 
-							$this->print_input_atts( compact( 'field', 'sub_field' ) );
-							?>
-						/>
-						<?php
+						if ( ! empty( $field_value[ $name ] ) ) {
+							$attrs['data-frmval'] = $field_value[ $name ];
+						}
+						if ( empty( $args['remove_names'] ) ) {
+							$attrs['name'] = $field_name . '[' . $name . ']';
+						}
+
+						echo '<input ';
+						FrmAppHelper::array_to_html_params( $attrs, true );
+						$this->print_input_atts( compact( 'field', 'sub_field' ) );
+						echo '/>';
 				}
 
 				if ( $sub_field['label'] && ( $sub_field_desc || $this->should_print_hidden_sub_fields() ) ) {
