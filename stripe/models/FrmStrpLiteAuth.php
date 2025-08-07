@@ -548,7 +548,7 @@ class FrmStrpLiteAuth {
 	 *
 	 * @since x.x
 	 *
-	 * @return string|false False if the statement descriptor is not valid.
+	 * @return false|string False if the statement descriptor is not valid.
 	 */
 	private static function get_statement_descriptor() {
 		$name = get_bloginfo( 'name' );
