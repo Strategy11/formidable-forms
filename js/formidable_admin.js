@@ -1728,6 +1728,7 @@ function frmAdminBuildJS() {
 	 * Don't allow hidden fields inside of field groups but allow them in sections.
 	 * Don't allow any fields below the submit button field.
 	 * Don't allow submit button field above any fields.
+	 * Don't allow GDPR fields in repeaters.
 	 *
 	 * @param {HTMLElement} draggable
 	 * @param {HTMLElement} droppable
@@ -1782,10 +1783,19 @@ function frmAdminBuildJS() {
 			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
+		if ( droppable.classList.contains( 'start_divider' ) && ( draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr' ) && droppable.closest( '.repeat_section' ) ) {
+			// Don't allow GDPR fields in repeaters.
+			return false;
+		}
+
 		if ( ! droppable.classList.contains( 'start_divider' ) ) {
 			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
 			if ( ! groupCanFitAnotherField( $fieldsInRow, jQuery( draggable ) ) ) {
 				// Field group is full and cannot accept another field.
+				return false;
+			}
+
+			if ( draggable.id === 'divider' && droppable.closest( '.start_divider' ) ) {
 				return false;
 			}
 		}
@@ -5537,6 +5547,19 @@ function frmAdminBuildJS() {
 				formatInput.setAttribute( 'value', '' );
 			}
 		}
+
+		setTimeout(
+			() => {
+				formatElement.querySelectorAll( 'option' ).forEach(
+					option => {
+						if ( option.selected && option.classList.contains( 'frm_show_upgrade' ) ) {
+							formatElement.value = 'none';
+						}
+					}
+				);
+			},
+			0
+		);
 	}
 
 	/**

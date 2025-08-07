@@ -68,7 +68,7 @@ class FrmFieldUrl extends FrmFieldType {
 			$value = '';
 		} else {
 			$value = esc_url_raw( $value );
-			$value = preg_match( '/^(https?|ftps?|mailto|news|feed|telnet):/is', $value ) ? $value : 'http://' . $value;
+			$value = preg_match( '/^(https?|ftps?|mailto|news|feed|telnet):/is', $value ) ? $value : 'https://' . $value;
 		}
 
 		FrmEntriesHelper::set_posted_value( $this->field, $value, $args );

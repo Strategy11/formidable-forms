@@ -1578,7 +1578,9 @@ class FrmAppHelper {
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<span class="frmfont frm_search_icon"></span>
+			
+			<?php self::icon_by_class( 'frm_icon_font frm_search_icon' ); ?>
+			
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -3179,7 +3181,7 @@ class FrmAppHelper {
 	public static function maybe_add_tooltip( $name, $class = 'closed', $form_name = '' ) {
 		$tooltips = array(
 			'action_title'  => __( 'Give this action a label for easy reference.', 'formidable' ),
-			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable' ),
+			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [default-email] is the address set in the global "Default Email Address" settings.', 'formidable' ),
 			'cc'            => __( 'Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'bcc'           => __( 'Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
