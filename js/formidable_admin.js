@@ -1607,7 +1607,7 @@ function frmAdminBuildJS() {
 	 * @returns {boolean}
 	 */
 	function shouldStopInsertingField( fieldType, event ) {
-		return 'range' === fieldType && event.originalEvent?.detail?.showModal !== 0 && builderPage.dataset.supportsRangeSlider === '1';
+		return 'range' === fieldType && ( event.originalEvent?.detail?.showModal ?? 0 ) !== 0 && builderPage.dataset.supportsRangeSlider === '1';
 	}
 
 	/**
