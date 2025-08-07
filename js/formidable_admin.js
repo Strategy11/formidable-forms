@@ -970,7 +970,7 @@ function frmAdminBuildJS() {
 		return droppable;
 	}
 
-	function handleFieldDrop( event, ui ) {
+	function handleFieldDrop( _, ui ) {
 		
 		if ( ! dragState.dragging ) {
 			// dragState.dragging is set to true on drag start.
@@ -996,7 +996,7 @@ function frmAdminBuildJS() {
 		const newSection              = placeholder.closest( 'ul.frm_sorting' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
-			insertNewFieldByDragging( draggable.id, event );
+			insertNewFieldByDragging( draggable.id );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
 		}
@@ -1613,9 +1613,8 @@ function frmAdminBuildJS() {
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
-	 * @param {Event}  event
 	 */
-	function insertNewFieldByDragging( fieldType, event ) {		
+	function insertNewFieldByDragging( fieldType ) {		
 		if ( shouldStopInsertingField( fieldType ) ) {
 			return;
 		}
