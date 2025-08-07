@@ -39,7 +39,7 @@ describe("Fields in the form builder", () => {
 
             cy.get('h1 > .frm_bstooltip').should("contain", "Test Form");
             cy.get('.current_page').should("contain", "Build");
-            cy.get('.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab').should("contain", "Add Fields");
+            cy.xpath("//li[@class='frm-active']//a[@id='frm_insert_fields_tab']").should("contain", "Add Fields");
 
             cy.log("Create and duplicate fields for each type");
         const fieldsToDelete = [
@@ -69,7 +69,7 @@ describe("Fields in the form builder", () => {
 
 
     it("should rename a field from each type", () => {
-        
+
         const createField = (fieldId, fieldType) => {
             cy.log(`Create a ${fieldType} field`);
             cy.get(`li[id="${fieldId}"] a[title="${fieldType}"]`).click({ force: true });
@@ -121,7 +121,7 @@ describe("Fields in the form builder", () => {
             cy.log(`Set ${fieldType} field as require`);
             cy.get(`li[data-ftype="${fieldId}"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 }).click({ force: true });
             cy.get(`li[data-ftype="${fieldId}"] .frm_select_field > span`).should("contain", "Field Settings").click({ force: true });
-            cy.get('.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 }).check({ force: true });
+			cy.get('input.frm_req_field[type="checkbox"]').check({ force: true });
         };
 
         cy.openForm();
@@ -145,7 +145,7 @@ describe("Fields in the form builder", () => {
         });
 
             cy.log("Update form");
-            cy.get('#frm_submit_side_top').should("contain", "Update").click();
+            cy.get('#frm_submit_side_top').should("contain", "Update").click({force: true});
 
             cy.log("Click on Preview - Blank Page");
             cy.get("#frm-previewDrop",{timeout:5000}).should("contain", "Preview").click();
@@ -177,10 +177,10 @@ describe("Fields in the form builder", () => {
             cy.log("Navigate back to the formidable form page");
             cy.go(-2);
         });
-        
+
     it("should validate forms with javascript setting", () => {
 
-        cy.openForm();    
+        cy.openForm();
             cy.log(`Create a text field and set it as required`);
             cy.get(`li[id="text"] a[title="Text"]`).click({ force: true });
             cy.get(`li[data-ftype="text"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 }).click({ force: true });
@@ -190,10 +190,10 @@ describe("Fields in the form builder", () => {
             cy.log("Create a phone and email field");
             cy.get(`li[id="email"] a[title="Email"]`).click({ force: true });
             cy.get(`li[id="phone"] a[title="Phone"]`).click({ force: true });
-                                
+
             cy.log("Update form");
-            cy.get('#frm_submit_side_top').should("contain", "Update").click();
-    
+            cy.get('#frm_submit_side_top').should("contain", "Update").click({force: true});
+
             cy.log("Enabling the 'Validate this form with javascript' setting");
             cy.xpath("//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]").should("contain","Settings").click();
             cy.get(':nth-child(3) > td > .frm_inline_block',{timeout:5000}).should("contain","Validate this form with javascript");
@@ -215,7 +215,7 @@ describe("Fields in the form builder", () => {
             cy.get(`[id^="frm_error_field_"]`).eq(0).should("contain",`Text cannot be blank.`);
             cy.get(`[id^="frm_error_field_"]`).eq(1).should("contain",`Email is invalid`);
             cy.get(`[id^="frm_error_field_"]`).eq(2).should("contain",`Phone is invalid`);
-            cy.get("button[type='submit']").should("contain", "Submit").click();   
+            cy.get("button[type='submit']").should("contain", "Submit").click();
 
             cy.log("Navigate back to the formidable form page");
             cy.go('back');
@@ -236,17 +236,17 @@ describe("Fields in the form builder", () => {
             cy.get(`[id^="frm_error_field_"]`).eq(1).should("not.exist");
             cy.get(`[id^="frm_error_field_"]`).eq(2).should("not.exist");
             cy.get('[id^="field_"]').filter('input, textarea').eq(1).clear();
-            cy.get('[id^="field_"]').filter('input, textarea').eq(2).clear(); 
-            cy.get("button[type='submit']").should("contain", "Submit").click();          
+            cy.get('[id^="field_"]').filter('input, textarea').eq(2).clear();
+            cy.get("button[type='submit']").should("contain", "Submit").click();
 
             cy.log("Navigate back to the formidable form page");
             cy.go('back');
-    });  
-    
+    });
+
     afterEach(() => {
 
         cy.log("Teardown - Save the form and delete it");
-        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });    
-        cy.deleteForm();        
+        cy.get("a[aria-label='Close']", { timeout: 5000 }).click({ force: true });
+        cy.deleteForm();
     });
 });

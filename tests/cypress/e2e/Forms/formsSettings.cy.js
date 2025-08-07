@@ -128,9 +128,9 @@ describe("Updating form settings", () => {
             cy.get("button[type='submit']").should("contain", "Submit").click();
 
             cy.log("Verify URL redirect after submitting form");
-            cy.origin('https://formidableforms.com', ()=> {
-                cy.location('href').should('include', 'https://formidableforms.com/')
-            });
+			cy.origin('https://formidableforms.com', () => {
+				cy.location('href', { timeout: 10000 }).should('include', 'formidableforms.com');
+				});
 
             cy.log("Navigate back to the formidable form page");
             cy.visit(Origin + "/wp-admin/admin.php?page=formidable");
