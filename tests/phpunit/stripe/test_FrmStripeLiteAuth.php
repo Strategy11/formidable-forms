@@ -36,8 +36,6 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 			),
 			$this->maybe_add_statement_descriptor( array() )
 		);
-
-		$this->assertEquals( true, false );
 	}
 
 	private function maybe_add_statement_descriptor( $intent_data ) {
