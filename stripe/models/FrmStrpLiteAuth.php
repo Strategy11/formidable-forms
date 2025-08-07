@@ -585,7 +585,14 @@ class FrmStrpLiteAuth {
 	 * @return string The name with special characters removed.
 	 */
 	private static function strip_special_characters_from_statement_descriptor( $name ) {
-		$special_characters = array( '<', '>', '\\', "'", '"', '*', );
+		$special_characters = array(
+			'<',
+			'>',
+			'\\',
+			"'",
+			'"',
+			'*',
+		);
 		return str_replace( $special_characters, '', $name );
 	}
 
