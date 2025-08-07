@@ -1603,11 +1603,10 @@ function frmAdminBuildJS() {
 	 * @since x.x
 	 *
 	 * @param {string} fieldType
-	 * @param {Event}  event
 	 * @returns {boolean}
 	 */
-	function shouldStopInsertingField( fieldType, event ) {
-		return 'range' === fieldType && ( event.originalEvent?.detail?.showModal ?? 0 ) !== 0 && builderPage.dataset.supportsRangeSlider === '1';
+	function shouldStopInsertingField( fieldType ) {
+		return wp.hooks.applyFilters( 'frm_should_stop_inserting_field', false, fieldType  );
 	}
 
 	/**
@@ -1617,7 +1616,7 @@ function frmAdminBuildJS() {
 	 * @param {Event}  event
 	 */
 	function insertNewFieldByDragging( fieldType, event ) {		
-		if ( shouldStopInsertingField( fieldType, event ) ) {
+		if ( shouldStopInsertingField( fieldType ) ) {
 			return;
 		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
@@ -2041,7 +2040,7 @@ function frmAdminBuildJS() {
 		document.dispatchEvent( loadedEvent );
 	}
 
-	function addFieldClick( event ) {
+	function addFieldClick() {
 		/*jshint validthis:true */
 		const $thisObj = jQuery( this );
 		// there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
@@ -2052,7 +2051,7 @@ function frmAdminBuildJS() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
-		if ( shouldStopInsertingField( fieldType, event ) ) {
+		if ( shouldStopInsertingField( fieldType ) ) {
 			return;
 		}
 
