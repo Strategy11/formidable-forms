@@ -614,7 +614,7 @@ class FrmStrpLiteAuth {
 			$name = substr( $name, 0, 22 );
 		}
 
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]$/', $name ) ) {
+		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
 			return false;
 		}
 
