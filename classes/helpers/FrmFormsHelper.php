@@ -279,7 +279,27 @@ class FrmFormsHelper {
 	 */
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
+
+		// Only autop if the message includes line breaks.
+		$autop = strpos( $message, "\n" ) !== false;
+
+		/**
+		 * Filters whether to autop the success message.
+		 * This is false by default if the message does not include line breaks.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool   $autop
+		 * @param string $message
+		 * @param object $form
+		 */
+		$autop = (bool) apply_filters( 'frm_wpautop_success_message', $autop, $message, $atts['form'] );
+
+		if ( $autop ) {
+			$message = FrmAppHelper::use_wpautop( $message );
+		}
+
+		$message = do_shortcode( $message );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 		return $message;
 	}
@@ -1849,7 +1869,7 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
-		$should_block = 'contact-form' === $form_key && ! current_user_can( 'frm_view_forms' );
+		$should_block = in_array( $form_key, array( 'contact-form', 'contact-us' ), true ) && ! current_user_can( 'frm_view_forms' );
 		/**
 		 * Filters whether the form preview should be blocked.
 		 *
@@ -1870,6 +1890,10 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function form_is_loaded_by_api() {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
+			return true;
+		}
 		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 

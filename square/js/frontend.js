@@ -13,6 +13,8 @@
 
 	let cardGlobal;
 
+	const buyerTokens = {};
+
 	// Track the state of each field in the card form
 	const cardFields = {
 		cardNumber: false,
@@ -148,8 +150,16 @@
 			throw new Error( verificationData.data );
 		}
 
+		if ( buyerTokens[ verificationData.data.hash ] ) {
+			// Avoid a second verify buyer request if the verification data has not changed.
+			return buyerTokens[ verificationData.data.hash ];
+		}
+
 		const verificationDetails = verificationData.data.verificationDetails;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
+
+		buyerTokens[ verificationData.data.hash ] = verificationResults.token;
+
 		return verificationResults.token;
 	}
 

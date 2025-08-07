@@ -89,6 +89,7 @@ class FrmSquareLiteAppController {
 		wp_send_json_success(
 			array(
 				'verificationDetails' => $verification_details,
+				'hash'                => md5( serialize( $verification_details ) ),
 			)
 		);
 	}
