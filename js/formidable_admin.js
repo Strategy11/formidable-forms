@@ -1572,11 +1572,51 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Get the arguments for inserting a new field.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @param {string} sectionId
+	 * @param {string} formId
+	 * @param {Number} hasBreak
+	 *
+	 * @returns {Object}
+	 */
+	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
+		const args = {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: sectionId,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType, formId, sectionId, hasBreak );
+	}
+
+	/**
+	 * Returns true if it's a range field type and slider type is not selected.
+	 *
+	 * @since x.x
+	 *
+	 * @param {string} fieldType
+	 * @returns {boolean}
+	 */
+	function shouldStopInsertingField( fieldType ) {
+		return wp.hooks.applyFilters( 'frm_should_stop_inserting_field', false, fieldType  );
+	}
+
+	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {
+	function insertNewFieldByDragging( fieldType ) {		
+		if ( shouldStopInsertingField( fieldType ) ) {
+			return;
+		}
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		const loading      = tag(
@@ -1603,16 +1643,9 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: sectionId,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			type: 'POST',
+			url: ajaxurl,
+			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success: function( msg ) {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
@@ -2016,6 +2049,10 @@ function frmAdminBuildJS() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
+		if ( shouldStopInsertingField( fieldType ) ) {
+			return;
+		}
+
 		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
@@ -2025,15 +2062,7 @@ function frmAdminBuildJS() {
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: 0,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
