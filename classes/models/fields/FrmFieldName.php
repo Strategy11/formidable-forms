@@ -254,7 +254,9 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return void
 	 */
 	public function show_after_default( $args ) {
+		echo '<div class="frm-mt-xs">';
 		parent::show_after_default( $args );
+		echo '</div>';
 
 		/**
 		 * @var array $field

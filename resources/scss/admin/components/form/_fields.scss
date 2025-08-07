@@ -131,32 +131,6 @@ input[type="checkbox"] {
 	padding: 0;
 }
 
-.frm_wrap .frm-number-range + .frm_last input,
-.frm_wrap .frm-number-range input {
-	text-align: center;
-	font-weight: 600;
-}
-
-.frm_wrap .frm-number-range input[type="number"],
-.frm_wrap .frm-number-range input[type="text"] {
-	color: var(--primary-700);
-}
-
-.frm-range-min {
-	position: relative;
-}
-
-.frm-range-min::after {
-	content: '';
-	height: 3px;
-	width: 10px;
-	border-radius: 30%;
-	background: var(--primary-700);
-	position: absolute;
-	top: 17px;
-	right: -28%;
-}
-
 .frm_grid_container > p,
 .frm_grid_container > p.frm_form_field,
 .frm_grid_container > div.frm_form_field,
@@ -164,6 +138,14 @@ input[type="checkbox"] {
 	margin-top: 8px;
 	margin-bottom: 8px;
 	margin-right: 0;
+
+	> label:only-child {
+		margin-bottom: 0;
+	}
+}
+
+.frm_grid_container > .frm-has-modal > p:only-child {
+	margin-bottom: var(--gap-xs);
 }
 
 #new_fields div.frm_grid_container > .frm_primary_label {
