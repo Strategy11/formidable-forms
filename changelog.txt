@@ -1,11 +1,11 @@
 == Changelog ==
 = 6.23 =
-* New: Generated table data row labels will now include scope="row" to help with accessibility.
 * New: The GDPR field agreement text can now be translated using the WPML or Polylang add-ons.
 * New: GDPR agreement text will no longer strip a few additional HTML tag types including <b>, <br>, <div>, <em>, <i>, <p>, <span>, and <strong>.
 * New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
 * New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
 * New: One time Stripe payments will now include a Statement Descriptor matching the active Site name by default. A new frm_stripe_statement_descriptor filter has been added to modify the value sent to Stripe.
+* New: Generated table data row labels will now include scope="row" to help with accessibility.
 * Fix: Option validation would fail in rare cases when a field that does not support options incorrectly has option data defined.
 * Fix: In some cases, calculation settings using < and > characters would only partially save.
 * Fix: The auto width setting for dropdowns would not properly appear enabled.
