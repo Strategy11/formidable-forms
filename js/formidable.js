@@ -1806,7 +1806,7 @@ function frmFrontFormJS() {
 
 				showSubmitLoading( jQuery( object ) );
 
-				frmFrontForm.submitFormNow( object, classList );
+				frmFrontForm.submitFormNow( object );
 			}
 		},
 
