@@ -373,7 +373,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 == Changelog ==
 = 6.23 =
-* New: The GDPR field agreement text can now be translated using the WPML or Polylang add-ons.
+* New: The GDPR agreement text can now be translated using the WPML or Polylang add-ons.
 * New: GDPR agreement text will no longer strip a few additional HTML tag types including <b>, <br>, <div>, <em>, <i>, <p>, <span>, and <strong>.
 * New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
 * New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
@@ -397,11 +397,11 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 = 6.22.1 =
 * New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
-* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: The honeypot would appear incorrectly when editing in-place.
 * Fix: Field IDs would not properly update when importing a Timeline view.
 * Fix: Database queries would not use cached query data when the query resulted in no results.
 * Fix: Name fields would not work correctly when using the minimize=1 option.
-* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+* Form previews are now automatically restricted to privileged users for the contact-us key to help prevent spam.
 
 = 6.22 =
 * New: Support for Square payments has been added.
@@ -410,12 +410,12 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
 * Fix: Option validation would fail in cases where the option data was modified using the_content filter.
 * Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
-* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
+* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox.
 * Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
-* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
+* Fix: Honeypots would not properly get hidden for forms loaded in the footer.
 * Fix: An extra empty set of columns would appear for comments when exporting as CSV.
-* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
-* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
+* Fix: A JavaScript error would occur for inline modals in the builder after deleting a field.
+* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox.
 * Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
