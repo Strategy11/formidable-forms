@@ -306,10 +306,11 @@ class FrmFormsHelper {
 			}
 			$html_id = 'field_' . $field_keys[ $index ]->field_key . $row;
 			if ( in_array( $field_keys[ $index ]->type, array( 'checkbox', 'radio' ), true ) ) {
-				$html_id .= '-0'; // Focus on the first option.
+				// Focus on the first option.
+				$html_id .= '-0';
 			}
 			$field_error_messages .= '<li><a href="#' . $html_id . '">' . $error . '</a></li>';
-		}
+		}//end foreach
 		return $field_error_messages;
 	}
 
