@@ -1,4 +1,5 @@
 .frm-access-free-templates-banner {
+	flex-grow: 1;
 
 	.frm-banner-image-wrapper {
 		display: flex;
@@ -7,5 +8,16 @@
 		background-color: var(--primary-25);
 		padding: 19px 14px 0;
 		border-radius: var(--small-radius);
+	}
+
+	&[data-direction="vertical"] {
+		flex-direction: column;
+		align-items: stretch;
+		gap: 12px;
+
+		.frm-banner-content {
+			align-items: center;
+			text-align: center;
+		}
 	}
 }
