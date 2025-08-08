@@ -4846,7 +4846,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
-				console.log( 'Moving open modals for field ' + fieldId, settings );
+
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
