@@ -4726,7 +4726,7 @@ function frmAdminBuildJS() {
 		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
 
 		// Remove any previous delete field data so delete confirmation does not attempt
-		// to delete a field that was already deleted.
+		// to delete a field that was already deleted or previously attempted and cancelled.
 		confirmedClick?.removeAttribute( 'data-deletefield' );
 
 		jQuery( confirmedClick ).on( 'click', deleteOnConfirm );
