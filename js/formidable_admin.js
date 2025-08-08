@@ -4723,9 +4723,15 @@ function frmAdminBuildJS() {
 		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
-		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
+		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
+
+		// Remove any previous delete field data so delete confirmation does not attempt
+		// to delete a field that was already deleted.
+		confirmedClick?.removeAttribute( 'data-deletefield' );
+
+		jQuery( confirmedClick ).on( 'click', deleteOnConfirm );
 		jQuery( '#frm_confirm_modal' ).one( 'dialogclose', function() {
-			jQuery( '#frm-confirmed-click' ).off( 'click', deleteOnConfirm );
+			jQuery( confirmedClick ).off( 'click', deleteOnConfirm );
 		});
 	}
 
@@ -4840,6 +4846,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
+				console.log( 'Moving open modals for field ' + fieldId, settings );
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
