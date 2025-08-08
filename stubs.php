@@ -79,6 +79,8 @@ namespace {
 		 */
 		public static function get_updater() {
 		}
+		public static function use_jquery_datepicker() {
+		}
 	}
 	class FrmProEntryMetaHelper {
 		public static function get_post_or_meta_value( $entry, $field, $atts = array() ) {
