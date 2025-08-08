@@ -264,18 +264,20 @@ class FrmFormsHelper {
 		$frm_settings = FrmAppHelper::get_settings( $settings_args );
 		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
 
-		$field_error_messages = self::get_field_error_messages( $args );
+		$field_error_messages = self::get_clickable_field_error_messages( $args );
 		$invalid_msg         .= $field_error_messages ? '<ul>' . $field_error_messages . '</ul>' : '';
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
 	/**
+	 * Get clickable field error messages.
+	 *
 	 * @since x.x
 	 *
 	 * @param array $args
 	 * @return string
 	 */
-	private static function get_field_error_messages( $args ) {
+	private static function get_clickable_field_error_messages( $args ) {
 		$field_error_messages = '';
 		if ( empty( $args['errors'] ) ) {
 			return $field_error_messages;
@@ -307,7 +309,7 @@ class FrmFormsHelper {
 			}
 			$html_id = 'field_' . $field_keys[ $index ]->field_key . $row;
 			if ( in_array( $field_keys[ $index ]->type, array( 'checkbox', 'radio' ), true ) ) {
-				// Focus on the first option.
+				// Needed to focus on the first option when error link is clicked.
 				$html_id .= '-0';
 			}
 			$field_error_messages .= '<li><a href="#' . $html_id . '">' . $error . '</a></li>';
