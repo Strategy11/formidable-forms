@@ -443,7 +443,10 @@ class FrmStylesHelper {
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
-			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
+
+			// These fields value may be changed later in css_var_prepare_value() as $settings[ $var ] will be the same as $defaults[ $var ] and the condition will be false
+			$show_fields = array( 'field_border_width', 'border_radius', 'border_width_error', 'box_shadow', 'font' );
+			$show        = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] ) || in_array( $var, $show_fields, true );
 			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
