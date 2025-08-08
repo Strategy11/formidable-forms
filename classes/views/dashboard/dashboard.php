@@ -35,6 +35,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<div class="frm-dashboard-widget frm-card-item frm-license-widget">
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
+			<div class="frm-dashboard-widget frm-card-item frm-px-sm">
+				<?php $dashboard_view->get_access_free_templates_banner(); ?>
+			</div>
 			<?php
 			if ( $should_display_videos ) {
 				$dashboard_view->get_youtube_video( 'frm-dashboard-widget frm-card-item frm-yt-widget' );
