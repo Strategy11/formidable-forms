@@ -226,6 +226,16 @@ class FrmFormTemplatesController {
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
 
+			// TODO: Add check for `frm_free_license_code` option.
+			if ( ! FrmAppHelper::pro_is_installed() ) {
+				$leave_email_args = array(
+					'title'              => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
+					'description'        => esc_html__( 'Just add your email address and you\'ll get 30+ free form templates to your account.', 'formidable' ),
+					'submit_button_text' => esc_html_x( 'Get Templates', 'get free templates modal submit button text', 'formidable' ),
+				);
+				$view_parts[]     = 'modals/leave-email-modal.php';
+			}
+
 			// Add 'upgrade' modal view for non-elite users.
 			if ( 'elite' !== FrmAddonsController::license_type() ) {
 				$view_parts[] = 'modals/upgrade-modal.php';

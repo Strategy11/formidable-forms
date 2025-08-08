@@ -200,4 +200,23 @@ class FrmFormTemplatesHelper {
 			);
 		}
 	}
+
+	/**
+	 * Echo the access free templates banner.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function echo_access_free_templates_banner() {
+		$args = array(
+			'direction' => 'vertical',
+		);
+
+		?>
+		<div class="frm-card-item frm-px-sm">
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/access-free-templates-banner.php'; ?>
+		</div>
+		<?php
+	}
 }

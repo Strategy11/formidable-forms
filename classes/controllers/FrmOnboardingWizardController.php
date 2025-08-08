@@ -323,15 +323,18 @@ class FrmOnboardingWizardController {
 	 *
 	 * @since 6.16
 	 *
+	 * @param string $email The email address to subscribe to ActiveCampaign.
 	 * @return void
 	 */
-	private static function subscribe_to_active_campaign() {
-		$user = wp_get_current_user();
-		if ( empty( $user->user_email ) ) {
+	public static function subscribe_to_active_campaign( $email = '' ) {
+		$user  = wp_get_current_user();
+		$email = $email ? $email : $user->user_email;
+
+		if ( ! $email ) {
 			return;
 		}
 
-		if ( ! self::should_send_email_to_active_campaign( $user->user_email ) ) {
+		if ( ! self::should_send_email_to_active_campaign( $email ) ) {
 			return;
 		}
 
@@ -349,7 +352,7 @@ class FrmOnboardingWizardController {
 						'form_id'       => 5,
 						'item_key'      => '',
 						'item_meta[0]'  => '',
-						'item_meta[15]' => $user->user_email,
+						'item_meta[15]' => $email,
 						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
 						'item_meta[18]' => is_string( $first_name ) ? $first_name : '',
 						'item_meta[19]' => is_string( $last_name ) ? $last_name : '',
@@ -376,7 +379,6 @@ class FrmOnboardingWizardController {
 			'@local.test',
 			'test@gmail.com',
 			'admin@gmail.com',
-			
 		);
 		foreach ( $substrings as $substring ) {
 			if ( false !== strpos( $email, $substring ) ) {
