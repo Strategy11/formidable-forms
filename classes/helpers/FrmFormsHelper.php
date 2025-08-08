@@ -263,6 +263,12 @@ class FrmFormsHelper {
 
 		$frm_settings = FrmAppHelper::get_settings( $settings_args );
 		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
+		$field_error_messages = '';
+		foreach ( $args['errors'] as $field_id => $error ) {
+			$field = (array) FrmField::getOne( str_replace( 'field', '', $field_id ) );
+			$field_error_messages .= '<li><a href="#' . FrmFieldsHelper::get_html_id( $field ) . '">' . $error . '</a></li>';
+		}
+		$invalid_msg .= $field_error_messages ? '<ul>' . $field_error_messages . '</ul>' : '';
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
