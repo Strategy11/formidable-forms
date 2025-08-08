@@ -9,13 +9,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 ?>
-<div class="frm-access-free-templates-banner frm-flex frm-gap-sm frm-items-center <?php echo esc_attr( $args['class'] ?? '' ); ?>">
+<div class="frm-access-free-templates-banner frm-flex frm-gap-sm frm-items-center" data-direction="<?php echo esc_attr( $args['direction'] ?? 'horizontal' ); ?>">
 	<div class="frm-banner-image-wrapper">
 		<img width="100" src="<?php echo esc_url( FrmAppHelper::plugin_url() ); ?>/images/access-free-templates-banner.png" alt="<?php esc_attr_e( 'Access free templates', 'formidable' ); ?>" />
 	</div>
 
-	<div class="frm-flex-col frm-gap-xs frm-items-start">
-		<h3 class="frm-text-sm">
+	<div class="frm-banner-content frm-flex-col frm-gap-xs frm-items-start">
+		<h3 class="frm-text-sm frm-font-semibold">
 			<?php
 			printf(
 				// translators: %s: HTML line break
