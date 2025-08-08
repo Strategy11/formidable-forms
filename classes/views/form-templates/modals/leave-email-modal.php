@@ -9,34 +9,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-// Initialize $args if not set.
-if ( ! isset( $args ) ) {
-	$args = array();
-}
-
-$defaults = array(
-	'api_url'     => 'https://sandbox.formidableforms.com/api/wp-json/frm/v2/forms/freetemplates?return=html&exclude_script=jquery&exclude_style=formidable-css',
-	'title'       => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
-	'description' => esc_html__( 'Just add your email address and we\'ll send you a code for free form templates!', 'formidable' ),
-);
-
-$args = wp_parse_args( $args, $defaults );
+$args = $args ?? $leave_email_args ?? array();
 ?>
 <div id="frm-leave-email-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
 	<div class="frm_modal_top">
 		<div class="frm-modal-title">
-			<h2><?php echo esc_html( $args['title'] ); ?></h2>
+			<h2><?php echo esc_html( $args['title'] ?? '' ); ?></h2>
 		</div>
 	</div>
 
 	<div class="inside frm_grid_container frm-fields frm-px-md frm-py-0 frm-mt-xs frm-mb-0">
-		<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_url( $args['api_url'] ); ?>">
-			<span class="frm-wait"></span>
-		</div>
+		<?php if ( ! empty( $args['api_url'] ) ) { ?>
+			<div id="frmapi-email-form" class="frmapi-form frm_hidden" data-url="<?php echo esc_url( $args['api_url'] ); ?>">
+				<span class="frm-wait"></span>
+			</div>
+			<?php
+		}
 
-		<?php
 		echo wp_kses(
-			wpautop( esc_html( $args['description'] ) ),
+			wpautop( esc_html( $args['description'] ?? '' ) ),
 			array(
 				'p'  => true,
 				'br' => true,
@@ -47,7 +38,7 @@ $args = wp_parse_args( $args, $defaults );
 		<div id="frm_leave_email_wrapper" class="frm-form-templates-modal-fieldset frm_form_field">
 			<span class="frm-with-left-icon">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_email_icon' ); ?>
-				<input id="frm_leave_email" type="email" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $user->user_email ); ?>" />
+				<input id="frm_leave_email" type="email" placeholder="<?php esc_attr_e( 'Enter your email', 'formidable' ); ?>" value="<?php echo esc_attr( $args['default_email'] ?? $user->user_email ); ?>" />
 			</span>
 
 			<?php
@@ -67,10 +58,10 @@ $args = wp_parse_args( $args, $defaults );
 
 	<div class="frm_modal_footer frm-flex-box frm-justify-end frm-pt-sm frm-pb-md">
 		<a href="#" class="button button-secondary frm-button-secondary frm-modal-close dismiss" role="button">
-			<?php esc_html_e( 'Close', 'formidable' ); ?>
+			<?php echo esc_html( $args['close_button_text'] ?? __( 'Close', 'formidable' ) ); ?>
 		</a>
 		<a href="#" id="frm-get-code-button" class="button button-primary frm-button-primary" role="button">
-			<?php esc_html_e( 'Get Code', 'formidable' ); ?>
+			<?php echo esc_html( $args['submit_button_text'] ?? __( 'Subscribe', 'formidable' ) ); ?>
 		</a>
 	</div>
 </div>
