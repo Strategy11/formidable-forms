@@ -124,7 +124,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</div>
 				<?php
 			}
-
 			do_action( 'frm_field_options_form_top', $field, $display, $values );
 			?>
 		</div>
