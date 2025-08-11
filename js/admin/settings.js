@@ -1,5 +1,4 @@
 ( function() {
-
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
@@ -13,11 +12,6 @@
 		if ( 'frm_currency' === e.target.id) {
 			syncCurrencyOptions( e.target );
 		}
-
-		if ( 'frm_datepicker_library' === e.target.id ) {
-			toggleDatepickerJqueryRangeSupportNoteOnChange( e );
-		}
-
 	}
 
 	function handleKeyDownEvent( e ) {
@@ -50,23 +44,6 @@
 			e.preventDefault(); // Prevent automatic browser scroll when space is pressed.
 			e.target.click();
 		}
-	}
-
-	/**
-	 * Toggle the jQuery range support note based on the datepicker library selection.
-	 * @param {Event} event
-	 * @return {void}
-	 */
-	function toggleDatepickerJqueryRangeSupportNoteOnChange( event ) {
-		const datepickerLibrary      = event.target.value;
-		const jqueryRangeSupportNote = document.getElementById( 'frm_datepicker_jquery_range_support_note' );
-
-		if ( 'jquery' === datepickerLibrary ) {
-			jqueryRangeSupportNote.classList.remove( 'frm_hidden' );
-			return;
-		}
-
-		jqueryRangeSupportNote.classList.add( 'frm_hidden' );
 	}
 
 	addEventListeners();
