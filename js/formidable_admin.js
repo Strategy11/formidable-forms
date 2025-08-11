@@ -1584,7 +1584,7 @@ function frmAdminBuildJS() {
 	 * @returns {Object}
 	 */
 	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
-		const args = {
+		return {
 			action: 'frm_insert_field',
 			form_id: formId,
 			field_type: fieldType,
@@ -1593,7 +1593,6 @@ function frmAdminBuildJS() {
 			has_break: hasBreak,
 			last_row_field_ids: getFieldIdsInSubmitRow()
 		};
-		return wp.hooks.applyFilters( 'frm_insert_field_args', args, fieldType, formId, sectionId, hasBreak );
 	}
 
 	/**
@@ -1615,8 +1614,10 @@ function frmAdminBuildJS() {
 	 */
 	function insertNewFieldByDragging( fieldType ) {		
 		if ( shouldStopInsertingField( fieldType ) ) {
+			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
 			return;
 		}
+
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		const loading      = tag(
@@ -1647,58 +1648,65 @@ function frmAdminBuildJS() {
 			url: ajaxurl,
 			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success: function( msg ) {
-				let replaceWith;
-				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
-				const fieldId   = checkMsgForFieldId( msg );
-
-				if ( ! $siblings.length ) {
-					// if dragging into a new row, we need to wrap the li first.
-					replaceWith = wrapFieldLi( msg );
-				} else {
-					replaceWith = msgAsjQueryObject( msg );
-					if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
-						// If a field group wasn't draggable because it only had a single field, make it draggable.
-						makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
-					}
-				}
-				$placeholder.replaceWith( replaceWith );
-				updateFieldOrder();
-				afterAddField( msg, false );
-				if ( $siblings.length ) {
-					syncLayoutClasses( $siblings.first() );
-				}
-				toggleSectionHolder();
-
-				if ( ! $siblings.length ) {
-					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
-					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
-				} else {
-					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
-				}
-
-				if ( fieldId ) {
-					/**
-					 * Fires after a field is added.
-					 *
-					 * @since x.x
-					 *
-					 * @param {Object} fieldData            The field data.
-					 * @param {String} fieldData.field      The field HTML.
-					 * @param {String} fieldData.field_type The field type.
-					 * @param {String} fieldData.form_id    The form ID.
-					 */
-					wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
-						field: msg,
-						fieldId: fieldId,
-						fieldType: fieldType,
-						form_id: formId,
-					});	
-				}
-
+				handleInsertFieldByDraggingResponse( msg, $placeholder, fieldType, formId );
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	/**
+	 * @param {String} msg
+	 * @param {Object} $placeholder jQuery object.
+	 */
+	function handleInsertFieldByDraggingResponse( msg, $placeholder, fieldType, formId ) {
+		let replaceWith;
+		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
+		const fieldId   = checkMsgForFieldId( msg );
+
+		if ( ! $siblings.length ) {
+			// if dragging into a new row, we need to wrap the li first.
+			replaceWith = wrapFieldLi( msg );
+		} else {
+			replaceWith = msgAsjQueryObject( msg );
+			if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
+				// If a field group wasn't draggable because it only had a single field, make it draggable.
+				makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
+			}
+		}
+		$placeholder.replaceWith( replaceWith );
+		updateFieldOrder();
+		afterAddField( msg, false );
+		if ( $siblings.length ) {
+			syncLayoutClasses( $siblings.first() );
+		}
+		toggleSectionHolder();
+
+		if ( ! $siblings.length ) {
+			makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+			makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
+		} else {
+			makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+		}
+
+		if ( fieldId ) {
+			/**
+			 * Fires after a field is added.
+			 *
+			 * @since x.x
+			 *
+			 * @param {Object} fieldData            The field data.
+			 * @param {String} fieldData.field      The field HTML.
+			 * @param {String} fieldData.field_type The field type.
+			 * @param {String} fieldData.form_id    The form ID.
+			 */
+			wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
+				field: msg,
+				fieldId: fieldId,
+				fieldType: fieldType,
+				form_id: formId,
+			});	
+		}
 	}
 
 	/**
@@ -2098,48 +2106,52 @@ function frmAdminBuildJS() {
 			url: ajaxurl,
 			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success: function( msg ) {
-				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				const replaceWith = wrapFieldLi( msg );
-				const fieldId     = checkMsgForFieldId( msg );
-				const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
-
-				if ( ! submitField ) {
-					$newFields.append( replaceWith );
-				} else {
-					jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
-				}
-
-				afterAddField( msg, true );
-
-				replaceWith.each(
-					function() {
-						makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
-						makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
-					}
-				);
-
-				if ( fieldId ) {
-					/**
-					 * Fires after a field is added.
-					 *
-					 * @since x.x
-					 *
-					 * @param {Object} fieldData            The field data.
-					 * @param {String} fieldData.field      The field HTML.
-					 * @param {String} fieldData.field_type The field type.
-					 * @param {String} fieldData.form_id    The form ID.
-					 */
-					wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
-						field: msg,
-						fieldId: fieldId,
-						fieldType: fieldType,
-						form_id: formId,
-					});	
-				}
+				handleAddFieldClickResponse( msg, fieldType, formId );
 			},
 			error: handleInsertFieldError
 		});
 		return false;
+	}
+
+	function handleAddFieldClickResponse( msg, fieldType, formId ) {
+		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		const replaceWith = wrapFieldLi( msg );
+		const fieldId     = checkMsgForFieldId( msg );
+		const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
+
+		if ( ! submitField ) {
+			$newFields.append( replaceWith );
+		} else {
+			jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
+		}
+
+		afterAddField( msg, true );
+
+		replaceWith.each(
+			function() {
+				makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
+				makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
+			}
+		);
+
+		if ( fieldId ) {
+			/**
+			 * Fires after a field is added.
+			 *
+			 * @since x.x
+			 *
+			 * @param {Object} fieldData            The field data.
+			 * @param {String} fieldData.field      The field HTML.
+			 * @param {String} fieldData.field_type The field type.
+			 * @param {String} fieldData.form_id    The form ID.
+			 */
+			wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
+				field: msg,
+				fieldId: fieldId,
+				fieldType: fieldType,
+				form_id: formId,
+			});	
+		}
 	}
 
 	function insertFormField( fieldType, fieldOptions = {} ) {
@@ -2161,7 +2173,8 @@ function frmAdminBuildJS() {
 					const fieldId      = checkMsgForFieldId( msg );
 
 					fieldElement[0].style.display = 'none';
-					resolve( fieldElement );
+					resolve({ fieldElement, msg });
+
 					setTimeout( () => {
 						updateFieldOrder();
 						afterAddField( msg, true );
@@ -2179,7 +2192,7 @@ function frmAdminBuildJS() {
 							 * @param {String} fieldData.field_type The field type.
 							 * @param {String} fieldData.form_id    The form ID.
 							 */
-							wp.hooks.doAction( 'frmadmin.afterFieldAddedInFormBuilder', {
+							wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
 								field: msg,
 								fieldId: fieldId,
 								fieldType: fieldType,
@@ -11169,7 +11182,9 @@ function frmAdminBuildJS() {
 		showSaveAndReloadModal,
 		deleteField,
 		insertFormField,
-		confirmLinkClick
+		confirmLinkClick,
+		handleInsertFieldByDraggingResponse,
+		handleAddFieldClickResponse,
 	};
 }
 
