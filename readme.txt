@@ -385,6 +385,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The deactivation pop-up has been updated to help prevent issues where the confirmation buttons were not visible because of an overflow issue.
 * Fix: Denylist terms using forward slashes would not match spam data as expected.
 * Fix: Square buyer tokens are now re-used when nothing has changed to prevent an "An unexpected error occurred verifying buyer" error from Square.
+* Fix: Captcha validation would fail when trying to submit a Square payment.
 * Fix: Stripe payment fields would not appear correctly when using a version of Pro older than 6.21.
 * Fix: Previous attempts to delete a field would re-trigger when deleting a field group, causing unexpected JS errors and issues with deleting a field unintentionally.
 * The deprecated filter frm_email_value has been removed.
