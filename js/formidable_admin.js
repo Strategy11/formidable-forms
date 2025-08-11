@@ -1650,7 +1650,7 @@ function frmAdminBuildJS() {
 				let replaceWith;
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
-				const fieldId   = msg.match( /data-fid="(\d+)"/ )[1];
+				const fieldId   = checkMsgForFieldId( msg );
 
 				if ( ! $siblings.length ) {
 					// if dragging into a new row, we need to wrap the li first.
@@ -1699,6 +1699,17 @@ function frmAdminBuildJS() {
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	/**
+	 * Get the field ID from the response message.
+	 *
+	 * @param {String} msg
+	 * @return {Number}
+	 */
+	function checkMsgForFieldId( msg ) {
+		const result = msg.match( /data-fid="(\d+)"/ );
+		return result ? parseInt( result[1] ) : 0;
 	}
 
 	function getFieldIdsInSubmitRow() {
@@ -2087,7 +2098,7 @@ function frmAdminBuildJS() {
 			success: function( msg ) {
 				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
 				const replaceWith = wrapFieldLi( msg );
-				const fieldId     = msg.match( /data-fid="(\d+)"/ )[1];
+				const fieldId     = checkMsgForFieldId( msg );
 				const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
 
 				if ( ! submitField ) {
@@ -2145,7 +2156,7 @@ function frmAdminBuildJS() {
 				data: Object.assign( getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ), { field_options: fieldOptions } ),
 				success: function( msg ) {
 					const fieldElement = jQuery( msg );
-					const fieldId      = msg.match( /data-fid="(\d+)"/ )[1];
+					const fieldId      = checkMsgForFieldId( msg );
 
 					fieldElement[0].style.display = 'none';
 					resolve( fieldElement );
