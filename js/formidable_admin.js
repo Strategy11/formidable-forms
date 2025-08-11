@@ -1704,6 +1704,8 @@ function frmAdminBuildJS() {
 	/**
 	 * Get the field ID from the response message.
 	 *
+	 * @since x.x
+	 *
 	 * @param {String} msg
 	 * @return {Number}
 	 */
