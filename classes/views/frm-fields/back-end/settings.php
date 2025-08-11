@@ -437,7 +437,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 				if ( $display['unique'] ) {
 					?>
-					<p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?> ">
+					<p class="frm_unique_details<?php echo esc_attr( $field['id'] . ( $field['unique'] ? '' : ' frm_hidden' ) ); ?>">
 						<label for="field_options_unique_msg_<?php echo esc_attr( $field['id'] ); ?>">
 							<?php esc_html_e( 'Unique', 'formidable' ); ?>
 						</label>
