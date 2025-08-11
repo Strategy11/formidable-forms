@@ -73,7 +73,7 @@ class FrmFieldsController {
 		$field = self::include_new_field( $field_type, $form_id, $field_options );
 
 		// this hook will allow for multiple fields to be added at once
-		do_action( 'frm_after_field_created', $field, $form_id, $field_options );
+		do_action( 'frm_after_field_created', $field, $form_id );
 
 		wp_die();
 	}

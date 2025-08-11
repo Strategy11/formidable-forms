@@ -364,7 +364,7 @@ function frmAdminBuildJS() {
 		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link });
 
 		$info.dialog( 'open' );
-		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
 		return false;
 	}
 
@@ -11155,7 +11155,8 @@ function frmAdminBuildJS() {
 		fillDropdownOpts,
 		showSaveAndReloadModal,
 		deleteField,
-		insertFormField
+		insertFormField,
+		confirmLinkClick
 	};
 }
 
