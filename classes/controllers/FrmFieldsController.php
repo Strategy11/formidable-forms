@@ -73,7 +73,7 @@ class FrmFieldsController {
 		$field = self::include_new_field( $field_type, $form_id, $field_options );
 
 		// this hook will allow for multiple fields to be added at once
-		do_action( 'frm_after_field_created', $field, $form_id );
+		do_action( 'frm_after_field_created', $field, $form_id, $field_options );
 
 		wp_die();
 	}
@@ -197,7 +197,7 @@ class FrmFieldsController {
 		 * @param array $field
 		 * @param array $display
 		 */
-		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', '', $field, $display );
+		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -330,10 +330,6 @@ class FrmFieldsController {
 
 		if ( ! isset( $field['read_only'] ) ) {
 			$field['read_only'] = false;
-		}
-
-		if ( ! isset( $field['range_field'] ) ) {
-			$field['range_field'] = false;
 		}
 
 		$field_selection_data = self::maybe_define_field_selection_data();

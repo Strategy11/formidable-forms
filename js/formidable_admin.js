@@ -2142,16 +2142,7 @@ function frmAdminBuildJS() {
 			jQuery.ajax({
 				type: 'POST',
 				url: ajaxurl,
-				data: {
-					action: 'frm_insert_field',
-					form_id: formId,
-					field_type: fieldType,
-					field_options: fieldOptions,
-					section_id: 0,
-					nonce: frmGlobal.nonce,
-					has_break: hasBreak,
-					last_row_field_ids: getFieldIdsInSubmitRow()
-				},
+				data: Object.assign( getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ), { field_options: fieldOptions } ),
 				success: function( msg ) {
 					const fieldElement = jQuery( msg );
 					const fieldId      = msg.match( /data-fid="(\d+)"/ )[1];
