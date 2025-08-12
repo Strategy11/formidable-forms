@@ -385,6 +385,28 @@ class FrmFormTemplatesController {
 	}
 
 	/**
+	 * Handle AJAX request to subscribe the user to ActiveCampaign.
+	 *
+	 * @since 6.9
+	 *
+	 * @return void
+	 */
+	public static function ajax_get_free_templates() {
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
+
+		self::$form_template_api = new FrmFormTemplateApi();
+		self::$form_template_api->reset_cached();
+
+		FrmOnboardingWizardController::subscribe_to_active_campaign( $email );
+		self::$form_template_api::set_free_license_code( '1' );
+
+		wp_send_json_success();
+	}
+
+	/**
 	 * Fetch and format custom templates.
 	 *
 	 * Retrieves the custom templates, formats them, and assigns them to the class property.
