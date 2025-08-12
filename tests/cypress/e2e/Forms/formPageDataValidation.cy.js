@@ -30,7 +30,7 @@ describe("Forms page", () => {
 						});
 					});
 				} else {
-					expect.fail(`Unexpected banner text or missing href: "${text}"`);
+                    throw new Error(`Unexpected banner text or missing href: "${text}"`);
 				}
 			});
 
