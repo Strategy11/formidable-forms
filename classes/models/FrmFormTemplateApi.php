@@ -44,7 +44,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected function api_url() {
 		$url = self::$base_api_url . 'list';
 
-		if ( empty( $this->license ) ) {
+		if ( empty( $this->license ) && self::get_free_license_code() ) {
 			$url .= '?l=RlJFRVRFTVBMQVRFUyEhIQ%3D%3D&v=' . FrmAppHelper::plugin_version();
 		}
 
@@ -58,6 +58,28 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 */
 	protected function skip_categories() {
 		return array();
+	}
+
+	/**
+	 * Set the free license code option value.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $code The license code to set.
+	 */
+	public static function set_free_license_code( $code ) {
+		update_option( self::$code_option_name, $code, 'no' );
+	}
+
+	/**
+	 * Get the free license code option value.
+	 *
+	 * @since x.x
+	 *
+	 * @return string The license code.
+	 */
+	public static function get_free_license_code() {
+		return get_option( self::$code_option_name );
 	}
 
 	/**

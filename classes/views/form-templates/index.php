@@ -33,7 +33,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 						)
 					);
 
+					if ( ! FrmFormTemplateApi::get_free_license_code() ) {
 						FrmFormTemplatesHelper::echo_get_free_templates_banner();
+					}
 
 					require $view_path . 'categories.php';
 					?>
