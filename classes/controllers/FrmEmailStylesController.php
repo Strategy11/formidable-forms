@@ -82,7 +82,7 @@ class FrmEmailStylesController {
 			),
 			array(
 				'label' => 'Message',
-				'value' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
+				'value' => 'Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
 			),
 		);
 
@@ -100,15 +100,7 @@ class FrmEmailStylesController {
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
 			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_style_settings' ) );
 
-			$content = '<div class="frm-email-wrapper" style="width:640px">';
-
-			if ( 'classic' !== $style_key ) {
-				$content .= '<div class="frm-email-logo" style="text-align:center;margin-bottom:40px;"><img /></div>';
-			}
-
-			$content .= '<div class="frm-email-content" style="padding:40px;border-radius:8px;background-color:#fff;">';
-
-			$content .= $table_generator->generate_table_header();
+			$content = $table_generator->generate_table_header();
 			if ( $should_remove_top_bottom_border ) {
 				$content = $table_generator->remove_border( $content, 'bottom' );
 			}
@@ -135,7 +127,7 @@ class FrmEmailStylesController {
 				$content = $table_generator->remove_border( $content, 'top' );
 			}
 
-			$content .= '</div></div>';
+			$content = FrmProEmailStylesController::wrap_email_message( $content );
 
 			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;font-family:Inter,sans-serif;}</style></head><body>' . $content . '</body>';
 		} else {

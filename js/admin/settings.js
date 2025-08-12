@@ -2,7 +2,7 @@
 
 	const globalVars = {
 		sendTestEmailModal: null
-	}
+	};
 
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
