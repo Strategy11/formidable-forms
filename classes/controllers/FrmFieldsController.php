@@ -191,7 +191,7 @@ class FrmFieldsController {
 		/**
 		 * Filter for adding extra attributes to the field container.
 		 *
-		 * @since x.x
+		 * @since 6.23
 		 *
 		 * @param array $extra_field_attributes
 		 * @param array $field

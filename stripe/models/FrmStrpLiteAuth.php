@@ -546,7 +546,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Get the statement descriptor for a payment intent.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @return false|string False if the statement descriptor is not valid.
 	 */
@@ -557,7 +557,7 @@ class FrmStrpLiteAuth {
 		 * Filters the statement descriptor for a payment intent.
 		 * This way a site can use the name they want on their statements.
 		 *
-		 * @since x.x
+		 * @since 6.23
 		 *
 		 * @param string $name The name of the site.
 		 */
@@ -579,7 +579,7 @@ class FrmStrpLiteAuth {
 	/**
 	 * Remove the special characters that Stripe doesn't allow in statement descriptors, in case any exist.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param string $name The name of the site.
 	 * @return string The name with special characters removed.
@@ -600,7 +600,7 @@ class FrmStrpLiteAuth {
 	 * Stripe includes requirements at https://docs.stripe.com/get-started/account/statement-descriptors
 	 * We need to make sure that the descriptor contains only Latin characters, and that it is between 5 and 22 characters long.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param string $name Passed by reference, as this is updated if it is too long.
 	 * @return bool

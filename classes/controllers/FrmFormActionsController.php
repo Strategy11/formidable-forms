@@ -86,7 +86,7 @@ class FrmFormActionsController {
 	/**
 	 * Remove the Highrise action if it is not registered.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param array $action_classes
 	 * @return array
@@ -199,7 +199,7 @@ class FrmFormActionsController {
 	/**
 	 * Get the actions to include in the CRM section.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @return array
 	 */
