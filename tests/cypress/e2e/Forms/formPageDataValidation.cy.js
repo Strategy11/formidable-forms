@@ -18,19 +18,20 @@ describe("Forms page", () => {
 				const text = $el.text().trim();
 				const href = $el.attr('href');
 
-				if (href && (text.includes('upgrading to PRO') || text.match(/GET \d+% OFF|SAVE \d+%/))) {
+				if (href && (text.includes('upgrading to PRO') || text.match('Get 60% Off Pro!') || text.match(/GET \d+% OFF|SAVE \d+%/))) {
 					cy.origin('https://formidableforms.com', { args: { href } }, ({ href }) => {
 						cy.visit(href);
 						cy.get('h1').should(($h1) => {
 							const headingText = $h1.text();
 							expect([
 								'The Only WordPress Form Maker & Application Builder Plugin',
-								'Upgrade Today to Unlock the Full Power of Formidable Forms'
+								'Upgrade Today to Unlock the Full Power of Formidable Forms',
+								'The Most Advanced WordPress Form builder'
 							]).to.include(headingText);
 						});
 					});
 				} else {
-					expect.fail(`Unexpected banner text or missing href: "${text}"`);
+      				throw new Error(`Unexpected banner text or missing href: "${text}"`);
 				}
 			});
 
@@ -39,11 +40,11 @@ describe("Forms page", () => {
 
         cy.log("Validate the header logo link");
         cy.get('a.frm-header-logo')
-            .should('have.attr', 'href', origin + "/wp-admin/admin.php?page=formidable")
+            .should('have.attr', 'href', origin + "wp-admin/admin.php?page=formidable")
             .click();
 
         cy.log("Validate the URL after clicking the header logo");
-        cy.url().should('eq', origin + "/wp-admin/admin.php?page=formidable");
+        cy.url().should('eq', origin + "wp-admin/admin.php?page=formidable");
 
         cy.log("Validate other header elements");
         cy.get('h1').should("contain", "Forms");
