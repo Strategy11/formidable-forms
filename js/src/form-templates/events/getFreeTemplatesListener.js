@@ -71,7 +71,7 @@ const onGetTemplatesButtonClick = async() => {
 		removeQueryParam( 'free-templates' );
 	}
 
-	setQueryParam( 'registered_for_free_templates', '1' );
+	setQueryParam( 'registered-for-free-templates', '1' );
 
 	window.location.reload();
 };

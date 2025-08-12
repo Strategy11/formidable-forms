@@ -2,14 +2,14 @@
  * External dependencies
  */
 import { HIDE_JS_CLASS } from 'core/constants';
-import { frmAnimate, hasQueryParam, hideElements, show, hide } from 'core/utils';
+import { frmAnimate, hasQueryParam, hideElements, show, removeParamFromHistory } from 'core/utils';
 import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getState } from '../shared';
+import { getSingleState } from '../shared';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -24,7 +24,8 @@ function setupInitialView() {
 		searchInput,
 		bodyContent,
 		twinFeaturedTemplateItems,
-		availableTemplatesCategory
+		availableTemplatesCategory,
+		extraTemplateCountElements,
 	} = getElements();
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
@@ -36,14 +37,19 @@ function setupInitialView() {
 
 	// Set the 'Available Templates' count if it is present
 	if ( availableTemplatesCategory ) {
-		const { availableTemplatesCount } = getState();
-		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
+		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = getSingleState( 'availableTemplatesCount' );
+
+		// Click the 'Available Templates' category if the 'registered-for-free-templates' query param is present
+		if ( hasQueryParam( 'registered-for-free-templates' ) ) {
+			removeParamFromHistory( 'registered-for-free-templates' );
+			setTimeout( () => {
+				availableTemplatesCategory.dispatchEvent( new Event( 'click', { bubbles: true } ) );
+			}, 0 );
+		}
 	}
 
 	// Update extra templates count
-	const { extraTemplateCountElements } = getElements();
-	const { extraTemplatesCount } = getState();
-	extraTemplateCountElements.forEach( element => element.textContent = extraTemplatesCount );
+	extraTemplateCountElements.forEach( element => element.textContent = getSingleState( 'extraTemplatesCount' ) );
 
 	// Smoothly display the updated UI elements
 	bodyContent.classList.remove( HIDE_JS_CLASS );
