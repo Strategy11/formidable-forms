@@ -74,7 +74,7 @@ class FrmMigrate {
 	/**
 	 * Updates some settings for new installs.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 */
 	private function update_settings_for_new_install() {
 		$settings = FrmAppHelper::get_settings();

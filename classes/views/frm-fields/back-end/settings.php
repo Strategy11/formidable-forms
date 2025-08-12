@@ -74,7 +74,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		/**
 		 * Fires before the field label in the field settings.
 		 *
-		 * @since x.x
+		 * @since 6.23
 		 *
 		 * @param array $field The field settings.
 		 * @param array $display The display settings for the field.
