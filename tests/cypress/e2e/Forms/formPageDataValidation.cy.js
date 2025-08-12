@@ -18,19 +18,20 @@ describe("Forms page", () => {
 				const text = $el.text().trim();
 				const href = $el.attr('href');
 
-				if (href && (text.includes('upgrading to PRO') || text.includes( 'Get 60% Off Pro!' ) || text.match(/GET \d+% OFF|SAVE \d+%/))) {
+				if (href && (text.includes('upgrading to PRO') || text.match('Get 60% Off Pro!') || text.match(/GET \d+% OFF|SAVE \d+%/))) {
 					cy.origin('https://formidableforms.com', { args: { href } }, ({ href }) => {
 						cy.visit(href);
 						cy.get('h1').should(($h1) => {
 							const headingText = $h1.text();
 							expect([
 								'The Only WordPress Form Maker & Application Builder Plugin',
-								'Upgrade Today to Unlock the Full Power of Formidable Forms'
+								'Upgrade Today to Unlock the Full Power of Formidable Forms',
+								'The Most Advanced WordPress Form builder'
 							]).to.include(headingText);
 						});
 					});
 				} else {
-                    throw new Error(`Unexpected banner text or missing href: "${text}"`);
+      				throw new Error(`Unexpected banner text or missing href: "${text}"`);
 				}
 			});
 
