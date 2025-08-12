@@ -47,6 +47,7 @@ addElements({
 	availableTemplatesCategory: document.querySelector(
 		`.${SKELETON_PREFIX}-cat[data-category="${VIEW_SLUGS.AVAILABLE_TEMPLATES}"]`
 	),
+	getFreeTemplatesBannerButton: document.querySelector( '.frm-get-free-templates-banner .button' ),
 
 	// Modal elements
 	modal,
@@ -63,6 +64,7 @@ addElements({
 	// Leave Email Modal
 	leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
 	leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
+	leaveEmailModalButton: document.getElementById( 'frm-get-code-button' ),
 	// Upgrade Modal
 	upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
 	upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
