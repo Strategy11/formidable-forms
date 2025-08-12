@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php $dashboard_view->get_license_management(); ?>
 			</div>
 			<div class="frm-dashboard-widget frm-card-item frm-px-sm">
-				<?php $dashboard_view->get_access_free_templates_banner(); ?>
+				<?php $dashboard_view->get_free_templates_banner(); ?>
 			</div>
 			<?php
 			if ( $should_display_videos ) {

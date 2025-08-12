@@ -87,7 +87,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function __construct( $data ) {
-		$sections = array( 'counters', 'license', 'access_free_templates', 'payments', 'entries', 'inbox', 'video', 'payments' );
+		$sections = array( 'counters', 'license', 'get_free_templates', 'payments', 'entries', 'inbox', 'video', 'payments' );
 		foreach ( $sections as $section ) {
 			if ( isset( $data[ $section ] ) ) {
 				$this->view[ $section ] = $data[ $section ];
@@ -162,14 +162,14 @@ class FrmDashboardHelper {
 	}
 
 	/**
-	 * Get access free templates banner template.
+	 * Get free templates banner template.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	public function get_access_free_templates_banner() {
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/access-free-templates-banner.php';
+	public function get_free_templates_banner() {
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php';
 	}
 
 	/**

@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						)
 					);
 
-					FrmFormTemplatesHelper::echo_access_free_templates_banner();
+						FrmFormTemplatesHelper::echo_get_free_templates_banner();
 
 					require $view_path . 'categories.php';
 					?>
