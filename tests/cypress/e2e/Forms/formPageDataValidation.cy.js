@@ -18,7 +18,7 @@ describe("Forms page", () => {
 				const text = $el.text().trim();
 				const href = $el.attr('href');
 
-				if (href && (text.includes('upgrading to PRO') || text.match(/GET \d+% OFF|SAVE \d+%/))) {
+				if (href && (text.includes('upgrading to PRO') || text.includes( 'Get 60% Off Pro!' ) || text.match(/GET \d+% OFF|SAVE \d+%/))) {
 					cy.origin('https://formidableforms.com', { args: { href } }, ({ href }) => {
 						cy.visit(href);
 						cy.get('h1').should(($h1) => {
