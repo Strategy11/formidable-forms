@@ -17,7 +17,6 @@ setState({
 	customCount: Number( customCount ),
 	extraTemplatesCount: templatesCount - availableTemplatesCount,
 	favoritesCount,
-	selectedTemplate: false,
 });
 
 export { getState, getSingleState, setState, setSingleState };
