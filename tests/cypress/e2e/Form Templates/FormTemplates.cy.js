@@ -3,6 +3,7 @@ describe("Form Templates page", () => {
         cy.login();
         cy.visit('/wp-admin/admin.php?page=formidable-form-templates');
         cy.viewport(1280, 720);
+
     });
 
     it("should validate page content", () => {
