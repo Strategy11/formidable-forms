@@ -127,9 +127,9 @@ class FrmEmailStylesController {
 				$content = $table_generator->remove_border( $content, 'top' );
 			}
 
-			$content = FrmProEmailStylesController::wrap_email_message( $content );
+			$content = FrmEmailStylesController::wrap_email_message( $content );
 
-			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;font-family:Inter,sans-serif;}</style></head><body>' . $content . '</body>';
+			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;font-family:Inter,sans-serif;} a {color: red;}</style></head><body>' . $content . '</body>';
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
@@ -222,5 +222,80 @@ class FrmEmailStylesController {
 
 	public static function show_upsell_settings() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';
+	}
+
+	public static function get_email_style_settings() {
+		return apply_filters(
+			'frm_email_style_settings',
+			array(
+				'img'                => FrmAppHelper::plugin_url() . '/images/email-styles/placeholder.png', // Placeholder image.
+				'img_size'           => '',
+				'img_align'          => '',
+				'img_location'       => '',
+				'bg_color'           => '#EAECF0',
+				'container_bg_color' => '#ffffff',
+				'text_color'         => '#475467',
+				'link_color'         => '#4199FD',
+				'font'               => '',
+			),
+		);
+	}
+
+	public static function wrap_email_message( $message ) {
+		$style_settings = self::get_email_style_settings();
+
+		$header_img = '';
+		if ( $style_settings['img'] ) {
+			$img_align = $style_settings['img_align'] ? $style_settings['img_align'] : 'center';
+			$img_size  = $style_settings['img_size'] ? $style_settings['img_size'] : 'thumbnail';
+			$img_url   = is_string( $style_settings['img'] ) ? $style_settings['img'] : wp_get_attachment_image_url( $style_settings['img'], $img_size );
+
+			$header_img .= sprintf(
+				'<div style="text-align:%s;margin-bottom:32px;">',
+				esc_attr( $img_align )
+			);
+
+			$header_img .= sprintf(
+				'<img src="%s" alt="" />',
+				esc_url( $img_url )
+			);
+
+			$header_img .= '</div>';
+		}
+
+		// Wrapper.
+		$font_family = $style_settings['font'] ? $style_settings['font'] : 'Inter,sans-serif';
+		$new_message = sprintf(
+			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 0;">',
+			esc_attr( $style_settings['bg_color'] ),
+			esc_attr( $style_settings['text_color'] ),
+			esc_attr( $font_family )
+		);
+
+		// Container.
+		$new_message .= '<div style="width:640px;margin:auto;">';
+
+		// Header image if outside.
+		if ( $style_settings['img'] && 'inside' !== $style_settings['img_location'] ) {
+			$new_message .= $header_img;
+		}
+
+		// Main container.
+		$new_message .= sprintf(
+			'<div style="background-color:%s;border-radius:8px;padding:32px;">',
+			esc_attr( $style_settings['container_bg_color'] )
+		);
+
+		// Header image if inside.
+		if ( $style_settings['img'] && 'inside' === $style_settings['img_location'] ) {
+			$new_message .= $header_img;
+		}
+
+		// The message.
+		$new_message .= $message;
+
+		$new_message .= '</div></div></div>';
+
+		return $new_message;
 	}
 }
