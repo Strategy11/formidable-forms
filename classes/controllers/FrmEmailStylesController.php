@@ -93,6 +93,8 @@ class FrmEmailStylesController {
 				'cell_padding' => '16px 0',
 			);
 
+			$style_settings = self::get_email_style_settings();
+
 			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
@@ -108,10 +110,10 @@ class FrmEmailStylesController {
 
 			foreach ( $table_rows as $index => $row ) {
 				if ( 'compact' === $style_key ) {
-					$table_row = $table_generator->generate_two_cell_table_row( '<div>' . $row['label'] . '</div>', '<div>' . $row['value'] . '</div>' );
+					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
 					$row_html = '<div style="font-weight:600;">' . $row['label'] . '</div>';
-					$row_html .= ( '<div>' . $row['value'] . '</div>' );
+					$row_html .= $row['value'];
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
 				}
 
@@ -133,7 +135,10 @@ class FrmEmailStylesController {
 			$content = '<html>
 				<head>
 					<meta charset="utf-8" />
-					<style>body {background-color:#EAECF0;}</style>
+					<style>
+						body {background-color:' . esc_attr( $style_settings['bg_color'] ) . ';}
+						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
+					</style>
 				</head>
 				<body>' . $content . '</body>
 			</html>';
@@ -255,7 +260,7 @@ class FrmEmailStylesController {
 		if ( $style_settings['img'] ) {
 			$img_align = $style_settings['img_align'] ? $style_settings['img_align'] : 'center';
 			$img_size  = $style_settings['img_size'] ? $style_settings['img_size'] : 'thumbnail';
-			$img_url   = is_string( $style_settings['img'] ) ? $style_settings['img'] : wp_get_attachment_image_url( $style_settings['img'], $img_size );
+			$img_url   = is_numeric( $style_settings['img'] ) ? wp_get_attachment_image_url( $style_settings['img'], $img_size ) : $style_settings['img'];
 
 			$header_img .= sprintf(
 				'<div style="text-align:%s;margin-bottom:32px;">',
