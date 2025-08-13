@@ -226,7 +226,7 @@ class FrmFormTemplatesController {
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
 
-			if ( ! FrmAppHelper::pro_is_installed() && ! FrmFormTemplateApi::get_free_license_code() ) {
+			if ( FrmFormTemplatesHelper::needs_get_free_templates_banner() ) {
 				$leave_email_args = array(
 					'title'              => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
 					'description'        => esc_html__( 'Just add your email address and you\'ll get 30+ free form templates to your account.', 'formidable' ),

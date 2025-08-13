@@ -219,4 +219,15 @@ class FrmFormTemplatesHelper {
 		</div>
 		<?php
 	}
+
+	/**
+	 * Checks if the get free templates banner should be displayed.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function needs_get_free_templates_banner() {
+		return ! FrmAppHelper::pro_is_installed() && ! FrmFormTemplateApi::get_free_license_code();
+	}
 }
