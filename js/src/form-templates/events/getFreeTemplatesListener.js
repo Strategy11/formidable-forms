@@ -48,6 +48,11 @@ const onGetTemplatesButtonClick = async() => {
 		return;
 	}
 
+	// Disable the button
+	const { leaveEmailModalButton } = getElements();
+	leaveEmailModalButton.style.setProperty( 'cursor', 'not-allowed' );
+	leaveEmailModalButton.classList.add( 'frm_loading_button' );
+
 	const formData = new FormData();
 	formData.append( 'email', email );
 
@@ -58,12 +63,12 @@ const onGetTemplatesButtonClick = async() => {
 		data = await doJsonPost( 'get_free_templates', formData );
 	} catch ( error ) {
 		console.error( 'An error occurred:', error );
+		showFailedToGetTemplates();
 		return;
 	}
 
 	if ( ! data.success ) {
-		const { leaveEmailModal } = getElements();
-		leaveEmailModal.querySelector( '.inside' ).innerHTML = `<p>${ __( 'Failed to get templates, please try again later.', 'formidable' ) }</p>`;
+		showFailedToGetTemplates();
 		return;
 	}
 
@@ -75,5 +80,18 @@ const onGetTemplatesButtonClick = async() => {
 
 	window.location.reload();
 };
+
+/**
+ * Shows a message indicating that templates could not be retrieved.
+ *
+ * @private
+ * @return {void}
+ */
+function showFailedToGetTemplates() {
+	const { leaveEmailModal } = getElements();
+
+	leaveEmailModal.querySelector( '.inside' ).innerHTML = `<p>${ __( 'Failed to get templates, please try again later.', 'formidable' ) }</p>`;
+	leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
+}
 
 export default addGetFreeTemplatesEvents;
