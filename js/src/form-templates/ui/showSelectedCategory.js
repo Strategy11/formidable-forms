@@ -20,7 +20,7 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
-	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems } = getElements();
+	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems, upsellBanner } = getElements();
 
 	if ( SKELETON_VIEWS.ALL_ITEMS !== selectedCategory ) {
 		hideElements( bodyContentChildren );
@@ -45,7 +45,7 @@ export function showSelectedCategory( selectedCategory ) {
 			break;
 		default:
 			hideElements( templateItems ); // Clear the view for new content
-			showElements([ templatesList, ...categorizedTemplates[ selectedCategory ] ]);
+			showElements([ upsellBanner, templatesList, ...categorizedTemplates[ selectedCategory ] ]);
 			break;
 	}
 }
@@ -167,10 +167,10 @@ export function showAvailableTemplates() {
 		return;
 	}
 
-	const { templatesList, templateItems, availableTemplateItems } = getElements();
+	const { templatesList, templateItems, availableTemplateItems, upsellBanner } = getElements();
 
 	hideElements( templateItems ); // Clear the view for new content
-	showElements([ templatesList, ...availableTemplateItems ]);
+	showElements([ upsellBanner, templatesList, ...availableTemplateItems ]);
 }
 
 export default showSelectedCategory;

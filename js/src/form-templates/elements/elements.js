@@ -23,7 +23,7 @@ addElements({
 	pageTitle: document.getElementById( `${PREFIX}-page-title` ),
 	pageTitleText: document.getElementById( `${PREFIX}-page-title-text` ),
 	pageTitleDivider: document.getElementById( `${PREFIX}-page-title-divider` ),
-	upsellBanner: document.getElementById( `${PREFIX}-upsell-banner` ),
+	upsellBanner: document.getElementById( 'frm-renew-subscription-banner' ) ?? document.getElementById( 'frm-upgrade-banner' ),
 	extraTemplateCountElements: document.querySelectorAll( `.${PREFIX}-extra-templates-count` ),
 
 	// Templates elements
