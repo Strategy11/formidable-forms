@@ -1574,7 +1574,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Get the arguments for inserting a new field.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param {string} fieldType
 	 * @param {string} sectionId
@@ -1598,7 +1598,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if it's a range field type and slider type is not selected.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param {string} fieldType
 	 * @returns {boolean}
@@ -1655,7 +1655,7 @@ function frmAdminBuildJS() {
 					/**
 					 * Fires after a field is added.
 					 *
-					 * @since x.x
+					 * @since 6.23
 					 *
 					 * @param {Object} fieldData            The field data.
 					 * @param {String} fieldData.field      The field HTML.
@@ -1712,7 +1712,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Get the field ID from the response message.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param {String} msg
 	 * @return {Number}
@@ -2113,7 +2113,7 @@ function frmAdminBuildJS() {
 					/**
 					 * Fires after a field is added.
 					 *
-					 * @since x.x
+					 * @since 6.23
 					 *
 					 * @param {Object} fieldData            The field data.
 					 * @param {String} fieldData.field      The field HTML.
@@ -2180,7 +2180,7 @@ function frmAdminBuildJS() {
 							/**
 							 * Fires after a field is added.
 							 *
-							 * @since x.x
+							 * @since 6.23
 							 *
 							 * @param {Object} fieldData            The field data.
 							 * @param {String} fieldData.field      The field HTML.

@@ -374,7 +374,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 == Changelog ==
 = 6.23 =
 * New: The GDPR agreement text can now be translated using the WPML or Polylang add-ons.
-* New: GDPR agreement text will no longer strip a few additional HTML tag types including <b>, <br>, <div>, <em>, <i>, <p>, <span>, and <strong>.
+* New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.
 * New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
 * New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
 * New: One time Stripe payments will now include a Statement Descriptor matching the active Site name by default. A new frm_stripe_statement_descriptor filter has been added to modify the value sent to Stripe.

@@ -53,7 +53,7 @@ describe("Entries submitted from a form", () => {
             const text = $el.text().trim();
             expect(text).to.be.oneOf([
                 "Upgrade to Pro.",
-				"Get 60% Off Pro!"
+                "Get 60% Off Pro!"
             ]);
         })
 
