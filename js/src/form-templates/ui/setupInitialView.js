@@ -92,7 +92,17 @@ function runAvailableTemplatesEffects( element, count ) {
 
 	setTimeout( () => {
 		const { availableTemplateItems } = getElements();
-		availableTemplateItems.forEach( item => item.classList.add( 'frm-background-highlight' ) );
+		availableTemplateItems.forEach( item => {
+			item.classList.add( 'frm-background-highlight' );
+
+			// Remove class after animation completes to prevent restart
+			item.addEventListener( 'animationend', function handleAnimationEnd( event ) {
+				if ( event.animationName === 'backgroundHighlight' ) {
+					this.classList.remove( 'frm-background-highlight' );
+					this.removeEventListener( 'animationend', handleAnimationEnd );
+				}
+			});
+		});
 	}, 750 );
 }
 
