@@ -87,21 +87,28 @@ class FrmEmailStylesController {
 		);
 
 		if ( 'plain' !== $style_key ) {
+			$style_settings = self::get_email_style_settings();
+
 			$atts = array(
 				'inline_style' => true,
 				'email_style'  => $style_key,
-				'cell_padding' => '16px 0',
 			);
 
-			$style_settings = self::get_email_style_settings();
+			if ( 'classic' !== $style_key ) {
+				$atts['border_color'] = '#EAECF0';
+				$atts['cell_padding'] = '16px 0';
+				$atts['bg_color']     = $style_settings['container_bg_color'];
+				$atts['alt_bg_color'] = $style_settings['container_bg_color'];
+				$atts['text_color']   = $style_settings['text_color'];
+			}
 
 			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
 			// This needs to run after the filter for styles.
-			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
+//			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
-			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
+//			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
 
 			$content = $table_generator->generate_table_header();
 			if ( $should_remove_top_bottom_border ) {
@@ -130,18 +137,20 @@ class FrmEmailStylesController {
 				$content = $table_generator->remove_border( $content, 'top' );
 			}
 
-			$content = FrmEmailStylesController::wrap_email_message( $content );
+			if ( 'classic' !== $style_key ) {
+				$content = FrmEmailStylesController::wrap_email_message( $content );
+			}
 
-			$content = '<html>
-				<head>
-					<meta charset="utf-8" />
-					<style>
+			$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
+			if ( 'classic' !== $style_key ) {
+				$wrapped_content .= '<style>
 						body {background-color:' . esc_attr( $style_settings['bg_color'] ) . ';}
 						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
-					</style>
-				</head>
-				<body>' . $content . '</body>
-			</html>';
+					</style>';
+			}
+			$wrapped_content .= '</head><body>' . $content . '</body></html>';
+
+			$content = $wrapped_content;
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
