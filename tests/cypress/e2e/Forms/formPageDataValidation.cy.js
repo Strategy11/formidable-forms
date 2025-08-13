@@ -40,11 +40,11 @@ describe("Forms page", () => {
 
         cy.log("Validate the header logo link");
         cy.get('a.frm-header-logo')
-            .should('have.attr', 'href', origin + "wp-admin/admin.php?page=formidable")
+            .should('have.attr', 'href', origin + "/wp-admin/admin.php?page=formidable")
             .click();
 
         cy.log("Validate the URL after clicking the header logo");
-        cy.url().should('eq', origin + "wp-admin/admin.php?page=formidable");
+        cy.url().should('eq', origin + "/wp-admin/admin.php?page=formidable");
 
         cy.log("Validate other header elements");
         cy.get('h1').should("contain", "Forms");
