@@ -48,6 +48,10 @@
 }
 /* END FadeIn 3d */
 
+.frm-background-highlight {
+	animation: backgroundHighlight 1000ms ease-in forwards;
+}
+
 @keyframes fadeIn {
 	0% {
 		opacity: 0;
@@ -91,5 +95,19 @@
 	100% {
 		opacity: 1;
 		transform: translateY(0);
+	}
+}
+
+@keyframes backgroundHighlight {
+	0% {
+		background-color: var(--primary-25);
+	}
+
+	90% {
+		background-color: var(--primary-25);
+	}
+
+	100% {
+		background-color: #fff;
 	}
 }

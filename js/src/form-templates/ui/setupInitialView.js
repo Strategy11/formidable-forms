@@ -83,12 +83,17 @@ function setupAvailableTemplatesCategory( availableTemplatesCategory ) {
  */
 function runAvailableTemplatesEffects( element, count ) {
 	setTimeout( () => {
+		element.dispatchEvent( new Event( 'click', { bubbles: true } ) );
+	}, 0 );
+
+	setTimeout( () => {
 		counter( element.querySelector( `.${SKELETON_PREFIX}-cat-count` ), count );
 	}, 150 );
 
 	setTimeout( () => {
-		element.dispatchEvent( new Event( 'click', { bubbles: true } ) );
-	}, 0 );
+		const { availableTemplateItems } = getElements();
+		availableTemplateItems.forEach( item => item.classList.add( 'frm-background-highlight' ) );
+	}, 750 );
 }
 
 export default setupInitialView;
