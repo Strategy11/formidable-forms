@@ -90,15 +90,16 @@ class FrmEmailStylesController {
 			$atts = array(
 				'inline_style' => true,
 				'email_style'  => $style_key,
+				'cell_padding' => '16px 0',
 			);
 
 			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
 			// This needs to run after the filter for styles.
-			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_style_settings' ), 20 );
+			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
 			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
-			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_style_settings' ) );
+			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
 
 			$content = $table_generator->generate_table_header();
 			if ( $should_remove_top_bottom_border ) {
@@ -107,10 +108,10 @@ class FrmEmailStylesController {
 
 			foreach ( $table_rows as $index => $row ) {
 				if ( 'compact' === $style_key ) {
-					$table_row = $table_generator->generate_two_cell_table_row( '<div style="padding:9px 0;">' . $row['label'] . '</div>', '<div style="padding:9px 0;">' . $row['value'] . '</div>' );
+					$table_row = $table_generator->generate_two_cell_table_row( '<div>' . $row['label'] . '</div>', '<div>' . $row['value'] . '</div>' );
 				} else {
-					$row_html = '<div style="font-weight:600;padding-top:9px;">' . $row['label'] . '</div>';
-					$row_html .= ( '<div style="padding-bottom:9px;">' . $row['value'] . '</div>' );
+					$row_html = '<div style="font-weight:600;">' . $row['label'] . '</div>';
+					$row_html .= ( '<div>' . $row['value'] . '</div>' );
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
 				}
 
@@ -129,7 +130,13 @@ class FrmEmailStylesController {
 
 			$content = FrmEmailStylesController::wrap_email_message( $content );
 
-			$content = '<html><head><meta charset="utf-8" /><style>body {background-color: #c4c4c4;font-family:Inter,sans-serif;} a {color: red;}</style></head><body>' . $content . '</body>';
+			$content = '<html>
+				<head>
+					<meta charset="utf-8" />
+					<style>body {background-color:#EAECF0;}</style>
+				</head>
+				<body>' . $content . '</body>
+			</html>';
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
@@ -214,7 +221,7 @@ class FrmEmailStylesController {
 		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
 	}
 
-	public static function override_style_settings( $style_settings ) {
+	public static function override_table_style_settings( $style_settings ) {
 		$style_settings['border_color'] = '#EAECF0';
 		$style_settings['text_color'] = '#1D2939';
 		return $style_settings;

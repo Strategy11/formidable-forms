@@ -54,6 +54,15 @@ class FrmTableHTMLGenerator {
 	protected $td_style = '';
 
 	/**
+	 * Cell padding.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	protected $cell_padding = '7px 9px';
+
+	/**
 	 * Used to add a class in tables. Set in Pro.
 	 *
 	 * @var bool
@@ -70,6 +79,11 @@ class FrmTableHTMLGenerator {
 	public function __construct( $type, $atts = array() ) {
 
 		$this->type = (string) $type;
+
+		if ( isset( $atts['cell_padding'] ) ) {
+			$this->cell_padding = $atts['cell_padding'];
+		}
+
 		$this->init_style_settings( $atts );
 		$this->init_use_inline_style( $atts );
 		$this->init_direction( $atts );
@@ -166,7 +180,7 @@ class FrmTableHTMLGenerator {
 		if ( $this->use_inline_style === true ) {
 
 			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:7px 9px;vertical-align:top;';
+			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
 			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
 
 			$this->td_style = ' style="' . $td_style_attributes . '"';
