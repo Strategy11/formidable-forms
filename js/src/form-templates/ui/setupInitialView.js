@@ -2,7 +2,8 @@
  * External dependencies
  */
 import { HIDE_JS_CLASS } from 'core/constants';
-import { frmAnimate, hasQueryParam, hideElements, show, removeParamFromHistory } from 'core/utils';
+import { frmAnimate, hasQueryParam, hideElements, removeParamFromHistory } from 'core/utils';
+import { counter } from 'core/ui';
 import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
 
 /**
@@ -25,7 +26,7 @@ function setupInitialView() {
 		bodyContent,
 		twinFeaturedTemplateItems,
 		availableTemplatesCategory,
-		extraTemplateCountElements,
+		extraTemplateCountElements
 	} = getElements();
 
 	const bodyContentAnimate = new frmAnimate( bodyContent );
@@ -35,18 +36,7 @@ function setupInitialView() {
 	// Hide the twin featured template items
 	hideElements( twinFeaturedTemplateItems );
 
-	// Set the 'Available Templates' count if it is present
-	if ( availableTemplatesCategory ) {
-		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = getSingleState( 'availableTemplatesCount' );
-
-		// Click the 'Available Templates' category if the 'registered-for-free-templates' query param is present
-		if ( hasQueryParam( 'registered-for-free-templates' ) ) {
-			removeParamFromHistory( 'registered-for-free-templates' );
-			setTimeout( () => {
-				availableTemplatesCategory.dispatchEvent( new Event( 'click', { bubbles: true } ) );
-			}, 0 );
-		}
-	}
+	setupAvailableTemplatesCategory( availableTemplatesCategory );
 
 	// Update extra templates count
 	extraTemplateCountElements.forEach( element => element.textContent = getSingleState( 'extraTemplatesCount' ) );
@@ -55,12 +45,50 @@ function setupInitialView() {
 	bodyContent.classList.remove( HIDE_JS_CLASS );
 	sidebar.classList.remove( HIDE_JS_CLASS );
 	bodyContentAnimate.fadeIn();
-	show( sidebar );
 
 	// Show the "Cancel" button in the header if the 'return_page' query param is present
 	if ( hasQueryParam( 'return_page' ) ) {
 		showHeaderCancelButton();
 	}
+}
+
+/**
+ * Sets up the 'Available Templates' category with proper count display
+ *
+ * @param {Element} availableTemplatesCategory The Available Templates category element
+ * @return {void}
+ */
+function setupAvailableTemplatesCategory( availableTemplatesCategory ) {
+	if ( ! availableTemplatesCategory ) {
+		return;
+	}
+
+	const availableTemplatesCount = getSingleState( 'availableTemplatesCount' );
+	if ( ! hasQueryParam( 'registered-for-free-templates' ) ) {
+		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
+		return;
+	}
+
+	removeParamFromHistory( 'registered-for-free-templates' );
+	runAvailableTemplatesEffects( availableTemplatesCategory, availableTemplatesCount );
+}
+
+/**
+ * Runs effects for the Available Templates category when the
+ * 'registered-for-free-templates' query parameter is present.
+ *
+ * @param {Element} element The Available Templates category element
+ * @param {number}  count   The count of available templates
+ * @return {void}
+ */
+function runAvailableTemplatesEffects( element, count ) {
+	setTimeout( () => {
+		counter( element.querySelector( `.${SKELETON_PREFIX}-cat-count` ), count );
+	}, 150 );
+
+	setTimeout( () => {
+		element.dispatchEvent( new Event( 'click', { bubbles: true } ) );
+	}, 0 );
 }
 
 export default setupInitialView;
