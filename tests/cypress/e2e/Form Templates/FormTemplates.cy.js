@@ -267,7 +267,8 @@ describe("Form Templates page", () => {
     it("add templates as favorites, view demo and use templates", () => {
 
         cy.log("Add contact us template as favorite");
-        cy.get('li[frm-search-text="contact us"]').first()
+		cy.contains('li', 'Contact Us', { timeout: 10000 })
+			.first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-item-favorite-button')
             .click({ force: true });
@@ -283,7 +284,8 @@ describe("Form Templates page", () => {
         cy.get('[data-category="all-items"]').should("contain", "All Templates").click();
 
         cy.log("View demo of the contact us template");
-        cy.get('li[frm-search-text="contact us"]').first()
+		cy.contains('li', 'Contact Us', { timeout: 10000 })
+			.first()
             .trigger('mouseover', { force: true })
             .find('.frm-button-secondary')
             .invoke('removeAttr', 'target')
@@ -297,7 +299,8 @@ describe("Form Templates page", () => {
 
         cy.visit('/wp-admin/admin.php?page=formidable-form-templates');
 
-        cy.get('li[frm-search-text="contact us"]').first()
+        cy.contains('li', 'Contact Us', { timeout: 10000 })
+			.first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should("contain", "Use Template");
@@ -305,13 +308,15 @@ describe("Form Templates page", () => {
         cy.log("Try to use available templates");
         cy.get('[data-category="available-templates"]').should("contain", "Available Templates").click();
         cy.get('#frm-form-templates-page-title-text').should("contain", "Available Templates");
-        cy.get('li[frm-search-text="contact us"]').first()
+        cy.contains('li', 'Contact Us', { timeout: 10000 })
+			.first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should('contain', 'Use Template')
             .click({ force: true });
 
-        cy.get('li[frm-search-text="contact us"]').first()
+        cy.contains('li', 'Contact Us', { timeout: 10000 })
+			.first()
             .trigger('mouseover', { force: true })
             .find('.frm-form-templates-use-template-button')
             .should('contain', 'Use Template')
