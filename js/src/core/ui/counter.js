@@ -18,14 +18,13 @@ const counter = ( element, value, options = {} ) => {
 		return null;
 	}
 
-	// Validate and convert value
 	const targetValue = typeof value === 'number' ? value : parseInt( value, 10 );
 	if ( isNaN( targetValue ) ) {
 		console.warn( 'Counter: Invalid value provided, defaulting to 0' );
 		return setElementValueAndReturn( targetElement, '0' );
 	}
 
-	// Don't run animation if sent value is 0
+	// Don't run the animation if the sent value is 0
 	if ( targetValue === 0 ) {
 		return setElementValueAndReturn( targetElement, '0' );
 	}
