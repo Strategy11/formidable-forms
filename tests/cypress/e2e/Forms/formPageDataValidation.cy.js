@@ -7,6 +7,7 @@ describe("Forms page", () => {
         cy.visit('/wp-admin/admin.php?page=formidable');
         cy.createNewForm(formTitle);
         cy.viewport(1280, 720);
+
     });
 
     it("should validate all data in list view", () => {
