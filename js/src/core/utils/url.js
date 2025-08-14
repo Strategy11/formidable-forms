@@ -51,3 +51,12 @@ export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState'
  * @return {boolean} True if the query parameter exists, otherwise false.
  */
 export const hasQueryParam = paramName => urlParams.has( paramName );
+
+/**
+ * Removes a query parameter and updates history with replaceState.
+ *
+ * @param {string} paramName The query parameter to remove.
+ * @return {void}
+ */
+export const removeParamFromHistory = ( paramName ) =>
+	history.replaceState( {}, '', removeQueryParam( paramName ) );
