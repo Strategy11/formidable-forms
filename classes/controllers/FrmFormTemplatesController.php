@@ -397,6 +397,13 @@ class FrmFormTemplatesController {
 
 		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
+				WP_Http::BAD_REQUEST
+			);
+		}
+
 		self::$form_template_api = new FrmFormTemplateApi();
 		self::$form_template_api->reset_cached();
 
