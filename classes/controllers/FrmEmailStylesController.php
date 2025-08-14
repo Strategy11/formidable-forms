@@ -95,7 +95,7 @@ class FrmEmailStylesController {
 			);
 
 			if ( 'classic' !== $style_key ) {
-				$atts['border_color'] = '#EAECF0';
+				$atts['border_color'] = $style_settings['border_color'];
 				$atts['cell_padding'] = '16px 0';
 				$atts['bg_color']     = $style_settings['container_bg_color'];
 				$atts['alt_bg_color'] = $style_settings['container_bg_color'];
@@ -235,12 +235,6 @@ class FrmEmailStylesController {
 		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
 	}
 
-	public static function override_table_style_settings( $style_settings ) {
-		$style_settings['border_color'] = '#EAECF0';
-		$style_settings['text_color'] = '#1D2939';
-		return $style_settings;
-	}
-
 	public static function show_upsell_settings() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';
 	}
@@ -257,6 +251,7 @@ class FrmEmailStylesController {
 				'container_bg_color' => '#ffffff',
 				'text_color'         => '#475467',
 				'link_color'         => '#4199FD',
+				'border_color'       => '#dddddd',
 				'font'               => '',
 			),
 		);
@@ -313,10 +308,40 @@ class FrmEmailStylesController {
 		}
 
 		// The message.
-		$new_message .= $message;
+		$new_message .= self::add_inline_css( 'a', 'color:' . $style_settings['link_color'] . ';', $message );
 
 		$new_message .= '</div></div></div>';
 
 		return $new_message;
+	}
+
+	private static function add_inline_css( $tag, $css, $content ) {
+		$regex = '/<' . $tag . '.*?>/msi';
+		preg_match_all( $regex, $content, $matches, PREG_SET_ORDER );
+
+		if ( ! $matches ) {
+			return $content;
+		}
+
+		$searches = array();
+		$replaces = array();
+
+		foreach ( $matches as $match ) {
+			$searches[] = $match[0];
+			$replaces[] = self::add_css_to_style_attr( $tag, $css, $match[0] );
+		}
+
+		return str_replace( $searches, $replaces, $content );
+	}
+
+	private static function add_css_to_style_attr( $tag, $css, $html ) {
+		$regex = '/\sstyle=("|\')/mi';
+		if ( preg_match( $regex, $html, $matches ) ) {
+			$search = $matches[0];
+			$replace = $search . $css;
+			return preg_replace( $regex, $replace, $html );
+		}
+
+		return str_replace( '<' . $tag, '<' . $tag . ' style="' . $css . '"', $html );
 	}
 }
