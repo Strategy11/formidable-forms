@@ -245,10 +245,11 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
+	 * @since x.x    Changed scope from `protected` to `public`.
 	 *
 	 * @return string
 	 */
-	protected function tr_style() {
+	public function tr_style() {
 
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
@@ -259,6 +260,14 @@ class FrmTableHTMLGenerator {
 		}
 
 		return $tr_style;
+	}
+
+	public function get_table_style() {
+		return $this->table_style;
+	}
+
+	public function get_td_style() {
+		return $this->td_style;
 	}
 
 	/**

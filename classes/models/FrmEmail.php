@@ -883,6 +883,7 @@ class FrmEmail {
 			'plain_text'  => $this->is_plain_text,
 			'form'        => $this->form,
 			'entry'       => $this->entry,
+			'email_style' => $this->settings['email_style'],
 		);
 	}
 

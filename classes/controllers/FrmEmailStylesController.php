@@ -89,25 +89,12 @@ class FrmEmailStylesController {
 		if ( 'plain' !== $style_key ) {
 			$style_settings = self::get_email_style_settings();
 
-			$atts = array(
-				'inline_style' => true,
-				'email_style'  => $style_key,
-			);
-
-			if ( 'classic' !== $style_key ) {
-				$atts['border_color'] = $style_settings['border_color'];
-				$atts['cell_padding'] = '16px 0';
-				$atts['bg_color']     = $style_settings['container_bg_color'];
-				$atts['alt_bg_color'] = $style_settings['container_bg_color'];
-				$atts['text_color']   = $style_settings['text_color'];
-			}
-
 			$should_remove_border            = 'sleek' === $style_key;
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
 			// This needs to run after the filter for styles.
 //			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
-			$table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
+			$table_generator = self::get_table_generator();
 //			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
 
 			$content = $table_generator->generate_table_header();
@@ -159,6 +146,29 @@ class FrmEmailStylesController {
 		}
 
 		return $content;
+	}
+
+	public static function get_table_generator( $email_style = false ) {
+		if ( false === $email_style ) {
+			$email_style = self::get_email_style();
+		}
+
+		$style_settings = self::get_email_style_settings();
+
+		$atts = array(
+			'inline_style' => true,
+			'email_style'  => $email_style,
+		);
+
+		if ( 'classic' !== $email_style ) {
+			$atts['border_color'] = $style_settings['border_color'];
+			$atts['cell_padding'] = '16px 0';
+			$atts['bg_color']     = $style_settings['container_bg_color'];
+			$atts['alt_bg_color'] = $style_settings['container_bg_color'];
+			$atts['text_color']   = $style_settings['text_color'];
+		}
+
+		return new FrmTableHTMLGenerator( 'entry', $atts );
 	}
 
 	public static function ajax_preview() {
