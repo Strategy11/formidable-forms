@@ -1,6 +1,11 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
+/**
+ * WordPress dependencies
+ */
+const { _x } = wp.i18n;
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -1612,7 +1617,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {		
+	function insertNewFieldByDragging( fieldType ) {
 		if ( shouldStopInsertingField( fieldType ) ) {
 			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
 			return;
@@ -1667,7 +1672,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2125,7 +2130,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2156,7 +2161,7 @@ function frmAdminBuildJS() {
 
 	function insertFormField( fieldType, fieldOptions = {} ) {
 
-		return new Promise( ( resolve ) => {			
+		return new Promise( ( resolve ) => {
 			const formId = thisFormId;
 			let hasBreak = 0;
 
@@ -6080,6 +6085,10 @@ function frmAdminBuildJS() {
 			if ( separateValues ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
+
+				if ( '' === label ) {
+					label = '' !== saved ? saved : _x( 'Untitled', 'dropdown option label', 'formidable' );
+				}
 			}
 
 			if ( hasImageOptions ) {
