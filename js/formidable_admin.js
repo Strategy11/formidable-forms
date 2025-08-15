@@ -1,6 +1,11 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
+/**
+ * WordPress dependencies
+ */
+const { _x } = wp.i18n;
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -6080,6 +6085,10 @@ function frmAdminBuildJS() {
 			if ( separateValues ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
+
+				if ( '' === label ) {
+					label = '' !== saved ? saved : _x( 'Untitled', 'dropdown option label', 'formidable' );
+				}
 			}
 
 			if ( hasImageOptions ) {
