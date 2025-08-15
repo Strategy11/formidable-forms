@@ -1612,7 +1612,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {		
+	function insertNewFieldByDragging( fieldType ) {
 		if ( shouldStopInsertingField( fieldType ) ) {
 			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
 			return;
@@ -1667,7 +1667,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2125,7 +2125,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2156,7 +2156,7 @@ function frmAdminBuildJS() {
 
 	function insertFormField( fieldType, fieldOptions = {} ) {
 
-		return new Promise( ( resolve ) => {			
+		return new Promise( ( resolve ) => {
 			const formId = thisFormId;
 			let hasBreak = 0;
 
