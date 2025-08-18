@@ -79,7 +79,7 @@ class FrmFieldOption {
 	 * @return void
 	 */
 	public function print_single_option( $selected_value, $truncate, $use_value_as_label = false ) {
-		if ( '' !== $this->saved_value && ! $use_value_as_label ) {
+		if ( '' === $this->saved_value && ! $use_value_as_label ) {
 			return;
 		}
 
