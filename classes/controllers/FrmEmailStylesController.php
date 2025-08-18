@@ -94,7 +94,7 @@ class FrmEmailStylesController {
 
 			// This needs to run after the filter for styles.
 //			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
-			$table_generator = self::get_table_generator();
+			$table_generator = self::get_table_generator( $style_key );
 //			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
 
 			$content = $table_generator->generate_table_header();
