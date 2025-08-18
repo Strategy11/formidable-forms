@@ -6,6 +6,7 @@
 **/formidable_dashboard.js
 **/formidable-templates.js
 **/formidable_styles.js
+js/formidable_admin.js
 
 **/node_modules/**
 **/vendor/**
