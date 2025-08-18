@@ -6013,8 +6013,8 @@ function frmAdminBuildJS() {
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
-		let opts = getMultipleOpts( sourceID ),
-		hasPlaceholder = ( typeof placeholder !== 'undefined' );
+		let opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
+		let hasPlaceholder = ( typeof placeholder !== 'undefined' );
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let label = opts[ i ].label,
@@ -6055,7 +6055,13 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function getMultipleOpts( fieldId ) {
+	/**
+	 * Get multiple options for a field.
+	 *
+	 * @param {string}  fieldId          The field id.
+	 * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
+	 */
+	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
 		let i, saved, labelName, label, key, optObj,
 			fieldType,
 			checked = false,
@@ -6080,6 +6086,10 @@ function frmAdminBuildJS() {
 			if ( separateValues ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
+
+				if ( showValueAsLabel && '' === label ) {
+					label = '' !== saved ? saved : _x( 'Untitled', 'dropdown option label', 'formidable' );
+				}
 			}
 
 			if ( hasImageOptions ) {
