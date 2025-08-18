@@ -287,7 +287,7 @@ class FrmFieldValueSelector {
 				}
 
 				$option = $this->get_single_field_option( $key, $value );
-				$option->print_single_option( $this->value, $truncate );
+				$option->print_single_option( $this->value, $truncate, str_contains( $this->html_name, 'hide_opt' ) );
 			}
 		}
 
