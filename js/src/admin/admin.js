@@ -6088,7 +6088,7 @@ function frmAdminBuildJS() {
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
 
 				if ( showValueAsLabel && '' === label ) {
-					label = '' !== saved ? saved : _x( 'Untitled', 'dropdown option label', 'formidable' );
+					label = '' !== saved ? saved : frm_admin_js.no_label; // eslint-disable-line camelcase
 				}
 			}
 
