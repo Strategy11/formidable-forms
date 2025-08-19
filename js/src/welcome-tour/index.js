@@ -3,6 +3,11 @@
  */
 import domReady from '@wordpress/dom-ready';
 
+/**
+ * Internal dependencies
+ */
+import { initializeModal } from './ui';
+
 domReady( () => {
-	// TODO: Add welcome tour logic
+	initializeModal();
 } );
