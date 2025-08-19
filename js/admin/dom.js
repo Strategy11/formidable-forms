@@ -72,7 +72,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal );
+			makeModalIntoADialogAndOpen( modal, { width } );
 			return modal;
 		},
 		footerButton: args => {
