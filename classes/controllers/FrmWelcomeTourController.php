@@ -84,12 +84,14 @@ class FrmWelcomeTourController {
 			return;
 		}
 
-		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
-
-		if ( FrmDashboardController::is_dashboard_page() && empty( self::$checklist['seen'] ) ) {
-			add_action( 'admin_footer', __CLASS__ . '::render_modal' );
-			return;
+		if ( self::is_welcome_tour_not_seen() ) {
+			self::mark_welcome_tour_as_seen();
 		}
+		// TODO: remove this after development
+		self::$checklist['seen'] = false;
+		self::set_checklist( self::$checklist );
+
+		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 
 		add_action( 'admin_menu', __CLASS__ . '::menu', 1 );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
@@ -98,15 +100,14 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Renders a modal component in the WordPress admin area.
+	 * Checks if the welcome tour has been seen.
 	 *
 	 * @since x.x
 	 *
-	 * @return void
+	 * @return bool True if the welcome tour has been seen, false otherwise.
 	 */
-	public static function render_modal() {
-		self::mark_welcome_tour_as_seen();
-		include self::$view_path . 'get-started-modal.php';
+	private static function is_welcome_tour_not_seen() {
+		return FrmDashboardController::is_dashboard_page() && empty( self::$checklist['seen'] );
 	}
 
 	/**
@@ -120,7 +121,6 @@ class FrmWelcomeTourController {
 		self::$checklist['seen'] = true;
 		self::set_checklist( self::$checklist );
 	}
-
 
 	/**
 	 * Add Welcome Tour menu item to sidebar.
@@ -223,7 +223,8 @@ class FrmWelcomeTourController {
 	 */
 	private static function get_js_variables() {
 		return array(
-			'INITIAL_STEP' => self::$checklist['step'] ?? self::INITIAL_STEP,
+			'INITIAL_STEP'         => self::$checklist['step'] ?? self::INITIAL_STEP,
+			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
 		);
 	}
 
