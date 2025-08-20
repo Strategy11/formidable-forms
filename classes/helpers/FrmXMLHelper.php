@@ -1707,7 +1707,7 @@ class FrmXMLHelper {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
-		} elseif ( seems_utf8( $str ) === false ) {
+		} elseif ( FrmAppHelper::is_valid_utf8( $str ) === false ) {
 			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
