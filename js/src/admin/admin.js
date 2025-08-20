@@ -1612,7 +1612,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {		
+	function insertNewFieldByDragging( fieldType ) {
 		if ( shouldStopInsertingField( fieldType ) ) {
 			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
 			return;
@@ -1667,7 +1667,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2125,7 +2125,7 @@ function frmAdminBuildJS() {
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2156,7 +2156,7 @@ function frmAdminBuildJS() {
 
 	function insertFormField( fieldType, fieldOptions = {} ) {
 
-		return new Promise( ( resolve ) => {			
+		return new Promise( ( resolve ) => {
 			const formId = thisFormId;
 			let hasBreak = 0;
 
@@ -6013,8 +6013,8 @@ function frmAdminBuildJS() {
 			showOther = atts.other;
 
 		removeDropdownOpts( field );
-		let opts = getMultipleOpts( sourceID ),
-		hasPlaceholder = ( typeof placeholder !== 'undefined' );
+		let opts = getMultipleOpts( sourceID, field.id.includes( 'frm_field_logic_opt' ) );
+		let hasPlaceholder = ( typeof placeholder !== 'undefined' );
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let label = opts[ i ].label,
@@ -6055,7 +6055,13 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function getMultipleOpts( fieldId ) {
+	/**
+	 * Get multiple options for a field.
+	 *
+	 * @param {string}  fieldId          The field id.
+	 * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
+	 */
+	function getMultipleOpts( fieldId, showValueAsLabel = false ) {
 		let i, saved, labelName, label, key, optObj,
 			fieldType,
 			checked = false,
@@ -6080,6 +6086,10 @@ function frmAdminBuildJS() {
 			if ( separateValues ) {
 				labelName = optVals[ i ].name.replace( '[label]', '[value]' );
 				saved = jQuery( 'input[name="' + labelName + '"]' ).val();
+
+				if ( showValueAsLabel && '' === label ) {
+					label = '' !== saved ? saved : frm_admin_js.no_label; // eslint-disable-line camelcase
+				}
 			}
 
 			if ( hasImageOptions ) {
