@@ -51,10 +51,17 @@ i.frm-show-inline-modal,
 	top: 0;
 }
 
-.frm_form_settings .wp-editor-container .frm-with-right-icon .frmsvg,
-#frm_builder_page .wp-editor-container .frm-with-right-icon .frmsvg {
-	top: auto;
-	bottom: var(--gap-lg);
+.frm_form_settings,
+#frm_builder_page  {
+
+	.wp-editor-container .frm-with-right-icon .frmsvg {
+		top: auto;
+		bottom: var(--gap-sm);
+	}
+
+	.tmce-active .wp-editor-container .frm-with-right-icon .frmsvg {
+		bottom: var(--gap-lg);
+	}
 }
 
 .frm_form_settings .frm_has_textarea .frm-with-right-icon .frmsvg {
