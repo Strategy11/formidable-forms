@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.8.1
+Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 6.22.3
+Stable tag: 6.23
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,24 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.23 =
+* New: The GDPR agreement text can now be translated using the WPML or Polylang add-ons.
+* New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.
+* New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
+* New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
+* New: One time Stripe payments will now include a Statement Descriptor matching the active Site name by default. A new frm_stripe_statement_descriptor filter has been added to modify the value sent to Stripe.
+* New: Generated table data row labels will now include scope="row" to help with accessibility.
+* Fix: Option validation would fail in rare cases when a field that does not support options incorrectly has option data defined.
+* Fix: In some cases, calculation settings using < and > characters would only partially save.
+* Fix: The auto width setting for dropdowns would not properly appear enabled.
+* Fix: The deactivation pop-up has been updated to help prevent issues where the confirmation buttons were not visible because of an overflow issue.
+* Fix: Denylist terms using forward slashes would not match spam data as expected.
+* Fix: Square buyer tokens are now re-used when nothing has changed to prevent an "An unexpected error occurred verifying buyer" error from Square.
+* Fix: Captcha validation would fail when trying to submit a Square payment.
+* Fix: Stripe payment fields would not appear correctly when using a version of Pro older than 6.21.
+* Fix: Previous attempts to delete a field would re-trigger when deleting a field group, causing unexpected JS errors and issues with deleting a field unintentionally.
+* The deprecated filter frm_email_value has been removed.
+
 = 6.22.3 =
 * Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
 
@@ -380,11 +398,11 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 
 = 6.22.1 =
 * New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
-* Fix: The honeypot field would appear incorrectly when editing in-place.
+* Fix: The honeypot would appear incorrectly when editing in-place.
 * Fix: Field IDs would not properly update when importing a Timeline view.
 * Fix: Database queries would not use cached query data when the query resulted in no results.
 * Fix: Name fields would not work correctly when using the minimize=1 option.
-* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+* Form previews are now automatically restricted to privileged users for the contact-us key to help prevent spam.
 
 = 6.22 =
 * New: Support for Square payments has been added.
@@ -393,21 +411,13 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
 * Fix: Option validation would fail in cases where the option data was modified using the_content filter.
 * Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
-* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
+* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox.
 * Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
-* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
+* Fix: Honeypots would not properly get hidden for forms loaded in the footer.
 * Fix: An extra empty set of columns would appear for comments when exporting as CSV.
-* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
-* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
+* Fix: A JavaScript error would occur for inline modals in the builder after deleting a field.
+* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox.
 * Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
-
-= 6.21.1 =
-* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
-* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
-* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
-* New: All spam checks are now disabled when importing forms.
-* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
-* Fix: User defined product fields would fail validation.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
