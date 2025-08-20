@@ -8,6 +8,7 @@
 	flex-direction: column;
 	font-size: var(--text-sm);
 	justify-content: space-around;
+	min-width: 0; /* Allows flex items to shrink below content size */
 }
 
 .frm_image_styling_frame {
@@ -15,6 +16,7 @@
 	align-items: stretch;
 	margin-left: 36px;
 	margin-bottom: var(--gap-xs);
+	width: 100%;
 
 	img {
 		height: 54px;
@@ -38,6 +40,8 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+	min-width: 0; /* Critical for text truncation in flex */
+	flex: 1 1 auto; /* Better flex behavior */
 }
 
 .frm_wrap .frm_choose_image_box {
