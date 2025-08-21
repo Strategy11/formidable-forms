@@ -364,7 +364,7 @@ function frmAdminBuildJS() {
 		wp.hooks.doAction( 'frmAdmin.beforeOpenConfirmModal', { $info, link });
 
 		$info.dialog( 'open' );
-		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) );
+		continueButton.setAttribute( 'href', link.getAttribute( 'href' ) || link.getAttribute( 'data-href' ) );
 		return false;
 	}
 
@@ -1572,11 +1572,52 @@ function frmAdminBuildJS() {
 	}
 
 	/**
+	 * Get the arguments for inserting a new field.
+	 *
+	 * @since 6.23
+	 *
+	 * @param {string} fieldType
+	 * @param {string} sectionId
+	 * @param {string} formId
+	 * @param {Number} hasBreak
+	 *
+	 * @returns {Object}
+	 */
+	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
+		return {
+			action: 'frm_insert_field',
+			form_id: formId,
+			field_type: fieldType,
+			section_id: sectionId,
+			nonce: frmGlobal.nonce,
+			has_break: hasBreak,
+			last_row_field_ids: getFieldIdsInSubmitRow()
+		};
+	}
+
+	/**
+	 * Returns true if it's a range field type and slider type is not selected.
+	 *
+	 * @since 6.23
+	 *
+	 * @param {string} fieldType
+	 * @returns {boolean}
+	 */
+	function shouldStopInsertingField( fieldType ) {
+		return wp.hooks.applyFilters( 'frm_should_stop_inserting_field', false, fieldType  );
+	}
+
+	/**
 	 * Add a new field by dragging and dropping it from the Fields sidebar
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {
+	function insertNewFieldByDragging( fieldType ) {		
+		if ( shouldStopInsertingField( fieldType ) ) {
+			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
+			return;
+		}
+
 		const placeholder  = document.getElementById( 'frm_drag_placeholder' );
 		const loadingID    = fieldType.replace( '|', '-' ) + '_' + getAutoId();
 		const loading      = tag(
@@ -1603,48 +1644,82 @@ function frmAdminBuildJS() {
 		}
 
 		jQuery.ajax({
-			type: 'POST', url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: sectionId,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			type: 'POST',
+			url: ajaxurl,
+			data: getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ),
 			success: function( msg ) {
-				let replaceWith;
-				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
-				if ( ! $siblings.length ) {
-					// if dragging into a new row, we need to wrap the li first.
-					replaceWith = wrapFieldLi( msg );
-				} else {
-					replaceWith = msgAsjQueryObject( msg );
-					if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
-						// If a field group wasn't draggable because it only had a single field, make it draggable.
-						makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
-					}
-				}
-				$placeholder.replaceWith( replaceWith );
-				updateFieldOrder();
-				afterAddField( msg, false );
-				if ( $siblings.length ) {
-					syncLayoutClasses( $siblings.first() );
-				}
-				toggleSectionHolder();
+				handleInsertFieldByDraggingResponse( msg, $placeholder );
 
-				if ( ! $siblings.length ) {
-					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
-					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
-				} else {
-					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+				const fieldId = checkMsgForFieldId( msg );
+				if ( fieldId ) {
+					/**
+					 * Fires after a field is added.
+					 *
+					 * @since 6.23
+					 *
+					 * @param {Object} fieldData            The field data.
+					 * @param {String} fieldData.field      The field HTML.
+					 * @param {String} fieldData.field_type The field type.
+					 * @param {String} fieldData.form_id    The form ID.
+					 */
+					wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
+						field: msg,
+						fieldId,
+						fieldType,
+						form_id: formId,
+					});	
 				}
-
 			},
 			error: handleInsertFieldError
 		});
+	}
+
+	/**
+	 * @param {String} msg
+	 * @param {Object} $placeholder jQuery object.
+	 */
+	function handleInsertFieldByDraggingResponse( msg, $placeholder ) {
+		let replaceWith;
+		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		const $siblings = $placeholder.siblings( 'li.form-field' ).not( '.edit_field_type_end_divider' );
+
+		if ( ! $siblings.length ) {
+			// if dragging into a new row, we need to wrap the li first.
+			replaceWith = wrapFieldLi( msg );
+		} else {
+			replaceWith = msgAsjQueryObject( msg );
+			if ( ! $placeholder.get( 0 ).parentNode.parentNode.classList.contains( 'ui-draggable' ) ) {
+				// If a field group wasn't draggable because it only had a single field, make it draggable.
+				makeDraggable( $placeholder.get( 0 ).parentNode.parentNode, '.frm-move' );
+			}
+		}
+		$placeholder.replaceWith( replaceWith );
+		updateFieldOrder();
+		afterAddField( msg, false );
+		if ( $siblings.length ) {
+			syncLayoutClasses( $siblings.first() );
+		}
+		toggleSectionHolder();
+
+		if ( ! $siblings.length ) {
+			makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
+			makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
+		} else {
+			makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+		}
+	}
+
+	/**
+	 * Get the field ID from the response message.
+	 *
+	 * @since 6.23
+	 *
+	 * @param {String} msg
+	 * @return {Number}
+	 */
+	function checkMsgForFieldId( msg ) {
+		const result = msg.match( /data-fid="(\d+)"/ );
+		return result ? parseInt( result[1] ) : 0;
 	}
 
 	function getFieldIdsInSubmitRow() {
@@ -2016,6 +2091,10 @@ function frmAdminBuildJS() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
+		if ( shouldStopInsertingField( fieldType ) ) {
+			return;
+		}
+
 		let hasBreak = 0;
 		if ( 'summary' === fieldType ) {
 			hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
@@ -2025,38 +2104,101 @@ function frmAdminBuildJS() {
 		jQuery.ajax({
 			type: 'POST',
 			url: ajaxurl,
-			data: {
-				action: 'frm_insert_field',
-				form_id: formId,
-				field_type: fieldType,
-				section_id: 0,
-				nonce: frmGlobal.nonce,
-				has_break: hasBreak,
-				last_row_field_ids: getFieldIdsInSubmitRow()
-			},
+			data: getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ),
 			success: function( msg ) {
-				document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
-				const replaceWith = wrapFieldLi( msg );
+				handleAddFieldClickResponse( msg );
 
-				const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
-				if ( ! submitField ) {
-					$newFields.append( replaceWith );
-				} else {
-					jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
+				const fieldId = checkMsgForFieldId( msg );
+				if ( fieldId ) {
+					/**
+					 * Fires after a field is added.
+					 *
+					 * @since 6.23
+					 *
+					 * @param {Object} fieldData            The field data.
+					 * @param {String} fieldData.field      The field HTML.
+					 * @param {String} fieldData.field_type The field type.
+					 * @param {String} fieldData.form_id    The form ID.
+					 */
+					wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
+						field: msg,
+						fieldId,
+						fieldType,
+						form_id: formId,
+					});	
 				}
-
-				afterAddField( msg, true );
-
-				replaceWith.each(
-					function() {
-						makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
-						makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
-					}
-				);
 			},
 			error: handleInsertFieldError
 		});
 		return false;
+	}
+
+	function handleAddFieldClickResponse( msg ) {
+		document.getElementById( 'frm_form_editor_container' ).classList.add( 'frm-has-fields' );
+		const replaceWith = wrapFieldLi( msg );
+		const submitField = $newFields[0].querySelector( '.edit_field_type_submit' );
+
+		if ( ! submitField ) {
+			$newFields.append( replaceWith );
+		} else {
+			jQuery( submitField.closest( '.frm_field_box:not(.form-field)' ) ).before( replaceWith );
+		}
+
+		afterAddField( msg, true );
+
+		replaceWith.each(
+			function() {
+				makeDroppable( this.querySelector( 'ul.frm_sorting' ) );
+				makeDraggable( this.querySelector( '.form-field' ), '.frm-move' );
+			}
+		);
+	}
+
+	function insertFormField( fieldType, fieldOptions = {} ) {
+
+		return new Promise( ( resolve ) => {			
+			const formId = thisFormId;
+			let hasBreak = 0;
+
+			if ( 'summary' === fieldType ) {
+				hasBreak = $newFields.children( 'li[data-type="break"]' ).length > 0 ? 1 : 0;
+			}
+
+			jQuery.ajax({
+				type: 'POST',
+				url: ajaxurl,
+				data: Object.assign( getInsertNewFieldArgs( fieldType, 0, formId, hasBreak ), { field_options: fieldOptions } ),
+				success: function( msg ) {
+					resolve( msg );
+
+					setTimeout( () => {
+						updateFieldOrder();
+						afterAddField( msg, true );
+
+						const fieldId = checkMsgForFieldId( msg );
+						if ( fieldId ) {
+							/**
+							 * Fires after a field is added.
+							 *
+							 * @since 6.23
+							 *
+							 * @param {Object} fieldData            The field data.
+							 * @param {String} fieldData.field      The field HTML.
+							 * @param {String} fieldData.field_type The field type.
+							 * @param {String} fieldData.form_id    The form ID.
+							 */
+							wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
+								field: msg,
+								fieldId,
+								fieldType,
+								form_id: formId,
+							});
+						}
+					}, 10 );
+				},
+				error: handleInsertFieldError
+			});
+		} );
 	}
 
 	function maybeHideQuantityProductFieldOption() {
@@ -4694,9 +4836,15 @@ function frmAdminBuildJS() {
 		this.setAttribute( 'data-frmverify', confirmFieldsDeleteMessage( fieldIdsToDelete.length ) );
 		confirmLinkClick( this );
 
-		jQuery( '#frm-confirmed-click' ).on( 'click', deleteOnConfirm );
+		const confirmedClick = document.getElementById( 'frm-confirmed-click' );
+
+		// Remove any previous delete field data so delete confirmation does not attempt
+		// to delete a field that was already deleted or previously attempted and cancelled.
+		confirmedClick?.removeAttribute( 'data-deletefield' );
+
+		jQuery( confirmedClick ).on( 'click', deleteOnConfirm );
 		jQuery( '#frm_confirm_modal' ).one( 'dialogclose', function() {
-			jQuery( '#frm-confirmed-click' ).off( 'click', deleteOnConfirm );
+			jQuery( confirmedClick ).off( 'click', deleteOnConfirm );
 		});
 	}
 
@@ -4811,6 +4959,7 @@ function frmAdminBuildJS() {
 				if ( settings.is( ':visible' ) ) {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
+
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
@@ -11025,7 +11174,13 @@ function frmAdminBuildJS() {
 		loadApiEmailForm,
 		addMyEmailAddress,
 		fillDropdownOpts,
-		showSaveAndReloadModal
+		showSaveAndReloadModal,
+		deleteField,
+		insertFormField,
+		confirmLinkClick,
+		handleInsertFieldByDraggingResponse,
+		handleAddFieldClickResponse,
+		syncLayoutClasses,
 	};
 }
 

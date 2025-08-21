@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.22.3';
+	public static $plug_version = '6.23';
 
 	/**
 	 * @var bool
@@ -4598,5 +4598,25 @@ class FrmAppHelper {
 	public static function no_gdpr_cookies() {
 		$frm_settings = self::get_settings();
 		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if a string is valid UTF-8.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $string The string to check.
+	 * @return bool
+	 */
+	public static function is_valid_utf8( $string ) {
+		// wp_is_valid_utf8 is added in WP 6.9.
+		if ( function_exists( 'wp_is_valid_utf8' ) ) {
+			return wp_is_valid_utf8( $string );
+		}
+		// As of WP 6.9, seems_utf8 is deprecated.
+		if ( function_exists( 'seems_utf8' ) ) {
+			return seems_utf8( $string );
+		}
+		return false;
 	}
 }

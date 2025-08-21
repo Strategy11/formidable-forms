@@ -516,6 +516,8 @@ class FrmStrpLiteAuth {
 			'metadata' => array( 'action' => $action->ID ),
 		);
 
+		$new_charge = self::maybe_add_statement_descriptor( $new_charge );
+
 		if ( FrmStrpLitePaymentTypeHandler::should_use_automatic_payment_methods( $action ) ) {
 			$new_charge['automatic_payment_methods'] = array( 'enabled' => true );
 		} else {
@@ -524,6 +526,99 @@ class FrmStrpLiteAuth {
 		}
 
 		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_intent', $new_charge );
+	}
+
+	/**
+	 * Add the statement descriptor to the intent data, if it is valid.
+	 *
+	 * @param array $intent_data
+	 * @return array
+	 */
+	private static function maybe_add_statement_descriptor( $intent_data ) {
+		$statement_descriptor = self::get_statement_descriptor();
+		if ( false !== $statement_descriptor ) {
+			$intent_data['statement_descriptor'] = $statement_descriptor;
+		}
+
+		return $intent_data;
+	}
+
+	/**
+	 * Get the statement descriptor for a payment intent.
+	 *
+	 * @since 6.23
+	 *
+	 * @return false|string False if the statement descriptor is not valid.
+	 */
+	private static function get_statement_descriptor() {
+		$name = get_bloginfo( 'name' );
+
+		/**
+		 * Filters the statement descriptor for a payment intent.
+		 * This way a site can use the name they want on their statements.
+		 *
+		 * @since 6.23
+		 *
+		 * @param string $name The name of the site.
+		 */
+		$name = apply_filters( 'frm_stripe_statement_descriptor', $name );
+
+		if ( ! is_string( $name ) ) {
+			return false;
+		}
+
+		$name = self::strip_special_characters_from_statement_descriptor( $name );
+
+		if ( ! self::statement_descriptor_is_valid( $name ) ) {
+			return false;
+		}
+
+		return $name;
+	}
+
+	/**
+	 * Remove the special characters that Stripe doesn't allow in statement descriptors, in case any exist.
+	 *
+	 * @since 6.23
+	 *
+	 * @param string $name The name of the site.
+	 * @return string The name with special characters removed.
+	 */
+	private static function strip_special_characters_from_statement_descriptor( $name ) {
+		$special_characters = array(
+			'<',
+			'>',
+			'\\',
+			"'",
+			'"',
+			'*',
+		);
+		return str_replace( $special_characters, '', $name );
+	}
+
+	/**
+	 * Stripe includes requirements at https://docs.stripe.com/get-started/account/statement-descriptors
+	 * We need to make sure that the descriptor contains only Latin characters, and that it is between 5 and 22 characters long.
+	 *
+	 * @since 6.23
+	 *
+	 * @param string $name Passed by reference, as this is updated if it is too long.
+	 * @return bool
+	 */
+	private static function statement_descriptor_is_valid( &$name ) {
+		if ( strlen( $name ) < 5 ) {
+			return false;
+		}
+
+		if ( strlen( $name ) > 22 ) {
+			$name = substr( $name, 0, 22 );
+		}
+
+		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
