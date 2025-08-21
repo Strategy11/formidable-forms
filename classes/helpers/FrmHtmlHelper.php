@@ -78,7 +78,8 @@ class FrmHtmlHelper {
 			array(
 				'field_attrs'        => array(),
 				'input_number_attrs' => array(),
-				'units'              => array( 'px', '%', 'em' ),
+				'units'              => array( '', 'px', '%', 'em' ),
+				'default_unit'       => 'px',
 				'value'              => '',
 			)
 		);
@@ -86,23 +87,33 @@ class FrmHtmlHelper {
 		$units = $args['units'];
 		$value = $args['value'];
 
-		// Extract unit if value contains one.
+		// Extract unit and number value if value is a string
 		if ( '' !== $value && ! is_numeric( $value ) ) {
-			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')$/';
-			if ( preg_match( $pattern, $value, $matches ) ) {
-				$number_value  = $matches[1];
-				$selected_unit = $matches[2];
+			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')?$/';
+			preg_match( $pattern, $value, $matches );
+			$selected_unit = $matches[2] ?? '';
+			if ( ! empty( $matches[1] ) ) {
+				$value = $matches[1];
 			}
 		}
+
+		$input_number_attrs          = array_merge(
+			$args['input_number_attrs'],
+			array(
+				'type'  => ! empty( $selected_unit ) ? 'number' : 'text',
+				'value' => $value,
+				'class' => trim( 'frm-unit-input-control ' . ( $args['input_number_attrs']['class'] ?? '' ) ),
+			)
+		);
 		?>
 		<span class="frm-unit-input">
 			<input type="hidden" value="<?php echo esc_attr( $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
-			<input type="number" value="<?php echo esc_attr( $number_value ?? $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['input_number_attrs'], true ); ?> />
+			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
 			<span class="frm-input-group-suffix">
 				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>">
 					<?php
 					foreach ( $units as $unit ) {
-						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $units[0] ), array( 'value' => $unit ) );
+						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $args['default_unit'] ), array( 'value' => $unit ) );
 					}
 					?>
 				</select>

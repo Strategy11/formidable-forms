@@ -22,7 +22,6 @@ if ( $display_max ) {
 	FrmHtmlHelper::echo_unit_input(
 		array(
 			'value'       => $field['size'],
-			'units'       => array( 'px', '%', 'em' ),
 			'field_attrs' => array(
 				'id'   => 'field_options_size_' . $field['id'],
 				'name' => 'field_options[size_' . $field['id'] . ']',
