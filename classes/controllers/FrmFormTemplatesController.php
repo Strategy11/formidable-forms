@@ -407,7 +407,7 @@ class FrmFormTemplatesController {
 		self::$form_template_api = new FrmFormTemplateApi();
 		self::$form_template_api->reset_cached();
 
-		FrmOnboardingWizardController::subscribe_to_active_campaign( $email );
+		FrmEmailCollectionHelper::subscribe_to_active_campaign( $email );
 		self::$form_template_api::set_free_license_code( '1' );
 
 		wp_send_json_success();
