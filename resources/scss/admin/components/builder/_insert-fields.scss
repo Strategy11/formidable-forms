@@ -79,9 +79,16 @@
 			display: flex !important;
 			transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
 
-			&:not(.disabled):hover {
-				background: var(--grey-100);
+			&:not(.disabled):hover,
+			&:focus,
+			&:focus-visible {
+				background: #fff;
 				box-shadow: var(--box-shadow-md);
+			}
+
+			&:focus,
+			&:focus-visible {
+				outline: 2px solid var(--primary-500);
 			}
 		}
 

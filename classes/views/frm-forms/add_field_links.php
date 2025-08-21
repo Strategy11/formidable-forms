@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									}
 									?>
 									<li class="<?php echo esc_attr( $classes ); ?>" id="<?php echo esc_attr( $field_key ); ?>">
-										<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>">
+										<a href="#" class="frm_add_field" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
 											<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 											<span><?php echo esc_html( $field_label ); ?></span>
 											<?php
@@ -100,7 +100,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 										$field_label = $field_type['name'];
 										?>
 										<li class="frmbutton frm6 <?php echo esc_attr( $no_allow_class . ' frm_t' . $field_key ); ?> dropdown" id="<?php echo esc_attr( $field_key ); ?>">
-											<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_attr( $field_label ); ?>">
+											<a href="#" id="frm-<?php echo esc_attr( $field_key ); ?>Drop" class="frm-dropdown-toggle" data-toggle="dropdown" title="<?php echo esc_attr( $field_label ); ?>" role="button" aria-label="<?php echo esc_attr( $field_label ); ?>">
 												<?php FrmAppHelper::icon_by_class( FrmFormsHelper::get_field_link_icon( $field_type ) ); ?>
 												<span><?php echo esc_html( $field_label ); ?> <b class="caret"></b></span>
 											</a>
