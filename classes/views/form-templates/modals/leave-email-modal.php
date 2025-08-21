@@ -12,11 +12,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 $args = $args ?? $leave_email_args ?? array();
 ?>
 <div id="frm-leave-email-modal" class="frm_wrap frm-form-templates-modal-item frm_hidden">
-	<div class="frm_modal_top">
-		<div class="frm-modal-title">
-			<h2><?php echo esc_html( $args['title'] ?? '' ); ?></h2>
+	<?php if ( ! empty( $args['title'] ) ) { ?>
+		<div class="frm_modal_top">
+			<div class="frm-modal-title">
+				<h2><?php echo esc_html( $args['title'] ); ?></h2>
+			</div>
 		</div>
-	</div>
+	<?php } ?>
 
 	<div class="inside frm_grid_container frm-px-md frm-py-0 frm-mt-xs frm-mb-0">
 		<?php if ( ! empty( $args['api_url'] ) ) { ?>
@@ -25,9 +27,11 @@ $args = $args ?? $leave_email_args ?? array();
 			</div>
 		<?php } ?>
 
-		<p class="frm-text-grey-500">
-			<?php echo esc_html( $args['description'] ?? '' ); ?>
-		</p>
+		<?php if ( ! empty( $args['description'] ) ) { ?>
+			<p class="frm-text-grey-500">
+				<?php echo esc_html( $args['description'] ); ?>
+			</p>
+		<?php } ?>
 
 		<div id="frm_leave_email_wrapper" class="frm-fields frm_form_field">
 			<p class="frm-mt-0 frm-mb-xs">
