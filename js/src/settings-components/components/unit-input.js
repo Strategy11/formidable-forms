@@ -9,7 +9,7 @@ import { documentOn } from 'core/utils';
  * @return {void}
  */
 export function setupUnitInputHandlers() {
-	documentOn( 'change', '.frm-unit-input input[type="number"]', onUnitInputChange );
+	documentOn( 'change', '.frm-unit-input .frm-unit-input-control', onUnitInputChange );
 	documentOn( 'change', '.frm-unit-input select', onUnitInputChange );
 }
 
@@ -22,11 +22,16 @@ export function setupUnitInputHandlers() {
  */
 function onUnitInputChange( event ) {
 	const unitInput = event.target.closest( '.frm-unit-input' );
-	const numberInputValue = unitInput.querySelector( 'input[type="number"]' ).value.trim();
+	const control = unitInput.querySelector( '.frm-unit-input-control' );
+	const unit = unitInput.querySelector( 'select' ).value;
+
+	// Update input type when unit changes
+	if ( event.target.matches( 'select' ) ) {
+		control.type = '' === unit ? 'text' : 'number';
+	}
 
 	// Update the actual field value
-	unitInput.querySelector( 'input[type="hidden"]' ).value = numberInputValue !== ''
-		? numberInputValue + unitInput.querySelector( 'select' ).value
-		: '';
+	const inputValue = control.value.trim();
+	unitInput.querySelector( 'input[type="hidden"]' ).value = '' !== inputValue ? inputValue + unit : '';
 }
 
