@@ -3,6 +3,8 @@
  */
 import { onClickPreventDefault, isValidEmail, setQueryParam, hasQueryParam, removeQueryParam } from 'core/utils';
 
+const { tag } = window.frmDom;
+
 /**
  * WordPress dependencies
  */
@@ -90,7 +92,10 @@ const onGetTemplatesButtonClick = async() => {
 function showFailedToGetTemplates() {
 	const { leaveEmailModal } = getElements();
 
-	leaveEmailModal.querySelector( '.inside' ).innerHTML = `<p>${ __( 'Failed to get templates, please try again later.', 'formidable' ) }</p>`;
+	leaveEmailModal.querySelector( '.inside' ).replaceChildren(
+		tag( 'p', __( 'Failed to get templates, please try again later.', 'formidable' ) )
+	);
+
 	leaveEmailModal.querySelector( '.frm_modal_footer' ).classList.add( 'frm_hidden' );
 }
 
