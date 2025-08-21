@@ -76,7 +76,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	 *
 	 * @since x.x
 	 *
-	 * @return string The license code.
+	 * @return false|string The license code, or false if not set.
 	 */
 	public static function get_free_license_code() {
 		return get_option( self::$code_option_name );
