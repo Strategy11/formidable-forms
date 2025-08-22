@@ -929,7 +929,7 @@ function frmAdminBuildJS() {
 		handleDragOverFieldGroup( { droppable, x: event.clientX, placeholder } );
 	}
 
-	function maybeScrollBuilder(event) {
+	function maybeScrollBuilder( event ) {
 		$postBodyContent.scrollTop(
 			( _, v ) => {
 				const moved = event.clientY;
