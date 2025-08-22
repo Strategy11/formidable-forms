@@ -18,5 +18,5 @@ jobs:
         uses: actions/checkout@master
       - name: Analyze js code style
         run: |
-          npm ci --legacy-peer-deps
+          npm ci --legacy-peer-deps --include=dev
           ./node_modules/.bin/eslint .
