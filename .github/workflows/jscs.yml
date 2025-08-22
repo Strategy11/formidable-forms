@@ -18,5 +18,5 @@ jobs:
         uses: actions/checkout@master
       - name: Analyze js code style
         run: |
-          npm ci --legacy-peer-deps
-          npm run lint
+          npm install --legacy-peer-deps eslint @babel/eslint-parser @wordpress/eslint-plugin eslint-import-resolver-webpack eslint-plugin-compat eslint-plugin-cypress eslint-plugin-jsdoc eslint-plugin-jsx-a11y eslint-plugin-no-jquery eslint-plugin-prettier eslint-plugin-react eslint-plugin-sonarjs
+          ./node_modules/.bin/eslint .
