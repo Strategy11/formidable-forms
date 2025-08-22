@@ -5,12 +5,12 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+    types: [ opened, labeled, synchronize ]
 
 name: Inspections
 jobs:
   runPHPCSInspection:
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
