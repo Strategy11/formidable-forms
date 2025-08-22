@@ -25,7 +25,7 @@ registerBlockType( 'formidable/simple-view', {
 
 	edit: () => {
 
-		const [ addonActivateButton, updateAddonActivateButton ] = useState({
+		const [ addonActivateButton, updateAddonActivateButton ] = useState({ // eslint-disable-line react-hooks/rules-of-hooks
 			defaultClassname: 'frm-activate-addon frm-button-primary button button-primary',
 			loadingClassname: buttonStyles['frm-loading'],
 			classnames: 'frm-activate-addon frm-button-primary button button-primary',

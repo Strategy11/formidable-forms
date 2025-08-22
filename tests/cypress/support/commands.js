@@ -71,15 +71,14 @@ Cypress.Commands.add("openForm", () => {
 
 Cypress.Commands.add("getCurrentFormattedDate", () => {
     const currentDate = new Date();
-    const formattedDate = currentDate.toISOString().split('T')[0].replace(/-/g, '/');
-    return formattedDate;
-});   
+    return currentDate.toISOString().split('T')[0].replace(/-/g, '/');
+});
 
 Cypress.Commands.add("emptyTrash", () => {
 cy.log("Precondition - Clear trash if there are deleted forms in the list");
 cy.get('.subsubsub > .trash > a').then(($trashLink) => {
     if ($trashLink.text().includes("Trash")) {
-        cy.wrap($trashLink).click();        
+        cy.wrap($trashLink).click();
         cy.get('body').then($body => {
             if ($body.find('#delete_all').length > 0) {
                 cy.get('#delete_all').should("contain", "Empty Trash").click();
@@ -90,5 +89,5 @@ cy.get('.subsubsub > .trash > a').then(($trashLink) => {
     } else {
         cy.log('No forms in the Trash.');
     }
-});      
-});   
+});
+});

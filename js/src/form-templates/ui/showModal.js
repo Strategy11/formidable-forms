@@ -68,7 +68,7 @@ const upgradablePlans = {
 /**
  * Display the modal dialog to prompt the user to upgrade their account.
  *
- * @param {string} plan Current plan name
+ * @param {string}      plan     Current plan name
  * @param {HTMLElement} template The template element
  * @return {void}
  */

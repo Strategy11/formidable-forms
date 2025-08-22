@@ -401,15 +401,15 @@
 	}
 
 	function getEmbedExample({ label, example, link, linkLabel }) {
-		let unique, element, labelElement, exampleElement, linkElement;
+		const unique = getAutoId();
 
-		unique = getAutoId();
-		element = div();
-
-		labelElement = getLabel( label );
+		const labelElement = getLabel( label );
 		labelElement.id = 'frm_embed_example_label_' + unique;
+
+		const element = div();
 		element.appendChild( labelElement );
 
+		let exampleElement;
 		if ( example.length > 80 ) {
 			exampleElement = tag( 'textarea' );
 		} else {
@@ -424,7 +424,7 @@
 		exampleElement.setAttribute( 'tabindex', -1 );
 
 		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
-			linkElement = tag( 'a' );
+			const linkElement = tag( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
 			linkElement.setAttribute( 'target', '_blank' );
@@ -503,7 +503,7 @@
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @returns {integer}
+	 * @return {integer} The unique id.
 	 */
 	function getAutoId() {
 		return ++autoId;

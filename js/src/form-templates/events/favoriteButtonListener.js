@@ -90,14 +90,14 @@ const onFavoriteButtonClick = ( event ) => {
 	if ( OPERATION.ADD === currentOperation ) {
 		// Increment favorite counts
 		++favoritesCount.total;
-		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default;
+		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default; // eslint-disable-line no-unused-expressions
 		// Set heart icon to filled
 		heartIcon.setAttribute( 'xlink:href', FILLED_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'xlink:href', FILLED_HEART_ICON );
 	} else {
 		// Decrement favorite counts
 		--favoritesCount.total;
-		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default;
+		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default; // eslint-disable-line no-unused-expressions
 		// Set heart icon to outline
 		heartIcon.setAttribute( 'xlink:href', LINEAR_HEART_ICON );
 		twinTemplateHeartIcon?.setAttribute( 'xlink:href', LINEAR_HEART_ICON );
@@ -136,7 +136,7 @@ const onFavoriteButtonClick = ( event ) => {
  * @param {string}  id        The template ID.
  * @param {string}  operation The operation to perform ('add' or 'remove').
  * @param {boolean} isCustom  Flag indicating whether the template is custom.
- * @return {Promise<any>}
+ * @return {Promise<any>} The result of the server-side update.
  */
 function updateFavoriteTemplate( id, operation, isCustom ) {
 	const formData = new FormData();

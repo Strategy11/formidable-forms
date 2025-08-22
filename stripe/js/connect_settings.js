@@ -7,7 +7,7 @@
 	}
 
 	function renderStripeConnectSettingsButton() {
-		var container = document.getElementById( 'frm_strp_settings_container' );
+		const container = document.getElementById( 'frm_strp_settings_container' );
 		if ( null !== container ) {
 			postAjax(
 				{
@@ -73,7 +73,7 @@
 	}
 
 	function strpSettingsAjaxRequest( action, success, testMode ) {
-		var data = {
+		const data = {
 			action: action,
 			testMode: testMode,
 			nonce: frmGlobal.nonce
@@ -82,10 +82,8 @@
 	}
 
 	function postAjax( data, success ) {
-		var xmlHttp, params;
-
-		xmlHttp = new XMLHttpRequest();
-		params = typeof data === 'string' ? data : Object.keys( data ).map(
+		const xmlHttp = new XMLHttpRequest();
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
 				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ]);
 			}
@@ -93,7 +91,7 @@
 
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
-			var response;
+			let response;
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {

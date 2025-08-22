@@ -69,7 +69,7 @@
 		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
 
 		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent( 'frmSquareLiteEnableSubmit', { 
+		const event = new CustomEvent( 'frmSquareLiteEnableSubmit', {
 			detail: { form: thisForm }
 		});
 		document.dispatchEvent(event);
@@ -85,7 +85,7 @@
 		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
 
 		// Trigger custom event for other scripts to hook into
-		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', { 
+		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
 			detail: { form: form }
 		});
 		document.dispatchEvent( event );
@@ -238,13 +238,11 @@
 
 		/**
 		 * @param {Object} $form
-		 * @return {Boolean} false if there are errors.
+		 * @return {boolean} false if there are errors.
 		 */
 		function validateFormSubmit( $form ) {
-			var errors, keys;
-
-			errors = frmFrontForm.validateFormSubmit( $form );
-			keys   = Object.keys( errors );
+			const errors = frmFrontForm.validateFormSubmit( $form );
+			const keys   = Object.keys( errors );
 
 			if ( 1 === keys.length && errors[ keys[0] ] === '' ) {
 				// Pop the empty error that gets added by invisible recaptcha.

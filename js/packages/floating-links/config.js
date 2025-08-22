@@ -2,6 +2,7 @@
  * Configuration File.
  * Establishes links and options parameters to be utilized by the S11FloatingLinks class.
  *
+ * @param {Object} wp
  * @class S11FloatingLinks
  */
 

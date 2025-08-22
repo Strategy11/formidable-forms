@@ -118,6 +118,7 @@ export function showAvailableTemplatesEmptyState() {
 	const { extraTemplatesCount } = getState();
 	emptyStateTitle.textContent = __( 'No Templates Available', 'formidable' );
 	emptyStateText.textContent = sprintf(
+		// translators: %s is the number of extra templates available
 		__( 'Upgrade to PRO for %s+ options or explore Free Templates.', 'formidable' ),
 		extraTemplatesCount
 	);

@@ -4,11 +4,11 @@ export class frmCounter {
 	 * Init frmCounter
 	 *
 	 * @param {Element} element
-	 * @param {object} options
+	 * @param {Object}  options
 	 * @param {integer} options.timetoFinish - Max time in mileseconds for counter to complete the animation.
 	 */
 	constructor( element, options ) {
-		if ( ! element instanceof Element || ! element.dataset.counter ) {
+		if ( ! ( element instanceof Element ) || ! element.dataset.counter ) {
 			return;
 		}
 

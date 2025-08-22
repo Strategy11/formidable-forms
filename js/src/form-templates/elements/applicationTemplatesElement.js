@@ -27,7 +27,7 @@ const thumbnailBaseURL = `${PLUGIN_URL}/images/applications/thumbnails`;
  * Create and return the application templates HTML element.
  *
  * @param {Object[]} applications Array of application objects.
- * @return {HTMLElement|null} The application templates element or null if no applications are provided.
+ * @return {void}
  */
 export function createApplicationTemplates( applications ) {
 	if ( ! applications || ! applications.length ) {
@@ -61,6 +61,7 @@ export function createApplicationTemplates( applications ) {
  */
 function createTemplateItem( template ) {
 	const { name, key, hasLiteThumbnail, isWebp } = template;
+	// eslint-disable-next-line no-nested-ternary
 	const thumbnailURL = hasLiteThumbnail ?
 		( isWebp ? `${thumbnailBaseURL}/${key}.webp` : `${thumbnailBaseURL}/${key}.png` ) :
 		`${thumbnailBaseURL}/placeholder.svg`;

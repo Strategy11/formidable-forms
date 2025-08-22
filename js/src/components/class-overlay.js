@@ -12,14 +12,14 @@ export class frmOverlay {
 	/**
 	 * Open overlay
 	 *
-	 * @param {Object} overlayData - An object containing data for the overlay.
-	 * @param {string} overlayData.hero_image - URL of the hero image.
-	 * @param {string} overlayData.heading - Heading of the overlay.
-	 * @param {string} overlayData.copy - Copy/content of the overlay.
-	 * @param {Array}  overlayData.buttons - Array of button objects.
-	 * @param {string} overlayData.buttons[].url - URL for the button.
-	 * @param {string} overlayData.buttons[].target - Target attribute for the button link.
-	 * @param {string} overlayData.buttons[].label - Label/text of the button.
+	 * @param {Object} overlayData                  An object containing data for the overlay.
+	 * @param {string} overlayData.hero_image       URL of the hero image.
+	 * @param {string} overlayData.heading          Heading of the overlay.
+	 * @param {string} overlayData.copy             Copy/content of the overlay.
+	 * @param {Array}  overlayData.buttons          Array of button objects.
+	 * @param {string} overlayData.buttons[].url    URL for the button.
+	 * @param {string} overlayData.buttons[].target Target attribute for the button link.
+	 * @param {string} overlayData.buttons[].label  Label/text of the button.
 	 */
 	open( overlayData ) {
 		this.overlayData = {

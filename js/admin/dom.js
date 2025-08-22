@@ -261,8 +261,8 @@
 		 *
 		 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
 		 *
-		 * @param {String} type Type of data. Accepts `page` or `user`.
-		 * @param {String|Object} container Container class or element. Default is null.
+		 * @param {string}        type      Type of data. Accepts `page` or `user`.
+		 * @param {string|Object} container Container class or element. Default is null.
 		 */
 		initAutocomplete: function( type, container ) {
 			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
@@ -464,10 +464,10 @@
 		 *
 		 * @since 6.0
 		 *
-		 * @param {String}         event    Event name.
-		 * @param {String}         selector Selector.
+		 * @param {string}         event    Event name.
+		 * @param {string}         selector Selector.
 		 * @param {Function}       handler  Handler.
-		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 		 */
 		documentOn: ( event, selector, handler, options ) => {
 			if ( 'undefined' === typeof options ) {
@@ -731,10 +731,10 @@
 	 *
 	 * @since 6.0
 	 *
-	 * @param {String} inputId
-	 * @param {String} labelText
-	 * @param {String} inputName
-	 * @returns {Element}
+	 * @param {string} inputId
+	 * @param {string} labelText
+	 * @param {string} inputName
+	 * @return {Element} The div element containing the label and input.
 	 */
 	function labelledTextInput( inputId, labelText, inputName ) {
 		const label = tag( 'label', labelText );
@@ -758,9 +758,9 @@
 	 *
 	 * @since 6.4.1 Accept a string as one of `children` to append a text node inside the element.
 	 *
-	 * @param {String} type Element tag name.
+	 * @param {string} type Element tag name.
 	 * @param {Object} args The args.
-	 * @return {Object}
+	 * @return {Object} The created DOM element.
 	 */
 	function tag( type, args = {}) {
 		const output = document.createElement( type );
@@ -820,8 +820,8 @@
 	 * Pop up a success message in the lower right corner.
 	 * It then fades out and gets deleted automatically.
 	 *
-	 * @param {HTMLElement|String} content
-	 * @returns {void}
+	 * @param {HTMLElement|string} content
+	 * @return {void}
 	 */
 	function success( content ) {
 		const container           = document.getElementById( 'wpbody' );
@@ -887,12 +887,12 @@
 			return svg( svgArgs );
 		}
 
-		const newNode = document.createElement( tagType );
-
 		if ( 'undefined' === typeof allowedHtml[ tagType ]) {
 			// Tag type is not allowed.
 			return document.createTextNode( '' );
 		}
+
+		const newNode = document.createElement( tagType );
 
 		allowedHtml[ tagType ].forEach(
 			allowedTag => {

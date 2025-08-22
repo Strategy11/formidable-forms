@@ -1,12 +1,15 @@
 # Exclude auto generated files.
 **/*.min.js
 **/*.js.map
-**/formidable_blocks.js
-**/formidable_overlay.js
-**/formidable_dashboard.js
-**/formidable-templates.js
-**/formidable_styles.js
+js/formidable_blocks.js
+js/formidable_overlay.js
+js/form-templates.js
+js/formidable_dashboard.js
+js/onboarding-wizard.js
+js/addons-page.js
+js/formidable_styles.js
 js/formidable_admin.js
+js/bootstrap-multiselect.js
 
 **/node_modules/**
 **/vendor/**

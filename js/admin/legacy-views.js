@@ -19,9 +19,7 @@
 	});
 
 	function viewInit() {
-		let $addRemove,
-			$advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
-
+		const $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 		$advInfo.before( '<div id="frm_position_ele"></div>' );
 		setupMenuOffset();
 
@@ -49,7 +47,7 @@
 
 		jQuery( document.getElementById( 'form_id' ) ).on( 'change', displayFormSelected );
 
-		$addRemove = jQuery( '.frm_repeat_rows' );
+		const $addRemove = jQuery( '.frm_repeat_rows' );
 		$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
 		$addRemove.on( 'click', '.frm_add_where_row', addWhereRow );
 		$addRemove.on( 'change', '.frm_insert_where_options', insertWhereOptions );
@@ -73,15 +71,15 @@
 			infoModal( msg );
 		}
 	}
-	
+
 	/**
 	 * Checks View filter value for params named with reserved words and displays a message if any are found.
 	 */
 	function checkFilterParamNames() {
-		let regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig,
-			filterValue = jQuery( this ).val(),
-			match = regEx.exec( filterValue ),
-			unsafeParams = '';
+		const regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig;
+		const filterValue = jQuery( this ).val();
+		let match = regEx.exec( filterValue );
+		let	unsafeParams = '';
 
 		while ( match !== null ) {
 			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[1]) ) {

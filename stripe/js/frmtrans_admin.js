@@ -1,13 +1,13 @@
 ( function() {
 	function toggleSub() {
-		var val  = this.value;
-		var show = val === 'recurring';
+		const val  = this.value;
+		const show = val === 'recurring';
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
 	}
 
 	function slideOpts( opt, show, c ) {
-		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
 			opts.slideDown( 'fast' );
 		} else {
@@ -16,7 +16,7 @@
 	}
 
 	function toggleOpts( opt, show, c ) {
-		var opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
+		const opts = jQuery( opt ).closest( '.frm_form_action_settings' ).find( c );
 		if ( show ) {
 			opts.show();
 		} else {
@@ -53,7 +53,7 @@
 	function frmTransLiteAdminJS() {
 		return {
 			init: function() {
-				var actions = document.getElementById( 'frm_notification_settings' );
+				const actions = document.getElementById( 'frm_notification_settings' );
 				if ( actions !== null ) {
 					jQuery( actions ).on( 'change', '.frm_trans_type', toggleSub );
 					jQuery( '.frm_form_settings' ).on( 'change', '.frm_gateway_opt input', toggleGateway );
@@ -100,6 +100,7 @@
 		// Prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements.
 		const unbindHandleConfirmedClick = e => {
 			if ( e.target.matches( '.ui-widget-overlay, .dismiss' ) ) {
+				// eslint-disable-next-line no-jquery/no-bind
 				jQuery( '#frm-confirmed-click' ).unbind( 'click', handleConfirmedClick );
 				document.removeEventListener( 'click', unbindHandleConfirmedClick );
 			}

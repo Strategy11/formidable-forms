@@ -795,7 +795,7 @@ function frmAdminBuildJS() {
 	 * Section titles are made droppable, but are not a list, so we need to change the droppable to the section's list instead.
 	 *
 	 * @param {Element} droppable
-	 * @returns {Element}
+	 * @return {Element}
 	 */
 	function getDroppableForOnDragOver( droppable ) {
 		if ( droppable.classList.contains( 'divider_section_only' ) ) {
@@ -1021,7 +1021,7 @@ function frmAdminBuildJS() {
 	 * If a page if collapsed, expand it before dragging since only the page break will move.
 	 *
 	 * @param {Element} placeholder
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeOpenCollapsedPage( placeholder ) {
 		if ( ! placeholder.previousElementSibling || ! placeholder.previousElementSibling.classList.contains( 'frm-is-collapsed' ) ) {
@@ -1061,7 +1061,7 @@ function frmAdminBuildJS() {
 	 * Remove an empty field group, but don't remove an empty section.
 	 *
 	 * @param {Element} previousFieldContainer
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeDeleteAnEmptyFieldGroup( previousFieldContainer ) {
 		const closestFieldBox = previousFieldContainer.closest( 'li.frm_field_box' );
@@ -1529,7 +1529,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {Object} currentItem
 	 * @param {Object} previousSection
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function updateFieldAfterMovingBetweenSections( currentItem, previousSection ) {
 		if ( ! currentItem.hasClass( 'form-field' ) ) {
@@ -1581,7 +1581,7 @@ function frmAdminBuildJS() {
 	 * @param {string} formId
 	 * @param {Number} hasBreak
 	 *
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
 		return {
@@ -1601,7 +1601,7 @@ function frmAdminBuildJS() {
 	 * @since 6.23
 	 *
 	 * @param {string} fieldType
-	 * @returns {boolean}
+	 * @return {boolean}
 	 */
 	function shouldStopInsertingField( fieldType ) {
 		return wp.hooks.applyFilters( 'frm_should_stop_inserting_field', false, fieldType  );
@@ -1612,7 +1612,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {string} fieldType
 	 */
-	function insertNewFieldByDragging( fieldType ) {		
+	function insertNewFieldByDragging( fieldType ) {
 		if ( shouldStopInsertingField( fieldType ) ) {
 			wp.hooks.doAction( 'frm_stopped_inserting_by_dragging', fieldType );
 			return;
@@ -1658,16 +1658,16 @@ function frmAdminBuildJS() {
 					 * @since 6.23
 					 *
 					 * @param {Object} fieldData            The field data.
-					 * @param {String} fieldData.field      The field HTML.
-					 * @param {String} fieldData.field_type The field type.
-					 * @param {String} fieldData.form_id    The form ID.
+					 * @param {string} fieldData.field      The field HTML.
+					 * @param {string} fieldData.field_type The field type.
+					 * @param {string} fieldData.form_id    The form ID.
 					 */
 					wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
 						field: msg,
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -1675,7 +1675,7 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @param {String} msg
+	 * @param {string} msg
 	 * @param {Object} $placeholder jQuery object.
 	 */
 	function handleInsertFieldByDraggingResponse( msg, $placeholder ) {
@@ -1714,7 +1714,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @since 6.23
 	 *
-	 * @param {String} msg
+	 * @param {string} msg
 	 * @return {Number}
 	 */
 	function checkMsgForFieldId( msg ) {
@@ -1766,7 +1766,7 @@ function frmAdminBuildJS() {
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @returns {integer}
+	 * @return {integer}
 	 */
 	function getAutoId() {
 		return ++autoId;
@@ -1787,7 +1787,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} draggable
 	 * @param {HTMLElement} droppable
 	 * @param {Event}       event
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function allowDrop( draggable, droppable, event ) {
 		if ( false === droppable ) {
@@ -2116,16 +2116,16 @@ function frmAdminBuildJS() {
 					 * @since 6.23
 					 *
 					 * @param {Object} fieldData            The field data.
-					 * @param {String} fieldData.field      The field HTML.
-					 * @param {String} fieldData.field_type The field type.
-					 * @param {String} fieldData.form_id    The form ID.
+					 * @param {string} fieldData.field      The field HTML.
+					 * @param {string} fieldData.field_type The field type.
+					 * @param {string} fieldData.form_id    The form ID.
 					 */
 					wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
 						field: msg,
 						fieldId,
 						fieldType,
 						form_id: formId,
-					});	
+					});
 				}
 			},
 			error: handleInsertFieldError
@@ -2156,7 +2156,7 @@ function frmAdminBuildJS() {
 
 	function insertFormField( fieldType, fieldOptions = {} ) {
 
-		return new Promise( ( resolve ) => {			
+		return new Promise( ( resolve ) => {
 			const formId = thisFormId;
 			let hasBreak = 0;
 
@@ -2183,9 +2183,9 @@ function frmAdminBuildJS() {
 							 * @since 6.23
 							 *
 							 * @param {Object} fieldData            The field data.
-							 * @param {String} fieldData.field      The field HTML.
-							 * @param {String} fieldData.field_type The field type.
-							 * @param {String} fieldData.form_id    The form ID.
+							 * @param {string} fieldData.field      The field HTML.
+							 * @param {string} fieldData.field_type The field type.
+							 * @param {string} fieldData.form_id    The form ID.
 							 */
 							wp.hooks.doAction( 'frm_after_field_added_in_form_builder', {
 								field: msg,
@@ -2226,7 +2226,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} field
 	 * @param {number}      maxFieldsInGroup
 	 *
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function canDuplicateField( field, maxFieldsInGroup ) {
 		if ( field.classList.contains( 'frm-page-collapsed' ) ) {
@@ -2327,7 +2327,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} field    The original field.
 	 * @param {HTMLElement} newField The duplicated field.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function setLayoutClassesForDuplicatedFieldInGroup( field, newField ) {
 		const hoverTarget = field.closest( '.frm-field-group-hover-target' );
@@ -2733,7 +2733,7 @@ function frmAdminBuildJS() {
 	 * Since multiple new fields may get added when a new field is inserted, check the HTML.
 	 *
 	 * @param {string} html
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function checkHtmlForNewFields( html ) {
 		const element = div();
@@ -2743,7 +2743,7 @@ function frmAdminBuildJS() {
 
 	/**
 	 * @param {HTMLElement} field
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function addFieldIdToDraftFieldsInput( field ) {
 		if ( ! field.dataset.fid ) {
@@ -2804,7 +2804,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
 	 * @param  formula
-	 * @returns {string}
+	 * @return {string}
 	 */
 	function checkMatchingParens( formula ) {
 
@@ -2846,7 +2846,7 @@ function frmAdminBuildJS() {
 	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
 	 * @param  calculation
 	 * @param  inputElement
-	 * @returns {string}
+	 * @return {string}
 	 */
 	function checkShortcodes( calculation, inputElement ) {
 		let msg = checkNonNumericShortcodes( calculation, inputElement );
@@ -2860,7 +2860,7 @@ function frmAdminBuildJS() {
 	 * @param  calculation
 	 *
 	 * @param  inputElement
-	 * @returns {string}
+	 * @return {string}
 	 */
 	function checkNonNumericShortcodes( calculation, inputElement ) {
 
@@ -2890,7 +2890,7 @@ function frmAdminBuildJS() {
 
 	/**
 	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
-	 * @returns {RegExp}
+	 * @return {RegExp}
 	 */
 	function getNonNumericShortcodes() {
 		return /\[(date|time|email|ip)\]/;
@@ -2899,7 +2899,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
 	 * @param  formula
-	 * @returns {string}
+	 * @return {string}
 	 */
 	function checkNonFormShortcodes( formula ) {
 		let nonFormShortcodes = getNonFormShortcodes(),
@@ -2916,7 +2916,7 @@ function frmAdminBuildJS() {
 	 * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
 	 * Notifications, and other Formidable areas.
 	 *
-	 * @returns {RegExp}
+	 * @return {RegExp}
 	 */
 	function getNonFormShortcodes() {
 		return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
@@ -4132,7 +4132,7 @@ function frmAdminBuildJS() {
 	 * @param {int}    size  2-6.
 	 * @param {string} type  even, middle, left, or right.
 	 * @param {int}    index 0-5.
-	 * @returns string
+	 * @return {string} The class name.
 	 */
 	function getClassForBlock( size, type, index ) {
 		if ( 'even' === type ) {
@@ -4199,7 +4199,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Handle when a field group layout option (that sets grid classes/column sizing) is selected in the "Row Layout" popup.
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function handleFieldGroupLayoutOptionClick() {
 		const row  = document.querySelector( '.frm-field-group-hover-target' );
@@ -4928,7 +4928,7 @@ function frmAdminBuildJS() {
 	 * @since 6.22
 	 *
 	 * @param {Object} settings
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function moveOpenModalsOutOfFieldOptions( settings ) {
 		const openModals = settings[0].querySelectorAll( '.frm-inline-modal[data-fills]' );
@@ -5131,7 +5131,7 @@ function frmAdminBuildJS() {
 	 * Returns an object that has the old and new values and labels, when a field choice is changed.
 	 *
 	 * @param {HTMLElement} input
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function getChoiceOldAndNewValues( input ) {
 		const { oldValue, oldLabel } = getChoiceOldValueAndLabel( input );
@@ -5144,7 +5144,7 @@ function frmAdminBuildJS() {
 	 * Returns an object that has the new value and label, when a field choice is changed.
 	 *
 	 * @param {HTMLElement} choiceElement
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function getChoiceNewValueAndLabel( choiceElement ) {
 		const singleOptionContainer = choiceElement.closest( '.frm_single_option' );
@@ -5167,7 +5167,7 @@ function frmAdminBuildJS() {
 	 * Returns an object that has the old value and label, when a field choice is changed.
 	 *
 	 * @param {HTMLElement} choiceElement
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function getChoiceOldValueAndLabel( choiceElement ) {
 		const usingSeparateValues   = choiceElement.closest( '.frm-single-settings' ).querySelector( '.frm_toggle_sep_values' )?.checked ?? false;
@@ -5291,7 +5291,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {HTMLElement} selectElement
 	 * @param {string}      searchText
-	 * @returns {HTMLElement|null}
+	 * @return {HTMLElement|null}
 	 */
 	function searchSelectByText( selectElement, searchText ) {
 		const options = selectElement.options;
@@ -5871,7 +5871,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @param {Number} fieldId
 	 * @param {string} expectedOption
-	 * @returns {Object}
+	 * @return {Object}
 	 */
 	function getNewConditionalLogicOption( fieldId, expectedOption ) {
 		const optionsContainer = document.getElementById( 'frm_field_' + fieldId + '_opts' );
@@ -6781,7 +6781,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Returns true if 'Name Your Form' modal should be displayed.
 	 *
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function shouldShowNameYourFormNameModal() {
 		const formNameInput = document.getElementById( 'frm_form_name' );
@@ -7110,8 +7110,8 @@ function frmAdminBuildJS() {
 	 * Allow addons to be installed from the upgrade modal.
 	 *
 	 * @param {Element}          link
-	 * @param {String}           context      Either 'modal' or 'tab'.
-	 * @param {String|undefined} upgradeLabel
+	 * @param {string}           context      Either 'modal' or 'tab'.
+	 * @param {string|undefined} upgradeLabel
 	 */
 	function addOneClick( link, context, upgradeLabel ) {
 		let container;
@@ -8342,7 +8342,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {Event} event
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
 		maybeShowSaveAndReloadModal( event.target );
@@ -8354,7 +8354,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} target
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function maybeShowSaveAndReloadModal( target ) {
 		if ( ! target.id.startsWith( 'field_options_type_' ) ) {
@@ -8376,7 +8376,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {string} message
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function showSaveAndReloadModal( message ) {
 		if ( 'undefined' === typeof message ) {
@@ -8501,7 +8501,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function checkContextualShortcode( item ) {
 		if ( frmAdminJs.contextualShortcodes.length === 0 ) {
@@ -8516,7 +8516,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function isContextualShortcode( item ) {
 		const anchor = item.querySelector( 'a' );
@@ -8532,7 +8532,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} item
-	 * @returns {Boolean}
+	 * @return {Boolean}
 	 */
 	function canShowContextualShortcode( item ) {
 		const shortcode = item.querySelector( 'a' ).dataset.code;
@@ -8549,7 +8549,7 @@ function frmAdminBuildJS() {
 	 * @since 6.16.3
 	 *
 	 * @param {HTMLElement} input
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function showOrHideContextualShortcodes( input ) {
 		[ 'address', 'body' ].forEach( type => {
@@ -8563,7 +8563,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} input
 	 * @param {string}      type
 	 *
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function toggleContextualShortcodes( input, type ) {
 		let selector, contextualShortcodes;
@@ -8581,7 +8581,7 @@ function frmAdminBuildJS() {
 	 *
 	 * @since 6.16.3
 	 *
-	 * @returns {Array}
+	 * @return {Array}
 	 */
 	function getContextualShortcodes() {
 		let contextualShortcodes = document.getElementById( 'frm_adv_info' )?.dataset.contextualShortcodes;
@@ -9847,9 +9847,9 @@ function frmAdminBuildJS() {
 		/**
 		 * Gets subfield element from cache.
 		 *
-		 * @param {String} fieldId Field ID.
-		 * @param {String} key     Cache key.
-		 * @returns {HTMLElement|undefined} Return the element from cache or undefined if not found.
+		 * @param {string} fieldId Field ID.
+		 * @param {string} key     Cache key.
+		 * @return {HTMLElement|undefined} Return the element from cache or undefined if not found.
 		 */
 		const getSubFieldElFromCache = ( fieldId, key ) => {
 			window.frmCachedSubFields = window.frmCachedSubFields || {};
@@ -9860,8 +9860,8 @@ function frmAdminBuildJS() {
 		/**
 		 * Sets subfield element to cache.
 		 *
-		 * @param {String}      fieldId Field ID.
-		 * @param {String}      key     Cache key.
+		 * @param {string}      fieldId Field ID.
+		 * @param {string}      key     Cache key.
 		 * @param {HTMLElement} el      Element.
 		 */
 		const setSubFieldElToCache = ( fieldId, key, el ) => {
@@ -9874,7 +9874,7 @@ function frmAdminBuildJS() {
 		 * Gets column class from the number of columns.
 		 *
 		 * @param {Number} colCount Number of columns.
-		 * @returns {string}
+		 * @return {string}
 		 */
 		const getColClass = colCount => 'frm' + parseInt( 12 / colCount );
 

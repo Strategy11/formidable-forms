@@ -15,7 +15,7 @@
 	}
 
 	function handleKeyDownEvent( e ) {
-		switch ( e.key ) {
+		switch ( e.key ) { // eslint-disable-line sonarjs/no-small-switch
 			case ' ':
 				handleSpaceDownEvent( e );
 				break;

@@ -38,7 +38,7 @@
 	"settings": {
 		"import/resolver": {
 			"webpack": {
-				"config": "webpack.config.js"
+				"config": "./webpack.config.js"
 			}
 		},
 		"react": {
@@ -48,7 +48,24 @@
 	"rules": {
 		"cypress/unsafe-to-chain-command": "off",
 		"cypress/no-assigning-return-values": "off",
-		"camelcase": ["error", { "properties": "never" }],
+		"camelcase": [
+			"error",
+			{
+				"properties": "never",
+				"allow": [
+					"frm_admin_js",
+					"frm_stripe_vars",
+					"frm_trans_vars",
+					"formidable_form_selector",
+					"frm_js",
+					"frm_password_checks",
+					"formidable_block_calculator",
+					"formidable_view_selector",
+					"frmdates_admin_js",
+					"frm_abdn"
+				]
+			}
+		],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
@@ -128,6 +145,7 @@
 		"no-jquery/no-trim": "error",
 		"no-jquery/no-type": "error",
 		"no-jquery/no-unique": "error",
-		"no-jquery/no-when": "error"
+		"no-jquery/no-when": "error",
+		"react/jsx-no-target-blank": "off"
 	}
 }

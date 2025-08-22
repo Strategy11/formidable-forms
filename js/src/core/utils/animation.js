@@ -3,9 +3,8 @@ export class frmAnimate {
 	/**
 	 * Construct frmAnimate
 	 *
-	 * @param {Element|Element[]} elements
-	 * @param {'default'|'cascade'|'cascade-3d'} type - The animation type: default | cascade | cascade-3d
-	 *
+	 * @param {Element|Element[]}                elements The elements to animate.
+	 * @param {'default'|'cascade'|'cascade-3d'} type     The animation type: default | cascade | cascade-3d
 	 */
 	constructor( elements, type = 'default' ) {
 		this.elements = elements;
@@ -36,8 +35,7 @@ export class frmAnimate {
 	 * ex: new frmAnimate( elements, 'cascade' ).cascadeFadeIn();
 	 *     new frmAnimate( elements, 'cascade-3d' ).cascadeFadeIn();
 	 *
-	 * @param {float} delay - The transition delay value.
-	 *
+	 * @param {float} delay The transition delay value.
 	 */
 	cascadeFadeIn( delay = 0.03 ) {
 		setTimeout( () => {

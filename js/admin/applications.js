@@ -241,8 +241,7 @@
 		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
-		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
-		return wrappedInput;
+		return newSearchInput( id, placeholder, targetClassName, args );
 	}
 
 	function handleTemplateSearch({ foundSomething, notEmptySearchText }) {

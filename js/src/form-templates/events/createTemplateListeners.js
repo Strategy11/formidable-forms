@@ -10,7 +10,7 @@ import { onClickPreventDefault } from 'core/utils';
 
 /**
  * Internal dependencies
-*/
+ */
 import { getElements } from '../elements';
 import { getState } from '../shared';
 import { showCreateTemplateModal } from '../ui';
@@ -44,7 +44,6 @@ function addCreateTemplateEvents() {
  * Handles the click event on the 'Create Template' button, showing the 'Create New Template' modal.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onShowCreateTemplateModalButtonClick = () => {
@@ -60,7 +59,6 @@ const onShowCreateTemplateModalButtonClick = () => {
  * Handles changes in the forms selection dropdown for creating a new template.
  *
  * @private
- * @param {Event} event The change event object.
  * @return {void}
  */
 const onFormsSelectChange = () => {
@@ -114,7 +112,6 @@ const toggleDisableModalElements = ( shouldDisable ) => {
  * Handles the click event on the 'Create Template' button to create a new template.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onCreateTemplateButtonClick = () => {

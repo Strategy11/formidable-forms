@@ -8,7 +8,7 @@ class S11FloatingLinks {
 	/**
 	 * Create a new S11FloatingLinks instance.
 	 *
-	 * @constructor
+	 * @class
 	 */
 	constructor() {
 		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ({ links, options }) => {
@@ -24,8 +24,8 @@ class S11FloatingLinks {
 	/**
 	 * Validate the input parameters.
 	 *
-	 * @param {Array<Object>} links - The links array.
-	 * @param {Object} options - The options object.
+	 * @param {Array<Object>} links   The links array.
+	 * @param {Object}        options The options object.
 	 *
 	 * @throws {Error} If the links array is empty or not provided.
 	 * @throws {Error} If the options.logoIcon is not provided or is an empty string.
@@ -85,7 +85,7 @@ class S11FloatingLinks {
 	}
 
 	/**
-	 * @return {HTMLElement}
+	 * @return {HTMLElement} The inbox slide-in element.
 	 */
 	getInboxSlideIn() {
 		const h3          = frmDom.tag(
