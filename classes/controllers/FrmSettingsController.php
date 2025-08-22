@@ -476,4 +476,21 @@ class FrmSettingsController {
 
 		wp_send_json( $results );
 	}
+
+	/**
+	 * Shows a fake color picker.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $color Color value.
+	 */
+	public static function fake_color_picker( $color ) {
+		?>
+		<div class="wp-picker-container">
+			<button type="button" class="button wp-color-result" aria-expanded="false" style="background-color:<?php echo esc_attr( $color); ?>;">
+				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
+			</button>
+		</div>
+		<?php
+	}
 }

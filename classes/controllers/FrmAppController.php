@@ -732,6 +732,10 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+			if ( 'formidable-settings' === $page ) {
+				wp_enqueue_style( 'wp-color-picker' );
+			}
+
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
