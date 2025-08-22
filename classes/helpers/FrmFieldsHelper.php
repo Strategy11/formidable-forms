@@ -1599,6 +1599,9 @@ class FrmFieldsHelper {
 			$replace_with[] = 'field_id="' . $new . '"';
 			$replace[]      = 'field_id=\"' . $old . '\"';
 			$replace_with[] = 'field_id=\"' . $new . '\"';
+			// This covers conditional logic.
+			$replace[]      = '_field":"' . $old . '","';
+			$replace_with[] = '_field":"' . $new . '","';
 			unset( $old, $new );
 		}//end foreach
 		if ( is_array( $val ) ) {
