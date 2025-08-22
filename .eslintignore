@@ -11,6 +11,9 @@ js/formidable_styles.js
 js/formidable_admin.js
 js/bootstrap-multiselect.js
 
+# Config files
+*.config.js
+
 **/node_modules/**
 **/vendor/**
 build

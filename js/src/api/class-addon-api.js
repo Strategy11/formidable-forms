@@ -13,11 +13,11 @@ export class frmAddonAPI {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: new URLSearchParams({
+			body: new URLSearchParams( {
 				action: action,
 				nonce: frmGlobal.nonce,
 				plugin: addon
-			})
-		}).then( response => response.json() );
+			} )
+		} ).then( response => response.json() );
 	}
 }

@@ -21,7 +21,7 @@ const { tag, div, span, a, img } = window.frmDom;
 let applicationTemplates;
 
 // Base URL for the thumbnail images of applications
-const thumbnailBaseURL = `${PLUGIN_URL}/images/applications/thumbnails`;
+const thumbnailBaseURL = `${ PLUGIN_URL }/images/applications/thumbnails`;
 
 /**
  * Create and return the application templates HTML element.
@@ -36,20 +36,20 @@ export function createApplicationTemplates( applications ) {
 
 	const templateItems = applications.map( template => createTemplateItem( template ) );
 
-	applicationTemplates = div({
-		id: `${PREFIX}-applications`,
+	applicationTemplates = div( {
+		id: `${ PREFIX }-applications`,
 		className: HIDDEN_CLASS,
 		children: [
 			tag( 'h2', {
 				text: __( 'Application Templates' ),
 				className: 'frm-text-sm frm-mb-sm'
-			}),
+			} ),
 			tag( 'ul', {
-				className: `${PREFIX}-list frm-list-grid-layout`,
+				className: `${ PREFIX }-list frm-list-grid-layout`,
 				children: templateItems
-			})
+			} )
 		]
-	});
+	} );
 }
 
 /**
@@ -62,42 +62,42 @@ export function createApplicationTemplates( applications ) {
 function createTemplateItem( template ) {
 	const { name, key, hasLiteThumbnail, isWebp } = template;
 	// eslint-disable-next-line no-nested-ternary
-	const thumbnailURL = hasLiteThumbnail ?
-		( isWebp ? `${thumbnailBaseURL}/${key}.webp` : `${thumbnailBaseURL}/${key}.png` ) :
-		`${thumbnailBaseURL}/placeholder.svg`;
+	const thumbnailURL = hasLiteThumbnail
+		? ( isWebp ? `${ thumbnailBaseURL }/${ key }.webp` : `${ thumbnailBaseURL }/${ key }.png` )
+		: `${ thumbnailBaseURL }/placeholder.svg`;
 
 	return tag( 'li', {
 		className: 'frm-card-item',
 		data: {
-			href: `${applicationsUrl}&triggerViewApplicationModal=1&template=${key}`,
+			href: `${ applicationsUrl }&triggerViewApplicationModal=1&template=${ key }`,
 			'frm-search-text': name.toLowerCase()
 		},
 		children: [
-			div({
-				className: `${PREFIX}-item-icon`,
-				child: img({ src: thumbnailURL })
-			}),
-			div({
-				className: `${PREFIX}-item-body`,
+			div( {
+				className: `${ PREFIX }-item-icon`,
+				child: img( { src: thumbnailURL } )
+			} ),
+			div( {
+				className: `${ PREFIX }-item-body`,
 				children: [
-					span({
+					span( {
 						text: __( 'Ready Made Solution', 'formidable' ),
 						className: 'frm-meta-tag frm-orange-tag frm-text-xs'
-					}),
+					} ),
 					tag( 'h3', {
 						text: name,
 						className: 'frm-text-sm frm-font-medium frm-m-0'
-					}),
-					a({
+					} ),
+					a( {
 						text: __( 'See all applications', 'formidable' ),
 						className: 'frm-text-xs frm-font-semibold',
 						href: applicationsUrl
-					})
+					} )
 				]
-			})
+			} )
 		]
-	});
-};
+	} );
+}
 
 /**
  * Inject application Templates elements into the DOM and the elements object.
@@ -113,10 +113,10 @@ export function addApplicationTemplatesElement() {
 
 	elements.bodyContent.appendChild( applicationTemplates );
 
-	addElements({
+	addElements( {
 		applicationTemplates,
 		applicationTemplatesTitle: applicationTemplates.querySelector( 'h2' ),
-		applicationTemplatesList: applicationTemplates.querySelector( `.${PREFIX}-list` ),
+		applicationTemplatesList: applicationTemplates.querySelector( `.${ PREFIX }-list` ),
 		applicationTemplateItems: applicationTemplates.querySelectorAll( '.frm-card-item' )
-	});
+	} );
 }

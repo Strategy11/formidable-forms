@@ -146,6 +146,8 @@
 		"no-jquery/no-type": "error",
 		"no-jquery/no-unique": "error",
 		"no-jquery/no-when": "error",
-		"react/jsx-no-target-blank": "off"
+		"react/jsx-no-target-blank": "off",
+		"comma-dangle": "off",
+		"arrow-parens": ["error", "as-needed"]
 	}
 }

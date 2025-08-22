@@ -1,6 +1,6 @@
 ( function() {
 	function toggleSub() {
-		const val  = this.value;
+		const val = this.value;
 		const show = val === 'recurring';
 		slideOpts( this, show, '.frm_trans_sub_opts' );
 		toggleOpts( this, ! show, '.frm_gateway_no_recur' );
@@ -34,9 +34,9 @@
 
 		toggleOpts( this, checked, '.show_' + gateway );
 
-		const toggleOff       = 'stripe' === gateway ? 'square' : 'stripe';
-		const settings        = jQuery( this ).closest( '.frm_form_action_settings' );
-		const showClass       = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
+		const toggleOff = 'stripe' === gateway ? 'square' : 'stripe';
+		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
+		const showClass = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
 		const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + toggleOff );
 
 		gatewaySettings.forEach(
@@ -74,16 +74,16 @@
 	function runAjaxLink( e ) {
 		e.preventDefault();
 
-		const $link                = jQuery( this );
+		const $link = jQuery( this );
 		const handleConfirmedClick = e => {
 			e.preventDefault();
 
-			const href             = $link.attr( 'href' );
-			const loadingImage     = document.createElement( 'span' );
+			const href = $link.attr( 'href' );
+			const loadingImage = document.createElement( 'span' );
 			loadingImage.className = 'frm-loading-img';
 
 			$link.replaceWith( loadingImage );
-			jQuery.ajax({
+			jQuery.ajax( {
 				type: 'GET',
 				url: href,
 				data: {
@@ -92,7 +92,7 @@
 				success: function( html ) {
 					jQuery( loadingImage ).replaceWith( html );
 				}
-			});
+			} );
 		};
 
 		jQuery( '#frm-confirmed-click' ).one( 'click', handleConfirmedClick );

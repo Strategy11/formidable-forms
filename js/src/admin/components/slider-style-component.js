@@ -4,7 +4,6 @@ import frmStyleDependentUpdaterComponent from './dependent-updater-component';
  * @class frmSliderStyleComponent
  */
 export default class frmSliderStyleComponent {
-
 	constructor() {
 		this.sliderElements = document.querySelectorAll( '.frm-slider-component' );
 		if ( 0 === this.sliderElements.length ) {
@@ -16,8 +15,8 @@ export default class frmSliderStyleComponent {
 		this.sliderMarginRight = 5;
 		this.eventsChange = [];
 
-		const { debounce }        = frmDom.util;
-		this.valueChangeDebouncer = debounce( ( index ) => this.triggerValueChange( index ), 25 );
+		const { debounce } = frmDom.util;
+		this.valueChangeDebouncer = debounce( index => this.triggerValueChange( index ), 25 );
 
 		this.initOptions();
 		this.init();
@@ -30,7 +29,7 @@ export default class frmSliderStyleComponent {
 		this.options = [];
 		this.sliderElements.forEach( ( element, index ) => {
 			const parentWrapper = element.classList.contains( 'frm-has-multiple-values' ) ? element.closest( '.frm-style-component' ) : element;
-			this.options.push({
+			this.options.push( {
 				dragging: false,
 				startX: 0,
 				translateX: 0,
@@ -39,8 +38,8 @@ export default class frmSliderStyleComponent {
 				index: index,
 				value: 0,
 				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmStyleDependentUpdaterComponent( parentWrapper ) : null
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -56,14 +55,14 @@ export default class frmSliderStyleComponent {
 	 */
 	initDraggable() {
 		this.sliderElements.forEach( ( element, index ) => {
-			this.eventsChange[ index ] = new Event( 'change', { 
+			this.eventsChange[ index ] = new Event( 'change', {
 				bubbles: true,
 				cancelable: true
-			});
+			} );
 			const draggableBullet = element.querySelector( '.frm-slider-bullet' );
-			const valueInput      = element.querySelector( '.frm-slider-value input[type="text"]' );
+			const valueInput = element.querySelector( '.frm-slider-value input[type="text"]' );
 
-			valueInput.addEventListener( 'change', ( event ) => {
+			valueInput.addEventListener( 'change', event => {
 				const unit = element.querySelector( 'select' ).value;
 
 				if ( this.getMaxValue( unit, index ) < parseInt( event.target.value, 10 ) ) {
@@ -73,42 +72,42 @@ export default class frmSliderStyleComponent {
 				this.initSliderWidth( element );
 				this.options[ index ].fullValue = this.updateValue( element, valueInput.value + unit );
 				this.triggerValueChange( index );
-			});
+			} );
 
 			this.expandSliderGroup( element );
 			this.updateOnUnitChange( element, valueInput, index );
 			this.changeSliderPositionOnClick( element, valueInput, index );
 
-			draggableBullet.addEventListener( 'mousedown', ( event ) => {
+			draggableBullet.addEventListener( 'mousedown', event => {
 				event.preventDefault();
 				event.stopPropagation();
 				if ( element.classList.contains( 'frm-disabled' ) ) {
 					return;
 				}
 				this.enableDragging( event, index );
-			});
+			} );
 
-			draggableBullet.addEventListener( 'mousemove', ( event ) => {
+			draggableBullet.addEventListener( 'mousemove', event => {
 				if ( element.classList.contains( 'frm-disabled' ) ) {
 					return;
 				}
 				this.moveTracker( event, index );
-			});
+			} );
 
-			draggableBullet.addEventListener( 'mouseup', ( event) => {
+			draggableBullet.addEventListener( 'mouseup', event => {
 				if ( element.classList.contains( 'frm-disabled' ) ) {
 					return;
 				}
 				this.disableDragging( index, event );
-			});
+			} );
 
-			draggableBullet.addEventListener( 'mouseleave', ( event ) => {
+			draggableBullet.addEventListener( 'mouseleave', event => {
 				if ( element.classList.contains( 'frm-disabled' ) ) {
 					return;
 				}
 				this.disableDragging( index, event );
-			});
-		});
+			} );
+		} );
 	}
 
 	expandSliderGroup( element ) {
@@ -120,14 +119,14 @@ export default class frmSliderStyleComponent {
 
 		const sliderGroupItems = this.getSliderGroupItems( element );
 		svgIcon.addEventListener( 'click', ( ) => {
-			sliderGroupItems.forEach( ( item ) => {
+			sliderGroupItems.forEach( item => {
 				item.classList.toggle( 'frm_hidden' );
-			});
-		});
+			} );
+		} );
 	}
 
 	updateOnUnitChange( element, valueInput, index ) {
-		element.querySelector( 'select' ).addEventListener( 'change', ( event ) => {
+		element.querySelector( 'select' ).addEventListener( 'change', event => {
 			const unit = event.target.value.toLowerCase();
 
 			if ( '' === unit ) {
@@ -147,17 +146,17 @@ export default class frmSliderStyleComponent {
 			this.options[ index ].fullValue = valueInput.value + unit;
 			this.updateValue( element, this.options[ index ].fullValue );
 			this.triggerValueChange( index );
-		});
+		} );
 	}
 
 	changeSliderPositionOnClick( element, valueInput, index ) {
-		const frmSlider   = element.querySelector( '.frm-slider' );
+		const frmSlider = element.querySelector( '.frm-slider' );
 		const customEvent = new Event( 'change', {
-			'bubbles': true,
-			'cancelable': true
-		});
+			bubbles: true,
+			cancelable: true
+		} );
 
-		frmSlider.addEventListener( 'click', ( event ) => {
+		frmSlider.addEventListener( 'click', event => {
 			if ( element.classList.contains( 'frm-disabled' ) ) {
 				return;
 			}
@@ -170,10 +169,10 @@ export default class frmSliderStyleComponent {
 			}
 
 			const sliderWidth = frmSlider.offsetWidth - this.sliderBulletWidth;
-			const sliderRect  = frmSlider.getBoundingClientRect();
-			const deltaX      = event.clientX - sliderRect.left - this.sliderBulletWidth;
-			const unit        = element.querySelector( 'select' ).value;
-			const value       = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
+			const sliderRect = frmSlider.getBoundingClientRect();
+			const deltaX = event.clientX - sliderRect.left - this.sliderBulletWidth;
+			const unit = element.querySelector( 'select' ).value;
+			const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
 
 			if ( value < 0 ) {
 				return;
@@ -184,8 +183,7 @@ export default class frmSliderStyleComponent {
 
 			valueInput.value = value;
 			valueInput.dispatchEvent( customEvent );
-
-		});
+		} );
 	}
 
 	/**
@@ -199,26 +197,26 @@ export default class frmSliderStyleComponent {
 			return [];
 		}
 		const slidersGroup = element.dataset.displaySliders.split( ',' );
-		const query        = slidersGroup.map( ( item ) => {
-			return `.frm-slider-component[data-type="${item}"]`;
-		}).join( ', ' );
+		const query = slidersGroup.map( item => {
+			return `.frm-slider-component[data-type="${ item }"]`;
+		} ).join( ', ' );
 
-		return element.closest( '.frm-style-component' ).querySelectorAll( query )
+		return element.closest( '.frm-style-component' ).querySelectorAll( query );
 	}
 
 	/**
 	 * Initializes the position of sliders when a style accordion section is opened.
 	 */
 	initSlidersPosition() {
-		const accordionitems  = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
-		const quickSettings   = document.querySelector( '.frm-quick-settings' );
+		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
+		const quickSettings = document.querySelector( '.frm-quick-settings' );
 		const openedAccordion = document.querySelector( '.accordion-section.open' );
 
 		// Detect if upload background image upload has triggered and initialize the "Image Opacity" slider width.
-		wp.hooks.addAction( 'frm_pro_on_bg_image_upload', 'formidable', ( event ) => {
+		wp.hooks.addAction( 'frm_pro_on_bg_image_upload', 'formidable', event => {
 			const imageBackgroundOpacitySlider = event.closest( '.accordion-section-content' ).querySelector( '#frm-bg-image-opacity-slider' );
 			this.initSlidersWidth( imageBackgroundOpacitySlider );
-		});
+		} );
 
 		// init the sliders width from "Quick Settings" page.
 		if ( null !== quickSettings ) {
@@ -231,11 +229,11 @@ export default class frmSliderStyleComponent {
 		}
 
 		// init the sliders width everytime when an accordion section is opened from "Advanced Settings" page.
-		accordionitems.forEach( ( item ) => {
-			item.addEventListener( 'click', ( event ) => {
+		accordionitems.forEach( item => {
+			item.addEventListener( 'click', event => {
 				this.initSlidersWidth( event.target.closest( '.accordion-section' ) );
-			});
-		});
+			} );
+		} );
 
 		this.initSliderPositionOnFieldShapeChange();
 	}
@@ -253,14 +251,14 @@ export default class frmSliderStyleComponent {
 		}
 
 		const radioButtons = fieldShapeType.querySelectorAll( 'input[type="radio"]' );
-		radioButtons.forEach( ( radio ) => {
-			radio.addEventListener( 'change', ( event ) => {
+		radioButtons.forEach( radio => {
+			radio.addEventListener( 'change', event => {
 				if ( event.target.checked && 'rounded-corner' === event.target.value ) {
 					const slider = document.querySelector( 'div[data-frm-element="field-shape-corner-radius"] .frm-slider-component' );
 					this.initSliderWidth( slider );
 				}
-			})
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -271,11 +269,11 @@ export default class frmSliderStyleComponent {
 	 */
 	initSlidersWidth( section ) {
 		const sliders = section.querySelectorAll( '.frm-slider-component' );
-		sliders.forEach( ( slider ) => {
+		sliders.forEach( slider => {
 			setTimeout( () => {
 				this.initSliderWidth( slider );
 			}, 100 );
-		});
+		} );
 	}
 
 	/**
@@ -288,13 +286,13 @@ export default class frmSliderStyleComponent {
 		if ( slider.classList.contains( 'frm-disabled' ) ) {
 			return;
 		}
-		const index       = this.getSliderIndex( slider );
+		const index = this.getSliderIndex( slider );
 		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
-		const value       = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
-		const unit        = slider.querySelector( 'select' ).value;
-		const deltaX      = '%' === unit ? Math.round( sliderWidth * value / 100 ) : Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
+		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
+		const unit = slider.querySelector( 'select' ).value;
+		const deltaX = '%' === unit ? Math.round( sliderWidth * value / 100 ) : Math.ceil( ( value / this.options[ index ].maxValue ) * sliderWidth );
 
-		slider.querySelector( '.frm-slider-active-track' ).style.width = `${deltaX}px`;
+		slider.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
 		this.options[ index ].translateX = deltaX;
 		this.options[ index ].value = value + unit;
 	}
@@ -314,10 +312,10 @@ export default class frmSliderStyleComponent {
 		const childSliders = slider.classList.contains( 'frm-has-independent-fields' ) ? slider.querySelectorAll( '.frm-independent-slider-field' ) : this.getSliderGroupItems( slider );
 
 		childSliders.forEach( ( item, childIndex ) => {
-			item.querySelector( '.frm-slider-active-track' ).style.width = `${width}px`;
+			item.querySelector( '.frm-slider-active-track' ).style.width = `${ width }px`;
 			this.options[ index + childIndex + 1 ].translateX = width;
 			this.options[ index + childIndex + 1 ].value = value;
-		});
+		} );
 	}
 
 	/**
@@ -327,10 +325,10 @@ export default class frmSliderStyleComponent {
 	 * @return {number} The index of the slider element.
 	 */
 	getSliderIndex( slider ) {
-		return this.options.filter( ( option ) => {
+		return this.options.filter( option => {
 			return option.element === slider;
-		})[0].index;
-	};
+		} )[ 0 ].index;
+	}
 
 	/**
 	 * Handles the movement of the slider tracker.
@@ -343,22 +341,22 @@ export default class frmSliderStyleComponent {
 		if ( ! this.options[ index ].dragging ) {
 			return;
 		}
-		let deltaX        = event.clientX - this.options[ index ].startX;
-		const element     = this.sliderElements[ index ];
+		let deltaX = event.clientX - this.options[ index ].startX;
+		const element = this.sliderElements[ index ];
 		const sliderWidth = element.querySelector( '.frm-slider' ).offsetWidth;
 
 		// Ensure deltaX does not go below 0
 		deltaX = Math.max( deltaX, 0 );
 
-		if ( deltaX + this.sliderBulletWidth / 2 + this.sliderMarginRight  >= sliderWidth ) {
+		if ( deltaX + this.sliderBulletWidth / 2 + this.sliderMarginRight >= sliderWidth ) {
 			return;
 		}
-		const unit  = element.querySelector( 'select' ).value;
+		const unit = element.querySelector( 'select' ).value;
 		const value = this.calculateValue( sliderWidth, deltaX, this.getMaxValue( unit, index ) );
 
 		element.querySelector( '.frm-slider-value input[type="text"]' ).value = value;
 		element.querySelector( '.frm-slider-bullet .frm-slider-value-label' ).innerText = value;
-		element.querySelector( '.frm-slider-active-track' ).style.width = `${deltaX}px`;
+		element.querySelector( '.frm-slider-active-track' ).style.width = `${ deltaX }px`;
 		this.initChildSlidersWidth( element, deltaX, index, value + unit );
 
 		this.options[ index ].translateX = deltaX;
@@ -416,11 +414,11 @@ export default class frmSliderStyleComponent {
 			return;
 		}
 
-		const input = this.sliderElements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.sliderElements[ index ].closest('.frm-style-component').querySelector( 'input[type="hidden"]' ) : this.sliderElements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+		const input = this.sliderElements[ index ].classList.contains( 'frm-has-multiple-values' ) ? this.sliderElements[ index ].closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' ) : this.sliderElements[ index ].querySelectorAll( '.frm-slider-value input[type="hidden"]' );
 		if ( input instanceof NodeList ) {
-			input.forEach( ( item ) => {
+			input.forEach( item => {
 				item.dispatchEvent( this.eventsChange[ index ] );
-			});
+			} );
 			return;
 		}
 		input.dispatchEvent( this.eventsChange[ index ] );
@@ -435,14 +433,13 @@ export default class frmSliderStyleComponent {
 	 * @return {number} - The calculated value.
 	 */
 	calculateValue( width, deltaX, maxValue ) {
-
 		// Indicates the additional value generated by the slider's drag progress (up to 100%) and the width of the slider bullet.
 		// Generates a more accurate value for the slider's start (0) and end (maximum value) positions, taking into account the slider's position and bullet width.
 		const delta = Math.ceil( this.sliderBulletWidth * ( deltaX / width ) );
 
 		const value = Math.ceil( ( ( deltaX + delta ) / width ) * maxValue );
 
-		return Math.min( value, maxValue )
+		return Math.min( value, maxValue );
 	}
 
 	/**
@@ -462,43 +459,43 @@ export default class frmSliderStyleComponent {
 			}
 		}
 		if ( element.classList.contains( 'frm-has-multiple-values' ) ) {
-			const input      = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
+			const input = element.closest( '.frm-style-component' ).querySelector( 'input[type="hidden"]' );
 			const inputValue = input.value.split( ' ' );
-			const type       = element.dataset.type;
+			const type = element.dataset.type;
 
-			if ( ! inputValue[2] ) {
-				inputValue[2] = '0px';
+			if ( ! inputValue[ 2 ] ) {
+				inputValue[ 2 ] = '0px';
 			}
 
-			if ( ! inputValue[3] ) {
-				inputValue[3] = '0px';
+			if ( ! inputValue[ 3 ] ) {
+				inputValue[ 3 ] = '0px';
 			}
 
 			switch ( type ) {
 				case 'vertical':
-					inputValue[0] = value;
-					inputValue[2] = value;
+					inputValue[ 0 ] = value;
+					inputValue[ 2 ] = value;
 					break;
 
 				case 'horizontal':
-					inputValue[1] = value;
-					inputValue[3] = value;
+					inputValue[ 1 ] = value;
+					inputValue[ 3 ] = value;
 					break;
 
 				case 'top':
-					inputValue[0] = value;
+					inputValue[ 0 ] = value;
 					break;
 
 				case 'bottom':
-					inputValue[2] = value;
+					inputValue[ 2 ] = value;
 					break;
 
 				case 'left':
-					inputValue[3] = value;
+					inputValue[ 3 ] = value;
 					break;
 
 				case 'right':
-					inputValue[1] = value;
+					inputValue[ 1 ] = value;
 					break;
 			}
 
@@ -506,22 +503,22 @@ export default class frmSliderStyleComponent {
 			input.value = newValue;
 
 			const childSlidersGroup = this.getSliderGroupItems( element );
-			childSlidersGroup.forEach( ( slider ) => {
+			childSlidersGroup.forEach( slider => {
 				const unitMeasure = this.getUnitMeasureFromValue( value );
 				slider.querySelector( '.frm-slider-value input[type="text"]' ).value = parseInt( value, 10 );
 				slider.querySelector( 'select' ).value = unitMeasure;
-			});
+			} );
 
 			return newValue;
 		}
 
 		if ( element.classList.contains( 'frm-has-independent-fields' ) ) {
-			const inputValues   = element.querySelectorAll( '.frm-slider-value input[type="hidden"]' );
+			const inputValues = element.querySelectorAll( '.frm-slider-value input[type="hidden"]' );
 			const visibleValues = element.querySelectorAll( '.frm-slider-value input[type="text"]' );
 			inputValues.forEach( ( input, index ) => {
 				input.value = value;
 				visibleValues[ index + 1 ].value = parseInt( value, 10 );
-			});
+			} );
 
 			return value;
 		}

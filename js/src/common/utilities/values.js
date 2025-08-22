@@ -6,9 +6,9 @@
  * @param {Function} setAttributes  Function to set the block attribute to be updated
  */
 export function updateAttribute( attributeName, attributeValue, setAttributes ) {
-	setAttributes({
+	setAttributes( {
 		[ attributeName ]: attributeValue
-	});
+	} );
 }
 
 /**

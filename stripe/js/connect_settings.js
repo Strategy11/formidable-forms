@@ -24,12 +24,12 @@
 		jQuery( document ).on( 'click', selector, function( event ) {
 			event.preventDefault();
 			callback( this );
-		});
+		} );
 	}
 
 	function handleStripeDisconnectClick( trigger ) {
 		const testMode = isTriggerInTestMode( trigger );
-		const spinner  = frmDom.span({ className: 'frm-wait frm_visible_spinner' });
+		const spinner = frmDom.span( { className: 'frm-wait frm_visible_spinner' } );
 
 		spinner.style.margin = 0; // The default 20px margin causes the spinner to look bad.
 		trigger.replaceWith( spinner );
@@ -85,7 +85,7 @@
 		const xmlHttp = new XMLHttpRequest();
 		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ]);
+				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
 			}
 		).join( '&' );
 

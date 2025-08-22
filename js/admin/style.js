@@ -10,8 +10,8 @@
 		return;
 	}
 
-	const { __, sprintf }                                        = wp.i18n;
-	const state                                                  = {
+	const { __, sprintf } = wp.i18n;
+	const state = {
 		showingSampleForm: document.getElementById( 'frm_active_style_form' ).classList.contains( 'frm_hidden' ), // boolean
 		unsavedChanges: false, // boolean
 		autoId: 0, // Number
@@ -21,9 +21,9 @@
 		initialSelectedStyleValue: false // String|false
 	};
 	const { div, span, a, labelledTextInput, tag, svg, success } = frmDom;
-	const { onClickPreventDefault }                              = frmDom.util;
-	const { maybeCreateModal, footerButton }                     = frmDom.modal;
-	const { doJsonPost }                                         = frmDom.ajax;
+	const { onClickPreventDefault } = frmDom.util;
+	const { maybeCreateModal, footerButton } = frmDom.modal;
+	const { doJsonPost } = frmDom.ajax;
 
 	const isListPage = document.getElementsByClassName( 'frm-style-card' ).length > 0;
 	if ( isListPage ) {
@@ -62,7 +62,6 @@
 		document.getElementById( 'frm_style_sidebar' ).classList.add( 'wp-core-ui' );
 
 		jQuery( document ).on( 'input change', 'input[data-frmrange]', initSliderPreview );
-
 	}
 
 	/**
@@ -102,8 +101,8 @@
 		setTimeout( addHamburgerMenusToCards, 1 );
 		initDatepickerSample();
 
-		const enableToggle              = document.getElementById( 'frm_enable_styling' );
-		const styleIdInput              = getStyleIdInput();
+		const enableToggle = document.getElementById( 'frm_enable_styling' );
+		const styleIdInput = getStyleIdInput();
 		state.initialSelectedStyleValue = styleIdInput.value;
 
 		enableToggle.addEventListener( 'change', handleEnableStylingToggleChange );
@@ -131,9 +130,9 @@
 	function initStyleCardPagination() {
 		document.querySelectorAll( '.frm-style-card-pagination' ).forEach(
 			pagination => {
-				const wrapper       = pagination.closest( '.frm-style-card-wrapper' );
+				const wrapper = pagination.closest( '.frm-style-card-wrapper' );
 				const showAllAnchor = pagination.querySelector( '.frm-show-all-styles' );
-				let showingAll      = false;
+				let showingAll = false;
 
 				onClickPreventDefault(
 					showAllAnchor,
@@ -151,7 +150,7 @@
 						wrapper.querySelectorAll( '.frm-style-card:nth-child(3) ~ .frm-style-card' ).forEach(
 							card => card.classList.add( 'frm_hidden' )
 						);
-						const hiddenCount         = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
+						const hiddenCount = wrapper.querySelectorAll( '.frm-style-card.frm_hidden' ).length;
 						/* translators: %d: The number of hidden items to show. */
 						showAllAnchor.textContent = sprintf( __( 'Show all (%d)', 'formidable' ), hiddenCount );
 					}
@@ -220,7 +219,7 @@
 	 * @return {void}
 	 */
 	function trackListPageChange() {
-		const styleIdInput   = getStyleIdInput();
+		const styleIdInput = getStyleIdInput();
 		state.unsavedChanges = styleIdInput.value !== state.initialSelectedStyleValue;
 	}
 
@@ -229,7 +228,7 @@
 	 * @return {void}
 	 */
 	function toggleFormidableStylingInPreviewForms( on ) {
-		const preview    = document.getElementById( 'frm_style_preview' );
+		const preview = document.getElementById( 'frm_style_preview' );
 		const activeCard = getActiveCard();
 
 		let selector = '.frm_forms';
@@ -346,7 +345,7 @@
 			return;
 		}
 
-		const card         = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
+		const card = target.classList.contains( 'frm-style-card' ) ? target : target.closest( '.frm-style-card' );
 		const cardIsLocked = card.classList.contains( 'frm-locked-style' );
 
 		if ( cardIsLocked ) {
@@ -354,9 +353,9 @@
 			return; // Exit early as we're not actually selecting a locked template for preview.
 		}
 
-		const previewArea  = document.getElementById( 'frm_style_preview' );
-		const activeCard   = document.querySelector( '.frm-active-style-card' );
-		const sampleForm   = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
+		const previewArea = document.getElementById( 'frm_style_preview' );
+		const activeCard = document.querySelector( '.frm-active-style-card' );
+		const sampleForm = document.getElementById( 'frm_sample_form' ).querySelector( '.frm_forms' );
 		const styleIdInput = getStyleIdInput();
 
 		disableLabelTransitions();
@@ -383,15 +382,15 @@
 		setTimeout( enableLabelTransitions, 1 );
 
 		// We want to toggle the edit button so you can only leave the page to edit the style if it's active (to avoid unsaved changes).
-		const editButton     = document.getElementById( 'frm_edit_style' );
+		const editButton = document.getElementById( 'frm_edit_style' );
 		const showEditButton = null !== card.querySelector( '.frm-style-card-info' ); // Only the "Applied style" has card info.
 		editButton.classList.toggle( 'frm_hidden', ! showEditButton );
 
 		changeLabelPositionsInPreview( card.dataset.labelPosition );
 
 		// Trigger an action here so Pro can handle template preview updates on card click.
-		const hookName      = 'frm_style_card_click';
-		const hookArgs      = { card, styleIdInput };
+		const hookName = 'frm_style_card_click';
+		const hookArgs = { card, styleIdInput };
 		wp.hooks.doAction( hookName, hookArgs );
 	}
 
@@ -400,9 +399,9 @@
 	 * @return {HTMLElement} The modal element.
 	 */
 	function maybeCreateStyleTemplateModal( card ) {
-		const titleElement  = card.querySelector( '.frm-style-card-title' );
+		const titleElement = card.querySelector( '.frm-style-card-title' );
 		const templateTitle = titleElement.textContent;
-		const modal         = maybeCreateModal(
+		const modal = maybeCreateModal(
 			'frm_style_template_modal',
 			{
 				content: getStyleTemplateModalContent( card ),
@@ -421,23 +420,23 @@
 		const children = [];
 
 		children.push(
-			div({
+			div( {
 				className: 'frm_warning_style',
 				children: [
 					span(
 						/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
 						sprintf( __( 'Access to this style requires the %s plan.', 'formidable' ), card.dataset.requires )
 					),
-					a({
+					a( {
 						text: getUpgradeNowText(),
 						href: card.dataset.upgradeUrl,
 						target: '_blank'
-					})
+					} )
 				]
-			})
+			} )
 		);
 
-		return div({ children });
+		return div( { children } );
 	}
 
 	/**
@@ -445,25 +444,25 @@
 	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getStyleTemplateModalFooter( card ) {
-		const viewDemoSiteButton = footerButton({
+		const viewDemoSiteButton = footerButton( {
 			text: __( 'Learn More', 'formidable' ),
 			buttonType: 'secondary'
-		});
+		} );
 		viewDemoSiteButton.href = card.dataset.upgradeUrl;
 		viewDemoSiteButton.target = '_blank';
 
-		const primaryActionButton = footerButton({
+		const primaryActionButton = footerButton( {
 			text: getUpgradeNowText(),
 			buttonType: 'primary'
-		});
+		} );
 
 		primaryActionButton.classList.remove( 'dismiss' );
 		primaryActionButton.setAttribute( 'href', card.dataset.upgradeUrl );
 		primaryActionButton.target = '_blank';
 
-		return div({
+		return div( {
 			children: [ viewDemoSiteButton, primaryActionButton ]
-		});
+		} );
 	}
 
 	/**
@@ -612,7 +611,7 @@
 
 		const styleId = document.getElementById( 'frm_styling_form' ).querySelector( 'input[name="ID"]' ).value;
 
-		const hamburgerMenu = getHamburgerMenu({ styleId });
+		const hamburgerMenu = getHamburgerMenu( { styleId } );
 		hamburgerMenu.classList.add( 'alignright' );
 		styleName.parentNode.insertBefore( hamburgerMenu, styleName );
 	}
@@ -629,41 +628,41 @@
 	 * @return {HTMLElement} The hamburger menu element.
 	 */
 	function getHamburgerMenu( data ) {
-		const hamburgerMenu = a({
+		const hamburgerMenu = a( {
 			className: 'frm-dropdown-toggle dropdown-toggle',
-			child: svg({ href: '#frm_thick_more_vert_icon' })
-		});
+			child: svg( { href: '#frm_thick_more_vert_icon' } )
+		} );
 		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
 		hamburgerMenu.setAttribute( 'data-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 
-		const isTemplate        = 'undefined' !== typeof data.templateKey;
+		const isTemplate = 'undefined' !== typeof data.templateKey;
 		let dropdownMenuOptions = [];
 
 		if ( isListPage ) {
-			const applyOption = a({
+			const applyOption = a( {
 				text: isTemplate ? __( 'Install and apply', 'formidable' ) : __( 'Apply', 'formidable' )
-			});
+			} );
 			addIconToOption( applyOption, 'frm_save_icon' );
-			dropdownMenuOptions.push({ anchor: applyOption, type: 'apply' });
+			dropdownMenuOptions.push( { anchor: applyOption, type: 'apply' } );
 			onClickPreventDefault( applyOption, handleApplyOptionClick );
 		}
 
 		if ( ! isTemplate ) {
 			if ( 'string' === typeof data.editUrl ) {
 				// The Edit option is not included on the Edit page.
-				const editOption = a({
+				const editOption = a( {
 					text: __( 'Edit', 'formidable' ),
 					href: data.editUrl
-				});
+				} );
 				addIconToOption( editOption, 'frm_pencil_icon' );
-				dropdownMenuOptions.push({ anchor: editOption, type: 'edit' });
+				dropdownMenuOptions.push( { anchor: editOption, type: 'edit' } );
 			}
 
-			const resetOption = a({
+			const resetOption = a( {
 				text: __( 'Reset to Defaults', 'formidable' )
-			});
+			} );
 			addIconToOption( resetOption, 'frm_repeater_icon' );
 			onClickPreventDefault( resetOption, () => confirmResetStyle( data.styleId ) );
 
@@ -673,29 +672,29 @@
 			);
 		}
 
-		const hookName      = 'frm_style_card_dropdown_options';
-		const hookArgs      = { data, addIconToOption, isTemplate };
+		const hookName = 'frm_style_card_dropdown_options';
+		const hookArgs = { data, addIconToOption, isTemplate };
 		dropdownMenuOptions = wp.hooks.applyFilters( hookName, dropdownMenuOptions, hookArgs );
 
 		if ( isListPage && ! isTemplate ) {
 			maybeAddDuplicateUpsell( dropdownMenuOptions );
 		}
 
-		const dropdownMenu  = div({
+		const dropdownMenu = div( {
 			// Use dropdown-menu-right to avoid an overlapping issue with the card to the right (where the # of forms would appear above the menu).
 			className: 'frm-dropdown-menu frm-style-options-menu frm-p-1',
 			children: dropdownMenuOptions.map( wrapDropdownItem )
-		});
+		} );
 
 		const isRtl = document.body.classList.contains( 'rtl' );
 		dropdownMenu.classList.add( 'dropdown-menu-' + ( isRtl ? 'left' : 'right' ) );
 
 		dropdownMenu.setAttribute( 'role', 'menu' );
 
-		return div({
+		return div( {
 			className: 'dropdown frm_wrap', // The .frm_wrap class prevents a blue outline on the active dropdown trigger.
 			children: [ hamburgerMenu, dropdownMenu ]
-		});
+		} );
 	}
 
 	/**
@@ -705,7 +704,7 @@
 	function maybeAddDuplicateUpsell( dropdownMenuOptions ) {
 		let duplicateOptionExists = false;
 		for ( let i = 0; i < dropdownMenuOptions.length; ++i ) {
-			if ( dropdownMenuOptions[i].type === 'duplicate' ) {
+			if ( dropdownMenuOptions[ i ].type === 'duplicate' ) {
 				duplicateOptionExists = true;
 				break;
 			}
@@ -715,10 +714,10 @@
 			return;
 		}
 
-		const duplicateUpsell = a({
+		const duplicateUpsell = a( {
 			text: __( 'Duplicate', 'formidable' ),
 			className: 'frm_noallow'
-		});
+		} );
 		addIconToOption( duplicateUpsell, 'frm_clone_icon' );
 		onClickPreventDefault( duplicateUpsell, () => document.getElementById( 'frm_new_style_trigger' ).click() );
 		const upsellOption = { anchor: duplicateUpsell, type: 'duplicate' };
@@ -731,7 +730,7 @@
 	 */
 	function handleApplyOptionClick( event ) {
 		const option = event.target;
-		const card   = option.closest( '.frm-style-card' );
+		const card = option.closest( '.frm-style-card' );
 		if ( ! card ) {
 			return;
 		}
@@ -821,7 +820,7 @@
 				return false;
 			}
 		);
-		const content = div({ child: form });
+		const content = div( { child: form } );
 		content.style.padding = '20px';
 		content.querySelector( 'label' ).style.lineHeight = 1.5;
 
@@ -852,15 +851,15 @@
 	 * @return {HTMLElement} The modal footer element.
 	 */
 	 function getRenameStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({ text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' });
+		const cancelButton = footerButton( { text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' } );
 		cancelButton.classList.add( 'dismiss' );
 
-		const renameButton = footerButton({ text: __( 'Rename style', 'formidable' ), buttonType: 'primary' });
+		const renameButton = footerButton( { text: __( 'Rename style', 'formidable' ), buttonType: 'primary' } );
 		onClickPreventDefault( renameButton, () => renameStyle( styleId ) );
 
-		return div({
+		return div( {
 			children: [ cancelButton, renameButton ]
-		});
+		} );
 	}
 
 	/**
@@ -871,7 +870,7 @@
 	 */
 	function renameStyle( styleId ) {
 		const styleNameInput = document.getElementById( 'frm_rename_style_name_input' );
-		const newStyleName   = styleNameInput.value;
+		const newStyleName = styleNameInput.value;
 
 		if ( '' === newStyleName ) {
 			// Avoid setting an empty name.
@@ -879,7 +878,7 @@
 			return;
 		}
 
-		const formData  = new FormData();
+		const formData = new FormData();
 		formData.append( 'style_id', styleId );
 		formData.append( 'style_name', newStyleName );
 		doJsonPost( 'rename_style', formData ).then(
@@ -911,7 +910,7 @@
 	 * @return {void}
 	 */
 	function updateStyleNameInCard( styleId, newStyleName ) {
-		const card         = getCardByStyleId( styleId );
+		const card = getCardByStyleId( styleId );
 		const titleElement = card.querySelector( '.frm-style-card-title' );
 		titleElement.textContent = newStyleName;
 	}
@@ -942,7 +941,7 @@
 	 * @return {void}
 	 */
 	function addIconToOption( option, iconId ) {
-		const icon = frmDom.svg({ href: '#' + iconId });
+		const icon = frmDom.svg( { href: '#' + iconId } );
 		option.insertBefore( icon, option.firstChild );
 	}
 
@@ -975,17 +974,17 @@
 	 * @return {HTMLElement} The modal footer element.
 	 */
 	function getResetStyleModalFooter( styleId ) {
-		const cancelButton = footerButton({
+		const cancelButton = footerButton( {
 			text: __( 'Cancel', 'formidable' ),
 			buttonType: 'cancel'
-		});
+		} );
 		cancelButton.classList.add( 'dismiss' );
-		const resetButton = footerButton({
+		const resetButton = footerButton( {
 			text: __( 'Reset style', 'formidable' ),
 			buttonType: 'primary'
-		});
+		} );
 		onClickPreventDefault( resetButton, () => resetStyle( styleId ) );
-		return div({ children: [ cancelButton, resetButton ] });
+		return div( { children: [ cancelButton, resetButton ] } );
 	}
 
 	/**
@@ -1035,7 +1034,7 @@
 	 * @return {void}
 	 */
 	function resetStyleOnEditPage() {
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -1043,7 +1042,7 @@
 				nonce: frmGlobal.nonce
 			},
 			success: syncEditPageAfterResetAction
-		});
+		} );
 	}
 
 	/**
@@ -1102,9 +1101,9 @@
 		}
 
 		const newStyle = document.createElement( 'link' );
-		newStyle.rel   = 'stylesheet';
-		newStyle.type  = 'text/css';
-		newStyle.href  = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
+		newStyle.rel = 'stylesheet';
+		newStyle.type = 'text/css';
+		newStyle.href = style.href + '&key=' + getAutoId(); // Make the URL unique so the old stylesheet doesn't get picked up by cache.
 
 		// Listen for the new style to load before removing the old style to avoid having no styles while the new style is loading.
 		newStyle.addEventListener(
@@ -1115,7 +1114,7 @@
 			}
 		);
 
-		const head = document.getElementsByTagName( 'HEAD' )[0];
+		const head = document.getElementsByTagName( 'HEAD' )[ 0 ];
 		head.appendChild( newStyle );
 	}
 
@@ -1132,11 +1131,11 @@
 	 * @param {string}      data.type
 	 * @return {HTMLElement} The dropdown item element.
 	 */
-	function wrapDropdownItem({ anchor, type }) {
-		return div({
+	function wrapDropdownItem( { anchor, type } ) {
+		return div( {
 			className: 'dropdown-item frm-' + type + '-style',
 			child: anchor
-		});
+		} );
 	}
 
 	/**
@@ -1145,9 +1144,9 @@
 	 * @return {void}
 	 */
 	function initEditPage() {
-		const { debounce }           = frmDom.util;
+		const { debounce } = frmDom.util;
 		const debouncedPreviewUpdate = debounce( () => changeStyling(), 100 );
-		const debouncedColorChange	 = debounce(( event, value ) => {
+		const debouncedColorChange	 = debounce( ( event, value ) => {
 			/**
 			 * Fires on style colorpicker change.
 			 *
@@ -1160,11 +1159,11 @@
 		const debouncedTextSquishCheck = debounce( textSquishCheck, 300 );
 		initPosClass(); // It's important that this gets called before we add event listeners because it triggers change events.
 
-		['frm_field_height', 'frm_field_font_size', 'frm_field_pad'].forEach( selector => {
+		[ 'frm_field_height', 'frm_field_font_size', 'frm_field_pad' ].forEach( selector => {
 			document.getElementById( selector ).addEventListener( 'change', debouncedTextSquishCheck );
-		});
+		} );
 
-		jQuery( 'input.hex' ).wpColorPicker({
+		jQuery( 'input.hex' ).wpColorPicker( {
 			change: function( event, ui ) {
 				let color = jQuery( this ).wpColorPicker( 'color' );
 				trackUnsavedChange();
@@ -1181,14 +1180,14 @@
 
 				jQuery( event.target ).val( color ).trigger( 'change' );
 			}
-		});
+		} );
 		jQuery( '.wp-color-result-text' ).text( function( _, oldText ) {
 			const container = jQuery( this ).closest( '.wp-picker-container' );
-			if ( 'undefined' !== typeof container && container[0].parentElement.classList.contains( 'frm-colorpicker' ) ) {
-				return container[0].querySelector( '.wp-color-picker' ).value;
+			if ( 'undefined' !== typeof container && container[ 0 ].parentElement.classList.contains( 'frm-colorpicker' ) ) {
+				return container[ 0 ].querySelector( '.wp-color-picker' ).value;
 			}
 			return oldText === 'Select Color' ? 'Select' : oldText;
-		});
+		} );
 		jQuery( '#frm_styling_form .styling_settings, #frm_styling_form .frm-field-shape, #frm_styling_form input[name="frm_style_setting[post_content][base_font_size]"]' ).on( 'change', debouncedPreviewUpdate );
 
 		// This is really only necessary for Pro. But if Pro is not up to date to initialize the datepicker in the sample form, it should still work because it's initialized here.
@@ -1210,9 +1209,9 @@
 			const styleInputs = Array.from( document.getElementById( 'frm_style_sidebar' ).querySelectorAll( 'input, select, textarea' ) ).filter(
 				input => 'style_name' === input.name || 0 === input.name.indexOf( 'frm_style_setting[post_content]' )
 			);
-			const locStr      = JSON.stringify( jQuery( styleInputs ).serializeArray() );
+			const locStr = JSON.stringify( jQuery( styleInputs ).serializeArray() );
 
-			jQuery.ajax({
+			jQuery.ajax( {
 				type: 'POST',
 				url: ajaxurl,
 				data: {
@@ -1220,11 +1219,11 @@
 					nonce: frmGlobal.nonce,
 					frm_style_setting: locStr
 				},
-				success: ( css ) => {
+				success: css => {
 					handleChangeStylingSuccess( css );
 					setSelectPlaceholderColor();
 				}
-			});
+			} );
 		}
 
 		/**
@@ -1253,9 +1252,9 @@
 			if ( null !== frmDom.util.getCookie( 'frm-style-text-squish-check' ) ) {
 				return;
 			}
-			const height         = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
+			const height = document.getElementById( 'frm_field_height' ).value.replace( /\D/g, '' );
 			const paddingEntered = document.getElementById( 'frm_field_pad' ).value.split( ' ' );
-			const paddingCount   = paddingEntered.length;
+			const paddingCount = paddingEntered.length;
 
 			frmDom.util.setCookie( 'frm-style-text-squish-check', 1, 30 );
 
@@ -1266,10 +1265,10 @@
 
 			const size = document.getElementById( 'frm_field_font_size' ).value.replace( /\D/g, '' );
 			// Get the top and bottom padding from entered values
-			const paddingTop    = paddingEntered[0].replace( /\D/g, '' );
-			let   paddingBottom = paddingTop;
+			const paddingTop = paddingEntered[ 0 ].replace( /\D/g, '' );
+			let paddingBottom = paddingTop;
 			if ( paddingCount >= 3 ) {
-				paddingBottom = paddingEntered[2].replace( /\D/g, '' );
+				paddingBottom = paddingEntered[ 2 ].replace( /\D/g, '' );
 			}
 
 			// Check if there is enough space for text
@@ -1288,9 +1287,9 @@
 		jQuery( document ).on( 'change', '.frm-dropdown-menu input[type="radio"]', function() {
 			trackUnsavedChange();
 
-			const radio  = this;
+			const radio = this;
 			const btnGrp = radio.closest( '.btn-group' );
-			const btnId  = btnGrp.getAttribute( 'id' );
+			const btnId = btnGrp.getAttribute( 'id' );
 
 			const select = document.getElementById( btnId.replace( '_select', '' ) );
 			if ( select ) {
@@ -1305,7 +1304,7 @@
 			}
 
 			radio.closest( '.dropdown-item' ).classList.add( 'active' );
-		});
+		} );
 
 		if ( frm_admin_js.requireAccordionTitleClickListener ) {
 			document.querySelectorAll( '.styling_settings h3.accordion-section-title' ).forEach( el => {
@@ -1313,8 +1312,8 @@
 					if ( ! event.target.closest( 'button' ) ) {
 						el.querySelector( 'button' ).click();
 					}
-				});
-			});
+				} );
+			} );
 		}
 	}
 
@@ -1394,9 +1393,9 @@
 		}
 
 		document.getElementById( 'frm_style_preview' ).querySelectorAll( '.frm_form_field.frm-default-label-position, #frm_sample_form .frm_form_field' ).forEach( container => {
-			const input                 = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
+			const input = container.querySelector( ':scope > input, :scope > select, :scope > textarea' ); // Fields that support floating label should have a directly child input/textarea/select.
 			const shouldForceTopStyling = 'inside' === value && ( ! input || 'hidden' === input.type ); // We do not want file upload to use floating labels, or inline datepickers, which both use hidden inputs.
-			const currentValue          = shouldForceTopStyling ? 'top' : value;
+			const currentValue = shouldForceTopStyling ? 'top' : value;
 
 			container.classList.remove( 'frm_top_container', 'frm_left_container', 'frm_right_container', 'frm_none_container', 'frm_inside_container' );
 			container.classList.add( 'frm_' + currentValue + '_container' );
@@ -1404,7 +1403,7 @@
 			if ( 'inside' === currentValue ) {
 				checkFloatingLabelsForStyles( input, container );
 			}
-		});
+		} );
 	}
 
 	/**
@@ -1449,7 +1448,7 @@
 
 		const $sample = jQuery( '#datepicker_sample' );
 		if ( $sample.length && 'function' === typeof $sample.datepicker ) {
-			$sample.datepicker({ changeMonth: true, changeYear: true });
+			$sample.datepicker( { changeMonth: true, changeYear: true } );
 		}
 	}
 
@@ -1469,8 +1468,8 @@
 		}
 
 		// Function to change the color of a select element
-		const changeSelectColor = ( select ) => {
-			if ( select.options[select.selectedIndex] && select.options[select.selectedIndex].classList.contains( 'frm-select-placeholder' ) ) {
+		const changeSelectColor = select => {
+			if ( select.options[ select.selectedIndex ] && select.options[ select.selectedIndex ].classList.contains( 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';
@@ -1478,13 +1477,13 @@
 		};
 
 		// Use a loop to iterate through each select element
-		selects.forEach( ( select ) => {
+		selects.forEach( select => {
 			// Apply the color change to each select element
 			changeSelectColor( select );
 
 			// Add an event listener for future changes
 			select.addEventListener( 'change', () => changeSelectColor( select ) );
-		});
+		} );
 	}
 
 	// Hook into the styleInit function in formidable_admin.js

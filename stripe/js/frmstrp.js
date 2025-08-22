@@ -18,7 +18,7 @@
 	 */
 	function validateForm( e ) {
 		thisForm = this;
-		formID   = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
+		formID = jQuery( thisForm ).find( 'input[name="form_id"]' ).val();
 
 		if ( shouldProcessForm() ) {
 			e.preventDefault();
@@ -120,7 +120,7 @@
 
 			window.onpageshow = function( event ) {
 				// Force the form to reload on back button after submitting.
-				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[0].type === 'back_forward' ) ) {
+				if ( event.persisted || ( window.performance && window.performance.getEntriesByType( 'navigation' )[ 0 ].type === 'back_forward' ) ) {
 					window.location.reload();
 				}
 			};
@@ -191,10 +191,10 @@
 
 			const error = element.querySelector( '.frm_error_style' );
 			if ( error ) {
-				handleConfirmPaymentError({
+				handleConfirmPaymentError( {
 					type: 'form_submit_error',
 					message: error.textContent
-				});
+				} );
 				return false;
 			}
 
@@ -231,9 +231,9 @@
 	 */
 	function validateFormSubmit( $form ) {
 		const errors = frmFrontForm.validateFormSubmit( $form );
-		const keys   = Object.keys( errors );
+		const keys = Object.keys( errors );
 
-		if ( 1 === keys.length && errors[ keys[0] ] === '' ) {
+		if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
 			// Pop the empty error that gets added by invisible recaptcha.
 			keys.pop();
 		}
@@ -280,7 +280,7 @@
 
 		for ( i = 0; i < settings.length; i++ ) {
 			firstNameID = settings[ i ].first_name;
-			lastNameID  = settings[ i ].last_name;
+			lastNameID = settings[ i ].last_name;
 		}
 
 		/**
@@ -295,14 +295,14 @@
 			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
 
 			if ( type === 'container' ) {
-				return queryForNameFieldIsFound ?
-					window.frmProForm.queryForNameField( fieldID, 'container' ) :
-					document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+				return queryForNameFieldIsFound
+					? window.frmProForm.queryForNameField( fieldID, 'container' )
+					: document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
 			}
 
-			return queryForNameFieldIsFound ?
-			window.frmProForm.queryForNameField( fieldID, 'field', $form[0]) :
-			$form[0].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+			return queryForNameFieldIsFound
+				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
+				: $form[ 0 ].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
 		}
 
 		if ( firstNameID !== '' ) {
@@ -400,7 +400,7 @@
 		let run = price.indexOf( fieldId ) > -1 || price.indexOf( field.id ) > -1;
 		if ( ! run ) {
 			for ( i = 0; i < price.length; i++ ) {
-				if ( field.id.indexOf( price[ i ]) === 0 ) {
+				if ( field.id.indexOf( price[ i ] ) === 0 ) {
 					run = true;
 				}
 			}
@@ -413,17 +413,17 @@
 			};
 			postAjax( data, function() {
 				// Amount has been conditionally updated.
-			});
+			} );
 		}
 	}
 
 	function postAjax( data, success ) {
 		const xmlHttp = new XMLHttpRequest();
 		const params = typeof data == 'string' ? data : Object.keys( data ).map(
-				function( k ) {
-					return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ]);
-				}
-			).join( '&' );
+			function( k ) {
+				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
+			}
+		).join( '&' );
 
 		xmlHttp.open( 'post', frm_stripe_vars.ajax, true );
 		xmlHttp.onreadystatechange = function() {
@@ -516,13 +516,13 @@
 			theme: 'stripe',
 			variables: {
 				fontSizeBase: frm_stripe_vars.baseFontSize,
-				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].color ),
-				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules['.Input'].backgroundColor ),
+				colorText: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].color ),
+				colorBackground: maybeAdjustColorForStripe( frm_stripe_vars.appearanceRules[ '.Input' ].backgroundColor ),
 				fontSmooth: 'auto'
 			},
 			rules: frm_stripe_vars.appearanceRules
 		};
-		elements = frmstripe.elements({ clientSecret: clientSecret, appearance: appearance });
+		elements = frmstripe.elements( { clientSecret: clientSecret, appearance: appearance } );
 		isStripeLink = true;
 
 		insertAuthenticationElement( cardElement );
@@ -550,9 +550,9 @@
 
 		const rgba = color.replace( /^rgba?\(|\s+|\)$/g, '' ).split( ',' );
 		/* eslint-disable no-bitwise */
-		return `#${( ( 1 << 24 ) + ( parseInt( rgba[0], 10 ) << 16 ) + ( parseInt( rgba[1], 10 ) << 8 ) + parseInt( rgba[2], 10 ) )
+		return `#${ ( ( 1 << 24 ) + ( parseInt( rgba[ 0 ], 10 ) << 16 ) + ( parseInt( rgba[ 1 ], 10 ) << 8 ) + parseInt( rgba[ 2 ], 10 ) )
 			.toString( 16 )
-			.slice( 1 )}`;
+			.slice( 1 ) }`;
 	}
 
 	/**
@@ -625,7 +625,7 @@
 	 */
 	function getAuthenticationChangeHandler( cardElement, emailInput ) {
 		function syncEmailInput( emailValue ) {
-			if ( 'string' === typeof emailValue && emailValue.length  ) {
+			if ( 'string' === typeof emailValue && emailValue.length ) {
 				emailInput.value = emailValue;
 			}
 		}
@@ -650,7 +650,7 @@
 
 			if ( readyToSubmitStripeLink( form ) ) {
 				thisForm = form;
-				running  = 0;
+				running = 0;
 				enableSubmit();
 			} else {
 				disableSubmit( form );
@@ -687,7 +687,7 @@
 	 * @return {string} Layout type for Stripe elements.
 	 */
 	function getLayout() {
-		const settings = getStripeSettings()[0];
+		const settings = getStripeSettings()[ 0 ];
 		return settings.hasOwnProperty( 'layout' ) && settings.layout || 'tabs';
 	}
 
@@ -756,7 +756,7 @@
 		// Handle final question or non-conversational form.
 		if ( readyToSubmitStripeLink( form ) ) {
 			thisForm = form;
-			running  = 0;
+			running = 0;
 			enableSubmit();
 		} else {
 			disableSubmit( form );
@@ -849,7 +849,7 @@
 			}
 
 			const currentSettingValue = currentSetting[ settingKey ];
-			const settingIsWrappedAsShortcode = '[' === currentSettingValue[0] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
+			const settingIsWrappedAsShortcode = '[' === currentSettingValue[ 0 ] && ']' === currentSettingValue[ currentSettingValue.length - 1 ];
 
 			if ( settingIsWrappedAsShortcode ) {
 				// Email is wrapped as a shortcode.

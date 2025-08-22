@@ -72,11 +72,11 @@ const onFormsSelectChange = () => {
 
 	toggleDisableModalElements( false );
 
-	const selectedOption = formsSelect.options[formsSelect.selectedIndex];
+	const selectedOption = formsSelect.options[ formsSelect.selectedIndex ];
 	const formDescription = selectedOption.dataset.description.trim();
 
 	let formName = selectedOption.dataset.name.trim();
-	const templateString = ` ${__( 'Template', 'formidable' )}`;
+	const templateString = ` ${ __( 'Template', 'formidable' ) }`;
 	if ( ! formName.endsWith( templateString ) ) {
 		formName += templateString;
 	}
@@ -93,7 +93,7 @@ const onFormsSelectChange = () => {
  * @param {boolean} shouldDisable True to disable, false to enable.
  * @return {void}
  */
-const toggleDisableModalElements = ( shouldDisable ) => {
+const toggleDisableModalElements = shouldDisable => {
 	const { createTemplateName, createTemplateDescription, createTemplateButton } = getElements();
 
 	// Toggle the disabled attribute for input and textarea
@@ -102,7 +102,7 @@ const toggleDisableModalElements = ( shouldDisable ) => {
 		if ( shouldDisable ) {
 			element.value = ''; // Clear the content for input and textarea
 		}
-	});
+	} );
 
 	// Toggle the disabled class for the button
 	createTemplateButton.classList.toggle( 'disabled', shouldDisable );

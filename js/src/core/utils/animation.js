@@ -1,5 +1,4 @@
 export class frmAnimate {
-
 	/**
 	 * Construct frmAnimate
 	 *
@@ -8,7 +7,7 @@ export class frmAnimate {
 	 */
 	constructor( elements, type = 'default' ) {
 		this.elements = elements;
-		this.type     = type;
+		this.type = type;
 
 		this.prepareElements();
 	}
@@ -25,8 +24,8 @@ export class frmAnimate {
 			element.addEventListener( 'animationend', () => {
 				this.resetOpacity();
 				element.classList.remove( 'frm-fadein-up' );
-			}, { once: true });
-		});
+			}, { once: true } );
+		} );
 	}
 
 	/**
@@ -42,7 +41,7 @@ export class frmAnimate {
 			this.applyStyleToElements( ( element, index ) => {
 				element.classList.remove( 'frm-animate' );
 				element.style.transitionDelay = ( index + 1 ) * delay + 's';
-			});
+			} );
 		}, 200 );
 	}
 
@@ -58,7 +57,7 @@ export class frmAnimate {
 				element.classList.add( 'frm-init-fadein-3d' );
 			}
 			element.classList.add( 'frm-animate' );
-		});
+		} );
 	}
 
 	resetOpacity() {

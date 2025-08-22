@@ -9,7 +9,7 @@
 			handleToggleChangeEvent( e );
 		}
 
-		if ( 'frm_currency' === e.target.id) {
+		if ( 'frm_currency' === e.target.id ) {
 			syncCurrencyOptions( e.target );
 		}
 	}

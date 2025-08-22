@@ -15,14 +15,14 @@ function frmPS() {
 		 * Get parent search hint element.
 		 * @return {Element|null} The parent search hint element.
 		 */
-		getCard: function () {
+		getCard: function() {
 			return document.querySelector( '.plugin-card-frm-plugin-search' );
 		},
 
 		/**
 		 * Replace bottom row of the card to insert logo, text and link to dismiss the card.
 		 */
-		replaceCardBottom: function () {
+		replaceCardBottom: function() {
 			const hint = FormidablePSH.getCard();
 			if ( 'object' === typeof hint && null !== hint ) {
 				hint.querySelector( '.plugin-card-bottom' ).outerHTML =
@@ -39,13 +39,12 @@ function frmPS() {
 			}
 		},
 
-
 		/**
 		 * Check if plugin card list nodes changed. If there's a Formidable PSH card, replace the title and the bottom row.
 		 * @param {Array} mutationsList
 		 */
-		replaceOnNewResults: function ( mutationsList ) {
-			mutationsList.forEach( function ( mutation ) {
+		replaceOnNewResults: function( mutationsList ) {
+			mutationsList.forEach( function( mutation ) {
 				if (
 					'childList' === mutation.type &&
 					1 === document.querySelectorAll( '.plugin-card-frm-plugin-search' ).length
@@ -58,7 +57,7 @@ function frmPS() {
 		/**
 		 * Start suggesting.
 		 */
-		init: function () {
+		init: function() {
 			if ( FormidablePSH.$pluginFilter === null ) {
 				return;
 			}

@@ -11,8 +11,8 @@ import { PREFIX, getState, setSingleState } from '../shared';
 import { showFavoritesEmptyState } from '../ui';
 import { isFavoriteTemplate, isCustomTemplate, isFeaturedTemplate, isFavoritesCategory } from '../utils';
 
-const FAVORITE_BUTTON_CLASS = `.${PREFIX}-item-favorite-button`;
-const HEART_ICON_SELECTOR = `${FAVORITE_BUTTON_CLASS} use`;
+const FAVORITE_BUTTON_CLASS = `.${ PREFIX }-item-favorite-button`;
+const HEART_ICON_SELECTOR = `${ FAVORITE_BUTTON_CLASS } use`;
 const FILLED_HEART_ICON = '#frm_heart_solid_icon';
 const LINEAR_HEART_ICON = '#frm_heart_icon';
 const OPERATION = {
@@ -41,7 +41,7 @@ function addFavoriteButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onFavoriteButtonClick = ( event ) => {
+const onFavoriteButtonClick = event => {
 	const favoriteButton = event.currentTarget;
 	const { templatesList, featuredTemplatesList, favoritesCategoryCountEl, customTemplatesTitle } = getElements();
 
@@ -60,19 +60,19 @@ const onFavoriteButtonClick = ( event ) => {
 	 */
 	let twinFeaturedTemplate = null;
 
-	template.classList.toggle( `${PREFIX}-favorite-item`, ! isFavorited );
+	template.classList.toggle( `${ PREFIX }-favorite-item`, ! isFavorited );
 	if ( isTemplateFeatured ) {
-		const templateList = template.closest( `#${PREFIX}-list` ) ?
-			featuredTemplatesList :
-			templatesList;
+		const templateList = template.closest( `#${ PREFIX }-list` )
+			? featuredTemplatesList
+			: templatesList;
 
 		if ( templateList ) {
 			twinFeaturedTemplate = templateList.querySelector(
-				`.frm-card-item[data-id="${templateId}"]`
+				`.frm-card-item[data-id="${ templateId }"]`
 			);
 			// Toggle twin template's favorite status
 			twinFeaturedTemplate.classList.toggle(
-				`${PREFIX}-favorite-item`,
+				`${ PREFIX }-favorite-item`,
 				! isFavorited
 			);
 		}

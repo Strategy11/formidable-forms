@@ -3,13 +3,13 @@
 		return;
 	}
 
-	const appId      = frmSquareVars.appId;
+	const appId = frmSquareVars.appId;
 	const locationId = frmSquareVars.locationId;
 
 	// Track the state of the Square card element
 	let squareCardElementIsComplete = false;
-	let thisForm                    = null;
-	let running                     = 0;
+	let thisForm = null;
+	let running = 0;
 
 	let cardGlobal;
 
@@ -29,17 +29,17 @@
 			return;
 		}
 
-		const card      = await payments.card();
+		const card = await payments.card();
 		const cardStyle = frmSquareVars.style;
 		await card.attach( '.frm-card-element' );
 
 		card.configure( { style: cardStyle } );
 
 		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', ( e ) => {
+		card.addEventListener( 'focusClassRemoved', e => {
 			const field = e.detail.field;
 			const value = e.detail.currentState.isCompletelyValid;
-			cardFields[field] = value;
+			cardFields[ field ] = value;
 
 			// Check if all fields are valid
 			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
@@ -71,8 +71,8 @@
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteEnableSubmit', {
 			detail: { form: thisForm }
-		});
-		document.dispatchEvent(event);
+		} );
+		document.dispatchEvent( event );
 	}
 
 	/**
@@ -87,17 +87,17 @@
 		// Trigger custom event for other scripts to hook into
 		const event = new CustomEvent( 'frmSquareLiteDisableSubmit', {
 			detail: { form: form }
-		});
+		} );
 		document.dispatchEvent( event );
 	}
 
 	async function createPayment( event, token, verificationToken ) {
-		const tokenInput = document.createElement('input');
+		const tokenInput = document.createElement( 'input' );
 		tokenInput.type = 'hidden';
 		tokenInput.value = token;
-		tokenInput.setAttribute('name', 'square-token');
+		tokenInput.setAttribute( 'name', 'square-token' );
 
-		const verificationInput = document.createElement('input');
+		const verificationInput = document.createElement( 'input' );
 		verificationInput.type = 'hidden';
 		verificationInput.value = verificationToken;
 		verificationInput.setAttribute( 'name', 'square-verification-token' );
@@ -123,9 +123,9 @@
 			return tokenResult.token;
 		}
 
-		let errorMessage = `Tokenization failed with status: ${tokenResult.status}`;
+		let errorMessage = `Tokenization failed with status: ${ tokenResult.status }`;
 		if ( tokenResult.errors ) {
-			errorMessage += ` and errors: ${JSON.stringify( tokenResult.errors )}`;
+			errorMessage += ` and errors: ${ JSON.stringify( tokenResult.errors ) }`;
 		}
 
 		throw new Error( errorMessage );
@@ -210,7 +210,7 @@
 					}
 
 					return false;
-				});
+				} );
 			}
 		}
 
@@ -219,10 +219,10 @@
 			// Square requires HTTPS to work.
 			payments = window.Square.payments( appId, locationId );
 		} catch ( e ) {
-			const statusContainer            = document.querySelector( '.frm-card-errors' );
+			const statusContainer = document.querySelector( '.frm-card-errors' );
 			statusContainer.classList.add( 'missing-credentials', 'frm_error' );
 			statusContainer.style.visibility = 'visible';
-			statusContainer.textContent      = e.message;
+			statusContainer.textContent = e.message;
 			return;
 		}
 
@@ -242,9 +242,9 @@
 		 */
 		function validateFormSubmit( $form ) {
 			const errors = frmFrontForm.validateFormSubmit( $form );
-			const keys   = Object.keys( errors );
+			const keys = Object.keys( errors );
 
-			if ( 1 === keys.length && errors[ keys[0] ] === '' ) {
+			if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
 				// Pop the empty error that gets added by invisible recaptcha.
 				keys.pop();
 			}
@@ -264,7 +264,7 @@
 					disableSubmit( thisForm );
 				}
 
-				const token             = await tokenize( card );
+				const token = await tokenize( card );
 				const verificationToken = await verifyBuyer( payments, token );
 				await createPayment( event, token, verificationToken );
 
@@ -284,7 +284,7 @@
 		}
 	}
 
-	document.addEventListener( 'DOMContentLoaded', async function () {
+	document.addEventListener( 'DOMContentLoaded', async function() {
 		if ( ! window.Square ) {
 			console.error( 'Square.js failed to load properly' );
 			return;
@@ -295,5 +295,5 @@
 		jQuery( document ).on( 'frmPageChanged', function() {
 			squareInit();
 		} );
-	});
+	} );
 }() );

@@ -9,7 +9,7 @@ const {
 
 function RadioControl( { label, className, selected, help, instanceId, onChange, options = [] } ) {
 	const id = `inspector-radio-control-${ instanceId }`;
-	const onChangeValue = ( event ) => onChange( event.target.value );
+	const onChangeValue = event => onChange( event.target.value );
 	className = className + ' components-radio-control';
 
 	// eslint-disable-next-line @wordpress/no-base-control-with-label-without-id
@@ -18,7 +18,7 @@ function RadioControl( { label, className, selected, help, instanceId, onChange,
 			<div
 				key={ `${ id }-${ index }` }
 				className="components-radio-control__option"
-				>
+			>
 				<input
 					id={ `${ id }-${ index }` }
 					className="components-radio-control__input"
@@ -28,15 +28,15 @@ function RadioControl( { label, className, selected, help, instanceId, onChange,
 					onChange={ onChangeValue }
 					checked={ option.value === selected }
 					aria-describedby={ !! help ? `${ id }__help` : undefined }
-					/>
+				/>
 				<label htmlFor={ `${ id }-${ index }` }>
 					{ option.label }
 				</label>
 				{ option.help &&
 				<p>{ option.help }</p>
-					}
+				}
 			</div>
-			) }
+		) }
 	</BaseControl>;
 }
 
