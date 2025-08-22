@@ -44,7 +44,7 @@
 	);
 
 	jQuery( document ).on(
-		'frmPageChanged',
+		'frmPageChanged frmFormComplete',
 		function() {
 			setupBootstrapDropdowns();
 		}
