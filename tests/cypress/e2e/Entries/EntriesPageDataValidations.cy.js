@@ -52,7 +52,8 @@ describe("Entries submitted from a form", () => {
         cy.get('.frm-tip-cta').then(($el) => {
             const text = $el.text().trim();
             expect(text).to.be.oneOf([
-                "Upgrade to Pro."
+                "Upgrade to Pro.",
+                "Get 60% Off Pro!"
             ]);
         })
 

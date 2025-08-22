@@ -287,7 +287,7 @@ class FrmFormsHelper {
 		 * Filters whether to autop the success message.
 		 * This is false by default if the message does not include line breaks.
 		 *
-		 * @since x.x
+		 * @since 6.23
 		 *
 		 * @param bool   $autop
 		 * @param string $message

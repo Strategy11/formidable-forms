@@ -13,6 +13,8 @@
 
 	let cardGlobal;
 
+	const buyerTokens = {};
+
 	// Track the state of each field in the card form
 	const cardFields = {
 		cardNumber: false,
@@ -134,6 +136,12 @@
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_verify_buyer' );
 		formData.append( 'nonce', frmSquareVars.nonce );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
 		const response = await fetch( frmSquareVars.ajax, {
 			method: 'POST',
 			body: formData
@@ -148,8 +156,16 @@
 			throw new Error( verificationData.data );
 		}
 
+		if ( buyerTokens[ verificationData.data.hash ] ) {
+			// Avoid a second verify buyer request if the verification data has not changed.
+			return buyerTokens[ verificationData.data.hash ];
+		}
+
 		const verificationDetails = verificationData.data.verificationDetails;
 		const verificationResults = await payments.verifyBuyer( token, verificationDetails );
+
+		buyerTokens[ verificationData.data.hash ] = verificationResults.token;
+
 		return verificationResults.token;
 	}
 
@@ -243,8 +259,6 @@
 				if ( ! validateFormSubmit( thisForm ) ) {
 					return;
 				}
-
-				event.preventDefault();
 
 				// Increment running counter and disable the submit button
 				running++;
