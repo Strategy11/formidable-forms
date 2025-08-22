@@ -18,8 +18,5 @@ jobs:
         uses: actions/checkout@master
       - name: Analyze js code style
         run: |
-          npm install eslint
-          wget https://develop.svn.wordpress.org/trunk/.jshintrc
-          ./node_modules/.bin/eslint ./js
-          ./node_modules/.bin/eslint ./stripe/js
-          ./node_modules/.bin/eslint ./tests/cypress/e2e/*
+          npm ci --legacy-peer-deps
+          npm run lint
