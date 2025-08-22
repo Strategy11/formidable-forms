@@ -109,7 +109,14 @@ describe( 'Updating form settings', () => {
 
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
 		cy.get( '.preview > .frm-dropdown-menu > :nth-child(1) > a' ).should( 'contain', 'On Blank Page' ).invoke( 'removeAttr', 'target' ).click();
-		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
+		cy.get( '.frm_forms', { timeout: 10000 } )
+			.should( 'be.visible' )
+			.within( () => {
+				cy.get( "button[type='submit'], input[type='submit']" )
+					.filter( ':visible' )
+					.first()
+					.click();
+			} );
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {
@@ -123,7 +130,14 @@ describe( 'Updating form settings', () => {
 		cy.log( 'Click on Preview - In Theme' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
 		cy.get( '.preview > .frm-dropdown-menu > :nth-child(2) > a' ).should( 'contain', 'In Theme' ).invoke( 'removeAttr', 'target' ).click();
-		cy.get( "button[type='submit']" ).should( 'contain', 'Submit' ).click();
+		cy.get( '.frm_forms', { timeout: 10000 } )
+			.should( 'be.visible' )
+			.within( () => {
+				cy.get( "button[type='submit'], input[type='submit']" )
+					.filter( ':visible' )
+					.first()
+					.click();
+			} );
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {

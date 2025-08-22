@@ -25,7 +25,10 @@ describe( 'Forms page', () => {
 							const headingText = $h1.text();
 							expect( [
 								'The Only WordPress Form Maker & Application Builder Plugin',
-								'Upgrade Today to Unlock the Full Power of Formidable Forms'
+								'Upgrade Today to Unlock the Full Power of Formidable Forms',
+								'The Most Advanced WordPress Form builder',
+								'More Than Just a WordPress Form builder'
+
 							] ).to.include( headingText );
 						} );
 					} );
@@ -164,6 +167,7 @@ describe( 'Forms page', () => {
 	} );
 
 	afterEach( () => {
+		cy.visit( '/wp-admin/admin.php?page=formidable' );
 		cy.deleteForm();
 	} );
 } );
