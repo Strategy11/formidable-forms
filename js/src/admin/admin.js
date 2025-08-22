@@ -935,11 +935,11 @@ function frmAdminBuildJS() {
 				const moved = event.clientY;
 				const h = postBodyContent.offsetHeight;
 				const relativePos = event.clientY - postBodyContent.offsetTop;
-				const y = relativePos - h / 2;
+				const y = relativePos - ( h / 2 );
 
 				if ( relativePos > ( h - 50 ) && moved > 5 ) {
 					// Scrolling down.
-					return v + y * 0.1;
+					return v + ( y * 0.1 );
 				}
 
 				if ( relativePos < 70 && moved < 130 ) {
@@ -3230,7 +3230,7 @@ function frmAdminBuildJS() {
 	function getSliderMidpoint( sliderInput ) {
 		const max = parseFloat( sliderInput.getAttribute( 'max' ) );
 		const min = parseFloat( sliderInput.getAttribute( 'min' ) );
-		return ( max - min ) / 2 + min;
+		return ( ( max - min ) / 2 ) + min;
 	}
 
 	function isSliderField( previewInput ) {
@@ -10704,7 +10704,7 @@ function frmAdminBuildJS() {
 			document.addEventListener( 'change', handleBuilderChangeEvent );
 			document.querySelector( '.frm_form_builder' ).addEventListener( 'mousedown', event => {
 				if ( event.shiftKey ) {
-				  event.preventDefault();
+					event.preventDefault();
 				}
 			} );
 		},

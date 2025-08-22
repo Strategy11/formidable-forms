@@ -348,7 +348,7 @@ export default class frmSliderStyleComponent {
 		// Ensure deltaX does not go below 0
 		deltaX = Math.max( deltaX, 0 );
 
-		if ( deltaX + this.sliderBulletWidth / 2 + this.sliderMarginRight >= sliderWidth ) {
+		if ( deltaX + ( this.sliderBulletWidth / 2 ) + this.sliderMarginRight >= sliderWidth ) {
 			return;
 		}
 		const unit = element.querySelector( 'select' ).value;

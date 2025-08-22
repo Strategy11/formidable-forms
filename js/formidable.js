@@ -1660,7 +1660,7 @@ function frmFrontFormJS() {
 		const startTime = performance.now();
 		const step = currentTime => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
-			document.documentElement.scrollTop = start + ( end - start ) * progress;
+			document.documentElement.scrollTop = start + ( ( end - start ) * progress );
 			if ( progress < 1 ) {
 				requestAnimationFrame( step );
 			}

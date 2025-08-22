@@ -40,7 +40,7 @@ export class frmAnimate {
 		setTimeout( () => {
 			this.applyStyleToElements( ( element, index ) => {
 				element.classList.remove( 'frm-animate' );
-				element.style.transitionDelay = ( index + 1 ) * delay + 's';
+				element.style.transitionDelay = ( ( index + 1 ) * delay ) + 's';
 			} );
 		}, 200 );
 	}

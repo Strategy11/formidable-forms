@@ -850,7 +850,7 @@
 	 * @param {string} styleId
 	 * @return {HTMLElement} The modal footer element.
 	 */
-	 function getRenameStyleModalFooter( styleId ) {
+	function getRenameStyleModalFooter( styleId ) {
 		const cancelButton = footerButton( { text: __( 'Cancel', 'formidable' ), buttonType: 'cancel' } );
 		cancelButton.classList.add( 'dismiss' );
 

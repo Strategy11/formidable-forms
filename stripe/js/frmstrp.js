@@ -688,7 +688,7 @@
 	 */
 	function getLayout() {
 		const settings = getStripeSettings()[ 0 ];
-		return settings.hasOwnProperty( 'layout' ) && settings.layout || 'tabs';
+		return ( settings.hasOwnProperty( 'layout' ) && settings.layout ) || 'tabs';
 	}
 
 	/**
