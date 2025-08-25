@@ -6685,7 +6685,7 @@ function frmAdminBuildJS() {
 					input.focus();
 				}
 				container.after( box );
-				box.setAttribute( 'data-fills', input.id );
+				box.setAttribute( 'data-fills', input.id.replace( '-proxy-input', '' ) );
 
 				if ( box.id.indexOf( 'frm-calc-box' ) === 0 ) {
 					popCalcFields( box, true );
@@ -6715,7 +6715,12 @@ function frmAdminBuildJS() {
 	 * @param {Event} event The click event
 	 */
 	function closeModalOnOutsideClick( { target } ) {
-		if ( target.closest( '.frm-inline-modal.frm-modal-no-dismiss' ) || target.closest( '.frm-show-inline-modal' ) || target.closest( '#frm_adv_info' ) ) {
+		if (
+			target.closest( '.frm-inline-modal.frm-modal-no-dismiss' )
+			|| target.closest( '.frm-show-inline-modal' )
+			|| target.closest( '#frm_adv_info' )
+			|| target.closest( '.frm-token-proxy-input' )
+		) {
 			return;
 		}
 
@@ -10736,7 +10741,7 @@ function frmAdminBuildJS() {
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
-			$builderForm.on( 'focusin', '.frm_classes', showBuilderModal );
+			$builderForm.on( 'focusin', '.frm_classes + .frm-token-proxy-input', showBuilderModal );
 
 			$newFields.on( 'click', '.frm_primary_label', clickLabel );
 			$newFields.on( 'click', '.frm_description', clickDescription );

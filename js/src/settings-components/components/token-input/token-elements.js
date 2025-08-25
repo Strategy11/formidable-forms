@@ -35,7 +35,8 @@ export function createTokenContainerElement( field ) {
 	container.insertBefore( tokensWrapper, container.firstChild );
 
 	const proxyInput = tag( 'input', {
-		className: CLASS_NAMES.TOKEN_PROXY_INPUT
+		className: CLASS_NAMES.TOKEN_PROXY_INPUT,
+		id: `${field.id}-proxy-input`
 	});
 
 	proxyInput.type = 'text';
