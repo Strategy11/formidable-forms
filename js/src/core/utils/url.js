@@ -18,7 +18,7 @@ export const getQueryParam = paramName => urlParams.get( paramName );
  * @param {string} paramName The name of the query parameter to remove.
  * @return {string} The updated URL string.
  */
-export const removeQueryParam = ( paramName ) => {
+export const removeQueryParam = paramName => {
 	urlParams.delete( paramName );
 	url.search = urlParams.toString();
 	return url.toString();
@@ -36,9 +36,9 @@ export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState'
 	urlParams.set( paramName, paramValue );
 	url.search = urlParams.toString();
 
-	if ([ 'pushState', 'replaceState' ].includes( updateMethod ) ) {
-		const state = {[paramName]: paramValue};
-		window.history[updateMethod]( state, '', url );
+	if ( [ 'pushState', 'replaceState' ].includes( updateMethod ) ) {
+		const state = { [ paramName ]: paramValue };
+		window.history[ updateMethod ]( state, '', url );
 	}
 
 	return url.toString();

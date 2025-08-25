@@ -9,7 +9,7 @@ const { Notice } = wp.components;
 const UpgradeNotice = ( { text, buttonText, link } ) => (
 	<Notice status="warning" isDismissible={ false }>
 		{ text }
-		<br/>
+		<br />
 		<a href={ link } target="_blank">
 			{ buttonText }
 		</a>

@@ -9,7 +9,6 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
  * @class
  */
 class frmStyleOptions {
-
 	constructor() {
 		this.success = frmDom.success;
 		this.init();
@@ -36,32 +35,32 @@ class frmStyleOptions {
 	 */
 	initColorPickerDependentUpdaterComponents() {
 		const components = document.querySelectorAll( '.frm-style-dependent-updater-component.frm-colorpicker' );
-		const elements   = [];
+		const elements = [];
 
-		components.forEach( ( component ) => {
+		components.forEach( component => {
 			const element = component.querySelector( 'input.hex' );
-			const id      = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
+			const id = 'undefined' !== typeof element ? element.getAttribute( 'id' ) : null;
 
 			if ( null !== id ) {
-				elements.push({
+				elements.push( {
 					id: id,
 					dependentUpdaterClass: new frmStyleDependentUpdaterComponent( component, 'colorpicker' )
-				});
+				} );
 			}
-		});
+		} );
 
 		wp.hooks.addAction( 'frm_style_options_color_change', 'formidable', ( { event, value } ) => {
 			const container = event.target.closest( '.wp-picker-container' );
-			const id        = event.target.getAttribute( 'id' );
+			const id = event.target.getAttribute( 'id' );
 
 			container.querySelector( '.wp-color-result-text' ).innerText = value;
 
-			elements.forEach( ( element ) => {
+			elements.forEach( element => {
 				if ( element.id === id ) {
 					element.dependentUpdaterClass.updateAllDependentElements( value );
 				}
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -81,21 +80,23 @@ class frmStyleOptions {
 
 		const styleOptionsMenu = settingsWrapper.querySelector( ':scope > ul' );
 
-		styleOptionsMenu.querySelectorAll( ':scope > li' ).forEach( ( item ) => {
-			item.querySelector('h3').addEventListener( 'mouseover', ( event ) => {
-				hoverElement.style.transform = `translateY(${event.target.closest('li').offsetTop}px)`;
+		styleOptionsMenu.querySelectorAll( ':scope > li' ).forEach( item => {
+			item.querySelector( 'h3' ).addEventListener( 'mouseover', event => {
+				hoverElement.style.transform = `translateY(${ event.target.closest( 'li' ).offsetTop }px)`;
 				hoverElement.classList.add( 'frm-animating' );
 				hoverElement.classList.remove( 'frm_hidden' );
-				setTimeout( () => { hoverElement.classList.remove( 'frm-animating' ); }, 250 );
-			});
-		});
+				setTimeout( () => {
+					hoverElement.classList.remove( 'frm-animating' );
+				}, 250 );
+			} );
+		} );
 
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
-		accordionitems.forEach( ( item ) => {
+		accordionitems.forEach( item => {
 			item.addEventListener( 'click', () => {
 				hoverElement.classList.add( 'frm_hidden' );
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -106,12 +107,12 @@ class frmStyleOptions {
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
 		const copyLabel = document.querySelector( '.frm-copy-text' );
-		copyLabel.addEventListener( 'click', ( event ) => {
+		copyLabel.addEventListener( 'click', event => {
 			const className = event.currentTarget.innerText;
 			navigator.clipboard.writeText( className ).then( () => {
 				this.success( successMessage );
-			});
-		})
+			} );
+		} );
 	}
 }
 

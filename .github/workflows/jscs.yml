@@ -5,12 +5,12 @@ on:
     branches:
       - master
   pull_request:
-    branches:
-      - master
+    types: [ opened, labeled, synchronize ]
 
 name: Inspections
 jobs:
   runPHPCSInspection:
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
@@ -18,8 +18,5 @@ jobs:
         uses: actions/checkout@master
       - name: Analyze js code style
         run: |
-          npm install eslint
-          wget https://develop.svn.wordpress.org/trunk/.jshintrc
-          ./node_modules/.bin/eslint ./js/formidable.js
-          ./node_modules/.bin/eslint ./tests/cypress/e2e/*
-          ./node_modules/.bin/eslint ./js/src/admin/admin.js
+          npm ci --legacy-peer-deps --include=dev
+          ./node_modules/.bin/eslint .

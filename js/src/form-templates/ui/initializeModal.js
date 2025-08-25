@@ -18,12 +18,12 @@ export async function initializeModal() {
 	}
 
 	// Customize the confirm modal appearance: adjusting its width and vertical position
-	wp.hooks.addAction( 'frmAdmin.beforeOpenConfirmModal', 'frmFormTemplates', ( options ) => {
+	wp.hooks.addAction( 'frmAdmin.beforeOpenConfirmModal', 'frmFormTemplates', options => {
 		const { $info: confirmModal } = options;
 
 		confirmModal.dialog( 'option', 'width', MODAL_SIZES.CREATE_TEMPLATE );
 		offsetModalY( confirmModal, '103px' );
-	});
+	} );
 }
 
 /**
