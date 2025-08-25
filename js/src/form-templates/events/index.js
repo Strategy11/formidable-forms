@@ -23,7 +23,7 @@ export function addEventListeners() {
 	wp.hooks.addAction( 'frmPage.onCategoryClick', 'frmFormTemplates', selectedCategory => {
 		// Display templates of the selected category
 		showSelectedCategory( selectedCategory );
-	});
+	} );
 
 	addCreateFormButtonEvents();
 	addFavoriteButtonEvents();

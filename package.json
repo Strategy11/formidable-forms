@@ -40,6 +40,7 @@
 		"classnames": "^2.2.6",
 		"google-closure-compiler": "^20240317.0.0",
 		"npm": "^10.5.2",
+		"prop-types": "^15.8.1",
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"styled-components": "^5.3.5"
@@ -55,6 +56,7 @@
 		"@svgr/webpack": "^8.1.0",
 		"@wordpress/babel-plugin-makepot": "^5.25.0",
 		"@wordpress/babel-preset-default": "^7.25.0",
+		"@wordpress/browserslist-config": "^6.29.0",
 		"@wordpress/env": "^9.8.0",
 		"@wordpress/eslint-plugin": "^15.1.0",
 		"@wordpress/stylelint-config": "^23.14.0",
@@ -94,9 +96,5 @@
 		"type": "git",
 		"url": "https://github.com/Strategy11/formidable-forms.git"
 	},
-	"homepage": "https://formidableforms.com",
-	"browserslist": [
-		"last 2 versions",
-		"not dead"
-	]
+	"homepage": "https://formidableforms.com"
 }
