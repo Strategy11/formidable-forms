@@ -43,8 +43,7 @@
 	height: 13px;
 	width: 13px;
 	vertical-align: top;
-	color: #A0A0A0;
-	color: var(--grey);
+	color: var(--grey-400);
 }
 
 .form-field input[type="text"].frm_other_input {
@@ -56,7 +55,6 @@
 	text-align: right;
 }
 
-.frm_add_opt .frm_add_tag,
 .frm-add-other .frm_add_tag {
 	vertical-align: 20%;
 }

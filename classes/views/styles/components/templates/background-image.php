@@ -5,7 +5,7 @@
 <div class="frm5 frm_form_field"><label class="frm-style-item-heading"><?php echo esc_html( $component['title'] ); ?></label></div>
 <div class="frm7 frm_form_field">
 	<div class="frm-style-component frm-background-image-component">
-		<span class="frm-flex-justify" tabindex="0">
+		<div class="frm-h-stack-xs frm-flex-wrap" tabindex="0">
 			<input type="text" <?php echo esc_attr( $field_name ); ?> id="<?php echo esc_attr( $component['id'] ); ?>" class="hex" value="<?php echo esc_attr( $field_value ); ?>" size="4" <?php do_action( 'frm_style_settings_input_atts', $component['action_slug'] ); ?> />
 			<?php
 			/**
@@ -33,7 +33,7 @@
 				<?php
 			}
 			?>
-		</span>
+		</div>
 	</div>
 </div>
 <?php

@@ -1,25 +1,54 @@
-import { show, hide } from 'core/utils';
+/**
+ * Internal dependencies
+ */
+import { HIDDEN_CLASS } from 'core/constants';
+import { show, hide, isVisible } from 'core/utils';
 
 /**
- * Represents a radio style component.
+ * Represents a radio component.
  * @class
  */
-export default class frmRadioStyleComponent {
+export default class frmRadioComponent {
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		this.observers = new Map();
 		if ( 0 < this.radioElements.length ) {
 			this.init();
 		}
+
+		/**
+		 * Handles the addition of new fields.
+		 *
+		 * @param {Event}       event          The frm_added_field event.
+		 * @param {HTMLElement} event.frmField The added field object being destructured from the event.
+		 */
+		document.addEventListener( 'frm_added_field', ( { frmField } ) => {
+			this.radioElements = document.getElementById( `frm-single-settings-${ frmField.dataset.fid }` )
+				.querySelectorAll( '.frm-style-component.frm-radio-component' );
+
+			this.initRadio();
+		} );
+
+		// Cleanup observers when page unloads to prevent memory leaks
+		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
 	}
 
 	/**
-	 * Initializes the radio style component.
+	 * Initializes the radio component.
 	 */
 	init() {
+		this.initRadio();
+		this.initTrackerOnAccordionClick();
+	}
+
+	/**
+	 * Initializes the radio component.
+	 */
+	initRadio() {
 		this.radioElements.forEach( element => {
 			this.initOnRadioChange( element );
+			this.initVisibilityObserver( element );
 		} );
-		this.initTrackerOnAccordionClick();
 	}
 
 	initTrackerOnAccordionClick() {
@@ -92,6 +121,57 @@ export default class frmRadioStyleComponent {
 	}
 
 	/**
+	 * Initializes visibility observer for the radio component. This handles cases when components are conditionally shown.
+	 *
+	 * @param {HTMLElement} element The radio component element
+	 * @return {void}
+	 */
+	initVisibilityObserver( element ) {
+		if ( this.observers.has( element ) ) {
+			this.observers.get( element ).disconnect();
+		}
+
+		const observer = new MutationObserver( () => {
+			// Check if element is now visible
+			if ( isVisible( element ) ) {
+				const radio = element.querySelector( 'input[type="radio"]:checked' );
+				if ( radio ) {
+					this.onRadioChange( radio );
+				}
+			}
+		} );
+
+		this.observers.set( element, observer );
+
+		// Observe for attribute changes on the component and its ancestors
+		observer.observe( element, {
+			attributes: true,
+			attributeFilter: [ 'class', 'style' ]
+		} );
+
+		// Also observe parent elements up to a reasonable depth
+		let parent = element.parentElement;
+		for ( let i = 0; i < 7 && parent; i++ ) {
+			observer.observe( parent, {
+				attributes: true,
+				attributeFilter: [ 'class', 'style' ]
+			} );
+			parent = parent.parentElement;
+		}
+	}
+
+	/**
+	 * Cleanup all observers to prevent memory leaks.
+	 */
+	cleanupObservers() {
+		this.observers.forEach( observer => {
+			observer.disconnect();
+		} );
+
+		this.observers.clear();
+	}
+
+	/**
 	 * Hide the possible opepend extra elements.
 	 */
 	hideExtraElements() {
@@ -101,7 +181,7 @@ export default class frmRadioStyleComponent {
 		}
 		elements.forEach( element => {
 			element.classList.remove( 'frm-element-is-visible' );
-			element.classList.add( 'frm_hidden' );
+			element.classList.add( HIDDEN_CLASS );
 			hide( element );
 		} );
 	}
