@@ -685,7 +685,8 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_loading_prev .frm_prev_page,
-.with_frm_style .frm_loading_form .frm_button_submit {
+.with_frm_style .frm_loading_form .frm_button_submit,
+.frm_autofilling_form #frm_testmode_fill_in_empty_form_fields {
 	position: relative;
 	color: transparent !important;
 	text-shadow: none !important;
@@ -704,7 +705,8 @@ legend.frm_hidden{
 }
 
 .with_frm_style .frm_loading_prev .frm_prev_page::before,
-.with_frm_style .frm_loading_form .frm_button_submit:before {
+.with_frm_style .frm_loading_form .frm_button_submit:before,
+.frm_autofilling_form #frm_testmode_fill_in_empty_form_fields:before {
 	content: '';
 	display: inline-block;
 	position: absolute;
