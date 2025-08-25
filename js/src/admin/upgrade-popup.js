@@ -86,3 +86,53 @@ export function addOneClick( link, context, upgradeLabel ) {
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
 }
+
+export function initModal( id, width ) {
+	const $info = jQuery( id );
+	if ( ! $info.length ) {
+		return false;
+	}
+
+	if ( typeof width === 'undefined' ) {
+		width = '550px';
+	}
+
+	const dialogArgs = {
+		dialogClass: 'frm-dialog',
+		modal: true,
+		autoOpen: false,
+		closeOnEscape: true,
+		width: width,
+		resizable: false,
+		draggable: false,
+		open: function() {
+			jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
+			jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
+			jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
+			$info.removeClass( 'ui-dialog-content ui-widget-content' );
+			bindClickForDialogClose( $info );
+		},
+		close: function() {
+			jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
+			jQuery( '.spinner' ).css( 'visibility', 'hidden' );
+
+			this.removeAttribute( 'data-option-type' );
+			const optionType = document.getElementById( 'bulk-option-type' );
+			if ( optionType ) {
+				optionType.value = '';
+			}
+		}
+	};
+
+	$info.dialog( dialogArgs );
+
+	return $info;
+}
+
+function bindClickForDialogClose( $modal ) {
+	const closeModal = function() {
+		$modal.dialog( 'close' );
+	};
+	jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
+	$modal.on( 'click', 'a.dismiss', closeModal );
+}

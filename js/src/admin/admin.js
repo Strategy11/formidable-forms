@@ -1,5 +1,3 @@
-import { addOneClick } from './upgrade-popup';
-
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
@@ -6994,6 +6992,11 @@ function frmAdminBuildJS() {
 		}
 	}
 
+	function addOneClick( element, type, upgradeLabel ) {
+		const upgradePopup = require( './upgrade-popup' );
+		upgradePopup.addOneClick( element, type, upgradeLabel );
+	}
+
 	function getRequiredLicenseFromTrigger( element ) {
 		if ( element.dataset.requires ) {
 			return element.dataset.requires;
@@ -8547,14 +8550,6 @@ function frmAdminBuildJS() {
 		}
 	}
 
-	function bindClickForDialogClose( $modal ) {
-		const closeModal = function() {
-			$modal.dialog( 'close' );
-		};
-		jQuery( '.ui-widget-overlay' ).on( 'click', closeModal );
-		$modal.on( 'click', 'a.dismiss', closeModal );
-	}
-
 	function offsetModalY( $modal, amount ) {
 		const position = {
 			my: 'top',
@@ -9550,45 +9545,8 @@ function frmAdminBuildJS() {
 	}
 
 	function initModal( id, width ) {
-		const $info = jQuery( id );
-		if ( ! $info.length ) {
-			return false;
-		}
-
-		if ( typeof width === 'undefined' ) {
-			width = '550px';
-		}
-
-		const dialogArgs = {
-			dialogClass: 'frm-dialog',
-			modal: true,
-			autoOpen: false,
-			closeOnEscape: true,
-			width: width,
-			resizable: false,
-			draggable: false,
-			open: function() {
-				jQuery( '.ui-dialog-titlebar' ).addClass( 'frm_hidden' ).removeClass( 'ui-helper-clearfix' );
-				jQuery( '#wpwrap' ).addClass( 'frm_overlay' );
-				jQuery( '.frm-dialog' ).removeClass( 'ui-widget ui-widget-content ui-corner-all' );
-				$info.removeClass( 'ui-dialog-content ui-widget-content' );
-				bindClickForDialogClose( $info );
-			},
-			close: function() {
-				jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
-				jQuery( '.spinner' ).css( 'visibility', 'hidden' );
-
-				this.removeAttribute( 'data-option-type' );
-				const optionType = document.getElementById( 'bulk-option-type' );
-				if ( optionType ) {
-					optionType.value = '';
-				}
-			}
-		};
-
-		$info.dialog( dialogArgs );
-
-		return $info;
+		const upgradePopup = require( './upgrade-popup' );
+		return upgradePopup.initModal( id, width );
 	}
 
 	function toggle( cname, id ) {
