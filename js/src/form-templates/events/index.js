@@ -11,6 +11,7 @@ import addFavoriteButtonEvents from './favoriteButtonListener';
 import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addSearchEvents from './searchListener';
 import addCreateTemplateEvents from './createTemplateListeners';
+import addGetFreeTemplatesEvents from './getFreeTemplatesListener';
 import { showSelectedCategory } from '../ui';
 
 /**
@@ -30,6 +31,7 @@ export function addEventListeners() {
 	addUseTemplateButtonEvents();
 	addSearchEvents();
 	addCreateTemplateEvents();
+	addGetFreeTemplatesEvents();
 }
 
 export { addApplicationTemplateEvents } from './applicationTemplateListener';
