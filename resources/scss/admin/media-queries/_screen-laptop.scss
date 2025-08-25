@@ -7,6 +7,13 @@
 		--gap-2xl: 24px;
 	}
 
+	/* Revert settings panel gap variables to default */
+	.frm-settings-panel {
+		--gap-sm: 16px;
+		--gap-md: 24px;
+		--gap-2xl: 32px;
+	}
+
 	.auto-fold #adminmenuwrap {
 		width: 36px;
 	}
@@ -56,21 +63,6 @@
 	#frm_form_editor_container,
 	.frm-entry-container {
 		margin: 0 20px;
-	}
-
-	.frmbutton.ui-sortable-helper .frmsvg,
-	.field_type_list li.frmbutton .frmsvg,
-	.frmbutton.ui-sortable-helper i,
-	.field_type_list li.frmbutton i {
-		margin: .15em 0 .15em .1em;
-		width: 25px;
-	}
-
-	.rtl .frmbutton.ui-sortable-helper .frmsvg,
-	.rtl .field_type_list li.frmbutton .frmsvg,
-	.rtl .frmbutton.ui-sortable-helper i,
-	.rtl .field_type_list li.frmbutton i {
-		margin: .15em .1em .15em 0;
 	}
 
 	.frm_wrap .frm-search {

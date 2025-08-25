@@ -1,0 +1,165 @@
+/**
+ * Tabs component styles
+ */
+
+.frm-tabs-wrapper {
+	position: relative;
+	overflow: hidden;
+
+	.frm-tabs-navigator {
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: var(--gap-xs);
+		justify-content: space-between;
+		align-items: center;
+		background: rgba( 242, 244, 247, 1 );
+		border-radius: var(--small-radius);
+		box-sizing: border-box;
+		height: 44px;
+		position: relative;
+		z-index: 2;
+
+		.frm-tab-item {
+			flex: 1;
+			text-align: center;
+			cursor: pointer;
+		}
+
+		.frm-active-background {
+			display: block;
+			height: 100%;
+			background: white;
+			position: absolute;
+			top: 0;
+			left: 0;
+			z-index: 1;
+		}
+	}
+}
+
+.frm-style-tabs-wrapper {
+	position: relative;
+
+	.frm-tabs-navs {
+		padding: 0;
+		min-height: 44px;
+
+		ul {
+			margin: 0;
+			height: var(--h-md);
+			position: relative;
+			justify-content: space-between;
+
+			li,
+			li a {
+				color: var( --grey-500 );
+				font-weight: 500;
+				font-size: var(--text-sm);
+				line-height: 28px;
+			}
+
+			li {
+				flex: 1;
+				height: 28px;
+				text-align: center;
+				margin-top: var(--gap-xs);
+				margin-bottom: 0;
+				cursor: pointer;
+
+
+				&.frm-active,
+				&.frm-active a {
+					color: var(--grey-900);
+				}
+
+				&:first-child {
+					margin-left: var(--gap-xs);
+				}
+
+				&:last-child {
+					margin-right: var(--gap-xs);
+				}
+			}
+		}
+	}
+
+	.frm-tabs-delimiter {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		background: rgba(242, 244, 247, 1);
+		height: 44px;
+		margin: 0;
+		border-radius: var(--small-radius);
+
+		.frm-tabs-active-underline {
+			height: 28px;
+			background: white;
+			position: absolute;
+			left: 0;
+			bottom: 8px;
+			width: 45px;
+			transition: 0.4s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
+			border-radius: var(--small-radius);
+			box-shadow: var(--button-shadow);
+
+			&.frm-first {
+				left: var(--gap-xs);
+			}
+
+			&.frm-last {
+				left: calc( -1 * var(--gap-xs) );
+			}
+		}
+	}
+}
+
+.frm-tabs-container {
+	position: relative;
+	overflow: hidden;
+	margin-top: var(--gap-md);
+	height: 100%;
+}
+
+.frm-style-tabs-wrapper {
+
+	.frm-tabs-container .frm-tabs-slide-track {
+	   transition: 0.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);
+	}
+
+	.frm-tabs-slide-track {
+
+		> div {
+			flex: 0 0 100%;
+			opacity: 0.0;
+			transition: 0.25s opacity linear;
+			position: relative;
+			height: auto;
+			max-height: unset;
+			overflow: hidden;
+			box-sizing: border-box;
+		}
+
+		> div > div {
+			overflow: auto;
+			position: relative;
+			width:100%;
+			padding: 0;
+			box-sizing: border-box;
+		}
+	}
+}
+
+.frm-tabs-slide-track {
+
+	> div > div:first-child {
+		height: 100%;
+	}
+
+	> div.frm-active {
+		opacity: 1.0;
+		transition: 0.35s opacity linear;
+	}
+}

@@ -746,7 +746,7 @@
 	 */
 	function getRenameOption( styleId ) {
 		const renameOption = a( __( 'Rename', 'formidable' ) );
-		addIconToOption( renameOption, 'frm_signature_icon' );
+		addIconToOption( renameOption, 'frm_signature2_icon' );
 
 		let titleTarget;
 

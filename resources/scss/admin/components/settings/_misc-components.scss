@@ -1,0 +1,23 @@
+/**
+ * Miscellaneous settings component styles
+ */
+
+.frm-style-component .frm_toggle_slider {
+	background: rgba( 242, 244, 247, 1 );
+}
+
+.frm-style-component label.frm-copy-text {
+	line-height: 32px;
+	cursor: pointer;
+	white-space: nowrap;
+}
+
+.frm-style-component .wp-picker-holder {
+	right: 0;
+}
+
+.formidable_page_formidable-styles .accordion-section-content .frm-style-item-heading {
+	font-weight: 500;
+	font-size: var( --text-md );
+	color: var( --grey-900 );
+}

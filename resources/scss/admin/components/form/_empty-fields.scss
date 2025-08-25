@@ -28,24 +28,32 @@
 	transition: all 0.4s linear;
 }
 
-.frm_no_fields {
-	min-height: 300px;
-	margin: 20px 5%;
-	width: 90%;
-	top: 0;
+.frm-empty-fields {
+
+	.frm_updated_message ~ .frm_no_fields {
+		top: 60px;
+	}
 }
 
-.frm-empty-fields .frm_updated_message ~ .frm_no_fields {
-	top: 60px;
+#frm_form_editor_container:not(.frm-has-fields) {
+
+	#frm-show-fields > .frm_field_box:last-child {
+		visibility: hidden;
+	}
 }
 
-#frm_form_editor_container:not(.frm-has-fields) #frm-show-fields > .frm_field_box:last-child {
-	visibility: hidden;
+.frm-has-fields {
+
+	.frm_no_fields {
+		display: none;
+	}
 }
 
-.frm-has-fields .frm_no_fields,
-#frm_form_editor_container:not(.frm-has-fields) #frm_drag_placeholder {
-	display: none;
+#frm_form_editor_container:not(.frm-has-fields) {
+
+	#frm_drag_placeholder {
+		display: none;
+	}
 }
 
 #frm-form-button {
@@ -53,8 +61,11 @@
 	margin: 0 7px 25px;
 }
 
-.frm-has-fields #frm-form-button {
-	display: block;
+.frm-has-fields {
+
+	#frm-form-button {
+		display: block;
+	}
 }
 
 .frm-large-plus.frmsvg {
@@ -63,15 +74,42 @@
 	width: 45px;
 }
 
-.frm_drag_inst {
-	line-height: normal;
-	font-size: 35px;
-	font-weight: 300;
-	margin: 80px 0 25px;
+.frm_no_section_fields {
+
+	p {
+		color: var(--grey);
+		font-size: 15px;
+	}
 }
 
-.frm_no_section_fields p,
-.frm_no_fields p {
-	color: var(--grey);
-	font-size: 15px;
+ .frm_no_fields {
+	top: 0;
+	width: calc( 100% - 24px );
+	min-height: 320px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	gap: var(--gap-md);
+	padding: var(--gap-md);
+	border: 0;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100%25' height='100%25'%3E%3Crect width='99%25' height='99%25' fill='none' stroke='%23D0D5DD' stroke-width='1' stroke-dasharray='8,8' rx='8' ry='8' x='0.5%25' y='0.5%25' stroke-linecap='square' vector-effect='non-scaling-stroke'/%3E%3C/svg%3E");
+	border-radius: var(--medium-radius);
+	margin: var(--gap-sm) 12px;
+
+	img {
+		margin-left: calc( -1 * var(--gap-lg) );
+	}
+
+	.frm_drag_inst {
+		font-size: 20px;
+		font-weight: 600;
+		margin: 0 0 12px;
+	}
+
+	p {
+		color: var(--grey-600);
+		font-size: var(--text-md);
+		margin: 0;
+	}
 }
