@@ -1,3 +1,5 @@
+import { addOneClick } from './upgrade-popup';
+
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
@@ -7094,95 +7096,6 @@ function frmAdminBuildJS() {
 		}
 
 		return wrapper;
-	}
-
-	/**
-	 * Allow addons to be installed from the upgrade modal.
-	 *
-	 * @param {Element}          link
-	 * @param {string}           context      Either 'modal' or 'tab'.
-	 * @param {string|undefined} upgradeLabel
-	 */
-	function addOneClick( link, context, upgradeLabel ) {
-		let container;
-
-		if ( 'modal' === context ) {
-			container = document.getElementById( 'frm_upgrade_modal' );
-		} else if ( 'tab' === context ) {
-			container = document.getElementById( link.getAttribute( 'href' ).substr( 1 ) );
-		} else {
-			return;
-		}
-
-		const oneclickMessage = container.querySelector( '.frm-oneclick' );
-		const upgradeMessage = container.querySelector( '.frm-upgrade-message' );
-		const showLink = container.querySelector( '.frm-upgrade-link' );
-		const button = container.querySelector( '.frm-oneclick-button' );
-		const addonStatus = container.querySelector( '.frm-addon-status' );
-
-		let oneclick = link.getAttribute( 'data-oneclick' );
-		let newMessage = link.getAttribute( 'data-message' );
-		let showIt = 'block';
-		let showMsg = 'block';
-		let hideIt = 'none';
-
-		// If one click upgrade, hide other content.
-		if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
-			if ( newMessage === null ) {
-				showMsg = 'none';
-			}
-			showIt = 'none';
-			hideIt = 'block';
-			oneclick = JSON.parse( oneclick );
-
-			button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
-			button.className = button.className + ' ' + oneclick.class;
-			button.rel = oneclick.url;
-
-			if ( oneclick.class === 'frm-activate-addon' ) {
-				oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
-				button.textContent = __( 'Activate', 'formidable' );
-			} else {
-				oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
-				button.textContent = __( 'Install', 'formidable' );
-			}
-		}
-
-		if ( ! newMessage ) {
-			newMessage = upgradeMessage.getAttribute( 'data-default' );
-		}
-		if ( undefined !== upgradeLabel ) {
-			newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
-		}
-
-		upgradeMessage.innerHTML = newMessage;
-
-		if ( link.dataset.upsellImage ) {
-			upgradeMessage.appendChild(
-				img( {
-					src: link.dataset.upsellImage,
-					alt: link.dataset.upgrade
-				} )
-			);
-		}
-
-		// Either set the link or use the default.
-		showLink.href = getShowLinkHrefValue( link, showLink );
-
-		addonStatus.style.display = 'none';
-
-		oneclickMessage.style.display = hideIt;
-		button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
-		upgradeMessage.style.display = showMsg;
-		showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
-	}
-
-	function getShowLinkHrefValue( link, showLink ) {
-		let customLink = link.getAttribute( 'data-link' );
-		if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
-			customLink = showLink.getAttribute( 'data-default' );
-		}
-		return customLink;
 	}
 
 	/* Form settings */
