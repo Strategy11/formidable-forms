@@ -16,7 +16,7 @@ import FormidableIcon from '../common/components/icon';
 	const UpgradeNotice = ( { text, buttonText, link } ) => (
 		<Notice status="warning" isDismissible={ false }>
 			{ text }
-			<br/>
+			<br />
 			<a href={ link } target="_blank">
 				{ buttonText }
 			</a>
@@ -30,7 +30,7 @@ import FormidableIcon from '../common/components/icon';
 		description: __( 'Display a chart or graph', 'formidable' ),
 		icon: (
 			<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 25 23">
-				<path stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" d="M23 2v19m-7-7.5V21M9 10.8V21m-7-2.9V21"/>
+				<path stroke="currentColor" strokeLinecap="round" strokeWidth="2.5" d="M23 2v19m-7-7.5V21M9 10.8V21m-7-2.9V21" />
 			</svg>
 		),
 		category: 'design',

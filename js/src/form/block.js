@@ -78,9 +78,9 @@ registerBlockType( 'formidable/simple-form', {
 		} = props;
 		const { formId } = attributes;
 		return (
-			( formId === undefined ) ?
-				'' :
-				<Fragment>
+			( formId === undefined )
+				? ''
+				: <Fragment>
 					<FormShortcode { ...attributes } />
 				</Fragment>
 		);

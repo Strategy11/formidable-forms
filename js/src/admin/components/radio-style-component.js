@@ -5,7 +5,6 @@ import { show, hide } from 'core/utils';
  * @class
  */
 export default class frmRadioStyleComponent {
-
 	constructor() {
 		this.radioElements = document.querySelectorAll( '.frm-style-component.frm-radio-component' );
 		if ( 0 < this.radioElements.length ) {
@@ -17,25 +16,25 @@ export default class frmRadioStyleComponent {
 	 * Initializes the radio style component.
 	 */
 	init() {
-		this.radioElements.forEach( ( element ) => {
+		this.radioElements.forEach( element => {
 			this.initOnRadioChange( element );
-		});
+		} );
 		this.initTrackerOnAccordionClick();
 	}
 
 	initTrackerOnAccordionClick() {
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
 
-		accordionitems.forEach( ( accordionitem ) => {
-			accordionitem.addEventListener( 'click', ( event ) => {
-				const wrapper      = event.target.closest( '.accordion-section' );
+		accordionitems.forEach( accordionitem => {
+			accordionitem.addEventListener( 'click', event => {
+				const wrapper = event.target.closest( '.accordion-section' );
 				const radioButtons = wrapper.querySelectorAll( '.frm-style-component.frm-radio-component input[type="radio"]:checked' );
 
-				radioButtons.forEach( ( radio ) => {
+				radioButtons.forEach( radio => {
 					setTimeout( () => this.onRadioChange( radio ), 200 );
-				});
-			});
-		});
+				} );
+			} );
+		} );
 	}
 
 	/**
@@ -43,14 +42,14 @@ export default class frmRadioStyleComponent {
 	 * @param {HTMLElement} radioElement - The radio element.
 	 */
 	initOnRadioChange( radioElement ) {
-		radioElement.querySelectorAll( 'input[type="radio"]' ).forEach( ( radio ) => {
+		radioElement.querySelectorAll( 'input[type="radio"]' ).forEach( radio => {
 			if ( radio.checked ) {
 				this.onRadioChange( radio );
 			}
-			radio.addEventListener( 'change', ( event ) => {
+			radio.addEventListener( 'change', event => {
 				this.onRadioChange( event.target );
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -58,7 +57,7 @@ export default class frmRadioStyleComponent {
 	 * @param {HTMLElement} target - The active radio button.
 	 */
 	onRadioChange( target ) {
-		const wrapper    = target.closest( '.frm-style-component.frm-radio-component' );
+		const wrapper = target.closest( '.frm-style-component.frm-radio-component' );
 		const activeItem = wrapper.querySelector( 'input[type="radio"]:checked + label' );
 
 		if ( null === activeItem ) {
@@ -80,16 +79,16 @@ export default class frmRadioStyleComponent {
 			return;
 		}
 
-		const elements = document.querySelectorAll( `div[data-frm-element="${elementAttr}"]` );
+		const elements = document.querySelectorAll( `div[data-frm-element="${ elementAttr }"]` );
 
 		if ( 0 === elements.length ) {
 			return;
 		}
 
-		elements.forEach( ( element ) => {
+		elements.forEach( element => {
 			show( element );
 			element.classList.add( 'frm-element-is-visible' );
-		});
+		} );
 	}
 
 	/**
@@ -100,11 +99,11 @@ export default class frmRadioStyleComponent {
 		if ( 0 === elements.length ) {
 			return;
 		}
-		elements.forEach( ( element ) => {
+		elements.forEach( element => {
 			element.classList.remove( 'frm-element-is-visible' );
 			element.classList.add( 'frm_hidden' );
 			hide( element );
-		});
+		} );
 	}
 
 	/**
@@ -113,12 +112,12 @@ export default class frmRadioStyleComponent {
 	 * @param {HTMLElement} wrapper    - The wrapper element.
 	 */
 	moveTracker( activeItem, wrapper ) {
-		const offset  = activeItem.offsetLeft;
-		const width   = activeItem.offsetWidth;
+		const offset = activeItem.offsetLeft;
+		const width = activeItem.offsetWidth;
 		const tracker = wrapper.querySelector( '.frm-radio-active-tracker' );
 
 		tracker.style.left = 0;
-		tracker.style.width = `${width}px`;
+		tracker.style.width = `${ width }px`;
 		tracker.style.transform = `translateX(${ offset }px)`;
 	}
 }

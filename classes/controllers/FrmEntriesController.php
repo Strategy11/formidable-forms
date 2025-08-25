@@ -393,6 +393,8 @@ class FrmEntriesController {
 	 * @return array
 	 */
 	public static function hidden_columns( $result ) {
+		global $frm_vars;
+
 		if ( ! is_array( $result ) ) {
 			// Force an unexpected value to be an array.
 			// Since $result is a filtered option and gets saved to the database, it's possible it could be a string.
@@ -400,13 +402,9 @@ class FrmEntriesController {
 			$result = array();
 		}
 
-		$form_id = FrmForm::get_current_form_id();
-
-		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
-
-		global $frm_vars;
-		$i = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
-
+		$form_id     = FrmForm::get_current_form_id();
+		$hidden      = self::user_hidden_columns_for_form( $form_id, $result );
+		$i           = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
 		$max_columns = 11;
 
 		if ( ! empty( $hidden ) ) {
@@ -447,6 +445,10 @@ class FrmEntriesController {
 	 * Remove some columns by default when there are too many
 	 *
 	 * @since 2.05.07
+	 *
+	 * @param array $atts
+	 * @param array $result
+	 * @return void
 	 */
 	private static function remove_excess_cols( $atts, &$result ) {
 		global $frm_vars;

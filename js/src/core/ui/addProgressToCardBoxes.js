@@ -23,14 +23,14 @@ function addProgressToCardBoxes( cardBoxes ) {
 
 		const progressBar = span();
 		const widthPercentage = ( ( index + 1 ) / cardBoxes.length ) * 100;
-		progressBar.style.width = `${widthPercentage}%`;
+		progressBar.style.width = `${ widthPercentage }%`;
 
-		const progressBarContainer = span({
+		const progressBarContainer = span( {
 			className: 'frm-card-box-progress-bar',
 			child: progressBar
-		});
+		} );
 		element.insertAdjacentElement( 'afterbegin', progressBarContainer );
-	});
+	} );
 }
 
 export default addProgressToCardBoxes;
