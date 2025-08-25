@@ -83,6 +83,16 @@ class FrmTestModeController {
 			return;
 		}
 
+		$form = FrmForm::getOne( $form_key );
+		if ( ! $form ) {
+			return;
+		}
+
+		if ( ! empty( $form->options['chat'] ) ) {
+			echo '<div class="frm_note_style">' . esc_html__( 'Test Mode is currently not supported for conversational forms.', 'formidable' ) . '</div>';
+			return;
+		}
+
 		$enabled                              = self::test_mode_addon_exists();
 		$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
 		$roles                                = self::get_roles();
