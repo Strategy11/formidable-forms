@@ -79,16 +79,14 @@
 			display: flex !important;
 			transition: background-color 0.2s ease-out, box-shadow 0.2s ease-out;
 
-			&:not(.disabled):hover,
-			&:focus,
-			&:focus-visible {
+			&:not(.disabled):hover {
 				background: #fff;
 				box-shadow: var(--box-shadow-md);
 			}
 
 			&:focus,
 			&:focus-visible {
-				outline: 2px solid var(--primary-500);
+				outline: 1px solid var(--primary-500);
 			}
 		}
 
