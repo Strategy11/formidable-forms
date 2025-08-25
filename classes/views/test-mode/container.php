@@ -10,11 +10,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 if ( ! empty( $should_show_warning ) ) {
 	?>
-	<div class="frm_warning_style">
+	<div class="frm_warning_style" style="display: flex;">
 		<?php if ( $should_suggest_test_mode_install ) { ?>
 			<?php esc_html_e( 'To use this feature, please install and activate the Testing Mode add-on.', 'formidable' ); ?>
 		<?php } elseif ( $should_suggest_ai_install ) { ?>
 			<?php esc_html_e( 'To autofill forms using AI, please install and activate the AI add-on.', 'formidable' ); ?>
+			<span data-upgrade="ai" style="margin-left: auto;">
+				<?php FrmAddonsController::conditional_action_button( 'ai', array() ); ?>
+			</span>
 		<?php } ?>
 	</div>
 	<?php

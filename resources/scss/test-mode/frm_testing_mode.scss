@@ -19,6 +19,9 @@
 // For the warning message when the add-on is not active.
 @import '../admin/components/notifications/_message-styles';
 
+// For the upgrade modal.
+@import '../admin/components/modal/modal';
+
 #frm_testing_mode {
     border-radius: 1rem;
     background-color: #fff;

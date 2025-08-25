@@ -253,6 +253,9 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	public static function register_and_enqueue_required_scripts() {
+		FrmAppController::enqueue_dialog_assets();
+		FrmAppController::upgrade_overlay_html();
+
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
