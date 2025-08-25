@@ -926,6 +926,11 @@ class FrmXMLHelper {
 
 			$post['post_content'] = self::switch_form_ids( $post['post_content'], $imported['forms'] );
 
+			// Fix issue with line breaks appearing in descriptions as "rn".
+			if ( $post['post_type'] === $form_action_type ) {
+				$post['post_content'] = str_replace( '\\\\r\\\\n', '\\r\\n', $post['post_content'] );
+			}
+
 			$old_id = $post['post_id'];
 			self::populate_post( $post, $item, $imported );
 
