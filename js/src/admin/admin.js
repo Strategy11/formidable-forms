@@ -9981,7 +9981,7 @@ function frmAdminBuildJS() {
 	}
 
 	function maybeAddSaveAndDragIcons( fieldId ) {
-		fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${ fieldId }-]` );
+		const fieldOptions = document.querySelectorAll( `[id^=frm_delete_field_${ fieldId }-]` );
 		// return if there are no options.
 		if ( fieldOptions.length < 2 ) {
 			return;
