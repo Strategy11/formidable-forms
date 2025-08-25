@@ -103,8 +103,8 @@ function handleToggleClick( event ) {
  * @return {void}
  */
 function applyToggleState( toggleButton, toggleGroup ) {
-	const fieldId = toggleGroup.closest( `.${ SINGLE_SETTINGS_CLASS }` )?.dataset.fid
-		|| toggleGroup.dataset.fid;
+	const fieldId = toggleGroup.closest( `.${ SINGLE_SETTINGS_CLASS }` )?.dataset.fid ||
+		toggleGroup.dataset.fid;
 
 	const isChecked = toggleButton.checked;
 

@@ -9,10 +9,10 @@
  * Initializes the Add Fields button click handler.
  */
 const initAddFieldsButtonHandler = () => {
-	document.getElementById( 'frm-form-add-field' )?.addEventListener( 'click', ( event ) => {
+	document.getElementById( 'frm-form-add-field' )?.addEventListener( 'click', event => {
 		event.preventDefault();
 		document.querySelector( '.frm-settings-panel .frm-tabs-navs ul > li:first-child' )?.click();
-	});
+	} );
 };
 
 export default initAddFieldsButtonHandler;

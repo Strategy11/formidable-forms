@@ -10,4 +10,4 @@ import initializeOnboardingWizard from './initializeOnboardingWizard';
 
 domReady( () => {
 	initializeOnboardingWizard();
-});
+} );

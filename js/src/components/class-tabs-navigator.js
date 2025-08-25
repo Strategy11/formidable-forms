@@ -1,5 +1,4 @@
 export class frmTabsNavigator {
-
 	constructor( wrapper ) {
 		if ( 'undefined' === typeof wrapper ) {
 			return;
@@ -12,11 +11,11 @@ export class frmTabsNavigator {
 		}
 
 		this.flexboxSlidesGap = '16px';
-		this.navs             = this.wrapper.querySelectorAll( '.frm-tabs-navs ul > li' );
-		this.slideTrackLine   = this.wrapper.querySelector( '.frm-tabs-active-underline' );
-		this.slideTrack       = this.wrapper.querySelector( '.frm-tabs-slide-track' );
-		this.slides           = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
-		this.isRTL            = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+		this.navs = this.wrapper.querySelectorAll( '.frm-tabs-navs ul > li' );
+		this.slideTrackLine = this.wrapper.querySelector( '.frm-tabs-active-underline' );
+		this.slideTrack = this.wrapper.querySelector( '.frm-tabs-slide-track' );
+		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
+		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
 
 		this.init();
 	}
@@ -29,7 +28,7 @@ export class frmTabsNavigator {
 		this.initDefaultSlideTrackerWidth();
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
-		});
+		} );
 	}
 
 	onNavClick( event, index ) {
@@ -53,24 +52,24 @@ export class frmTabsNavigator {
 		if ( ! this.slideTrackLine.dataset.initialWidth ) {
 			return;
 		}
-		this.slideTrackLine.style.width = `${this.slideTrackLine.dataset.initialWidth}px`;
+		this.slideTrackLine.style.width = `${ this.slideTrackLine.dataset.initialWidth }px`;
 	}
 	initSlideTrackUnderline( nav, index ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
-		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) ) ;
+		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		const position = this.isRTL
 			? -( activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth )
 			: activeNav.offsetLeft;
 
-		this.slideTrackLine.style.transform = `translateX(${position}px)`;
+		this.slideTrackLine.style.transform = `translateX(${ position }px)`;
 		this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
 	}
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
-		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${this.isRTL ? 1 : -1} )`;
+		const translate = index == 0 ? '0px' : `calc( ( ${ ( index * 100 ) }% + ${ parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${ this.isRTL ? 1 : -1 } )`;
 		if ( '0px' !== translate ) {
-			this.slideTrack.style.transform = `translateX(${translate})`;
+			this.slideTrack.style.transform = `translateX(${ translate })`;
 		} else {
 			this.slideTrack.style.removeProperty( 'transform' );
 		}

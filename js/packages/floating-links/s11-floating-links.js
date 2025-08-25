@@ -4,28 +4,27 @@
  * @class S11FloatingLinks
  */
 class S11FloatingLinks {
-
 	/**
 	 * Create a new S11FloatingLinks instance.
 	 *
-	 * @constructor
+	 * @class
 	 */
 	constructor() {
-		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ({ links, options }) => {
+		wp.hooks.addAction( 'set_floating_links_config', 'S11FloatingLinks', ( { links, options } ) => {
 			this.validateInputs( links, options );
 
 			this.links = links;
 			this.options = options;
 
 			this.initComponent();
-		});
+		} );
 	}
 
 	/**
 	 * Validate the input parameters.
 	 *
-	 * @param {Array<Object>} links - The links array.
-	 * @param {Object} options - The options object.
+	 * @param {Array<Object>} links   The links array.
+	 * @param {Object}        options The options object.
 	 *
 	 * @throws {Error} If the links array is empty or not provided.
 	 * @throws {Error} If the options.logoIcon is not provided or is an empty string.
@@ -85,39 +84,39 @@ class S11FloatingLinks {
 	}
 
 	/**
-	 * @return {HTMLElement}
+	 * @return {HTMLElement} The inbox slide-in element.
 	 */
 	getInboxSlideIn() {
-		const h3          = frmDom.tag(
+		const h3 = frmDom.tag(
 			'h3',
 			{ id: 'frm_inbox_slidein_title' }
 		);
-		h3.innerHTML      = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
-		const messageSpan = frmDom.span({
+		h3.innerHTML = frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.subject );
+		const messageSpan = frmDom.span( {
 			id: 'frm_inbox_slidein_message',
 			text: frmGlobal.inboxSlideIn.slidein
-		});
-		const dismissIcon = frmDom.a({
+		} );
+		const dismissIcon = frmDom.a( {
 			className: 'dismiss frm_inbox_dismiss',
-			child: frmDom.svg({ href: '#frm_close_icon' })
-		});
+			child: frmDom.svg( { href: '#frm_close_icon' } )
+		} );
 		dismissIcon.setAttribute( 'aria-label', wp.i18n.__( 'Dismiss this notice', 'formidable' ) );
 		dismissIcon.setAttribute( 'role', 'button' );
-		const children    = frmAdminBuild.hooks.applyFilters(
+		const children = frmAdminBuild.hooks.applyFilters(
 			'frm_inbox_slidein_children',
 			[ h3, messageSpan ]
 		);
-		const slideIn     = frmDom.div({
+		const slideIn = frmDom.div( {
 			id: 'frm_inbox_slide_in',
 			className: 'frm-card-item frm-compact-card-item frm-dismissible frm-box-shadow-xxl',
 			children
-		});
+		} );
 		slideIn.setAttribute( 'data-message', frmGlobal.inboxSlideIn.key );
 		slideIn.setAttribute( 'role', 'alert' );
 		slideIn.insertAdjacentHTML( 'beforeend', frmAdminBuild.purifyHtml( frmGlobal.inboxSlideIn.cta ) );
 		slideIn.querySelector( '.frm-button-secondary' )?.remove();
 		this.updateSlideInCtaUtm( slideIn );
-		slideIn.appendChild( frmDom.span({ child: dismissIcon }) );
+		slideIn.appendChild( frmDom.span( { child: dismissIcon } ) );
 		slideIn.querySelector( 'a[href].frm-button-primary' )?.setAttribute(
 			'aria-description',
 			( frmGlobal.inboxSlideIn.subject + ' ' + frmGlobal.inboxSlideIn.slidein ).replace( '&amp;', '&' )
@@ -133,13 +132,13 @@ class S11FloatingLinks {
 					return;
 				}
 
-				const urlObj       = new URL( anchor.href );
+				const urlObj = new URL( anchor.href );
 				const searchParams = new URLSearchParams( urlObj.search );
 
 				searchParams.set( 'utm_medium', 'slidein' );
 
 				urlObj.search = searchParams.toString();
-				anchor.href   = urlObj.toString();
+				anchor.href = urlObj.toString();
 			}
 		);
 	}
@@ -169,7 +168,7 @@ class S11FloatingLinks {
 		this.navMenuElement.classList.add( 's11-floating-links-nav-menu', 's11-fadeout' );
 
 		// Create and append link elements
-		this.links.forEach( ( link ) => {
+		this.links.forEach( link => {
 			if ( ! this.linkHasRequiredProperties( link ) ) {
 				return;
 			}
@@ -180,18 +179,18 @@ class S11FloatingLinks {
 			linkElement.href = link.url;
 			linkElement.title = link.title;
 
-			if ( link.openInNewTab ===  true ) {
+			if ( link.openInNewTab === true ) {
 				linkElement.target = '_blank';
 				linkElement.rel = 'noopener noreferrer';
 			}
 
 			linkElement.innerHTML = `
-				<span class="s11-floating-links-nav-text">${link.title}</span>
-				<span class="s11-floating-links-nav-icon">${link.icon}</span>
+				<span class="s11-floating-links-nav-text">${ link.title }</span>
+				<span class="s11-floating-links-nav-icon">${ link.icon }</span>
 			`;
 
 			this.navMenuElement.appendChild( linkElement );
-		});
+		} );
 
 		// Append the navigation menu to the wrapper element
 		this.wrapperElement.appendChild( this.navMenuElement );
@@ -231,7 +230,7 @@ class S11FloatingLinks {
 
 			// Switch the icon of the icon button element
 			this.switchIconButton( closeIcon );
-		});
+		} );
 
 		// Append the icon button to the wrapper element
 		this.wrapperElement.appendChild( this.iconButtonElement );
@@ -275,7 +274,7 @@ class S11FloatingLinks {
 
 		element.addEventListener( 'animationend', () => {
 			element.classList.remove( 's11-fading' );
-		}, { once: true });
+		}, { once: true } );
 	}
 
 	/**
@@ -285,7 +284,7 @@ class S11FloatingLinks {
 	 * @memberof S11FloatingLinks
 	 */
 	addOutsideClickListener() {
-		document.body.addEventListener( 'click', ( e ) => {
+		document.body.addEventListener( 'click', e => {
 			if ( ! this.wrapperElement.contains( e.target ) && this.navMenuElement.classList.contains( 's11-fadein' ) ) {
 				// Toggle the navigation menu element
 				this.toggleFade( this.navMenuElement );
@@ -297,12 +296,12 @@ class S11FloatingLinks {
 				// Switch the icon of the icon button element
 				this.switchIconButton( this.options.logoIcon.trim() );
 			}
-		});
+		} );
 
 		// Prevent click event from bubbling up to the body when clicking on the wrapper element
-		this.wrapperElement.addEventListener( 'click', ( e ) => {
+		this.wrapperElement.addEventListener( 'click', e => {
 			e.stopPropagation();
-		});
+		} );
 	}
 
 	/**
@@ -326,7 +325,7 @@ class S11FloatingLinks {
 			}
 
 			this.lastScrollPosition = currentScrollPosition;
-		});
+		} );
 	}
 
 	inboxSlideInIsVisible() {

@@ -1,25 +1,24 @@
 export class frmCounter {
-
 	/**
 	 * Init frmCounter
 	 *
 	 * @param {Element} element
-	 * @param {object} options
+	 * @param {Object}  options
 	 * @param {integer} options.timetoFinish - Max time in mileseconds for counter to complete the animation.
 	 */
 	constructor( element, options ) {
-		if ( ! element instanceof Element || ! element.dataset.counter ) {
+		if ( ! ( element instanceof Element ) || ! element.dataset.counter ) {
 			return;
 		}
 
-		this.template        = element.dataset.type || 'default';
-		this.element         = element;
-		this.value           = parseInt( element.dataset.counter, 10 );
-		this.activeCounter   = 0;
-		this.locale          = element.dataset.locale ? element.dataset.locale.replace( '_', '-' ) : 'en-US';
+		this.template = element.dataset.type || 'default';
+		this.element = element;
+		this.value = parseInt( element.dataset.counter, 10 );
+		this.activeCounter = 0;
+		this.locale = element.dataset.locale ? element.dataset.locale.replace( '_', '-' ) : 'en-US';
 		this.timeoutInterval = 50;
-		this.timeToFinish    = 'undefined' !== typeof options && 'undefined' !== typeof options.timetoFinish ? options.timetoFinish : 1400;
-		this.valueStep       = this.value / Math.ceil( this.timeToFinish / this.timeoutInterval );
+		this.timeToFinish = 'undefined' !== typeof options && 'undefined' !== typeof options.timetoFinish ? options.timetoFinish : 1400;
+		this.valueStep = this.value / Math.ceil( this.timeToFinish / this.timeoutInterval );
 
 		if ( 0 === this.value ) {
 			return;
@@ -30,7 +29,7 @@ export class frmCounter {
 
 	formatNumber( number ) {
 		if ( 'currency' === this.template ) {
-			return number.toLocaleString( this.locale, { minimumFractionDigits: 2 });
+			return number.toLocaleString( this.locale, { minimumFractionDigits: 2 } );
 		}
 		return number;
 	}
@@ -43,7 +42,5 @@ export class frmCounter {
 		} else {
 			this.element.innerText = this.formatNumber( this.value );
 		}
-
 	}
-
 }

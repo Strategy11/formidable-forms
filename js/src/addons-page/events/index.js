@@ -20,7 +20,7 @@ export function addEventListeners() {
 	wp.hooks.addAction(
 		'frmPage.onCategoryClick',
 		'frmAddonsPage',
-		( selectedCategory ) => {
+		selectedCategory => {
 			showSelectedCategory( selectedCategory );
 		}
 	);

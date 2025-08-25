@@ -33,6 +33,7 @@ const entries = {
     'onboarding-wizard': './js/src/onboarding-wizard/index.js',
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
+	formidable_admin: './js/src/admin/admin.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
   },
   // SCSS entries

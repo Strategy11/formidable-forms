@@ -49,7 +49,7 @@ function findAndInitializeTokenFields() {
 			setupTokenInput( field );
 			processedFields.add( field.id );
 		}
-	});
+	} );
 }
 
 /**

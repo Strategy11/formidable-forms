@@ -26,4 +26,4 @@ domReady( () => {
 	initToggleGroupComponents();
 	setupCustomToggleGroupHandlers();
 	setupUnitInputHandlers();
-});
+} );

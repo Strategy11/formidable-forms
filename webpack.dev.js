@@ -55,18 +55,18 @@ const init = () => {
 	jsCompiler.watch(
 		{ aggregateTimeout: 300 },
 		( err, stats ) => err || stats.hasErrors()
-			? console.log( `JS compilation ${err ? 'error: ' + err : 'has errors'}` )
+			? console.log( `JS compilation ${ err ? 'error: ' + err : 'has errors' }` )
 			: console.log( 'JS compiled successfully' )
 	);
 
-	browserSyncInstance.init({
+	browserSyncInstance.init( {
 		proxy: {
 			target: config.siteDomain,
 			middleware: [
 				webpackDevMiddleware( cssCompiler, {
 					publicPath: config.publicPath,
 					writeToDisk: true
-				})
+				} )
 			]
 		},
 
@@ -76,17 +76,17 @@ const init = () => {
 			{
 				match: [ config.cssPath ],
 				fn: ( event, file ) => {
-					console.log( `CSS updated: ${file}` );
+					console.log( `CSS updated: ${ file }` );
 					browserSyncInstance.reload( '*.css' );
 				}
 			},
 			// JS source changes
 			{
 				match: [ config.jsSrcPath ],
-				fn: ( event, file ) => console.log( `JS source updated: ${file}\nRebuilding JS bundles...` )
+				fn: ( event, file ) => console.log( `JS source updated: ${ file }\nRebuilding JS bundles...` )
 			},
 			// Conditionally watch compiled JS and PHP files
-			...(process.env.WATCH_FILES && process.env.WATCH_FILES.toLowerCase().startsWith('y') ? [config.jsPath, config.phpPath] : [])
+			...( process.env.WATCH_FILES && process.env.WATCH_FILES.toLowerCase().startsWith( 'y' ) ? [ config.jsPath, config.phpPath ] : [] )
 		],
 
 		// Server settings
@@ -98,14 +98,14 @@ const init = () => {
 		ghostMode: false,
 
 		// Resource handling
-		serveStatic: [{ route: '/css', dir: './css' }],
-		rewriteRules: [{
+		serveStatic: [ { route: '/css', dir: './css' } ],
+		rewriteRules: [ {
 			match: new RegExp( config.siteDomain.replace( /^https?:\/\//, '' ), 'g' ),
-			replace: `localhost:${config.port}`
-		}]
-	});
+			replace: `localhost:${ config.port }`
+		} ]
+	} );
 
-	console.log( `Development server running at: http://localhost:${config.port}` );
+	console.log( `Development server running at: http://localhost:${ config.port }` );
 };
 
 // Start the server
