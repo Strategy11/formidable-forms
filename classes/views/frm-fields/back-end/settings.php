@@ -141,8 +141,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php if ( $display['css'] ) { ?>
 			<p class="frm-has-modal">
-				<label for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help" title="<?php esc_attr_e( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ); ?>">
-					<?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?>
+				<label class="frm-h-stack-xs" for="frm_classes_<?php echo esc_attr( $field['id'] ); ?>">
+					<span><?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?></span>
+					<?php FrmAppHelper::tooltip_icon( __( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 				</label>
 				<span class="frm-with-right-icon">
 					<?php
@@ -153,11 +154,24 @@ if ( ! defined( 'ABSPATH' ) ) {
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
 						)
 					);
+					$css_layout_classes_attrs = array(
+						'type'           => 'text',
+						'name'           => 'field_options[classes_' . $field['id'] . ']',
+						'value'          => $field['classes'],
+						'class'          => 'frm_classes frm-token-input-field',
+						'id'             => 'frm_classes_' . $field['id'],
+						'data-changeme'  => 'frm_field_id_' . $field['id'],
+						'data-changeatt' => 'class',
+						'data-sep'       => ' ',
+						'data-shortcode' => '0',
+					);
 					?>
-					<input type="text" name="field_options[classes_<?php echo esc_attr( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['classes'] ); ?>" class="frm_classes frm-token-input-field" id="frm_classes_<?php echo esc_attr( $field['id'] ); ?>" data-changeme="frm_field_id_<?php echo esc_attr( $field['id'] ); ?>" data-changeatt="class" data-sep=" " data-shortcode="0" />
+					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 				</span>
 			</p>
-		<?php } ?>
+			<?php
+		}//end if
+		?>
 	</div>
 
 <?php

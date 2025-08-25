@@ -4,6 +4,9 @@
  * Functions for handling token input events
  */
 
+/**
+ * Internal dependencies
+ */
 import { CLASS_NAMES, KEYS } from './constants';
 import { addToken, removeToken, synchronizeTokensDisplay } from './token-actions';
 import { adjustProxyInputStyle } from './proxy-input-style';
@@ -38,16 +41,26 @@ export function addEventListeners( field, proxyInput, tokensWrapper ) {
  * @return {void}
  */
 function onProxyInputKeydown( event, field, proxyInput, tokensWrapper ) {
-	const key = event.key;
+	const { key } = event;
 	const value = proxyInput.value.trim();
 
-	if ( key === KEYS.BACKSPACE && ! value ) { // Handle token removal on backspace
-		event.preventDefault();
-		const lastToken = tokensWrapper.querySelector( `.${ CLASS_NAMES.TOKEN }:last-child` );
-		removeToken( lastToken, field, proxyInput );
-	} else if ( [ KEYS.SPACE, KEYS.COMMA, KEYS.ENTER, KEYS.TAB ].includes( key ) ) { // Handle token creation keys
-		event.preventDefault();
-		addToken( value, field, proxyInput );
+	switch ( key ) {
+		// Remove the last token when backspace is pressed and input field is empty (no text being typed)
+		case KEYS.BACKSPACE:
+			if ( ! value ) {
+				event.preventDefault();
+				const lastToken = tokensWrapper.querySelector( `.${ CLASS_NAMES.TOKEN }:last-child` );
+				removeToken( lastToken, field, proxyInput );
+			}
+			break;
+
+		// Create a token from current input when delimiter keys are pressed
+		case KEYS.SPACE:
+		case KEYS.COMMA:
+		case KEYS.ENTER:
+			event.preventDefault();
+			addToken( value, field, proxyInput );
+			break;
 	}
 
 	adjustProxyInputStyle( proxyInput, tokensWrapper );
