@@ -21,6 +21,29 @@
 
 // For the upgrade modal.
 @import '../admin/components/modal/modal';
+@import '../admin/components/modal/dialog';
+@import '../admin/components/icons/circled-icons';
+@import '../admin/utilities/layout/flex';
+
+.frmsvg {
+    fill:currentColor;
+    width:18px;
+    height:18px;
+    vertical-align:middle
+}
+
+body.frm_preview_page .ui-widget-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--grey-500);
+	opacity: .5;
+	z-index: 2;
+}
 
 #frm_testing_mode {
     border-radius: 1rem;

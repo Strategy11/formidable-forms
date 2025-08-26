@@ -107,7 +107,7 @@ class FrmTestModeController {
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
 		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
 
-		if ( $should_show_upsell ) {
+		if ( $should_show_upsell || $should_suggest_ai_install ) {
 			// This is required for the speaker icon in the upsell to appear.
 			FrmAppHelper::include_svg();
 		}
