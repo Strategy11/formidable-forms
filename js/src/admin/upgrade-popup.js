@@ -1,3 +1,5 @@
+import { __ } from '@wordpress/i18n';
+
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
 	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
@@ -15,7 +17,7 @@ function getShowLinkHrefValue( link, showLink ) {
  */
 export function addOneClick( link, context, upgradeLabel ) {
 	let container;
- 
+
 	if ( 'modal' === context ) {
 		container = document.getElementById( 'frm_upgrade_modal' );
 	} else if ( 'tab' === context ) {
