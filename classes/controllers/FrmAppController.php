@@ -736,6 +736,10 @@ class FrmAppController {
 				wp_enqueue_style( 'wp-color-picker' );
 			}
 
+			if ( 'formidable' === $page && 'settings' === FrmAppHelper::get_param( 'frm_action' ) ) {
+				wp_enqueue_script( 'frm-custom-dropdown', $plugin_url . '/js/admin/custom-dropdown.js', array( 'jquery-ui-selectmenu' ), $version, true );
+			}
+
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();

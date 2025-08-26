@@ -10329,6 +10329,10 @@ span.clear {
 }
 
 /* End hide from IE-mac */
+.frm-custom-dropdown-menu .ui-menu-item {
+  display: inline-block;
+}
+
 /**
  * Responsive Styles
  *

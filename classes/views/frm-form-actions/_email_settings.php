@@ -16,7 +16,8 @@ $default_style = ! empty( $frm_settings->email_style ) ? $frm_settings->email_st
 	<label for="frm-email-style-value">
 		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
 	</label>
-	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value">
+
+	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value" class="frm-custom-dropdown">
 		<?php
 		foreach ( $email_styles as $style_key => $style ) {
 			$option_attrs = array( 'value' => $style_key );
