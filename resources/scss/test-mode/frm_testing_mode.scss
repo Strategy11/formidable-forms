@@ -178,3 +178,18 @@ body.frm_preview_page .ui-widget-overlay {
     margin-bottom: -16px;
     border-radius: 0 0 16px 16px;
 }
+
+.frm_warning_style:has(.frm-addon-button) {
+    display: flex;
+    padding: var(--gap-sm);
+    line-height: 40px;
+}
+
+.frm_warning_style .frm-addon-button,
+#frm_upgrade_modal a.frm-button-primary {
+    text-decoration: none;
+}
+
+#frm_upgrade_modal a.frm-button-primary {
+    cursor: pointer;
+}
