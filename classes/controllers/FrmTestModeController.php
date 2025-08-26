@@ -107,21 +107,18 @@ class FrmTestModeController {
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
 		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
 
-		// TODO: I think this needs multiple statuses. This is too hard coded.
-		$oneclick = array(
-			'url'    => 'formidable-ai/formidable-ai.php',
-			'class'  => 'frm-activate-addon',
-			'status' => 'installed',
-		);
-
 		$ai_install_span_attrs = array(
 			'data-upgrade'  => __( 'Autofilled forms with AI', 'formidable' ),
 			'data-content'  => 'ai-autofill',
 			'data-medium'   => 'test-mode',
 			'data-requires' => 'Business',
-			'data-oneclick' => json_encode( $oneclick ),
 			'style'         => 'margin-left: auto;',
 		);
+
+		$oneclick_data = FrmAddonsController::install_link( 'ai' );
+		if ( isset( $oneclick_data['url'] ) ) {
+			$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
+		}
 
 		if ( $should_show_upsell || $should_suggest_ai_install ) {
 			// This is required for the speaker icon in the upsell to appear.
