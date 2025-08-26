@@ -274,7 +274,14 @@ class FrmTestModeController {
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
-		wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array( 'jquery' ), $version, true );
+		wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array( 'jquery', 'formidable_dom' ), $version, true );
+
+		$admin_script_strings = array(
+			'active'        => __( 'Active', 'formidable' ),
+			'installed'     => __( 'Installed', 'formidable' ),
+			'not_installed' => __( 'Not Installed', 'formidable' ),
+		);
+		wp_localize_script( 'frm_testing_mode', 'frm_admin_js', $admin_script_strings );
 
 		self::register_and_enqueue_multiselect_dropdown_requirements();
 	}

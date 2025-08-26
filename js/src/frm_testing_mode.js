@@ -1,5 +1,23 @@
 ( function() {
+	const { toggleAddonState } = require( './admin/addon-state' );
+
 	function onReady() {
+
+		jQuery( document ).on( 'click', '#frm_upgrade_modal .frm-install-addon', installAddon );
+		jQuery( document ).on( 'click', '#frm_upgrade_modal .frm-activate-addon', activateAddon );
+
+		function activateAddon( e ) {
+			alert( 'activate' );
+			e.preventDefault();
+			toggleAddonState( this, 'frm_activate_addon' );
+		}
+	
+		function installAddon( e ) {
+			alert( 'install' );
+			e.preventDefault();
+			toggleAddonState( this, 'frm_install_addon' );
+		}
+
 		initUpgradeModal();
 		setupBootstrapDropdowns();
 	}
