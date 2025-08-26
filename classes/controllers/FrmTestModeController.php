@@ -268,6 +268,7 @@ class FrmTestModeController {
 	 * @return void
 	 */
 	public static function register_and_enqueue_required_scripts() {
+		// These are used for the upgrade pop-up.
 		FrmAppController::enqueue_dialog_assets();
 		FrmAppController::upgrade_overlay_html();
 
@@ -276,6 +277,7 @@ class FrmTestModeController {
 		wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
 		wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array( 'jquery', 'formidable_dom' ), $version, true );
 
+		// These are used in addon-state.js.
 		$admin_script_strings = array(
 			'active'        => __( 'Active', 'formidable' ),
 			'installed'     => __( 'Installed', 'formidable' ),
