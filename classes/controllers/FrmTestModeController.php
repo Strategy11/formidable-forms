@@ -107,6 +107,7 @@ class FrmTestModeController {
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
 		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
 
+		// TODO: I think this needs multiple statuses. This is too hard coded.
 		$oneclick = array(
 			'url'    => 'formidable-ai/formidable-ai.php',
 			'class'  => 'frm-activate-addon',
