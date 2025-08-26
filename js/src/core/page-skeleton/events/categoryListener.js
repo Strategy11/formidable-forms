@@ -20,7 +20,7 @@ export function addCategoryEvents() {
 	const { categoryItems } = getElements();
 
 	// Attach click and keyboard event listeners to each sidebar category
-	categoryItems.forEach( ( category ) => {
+	categoryItems.forEach( category => {
 		onClickPreventDefault( category, onCategoryClick );
 		category.addEventListener( 'keydown', onCategoryKeydown );
 	} );
@@ -32,7 +32,7 @@ export function addCategoryEvents() {
  * @private
  * @param {Event} event The click event object.
  */
-const onCategoryClick = ( event ) => {
+const onCategoryClick = event => {
 	const clickedCategory = event.currentTarget;
 	const newSelectedCategory = clickedCategory.getAttribute( 'data-category' );
 	let { selectedCategory, selectedCategoryEl, notEmptySearchText } =

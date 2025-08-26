@@ -12,7 +12,7 @@ import { isCustomTemplate, isLockedTemplate } from '../utils';
  * @return {void}
  */
 function addUseTemplateButtonEvents() {
-	const useTemplateButtons = document.querySelectorAll( `.${PREFIX}-use-template-button` );
+	const useTemplateButtons = document.querySelectorAll( `.${ PREFIX }-use-template-button` );
 
 	// Attach click event listeners to each use template button
 	useTemplateButtons.forEach( useTemplateButton =>
@@ -27,7 +27,7 @@ function addUseTemplateButtonEvents() {
  * @param {Event} event The click event object.
  * @return {void}
  */
-const onUseTemplateButtonClick = ( event ) => {
+const onUseTemplateButtonClick = event => {
 	const useTemplateButton = event.currentTarget;
 
 	const template = useTemplateButton.closest( '.frm-card-item' );

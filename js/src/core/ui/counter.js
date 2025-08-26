@@ -46,7 +46,7 @@ const counter = ( element, value, options = {} ) => {
 
 	// Start animation
 	targetElement.classList.add( 'frm-fadein' );
-	targetElement._counterAnimation = requestAnimationFrame( ( timestamp ) =>
+	targetElement._counterAnimation = requestAnimationFrame( timestamp =>
 		animateCounter( timestamp, targetElement, startValue, targetValue, duration, change, easing )
 	);
 
@@ -96,7 +96,7 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
 		// Fallback strategy: after 3 frame drops, abandon JS animation for CSS transition
 		// This prevents choppy animations when browser is under heavy load
 		if ( element._counterFrameDropCount > 3 ) {
-			element.style.transition = `opacity ${Math.max(duration - elapsed, 100)}ms ease-out`;
+			element.style.transition = `opacity ${ Math.max( duration - elapsed, 100 ) }ms ease-out`;
 			element.textContent = String( targetValue );
 			delete element._counterAnimation;
 			return;
@@ -118,7 +118,7 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
 
 	// Continue animation or finish
 	if ( progress < 1 ) {
-		element._counterAnimation = requestAnimationFrame( ( timestamp ) =>
+		element._counterAnimation = requestAnimationFrame( timestamp =>
 			animateCounter( timestamp, element, startValue, targetValue, duration, change, easing )
 		);
 	} else {
@@ -138,6 +138,6 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
  * @param {number} t Progress from 0 to 1
  * @return {number} Eased value
  */
-const easeOutQuart = ( t ) => 1 - Math.pow( 1 - t, 4 );
+const easeOutQuart = t => 1 - Math.pow( 1 - t, 4 );
 
 export default counter;

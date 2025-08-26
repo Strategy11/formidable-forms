@@ -6,7 +6,7 @@ import { CURRENT_CLASS } from 'core/constants';
 /**
  * Internal dependencies
  */
-import { getElements } from "../elements";
+import { getElements } from '../elements';
 import { STEPS } from '../shared';
 
 const COMPLETED_STEP_CLASS = 'frm-completed-step';
@@ -26,12 +26,12 @@ export function updateRootline( currentStep ) {
 	}
 
 	const { rootline } = getElements();
-	const currentItem = rootline.querySelector( `.frm-rootline-item[data-step="${currentStep}"]` );
+	const currentItem = rootline.querySelector( `.frm-rootline-item[data-step="${ currentStep }"]` );
 
 	rootline.querySelectorAll( '.frm-rootline-item' ).forEach( item => {
 		item.classList.remove( COMPLETED_STEP_CLASS );
 		item.classList.remove( CURRENT_CLASS );
-	});
+	} );
 
 	let prevItem = currentItem.previousElementSibling;
 	if ( prevItem ) {

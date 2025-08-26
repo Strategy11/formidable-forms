@@ -34,7 +34,7 @@ function addGetFreeTemplatesEvents() {
  * @private
  * @return {void}
  */
-const onGetTemplatesButtonClick = async() => {
+const onGetTemplatesButtonClick = async () => {
 	const { leaveEmailModalInput } = getElements();
 	const email = leaveEmailModalInput.value.trim();
 

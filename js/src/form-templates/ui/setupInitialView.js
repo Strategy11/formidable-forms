@@ -65,7 +65,7 @@ function setupAvailableTemplatesCategory( availableTemplatesCategory ) {
 
 	const availableTemplatesCount = getSingleState( 'availableTemplatesCount' );
 	if ( ! hasQueryParam( 'registered-for-free-templates' ) ) {
-		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
+		availableTemplatesCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = availableTemplatesCount;
 		return;
 	}
 
@@ -87,7 +87,7 @@ function runAvailableTemplatesEffects( element, count ) {
 	}, 0 );
 
 	setTimeout( () => {
-		counter( element.querySelector( `.${SKELETON_PREFIX}-cat-count` ), count );
+		counter( element.querySelector( `.${ SKELETON_PREFIX }-cat-count` ), count );
 	}, 150 );
 
 	setTimeout( () => {
@@ -101,8 +101,8 @@ function runAvailableTemplatesEffects( element, count ) {
 					this.classList.remove( 'frm-background-highlight' );
 					this.removeEventListener( 'animationend', handleAnimationEnd );
 				}
-			});
-		});
+			} );
+		} );
 	}, 750 );
 }
 

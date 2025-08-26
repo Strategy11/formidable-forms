@@ -36,11 +36,11 @@ export function showSearchState( notEmptySearchText ) {
 
 	// Update the page title and display relevant elements
 	updatePageTitle( __( 'Search Result', 'formidable' ) );
-	showElements([ pageTitle, templatesList, applicationTemplates ]);
+	showElements( [ pageTitle, templatesList, applicationTemplates ] );
 
 	// Smoothly display the updated UI elements
 	bodyContentAnimate.fadeIn();
-};
+}
 
 /**
  * Displays search results based on search outcome.
@@ -65,10 +65,10 @@ export function displaySearchElements( foundSomething ) {
 
 	const { templatesList, applicationTemplates, applicationTemplatesTitle, applicationTemplatesList } = getElements();
 
-	showElements([ templatesList, applicationTemplates, applicationTemplatesTitle ]);
+	showElements( [ templatesList, applicationTemplates, applicationTemplatesTitle ] );
 
 	if ( templatesList.offsetHeight === 0 ) {
-		hideElements([ templatesList, applicationTemplatesTitle ]);
+		hideElements( [ templatesList, applicationTemplatesTitle ] );
 	}
 
 	if ( applicationTemplatesList?.offsetHeight === 0 ) {

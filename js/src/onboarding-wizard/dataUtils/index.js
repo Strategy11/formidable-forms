@@ -1,1 +1,1 @@
-export { default as setupUsageData} from './setupUsageData';
+export { default as setupUsageData } from './setupUsageData';
