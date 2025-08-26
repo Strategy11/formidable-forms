@@ -106,8 +106,7 @@ class FrmTestModeController {
 		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
 		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
-
-		$ai_install_span_attrs = array(
+		$ai_install_span_attrs                = array(
 			'data-upgrade'  => __( 'Autofilled forms with AI', 'formidable' ),
 			'data-content'  => 'ai-autofill',
 			'data-medium'   => 'test-mode',
