@@ -28,10 +28,6 @@ class FrmEmailCollectionHelper {
 		$user  = wp_get_current_user();
 		$email = $email ? $email : $user->user_email;
 
-		if ( ! $email ) {
-			return;
-		}
-
 		if ( self::is_fake_email( $email ) ) {
 			return;
 		}
