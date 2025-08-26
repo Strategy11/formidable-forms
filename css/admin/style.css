@@ -224,15 +224,6 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	min-width: 200px;
 }
 
-/*
-Do not set this for frm_inside_container as it requires a custom line height value.
-Target .frm_primary_label so we avoid other labels like star rating stars.
-Time fields use a div instead of a label, so don't target by the primary label by tag type.
-*/
-#frm_style_preview .frm_form_field:not(.frm_inside_container) > .frm_primary_label {
-	line-height: var(--line-height);
-}
-
 #frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {
 	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
 	width: var(--auto-width);
