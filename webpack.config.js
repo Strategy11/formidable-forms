@@ -86,7 +86,8 @@ const jsConfig = {
   entry: entries.js,
   output: {
     filename: '[name].js',
-    path: paths.js
+    path: paths.js,
+    chunkFormat: false,
   },
   module: {
     rules: [
