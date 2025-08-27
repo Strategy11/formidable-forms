@@ -78,7 +78,7 @@ body.frm_preview_page .ui-widget-overlay {
     }
 
     label:not(:first-child) {
-        margin-left: var(--gap-sm);
+        margin-left: var(--gap-xs);
     }
 
     a.frm_button {
@@ -200,4 +200,16 @@ body.frm_preview_page .ui-widget-overlay {
 
 #frm_upgrade_modal a.frm-button-primary {
     cursor: pointer;
+}
+
+@media (max-width: 1024px) {
+    #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
+        width: 100%;
+        display: block !important;
+        margin-left: 0 !important;
+    }
+
+    #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
+        margin-top: var(--gap-sm);
+    }
 }

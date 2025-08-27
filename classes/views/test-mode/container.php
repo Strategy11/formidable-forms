@@ -47,40 +47,44 @@ if ( ! empty( $should_show_warning ) ) {
 		if ( $roles ) :
 			$selected_role = $enabled ? FrmAppHelper::simple_get( 'frm_testmode_role' ) : '';
 			?>
-			<label><?php esc_html_e( 'Preview as:', 'formidable' ); ?></label>
-			<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
-				<?php
-				foreach ( $roles as $role => $details ) {
-					FrmHtmlHelper::echo_dropdown_option(
-						$details['name'],
-						$selected_role === $role,
-						array(
-							'value' => $role,
-						)
-					);
-				}
-				?>
+			<label>
+				<?php esc_html_e( 'Preview as:', 'formidable' ); ?>
+				<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
+					<?php
+					foreach ( $roles as $role => $details ) {
+						FrmHtmlHelper::echo_dropdown_option(
+							$details['name'],
+							$selected_role === $role,
+							array(
+								'value' => $role,
+							)
+						);
+					}
+					?>
 			</select>
+			</label>
 		<?php endif; ?>
 
-		<label><?php esc_html_e( 'Enabled form actions:', 'formidable' ); ?></label>
-		<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
-			<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
-			<?php
-			foreach ( $form_actions as $form_action ) {
-				?>
-				<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
-					<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
-				</option>
+		<label>
+			<?php esc_html_e( 'Enabled form actions:', 'formidable' ); ?>
+			<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
+				<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
 				<?php
-			}
-			?>
-			</select>
-		</div>
+				foreach ( $form_actions as $form_action ) {
+					?>
+					<option value="<?php echo esc_attr( $form_action->ID ); ?>" <?php selected( in_array( $form_action->ID, $enabled_form_actions, true ), true ); ?>>
+						<?php echo esc_html( $form_action->post_title ) . ' (' . absint( $form_action->ID ) . ')'; ?>
+					</option>
+					<?php
+				}
+				?>
+				</select>
+			</div>
+		</label>
 	</div>
 	<hr>
 	<div>
-		<label><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>
+		<label id="frm_quick_jump_label"><?php esc_html_e( 'Quick jump to page:', 'formidable' ); ?></label>
 
 		<?php
 		if ( false !== $pagination && is_callable( $pagination ) ) {
