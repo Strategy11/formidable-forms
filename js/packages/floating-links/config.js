@@ -2,11 +2,11 @@
  * Configuration File.
  * Establishes links and options parameters to be utilized by the S11FloatingLinks class.
  *
+ * @param {Object} wp
  * @class S11FloatingLinks
  */
 
-( ( wp ) => {
-
+( wp => {
 	/**
 	 * WordPress dependencies
 	 */
@@ -109,5 +109,4 @@
 
 	// Trigger the 'set_floating_links_config' action, passing the config
 	wp.hooks.doAction( 'set_floating_links_config', frmFloatingLinksConfig );
-
-})( window.wp );
+} )( window.wp );

@@ -29,7 +29,6 @@ function addCreateFormButtonEvents() {
  * Handles the click event on the "Create a blank form" button.
  *
  * @private
- * @param {Event} event The click event object.
  * @return {void}
  */
 const onCreateFormButtonClick = () => {

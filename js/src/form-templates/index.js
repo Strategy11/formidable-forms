@@ -18,7 +18,7 @@ domReady( () => {
 	wp.hooks.doAction( 'frmFormTemplates.beforeInitialize', {
 		getState,
 		setState
-	});
+	} );
 
 	// Initialize the form templates
 	initializeFormTemplates();
@@ -31,7 +31,7 @@ domReady( () => {
 	wp.hooks.doAction( 'frmFormTemplates.afterInitialize', {
 		getState,
 		setState
-	});
+	} );
 
 	/**
 	 * Trigger a specific action to interact with the hidden form '#frm-new-template',
@@ -40,4 +40,4 @@ domReady( () => {
 	 * @param {jQuery} $form The jQuery object containing the hidden form element.
 	 */
 	wp.hooks.doAction( 'frm_new_form_modal_form', jQuery( '#frm-new-template' ) );
-});
+} );

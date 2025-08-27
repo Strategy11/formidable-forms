@@ -53,6 +53,8 @@ class FrmMigrate {
 				if ( false === get_option( 'frm_first_activation' ) ) {
 					update_option( 'frm_first_activation', time(), false );
 				}
+
+				$this->update_settings_for_new_install();
 			}
 		}//end if
 
@@ -67,6 +69,18 @@ class FrmMigrate {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
 		}
+	}
+
+	/**
+	 * Updates some settings for new installs.
+	 *
+	 * @since 6.23
+	 */
+	private function update_settings_for_new_install() {
+		$settings = FrmAppHelper::get_settings();
+
+		$settings->denylist_check = 1;
+		$settings->store();
 	}
 
 	/**

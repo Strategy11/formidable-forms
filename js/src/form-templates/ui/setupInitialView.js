@@ -37,7 +37,7 @@ function setupInitialView() {
 	// Set the 'Available Templates' count if it is present
 	if ( availableTemplatesCategory ) {
 		const { availableTemplatesCount } = getState();
-		availableTemplatesCategory.querySelector( `.${SKELETON_PREFIX}-cat-count` ).textContent = availableTemplatesCount;
+		availableTemplatesCategory.querySelector( `.${ SKELETON_PREFIX }-cat-count` ).textContent = availableTemplatesCount;
 	}
 
 	// Update extra templates count

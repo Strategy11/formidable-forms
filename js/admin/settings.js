@@ -1,9 +1,12 @@
 ( function() {
+<<<<<<< HEAD
 
 	const globalVars = {
 		sendTestEmailModal: null
 	};
 
+=======
+>>>>>>> master
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
@@ -15,13 +18,13 @@
 			handleToggleChangeEvent( e );
 		}
 
-		if ( 'frm_currency' === e.target.id) {
+		if ( 'frm_currency' === e.target.id ) {
 			syncCurrencyOptions( e.target );
 		}
 	}
 
 	function handleKeyDownEvent( e ) {
-		switch ( e.key ) {
+		switch ( e.key ) { // eslint-disable-line sonarjs/no-small-switch
 			case ' ':
 				handleSpaceDownEvent( e );
 				break;

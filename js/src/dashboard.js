@@ -6,9 +6,7 @@ import { frmAnimate } from 'core/utils';
 import { frmTabsNavigator } from './components/class-tabs-navigator';
 import { frmCounter } from './components/class-counter';
 class frmDashboard {
-
 	constructor() {
-
 		this.options = {
 			ajax: {
 				action: 'dashboard_ajax_action',
@@ -32,12 +30,12 @@ class frmDashboard {
 
 	initInbox() {
 		new frmTabsNavigator( '.frm-inbox-wrapper' );
-		const userEmailInput  = document.querySelector( '#frm_leave_email' );
+		const userEmailInput = document.querySelector( '#frm_leave_email' );
 		const subscribeButton = document.querySelector( '#frm-add-my-email-address' );
 
 		subscribeButton.addEventListener( 'click', () => {
 			this.saveSubscribedEmail( userEmailInput.value ).then();
-		});
+		} );
 	}
 
 	initCounters() {
@@ -58,8 +56,8 @@ class frmDashboard {
 				if ( true === data.success ) {
 					dashboardBanner.remove();
 				}
-			});
-		});
+			} );
+		} );
 	}
 
 	saveSubscribedEmail( email ) {
@@ -68,12 +66,12 @@ class frmDashboard {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: new URLSearchParams({
+			body: new URLSearchParams( {
 				action: this.options.ajax.action,
 				dashboard_action: this.options.ajax.dashboardActions.saveSubscribedEmail,
 				email: email
-			})
-		}).then( result => result.json() );
+			} )
+		} ).then( result => result.json() );
 	}
 
 	closeWelcomeBannerSaveCookieRequest() {
@@ -82,15 +80,15 @@ class frmDashboard {
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded'
 			},
-			body: new URLSearchParams({
+			body: new URLSearchParams( {
 				action: this.options.ajax.action,
 				dashboard_action: this.options.ajax.dashboardActions.welcomeBanner,
 				banner_has_closed: 1
-			})
-		}).then( result => result.json() );
+			} )
+		} ).then( result => result.json() );
 	}
 }
 const frmDashboardClass = new frmDashboard();
 document.addEventListener( 'DOMContentLoaded', () => {
 	frmDashboardClass.init();
-});
+} );
