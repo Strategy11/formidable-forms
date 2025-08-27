@@ -4877,13 +4877,11 @@ function frmAdminBuildJS() {
 		deleteField( fieldId );
 
 		if ( field.hasClass( 'edit_field_type_divider' ) ) {
-			field.find( 'li.frm_field_box' ).each( function() {
-				//TODO: maybe delete only end section
-				//if(n.hasClass('edit_field_type_end_divider')){
+			field.find( 'li.frm_field_box[data-fid]' ).each( function() {
 				deleteField( this.getAttribute( 'data-fid' ) );
-				//}
 			} );
 		}
+
 		toggleSectionHolder();
 	}
 
