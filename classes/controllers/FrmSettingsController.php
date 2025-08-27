@@ -303,6 +303,8 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Shows email settings.
+	 *
 	 * @since x.x
 	 */
 	public static function email_settings() {

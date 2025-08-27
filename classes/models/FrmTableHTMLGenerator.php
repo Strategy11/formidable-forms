@@ -187,6 +187,15 @@ class FrmTableHTMLGenerator {
 		}
 	}
 
+	/**
+	 * Removes border CSS from HTML.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $html The HTML.
+	 * @param string $position The border position. Default is `top`.
+	 * @return string
+	 */
 	public function remove_border( $html, $position = 'top' ) {
 		$search = sprintf(
 			'border-%1$s:%2$s solid %3$s;',
@@ -262,10 +271,24 @@ class FrmTableHTMLGenerator {
 		return $tr_style;
 	}
 
+	/**
+	 * Gets table style.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	public function get_table_style() {
 		return $this->table_style;
 	}
 
+	/**
+	 * Gets td style.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
 	public function get_td_style() {
 		return $this->td_style;
 	}

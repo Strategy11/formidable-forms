@@ -11,8 +11,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+/**
+ * Class FrmEmailStylesController
+ */
 class FrmEmailStylesController {
 
+	/**
+	 * Gets email styles.
+	 *
+	 * @return array[]
+	 */
 	public static function get_email_styles() {
 		$email_styles = array(
 			'classic' => array(
@@ -58,10 +66,22 @@ class FrmEmailStylesController {
 		return apply_filters( 'frm_email_styles', $email_styles );
 	}
 
+	/**
+	 * Gets email style preview URL.
+	 *
+	 * @param string $style_key Style key.
+	 * @return string
+	 */
 	public static function get_email_style_preview_url( $style_key ) {
 		return wp_nonce_url( admin_url( 'admin-ajax.php?action=frm_email_style_preview&style_key=' . $style_key ), 'frm_email_style_preview' );
 	}
 
+	/**
+	 * Gets the test email content.
+	 *
+	 * @param string $style_key Default is `false`, using the one in settings.
+	 * @return string
+	 */
 	private static function get_test_email_content( $style_key = false ) {
 		if ( ! $style_key ) {
 			$style_key = self::get_email_style();
@@ -89,23 +109,27 @@ class FrmEmailStylesController {
 		if ( 'plain' !== $style_key ) {
 			$style_settings = self::get_email_style_settings();
 
-			$should_remove_border            = 'sleek' === $style_key;
+			// Sleek table style doesn't have any border.
+			$should_remove_border = 'sleek' === $style_key;
+
+			// Modern and Compact table styles don't have top and bottom border.
 			$should_remove_top_bottom_border = 'classic' !== $style_key;
 
-			// This needs to run after the filter for styles.
-//			add_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ), 20 );
 			$table_generator = self::get_table_generator( $style_key );
-//			remove_filter( 'frm_show_entry_styles', array( __CLASS__, 'override_table_style_settings' ) );
 
 			$content = $table_generator->generate_table_header();
+
+			// By default, table has the bottom border and table cells have top border.
 			if ( $should_remove_top_bottom_border ) {
 				$content = $table_generator->remove_border( $content, 'bottom' );
 			}
 
 			foreach ( $table_rows as $index => $row ) {
 				if ( 'compact' === $style_key ) {
+					// Compact table has one column layout.
 					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
+					// Other table styles have two columns layout.
 					$row_html = '<div style="font-weight:600;">' . $row['label'] . '</div>';
 					$row_html .= $row['value'];
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
@@ -148,6 +172,12 @@ class FrmEmailStylesController {
 		return $content;
 	}
 
+	/**
+	 * Gets table generator object for an email style.
+	 *
+	 * @param string $email_style Email style. Default is `false`: using the one in global settings.
+	 * @return FrmTableHTMLGenerator
+	 */
 	public static function get_table_generator( $email_style = false ) {
 		if ( false === $email_style ) {
 			$email_style = self::get_email_style();
@@ -171,6 +201,9 @@ class FrmEmailStylesController {
 		return new FrmTableHTMLGenerator( 'entry', $atts );
 	}
 
+	/**
+	 * AJAX handler for previewing email style.
+	 */
 	public static function ajax_preview() {
 		// Check permission and nonce
 		FrmAppHelper::permission_check( 'manage_options' );
@@ -200,11 +233,19 @@ class FrmEmailStylesController {
 		die();
 	}
 
+	/**
+	 * Gets selected email style in global settings.
+	 *
+	 * @return string
+	 */
 	public static function get_email_style() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return ! empty( $frm_settings->email_style ) ? $frm_settings->email_style : 'classic';
 	}
 
+	/**
+	 * AJAX handler for sending a test email.
+	 */
 	public static function ajax_send_test_email() {
 		// Check permission and nonce
 		FrmAppHelper::permission_check( 'manage_options' );
@@ -245,11 +286,26 @@ class FrmEmailStylesController {
 		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
 	}
 
+	/**
+	 * Shows placeholder Pro settings.
+	 */
 	public static function show_upsell_settings() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';
 	}
 
+	/**
+	 * Gets email style settings value.
+	 *
+	 * @return array
+	 */
 	public static function get_email_style_settings() {
+		/**
+		 * Filter the email style settings value.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $settings The settings value.
+		 */
 		return apply_filters(
 			'frm_email_style_settings',
 			array(
@@ -267,6 +323,12 @@ class FrmEmailStylesController {
 		);
 	}
 
+	/**
+	 * Wraps email message with new settings.
+	 *
+	 * @param string $message Email message.
+	 * @return string
+	 */
 	public static function wrap_email_message( $message ) {
 		$style_settings = self::get_email_style_settings();
 
@@ -325,6 +387,14 @@ class FrmEmailStylesController {
 		return $new_message;
 	}
 
+	/**
+	 * Adds inline CSS to a tag in the content.
+	 *
+	 * @param string $tag     Tag name.
+	 * @param string $css     CSS code.
+	 * @param string $content The content.
+	 * @return string
+	 */
 	private static function add_inline_css( $tag, $css, $content ) {
 		$regex = '/<' . $tag . '.*?>/msi';
 		preg_match_all( $regex, $content, $matches, PREG_SET_ORDER );
@@ -344,6 +414,14 @@ class FrmEmailStylesController {
 		return str_replace( $searches, $replaces, $content );
 	}
 
+	/**
+	 * Adds inline CSS to a single HTML tag.
+	 *
+	 * @param string $tag  Tag name.
+	 * @param string $css  CSS code.
+	 * @param string $html The HTML tag.
+	 * @return string
+	 */
 	private static function add_css_to_style_attr( $tag, $css, $html ) {
 		$regex = '/\sstyle=("|\')/mi';
 		if ( preg_match( $regex, $html, $matches ) ) {
