@@ -29,28 +29,28 @@ class FrmEmailStylesController {
 				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/classic.svg',
 				'is_plain_text' => false,
 			),
-			'plain' => array(
+			'plain'   => array(
 				'name'          => __( 'Plain Text', 'formidable' ),
 				'selectable'    => true,
 				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/plain.svg',
 				'is_plain_text' => true,
 			),
-			'modern' => array(
-				'name' => __( 'Modern', 'formidable' ),
-				'selectable' => false,
-				'icon_url'   => FrmAppHelper::plugin_url() . '/images/email-styles/modern.svg',
+			'modern'  => array(
+				'name'          => __( 'Modern', 'formidable' ),
+				'selectable'    => false,
+				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/modern.svg',
 				'is_plain_text' => false,
 			),
-			'sleek' => array(
+			'sleek'   => array(
 				'name' => __( 'Sleek', 'formidable' ),
-				'selectable' => false,
-				'icon_url'   => FrmAppHelper::plugin_url() . '/images/email-styles/sleek.svg',
+				'selectable'    => false,
+				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/sleek.svg',
 				'is_plain_text' => false,
 			),
 			'compact' => array(
-				'name' => __( 'Compact', 'formidable' ),
-				'selectable' => false,
-				'icon_url'   => FrmAppHelper::plugin_url() . '/images/email-styles/compact.svg',
+				'name'          => __( 'Compact', 'formidable' ),
+				'selectable'    => false,
+				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/compact.svg',
 				'is_plain_text' => false,
 			),
 		);
@@ -102,7 +102,8 @@ class FrmEmailStylesController {
 			),
 			array(
 				'label' => 'Message',
-				'value' => 'Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>. Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
+				'value' => 'Lorem ipsum dolor sit amet, <a href="#">consectetur adipiscing elit</a>.
+							Praesent in risus velit. Donec molestie tincidunt ex sed consequat. Ut ornare fringilla fringilla.',
 			),
 		);
 
@@ -130,7 +131,7 @@ class FrmEmailStylesController {
 					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
 					// Other table styles have two columns layout.
-					$row_html = '<div style="font-weight:600;">' . $row['label'] . '</div>';
+					$row_html  = '<div style="font-weight:600;">' . $row['label'] . '</div>';
 					$row_html .= $row['value'];
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
 				}
@@ -149,7 +150,7 @@ class FrmEmailStylesController {
 			}
 
 			if ( 'classic' !== $style_key ) {
-				$content = FrmEmailStylesController::wrap_email_message( $content );
+				$content = self::wrap_email_message( $content );
 			}
 
 			$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
@@ -167,7 +168,7 @@ class FrmEmailStylesController {
 			foreach ( $table_rows as $row ) {
 				$content .= $row['label'] . ': ' . $row['value'] . "\r\n";
 			}
-		}
+		}//end if
 
 		return $content;
 	}
@@ -212,12 +213,12 @@ class FrmEmailStylesController {
 		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
 		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
 		if ( ! $style_key ) {
-			die( $not_exist_msg);
+			die( esc_html( $not_exist_msg ) );
 		}
 
 		$styles = self::get_email_styles();
 		if ( ! isset( $styles[ $style_key ] ) ) {
-			die( $not_exist_msg );
+			die( esc_html( $not_exist_msg ) );
 		}
 
 		$style_key = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
@@ -229,7 +230,7 @@ class FrmEmailStylesController {
 			header( 'Content-Type: text/plain' );
 		}
 
-		echo $content;
+		echo wp_kses_post( $content );
 		die();
 	}
 
@@ -309,7 +310,8 @@ class FrmEmailStylesController {
 		return apply_filters(
 			'frm_email_style_settings',
 			array(
-				'img'                => FrmAppHelper::plugin_url() . '/images/email-styles/placeholder.png', // Placeholder image.
+				// Placeholder image.
+				'img'                => FrmAppHelper::plugin_url() . '/images/email-styles/placeholder.png',
 				'img_size'           => '',
 				'img_align'          => '',
 				'img_location'       => '',
@@ -425,7 +427,7 @@ class FrmEmailStylesController {
 	private static function add_css_to_style_attr( $tag, $css, $html ) {
 		$regex = '/\sstyle=("|\')/mi';
 		if ( preg_match( $regex, $html, $matches ) ) {
-			$search = $matches[0];
+			$search  = $matches[0];
 			$replace = $search . $css;
 			return preg_replace( $regex, $replace, $html );
 		}
