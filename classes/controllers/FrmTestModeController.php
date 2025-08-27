@@ -106,6 +106,13 @@ class FrmTestModeController {
 		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
 		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
+		$test_mode_install_span_attrs         = array(
+			'data-upgrade'  => __( 'Test Mode Controls', 'formidable' ),
+			'data-content'  => 'test-mode',
+			'data-medium'   => 'test-mode',
+			'data-requires' => 'Business',
+			'style'         => 'margin-left: auto;',
+		);
 		$ai_install_span_attrs                = array(
 			'data-upgrade'  => __( 'Autofilled forms with AI', 'formidable' ),
 			'data-content'  => 'ai-autofill',
@@ -119,8 +126,14 @@ class FrmTestModeController {
 			$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
 
-		if ( $should_show_upsell || $should_suggest_ai_install ) {
-			// This is required for the speaker icon in the upsell to appear.
+		$oneclick_data = FrmAddonsController::install_link( 'test-mode' );
+		if ( isset( $oneclick_data['url'] ) ) {
+			$test_mode_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
+		}
+
+		if ( $should_show_upsell || $should_suggest_test_mode_install || $should_suggest_ai_install ) {
+			// This is required for the speaker icon in the upsell to appear,
+			// and for the lock icon in the upgrade modals.
 			FrmAppHelper::include_svg();
 		}
 
