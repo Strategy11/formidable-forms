@@ -4950,7 +4950,6 @@ function frmAdminBuildJS() {
 					document.getElementById( 'frm_insert_fields_tab' ).click();
 				}
 
-				console.log( 'moveOpenModalsOutOfFieldOptions', fieldId, settings );
 				moveOpenModalsOutOfFieldOptions( settings );
 				settings.remove();
 
