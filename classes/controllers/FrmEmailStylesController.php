@@ -321,7 +321,7 @@ class FrmEmailStylesController {
 				'link_color'         => '#4199FD',
 				'border_color'       => '#dddddd',
 				'font'               => '',
-			),
+			)
 		);
 	}
 
