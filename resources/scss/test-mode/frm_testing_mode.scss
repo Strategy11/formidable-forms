@@ -111,6 +111,14 @@ body.frm_preview_page .ui-widget-overlay {
         position: relative;
         top: 1px;
     }
+
+    .frm_toggle_block {
+        gap: var(--gap-xs);
+    }
+
+    label:not(.frm_toggle_block) {
+        margin-right: 2px;
+    }
 }
 
 #frm_test_mode_pagination {
