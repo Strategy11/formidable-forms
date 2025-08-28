@@ -4877,13 +4877,11 @@ function frmAdminBuildJS() {
 		deleteField( fieldId );
 
 		if ( field.hasClass( 'edit_field_type_divider' ) ) {
-			field.find( 'li.frm_field_box' ).each( function() {
-				//TODO: maybe delete only end section
-				//if(n.hasClass('edit_field_type_end_divider')){
+			field.find( 'li.frm_field_box[data-fid]' ).each( function() {
 				deleteField( this.getAttribute( 'data-fid' ) );
-				//}
 			} );
 		}
+
 		toggleSectionHolder();
 	}
 
@@ -10004,7 +10002,7 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function maybeInitEntriesListPage() {
-		if ( ! document.body.classList.contains( 'formidable_page_formidable-entries' ) ) {
+		if ( ! document.body.classList.contains( 'frm-admin-page-entries' ) ) {
 			return;
 		}
 
