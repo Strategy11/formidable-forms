@@ -155,6 +155,7 @@ class FrmEmailStylesController {
 
 			$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
 			if ( 'classic' !== $style_key ) {
+				// This works in previewing and as a fallback for email content.
 				$wrapped_content .= '<style>
 						body {background-color:' . esc_attr( $style_settings['bg_color'] ) . ';}
 						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
@@ -227,10 +228,12 @@ class FrmEmailStylesController {
 		if ( 'plain' !== $style_key ) {
 			header( 'Content-Type: text/html; charset=utf-8' );
 		} else {
-			header( 'Content-Type: text/plain' );
+			// Plain‐text preview with charset
+			header( 'Content-Type: text/plain; charset=utf-8' );
 		}
 
-		echo wp_kses_post( $content );
+		echo $content;
+
 		die();
 	}
 
