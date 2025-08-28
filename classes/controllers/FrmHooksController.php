@@ -265,6 +265,7 @@ class FrmHooksController {
 		// Form Templates Controller.
 		add_action( 'wp_ajax_frm_add_or_remove_favorite_template', 'FrmFormTemplatesController::ajax_add_or_remove_favorite' );
 		add_action( 'wp_ajax_frm_create_template', 'FrmFormTemplatesController::ajax_create_template' );
+		add_action( 'wp_ajax_frm_get_free_templates', 'FrmFormTemplatesController::ajax_get_free_templates' );
 
 		// Inbox.
 		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );

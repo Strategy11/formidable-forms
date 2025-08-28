@@ -80,12 +80,13 @@ class FrmDashboardController {
 
 		return new FrmDashboardHelper(
 			array(
-				'counters' => array(
+				'counters'           => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
-				'license'  => array(),
-				'inbox'    => self::view_args_inbox(),
-				'entries'  => array(
+				'license'            => array(),
+				'get_free_templates' => array(),
+				'inbox'              => self::view_args_inbox(),
+				'entries'            => array(
 					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
 					'cta'              => array(
 						'label' => __( 'View All Entries', 'formidable' ),
@@ -95,7 +96,7 @@ class FrmDashboardController {
 					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
-				'payments' => array(
+				'payments'           => array(
 					'show-placeholder' => empty( $total_payments ),
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
@@ -112,7 +113,7 @@ class FrmDashboardController {
 						),
 					),
 				),
-				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
+				'video'              => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
 	}

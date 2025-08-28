@@ -200,4 +200,34 @@ class FrmFormTemplatesHelper {
 			);
 		}
 	}
+
+	/**
+	 * Echo the get free templates banner.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function echo_get_free_templates_banner() {
+		$args = array(
+			'direction' => 'vertical',
+		);
+
+		?>
+		<div class="frm-card-item frm-px-sm">
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php'; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Checks if the get free templates banner should be displayed.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function needs_get_free_templates_banner() {
+		return ! FrmAppHelper::pro_is_installed() && ! FrmFormTemplateApi::get_free_license_code();
+	}
 }
