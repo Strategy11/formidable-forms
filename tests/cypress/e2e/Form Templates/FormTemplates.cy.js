@@ -441,29 +441,29 @@ describe( 'Form Templates page', () => {
 
 	it( 'Get Instant Access to 30+ Free Form Templates', () => {
 		 cy.log( 'Get free templates by clicking Use Template' );
-		    cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
-		    cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'All Templates' );
-		    cy.get( 'li[frm-search-text="contact us"]' ).first()
-		        .trigger( 'mouseover', { force: true } )
-		        .find( '.frm-form-templates-use-template-button' )
-		        .should( 'contain', 'Use Template' )
-		        .click( { force: true } );
+			cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
+			cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'All Templates' );
+			cy.get( 'li[frm-search-text="contact us"]' ).first()
+				.trigger( 'mouseover', { force: true } )
+				.find( '.frm-form-templates-use-template-button' )
+				.should( 'contain', 'Use Template' )
+				.click( { force: true } );
 
-		    cy.get( '#frm-leave-email-modal' ).should( 'be.visible' );
-		    cy.get( '#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'Get 30+ Free Form Templates' );
-		    cy.get( 'p[class="frm-text-grey-500"]' ).should( 'contain', "Just add your email address and you'll get 30+ free form templates to your account." );
+			cy.get( '#frm-leave-email-modal' ).should( 'be.visible' );
+			cy.get( '#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'Get 30+ Free Form Templates' );
+			cy.get( 'p[class="frm-text-grey-500"]' ).should( 'contain', "Just add your email address and you'll get 30+ free form templates to your account." );
 
-		    cy.get( 'a#frm-get-code-button' ).should( 'contain', 'Get Templates' );
-		    cy.get( 'a.frm-modal-close' ).should( 'contain.text', 'Close' );
+			cy.get( 'a#frm-get-code-button' ).should( 'contain', 'Get Templates' );
+			cy.get( 'a.frm-modal-close' ).should( 'contain.text', 'Close' );
 
-		    cy.get( '#frm-leave-email-modal > .frm_modal_footer > .button-secondary' ).click();
+			cy.get( '#frm-leave-email-modal > .frm_modal_footer > .button-secondary' ).click();
 
-		    cy.get( 'li[frm-search-text="contact us"]' ).first()
-		        .trigger( 'mouseover', { force: true } )
-		        .find( '.frm-form-templates-use-template-button' )
-		        .should( 'contain', 'Use Template' )
-		        .click( { force: true } );
-		    cy.get( 'a#frm-get-code-button' ).click();
+			cy.get( 'li[frm-search-text="contact us"]' ).first()
+				.trigger( 'mouseover', { force: true } )
+				.find( '.frm-form-templates-use-template-button' )
+				.should( 'contain', 'Use Template' )
+				.click( { force: true } );
+			cy.get( 'a#frm-get-code-button' ).click();
 
 		cy.get( '[data-category="available-templates"]' ).click();
 
