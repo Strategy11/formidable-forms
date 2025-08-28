@@ -357,8 +357,10 @@ describe('Form Templates page', () => {
 			.should('contain.text', 'Cancel');
 
 		cy.get('#frm_new_form_name_input').type('Form Template Test');
-		cy.get('#frm-save-form-name-button').should('contain', 'Save').click();
-		cy.get('svg[aria-label="Close"]').click({ force: true });
+		cy.get('#frm-save-form-name-button').should('contain', 'Save').click({ force: true });
+		cy.get("a[aria-label='Close'] svg", { timeout: 10000 })
+			.should('be.visible')
+			.click({ force: true });
 
 		cy.get('#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a').should('contain', 'Form Templates').click();
 		cy.get('[data-category="custom"]').click();
@@ -377,7 +379,9 @@ describe('Form Templates page', () => {
 		cy.get(':nth-child(3) > label').should('contain', 'Description');
 		cy.get('#frm_create_template_description').type('Test description');
 		cy.get('#frm-create-template-button').should('contain', 'Create Template').click({ force: true });
-		cy.get('svg[aria-label="Close"]').click({ force: true });
+		cy.get("a[aria-label='Close'] svg", { timeout: 10000 })
+			.should('be.visible')
+			.click({ force: true });
 		cy.get('.row-title').should('contain', 'Form Template Test Template');
 
 		cy.get('#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a').should('contain', 'Form Templates').click();
@@ -396,7 +400,9 @@ describe('Form Templates page', () => {
 			.should('contain', 'Edit')
 			.click({ force: true });
 
-		cy.get('svg[aria-label="Close"]').click({ force: true });
+		cy.get("a[aria-label='Close'] svg", { timeout: 10000 })
+			.should('be.visible')
+			.click({ force: true });
 
 		cy.get('#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a').should('contain', 'Form Templates').click();
 		cy.get('[data-category="custom"]').click();
@@ -408,7 +414,9 @@ describe('Form Templates page', () => {
 			.should('contain', 'Use Template')
 			.click({ force: true });
 
-		cy.get('svg[aria-label="Close"]').click({ force: true });
+		cy.get("a[aria-label='Close'] svg", { timeout: 10000 })
+			.should('be.visible')
+			.click({ force: true });
 
 		cy.get('#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a').should('contain', 'Form Templates').click();
 		cy.get('[data-category="custom"]').click();
