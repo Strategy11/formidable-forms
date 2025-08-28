@@ -19,7 +19,7 @@ $selected_style = $frm_settings->email_style ? $frm_settings->email_style : 'cla
 <p><?php esc_html_e( 'Customize your email template and sending preferences.', 'formidable' ); ?></p>
 
 <h4><?php esc_html_e( 'Styles', 'formidable' ); ?></h4>
-<p><?php esc_html_e( 'Change how your emails looks and feels.', 'formidable' ); ?></p>
+<p><?php esc_html_e( 'Change how your emails look and feel.', 'formidable' ); ?></p>
 
 <div id="frm-email-styles" class="frm_clearfix">
 	<?php

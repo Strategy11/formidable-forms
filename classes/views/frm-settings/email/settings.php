@@ -63,7 +63,7 @@ $upgrade_attrs = array(
 					<p>
 						<label for="frm-email-image-location"><?php esc_html_e( 'Image Location', 'formidable' ); ?></label>
 						<select id="frm-email-image-location" disabled>
-							<option><?php esc_html_e( 'Outsidde', 'formidable' ); ?></option>
+							<option><?php esc_html_e( 'Outside', 'formidable' ); ?></option>
 						</select>
 					</p>
 				</div>

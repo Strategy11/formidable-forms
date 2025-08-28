@@ -97,7 +97,8 @@
 	}
 
 	&:hover &__buttons,
-	.frm-email-style__click:focus + &__buttons {
+	.frm-email-style__click:focus + &__buttons,
+	&:focus-within &__buttons {
 		display: flex;
 	}
 }
