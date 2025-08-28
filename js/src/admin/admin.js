@@ -10002,7 +10002,7 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function maybeInitEntriesListPage() {
-		if ( ! document.body.classList.contains( 'formidable_page_formidable-entries' ) ) {
+		if ( ! document.body.classList.contains( 'frm-admin-page-entries' ) ) {
 			return;
 		}
 
