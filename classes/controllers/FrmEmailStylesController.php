@@ -207,8 +207,8 @@ class FrmEmailStylesController {
 	 * AJAX handler for previewing email style.
 	 */
 	public static function ajax_preview() {
-		// Check permission and nonce
-		FrmAppHelper::permission_check( 'manage_options' );
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_email_style_preview' );
 
 		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
@@ -251,8 +251,8 @@ class FrmEmailStylesController {
 	 * AJAX handler for sending a test email.
 	 */
 	public static function ajax_send_test_email() {
-		// Check permission and nonce
-		FrmAppHelper::permission_check( 'manage_options' );
+		// Check permission and nonce.
+		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$emails_str   = FrmAppHelper::get_post_param( 'emails_str', '', 'sanitize_text_field' );
