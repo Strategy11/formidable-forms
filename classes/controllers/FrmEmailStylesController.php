@@ -127,10 +127,10 @@ class FrmEmailStylesController {
 
 			foreach ( $table_rows as $index => $row ) {
 				if ( 'compact' === $style_key ) {
-					// Compact table has one column layout.
+					// Compact table has two columns layout.
 					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
-					// Other table styles have two columns layout.
+					// Other table styles have one column layout.
 					$row_html  = '<div style="font-weight:600;">' . $row['label'] . '</div>';
 					$row_html .= $row['value'];
 					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
