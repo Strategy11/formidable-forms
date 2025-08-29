@@ -6,6 +6,10 @@
  * @package FormidableForms
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'You are not allowed to call this page directly.' );
+}
+
 FrmTipsHelper::show_tip(
 	array(
 		'tip'   => __( 'Make every email match your brand — beautifully and effortlessly.', 'formidable' ),
