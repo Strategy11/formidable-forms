@@ -1,12 +1,9 @@
 ( function() {
-<<<<<<< HEAD
 
 	const globalVars = {
 		sendTestEmailModal: null
 	};
 
-=======
->>>>>>> master
 	function addEventListeners() {
 		document.addEventListener( 'change', handleChangeEvent );
 		document.addEventListener( 'keydown', handleKeyDownEvent );
