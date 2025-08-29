@@ -551,6 +551,10 @@ class FrmStylesHelper {
 	private static function css_var_prepare_value( $settings, $key ) {
 		$value = $settings[ $key ];
 
+		if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+			return '';
+		}
+
 		switch ( $key ) {
 			case 'font':
 				return safecss_filter_attr( $value );
@@ -581,7 +585,7 @@ class FrmStylesHelper {
 				break;
 		}//end switch
 
-		return esc_html( $settings[ $key ] );
+		return esc_html( $value );
 	}
 
 	/**
