@@ -215,6 +215,7 @@ class FrmEmailStylesController {
 		);
 
 		if ( 'classic' !== $email_style ) {
+			$atts['width']        = '100%';
 			$atts['border_color'] = $style_settings['border_color'];
 			$atts['cell_padding'] = '16px 0';
 			$atts['bg_color']     = $style_settings['container_bg_color'];

@@ -402,10 +402,11 @@ class FrmEmail {
 		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
-				'id'         => $this->entry->id,
-				'entry'      => $pass_entry,
-				'plain_text' => $this->is_plain_text,
-				'user_info'  => $this->include_user_info,
+				'id'          => $this->entry->id,
+				'entry'       => $pass_entry,
+				'plain_text'  => $this->is_plain_text,
+				'user_info'   => $this->include_user_info,
+				'table_style' => $this->settings['email_style'],
 			)
 		);
 

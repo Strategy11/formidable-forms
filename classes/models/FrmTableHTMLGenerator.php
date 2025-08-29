@@ -63,6 +63,15 @@ class FrmTableHTMLGenerator {
 	protected $cell_padding = '7px 9px';
 
 	/**
+	 * Table width.
+	 *
+	 * @since x.x
+	 *
+	 * @var string
+	 */
+	protected $width = '';
+
+	/**
 	 * Used to add a class in tables. Set in Pro.
 	 *
 	 * @var bool
@@ -82,6 +91,10 @@ class FrmTableHTMLGenerator {
 
 		if ( isset( $atts['cell_padding'] ) ) {
 			$this->cell_padding = $atts['cell_padding'];
+		}
+
+		if ( isset( $atts['width'] ) ) {
+			$this->width = $atts['width'];
 		}
 
 		$this->init_style_settings( $atts );
@@ -167,6 +180,10 @@ class FrmTableHTMLGenerator {
 
 		if ( ! empty( $this->style_settings['class'] ) ) {
 			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
+		}
+
+		if ( ! empty( $this->width ) ) {
+			$this->table_style .= ' width="' . esc_attr( $this->width ) . '"';
 		}
 	}
 
