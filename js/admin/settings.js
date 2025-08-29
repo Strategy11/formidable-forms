@@ -1,4 +1,5 @@
 ( function() {
+	'use strict';
 
 	const globalVars = {
 		sendTestEmailModal: null
@@ -50,7 +51,7 @@
 
 	function handleClickChooseEmailStyle( e ) {
 		const styleEls = document.querySelectorAll( '.frm-email-style' );
-		styleEls.forEach( ( el ) => {
+		styleEls.forEach( el => {
 			el.classList.remove( 'frm-email-style--selected' );
 		} );
 
@@ -71,7 +72,7 @@
 
 	function handleClickSendTestEmailBtn( e ) {
 		const emailInput = document.getElementById( 'frm-test-email-address' );
-		const resultEl   = document.getElementById( 'frm-send-test-email-result' );
+		const resultEl = document.getElementById( 'frm-send-test-email-result' );
 
 		const showResult = ( msg, success ) => {
 			resultEl.textContent = msg;
@@ -90,9 +91,9 @@
 		data.append( 'emails_str', emailInput.value );
 		frmDom.ajax.doJsonPost( 'send_test_email', data ).then( response => {
 			showResult( response, true );
-		}).catch( error => {
+		} ).catch( error => {
 			showResult( error );
-		});
+		} );
 	}
 
 	/**
