@@ -106,7 +106,7 @@ class FrmEmailStylesController {
 	 */
 	private static function get_test_email_content( $style_key = false ) {
 		if ( ! $style_key ) {
-			$style_key = self::get_email_style();
+			$style_key = self::get_default_email_style();
 		}
 
 		$table_rows = array(
@@ -204,7 +204,7 @@ class FrmEmailStylesController {
 	 */
 	public static function get_table_generator( $email_style = false ) {
 		if ( false === $email_style ) {
-			$email_style = self::get_email_style();
+			$email_style = self::get_default_email_style();
 		}
 
 		$style_settings = self::get_email_style_settings();
@@ -260,16 +260,6 @@ class FrmEmailStylesController {
 	}
 
 	/**
-	 * Gets selected email style in global settings.
-	 *
-	 * @return string
-	 */
-	public static function get_email_style() {
-		$frm_settings = FrmAppHelper::get_settings();
-		return ! empty( $frm_settings->email_style ) ? $frm_settings->email_style : 'classic';
-	}
-
-	/**
 	 * AJAX handler for sending a test email.
 	 */
 	public static function ajax_send_test_email() {
@@ -292,7 +282,7 @@ class FrmEmailStylesController {
 			wp_send_json_error( __( 'Invalid email address', 'formidable' ) );
 		}
 
-		$email_style = self::get_email_style();
+		$email_style = self::get_default_email_style();
 
 		$subject = __( 'Formidable Test Email', 'formidable' );
 		$content = self::get_test_email_content();

@@ -489,7 +489,7 @@ class FrmSettingsController {
 	public static function fake_color_picker( $color ) {
 		?>
 		<div class="wp-picker-container">
-			<button type="button" class="button wp-color-result" aria-expanded="false" style="background-color:<?php echo esc_attr( $color ); ?>;">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
 				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
 			</button>
 		</div>
