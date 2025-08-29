@@ -57,7 +57,7 @@
 		"@wordpress/babel-plugin-makepot": "^5.25.0",
 		"@wordpress/babel-preset-default": "^7.25.0",
 		"@wordpress/browserslist-config": "^6.29.0",
-		"@wordpress/env": "^9.8.0",
+		"@wordpress/env": "^10.29.0",
 		"@wordpress/eslint-plugin": "^15.1.0",
 		"@wordpress/stylelint-config": "^23.14.0",
 		"axe-core": "^4.9.1",
