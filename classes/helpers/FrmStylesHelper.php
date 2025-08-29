@@ -443,11 +443,34 @@ class FrmStylesHelper {
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
-			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			$prepared_value = '';
+			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $settings
+	 * @param array  $defaults
+	 * @param string $var
+	 * @param string $prepared_value
+	 * @return bool
+	 */
+	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
+		$prepared_value = self::css_var_prepare_value( $settings, $var );
+		if ( $prepared_value === '' ) {
+			return false;
+		}
+
+		if ( $defaults && $defaults[ $var ] === $prepared_value ) {
+			return false;
+		}
+
+		return self::css_value_is_valid( $prepared_value );
 	}
 
 	/**
