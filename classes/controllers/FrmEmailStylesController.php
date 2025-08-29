@@ -153,9 +153,7 @@ class FrmEmailStylesController {
 					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 				} else {
 					// Other table styles have one column layout.
-					$row_html  = '<div style="font-weight:600;">' . $row['label'] . '</div>';
-					$row_html .= $row['value'];
-					$table_row = $table_generator->generate_single_cell_table_row( $row_html );
+					$table_row = $table_generator->generate_single_cell_table_row( self::get_content_for_one_column_cell( $row['label'], $row['value'] ) );
 				}
 
 				if ( ! $index && $should_remove_top_bottom_border ) {
@@ -194,6 +192,17 @@ class FrmEmailStylesController {
 		}//end if
 
 		return $content;
+	}
+
+	/**
+	 * Gets content for the cell of one column table.
+	 *
+	 * @param string $label Field label.
+	 * @param string $value Prepared field value.
+	 * @return string
+	 */
+	public static function get_content_for_one_column_cell( $label, $value ) {
+		return '<div style="font-weight:600;">' . $label . '</div>' . $value;
 	}
 
 	/**
