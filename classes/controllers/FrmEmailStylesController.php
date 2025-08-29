@@ -77,6 +77,28 @@ class FrmEmailStylesController {
 	}
 
 	/**
+	 * Gets the email style set in the Global settings.
+	 *
+	 * @return string
+	 */
+	public static function get_default_email_style() {
+		$frm_settings = FrmAppHelper::get_settings();
+		if ( empty( $frm_settings->email_style ) ) {
+			return 'classic';
+		}
+
+		// Check if the selected style is available and selectable.
+		$email_styles = self::get_email_styles();
+		foreach ( $email_styles as $key => $email_style ) {
+			if ( $key === $frm_settings->email_style && ! empty( $email_style['selectable'] ) ) {
+				return $key;
+			}
+		}
+
+		return 'classic';
+	}
+
+	/**
 	 * Gets the test email content.
 	 *
 	 * @param string|false $style_key Default is `false`, using the one in settings.
