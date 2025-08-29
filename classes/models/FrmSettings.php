@@ -178,6 +178,7 @@ class FrmSettings {
 			'denylist_check'            => 0,
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
+			'email_style'               => 'classic',
 		);
 	}
 

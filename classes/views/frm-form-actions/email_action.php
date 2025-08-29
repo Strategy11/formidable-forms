@@ -42,6 +42,7 @@ class FrmEmailAction extends FrmFormAction {
 			'email_message' => '[default-message]',
 			'inc_user_info' => 0,
 			'plain_text'    => 0,
+			'email_style'   => '',
 			'event'         => array( 'create' ),
 		);
 	}
