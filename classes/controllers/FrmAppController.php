@@ -732,10 +732,7 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
-			if ( 'formidable-settings' === $page ) {
-				wp_enqueue_style( 'wp-color-picker' );
-				wp_enqueue_script( 'formidable_settings' );
-			}
+			self::enqueue_global_settings_scripts( $page );
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
@@ -788,6 +785,18 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+	}
+
+	/**
+	 * Enqueues global settings scripts.
+	 *
+	 * @param string $page The `page` param in URL.
+	 */
+	private static function enqueue_global_settings_scripts( $page ) {
+		if ( 'formidable-settings' === $page ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'formidable_settings' );
 		}
 	}
 

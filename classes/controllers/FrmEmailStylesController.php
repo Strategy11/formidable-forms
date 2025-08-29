@@ -42,7 +42,7 @@ class FrmEmailStylesController {
 				'is_plain_text' => false,
 			),
 			'sleek'   => array(
-				'name' => __( 'Sleek', 'formidable' ),
+				'name'          => __( 'Sleek', 'formidable' ),
 				'selectable'    => false,
 				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/sleek.svg',
 				'is_plain_text' => false,
@@ -254,7 +254,7 @@ class FrmEmailStylesController {
 			header( 'Content-Type: text/plain; charset=utf-8' );
 		}
 
-		echo $content;
+		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		die();
 	}

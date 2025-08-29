@@ -12,9 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 FrmTipsHelper::show_tip(
 	array(
-		'tip'   => __( 'Make every email match your brand — beautifully and effortlessly.', 'formidable' ),
-		'call'  => __( 'Upgrade to PRO', 'formidable' ),
-		'link'  => array(
+		'tip'  => __( 'Make every email match your brand — beautifully and effortlessly.', 'formidable' ),
+		'call' => __( 'Upgrade to PRO', 'formidable' ),
+		'link' => array(
 			'url' => 'https://formidableforms.com/knowledgebase/email-styles/',
 		),
 	)

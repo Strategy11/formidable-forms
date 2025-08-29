@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$email_styles = FrmEmailStylesController::get_email_styles();
+$email_styles   = FrmEmailStylesController::get_email_styles();
 $selected_style = ! empty( $form_action->post_content['email_style'] ) ? $form_action->post_content['email_style'] : 'classic';
 if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 	$selected_style = 'plain';
@@ -24,11 +24,11 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 
 			if ( empty( $style['selectable'] ) ) {
 				$option_attrs['disabled'] = 'disabled';
-				$option_label            .= ( ' ' . __( '(Pro)', 'formidable' ) );
+				$option_label            .= ' ' . __( '(Pro)', 'formidable' );
 			}
 
 			if ( $style_key === $default_style ) {
-				$option_label .= ( ' ' . __( '(Default)', 'formidable' ) );
+				$option_label .= ' ' . __( '(Default)', 'formidable' );
 			}
 			?>
 			<option <?php FrmAppHelper::array_to_html_params( $option_attrs, true ); ?> <?php selected( $selected_style, $style_key ); ?>><?php echo esc_html( $option_label ); ?></option>

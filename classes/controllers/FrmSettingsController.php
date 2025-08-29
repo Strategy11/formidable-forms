@@ -100,7 +100,7 @@ class FrmSettingsController {
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
-			'email'       => array(
+			'email'         => array(
 				'class'    => __CLASS__,
 				'function' => 'email_settings',
 				'name'     => __( 'Email', 'formidable' ),
@@ -489,7 +489,7 @@ class FrmSettingsController {
 	public static function fake_color_picker( $color ) {
 		?>
 		<div class="wp-picker-container">
-			<button type="button" class="button wp-color-result" aria-expanded="false" style="background-color:<?php echo esc_attr( $color); ?>;">
+			<button type="button" class="button wp-color-result" aria-expanded="false" style="background-color:<?php echo esc_attr( $color ); ?>;">
 				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
 			</button>
 		</div>
