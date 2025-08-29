@@ -454,11 +454,11 @@ class FrmStylesHelper {
 	/**
 	 * @since x.x
 	 *
-	 * @param array  $settings
-	 * @param array  $defaults
-	 * @param string $var
-	 * @param string $prepared_value
-	 * @return bool
+	 * @param array  $settings       Array of setting values.
+	 * @param array  $defaults       Array of default values.
+	 * @param string $var            The setting key name.
+	 * @param string $prepared_value The value from calling css_var_prepare_value. This is set by reference so it can be used after this function is called.
+	 * @return bool True if the CSS value should be printed.
 	 */
 	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
 		$prepared_value = self::css_var_prepare_value( $settings, $var );
