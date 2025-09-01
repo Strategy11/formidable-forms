@@ -8798,7 +8798,9 @@ function frmAdminBuildJS() {
 	function getInputForIcon( moreIcon ) {
 		// For regular fields
 		let input = moreIcon.nextElementSibling;
-		while ( input !== null && input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) {
+		while ( input !== null && (
+			( input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' ) || input.classList.contains( 'frm-token-input-field' )
+		) ) {
 			input = getInputForIcon( input );
 		}
 
