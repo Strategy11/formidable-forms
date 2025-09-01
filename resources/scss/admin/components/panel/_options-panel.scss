@@ -61,6 +61,11 @@
 		background-color: #fff;
 		box-shadow: var(--box-shadow-sm);
 	}
+
+	&:focus-visible {
+		outline: 1px solid var(--primary-500) !important;
+		outline-offset: -1px;
+	}
 }
 
 .frm-right-panel a.frm_add_logic_link:focus {

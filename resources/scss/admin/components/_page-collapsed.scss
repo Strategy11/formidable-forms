@@ -120,4 +120,8 @@
 	+ .frm-collapse-me {
 		padding-bottom: 0;
 	}
+
+	&:focus-visible {
+		outline: 1px solid var(--primary-500);
+	}
 }
