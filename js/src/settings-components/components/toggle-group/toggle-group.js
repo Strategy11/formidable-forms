@@ -119,7 +119,12 @@ function applyToggleState( toggleButton, toggleGroup ) {
 	const disableSelectors = toggleButton.getAttribute( DATA_ATTRIBUTES.DISABLE );
 	if ( disableSelectors ) {
 		document.querySelectorAll( normalizeSelector( disableSelectors, fieldId ) )
-			.forEach( element => element.classList.toggle( DISABLED_CLASS, isChecked ) );
+			.forEach( element => {
+				element.classList.toggle( DISABLED_CLASS, isChecked );
+				element.querySelectorAll( 'input, select, textarea' ).forEach(
+					formElement => formElement.disabled = isChecked
+				);
+			} );
 	}
 
 	// Handle enable elements
@@ -133,7 +138,14 @@ function applyToggleState( toggleButton, toggleGroup ) {
 	const currentToggleBlock = toggleButton.closest( `.${ CLASS_NAMES.TOGGLE_BLOCK }` );
 	Array.from( toggleGroup.querySelectorAll( `.${ CLASS_NAMES.TOGGLE_BLOCK }` ) )
 		.filter( toggleBlock => toggleBlock !== currentToggleBlock )
-		.forEach( toggleBlock => toggleBlock.classList.toggle( DISABLED_CLASS, isChecked ) );
+		.forEach( toggleBlock => {
+			toggleBlock.classList.toggle( DISABLED_CLASS, isChecked );
+
+			// Disable toggle switch
+			const toggle = toggleBlock.querySelector( '.frm_toggle' );
+			toggle.tabIndex = isChecked ? -1 : 0;
+			toggle.setAttribute( 'aria-disabled', isChecked );
+		} );
 }
 
 /**
