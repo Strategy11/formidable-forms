@@ -110,7 +110,7 @@ class FrmHtmlHelper {
 			<input type="hidden" value="<?php echo esc_attr( $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
 			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
 			<span class="frm-input-group-suffix">
-				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>">
+				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>" tabindex="0">
 					<?php
 					foreach ( $units as $unit ) {
 						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $args['default_unit'] ), array( 'value' => $unit ) );
