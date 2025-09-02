@@ -1836,5 +1836,6 @@ DEFAULT_HTML;
 	 */
 	protected function get_add_option_string() {
 		_deprecated_function( __METHOD__, 'x.x' );
+		return __( 'Add Option', 'formidable' );
 	}
 }
