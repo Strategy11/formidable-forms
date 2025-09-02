@@ -1,9 +1,15 @@
-import frmStyleDependentUpdaterComponent from './dependent-updater-component';
+
 /**
- * Represents a slider style component.
- * @class frmSliderStyleComponent
+ * Internal dependencies
  */
-export default class frmSliderStyleComponent {
+import { HIDDEN_CLASS } from 'core/constants';
+import frmDependentUpdaterComponent from '../../admin/components/dependent-updater-component';
+
+/**
+ * Represents a slider component.
+ * @class frmSliderComponent
+ */
+export default class frmSliderComponent {
 	constructor() {
 		this.sliderElements = document.querySelectorAll( '.frm-slider-component' );
 		if ( 0 === this.sliderElements.length ) {
@@ -23,7 +29,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the options for the slider style component.
+	 * Initializes the options for the slider component.
 	 */
 	initOptions() {
 		this.options = [];
@@ -37,13 +43,13 @@ export default class frmSliderStyleComponent {
 				element: element,
 				index: index,
 				value: 0,
-				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmStyleDependentUpdaterComponent( parentWrapper ) : null
+				dependentUpdater: parentWrapper.classList.contains( 'frm-style-dependent-updater-component' ) ? new frmDependentUpdaterComponent( parentWrapper ) : null
 			} );
 		} );
 	}
 
 	/**
-	 * Initializes the slider style component.
+	 * Initializes the slider component.
 	 */
 	init() {
 		this.initSlidersPosition();
@@ -51,7 +57,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the draggable functionality for the slider style component.
+	 * Initializes the draggable functionality for the slider component.
 	 */
 	initDraggable() {
 		this.sliderElements.forEach( ( element, index ) => {
@@ -120,7 +126,7 @@ export default class frmSliderStyleComponent {
 		const sliderGroupItems = this.getSliderGroupItems( element );
 		svgIcon.addEventListener( 'click', ( ) => {
 			sliderGroupItems.forEach( item => {
-				item.classList.toggle( 'frm_hidden' );
+				item.classList.toggle( HIDDEN_CLASS );
 			} );
 		} );
 	}
@@ -205,7 +211,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Initializes the position of sliders when a style accordion section is opened.
+	 * Initializes the position of sliders when a accordion section is opened.
 	 */
 	initSlidersPosition() {
 		const accordionitems = document.querySelectorAll( '#frm_style_sidebar .accordion-section h3' );
@@ -377,7 +383,7 @@ export default class frmSliderStyleComponent {
 	}
 
 	/**
-	 * Enables dragging for the slider style component.
+	 * Enables dragging for the slider component.
 	 *
 	 * @param {Event}  event - The event object.
 	 * @param {number} index - The index of the option being dragged.

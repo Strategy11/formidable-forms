@@ -16,10 +16,10 @@
 }
 
 .rtl .frm-full-close,
-.rtl .frm_wrap .columns-2 .frm-right-panel,
+.rtl .frm_wrap .columns-2 .frm-right-panel + div,
 .rtl .frm-right-panel {
-	border-right-width: 1px;
 	border-left-width: 0;
+	border-right: 1px solid var(--grey-300);
 }
 
 .rtl .frm-full-close {
@@ -84,12 +84,7 @@
 	float: left;
 }
 
-.rtl .frm-default-switcher {
-	float: left;
-	position: relative;
-}
-
-.rtl .frm-with-right-icon .frmsvg {
+.rtl .frm-with-right-icon:not(.frm-token-container) .frmsvg {
 	right: auto;
 	left: 0;
 }

@@ -1,0 +1,114 @@
+/**
+ * Background image component styles
+ */
+
+.formidable_page_formidable-styles .frm-right-panel .frm-style-component.frm-background-image-component {
+
+	> div {
+		max-width: 216px;
+	}
+
+	.wp-picker-container {
+		max-width: calc( 100% - 44px );
+		position: relative;
+	}
+
+	button.frm_choose_image_box {
+		width: 36px;
+		height: 36px;
+		padding: 0;
+		background: white;
+		overflow: hidden;
+		text-indent: -999px;
+		flex-wrap: wrap;
+		border: none;
+	}
+
+	.frm_image_styling_frame {
+		margin-left: 0;
+	}
+
+	.frm_image_preview_wrapper {
+		position: relative;
+		width: 36px;
+		height: 36px;
+		margin: 0;
+		border: 1px solid var(--grey-300);
+		border-radius: var(--small-radius);
+		overflow: hidden;
+		box-sizing: border-box;
+	}
+
+	.frm_image_preview_wrapper .frm_image_preview_frame {
+		max-width: 120%;
+		height: 120%;
+		margin: -10%;
+		position: relative;
+	}
+
+	.frm_image_data {
+		position: absolute;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		overflow: hidden;
+		margin: 0;
+		border-radius: var(--small-radius);
+	}
+
+	.frm_remove_image_option {
+		width: 100%;
+		height: 100%;
+		border: 1px solid var(--red-500);
+		text-indent: -9999px;
+		position: absolute;
+		top: 0;
+		left: 0;
+	}
+
+	.frm_remove_image_option::before {
+		opacity: 0.0;
+		content: '';
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		background: rgba( 255, 255, 255, 0.8 );
+	}
+
+	.frm_remove_image_option::after {
+		opacity: 0.0;
+		content: '';
+		display: block;
+		position: absolute;
+		width: 100%;
+		height: 100%;
+		z-index: 1;
+		top: 0;
+		left: 0;
+		background: url( '../../images/style/close.svg' ) no-repeat;
+		background-position: center;
+	}
+
+	.frm_remove_image_option:hover::before,
+	.frm_remove_image_option:hover::after {
+		opacity: 1.0;
+	}
+
+	.frm_image_preview_wrapper .frm_image_preview_frame .frm_image_styling_frame,
+	.frm_image_preview_wrapper .frm_image_preview_frame .frm_image_styling_frame img {
+		width: 100%;
+		height: 100%;
+	}
+
+	.frm_image_preview_wrapper + *,
+	.frm_image_preview_wrapper .frm_image_preview_title,
+	.frm_bg_image_additional_settings,
+	.frm_remove_image_option * {
+		display: none;
+	}
+}

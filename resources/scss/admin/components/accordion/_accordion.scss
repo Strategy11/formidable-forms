@@ -22,7 +22,7 @@
 .frm-with-line span,
 .accordion-section-content h4 span {
 	background: #fff;
-	padding: 0 10px;
+	padding: 0 var(--gap-xs);
 	position: relative;
 	display: inline-block;
 	z-index: 2;
