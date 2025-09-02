@@ -2427,4 +2427,82 @@ class FrmFieldsHelper {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
 		return wp_list_pluck( $draft_field_rows, 'id' );
 	}
+
+	/**
+	 * Render AI generate options button.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args Field arguments.
+	 * @param bool  $should_hide_bulk_edit Whether to hide bulk edit.
+	 */
+	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
+		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );
+
+		if ( ! empty( $should_hide_bulk_edit ) ) {
+			$attributes['class'] .= ' frm_hidden!';
+		}
+
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'ai',
+			array(
+				'requires' => 'Business',
+				'upgrade'  => __( 'Generate options with AI', 'formidable' ),
+				'medium'   => 'builder',
+				'content'  => 'generate-options-with-ai',
+			),
+			true
+		);
+
+		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
+			// Backwards compatibility "@since x.x".
+			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$data = array(
+					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
+					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
+				);
+			} else {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			}
+		}
+
+		if ( empty( $attributes['data-fid'] ) ) {
+			unset( $data['plugin-status'] );
+			foreach ( $data as $key => $value ) {
+				$attributes[ 'data-' . $key ] = $value;
+			}
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/generate-options-with-ai.php';
+	}
+
+	/**
+	 * Get AI generate options button class.
+	 *
+	 * @since x.x
+	 *
+	 * @return string Button class.
+	 */
+	private static function get_ai_generate_options_button_class() {
+		return implode(
+			' ',
+			array(
+				'frm_form_field',
+				'frm6',
+				'frm6_followed',
+				'frm-h-stack',
+				'button',
+				'frm-button-secondary',
+				'frm-button-gradient',
+				'frm-rounded-6',
+				'frm-max-w-fit',
+				'frm-font-normal',
+				'frm-py-2xs',
+				'frm-px-xs',
+				'frm-mt-xs',
+				'frm-mb-12',
+			)
+		);
+	}
 }

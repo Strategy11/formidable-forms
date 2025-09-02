@@ -4246,7 +4246,7 @@ class FrmAppHelper {
 		}
 
 		if ( $detailed ) {
-			$params['plugin-status'] = $link['status'];
+			$params['plugin-status'] = $link['status'] ?? '';
 		}
 
 		return $params;
