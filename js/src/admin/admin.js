@@ -3601,7 +3601,13 @@ function frmAdminBuildJS() {
 			$field.find( '.frm-bulk-edit-link' ).show();
 		}
 
-		$field[ 0 ].querySelector( '.frm-ai-generate-options-modal-trigger' )?.classList.toggle( 'frm_hidden!', hasImageOptions );
+		/**
+		 * Fires when image options are toggled for a field.
+		 *
+		 * @param {HTMLElement} field           The field element.
+		 * @param {boolean}     hasImageOptions Whether the field has image options enabled.
+		 */
+		wp.hooks.doAction( 'frm_image_options_toggled', $field[ 0 ], hasImageOptions );
 	}
 
 	function removeImageSizeClasses( field ) {
