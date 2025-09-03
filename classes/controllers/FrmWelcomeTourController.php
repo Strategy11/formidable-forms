@@ -134,16 +134,39 @@ class FrmWelcomeTourController {
 			return;
 		}
 
-		$label = __( 'Checklist', 'formidable' );
+		$label  = __( 'Checklist', 'formidable' );
 
 		add_submenu_page(
 			'formidable',
 			'Formidable | ' . $label,
-			$label,
+			$label . self::get_progress_bar(),
 			self::REQUIRED_CAPABILITY,
 			self::PAGE_SLUG,
 			null
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_progress_bar() {
+		$progress   = self::get_progress_bar_percent();
+		$bar        = '<span class="frm-progress-bar" style="width: ' . absint( $progress ) . '%;"></span>';
+		$background = '<span class="frm-progress-bar-background">' . $bar . '</span>';
+
+		return '<span id="frm_welcome_tour_progress">' . $background . '</span>';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private static function get_progress_bar_percent() {
+		// TODO
+		return 25;
 	}
 
 	/**
