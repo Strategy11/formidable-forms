@@ -5,7 +5,6 @@
  * For instance, when the "FrmPrimaryColorStyleComponent" is changed, it simultaneously updates various style elements like border color, text color, and button backgrounds.
  */
 export default class frmStyleDependentUpdaterComponent {
-
 	/**
 	 * Creates an instance of frmStyleDependentUpdaterComponent.
 	 * @param {HTMLElement} component - The component element.
@@ -31,12 +30,12 @@ export default class frmStyleDependentUpdaterComponent {
 	 */
 	initPropagationList( inputNames ) {
 		const list = [];
-		inputNames.forEach( ( name ) => {
-			const input = document.querySelector( `input[name="${name}"]` );
+		inputNames.forEach( name => {
+			const input = document.querySelector( `input[name="${ name }"]` );
 			if ( null !== input ) {
 				list.push( input );
 			}
-		});
+		} );
 		return list;
 	}
 
@@ -45,9 +44,9 @@ export default class frmStyleDependentUpdaterComponent {
 	 * @param {string} value - The value to update the dependent elements with.
 	 */
 	updateAllDependentElements( value ) {
-		this.data.propagateInputs.forEach( ( input ) => {
+		this.data.propagateInputs.forEach( input => {
 			input.value = value;
-		});
-		this.data.propagateInputs[0].dispatchEvent( this.data.changeEvent );
+		} );
+		this.data.propagateInputs[ 0 ].dispatchEvent( this.data.changeEvent );
 	}
 }
