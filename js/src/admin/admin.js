@@ -3312,8 +3312,10 @@ function frmAdminBuildJS() {
 		if ( hasValue ) {
 			$msg.fadeIn( 'fast' ).closest( '.frm_validation_msg' ).fadeIn( 'fast' );
 		} else {
-			//Fade out validation options
-			const v = $msg.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(' + messageClass + '):visible' ).length;
+			// Fade out validation options
+			const $validationBox = $msg.fadeOut( 'fast' ).closest( '.frm_validation_box' );
+			const v = $validationBox.css( 'display', 'block' ).children( ':not(' + messageClass + '):visible' ).length;
+			$validationBox.css( 'display', '' );
 			if ( v === 0 ) {
 				$msg.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
@@ -3331,7 +3333,9 @@ function frmAdminBuildJS() {
 				$unqDetail.val( frmAdminJs.default_unique );
 			}
 		} else {
-			const v = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
+			const $validationBox = $thisField.fadeOut( 'fast' ).closest( '.frm_validation_box' );
+			const v = $validationBox.css( 'display', 'block' ).children( ':not(.frm_unique_details' + fieldId + '):visible' ).length;
+			$validationBox.css( 'display', '' );
 			if ( v === 0 ) {
 				$thisField.closest( '.frm_validation_msg' ).fadeOut( 'fast' );
 			}
