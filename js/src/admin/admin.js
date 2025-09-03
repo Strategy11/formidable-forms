@@ -989,7 +989,7 @@ function frmAdminBuildJS() {
 
 		const $previousFieldContainer = ui.helper.parent();
 		const previousSection = ui.helper.get( 0 ).closest( 'ul.start_divider' );
-		const newSection = placeholder.closest( 'ul.frm_sorting' );
+		let newSection = placeholder.closest( 'ul.start_divider' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
 			insertNewFieldByDragging( draggable.id );
@@ -998,7 +998,7 @@ function frmAdminBuildJS() {
 		}
 
 		const previousSectionId = previousSection ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
-		const newSectionId = newSection.classList.contains( 'start_divider' ) ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		let newSectionId = newSection ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 
 		placeholder.remove();
 		ui.helper.remove();
