@@ -36,16 +36,31 @@ export async function initializeModal() {
 			} ),
 			footer: div( {
 				className: 'frmcenter',
-				child: tag( 'button', {
-					className: 'button button-primary frm-button-primary',
-					text: __( 'Begin Tour', 'formidable' )
-				} )
+				child: getBeginTourButton()
 			} ),
 			width: MODAL_SIZE
 		}
 	);
 
 	modalWidget.classList.add( 'frm_wrap', 'frm-welcome-tour-modal', 'frmcenter' );
+}
+
+function getBeginTourButton() {
+	const beginTourButton = tag( 'button', {
+		className: 'button button-primary frm-button-primary',
+		text: __( 'Begin Tour', 'formidable' )
+	} );
+
+	beginTourButton.addEventListener( 'click', () => {
+		jQuery( modalWidget ).dialog( 'close' );
+		startTour();
+	} );
+
+	return beginTourButton;
+}
+
+function startTour() {
+	
 }
 
 /**

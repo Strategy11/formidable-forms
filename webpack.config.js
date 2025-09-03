@@ -34,7 +34,7 @@ const entries = {
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
     'welcome-tour': './js/src/welcome-tour',
-	  formidable_admin: './js/src/admin/admin.js',
+    formidable_admin: './js/src/admin/admin.js',
   },
   // SCSS entries
   scss: {
