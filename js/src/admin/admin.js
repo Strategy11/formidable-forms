@@ -989,7 +989,7 @@ function frmAdminBuildJS() {
 
 		const $previousFieldContainer = ui.helper.parent();
 		const previousSection = ui.helper.get( 0 ).closest( 'ul.start_divider' );
-		let newSection = placeholder.closest( 'ul.start_divider' );
+		const newSection = placeholder.closest( 'ul.start_divider' );
 
 		if ( draggable.classList.contains( 'frm-new-field' ) ) {
 			insertNewFieldByDragging( draggable.id );
