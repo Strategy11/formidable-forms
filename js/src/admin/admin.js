@@ -998,7 +998,7 @@ function frmAdminBuildJS() {
 		}
 
 		const previousSectionId = previousSection ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
-		let newSectionId = newSection ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
+		const newSectionId = newSection ? parseInt( newSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
 
 		placeholder.remove();
 		ui.helper.remove();
