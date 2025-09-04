@@ -76,6 +76,12 @@
 	padding-bottom: 10px;
 }
 
+// Fix multiselect dropdown overlap issue with collapsed sections
+.frm-collapse-me.frm_grid_container:has(.dropdown-toggle.multiselect) {
+	position: relative;
+	z-index: 1;
+}
+
 .frm-collapsed + div {
 	height: 0;
 	padding: 0;

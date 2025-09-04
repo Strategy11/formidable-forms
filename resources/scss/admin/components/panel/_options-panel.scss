@@ -46,6 +46,10 @@
 
 				> p:first-child {
 					margin-top: var(--gap-sm);
+
+					&.frm6 + .frm6 {
+						margin-top: var(--gap-sm);
+					}
 				}
 			}
 		}

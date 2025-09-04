@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			esc_html( $type_name )
 		);
 		?>
-		<span class="frm-sub-label frm-text-sm frm-text-grey-400">#<?php echo esc_html( $field['id'] ); ?></span>
+		<span class="frm-sub-label frm-text-sm frm-text-grey-400">(ID <?php echo esc_html( $field['id'] ); ?>)</span>
 	</h3>
 
 	<div class="frm_grid_container frm-collapse-me" role="group">
