@@ -87,13 +87,13 @@ class FrmWelcomeTourController {
 		if ( self::is_welcome_tour_not_seen() ) {
 			self::mark_welcome_tour_as_seen();
 		}
+
 		// TODO: remove this after development
 		self::$checklist['seen'] = false;
 		self::set_checklist( self::$checklist );
 
 		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 
-		add_action( 'admin_menu', __CLASS__ . '::menu', 1 );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 		// add_filter( 'frm_show_footer_links', '__return_false' );
@@ -120,53 +120,6 @@ class FrmWelcomeTourController {
 	private static function mark_welcome_tour_as_seen() {
 		self::$checklist['seen'] = true;
 		self::set_checklist( self::$checklist );
-	}
-
-	/**
-	 * Add Welcome Tour menu item to sidebar.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function menu() {
-		if ( ! current_user_can( 'activate_plugins' ) ) {
-			return;
-		}
-
-		$label  = __( 'Checklist', 'formidable' );
-
-		add_submenu_page(
-			'formidable',
-			'Formidable | ' . $label,
-			$label . self::get_progress_bar(),
-			self::REQUIRED_CAPABILITY,
-			self::PAGE_SLUG,
-			null
-		);
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return string
-	 */
-	private static function get_progress_bar() {
-		$progress   = self::get_progress_bar_percent();
-		$bar        = '<span class="frm-progress-bar" style="width: ' . absint( $progress ) . '%;"></span>';
-		$background = '<span class="frm-progress-bar-background">' . $bar . '</span>';
-
-		return '<span id="frm_welcome_tour_progress">' . $background . '</span>';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @return int
-	 */
-	private static function get_progress_bar_percent() {
-		// TODO
-		return 25;
 	}
 
 	/**
@@ -200,10 +153,6 @@ class FrmWelcomeTourController {
 		$usage_data = self::get_usage_data();
 
 		$fields_to_update = array(
-			'allows_tracking'  => 'rest_sanitize_boolean',
-			'installed_addons' => 'sanitize_text_field',
-			'processed_steps'  => 'sanitize_text_field',
-			'completed_steps'  => 'rest_sanitize_boolean',
 		);
 
 		foreach ( $fields_to_update as $field => $sanitize_callback ) {
@@ -263,7 +212,6 @@ class FrmWelcomeTourController {
 		return $classes . ' frm-admin-welcome-tour';
 	}
 
-
 	/**
 	 * Sets the checklist data.
 	 *
@@ -273,7 +221,7 @@ class FrmWelcomeTourController {
 	 */
 	public static function set_checklist( $checklist ) {
 		self::$checklist = $checklist;
-		update_option( self::CHECKLIST_OPTION, self::$checklist );
+		update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
 	}
 
 	/**

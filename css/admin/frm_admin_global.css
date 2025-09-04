@@ -21,3 +21,25 @@
 #adminmenu .frm-orange-text {
 	color: #F47449;
 }
+
+#frm_welcome_tour_progress {
+    display: inline-block;
+    padding-bottom: var(--gap-xs);
+    border-bottom: 1px solid rgba(86, 92, 95, 1);
+    width: 100%;
+}
+
+#frm_welcome_tour_progress .frm-progress-bar-background {
+	background-color: rgba(0, 0, 0, 1);
+	display: inline-block;
+	height: 4px;
+	width: 100%;
+	position: relative;
+}
+
+#frm_welcome_tour_progress .frm-progress-bar {
+	background-color: rgba(107, 199, 142, 1);
+	height: 4px;
+	display: inline-block;
+	position: absolute;
+}

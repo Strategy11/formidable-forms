@@ -25,6 +25,56 @@ jQuery( document ).ready( function() {
 			li.classList.add( 'frm-submenu-highlight' );
 		}
 	}
+
+	injectWelcomeTourChecklist();
+
+	function injectWelcomeTourChecklist() {
+		const formidableMenuItem = document.getElementById( 'toplevel_page_formidable' );
+		if ( ! formidableMenuItem ) {
+			return;
+		}
+
+		const subMenu = formidableMenuItem.querySelector( 'ul' );
+		if ( ! subMenu ) {
+			return;
+		}
+
+		const bar       = document.createElement( 'span' );
+		bar.className   = 'frm-progress-bar';
+		bar.style.width = getProgressBarPercent() + '%';
+
+		const background     = document.createElement( 'span' );
+		background.className = 'frm-progress-bar-background';
+		background.appendChild( bar );
+
+		const span = document.createElement( 'span' );
+		span.id    = 'frm_welcome_tour_progress';
+		span.appendChild( background );
+
+		const newLi = document.createElement( 'li' );
+		newLi.style.backgroundColor = 'rgba(44, 51, 56, 1)';
+
+		const welcomeTourAnchor = document.createElement( 'a' );
+		welcomeTourAnchor.style.padding = '5px 12px';
+		welcomeTourAnchor.href = '#';
+		welcomeTourAnchor.textContent = 'Checklist'; // TODO Set this as a global var so it can be translated.
+		welcomeTourAnchor.appendChild( span );
+
+		newLi.appendChild( welcomeTourAnchor );
+
+		if ( subMenu.closest( '.wp-not-current-submenu' ) ) {
+			const newUl = document.createElement( 'ul' );
+			newUl.appendChild( newLi );
+			formidableMenuItem.appendChild( newUl );
+		} else {
+			subMenu.insertBefore( newLi, subMenu.firstChild );
+		}
+	}
+
+	function getProgressBarPercent() {
+		// TODO
+		return 25;
+	}
 } );
 
 function frm_install_now() { // eslint-disable-line camelcase
