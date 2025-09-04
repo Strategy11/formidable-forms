@@ -197,7 +197,16 @@ class FrmWelcomeTourController {
 		return array(
 			'INITIAL_STEP'         => self::$checklist['step'] ?? self::INITIAL_STEP,
 			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
+			'i18n'                 => array(
+				'CHECKLIST_TEXT' => __( 'Checklist', 'formidable' ),
+			),
+			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
 		);
+	}
+
+	private static function get_welcome_tour_progress_bar_percent() {
+		// TODO
+		return 50;
 	}
 
 	/**
