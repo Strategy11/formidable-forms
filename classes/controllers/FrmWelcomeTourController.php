@@ -55,6 +55,8 @@ class FrmWelcomeTourController {
 	 * Initialize hooks for Dashboard page only.
 	 *
 	 * @since x.x
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
@@ -94,16 +96,11 @@ class FrmWelcomeTourController {
 
 			switch ( $step_key ) {
 				case 'create-a-form':
-					$form_keys = FrmDb::get_col( 'frm_forms', array(), 'form_key' );
-					if ( count( $form_keys ) > 1 ) {
-						$completed = true;
-					} else {
-						$completed = $form_keys && ! in_array( 'contact-form', $form_keys, true );
-					}
+					$completed = self::more_than_the_default_form_exists();
 					break;
 
 				case 'update-form':
-					
+					// TODO
 					break;
 
 				case 'first-entry':
@@ -130,6 +127,22 @@ class FrmWelcomeTourController {
 
 		self::$checklist['step'] = $current_step;
 		self::set_checklist( self::$checklist );
+	}
+
+	/**
+	 * Checks if more than the default form exists.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if more than the default form exists, false otherwise.
+	 */
+	private static function more_than_the_default_form_exists() {
+		$form_keys = FrmDb::get_col( 'frm_forms', array(), 'form_key' );
+		if ( count( $form_keys ) > 1 ) {
+			return true;
+		}
+
+		return $form_keys && ! in_array( 'contact-form', $form_keys, true );
 	}
 
 	/**
