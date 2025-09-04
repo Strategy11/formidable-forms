@@ -3476,6 +3476,11 @@ class FrmAppHelper {
 		}
 	}
 
+	private static function get_welcome_tour_progress_bar_percent() {
+		// TODO
+		return 50;
+	}
+
 	/**
 	 * @since 2.0.9
 	 * @return void
