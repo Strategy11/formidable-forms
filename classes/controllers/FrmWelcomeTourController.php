@@ -66,13 +66,6 @@ class FrmWelcomeTourController {
 	private static $checklist = array();
 
 	/**
-	 * Path to views.
-	 *
-	 * @var string
-	 */
-	private static $view_path = '';
-
-	/**
 	 * Initialize hooks for Dashboard page only.
 	 *
 	 * @since x.x
@@ -91,8 +84,6 @@ class FrmWelcomeTourController {
 		// TODO: remove this after development
 		self::$checklist['seen'] = false;
 		self::set_checklist( self::$checklist );
-
-		self::$view_path = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
@@ -120,21 +111,6 @@ class FrmWelcomeTourController {
 	private static function mark_welcome_tour_as_seen() {
 		self::$checklist['seen'] = true;
 		self::set_checklist( self::$checklist );
-	}
-
-	/**
-	 * Renders the Welcome Tour checklist in the WordPress admin area.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function render() {
-		$step_parts = array();
-
-		foreach ( $step_parts as $step_part ) {
-			include self::$view_path . $step_part;
-		}
 	}
 
 	/**
@@ -204,9 +180,32 @@ class FrmWelcomeTourController {
 		);
 	}
 
+	/**
+	 * Get the Welcome Tour progress bar percentage.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
 	private static function get_welcome_tour_progress_bar_percent() {
-		// TODO
-		return 50;
+		if ( empty( self::$checklist['step'] ) ) {
+			return 0;
+		}
+
+		$percent = ( self::$checklist['step'] / count( self::get_steps() ) ) * 100;
+
+		return (int) $percent;
+	}
+
+	/**
+	 * @return array
+	 */
+	private static function get_steps() {
+		return array(
+			'create-a-form',
+			'update-form',
+			'first-entry',
+		);
 	}
 
 	/**
@@ -230,7 +229,7 @@ class FrmWelcomeTourController {
 	 */
 	public static function set_checklist( $checklist ) {
 		self::$checklist = $checklist;
-		update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
+	//	update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
 	}
 
 	/**
@@ -242,17 +241,6 @@ class FrmWelcomeTourController {
 	 */
 	public static function get_checklist() {
 		return self::$checklist;
-	}
-
-	/**
-	 * Get the path to the Onboarding Wizard views.
-	 *
-	 * @since x.x
-	 *
-	 * @return string Path to views.
-	 */
-	public static function get_view_path() {
-		return self::$view_path;
 	}
 
 	/**
