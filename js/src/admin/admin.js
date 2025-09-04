@@ -838,13 +838,12 @@ function frmAdminBuildJS() {
 		const settings = {
 			helper: getDraggableHelper,
 			revert: 'invalid',
-			delay: 2,
+			delay: 10,
 			start: handleDragStart,
 			stop: handleDragStop,
 			drag: handleDrag,
 			cursor: 'grabbing',
 			refreshPositions: true,
-			distance: 3, // Only start drag after 3px of movement for more precision
 			cursorAt: {
 				top: 1,
 				left: 70 // The width of draggable button is 140. 70 should center the draggable on the cursor.
