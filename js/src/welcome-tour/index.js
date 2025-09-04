@@ -3,7 +3,13 @@
  */
 import domReady from '@wordpress/dom-ready';
 
+/**
+ * Internal dependencies
+ */
+import { initializeModal } from './ui';
+
 domReady( () => {
+	initializeModal();
 	injectWelcomeTourChecklist();
 } );
 
