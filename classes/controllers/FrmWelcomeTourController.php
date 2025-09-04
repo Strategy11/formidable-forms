@@ -17,13 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmWelcomeTourController {
 
 	/**
-	 * Defines the initial step for redirection within the application flow.
-	 *
-	 * @var string
-	 */
-	const INITIAL_STEP = 'pick-a-template';
-
-	/**
 	 * The required user capability to view the Welcome Tour page.
 	 *
 	 * @var string
@@ -36,13 +29,6 @@ class FrmWelcomeTourController {
 	 * @var string
 	 */
 	const CHECKLIST_OPTION = 'frm_welcome_tour_checklist';
-
-	/**
-	 * Option name to store usage data.
-	 *
-	 * @var string
-	 */
-	const USAGE_DATA_OPTION = 'frm_welcome_tour_usage_data';
 
 	/**
 	 * The script handle.
@@ -81,13 +67,69 @@ class FrmWelcomeTourController {
 			self::mark_welcome_tour_as_seen();
 		}
 
+		self::maybe_check_for_completed_steps();
+
 		// TODO: remove this after development
 		self::$checklist['seen'] = false;
 		self::set_checklist( self::$checklist );
 
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-		// add_filter( 'frm_show_footer_links', '__return_false' );
+	}
+
+	/**
+	 * @return void
+	 */
+	private static function maybe_check_for_completed_steps() {
+		if ( ! isset( self::$checklist['completed_steps'] ) ) {
+			return;
+		}
+
+		self::$checklist['completed_steps'] = array();
+
+		$steps     = self::get_steps();
+		$step_keys = array_keys( $steps );
+		foreach ( $step_keys as $step_key ) {
+			$completed = false;
+
+			switch ( $step_key ) {
+				case 'create-a-form':
+					$form_keys = FrmDb::get_col( 'frm_forms', array(), 'form_key' );
+					if ( count( $form_keys ) > 1 ) {
+						$completed = true;
+					} else {
+						$completed = $form_keys && ! in_array( 'contact-form', $form_keys, true );
+					}
+					break;
+
+				case 'update-form':
+					
+					break;
+
+				case 'first-entry':
+					$entry_id = FrmDb::get_var( 'frm_items', array(), 'id' );
+					if ( $entry_id ) {
+						$completed = true;
+					}
+					break;
+			}
+
+			if ( $completed ) {
+				self::$checklist['completed_steps'][] = $step_key;
+			}
+		}
+
+		$current_step = 0;
+		foreach ( $step_keys as $step_key ) {
+			if ( in_array( $step_key, self::$checklist['completed_steps'], true ) ) {
+				$current_step++;
+			} else {
+				break;
+			}
+		}
+
+		self::$checklist['step'] = $current_step;
+		self::set_checklist( self::$checklist );
 	}
 
 	/**
@@ -111,34 +153,6 @@ class FrmWelcomeTourController {
 	private static function mark_welcome_tour_as_seen() {
 		self::$checklist['seen'] = true;
 		self::set_checklist( self::$checklist );
-	}
-
-	/**
-	 * Handle AJAX request to set up usage data for the Welcome Tour.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function setup_usage_data() {
-		// Check permission and nonce.
-		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
-		check_ajax_referer( 'frm_ajax', 'nonce' );
-
-		// Retrieve the current usage data.
-		$usage_data = self::get_usage_data();
-
-		$fields_to_update = array(
-		);
-
-		foreach ( $fields_to_update as $field => $sanitize_callback ) {
-			if ( isset( $_POST[ $field ] ) ) {
-				$usage_data[ $field ] = FrmAppHelper::get_post_param( $field, '', $sanitize_callback );
-			}
-		}
-
-		update_option( self::USAGE_DATA_OPTION, $usage_data );
-		wp_send_json_success();
 	}
 
 	/**
@@ -169,14 +183,14 @@ class FrmWelcomeTourController {
 	 *
 	 * @return array
 	 */
-	private static function get_js_variables() {
+	private static function get_js_variables() {		
 		return array(
-			'INITIAL_STEP'         => self::$checklist['step'] ?? self::INITIAL_STEP,
 			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
 			'i18n'                 => array(
 				'CHECKLIST_TEXT' => __( 'Checklist', 'formidable' ),
 			),
 			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
+			'CHECKLIST_STEPS'        => self::get_steps(),
 		);
 	}
 
@@ -202,9 +216,15 @@ class FrmWelcomeTourController {
 	 */
 	private static function get_steps() {
 		return array(
-			'create-a-form',
-			'update-form',
-			'first-entry',
+			'create-a-form' => array(
+				'title' => __( 'Create a Form', 'formidable' ),
+			),
+			'update-form' 	=> array(
+				'title' => __( 'Update a Form', 'formidable' ),
+			),
+			'first-entry' => array(
+				'title' => __( 'Create First Entry', 'formidable' ),
+			),
 		);
 	}
 
@@ -229,7 +249,7 @@ class FrmWelcomeTourController {
 	 */
 	public static function set_checklist( $checklist ) {
 		self::$checklist = $checklist;
-	//	update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
+		update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
 	}
 
 	/**
@@ -241,16 +261,5 @@ class FrmWelcomeTourController {
 	 */
 	public static function get_checklist() {
 		return self::$checklist;
-	}
-
-	/**
-	 * Retrieves the current Onboarding Wizard usage data, returning an empty array if none exists.
-	 *
-	 * @since x.x
-	 *
-	 * @return array Current usage data.
-	 */
-	public static function get_usage_data() {
-		return get_option( self::USAGE_DATA_OPTION, array() );
 	}
 }
