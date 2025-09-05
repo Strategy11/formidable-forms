@@ -595,34 +595,15 @@ function frmAdminBuildJS() {
 			jQuery( this ).closest( '.frm_logic_rows' ).fadeOut( 'slow' );
 		}
 
-		mayToggleWatchLookupLabel( id, fadeEle );
+		/**
+		 * Fires when a tag element is removed.
+		 *
+		 * @param {string}      id      The ID of the removed element
+		 * @param {HTMLElement} fadeEle The removed element
+		 */
+		wp.hooks.doAction( 'frm_after_remove_this_tag', id, fadeEle );
 
 		return false;
-	}
-
-	/**
-	 * Maybe toggle Watch Lookup Fields label visibility
-	 *
-	 * @param {string}      id      The ID of the removed element
-	 * @param {HTMLElement} fadeEle The removed element
-	 * @return {void}
-	 */
-	function mayToggleWatchLookupLabel( id, fadeEle ) {
-		if ( ! id || ! id.startsWith( 'frm_watch_lookup_' ) ) {
-			return;
-		}
-
-		// If there are other rows, don't hide the label
-		if ( fadeEle.parentElement.children.length > 1 ) {
-			return;
-		}
-
-		const fieldId = fadeEle.closest( '.frm-single-settings' )?.dataset.fid;
-		if ( fieldId ) {
-			setTimeout( () => {
-				document.getElementById( `frm_watch_lookup_label_${ fieldId }` )?.classList.add( 'frm_hidden!' );
-			}, 190 );
-		}
 	}
 
 	function afterActionRemoved( type ) {
