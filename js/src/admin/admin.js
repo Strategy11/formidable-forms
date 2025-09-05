@@ -1024,9 +1024,9 @@ function frmAdminBuildJS() {
 	 * @return {void}
 	 */
 	function maybeMakeFieldGroupDraggableAfterDragging( placeholderParent ) {
-		const isDroppingIntoFieldGroup = placeholderParent.nodeName === 'UL'
-			&& ! placeholderParent.classList.contains( 'start_divider' )
-			&& 'frm-show-fields' !== placeholderParent.id;
+		const isDroppingIntoFieldGroup = placeholderParent.nodeName === 'UL' &&
+			! placeholderParent.classList.contains( 'start_divider' ) &&
+			'frm-show-fields' !== placeholderParent.id;
 
 		if ( ! isDroppingIntoFieldGroup ) {
 			return;
