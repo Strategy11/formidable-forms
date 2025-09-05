@@ -1015,6 +1015,14 @@ function frmAdminBuildJS() {
 		debouncedSyncAfterDragAndDrop();
 	}
 
+	/**
+	 * When a field is moved into a field group, make sure the field group is draggable.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} placeholderParent
+	 * @return {void}
+	 */
 	function maybeMakeFieldGroupDraggableAfterDragging( placeholderParent ) {
 		const isDroppingIntoFieldGroup = placeholderParent.nodeName === 'UL'
 			&& ! placeholderParent.classList.contains( 'start_divider' )
