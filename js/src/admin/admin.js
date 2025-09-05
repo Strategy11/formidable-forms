@@ -995,6 +995,7 @@ function frmAdminBuildJS() {
 			insertNewFieldByDragging( draggable.id );
 		} else {
 			moveFieldThatAlreadyExists( draggable, placeholder );
+			maybeMakeFieldGroupDraggableAfterDragging( placeholder.parentElement );
 		}
 
 		const previousSectionId = previousSection ? parseInt( previousSection.closest( '.edit_field_type_divider' ).getAttribute( 'data-fid' ) ) : 0;
@@ -1012,6 +1013,29 @@ function frmAdminBuildJS() {
 		}
 
 		debouncedSyncAfterDragAndDrop();
+	}
+
+	/**
+	 * When a field is moved into a field group, make sure the field group is draggable.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} placeholderParent
+	 * @return {void}
+	 */
+	function maybeMakeFieldGroupDraggableAfterDragging( placeholderParent ) {
+		const isDroppingIntoFieldGroup = placeholderParent.nodeName === 'UL' &&
+			! placeholderParent.classList.contains( 'start_divider' ) &&
+			'frm-show-fields' !== placeholderParent.id;
+
+		if ( ! isDroppingIntoFieldGroup ) {
+			return;
+		}
+
+		const fieldGroupLi = placeholderParent.closest( 'li' );
+		if ( fieldGroupLi && ! fieldGroupLi.classList.contains( 'ui-draggable' ) ) {
+			makeDraggable( fieldGroupLi, '.frm-move' );
+		}
 	}
 
 	/**
