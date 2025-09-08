@@ -88,11 +88,10 @@ class FrmEmailStylesController {
 		}
 
 		// Check if the selected style is available and selectable.
-		$email_styles = self::get_email_styles();
-		foreach ( $email_styles as $key => $email_style ) {
-			if ( $key === $frm_settings->email_style && ! empty( $email_style['selectable'] ) ) {
-				return $key;
-			}
+		$styles = self::get_email_styles();
+		$style  = $frm_settings->email_style;
+		if ( isset( $styles[ $style ] ) && ! empty( $styles[ $style ]['selectable'] ) ) {
+			return $style;
 		}
 
 		return 'classic';
