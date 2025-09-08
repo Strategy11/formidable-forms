@@ -23,7 +23,10 @@ describe( 'Applications page', () => {
 						const text = $h1.text();
 						expect( text ).to.satisfy( t =>
 							t.includes( 'The Only WordPress Form Maker & Application Builder Plugin' ) ||
-							t.includes( 'Upgrade Today to Unlock the Full Power of Formidable Forms' )
+							t.includes( 'Upgrade Today to Unlock the Full Power of Formidable Forms' ) ||
+							t.includes( 'The Most Advanced WordPress Form builder' ) ||
+							t.includes( 'More Than Just a WordPress Form builder' ) ||
+							t.includes( 'Get More Done in Less Time with Better WordPress Forms' )
 						);
 					} );
 				} );

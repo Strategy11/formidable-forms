@@ -42,8 +42,7 @@ describe( 'Run some CSS validation', () => {
 
 				// Fail the test if there are validation errors
 				if ( errors.length ) {
-					console.log( 'CSS Validation errors for ' + url, errors );
-					throw new Error( 'CSS validation errors found in: ' + css );
+					throw new Error( 'CSS validation errors found' );
 				}
 			} );
 		} );
