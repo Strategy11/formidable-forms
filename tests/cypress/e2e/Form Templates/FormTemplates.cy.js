@@ -287,7 +287,7 @@ describe( 'Form Templates page', () => {
 			.click( { force: true } );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1.margin30' ).should( 'have.text', 'Contact Us Form Template' );
+			cy.get( 'h1' ).should( 'have.text', 'Contact Us Form Template' );
 			cy.get( 'h2.aligncenter' ).should( 'contain', "What's in the Contact Us Form Template Demo" );
 		} );
 

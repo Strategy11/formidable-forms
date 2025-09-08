@@ -27,7 +27,8 @@ describe( 'Forms page', () => {
 								'The Only WordPress Form Maker & Application Builder Plugin',
 								'Upgrade Today to Unlock the Full Power of Formidable Forms',
 								'The Most Advanced WordPress Form builder',
-								'More Than Just a WordPress Form builder'
+								'More Than Just a WordPress Form builder',
+								'Get More Done in Less Time with Better WordPress Forms',
 
 							] ).to.include( headingText );
 						} );
