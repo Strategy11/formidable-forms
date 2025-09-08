@@ -243,7 +243,7 @@ class FrmEmailStylesController {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_email_style_preview' );
 
-		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
+		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'get', 'sanitize_text_field' );
 		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
 		if ( ! $style_key ) {
 			die( esc_html( $not_exist_msg ) );
