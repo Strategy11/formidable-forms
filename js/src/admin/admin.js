@@ -3038,7 +3038,7 @@ function frmAdminBuildJS() {
 	}
 
 	function getExcludeArray( calcBox, isSummary ) {
-		const codeList = calcBox.querySelector( '.frm_code_list' ) ?? calcBox.getElementsByClassName( 'frm_code_list' )[ 0 ];
+		const codeList = calcBox.querySelector( '.frm_code_list' );
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
