@@ -20,13 +20,13 @@ describe( 'Applications page', () => {
 				cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 					cy.visit( href );
 					cy.get( 'h1' ).should( $h1 => {
-						const text = $h1.text();
+						const text = $h1.text().toLowerCase();
 						expect( text ).to.satisfy( t =>
-							t.includes( 'The Only WordPress Form Maker & Application Builder Plugin' ) ||
-							t.includes( 'Upgrade Today to Unlock the Full Power of Formidable Forms' ) ||
-							t.includes( 'The Most Advanced WordPress Form builder' ) ||
-							t.includes( 'More Than Just a WordPress Form builder' ) ||
-							t.includes( 'Get More Done in Less Time with Better WordPress Forms' )
+							t.includes( 'the only wordpress form maker & application builder plugin' ) ||
+							t.includes( 'upgrade today to unlock the full power of formidable forms' ) ||
+							t.includes( 'the most advanced wordpress form builder' ) ||
+							t.includes( 'more than just a wordpress form builder' ) ||
+							t.includes( 'get more done in less time with better wordpress forms' )
 						);
 					} );
 				} );
