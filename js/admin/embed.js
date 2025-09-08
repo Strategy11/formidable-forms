@@ -503,7 +503,7 @@
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @return {integer} The unique id.
+	 * @return {number} The unique id.
 	 */
 	function getAutoId() {
 		return ++autoId;

@@ -579,7 +579,7 @@
 	}
 
 	/**
-	 * @param {HTMLlement} card
+	 * @param {HTMLElement} card
 	 * @return {void}
 	 */
 	function maybeAddMenuToCard( card ) {

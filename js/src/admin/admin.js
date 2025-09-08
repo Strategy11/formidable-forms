@@ -400,7 +400,7 @@ function frmAdminBuildJS() {
 	 * Toggle a class on target elements when an anchor is clicked, or when a radio or checkbox has been selected.
 	 *
 	 * @param {Event} e Event with either the change or click type.
-	 * @returns {false}
+	 * @return {false}
 	 */
 	function hideShowItem( e ) {
 		/*jshint validthis:true */
@@ -1796,7 +1796,7 @@ function frmAdminBuildJS() {
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @return {integer}
+	 * @return {number}
 	 */
 	function getAutoId() {
 		return ++autoId;
@@ -4181,9 +4181,9 @@ function frmAdminBuildJS() {
 	}
 
 	/**
-	 * @param {int}    size  2-6.
+	 * @param {number} size  2-6.
 	 * @param {string} type  even, middle, left, or right.
-	 * @param {int}    index 0-5.
+	 * @param {number} index 0-5.
 	 * @return {string} The class name.
 	 */
 	function getClassForBlock( size, type, index ) {
@@ -8705,7 +8705,7 @@ function frmAdminBuildJS() {
 	 * @param {HTMLElement} input
 	 * @param {string}      type
 	 *
-	 * @returns {Void}
+	 * @return {void}
 	 */
 	function toggleContextualShortcodes( input, type ) {
 		let selector, contextualShortcodes;
@@ -8809,7 +8809,7 @@ function frmAdminBuildJS() {
 	 * Get the input box for the selected icon or calculation field.
 	 *
 	 * @param {Element} moreIcon The icon element
-	 * @returns {Element} The associated input or textarea
+	 * @return {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
 		// For regular fields
