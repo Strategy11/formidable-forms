@@ -118,11 +118,11 @@
 }
 
 .frm-order-first {
-	order: calc(-infinity);
+	order: -9999;
 }
 
 .frm-order-last {
-	order: calc(infinity);
+	order: 9999;
 }
 
 .frm-order-none {
