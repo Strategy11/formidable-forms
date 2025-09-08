@@ -74,7 +74,7 @@ describe( 'Applications page', () => {
 			} );
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Business Directory Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Elite plan.' ).should( 'be.visible' );
 			} );
@@ -202,7 +202,7 @@ describe( 'Applications page', () => {
 			} );
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Letter of Recommendation Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
 			} );
@@ -319,7 +319,7 @@ describe( 'Applications page', () => {
 
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Testimonials Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
 			} );

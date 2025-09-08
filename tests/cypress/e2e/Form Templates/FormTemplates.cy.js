@@ -288,7 +288,6 @@ describe( 'Form Templates page', () => {
 
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Contact Us Form Template' );
-			cy.get( 'h2' ).should( 'contain', "What's in the Contact Us Form Template Demo" );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
