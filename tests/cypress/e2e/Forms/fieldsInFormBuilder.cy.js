@@ -193,7 +193,7 @@ describe( 'Fields in the form builder', () => {
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
 		cy.get( '#js_validate' ).click( { force: true } );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
 
 		cy.log( 'Click on Preview - Blank Page' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
