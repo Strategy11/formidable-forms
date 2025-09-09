@@ -596,12 +596,12 @@ function frmAdminBuildJS() {
 		}
 
 		/**
-		 * Fires when a tag element is removed.
+		 * Fires after a tag element has been removed in the admin interface.
 		 *
 		 * @param {string}      id      The ID of the removed element
-		 * @param {HTMLElement} fadeEle The removed element
+		 * @param {HTMLElement} fadeEle The removed element that was faded out
 		 */
-		wp.hooks.doAction( 'frm_after_remove_this_tag', id, fadeEle );
+		wp.hooks.doAction( 'frm_admin_tag_removed', id, fadeEle );
 
 		return false;
 	}
