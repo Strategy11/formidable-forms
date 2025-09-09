@@ -5126,7 +5126,7 @@ function frmAdminBuildJS() {
 				watchRowBlock.fadeIn( 'slow' );
 
 				// Show the "Watch Lookup Fields" label if it was hidden
-				document.getElementById( `frm_watch_lookup_label_${ id }` )?.classList.remove( 'frm_hidden!' );
+				document.getElementById( `frm_watch_lookup_label_${ id }` )?.classList.remove( 'frm-force-hidden' );
 			}
 		} );
 		return false;

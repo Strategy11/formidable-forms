@@ -2,7 +2,7 @@
  * Utilities - Display
  */
 
-#wpwrap .frm_hidden\! {
+#wpwrap .frm-force-hidden {
 	display: none !important;
 }
 
@@ -15,7 +15,7 @@
 	display: inline;
 }
 
-.frm-inline\! {
+.frm-force-inline {
 	display: inline !important;
 }
 

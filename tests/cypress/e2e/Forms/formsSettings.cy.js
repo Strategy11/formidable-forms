@@ -120,7 +120,7 @@ describe( 'Updating form settings', () => {
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.location( 'href',  { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
+			cy.location( 'href', { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );
@@ -141,7 +141,7 @@ describe( 'Updating form settings', () => {
 
 		cy.log( 'Verify URL redirect after submitting form' );
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.location( 'href',  { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
+			cy.location( 'href', { timeout: 10000 } ).should( 'include', 'https://formidableforms.com/' );
 		} );
 
 		cy.log( 'Navigate back to the formidable form page' );

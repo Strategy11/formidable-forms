@@ -2440,7 +2440,7 @@ class FrmFieldsHelper {
 		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );
 
 		if ( ! empty( $should_hide_bulk_edit ) ) {
-			$attributes['class'] .= ' frm_hidden!';
+			$attributes['class'] .= ' frm-force-hidden';
 		}
 
 		$data = FrmAppHelper::get_upgrade_data_params(
