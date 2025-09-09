@@ -20,10 +20,13 @@ describe( 'Applications page', () => {
 				cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 					cy.visit( href );
 					cy.get( 'h1' ).should( $h1 => {
-						const text = $h1.text();
+						const text = $h1.text().toLowerCase();
 						expect( text ).to.satisfy( t =>
-							t.includes( 'The Only WordPress Form Maker & Application Builder Plugin' ) ||
-							t.includes( 'Upgrade Today to Unlock the Full Power of Formidable Forms' )
+							t.includes( 'the only wordpress form maker & application builder plugin' ) ||
+							t.includes( 'upgrade today to unlock the full power of formidable forms' ) ||
+							t.includes( 'the most advanced wordpress form builder' ) ||
+							t.includes( 'more than just a wordpress form builder' ) ||
+							t.includes( 'get more done in less time with better wordpress forms' )
 						);
 					} );
 				} );
@@ -71,7 +74,7 @@ describe( 'Applications page', () => {
 			} );
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Business Directory Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Elite plan.' ).should( 'be.visible' );
 			} );
@@ -199,7 +202,7 @@ describe( 'Applications page', () => {
 			} );
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Letter of Recommendation Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
 			} );
@@ -316,7 +319,7 @@ describe( 'Applications page', () => {
 
 		cy.origin( 'https://formidableforms.com', () => {
 			cy.get( 'h1' ).should( 'have.text', 'Testimonials Template' );
-			cy.get( 'p.margin30' ).within( () => {
+			cy.get( 'div.c-template-required-plan__text' ).within( () => {
 				cy.contains( 'This application template is included with the' ).should( 'be.visible' );
 				cy.contains( 'Business plan.' ).should( 'be.visible' );
 			} );

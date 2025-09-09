@@ -1,8 +1,5 @@
 import { __ } from '@wordpress/i18n';
-import frmRadioStyleComponent from './components/radio-style-component.js';
-import frmSliderStyleComponent from './components/slider-style-component.js';
-import frmTabsStyleComponent from './components/tabs-style-component.js';
-import frmStyleDependentUpdaterComponent from './components/dependent-updater-component.js';
+import frmStyleDependentUpdaterComponent from './components/dependent-updater-component';
 
 /**
  * Represents the frmStyleOptions class.
@@ -16,14 +13,9 @@ class frmStyleOptions {
 	}
 
 	/**
-	 * Initializes the style components: frmRadioStyleComponent, frmSliderStyleComponent, and frmTabsStyleComponent.
 	 * Init the dependent
 	 */
 	init() {
-		new frmRadioStyleComponent();
-		new frmSliderStyleComponent();
-		new frmTabsStyleComponent();
-
 		this.initColorPickerDependentUpdaterComponents();
 		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
 	}

@@ -38,7 +38,8 @@ describe( 'Fields in the form builder', () => {
 
 		cy.get( 'h1 > .frm_bstooltip' ).should( 'contain', 'Test Form' );
 		cy.get( '.current_page' ).should( 'contain', 'Build' );
-		cy.get( '.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab' ).should( 'contain', 'Add Fields' );
+
+		cy.xpath( "//li[@class='frm-active']//a[@id='frm_insert_fields_tab']" ).should( 'contain', 'Add Fields' );
 
 		cy.log( 'Create and duplicate fields for each type' );
 		const fieldsToDelete = [
@@ -117,7 +118,7 @@ describe( 'Fields in the form builder', () => {
 			cy.log( `Set ${ fieldType } field as require` );
 			cy.get( `li[data-ftype="${ fieldId }"] [id^="field_"][id$="_inner_container"] > .frm-field-action-icons > .dropdown > .frm_bstooltip > .frmsvg > use`, { timeout: 10000 } ).click( { force: true } );
 			cy.get( `li[data-ftype="${ fieldId }"] .frm_select_field > span` ).should( 'contain', 'Field Settings' ).click( { force: true } );
-			cy.get( '.frm_field_list div[id^="frm-single-settings-"] .frm_grid_container .frm-hide-empty input[type="checkbox"]', { timeout: 10000 } ).check( { force: true } );
+			cy.get( 'input.frm_req_field[type="checkbox"]' ).check( { force: true } );
 		};
 
 		cy.openForm();
@@ -141,7 +142,7 @@ describe( 'Fields in the form builder', () => {
 		} );
 
 		cy.log( 'Update form' );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
 
 		cy.log( 'Click on Preview - Blank Page' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();
@@ -187,13 +188,13 @@ describe( 'Fields in the form builder', () => {
 		cy.get( `li[id="phone"] a[title="Phone"]` ).click( { force: true } );
 
 		cy.log( 'Update form' );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
 
 		cy.log( "Enabling the 'Validate this form with javascript' setting" );
 		cy.xpath( "//ul[@class='frm_form_nav']//a[contains(text(),'Settings')]" ).should( 'contain', 'Settings' ).click();
 		cy.get( ':nth-child(3) > td > .frm_inline_block', { timeout: 5000 } ).should( 'contain', 'Validate this form with javascript' );
 		cy.get( '#js_validate' ).click( { force: true } );
-		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click();
+		cy.get( '#frm_submit_side_top' ).should( 'contain', 'Update' ).click( { force: true } );
 
 		cy.log( 'Click on Preview - Blank Page' );
 		cy.get( '#frm-previewDrop', { timeout: 5000 } ).should( 'contain', 'Preview' ).click();

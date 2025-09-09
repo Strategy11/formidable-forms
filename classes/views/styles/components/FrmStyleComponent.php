@@ -234,6 +234,7 @@ class FrmStyleComponent {
 	 */
 	private function load_css() {
 		wp_enqueue_style( self::ASSETS_SLUG );
+		wp_enqueue_style( 'formidable-settings-components' );
 	}
 
 	/**
@@ -245,5 +246,6 @@ class FrmStyleComponent {
 	 */
 	private function load_js() {
 		wp_enqueue_script( self::ASSETS_SLUG );
+		wp_enqueue_script( 'formidable-settings-components' );
 	}
 }

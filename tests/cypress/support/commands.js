@@ -66,7 +66,7 @@ Cypress.Commands.add( 'openForm', () => {
 
 	cy.get( 'h1 > .frm_bstooltip' ).should( 'contain', 'Test Form' );
 	cy.get( '.current_page' ).should( 'contain', 'Build' );
-	cy.get( '.frm_field_list > #frm-nav-tabs > .frm-tabs > #frm_insert_fields_tab' ).should( 'contain', 'Add Fields' );
+	cy.xpath( "//li[@class='frm-active']//a[@id='frm_insert_fields_tab']" ).should( 'contain', 'Add Fields' );
 } );
 
 Cypress.Commands.add( 'getCurrentFormattedDate', () => {
