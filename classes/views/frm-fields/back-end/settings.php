@@ -330,7 +330,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 
 		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
-				<label class="frm-flex! frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
+				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
 					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
 					<span class="-frm-mt-2xs"><?php esc_html_e( 'If this URL points to an image, show to image on the entries listing page.', 'formidable' ); ?></span>
 				</label>
