@@ -96,7 +96,8 @@ zip -r $zipname $destination \
 	-x "*/report-task.txt" \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
-	-x "formidable-ai/resources/*"
+	-x "formidable-ai/resources/*" \
+	-x "*/webpack.dev.js"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination
