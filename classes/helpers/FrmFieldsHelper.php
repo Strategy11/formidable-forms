@@ -2431,7 +2431,7 @@ class FrmFieldsHelper {
 	/**
 	 * Render AI generate options button.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param array $args Field arguments.
 	 * @param bool  $should_hide_bulk_edit Whether to hide bulk edit.
@@ -2455,7 +2455,7 @@ class FrmFieldsHelper {
 		);
 
 		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
-			// Backwards compatibility "@since x.x".
+			// Backwards compatibility "@since 6.24".
 			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
 				$data = array(
 					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
@@ -2480,7 +2480,7 @@ class FrmFieldsHelper {
 	/**
 	 * Get AI generate options button class.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @return string Button class.
 	 */

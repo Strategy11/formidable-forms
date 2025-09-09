@@ -1027,7 +1027,7 @@ function frmAdminBuildJS() {
 	/**
 	 * When a field is moved into a field group, make sure the field group is draggable.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param {HTMLElement} placeholderParent
 	 * @return {void}
@@ -10163,7 +10163,7 @@ function frmAdminBuildJS() {
 	/**
 	 * Enforce the maximum number of entries list columns dynamically.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @return {void}
 	 */

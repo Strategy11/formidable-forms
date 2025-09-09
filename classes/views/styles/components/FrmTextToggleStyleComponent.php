@@ -8,7 +8,7 @@ class FrmTextToggleStyleComponent extends FrmStyleComponent {
 	/**
 	 * The view file name.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @var string
 	 */
@@ -17,7 +17,7 @@ class FrmTextToggleStyleComponent extends FrmStyleComponent {
 	/**
 	 * Construct FrmTextToggleStyleComponent.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
 		$this->init( $data, $field_name, $field_value );

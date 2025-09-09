@@ -210,7 +210,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							continue;
 						}
 
-						// Backwards compatibility "@since x.x".
+						// Backwards compatibility "@since 6.24".
 						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
 							switch ( $type ) {
 								case 'calc':
