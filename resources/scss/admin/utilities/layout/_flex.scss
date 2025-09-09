@@ -47,7 +47,7 @@
 	@extend %frm-flex-center;
 }
 
-.frm-flex-center\! {
+.frm-force-flex-center {
 	display: flex !important;
 
 	@extend %frm-flex-center;
