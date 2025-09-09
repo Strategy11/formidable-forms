@@ -59,7 +59,7 @@ class FrmHtmlHelper {
 	/**
 	 * Renders a number input with unit selector.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param array $args {
 	 *     Optional. Arguments to customize the unit input.

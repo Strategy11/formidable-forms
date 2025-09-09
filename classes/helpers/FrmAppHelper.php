@@ -4603,7 +4603,7 @@ class FrmAppHelper {
 	/**
 	 * Check if a string is valid UTF-8.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param string $string The string to check.
 	 * @return bool

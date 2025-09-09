@@ -1832,10 +1832,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
-	 * @deprecated x.x
+	 * @deprecated 6.24
 	 */
 	protected function get_add_option_string() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.24' );
 		return __( 'Add Option', 'formidable' );
 	}
 }
