@@ -56,7 +56,7 @@
 /* END FadeIn 3d */
 
 .frm-background-highlight {
-	animation: backgroundHighlight 1000ms ease-in forwards;
+	animation: backgroundHighlight var(--highlight-time, 2750ms) ease-in forwards;
 }
 
 @keyframes fadeIn {
