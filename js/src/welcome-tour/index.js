@@ -57,4 +57,11 @@ function initalizeWelcomeTourChecklist() {
 		floatingLinksElement.style.display = 'none';
 	}
 
+	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {
+		const stepElement = document.createElement( 'div' );
+		stepElement.id = `frm-welcome-tour-checklist-step-${ stepKey }`;
+		stepElement.className = 'frm-welcome-tour-checklist-step';
+		stepElement.textContent = stepValue.title;
+		checklistElement.appendChild( stepElement );
+	} );
 }

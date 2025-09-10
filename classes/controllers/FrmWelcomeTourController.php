@@ -95,19 +95,20 @@ class FrmWelcomeTourController {
 			$completed = false;
 
 			switch ( $step_key ) {
-				case 'create-a-form':
+				case 'create-first-form':
 					$completed = self::more_than_the_default_form_exists();
 					break;
 
-				case 'update-form':
+				case 'add-fields':
 					// TODO
 					break;
 
-				case 'first-entry':
-					$entry_id = FrmDb::get_var( 'frm_items', array(), 'id' );
-					if ( $entry_id ) {
-						$completed = true;
-					}
+				case 'style-form':
+					// TODO
+					break;
+
+				case 'embed-form':
+					// TODO
 					break;
 			}
 
@@ -230,14 +231,21 @@ class FrmWelcomeTourController {
 	 */
 	private static function get_steps() {
 		return array(
-			'create-a-form' => array(
-				'title' => __( 'Create a Form', 'formidable' ),
+			'create-first-form' => array(
+				'title'       => __( 'Create your first form', 'formidable' ),
+				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
 			),
-			'update-form' 	=> array(
-				'title' => __( 'Update a Form', 'formidable' ),
+			'add-fields' 	=> array(
+				'title'       => __( 'Add fields to your form', 'formidable' ),
+				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
 			),
-			'first-entry' => array(
-				'title' => __( 'Create First Entry', 'formidable' ),
+			'style-form' => array(
+				'title'       => __( 'Style your form', 'formidable' ),
+				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
+			),
+			'embed-form' => array(
+				'title'       => __( 'Embed in a page', 'formidable' ),
+				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
 			),
 		);
 	}

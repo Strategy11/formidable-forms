@@ -18,3 +18,12 @@
     box-sizing: border-box;
     color: #fff;
 }
+
+.frm-welcome-tour-checklist-step {
+	height: 50px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-left: 16px;
+}
