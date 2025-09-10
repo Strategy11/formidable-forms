@@ -1,4 +1,7 @@
 == Changelog ==
+= 6.24.1 =
+* Fix: Importing entries with a CSV file stopped working with v6.24.
+
 = 6.24 =
 * New: Field settings have been redesigned.
 * Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
