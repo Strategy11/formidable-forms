@@ -34,7 +34,7 @@ export class frmAnimate {
 	 * ex: new frmAnimate( elements, 'cascade' ).cascadeFadeIn();
 	 *     new frmAnimate( elements, 'cascade-3d' ).cascadeFadeIn();
 	 *
-	 * @param {float} delay The transition delay value.
+	 * @param {number} delay The transition delay value.
 	 */
 	cascadeFadeIn( delay = 0.03 ) {
 		setTimeout( () => {

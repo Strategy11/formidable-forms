@@ -76,8 +76,58 @@
 	padding-bottom: 10px;
 }
 
+// Fix multiselect dropdown overlap issue with collapsed sections
+.frm-collapse-me.frm_grid_container:has(.dropdown-toggle.multiselect) {
+	position: relative;
+	z-index: 1;
+}
+
 .frm-collapsed + div {
 	height: 0;
 	padding: 0;
-	border-bottom: 2px solid var(--sidebar-hover);
+
+	&.frm-collapse-me {
+		display: none;
+	}
+}
+
+.frm-collapsible {
+	$self: &;
+
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	font-weight: 700;
+	padding: var(--gap-xs) 0;
+	margin: 0;
+	cursor: pointer;
+
+	/* prevent text selection */
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+	&.frm-collapsed {
+		font-weight: 400;
+	}
+
+	&:not(.frm-collapsed) {
+
+		.frmsvg {
+			transform: rotate(-180deg);
+		}
+	}
+
+	@at-root h4#{$self} {
+		font-size: var(--text-md);
+	}
+
+	+ .frm-collapse-me {
+		padding-bottom: 0;
+	}
+
+	&:focus-visible {
+		outline: 1px solid var(--primary-500);
+	}
 }

@@ -500,6 +500,7 @@ DEFAULT_HTML;
 		$should_hide_bulk_edit = apply_filters( 'frm_should_hide_bulk_edit', $display_format === '1', $display_format, $args );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php';
+		FrmFieldsHelper::render_ai_generate_options_button( $args, $should_hide_bulk_edit );
 	}
 
 	/**
@@ -598,13 +599,6 @@ DEFAULT_HTML;
 	/**
 	 * @since 4.04
 	 */
-	protected function get_add_option_string() {
-		return __( 'Add Option', 'formidable' );
-	}
-
-	/**
-	 * @since 4.04
-	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
 	}
@@ -658,7 +652,7 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
-			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 			?>
 		</h3>
 		<?php
@@ -1225,7 +1219,7 @@ DEFAULT_HTML;
 
 		return $hidden;
 	}
-	
+
 	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
@@ -1834,5 +1828,14 @@ DEFAULT_HTML;
 	protected function get_select_atributes( $values ) {
 		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
 		return $this->get_select_attributes( $values );
+	}
+
+	/**
+	 * @since 4.04
+	 * @deprecated 6.24
+	 */
+	protected function get_add_option_string() {
+		_deprecated_function( __METHOD__, '6.24' );
+		return __( 'Add Option', 'formidable' );
 	}
 }
