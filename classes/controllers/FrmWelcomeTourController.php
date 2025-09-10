@@ -199,9 +199,7 @@ class FrmWelcomeTourController {
 	private static function get_js_variables() {		
 		return array(
 			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
-			'i18n'                 => array(
-				'CHECKLIST_TEXT' => __( 'Checklist', 'formidable' ),
-			),
+			'i18n'                 => array(),
 			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
 			'CHECKLIST_STEPS'        => self::get_steps(),
 		);
