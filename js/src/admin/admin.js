@@ -229,7 +229,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 	return app;
 }( document, window, jQuery ) );
 
-function frmAdminBuildJS() {
+window.frmAdminBuildJS = function() {
 	//'use strict';
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
@@ -11415,7 +11415,7 @@ function frmAdminBuildJS() {
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
 	};
-}
+};
 
 window.frmAdminBuild = frmAdminBuildJS();
 
