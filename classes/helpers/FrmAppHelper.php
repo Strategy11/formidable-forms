@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.23';
+	public static $plug_version = '6.24.1';
 
 	/**
 	 * @var bool
@@ -1540,6 +1540,7 @@ class FrmAppHelper {
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
 			'value'       => false,
+			'class'       => '',
 		);
 		$atts     = array_merge( $defaults, $atts );
 
@@ -1574,13 +1575,11 @@ class FrmAppHelper {
 			$input_atts['autocomplete'] = 'off';
 		}
 		?>
-		<p class="frm-search">
+		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-
-			<?php self::icon_by_class( 'frm_icon_font frm_search_icon' ); ?>
-
+			<?php self::icon_by_class( 'frm_icon_font frm_search_icon frm_svg20' ); ?>
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -3924,12 +3923,6 @@ class FrmAppHelper {
 		$new_args['options']     = (array) $new_args['options'];
 		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
 
-		// Set the number of columns.
-		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
-		if ( $new_args['col_class'] > 6 ) {
-			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
-		}
-
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
 		 *
@@ -4241,13 +4234,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Enhances upgrade data parameters with installation link and plan requirement information.
+	 *
 	 * @since 5.0.17
 	 *
-	 * @param string $plugin
-	 * @param array  $params
-	 * @return array
+	 * @param string $plugin   The plugin slug to get installation data for.
+	 * @param array  $params   Initial parameters for the upgrade data.
+	 * @param bool   $detailed Whether to include detailed information.
+	 * @return array Modified parameters with installation data.
 	 */
-	public static function get_upgrade_data_params( $plugin, $params ) {
+	public static function get_upgrade_data_params( $plugin, $params, $detailed = false ) {
 		$link = FrmAddonsController::install_link( $plugin );
 		if ( ! $link ) {
 			return $params;
@@ -4260,7 +4256,11 @@ class FrmAppHelper {
 				$params['medium'] = $plugin;
 			}
 		} else {
-			$params['requires'] = FrmFormsHelper::get_plan_required( $link );
+			$params['requires'] = $params['requires'] ?? FrmFormsHelper::get_plan_required( $link );
+		}
+
+		if ( $detailed ) {
+			$params['plugin-status'] = $link['status'] ?? '';
 		}
 
 		return $params;
@@ -4612,6 +4612,26 @@ class FrmAppHelper {
 	public static function no_gdpr_cookies() {
 		$frm_settings = self::get_settings();
 		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if a string is valid UTF-8.
+	 *
+	 * @since 6.24
+	 *
+	 * @param string $string The string to check.
+	 * @return bool
+	 */
+	public static function is_valid_utf8( $string ) {
+		// wp_is_valid_utf8 is added in WP 6.9.
+		if ( function_exists( 'wp_is_valid_utf8' ) ) {
+			return wp_is_valid_utf8( $string );
+		}
+		// As of WP 6.9, seems_utf8 is deprecated.
+		if ( function_exists( 'seems_utf8' ) ) {
+			return seems_utf8( $string );
+		}
+		return false;
 	}
 
 	/**

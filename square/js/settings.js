@@ -50,7 +50,7 @@
 
 	function getSquareTestSetupModalContent() {
 		const signUpUrl = 'https://app.squareup.com/signup/';
-		const confirmationTrigger = frmDom.a({ id: 'frm_confirm_square_test_modal', text: 'here', target: '_blank' });
+		const confirmationTrigger = frmDom.a( { id: 'frm_confirm_square_test_modal', text: 'here', target: '_blank' } );
 		confirmationTrigger.addEventListener( 'click', function( e ) {
 			e.preventDefault();
 			const modal = document.getElementById( 'frm_square_test_setup_modal' );
@@ -72,8 +72,8 @@
 					frmDom.tag( 'div', { className: 'frm_note_style', text: 'Important! If you skip these initial steps, you will get stuck on a white screen.' } ),
 					frmDom.tag( 'ol',
 						{ children: [
-							frmDom.span( { children: [ 'Click ', frmDom.a({ href: signUpUrl, text: 'here' }), ' to create a Square account if you do not already have one.' ] } ),
-							frmDom.span( { children: [ 'Click ', frmDom.a({ href: 'https://developer.squareup.com/console/en/sandbox-test-accounts', text: 'here', target: '_blank' }), ' and create a Square sandbox test account.' ] } ),
+							frmDom.span( { children: [ 'Click ', frmDom.a( { href: signUpUrl, text: 'here' } ), ' to create a Square account if you do not already have one.' ] } ),
+							frmDom.span( { children: [ 'Click ', frmDom.a( { href: 'https://developer.squareup.com/console/en/sandbox-test-accounts', text: 'here', target: '_blank' } ), ' and create a Square sandbox test account.' ] } ),
 							'Click "Square Dashboard" for the new sandbox test account. Leave the tab open and return to this page.',
 							frmDom.span( { children: [ 'Click ', confirmationTrigger, '. You will be taken to Square to allow the required permissions for handling payments.' ] } ),
 						].map(

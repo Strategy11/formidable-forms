@@ -1,1 +1,1 @@
-export const { onClickPreventDefault } = window.frmDom.util;
+export const { onClickPreventDefault, documentOn } = window.frmDom.util;
