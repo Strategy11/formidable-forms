@@ -121,16 +121,17 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
 		element._counterAnimation = requestAnimationFrame( timestamp =>
 			animateCounter( timestamp, element, startValue, targetValue, duration, change, easing )
 		);
-	} else {
-		// Ensure final value is exact
-		element.textContent = String( targetValue );
-
-		// Clean up all counter-related properties
-		[ '_counterAnimation', '_counterStartTime', '_counterLastTimestamp', '_counterFrameDropCount', '_counterLastValue' ]
-			.forEach( prop => delete element[ prop ] );
-
-		element.style.removeProperty( 'transition' );
+		return;
 	}
+
+	// Ensure final value is exact
+	element.textContent = String( targetValue );
+
+	// Clean up all counter-related properties
+	[ '_counterAnimation', '_counterStartTime', '_counterLastTimestamp', '_counterFrameDropCount', '_counterLastValue' ]
+		.forEach( prop => delete element[ prop ] );
+
+	element.style.removeProperty( 'transition' );
 };
 
 /**
