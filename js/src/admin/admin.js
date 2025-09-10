@@ -11490,7 +11490,7 @@ window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callb
 	} );
 };
 
-window.frmImportCsv = ( formID ) => {
+window.frmImportCsv = formID => {
 	let urlVars = '';
 	if ( typeof __FRMURLVARS !== 'undefined' ) {
 		urlVars = __FRMURLVARS;
