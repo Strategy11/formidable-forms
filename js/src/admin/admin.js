@@ -229,7 +229,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 	return app;
 }( document, window, jQuery ) );
 
-function frmAdminBuildJS() {
+window.frmAdminBuildJS = function() {
 	//'use strict';
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
@@ -11415,7 +11415,7 @@ function frmAdminBuildJS() {
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
 	};
-}
+};
 
 window.frmAdminBuild = frmAdminBuildJS();
 
@@ -11455,24 +11455,24 @@ jQuery( document ).ready(
 	}
 );
 
-function frm_show_div( div, value, showIf, classId ) { // eslint-disable-line camelcase
+window.frm_show_div = ( div, value, showIf, classId ) => { // eslint-disable-line camelcase
 	if ( value == showIf ) {
 		jQuery( classId + div ).fadeIn( 'slow' ).css( 'visibility', 'visible' );
 	} else {
 		jQuery( classId + div ).fadeOut( 'slow' );
 	}
-}
+};
 
-function frmCheckAll( checked, n ) {
+window.frmCheckAll = ( checked, n ) => {
 	jQuery( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
-}
+};
 
-function frmCheckAllLevel( checked, n, level ) {
+window.frmCheckAllLevel = ( checked, n, level ) => {
 	const $kids = jQuery( '.frm_catlevel_' + level ).children( '.frm_checkbox' ).children( 'label' );
 	$kids.children( 'input[name^="' + n + '"]' ).prop( 'checked', ! ! checked );
-}
+};
 
-function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName, callback ) {
+window.frmGetFieldValues = ( fieldId, cur, rowNumber, fieldType, htmlName, callback ) => {
 	if ( ! fieldId ) {
 		return;
 	}
@@ -11488,9 +11488,9 @@ function frmGetFieldValues( fieldId, cur, rowNumber, fieldType, htmlName, callba
 			}
 		}
 	} );
-}
+};
 
-function frmImportCsv( formID ) {
+window.frmImportCsv = formID => {
 	let urlVars = '';
 	if ( typeof __FRMURLVARS !== 'undefined' ) {
 		urlVars = __FRMURLVARS;
@@ -11516,4 +11516,4 @@ function frmImportCsv( formID ) {
 			}
 		}
 	} );
-}
+};
