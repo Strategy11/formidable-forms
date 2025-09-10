@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 6.23
+Stable tag: 6.24
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,16 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.24 =
+* New: Field settings have been redesigned.
+* Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
+* Fix: Conditional logic field IDs would not properly update after importing an XML.
+* Fix: Line breaks used in Quiz Outcome actions would not properly import.
+* Fix: In some cases, a field group would not be draggable after a field was added beside another field.
+* Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
+* Fix: JS errors would occur in some cases after deleting a field group or section.
+* Fix: The line height style setting is no longer applied to the label in the visual styler preview.
+
 = 6.23 =
 * New: The GDPR agreement text can now be translated using the WPML or Polylang add-ons.
 * New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.
@@ -403,21 +413,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Database queries would not use cached query data when the query resulted in no results.
 * Fix: Name fields would not work correctly when using the minimize=1 option.
 * Form previews are now automatically restricted to privileged users for the contact-us key to help prevent spam.
-
-= 6.22 =
-* New: Support for Square payments has been added.
-* Fix: Option validation would fail in some cases where shortcodes were used in options.
-* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
-* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
-* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
-* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
-* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox.
-* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
-* Fix: Honeypots would not properly get hidden for forms loaded in the footer.
-* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
-* Fix: A JavaScript error would occur for inline modals in the builder after deleting a field.
-* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox.
-* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

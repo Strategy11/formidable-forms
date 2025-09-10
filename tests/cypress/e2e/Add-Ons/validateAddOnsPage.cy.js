@@ -160,7 +160,7 @@ describe( 'Add-Ons page', () => {
 		} );
 
 		cy.origin( 'https://formidableforms.com', () => {
-			cy.get( 'h1' ).should( 'have.text', 'Formidable Forms Docs & Support' );
+			cy.get( 'h1' ).should( 'have.text', 'Docs & Support' );
 		} );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-addons' );

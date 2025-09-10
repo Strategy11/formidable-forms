@@ -16,7 +16,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} el        The HTML element.
 	 * @param {string}      eventName Event name.
-	 * @param {mixed}       data      The passed data.
+	 * @param {*}           data      The passed data.
 	 */
 	function triggerCustomEvent( el, eventName, data ) {
 		if ( typeof window.CustomEvent !== 'function' ) {

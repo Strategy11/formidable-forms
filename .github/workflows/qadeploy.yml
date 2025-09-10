@@ -13,11 +13,18 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v3.5.0
 
+    - name: 🔄 Sanitize branch name
+      id: sanitize
+      run: |
+        BRANCH="${{ github.event.pull_request.head.ref }}"
+        SANITIZED_BRANCH="${BRANCH//\//-}"
+        echo "sanitized_branch=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
+
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.1
       with:
         server: ${{ secrets.FRM_FTP_HOST }}
-        server-dir: ${{ github.event.repository.name }}-${{ github.event.pull_request.head.ref }}/
+        server-dir: ${{ github.event.repository.name }}-${{ steps.sanitize.outputs.sanitized_branch }}/
         username: ${{ secrets.FRM_FTP_USERNAME }}
         password: ${{ secrets.FRM_FTP_PASSWORD }}
         exclude: |
