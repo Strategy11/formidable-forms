@@ -60,7 +60,7 @@ function getBeginTourButton() {
 }
 
 function startTour() {
-	
+	window.location.href = frmWelcomeTourVars.TOUR_URL;
 }
 
 /**
