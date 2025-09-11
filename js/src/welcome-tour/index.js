@@ -14,22 +14,49 @@ domReady( () => {
 		initializeModal();
 	}
 
-	if ( onFormTemplatesPage() ) {
-		initalizeWelcomeTourChecklist();
-	}
+	initalizeWelcomeTourChecklist();
 } );
 
+/**
+ * Checks if the current page is the editor page.
+ *
+ * @return {boolean} True if the current page is the editor page, false otherwise.
+ */
+function onEditorPage() {
+	const editorContainer = document.getElementById( 'frm_form_editor_container' );
+	return editorContainer !== null;
+}
+
+/**
+ * Checks if the current page is the form templates page.
+ *
+ * @return {boolean} True if the current page is the form templates page, false otherwise.
+ */
 function onFormTemplatesPage() {
 	const urlObj = new URL( window.location.href );
 	return urlObj.searchParams.get( 'page' ) === 'formidable-form-templates';
 }
 
+/**
+ * Checks if the current page is the dashboard page.
+ *
+ * @return {boolean} True if the current page is the dashboard page, false otherwise.
+ */
 function onDashboardPage() {
 	const urlObj = new URL( window.location.href );
 	return urlObj.searchParams.get( 'page' ) === 'formidable-dashboard';
 }
 
+/**
+ * Initializes the welcome tour checklist.
+ *
+ * @return {void}
+ */
 function initalizeWelcomeTourChecklist() {
+	if ( ! shouldShowChecklist() ) {
+		return;
+	}
+
 	// TODO: Add the new element to document.body.
 	// This element will be used to display the checklist.
 	// We'll hide the floating links elements.
@@ -41,6 +68,19 @@ function initalizeWelcomeTourChecklist() {
 	document.body.appendChild( buildChecklistElement() );
 
 	hideFloatingLinks();
+}
+
+function shouldShowChecklist() {
+	const activeStep = frmWelcomeTourVars.CHECKLIST_ACTIVE_STEP;
+
+	switch ( activeStep ) {
+		case 'create-first-form':
+			return onFormTemplatesPage();
+		case 'add-fields':
+			return onEditorPage();
+		default:
+			return false;
+	}
 }
 
 /**
