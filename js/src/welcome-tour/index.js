@@ -9,6 +9,8 @@ import domReady from '@wordpress/dom-ready';
 import { initializeModal } from './ui';
 import { div, svg } from 'core/utils';
 
+let checklistElement;
+
 domReady( () => {
 	if ( onDashboardPage() ) {
 		initializeModal();
@@ -25,6 +27,11 @@ domReady( () => {
 function onEditorPage() {
 	const editorContainer = document.getElementById( 'frm_form_editor_container' );
 	return editorContainer !== null;
+}
+
+function onStylerPage() {
+	const stylerPreviewContainer = document.getElementById( 'frm_active_style_form' );
+	return stylerPreviewContainer !== null;
 }
 
 /**
@@ -68,6 +75,48 @@ function initalizeWelcomeTourChecklist() {
 	document.body.appendChild( buildChecklistElement() );
 
 	hideFloatingLinks();
+
+	if ( onEditorPage() ) {
+		document.addEventListener( 'frm_added_field', function() {
+			markStepAsCompleted( 'add-fields' );
+		} );
+	}
+
+	if ( onStylerPage() ) {
+		const updatedMessage = document.querySelector( '.frm_updated_message' );
+		if ( updatedMessage ) {
+			markStepAsCompleted( 'style-form' );
+		}
+	}
+}
+
+/**
+ * Marks a step as completed.
+ *
+ * @param {string} stepKey The step key.
+ * @return {void}
+ */
+function markStepAsCompleted( stepKey ) {
+	if ( ! checklistElement ) {
+		return;
+	}
+
+	const stepElement = checklistElement.querySelector( `#frm-welcome-tour-checklist-step-${ stepKey }` );
+	if ( ! stepElement ) {
+		return;
+	}
+
+	if ( ! stepElement.classList.contains( 'frm-welcome-tour-active-step' ) ) {
+		return;
+	}
+
+	stepElement.classList.remove( 'frm-welcome-tour-active-step' );
+	stepElement.nextElementSibling?.classList.add( 'frm-welcome-tour-active-step' );
+
+	const icon = stepElement.querySelector( 'svg' );
+	if ( icon ) {
+		icon.replaceWith( svg({ href: '#frm_complete_status_icon' }) );
+	}
 }
 
 function shouldShowChecklist() {
@@ -78,6 +127,10 @@ function shouldShowChecklist() {
 			return onFormTemplatesPage();
 		case 'add-fields':
 			return onEditorPage();
+		case 'style-form':
+			return onEditorPage() || onStylerPage();
+		case 'embed-form':
+			return onStylerPage();
 		default:
 			return false;
 	}
@@ -89,8 +142,9 @@ function shouldShowChecklist() {
  * @return {HTMLElement} The checklist element.
  */
 function buildChecklistElement() {
-	const checklistElement = div({ id: 'frm-welcome-tour-checklist' });
-	const stepsWrapper     = div({ className: 'frm-welcome-tour-checklist-steps' });
+	checklistElement = div({ id: 'frm-welcome-tour-checklist' });
+
+	const stepsWrapper = div({ className: 'frm-welcome-tour-checklist-steps' });
 
 	checklistElement.appendChild( buildChecklistHeader() );
 	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {

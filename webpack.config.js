@@ -41,7 +41,8 @@ const entries = {
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
-    font_icons: './resources/scss/font_icons.scss'
+    font_icons: './resources/scss/font_icons.scss',
+    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss'
   }
 };
 

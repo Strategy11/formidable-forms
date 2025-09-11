@@ -61,6 +61,8 @@ class FrmWelcomeTourController {
 	public static function load_admin_hooks() {
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
 
+		// self::$checklist['completed_steps'] = array();
+
 		if ( 'done' === self::$checklist ) {
 			return;
 		}
@@ -73,10 +75,13 @@ class FrmWelcomeTourController {
 
 		// TODO: remove this after development
 		self::$checklist['seen'] = false;
-		self::set_checklist( self::$checklist );
+		self::set_checklist();
 
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+
+		add_action( 'frm_after_changed_form_style', __CLASS__ . '::maybe_mark_styler_step_as_completed' );
+		add_action( 'frm_after_saved_style', __CLASS__ . '::maybe_mark_styler_step_as_completed' );
 	}
 
 	/**
@@ -84,31 +89,20 @@ class FrmWelcomeTourController {
 	 */
 	private static function maybe_check_for_completed_steps() {
 		if ( ! isset( self::$checklist['completed_steps'] ) ) {
-			return;
+			self::$checklist['completed_steps'] = array();
 		}
-
-		self::$checklist['completed_steps'] = array();
 
 		$steps     = self::get_steps();
 		$step_keys = array_keys( $steps );
 		foreach ( $step_keys as $step_key ) {
-			$completed = false;
+			$completed = in_array( $step_key, self::$checklist['completed_steps'], true );
+			if ( $completed ) {
+				continue;
+			}
 
 			switch ( $step_key ) {
 				case 'create-first-form':
 					$completed = self::more_than_the_default_form_exists();
-					break;
-
-				case 'add-fields':
-					// TODO
-					break;
-
-				case 'style-form':
-					// TODO
-					break;
-
-				case 'embed-form':
-					// TODO
 					break;
 			}
 
@@ -127,7 +121,7 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist['step'] = $current_step;
-		self::set_checklist( self::$checklist );
+		self::set_checklist();
 	}
 
 	/**
@@ -166,7 +160,7 @@ class FrmWelcomeTourController {
 	 */
 	private static function mark_welcome_tour_as_seen() {
 		self::$checklist['seen'] = true;
-		self::set_checklist( self::$checklist );
+		self::set_checklist();
 	}
 
 	/**
@@ -212,7 +206,7 @@ class FrmWelcomeTourController {
 
 	private static function get_active_step() {
 		// TODO
-		return 'add-fields';
+		return 'embed-form';
 	}
 
 	/**
@@ -266,6 +260,7 @@ class FrmWelcomeTourController {
 		foreach ( $steps as $step_key => $step ) {
 			$steps[ $step_key ]['complete'] = in_array( $step_key, self::$checklist['completed_steps'], true );
 		}
+		$steps['add-fields']['complete'] = true; // Remove this.
 		return $steps;
 	}
 
@@ -288,8 +283,7 @@ class FrmWelcomeTourController {
 	 *
 	 * @param array $checklist The checklist data to set.
 	 */
-	public static function set_checklist( $checklist ) {
-		self::$checklist = $checklist;
+	public static function set_checklist() {
 		update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
 	}
 
@@ -302,5 +296,14 @@ class FrmWelcomeTourController {
 	 */
 	public static function get_checklist() {
 		return self::$checklist;
+	}
+
+	public static function maybe_mark_styler_step_as_completed() {
+		if ( in_array( 'style-form', self::$checklist['completed_steps'], true ) ) {
+			return;
+		}
+
+		self::$checklist['completed_steps'][] = 'style-form';
+		self::set_checklist();
 	}
 }
