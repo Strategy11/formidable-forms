@@ -206,7 +206,13 @@ class FrmWelcomeTourController {
 			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
 			'CHECKLIST_STEPS'        => self::get_steps(),
 			'TOUR_URL'               => admin_url( 'admin.php?page=formidable-form-templates' ),
+			'CHECKLIST_ACTIVE_STEP'  => self::get_active_step(),
 		);
+	}
+
+	private static function get_active_step() {
+		// TODO
+		return 'add-fields';
 	}
 
 	/**
@@ -230,7 +236,7 @@ class FrmWelcomeTourController {
 	 * @return array
 	 */
 	private static function get_steps() {
-		return array(
+		$steps = array(
 			'create-first-form' => array(
 				'title'       => __( 'Create your first form', 'formidable' ),
 				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
@@ -248,6 +254,19 @@ class FrmWelcomeTourController {
 				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
 			),
 		);
+		$steps = self::fill_step_completed_data( $steps );
+		return $steps;
+	}
+
+	/**
+	 * @param array $steps
+	 * @return array
+	 */
+	private static function fill_step_completed_data( $steps ) {
+		foreach ( $steps as $step_key => $step ) {
+			$steps[ $step_key ]['complete'] = in_array( $step_key, self::$checklist['completed_steps'], true );
+		}
+		return $steps;
 	}
 
 	/**

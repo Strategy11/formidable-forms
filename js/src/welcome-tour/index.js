@@ -7,6 +7,7 @@ import domReady from '@wordpress/dom-ready';
  * Internal dependencies
  */
 import { initializeModal } from './ui';
+import { div, svg } from 'core/utils';
 
 domReady( () => {
 	if ( onDashboardPage() ) {
@@ -17,10 +18,6 @@ domReady( () => {
 		initalizeWelcomeTourChecklist();
 	}
 } );
-
-function getProgressBarPercent() {
-	return frmWelcomeTourVars.PROGRESS_BAR_PERCENT;
-}
 
 function onFormTemplatesPage() {
 	const urlObj = new URL( window.location.href );
@@ -41,27 +38,85 @@ function initalizeWelcomeTourChecklist() {
 	// The checklist needs to be collapsible.
 	// The bottom should include a "Dismiss Checklist" button.
 
-	const checklistElement = document.createElement( 'div' );
-	checklistElement.id = 'frm-welcome-tour-checklist';
+	document.body.appendChild( buildChecklistElement() );
 
-	const checklistHeader = document.createElement( 'div' );
-	checklistHeader.className = 'frm-welcome-tour-checklist-header';
-	checklistHeader.textContent = frmWelcomeTourVars.i18n.CHECKLIST_HEADER_TITLE;
-	checklistElement.appendChild( checklistHeader );
+	hideFloatingLinks();
+}
 
-	document.body.appendChild( checklistElement );
+/**
+ * Build the checklist element.
+ *
+ * @return {HTMLElement} The checklist element.
+ */
+function buildChecklistElement() {
+	const checklistElement = div({ id: 'frm-welcome-tour-checklist' });
+	const stepsWrapper     = div({ className: 'frm-welcome-tour-checklist-steps' });
 
-	// Hide the floating links elements.
+	checklistElement.appendChild( buildChecklistHeader() );
+	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {
+		stepsWrapper.appendChild( buildChecklistStep( stepKey, stepValue ) );
+	} );
+	checklistElement.appendChild( stepsWrapper );
+
+	return checklistElement;
+}
+
+/**
+ * Build the checklist header element.
+ *
+ * @return {HTMLElement} The checklist header element.
+ */
+function buildChecklistHeader() {
+	return div({
+		className: 'frm-welcome-tour-checklist-header',
+		text: frmWelcomeTourVars.i18n.CHECKLIST_HEADER_TITLE,
+	});
+}
+
+/**
+ * Build a checklist step element.
+ *
+ * @param {string} stepKey The step key.
+ * @param {Object} stepData The step data.
+ * @return {HTMLElement} The checklist step element.
+ */
+function buildChecklistStep( stepKey, stepData ) {
+	const status          = stepData.complete ? 'complete' : 'incomplete';
+	const stepImage       = svg({ href: `#frm_${ status }_status_icon` });
+	const stepTitle       = document.createTextNode( stepData.title );
+	const stepMainContent = div({
+		className: 'frm-welcome-tour-checklist-step-main-content',
+		children: [ stepImage, stepTitle ]
+	});
+	const stepDescription = div({
+		text: stepData.description,
+		className: 'frm-welcome-tour-checklist-step-description',
+	});
+	const step            = div({
+		id: `frm-welcome-tour-checklist-step-${ stepKey }`,
+		className: 'frm-welcome-tour-checklist-step',
+		children: [ stepMainContent, stepDescription ]
+	});
+	if ( isActiveStep( stepKey ) ) {
+		step.classList.add( 'frm-welcome-tour-active-step' );
+	}
+	return step;
+}
+
+function isActiveStep( stepKey ) {
+	return frmWelcomeTourVars.CHECKLIST_ACTIVE_STEP === stepKey;
+}
+
+/**
+ * Hide the floating links elements.
+ */
+function hideFloatingLinks() {
 	const floatingLinksElement = document.querySelector( '.s11-floating-links' );
 	if ( floatingLinksElement ) {
 		floatingLinksElement.style.display = 'none';
 	}
+}
 
-	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {
-		const stepElement = document.createElement( 'div' );
-		stepElement.id = `frm-welcome-tour-checklist-step-${ stepKey }`;
-		stepElement.className = 'frm-welcome-tour-checklist-step';
-		stepElement.textContent = stepValue.title;
-		checklistElement.appendChild( stepElement );
-	} );
+function getProgressBarPercent() {
+	return frmWelcomeTourVars.PROGRESS_BAR_PERCENT;
 }
