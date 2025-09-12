@@ -28,7 +28,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<li class="<?php echo esc_attr( $classes ); ?>" data-category="<?php echo esc_attr( $category_slug ); ?>" tabindex="0" aria-label="<?php echo esc_attr( $aria_label ); ?>">
 			<span class="frm-page-skeleton-cat-text"><?php echo esc_html( $category_data['name'] ); ?></span>
-			<span class="frm-page-skeleton-cat-count"><?php echo esc_html( $category_data['count'] ); ?></span>
+			<span class="frm-page-skeleton-cat-count">
+				<?php
+				if ( 'available-templates' !== $category_slug ) {
+					echo esc_html( $category_data['count'] );
+				}
+				?>
+			</span>
 		</li>
 		<?php
 	}//end foreach

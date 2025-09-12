@@ -269,9 +269,10 @@
 @import 'components/builder/submit-field';
 @import 'components/accordion/accordion-title';
 @import 'components/square';
-@import 'components/sales/banner';
+@import 'components/banner/sale-banner';
+@import 'components/banner/get-free-templates-banner';
 
 /**
  * Backwards Compatibility
  */
-@import 'backwards-compatibility';
+ @import 'backwards-compatibility';

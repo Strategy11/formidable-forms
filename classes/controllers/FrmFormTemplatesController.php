@@ -49,6 +49,13 @@ class FrmFormTemplatesController {
 	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
 
 	/**
+	 * The keys of the free templates.
+	 *
+	 * @var array FREE_TEMPLATES_KEYS Unique keys for the free templates.
+	 */
+	const FREE_TEMPLATES_KEYS = array( 20872734, 28223640 );
+
+	/**
 	 * Option name to store favorite templates.
 	 *
 	 * @var string FAVORITE_TEMPLATES_OPTION Unique identifier for storing favorite templates.
@@ -226,6 +233,15 @@ class FrmFormTemplatesController {
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
 
+			if ( FrmFormTemplatesHelper::needs_get_free_templates_banner() ) {
+				$leave_email_args = array(
+					'title'              => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
+					'description'        => esc_html__( 'Just add your email address and you\'ll get 30+ free form templates to your account.', 'formidable' ),
+					'submit_button_text' => esc_html_x( 'Get Templates', 'get free templates modal submit button text', 'formidable' ),
+				);
+				$view_parts[]     = 'modals/leave-email-modal.php';
+			}
+
 			// Add 'upgrade' modal view for non-elite users.
 			if ( 'elite' !== FrmAddonsController::license_type() ) {
 				$view_parts[] = 'modals/upgrade-modal.php';
@@ -373,6 +389,35 @@ class FrmFormTemplatesController {
 		// Send response.
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Handle AJAX request to subscribe the user to ActiveCampaign.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function ajax_get_free_templates() {
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
+
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
+				WP_Http::BAD_REQUEST
+			);
+		}
+
+		self::$form_template_api = new FrmFormTemplateApi();
+		self::$form_template_api->reset_cached();
+
+		FrmEmailCollectionHelper::subscribe_to_active_campaign( $email );
+		self::$form_template_api::set_free_license_code( '1' );
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -675,6 +720,7 @@ class FrmFormTemplatesController {
 	private static function get_js_variables() {
 		$js_variables = array(
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
+			'FREE_TEMPLATES_KEYS'     => self::FREE_TEMPLATES_KEYS,
 			'templatesCount'          => self::get_template_count(),
 			'favoritesCount'          => array(
 				'total'   => self::get_favorite_templates_count(),
