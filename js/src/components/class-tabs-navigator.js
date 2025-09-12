@@ -16,6 +16,7 @@ export class frmTabsNavigator {
 		this.slideTrack = this.wrapper.querySelector( '.frm-tabs-slide-track' );
 		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
 		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+		this.resizeObserver = null;
 
 		this.init();
 	}
@@ -29,6 +30,10 @@ export class frmTabsNavigator {
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 		} );
+
+		this.setupScrollbarObserver();
+		// Cleanup observers when page unloads to prevent memory leaks
+		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
 	}
 
 	onNavClick( event, index ) {
@@ -57,12 +62,54 @@ export class frmTabsNavigator {
 	initSlideTrackUnderline( nav, index ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
-		const position = this.isRTL
-			? -( activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth )
-			: activeNav.offsetLeft;
+		this.positionUnderlineIndicator( activeNav );
+	}
 
-		this.slideTrackLine.style.transform = `translateX(${ position }px)`;
-		this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+	/**
+	 * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
+	 * Automatically repositions the underline indicator when layout changes occur.
+	 */
+	setupScrollbarObserver() {
+		const scrollbarWrapper = this.wrapper.closest( '.frm-scrollbar-wrapper' );
+
+		if ( ! scrollbarWrapper || ! ( 'ResizeObserver' in window ) ) {
+			return;
+		}
+
+		this.resizeObserver = new ResizeObserver( () => {
+			const activeNav = this.wrapper.querySelector( '.frm-tabs-navs ul > li.frm-active' );
+			if ( activeNav ) {
+				this.positionUnderlineIndicator( activeNav );
+			}
+		} );
+
+		this.resizeObserver.observe( scrollbarWrapper );
+	}
+
+	/**
+	 * Cleans up observers to prevent memory leaks.
+	 */
+	cleanupObservers() {
+		if ( this.resizeObserver ) {
+			this.resizeObserver.disconnect();
+			this.resizeObserver = null;
+		}
+	}
+
+	/**
+	 * Positions the underline indicator based on the active navigation element.
+	 *
+	 * @param {HTMLElement} activeNav The active navigation element to position the underline under
+	 */
+	positionUnderlineIndicator( activeNav ) {
+		requestAnimationFrame( () => {
+			const position = this.isRTL
+				? -( activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth )
+				: activeNav.offsetLeft;
+
+			this.slideTrackLine.style.transform = `translateX(${ position }px)`;
+			this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+		} );
 	}
 
 	changeSlide( index ) {
