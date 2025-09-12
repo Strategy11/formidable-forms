@@ -169,6 +169,7 @@ function prepareCompletedChecklist( checklistElement ) {
 		text: frmWelcomeTourVars.i18n.DOCS_LINK_TEXT,
 		href: frmWelcomeTourVars.DOCS_URL,
 	});
+	anchor.setAttribute( 'target', '_blank' );
 	docsMessage.innerHTML     = docsMessage.innerHTML.replace( '%s', anchor.outerHTML );
 
 	const completedStep = div({
