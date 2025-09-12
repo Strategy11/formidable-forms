@@ -44,7 +44,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	protected function api_url() {
 		$url = self::$base_api_url . 'list';
 
-		if ( empty( $this->license ) && self::get_free_license_code() ) {
+		if ( empty( $this->license ) ) {
 			$url .= '?l=RlJFRVRFTVBMQVRFUyEhIQ%3D%3D&v=' . FrmAppHelper::plugin_version();
 		}
 
