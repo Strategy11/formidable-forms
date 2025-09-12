@@ -33,14 +33,16 @@ const entries = {
     'onboarding-wizard': './js/src/onboarding-wizard/index.js',
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
-	formidable_admin: './js/src/admin/admin.js',
+    formidable_admin: './js/src/admin/admin.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
+    'welcome-tour': './js/src/welcome-tour',
   },
   // SCSS entries
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
-    font_icons: './resources/scss/font_icons.scss'
+    font_icons: './resources/scss/font_icons.scss',
+    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss'
   }
 };
 
