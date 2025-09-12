@@ -205,6 +205,11 @@ class FrmWelcomeTourController {
 			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
 			'i18n'                 => array(
 				'CHECKLIST_HEADER_TITLE' => __( 'Formidable Checklist', 'formidable' ),
+				'CONGRATULATIONS_TEXT'   => __( 'Congratulations! 🎉', 'formidable' ),
+				'COMPLETED_MAIN_MESSAGE' => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
+				'WHATS_NEXT_TEXT'        => __( 'What\'s next for you?', 'formidable' ),
+				// translators: %s is the link to the documentation.
+				'DOCS_MESSAGE'           => __( 'Check %s to learn more.', 'formidable' ),
 			),
 			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
 			'CHECKLIST_STEPS'        => self::get_steps(),
@@ -215,7 +220,7 @@ class FrmWelcomeTourController {
 
 	private static function get_active_step() {
 		// TODO
-		return 'embed-form';
+		return 'completed';
 	}
 
 	/**

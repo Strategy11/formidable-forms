@@ -7,7 +7,10 @@ import domReady from '@wordpress/dom-ready';
  * Internal dependencies
  */
 import { initializeModal } from './ui';
-import { div, svg } from 'core/utils';
+import { div, tag, svg } from 'core/utils';
+
+const p    = args => tag( 'p', args );
+const bold = args => tag( 'strong', args );
 
 let checklistElement;
 let progressBar;
@@ -132,6 +135,8 @@ function shouldShowChecklist() {
 			return onEditorPage() || onStylerPage();
 		case 'embed-form':
 			return onStylerPage() || onEditorPage();
+		case 'completed':
+			return onStylerPage() || onEditorPage();
 		default:
 			return false;
 	}
@@ -145,25 +150,49 @@ function shouldShowChecklist() {
 function buildChecklistElement() {
 	checklistElement = div({ id: 'frm-welcome-tour-checklist' });
 
-	const stepsWrapper = div({ className: 'frm-welcome-tour-checklist-steps' });
+	if ( 'completed' === frmWelcomeTourVars.CHECKLIST_ACTIVE_STEP ) {
+		prepareCompletedChecklist( checklistElement );
+	} else {
+		prepareIncompleteChecklist( checklistElement );
+	}
 
+	return checklistElement;
+}
+
+function prepareCompletedChecklist( checklistElement ) {
+	const congratulationsText = p({ child: bold( frmWelcomeTourVars.i18n.CONGRATULATIONS_TEXT ) });
+	const mainMessage         = p( frmWelcomeTourVars.i18n.COMPLETED_MAIN_MESSAGE );
+	const whatsNextText       = p( frmWelcomeTourVars.i18n.WHATS_NEXT_TEXT );
+	const ctaButtons          = div({ className: 'frm-welcome-tour-cta-buttons' });
+	const docsMessage         = p( frmWelcomeTourVars.i18n.DOCS_MESSAGE );
+
+	const completedStep = div({
+		className: 'frm-welcome-tour-completed',
+		children: [ congratulationsText, mainMessage, whatsNextText, ctaButtons, docsMessage ]
+	});
+
+	checklistElement.appendChild( buildChecklistHeader( completedStep ) );
+	checklistElement.appendChild( completedStep );
+}
+
+function prepareIncompleteChecklist( checklistElement ) {
+	const stepsWrapper = div({ className: 'frm-welcome-tour-checklist-steps' });
 	checklistElement.appendChild( buildChecklistHeader( stepsWrapper ) );
 	checklistElement.appendChild( buildChecklistProgressBar() );
+
 	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {
 		stepsWrapper.appendChild( buildChecklistStep( stepKey, stepValue ) );
 	} );
 	checklistElement.appendChild( stepsWrapper );
-
-	return checklistElement;
 }
 
 /**
  * Build the checklist header element.
  *
- * @param {HTMLElement} stepsWrapper The checklist steps wrapper element.
+ * @param {HTMLElement} toggleTarget The element to toggle when the header is clicked.
  * @return {HTMLElement} The checklist header element.
  */
-function buildChecklistHeader( stepsWrapper ) {
+function buildChecklistHeader( toggleTarget ) {
 	const header = div({
 		className: 'frm-welcome-tour-checklist-header',
 		text: frmWelcomeTourVars.i18n.CHECKLIST_HEADER_TITLE,
@@ -173,14 +202,7 @@ function buildChecklistHeader( stepsWrapper ) {
 	let open = true;
 	header.addEventListener( 'click', () => {
 		open = ! open;
-		if ( open && progressBar ) {
-			progressBar.style.borderRadius = 0;
-		}
-		jQuery( stepsWrapper ).slideToggle( 400, function() {
-			if ( progressBar && ! open ) {
-				progressBar.style.borderRadius = '0 0 8px 8px';
-			}
-		} );
+		jQuery( toggleTarget ).slideToggle( 400 );
 		jQuery( icon ).animate({ rotate: open ? '0deg' : '-180deg' }, 400 );
 	} );
 	return header;

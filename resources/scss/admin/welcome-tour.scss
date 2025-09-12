@@ -7,6 +7,7 @@
     width: 316px;
     max-height: 400px;
     border-radius: 12px;
+    overflow: hidden;
     box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.2);
 }
 
@@ -15,7 +16,6 @@
         background-color: rgba(29, 41, 57, 1);
         width: 100%;
         padding: 16px;
-        border-radius: 16px 16px 0 0;
         box-sizing: border-box;
         color: #fff;
         display: flex;
@@ -85,4 +85,8 @@
     &-step-description {
         display: none;
     }
+}
+
+.frm-welcome-tour-completed {
+    padding: 0 var(--gap-sm);
 }
