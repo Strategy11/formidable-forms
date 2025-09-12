@@ -163,7 +163,7 @@ function prepareCompletedChecklist( checklistElement ) {
 	const congratulationsText = p({ child: bold( frmWelcomeTourVars.i18n.CONGRATULATIONS_TEXT ) });
 	const mainMessage         = p( frmWelcomeTourVars.i18n.COMPLETED_MAIN_MESSAGE );
 	const whatsNextText       = p( frmWelcomeTourVars.i18n.WHATS_NEXT_TEXT );
-	const ctaButtons          = div({ className: 'frm-welcome-tour-cta-buttons' });
+	const ctaButtons          = buildCompletedStepCTAButtons();
 	const docsMessage         = p( frmWelcomeTourVars.i18n.DOCS_MESSAGE );
 	const anchor              = a({
 		text: frmWelcomeTourVars.i18n.DOCS_LINK_TEXT,
@@ -179,6 +179,49 @@ function prepareCompletedChecklist( checklistElement ) {
 
 	checklistElement.appendChild( buildChecklistHeader( completedStep ) );
 	checklistElement.appendChild( completedStep );
+}
+
+function buildCompletedStepCTAButtons() {
+	const buttonDetails = [
+		{
+			text: frmWelcomeTourVars.i18n.SETUP_EMAIL_NOTIFICATIONS_BUTTON_TEXT,
+			onclick: () => {
+				window.location.href = frmWelcomeTourVars.SETUP_EMAIL_NOTIFICATIONS_URL;
+			}
+		},
+		{
+			text: frmWelcomeTourVars.i18n.CUSTOMIZE_SUCCESS_MESSAGE_BUTTON_TEXT,
+			onclick: () => {
+				window.location.href = frmWelcomeTourVars.CUSTOMIZE_SUCCESS_MESSAGE_URL;
+			}
+		},
+		{
+			text: frmWelcomeTourVars.i18n.MANAGE_FORM_ENTRIES_BUTTON_TEXT,
+			onclick: () => {
+				window.location.href = frmWelcomeTourVars.MANAGE_FORM_ENTRIES_URL;
+			}
+		},
+		{
+			text: frmWelcomeTourVars.i18n.EXPLORE_INTEGRATIONS_BUTTON_TEXT,
+			onclick: () => {
+				window.location.href = frmWelcomeTourVars.EXPLORE_INTEGRATIONS_URL;
+			}
+		}
+	];
+
+	return div({
+		className: 'frm-welcome-tour-cta-buttons',
+		children: buttonDetails.map(
+			buttonDetail => completedStepWhatsNextButton( buttonDetail )
+		)
+	});
+}
+
+function completedStepWhatsNextButton( buttonDetails ) {
+	const button = tag( 'button', buttonDetails.text );
+	button.classList.add( 'button', 'button-secondary', 'frm-button', 'frm-button-secondary' );
+	button.addEventListener( 'click', buttonDetails.onclick );
+	return button;
 }
 
 function prepareIncompleteChecklist( checklistElement ) {

@@ -9,6 +9,10 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.2);
+
+    .frm-welcome-tour-cta-buttons button {
+        margin-bottom: var(--gap-sm);
+    }
 }
 
 .frm-welcome-tour-checklist {
@@ -89,4 +93,7 @@
 
 .frm-welcome-tour-completed {
     padding: 0 var(--gap-sm);
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 350px;
 }

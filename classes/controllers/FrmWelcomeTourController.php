@@ -201,9 +201,11 @@ class FrmWelcomeTourController {
 	 * @return array
 	 */
 	private static function get_js_variables() {		
+		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+
 		return array(
-			'IS_WELCOME_TOUR_SEEN' => ! self::is_welcome_tour_not_seen(),
-			'i18n'                 => array(
+			'IS_WELCOME_TOUR_SEEN'          => ! self::is_welcome_tour_not_seen(),
+			'i18n'                          => array(
 				'CHECKLIST_HEADER_TITLE' => __( 'Formidable Checklist', 'formidable' ),
 				'CONGRATULATIONS_TEXT'   => __( 'Congratulations! 🎉', 'formidable' ),
 				'COMPLETED_MAIN_MESSAGE' => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
@@ -211,12 +213,24 @@ class FrmWelcomeTourController {
 				// translators: %s is the link to the documentation.
 				'DOCS_MESSAGE'           => __( 'Check %s to learn more.', 'formidable' ),
 				'DOCS_LINK_TEXT'         => __( 'Docs & Support', 'formidable' ),
+				'SETUP_EMAIL_NOTIFICATIONS_BUTTON_TEXT' => __( 'Setup email notifications', 'formidable' ),
+				'CUSTOMIZE_SUCCESS_MESSAGE_BUTTON_TEXT' => __( 'Customize success message', 'formidable' ),
+				'MANAGE_FORM_ENTRIES_BUTTON_TEXT'       => __( 'Manage form entries', 'formidable' ),
+				'EXPLORE_INTEGRATIONS_BUTTON_TEXT'      => __( 'Explore integrations', 'formidable' ),
 			),
-			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
-			'CHECKLIST_STEPS'        => self::get_steps(),
-			'TOUR_URL'               => admin_url( 'admin.php?page=formidable-form-templates' ),
-			'DOCS_URL'               => 'https://formidableforms.com/knowledgebase/',
-			'CHECKLIST_ACTIVE_STEP'  => self::get_active_step(),
+			'PROGRESS_BAR_PERCENT'          => self::get_welcome_tour_progress_bar_percent(),
+			'CHECKLIST_STEPS'               => self::get_steps(),
+			'TOUR_URL'                      => admin_url( 'admin.php?page=formidable-form-templates' ),
+			'DOCS_URL'                      => 'https://formidableforms.com/knowledgebase/',
+			'CHECKLIST_ACTIVE_STEP'         => self::get_active_step(),
+			// Setup email notifications would go to the actions & notifications area
+			'SETUP_EMAIL_NOTIFICATIONS_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Customize success message would do the same, ideally scrolling down to the message
+			'CUSTOMIZE_SUCCESS_MESSAGE_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Manage form entries would go to the "entries" area for all forms.
+			'MANAGE_FORM_ENTRIES_URL'       => admin_url( 'admin.php?page=formidable-entries' ),
+			// Explore Integrations would take them to the add-ons tab
+			'EXPLORE_INTEGRATIONS_URL'      => admin_url( 'admin.php?page=formidable-addons' ),
 		);
 	}
 
