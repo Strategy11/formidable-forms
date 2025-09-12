@@ -10,7 +10,7 @@ import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getSingleState } from '../shared';
+import { getSingleState, FREE_TEMPLATES_KEYS } from '../shared';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -93,6 +93,10 @@ function runAvailableTemplatesEffects( element, count ) {
 	setTimeout( () => {
 		const { availableTemplateItems } = getElements();
 		availableTemplateItems.forEach( item => {
+			if ( FREE_TEMPLATES_KEYS.includes( Number( item.dataset.id ) ) ) {
+				return;
+			}
+
 			item.classList.add( 'frm-background-highlight' );
 
 			// Remove class after animation completes to prevent restart
