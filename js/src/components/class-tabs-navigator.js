@@ -33,7 +33,7 @@ export class frmTabsNavigator {
 
 		this.setupScrollbarObserver();
 		// Cleanup observers when page unloads to prevent memory leaks
-		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
+		window.addEventListener( 'beforeunload', this.cleanupObservers );
 	}
 
 	onNavClick( event, index ) {
