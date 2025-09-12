@@ -10,6 +10,7 @@ import { initializeModal } from './ui';
 import { div, svg } from 'core/utils';
 
 let checklistElement;
+let progressBar;
 
 domReady( () => {
 	if ( onDashboardPage() ) {
@@ -130,7 +131,7 @@ function shouldShowChecklist() {
 		case 'style-form':
 			return onEditorPage() || onStylerPage();
 		case 'embed-form':
-			return onStylerPage();
+			return onStylerPage() || onEditorPage();
 		default:
 			return false;
 	}
@@ -146,7 +147,8 @@ function buildChecklistElement() {
 
 	const stepsWrapper = div({ className: 'frm-welcome-tour-checklist-steps' });
 
-	checklistElement.appendChild( buildChecklistHeader() );
+	checklistElement.appendChild( buildChecklistHeader( stepsWrapper ) );
+	checklistElement.appendChild( buildChecklistProgressBar() );
 	Object.entries( frmWelcomeTourVars.CHECKLIST_STEPS ).forEach( ( [ stepKey, stepValue ] ) => {
 		stepsWrapper.appendChild( buildChecklistStep( stepKey, stepValue ) );
 	} );
@@ -158,12 +160,45 @@ function buildChecklistElement() {
 /**
  * Build the checklist header element.
  *
+ * @param {HTMLElement} stepsWrapper The checklist steps wrapper element.
  * @return {HTMLElement} The checklist header element.
  */
-function buildChecklistHeader() {
-	return div({
+function buildChecklistHeader( stepsWrapper ) {
+	const header = div({
 		className: 'frm-welcome-tour-checklist-header',
 		text: frmWelcomeTourVars.i18n.CHECKLIST_HEADER_TITLE,
+	});
+	let icon = svg({ href: '#frm_arrowdown9_icon' });
+	header.appendChild( icon );
+	let open = true;
+	header.addEventListener( 'click', () => {
+		open = ! open;
+		if ( open && progressBar ) {
+			progressBar.style.borderRadius = 0;
+		}
+		jQuery( stepsWrapper ).slideToggle( 400, function() {
+			if ( progressBar && ! open ) {
+				progressBar.style.borderRadius = '0 0 8px 8px';
+			}
+		} );
+		jQuery( icon ).animate({ rotate: open ? '0deg' : '-180deg' }, 400 );
+	} );
+	return header;
+}
+
+/**
+ * Build the checklist progress bar element.
+ *
+ * @return {HTMLElement} The checklist progress bar element.
+ */
+function buildChecklistProgressBar() {
+	progressBar = div({
+		className: 'frm-welcome-tour-checklist-progress-bar'
+	});
+	progressBar.style.width = getProgressBarPercent() + '%';
+	return div({
+		className: 'frm-welcome-tour-checklist-progress-bar-wrapper',
+		child: progressBar
 	});
 }
 

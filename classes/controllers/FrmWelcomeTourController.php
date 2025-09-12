@@ -104,6 +104,9 @@ class FrmWelcomeTourController {
 				case 'create-first-form':
 					$completed = self::more_than_the_default_form_exists();
 					break;
+				case 'embed-form':
+					$completed = self::check_for_form_embeds();
+					break;
 			}
 
 			if ( $completed ) {
@@ -138,6 +141,12 @@ class FrmWelcomeTourController {
 		}
 
 		return $form_keys && ! in_array( 'contact-form', $form_keys, true );
+	}
+
+	private static function check_for_form_embeds() {
+		global $wpdb;
+		$result = $wpdb->get_var( "SELECT 1 FROM {$wpdb->posts} WHERE post_content LIKE '%[formidable %' LIMIT 1" );
+		return '1' === $result;
 	}
 
 	/**
