@@ -210,10 +210,12 @@ class FrmWelcomeTourController {
 				'WHATS_NEXT_TEXT'        => __( 'What\'s next for you?', 'formidable' ),
 				// translators: %s is the link to the documentation.
 				'DOCS_MESSAGE'           => __( 'Check %s to learn more.', 'formidable' ),
+				'DOCS_LINK_TEXT'         => __( 'Docs & Support', 'formidable' ),
 			),
 			'PROGRESS_BAR_PERCENT'   => self::get_welcome_tour_progress_bar_percent(),
 			'CHECKLIST_STEPS'        => self::get_steps(),
 			'TOUR_URL'               => admin_url( 'admin.php?page=formidable-form-templates' ),
+			'DOCS_URL'               => 'https://formidableforms.com/knowledgebase/',
 			'CHECKLIST_ACTIVE_STEP'  => self::get_active_step(),
 		);
 	}

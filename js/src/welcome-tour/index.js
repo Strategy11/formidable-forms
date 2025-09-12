@@ -7,7 +7,7 @@ import domReady from '@wordpress/dom-ready';
  * Internal dependencies
  */
 import { initializeModal } from './ui';
-import { div, tag, svg } from 'core/utils';
+import { div, tag, svg, a } from 'core/utils';
 
 const p    = args => tag( 'p', args );
 const bold = args => tag( 'strong', args );
@@ -165,6 +165,11 @@ function prepareCompletedChecklist( checklistElement ) {
 	const whatsNextText       = p( frmWelcomeTourVars.i18n.WHATS_NEXT_TEXT );
 	const ctaButtons          = div({ className: 'frm-welcome-tour-cta-buttons' });
 	const docsMessage         = p( frmWelcomeTourVars.i18n.DOCS_MESSAGE );
+	const anchor              = a({
+		text: frmWelcomeTourVars.i18n.DOCS_LINK_TEXT,
+		href: frmWelcomeTourVars.DOCS_URL,
+	});
+	docsMessage.innerHTML     = docsMessage.innerHTML.replace( '%s', anchor.outerHTML );
 
 	const completedStep = div({
 		className: 'frm-welcome-tour-completed',
