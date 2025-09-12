@@ -49,6 +49,13 @@ class FrmFormTemplatesController {
 	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
 
 	/**
+	 * The keys of the free templates.
+	 *
+	 * @var array FREE_TEMPLATES_KEYS Unique keys for the free templates.
+	 */
+	const FREE_TEMPLATES_KEYS = array( 20872734, 28223640 );
+
+	/**
 	 * Option name to store favorite templates.
 	 *
 	 * @var string FAVORITE_TEMPLATES_OPTION Unique identifier for storing favorite templates.
@@ -713,6 +720,7 @@ class FrmFormTemplatesController {
 	private static function get_js_variables() {
 		$js_variables = array(
 			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
+			'FREE_TEMPLATES_KEYS'     => self::FREE_TEMPLATES_KEYS,
 			'templatesCount'          => self::get_template_count(),
 			'favoritesCount'          => array(
 				'total'   => self::get_favorite_templates_count(),
