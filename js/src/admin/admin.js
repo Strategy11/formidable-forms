@@ -6671,10 +6671,10 @@ window.frmAdminBuildJS = function() {
 	function maybeShowInlineModal( e ) {
 		/*jshint validthis:true */
 		e.preventDefault();
-		showInlineModal( this );
+		showInlineModal( this, undefined, e );
 	}
 
-	function showInlineModal( icon, input ) {
+	function showInlineModal( icon, input, event ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
 			container = jQuery( icon ).closest( 'p,ul' ),
 			inputTrigger = ( typeof input !== 'undefined' );
@@ -6688,7 +6688,10 @@ window.frmAdminBuildJS = function() {
 			}
 			if ( input !== null ) {
 				if ( ! inputTrigger ) {
-					input.focus();
+					const { key } = event ?? {};
+					if ( key !== 'Enter' && key !== ' ' ) {
+						input.focus();
+					}
 				}
 				container.after( box );
 				box.setAttribute( 'data-fills', input.id.replace( '-proxy-input', '' ) );
@@ -8445,12 +8448,6 @@ window.frmAdminBuildJS = function() {
 		code = 'if ' + field + ' ' + is + '="' + text + '"]';
 		result.setAttribute( 'data-code', code + frmAdminJs.conditional_text + '[/if ' + field );
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
-	}
-
-	function showBuilderModal() {
-		/*jshint validthis:true */
-		const moreIcon = getIconForInput( this );
-		showInlineModal( moreIcon, this );
 	}
 
 	function maybeShowModal( input ) {
@@ -10839,7 +10836,7 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
 			$builderForm.on( 'click', '.frm-show-inline-modal', maybeShowInlineModal );
-			$builderForm.on( 'keydown', '.frm-show-inline-modal', event => {
+			$builderForm.on( 'keydown', '.frm-show-inline-modal', function( event ) {
 				const { key } = event;
 				if ( key === 'Enter' || key === ' ' ) {
 					event.preventDefault();
