@@ -8812,6 +8812,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
+		if ( moreIcon.classList.contains( 'frm-input-icon' ) ) {
+			return moreIcon.previousElementSibling;
+		}
+
 		// For regular fields
 		let input = moreIcon.nextElementSibling;
 		while ( input !== null && (
@@ -8832,6 +8836,10 @@ window.frmAdminBuildJS = function() {
 	 * Get the ... icon for the selected input box.
 	 */
 	function getIconForInput( input ) {
+		if ( input.nextElementSibling.classList.contains( 'frm-input-icon' ) ) {
+			return input.nextElementSibling;
+		}
+
 		let moreIcon = input.previousElementSibling;
 
 		while ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
@@ -10820,7 +10828,6 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
-			$builderForm.on( 'focusin', '.frm_classes + .frm-token-proxy-input', showBuilderModal );
 
 			$newFields.on( 'click', '.frm_primary_label', clickLabel );
 			$newFields.on( 'click', '.frm_description', clickDescription );
@@ -10832,6 +10839,13 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
 			$builderForm.on( 'click', '.frm-show-inline-modal', maybeShowInlineModal );
+			$builderForm.on( 'keydown', '.frm-show-inline-modal', event => {
+				const { key } = event;
+				if ( key === 'Enter' || key === ' ' ) {
+					event.preventDefault();
+					maybeShowInlineModal.call( this, event );
+				}
+			} );
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
