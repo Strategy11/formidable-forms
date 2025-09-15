@@ -11414,6 +11414,7 @@ window.frmAdminBuildJS = function() {
 		handleInsertFieldByDraggingResponse,
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
+		moveFieldSettings,
 	};
 };
 
