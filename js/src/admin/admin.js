@@ -8833,7 +8833,7 @@ window.frmAdminBuildJS = function() {
 	 * Get the ... icon for the selected input box.
 	 */
 	function getIconForInput( input ) {
-		if ( input.nextElementSibling.classList.contains( 'frm-input-icon' ) ) {
+		if ( input.nextElementSibling?.classList.contains( 'frm-input-icon' ) ) {
 			return input.nextElementSibling;
 		}
 
