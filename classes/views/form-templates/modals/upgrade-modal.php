@@ -53,7 +53,7 @@ $plans = FrmFormsHelper::get_license_types( array( 'include_all' => false ) );
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
 					esc_html__( 'Lite users get %1$s%2$d%% OFF%3$s regular price.', 'formidable' ),
 					'<span class="frm-meta-tag frm-green-tag">',
-					$use_discount,
+					absint( $use_discount ),
 					'</span>'
 				);
 				?>
