@@ -12,9 +12,6 @@ import { TOUR_URL } from '../shared';
  */
 function addBeginTourButtonEvents() {
 	const { beginTourButton } = getElements();
-	if ( ! beginTourButton ) {
-		return;
-	}
 
 	beginTourButton.addEventListener( 'click', onBeginTourButtonClick );
 }
