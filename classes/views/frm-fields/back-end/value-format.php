@@ -8,15 +8,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Format', 'formidable' ); ?>
 	</label>
 	<span class="frm-with-right-icon">
+		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo intval( $field['id'] ); ?>" />
 		<?php
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => 'frm-input-mask-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+				'tabindex'  => '0',
 			)
 		);
 		?>
-		<input type="text" class="frm_long_input frm_format_opt" value="<?php echo esc_attr( $field['format'] ); ?>" name="field_options[format_<?php echo absint( $field['id'] ); ?>]" id="frm_format_<?php echo absint( $field['id'] ); ?>" data-fid="<?php echo intval( $field['id'] ); ?>" />
 	</span>
 </p>

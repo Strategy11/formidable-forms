@@ -147,13 +147,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 				<span class="frm-with-right-icon">
 					<?php
-					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-						array(
-							'data-open' => 'frm-layout-classes-box',
-							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
-						)
-					);
 					$css_layout_classes_attrs = array(
 						'type'           => 'text',
 						'name'           => 'field_options[classes_' . $field['id'] . ']',
@@ -167,6 +160,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					);
 					?>
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
+					<?php
+					FrmAppHelper::icon_by_class(
+						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						array(
+							'data-open' => 'frm-layout-classes-box',
+							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+							'tabindex'  => '0',
+						)
+					);
+					?>
 				</span>
 			</p>
 			<?php

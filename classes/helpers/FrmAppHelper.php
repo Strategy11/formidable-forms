@@ -1291,6 +1291,7 @@ class FrmAppHelper {
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
 		$allowed_html['svg']['title']     = true;
+		$allowed_html['svg']['tabindex']  = true;
 		return $allowed_html;
 	}
 
