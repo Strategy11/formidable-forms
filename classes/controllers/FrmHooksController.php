@@ -211,6 +211,7 @@ class FrmHooksController {
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
+		FrmWelcomeTourController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 

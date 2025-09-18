@@ -51,3 +51,18 @@ export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState'
  * @return {boolean} True if the query parameter exists, otherwise false.
  */
 export const hasQueryParam = paramName => urlParams.has( paramName );
+
+/**
+ * Navigates to the specified URL.
+ *
+ * @param {string} href The URL to navigate to.
+ * @return {void}
+ * @throws {Error} If the URL is invalid or navigation fails.
+ */
+export const navigate = href => {
+	try {
+		window.location.assign( href );
+	} catch ( error ) {
+		throw new Error( `Failed to navigate to URL: ${ href }. ${ error.message }` );
+	}
+};
