@@ -71,7 +71,7 @@ class FrmWelcomeTourController {
 			self::mark_welcome_tour_as_seen();
 		}
 
-		self::maybe_check_for_completed_steps();
+		add_action( 'admin_init', __CLASS__ . '::maybe_check_for_completed_steps' );
 
 		// TODO: remove this after development
 		self::$checklist['seen'] = false;
@@ -87,7 +87,7 @@ class FrmWelcomeTourController {
 	/**
 	 * @return void
 	 */
-	private static function maybe_check_for_completed_steps() {
+	public static function maybe_check_for_completed_steps() {
 		if ( ! isset( self::$checklist['completed_steps'] ) ) {
 			self::$checklist['completed_steps'] = array();
 		}
@@ -200,19 +200,19 @@ class FrmWelcomeTourController {
 	 *
 	 * @return array
 	 */
-	private static function get_js_variables() {		
+	private static function get_js_variables() {
 		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 
 		return array(
 			'IS_WELCOME_TOUR_SEEN'          => ! self::is_welcome_tour_not_seen(),
 			'i18n'                          => array(
-				'CHECKLIST_HEADER_TITLE' => __( 'Formidable Checklist', 'formidable' ),
-				'CONGRATULATIONS_TEXT'   => __( 'Congratulations! 🎉', 'formidable' ),
-				'COMPLETED_MAIN_MESSAGE' => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
-				'WHATS_NEXT_TEXT'        => __( 'What\'s next for you?', 'formidable' ),
+				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
+				'CONGRATULATIONS_TEXT'                  => __( 'Congratulations! 🎉', 'formidable' ),
+				'COMPLETED_MAIN_MESSAGE'                => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
+				'WHATS_NEXT_TEXT'                       => __( 'What\'s next for you?', 'formidable' ),
 				// translators: %s is the link to the documentation.
-				'DOCS_MESSAGE'           => __( 'Check %s to learn more.', 'formidable' ),
-				'DOCS_LINK_TEXT'         => __( 'Docs & Support', 'formidable' ),
+				'DOCS_MESSAGE'                          => __( 'Check %s to learn more.', 'formidable' ),
+				'DOCS_LINK_TEXT'                        => __( 'Docs & Support', 'formidable' ),
 				'SETUP_EMAIL_NOTIFICATIONS_BUTTON_TEXT' => __( 'Setup email notifications', 'formidable' ),
 				'CUSTOMIZE_SUCCESS_MESSAGE_BUTTON_TEXT' => __( 'Customize success message', 'formidable' ),
 				'MANAGE_FORM_ENTRIES_BUTTON_TEXT'       => __( 'Manage form entries', 'formidable' ),
@@ -251,7 +251,7 @@ class FrmWelcomeTourController {
 			return 0;
 		}
 
-		$percent = ( self::$checklist['step'] / count( self::get_steps() ) ) * 100;
+		$percent = self::$checklist['step'] / count( self::get_steps() ) * 100;
 
 		return (int) $percent;
 	}
@@ -265,15 +265,15 @@ class FrmWelcomeTourController {
 				'title'       => __( 'Create your first form', 'formidable' ),
 				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
 			),
-			'add-fields' 	=> array(
+			'add-fields'        => array(
 				'title'       => __( 'Add fields to your form', 'formidable' ),
 				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
 			),
-			'style-form' => array(
+			'style-form'        => array(
 				'title'       => __( 'Style your form', 'formidable' ),
 				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
 			),
-			'embed-form' => array(
+			'embed-form'        => array(
 				'title'       => __( 'Embed in a page', 'formidable' ),
 				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
 			),
@@ -290,7 +290,10 @@ class FrmWelcomeTourController {
 		foreach ( $steps as $step_key => $step ) {
 			$steps[ $step_key ]['complete'] = in_array( $step_key, self::$checklist['completed_steps'], true );
 		}
-		$steps['add-fields']['complete'] = true; // Remove this.
+
+		// Remove this.
+		$steps['add-fields']['complete'] = true;
+
 		return $steps;
 	}
 
