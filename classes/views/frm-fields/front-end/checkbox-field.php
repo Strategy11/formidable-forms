@@ -69,9 +69,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		do_action( 'frm_field_input_html', $field );
 
-		if ( apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key ) ) {
-			echo ' disabled="disabled" ';
-		}
+		FrmFieldsController::maybe_disable_option( $field, $opt_key );
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
 			echo ' aria-required="true" ';
