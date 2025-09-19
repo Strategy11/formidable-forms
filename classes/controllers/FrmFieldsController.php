@@ -380,15 +380,16 @@ class FrmFieldsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param array $field
+	 * @param array  $field
 	 * @param string $opt_key
+	 *
 	 * @return void
 	 */
 	public static function maybe_disable_option( $field, $opt_key ) {
 		if ( apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key ) ) {
 			echo ' disabled="disabled" ';
 			if ( FrmField::is_field_type( $field, 'checkbox' ) ) {
-				echo ' data-max-reached="1" ';
+				echo 'data-max-reached="1" ';
 			}
 		}
 	}
