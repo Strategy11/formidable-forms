@@ -24,7 +24,7 @@ class test_FrmFormTemplatesControllerAjax extends FrmAjaxUnitTest {
 		$_POST    = array(
 			'action'             => 'frm_add_or_remove_favorite_template',
 			'nonce'              => wp_create_nonce( 'frm_ajax' ),
-			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_KEYS ),
+			'template_id'        => array_rand( $this->controller::FEATURED_TEMPLATES_IDS ),
 			'operation'          => 'add',
 			'is_custom_template' => 'false',
 		);

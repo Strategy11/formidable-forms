@@ -7,7 +7,7 @@ import { VIEWS as SKELETON_VIEWS } from 'core/page-skeleton';
 /**
  * Internal dependencies
  */
-import { PREFIX, VIEW_SLUGS, FEATURED_TEMPLATES_KEYS } from '../shared';
+import { PREFIX, VIEW_SLUGS, FEATURED_TEMPLATES_IDS } from '../shared';
 
 /**
  * Checks if the category is "All Templates".
@@ -58,7 +58,7 @@ export const isCustomTemplate = template =>
  * @return {boolean} True if the template is featured, otherwise false.
  */
 export const isFeaturedTemplate = template =>
-	isHTMLElement( template ) ? FEATURED_TEMPLATES_KEYS.includes( Number( template.dataset.id ) ) : false;
+	isHTMLElement( template ) ? FEATURED_TEMPLATES_IDS.includes( Number( template.dataset.id ) ) : false;
 
 /**
  * Checks if a template is locked.

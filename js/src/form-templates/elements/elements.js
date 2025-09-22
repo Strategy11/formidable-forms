@@ -23,7 +23,7 @@ addElements( {
 	pageTitle: document.getElementById( `${ PREFIX }-page-title` ),
 	pageTitleText: document.getElementById( `${ PREFIX }-page-title-text` ),
 	pageTitleDivider: document.getElementById( `${ PREFIX }-page-title-divider` ),
-	upsellBanner: document.getElementById( `${ PREFIX }-upsell-banner` ),
+	upsellBanner: document.getElementById( 'frm-renew-subscription-banner' ) ?? document.getElementById( 'frm-upgrade-banner' ),
 	extraTemplateCountElements: document.querySelectorAll( `.${ PREFIX }-extra-templates-count` ),
 
 	// Templates elements
@@ -47,6 +47,7 @@ addElements( {
 	availableTemplatesCategory: document.querySelector(
 		`.${ SKELETON_PREFIX }-cat[data-category="${ VIEW_SLUGS.AVAILABLE_TEMPLATES }"]`
 	),
+	getFreeTemplatesBannerButton: document.querySelector( '.frm-get-free-templates-banner .button' ),
 
 	// Modal elements
 	modal,
@@ -60,6 +61,10 @@ addElements( {
 	createTemplateButton: document.getElementById( 'frm-create-template-button' ),
 	// Renew Account Modal
 	renewAccountModal: document.getElementById( 'frm-renew-modal' ),
+	// Leave Email Modal
+	leaveEmailModal: document.getElementById( 'frm-leave-email-modal' ),
+	leaveEmailModalInput: document.getElementById( 'frm_leave_email' ),
+	leaveEmailModalButton: document.getElementById( 'frm-get-code-button' ),
 	// Upgrade Modal
 	upgradeModal: document.getElementById( 'frm-form-upgrade-modal' ),
 	upgradeModalTemplateNames: modal?.querySelectorAll( '.frm-upgrade-modal-template-name' ),
