@@ -245,6 +245,7 @@ class FrmFormTemplatesHelper {
 	 */
 	private static function needs_free_plan( $template ) {
 		return self::needs_get_free_templates_banner()
+			&& ! empty( $template['category_slugs'] )
 			&& in_array( 'free', $template['category_slugs'], true )
 			&& ! in_array( $template['id'], FrmFormTemplatesController::FREE_TEMPLATES_IDS, true );
 	}
