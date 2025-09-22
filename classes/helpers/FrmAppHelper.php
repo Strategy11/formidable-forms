@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.23';
+	public static $plug_version = '6.24.1';
 
 	/**
 	 * @var bool
@@ -215,7 +215,7 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
-		return FrmAddonsController::is_license_expired() ? 'Formidable' : $frm_settings->menu;
+		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
 	}
 
 	/**
@@ -4246,7 +4246,7 @@ class FrmAppHelper {
 		}
 
 		if ( $detailed ) {
-			$params['plugin-status'] = $link['status'];
+			$params['plugin-status'] = $link['status'] ?? '';
 		}
 
 		return $params;
@@ -4603,7 +4603,7 @@ class FrmAppHelper {
 	/**
 	 * Check if a string is valid UTF-8.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param string $string The string to check.
 	 * @return bool

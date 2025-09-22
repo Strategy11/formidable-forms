@@ -3,8 +3,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$args['class'] .= ! $args['dismiss-icon'] ? ' frm-modal-no-dismiss' : '';
-$args['class'] .= ! $args['show'] ? ' frm_hidden' : '';
+if ( ! $args['dismiss-icon'] ) {
+	$args['class'] .= ' frm-modal-no-dismiss';
+}
+if ( ! $args['show'] ) {
+	$args['class'] .= ' frm_hidden';
+}
 ?>
 <div class="frm-inline-modal frm-modal postbox <?php echo esc_attr( $args['class'] ); ?>" id="<?php echo esc_attr( $args['id'] ); ?>">
 	<?php if ( $args['dismiss-icon'] ) { ?>

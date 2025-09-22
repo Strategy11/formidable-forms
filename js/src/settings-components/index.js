@@ -13,7 +13,6 @@ import {
 	frmTabsComponent,
 	initTokenInputFields,
 	initToggleGroupComponents,
-	setupCustomToggleGroupHandlers,
 	setupUnitInputHandlers
 } from './components';
 
@@ -24,6 +23,5 @@ domReady( () => {
 	initAddFieldsButtonHandler();
 	initTokenInputFields();
 	initToggleGroupComponents();
-	setupCustomToggleGroupHandlers();
 	setupUnitInputHandlers();
-});
+} );

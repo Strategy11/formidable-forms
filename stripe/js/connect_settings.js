@@ -7,7 +7,7 @@
 	}
 
 	function renderStripeConnectSettingsButton() {
-		var container = document.getElementById( 'frm_strp_settings_container' );
+		const container = document.getElementById( 'frm_strp_settings_container' );
 		if ( null !== container ) {
 			postAjax(
 				{
@@ -24,12 +24,12 @@
 		jQuery( document ).on( 'click', selector, function( event ) {
 			event.preventDefault();
 			callback( this );
-		});
+		} );
 	}
 
 	function handleStripeDisconnectClick( trigger ) {
 		const testMode = isTriggerInTestMode( trigger );
-		const spinner  = frmDom.span({ className: 'frm-wait frm_visible_spinner' });
+		const spinner = frmDom.span( { className: 'frm-wait frm_visible_spinner' } );
 
 		spinner.style.margin = 0; // The default 20px margin causes the spinner to look bad.
 		trigger.replaceWith( spinner );
@@ -73,7 +73,7 @@
 	}
 
 	function strpSettingsAjaxRequest( action, success, testMode ) {
-		var data = {
+		const data = {
 			action: action,
 			testMode: testMode,
 			nonce: frmGlobal.nonce
@@ -82,18 +82,16 @@
 	}
 
 	function postAjax( data, success ) {
-		var xmlHttp, params;
-
-		xmlHttp = new XMLHttpRequest();
-		params = typeof data === 'string' ? data : Object.keys( data ).map(
+		const xmlHttp = new XMLHttpRequest();
+		const params = typeof data === 'string' ? data : Object.keys( data ).map(
 			function( k ) {
-				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ]);
+				return encodeURIComponent( k ) + '=' + encodeURIComponent( data[ k ] );
 			}
 		).join( '&' );
 
 		xmlHttp.open( 'post', ajaxurl, true );
 		xmlHttp.onreadystatechange = function() {
-			var response;
+			let response;
 			if ( xmlHttp.readyState > 3 && xmlHttp.status == 200 ) {
 				response = xmlHttp.responseText;
 				if ( response !== '' ) {

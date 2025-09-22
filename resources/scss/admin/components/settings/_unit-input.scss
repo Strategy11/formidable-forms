@@ -29,6 +29,11 @@
 			padding-left: var(--gap-2xs);
 			padding-right: 21px !important;
 			border: transparent;
+
+			&:focus-visible {
+				outline: 1px solid var(--primary-500);
+				outline-offset: -2px;
+			}
 		}
 	}
 }

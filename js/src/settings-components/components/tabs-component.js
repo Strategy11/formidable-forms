@@ -4,7 +4,6 @@ import { frmTabsNavigator } from '../../components/class-tabs-navigator';
  * @class
  */
 export default class frmTabsComponent {
-
 	constructor() {
 		this.elements = document.querySelectorAll( '.frm-style-tabs-wrapper' );
 		if ( 0 < this.elements.length ) {
@@ -16,9 +15,9 @@ export default class frmTabsComponent {
 	 * Initializes the Tabs Component.
 	 */
 	init() {
-		this.elements.forEach( ( element ) => {
+		this.elements.forEach( element => {
 			new frmTabsNavigator( element );
-		});
+		} );
 	}
 
 	/**
@@ -27,10 +26,10 @@ export default class frmTabsComponent {
 	 */
 	initOnTabClick( wrapper ) {
 		this.initActiveBackgroundWidth( wrapper );
-		wrapper.querySelectorAll( '.frm-tab-item' ).forEach( ( tab ) => {
-			tab.addEventListener( 'click', ( event ) => {
+		wrapper.querySelectorAll( '.frm-tab-item' ).forEach( tab => {
+			tab.addEventListener( 'click', event => {
 				this.onTabClick( event.target.closest( '.frm-tabs-wrapper' ) );
-			});
-		});
+			} );
+		} );
 	}
 }

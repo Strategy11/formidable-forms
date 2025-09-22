@@ -47,6 +47,10 @@
 
 				> p:first-child {
 					margin-top: var(--gap-sm);
+
+					&.frm6 + .frm6 {
+						margin-top: var(--gap-sm);
+					}
 				}
 			}
 		}
@@ -61,6 +65,11 @@
 		color: var(--grey-700);
 		background-color: #fff;
 		box-shadow: var(--box-shadow-sm);
+	}
+
+	&:focus-visible {
+		outline: 1px solid var(--primary-500) !important;
+		outline-offset: -1px;
 	}
 }
 

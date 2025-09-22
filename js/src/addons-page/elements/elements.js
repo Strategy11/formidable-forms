@@ -16,7 +16,7 @@ const { bodyContent, sidebar } = getElements();
 
 bodyContent
 	.querySelectorAll( '.frm-card-item:not(.plugin-card-formidable-pro)' )
-	.forEach( ( addon ) => {
+	.forEach( addon => {
 		const categories = addon.dataset.categories;
 		switch ( true ) {
 			case categories.includes( PLANS.BUSINESS ):

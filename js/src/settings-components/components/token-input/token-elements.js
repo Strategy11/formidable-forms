@@ -28,15 +28,16 @@ export function createTokenContainerElement( field ) {
 
 	container.classList.add( CLASS_NAMES.CONTAINER );
 
-	const tokensWrapper = span({
+	const tokensWrapper = span( {
 		className: CLASS_NAMES.TOKENS_WRAPPER
-	});
+	} );
 
 	container.insertBefore( tokensWrapper, container.firstChild );
 
 	const proxyInput = tag( 'input', {
-		className: CLASS_NAMES.TOKEN_PROXY_INPUT
-	});
+		className: CLASS_NAMES.TOKEN_PROXY_INPUT,
+		id: `${ field.id }-proxy-input`
+	} );
 
 	proxyInput.type = 'text';
 
@@ -55,19 +56,19 @@ export function createTokenContainerElement( field ) {
  * @return {void}
  */
 export function createTokenElement( value, tokensWrapper ) {
-	const tokenElement = span({
+	const tokenElement = span( {
 		className: CLASS_NAMES.TOKEN,
 		children: [
-			span({
+			span( {
 				text: value,
 				className: CLASS_NAMES.TOKEN_VALUE
-			}),
-			span({
+			} ),
+			span( {
 				className: CLASS_NAMES.TOKEN_REMOVE,
-				child: svg({ href: '#frm_close_icon' })
-			})
+				child: svg( { href: '#frm_close_icon' } )
+			} )
 		]
-	});
+	} );
 
 	tokensWrapper.appendChild( tokenElement );
 }

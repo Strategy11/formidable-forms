@@ -52,14 +52,14 @@ export function adjustProxyInputStyle( proxyInput, tokensWrapper ) {
 		// For multiple rows, calculate the width of tokens in the last row
 		const lastRowWidth = calculateLastRowWidth( getLastRowTokens( tokens ) );
 
-		proxyInput.style.height = `${tokensWrapperHeight}px`;
-		proxyInput.style.paddingTop = `${tokensWrapperHeight - PROXY_INPUT_HEIGHT + TOKEN_GAP}px`;
-		proxyInput.style.paddingLeft = lastRowWidth ? `${lastRowWidth + TOKEN_GAP * 2}px` : '';
+		proxyInput.style.height = `${ tokensWrapperHeight }px`;
+		proxyInput.style.paddingTop = `${ tokensWrapperHeight - PROXY_INPUT_HEIGHT + TOKEN_GAP }px`;
+		proxyInput.style.paddingLeft = lastRowWidth ? `${ lastRowWidth + ( TOKEN_GAP * 2 ) }px` : '';
 	} else {
 		// For single row, use the full width of tokens
 		proxyInput.style.height = '';
 		proxyInput.style.paddingTop = '';
-		proxyInput.style.paddingLeft = `${tokensWrapper.offsetWidth - TOKEN_GAP}px`;
+		proxyInput.style.paddingLeft = `${ tokensWrapper.offsetWidth - TOKEN_GAP }px`;
 	}
 }
 
@@ -84,13 +84,13 @@ function getLastRowTokens( tokens ) {
 		if ( tokenBottom > lastRowY ) {
 			lastRowY = tokenBottom;
 		}
-	});
+	} );
 
 	const threshold = TOKEN_GAP / 2;
 	return tokensArray.filter( token => {
 		const tokenRect = token.getBoundingClientRect();
 		return Math.abs( tokenRect.bottom - lastRowY ) <= threshold;
-	});
+	} );
 }
 
 /**
@@ -108,7 +108,7 @@ function calculateLastRowWidth( lastRowTokens ) {
 
 	lastRowTokens.forEach( token => {
 		totalWidth += token.offsetWidth;
-	});
+	} );
 
 	totalWidth += ( lastRowTokens.length - 1 ) * TOKEN_GAP;
 

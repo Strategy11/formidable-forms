@@ -11,7 +11,7 @@
 	display: flex;
 }
 
-.frm-flex\! {
+.frm-force-flex {
 	display: flex !important;
 }
 
@@ -47,7 +47,7 @@
 	@extend %frm-flex-center;
 }
 
-.frm-flex-center\! {
+.frm-force-flex-center {
 	display: flex !important;
 
 	@extend %frm-flex-center;
@@ -67,10 +67,6 @@
 
 .frm-gap-xs {
 	gap: var(--gap-xs);
-}
-
-.frm-gap-xs\! {
-	gap: var(--gap-xs) !important;
 }
 
 .frm-gap-sm {
@@ -118,11 +114,11 @@
 }
 
 .frm-order-first {
-	order: calc(-infinity);
+	order: -9999;
 }
 
 .frm-order-last {
-	order: calc(infinity);
+	order: 9999;
 }
 
 .frm-order-none {

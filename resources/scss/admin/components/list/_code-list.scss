@@ -54,6 +54,11 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
+
+	&:focus span:last-child {
+		outline: 1px solid var(--primary-500);
+		outline-offset: var(--gap-2xs);
+	}
 }
 
 .frm_code_list.frm-full-hover.frmcenter a {
@@ -125,11 +130,16 @@
 	border-radius: var(--small-radius);
 	padding: 10px 0;
 	box-shadow: var(--box-shadow-sm);
-}
 
-.frm_code_list.frm_grid_container a:hover {
-	background-color: var(--primary-500);
-	color: #fff;
+	&:hover {
+		background-color: var(--primary-500);
+		color: #fff;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--primary-500);
+		outline-offset: -1px;
+	}
 }
 
 .frm-single-settings,

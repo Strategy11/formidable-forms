@@ -61,6 +61,10 @@
 	margin-bottom: var(--gap-2xs) !important;
 }
 
+.frm-mb-6 {
+	margin-bottom: 6px !important;
+}
+
 .frm-mb-sm {
 	margin-bottom: var(--gap-sm) !important;
 }
@@ -101,7 +105,7 @@
 	margin-right: auto;
 }
 
-.frm-mr-auto\! {
+.frm-force-mr-auto {
 	margin-right: auto !important;
 }
 

@@ -793,7 +793,7 @@ class FrmAppController {
 	/**
 	 * Enqueue the Form Builder assets.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param string $plugin_url The plugin URL.
 	 * @param string $version    The plugin version.
