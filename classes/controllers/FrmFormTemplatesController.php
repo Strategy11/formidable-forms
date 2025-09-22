@@ -51,7 +51,7 @@ class FrmFormTemplatesController {
 	/**
 	 * The keys of the free templates.
 	 *
-	 * @var array FREE_TEMPLATES_KEYS Unique keys for the free templates.
+	 * @var array Unique keys for the free templates.
 	 */
 	const FREE_TEMPLATES_KEYS = array( 20872734, 28223640 );
 
