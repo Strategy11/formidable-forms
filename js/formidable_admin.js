@@ -11330,6 +11330,7 @@ function frmAdminBuildJS() {
 		handleInsertFieldByDraggingResponse,
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
+		maybeCollapseSettings,
 	};
 }
 

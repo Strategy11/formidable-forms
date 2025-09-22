@@ -34,6 +34,7 @@ const entries = {
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
+    'formidable-web-components': './js/src/web-components/index.js',
   },
   // SCSS entries
   scss: {
@@ -101,8 +102,13 @@ const jsConfig = {
       },
       {
         test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
+        use: ['style-loader', 'css-loader'],
+		exclude: /-component\.css$/
       },
+	  {
+		test: /-component\.css$/i,
+		use: ['raw-loader']
+	  },
       {
         test: /\.scss$/,
         use: [
