@@ -20,21 +20,21 @@ class FrmFormTemplatesController {
 	/**
 	 * The slug of the Form Templates page.
 	 *
-	 * @var string PAGE_SLUG Unique identifier for the "Form Templates" page.
+	 * @var string Unique identifier for the "Form Templates" page.
 	 */
 	const PAGE_SLUG = 'formidable-form-templates';
 
 	/**
 	 * The script handle.
 	 *
-	 * @var string SCRIPT_HANDLE Unique handle for the admin script.
+	 * @var string Unique handle for the admin script.
 	 */
 	const SCRIPT_HANDLE = 'frm-form-templates';
 
 	/**
 	 * The required user capability to view form templates.
 	 *
-	 * @var string REQUIRED_CAPABILITY Required capability to access the view form templates.
+	 * @var string Required capability to access the view form templates.
 	 */
 	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
@@ -44,7 +44,7 @@ class FrmFormTemplatesController {
 	 * Contains the unique keys for the templates that are considered "featured":
 	 * "Contact Us", "Stripe Payment", "User Registration", "Create WordPress Post", "Survey", and "Quiz".
 	 *
-	 * @var array FEATURED_TEMPLATES_KEYS Unique keys for the featured templates.
+	 * @var array Unique keys for the featured templates.
 	 */
 	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
 
@@ -58,7 +58,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Option name to store favorite templates.
 	 *
-	 * @var string FAVORITE_TEMPLATES_OPTION Unique identifier for storing favorite templates.
+	 * @var string Unique identifier for storing favorite templates.
 	 */
 	const FAVORITE_TEMPLATES_OPTION = 'frm_favorite_templates';
 
