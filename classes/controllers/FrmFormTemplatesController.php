@@ -39,21 +39,21 @@ class FrmFormTemplatesController {
 	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
 	/**
-	 * The keys of the featured templates.
+	 * The IDs of the featured templates.
 	 *
-	 * Contains the unique keys for the templates that are considered "featured":
+	 * Contains the unique IDs for the templates that are considered "featured":
 	 * "Contact Us", "Stripe Payment", "User Registration", "Create WordPress Post", "Survey", and "Quiz".
 	 *
-	 * @var array Unique keys for the featured templates.
+	 * @var array Unique IDs for the featured templates.
 	 */
-	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
+	const FEATURED_TEMPLATES_IDS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
 
 	/**
-	 * The keys of the free templates.
+	 * The IDs of the free templates.
 	 *
-	 * @var array Unique keys for the free templates.
+	 * @var array Unique IDs for the free templates.
 	 */
-	const FREE_TEMPLATES_KEYS = array( 20872734, 28223640 );
+	const FREE_TEMPLATES_IDS = array( 20872734, 28223640 );
 
 	/**
 	 * Option name to store favorite templates.
@@ -575,7 +575,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Assign featured templates.
 	 *
-	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
+	 * Iterates through FEATURED_TEMPLATES_IDS and adds matching templates to
 	 * the `featured_templates` class property.
 	 *
 	 * @since 6.7
@@ -583,7 +583,7 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	private static function assign_featured_templates() {
-		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
+		foreach ( self::FEATURED_TEMPLATES_IDS as $key ) {
 			if ( isset( self::$templates[ $key ] ) ) {
 				self::$templates[ $key ]['is_featured'] = true;
 				self::$featured_templates[]             = self::$templates[ $key ];
@@ -719,16 +719,16 @@ class FrmFormTemplatesController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
-			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
-			'FREE_TEMPLATES_KEYS'     => self::FREE_TEMPLATES_KEYS,
-			'templatesCount'          => self::get_template_count(),
-			'favoritesCount'          => array(
+			'FEATURED_TEMPLATES_IDS' => self::FEATURED_TEMPLATES_IDS,
+			'FREE_TEMPLATES_IDS'     => self::FREE_TEMPLATES_IDS,
+			'templatesCount'         => self::get_template_count(),
+			'favoritesCount'         => array(
 				'total'   => self::get_favorite_templates_count(),
 				'default' => count( self::$favorite_templates['default'] ),
 				'custom'  => count( self::$favorite_templates['custom'] ),
 			),
-			'customCount'             => count( self::$custom_templates ),
-			'upgradeLink'             => self::$upgrade_link,
+			'customCount'            => count( self::$custom_templates ),
+			'upgradeLink'            => self::$upgrade_link,
 		);
 
 		/**

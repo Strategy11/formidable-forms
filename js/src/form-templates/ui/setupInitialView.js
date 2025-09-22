@@ -10,7 +10,7 @@ import { PREFIX as SKELETON_PREFIX } from 'core/page-skeleton';
  * Internal dependencies
  */
 import { getElements } from '../elements';
-import { getSingleState, FREE_TEMPLATES_KEYS } from '../shared';
+import { getSingleState, FREE_TEMPLATES_IDS } from '../shared';
 import { showHeaderCancelButton } from './';
 
 /**
@@ -93,7 +93,7 @@ function runAvailableTemplatesEffects( element, count ) {
 	setTimeout( () => {
 		const { availableTemplateItems } = getElements();
 		availableTemplateItems.forEach( item => {
-			if ( FREE_TEMPLATES_KEYS.includes( Number( item.dataset.id ) ) ) {
+			if ( FREE_TEMPLATES_IDS.includes( Number( item.dataset.id ) ) ) {
 				return;
 			}
 
