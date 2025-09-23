@@ -526,6 +526,11 @@ class FrmFieldFormHtml {
 			$attributes['aria-required'] = 'true';
 		}
 
+		// Add 'aria-invalid' attribute to the group if there are errors.
+		if ( isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
+			$attributes['aria-invalid'] = 'true';
+		}
+
 		// Concatenate attributes into a string, and replace the role="group" in the HTML with the attributes string.
 		$html_attributes = FrmAppHelper::array_to_html_params( $attributes );
 		$this->html      = str_replace( ' role="group"', $html_attributes, $this->html );

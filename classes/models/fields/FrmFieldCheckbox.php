@@ -108,4 +108,8 @@ class FrmFieldCheckbox extends FrmFieldType {
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
 	}
+
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		unset( $shortcode_atts['aria-invalid'] );
+	}
 }

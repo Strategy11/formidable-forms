@@ -109,4 +109,8 @@ class FrmFieldRadio extends FrmFieldType {
 	protected function show_readonly_hidden() {
 		return true;
 	}
+
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		unset( $shortcode_atts['aria-invalid'] );
+	}
 }
