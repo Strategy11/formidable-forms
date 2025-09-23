@@ -1631,7 +1631,7 @@ class FrmFormsController {
 			return;
 		}
 
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info_new.php';
+		include $template_path;
 	}
 
 	/**
