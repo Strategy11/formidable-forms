@@ -201,7 +201,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( $lang ) {
 			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
 			$lang_parts  = explode( '-', $lang );
-			$api_js_url .= count( $lang_parts ) > 1 ? '&hl=' . $lang_parts[0] : $lang;
+			$api_js_url .= '&hl=' . ( count( $lang_parts ) > 1 ? $lang_parts[0] : $lang );
 		}
 
 		/**
