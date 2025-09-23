@@ -110,6 +110,15 @@ class FrmFieldRadio extends FrmFieldType {
 		return true;
 	}
 
+	/**
+	 * Unset aria-invalid for radio buttons because it's not valid for radio buttons.
+	 * Instead aria-invalid is added to the radiogroup parent element.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 */
 	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
 		unset( $shortcode_atts['aria-invalid'] );
 	}
