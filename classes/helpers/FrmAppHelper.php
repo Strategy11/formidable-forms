@@ -1291,6 +1291,7 @@ class FrmAppHelper {
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
 		$allowed_html['svg']['title']     = true;
+		$allowed_html['svg']['tabindex']  = true;
 		return $allowed_html;
 	}
 
@@ -2009,7 +2010,7 @@ class FrmAppHelper {
 		foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_html( $name ); ?> </option>
+			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_html( $name ); ?></option>
 			<?php
 			unset( $role, $details );
 		}

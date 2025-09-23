@@ -361,7 +361,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use xlink:href="#frm_wordpress_icon" /></svg>';
