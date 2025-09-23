@@ -1193,7 +1193,7 @@ function frmFrontFormJS() {
 
 		if ( 'true' === input.attr( 'aria-invalid' ) ) {
 			input.attr( 'aria-invalid', false );
-		} else {
+		} else if ( [ 'radio', 'checkbox' ].includes( input.attr( 'type' ) ) ) {
 			input.closest( '[role="radiogroup"], [role="group"]' ).attr( 'aria-invalid', false );
 		}
 
