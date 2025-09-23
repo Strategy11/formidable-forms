@@ -1605,7 +1605,7 @@ class FrmFormsController {
 	 * @param string     $class
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '', $template = 'default' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1626,7 +1626,7 @@ class FrmFormsController {
 
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
-		if ( 'new-tab-navigator' !== $template ) {
+		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
 			include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
 			return;
 		}
