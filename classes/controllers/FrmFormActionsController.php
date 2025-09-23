@@ -184,6 +184,7 @@ class FrmFormActionsController {
 					'getresponse',
 					'aweber',
 					'mailpoet',
+					'convertkit',
 				),
 			),
 			'crm'       => array(

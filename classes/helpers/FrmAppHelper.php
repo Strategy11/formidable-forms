@@ -215,7 +215,7 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
-		return FrmAddonsController::is_license_expired() ? 'Formidable' : $frm_settings->menu;
+		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
 	}
 
 	/**
@@ -1291,6 +1291,7 @@ class FrmAppHelper {
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
 		$allowed_html['svg']['title']     = true;
+		$allowed_html['svg']['tabindex']  = true;
 		return $allowed_html;
 	}
 
