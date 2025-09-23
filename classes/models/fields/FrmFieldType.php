@@ -534,10 +534,11 @@ DEFAULT_HTML;
 	public function display_smart_values_modal_trigger_icon( $field ) {
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+				'tabindex'  => '0',
 			)
 		);
 	}
