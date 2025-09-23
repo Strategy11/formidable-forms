@@ -6688,7 +6688,7 @@ window.frmAdminBuildJS = function() {
 			}
 			if ( input !== null ) {
 				if ( ! inputTrigger ) {
-					const { key } = event ?? {};
+					const { key } = event;
 					if ( key !== 'Enter' && key !== ' ' ) {
 						input.focus();
 					}
