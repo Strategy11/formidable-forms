@@ -37,7 +37,7 @@ if ( $field['type'] === 'divider' ) {
 		</a>
 
 		<div class="dropdown">
-			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" aria-expanded="false">
+			<a href="#" class="frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle" title="<?php esc_attr_e( 'More Options', 'formidable' ); ?>" data-toggle="dropdown" data-container="body" data-trigger="hover" aria-expanded="false">
 				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_thick_more_vert_icon' ); ?>
 				<span class="screen-reader-text"><?php esc_html_e( 'Toggle More Options Dropdown', 'formidable' ); ?></span>
 			</a>
