@@ -73,10 +73,6 @@ body.frm_preview_page .ui-widget-overlay {
         }
     }
 
-    select {
-        width: auto !important;
-    }
-
     label:not(:first-child) {
         margin-left: var(--gap-xs);
     }
@@ -121,9 +117,12 @@ body.frm_preview_page .ui-widget-overlay {
     }
 
     select {
+        width: auto !important;
+        min-height: auto !important;
         outline: 0;
         box-shadow: var(--box-shadow-xs);
         border-radius: var(--small-radius);
+        border-width: 1px;
         padding: 5px 14px;
         border-color: var(--grey-300);
         color: var(--grey-800);
@@ -145,11 +144,17 @@ body.frm_preview_page .ui-widget-overlay {
         border-radius: var(--medium-radius);
         font-size: 12px;
         font-weight: 600;
+        height: 30px;
+    }
+
+    .btn-group button.multiselect.dropdown-toggle {
+        padding-top: 0;
+        padding-bottom: 0;
     }
 
     .multiselect-selected-text {
         position: relative;
-        top: 1px;
+        top: 2px;
     }
 }
 
@@ -163,7 +168,7 @@ body.frm_preview_page .ui-widget-overlay {
         border-radius: 8px;
         font-size: 12px;
         background-color: #fff;
-    
+
         &.frm_test_mode_active_page {
             background-color: var(--primary-500);
             border-color: var(--primary-500);
