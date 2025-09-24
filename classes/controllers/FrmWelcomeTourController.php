@@ -76,10 +76,12 @@ class FrmWelcomeTourController {
 		self::maybe_mark_welcome_tour_as_seen();
 
 		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
+		add_action( 'admin_footer', __CLASS__ . '::render' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 
-		add_action( 'frm_after_changed_form_style', __CLASS__ . '::maybe_mark_styler_step_as_completed' );
-		add_action( 'frm_after_saved_style', __CLASS__ . '::maybe_mark_styler_step_as_completed' );
+		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
+		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
 	}
 
 	/**
@@ -140,6 +142,100 @@ class FrmWelcomeTourController {
 		self::$checklist['current_step'] = $current_step;
 		self::save_checklist();
 	}
+
+	/**
+	 * Render the welcome tour elements.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function render() {
+		$view_path       = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
+		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+
+		$active_step = self::get_active_step();
+		$completed   = 'completed' === $active_step;
+
+		$urls = array(
+			'docs'                      => self::make_tracked_url( 'https://formidableforms.com/knowledgebase/' ),
+			// Setup email notifications would go to the actions & notifications area
+			'setup_email_notifications' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Customize success message would do the same, ideally scrolling down to the message
+			'customize_success_message' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Manage form entries would go to the "entries" area for all forms.
+			'manage_form_entries'       => admin_url( 'admin.php?page=formidable-entries' ),
+			// Explore Integrations would take them to the add-ons tab
+			'explore_integrations'      => admin_url( 'admin.php?page=formidable-addons' ),
+		);
+
+		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Checks if the welcome tour has been seen.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the welcome tour has been seen, false otherwise.
+	 */
+	private static function is_welcome_tour_seen() {
+		return FrmDashboardController::is_dashboard_page() && ! empty( self::$checklist['seen'] );
+	}
+
+	/**
+	 * Gets the checklist steps.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_steps() {
+		$steps = array(
+			'create-form' => array(
+				'title'       => __( 'Create your first form', 'formidable' ),
+				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
+			),
+			'add-fields'  => array(
+				'title'       => __( 'Add fields to your form', 'formidable' ),
+				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
+			),
+			'style-form'  => array(
+				'title'       => __( 'Style your form', 'formidable' ),
+				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
+			),
+			'embed-form'  => array(
+				'title'       => __( 'Embed in a page', 'formidable' ),
+				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
+			),
+		);
+
+		$steps_keys = array_keys( $steps );
+
+		return array(
+			'keys'  => $steps_keys,
+			'steps' => self::fill_step_completed_data( $steps, $steps_keys ),
+		);
+	}
+
+	/**
+	 * Fills the steps with the completed data.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $steps The steps to fill.
+	 * @param array $steps_keys The steps keys.
+	 * @return array The steps with the completed data.
+	 */
+	private static function fill_step_completed_data( $steps, $steps_keys ) {
+		return array_map(
+			function ( $step, $step_key ) {
+				$step['complete'] = isset( self::$completed_steps[ $step_key ] );
+				return $step;
+			},
+			$steps,
+			$steps_keys
+		);
 	}
 
 	/**
@@ -158,6 +254,13 @@ class FrmWelcomeTourController {
 		return $form_keys && ! in_array( 'contact-form', $form_keys, true );
 	}
 
+	/**
+	 * Checks if there are form embeds.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if there are form embeds, false otherwise.
+	 */
 	private static function check_for_form_embeds() {
 		global $wpdb;
 		$result = $wpdb->get_var( "SELECT 1 FROM {$wpdb->posts} WHERE post_content LIKE '%[formidable %' LIMIT 1" );
@@ -165,26 +268,102 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Checks if the welcome tour has been seen.
+	 * Get the Welcome Tour JS variables as an array.
 	 *
 	 * @since x.x
 	 *
-	 * @return bool True if the welcome tour has been seen, false otherwise.
+	 * @return array
 	 */
-	private static function is_welcome_tour_not_seen() {
-		return FrmDashboardController::is_dashboard_page() && empty( self::$checklist['seen'] );
+	private static function get_js_variables() {
+		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+
+		return array(
+			'IS_WELCOME_TOUR_SEEN'          => self::is_welcome_tour_seen(),
+			'i18n'                          => array(
+				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
+				'CONGRATULATIONS_TEXT'                  => __( 'Congratulations! 🎉', 'formidable' ),
+				'COMPLETED_MAIN_MESSAGE'                => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
+				'WHATS_NEXT_TEXT'                       => __( 'What\'s next for you?', 'formidable' ),
+				// translators: %s is the link to the documentation.
+				'DOCS_MESSAGE'                          => __( 'Check %s to learn more.', 'formidable' ),
+				'DOCS_LINK_TEXT'                        => __( 'Docs & Support', 'formidable' ),
+				'SETUP_EMAIL_NOTIFICATIONS_BUTTON_TEXT' => __( 'Setup email notifications', 'formidable' ),
+				'CUSTOMIZE_SUCCESS_MESSAGE_BUTTON_TEXT' => __( 'Customize success message', 'formidable' ),
+				'MANAGE_FORM_ENTRIES_BUTTON_TEXT'       => __( 'Manage form entries', 'formidable' ),
+				'EXPLORE_INTEGRATIONS_BUTTON_TEXT'      => __( 'Explore integrations', 'formidable' ),
+			),
+			'PROGRESS_BAR_PERCENT'          => self::get_welcome_tour_progress_bar_percent(),
+			'CHECKLIST_STEPS'               => self::get_steps()['steps'],
+			'TOUR_URL'                      => admin_url( 'admin.php?page=formidable-form-templates' ),
+			'DOCS_URL'                      => 'https://formidableforms.com/knowledgebase/',
+			'CHECKLIST_ACTIVE_STEP'         => self::get_active_step(),
+			// Setup email notifications would go to the actions & notifications area
+			'SETUP_EMAIL_NOTIFICATIONS_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Customize success message would do the same, ideally scrolling down to the message
+			'CUSTOMIZE_SUCCESS_MESSAGE_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+			// Manage form entries would go to the "entries" area for all forms.
+			'MANAGE_FORM_ENTRIES_URL'       => admin_url( 'admin.php?page=formidable-entries' ),
+			// Explore Integrations would take them to the add-ons tab
+			'EXPLORE_INTEGRATIONS_URL'      => admin_url( 'admin.php?page=formidable-addons' ),
+		);
 	}
 
 	/**
-	 * Marks the welcome tour as seen.
+	 * Get the active step.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_active_step() {
+		return empty( self::$checklist['current_step'] ) ? 'create-form' : self::$checklist['current_step'];
+	}
+
+	/**
+	 * Get the Welcome Tour progress bar percentage.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private static function get_welcome_tour_progress_bar_percent() {
+		if ( empty( self::$checklist['current_step'] ) ) {
+			return 0;
+		}
+
+		$percent = self::$checklist['current_step'] / count( self::get_steps()['keys'] ) * 100;
+
+		return (int) $percent;
+	}
+
+	/**
+	 * Mark the styler step as completed.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function mark_welcome_tour_as_seen() {
-		self::$checklist['seen'] = true;
-		self::set_checklist();
+	public static function mark_styler_step_as_completed() {
+		if ( isset( self::$completed_steps['style-form'] ) ) {
+			return;
+		}
+
+		self::$checklist['completed_steps'][] = 'style-form';
+		self::$completed_steps['style-form']  = true;
+
+		self::save_checklist();
+	}
+
+	/**
+	 * Adds custom classes to the existing string of admin body classes.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $classes Existing body classes.
+	 * @return string Updated list of body classes, including the newly added classes.
+	 */
+	public static function add_admin_body_classes( $classes ) {
+		return $classes . ' frm-admin-welcome-tour';
 	}
 
 	/**
@@ -209,149 +388,31 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Get the Welcome Tour JS variables as an array.
+	 * Saves the checklist data.
 	 *
 	 * @since x.x
 	 *
-	 * @return array
+	 * @param array|null $checklist The checklist data to set.
 	 */
-	private static function get_js_variables() {
-		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+	public static function save_checklist( $checklist = null ) {
+		update_option( self::CHECKLIST_OPTION, $checklist ?? self::$checklist, 'no' );
+	}
 
-		return array(
-			'IS_WELCOME_TOUR_SEEN'          => ! self::is_welcome_tour_not_seen(),
-			'i18n'                          => array(
-				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
-				'CONGRATULATIONS_TEXT'                  => __( 'Congratulations! 🎉', 'formidable' ),
-				'COMPLETED_MAIN_MESSAGE'                => __( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ),
-				'WHATS_NEXT_TEXT'                       => __( 'What\'s next for you?', 'formidable' ),
-				// translators: %s is the link to the documentation.
-				'DOCS_MESSAGE'                          => __( 'Check %s to learn more.', 'formidable' ),
-				'DOCS_LINK_TEXT'                        => __( 'Docs & Support', 'formidable' ),
-				'SETUP_EMAIL_NOTIFICATIONS_BUTTON_TEXT' => __( 'Setup email notifications', 'formidable' ),
-				'CUSTOMIZE_SUCCESS_MESSAGE_BUTTON_TEXT' => __( 'Customize success message', 'formidable' ),
-				'MANAGE_FORM_ENTRIES_BUTTON_TEXT'       => __( 'Manage form entries', 'formidable' ),
-				'EXPLORE_INTEGRATIONS_BUTTON_TEXT'      => __( 'Explore integrations', 'formidable' ),
-			),
-			'PROGRESS_BAR_PERCENT'          => self::get_welcome_tour_progress_bar_percent(),
-			'CHECKLIST_STEPS'               => self::get_steps(),
-			'TOUR_URL'                      => admin_url( 'admin.php?page=formidable-form-templates' ),
-			'DOCS_URL'                      => 'https://formidableforms.com/knowledgebase/',
-			'CHECKLIST_ACTIVE_STEP'         => self::get_active_step(),
-			// Setup email notifications would go to the actions & notifications area
-			'SETUP_EMAIL_NOTIFICATIONS_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Customize success message would do the same, ideally scrolling down to the message
-			'CUSTOMIZE_SUCCESS_MESSAGE_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Manage form entries would go to the "entries" area for all forms.
-			'MANAGE_FORM_ENTRIES_URL'       => admin_url( 'admin.php?page=formidable-entries' ),
-			// Explore Integrations would take them to the add-ons tab
-			'EXPLORE_INTEGRATIONS_URL'      => admin_url( 'admin.php?page=formidable-addons' ),
+	/**
+	 * Build a tracked URL with UTM parameters and affiliate tracking.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $url The base URL to process.
+	 * @return string The processed URL with UTM parameters and affiliate tracking.
+	 */
+	private static function make_tracked_url( $url ) {
+		$utm_params = array(
+			'utm_source'   => 'WordPress',
+			'utm_medium'   => 'welcome-tour',
+			'utm_campaign' => 'liteplugin',
 		);
-	}
 
-	private static function get_active_step() {
-		// TODO
-		return 'completed';
-	}
-
-	/**
-	 * Get the Welcome Tour progress bar percentage.
-	 *
-	 * @since x.x
-	 *
-	 * @return int
-	 */
-	private static function get_welcome_tour_progress_bar_percent() {
-		if ( empty( self::$checklist['step'] ) ) {
-			return 0;
-		}
-
-		$percent = self::$checklist['step'] / count( self::get_steps() ) * 100;
-
-		return (int) $percent;
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function get_steps() {
-		$steps = array(
-			'create-first-form' => array(
-				'title'       => __( 'Create your first form', 'formidable' ),
-				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
-			),
-			'add-fields'        => array(
-				'title'       => __( 'Add fields to your form', 'formidable' ),
-				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
-			),
-			'style-form'        => array(
-				'title'       => __( 'Style your form', 'formidable' ),
-				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
-			),
-			'embed-form'        => array(
-				'title'       => __( 'Embed in a page', 'formidable' ),
-				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
-			),
-		);
-		$steps = self::fill_step_completed_data( $steps );
-		return $steps;
-	}
-
-	/**
-	 * @param array $steps
-	 * @return array
-	 */
-	private static function fill_step_completed_data( $steps ) {
-		foreach ( $steps as $step_key => $step ) {
-			$steps[ $step_key ]['complete'] = in_array( $step_key, self::$checklist['completed_steps'], true );
-		}
-
-		// Remove this.
-		$steps['add-fields']['complete'] = true;
-
-		return $steps;
-	}
-
-	/**
-	 * Adds custom classes to the existing string of admin body classes.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $classes Existing body classes.
-	 * @return string Updated list of body classes, including the newly added classes.
-	 */
-	public static function add_admin_body_classes( $classes ) {
-		return $classes . ' frm-admin-welcome-tour';
-	}
-
-	/**
-	 * Sets the checklist data.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $checklist The checklist data to set.
-	 */
-	public static function set_checklist() {
-		update_option( self::CHECKLIST_OPTION, self::$checklist, 'no' );
-	}
-
-	/**
-	 * Retrieves the current checklist data, returning an empty array if none exists.
-	 *
-	 * @since x.x
-	 *
-	 * @return array Current checklist data.
-	 */
-	public static function get_checklist() {
-		return self::$checklist;
-	}
-
-	public static function maybe_mark_styler_step_as_completed() {
-		if ( in_array( 'style-form', self::$checklist['completed_steps'], true ) ) {
-			return;
-		}
-
-		self::$checklist['completed_steps'][] = 'style-form';
-		self::set_checklist();
+		return FrmAppHelper::make_affiliate_url( add_query_arg( $utm_params, $url ) );
 	}
 }
