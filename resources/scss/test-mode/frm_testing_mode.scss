@@ -119,6 +119,17 @@ body.frm_preview_page .ui-widget-overlay {
     label:not(.frm_toggle_block) {
         margin-right: 2px;
     }
+
+    select {
+        appearance: none;
+        background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath stroke='%2398A2B3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12.708 8.959 10 11.875 7.292 8.96'/%3E%3C/svg%3E") no-repeat right 8px top 50%;
+        padding-right: var(--gap-lg) !important;
+    }
+
+    select,
+    .btn-group button.multiselect.dropdown-toggle {
+        border-radius: var(--medium-radius);
+    }
 }
 
 #frm_test_mode_pagination {
