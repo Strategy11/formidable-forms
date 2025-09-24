@@ -143,7 +143,7 @@ class FrmTestModeController {
 	/**
 	 * @since x.x
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private static function get_form_key_from_request() {
 		$form_key = FrmAppHelper::simple_get( 'form' );
