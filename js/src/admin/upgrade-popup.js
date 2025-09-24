@@ -212,7 +212,7 @@ export function initUpgradeModal() {
 			if ( lockIcon ) {
 				lockIcon.style.display = 'none';
 			}
-			lockIcon.parentNode.insertBefore( img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
+			lockIcon.parentNode.insertBefore( frmDom.img( { id: upgradeImageId, src: frmGlobal.url + '/images/' + element.dataset.image } ), lockIcon );
 		}
 
 		const level = modal.querySelector( '.license-level' );
