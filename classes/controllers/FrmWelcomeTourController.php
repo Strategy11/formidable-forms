@@ -71,9 +71,9 @@ class FrmWelcomeTourController {
 			return;
 		}
 
-		if ( self::is_welcome_tour_not_seen() ) {
-			self::mark_welcome_tour_as_seen();
-		}
+		self::$completed_steps = array_flip( self::$checklist['completed_steps'] );
+
+		self::maybe_mark_welcome_tour_as_seen();
 
 		add_action( 'admin_init', __CLASS__ . '::maybe_check_for_completed_steps' );
 
@@ -89,29 +89,25 @@ class FrmWelcomeTourController {
 	}
 
 	/**
+	 * Marks the welcome tour as seen if it hasn't been seen yet.
+	 *
+	 * @since x.x
+	 *
 	 * @return void
 	 */
-	public static function maybe_check_for_completed_steps() {
-		if ( ! isset( self::$checklist['completed_steps'] ) ) {
-			self::$checklist['completed_steps'] = array();
+	private static function maybe_mark_welcome_tour_as_seen() {
+		if ( self::is_welcome_tour_seen() ) {
+			return;
 		}
 
-		$steps     = self::get_steps();
-		$step_keys = array_keys( $steps );
-		foreach ( $step_keys as $step_key ) {
-			$completed = in_array( $step_key, self::$checklist['completed_steps'], true );
-			if ( $completed ) {
-				continue;
-			}
+		self::$checklist['seen'] = true;
+		self::save_checklist();
 
-			switch ( $step_key ) {
-				case 'create-first-form':
-					$completed = self::more_than_the_default_form_exists();
-					break;
-				case 'embed-form':
-					$completed = self::check_for_form_embeds();
-					break;
-			}
+		// TODO: remove this after development, for now we always show the checklist
+		self::$checklist['seen'] = false;
+		self::save_checklist();
+	}
+
 
 			if ( $completed ) {
 				self::$checklist['completed_steps'][] = $step_key;
