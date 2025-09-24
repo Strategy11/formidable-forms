@@ -156,6 +156,12 @@ body.frm_preview_page .ui-widget-overlay {
         position: relative;
         top: 2px;
     }
+
+    #frm_testmode_fill_in_empty_form_fields {
+        background-color: var(--primary-500);
+        color: #fff;
+        padding: 8px 18px;
+    }
 }
 
 #frm_test_mode_pagination {
@@ -252,5 +258,18 @@ body.frm_preview_page .ui-widget-overlay {
 
     #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
         margin-top: var(--gap-sm);
+    }
+
+    #frm_testmode_fill_in_empty_form_fields {
+        display: block;
+    }
+
+    #frm_testing_mode > div:nth-of-type(2) {
+        flex-direction: column;
+        align-items: normal;
+    }
+
+    #frm_test_mode_pagination {
+        margin-left: 0;
     }
 }
