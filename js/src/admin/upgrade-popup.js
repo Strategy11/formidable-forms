@@ -66,7 +66,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	if ( undefined !== upgradeLabel ) {
 		newMessage = newMessage.replace( '<span class="frm_feature_label"></span>', upgradeLabel );
 	}
- 
+
 	upgradeMessage.innerHTML = newMessage;
  
 	if ( link.dataset.upsellImage ) {

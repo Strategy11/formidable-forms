@@ -186,10 +186,9 @@ function saveAndReloadSettingsButton( saveAndReload ) {
 }
 
 function saveAndReloadSettings() {
-	let page, form;
-	page = document.getElementById( 'form_settings_page' );
+	const page = document.getElementById( 'form_settings_page' );
 	if ( null !== page ) {
-		form = page.querySelector( 'form.frm_form_settings' );
+		const form = page.querySelector( 'form.frm_form_settings' );
 		if ( null !== form ) {
 			fieldsUpdated = 0;
 			form.submit();
