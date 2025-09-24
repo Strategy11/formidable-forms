@@ -129,6 +129,12 @@ body.frm_preview_page .ui-widget-overlay {
     select,
     .btn-group button.multiselect.dropdown-toggle {
         border-radius: var(--medium-radius);
+        font-size: 12px;
+    }
+
+    .multiselect-selected-text {
+        position: relative;
+        top: 1px;
     }
 }
 
