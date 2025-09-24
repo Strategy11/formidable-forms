@@ -82,6 +82,8 @@ class FrmWelcomeTourController {
 
 		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
 		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
+
+		add_filter( 'frm_should_show_floating_links', '__return_false' );
 	}
 
 	/**
