@@ -34,7 +34,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "jsdoc"],
 	"settings": {
 		"import/resolver": {
 			"webpack": {
@@ -94,7 +94,7 @@
 		"@wordpress/no-global-active-element": "off",
 		"no-alert": "off",
 		"no-undef": "off",
-		"jsdoc/no-undefined-types": "off",
+		"jsdoc/check-tag-names": "error",
 		"no-shadow": "off",
 		"sonarjs/no-duplicate-string": "off",
 		"sonarjs/prefer-single-boolean-return": "off",

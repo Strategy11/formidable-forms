@@ -1265,13 +1265,11 @@ class FrmStylesController {
 						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
 							<h3 class="accordion-section-title hndle">
 								<?php
-								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
+								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
 								echo esc_html( $box['title'] );
 								?>
 								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>">
-									<?php
-									FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
-									?>
+									<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
 								</button>
 							</h3>
 							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
