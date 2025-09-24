@@ -183,6 +183,7 @@
 }
 
 #frm_view_application_modal .frm_modal_content {
+	max-height: 75vh !important;
 	flex: 1;
 	overflow-y: auto;
 }
@@ -281,11 +282,6 @@ ul.frm-application-item-list {
 	margin-top: 0;
 	list-style: disc;
 	list-style-position: inside;
-}
-
-#frm_view_application_modal .frm_modal_content {
-	max-height: 75vh !important;
-	overflow-y: auto;
 }
 
 @media only screen and (max-width: 1200px) {
