@@ -1,4 +1,4 @@
-#frm-welcome-tour-checklist {
+.frm-welcome-tour {
 	background-color: #fff;
 	position: fixed;
 	right: 48px;
@@ -8,15 +8,16 @@
     max-height: 400px;
     border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0px 4px 36px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 4px 36px rgba(0, 0, 0, 0.2);
 
-    .frm-welcome-tour-cta-buttons button {
+    &__cta-buttons button {
         margin-bottom: var(--gap-sm);
     }
 }
 
-.frm-welcome-tour-checklist {
-    &-header {
+.frm-checklist {
+
+    &__header {
         background-color: rgba(29, 41, 57, 1);
         width: 100%;
         padding: 16px;
@@ -34,12 +35,12 @@
         }
     }
 
-    &-progress-bar-wrapper {
+    &__progress-bar {
         background-color: var(--gray-200);
         height: 8px;
         width: 100%;
 
-        .frm-welcome-tour-checklist-progress-bar {
+        &-fill {
             background-color: var( --primary-500 );
             height: 8px;
         }
@@ -58,22 +59,23 @@
         padding: 0 16px;
         box-sizing: border-box;
         font-size: 12px;
+
+		&--active {
+
+			&__step-main-content {
+				font-weight: 700;
+			}
+
+			&__step-description {
+				display: block;
+				padding: 8px;
+				background-color: rgba(249, 250, 251, 1);
+				border-radius: 8px;
+			}
+		}
     }
 
-    &-step.frm-welcome-tour-active-step {
-        .frm-welcome-tour-checklist-step-main-content {
-            font-weight: 700;
-        }
-
-        .frm-welcome-tour-checklist-step-description {
-            display: block;
-            padding: 8px;
-            background-color: rgba(249, 250, 251, 1);
-            border-radius: 8px;
-        }
-    }
-
-    &-step-main-content {
+    &__step-main-content {
         height: 50px;
         width: 100%;
         display: flex;
@@ -86,12 +88,12 @@
         }
     }
 
-    &-step-description {
+    &__step-description {
         display: none;
     }
 }
 
-.frm-welcome-tour-completed {
+.frm-checklist__completed {
     padding: 0 var(--gap-sm);
     overflow-x: hidden;
     overflow-y: auto;

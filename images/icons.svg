@@ -230,7 +230,6 @@
 <path d="M5 6l5 5 5-5 2 1-7 7-7-7 2-1z" />
 </symbol>
 <symbol id="frm_arrowdown8_icon" viewBox="0 0 32 32"><path d="M24.821 14.316c-0.652 0.67-7.527 7.219-7.527 7.219-0.35 0.358-0.807 0.535-1.263 0.535-0.459 0-0.916-0.178-1.263-0.535 0 0-6.874-6.549-7.529-7.219-0.652-0.67-0.697-1.874 0-2.591 0.699-0.715 1.672-0.771 2.527 0l6.265 6.009 6.263-6.007c0.856-0.771 1.831-0.715 2.527 0 0.699 0.715 0.655 1.921 0 2.589z"></path></symbol>
-<symbol id="frm_arrowdown9_icon" fill="none" viewBox="0 0 8 5"><path stroke="#EAECF0" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6.4 1 4 3.8 1.6 1"/></symbol>
 <symbol id="frm_arrow_left_icon" viewBox="0 0 20 20">
 <title>arrow_left</title>
 <path d="M11.4 15.5L7 10.8a1.1 1.1 0 0 1 0-1.6l4.5-4.7c.5-.4 1.2-.4 1.7 0 .4.5.4 1 0 1.6L9.3 10l3.8 4c.4.4.4 1 0 1.5-.5.4-1.2.4-1.7 0z"/>
