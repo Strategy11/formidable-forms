@@ -6,19 +6,17 @@ const { div } = frmDom;
  * Toggles the state of an add-on (ie. enable or disable an add-on).
  *
  * @param {Element} clicked
- * @param {string} action
+ * @param {string}  action
  */
 export function toggleAddonState( clicked, action ) {
 	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url; // eslint-disable-line camelcase
 
-	let button, plugin, el, message;
-
 	// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 	jQuery( '.frm-addon-error' ).remove();
-	button = jQuery( clicked );
-	plugin = button.attr( 'rel' );
-	el = button.parent();
-	message = el.parent().find( '.addon-status-label' );
+	const button  = jQuery( clicked );
+	const plugin  = button.attr( 'rel' );
+	const el      = button.parent();
+	const message = el.parent().find( '.addon-status-label' );
 
 	button.addClass( 'frm_loading_button' );
 
