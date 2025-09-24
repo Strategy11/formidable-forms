@@ -75,13 +75,7 @@ class FrmWelcomeTourController {
 
 		self::maybe_mark_welcome_tour_as_seen();
 
-		add_action( 'admin_init', __CLASS__ . '::maybe_check_for_completed_steps' );
-
-		// TODO: remove this after development
-		self::$checklist['seen'] = false;
-		self::set_checklist();
-
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 
 		add_action( 'frm_after_changed_form_style', __CLASS__ . '::maybe_mark_styler_step_as_completed' );
@@ -108,23 +102,44 @@ class FrmWelcomeTourController {
 		self::save_checklist();
 	}
 
-
-			if ( $completed ) {
-				self::$checklist['completed_steps'][] = $step_key;
-			}
-		}
-
+	/**
+	 * Sets up the checklist progress.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function setup_checklist_progress() {
 		$current_step = 0;
-		foreach ( $step_keys as $step_key ) {
-			if ( in_array( $step_key, self::$checklist['completed_steps'], true ) ) {
-				$current_step++;
-			} else {
-				break;
-			}
-		}
 
-		self::$checklist['step'] = $current_step;
-		self::set_checklist();
+		foreach ( self::get_steps()['keys'] as $index => $step_key ) {
+			$completed = isset( self::$completed_steps[ $step_key ] );
+
+			if ( false === $completed ) {
+				switch ( $step_key ) {
+					case 'create-form':
+						$completed = self::more_than_the_default_form_exists();
+						break;
+					case 'embed-form':
+						$completed = self::check_for_form_embeds();
+						break;
+				}
+
+				if ( $completed ) {
+					self::$checklist['completed_steps'][] = $step_key;
+					self::$completed_steps[ $step_key ]   = true;
+				}
+			}
+
+			// Count completed steps from start until gap found.
+			if ( $completed && $index === $current_step ) {
+				$current_step++;
+			}
+		}//end foreach
+
+		self::$checklist['current_step'] = $current_step;
+		self::save_checklist();
+	}
 	}
 
 	/**
