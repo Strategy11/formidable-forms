@@ -9,7 +9,7 @@ const { div } = frmDom;
  * @param {string} action
  */
 export function toggleAddonState( clicked, action ) {
-	const ajaxurl = frm_js.ajax_url; // eslint-disable-line camelcase
+	const ajaxurl = window.ajaxurl ?? frm_js.ajax_url; // eslint-disable-line camelcase
 
 	let button, plugin, el, message;
 
