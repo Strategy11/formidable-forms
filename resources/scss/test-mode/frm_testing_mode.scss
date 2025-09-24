@@ -169,6 +169,10 @@ body.frm_preview_page .ui-widget-overlay {
             border-color: var(--primary-500);
             color: #fff;
         }
+
+        &:not(.frm_noallow) {
+            cursor: pointer;
+        }
     }
 }
 
