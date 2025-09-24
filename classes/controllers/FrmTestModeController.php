@@ -182,7 +182,7 @@ class FrmTestModeController {
 			return wp_list_pluck( $form_actions, 'ID' );
 		}
 
-		if ( empty( $_POST['frm_testmode']['enabled_form_actions'] ) || ! is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( empty( $_POST['frm_testmode']['enabled_form_actions'] ) || ! is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			return array();
 		}
 

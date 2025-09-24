@@ -16,26 +16,32 @@ if ( ! empty( $should_show_warning ) ) {
 			<?php esc_html_e( 'To use this feature, please install and activate the Testing Mode add-on.', 'formidable' ); ?>
 			<span <?php FrmAppHelper::array_to_html_params( $test_mode_install_span_attrs, true ); ?>>
 			<?php
-			FrmAddonsController::conditional_action_button( 'test-mode', array(
-				'medium' => 'test-mode',
-				'class'  => 'frm-button-primary',
-			) );
+			FrmAddonsController::conditional_action_button(
+				'test-mode',
+				array(
+					'medium' => 'test-mode',
+					'class'  => 'frm-button-primary',
+				)
+			);
 			?>
 			</span>
 		<?php } elseif ( $should_suggest_ai_install ) { ?>
 			<?php esc_html_e( 'To autofill forms using AI, please install and activate the AI add-on.', 'formidable' ); ?>
 			<span <?php FrmAppHelper::array_to_html_params( $ai_install_span_attrs, true ); ?>>
 				<?php
-				FrmAddonsController::conditional_action_button( 'ai', array(
-					'medium' => 'ai-autofill',
-					'class'  => 'frm-button-primary',
-				) );
+				FrmAddonsController::conditional_action_button(
+					'ai',
+					array(
+						'medium' => 'ai-autofill',
+						'class'  => 'frm-button-primary',
+					)
+				);
 				?>
 			</span>
-		<?php } ?>
+		<?php }//end if ?>
 	</div>
 	<?php
-}
+}//end if
 ?>
 <div id="frm_testing_mode">
 	<h2><?php esc_html_e( 'Testing Mode Controls', 'formidable' ); ?></h2>
