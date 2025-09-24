@@ -1,0 +1,26 @@
+.frm-checklist {
+
+	width: 316px;
+	height: 400px;
+	overflow: hidden;
+
+	&,
+	*,
+	*::before,
+	*::after {
+		box-sizing: border-box;
+	}
+
+	&__progress-bar {
+		height: 8px;
+	}
+
+	&__progress-fill {
+		width: 50%;
+	}
+
+	&__dismiss {
+		height: 50px;
+		border-top: 1px solid var(--grey-100);
+	}
+}
