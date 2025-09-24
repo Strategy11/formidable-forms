@@ -124,6 +124,9 @@ function applyToggleState( toggleButton, toggleGroup ) {
 				element.querySelectorAll( 'input, select, textarea' ).forEach(
 					formElement => formElement.disabled = isChecked
 				);
+				element.querySelectorAll( '.frm-show-inline-modal[tabindex]' ).forEach(
+					inlineModal => inlineModal.tabIndex = isChecked ? -1 : 0
+				);
 			} );
 	}
 

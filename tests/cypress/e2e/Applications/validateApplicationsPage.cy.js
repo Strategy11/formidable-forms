@@ -26,7 +26,8 @@ describe( 'Applications page', () => {
 							t.includes( 'upgrade today to unlock the full power of formidable forms' ) ||
 							t.includes( 'the most advanced wordpress form builder' ) ||
 							t.includes( 'more than just a wordpress form builder' ) ||
-							t.includes( 'get more done in less time with better wordpress forms' )
+							t.includes( 'get more done in less time with better wordpress forms' ) ||
+							t.includes( 'power your wordpress site like never before' )
 						);
 					} );
 				} );
