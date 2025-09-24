@@ -47,9 +47,16 @@ class FrmWelcomeTourController {
 	/**
 	 * Checklist data to pass to the view.
 	 *
-	 * @var string|array
+	 * @var array
 	 */
 	private static $checklist = array();
+
+	/**
+	 * Checklist data to pass to the view.
+	 *
+	 * @var string|array
+	 */
+	private static $completed_steps = array();
 
 	/**
 	 * Initialize hooks for Dashboard page only.
@@ -60,10 +67,7 @@ class FrmWelcomeTourController {
 	 */
 	public static function load_admin_hooks() {
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
-
-		// self::$checklist['completed_steps'] = array();
-
-		if ( 'done' === self::$checklist ) {
+		if ( ! empty( self::$checklist['done'] ) ) {
 			return;
 		}
 
