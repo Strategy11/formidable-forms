@@ -64,7 +64,7 @@ class FrmTestModeController {
 	private static function get_testing_mode_container() {
 		return FrmAppHelper::clip(
 			function () {
-				self::render_testing_most_container();
+				self::render_testing_mode_container();
 			}
 		);
 	}
@@ -76,7 +76,7 @@ class FrmTestModeController {
 	 *
 	 * @return void
 	 */
-	private static function render_testing_most_container() {
+	private static function render_testing_mode_container() {
 		$form_key = self::get_form_key_from_request();
 
 		if ( ! $form_key ) {
@@ -156,9 +156,9 @@ class FrmTestModeController {
 			return $form_key;
 		}
 
-		$form_key = FrmAppHelper::get_post_param( 'form_key', '', 'sanitize_text_field' );
-		if ( $form_key ) {
-			return $form_key;
+		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'sanitize_text_field' );
+		if ( $form_id && is_numeric( $form_id ) ) {
+			return FrmForm::get_key_by_id( $form_id );
 		}
 
 		return false;
