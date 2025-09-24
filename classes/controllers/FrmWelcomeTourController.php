@@ -106,8 +106,8 @@ class FrmWelcomeTourController {
 		self::save_checklist();
 
 		// TODO: remove this after development, for now we always show the checklist
-		self::$checklist['seen'] = false;
-		self::save_checklist();
+		// self::$checklist['seen'] = false;
+		// self::save_checklist();
 	}
 
 	/**
@@ -118,9 +118,10 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function setup_checklist_progress() {
-		$current_step = 0;
+		$steps       = self::get_steps()['keys'];
+		$active_step = 0;
 
-		foreach ( self::get_steps()['keys'] as $index => $step_key ) {
+		foreach ( $steps as $index => $step_key ) {
 			$completed = isset( self::$completed_steps[ $step_key ] );
 
 			if ( false === $completed ) {
@@ -132,20 +133,20 @@ class FrmWelcomeTourController {
 						$completed = self::check_for_form_embeds();
 						break;
 				}
+			}
 
-				if ( $completed ) {
-					self::$checklist['completed_steps'][] = $step_key;
-					self::$completed_steps[ $step_key ]   = true;
-				}
+			if ( $completed ) {
+				self::$checklist['completed_steps'][] = $step_key;
+				self::$completed_steps[ $step_key ]   = true;
 			}
 
 			// Count completed steps from start until gap found.
-			if ( $completed && $index === $current_step ) {
-				$current_step++;
+			if ( $completed && $index === $active_step ) {
+				$active_step++;
 			}
 		}//end foreach
 
-		self::$checklist['current_step'] = $current_step;
+		self::$checklist['active_step'] = $active_step;
 		self::save_checklist();
 	}
 
@@ -157,13 +158,15 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function render() {
-		$view_path       = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
-		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-
+		$steps       = self::get_steps()['steps'];
 		$active_step = self::get_active_step();
-		$completed   = 'completed' === $active_step;
+		$completed   = count( self::$completed_steps ) === count( $steps );
 
-		$urls = array(
+		$view_path       = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
+		$steps_view_path = $completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
+
+		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		$urls            = array(
 			'docs'                      => self::make_tracked_url( 'https://formidableforms.com/knowledgebase/' ),
 			// Setup email notifications would go to the actions & notifications area
 			'setup_email_notifications' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
@@ -322,7 +325,7 @@ class FrmWelcomeTourController {
 	 * @return string
 	 */
 	private static function get_active_step() {
-		return empty( self::$checklist['current_step'] ) ? 'create-form' : self::$checklist['current_step'];
+		return self::$checklist['active_step'] ?? 0;
 	}
 
 	/**
@@ -333,11 +336,7 @@ class FrmWelcomeTourController {
 	 * @return int
 	 */
 	private static function get_welcome_tour_progress_bar_percent() {
-		if ( empty( self::$checklist['current_step'] ) ) {
-			return 0;
-		}
-
-		$percent = self::$checklist['current_step'] / count( self::get_steps()['keys'] ) * 100;
+		$percent = self::get_active_step() / count( self::get_steps()['keys'] ) * 100;
 
 		return (int) $percent;
 	}
