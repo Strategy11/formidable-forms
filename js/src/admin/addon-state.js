@@ -146,6 +146,22 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 	}
 }
 
+export function addonError( response, el, button ) {
+	if ( response.form ) {
+		jQuery( '.frm-inline-error' ).remove();
+		button.closest( '.frm-card' )
+			.html( response.form )
+			.css( { padding: 5 } )
+			.find( '#upgrade' )
+			.attr( 'rel', button.attr( 'rel' ) )
+			.on( 'click', installAddonWithCreds );
+	} else {
+		el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
+		button.removeClass( 'frm_loading_button' );
+		jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
+	}
+}
+
 function getSaveAndReloadSettingsOptions( saveAndReload, inModal ) {
 	const className = 'frm-save-and-reload-options';
 	const children = [ saveAndReloadSettingsButton( saveAndReload ) ];

@@ -9138,19 +9138,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addonError( response, el, button ) {
-		if ( response.form ) {
-			jQuery( '.frm-inline-error' ).remove();
-			button.closest( '.frm-card' )
-				.html( response.form )
-				.css( { padding: 5 } )
-				.find( '#upgrade' )
-				.attr( 'rel', button.attr( 'rel' ) )
-				.on( 'click', installAddonWithCreds );
-		} else {
-			el.append( '<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>' );
-			button.removeClass( 'frm_loading_button' );
-			jQuery( '.frm-addon-error' ).delay( 4000 ).fadeOut();
-		}
+		const addonState = require( './addon-state' );
+		addonState.addonError( response, el, button );
 	}
 
 	/* Templates */
