@@ -66,6 +66,10 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
+		if ( ! FrmAppHelper::is_formidable_admin() ) {
+			return;
+		}
+
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
 		if ( ! empty( self::$checklist['done'] ) ) {
 			return;
