@@ -119,7 +119,7 @@ class FrmOnSubmitHelper {
 			);
 			?>
 		</div>
-<?php
+		<?php
 	}
 
 	/**

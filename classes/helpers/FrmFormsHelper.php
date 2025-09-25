@@ -67,7 +67,7 @@ class FrmFormsHelper {
 				</option>
 			<?php } ?>
 		</select>
-<?php
+		<?php
 	}
 
 	/**
@@ -206,7 +206,7 @@ class FrmFormsHelper {
 				?>
 			</ul>
 		</div>
-<?php
+		<?php
 	}
 
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {

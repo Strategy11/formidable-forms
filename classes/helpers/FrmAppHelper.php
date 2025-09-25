@@ -56,7 +56,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function plugin_path() {
-		return dirname(__DIR__, 2);
+		return dirname( __DIR__, 2 );
 	}
 
 	/**
