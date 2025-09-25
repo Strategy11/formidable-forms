@@ -116,7 +116,6 @@ return RectorConfig::configure()
 			RemoveUnusedForeachKeyRector::class,
 			SingularSwitchToIfRector::class,
 			RemoveUnusedPrivateMethodParameterRector::class,
-			RenameFunctionRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedVariableAssignRector::class,
