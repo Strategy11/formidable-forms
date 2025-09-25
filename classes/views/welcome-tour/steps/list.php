@@ -14,14 +14,33 @@ if ( ! is_array( $steps ) ) {
 }
 
 foreach ( $steps as $key => $step ) {
+	$is_active  = $active_step === $key;
+	$step_attrs = array(
+		'id'    => 'frm-checklist__step-' . $key,
+		'class' => 'frm-checklist__step',
+	);
+
+	if ( $is_active ) {
+		$step_attrs['class'] .= ' frm-checklist__step--active';
+	}
+
+	if ( $step['completed'] ) {
+		$step_attrs['class'] .= ' frm-checklist__step--completed';
+	}
 	?>
-	<div id="frm-checklist__step-<?php echo esc_attr( $key ); ?>" class="frm-checklist__step">
-		<div class="frm-checklist__step-title">
-			<span class="frm-text-sm frm-p-xs"><?php echo esc_html( $step['title'] ); ?></span>
+	<div <?php FrmAppHelper::array_to_html_params( $step_attrs, true ); ?>>
+		<div class="frm-checklist__step-title frm-h-stack-xs frm-p-sm">
+			<span class="frm-checklist__step-status frm-flex-center">
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon frm_svg7 frm-text-white', array( 'aria-hidden' => 'true' ) ); ?>
+			</span>
+			<span class=" frm-leading-none"><?php echo esc_html( $step['title'] ); ?></span>
 		</div>
-		<div class="frm-checklist__step-description">
-			<span class="frm-text-xs frm-p-xs"><?php echo esc_html( $step['description'] ); ?></span>
-		</div>
+
+		<?php if ( $is_active ) { ?>
+			<div class="frm-checklist__step-description frm-flex frm-p-xs frm-mx-xs -frm-mt-2xs">
+				<span><?php echo esc_html( $step['description'] ); ?></span>
+			</div>
+		<?php } ?>
 	</div>
 	<?php
-}
+}//end foreach
