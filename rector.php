@@ -119,10 +119,7 @@ return RectorConfig::configure()
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedVariableAssignRector::class,
-			RemoveNonExistingVarAnnotationRector::class,
-			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
 			RemoveUnusedConstructorParamRector::class,
-			UnnecessaryTernaryExpressionRector::class,
 			LongArrayToShortArrayRector::class,
 			TernaryToElvisRector::class,
 		)
