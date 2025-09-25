@@ -40,7 +40,7 @@ export const isCustomCategory = category => VIEW_SLUGS.CUSTOM === category;
  * @return {boolean} True if the template is a favorite, otherwise false.
  */
 export const isFavoriteTemplate = template =>
-	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-favorite-item` ) : false;
+	isHTMLElement( template ) ? template.classList.contains( `${ PREFIX }-favorite-item` ) : false;
 
 /**
  * Checks if a template is custom.
@@ -49,7 +49,7 @@ export const isFavoriteTemplate = template =>
  * @return {boolean} True if the template is custom, otherwise false.
  */
 export const isCustomTemplate = template =>
-	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-custom-item` ) : false;
+	isHTMLElement( template ) ? template.classList.contains( `${ PREFIX }-custom-item` ) : false;
 
 /**
  * Checks if a template is featured.
@@ -67,4 +67,4 @@ export const isFeaturedTemplate = template =>
  * @return {boolean} True if the template is locked, otherwise false.
  */
 export const isLockedTemplate = template =>
-	isHTMLElement( template ) ? template.classList.contains( `${PREFIX}-locked-item` ) : false;
+	isHTMLElement( template ) ? template.classList.contains( `${ PREFIX }-locked-item` ) : false;

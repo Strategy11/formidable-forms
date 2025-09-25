@@ -601,7 +601,8 @@ class FrmFieldsHelper {
 		$base_name = 'default_value_' . $field['id'];
 		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
 
-		$default_type = self::get_default_value_type( $field );
+		$default_type  = self::get_default_value_type( $field );
+		$options_count = count( $field['options'] );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
@@ -693,6 +694,7 @@ class FrmFieldsHelper {
 			'args'         => array(),
 			'title'        => '',
 			'inside_class' => 'inside',
+			'dismiss-icon' => true,
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -1599,6 +1601,9 @@ class FrmFieldsHelper {
 			$replace_with[] = 'field_id="' . $new . '"';
 			$replace[]      = 'field_id=\"' . $old . '\"';
 			$replace_with[] = 'field_id=\"' . $new . '\"';
+			// This covers conditional logic.
+			$replace[]      = '_field":"' . $old . '","';
+			$replace_with[] = '_field":"' . $new . '","';
 			unset( $old, $new );
 		}//end foreach
 		if ( is_array( $val ) ) {
@@ -2421,5 +2426,83 @@ class FrmFieldsHelper {
 	public static function get_all_draft_field_ids( $form_id ) {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
 		return wp_list_pluck( $draft_field_rows, 'id' );
+	}
+
+	/**
+	 * Render AI generate options button.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array $args Field arguments.
+	 * @param bool  $should_hide_bulk_edit Whether to hide bulk edit.
+	 */
+	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
+		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );
+
+		if ( ! empty( $should_hide_bulk_edit ) ) {
+			$attributes['class'] .= ' frm-force-hidden';
+		}
+
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'ai',
+			array(
+				'requires' => 'Business',
+				'upgrade'  => __( 'Generate options with AI', 'formidable' ),
+				'medium'   => 'builder',
+				'content'  => 'generate-options-with-ai',
+			),
+			true
+		);
+
+		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
+			// Backwards compatibility "@since 6.24".
+			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$data = array(
+					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
+					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
+				);
+			} else {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			}
+		}
+
+		if ( empty( $attributes['data-fid'] ) ) {
+			unset( $data['plugin-status'] );
+			foreach ( $data as $key => $value ) {
+				$attributes[ 'data-' . $key ] = $value;
+			}
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/generate-options-with-ai.php';
+	}
+
+	/**
+	 * Get AI generate options button class.
+	 *
+	 * @since 6.24
+	 *
+	 * @return string Button class.
+	 */
+	private static function get_ai_generate_options_button_class() {
+		return implode(
+			' ',
+			array(
+				'frm_form_field',
+				'frm6',
+				'frm6_followed',
+				'frm-h-stack',
+				'button',
+				'frm-button-secondary',
+				'frm-button-gradient',
+				'frm-rounded-6',
+				'frm-max-w-fit',
+				'frm-font-normal',
+				'frm-py-2xs',
+				'frm-px-xs',
+				'frm-mt-xs',
+				'frm-mb-12',
+			)
+		);
 	}
 }

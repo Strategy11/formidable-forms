@@ -16,7 +16,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} el        The HTML element.
 	 * @param {string}      eventName Event name.
-	 * @param {mixed}       data      The passed data.
+	 * @param {*}           data      The passed data.
 	 */
 	function triggerCustomEvent( el, eventName, data ) {
 		if ( typeof window.CustomEvent !== 'function' ) {
@@ -74,23 +74,22 @@ function frmFrontFormJS() {
 		}
 		nameParts = nameParts.filter( function( n ) {
 			return n !== '';
-		});
+		} );
 
-		fieldId = nameParts[0];
+		fieldId = nameParts[ 0 ];
 
 		if ( nameParts.length === 1 ) {
 			return fieldId;
 		}
 
-		if ( nameParts[1] === '[form' || nameParts[1] === '[row_ids' ) {
+		if ( nameParts[ 1 ] === '[form' || nameParts[ 1 ] === '[row_ids' ) {
 			return 0;
 		}
 
 		// Check if 'this' is in a repeating section
 		if ( document.querySelector( 'input[name="item_meta[' + fieldId + '][form]"]' ) ) {
-
 			// this is a repeatable section with name: item_meta[repeating-section-id][row-id][field-id]
-			fieldId = nameParts[2].replace( '[', '' );
+			fieldId = nameParts[ 2 ].replace( '[', '' );
 			isRepeating = true;
 		}
 
@@ -98,19 +97,19 @@ function frmFrontFormJS() {
 		if ( 'other' === fieldId ) {
 			if ( isRepeating ) {
 				// name for other fields: item_meta[370][0][other][414]
-				fieldId = nameParts[3].replace( '[', '' );
+				fieldId = nameParts[ 3 ].replace( '[', '' );
 			} else {
 				// Other field name: item_meta[other][370]
-				fieldId = nameParts[1].replace( '[', '' );
+				fieldId = nameParts[ 1 ].replace( '[', '' );
 			}
 		}
 
 		if ( fullID === true ) {
 			// For use in the container div id
-			if ( fieldId === nameParts[0]) {
-				fieldId = fieldId + '-' + nameParts[1].replace( '[', '' );
+			if ( fieldId === nameParts[ 0 ] ) {
+				fieldId = fieldId + '-' + nameParts[ 1 ].replace( '[', '' );
 			} else {
-				fieldId = fieldId + '-' + nameParts[0] + '-' + nameParts[1].replace( '[', '' );
+				fieldId = fieldId + '-' + nameParts[ 0 ] + '-' + nameParts[ 1 ].replace( '[', '' );
 			}
 		}
 
@@ -161,10 +160,10 @@ function frmFrontFormJS() {
 		if ( ! $form.length ) {
 			return;
 		}
-		$form[0].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
-			saveDraftButton.disabled            = false;
+		$form[ 0 ].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
+			saveDraftButton.disabled = false;
 			saveDraftButton.style.pointerEvents = '';
-		});
+		} );
 	}
 
 	/**
@@ -244,7 +243,7 @@ function frmFrontFormJS() {
 		}
 
 		fieldID = getFieldId( field, true );
-		if ( 'undefined' === typeof errors[ fieldID ]) {
+		if ( 'undefined' === typeof errors[ fieldID ] ) {
 			errors[ fieldID ] = getFieldValidationMessage( field, 'data-invmsg' );
 		}
 
@@ -299,7 +298,7 @@ function frmFrontFormJS() {
 	function validateField( field ) {
 		let errors, key;
 
-		errors               = [];
+		errors = [];
 		const fieldContainer = field.closest( '.frm_form_field' );
 
 		if ( ! fieldContainer ) {
@@ -355,7 +354,7 @@ function frmFrontFormJS() {
 			field: field,
 			errors: errors,
 			onSubmit: onSubmit
-		});
+		} );
 	}
 
 	/**
@@ -408,8 +407,8 @@ function frmFrontFormJS() {
 				tempVal = val;
 				val = '';
 				for ( i = 0; i < tempVal.length; i++ ) {
-					if ( tempVal[i] !== '' ) {
-						val = tempVal[i];
+					if ( tempVal[ i ] !== '' ) {
+						val = tempVal[ i ];
 					}
 				}
 			}
@@ -495,7 +494,7 @@ function frmFrontFormJS() {
 			if ( val === '' ) {
 				val = this.value;
 			}
-		});
+		} );
 		return val;
 	}
 
@@ -667,7 +666,7 @@ function frmFrontFormJS() {
 
 		// Function to change the color of a select element
 		changeSelectColor = function( select ) {
-			if ( select.options[select.selectedIndex] && hasClass( select.options[select.selectedIndex], 'frm-select-placeholder' ) ) {
+			if ( select.options[ select.selectedIndex ] && hasClass( select.options[ select.selectedIndex ], 'frm-select-placeholder' ) ) {
 				select.style.setProperty( 'color', textColorDisabled, 'important' );
 			} else {
 				select.style.color = '';
@@ -682,8 +681,8 @@ function frmFrontFormJS() {
 			// Add an event listener for future changes
 			select.addEventListener( 'change', function() {
 				changeSelectColor( select );
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -738,7 +737,7 @@ function frmFrontFormJS() {
 
 		if ( response.length === 0 ) {
 			const fieldContainer = $recaptcha.closest( '.frm_form_field' );
-			const fieldID        = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
+			const fieldID = fieldContainer.attr( 'id' ).replace( 'frm_field_', '' ).replace( '_container', '' );
 			errors[ fieldID ] = '';
 		}
 
@@ -774,13 +773,13 @@ function frmFrontFormJS() {
 			return msg;
 		}
 
-		errorHtml          = errorHtml.replace( /\+/g, '%20' );
-		msg                = decodeURIComponent( errorHtml ).replace( '[error]', msg );
-		const fieldId      = getFieldId( field, false );
-		const split        = fieldId.split( '-' );
+		errorHtml = errorHtml.replace( /\+/g, '%20' );
+		msg = decodeURIComponent( errorHtml ).replace( '[error]', msg );
+		const fieldId = getFieldId( field, false );
+		const split = fieldId.split( '-' );
 		const fieldIdParts = field.id.split( '_' );
 		fieldIdParts.shift(); // Drop the "field" value from the front.
-		split[0]       = fieldIdParts.join( '_' );
+		split[ 0 ] = fieldIdParts.join( '_' );
 		const errorKey = split.join( '-' );
 		return msg.replace( '[key]', errorKey );
 	}
@@ -819,11 +818,11 @@ function frmFrontFormJS() {
 		fieldset = jQuery( object ).find( '.frm_form_field' );
 		fieldset.addClass( 'frm_doing_ajax' );
 
-		data               = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
+		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
-			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ]);
+			jQuery( document ).trigger( 'frmBeforeFormRedirect', [ object, response ] );
 
 			if ( ! response.openInNewTab ) {
 				// We return here because we're redirecting there is no need to update content.
@@ -879,7 +878,7 @@ function frmFrontFormJS() {
 				// the form or success message was returned
 
 				if ( shouldTriggerEvent ) {
-					triggerCustomEvent( object, 'frmSubmitEvent', { content: response.content });
+					triggerCustomEvent( object, 'frmSubmitEvent', { content: response.content } );
 					return;
 				}
 
@@ -960,7 +959,7 @@ function frmFrontFormJS() {
 				}
 
 				jQuery( object ).find( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).each( function() {
-					const $recaptcha  = jQuery( this ),
+					const $recaptcha = jQuery( this ),
 						recaptchaID = $recaptcha.data( 'rid' );
 
 					if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
@@ -973,7 +972,7 @@ function frmFrontFormJS() {
 					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
 						hcaptcha.reset();
 					}
-				});
+				} );
 
 				if ( window.turnstile ) {
 					object.querySelectorAll( '.cf-turnstile' ).forEach(
@@ -981,7 +980,7 @@ function frmFrontFormJS() {
 					);
 				}
 
-				jQuery( document ).trigger( 'frmFormErrors', [ object, response ]);
+				jQuery( document ).trigger( 'frmFormErrors', [ object, response ] );
 
 				fieldset.removeClass( 'frm_doing_ajax' );
 				scrollToFirstField( object );
@@ -1016,7 +1015,7 @@ function frmFrontFormJS() {
 		action = form.getAttribute( 'action' );
 
 		if ( 'string' === typeof action && -1 !== action.indexOf( '?action=frm_forms_preview' ) ) {
-			ajaxUrl = action.split( '?action=frm_forms_preview' )[0];
+			ajaxUrl = action.split( '?action=frm_forms_preview' )[ 0 ];
 		}
 
 		ajaxParams = {
@@ -1036,9 +1035,9 @@ function frmFrontFormJS() {
 	function afterFormSubmitted( object, response ) {
 		const formCompleted = jQuery( response.content ).find( '.frm_message' );
 		if ( formCompleted.length ) {
-			jQuery( document ).trigger( 'frmFormComplete', [ object, response ]);
+			jQuery( document ).trigger( 'frmFormComplete', [ object, response ] );
 		} else {
-			jQuery( document ).trigger( 'frmPageChanged', [ object, response ]);
+			jQuery( document ).trigger( 'frmPageChanged', [ object, response ] );
 		}
 	}
 
@@ -1054,7 +1053,7 @@ function frmFrontFormJS() {
 	function afterFormSubmittedBeforeReplace( object, response ) {
 		const formCompleted = jQuery( response.content ).find( '.frm_message' );
 		if ( formCompleted.length ) {
-			triggerCustomEvent( document, 'frmFormCompleteBeforeReplace', { object, response });
+			triggerCustomEvent( document, 'frmFormCompleteBeforeReplace', { object, response } );
 		}
 	}
 
@@ -1085,7 +1084,7 @@ function frmFrontFormJS() {
 		let url;
 		if ( history.pushState && typeof response.page !== 'undefined' ) {
 			url = addQueryVar( 'frm_page', response.page );
-			window.history.pushState({ 'html': response.html }, '', '?' + url );
+			window.history.pushState( { html: response.html }, '', '?' + url );
 		}
 	}
 
@@ -1099,11 +1098,11 @@ function frmFrontFormJS() {
 
 		i = kvp.length;
 		while ( i-- ) {
-			x = kvp[i].split( '=' );
+			x = kvp[ i ].split( '=' );
 
-			if ( x[0] == key ) {
-				x[1] = value;
-				kvp[i] = x.join( '=' );
+			if ( x[ 0 ] == key ) {
+				x[ 1 ] = value;
+				kvp[ i ] = x.join( '=' );
 				break;
 			}
 		}
@@ -1127,13 +1126,13 @@ function frmFrontFormJS() {
 			if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 				frmThemeOverride_frmPlaceError( key, jsErrors );
 			} else {
-				if ( -1 !== jsErrors[key].indexOf( '<div' ) ) {
+				if ( -1 !== jsErrors[ key ].indexOf( '<div' ) ) {
 					$fieldCont.append(
-						jsErrors[key]
+						jsErrors[ key ]
 					);
 				} else {
 					roleString = frm_js.include_alert_role ? 'role="alert"' : ''; // eslint-disable-line camelcase
-					$fieldCont.append( '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[key] + '</div>' );
+					$fieldCont.append( '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>' );
 				}
 
 				if ( typeof describedBy === 'undefined' ) {
@@ -1150,7 +1149,7 @@ function frmFrontFormJS() {
 			}
 			input.attr( 'aria-invalid', true );
 
-			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ]);
+			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ] );
 		}
 	}
 
@@ -1178,9 +1177,9 @@ function frmFrontFormJS() {
 	 */
 	function removeFieldError( $fieldCont ) {
 		const errorMessage = $fieldCont.find( '.frm_error' );
-		const errorId      = errorMessage.attr( 'id' );
-		const input        = $fieldCont.find( 'input, select, textarea' );
-		let describedBy    = input.attr( 'aria-describedby' );
+		const errorId = errorMessage.attr( 'id' );
+		const input = $fieldCont.find( 'input, select, textarea' );
+		let describedBy = input.attr( 'aria-describedby' );
 
 		const fieldContainer = $fieldCont.get( 0 );
 		if ( fieldContainer && fieldContainer.classList ) {
@@ -1316,8 +1315,8 @@ function frmFrontFormJS() {
 
 			label.addEventListener( 'click', function() {
 				inputsContainer.querySelector( '.frm_form_field:first-child input, .frm_form_field:first-child select, .frm_form_field:first-child textarea' ).focus();
-			});
-		});
+			} );
+		} );
 	}
 
 	/**
@@ -1355,7 +1354,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		element = errors[0];
+		element = errors[ 0 ];
 		do {
 			element = element.previousSibling;
 			if ( -1 !== [ 'input', 'select', 'textarea' ].indexOf( element.nodeName.toLowerCase() ) ) {
@@ -1407,7 +1406,7 @@ function frmFrontFormJS() {
 		if ( input.offsetParent !== null ) {
 			input.focus();
 		} else {
-			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input });
+			triggerCustomEvent( document, 'frmMaybeDelayFocus', { input } );
 		}
 	}
 
@@ -1442,7 +1441,7 @@ function frmFrontFormJS() {
 	function initFloatingLabels() {
 		let checkFloatLabel, checkDropdownLabel, runOnLoad, selector, floatClass;
 
-		selector   = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
+		selector = '.frm-show-form .frm_inside_container input, .frm-show-form .frm_inside_container select, .frm-show-form .frm_inside_container textarea';
 		floatClass = 'frm_label_float_top';
 
 		checkFloatLabel = function( input ) {
@@ -1480,7 +1479,7 @@ function frmFrontFormJS() {
 					firstOpt.setAttribute( 'data-label', firstOpt.textContent );
 					firstOpt.textContent = '';
 				}
-			});
+			} );
 		};
 
 		[ 'focus', 'blur', 'change' ].forEach( function( eventName ) {
@@ -1492,11 +1491,11 @@ function frmFrontFormJS() {
 				},
 				true
 			);
-		});
+		} );
 
 		jQuery( document ).on( 'change', selector, function( event ) {
 			checkFloatLabel( event.target );
-		});
+		} );
 
 		runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
@@ -1519,11 +1518,11 @@ function frmFrontFormJS() {
 
 		jQuery( document ).on( 'frmPageChanged', function( event ) {
 			runOnLoad();
-		});
+		} );
 
 		document.addEventListener( 'frm_after_start_over', function( event ) {
 			runOnLoad();
-		});
+		} );
 	}
 
 	function shouldUpdateValidityMessage( target ) {
@@ -1562,7 +1561,7 @@ function frmFrontFormJS() {
 				isInvalid = true;
 				break;
 			}
-		};
+		}
 
 		if ( ! isInvalid ) {
 			field.setCustomValidity( '' );
@@ -1587,7 +1586,7 @@ function frmFrontFormJS() {
 	function setCustomValidityMessage() {
 		let forms, length, index;
 
-		forms  = document.getElementsByClassName( 'frm-show-form' );
+		forms = document.getElementsByClassName( 'frm-show-form' );
 		length = forms.length;
 
 		for ( index = 0; index < length; ++index ) {
@@ -1615,7 +1614,7 @@ function frmFrontFormJS() {
 				);
 				removeSubmitLoading();
 			}
-		});
+		} );
 	}
 
 	/**
@@ -1659,9 +1658,9 @@ function frmFrontFormJS() {
 
 		/* eslint-disable compat/compat */
 		const startTime = performance.now();
-		const step      = ( currentTime ) => {
+		const step = currentTime => {
 			const progress = Math.min( ( currentTime - startTime ) / duration, 1 );
-			document.documentElement.scrollTop = start + ( end - start ) * progress;
+			document.documentElement.scrollTop = start + ( ( end - start ) * progress );
 			if ( progress < 1 ) {
 				requestAnimationFrame( step );
 			}
@@ -1679,7 +1678,7 @@ function frmFrontFormJS() {
 				if ( jQuery( this ).val() === '' ) {
 					jQuery( this ).trigger( 'blur' );
 				}
-			});
+			} );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
@@ -1726,7 +1725,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			const size   = captcha.getAttribute( 'data-size' );
+			const size = captcha.getAttribute( 'data-size' );
 			const params = {
 				sitekey: captcha.getAttribute( 'data-sitekey' ),
 				size: size,
@@ -1746,20 +1745,20 @@ function frmFrontFormJS() {
 				};
 			}
 
-			const activeCaptcha    = getSelectedCaptcha( captchaSelector );
+			const activeCaptcha = getSelectedCaptcha( captchaSelector );
 			const captchaContainer = typeof turnstile !== 'undefined' && turnstile === activeCaptcha ? '#' + captcha.id : captcha.id;
-			const captchaID        = activeCaptcha.render( captchaContainer, params );
+			const captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
 		},
 
 		afterSingleRecaptcha: function() {
-			const object = jQuery( '.frm-show-form .g-recaptcha' ).closest( 'form' )[0];
+			const object = jQuery( '.frm-show-form .g-recaptcha' ).closest( 'form' )[ 0 ];
 			frmFrontForm.submitFormNow( object );
 		},
 
 		afterRecaptcha: function( _, formID ) {
-			const object = jQuery( '#frm_form_' + formID + '_container form' )[0];
+			const object = jQuery( '#frm_form_' + formID + '_container form' )[ 0 ];
 			frmFrontForm.submitFormNow( object );
 		},
 
@@ -1803,7 +1802,6 @@ function frmFrontFormJS() {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
-
 				showSubmitLoading( jQuery( object ) );
 
 				frmFrontForm.submitFormNow( object );
@@ -1825,15 +1823,15 @@ function frmFrontFormJS() {
 
 			// Add a unique ID, used for duplicate checks.
 			const uniqueIDInput = document.createElement( 'input' );
-			uniqueIDInput.type  = 'hidden';
-			uniqueIDInput.name  = 'unique_id';
+			uniqueIDInput.type = 'hidden';
+			uniqueIDInput.name = 'unique_id';
 			uniqueIDInput.value = getUniqueKey();
 			object.appendChild( uniqueIDInput );
 
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				hasFileFields = jQuery( object ).find( 'input[type="file"]' ).filter( function() {
 					return !! this.value;
-				}).length;
+				} ).length;
 				if ( hasFileFields < 1 ) {
 					const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 					frmFrontForm.checkFormErrors( object, action );
@@ -1879,7 +1877,7 @@ function frmFrontFormJS() {
 			if ( typeof frmThemeOverride_jsErrors === 'function' ) { // eslint-disable-line camelcase
 				const action = jQuery( object ).find( 'input[name="frm_action"]' ).val();
 				customErrors = frmThemeOverride_jsErrors( action, object );
-				if ( Object.keys( customErrors ).length  ) {
+				if ( Object.keys( customErrors ).length ) {
 					for ( key in customErrors ) {
 						jsErrors[ key ] = customErrors[ key ];
 					}
@@ -1889,7 +1887,7 @@ function frmFrontFormJS() {
 			triggerCustomEvent( document, 'frm_get_ajax_form_errors', {
 				formEl: object,
 				errors: jsErrors
-			});
+			} );
 
 			return jsErrors;
 		},
@@ -1982,7 +1980,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ]);
+			jQuery( document ).trigger( 'frmFieldChanged', [ this, fieldId, e ] );
 
 			if ( e.selfTriggered !== true ) {
 				maybeValidateChange( this );
@@ -2030,7 +2028,7 @@ window.frmFrontForm = frmFrontFormJS();
 
 jQuery( document ).ready( function() {
 	frmFrontForm.init();
-});
+} );
 
 function frmRecaptcha() {
 	frmCaptcha( '.frm-g-recaptcha' );
@@ -2043,11 +2041,11 @@ function frmTurnstile() {
 function frmCaptcha( captchaSelector ) {
 	let c;
 	const captchas = document.querySelectorAll( captchaSelector );
-	const cl       = captchas.length;
+	const cl = captchas.length;
 	for ( c = 0; c < cl; c++ ) {
-		const closestForm   = captchas[c].closest( 'form' );
+		const closestForm = captchas[ c ].closest( 'form' );
 		const formIsVisible = closestForm && closestForm.offsetParent !== null;
-		const captcha       = captchas[c];
+		const captcha = captchas[ c ];
 		if ( ! formIsVisible ) {
 			// If the form is not visible, try again later in 400ms.
 			// This fixes issues where the form fades visible on page load.
