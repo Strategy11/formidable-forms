@@ -606,7 +606,7 @@ class FrmEntriesHelper {
 
 		// finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
-		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		$pattern = '#(?<browser>' . implode( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
 		// Get the matching numbers.
 		preg_match_all( $pattern, $u_agent, $matches );
 
