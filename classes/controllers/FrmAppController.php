@@ -683,6 +683,8 @@ class FrmAppController {
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 
+		wp_register_script( 'formidable-web-components', $plugin_url . '/js/formidable-web-components.js', array( 'formidable_admin' ), $version, true );
+
 		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
