@@ -520,7 +520,7 @@ class FrmStrpLiteEventsController {
 	 */
 	private function handle_event() {
 		$this->invoice = $this->event->data->object;
-		$this->charge  = isset( $this->invoice->charge ) ? $this->invoice->charge : false;
+		$this->charge  = $this->invoice->charge ?? false;
 		if ( ! $this->charge && $this->invoice->object === 'payment_intent' ) {
 			$this->charge = $this->invoice->id;
 		}

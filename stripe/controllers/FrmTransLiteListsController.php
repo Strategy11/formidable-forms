@@ -16,8 +16,8 @@ class FrmTransLiteListsController {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
 
-		add_filter( $hook_name, __CLASS__ . '::payment_columns' );
-		add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
+		add_filter( $hook_name, self::class . '::payment_columns' );
+		add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 	}
 
 	/**

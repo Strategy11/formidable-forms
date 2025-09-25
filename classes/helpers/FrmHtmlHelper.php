@@ -31,7 +31,7 @@ class FrmHtmlHelper {
 			function () use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},
-			isset( $args['echo'] ) ? $args['echo'] : false
+			$args['echo'] ?? false
 		);
 	}
 

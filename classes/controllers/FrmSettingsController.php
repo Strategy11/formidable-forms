@@ -59,19 +59,19 @@ class FrmSettingsController {
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'messages'      => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
 			'permissions'   => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
@@ -79,7 +79,7 @@ class FrmSettingsController {
 			'payments'      => array(
 				'name'     => __( 'Payments', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_simple_cc_icon',
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'payments_settings',
 			),
 			'custom_css'    => array(
@@ -95,7 +95,7 @@ class FrmSettingsController {
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
 			'captcha'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
@@ -153,7 +153,7 @@ class FrmSettingsController {
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
 			'icon'     => 'frm_icon_font frm_shuffle_icon',
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
 
@@ -203,7 +203,7 @@ class FrmSettingsController {
 			}
 		}
 
-		uksort( self::$removed_payments_sections, array( __CLASS__, 'payment_sections_sort_callback' ) );
+		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
 	}
 
 	/**
@@ -240,7 +240,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		wp_die();
 	}

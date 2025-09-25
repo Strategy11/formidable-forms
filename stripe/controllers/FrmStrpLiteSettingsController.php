@@ -13,7 +13,7 @@ class FrmStrpLiteSettingsController {
 	 */
 	public static function add_settings_section( $sections ) {
 		$sections['stripe'] = array(
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'route',
 			'icon'     => 'frm_icon_font frm_stripe_icon',
 		);

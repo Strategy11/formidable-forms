@@ -230,7 +230,7 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_error_shortcode() {
 		$this->maybe_add_error_id();
-		$error = isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ? $this->pass_args['errors'][ 'field' . $this->field_id ] : false;
+		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
 		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
@@ -387,7 +387,7 @@ class FrmFieldFormHtml {
 			--$shortcode_atts['opt'];
 		}
 
-		$field_class = isset( $shortcode_atts['class'] ) ? $shortcode_atts['class'] : '';
+		$field_class = $shortcode_atts['class'] ?? '';
 		$this->field_obj->set_field_column( 'input_class', $field_class );
 
 		if ( isset( $shortcode_atts['class'] ) ) {

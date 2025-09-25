@@ -616,7 +616,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+		$field_id = $field->temp_id ?? $field->id;
 
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );
