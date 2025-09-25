@@ -78,7 +78,7 @@ return RectorConfig::configure()
 		// PHP 7.1
 		false,
 		// PHP 7.0
-		true,
+		true
 	)
 	->withSkip(
 		array(
