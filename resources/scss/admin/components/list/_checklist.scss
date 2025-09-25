@@ -11,16 +11,67 @@
 		box-sizing: border-box;
 	}
 
+	p,
+	span {
+		font-size: var(--text-xs);
+	}
+
 	&__progress-bar {
 		height: 8px;
 	}
 
 	&__progress-fill {
-		width: 50%;
+		width: 25%;
 	}
 
 	&__dismiss {
 		height: 50px;
 		border-top: 1px solid var(--grey-100);
+		cursor: pointer;
+	}
+
+	&__completed {
+		height: 100%;
+
+		p {
+			color: var(--grey-800);
+			margin: 0;
+		}
+	}
+
+	&__step {
+		$self: &;
+
+		&-status {
+			height: 16px;
+			width: 16px;
+			border-radius: 50%;
+			border: 1.5px dashed var(--grey-400);
+		}
+
+		&-description {
+			background-color: var(--grey-50);
+			border-radius: var(--small-radius);
+			line-height: var(--leading);
+		}
+
+		&--active {
+			#{$self}-title {
+				font-weight: 600;
+				color: var(--grey-800);
+			}
+		}
+
+		&--completed {
+			#{$self}-status {
+				background-color: var(--success-500);
+				border-style: solid;
+				border-color: var(--success-500);
+			}
+		}
+
+		&:not(&--completed):not(&--active) {
+			cursor: pointer;
+		}
 	}
 }
