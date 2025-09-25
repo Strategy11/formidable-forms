@@ -97,12 +97,20 @@
 	justify-content: end;
 }
 
+.frm-items-start {
+	align-items: start;
+}
+
 .frm-items-center {
 	align-items: center;
 }
 
 .frm-items-stretch {
 	align-items: stretch;
+}
+
+.frm-self-normal {
+	align-self: normal;
 }
 
 #wpbody-content .frm-flex-wrap {
