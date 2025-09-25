@@ -381,7 +381,7 @@ class FrmFieldCombo extends FrmFieldType {
 		}
 
 		// Add optional class.
-		$classes = isset( $sub_field['classes'] ) ? $sub_field['classes'] : '';
+		$classes = $sub_field['classes'] ?? '';
 		if ( is_array( $classes ) ) {
 			$classes = implode( ' ', $classes );
 		}
@@ -417,7 +417,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
-		$errors = isset( $args['errors'] ) ? $args['errors'] : array();
+		$errors = $args['errors'] ?? array();
 
 		if ( ! $this->field->required ) {
 			return $errors;
@@ -453,9 +453,9 @@ class FrmFieldCombo extends FrmFieldType {
 	 */
 	public function get_export_headings() {
 		$headings   = array();
-		$field_id   = isset( $this->field->id ) ? $this->field->id : $this->field['id'];
-		$field_name = isset( $this->field->name ) ? $this->field->name : $this->field['name'];
-		$field_key  = isset( $this->field->field_key ) ? $this->field->field_key : $this->field['field_key'];
+		$field_id   = $this->field->id ?? $this->field['id'];
+		$field_name = $this->field->name ?? $this->field['name'];
+		$field_key  = $this->field->field_key ?? $this->field['field_key'];
 		$sub_fields = $this->get_processed_sub_fields();
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];

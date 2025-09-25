@@ -56,7 +56,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function plugin_path() {
-		return dirname( dirname( __DIR__ ) );
+		return dirname( __DIR__, 2 );
 	}
 
 	/**
@@ -128,7 +128,7 @@ class FrmAppHelper {
 
 		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
+			$medium = $args['medium'] ?? '';
 			if ( isset( $args['content'] ) ) {
 				$content = $args['content'];
 			}
@@ -663,7 +663,7 @@ class FrmAppHelper {
 				}
 
 				$p     = trim( $p, ']' );
-				$value = isset( $value[ $p ] ) ? $value[ $p ] : $default;
+				$value = $value[ $p ] ?? $default;
 			}
 		}
 
@@ -1024,7 +1024,7 @@ class FrmAppHelper {
 			$allowed_html = $html;
 		} elseif ( ! empty( $allowed ) ) {
 			foreach ( (array) $allowed as $a ) {
-				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+				$allowed_html[ $a ] = $html[ $a ] ?? array();
 			}
 		}
 
@@ -1833,8 +1833,8 @@ class FrmAppHelper {
 	 */
 	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
 		if ( is_array( $option ) ) {
-			$value = isset( $option[ $args['value_key'] ] ) ? $option[ $args['value_key'] ] : '';
-			$label = isset( $option[ $args['label_key'] ] ) ? $option[ $args['label_key'] ] : '';
+			$value = $option[ $args['value_key'] ] ?? '';
+			$label = $option[ $args['label_key'] ] ?? '';
 		} else {
 			$value = $key;
 			$label = $option;
@@ -2536,11 +2536,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function generate_new_key( $num_chars ) {
-		$max_slug_value = pow( 36, $num_chars );
+		$max_slug_value = 36 ** $num_chars;
 
 		// We want to have at least 2 characters in the slug.
 		$min_slug_value = 37;
-		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		return base_convert( random_int( $min_slug_value, $max_slug_value ), 10, 36 );
 	}
 
 	/**
@@ -2594,7 +2594,7 @@ class FrmAppHelper {
 		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
-			$default_val    = isset( $record->{$var} ) ? $record->{$var} : '';
+			$default_val    = $record->{$var} ?? '';
 			$values[ $var ] = self::get_param( $var, $default_val, 'get', 'wp_kses_post' );
 			unset( $var, $default_val );
 		}
@@ -2621,7 +2621,7 @@ class FrmAppHelper {
 					// Don't prep default values on the form settings page.
 					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 				}
-				$args['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+				$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
 				self::fill_field_defaults( $field, $record, $values, $args );
 			}
 		}
@@ -2651,7 +2651,7 @@ class FrmAppHelper {
 			$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 		}//end if
 
-		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
+		$field_type = $post_values['field_options'][ 'type_' . $field->id ] ?? $field->type;
 		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
 			$new_value = $post_values['item_meta'][ $field->id ];
 			self::unserialize_or_decode( $new_value );
@@ -2755,7 +2755,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
-				$values[ $h . '_html' ] = ( isset( $post_values['options'][ $h . '_html' ] ) ? $post_values['options'][ $h . '_html' ] : FrmFormsHelper::get_default_html( $h ) );
+				$values[ $h . '_html' ] = ( $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h ) );
 			}
 			unset( $h );
 		}

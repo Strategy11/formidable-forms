@@ -223,7 +223,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 */
 	protected function get_words_from_setting( $setting_key ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		$words        = isset( $frm_settings->$setting_key ) ? $frm_settings->$setting_key : '';
+		$words        = $frm_settings->$setting_key ?? '';
 		if ( ! $words ) {
 			return array();
 		}

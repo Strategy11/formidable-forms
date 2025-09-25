@@ -1031,7 +1031,7 @@ class FrmAppController {
 		$args = array(
 			'methods'             => 'GET',
 			'callback'            => 'FrmAppController::api_install',
-			'permission_callback' => __CLASS__ . '::can_update_db',
+			'permission_callback' => self::class . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );

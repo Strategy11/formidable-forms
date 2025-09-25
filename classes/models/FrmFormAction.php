@@ -435,7 +435,7 @@ class FrmFormAction {
 		foreach ( $settings as $number => $new_instance ) {
 			$this->_set( $number );
 
-			$old_instance = isset( $all_instances[ $number ] ) ? $all_instances[ $number ] : array();
+			$old_instance = $all_instances[ $number ] ?? array();
 
 			if ( ! isset( $new_instance['post_status'] ) ) {
 				$new_instance['post_status'] = 'draft';
@@ -452,7 +452,7 @@ class FrmFormAction {
 			$new_instance['post_type']  = FrmFormActionsController::$action_post_type;
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
-			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
+			$new_instance['post_date']  = $old_instance->post_date ?? '';
 			$instance                   = $this->update( $new_instance, $old_instance );
 
 			/**
