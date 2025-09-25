@@ -61,7 +61,24 @@ return RectorConfig::configure()
 		true
 	)
 	->withPhpSets(
-		php70: true,
+		// PHP 8.3
+		false,
+		// PHP 8.2
+		false,
+		// PHP 8.1
+		false,
+		// PHP 8.0
+		false,
+		// PHP 7.4
+		false,
+		// PHP 7.3
+		false,
+		// PHP 7.2
+		false,
+		// PHP 7.1
+		false,
+		// PHP 7.0
+		true,
 	)
 	->withSkip(
 		array(
