@@ -101,12 +101,12 @@ return RectorConfig::configure()
 			JoinStringConcatRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
 			RemoveUselessParamTagRector::class,
-			RemoveDeadStmtRector::class,
 			RemoveDeadReturnRector::class,
 			RemoveAlwaysTrueIfConditionRector::class,
 			RemoveUnreachableStatementRector::class,
 			SimplifyEmptyArrayCheckRector::class,
-			CompleteDynamicPropertiesRector::class,
+			LongArrayToShortArrayRector::class,
+			TernaryToElvisRector::class,
 			// TODO: Try this for some files and not others.
 			RemoveUnusedPrivateMethodRector::class,
 			ShortenElseIfRector::class,
@@ -120,7 +120,8 @@ return RectorConfig::configure()
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedVariableAssignRector::class,
 			RemoveUnusedConstructorParamRector::class,
-			LongArrayToShortArrayRector::class,
-			TernaryToElvisRector::class,
+			RemoveNonExistingVarAnnotationRector::class,
+			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
+			UnnecessaryTernaryExpressionRector::class,
 		)
 	);
