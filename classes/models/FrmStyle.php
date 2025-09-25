@@ -211,7 +211,7 @@ class FrmStyle {
 				}
 			}//end if
 
-			$new_color_values[] = $new_value ?? $value;
+			$new_color_values[] = $new_value;
 		}//end foreach
 
 		// add more 0s and 1 (if alpha position) if needed.
