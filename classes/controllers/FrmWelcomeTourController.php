@@ -239,7 +239,7 @@ class FrmWelcomeTourController {
 	private static function fill_step_completed_data( $steps, $steps_keys ) {
 		return array_map(
 			function ( $step, $step_key ) {
-				$step['complete'] = isset( self::$completed_steps[ $step_key ] );
+				$step['completed'] = isset( self::$completed_steps[ $step_key ] );
 				return $step;
 			},
 			$steps,
