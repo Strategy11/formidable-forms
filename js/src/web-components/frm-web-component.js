@@ -13,7 +13,7 @@ export class frmWebComponent extends HTMLElement {
 	}
 
 	initOptions() {
-		this.useShadowDom = 'false' === this.getAttribute( 'data-shadow-dom' ) ? false : true;
+		this.useShadowDom = 'false' !== this.getAttribute( 'data-shadow-dom' );
 	}
 
 	/*
@@ -51,7 +51,7 @@ export class frmWebComponent extends HTMLElement {
 	 */
 	whenElementBecomesVisible() {
 		// eslint-disable-next-line compat/compat
-		return new Promise( ( resolve ) => {
+		return new Promise( resolve => {
 			// eslint-disable-next-line compat/compat
 			if ( 'undefined' === typeof window.IntersectionObserver ) {
 				requestAnimationFrame( () => resolve() );
@@ -59,7 +59,7 @@ export class frmWebComponent extends HTMLElement {
 			}
 
 			// eslint-disable-next-line compat/compat
-			const observer = new IntersectionObserver( ( entries ) => {
+			const observer = new IntersectionObserver( entries => {
 				entries.forEach( entry => {
 					// The element is in viewport and its visibility is greater than 0.
 					if ( entry.isIntersecting && entry.intersectionRatio > 0 ) {

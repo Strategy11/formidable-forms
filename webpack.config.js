@@ -4,6 +4,17 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
+const glob = require( 'glob' );
+
+// Generate web component SCSS entries using glob
+const webComponentScssFiles = glob.sync('./js/src/web-components/*/**.scss')
+  .reduce( ( scssList, file ) => {
+    const match = file.match(/web-components\/(.+)\/(.+)\.scss$/);
+    if (match) {
+      scssList[`../js/src/web-components/${match[1]}/${match[2]}`] = './' + file;
+    }
+    return scssList;
+}, {});
 
 /**
  * Environment configuration
@@ -41,7 +52,9 @@ const entries = {
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
-    font_icons: './resources/scss/font_icons.scss'
+    font_icons: './resources/scss/font_icons.scss',
+    // Dynamically generated web component SCSS files
+    ...webComponentScssFiles
   }
 };
 
@@ -104,7 +117,7 @@ const jsConfig = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-		exclude: /-component\.css$/
+		    exclude: /-component\.css$/
       },
 	  {
 		test: /-component\.css$/i,

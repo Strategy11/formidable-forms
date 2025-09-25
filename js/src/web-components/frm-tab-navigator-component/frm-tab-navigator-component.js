@@ -20,7 +20,9 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 		const wrapper = document.createElement( 'div' );
 		wrapper.classList.add( 'frm-tabs-wrapper' );
-		wrapper.innerHTML = this.getTabDelimiter() + this.getTabs() + this.getTabContainer();
+		wrapper.appendChild( this.getTabDelimiter() );
+		wrapper.appendChild( this.getTabs() );
+		wrapper.appendChild( this.getTabContainer() );
 
 		new frmTabsNavigator( wrapper );
 
@@ -50,9 +52,15 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 * @return {string} - The tab delimiter.
 	 */
 	getTabDelimiter() {
-		return `<div class="frm-tabs-delimiter">
-			<span data-initial-width="123" class="frm-tabs-active-underline frm-first"></span>
-		</div>`;
+		const delimiter = document.createElement( 'div' );
+		const underline = document.createElement( 'span' );
+
+		underline.setAttribute( 'data-initial-width', '123' );
+		underline.classList.add( 'frm-tabs-active-underline', 'frm-first' );
+		delimiter.className = 'frm-tabs-delimiter';
+		delimiter.appendChild( underline );
+
+		return delimiter;
 	}
 
 	/**
@@ -60,15 +68,17 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 * @return {string} - The tab headings.
 	 */
 	getTabs() {
-		const tabHeadings = Array.from( this.tabs ).map( ( tab, index ) => {
-			return this.createTabHeading( tab, index );
+		const tabHeadings = document.createElement( 'div' );
+		const ul = document.createElement( 'ul' );
+
+		tabHeadings.className = 'frm-tabs-navs';
+		tabHeadings.appendChild( ul );
+
+		Array.from( this.tabs ).forEach( ( tab, index ) => {
+			ul.appendChild( this.createTabHeading( tab, index ) );
 		});
 
-		return `<div class="frm-tabs-navs">
-			<ul>
-				${tabHeadings.join( '' )}
-			</ul>
-		</div>`;
+		return tabHeadings;
 	}
 
 	/**
@@ -76,15 +86,18 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 * @return {string} - The tab container.
 	 */
 	getTabContainer() {
-		const tabContainer = Array.from( this.tabs ).map( ( tab, index ) => {
-			return this.createTabContainer( tab, index );
+		const tabContainer = document.createElement( 'div' );
+		const slideTrack = document.createElement( 'div' );
+
+		tabContainer.className = 'frm-tabs-container';
+		slideTrack.className = 'frm-tabs-slide-track frm-flex-box';
+		tabContainer.appendChild( slideTrack );
+
+		Array.from( this.tabs ).forEach( ( tab, index ) => {
+			slideTrack.appendChild( this.createTabContainer( tab, index ) );
 		});
 
-		return `<div class="frm-tabs-container">
-			<div class="frm-tabs-slide-track frm-flex-box">
-				${tabContainer.join( '' )}
-			</div>
-		</div>`;
+		return tabContainer;
 	}
 
 	/**
@@ -95,7 +108,10 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 */
 	createTabHeading( tab, index ) {
 		const className = index === 0 ? 'frm-active' : '';
-		return `<li class="${className}">${tab.getAttribute( 'data-tab-title' )}</li>`;
+		const li = document.createElement( 'li' );
+		li.className = className;
+		li.innerText = tab.getAttribute( 'data-tab-title' );
+		return li;
 	}
 
 	/**
@@ -106,9 +122,15 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 	 */
 	createTabContainer( tab, index ) {
 		const className = index === 0 ? 'frm-active' : '';
-		return `<div class="frm-tab-container ${className}">
-			${tab.innerHTML}
-		</div>`;
+		const container = document.createElement( 'div' );
+
+		container.className = `frm-tab-container ${className}`;
+
+		Array.from( tab.children ).forEach( child => {
+			container.appendChild( child );
+		});
+
+		return container;
 	}
 
 	/**
