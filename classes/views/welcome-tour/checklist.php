@@ -16,16 +16,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php if ( ! $completed ) : ?>
-		<div class="frm-checklist__progress-bar frm-flex frm-bg-grey-200">
+		<div class="frm-checklist__progress-bar frm-shrink-0 frm-flex frm-bg-grey-200">
 			<div class="frm-checklist__progress-fill frm-bg-primary-500"></div>
 		</div>
 	<?php endif; ?>
 
-	<div class="frm-checklist__steps frm-scrollbar-wrapper frm-px-xs">
+	<div class="frm-checklist__steps frm-grow frm-scrollbar-wrapper">
 		<?php include $steps_view_path; ?>
 	</div>
 
-	<div class="frm-checklist__dismiss frm-flex-center frm-mt-auto">
-		<span class="frm-text-xs frm-text-grey-400"><?php esc_html_e( 'Dismiss Checklist', 'formidable' ); ?></span>
-	</div>
+	<?php if ( ! $completed ) { ?>
+		<div class="frm-checklist__dismiss frm-shrink-0 frm-flex-center frm-mt-auto">
+			<span class="frm-text-grey-400"><?php esc_html_e( 'Dismiss Checklist', 'formidable' ); ?></span>
+		</div>
+	<?php } ?>
 </div>
