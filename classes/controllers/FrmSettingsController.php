@@ -59,19 +59,19 @@ class FrmSettingsController {
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'messages'      => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
 			'permissions'   => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
@@ -79,7 +79,7 @@ class FrmSettingsController {
 			'payments'      => array(
 				'name'     => __( 'Payments', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_simple_cc_icon',
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'payments_settings',
 			),
 			'custom_css'    => array(
@@ -95,13 +95,13 @@ class FrmSettingsController {
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
 			'captcha'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
 			'email'         => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'email_settings',
 				'name'     => __( 'Email', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_email_icon',
