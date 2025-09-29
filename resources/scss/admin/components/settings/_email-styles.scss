@@ -1,6 +1,3 @@
-#frm-email-styles {
-}
-
 .frm-email-style {
 	float: left;
 	margin-right: var(--gap-md);
@@ -101,6 +98,12 @@
 	&:focus-within &__buttons {
 		display: flex;
 	}
+}
+
+#frm-send-test-email,
+.frm-upload-image-btn,
+.frm-remove-image-btn {
+	cursor: pointer;
 }
 
 #frm-send-test-email-modal {

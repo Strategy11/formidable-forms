@@ -85,7 +85,7 @@ do_action( 'frm_email_styles_extra_settings' );
 
 <div id="frm-send-test-email-modal" class="frm_hidden frm-modal">
 	<div class="metabox-holder">
-		<div class="postbox">
+		<div class="postbox frm_wrap">
 			<a href="javascript:void(0)" class="dismiss" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
@@ -94,7 +94,7 @@ do_action( 'frm_email_styles_extra_settings' );
 
 				<div>
 					<label for="frm-test-email-address"><?php esc_html_e( 'Email address', 'formidable' ); ?></label>
-					<input type="text" id="frm-test-email-address" class="widefat" />
+					<input type="text" id="frm-test-email-address" class="widefat" autofocus />
 					<p class="description"><?php esc_html_e( 'Use commas to separate multiple emails.', 'formidable' ); ?></p>
 				</div>
 
