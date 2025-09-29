@@ -386,6 +386,10 @@ class FrmFieldsController {
 	 * @return bool
 	 */
 	public static function maybe_disable_option( $field, $opt_key ) {
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			return false;
+		}
+
 		if ( apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key ) ) {
 			echo ' disabled="disabled" ';
 			if ( FrmField::is_field_type( $field, 'checkbox' ) ) {
