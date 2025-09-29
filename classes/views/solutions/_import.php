@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			$disabled = isset( $imported[ $info['form'] ] ) ? ' disabled' : '';
-			$url      = isset( $info['url'] ) ? $info['url'] : '';
+			$url      = $info['url'] ?? '';
 			$value    = $importing === 'form' ? $info['form'] : $info['key'];
 			if ( ! isset( $info['img'] ) ) {
 				?>

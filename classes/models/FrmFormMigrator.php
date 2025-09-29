@@ -597,7 +597,7 @@ abstract class FrmFormMigrator {
 	 * @return string
 	 */
 	protected function get_field_label( $field ) {
-		$label = isset( $field['label'] ) ? $field['label'] : '';
+		$label = $field['label'] ?? '';
 		if ( ! empty( $label ) ) {
 			return $label;
 		}

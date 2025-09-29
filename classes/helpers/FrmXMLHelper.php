@@ -710,7 +710,7 @@ class FrmXMLHelper {
 
 			foreach ( $options as $opt_key => $opt ) {
 				if ( is_array( $opt ) ) {
-					$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+					$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 				}
 
 				if ( $opt == $default_value ) {
@@ -2104,7 +2104,7 @@ class FrmXMLHelper {
 		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
 			// migrate autoresponder
 
-			$email_field = isset( $form_options['ar_email_to'] ) ? $form_options['ar_email_to'] : 0;
+			$email_field = $form_options['ar_email_to'] ?? 0;
 			if ( strpos( $email_field, '|' ) ) {
 				// data from entries field
 				$email_field = explode( '|', $email_field );
@@ -2120,16 +2120,16 @@ class FrmXMLHelper {
 			$new_notification2 = array(
 				'post_content' => array(
 					'email_message' => $notification['ar_email_message'],
-					'email_subject' => isset( $notification['ar_email_subject'] ) ? $notification['ar_email_subject'] : '',
+					'email_subject' => $notification['ar_email_subject'] ?? '',
 					'email_to'      => $email_field,
-					'plain_text'    => isset( $notification['ar_plain_text'] ) ? $notification['ar_plain_text'] : 0,
+					'plain_text'    => $notification['ar_plain_text'] ?? 0,
 					'inc_user_info' => 0,
 				),
 				'post_name'    => $form_id . '_email_' . count( $notifications ),
 			);
 
-			$reply_to      = isset( $notification['ar_reply_to'] ) ? $notification['ar_reply_to'] : '';
-			$reply_to_name = isset( $notification['ar_reply_to_name'] ) ? $notification['ar_reply_to_name'] : '';
+			$reply_to      = $notification['ar_reply_to'] ?? '';
+			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
 			if ( ! empty( $reply_to ) ) {
 				$new_notification2['post_content']['reply_to'] = $reply_to;

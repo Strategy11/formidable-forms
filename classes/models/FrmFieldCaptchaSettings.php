@@ -174,7 +174,7 @@ class FrmFieldCaptchaSettings {
 	 */
 	public function get_pubkey() {
 		$key = $this->get_key_for_pubkey();
-		return isset( $this->frm_settings->$key ) ? $this->frm_settings->$key : '';
+		return $this->frm_settings->$key ?? '';
 	}
 
 	/**

@@ -276,7 +276,7 @@ class FrmStrpLiteAuth {
 		self::format_form_data( $form );
 
 		$form_id = absint( $form['form_id'] );
-		$intents = isset( $form[ 'frmintent' . $form_id ] ) ? $form[ 'frmintent' . $form_id ] : array();
+		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
 		if ( empty( $intents ) ) {
 			wp_die();
