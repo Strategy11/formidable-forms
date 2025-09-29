@@ -43,22 +43,23 @@ $labels    = $this->get_built_in_option_labels();
 						<?php echo esc_html( $labels[ $option ] ); ?>
 					</label>
 					<span class="frm-with-right-icon">
-						<?php
-						FrmAppHelper::icon_by_class(
-							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-							array(
-								'data-open' => 'frm-smart-values-box',
-							)
-						);
-						?>
 						<input
 							type="text"
 							name="<?php echo esc_attr( $input_name ); ?>"
 							id="<?php echo esc_attr( $input_id ); ?>"
-							value="<?php echo esc_attr( isset( $default_value[ $sub_field['name'] ] ) ? $default_value[ $sub_field['name'] ] : '' ); ?>"
+							value="<?php echo esc_attr( $default_value[ $sub_field['name'] ] ?? '' ); ?>"
 							data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 							data-changeatt="value"
 						/>
+						<?php
+						FrmAppHelper::icon_by_class(
+							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+							array(
+								'data-open' => 'frm-smart-values-box',
+								'tabindex'  => '0',
+							)
+						);
+						?>
 					</span>
 				</p>
 				<?php
@@ -78,7 +79,7 @@ $labels    = $this->get_built_in_option_labels();
 						type="text"
 						name="<?php echo esc_attr( $input_name ); ?>"
 						id="<?php echo esc_attr( $input_id ); ?>"
-						value="<?php echo esc_attr( isset( $input_value[ $sub_field['name'] ] ) ? $input_value[ $sub_field['name'] ] : '' ); ?>"
+						value="<?php echo esc_attr( $input_value[ $sub_field['name'] ] ?? '' ); ?>"
 						data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 						data-changeatt="<?php echo esc_attr( $option ); ?>"
 					/>

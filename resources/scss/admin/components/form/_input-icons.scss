@@ -9,7 +9,6 @@
 .frm-with-left-icon,
 .frm-with-right-icon {
 	position: relative;
-	display: block;
 }
 
 i.frm-show-box,
@@ -84,4 +83,8 @@ i.frm-show-inline-modal {
 	z-index: 1;
 	cursor: pointer;
 	pointer-events: initial;
+
+	&:focus {
+		outline: 1px solid var(--primary-500);
+	}
 }

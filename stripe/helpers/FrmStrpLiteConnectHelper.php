@@ -175,7 +175,7 @@ class FrmStrpLiteConnectHelper {
 			return 'Response from server was not successful';
 		}
 
-		return isset( $body->data ) ? $body->data : array();
+		return $body->data ?? array();
 	}
 
 	/**

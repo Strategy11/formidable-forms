@@ -123,10 +123,10 @@ class FrmOnboardingWizardController {
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
-		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
+		add_action( 'admin_init', self::class . '::do_admin_redirects' );
 
 		if ( self::has_onboarding_been_skipped() ) {
-			add_filter( 'option_frm_inbox', __CLASS__ . '::add_wizard_to_floating_links' );
+			add_filter( 'option_frm_inbox', self::class . '::add_wizard_to_floating_links' );
 		}
 
 		// Load page if admin page is Onboarding Wizard.
@@ -204,12 +204,12 @@ class FrmOnboardingWizardController {
 			$message = new FrmInbox();
 			$message->dismiss( 'onboarding_wizard' );
 
-			add_action( 'admin_menu', __CLASS__ . '::menu', 99 );
-			add_action( 'admin_init', __CLASS__ . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-			add_action( 'admin_head', __CLASS__ . '::remove_menu' );
+			add_action( 'admin_menu', self::class . '::menu', 99 );
+			add_action( 'admin_init', self::class . '::assign_properties' );
+			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+			add_action( 'admin_head', self::class . '::remove_menu' );
 
-			add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+			add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
@@ -254,7 +254,7 @@ class FrmOnboardingWizardController {
 			$label,
 			self::REQUIRED_CAPABILITY,
 			self::PAGE_SLUG,
-			array( __CLASS__, 'render' )
+			array( self::class, 'render' )
 		);
 	}
 

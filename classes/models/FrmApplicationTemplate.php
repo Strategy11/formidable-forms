@@ -131,7 +131,7 @@ class FrmApplicationTemplate {
 	 * @return array<string>
 	 */
 	public static function get_categories() {
-		return isset( self::$categories ) ? self::$categories : array();
+		return self::$categories ?? array();
 	}
 
 	/**
