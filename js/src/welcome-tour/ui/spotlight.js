@@ -27,13 +27,12 @@ function positionSpotlight( spotlightElement ) {
 		return;
 	}
 
-	const targetRect = targetElement.getBoundingClientRect();
+	const computedStyle = window.getComputedStyle( targetElement );
+	if ( computedStyle.position === 'static' ) {
+		targetElement.style.position = 'relative';
+	}
 
-	const centerX = targetRect.left + ( targetRect.width / 2 );
-	const centerY = targetRect.top + ( targetRect.height / 2 );
-
-	spotlightElement.style.top = `${ centerY }px`;
-	spotlightElement.style.left = `${ centerX }px`;
+	targetElement.appendChild( spotlightElement );
 	spotlightElement.classList.remove( 'frm-force-hidden' );
 }
 
