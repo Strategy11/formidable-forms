@@ -202,8 +202,8 @@ class FrmWelcomeTourController {
 		switch ( self::$checklist['active_step_key'] ) {
 			case 'create-form':
 				$spotlight_data = array(
-					'target'   => '#frm-form-templates-create-form-divider',
-					'position' => 'middle',
+					'target'        => '#frm-form-templates-create-form-divider',
+					'left-position' => '27%',
 				);
 				break;
 			case 'add-fields':
