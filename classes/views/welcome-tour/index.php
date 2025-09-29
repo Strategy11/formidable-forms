@@ -10,5 +10,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frm-welcome-tour">
-	<?php include $view_path . 'checklist.php'; ?>
+	<?php
+	if ( ! empty( $spotlight ) ) {
+		include $view_path . 'spotlight.php';
+	}
+
+	include $view_path . 'checklist.php';
+	?>
 </div>
