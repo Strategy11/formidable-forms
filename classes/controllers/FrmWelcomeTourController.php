@@ -146,7 +146,8 @@ class FrmWelcomeTourController {
 			}
 		}//end foreach
 
-		self::$checklist['active_step'] = $active_step;
+		self::$checklist['active_step']     = $active_step;
+		self::$checklist['active_step_key'] = $steps[ $active_step ];
 		self::save_checklist();
 	}
 
@@ -165,6 +166,8 @@ class FrmWelcomeTourController {
 		$view_path       = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 		$steps_view_path = $completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
 
+		$spotlight       = self::get_spotlight_data( $completed );
+
 		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		$urls            = array(
 			'docs'                      => self::make_tracked_url( 'https://formidableforms.com/knowledgebase/' ),
@@ -179,6 +182,56 @@ class FrmWelcomeTourController {
 		);
 
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Get spotlight data for the current active step.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool $completed Whether the tour is completed.
+	 * @return array|null The spotlight data or null if not needed.
+	 */
+	private static function get_spotlight_data( $completed ) {
+		if ( $completed ) {
+			return null;
+		}
+
+		$spotlight_data = array();
+
+		switch ( self::$checklist['active_step_key'] ) {
+			case 'create-form':
+				$spotlight_data = array(
+					'target'   => '#frm-form-templates-create-form-divider',
+					'position' => 'middle',
+				);
+				break;
+			case 'add-fields':
+				$spotlight_data = array(
+					'target'   => '#frm-form-templates-create-form-divider',
+					'position' => 'middle',
+				);
+				break;
+			case 'style-form':
+				$spotlight_data = array(
+					'target'   => '#frm-form-templates-create-form-divider',
+					'position' => 'middle',
+				);
+				break;
+			case 'embed-form':
+				$spotlight_data = array(
+					'target'   => '#frm-form-templates-create-form-divider',
+					'position' => 'middle',
+				);
+				break;
+			default:
+				break;
+		}//end switch
+
+		return array_merge(
+			self::get_steps()['steps'][ self::$checklist['active_step'] ],
+			$spotlight_data
+		);
 	}
 
 	/**
