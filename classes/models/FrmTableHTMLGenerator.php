@@ -173,7 +173,7 @@ class FrmTableHTMLGenerator {
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
 
-			$this->table_style  = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
+			$this->table_style  = ' style="' . esc_attr( 'border-spacing:0;font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
 		}
