@@ -21,10 +21,11 @@ jobs:
         uses: actions/setup-node@v5
         with:
           node-version: 18
-          cache: 'npm'
 
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps --include=dev
+      - name: Install and cache dependencies
+        uses: bahmutov/npm-install@v1
+        with:
+          install-command: npm ci --legacy-peer-deps --include=dev
 
       - name: Analyze js code style
         run: ./node_modules/.bin/eslint .
