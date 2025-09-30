@@ -1,22 +1,40 @@
+name: Inspections
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
     types: [ opened, labeled, synchronize ]
 
-name: Inspections
 jobs:
-  runPHPCSInspection:
+  runESLintInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
+      - name: Checkout code
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18
+
+      - name: Cache Node.js dependencies
+        id: cache
+        uses: actions/cache@v4
+        with:
+          path: ./node_modules
+          key: ${{ runner.os }}-node-18-${{ hashFiles('./package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-18-
+            ${{ runner.os }}-node-
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --include=dev
+        if: steps.cache.outputs.cache-hit != 'true'
+
       - name: Analyze js code style
-        run: |
-          npm ci --legacy-peer-deps --include=dev
-          ./node_modules/.bin/eslint .
+        run: ./node_modules/.bin/eslint .
