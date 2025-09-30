@@ -14,4 +14,6 @@ domReady( () => {
 	setupInitialView();
 	buildCategorizedAddons();
 	addEventListeners();
+
+	console.log( 'A test change to see if GitHub Actions caching is working' );
 } );
