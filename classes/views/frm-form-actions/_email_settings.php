@@ -38,7 +38,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 				selected( $selected_style, $style_key, false ),
 				esc_html( $option_label )
 			);
-		}
+		}//end foreach
 		?>
 	</select>
 </p>
