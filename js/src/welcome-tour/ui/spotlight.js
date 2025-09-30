@@ -27,9 +27,22 @@ function positionSpotlight( spotlightElement ) {
 		return;
 	}
 
-	const computedStyle = window.getComputedStyle( targetElement );
-	if ( computedStyle.position === 'static' ) {
+	const targetStyle = window.getComputedStyle( targetElement );
+	if ( targetStyle.position === 'static' ) {
 		targetElement.style.position = 'relative';
+	}
+
+	const leftPosition = spotlightElement.dataset.leftPosition;
+	switch ( leftPosition ) {
+		case 'middle':
+			spotlightElement.style.left = '50%';
+			break;
+		case 'end':
+			spotlightElement.style.right = '0';
+			break;
+		default:
+			spotlightElement.style.left = leftPosition;
+			break;
 	}
 
 	targetElement.appendChild( spotlightElement );
