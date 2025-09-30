@@ -131,6 +131,8 @@ class FrmOnboardingWizardController {
 
 		// Load page if admin page is Onboarding Wizard.
 		self::maybe_load_page();
+
+		// Add a test comment to PHP code to check GitHub Actions caching.
 	}
 
 	/**
@@ -376,7 +378,7 @@ class FrmOnboardingWizardController {
 			'@local.test',
 			'test@gmail.com',
 			'admin@gmail.com',
-			
+
 		);
 		foreach ( $substrings as $substring ) {
 			if ( false !== strpos( $email, $substring ) ) {
