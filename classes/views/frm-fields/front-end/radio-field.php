@@ -23,12 +23,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		}
 		ob_start();
 		do_action( 'frm_field_input_html', $field, $opt_key );
-		$input_html = ob_get_clean();
+		$input_html           = ob_get_clean();
 		$choice_limit_reached = strpos( $input_html, 'limit_reached' ) !== false;
-		if ( ! empty( $form_options['disable_on_choice_limit'] ) ) {
-			if ( $choice_limit_reached ) {
-				continue;
-			}
+		if ( ! empty( $form_options['disable_on_choice_limit'] ) && $choice_limit_reached ) {
+			continue;
 		}
 
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
