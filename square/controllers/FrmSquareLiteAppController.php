@@ -192,10 +192,11 @@ class FrmSquareLiteAppController {
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {
-		$entry          = new stdClass();
-		$entry->post_id = 0;
-		$entry->id      = 0;
-		$entry->metas   = array();
+		$entry           = new stdClass();
+		$entry->post_id  = 0;
+		$entry->id       = 0;
+		$entry->item_key = '';
+		$entry->metas    = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {
