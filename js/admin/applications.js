@@ -331,7 +331,7 @@
 			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
 			return div( {
 				className: 'frm-application-card-image-wrapper',
-				child: img( { src: thumbnailFolderUrl + filenameToUse } )
+				children: [ img( { src: thumbnailFolderUrl + filenameToUse } ), data.hasLiteThumbnail ? document.createTextNode( '' ) : document.createTextNode( data.key ) ]
 			} );
 		}
 
