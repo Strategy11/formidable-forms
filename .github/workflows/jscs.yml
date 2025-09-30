@@ -26,11 +26,8 @@ jobs:
         id: cache
         uses: actions/cache@v4
         with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-18-${{ hashFiles('./package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-18-
-            ${{ runner.os }}-node-
+          path: node_modules
+          key: ${{ runner.os }}-node-18-${{ hashFiles('package-lock.json') }}
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps --include=dev
