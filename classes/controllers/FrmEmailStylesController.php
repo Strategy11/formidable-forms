@@ -131,60 +131,7 @@ class FrmEmailStylesController {
 		);
 
 		if ( 'plain' !== $style_key ) {
-			$style_settings = self::get_email_style_settings();
-
-			// Sleek table style doesn't have any border.
-			$should_remove_border = 'sleek' === $style_key;
-
-			// Modern and Compact table styles don't have top and bottom border.
-			$should_remove_top_bottom_border = 'classic' !== $style_key;
-
-			$table_generator = self::get_table_generator( $style_key );
-
-			$content = $table_generator->generate_table_header();
-
-			// By default, table has the bottom border and table cells have top border.
-			if ( $should_remove_top_bottom_border ) {
-				$content = $table_generator->remove_border( $content, 'bottom' );
-			}
-
-			foreach ( $table_rows as $index => $row ) {
-				if ( 'compact' === $style_key ) {
-					// Compact table has two columns layout.
-					$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
-				} else {
-					// Other table styles have one column layout.
-					$table_row = $table_generator->generate_single_cell_table_row( self::get_content_for_one_column_cell( $row['label'], $row['value'] ) );
-				}
-
-				if ( ! $index && $should_remove_top_bottom_border ) {
-					$table_row = $table_generator->remove_border( $table_row );
-				}
-
-				$content .= $table_row;
-			}
-
-			$content .= $table_generator->generate_table_footer();
-
-			if ( $should_remove_border ) {
-				$content = $table_generator->remove_border( $content, 'top' );
-			}
-
-			if ( 'classic' !== $style_key ) {
-				$content = self::wrap_email_message( $content );
-			}
-
-			$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
-			if ( 'classic' !== $style_key ) {
-				// This works in previewing and as a fallback for email content.
-				$wrapped_content .= '<style>
-						body {background-color:' . esc_attr( $style_settings['bg_color'] ) . ';}
-						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
-					</style>';
-			}
-			$wrapped_content .= '</head><body>' . $content . '</body></html>';
-
-			$content = $wrapped_content;
+			$content = self::get_test_rich_text_email_content( $style_key, $table_rows );
 		} else {
 			$content = '';
 			foreach ( $table_rows as $row ) {
@@ -193,6 +140,70 @@ class FrmEmailStylesController {
 		}//end if
 
 		return $content;
+	}
+
+	/**
+	 * Gets the test email content.
+	 *
+	 * @param string $style_key  Style key.
+	 * @param array  $table_rows Table rows.
+	 * @return string
+	 */
+	private static function get_test_rich_text_email_content( $style_key, $table_rows ) {
+		$style_settings = self::get_email_style_settings();
+
+		// Sleek table style doesn't have any border.
+		$should_remove_border = 'sleek' === $style_key;
+
+		// Modern and Compact table styles don't have top and bottom border.
+		$should_remove_top_bottom_border = 'classic' !== $style_key;
+
+		$table_generator = self::get_table_generator( $style_key );
+
+		$content = $table_generator->generate_table_header();
+
+		// By default, table has the bottom border and table cells have top border.
+		if ( $should_remove_top_bottom_border ) {
+			$content = $table_generator->remove_border( $content, 'bottom' );
+		}
+
+		foreach ( $table_rows as $index => $row ) {
+			if ( 'compact' === $style_key ) {
+				// Compact table has two columns layout.
+				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
+			} else {
+				// Other table styles have one column layout.
+				$table_row = $table_generator->generate_single_cell_table_row( self::get_content_for_one_column_cell( $row['label'], $row['value'] ) );
+			}
+
+			if ( ! $index && $should_remove_top_bottom_border ) {
+				$table_row = $table_generator->remove_border( $table_row );
+			}
+
+			$content .= $table_row;
+		}
+
+		$content .= $table_generator->generate_table_footer();
+
+		if ( $should_remove_border ) {
+			$content = $table_generator->remove_border( $content, 'top' );
+		}
+
+		if ( 'classic' !== $style_key ) {
+			$content = self::wrap_email_message( $content );
+		}
+
+		$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
+		if ( 'classic' !== $style_key ) {
+			// This works in previewing and as a fallback for email content.
+			$wrapped_content .= '<style>
+						body {background-color:' . esc_attr( $style_settings['bg_color'] ) . ';}
+						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
+					</style>';
+		}
+		$wrapped_content .= '</head><body>' . $content . '</body></html>';
+
+		return $wrapped_content;
 	}
 
 	/**
