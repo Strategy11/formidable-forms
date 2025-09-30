@@ -129,10 +129,10 @@ class FrmFieldNumber extends FrmFieldType {
 	 */
 	protected function check_value_is_valid_with_step( $value, $step ) {
 		// Count the number of decimals.
-		$decimals = max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
+		$decimals = (int) max( FrmAppHelper::count_decimals( $value ), FrmAppHelper::count_decimals( $step ) );
 
 		// Convert value and step to int to prevent precision problem.
-		$pow   = pow( 10, $decimals );
+		$pow   = 10 ** $decimals;
 		$value = intval( $pow * $value );
 		$step  = intval( $pow * $step );
 		$div   = $value / $step;

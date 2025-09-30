@@ -359,7 +359,7 @@ class FrmSolution {
 			}
 
 			// Set disabled buttons.
-			$class  = isset( $step['button_class'] ) ? $step['button_class'] : '';
+			$class  = $step['button_class'] ?? '';
 			$class .= ' button-primary frm-button-primary';
 			if ( ! $steps[ $k ]['current'] ) {
 				$class .= ' frm_grey disabled';
@@ -492,7 +492,7 @@ class FrmSolution {
 		$this->step_top( $step );
 
 		if ( ! isset( $step['error'] ) ) {
-			$rel = isset( $step['links'] ) ? $step['links'] : array();
+			$rel = $step['links'] ?? array();
 
 			?>
 			<a rel="<?php echo esc_attr( implode( ',', $rel ) ); ?>" class="<?php echo esc_attr( $step['button_class'] ); ?>">

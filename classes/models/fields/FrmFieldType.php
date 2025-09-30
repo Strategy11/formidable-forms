@@ -139,7 +139,7 @@ abstract class FrmFieldType {
 		}
 
 		if ( is_array( $this->field ) ) {
-			$this->field_id = isset( $this->field['id'] ) ? $this->field['id'] : 0;
+			$this->field_id = $this->field['id'] ?? 0;
 		} elseif ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
 			$this->field_id = $this->field->id;
 		} elseif ( is_numeric( $this->field ) ) {
@@ -289,7 +289,7 @@ DEFAULT_HTML;
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
 		$html_id    = $this->html_id();
-		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
+		$read_only  = $field['read_only'] ?? 0;
 
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
@@ -1197,7 +1197,7 @@ DEFAULT_HTML;
 	 */
 	private function include_hidden_values_for_single_opt( $args, $opt ) {
 		$hidden         = '';
-		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+		$selected_value = $args['field_value'] ?? $this->field['value'];
 
 		if ( ! is_array( $selected_value ) ) {
 			return $hidden;
@@ -1238,7 +1238,7 @@ DEFAULT_HTML;
 	}
 
 	protected function show_hidden_values( $args ) {
-		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
 		if ( is_array( $selected_value ) ) {
 			$args['save_array'] = true;
@@ -1292,7 +1292,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function select_tag( $values ) {
-		$field       = isset( $values['field'] ) ? $values['field'] : $this->field;
+		$field       = $values['field'] ?? $this->field;
 		$input_html  = $this->get_field_input_html_hook( $field );
 		$select_atts = $this->get_select_attributes( $values );
 		$select      = FrmAppHelper::array_to_html_params( $select_atts ) . ' ';
@@ -1540,7 +1540,7 @@ DEFAULT_HTML;
 			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
 			} elseif ( empty( $atts['return_array'] ) ) {
-				$sep   = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+				$sep   = $atts['sep'] ?? ', ';
 				$value = FrmAppHelper::safe_implode( $sep, $value );
 			}
 		}

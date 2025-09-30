@@ -133,7 +133,7 @@ class FrmTableHTMLGenerator {
 			}
 		}
 
-		$this->style_settings['class'] = isset( $atts['class'] ) ? $atts['class'] : '';
+		$this->style_settings['class'] = $atts['class'] ?? '';
 	}
 
 	/**

@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
-			$default_value = isset( $field['dyn_default_value'] ) ? $field['dyn_default_value'] : '';
+			$default_value = $field['dyn_default_value'] ?? '';
 		} else {
 			$default_name  = 'default_value_' . $field['id'];
 			$default_value = $field['default_value'];

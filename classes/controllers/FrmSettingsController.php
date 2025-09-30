@@ -159,7 +159,7 @@ class FrmSettingsController {
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
 			'icon'     => 'frm_icon_font frm_shuffle_icon',
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
 
@@ -209,7 +209,7 @@ class FrmSettingsController {
 			}
 		}
 
-		uksort( self::$removed_payments_sections, array( __CLASS__, 'payment_sections_sort_callback' ) );
+		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
 	}
 
 	/**
@@ -246,7 +246,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		wp_die();
 	}

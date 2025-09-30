@@ -47,7 +47,7 @@ $labels    = $this->get_built_in_option_labels();
 							type="text"
 							name="<?php echo esc_attr( $input_name ); ?>"
 							id="<?php echo esc_attr( $input_id ); ?>"
-							value="<?php echo esc_attr( isset( $default_value[ $sub_field['name'] ] ) ? $default_value[ $sub_field['name'] ] : '' ); ?>"
+							value="<?php echo esc_attr( $default_value[ $sub_field['name'] ] ?? '' ); ?>"
 							data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 							data-changeatt="value"
 						/>
@@ -79,7 +79,7 @@ $labels    = $this->get_built_in_option_labels();
 						type="text"
 						name="<?php echo esc_attr( $input_name ); ?>"
 						id="<?php echo esc_attr( $input_id ); ?>"
-						value="<?php echo esc_attr( isset( $input_value[ $sub_field['name'] ] ) ? $input_value[ $sub_field['name'] ] : '' ); ?>"
+						value="<?php echo esc_attr( $input_value[ $sub_field['name'] ] ?? '' ); ?>"
 						data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 						data-changeatt="<?php echo esc_attr( $option ); ?>"
 					/>

@@ -141,13 +141,13 @@ class FrmFormTemplatesController {
 		self::init_template_resources();
 
 		// Use the same priority as Applications so Form Templates appear directly under Applications.
-		add_action( 'admin_menu', __CLASS__ . '::menu', 14 );
-		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
-		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
+		add_action( 'admin_menu', self::class . '::menu', 14 );
+		add_action( 'admin_footer', self::class . '::render_modal' );
+		add_filter( 'frm_form_nav_list', self::class . '::append_new_template_to_nav', 10, 2 );
 
 		if ( self::is_templates_page() ) {
-			add_action( 'admin_init', __CLASS__ . '::set_form_templates_data' );
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_action( 'admin_init', self::class . '::set_form_templates_data' );
+			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
@@ -168,7 +168,7 @@ class FrmFormTemplatesController {
 			$label,
 			self::REQUIRED_CAPABILITY,
 			self::PAGE_SLUG,
-			array( __CLASS__, 'render' )
+			array( self::class, 'render' )
 		);
 	}
 

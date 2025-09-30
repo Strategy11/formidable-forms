@@ -6649,7 +6649,7 @@ window.frmAdminBuildJS = function() {
 		replaceWith += ' ';
 
 		// Allow for the column number dropdown.
-		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' );
+		replaceWith = replaceWith.replace( ' block ', ' vertical_radio ' ).replace( ' inline ', ' horizontal_radio ' );
 
 		classes = field.className.split( ' frmstart ' )[ 1 ];
 		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[ 0 ];
