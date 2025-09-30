@@ -17,8 +17,16 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@v5
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 18
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps --include=dev
+
       - name: Analyze js code style
-        run: |
-          npm ci --legacy-peer-deps --include=dev
-          ./node_modules/.bin/eslint .
+        run: ./node_modules/.bin/eslint .
