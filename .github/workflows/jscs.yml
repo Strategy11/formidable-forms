@@ -1,6 +1,8 @@
 name: Inspections
 
 on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
   push:
     branches:
       - master
@@ -14,17 +16,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: 18
-          cache: 'npm'
-
-      - name: Install dependencies
-        run: npm ci --legacy-peer-deps --include=dev
-
+      - name: Checkout
+        uses: actions/checkout@master
       - name: Analyze js code style
-        run: ./node_modules/.bin/eslint .
+        run: |
+          npm ci --legacy-peer-deps --include=dev
+          ./node_modules/.bin/eslint .
