@@ -1,8 +1,6 @@
 name: Inspections
 
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
@@ -11,37 +9,26 @@ on:
 
 jobs:
   runESLintInspection:
-    if: contains(github.event.pull_request.labels.*.name, 'run analysis') || github.ref == 'refs/heads/master'
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
+    
+    env:
+      NODE_OPTIONS: --max-old-space-size=4096
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
-
+        uses: actions/checkout@v5
+        
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
           node-version: 18
-
-      - name: Cache npm dependencies
-        uses: actions/cache@v4
-        with:
-          path: ~/.npm
-          key: ${{ runner.os }}-npm-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-npm-
-
-      - name: Cache ESLint results
-        uses: actions/cache@v4
-        with:
-          path: .eslintcache
-          key: ${{ runner.os }}-eslintcache-${{ hashFiles('**/*.js', '**/*.jsx', '.eslintrc*') }}
-          restore-keys: |
-            ${{ runner.os }}-eslintcache-
-
+          cache: 'npm'
+          cache-dependency-path: 'package-lock.json'
+          
       - name: Install dependencies
         run: npm ci --legacy-peer-deps --include=dev
-
+        
       - name: Analyze js code style
-        run: ./node_modules/.bin/eslint . --cache
+        run: ./node_modules/.bin/eslint .
