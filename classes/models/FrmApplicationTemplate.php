@@ -104,7 +104,6 @@ class FrmApplicationTemplate {
 			'tiered-pricing',
 			'trip-itinerary',
 			'twitterx',
-
 		);
 	}
 
