@@ -974,7 +974,7 @@ class FrmAddonsController {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
-		// Start output bufferring to catch the filesystem form if credentials are needed.
+		// Start output buffering to catch the filesystem form if credentials are needed.
 		ob_start();
 
 		$show_form = false;
