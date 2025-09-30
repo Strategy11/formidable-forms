@@ -24,7 +24,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 
 			if ( empty( $style['selectable'] ) ) {
 				$option_attrs['disabled'] = 'disabled';
-				$option_label             .= ' ' . __( '(Pro)', 'formidable' );
+				$option_label            .= ' ' . __( '(Pro)', 'formidable' );
 			}
 
 			if ( $style_key === $default_style ) {
@@ -33,6 +33,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 
 			printf(
 				'<option %1$s%2$s>%3$s</option>',
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				FrmAppHelper::array_to_html_params( $option_attrs ),
 				selected( $selected_style, $style_key, false ),
 				esc_html( $option_label )
