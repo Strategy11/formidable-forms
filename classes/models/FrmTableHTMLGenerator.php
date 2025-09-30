@@ -200,7 +200,7 @@ class FrmTableHTMLGenerator {
 			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
 			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
 
-			$this->td_style = ' style="' . $td_style_attributes . '"';
+			$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
 		}
 	}
 

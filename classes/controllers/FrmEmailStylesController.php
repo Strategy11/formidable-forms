@@ -22,35 +22,37 @@ class FrmEmailStylesController {
 	 * @return array[]
 	 */
 	public static function get_email_styles() {
+		$icon_dir_url = FrmAppHelper::plugin_url() . '/images/email-styles/';
+
 		$email_styles = array(
 			'classic' => array(
 				'name'          => __( 'Classic', 'formidable' ),
 				'selectable'    => true,
-				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/classic.svg',
+				'icon_url'      => $icon_dir_url . 'classic.svg',
 				'is_plain_text' => false,
 			),
 			'plain'   => array(
 				'name'          => __( 'Plain Text', 'formidable' ),
 				'selectable'    => true,
-				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/plain.svg',
+				'icon_url'      => $icon_dir_url . 'plain.svg',
 				'is_plain_text' => true,
 			),
 			'modern'  => array(
 				'name'          => __( 'Modern', 'formidable' ),
 				'selectable'    => false,
-				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/modern.svg',
+				'icon_url'      => $icon_dir_url . 'modern.svg',
 				'is_plain_text' => false,
 			),
 			'sleek'   => array(
 				'name'          => __( 'Sleek', 'formidable' ),
 				'selectable'    => false,
-				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/sleek.svg',
+				'icon_url'      => $icon_dir_url . 'sleek.svg',
 				'is_plain_text' => false,
 			),
 			'compact' => array(
 				'name'          => __( 'Compact', 'formidable' ),
 				'selectable'    => false,
-				'icon_url'      => FrmAppHelper::plugin_url() . '/images/email-styles/compact.svg',
+				'icon_url'      => $icon_dir_url . 'compact.svg',
 				'is_plain_text' => false,
 			),
 		);

@@ -24,15 +24,21 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 
 			if ( empty( $style['selectable'] ) ) {
 				$option_attrs['disabled'] = 'disabled';
-				$option_label            .= ' ' . __( '(Pro)', 'formidable' );
+				$option_label             .= ' ' . __( '(Pro)', 'formidable' );
 			}
 
 			if ( $style_key === $default_style ) {
 				$option_label .= ' ' . __( '(Default)', 'formidable' );
 			}
-			?>
-			<option <?php FrmAppHelper::array_to_html_params( $option_attrs, true ); ?> <?php selected( $selected_style, $style_key ); ?>><?php echo esc_html( $option_label ); ?></option>
-		<?php } ?>
+
+			printf(
+				'<option %1$s%2$s>%3$s</option>',
+				FrmAppHelper::array_to_html_params( $option_attrs ),
+				selected( $selected_style, $style_key, false ),
+				esc_html( $option_label )
+			);
+		}
+		?>
 	</select>
 </p>
 
