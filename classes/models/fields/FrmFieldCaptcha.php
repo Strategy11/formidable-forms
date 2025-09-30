@@ -109,7 +109,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 			'data-sitekey' => $settings->get_pubkey(),
 		);
 		if ( 'turnstile' === $frm_settings->active_captcha ) {
-			$div_attributes['data-language'] = $this->get_captcha_language();
+			$captcha_language = $this->get_captcha_language();
+			if ( $captcha_language ) {
+				$div_attributes['data-language'] = $captcha_language;
+			}
 		}
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
 		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
