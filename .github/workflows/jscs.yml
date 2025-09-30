@@ -12,104 +12,26 @@ jobs:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    env:
-      NODE_OPTIONS: --max-old-space-size=4096
-      CI: true
 
     steps:
       - name: Checkout
         uses: actions/checkout@v5
+
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
           node-version: 18
 
-      - name: Debug - Environment Info
-        run: |
-          echo "=== ENVIRONMENT DEBUG ==="
-          echo "Node.js version: $(node --version)"
-          echo "npm version: $(npm --version)"
-          echo "Runner OS: ${{ runner.os }}"
-          echo "Working directory: $(pwd)"
-          echo "Home directory: $HOME"
-          echo "npm cache directory: $(npm config get cache)"
-          echo "Package-lock hash: ${{ hashFiles('**/package-lock.json') }}"
-
-      - name: Cache npm dependencies
-        id: cache-npm
+      - name: Cache Node.js dependencies
+        id: cache
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
-
-      - name: Debug - Cache Status
-        run: |
-          echo "=== CACHE DEBUG ==="
-          echo "Cache hit: ${{ steps.cache-npm.outputs.cache-hit }}"
-          echo "Cache key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}"
-          echo "npm cache location: ~/.npm"
-          if [ -d ~/.npm ]; then
-            echo "npm cache exists, size: $(du -sh ~/.npm 2>/dev/null || echo 'cannot calculate')"
-            echo "npm cache contents: $(ls -la ~/.npm 2>/dev/null | wc -l || echo '0') items"
-          else
-            echo "npm cache directory does not exist"
-          fi
+          path: ./node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('./package-lock.json') }}
 
       - name: Install dependencies
-        run: |
-          echo "=== INSTALLATION DEBUG ==="
-          echo "Starting npm ci at: $(date)"
-          npm ci --legacy-peer-deps --include=dev --timing
-          echo "Installation completed at: $(date)"
-
-      - name: Debug - Post Installation
-        run: |
-          echo "=== POST-INSTALL DEBUG ==="
-          echo "node_modules exists: $(test -d node_modules && echo 'YES' || echo 'NO')"
-          if [ -d node_modules ]; then
-            echo "node_modules size: $(du -sh node_modules)"
-            echo "ESLint binary exists: $(test -f ./node_modules/.bin/eslint && echo 'YES' || echo 'NO')"
-            if [ -f ./node_modules/.bin/eslint ]; then
-              echo "ESLint version: $(./node_modules/.bin/eslint --version)"
-            fi
-          fi
+        run: npm ci --legacy-peer-deps --include=dev
+        if: steps.cache.outputs.cache-hit != 'true'
 
       - name: Analyze js code style
-        run: |
-          echo "=== ESLINT EXECUTION ==="
-          if [ ! -f ./node_modules/.bin/eslint ]; then
-            echo "❌ ERROR: ESLint binary not found!"
-            echo "Debugging node_modules structure:"
-            ls -la node_modules/.bin/ | head -10
-            exit 1
-          fi
-          echo "✅ ESLint binary found, starting analysis..."
-          ./node_modules/.bin/eslint . --format=compact
-
-      - name: Debug - Failure Analysis
-        if: failure()
-        run: |
-          echo "=== FAILURE DEBUG ==="
-          echo "Workflow failed. Analyzing state:"
-          echo "Node.js version: $(node --version 2>/dev/null || echo 'not available')"
-          echo "npm version: $(npm --version 2>/dev/null || echo 'not available')"
-          echo "Working directory contents:"
-          ls -la
-          echo "node_modules status:"
-          if [ -d node_modules ]; then
-            echo "✅ node_modules exists ($(du -sh node_modules))"
-            echo "node_modules/.bin contents:"
-            ls -la node_modules/.bin/ | head -5
-          else
-            echo "❌ node_modules missing!"
-          fi
-          echo "npm cache status:"
-          if [ -d ~/.npm ]; then
-            echo "✅ npm cache exists ($(du -sh ~/.npm))"
-          else
-            echo "❌ npm cache missing!"
-          fi
+        run: ./node_modules/.bin/eslint .
