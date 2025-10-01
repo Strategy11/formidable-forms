@@ -269,12 +269,7 @@ class FrmEmailStylesController {
 		$style_key = FrmAppHelper::get_param( 'style_key', '', 'sanitize_text_field' );
 		$content   = self::get_test_email_content( $style_key );
 
-		if ( 'plain' !== $style_key ) {
-			header( 'Content-Type: text/html; charset=utf-8' );
-		} else {
-			// Plain‐text preview with charset
-			header( 'Content-Type: text/plain; charset=utf-8' );
-		}
+		header( self::get_content_type_header( $style_key ) );
 
 		echo $content; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
@@ -308,13 +303,9 @@ class FrmEmailStylesController {
 
 		$subject = __( 'Formidable Test Email', 'formidable' );
 		$content = self::get_test_email_content();
-		$headers = array();
-
-		if ( 'plain' === $email_style ) {
-			$headers[] = 'Content-Type: text/plain';
-		} else {
-			$headers[] = 'Content-Type: text/html; charset=utf-8';
-		}
+		$headers = array(
+			self::get_content_type_header( $email_style ),
+		);
 
 		$result = wp_mail( $valid_emails, $subject, $content, $headers );
 		if ( $result ) {
@@ -322,6 +313,17 @@ class FrmEmailStylesController {
 		}
 
 		wp_send_json_error( __( 'Failed to send test email!', 'formidable' ) );
+	}
+
+	/**
+	 * Gets Content-Type header.
+	 *
+	 * @param string $email_style Email style.
+	 * @return string
+	 */
+	private static function get_content_type_header( $email_style ) {
+		$content_type = 'plain' === $email_style ? 'text/plain' : 'text/html';
+		return 'Content-Type: ' . $content_type . '; charset=utf-8';
 	}
 
 	/**
