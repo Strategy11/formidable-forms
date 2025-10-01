@@ -539,6 +539,73 @@ class FrmEntry {
 	}
 
 	/**
+	 * Retrieves multiple entries with specified fields pivoted as columns.
+	 * 
+	 * Transforms the vertical meta_value structure into a horizontal table format
+	 * where each row represents one entry and each column represents a field value.
+	 * 
+	 * Example:
+	 * Instead of:
+	 *   item_id | field_id | meta_value
+	 *   100     | 5        | John
+	 *   100     | 6        | john@example.com
+	 *   101     | 5        | Jane
+	 *   101     | 6        | jane@example.com
+	 * 
+	 * Returns:
+	 *   item_id | name | email
+	 *   100     | John | john@example.com
+	 *   101     | Jane | jane@example.com
+	 *
+	 * @since x.x
+	 * @param array        $field_ids_and_aliases The field ids and aliases to get the values for.
+	 *              Example:
+	 *                 array(
+	 *                  123 => 'start_range',
+	 *                  456 => 'end_range',
+	 *                  789 => 'extra_note',
+	 *                 )
+	 *               This means:
+	 *                - Field ID 123 will be returned as column "start_range"
+	 *                - Field ID 456 will be returned as column "end_range"
+	 *                - Field ID 789 will be returned as column "extra_note".
+	 *
+	 * @param string|array $where The where SQL clause to add to the query.
+	 *
+	 * @return array The entries with the fields pivoted as columns.
+	 */
+	public static function get_entries_with_fields( $field_ids_and_aliases, $where = '' ) {
+		global $wpdb;
+
+		if ( empty( $field_ids_and_aliases ) || ! is_array( $field_ids_and_aliases ) ) {
+			return array();
+		}
+
+		$select_case_parts = array();
+		foreach ( $field_ids_and_aliases as $fid => $alias ) {
+			$select_case_parts[] = $wpdb->prepare(
+				'MAX(CASE WHEN field_id = %d THEN meta_value END) AS %i',
+				absint( $fid ),
+				$alias
+			);
+		}
+
+		$placeholders    = implode( ',', array_fill( 0, count( $field_ids_and_aliases ), '%d' ) );
+		$field_id_values = array_map( 'absint', array_keys( $field_ids_and_aliases ) );
+
+		$sql = '
+			SELECT item_id, ' . implode( ', ', $select_case_parts ) . '
+			FROM ' . $wpdb->prefix . 'frm_item_metas
+			WHERE field_id IN ( ' . $placeholders . ' )
+			' . FrmDb::prepend_and_or_where( ' AND ', $where ) . '
+			GROUP BY item_id
+		';
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->get_results( $wpdb->prepare( $sql, $field_id_values ) );
+	}
+
+	/**
 	 * @param string $id
 	 */
 	public static function exists( $id ) {
