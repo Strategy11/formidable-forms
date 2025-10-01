@@ -26,6 +26,9 @@
 @import '../admin/utilities/layout/flex';
 @import '../admin/components/modal/info-modals';
 
+// For the spinner
+@import '../admin/components/loading/_loading';
+
 .frmsvg {
     fill:currentColor;
     width:18px;
