@@ -583,10 +583,11 @@ class FrmEntry {
 
 		$select_case_parts = array();
 		foreach ( $field_ids_and_aliases as $fid => $alias ) {
+			$safe_alias          = preg_replace( '/[^a-zA-Z0-9_]/', '', $alias );
 			$select_case_parts[] = $wpdb->prepare(
 				'MAX(CASE WHEN field_id = %d THEN meta_value END) AS %i',
 				absint( $fid ),
-				$alias
+				$safe_alias
 			);
 		}
 
