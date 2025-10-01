@@ -378,6 +378,29 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $opt_key
+	 *
+	 * @return bool
+	 */
+	public static function maybe_disable_option( $field, $opt_key ) {
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			return false;
+		}
+
+		if ( apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key ) ) {
+			echo ' disabled="disabled" ';
+			if ( FrmField::is_field_type( $field, 'checkbox' ) ) {
+				echo 'data-max-reached="1" ';
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0
