@@ -88,7 +88,7 @@ input[disabled] + .frm_toggle .frm_toggle_slider {
 	opacity: .5;
 }
 
-.frm_toggle_opt ~ .frm_toggle .frm_toggle_slider::before {
+.frm_toggle_opt ~ .frm_toggle:not(#frm_testing_mode .frm_toggle) .frm_toggle_slider::before {
 	content: '' !important; /* Don't show x/check if off label included or on builder page */
 }
 
