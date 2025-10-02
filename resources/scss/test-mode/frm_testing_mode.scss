@@ -29,6 +29,7 @@
 // For the spinner
 @import '../admin/components/loading/_loading';
 
+
 .frmsvg {
     fill:currentColor;
     width:18px;
@@ -168,6 +169,17 @@ body.frm_preview_page .ui-widget-overlay {
 
     .frm_help {
         vertical-align: top;
+    }
+}
+
+#frm_testing_mode,
+#frm_testmode_disable_required_fields_modal {
+    .frm-button-secondary:hover {
+        border-color: var(--grey-300) !important;
+        color: var(--grey-800);
+        background: var(--grey-50) !important;
+        box-shadow: none !important;
+        outline: none !important;
     }
 }
 

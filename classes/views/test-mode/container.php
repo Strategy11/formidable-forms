@@ -104,14 +104,14 @@ if ( ! empty( $should_show_warning ) ) {
 		}
 		?>
 
-		<a id="frm_testmode_fill_in_empty_form_fields" class="frm_button <?php echo $enabled && $ai_enabled ? '' : 'frm_noallow'; ?>" href="#">
+		<a id="frm_testmode_fill_in_empty_form_fields" class="frm_button frm-button-primary <?php echo $enabled && $ai_enabled ? '' : 'frm_noallow'; ?>" href="#">
 			<?php esc_html_e( 'Fill empty fields with AI', 'formidable' ); ?>
 		</a>
 	</div>
 	<?php
 	$start_over_button_attrs = array(
 		'id'    => 'frm_testmode_start_over',
-		'class' => 'frm_button frm_noallow',
+		'class' => 'frm_button frm-button-secondary frm_noallow',
 		'href'  => '#',
 	);
 	$start_over_button_attrs = apply_filters( 'frm_testmode_start_over_button_attrs', $start_over_button_attrs );
