@@ -663,7 +663,7 @@ class FrmStylesHelper {
 			return $settings;
 		}
 		$base_font_size       = (int) $settings['base_font_size'];
-		$font_size            = $settings['font_size'];
+		$font_size            = $defaults['font_size'];
 		$font_sizes_to_update = array(
 			'font_size',
 			'field_font_size',
