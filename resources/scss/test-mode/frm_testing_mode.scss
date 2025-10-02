@@ -173,7 +173,8 @@ body.frm_preview_page .ui-widget-overlay {
 }
 
 #frm_testing_mode,
-#frm_testmode_disable_required_fields_modal {
+#frm_testmode_disable_required_fields_modal,
+#frm_ai_autofill_error_modal {
     .frm-button-secondary:hover {
         border-color: var(--grey-300) !important;
         color: var(--grey-800);
@@ -181,6 +182,14 @@ body.frm_preview_page .ui-widget-overlay {
         box-shadow: none !important;
         outline: none !important;
     }
+
+    a {
+        text-decoration: none;
+    }
+}
+
+#frm_testmode_disable_required_fields_modal p {
+    font-size: 16px;
 }
 
 #frm_test_mode_pagination {
@@ -268,10 +277,12 @@ body.frm_preview_page .ui-widget-overlay {
     cursor: pointer;
 }
 
-#frm_testmode_disable_required_fields_modal {
-    a {
-        text-decoration: none;
-    }
+.frm-dialog {
+    z-index: 1001;
+}
+
+.frm-dialog + .ui-widget-overlay {
+    z-index: 1000;
 }
 
 @media (max-width: 1024px) {
@@ -297,10 +308,4 @@ body.frm_preview_page .ui-widget-overlay {
     #frm_test_mode_pagination {
         margin-left: 0;
     }
-}
-.frm-dialog {
-    z-index: 1001;
-}
-.frm-dialog + .ui-widget-overlay {
-    z-index: 1000;
 }
