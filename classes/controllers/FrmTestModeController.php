@@ -137,7 +137,7 @@ class FrmTestModeController {
 		include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
 	}
 
-	/*
+	/**
 	 * This is required for the speaker icon in the upsell to appear,
 	 * and for the lock icon in the upgrade modals.
 	 * It is also required for the tooltip icon used for the enabled form actions setting.
