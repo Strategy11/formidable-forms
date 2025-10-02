@@ -132,9 +132,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 * @since x.x
 		 *
 		 * @param string $lang
-		 * @return string
+		 * @param array $field
 		 */
-		return apply_filters( 'frm_captcha_lang', get_bloginfo( 'language' ) );
+		return apply_filters( 'frm_captcha_lang', get_bloginfo( 'language' ), $this->field );
 	}
 
 	/**
