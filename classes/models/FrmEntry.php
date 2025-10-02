@@ -570,7 +570,7 @@ class FrmEntry {
 	 *                - Field ID 456 will be returned as column "end_range"
 	 *                - Field ID 789 will be returned as column "extra_note".
 	 *
-	 * @param string|array $where The where SQL clause to add to the query.
+	 * @param array|string $where The where SQL clause to add to the query.
 	 *
 	 * @return array The entries with the fields pivoted as columns.
 	 */
