@@ -3,7 +3,7 @@
 /**
  * @group ajax
  */
-class test_FrmAppHeperAjax extends FrmAjaxUnitTest {
+class test_FrmAppHelperAjax extends FrmAjaxUnitTest {
 
 	public function setUp(): void {
 		parent::setUp();

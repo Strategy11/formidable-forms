@@ -553,12 +553,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_default_value_field( $field, $default_name, $default_value ) {
-		if ( $field['type'] === 'rte' ) {
-			// This function is overwritten in Pro. This check is for backwards compatibility.
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
-			return;
-		}
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
 	}
 
@@ -777,7 +771,7 @@ DEFAULT_HTML;
 		$pro_fields = FrmField::pro_field_selection();
 
 		// As the credit card field is in Lite now, we want the name from the Lite array.
-		// The pro key would is still set for backward compatibility.
+		// The pro key is still set for backward compatibility.
 		unset( $pro_fields['credit_card'] );
 
 		$fields = array_merge( $fields, $pro_fields );
