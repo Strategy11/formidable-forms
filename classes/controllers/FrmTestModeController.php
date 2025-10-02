@@ -96,6 +96,7 @@ class FrmTestModeController {
 		$enabled                              = self::test_mode_addon_exists();
 		$ai_enabled                           = class_exists( 'FrmAIAppHelper' );
 		$roles                                = self::get_roles();
+		$selected_role                        = self::get_selected_role();
 		$pagination                           = apply_filters( 'frm_test_mode_pagination_buttons', false );
 		$disabled_required_fields_toggle_args = self::get_disabled_required_fields_toggle_args();
 		$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
@@ -105,7 +106,7 @@ class FrmTestModeController {
 		$should_suggest_ai_install            = $enabled && ! $ai_enabled;
 		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );
-		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions, $enabled );
+		$enabled_form_actions                 = self::get_enabled_form_action_ids( $form_actions );
 		$test_mode_install_span_attrs         = array(
 			'data-upgrade'  => __( 'Test Mode Controls', 'formidable' ),
 			'data-content'  => 'test-mode',
@@ -177,25 +178,19 @@ class FrmTestModeController {
 	 * @since x.x
 	 *
 	 * @param array $form_actions
-	 * @param bool  $enabled
 	 * @return array
 	 */
-	private static function get_enabled_form_action_ids( $form_actions, $enabled ) {
-		if ( ! $enabled || empty( $_POST ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			// Default to having all actions selected.
-			return wp_list_pluck( $form_actions, 'ID' );
-		}
+	private static function get_enabled_form_action_ids( $form_actions ) {
+		$all_form_action_ids = wp_list_pluck( $form_actions, 'ID' );
 
-		if ( 'frm_load_form' === FrmAppHelper::get_post_param( 'action', '', 'sanitize_text_field' ) ) {
-			// If we are starting over, select every form action again.
-			return wp_list_pluck( $form_actions, 'ID' );
-		}
-
-		if ( empty( $_POST['frm_testmode']['enabled_form_actions'] ) || ! is_array( $_POST['frm_testmode']['enabled_form_actions'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			return array();
-		}
-
-		return array_map( 'absint', $_POST['frm_testmode']['enabled_form_actions'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		/**
+		 * Filters the list of enabled form action IDs.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $all_form_action_ids
+		 */
+		return apply_filters( 'frm_test_mode_enabled_form_action_ids', $all_form_action_ids );
 	}
 
 	/**
@@ -239,6 +234,24 @@ class FrmTestModeController {
 			'name' => __( 'Logged Out', 'formidable' ),
 		);
 		return $roles;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_selected_role() {
+		$selected_role = '';
+
+		/**
+		 * Filters the selected role for test mode.
+		 *
+		 * @since x.x
+		 *
+		 * @param string $selected_role
+		 */
+		return apply_filters( 'frm_test_mode_selected_role', $selected_role );
 	}
 
 	/**

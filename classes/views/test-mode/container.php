@@ -51,12 +51,11 @@ if ( ! empty( $should_show_warning ) ) {
 		FrmHtmlHelper::toggle( 'frm_testmode_show_all_hidden_fields', 'frm_testmode[show_all_hidden_fields]', $show_all_hidden_fields_toggle_args );
 
 		if ( $roles ) :
-			$selected_role = $enabled ? FrmAppHelper::simple_get( 'frm_testmode_role' ) : '';
 			?>
 			<label>
 				<?php esc_html_e( 'Preview as', 'formidable' ); ?>
 				&nbsp;
-				<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
+				<select id="frm_testmode_preview_role" name="frm_testmode[preview_role]" <?php disabled( ! $enabled ); ?>>
 					<?php
 					foreach ( $roles as $role => $details ) {
 						FrmHtmlHelper::echo_dropdown_option(
