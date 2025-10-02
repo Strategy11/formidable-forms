@@ -51,6 +51,11 @@ class FrmTestModeController {
 			return false;
 		}
 
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $is_test_mode
+		 */
 		return (bool) apply_filters( 'frm_test_mode', (bool) FrmAppHelper::simple_get( 'testmode' ) );
 	}
 
