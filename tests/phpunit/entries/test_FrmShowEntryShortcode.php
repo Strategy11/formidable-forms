@@ -793,7 +793,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
 			$border_color = $atts['border_color'];
 
-			$header .= ' style="font-size:' . $font_size . ';line-height:135%;';
+			$header .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
 			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
 
