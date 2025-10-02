@@ -499,7 +499,7 @@ class FrmInbox extends FrmFormApi {
 		return array_reduce(
 			$keys_to_return,
 			function ( $total, $key ) use ( $message ) {
-				$total[ $key ] = isset( $message[ $key ] ) ? $message[ $key ] : '';
+				$total[ $key ] = $message[ $key ] ?? '';
 				return $total;
 			},
 			array()

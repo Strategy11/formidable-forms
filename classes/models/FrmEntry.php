@@ -413,7 +413,7 @@ class FrmEntry {
 	 * @since 2.0.11
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
-		$name = isset( $values['item_name'] ) ? $values['item_name'] : ( isset( $values['name'] ) ? $values['name'] : $default );
+		$name = $values['item_name'] ?? $values['name'] ?? $default;
 		if ( is_array( $name ) ) {
 			$name = reset( $name );
 		}
@@ -808,13 +808,13 @@ class FrmEntry {
 			'user_id'        => self::get_entry_user_id( $values ),
 		);
 
-		$new_values['updated_by'] = isset( $values['updated_by'] ) ? $values['updated_by'] : $new_values['user_id'];
+		$new_values['updated_by'] = $values['updated_by'] ?? $new_values['user_id'];
 
 		return $new_values;
 	}
 
 	private static function get_entry_value( $values, $name, $default ) {
-		return isset( $values[ $name ] ) ? $values[ $name ] : $default;
+		return $values[ $name ] ?? $default;
 	}
 
 	/**
@@ -1108,7 +1108,7 @@ class FrmEntry {
 			'form_id'    => (int) self::get_entry_value( $values, 'form_id', null ),
 			'is_draft'   => self::get_is_draft_value( $values ),
 			'updated_at' => current_time( 'mysql', 1 ),
-			'updated_by' => isset( $values['updated_by'] ) ? $values['updated_by'] : get_current_user_id(),
+			'updated_by' => $values['updated_by'] ?? get_current_user_id(),
 		);
 
 		if ( isset( $values['post_id'] ) ) {

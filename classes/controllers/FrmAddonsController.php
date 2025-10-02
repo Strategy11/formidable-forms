@@ -29,13 +29,13 @@ class FrmAddonsController {
 	 * @since 6.15
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_menu', __CLASS__ . '::menu', 100 );
-		add_filter( 'pre_set_site_transient_update_plugins', __CLASS__ . '::check_update' );
+		add_action( 'admin_menu', self::class . '::menu', 100 );
+		add_filter( 'pre_set_site_transient_update_plugins', self::class . '::check_update' );
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-addons' ) ) {
 			self::$request_addon_url = 'https://connect.formidableforms.com/add-on-request/';
 
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
@@ -143,7 +143,7 @@ class FrmAddonsController {
 		if ( isset( $addons['error'] ) ) {
 			$api          = new FrmFormApi();
 			$errors       = $api->get_error_from_response( $addons );
-			$license_type = isset( $addons['error']['type'] ) ? $addons['error']['type'] : '';
+			$license_type = $addons['error']['type'] ?? '';
 			unset( $addons['error'] );
 		}
 
@@ -415,7 +415,7 @@ class FrmAddonsController {
 		$downloads = $api->get_api_info();
 		$pro       = self::get_pro_from_addons( $downloads );
 
-		return isset( $pro['url'] ) ? $pro['url'] : '';
+		return $pro['url'] ?? '';
 	}
 
 	/**
@@ -453,7 +453,7 @@ class FrmAddonsController {
 	 * @return array
 	 */
 	protected static function get_pro_from_addons( $addons ) {
-		return isset( $addons['93790'] ) ? $addons['93790'] : array();
+		return $addons['93790'] ?? array();
 	}
 
 	/**
@@ -478,7 +478,7 @@ class FrmAddonsController {
 			return false;
 		}
 
-		$expires = isset( $version_info['error']['expires'] ) ? $version_info['error']['expires'] : 0;
+		$expires = $version_info['error']['expires'] ?? 0;
 		if ( empty( $expires ) || $expires > time() ) {
 			return false;
 		}
@@ -549,8 +549,8 @@ class FrmAddonsController {
 				continue;
 			}
 
-			$wp_plugin    = isset( $wp_plugins[ $folder ] ) ? $wp_plugins[ $folder ] : array();
-			$wp_version   = isset( $wp_plugin['Version'] ) ? $wp_plugin['Version'] : '1.0';
+			$wp_plugin    = $wp_plugins[ $folder ] ?? array();
+			$wp_version   = $wp_plugin['Version'] ?? '1.0';
 			$plugin->slug = explode( '/', $folder )[0];
 
 			if ( version_compare( $wp_version, $plugin->new_version, '<' ) ) {
@@ -630,7 +630,7 @@ class FrmAddonsController {
 				continue;
 			}
 
-			$download_id = isset( $plugin['id'] ) ? $plugin['id'] : 0;
+			$download_id = $plugin['id'] ?? 0;
 			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
@@ -974,7 +974,7 @@ class FrmAddonsController {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
-		// Start output bufferring to catch the filesystem form if credentials are needed.
+		// Start output buffering to catch the filesystem form if credentials are needed.
 		ob_start();
 
 		$show_form = false;
