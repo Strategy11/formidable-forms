@@ -18,6 +18,12 @@
 
 		initUpgradeModal();
 		setupBootstrapDropdowns();
+
+		jQuery( document ).on( 'mouseenter.frm', '.frm_help', function() {
+			jQuery( this ).off( 'mouseenter.frm' );
+
+			jQuery( this ).tooltip( 'show' );
+		} );
 	}
 
 	async function initUpgradeModal() {

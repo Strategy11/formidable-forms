@@ -131,13 +131,22 @@ class FrmTestModeController {
 			$test_mode_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
 
-		if ( $should_show_upsell || $should_suggest_test_mode_install || $should_suggest_ai_install ) {
-			// This is required for the speaker icon in the upsell to appear,
-			// and for the lock icon in the upgrade modals.
-			FrmAppHelper::include_svg();
-		}
+		self::include_svg();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/test-mode/container.php';
+	}
+
+	/*
+	 * This is required for the speaker icon in the upsell to appear,
+	 * and for the lock icon in the upgrade modals.
+	 * It is also required for the tooltip icon used for the enabled form actions setting.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function include_svg() {
+		FrmAppHelper::include_svg();
 	}
 
 	/**

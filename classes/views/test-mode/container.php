@@ -54,7 +54,8 @@ if ( ! empty( $should_show_warning ) ) {
 			$selected_role = $enabled ? FrmAppHelper::simple_get( 'frm_testmode_role' ) : '';
 			?>
 			<label>
-				<?php esc_html_e( 'Preview as:', 'formidable' ); ?>
+				<?php esc_html_e( 'Preview as', 'formidable' ); ?>
+				&nbsp;
 				<select id="frm_testmode_preview_role" <?php disabled( ! $enabled ); ?>>
 					<?php
 					foreach ( $roles as $role => $details ) {
@@ -72,7 +73,10 @@ if ( ! empty( $should_show_warning ) ) {
 		<?php endif; ?>
 
 		<label>
-			<?php esc_html_e( 'Enabled form actions:', 'formidable' ); ?>
+			<?php
+			esc_html_e( 'Enabled form actions', 'formidable' );
+			FrmAppHelper::tooltip_icon( __( 'Selected form actions will be triggered when this test entry is submitted', 'formidable' ) );
+			?>
 			<div id="frm_testmode_enabled_form_actions_container" class="frm-fields">
 				<select id="frm_testmode_enabled_form_actions" multiple class="frm_multiselect" name="frm_testmode[enabled_form_actions][]" <?php disabled( ! $enabled ); ?>>
 				<?php

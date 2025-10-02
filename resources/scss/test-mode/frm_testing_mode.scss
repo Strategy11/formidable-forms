@@ -165,6 +165,10 @@ body.frm_preview_page .ui-widget-overlay {
         color: #fff;
         padding: 8px 18px;
     }
+
+    .frm_help {
+        vertical-align: top;
+    }
 }
 
 #frm_test_mode_pagination {
@@ -250,6 +254,12 @@ body.frm_preview_page .ui-widget-overlay {
 
 #frm_upgrade_modal a.frm-button-primary {
     cursor: pointer;
+}
+
+#frm_testmode_disable_required_fields_modal {
+    a {
+        text-decoration: none;
+    }
 }
 
 @media (max-width: 1024px) {
