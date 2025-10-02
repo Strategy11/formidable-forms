@@ -15,7 +15,8 @@ FrmTipsHelper::show_tip(
 		'tip'  => __( 'Make every email match your brand — beautifully and effortlessly.', 'formidable' ),
 		'call' => __( 'Upgrade to PRO', 'formidable' ),
 		'link' => array(
-			'medium' => 'tip',
+			'medium'  => 'tip',
+			'content' => 'email-settings',
 		),
 	)
 );
