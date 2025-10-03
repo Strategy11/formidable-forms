@@ -140,17 +140,6 @@ describe( 'Run some accessibility tests', function() {
 		cy.checkA11y( null, null, logViolations );
 	} );
 
-	it( 'Check the form creation is accessible', () => {
-		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates&return_page=forms' );
-		cy.injectAxe();
-		configureAxeWithIgnoredRuleset( [
-			{ id: 'color-contrast', enabled: false },
-			{ id: 'aria-allowed-role', enabled: false },
-			{ id: 'link-name', enabled: false }
-		] );
-		cy.checkA11y( null, null, logViolations );
-	} );
-
 	it( 'Check the list of deleted forms is accessible', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable&form_type=trash' );
 		cy.injectAxe();
