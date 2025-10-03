@@ -5,7 +5,7 @@ describe( 'Form Templates page', () => {
 		cy.viewport( 1280, 720 );
 	} );
 
-	it( 'should validate page contenttest', () => {
+	it( 'should validate page content', () => {
 		cy.get( 'h1' ).should( 'contain', 'Form Templates' );
 		cy.get( '#template-search-input' ).should( 'exist' );
 
