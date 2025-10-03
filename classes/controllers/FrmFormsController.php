@@ -2050,8 +2050,18 @@ class FrmFormsController {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
-		// Update the form name and form key.
-		$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+		$form = FrmForm::getOne( $form_id );
+		if ( $name === $form->name ) {
+			wp_send_json_success();
+		}
+
+		if ( '' !== $name ) {
+			// Update the form name and form key.
+			$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+		} else {
+			$form_key = FrmForm::get_key_by_id( $form_id );
+		}
+
 		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
 
 		wp_send_json_success( compact( 'form_key' ) );
