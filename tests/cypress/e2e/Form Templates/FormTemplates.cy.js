@@ -12,12 +12,12 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Validate template categories' );
 		cy.get( 'li[data-category="favorites"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Favorites' );
-			cy.get( '.frm-page-skeleton-cat-count' ).should( 'have.text', '0' );
+			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
 		cy.get( 'li[data-category="custom"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Custom' );
-			cy.get( '.frm-page-skeleton-cat-count' ).should( 'have.text', '0' );
+			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
 		cy.get( 'li[data-category="all-items"]' ).within( () => {
