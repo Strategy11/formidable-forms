@@ -4571,11 +4571,28 @@ window.frmAdminBuildJS = function() {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
 
-				let $range;
+				let $range, targetSection;
+				const hoverTargetSection = hoverTarget.closest( '.edit_field_type_divider' );
+				if ( hoverTargetSection ) {
+					targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
+				}
 				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
-					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
+					// If field target field is in a section
+					if ( hoverTargetSection ) {
+						$range = $firstGroup.parent().nextUntil( targetSection );
+						const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
+						$range = $range.add( fieldsInSection.slice( 0, fieldsInSection.indexOf( hoverTarget ) + 1 ) );
+					} else {
+						$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
+					}
 				} else {
-					$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
+					if ( hoverTargetSection ) {
+						$range = $firstGroup.parent().prevUntil( targetSection );
+						const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
+						$range = $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTarget ) + 1 ) );
+					} else {
+						$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
+					}
 				}
 
 				$range.each(
