@@ -60,7 +60,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 						$attrs = array(
 							'type'  => $sub_field['type'],
 							'id'    => $html_id . '_' . $name,
-							'value' => isset( $field_value[ $name ] ) ? $field_value[ $name ] : '',
+							'value' => $field_value[ $name ] ?? '',
 						);
 
 						if ( ! empty( $field_value[ $name ] ) ) {

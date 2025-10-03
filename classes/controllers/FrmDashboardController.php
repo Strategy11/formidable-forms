@@ -21,7 +21,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_menu', __CLASS__ . '::menu', 9 );
+		add_action( 'admin_menu', self::class . '::menu', 9 );
 	}
 
 	/**
@@ -463,13 +463,13 @@ class FrmDashboardController {
 			return null;
 		}
 		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
-			return isset( $welcome_video['video-id'] ) ? $welcome_video['video-id'] : null;
+			return $welcome_video['video-id'] ?? null;
 		}
 		// We might receive the most recent video feed as the featured selection.
 		if ( isset( $featured_video[0] ) ) {
 			return $featured_video[0]['video-id'];
 		}
-		return isset( $featured_video['video-id'] ) ? $featured_video['video-id'] : null;
+		return $featured_video['video-id'] ?? null;
 	}
 
 	/**

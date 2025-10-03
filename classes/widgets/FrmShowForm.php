@@ -21,9 +21,9 @@ class FrmShowForm extends WP_Widget {
 		}
 
 		$form_atts = array(
-			'id'          => isset( $instance['form'] ) ? $instance['form'] : 0,
+			'id'          => $instance['form'] ?? 0,
 			'title'       => false,
-			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
+			'description' => $instance['description'] ?? false,
 		);
 
 		echo FrmFormsController::get_form_shortcode( $form_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

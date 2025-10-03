@@ -281,9 +281,13 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function set_is_plain_text() {
-		if ( $this->settings['plain_text'] ) {
-			$this->is_plain_text = true;
+		if ( empty( $this->settings['email_style'] ) ) {
+			// If `email_style` isn't set, use the `plain_text` checkbox.
+			$this->is_plain_text = ! empty( $this->settings['plain_text'] );
+			return;
 		}
+
+		$this->is_plain_text = 'plain' === $this->settings['email_style'];
 	}
 
 	/**
@@ -398,10 +402,11 @@ class FrmEmail {
 		$mail_body  = FrmEntriesHelper::replace_default_message(
 			$prev_mail_body,
 			array(
-				'id'         => $this->entry->id,
-				'entry'      => $pass_entry,
-				'plain_text' => $this->is_plain_text,
-				'user_info'  => $this->include_user_info,
+				'id'          => $this->entry->id,
+				'entry'       => $pass_entry,
+				'plain_text'  => $this->is_plain_text,
+				'user_info'   => $this->include_user_info,
+				'table_style' => $this->settings['email_style'],
 			)
 		);
 
@@ -879,6 +884,7 @@ class FrmEmail {
 			'plain_text'  => $this->is_plain_text,
 			'form'        => $this->form,
 			'entry'       => $this->entry,
+			'email_style' => $this->settings['email_style'],
 		);
 	}
 

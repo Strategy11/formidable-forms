@@ -204,6 +204,8 @@ class FrmHooksController {
 		add_action( 'admin_footer', 'FrmDeactivationFeedbackController::footer_html' );
 		add_action( 'deactivated_plugin', 'FrmDeactivationFeedbackController::set_feedback_expired_date' );
 
+		add_action( 'frm_email_styles_extra_settings', 'FrmEmailStylesController::show_upsell_settings' );
+
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
@@ -309,6 +311,9 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
 
 		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
+
+		add_action( 'wp_ajax_frm_email_style_preview', 'FrmEmailStylesController::ajax_preview' );
+		add_action( 'wp_ajax_frm_send_test_email', 'FrmEmailStylesController::ajax_send_test_email' );
 	}
 
 	/**

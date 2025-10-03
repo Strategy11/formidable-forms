@@ -43,7 +43,7 @@ class FrmStyle {
 		$max_slug_value = 2147483647;
 		// We want to have at least 2 characters in the slug.
 		$min_slug_value = 37;
-		$key            = base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		$key            = base_convert( random_int( $min_slug_value, $max_slug_value ), 10, 36 );
 
 		$style = array(
 			'post_type'    => FrmStylesController::$post_type,
@@ -100,7 +100,7 @@ class FrmStyle {
 
 			// Custom CSS is no longer used from the default style, but it is still checked if the Global Setting is missing.
 			// Preserve the previous value in case Custom CSS has not been saved as a Global Setting yet.
-			$custom_css = isset( $new_instance['post_content']['custom_css'] ) ? $new_instance['post_content']['custom_css'] : '';
+			$custom_css = $new_instance['post_content']['custom_css'] ?? '';
 
 			// phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( ! empty( $_POST['frm_style_setting']['post_title'] ) ) {
@@ -211,7 +211,7 @@ class FrmStyle {
 				}
 			}//end if
 
-			$new_color_values[] = null === $new_value ? $value : $new_value;
+			$new_color_values[] = $new_value;
 		}//end foreach
 
 		// add more 0s and 1 (if alpha position) if needed.

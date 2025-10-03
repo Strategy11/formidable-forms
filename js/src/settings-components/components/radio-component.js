@@ -22,12 +22,19 @@ export default class frmRadioComponent {
 		 * @param {Event}       event          The frm_added_field event.
 		 * @param {HTMLElement} event.frmField The added field object being destructured from the event.
 		 */
-		document.addEventListener( 'frm_added_field', ( { frmField } ) => {
-			this.radioElements = document.getElementById( `frm-single-settings-${ frmField.dataset.fid }` )
-				.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		document.addEventListener( 'frm_added_field', ( { frmField } ) =>
+			this.discoverAndInitFieldRadios( frmField.dataset.fid )
+		);
 
-			this.initRadio();
-		} );
+		/**
+		 * Handles the addition of new fields via AJAX.
+		 *
+		 * @param {Event}       event           The frm_ajax_loaded_field event.
+		 * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
+		 */
+		document.addEventListener( 'frm_ajax_loaded_field', ( { frmFields } ) =>
+			frmFields.forEach( field => this.discoverAndInitFieldRadios( field.id ) )
+		);
 
 		// Cleanup observers when page unloads to prevent memory leaks
 		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
@@ -39,6 +46,23 @@ export default class frmRadioComponent {
 	init() {
 		this.initRadio();
 		this.initTrackerOnAccordionClick();
+	}
+
+	/**
+	 * Discovers and initializes radio components for a specific field.
+	 *
+	 * @param {string|number} fieldId The unique identifier of the field whose radio components should be discovered and initialized
+	 * @throws {Error} Throws an error if the field container is not found in the DOM
+	 */
+	discoverAndInitFieldRadios( fieldId ) {
+		const fieldContainer = document.getElementById( `frm-single-settings-${ fieldId }` );
+
+		if ( ! fieldContainer ) {
+			throw new Error( `Field container not found for field ID: ${ fieldId }` );
+		}
+
+		this.radioElements = fieldContainer.querySelectorAll( '.frm-style-component.frm-radio-component' );
+		this.initRadio();
 	}
 
 	/**

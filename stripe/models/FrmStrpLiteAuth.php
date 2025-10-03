@@ -276,7 +276,7 @@ class FrmStrpLiteAuth {
 		self::format_form_data( $form );
 
 		$form_id = absint( $form['form_id'] );
-		$intents = isset( $form[ 'frmintent' . $form_id ] ) ? $form[ 'frmintent' . $form_id ] : array();
+		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
 		if ( empty( $intents ) ) {
 			wp_die();
@@ -374,10 +374,11 @@ class FrmStrpLiteAuth {
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {
-		$entry          = new stdClass();
-		$entry->post_id = 0;
-		$entry->id      = 0;
-		$entry->metas   = array();
+		$entry           = new stdClass();
+		$entry->post_id  = 0;
+		$entry->id       = 0;
+		$entry->item_key = '';
+		$entry->metas    = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {

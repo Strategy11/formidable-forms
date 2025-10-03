@@ -105,7 +105,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( $display['unique'] ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
+						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
@@ -115,7 +116,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( $display['read_only'] ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
+					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
 						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
@@ -147,13 +148,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				</label>
 				<span class="frm-with-right-icon">
 					<?php
-					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-						array(
-							'data-open' => 'frm-layout-classes-box',
-							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
-						)
-					);
 					$css_layout_classes_attrs = array(
 						'type'           => 'text',
 						'name'           => 'field_options[classes_' . $field['id'] . ']',
@@ -167,6 +161,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 					);
 					?>
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
+					<?php
+					FrmAppHelper::icon_by_class(
+						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						array(
+							'data-open' => 'frm-layout-classes-box',
+							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+							'tabindex'  => '0',
+						)
+					);
+					?>
 				</span>
 			</p>
 			<?php

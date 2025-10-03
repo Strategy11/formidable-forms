@@ -80,7 +80,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<select id="format" name="format">
 					<?php foreach ( $export_format as $t => $type ) { ?>
 						<option value="<?php echo esc_attr( $t ); ?>" data-support="<?php echo esc_attr( $type['support'] ); ?>" <?php echo isset( $type['count'] ) ? 'data-count="' . esc_attr( $type['count'] ) . '"' : ''; ?>>
-							<?php echo esc_html( isset( $type['name'] ) ? $type['name'] : $t ); ?>
+							<?php echo esc_html( $type['name'] ?? $t ); ?>
 						</option>
 					<?php } ?>
 				</select>
@@ -187,7 +187,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</td>
 								<td class="column-entries">
 									<?php
-									$style = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : 1;
+									$style = $form->options['custom_style'] ?? 1;
 									if ( empty( $style ) ) {
 										echo '0';
 									} else {

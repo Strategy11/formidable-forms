@@ -29,7 +29,7 @@ class FrmStrpLiteUrlParamHelper {
 		if ( ! isset( self::$details_by_form_id[ $form_id ] ) ) {
 			self::set_details_for_form( (int) $form_id );
 		}
-		return isset( self::$details_by_form_id[ $form_id ] ) ? self::$details_by_form_id[ $form_id ] : false;
+		return self::$details_by_form_id[ $form_id ] ?? false;
 	}
 
 	/**

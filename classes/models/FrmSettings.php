@@ -178,6 +178,7 @@ class FrmSettings {
 			'denylist_check'            => 0,
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
+			'email_style'               => 'classic',
 		);
 	}
 
@@ -302,9 +303,9 @@ class FrmSettings {
 		if ( ! isset( $this->pubkey ) ) {
 			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
-			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+			$this->pubkey  = $recaptcha_opt['pubkey'] ?? '';
+			$privkey       = $recaptcha_opt['privkey'] ?? $privkey;
+			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
 		if ( empty( $this->re_msg ) ) {
@@ -445,7 +446,7 @@ class FrmSettings {
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
+			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
 
 			// Make sure administrators always have permissions
 			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {

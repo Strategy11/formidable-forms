@@ -362,8 +362,8 @@ class FrmFormsHelper {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
-		$values['form_key']    = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
-		$values['is_template'] = isset( $post_values['is_template'] ) ? $post_values['is_template'] : $record->is_template;
+		$values['form_key']    = $post_values['form_key'] ?? $record->form_key;
+		$values['is_template'] = $post_values['is_template'] ?? $record->is_template;
 		$values['status']      = $record->status;
 
 		$values = self::fill_default_opts( $values, $record, $post_values );
@@ -438,7 +438,7 @@ class FrmFormsHelper {
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
 		foreach ( $defaults as $var => $default ) {
-			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
+			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
 		}
 	}
@@ -613,9 +613,9 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
-		$class  = isset( $args['class'] ) ? $args['class'] : '';
+		$class  = $args['class'] ?? '';
 		$fields = self::get_field_type_data_for_insert_opt_html();
-		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
+		$field  = $fields[ $args['type'] ] ?? array();
 
 		self::prepare_field_type( $field );
 
@@ -651,14 +651,14 @@ BEFORE_HTML;
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
+				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
@@ -975,7 +975,7 @@ BEFORE_HTML;
 		// Start from the fields closest to the submit button.
 		$fields = array_reverse( $fields );
 		foreach ( $fields as $field ) {
-			$type      = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
+			$type      = $field['original_type'] ?? $field['type'];
 			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
 			if ( $has_input ) {
 				return self::field_has_top_label( $field, $form );
@@ -1221,7 +1221,7 @@ BEFORE_HTML;
 				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
 			}
 
-			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
+			$label = ( $link_details[ $length ] ?? $link_details['label'] );
 			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
 				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
@@ -1433,7 +1433,7 @@ BEFORE_HTML;
 		$icon = $icons[''];
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
-			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
+			$icon     = $icons[ $category ] ?? $icon;
 		} elseif ( ! empty( $categories ) ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon  = reset( $icons );
@@ -1441,7 +1441,7 @@ BEFORE_HTML;
 
 		// Prepare variables for output.
 		$icon_name = $icon[0];
-		$bg_color  = isset( $icon[1] ) ? $icon[1] : '';
+		$bg_color  = $icon[1] ?? '';
 
 		// Render the icon.
 		echo '<span class="frm-category-icon frm-icon-wrapper"';
@@ -1977,7 +1977,7 @@ BEFORE_HTML;
 		}
 
 		$status     = $atts['status'];
-		$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$form_id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
