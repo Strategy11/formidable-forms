@@ -15,17 +15,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
-	$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $field['form_id'] ), 'options' );
-	FrmAppHelper::unserialize_or_decode( $form_options );
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
-			continue;
-		}
-		ob_start();
-		do_action( 'frm_field_input_html', $field, $opt_key );
-		$input_html           = ob_get_clean();
-		$choice_limit_reached = strpos( $input_html, 'limit_reached' ) !== false;
-		if ( ! empty( $form_options['disable_on_choice_limit'] ) && $choice_limit_reached ) {
 			continue;
 		}
 
@@ -62,13 +53,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
-		if ( ! $choice_limit_reached ) {
-			echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
-			$input_html = str_replace( 'limit_reached', '', $input_html );
-		}
+		do_action( 'frm_field_input_html', $field );
 
-		echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key );
+		if ( ! $disabled ) {
+			echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
