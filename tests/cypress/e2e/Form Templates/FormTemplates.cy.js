@@ -442,8 +442,8 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Get free templates by clicking Use Template' );
 		cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
 		cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'All Templates' );
-		cy.get( 'li[frm-search-text="contact us"]' ).first()
-			.trigger( 'mouseover', { force: true } )
+		cy.get( '[frm-search-text="grade book"]' )
+			.trigger( 'mouseover' )
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
 			.click( { force: true } );
@@ -457,11 +457,12 @@ describe( 'Form Templates page', () => {
 
 		cy.get( '#frm-leave-email-modal > .frm_modal_footer > .button-secondary' ).click();
 
-		cy.get( 'li[frm-search-text="contact us"]' ).first()
-			.trigger( 'mouseover', { force: true } )
+		cy.get( '[frm-search-text="grade book"]' )
+			.trigger( 'mouseover' )
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' )
 			.click( { force: true } );
+
 		cy.get( 'a#frm-get-code-button' ).click();
 
 		cy.get( '[data-category="available-templates"]' ).click();
