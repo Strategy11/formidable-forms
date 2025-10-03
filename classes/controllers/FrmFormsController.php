@@ -2051,7 +2051,7 @@ class FrmFormsController {
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
 		$form = FrmForm::getOne( $form_id );
-		if ( $name === $form->name ) {
+		if ( ! $form || $name === $form->name ) {
 			wp_send_json_success();
 		}
 
