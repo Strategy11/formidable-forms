@@ -2051,7 +2051,11 @@ class FrmFormsController {
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
 		$form = FrmForm::getOne( $form_id );
-		if ( ! $form || $name === $form->name ) {
+		if ( ! $form ) {
+			wp_send_json_error( __( 'Form not found', 'formidable' ) );
+		}
+
+		if ( $name === $form->name ) {
 			// Nothing to change to exit early.
 			wp_send_json_success();
 		}
