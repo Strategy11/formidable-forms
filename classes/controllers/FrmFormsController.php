@@ -2066,7 +2066,7 @@ class FrmFormsController {
 
 		if ( '' !== $name ) {
 			// Only update form_key if name is not empty.
-			$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+			$form_key              = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
 			$to_update['form_key'] = $form_key;
 		} else {
 			$form_key = $form->form_key;
