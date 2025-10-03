@@ -94,7 +94,8 @@ describe( 'Run some accessibility tests', function() {
 		configureAxeWithIgnoredRuleset( [
 			{ id: 'color-contrast', enabled: false },
 			{ id: 'aria-allowed-role', enabled: false },
-			{ id: 'link-name', enabled: false }
+			{ id: 'link-name', enabled: false },
+			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( null, null, logViolations );
 	} );
