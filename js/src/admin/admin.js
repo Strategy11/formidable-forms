@@ -4546,6 +4546,7 @@ window.frmAdminBuildJS = function() {
 			const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
 			return $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTarget ) + 1 ) );
 		}
+
 		return $firstGroup.parent().prevUntil( hoverTarget.parentNode );
 	}
 
