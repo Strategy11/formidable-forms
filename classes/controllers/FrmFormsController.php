@@ -2052,17 +2052,23 @@ class FrmFormsController {
 
 		$form = FrmForm::getOne( $form_id );
 		if ( ! $form || $name === $form->name ) {
+			// Nothing to change to exit early.
 			wp_send_json_success();
 		}
 
+		$to_update = array(
+			'name' => $name,
+		);
+
 		if ( '' !== $name ) {
-			// Update the form name and form key.
+			// Only update form_key if name is not empty.
 			$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+			$to_update['form_key'] = $form_key;
 		} else {
-			$form_key = FrmForm::get_key_by_id( $form_id );
+			$form_key = $form->form_key;
 		}
 
-		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
+		FrmForm::update( $form_id, $to_update );
 
 		wp_send_json_success( compact( 'form_key' ) );
 	}
