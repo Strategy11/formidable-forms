@@ -2056,7 +2056,7 @@ class FrmFormsController {
 		}
 
 		if ( $name === $form->name ) {
-			// Nothing to change to exit early.
+			// Nothing to change so exit early.
 			wp_send_json_success();
 		}
 
