@@ -193,8 +193,6 @@ class FrmSquareLiteAppController {
 		$details['state']        = $address['state'];
 		$details['postalCode']   = $address['zip'];
 		$details['countryCode']  = $country_code;
-
-		error_log( print_r( $details, true ) );
 	}
 
 	/**
