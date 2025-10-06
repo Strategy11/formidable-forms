@@ -47,10 +47,13 @@ $plans = FrmFormsHelper::get_license_types( array( 'include_all' => false ) );
 		<div class="frm-cta frm-cta-green">
 			<span class="frm-banner-title frm-flex-box frm-items-center frm-font-medium frm-mb-2xs">
 				<?php
+				$best_discount = FrmSalesApi::get_best_sale_value( 'discount_percent' );
+				$use_discount  = $best_discount > 50 ? $best_discount : 50;
 				printf(
 					/* translators: %1$s: Open span tag, %2$s: Close span tag */
-					esc_html__( 'Lite users get %1$s50%% OFF%2$s regular price.', 'formidable' ),
+					esc_html__( 'Lite users get %1$s%2$d%% OFF%3$s regular price.', 'formidable' ),
 					'<span class="frm-meta-tag frm-green-tag">',
+					absint( $use_discount ),
 					'</span>'
 				);
 				?>

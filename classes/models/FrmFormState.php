@@ -75,10 +75,7 @@ class FrmFormState {
 	}
 
 	public function get( $key, $default ) {
-		if ( isset( $this->state[ $key ] ) ) {
-			return $this->state[ $key ];
-		}
-		return $default;
+		return $this->state[ $key ] ?? $default;
 	}
 
 	/**

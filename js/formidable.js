@@ -16,7 +16,7 @@ function frmFrontFormJS() {
 	 *
 	 * @param {HTMLElement} el        The HTML element.
 	 * @param {string}      eventName Event name.
-	 * @param {mixed}       data      The passed data.
+	 * @param {*}           data      The passed data.
 	 */
 	function triggerCustomEvent( el, eventName, data ) {
 		if ( typeof window.CustomEvent !== 'function' ) {
@@ -1147,7 +1147,12 @@ function frmFrontFormJS() {
 
 				input.attr( 'aria-describedby', describedBy );
 			}
-			input.attr( 'aria-invalid', true );
+
+			if ( [ 'radio', 'checkbox' ].includes( input.attr( 'type' ) ) ) {
+				input.closest( '[role="radiogroup"], [role="group"]' ).attr( 'aria-invalid', true );
+			} else {
+				input.attr( 'aria-invalid', true );
+			}
 
 			jQuery( document ).trigger( 'frmAddFieldError', [ $fieldCont, key, jsErrors ] );
 		}
@@ -1186,8 +1191,13 @@ function frmFrontFormJS() {
 			fieldContainer.classList.remove( 'frm_blank_field', 'has-error' );
 		}
 
+		if ( 'true' === input.attr( 'aria-invalid' ) ) {
+			input.attr( 'aria-invalid', false );
+		} else if ( [ 'radio', 'checkbox' ].includes( input.attr( 'type' ) ) ) {
+			input.closest( '[role="radiogroup"], [role="group"]' ).attr( 'aria-invalid', false );
+		}
+
 		errorMessage.remove();
-		input.attr( 'aria-invalid', false );
 		input.removeAttr( 'aria-describedby' );
 
 		if ( typeof describedBy !== 'undefined' ) {

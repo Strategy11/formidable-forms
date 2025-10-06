@@ -45,6 +45,9 @@ parameters:
 		- '#in empty\(\) is not falsy.#'
 		- '#always exists and is not falsy.#'
 		- '#has no type specified.#'
+		- '#of function random_int expects lower number#'
+		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
+		- "#on left side of ??#"
 		-
 			message: '#has an unused parameter#'
 			paths:

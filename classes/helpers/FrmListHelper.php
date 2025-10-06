@@ -174,8 +174,8 @@ class FrmListHelper {
 		return FrmAppHelper::get_simple_request(
 			array(
 				'param'    => $args['param'],
-				'default'  => isset( $args['default'] ) ? $args['default'] : '',
-				'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
+				'default'  => $args['default'] ?? '',
+				'sanitize' => $args['sanitize'] ?? 'sanitize_title',
 				'type'     => 'request',
 			)
 		);

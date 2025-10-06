@@ -184,7 +184,7 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
+			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
@@ -391,28 +391,30 @@ class FrmFieldsController {
 			'default_value'    => array(
 				'class' => '',
 				'icon'  => 'frm_icon_font frm_text2_icon',
-				'title' => __( 'Default Value (Text)', 'formidable' ),
+				'title' => __( 'Default Value', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
 				),
 			),
 			'calc'             => array(
-				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Calculation)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_calculator_icon',
-				'data'  => array(
+				'class'   => 'frm_show_upgrade frm_noallow',
+				'title'   => __( 'Calculate Value', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_calculator_icon',
+				'data'    => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
 				),
+				'tooltip' => __( 'Automatically calculate the value of this field based on values from other fields.', 'formidable' ),
 			),
 			'get_values_field' => array(
-				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Lookup)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_search_icon',
-				'data'  => array(
+				'class'   => 'frm_show_upgrade frm_noallow',
+				'title'   => __( 'Lookup', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_search_icon',
+				'data'    => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),
 				),
+				'tooltip' => __( 'Dynamically retrieve the value of this field from a lookup field.', 'formidable' ),
 			),
 		);
 
@@ -422,9 +424,11 @@ class FrmFieldsController {
 		$settings = array_keys( $types );
 		$active   = 'default_value';
 
-		foreach ( $settings as $type ) {
-			if ( ! empty( $field[ $type ] ) ) {
-				$active = $type;
+		if ( FrmAppHelper::pro_is_connected() ) {
+			foreach ( $settings as $type ) {
+				if ( ! empty( $field[ $type ] ) ) {
+					$active = $type;
+				}
 			}
 		}
 
@@ -671,7 +675,7 @@ class FrmFieldsController {
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$placeholder = $field['placeholder'] ?? '';
 
 		return $placeholder;
 	}
@@ -995,9 +999,9 @@ class FrmFieldsController {
 	public static function check_value( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
-				$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 			} else {
-				$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+				$opt = $opt['label'] ?? reset( $opt );
 			}
 		}
 
@@ -1006,7 +1010,7 @@ class FrmFieldsController {
 
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
-			$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+			$opt = $opt['label'] ?? reset( $opt );
 		}
 
 		return $opt;

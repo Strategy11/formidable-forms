@@ -40,9 +40,6 @@ class FrmYoutubeFeedApi extends FrmFormApi {
 	 */
 	public function get_video( $type = 'welcome' ) {
 		$videos = $this->get_api_info();
-		if ( isset( $videos[ $type ] ) ) {
-			return $videos[ $type ];
-		}
-		return array();
+		return $videos[ $type ] ?? array();
 	}
 }

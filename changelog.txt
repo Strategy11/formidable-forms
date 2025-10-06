@@ -1,4 +1,17 @@
 == Changelog ==
+= 6.24.1 =
+* Fix: Importing entries with a CSV file stopped working with v6.24.
+
+= 6.24 =
+* New: Field settings have been redesigned.
+* Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
+* Fix: Conditional logic field IDs would not properly update after importing an XML.
+* Fix: Line breaks used in Quiz Outcome actions would not properly import.
+* Fix: In some cases, a field group would not be draggable after a field was added beside another field.
+* Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
+* Fix: JS errors would occur in some cases after deleting a field group or section.
+* Fix: The line height style setting is no longer applied to the label in the visual styler preview.
+
 = 6.23 =
 * New: The GDPR field agreement text can now be translated using the WPML or Polylang add-ons.
 * New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.

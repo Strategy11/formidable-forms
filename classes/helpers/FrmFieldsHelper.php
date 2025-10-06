@@ -71,7 +71,7 @@ class FrmFieldsHelper {
 
 		self::fill_field_array( $field, $values );
 
-		$values['custom_html'] = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+		$values['custom_html'] = $field->field_options['custom_html'] ?? self::get_default_html( $field->type );
 
 		return $values;
 	}
@@ -121,7 +121,7 @@ class FrmFieldsHelper {
 		self::fill_cleared_strings( $field, $field_array );
 
 		// Track the original field's type
-		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
+		$field_array['original_type'] = $field->field_options['original_type'] ?? $field->type;
 
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
@@ -172,7 +172,7 @@ class FrmFieldsHelper {
 		}
 
 		foreach ( $defaults as $opt => $default ) {
-			$values[ $opt ] = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
+			$values[ $opt ] = $field->field_options[ $opt ] ?? $default;
 
 			if ( $check_post ) {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
@@ -533,7 +533,7 @@ class FrmFieldsHelper {
 	 * @param array|string $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
-		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
+		$autop = $atts['wpautop'] ?? true;
 		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
 			if ( is_array( $value ) ) {
 				$value = implode( "\n", $value );
@@ -599,9 +599,10 @@ class FrmFieldsHelper {
 		}
 
 		$base_name = 'default_value_' . $field['id'];
-		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id   = $field['html_id'] ?? self::get_html_id( $field );
 
-		$default_type = self::get_default_value_type( $field );
+		$default_type  = self::get_default_value_type( $field );
+		$options_count = count( $field['options'] );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
@@ -642,7 +643,7 @@ class FrmFieldsHelper {
 		$opt        = __( 'New Option', 'formidable' );
 		$checked    = false;
 		$field_name = 'default_value_' . $field['id'];
-		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id    = $field['html_id'] ?? self::get_html_id( $field );
 
 		$default_type = self::get_default_value_type( $field );
 		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
@@ -693,6 +694,7 @@ class FrmFieldsHelper {
 			'args'         => array(),
 			'title'        => '',
 			'inside_class' => 'inside',
+			'dismiss-icon' => true,
 		);
 		$args     = array_merge( $defaults, $args );
 
@@ -1096,7 +1098,7 @@ class FrmFieldsHelper {
 			$replace_with = FrmEntryMeta::get_meta_value( $atts['entry'], $field->id );
 			$string_value = $replace_with;
 			if ( is_array( $replace_with ) ) {
-				$sep          = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+				$sep          = $atts['sep'] ?? ', ';
 				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
@@ -1172,7 +1174,7 @@ class FrmFieldsHelper {
 				$atts['prev_val'] = '';
 			}
 
-			$new_value = isset( $atts['default'] ) ? $atts['default'] : $atts['prev_val'];
+			$new_value = $atts['default'] ?? $atts['prev_val'];
 		}
 
 		if ( is_array( $new_value ) && ! $return_array ) {
@@ -1198,7 +1200,7 @@ class FrmFieldsHelper {
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
 		$field = $atts['field'];
-		$atts  = isset( $atts['atts'] ) ? $atts['atts'] : $atts;
+		$atts  = $atts['atts'] ?? $atts;
 
 		if ( is_array( $field ) ) {
 			$field = $field['id'];
@@ -1234,7 +1236,7 @@ class FrmFieldsHelper {
 			} elseif ( $user_info === 'author_link' ) {
 				$info = get_author_posts_url( $user_id );
 			} else {
-				$info = isset( $user->$user_info ) ? $user->$user_info : '';
+				$info = $user->$user_info ?? '';
 			}
 
 			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
@@ -1533,7 +1535,7 @@ class FrmFieldsHelper {
 		// Set up HTML ID for Other field
 		$other_id = self::get_other_field_html_id( $args['field']['type'], $args['html_id'], $args['opt_key'] );
 
-		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
+		$label = $args['opt_label'] ?? $args['field']['name'];
 
 		echo '<label for="' . esc_attr( $other_id ) . '" class="frm_screen_reader frm_hidden">' .
 			esc_html( $label ) .
@@ -2424,5 +2426,83 @@ class FrmFieldsHelper {
 	public static function get_all_draft_field_ids( $form_id ) {
 		$draft_field_rows = self::get_draft_field_results( $form_id );
 		return wp_list_pluck( $draft_field_rows, 'id' );
+	}
+
+	/**
+	 * Render AI generate options button.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array $args Field arguments.
+	 * @param bool  $should_hide_bulk_edit Whether to hide bulk edit.
+	 */
+	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
+		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );
+
+		if ( ! empty( $should_hide_bulk_edit ) ) {
+			$attributes['class'] .= ' frm-force-hidden';
+		}
+
+		$data = FrmAppHelper::get_upgrade_data_params(
+			'ai',
+			array(
+				'requires' => 'Business',
+				'upgrade'  => __( 'Generate options with AI', 'formidable' ),
+				'medium'   => 'builder',
+				'content'  => 'generate-options-with-ai',
+			),
+			true
+		);
+
+		if ( in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) && 'active' === $data['plugin-status'] ) {
+			// Backwards compatibility "@since 6.24".
+			if ( ! method_exists( 'FrmAIAppController', 'get_ai_generated_options_summary' ) ) {
+				$data = array(
+					'modal-title'   => __( 'Generate options with AI', 'formidable' ),
+					'modal-content' => __( 'Update the Formidable AI add-on to the last version to use this feature.', 'formidable' ),
+				);
+			} else {
+				$attributes['class']   .= ' frm-ai-generate-options-modal-trigger';
+				$attributes['data-fid'] = $args['likert_id'] ?? $args['field']['id'];
+			}
+		}
+
+		if ( empty( $attributes['data-fid'] ) ) {
+			unset( $data['plugin-status'] );
+			foreach ( $data as $key => $value ) {
+				$attributes[ 'data-' . $key ] = $value;
+			}
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/generate-options-with-ai.php';
+	}
+
+	/**
+	 * Get AI generate options button class.
+	 *
+	 * @since 6.24
+	 *
+	 * @return string Button class.
+	 */
+	private static function get_ai_generate_options_button_class() {
+		return implode(
+			' ',
+			array(
+				'frm_form_field',
+				'frm6',
+				'frm6_followed',
+				'frm-h-stack',
+				'button',
+				'frm-button-secondary',
+				'frm-button-gradient',
+				'frm-rounded-6',
+				'frm-max-w-fit',
+				'frm-font-normal',
+				'frm-py-2xs',
+				'frm-px-xs',
+				'frm-mt-xs',
+				'frm-mb-12',
+			)
+		);
 	}
 }

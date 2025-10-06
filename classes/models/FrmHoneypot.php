@@ -274,7 +274,7 @@ class FrmHoneypot extends FrmValidate {
 			return '';
 		}
 
-		return isset( $item_meta[ $field_id ] ) ? $item_meta[ $field_id ] : '';
+		return $item_meta[ $field_id ] ?? '';
 	}
 
 	/**

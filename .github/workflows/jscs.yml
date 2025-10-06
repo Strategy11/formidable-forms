@@ -1,22 +1,44 @@
+name: Inspections
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
     types: [ opened, labeled, synchronize ]
 
-name: Inspections
 jobs:
-  runPHPCSInspection:
-    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
+  runESLintInspection:
+    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Analyze js code style
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Check cache and install dependencies
         run: |
-          npm ci --legacy-peer-deps --include=dev
-          ./node_modules/.bin/eslint .
+          if [ -d "node_modules" ]; then
+            echo "✅ Using cached node_modules"
+            echo "Cache size: $(du -sh node_modules | cut -f1)"
+          else
+            echo "📦 Installing dependencies (cache miss)"
+            npm ci --legacy-peer-deps --include=dev
+          fi
+
+      - name: Analyze js code style
+        run: ./node_modules/.bin/eslint .

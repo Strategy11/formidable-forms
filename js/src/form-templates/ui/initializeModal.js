@@ -1,4 +1,14 @@
+/**
+ * External dependencies
+ */
+import { hasQueryParam } from 'core/utils';
+
+/**
+ * Internal dependencies
+ */
+import { getElements } from '../elements';
 import { MODAL_SIZES } from '../shared';
+import { showLeaveEmailModal } from './';
 
 let modalWidget = null;
 
@@ -15,6 +25,14 @@ export async function initializeModal() {
 	// Set the vertical offset for the modal
 	if ( modalWidget ) {
 		offsetModalY( modalWidget, '103px' );
+	}
+
+	// Show the email modal if the 'free-templates' query param is present
+	if ( hasQueryParam( 'free-templates' ) ) {
+		const { leaveEmailModal } = getElements();
+		if ( leaveEmailModal ) {
+			showLeaveEmailModal();
+		}
 	}
 
 	// Customize the confirm modal appearance: adjusting its width and vertical position

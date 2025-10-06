@@ -350,7 +350,6 @@ The label in the preview should use the label color setting.
 
 #frm_loading_style_placeholder,
 #frm_style_preview.frm-loading-style-template .frm_forms,
-#frm_default_style_cards_wrapper .dropdown-item.frm-apply-style,
 .frm-currently-set-style-card .dropdown-item.frm-apply-style
 {
 	display: none;

@@ -454,7 +454,7 @@ class FrmStylesHelper {
 	/**
 	 * Check if a CSS variable setting is not blank, doesn't match the default, and doesn't include invalid substrings.
 	 *
-	 * @since x.x
+	 * @since 6.24
 	 *
 	 * @param array  $settings       Array of setting values.
 	 * @param array  $defaults       Array of default values.
