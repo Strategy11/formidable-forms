@@ -73,6 +73,13 @@ jobs:
           echo "ESLint version: $(./node_modules/.bin/eslint --version)"
           echo "ESLint config test:"
           ./node_modules/.bin/eslint --print-config js/src/addons-page/index.js | head -20
+          echo ""
+          echo "🔍 Testing specific file for space-in-parens errors:"
+          echo "Content of js/src/addons-page/index.js:"
+          cat js/src/addons-page/index.js
+          echo ""
+          echo "ESLint test on js/src/addons-page/index.js:"
+          ./node_modules/.bin/eslint js/src/addons-page/index.js || echo "ESLint found errors (expected)"
           echo "Dependencies installed successfully ✅"
 
       - name: Analyze js code style
