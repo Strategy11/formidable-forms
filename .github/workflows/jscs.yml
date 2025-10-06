@@ -28,8 +28,9 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}-${{ github.sha }}
           restore-keys: |
+            ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}-
             ${{ runner.os }}-node-modules-
 
       - name: Check cache and install dependencies
