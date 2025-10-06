@@ -14,4 +14,4 @@ domReady( () => {
 	setupInitialView();
 	buildCategorizedAddons();
 	addEventListeners();
-});
+} );
