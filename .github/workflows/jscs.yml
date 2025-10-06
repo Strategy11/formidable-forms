@@ -9,7 +9,7 @@ on:
 
 jobs:
   runESLintInspection:
-    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'run analysis')
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
