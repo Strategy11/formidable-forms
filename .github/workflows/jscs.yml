@@ -35,7 +35,7 @@ jobs:
 
       - name: Check cache and install dependencies
         run: |
-          if [ -d "node_modules" ]; then
+          if [[ "${{ steps.cache-node-modules.outputs.cache-hit }}" == "true" ]]; then
             echo "Using cached node_modules"
             echo "Cache size: $(du -sh node_modules | cut -f1)"
           else
