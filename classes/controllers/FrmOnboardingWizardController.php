@@ -131,8 +131,6 @@ class FrmOnboardingWizardController {
 
 		// Load page if admin page is Onboarding Wizard.
 		self::maybe_load_page();
-
-		// Add a test comment to PHP code to check GitHub Actions caching.
 	}
 
 	/**

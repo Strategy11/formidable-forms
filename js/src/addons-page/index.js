@@ -10,7 +10,7 @@ import { setupInitialView } from './ui';
 import { addEventListeners } from './events';
 import { buildCategorizedAddons } from './addons';
 
-domReady(() => {
+domReady( () => {
 	setupInitialView();
 	buildCategorizedAddons();
 	addEventListeners();
