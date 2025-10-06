@@ -1,6 +1,7 @@
 import { frmTabsNavigator } from '../../components/class-tabs-navigator';
 /**
  * Represents a Tabs Component.
+ *
  * @class
  */
 export default class frmTabsComponent {
@@ -22,6 +23,7 @@ export default class frmTabsComponent {
 
 	/**
 	 * Initializes the component on tab click.
+	 *
 	 * @param {Element} wrapper - The wrapper element.
 	 */
 	initOnTabClick( wrapper ) {
