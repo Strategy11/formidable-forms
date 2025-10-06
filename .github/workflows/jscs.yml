@@ -21,11 +21,6 @@ jobs:
         with:
           node-version: 18
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        shell: bash
-        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-
       - name: Cache node modules
         id: cache-node-modules
         uses: actions/cache@v3
