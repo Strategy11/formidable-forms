@@ -28,10 +28,15 @@ jobs:
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}-${{ github.sha }}
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}-
             ${{ runner.os }}-node-modules-
+
+      - name: Debug cache info
+        run: |
+          echo "Cache key hash: ${{ hashFiles('package-lock.json', 'package.json') }}"
+          echo "Cache hit: ${{ steps.cache-node-modules.outputs.cache-hit }}"
+          echo "Full cache key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json', 'package.json') }}"
 
       - name: Check cache and install dependencies
         run: |
