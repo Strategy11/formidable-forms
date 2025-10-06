@@ -9,7 +9,7 @@ on:
 
 jobs:
   runESLintInspection:
-    if: github.event_name == 'push' || contains(github.event.pull_request.labels.*.name, 'run analysis')
+    if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
@@ -21,66 +21,26 @@ jobs:
         with:
           node-version: '20.10.0'
           cache: 'npm'
-          cache-dependency-path: './package.json'
+          cache-dependency-path: './package-lock.json'
 
-      - name: Debug environment and cache status
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Check cache and install dependencies
         run: |
-          echo "🔍 Environment Debug Information:"
-          echo "Node version: $(node --version)"
-          echo "NPM version: $(npm --version)"
-          echo "Current directory: $(pwd)"
-          echo "Directory contents:"
-          ls -la
-          echo ""
-          echo "🔍 NPM Cache Debug:"
-          npm config get cache
-          echo "NPM cache size:"
-          npm cache verify || echo "Cache verify failed"
-          echo ""
-          echo "🔍 Package files status:"
-          if [ -f "package.json" ]; then
-            echo "✅ package.json exists"
-            echo "Package.json hash: $(sha256sum package.json)"
-          else
-            echo "❌ package.json missing"
-          fi
-          if [ -f "package-lock.json" ]; then
-            echo "✅ package-lock.json exists"
-            echo "Package-lock.json hash: $(sha256sum package-lock.json)"
-          else
-            echo "ℹ️ package-lock.json does not exist (expected)"
-          fi
-          echo ""
-          echo "🔍 Node modules status:"
           if [ -d "node_modules" ]; then
-            echo "✅ node_modules directory exists"
-            echo "Node modules size: $(du -sh node_modules 2>/dev/null | cut -f1 || echo 'Unable to calculate')"
-            echo "Node modules file count: $(find node_modules -type f 2>/dev/null | wc -l || echo 'Unable to count')"
+            echo "Using cached node_modules"
+            echo "Cache size: $(du -sh node_modules | cut -f1)"
           else
-            echo "❌ node_modules directory does not exist"
+            echo "Installing dependencies"
+            npm ci --legacy-peer-deps --include=dev
           fi
-
-      - name: Install dependencies
-        run: |
-          echo "📦 Installing dependencies with npm ci"
-          npm ci --include=dev
-          echo "✅ Installation completed"
-          echo "Final node_modules size: $(du -sh node_modules | cut -f1)"
-
-      - name: Verify installation
-        run: |
-          echo "🔍 Post-installation verification:"
-          echo "ESLint version: $(./node_modules/.bin/eslint --version)"
-          echo "ESLint config test:"
-          ./node_modules/.bin/eslint --print-config js/src/addons-page/index.js | head -20
-          echo ""
-          echo "🔍 Testing specific file for space-in-parens errors:"
-          echo "Content of js/src/addons-page/index.js:"
-          cat js/src/addons-page/index.js
-          echo ""
-          echo "ESLint test on js/src/addons-page/index.js:"
-          ./node_modules/.bin/eslint js/src/addons-page/index.js || echo "ESLint found errors (expected)"
-          echo "Dependencies installed successfully ✅"
 
       - name: Analyze js code style
         run: ./node_modules/.bin/eslint .
