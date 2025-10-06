@@ -13,10 +13,10 @@
 		}
 	},
 	"extends": [
-		"plugin:@wordpress/eslint-plugin/recommended",
+		"plugin:@wordpress/eslint-plugin/recommended-with-formatting",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended",
-		"plugin:sonarjs/recommended-legacy",
+		"plugin:sonarjs/recommended",
 		"plugin:cypress/recommended",
 		"plugin:no-jquery/deprecated",
 		"plugin:compat/recommended"
@@ -46,6 +46,7 @@
 		}
 	},
 	"rules": {
+		"sonarjs/cognitive-complexity": ["error", 50],
 		"cypress/unsafe-to-chain-command": "off",
 		"cypress/no-assigning-return-values": "off",
 		"camelcase": [
