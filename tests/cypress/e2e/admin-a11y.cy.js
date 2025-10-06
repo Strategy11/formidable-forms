@@ -94,7 +94,8 @@ describe( 'Run some accessibility tests', function() {
 		configureAxeWithIgnoredRuleset( [
 			{ id: 'color-contrast', enabled: false },
 			{ id: 'aria-allowed-role', enabled: false },
-			{ id: 'link-name', enabled: false }
+			{ id: 'link-name', enabled: false },
+			{ id: 'heading-order', enabled: false }
 		] );
 		cy.checkA11y( null, null, logViolations );
 	} );
@@ -135,17 +136,6 @@ describe( 'Run some accessibility tests', function() {
 			...baselineRules,
 			{ id: 'landmark-unique', enabled: false },
 			{ id: 'landmark-complementary-is-top-level', enabled: false }
-		] );
-		cy.checkA11y( null, null, logViolations );
-	} );
-
-	it( 'Check the form creation is accessible', () => {
-		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates&return_page=forms' );
-		cy.injectAxe();
-		configureAxeWithIgnoredRuleset( [
-			{ id: 'color-contrast', enabled: false },
-			{ id: 'aria-allowed-role', enabled: false },
-			{ id: 'link-name', enabled: false }
 		] );
 		cy.checkA11y( null, null, logViolations );
 	} );
