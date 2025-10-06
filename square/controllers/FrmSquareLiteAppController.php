@@ -155,7 +155,7 @@ class FrmSquareLiteAppController {
 			$details['email'] = FrmTransLiteAppHelper::process_shortcodes( $shortcode_atts );
 		}
 
-		self::maybe_add_address_data( $details, $address );
+		self::maybe_add_address_data( $details, $address, (int) $address_setting );
 
 		return $details;
 	}
@@ -165,14 +165,24 @@ class FrmSquareLiteAppController {
 	 *
 	 * @param array $details
 	 * @param array $address
+	 * @param int   $address_field_id
 	 * @return void
 	 */
-	private static function maybe_add_address_data( &$details, $address ) {
+	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
 		if ( ! is_array( $address ) || ! isset( $address['line1'] ) || ! isset( $address['line2'] ) || ! is_callable( 'FrmProAddressesController::get_country_code' ) ) {
 			return;
 		}
 
-		$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+		$address_field = FrmField::getOne( $address_field_id );
+		if ( ! $address_field ) {
+			return;
+		}
+
+		if ( 'us' === $address_field->field_options['address_type'] ) {
+			$country_code = 'US';
+		} else {
+			$country_code = FrmProAddressesController::get_country_code( $address['country'] );
+		}
 
 		if ( ! $address['line1'] && ! $address['line2'] && ! $address['city'] && ! $address['state'] && ! $address['zip'] && ! $country_code ) {
 			return;
@@ -192,10 +202,11 @@ class FrmSquareLiteAppController {
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {
-		$entry          = new stdClass();
-		$entry->post_id = 0;
-		$entry->id      = 0;
-		$entry->metas   = array();
+		$entry           = new stdClass();
+		$entry->post_id  = 0;
+		$entry->id       = 0;
+		$entry->item_key = '';
+		$entry->metas    = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {

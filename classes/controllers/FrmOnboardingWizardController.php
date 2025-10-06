@@ -314,79 +314,12 @@ class FrmOnboardingWizardController {
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
-		self::subscribe_to_active_campaign();
+		FrmEmailCollectionHelper::subscribe_to_active_campaign();
 
 		// Send response.
 		wp_send_json_success();
 	}
 
-	/**
-	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
-	 *
-	 * @since 6.16
-	 *
-	 * @return void
-	 */
-	private static function subscribe_to_active_campaign() {
-		$user = wp_get_current_user();
-		if ( empty( $user->user_email ) ) {
-			return;
-		}
-
-		if ( ! self::should_send_email_to_active_campaign( $user->user_email ) ) {
-			return;
-		}
-
-		$user_id    = $user->ID;
-		$first_name = get_user_meta( $user_id, 'first_name', true );
-		$last_name  = get_user_meta( $user_id, 'last_name', true );
-
-		wp_remote_post(
-			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
-			array(
-				'body' => http_build_query(
-					array(
-						'form_key'      => 'subscribe-onboarding',
-						'frm_action'    => 'create',
-						'form_id'       => 5,
-						'item_key'      => '',
-						'item_meta[0]'  => '',
-						'item_meta[15]' => $user->user_email,
-						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
-						'item_meta[18]' => is_string( $first_name ) ? $first_name : '',
-						'item_meta[19]' => is_string( $last_name ) ? $last_name : '',
-					)
-				),
-			)
-		);
-	}
-
-	/**
-	 * Try to skip any fake emails.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $email
-	 * @return bool
-	 */
-	private static function should_send_email_to_active_campaign( $email ) {
-		$substrings = array(
-			'@wpengine.local',
-			'@example.com',
-			'@localhost',
-			'@local.dev',
-			'@local.test',
-			'test@gmail.com',
-			'admin@gmail.com',
-
-		);
-		foreach ( $substrings as $substring ) {
-			if ( false !== strpos( $email, $substring ) ) {
-				return false;
-			}
-		}
-		return true;
-	}
 
 	/**
 	 * Handle AJAX request to set up usage data for the Onboarding Wizard.
