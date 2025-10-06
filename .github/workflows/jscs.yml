@@ -22,17 +22,39 @@ jobs:
           node-version: 18
 
       - name: Cache Node.js dependencies
-        id: cache
+        id: cache-deps
         uses: actions/cache@v3
         with:
-          path: ./node_modules
-          key: ${{ runner.os }}-node-${{ hashFiles('./package-lock.json') }}
+          path: node_modules
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
 
+      - name: Debug cache status
+        run: |
+          echo "Cache hit: ${{ steps.cache-deps.outputs.cache-hit }}"
+          echo "Cache primary key: ${{ steps.cache-deps.outputs.cache-primary-key }}"
+          echo "Cache matched key: ${{ steps.cache-deps.outputs.cache-matched-key }}"
+          if [ -d "node_modules" ]; then
+            echo "node_modules directory exists"
+            echo "node_modules size: $(du -sh node_modules | cut -f1)"
+            echo "node_modules file count: $(find node_modules -type f | wc -l)"
+          else
+            echo "node_modules directory does NOT exist"
+          fi
+
       - name: Install dependencies
+        if: steps.cache-deps.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps --include=dev
-        if: steps.cache.outputs.cache-hit != 'true'
+
+      - name: Verify dependencies after install
+        run: |
+          echo "Post-install check:"
+          if [ -d "node_modules" ]; then
+            echo "node_modules exists - size: $(du -sh node_modules | cut -f1)"
+          else
+            echo "ERROR: node_modules missing after install"
+          fi
 
       - name: Analyze js code style
         run: ./node_modules/.bin/eslint .
