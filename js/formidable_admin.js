@@ -3929,6 +3929,32 @@ window.frmAdminBuildJS = function () {
     }
     destroyFieldGroupPopup();
   }
+  function getSelectedRange($firstGroup, hoverTarget) {
+    var hoverTargetSection = hoverTarget.closest('.edit_field_type_divider');
+    var targetSection, $range;
+    if (hoverTargetSection) {
+      targetSection = hoverTargetSection.closest('ul').closest('.frm_field_box.ui-draggable');
+    }
+    if ($firstGroup.parent().index() < jQuery(hoverTarget.parentNode).index()) {
+      // If field target field is in a section.
+      $range = $firstGroup.parent().nextUntil(targetSection || hoverTarget.parentNode);
+      if (!hoverTargetSection) {
+        return $range;
+      }
+      var _fieldsInSection = Array.from(hoverTargetSection.querySelectorAll('.frm_field_box.ui-draggable'));
+      $range = $range.add(_fieldsInSection.slice(0, _fieldsInSection.indexOf(hoverTarget) + 1));
+      return $range;
+    }
+
+    // Select fields back to the first group.
+    $range = $firstGroup.parent().prevUntil(targetSection || hoverTarget.parentNode);
+    if (!hoverTargetSection) {
+      return $range;
+    }
+    var fieldsInSection = Array.from(hoverTargetSection.querySelectorAll('.frm_field_box.ui-draggable'));
+    $range = $range.add(fieldsInSection.slice(-fieldsInSection.indexOf(hoverTarget) + 1));
+    return $range;
+  }
   function fieldGroupClick(e) {
     maybeShowFieldGroupMessage();
     if ('ul' !== e.originalEvent.target.nodeName.toLowerCase()) {
@@ -3965,29 +3991,7 @@ window.frmAdminBuildJS = function () {
       } else if (shiftKeyIsDown && !groupIsActive) {
         ++numberOfSelectedGroups; // include the one we're selecting right now.
         var $firstGroup = $selectedFieldGroups.first();
-        var $range, targetSection;
-        var hoverTargetSection = hoverTarget.closest('.edit_field_type_divider');
-        if (hoverTargetSection) {
-          targetSection = hoverTargetSection.closest('ul').closest('.frm_field_box.ui-draggable');
-        }
-        if ($firstGroup.parent().index() < jQuery(hoverTarget.parentNode).index()) {
-          // If field target field is in a section
-          if (hoverTargetSection) {
-            $range = $firstGroup.parent().nextUntil(targetSection);
-            var _fieldsInSection = Array.from(hoverTargetSection.querySelectorAll('.frm_field_box.ui-draggable'));
-            $range = $range.add(_fieldsInSection.slice(0, _fieldsInSection.indexOf(hoverTarget) + 1));
-          } else {
-            $range = $firstGroup.parent().nextUntil(hoverTarget.parentNode);
-          }
-        } else {
-          if (hoverTargetSection) {
-            $range = $firstGroup.parent().prevUntil(targetSection);
-            var _fieldsInSection2 = Array.from(hoverTargetSection.querySelectorAll('.frm_field_box.ui-draggable'));
-            $range = $range.add(_fieldsInSection2.slice(-_fieldsInSection2.indexOf(hoverTarget) + 1));
-          } else {
-            $range = $firstGroup.parent().prevUntil(hoverTarget.parentNode);
-          }
-        }
+        var $range = getSelectedRange($firstGroup, hoverTarget);
         $range.each(function () {
           var $fieldGroup = jQuery(this).closest('li').find('ul.frm_sorting');
           if (!$fieldGroup.hasClass('frm-selected-field-group')) {
