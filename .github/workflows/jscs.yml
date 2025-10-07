@@ -32,27 +32,21 @@ jobs:
           if [ -f package-lock.json ]; then
             echo "File size: $(stat -c%s package-lock.json) bytes"
             echo "Last modified: $(stat -c%y package-lock.json)"
-            echo "File hash: ${{ hashFiles('**/package-lock.json') }}"
           fi
           echo "Generated cache key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}"
           echo ""
           echo "🔍 CACHE LOGIC: Any change to package-lock.json → Different hash → Cache miss → npm ci runs"
 
-      - name: Cache node_modules
-        uses: actions/cache@v4
+      - name: Cache node modules
         id: npm-cache
+        uses: actions/cache@v4
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-            ${{ runner.os }}-node-modules-
-          # Allow restore-keys to find caches across PR pushes
 
       - name: Debug - Cache result
         run: |
           echo "🎯 CACHE DECISION:"
-          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
           if [ "${{ steps.npm-cache.outputs.cache-hit }}" = "true" ]; then
             echo "✅ CACHE HIT - package-lock.json UNCHANGED - Dependencies will be SKIPPED"
             echo "   → This means NO changes to dependencies, versions, or new packages"
@@ -72,26 +66,12 @@ jobs:
       - name: Check if installation needed
         id: check-install
         run: |
-          CURRENT_HASH="${{ hashFiles('**/package-lock.json') }}"
-          EXPECTED_KEY="Linux-node-modules-${CURRENT_HASH}"
-          RESTORED_KEY="${{ steps.npm-cache.outputs.cache-matched-key }}"
-          
-          echo "Current package-lock.json hash: ${CURRENT_HASH}"
-          echo "Expected cache key: ${EXPECTED_KEY}"
-          echo "Actually restored key: ${RESTORED_KEY}"
-          
           if [ "${{ steps.npm-cache.outputs.cache-hit }}" = "true" ]; then
             echo "needs-install=false" >> $GITHUB_OUTPUT
             echo "reason=exact-cache-hit" >> $GITHUB_OUTPUT
-          elif [ "${RESTORED_KEY}" = "${EXPECTED_KEY}" ]; then
-            echo "needs-install=false" >> $GITHUB_OUTPUT  
-            echo "reason=exact-match-via-restore-key" >> $GITHUB_OUTPUT
-          elif [ -d "node_modules" ] && [ -f "./node_modules/.bin/eslint" ]; then
-            echo "needs-install=true" >> $GITHUB_OUTPUT
-            echo "reason=stale-cache-detected" >> $GITHUB_OUTPUT
           else
             echo "needs-install=true" >> $GITHUB_OUTPUT
-            echo "reason=no-cache-or-missing-deps" >> $GITHUB_OUTPUT
+            echo "reason=cache-miss-or-stale" >> $GITHUB_OUTPUT
           fi
 
       - name: Install dependencies
@@ -100,7 +80,7 @@ jobs:
           echo "🔄 INSTALLING DEPENDENCIES (cache miss detected)"
           echo "📝 Reasons this could happen:"
           echo "   • New dependency added to package.json"
-          echo "   • Dependency version updated" 
+          echo "   • Dependency version updated"
           echo "   • package-lock.json manually changed"
           echo "   • First run or different branch"
           npm ci --include=dev
@@ -109,6 +89,7 @@ jobs:
       - name: Debug - Installation decision proof
         run: |
           echo "🔍 FINAL DECISION:"
+          echo "Cache hit: ${{ steps.npm-cache.outputs.cache-hit }}"
           echo "Reason: ${{ steps.check-install.outputs.reason }}"
           if [ "${{ steps.check-install.outputs.needs-install }}" = "true" ]; then
             echo "✅ RAN INSTALLATION - ${{ steps.check-install.outputs.reason }}"
