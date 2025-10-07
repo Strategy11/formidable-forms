@@ -136,6 +136,7 @@ const animateCounter = ( timestamp, element, startValue, targetValue, duration, 
 
 /**
  * Easing function for smooth animation
+ *
  * @param {number} t Progress from 0 to 1
  * @return {number} Eased value
  */
