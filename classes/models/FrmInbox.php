@@ -55,6 +55,7 @@ class FrmInbox extends FrmFormApi {
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
+
 		return $messages;
 	}
 
@@ -110,7 +111,7 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( $this->is_expired( $message ) ) {
+		if ( ! $this->has_started( $message ) || $this->is_expired( $message ) ) {
 			return;
 		}
 
@@ -159,8 +160,10 @@ class FrmInbox extends FrmFormApi {
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$started   = $this->has_started( $message );
 			$expired   = $this->is_expired( $message );
-			if ( $read || $expired || $dismissed ) {
+
+			if ( $read || $expired || $dismissed || ! $started ) {
 				unset( self::$messages[ $t ] );
 				$removed = true;
 			}
@@ -180,13 +183,29 @@ class FrmInbox extends FrmFormApi {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( empty( $k ) || $this->is_expired( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( empty( $k ) || $this->is_expired( $message ) || ( $type === 'dismissed' ) !== $dismissed || ! $this->has_started( $message ) ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
 			}
 		}
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
+	}
+
+	/**
+	 * Check if a message has actually started, so we can prevent showing something that is queued up early.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $message
+	 * @return bool
+	 */
+	private function has_started( $message ) {
+		if ( empty( $message['starts'] ) ) {
+			return true;
+		}
+
+		return $message['starts'] <= time();
 	}
 
 	/**
