@@ -36,6 +36,5 @@ jobs:
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --include=dev
 
-      - name: Run ESLint (allow failure)
-        continue-on-error: true
+      - name: Run ESLint
         run: ./node_modules/.bin/eslint .
