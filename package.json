@@ -85,7 +85,7 @@
 		"eslint-plugin-prettier": "5.0.0",
 		"eslint-plugin-react": "^7.20.6",
 		"eslint-plugin-import": "2.25.2",
-		"eslint-plugin-sonarjs": "0.19.0",
+		"eslint-plugin-sonarjs": "0.25.1",
 		"html-validate": "^8.20.0",
 		"mini-css-extract-plugin": "^2.9.2",
 		"prompts": "^2.4.2",
@@ -95,8 +95,8 @@
 		"style-loader": "3.2.1",
 		"webpack": "5.97.0",
 		"webpack-cli": "^5.1.4",
-		"webpack-dev-middleware": "^7.4.5",
-		"webpack-dev-server": "^5.2.2",
+		"webpack-dev-middleware": "^7.4.2",
+		"webpack-dev-server": "^5.0.4",
 		"webpack-remove-empty-scripts": "^1.1.1"
 	},
 	"repository": {
