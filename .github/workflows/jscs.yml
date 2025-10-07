@@ -21,16 +21,58 @@ jobs:
         with:
           node-version: "20.10.0"
 
+      - name: Generate cache key
+        id: cache-key
+        run: |
+          echo "🔑 Generating cache key..."
+          HASH=$(sha256sum package-lock.json | cut -d' ' -f1)
+          echo "hash=$HASH" >> $GITHUB_OUTPUT
+          echo "key=${{ runner.os }}-node-modules-$HASH" >> $GITHUB_OUTPUT
+          echo "📦 Cache key: ${{ runner.os }}-node-modules-$HASH"
+          echo "📊 package-lock.json hash: $HASH"
+
       - name: Cache node modules
         id: cache-npm
         uses: actions/cache@v4
         with:
           path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ steps.cache-key.outputs.key }}
+
+      - name: Debug cache status
+        run: |
+          echo "🔍 Cache Status Debug:"
+          echo "Cache hit: ${{ steps.cache-npm.outputs.cache-hit }}"
+          echo "Cache primary key: ${{ steps.cache-npm.outputs.cache-primary-key }}"
+          echo "Cache matched key: ${{ steps.cache-npm.outputs.cache-matched-key }}"
+          if [ "${{ steps.cache-npm.outputs.cache-hit }}" = "true" ]; then
+            echo "✅ CACHE HIT - Using cached dependencies"
+            echo "📂 Checking node_modules:"
+            ls -la node_modules/ | head -10
+            echo "✅ ESLint binary exists: $([ -f ./node_modules/.bin/eslint ] && echo 'YES' || echo 'NO')"
+          else
+            echo "❌ CACHE MISS - Will install dependencies"
+          fi
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev
+        run: |
+          echo "📦 Installing dependencies (cache miss)..."
+          npm ci --include=dev
+          echo "✅ Installation complete"
+          echo "📂 Verifying node_modules:"
+          ls -la node_modules/ | head -10
+
+      - name: Verify dependencies exist
+        run: |
+          echo "🔍 Final dependency check:"
+          if [ -d "node_modules" ]; then
+            echo "✅ node_modules exists"
+            echo "📊 Total packages: $(find node_modules -maxdepth 1 -type d | wc -l)"
+            echo "✅ ESLint binary: $([ -f ./node_modules/.bin/eslint ] && echo 'EXISTS' || echo 'MISSING')"
+          else
+            echo "❌ ERROR: node_modules missing!"
+            exit 1
+          fi
 
       - name: Analyze js code style
         run: ./node_modules/.bin/eslint .
