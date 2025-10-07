@@ -52,11 +52,9 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
-
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
-
 		return $messages;
 	}
 
