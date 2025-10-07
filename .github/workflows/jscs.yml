@@ -44,7 +44,10 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          # No restore-keys - only exact matches for safety
+          restore-keys: |
+            ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            ${{ runner.os }}-node-modules-
+          # Allow restore-keys to find caches across PR pushes
 
       - name: Debug - Cache result
         run: |
@@ -66,13 +69,27 @@ jobs:
             echo "Node modules count: $(find node_modules -maxdepth 1 -type d | wc -l)"
           fi
 
+      - name: Check if installation needed
+        id: check-install
+        run: |
+          if [ "${{ steps.npm-cache.outputs.cache-hit }}" = "true" ]; then
+            echo "needs-install=false" >> $GITHUB_OUTPUT
+            echo "reason=exact-cache-hit" >> $GITHUB_OUTPUT
+          elif [ -d "node_modules" ] && [ -f "./node_modules/.bin/eslint" ]; then
+            echo "needs-install=false" >> $GITHUB_OUTPUT  
+            echo "reason=cache-restored" >> $GITHUB_OUTPUT
+          else
+            echo "needs-install=true" >> $GITHUB_OUTPUT
+            echo "reason=no-cache-or-missing-deps" >> $GITHUB_OUTPUT
+          fi
+
       - name: Install dependencies
-        if: steps.npm-cache.outputs.cache-hit != 'true'
+        if: steps.check-install.outputs.needs-install == 'true'
         run: |
           echo "🔄 INSTALLING DEPENDENCIES (cache miss detected)"
           echo "📝 Reasons this could happen:"
           echo "   • New dependency added to package.json"
-          echo "   • Dependency version updated"
+          echo "   • Dependency version updated" 
           echo "   • package-lock.json manually changed"
           echo "   • First run or different branch"
           npm ci --include=dev
@@ -80,10 +97,12 @@ jobs:
 
       - name: Debug - Installation decision proof
         run: |
-          if [ "${{ steps.npm-cache.outputs.cache-hit }}" = "true" ]; then
-            echo "✅ SKIPPED INSTALLATION - package-lock.json unchanged, used cached node_modules"
+          echo "🔍 FINAL DECISION:"
+          echo "Reason: ${{ steps.check-install.outputs.reason }}"
+          if [ "${{ steps.check-install.outputs.needs-install }}" = "true" ]; then
+            echo "✅ RAN INSTALLATION - ${{ steps.check-install.outputs.reason }}"
           else
-            echo "✅ RAN INSTALLATION - package-lock.json changed, fresh dependencies installed"
+            echo "✅ SKIPPED INSTALLATION - ${{ steps.check-install.outputs.reason }}"
           fi
 
       - name: Debug - Post-install state
