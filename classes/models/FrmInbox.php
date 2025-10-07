@@ -52,6 +52,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
+
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
@@ -111,7 +112,7 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( ! $this->has_started( $message ) || $this->is_expired( $message ) ) {
+		if ( ! $this->within_valid_timeframe( $message ) ) {
 			return;
 		}
 
@@ -160,10 +161,8 @@ class FrmInbox extends FrmFormApi {
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
-			$started   = $this->has_started( $message );
-			$expired   = $this->is_expired( $message );
 
-			if ( $read || $expired || $dismissed || ! $started ) {
+			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
 				unset( self::$messages[ $t ] );
 				$removed = true;
 			}
@@ -183,13 +182,25 @@ class FrmInbox extends FrmFormApi {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( empty( $k ) || $this->is_expired( $message ) || ( $type === 'dismissed' ) !== $dismissed || ! $this->has_started( $message ) ) {
+			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
 			}
 		}
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
+	}
+
+	/**
+	 * Check if a message has started and is not expired.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $message
+	 * @return bool
+	 */
+	private function within_valid_timeframe( $message ) {
+		return $this->has_started( $message ) && ! $this->is_expired( $message );
 	}
 
 	/**
