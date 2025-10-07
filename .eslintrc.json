@@ -16,7 +16,7 @@
 		"plugin:@wordpress/eslint-plugin/recommended-with-formatting",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended",
-		"plugin:sonarjs/recommended",
+		"plugin:sonarjs/recommended-legacy",
 		"plugin:cypress/recommended",
 		"plugin:no-jquery/deprecated",
 		"plugin:compat/recommended"
