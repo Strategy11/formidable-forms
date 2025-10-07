@@ -72,12 +72,23 @@ jobs:
       - name: Check if installation needed
         id: check-install
         run: |
+          CURRENT_HASH="${{ hashFiles('**/package-lock.json') }}"
+          EXPECTED_KEY="Linux-node-modules-${CURRENT_HASH}"
+          RESTORED_KEY="${{ steps.npm-cache.outputs.cache-matched-key }}"
+          
+          echo "Current package-lock.json hash: ${CURRENT_HASH}"
+          echo "Expected cache key: ${EXPECTED_KEY}"
+          echo "Actually restored key: ${RESTORED_KEY}"
+          
           if [ "${{ steps.npm-cache.outputs.cache-hit }}" = "true" ]; then
             echo "needs-install=false" >> $GITHUB_OUTPUT
             echo "reason=exact-cache-hit" >> $GITHUB_OUTPUT
-          elif [ -d "node_modules" ] && [ -f "./node_modules/.bin/eslint" ]; then
+          elif [ "${RESTORED_KEY}" = "${EXPECTED_KEY}" ]; then
             echo "needs-install=false" >> $GITHUB_OUTPUT  
-            echo "reason=cache-restored" >> $GITHUB_OUTPUT
+            echo "reason=exact-match-via-restore-key" >> $GITHUB_OUTPUT
+          elif [ -d "node_modules" ] && [ -f "./node_modules/.bin/eslint" ]; then
+            echo "needs-install=true" >> $GITHUB_OUTPUT
+            echo "reason=stale-cache-detected" >> $GITHUB_OUTPUT
           else
             echo "needs-install=true" >> $GITHUB_OUTPUT
             echo "reason=no-cache-or-missing-deps" >> $GITHUB_OUTPUT
