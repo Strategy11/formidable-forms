@@ -27,12 +27,29 @@ jobs:
         with:
           path: node_modules
           key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          save-always: true
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev
+        run: |
+          echo "Installing dependencies..."
+          npm ci --include=dev
+          echo "Dependencies installed successfully"
+
+      - name: Debug cache status
+        run: |
+          echo "Cache hit: ${{ steps.cache-npm.outputs.cache-hit }}"
+          echo "Node modules exists: $([ -d node_modules ] && echo 'YES' || echo 'NO')"
+          if [ -d node_modules ]; then
+            echo "Package count: $(find node_modules -maxdepth 1 -type d | wc -l)"
+          fi
 
       - name: Analyze js code style
         run: |
-          echo "🔍 Running ESLint analysis..."
-          ./node_modules/.bin/eslint .
+          echo "Running ESLint analysis..."
+          if [ -f ./node_modules/.bin/eslint ]; then
+            ./node_modules/.bin/eslint .
+          else
+            echo "ESLint binary not found"
+            exit 1
+          fi
