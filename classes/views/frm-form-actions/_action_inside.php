@@ -7,6 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
+<?php
+/**
+ * @since x.x
+ *
+ * @param WP_Post $form_action
+ */
+do_action( 'frm_action_settings_before_action_name', $form_action );
+?>
+
 <div class="frm_grid_container frm_no_p_margin">
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
