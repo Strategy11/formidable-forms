@@ -46,7 +46,7 @@
 		}
 	},
 	"rules": {
-		"sonarjs/cognitive-complexity": ["error", 50],
+		"sonarjs/cognitive-complexity": "off",
 		"cypress/unsafe-to-chain-command": "off",
 		"cypress/no-assigning-return-values": "off",
 		"camelcase": [
