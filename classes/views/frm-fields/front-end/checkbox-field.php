@@ -19,7 +19,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $field['form_id'] ), 'options' );
 	FrmAppHelper::unserialize_or_decode( $form_options );
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key, $form_options );
+		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key );
 		if ( FrmProFieldsController::should_hide_field_choice( $disabled, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
