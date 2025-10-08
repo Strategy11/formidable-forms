@@ -307,6 +307,8 @@ class FrmEmailStylesController {
 			self::get_content_type_header( $email_style ),
 		);
 
+		FrmUsageController::update_flows_data( 'send_test_email', $email_style );
+
 		$result = wp_mail( $valid_emails, $subject, $content, $headers );
 		if ( $result ) {
 			wp_send_json_success( __( 'Test email sent successfully!', 'formidable' ) );
