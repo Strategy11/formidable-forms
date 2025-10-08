@@ -325,7 +325,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -393,6 +393,23 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * In older versions of Lite, it's possible we've saved the wrong location ID.
+	 * So force it to get valid values again.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function migrate_to_104() {
+		if ( ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
+			return;
+		}
+
+		FrmSquareLiteConnectHelper::get_location_id( true, 'test' );
+		FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
 	}
 
 	/**
