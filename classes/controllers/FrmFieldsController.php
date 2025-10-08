@@ -385,7 +385,7 @@ class FrmFieldsController {
 	 *
 	 * @return bool
 	 */
-	public static function maybe_disable_option( $field, $opt_key ) {
+	public static function choice_limit_reached( $field, $opt_key ) {
 		if ( FrmAppHelper::is_form_builder_page() ) {
 			return false;
 		}

@@ -18,8 +18,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $field['form_id'] ), 'options' );
 	FrmAppHelper::unserialize_or_decode( $form_options );
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key );
-		if ( FrmProFieldsController::should_hide_field_choice( $disabled, $shortcode_atts, $opt_key, $form_options ) ) {
+		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
+		if ( FrmProFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
@@ -56,7 +56,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
 		do_action( 'frm_field_input_html', $field );
-		echo $disabled ? ' disabled="disabled" ' : $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $choice_limit_reached ? ' disabled="disabled" ' : $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {

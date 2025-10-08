@@ -53,8 +53,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
-		$disabled  = FrmFieldsController::maybe_disable_option( $field, $opt_key );
-		if ( FrmProFieldsController::should_hide_field_choice( $disabled, $shortcode_atts, $opt_key, $form_options ) ) {
+
+		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
+		if ( FrmProFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
 		if ( $other_opt === false ) {
@@ -76,7 +77,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 			$option_params['class'] = 'frm_other_trigger';
 		}
-		if ( $disabled ) {
+		if ( $choice_limit_reached ) {
 			$option_params['disabled'] = 'disabled';
 			$selected = false;
 		}
