@@ -106,58 +106,61 @@ select.frm_cancelnew, input.frm_enternew {
 }
 
 /* Color picker CSS */
-.frm-right-panel .wp-picker-open + .wp-picker-input-wrap {
-	position: absolute;
-	margin-left: calc( ( 100% - 35px ) * -1 );
-	margin-top: 1px;
-	width: calc( 100% - 36px );
-}
+.frm_settings_form,
+.frm-right-panel {
+	.wp-picker-open + .wp-picker-input-wrap {
+		position: absolute;
+		margin-left: calc( ( 100% - 35px ) * -1 );
+		margin-top: 1px;
+		width: calc( 100% - 36px );
+	}
 
-.frm-right-panel .wp-picker-container input[type="text"].wp-color-picker {
-	border: none;
-	padding: 5px 8px;
-	font-family: inherit;
-	color: var(--grey-700);
-	font-size: var(--text-md);
-	width: 100%;
-	line-height: var(--leading);
-}
+	.wp-picker-container input[type="text"].wp-color-picker {
+		border: none;
+		padding: 5px 8px;
+		font-family: inherit;
+		color: var(--grey-700);
+		font-size: var(--text-md);
+		width: 100%;
+		line-height: var(--leading);
+	}
 
-.frm-right-panel .wp-picker-input-wrap .wp-picker-clear {
-	display: none !important;
-}
+	.wp-picker-input-wrap .wp-picker-clear {
+		display: none !important;
+	}
 
-.frm-right-panel .wp-picker-holder {
-	position: absolute;
-	z-index: 999;
-}
+	.wp-picker-holder {
+		position: absolute;
+		z-index: 999;
+	}
 
-.frm-right-panel .wp-picker-input-wrap label {
-	margin-bottom: 0;
-}
+	.wp-picker-input-wrap label {
+		margin-bottom: 0;
+	}
 
-.frm-right-panel .wp-picker-container .wp-color-result.button {
-	width: 100%;
-	overflow: hidden;
-	margin: 0 !important;
-	height: var(--h-md) !important;
-	padding: 0 0 0 var(--gap-lg) !important;
-	border-radius: var(--small-radius);
-	border-color: var(--grey-300);
-}
+	.wp-picker-container .wp-color-result.button {
+		width: 100%;
+		overflow: hidden;
+		margin: 0 !important;
+		height: var(--h-md) !important;
+		padding: 0 0 0 var(--gap-lg) !important;
+		border-radius: var(--small-radius);
+		border-color: var(--grey-300);
+	}
 
-.frm-right-panel .wp-color-result-text {
-	line-height: var(--leading) !important;
-	font-size: var(--text-md);
-	background: #fff !important;
-	color: var(--grey-900);
-	padding: 5px 8px;
-	border-color: var(--grey-300);
-	text-align: left;
-}
+	.wp-color-result-text {
+		line-height: var(--leading) !important;
+		font-size: var(--text-md);
+		background: #fff !important;
+		color: var(--grey-900);
+		padding: 5px 8px;
+		border-color: var(--grey-300);
+		text-align: left;
+	}
 
-.frm-right-panel .color-alpha {
-	width: var(--gap-lg) !important;
+	.color-alpha {
+		width: var(--gap-lg) !important;
+	}
 }
 
 .frm_grid_container .wp-picker-container {

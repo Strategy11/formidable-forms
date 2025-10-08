@@ -732,6 +732,8 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+			self::enqueue_global_settings_scripts( $page );
+
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
@@ -807,6 +809,18 @@ class FrmAppController {
 
 		wp_enqueue_style( 'formidable-settings-components' );
 		wp_enqueue_script( 'formidable-settings-components' );
+	}
+
+	/**
+	 * Enqueues global settings scripts.
+	 *
+	 * @param string $page The `page` param in URL.
+	 */
+	private static function enqueue_global_settings_scripts( $page ) {
+		if ( 'formidable-settings' === $page ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'formidable_settings' );
+		}
 	}
 
 	/**
@@ -1031,7 +1045,7 @@ class FrmAppController {
 		$args = array(
 			'methods'             => 'GET',
 			'callback'            => 'FrmAppController::api_install',
-			'permission_callback' => __CLASS__ . '::can_update_db',
+			'permission_callback' => self::class . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );

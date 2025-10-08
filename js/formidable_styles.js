@@ -1876,6 +1876,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
   /**
    * Creates an instance of frmStyleDependentUpdaterComponent.
+   *
    * @param {HTMLElement} component - The component element.
    */
   function frmStyleDependentUpdaterComponent(component) {
@@ -1897,6 +1898,7 @@ var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
   /**
    * Initializes the list of inputs to propagate changes to.
    * The selection is made by provided input's names list in "will-change" attribute.
+   *
    * @param {string[]} inputNames - The names of the inputs to propagate changes to.
    * @return {HTMLElement[]} - The list of inputs to propagate changes to.
    */
@@ -1915,6 +1917,7 @@ var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
 
     /**
      * Updates all dependent elements with the given value.
+     *
      * @param {string} value - The value to update the dependent elements with.
      */
   }, {
@@ -2905,6 +2908,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /**
  * Represents the frmStyleOptions class.
+ *
  * @class
  */
 var frmStyleOptions = /*#__PURE__*/function () {
@@ -2998,6 +3002,7 @@ var frmStyleOptions = /*#__PURE__*/function () {
      * Initializes the copy to clipboard functionality for style classes.
      * Adds a click event listener to the copyLabel element.
      * Copies the class name to the clipboard and displays a success message.
+     *
      * @param {string} successMessage - The success message to display.
      */
   }, {

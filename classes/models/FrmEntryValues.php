@@ -272,7 +272,7 @@ class FrmEntryValues {
 		);
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
+			'value' => $entry_description['referrer'] ?? '',
 		);
 
 		/**

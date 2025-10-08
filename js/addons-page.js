@@ -3574,6 +3574,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isValidEmail: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_5__.isValidEmail),
 /* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.isVisible),
 /* harmony export */   onClickPreventDefault: () => (/* reexport safe */ _event__WEBPACK_IMPORTED_MODULE_3__.onClickPreventDefault),
+/* harmony export */   removeParamFromHistory: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.setQueryParam),
 /* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.show),
@@ -3608,6 +3609,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   getQueryParam: () => (/* binding */ getQueryParam),
 /* harmony export */   hasQueryParam: () => (/* binding */ hasQueryParam),
+/* harmony export */   removeParamFromHistory: () => (/* binding */ removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* binding */ removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* binding */ setQueryParam)
 /* harmony export */ });
@@ -3670,6 +3672,16 @@ var setQueryParam = function setQueryParam(paramName, paramValue) {
  */
 var hasQueryParam = function hasQueryParam(paramName) {
   return urlParams.has(paramName);
+};
+
+/**
+ * Removes a query parameter and updates history with replaceState.
+ *
+ * @param {string} paramName The query parameter to remove.
+ * @return {void}
+ */
+var removeParamFromHistory = function removeParamFromHistory(paramName) {
+  return history.replaceState({}, '', removeQueryParam(paramName));
 };
 
 /***/ }),

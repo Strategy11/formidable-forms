@@ -15,18 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<span class="frm-flex-col frm-with-right-icon">
 		<?php
-		$field_obj->display_smart_values_modal_trigger_icon( $field );
-
 		if ( isset( $display['default_value'] ) && $display['default_value'] ) {
 			$default_name  = 'field_options[dyn_default_value_' . $field['id'] . ']';
-			$default_value = isset( $field['dyn_default_value'] ) ? $field['dyn_default_value'] : '';
+			$default_value = $field['dyn_default_value'] ?? '';
 		} else {
 			$default_name  = 'default_value_' . $field['id'];
 			$default_value = $field['default_value'];
 		}
-		$field_obj->default_value_to_string( $default_value );
 
+		$field_obj->default_value_to_string( $default_value );
 		$field_obj->show_default_value_field( $field, $default_name, $default_value );
+		$field_obj->display_smart_values_modal_trigger_icon( $field );
 		?>
 	</span>
 </p>

@@ -223,6 +223,7 @@ class FrmUsage {
 			'honeypot',
 			'wp_spam_check',
 			'denylist_check',
+			'email_style',
 		);
 
 		foreach ( $pass_settings as $setting ) {

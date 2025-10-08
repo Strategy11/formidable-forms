@@ -43,9 +43,9 @@ class FrmEntriesHelper {
 			$field_array                     = FrmAppHelper::start_field_array( $field );
 			$field_array['value']            = $new_value;
 			$field_array['type']             = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
-			$field_array['parent_form_id']   = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+			$field_array['parent_form_id']   = $args['parent_form_id'] ?? $field->form_id;
 			$field_array['reset_value']      = $reset;
-			$field_array['in_embed_form']    = isset( $args['in_embed_form'] ) ? $args['in_embed_form'] : '0';
+			$field_array['in_embed_form']    = $args['in_embed_form'] ?? '0';
 			$field_array['original_default'] = $original_default;
 
 			FrmFieldsHelper::prepare_new_front_field( $field_array, $field, $args );
@@ -195,7 +195,7 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
-		$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : false;
+		$field_value = $entry->metas[ $field->id ] ?? false;
 
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$empty = empty( $field_value );
@@ -223,7 +223,7 @@ class FrmEntriesHelper {
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
 		} else {
 			// Get all values for this field.
-			$child_values = isset( $entry->metas[ $atts['embedded_field_id'] ] ) ? $entry->metas[ $atts['embedded_field_id'] ] : false;
+			$child_values = $entry->metas[ $atts['embedded_field_id'] ] ?? false;
 
 			if ( $child_values ) {
 				$child_entries = FrmEntry::getAll( array( 'it.id' => (array) $child_values ) );
@@ -308,7 +308,7 @@ class FrmEntriesHelper {
 		if ( FrmAppHelper::pro_is_installed() && $atts['post_id'] && ( $field->field_options['post_field'] || $atts['type'] === 'tag' ) ) {
 			$atts['pre_truncate'] = $atts['truncate'];
 			$atts['truncate']     = true;
-			$atts['exclude_cat']  = isset( $field->field_options['exclude_cat'] ) ? $field->field_options['exclude_cat'] : 0;
+			$atts['exclude_cat']  = $field->field_options['exclude_cat'] ?? 0;
 
 			$value            = FrmProEntryMetaHelper::get_post_value( $atts['post_id'], $field->field_options['post_field'], $field->field_options['custom_field'], $atts );
 			$atts['truncate'] = $atts['pre_truncate'];
@@ -606,7 +606,7 @@ class FrmEntriesHelper {
 
 		// finally get the correct version number
 		$known   = array( 'Version', $ub, 'other' );
-		$pattern = '#(?<browser>' . join( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
+		$pattern = '#(?<browser>' . implode( '|', $known ) . ')[/ ]+(?<version>[0-9.|a-zA-Z.]*)#';
 		// Get the matching numbers.
 		preg_match_all( $pattern, $u_agent, $matches );
 
@@ -639,7 +639,7 @@ class FrmEntriesHelper {
 	 * @since 3.0
 	 */
 	public static function actions_dropdown( $atts ) {
-		$id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {

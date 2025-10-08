@@ -2526,6 +2526,226 @@ var _createPageState = (0,core_factory__WEBPACK_IMPORTED_MODULE_0__.createPageSt
 
 /***/ }),
 
+/***/ "./js/src/core/ui/addProgressToCardBoxes.js":
+/*!**************************************************!*\
+  !*** ./js/src/core/ui/addProgressToCardBoxes.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Internal Dependencies
+ */
+var span = window.frmDom.span;
+
+/**
+ * Adds a progress bar to each card box element to visually indicate its position in the sequence.
+ *
+ * @param {Element[]} cardBoxes Collection of card box elements to enhance with progress bars.
+ * @return {void}
+ */
+function addProgressToCardBoxes(cardBoxes) {
+  if (!Array.isArray(cardBoxes) || !cardBoxes.length) {
+    console.warn('addProgressToCardBoxes: Expected a non-empty array of cardBoxes.');
+    return;
+  }
+  cardBoxes.forEach(function (element, index) {
+    // Exclude cards that either don't require a progress bar or already include one
+    if (!element.classList.contains('frm-has-progress-bar') || element.querySelector('.frm-card-box-progress-bar')) {
+      return;
+    }
+    var progressBar = span();
+    var widthPercentage = (index + 1) / cardBoxes.length * 100;
+    progressBar.style.width = "".concat(widthPercentage, "%");
+    var progressBarContainer = span({
+      className: 'frm-card-box-progress-bar',
+      child: progressBar
+    });
+    element.insertAdjacentElement('afterbegin', progressBarContainer);
+  });
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (addProgressToCardBoxes);
+
+/***/ }),
+
+/***/ "./js/src/core/ui/counter.js":
+/*!***********************************!*\
+  !*** ./js/src/core/ui/counter.js ***!
+  \***********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Updates the text content of an element with a counter value using smooth animation.
+ *
+ * @param {HTMLElement|string} element          The DOM element or selector to update
+ * @param {number|string}      value            The new counter value to set
+ * @param {Object}             options          Animation options
+ * @param {number}             options.duration Duration in milliseconds (default: 3000)
+ * @param {Function}           options.easing   Easing function (default: easeOutQuart)
+ * @throws {Error} When element is not found or invalid
+ * @return {HTMLElement} The updated element for method chaining
+ */
+var counter = function counter(element, value) {
+  var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+  var targetElement = typeof element === 'string' ? document.querySelector(element) : element;
+  if (!targetElement || !(targetElement instanceof HTMLElement)) {
+    return null;
+  }
+  var targetValue = typeof value === 'number' ? value : parseInt(value, 10);
+  if (isNaN(targetValue)) {
+    console.warn('Counter: Invalid value provided, defaulting to 0');
+    return setElementValueAndReturn(targetElement, '0');
+  }
+
+  // Don't run the animation if the sent value is 0
+  if (targetValue === 0) {
+    return setElementValueAndReturn(targetElement, '0');
+  }
+  var _options$duration = options.duration,
+    duration = _options$duration === void 0 ? 3000 : _options$duration,
+    _options$easing = options.easing,
+    easing = _options$easing === void 0 ? easeOutQuart : _options$easing;
+  var startValue = parseInt(targetElement.textContent, 10) || 0;
+  var change = targetValue - startValue;
+
+  // Skip animation if no change needed
+  if (change === 0) {
+    return targetElement;
+  }
+
+  // Cancel any existing animation
+  if (targetElement._counterAnimation) {
+    cancelAnimationFrame(targetElement._counterAnimation);
+  }
+
+  // Start animation
+  targetElement.classList.add('frm-fadein');
+  targetElement._counterAnimation = requestAnimationFrame(function (timestamp) {
+    return _animateCounter(timestamp, targetElement, startValue, targetValue, duration, change, easing);
+  });
+  return targetElement;
+};
+
+/**
+ * Helper function to set element text content and return element
+ *
+ * @param {HTMLElement}   element Target element
+ * @param {string|number} value   Value to set
+ * @return {HTMLElement} The element for method chaining
+ */
+var setElementValueAndReturn = function setElementValueAndReturn(element, value) {
+  element.textContent = String(value);
+  return element;
+};
+
+/**
+ * Standalone animation function for counter (optimized to prevent redefinition)
+ *
+ * @param {number}      timestamp   Current timestamp from requestAnimationFrame
+ * @param {HTMLElement} element     Target element to animate
+ * @param {number}      startValue  Starting counter value
+ * @param {number}      targetValue Target counter value
+ * @param {number}      duration    Animation duration in milliseconds
+ * @param {number}      change      Total change amount (targetValue - startValue)
+ * @param {Function}    easing      Easing function
+ * @return {void}
+ */
+var _animateCounter = function animateCounter(timestamp, element, startValue, targetValue, duration, change, easing) {
+  if (!element._counterStartTime) {
+    element._counterStartTime = timestamp;
+    element._counterLastTimestamp = timestamp;
+    element._counterFrameDropCount = 0;
+    element._counterLastValue = startValue;
+  }
+  var frameDelta = timestamp - element._counterLastTimestamp;
+  var elapsed = timestamp - element._counterStartTime;
+
+  // Performance monitoring: detect animation stuttering
+  // If frame gaps exceed 50ms (indicating browser lag/blocking), count as frame drop
+  if (frameDelta > 50 && element._counterLastTimestamp !== null) {
+    element._counterFrameDropCount++;
+
+    // Fallback strategy: after 3 frame drops, abandon JS animation for CSS transition
+    // This prevents choppy animations when browser is under heavy load
+    if (element._counterFrameDropCount > 3) {
+      element.style.transition = "opacity ".concat(Math.max(duration - elapsed, 100), "ms ease-out");
+      element.textContent = String(targetValue);
+      delete element._counterAnimation;
+      return;
+    }
+  }
+
+  // Calculate eased progress and current value
+  var progress = Math.min(elapsed / duration, 1);
+  var easedProgress = easing(progress);
+  var currentValue = Math.round(startValue + change * easedProgress);
+
+  // Only update DOM if value actually changed (reduce unnecessary reflows)
+  if (currentValue !== element._counterLastValue) {
+    element.textContent = String(currentValue);
+    element._counterLastValue = currentValue;
+  }
+  element._counterLastTimestamp = timestamp;
+
+  // Continue animation or finish
+  if (progress < 1) {
+    element._counterAnimation = requestAnimationFrame(function (timestamp) {
+      return _animateCounter(timestamp, element, startValue, targetValue, duration, change, easing);
+    });
+    return;
+  }
+
+  // Ensure final value is exact
+  element.textContent = String(targetValue);
+
+  // Clean up all counter-related properties
+  ['_counterAnimation', '_counterStartTime', '_counterLastTimestamp', '_counterFrameDropCount', '_counterLastValue'].forEach(function (prop) {
+    return delete element[prop];
+  });
+  element.style.removeProperty('transition');
+};
+
+/**
+ * Easing function for smooth animation
+ *
+ * @param {number} t Progress from 0 to 1
+ * @return {number} Eased value
+ */
+var easeOutQuart = function easeOutQuart(t) {
+  return 1 - Math.pow(1 - t, 4);
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (counter);
+
+/***/ }),
+
+/***/ "./js/src/core/ui/index.js":
+/*!*********************************!*\
+  !*** ./js/src/core/ui/index.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addProgressToCardBoxes: () => (/* reexport safe */ _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   counter: () => (/* reexport safe */ _counter__WEBPACK_IMPORTED_MODULE_1__["default"])
+/* harmony export */ });
+/* harmony import */ var _addProgressToCardBoxes__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./addProgressToCardBoxes */ "./js/src/core/ui/addProgressToCardBoxes.js");
+/* harmony import */ var _counter__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./counter */ "./js/src/core/ui/counter.js");
+
+
+
+/***/ }),
+
 /***/ "./js/src/core/utils/animation.js":
 /*!****************************************!*\
   !*** ./js/src/core/utils/animation.js ***!
@@ -2762,6 +2982,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isValidEmail: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_5__.isValidEmail),
 /* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.isVisible),
 /* harmony export */   onClickPreventDefault: () => (/* reexport safe */ _event__WEBPACK_IMPORTED_MODULE_3__.onClickPreventDefault),
+/* harmony export */   removeParamFromHistory: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.setQueryParam),
 /* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.show),
@@ -2796,6 +3017,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   getQueryParam: () => (/* binding */ getQueryParam),
 /* harmony export */   hasQueryParam: () => (/* binding */ hasQueryParam),
+/* harmony export */   removeParamFromHistory: () => (/* binding */ removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* binding */ removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* binding */ setQueryParam)
 /* harmony export */ });
@@ -2858,6 +3080,16 @@ var setQueryParam = function setQueryParam(paramName, paramValue) {
  */
 var hasQueryParam = function hasQueryParam(paramName) {
   return urlParams.has(paramName);
+};
+
+/**
+ * Removes a query parameter and updates history with replaceState.
+ *
+ * @param {string} paramName The query parameter to remove.
+ * @return {void}
+ */
+var removeParamFromHistory = function removeParamFromHistory(paramName) {
+  return history.replaceState({}, '', removeQueryParam(paramName));
 };
 
 /***/ }),
@@ -3136,7 +3368,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
 /* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
-var _document$getElementB;
+var _document$getElementB, _document$getElementB2;
 /**
  * External dependencies
  */
@@ -3159,7 +3391,7 @@ var modal = document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1
   pageTitle: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-page-title")),
   pageTitleText: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-page-title-text")),
   pageTitleDivider: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-page-title-divider")),
-  upsellBanner: document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-upsell-banner")),
+  upsellBanner: (_document$getElementB2 = document.getElementById('frm-renew-subscription-banner')) !== null && _document$getElementB2 !== void 0 ? _document$getElementB2 : document.getElementById('frm-upgrade-banner'),
   extraTemplateCountElements: document.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-extra-templates-count")),
   // Templates elements
   templatesList: templatesList,
@@ -3176,6 +3408,7 @@ var modal = document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1
   favoritesCategory: favoritesCategory,
   favoritesCategoryCountEl: favoritesCategory === null || favoritesCategory === void 0 ? void 0 : favoritesCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat-count")),
   availableTemplatesCategory: document.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.PREFIX, "-cat[data-category=\"").concat(_shared__WEBPACK_IMPORTED_MODULE_1__.VIEW_SLUGS.AVAILABLE_TEMPLATES, "\"]")),
+  getFreeTemplatesBannerButton: document.querySelector('.frm-get-free-templates-banner .button'),
   // Modal elements
   modal: modal,
   modalItems: modal === null || modal === void 0 ? void 0 : modal.querySelectorAll(".".concat(_shared__WEBPACK_IMPORTED_MODULE_1__.PREFIX, "-modal-item")),
@@ -3188,6 +3421,10 @@ var modal = document.getElementById("".concat(_shared__WEBPACK_IMPORTED_MODULE_1
   createTemplateButton: document.getElementById('frm-create-template-button'),
   // Renew Account Modal
   renewAccountModal: document.getElementById('frm-renew-modal'),
+  // Leave Email Modal
+  leaveEmailModal: document.getElementById('frm-leave-email-modal'),
+  leaveEmailModalInput: document.getElementById('frm_leave_email'),
+  leaveEmailModalButton: document.getElementById('frm-get-code-button'),
   // Upgrade Modal
   upgradeModal: document.getElementById('frm-form-upgrade-modal'),
   upgradeModalTemplateNames: modal === null || modal === void 0 ? void 0 : modal.querySelectorAll('.frm-upgrade-modal-template-name'),
@@ -3663,6 +3900,143 @@ function updateFavoriteTemplate(id, operation, isCustom) {
 
 /***/ }),
 
+/***/ "./js/src/form-templates/events/getFreeTemplatesListener.js":
+/*!******************************************************************!*\
+  !*** ./js/src/form-templates/events/getFreeTemplatesListener.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
+function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
+function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+/**
+ * External dependencies
+ */
+
+var tag = window.frmDom.tag;
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+/**
+ * Manages event handling for the "Get Templates" button.
+ *
+ * @return {void}
+ */
+function addGetFreeTemplatesEvents() {
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    leaveEmailModalButton = _getElements.leaveEmailModalButton,
+    getFreeTemplatesBannerButton = _getElements.getFreeTemplatesBannerButton;
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.onClickPreventDefault)(leaveEmailModalButton, onGetTemplatesButtonClick);
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.onClickPreventDefault)(getFreeTemplatesBannerButton, _ui__WEBPACK_IMPORTED_MODULE_3__.showLeaveEmailModal);
+}
+
+/**
+ * Handles the click event on the "Get Templates" button.
+ *
+ * @private
+ * @return {void}
+ */
+var onGetTemplatesButtonClick = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+    var _getElements2, leaveEmailModalInput, email, _getElements3, leaveEmailModalButton, formData, data, doJsonPost;
+    return _regeneratorRuntime().wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(), leaveEmailModalInput = _getElements2.leaveEmailModalInput;
+          email = leaveEmailModalInput.value.trim(); // Check if the email field is empty
+          if (email) {
+            _context.next = 5;
+            break;
+          }
+          (0,_ui__WEBPACK_IMPORTED_MODULE_3__.showEmailAddressError)('empty');
+          return _context.abrupt("return");
+        case 5:
+          if ((0,core_utils__WEBPACK_IMPORTED_MODULE_0__.isValidEmail)(email)) {
+            _context.next = 8;
+            break;
+          }
+          (0,_ui__WEBPACK_IMPORTED_MODULE_3__.showEmailAddressError)('invalid');
+          return _context.abrupt("return");
+        case 8:
+          // Disable the button
+          _getElements3 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(), leaveEmailModalButton = _getElements3.leaveEmailModalButton;
+          leaveEmailModalButton.style.setProperty('cursor', 'not-allowed');
+          leaveEmailModalButton.classList.add('frm_loading_button');
+          formData = new FormData();
+          formData.append('email', email);
+          doJsonPost = frmDom.ajax.doJsonPost;
+          _context.prev = 14;
+          _context.next = 17;
+          return doJsonPost('get_free_templates', formData);
+        case 17:
+          data = _context.sent;
+          _context.next = 25;
+          break;
+        case 20:
+          _context.prev = 20;
+          _context.t0 = _context["catch"](14);
+          console.error('An error occurred:', _context.t0);
+          showFailedToGetTemplates();
+          return _context.abrupt("return");
+        case 25:
+          if (data.success) {
+            _context.next = 28;
+            break;
+          }
+          showFailedToGetTemplates();
+          return _context.abrupt("return");
+        case 28:
+          if ((0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hasQueryParam)('free-templates')) {
+            (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.removeQueryParam)('free-templates');
+          }
+          (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.setQueryParam)('registered-for-free-templates', '1');
+          window.location.reload();
+        case 31:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee, null, [[14, 20]]);
+  }));
+  return function onGetTemplatesButtonClick() {
+    return _ref.apply(this, arguments);
+  };
+}();
+
+/**
+ * Shows a message indicating that templates could not be retrieved.
+ *
+ * @private
+ * @return {void}
+ */
+function showFailedToGetTemplates() {
+  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    leaveEmailModal = _getElements4.leaveEmailModal;
+  leaveEmailModal.querySelector('.inside').replaceChildren(tag('p', (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__)('Failed to get templates, please try again later.', 'formidable')));
+  leaveEmailModal.querySelector('.frm_modal_footer').classList.add('frm_hidden');
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (addGetFreeTemplatesEvents);
+
+/***/ }),
+
 /***/ "./js/src/form-templates/events/index.js":
 /*!***********************************************!*\
   !*** ./js/src/form-templates/events/index.js ***!
@@ -3672,7 +4046,7 @@ function updateFavoriteTemplate(id, operation, isCustom) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   addApplicationTemplateEvents: () => (/* reexport safe */ _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_7__.addApplicationTemplateEvents),
+/* harmony export */   addApplicationTemplateEvents: () => (/* reexport safe */ _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_8__.addApplicationTemplateEvents),
 /* harmony export */   addEventListeners: () => (/* binding */ addEventListeners)
 /* harmony export */ });
 /* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
@@ -3681,8 +4055,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _useTemplateButtonListener__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./useTemplateButtonListener */ "./js/src/form-templates/events/useTemplateButtonListener.js");
 /* harmony import */ var _searchListener__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./searchListener */ "./js/src/form-templates/events/searchListener.js");
 /* harmony import */ var _createTemplateListeners__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createTemplateListeners */ "./js/src/form-templates/events/createTemplateListeners.js");
-/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
-/* harmony import */ var _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./applicationTemplateListener */ "./js/src/form-templates/events/applicationTemplateListener.js");
+/* harmony import */ var _getFreeTemplatesListener__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./getFreeTemplatesListener */ "./js/src/form-templates/events/getFreeTemplatesListener.js");
+/* harmony import */ var _ui__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../ui */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var _applicationTemplateListener__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./applicationTemplateListener */ "./js/src/form-templates/events/applicationTemplateListener.js");
 /**
  * External dependencies
  */
@@ -3691,6 +4066,7 @@ __webpack_require__.r(__webpack_exports__);
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -3707,13 +4083,14 @@ function addEventListeners() {
   (0,core_page_skeleton__WEBPACK_IMPORTED_MODULE_0__.addCategoryEvents)();
   wp.hooks.addAction('frmPage.onCategoryClick', 'frmFormTemplates', function (selectedCategory) {
     // Display templates of the selected category
-    (0,_ui__WEBPACK_IMPORTED_MODULE_6__.showSelectedCategory)(selectedCategory);
+    (0,_ui__WEBPACK_IMPORTED_MODULE_7__.showSelectedCategory)(selectedCategory);
   });
   (0,_createFormButtonListener__WEBPACK_IMPORTED_MODULE_1__["default"])();
   (0,_favoriteButtonListener__WEBPACK_IMPORTED_MODULE_2__["default"])();
   (0,_useTemplateButtonListener__WEBPACK_IMPORTED_MODULE_3__["default"])();
   (0,_searchListener__WEBPACK_IMPORTED_MODULE_4__["default"])();
   (0,_createTemplateListeners__WEBPACK_IMPORTED_MODULE_5__["default"])();
+  (0,_getFreeTemplatesListener__WEBPACK_IMPORTED_MODULE_6__["default"])();
 }
 
 
@@ -3892,9 +4269,6 @@ var onUseTemplateButtonClick = function onUseTemplateButtonClick(event) {
   // Prevent the default link behavior for non-custom or locked templates
   event.preventDefault();
 
-  // Update app state with selected template
-  (0,_shared__WEBPACK_IMPORTED_MODULE_1__.setSingleState)('selectedTemplate', template);
-
   // Handle locked templates
   if (isLocked) {
     (0,_ui___WEBPACK_IMPORTED_MODULE_2__.showLockedTemplateModal)(template);
@@ -3970,7 +4344,8 @@ function initializeFormTemplates() {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   FEATURED_TEMPLATES_KEYS: () => (/* binding */ FEATURED_TEMPLATES_KEYS),
+/* harmony export */   FEATURED_TEMPLATES_IDS: () => (/* binding */ FEATURED_TEMPLATES_IDS),
+/* harmony export */   FREE_TEMPLATES_IDS: () => (/* binding */ FREE_TEMPLATES_IDS),
 /* harmony export */   MODAL_SIZES: () => (/* binding */ MODAL_SIZES),
 /* harmony export */   PLANS: () => (/* binding */ PLANS),
 /* harmony export */   PREFIX: () => (/* binding */ PREFIX),
@@ -3984,7 +4359,8 @@ var _window$frmGlobal = window.frmGlobal,
   applicationsUrl = _window$frmGlobal.applicationsUrl;
 
 var _window$frmFormTempla = window.frmFormTemplatesVars,
-  FEATURED_TEMPLATES_KEYS = _window$frmFormTempla.FEATURED_TEMPLATES_KEYS,
+  FEATURED_TEMPLATES_IDS = _window$frmFormTempla.FEATURED_TEMPLATES_IDS,
+  FREE_TEMPLATES_IDS = _window$frmFormTempla.FREE_TEMPLATES_IDS,
   upgradeLink = _window$frmFormTempla.upgradeLink;
 
 var PREFIX = 'frm-form-templates';
@@ -4018,7 +4394,8 @@ var MODAL_SIZES = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   FEATURED_TEMPLATES_KEYS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.FEATURED_TEMPLATES_KEYS),
+/* harmony export */   FEATURED_TEMPLATES_IDS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.FEATURED_TEMPLATES_IDS),
+/* harmony export */   FREE_TEMPLATES_IDS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.FREE_TEMPLATES_IDS),
 /* harmony export */   MODAL_SIZES: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.MODAL_SIZES),
 /* harmony export */   PLANS: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.PLANS),
 /* harmony export */   PREFIX: () => (/* reexport safe */ _constants__WEBPACK_IMPORTED_MODULE_0__.PREFIX),
@@ -4074,8 +4451,7 @@ var availableTemplatesCount = availableTemplateItems.length;
   availableTemplatesCount: availableTemplatesCount,
   customCount: Number(customCount),
   extraTemplatesCount: templatesCount - availableTemplatesCount,
-  favoritesCount: favoritesCount,
-  selectedTemplate: false
+  favoritesCount: favoritesCount
 });
 
 
@@ -4220,9 +4596,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   showCreateTemplateModal: () => (/* reexport safe */ _showModal__WEBPACK_IMPORTED_MODULE_7__.showCreateTemplateModal),
 /* harmony export */   showCustomTemplates: () => (/* reexport safe */ _showSelectedCategory__WEBPACK_IMPORTED_MODULE_4__.showCustomTemplates),
 /* harmony export */   showCustomTemplatesEmptyState: () => (/* reexport safe */ _showEmptyState__WEBPACK_IMPORTED_MODULE_6__.showCustomTemplatesEmptyState),
+/* harmony export */   showEmailAddressError: () => (/* reexport safe */ _showError__WEBPACK_IMPORTED_MODULE_8__.showEmailAddressError),
 /* harmony export */   showFavoriteTemplates: () => (/* reexport safe */ _showSelectedCategory__WEBPACK_IMPORTED_MODULE_4__.showFavoriteTemplates),
 /* harmony export */   showFavoritesEmptyState: () => (/* reexport safe */ _showEmptyState__WEBPACK_IMPORTED_MODULE_6__.showFavoritesEmptyState),
 /* harmony export */   showHeaderCancelButton: () => (/* reexport safe */ _showHeaderCancelButton__WEBPACK_IMPORTED_MODULE_3__.showHeaderCancelButton),
+/* harmony export */   showLeaveEmailModal: () => (/* reexport safe */ _showModal__WEBPACK_IMPORTED_MODULE_7__.showLeaveEmailModal),
 /* harmony export */   showLockedTemplateModal: () => (/* reexport safe */ _showModal__WEBPACK_IMPORTED_MODULE_7__.showLockedTemplateModal),
 /* harmony export */   showRenewAccountModal: () => (/* reexport safe */ _showModal__WEBPACK_IMPORTED_MODULE_7__.showRenewAccountModal),
 /* harmony export */   showSearchEmptyState: () => (/* reexport safe */ _showEmptyState__WEBPACK_IMPORTED_MODULE_6__.showSearchEmptyState),
@@ -4239,6 +4617,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _searchState__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./searchState */ "./js/src/form-templates/ui/searchState.js");
 /* harmony import */ var _showEmptyState__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./showEmptyState */ "./js/src/form-templates/ui/showEmptyState.js");
 /* harmony import */ var _showModal__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./showModal */ "./js/src/form-templates/ui/showModal.js");
+/* harmony import */ var _showError__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./showError */ "./js/src/form-templates/ui/showError.js");
+
 
 
 
@@ -4262,11 +4642,24 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   getModalWidget: () => (/* binding */ getModalWidget),
 /* harmony export */   initializeModal: () => (/* binding */ initializeModal)
 /* harmony export */ });
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */ _regeneratorRuntime = function _regeneratorRuntime() { return e; }; var t, e = {}, r = Object.prototype, n = r.hasOwnProperty, o = Object.defineProperty || function (t, e, r) { t[e] = r.value; }, i = "function" == typeof Symbol ? Symbol : {}, a = i.iterator || "@@iterator", c = i.asyncIterator || "@@asyncIterator", u = i.toStringTag || "@@toStringTag"; function define(t, e, r) { return Object.defineProperty(t, e, { value: r, enumerable: !0, configurable: !0, writable: !0 }), t[e]; } try { define({}, ""); } catch (t) { define = function define(t, e, r) { return t[e] = r; }; } function wrap(t, e, r, n) { var i = e && e.prototype instanceof Generator ? e : Generator, a = Object.create(i.prototype), c = new Context(n || []); return o(a, "_invoke", { value: makeInvokeMethod(t, r, c) }), a; } function tryCatch(t, e, r) { try { return { type: "normal", arg: t.call(e, r) }; } catch (t) { return { type: "throw", arg: t }; } } e.wrap = wrap; var h = "suspendedStart", l = "suspendedYield", f = "executing", s = "completed", y = {}; function Generator() {} function GeneratorFunction() {} function GeneratorFunctionPrototype() {} var p = {}; define(p, a, function () { return this; }); var d = Object.getPrototypeOf, v = d && d(d(values([]))); v && v !== r && n.call(v, a) && (p = v); var g = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(p); function defineIteratorMethods(t) { ["next", "throw", "return"].forEach(function (e) { define(t, e, function (t) { return this._invoke(e, t); }); }); } function AsyncIterator(t, e) { function invoke(r, o, i, a) { var c = tryCatch(t[r], t, o); if ("throw" !== c.type) { var u = c.arg, h = u.value; return h && "object" == _typeof(h) && n.call(h, "__await") ? e.resolve(h.__await).then(function (t) { invoke("next", t, i, a); }, function (t) { invoke("throw", t, i, a); }) : e.resolve(h).then(function (t) { u.value = t, i(u); }, function (t) { return invoke("throw", t, i, a); }); } a(c.arg); } var r; o(this, "_invoke", { value: function value(t, n) { function callInvokeWithMethodAndArg() { return new e(function (e, r) { invoke(t, n, e, r); }); } return r = r ? r.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg(); } }); } function makeInvokeMethod(e, r, n) { var o = h; return function (i, a) { if (o === f) throw Error("Generator is already running"); if (o === s) { if ("throw" === i) throw a; return { value: t, done: !0 }; } for (n.method = i, n.arg = a;;) { var c = n.delegate; if (c) { var u = maybeInvokeDelegate(c, n); if (u) { if (u === y) continue; return u; } } if ("next" === n.method) n.sent = n._sent = n.arg;else if ("throw" === n.method) { if (o === h) throw o = s, n.arg; n.dispatchException(n.arg); } else "return" === n.method && n.abrupt("return", n.arg); o = f; var p = tryCatch(e, r, n); if ("normal" === p.type) { if (o = n.done ? s : l, p.arg === y) continue; return { value: p.arg, done: n.done }; } "throw" === p.type && (o = s, n.method = "throw", n.arg = p.arg); } }; } function maybeInvokeDelegate(e, r) { var n = r.method, o = e.iterator[n]; if (o === t) return r.delegate = null, "throw" === n && e.iterator.return && (r.method = "return", r.arg = t, maybeInvokeDelegate(e, r), "throw" === r.method) || "return" !== n && (r.method = "throw", r.arg = new TypeError("The iterator does not provide a '" + n + "' method")), y; var i = tryCatch(o, e.iterator, r.arg); if ("throw" === i.type) return r.method = "throw", r.arg = i.arg, r.delegate = null, y; var a = i.arg; return a ? a.done ? (r[e.resultName] = a.value, r.next = e.nextLoc, "return" !== r.method && (r.method = "next", r.arg = t), r.delegate = null, y) : a : (r.method = "throw", r.arg = new TypeError("iterator result is not an object"), r.delegate = null, y); } function pushTryEntry(t) { var e = { tryLoc: t[0] }; 1 in t && (e.catchLoc = t[1]), 2 in t && (e.finallyLoc = t[2], e.afterLoc = t[3]), this.tryEntries.push(e); } function resetTryEntry(t) { var e = t.completion || {}; e.type = "normal", delete e.arg, t.completion = e; } function Context(t) { this.tryEntries = [{ tryLoc: "root" }], t.forEach(pushTryEntry, this), this.reset(!0); } function values(e) { if (e || "" === e) { var r = e[a]; if (r) return r.call(e); if ("function" == typeof e.next) return e; if (!isNaN(e.length)) { var o = -1, i = function next() { for (; ++o < e.length;) if (n.call(e, o)) return next.value = e[o], next.done = !1, next; return next.value = t, next.done = !0, next; }; return i.next = i; } } throw new TypeError(_typeof(e) + " is not iterable"); } return GeneratorFunction.prototype = GeneratorFunctionPrototype, o(g, "constructor", { value: GeneratorFunctionPrototype, configurable: !0 }), o(GeneratorFunctionPrototype, "constructor", { value: GeneratorFunction, configurable: !0 }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, u, "GeneratorFunction"), e.isGeneratorFunction = function (t) { var e = "function" == typeof t && t.constructor; return !!e && (e === GeneratorFunction || "GeneratorFunction" === (e.displayName || e.name)); }, e.mark = function (t) { return Object.setPrototypeOf ? Object.setPrototypeOf(t, GeneratorFunctionPrototype) : (t.__proto__ = GeneratorFunctionPrototype, define(t, u, "GeneratorFunction")), t.prototype = Object.create(g), t; }, e.awrap = function (t) { return { __await: t }; }, defineIteratorMethods(AsyncIterator.prototype), define(AsyncIterator.prototype, c, function () { return this; }), e.AsyncIterator = AsyncIterator, e.async = function (t, r, n, o, i) { void 0 === i && (i = Promise); var a = new AsyncIterator(wrap(t, r, n, o), i); return e.isGeneratorFunction(r) ? a : a.next().then(function (t) { return t.done ? t.value : a.next(); }); }, defineIteratorMethods(g), define(g, u, "Generator"), define(g, a, function () { return this; }), define(g, "toString", function () { return "[object Generator]"; }), e.keys = function (t) { var e = Object(t), r = []; for (var n in e) r.push(n); return r.reverse(), function next() { for (; r.length;) { var t = r.pop(); if (t in e) return next.value = t, next.done = !1, next; } return next.done = !0, next; }; }, e.values = values, Context.prototype = { constructor: Context, reset: function reset(e) { if (this.prev = 0, this.next = 0, this.sent = this._sent = t, this.done = !1, this.delegate = null, this.method = "next", this.arg = t, this.tryEntries.forEach(resetTryEntry), !e) for (var r in this) "t" === r.charAt(0) && n.call(this, r) && !isNaN(+r.slice(1)) && (this[r] = t); }, stop: function stop() { this.done = !0; var t = this.tryEntries[0].completion; if ("throw" === t.type) throw t.arg; return this.rval; }, dispatchException: function dispatchException(e) { if (this.done) throw e; var r = this; function handle(n, o) { return a.type = "throw", a.arg = e, r.next = n, o && (r.method = "next", r.arg = t), !!o; } for (var o = this.tryEntries.length - 1; o >= 0; --o) { var i = this.tryEntries[o], a = i.completion; if ("root" === i.tryLoc) return handle("end"); if (i.tryLoc <= this.prev) { var c = n.call(i, "catchLoc"), u = n.call(i, "finallyLoc"); if (c && u) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } else if (c) { if (this.prev < i.catchLoc) return handle(i.catchLoc, !0); } else { if (!u) throw Error("try statement without catch or finally"); if (this.prev < i.finallyLoc) return handle(i.finallyLoc); } } } }, abrupt: function abrupt(t, e) { for (var r = this.tryEntries.length - 1; r >= 0; --r) { var o = this.tryEntries[r]; if (o.tryLoc <= this.prev && n.call(o, "finallyLoc") && this.prev < o.finallyLoc) { var i = o; break; } } i && ("break" === t || "continue" === t) && i.tryLoc <= e && e <= i.finallyLoc && (i = null); var a = i ? i.completion : {}; return a.type = t, a.arg = e, i ? (this.method = "next", this.next = i.finallyLoc, y) : this.complete(a); }, complete: function complete(t, e) { if ("throw" === t.type) throw t.arg; return "break" === t.type || "continue" === t.type ? this.next = t.arg : "return" === t.type ? (this.rval = this.arg = t.arg, this.method = "return", this.next = "end") : "normal" === t.type && e && (this.next = e), y; }, finish: function finish(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.finallyLoc === t) return this.complete(r.completion, r.afterLoc), resetTryEntry(r), y; } }, catch: function _catch(t) { for (var e = this.tryEntries.length - 1; e >= 0; --e) { var r = this.tryEntries[e]; if (r.tryLoc === t) { var n = r.completion; if ("throw" === n.type) { var o = n.arg; resetTryEntry(r); } return o; } } throw Error("illegal catch attempt"); }, delegateYield: function delegateYield(e, r, n) { return this.delegate = { iterator: values(e), resultName: r, nextLoc: n }, "next" === this.method && (this.arg = t), y; } }, e; }
 function asyncGeneratorStep(n, t, e, r, o, a, c) { try { var i = n[a](c), u = i.value; } catch (n) { return void e(n); } i.done ? t(u) : Promise.resolve(u).then(r, o); }
 function _asyncToGenerator(n) { return function () { var t = this, e = arguments; return new Promise(function (r, o) { var a = n.apply(t, e); function _next(n) { asyncGeneratorStep(a, r, o, _next, _throw, "next", n); } function _throw(n) { asyncGeneratorStep(a, r, o, _next, _throw, "throw", n); } _next(void 0); }); }; }
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
 
 var modalWidget = null;
 
@@ -4286,25 +4679,33 @@ function initializeModal() {
  */
 function _initializeModal() {
   _initializeModal = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-    var _window$frmAdminBuild, initModal, offsetModalY;
+    var _window$frmAdminBuild, initModal, offsetModalY, _getElements, leaveEmailModal;
     return _regeneratorRuntime().wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _window$frmAdminBuild = window.frmAdminBuild, initModal = _window$frmAdminBuild.initModal, offsetModalY = _window$frmAdminBuild.offsetModalY;
-          modalWidget = initModal('#frm-form-templates-modal', _shared__WEBPACK_IMPORTED_MODULE_0__.MODAL_SIZES.GENERAL);
+          modalWidget = initModal('#frm-form-templates-modal', _shared__WEBPACK_IMPORTED_MODULE_2__.MODAL_SIZES.GENERAL);
 
           // Set the vertical offset for the modal
           if (modalWidget) {
             offsetModalY(modalWidget, '103px');
           }
 
+          // Show the email modal if the 'free-templates' query param is present
+          if ((0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hasQueryParam)('free-templates')) {
+            _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_1__.getElements)(), leaveEmailModal = _getElements.leaveEmailModal;
+            if (leaveEmailModal) {
+              (0,___WEBPACK_IMPORTED_MODULE_3__.showLeaveEmailModal)();
+            }
+          }
+
           // Customize the confirm modal appearance: adjusting its width and vertical position
           wp.hooks.addAction('frmAdmin.beforeOpenConfirmModal', 'frmFormTemplates', function (options) {
             var confirmModal = options.$info;
-            confirmModal.dialog('option', 'width', _shared__WEBPACK_IMPORTED_MODULE_0__.MODAL_SIZES.CREATE_TEMPLATE);
+            confirmModal.dialog('option', 'width', _shared__WEBPACK_IMPORTED_MODULE_2__.MODAL_SIZES.CREATE_TEMPLATE);
             offsetModalY(confirmModal, '103px');
           });
-        case 4:
+        case 5:
         case "end":
           return _context.stop();
       }
@@ -4476,13 +4877,15 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var core_constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/constants */ "./js/src/core/constants.js");
 /* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
-/* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
-/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
-/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
+/* harmony import */ var core_ui__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! core/ui */ "./js/src/core/ui/index.js");
+/* harmony import */ var core_page_skeleton__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! core/page-skeleton */ "./js/src/core/page-skeleton/index.js");
+/* harmony import */ var _elements__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../elements */ "./js/src/form-templates/elements/index.js");
+/* harmony import */ var _shared__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../shared */ "./js/src/form-templates/shared/index.js");
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./ */ "./js/src/form-templates/ui/index.js");
 /**
  * External dependencies
  */
+
 
 
 
@@ -4501,44 +4904,90 @@ __webpack_require__.r(__webpack_exports__);
  * @return {void}
  */
 function setupInitialView() {
-  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
+  var _getElements = (0,_elements__WEBPACK_IMPORTED_MODULE_4__.getElements)(),
     sidebar = _getElements.sidebar,
     searchInput = _getElements.searchInput,
     bodyContent = _getElements.bodyContent,
     twinFeaturedTemplateItems = _getElements.twinFeaturedTemplateItems,
-    availableTemplatesCategory = _getElements.availableTemplatesCategory;
+    availableTemplatesCategory = _getElements.availableTemplatesCategory,
+    extraTemplateCountElements = _getElements.extraTemplateCountElements;
   var bodyContentAnimate = new core_utils__WEBPACK_IMPORTED_MODULE_1__.frmAnimate(bodyContent);
   searchInput.value = '';
 
   // Hide the twin featured template items
   (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.hideElements)(twinFeaturedTemplateItems);
-
-  // Set the 'Available Templates' count if it is present
-  if (availableTemplatesCategory) {
-    var _getState = (0,_shared__WEBPACK_IMPORTED_MODULE_4__.getState)(),
-      availableTemplatesCount = _getState.availableTemplatesCount;
-    availableTemplatesCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_2__.PREFIX, "-cat-count")).textContent = availableTemplatesCount;
-  }
+  setupAvailableTemplatesCategory(availableTemplatesCategory);
 
   // Update extra templates count
-  var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_3__.getElements)(),
-    extraTemplateCountElements = _getElements2.extraTemplateCountElements;
-  var _getState2 = (0,_shared__WEBPACK_IMPORTED_MODULE_4__.getState)(),
-    extraTemplatesCount = _getState2.extraTemplatesCount;
   extraTemplateCountElements.forEach(function (element) {
-    return element.textContent = extraTemplatesCount;
+    return element.textContent = (0,_shared__WEBPACK_IMPORTED_MODULE_5__.getSingleState)('extraTemplatesCount');
   });
 
   // Smoothly display the updated UI elements
   bodyContent.classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS);
   sidebar.classList.remove(core_constants__WEBPACK_IMPORTED_MODULE_0__.HIDE_JS_CLASS);
   bodyContentAnimate.fadeIn();
-  (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.show)(sidebar);
 
   // Show the "Cancel" button in the header if the 'return_page' query param is present
   if ((0,core_utils__WEBPACK_IMPORTED_MODULE_1__.hasQueryParam)('return_page')) {
-    (0,___WEBPACK_IMPORTED_MODULE_5__.showHeaderCancelButton)();
+    (0,___WEBPACK_IMPORTED_MODULE_6__.showHeaderCancelButton)();
   }
+}
+
+/**
+ * Sets up the 'Available Templates' category with proper count display
+ *
+ * @param {Element} availableTemplatesCategory The Available Templates category element
+ * @return {void}
+ */
+function setupAvailableTemplatesCategory(availableTemplatesCategory) {
+  if (!availableTemplatesCategory) {
+    return;
+  }
+  var availableTemplatesCount = (0,_shared__WEBPACK_IMPORTED_MODULE_5__.getSingleState)('availableTemplatesCount');
+  if (!(0,core_utils__WEBPACK_IMPORTED_MODULE_1__.hasQueryParam)('registered-for-free-templates')) {
+    availableTemplatesCategory.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_3__.PREFIX, "-cat-count")).textContent = availableTemplatesCount;
+    return;
+  }
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.removeParamFromHistory)('registered-for-free-templates');
+  runAvailableTemplatesEffects(availableTemplatesCategory, availableTemplatesCount);
+}
+
+/**
+ * Runs effects for the Available Templates category when the
+ * 'registered-for-free-templates' query parameter is present.
+ *
+ * @param {Element} element The Available Templates category element
+ * @param {number}  count   The count of available templates
+ * @return {void}
+ */
+function runAvailableTemplatesEffects(element, count) {
+  setTimeout(function () {
+    element.dispatchEvent(new Event('click', {
+      bubbles: true
+    }));
+  }, 0);
+  setTimeout(function () {
+    (0,core_ui__WEBPACK_IMPORTED_MODULE_2__.counter)(element.querySelector(".".concat(core_page_skeleton__WEBPACK_IMPORTED_MODULE_3__.PREFIX, "-cat-count")), count);
+  }, 150);
+  setTimeout(function () {
+    var _getElements2 = (0,_elements__WEBPACK_IMPORTED_MODULE_4__.getElements)(),
+      availableTemplateItems = _getElements2.availableTemplateItems;
+    availableTemplateItems.forEach(function (item) {
+      if (_shared__WEBPACK_IMPORTED_MODULE_5__.FREE_TEMPLATES_IDS.includes(Number(item.dataset.id))) {
+        return;
+      }
+      item.classList.add('frm-background-highlight');
+
+      // Remove class after animation completes to prevent restart
+      item.addEventListener('animationend', function handleAnimationEnd(event) {
+        if (event.animationName === 'backgroundHighlight') {
+          this.classList.remove('frm-background-highlight');
+          this.removeEventListener('animationend', handleAnimationEnd);
+        }
+      });
+    });
+  }, 750);
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (setupInitialView);
 
@@ -4706,6 +5155,35 @@ function showAvailableTemplatesEmptyState() {
 
 /***/ }),
 
+/***/ "./js/src/form-templates/ui/showError.js":
+/*!***********************************************!*\
+  !*** ./js/src/form-templates/ui/showError.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   showEmailAddressError: () => (/* binding */ showEmailAddressError)
+/* harmony export */ });
+/* harmony import */ var core_utils__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! core/utils */ "./js/src/core/utils/index.js");
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Displays errors related to the email address field.
+ *
+ * @param {string} type The categorization of the error (e.g., "invalid", "empty").
+ * @return {void}
+ */
+var showEmailAddressError = function showEmailAddressError(type) {
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showFormError)('#frm_leave_email', '#frm_leave_email_error', type);
+};
+
+/***/ }),
+
 /***/ "./js/src/form-templates/ui/showHeaderCancelButton.js":
 /*!************************************************************!*\
   !*** ./js/src/form-templates/ui/showHeaderCancelButton.js ***!
@@ -4752,6 +5230,7 @@ function showHeaderCancelButton() {
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   showCreateTemplateModal: () => (/* binding */ showCreateTemplateModal),
+/* harmony export */   showLeaveEmailModal: () => (/* binding */ showLeaveEmailModal),
 /* harmony export */   showLockedTemplateModal: () => (/* binding */ showLockedTemplateModal),
 /* harmony export */   showRenewAccountModal: () => (/* binding */ showRenewAccountModal),
 /* harmony export */   showUpgradeModal: () => (/* binding */ showUpgradeModal)
@@ -4799,6 +5278,9 @@ function showLockedTemplateModal(template) {
       break;
     case _shared__WEBPACK_IMPORTED_MODULE_3__.PLANS.RENEW:
       showRenewAccountModal();
+      break;
+    case _shared__WEBPACK_IMPORTED_MODULE_3__.PLANS.FREE:
+      showLeaveEmailModal();
       break;
   }
 }
@@ -4905,6 +5387,17 @@ var showRenewAccountModal = showModal(function () {
 });
 
 /**
+ * Display the modal dialog to prompt the user to leave an email.
+ *
+ * @return {void}
+ */
+var showLeaveEmailModal = showModal(function () {
+  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    leaveEmailModal = _getElements4.leaveEmailModal;
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.show)(leaveEmailModal);
+});
+
+/**
  * Displays a modal dialog prompting the user to create a new template.
  *
  * @return {void}
@@ -4912,8 +5405,8 @@ var showRenewAccountModal = showModal(function () {
 var showCreateTemplateModal = showModal(function () {
   var dialogWidget = (0,___WEBPACK_IMPORTED_MODULE_4__.getModalWidget)();
   dialogWidget.dialog('option', 'width', _shared__WEBPACK_IMPORTED_MODULE_3__.MODAL_SIZES.CREATE_TEMPLATE);
-  var _getElements4 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
-    createTemplateModal = _getElements4.createTemplateModal;
+  var _getElements5 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
+    createTemplateModal = _getElements5.createTemplateModal;
   (0,core_utils__WEBPACK_IMPORTED_MODULE_1__.show)(createTemplateModal);
 });
 
@@ -4975,7 +5468,8 @@ function showSelectedCategory(selectedCategory) {
     pageTitle = _getElements.pageTitle,
     showCreateTemplateModalButton = _getElements.showCreateTemplateModalButton,
     templatesList = _getElements.templatesList,
-    templateItems = _getElements.templateItems;
+    templateItems = _getElements.templateItems,
+    upsellBanner = _getElements.upsellBanner;
   if (core_page_skeleton__WEBPACK_IMPORTED_MODULE_1__.VIEWS.ALL_ITEMS !== selectedCategory) {
     (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(bodyContentChildren);
   }
@@ -4997,7 +5491,7 @@ function showSelectedCategory(selectedCategory) {
       break;
     default:
       (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(templateItems); // Clear the view for new content
-      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)([templatesList].concat(_toConsumableArray(_templates__WEBPACK_IMPORTED_MODULE_5__.categorizedTemplates[selectedCategory])));
+      (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)([upsellBanner, templatesList].concat(_toConsumableArray(_templates__WEBPACK_IMPORTED_MODULE_5__.categorizedTemplates[selectedCategory])));
       break;
   }
 }
@@ -5111,9 +5605,10 @@ function showAvailableTemplates() {
   var _getElements5 = (0,_elements__WEBPACK_IMPORTED_MODULE_2__.getElements)(),
     templatesList = _getElements5.templatesList,
     templateItems = _getElements5.templateItems,
-    availableTemplateItems = _getElements5.availableTemplateItems;
+    availableTemplateItems = _getElements5.availableTemplateItems,
+    upsellBanner = _getElements5.upsellBanner;
   (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.hideElements)(templateItems); // Clear the view for new content
-  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)([templatesList].concat(_toConsumableArray(availableTemplateItems)));
+  (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.showElements)([upsellBanner, templatesList].concat(_toConsumableArray(availableTemplateItems)));
 }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (showSelectedCategory);
 
@@ -5229,7 +5724,7 @@ var isCustomTemplate = function isCustomTemplate(template) {
  * @return {boolean} True if the template is featured, otherwise false.
  */
 var isFeaturedTemplate = function isFeaturedTemplate(template) {
-  return (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(template) ? _shared__WEBPACK_IMPORTED_MODULE_2__.FEATURED_TEMPLATES_KEYS.includes(Number(template.dataset.id)) : false;
+  return (0,core_utils__WEBPACK_IMPORTED_MODULE_0__.isHTMLElement)(template) ? _shared__WEBPACK_IMPORTED_MODULE_2__.FEATURED_TEMPLATES_IDS.includes(Number(template.dataset.id)) : false;
 };
 
 /**

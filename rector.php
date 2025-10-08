@@ -1,8 +1,6 @@
 <?php
 
 use Rector\Config\RectorConfig;
-use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
-use Rector\Instanceof_\Rector\Ternary\FlipNegatedTernaryInstanceofRector;
 use Rector\CodeQuality\Rector\Ternary\SwitchNegatedTernaryRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 use Rector\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector;
@@ -43,6 +41,8 @@ use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
+use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
+use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 
 define( 'ABSPATH', '' );
 
@@ -60,9 +60,28 @@ return RectorConfig::configure()
 		// codeQuality
 		true
 	)
+	->withPhpSets(
+		// PHP 8.3
+		false,
+		// PHP 8.2
+		false,
+		// PHP 8.1
+		false,
+		// PHP 8.0
+		false,
+		// PHP 7.4
+		false,
+		// PHP 7.3
+		false,
+		// PHP 7.2
+		false,
+		// PHP 7.1
+		false,
+		// PHP 7.0
+		true
+	)
 	->withSkip(
 		array(
-			FlipNegatedTernaryInstanceofRector::class,
 			SwitchNegatedTernaryRector::class,
 			CompactToVariablesRector::class,
 			IssetOnPropertyObjectToPropertyExistsRector::class,
@@ -82,13 +101,12 @@ return RectorConfig::configure()
 			JoinStringConcatRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
 			RemoveUselessParamTagRector::class,
-			RemoveDeadStmtRector::class,
 			RemoveDeadReturnRector::class,
 			RemoveAlwaysTrueIfConditionRector::class,
 			RemoveUnreachableStatementRector::class,
 			SimplifyEmptyArrayCheckRector::class,
-			CompleteDynamicPropertiesRector::class,
-			TypedPropertyFromStrictConstructorRector::class,
+			LongArrayToShortArrayRector::class,
+			TernaryToElvisRector::class,
 			// TODO: Try this for some files and not others.
 			RemoveUnusedPrivateMethodRector::class,
 			ShortenElseIfRector::class,
@@ -98,13 +116,12 @@ return RectorConfig::configure()
 			RemoveUnusedForeachKeyRector::class,
 			SingularSwitchToIfRector::class,
 			RemoveUnusedPrivateMethodParameterRector::class,
-			RenameFunctionRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedVariableAssignRector::class,
+			RemoveUnusedConstructorParamRector::class,
 			RemoveNonExistingVarAnnotationRector::class,
 			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
-			RemoveUnusedConstructorParamRector::class,
 			UnnecessaryTernaryExpressionRector::class,
 		)
 	);

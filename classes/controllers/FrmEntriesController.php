@@ -100,7 +100,7 @@ class FrmEntriesController {
 			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
 		} else {
-			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
+			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 		}
 	}
 
@@ -517,7 +517,7 @@ class FrmEntriesController {
 	private static function get_delete_form_time( $form, &$errors ) {
 		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( $form->options['trash_time'] ?? time() ) );
 
 			/* translators: %1$s: Time string */
 			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
@@ -735,6 +735,7 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
+			'table_style'     => '',
 			// Return embedded fields as nested array.
 			'child_array'     => false,
 			'line_breaks'     => true,

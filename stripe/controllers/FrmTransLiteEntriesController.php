@@ -18,7 +18,7 @@ class FrmTransLiteEntriesController {
 
 		// This line removes PayPal actions from the entries sidebar.
 		remove_action( 'frm_show_entry_sidebar', 'FrmPaymentsController::sidebar_list' );
-		add_action( 'frm_entry_shared_sidebar_middle', __CLASS__ . '::show_sidebar_list' );
+		add_action( 'frm_entry_shared_sidebar_middle', self::class . '::show_sidebar_list' );
 	}
 
 	/**

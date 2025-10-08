@@ -184,7 +184,7 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
+			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
 
@@ -698,7 +698,7 @@ class FrmFieldsController {
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$placeholder = $field['placeholder'] ?? '';
 
 		return $placeholder;
 	}
@@ -1022,9 +1022,9 @@ class FrmFieldsController {
 	public static function check_value( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
-				$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 			} else {
-				$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+				$opt = $opt['label'] ?? reset( $opt );
 			}
 		}
 
@@ -1033,7 +1033,7 @@ class FrmFieldsController {
 
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
-			$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+			$opt = $opt['label'] ?? reset( $opt );
 		}
 
 		return $opt;

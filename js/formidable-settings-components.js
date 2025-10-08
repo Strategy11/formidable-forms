@@ -85,6 +85,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
   /**
    * Creates an instance of frmStyleDependentUpdaterComponent.
+   *
    * @param {HTMLElement} component - The component element.
    */
   function frmStyleDependentUpdaterComponent(component) {
@@ -106,6 +107,7 @@ var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
   /**
    * Initializes the list of inputs to propagate changes to.
    * The selection is made by provided input's names list in "will-change" attribute.
+   *
    * @param {string[]} inputNames - The names of the inputs to propagate changes to.
    * @return {HTMLElement[]} - The list of inputs to propagate changes to.
    */
@@ -124,6 +126,7 @@ var frmStyleDependentUpdaterComponent = /*#__PURE__*/function () {
 
     /**
      * Updates all dependent elements with the given value.
+     *
      * @param {string} value - The value to update the dependent elements with.
      */
   }, {
@@ -172,6 +175,7 @@ var frmTabsNavigator = /*#__PURE__*/function () {
     this.slideTrack = this.wrapper.querySelector('.frm-tabs-slide-track');
     this.slides = this.wrapper.querySelectorAll('.frm-tabs-slide-track > div');
     this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+    this.resizeObserver = null;
     this.init();
   }
   return _createClass(frmTabsNavigator, [{
@@ -187,6 +191,9 @@ var frmTabsNavigator = /*#__PURE__*/function () {
           return _this.onNavClick(event, index);
         });
       });
+      this.setupScrollbarObserver();
+      // Cleanup observers when page unloads to prevent memory leaks
+      window.addEventListener('beforeunload', this.cleanupObservers);
     }
   }, {
     key: "onNavClick",
@@ -220,9 +227,56 @@ var frmTabsNavigator = /*#__PURE__*/function () {
       var activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter(function (nav) {
         return nav.classList.contains('frm-active');
       });
-      var position = this.isRTL ? -(activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth) : activeNav.offsetLeft;
-      this.slideTrackLine.style.transform = "translateX(".concat(position, "px)");
-      this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+      this.positionUnderlineIndicator(activeNav);
+    }
+
+    /**
+     * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
+     * Automatically repositions the underline indicator when layout changes occur.
+     */
+  }, {
+    key: "setupScrollbarObserver",
+    value: function setupScrollbarObserver() {
+      var _this2 = this;
+      var scrollbarWrapper = this.wrapper.closest('.frm-scrollbar-wrapper');
+      if (!scrollbarWrapper || !('ResizeObserver' in window)) {
+        return;
+      }
+      this.resizeObserver = new ResizeObserver(function () {
+        var activeNav = _this2.wrapper.querySelector('.frm-tabs-navs ul > li.frm-active');
+        if (activeNav) {
+          _this2.positionUnderlineIndicator(activeNav);
+        }
+      });
+      this.resizeObserver.observe(scrollbarWrapper);
+    }
+
+    /**
+     * Cleans up observers to prevent memory leaks.
+     */
+  }, {
+    key: "cleanupObservers",
+    value: function cleanupObservers() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+        this.resizeObserver = null;
+      }
+    }
+
+    /**
+     * Positions the underline indicator based on the active navigation element.
+     *
+     * @param {HTMLElement} activeNav The active navigation element to position the underline under
+     */
+  }, {
+    key: "positionUnderlineIndicator",
+    value: function positionUnderlineIndicator(activeNav) {
+      var _this3 = this;
+      requestAnimationFrame(function () {
+        var position = _this3.isRTL ? -(activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth) : activeNav.offsetLeft;
+        _this3.slideTrackLine.style.transform = "translateX(".concat(position, "px)");
+        _this3.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+      });
     }
   }, {
     key: "changeSlide",
@@ -522,6 +576,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   isValidEmail: () => (/* reexport safe */ _validation__WEBPACK_IMPORTED_MODULE_5__.isValidEmail),
 /* harmony export */   isVisible: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.isVisible),
 /* harmony export */   onClickPreventDefault: () => (/* reexport safe */ _event__WEBPACK_IMPORTED_MODULE_3__.onClickPreventDefault),
+/* harmony export */   removeParamFromHistory: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* reexport safe */ _url__WEBPACK_IMPORTED_MODULE_4__.setQueryParam),
 /* harmony export */   show: () => (/* reexport safe */ _visibility__WEBPACK_IMPORTED_MODULE_6__.show),
@@ -555,6 +610,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   getQueryParam: () => (/* binding */ getQueryParam),
 /* harmony export */   hasQueryParam: () => (/* binding */ hasQueryParam),
+/* harmony export */   removeParamFromHistory: () => (/* binding */ removeParamFromHistory),
 /* harmony export */   removeQueryParam: () => (/* binding */ removeQueryParam),
 /* harmony export */   setQueryParam: () => (/* binding */ setQueryParam)
 /* harmony export */ });
@@ -617,6 +673,16 @@ var setQueryParam = function setQueryParam(paramName, paramValue) {
  */
 var hasQueryParam = function hasQueryParam(paramName) {
   return urlParams.has(paramName);
+};
+
+/**
+ * Removes a query parameter and updates history with replaceState.
+ *
+ * @param {string} paramName The query parameter to remove.
+ * @return {void}
+ */
+var removeParamFromHistory = function removeParamFromHistory(paramName) {
+  return history.replaceState({}, '', removeQueryParam(paramName));
 };
 
 /***/ }),
@@ -800,6 +866,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /**
  * Represents a radio component.
+ *
  * @class
  */
 var frmRadioComponent = /*#__PURE__*/function () {
@@ -820,8 +887,20 @@ var frmRadioComponent = /*#__PURE__*/function () {
      */
     document.addEventListener('frm_added_field', function (_ref) {
       var frmField = _ref.frmField;
-      _this.radioElements = document.getElementById("frm-single-settings-".concat(frmField.dataset.fid)).querySelectorAll('.frm-style-component.frm-radio-component');
-      _this.initRadio();
+      return _this.discoverAndInitFieldRadios(frmField.dataset.fid);
+    });
+
+    /**
+     * Handles the addition of new fields via AJAX.
+     *
+     * @param {Event}       event           The frm_ajax_loaded_field event.
+     * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
+     */
+    document.addEventListener('frm_ajax_loaded_field', function (_ref2) {
+      var frmFields = _ref2.frmFields;
+      return frmFields.forEach(function (field) {
+        return _this.discoverAndInitFieldRadios(field.id);
+      });
     });
 
     // Cleanup observers when page unloads to prevent memory leaks
@@ -838,6 +917,23 @@ var frmRadioComponent = /*#__PURE__*/function () {
     value: function init() {
       this.initRadio();
       this.initTrackerOnAccordionClick();
+    }
+
+    /**
+     * Discovers and initializes radio components for a specific field.
+     *
+     * @param {string|number} fieldId The unique identifier of the field whose radio components should be discovered and initialized
+     * @throws {Error} Throws an error if the field container is not found in the DOM
+     */
+  }, {
+    key: "discoverAndInitFieldRadios",
+    value: function discoverAndInitFieldRadios(fieldId) {
+      var fieldContainer = document.getElementById("frm-single-settings-".concat(fieldId));
+      if (!fieldContainer) {
+        throw new Error("Field container not found for field ID: ".concat(fieldId));
+      }
+      this.radioElements = fieldContainer.querySelectorAll('.frm-style-component.frm-radio-component');
+      this.initRadio();
     }
 
     /**
@@ -872,6 +968,7 @@ var frmRadioComponent = /*#__PURE__*/function () {
 
     /**
      * Initializes the onRadioChange event for the given wrapper.
+     *
      * @param {HTMLElement} radioElement - The radio element.
      */
   }, {
@@ -890,6 +987,7 @@ var frmRadioComponent = /*#__PURE__*/function () {
 
     /**
      * Handles the onRadioChange event for the given wrapper.
+     *
      * @param {HTMLElement} target - The active radio button.
      */
   }, {
@@ -907,6 +1005,7 @@ var frmRadioComponent = /*#__PURE__*/function () {
 
     /**
      * Display additional elements related to the selected radio option.
+     *
      * @param {HTMLElement} radio - The radio button element.
      */
   }, {
@@ -998,6 +1097,7 @@ var frmRadioComponent = /*#__PURE__*/function () {
 
     /**
      * Moves the tracker to the active item.
+     *
      * @param {HTMLElement} activeItem - The active item element.
      * @param {HTMLElement} wrapper    - The wrapper element.
      */
@@ -1043,6 +1143,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /**
  * Represents a slider component.
+ *
  * @class frmSliderComponent
  */
 var frmSliderComponent = /*#__PURE__*/function () {
@@ -1610,6 +1711,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 
 /**
  * Represents a Tabs Component.
+ *
  * @class
  */
 var frmTabsComponent = /*#__PURE__*/function () {
@@ -1634,6 +1736,7 @@ var frmTabsComponent = /*#__PURE__*/function () {
 
     /**
      * Initializes the component on tab click.
+     *
      * @param {Element} wrapper - The wrapper element.
      */
   }, {
@@ -1799,6 +1902,9 @@ function applyToggleState(toggleButton, toggleGroup) {
       element.classList.toggle(core_constants__WEBPACK_IMPORTED_MODULE_1__.DISABLED_CLASS, isChecked);
       element.querySelectorAll('input, select, textarea').forEach(function (formElement) {
         return formElement.disabled = isChecked;
+      });
+      element.querySelectorAll('.frm-show-inline-modal[tabindex]').forEach(function (inlineModal) {
+        return inlineModal.tabIndex = isChecked ? -1 : 0;
       });
     });
   }
@@ -2398,10 +2504,31 @@ __webpack_require__.r(__webpack_exports__);
  * @return {void}
  */
 function initTokenInputFields() {
-  // Initialize for existing fields
   findAndInitializeTokenFields();
-  // Initialize for newly added fields
-  document.addEventListener('frm_added_field', findAndInitializeTokenFields);
+
+  /**
+   * Initialize for newly added fields
+   *
+   * @param {Event}       event          The frm_added_field event.
+   * @param {HTMLElement} event.frmField The added field object being destructured from the event.
+   */
+  document.addEventListener('frm_added_field', function (_ref) {
+    var frmField = _ref.frmField;
+    return findAndInitializeTokenFields(frmField.dataset.fid);
+  });
+
+  /**
+   * Initialize for newly added fields via AJAX
+   *
+   * @param {Event}       event           The frm_ajax_loaded_field event.
+   * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
+   */
+  document.addEventListener('frm_ajax_loaded_field', function (_ref2) {
+    var frmFields = _ref2.frmFields;
+    return frmFields.forEach(function (field) {
+      return findAndInitializeTokenFields(field.id);
+    });
+  });
 
   // Adjust styling for all token inputs when field settings are shown
   wp.hooks.addAction(core_constants__WEBPACK_IMPORTED_MODULE_0__.HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', _proxy_input_style__WEBPACK_IMPORTED_MODULE_4__.adjustAllProxyInputStyles);
@@ -2411,11 +2538,12 @@ function initTokenInputFields() {
  * Find all token input fields and initialize them
  *
  * @private
- *
+ * @param {string|number} fieldId The ID of the field to initialize
  * @return {void}
  */
-function findAndInitializeTokenFields() {
-  var tokenInputFields = document.querySelectorAll(".".concat(_constants__WEBPACK_IMPORTED_MODULE_1__.CLASS_NAMES.TOKEN_INPUT_FIELD));
+function findAndInitializeTokenFields(fieldId) {
+  var container = fieldId ? document.getElementById("frm-single-settings-".concat(fieldId)) : document.body;
+  var tokenInputFields = container.querySelectorAll(".".concat(_constants__WEBPACK_IMPORTED_MODULE_1__.CLASS_NAMES.TOKEN_INPUT_FIELD));
   if (!tokenInputFields.length) {
     return;
   }

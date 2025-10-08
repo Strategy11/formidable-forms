@@ -120,6 +120,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 				/**
 				 * Triggers the after license is authorized action for a confirmation/success modal.
+				 *
 				 * @param {Object} msg An object containing message data received from Authorize request.
 				 */
 				wp.hooks.doAction( 'frmAdmin.afterLicenseAuthorizeSuccess', { msg } );
@@ -2831,6 +2832,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
+	 *
 	 * @param  formula
 	 * @return {string}
 	 */
@@ -2871,6 +2873,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+	 *
 	 * @param  calculation
 	 * @param  inputElement
 	 * @return {string}
@@ -2884,6 +2887,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
+	 *
 	 * @param  calculation
 	 *
 	 * @param  inputElement
@@ -2916,6 +2920,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+	 *
 	 * @return {RegExp}
 	 */
 	function getNonNumericShortcodes() {
@@ -2924,6 +2929,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+	 *
 	 * @param  formula
 	 * @return {string}
 	 */
@@ -6063,6 +6069,7 @@ window.frmAdminBuildJS = function() {
 		this.getSingle = function() {
 			/**
 			 * Get single option template.
+			 *
 			 * @param {Object} option  Object containing the option data.
 			 * @param {string} type    The field type.
 			 * @param {string} fieldId The field id.
@@ -6649,7 +6656,7 @@ window.frmAdminBuildJS = function() {
 		replaceWith += ' ';
 
 		// Allow for the column number dropdown.
-		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' );
+		replaceWith = replaceWith.replace( ' block ', ' vertical_radio ' ).replace( ' inline ', ' horizontal_radio ' );
 
 		classes = field.className.split( ' frmstart ' )[ 1 ];
 		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[ 0 ];
@@ -6671,10 +6678,10 @@ window.frmAdminBuildJS = function() {
 	function maybeShowInlineModal( e ) {
 		/*jshint validthis:true */
 		e.preventDefault();
-		showInlineModal( this );
+		showInlineModal( this, undefined, e );
 	}
 
-	function showInlineModal( icon, input ) {
+	function showInlineModal( icon, input, event ) {
 		const box = document.getElementById( icon.getAttribute( 'data-open' ) ),
 			container = jQuery( icon ).closest( 'p,ul' ),
 			inputTrigger = ( typeof input !== 'undefined' );
@@ -6688,7 +6695,10 @@ window.frmAdminBuildJS = function() {
 			}
 			if ( input !== null ) {
 				if ( ! inputTrigger ) {
-					input.focus();
+					const { key } = event;
+					if ( key !== 'Enter' && key !== ' ' ) {
+						input.focus();
+					}
 				}
 				container.after( box );
 				box.setAttribute( 'data-fills', input.id.replace( '-proxy-input', '' ) );
@@ -8447,12 +8457,6 @@ window.frmAdminBuildJS = function() {
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
-	function showBuilderModal() {
-		/*jshint validthis:true */
-		const moreIcon = getIconForInput( this );
-		showInlineModal( moreIcon, this );
-	}
-
 	function maybeShowModal( input ) {
 		let moreIcon;
 		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
@@ -8812,6 +8816,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {Element} The associated input or textarea
 	 */
 	function getInputForIcon( moreIcon ) {
+		if ( moreIcon.classList.contains( 'frm-input-icon' ) ) {
+			return moreIcon.previousElementSibling;
+		}
+
 		// For regular fields
 		let input = moreIcon.nextElementSibling;
 		while ( input !== null && (
@@ -8832,6 +8840,10 @@ window.frmAdminBuildJS = function() {
 	 * Get the ... icon for the selected input box.
 	 */
 	function getIconForInput( input ) {
+		if ( input.nextElementSibling?.classList.contains( 'frm-input-icon' ) ) {
+			return input.nextElementSibling;
+		}
+
 		let moreIcon = input.previousElementSibling;
 
 		while ( moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg' ) {
@@ -10820,7 +10832,6 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'change', '.frm_single_option input', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_image_id', resetOptOnChange );
 			$builderForm.on( 'change', '.frm_toggle_mult_sel', toggleMultSel );
-			$builderForm.on( 'focusin', '.frm_classes + .frm-token-proxy-input', showBuilderModal );
 
 			$newFields.on( 'click', '.frm_primary_label', clickLabel );
 			$newFields.on( 'click', '.frm_description', clickDescription );
@@ -10832,6 +10843,13 @@ window.frmAdminBuildJS = function() {
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
 			$builderForm.on( 'click', '.frm-show-inline-modal', maybeShowInlineModal );
+			$builderForm.on( 'keydown', '.frm-show-inline-modal', function( event ) {
+				const { key } = event;
+				if ( key === 'Enter' || key === ' ' ) {
+					event.preventDefault();
+					maybeShowInlineModal.call( this, event );
+				}
+			} );
 
 			$builderForm.on( 'click', '.frm-inline-modal .dismiss', dismissInlineModal );
 			jQuery( document ).on( 'change', '[data-frmchange]', changeInputtedValue );
@@ -11414,6 +11432,7 @@ window.frmAdminBuildJS = function() {
 		handleInsertFieldByDraggingResponse,
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
+		moveFieldSettings,
 	};
 };
 
