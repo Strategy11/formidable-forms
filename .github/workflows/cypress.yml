@@ -1,13 +1,12 @@
+name: E2E Test
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
-    types: [ opened, labeled, synchronize ]
+    types: [opened, labeled, synchronize]
 
-name: E2E Test
 jobs:
   cypress:
     if: contains(github.event.pull_request.labels.*.name, 'run tests')
@@ -15,18 +14,40 @@ jobs:
 
     name: Cypress
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v5
 
-      - name: Composer install
-        run: composer install
-
-      - name: Install Node
-        uses: actions/setup-node@v4
+      - name: Set up PHP
+        uses: shivammathur/setup-php@2.35.5
         with:
-          node-version: 20
+          php-version: '7.4'
+          extensions: mbstring, curl, zip, openssl, json, pdo
+          tools: composer
 
-      - name: Install dependencies
+      - name: Install Composer dependencies
+        uses: ramsey/composer-install@3.1.1
+        with:
+          dependency-versions: "locked"
+          composer-options: "--optimize-autoloader --no-dev"
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: "20.10.0"
+
+      - name: Cache Node dependencies
+        id: cache-npm
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+
+      - name: Install Node dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --legacy-peer-deps --include=dev
 
       - name: Set up WP environment
