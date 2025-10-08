@@ -14,62 +14,34 @@ jobs:
 
     name: Cypress
     steps:
-      - name: Checkout code
+      - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@2.35.5
-        with:
-          php-version: "7.4"
-          extensions: mbstring, curl, zip, openssl, json, pdo
-          tools: composer
-
-      - name: Cache Composer dependencies
-        id: cache-composer
-        uses: actions/cache@v4
-        with:
-          path: vendor
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
-
-      - name: Install Composer dependencies
-        if: steps.cache-composer.outputs.cache-hit != 'true'
-        run: composer install --optimize-autoloader --no-dev
+      - name: Composer install
+        run: composer install
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
         with:
           node-version: "20.10.0"
 
-      - name: Cache Node dependencies
-        id: cache-node
-        uses: actions/cache@v4
-        with:
-          path: node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-
-      - name: Install Node dependencies
-        if: steps.cache-node.outputs.cache-hit != 'true'
-        run: npm ci --legacy-peer-deps --include=dev
-
-      - name: Cache WordPress environment
-        id: cache-wp-env
+      - name: Cache dependencies
+        id: cache-npm
         uses: actions/cache@v4
         with:
           path: |
-            ~/.wp-env
-            .wp-env
-          key: ${{ runner.os }}-wp-env-${{ hashFiles('.wp-env.json', 'package-lock.json') }}
+            ~/.npm
+            node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-wp-env-
+            ${{ runner.os }}-node-modules-
 
-      - name: Set up WordPress environment
-        run: |
-          npm run build
-          npx wp-env start
+      - name: Install dependencies
+        if: steps.cache-npm.outputs.cache-hit != 'true'
+        run: npm ci --include=dev
 
-      - name: Run Cypress tests
+      - name: Set up WP environment
+        run: npm run env start
+
+      - name: Test
         run: npm run e2e:githubrun
-        env:
-          CYPRESS_baseUrl: http://localhost:8888
