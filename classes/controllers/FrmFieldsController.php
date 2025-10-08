@@ -401,6 +401,24 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param bool   $choice_limit_is_reached
+	 * @param array  $shortcode_atts
+	 * @param string $opt_key
+	 * @param array  $form_options
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_options ) {
+		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+			return true;
+		}
+
+		return $choice_limit_is_reached && empty( $form_options['disable_on_choice_limit'] );
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0
