@@ -20,15 +20,22 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@2.35.5
         with:
-          php-version: '7.4'
+          php-version: "7.4"
           extensions: mbstring, curl, zip, openssl, json, pdo
           tools: composer
 
-      - name: Install Composer dependencies
-        uses: ramsey/composer-install@3.1.1
+      - name: Cache Composer dependencies
+        id: cache-composer
+        uses: actions/cache@v4
         with:
-          dependency-versions: "locked"
-          composer-options: "--optimize-autoloader --no-dev"
+          path: vendor
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install Composer dependencies
+        if: steps.cache-composer.outputs.cache-hit != 'true'
+        run: composer install --optimize-autoloader --no-dev
 
       - name: Set up Node.js
         uses: actions/setup-node@v5
@@ -36,22 +43,33 @@ jobs:
           node-version: "20.10.0"
 
       - name: Cache Node dependencies
-        id: cache-npm
+        id: cache-node
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+
+      - name: Install Node dependencies
+        if: steps.cache-node.outputs.cache-hit != 'true'
+        run: npm ci --legacy-peer-deps --include=dev
+
+      - name: Cache WordPress environment
+        id: cache-wp-env
         uses: actions/cache@v4
         with:
           path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+            ~/.wp-env
+            .wp-env
+          key: ${{ runner.os }}-wp-env-${{ hashFiles('.wp-env.json', 'package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
+            ${{ runner.os }}-wp-env-
 
-      - name: Install Node dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --legacy-peer-deps --include=dev
+      - name: Set up WordPress environment
+        run: |
+          npm run build
+          npx wp-env start
 
-      - name: Set up WP environment
-        run: npm run env start
-
-      - name: Test
+      - name: Run Cypress tests
         run: npm run e2e:githubrun
+        env:
+          CYPRESS_baseUrl: http://localhost:8888
