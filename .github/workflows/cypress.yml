@@ -41,8 +41,24 @@ jobs:
         if: steps.cache-npm.outputs.cache-hit != 'true'
         run: npm ci --include=dev
 
-      - name: Set up WP environment
-        run: npm run env start
+      - name: Cache Docker layers
+        uses: actions/cache@v4
+        with:
+          path: /tmp/.buildx-cache
+          key: ${{ runner.os }}-buildx-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-buildx-
+
+      - name: Set up WP environment (optimized)
+        run: |
+          # Pre-pull WordPress images to speed up wp-env
+          docker pull wordpress:latest &
+          docker pull mariadb:latest &
+          docker pull mailhog/mailhog:latest &
+          wait
+          
+          # Start wp-env with faster options
+          npm run env start
 
       - name: Test
         run: npm run e2e:githubrun
