@@ -415,7 +415,7 @@ class FrmFieldsController {
 			return true;
 		}
 
-		return $choice_limit_is_reached && empty( $form_options['disable_on_choice_limit'] );
+		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_options, $opt_key );
 	}
 
 	/**

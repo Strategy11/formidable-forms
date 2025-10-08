@@ -55,7 +55,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
 
 		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
-		if ( FrmProFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
+		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
 		if ( $other_opt === false ) {

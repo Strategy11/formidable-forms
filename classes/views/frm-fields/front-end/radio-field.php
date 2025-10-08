@@ -19,7 +19,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	FrmAppHelper::unserialize_or_decode( $form_options );
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
-		if ( FrmProFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
+		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
