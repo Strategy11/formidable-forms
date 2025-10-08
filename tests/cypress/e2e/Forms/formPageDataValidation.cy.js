@@ -30,6 +30,7 @@ describe( 'Forms page', () => {
 								'more than just a wordpress form builder',
 								'get more done in less time with better wordpress forms',
 								'power your wordpress site like never before',
+								'upgrading for 60% off during our No Brainer Sale!',
 							] ).to.include( headingText );
 						} );
 					} );
