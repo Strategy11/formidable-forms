@@ -31,10 +31,11 @@ jobs:
         with:
           path: |
             ~/.npm
+            ~/.cache/Cypress
             node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
-            ${{ runner.os }}-node-modules-
+            ${{ runner.os }}-cypress-
 
       - name: Install dependencies
         if: steps.cache-npm.outputs.cache-hit != 'true'
