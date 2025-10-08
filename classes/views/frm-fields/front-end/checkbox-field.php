@@ -16,12 +16,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
 	$option_index = 0;
-
+	$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $field['form_id'] ), 'options' );
+	FrmAppHelper::unserialize_or_decode( $form_options );
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
+		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key, $form_options );
+		if ( FrmProFieldsController::should_hide_field_choice( $disabled, $shortcode_atts, $opt_key, $form_options ) ) {
 			continue;
 		}
-
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
@@ -68,8 +69,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		do_action( 'frm_field_input_html', $field );
 
-		$disabled = FrmFieldsController::maybe_disable_option( $field, $opt_key );
-		if ( ! $disabled ) {
+		if ( $disabled ) {
+			echo ' disabled="disabled" data-max-reached="1"';
+		} else {
 			echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 

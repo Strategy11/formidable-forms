@@ -390,14 +390,14 @@ class FrmFieldsController {
 			return false;
 		}
 
-		if ( apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key ) ) {
-			echo ' disabled="disabled" ';
-			if ( FrmField::is_field_type( $field, 'checkbox' ) ) {
-				echo 'data-max-reached="1" ';
-			}
-			return true;
-		}
-		return false;
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $disabled
+		 * @param array $field
+		 * @param string $opt_key
+		 */
+		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
 	}
 
 	/**
