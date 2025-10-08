@@ -404,12 +404,13 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_104() {
-		if ( ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
-			return;
+		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'test' ) ) {
+			FrmSquareLiteConnectHelper::get_location_id( true, 'test' );
 		}
 
-		FrmSquareLiteConnectHelper::get_location_id( true, 'test' );
-		FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
+		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'live' ) ) {
+			FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
+		}
 	}
 
 	/**
