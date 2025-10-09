@@ -113,6 +113,11 @@ if ( ! empty( $should_show_warning ) ) {
 		'class' => 'frm_button frm-button-secondary frm_noallow',
 		'href'  => '#',
 	);
+	/**
+	 * @since x.x
+	 *
+	 * @param array $start_over_button_attrs
+	 */
 	$start_over_button_attrs = apply_filters( 'frm_testmode_start_over_button_attrs', $start_over_button_attrs );
 	?>
 	<a <?php FrmAppHelper::array_to_html_params( $start_over_button_attrs, true ); ?>>

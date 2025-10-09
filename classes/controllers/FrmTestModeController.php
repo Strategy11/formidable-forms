@@ -52,6 +52,8 @@ class FrmTestModeController {
 		}
 
 		/**
+		 * Filter this so the add-on can enable it when applicable in other cases (like when submitting with AJAX).
+		 *
 		 * @since x.x
 		 *
 		 * @param bool $is_test_mode
@@ -83,7 +85,6 @@ class FrmTestModeController {
 	 */
 	private static function render_testing_mode_container() {
 		$form_key = self::get_form_key_from_request();
-
 		if ( ! $form_key ) {
 			return;
 		}
@@ -156,6 +157,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Check GET and POST to determine the current form key.
+	 *
 	 * @since x.x
 	 *
 	 * @return false|string
@@ -180,6 +183,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Check the request data to determine which action IDs are currently enabled.
+	 *
 	 * @since x.x
 	 *
 	 * @param array $form_actions
@@ -190,6 +195,7 @@ class FrmTestModeController {
 
 		/**
 		 * Filters the list of enabled form action IDs.
+		 * This way the add-on can modify it when required.
 		 *
 		 * @since x.x
 		 *
@@ -199,6 +205,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Determine if the upsell should be shown.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -212,6 +220,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Determine if the Test Mode add-on is installed and active.
+	 *
 	 * @since x.x
 	 *
 	 * @return bool
@@ -225,6 +235,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Get the list of roles that can be selected in the test mode container.
+	 *
 	 * @since x.x
 	 *
 	 * @return array
@@ -242,6 +254,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Get the selected role for test mode.
+	 *
 	 * @since x.x
 	 *
 	 * @return string
@@ -250,7 +264,7 @@ class FrmTestModeController {
 		$selected_role = '';
 
 		/**
-		 * Filters the selected role for test mode.
+		 * Filters the selected role for test mode so the add-on can modify it when required.
 		 *
 		 * @since x.x
 		 *
@@ -260,15 +274,21 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Get the arguments for the disabled required fields toggle.
+	 *
+	 * @since x.x
+	 *
 	 * @return array
 	 */
 	private static function get_disabled_required_fields_toggle_args() {
 		/**
+		 * Filters the arguments for the disabled required fields toggle so the add-on can modify it.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $args
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'frm_test_mode_disable_required_fields_toggle_args',
 			array(
 				'echo'        => true,
@@ -280,15 +300,21 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Get the arguments for the show all hidden fields toggle.
+	 *
+	 * @since x.x
+	 *
 	 * @return array
 	 */
 	private static function get_show_all_hidden_fields_toggle_args() {
 		/**
+		 * Filters the arguments for the show all hidden fields toggle so the add-on can modify it.
+		 *
 		 * @since x.x
 		 *
 		 * @param array $args
 		 */
-		return apply_filters(
+		return (array) apply_filters(
 			'frm_test_mode_show_all_hidden_fields_toggle_args',
 			array(
 				'echo'        => true,
@@ -300,6 +326,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Register and enqueue the required scripts for the test mode container Lite functionality.
+	 *
 	 * @since x.x
 	 *
 	 * @return void
@@ -326,6 +354,8 @@ class FrmTestModeController {
 	}
 
 	/**
+	 * Register and enqueue the required scripts for the multiselect dropdown.
+	 *
 	 * @since x.x
 	 *
 	 * @return void
