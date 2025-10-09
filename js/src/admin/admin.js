@@ -1615,15 +1615,22 @@ window.frmAdminBuildJS = function() {
 	 * @return {Object}
 	 */
 	function getInsertNewFieldArgs( fieldType, sectionId, formId, hasBreak ) {
-		return {
+		const fieldArgs = {
 			action: 'frm_insert_field',
 			form_id: formId,
 			field_type: fieldType,
 			section_id: sectionId,
 			nonce: frmGlobal.nonce,
-			has_break: hasBreak,
-			last_row_field_ids: getFieldIdsInSubmitRow()
+			has_break: hasBreak
 		};
+
+		// Only send last row field IDs to update their order if this field isn't added to a repeater.
+		const isInRepeater = sectionId > 0 && document.getElementById( 'form_id' ).value !== formId;
+		if ( ! isInRepeater ) {
+			fieldArgs.last_row_field_ids = getFieldIdsInSubmitRow();
+		}
+
+		return fieldArgs;
 	}
 
 	/**
