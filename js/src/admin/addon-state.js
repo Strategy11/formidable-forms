@@ -190,7 +190,7 @@ function saveAndReloadSettings() {
 	if ( null !== page ) {
 		const form = page.querySelector( 'form.frm_form_settings' );
 		if ( null !== form ) {
-			fieldsUpdated = 0;
+			wp.hooks.doAction( 'frm_reset_fields_updated' );
 			form.submit();
 		}
 	}

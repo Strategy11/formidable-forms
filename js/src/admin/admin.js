@@ -8576,16 +8576,8 @@ window.frmAdminBuildJS = function() {
 		fieldsUpdated = 0;
 	}
 
-	function saveAndReloadSettings() {
-		let page, form;
-		page = document.getElementById( 'form_settings_page' );
-		if ( null !== page ) {
-			form = page.querySelector( 'form.frm_form_settings' );
-			if ( null !== form ) {
-				fieldsUpdated = 0;
-				form.submit();
-			}
-		}
+	function resetFieldsUpdated() {
+		fieldsUpdated = 0;
 	}
 
 	function reloadIfAddonActivatedAjaxSubmitOnly() {
@@ -10662,6 +10654,8 @@ window.frmAdminBuildJS = function() {
 			jQuery( document ).on( 'frm-action-loaded', onActionLoaded );
 
 			initOnSubmitAction();
+
+			wp.hooks.addAction( 'frm_reset_fields_updated', 'formidableAdmin', resetFieldsUpdated );
 		},
 
 		panelInit: function() {
