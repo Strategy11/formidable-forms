@@ -20,45 +20,11 @@ jobs:
       - name: Composer install
         run: composer install
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "20.10.0"
+      - name: Set up Node.js and install dependencies
+        uses: ./.github/setup-node
 
-      - name: Cache dependencies
-        id: cache-npm
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            ~/.cache/Cypress
-            node_modules
-          key: ${{ runner.os }}-cypress-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-cypress-
-
-      - name: Install dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev
-
-      - name: Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
-
-      - name: Set up WP environment (optimized)
-        run: |
-          # Pre-pull WordPress images to speed up wp-env
-          docker pull wordpress:latest &
-          docker pull mariadb:latest &
-          docker pull mailhog/mailhog:latest &
-          wait
-          
-          # Start wp-env with faster options
-          npm run env start
+      - name: Set up WP environment
+        run: npm run env start
 
       - name: Test
         run: npm run e2e:githubrun
