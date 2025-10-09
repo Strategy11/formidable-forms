@@ -11433,6 +11433,7 @@ window.frmAdminBuildJS = function() {
 		handleAddFieldClickResponse,
 		syncLayoutClasses,
 		moveFieldSettings,
+		maybeCollapseSettings,
 	};
 };
 
