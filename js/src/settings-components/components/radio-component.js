@@ -6,6 +6,7 @@ import { show, hide, isVisible } from 'core/utils';
 
 /**
  * Represents a radio component.
+ *
  * @class
  */
 export default class frmRadioComponent {
@@ -92,6 +93,7 @@ export default class frmRadioComponent {
 
 	/**
 	 * Initializes the onRadioChange event for the given wrapper.
+	 *
 	 * @param {HTMLElement} radioElement - The radio element.
 	 */
 	initOnRadioChange( radioElement ) {
@@ -107,6 +109,7 @@ export default class frmRadioComponent {
 
 	/**
 	 * Handles the onRadioChange event for the given wrapper.
+	 *
 	 * @param {HTMLElement} target - The active radio button.
 	 */
 	onRadioChange( target ) {
@@ -124,6 +127,7 @@ export default class frmRadioComponent {
 
 	/**
 	 * Display additional elements related to the selected radio option.
+	 *
 	 * @param {HTMLElement} radio - The radio button element.
 	 */
 	maybeShowExtraElements( radio ) {
@@ -212,6 +216,7 @@ export default class frmRadioComponent {
 
 	/**
 	 * Moves the tracker to the active item.
+	 *
 	 * @param {HTMLElement} activeItem - The active item element.
 	 * @param {HTMLElement} wrapper    - The wrapper element.
 	 */

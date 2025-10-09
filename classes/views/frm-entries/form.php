@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $shortcode_tags;
 
 // Store the current callbacks for the shortcode
-$original_input_shortcode_callback = isset( $shortcode_tags['input'] ) ? $shortcode_tags['input'] : false;
+$original_input_shortcode_callback = $shortcode_tags['input'] ?? false;
 
 // Remove the shortcode
 remove_shortcode( 'input' );

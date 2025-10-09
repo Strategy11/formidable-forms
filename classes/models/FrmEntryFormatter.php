@@ -896,7 +896,7 @@ class FrmEntryFormatter {
 	 */
 	protected function flatten_array( $value ) {
 		if ( is_array( $value ) ) {
-			$separator = isset( $this->atts['array_separator'] ) ? $this->atts['array_separator'] : ', ';
+			$separator = $this->atts['array_separator'] ?? ', ';
 			$value     = implode( $separator, $value );
 		}
 

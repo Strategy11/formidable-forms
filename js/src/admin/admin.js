@@ -120,6 +120,7 @@ window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window,
 
 				/**
 				 * Triggers the after license is authorized action for a confirmation/success modal.
+				 *
 				 * @param {Object} msg An object containing message data received from Authorize request.
 				 */
 				wp.hooks.doAction( 'frmAdmin.afterLicenseAuthorizeSuccess', { msg } );
@@ -2831,6 +2832,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
+	 *
 	 * @param  formula
 	 * @return {string}
 	 */
@@ -2871,6 +2873,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+	 *
 	 * @param  calculation
 	 * @param  inputElement
 	 * @return {string}
@@ -2884,6 +2887,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
+	 *
 	 * @param  calculation
 	 *
 	 * @param  inputElement
@@ -2916,6 +2920,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+	 *
 	 * @return {RegExp}
 	 */
 	function getNonNumericShortcodes() {
@@ -2924,6 +2929,7 @@ window.frmAdminBuildJS = function() {
 
 	/**
 	 * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+	 *
 	 * @param  formula
 	 * @return {string}
 	 */
@@ -6063,6 +6069,7 @@ window.frmAdminBuildJS = function() {
 		this.getSingle = function() {
 			/**
 			 * Get single option template.
+			 *
 			 * @param {Object} option  Object containing the option data.
 			 * @param {string} type    The field type.
 			 * @param {string} fieldId The field id.
@@ -6649,7 +6656,7 @@ window.frmAdminBuildJS = function() {
 		replaceWith += ' ';
 
 		// Allow for the column number dropdown.
-		replaceWith = replaceWith.replace( ' block ', ' ' ).replace( ' inline ', ' horizontal_radio ' );
+		replaceWith = replaceWith.replace( ' block ', ' vertical_radio ' ).replace( ' inline ', ' horizontal_radio ' );
 
 		classes = field.className.split( ' frmstart ' )[ 1 ];
 		classes = 0 === classes.indexOf( 'frmend ' ) ? '' : classes.split( ' frmend ' )[ 0 ];

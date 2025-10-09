@@ -21,7 +21,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		add_action( 'admin_menu', __CLASS__ . '::menu', 9 );
+		add_action( 'admin_menu', self::class . '::menu', 9 );
 	}
 
 	/**
@@ -80,12 +80,13 @@ class FrmDashboardController {
 
 		return new FrmDashboardHelper(
 			array(
-				'counters' => array(
+				'counters'           => array(
 					'counters' => self::view_args_counters( $latest_available_form, $counters_value ),
 				),
-				'license'  => array(),
-				'inbox'    => self::view_args_inbox(),
-				'entries'  => array(
+				'license'            => array(),
+				'get_free_templates' => array(),
+				'inbox'              => self::view_args_inbox(),
+				'entries'            => array(
 					'widget-heading'   => __( 'Latest Entries', 'formidable' ),
 					'cta'              => array(
 						'label' => __( 'View All Entries', 'formidable' ),
@@ -95,7 +96,7 @@ class FrmDashboardController {
 					'count'            => $counters_value['entries'],
 					'placeholder'      => self::view_args_entries_placeholder( $counters_value['forms'] ),
 				),
-				'payments' => array(
+				'payments'           => array(
 					'show-placeholder' => empty( $total_payments ),
 					'placeholder'      => array(
 						'copy' => __( 'You don\'t have a payment form setup yet.', 'formidable' ),
@@ -112,7 +113,7 @@ class FrmDashboardController {
 						),
 					),
 				),
-				'video'    => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
+				'video'              => array( 'id' => self::get_youtube_embed_video( $counters_value['entries'] ) ),
 			)
 		);
 	}
@@ -462,13 +463,13 @@ class FrmDashboardController {
 			return null;
 		}
 		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
-			return isset( $welcome_video['video-id'] ) ? $welcome_video['video-id'] : null;
+			return $welcome_video['video-id'] ?? null;
 		}
 		// We might receive the most recent video feed as the featured selection.
 		if ( isset( $featured_video[0] ) ) {
 			return $featured_video[0]['video-id'];
 		}
-		return isset( $featured_video['video-id'] ) ? $featured_video['video-id'] : null;
+		return $featured_video['video-id'] ?? null;
 	}
 
 	/**

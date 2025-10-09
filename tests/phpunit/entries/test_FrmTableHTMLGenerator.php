@@ -43,6 +43,23 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		}
 	}
 
+	public function test_remove_border() {
+		$table_generator = new FrmTableHTMLGenerator(
+			'entry',
+			array(
+				'border_color' => 'eee',
+				'border_width' => '3px',
+			)
+		);
+
+		$html = '<div style="border-top:3px solid #eee;"></div>';
+		$this->assertEquals( $table_generator->remove_border( $html ), '<div style=""></div>' );
+		$this->assertEquals( $table_generator->remove_border( $html, 'bottom' ), $html );
+
+		$html = '<div style="border-top:1px solid #eee;"></div>';
+		$this->assertEquals( $table_generator->remove_border( $html ), $html );
+	}
+
 	private function _get_colors() {
 		$atts = array(
 			'border_color' => 'ffffff',

@@ -31,7 +31,7 @@ class FrmHtmlHelper {
 			function () use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},
-			isset( $args['echo'] ) ? $args['echo'] : false
+			$args['echo'] ?? false
 		);
 	}
 
@@ -105,9 +105,14 @@ class FrmHtmlHelper {
 				'class' => trim( 'frm-unit-input-control ' . ( $args['input_number_attrs']['class'] ?? '' ) ),
 			)
 		);
+
+		$hidden_value = $args['value'];
+		if ( is_numeric( $hidden_value ) ) {
+			$hidden_value .= $args['default_unit'];
+		}
 		?>
 		<span class="frm-unit-input">
-			<input type="hidden" value="<?php echo esc_attr( $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
+			<input type="hidden" value="<?php echo esc_attr( $hidden_value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
 			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
 			<span class="frm-input-group-suffix">
 				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>" tabindex="0">

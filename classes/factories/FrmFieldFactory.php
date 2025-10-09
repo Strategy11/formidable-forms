@@ -112,7 +112,7 @@ class FrmFieldFactory {
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
 		);
 
-		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
+		$class = $type_classes[ $field_type ] ?? '';
 
 		return apply_filters( 'frm_get_field_type_class', $class, $field_type );
 	}
