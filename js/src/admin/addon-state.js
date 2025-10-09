@@ -13,9 +13,9 @@ export function toggleAddonState( clicked, action ) {
 
 	// Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
 	jQuery( '.frm-addon-error' ).remove();
-	const button  = jQuery( clicked );
-	const plugin  = button.attr( 'rel' );
-	const el      = button.parent();
+	const button = jQuery( clicked );
+	const plugin = button.attr( 'rel' );
+	const el = button.parent();
 	const message = el.parent().find( '.addon-status-label' );
 
 	button.addClass( 'frm_loading_button' );

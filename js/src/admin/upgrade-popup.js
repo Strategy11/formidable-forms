@@ -25,19 +25,19 @@ export function addOneClick( link, context, upgradeLabel ) {
 	} else {
 		return;
 	}
- 
+
 	const oneclickMessage = container.querySelector( '.frm-oneclick' );
 	const upgradeMessage = container.querySelector( '.frm-upgrade-message' );
 	const showLink = container.querySelector( '.frm-upgrade-link' );
 	const button = container.querySelector( '.frm-oneclick-button' );
 	const addonStatus = container.querySelector( '.frm-addon-status' );
- 
+
 	let oneclick = link.getAttribute( 'data-oneclick' );
 	let newMessage = link.getAttribute( 'data-message' );
 	let showIt = 'block';
 	let showMsg = 'block';
 	let hideIt = 'none';
- 
+
 	// If one click upgrade, hide other content.
 	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
 		if ( newMessage === null ) {
@@ -46,11 +46,11 @@ export function addOneClick( link, context, upgradeLabel ) {
 		showIt = 'none';
 		hideIt = 'block';
 		oneclick = JSON.parse( oneclick );
- 
+
 		button.className = button.className.replace( ' frm-install-addon', '' ).replace( ' frm-activate-addon', '' );
 		button.className = button.className + ' ' + oneclick.class;
 		button.rel = oneclick.url;
- 
+
 		if ( oneclick.class === 'frm-activate-addon' ) {
 			oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
 			button.textContent = __( 'Activate', 'formidable' );
@@ -59,7 +59,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 			button.textContent = __( 'Install', 'formidable' );
 		}
 	}
- 
+
 	if ( ! newMessage ) {
 		newMessage = upgradeMessage.getAttribute( 'data-default' );
 	}
@@ -68,7 +68,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	}
 
 	upgradeMessage.innerHTML = newMessage;
- 
+
 	if ( link.dataset.upsellImage ) {
 		upgradeMessage.appendChild(
 			frmDom.img( {
@@ -77,12 +77,12 @@ export function addOneClick( link, context, upgradeLabel ) {
 			} )
 		);
 	}
- 
+
 	// Either set the link or use the default.
 	showLink.href = getShowLinkHrefValue( link, showLink );
- 
+
 	addonStatus.style.display = 'none';
- 
+
 	oneclickMessage.style.display = hideIt;
 	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 	upgradeMessage.style.display = showMsg;
