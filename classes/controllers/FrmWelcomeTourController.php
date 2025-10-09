@@ -181,7 +181,39 @@ class FrmWelcomeTourController {
 			'explore_integrations'      => admin_url( 'admin.php?page=formidable-addons' ),
 		);
 
+		$show_checklist = self::should_show_checklist();
+
 		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Checks if the checklist should be shown.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the checklist should be shown, false otherwise.
+	 */
+	private static function should_show_checklist() {
+		$active_step            = self::$checklist['active_step_key'];
+		$page                   = FrmAppHelper::simple_get( 'page' );
+		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
+		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
+		$is_style_editor_page   = FrmAppHelper::is_style_editor_page();
+
+		switch ( $active_step ) {
+			case 'create-form':
+				return $is_form_templates_page;
+			case 'add-fields':
+				return $is_form_builder_page;
+			case 'style-form':
+				return $is_form_builder_page || $is_style_editor_page;
+			case 'embed-form':
+				return $is_style_editor_page || $is_form_builder_page;
+			case 'completed':
+				return $is_style_editor_page || $is_form_builder_page;
+			default:
+				return false;
+		}
 	}
 
 	/**
@@ -208,8 +240,8 @@ class FrmWelcomeTourController {
 				break;
 			case 'add-fields':
 				$spotlight_data = array(
-					'target'   => '#frm-form-templates-create-form-divider',
-					'position' => 'middle',
+					'target'   => '.frm-settings-panel #frm_insert_fields_tab',
+					'position' => '100px',
 				);
 				break;
 			case 'style-form':
