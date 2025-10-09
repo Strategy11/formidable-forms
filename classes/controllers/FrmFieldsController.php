@@ -378,6 +378,47 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $opt_key
+	 *
+	 * @return bool
+	 */
+	public static function choice_limit_reached( $field, $opt_key ) {
+		if ( FrmAppHelper::is_form_builder_page() ) {
+			return false;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $disabled
+		 * @param array $field
+		 * @param string $opt_key
+		 */
+		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool   $choice_limit_is_reached
+	 * @param array  $shortcode_atts
+	 * @param string $opt_key
+	 * @param array  $form_options
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_options ) {
+		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+			return true;
+		}
+
+		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_options, $opt_key );
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0
