@@ -689,27 +689,7 @@ class FrmAppController {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 
-		$dependencies = array(
-			'formidable_admin_global',
-			'jquery',
-			'jquery-ui-core',
-			'jquery-ui-draggable',
-			'jquery-ui-sortable',
-			'bootstrap_tooltip',
-			'bootstrap-multiselect',
-			'wp-i18n',
-			// Required in WP versions older than 5.7
-			'wp-hooks',
-			'formidable_dom',
-			'formidable_embed',
-		);
-
-		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			// We only need to load the color picker when editing styles.
-			$dependencies[] = 'wp-color-picker';
-		}
-
-		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
+		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', self::get_admin_js_dependencies(), $version, true );
 
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
@@ -790,6 +770,35 @@ class FrmAppController {
 		}
 
 		self::enqueue_builder_assets( $plugin_url, $version );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_admin_js_dependencies() {
+		$dependencies = array(
+			'formidable_admin_global',
+			'jquery',
+			'jquery-ui-core',
+			'jquery-ui-draggable',
+			'jquery-ui-sortable',
+			'bootstrap_tooltip',
+			'bootstrap-multiselect',
+			'wp-i18n',
+			// Required in WP versions older than 5.7
+			'wp-hooks',
+			'formidable_dom',
+			'formidable_embed',
+		);
+
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			// We only need to load the color picker when editing styles.
+			$dependencies[] = 'wp-color-picker';
+		}
+
+		return $dependencies;
 	}
 
 	/**
