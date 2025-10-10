@@ -277,6 +277,7 @@
 
 	/**
 	 * This function is used to update the form action when switching from the advanced settings and quick-settings.
+	 *
 	 * @param {Object} target The submit button event target
 	 * @return {void}
 	 */

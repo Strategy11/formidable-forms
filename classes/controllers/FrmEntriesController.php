@@ -735,6 +735,7 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
+			'table_style'     => '',
 			// Return embedded fields as nested array.
 			'child_array'     => false,
 			'line_breaks'     => true,

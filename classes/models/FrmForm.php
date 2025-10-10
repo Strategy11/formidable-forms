@@ -355,6 +355,10 @@ class FrmForm {
 			unset( $update_options['custom_html'] );
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
+			if ( ! is_array( $field->field_options ) ) {
+				$field->field_options = array();
+			}
+
 			foreach ( $update_options as $opt => $default ) {
 				$field->field_options[ $opt ] = $values['field_options'][ $opt . '_' . $field_id ] ?? $default;
 				self::sanitize_field_opt( $opt, $field->field_options[ $opt ] );
@@ -1158,6 +1162,14 @@ class FrmForm {
 		} else {
 			$visible = true;
 		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $visible
+		 * @param object $form
+		 */
+		$visible = (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
 
 		return $visible;
 	}
