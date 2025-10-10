@@ -17,18 +17,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmWelcomeTourController {
 
 	/**
-	 * The required user capability to view the Welcome Tour page.
-	 *
-	 * @var string
-	 */
-	const REQUIRED_CAPABILITY = 'frm_view_forms';
-
-	/**
 	 * Option name to store Welcome Tour data.
 	 *
 	 * @var string
 	 */
-	const CHECKLIST_OPTION = 'frm_welcome_tour_checklist';
+	const CHECKLIST_OPTION = 'frm-welcome-tour';
 
 	/**
 	 * The script handle.
@@ -38,13 +31,6 @@ class FrmWelcomeTourController {
 	const SCRIPT_HANDLE = 'frm-welcome-tour';
 
 	/**
-	 * The slug of the Welcome Tour page.
-	 *
-	 * @var string
-	 */
-	const PAGE_SLUG = 'formidable-welcome-tour';
-
-	/**
 	 * Checklist data to pass to the view.
 	 *
 	 * @var array
@@ -52,11 +38,25 @@ class FrmWelcomeTourController {
 	private static $checklist = array();
 
 	/**
+	 * Steps data to pass to the view.
+	 *
+	 * @var array
+	 */
+	private static $steps = array();
+
+	/**
 	 * Checklist data to pass to the view.
 	 *
 	 * @var array
 	 */
 	private static $completed_steps = array();
+
+	/**
+	 * Whether the current page is the dashboard page.
+	 *
+	 * @var bool|null
+	 */
+	private static $is_dashboard_page = null;
 
 	/**
 	 * Initialize hooks for Dashboard page only.
@@ -70,36 +70,43 @@ class FrmWelcomeTourController {
 			return;
 		}
 
-		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
-		if ( ! empty( self::$checklist['done'] ) ) {
+		self::$checklist = get_option(
+			self::CHECKLIST_OPTION,
+			array( 'completed_steps' => array(), 'active_step_key' => 'create-form' )
+		);
+
+		self::$is_dashboard_page = FrmDashboardController::is_dashboard_page();
+
+		if ( ! self::should_show_welcome_tour() ) {
 			return;
 		}
 
-		self::$completed_steps = array_flip( self::$checklist['completed_steps'] ?? array() );
-
-		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
-		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-		add_action( 'admin_footer', __CLASS__ . '::admin_footer' );
 
-		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
-		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
+		if ( ! self::$is_dashboard_page ) {
+			self::$completed_steps = array_flip( self::$checklist['completed_steps'] );
 
-		add_filter( 'frm_should_show_floating_links', '__return_false' );
+			add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
+			add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+			add_action( 'admin_footer', __CLASS__ . '::admin_footer' );
+
+			add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
+			add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
+
+			add_filter( 'frm_should_show_floating_links', '__return_false' );
+		}
 	}
 
 	/**
-	 * Marks the welcome tour as seen if it hasn't been seen yet.
+	 * Determines if the welcome tour should be displayed.
 	 *
 	 * @since x.x
 	 *
-	 * @return void
+	 * @return bool True if the welcome tour should be shown, false otherwise.
 	 */
-	private static function maybe_mark_welcome_tour_as_seen() {
-		if ( FrmDashboardController::is_dashboard_page() && empty( self::$checklist['seen'] ) ) {
-			self::$checklist['seen'] = true;
-			self::save_checklist();
-		}
+	private static function should_show_welcome_tour() {
+		return empty( self::$checklist['done'] )
+			&& ( self::should_show_checklist() || self::$is_dashboard_page );
 	}
 
 	/**
@@ -110,10 +117,11 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function setup_checklist_progress() {
-		$steps       = self::get_steps()['keys'];
+		self::$steps = self::get_steps();
+		$step_keys   = self::$steps['keys'];
 		$active_step = 0;
 
-		foreach ( $steps as $index => $step_key ) {
+		foreach ( $step_keys as $index => $step_key ) {
 			$completed = isset( self::$completed_steps[ $step_key ] );
 
 			if ( false === $completed ) {
@@ -139,7 +147,7 @@ class FrmWelcomeTourController {
 		}//end foreach
 
 		self::$checklist['active_step']     = $active_step;
-		self::$checklist['active_step_key'] = $steps[ $active_step ];
+		self::$checklist['active_step_key'] = $step_keys[ $active_step ];
 		self::save_checklist();
 	}
 
@@ -151,8 +159,24 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function admin_footer() {
-		self::render();
 		self::maybe_mark_welcome_tour_as_seen();
+		self::render();
+	}
+
+	/**
+	 * Marks the welcome tour as seen if it hasn't been seen yet.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_mark_welcome_tour_as_seen() {
+		if ( ! empty( self::$checklist['seen'] ) ) {
+			return;
+		}
+
+		self::$checklist['seen'] = true;
+		self::save_checklist();
 	}
 
 	/**
@@ -163,7 +187,7 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function render() {
-		$steps       = self::get_steps()['steps'];
+		$steps       = self::$steps['steps'];
 		$active_step = self::get_active_step();
 		$completed   = count( self::$completed_steps ) === count( $steps );
 
@@ -185,8 +209,6 @@ class FrmWelcomeTourController {
 			'explore_integrations'      => admin_url( 'admin.php?page=formidable-addons' ),
 		);
 
-		$show_checklist = self::should_show_checklist();
-
 		include $view_path . 'index.php';
 	}
 
@@ -198,7 +220,7 @@ class FrmWelcomeTourController {
 	 * @return bool True if the checklist should be shown, false otherwise.
 	 */
 	private static function should_show_checklist() {
-		$active_step            = self::$checklist['active_step_key'] ?? 'create-form';
+		$active_step            = self::$checklist['active_step_key'];
 		$page                   = FrmAppHelper::simple_get( 'page' );
 		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
 		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
@@ -212,7 +234,6 @@ class FrmWelcomeTourController {
 			case 'style-form':
 				return $is_form_builder_page || $is_style_editor_page;
 			case 'embed-form':
-				return $is_style_editor_page || $is_form_builder_page;
 			case 'completed':
 				return $is_style_editor_page || $is_form_builder_page;
 			default:
@@ -264,10 +285,7 @@ class FrmWelcomeTourController {
 				break;
 		}//end switch
 
-		return array_merge(
-			self::get_steps()['steps'][ self::$checklist['active_step'] ],
-			$spotlight_data
-		);
+		return array_merge( self::$steps['steps'][ self::$checklist['active_step'] ], $spotlight_data );
 	}
 
 	/**
@@ -365,7 +383,7 @@ class FrmWelcomeTourController {
 		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 
 		return array(
-			'IS_DASHBOARD_PAGE'             => FrmDashboardController::is_dashboard_page(),
+			'IS_DASHBOARD_PAGE'             => self::$is_dashboard_page,
 			'IS_WELCOME_TOUR_SEEN'          => ! empty( self::$checklist['seen'] ),
 			'i18n'                          => array(
 				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
@@ -381,7 +399,6 @@ class FrmWelcomeTourController {
 				'EXPLORE_INTEGRATIONS_BUTTON_TEXT'      => __( 'Explore integrations', 'formidable' ),
 			),
 			'PROGRESS_BAR_PERCENT'          => self::get_welcome_tour_progress_bar_percent(),
-			'CHECKLIST_STEPS'               => self::get_steps()['steps'],
 			'TOUR_URL'                      => admin_url( 'admin.php?page=formidable-form-templates' ),
 			'DOCS_URL'                      => 'https://formidableforms.com/knowledgebase/',
 			'CHECKLIST_ACTIVE_STEP'         => self::get_active_step(),
@@ -415,7 +432,11 @@ class FrmWelcomeTourController {
 	 * @return int
 	 */
 	private static function get_welcome_tour_progress_bar_percent() {
-		$percent = self::get_active_step() / count( self::get_steps()['keys'] ) * 100;
+		if ( ! self::$steps ) {
+			return 0;
+		}
+
+		$percent = self::get_active_step() / count( self::$steps['keys'] ) * 100;
 
 		return (int) $percent;
 	}
