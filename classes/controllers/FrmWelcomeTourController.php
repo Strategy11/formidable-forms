@@ -78,10 +78,7 @@ class FrmWelcomeTourController {
 		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 
 		if ( FrmDashboardController::is_dashboard_page() ) {
-			self::$checklist['seen'] = false;
-			self::save_checklist();
-
-			// self::maybe_mark_welcome_tour_as_seen();
+			self::maybe_mark_welcome_tour_as_seen();
 			return;
 		}
 
@@ -108,7 +105,7 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	private static function maybe_mark_welcome_tour_as_seen() {
-		if ( isset( self::$checklist['seen'] ) ) {
+		if ( ! empty( self::$checklist['seen'] ) ) {
 			return;
 		}
 
@@ -368,7 +365,7 @@ class FrmWelcomeTourController {
 
 		return array(
 			'IS_DASHBOARD_PAGE'             => FrmDashboardController::is_dashboard_page(),
-			'IS_WELCOME_TOUR_SEEN'          => self::$checklist['seen'],
+			'IS_WELCOME_TOUR_SEEN'          => ! empty( self::$checklist['seen'] ),
 			'i18n'                          => array(
 				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
 				'CONGRATULATIONS_TEXT'                  => __( 'Congratulations! 🎉', 'formidable' ),

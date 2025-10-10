@@ -6,9 +6,9 @@ import { __ } from '@wordpress/i18n';
 /**
  * Internal dependencies
  */
-import { maybeCreateModal, div, p, button } from 'core/utils';
+import { maybeCreateModal, div, p, a } from 'core/utils';
 import { addElements, getElements } from './elements';
-import { MODAL_SIZE } from '../shared';
+import { MODAL_SIZE, TOUR_URL } from '../shared';
 
 /**
  * Build the begin tour modal element.
@@ -26,11 +26,6 @@ export function buildBeginTourModalElement() {
  * @return {HTMLElement} The begin tour modal element.
  */
 function createBeginTourModalElement() {
-	const beginTourButton = button( {
-		className: 'button button-primary frm-button-primary',
-		text: __( 'Begin Tour', 'formidable' )
-	} );
-
 	const beginTourModal = maybeCreateModal(
 		'frm-get-started-modal',
 		{
@@ -41,7 +36,11 @@ function createBeginTourModalElement() {
 			} ),
 			footer: div( {
 				className: 'frmcenter',
-				child: beginTourButton
+				child: a( {
+					className: 'button button-primary frm-button-primary',
+					href: TOUR_URL,
+					text: __( 'Begin Tour', 'formidable' )
+				} )
 			} ),
 			width: MODAL_SIZE,
 			dialogClass: 'frm-fadein-up',
@@ -50,24 +49,22 @@ function createBeginTourModalElement() {
 
 	beginTourModal.classList.add( 'frm_wrap', 'frm-welcome-tour-modal', 'frmcenter' );
 
-	return { beginTourModal, beginTourButton };
+	return beginTourModal;
 }
 
 /**
  * Inject begin tour modal elements into the DOM and the elements object.
  *
  * @private
- * @param {Object}      root0
- * @param {HTMLElement} root0.beginTourModal  The begin tour modal element.
- * @param {HTMLElement} root0.beginTourButton The begin tour button element.
+ * @param {HTMLElement} beginTourModal The begin tour modal element.
  * @return {void}
  */
-function addBeginTourModalToElements( { beginTourModal, beginTourButton } ) {
+function addBeginTourModalToElements( beginTourModal ) {
 	const elements = getElements();
 
 	if ( elements.beginTourModal || undefined === beginTourModal ) {
 		return;
 	}
 
-	addElements( { beginTourModal, beginTourButton } );
+	addElements( { beginTourModal } );
 }
