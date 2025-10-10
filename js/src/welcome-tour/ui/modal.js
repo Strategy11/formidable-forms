@@ -10,11 +10,9 @@ import { IS_WELCOME_TOUR_SEEN, IS_DASHBOARD_PAGE } from '../shared';
  * @return {void}
  */
 function initializeModal() {
-	if ( IS_WELCOME_TOUR_SEEN || ! IS_DASHBOARD_PAGE ) {
-		return;
+	if ( IS_DASHBOARD_PAGE && ! IS_WELCOME_TOUR_SEEN ) {
+		buildBeginTourModalElement();
 	}
-
-	buildBeginTourModalElement();
 }
 
 export default initializeModal;

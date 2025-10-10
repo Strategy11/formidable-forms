@@ -43,7 +43,7 @@ function createBeginTourModalElement() {
 				} )
 			} ),
 			width: MODAL_SIZE,
-			dialogClass: 'frm-fadein-up',
+			dialogClass: 'frm-fadein-up-back',
 		}
 	);
 

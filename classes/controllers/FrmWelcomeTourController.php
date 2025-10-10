@@ -47,14 +47,14 @@ class FrmWelcomeTourController {
 	/**
 	 * Checklist data to pass to the view.
 	 *
-	 * @var array|string
+	 * @var array
 	 */
 	private static $checklist = array();
 
 	/**
 	 * Checklist data to pass to the view.
 	 *
-	 * @var string|array
+	 * @var array
 	 */
 	private static $completed_steps = array();
 
@@ -71,26 +71,17 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
-		if ( 'done' === self::$checklist ) {
+		if ( ! empty( self::$checklist['done'] ) ) {
 			return;
 		}
 
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-
-		if ( FrmDashboardController::is_dashboard_page() ) {
-			self::maybe_mark_welcome_tour_as_seen();
-			return;
-		}
-
-		if ( ! self::should_show_checklist() ) {
-			return;
-		}
-
-		self::$completed_steps = array_flip( self::$checklist['completed_steps'] );
+		self::$completed_steps = array_flip( self::$checklist['completed_steps'] ?? array() );
 
 		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
-		add_action( 'admin_footer', __CLASS__ . '::render' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+		add_action( 'admin_footer', __CLASS__ . '::admin_footer' );
+
 		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
 		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
 
@@ -105,12 +96,10 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	private static function maybe_mark_welcome_tour_as_seen() {
-		if ( ! empty( self::$checklist['seen'] ) ) {
-			return;
+		if ( FrmDashboardController::is_dashboard_page() && empty( self::$checklist['seen'] ) ) {
+			self::$checklist['seen'] = true;
+			self::save_checklist();
 		}
-
-		self::$checklist['seen'] = true;
-		self::save_checklist();
 	}
 
 	/**
@@ -152,6 +141,18 @@ class FrmWelcomeTourController {
 		self::$checklist['active_step']     = $active_step;
 		self::$checklist['active_step_key'] = $steps[ $active_step ];
 		self::save_checklist();
+	}
+
+	/**
+	 * Callback for the admin_footer action hook.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function admin_footer() {
+		self::render();
+		self::maybe_mark_welcome_tour_as_seen();
 	}
 
 	/**
@@ -197,7 +198,7 @@ class FrmWelcomeTourController {
 	 * @return bool True if the checklist should be shown, false otherwise.
 	 */
 	private static function should_show_checklist() {
-		$active_step            = self::$checklist['active_step_key'];
+		$active_step            = self::$checklist['active_step_key'] ?? 'create-form';
 		$page                   = FrmAppHelper::simple_get( 'page' );
 		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
 		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
