@@ -43,7 +43,8 @@ function createBeginTourModalElement() {
 				className: 'frmcenter',
 				child: beginTourButton
 			} ),
-			width: MODAL_SIZE
+			width: MODAL_SIZE,
+			dialogClass: 'frm-fadein-up',
 		}
 	);
 
