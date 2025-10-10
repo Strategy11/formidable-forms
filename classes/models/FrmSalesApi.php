@@ -433,16 +433,17 @@ class FrmSalesApi extends FrmFormApi {
 			self::$cross_sell_text,
 			'activate_plugins',
 			'frm-sales-api-cross-sell',
-			function() {
+			function () {
 				// There is no page. The redirect logic is handled below, before this callback is triggered.
 			}
 		);
 
 		add_action(
 			'admin_init',
-			function() {
+			function () {
 				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && ! empty( self::$cross_sell_link ) ) {
 					wp_redirect( self::$cross_sell_link );
+					exit;
 				}
 			}
 		);
