@@ -47,7 +47,7 @@ class FrmWelcomeTourController {
 	/**
 	 * Checklist data to pass to the view.
 	 *
-	 * @var array
+	 * @var array|string
 	 */
 	private static $checklist = array();
 
@@ -71,19 +71,29 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist = get_option( self::CHECKLIST_OPTION, array() );
-		if ( ! empty( self::$checklist['done'] ) ) {
+		if ( 'done' === self::$checklist ) {
+			return;
+		}
+
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+
+		if ( FrmDashboardController::is_dashboard_page() ) {
+			self::$checklist['seen'] = false;
+			self::save_checklist();
+
+			// self::maybe_mark_welcome_tour_as_seen();
+			return;
+		}
+
+		if ( ! self::should_show_checklist() ) {
 			return;
 		}
 
 		self::$completed_steps = array_flip( self::$checklist['completed_steps'] );
 
-		self::maybe_mark_welcome_tour_as_seen();
-
 		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
 		add_action( 'admin_footer', __CLASS__ . '::render' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-
 		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
 		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
 
@@ -98,16 +108,12 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	private static function maybe_mark_welcome_tour_as_seen() {
-		if ( self::is_welcome_tour_seen() ) {
+		if ( isset( self::$checklist['seen'] ) ) {
 			return;
 		}
 
 		self::$checklist['seen'] = true;
 		self::save_checklist();
-
-		// TODO: remove this after development, for now we always show the checklist
-		// self::$checklist['seen'] = false;
-		// self::save_checklist();
 	}
 
 	/**
@@ -267,17 +273,6 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Checks if the welcome tour has been seen.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool True if the welcome tour has been seen, false otherwise.
-	 */
-	private static function is_welcome_tour_seen() {
-		return FrmDashboardController::is_dashboard_page() && ! empty( self::$checklist['seen'] );
-	}
-
-	/**
 	 * Gets the checklist steps.
 	 *
 	 * @since x.x
@@ -372,7 +367,8 @@ class FrmWelcomeTourController {
 		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 
 		return array(
-			'IS_WELCOME_TOUR_SEEN'          => self::is_welcome_tour_seen(),
+			'IS_DASHBOARD_PAGE'             => FrmDashboardController::is_dashboard_page(),
+			'IS_WELCOME_TOUR_SEEN'          => self::$checklist['seen'],
 			'i18n'                          => array(
 				'CHECKLIST_HEADER_TITLE'                => __( 'Formidable Checklist', 'formidable' ),
 				'CONGRATULATIONS_TEXT'                  => __( 'Congratulations! 🎉', 'formidable' ),
