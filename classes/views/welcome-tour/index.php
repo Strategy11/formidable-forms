@@ -15,8 +15,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 		include $view_path . 'spotlight.php';
 	}
 
-	if ( $show_checklist ) {
-		include $view_path . 'checklist.php';
-	}
+	include $view_path . 'checklist.php';
 	?>
 </div>
