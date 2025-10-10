@@ -86,7 +86,7 @@ class FrmSalesApi extends FrmFormApi {
 			$this->add_sale( $sale );
 
 			if ( is_array( $sale ) && isset( $sale['cross_sell_text'] ) ) {
-				self::set_cross_sale( $sale );
+				$this->set_cross_sale( $sale );
 			}
 		}
 	}
