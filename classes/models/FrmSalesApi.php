@@ -99,11 +99,11 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private function set_cross_sale( $data ) {
 		if ( ! empty( $data['cross_sell_text'] ) ) {
-			self::$cross_sell_text = $data['cross_sell_text'];
+			self::$cross_sell_text = sanitize_text_field( $data['cross_sell_text'] );
 		}
 
 		if ( ! empty( $data['cross_sell_link'] ) ) {
-			self::$cross_sell_link = $data['cross_sell_link'];
+			self::$cross_sell_link = esc_url_raw( $data['cross_sell_link'] );
 		}
 	}
 
@@ -446,7 +446,7 @@ class FrmSalesApi extends FrmFormApi {
 				}
 
 				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && ! empty( self::$cross_sell_link ) ) {
-					wp_redirect( esc_url_raw( self::$cross_sell_link ) );
+					wp_redirect( self::$cross_sell_link );
 					exit;
 				}
 			}
