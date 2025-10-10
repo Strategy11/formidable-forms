@@ -29,6 +29,20 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private static $best_sale;
 
+	/**
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	private static $cross_sell_text;
+
+	/**
+	 * @since x.x
+	 *
+	 * @var string|null
+	 */
+	private static $cross_sell_link;
+
 	public function __construct() {
 		$this->set_cache_key();
 
@@ -70,6 +84,26 @@ class FrmSalesApi extends FrmFormApi {
 
 		foreach ( $api as $sale ) {
 			$this->add_sale( $sale );
+
+			if ( is_array( $sale ) && isset( $sale['cross_sell_text'] ) ) {
+				$this->set_cross_sale( $sale );
+			}
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $data
+	 * @return void
+	 */
+	private function set_cross_sale( $data ) {
+		if ( ! empty( $data['cross_sell_text'] ) ) {
+			self::$cross_sell_text = sanitize_text_field( $data['cross_sell_text'] );
+		}
+
+		if ( ! empty( $data['cross_sell_link'] ) ) {
+			self::$cross_sell_link = esc_url_raw( $data['cross_sell_link'] );
 		}
 	}
 
@@ -382,5 +416,40 @@ class FrmSalesApi extends FrmFormApi {
 	private static function is_banner_dismissed( $key ) {
 		$dismissed_sales = get_user_option( 'frm_dismissed_sales', get_current_user_id() );
 		return is_array( $dismissed_sales ) && in_array( $key, $dismissed_sales, true );
+	}
+
+	public static function menu() {
+		if ( false === self::$sales ) {
+			new self();
+		}
+
+		if ( ! self::$cross_sell_text || ! self::$cross_sell_link ) {
+			return;
+		}
+
+		add_submenu_page(
+			'formidable',
+			esc_html( self::$cross_sell_text ) . ' | Formidable',
+			esc_html( self::$cross_sell_text ),
+			'activate_plugins',
+			'frm-sales-api-cross-sell',
+			function () {
+				// There is no page. The redirect logic is handled below, before this callback is triggered.
+			}
+		);
+
+		add_action(
+			'admin_init',
+			function () {
+				if ( ! current_user_can( 'activate_plugins' ) ) {
+					return;
+				}
+
+				if ( 'frm-sales-api-cross-sell' === FrmAppHelper::simple_get( 'page' ) && ! empty( self::$cross_sell_link ) ) {
+					wp_redirect( self::$cross_sell_link );
+					exit;
+				}
+			}
+		);
 	}
 }
