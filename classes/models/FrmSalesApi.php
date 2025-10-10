@@ -429,8 +429,8 @@ class FrmSalesApi extends FrmFormApi {
 
 		add_submenu_page(
 			'formidable',
-			self::$cross_sell_text . ' | Formidable',
-			self::$cross_sell_text,
+			esc_html( self::$cross_sell_text ) . ' | Formidable',
+			esc_html( self::$cross_sell_text ),
 			'activate_plugins',
 			'frm-sales-api-cross-sell',
 			function () {
