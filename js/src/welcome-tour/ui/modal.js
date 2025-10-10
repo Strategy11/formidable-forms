@@ -3,8 +3,7 @@
  */
 import { buildBeginTourModalElement } from '../elements';
 import { addBeginTourButtonEvents } from '../events';
-import { IS_WELCOME_TOUR_SEEN } from '../shared';
-import { onDashboardPage } from '../utils';
+import { IS_WELCOME_TOUR_SEEN, IS_DASHBOARD_PAGE } from '../shared';
 
 /**
  * Initialize the modal widget.
@@ -12,7 +11,7 @@ import { onDashboardPage } from '../utils';
  * @return {void}
  */
 function initializeModal() {
-	if ( IS_WELCOME_TOUR_SEEN || ! onDashboardPage() ) {
+	if ( IS_WELCOME_TOUR_SEEN || ! IS_DASHBOARD_PAGE ) {
 		return;
 	}
 
