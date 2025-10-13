@@ -4547,6 +4547,7 @@ window.frmAdminBuildJS = function() {
 		if ( hoverTargetSection ) {
 			targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
 		}
+		const hoverTargetBox = hoverTarget.querySelector( 'li' );
 		if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
 			// If field target field is in a section.
 			$range = $firstGroup.parent().nextUntil( targetSection || hoverTarget.parentNode );
@@ -4555,7 +4556,7 @@ window.frmAdminBuildJS = function() {
 				return $range;
 			}
 			const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
-			$range = $range.add( fieldsInSection.slice( 0, fieldsInSection.indexOf( hoverTarget ) + 1 ) );
+			$range = $range.add( fieldsInSection.slice( 0, fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
 			return $range;
 		}
 
@@ -4565,7 +4566,7 @@ window.frmAdminBuildJS = function() {
 			return $range;
 		}
 		const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
-		$range = $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTarget ) + 1 ) );
+		$range = $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
 
 		return $range;
 	}
