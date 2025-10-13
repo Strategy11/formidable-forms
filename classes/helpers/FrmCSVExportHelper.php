@@ -327,7 +327,7 @@ class FrmCSVExportHelper {
 			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
 
-		$field_headings[ $col->id ] = strip_tags( $col->name );
+		$field_headings[ $col->id ] = strip_tags( $col->name ) . ' ' . __( '(value)', 'formidable' );
 		$field_headings             = apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
