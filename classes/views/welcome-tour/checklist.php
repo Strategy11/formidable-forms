@@ -15,17 +15,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg12 frm-text-white frm-m-2xs', array( 'aria-hidden' => 'true' ) ); ?>
 	</div>
 
-	<?php if ( ! $completed ) : ?>
+	<?php if ( ! $is_tour_completed ) : ?>
 		<div class="frm-checklist__progress-bar frm-shrink-0 frm-flex frm-bg-grey-200">
 			<div class="frm-checklist__progress-fill frm-bg-primary-500"></div>
 		</div>
 	<?php endif; ?>
 
-	<div class="frm-checklist__steps frm-grow frm-scrollbar-wrapper">
+	<div class="frm-checklist__steps frm-grow frm-scrollbar-wrapper frm-slide-down">
 		<?php include $steps_view_path; ?>
 	</div>
 
-	<?php if ( ! $completed ) { ?>
+	<?php if ( ! $is_tour_completed ) { ?>
 		<div class="frm-checklist__dismiss frm-shrink-0 frm-flex-center frm-mt-auto">
 			<span class="frm-text-grey-400"><?php esc_html_e( 'Dismiss Checklist', 'formidable' ); ?></span>
 		</div>

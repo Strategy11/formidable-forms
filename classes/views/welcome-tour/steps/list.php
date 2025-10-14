@@ -36,11 +36,9 @@ foreach ( $steps as $key => $step ) {
 			<span class=" frm-leading-none"><?php echo esc_html( $step['title'] ); ?></span>
 		</div>
 
-		<?php if ( $is_active ) { ?>
-			<div class="frm-checklist__step-description frm-flex frm-p-xs frm-mx-xs -frm-mt-2xs">
-				<span><?php echo esc_html( $step['description'] ); ?></span>
-			</div>
-		<?php } ?>
+		<div class="frm-checklist__step-description frm-flex frm-p-xs frm-mx-xs -frm-mt-2xs">
+			<span><?php echo esc_html( $step['description'] ); ?></span>
+		</div>
 	</div>
 	<?php
 }//end foreach
