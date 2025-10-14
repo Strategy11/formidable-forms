@@ -223,6 +223,15 @@ class FrmTransLiteActionsController {
 		// Set future-cancel as trigger when applicable.
 		$atts['trigger'] = str_replace( '_', '-', $atts['trigger'] );
 
+		/**
+		 * Trigger various hooks including frm_payment_status_complete.
+		 *
+		 * @since x.x This was included in the payments submodule, but not included in Lite until x.x.
+		 *
+		 * @param array $atts
+		 */
+		do_action( 'frm_payment_status_' . $atts['trigger'], $atts );
+
 		if ( $atts['payment'] ) {
 			self::trigger_actions_after_payment( $atts['payment'], $atts );
 		}
