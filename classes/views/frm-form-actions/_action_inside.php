@@ -9,7 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php
 /**
- * @since x.x
+ * @since 6.25
  *
  * @param WP_Post $form_action
  */

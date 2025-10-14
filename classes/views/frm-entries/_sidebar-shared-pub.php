@@ -23,7 +23,7 @@ if ( ! isset( $entry ) ) {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string   $text
 	 * @param stdClass $entry

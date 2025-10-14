@@ -4,14 +4,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @since x.x
+ * @since 6.25
  */
 class FrmTestModeController {
 
 	/**
 	 * Maybe add the test mode container.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $html
 	 * @return string
@@ -22,7 +22,7 @@ class FrmTestModeController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.25
 		 */
 		do_action( 'frm_test_mode_container' );
 
@@ -42,7 +42,7 @@ class FrmTestModeController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return bool
 	 */
@@ -54,7 +54,7 @@ class FrmTestModeController {
 		/**
 		 * Filter this so the add-on can enable it when applicable in other cases (like when submitting with AJAX).
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param bool $is_test_mode
 		 */
@@ -64,7 +64,7 @@ class FrmTestModeController {
 	/**
 	 * Get the testing mode container.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
@@ -79,7 +79,7 @@ class FrmTestModeController {
 	/**
 	 * Render the testing mode container.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
@@ -148,7 +148,7 @@ class FrmTestModeController {
 	 * and for the lock icon in the upgrade modals.
 	 * It is also required for the tooltip icon used for the enabled form actions setting.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
@@ -159,7 +159,7 @@ class FrmTestModeController {
 	/**
 	 * Check GET and POST to determine the current form key.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return false|string
 	 */
@@ -185,7 +185,7 @@ class FrmTestModeController {
 	/**
 	 * Check the request data to determine which action IDs are currently enabled.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $form_actions
 	 * @return array
@@ -197,7 +197,7 @@ class FrmTestModeController {
 		 * Filters the list of enabled form action IDs.
 		 * This way the add-on can modify it when required.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param array $all_form_action_ids
 		 */
@@ -207,7 +207,7 @@ class FrmTestModeController {
 	/**
 	 * Determine if the upsell should be shown.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return bool
 	 */
@@ -222,7 +222,7 @@ class FrmTestModeController {
 	/**
 	 * Determine if the Test Mode add-on is installed and active.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return bool
 	 */
@@ -237,7 +237,7 @@ class FrmTestModeController {
 	/**
 	 * Get the list of roles that can be selected in the test mode container.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return array
 	 */
@@ -256,7 +256,7 @@ class FrmTestModeController {
 	/**
 	 * Get the selected role for test mode.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
@@ -266,7 +266,7 @@ class FrmTestModeController {
 		/**
 		 * Filters the selected role for test mode so the add-on can modify it when required.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param string $selected_role
 		 */
@@ -276,7 +276,7 @@ class FrmTestModeController {
 	/**
 	 * Get the arguments for the disabled required fields toggle.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return array
 	 */
@@ -284,7 +284,7 @@ class FrmTestModeController {
 		/**
 		 * Filters the arguments for the disabled required fields toggle so the add-on can modify it.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param array $args
 		 */
@@ -302,7 +302,7 @@ class FrmTestModeController {
 	/**
 	 * Get the arguments for the show all hidden fields toggle.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return array
 	 */
@@ -310,7 +310,7 @@ class FrmTestModeController {
 		/**
 		 * Filters the arguments for the show all hidden fields toggle so the add-on can modify it.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param array $args
 		 */
@@ -328,7 +328,7 @@ class FrmTestModeController {
 	/**
 	 * Register and enqueue the required scripts for the test mode container Lite functionality.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
@@ -356,7 +356,7 @@ class FrmTestModeController {
 	/**
 	 * Register and enqueue the required scripts for the multiselect dropdown.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */

@@ -208,7 +208,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo the get free templates banner.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
@@ -227,7 +227,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Checks if the get free templates banner should be displayed.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return bool
 	 */
@@ -238,7 +238,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Checks if a template needs the free plan override.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $template The template data.
 	 * @return bool
