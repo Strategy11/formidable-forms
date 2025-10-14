@@ -406,15 +406,16 @@ class FrmFieldsController {
 	 * @param bool   $choice_limit_is_reached
 	 * @param array  $shortcode_atts
 	 * @param string $opt_key
-	 * @param array  $form_options
+	 * @param int    $form_id
 	 *
 	 * @return bool
 	 */
-	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_options ) {
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
 		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			return true;
 		}
-
+		$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'options' );
+		FrmAppHelper::unserialize_or_decode( $form_options );
 		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_options, $opt_key );
 	}
 
