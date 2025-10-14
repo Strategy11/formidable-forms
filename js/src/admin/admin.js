@@ -4543,29 +4543,28 @@ window.frmAdminBuildJS = function() {
 	 */
 	function getSelectedRange( $firstGroup, hoverTarget ) {
 		const hoverTargetSection = hoverTarget.closest( '.edit_field_type_divider' );
-		let targetSection, $range;
+		let targetSection, $range, fieldsInSection;
 		if ( hoverTargetSection ) {
 			targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
+			fieldsInSection = [ ...hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' )].filter( el => el.classList.length === 2 );
 		}
 		const hoverTargetBox = hoverTarget.querySelector( 'li' );
 		if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
 			// If field target field is in a section.
 			$range = $firstGroup.parent().nextUntil( targetSection || hoverTarget.parentNode );
 
-			if ( ! hoverTargetSection ) {
+			if ( ! fieldsInSection ) {
 				return $range;
 			}
-			const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
 			$range = $range.add( fieldsInSection.slice( 0, fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
 			return $range;
 		}
 
 		// Select fields back to the first group.
 		$range = $firstGroup.parent().prevUntil( targetSection || hoverTarget.parentNode );
-		if ( ! hoverTargetSection ) {
+		if ( ! fieldsInSection ) {
 			return $range;
 		}
-		const fieldsInSection = Array.from( hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) );
 		$range = $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
 
 		return $range;
