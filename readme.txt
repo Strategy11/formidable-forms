@@ -419,20 +419,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Previous attempts to delete a field would re-trigger when deleting a field group, causing unexpected JS errors and issues with deleting a field unintentionally.
 * The deprecated filter frm_email_value has been removed.
 
-= 6.22.3 =
-* Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
-
-= 6.22.2 =
-* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
-
-= 6.22.1 =
-* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
-* Fix: The honeypot would appear incorrectly when editing in-place.
-* Fix: Field IDs would not properly update when importing a Timeline view.
-* Fix: Database queries would not use cached query data when the query resulted in no results.
-* Fix: Name fields would not work correctly when using the minimize=1 option.
-* Form previews are now automatically restricted to privileged users for the contact-us key to help prevent spam.
-
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
 == Upgrade Notice ==
