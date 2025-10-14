@@ -1422,17 +1422,19 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
-		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
+			return;
+		}
+
+		$is_form_list  = FrmAppHelper::is_admin_list_page();
+		$is_entry_list = FrmAppHelper::is_admin_list_page( 'formidable-entries' );
+		if ( ! $is_form_list && ! $is_entry_list ) {
 			return;
 		}
 
 		$orderby = FrmAppHelper::get_param( 'orderby' );
 		if ( ! $orderby ) {
-			return;
-		}
-
-		$meta_key = self::get_sort_pref_user_meta_key();
-		if ( false === $meta_key ) {
 			return;
 		}
 
@@ -1442,17 +1444,28 @@ class FrmAppController {
 			'orderby' => $orderby,
 			'order'   => $order,
 		);
-		$current_sort = get_user_meta( $user_id, $meta_key, true );
+		$previous_meta = get_user_meta( $user_id, $meta_key, true );
+		$current_sort  = $previous_meta;
+		$form_id       = $is_entry_list ? FrmAppHelper::simple_get( 'form' ) : 0;
+
+		if ( is_array( $current_sort ) && $form_id && isset( $current_sort[ $form_id ] ) ) {
+			$current_sort = $current_sort[ $form_id ];
+		}
 
 		if ( $new_sort !== $current_sort ) {
-			update_user_meta(
-				$user_id,
-				$meta_key,
-				array(
-					'orderby' => $orderby,
-					'order'   => $order,
-				)
+			$new_meta = array(
+				'orderby' => $orderby,
+				'order'   => $order,
 			);
+
+			if ( $is_entry_list ) {
+				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
+				$temp_meta[ $form_id ] = $new_meta;
+				$new_meta              = $temp_meta;
+				unset( $temp_meta );
+			}
+
+			update_user_meta( $user_id, $meta_key, $new_meta );
 		}
 	}
 
@@ -1466,10 +1479,6 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function apply_saved_sort_preference( &$orderby, &$order ) {
-		if ( ! function_exists( 'get_current_screen' ) ) {
-			return;
-		}
-
 		$meta_key = self::get_sort_pref_user_meta_key();
 		if ( false === $meta_key ) {
 			return;
@@ -1477,11 +1486,10 @@ class FrmAppController {
 
 		$user_id             = get_current_user_id();
 		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
-		$screen_id_only_key  = self::get_sort_pref_user_meta_key_with_screen_id_only();
+		$form_id             = FrmAppHelper::simple_get( 'form' );
 
-		if ( ! is_array( $preferred_list_sort ) && $meta_key !== $screen_id_only_key ) {
-			// Fallback to the old setting if the new one is not found.
-			$preferred_list_sort = get_user_meta( $user_id, $screen_id_only_key, true );
+		if ( is_array( $preferred_list_sort ) && $form_id && isset( $preferred_list_sort[ $form_id ] ) ) {
+			$preferred_list_sort = $preferred_list_sort[ $form_id ];
 		}
 
 		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
@@ -1494,35 +1502,17 @@ class FrmAppController {
 	}
 
 	/**
-	 * Get the user meta key for the current screen.
-	 * If we are on the entries list page, include the form ID so
-	 * preferences in one form do not cause issues in another form.
+	 * Get a simple user meta key that only includes the screen ID.
 	 *
 	 * @since x.x
 	 *
 	 * @return false|string
 	 */
 	private static function get_sort_pref_user_meta_key() {
-		$meta_key = self::get_sort_pref_user_meta_key_with_screen_id_only();
-		if ( is_string( $meta_key ) && FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
-			$form_id = FrmAppHelper::simple_get( 'form' );
-			if ( $form_id ) {
-				$meta_key .= '-' . $form_id;
-			}
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
 		}
 
-		return $meta_key;
-	}
-
-	/**
-	 * Get a simple user meta key that only includes the screen ID.
-	 * This is used for the forms list. On the entries list, the form ID is added afterward.
-	 *
-	 * @since x.x
-	 *
-	 * @return false|string
-	 */
-	private static function get_sort_pref_user_meta_key_with_screen_id_only() {
 		$screen = get_current_screen();
 		return $screen ? 'frm_preferred_list_sort_' . $screen->id : false;
 	}
