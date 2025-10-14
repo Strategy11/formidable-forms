@@ -38,13 +38,6 @@ class FrmWelcomeTourController {
 	private static $checklist = array();
 
 	/**
-	 * Whether the checklist should be shown.
-	 *
-	 * @var bool
-	 */
-	private static $should_show_checklist = false;
-
-	/**
 	 * Steps data to pass to the view.
 	 *
 	 * @var array
@@ -102,9 +95,6 @@ class FrmWelcomeTourController {
 					case 'create-form':
 						$completed_step = self::more_than_the_default_form_exists();
 						break;
-					case 'add-fields':
-						$completed_step = isset( self::$checklist['completed_steps']['add-fields'] );
-						break;
 					case 'embed-form':
 						$completed_step = self::check_for_form_embeds();
 						break;
@@ -119,16 +109,13 @@ class FrmWelcomeTourController {
 			if ( $completed_step && $index === $active_step ) {
 				$active_step++;
 			}
+
+			self::$steps['steps'][ $index ]['completed'] = $completed_step;
 		}//end foreach
 
 		self::$checklist['active_step']     = $active_step;
 		self::$checklist['active_step_key'] = $step_keys[ $active_step ];
 		self::save_checklist();
-
-		self::$should_show_checklist = self::should_show_checklist();
-		if ( self::$should_show_checklist ) {
-			add_filter( 'frm_should_show_floating_links', '__return_false' );
-		}
 	}
 
 	/**
@@ -169,31 +156,23 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function render() {
-		if ( ! self::$should_show_checklist ) {
+		if ( ! self::should_show_checklist() ) {
 			return;
 		}
 
+		add_filter( 'frm_should_show_floating_links', '__return_false' );
+
+		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 		$steps             = array_combine( self::$steps['keys'], self::$steps['steps'] );
 		$active_step       = self::$checklist['active_step_key'];
 		$is_tour_completed = count( $steps ) === count( self::$checklist['completed_steps'] );
+		$steps_view_path   = $is_tour_completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
+		$spotlight         = self::get_spotlight_data( $is_tour_completed );
 
-		$view_path       = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
-		$steps_view_path = $is_tour_completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
-
-		$spotlight       = self::get_spotlight_data( $is_tour_completed );
-
-		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-		$urls            = array(
-			'docs'                      => self::make_tracked_url( 'https://formidableforms.com/knowledgebase/' ),
-			// Setup email notifications would go to the actions & notifications area
-			'setup_email_notifications' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Customize success message would do the same, ideally scrolling down to the message
-			'customize_success_message' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Manage form entries would go to the "entries" area for all forms.
-			'manage_form_entries'       => admin_url( 'admin.php?page=formidable-entries' ),
-			// Explore Integrations would take them to the add-ons tab
-			'explore_integrations'      => admin_url( 'admin.php?page=formidable-addons' ),
-		);
+		$current_form_id   = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		if ( ! $current_form_id ) {
+			$current_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		}
 
 		include $view_path . 'index.php';
 	}
@@ -386,11 +365,6 @@ class FrmWelcomeTourController {
 			return true;
 		}
 
-		// If we're in the form builder and not on the default form, a form exists.
-		if ( FrmAppHelper::is_form_builder_page() && 1 !== FrmAppHelper::simple_get( 'id', 'absint', 0 ) ) {
-			return true;
-		}
-
 		return $form_keys && ! in_array( 'contact-form', $form_keys, true );
 	}
 
@@ -548,7 +522,7 @@ class FrmWelcomeTourController {
 	 * @param string $url The base URL to process.
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
-	private static function make_tracked_url( $url ) {
+	public static function make_tracked_url( $url ) {
 		$utm_params = array(
 			'utm_source'   => 'WordPress',
 			'utm_medium'   => 'welcome-tour',
