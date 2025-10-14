@@ -414,9 +414,18 @@ class FrmFieldsController {
 		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			return true;
 		}
-		$form_options = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'options' );
-		FrmAppHelper::unserialize_or_decode( $form_options );
-		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_options, $opt_key );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $should_hide_field_choice
+		 * @param bool   $choice_limit_is_reached
+		 * @param int    $form_id
+		 * @param string $opt_key
+		 *
+		 * @return bool
+		 */
+		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_id, $opt_key );
 	}
 
 	/**
