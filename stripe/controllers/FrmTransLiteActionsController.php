@@ -226,7 +226,7 @@ class FrmTransLiteActionsController {
 		/**
 		 * Trigger various hooks including frm_payment_status_complete.
 		 *
-		 * @since x.x This was included in the payments submodule, but not included in Lite until x.x.
+		 * @since 6.25 This was included in the payments submodule, but not included in Lite until 6.25.
 		 *
 		 * @param array $atts
 		 */

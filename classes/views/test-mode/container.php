@@ -114,7 +114,7 @@ if ( ! empty( $should_show_warning ) ) {
 		'href'  => '#',
 	);
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $start_over_button_attrs
 	 */
