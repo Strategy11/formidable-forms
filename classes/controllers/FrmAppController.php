@@ -1422,30 +1422,26 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
-		$screen  = get_current_screen();
-		if ( ! $screen ) {
-			return;
-		}
-
 		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
 			return;
 		}
 
 		$orderby = FrmAppHelper::get_param( 'orderby' );
-
 		if ( ! $orderby ) {
 			return;
 		}
 
-		$user_id  = get_current_user_id();
-		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
-		$order    = FrmAppHelper::get_param( 'order' );
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
+			return;
+		}
 
-		$new_sort = array(
+		$user_id      = get_current_user_id();
+		$order        = FrmAppHelper::get_param( 'order' );
+		$new_sort     = array(
 			'orderby' => $orderby,
 			'order'   => $order,
 		);
-
 		$current_sort = get_user_meta( $user_id, $meta_key, true );
 
 		if ( $new_sort !== $current_sort ) {
@@ -1474,13 +1470,19 @@ class FrmAppController {
 			return;
 		}
 
-		$screen = get_current_screen();
-		if ( ! $screen ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
 			return;
 		}
 
 		$user_id             = get_current_user_id();
-		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+		$legacy_meta_key     = self::get_legacy_sort_pref_user_meta_key();
+
+		if ( ! is_array( $preferred_list_sort ) && $meta_key !== $legacy_meta_key ) {
+			// Fallback to the old setting if the new one is not found.
+			$preferred_list_sort = get_user_meta( $user_id, $legacy_meta_key, true );
+		}
 
 		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
 			$orderby = $preferred_list_sort['orderby'];
@@ -1489,6 +1491,45 @@ class FrmAppController {
 				$order = $preferred_list_sort['order'];
 			}
 		}
+	}
+
+	/**
+	 * Get the user meta key for the current screen.
+	 * If we are on the entries list page, include the form ID so
+	 * preferences in one form do not cause issues in another form.
+	 *
+	 * @since x.x
+	 *
+	 * @return false|string
+	 */
+	private static function get_sort_pref_user_meta_key() {
+		$screen = get_current_screen();
+		if ( ! $screen ) {
+			return false;
+		}
+
+		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
+		if ( FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+			$form_id = FrmAppHelper::simple_get( 'form' );
+			if ( $form_id ) {
+				$meta_key .= '-' . $form_id;
+			}
+		}
+
+		return $meta_key;
+	}
+
+	/**
+	 * Get the old meta key for the enries list page, that doesn't include the form ID.
+	 * This is used so we can use the previous setting if the new one hasn't been set yet.
+	 *
+	 * @since x.x
+	 *
+	 * @return false|string
+	 */
+	private static function get_legacy_sort_pref_user_meta_key() {
+		$screen = get_current_screen();
+		return $screen ? 'frm_preferred_list_sort_' . $screen->id : false;
 	}
 
 	/**
