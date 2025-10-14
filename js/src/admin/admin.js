@@ -4548,7 +4548,7 @@ window.frmAdminBuildJS = function() {
 			targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
 			fieldsInSection = [ ...hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' )].filter( el => el.classList.length === 2 );
 		}
-		const hoverTargetBox = hoverTarget.querySelector( 'li' );
+		const hoverTargetBox = hoverTarget.closest( 'li' );
 		if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
 			// If field target field is in a section.
 			$range = $firstGroup.parent().nextUntil( targetSection || hoverTarget.parentNode );
