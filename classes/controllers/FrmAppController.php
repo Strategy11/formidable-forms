@@ -1459,6 +1459,7 @@ class FrmAppController {
 			);
 
 			if ( $is_entry_list ) {
+				// Index meta by form ID.
 				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
 				$temp_meta[ $form_id ] = $new_meta;
 				$new_meta              = $temp_meta;
