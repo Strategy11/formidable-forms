@@ -63,7 +63,8 @@
 		}
 
 		&--active {
-			#{$self}-title {
+			#{$self}-title,
+			#{$self}-title a {
 				font-weight: 600;
 				color: var(--grey-800);
 			}
@@ -79,10 +80,6 @@
 				border-style: solid;
 				border-color: var(--success-500);
 			}
-		}
-
-		&:not(&--completed):not(&--active) {
-			cursor: pointer;
 		}
 	}
 
