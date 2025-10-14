@@ -305,10 +305,12 @@ class FrmHooksController {
 
 		// Reviews.
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
-
 		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
-
 		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
+
+		// Welcome Tour.
+		add_action( 'wp_ajax_frm_mark_checklist_step_as_completed', 'FrmWelcomeTourController::ajax_mark_checklist_step_as_completed' );
+		add_action( 'wp_ajax_frm_dismiss_welcome_tour', 'FrmWelcomeTourController::ajax_dismiss_welcome_tour' );
 	}
 
 	/**
