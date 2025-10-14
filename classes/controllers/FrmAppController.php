@@ -1438,9 +1438,9 @@ class FrmAppController {
 			return;
 		}
 
-		$user_id      = get_current_user_id();
-		$order        = FrmAppHelper::get_param( 'order' );
-		$new_sort     = array(
+		$user_id       = get_current_user_id();
+		$order         = FrmAppHelper::get_param( 'order' );
+		$new_sort      = array(
 			'orderby' => $orderby,
 			'order'   => $order,
 		);
@@ -1453,10 +1453,7 @@ class FrmAppController {
 		}
 
 		if ( $new_sort !== $current_sort ) {
-			$new_meta = array(
-				'orderby' => $orderby,
-				'order'   => $order,
-			);
+			$new_meta = $new_sort;
 
 			if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
 				// Index meta by form ID.
