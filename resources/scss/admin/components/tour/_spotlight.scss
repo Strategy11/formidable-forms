@@ -1,9 +1,7 @@
 .frm-spotlight {
-	position: absolute;
-	top: 50%;
-	transform: translate(-7px, -50%);
+	position: fixed;
+	transform: translateY(-50%);
 	cursor: default;
-	z-index: 9999;
 
 	> * {
 		flex: 0 0 auto
