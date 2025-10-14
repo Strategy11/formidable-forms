@@ -411,7 +411,7 @@ class FrmFieldsController {
 	 * @return bool
 	 */
 	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_options ) {
-		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
 			return true;
 		}
 
