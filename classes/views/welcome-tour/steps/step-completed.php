@@ -22,16 +22,16 @@ $button_attrs_html = FrmAppHelper::array_to_html_params(
 	<p><?php esc_html_e( 'Setup is complete and your form is ready to use. Thank you for building with Formidable Forms!', 'formidable' ); ?></p>
 
 	<p class="frm-mt-sm"><?php esc_html_e( 'What\'s next for you?', 'formidable' ); ?></p>
-	<a href="<?php echo esc_url( $urls['setup_email_notifications'] ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ) ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php esc_html_e( 'Setup email notifications', 'formidable' ); ?>
 	</a>
-	<a href="<?php echo esc_url( $urls['customize_success_message'] ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ) ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php esc_html_e( 'Customize success message', 'formidable' ); ?>
 	</a>
-	<a href="<?php echo esc_url( $urls['manage_form_entries'] ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-entries' ) ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php esc_html_e( 'Manage form entries', 'formidable' ); ?>
 	</a>
-	<a href="<?php echo esc_url( $urls['explore_integrations'] ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-addons' ) ); ?>" <?php echo $button_attrs_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php esc_html_e( 'Explore integrations', 'formidable' ); ?>
 	</a>
 
@@ -40,7 +40,7 @@ $button_attrs_html = FrmAppHelper::array_to_html_params(
 		printf(
 			/* translators: %s is the link to the documentation */
 			esc_html__( 'Check %s to learn more.', 'formidable' ),
-			'<a href="' . esc_url( $urls['docs'] ) . '" class="frm-underline" target="_blank" rel="noopener">' . esc_html__( 'Docs & Support', 'formidable' ) . '</a>'
+			'<a href="' . esc_url( FrmWelcomeTourController::make_tracked_url( 'https://formidableforms.com/knowledgebase/' ) ) . '" class="frm-underline" target="_blank" rel="noopener">' . esc_html__( 'Docs & Support', 'formidable' ) . '</a>'
 		);
 		?>
 	</p>
