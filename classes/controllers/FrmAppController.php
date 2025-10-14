@@ -1446,9 +1446,9 @@ class FrmAppController {
 		);
 		$previous_meta = get_user_meta( $user_id, $meta_key, true );
 		$current_sort  = $previous_meta;
-		$form_id       = $is_entry_list ? FrmAppHelper::simple_get( 'form' ) : 0;
+		$form_id       = $is_entry_list ? FrmAppHelper::simple_get( 'form', 'absint' ) : 0;
 
-		if ( is_array( $current_sort ) && $form_id && isset( $current_sort[ $form_id ] ) ) {
+		if ( is_array( $current_sort ) && $form_id && is_int( $form_id ) && isset( $current_sort[ $form_id ] ) ) {
 			$current_sort = $current_sort[ $form_id ];
 		}
 
@@ -1458,7 +1458,7 @@ class FrmAppController {
 				'order'   => $order,
 			);
 
-			if ( $is_entry_list ) {
+			if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
 				// Index meta by form ID.
 				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
 				$temp_meta[ $form_id ] = $new_meta;
@@ -1487,9 +1487,9 @@ class FrmAppController {
 
 		$user_id             = get_current_user_id();
 		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
-		$form_id             = FrmAppHelper::simple_get( 'form' );
+		$form_id             = FrmAppHelper::simple_get( 'form', 'absint' );
 
-		if ( is_array( $preferred_list_sort ) && $form_id && isset( $preferred_list_sort[ $form_id ] ) ) {
+		if ( is_array( $preferred_list_sort ) && $form_id && is_int( $form_id ) && isset( $preferred_list_sort[ $form_id ] ) ) {
 			$preferred_list_sort = $preferred_list_sort[ $form_id ];
 		}
 
