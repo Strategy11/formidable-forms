@@ -2,6 +2,7 @@
 	position: absolute;
 	top: 50%;
 	transform: translate(-7px, -50%);
+	cursor: default;
 	z-index: 9999;
 
 	> * {
@@ -11,8 +12,8 @@
 	&__content {
 		position: relative;
 		box-sizing: border-box;
+		flex-shrink: 0;
 		width: 242px;
-		height: 112px;
 		border: 1px solid var(--grey-200);
 		overflow: visible;
 

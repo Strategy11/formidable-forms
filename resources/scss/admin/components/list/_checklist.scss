@@ -1,4 +1,5 @@
 .frm-checklist {
+	$root: &;
 
 	width: 316px;
 	height: 400px;
@@ -16,18 +17,23 @@
 		font-size: var(--text-xs);
 	}
 
+	&__header .frmsvg {
+		transition: transform 200ms ease-out 50ms;
+	}
+
 	&__progress-bar {
 		height: 8px;
 	}
 
 	&__progress-fill {
-		width: 25%;
+		width: 0;
 	}
 
 	&__dismiss {
 		height: 50px;
 		border-top: 1px solid var(--grey-100);
 		cursor: pointer;
+		transition: height 150ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
 	}
 
 	&__completed {
@@ -53,12 +59,17 @@
 			background-color: var(--grey-50);
 			border-radius: var(--small-radius);
 			line-height: var(--leading);
+			display: none;
 		}
 
 		&--active {
 			#{$self}-title {
 				font-weight: 600;
 				color: var(--grey-800);
+			}
+
+			#{$self}-description {
+				display: block;
 			}
 		}
 
@@ -72,6 +83,23 @@
 
 		&:not(&--completed):not(&--active) {
 			cursor: pointer;
+		}
+	}
+
+	&--collapsed {
+		height: auto;
+
+		#{$root}__steps {
+			display: none;
+		}
+
+		#{$root}__dismiss {
+			height: 0;
+			overflow: hidden;
+		}
+
+		#{$root}__header .frmsvg {
+			transform: rotate(-180deg);
 		}
 	}
 }
