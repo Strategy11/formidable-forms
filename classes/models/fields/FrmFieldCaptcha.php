@@ -121,7 +121,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
@@ -129,7 +129,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * Allows updating the captcha language.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param string $lang
 		 * @param array $field

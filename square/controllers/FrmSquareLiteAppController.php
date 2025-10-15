@@ -161,7 +161,7 @@ class FrmSquareLiteAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $details
 	 * @param array $address

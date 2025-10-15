@@ -22,7 +22,7 @@ describe( 'Forms page', () => {
 					cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 						cy.visit( href );
 						cy.get( 'h1' ).should( $h1 => {
-							const headingText = $h1.text().toLowerCase();
+							const headingText = $h1.text().trim().toLowerCase();
 							expect( [
 								'the only wordpress form maker & application builder plugin',
 								'upgrade today to unlock the full power of formidable forms',
@@ -30,6 +30,8 @@ describe( 'Forms page', () => {
 								'more than just a wordpress form builder',
 								'get more done in less time with better wordpress forms',
 								'power your wordpress site like never before',
+								'tired of workarounds? build what you really need.',
+								'build powerful forms, web apps, dashboards, and more',
 							] ).to.include( headingText );
 						} );
 					} );

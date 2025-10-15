@@ -63,7 +63,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * Set the free license code option value.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $code The license code to set.
 	 */
@@ -74,7 +74,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * Get the free license code option value.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return false|string The license code, or false if not set.
 	 */

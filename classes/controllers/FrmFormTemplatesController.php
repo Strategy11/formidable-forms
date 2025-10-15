@@ -394,7 +394,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Handle AJAX request to subscribe the user to ActiveCampaign.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
