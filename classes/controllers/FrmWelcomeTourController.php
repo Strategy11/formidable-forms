@@ -207,10 +207,9 @@ class FrmWelcomeTourController {
 			case 'add-fields':
 				return $is_form_builder_page;
 			case 'style-form':
-				return $is_form_builder_page || $is_style_editor_page;
 			case 'embed-form':
 			case 'completed':
-				return $is_style_editor_page || $is_form_builder_page;
+				return $is_form_builder_page || $is_style_editor_page;
 			default:
 				return false;
 		}
@@ -235,19 +234,19 @@ class FrmWelcomeTourController {
 			case 'create-form':
 				$spotlight_data = array(
 					'target'        => '#frm-form-templates-create-form-divider',
-					'left-position' => '35%',
+					'left-position' => 'middle',
 				);
 				break;
 			case 'add-fields':
 				$spotlight_data = array(
 					'target'        => '.frm-settings-panel .frm-tabs-navs li.frm-active',
-					'left-position' => '150px',
+					'left-position' => '140px',
 				);
 				break;
 			case 'style-form':
 				$spotlight_data = array(
-					'target'        => '#frm-form-templates-create-form-divider',
-					'left-position' => 'middle',
+					'target'        => '#frm_style_sidebar .frm-style-card > div + .dropdown',
+					'left-position' => 'calc(100% + var(--gap-xs))',
 				);
 				break;
 			case 'embed-form':
@@ -278,7 +277,7 @@ class FrmWelcomeTourController {
 			),
 			'add-fields'  => array(
 				'title'       => __( 'Add fields to your form', 'formidable' ),
-				'description' => __( 'Click or drag fields from the left to add them to your form.', 'formidable' ),
+				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
 			),
 			'style-form'  => array(
 				'title'       => __( 'Style your form', 'formidable' ),
@@ -399,23 +398,11 @@ class FrmWelcomeTourController {
 	 * @return array
 	 */
 	private static function get_js_variables() {
-		$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-
 		return array(
-			'IS_DASHBOARD_PAGE'             => FrmDashboardController::is_dashboard_page(),
-			'IS_WELCOME_TOUR_SEEN'          => ! empty( self::$checklist['seen'] ),
-			'PROGRESS_BAR_PERCENT'          => self::get_welcome_tour_progress_bar_percent(),
-			'TOUR_URL'                      => admin_url( 'admin.php?page=formidable-form-templates' ),
-			'DOCS_URL'                      => 'https://formidableforms.com/knowledgebase/',
-			'CHECKLIST_ACTIVE_STEP'         => self::get_active_step(),
-			// Setup email notifications would go to the actions & notifications area
-			'SETUP_EMAIL_NOTIFICATIONS_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Customize success message would do the same, ideally scrolling down to the message
-			'CUSTOMIZE_SUCCESS_MESSAGE_URL' => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-			// Manage form entries would go to the "entries" area for all forms.
-			'MANAGE_FORM_ENTRIES_URL'       => admin_url( 'admin.php?page=formidable-entries' ),
-			// Explore Integrations would take them to the add-ons tab
-			'EXPLORE_INTEGRATIONS_URL'      => admin_url( 'admin.php?page=formidable-addons' ),
+			'IS_DASHBOARD_PAGE'    => self::$is_dashboard_page,
+			'IS_WELCOME_TOUR_SEEN' => ! empty( self::$checklist['seen'] ),
+			'PROGRESS_BAR_PERCENT' => self::get_welcome_tour_progress_bar_percent(),
+			'TOUR_URL'             => admin_url( 'admin.php?page=formidable-form-templates' ),
 		);
 	}
 
