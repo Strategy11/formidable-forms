@@ -2780,7 +2780,7 @@ window.frmAdminBuildJS = function() {
 			if ( orderInput ) {
 				orderInput.value = fieldsOrder[ fieldId ];
 			}
-		});
+		} );
 	}
 
 	/**
