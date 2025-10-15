@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 103;
+	public static $db_version = 104;
 
 	/**
 	 * Used by the API add-on.
@@ -2040,12 +2040,6 @@ class FrmAppHelper {
 		 * @param array<string,string> $pro_cap
 		 */
 		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
-
-		if ( ! array_key_exists( 'frm_edit_displays', $pro_cap ) && is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) {
-			// For backward compatibility, add the Add/Edit Views permission if Pro is not up to date.
-			// This was added in 6.5.4. Remove this in the future.
-			$pro_cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
-		}
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;

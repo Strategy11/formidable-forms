@@ -3,6 +3,7 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
 
 /**
  * Represents the frmStyleOptions class.
+ *
  * @class
  */
 class frmStyleOptions {
@@ -95,6 +96,7 @@ class frmStyleOptions {
 	 * Initializes the copy to clipboard functionality for style classes.
 	 * Adds a click event listener to the copyLabel element.
 	 * Copies the class name to the clipboard and displays a success message.
+	 *
 	 * @param {string} successMessage - The success message to display.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {

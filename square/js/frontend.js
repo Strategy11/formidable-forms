@@ -254,6 +254,8 @@
 
 		async function handlePaymentMethodSubmission( event, card ) {
 			try {
+				thisForm.classList.add( 'frm_js_validate' );
+
 				if ( ! validateFormSubmit( thisForm ) ) {
 					return;
 				}
