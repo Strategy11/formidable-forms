@@ -209,20 +209,23 @@ class FrmSubmitHelper {
 	 */
 	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
-		if ( ! $last_row_field_ids ) {
+		if ( ! is_array( $last_row_field_ids ) || empty( $last_row_field_ids ) ) {
 			return;
 		}
-
 		foreach ( $last_row_field_ids as $index => $last_row_field_id ) {
+			$last_row_field_id = absint( $last_row_field_id );
+			if ( ! $last_row_field_id ) {
+				continue;
+			}
 			// Plus 2 here because the new field has that plus 1.
 			$new_order = $field_count + $index + 2;
-
-			FrmField::update(
+			$updated   = FrmField::update(
 				$last_row_field_id,
 				array( 'field_order' => $new_order )
 			);
-
-			self::$last_row_fields_order[ $last_row_field_id ] = $new_order;
+			if ( false !== $updated ) {
+				self::$last_row_fields_order[ $last_row_field_id ] = $new_order;
+			}
 		}
 	}
 
