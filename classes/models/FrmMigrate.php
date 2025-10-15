@@ -399,7 +399,7 @@ class FrmMigrate {
 	 * In older versions of Lite, it's possible we've saved the wrong location ID.
 	 * So force it to get valid values again.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */

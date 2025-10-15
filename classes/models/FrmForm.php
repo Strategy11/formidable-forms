@@ -1164,7 +1164,7 @@ class FrmForm {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param bool   $visible
 		 * @param object $form

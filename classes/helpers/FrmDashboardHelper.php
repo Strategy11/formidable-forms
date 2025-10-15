@@ -164,7 +164,7 @@ class FrmDashboardHelper {
 	/**
 	 * Get free templates banner template.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
