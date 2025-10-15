@@ -52,6 +52,13 @@ class FrmWelcomeTourController {
 	private static $is_dashboard_page = false;
 
 	/**
+	 * The current form ID.
+	 *
+	 * @var int
+	 */
+	private static $current_form_id = 0;
+
+	/**
 	 * Initialize hooks for Dashboard page only.
 	 *
 	 * @since x.x
@@ -147,72 +154,59 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Marks the welcome tour as seen if it hasn't been seen yet.
+	 * Gets the checklist steps.
 	 *
 	 * @since x.x
 	 *
-	 * @return void
+	 * @return array
 	 */
-	public static function maybe_mark_welcome_tour_as_seen() {
-		if ( ! empty( self::$checklist['seen'] ) ) {
-			return;
-		}
+	private static function get_steps() {
+		$steps = array(
+			'create-form' => array(
+				'title'       => __( 'Create your first form', 'formidable' ),
+				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
+			),
+			'add-fields'  => array(
+				'title'       => __( 'Add fields to your form', 'formidable' ),
+				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
+			),
+			'style-form'  => array(
+				'title'       => __( 'Style your form', 'formidable' ),
+				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
+				'link'        => FrmStylesHelper::get_list_url( self::get_current_form_id() ),
+			),
+			'embed-form'  => array(
+				'title'       => __( 'Embed in a page', 'formidable' ),
+				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
+			),
+		);
 
-		if ( ! FrmOnboardingWizardController::is_onboarding_wizard_page() ) {
-			self::$checklist['seen'] = true;
-			self::save_checklist();
-		}
+		$steps_keys = array_keys( $steps );
+
+		return array(
+			'keys'  => $steps_keys,
+			'steps' => self::fill_step_completed_data( $steps, $steps_keys ),
+		);
 	}
 
 	/**
-	 * Render the welcome tour elements.
+	 * Fills the steps with the completed data.
 	 *
 	 * @since x.x
 	 *
-	 * @return void
+	 * @param array $steps The steps to fill.
+	 * @param array $steps_keys The steps keys.
+	 * @return array The steps with the completed data.
 	 */
-	public static function render() {
-		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
-		$steps             = array_combine( self::$steps['keys'], self::$steps['steps'] );
-		$active_step       = self::$checklist['active_step_key'];
-		$is_tour_completed = count( $steps ) === count( self::$checklist['completed_steps'] );
-		$steps_view_path   = $is_tour_completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
-		$spotlight         = self::get_spotlight_data( $is_tour_completed );
-
-		$current_form_id   = FrmAppHelper::simple_get( 'id', 'absint', 0 );
-		if ( ! $current_form_id ) {
-			$current_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
-		}
-
-		include $view_path . 'index.php';
-	}
-
-	/**
-	 * Checks if the checklist should be shown.
-	 *
-	 * @since x.x
-	 *
-	 * @return bool True if the checklist should be shown, false otherwise.
-	 */
-	private static function should_show_checklist() {
-		$active_step            = self::$checklist['active_step_key'];
-		$page                   = FrmAppHelper::simple_get( 'page' );
-		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
-		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
-		$is_style_editor_page   = FrmAppHelper::is_style_editor_page();
-
-		switch ( $active_step ) {
-			case 'create-form':
-				return $is_form_templates_page;
-			case 'add-fields':
-				return $is_form_builder_page;
-			case 'style-form':
-			case 'embed-form':
-			case 'completed':
-				return $is_form_builder_page || $is_style_editor_page;
-			default:
-				return false;
-		}
+	private static function fill_step_completed_data( $steps, $steps_keys ) {
+		return array_map(
+			function ( $step, $step_key ) {
+				$step['completed'] = isset( self::$checklist['completed_steps'][ $step_key ] );
+				return $step;
+			},
+			$steps,
+			$steps_keys
+		);
 	}
 
 	/**
@@ -263,58 +257,68 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Gets the checklist steps.
+	 * Marks the welcome tour as seen if it hasn't been seen yet.
 	 *
 	 * @since x.x
 	 *
-	 * @return array
+	 * @return void
 	 */
-	private static function get_steps() {
-		$steps = array(
-			'create-form' => array(
-				'title'       => __( 'Create your first form', 'formidable' ),
-				'description' => __( 'Start from scratch or jump in with one of our ready-to-use templates.', 'formidable' ),
-			),
-			'add-fields'  => array(
-				'title'       => __( 'Add fields to your form', 'formidable' ),
-				'description' => __( 'Click or drag fields from the left to add them to your form. Edit and/or delete them as needed.', 'formidable' ),
-			),
-			'style-form'  => array(
-				'title'       => __( 'Style your form', 'formidable' ),
-				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
-			),
-			'embed-form'  => array(
-				'title'       => __( 'Embed in a page', 'formidable' ),
-				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
-			),
-		);
+	public static function maybe_mark_welcome_tour_as_seen() {
+		if ( ! empty( self::$checklist['seen'] ) ) {
+			return;
+		}
 
-		$steps_keys = array_keys( $steps );
-
-		return array(
-			'keys'  => $steps_keys,
-			'steps' => self::fill_step_completed_data( $steps, $steps_keys ),
-		);
+		if ( ! FrmOnboardingWizardController::is_onboarding_wizard_page() ) {
+			self::$checklist['seen'] = true;
+			self::save_checklist();
+		}
 	}
 
 	/**
-	 * Fills the steps with the completed data.
+	 * Render the welcome tour elements.
 	 *
 	 * @since x.x
 	 *
-	 * @param array $steps The steps to fill.
-	 * @param array $steps_keys The steps keys.
-	 * @return array The steps with the completed data.
+	 * @return void
 	 */
-	private static function fill_step_completed_data( $steps, $steps_keys ) {
-		return array_map(
-			function ( $step, $step_key ) {
-				$step['completed'] = isset( self::$checklist['completed_steps'][ $step_key ] );
-				return $step;
-			},
-			$steps,
-			$steps_keys
-		);
+	public static function render() {
+		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
+		$steps             = array_combine( self::$steps['keys'], self::$steps['steps'] );
+		$active_step       = self::$checklist['active_step_key'];
+		$is_tour_completed = count( $steps ) === count( self::$checklist['completed_steps'] );
+		$steps_view_path   = $is_tour_completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
+		$spotlight         = self::get_spotlight_data( $is_tour_completed );
+		$current_form_id   = self::get_current_form_id();
+
+		include $view_path . 'index.php';
+	}
+
+	/**
+	 * Checks if the checklist should be shown.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the checklist should be shown, false otherwise.
+	 */
+	private static function should_show_checklist() {
+		$active_step            = self::$checklist['active_step_key'];
+		$page                   = FrmAppHelper::simple_get( 'page' );
+		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
+		$is_form_builder_page   = FrmAppHelper::is_form_builder_page();
+		$is_style_editor_page   = FrmAppHelper::is_style_editor_page();
+
+		switch ( $active_step ) {
+			case 'create-form':
+				return $is_form_templates_page;
+			case 'add-fields':
+				return $is_form_builder_page;
+			case 'style-form':
+			case 'embed-form':
+			case 'completed':
+				return $is_form_builder_page || $is_style_editor_page;
+			default:
+				return false;
+		}
 	}
 
 	/**
@@ -329,14 +333,12 @@ class FrmWelcomeTourController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$step_key = FrmAppHelper::get_post_param( 'step_key' );
-
 		if ( ! $step_key ) {
 			wp_send_json_error( __( 'Step is empty', 'formidable' ) );
 		}
 
 		self::$checklist                                 = self::get_checklist();
 		self::$checklist['completed_steps'][ $step_key ] = true;
-
 		self::save_checklist();
 
 		wp_send_json_success();
@@ -355,7 +357,6 @@ class FrmWelcomeTourController {
 
 		self::$checklist              = self::get_checklist();
 		self::$checklist['dismissed'] = true;
-
 		self::save_checklist();
 
 		wp_send_json_success();
@@ -527,5 +528,18 @@ class FrmWelcomeTourController {
 		);
 
 		return FrmAppHelper::make_affiliate_url( add_query_arg( $utm_params, $url ) );
+	}
+
+	public static function get_current_form_id() {
+		if ( self::$current_form_id ) {
+			return self::$current_form_id;
+		}
+
+		self::$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+		if ( ! self::$current_form_id ) {
+			self::$current_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		}
+
+		return self::$current_form_id;
 	}
 }
