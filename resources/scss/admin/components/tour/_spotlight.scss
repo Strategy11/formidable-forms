@@ -1,4 +1,6 @@
 .frm-spotlight {
+	--fadeout-time: 25ms;
+
 	position: fixed;
 	transform: translateY(-50%);
 	cursor: default;
