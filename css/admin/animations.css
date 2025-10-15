@@ -14,6 +14,10 @@
 .frm-fadein-down-short {
 	animation: fadeInDownShort 300ms ease-out forwards;
 }
+
+.frm-fadeout {
+	animation: fadeOut var(--fadeout-time, 400ms) ease-in-out forwards;
+}
 /* END fadeIn */
 
 /* pulse */
@@ -82,6 +86,16 @@
 
 	100% {
 		opacity: 1;
+	}
+}
+
+@keyframes fadeOut {
+	0% {
+		opacity: 1;
+	}
+
+	100% {
+		opacity: 0;
 	}
 }
 
