@@ -984,7 +984,7 @@ DEFAULT_HTML;
 		} elseif ( 'block' === $align ) {
 			$check_align = FrmStylesController::get_style_val( 'check_align', $this->field['form_id'] );
 			// Check needed to fix issue #6035
-			if ( 'block' === $check_align ) {
+			if ( 'inline' !== $check_align ) {
 				$align = 'vertical_radio';
 			}
 		}
