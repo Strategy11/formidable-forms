@@ -44,6 +44,7 @@ function setupSpotlight( spotlightElement ) {
 /**
  * Update spotlight position based on target element.
  *
+ * @private
  * @param {HTMLElement} spotlightElement The spotlight container.
  * @param {HTMLElement} targetElement    The target element.
  * @return {void}
@@ -58,34 +59,22 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
 		return;
 	}
 
-	// Simple viewport bounds check - adjust if target is off-screen
-	let top = targetRect.top + ( targetRect.height / 2 );
 	let left = targetRect.left;
+	const leftPositionAttr = spotlightElement.dataset.leftPosition;
 
-	const leftPosition = spotlightElement.dataset.leftPosition;
-	switch ( leftPosition ) {
+	switch ( leftPositionAttr ) {
 		case 'middle':
-			left = targetRect.left + ( targetRect.width / 2 );
+			left = targetRect.left + Math.round( targetRect.width / 2 );
 			break;
 		case 'end':
 			left = targetRect.right;
 			break;
 		default:
-			const offset = leftPosition && leftPosition.includes( 'px' ) ? parseInt( leftPosition ) : 0;
-			left = targetRect.left + offset;
+			left = targetRect.left + parseInt( leftPositionAttr );
 			break;
 	}
 
-	// Simple collision detection - keep spotlight in viewport
-	const margin = 10; // Safe margin from viewport edges
-	const viewportWidth = window.innerWidth;
-	const viewportHeight = window.innerHeight;
-
-	// Constrain to viewport bounds
-	top = Math.max( margin, Math.min( top, viewportHeight - margin ) );
-	left = Math.max( margin, Math.min( left, viewportWidth - margin ) );
-
-	spotlightElement.style.top = `${ top }px`;
+	spotlightElement.style.top = `${ targetRect.top + Math.round( targetRect.height / 2 ) }px`;
 	spotlightElement.style.left = `${ left }px`;
 }
 
