@@ -29,7 +29,10 @@ function setupSpotlight( spotlightElement ) {
 	// Add scroll listeners to all scrollable ancestors
 	const scrollableElements = getScrollableAncestors( targetElement );
 	scrollableElements.forEach( element => {
-		element.addEventListener( 'scroll', () => updateSpotlightPosition( spotlightElement, targetElement ), { passive: true } );
+		element.addEventListener( 'scroll', () => {
+			updateSpotlightPosition( spotlightElement, targetElement );
+			handleSpotlightFadeAnimation( spotlightElement );
+		}, { passive: true } );
 	} );
 
 	window.addEventListener( 'resize', () => updateSpotlightPosition( spotlightElement, targetElement ), { passive: true } );
@@ -76,6 +79,30 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
 
 	spotlightElement.style.top = `${ targetRect.top + Math.round( targetRect.height / 2 ) }px`;
 	spotlightElement.style.left = `${ left }px`;
+}
+
+/**
+ * Handle fade animations based on spotlight position relative to #frm_top_bar.
+ *
+ * @private
+ * @param {HTMLElement} spotlightElement The spotlight container.
+ * @return {void}
+ */
+function handleSpotlightFadeAnimation( spotlightElement ) {
+	const topBar = document.querySelector( '#frm_top_bar' );
+	if ( ! topBar ) {
+		return;
+	}
+
+	const shouldFadeOut = ( spotlightElement.getBoundingClientRect().top + 24 ) <= topBar.getBoundingClientRect().bottom;
+
+	if ( shouldFadeOut && ! spotlightElement.classList.contains( 'frm-fadeout' ) ) {
+		spotlightElement.classList.remove( 'frm-fadein' );
+		spotlightElement.classList.add( 'frm-fadeout' );
+	} else if ( ! shouldFadeOut && ! spotlightElement.classList.contains( 'frm-fadein' ) ) {
+		spotlightElement.classList.remove( 'frm-fadeout' );
+		spotlightElement.classList.add( 'frm-fadein' );
+	}
 }
 
 /**
