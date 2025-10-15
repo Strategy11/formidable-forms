@@ -137,12 +137,41 @@ class FrmSalesApi extends FrmFormApi {
 	}
 
 	/**
-	 * @param array $cross_sell_text
+	 * Determine which cross sell text to use.
+	 * These are shown in order for 30 days before moving on to the next one.
 	 *
+	 * @since x.x
+	 *
+	 * @param array $cross_sell_text
 	 * @return int
 	 */
 	private static function determine_cross_sell_index( $cross_sell_text ) {
-		// TODO
+		$option_name         = 'frm_cross_sell_settings';
+		$cross_sell_settings = get_option( $option_name );
+
+		if ( ! is_array( $cross_sell_settings ) ) {
+			$cross_sell_settings = array(
+				reset( $cross_sell_text ) => time(),
+			);
+			update_option( $option_name, $cross_sell_settings );
+			return 0;
+		}
+
+		foreach ( $cross_sell_text as $index => $current_text ) {
+			if ( ! isset( $cross_sell_settings[ $current_text ] ) ) {
+				$cross_sell_settings[ $current_text ] = time();
+				update_option( $option_name, $cross_sell_settings );
+				return $index;
+			}
+
+			$time_elapsed = time() - $cross_sell_settings[ $current_text ];
+			if ( $time_elapsed < DAY_IN_SECONDS * 30 ) {
+				return $index;
+			}
+		}
+
+		// If all options are expired, reset the option.
+		delete_option( $option_name );
 		return 0;
 	}
 
