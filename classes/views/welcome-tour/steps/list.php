@@ -28,6 +28,10 @@ foreach ( $steps as $key => $step ) {
 		$step_attrs['class'] .= ' frm-checklist__step--completed';
 	}
 
+	if ( ! empty( $step['link'] ) ) {
+		$step_attrs['data-link'] = $step['link'];
+	}
+
 	$active_step_url = $is_active && in_array( $active_step, array( 'style-form', 'embed-form' ), true )
 		? FrmStylesHelper::get_list_url( $current_form_id )
 		: '';
