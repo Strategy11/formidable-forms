@@ -66,7 +66,8 @@ class FrmSalesApi extends FrmFormApi {
 	 * @return string
 	 */
 	protected function api_url() {
-		return 'https://plapi.formidableforms.com/sales/';
+		return 'https://dev-site.local/wp-json/s11-sales/v1/list/';
+		// return 'https://plapi.formidableforms.com/sales/';
 	}
 
 	/**
@@ -86,25 +87,63 @@ class FrmSalesApi extends FrmFormApi {
 			$this->add_sale( $sale );
 
 			if ( is_array( $sale ) && isset( $sale['cross_sell_text'] ) ) {
-				$this->set_cross_sale( $sale );
+				$this->set_cross_sell( $sale );
 			}
 		}
 	}
 
 	/**
+	 * Check for a special array in the sales API array.
+	 * Normally cross_sell_text and cross_sell_link are not set.
+	 * But one array, that isn't actually a sale, contains cross sell data.
+	 * This should be near the end of the array.
+	 *
 	 * @since x.x
 	 *
 	 * @param array $data
 	 * @return void
 	 */
-	private function set_cross_sale( $data ) {
-		if ( ! empty( $data['cross_sell_text'] ) ) {
-			self::$cross_sell_text = sanitize_text_field( $data['cross_sell_text'] );
+	private function set_cross_sell( $data ) {
+		if ( ! self::cross_sell_is_valid( $data ) ) {
+			return;
 		}
 
-		if ( ! empty( $data['cross_sell_link'] ) ) {
-			self::$cross_sell_link = esc_url_raw( $data['cross_sell_link'] );
+		$cross_sell_text  = $data['cross_sell_text'];
+		$cross_sell_links = $data['cross_sell_link'];
+		$index            = self::determine_cross_sell_index( $cross_sell_text );
+
+		self::$cross_sell_text = sanitize_text_field( $cross_sell_text[ $index ] );
+		self::$cross_sell_link = esc_url_raw( $cross_sell_links[ $index ] );
+	}
+
+	/**
+	 * Check that both cross_sell_text and cross_sell_link are set and are arrays of the same size.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $data
+	 * @return bool
+	 */
+	private function cross_sell_is_valid( $data ) {
+		if ( empty( $data['cross_sell_text'] ) || empty( $data['cross_sell_link'] ) ) {
+			return false;
 		}
+
+		if ( ! is_array( $data['cross_sell_text'] ) || ! is_array( $data['cross_sell_link'] ) ) {
+			return false;
+		}
+
+		return count( $data['cross_sell_link'] ) === count( $data['cross_sell_text'] );
+	}
+
+	/**
+	 * @param array $cross_sell_text
+	 *
+	 * @return int
+	 */
+	private static function determine_cross_sell_index( $cross_sell_text ) {
+		// TODO
+		return 0;
 	}
 
 	/**
