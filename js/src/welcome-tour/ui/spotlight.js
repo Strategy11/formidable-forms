@@ -14,6 +14,7 @@ function initializeSpotlight() {
 /**
  * Setup spotlight with positioning and scroll listeners.
  *
+ * @private
  * @param {HTMLElement} spotlightElement The spotlight container.
  * @return {void}
  */
@@ -23,18 +24,21 @@ function setupSpotlight( spotlightElement ) {
 		return;
 	}
 
-	// Append spotlight to body to ensure it's visible
 	document.body.appendChild( spotlightElement );
-	spotlightElement.classList.remove( 'frm-force-hidden' );
 
-	updateSpotlightPosition( spotlightElement, targetElement );
-
+	// Add scroll listeners to all scrollable ancestors
 	const scrollableElements = getScrollableAncestors( targetElement );
 	scrollableElements.forEach( element => {
 		element.addEventListener( 'scroll', () => updateSpotlightPosition( spotlightElement, targetElement ), { passive: true } );
 	} );
 
 	window.addEventListener( 'resize', () => updateSpotlightPosition( spotlightElement, targetElement ), { passive: true } );
+
+	// Re-position and show spotlight after a short delay on page load
+	setTimeout( () => {
+		updateSpotlightPosition( spotlightElement, targetElement );
+		spotlightElement.classList.remove( 'frm-force-hidden' );
+	}, 200 );
 }
 
 /**
