@@ -2730,6 +2730,11 @@ window.frmAdminBuildJS = function() {
 			field.classList.remove( 'frm-newly-added' );
 		}, 1000 );
 
+		const lastRowOrderInput = field.querySelector( '#frm-last-row-fields-order' );
+		if ( lastRowOrderInput ) {
+			updateLastRowFieldsOrder( JSON.parse( lastRowOrderInput.value ) );
+		}
+
 		if ( addFocus ) {
 			const bounding = field.getBoundingClientRect(),
 				container = document.getElementById( 'post-body-content' ),
@@ -2763,6 +2768,19 @@ window.frmAdminBuildJS = function() {
 		addedEvent.frmType = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
+	}
+
+	function updateLastRowFieldsOrder( fieldsOrder ) {
+		if ( ! fieldsOrder || 'object' !== typeof fieldsOrder ) {
+			return;
+		}
+
+		Object.keys( fieldsOrder ).forEach( fieldId => {
+			const orderInput = document.querySelector( 'input[name="field_options[field_order_' + fieldId + ']"]' );
+			if ( orderInput ) {
+				orderInput.value = fieldsOrder[ fieldId ];
+			}
+		});
 	}
 
 	/**
