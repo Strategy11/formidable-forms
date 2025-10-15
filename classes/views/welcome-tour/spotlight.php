@@ -13,7 +13,7 @@ if ( empty( $spotlight['target'] ) ) {
 	return;
 }
 ?>
-<div class="frm-spotlight frm-welcome-tour-spotlight frm-h-stack-xs frm-force-hidden" data-target="<?php echo esc_attr( $spotlight['target'] ); ?>" data-left-position="<?php echo esc_attr( $spotlight['left-position'] ?? 'end' ); ?>">
+<div class="frm-spotlight frm-welcome-tour-spotlight frm-flex frm-gap-xs frm-items-center frm-force-hidden" data-target="<?php echo esc_attr( $spotlight['target'] ); ?>" data-left-position="<?php echo esc_attr( $spotlight['left-position'] ?? 'end' ); ?>">
 	<div class="frm-spotlight__pointer frm-flex-center frm-mr-2xs frm-fadein-up-back frm-pulse"></div>
 
 	<div class="frm-spotlight__content frm-flex-col frm-justify-center frm-gap-xs frmcenter frm-bg-white frm-p-sm frm-rounded-md frm-box-shadow-xxl frm-fadein-up-back">
