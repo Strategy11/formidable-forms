@@ -3,7 +3,7 @@ export const {
 	IS_WELCOME_TOUR_SEEN,
 	CHECKLIST_STEPS,
 	TOUR_URL,
-	PROGRESS_BAR_PERCENT
+	PROGRESS_BAR_PERCENT,
 } = window.frmWelcomeTourVars;
 
 export const PREFIX = 'frm-welcome-tour';
