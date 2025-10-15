@@ -45,6 +45,13 @@ class FrmWelcomeTourController {
 	private static $steps = array();
 
 	/**
+	 * Whether the current page is the dashboard page.
+	 *
+	 * @var bool
+	 */
+	private static $is_dashboard_page = false;
+
+	/**
 	 * Initialize hooks for Dashboard page only.
 	 *
 	 * @since x.x
@@ -52,27 +59,48 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function load_admin_hooks() {
-		if ( ! FrmAppHelper::is_formidable_admin() ) {
+		if ( ! self::should_show_welcome_tour() ) {
 			return;
+		}
+
+		add_filter( 'frm_should_show_floating_links', '__return_false' );
+		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+
+		if ( self::$is_dashboard_page ) {
+			add_action( 'admin_footer', __CLASS__ . '::maybe_mark_welcome_tour_as_seen', 999 );
+			return;
+		}
+
+		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
+		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
+		add_action( 'admin_footer', __CLASS__ . '::render', 999 );
+	}
+
+	/**
+	 * Determines if the welcome tour should be shown based on current page context.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if welcome tour should be shown, false otherwise.
+	 */
+	private static function should_show_welcome_tour() {
+		if ( ! FrmAppHelper::is_formidable_admin() ) {
+			return false;
 		}
 
 		self::$checklist = self::get_checklist();
 		if ( ! empty( self::$checklist['done'] ) || ! empty( self::$checklist['dismissed'] ) ) {
-			return;
+			return false;
 		}
 
-		// Return if it's the dashboard page and the checklist has been seen.
-		if ( FrmDashboardController::is_dashboard_page() && ! empty( self::$checklist['seen'] ) ) {
-			return;
+		self::$is_dashboard_page = FrmDashboardController::is_dashboard_page();
+		if ( self::$is_dashboard_page ) {
+			return empty( self::$checklist['seen'] );
 		}
 
-		add_action( 'admin_init', __CLASS__ . '::setup_checklist_progress' );
-		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-		add_action( 'admin_footer', __CLASS__ . '::admin_footer', 9999999 );
-
-		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
-		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
+		self::setup_checklist_progress();
+		return self::should_show_checklist();
 	}
 
 	/**
@@ -119,25 +147,13 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Callback for the admin_footer action hook.
-	 *
-	 * @since x.x
-	 *
-	 * @return void
-	 */
-	public static function admin_footer() {
-		self::maybe_mark_welcome_tour_as_seen();
-		self::render();
-	}
-
-	/**
 	 * Marks the welcome tour as seen if it hasn't been seen yet.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function maybe_mark_welcome_tour_as_seen() {
+	public static function maybe_mark_welcome_tour_as_seen() {
 		if ( ! empty( self::$checklist['seen'] ) ) {
 			return;
 		}
@@ -156,12 +172,6 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function render() {
-		if ( ! self::should_show_checklist() ) {
-			return;
-		}
-
-		add_filter( 'frm_should_show_floating_links', '__return_false' );
-
 		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 		$steps             = array_combine( self::$steps['keys'], self::$steps['steps'] );
 		$active_step       = self::$checklist['active_step_key'];
