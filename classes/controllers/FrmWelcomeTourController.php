@@ -72,7 +72,10 @@ class FrmWelcomeTourController {
 
 		add_filter( 'frm_should_show_floating_links', '__return_false' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+
+		if ( ! self::is_tour_completed() ) {
+			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+		}
 
 		if ( self::$is_dashboard_page ) {
 			add_action( 'admin_footer', __CLASS__ . '::maybe_mark_welcome_tour_as_seen', 999 );
@@ -97,7 +100,7 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist = self::get_checklist();
-		if ( ! empty( self::$checklist['done'] ) || ! empty( self::$checklist['dismissed'] ) ) {
+		if ( self::is_tour_completed() || ! empty( self::$checklist['dismissed'] ) ) {
 			return false;
 		}
 
@@ -148,8 +151,15 @@ class FrmWelcomeTourController {
 			self::$steps['steps'][ $index ]['completed'] = $completed_step;
 		}//end foreach
 
-		self::$checklist['active_step']     = $active_step;
-		self::$checklist['active_step_key'] = $step_keys[ $active_step ];
+		self::$checklist['active_step'] = $active_step;
+
+		if ( $active_step === count( $step_keys ) ) {
+			self::$checklist['done']            = true;
+			self::$checklist['active_step_key'] = 'completed';
+		} else {
+			self::$checklist['active_step_key'] = $step_keys[ $active_step ];
+		}
+
 		self::save_checklist();
 	}
 
@@ -178,6 +188,7 @@ class FrmWelcomeTourController {
 			'embed-form'  => array(
 				'title'       => __( 'Embed in a page', 'formidable' ),
 				'description' => __( 'Time to get some responses! Add your brand new form to a current page, or embed it on a new one.', 'formidable' ),
+				'link'        => FrmStylesHelper::get_list_url( self::get_current_form_id() ),
 			),
 		);
 
@@ -214,14 +225,9 @@ class FrmWelcomeTourController {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool $is_tour_completed Whether the tour is completed.
-	 * @return array|null The spotlight data or null if not needed.
+	 * @return array The spotlight data.
 	 */
-	private static function get_spotlight_data( $is_tour_completed ) {
-		if ( $is_tour_completed ) {
-			return null;
-		}
-
+	private static function get_spotlight_data() {
 		$spotlight_data = array();
 
 		switch ( self::$checklist['active_step_key'] ) {
@@ -282,12 +288,17 @@ class FrmWelcomeTourController {
 	 */
 	public static function render() {
 		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
-		$steps             = array_combine( self::$steps['keys'], self::$steps['steps'] );
-		$active_step       = self::$checklist['active_step_key'];
-		$is_tour_completed = count( $steps ) === count( self::$checklist['completed_steps'] );
-		$steps_view_path   = $is_tour_completed ? $view_path . 'steps/step-completed.php' : $view_path . 'steps/list.php';
-		$spotlight         = self::get_spotlight_data( $is_tour_completed );
+		$is_tour_completed = self::is_tour_completed();
 		$current_form_id   = self::get_current_form_id();
+
+		if ( $is_tour_completed ) {
+			$steps_path = $view_path . 'steps/step-completed.php';
+		} else {
+			$steps_path  = $view_path . 'steps/list.php';
+			$steps       = array_combine( self::$steps['keys'], self::$steps['steps'] );
+			$active_step = self::$checklist['active_step_key'];
+			$spotlight   = self::get_spotlight_data();
+		}
 
 		include $view_path . 'index.php';
 	}
@@ -300,6 +311,11 @@ class FrmWelcomeTourController {
 	 * @return bool True if the checklist should be shown, false otherwise.
 	 */
 	private static function should_show_checklist() {
+		if ( self::is_tour_completed() ) {
+			// Show the checklist to display the completed step.
+			return true;
+		}
+
 		$active_step            = self::$checklist['active_step_key'];
 		$page                   = FrmAppHelper::simple_get( 'page' );
 		$is_form_templates_page = FrmFormTemplatesController::PAGE_SLUG === $page;
@@ -391,22 +407,6 @@ class FrmWelcomeTourController {
 	}
 
 	/**
-	 * Get the Welcome Tour JS variables as an array.
-	 *
-	 * @since x.x
-	 *
-	 * @return array
-	 */
-	private static function get_js_variables() {
-		return array(
-			'IS_DASHBOARD_PAGE'    => self::$is_dashboard_page,
-			'IS_WELCOME_TOUR_SEEN' => ! empty( self::$checklist['seen'] ),
-			'PROGRESS_BAR_PERCENT' => self::get_welcome_tour_progress_bar_percent(),
-			'TOUR_URL'             => admin_url( 'admin.php?page=formidable-form-templates' ),
-		);
-	}
-
-	/**
 	 * Get the active step.
 	 *
 	 * @since x.x
@@ -415,23 +415,6 @@ class FrmWelcomeTourController {
 	 */
 	private static function get_active_step() {
 		return self::$checklist['active_step'] ?? 0;
-	}
-
-	/**
-	 * Get the Welcome Tour progress bar percentage.
-	 *
-	 * @since x.x
-	 *
-	 * @return int
-	 */
-	private static function get_welcome_tour_progress_bar_percent() {
-		if ( ! self::$steps ) {
-			return 0;
-		}
-
-		$percent = self::get_active_step() / count( self::$steps['keys'] ) * 100;
-
-		return (int) $percent;
 	}
 
 	/**
@@ -481,6 +464,39 @@ class FrmWelcomeTourController {
 		wp_enqueue_script( self::SCRIPT_HANDLE );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
+	}
+
+	/**
+	 * Get the Welcome Tour JS variables as an array.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_js_variables() {
+		return array(
+			'IS_DASHBOARD_PAGE'    => self::$is_dashboard_page,
+			'IS_WELCOME_TOUR_SEEN' => ! empty( self::$checklist['seen'] ),
+			'PROGRESS_BAR_PERCENT' => self::get_welcome_tour_progress_bar_percent(),
+			'TOUR_URL'             => admin_url( 'admin.php?page=formidable-form-templates' ),
+		);
+	}
+
+	/**
+	 * Get the Welcome Tour progress bar percentage.
+	 *
+	 * @since x.x
+	 *
+	 * @return int
+	 */
+	private static function get_welcome_tour_progress_bar_percent() {
+		if ( ! self::$steps ) {
+			return 0;
+		}
+
+		$percent = self::get_active_step() / count( self::$steps['keys'] ) * 100;
+
+		return (int) $percent;
 	}
 
 	/**
@@ -540,5 +556,16 @@ class FrmWelcomeTourController {
 		}
 
 		return self::$current_form_id;
+	}
+
+	/**
+	 * Checks if the tour is completed.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool True if the tour is completed, false otherwise.
+	 */
+	private static function is_tour_completed() {
+		return ! empty( self::$checklist['done'] );
 	}
 }

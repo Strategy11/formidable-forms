@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php endif; ?>
 
 	<div class="frm-checklist__steps frm-grow frm-scrollbar-wrapper frm-slide-down">
-		<?php include $steps_view_path; ?>
+		<?php include $steps_path; ?>
 	</div>
 
 	<?php if ( ! $is_tour_completed ) { ?>
