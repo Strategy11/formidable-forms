@@ -19,8 +19,16 @@ $spotlight_attributes           = array(
 	'data-target'        => $spotlight['target'],
 	'data-left-position' => $spotlight['left-position'] ?? 'end',
 	'data-placement'     => $placement,
+	'style'              => '',
 );
 $spotlight_attributes['class'] .= 'bottom' === $placement ? ' frm-flex-col' : ' frm-flex';
+
+if ( ! empty( $spotlight['offset']['top'] ) ) {
+	$spotlight_attributes['style'] .= 'margin-top: ' . $spotlight['offset']['top'] . 'px;';
+}
+if ( ! empty( $spotlight['offset']['left'] ) ) {
+	$spotlight_attributes['style'] .= 'margin-left: ' . $spotlight['offset']['left'] . 'px;';
+}
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $spotlight_attributes, true ); ?>>
 	<div class="frm-spotlight__pointer frm-flex-center frm-fadein-up-back frm-pulse"></div>
