@@ -77,16 +77,10 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
 	}
 	spotlightElement.style.left = `${ left || targetRect.left }px`;
 
-	let top;
-	const placementAttr = spotlightElement.dataset.placement;
-	switch ( placementAttr ) {
-		case 'bottom':
-			top = targetRect.top + targetRect.height;
-			break;
-		default:
-			top = targetRect.top + Math.round( targetRect.height / 2 );
-			break;
-	}
+	const top = 'bottom' === spotlightElement.dataset.placement
+		? targetRect.top + targetRect.height
+		: targetRect.top + Math.round( targetRect.height / 2 );
+
 	spotlightElement.style.top = `${ top }px`;
 }
 
