@@ -1,2 +1,14 @@
-export { default as addChecklistEvents } from './checklistEvents';
-export { default as addDismissEvents } from './dismissEvents';
+import addChecklistEvents from './checklistEvents';
+import addDismissEvents from './dismissEvents';
+import addStyleUpdateEvents from './styleUpdateEvents';
+
+
+/**
+ * Attaches event listeners for handling user interactions.
+ *
+ * @return {void}
+ */
+export function addEventListeners() {
+	addChecklistEvents();
+	addDismissEvents();
+}
