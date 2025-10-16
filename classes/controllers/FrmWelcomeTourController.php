@@ -72,10 +72,7 @@ class FrmWelcomeTourController {
 
 		add_filter( 'frm_should_show_floating_links', '__return_false' );
 		add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
-
-		if ( ! self::is_tour_completed() ) {
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-		}
+		add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
 
 		if ( self::$is_dashboard_page ) {
 			add_action( 'admin_footer', __CLASS__ . '::maybe_mark_welcome_tour_as_seen', 999 );
@@ -245,8 +242,12 @@ class FrmWelcomeTourController {
 				break;
 			case 'style-form':
 				$spotlight_data = array(
-					'target'        => '#frm_style_sidebar .frm-style-card > div + .dropdown',
+					'target'        => '#frm_style_sidebar .frm-style-card > div',
 					'left-position' => 'end',
+					'offset'        => array(
+						'top'  => -22,
+						'left' => 16,
+					),
 				);
 				break;
 			case 'embed-form':
@@ -553,6 +554,9 @@ class FrmWelcomeTourController {
 		self::$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		if ( ! self::$current_form_id ) {
 			self::$current_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		}
+		if ( ! self::$current_form_id ) {
+			self::$current_form_id = FrmForm::get_current_form_id( 'first' );
 		}
 
 		return self::$current_form_id;
