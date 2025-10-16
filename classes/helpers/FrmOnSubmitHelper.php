@@ -150,10 +150,7 @@ class FrmOnSubmitHelper {
 	 * @return string
 	 */
 	public static function get_action_type( $action ) {
-		if ( isset( $action->post_content['success_action'] ) ) {
-			return $action->post_content['success_action'];
-		}
-		return self::get_default_action_type();
+		return $action->post_content['success_action'] ?? self::get_default_action_type();
 	}
 
 	public static function get_default_action_type() {
@@ -228,11 +225,11 @@ class FrmOnSubmitHelper {
 			return;
 		}
 
-		$form_options[ $opt . 'action' ] = isset( $action->post_content['success_action'] ) ? $action->post_content['success_action'] : 'message';
+		$form_options[ $opt . 'action' ] = $action->post_content['success_action'] ?? 'message';
 
 		switch ( $form_options[ $opt . 'action' ] ) {
 			case 'redirect':
-				$form_options[ $opt . 'url' ]        = isset( $action->post_content['success_url'] ) ? $action->post_content['success_url'] : '';
+				$form_options[ $opt . 'url' ]        = $action->post_content['success_url'] ?? '';
 				$form_options['open_in_new_tab']     = ! empty( $action->post_content['open_in_new_tab'] );
 				$form_options['redirect_delay']      = ! empty( $action->post_content['redirect_delay'] );
 				$form_options['redirect_delay_time'] = $action->post_content['redirect_delay_time'];
@@ -240,7 +237,7 @@ class FrmOnSubmitHelper {
 				break;
 
 			case 'page':
-				$form_options[ $opt . 'page_id' ] = isset( $action->post_content['success_page_id'] ) ? $action->post_content['success_page_id'] : '';
+				$form_options[ $opt . 'page_id' ] = $action->post_content['success_page_id'] ?? '';
 				break;
 
 			default:
@@ -333,20 +330,20 @@ class FrmOnSubmitHelper {
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
 		$opt  = 'update' === $event ? 'edit_' : 'success_';
 		$data = array(
-			'success_action' => isset( $form_options[ $opt . 'action' ] ) ? $form_options[ $opt . 'action' ] : self::get_default_action_type(),
+			'success_action' => $form_options[ $opt . 'action' ] ?? self::get_default_action_type(),
 		);
 
 		switch ( $data['success_action'] ) {
 			case 'redirect':
-				$data['success_url'] = isset( $form_options[ $opt . 'url' ] ) ? $form_options[ $opt . 'url' ] : '';
+				$data['success_url'] = $form_options[ $opt . 'url' ] ?? '';
 				break;
 
 			case 'page':
-				$data['success_page_id'] = isset( $form_options[ $opt . 'page_id' ] ) ? $form_options[ $opt . 'page_id' ] : '';
+				$data['success_page_id'] = $form_options[ $opt . 'page_id' ] ?? '';
 				break;
 
 			default:
-				$data['success_msg'] = isset( $form_options[ $opt . 'msg' ] ) ? $form_options[ $opt . 'msg' ] : self::get_default_msg();
+				$data['success_msg'] = $form_options[ $opt . 'msg' ] ?? self::get_default_msg();
 				$data['show_form']   = ! empty( $form_options['show_form'] );
 		}
 

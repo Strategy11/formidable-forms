@@ -53,16 +53,10 @@ export const setQueryParam = ( paramName, paramValue, updateMethod = 'pushState'
 export const hasQueryParam = paramName => urlParams.has( paramName );
 
 /**
- * Navigates to the specified URL.
+ * Removes a query parameter and updates history with replaceState.
  *
- * @param {string} href The URL to navigate to.
+ * @param {string} paramName The query parameter to remove.
  * @return {void}
- * @throws {Error} If the URL is invalid or navigation fails.
  */
-export const navigate = href => {
-	try {
-		window.location.assign( href );
-	} catch ( error ) {
-		throw new Error( `Failed to navigate to URL: ${ href }. ${ error.message }` );
-	}
-};
+export const removeParamFromHistory = paramName =>
+	history.replaceState( {}, '', removeQueryParam( paramName ) );

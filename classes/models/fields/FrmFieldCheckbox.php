@@ -108,4 +108,17 @@ class FrmFieldCheckbox extends FrmFieldType {
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
 	}
+
+	/**
+	 * Unset aria-invalid for checkboxes because it's not valid for checkboxes.
+	 * Instead aria-invalid is added to the checkbox group parent element.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		unset( $shortcode_atts['aria-invalid'] );
+	}
 }

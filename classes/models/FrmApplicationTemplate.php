@@ -83,6 +83,27 @@ class FrmApplicationTemplate {
 			'product-review',
 			'real-estate-listings',
 			'business-directory',
+			'artist-gallery',
+			'classifieds',
+			'community-event-calendar',
+			'company-timeline',
+			'crowdfunding',
+			'job-board',
+			'logo-cloud',
+			'multi-property-booking-system',
+			'wedding-venue-booking',
+			'permission-slip',
+			'property-directory',
+			'radio-station',
+			'recipe',
+			'rsvp-invite',
+			'searchable-directory',
+			'shopping-cart',
+			'sports-league-calendar',
+			'staff-directory',
+			'tiered-pricing',
+			'trip-itinerary',
+			'twitterx',
 		);
 	}
 
@@ -131,7 +152,7 @@ class FrmApplicationTemplate {
 	 * @return array<string>
 	 */
 	public static function get_categories() {
-		return isset( self::$categories ) ? self::$categories : array();
+		return self::$categories ?? array();
 	}
 
 	/**

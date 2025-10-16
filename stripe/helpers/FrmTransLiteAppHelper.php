@@ -66,7 +66,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
-		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+		return $statuses[ $status ] ?? $status;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class FrmTransLiteAppHelper {
 				$payment_values['status']
 			);
 		}
-		$payment_values['meta_value'] = isset( $payment_values['meta_value'] ) ? $payment_values['meta_value'] : array();
+		$payment_values['meta_value'] = $payment_values['meta_value'] ?? array();
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );
 	}
 
@@ -152,7 +152,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
+		$value    = $settings[ $option ] ?? '';
 		return $value;
 	}
 
@@ -403,7 +403,7 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function echo_confirmation_link( $link ) {
-		$filter = __CLASS__ . '::allow_deleteconfirm_data_attribute';
+		$filter = self::class . '::allow_deleteconfirm_data_attribute';
 		add_filter( 'frm_striphtml_allowed_tags', $filter );
 		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $filter );

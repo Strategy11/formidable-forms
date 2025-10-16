@@ -7,6 +7,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 <input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />
 
+<?php
+/**
+ * @since 6.25
+ *
+ * @param WP_Post $form_action
+ */
+do_action( 'frm_action_settings_before_action_name', $form_action );
+?>
+
 <div class="frm_grid_container frm_no_p_margin">
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
@@ -43,7 +52,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) {
 		?>
-		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>

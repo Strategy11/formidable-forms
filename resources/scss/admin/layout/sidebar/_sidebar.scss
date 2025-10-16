@@ -37,6 +37,16 @@
 		.frm-tabs-navs {
 			padding: var(--gap-xs) var(--gap-xs) 0;
 		}
+
+		.frm-tabs-slide-track > div {
+			max-height: 0;
+			visibility: hidden;
+
+			&.frm-active {
+				max-height: unset;
+				visibility: visible;
+			}
+		}
 	}
 
 	.frm-embed-field-placeholder {

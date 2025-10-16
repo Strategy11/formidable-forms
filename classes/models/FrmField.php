@@ -377,7 +377,7 @@ class FrmField {
 		global $wpdb, $frm_duplicate_ids;
 
 		$new_values              = array();
-		$key                     = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
+		$key                     = $values['field_key'] ?? $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
@@ -1384,7 +1384,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
+		return $field->field_options[ $option ] ?? '';
 	}
 
 	/**

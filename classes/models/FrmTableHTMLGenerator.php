@@ -54,6 +54,24 @@ class FrmTableHTMLGenerator {
 	protected $td_style = '';
 
 	/**
+	 * Cell padding.
+	 *
+	 * @since 6.25
+	 *
+	 * @var string
+	 */
+	protected $cell_padding = '7px 9px';
+
+	/**
+	 * Table width.
+	 *
+	 * @since 6.25
+	 *
+	 * @var string
+	 */
+	protected $width = '';
+
+	/**
 	 * Used to add a class in tables. Set in Pro.
 	 *
 	 * @var bool
@@ -70,6 +88,15 @@ class FrmTableHTMLGenerator {
 	public function __construct( $type, $atts = array() ) {
 
 		$this->type = (string) $type;
+
+		if ( isset( $atts['cell_padding'] ) ) {
+			$this->cell_padding = $atts['cell_padding'];
+		}
+
+		if ( isset( $atts['width'] ) ) {
+			$this->width = $atts['width'];
+		}
+
 		$this->init_style_settings( $atts );
 		$this->init_use_inline_style( $atts );
 		$this->init_direction( $atts );
@@ -106,7 +133,7 @@ class FrmTableHTMLGenerator {
 			}
 		}
 
-		$this->style_settings['class'] = isset( $atts['class'] ) ? $atts['class'] : '';
+		$this->style_settings['class'] = $atts['class'] ?? '';
 	}
 
 	/**
@@ -146,13 +173,17 @@ class FrmTableHTMLGenerator {
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
 
-			$this->table_style  = ' style="' . esc_attr( 'font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
+			$this->table_style  = ' style="' . esc_attr( 'border-spacing:0;font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
 
 		}
 
 		if ( ! empty( $this->style_settings['class'] ) ) {
 			$this->table_style .= ' class="' . esc_attr( $this->style_settings['class'] ) . '"';
+		}
+
+		if ( ! empty( $this->width ) ) {
+			$this->table_style .= ' width="' . esc_attr( $this->width ) . '"';
 		}
 	}
 
@@ -166,11 +197,31 @@ class FrmTableHTMLGenerator {
 		if ( $this->use_inline_style === true ) {
 
 			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
-			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:7px 9px;vertical-align:top;';
+			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
 			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';
 
-			$this->td_style = ' style="' . $td_style_attributes . '"';
+			$this->td_style = ' style="' . esc_attr( $td_style_attributes ) . '"';
 		}
+	}
+
+	/**
+	 * Removes border CSS from HTML.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $html The HTML.
+	 * @param string $position The border position. Default is `top`.
+	 * @return string
+	 */
+	public function remove_border( $html, $position = 'top' ) {
+		$search = sprintf(
+			'border-%1$s:%2$s solid %3$s;',
+			$position,
+			$this->style_settings['border_width'],
+			$this->style_settings['border_color']
+		);
+
+		return str_replace( $search, '', $html );
 	}
 
 	/**
@@ -220,10 +271,11 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
+	 * @since 6.25    Changed scope from `protected` to `public`.
 	 *
 	 * @return string
 	 */
-	protected function tr_style() {
+	public function tr_style() {
 
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
@@ -234,6 +286,28 @@ class FrmTableHTMLGenerator {
 		}
 
 		return $tr_style;
+	}
+
+	/**
+	 * Gets table style.
+	 *
+	 * @since 6.25
+	 *
+	 * @return string
+	 */
+	public function get_table_style() {
+		return $this->table_style;
+	}
+
+	/**
+	 * Gets td style.
+	 *
+	 * @since 6.25
+	 *
+	 * @return string
+	 */
+	public function get_td_style() {
+		return $this->td_style;
 	}
 
 	/**

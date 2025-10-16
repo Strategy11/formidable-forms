@@ -34,6 +34,7 @@ const entries = {
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
     formidable_admin: './js/src/admin/admin.js',
+    frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
     'welcome-tour': './js/src/welcome-tour',
   },
@@ -42,6 +43,7 @@ const entries = {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
     font_icons: './resources/scss/font_icons.scss',
+    frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss',
     'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss'
   }
 };
@@ -88,7 +90,8 @@ const jsConfig = {
   entry: entries.js,
   output: {
     filename: '[name].js',
-    path: paths.js
+    path: paths.js,
+    chunkFormat: false,
   },
   module: {
     rules: [

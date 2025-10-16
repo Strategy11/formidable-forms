@@ -29,6 +29,10 @@ class FrmFormTemplatesHelper {
 		$template['is_custom']     = ! empty( $template['is_custom'] );
 		$template['plan_required'] = FrmFormsHelper::get_plan_required( $template );
 
+		if ( self::needs_free_plan( $template ) ) {
+			$template['plan_required'] = 'free';
+		}
+
 		if ( ! empty( $template['name'] ) ) {
 			$template['name'] = $template['is_custom'] ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
 		} else {
@@ -199,5 +203,50 @@ class FrmFormTemplatesHelper {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Echo the get free templates banner.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	public static function echo_get_free_templates_banner() {
+		$args = array(
+			'direction' => 'vertical',
+		);
+
+		?>
+		<div class="frm-card-item frm-px-sm">
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php'; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Checks if the get free templates banner should be displayed.
+	 *
+	 * @since 6.25
+	 *
+	 * @return bool
+	 */
+	public static function needs_get_free_templates_banner() {
+		return ! FrmAppHelper::pro_is_installed() && ! FrmFormTemplateApi::get_free_license_code();
+	}
+
+	/**
+	 * Checks if a template needs the free plan override.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $template The template data.
+	 * @return bool
+	 */
+	private static function needs_free_plan( $template ) {
+		return self::needs_get_free_templates_banner()
+			&& ! empty( $template['category_slugs'] )
+			&& in_array( 'free', $template['category_slugs'], true )
+			&& ! in_array( $template['id'], FrmFormTemplatesController::FREE_TEMPLATES_IDS, true );
 	}
 }

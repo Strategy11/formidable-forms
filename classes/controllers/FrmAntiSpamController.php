@@ -28,11 +28,11 @@ class FrmAntiSpamController {
 		);
 
 		foreach ( $methods as $method ) {
-			if ( ! is_callable( array( __CLASS__, $method ) ) ) {
+			if ( ! is_callable( array( self::class, $method ) ) ) {
 				continue;
 			}
 
-			$is_spam = call_user_func( array( __CLASS__, $method ), $values );
+			$is_spam = call_user_func( array( self::class, $method ), $values );
 			if ( $is_spam ) {
 				return $is_spam;
 			}

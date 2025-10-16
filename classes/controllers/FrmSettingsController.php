@@ -59,19 +59,19 @@ class FrmSettingsController {
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'messages'      => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
 			'permissions'   => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
@@ -79,7 +79,7 @@ class FrmSettingsController {
 			'payments'      => array(
 				'name'     => __( 'Payments', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_simple_cc_icon',
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'payments_settings',
 			),
 			'custom_css'    => array(
@@ -95,10 +95,16 @@ class FrmSettingsController {
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
 			'captcha'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
+			),
+			'email'         => array(
+				'class'    => self::class,
+				'function' => 'email_settings',
+				'name'     => __( 'Email', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_email_icon',
 			),
 			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
@@ -153,7 +159,7 @@ class FrmSettingsController {
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
 			'icon'     => 'frm_icon_font frm_shuffle_icon',
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
 
@@ -203,7 +209,7 @@ class FrmSettingsController {
 			}
 		}
 
-		uksort( self::$removed_payments_sections, array( __CLASS__, 'payment_sections_sort_callback' ) );
+		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
 	}
 
 	/**
@@ -240,7 +246,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		wp_die();
 	}
@@ -294,6 +300,17 @@ class FrmSettingsController {
 		$captcha_lang = FrmAppHelper::locales( 'captcha' );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/captcha/captcha.php';
+	}
+
+	/**
+	 * Shows email settings.
+	 *
+	 * @since 6.25
+	 */
+	public static function email_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
 	/**
@@ -460,5 +477,22 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
+	}
+
+	/**
+	 * Shows a fake color picker.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $color Color value.
+	 */
+	public static function fake_color_picker( $color ) {
+		?>
+		<div class="wp-picker-container">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
+			</button>
+		</div>
+		<?php
 	}
 }

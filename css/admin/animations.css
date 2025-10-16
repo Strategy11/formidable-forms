@@ -79,6 +79,10 @@
 }
 /* END FadeIn 3d */
 
+.frm-background-highlight {
+	animation: backgroundHighlight var(--highlight-time, 2750ms) ease-in forwards;
+}
+
 @keyframes fadeIn {
 	0% {
 		opacity: 0;
@@ -153,6 +157,20 @@
 
 	100% {
 		max-height: none;
+	}
+}
+
+@keyframes backgroundHighlight {
+	0% {
+		background-color: var(--primary-25);
+	}
+
+	90% {
+		background-color: var(--primary-25);
+	}
+
+	100% {
+		background-color: #fff;
 	}
 }
 
