@@ -79,9 +79,9 @@ class FrmWelcomeTourController {
 			return;
 		}
 
+		add_action( 'admin_footer', __CLASS__ . '::render', 999 );
 		add_action( 'frm_after_changed_form_style', __CLASS__ . '::mark_styler_step_as_completed' );
 		add_action( 'frm_after_saved_style', __CLASS__ . '::mark_styler_step_as_completed' );
-		add_action( 'admin_footer', __CLASS__ . '::render', 999 );
 	}
 
 	/**
@@ -240,7 +240,7 @@ class FrmWelcomeTourController {
 			case 'style-form':
 				$spotlight_data = array(
 					'target'        => '#frm_style_sidebar .frm-style-card > div + .dropdown',
-					'left-position' => 'calc(100% + var(--gap-xs))',
+					'left-position' => 'end',
 				);
 				break;
 			case 'embed-form':
@@ -268,10 +268,8 @@ class FrmWelcomeTourController {
 			return;
 		}
 
-		if ( ! FrmOnboardingWizardController::is_onboarding_wizard_page() ) {
-			self::$checklist['seen'] = true;
-			self::save_checklist();
-		}
+		self::$checklist['seen'] = true;
+		self::save_checklist();
 	}
 
 	/**
