@@ -545,6 +545,13 @@ class FrmWelcomeTourController {
 		return FrmAppHelper::make_affiliate_url( add_query_arg( $utm_params, $url ) );
 	}
 
+	/**
+	 * Get the current form ID.
+	 *
+	 * @since x.x
+	 *
+	 * @return int The current form ID.
+	 */
 	public static function get_current_form_id() {
 		if ( self::$current_form_id ) {
 			return self::$current_form_id;
