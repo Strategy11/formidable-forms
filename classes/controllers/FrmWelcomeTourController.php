@@ -458,7 +458,6 @@ class FrmWelcomeTourController {
 		$version    = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/welcome-tour.css', array(), $version );
-		wp_enqueue_style( self::SCRIPT_HANDLE );
 
 		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/welcome-tour.js', array( 'wp-i18n' ), $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmWelcomeTourVars', self::get_js_variables() );
