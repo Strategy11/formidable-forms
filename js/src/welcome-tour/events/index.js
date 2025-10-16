@@ -1,5 +1,6 @@
 import addChecklistEvents from './checklistEvents';
 import addDismissEvents from './dismissEvents';
+import addStylerUpdateEvents from './stylerUpdateButtonEvents';
 
 /**
  * Attaches event listeners for handling user interactions.
@@ -9,4 +10,5 @@ import addDismissEvents from './dismissEvents';
 export function addEventListeners() {
 	addChecklistEvents();
 	addDismissEvents();
+	addStylerUpdateEvents();
 }
