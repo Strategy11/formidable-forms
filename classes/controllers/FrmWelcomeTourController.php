@@ -350,7 +350,7 @@ class FrmWelcomeTourController {
 
 		$step_key = FrmAppHelper::get_post_param( 'step_key' );
 		if ( ! $step_key ) {
-			wp_send_json_error( __( 'Step is empty', 'formidable' ) );
+			wp_send_json_error( __( 'Invalid step', 'formidable' ) );
 		}
 
 		self::$checklist                                 = self::get_checklist();
