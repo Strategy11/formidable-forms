@@ -179,7 +179,7 @@ class FrmWelcomeTourController {
 			),
 			'style-form'  => array(
 				'title'       => __( 'Style your form', 'formidable' ),
-				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ),
+				'description' => __( 'Our default style looks great, but feel free to modify it! Change the color, font size, spacing, or whatever else you\'d like.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'link'        => FrmStylesHelper::get_list_url( self::get_current_form_id() ),
 			),
 			'embed-form'  => array(
