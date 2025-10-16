@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-checklist frm-flex-col frm-bg-white frm-rounded-12 frm-box-shadow-xxl">
 	<div class="frm-checklist__header frm-bg-grey-800 frm-h-stack frm-justify-between frm-p-sm frm-cursor-pointer">
-		<h2 class="frm-text-sm frm-text-white frm-m-0"><?php echo esc_html_e( 'Formidable Checklist', 'formidable' ); ?></h2>
+		<h2 class="frm-text-sm frm-text-white frm-m-0"><?php esc_html_e( 'Formidable Checklist', 'formidable' ); ?></h2>
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon frm_svg12 frm-text-white frm-m-2xs', array( 'aria-hidden' => 'true' ) ); ?>
 	</div>
 
