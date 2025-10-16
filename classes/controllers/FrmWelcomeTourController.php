@@ -59,13 +59,13 @@ class FrmWelcomeTourController {
 	private static $current_form_id = 0;
 
 	/**
-	 * Initialize hooks for Dashboard page only.
+	 * Initializes the Welcome Tour.
 	 *
 	 * @since x.x
 	 *
 	 * @return void
 	 */
-	public static function load_admin_hooks() {
+	public static function admin_init() {
 		if ( ! self::should_show_welcome_tour() ) {
 			return;
 		}

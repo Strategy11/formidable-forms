@@ -209,6 +209,8 @@ class FrmHooksController {
 
 		add_action( 'frm_email_styles_extra_settings', 'FrmEmailStylesController::show_upsell_settings' );
 
+		add_action( 'admin_init', 'FrmWelcomeTourController::admin_init' );
+
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
@@ -216,7 +218,6 @@ class FrmHooksController {
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
-		FrmWelcomeTourController::load_admin_hooks();
 		new FrmPluginSearch();
 	}
 
