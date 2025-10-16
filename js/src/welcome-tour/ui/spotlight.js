@@ -62,9 +62,8 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
 		return;
 	}
 
-	let left = targetRect.left;
+	let left;
 	const leftPositionAttr = spotlightElement.dataset.leftPosition;
-
 	switch ( leftPositionAttr ) {
 		case 'middle':
 			left = targetRect.left + Math.round( targetRect.width / 2 );
@@ -76,9 +75,19 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
 			left = targetRect.left + parseInt( leftPositionAttr );
 			break;
 	}
+	spotlightElement.style.left = `${ left || targetRect.left }px`;
 
-	spotlightElement.style.top = `${ targetRect.top + Math.round( targetRect.height / 2 ) }px`;
-	spotlightElement.style.left = `${ left }px`;
+	let top;
+	const placementAttr = spotlightElement.dataset.placement;
+	switch ( placementAttr ) {
+		case 'bottom':
+			top = targetRect.top + targetRect.height;
+			break;
+		default:
+			top = targetRect.top + Math.round( targetRect.height / 2 );
+			break;
+	}
+	spotlightElement.style.top = `${ top }px`;
 }
 
 /**

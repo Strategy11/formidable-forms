@@ -4,8 +4,15 @@
 	--fadeout-time: 25ms;
 
 	position: fixed;
-	transform: translateY(-50%);
 	cursor: default;
+
+	&[data-placement="right"] {
+		transform: translateY(-50%);
+	}
+
+	&[data-placement="bottom"] {
+		transform: translateX(-50%);
+	}
 
 	> * {
 		flex: 0 0 auto
