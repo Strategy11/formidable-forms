@@ -252,7 +252,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					array(
 						'code'  => $include_x . $code,
 						'label' => $code_label['label'],
-						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
+						'title' => $code_label['title'] ?? '',
 						'class' => 'frm-advanced-list',
 					)
 				);

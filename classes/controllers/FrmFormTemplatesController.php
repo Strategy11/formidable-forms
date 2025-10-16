@@ -20,38 +20,45 @@ class FrmFormTemplatesController {
 	/**
 	 * The slug of the Form Templates page.
 	 *
-	 * @var string PAGE_SLUG Unique identifier for the "Form Templates" page.
+	 * @var string Unique identifier for the "Form Templates" page.
 	 */
 	const PAGE_SLUG = 'formidable-form-templates';
 
 	/**
 	 * The script handle.
 	 *
-	 * @var string SCRIPT_HANDLE Unique handle for the admin script.
+	 * @var string Unique handle for the admin script.
 	 */
 	const SCRIPT_HANDLE = 'frm-form-templates';
 
 	/**
 	 * The required user capability to view form templates.
 	 *
-	 * @var string REQUIRED_CAPABILITY Required capability to access the view form templates.
+	 * @var string Required capability to access the view form templates.
 	 */
 	const REQUIRED_CAPABILITY = 'frm_view_forms';
 
 	/**
-	 * The keys of the featured templates.
+	 * The IDs of the featured templates.
 	 *
-	 * Contains the unique keys for the templates that are considered "featured":
+	 * Contains the unique IDs for the templates that are considered "featured":
 	 * "Contact Us", "Stripe Payment", "User Registration", "Create WordPress Post", "Survey", and "Quiz".
 	 *
-	 * @var array FEATURED_TEMPLATES_KEYS Unique keys for the featured templates.
+	 * @var array Unique IDs for the featured templates.
 	 */
-	const FEATURED_TEMPLATES_KEYS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
+	const FEATURED_TEMPLATES_IDS = array( 20872734, 28223640, 20874748, 20882522, 20908981, 28109851 );
+
+	/**
+	 * The IDs of the free templates.
+	 *
+	 * @var array Unique IDs for the free templates.
+	 */
+	const FREE_TEMPLATES_IDS = array( 20872734, 28223640 );
 
 	/**
 	 * Option name to store favorite templates.
 	 *
-	 * @var string FAVORITE_TEMPLATES_OPTION Unique identifier for storing favorite templates.
+	 * @var string Unique identifier for storing favorite templates.
 	 */
 	const FAVORITE_TEMPLATES_OPTION = 'frm_favorite_templates';
 
@@ -141,13 +148,13 @@ class FrmFormTemplatesController {
 		self::init_template_resources();
 
 		// Use the same priority as Applications so Form Templates appear directly under Applications.
-		add_action( 'admin_menu', __CLASS__ . '::menu', 14 );
-		add_action( 'admin_footer', __CLASS__ . '::render_modal' );
-		add_filter( 'frm_form_nav_list', __CLASS__ . '::append_new_template_to_nav', 10, 2 );
+		add_action( 'admin_menu', self::class . '::menu', 14 );
+		add_action( 'admin_footer', self::class . '::render_modal' );
+		add_filter( 'frm_form_nav_list', self::class . '::append_new_template_to_nav', 10, 2 );
 
 		if ( self::is_templates_page() ) {
-			add_action( 'admin_init', __CLASS__ . '::set_form_templates_data' );
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
+			add_action( 'admin_init', self::class . '::set_form_templates_data' );
+			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
@@ -168,7 +175,7 @@ class FrmFormTemplatesController {
 			$label,
 			self::REQUIRED_CAPABILITY,
 			self::PAGE_SLUG,
-			array( __CLASS__, 'render' )
+			array( self::class, 'render' )
 		);
 	}
 
@@ -225,6 +232,15 @@ class FrmFormTemplatesController {
 
 			// Add `create-template` modal view.
 			$view_parts[] = 'modals/create-template-modal.php';
+
+			if ( FrmFormTemplatesHelper::needs_get_free_templates_banner() ) {
+				$leave_email_args = array(
+					'title'              => esc_html__( 'Get 30+ Free Form Templates', 'formidable' ),
+					'description'        => esc_html__( 'Just add your email address and you\'ll get 30+ free form templates to your account.', 'formidable' ),
+					'submit_button_text' => esc_html_x( 'Get Templates', 'get free templates modal submit button text', 'formidable' ),
+				);
+				$view_parts[]     = 'modals/leave-email-modal.php';
+			}
 
 			// Add 'upgrade' modal view for non-elite users.
 			if ( 'elite' !== FrmAddonsController::license_type() ) {
@@ -373,6 +389,35 @@ class FrmFormTemplatesController {
 		// Send response.
 		echo wp_json_encode( $response );
 		wp_die();
+	}
+
+	/**
+	 * Handle AJAX request to subscribe the user to ActiveCampaign.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	public static function ajax_get_free_templates() {
+		FrmAppHelper::permission_check( self::REQUIRED_CAPABILITY );
+		check_ajax_referer( 'frm_ajax', 'nonce' );
+
+		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
+
+		if ( empty( $email ) || ! is_email( $email ) ) {
+			wp_send_json_error(
+				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
+				WP_Http::BAD_REQUEST
+			);
+		}
+
+		self::$form_template_api = new FrmFormTemplateApi();
+		self::$form_template_api->reset_cached();
+
+		FrmEmailCollectionHelper::subscribe_to_active_campaign( $email );
+		self::$form_template_api::set_free_license_code( '1' );
+
+		wp_send_json_success();
 	}
 
 	/**
@@ -530,7 +575,7 @@ class FrmFormTemplatesController {
 	/**
 	 * Assign featured templates.
 	 *
-	 * Iterates through FEATURED_TEMPLATES_KEYS and adds matching templates to
+	 * Iterates through FEATURED_TEMPLATES_IDS and adds matching templates to
 	 * the `featured_templates` class property.
 	 *
 	 * @since 6.7
@@ -538,7 +583,7 @@ class FrmFormTemplatesController {
 	 * @return void
 	 */
 	private static function assign_featured_templates() {
-		foreach ( self::FEATURED_TEMPLATES_KEYS as $key ) {
+		foreach ( self::FEATURED_TEMPLATES_IDS as $key ) {
 			if ( isset( self::$templates[ $key ] ) ) {
 				self::$templates[ $key ]['is_featured'] = true;
 				self::$featured_templates[]             = self::$templates[ $key ];
@@ -674,15 +719,16 @@ class FrmFormTemplatesController {
 	 */
 	private static function get_js_variables() {
 		$js_variables = array(
-			'FEATURED_TEMPLATES_KEYS' => self::FEATURED_TEMPLATES_KEYS,
-			'templatesCount'          => self::get_template_count(),
-			'favoritesCount'          => array(
+			'FEATURED_TEMPLATES_IDS' => self::FEATURED_TEMPLATES_IDS,
+			'FREE_TEMPLATES_IDS'     => self::FREE_TEMPLATES_IDS,
+			'templatesCount'         => self::get_template_count(),
+			'favoritesCount'         => array(
 				'total'   => self::get_favorite_templates_count(),
 				'default' => count( self::$favorite_templates['default'] ),
 				'custom'  => count( self::$favorite_templates['custom'] ),
 			),
-			'customCount'             => count( self::$custom_templates ),
-			'upgradeLink'             => self::$upgrade_link,
+			'customCount'            => count( self::$custom_templates ),
+			'upgradeLink'            => self::$upgrade_link,
 		);
 
 		/**

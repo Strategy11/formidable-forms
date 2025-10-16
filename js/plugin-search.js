@@ -13,6 +13,7 @@ function frmPS() {
 
 		/**
 		 * Get parent search hint element.
+		 *
 		 * @return {Element|null} The parent search hint element.
 		 */
 		getCard: function() {
@@ -41,6 +42,7 @@ function frmPS() {
 
 		/**
 		 * Check if plugin card list nodes changed. If there's a Formidable PSH card, replace the title and the bottom row.
+		 *
 		 * @param {Array} mutationsList
 		 */
 		replaceOnNewResults: function( mutationsList ) {

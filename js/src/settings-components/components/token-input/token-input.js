@@ -20,10 +20,27 @@ import { addEventListeners } from './event-handlers';
  * @return {void}
  */
 function initTokenInputFields() {
-	// Initialize for existing fields
 	findAndInitializeTokenFields();
-	// Initialize for newly added fields
-	document.addEventListener( 'frm_added_field', findAndInitializeTokenFields );
+
+	/**
+	 * Initialize for newly added fields
+	 *
+	 * @param {Event}       event          The frm_added_field event.
+	 * @param {HTMLElement} event.frmField The added field object being destructured from the event.
+	 */
+	document.addEventListener( 'frm_added_field', ( { frmField } ) =>
+		findAndInitializeTokenFields( frmField.dataset.fid )
+	);
+
+	/**
+	 * Initialize for newly added fields via AJAX
+	 *
+	 * @param {Event}       event           The frm_ajax_loaded_field event.
+	 * @param {HTMLElement} event.frmFields The added field objects being destructured from the event.
+	 */
+	document.addEventListener( 'frm_ajax_loaded_field', ( { frmFields } ) =>
+		frmFields.forEach( field => findAndInitializeTokenFields( field.id ) )
+	);
 
 	// Adjust styling for all token inputs when field settings are shown
 	wp.hooks.addAction( HOOKS.SHOW_FIELD_SETTINGS, 'formidable-token-input', adjustAllProxyInputStyles );
@@ -33,11 +50,12 @@ function initTokenInputFields() {
  * Find all token input fields and initialize them
  *
  * @private
- *
+ * @param {string|number} fieldId The ID of the field to initialize
  * @return {void}
  */
-function findAndInitializeTokenFields() {
-	const tokenInputFields = document.querySelectorAll( `.${ CLASS_NAMES.TOKEN_INPUT_FIELD }` );
+function findAndInitializeTokenFields( fieldId ) {
+	const container = fieldId ? document.getElementById( `frm-single-settings-${ fieldId }` ) : document.body;
+	const tokenInputFields = container.querySelectorAll( `.${ CLASS_NAMES.TOKEN_INPUT_FIELD }` );
 	if ( ! tokenInputFields.length ) {
 		return;
 	}

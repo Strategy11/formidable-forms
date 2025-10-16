@@ -71,7 +71,7 @@ class FrmFieldsHelper {
 
 		self::fill_field_array( $field, $values );
 
-		$values['custom_html'] = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : self::get_default_html( $field->type );
+		$values['custom_html'] = $field->field_options['custom_html'] ?? self::get_default_html( $field->type );
 
 		return $values;
 	}
@@ -121,7 +121,7 @@ class FrmFieldsHelper {
 		self::fill_cleared_strings( $field, $field_array );
 
 		// Track the original field's type
-		$field_array['original_type'] = isset( $field->field_options['original_type'] ) ? $field->field_options['original_type'] : $field->type;
+		$field_array['original_type'] = $field->field_options['original_type'] ?? $field->type;
 
 		self::prepare_field_options_for_display( $field_array, $field, $args );
 
@@ -172,7 +172,7 @@ class FrmFieldsHelper {
 		}
 
 		foreach ( $defaults as $opt => $default ) {
-			$values[ $opt ] = isset( $field->field_options[ $opt ] ) ? $field->field_options[ $opt ] : $default;
+			$values[ $opt ] = $field->field_options[ $opt ] ?? $default;
 
 			if ( $check_post ) {
 				self::get_posted_field_setting( $opt . '_' . $field->id, $values[ $opt ] );
@@ -533,7 +533,7 @@ class FrmFieldsHelper {
 	 * @param array|string $value
 	 */
 	public static function run_wpautop( $atts, &$value ) {
-		$autop = isset( $atts['wpautop'] ) ? $atts['wpautop'] : true;
+		$autop = $atts['wpautop'] ?? true;
 		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
 			if ( is_array( $value ) ) {
 				$value = implode( "\n", $value );
@@ -599,7 +599,7 @@ class FrmFieldsHelper {
 		}
 
 		$base_name = 'default_value_' . $field['id'];
-		$html_id   = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id   = $field['html_id'] ?? self::get_html_id( $field );
 
 		$default_type  = self::get_default_value_type( $field );
 		$options_count = count( $field['options'] );
@@ -643,7 +643,7 @@ class FrmFieldsHelper {
 		$opt        = __( 'New Option', 'formidable' );
 		$checked    = false;
 		$field_name = 'default_value_' . $field['id'];
-		$html_id    = isset( $field['html_id'] ) ? $field['html_id'] : self::get_html_id( $field );
+		$html_id    = $field['html_id'] ?? self::get_html_id( $field );
 
 		$default_type = self::get_default_value_type( $field );
 		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
@@ -1098,7 +1098,7 @@ class FrmFieldsHelper {
 			$replace_with = FrmEntryMeta::get_meta_value( $atts['entry'], $field->id );
 			$string_value = $replace_with;
 			if ( is_array( $replace_with ) ) {
-				$sep          = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+				$sep          = $atts['sep'] ?? ', ';
 				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
@@ -1174,7 +1174,7 @@ class FrmFieldsHelper {
 				$atts['prev_val'] = '';
 			}
 
-			$new_value = isset( $atts['default'] ) ? $atts['default'] : $atts['prev_val'];
+			$new_value = $atts['default'] ?? $atts['prev_val'];
 		}
 
 		if ( is_array( $new_value ) && ! $return_array ) {
@@ -1200,7 +1200,7 @@ class FrmFieldsHelper {
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
 		$field = $atts['field'];
-		$atts  = isset( $atts['atts'] ) ? $atts['atts'] : $atts;
+		$atts  = $atts['atts'] ?? $atts;
 
 		if ( is_array( $field ) ) {
 			$field = $field['id'];
@@ -1236,7 +1236,7 @@ class FrmFieldsHelper {
 			} elseif ( $user_info === 'author_link' ) {
 				$info = get_author_posts_url( $user_id );
 			} else {
-				$info = isset( $user->$user_info ) ? $user->$user_info : '';
+				$info = $user->$user_info ?? '';
 			}
 
 			if ( 'display_name' === $user_info && empty( $info ) && ! $args['blank'] ) {
@@ -1535,7 +1535,7 @@ class FrmFieldsHelper {
 		// Set up HTML ID for Other field
 		$other_id = self::get_other_field_html_id( $args['field']['type'], $args['html_id'], $args['opt_key'] );
 
-		$label = isset( $args['opt_label'] ) ? $args['opt_label'] : $args['field']['name'];
+		$label = $args['opt_label'] ?? $args['field']['name'];
 
 		echo '<label for="' . esc_attr( $other_id ) . '" class="frm_screen_reader frm_hidden">' .
 			esc_html( $label ) .

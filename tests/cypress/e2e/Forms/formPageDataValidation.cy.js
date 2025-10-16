@@ -18,18 +18,20 @@ describe( 'Forms page', () => {
 				const text = $el.text().trim();
 				const href = $el.attr( 'href' );
 
-				if ( href && ( text.includes( 'upgrading to PRO' ) || text.includes( 'Get 60% Off Pro!' ) || text.includes( 'Get the Deal' ) || text.match( /GET \d+% OFF|SAVE \d+%/ ) ) ) {
+				if ( href && ( text.includes( 'upgrading to PRO' ) || text.includes( 'Get 60% Off Pro!' ) || text.includes( 'Get the Deal' ) || text.match( /GET \d+% OFF|SAVE \d+%/ ) || text.includes( 'upgrading for 60% off during our No Brainer Sale!' ) ) ) {
 					cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 						cy.visit( href );
 						cy.get( 'h1' ).should( $h1 => {
-							const headingText = $h1.text().toLowerCase();
+							const headingText = $h1.text().trim().toLowerCase();
 							expect( [
 								'the only wordpress form maker & application builder plugin',
 								'upgrade today to unlock the full power of formidable forms',
 								'the most advanced wordpress form builder',
 								'more than just a wordpress form builder',
 								'get more done in less time with better wordpress forms',
-
+								'power your wordpress site like never before',
+								'tired of workarounds? build what you really need.',
+								'build powerful forms, web apps, dashboards, and more',
 							] ).to.include( headingText );
 						} );
 					} );

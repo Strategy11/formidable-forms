@@ -110,10 +110,7 @@ class FrmTransLiteActionsController {
 	 * @return array|string
 	 */
 	private static function get_gateway_for_action( $action ) {
-		if ( isset( $action->post_content['gateway'] ) ) {
-			return $action->post_content['gateway'];
-		}
-		return 'stripe';
+		return $action->post_content['gateway'] ?? 'stripe';
 	}
 
 	/**
@@ -126,7 +123,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$frm_vars['frm_trans'] = array(
 			'pay_entry' => $args['entry'],
-			'error'     => isset( $args['response']['error'] ) ? $args['response']['error'] : '',
+			'error'     => $args['response']['error'] ?? '',
 		);
 
 		add_filter( 'frm_success_filter', 'FrmTransLiteActionsController::force_message_after_create' );
@@ -151,7 +148,7 @@ class FrmTransLiteActionsController {
 	 */
 	public static function replace_success_message() {
 		global $frm_vars;
-		$message = isset( $frm_vars['frm_trans']['error'] ) ? $frm_vars['frm_trans']['error'] : '';
+		$message = $frm_vars['frm_trans']['error'] ?? '';
 		if ( empty( $message ) ) {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
@@ -225,6 +222,15 @@ class FrmTransLiteActionsController {
 
 		// Set future-cancel as trigger when applicable.
 		$atts['trigger'] = str_replace( '_', '-', $atts['trigger'] );
+
+		/**
+		 * Trigger various hooks including frm_payment_status_complete.
+		 *
+		 * @since 6.25 This was included in the payments submodule, but not included in Lite until 6.25.
+		 *
+		 * @param array $atts
+		 */
+		do_action( 'frm_payment_status_' . $atts['trigger'], $atts );
 
 		if ( $atts['payment'] ) {
 			self::trigger_actions_after_payment( $atts['payment'], $atts );
@@ -390,7 +396,7 @@ class FrmTransLiteActionsController {
 				'fields'     => self::get_fields_for_price( $payment_action ),
 				'one'        => $payment_action->post_content['type'],
 				'email'      => $payment_action->post_content['email'],
-				'layout'     => isset( $payment_action->post_content['layout'] ) ? $payment_action->post_content['layout'] : '',
+				'layout'     => $payment_action->post_content['layout'] ?? '',
 			);
 
 			/**
@@ -415,7 +421,7 @@ class FrmTransLiteActionsController {
 	private static function get_fields_for_price( $action ) {
 		$amount     = $action->post_content['amount'];
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $amount, $action->menu_order );
-		return isset( $shortcodes[2] ) ? $shortcodes[2] : -1;
+		return $shortcodes[2] ?? -1;
 	}
 
 	/**
@@ -468,7 +474,7 @@ class FrmTransLiteActionsController {
 	 */
 	public static function fill_entry_from_previous( $values, $field ) {
 		global $frm_vars;
-		$previous_entry = isset( $frm_vars['frm_trans']['pay_entry'] ) ? $frm_vars['frm_trans']['pay_entry'] : false;
+		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
 		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}

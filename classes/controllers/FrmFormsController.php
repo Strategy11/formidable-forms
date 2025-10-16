@@ -435,6 +435,12 @@ class FrmFormsController {
 		// print_emoji_styles is deprecated.
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
+		if ( FrmTestModeController::should_add_test_mode_container() ) {
+			do_action( 'frm_test_mode_init' );
+			add_action( 'wp_enqueue_scripts', 'FrmTestModeController::register_and_enqueue_required_scripts' );
+			add_filter( 'frm_filter_final_form', 'FrmTestModeController::maybe_add_test_mode_container', 99 );
+		}
+
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {
 			self::set_preview_query();
@@ -1411,7 +1417,7 @@ class FrmFormsController {
 			'advanced'    => array(
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
-				'function' => array( __CLASS__, 'advanced_settings' ),
+				'function' => array( self::class, 'advanced_settings' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'email'       => array(
@@ -1443,7 +1449,7 @@ class FrmFormsController {
 			),
 			'buttons'     => array(
 				'name'     => __( 'Buttons', 'formidable' ),
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'buttons_settings',
 				'icon'     => 'frm_icon_font frm_button_icon',
 			),
@@ -1481,7 +1487,7 @@ class FrmFormsController {
 			),
 			'html'        => array(
 				'name'     => __( 'Customize HTML', 'formidable' ),
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'html_settings',
 				'icon'     => 'frm_icon_font frm_code_icon',
 			),
@@ -2050,9 +2056,29 @@ class FrmFormsController {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
-		// Update the form name and form key.
-		$form_key = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
-		FrmForm::update( $form_id, compact( 'name', 'form_key' ) );
+		$form = FrmForm::getOne( $form_id );
+		if ( ! $form ) {
+			wp_send_json_error( __( 'Form not found', 'formidable' ) );
+		}
+
+		if ( $name === $form->name ) {
+			// Nothing to change so exit early.
+			wp_send_json_success();
+		}
+
+		$to_update = array(
+			'name' => $name,
+		);
+
+		if ( '' !== $name ) {
+			// Only update form_key if name is not empty.
+			$form_key              = FrmAppHelper::get_unique_key( sanitize_title( $name ), 'frm_forms', 'form_key' );
+			$to_update['form_key'] = $form_key;
+		} else {
+			$form_key = $form->form_key;
+		}
+
+		FrmForm::update( $form_id, $to_update );
 
 		wp_send_json_success( compact( 'form_key' ) );
 	}
@@ -3026,7 +3052,7 @@ class FrmFormsController {
 		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
 
 		$frm_settings = FrmAppHelper::get_settings();
-		$submit       = isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : $frm_settings->submit_value;
+		$submit       = $form->options['submit_value'] ?? $frm_settings->submit_value;
 
 		global $frm_vars;
 		self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
@@ -3116,10 +3142,10 @@ class FrmFormsController {
 	 */
 	private static function prepare_submit_message( $form, $entry_id, $args = array() ) {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
-		$opt          = isset( $args['success_opt'] ) ? $args['success_opt'] : 'success';
+		$opt          = $args['success_opt'] ?? 'success';
 
 		if ( $entry_id && is_numeric( $entry_id ) ) {
-			$message = isset( $form->options[ $opt . '_msg' ] ) ? $form->options[ $opt . '_msg' ] : $frm_settings->success_msg;
+			$message = $form->options[ $opt . '_msg' ] ?? $frm_settings->success_msg;
 			$class   = 'frm_message';
 		} else {
 			$message = $frm_settings->failed_msg;

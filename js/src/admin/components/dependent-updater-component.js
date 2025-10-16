@@ -7,6 +7,7 @@
 export default class frmStyleDependentUpdaterComponent {
 	/**
 	 * Creates an instance of frmStyleDependentUpdaterComponent.
+	 *
 	 * @param {HTMLElement} component - The component element.
 	 */
 	constructor( component ) {
@@ -25,6 +26,7 @@ export default class frmStyleDependentUpdaterComponent {
 	/**
 	 * Initializes the list of inputs to propagate changes to.
 	 * The selection is made by provided input's names list in "will-change" attribute.
+	 *
 	 * @param {string[]} inputNames - The names of the inputs to propagate changes to.
 	 * @return {HTMLElement[]} - The list of inputs to propagate changes to.
 	 */
@@ -41,6 +43,7 @@ export default class frmStyleDependentUpdaterComponent {
 
 	/**
 	 * Updates all dependent elements with the given value.
+	 *
 	 * @param {string} value - The value to update the dependent elements with.
 	 */
 	updateAllDependentElements( value ) {

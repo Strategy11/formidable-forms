@@ -15,9 +15,9 @@ class FrmCreateFile {
 	private $has_permission = false;
 
 	public function __construct( $atts ) {
-		$this->folder_name   = isset( $atts['folder_name'] ) ? $atts['folder_name'] : '';
+		$this->folder_name   = $atts['folder_name'] ?? '';
 		$this->file_name     = $atts['file_name'];
-		$this->error_message = isset( $atts['error_message'] ) ? $atts['error_message'] : '';
+		$this->error_message = $atts['error_message'] ?? '';
 		$this->uploads       = wp_upload_dir();
 		$this->set_new_file_path( $atts );
 		$this->chmod_dir  = defined( 'FS_CHMOD_DIR' ) ? FS_CHMOD_DIR : ( fileperms( ABSPATH ) & 0777 | 0755 );

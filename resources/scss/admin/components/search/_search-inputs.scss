@@ -54,7 +54,7 @@
 span.multiselect-selected-text {
 	white-space: nowrap;
 	display: inline-block;
-	max-width: 90%;
+	max-width: calc(90% - var(--gap-xs));
 	text-overflow: ellipsis;
 	overflow: hidden;
 }
