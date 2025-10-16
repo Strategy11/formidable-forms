@@ -428,7 +428,7 @@ class FrmSalesApi extends FrmFormApi {
 				<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/sales/' . $banner_icon . '.svg' ); ?>" alt="<?php echo esc_attr( $banner_title ); ?>" />
 			</div>
 			<div <?php FrmAppHelper::array_to_html_params( $content_attrs, true ); ?>>
-				<div>
+				<div class="frm-text-md frm-font-semibold">
 					<?php echo esc_html( $banner_title ); ?>
 				</div>
 				<div>
