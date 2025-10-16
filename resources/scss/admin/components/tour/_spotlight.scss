@@ -1,4 +1,6 @@
 .frm-spotlight {
+	$self: &;
+
 	--fadeout-time: 25ms;
 
 	position: fixed;
@@ -20,15 +22,26 @@
 		&::after {
 			content: '';
 			position: absolute;
-			top: 50%;
-			left: -6px;
 			width: 11px;
 			height: 11px;
 			background-color: inherit;
 			transform: translateY(-50%) rotate(45deg);
 			border-left: 1px solid var(--grey-200);
-			border-bottom: 1px solid var(--grey-200);
 			border-radius: 2px;
+
+			#{$self}[data-placement="right"] & {
+				top: 50%;
+				left: -6px;
+				transform: translateY(-50%) rotate(45deg);
+				border-bottom: 1px solid var(--grey-200);
+			}
+
+			#{$self}[data-placement="bottom"] & {
+				top: -6px;
+				left: 50%;
+				transform: translateX(-50%) rotate(45deg);
+				border-top: 1px solid var(--grey-200);
+			}
 		}
 	}
 
@@ -39,5 +52,13 @@
 		background-color: var(--grey-600);
 		padding: 3px;
 		border-radius: 50%;
+
+		#{$self}[data-placement="right"] & {
+			margin-right: var(--gap-2xs);
+		}
+
+		#{$self}[data-placement="bottom"] & {
+			margin-bottom: var(--gap-2xs);
+		}
 	}
 }

@@ -245,8 +245,9 @@ class FrmWelcomeTourController {
 				break;
 			case 'embed-form':
 				$spotlight_data = array(
-					'target'        => '#frm-form-templates-create-form-divider',
+					'target'        => '#frm-embed-action',
 					'left-position' => 'middle',
+					'placement'     => 'bottom',
 				);
 				break;
 			default:
