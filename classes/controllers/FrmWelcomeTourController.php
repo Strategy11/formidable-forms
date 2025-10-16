@@ -507,7 +507,7 @@ class FrmWelcomeTourController {
 	 * @param array|null $checklist The checklist data to set.
 	 */
 	public static function save_checklist( $checklist = null ) {
-		update_option( self::CHECKLIST_OPTION, $checklist ?? self::$checklist, 'no' );
+		update_option( self::CHECKLIST_OPTION, $checklist ?? self::$checklist, false );
 	}
 
 	/**
