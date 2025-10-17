@@ -899,8 +899,6 @@ function frmFrontFormJS() {
 
 				setTimeout(
 					function() {
-						let container, input, previousInput;
-
 						afterFormSubmittedBeforeReplace( object, response );
 
 						replaceContent.replaceWith( response.content );
