@@ -92,7 +92,7 @@ function updateSpotlightPosition( spotlightElement, targetElement ) {
  * @return {void}
  */
 function handleSpotlightFadeAnimation( spotlightElement ) {
-	const topBar = document.querySelector( '#frm_top_bar' );
+	const topBar = document.getElementById( 'frm_top_bar' );
 	if ( ! topBar ) {
 		return;
 	}
