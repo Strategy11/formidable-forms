@@ -1,5 +1,4 @@
 export class frmTabsNavigator {
-
 	constructor( wrapper ) {
 		if ( 'undefined' === typeof wrapper ) {
 			return;
@@ -12,57 +11,115 @@ export class frmTabsNavigator {
 		}
 
 		this.flexboxSlidesGap = '16px';
-		this.navs             = this.wrapper.querySelectorAll( '.frm-tabs-navs ul > li' );
-		this.slideTrackLine   = this.wrapper.querySelector( '.frm-tabs-active-underline' );
-		this.slideTrack       = this.wrapper.querySelector( '.frm-tabs-slide-track' );
-		this.slides           = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
+		this.navs = this.wrapper.querySelectorAll( '.frm-tabs-navs ul > li' );
+		this.slideTrackLine = this.wrapper.querySelector( '.frm-tabs-active-underline' );
+		this.slideTrack = this.wrapper.querySelector( '.frm-tabs-slide-track' );
+		this.slides = this.wrapper.querySelectorAll( '.frm-tabs-slide-track > div' );
+		this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+		this.resizeObserver = null;
 
 		this.init();
 	}
 
 	init() {
-		if ( null === this.wrapper || ! this.navs.length || null === this.trackLine || null === this.slideTrack || ! this.slides.length ) {
+		if ( null === this.wrapper || ! this.navs.length || null === this.slideTrackLine || null === this.slideTrack || ! this.slides.length ) {
 			return;
 		}
 
 		this.initDefaultSlideTrackerWidth();
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
-		});
+		} );
+
+		this.setupScrollbarObserver();
+		// Cleanup observers when page unloads to prevent memory leaks
+		window.addEventListener( 'beforeunload', this.cleanupObservers );
 	}
 
 	onNavClick( event, index ) {
+		const navItem = event.currentTarget;
+
+		event.preventDefault();
+
 		this.removeActiveClassnameFromNavs();
-		event.target.classList.add( 'frm-active' );
-		this.initSlideTrackUnderline( event.target, index );
+		navItem.classList.add( 'frm-active' );
+		this.initSlideTrackUnderline( navItem, index );
 		this.changeSlide( index );
+
+		// Handle special case for frm_insert_fields_tab
+		const navLink = navItem.querySelector( 'a' );
+		if ( navLink && navLink.id === 'frm_insert_fields_tab' && ! navLink.closest( '#frm_adv_info' ) ) {
+			window.frmAdminBuild?.clearSettingsBox?.();
+		}
 	}
 
 	initDefaultSlideTrackerWidth() {
 		if ( ! this.slideTrackLine.dataset.initialWidth ) {
 			return;
 		}
-		this.slideTrackLine.style.width = `${this.slideTrackLine.dataset.initialWidth}px`;
+		this.slideTrackLine.style.width = `${ this.slideTrackLine.dataset.initialWidth }px`;
 	}
 	initSlideTrackUnderline( nav, index ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
-		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) ) ;
-		this.slideTrackLine.style.transform = `translateX(${activeNav.offsetLeft}px)`;
-		this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
+		this.positionUnderlineIndicator( activeNav );
+	}
 
-		if ( this.navs.length === index + 1 ) { 
-			this.slideTrackLine.classList.add( 'frm-last' );
+	/**
+	 * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
+	 * Automatically repositions the underline indicator when layout changes occur.
+	 */
+	setupScrollbarObserver() {
+		const scrollbarWrapper = this.wrapper.closest( '.frm-scrollbar-wrapper' );
+
+		if ( ! scrollbarWrapper || ! ( 'ResizeObserver' in window ) ) {
 			return;
 		}
-		if ( 0 === index ) {
-			this.slideTrackLine.classList.add( 'frm-first' );
+
+		this.resizeObserver = new ResizeObserver( () => {
+			const activeNav = this.wrapper.querySelector( '.frm-tabs-navs ul > li.frm-active' );
+			if ( activeNav ) {
+				this.positionUnderlineIndicator( activeNav );
+			}
+		} );
+
+		this.resizeObserver.observe( scrollbarWrapper );
+	}
+
+	/**
+	 * Cleans up observers to prevent memory leaks.
+	 */
+	cleanupObservers() {
+		if ( this.resizeObserver ) {
+			this.resizeObserver.disconnect();
+			this.resizeObserver = null;
 		}
+	}
+
+	/**
+	 * Positions the underline indicator based on the active navigation element.
+	 *
+	 * @param {HTMLElement} activeNav The active navigation element to position the underline under
+	 */
+	positionUnderlineIndicator( activeNav ) {
+		requestAnimationFrame( () => {
+			const position = this.isRTL
+				? -( activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth )
+				: activeNav.offsetLeft;
+
+			this.slideTrackLine.style.transform = `translateX(${ position }px)`;
+			this.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+		} );
 	}
 
 	changeSlide( index ) {
 		this.removeActiveClassnameFromSlides();
-		const translate = index == 0 ? '0px' : `calc( ( ${( index * 100 )}% + ${parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * -1 )`;
-		this.slideTrack.style.transform = `translateX(${translate})`;
+		const translate = index == 0 ? '0px' : `calc( ( ${ ( index * 100 ) }% + ${ parseInt( this.flexboxSlidesGap, 10 ) * index }px ) * ${ this.isRTL ? 1 : -1 } )`;
+		if ( '0px' !== translate ) {
+			this.slideTrack.style.transform = `translateX(${ translate })`;
+		} else {
+			this.slideTrack.style.removeProperty( 'transform' );
+		}
 		if ( index in this.slides ) {
 			this.slides[ index ].classList.add( 'frm-active' );
 		}

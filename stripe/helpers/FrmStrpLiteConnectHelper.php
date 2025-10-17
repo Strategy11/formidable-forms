@@ -175,7 +175,7 @@ class FrmStrpLiteConnectHelper {
 			return 'Response from server was not successful';
 		}
 
-		return isset( $body->data ) ? $body->data : array();
+		return $body->data ?? array();
 	}
 
 	/**
@@ -349,13 +349,13 @@ class FrmStrpLiteConnectHelper {
 
 	private static function redirect() {
 		$connected = self::check_server_for_connected_account_status();
-		header( 'Location: ' . self::get_url_for_stripe_settings( $connected ), true, 302 );
+		wp_safe_redirect( self::get_url_for_stripe_settings( $connected ) );
 		exit;
 	}
 
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_account_id();
-		header( 'Location: ' . self::get_url_for_stripe_settings( $connected ), true, 302 );
+		wp_safe_redirect( self::get_url_for_stripe_settings( $connected ) );
 		exit;
 	}
 

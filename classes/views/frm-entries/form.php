@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $shortcode_tags;
 
 // Store the current callbacks for the shortcode
-$original_input_shortcode_callback = isset( $shortcode_tags['input'] ) ? $shortcode_tags['input'] : false;
+$original_input_shortcode_callback = $shortcode_tags['input'] ?? false;
 
 // Remove the shortcode
 remove_shortcode( 'input' );
@@ -77,10 +77,10 @@ if ( ! $only_contain_submit ) {
 	}
 
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
-}
+}//end if
 
 $frm_settings = FrmAppHelper::get_settings();
-if ( FrmAppHelper::is_admin() ) {
+if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
 	?>
 	<div class="frm_form_field form-field">
 	<label class="frm_primary_label"><?php esc_html_e( 'Entry Key', 'formidable' ); ?></label>

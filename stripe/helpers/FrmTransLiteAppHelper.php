@@ -66,7 +66,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
-		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+		return $statuses[ $status ] ?? $status;
 	}
 
 	/**
@@ -127,7 +127,7 @@ class FrmTransLiteAppHelper {
 				$payment_values['status']
 			);
 		}
-		$payment_values['meta_value'] = isset( $payment_values['meta_value'] ) ? $payment_values['meta_value'] : array();
+		$payment_values['meta_value'] = $payment_values['meta_value'] ?? array();
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );
 	}
 
@@ -152,7 +152,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
+		$value    = $settings[ $option ] ?? '';
 		return $value;
 	}
 
@@ -403,7 +403,7 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function echo_confirmation_link( $link ) {
-		$filter = __CLASS__ . '::allow_deleteconfirm_data_attribute';
+		$filter = self::class . '::allow_deleteconfirm_data_attribute';
 		add_filter( 'frm_striphtml_allowed_tags', $filter );
 		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $filter );
@@ -509,5 +509,77 @@ class FrmTransLiteAppHelper {
 		}
 
 		return $count;
+	}
+
+	public static function get_gateways() {
+		$gateways = apply_filters( 'frm_payment_gateways', array() );
+		return $gateways;
+	}
+
+	/**
+	 * @param array|string $gateway
+	 * @param string       $setting
+	 */
+	public static function get_setting_for_gateway( $gateway, $setting ) {
+		$gateways = self::get_gateways();
+		$value    = '';
+		if ( is_array( $gateway ) ) {
+			$gateway = reset( $gateway );
+		}
+		if ( isset( $gateways[ $gateway ] ) ) {
+			$value = $gateways[ $gateway ][ $setting ];
+		}
+		return $value;
+	}
+
+	/**
+	 * Show the currency dropdown for a Payment action.
+	 * When Square is selected, this dropdown is disabled and will always use "Use Square Merchant Currency".
+	 *
+	 * @since 6.22
+	 *
+	 * @param string $id
+	 * @param string $name
+	 * @param array  $action_settings
+	 */
+	public static function show_currency_dropdown( $id, $name, $action_settings ) {
+		$selected     = $action_settings['currency'];
+		$gateways     = (array) $action_settings['gateway'];
+		$select_attrs = array(
+			'id'   => $id,
+			'name' => $name,
+		);
+		if ( in_array( 'square', $gateways, true ) ) {
+			$select_attrs['disabled'] = 'disabled';
+			$selected                 = '';
+		}
+		$currencies = FrmCurrencyHelper::get_currencies();
+		?>
+		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
+			<?php
+			if ( in_array( 'square', $gateways, true ) ) {
+				$option_params = array(
+					'class'    => 'square-currency',
+					'selected' => 'selected',
+					'value'    => 'square',
+				);
+				?>
+				<option <?php FrmAppHelper::array_to_html_params( $option_params, true ); ?>><?php esc_html_e( 'Use Square Merchant Currency', 'formidable' ); ?></option>
+				<?php
+			}
+
+			foreach ( $currencies as $code => $currency ) {
+				FrmHtmlHelper::echo_dropdown_option(
+					$currency['name'] . ' (' . strtoupper( $code ) . ')',
+					$selected === strtolower( $code ),
+					array(
+						'value' => strtolower( $code ),
+					)
+				);
+				unset( $currency, $code );
+			}
+			?>
+		</select>
+		<?php
 	}
 }

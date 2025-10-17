@@ -8,7 +8,7 @@
 	const Modal = {
 		init: function( id, width ) {
 			const $info = jQuery( id );
-			const self  = this;
+			const self = this;
 
 			if ( ! $info.length ) {
 				return false;
@@ -64,7 +64,7 @@
 			text: FrmDeactivationFeedbackI18n.skip_text,
 			href: deactivationUrl,
 			className: 'frm-skip-link'
-		});
+		} );
 
 		formEl.querySelector( '.frm_submit' ).prepend( btn );
 	};
@@ -87,22 +87,22 @@
 
 		const response = fetch( url, {
 			method: 'GET'
-		});
+		} );
 
 		response
 			.then( response => response.json() )
 			.then( response => {
 				const wrapper = document.getElementById( 'frm-deactivation-form-wrapper' );
-				const form    = response.renderedHtml.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
+				const form = response.renderedHtml.replace( /<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '' );
 
 				jQuery( wrapper ).html( form );
 				wrapper.setAttribute( 'data-slug', pluginSlug );
 				addSkipBtn( wrapper );
 				deactivationModal.dialog( 'open' );
-			})
+			} )
 			.catch( error => {
 				console.error( error );
-			});
+			} );
 	};
 
 	frmDom.util.documentOn( 'click', selectors, onClickDeactivate );
@@ -110,5 +110,5 @@
 	document.addEventListener( 'frmFormCompleteBeforeReplace', function( event ) {
 		document.getElementById( 'frm-deactivation-modal-icon' ).remove();
 		window.location.href = deactivationUrl;
-	});
+	} );
 }() );

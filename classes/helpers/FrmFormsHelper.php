@@ -279,7 +279,27 @@ class FrmFormsHelper {
 	 */
 	public static function get_success_message( $atts ) {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
-		$message = do_shortcode( FrmAppHelper::use_wpautop( $message ) );
+
+		// Only autop if the message includes line breaks.
+		$autop = strpos( $message, "\n" ) !== false;
+
+		/**
+		 * Filters whether to autop the success message.
+		 * This is false by default if the message does not include line breaks.
+		 *
+		 * @since 6.23
+		 *
+		 * @param bool   $autop
+		 * @param string $message
+		 * @param object $form
+		 */
+		$autop = (bool) apply_filters( 'frm_wpautop_success_message', $autop, $message, $atts['form'] );
+
+		if ( $autop ) {
+			$message = FrmAppHelper::use_wpautop( $message );
+		}
+
+		$message = do_shortcode( $message );
 		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 		return $message;
 	}
@@ -342,8 +362,8 @@ class FrmFormsHelper {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
-		$values['form_key']    = isset( $post_values['form_key'] ) ? $post_values['form_key'] : $record->form_key;
-		$values['is_template'] = isset( $post_values['is_template'] ) ? $post_values['is_template'] : $record->is_template;
+		$values['form_key']    = $post_values['form_key'] ?? $record->form_key;
+		$values['is_template'] = $post_values['is_template'] ?? $record->is_template;
 		$values['status']      = $record->status;
 
 		$values = self::fill_default_opts( $values, $record, $post_values );
@@ -394,7 +414,7 @@ class FrmFormsHelper {
 			'success_msg'      => $frm_settings->success_msg,
 			'show_form'        => 0,
 			'akismet'          => '',
-			'honeypot'         => 'basic',
+			'stopforumspam'    => 0,
 			'antispam'         => 0,
 			'no_save'          => 0,
 			'ajax_load'        => 0,
@@ -418,7 +438,7 @@ class FrmFormsHelper {
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
 		foreach ( $defaults as $var => $default ) {
-			$options[ $var ] = isset( $values['options'][ $var ] ) ? $values['options'][ $var ] : $default;
+			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
 		}
 	}
@@ -593,9 +613,9 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
-		$class  = isset( $args['class'] ) ? $args['class'] : '';
+		$class  = $args['class'] ?? '';
 		$fields = self::get_field_type_data_for_insert_opt_html();
-		$field  = isset( $fields[ $args['type'] ] ) ? $fields[ $args['type'] ] : array();
+		$field  = $fields[ $args['type'] ] ?? array();
 
 		self::prepare_field_type( $field );
 
@@ -631,14 +651,14 @@ BEFORE_HTML;
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( isset( $args['id_label'] ) ? $args['id_label'] : $args['id'] ); ?>]</span>
+				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo esc_html( $truncated_name );
 				?>
-				<span>[<?php echo esc_attr( FrmAppHelper::truncate( isset( $args['key_label'] ) ? $args['key_label'] : $args['key'], 7 ) ); ?>]</span>
+				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
 			</a>
 		</li>
 		<?php
@@ -955,7 +975,7 @@ BEFORE_HTML;
 		// Start from the fields closest to the submit button.
 		$fields = array_reverse( $fields );
 		foreach ( $fields as $field ) {
-			$type      = isset( $field['original_type'] ) ? $field['original_type'] : $field['type'];
+			$type      = $field['original_type'] ?? $field['type'];
 			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
 			if ( $has_input ) {
 				return self::field_has_top_label( $field, $form );
@@ -980,7 +1000,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @param array|bool|object|string $form
+	 * @param array|bool|int|object|string $form
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -998,7 +1018,7 @@ BEFORE_HTML;
 			$style = $form['custom_style'];
 		}
 
-		if ( $form && is_string( $form ) ) {
+		if ( $form && ( is_string( $form ) || is_int( $form ) ) ) {
 			$form = FrmForm::getOne( $form );
 		}
 
@@ -1201,7 +1221,7 @@ BEFORE_HTML;
 				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
 			}
 
-			$label = ( isset( $link_details[ $length ] ) ? $link_details[ $length ] : $link_details['label'] );
+			$label = ( $link_details[ $length ] ?? $link_details['label'] );
 			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
 				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
@@ -1413,7 +1433,7 @@ BEFORE_HTML;
 		$icon = $icons[''];
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
-			$icon     = isset( $icons[ $category ] ) ? $icons[ $category ] : $icon;
+			$icon     = $icons[ $category ] ?? $icon;
 		} elseif ( ! empty( $categories ) ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon  = reset( $icons );
@@ -1421,7 +1441,7 @@ BEFORE_HTML;
 
 		// Prepare variables for output.
 		$icon_name = $icon[0];
-		$bg_color  = isset( $icon[1] ) ? $icon[1] : '';
+		$bg_color  = $icon[1] ?? '';
 
 		// Render the icon.
 		echo '<span class="frm-category-icon frm-icon-wrapper"';
@@ -1849,7 +1869,7 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
-		$should_block = 'contact-form' === $form_key && ! current_user_can( 'frm_view_forms' );
+		$should_block = in_array( $form_key, array( 'contact-form', 'contact-us' ), true ) && ! current_user_can( 'frm_view_forms' );
 		/**
 		 * Filters whether the form preview should be blocked.
 		 *
@@ -1860,6 +1880,86 @@ BEFORE_HTML;
 		 */
 		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
 		return $should_block;
+	}
+
+	/**
+	 * Checks if the form is loaded by API.
+	 *
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	public static function form_is_loaded_by_api() {
+		global $frm_vars;
+		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
+			return true;
+		}
+		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_visual_views_preview() {
+		return 'frm_views_process_box_preview' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_elementor_ajax() {
+		return 'elementor_ajax' === FrmAppHelper::get_post_param( 'action' );
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_gutenberg_editor() {
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+			return true;
+		}
+
+		global $pagenow;
+		if ( 'post.php' === $pagenow ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * @since 6.21
+	 *
+	 * @return bool
+	 */
+	private static function is_formidable_api_form() {
+		if ( ! class_exists( 'FrmAPIAppController' ) ) {
+			return false;
+		}
+
+		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+			// Prevent the honeypot from appearing for an API loaded form.
+			// This is to prevent conflicts where the script is not working.
+			return true;
+		}
+
+		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
+			$api = FrmProFormState::get_from_request( 'a', 0 );
+
+			if ( $api ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -1877,7 +1977,7 @@ BEFORE_HTML;
 		}
 
 		$status     = $atts['status'];
-		$form_id    = isset( $atts['id'] ) ? $atts['id'] : FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+		$form_id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
 		$trash_link = self::delete_trash_info( $form_id, $status );
 		$links      = self::get_action_links( $form_id, $status );
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';

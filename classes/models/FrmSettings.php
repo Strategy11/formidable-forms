@@ -91,6 +91,16 @@ class FrmSettings {
 	 */
 	public $custom_css;
 
+	public $honeypot;
+
+	public $wp_spam_check;
+
+	public $denylist_check;
+
+	public $disallowed_words;
+
+	public $allowed_words;
+
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -163,6 +173,12 @@ class FrmSettings {
 			// Normally custom CSS is a string. A false value is used when nothing has been set.
 			// When it is false, we try to use the old custom_key value from the default style's post_content array.
 			'custom_css'                => false,
+			'honeypot'                  => 1,
+			'wp_spam_check'             => 0,
+			'denylist_check'            => 0,
+			'disallowed_words'          => '',
+			'allowed_words'             => '',
+			'email_style'               => 'classic',
 		);
 	}
 
@@ -287,9 +303,9 @@ class FrmSettings {
 		if ( ! isset( $this->pubkey ) ) {
 			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
-			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+			$this->pubkey  = $recaptcha_opt['pubkey'] ?? '';
+			$privkey       = $recaptcha_opt['privkey'] ?? $privkey;
+			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
 		if ( empty( $this->re_msg ) ) {
@@ -401,7 +417,21 @@ class FrmSettings {
 		$this->from_email        = $params['frm_from_email'];
 		$this->currency          = $params['frm_currency'];
 
-		$checkboxes = array( 'mu_menu', 're_multi', 'fade_form', 'no_ips', 'no_gdpr_cookies', 'enable_gdpr', 'custom_header_ip', 'tracking', 'admin_bar', 'summary_emails' );
+		$checkboxes = array(
+			'mu_menu',
+			're_multi',
+			'fade_form',
+			'no_ips',
+			'no_gdpr_cookies',
+			'enable_gdpr',
+			'custom_header_ip',
+			'tracking',
+			'admin_bar',
+			'summary_emails',
+			'honeypot',
+			'wp_spam_check',
+			'denylist_check',
+		);
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
@@ -416,7 +446,7 @@ class FrmSettings {
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
+			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
 
 			// Make sure administrators always have permissions
 			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {

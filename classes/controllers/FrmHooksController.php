@@ -81,6 +81,7 @@ class FrmHooksController {
 		add_filter( 'frm_replace_content_shortcodes', 'FrmFormsController::replace_content_shortcodes', 20, 3 );
 		add_action( 'admin_bar_init', 'FrmFormsController::admin_bar_css' );
 		add_action( 'wp_footer', 'FrmFormsController::footer_js', 1, 0 );
+		add_action( 'wp_footer', 'FrmHoneypot::maybe_print_honeypot_js', 99 );
 
 		add_action( 'wp_scheduled_delete', 'FrmForm::scheduled_delete' );
 
@@ -113,6 +114,7 @@ class FrmHooksController {
 
 		FrmTransLiteHooksController::load_hooks();
 		FrmStrpLiteHooksController::load_hooks();
+		FrmSquareLiteHooksController::load_hooks();
 
 		// GDPR
 		add_filter( 'frm_is_field_required', 'FrmFieldGdpr::force_required_field', 10, 2 );
@@ -197,14 +199,20 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		// Cross sell.
+		add_action( 'admin_menu', 'FrmSalesApi::menu', 1000 );
+
 		// Deactivation feedback.
 		add_action( 'admin_enqueue_scripts', 'FrmDeactivationFeedbackController::enqueue_assets' );
 		add_action( 'admin_footer', 'FrmDeactivationFeedbackController::footer_html' );
 		add_action( 'deactivated_plugin', 'FrmDeactivationFeedbackController::set_feedback_expired_date' );
 
+		add_action( 'frm_email_styles_extra_settings', 'FrmEmailStylesController::show_upsell_settings' );
+
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
 		FrmStrpLiteHooksController::load_admin_hooks();
+		FrmSquareLiteHooksController::load_admin_hooks();
 		FrmSMTPController::load_hooks();
 		FrmOnboardingWizardController::load_admin_hooks();
 		FrmAddonsController::load_admin_hooks();
@@ -262,6 +270,7 @@ class FrmHooksController {
 		// Form Templates Controller.
 		add_action( 'wp_ajax_frm_add_or_remove_favorite_template', 'FrmFormTemplatesController::ajax_add_or_remove_favorite' );
 		add_action( 'wp_ajax_frm_create_template', 'FrmFormTemplatesController::ajax_create_template' );
+		add_action( 'wp_ajax_frm_get_free_templates', 'FrmFormTemplatesController::ajax_get_free_templates' );
 
 		// Inbox.
 		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );
@@ -303,6 +312,11 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
 
 		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
+
+		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
+
+		add_action( 'wp_ajax_frm_email_style_preview', 'FrmEmailStylesController::ajax_preview' );
+		add_action( 'wp_ajax_frm_send_test_email', 'FrmEmailStylesController::ajax_send_test_email' );
 	}
 
 	/**

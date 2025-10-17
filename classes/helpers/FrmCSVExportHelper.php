@@ -159,7 +159,7 @@ class FrmCSVExportHelper {
 			array(
 				'item_id'         => $atts['entry_ids'],
 				'field_id'        => 0,
-				'meta_value like' => '{',
+				'meta_value like' => 's:7:"comment";',
 			),
 			array(
 				'group_by' => 'item_id',
@@ -595,7 +595,7 @@ class FrmCSVExportHelper {
 
 	private static function add_field_values_to_csv( &$row ) {
 		foreach ( self::$fields as $col ) {
-			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
+			$field_value = self::$entry->metas[ $col->id ] ?? false;
 
 			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );

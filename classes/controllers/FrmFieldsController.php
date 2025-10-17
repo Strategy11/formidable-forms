@@ -64,12 +64,13 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_type = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
-		$form_id    = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		$field_type    = FrmAppHelper::get_post_param( 'field_type', '', 'sanitize_text_field' );
+		$form_id       = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+		$field_options = FrmAppHelper::get_post_param( 'field_options', array(), 'wp_kses_post' );
 
 		do_action( 'frm_before_create_field', $field_type, $form_id );
 
-		$field = self::include_new_field( $field_type, $form_id );
+		$field = self::include_new_field( $field_type, $form_id, $field_options );
 
 		// this hook will allow for multiple fields to be added at once
 		do_action( 'frm_after_field_created', $field, $form_id );
@@ -82,11 +83,16 @@ class FrmFieldsController {
 	 *
 	 * @param string $field_type
 	 * @param int    $form_id
+	 * @param array  $field_options
 	 *
 	 * @return array|false
 	 */
-	public static function include_new_field( $field_type, $form_id ) {
+	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
+
+		if ( ! empty( $field_options ) ) {
+			$field_values['field_options'] = array_merge( $field_values['field_options'], $field_options );
+		}
 
 		// When a new field is added to the form, flag it as draft and hide it from the front-end.
 		$field_values['field_options']['draft'] = 1;
@@ -178,9 +184,20 @@ class FrmFieldsController {
 		}
 
 		if ( ! isset( $field ) && is_object( $field_object ) ) {
-			$field_object->parent_form_id = isset( $values['id'] ) ? $values['id'] : $field_object->form_id;
+			$field_object->parent_form_id = $values['id'] ?? $field_object->form_id;
 			$field                        = FrmFieldsHelper::setup_edit_vars( $field_object );
 		}
+
+		/**
+		 * Filter for adding extra attributes to the field container.
+		 *
+		 * @since 6.23
+		 *
+		 * @param array $extra_field_attributes
+		 * @param array $field
+		 * @param array $display
+		 */
+		$extra_field_attributes = apply_filters( 'frm_field_container_extra_attributes', array(), $field, $display );
 
 		$li_classes  = self::get_classes_for_builder_field( $field, $display, $field_obj );
 		$li_classes .= ' ui-state-default widgets-holder-wrap';
@@ -374,28 +391,30 @@ class FrmFieldsController {
 			'default_value'    => array(
 				'class' => '',
 				'icon'  => 'frm_icon_font frm_text2_icon',
-				'title' => __( 'Default Value (Text)', 'formidable' ),
+				'title' => __( 'Default Value', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
 				),
 			),
 			'calc'             => array(
-				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Calculation)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_calculator_icon',
-				'data'  => array(
+				'class'   => 'frm_show_upgrade frm_noallow',
+				'title'   => __( 'Calculate Value', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_calculator_icon',
+				'data'    => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
 				),
+				'tooltip' => __( 'Automatically calculate the value of this field based on values from other fields.', 'formidable' ),
 			),
 			'get_values_field' => array(
-				'class' => 'frm_show_upgrade frm_noallow',
-				'title' => __( 'Default Value (Lookup)', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_search_icon',
-				'data'  => array(
+				'class'   => 'frm_show_upgrade frm_noallow',
+				'title'   => __( 'Lookup', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_search_icon',
+				'data'    => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),
 				),
+				'tooltip' => __( 'Dynamically retrieve the value of this field from a lookup field.', 'formidable' ),
 			),
 		);
 
@@ -405,9 +424,11 @@ class FrmFieldsController {
 		$settings = array_keys( $types );
 		$active   = 'default_value';
 
-		foreach ( $settings as $type ) {
-			if ( ! empty( $field[ $type ] ) ) {
-				$active = $type;
+		if ( FrmAppHelper::pro_is_connected() ) {
+			foreach ( $settings as $type ) {
+				if ( ! empty( $field[ $type ] ) ) {
+					$active = $type;
+				}
 			}
 		}
 
@@ -654,7 +675,7 @@ class FrmFieldsController {
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder = isset( $field['placeholder'] ) ? $field['placeholder'] : '';
+		$placeholder = $field['placeholder'] ?? '';
 
 		return $placeholder;
 	}
@@ -978,9 +999,9 @@ class FrmFieldsController {
 	public static function check_value( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
-				$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 			} else {
-				$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+				$opt = $opt['label'] ?? reset( $opt );
 			}
 		}
 
@@ -989,7 +1010,7 @@ class FrmFieldsController {
 
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
-			$opt = isset( $opt['label'] ) ? $opt['label'] : reset( $opt );
+			$opt = $opt['label'] ?? reset( $opt );
 		}
 
 		return $opt;

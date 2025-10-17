@@ -33,11 +33,16 @@ const entries = {
     'onboarding-wizard': './js/src/onboarding-wizard/index.js',
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
+    formidable_admin: './js/src/admin/admin.js',
+    frm_testing_mode: './js/src/frm_testing_mode.js',
+    'formidable-settings-components': './js/src/settings-components/index.js',
   },
   // SCSS entries
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
-    font_icons: './resources/scss/font_icons.scss'
+    'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
+    font_icons: './resources/scss/font_icons.scss',
+    frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss'
   }
 };
 
@@ -83,7 +88,8 @@ const jsConfig = {
   entry: entries.js,
   output: {
     filename: '[name].js',
-    path: paths.js
+    path: paths.js,
+    chunkFormat: false,
   },
   module: {
     rules: [
@@ -141,7 +147,7 @@ const cssConfig = {
           MiniCssExtractPlugin.loader,
           {
             loader: 'css-loader',
-            options: { 
+            options: {
               url: false,
               sourceMap: isDevelopment
             }

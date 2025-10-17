@@ -2,6 +2,10 @@
  * Utilities - Display
  */
 
+#wpwrap .frm-force-hidden {
+	display: none !important;
+}
+
 .frm_block, /* deprecated */
 .frm-block {
 	display: block;
@@ -9,6 +13,10 @@
 
 .frm_inline {
 	display: inline;
+}
+
+.frm-force-inline {
+	display: inline !important;
 }
 
 .frm_inline_block {

@@ -195,4 +195,17 @@ class FrmFieldGdpr extends FrmFieldType {
 
 		return $required;
 	}
+
+	/**
+	 * Add the GDPR agreement text as an additional translatable string.
+	 *
+	 * @since 6.23
+	 *
+	 * @return array
+	 */
+	public function translatable_strings() {
+		$strings   = parent::translatable_strings();
+		$strings[] = 'gdpr_agreement_text';
+		return $strings;
+	}
 }

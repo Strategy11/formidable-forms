@@ -100,7 +100,7 @@ class FrmEntriesController {
 			add_filter( 'get_user_option_' . self::hidden_column_key( $menu_name ), 'FrmEntriesController::hidden_columns' );
 			add_filter( 'manage_' . $base . '_sortable_columns', 'FrmEntriesController::sortable_columns' );
 		} else {
-			add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
+			add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 		}
 	}
 
@@ -415,6 +415,8 @@ class FrmEntriesController {
 	 * @return array
 	 */
 	public static function hidden_columns( $result ) {
+		global $frm_vars;
+
 		if ( ! is_array( $result ) ) {
 			// Force an unexpected value to be an array.
 			// Since $result is a filtered option and gets saved to the database, it's possible it could be a string.
@@ -422,19 +424,14 @@ class FrmEntriesController {
 			$result = array();
 		}
 
-		$form_id = FrmForm::get_current_form_id();
-
-		$hidden = self::user_hidden_columns_for_form( $form_id, $result );
-
-		global $frm_vars;
-		$i = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
+		$form_id     = FrmForm::get_current_form_id();
+		$hidden      = self::user_hidden_columns_for_form( $form_id, $result );
+		$i           = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
+		$max_columns = 11;
 
 		if ( ! empty( $hidden ) ) {
-			$result      = $hidden;
-			$i           = $i - count( $result );
-			$max_columns = 11;
-		} else {
-			$max_columns = 8;
+			$result = $hidden;
+			$i      = $i - count( $result );
 		}
 
 		if ( $i <= $max_columns ) {
@@ -470,6 +467,10 @@ class FrmEntriesController {
 	 * Remove some columns by default when there are too many
 	 *
 	 * @since 2.05.07
+	 *
+	 * @param array $atts
+	 * @param array $result
+	 * @return void
 	 */
 	private static function remove_excess_cols( $atts, &$result ) {
 		global $frm_vars;
@@ -538,7 +539,7 @@ class FrmEntriesController {
 	private static function get_delete_form_time( $form, &$errors ) {
 		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
-			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( isset( $form->options['trash_time'] ) ? $form->options['trash_time'] : time() ) );
+			$time_to_delete   = FrmAppHelper::human_time_diff( $delete_timestamp, ( $form->options['trash_time'] ?? time() ) );
 
 			/* translators: %1$s: Time string */
 			$errors['trash'] = sprintf( __( 'This form is in the trash and is scheduled to be deleted permanently in %s along with any entries.', 'formidable' ), $time_to_delete );
@@ -756,6 +757,7 @@ class FrmEntriesController {
 			'include_fields'  => '',
 			'include_extras'  => '',
 			'inline_style'    => 1,
+			'table_style'     => '',
 			// Return embedded fields as nested array.
 			'child_array'     => false,
 			'line_breaks'     => true,

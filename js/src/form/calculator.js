@@ -53,7 +53,7 @@ registerBlockType( 'formidable/calculator', {
 					<div className="frm-block-selector-screen frm_pro_tip">
 						<Notice status="warning" isDismissible={ false }>
 							{ __( 'This site does not have any calculator forms.', 'formidable' ) }
-							<br/>
+							<br />
 							<a href={ formidable_form_selector.link } target="_blank">
 								{ __( 'Upgrade Formidable Forms.', 'formidable' ) }
 							</a>

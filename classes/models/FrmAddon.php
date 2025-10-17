@@ -215,9 +215,9 @@ class FrmAddon {
 	 * @since 2.04
 	 */
 	public function get_defined_license() {
-		$consant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
+		$constant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
 
-		return defined( $consant_name ) ? constant( $consant_name ) : false;
+		return defined( $constant_name ) ? constant( $constant_name ) : false;
 	}
 
 	public function set_license( $license ) {
@@ -296,7 +296,7 @@ class FrmAddon {
 		$roles    = get_editable_roles();
 		$settings = new FrmSettings();
 		foreach ( $caps as $cap => $cap_desc ) {
-			$cap_roles = (array) ( isset( $settings->$cap ) ? $settings->$cap : 'administrator' );
+			$cap_roles = (array) ( $settings->$cap ?? 'administrator' );
 
 			// Make sure administrators always have permissions.
 			if ( ! in_array( 'administrator', $cap_roles, true ) ) {
@@ -552,7 +552,7 @@ class FrmAddon {
 			return true;
 		}
 
-		$checked_time = isset( $last_checked['time'] ) ? $last_checked['time'] : false;
+		$checked_time = $last_checked['time'] ?? false;
 		$time_ago     = gmdate( 'Y-m-d H:i:s', strtotime( '-' . $time ) );
 		return $checked_time && $checked_time > $time_ago;
 	}

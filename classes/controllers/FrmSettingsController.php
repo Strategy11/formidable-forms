@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSettingsController {
 
+	/**
+	 * Payments sections are removed from the top level and added to a payments section.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @var array
+	 */
+	private static $removed_payments_sections = array();
+
 	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
@@ -35,6 +44,10 @@ class FrmSettingsController {
 		$sections = self::get_settings_tabs();
 		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
+		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$current = 'payments_settings';
+		}
+
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-settings/form.php';
 	}
 
@@ -46,22 +59,28 @@ class FrmSettingsController {
 	private static function get_settings_tabs() {
 		$sections = array(
 			'general'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_settings_icon',
 			),
 			'messages'      => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_stamp_icon',
 			),
 			'permissions'   => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_lock_icon',
+			),
+			'payments'      => array(
+				'name'     => __( 'Payments', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_simple_cc_icon',
+				'class'    => self::class,
+				'function' => 'payments_settings',
 			),
 			'custom_css'    => array(
 				'class'    => 'FrmStylesController',
@@ -76,10 +95,16 @@ class FrmSettingsController {
 				'icon'     => 'frm_icon_font frm_pallet_icon',
 			),
 			'captcha'       => array(
-				'class'    => __CLASS__,
+				'class'    => self::class,
 				'function' => 'captcha_settings',
-				'name'     => __( 'Captcha', 'formidable' ),
+				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
+			),
+			'email'         => array(
+				'class'    => self::class,
+				'function' => 'email_settings',
+				'name'     => __( 'Email', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_email_icon',
 			),
 			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
@@ -129,11 +154,12 @@ class FrmSettingsController {
 		 * @param array<array> $sections
 		 */
 		$sections = apply_filters( 'frm_add_settings_section', $sections );
+		self::remove_payments_sections( $sections );
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
 			'icon'     => 'frm_icon_font frm_shuffle_icon',
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
 
@@ -164,6 +190,47 @@ class FrmSettingsController {
 		return $sections;
 	}
 
+	/**
+	 * Remove the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 * and show them all on the payments section in separate tabs.
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param array $sections
+	 * @return void
+	 */
+	private static function remove_payments_sections( &$sections ) {
+		$payment_section_keys = array( 'paypal', 'square', 'stripe', 'authorize_net' );
+
+		foreach ( $sections as $key => $section ) {
+			if ( in_array( $key, $payment_section_keys, true ) ) {
+				self::$removed_payments_sections[ $key ] = $section;
+				unset( $sections[ $key ] );
+			}
+		}
+
+		uksort( self::$removed_payments_sections, array( self::class, 'payment_sections_sort_callback' ) );
+	}
+
+	/**
+	 * Sort the payments sections (PayPal, Square, Stripe, Authorize.Net)
+	 *
+	 * @since 6.22.1
+	 *
+	 * @param string $a
+	 * @param string $b
+	 * @return int
+	 */
+	private static function payment_sections_sort_callback( $a, $b ) {
+		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
+		$first_key  = array_search( $a, $order );
+		$second_key = array_search( $b, $order );
+		if ( false === $first_key || false === $second_key ) {
+			return 0;
+		}
+		return $first_key - $second_key;
+	}
+
 	public static function load_settings_tab() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
@@ -179,7 +246,7 @@ class FrmSettingsController {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		wp_die();
 	}
@@ -236,6 +303,17 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Shows email settings.
+	 *
+	 * @since 6.25
+	 */
+	public static function email_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
+	}
+
+	/**
 	 * @since 4.0
 	 */
 	public static function permission_settings() {
@@ -243,6 +321,19 @@ class FrmSettingsController {
 		$frm_roles    = FrmAppHelper::frm_capabilities();
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
+	}
+
+	public static function payments_settings() {
+		$payment_sections = self::$removed_payments_sections;
+
+		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
+			$tab = str_replace( '_settings', '', $tab );
+		} else {
+			$tab = 'stripe';
+		}
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/payments.php';
 	}
 
 	/**
@@ -386,5 +477,22 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
+	}
+
+	/**
+	 * Shows a fake color picker.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $color Color value.
+	 */
+	public static function fake_color_picker( $color ) {
+		?>
+		<div class="wp-picker-container">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
+			</button>
+		</div>
+		<?php
 	}
 }

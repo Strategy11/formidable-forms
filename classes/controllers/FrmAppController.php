@@ -357,7 +357,9 @@ class FrmAppController {
 			}
 
 			$upgrade_link = FrmSalesApi::get_best_sale_value( 'plugin_page_cta_link' );
-			if ( ! $upgrade_link ) {
+			if ( $upgrade_link ) {
+				$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, array( 'medium' => 'plugin-row' ) );
+			} else {
 				$upgrade_link = FrmAppHelper::admin_upgrade_link( 'plugin-row' );
 			}
 
@@ -485,7 +487,7 @@ class FrmAppController {
 	 */
 	public static function remove_upsells() {
 		remove_action( 'frm_before_settings', 'FrmSettingsController::license_box' );
-		remove_action( 'frm_after_settings', 'FrmSettingsController::settings_cta' );
+		remove_action( 'frm_after_settings_tabs', 'FrmSettingsController::settings_cta' );
 		remove_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
 	}
 
@@ -577,13 +579,15 @@ class FrmAppController {
 
 		if ( 'formidable-pro-upgrade' === FrmAppHelper::get_param( 'page' ) && ! FrmAppHelper::pro_is_installed() && current_user_can( 'frm_view_forms' ) ) {
 			$redirect = FrmSalesApi::get_best_sale_value( 'menu_cta_link' );
-			if ( ! $redirect ) {
-				$redirect = FrmAppHelper::admin_upgrade_link(
-					array(
-						'medium'  => 'upgrade',
-						'content' => 'submenu-upgrade',
-					)
-				);
+			$utm      = array(
+				'medium'  => 'upgrade',
+				'content' => 'submenu-upgrade',
+			);
+
+			if ( $redirect ) {
+				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
+			} else {
+				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
 			}
 
 			wp_redirect( $redirect );
@@ -728,6 +732,7 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+			self::enqueue_global_settings_scripts( $page );
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
@@ -780,6 +785,41 @@ class FrmAppController {
 		if ( 'formidable-addons' === $page ) {
 			wp_register_script( 'formidable_addons', $plugin_url . '/js/admin/addons.js', array( 'formidable_admin', 'wp-dom-ready' ), $version, true );
 			wp_enqueue_script( 'formidable_addons' );
+		}
+
+		self::enqueue_builder_assets( $plugin_url, $version );
+	}
+
+	/**
+	 * Enqueue the Form Builder assets.
+	 *
+	 * @since 6.24
+	 *
+	 * @param string $plugin_url The plugin URL.
+	 * @param string $version    The plugin version.
+	 * @return void
+	 */
+	private static function enqueue_builder_assets( $plugin_url, $version ) {
+		wp_register_style( 'formidable-settings-components', $plugin_url . '/css/admin/frm-settings-components.css', array( 'formidable-admin', 'formidable-grids' ), $version );
+		wp_register_script( 'formidable-settings-components', $plugin_url . '/js/formidable-settings-components.js', array( 'formidable_admin' ), $version, true );
+
+		if ( ! FrmAppHelper::is_form_builder_page() ) {
+			return;
+		}
+
+		wp_enqueue_style( 'formidable-settings-components' );
+		wp_enqueue_script( 'formidable-settings-components' );
+	}
+
+	/**
+	 * Enqueues global settings scripts.
+	 *
+	 * @param string $page The `page` param in URL.
+	 */
+	private static function enqueue_global_settings_scripts( $page ) {
+		if ( 'formidable-settings' === $page ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'formidable_settings' );
 		}
 	}
 
@@ -872,6 +912,7 @@ class FrmAppController {
 			'
 		);
 		wp_enqueue_style( 'formidable-admin' );
+		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() );
 		FrmAppHelper::localize_script( 'admin' );
 		self::include_info_overlay();
 	}
@@ -1004,7 +1045,7 @@ class FrmAppController {
 		$args = array(
 			'methods'             => 'GET',
 			'callback'            => 'FrmAppController::api_install',
-			'permission_callback' => __CLASS__ . '::can_update_db',
+			'permission_callback' => self::class . '::can_update_db',
 		);
 
 		register_rest_route( 'frm-admin/v1', '/install', $args );
@@ -1381,41 +1422,48 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
-		$screen  = get_current_screen();
-		if ( ! $screen ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
 			return;
 		}
 
-		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+		$is_form_list  = FrmAppHelper::is_admin_list_page();
+		$is_entry_list = FrmAppHelper::is_admin_list_page( 'formidable-entries' );
+		if ( ! $is_form_list && ! $is_entry_list ) {
 			return;
 		}
 
 		$orderby = FrmAppHelper::get_param( 'orderby' );
-
 		if ( ! $orderby ) {
 			return;
 		}
 
-		$user_id  = get_current_user_id();
-		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
-		$order    = FrmAppHelper::get_param( 'order' );
-
-		$new_sort = array(
+		$user_id       = get_current_user_id();
+		$order         = FrmAppHelper::get_param( 'order' );
+		$new_sort      = array(
 			'orderby' => $orderby,
 			'order'   => $order,
 		);
+		$previous_meta = get_user_meta( $user_id, $meta_key, true );
+		$current_sort  = $previous_meta;
+		$form_id       = $is_entry_list ? FrmAppHelper::simple_get( 'form', 'absint' ) : 0;
 
-		$current_sort = get_user_meta( $user_id, $meta_key, true );
+		if ( is_array( $current_sort ) && $form_id && is_int( $form_id ) && isset( $current_sort[ $form_id ] ) ) {
+			$current_sort = $current_sort[ $form_id ];
+		}
 
 		if ( $new_sort !== $current_sort ) {
-			update_user_meta(
-				$user_id,
-				$meta_key,
-				array(
-					'orderby' => $orderby,
-					'order'   => $order,
-				)
-			);
+			$new_meta = $new_sort;
+
+			if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
+				// Index meta by form ID.
+				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
+				$temp_meta[ $form_id ] = $new_meta;
+				$new_meta              = $temp_meta;
+				unset( $temp_meta );
+			}
+
+			update_user_meta( $user_id, $meta_key, $new_meta );
 		}
 	}
 
@@ -1429,17 +1477,18 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function apply_saved_sort_preference( &$orderby, &$order ) {
-		if ( ! function_exists( 'get_current_screen' ) ) {
-			return;
-		}
-
-		$screen = get_current_screen();
-		if ( ! $screen ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
 			return;
 		}
 
 		$user_id             = get_current_user_id();
-		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+		$form_id             = FrmAppHelper::simple_get( 'form', 'absint' );
+
+		if ( is_array( $preferred_list_sort ) && $form_id && is_int( $form_id ) && isset( $preferred_list_sort[ $form_id ] ) ) {
+			$preferred_list_sort = $preferred_list_sort[ $form_id ];
+		}
 
 		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
 			$orderby = $preferred_list_sort['orderby'];
@@ -1448,6 +1497,22 @@ class FrmAppController {
 				$order = $preferred_list_sort['order'];
 			}
 		}
+	}
+
+	/**
+	 * Get a simple user meta key that only includes the screen ID.
+	 *
+	 * @since x.x
+	 *
+	 * @return false|string
+	 */
+	private static function get_sort_pref_user_meta_key() {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+		return $screen ? 'frm_preferred_list_sort_' . $screen->id : false;
 	}
 
 	/**
@@ -1511,7 +1576,7 @@ class FrmAppController {
 	/**
 	 * Handles the small screen proceed action.
 	 *
-	 * @since x.x
+	 * @since 6.21
 	 *
 	 * @return void
 	 */
