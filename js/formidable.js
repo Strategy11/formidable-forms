@@ -913,18 +913,6 @@ function frmFrontFormJS() {
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
 						}
 
-						if ( typeof response.recaptcha !== 'undefined' ) {
-							container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
-							input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
-							previousInput = container.find( 'input[name="recaptcha_checked"]' );
-
-							if ( previousInput.length ) {
-								previousInput.replaceWith( input );
-							} else {
-								container.append( input );
-							}
-						}
-
 						afterFormSubmitted( object, response );
 					},
 					delay
