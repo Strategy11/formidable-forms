@@ -153,6 +153,10 @@ class FrmWelcomeTourController {
 		if ( $active_step === count( $step_keys ) ) {
 			self::$checklist['done']            = true;
 			self::$checklist['active_step_key'] = 'completed';
+
+			foreach ( self::$checklist['completed_steps'] as $step_key => $completed ) {
+				FrmUsageController::update_flows_data( 'welcome_tour_completed_steps', $step_key );
+			}
 		} else {
 			self::$checklist['active_step_key'] = $step_keys[ $active_step ];
 		}
@@ -374,6 +378,8 @@ class FrmWelcomeTourController {
 		self::$checklist              = self::get_checklist();
 		self::$checklist['dismissed'] = true;
 		self::save_checklist();
+
+		FrmUsageController::update_flows_data( 'welcome_tour_dismissed_step', self::$checklist['active_step_key'] );
 
 		wp_send_json_success();
 	}
