@@ -333,4 +333,34 @@
 	<rule ref="Generic.WhiteSpace.ScopeIndent.Incorrect">
 		<exclude-pattern>*.js</exclude-pattern>
 	</rule>
+	<rule ref="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FileComment.MissingPackageTag">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FileComment.SpacingAfterComment">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.SpaceBeforeOpenBracket">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceBeforeAmp">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfterAmp">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.OpeningIndent">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPressVIPMinimum.JS.Window.location">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterCloseBrace">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Generic.Commenting.DocComment.ShortNotCapital">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
 </ruleset>
