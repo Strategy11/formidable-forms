@@ -9,7 +9,7 @@
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
 
-	<arg name="extensions" value="php,css" />
+	<arg name="extensions" value="php,css,js" />
 	<arg value="nsp" />
 
 	<rule ref="WordPress">
@@ -270,5 +270,67 @@
 	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
 		<severity>8</severity>
 		<type>error</type>
+	</rule>
+
+	<!-- JS Rules to Ignore -->
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.Arrays.MultipleStatementAlignment.DoubleArrowNotAligned">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Generic.WhiteSpace.ScopeIndent.IncorrectExact">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Functions.MultiLineFunctionDeclaration.SpaceAfterFunction">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.CloseBracketLine">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.Indent">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceBefore">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.EmptyLine">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="WordPress.WhiteSpace.OperatorSpacing.NoSpaceAfter">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.LongConditionClosingComment.Missing">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.ContentAfterOpenBracket">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.MultipleArguments">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.PHP.DisallowSizeFunctionsInLoops.Found">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.PostStatementComment.Found">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.InlineComment.NoSpaceBefore">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.Commenting.FileComment.WrongStyle">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.SpaceAfterOpenBracket">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="PEAR.Functions.FunctionCallSignature.SpaceBeforeCloseBracket">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Squiz.ControlStructures.ControlSignature.SpaceAfterKeyword">
+		<exclude-pattern>*.js</exclude-pattern>
+	</rule>
+	<rule ref="Generic.WhiteSpace.ScopeIndent.Incorrect">
+		<exclude-pattern>*.js</exclude-pattern>
 	</rule>
 </ruleset>
