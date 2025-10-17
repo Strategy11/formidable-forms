@@ -899,8 +899,6 @@ function frmFrontFormJS() {
 
 				setTimeout(
 					function() {
-						let container, input, previousInput;
-
 						afterFormSubmittedBeforeReplace( object, response );
 
 						replaceContent.replaceWith( response.content );
@@ -911,18 +909,6 @@ function frmFrontFormJS() {
 							pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
 							formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
-						}
-
-						if ( typeof response.recaptcha !== 'undefined' ) {
-							container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
-							input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
-							previousInput = container.find( 'input[name="recaptcha_checked"]' );
-
-							if ( previousInput.length ) {
-								previousInput.replaceWith( input );
-							} else {
-								container.append( input );
-							}
 						}
 
 						afterFormSubmitted( object, response );
