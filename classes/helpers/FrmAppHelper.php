@@ -4625,22 +4625,4 @@ class FrmAppHelper {
 		}
 		return false;
 	}
-
-	/**
-	 * Check if a string contains a substring.
-	 * Provides backward compatibility for PHP < 8.0.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $haystack The string to search in.
-	 * @param string $needle   The substring to search for.
-	 * @return bool True if needle is found in haystack, false otherwise.
-	 */
-	public static function str_contains( $haystack, $needle ) {
-		if ( function_exists( 'str_contains' ) ) {
-			return str_contains( $haystack, $needle );
-		}
-
-		return strpos( $haystack, $needle ) !== false;
-	}
 }
