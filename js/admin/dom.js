@@ -10,7 +10,7 @@
 	}
 
 	const modal = {
-		maybeCreateModal: ( id, { title, content, footer, width } = {} ) => {
+		maybeCreateModal: ( id, { title, content, footer, width, dialogClass } = {} ) => {
 			let modal = document.getElementById( id );
 
 			if ( ! modal ) {
@@ -57,7 +57,7 @@
 			}
 
 			if ( ! content && ! footer ) {
-				makeModalIntoADialogAndOpen( modal, { width } );
+				makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 				return modal;
 			}
 
@@ -72,7 +72,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal );
+			makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 			return modal;
 		},
 		footerButton: args => {
@@ -648,13 +648,13 @@
 		return modal;
 	}
 
-	function makeModalIntoADialogAndOpen( modal, { width } = {} ) {
+	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '' } = {} ) {
 		const bodyWithModalClassName = 'frm-body-with-open-modal';
 
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
 			$modal.dialog( {
-				dialogClass: 'frm-dialog',
+				dialogClass: 'frm-dialog ' + dialogClass,
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
