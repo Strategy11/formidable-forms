@@ -5656,7 +5656,7 @@ window.frmAdminBuildJS = function() {
 				}
 			}
 		}
-		if ( e.shiftKey || e?.metaKey || e?.ctrlKey ) {
+		if ( e?.metaKey || e?.ctrlKey ) {
 			// Add the target to list of selected fields.
 			this.closest( 'ul' ).classList.add( 'frm-selected-field-group' );
 			return;
