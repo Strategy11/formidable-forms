@@ -12,7 +12,11 @@ if ( $field['type'] === 'divider' ) {
 <div class="divider_section_only">
 <?php } ?>
 
-<?php do_action( 'frm_extra_field_actions', $field['id'] ); ?>
+<?php
+FrmSubmitHelper::print_last_row_fields_order_input();
+
+do_action( 'frm_extra_field_actions', $field['id'] );
+?>
 
 <div id="field_<?php echo esc_attr( $field['id'] ); ?>_inner_container" class="frm_inner_field_container">
 	<div class="frm-field-action-icons frm-show-hover">
