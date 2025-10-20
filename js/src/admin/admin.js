@@ -471,6 +471,7 @@ window.frmAdminBuildJS = function() {
 		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
 		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
 			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
+			tooltipTarget.removeAttribute( 'title' );
 			tooltipTarget.classList.remove( 'frm_bstooltip' );
 			tooltipTarget.parentElement.classList.add( 'frm_bstooltip' );
 			tooltipTarget = tooltipTarget.parentElement;
@@ -479,6 +480,7 @@ window.frmAdminBuildJS = function() {
 		jQuery( tooltipTarget ).tooltip();
 
 		if ( show ) {
+			deleteTooltips();
 			jQuery( tooltipTarget ).tooltip( 'show' );
 		}
 	}
@@ -2562,6 +2564,7 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		maybeRemoveGroupHoverTarget();
+		deleteTooltips();
 	}
 
 	function onFieldActionDropdownShow( isFieldGroup ) {

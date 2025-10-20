@@ -91,7 +91,8 @@ h1 .fa-caret-down {
 	min-width: 180px !important;
 }
 
-.frm-field-action-icons .frm-dropdown-toggle svg {
+.frm-field-action-icons .frm-dropdown-toggle svg,
+#frm_field_group_controls .frm-dropdown-toggle svg {
 	color: #9EA9B8;
 }
 
