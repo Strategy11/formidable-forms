@@ -1670,27 +1670,25 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * If there are multiple captcha fields, all labels following the first will use an incorrect ID.
-	 * This function fixes that by setting the correct ID.
+	 * Make sure that the captcha label for a reCAPTCHA or Turnstile field matches the response input ID.
+	 * This is determined dynamically, so we check for the ID after the input is rendered.
 	 *
 	 * @since x.x
 	 *
+	 * @param {HTMLElement} captcha
 	 * @return {void}
 	 */
-	function fixCaptchaLabels() {
-		const captchaLabels = document.querySelectorAll( 'label[for="g-recaptcha-response"], label[for="cf-turnstile-response"]' );
-		if ( captchaLabels.length ) {
-			captchaLabels.forEach( maybeFixCaptchaLabel );
+	function maybeFixCaptchaLabel( captcha ) {
+		const form = captcha.closest( 'form' );
+		if ( ! form ) {
+			return;
 		}
-	}
 
-	/**
-	 * @since x.x
-	 *
-	 * @param {HTMLElement} label
-	 * @return {void}
-	 */
-	function maybeFixCaptchaLabel( label ) {
+		const label = form.querySelector( 'label[for="g-recaptcha-response"], label[for="cf-turnstile-response"]' );
+		if ( ! label ) {
+			return;
+		}
+
 		const captchaResponse = label.closest( 'form' )?.querySelector( '[name="g-recaptcha-response"], [name="cf-turnstile-response"]' );
 		if ( captchaResponse ) {
 			label.htmlFor = captchaResponse.id;
@@ -1779,7 +1777,7 @@ function frmFrontFormJS() {
 
 			captcha.setAttribute( 'data-rid', captchaID );
 
-			fixCaptchaLabels( captcha );
+			maybeFixCaptchaLabel( captcha );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -2079,7 +2077,7 @@ function frmCaptcha( captchaSelector ) {
 		const captchaLabels = document.querySelectorAll( 'label[for="h-captcha-response"]' );
 		if ( captchaLabels.length ) {
 			captchaLabels.forEach( label => {
-				const captchaResponse = label.closest( 'form' )?.querySelector( '[name="h-captcha-response"]' );
+				const captchaResponse = label.closest( 'form' )?.querySelector( 'input[name="h-captcha-response"], textarea[name="h-captcha-response"]' );
 				if ( captchaResponse ) {
 					label.htmlFor = captchaResponse.id;
 				}
