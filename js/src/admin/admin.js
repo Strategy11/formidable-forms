@@ -2776,17 +2776,9 @@ window.frmAdminBuildJS = function() {
 
 		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
 
-		field.querySelectorAll( '[data-toggle]' ).forEach(
-			function( toggle ) {
-				toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) );
-			}
-		);
-
-		field.querySelectorAll( '.frm-dropdown-menu' ).forEach(
-			dropdownMenu => {
-				dropdownMenu.classList.add( 'dropdown-menu' );
-			}
-		);
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle, and requires that elements have the dropdown-menu class.
+		field.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		field.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 
 		const addedEvent = new Event( 'frm_added_field', { bubbles: false } );
 		addedEvent.frmField = field;
@@ -11103,11 +11095,8 @@ jQuery( document ).ready(
 		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
-		document.querySelectorAll( '[data-toggle]' ).forEach(
-			function( toggle ) {
-				toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) );
-			}
-		);
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle.
+		document.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 
 		function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
 			frmDropdownMenu.classList.add( 'dropdown-menu' );
