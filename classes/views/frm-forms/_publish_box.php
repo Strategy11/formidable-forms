@@ -22,7 +22,7 @@ $preview_link = FrmFormsHelper::get_direct_link( $values['form_key'] );
 				<?php esc_html_e( 'Preview', 'formidable' ); ?>
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon frm_svg13', array( 'aria-hidden' => 'true' ) ); ?>
 			</a>
-			<ul class="frm-dropdown-menu dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
+			<ul class="frm-dropdown-menu frm-p-1 <?php echo esc_attr( is_rtl() ? 'dropdown-menu-left' : 'dropdown-menu-right' ); ?>" role="menu" aria-labelledby="frm-previewDrop">
 				<li>
 					<a href="<?php echo esc_url( $preview_link ); ?>" target="_blank">
 						<?php esc_html_e( 'On Blank Page', 'formidable' ); ?>

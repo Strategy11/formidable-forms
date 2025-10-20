@@ -206,7 +206,13 @@
 		}
 	};
 
-	const bootstrap = { multiselect };
+	const bootstrap = {
+		setupBootstrapDropdowns: function() {
+			// This function is no longer necessary.
+			// It's call in Pro though, so keep it to avoid any errors for now.
+		},
+		multiselect
+	};
 
 	const autocomplete = {
 		initSelectionAutocomplete: function( container ) {
