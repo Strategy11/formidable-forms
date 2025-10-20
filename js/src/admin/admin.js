@@ -11100,7 +11100,7 @@ jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
 
-		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap4 );
+		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
 		document.querySelectorAll( '[data-toggle]' ).forEach(
@@ -11109,7 +11109,7 @@ jQuery( document ).ready(
 			}
 		);
 
-		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
+		function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
 			frmDropdownMenu.classList.add( 'dropdown-menu' );
 
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
