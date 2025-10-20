@@ -10137,21 +10137,32 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @return void
+	 * @return {void}
 	 */
 	function makeSureOnlyASingleDropdownIsActive() {
-		document.addEventListener( 'show.bs.dropdown', function( event ) {
-			const ul = event.target.parentNode.querySelector( '.frm-dropdown-menu.show' );
-			document.querySelectorAll( '.frm-dropdown-menu.show' ).forEach(
-				function( currentUl ) {
-					if ( ul !== currentUl ) {
-						const toggle = currentUl.closest( '.dropdown' ).querySelector( '.dropdown-toggle' );
-						const dropdown = bootstrap.Dropdown.getInstance( toggle ) || new bootstrap.Dropdown( toggle );
-						dropdown.hide();
+		document.addEventListener(
+			'show.bs.dropdown',
+			/**
+			 * @param {Event} event
+			 * @return {void}
+			 */
+			function( event ) {
+				const ul = event.target.parentNode.querySelector( '.frm-dropdown-menu.show' );
+				document.querySelectorAll( '.frm-dropdown-menu.show' ).forEach(
+					/**
+					 * @param {HTMLElement} currentUl
+					 * @return {void}
+					 */
+					function( currentUl ) {
+						if ( ul !== currentUl ) {
+							const toggle = currentUl.closest( '.dropdown' ).querySelector( '.dropdown-toggle' );
+							const dropdown = bootstrap.Dropdown.getInstance( toggle ) || new bootstrap.Dropdown( toggle );
+							dropdown.hide();
+						}
 					}
-				}
-			);
-		} );
+				);
+			}
+		);
 	}
 
 	return {
