@@ -1672,6 +1672,7 @@ function frmFrontFormJS() {
 	/**
 	 * Make sure that the captcha label for a reCAPTCHA or Turnstile field matches the response input ID.
 	 * This is determined dynamically, so we check for the ID after the input is rendered.
+	 * hCaptcha is handled separately, in the frmCaptcha function as it is not rendered explicitly.
 	 *
 	 * @since x.x
 	 *
