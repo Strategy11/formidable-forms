@@ -1689,7 +1689,7 @@ function frmFrontFormJS() {
 			return;
 		}
 
-		const captchaResponse = label.closest( 'form' )?.querySelector( '[name="g-recaptcha-response"], [name="cf-turnstile-response"]' );
+		const captchaResponse = form.querySelector( '[name="g-recaptcha-response"], [name="cf-turnstile-response"]' );
 		if ( captchaResponse ) {
 			label.htmlFor = captchaResponse.id;
 		}
