@@ -1685,12 +1685,9 @@ function frmFrontFormJS() {
 		}
 
 		const label = form.querySelector( 'label[for="g-recaptcha-response"], label[for="cf-turnstile-response"]' );
-		if ( ! label ) {
-			return;
-		}
-
 		const captchaResponse = form.querySelector( '[name="g-recaptcha-response"], [name="cf-turnstile-response"]' );
-		if ( captchaResponse ) {
+
+		if ( label && captchaResponse ) {
 			label.htmlFor = captchaResponse.id;
 		}
 	}
