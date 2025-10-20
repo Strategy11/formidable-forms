@@ -1669,6 +1669,34 @@ function frmFrontFormJS() {
 		/* eslint-enable compat/compat */
 	}
 
+	/**
+	 * If there are multiple captcha fields, all labels following the first will use an incorrect ID.
+	 * This function fixes that by setting the correct ID.
+	 *
+	 * @since x.x
+	 *
+	 * @return {void}
+	 */
+	function fixCaptchaLabels() {
+		const captchaLabels = document.querySelectorAll( 'label[for="g-recaptcha-response"], label[for="cf-turnstile-response"]' );
+		if ( captchaLabels.length ) {
+			captchaLabels.forEach( maybeFixCaptchaLabel );
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} label
+	 * @return {void}
+	 */
+	function maybeFixCaptchaLabel( label ) {
+		const captchaResponse = label.closest( 'form' )?.querySelector( 'input[name="g-recaptcha-response"], textarea[name="g-recaptcha-response"], input[name="cf-turnstile-response"], textarea[name="cf-turnstile-response"]' );
+		if ( captchaResponse ) {
+			label.htmlFor = captchaResponse.id;
+		}
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1750,6 +1778,8 @@ function frmFrontFormJS() {
 			const captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
+
+			fixCaptchaLabels( captcha );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -2034,11 +2064,30 @@ function frmRecaptcha() {
 	frmCaptcha( '.frm-g-recaptcha' );
 }
 
+function frmHcaptcha() {
+	frmCaptcha( '.h-captcha' );
+}
+
 function frmTurnstile() {
 	frmCaptcha( '.cf-turnstile' );
 }
 
 function frmCaptcha( captchaSelector ) {
+	if ( '.h-captcha' === captchaSelector ) {
+		// hCaptcha is still rendered implicitly, so we only want to handle the label and exit early.
+		// Match the hcaptcha labels to the hcaptcha response fields.
+		const captchaLabels = document.querySelectorAll( 'label[for="h-captcha-response"]' );
+		if ( captchaLabels.length ) {
+			captchaLabels.forEach( label => {
+				const captchaResponse = label.closest( 'form' )?.querySelector( 'input[name="h-captcha-response"], textarea[name="h-captcha-response"]' );
+				if ( captchaResponse ) {
+					label.htmlFor = captchaResponse.id;
+				}
+			} );
+		}
+		return;
+	}
+
 	let c;
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl = captchas.length;
