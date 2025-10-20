@@ -2542,7 +2542,7 @@ window.frmAdminBuildJS = function() {
 		maybeRemoveGroupHoverTarget();
 	}
 
-	function onFieldActionDropdownShow( isFieldGroup, event ) {
+	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
 
 		// maybe offset the dropdown if it goes off of the right of the screen.
@@ -2574,8 +2574,8 @@ window.frmAdminBuildJS = function() {
 		);
 	}
 
-	function onFieldGroupActionDropdownShow( event ) {
-		onFieldActionDropdownShow( true, event );
+	function onFieldGroupActionDropdownShow() {
+		onFieldActionDropdownShow( true );
 	}
 
 	function changeSectionStyle( e ) {
@@ -10486,9 +10486,7 @@ window.frmAdminBuildJS = function() {
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			} );
 			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
-			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', function( event ) {
-				onFieldActionDropdownShow( false, event );
-			} );
+			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow );
 			jQuery( document ).on( 'show.bs.dropdown', '#frm_field_group_controls', onFieldGroupActionDropdownShow );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
