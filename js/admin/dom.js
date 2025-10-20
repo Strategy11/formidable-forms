@@ -201,8 +201,6 @@
 					}
 				}
 			} );
-
-			$select.find( '.dropdown-menu' ).removeClass( 'dropdown-menu' );
 		}
 	};
 
