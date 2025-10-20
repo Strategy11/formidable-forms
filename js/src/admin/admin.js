@@ -457,6 +457,32 @@ window.frmAdminBuildJS = function() {
 		return 'INPUT' === element.nodeName && 'checkbox' === element.type && ! element.checked;
 	}
 
+	/**
+	 * Load a tooltip for a single element.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @param {boolean} show
+	 */
+	function loadTooltip( element, show = false ) {
+		let tooltipTarget = element;
+
+		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
+		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
+			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
+			tooltipTarget.classList.remove( 'frm_bstooltip' );
+			tooltipTarget.parentElement.classList.add( 'frm_bstooltip' );
+			tooltipTarget = tooltipTarget.parentElement;
+		}
+
+		jQuery( tooltipTarget ).tooltip();
+
+		if ( show ) {
+			jQuery( tooltipTarget ).tooltip( 'show' );
+		}
+	}
+
 	function loadTooltips() {
 		let wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' ),
@@ -476,12 +502,8 @@ window.frmAdminBuildJS = function() {
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
-
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
-			jQuery( this ).tooltip( 'show' );
+			loadTooltip( this, true );
 		} );
-
-		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
 		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
 			const isTop = this.id === 'doaction',
@@ -10132,44 +10154,15 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
-	/**
-	 * Listen for when a bootstrap dropdown opens, and close any other dropdowns.
-	 *
-	 * @since x.x
-	 *
-	 * @return {void}
-	 */
-	function makeSureOnlyASingleDropdownIsActive() {
-		document.addEventListener(
-			'show.bs.dropdown',
-			/**
-			 * @param {Event} event
-			 * @return {void}
-			 */
-			function( event ) {
-				const ul = event.target.parentNode.querySelector( '.frm-dropdown-menu.show' );
-				document.querySelectorAll( '.frm-dropdown-menu.show' ).forEach(
-					/**
-					 * @param {HTMLElement} currentUl
-					 * @return {void}
-					 */
-					function( currentUl ) {
-						if ( ul !== currentUl ) {
-							const toggle = currentUl.closest( '.dropdown' ).querySelector( '.dropdown-toggle' );
-							const dropdown = bootstrap.Dropdown.getInstance( toggle ) || new bootstrap.Dropdown( toggle );
-							dropdown.hide();
-						}
-					}
-				);
-			}
-		);
-	}
-
 	return {
 		init: function() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
-			makeSureOnlyASingleDropdownIsActive();
+
+			document.addEventListener( 'show.bs.dropdown', function() {
+				// Fixes issues with tooltips lingering after a dropdown is shown.
+				deleteTooltips();
+			} );
 
 			s = {};
 
