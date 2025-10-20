@@ -1388,8 +1388,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addTooltip( element, title ) {
-		element.setAttribute( 'data-toggle', 'tooltip' );
-		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'data-bs-toggle', 'tooltip' );
+		element.setAttribute( 'data-bs-container', 'body' );
 		element.setAttribute( 'title', title );
 		element.addEventListener(
 			'mouseover',
@@ -1420,8 +1420,8 @@ window.frmAdminBuildJS = function() {
 			trigger,
 			{
 				title: __( 'More Options', 'formidable' ),
-				'data-toggle': 'dropdown',
-				'data-container': 'body'
+				'data-bs-toggle': 'dropdown',
+				'data-bs-container': 'body'
 			}
 		);
 		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
@@ -11057,8 +11057,8 @@ jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
 
-		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
-		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-toggle', 'dropdown' );
+		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap4 );
+		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
 		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
