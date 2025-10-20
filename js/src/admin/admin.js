@@ -1421,7 +1421,8 @@ window.frmAdminBuildJS = function() {
 			{
 				title: __( 'More Options', 'formidable' ),
 				'data-bs-toggle': 'dropdown',
-				'data-bs-container': 'body'
+				'data-bs-container': 'body',
+				'data-bs-display': 'static'
 			}
 		);
 		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
@@ -2541,13 +2542,16 @@ window.frmAdminBuildJS = function() {
 		maybeRemoveGroupHoverTarget();
 	}
 
-	function onFieldActionDropdownShow( isFieldGroup ) {
+	function onFieldActionDropdownShow( isFieldGroup, event ) {
 		unselectFieldGroups();
+
 		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
 			function() {
 				let ul, $ul;
-				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
+
+				ul = document.querySelector( '.dropdown .frm-dropdown-menu.show' );
+
 				if ( null === ul ) {
 					return;
 				}
@@ -2570,8 +2574,8 @@ window.frmAdminBuildJS = function() {
 		);
 	}
 
-	function onFieldGroupActionDropdownShow() {
-		onFieldActionDropdownShow( true );
+	function onFieldGroupActionDropdownShow( event ) {
+		onFieldActionDropdownShow( true, event );
 	}
 
 	function changeSectionStyle( e ) {
@@ -2749,6 +2753,18 @@ window.frmAdminBuildJS = function() {
 		initiateMultiselect();
 
 		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+
+		field.querySelectorAll( '[data-toggle]' ).forEach(
+			function( toggle ) {
+				toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) );
+			}
+		);
+
+		field.querySelectorAll( '.frm-dropdown-menu' ).forEach(
+			dropdownMenu => {
+				dropdownMenu.classList.add( 'dropdown-menu' );
+			}
+		);
 
 		const addedEvent = new Event( 'frm_added_field', { bubbles: false } );
 		addedEvent.frmField = field;
@@ -10116,10 +10132,33 @@ window.frmAdminBuildJS = function() {
 		}
 	}
 
+	/**
+	 * Listen for when a bootstrap dropdown opens, and close any other dropdowns.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	function makeSureOnlyASingleDropdownIsActive() {
+		document.addEventListener( 'show.bs.dropdown', function( event ) {
+			const ul = event.target.parentNode.querySelector( '.frm-dropdown-menu.show' );
+			document.querySelectorAll( '.frm-dropdown-menu.show' ).forEach(
+				function( currentUl ) {
+					if ( ul !== currentUl ) {
+						const toggle = currentUl.closest( '.dropdown' ).querySelector( '.dropdown-toggle' );
+						const dropdown = bootstrap.Dropdown.getInstance( toggle ) || new bootstrap.Dropdown( toggle );
+						dropdown.hide();
+					}
+				}
+			);
+		} );
+	}
+
 	return {
 		init: function() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
+			makeSureOnlyASingleDropdownIsActive();
 
 			s = {};
 
@@ -10436,7 +10475,9 @@ window.frmAdminBuildJS = function() {
 				jQuery( document ).on( 'click', '#frm_builder_page', handleClickOutsideOfFieldSettings );
 			} );
 			$newFields.on( 'mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove );
-			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow );
+			$newFields.on( 'show.bs.dropdown', '.frm-field-action-icons', function( event ) {
+				onFieldActionDropdownShow( false, event );
+			} );
 			jQuery( document ).on( 'show.bs.dropdown', '#frm_field_group_controls', onFieldGroupActionDropdownShow );
 			$builderForm.on( 'click', '.frm_single_option a[data-removeid]', deleteFieldOption );
 			$builderForm.on( 'mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio );
@@ -11060,7 +11101,15 @@ jQuery( document ).ready(
 		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap4 );
 		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
+		document.querySelectorAll( '[data-toggle]' ).forEach(
+			function( toggle ) {
+				toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) );
+			}
+		);
+
 		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {
