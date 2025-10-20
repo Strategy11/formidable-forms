@@ -2074,7 +2074,7 @@ function frmCaptcha( captchaSelector ) {
 		const captchaLabels = document.querySelectorAll( 'label[for="h-captcha-response"]' );
 		if ( captchaLabels.length ) {
 			captchaLabels.forEach( label => {
-				const captchaResponse = label.closest( 'form' )?.querySelector( 'input[name="h-captcha-response"], textarea[name="h-captcha-response"]' );
+				const captchaResponse = label.closest( 'form' )?.querySelector( '[name="h-captcha-response"]' );
 				if ( captchaResponse ) {
 					label.htmlFor = captchaResponse.id;
 				}
