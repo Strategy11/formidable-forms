@@ -65,7 +65,7 @@ Introducing sophisticated payment forms, donation forms, and other credit card f
 
 == Data-Driven Web Applications Made Easy ==
 
-With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, and much more.
+With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, timelines, and much more.
 
 == Elevate Your Online Store with WooCommerce Product Order Forms ==
 
