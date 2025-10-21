@@ -965,7 +965,7 @@ function frmFrontFormJS() {
 				} );
 
 				if ( window.turnstile ) {
-					object.querySelectorAll( '.cf-turnstile' ).forEach(
+					object.querySelectorAll( '.frm-cf-turnstile' ).forEach(
 						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
 					);
 				}
@@ -2065,7 +2065,7 @@ function frmHcaptcha() {
 }
 
 function frmTurnstile() {
-	frmCaptcha( '.cf-turnstile' );
+	frmCaptcha( '.frm-cf-turnstile' );
 }
 
 function frmCaptcha( captchaSelector ) {
@@ -2114,7 +2114,7 @@ function getSelectedCaptcha( captchaSelector ) {
 	if ( captchaSelector === '.frm-g-recaptcha' ) {
 		return grecaptcha;
 	}
-	if ( document.querySelector( '.cf-turnstile' ) ) {
+	if ( document.querySelector( '.frm-cf-turnstile' ) ) {
 		return turnstile;
 	}
 	return hcaptcha;

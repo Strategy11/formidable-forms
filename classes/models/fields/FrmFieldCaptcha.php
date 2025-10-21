@@ -254,13 +254,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return ''|'frm-'
 	 */
 	protected function class_prefix( $frm_settings ) {
-		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
-			$class_prefix = 'frm-';
-		} else {
-			$class_prefix = '';
-		}
-
-		return $class_prefix;
+		return FrmCaptchaFactory::get_settings_object()->get_class_prefix( $this->allow_multiple( $frm_settings ) );
 	}
 
 	/**

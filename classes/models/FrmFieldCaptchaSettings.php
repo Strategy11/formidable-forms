@@ -253,4 +253,14 @@ class FrmFieldCaptchaSettings {
 	public function should_show_captcha_theme_auto_option() {
 		return false;
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool $allow_multiple
+	 * @return string
+	 */
+	public function get_class_prefix( $allow_multiple ) {
+		return '';
+	}
 }
