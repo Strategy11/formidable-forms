@@ -4548,7 +4548,7 @@ window.frmAdminBuildJS = function() {
 		let targetSection, $range, fieldsInSection;
 		if ( hoverTargetSection ) {
 			targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
-			fieldsInSection = [ ...hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' )].filter( el => el.classList.length === 2 );
+			fieldsInSection = [ ...hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) ].filter( el => el.classList.length === 2 );
 		}
 		const hoverTargetBox = hoverTarget.closest( 'li' );
 		if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
