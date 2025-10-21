@@ -4571,7 +4571,7 @@ window.frmAdminBuildJS = function() {
 		if ( ! fieldsInSection ) {
 			return $range;
 		}
-		$range = $range.add( fieldsInSection.slice( - (fieldsInSection.length - fieldsInSection.indexOf( hoverTargetBox ) ) ) );
+		$range = $range.add( fieldsInSection.slice( -( fieldsInSection.length - fieldsInSection.indexOf( hoverTargetBox ) ) ) );
 
 		return $range;
 	}
