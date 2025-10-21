@@ -4563,11 +4563,15 @@ window.frmAdminBuildJS = function() {
 		}
 
 		// Select fields back to the first group.
-		$range = $firstGroup.parent().prevUntil( targetSection || hoverTarget.parentNode );
+		if ( targetSection?.contains( $firstGroup.get( 0 ) ) ) {
+			$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
+		} else {
+			$range = $firstGroup.parent().prevUntil( targetSection || hoverTarget.parentNode );
+		}
 		if ( ! fieldsInSection ) {
 			return $range;
 		}
-		$range = $range.add( fieldsInSection.slice( -fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
+		$range = $range.add( fieldsInSection.slice( - (fieldsInSection.length - fieldsInSection.indexOf( hoverTargetBox ) ) ) );
 
 		return $range;
 	}
