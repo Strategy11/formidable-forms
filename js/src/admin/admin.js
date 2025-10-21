@@ -4533,6 +4533,49 @@ window.frmAdminBuildJS = function() {
 		destroyFieldGroupPopup();
 	}
 
+	/**
+	 * Get an array of fields that are selected.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      $firstGroup
+	 * @param {HTMLElement} hoverTarget
+	 *
+	 * @returns {Object}
+	 */
+	function getSelectedRange( $firstGroup, hoverTarget ) {
+		const hoverTargetSection = hoverTarget.closest( '.edit_field_type_divider' );
+		let targetSection, $range, fieldsInSection;
+		if ( hoverTargetSection ) {
+			targetSection = hoverTargetSection.closest( 'ul' ).closest( '.frm_field_box.ui-draggable' );
+			fieldsInSection = [ ...hoverTargetSection.querySelectorAll( '.frm_field_box.ui-draggable' ) ].filter( el => el.classList.length === 2 );
+		}
+		const hoverTargetBox = hoverTarget.closest( 'li' );
+		if ( $firstGroup.parent().index() < jQuery( targetSection || hoverTarget.parentNode ).index() ) {
+			// If field target field is in a section.
+			$range = $firstGroup.parent().nextUntil( targetSection || hoverTarget.parentNode );
+
+			if ( ! fieldsInSection ) {
+				return $range;
+			}
+			$range = $range.add( fieldsInSection.slice( 0, fieldsInSection.indexOf( hoverTargetBox ) + 1 ) );
+			return $range;
+		}
+
+		// Select fields back to the first group.
+		if ( targetSection?.contains( $firstGroup.get( 0 ) ) ) {
+			$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
+		} else {
+			$range = $firstGroup.parent().prevUntil( targetSection || hoverTarget.parentNode );
+		}
+		if ( ! fieldsInSection ) {
+			return $range;
+		}
+		$range = $range.add( fieldsInSection.slice( -( fieldsInSection.length - fieldsInSection.indexOf( hoverTargetBox ) ) ) );
+
+		return $range;
+	}
+
 	function fieldGroupClick( e ) {
 		maybeShowFieldGroupMessage();
 
@@ -4577,14 +4620,7 @@ window.frmAdminBuildJS = function() {
 				++numberOfSelectedGroups; // include the one we're selecting right now.
 				const $firstGroup = $selectedFieldGroups.first();
 
-				let $range;
-				if ( $firstGroup.parent().index() < jQuery( hoverTarget.parentNode ).index() ) {
-					$range = $firstGroup.parent().nextUntil( hoverTarget.parentNode );
-				} else {
-					$range = $firstGroup.parent().prevUntil( hoverTarget.parentNode );
-				}
-
-				$range.each(
+				getSelectedRange( $firstGroup, hoverTarget ).each(
 					function() {
 						const $fieldGroup = jQuery( this ).closest( 'li' ).find( 'ul.frm_sorting' );
 						if ( ! $fieldGroup.hasClass( 'frm-selected-field-group' ) ) {
