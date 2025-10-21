@@ -108,10 +108,33 @@ class FrmFieldCaptcha extends FrmFieldType {
 			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
 			'data-sitekey' => $settings->get_pubkey(),
 		);
+		if ( 'turnstile' === $frm_settings->active_captcha ) {
+			$captcha_language = $this->get_captcha_language();
+			if ( $captcha_language ) {
+				$div_attributes['data-language'] = $captcha_language;
+			}
+		}
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
 		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
 		return $html;
+	}
+
+	/**
+	 * @since 6.25
+	 *
+	 * @return string
+	 */
+	private function get_captcha_language() {
+		/**
+		 * Allows updating the captcha language.
+		 *
+		 * @since 6.25
+		 *
+		 * @param string $lang
+		 * @param array $field
+		 */
+		return apply_filters( 'frm_captcha_lang', get_bloginfo( 'language' ), $this->field );
 	}
 
 	/**
@@ -176,6 +199,13 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
+
+		$lang = $this->get_captcha_language();
+		if ( $lang ) {
+			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
+			$lang_parts  = explode( '-', $lang );
+			$api_js_url .= '?hl=' . $lang_parts[0];
+		}
 
 		/**
 		 * Allows updating hcaptcha js api url.

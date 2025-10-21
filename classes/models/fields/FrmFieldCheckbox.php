@@ -113,7 +113,7 @@ class FrmFieldCheckbox extends FrmFieldType {
 	 * Unset aria-invalid for checkboxes because it's not valid for checkboxes.
 	 * Instead aria-invalid is added to the checkbox group parent element.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $shortcode_atts
 	 * @param array $args

@@ -2,7 +2,7 @@
 /**
  * View for email settings
  *
- * @since x.x
+ * @since 6.25
  *
  * @package Formidable
  */
@@ -74,7 +74,7 @@ $selected_style = FrmEmailStylesController::get_default_email_style();
 
 <?php
 /**
- * @since x.x
+ * @since 6.25
  */
 do_action( 'frm_email_styles_extra_settings' );
 ?>

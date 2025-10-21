@@ -22,11 +22,22 @@ if ( ! isset( $entry ) ) {
 		$date_format = __( 'M j, Y', 'formidable' );
 	}
 
+	/**
+	 * @since 6.25
+	 *
+	 * @param string   $text
+	 * @param stdClass $entry
+	 */
+	$additional_timestamp_text = apply_filters( 'frm_additional_timestamp_text', '', $entry );
+
 	printf(
-		/* translators: %1$s: Entry status %2$s: The date */
-		esc_html__( '%1$s: %2$s', 'formidable' ),
+		/* translators: %1$s: Entry status, %2$s: <b> open tag, %3$s: The date, %4$s: Possible additional text, %5$s: </b> close tag */
+		esc_html__( '%1$s: %2$s%3$s%4$s%5$s', 'formidable' ),
 		esc_html( FrmEntriesHelper::get_entry_status_label( $entry->is_draft ) ),
-		'<b>' . esc_html( FrmAppHelper::get_formatted_time( $entry->created_at, $date_format ) ) . '</b>'
+		'<b>',
+		esc_html( FrmAppHelper::get_formatted_time( $entry->created_at, $date_format ) ),
+		esc_html( $additional_timestamp_text ),
+		'</b>'
 	);
 	?>
 	</span>

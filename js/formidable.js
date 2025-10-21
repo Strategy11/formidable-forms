@@ -347,6 +347,10 @@ function frmFrontFormJS() {
 			checkPatternField( field, errors );
 		}
 
+		if ( 'tel' === field.type && shouldCheckConfirmField( field, onSubmit ) ) {
+			confirmField( field, errors );
+		}
+
 		/**
 		 * @since 6.15 Added `onSubmit` to the data.
 		 */
