@@ -4536,6 +4536,8 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Get an array of fields that are selected.
 	 *
+	 * @since x.x
+	 *
 	 * @param {Object}      $firstGroup
 	 * @param {HTMLElement} hoverTarget
 	 *
