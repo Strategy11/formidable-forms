@@ -171,8 +171,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$allow_multiple = $frm_settings->re_multi;
-		if ( $allow_multiple ) {
+		if ( $this->allow_multiple( $frm_settings ) ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 
@@ -258,7 +257,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @param FrmSettings $frm_settings This isn't used anymore. It's only there for backwards compatibility.
 	 *
 	 * @return string
 	 *
