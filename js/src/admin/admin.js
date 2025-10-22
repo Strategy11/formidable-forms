@@ -5687,6 +5687,11 @@ window.frmAdminBuildJS = function() {
 				}
 			}
 		}
+		if ( e?.metaKey || e?.ctrlKey ) {
+			// Add the target to list of selected fields.
+			this.closest( 'ul' ).classList.add( 'frm-selected-field-group' );
+			return;
+		}
 
 		clickAction( this );
 	}
