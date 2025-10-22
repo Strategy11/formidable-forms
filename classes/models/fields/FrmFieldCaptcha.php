@@ -180,6 +180,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$api_js_url .= '&hl=' . $lang;
 		}
 
+		// Since this URL initially ends with ? and we never use add_query_arg, remove the extra
+		// & that appears immediately after the ?
+		$api_js_url = str_replace( '?&', '?', $api_js_url );
+
 		/**
 		 * @param string $api_js_url
 		 */
