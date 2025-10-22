@@ -403,25 +403,31 @@ class FrmFieldsHelper {
 	public static function get_error_msg( $field, $error ) {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		$conf_msg = __( 'The entered values do not match', 'formidable' );
+		$conf_msg         = __( 'The entered values do not match', 'formidable' );
+		$choice_limit_msg = __( 'All choices limit reached.', 'formidable' );
+
 		$defaults = array(
-			'unique_msg' => array(
+			'unique_msg'       => array(
 				'full' => self::default_unique_msg(),
 				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s must be unique', 'formidable' ), '[field_name]' ),
 			),
-			'invalid'    => array(
+			'invalid'          => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
 				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
 			),
-			'blank'      => array(
+			'blank'            => array(
 				'full' => $frm_settings->blank_msg,
 				'part' => $frm_settings->blank_msg,
 			),
-			'conf_msg'   => array(
+			'conf_msg'         => array(
 				'full' => $conf_msg,
 				'part' => $conf_msg,
+			),
+			'choice_limit_msg' => array(
+				'full' => $choice_limit_msg,
+				'part' => $choice_limit_msg,
 			),
 		);
 

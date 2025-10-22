@@ -31,6 +31,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		}
 	);
 	if ( ! $should_show_field ) {
+		echo FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' );
 		return;
 	}
 	if ( $read_only ) {
