@@ -1510,8 +1510,8 @@ class FrmAppHelper {
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
 				$utm          = array(
-					'medium'  => 'settings-license',
-					'content' => 'lite-banner',
+					'campaign' => 'settings-license',
+					'content'  => 'lite-banner',
 				);
 
 				if ( $upgrade_link ) {
