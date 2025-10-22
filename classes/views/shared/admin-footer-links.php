@@ -8,7 +8,7 @@ $support_link = ! FrmAppHelper::pro_is_installed() ? 'https://wordpress.org/supp
 
 $upgrade_link = FrmSalesApi::get_best_sale_value( 'footer_cta_link' );
 $utm          = array(
-	'medium' => 'admin-footer-link',
+	'campaign' => 'admin-footer-link',
 );
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );

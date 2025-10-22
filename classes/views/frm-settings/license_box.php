@@ -10,8 +10,8 @@ if ( ! $button_upgrade_text ) {
 
 $button_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_license_cta_link' );
 $utm                 = array(
-	'medium'  => 'settings-license',
-	'content' => 'global-settings-license-box-get-formidable-button',
+	'campaign' => 'settings-license',
+	'content'  => 'global-settings-license-box-get-formidable-button',
 );
 if ( $button_upgrade_link ) {
 	$button_upgrade_link = FrmAppHelper::maybe_add_missing_utm( $button_upgrade_link, $utm );
@@ -26,8 +26,8 @@ if ( ! $unlock_more_upgrade_text ) {
 
 $unlock_more_upgrade_link = FrmSalesApi::get_best_sale_value( 'global_settings_unlock_more_cta_link' );
 $utm                      = array(
-	'medium'  => 'settings-license',
-	'content' => 'global-settings-license-box-unlock-more',
+	'campaign' => 'settings-license',
+	'content'  => 'global-settings-license-box-unlock-more',
 );
 if ( $unlock_more_upgrade_link ) {
 	$unlock_more_upgrade_link = FrmAppHelper::maybe_add_missing_utm( $unlock_more_upgrade_link, $utm );

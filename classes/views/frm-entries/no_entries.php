@@ -35,6 +35,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	printf(
 		/* translators: %1$s: Start link HTML, %2$s: End link HTML, %3$s: Line break HTML */
 		esc_html__( 'See the %1$sform documentation%2$s for instructions on publishing your form', 'formidable' ),
+		// TODO: This URL.
 		'<a href="https://formidableforms.com/knowledgebase/publish-your-forms/?utm_source=WordPress&utm_medium=entries&utm_campaign=liteplugin" target="_blank">',
 		'</a>'
 	);

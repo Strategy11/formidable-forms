@@ -306,6 +306,7 @@ class FrmFormsController {
 			$message .= '<br/> ' . sprintf(
 				/* translators: %1$s: Start link HTML, %2$s: end link HTML */
 				__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
+				// TODO: This URL.
 				'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
 				'</a>'
 			);
