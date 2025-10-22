@@ -21,14 +21,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 } else {
 	$field_choices_limit_reached_statuses = FrmFieldsController::get_choices_limit_reached_statuses( $field );
 
-	$should_show_field = false;
 	foreach ( $field_choices_limit_reached_statuses as $choices_limit_reached_status ) {
 		if ( ! $choices_limit_reached_status ) {
-			$should_show_field = true;
 			break;
 		}
 	}
-	if ( ! $should_show_field ) {
+	if ( current( $field_choices_limit_reached_statuses ) ) {
 		echo esc_html( FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' ) );
 		return;
 	}
