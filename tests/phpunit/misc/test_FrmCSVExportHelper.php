@@ -58,7 +58,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'Signature',
 			'Lookup Field - level 1',
 			'Checkboxes - separate values (label)',
-			'Checkboxes - separate values',
+			'Checkboxes - separate values (value)',
 			'Address - US',
 			'Credit Card',
 		);

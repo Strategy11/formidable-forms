@@ -199,6 +199,9 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		// Cross sell.
+		add_action( 'admin_menu', 'FrmSalesApi::menu', 1000 );
+
 		// Deactivation feedback.
 		add_action( 'admin_enqueue_scripts', 'FrmDeactivationFeedbackController::enqueue_assets' );
 		add_action( 'admin_footer', 'FrmDeactivationFeedbackController::footer_html' );

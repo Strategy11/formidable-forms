@@ -76,7 +76,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Remove the "for" attribute for captcha
+	 * Replace the "for" attribute for captcha field so it matches the response ID.
 	 *
 	 * @param array  $args
 	 * @param string $html
@@ -84,11 +84,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		$frm_settings     = FrmAppHelper::get_settings();
-		$replace_response = $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha-response' : 'h-captcha-response';
-		$replaced_for     = str_replace( ' for="field_[key]"', ' for="' . $replace_response . '"', $html );
-
-		return $replaced_for;
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return str_replace( ' for="field_[key]"', ' for="' . esc_attr( $settings->token_field ) . '"', $html );
 	}
 
 	/**
@@ -121,7 +118,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
@@ -129,7 +126,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * Allows updating the captcha language.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param string $lang
 		 * @param array $field
@@ -206,6 +203,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$lang_parts  = explode( '-', $lang );
 			$api_js_url .= '?hl=' . $lang_parts[0];
 		}
+
+		$api_js_url = add_query_arg( 'onload', 'frmHcaptcha', $api_js_url );
 
 		/**
 		 * Allows updating hcaptcha js api url.

@@ -192,7 +192,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Check if a message has started and is not expired.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $message
 	 * @return bool
@@ -204,7 +204,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * Check if a message has actually started, so we can prevent showing something that is queued up early.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $message
 	 * @return bool
