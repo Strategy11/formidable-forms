@@ -15,13 +15,25 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	$option_index = 0;
+	$field_choices_limit_reached_statuses = FrmFieldsController::get_choices_limit_reached_statuses( $field );
 
+	foreach ( $field_choices_limit_reached_statuses as $choices_limit_reached_status ) {
+		if ( ! $choices_limit_reached_status ) {
+			break;
+		}
+	}
+	if ( current( $field_choices_limit_reached_statuses ) ) {
+		echo esc_html( FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' ) );
+		return;
+	}
+	$option_index = 0;
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
+		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
+
+		$atts = isset( $shortcode_atts ) && is_array( $shortcode_atts ) ? $shortcode_atts : array();
+		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, $atts, $opt_key, $field['form_id'] ) ) {
 			continue;
 		}
-
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
@@ -65,9 +77,14 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		}
 
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
-		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		do_action( 'frm_field_input_html', $field );
+
+		if ( $choice_limit_reached ) {
+			echo ' disabled="disabled" data-max-reached="1"';
+		} else {
+			echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
 			echo ' aria-required="true" ';
