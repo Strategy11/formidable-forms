@@ -18,7 +18,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$option_index = 0;
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
-		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, $shortcode_atts, $opt_key, $field['form_id'] ) ) {
+		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, isset( $shortcode_atts ) ?? array(), $opt_key, $field['form_id'] ) ) {
 			continue;
 		}
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
