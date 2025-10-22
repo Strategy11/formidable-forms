@@ -732,6 +732,8 @@ class FrmAppController {
 
 		global $pagenow;
 		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+			self::enqueue_global_settings_scripts( $page );
+
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
 			self::maybe_deregister_popper2();
@@ -807,6 +809,18 @@ class FrmAppController {
 
 		wp_enqueue_style( 'formidable-settings-components' );
 		wp_enqueue_script( 'formidable-settings-components' );
+	}
+
+	/**
+	 * Enqueues global settings scripts.
+	 *
+	 * @param string $page The `page` param in URL.
+	 */
+	private static function enqueue_global_settings_scripts( $page ) {
+		if ( 'formidable-settings' === $page ) {
+			wp_enqueue_style( 'wp-color-picker' );
+			wp_enqueue_script( 'formidable_settings' );
+		}
 	}
 
 	/**
@@ -1408,41 +1422,48 @@ class FrmAppController {
 	 * @return void
 	 */
 	private static function remember_custom_sort() {
-		$screen  = get_current_screen();
-		if ( ! $screen ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
 			return;
 		}
 
-		if ( ! FrmAppHelper::is_admin_list_page() && ! FrmAppHelper::is_admin_list_page( 'formidable-entries' ) ) {
+		$is_form_list  = FrmAppHelper::is_admin_list_page();
+		$is_entry_list = FrmAppHelper::is_admin_list_page( 'formidable-entries' );
+		if ( ! $is_form_list && ! $is_entry_list ) {
 			return;
 		}
 
 		$orderby = FrmAppHelper::get_param( 'orderby' );
-
 		if ( ! $orderby ) {
 			return;
 		}
 
-		$user_id  = get_current_user_id();
-		$meta_key = 'frm_preferred_list_sort_' . $screen->id;
-		$order    = FrmAppHelper::get_param( 'order' );
-
-		$new_sort = array(
+		$user_id       = get_current_user_id();
+		$order         = FrmAppHelper::get_param( 'order' );
+		$new_sort      = array(
 			'orderby' => $orderby,
 			'order'   => $order,
 		);
+		$previous_meta = get_user_meta( $user_id, $meta_key, true );
+		$current_sort  = $previous_meta;
+		$form_id       = $is_entry_list ? FrmAppHelper::simple_get( 'form', 'absint' ) : 0;
 
-		$current_sort = get_user_meta( $user_id, $meta_key, true );
+		if ( is_array( $current_sort ) && $form_id && is_int( $form_id ) && isset( $current_sort[ $form_id ] ) ) {
+			$current_sort = $current_sort[ $form_id ];
+		}
 
 		if ( $new_sort !== $current_sort ) {
-			update_user_meta(
-				$user_id,
-				$meta_key,
-				array(
-					'orderby' => $orderby,
-					'order'   => $order,
-				)
-			);
+			$new_meta = $new_sort;
+
+			if ( $is_entry_list && $form_id && is_int( $form_id ) ) {
+				// Index meta by form ID.
+				$temp_meta             = is_array( $previous_meta ) ? $previous_meta : array();
+				$temp_meta[ $form_id ] = $new_meta;
+				$new_meta              = $temp_meta;
+				unset( $temp_meta );
+			}
+
+			update_user_meta( $user_id, $meta_key, $new_meta );
 		}
 	}
 
@@ -1456,17 +1477,18 @@ class FrmAppController {
 	 * @return void
 	 */
 	public static function apply_saved_sort_preference( &$orderby, &$order ) {
-		if ( ! function_exists( 'get_current_screen' ) ) {
-			return;
-		}
-
-		$screen = get_current_screen();
-		if ( ! $screen ) {
+		$meta_key = self::get_sort_pref_user_meta_key();
+		if ( false === $meta_key ) {
 			return;
 		}
 
 		$user_id             = get_current_user_id();
-		$preferred_list_sort = get_user_meta( $user_id, 'frm_preferred_list_sort_' . $screen->id, true );
+		$preferred_list_sort = get_user_meta( $user_id, $meta_key, true );
+		$form_id             = FrmAppHelper::simple_get( 'form', 'absint' );
+
+		if ( is_array( $preferred_list_sort ) && $form_id && is_int( $form_id ) && isset( $preferred_list_sort[ $form_id ] ) ) {
+			$preferred_list_sort = $preferred_list_sort[ $form_id ];
+		}
 
 		if ( is_array( $preferred_list_sort ) && ! empty( $preferred_list_sort['orderby'] ) ) {
 			$orderby = $preferred_list_sort['orderby'];
@@ -1475,6 +1497,22 @@ class FrmAppController {
 				$order = $preferred_list_sort['order'];
 			}
 		}
+	}
+
+	/**
+	 * Get a simple user meta key that only includes the screen ID.
+	 *
+	 * @since x.x
+	 *
+	 * @return false|string
+	 */
+	private static function get_sort_pref_user_meta_key() {
+		if ( ! function_exists( 'get_current_screen' ) ) {
+			return false;
+		}
+
+		$screen = get_current_screen();
+		return $screen ? 'frm_preferred_list_sort_' . $screen->id : false;
 	}
 
 	/**

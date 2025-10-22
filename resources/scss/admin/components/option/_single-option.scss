@@ -57,8 +57,9 @@
 	cursor: move;
 }
 
-.frm_single_option .frm_option_key {
-	margin-left: 19px !important;
+.frm_single_option .frm_option_key.frm_image_preview_wrapper,
+.frm-type-ranking .frm_single_option .frm_option_key {
+	margin-left: 21px !important;
 }
 
 .frm_option_key {
@@ -72,6 +73,10 @@
 	input[type="radio"] + input[type="text"] {
 		margin-left: 30px !important;
 	}
+}
+
+.frm-type-ranking .frm_option_key input[id*="field_key_"] {
+	margin-left: 30px !important;
 }
 
 li.ui-state-default.selected .frm-show-click,

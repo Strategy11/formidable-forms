@@ -61,6 +61,28 @@ class FrmFormTemplateApi extends FrmFormApi {
 	}
 
 	/**
+	 * Set the free license code option value.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $code The license code to set.
+	 */
+	public static function set_free_license_code( $code ) {
+		update_option( self::$code_option_name, $code, 'no' );
+	}
+
+	/**
+	 * Get the free license code option value.
+	 *
+	 * @since 6.25
+	 *
+	 * @return false|string The license code, or false if not set.
+	 */
+	public static function get_free_license_code() {
+		return get_option( self::$code_option_name );
+	}
+
+	/**
 	 * AJAX Hook for signing free users up for a template API key
 	 *
 	 * @return void

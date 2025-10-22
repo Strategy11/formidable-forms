@@ -100,6 +100,12 @@ class FrmSettingsController {
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
 				'icon'     => 'frm_icon_font frm_shield_check_icon',
 			),
+			'email'         => array(
+				'class'    => self::class,
+				'function' => 'email_settings',
+				'name'     => __( 'Email', 'formidable' ),
+				'icon'     => 'frm_icon_font frm_email_icon',
+			),
 			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
 				'icon'       => 'frm_icon_font frm_ghost_icon',
@@ -297,6 +303,17 @@ class FrmSettingsController {
 	}
 
 	/**
+	 * Shows email settings.
+	 *
+	 * @since 6.25
+	 */
+	public static function email_settings() {
+		$frm_settings = FrmAppHelper::get_settings();
+
+		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
+	}
+
+	/**
 	 * @since 4.0
 	 */
 	public static function permission_settings() {
@@ -460,5 +477,22 @@ class FrmSettingsController {
 		}
 
 		wp_send_json( $results );
+	}
+
+	/**
+	 * Shows a fake color picker.
+	 *
+	 * @since 6.25
+	 *
+	 * @param string $color Color value.
+	 */
+	public static function fake_color_picker( $color ) {
+		?>
+		<div class="wp-picker-container">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
+			</button>
+		</div>
+		<?php
 	}
 }

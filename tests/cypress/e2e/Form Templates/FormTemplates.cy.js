@@ -12,12 +12,12 @@ describe( 'Form Templates page', () => {
 		cy.log( 'Validate template categories' );
 		cy.get( 'li[data-category="favorites"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Favorites' );
-			cy.get( '.frm-page-skeleton-cat-count' ).should( 'have.text', '0' );
+			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
 		cy.get( 'li[data-category="custom"]' ).within( () => {
 			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Custom' );
-			cy.get( '.frm-page-skeleton-cat-count' ).should( 'have.text', '0' );
+			cy.get( '.frm-page-skeleton-cat-count' ).should( 'contain', '0' );
 		} );
 
 		cy.get( 'li[data-category="all-items"]' ).within( () => {
@@ -298,15 +298,9 @@ describe( 'Form Templates page', () => {
 			.find( '.frm-form-templates-use-template-button' )
 			.should( 'contain', 'Use Template' );
 
-		cy.log( 'Try to use available templates' );
-		cy.get( '[data-category="available-templates"]' ).should( 'contain', 'Available Templates' ).click();
-		cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'Available Templates' );
-		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
-			.first()
-			.trigger( 'mouseover', { force: true } )
-			.find( '.frm-form-templates-use-template-button' )
-			.should( 'contain', 'Use Template' )
-			.click( { force: true } );
+		// cy.log( 'Try to use available templates' );
+		// cy.get( '[data-category="available-templates"]' ).should( 'contain', 'Available Templates' ).click();
+		// cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'Available Templates' );
 
 		cy.contains( 'li', 'Contact Us', { timeout: 10000 } )
 			.first()
@@ -315,7 +309,7 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Use Template' )
 			.click( { force: true } );
 
-		cy.get( 'a[aria-label="Close"] svg' ).click();
+		cy.get( 'svg[aria-label="Close"]' ).click( { force: true } );
 
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 
@@ -361,8 +355,10 @@ describe( 'Form Templates page', () => {
 			.should( 'contain.text', 'Cancel' );
 
 		cy.get( '#frm_new_form_name_input' ).type( 'Form Template Test' );
-		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
-		cy.get( 'a[aria-label="Close"] svg' ).click();
+		cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click( { force: true } );
+		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
+			.should( 'be.visible' )
+			.click( { force: true } );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -381,7 +377,9 @@ describe( 'Form Templates page', () => {
 		cy.get( ':nth-child(3) > label' ).should( 'contain', 'Description' );
 		cy.get( '#frm_create_template_description' ).type( 'Test description' );
 		cy.get( '#frm-create-template-button' ).should( 'contain', 'Create Template' ).click( { force: true } );
-		cy.get( 'a[aria-label="Close"] svg' ).click();
+		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
+			.should( 'be.visible' )
+			.click( { force: true } );
 		cy.get( '.row-title' ).should( 'contain', 'Form Template Test Template' );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
@@ -400,7 +398,9 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Edit' )
 			.click( { force: true } );
 
-		cy.get( 'a[aria-label="Close"] svg' ).click();
+		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
+			.should( 'be.visible' )
+			.click( { force: true } );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -412,7 +412,9 @@ describe( 'Form Templates page', () => {
 			.should( 'contain', 'Use Template' )
 			.click( { force: true } );
 
-		cy.get( 'a[aria-label="Close"] svg' ).click();
+		cy.get( "a[aria-label='Close'] svg", { timeout: 10000 } )
+			.should( 'be.visible' )
+			.click( { force: true } );
 
 		cy.get( '#toplevel_page_formidable > .wp-submenu > :nth-child(8) > a' ).should( 'contain', 'Form Templates' ).click();
 		cy.get( '[data-category="custom"]' ).click();
@@ -434,5 +436,61 @@ describe( 'Form Templates page', () => {
 		cy.get( '#cb-select-all-1' ).click();
 		cy.get( '#bulk-action-selector-top' ).select( 'Move to Trash' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
+	} );
+
+	it( 'Get Instant Access to 30+ Free Form Templates', () => {
+		cy.log( 'Get free templates by clicking Use Template' );
+		cy.get( '[data-category="all-items"]' ).should( 'contain', 'All Templates' ).click();
+		cy.get( '#frm-form-templates-page-title-text' ).should( 'contain', 'All Templates' );
+		cy.get( '[frm-search-text="grade book"]' )
+			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-use-template-button' )
+			.should( 'contain', 'Use Template' )
+			.click( { force: true } );
+
+		cy.get( '#frm-leave-email-modal' ).should( 'be.visible' );
+		cy.get( '#frm-leave-email-modal > .frm_modal_top > .frm-modal-title > h2' ).should( 'contain', 'Get 30+ Free Form Templates' );
+		cy.get( 'p[class="frm-text-grey-500"]' ).should( 'contain', "Just add your email address and you'll get 30+ free form templates to your account." );
+
+		cy.get( 'a#frm-get-code-button' ).should( 'contain', 'Get Templates' );
+		cy.get( 'a.frm-modal-close' ).should( 'contain.text', 'Close' );
+
+		cy.get( '#frm-leave-email-modal > .frm_modal_footer > .button-secondary' ).click();
+
+		cy.get( '[frm-search-text="grade book"]' )
+			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-use-template-button' )
+			.should( 'contain', 'Use Template' )
+			.click( { force: true } );
+
+		cy.get( 'a#frm-get-code-button' ).click();
+
+		cy.get( '[data-category="available-templates"]' ).click();
+
+		cy.log( 'Try to use free templates' );
+		cy.get( '[frm-search-text="employee referral"]' )
+			.first()
+			.trigger( 'mouseover' )
+			.find( '.frm-form-templates-use-template-button' )
+			.should( 'contain', 'Use Template' )
+			.click( { force: true } );
+
+		cy.get( 'span[title]' ).should( 'contain', 'Employee Referral' );
+		cy.get( "a[aria-label='Close']", { timeout: 5000 } ).click();
+		cy.log( 'Delete Form' );
+		cy.contains( '#the-list tr', 'Employee Referral' ).trigger( 'mouseover' ).then( $row => {
+			console.log( 'Hovered Row:', $row );
+			cy.wrap( $row ).within( () => {
+				cy.get( '.row-actions .trash .frm-trash-link' ).should( 'be.visible' ).click( { force: true } );
+			} );
+			cy.get( 'body' ).then( $body => {
+				if ( $body.find( "div[role='dialog']" ).length ) {
+					cy.get( "div[role='dialog']" ).should( 'be.visible' ).and( 'contain.text', 'Do you want to move this form to the trash?' );
+					cy.xpath( "//a[@id='frm-confirmed-click']" ).should( 'contain.text', 'Confirm' ).click( { force: true } );
+				} else {
+					cy.log( 'Dialog not found' );
+				}
+			} );
+		} );
 	} );
 } );

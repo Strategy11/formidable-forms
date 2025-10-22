@@ -42,9 +42,6 @@ const onUseTemplateButtonClick = event => {
 	// Prevent the default link behavior for non-custom or locked templates
 	event.preventDefault();
 
-	// Update app state with selected template
-	setSingleState( 'selectedTemplate', template );
-
 	// Handle locked templates
 	if ( isLocked ) {
 		showLockedTemplateModal( template );

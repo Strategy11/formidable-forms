@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 103;
+	public static $db_version = 104;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.24.1';
+	public static $plug_version = '6.25';
 
 	/**
 	 * @var bool
@@ -3512,7 +3512,7 @@ class FrmAppHelper {
 			$admin_script_strings = array(
 				'desc'                               => __( '(Click to add description)', 'formidable' ),
 				'blank'                              => __( '(Blank)', 'formidable' ),
-				'no_label'                           => __( '(no label)', 'formidable' ),
+				'no_label'                           => self::get_no_label_text(),
 				'ok'                                 => __( 'OK', 'formidable' ),
 				'cancel'                             => __( 'Cancel', 'formidable' ),
 				'default_label'                      => __( 'Default', 'formidable' ),
@@ -3586,6 +3586,17 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * Get the no label text.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_no_label_text() {
+		return __( '(no label)', 'formidable' );
 	}
 
 	/**
