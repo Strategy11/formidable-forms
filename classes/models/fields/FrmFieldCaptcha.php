@@ -76,7 +76,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * Remove the "for" attribute for captcha
+	 * Replace the "for" attribute for captcha field so it matches the response ID.
 	 *
 	 * @param array  $args
 	 * @param string $html
@@ -84,11 +84,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
-		$frm_settings     = FrmAppHelper::get_settings();
-		$replace_response = $frm_settings->active_captcha === 'recaptcha' ? 'g-recaptcha-response' : 'h-captcha-response';
-		$replaced_for     = str_replace( ' for="field_[key]"', ' for="' . $replace_response . '"', $html );
-
-		return $replaced_for;
+		$settings = FrmCaptchaFactory::get_settings_object();
+		return str_replace( ' for="field_[key]"', ' for="' . esc_attr( $settings->token_field ) . '"', $html );
 	}
 
 	/**
@@ -174,8 +171,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$allow_multiple = $frm_settings->re_multi;
-		if ( $allow_multiple ) {
+		if ( $this->allow_multiple( $frm_settings ) ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 
@@ -206,6 +202,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			$lang_parts  = explode( '-', $lang );
 			$api_js_url .= '?hl=' . $lang_parts[0];
 		}
+
+		$api_js_url = add_query_arg( 'onload', 'frmHcaptcha', $api_js_url );
 
 		/**
 		 * Allows updating hcaptcha js api url.
@@ -255,17 +253,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return ''|'frm-'
 	 */
 	protected function class_prefix( $frm_settings ) {
-		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
-			$class_prefix = 'frm-';
-		} else {
-			$class_prefix = '';
-		}
-
-		return $class_prefix;
+		return FrmCaptchaFactory::get_settings_object()->get_class_prefix( $this->allow_multiple( $frm_settings ) );
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @param FrmSettings $frm_settings This isn't used anymore. It's only there for backwards compatibility.
 	 *
 	 * @return string
 	 *
