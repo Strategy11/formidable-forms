@@ -404,7 +404,7 @@ class FrmFieldsHelper {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		$conf_msg         = __( 'The entered values do not match', 'formidable' );
-		$choice_limit_msg = __( 'All choices limit reached.', 'formidable' );
+		$choice_limit_msg = __( 'All choices have reached their entry limit', 'formidable' );
 
 		$defaults = array(
 			'unique_msg'       => array(
