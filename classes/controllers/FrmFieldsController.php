@@ -425,6 +425,20 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	public static function get_choices_limit_reached_statuses( $field ) {
+		$choices_limit_reached_statuses = array();
+		foreach ( $field['options'] as $opt_key => $opt ) {
+			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
+		}
+		return $choices_limit_reached_statuses;
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0

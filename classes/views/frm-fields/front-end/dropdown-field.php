@@ -19,19 +19,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		)
 	);
 } else {
-	$fields_choice_limit_value = array();
-	foreach ( $field['options'] as $opt_key => $opt ) {
-		$choice_limit_reached = FrmFieldsController::choice_limit_reached( $field, $opt_key );
-		$fields_choice_limit_value[ $opt_key ] = $choice_limit_reached;
-	}
+	$field_choices_limit_reached_statuses = FrmFieldsController::get_choices_limit_reached_statuses( $field );
 	$should_show_field = array_filter(
-		$fields_choice_limit_value,
+		$field_choices_limit_reached_statuses,
 		function ( $value ) {
 			return ! $value;
 		}
 	);
 	if ( ! $should_show_field ) {
-		echo FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' );
+		echo esc_html( FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' ) );
 		return;
 	}
 	if ( $read_only ) {
@@ -66,7 +62,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
 
-		$choice_limit_reached = $fields_choice_limit_value[ $opt_key ];
+		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ];
 		if ( FrmFieldsController::should_hide_field_choice( $choice_limit_reached, array(), $opt_key, $field['form_id'] ) ) {
 			continue;
 		}
