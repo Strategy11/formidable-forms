@@ -3735,6 +3735,7 @@ class FrmAppHelper {
 			if ( empty( $expired ) ) {
 				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
 			} else {
+				// TODO: This URL.
 				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version.';
 			}
 			?>
