@@ -3512,7 +3512,7 @@ class FrmAppHelper {
 			$admin_script_strings = array(
 				'desc'                               => __( '(Click to add description)', 'formidable' ),
 				'blank'                              => __( '(Blank)', 'formidable' ),
-				'no_label'                           => __( '(no label)', 'formidable' ),
+				'no_label'                           => self::get_no_label_text(),
 				'ok'                                 => __( 'OK', 'formidable' ),
 				'cancel'                             => __( 'Cancel', 'formidable' ),
 				'default_label'                      => __( 'Default', 'formidable' ),
@@ -3586,6 +3586,17 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * Get the no label text.
+	 *
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	public static function get_no_label_text() {
+		return __( '(no label)', 'formidable' );
 	}
 
 	/**
