@@ -419,7 +419,7 @@ class FrmWelcomeTourController {
 	 *
 	 * @since x.x
 	 *
-	 * @return string
+	 * @return int
 	 */
 	private static function get_active_step() {
 		return self::$checklist['active_step'] ?? 0;
