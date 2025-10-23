@@ -3040,11 +3040,11 @@ window.frmAdminBuildJS = function() {
 			box = document.getElementById( 'frm-calc-box-' + fieldId );
 		}
 
-		exclude            = getExcludeArray( box, isSummary );
+		exclude = getExcludeArray( box, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
 
-		fields         = getFieldList();
-		list           = document.getElementById( 'frm-calc-list-' + fieldId );
+		fields = getFieldList();
+		list = document.getElementById( 'frm-calc-list-' + fieldId );
 		list.innerHTML = '';
 
 		const supportsShowShortcodes = document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes;
@@ -3054,12 +3054,12 @@ window.frmAdminBuildJS = function() {
 				continue;
 			}
 
-			addCalcFieldLiToList( list, fieldId, fields[i].fieldId, fields[i].fieldName, fields[i].fieldType );
+			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
 			if ( supportsShowShortcodes ) { // If the required Pro updates are there to support "show" shortcodes.
-				if ( shouldShowFieldLabelShortcode( fields[i].fieldType, fields[i].fieldId ) ) {
-					addCalcFieldLiToList( list, fieldId, fields[i].fieldId + ' show=label', fields[i].fieldName + ' (Label)', fields[i].fieldType );
+				if ( shouldShowFieldLabelShortcode( fields[ i ].fieldType, fields[ i ].fieldId ) ) {
+					addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
 				}
-				maybeAddNamePartShortcodes( fields[i], fieldId, list );	
+				maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
 			}
 		}
 	}
@@ -3073,18 +3073,18 @@ window.frmAdminBuildJS = function() {
 	 * @param {Number}      fieldId
 	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
 	 *
-	 * @returns {Void}
+	 * @returns {void}
 	 */
 	function maybeAddNamePartShortcodes( field, fieldId, list ) {
 		if ( 'name' !== field.fieldType ) {
 			return;
 		}
-		Object.entries({
+		Object.entries( {
 			first: __( 'First', 'formidable' ),
 			middle: __( 'Middle', 'formidable' ),
 			last: __( 'Last', 'formidable' ),
-		}).forEach(
-			([ code, label ]) => {
+		} ).forEach(
+			( [ code, label ] ) => {
 				addCalcFieldLiToList(
 					list,
 					fieldId,
@@ -3107,7 +3107,7 @@ window.frmAdminBuildJS = function() {
 	 * @returns {Boolean}
 	 */
 	function shouldShowFieldLabelShortcode( fieldType, fieldId ) {
-		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && !! document.getElementById( `separate_value_${fieldId}` )?.checked;
+		return [ 'radio', 'checkbox', 'dropdown' ].includes( fieldType ) && !! document.getElementById( `separate_value_${ fieldId }` )?.checked;
 	}
 
 	/**
@@ -3120,18 +3120,18 @@ window.frmAdminBuildJS = function() {
 	 * @returns {void}
 	 */
 	function addCalcFieldLiToList( list, fieldId, code, label, fieldType ) {
-		const anchor = a({
+		const anchor = a( {
 			className: 'frm_insert_code',
 			children: [
-				span({
+				span( {
 					text: '[' + code + ']'
-				}),
+				} ),
 				document.createTextNode( label )
 			],
 			data: {
 				code
 			}
-		});
+		} );
 
 		list.appendChild(
 			tag(
