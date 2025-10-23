@@ -2,7 +2,46 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$email_styles   = FrmEmailStylesController::get_email_styles();
+$selected_style = ! empty( $form_action->post_content['email_style'] ) ? $form_action->post_content['email_style'] : 'classic';
+if ( ! empty( $form_action->post_content['plain_text'] ) ) {
+	$selected_style = 'plain';
+}
+
+$frm_settings  = FrmAppHelper::get_settings();
+$default_style = FrmEmailStylesController::get_default_email_style();
 ?>
+<p class="frm-email-style-container">
+	<label for="frm-email-style-value">
+		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
+	</label>
+	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value">
+		<?php
+		foreach ( $email_styles as $style_key => $style ) {
+			$option_attrs = array( 'value' => $style_key );
+			$option_label = $style['name'];
+
+			if ( empty( $style['selectable'] ) ) {
+				$option_attrs['disabled'] = 'disabled';
+				$option_label            .= ' ' . __( '(Pro)', 'formidable' );
+			}
+
+			if ( $style_key === $default_style ) {
+				$option_label .= ' ' . __( '(Default)', 'formidable' );
+			}
+
+			printf(
+				'<option %1$s%2$s>%3$s</option>',
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::array_to_html_params( $option_attrs ),
+				selected( $selected_style, $style_key, false ),
+				esc_html( $option_label )
+			);
+		}//end foreach
+		?>
+	</select>
+</p>
 
 <p class="frm_bcc_cc_container">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo esc_attr( ! empty( $form_action->post_content['cc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="cc">
@@ -122,10 +161,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Append Browser and Referring URL to message', 'formidable' ); ?>
 	<?php } ?>
 </label>
-
-<p>
-	<label for="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>">
-		<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'plain_text' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>" value="1" <?php checked( $form_action->post_content['plain_text'], 1 ); ?> />
-		<?php esc_html_e( 'Send Emails in Plain Text', 'formidable' ); ?>
-	</label>
-</p>

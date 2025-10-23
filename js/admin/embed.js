@@ -93,15 +93,15 @@
 	}
 
 	function getModalFooter() {
-		const doneButton = footerButton({
+		const doneButton = footerButton( {
 			text: __( 'Done', 'formidable' ),
 			buttonType: 'primary'
-		});
+		} );
 
-		const cancelButton = footerButton({
+		const cancelButton = footerButton( {
 			text: __( 'Back', 'formidable' ),
 			buttonType: 'cancel'
-		});
+		} );
 		cancelButton.addEventListener(
 			'click',
 			function( event ) {
@@ -110,9 +110,9 @@
 			}
 		);
 
-		return div({
+		return div( {
 			children: [ doneButton, cancelButton ]
-		});
+		} );
 	}
 
 	function offsetModalY( $modal, amount ) {
@@ -125,7 +125,7 @@
 	}
 
 	function getModalOptions() {
-		const content = div({ className: 'frm-embed-modal-content frm_wrap' });
+		const content = div( { className: 'frm-embed-modal-content frm_wrap' } );
 		const typeDescription = getTypeDescription();
 
 		/* translators: %s type: ie form, view. */
@@ -156,7 +156,7 @@
 
 					content.classList.add( 'frm-loading-page-options' );
 
-					jQuery.ajax({
+					jQuery.ajax( {
 						type: 'POST',
 						url: ajaxurl,
 						data: {
@@ -165,7 +165,7 @@
 						},
 						dataType: 'json',
 						success: addExistingPageDropdown
-					});
+					} );
 
 					function addExistingPageDropdown( response ) {
 						if ( 'object' !== typeof response || 'string' !== typeof response.html ) {
@@ -222,7 +222,7 @@
 							const pageId = pageDropdown.value;
 
 							if ( '0' === pageId || '' === pageId ) {
-								const error = div({ className: 'frm_error_style' });
+								const error = div( { className: 'frm_error_style' } );
 								error.setAttribute( 'role', 'alert' );
 								error.textContent = __( 'Please select a page', 'formidable' );
 								content.insertBefore( error, title.nextElementSibling );
@@ -241,7 +241,7 @@
 				callback: () => {
 					content.innerHTML = '';
 
-					const wrapper = div({ className: 'field-group' });
+					const wrapper = div( { className: 'field-group' } );
 					const form = tag( 'form' );
 
 					const createPageWithShortcode = () => {
@@ -256,7 +256,7 @@
 								nonce: frmGlobal.nonce
 							}
 						);
-						jQuery.ajax({
+						jQuery.ajax( {
 							type: 'POST',
 							url: ajaxurl,
 							data,
@@ -266,7 +266,7 @@
 									window.location.href = response.redirect;
 								}
 							}
-						});
+						} );
 					};
 
 					form.addEventListener(
@@ -346,7 +346,7 @@
 		}
 	}
 
-	function getModalOption({ icon, label, description, callback }) {
+	function getModalOption( { icon, label, description, callback } ) {
 		const output = div();
 		output.appendChild( wrapModalOptionIcon( icon ) );
 		output.className = 'frm-embed-modal-option';
@@ -358,7 +358,7 @@
 		textWrapper.appendChild( div( description ) );
 		output.appendChild( textWrapper );
 
-		output.appendChild( div({ className: 'caret' }) );
+		output.appendChild( div( { className: 'caret' } ) );
 
 		output.addEventListener(
 			'click',
@@ -371,10 +371,10 @@
 	}
 
 	function wrapModalOptionIcon( iconHref ) {
-		return div({
+		return div( {
 			className: 'frm-icon-wrapper',
-			child: svg({ href: iconHref })
-		});
+			child: svg( { href: iconHref } )
+		} );
 	}
 
 	function getEmbedFormManualExamples() {
@@ -400,16 +400,16 @@
 		return examples;
 	}
 
-	function getEmbedExample({ label, example, link, linkLabel }) {
-		let unique, element, labelElement, exampleElement, linkElement;
+	function getEmbedExample( { label, example, link, linkLabel } ) {
+		const unique = getAutoId();
 
-		unique = getAutoId();
-		element = div();
-
-		labelElement = getLabel( label );
+		const labelElement = getLabel( label );
 		labelElement.id = 'frm_embed_example_label_' + unique;
+
+		const element = div();
 		element.appendChild( labelElement );
 
+		let exampleElement;
 		if ( example.length > 80 ) {
 			exampleElement = tag( 'textarea' );
 		} else {
@@ -424,7 +424,7 @@
 		exampleElement.setAttribute( 'tabindex', -1 );
 
 		if ( 'undefined' !== typeof link && 'undefined' !== typeof linkLabel ) {
-			linkElement = tag( 'a' );
+			const linkElement = tag( 'a' );
 			linkElement.href = link;
 			linkElement.textContent = linkLabel;
 			linkElement.setAttribute( 'target', '_blank' );
@@ -443,7 +443,7 @@
 	}
 
 	function getCopyIcon( label ) {
-		const icon = svg({ href: '#frm_clone_icon' });
+		const icon = svg( { href: '#frm_clone_icon' } );
 		icon.id = 'frm_copy_embed_' + getAutoId();
 		icon.setAttribute( 'tabindex', 0 );
 		icon.setAttribute( 'role', 'button' );
@@ -503,7 +503,7 @@
 	 * Can be used for any UI that requires a unique id.
 	 * Not to be used in data.
 	 *
-	 * @returns {integer}
+	 * @return {number} The unique id.
 	 */
 	function getAutoId() {
 		return ++autoId;

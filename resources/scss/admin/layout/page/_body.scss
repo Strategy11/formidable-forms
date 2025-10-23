@@ -1,0 +1,30 @@
+/**
+ * Layout - Body
+ */
+
+body.post-type-frm_display.edit-php,
+body.frm-white-body {
+	background: #fff;
+}
+
+body.frm-white-body ul#adminmenu a.wp-has-current-submenu::after,
+body.frm-white-body ul#adminmenu > li.current > a.current::after {
+	border-right-color: #fff;
+}
+
+.frm-white-body #wpcontent {
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.frm-white-body .wrap #post-body {
+	padding: 0 20px;
+}
+
+.frm-grey-body #wpbody {
+	background: var(--grey-100);
+}
+
+.frm-grey-body #frm_top_bar {
+	background: #fff;
+}

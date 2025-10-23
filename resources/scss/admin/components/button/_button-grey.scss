@@ -1,0 +1,12 @@
+/**
+ * Component: Button Grey
+ */
+
+.wp-core-ui .frm_grey.frm-button-primary.disabled,
+.wp-core-ui .frm_grey.frm-button-primary,
+#frm-welcome .frm_grey {
+	opacity: 0.5;
+	background: #F6F6F6 !important;
+	border-color: #ddd !important;
+	color: #9FA5AA !important;
+}

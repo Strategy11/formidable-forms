@@ -20,7 +20,7 @@ import { updatePageTitle, showFavoritesEmptyState, showCustomTemplatesEmptyState
  * @return {void}
  */
 export function showSelectedCategory( selectedCategory ) {
-	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems } = getElements();
+	const { bodyContentChildren, pageTitle, showCreateTemplateModalButton, templatesList, templateItems, upsellBanner } = getElements();
 
 	if ( SKELETON_VIEWS.ALL_ITEMS !== selectedCategory ) {
 		hideElements( bodyContentChildren );
@@ -37,9 +37,6 @@ export function showSelectedCategory( selectedCategory ) {
 		case VIEW_SLUGS.AVAILABLE_TEMPLATES:
 			showAvailableTemplates();
 			break;
-		case VIEW_SLUGS.FREE_TEMPLATES:
-			showFreeTemplates();
-			break;
 		case VIEW_SLUGS.FAVORITES:
 			showFavoriteTemplates();
 			break;
@@ -48,7 +45,7 @@ export function showSelectedCategory( selectedCategory ) {
 			break;
 		default:
 			hideElements( templateItems ); // Clear the view for new content
-			showElements([ templatesList, ...categorizedTemplates[ selectedCategory ] ]);
+			showElements( [ upsellBanner, templatesList, ...categorizedTemplates[ selectedCategory ] ] );
 			break;
 	}
 }
@@ -69,8 +66,8 @@ export function showAllTemplates() {
 		applicationTemplates
 	} = getElements();
 
-	showElements([ ...bodyContentChildren, ...templateItems ]);
-	hideElements([ pageTitleDivider, ...twinFeaturedTemplateItems, customTemplatesSection, emptyState, applicationTemplates ]);
+	showElements( [ ...bodyContentChildren, ...templateItems ] );
+	hideElements( [ pageTitleDivider, ...twinFeaturedTemplateItems, customTemplatesSection, emptyState, applicationTemplates ] );
 }
 
 /**
@@ -102,7 +99,7 @@ export function showFavoriteTemplates() {
 	const elementsToShow = [];
 
 	// Get all favorite items from the DOM and add the elements to show
-	const favoriteItems = bodyContent.querySelectorAll( `.${PREFIX}-favorite-item` );
+	const favoriteItems = bodyContent.querySelectorAll( `.${ PREFIX }-favorite-item` );
 	elementsToShow.push( ...favoriteItems );
 
 	// Add default favorites if available
@@ -154,7 +151,7 @@ export function showCustomTemplates() {
 	} = getElements();
 
 	hide( customTemplatesTitle );
-	showElements([ showCreateTemplateModalButton, pageTitleDivider, customTemplatesSection, customTemplatesList, ...customTemplateItems ]);
+	showElements( [ showCreateTemplateModalButton, pageTitleDivider, customTemplatesSection, customTemplatesList, ...customTemplateItems ] );
 }
 
 /**
@@ -170,22 +167,10 @@ export function showAvailableTemplates() {
 		return;
 	}
 
-	const { templatesList, templateItems, availableTemplateItems } = getElements();
+	const { templatesList, templateItems, availableTemplateItems, upsellBanner } = getElements();
 
 	hideElements( templateItems ); // Clear the view for new content
-	showElements([ templatesList, ...availableTemplateItems ]);
-}
-
-/**
- * Shows free templates.
- *
- * @return {void}
- */
-export function showFreeTemplates() {
-	const { templatesList, templateItems, freeTemplateItems } = getElements();
-
-	hideElements( templateItems ); // Clear the view for new content
-	showElements([ templatesList, ...freeTemplateItems ]);
+	showElements( [ upsellBanner, templatesList, ...availableTemplateItems ] );
 }
 
 export default showSelectedCategory;

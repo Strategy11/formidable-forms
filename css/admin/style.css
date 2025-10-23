@@ -224,16 +224,7 @@ This file is added to the visual styler admin page, accessed from the style tab.
 	min-width: 200px;
 }
 
-/*
-Do not set this for frm_inside_container as it requires a custom line height value.
-Target .frm_primary_label so we avoid other labels like star rating stars.
-Time fields use a div instead of a label, so don't target by the primary label by tag type.
-*/
-#frm_style_preview .frm_form_field:not(.frm_inside_container) > .frm_primary_label {
-	line-height: var(--line-height);
-}
-
-#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select {
+#frm_style_preview .with_frm_style :not(.ui-datepicker-title) > select:not(.flatpickr-monthDropdown-months) {
 	/* Prevent back end styles from shrinking dropdowns. But leave datepicker dropdowns alone. */
 	width: var(--auto-width);
 	max-width: 100%;
@@ -359,7 +350,6 @@ The label in the preview should use the label color setting.
 
 #frm_loading_style_placeholder,
 #frm_style_preview.frm-loading-style-template .frm_forms,
-#frm_default_style_cards_wrapper .dropdown-item.frm-apply-style,
 .frm-currently-set-style-card .dropdown-item.frm-apply-style
 {
 	display: none;
@@ -513,9 +503,8 @@ body.rtl .frm-style-card-separator {
 .frm-right-panel .open.accordion-section {
 	border-bottom: 1px solid var(--grey-300);
 }
-#frm_view_editor_left.frm-right-panel .accordion-section-title,
 .frm-right-panel h3.accordion-section-title {
-	padding: 17px 15px;
+	padding: 17px 15px !important;
 	background: transparent;
 	line-height: var(--leading);
 	color: var(--grey-500);

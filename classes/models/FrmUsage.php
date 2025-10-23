@@ -213,11 +213,17 @@ class FrmUsage {
 			'mu_menu',
 			'no_ips',
 			'custom_header_ip',
+			'enable_gdpr',
+			'no_gdpr_cookies',
 			'btsp_css',
 			'btsp_version',
 			'admin_bar',
 			'summary_emails',
 			'active_captcha',
+			'honeypot',
+			'wp_spam_check',
+			'denylist_check',
+			'email_style',
 		);
 
 		foreach ( $pass_settings as $setting ) {
@@ -303,8 +309,8 @@ class FrmUsage {
 		$settings    = array(
 			'form_class',
 			'akismet',
-			'honeypot',
 			'antispam',
+			'stopforumspam',
 			'custom_style',
 			'success_action',
 			'show_form',
@@ -421,7 +427,7 @@ class FrmUsage {
 			'order_by' => 'id DESC',
 		);
 
-		$fields = FrmDb::get_results( 'frm_fields', array(), 'form_id, name, type, field_options', $args );
+		$fields = FrmDb::get_results( 'frm_fields', array(), 'id, form_id, name, type, field_options', $args );
 		foreach ( $fields as $k => $field ) {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
 			$fields[ $k ]->field_options = json_encode( $field->field_options );

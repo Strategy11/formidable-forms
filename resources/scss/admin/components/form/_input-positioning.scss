@@ -1,0 +1,18 @@
+/**
+ * Input Positioning
+ */
+
+.frm-with-left-icon input {
+	padding-left: 37px !important;
+}
+
+.frm_wrap .frm-with-right-icon textarea,
+.frm_wrap .frm-with-right-icon input,
+.frm_wrap .frm-with-right-icon input[type="text"] {
+	padding-right: var(--gap-md);
+}
+
+#frm-show-fields .frm-with-left-icon .frmsvg,
+#frm-show-fields .frm-with-left-icon i {
+	padding-top: 10px;
+}

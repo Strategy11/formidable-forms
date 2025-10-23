@@ -139,7 +139,7 @@ abstract class FrmFieldType {
 		}
 
 		if ( is_array( $this->field ) ) {
-			$this->field_id = isset( $this->field['id'] ) ? $this->field['id'] : 0;
+			$this->field_id = $this->field['id'] ?? 0;
 		} elseif ( is_object( $this->field ) && property_exists( $this->field, 'id' ) ) {
 			$this->field_id = $this->field->id;
 		} elseif ( is_numeric( $this->field ) ) {
@@ -267,7 +267,7 @@ DEFAULT_HTML;
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
-			<?php echo FrmAppHelper::kses( force_balance_tags( $field['name'] ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
 			<span class="frm_required <?php echo esc_attr( FrmField::is_required( $field ) ? '' : 'frm_hidden' ); ?>">
 				<?php echo esc_html( $field['required_indicator'] ); ?>
 			</span>
@@ -289,7 +289,7 @@ DEFAULT_HTML;
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
 		$html_id    = $this->html_id();
-		$read_only  = isset( $field['read_only'] ) ? $field['read_only'] : 0;
+		$read_only  = $field['read_only'] ?? 0;
 
 		$field['html_name']     = $field_name;
 		$field['html_id']       = $html_id;
@@ -313,7 +313,30 @@ DEFAULT_HTML;
 	protected function builder_text_field( $name = '' ) {
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
-		return '<input type="text" name="' . esc_attr( $this->html_name( $name ) ) . '" id="' . esc_attr( $this->html_id() ) . '" value="' . esc_attr( $this->get_field_column( 'default_value' ) ) . '" placeholder="' . esc_attr( FrmField::get_option( $this->field, 'placeholder' ) ) . '" ' . ( $read_only ? ' readonly="readonly" disabled="disabled"' : '' ) . ' />';
+		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
+		if ( is_array( $placeholder ) ) {
+			$placeholder = '';
+		}
+
+		$value = $this->get_field_column( 'default_value' );
+		if ( is_array( $value ) ) {
+			$value = '';
+		}
+
+		$input_atts = array(
+			'type'        => 'text',
+			'name'        => $this->html_name( $name ),
+			'id'          => $this->html_id(),
+			'value'       => $value,
+			'placeholder' => $placeholder,
+		);
+
+		if ( $read_only ) {
+			$input_atts['readonly'] = 'readonly';
+			$input_atts['disabled'] = 'disabled';
+		}
+
+		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
 	}
 
 	protected function html_name( $name = '' ) {
@@ -338,27 +361,29 @@ DEFAULT_HTML;
 	 */
 	protected function default_field_settings() {
 		return array(
-			'type'           => $this->type,
-			'label'          => true,
-			'required'       => true,
-			'unique'         => false,
-			'read_only'      => false,
-			'description'    => true,
-			'options'        => true,
-			'label_position' => true,
-			'invalid'        => false,
-			'size'           => false,
+			'type'              => $this->type,
+			'label'             => true,
+			'required'          => true,
+			'readonly_required' => false,
+			'unique'            => false,
+			'read_only'         => false,
+			'range_field'       => false,
+			'description'       => true,
+			'options'           => true,
+			'label_position'    => true,
+			'invalid'           => false,
+			'size'              => false,
 			// Shows the placeholder option.
-			'clear_on_focus' => false,
-			'css'            => true,
-			'conf_field'     => false,
-			'max'            => true,
-			'range'          => false,
-			'captcha_size'   => false,
-			'captcha_theme'  => false,
-			'format'         => false,
-			'show_image'     => false,
-			'default'        => true,
+			'clear_on_focus'    => false,
+			'css'               => true,
+			'conf_field'        => false,
+			'max'               => true,
+			'range'             => false,
+			'captcha_size'      => false,
+			'captcha_theme'     => false,
+			'format'            => false,
+			'show_image'        => false,
+			'default'           => true,
 		);
 	}
 
@@ -475,6 +500,7 @@ DEFAULT_HTML;
 		$should_hide_bulk_edit = apply_filters( 'frm_should_hide_bulk_edit', $display_format === '1', $display_format, $args );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/field-options.php';
+		FrmFieldsHelper::render_ai_generate_options_button( $args, $should_hide_bulk_edit );
 	}
 
 	/**
@@ -508,10 +534,11 @@ DEFAULT_HTML;
 	public function display_smart_values_modal_trigger_icon( $field ) {
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
+			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
+				'tabindex'  => '0',
 			)
 		);
 	}
@@ -526,12 +553,6 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function show_default_value_field( $field, $default_name, $default_value ) {
-		if ( $field['type'] === 'rte' ) {
-			// This function is overwritten in Pro. This check is for backwards compatibility.
-			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/textarea-default-value-field.php';
-			return;
-		}
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/default-value-field.php';
 	}
 
@@ -546,17 +567,28 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since 4.04
+	 * Check if a field type includes field options. This should generally match the result of should_continue_to_field_options, but
+	 * this function was added because should_continue_to_field_options uses a protected scope.
+	 *
+	 * @since 6.23
+	 *
+	 * @return bool
 	 */
-	protected function get_bulk_edit_string() {
-		return __( 'Bulk Edit Options', 'formidable' );
+	public function field_type_has_options_settings() {
+		return $this->should_continue_to_field_options(
+			array(
+				'field' => array(
+					'type' => is_object( $this->field ) ? $this->field->type : $this->field['type'],
+				),
+			)
+		);
 	}
 
 	/**
 	 * @since 4.04
 	 */
-	protected function get_add_option_string() {
-		return __( 'Add Option', 'formidable' );
+	protected function get_bulk_edit_string() {
+		return __( 'Bulk Edit Options', 'formidable' );
 	}
 
 	/**
@@ -615,7 +647,7 @@ DEFAULT_HTML;
 				esc_html__( '%s Options', 'formidable' ),
 				esc_html( $all_field_types[ $args['display']['type'] ]['name'] )
 			);
-			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown6_icon', array( 'aria-hidden' => 'true' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 			?>
 		</h3>
 		<?php
@@ -739,7 +771,7 @@ DEFAULT_HTML;
 		$pro_fields = FrmField::pro_field_selection();
 
 		// As the credit card field is in Lite now, we want the name from the Lite array.
-		// The pro key would is still set for backward compatibility.
+		// The pro key is still set for backward compatibility.
 		unset( $pro_fields['credit_card'] );
 
 		$fields = array_merge( $fields, $pro_fields );
@@ -1044,7 +1076,11 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$hidden = $this->maybe_include_hidden_values( $args );
+		if ( isset( $shortcode_atts['opt'] ) ) {
+			$hidden = $this->include_hidden_values_for_single_opt( $args, $shortcode_atts['opt'] );
+		} else {
+			$hidden = $this->maybe_include_hidden_values( $args );
+		}
 
 		$field      = $this->field;
 		$html_id    = $args['html_id'];
@@ -1145,6 +1181,41 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * When opt=2 for example is used in the [input] shortcode, only print a single hidden input.
+	 *
+	 * @since 6.22
+	 *
+	 * @param array      $args
+	 * @param int|string $opt
+	 * @return string
+	 */
+	private function include_hidden_values_for_single_opt( $args, $opt ) {
+		$hidden         = '';
+		$selected_value = $args['field_value'] ?? $this->field['value'];
+
+		if ( ! is_array( $selected_value ) ) {
+			return $hidden;
+		}
+
+		$options = array_values( $this->field['options'] );
+		if ( ! isset( $options[ $opt ] ) ) {
+			return $hidden;
+		}
+
+		$option = $options[ $opt ];
+		if ( is_array( $option ) ) {
+			$option = $option['value'];
+		}
+
+		if ( in_array( $option, $selected_value, true ) ) {
+			$args['field_value'] = array( $option );
+			$hidden              = $this->maybe_include_hidden_values( $args );
+		}
+
+		return $hidden;
+	}
+
+	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
 	 */
@@ -1161,7 +1232,7 @@ DEFAULT_HTML;
 	}
 
 	protected function show_hidden_values( $args ) {
-		$selected_value = isset( $args['field_value'] ) ? $args['field_value'] : $this->field['value'];
+		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
 		if ( is_array( $selected_value ) ) {
 			$args['save_array'] = true;
@@ -1215,7 +1286,7 @@ DEFAULT_HTML;
 	 * @since 3.0
 	 */
 	protected function select_tag( $values ) {
-		$field       = isset( $values['field'] ) ? $values['field'] : $this->field;
+		$field       = $values['field'] ?? $this->field;
 		$input_html  = $this->get_field_input_html_hook( $field );
 		$select_atts = $this->get_select_attributes( $values );
 		$select      = FrmAppHelper::array_to_html_params( $select_atts ) . ' ';
@@ -1339,7 +1410,6 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args
-	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -1464,7 +1534,7 @@ DEFAULT_HTML;
 			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
 				$value = $value[ $atts['show'] ];
 			} elseif ( empty( $atts['return_array'] ) ) {
-				$sep   = isset( $atts['sep'] ) ? $atts['sep'] : ', ';
+				$sep   = $atts['sep'] ?? ', ';
 				$value = FrmAppHelper::safe_implode( $sep, $value );
 			}
 		}
@@ -1753,5 +1823,14 @@ DEFAULT_HTML;
 	protected function get_select_atributes( $values ) {
 		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
 		return $this->get_select_attributes( $values );
+	}
+
+	/**
+	 * @since 4.04
+	 * @deprecated 6.24
+	 */
+	protected function get_add_option_string() {
+		_deprecated_function( __METHOD__, '6.24' );
+		return __( 'Add Option', 'formidable' );
 	}
 }

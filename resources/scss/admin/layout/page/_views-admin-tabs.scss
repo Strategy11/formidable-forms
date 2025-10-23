@@ -1,0 +1,31 @@
+/**
+ * View Page Admin Tabs
+ */
+
+.post-type-frm_display #poststuff h2.nav-tab-wrapper {
+	padding-left: 10px;
+	margin-bottom: 0;
+	padding-bottom: 0;
+}
+
+.post-type-frm_display .nav-menus-php .wrap {
+	margin: 10px 0 0;
+}
+
+.post-type-frm_display .nav-menus-php .wrap p {
+	padding-left: 12px;
+	padding-right: 12px;
+}
+
+.post-type-frm_display .nav-tab {
+	display: inline-block;
+	background-color: #f4f4f4;
+}
+
+.post-type-frm_display .nav-tab.frm_hidden {
+	display: none;
+}
+
+.post-type-frm_display .nav-tab:hover {
+	background-color: #e4e4e4;
+}

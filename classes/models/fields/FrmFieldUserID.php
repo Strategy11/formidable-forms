@@ -59,7 +59,7 @@ class FrmFieldUserID extends FrmFieldType {
 		$user_ID      = get_current_user_id();
 		$user_ID      = ( $user_ID ? $user_ID : '' );
 		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
+		$action       = ( $args['action'] ?? $args['form_action'] ?? '' );
 		$updating     = $action === 'update';
 		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
@@ -134,6 +134,10 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
+		if ( '' === $value ) {
+			// Allow for an empty User ID. Return early to prevent it from getting set to 0.
+			return;
+		}
 		FrmAppHelper::sanitize_value( 'intval', $value );
 	}
 }

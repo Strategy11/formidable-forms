@@ -29,11 +29,11 @@ if ( false === strpos( $attributes['class'], 'frm-gradient' ) ) {
 	?>
 	<div class="frm-cta-content">
 		<h4>
-			<?php echo FrmAppHelper::kses( $args['title'], array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( $args['title'], array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); ?>
 		</h4>
 
 		<p class="frm-m-0">
-			<?php echo FrmAppHelper::kses( $args['description'], array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php FrmAppHelper::kses_echo( $args['description'], array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ); ?>
 		</p>
 	</div>
 

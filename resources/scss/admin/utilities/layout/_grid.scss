@@ -1,0 +1,48 @@
+.frm_form_field.frm6_followed:not(.frm_hidden):not(.frm-force-hidden) {
+
+	+ p,
+	+ div,
+	+ span {
+		grid-column: span 6 / span 6;
+		align-content: center;
+	}
+}
+
+.frm_form_field.frm12_followed:not(.frm_hidden):not(.frm-force-hidden) {
+
+	+ p,
+	+ div,
+	+ span {
+		grid-column: span 12 / span 12 !important;
+		align-content: center;
+	}
+}
+
+.frm_form_field.frm-phone-type ~ [id*="frm-field-format-custom-"] > label,
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] > label {
+	opacity: 0; /* Hide the label for the format input in the phone field. */
+}
+
+.frm_form_field.frm-format-dropdown ~ [id*="frm-field-format-custom-"] {
+	grid-column: span 6 / span 6;
+}
+
+/* Adjust "CSS Layout Classes" to full width when the "Format" setting is present. */
+.frm-single-settings.frm-type-textarea > .frm_grid_container [id*="frm-field-format-custom-"] + p {
+	grid-column: span 12/span 12;
+}
+
+.frm-single-settings {
+
+	.frm_grid_container {
+		column-gap: var(--gap-sm);
+	}
+}
+
+.frm-content-center {
+	align-content: center;
+}
+
+.frm-self-end {
+	align-self: end;
+}

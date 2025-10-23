@@ -41,7 +41,46 @@ class FrmSerializedStringParserHelper {
 	 * @return mixed
 	 */
 	public function parse( $string ) {
-		return $this->do_parse( new FrmStringReaderHelper( $string ) );
+		$unserialized_data = $this->do_parse( new FrmStringReaderHelper( $string ) );
+
+		if ( is_array( $unserialized_data ) && $this->serialized_string_is_invalid( $string ) ) {
+			return array_filter( $unserialized_data, array( $this, 'serialized_value_is_valid' ) );
+		}
+
+		return $unserialized_data;
+	}
+
+	/**
+	 * Check if an unserialized value is valid.
+	 *
+	 * @since 6.20
+	 *
+	 * @param mixed $value
+	 * @return bool
+	 */
+	private function serialized_value_is_valid( $value ) {
+		return ! is_string( $value ) || strpos( $value, ';s:' ) === false;
+	}
+
+	/**
+	 * @since 6.20
+	 *
+	 * @param string $string
+	 * @return bool
+	 */
+	private function serialized_string_is_invalid( $string ) {
+		$invalid_substrings = array(
+			';s:10:\"a"',
+			';s:";',
+		);
+
+		foreach ( $invalid_substrings as $invalid ) {
+			if ( strpos( $string, $invalid ) !== false ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

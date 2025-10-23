@@ -1,0 +1,8 @@
+/**
+ * Component: Accordion Title
+ */
+
+#frm_style_sidebar .accordion-section-title::after,
+#frm_view_editor_left .accordion-section-title::after {
+	content: "";
+}

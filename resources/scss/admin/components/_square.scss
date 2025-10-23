@@ -1,0 +1,17 @@
+a[href="#square_settings"] svg.frmsvg {
+	width: 23px !important;
+	height: 22px !important;
+}
+
+#frm_square_test_setup_modal a:focus {
+	box-shadow: none !important;
+}
+
+@media only screen and (max-width: 900px) {
+	#square_settings .frm_grid_container:has(.frm-card-item) {
+		grid-template-columns: repeat(1, 1fr);
+	}
+	#square_settings .frm-card-item + .frm-card-item {
+		margin-top: var(--gap-sm);
+	}
+}

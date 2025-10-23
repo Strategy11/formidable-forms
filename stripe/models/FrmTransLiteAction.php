@@ -34,8 +34,8 @@ class FrmTransLiteAction extends FrmFormAction {
 		$options             = $form_action->post_content;
 		$form_fields         = $this->get_field_options( $args['form']->id );
 		$field_dropdown_atts = compact( 'form_fields', 'form_action' );
-		$currencies          = FrmCurrencyHelper::get_currencies();
 		$repeat_times        = FrmTransLiteAppHelper::get_repeat_times();
+		$gateways            = FrmTransLiteAppHelper::get_gateways();
 
 		if ( ! isset( $form_action->post_content['payment_limit'] ) ) {
 			$form_action->post_content['payment_limit'] = '';
@@ -51,9 +51,10 @@ class FrmTransLiteAction extends FrmFormAction {
 	 *
 	 * @since 6.5
 	 *
+	 * @param string $selected_gateway The selected gateway for the given payment action.
 	 * @return void
 	 */
-	public function echo_capture_payment_upsell() {
+	public function echo_capture_payment_upsell( $selected_gateway = 'stripe' ) {
 		// Add an upsell placeholder for the capture payment setting.
 		$upgrading      = FrmAddonsController::install_link( 'stripe' );
 		$upgrade_params = array();

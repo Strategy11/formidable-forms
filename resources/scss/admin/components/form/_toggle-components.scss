@@ -1,0 +1,191 @@
+/**
+ * Toggle Components
+ *
+ * These are the styles for the "Enable Formidable styling" toggle in the visual styler.
+ * To use this element, you can call the FrmHtmlHelper::toggle function.
+ */
+
+.frm_toggle_opt {
+	padding: 0;
+	white-space: normal;
+	display: inline;
+	vertical-align: middle;
+	font-weight: 400;
+}
+
+.frm_on_label,
+.frm_off_label {
+	color: var(--grey-700);
+}
+
+.frm_toggle {
+	position: relative;
+	display: inline-block;
+	width: 40px;
+	height: var(--h-xs);
+	vertical-align: middle;
+}
+
+.frm_toggle_block {
+	display: inline-flex !important;
+	gap: var(--gap-xs);
+	align-items: center;
+}
+
+.frm_toggle input, /* Reverse compatibility */
+.frm_toggle_block input {
+	display:none !important;
+}
+
+.frm_toggle_slider {
+	position: absolute;
+	cursor: pointer;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: var(--grey-200);
+	transition: .4s;
+	border-radius: 30px;
+}
+
+.frm_toggle_slider::before {
+	box-sizing: border-box;
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%2398A2B3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m10.063 3.938-6.126 6.124M3.938 3.938l6.124 6.124'/%3E%3C/svg%3E");
+	position: absolute;
+	left: 2px;
+	bottom: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+	line-height: 20px;
+	background-color: #fff;
+	border-radius: 50%;
+	transition: 0.4s;
+	box-shadow: var(--box-shadow-md);
+}
+
+input:checked + .frm_toggle .frm_toggle_slider {
+	background-color: var(--primary-500);
+}
+
+input:focus + .frm_toggle .frm_toggle_slider {
+	box-shadow: var(--box-shadow-md);
+}
+
+input:checked + .frm_toggle .frm_toggle_slider::before {
+	transform: translateX(16px);
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%234199FD' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4.52 7.437 1.313 1.459L9.48 5.104'/%3E%3C/svg%3E");
+}
+
+input[disabled] + .frm_toggle_slider,
+input[disabled] + .frm_toggle .frm_toggle_slider {
+	pointer-events: none;
+	cursor: text;
+	opacity: .5;
+}
+
+.frm_toggle_opt ~ .frm_toggle:not(#frm_testing_mode .frm_toggle) .frm_toggle_slider::before {
+	content: '' !important; /* Don't show x/check if off label included or on builder page */
+}
+
+.rtl .frm_toggle_opt {
+	padding: 0 8px;
+}
+
+.rtl .frm_toggle_slider::before {
+	left: 17px;
+}
+
+.rtl input:checked + .frm_toggle .frm_toggle_slider::before {
+	transform: none!important;
+	left: 1px;
+}
+
+/* Deprecated admin toggle */
+.frm_toggle_off,
+.frm_toggle_on {
+	display: none;
+	color: #fff;
+	z-index: 999;
+	position: absolute;
+	font-size: 10px;
+	line-height: 20px;
+	left: 6px;
+}
+
+.frm_toggle_off {
+	display: inline;
+	left: auto;
+	right: 5px;
+	color: var(--dark-grey);
+}
+
+.frm_toggle_long {
+	width: 80% !important;
+	height: 28px;
+	display: inline-block !important;
+}
+
+.frm_toggle_long .frm_toggle_slider {
+	background: var(--primary-700);
+	box-shadow: 0 0 0 2px var(--primary-700);
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long .frm_toggle_on {
+	width: 50%;
+	text-align: center;
+	font-size: 13px;
+	line-height: 28px;
+}
+
+.frm_toggle_long .frm_toggle_on {
+	left: 0;
+}
+
+.frm_toggle_long .frm_toggle_off {
+	right: 0;
+}
+
+.frm_toggle_long .frm_toggle_slider::before {
+	width: 50%;
+	left: 0;
+	top: 0;
+	border-radius: var(--border-radius) 0 0 var(--border-radius);
+	height: 100%;
+	background-color: #fff;
+	color: var(--primary-color);
+	content: '' !important;
+}
+
+.frm_toggle_long input:checked + .frm_toggle_slider::before {
+	transform: translateX(101%);
+	border-radius: 0 var(--border-radius) var(--border-radius) 0;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on {
+	display: inline;
+}
+
+input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: none;
+}
+
+.frm_toggle_long .frm_toggle_on,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on + .frm_toggle_off {
+	display: inline;
+	color: var(--primary-500);
+	font-weight: 400;
+}
+
+.frm_toggle_long .frm_toggle_off,
+.frm_toggle_long input:checked + .frm_toggle_slider + .frm_toggle_on {
+	color: #fff;
+	font-weight: 700;
+}
+
+/* End toggle styling */

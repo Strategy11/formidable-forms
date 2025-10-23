@@ -224,7 +224,7 @@ class FrmEntryMeta {
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
 		if ( isset( $entry->metas ) ) {
-			return isset( $entry->metas[ $field_id ] ) ? $entry->metas[ $field_id ] : false;
+			return $entry->metas[ $field_id ] ?? false;
 		}
 		return self::get_entry_meta_by_field( $entry->id, $field_id );
 	}

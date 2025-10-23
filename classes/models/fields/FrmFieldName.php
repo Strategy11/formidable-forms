@@ -139,7 +139,7 @@ class FrmFieldName extends FrmFieldCombo {
 		$name_layout = $this->get_name_layout();
 
 		if ( ! empty( $atts['show'] ) ) {
-			return isset( $value[ $atts['show'] ] ) ? $value[ $atts['show'] ] : '';
+			return $value[ $atts['show'] ] ?? '';
 		}
 
 		$value = wp_parse_args(
@@ -254,7 +254,9 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return void
 	 */
 	public function show_after_default( $args ) {
+		echo '<div class="frm-mt-xs">';
 		parent::show_after_default( $args );
+		echo '</div>';
 
 		/**
 		 * @var array $field

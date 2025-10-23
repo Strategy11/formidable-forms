@@ -13,23 +13,23 @@ class FrmShowForm extends WP_Widget {
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
-		echo FrmAppHelper::kses( $args['before_widget'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $args['before_widget'], 'all' );
 
 		echo '<div class="frm_form_widget">';
 		if ( $title ) {
-			echo FrmAppHelper::kses( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			FrmAppHelper::kses_echo( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' );
 		}
 
 		$form_atts = array(
-			'id'          => isset( $instance['form'] ) ? $instance['form'] : 0,
+			'id'          => $instance['form'] ?? 0,
 			'title'       => false,
-			'description' => isset( $instance['description'] ) ? $instance['description'] : false,
+			'description' => $instance['description'] ?? false,
 		);
 
 		echo FrmFormsController::get_form_shortcode( $form_atts ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		echo '</div>';
-		echo FrmAppHelper::kses( $args['after_widget'], 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $args['after_widget'], 'all' );
 	}
 
 	/**

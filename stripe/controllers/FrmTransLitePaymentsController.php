@@ -101,7 +101,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$link = apply_filters( 'frm_pay_' . $paysys . '_receipt', $link );
 		}
 
-		echo FrmAppHelper::kses( $link, array( 'a' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 	}
 
 	/**
@@ -206,7 +206,18 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one( $payment_id );
-		$refunded    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
+
+		switch ( $payment->paysys ) {
+			case 'stripe':
+				$refunded = FrmStrpLiteAppHelper::call_stripe_helper_class( 'refund_payment', $payment->receipt_id );
+				break;
+			case 'square':
+				$refunded = FrmSquareLiteConnectHelper::refund_payment( $payment->receipt_id );
+				break;
+			default:
+				$refunded = false;
+				break;
+		}
 
 		if ( $refunded ) {
 			self::change_payment_status( $payment, 'refunded' );

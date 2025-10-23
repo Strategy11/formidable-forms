@@ -710,7 +710,7 @@ class FrmXMLHelper {
 
 			foreach ( $options as $opt_key => $opt ) {
 				if ( is_array( $opt ) ) {
-					$opt = isset( $opt['value'] ) ? $opt['value'] : ( isset( $opt['label'] ) ? $opt['label'] : reset( $opt ) );
+					$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 				}
 
 				if ( $opt == $default_value ) {
@@ -926,6 +926,11 @@ class FrmXMLHelper {
 
 			$post['post_content'] = self::switch_form_ids( $post['post_content'], $imported['forms'] );
 
+			// Fix issue with line breaks appearing in descriptions as "rn".
+			if ( $post['post_type'] === $form_action_type ) {
+				$post['post_content'] = str_replace( '\\\\r\\\\n', '\\r\\n', $post['post_content'] );
+			}
+
 			$old_id = $post['post_id'];
 			self::populate_post( $post, $item, $imported );
 
@@ -934,7 +939,7 @@ class FrmXMLHelper {
 			$post_id = false;
 			if ( $post['post_type'] === $form_action_type ) {
 				$action_control = FrmFormActionsController::get_form_actions( $post['post_excerpt'] );
-				if ( $action_control && is_object( $action_control ) ) {
+				if ( $action_control && is_object( $action_control ) && isset( $imported['form_status'] ) ) {
 					$post_id = $action_control->maybe_create_action( $post, $imported['form_status'] );
 				}
 				unset( $action_control );
@@ -1211,6 +1216,16 @@ class FrmXMLHelper {
 						foreach ( $m['value']['calendar_options'] as $calendar_option_group_key => $calendar_option ) {
 							if ( isset( $frm_duplicate_ids[ $calendar_option['value'] ] ) ) {
 								$m['value']['calendar_options'][ $calendar_option_group_key ]['value'] = $frm_duplicate_ids[ $calendar_option['value'] ];
+							}
+						}
+					}
+
+					if ( ! empty( $m['value']['timeline_options'] ) ) {
+						foreach ( $m['value']['timeline_options'] as $timeline_option_group_key => $timeline_group_option ) {
+							foreach ( $timeline_group_option as $timeline_option_key => $timeline_option ) {
+								if ( isset( $frm_duplicate_ids[ $timeline_option ] ) ) {
+									$m['value']['timeline_options'][ $timeline_option_group_key ][ $timeline_option_key ] = $frm_duplicate_ids[ $timeline_option ];
+								}
 							}
 						}
 					}
@@ -1697,7 +1712,7 @@ class FrmXMLHelper {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
 			$str = json_encode( $str );
-		} elseif ( seems_utf8( $str ) === false ) {
+		} elseif ( FrmAppHelper::is_valid_utf8( $str ) === false ) {
 			$str = FrmAppHelper::maybe_utf8_encode( $str );
 		}
 
@@ -2089,7 +2104,7 @@ class FrmXMLHelper {
 		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
 			// migrate autoresponder
 
-			$email_field = isset( $form_options['ar_email_to'] ) ? $form_options['ar_email_to'] : 0;
+			$email_field = $form_options['ar_email_to'] ?? 0;
 			if ( strpos( $email_field, '|' ) ) {
 				// data from entries field
 				$email_field = explode( '|', $email_field );
@@ -2105,16 +2120,16 @@ class FrmXMLHelper {
 			$new_notification2 = array(
 				'post_content' => array(
 					'email_message' => $notification['ar_email_message'],
-					'email_subject' => isset( $notification['ar_email_subject'] ) ? $notification['ar_email_subject'] : '',
+					'email_subject' => $notification['ar_email_subject'] ?? '',
 					'email_to'      => $email_field,
-					'plain_text'    => isset( $notification['ar_plain_text'] ) ? $notification['ar_plain_text'] : 0,
+					'plain_text'    => $notification['ar_plain_text'] ?? 0,
 					'inc_user_info' => 0,
 				),
 				'post_name'    => $form_id . '_email_' . count( $notifications ),
 			);
 
-			$reply_to      = isset( $notification['ar_reply_to'] ) ? $notification['ar_reply_to'] : '';
-			$reply_to_name = isset( $notification['ar_reply_to_name'] ) ? $notification['ar_reply_to_name'] : '';
+			$reply_to      = $notification['ar_reply_to'] ?? '';
+			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
 			if ( ! empty( $reply_to ) ) {
 				$new_notification2['post_content']['reply_to'] = $reply_to;

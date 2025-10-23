@@ -10,69 +10,74 @@ class FrmField {
 
 	public static function field_selection() {
 		$fields = array(
-			'text'                      => array(
+			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_text2_icon',
 			),
-			'textarea'                  => array(
+			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
 				'icon' => 'frm_icon_font frm_paragraph_icon',
 			),
-			'checkbox'                  => array(
+			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
 				'icon' => 'frm_icon_font frm_check_square_icon',
 			),
-			'radio'                     => array(
+			'radio'                        => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
 				'icon' => 'frm_icon_font frm_radio_checked_icon',
 			),
-			'select'                    => array(
+			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_caret_square_down_icon',
+				'icon' => 'frm_icon_font frm_dropdown_icon',
 			),
-			'email'                     => array(
+			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email_icon',
+				'icon' => 'frm_icon_font frm_email2_icon',
 			),
-			'url'                       => array(
+			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link_icon',
+				'icon' => 'frm_icon_font frm_link2_icon',
 			),
-			'number'                    => array(
+			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
 				'icon' => 'frm_icon_font frm_hashtag_icon',
 			),
-			'name'                      => array(
+			'name'                         => array(
 				'name' => __( 'Name', 'formidable' ),
 				'icon' => 'frm_icon_font frm_user_name_icon',
 			),
-			'phone'                     => array(
+			'phone'                        => array(
 				'name' => __( 'Phone', 'formidable' ),
 				'icon' => 'frm_icon_font frm_phone_icon',
 			),
-			'html'                      => array(
+			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_icon',
+				'icon' => 'frm_icon_font frm_code2_icon',
 			),
-			'hidden'                    => array(
+			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash_icon',
+				'icon' => 'frm_icon_font frm_eye_slash2_icon',
 			),
-			'user_id'                   => array(
+			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
+				'icon' => 'frm_icon_font frm_user2_icon',
 			),
-			'captcha'                   => array(
+			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'icon' => 'frm_icon_font frm_shield_check2_icon',
 			),
-			'credit_card'               => array(
+			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card_icon',
+				'icon' => 'frm_icon_font frm_credit_card2_icon',
 			),
-			FrmSubmitHelper::FIELD_TYPE => array(
+			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
 				'hide' => true,
+			),
+			FrmFieldGdprHelper::FIELD_TYPE => array(
+				'name' => __( 'GDPR', 'formidable' ),
+				'icon' => 'frm_icon_font frm-gdpr-icon',
+				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
 		);
 
@@ -96,7 +101,7 @@ class FrmField {
 		$fields     = array(
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload_icon',
+				'icon'    => 'frm_icon_font frm_upload3_icon',
 				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
 			'ranking'         => array(),
@@ -106,7 +111,7 @@ class FrmField {
 			),
 			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar_icon',
+				'icon' => 'frm_icon_font frm_calendar2_icon',
 			),
 			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),
@@ -119,7 +124,7 @@ class FrmField {
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star_icon',
+				'icon' => 'frm_icon_font frm_star2_icon',
 			),
 			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
@@ -131,7 +136,7 @@ class FrmField {
 			),
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_sitemap_icon',
+				'icon'    => 'frm_icon_font frm_dynamic_icon',
 				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
 			),
 			'lookup'          => array(
@@ -141,7 +146,7 @@ class FrmField {
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_repeater_icon',
+				'icon'    => 'frm_icon_font frm_refresh_icon',
 				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
@@ -159,7 +164,7 @@ class FrmField {
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text_icon',
+				'icon' => 'frm_icon_font frm_file_text2_icon',
 			),
 			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
@@ -173,11 +178,11 @@ class FrmField {
 			),
 			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_open_icon',
+				'icon' => 'frm_icon_font frm_lock_closed2_icon',
 			),
 			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags_icon',
+				'icon' => 'frm_icon_font frm_price_tags2_icon',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -187,11 +192,11 @@ class FrmField {
 			),
 			'address'         => array(
 				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location_icon',
+				'icon' => 'frm_icon_font frm_location2_icon',
 			),
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text_icon',
+				'icon'    => 'frm_icon_font frm_file_text3_icon',
 				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
 			),
 			'signature'       => array(
@@ -201,13 +206,13 @@ class FrmField {
 			),
 			'ai'              => array(
 				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm-ai-icon frm_show_upgrade',
 				'addon'   => 'ai',
 				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
@@ -219,7 +224,7 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product_icon',
+				'icon'    => 'frm_icon_font frm_product2_icon',
 				'section' => 'pricing',
 			),
 			'quantity'        => array(
@@ -229,7 +234,7 @@ class FrmField {
 			),
 			'total'           => array(
 				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total_icon',
+				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
 			),
 		);
@@ -372,13 +377,15 @@ class FrmField {
 		global $wpdb, $frm_duplicate_ids;
 
 		$new_values              = array();
-		$key                     = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
+		$key                     = $values['field_key'] ?? $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
 
 		foreach ( array( 'name', 'description', 'type', 'default_value' ) as $col ) {
-			$new_values[ $col ] = $values[ $col ];
+			if ( isset( $values[ $col ] ) ) {
+				$new_values[ $col ] = $values[ $col ];
+			}
 		}
 
 		$new_values['options']       = self::maybe_filter_options( $values['options'] );
@@ -1089,7 +1096,7 @@ class FrmField {
 
 		if ( $field_object->should_unserialize_value() ) {
 			FrmAppHelper::unserialize_or_decode( $results->default_value );
-			if ( $before === $results->default_value && ! is_array( $before ) && strpos( $before, '["' ) === 0 ) {
+			if ( $before === $results->default_value && is_string( $before ) && strpos( $before, '["' ) === 0 ) {
 				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 			}
 		}
@@ -1143,7 +1150,7 @@ class FrmField {
 			if ( ! $set ) {
 				// the transient didn't save
 				if ( $name != $base_name ) {
-					// if the first saved an others fail, this will show an incmoplete form
+					// if the first saved an others fail, this will show an incomplete form
 					self::delete_form_transient( $form_id );
 				}
 
@@ -1377,7 +1384,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
+		return $field->field_options[ $option ] ?? '';
 	}
 
 	/**

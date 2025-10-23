@@ -87,7 +87,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function __construct( $data ) {
-		$sections = array( 'counters', 'license', 'payments', 'entries', 'inbox', 'video', 'payments' );
+		$sections = array( 'counters', 'license', 'get_free_templates', 'payments', 'entries', 'inbox', 'video', 'payments' );
 		foreach ( $sections as $section ) {
 			if ( isset( $data[ $section ] ) ) {
 				$this->view[ $section ] = $data[ $section ];
@@ -162,6 +162,17 @@ class FrmDashboardHelper {
 	}
 
 	/**
+	 * Get free templates banner template.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	public function get_free_templates_banner() {
+		include FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php';
+	}
+
+	/**
 	 * Show buttons to in the license key box.
 	 *
 	 * @since 6.8
@@ -202,13 +213,15 @@ class FrmDashboardHelper {
 		}
 
 		$upgrade_link = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_link' );
-		if ( ! $upgrade_link ) {
-			$upgrade_link = FrmAppHelper::admin_upgrade_link(
-				array(
-					'medium'  => 'settings-license',
-					'content' => 'dashboard-license-box',
-				)
-			);
+		$utm          = array(
+			'medium'  => 'settings-license',
+			'content' => 'dashboard-license-box',
+		);
+
+		if ( $upgrade_link ) {
+			$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
+		} else {
+			$upgrade_link = FrmAppHelper::admin_upgrade_link( $utm );
 		}
 
 		return array(

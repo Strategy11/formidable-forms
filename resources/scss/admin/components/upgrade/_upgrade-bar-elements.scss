@@ -1,0 +1,29 @@
+/**
+ * Components - Upgrade Bar Elements
+ */
+
+.upgrade_to_pro a {
+	color: var(--orange);
+}
+
+.upgrade_to_pro table .frmsvg {
+	height: var(--text-xl);
+	width: var(--text-xl);
+}
+
+.upgrade_to_pro table.widefat {
+	background-color: #fff;
+	border-collapse: collapse;
+}
+
+.frm-white-body .upgrade_to_pro table th,
+.upgrade_to_pro table td {
+	padding: 10px 15px;
+	border: 1px solid var(--grey-300);
+	line-height: var(--leading);
+	font-size: var(--text-sm);
+}
+
+.upgrade_to_pro table th.frmcenter {
+	text-align: center;
+}

@@ -73,6 +73,7 @@ class FrmFormActionsController {
 		);
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
+		$action_classes = self::maybe_unset_highrise( $action_classes );
 
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/email_action.php';
 		include_once FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/default_actions.php';
@@ -80,6 +81,21 @@ class FrmFormActionsController {
 		foreach ( $action_classes as $action_class ) {
 			self::$registered_actions->register( $action_class );
 		}
+	}
+
+	/**
+	 * Remove the Highrise action if it is not registered.
+	 *
+	 * @since 6.23
+	 *
+	 * @param array $action_classes
+	 * @return array
+	 */
+	private static function maybe_unset_highrise( $action_classes ) {
+		if ( 'FrmDefHighriseAction' === ( $action_classes['highrise'] ?? '' ) ) {
+			unset( $action_classes['highrise'] );
+		}
+		return $action_classes;
 	}
 
 	/**
@@ -168,20 +184,39 @@ class FrmFormActionsController {
 					'getresponse',
 					'aweber',
 					'mailpoet',
+					'convertkit',
 				),
 			),
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_address_card_icon',
-				'actions' => array(
-					'salesforce',
-					'hubspot',
-					'highrise',
-				),
+				'actions' => self::get_crm_actions(),
 			),
 		);
 
 		return apply_filters( 'frm_action_groups', $groups );
+	}
+
+	/**
+	 * Get the actions to include in the CRM section.
+	 *
+	 * @since 6.23
+	 *
+	 * @return array
+	 */
+	private static function get_crm_actions() {
+		$crm_actions = array(
+			'salesforce',
+			'hubspot',
+		);
+
+		// Only include Highrise when the add-on is active.
+		// This is because Highrise is deprecated. We don't want to show it in Lite.
+		if ( class_exists( 'FrmHrsSettings' ) ) {
+			$crm_actions[] = 'highrise';
+		}
+
+		return $crm_actions;
 	}
 
 	/**
@@ -549,6 +584,9 @@ class FrmFormActionsController {
 		}
 
 		FrmForm::maybe_get_form( $form );
+		if ( ! is_object( $form ) ) {
+			return;
+		}
 
 		$link_settings = self::get_form_actions( $type );
 		if ( 'all' !== $type ) {
@@ -580,7 +618,7 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( ( is_object( $form ) && is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ( isset( $args['is_child'] ) && $args['is_child'] ) );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
@@ -663,6 +701,22 @@ class FrmFormActionsController {
 		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 
 		return $where;
+	}
+
+	/**
+	 * Prevent WPML from filtering form actions based on the active language.
+	 *
+	 * @since 6.20
+	 *
+	 * @param bool|null $null
+	 * @param string    $post_type
+	 * @return bool|null
+	 */
+	public static function prevent_wpml_translations( $null, $post_type ) {
+		if ( self::$action_post_type === $post_type ) {
+			return false;
+		}
+		return $null;
 	}
 }
 

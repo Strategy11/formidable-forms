@@ -1,0 +1,36 @@
+/**
+ * Field Choices
+ */
+
+li.frm_single_option {
+	padding-bottom: var(--gap-sm);
+	border-bottom: 0;
+}
+
+.frm_prod_type_single input[type="radio"],
+.frm_prod_type_single .frm_drag_icon,
+.frm_prod_type_single .frm_sortable_field_opts li:nth-child( n + 3 ),
+.frm_prod_type_single .frm_sortable_field_opts .frm_remove_tag,
+.frm_prod_type_single .frm_form_field:not(.frm_product_type):not(.frm_sep_val_product),
+.frm_prod_type_single .frm-bulk-edit-link,
+.frm_prod_type_user_def.frm_grid_container,
+.frm_prod_options_heading.frm_prod_user_def {
+	display: none;
+}
+
+.frm_prod_type_single .frm-ai-generate-options-modal-trigger {
+	display: none !important;
+}
+
+.frm_prod_type_single .frm_option_key {
+	margin-left: 0 !important;
+
+	input[type="checkbox"] + input[type="text"],
+	input[type="radio"] + input[type="text"] {
+		margin-left: 0 !important;
+	}
+}
+
+.plugin-card-bottom .frm-trash {
+	color: #a00;
+}

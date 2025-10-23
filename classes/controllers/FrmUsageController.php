@@ -40,10 +40,10 @@ class FrmUsageController {
 		}
 
 		$tracking = array(
-			'day'    => rand( 0, 6 ) * DAY_IN_SECONDS,
-			'hour'   => rand( 0, 23 ) * HOUR_IN_SECONDS,
-			'minute' => rand( 0, 59 ) * MINUTE_IN_SECONDS,
-			'second' => rand( 0, 59 ),
+			'day'    => random_int( 0, 6 ) * DAY_IN_SECONDS,
+			'hour'   => random_int( 0, 23 ) * HOUR_IN_SECONDS,
+			'minute' => random_int( 0, 59 ) * MINUTE_IN_SECONDS,
+			'second' => random_int( 0, 59 ),
 		);
 
 		$offset    = array_sum( $tracking );
@@ -106,18 +106,13 @@ class FrmUsageController {
 	 * @return bool
 	 */
 	private static function is_forms_list_page() {
-		if ( ! FrmAppHelper::is_admin_page() ) {
+		if ( ! FrmAppHelper::on_form_listing_page() ) {
 			return false;
 		}
 
-		// Check Trash page.
+		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		if ( $form_type && 'published' !== $form_type ) {
-			return false;
-		}
-
-		// Check edit or settings page.
-		return ! FrmAppHelper::simple_get( 'frm_action' );
+		return $form_type && 'published' === $form_type;
 	}
 
 	/**

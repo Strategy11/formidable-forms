@@ -433,22 +433,96 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon' );
+		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
 		$vars   = array_diff( $vars, $remove );
 
 		foreach ( $vars as $var ) {
-			if ( ! isset( $settings[ $var ] ) ) {
+			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
 			}
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
-			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			$prepared_value = '';
+			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
 	}
+
+	/**
+	 * Check if a CSS variable setting is not blank, doesn't match the default, and doesn't include invalid substrings.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array  $settings       Array of setting values.
+	 * @param array  $defaults       Array of default values.
+	 * @param string $var            The setting key name.
+	 * @param string $prepared_value The value from calling css_var_prepare_value. This is set by reference so it can be used after this function is called.
+	 * @return bool True if the CSS value should be printed.
+	 */
+	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
+		$prepared_value = self::css_var_prepare_value( $settings, $var );
+		if ( $prepared_value === '' ) {
+			return false;
+		}
+
+		if ( $defaults && $defaults[ $var ] === $prepared_value ) {
+			return false;
+		}
+
+		return self::css_value_is_valid( $prepared_value );
+	}
+
+	/**
+	 * Prevent invalid CSS keys from getting added to the generated CSS.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $key
+	 * @return bool
+	 */
+	private static function css_key_is_valid( $key ) {
+		// Any key that is abnormally large is not valid.
+		// Any key that contains a '{' is not valid.
+		return strlen( $key ) < 100 && false === strpos( $key, '{' );
+	}
+
+	/**
+	 * Confirm a CSS value is valid.
+	 * If it appears to contain JavaScript, it will not be added.
+	 *
+	 * @since 6.20
+	 *
+	 * @param string $var
+	 * @return bool
+	 */
+	private static function css_value_is_valid( $var ) {
+		if ( is_numeric( $var ) ) {
+			return true;
+		}
+
+		// None of these substrings should be present in any CSS value.
+		$invalid_substrings = array(
+			'function(',
+			';userAgent',
+			';stopPropagation',
+			'{const',
+			'window[',
+			'navigator[',
+			'Array;',
+		);
+
+		foreach ( $invalid_substrings as $substring ) {
+			if ( strpos( $var, $substring ) !== false ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 
 	/**
 	 * Remove anything that isn't used as a CSS variable name.
@@ -472,6 +546,10 @@ class FrmStylesHelper {
 	 */
 	private static function css_var_prepare_value( $settings, $key ) {
 		$value = $settings[ $key ];
+
+		if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+			return '';
+		}
 
 		switch ( $key ) {
 			case 'font':
@@ -503,7 +581,7 @@ class FrmStylesHelper {
 				break;
 		}//end switch
 
-		return esc_html( $settings[ $key ] );
+		return esc_html( $value );
 	}
 
 	/**
@@ -585,7 +663,7 @@ class FrmStylesHelper {
 			return $settings;
 		}
 		$base_font_size       = (int) $settings['base_font_size'];
-		$font_size            = $settings['font_size'];
+		$font_size            = $defaults['font_size'];
 		$font_sizes_to_update = array(
 			'font_size',
 			'field_font_size',
@@ -928,6 +1006,7 @@ class FrmStylesHelper {
 
 		return wp_get_attachment_url( (int) $background_image );
 	}
+
 	/**
 	 * Determines if the chosen JavaScript library should be used.
 	 *

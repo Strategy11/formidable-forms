@@ -1,11 +1,10 @@
 export const { canAccessApplicationDashboard, applicationsUrl } = window.frmGlobal;
-export const { FEATURED_TEMPLATES_KEYS, upgradeLink } = window.frmFormTemplatesVars;
+export const { FEATURED_TEMPLATES_IDS, FREE_TEMPLATES_IDS, upgradeLink } = window.frmFormTemplatesVars;
 
 export const PREFIX = 'frm-form-templates';
 
 export const VIEW_SLUGS = {
 	AVAILABLE_TEMPLATES: 'available-templates',
-	FREE_TEMPLATES: 'free-templates',
 	FAVORITES: 'favorites',
 	CUSTOM: 'custom',
 	SEARCH: 'search'

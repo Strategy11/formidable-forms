@@ -39,8 +39,8 @@
 		getApplicationDataAndLoadPage();
 	}
 
-	function getUrlParamsAndMaybeOpenTemplateModal( _, { data } = {}) {
-		const url       = new URL( window.location.href );
+	function getUrlParamsAndMaybeOpenTemplateModal( _, { data } = {} ) {
+		const url = new URL( window.location.href );
 		const urlParams = url.searchParams;
 		if ( ! urlParams.get( 'triggerViewApplicationModal' ) ) {
 			return;
@@ -67,7 +67,7 @@
 
 		container.innerHTML = '';
 
-		const contentWrapper = div({ className: 'frm-applications-index-content' });
+		const contentWrapper = div( { className: 'frm-applications-index-content' } );
 		container.appendChild( contentWrapper );
 
 		const customTemplatesNav = getCustomTemplatesNav();
@@ -85,7 +85,7 @@
 	}
 
 	function getCustomTemplatesNav() {
-		return div({
+		return div( {
 			className: 'frm-application-templates-nav wrap',
 			children: [
 				tag(
@@ -96,35 +96,35 @@
 					}
 				)
 			]
-		});
+		} );
 	}
 
 	function addCustomApplicationsPlaceholder( customTemplatesNav ) {
-		const placeholder = div({
+		const placeholder = div( {
 			id: 'frm_custom_applications_placeholder',
 			className: 'frm_placeholder_block',
-			child: div({
+			child: div( {
 				className: 'frm_grid_container',
 				children: [
-					div({
+					div( {
 						className: 'frm10 frm_clearfix',
 						children: [
-							img({ src: getUrlToApplicationsImages() + 'folder.svg' }),
+							img( { src: getUrlToApplicationsImages() + 'folder.svg' } ),
 							tag( 'h3', __( 'Improve your workflow with applications', 'formidable' ) ),
 							div( __( 'Applications help to organize your workspace by combining forms, Views, and pages into a full solution.', 'formidable' ) ),
 						]
-					}),
-					div({
+					} ),
+					div( {
 						className: 'frm2',
-						child: a({
+						child: a( {
 							className: 'frm-button-primary frm-gradient',
 							text: __( 'Upgrade to Pro', 'formidable' ),
 							href: frmApplicationsVars.proUpgradeUrl
-						})
-					})
+						} )
+					} )
 				]
-			})
-		});
+			} )
+		} );
 		customTemplatesNav.parentNode.insertBefore( placeholder, customTemplatesNav.nextElementSibling );
 	}
 
@@ -133,10 +133,10 @@
 	}
 
 	function renderFormidableTemplates( contentWrapper, templates ) {
-		elements.templatesGrid = div({
+		elements.templatesGrid = div( {
 			id: 'frm_application_templates_grid',
 			className: 'frm_grid_container frm-application-cards-grid'
-		});
+		} );
 		addTemplatesToGrid( templates );
 		contentWrapper.appendChild( getTemplatesNav() );
 		contentWrapper.appendChild( elements.templatesGrid );
@@ -159,7 +159,7 @@
 	}
 
 	function getTemplatesNav() {
-		return div({
+		return div( {
 			className: 'frm-application-templates-nav wrap',
 			children: [
 				tag(
@@ -172,7 +172,7 @@
 				getCategoryOptions(),
 				getTemplateSearch()
 			]
-		});
+		} );
 	}
 
 	function getCategoryOptions() {
@@ -182,7 +182,7 @@
 		}
 
 		const categories = [ getAllItemsCategory() ].concat( state.categories );
-		const wrapper = div({ id: 'frm_application_category_filter', className: 'subsubsub' });
+		const wrapper = div( { id: 'frm_application_category_filter', className: 'subsubsub' } );
 
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
@@ -241,11 +241,10 @@
 		const placeholder = __( 'Search Templates', 'formidable' );
 		const targetClassName = 'frm-application-template-card';
 		const args = { handleSearchResult: handleTemplateSearch };
-		const wrappedInput = newSearchInput( id, placeholder, targetClassName, args );
-		return wrappedInput;
+		return newSearchInput( id, placeholder, targetClassName, args );
 	}
 
-	function handleTemplateSearch({ foundSomething, notEmptySearchText }) {
+	function handleTemplateSearch( { foundSomething, notEmptySearchText } ) {
 		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
 			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
 			elements.templatesGrid.appendChild( elements.noTemplateSearchResultsPlaceholder );
@@ -263,13 +262,13 @@
 
 	function createApplicationCard( data ) {
 		const isTemplate = ! data.termId;
-		const card = div({
+		const card = div( {
 			className: 'frm-application-card frm-card-item',
 			children: [
 				getCardHeader(),
-				div({ className: 'frm-flex' })
+				div( { className: 'frm-flex' } )
 			]
-		});
+		} );
 
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
@@ -284,7 +283,7 @@
 		}
 
 		const hookName = 'frm_application_index_card';
-		const args     = { data };
+		const args = { data };
 		wp.hooks.doAction( hookName, card, args );
 
 		function getCardHeader() {
@@ -292,25 +291,25 @@
 				'h3',
 				{
 					children: [
-						svg({ href: '#frm_lock_icon' }),
-						span({ className: 'frm-inner-text', text: data.name })
+						svg( { href: '#frm_lock_icon' } ),
+						span( { className: 'frm-inner-text', text: data.name } )
 					]
 				}
 			);
-			const header = div({
+			const header = div( {
 				children: [
 					titleWrapper
 				]
-			});
+			} );
 
 			const templateControl = getUseThisTemplateControl( data );
-			if ( templateControl.classList.contains('frm-delete-application-trigger' ) ) {
+			if ( templateControl.classList.contains( 'frm-delete-application-trigger' ) ) {
 				header.appendChild( templateControl );
 			} else {
 				titleWrapper.appendChild( templateControl );
 			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span({ className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) }) );
+				titleWrapper.appendChild( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
 			}
 
 			const counter = getItemCounter();
@@ -329,17 +328,17 @@
 
 		function getCardContent() {
 			const thumbnailFolderUrl = getUrlToApplicationsImages() + 'thumbnails/';
-			const filenameToUse = data.hasLiteThumbnail ? data.key +  ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
-			return div({
+			const filenameToUse = data.hasLiteThumbnail ? data.key + ( data.isWebp ? '.webp' : '.png' ) : 'placeholder.svg';
+			return div( {
 				className: 'frm-application-card-image-wrapper',
-				child: img({ src: thumbnailFolderUrl + filenameToUse })
-			});
+				child: img( { src: thumbnailFolderUrl + filenameToUse } )
+			} );
 		}
 
 		return card;
 	}
 
-	function filterItemCount( counter, { data }) {
+	function filterItemCount( counter, { data } ) {
 		const hasForms = 'undefined' !== typeof data.formCount && '0' !== data.formCount;
 		const hasViews = 'undefined' !== typeof data.viewCount && '0' !== data.viewCount;
 		const hasPages = 'undefined' !== typeof data.pageCount && '0' !== data.pageCount;
@@ -348,7 +347,7 @@
 			return counter;
 		}
 
-		counter = div({ className: 'frm-application-item-count' });
+		counter = div( { className: 'frm-application-item-count' } );
 
 		if ( hasForms ) {
 			addCount( data.formCount, __( 'Forms', 'formidable' ), __( 'Form', 'formidable' ) );
@@ -377,10 +376,10 @@
 	}
 
 	function getUseThisTemplateControl( data ) {
-		let control = a({
+		let control = a( {
 			className: 'button frm-button-secondary frm-button-sm frm-fadein',
 			text: __( 'Learn More', 'formidable' )
-		});
+		} );
 		control.setAttribute( 'role', 'button' );
 		/* translators: %s: Application Template Name */
 		const ariaDescription = sprintf( __( '%s Template', 'formidable' ), data.name );
@@ -423,24 +422,24 @@
 
 		if ( data.upgradeUrl ) {
 			children.push(
-				div({
+				div( {
 					className: 'frm_note_style2',
 					children: [
 						span(
 							/* translators: %s: The required license type (ie. Plus, Business, or Elite) */
 							sprintf( __( 'Access to this application requires the %s plan.', 'formidable' ), data.requires )
 						),
-						a({
+						a( {
 							className: 'frm-gradient frm-button-primary frm-button-sm',
 							text: getUpgradeNowText(),
 							href: data.upgradeUrl
-						})
+						} )
 					]
-				})
+				} )
 			);
 		}
 
-		const placeholderImage = img({ src: getUrlToApplicationsImages() + 'placeholder.png' });
+		const placeholderImage = img( { src: getUrlToApplicationsImages() + 'placeholder.png' } );
 		if ( placeholderImage.complete ) {
 			setTimeout( maybeCenterViewApplicationModal, 0 );
 		} else {
@@ -448,38 +447,38 @@
 		}
 
 		const detailsChildren = [
-			div({
+			div( {
 				className: 'frm-application-modal-label',
 				text: __( 'Description', 'formidable' )
-			}),
+			} ),
 			div( data.description )
 		];
 
 		if ( data.usedAddons && data.usedAddons.length ) {
 			detailsChildren.push(
-				div({
+				div( {
 					className: 'frm-application-modal-label',
 					text: __( 'Required Add-ons', 'formidable-pro' )
-				}),
+				} ),
 				getBasicList( data.usedAddons )
 			);
 		}
 
 		children.push(
-			div({
+			div( {
 				className: 'frm-application-image-wrapper',
 				child: placeholderImage
-			}),
-			div({
+			} ),
+			div( {
 				className: 'frm-application-modal-details',
 				children: detailsChildren
-			})
+			} )
 		);
 
-		const output = div({ children });
+		const output = div( { children } );
 
 		const hookName = 'frm_view_application_modal_content';
-		const args     = { data };
+		const args = { data };
 		wp.hooks.doAction( hookName, output, args );
 
 		return output;
@@ -507,21 +506,21 @@
 			at: 'center',
 			of: window
 		};
-		jQuery( modal ).dialog({ position });
+		jQuery( modal ).dialog( { position } );
 	}
 
 	function getViewApplicationModalFooter( data ) {
-		const viewDemoSiteButton = footerButton({
+		const viewDemoSiteButton = footerButton( {
 			text: __( 'Learn More', 'formidable' ),
 			buttonType: 'secondary'
-		});
+		} );
 		viewDemoSiteButton.href = data.link;
 		viewDemoSiteButton.target = '_blank';
 
-		let primaryActionButton = footerButton({
+		let primaryActionButton = footerButton( {
 			text: getUpgradeNowText(),
 			buttonType: 'primary'
-		});
+		} );
 
 		if ( data.upgradeUrl ) {
 			primaryActionButton.classList.remove( 'dismiss' );
@@ -529,11 +528,11 @@
 		}
 
 		const hookName = 'frm_view_application_modal_primary_action_button';
-		const args     = { data };
+		const args = { data };
 		primaryActionButton = wp.hooks.applyFilters( hookName, primaryActionButton, args );
 
-		return div({
+		return div( {
 			children: [ viewDemoSiteButton, primaryActionButton ]
-		});
+		} );
 	}
 }() );

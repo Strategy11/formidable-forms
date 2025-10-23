@@ -1,0 +1,185 @@
+/**
+ * Component: Admin Inputs
+ */
+
+.frmdates_add_blackout_date_link,
+.frmdates_add_exception_link,
+.frm_form_field.frm_scroll_box .frm_opt_container,
+.frm-white-body .wrap input[type="text"], /* Cover Views pages */
+.frm-white-body .wrap input[type="search"],
+.frm-white-body .wrap input[type="number"],
+.frm-white-body .wrap select,
+#frm-form-templates-modal select,
+.frm-white-body .wrap textarea,
+button.frm_choose_image_box,
+#titlediv input[type="text"],
+.frm-fields button.btn,
+.frm_wrap textarea,
+.frm_wrap input[type="tel"],
+.frm_wrap input[type="text"],
+.frm_wrap input[type="email"]
+.frm_wrap input[type="search"],
+.frm_wrap input[type="number"],
+.frm_wrap input[type="date"],
+.frm_wrap select,
+.wp-admin .frm_wrap select,
+.field-group textarea,
+.field-group input[type="text"],
+.field-group select,
+.frm-fields .frm-input-field {
+	outline: 0;
+	box-shadow: var(--box-shadow-xs);
+	border-radius: var(--small-radius);
+	padding: 5px 14px;
+	border-color: var(--grey-300);
+	color: var(--grey-800);
+	font-size: var(--text-md);
+	margin: 0;
+	background-color: #fff;
+	line-height: var(--leading);
+}
+
+.frm_input_with_suffix {
+	border-radius: var(--small-radius);
+	border: 1px solid var(--grey-300);
+	display: inline-block;
+	padding-right: 14px;
+}
+
+.frm_input_with_suffix input {
+	border: 0 !important;
+	padding-right: 5px !important;
+}
+
+.frm_wrap ::-webkit-datetime-edit {
+	line-height: var(--leading);
+}
+
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) textarea:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) input:focus,
+.frm-white-body:not(.frm-admin-page-styles):not(.frm-admin-page-entries) select:focus,
+.frm_wrap input:focus,
+.frm_wrap select:focus,
+.wp-core-ui .frm_wrap select:focus,
+#frm-form-templates-modal select:focus,
+.frm-btn-group .multiselect.dropdown-toggle:focus,
+.frm_wrap textarea:focus {
+	border-color: var(--primary-500) !important;
+	box-shadow: none !important;
+}
+
+/*
+Pages like Entries and Styles need the border-color and box-shadow properties without the !important flag.
+To achieve this, we exclude them above and duplicate these rules specifically for those pages without using !important.
+*/
+.wp-admin .frm_fields_container textarea:focus,
+.wp-admin .frm_fields_container input:focus,
+.wp-admin .frm_fields_container select:focus {
+	border-color: var(--primary-500);
+	box-shadow: none;
+}
+
+#postbox-container-2 textarea,
+.frm_wrap textarea,
+.field-group textarea {
+	line-height: 2;
+}
+
+.frm_wrap input[type="number"] {
+	height: auto;
+}
+
+.frm_wrap select {
+	padding: 2px;
+}
+
+.wp-admin .frm_wrap select,
+#frm-form-templates-modal select {
+	max-width: 100%;
+}
+
+.frm_form_field.frm_scroll_box .frm_opt_container {
+	padding: 10px 12px;
+}
+
+.frm_wrap input[disabled],
+.frm_wrap select[disabled],
+.frm_wrap textarea[disabled],
+.frm_wrap input[readonly],
+.frm_wrap select[readonly],
+.frm_wrap textarea[readonly],
+.frm_wrap input::placeholder {
+	color: var(--grey-500);
+}
+
+textarea[id^="frm_calc_"]::placeholder {
+	font-size: var(--text-sm);
+	line-height: var(--leading);
+	font-style: italic;
+	color: var(--grey-400);
+	padding-top: 5px;
+}
+
+.frm_wrap .frm-button-primary.frm-disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
+#postcustomstuff table td > div {
+
+	/* To override some inline css in add-on */
+	padding-top: 0 !important;
+}
+
+.wp-admin .frm_wrap .form-table select {
+	vertical-align: top;
+}
+
+.frm_wrap .frm_form_builder select {
+	line-height: var(--leading);
+	height: var(--text-md);
+	width: 100%;
+}
+
+#postbox-container-2 select,
+.wp-admin .frm_wrap select,
+.frm_wrap .frm_form_builder select,
+#frm-form-templates-modal select {
+	height: auto;
+}
+
+.frm-white-body .tablenav select,
+.frm-white-body .tablenav input[type="text"],
+.wp-admin .frm_wrap .tablenav select,
+.frm_wrap .tablenav input[type="date"],
+.frm_wrap .tablenav input[type="text"] {
+	padding-top: 0;
+	padding-bottom: 0;
+	line-height: 1;
+}
+
+.frm_wrap .tablenav ::-webkit-datetime-edit {
+	line-height: 1;
+}
+
+.frm-fields button.btn,
+.frm-fields textarea,
+.frm-fields input[type="text"],
+.frm-fields select,
+.field-group textarea,
+.field-group input[type="text"],
+.field-group select,
+.accordion-container input.hex,
+.frm-fields .frm-input-field {
+	width: 100%;
+	outline: 0;
+}
+
+.frm-fields button.btn {
+	height: var(--h-md);
+	text-align: inherit;
+}
+
+.global-font .field-group input[type="text"] {
+	width: auto;
+}

@@ -42,6 +42,15 @@ class FrmFieldRadio extends FrmFieldType {
 	}
 
 	/**
+	 * @return bool[]
+	 */
+	protected function field_settings_for_type() {
+		return array(
+			'invalid' => true,
+		);
+	}
+
+	/**
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
@@ -99,5 +108,18 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected function show_readonly_hidden() {
 		return true;
+	}
+
+	/**
+	 * Unset aria-invalid for radio buttons because it's not valid for radio buttons.
+	 * Instead aria-invalid is added to the radiogroup parent element.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		unset( $shortcode_atts['aria-invalid'] );
 	}
 }

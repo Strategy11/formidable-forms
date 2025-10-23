@@ -14,15 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
-$div_class    = isset( $args['div_class'] ) ? $args['div_class'] : false;
-$show_labels  = isset( $args['show_labels'] ) ? $args['show_labels'] : false;
-$off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
-$on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
-$value        = isset( $args['value'] ) ? $args['value'] : $on_label;
+$div_class    = $args['div_class'] ?? false;
+$show_labels  = $args['show_labels'] ?? false;
+$off_label    = $args['off_label'] ?? '';
+$on_label     = $args['on_label'] ?? 1;
+$value        = $args['value'] ?? $on_label;
 $checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
 $disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
-$input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
+$input_html   = $args['input_html'] ?? array();
 
 $use_container = false;
 
@@ -49,7 +49,7 @@ if ( $use_container ) {
 ?>
 	<label class="frm_toggle_block" <?php FrmAppHelper::array_to_html_params( $div_params, true ); ?>>
 		<?php if ( $show_labels && $off_label ) { ?>
-			<span class="frm_off_label frm_toggle_opt"><?php echo esc_html( $off_label ); ?></span>
+			<span class="frm_off_label frm_toggle_opt frm-leading-none"><?php echo esc_html( $off_label ); ?></span>
 		<?php } ?>
 
 		<input type="checkbox" name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $value ); ?>"
@@ -78,7 +78,7 @@ if ( $use_container ) {
 		</span>
 
 		<?php if ( $show_labels && $on_label != 1 ) { ?>
-			<span class="frm_on_label frm_toggle_opt"><?php echo FrmAppHelper::kses( $on_label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></span>
+			<span class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
 	</label>
 <?php if ( $use_container ) { ?>

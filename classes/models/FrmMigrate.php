@@ -42,6 +42,7 @@ class FrmMigrate {
 
 			$this->create_tables();
 			$this->migrate_data( $old_db_version );
+			$this->check_that_tables_exist();
 
 			// SAVE DB VERSION.
 			update_option( 'frm_db_version', FrmAppHelper::plugin_version() . '-' . FrmAppHelper::$db_version );
@@ -52,6 +53,8 @@ class FrmMigrate {
 				if ( false === get_option( 'frm_first_activation' ) ) {
 					update_option( 'frm_first_activation', time(), false );
 				}
+
+				$this->update_settings_for_new_install();
 			}
 		}//end if
 
@@ -68,6 +71,52 @@ class FrmMigrate {
 		}
 	}
 
+	/**
+	 * Updates some settings for new installs.
+	 *
+	 * @since 6.23
+	 */
+	private function update_settings_for_new_install() {
+		$settings = FrmAppHelper::get_settings();
+
+		$settings->denylist_check = 1;
+		$settings->store();
+	}
+
+	/**
+	 * If we fail to create the database tables, add an inbox notice.
+	 * This informs the user that they need to correct the issue and try again.
+	 *
+	 * @since 6.19
+	 *
+	 * @return void
+	 */
+	private function check_that_tables_exist() {
+		// Check the DB that the table $this->forms exists.
+		global $wpdb;
+		$exists = $wpdb->get_results( $wpdb->prepare( 'SHOW TABLES LIKE %s', $this->forms ) );
+
+		if ( $exists ) {
+			$inbox = new FrmInbox();
+			$inbox->dismiss( 'failed-to-create-tables' );
+			return;
+		}
+
+		$message = array(
+			'key'     => 'failed-to-create-tables',
+			'subject' => 'Something went wrong setting up the database',
+			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.',
+			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">Learn More</a>',
+			'type'    => 'error',
+		);
+
+		$inbox = new FrmInbox();
+		$inbox->add_message( $message );
+	}
+
+	/**
+	 * @return string
+	 */
 	public function collation() {
 		global $wpdb;
 		if ( ! $wpdb->has_cap( 'collation' ) ) {
@@ -276,7 +325,7 @@ class FrmMigrate {
 			return;
 		}
 
-		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101 );
+		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104 );
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -344,6 +393,24 @@ class FrmMigrate {
 		do_action( 'frm_after_uninstall' );
 
 		return true;
+	}
+
+	/**
+	 * In older versions of Lite, it's possible we've saved the wrong location ID.
+	 * So force it to get valid values again.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	private function migrate_to_104() {
+		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'test' ) ) {
+			FrmSquareLiteConnectHelper::get_location_id( true, 'test' );
+		}
+
+		if ( FrmSquareLiteConnectHelper::get_merchant_id( 'live' ) ) {
+			FrmSquareLiteConnectHelper::get_location_id( true, 'live' );
+		}
 	}
 
 	/**
