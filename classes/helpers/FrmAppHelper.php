@@ -128,7 +128,7 @@ class FrmAppHelper {
 		}
 
 		if ( is_array( $args ) ) {
-			self::adjust_legacy_utm_args( $args );
+			$args = self::adjust_legacy_utm_args( $args );
 		} else {
 			$args = array( 'campaign' => $args );
 		}
