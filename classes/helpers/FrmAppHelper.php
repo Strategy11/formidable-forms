@@ -3727,20 +3727,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$expired = FrmAddonsController::is_license_expired();
-		?>
-		<div class="frm-banner-alert frm_error_style frm_previous_install">
-			<?php
-			esc_html_e( 'You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro.', 'formidable' );
-			if ( empty( $expired ) ) {
-				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
-			} else {
-				// TODO: This URL.
-				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version.';
-			}
-			?>
-		</div>
-		<?php
+		include self::plugin_path() . '/classes/views/addons/min-version-notice.php';
 	}
 
 	/**
