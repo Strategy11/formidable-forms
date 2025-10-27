@@ -171,8 +171,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function recaptcha_api_url( $frm_settings ) {
 		$api_js_url = 'https://www.google.com/recaptcha/api.js?';
 
-		$allow_multiple = $frm_settings->re_multi;
-		if ( $allow_multiple ) {
+		if ( $this->allow_multiple( $frm_settings ) ) {
 			$api_js_url .= '&onload=frmRecaptcha&render=explicit';
 		}
 
@@ -180,6 +179,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( $lang ) {
 			$api_js_url .= '&hl=' . $lang;
 		}
+
+		// Since this URL initially ends with ? and we never use add_query_arg, remove the extra
+		// & that appears immediately after the ?
+		$api_js_url = str_replace( '?&', '?', $api_js_url );
 
 		/**
 		 * @param string $api_js_url
@@ -254,17 +257,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @psalm-return ''|'frm-'
 	 */
 	protected function class_prefix( $frm_settings ) {
-		if ( $this->allow_multiple( $frm_settings ) && $frm_settings->active_captcha === 'recaptcha' ) {
-			$class_prefix = 'frm-';
-		} else {
-			$class_prefix = '';
-		}
-
-		return $class_prefix;
+		return FrmCaptchaFactory::get_settings_object()->get_class_prefix( $this->allow_multiple( $frm_settings ) );
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
+	 * @param FrmSettings $frm_settings This isn't used anymore. It's only there for backwards compatibility.
 	 *
 	 * @return string
 	 *

@@ -88,3 +88,12 @@ i.frm-show-inline-modal {
 		outline: 1px solid var(--primary-500);
 	}
 }
+
+.frm_form_settings {
+	.frmsvg.frm-show-box,
+	.frmsvg.frm-show-inline-modal,
+	i.frm-show-box,
+	i.frm-show-inline-modal {
+		margin: 4px 4px 0;
+	}
+}
