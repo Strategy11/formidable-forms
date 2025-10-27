@@ -1334,12 +1334,18 @@ class FrmAppController {
 			wp_set_script_translations( 's11-floating-links-config', 's11-' );
 		}
 
-		$utm = array(
+		$upgrade_utm = array(
 			'campaign' => 'floating-links',
+			'content'  => 'floating-links-upgrade',
+		);
+		$docs_utm = array(
+			'campaign' => 'floating-links',
+			'content'  => 'floating-links-docs',
 		);
 		$floating_links_data = array(
-			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
-			'upgradeUrl'     => FrmAppHelper::admin_upgrade_link( $utm ),
+			'proIsInstalled'   => FrmAppHelper::pro_is_installed(),
+			'upgradeUrl'       => FrmAppHelper::admin_upgrade_link( $upgrade_utm ),
+			'documentationUrl' => FrmAppHelper::admin_upgrade_link( $docs_utm, 'knowledgebase/' ),
 		);
 		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
 

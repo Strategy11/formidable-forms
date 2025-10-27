@@ -66,7 +66,7 @@
 		{
 			title: __( 'Documentation', 'formidable' ),
 			icon: frmFloatingLinksConfig.documentationIcon,
-			url: 'https://formidableforms.com/knowledgebase/',
+			url: s11FloatingLinksData.documentationUrl,
 			openInNewTab: true
 		}
 	];
@@ -78,7 +78,7 @@
 		{
 			title: __( 'Support & Docs', 'formidable' ),
 			icon: frmFloatingLinksConfig.supportIcon,
-			url: 'https://formidableforms.com/knowledgebase/',
+			url: s11FloatingLinksData.documentationUrl,
 			openInNewTab: true
 		}
 	];
