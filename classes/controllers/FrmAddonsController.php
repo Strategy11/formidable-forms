@@ -839,12 +839,11 @@ class FrmAddonsController {
 			$link = $site_url . $link;
 		}
 		$link       = FrmAppHelper::make_affiliate_url( $link );
-		$query_args = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => 'addons',
-			'utm_campaign' => 'liteplugin',
+
+		$utm  = array(
+			'campaign' => 'addons',
 		);
-		$link       = add_query_arg( $query_args, $link );
+		$link = FrmAppHelper::maybe_add_missing_utm( $link, $utm );
 	}
 
 	/**
