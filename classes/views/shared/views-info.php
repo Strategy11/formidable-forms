@@ -20,15 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 		<?php
 		$upgrade_link_args = array(
-			'medium' => 'views-info',
-			'plan'   => 'view',
-			'class'  => 'frm-mb-md frm-button-primary frm-gradient',
-			'text'   => __( 'Get Formidable Views', 'formidable' ),
+			'campaign' => 'views-info',
+			'content'  => 'get-views-button',
+			'plan'     => 'view',
+			'class'    => 'frm-mb-md frm-button-primary frm-gradient',
+			'text'     => __( 'Get Formidable Views', 'formidable' ),
 		);
 		FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
-		?>
 
-		<a href="https://formidableforms.com/demos/" class="frm-mb-md frm-ml-xs frm-button-secondary"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
+		$demo_link_args = array(
+			'campaign' => 'views-info',
+			'content'  => 'view-demos-button',
+		);
+		?>
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $demo_link_args, 'demos/' ) ); ?>" class="frm-mb-md frm-ml-xs frm-button-secondary"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
 
 		<div class="frm-views-features frm_grid_container">
 			<div class="frm4">
