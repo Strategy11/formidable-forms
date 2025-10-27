@@ -302,7 +302,7 @@ class FrmFormsController {
 		FrmForm::update( $id, $values );
 		$message = __( 'Form was successfully updated.', 'formidable' );
 
-		if ( true ) {//self::is_too_long( $values ) ) {
+		if ( self::is_too_long( $values ) ) {
 			$message .= '<br/> ' . sprintf(
 				/* translators: %1$s: Start link HTML, %2$s: end link HTML */
 				__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
