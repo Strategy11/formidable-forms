@@ -1334,8 +1334,12 @@ class FrmAppController {
 			wp_set_script_translations( 's11-floating-links-config', 's11-' );
 		}
 
+		$utm = array(
+			'campaign' => 'floating-links',
+		);
 		$floating_links_data = array(
 			'proIsInstalled' => FrmAppHelper::pro_is_installed(),
+			'upgradeUrl'     => FrmAppHelper::admin_upgrade_link( $utm ),
 		);
 		wp_localize_script( 's11-floating-links-config', 's11FloatingLinksData', $floating_links_data );
 
