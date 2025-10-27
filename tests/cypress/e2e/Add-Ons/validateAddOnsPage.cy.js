@@ -172,7 +172,7 @@ describe( 'Add-Ons page', () => {
 
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20signature' )
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=signature' )
 					.and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
@@ -186,7 +186,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_paypal_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20paypal-standard' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=paypal-standard' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
