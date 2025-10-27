@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'content'  => 'min-pro-version-notice',
 		);
 		?>
-		Please <a href="<?php echo FrmAppHelper::admin_upgrade_link( $utm, 'account/downloads/' ); ?>">renew now</a> to get the latest version.
+		Please <a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $utm, 'account/downloads/' ) ); ?>">renew now</a> to get the latest version.
 	<?php else : ?>
 		Please <a href="<?php echo esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ); ?>">update now</a>.
 	<?php endif; ?>

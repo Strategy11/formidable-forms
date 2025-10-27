@@ -1334,11 +1334,11 @@ class FrmAppController {
 			wp_set_script_translations( 's11-floating-links-config', 's11-' );
 		}
 
-		$upgrade_utm = array(
+		$upgrade_utm         = array(
 			'campaign' => 'floating-links',
 			'content'  => 'floating-links-upgrade',
 		);
-		$docs_utm = array(
+		$docs_utm            = array(
 			'campaign' => 'floating-links',
 			'content'  => 'floating-links-docs',
 		);
