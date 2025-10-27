@@ -376,7 +376,7 @@ class FrmAppController {
 	 */
 	public static function pro_get_started_headline() {
 		self::review_request();
-		FrmAppHelper::min_pro_version_notice( '6.0' );
+		FrmAppHelper::min_pro_version_notice( '6.20' );
 	}
 
 	/**
