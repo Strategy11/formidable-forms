@@ -104,12 +104,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div><!--- End .frm-views-features -->
 
+		<?php
+		$learn_more_utm = array(
+			'campaign' => 'views-info',
+			'content'  => 'views-info-learn-more',
+		);
+		?>
+
 		<div class="frm_grid_container">
 			<div class="frm6">
 				<div class="frm-views-learn-more">
 					<h3><?php esc_html_e( 'Learn more', 'formidable' ); ?></h3>
 					<p style="margin-bottom: var(--gap-md);"><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
-					<a href="https://formidableforms.com/features/display-form-data-views/" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $learn_more_utm, 'features/display-form-data-views/' ) ); ?>" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
 				</div>
 			</div>
 			<div class="frm6">
