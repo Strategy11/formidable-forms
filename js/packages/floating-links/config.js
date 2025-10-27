@@ -54,7 +54,6 @@
 		{
 			title: __( 'Upgrade', 'formidable' ),
 			icon: frmFloatingLinksConfig.upgradeIcon,
-			// TODO: This URL.
 			url: s11FloatingLinksData.upgradeUrl,
 			openInNewTab: true
 		},
