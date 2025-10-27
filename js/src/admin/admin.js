@@ -3047,7 +3047,6 @@ window.frmAdminBuildJS = function() {
 		list = document.getElementById( 'frm-calc-list-' + fieldId );
 		list.innerHTML = '';
 
-		const supportsShowShortcodes = document.getElementById( 'new_fields' ).dataset.supportsShowShortcodes;
 		for ( i = 0; i < fields.length; i++ ) {
 			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
 				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
@@ -3055,12 +3054,10 @@ window.frmAdminBuildJS = function() {
 			}
 
 			addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId, fields[ i ].fieldName, fields[ i ].fieldType );
-			if ( supportsShowShortcodes ) { // If the required Pro updates are there to support "show" shortcodes.
-				if ( shouldShowFieldLabelShortcode( fields[ i ].fieldType, fields[ i ].fieldId ) ) {
-					addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
-				}
-				maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
+			if ( shouldShowFieldLabelShortcode( fields[ i ].fieldType, fields[ i ].fieldId ) ) {
+				addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
 			}
+			maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
 		}
 	}
 
