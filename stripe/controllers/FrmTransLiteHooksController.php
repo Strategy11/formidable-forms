@@ -13,9 +13,6 @@ class FrmTransLiteHooksController {
 
 		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
-
-
-
 			return;
 		}
 

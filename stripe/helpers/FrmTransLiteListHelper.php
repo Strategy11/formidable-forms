@@ -578,4 +578,16 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_mode_column( $item ) {
 		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
 	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $active_tab
+	 * @return void
+	 */
+	public static function render_tabs( $active_tab = 'payments' ) {
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
+		}
+	}
 }

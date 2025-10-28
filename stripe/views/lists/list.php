@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'publish' => ! $should_show_add_new_button ? true : array(
 				'FrmAppHelper::add_new_item_link',
 				array(
-					'new_link' => admin_url( 'admin.php?page=formidable-payments&amp;action=new' ),
+					'new_link' => admin_url( 'admin.php?page=formidable-payments&action=new' ),
 				),
 			),
 		)
@@ -22,21 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<div class="wrap">
-		<?php if ( FrmAppHelper::show_new_feature( 'coupons' ) ) : ?>
-			<div class="frm-payments-tabs">
-				<div class="frm-payments-tab-filler"></div>	
-				<div class="frm-payments-tab frm-active">
-					<?php echo esc_html__( 'Payments', 'formidable' ); ?>
-				</div>
-				<div class="frm-payments-tab-filler"></div>	
-				<div class="frm-payments-tab">
-					<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-payments&action=coupons' ) ); ?>"><?php echo esc_html__( 'Coupons', 'formidable' ); ?></a>
-				</div>
-				<div class="frm-payments-tab-filler"></div>
-			</div>
-		<?php endif; ?>
-
 		<?php
+		FrmTransLiteListHelper::render_tabs();
 		$wp_list_table->views();
 		?>
 
