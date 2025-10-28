@@ -249,9 +249,9 @@ describe( 'Fields in the form builder', () => {
 		cy.go( 'back' );
 	} );
 
-	// afterEach( () => {
-	// 	cy.log( 'Teardown - Save the form and delete it' );
-	// 	cy.get( "a[aria-label='Close']", { timeout: 10000 } ).click( { force: true } );
-	// 	cy.deleteForm();
+	afterEach( () => {
+		cy.log( 'Teardown - Save the form and delete it' );
+		cy.get( "a[aria-label='Close']", { timeout: 10000 } ).click( { force: true } );
+		cy.deleteForm();
 	} );
-
+} );
