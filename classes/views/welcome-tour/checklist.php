@@ -26,8 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 
 	<?php if ( ! $is_tour_completed ) { ?>
-		<div class="frm-checklist__dismiss frm-shrink-0 frm-flex-center frm-mt-auto">
+		<button type="button" class="frm-checklist__dismiss frm-btn-unstyled frm-shrink-0 frm-flex-center frm-mt-auto">
 			<span class="frm-text-grey-400"><?php esc_html_e( 'Dismiss Checklist', 'formidable' ); ?></span>
-		</div>
+		</button>
 	<?php } ?>
 </div>
