@@ -67,7 +67,7 @@ describe( 'Applications page', () => {
 				cy.get( '.frm_modal_footer a.button-secondary' )
 					.should( 'contain.text', 'Learn More' )
 					.and( 'have.attr', 'href' )
-					.and( 'include', 'https://formidableforms.com/view-templates/business-directory-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade' );
+					.and( 'include', 'https://formidableforms.com/view-templates/business-directory-template?utm_source=plugin&utm_medium=lite&utm_campaign=applications&utm_content=upgrade' );
 				cy.get( '.frm_modal_footer a.button-primary' )
 					.should( 'contain.text', 'Upgrade Now' )
 					.invoke( 'removeAttr', 'target' )
@@ -195,7 +195,7 @@ describe( 'Applications page', () => {
 				cy.get( '.frm_modal_footer a.button-secondary' )
 					.should( 'contain.text', 'Learn More' )
 					.and( 'have.attr', 'href' )
-					.and( 'include', 'https://formidableforms.com/view-templates/letter-of-recommendation-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade' );
+					.and( 'include', 'https://formidableforms.com/view-templates/letter-of-recommendation-template?utm_source=plugin&utm_medium=lite&utm_campaign=applications&utm_content=upgrade' );
 				cy.get( '.frm_modal_footer a.button-primary' )
 					.should( 'contain.text', 'Upgrade Now' )
 					.invoke( 'removeAttr', 'target' )
@@ -311,7 +311,7 @@ describe( 'Applications page', () => {
 				cy.get( '.frm_modal_footer a.button-secondary' )
 					.should( 'contain.text', 'Learn More' )
 					.and( 'have.attr', 'href' )
-					.and( 'include', 'https://formidableforms.com/view-templates/testimonials-template?utm_source=WordPress&utm_medium=applications&utm_campaign=liteplugin&utm_content=upgrade' );
+					.and( 'include', 'https://formidableforms.com/view-templates/testimonials-template?utm_source=plugin&utm_medium=lite&utm_campaign=applications&utm_content=upgrade' );
 				cy.get( '.frm_modal_footer a.button-primary' )
 					.should( 'contain.text', 'Upgrade Now' )
 					.invoke( 'removeAttr', 'target' )
