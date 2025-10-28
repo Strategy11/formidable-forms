@@ -96,6 +96,7 @@ class FrmUsage {
 			'actions'           => $this->actions(),
 
 			'onboarding-wizard' => $this->onboarding_wizard(),
+			'welcome-tour'      => FrmWelcomeTourController::get_usage_data(),
 			'flows'             => FrmUsageController::get_flows_data(),
 			'payments'          => $this->payments(),
 			'subscriptions'     => $this->payments( 'frm_subscriptions' ),

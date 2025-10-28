@@ -154,10 +154,6 @@ class FrmWelcomeTourController {
 		if ( $active_step === count( $step_keys ) ) {
 			self::$checklist['done']            = true;
 			self::$checklist['active_step_key'] = 'completed';
-
-			foreach ( self::$checklist['completed_steps'] as $step_key => $completed ) {
-				FrmUsageController::update_flows_data( 'welcome_tour_completed_steps', $step_key );
-			}
 		} else {
 			self::$checklist['active_step_key'] = $step_keys[ $active_step ];
 		}
@@ -380,8 +376,6 @@ class FrmWelcomeTourController {
 		self::$checklist['dismissed'] = true;
 		self::save_checklist();
 
-		FrmUsageController::update_flows_data( 'welcome_tour_dismissed_step', self::$checklist['active_step_key'] );
-
 		wp_send_json_success();
 	}
 
@@ -584,5 +578,33 @@ class FrmWelcomeTourController {
 	 */
 	private static function is_tour_completed() {
 		return ! empty( self::$checklist['done'] );
+	}
+
+	/**
+	 * Gets usage tracking data.
+	 *
+	 * @return array
+	 */
+	public static function get_usage_data() {
+		// Do not use the get_checklist() method to prevent adding default value.
+		$option = get_option( self::CHECKLIST_OPTION );
+		if ( ! $option ) {
+			// Welcome tour doesn't show on this site.
+			return array();
+		}
+
+		$usage_data = array();
+		$steps      = self::get_steps();
+
+		foreach ( $steps as $key => $step ) {
+			$usage_data['completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
+		}
+
+		$usage_data['done'] = empty( $option['done'] ) ? 0 : 1;
+
+		// If dismissed, the dismissed step is the active step.
+		$usage_data['dismissed'] = empty( $option['dismissed'] ) ? 0 : $option['active_step_key'];
+
+		return $usage_data;
 	}
 }
