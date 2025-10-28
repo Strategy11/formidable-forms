@@ -108,6 +108,13 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function route( $action ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param string $action
+		 */
+		do_action( 'frm_trans_lite_lists_route', $action );
+
 		self::display_list();
 	}
 
