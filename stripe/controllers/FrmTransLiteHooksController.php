@@ -13,6 +13,9 @@ class FrmTransLiteHooksController {
 
 		// Exit early, let the Payments submodule handle everything.
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
+
+
+
 			return;
 		}
 
@@ -46,7 +49,12 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
-			// Exit early, let the Payments submodule handle everything.
+			if ( 'edit' !== FrmAppHelper::simple_get( 'action' ) ) {
+				remove_action( 'admin_menu', 'FrmTransPaymentsController::menu', 25 );
+				add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
+			}
+
+			// Exit early, let the Payments submodule handle everything else.
 			return;
 		}
 
