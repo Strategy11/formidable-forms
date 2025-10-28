@@ -30,7 +30,7 @@ describe( 'Fields in the form builder', () => {
 				cy.get( '.frm-dropdown-menu .frm_delete_field' )
 					.should( 'contain', 'Delete' )
 					.click( { force: true } );
-			});
+			} );
 
 			cy.get( '.postbox a[id="frm-confirmed-click"]' )
 				.contains( 'Confirm' )
@@ -38,7 +38,7 @@ describe( 'Fields in the form builder', () => {
 				.click( { force: true } );
 
 			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
-};
+		};
 
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
 			cy.wrap( $row ).within( () => {
