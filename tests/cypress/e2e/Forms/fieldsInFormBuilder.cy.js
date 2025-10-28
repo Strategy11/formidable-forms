@@ -19,27 +19,26 @@ describe( 'Fields in the form builder', () => {
 			return { originalField, duplicateField };
 		};
 
-		const removeField = ( field ) => {
-		field.within( () => {
-			cy.get( '.frm-field-action-icons .dropdown' )
-			.trigger( 'mouseover' );
+		const removeField = field => {
+			field.within( () => {
+				cy.get( '.frm-field-action-icons .dropdown' )
+					.trigger( 'mouseover' );
 
-			cy.get( '.frm-field-action-icons .dropdown .frm-hover-icon .frmsvg' )
-			.click( { force: true } );
+				cy.get( '.frm-field-action-icons .dropdown .frm-hover-icon .frmsvg' )
+					.click( { force: true } );
 
-			cy.get( '.frm-dropdown-menu .frm_delete_field' )
-			.should( 'contain', 'Delete' )
-			.click( { force: true } );
-		} );
+				cy.get( '.frm-dropdown-menu .frm_delete_field' )
+					.should( 'contain', 'Delete' )
+					.click( { force: true } );
+			});
 
-		cy.get( '.postbox a[id="frm-confirmed-click"]' )
-			.contains( 'Confirm' )
-			.should( 'be.visible' )
-			.click( { force: true } );
+			cy.get( '.postbox a[id="frm-confirmed-click"]' )
+				.contains( 'Confirm' )
+				.should( 'be.visible' )
+				.click( { force: true } );
 
-		cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
-		};
-
+			cy.get( `li[data-type="${ field }"]` ).should( 'not.exist' );
+};
 
 		cy.contains( '#the-list tr', 'Test Form' ).trigger( 'mouseover' ).then( $row => {
 			cy.wrap( $row ).within( () => {
