@@ -108,17 +108,12 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function route( $action ) {
-		/**
-		 * @since x.x
-		 *
-		 * @param bool   $route_handled
-		 * @param string $action
-		 */
-		$route_handled = apply_filters( 'frm_trans_lite_lists_route', false, $action );
-
-		if ( ! $route_handled ) {
-			self::display_list();
+		if ( 'coupons' === $action ) {
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/coupons.php';
+			return;
 		}
+
+		self::display_list();
 	}
 
 	/**
