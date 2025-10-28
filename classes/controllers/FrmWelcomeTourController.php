@@ -597,7 +597,7 @@ class FrmWelcomeTourController {
 		$steps      = self::get_steps();
 
 		foreach ( $steps as $key => $step ) {
-			$usage_data['completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
+			$usage_data[ 'completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
 		}
 
 		$usage_data['done'] = empty( $option['done'] ) ? 0 : 1;
