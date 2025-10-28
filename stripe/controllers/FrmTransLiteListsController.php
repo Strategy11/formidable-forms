@@ -111,11 +111,14 @@ class FrmTransLiteListsController {
 		/**
 		 * @since x.x
 		 *
+		 * @param bool   $route_handled
 		 * @param string $action
 		 */
-		do_action( 'frm_trans_lite_lists_route', $action );
+		$route_handled = apply_filters( 'frm_trans_lite_lists_route', false, $action );
 
-		self::display_list();
+		if ( ! $route_handled ) {
+			self::display_list();
+		}
 	}
 
 	/**
