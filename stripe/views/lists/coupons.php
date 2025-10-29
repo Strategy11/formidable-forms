@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	FrmAppHelper::get_admin_header(
 		array(
-			'label'   => __( 'Coupons', 'formidable' ),
+			'label'   => __( 'Payments', 'formidable' ),
 			'form'    => FrmAppHelper::simple_get( 'form', 'absint', 0 ),
 			'publish' => $publish,
 		)
