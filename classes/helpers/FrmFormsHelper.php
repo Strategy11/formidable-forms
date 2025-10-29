@@ -649,7 +649,11 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo esc_html( $truncated_name );
+				// echo esc_html( $truncated_name );
+				printf(
+					'<span>%s</span>',
+					esc_html( $truncated_name )
+				);
 				?>
 				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>

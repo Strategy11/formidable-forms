@@ -45,6 +45,14 @@
 	margin-left: auto;
 }
 
+.frm_form_settings, #frm_edit_box_content_modal {
+	& .frm_code_list.frm-full-hover a span:first-of-type {
+		max-width: 170px;
+		margin-left: 0;
+		margin-right: auto;
+	}
+}
+
 .frm_code_list.frm-full-hover a {
 	border-radius: var(--small-radius);
 
