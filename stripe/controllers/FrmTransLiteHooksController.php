@@ -46,7 +46,9 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
-			// Exit early, let the Payments submodule handle everything.
+			self::maybe_set_admin_menu();
+
+			// Exit early, let the Payments submodule handle everything else.
 			return;
 		}
 
@@ -65,6 +67,21 @@ class FrmTransLiteHooksController {
 		if ( defined( 'DOING_AJAX' ) ) {
 			self::load_ajax_hooks();
 		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function maybe_set_admin_menu() {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) ) {
+			// We're still falling back to the Stripe, Authorize.Net, or PayPal add-on to handle these routes.
+			return;
+		}
+
+		remove_action( 'admin_menu', 'FrmTransPaymentsController::menu', 25 );
+		add_action( 'admin_menu', 'FrmTransLitePaymentsController::menu', 25 );
 	}
 
 	private static function load_ajax_hooks() {

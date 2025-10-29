@@ -239,6 +239,15 @@ class FrmField {
 			),
 		);
 
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			$fields['coupon'] = array(
+				'name'    => __( 'Coupon', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_total2_icon frm_show_upgrade',
+				'addon'   => 'coupons',
+				'section' => 'pricing',
+			);
+		}
+
 		if ( self::include_ranking_fields() ) {
 			$fields['ranking'] = array(
 				'name'         => __( 'Ranking', 'formidable' ),

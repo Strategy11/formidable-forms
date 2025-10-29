@@ -347,28 +347,46 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_action_column( $item, $field ) {
-		$link = add_query_arg(
-			array(
-				'action' => 'show',
-				'id'     => $item->id,
-				'type'   => $this->table,
-				'page'   => FrmAppHelper::simple_get( 'page' ),
-			),
-			admin_url( 'admin.php' )
-		);
+		$link = $this->get_view_payment_link( $item, $field );
+		return '<strong>' . $link . '</strong><br />' . $this->row_actions( $this->get_row_actions( $item ) );
+	}
 
+	private function get_edit_payment_link( $item ) {
+		return '';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param object $item
+	 * @param string $field
+	 * @return string
+	 */
+	private function get_view_payment_link( $item, $field ) {
 		$link_params = array(
 			'class' => 'rot-title',
-			'href'  => esc_url( $link ),
+			'href'  => esc_url( $this->get_url_to_payment( $item->id, 'show' ) ),
 			'title' => __( 'View', 'formidable' ),
 		);
-		$link        = '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>'
-			. $item->{$field}
-			. '</a>';
+		return '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>' . esc_html( $item->{ $field } ) . '</a>';
+	}
 
-		return '<strong>' . $link . '</strong>'
-			. '<br />'
-			. $this->row_actions( $this->get_row_actions( $item ) );
+	/**
+	 * @param int|string $payment_id
+	 * @param string     $action Supports 'show' and 'edit'.
+	 *
+	 * @return string
+	 */
+	private function get_url_to_payment( $payment_id, $action = 'show' ) {
+		return add_query_arg(
+				array(
+					'action' => $action,
+					'id'     => $payment_id,
+					'type'   => $this->table,
+					'page'   => FrmAppHelper::simple_get( 'page' ),
+				),
+				admin_url( 'admin.php' )
+			);
 	}
 
 	/**
@@ -383,7 +401,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions         = array();
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
-		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
+		if ( $this->supports_edit_link() ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
 		}
@@ -391,6 +409,19 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>';
 
 		return $actions;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function supports_edit_link() {
+		if ( $this->table === 'subscriptions' ) {
+			return false;
+		}
+
+		return class_exists( 'FrmTransAppController', false ) || class_exists( 'FrmPaymentsController', false );
 	}
 
 	/**
@@ -546,5 +577,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_mode_column( $item ) {
 		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $active_tab
+	 * @return void
+	 */
+	public static function render_tabs( $active_tab = 'payments' ) {
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
+		}
 	}
 }
