@@ -649,7 +649,6 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				// echo esc_html( $truncated_name );
 				printf(
 					'<span>%s</span>',
 					esc_html( $truncated_name )
@@ -660,7 +659,10 @@ BEFORE_HTML;
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
 				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				echo esc_html( $truncated_name );
+				printf(
+					'<span>%s</span>',
+					esc_html( $truncated_name )
+				);
 				?>
 				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
 			</a>
