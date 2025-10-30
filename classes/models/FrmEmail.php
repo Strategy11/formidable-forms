@@ -882,6 +882,7 @@ class FrmEmail {
 			'message'     => $this->message,
 			'attachments' => $this->attachments,
 			'plain_text'  => $this->is_plain_text,
+			'email_key'   => $this->email_key,
 			'form'        => $this->form,
 			'entry'       => $this->entry,
 			'email_style' => $this->settings['email_style'],
