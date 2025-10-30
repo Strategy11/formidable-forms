@@ -116,8 +116,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( 'recurring' === $action->post_content['type'] ) {
 			$charge = self::trigger_recurring_payment( $payment_args );
 		} else {
-			$charge                   = self::trigger_one_time_payment( $payment_args );
-			$response['run_triggers'] = true;
+			$charge = self::trigger_one_time_payment( $payment_args );
 		}
 
 		if ( $charge === true ) {
