@@ -457,6 +457,34 @@ window.frmAdminBuildJS = function() {
 		return 'INPUT' === element.nodeName && 'checkbox' === element.type && ! element.checked;
 	}
 
+	/**
+	 * Load a tooltip for a single element.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @param {boolean} show
+	 */
+	function loadTooltip( element, show = false ) {
+		let tooltipTarget = element;
+
+		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
+		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
+			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
+			tooltipTarget.removeAttribute( 'title' );
+			tooltipTarget.classList.remove( 'frm_bstooltip' );
+			tooltipTarget.parentElement.classList.add( 'frm_bstooltip' );
+			tooltipTarget = tooltipTarget.parentElement;
+		}
+
+		jQuery( tooltipTarget ).tooltip();
+
+		if ( show ) {
+			deleteTooltips();
+			jQuery( tooltipTarget ).tooltip( 'show' );
+		}
+	}
+
 	function loadTooltips() {
 		let wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' ),
@@ -476,12 +504,8 @@ window.frmAdminBuildJS = function() {
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
-
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
-			jQuery( this ).tooltip( 'show' );
+			loadTooltip( this, true );
 		} );
-
-		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
 		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
 			const isTop = this.id === 'doaction',
@@ -1388,8 +1412,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addTooltip( element, title ) {
-		element.setAttribute( 'data-toggle', 'tooltip' );
-		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'data-bs-toggle', 'tooltip' );
+		element.setAttribute( 'data-bs-container', 'body' );
 		element.setAttribute( 'title', title );
 		element.addEventListener(
 			'mouseover',
@@ -1420,8 +1444,9 @@ window.frmAdminBuildJS = function() {
 			trigger,
 			{
 				title: __( 'More Options', 'formidable' ),
-				'data-toggle': 'dropdown',
-				'data-container': 'body'
+				'data-bs-toggle': 'dropdown',
+				'data-bs-container': 'body',
+				'data-bs-display': 'static'
 			}
 		);
 		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
@@ -2546,15 +2571,19 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		maybeRemoveGroupHoverTarget();
+		deleteTooltips();
 	}
 
 	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
+
 		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
 			function() {
 				let ul, $ul;
-				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
+
+				ul = document.querySelector( '.dropdown .frm-dropdown-menu.show' );
+
 				if ( null === ul ) {
 					return;
 				}
@@ -2761,6 +2790,10 @@ window.frmAdminBuildJS = function() {
 		initiateMultiselect();
 
 		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle, and requires that elements have the dropdown-menu class.
+		field.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		field.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 
 		const addedEvent = new Event( 'frm_added_field', { bubbles: false } );
 		addedEvent.frmField = field;
@@ -10146,6 +10179,11 @@ window.frmAdminBuildJS = function() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
 
+			document.addEventListener( 'show.bs.dropdown', function() {
+				// Fixes issues with tooltips lingering after a dropdown is shown.
+				deleteTooltips();
+			} );
+
 			s = {};
 
 			// Bootstrap dropdown button
@@ -11082,10 +11120,15 @@ jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
 
-		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
-		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-toggle', 'dropdown' );
+		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
+		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
-		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle.
+		document.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+
+		function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {
