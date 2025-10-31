@@ -120,7 +120,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
 						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>
 						class="<?php echo esc_attr( $no_allow ); ?>"
-						<?php echo 'data-upgrade="' . esc_attr( ! $pro_is_installed ? __( 'Unique fields', 'formidable' ) : '' ) . '"'; ?>
+						<?php echo 'data-upgrade="' . esc_attr( ! $pro_is_installed ? __( 'Read only fields', 'formidable' ) : '' ) . '"'; ?>
 						/>
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
