@@ -306,6 +306,48 @@ class FrmWelcomeTourController {
 	}
 
 	/**
+	 * Shows links after completing the Welcome tour.
+	 *
+	 * @param int $current_form_id Current form ID.
+	 */
+	public static function show_completed_links( $current_form_id ) {
+		$links = array(
+			'setup-email-notification'  => array(
+				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+				'text' => __( 'Setup email notifications', 'formidable' ),
+			),
+			'customize-success-message' => array(
+				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+				'text' => __( 'Customize success message', 'formidable' ),
+			),
+			'manage-entries'            => array(
+				'url'  => admin_url( 'admin.php?page=formidable-entries' ),
+				'text' => __( 'Manage form entries', 'formidable' ),
+			),
+			'explore-addon'             => array(
+				'url'  => admin_url( 'admin.php?page=formidable-addons' ),
+				'text' => __( 'Explore integrations', 'formidable' ),
+			),
+		);
+
+		$button_attrs = array(
+			'class'             => 'frm-usage-tracking-flow-click button frm-button-secondary frm-button-sm frm-mb-2xs',
+			'target'            => '_blank',
+			'rel'               => 'noopener',
+			'data-tracking-key' => 'welcome_tour_completed_link_click',
+		);
+
+		foreach ( $links as $key => $link ) {
+			$attrs = $button_attrs + array( 'data-tracking-value' => $key );
+			?>
+			<a href="<?php echo esc_url( $link['url'] ); ?>" <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
+				<?php echo esc_html( $link['text'] ); ?>
+			</a>
+			<?php
+		}
+	}
+
+	/**
 	 * Checks if the checklist should be shown.
 	 *
 	 * @since x.x
@@ -606,47 +648,5 @@ class FrmWelcomeTourController {
 		$usage_data['dismissed'] = empty( $option['dismissed'] ) ? 0 : $option['active_step_key'];
 
 		return $usage_data;
-	}
-
-	/**
-	 * Shows links after completing the Welcome tour.
-	 *
-	 * @param int $current_form_id Current form ID.
-	 */
-	public static function show_completed_links( $current_form_id ) {
-		$links = array(
-			'setup-email-notification'  => array(
-				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-				'text' => __( 'Setup email notifications', 'formidable' ),
-			),
-			'customize-success-message' => array(
-				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
-				'text' => __( 'Customize success message', 'formidable' ),
-			),
-			'manage-entries'            => array(
-				'url'  => admin_url( 'admin.php?page=formidable-entries' ),
-				'text' => __( 'Manage form entries', 'formidable' ),
-			),
-			'explore-addon'             => array(
-				'url'  => admin_url( 'admin.php?page=formidable-addons' ),
-				'text' => __( 'Explore integrations', 'formidable' ),
-			),
-		);
-
-		$button_attrs = array(
-			'class'             => 'frm-usage-tracking-flow-click button frm-button-secondary frm-button-sm frm-mb-2xs',
-			'target'            => '_blank',
-			'rel'               => 'noopener',
-			'data-tracking-key' => 'welcome_tour_completed_link_click',
-		);
-
-		foreach ( $links as $key => $link ) {
-			$attrs = $button_attrs + array( 'data-tracking-value' => $key );
-			?>
-			<a href="<?php echo esc_url( $link['url'] ); ?>" <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
-				<?php echo esc_html( $link['text'] ); ?>
-			</a>
-			<?php
-		}
 	}
 }
