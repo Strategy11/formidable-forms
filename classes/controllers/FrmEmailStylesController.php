@@ -387,7 +387,7 @@ class FrmEmailStylesController {
 			);
 
 			$header_img .= sprintf(
-				'<img src="%s" alt="" />',
+				'<img src="%s" alt="" style="max-width:100%%;height:auto;" />',
 				esc_url( $img_url )
 			);
 
