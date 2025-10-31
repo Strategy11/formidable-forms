@@ -334,8 +334,33 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		?>
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			?>
+		<p class="frm_form_field frm6">
+			<label class="frm-h-stack-xs frm_show_upgrade" for="prepend_<?php echo absint( $field['id'] ); ?>">
+				<span><?php esc_html_e( 'Before Input', 'formidable' ); ?></span>
+				<?php
+				FrmAppHelper::tooltip_icon(
+					__( 'A value entered here will show directly before the input box in the form.', 'formidable' ),
+					array(
+						'data-placement' => 'right',
+						'class'          => 'frm-flex',
+					)
+				);
+				?>
+			</label>
 
+			<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['prepend'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+		</p>
+
+		<p class="frm_form_field frm6">
+			<label for="append_<?php echo absint( $field['id'] ); ?>" class="frm_show_upgrade">
+				<?php esc_html_e( 'After Input', 'formidable' ); ?>
+			</label>
+
+			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['append'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+		</p>
+		<?php } ?>
 		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
