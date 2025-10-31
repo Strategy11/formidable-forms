@@ -362,6 +362,8 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+		$no_allow = ! $pro_is_installed ? 'frm_noallow' : '';
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 

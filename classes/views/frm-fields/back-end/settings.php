@@ -102,22 +102,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['unique'] ) {
+			if ( $display['unique'] || ! $pro_is_installed ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
+						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique <?php echo esc_attr( $no_allow ); ?>"
+						<?php echo 'data-upgrade="' . esc_attr( $pro_is_installed ? '' : __( 'Unique fields', 'formidable' ) ) . '"'; ?>/>
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
 				<?php
 			}
 
-			if ( $display['read_only'] ) {
+			if ( $display['read_only'] || ! $pro_is_installed ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
+					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
+						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>
+						class="<?php echo esc_attr( $no_allow ); ?>"
+						<?php echo 'data-upgrade="' . esc_attr( $pro_is_installed ? '' : __( 'Read only fields', 'formidable' ) ) . '"'; ?>
+						/>
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
@@ -330,8 +334,33 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		?>
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			?>
+		<p class="frm_form_field frm6">
+			<label class="frm-h-stack-xs frm_show_upgrade" for="prepend_<?php echo absint( $field['id'] ); ?>">
+				<span><?php esc_html_e( 'Before Input', 'formidable' ); ?></span>
+				<?php
+				FrmAppHelper::tooltip_icon(
+					__( 'A value entered here will show directly before the input box in the form.', 'formidable' ),
+					array(
+						'data-placement' => 'right',
+						'class'          => 'frm-flex',
+					)
+				);
+				?>
+			</label>
 
+			<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['prepend'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+		</p>
+
+		<p class="frm_form_field frm6">
+			<label for="append_<?php echo absint( $field['id'] ); ?>" class="frm_show_upgrade">
+				<?php esc_html_e( 'After Input', 'formidable' ); ?>
+			</label>
+
+			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['append'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+		</p>
+		<?php } ?>
 		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
