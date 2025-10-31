@@ -608,6 +608,11 @@ class FrmWelcomeTourController {
 		return $usage_data;
 	}
 
+	/**
+	 * Shows links after completing the Welcome tour.
+	 *
+	 * @param int $current_form_id Current form ID.
+	 */
 	public static function show_completed_links( $current_form_id ) {
 		$links = array(
 			'setup-email-notification'  => array(
