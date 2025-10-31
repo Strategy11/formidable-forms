@@ -6,6 +6,9 @@
 	padding: 0 var(--gap-sm);
 	color: var(--grey-900);
 	overflow: hidden;
+	.frm_show_upgrade {
+		opacity: .5;
+	}
 }
 
 .frm-right-panel a.frm_add_logic_link,
