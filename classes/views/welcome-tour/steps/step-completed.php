@@ -23,7 +23,7 @@ $button_attrs_html = FrmAppHelper::array_to_html_params(
 
 	<p class="frm-mt-sm"><?php esc_html_e( 'What\'s next for you?', 'formidable' ); ?></p>
 
-    <?php FrmWelcomeTourController::show_completed_links( $current_form_id ); ?>
+	<?php FrmWelcomeTourController::show_completed_links( $current_form_id ); ?>
 
 	<p class="frm-self-normal frm-bg-grey-50 frm-p-xs frm-rounded-sm frm-mt-auto">
 		<?php

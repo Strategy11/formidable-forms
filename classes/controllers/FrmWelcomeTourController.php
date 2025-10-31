@@ -632,7 +632,7 @@ class FrmWelcomeTourController {
 			'class'             => 'frm-usage-tracking-flow-click button frm-button-secondary frm-button-sm frm-mb-2xs',
 			'target'            => '_blank',
 			'rel'               => 'noopener',
-            'data-tracking-key' => 'welcome_tour_completed_link_click',
+			'data-tracking-key' => 'welcome_tour_completed_link_click',
 		);
 
 		foreach ( $links as $key => $link ) {
