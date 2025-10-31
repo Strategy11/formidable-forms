@@ -61,8 +61,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Initializes the Welcome Tour.
 	 *
-	 * @since x.x
-	 *
 	 * @return void
 	 */
 	public static function admin_init() {
@@ -86,8 +84,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Determines if the welcome tour should be shown based on current page context.
-	 *
-	 * @since x.x
 	 *
 	 * @return bool True if welcome tour should be shown, false otherwise.
 	 */
@@ -113,8 +109,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Sets up the checklist progress.
-	 *
-	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -168,8 +162,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Gets the checklist steps.
 	 *
-	 * @since x.x
-	 *
 	 * @return array
 	 */
 	private static function get_steps() {
@@ -205,8 +197,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Fills the steps with the completed data.
 	 *
-	 * @since x.x
-	 *
 	 * @param array $steps The steps to fill.
 	 * @param array $steps_keys The steps keys.
 	 * @return array The steps with the completed data.
@@ -224,8 +214,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Get spotlight data for the current active step.
-	 *
-	 * @since x.x
 	 *
 	 * @return array The spotlight data.
 	 */
@@ -272,8 +260,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Marks the welcome tour as seen if it hasn't been seen yet.
 	 *
-	 * @since x.x
-	 *
 	 * @return void
 	 */
 	public static function maybe_mark_welcome_tour_as_seen() {
@@ -287,8 +273,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Render the welcome tour elements.
-	 *
-	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -311,8 +295,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Checks if the checklist should be shown.
-	 *
-	 * @since x.x
 	 *
 	 * @return bool True if the checklist should be shown, false otherwise.
 	 */
@@ -345,8 +327,6 @@ class FrmWelcomeTourController {
 	/**
 	 * AJAX callback to mark a checklist step as completed.
 	 *
-	 * @since x.x
-	 *
 	 * @return void
 	 */
 	public static function ajax_mark_checklist_step_as_completed() {
@@ -368,8 +348,6 @@ class FrmWelcomeTourController {
 	/**
 	 * AJAX callback to dismiss the welcome tour.
 	 *
-	 * @since x.x
-	 *
 	 * @return void
 	 */
 	public static function ajax_dismiss_welcome_tour() {
@@ -388,8 +366,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Checks if more than the default form exists.
 	 *
-	 * @since x.x
-	 *
 	 * @return bool True if more than the default form exists, false otherwise.
 	 */
 	private static function more_than_the_default_form_exists() {
@@ -404,8 +380,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Checks if there are form embeds.
 	 *
-	 * @since x.x
-	 *
 	 * @return bool True if there are form embeds, false otherwise.
 	 */
 	private static function check_for_form_embeds() {
@@ -417,8 +391,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Get the active step.
 	 *
-	 * @since x.x
-	 *
 	 * @return int
 	 */
 	private static function get_active_step() {
@@ -427,8 +399,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Mark the styler step as completed.
-	 *
-	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -444,8 +414,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Adds custom classes to the existing string of admin body classes.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $classes Existing body classes.
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
@@ -455,8 +423,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Enqueues the Welcome Tour page scripts and styles.
-	 *
-	 * @since x.x
 	 *
 	 * @return void
 	 */
@@ -476,8 +442,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Get the Welcome Tour JS variables as an array.
 	 *
-	 * @since x.x
-	 *
 	 * @return array
 	 */
 	private static function get_js_variables() {
@@ -491,8 +455,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Get the Welcome Tour progress bar percentage.
-	 *
-	 * @since x.x
 	 *
 	 * @return int
 	 */
@@ -509,8 +471,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Saves the checklist data.
 	 *
-	 * @since x.x
-	 *
 	 * @param array|null $checklist The checklist data to set.
 	 */
 	public static function save_checklist( $checklist = null ) {
@@ -519,8 +479,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Gets the checklist data.
-	 *
-	 * @since x.x
 	 *
 	 * @return array The checklist data.
 	 */
@@ -537,8 +495,6 @@ class FrmWelcomeTourController {
 	/**
 	 * Build a tracked URL with UTM parameters and affiliate tracking.
 	 *
-	 * @since x.x
-	 *
 	 * @param string $url The base URL to process.
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
@@ -554,8 +510,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Get the current form ID.
-	 *
-	 * @since x.x
 	 *
 	 * @return int The current form ID.
 	 */
@@ -577,8 +531,6 @@ class FrmWelcomeTourController {
 
 	/**
 	 * Checks if the tour is completed.
-	 *
-	 * @since x.x
 	 *
 	 * @return bool True if the tour is completed, false otherwise.
 	 */
