@@ -855,10 +855,19 @@ class FrmAppController {
 			return false;
 		}
 
-		return FrmAppHelper::is_formidable_admin() &&
+		$should_show = FrmAppHelper::is_formidable_admin() &&
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+
+		/**
+		 * Filters whether the floating links should be displayed.
+		 *
+		 * @since x.x
+		 *
+		 * @param bool $should_show Whether the floating links should be shown.
+		 */
+		return apply_filters( 'frm_should_show_floating_links', $should_show );
 	}
 
 	/**
