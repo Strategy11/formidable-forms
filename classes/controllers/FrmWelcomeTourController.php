@@ -148,10 +148,6 @@ class FrmWelcomeTourController {
 		if ( $active_step === count( $step_keys ) ) {
 			self::$checklist['done']            = true;
 			self::$checklist['active_step_key'] = 'completed';
-
-			foreach ( self::$checklist['completed_steps'] as $step_key => $completed ) {
-				FrmUsageController::update_flows_data( 'welcome_tour_completed_steps', $step_key );
-			}
 		} else {
 			self::$checklist['active_step_key'] = $step_keys[ $active_step ];
 		}
@@ -294,6 +290,48 @@ class FrmWelcomeTourController {
 	}
 
 	/**
+	 * Shows links after completing the Welcome tour.
+	 *
+	 * @param int $current_form_id Current form ID.
+	 */
+	public static function show_completed_links( $current_form_id ) {
+		$links = array(
+			'setup-email-notification'  => array(
+				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+				'text' => __( 'Setup email notifications', 'formidable' ),
+			),
+			'customize-success-message' => array(
+				'url'  => admin_url( 'admin.php?page=formidable&frm_action=settings&id=' . $current_form_id . '&t=email_settings' ),
+				'text' => __( 'Customize success message', 'formidable' ),
+			),
+			'manage-entries'            => array(
+				'url'  => admin_url( 'admin.php?page=formidable-entries' ),
+				'text' => __( 'Manage form entries', 'formidable' ),
+			),
+			'explore-addon'             => array(
+				'url'  => admin_url( 'admin.php?page=formidable-addons' ),
+				'text' => __( 'Explore integrations', 'formidable' ),
+			),
+		);
+
+		$button_attrs = array(
+			'class'             => 'frm-usage-tracking-flow-click button frm-button-secondary frm-button-sm frm-mb-2xs',
+			'target'            => '_blank',
+			'rel'               => 'noopener',
+			'data-tracking-key' => 'welcome_tour_completed_link_click',
+		);
+
+		foreach ( $links as $key => $link ) {
+			$attrs = $button_attrs + array( 'data-tracking-value' => $key );
+			?>
+			<a href="<?php echo esc_url( $link['url'] ); ?>" <?php FrmAppHelper::array_to_html_params( $attrs, true ); ?>>
+				<?php echo esc_html( $link['text'] ); ?>
+			</a>
+			<?php
+		}
+	}
+
+	/**
 	 * Checks if the checklist should be shown.
 	 *
 	 * @return bool True if the checklist should be shown, false otherwise.
@@ -357,8 +395,6 @@ class FrmWelcomeTourController {
 		self::$checklist              = self::get_checklist();
 		self::$checklist['dismissed'] = true;
 		self::save_checklist();
-
-		FrmUsageController::update_flows_data( 'welcome_tour_dismissed_step', self::$checklist['active_step_key'] );
 
 		wp_send_json_success();
 	}
@@ -536,5 +572,33 @@ class FrmWelcomeTourController {
 	 */
 	private static function is_tour_completed() {
 		return ! empty( self::$checklist['done'] );
+	}
+
+	/**
+	 * Gets usage tracking data.
+	 *
+	 * @return array
+	 */
+	public static function get_usage_data() {
+		// Do not use the get_checklist() method to prevent adding default value.
+		$option = get_option( self::CHECKLIST_OPTION );
+		if ( ! $option ) {
+			// Welcome tour doesn't show on this site.
+			return array();
+		}
+
+		$usage_data = array();
+		$steps      = self::get_steps();
+
+		foreach ( $steps as $key => $step ) {
+			$usage_data[ 'completed_step_' . $key ] = empty( $option['completed_steps'][ $key ] ) ? 0 : 1;
+		}
+
+		$usage_data['done'] = empty( $option['done'] ) ? 0 : 1;
+
+		// If dismissed, the dismissed step is the active step.
+		$usage_data['dismissed'] = empty( $option['dismissed'] ) ? 0 : $option['active_step_key'];
+
+		return $usage_data;
 	}
 }

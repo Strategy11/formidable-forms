@@ -93,7 +93,7 @@ class FrmUsageController {
 	 * @since 6.16.1
 	 */
 	public static function load_scripts() {
-		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) ) {
+		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) || FrmAppHelper::is_admin_page() ) {
 			wp_enqueue_script( 'frm-usage-tracking', FrmAppHelper::plugin_url() . '/js/admin/usage-tracking.js', array( 'formidable_dom' ), FrmAppHelper::$plug_version, true );
 		}
 	}
