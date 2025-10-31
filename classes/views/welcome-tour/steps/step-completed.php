@@ -8,14 +8,6 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
-
-$button_attrs_html = FrmAppHelper::array_to_html_params(
-	array(
-		'class'  => 'button frm-button-secondary frm-button-sm frm-mb-2xs',
-		'target' => '_blank',
-		'rel'    => 'noopener',
-	)
-);
 ?>
 <div class="frm-checklist__completed frm-flex-col frm-items-start frm-p-sm frm-gap-xs">
 	<p class="frm-font-bold"><?php esc_html_e( 'Congratulations! 🎉', 'formidable' ); ?></p>
