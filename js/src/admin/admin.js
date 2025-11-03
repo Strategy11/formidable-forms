@@ -3552,7 +3552,16 @@ window.frmAdminBuildJS = function() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			this.closest( '.frm_single_option' ).after( newOption.newOption );
+
+			const $thisOption = this.closest( '.frm_single_option' );
+			if ( $thisOption ) {
+				$thisOption.after( newOption.newOption );
+			} else {
+				// Backwards compatibility "@since 6.24"
+				// Note: Keep it jQuery since some events are attached to the element
+				jQuery( `#frm_field_${ fieldId }_opts` ).append( newOption.newOption );
+			}
+
 			resetDisplayedOpts( fieldId );
 		}
 
