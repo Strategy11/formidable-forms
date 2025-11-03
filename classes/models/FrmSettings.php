@@ -97,6 +97,11 @@ class FrmSettings {
 
 	public $denylist_check;
 
+	/**
+	 * @since x.x
+	 *
+	 * @var int|null 1 if installed after welcome tour update, null otherwise.
+	 */
 	public $installed_after_welcome_tour_update;
 
 	public $disallowed_words;
