@@ -32,7 +32,13 @@ Cypress.Commands.add( 'createNewForm', () => {
 	cy.get( '#frm-form-templates-modal' ).should( 'exist' );
 	cy.get( '.frm-modal-title' ).should( 'contain', 'Name your form' );
 	cy.get( '#frm_new_form_name_input' ).type( 'Test Form' );
-	cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
+	cy.get('body').then($body => {
+		if ($body.find('.frm-checklist span.frm-text-grey-400').length) {
+		cy.get('.frm-checklist span.frm-text-grey-400').click({ force: true });
+		cy.log('Checklist dismissed');
+		}
+	});
+  	cy.get( '#frm-save-form-name-button' ).should( 'contain', 'Save' ).click();
 	cy.get( "a[aria-label='Close']", { timeout: 7000 } ).click();
 } );
 Cypress.Commands.add( 'deleteForm', () => {
