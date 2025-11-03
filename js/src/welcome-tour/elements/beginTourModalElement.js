@@ -27,7 +27,7 @@ export function buildBeginTourModalElement() {
  */
 function createBeginTourModalElement() {
 	const beginTourModal = maybeCreateModal(
-		'frm-get-started-modal',
+		'frm_get_started_modal',
 		{
 			title: __( 'Get Started with Formidable Forms', 'formidable' ),
 			content: p( {
