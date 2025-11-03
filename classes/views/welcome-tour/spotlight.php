@@ -2,6 +2,7 @@
 /**
  * Welcome Tour's Spotlight component.
  *
+ * @since x.x
  * @package Formidable
  */
 

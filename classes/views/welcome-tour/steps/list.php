@@ -2,6 +2,7 @@
 /**
  * Welcome Tour's Individual step view.
  *
+ * @since x.x
  * @package Formidable
  */
 

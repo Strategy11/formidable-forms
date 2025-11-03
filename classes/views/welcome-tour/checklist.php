@@ -2,6 +2,7 @@
 /**
  * Welcome Tour's Checklist component.
  *
+ * @since x.x
  * @package Formidable
  */
 

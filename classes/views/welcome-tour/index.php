@@ -2,6 +2,7 @@
 /**
  * Welcome Tour's main view file.
  *
+ * @since x.x
  * @package Formidable
  */
 
