@@ -37,8 +37,8 @@ describe( 'Run some accessibility tests', function() {
 		cy.visit( '/wp-admin/admin.php?page=formidable-dashboard' );
 		cy.injectAxe();
 		cy.get( 'body' ).then( $body => {
-			if ( $body.find( '.frm-welcome-tour-modal a.button-primary' ).length ) {
-				cy.get( '.frm-welcome-tour-modal a.button-primary' ).click( { force: true } );
+			if ( $body.find( '.frm-welcome-tour-modal a.dismiss' ).length ) {
+				cy.get( '.frm-welcome-tour-modal a.dismiss' ).click( { force: true } );
 				cy.log( 'Welcome tour dismissed' );
 			}
 		} );
