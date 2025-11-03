@@ -89,7 +89,7 @@ class FrmWelcomeTourController {
 	 */
 	private static function should_show_welcome_tour() {
 		// Only show welcome tour for new installs on Formidable admin pages.
-		if ( ! FrmAppHelper::is_formidable_admin() || empty( FrmAppHelper::get_settings()->is_new_install ) ) {
+		if ( ! FrmAppHelper::is_formidable_admin() || empty( FrmAppHelper::get_settings()->installed_after_welcome_tour_update ) ) {
 			return false;
 		}
 

@@ -97,7 +97,7 @@ class FrmSettings {
 
 	public $denylist_check;
 
-	public $is_new_install;
+	public $installed_after_welcome_tour_update;
 
 	public $disallowed_words;
 
