@@ -62,7 +62,7 @@ function createBeginTourModalElement() {
 function addBeginTourModalToElements( beginTourModal ) {
 	const elements = getElements();
 
-	if ( elements.beginTourModal || undefined === beginTourModal ) {
+	if ( elements.beginTourModal || ! ( beginTourModal instanceof HTMLElement ) ) {
 		return;
 	}
 
