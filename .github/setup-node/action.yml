@@ -1,15 +1,15 @@
-name: 'Configure Node.js and install dependencies'
-description: 'Set up Node.js environment and install npm packages with optimized caching for faster CI/CD builds.'
+name: 'Setup Node.js and install npm dependencies'
+description: 'Configure Node.js and install npm dependencies while managing all aspects of caching.'
 inputs:
     node-version:
-        description: 'The Node.js version to use. When not specified, uses the version from .nvmrc file.'
+        description: 'Optional. The Node.js version to use. When not specified, the version specified in .nvmrc will be used.'
         required: false
         type: string
 
 runs:
     using: 'composite'
     steps:
-        - name: Configure Node.js environment
+        - name: Use desired version of Node.js
           uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444 # v5.0.0
           with:
               node-version-file: ${{ inputs.node-version == '' && '.nvmrc' || '' }}
@@ -17,83 +17,27 @@ runs:
               check-latest: true
               cache: npm
 
-        - name: Detect Node.js and npm versions
+        - name: Get Node.js and npm version
           id: node-version
           run: |
               echo "NODE_VERSION=$(node -v)" >> "$GITHUB_OUTPUT"
           shell: bash
 
-        - name: Debug cache environment
-          run: |
-              echo "=== Cache Debug Information ==="
-              echo "Working Directory: $(pwd)"
-              echo "Runner OS: ${{ runner.os }}"
-              echo "Runner Arch: ${{ runner.arch }}"
-              echo "Node Version: ${{ steps.node-version.outputs.NODE_VERSION }}"
-              echo ""
-              echo "=== Package Lock Files Search ==="
-              find . -name "package-lock.json" -type f || echo "No package-lock.json found"
-              echo ""
-              echo "=== Hash Tests ==="
-              echo "hashFiles('package-lock.json'): ${{ hashFiles('package-lock.json') }}"
-              echo "hashFiles('**/package-lock.json'): ${{ hashFiles('**/package-lock.json') }}"
-              echo ""
-              echo "=== Directory Contents ==="
-              ls -la
-              echo ""
-              echo "=== Node Modules Check ==="
-              ls -la node_modules 2>/dev/null || echo "node_modules directory does not exist"
-              echo ""
-              echo "=== Generated Cache Key ==="
-              echo "Key: node_modules-${{ runner.os }}-${{ runner.arch }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}"
-          shell: bash
-
-        - name: Cache node_modules directory
+        - name: Cache node_modules
           id: cache-node_modules
           uses: actions/cache@0400d5f644dc74513175e3cd8d07132dd4860809 # v4.2.4
           with:
               path: '**/node_modules'
-              key: node_modules-${{ runner.os }}-${{ runner.arch }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('**/package-lock.json') }}
-
-        - name: Debug cache results
-          run: |
-              echo "=== Cache Results Debug ==="
-              echo "Cache hit: ${{ steps.cache-node_modules.outputs.cache-hit }}"
-              echo "Cache primary key: ${{ steps.cache-node_modules.outputs.cache-primary-key }}"
-              echo "Cache matched key: ${{ steps.cache-node_modules.outputs.cache-matched-key }}"
-              echo ""
-              echo "=== Post-Cache Directory Check ==="
-              ls -la node_modules 2>/dev/null || echo "node_modules directory still does not exist"
-              if [ -d "node_modules" ]; then
-                  echo "node_modules found, checking contents..."
-                  ls -la node_modules | head -10
-                  echo "Total packages: $(ls node_modules | wc -l)"
-              fi
-          shell: bash
+              key: node_modules-${{ runner.os }}-${{ runner.arch }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
 
         - name: Install npm dependencies
           if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
-          run: |
-              echo "=== Installing Dependencies (Cache Miss) ==="
-              npm ci
+          run: npm ci
           shell: bash
 
-        - name: Validate installation
-          run: |
-              echo "=== Post-Install Validation ==="
-              if [ -d "node_modules" ]; then
-                  echo "✅ node_modules directory exists"
-                  echo "📦 Total packages installed: $(ls node_modules | wc -l)"
-                  echo "💾 Directory size: $(du -sh node_modules)"
-              else
-                  echo "❌ node_modules directory missing after installation"
-                  exit 1
-              fi
-          shell: bash
-
-        - name: Upload npm logs on installation failure
+        - name: Upload npm logs as an artifact on failure
           uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
           if: failure()
           with:
               name: npm-logs
-              path: C:\npm\cache\_logs
+              path: ~/.npm/_logs
