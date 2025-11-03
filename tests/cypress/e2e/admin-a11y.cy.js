@@ -36,6 +36,12 @@ describe( 'Run some accessibility tests', function() {
 	it( 'Check the dashboard page is accessible', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-dashboard' );
 		cy.injectAxe();
+		cy.get( 'body' ).then( $body => {
+			if ( $body.find( '.frm-welcome-tour-modal a.button-primary' ).length) {
+			cy.get( '.frm-welcome-tour-modal a.button-primary' ).click( { force: true } );
+			cy.log( 'Welcome tour dismissed' );
+			}
+		} );
 		configureAxeWithIgnoredRuleset( [
 			...baselineRules,
 			{ id: 'heading-order', enabled: false }
@@ -91,6 +97,12 @@ describe( 'Run some accessibility tests', function() {
 	it( 'Check the form templates page is accessible', () => {
 		cy.visit( '/wp-admin/admin.php?page=formidable-form-templates' );
 		cy.injectAxe();
+		cy.get( 'body' ).then( $body => {
+			if ( $body.find( '.frm-checklist span.frm-text-grey-400' ).length) {
+			cy.get( '.frm-checklist span.frm-text-grey-400' ).click( { force: true } );
+			cy.log( 'Checklist dismissed' );
+			}
+		} );
 		configureAxeWithIgnoredRuleset( [
 			{ id: 'color-contrast', enabled: false },
 			{ id: 'aria-allowed-role', enabled: false },
