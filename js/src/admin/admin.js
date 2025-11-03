@@ -3565,11 +3565,23 @@ window.frmAdminBuildJS = function() {
 			resetDisplayedOpts( fieldId );
 		}
 
-		// Make sure all remove buttons are enabled
-		this.closest( '.frm_sortable_field_opts' )?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
-			forEach( button => button.classList.remove( 'frm_disabled' ) );
-
+		fieldOptionEnableAllRemoveButtons( this );
 		fieldUpdated();
+	}
+
+	/**
+	 * Enable all remove buttons for field options.
+	 *
+	 * @param {HTMLElement} element The add option button element.
+	 */
+	function fieldOptionEnableAllRemoveButtons( element ) {
+		// Make sure all remove buttons are enabled
+		const parentEl = element.classList.contains( 'frm-add-option-legacy' ) // Backwards compatibility "@since 6.24"
+			? element.closest( '.frm-collapse-me' )?.querySelector( '.frm_sortable_field_opts' )
+			: element.closest( '.frm_sortable_field_opts' );
+
+		parentEl?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
+			forEach( button => button.classList.remove( 'frm_disabled' ) );
 	}
 
 	function getHighestOptKey( fieldId ) {
