@@ -363,7 +363,14 @@ class FrmFieldsController {
 		}
 
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
-		$no_allow = ! $pro_is_installed ? 'frm_noallow' : '';
+		$no_allow         = ! $pro_is_installed ? 'frm_noallow' : '';
+
+		$field_has_unique_option                = in_array( $field['type'], array( 'address', 'checkbox', 'data', 'date', 'email', 'file', 'lookup', 'name', 'number', 'password', 'phone', 'radio', 'rte', 'text', 'textarea', 'time', 'url' ), true );
+		$show_upsell_for_unique_value           = ! $pro_is_installed && $field_has_unique_option;
+		$field_has_read_only_option             = in_array( $field['type'], array( 'data', 'date', 'email', 'file', 'hidden', 'lookup', 'number', 'password', 'phone', 'radio', 'rte', 'text', 'textarea', 'time', 'url' ), true );
+		$show_upsell_for_read_only              = ! $pro_is_installed && $field_has_read_only_option;
+		$field_has_before_after_contents_option = in_array( $field['type'], array( 'date', 'email', 'number', 'password', 'phone', 'range', 'select', 'tag', 'text', 'url' ), true );
+		$show_upsell_for_before_after_contents  = ! $pro_is_installed && $field_has_before_after_contents_option;
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
