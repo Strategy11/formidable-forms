@@ -70,6 +70,22 @@ class FrmFieldSelect extends FrmFieldType {
 	 */
 	public function show_extra_field_choices( $args ) {
 		$this->auto_width_setting( $args );
+		$this->show_upsell_options();
+	}
+
+	private function show_upsell_options() {
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return;
+		}
+		$field_id = FrmField::get_option( $this->field, 'id' );
+		?>
+		<p class="frm_form_field frm_show_upgrade frm_multiple_cont_<?php echo absint( $field_id ); ?> <?php echo esc_attr( FrmField::is_field_type( $this->field, 'select' ) ? '' : 'frm_hidden' ); ?>">
+			<label for="autocom_<?php echo absint( $field_id ); ?>">
+				<input type="checkbox" id="autocom_<?php echo absint( $field_id ); ?>" value="1" data-upgrade="<?php esc_attr_e( 'Autocomplete', 'formidable' ); ?>" />
+				<?php esc_html_e( 'Autocomplete', 'formidable' ); ?>
+			</label>
+		</p>
+		<?php
 	}
 
 	/**
