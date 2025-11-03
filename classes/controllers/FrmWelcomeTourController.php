@@ -131,7 +131,7 @@ class FrmWelcomeTourController {
 				}
 			}
 
-			if ( $completed_step && ! isset( self::$checklist['completed_steps'][ $step_key ] ) ) {
+			if ( $completed_step ) {
 				self::$checklist['completed_steps'][ $step_key ] = true;
 			}
 
