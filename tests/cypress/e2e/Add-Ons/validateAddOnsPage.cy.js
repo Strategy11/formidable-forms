@@ -13,7 +13,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'h4' ).should( 'contain.text', 'Unlock Add-on library' );
 			cy.get( 'p.frm-m-0' ).should( 'contain.text', 'Upgrade to Pro and access our library of add-ons to supercharge your forms.' );
 			cy.get( 'a.frm-cta-link' )
-				.should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin&utm_content=upgrade-cta' )
+				.should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=upgrade-cta' )
 				.and( 'contain.text', 'Upgrade to PRO' );
 		} );
 		cy.get( '#addon-search-input' ).should( 'exist' );
@@ -154,7 +154,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( '.frm-font-medium.frm-truncate' ).should( 'contain.text', 'Formidable Forms Pro' );
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create calculators, surveys, smart forms, and data-driven applications. Build directories, real estate listings, job boards, and much more.' );
-			cy.get( 'a[aria-label="View Docs"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin' )
+			cy.get( 'a[aria-label="View Docs"]' ).should( 'have.attr', 'href', 'https://formidableforms.com/knowledgebase/?utm_source=plugin&utm_medium=lite&utm_campaign=addons' )
 				.and( 'have.attr', 'target', '_blank' )
 				.invoke( 'removeAttr', 'target' ).click();
 		} );
@@ -172,7 +172,7 @@ describe( 'Add-Ons page', () => {
 
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Add an electronic signature to your WordPress form. The visitor may write their signature with a trackpad/mouse or type it.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20signature' )
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=signature' )
 					.and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
@@ -186,7 +186,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_paypal_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Collect instant payments and recurring payments to automate your online business. Calculate a total and send customers on to PayPal.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20paypal-standard' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=paypal-standard' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -198,7 +198,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Add a full forms API for forms, form fields, views, and entries. Then send submissions to other sites with REST APIs.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20formidable-api' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=formidable-api' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -210,7 +210,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_twilio_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Allow users to text their votes for polls created by Formidable Forms, or send SMS notifications when entries are submitted or updated.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20twilio' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=twilio' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -222,7 +222,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_bootstrap_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Instantly add Bootstrap styling to all your Formidable forms.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20bootstrap' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=bootstrap' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -234,7 +234,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_aweber_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'AWeber is a powerful email marketing service. Subscribe contacts to an AWeber mailing list when they submit your WordPress contact forms.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20aweber' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=aweber' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -246,7 +246,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Translate your forms into multiple languages using the Formidable-integrated WPML plugin.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20wp-multilingual' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=wp-multilingual' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -258,7 +258,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Populate fields with Countries, States/Provinces, U.S. Counties, and U.S. Cities. This data can then be used in dependent Data from Entries fields.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20locations' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=locations' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -270,7 +270,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_zapier_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Connect with hundreds of applications through Zapier. Automatically insert a Google spreadsheet row, tweet, or upload to Dropbox.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20zapier' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=zapier' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -282,7 +282,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Track the pages a user visits and the time spent on each page prior to submitting a form.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20user-tracking' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=user-tracking' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -294,7 +294,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_mailchimp_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Get on the path to more leads in minutes. Add and update leads in a Mailchimp mailing list when a form is submitted.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20mailchimp' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=mailchimp' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -306,7 +306,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Give new users access to your site quickly and painlessly. Plus edit profiles and login from the front end.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20user-registration' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=user-registration' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -318,7 +318,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_woocommerce_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Are your WooCommerce product forms too basic? Add custom fields to a product form and collect more data when it is added to the cart.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20woocommerce' ).and( 'contain.text', 'Elite' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=woocommerce' ).and( 'contain.text', 'Elite' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -330,7 +330,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_highrise_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Capture leads in your WordPress contact forms, and save them in your Highrise CRM account too.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20highrise' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=highrise' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -342,7 +342,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_bootstrap_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Open forms, views, other shortcodes, or sections of content in a Bootstrap popup.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20bootstrap-modal' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=bootstrap-modal' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -354,7 +354,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_polylang_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create bilingual or multilingual forms with help from Polylang.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20polylang' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=polylang' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -366,7 +366,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Schedule email notifications, SMS messages, and API actions.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20autoresponder' ).and( 'contain.text', 'Elite' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=autoresponder' ).and( 'contain.text', 'Elite' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -381,7 +381,7 @@ describe( 'Add-Ons page', () => {
 				expect( normalizedText ).to.contain( 'See your API requests along with their responses from add-ons including Zapier, Formidable API Webhooks, Salesforce and more.' );
 			} );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20logs' ).and( 'contain.text', 'Basic' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=logs' ).and( 'contain.text', 'Basic' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -396,7 +396,7 @@ describe( 'Add-Ons page', () => {
 				expect( normalizedText ).to.contain( 'Add more options to date fields in your forms for so only the dates you choose can be chosen.' );
 			} );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20datepicker-options' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=datepicker-options' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -408,7 +408,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_salesforcealt_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Add new contacts and leads into your Salesforce CRM directly from the WordPress forms on your site.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20salesforce' ).and( 'contain.text', 'Elite' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=salesforce' ).and( 'contain.text', 'Elite' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -423,7 +423,7 @@ describe( 'Add-Ons page', () => {
 				expect( normalizedText ).to.contain( 'Send WordPress newsletters from your own site with MailPoet. And use Formidable to for your newsletter signup forms.' );
 			} );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20mailpoet-newsletters' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=mailpoet-newsletters' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -435,7 +435,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_activecampaign_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Add contacts to any ActiveCampaign list from your WordPress forms.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20activecampaign-wordpress-plugin' ).and( 'contain.text', 'Elite' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=activecampaign-wordpress-plugin' ).and( 'contain.text', 'Elite' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -447,7 +447,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_getresponse_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Collect leads in WordPress forms and automatically add them in GetResponse. Then trigger automatic emails and other GetResponse marketing automations.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20getresponse-wordpress-plugin' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=getresponse-wordpress-plugin' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -459,7 +459,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Turn your forms into automated quizzes. Add questions and submit the quiz key. Then all the grading is done for you.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20quiz-maker' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=quiz-maker' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -471,7 +471,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_constant_contact_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Setup WordPress forms to create leads automatically in Constant Contact. Just select a list and match up form fields.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20constant-contact' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=constant-contact' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -483,7 +483,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_campaignmonitor_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Save time by automatically sending leads from WordPress forms to Campaign Monitor.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20campaign-monitor' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=campaign-monitor' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -495,7 +495,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Easily create custom CSV files and allow users to export their data from the front-end of your site.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20export-view' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=export-view' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -507,7 +507,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create WordPress web apps to display your form submissions in grids, tables, calendars, and more.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20visual-views' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=visual-views' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -519,7 +519,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Transform your WordPress site into a data collection machine with our user-friendly survey form builder.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20surveys' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=surveys' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -531,7 +531,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create beautiful landing pages fast and rake in new leads.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20landing-pages' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=landing-pages' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -543,7 +543,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Ask one question at a time to humanize forms and boost their conversion rates.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20conversational-forms' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=conversational-forms' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -555,7 +555,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Get more accurate data and make forms faster to complete with address autocomplete.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20geolocation' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=geolocation' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -567,7 +567,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Create PDFs from form entries automatically. Email them or let visitors download PDFs from your site.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20pdfs' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=pdfs' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -579,7 +579,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_googlesheets_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Send form entries to a Google spreadsheet as a backup or for extra processing.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20google-sheets' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=google-sheets' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -591,7 +591,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_acfforms_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Sync custom fields between Formidable and Advanced Custom Fields or ACF Pro.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20acf-forms' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=acf-forms' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -603,7 +603,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm-ai-form-icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Get back your time by autogenerating a response from ChatGPT and inserting it into a field.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20ai' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=ai' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -618,7 +618,7 @@ describe( 'Add-Ons page', () => {
 				expect( normalizedText ).to.contain( "Capture form data before it's submitted to save more leads and optimize forms. Plus, auto save drafts and allow logged out editing." );
 			} );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20abandonment' ).and( 'contain.text', 'Business' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=abandonment' ).and( 'contain.text', 'Business' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -630,7 +630,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_logo_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Transform form data into insightful graphs with ease.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20charts' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=charts' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
@@ -642,7 +642,7 @@ describe( 'Add-Ons page', () => {
 			cy.get( 'svg.frmsvg > use' ).should( 'have.attr', 'xlink:href', '#frm_convertkit_icon' );
 			cy.get( 'p.frm-line-clamp-2' ).should( 'contain.text', 'Bring automation into your email marketing plan for the power to say "welcome" to your subscribers the moment they opt-in to your list.' );
 			cy.contains( 'Plan required:' ).within( () => {
-				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=WordPress&utm_medium=addons&utm_campaign=liteplugin%20&%20utm_content%20=%20convertkit' ).and( 'contain.text', 'Plus' );
+				cy.get( 'a' ).should( 'have.attr', 'href', 'https://formidableforms.com/lite-upgrade/?utm_source=plugin&utm_medium=lite&utm_campaign=addons&utm_content=convertkit' ).and( 'contain.text', 'Plus' );
 			} );
 			cy.get( 'a[aria-label="Upgrade Now"]' ).should( 'have.attr', 'target', '_blank' )
 				.and( 'have.attr', 'href' ).and( 'include', 'https://formidableforms.com/lite-upgrade/' );
