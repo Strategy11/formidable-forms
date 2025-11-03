@@ -334,6 +334,45 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
+		if ( ! $pro_is_installed ) {
+			?>
+		<p class="frm6 frm_form_field frm_show_upgrade">
+			<label class="frm-h-stack-xs" id="for_field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" for="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>">
+				<span><?php esc_html_e( 'Autocomplete', 'formidable' ); ?></span>
+				<?php
+				FrmAppHelper::tooltip_icon(
+					__( 'The autocomplete attribute asks the browser to attempt autocompletion, based on user history.', 'formidable' ),
+					array(
+						'data-placement' => 'right',
+						'class'          => 'frm-flex',
+					)
+				);
+				?>
+			</label>
+			<select name="field_options[autocomplete_<?php echo absint( $field['id'] ); ?>]" id="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Autocomplete options', 'formidable' ); ?>">
+				<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
+			</select>
+		</p>
+		<p class="frm6 frm_form_field frm_show_upgrade">
+			<label class="frm-h-stack-xs" id="for_field_options_admin_only_<?php echo absint( $field['id'] ); ?>" for="field_options_admin_only_<?php echo absint( $field['id'] ); ?>">
+				<span><?php esc_html_e( 'Visibility', 'formidable' ); ?></span>
+				<?php
+				FrmAppHelper::tooltip_icon(
+					__( 'Determines who can see this field.', 'formidable' ),
+					array(
+						'data-placement' => 'right',
+						'class'          => 'frm-flex',
+					)
+				);
+				?>
+			</label>
+			<select readonly name="field_options[admin_only_<?php echo absint( $field['id'] ); ?>][]" id="field_options_admin_only_<?php echo absint( $field['id'] ); ?>" class="" data-upgrade="<?php esc_attr_e( 'Visibility options', 'formidable' ); ?>">
+				<option value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
+			</select>
+		</p>
+			<?php
+		}//end if
+
 		if ( $show_upsell_for_before_after_contents ) {
 			?>
 		<p class="frm_form_field frm6">
