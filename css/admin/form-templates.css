@@ -18,6 +18,11 @@
  *
  * Focuses on the main content area, laying out the various elements and components.
  */
+
+.frm_show_upgrade {
+	opacity: .5;
+}
+
 /* Create a blank form */
 .frm-form-templates-create-button {
 	gap: 10px;
