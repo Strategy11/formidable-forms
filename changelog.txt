@@ -8,8 +8,8 @@
 * Fix: Large email header images used in emails would extend beyond the image container boundaries.
 * Fix: The payments list would not properly sort in descending order.
 * Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
-* Fix: Captcha field labels would incorrectly use the same for attribute when multiple captcha fields were rendered, causing accessibility issues.
-* Fix: In some cases, new fields would get inserted below the submit field unexpectedly after saving and reloading.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
 
 = 6.25 =
 * New: Style settings have been added to Email actions.
