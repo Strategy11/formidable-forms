@@ -475,6 +475,7 @@ class FrmWelcomeTourController {
 		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/welcome-tour.js', array( 'wp-i18n' ), $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmWelcomeTourVars', self::get_js_variables() );
 		wp_enqueue_script( self::SCRIPT_HANDLE );
+		wp_set_script_translations( self::SCRIPT_HANDLE, 'formidable' );
 
 		FrmAppHelper::dequeue_extra_global_scripts();
 	}
