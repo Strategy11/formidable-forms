@@ -53,7 +53,7 @@ function createBeginTourModalElement() {
 }
 
 /**
- * Inject begin tour modal elements into the DOM and the elements object.
+ * Add the begin tour modal to the elements registry.
  *
  * @private
  * @param {HTMLElement} beginTourModal The begin tour modal element.
