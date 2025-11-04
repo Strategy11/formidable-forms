@@ -853,10 +853,19 @@ class FrmAppController {
 			return false;
 		}
 
-		return FrmAppHelper::is_formidable_admin() &&
+		$should_show = FrmAppHelper::is_formidable_admin() &&
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+
+		/**
+		 * Filters whether the floating links should be displayed.
+		 *
+		 * @since 6.25.1
+		 *
+		 * @param bool $should_show Whether the floating links should be shown.
+		 */
+		return apply_filters( 'frm_should_show_floating_links', $should_show );
 	}
 
 	/**
@@ -1510,7 +1519,7 @@ class FrmAppController {
 	/**
 	 * Get a simple user meta key that only includes the screen ID.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return false|string
 	 */
