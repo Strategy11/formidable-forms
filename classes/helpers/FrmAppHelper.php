@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.25';
+	public static $plug_version = '6.25.1';
 
 	/**
 	 * @var bool
@@ -167,7 +167,7 @@ class FrmAppHelper {
 	/**
 	 * If medium is "pro", add an additional utm_license param with their active license type.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param array $query_args
 	 * @return array
@@ -181,7 +181,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return string
 	 */
@@ -192,7 +192,7 @@ class FrmAppHelper {
 	/**
 	 * Change campaign from "liteplugin" to what we're currently using for medium.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param array $args
 	 * @return array
@@ -3639,7 +3639,7 @@ class FrmAppHelper {
 	/**
 	 * Get the no label text.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return string
 	 */

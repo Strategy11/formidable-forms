@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Handles the Welcome Tour page in the admin area.
  *
- * @since x.x
+ * @since 6.25.1
  */
 class FrmWelcomeTourController {
 

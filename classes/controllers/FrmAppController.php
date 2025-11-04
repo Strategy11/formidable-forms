@@ -863,7 +863,7 @@ class FrmAppController {
 		/**
 		 * Filters whether the floating links should be displayed.
 		 *
-		 * @since x.x
+		 * @since 6.25.1
 		 *
 		 * @param bool $should_show Whether the floating links should be shown.
 		 */
@@ -1521,7 +1521,7 @@ class FrmAppController {
 	/**
 	 * Get a simple user meta key that only includes the screen ID.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return false|string
 	 */

@@ -30,14 +30,14 @@ class FrmSalesApi extends FrmFormApi {
 	private static $best_sale;
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @var string|null
 	 */
 	private static $cross_sell_text;
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @var string|null
 	 */
@@ -97,7 +97,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * But one array, that isn't actually a sale, contains cross sell data.
 	 * This should be near the end of the array.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param array $data
 	 * @return void
@@ -118,7 +118,7 @@ class FrmSalesApi extends FrmFormApi {
 	/**
 	 * Check that both cross_sell_text and cross_sell_link are set and are arrays of the same size.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param array $data
 	 * @return bool
@@ -139,7 +139,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * Determine which cross sell text to use.
 	 * These are shown in order for 30 days before moving on to the next one.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param array $cross_sell_text
 	 * @return int
