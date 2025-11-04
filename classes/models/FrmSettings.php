@@ -98,7 +98,7 @@ class FrmSettings {
 	public $denylist_check;
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @var int|null 1 if installed after welcome tour update, null otherwise.
 	 */

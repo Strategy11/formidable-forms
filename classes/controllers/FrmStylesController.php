@@ -522,7 +522,7 @@ class FrmStylesController {
 		FrmForm::clear_form_cache();
 
 		/**
-		 * @since x.x
+		 * @since 6.25.1
 		 *
 		 * @param int $form_id
 		 * @param int $style_id
@@ -700,7 +700,7 @@ class FrmStylesController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.25.1
 		 *
 		 * @param int $post_id
 		 */

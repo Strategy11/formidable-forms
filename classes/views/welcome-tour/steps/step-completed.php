@@ -2,7 +2,7 @@
 /**
  * Welcome Tour - Completed state (similar to form-templates/template.php).
  *
- * @since x.x
+ * @since 6.25.1
  * @package Formidable
  */
 

@@ -248,7 +248,7 @@ class FrmEntriesController {
 	/**
 	 * Appends "(Value)" or "(Label)" to the field name if it's an option field that has a separate value/label.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param object $field
 	 * @param bool   $include_column_for_sep_val

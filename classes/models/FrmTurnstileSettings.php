@@ -78,7 +78,7 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Always add the "frm-" prefix for Turnstile fields.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param bool $allow_multiple
 	 * @return string
