@@ -4915,7 +4915,7 @@ window.frmAdminBuildJS = function() {
 				return false;
 			}
 			totalFieldCount += getFieldsInRow( jQuery( fieldGroup ) ).length;
-			if ( totalFieldCount > 6 ) {
+			if ( totalFieldCount > MAX_FIELD_GROUP_SIZE ) {
 				return false;
 			}
 		}
