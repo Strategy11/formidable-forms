@@ -94,7 +94,10 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist = self::get_checklist();
-		if ( self::is_tour_completed() || ! empty( self::$checklist['dismissed'] ) ) {
+		if (
+			self::is_tour_completed() && ! empty( self::$checklist['completed_seen'] )
+			|| ! empty( self::$checklist['dismissed'] )
+		) {
 			return false;
 		}
 
@@ -278,6 +281,7 @@ class FrmWelcomeTourController {
 		$current_form_id   = self::get_current_form_id();
 
 		if ( $is_tour_completed ) {
+			self::mark_completed_as_seen();
 			$steps_path = $view_path . 'steps/step-completed.php';
 		} else {
 			$steps_path  = $view_path . 'steps/list.php';
@@ -338,8 +342,8 @@ class FrmWelcomeTourController {
 	 */
 	private static function should_show_checklist() {
 		if ( self::is_tour_completed() ) {
-			// Show the checklist to display the completed step.
-			return true;
+			// Show the completed step only if user hasn't seen it yet.
+			return empty( self::$checklist['completed_seen'] );
 		}
 
 		$active_step            = self::$checklist['active_step_key'];
@@ -569,6 +573,20 @@ class FrmWelcomeTourController {
 	 */
 	private static function is_tour_completed() {
 		return ! empty( self::$checklist['done'] );
+	}
+
+	/**
+	 * Marks the completed state as seen.
+	 *
+	 * @return void
+	 */
+	private static function mark_completed_as_seen() {
+		if ( ! empty( self::$checklist['completed_seen'] ) ) {
+			return;
+		}
+
+		self::$checklist['completed_seen'] = true;
+		self::save_checklist();
 	}
 
 	/**
