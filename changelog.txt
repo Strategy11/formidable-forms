@@ -1,4 +1,16 @@
 == Changelog ==
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha field labels would incorrectly use the same for attribute when multiple captcha fields were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit field unexpectedly after saving and reloading.
+
 = 6.25 =
 * New: Style settings have been added to Email actions.
 * New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
