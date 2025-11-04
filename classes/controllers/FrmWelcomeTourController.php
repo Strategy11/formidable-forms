@@ -558,9 +558,6 @@ class FrmWelcomeTourController {
 		if ( ! self::$current_form_id ) {
 			self::$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		}
-		if ( ! self::$current_form_id ) {
-			self::$current_form_id = FrmForm::get_current_form_id( 'first' );
-		}
 
 		return self::$current_form_id;
 	}
