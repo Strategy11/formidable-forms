@@ -236,7 +236,7 @@ window.frmAdminBuildJS = function() {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
 	const MAX_FIELD_GROUP_SIZE = 12;
-	
+
 	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
