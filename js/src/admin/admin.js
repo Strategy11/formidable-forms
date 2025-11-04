@@ -2038,7 +2038,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 		fieldId = $field.attr( 'data-fid' );
-		// allow 8 if we're not changing field groups.
+		// Allow the maximum number if we're not changing field groups.
 		return 1 === jQuery( fieldsInRow ).filter( '[data-fid="' + fieldId + '"]' ).length;
 	}
 
