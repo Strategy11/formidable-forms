@@ -60,10 +60,7 @@ function createBeginTourModalElement() {
  * @return {void}
  */
 function addBeginTourModalToElements( beginTourModal ) {
-	const elements = getElements();
-	if ( elements.beginTourModal ) {
-		return;
+	if ( ! getElements().beginTourModal ) {
+		addElements( { beginTourModal } );
 	}
-
-	addElements( { beginTourModal } );
 }
