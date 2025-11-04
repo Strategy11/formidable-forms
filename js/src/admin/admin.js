@@ -235,6 +235,8 @@ window.frmAdminBuildJS = function() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
+	const MAX_FIELD_GROUP_SIZE = 12;
+	
 	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
@@ -2029,14 +2031,14 @@ window.frmAdminBuildJS = function() {
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
 		let fieldId;
-		if ( fieldsInRow.length < 6 ) {
+		if ( fieldsInRow.length < MAX_FIELD_GROUP_SIZE ) {
 			return true;
 		}
-		if ( fieldsInRow.length > 6 ) {
+		if ( fieldsInRow.length > MAX_FIELD_GROUP_SIZE ) {
 			return false;
 		}
 		fieldId = $field.attr( 'data-fid' );
-		// allow 6 if we're not changing field groups.
+		// allow 8 if we're not changing field groups.
 		return 1 === jQuery( fieldsInRow ).filter( '[data-fid="' + fieldId + '"]' ).length;
 	}
 
@@ -2279,7 +2281,7 @@ window.frmAdminBuildJS = function() {
 
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
-		const maxFieldsInGroup = 6;
+		const maxFieldsInGroup = MAX_FIELD_GROUP_SIZE;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 		newRowId = this.getAttribute( 'frm-target-row-id' );
@@ -4085,7 +4087,10 @@ window.frmAdminBuildJS = function() {
 		popup.appendChild( wrapper );
 		popup.appendChild( separator() );
 
-		popup.appendChild( getCustomLayoutOption() );
+		if ( sizeOfFieldGroup <= 6 ) {
+			popup.appendChild( getCustomLayoutOption() );
+		}
+
 		popup.appendChild( getBreakIntoDifferentRowsOption() );
 
 		return popup;
@@ -4151,6 +4156,12 @@ window.frmAdminBuildJS = function() {
 		let wrapper, padding;
 
 		wrapper = getEmptyGridContainer();
+
+		if ( size > 6 ) {
+			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
+			return wrapper;
+		}
+
 		if ( 5 !== size ) {
 			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
 		}
@@ -4185,7 +4196,12 @@ window.frmAdminBuildJS = function() {
 				useClass = 'frm_third';
 				break;
 			default:
-				useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+				if ( size > 6 ) {
+					// We only show a single option at 6-12, so we use the full width.
+					useClass = 'frm_full';
+				} else {
+					useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+				}
 				break;
 		}
 
@@ -4233,7 +4249,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @param {number} size  2-6.
+	 * @param {number} size  2-12.
 	 * @param {string} type  even, middle, left, or right.
 	 * @param {number} index 0-5.
 	 * @return {string} The class name.
@@ -4256,7 +4272,15 @@ window.frmAdminBuildJS = function() {
 		return 'frm12';
 	}
 
+	/**
+	 * @param {number}           size  2-12.
+	 * @param {number|undefined} index 0-5.
+	 * @return {string} The class name.
+	 */
 	function getEvenClassForSize( size, index ) {
+		if ( size > 6 ) {
+			return 'frm1';
+		}
 		if ( -1 !== [ 2, 3, 4, 6 ].indexOf( size ) ) {
 			return getLayoutClassForSize( 12 / size );
 		}
