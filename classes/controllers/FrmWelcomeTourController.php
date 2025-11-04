@@ -95,7 +95,7 @@ class FrmWelcomeTourController {
 
 		self::$checklist = self::get_checklist();
 		if (
-			self::is_tour_completed() && ! empty( self::$checklist['completed_seen'] )
+			self::is_tour_completed() && ( ! empty( self::$checklist['completed_seen'] ) || ! self::get_current_form_id() )
 			|| ! empty( self::$checklist['dismissed'] )
 		) {
 			return false;
@@ -281,6 +281,9 @@ class FrmWelcomeTourController {
 		$current_form_id   = self::get_current_form_id();
 
 		if ( $is_tour_completed ) {
+			if ( ! $current_form_id ) {
+				return;
+			}
 			self::mark_completed_as_seen();
 			$steps_path = $view_path . 'steps/step-completed.php';
 		} else {
