@@ -14,27 +14,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v5
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v5
-        with:
-          node-version: "20.10.0"
-
-      - name: Cache dependencies
-        id: cache-npm
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.npm
-            node_modules
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-modules-
-
-      - name: Install dependencies
-        if: steps.cache-npm.outputs.cache-hit != 'true'
-        run: npm ci --include=dev
+      - name: Set up Node and dependencies
+        uses: ./.github/setup-node
 
       - name: Run ESLint
         run: ./node_modules/.bin/eslint .

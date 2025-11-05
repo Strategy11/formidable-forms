@@ -1,20 +1,21 @@
+name: Inspections
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
-    types: [ opened, labeled, synchronize ]
+    types: [opened, labeled, synchronize]
 
-name: Inspections
 jobs:
   runRectorInspection:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
     name: Run Rector inspection
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4.1.1
+      - name: Checkout code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+
       - name: Install dependencies
         run: composer install --dev --prefer-dist --no-progress
 

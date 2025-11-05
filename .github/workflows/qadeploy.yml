@@ -1,70 +1,70 @@
-on:
-  # Trigger the workflow on pull request.
-  pull_request:
-    types: [ opened, labeled, synchronize ]
-
 name: 🚀 Deploy website on push
+
+on:
+  pull_request:
+    types: [opened, labeled, synchronize]
+
 jobs:
   web-deploy:
     if: contains(github.event.pull_request.labels.*.name, 'deploy')
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      - name: Checkout code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-    - name: 🔄 Sanitize branch name
-      id: sanitize
-      run: |
-        BRANCH="${{ github.event.pull_request.head.ref }}"
-        SANITIZED_BRANCH="${BRANCH//\//-}"
-        echo "sanitized_branch=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
+      - name: 🔄 Sanitize branch name
+        id: sanitize
+        run: |
+          BRANCH="${{ github.event.pull_request.head.ref }}"
+          SANITIZED_BRANCH="${BRANCH//\//-}"
+          echo "sanitized_branch=$SANITIZED_BRANCH" >> $GITHUB_OUTPUT
 
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.1
-      with:
-        server: ${{ secrets.FRM_FTP_HOST }}
-        server-dir: ${{ github.event.repository.name }}-${{ steps.sanitize.outputs.sanitized_branch }}/
-        username: ${{ secrets.FRM_FTP_USERNAME }}
-        password: ${{ secrets.FRM_FTP_PASSWORD }}
-        exclude: |
-          **/.*
-          **/.*/**
-          **/.git*/**
-          **/bin/**
-          **/node_modules/**
-          **/scss/**
-          **/tests/**
-          composer.json
-          package.json
-          package-lock.json
-          phpcs.xml
-          phpunit.xml
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.1
+        with:
+          server: ${{ secrets.FRM_FTP_HOST }}
+          server-dir: ${{ github.event.repository.name }}-${{ steps.sanitize.outputs.sanitized_branch }}/
+          username: ${{ secrets.FRM_FTP_USERNAME }}
+          password: ${{ secrets.FRM_FTP_PASSWORD }}
+          exclude: |
+            **/.*
+            **/.*/**
+            **/.git*/**
+            **/bin/**
+            **/node_modules/**
+            **/scss/**
+            **/tests/**
+            composer.json
+            package.json
+            package-lock.json
+            phpcs.xml
+            phpunit.xml
   beta-deploy:
     if: contains(github.event.pull_request.labels.*.name, 'beta deploy')
     name: 🎉 Beta Deploy
     runs-on: ubuntu-latest
     steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v3.5.0
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3.5.0
 
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.1
-      with:
-        server: ${{ secrets.FRM_FTP_HOST }}
-        server-dir: ${{ github.event.repository.name }}-beta/
-        username: ${{ secrets.FRM_FTP_USERNAME }}
-        password: ${{ secrets.FRM_FTP_PASSWORD }}
-        exclude: |
-          **/.*
-          **/.*/**
-          **/.git*/**
-          **/bin/**
-          **/node_modules/**
-          **/scss/**
-          **/tests/**
-          composer.json
-          package.json
-          package-lock.json
-          phpcs.xml
-          phpunit.xml
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@4.3.1
+        with:
+          server: ${{ secrets.FRM_FTP_HOST }}
+          server-dir: ${{ github.event.repository.name }}-beta/
+          username: ${{ secrets.FRM_FTP_USERNAME }}
+          password: ${{ secrets.FRM_FTP_PASSWORD }}
+          exclude: |
+            **/.*
+            **/.*/**
+            **/.git*/**
+            **/bin/**
+            **/node_modules/**
+            **/scss/**
+            **/tests/**
+            composer.json
+            package.json
+            package-lock.json
+            phpcs.xml
+            phpunit.xml

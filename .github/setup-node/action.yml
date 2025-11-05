@@ -1,0 +1,43 @@
+name: 'Set up Node and dependencies'
+description: 'Installs Node.js and npm packages with caching for faster builds'
+inputs:
+    node-version:
+        description: 'Node.js version (defaults to .nvmrc if not specified)'
+        required: false
+        type: string
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Set up Node.js
+          uses: actions/setup-node@2028fbc5c25fe9cf00d9f06a71cc4710d4507903 # v6.0.0
+          with:
+              node-version-file: ${{ inputs.node-version == '' && '.nvmrc' || '' }}
+              node-version: ${{ inputs.node-version }}
+              check-latest: true
+              cache: npm
+
+        - name: Detect Node version
+          id: node-version
+          run: |
+              echo "NODE_VERSION=$(node -v)" >> "$GITHUB_OUTPUT"
+          shell: bash
+
+        - name: Restore cached dependencies
+          id: cache-node_modules
+          uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+          with:
+              path: '**/node_modules'
+              key: node_modules-${{ runner.os }}-${{ runner.arch }}-${{ steps.node-version.outputs.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+
+        - name: Install dependencies
+          if: ${{ steps.cache-node_modules.outputs.cache-hit != 'true' }}
+          run: npm ci
+          shell: bash
+
+        - name: Save npm logs on failure
+          uses: actions/upload-artifact@330a01c490aca151604b8cf639adc76d48f6c5d4 # v5.0.0
+          if: failure()
+          with:
+              name: npm-logs
+              path: ~/.npm/_logs
