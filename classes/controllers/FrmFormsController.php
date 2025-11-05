@@ -306,7 +306,7 @@ class FrmFormsController {
 			$message .= '<br/> ' . sprintf(
 				/* translators: %1$s: Start link HTML, %2$s: end link HTML */
 				__( 'However, your form is very long and may be %1$sreaching server limits%2$s.', 'formidable' ),
-				'<a href="https://formidableforms.com/knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/?utm_source=WordPress&utm_medium=builder&utm_campaign=liteplugin" target="_blank" rel="noopener">',
+				'<a href="' . esc_url( self::get_form_too_long_docs_url() ) . '" target="_blank" rel="noopener">',
 				'</a>'
 			);
 		}
@@ -316,6 +316,19 @@ class FrmFormsController {
 		}
 
 		self::get_edit_vars( $id, array(), $message );
+	}
+
+	/**
+	 * @since 6.25.1
+	 *
+	 * @return string
+	 */
+	private static function get_form_too_long_docs_url() {
+		$utm = array(
+			'campaign' => 'builder',
+			'content'  => 'form-too-long',
+		);
+		return FrmAppHelper::admin_upgrade_link( $utm, 'knowledgebase/i-have-a-long-form-why-did-the-options-at-the-end-of-the-form-stop-saving/' );
 	}
 
 	/**
@@ -353,6 +366,7 @@ class FrmFormsController {
 	 *
 	 * @since 3.06.01
 	 *
+	 * @param array $values
 	 * @return bool
 	 */
 	private static function is_too_long( $values ) {
@@ -434,6 +448,12 @@ class FrmFormsController {
 
 		// print_emoji_styles is deprecated.
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
+
+		if ( FrmTestModeController::should_add_test_mode_container() ) {
+			do_action( 'frm_test_mode_init' );
+			add_action( 'wp_enqueue_scripts', 'FrmTestModeController::register_and_enqueue_required_scripts' );
+			add_filter( 'frm_filter_final_form', 'FrmTestModeController::maybe_add_test_mode_container', 99 );
+		}
 
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
 		if ( $include_theme ) {

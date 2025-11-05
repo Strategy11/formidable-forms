@@ -2,7 +2,7 @@
 /**
  * View for upsell settings in Email global settings
  *
- * @since x.x
+ * @since 6.25
  * @package FormidableForms
  */
 

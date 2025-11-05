@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for email collection and subscription.
  *
- * @since x.x
+ * @since 6.25
  */
 class FrmEmailCollectionHelper {
 
 	/**
 	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $email The email address to subscribe to ActiveCampaign.
 	 * @return void
@@ -61,7 +61,7 @@ class FrmEmailCollectionHelper {
 	/**
 	 * Check if an email is fake, test, or local development email.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $email The email address to check.
 	 * @return bool True if the email is fake/test, false if valid.

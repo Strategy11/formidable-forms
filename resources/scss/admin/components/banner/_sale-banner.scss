@@ -18,16 +18,16 @@
 			align-self: center;
 		}
 	}
-	
+
 	> div:nth-child(3) {
 		margin-left: auto;
 		margin-right: 50px;
 	}
-	
+
 	> div:nth-child(2) > div:last-child {
 		opacity: 0.8;
 	}
-	
+
 	a:not(.dismiss) {
 		text-shadow: none;
 		border-radius: 30px;
