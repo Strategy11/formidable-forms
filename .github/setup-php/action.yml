@@ -2,10 +2,10 @@ name: 'Set up PHP and dependencies'
 description: 'Installs PHP and Composer packages with caching for faster builds'
 inputs:
     php-version:
-        description: 'PHP version (defaults to 7.0 if not specified)'
+        description: 'PHP version (defaults to 8.0 if not specified)'
         required: false
         type: string
-        default: '7.0'
+        default: '8.0'
 
 runs:
     using: 'composite'
