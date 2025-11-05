@@ -13,10 +13,10 @@ jobs:
     name: Run PHP CS Fixer inspection
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
+      - name: Checkout code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - name: Set up PHP and install dependencies
-        uses: ./.github/setup-php
+      - uses: ./.github/setup-php
 
       - name: PHPCSFixer check
         run: ./vendor/friendsofphp/php-cs-fixer/php-cs-fixer fix --dry-run --verbose
