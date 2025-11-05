@@ -1,6 +1,6 @@
+name: Psalm Code Analysis
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
@@ -8,14 +8,13 @@ on:
     branches:
       - master
 
-name: Psalm Code Analysis
 jobs:
   psalm:
     name: Psalm
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4.1.1
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       - name: Psalm
         uses: docker://vimeo/psalm-github-actions
