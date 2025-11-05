@@ -1,13 +1,12 @@
+name: PHPUnit
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
-    types: [ opened, labeled, synchronize ]
+    types: [opened, labeled, synchronize]
 
-name: PHPUnit
 jobs:
   build-test:
     if: contains(github.event.pull_request.labels.*.name, 'run tests')
@@ -26,7 +25,8 @@ jobs:
 
     name: PHP ${{ matrix.php }} tests in WP ${{ matrix.wordpress }}
     steps:
-      - uses: actions/checkout@v3.5.0
+      - name: Checkout code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
       # get the PHP version
       - uses: shivammathur/setup-php@2.24.0
