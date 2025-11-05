@@ -1,0 +1,34 @@
+name: 'Set up PHP and dependencies'
+description: 'Installs PHP and Composer packages with caching for faster builds'
+inputs:
+    php-version:
+        description: 'PHP version (defaults to 7.0 if not specified)'
+        required: false
+        type: string
+        default: '7.0'
+
+runs:
+    using: 'composite'
+    steps:
+        - name: Set up PHP
+          uses: shivammathur/setup-php@bf6b4fbd49ca58e4608c9c89fba0b8d90bd2a39f # v2.35.5
+          with:
+              php-version: ${{ inputs.php-version }}
+              coverage: none
+
+        - name: Get Composer cache directory
+          id: composer-cache
+          run: echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+          shell: bash
+
+        - name: Cache Composer dependencies
+          uses: actions/cache@0057852bfaa89a56745cba8c7296529d2fc39830 # v4.3.0
+          with:
+              path: ${{ steps.composer-cache.outputs.dir }}
+              key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+              restore-keys: |
+                  ${{ runner.os }}-composer-
+
+        - name: Install dependencies
+          run: composer install --dev --prefer-dist --no-progress
+          shell: bash

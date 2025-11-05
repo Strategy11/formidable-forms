@@ -13,11 +13,8 @@ jobs:
     name: Run ESLint
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v5
-
-      - name: Set up Node.js and install dependencies
-        uses: ./.github/setup-node
+      - uses: ./.github/checkout
+      - uses: ./.github/setup-node
 
       - name: Run ESLint
         run: ./node_modules/.bin/eslint .

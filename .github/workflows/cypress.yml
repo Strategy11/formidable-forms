@@ -14,14 +14,9 @@ jobs:
 
     name: Cypress
     steps:
-      - name: Checkout
-        uses: actions/checkout@v5
-
-      - name: Composer install
-        run: composer install
-
-      - name: Set up Node.js and install dependencies
-        uses: ./.github/setup-node
+      - uses: ./.github/checkout
+      - uses: ./.github/setup-php
+      - uses: ./.github/setup-node
 
       - name: Install Cypress binary
         run: npx cypress install
