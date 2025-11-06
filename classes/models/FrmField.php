@@ -196,9 +196,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/likert-field-preview.png',
 			),
 			'nps'             => array(
-				'name'  => __( 'NPS', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
-				'addon' => 'surveys',
+				'name'         => __( 'NPS', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_nps frm_show_upgrade',
+				'addon'        => 'surveys',
+				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/nps-field-preview.png',
 			),
 			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
