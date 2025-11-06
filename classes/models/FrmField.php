@@ -183,8 +183,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/page-break-field-preview.png',
 			),
 			'form'            => array(
-				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text2_icon',
+				'name'         => __( 'Embed Form', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_file_text2_icon',
+				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/embed-form-field-preview.png',
 			),
 			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
