@@ -233,9 +233,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/summary-field-preview.png',
 			),
 			'signature'       => array(
-				'name'  => __( 'Signature', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
-				'addon' => 'signature',
+				'name'         => __( 'Signature', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_signature_icon frm_show_upgrade',
+				'addon'        => 'signature',
+				'message'      => __( 'Capture digital e-signatures directly within your form, making official agreements and authorizations straightforward.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/signature-field-preview.png',
 			),
 			'ai'              => array(
 				'name'    => __( 'AI', 'formidable' ),
