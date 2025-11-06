@@ -410,7 +410,7 @@ window.frmAdminBuildJS = function() {
 		};
 
 		this.getOnDeleteActionsTriggerCheckbox = function() {
-			return wp.hooks.applyFilters( 'frm_on_delete_actions_trigger_checkbox', false );
+			return wp.hooks.applyFilters( 'frm_on_delete_actions_trigger_checkbox', false, args );
 		};
 
 		this.updateOnDeleteURL = function( triggerOnDeleteActions = true ) {
