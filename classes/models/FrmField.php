@@ -137,8 +137,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/star-field-preview.png',
 			),
 			'range'           => array(
-				'name' => __( 'Slider', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_commit_icon',
+				'name'         => __( 'Slider', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_code_commit_icon',
+				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/slider-field-preview.png',
 			),
 			'toggle'          => array(
 				'name' => __( 'Toggle', 'formidable' ),
