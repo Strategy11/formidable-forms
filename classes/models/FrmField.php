@@ -240,10 +240,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/signature-field-preview.png',
 			),
 			'ai'              => array(
-				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm-ai-icon frm_show_upgrade',
-				'addon'   => 'ai',
-				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
+				'name'         => __( 'AI', 'formidable' ),
+				'icon'         => 'frm_icon_font frm-ai-icon frm_show_upgrade',
+				'addon'        => 'ai',
+				'message'      => __( 'Harness artificial intelligence by taking user input and let the model of your choice create an output, quickly and easily.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/ai-field-preview.png',
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
