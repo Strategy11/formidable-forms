@@ -155,9 +155,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/dynamic-field-preview.png',
 			),
 			'lookup'          => array(
-				'name'    => __( 'Lookup', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => esc_html__( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . esc_attr__( 'cascading lookup fields', 'formidable' ) . '" />',
+				'name'         => __( 'Lookup', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_search_icon',
+				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/lookup-field-preview.png',
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
