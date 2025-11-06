@@ -100,9 +100,10 @@ class FrmField {
 		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
 			'file'            => array(
-				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload3_icon',
-				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
+				'name'         => __( 'File Upload', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_upload3_icon',
+				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/file-upload-field-preview.png',
 			),
 			'ranking'         => array(),
 			'rte'             => array(
