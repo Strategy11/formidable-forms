@@ -171,8 +171,10 @@ class FrmField {
 				'switch_from' => 'divider',
 			),
 			'divider'         => array(
-				'name' => __( 'Section', 'formidable' ),
-				'icon' => 'frm_icon_font frm_header_icon',
+				'name'         => __( 'Section', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_header_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/section-field-preview.png',
 			),
 			'break'           => array(
 				'name'    => __( 'Page Break', 'formidable' ),
