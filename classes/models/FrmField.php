@@ -203,8 +203,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/nps-field-preview.png',
 			),
 			'password'        => array(
-				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_closed2_icon',
+				'name'         => __( 'Password', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_lock_closed2_icon',
+				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/password-field-preview.png',
 			),
 			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
