@@ -410,22 +410,7 @@ window.frmAdminBuildJS = function() {
 		};
 
 		this.getOnDeleteActionsTriggerCheckbox = function() {
-			const checkbox = window.frmDom.tag( 'input' );
-			checkbox.type  = 'checkbox';
-			checkbox.id    = 'frm_trigger_on_delete_entry_actions';
-			checkbox.addEventListener( 'click', function( e ) {
-				self.updateOnDeleteURL( e.target.checked );
-			});
-
-			const label = window.frmDom.tag( 'label', {
-				children: [
-					checkbox,
-					document.createTextNode( __( 'Trigger all actions that happen "on entry deleted"', 'formidable' ) ),
-				],
-			} );
-			label.for = 'frm_trigger_on_delete_entry_actions';
-
-			return label;
+			return wp.hooks.applyFilters( 'frm_on_delete_actions_trigger_checkbox', false );
 		};
 
 		this.updateOnDeleteURL = function( triggerOnDeleteActions = true ) {
@@ -501,11 +486,13 @@ window.frmAdminBuildJS = function() {
 			copyWrapper.append( window.frmDom.tag( 'h2', self.getHeading() ) );
 			copyWrapper.append( self.getCopy() );
 			copyWrapper.append( self.getConfirmationInput() );
+			const onDeleteActionsTrigger = self.getOnDeleteActionsTriggerCheckbox();
 			if (
 				link.getAttribute( 'data-total-entries' ) &&
-				( 'undefined' === typeof frmEntriesData || frmEntriesData.hasPostAction === '0' )
+				( 'undefined' === typeof frmEntriesData || frmEntriesData.hasPostAction === '0' ) &&
+				onDeleteActionsTrigger
 			) {
-				copyWrapper.append( self.getOnDeleteActionsTriggerCheckbox() );
+				copyWrapper.append( onDeleteActionsTrigger );
 			}
 
 			self.initConfirmationInput();
