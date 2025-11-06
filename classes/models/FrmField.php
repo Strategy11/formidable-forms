@@ -260,9 +260,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/appointment-field-preview.png',
 			),
 			'product'         => array(
-				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product2_icon',
-				'section' => 'pricing',
+				'name'         => __( 'Product', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_product2_icon',
+				'section'      => 'pricing',
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/product-field-preview.png',
 			),
 			'quantity'        => array(
 				'name'    => __( 'Quantity', 'formidable' ),
