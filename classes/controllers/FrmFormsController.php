@@ -319,7 +319,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return string
 	 */

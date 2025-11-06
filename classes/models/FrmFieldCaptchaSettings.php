@@ -257,7 +257,7 @@ class FrmFieldCaptchaSettings {
 	/**
 	 * Default to no prefix. This is overwritten by child classes.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param bool $allow_multiple
 	 * @return string
