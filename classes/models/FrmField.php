@@ -209,8 +209,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/password-field-preview.png',
 			),
 			'tag'             => array(
-				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags2_icon',
+				'name'         => __( 'Tags', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_price_tags2_icon',
+				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/tags-field-preview.png',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
