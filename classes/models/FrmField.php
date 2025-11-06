@@ -113,8 +113,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/rich-text-field-preview.png',
 			),
 			'date'            => array(
-				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar2_icon',
+				'name'         => __( 'Date', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_calendar2_icon',
+				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/date-field-preview.png',
 			),
 			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),
