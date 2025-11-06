@@ -119,8 +119,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/date-field-preview.png',
 			),
 			'time'            => array(
-				'name' => __( 'Time', 'formidable' ),
-				'icon' => 'frm_icon_font frm_clock_icon',
+				'name'         => __( 'Time', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_clock_icon',
+				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/time-field-preview.png',
 			),
 			'scale'           => array(
 				'name'    => __( 'Scale', 'formidable' ),
