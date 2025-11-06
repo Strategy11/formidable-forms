@@ -131,8 +131,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/scale-field-preview.png',
 			),
 			'star'            => array(
-				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star2_icon',
+				'name'         => __( 'Star Rating', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_star2_icon',
+				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/star-field-preview.png',
 			),
 			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
