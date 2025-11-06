@@ -189,9 +189,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/embed-form-field-preview.png',
 			),
 			'likert'          => array(
-				'name'  => __( 'Likert Scale', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
-				'addon' => 'surveys',
+				'name'         => __( 'Likert Scale', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'addon'        => 'surveys',
+				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/likert-field-preview.png',
 			),
 			'nps'             => array(
 				'name'  => __( 'NPS', 'formidable' ),
