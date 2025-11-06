@@ -143,8 +143,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/slider-field-preview.png',
 			),
 			'toggle'          => array(
-				'name' => __( 'Toggle', 'formidable' ),
-				'icon' => 'frm_icon_font frm_toggle_on_icon',
+				'name'         => __( 'Toggle', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_toggle_on_icon',
+				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/toggle-field-preview.png',
 			),
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
