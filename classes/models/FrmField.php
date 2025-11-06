@@ -274,9 +274,11 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/quantity-field-preview.png',
 			),
 			'total'           => array(
-				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total2_icon',
-				'section' => 'pricing',
+				'name'         => __( 'Total', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_total2_icon',
+				'section'      => 'pricing',
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/total-field-preview.png',
 			),
 		);
 
