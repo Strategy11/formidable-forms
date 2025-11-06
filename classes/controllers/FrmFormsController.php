@@ -1511,12 +1511,6 @@ class FrmFormsController {
 			unset( $sections['buttons'] );
 		}
 
-		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
-			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
-				unset( $sections[ $feature ] );
-			}
-		}
-
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );
 
 		foreach ( $sections as $key => $section ) {

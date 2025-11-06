@@ -252,10 +252,6 @@ class FrmField {
 			unset( $fields['ranking'] );
 		}
 
-		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
-			unset( $fields['ai'] );
-		}
-
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
 		if ( isset( $lite_fields['signature'] ) ) {
