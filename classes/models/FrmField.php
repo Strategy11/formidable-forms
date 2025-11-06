@@ -125,9 +125,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/time-field-preview.png',
 			),
 			'scale'           => array(
-				'name'    => __( 'Scale', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => esc_html__( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . esc_attr__( 'Scale Field', 'formidable' ) . '" />',
+				'name'         => __( 'Scale', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_linear_scale_icon',
+				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/scale-field-preview.png',
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
