@@ -161,9 +161,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/lookup-field-preview.png',
 			),
 			'divider|repeat'  => array(
-				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_refresh_icon',
-				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
+				'name'         => __( 'Repeater', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_refresh_icon',
+				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/repeater-field-preview.png',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
