@@ -227,9 +227,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/address-field-preview.png',
 			),
 			'summary'         => array(
-				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text3_icon',
-				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
+				'name'         => __( 'Summary', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_file_text3_icon',
+				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/summary-field-preview.png',
 			),
 			'signature'       => array(
 				'name'  => __( 'Signature', 'formidable' ),
