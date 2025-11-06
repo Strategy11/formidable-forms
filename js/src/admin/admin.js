@@ -312,7 +312,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( 'entries-list' === loadedFrom ) {
-			const confirmModal = wp.hooks.applyFilters( 'frm_on_multiple_entries_delete', { link, initModal });
+			const confirmModal = wp.hooks.applyFilters( 'frm_on_multiple_entries_delete', { link, initModal } );
 			if ( typeof confirmModal === 'string' ) {
 				return confirmModal;
 			}
@@ -347,7 +347,7 @@ window.frmAdminBuildJS = function() {
 
 		this.deleteAllFormEntries = false;
 
-		this.countEntries = function () {
+		this.countEntries = function() {
 			if ( null !== link.getAttribute( 'data-total-entries' ) ) {
 				self.modalOptions.entriesCount = parseInt(
 					link.getAttribute( 'data-total-entries' ),
@@ -360,7 +360,7 @@ window.frmAdminBuildJS = function() {
 			self.modalOptions.entriesCount = 0;
 			document
 				.querySelectorAll( 'input[name="item-action[]"]' )
-				.forEach( function ( checkbox ) {
+				.forEach( function( checkbox ) {
 					if ( checkbox.checked ) {
 						self.modalOptions.entriesCount++;
 					}
@@ -368,7 +368,7 @@ window.frmAdminBuildJS = function() {
 			return self.modalOptions.entriesCount;
 		};
 
-		this.getHeading = function () {
+		this.getHeading = function() {
 			if ( 1 === self.modalOptions.entriesCount ) {
 				return self.modalOptions.headingSingleEntry;
 			}
@@ -378,7 +378,7 @@ window.frmAdminBuildJS = function() {
 			);
 		};
 
-		this.getCopy = function () {
+		this.getCopy = function() {
 			if ( ! link.getAttribute( 'data-frmverify' ) ) {
 				return self.modalOptions.copy;
 			}
@@ -401,7 +401,7 @@ window.frmAdminBuildJS = function() {
 			return ( self.modalOptions.copy = copy );
 		};
 
-		this.getConfirmationInput = function () {
+		this.getConfirmationInput = function() {
 			self.confirmationInput = window.frmDom.tag( 'input', {
 				className: 'frm-delete-confirmation-input',
 			} );
@@ -423,8 +423,8 @@ window.frmAdminBuildJS = function() {
 				redirectURL
 			);
 		};
-	
-		this.initConfirmButton = function ( active ) {
+
+		this.initConfirmButton = function( active ) {
 			self.confirmButton.classList.add(
 				link.getAttribute( 'data-frmverify-btn' )
 			);
@@ -442,15 +442,15 @@ window.frmAdminBuildJS = function() {
 			self.confirmButton.setAttribute( 'href', '#' );
 			self.confirmButton.classList.add( 'frm-btn-inactive' );
 			self.confirmButton.classList.remove( 'dismiss' );
-			self.modal.one( 'dialogclose', function () {
+			self.modal.one( 'dialogclose', function() {
 				self.confirmButton.classList.remove( 'frm-btn-inactive' );
 			} );
 		};
 
-		this.initConfirmationInput = function () {
+		this.initConfirmationInput = function() {
 			self.confirmationInput.placeholder =
 				self.modalOptions.inputPlaceholder;
-			self.confirmationInput.addEventListener( 'keydown', function () {
+			self.confirmationInput.addEventListener( 'keydown', function() {
 				clearTimeout( self.timeoutInterval );
 				self.timeoutInterval = setTimeout(
 					self.confirmationCheck,
@@ -459,7 +459,7 @@ window.frmAdminBuildJS = function() {
 			} );
 		};
 
-		this.confirmationCheck = function () {
+		this.confirmationCheck = function() {
 			if (
 				'delete all' ===
 				self.confirmationInput.value.toLowerCase().trim()
@@ -470,7 +470,7 @@ window.frmAdminBuildJS = function() {
 			self.initConfirmButton( false );
 		};
 
-		this.initModal = function () {
+		this.initModal = function() {
 			if (
 				null === self.wrapper ||
 				null === self.wrapper.querySelector( '.frm-confirm-msg' )
@@ -499,7 +499,7 @@ window.frmAdminBuildJS = function() {
 			self.initConfirmButton( false );
 		};
 
-		this.openModal = function () {
+		this.openModal = function() {
 			if ( false === self.modal || 0 === self.countEntries() ) {
 				return false;
 			}
