@@ -228,10 +228,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 	protected function display_tablenav( $which ) {
 		$is_footer = ( $which !== 'top' );
 		if ( $is_footer && ! empty( $this->items ) ) {
+			$utm = array(
+				'campaign' => 'spam-protection',
+				'content'  => 'entries-list-spam-protection',
+			);
 			?>
 			<p>
 				<?php esc_html_e( 'Getting spam form submissions?', 'formidable' ); ?>
-				<a href="https://formidableforms.com/knowledgebase/add-spam-protection/" target="_blank">
+				<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $utm, 'knowledgebase/add-spam-protection/' ) ); ?>" target="_blank">
 					<?php esc_html_e( 'Learn how to prevent them.', 'formidable' ); ?>
 				</a>
 			</p>

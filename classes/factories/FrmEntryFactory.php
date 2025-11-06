@@ -38,7 +38,7 @@ class FrmEntryFactory {
 	}
 
 	/**
-	 * Create an intsance of the FrmEntryShortcodeFormatter class
+	 * Create an instance of the FrmEntryShortcodeFormatter class
 	 *
 	 * @since 2.04
 	 *

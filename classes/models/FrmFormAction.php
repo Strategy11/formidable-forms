@@ -435,7 +435,7 @@ class FrmFormAction {
 		foreach ( $settings as $number => $new_instance ) {
 			$this->_set( $number );
 
-			$old_instance = isset( $all_instances[ $number ] ) ? $all_instances[ $number ] : array();
+			$old_instance = $all_instances[ $number ] ?? array();
 
 			if ( ! isset( $new_instance['post_status'] ) ) {
 				$new_instance['post_status'] = 'draft';
@@ -452,7 +452,7 @@ class FrmFormAction {
 			$new_instance['post_type']  = FrmFormActionsController::$action_post_type;
 			$new_instance['post_name']  = $this->form_id . '_' . $this->id_base . '_' . $this->number;
 			$new_instance['menu_order'] = $this->form_id;
-			$new_instance['post_date']  = isset( $old_instance->post_date ) ? $old_instance->post_date : '';
+			$new_instance['post_date']  = $old_instance->post_date ?? '';
 			$instance                   = $this->update( $new_instance, $old_instance );
 
 			/**
@@ -540,6 +540,9 @@ class FrmFormAction {
 		}
 
 		if ( 'all' !== $type ) {
+			if ( is_array( $action_controls ) ) {
+				return array();
+			}
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
@@ -865,32 +868,6 @@ class FrmFormAction {
 
 		$stop = false;
 		return $stop;
-	}
-
-	/**
-	 * Prepare the logic value for comparison against the entered value
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param array|string $logic_value
-	 *
-	 * @return void
-	 */
-	private static function prepare_logic_value( &$logic_value, $action, $entry ) {
-		if ( is_array( $logic_value ) ) {
-			$logic_value = reset( $logic_value );
-		}
-
-		if ( $logic_value === 'current_user' ) {
-			$logic_value = get_current_user_id();
-		}
-
-		$logic_value = apply_filters( 'frm_content', $logic_value, $action->menu_order, $entry );
-
-		/**
-		 * @since 4.04.05
-		 */
-		$logic_value = apply_filters( 'frm_action_logic_value', $logic_value );
 	}
 
 	/**

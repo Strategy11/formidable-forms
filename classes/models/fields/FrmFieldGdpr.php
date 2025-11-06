@@ -199,7 +199,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	/**
 	 * Add the GDPR agreement text as an additional translatable string.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @return array
 	 */

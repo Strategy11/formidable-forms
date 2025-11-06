@@ -391,7 +391,7 @@ class FrmTipsHelper {
 	}
 
 	public static function get_random_tip( $tips ) {
-		$random = rand( 0, count( $tips ) - 1 );
+		$random = random_int( 0, count( $tips ) - 1 );
 
 		return $tips[ $random ];
 	}

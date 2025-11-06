@@ -355,7 +355,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function column_style( $form ) {
-		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
+		$style_setting = $form->options['custom_style'] ?? '';
 		$frm_settings  = FrmAppHelper::get_settings();
 
 		if ( $style_setting === '0' || 'none' === $frm_settings->load_style ) {

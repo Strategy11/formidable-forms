@@ -327,7 +327,11 @@ class FrmCSVExportHelper {
 			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
 
-		$field_headings[ $col->id ] = strip_tags( $col->name );
+		if ( ! empty( $field_headings[ $col->id . '_label' ] ) ) {
+			$field_headings[ $col->id ] = strip_tags( $col->name . ' ' . __( '(value)', 'formidable' ) );
+		} else {
+			$field_headings[ $col->id ] = strip_tags( $col->name );
+		}
 		$field_headings             = apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
@@ -591,7 +595,7 @@ class FrmCSVExportHelper {
 
 	private static function add_field_values_to_csv( &$row ) {
 		foreach ( self::$fields as $col ) {
-			$field_value = isset( self::$entry->metas[ $col->id ] ) ? self::$entry->metas[ $col->id ] : false;
+			$field_value = self::$entry->metas[ $col->id ] ?? false;
 
 			FrmFieldsHelper::prepare_field_value( $field_value, $col->type );
 			self::add_array_values_to_columns( $row, compact( 'col', 'field_value' ) );

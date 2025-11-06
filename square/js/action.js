@@ -53,7 +53,7 @@
 	function onToggleSub() {
 		const target = this;
 		setTimeout( function() {
-			const settings       = target.closest( '.frm_form_action_settings' );
+			const settings = target.closest( '.frm_form_action_settings' );
 			const squareIsActive = settings.querySelector( '[name*="[post_content][gateway]"][value="square"]' ).checked;
 
 			settings.querySelectorAll( '.frm_trans_sub_opts' ).forEach(
@@ -152,7 +152,7 @@
 
 		if ( option ) {
 			if ( 'square' === gateway ) {
-				currencySetting.value    = option.value;
+				currencySetting.value = option.value;
 				currencySetting.disabled = true;
 			} else {
 				currencySetting.disabled = false;
@@ -165,7 +165,7 @@
 		// Option didn't exist yet, so add it.
 		if ( 'square' === gateway ) {
 			option = document.createElement( 'option' );
-			option.value       = 'square';
+			option.value = 'square';
 			option.textContent = 'Use Square Merchant Currency';
 			option.classList.add( 'square-currency' );
 			currencySetting.appendChild( option );

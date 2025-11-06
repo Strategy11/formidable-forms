@@ -443,11 +443,36 @@ class FrmStylesHelper {
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
-			$show = empty( $defaults ) || ( $settings[ $var ] !== '' && $settings[ $var ] !== $defaults[ $var ] );
-			if ( $show && self::css_value_is_valid( $settings[ $var ] ) ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . self::css_var_prepare_value( $settings, $var ) . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+			$prepared_value = '';
+			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * Check if a CSS variable setting is not blank, doesn't match the default, and doesn't include invalid substrings.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array  $settings       Array of setting values.
+	 * @param array  $defaults       Array of default values.
+	 * @param string $var            The setting key name.
+	 * @param string $prepared_value The value from calling css_var_prepare_value. This is set by reference so it can be used after this function is called.
+	 * @return bool True if the CSS value should be printed.
+	 */
+	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
+		$prepared_value = self::css_var_prepare_value( $settings, $var );
+		if ( $prepared_value === '' ) {
+			return false;
+		}
+
+		if ( $defaults && $defaults[ $var ] === $prepared_value ) {
+			return false;
+		}
+
+		return self::css_value_is_valid( $prepared_value );
 	}
 
 	/**
@@ -474,6 +499,10 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	private static function css_value_is_valid( $var ) {
+		if ( is_numeric( $var ) ) {
+			return true;
+		}
+
 		// None of these substrings should be present in any CSS value.
 		$invalid_substrings = array(
 			'function(',
@@ -518,6 +547,10 @@ class FrmStylesHelper {
 	private static function css_var_prepare_value( $settings, $key ) {
 		$value = $settings[ $key ];
 
+		if ( ! is_string( $value ) && ! is_numeric( $value ) ) {
+			return '';
+		}
+
 		switch ( $key ) {
 			case 'font':
 				return safecss_filter_attr( $value );
@@ -548,7 +581,7 @@ class FrmStylesHelper {
 				break;
 		}//end switch
 
-		return esc_html( $settings[ $key ] );
+		return esc_html( $value );
 	}
 
 	/**
@@ -630,7 +663,7 @@ class FrmStylesHelper {
 			return $settings;
 		}
 		$base_font_size       = (int) $settings['base_font_size'];
-		$font_size            = $settings['font_size'];
+		$font_size            = $defaults['font_size'];
 		$font_sizes_to_update = array(
 			'font_size',
 			'field_font_size',

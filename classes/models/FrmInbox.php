@@ -110,7 +110,7 @@ class FrmInbox extends FrmFormApi {
 			return;
 		}
 
-		if ( $this->is_expired( $message ) ) {
+		if ( ! $this->within_valid_timeframe( $message ) ) {
 			return;
 		}
 
@@ -159,8 +159,8 @@ class FrmInbox extends FrmFormApi {
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
-			$expired   = $this->is_expired( $message );
-			if ( $read || $expired || $dismissed ) {
+
+			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
 				unset( self::$messages[ $t ] );
 				$removed = true;
 			}
@@ -180,13 +180,41 @@ class FrmInbox extends FrmFormApi {
 		$user_id = get_current_user_id();
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
-			if ( empty( $k ) || $this->is_expired( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
 			}
 		}
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
+	}
+
+	/**
+	 * Check if a message has started and is not expired.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $message
+	 * @return bool
+	 */
+	private function within_valid_timeframe( $message ) {
+		return $this->has_started( $message ) && ! $this->is_expired( $message );
+	}
+
+	/**
+	 * Check if a message has actually started, so we can prevent showing something that is queued up early.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $message
+	 * @return bool
+	 */
+	private function has_started( $message ) {
+		if ( empty( $message['starts'] ) ) {
+			return true;
+		}
+
+		return $message['starts'] <= time();
 	}
 
 	/**
@@ -499,7 +527,7 @@ class FrmInbox extends FrmFormApi {
 		return array_reduce(
 			$keys_to_return,
 			function ( $total, $key ) use ( $message ) {
-				$total[ $key ] = isset( $message[ $key ] ) ? $message[ $key ] : '';
+				$total[ $key ] = $message[ $key ] ?? '';
 				return $total;
 			},
 			array()

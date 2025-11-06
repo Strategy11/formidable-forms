@@ -230,30 +230,6 @@ class FrmFieldValue {
 			}
 		}
 
-		// TODO: maybe change from 'source' to 'run_filters' = 'email'
-		if ( isset( $atts['source'] ) && $atts['source'] === 'entry_formatter' ) {
-			// Deprecated frm_email_value hook
-			$meta = array(
-				'item_id'    => $this->entry->id,
-				'field_id'   => $this->field->id,
-				'meta_value' => $this->saved_value,
-				'field_type' => $this->field->type,
-			);
-
-			if ( has_filter( 'frm_email_value' ) ) {
-				_deprecated_function( 'The frm_email_value filter', '2.04', 'the frm_display_{fieldtype}_value_custom filter' );
-				$this->displayed_value = apply_filters(
-					'frm_email_value',
-					$this->displayed_value,
-					(object) $meta,
-					$this->entry,
-					array(
-						'field' => $this->field,
-					)
-				);
-			}
-		}//end if
-
 		// frm_display_{fieldtype}_value_custom hook
 		$this->displayed_value = apply_filters(
 			'frm_display_' . $this->field->type . '_value_custom',

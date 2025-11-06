@@ -24,29 +24,28 @@ registerBlockType( 'formidable/simple-view', {
 	],
 
 	edit: () => {
-
-		const [ addonActivateButton, updateAddonActivateButton ] = useState({
+		const [ addonActivateButton, updateAddonActivateButton ] = useState( { // eslint-disable-line react-hooks/rules-of-hooks
 			defaultClassname: 'frm-activate-addon frm-button-primary button button-primary',
-			loadingClassname: buttonStyles['frm-loading'],
+			loadingClassname: buttonStyles[ 'frm-loading' ],
 			classnames: 'frm-activate-addon frm-button-primary button button-primary',
 			label: ! blockData.viewsAddon.installed && blockData.viewsAddon.hasAccess ? __( 'Install', 'formidable' ) : __( 'Activate', 'formidable' ),
 			isLoading: false
-		});
+		} );
 
 		const activateViewsAddon = () => {
 			if ( true === addonActivateButton.isLoading ) {
 				return;
 			}
-			updateAddonActivateButton({ ...addonActivateButton, isLoading: true, classnames: addonActivateButton.defaultClassname + ' ' + addonActivateButton.loadingClassname });
+			updateAddonActivateButton( { ...addonActivateButton, isLoading: true, classnames: addonActivateButton.defaultClassname + ' ' + addonActivateButton.loadingClassname } );
 			if ( ! blockData.viewsAddon.installed && blockData.viewsAddon.hasAccess ) {
 				frmAddonAPI.toggleAddonState( 'frm_install_addon', blockData.viewsAddon.url ).then( () => {
 					window.location.reload();
-				});
+				} );
 				return;
 			}
 			frmAddonAPI.toggleAddonState( 'frm_activate_addon', 'formidable-views/formidable-views.php' ).then( () => {
 				window.location.reload();
-			});
+			} );
 		};
 
 		const blockName = __( 'Formidable Views', 'formidable' );
@@ -68,9 +67,9 @@ registerBlockType( 'formidable/simple-view', {
 					<FormidableIcon></FormidableIcon>
 					<div className="frm-block-title">{ blockName }</div>
 					<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
-						{ ! blockData.viewsAddon.hasAccess  &&
+						{ ! blockData.viewsAddon.hasAccess &&
 							<Notice status="warning" isDismissible={ false }>
-								<div style={ { maxWidth: '500px', margin: 'auto'} }>
+								<div style={ { maxWidth: '500px', margin: 'auto' } }>
 									{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
 								</div>
 								<br />
@@ -82,7 +81,7 @@ registerBlockType( 'formidable/simple-view', {
 						}
 						{ blockData.viewsAddon.hasAccess &&
 							<Notice status="warning" isDismissible={ false }>
-								<div style={ { maxWidth: '500px', margin: 'auto'} }>
+								<div style={ { maxWidth: '500px', margin: 'auto' } }>
 									{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
 								</div>
 								<br />
@@ -97,4 +96,4 @@ registerBlockType( 'formidable/simple-view', {
 			</div>
 		);
 	}
-});
+} );

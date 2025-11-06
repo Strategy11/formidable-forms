@@ -10,7 +10,7 @@ class FrmAppHelper {
 	 *
 	 * @var int
 	 */
-	public static $db_version = 103;
+	public static $db_version = 104;
 
 	/**
 	 * Used by the API add-on.
@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.22.3';
+	public static $plug_version = '6.25.1';
 
 	/**
 	 * @var bool
@@ -56,7 +56,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function plugin_path() {
-		return dirname( dirname( __DIR__ ) );
+		return dirname( __DIR__, 2 );
 	}
 
 	/**
@@ -115,50 +115,95 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.04.02
-	 * @param array|string $args
+	 *
+	 * @param array|string $args If a string is passed, it is used for the utm_campaign attribute.
 	 * @param string       $page
 	 */
 	public static function admin_upgrade_link( $args, $page = '' ) {
-		if ( empty( $page ) ) {
-			$page = 'https://formidableforms.com/lite-upgrade/';
-		} else {
+		if ( $page ) {
 			$page = str_replace( 'https://formidableforms.com/', '', $page );
 			$page = 'https://formidableforms.com/' . $page;
+		} else {
+			$page = 'https://formidableforms.com/lite-upgrade/';
 		}
 
-		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = isset( $args['medium'] ) ? $args['medium'] : '';
-			if ( isset( $args['content'] ) ) {
-				$content = $args['content'];
-			}
-			if ( isset( $args['anchor'] ) ) {
-				$anchor = '#' . $args['anchor'];
-			}
+			$args = self::adjust_legacy_utm_args( $args );
 		} else {
-			$medium = $args;
+			$args = array( 'campaign' => $args );
 		}
 
 		$query_args = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => $medium,
-			'utm_campaign' => 'liteplugin',
+			'utm_source' => 'plugin',
+			'utm_medium' => self::get_utm_medium(),
 		);
+		$query_args = self::maybe_add_utm_license( $query_args );
 
-		if ( isset( $content ) ) {
-			$query_args['utm_content'] = $content;
+		if ( isset( $args['campaign'] ) ) {
+			$query_args['utm_campaign'] = $args['campaign'];
 		}
 
-		if ( is_array( $args ) && isset( $args['param'] ) ) {
+		if ( isset( $args['content'] ) ) {
+			$query_args['utm_content'] = $args['content'];
+		}
+
+		if ( isset( $args['param'] ) ) {
 			$query_args['f'] = $args['param'];
 		}
 
-		if ( is_array( $args ) && ! empty( $args['plan'] ) ) {
+		if ( ! empty( $args['plan'] ) ) {
 			$query_args['plan'] = $args['plan'];
 		}
 
-		$link = add_query_arg( $query_args, $page ) . $anchor;
+		$link = add_query_arg( $query_args, $page );
+
+		if ( isset( $args['anchor'] ) ) {
+			$link .= '#' . $args['anchor'];
+		}
+
 		return self::make_affiliate_url( $link );
+	}
+
+	/**
+	 * If medium is "pro", add an additional utm_license param with their active license type.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param array $query_args
+	 * @return array
+	 */
+	private static function maybe_add_utm_license( $query_args ) {
+		if ( 'pro' === $query_args['utm_medium'] && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
+			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
+		}
+
+		return $query_args;
+	}
+
+	/**
+	 * @since 6.25.1
+	 *
+	 * @return string
+	 */
+	private static function get_utm_medium() {
+		return self::pro_is_connected() ? 'pro' : 'lite';
+	}
+
+	/**
+	 * Change campaign from "liteplugin" to what we're currently using for medium.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	private static function adjust_legacy_utm_args( $args ) {
+		if ( isset( $args['medium'] ) ) {
+			$args['campaign'] = $args['medium'];
+			unset( $args['medium'] );
+		}
+
+		return $args;
 	}
 
 	/**
@@ -168,23 +213,26 @@ class FrmAppHelper {
 	 * @param array  $utm
 	 */
 	public static function maybe_add_missing_utm( $cta_link, $utm ) {
+		$utm        = self::adjust_legacy_utm_args( $utm );
 		$query_args = array();
 
 		if ( false === strpos( $cta_link, 'utm_source' ) ) {
-			$query_args['utm_source'] = 'WordPress';
+			$query_args['utm_source'] = 'plugin';
 		}
 
-		if ( false === strpos( $cta_link, 'utm_campaign' ) ) {
-			$query_args['utm_campaign'] = 'liteplugin';
+		if ( false === strpos( $cta_link, 'utm_medium' ) ) {
+			$query_args['utm_medium'] = self::get_utm_medium();
 		}
 
-		if ( false === strpos( $cta_link, 'utm_medium' ) && isset( $utm['medium'] ) ) {
-			$query_args['utm_medium'] = $utm['medium'];
+		if ( false === strpos( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
+			$query_args['utm_campaign'] = $utm['campaign'];
 		}
 
 		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
 			$query_args['utm_content'] = $utm['content'];
 		}
+
+		$query_args = self::maybe_add_utm_license( $query_args );
 
 		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
 	}
@@ -215,7 +263,7 @@ class FrmAppHelper {
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
 
-		return FrmAddonsController::is_license_expired() ? 'Formidable' : $frm_settings->menu;
+		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
 	}
 
 	/**
@@ -663,7 +711,7 @@ class FrmAppHelper {
 				}
 
 				$p     = trim( $p, ']' );
-				$value = isset( $value[ $p ] ) ? $value[ $p ] : $default;
+				$value = $value[ $p ] ?? $default;
 			}
 		}
 
@@ -1024,7 +1072,7 @@ class FrmAppHelper {
 			$allowed_html = $html;
 		} elseif ( ! empty( $allowed ) ) {
 			foreach ( (array) $allowed as $a ) {
-				$allowed_html[ $a ] = isset( $html[ $a ] ) ? $html[ $a ] : array();
+				$allowed_html[ $a ] = $html[ $a ] ?? array();
 			}
 		}
 
@@ -1291,6 +1339,7 @@ class FrmAppHelper {
 	public static function add_allowed_icon_tags( $allowed_html ) {
 		$allowed_html['svg']['data-open'] = true;
 		$allowed_html['svg']['title']     = true;
+		$allowed_html['svg']['tabindex']  = true;
 		return $allowed_html;
 	}
 
@@ -1461,8 +1510,8 @@ class FrmAppHelper {
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
 				$utm          = array(
-					'medium'  => 'settings-license',
-					'content' => 'lite-banner',
+					'campaign' => 'settings-license',
+					'content'  => 'lite-banner',
 				);
 
 				if ( $upgrade_link ) {
@@ -1540,6 +1589,7 @@ class FrmAppHelper {
 			'text'        => __( 'Search', 'formidable' ),
 			'input_id'    => '',
 			'value'       => false,
+			'class'       => '',
 		);
 		$atts     = array_merge( $defaults, $atts );
 
@@ -1574,11 +1624,11 @@ class FrmAppHelper {
 			$input_atts['autocomplete'] = 'off';
 		}
 		?>
-		<p class="frm-search">
+		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<span class="frmfont frm_search_icon"></span>
+			<?php self::icon_by_class( 'frm_icon_font frm_search_icon frm_svg20' ); ?>
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -1831,8 +1881,8 @@ class FrmAppHelper {
 	 */
 	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
 		if ( is_array( $option ) ) {
-			$value = isset( $option[ $args['value_key'] ] ) ? $option[ $args['value_key'] ] : '';
-			$label = isset( $option[ $args['label_key'] ] ) ? $option[ $args['label_key'] ] : '';
+			$value = $option[ $args['value_key'] ] ?? '';
+			$label = $option[ $args['label_key'] ] ?? '';
 		} else {
 			$value = $key;
 			$label = $option;
@@ -2008,7 +2058,7 @@ class FrmAppHelper {
 		foreach ( $editable_roles as $role => $details ) {
 			$name = translate_user_role( $details['name'] );
 			?>
-			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_html( $name ); ?> </option>
+			<option value="<?php echo esc_attr( $role ); ?>" <?php self::selected( $capability, $role ); ?>><?php echo esc_html( $name ); ?></option>
 			<?php
 			unset( $role, $details );
 		}
@@ -2038,12 +2088,6 @@ class FrmAppHelper {
 		 * @param array<string,string> $pro_cap
 		 */
 		$pro_cap = apply_filters( 'frm_pro_capabilities', $pro_cap );
-
-		if ( ! array_key_exists( 'frm_edit_displays', $pro_cap ) && is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed() ) {
-			// For backward compatibility, add the Add/Edit Views permission if Pro is not up to date.
-			// This was added in 6.5.4. Remove this in the future.
-			$pro_cap['frm_edit_displays'] = __( 'Add/Edit Views', 'formidable' );
-		}
 
 		if ( 'pro_only' === $type ) {
 			return $pro_cap;
@@ -2534,11 +2578,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function generate_new_key( $num_chars ) {
-		$max_slug_value = pow( 36, $num_chars );
+		$max_slug_value = 36 ** $num_chars;
 
 		// We want to have at least 2 characters in the slug.
 		$min_slug_value = 37;
-		return base_convert( rand( $min_slug_value, $max_slug_value ), 10, 36 );
+		return base_convert( random_int( $min_slug_value, $max_slug_value ), 10, 36 );
 	}
 
 	/**
@@ -2592,7 +2636,7 @@ class FrmAppHelper {
 		);
 
 		foreach ( array( 'name', 'description' ) as $var ) {
-			$default_val    = isset( $record->{$var} ) ? $record->{$var} : '';
+			$default_val    = $record->{$var} ?? '';
 			$values[ $var ] = self::get_param( $var, $default_val, 'get', 'wp_kses_post' );
 			unset( $var, $default_val );
 		}
@@ -2619,7 +2663,7 @@ class FrmAppHelper {
 					// Don't prep default values on the form settings page.
 					$field->default_value = apply_filters( 'frm_get_default_value', $field->default_value, $field, true );
 				}
-				$args['parent_form_id'] = isset( $args['parent_form_id'] ) ? $args['parent_form_id'] : $field->form_id;
+				$args['parent_form_id'] = $args['parent_form_id'] ?? $field->form_id;
 				self::fill_field_defaults( $field, $record, $values, $args );
 			}
 		}
@@ -2649,7 +2693,7 @@ class FrmAppHelper {
 			$meta_value = FrmEntryMeta::get_meta_value( $record, $field->id );
 		}//end if
 
-		$field_type = isset( $post_values['field_options'][ 'type_' . $field->id ] ) ? $post_values['field_options'][ 'type_' . $field->id ] : $field->type;
+		$field_type = $post_values['field_options'][ 'type_' . $field->id ] ?? $field->type;
 		if ( isset( $post_values['item_meta'][ $field->id ] ) ) {
 			$new_value = $post_values['item_meta'][ $field->id ];
 			self::unserialize_or_decode( $new_value );
@@ -2753,7 +2797,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
-				$values[ $h . '_html' ] = ( isset( $post_values['options'][ $h . '_html' ] ) ? $post_values['options'][ $h . '_html' ] : FrmFormsHelper::get_default_html( $h ) );
+				$values[ $h . '_html' ] = ( $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h ) );
 			}
 			unset( $h );
 		}
@@ -3179,7 +3223,7 @@ class FrmAppHelper {
 	public static function maybe_add_tooltip( $name, $class = 'closed', $form_name = '' ) {
 		$tooltips = array(
 			'action_title'  => __( 'Give this action a label for easy reference.', 'formidable' ),
-			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [admin_email] is the address set in WP General Settings.', 'formidable' ),
+			'email_to'      => __( 'Add one or more recipient addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.  [default-email] is the address set in the global "Default Email Address" settings.', 'formidable' ),
 			'cc'            => __( 'Add CC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'bcc'           => __( 'Add BCC addresses separated by a ",".  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
 			'reply_to'      => __( 'If you would like a different reply to address than the "from" address, add a single address here.  FORMAT: Name <name@email.com> or name@email.com.', 'formidable' ),
@@ -3516,7 +3560,7 @@ class FrmAppHelper {
 			$admin_script_strings = array(
 				'desc'                               => __( '(Click to add description)', 'formidable' ),
 				'blank'                              => __( '(Blank)', 'formidable' ),
-				'no_label'                           => __( '(no label)', 'formidable' ),
+				'no_label'                           => self::get_no_label_text(),
 				'ok'                                 => __( 'OK', 'formidable' ),
 				'cancel'                             => __( 'Cancel', 'formidable' ),
 				'default_label'                      => __( 'Default', 'formidable' ),
@@ -3590,6 +3634,17 @@ class FrmAppHelper {
 				wp_localize_script( 'formidable_admin', 'frm_admin_js', $admin_script_strings );
 			}
 		}//end if
+	}
+
+	/**
+	 * Get the no label text.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @return string
+	 */
+	public static function get_no_label_text() {
+		return __( '(no label)', 'formidable' );
 	}
 
 	/**
@@ -3672,19 +3727,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$expired = FrmAddonsController::is_license_expired();
-		?>
-		<div class="frm-banner-alert frm_error_style frm_previous_install">
-			<?php
-			esc_html_e( 'You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro.', 'formidable' );
-			if ( empty( $expired ) ) {
-				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
-			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version.';
-			}
-			?>
-		</div>
-		<?php
+		include self::plugin_path() . '/classes/views/addons/min-version-notice.php';
 	}
 
 	/**
@@ -3907,12 +3950,6 @@ class FrmAppHelper {
 
 		$new_args['options']     = (array) $new_args['options'];
 		$new_args['input_attrs'] = (array) $new_args['input_attrs'];
-
-		// Set the number of columns.
-		$new_args['col_class'] = ceil( 12 / count( $new_args['options'] ) );
-		if ( $new_args['col_class'] > 6 ) {
-			$new_args['col_class'] = ceil( $new_args['col_class'] / 2 );
-		}
 
 		/**
 		 * Allows modifying the arguments of images_dropdown() method.
@@ -4225,13 +4262,16 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * Enhances upgrade data parameters with installation link and plan requirement information.
+	 *
 	 * @since 5.0.17
 	 *
-	 * @param string $plugin
-	 * @param array  $params
-	 * @return array
+	 * @param string $plugin   The plugin slug to get installation data for.
+	 * @param array  $params   Initial parameters for the upgrade data.
+	 * @param bool   $detailed Whether to include detailed information.
+	 * @return array Modified parameters with installation data.
 	 */
-	public static function get_upgrade_data_params( $plugin, $params ) {
+	public static function get_upgrade_data_params( $plugin, $params, $detailed = false ) {
 		$link = FrmAddonsController::install_link( $plugin );
 		if ( ! $link ) {
 			return $params;
@@ -4244,7 +4284,11 @@ class FrmAppHelper {
 				$params['medium'] = $plugin;
 			}
 		} else {
-			$params['requires'] = FrmFormsHelper::get_plan_required( $link );
+			$params['requires'] = $params['requires'] ?? FrmFormsHelper::get_plan_required( $link );
+		}
+
+		if ( $detailed ) {
+			$params['plugin-status'] = $link['status'] ?? '';
 		}
 
 		return $params;
@@ -4596,5 +4640,25 @@ class FrmAppHelper {
 	public static function no_gdpr_cookies() {
 		$frm_settings = self::get_settings();
 		return $frm_settings->enable_gdpr && $frm_settings->no_gdpr_cookies;
+	}
+
+	/**
+	 * Check if a string is valid UTF-8.
+	 *
+	 * @since 6.24
+	 *
+	 * @param string $string The string to check.
+	 * @return bool
+	 */
+	public static function is_valid_utf8( $string ) {
+		// wp_is_valid_utf8 is added in WP 6.9.
+		if ( function_exists( 'wp_is_valid_utf8' ) ) {
+			return wp_is_valid_utf8( $string );
+		}
+		// As of WP 6.9, seems_utf8 is deprecated.
+		if ( function_exists( 'seems_utf8' ) ) {
+			return seems_utf8( $string );
+		}
+		return false;
 	}
 }

@@ -20,7 +20,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	public static function maybe_show_card( $callback, $field = false ) {
 		if ( false === $field ) {
 			// Pro isn't up to date.
-			return $callback;
+			// Fallback to Stripe Lite if we do not know the form.
+			// This way we do not display the default credit card field
+			// when Pro is not up to version 6.21.
+			return self::class . '::show_card';
 		}
 
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
@@ -613,7 +616,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+		$field_id = $field->temp_id ?? $field->id;
 
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );

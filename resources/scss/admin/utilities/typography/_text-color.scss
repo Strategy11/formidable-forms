@@ -2,16 +2,32 @@
  * Utilities - Text Color
  */
 
+.frm-text-white {
+	color: #fff !important;
+}
+
 .frm-text-primary-500 {
 	color: var(--primary-500);
 }
 
+.frm-text-grey-400 {
+	color: var(--grey-400) !important;
+}
+
 .frm-text-grey-500 {
-	color: var(--grey-500);
+	color: var(--grey-500) !important;
+}
+
+.frm-text-grey-600 {
+	color: var(--grey-600) !important;
 }
 
 .frm-text-grey-700 {
 	color: var(--grey-700);
+}
+
+.frm-text-grey-800 {
+	color: var(--grey-800);
 }
 
 .frm-text-grey-900 {

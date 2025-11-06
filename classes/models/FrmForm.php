@@ -18,20 +18,20 @@ class FrmForm {
 			'form_key'       => FrmAppHelper::get_unique_key( $values['form_key'], $wpdb->prefix . 'frm_forms', 'form_key' ),
 			'name'           => $values['name'],
 			'description'    => $values['description'],
-			'status'         => isset( $values['status'] ) ? $values['status'] : 'published',
-			'logged_in'      => isset( $values['logged_in'] ) ? $values['logged_in'] : 0,
+			'status'         => $values['status'] ?? 'published',
+			'logged_in'      => $values['logged_in'] ?? 0,
 			'is_template'    => isset( $values['is_template'] ) ? (int) $values['is_template'] : 0,
 			'parent_form_id' => isset( $values['parent_form_id'] ) ? absint( $values['parent_form_id'] ) : 0,
 			'editable'       => isset( $values['editable'] ) ? (int) $values['editable'] : 0,
-			'created_at'     => isset( $values['created_at'] ) ? $values['created_at'] : current_time( 'mysql', 1 ),
+			'created_at'     => $values['created_at'] ?? current_time( 'mysql', 1 ),
 		);
 
 		$options = isset( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
-		$options['before_html'] = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
-		$options['after_html']  = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
-		$options['submit_html'] = isset( $values['options']['submit_html'] ) ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
+		$options['before_html'] = $values['options']['before_html'] ?? FrmFormsHelper::get_default_html( 'before' );
+		$options['after_html']  = $values['options']['after_html'] ?? FrmFormsHelper::get_default_html( 'after' );
+		$options['submit_html'] = $values['options']['submit_html'] ?? FrmFormsHelper::get_default_html( 'submit' );
 
 		/**
 		 * Allows modifying form options before updating or creating.
@@ -280,9 +280,9 @@ class FrmForm {
 		$options = ! empty( $values['options'] ) ? (array) $values['options'] : array();
 		FrmFormsHelper::fill_form_options( $options, $values );
 
-		$options['custom_style'] = isset( $values['options']['custom_style'] ) ? $values['options']['custom_style'] : 0;
-		$options['before_html']  = isset( $values['options']['before_html'] ) ? $values['options']['before_html'] : FrmFormsHelper::get_default_html( 'before' );
-		$options['after_html']   = isset( $values['options']['after_html'] ) ? $values['options']['after_html'] : FrmFormsHelper::get_default_html( 'after' );
+		$options['custom_style'] = $values['options']['custom_style'] ?? 0;
+		$options['before_html']  = $values['options']['before_html'] ?? FrmFormsHelper::get_default_html( 'before' );
+		$options['after_html']   = $values['options']['after_html'] ?? FrmFormsHelper::get_default_html( 'after' );
 		$options['submit_html']  = isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
 
 		/**
@@ -355,8 +355,12 @@ class FrmForm {
 			unset( $update_options['custom_html'] );
 			$update_options = apply_filters( 'frm_field_options_to_update', $update_options );
 
+			if ( ! is_array( $field->field_options ) ) {
+				$field->field_options = array();
+			}
+
 			foreach ( $update_options as $opt => $default ) {
-				$field->field_options[ $opt ] = isset( $values['field_options'][ $opt . '_' . $field_id ] ) ? $values['field_options'][ $opt . '_' . $field_id ] : $default;
+				$field->field_options[ $opt ] = $values['field_options'][ $opt . '_' . $field_id ] ?? $default;
 				self::sanitize_field_opt( $opt, $field->field_options[ $opt ] );
 			}
 
@@ -474,12 +478,14 @@ class FrmForm {
 	 */
 	private static function normalize_calc_spaces( $calc ) {
 		// Check for a pattern with 5 parts
-		// $1 \d the first comparison digit.
+		// $1 \d|\] the first comparison digit or the end of a comparison shortcode.
 		// $2 a space (optional).
 		// $3 an equals sign (optional) that follows the < operator for <= comparisons.
 		// $4 another space (optional).
-		// $5 \d the second comparison digit.
-		return preg_replace( '/(\d)( ){0,1}<(=){0,1}( ){0,1}(\d)/', '$1 <$3 $5', $calc );
+		// $5 \d|\[ the second comparison digit or the start of a comparison shortcode.
+		$calc = preg_replace( '/(\d|\])( ){0,1}<(=){0,1}( ){0,1}(\d|\[)/', '$1 <$3 $5', $calc );
+
+		return $calc;
 	}
 
 	/**
@@ -488,9 +494,9 @@ class FrmForm {
 	private static function get_settings_page_html( $values, &$field ) {
 		if ( isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ) {
 			$prev_opts     = array();
-			$fallback_html = isset( $field->field_options['custom_html'] ) ? $field->field_options['custom_html'] : FrmFieldsHelper::get_default_html( $field->type );
+			$fallback_html = $field->field_options['custom_html'] ?? FrmFieldsHelper::get_default_html( $field->type );
 
-			$field->field_options['custom_html'] = isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ? $values['field_options'][ 'custom_html_' . $field->id ] : $fallback_html;
+			$field->field_options['custom_html'] = $values['field_options'][ 'custom_html_' . $field->id ] ?? $fallback_html;
 		} elseif ( $field->type === 'hidden' || $field->type === 'user_id' ) {
 			$prev_opts = $field->field_options;
 		}
@@ -515,7 +521,7 @@ class FrmForm {
 		);
 		foreach ( $field_cols as $col => $default ) {
 			$default           = $default === '' ? $field->{$col} : $default;
-			$new_field[ $col ] = isset( $values['field_options'][ $col . '_' . $field->id ] ) ? $values['field_options'][ $col . '_' . $field->id ] : $default;
+			$new_field[ $col ] = $values['field_options'][ $col . '_' . $field->id ] ?? $default;
 		}
 
 		if ( $field->type === 'submit' && isset( $new_field['field_order'] ) && (int) $new_field['field_order'] === FrmSubmitHelper::DEFAULT_ORDER ) {
@@ -1157,6 +1163,14 @@ class FrmForm {
 			$visible = true;
 		}
 
+		/**
+		 * @since 6.25
+		 *
+		 * @param bool   $visible
+		 * @param object $form
+		 */
+		$visible = (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
+
 		return $visible;
 	}
 
@@ -1172,9 +1186,9 @@ class FrmForm {
 	 */
 	public static function get_option( $atts ) {
 		$form    = $atts['form'];
-		$default = isset( $atts['default'] ) ? $atts['default'] : '';
+		$default = $atts['default'] ?? '';
 
-		return isset( $form->options[ $atts['option'] ] ) ? $form->options[ $atts['option'] ] : $default;
+		return $form->options[ $atts['option'] ] ?? $default;
 	}
 
 	/**

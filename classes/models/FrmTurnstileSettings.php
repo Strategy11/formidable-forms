@@ -74,4 +74,16 @@ class FrmTurnstileSettings extends FrmFieldCaptchaSettings {
 	public function should_show_captcha_theme_auto_option() {
 		return true;
 	}
+
+	/**
+	 * Always add the "frm-" prefix for Turnstile fields.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param bool $allow_multiple
+	 * @return string
+	 */
+	public function get_class_prefix( $allow_multiple ) {
+		return 'frm-';
+	}
 }

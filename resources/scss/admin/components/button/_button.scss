@@ -68,6 +68,36 @@
 	border-radius: 12px !important;
 }
 
+#wpcontent .frm-button-secondary {
+
+	&.frm-button-gradient {
+		position: relative;
+		border-color: transparent !important;
+		background-clip: padding-box !important;
+
+		&::before {
+			content: '';
+			position: absolute;
+			top: 0;
+			right: 0;
+			bottom: 0;
+			left: 0;
+			z-index: -1;
+			margin: -1px;
+			border-radius: inherit;
+			background: linear-gradient(90deg, #129EFD 0%, #A334FD 100%);
+			transition: opacity 150ms ease-out;
+		}
+	}
+
+	&:hover {
+
+		&::before {
+			opacity: 0.5;
+		}
+	}
+}
+
 .no-js.wp-core-ui .frm-search .button.hide-if-no-js,
 .js.wp-core-ui .frm-search .button.hide-if-js {
 	display: none;
@@ -301,4 +331,28 @@ input.frm_insert_in_template {
 
 .frm-dismissible a.dismiss svg {
 	color: var(--grey-800);
+}
+
+.frm-btn-unstyled {
+	font: inherit;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+	outline: inherit;
+
+	&:hover,
+	&:focus,
+	&:active {
+		text-decoration: none;
+		background: none;
+		border: none;
+		box-shadow: none;
+	}
+
+	&:disabled,
+	&[disabled] {
+		pointer-events: none;
+		opacity: 0.65;
+	}
 }
