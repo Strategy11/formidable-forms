@@ -177,9 +177,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/section-field-preview.png',
 			),
 			'break'           => array(
-				'name'    => __( 'Page Break', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_page_break_icon',
-				'message' => __( 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?', 'formidable' ),
+				'name'         => __( 'Page Break', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_page_break_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/page-break-field-preview.png',
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
