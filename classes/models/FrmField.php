@@ -107,8 +107,10 @@ class FrmField {
 			),
 			'ranking'         => array(),
 			'rte'             => array(
-				'name' => __( 'Rich Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_align_right_icon',
+				'name'         => __( 'Rich Text', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_align_right_icon',
+				'message'      => __( 'Go beyond plain text, let your users format their content with bolding, italics, links, lists and more.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/rich-text-field-preview.png',
 			),
 			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
