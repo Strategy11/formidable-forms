@@ -247,16 +247,17 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/ai-field-preview.png',
 			),
 			'ssa-appointment' => array(
-				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
-				'require' => 'Simply Schedule Appointments',
-				'message' => sprintf(
+				'name'         => __( 'Appointment', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
+				'require'      => 'Simply Schedule Appointments',
+				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
 					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
-					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
+					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/">',
 					'</a>'
-				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . esc_attr__( 'Scheduling', 'formidable' ) . '" />',
-				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
+				),
+				'link'         => 'https://simplyscheduleappointments.com/meet/formidable/',
+				'upsell_image' => $images_url . 'fields/appointment-field-preview.png',
 			),
 			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
