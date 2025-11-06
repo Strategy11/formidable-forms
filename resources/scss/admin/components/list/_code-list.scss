@@ -167,7 +167,7 @@
 				margin: 0;
 
 				&:first-child {
-					max-width: 250px;
+					max-width: calc(100% - 70px);
 				}
 
 				&:last-child {
