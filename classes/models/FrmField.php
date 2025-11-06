@@ -221,8 +221,10 @@ class FrmField {
 				'icon' => '',
 			),
 			'address'         => array(
-				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location2_icon',
+				'name'         => __( 'Address', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_location2_icon',
+				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/address-field-preview.png',
 			),
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
