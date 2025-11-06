@@ -149,9 +149,10 @@ class FrmField {
 				'upsell_image' => $images_url . 'fields/toggle-field-preview.png',
 			),
 			'data'            => array(
-				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_dynamic_icon',
-				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
+				'name'         => __( 'Dynamic', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_dynamic_icon',
+				'message'      => __( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'upsell_image' => $images_url . 'fields/dynamic-field-preview.png',
 			),
 			'lookup'          => array(
 				'name'    => __( 'Lookup', 'formidable' ),
