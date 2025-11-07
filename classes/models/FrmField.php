@@ -245,6 +245,7 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
 				'addon'   => 'coupons',
 				'section' => 'pricing',
+				'limit'   => 1,
 			);
 		}
 
