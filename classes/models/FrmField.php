@@ -263,7 +263,9 @@ class FrmField {
 	 * @return bool
 	 */
 	private static function field_is_new( $type ) {
-		$release_dates = array();
+		$release_dates = array(
+			'ranking' => '2024-03-12',
+		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
 			return false;
