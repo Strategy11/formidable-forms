@@ -44,7 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
-					<p class="frm-upgrade-message" data-default="<?php echo esc_attr( $message ); ?>">
+					<p class="frm-upgrade-message frm-mt-xs" data-default="<?php echo esc_attr( $message ); ?>">
 						<?php FrmAppHelper::kses_echo( $message, array( 'span' ) ); ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
