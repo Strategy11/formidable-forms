@@ -237,20 +237,15 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
 			),
-		);
-
-		if ( self::include_ranking_fields() ) {
-			$fields['ranking'] = array(
+			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
 				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
 				'addon'        => 'surveys',
 				'is_new'       => self::field_is_new( 'ranking' ),
-			);
-		} else {
-			unset( $fields['ranking'] );
-		}
+			),
+		);
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -259,27 +254,6 @@ class FrmField {
 		}
 
 		return apply_filters( 'frm_pro_available_fields', $fields );
-	}
-
-	/**
-	 * Check if we should show ranking fields in the builder.
-	 * This is based on the active version coming from our API data.
-	 * If Surveys v1.1 is not released yet, we don't want to display ranking fields yet.
-	 *
-	 * @since 6.8.3
-	 *
-	 * @return bool
-	 */
-	private static function include_ranking_fields() {
-		if ( class_exists( 'FrmSurveys\models\fields\Ranking' ) ) {
-			// Always return true if Ranking fields exist.
-			return true;
-		}
-
-		$plugin           = 'formidable-surveys/formidable-surveys.php';
-		$expected_version = '1.1';
-
-		return self::installed_plugin_meets_version( $plugin, $expected_version ) || self::api_meets_version( $plugin, $expected_version );
 	}
 
 	/**
