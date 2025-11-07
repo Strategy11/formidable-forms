@@ -104,7 +104,13 @@ class FrmField {
 				'icon'    => 'frm_icon_font frm_upload3_icon',
 				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
-			'ranking'         => array(),
+			'ranking'         => array(
+				'name'         => __( 'Ranking', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
+				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
+				'addon'        => 'surveys',
+			),
 			'rte'             => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
@@ -236,13 +242,6 @@ class FrmField {
 				'name'    => __( 'Total', 'formidable' ),
 				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
-			),
-			'ranking'         => array(
-				'name'         => __( 'Ranking', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
-				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
-				'addon'        => 'surveys',
 			),
 		);
 
