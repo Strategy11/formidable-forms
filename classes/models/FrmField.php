@@ -242,7 +242,7 @@ class FrmField {
 		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
 			$fields['coupon'] = array(
 				'name'    => __( 'Coupon', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total2_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
 				'addon'   => 'coupons',
 				'section' => 'pricing',
 			);
