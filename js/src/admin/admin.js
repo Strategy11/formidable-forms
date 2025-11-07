@@ -2194,7 +2194,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const temporaryAnchor = document.createElement( 'a' );
-		temporaryAnchor.setAttribute( 'data-frmverify', 'This field type has reached its limit.' );
+		temporaryAnchor.setAttribute( 'data-frmverify', __( 'This field type has reached its limit.', 'formidable' ) );
 
 		wrapper.appendChild( temporaryAnchor );
 		temporaryAnchor.click();
