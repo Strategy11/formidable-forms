@@ -2214,10 +2214,10 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param array $li_params   The params.
-	 * @param int   $form_id     The form ID.
+	 * @param array  $li_params  The params.
+	 * @param int    $form_id    The form ID.
 	 * @param string $field_type The field type.
-	 * @param int   $limit       The limit.
+	 * @param int    $limit      The limit.
 	 *
 	 * @return array The updated params.
 	 */
