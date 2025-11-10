@@ -1358,7 +1358,7 @@ DEFAULT_HTML;
 	 * @param string $input_html
 	 * @return void
 	 */
-	protected function add_aria_description( $args, &$input_html ) {
+	public function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 		if ( $aria_describedby_exists ) {
 			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );

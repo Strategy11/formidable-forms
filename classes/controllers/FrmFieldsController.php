@@ -526,6 +526,11 @@ class FrmFieldsController {
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
 
+		if ( isset( $field['args'] ) ) {
+			$field_object = FrmFieldFactory::get_field_object( $field );
+			$field_object->add_aria_description( $field['args'], $add_html );
+		}
+
 		if ( $echo ) {
 			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
