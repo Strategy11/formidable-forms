@@ -316,6 +316,7 @@ window.frmAdminBuildJS = function() {
 			if ( typeof confirmModal === 'string' ) {
 				return confirmModal;
 			}
+			console.log('HRE2', confirmDeleteAllEntriesModal)
 			return confirmDeleteAllEntriesModal( { link, initModal } );
 		}
 
@@ -410,7 +411,7 @@ window.frmAdminBuildJS = function() {
 		};
 
 		this.getOnDeleteActionsTriggerCheckbox = function() {
-			return wp.hooks.applyFilters( 'frm_on_delete_actions_trigger_checkbox', false, args );
+			return wp.hooks.applyFilters( 'frm_on_delete_actions_trigger', false, args );
 		};
 
 		this.updateOnDeleteURL = function( triggerOnDeleteActions = true ) {
