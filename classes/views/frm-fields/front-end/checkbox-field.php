@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var bool   $read_only
  * @var string $html_id
  * @var array  $args
- * @var array  $shortcode_atts
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
