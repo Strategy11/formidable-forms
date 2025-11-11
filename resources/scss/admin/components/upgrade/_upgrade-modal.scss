@@ -6,7 +6,20 @@
 	max-width: 200px;
 }
 
-#frm_upgrade_modal .frm-upgrade-message img {
-	width: 100%;
-	margin: var(--gap-sm) 0 10px;
+#frm_upgrade_modal {
+	.frm-upgrade-message img {
+		width: 100%;
+		margin: var(--gap-sm) 0 10px;
+	}
+
+	.frm-oneclick.frm_hidden {
+		display: none !important;
+	}
+}
+
+.frm-dialog[aria-describedby="frm_upgrade_modal"] {
+	position: fixed !important;
+	top: 50% !important;
+	left: 50% !important;
+	transform: translate(-50%, -50%) !important;
 }
