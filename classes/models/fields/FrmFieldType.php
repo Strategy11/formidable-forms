@@ -1350,9 +1350,10 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Link input to field description for screen readers
+	 * Link input to field description for screen readers.
 	 *
 	 * @since 3.0
+	 * @since x.x Function privacy changed from `protected` to `public`.
 	 *
 	 * @param array  $args
 	 * @param string $input_html
