@@ -27,13 +27,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 					?>
 				</h2>
 				<div class="cta-inside">
-					<p class="frm-oneclick frm_hidden"></p>
-					<p class="frm-addon-status"></p>
-
-					<a class="button button-primary frm-button-primary frm_hidden frm-oneclick-button">
-						<?php esc_html_e( 'Install', 'formidable' ); ?>
-					</a>
-
 					<?php
 					if ( $is_pro ) {
 						/* translators: %s: Feature name */
@@ -80,6 +73,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 						<?php
 					}//end if
 					?>
+					<p class="frm-oneclick frm_hidden"></p>
+					<p class="frm-addon-status"></p>
+					<a class="button button-primary frm-button-primary frm_hidden frm-oneclick-button">
+						<?php esc_html_e( 'Install', 'formidable' ); ?>
+					</a>
 				</div>
 			</div>
 		</div>
