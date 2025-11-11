@@ -55,21 +55,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</a>
 					<?php } else { ?>
-						<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
-							<?php
-							printf(
-								/* translators: %s: Plan name */
-								esc_html__( 'Upgrade to %s', 'formidable' ),
-								'<span class="license-level">Pro</span>'
-							);
-							?>
-						</a>
-
-						<p>
-							<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $upgrade_link, 'knowledgebase/install-formidable-forms/' ) ); ?>" target="_blank" class="frm-link-secondary">
-								<?php esc_html_e( 'Already purchased?', 'formidable' ); ?>
+						<div class="frm-flex frm-items-center frm-gap-xs">
+							<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
+								<?php
+								printf(
+									/* translators: %s: Plan name */
+									esc_html__( 'Upgrade to %s', 'formidable' ),
+									'<span class="license-level">Pro</span>'
+								);
+								?>
 							</a>
-						</p>
+							<a href="#" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener noreferrer">
+								<?php echo esc_html_x( 'Learn More', 'upgrade overlay', 'formidable' ); ?>
+							</a>
+						</div>
 						<?php
 					}//end if
 					?>
