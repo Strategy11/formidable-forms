@@ -316,7 +316,6 @@ window.frmAdminBuildJS = function() {
 			if ( typeof confirmModal === 'string' ) {
 				return confirmModal;
 			}
-			console.log('HRE2', confirmDeleteAllEntriesModal)
 			return confirmDeleteAllEntriesModal( { link, initModal } );
 		}
 
