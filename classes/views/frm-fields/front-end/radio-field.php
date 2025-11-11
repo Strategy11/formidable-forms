@@ -22,7 +22,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			break;
 		}
 	}
-	if ( current( $field_choices_limit_reached_statuses ) ) {
+	if ( ! empty( $choices_limit_reached_status ) ) {
 		echo esc_html( FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' ) );
 		return;
 	}
