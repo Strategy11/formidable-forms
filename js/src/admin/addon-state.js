@@ -200,7 +200,7 @@ function closePopupButton() {
 	const a = document.createElement( 'a' );
 	a.setAttribute( 'href', '#' );
 	a.classList.add( 'button', 'button-secondary', 'frm-button-secondary', 'dismiss' );
-	a.textContent = __( 'Close', 'formidable' );
+	a.textContent = __( 'Not Now', 'formidable' );
 	return a;
 }
 

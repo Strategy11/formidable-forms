@@ -17,7 +17,6 @@ function getShowLinkHrefValue( link, showLink ) {
  */
 export function addOneClick( link, context, upgradeLabel ) {
 	let container;
-
 	if ( 'modal' === context ) {
 		container = document.getElementById( 'frm_upgrade_modal' );
 	} else if ( 'tab' === context ) {
@@ -52,9 +51,13 @@ export function addOneClick( link, context, upgradeLabel ) {
 		button.rel = oneclick.url;
 
 		if ( oneclick.class === 'frm-activate-addon' ) {
+			container.querySelector( '.frm-circled-icon svg' ).classList.add( 'frm-filled-lock-open-icon' );
+			container.querySelector( '.frm-circled-icon use' ).setAttribute( 'xlink:href', '#frm_filled_lock_open_icon' );
 			oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
 			button.textContent = __( 'Activate', 'formidable' );
 		} else {
+			container.querySelector( '.frm-circled-icon svg' ).classList.remove( 'frm-filled-lock-open-icon' );
+			container.querySelector( '.frm-circled-icon use' ).setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
 			oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
 			button.textContent = __( 'Install', 'formidable' );
 		}
