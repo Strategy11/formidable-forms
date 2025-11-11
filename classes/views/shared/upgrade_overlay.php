@@ -10,7 +10,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon', array( 'aria-label' => 'Dismiss' ) ); ?>
 			</a>
 			<div class="inside">
-
 				<div class="frm-circled-icon frm-flex-center frm-mb-sm">
 					<?php FrmAppHelper::icon_by_class( 'frmfont frm_filled_lock_icon frm_locked', array( 'aria-hidden' => 'true' ) ); ?>
 				</div>

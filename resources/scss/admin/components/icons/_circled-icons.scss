@@ -21,6 +21,11 @@
 .frm-circled-icon .frmsvg {
 	width: 21px;
 	height: 24px;
+
+	&.frm-filled-lock-open-icon {
+		width: 32px;
+		margin-right: calc(-1 * var(--gap-xs));
+	}
 }
 
 .frm-circled-icon-large .frmsvg {
