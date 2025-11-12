@@ -1,0 +1,19 @@
+@import '../../../resources/scss/admin/base/variables';
+
+.frm_hidden {
+	display: none;
+}
+
+.frm-component {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	& > label.frm-component-label {
+		font-weight: 500;
+		font-size: var(--text-sm) !important;
+		color: var(--grey-900) !important;
+		width: 40% !important;
+		display: block !important;
+		margin-right: 12px!important;
+	}
+}

@@ -1,0 +1,50 @@
+@import '../frm-web-component.scss';
+// This component is always initialized using attachShadow({ mode: 'open' }).
+.frm-colorpicker-component {
+	.wp-picker-container button {
+		position: relative;
+		height: 36px !important;
+		background-image: none !important;
+		background-color: #fff !important;
+		overflow: hidden;
+		&:after {
+			content: '';
+			width: 20px;
+			height: 20px;
+			display: block;
+			position: absolute;
+			top: 0;
+			right: 8px;
+			bottom: 0;
+			margin: auto;
+			background: url('--frm-plugin-url/images/style/small-arrow.svg') no-repeat;
+			background-position: center;
+			z-index: 10;
+		}
+	}
+
+	.wp-color-result-text {
+		line-height: 36px !important;
+		padding: 0 12px;
+		border: 0;
+	}
+
+	.color-alpha {
+		width: 20px !important;
+		height: 20px !important;
+		border-radius: 50% !important;
+		border: 1px solid rgba(208, 213, 221, 1);
+		top: 0;
+		left: 0;
+		bottom: 0;
+		margin: auto;
+		margin-left: 12px;
+	}
+
+	.wp-picker-input-wrap input {
+		width: calc( 100% - 10px ) !important;
+		margin: 1px 5px;
+		height: 32px;
+		line-height: 32px;
+	}
+}

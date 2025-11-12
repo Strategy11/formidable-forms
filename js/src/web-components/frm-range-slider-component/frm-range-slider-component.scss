@@ -1,0 +1,17 @@
+@import '../../../../resources/scss/admin/components/settings/sliders.scss';
+@import '../frm-web-component.scss';
+
+.frm-flex-justify {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.frmsvg {
+	width: 18px;
+	height: 18px;
+}
+
+.frm-sliders-container {
+	width: 100%;
+}
