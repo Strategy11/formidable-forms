@@ -2,7 +2,7 @@
 /**
  * Controller for email styles
  *
- * @since x.x
+ * @since 6.25
  *
  * @package Formidable
  */
@@ -60,7 +60,7 @@ class FrmEmailStylesController {
 		/**
 		 * Filter the email styles.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param array[] $email_styles The email styles.
 		 * @return array
@@ -344,7 +344,7 @@ class FrmEmailStylesController {
 		/**
 		 * Filter the email style settings value.
 		 *
-		 * @since x.x
+		 * @since 6.25
 		 *
 		 * @param array $settings The settings value.
 		 */
@@ -387,7 +387,7 @@ class FrmEmailStylesController {
 			);
 
 			$header_img .= sprintf(
-				'<img src="%s" alt="" />',
+				'<img src="%s" alt="" style="max-width:100%%;height:auto;" />',
 				esc_url( $img_url )
 			);
 

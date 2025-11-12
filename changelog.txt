@@ -1,4 +1,32 @@
 == Changelog ==
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
+
+= 6.25 =
+* New: Style settings have been added to Email actions.
+* New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
+* New: Square forms will now automatically enforce JavaScript validation before attempting to make the Square payment.
+* New: Payment hooks like frm_payment_status_complete are now called even when no payments add-ons (Stripe or Authorize.Net) are active.
+* Fix: An empty address will no longer be sent to Square when verifying the buyer to help reduce buyer verification issues.
+* Fix: Square location IDs could be incorrectly set when connecting when another mode was active.
+* Fix: Calculation settings would not properly load if the field was loaded using AJAX.
+* Fix: Checkbox and radio button fields no longer include the aria-invalid attribute. Instead, this is applied to the group for better accessibility.
+* Fix: Buttons could be cut off in an application pop-up when there was a lot of content in the description.
+* Fix: Field unit dropdowns would lose its unit value.
+* Fix: An Undefined property: stdClass::$item_key PHP warning when making Square payments has been fixed.
+* Fix: The country code would not properly get sent to Square when using US as the address type.
+* Fix: A Cannot access offset of type string on string fatal error that occurs when field options data is in an unexpected format has been fixed.
+* Fix: Font sizes would not scale as expected after changing the base font size style setting for a second time.
+
 = 6.24.1 =
 * Fix: Importing entries with a CSV file stopped working with v6.24.
 

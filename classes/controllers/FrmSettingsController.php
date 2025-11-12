@@ -305,7 +305,7 @@ class FrmSettingsController {
 	/**
 	 * Shows email settings.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 */
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -482,7 +482,7 @@ class FrmSettingsController {
 	/**
 	 * Shows a fake color picker.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $color Color value.
 	 */

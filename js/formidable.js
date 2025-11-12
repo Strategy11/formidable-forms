@@ -347,6 +347,10 @@ function frmFrontFormJS() {
 			checkPatternField( field, errors );
 		}
 
+		if ( 'tel' === field.type && shouldCheckConfirmField( field, onSubmit ) ) {
+			confirmField( field, errors );
+		}
+
 		/**
 		 * @since 6.15 Added `onSubmit` to the data.
 		 */
@@ -895,8 +899,6 @@ function frmFrontFormJS() {
 
 				setTimeout(
 					function() {
-						let container, input, previousInput;
-
 						afterFormSubmittedBeforeReplace( object, response );
 
 						replaceContent.replaceWith( response.content );
@@ -907,18 +909,6 @@ function frmFrontFormJS() {
 							pageOrder = jQuery( 'input[name="frm_page_order_' + formID + '"]' ).val();
 							formReturned = jQuery( response.content ).find( 'input[name="form_id"]' ).val();
 							frmThemeOverride_frmAfterSubmit( formReturned, pageOrder, response.content, object );
-						}
-
-						if ( typeof response.recaptcha !== 'undefined' ) {
-							container = jQuery( '#frm_form_' + formID + '_container' ).find( '.frm_fields_container' );
-							input = '<input type="hidden" name="recaptcha_checked" value="' + response.recaptcha + '">';
-							previousInput = container.find( 'input[name="recaptcha_checked"]' );
-
-							if ( previousInput.length ) {
-								previousInput.replaceWith( input );
-							} else {
-								container.append( input );
-							}
 						}
 
 						afterFormSubmitted( object, response );
@@ -975,7 +965,7 @@ function frmFrontFormJS() {
 				} );
 
 				if ( window.turnstile ) {
-					object.querySelectorAll( '.cf-turnstile' ).forEach(
+					object.querySelectorAll( '.frm-cf-turnstile' ).forEach(
 						turnstileField => turnstileField.dataset.rid && turnstile.reset( turnstileField.dataset.rid )
 					);
 				}
@@ -1679,6 +1669,30 @@ function frmFrontFormJS() {
 		/* eslint-enable compat/compat */
 	}
 
+	/**
+	 * Make sure that the captcha label for a reCAPTCHA or Turnstile field matches the response input ID.
+	 * This is determined dynamically, so we check for the ID after the input is rendered.
+	 * hCaptcha is handled separately, in the frmCaptcha function as it is not rendered explicitly.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param {HTMLElement} captcha
+	 * @return {void}
+	 */
+	function maybeFixCaptchaLabel( captcha ) {
+		const form = captcha.closest( 'form' );
+		if ( ! form ) {
+			return;
+		}
+
+		const label = form.querySelector( 'label[for="g-recaptcha-response"], label[for="cf-turnstile-response"]' );
+		const captchaResponse = form.querySelector( '[name="g-recaptcha-response"], [name="cf-turnstile-response"]' );
+
+		if ( label && captchaResponse ) {
+			label.htmlFor = captchaResponse.id;
+		}
+	}
+
 	return {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
@@ -1760,6 +1774,8 @@ function frmFrontFormJS() {
 			const captchaID = activeCaptcha.render( captchaContainer, params );
 
 			captcha.setAttribute( 'data-rid', captchaID );
+
+			maybeFixCaptchaLabel( captcha );
 		},
 
 		afterSingleRecaptcha: function() {
@@ -2044,11 +2060,30 @@ function frmRecaptcha() {
 	frmCaptcha( '.frm-g-recaptcha' );
 }
 
+function frmHcaptcha() {
+	frmCaptcha( '.h-captcha' );
+}
+
 function frmTurnstile() {
-	frmCaptcha( '.cf-turnstile' );
+	frmCaptcha( '.frm-cf-turnstile' );
 }
 
 function frmCaptcha( captchaSelector ) {
+	if ( '.h-captcha' === captchaSelector ) {
+		// hCaptcha is still rendered implicitly, so we only want to handle the label and exit early.
+		// Match the hcaptcha labels to the hcaptcha response fields.
+		const captchaLabels = document.querySelectorAll( 'label[for="h-captcha-response"]' );
+		if ( captchaLabels.length ) {
+			captchaLabels.forEach( label => {
+				const captchaResponse = label.closest( 'form' )?.querySelector( '[name="h-captcha-response"]' );
+				if ( captchaResponse ) {
+					label.htmlFor = captchaResponse.id;
+				}
+			} );
+		}
+		return;
+	}
+
 	let c;
 	const captchas = document.querySelectorAll( captchaSelector );
 	const cl = captchas.length;
@@ -2079,7 +2114,7 @@ function getSelectedCaptcha( captchaSelector ) {
 	if ( captchaSelector === '.frm-g-recaptcha' ) {
 		return grecaptcha;
 	}
-	if ( document.querySelector( '.cf-turnstile' ) ) {
+	if ( document.querySelector( '.frm-cf-turnstile' ) ) {
 		return turnstile;
 	}
 	return hcaptcha;

@@ -30,6 +30,13 @@ class FrmSubmitHelper {
 	const DEFAULT_ORDER = 9999;
 
 	/**
+	 * Track the new order of last row fields after a new field is added.
+	 *
+	 * @var array Keys are field IDs, values are the order.
+	 */
+	private static $last_row_fields_order = array();
+
+	/**
 	 * Gets submit field object.
 	 *
 	 * @param int $form_id Form ID.
@@ -191,5 +198,52 @@ class FrmSubmitHelper {
 			$submit_field = $field;
 		}
 		return $submit_field;
+	}
+
+	/**
+	 * Updates fields in the last row when new field is added.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param int $field_count The current field count.
+	 */
+	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
+		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
+		if ( ! is_array( $last_row_field_ids ) || empty( $last_row_field_ids ) ) {
+			return;
+		}
+		foreach ( $last_row_field_ids as $index => $last_row_field_id ) {
+			$last_row_field_id = absint( $last_row_field_id );
+			if ( ! $last_row_field_id ) {
+				continue;
+			}
+			// Plus 2 here because the new field has that plus 1.
+			$new_order = $field_count + $index + 2;
+			$updated   = FrmField::update(
+				$last_row_field_id,
+				array( 'field_order' => $new_order )
+			);
+			if ( false !== $updated ) {
+				self::$last_row_fields_order[ $last_row_field_id ] = $new_order;
+			}
+		}
+	}
+
+	/**
+	 * Prints the hidden input that contains the last row fields order to be processed in JS after adding new field.
+	 *
+	 * @since 6.25.1
+	 */
+	public static function print_last_row_fields_order_input() {
+		if ( ! self::$last_row_fields_order ) {
+			return;
+		}
+
+		printf(
+			'<input id="frm-last-row-fields-order" type="hidden" value="%s" />',
+			esc_attr( wp_json_encode( self::$last_row_fields_order ) )
+		);
+
+		self::$last_row_fields_order = array();
 	}
 }
