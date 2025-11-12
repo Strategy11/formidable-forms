@@ -175,25 +175,74 @@
 					}
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
-					$dropdown.find( '.dropdown-item' ).each(
-						function() {
-							const option = this;
-							const dropdownInput = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
-							if ( dropdownInput ) {
-								option.setAttribute( 'role', 'checkbox' );
-								option.setAttribute( 'aria-checked', dropdownInput.checked ? 'true' : 'false' );
-							}
+					const $items = $dropdown.find( 'button.dropdown-item' );
+				
+					$items.each( ( _, item ) => {
+						const input = item.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+						if ( input ) {
+							item.setAttribute( 'role', 'checkbox' );
+							item.setAttribute( 'aria-checked', input.checked );
 						}
-					);
+						item.setAttribute( 'tabindex', '0' );
+					} );
+				
+					// Keyboard navigation handler
+					$items.on( 'keydown', ( evt ) => {
+						const currentIndex = $items.index( evt.currentTarget );
+						const isFirst = currentIndex === 0;
+						const isLast = currentIndex === $items.length - 1;
+						
+						const navigate = ( direction ) => {
+							evt.preventDefault();
+							const nextIndex = currentIndex + direction;
+							if ( nextIndex >= 0 && nextIndex < $items.length ) {
+								$items.eq( nextIndex ).focus();
+							}
+						};
+						
+						const select = () => {
+							evt.preventDefault();
+							const input = evt.currentTarget.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+							if ( input ) {
+								input.checked = ! input.checked;
+								jQuery( input ).trigger( 'change' );
+							}
+						};
+						
+						const actions = {
+							9: () => { // Tab
+								if ( evt.shiftKey && ! isFirst ) {
+									navigate( -1 );
+									return true;
+								}
+								if ( ! evt.shiftKey && ! isLast ) {
+									navigate( 1 );
+									return true;
+								}
+								return false; // Allow Tab escape at boundaries
+							},
+							38: () => navigate( -1 ) || true, // Up
+							40: () => navigate( 1 ) || true, // Down
+							32: () => select() || true, // Space
+							13: () => select() || true // Enter
+						};
+						
+						if ( actions[ evt.keyCode ]?.() ) {
+							evt.stopPropagation();
+						}
+					} );
+				
+					// Auto-focus first item
+					setTimeout( () => $items.first().focus(), 50 );
 				},
 				onChange: function( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
 					const optionValue = $option.val();
-					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
+					const $dropdownItem = $dropdown.find( `input[value="${ optionValue }"]` ).closest( 'button.dropdown-item' );
 					if ( $dropdownItem.length ) {
-						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
+						$dropdownItem.attr( 'aria-checked', checked );
 
 						// Delay a focus event so the screen reader reads the option value again.
 						// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
