@@ -14,7 +14,7 @@
 		"minimize": "npx google-closure-compiler --js=js/formidable.js --js_output_file=js/formidable.min.js --compilation_level=WHITESPACE && npx google-closure-compiler --js=stripe/js/frmstrp.js --js_output_file=stripe/js/frmstrp.min.js --compilation_level=WHITESPACE",
 		"zip": "./bin/zip-plugin.sh formidable",
 		"git-release": "./bin/git-release.sh formidable formidable-forms",
-		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit --merge=languages/formidable-js.pot",
+		"makepot": "wp i18n make-pot . languages/formidable.pot --skip-audit",
 		"php-cs-fixer": "./vendor/bin/php-cs-fixer fix ./ --allow-risky=yes",
 		"rector": "./vendor/bin/rector process",
 		"phpstan": "./vendor/bin/phpstan analyze ./ --memory-limit 2G",

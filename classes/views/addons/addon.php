@@ -76,7 +76,7 @@ if ( ! is_array( $addon ) || $addon['slug'] === 'views' ) {
 			</a>
 			<?php
 		} else {
-			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . ' & utm_content = ' . $addon['slug'] );
+			FrmFormsHelper::show_plan_required( FrmAddonsHelper::get_plan(), $pricing . '&utm_content=' . $addon['slug'] );
 			?>
 			<div>
 				<?php FrmAddonsController::addon_upgrade_link( $addon, $pricing ); ?>

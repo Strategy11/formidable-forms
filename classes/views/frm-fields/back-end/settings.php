@@ -146,7 +146,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span><?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?></span>
 					<?php FrmAppHelper::tooltip_icon( __( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 				</label>
-				<span class="frm-with-right-icon">
+				<span class="frm-with-right-icon frm-block">
 					<?php
 					$css_layout_classes_attrs = array(
 						'type'           => 'text',

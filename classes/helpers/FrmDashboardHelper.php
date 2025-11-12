@@ -214,8 +214,8 @@ class FrmDashboardHelper {
 
 		$upgrade_link = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_link' );
 		$utm          = array(
-			'medium'  => 'settings-license',
-			'content' => 'dashboard-license-box',
+			'campaign' => 'settings-license',
+			'content'  => 'dashboard-license-box',
 		);
 
 		if ( $upgrade_link ) {

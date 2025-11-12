@@ -497,6 +497,8 @@ class FrmStylesController {
 			return;
 		}
 
+		$previous_style_id = $form->options['custom_style'];
+
 		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
@@ -508,10 +510,24 @@ class FrmStylesController {
 		// We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
 		$form->options['custom_style'] = (string) $style_id;
 
+		if ( $previous_style_id === $form->options['custom_style'] ) {
+			// Exit early before updating DB if nothing actually changed.
+			self::$message = __( 'Successfully updated style.', 'formidable' );
+			return;
+		}
+
 		global $wpdb;
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 
 		FrmForm::clear_form_cache();
+
+		/**
+		 * @since 6.25.1
+		 *
+		 * @param int $form_id
+		 * @param int $style_id
+		 */
+		do_action( 'frm_after_changed_form_style', absint( $form_id ), absint( $style_id ) );
 
 		self::$message = __( 'Successfully updated style.', 'formidable' );
 	}
@@ -682,6 +698,13 @@ class FrmStylesController {
 			// Set the post id to the new style so it will be loaded for editing.
 			$post_id = reset( $id );
 		}
+
+		/**
+		 * @since 6.25.1
+		 *
+		 * @param int $post_id
+		 */
+		do_action( 'frm_after_saved_style', absint( $post_id ) );
 
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}

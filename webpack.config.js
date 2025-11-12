@@ -36,13 +36,15 @@ const entries = {
     formidable_admin: './js/src/admin/admin.js',
     frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
+    'welcome-tour': './js/src/welcome-tour',
   },
   // SCSS entries
   scss: {
     frm_admin: './resources/scss/admin/frm_admin.scss',
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
     font_icons: './resources/scss/font_icons.scss',
-    frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss'
+    frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss',
+    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss'
   }
 };
 

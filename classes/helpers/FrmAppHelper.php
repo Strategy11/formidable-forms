@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.25';
+	public static $plug_version = '6.25.1';
 
 	/**
 	 * @var bool
@@ -115,50 +115,95 @@ class FrmAppHelper {
 
 	/**
 	 * @since 3.04.02
-	 * @param array|string $args
+	 *
+	 * @param array|string $args If a string is passed, it is used for the utm_campaign attribute.
 	 * @param string       $page
 	 */
 	public static function admin_upgrade_link( $args, $page = '' ) {
-		if ( empty( $page ) ) {
-			$page = 'https://formidableforms.com/lite-upgrade/';
-		} else {
+		if ( $page ) {
 			$page = str_replace( 'https://formidableforms.com/', '', $page );
 			$page = 'https://formidableforms.com/' . $page;
+		} else {
+			$page = 'https://formidableforms.com/lite-upgrade/';
 		}
 
-		$anchor = '';
 		if ( is_array( $args ) ) {
-			$medium = $args['medium'] ?? '';
-			if ( isset( $args['content'] ) ) {
-				$content = $args['content'];
-			}
-			if ( isset( $args['anchor'] ) ) {
-				$anchor = '#' . $args['anchor'];
-			}
+			$args = self::adjust_legacy_utm_args( $args );
 		} else {
-			$medium = $args;
+			$args = array( 'campaign' => $args );
 		}
 
 		$query_args = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => $medium,
-			'utm_campaign' => 'liteplugin',
+			'utm_source' => 'plugin',
+			'utm_medium' => self::get_utm_medium(),
 		);
+		$query_args = self::maybe_add_utm_license( $query_args );
 
-		if ( isset( $content ) ) {
-			$query_args['utm_content'] = $content;
+		if ( isset( $args['campaign'] ) ) {
+			$query_args['utm_campaign'] = $args['campaign'];
 		}
 
-		if ( is_array( $args ) && isset( $args['param'] ) ) {
+		if ( isset( $args['content'] ) ) {
+			$query_args['utm_content'] = $args['content'];
+		}
+
+		if ( isset( $args['param'] ) ) {
 			$query_args['f'] = $args['param'];
 		}
 
-		if ( is_array( $args ) && ! empty( $args['plan'] ) ) {
+		if ( ! empty( $args['plan'] ) ) {
 			$query_args['plan'] = $args['plan'];
 		}
 
-		$link = add_query_arg( $query_args, $page ) . $anchor;
+		$link = add_query_arg( $query_args, $page );
+
+		if ( isset( $args['anchor'] ) ) {
+			$link .= '#' . $args['anchor'];
+		}
+
 		return self::make_affiliate_url( $link );
+	}
+
+	/**
+	 * If medium is "pro", add an additional utm_license param with their active license type.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param array $query_args
+	 * @return array
+	 */
+	private static function maybe_add_utm_license( $query_args ) {
+		if ( 'pro' === $query_args['utm_medium'] && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
+			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
+		}
+
+		return $query_args;
+	}
+
+	/**
+	 * @since 6.25.1
+	 *
+	 * @return string
+	 */
+	private static function get_utm_medium() {
+		return self::pro_is_connected() ? 'pro' : 'lite';
+	}
+
+	/**
+	 * Change campaign from "liteplugin" to what we're currently using for medium.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param array $args
+	 * @return array
+	 */
+	private static function adjust_legacy_utm_args( $args ) {
+		if ( isset( $args['medium'] ) ) {
+			$args['campaign'] = $args['medium'];
+			unset( $args['medium'] );
+		}
+
+		return $args;
 	}
 
 	/**
@@ -168,23 +213,26 @@ class FrmAppHelper {
 	 * @param array  $utm
 	 */
 	public static function maybe_add_missing_utm( $cta_link, $utm ) {
+		$utm        = self::adjust_legacy_utm_args( $utm );
 		$query_args = array();
 
 		if ( false === strpos( $cta_link, 'utm_source' ) ) {
-			$query_args['utm_source'] = 'WordPress';
+			$query_args['utm_source'] = 'plugin';
 		}
 
-		if ( false === strpos( $cta_link, 'utm_campaign' ) ) {
-			$query_args['utm_campaign'] = 'liteplugin';
+		if ( false === strpos( $cta_link, 'utm_medium' ) ) {
+			$query_args['utm_medium'] = self::get_utm_medium();
 		}
 
-		if ( false === strpos( $cta_link, 'utm_medium' ) && isset( $utm['medium'] ) ) {
-			$query_args['utm_medium'] = $utm['medium'];
+		if ( false === strpos( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
+			$query_args['utm_campaign'] = $utm['campaign'];
 		}
 
 		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
 			$query_args['utm_content'] = $utm['content'];
 		}
+
+		$query_args = self::maybe_add_utm_license( $query_args );
 
 		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
 	}
@@ -1462,8 +1510,8 @@ class FrmAppHelper {
 
 				$upgrade_link = FrmSalesApi::get_best_sale_value( 'lite_banner_cta_link' );
 				$utm          = array(
-					'medium'  => 'settings-license',
-					'content' => 'lite-banner',
+					'campaign' => 'settings-license',
+					'content'  => 'lite-banner',
 				);
 
 				if ( $upgrade_link ) {
@@ -3591,7 +3639,7 @@ class FrmAppHelper {
 	/**
 	 * Get the no label text.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return string
 	 */
@@ -3679,19 +3727,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		$expired = FrmAddonsController::is_license_expired();
-		?>
-		<div class="frm-banner-alert frm_error_style frm_previous_install">
-			<?php
-			esc_html_e( 'You are running a version of Formidable Forms that may not be compatible with your version of Formidable Forms Pro.', 'formidable' );
-			if ( empty( $expired ) ) {
-				echo ' Please <a href="' . esc_url( admin_url( 'plugins.php?s=formidable%20forms%20pro' ) ) . '">update now</a>.';
-			} else {
-				echo '<br/>Please <a href="https://formidableforms.com/account/downloads/?utm_source=WordPress&utm_medium=outdated">renew now</a> to get the latest version.';
-			}
-			?>
-		</div>
-		<?php
+		include self::plugin_path() . '/classes/views/addons/min-version-notice.php';
 	}
 
 	/**
@@ -4193,15 +4229,6 @@ class FrmAppHelper {
 	/**
 	 * @since 5.0.16
 	 *
-	 * @return bool
-	 */
-	public static function show_landing_pages() {
-		return self::show_new_feature( 'landing' );
-	}
-
-	/**
-	 * @since 5.0.16
-	 *
 	 * @return array
 	 */
 	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
@@ -4624,5 +4651,16 @@ class FrmAppHelper {
 			return seems_utf8( $string );
 		}
 		return false;
+	}
+
+	/**
+	 * @since 5.0.16
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function show_landing_pages() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return true;
 	}
 }
