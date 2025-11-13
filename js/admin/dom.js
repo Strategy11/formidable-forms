@@ -163,6 +163,75 @@
 				numberDisplayed: 8,
 				onInitialized: function( _, $container ) {
 					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
+
+					const container = $container[ 0 ];
+					const items = container.querySelectorAll( 'button.dropdown-item' );
+					const itemsArray = [ ...items ];
+
+					items.forEach( ( item, index ) => {
+						const input = item.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+						if ( input ) {
+							item.setAttribute( 'role', 'checkbox' );
+							item.setAttribute( 'aria-checked', input.checked );
+						}
+						item.setAttribute( 'tabindex', '0' );
+
+						item.addEventListener( 'keydown', evt => {
+							const isFirst = index === 0;
+							const isLast = index === itemsArray.length - 1;
+
+							const navigate = direction => {
+								evt.preventDefault();
+								const nextIndex = index + direction;
+								if ( nextIndex >= 0 && nextIndex < itemsArray.length ) {
+									itemsArray[ nextIndex ].focus();
+								}
+							};
+
+							const select = () => {
+								evt.preventDefault();
+								const input = evt.currentTarget.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+								if ( input ) {
+									input.checked = ! input.checked;
+									input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+								}
+							};
+
+							const actions = {
+								Tab: () => {
+									if ( evt.shiftKey && ! isFirst ) {
+										navigate( -1 );
+										return true;
+									}
+									if ( ! evt.shiftKey && ! isLast ) {
+										navigate( 1 );
+										return true;
+									}
+									return false; // Allow Tab escape at boundaries
+								},
+								ArrowUp: () => {
+									navigate( -1 );
+									return true;
+								},
+								ArrowDown: () => {
+									navigate( 1 );
+									return true;
+								},
+								' ': () => {
+									select();
+									return true;
+								},
+								Enter: () => {
+									select();
+									return true;
+								}
+							};
+
+							if ( actions[ evt.key ]?.() ) {
+								evt.stopPropagation();
+							}
+						} );
+					} );
 				},
 				onDropdownShown: function( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
@@ -174,30 +243,34 @@
 						} );
 					}
 
-					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
-					$dropdown.find( '.dropdown-item' ).each(
-						function() {
-							const option = this;
-							const dropdownInput = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
-							if ( dropdownInput ) {
-								option.setAttribute( 'role', 'checkbox' );
-								option.setAttribute( 'aria-checked', dropdownInput.checked ? 'true' : 'false' );
+					// Auto-focus first visible item when dropdown opens
+					const dropdown = $select.next( '.frm-btn-group.dropdown' )[ 0 ];
+					if ( dropdown ) {
+						setTimeout( () => {
+							const items = dropdown.querySelectorAll( 'button.dropdown-item' );
+							const firstVisible = [ ...items ].find( item => item.offsetParent !== null );
+							if ( firstVisible ) {
+								firstVisible.focus();
 							}
-						}
-					);
+						}, 50 );
+					}
 				},
 				onChange: function( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
-					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
+					// Update ARIA attribute (vanilla JS)
+					const dropdown = $select.next( '.frm-btn-group.dropdown' )[ 0 ];
 					const optionValue = $option.val();
-					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
-					if ( $dropdownItem.length ) {
-						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
+					const input = dropdown.querySelector( `input[value="${ optionValue }"]` );
+					if ( input ) {
+						const dropdownItem = input.closest( 'button.dropdown-item' );
+						if ( dropdownItem ) {
+							dropdownItem.setAttribute( 'aria-checked', checked );
 
-						// Delay a focus event so the screen reader reads the option value again.
-						// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
-						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
+							// Delay a focus event so the screen reader reads the option value again.
+							// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
+							setTimeout( () => dropdownItem.focus(), 0 );
+						}
 					}
 				}
 			} );
