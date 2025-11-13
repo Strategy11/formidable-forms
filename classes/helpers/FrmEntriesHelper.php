@@ -718,7 +718,7 @@ class FrmEntriesHelper {
 			'icon'  => 'frm_icon_font frm_email_icon',
 		);
 
-		if ( ! function_exists( 'frm_pdfs_autoloader' ) && FrmAppHelper::show_new_feature( 'pdfs' ) ) {
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
 			$actions['frm_download_pdf'] = array(
 				'url'   => '#',
 				'label' => __( 'Download as PDF', 'formidable' ),

@@ -116,6 +116,18 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	}
 
 	/**
+	 * Only add the "frm-" prefix if multiple reCAPTCHA fields are allowed.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @param bool $allow_multiple
+	 * @return string
+	 */
+	public function get_class_prefix( $allow_multiple ) {
+		return $allow_multiple ? 'frm-' : '';
+	}
+
+	/**
 	 * @since 6.8.4
 	 * @deprecated 6.11.1
 	 * @return string

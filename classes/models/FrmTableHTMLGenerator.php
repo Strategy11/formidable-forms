@@ -56,7 +56,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Cell padding.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @var string
 	 */
@@ -65,7 +65,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Table width.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @var string
 	 */
@@ -207,7 +207,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Removes border CSS from HTML.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $html The HTML.
 	 * @param string $position The border position. Default is `top`.
@@ -271,7 +271,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
-	 * @since x.x    Changed scope from `protected` to `public`.
+	 * @since 6.25    Changed scope from `protected` to `public`.
 	 *
 	 * @return string
 	 */
@@ -291,7 +291,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Gets table style.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
@@ -302,7 +302,7 @@ class FrmTableHTMLGenerator {
 	/**
 	 * Gets td style.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return string
 	 */
