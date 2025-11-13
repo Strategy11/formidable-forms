@@ -163,6 +163,75 @@
 				numberDisplayed: 8,
 				onInitialized: function( _, $container ) {
 					$container.find( '.multiselect.dropdown-toggle' ).removeAttr( 'title' );
+
+					const container = $container[ 0 ];
+					const items = container.querySelectorAll( 'button.dropdown-item' );
+					const itemsArray = [ ...items ];
+
+					items.forEach( ( item, index ) => {
+						const input = item.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+						if ( input ) {
+							item.setAttribute( 'role', 'checkbox' );
+							item.setAttribute( 'aria-checked', input.checked );
+						}
+						item.setAttribute( 'tabindex', '0' );
+
+						item.addEventListener( 'keydown', evt => {
+							const isFirst = index === 0;
+							const isLast = index === itemsArray.length - 1;
+
+							const navigate = direction => {
+								evt.preventDefault();
+								const nextIndex = index + direction;
+								if ( nextIndex >= 0 && nextIndex < itemsArray.length ) {
+									itemsArray[ nextIndex ].focus();
+								}
+							};
+
+							const select = () => {
+								evt.preventDefault();
+								const input = evt.currentTarget.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+								if ( input ) {
+									input.checked = ! input.checked;
+									input.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+								}
+							};
+
+							const actions = {
+								Tab: () => {
+									if ( evt.shiftKey && ! isFirst ) {
+										navigate( -1 );
+										return true;
+									}
+									if ( ! evt.shiftKey && ! isLast ) {
+										navigate( 1 );
+										return true;
+									}
+									return false; // Allow Tab escape at boundaries
+								},
+								ArrowUp: () => {
+									navigate( -1 );
+									return true;
+								},
+								ArrowDown: () => {
+									navigate( 1 );
+									return true;
+								},
+								' ': () => {
+									select();
+									return true;
+								},
+								Enter: () => {
+									select();
+									return true;
+								}
+							};
+
+							if ( actions[ evt.key ]?.() ) {
+								evt.stopPropagation();
+							}
+						} );
+					} );
 				},
 				onDropdownShown: function( event ) {
 					const action = jQuery( event.currentTarget.closest( '.frm_form_action_settings, #frm-show-fields' ) );
@@ -174,79 +243,34 @@
 						} );
 					}
 
-					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
-					const $items = $dropdown.find( 'button.dropdown-item' );
-				
-					$items.each( ( _, item ) => {
-						const input = item.querySelector( 'input[type="checkbox"], input[type="radio"]' );
-						if ( input ) {
-							item.setAttribute( 'role', 'checkbox' );
-							item.setAttribute( 'aria-checked', input.checked );
-						}
-						item.setAttribute( 'tabindex', '0' );
-					} );
-				
-					// Keyboard navigation handler
-					$items.on( 'keydown', ( evt ) => {
-						const currentIndex = $items.index( evt.currentTarget );
-						const isFirst = currentIndex === 0;
-						const isLast = currentIndex === $items.length - 1;
-						
-						const navigate = ( direction ) => {
-							evt.preventDefault();
-							const nextIndex = currentIndex + direction;
-							if ( nextIndex >= 0 && nextIndex < $items.length ) {
-								$items.eq( nextIndex ).focus();
+					// Auto-focus first visible item when dropdown opens
+					const dropdown = $select.next( '.frm-btn-group.dropdown' )[ 0 ];
+					if ( dropdown ) {
+						setTimeout( () => {
+							const items = dropdown.querySelectorAll( 'button.dropdown-item' );
+							const firstVisible = [ ...items ].find( item => item.offsetParent !== null );
+							if ( firstVisible ) {
+								firstVisible.focus();
 							}
-						};
-						
-						const select = () => {
-							evt.preventDefault();
-							const input = evt.currentTarget.querySelector( 'input[type="checkbox"], input[type="radio"]' );
-							if ( input ) {
-								input.checked = ! input.checked;
-								jQuery( input ).trigger( 'change' );
-							}
-						};
-						
-						const actions = {
-							9: () => { // Tab
-								if ( evt.shiftKey && ! isFirst ) {
-									navigate( -1 );
-									return true;
-								}
-								if ( ! evt.shiftKey && ! isLast ) {
-									navigate( 1 );
-									return true;
-								}
-								return false; // Allow Tab escape at boundaries
-							},
-							38: () => navigate( -1 ) || true, // Up
-							40: () => navigate( 1 ) || true, // Down
-							32: () => select() || true, // Space
-							13: () => select() || true // Enter
-						};
-						
-						if ( actions[ evt.keyCode ]?.() ) {
-							evt.stopPropagation();
-						}
-					} );
-				
-					// Auto-focus first item
-					setTimeout( () => $items.first().focus(), 50 );
+						}, 50 );
+					}
 				},
 				onChange: function( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
-					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
+					// Update ARIA attribute (vanilla JS)
+					const dropdown = $select.next( '.frm-btn-group.dropdown' )[ 0 ];
 					const optionValue = $option.val();
-					const $dropdownItem = $dropdown.find( `input[value="${ optionValue }"]` ).closest( 'button.dropdown-item' );
-					if ( $dropdownItem.length ) {
-						$dropdownItem.attr( 'aria-checked', checked );
+					const input = dropdown.querySelector( `input[value="${ optionValue }"]` );
+					if ( input ) {
+						const dropdownItem = input.closest( 'button.dropdown-item' );
+						if ( dropdownItem ) {
+							dropdownItem.setAttribute( 'aria-checked', checked );
 
-						// Delay a focus event so the screen reader reads the option value again.
-						// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
-						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
+							// Delay a focus event so the screen reader reads the option value again.
+							// Without this, and without the setTimeout, it only reads "checked" or "unchecked".
+							setTimeout( () => dropdownItem.focus(), 0 );
+						}
 					}
 				}
 			} );
