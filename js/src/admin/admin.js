@@ -6152,7 +6152,8 @@ window.frmAdminBuildJS = function() {
 			opts = [],
 			imageUrl = '';
 
-		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"][name*="label"], input[name^="field_options[options_' + fieldId + ']"][name*="value"]' );
+		const baseSelector = 'input[name^="field_options[options_' + fieldId + ']"]';
+		const optVals = jQuery( baseSelector + '[name*="label"], ' + baseSelector + '[name*="value"], ' + baseSelector + '[name*="price"]');
 		const isProduct = isProductField( fieldId );
 		const showLabelWithImage = showingLabelWithImage( fieldId );
 		const hasImageOptions = imagesAsOptions( fieldId );
