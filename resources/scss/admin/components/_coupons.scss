@@ -4,6 +4,7 @@
 	align-items: center;
 
 	p {
+		margin-top: var(--gap-xs);
 		max-width: 364px;
 		text-align: center;
 	}
@@ -13,7 +14,7 @@
 		max-height: 300px;
 	}
 
-	h3 {
+	h2 {
 		margin-bottom: 0;
 	}
 }

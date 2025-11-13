@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $images_folder_url = FrmAppHelper::plugin_url() . '/images/coupons/';
 ?>
 <div class="frm-coupons-upsell-wrapper">
-	<h3><?php esc_html_e( 'Coupons', 'formidable' ); ?></h3>
+	<h2><?php esc_html_e( 'Coupons', 'formidable' ); ?></h2>
 
 	<p>
 		<?php esc_html_e( 'Offer discounts with custom coupon codes. Add a Coupon field to your payment form and set percentage or fixed discounts, usage limits, and availability. Requires a Pro license or higher.', 'formidable' ); ?>
