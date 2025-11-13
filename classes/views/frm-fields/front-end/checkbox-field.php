@@ -75,11 +75,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
 
 		do_action( 'frm_field_input_html', $field );
+		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		if ( $choice_limit_reached ) {
-			echo ' disabled="disabled" data-max-reached="1"';
-		} else {
-			echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			if ( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) !== 'edit' || ! $checked ) {
+				echo 'disabled="disabled" data-max-reached="1" ';
+			}
 		}
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {

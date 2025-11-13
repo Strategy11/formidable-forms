@@ -63,7 +63,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
 		do_action( 'frm_field_input_html', $field );
-		echo $choice_limit_reached ? ' disabled="disabled" ' : $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( $choice_limit_reached ) {
+			if (  FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) !== 'edit' || ! $checked ) {
+				echo 'disabled="disabled" ';
+			}
+		}
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {

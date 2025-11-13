@@ -40,6 +40,10 @@ class FrmEntryValidate {
 		// Pass exclude value to validate_field function so it can be used for repeating sections
 		$args = array( 'exclude' => $exclude );
 
+		if ( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) === 'edit' ) {
+			$entry_id      = FrmAppHelper::simple_get( 'id', 'sanitize_title', 0 );
+			$args['entry'] = FrmEntry::getOne( $entry_id, true );
+		}
 		foreach ( $posted_fields as $posted_field ) {
 			self::validate_field( $posted_field, $errors, $values, $args );
 			unset( $posted_field );
