@@ -25,13 +25,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="wrap">
 		<?php
 		/**
+		 * Allow the coupons add-on to hook in and display the coupons list.
+		 * If the return value of the hook doesn't change, the coupons upsell
+		 * will be displayed instead.
+		 *
 		 * @since x.x
 		 *
 		 * @param bool $coupons_list_displayed
 		 */
 		$coupons_list_displayed = apply_filters( 'frm_coupons_list_displayed', false );
 		if ( ! $coupons_list_displayed ) {
-			// TODO: Show upsell here.
+			include FrmAppHelper::plugin_path() . '/stripe/views/lists/coupons-upsell.php';
 		}
 		?>
 	</div>
