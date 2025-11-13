@@ -64,6 +64,7 @@ class FrmFormActionsController {
 			'getresponse'       => 'FrmDefGetResponseAction',
 			'hubspot'           => 'FrmDefHubspotAction',
 			'zapier'            => 'FrmDefZapierAction',
+			'n8n'               => 'FrmDefN8NAction',
 			'twilio'            => 'FrmDefTwilioAction',
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
