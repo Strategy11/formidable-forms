@@ -1926,6 +1926,10 @@ BEFORE_HTML;
 			return true;
 		}
 
+		if ( false !== strpos( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
+			return true;
+		}
+
 		global $pagenow;
 		if ( 'post.php' === $pagenow ) {
 			return true;
