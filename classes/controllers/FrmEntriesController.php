@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesController {
 
+	/**
+	 * Tracks whether self::display_list() has been called to avoid multiple calls.
+	 *
+	 * @since x.x
+	 *
+	 * @var bool
+	 */
+	private static $has_displayed_list;
+
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
@@ -105,6 +114,61 @@ class FrmEntriesController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $action
+	 * @return void
+	 */
+	public static function bulk_actions( $action = 'list-form' ) {
+		$items = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
+		if ( empty( $items ) ) {
+			self::display_list( '', array( __( 'No entries were specified', 'formidable' ) ) );
+			return;
+		}
+		$bulk_action = self::get_bulk_action( $action );
+		if ( 'delete' !== $bulk_action ) {
+			return;
+		}
+		if ( ! current_user_can( 'frm_delete_entries' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			self::display_list( '', array( $frm_settings->admin_permission ) );
+			return;
+		}
+		self::destroy_items( $items );
+		self::display_list();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $items
+	 * @return void
+	 */
+	private static function destroy_items( $items ) {
+		if ( ! is_array( $items ) ) {
+			$items = explode( ',', $items );
+		}
+		foreach ( $items as $item_id ) {
+			FrmEntry::destroy( $item_id );
+		}
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $action
+	 * @return string
+	 */
+	private static function get_bulk_action( $action ) {
+		if ( $action === 'list-form' ) {
+			$request_bulkaction  = FrmAppHelper::get_param( 'bulkaction', '-1', 'request', 'sanitize_text_field' );
+			$request_bulkaction2 = FrmAppHelper::get_param( 'bulkaction2', '-1', 'request', 'sanitize_text_field' );
+			return $request_bulkaction !== '-1' ? $request_bulkaction : $request_bulkaction2;
+		}
+		return str_replace( 'bulk_', '', $action );
+	}
+
+	/**
 	 * Display in Back End.
 	 */
 	public static function route() {
@@ -117,13 +181,104 @@ class FrmEntriesController {
 				return self::$action();
 
 			default:
+				if ( FrmEntriesListHelper::has_moved_entries_bulk_delete_from_pro() ) {
+					if ( intval( $action ) === -1 ) {
+						$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
+					}
+					$bulk_action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
+					if ( strpos( $bulk_action, 'bulk_' ) === 0 ) {
+						FrmAppHelper::remove_get_action();
+						self::bulk_actions( $bulk_action );
+					}
+				}
 				do_action( 'frm_entry_action_route', $action );
 				if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
 					return;
 				}
 
 				return self::display_list();
+		}//end switch
+	}
+
+	/**
+	 * Delete all entries in a form when the 'delete all' button is clicked.
+	 *
+	 * @since x.x
+	 */
+	public static function destroy_all() {
+		if ( ! current_user_can( 'frm_delete_entries' ) || ! wp_verify_nonce( FrmAppHelper::simple_get( '_wpnonce', '', 'sanitize_text_field' ), '-1' ) ) {
+			$frm_settings = FrmAppHelper::get_settings();
+			wp_die( esc_html( $frm_settings->admin_permission ) );
 		}
+
+		$params  = FrmForm::get_admin_params();
+		$message = '';
+		$form_id = (int) $params['form'];
+
+		if ( $form_id ) {
+			$results = self::delete_form_entries( $form_id );
+			if ( $results ) {
+				$message = 'destroy_all';
+				FrmEntry::clear_cache();
+			}
+		} else {
+			$message = 'no_entries_selected';
+		}
+
+		$url = admin_url( 'admin.php?page=formidable-entries&frm_action=list&form=' . absint( $form_id ) );
+
+		if ( $message ) {
+			$url .= '&message=' . $message;
+		}
+
+		wp_safe_redirect( $url );
+		die();
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 */
+	private static function delete_form_entries( $form_id ) {
+		global $wpdb;
+
+		$form_ids = self::get_child_form_ids( $form_id );
+
+		$meta_query  = $wpdb->prepare( "DELETE em.* FROM {$wpdb->prefix}frm_item_metas AS em INNER JOIN {$wpdb->prefix}frm_items AS e ON (em.item_id=e.id) WHERE form_id=%d", $form_id );
+		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
+
+		if ( ! empty( $form_ids ) ) {
+			$form_query   = ' OR form_id in (' . $form_ids . ')';
+			$meta_query  .= $form_query;
+			$entry_query .= $form_query;
+		}
+
+		$wpdb->query( $meta_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
+		return $wpdb->query( $entry_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int         $form_id
+	 * @param bool|string $implode
+	 *
+	 * @return array|string
+	 */
+	private static function get_child_form_ids( $form_id, $implode = ',' ) {
+		$form_ids       = array();
+		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
+		if ( $child_form_ids ) {
+			$form_ids = $child_form_ids;
+		}
+		$form_ids = array_filter( $form_ids, 'is_numeric' );
+		if ( $implode ) {
+			$form_ids = implode( $implode, $form_ids );
+		}
+
+		return $form_ids;
 	}
 
 	/**
@@ -145,8 +300,8 @@ class FrmEntriesController {
 
 	public static function manage_columns( $columns ) {
 		global $frm_vars;
-		$form_id = FrmForm::get_current_form_id();
-
+		$form_id                           = FrmForm::get_current_form_id();
+		$columns['cb']                     = '<input type="checkbox" />';
 		$columns[ $form_id . '_id' ]       = 'ID';
 		$columns[ $form_id . '_item_key' ] = esc_html__( 'Entry Key', 'formidable' );
 
@@ -498,6 +653,12 @@ class FrmEntriesController {
 	}
 
 	public static function display_list( $message = '', $errors = array() ) {
+		if ( self::$has_displayed_list ) {
+			return;
+		}
+
+		self::$has_displayed_list = true;
+
 		global $wpdb, $frm_vars;
 
 		$form   = FrmForm::maybe_get_current_form();
