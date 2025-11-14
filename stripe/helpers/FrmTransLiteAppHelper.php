@@ -71,7 +71,7 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_payment_status( $payment ) {
-		if ( $payment->status ) {
+		if ( ! empty( $payment->status ) ) {
 			return $payment->status;
 		}
 		// PayPal fallback.

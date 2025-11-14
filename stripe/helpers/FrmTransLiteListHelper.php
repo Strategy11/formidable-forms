@@ -543,7 +543,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_status_column( $item ) {
 		$status = esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $item ) ) );
 
-		if ( 'processing' === $item->status ) {
+		if ( 'processing' === ( $item->status ?? '' ) ) {
 			$status .= $this->get_processing_tooltip();
 		}
 
