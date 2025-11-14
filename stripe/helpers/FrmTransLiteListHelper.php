@@ -177,7 +177,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	public function get_bulk_actions(){
 		$actions = array();
-		if ( class_exists( 'FrmTransListHelper' ) ) {
+		if ( $this->payments_addon_list_helper_exists() ) {
 			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
 		}
 
@@ -263,12 +263,21 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	protected function get_column_info() {
 		$column_info = parent::get_column_info();
 
-		if ( ! class_exists( 'FrmTransListHelper' ) ) {
+		if ( ! $this->payments_addon_list_helper_exists() ) {
 			// Remove the checkbox column for Lite only.
 			unset( $column_info[0]['cb'] );
 		}
 
 		return $column_info;
+	}
+
+	/**
+	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
+	 *
+	 * @return bool
+	 */
+	private function payments_addon_list_helper_exists() {
+		return class_exists( 'FrmTransListHelper' ) || class_exists( 'FrmPaymentsListHelper' );
 	}
 
 	/**

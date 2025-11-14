@@ -9,10 +9,6 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
 
@@ -71,7 +67,10 @@ class FrmTransLiteListsController {
 		$columns['status']     = esc_html__( 'Status', 'formidable' );
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 		$columns['paysys']     = esc_html__( 'Processor', 'formidable' );
-		$columns['mode']       = esc_html__( 'Mode', 'formidable' );
+
+		if ( 'bulk_delete' !== FrmAppHelper::simple_get( 'action' ) ) {
+			$columns['mode'] = esc_html__( 'Mode', 'formidable' );
+		}
 
 		return $columns;
 	}

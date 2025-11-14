@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppHelper {
 
 	/**
-	 * @var bool|null
-	 */
-	private static $should_fallback_to_paypal;
-
-	/**
 	 * @return string
 	 */
 	public static function plugin_path() {
@@ -449,33 +444,6 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public static function should_fallback_to_paypal() {
-		if ( isset( self::$should_fallback_to_paypal ) ) {
-			return self::$should_fallback_to_paypal;
-		}
-
-		if ( ! class_exists( 'FrmPaymentsController' ) || ! isset( FrmPaymentsController::$db_opt_name ) ) {
-			self::$should_fallback_to_paypal = false;
-			return false;
-		}
-
-		$db     = new FrmTransLiteDb();
-		$option = get_option( $db->db_opt_name );
-		if ( false !== $option ) {
-			// Don't fallback to PayPal if Stripe migrations have run.
-			self::$should_fallback_to_paypal = false;
-			return false;
-		}
-
-		$option                          = get_option( FrmPaymentsController::$db_opt_name );
-		self::$should_fallback_to_paypal = false !== $option;
-
-		return self::$should_fallback_to_paypal;
-	}
-
-	/**
 	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
 	 * Old payments will just output an empty string.
 	 *
@@ -581,5 +549,15 @@ class FrmTransLiteAppHelper {
 			?>
 		</select>
 		<?php
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function should_fallback_to_paypal() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return false;
 	}
 }

@@ -179,10 +179,6 @@ class FrmAppController {
 	 * @return bool
 	 */
 	private static function is_white_payments_page() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return false;
-		}
-
 		$action        = FrmAppHelper::simple_get( 'action', 'sanitize_title' );		
 		$on_edit_page  = in_array( $action, array( 'edit', 'new' ), true );
 
