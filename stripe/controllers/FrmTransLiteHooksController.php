@@ -39,6 +39,9 @@ class FrmTransLiteHooksController {
 		if ( class_exists( 'FrmTransHooksController', false ) ) {
 			add_action( 'frm_pay_show_square_options', 'FrmTransLiteAppController::add_repeat_cadence_value' );
 
+			remove_action( 'admin_head', 'FrmTransListsController::add_list_hooks' );
+			add_action( 'admin_head', 'FrmTransLiteListsController::add_list_hooks' );
+
 			self::maybe_set_admin_menu();
 
 			// Exit early, let the Payments submodule handle everything else.
