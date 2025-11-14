@@ -552,6 +552,15 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function payments_submodule_or_paypal_is_active() {
+		return class_exists( 'FrmTransAppController' ) || class_exists( 'FrmPaymentsController' );
+	}
+
+	/**
 	 * @deprecated x.x
 	 *
 	 * @return bool
