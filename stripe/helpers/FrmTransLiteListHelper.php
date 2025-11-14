@@ -253,8 +253,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	protected function get_column_info() {
 		$column_info = parent::get_column_info();
-		// Remove the checkbox column.
-		unset( $column_info[0]['cb'] );
+
+		if ( ! class_exists( 'FrmTransListHelper' ) ) {
+			// Remove the checkbox column for Lite only.
+			unset( $column_info[0]['cb'] );
+		}
+
 		return $column_info;
 	}
 
@@ -329,6 +333,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		}
 
 		return 'class="' . esc_attr( $class ) . '"';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_cb_column( $item ) {
+		return '<input type="checkbox" name="item-action[]" value="' . esc_attr( $item->id ) . '" />';
 	}
 
 	/**
