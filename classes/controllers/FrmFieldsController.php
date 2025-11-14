@@ -378,6 +378,102 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $opt_key
+	 *
+	 * @return bool
+	 */
+	public static function choice_limit_reached( $field, $opt_key ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $disabled
+		 * @param array $field
+		 * @param string $opt_key
+		 */
+		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool $choice_limit_reached
+	 * @param bool $choice_selected
+	 *
+	 * @return bool
+	 */
+	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_echo_disabled_attribute
+		 * @param bool $choice_limit_reached
+		 * @param bool $choice_selected
+		 */
+		return apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool   $choice_limit_is_reached
+	 * @param array  $shortcode_atts
+	 * @param string $opt_key
+	 * @param int    $form_id
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
+		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+			return true;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $should_hide_field_choice
+		 * @param bool   $choice_limit_is_reached
+		 * @param int    $form_id
+		 * @param string $opt_key
+		 *
+		 * @return bool
+		 */
+		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_id, $opt_key );
+	}
+
+	public static function should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) {
+		if ( ! is_callable( 'FrmProFieldsController::should_hide_field_choice' ) ) {
+			return false;
+		}
+
+		$should_hide_field_choices = FrmProFieldsController::should_hide_field_choice( false, true, $field['form_id'] );
+
+		foreach ( $field_choices_limit_reached_statuses as $choices_limit_reached ) {
+			if ( ! $choices_limit_reached ) {
+				break;
+			}
+		}
+
+		return ! empty( $choices_limit_reached ) && $should_hide_field_choices;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	public static function get_choices_limit_reached_statuses( $field ) {
+		$choices_limit_reached_statuses = array();
+		foreach ( $field['options'] as $opt_key => $opt ) {
+			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
+		}
+		return $choices_limit_reached_statuses;
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0
