@@ -68,7 +68,7 @@ class FrmTransLiteListsController {
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 		$columns['paysys']     = esc_html__( 'Processor', 'formidable' );
 
-		if ( 'bulk_delete' !== FrmAppHelper::simple_get( 'action' ) ) {
+		if ( 'bulk_delete' !== FrmAppHelper::simple_get( 'action' ) && ! class_exists( 'FrmTransListHelper' ) && class_exists( 'FrmPaymentsListHelper' ) ) {
 			$columns['mode'] = esc_html__( 'Mode', 'formidable' );
 		}
 
