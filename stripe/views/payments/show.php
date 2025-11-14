@@ -57,7 +57,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</tr>
 							<?php } ?>
 
-							<?php FrmTransLiteAppHelper::show_in_table( $payment->invoice_id, __( 'Invoice #', 'formidable' ) ); ?>
+							<?php
+							if ( isset( $payment->invoice_id ) ) {
+								FrmTransLiteAppHelper::show_in_table( $payment->invoice_id, __( 'Invoice #', 'formidable' ) );
+							}
+							?>
 
 							<?php if ( ! empty( $payment->sub_id ) ) { ?>
 								<tr>
