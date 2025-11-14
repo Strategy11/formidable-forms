@@ -150,13 +150,8 @@ class FrmAppController {
 			FrmOnboardingWizardController::PAGE_SLUG,
 		);
 
-		if ( ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			$on_edit_page = in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true );
-
-			// Fallback to the Stripe, Authorize.Net, or PayPal add on for the "edit" action since Stripe Lite does not have an edit view.
-			if ( ! $on_edit_page ) {
-				$white_pages[] = 'formidable-payments';
-			}
+		if ( self::is_white_payments_page() ) {
+			$white_pages[] = 'formidable-payments';
 		}
 
 		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || FrmAppHelper::is_view_builder_page();
@@ -171,6 +166,31 @@ class FrmAppController {
 		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
 
 		return $is_white_page;
+	}
+
+	/**
+	 * Check if the payments page should be styled as a white page.
+	 * Fallback to the Stripe, Authorize.Net, or PayPal add on for the "edit" action since
+	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
+	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_white_payments_page() {
+		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
+			return false;
+		}
+
+		$action        = FrmAppHelper::simple_get( 'action', 'sanitize_title' );		
+		$on_edit_page  = in_array( $action, array( 'edit', 'new' ), true );
+
+		if ( $on_edit_page || 'bulk_delete' === $action ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**

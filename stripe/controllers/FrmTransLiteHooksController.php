@@ -75,7 +75,7 @@ class FrmTransLiteHooksController {
 	 * @return void
 	 */
 	private static function maybe_set_admin_menu() {
-		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) ) {
 			// We're still falling back to the Stripe, Authorize.Net, or PayPal add-on to handle these routes.
 			return;
 		}

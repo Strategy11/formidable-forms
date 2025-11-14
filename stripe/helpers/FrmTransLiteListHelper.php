@@ -175,6 +175,14 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 	}
 
+	public function get_bulk_actions(){
+		if ( class_exists( 'FrmTransListHelper' ) ) {
+			$actions = array( 'bulk_delete' => __( 'Delete' ) );
+		}
+
+		return $actions;
+	}
+
 	/**
 	 * @param string $which
 	 * @return void
