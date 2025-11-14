@@ -1886,12 +1886,28 @@ window.frmAdminBuildJS = function() {
 			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
-		if ( droppable.classList.contains( 'start_divider' ) && ( draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr' ) && droppable.closest( '.repeat_section' ) ) {
-			// Don't allow GDPR fields in repeaters.
-			return false;
+		const droppableIsARepeater = droppable.classList.contains( 'start_divider' ) && null !== droppable.closest( '.repeat_section' );
+		const droppableIsInsideOfARepeater = null !== droppable.closest( '.repeat_section' );
+
+		if ( droppableIsARepeater || droppableIsInsideOfARepeater ) {
+			const isGdpr = draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr';
+			if ( isGdpr ) {
+				return false;
+			}
+
+			/**
+			 * @since x.x
+			 *
+			 * @param {boolean} denyDropInRepeater
+			 * @param {HTMLElement} draggable
+			 */
+			const shouldDenyDropInRepeater = wp.hooks.applyFilters( 'frm_deny_drop_in_repeater', false, draggable );
+			if ( shouldDenyDropInRepeater ) {
+				return false;
+			}
 		}
 
-		if ( ! droppable.classList.contains( 'start_divider' ) ) {
+		if ( ! droppableIsARepeater ) {
 			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
 			if ( ! groupCanFitAnotherField( $fieldsInRow, jQuery( draggable ) ) ) {
 				// Field group is full and cannot accept another field.
