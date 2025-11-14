@@ -175,6 +175,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
 	public function get_bulk_actions(){
 		$actions = array();
 		if ( $this->payments_addon_list_helper_exists() ) {
@@ -274,6 +279,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
 	 *
+	 * @since x.x
+	 *
 	 * @return bool
 	 */
 	private function payments_addon_list_helper_exists() {
@@ -354,6 +361,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * Get the checkbox for bulk actions.
+	 * This is only required when the Payments submodule or PayPal is active.
+	 *
 	 * @since x.x
 	 *
 	 * @param object $item
