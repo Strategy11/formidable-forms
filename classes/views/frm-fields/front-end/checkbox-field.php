@@ -77,10 +77,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( $choice_limit_reached ) {
-			if ( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ) !== 'edit' || ! $checked ) {
-				echo 'disabled="disabled" data-max-reached="1" ';
-			}
+		if ( FrmFieldsController::should_echo_disabled_attribute( $choice_limit_reached, $checked ) ) {
+			echo 'disabled="disabled" data-max-reached="1" ';
 		}
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {

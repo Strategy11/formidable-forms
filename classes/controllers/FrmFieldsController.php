@@ -399,6 +399,25 @@ class FrmFieldsController {
 	/**
 	 * @since x.x
 	 *
+	 * @param bool $choice_limit_reached
+	 * @param bool $choice_selected
+	 *
+	 * @return bool
+	 */
+	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_echo_disabled_attribute
+		 * @param bool $choice_limit_reached
+		 * @param bool $choice_selected
+		 */
+		return apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+	}
+
+	/**
+	 * @since x.x
+	 *
 	 * @param bool   $choice_limit_is_reached
 	 * @param array  $shortcode_atts
 	 * @param string $opt_key
