@@ -176,8 +176,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	public function get_bulk_actions(){
+		$actions = array();
 		if ( class_exists( 'FrmTransListHelper' ) ) {
-			$actions = array( 'bulk_delete' => __( 'Delete' ) );
+			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
 		}
 
 		return $actions;
