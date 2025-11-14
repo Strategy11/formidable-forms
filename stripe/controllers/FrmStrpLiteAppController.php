@@ -62,7 +62,16 @@ class FrmStrpLiteAppController {
 	 * @return void
 	 */
 	public static function maybe_redirect_to_stripe_settings() {
-		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) || FrmTransLiteAppHelper::payments_table_exists() ) {
+		if ( ! FrmAppHelper::is_admin_page( 'formidable-payments' ) ) {
+			return;
+		}
+
+		if ( class_exists( 'FrmPaymentsController' ) ) {
+			// Never redirect when someone is using the PayPal add-on.
+			return;
+		}
+
+		if ( FrmTransLiteAppHelper::payments_table_exists() ) {
 			return;
 		}
 
