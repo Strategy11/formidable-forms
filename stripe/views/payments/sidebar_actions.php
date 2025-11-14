@@ -24,3 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmTransLitePaymentsController::show_refund_link( $payment ); ?>
 	</div>
 <?php } ?>
+
+<?php
+do_action( 'frm_pay_' . $payment->paysys . '_sidebar', $payment );
+?>
