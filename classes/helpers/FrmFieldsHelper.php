@@ -396,17 +396,17 @@ class FrmFieldsHelper {
 		$frm_settings = FrmAppHelper::get_settings();
 
 		$defaults = array(
-			'unique_msg'       => array(
+			'unique_msg' => array(
 				'full' => self::default_unique_msg(),
 				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s must be unique', 'formidable' ), '[field_name]' ),
 			),
-			'invalid'          => array(
+			'invalid'    => array(
 				'full' => __( 'This field is invalid', 'formidable' ),
 				/* translators: %s: Field name */
 				'part' => sprintf( __( '%s is invalid', 'formidable' ), '[field_name]' ),
 			),
-			'blank'            => array(
+			'blank'      => array(
 				'full' => $frm_settings->blank_msg,
 				'part' => $frm_settings->blank_msg,
 			),
