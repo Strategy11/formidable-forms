@@ -430,17 +430,29 @@ class FrmFieldsController {
 			return true;
 		}
 
+		if ( ! $choice_limit_is_reached ) {
+			return false;
+		}
+
+		return self::should_hide_maxed_out_field_choices( $form_id );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return bool
+	 */
+	private static function should_hide_maxed_out_field_choices( $form_id ) {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool   $should_hide_field_choice
-		 * @param bool   $choice_limit_is_reached
-		 * @param int    $form_id
-		 * @param string $opt_key
+		 * @param bool $should_hide_field_choice_by_form_id
+		 * @param int  $form_id
 		 *
 		 * @return bool
 		 */
-		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_id, $opt_key );
+		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
 	}
 
 	/**
@@ -452,17 +464,13 @@ class FrmFieldsController {
 	 * @return bool
 	 */
 	public static function should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) {
-		if ( ! is_callable( 'FrmProFieldsController::should_hide_field_choice' ) ) {
-			return false;
-		}
-
 		foreach ( $field_choices_limit_reached_statuses as $choice_limit_reached ) {
 			if ( ! $choice_limit_reached ) {
 				return false;
 			}
 		}
 
-		return FrmProFieldsController::should_hide_field_choice( false, true, $field['form_id'] );
+		return self::should_hide_maxed_out_field_choices( $field['form_id'] );
 	}
 
 	/**
@@ -472,6 +480,10 @@ class FrmFieldsController {
 	 * @return array
 	 */
 	public static function get_choices_limit_reached_statuses( $field ) {
+		if ( ! has_filter( 'frm_choice_limit_reached' ) ) {
+			return array_fill_keys( array_keys( $field['options'] ), false );
+		}
+
 		$choices_limit_reached_statuses = array();
 		foreach ( $field['options'] as $opt_key => $opt ) {
 			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
