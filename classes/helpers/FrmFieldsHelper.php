@@ -395,9 +395,6 @@ class FrmFieldsHelper {
 	public static function get_error_msg( $field, $error ) {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		$conf_msg         = __( 'The entered values do not match', 'formidable' );
-		$choice_limit_msg = __( 'All choices have reached their entry limit', 'formidable' );
-
 		$defaults = array(
 			'unique_msg'       => array(
 				'full' => self::default_unique_msg(),
@@ -413,15 +410,18 @@ class FrmFieldsHelper {
 				'full' => $frm_settings->blank_msg,
 				'part' => $frm_settings->blank_msg,
 			),
-			'conf_msg'         => array(
-				'full' => $conf_msg,
-				'part' => $conf_msg,
-			),
-			'choice_limit_msg' => array(
-				'full' => $choice_limit_msg,
-				'part' => $choice_limit_msg,
-			),
 		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param string $conf_msg
+		 * @param array|object $field
+		 * @param string $error
+		 *
+		 * @return string
+		 */
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults );
 
 		$msg = FrmField::get_option( $field, $error );
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
