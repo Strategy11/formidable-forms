@@ -415,13 +415,12 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param string $conf_msg
+		 * @param array $defaults
 		 * @param array|object $field
-		 * @param string $error
 		 *
 		 * @return string
 		 */
-		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults );
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
 
 		$msg = FrmField::get_option( $field, $error );
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
