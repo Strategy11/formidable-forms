@@ -443,20 +443,26 @@ class FrmFieldsController {
 		return apply_filters( 'frm_should_hide_field_choice', false, $choice_limit_is_reached, $form_id, $opt_key );
 	}
 
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_choices_limit_reached_statuses
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
 	public static function should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) {
 		if ( ! is_callable( 'FrmProFieldsController::should_hide_field_choice' ) ) {
 			return false;
 		}
 
-		$should_hide_field_choices = FrmProFieldsController::should_hide_field_choice( false, true, $field['form_id'] );
-
-		foreach ( $field_choices_limit_reached_statuses as $choices_limit_reached ) {
-			if ( ! $choices_limit_reached ) {
-				break;
+		foreach ( $field_choices_limit_reached_statuses as $choice_limit_reached ) {
+			if ( ! $choice_limit_reached ) {
+				return false;
 			}
 		}
 
-		return ! empty( $choices_limit_reached ) && $should_hide_field_choices;
+		return FrmProFieldsController::should_hide_field_choice( false, true, $field['form_id'] );
 	}
 
 	/**
