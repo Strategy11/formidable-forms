@@ -353,16 +353,17 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $label The label.
 	 * @param string $value The value.
+	 * @param array  $args  Additional arguments. May include "field_type" string.
 	 *
 	 * @return string
 	 */
-	public function generate_two_cell_table_row( $label, $value ) {
+	public function generate_two_cell_table_row( $label, $value, $args = array() ) {
 		$row  = '<tr' . $this->tr_style();
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
+		$value = '<td' . $this->td_style . '>' . $this->sanitize_value( $value, $args ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
@@ -377,6 +378,21 @@ class FrmTableHTMLGenerator {
 		$this->switch_odd();
 
 		return $row;
+	}
+
+	/**
+	 * @param string $value
+	 * @param array  $args
+	 * @return string
+	 */
+	private function sanitize_value( $value, $args ) {
+		if ( empty( $args['field_type'] ) ) {
+			return wp_kses_post( $value );
+		}
+
+		$field_object = FrmFieldFactory::get_field_type( $args['field_type'] );
+		$field_object->sanitize_value( $value );
+		return $value;
 	}
 
 	/**
