@@ -90,6 +90,11 @@ export function addOneClick( link, context, upgradeLabel ) {
 	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
+
+	const showLinkParent = showLink.closest( '.frm-upgrade-modal-actions' );
+	if ( showLinkParent ) {
+		showLinkParent.style.display = showIt === 'block' ? 'flex' : showIt;
+	}
 }
 
 export function initModal( id, width ) {
