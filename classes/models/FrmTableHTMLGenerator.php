@@ -363,7 +363,7 @@ class FrmTableHTMLGenerator {
 		$row .= '>';
 
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $this->td_style . '>' . $this->sanitize_value( $value, $args ) . '</td>';
+		$value = '<td' . $this->td_style . '>' . $this->filter_value_for_display( $value, $args ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
@@ -385,14 +385,13 @@ class FrmTableHTMLGenerator {
 	 * @param array  $args
 	 * @return string
 	 */
-	private function sanitize_value( $value, $args ) {
+	private function filter_value_for_display( $value, $args ) {
 		if ( empty( $args['field_type'] ) ) {
 			return wp_kses_post( $value );
 		}
 
 		$field_object = FrmFieldFactory::get_field_type( $args['field_type'] );
-		$field_object->sanitize_value( $value );
-		return $value;
+		return $field_object->filter_value_for_table_html( $value );
 	}
 
 	/**
