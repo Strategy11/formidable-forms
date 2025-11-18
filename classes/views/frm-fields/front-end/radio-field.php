@@ -8,11 +8,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Extra line breaks show as space on the front-end when
  * the form is double filtered and not minimized.
  *
- * @var array  $field
- * @var string $field_name
- * @var bool   $read_only
- * @var string $html_id
- * @var array  $args
+ * @var array      $field
+ * @var string     $field_name
+ * @var bool       $read_only
+ * @var string     $html_id
+ * @var array|null $args
  *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
