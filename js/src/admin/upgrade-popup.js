@@ -37,6 +37,14 @@ export function addOneClick( link, context, upgradeLabel ) {
 	let showMsg = 'block';
 	let hideIt = 'none';
 
+	const modalIconSvg = container.querySelector( '.frm-circled-icon svg' );
+	let modalIcon;
+	if ( modalIconSvg ) {
+		modalIcon = modalIconSvg.querySelector( 'use' );
+		modalIconSvg.classList.remove( 'frm_svg32' );
+		modalIcon.setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
+	}
+
 	// If one click upgrade, hide other content.
 	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
 		if ( newMessage === null ) {
@@ -51,13 +59,13 @@ export function addOneClick( link, context, upgradeLabel ) {
 		button.rel = oneclick.url;
 
 		if ( oneclick.class === 'frm-activate-addon' ) {
-			container.querySelector( '.frm-circled-icon svg' ).classList.add( 'frm-filled-lock-open-icon' );
-			container.querySelector( '.frm-circled-icon use' ).setAttribute( 'xlink:href', '#frm_filled_lock_open_icon' );
 			oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
 			button.textContent = __( 'Activate', 'formidable' );
+			if ( modalIcon ) {
+				modalIconSvg.classList.add( 'frm_svg32' );
+				modalIcon.setAttribute( 'xlink:href', link.querySelector( 'use' ).getAttribute( 'xlink:href' ) );
+			}
 		} else {
-			container.querySelector( '.frm-circled-icon svg' ).classList.remove( 'frm-filled-lock-open-icon' );
-			container.querySelector( '.frm-circled-icon use' ).setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
 			oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
 			button.textContent = __( 'Install', 'formidable' );
 		}

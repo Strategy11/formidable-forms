@@ -36,7 +36,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					}
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
-					<p class="frm-upgrade-message frm-mt-xs" data-default="<?php echo esc_attr( $message ); ?>">
+					<p class="frm-upgrade-message frm-my-xs" data-default="<?php echo esc_attr( $message ); ?>">
 						<?php FrmAppHelper::kses_echo( $message, array( 'span' ) ); ?>
 					</p>
 					<?php if ( $is_pro ) { ?>
@@ -54,7 +54,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</a>
 					<?php } else { ?>
-						<div class="frm-flex frm-flex-row-reverse frm-items-center frm-gap-xs">
+						<div class="frm-upgrade-modal-actions frm-flex frm-flex-row-reverse frm-items-center frm-gap-xs">
 							<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
 								<?php
 								printf(
