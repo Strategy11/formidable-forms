@@ -1811,6 +1811,16 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param string $value
+	 * @return string
+	 */
+	public function filter_value_for_table_html( $value ) {
+		return wp_kses_post( $value );
+	}
+
+	/**
 	 * This function is deprecated since it has a typo in the name.
 	 *
 	 * @since 3.0
