@@ -27,7 +27,7 @@
 					'class'             => 'frm_image_preview_wrapper',
 					'data-upgrade'      => __( 'Background image styles', 'formidable' ),
 					'data-message'      => __( 'Elevate your form\'s design by adding full-width background images to your forms.', 'formidable' ),
-					'data-upsell-image' => FrmAppHelper::plugin_url() . '/images/upsell/background-image-styles-preview.png',
+					'data-upsell-image' => FrmAppHelper::plugin_url() . '/images/upsell/background-image-styles-preview.webp',
 					'data-medium'       => 'background-image',
 				);
 				?>
