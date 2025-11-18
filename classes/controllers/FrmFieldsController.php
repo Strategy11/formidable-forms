@@ -378,6 +378,8 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Check if the choice limit is reached.
+	 *
 	 * @since x.x
 	 *
 	 * @param array  $field
@@ -397,6 +399,8 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Determine if 'disabled' attribute should be echoed for a field choice.
+	 *
 	 * @since x.x
 	 *
 	 * @param bool $choice_limit_reached
@@ -416,6 +420,8 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
 	 * @since x.x
 	 *
 	 * @param bool   $choice_limit_is_reached
@@ -456,6 +462,8 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Determines if the choices limit validation message should be shown.
+	 *
 	 * @since x.x
 	 *
 	 * @param array $field_choices_limit_reached_statuses
@@ -474,6 +482,8 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Returns array that contains whether each field choice has reached its limit.
+	 *
 	 * @since x.x
 	 *
 	 * @param array $field
