@@ -347,7 +347,7 @@
 	/**
 	 * Possibly toggle on and off the submit button when a Stripe Link payment field is conditionally shown or hidden.
 	 *
-	 * @since 3.1.5
+	 * @since x.x
 	 *
 	 * @param {HTMLElement} form
 	 * @returns {void}
@@ -401,7 +401,9 @@
 	 */
 	function observeAttributeMutations( element, mutationHandler ) {
 		const observer = new MutationObserver(
-			( mutations ) => each( mutations, mutationHandler )
+			( mutations ) => {
+				mutations.forEach( mutationHandler );
+			}
 		);
 		observer.observe(
 			element,
@@ -413,7 +415,7 @@
 	 * Check if the submit button is conditionally disabled.
 	 * This is required for Stripe link so the button does not get enabled at the wrong time after completing the Stripe elements.
 	 *
-	 * @since 3.0
+	 * @since x.x
 	 *
 	 * @param {String} formId
 	 * @returns {bool}
@@ -425,7 +427,7 @@
 	/**
 	 * Check submit button is conditionally "hidden". This is also used for the enabled check and is used in submitButtonIsConditionallyDisabled.
 	 *
-	 * @since 3.0
+	 * @since x.x
 	 *
 	 * @param {String} formId
 	 * @returns bool
@@ -433,23 +435,6 @@
 	function submitButtonIsConditionallyNotAvailable( formId ) {
 		var hideFields = document.getElementById( 'frm_hide_fields_' + formId );
 		return hideFields && -1 !== hideFields.value.indexOf( '["frm_form_' + formId + '_container .frm_final_submit"]' );
-	}
-
-	/**
-	 * @since 3.0
-	 *
-	 * @param {@array|NodeList} items
-	 * @param {function} callback
-	 */
-	function each( items, callback ) {
-		var index, length;
-
-		length = items.length;
-		for ( index = 0; index < length; index++ ) {
-			if ( false === callback( items[ index ], index ) ) {
-				break;
-			}
-		}
 	}
 
 	/**
