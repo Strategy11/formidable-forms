@@ -1,4 +1,4 @@
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 const { div } = frmDom;
 
@@ -105,9 +105,7 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 		}
 	);
 
-	jQuery( '#frm_upgrade_modal h2' ).hide();
-	jQuery( '#frm_upgrade_modal .frm_lock_icon' ).addClass( 'frm_lock_open_icon' );
-	jQuery( '#frm_upgrade_modal .frm_lock_icon use' ).attr( 'xlink:href', '#frm_lock_open_icon' );
+	showUpgradeModalSuccess();
 
 	// Proceed with CSS changes
 	const actionMap = {
@@ -210,4 +208,43 @@ function saveAndReloadFormBuilder() {
 		submitButton.setAttribute( 'data-new-addon-installed', true );
 	}
 	submitButton.click();
+}
+
+/**
+ * Updates the upgrade modal to show successful addon installation state.
+ *
+ * @private
+ * @return {void}
+ */
+function showUpgradeModalSuccess() {
+	const upgradeModal = document.getElementById( 'frm_upgrade_modal' );
+	if ( ! upgradeModal ) {
+		return;
+	}
+
+	upgradeModal.classList.add( 'frm-success' );
+
+	const upgradeMessage = upgradeModal.querySelector( '.frm-upgrade-message' );
+	if ( upgradeMessage ) {
+		const image = upgradeMessage.querySelector( 'img' );
+		upgradeMessage.innerHTML = sprintf(
+			__( 'Great! Everything\'s ready to go!%sWe just need to refresh the builder so the new field becomes available.', 'formidable' ),
+			'<br>'
+		);
+		if ( image ) {
+			upgradeMessage.append( image );
+		}
+	}
+
+	const frmAddonStatus = document.querySelector( '.frm-addon-status' );
+	if ( frmAddonStatus ) {
+		frmAddonStatus.textContent = '';
+	}
+
+	const circledIcon = upgradeModal.querySelector( '.frm-circled-icon' );
+	if ( circledIcon ) {
+		circledIcon.classList.add( 'frm-circled-icon-green' );
+		circledIcon.querySelector( 'svg' )?.classList.remove( 'frm_svg32' );
+		circledIcon.querySelector( 'use' )?.setAttribute( 'xlink:href', '#frm_checkmark_icon' );
+	}
 }
