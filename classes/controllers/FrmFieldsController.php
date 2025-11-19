@@ -378,6 +378,130 @@ class FrmFieldsController {
 	}
 
 	/**
+	 * Check if the choice limit is reached.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $opt_key
+	 *
+	 * @return bool
+	 */
+	public static function choice_limit_reached( $field, $opt_key ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $disabled
+		 * @param array $field
+		 * @param string $opt_key
+		 */
+		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
+	}
+
+	/**
+	 * Determine if 'disabled' attribute should be echoed for a field choice.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool $choice_limit_reached
+	 * @param bool $choice_selected
+	 *
+	 * @return bool
+	 */
+	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_echo_disabled_attribute
+		 * @param bool $choice_limit_reached
+		 * @param bool $choice_selected
+		 */
+		return apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+	}
+
+	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool   $choice_limit_is_reached
+	 * @param array  $shortcode_atts
+	 * @param string $opt_key
+	 * @param int    $form_id
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
+		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+			return true;
+		}
+
+		if ( ! $choice_limit_is_reached ) {
+			return false;
+		}
+
+		return self::should_hide_maxed_out_field_choices( $form_id );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return bool
+	 */
+	private static function should_hide_maxed_out_field_choices( $form_id ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_hide_field_choice_by_form_id
+		 * @param int  $form_id
+		 *
+		 * @return bool
+		 */
+		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
+	}
+
+	/**
+	 * Determines if the choices limit validation message should be shown.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field_choices_limit_reached_statuses
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) {
+		foreach ( $field_choices_limit_reached_statuses as $choice_limit_reached ) {
+			if ( ! $choice_limit_reached ) {
+				return false;
+			}
+		}
+
+		return self::should_hide_maxed_out_field_choices( $field['form_id'] );
+	}
+
+	/**
+	 * Returns array that contains whether each field choice has reached its limit.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @return array
+	 */
+	public static function get_choices_limit_reached_statuses( $field ) {
+		if ( ! has_filter( 'frm_choice_limit_reached' ) ) {
+			return array_fill_keys( array_keys( $field['options'] ), false );
+		}
+
+		$choices_limit_reached_statuses = array();
+		foreach ( $field['options'] as $opt_key => $opt ) {
+			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
+		}
+		return $choices_limit_reached_statuses;
+	}
+
+	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0

@@ -395,7 +395,6 @@ class FrmFieldsHelper {
 	public static function get_error_msg( $field, $error ) {
 		$frm_settings = FrmAppHelper::get_settings();
 
-		$conf_msg = __( 'The entered values do not match', 'formidable' );
 		$defaults = array(
 			'unique_msg' => array(
 				'full' => self::default_unique_msg(),
@@ -411,11 +410,17 @@ class FrmFieldsHelper {
 				'full' => $frm_settings->blank_msg,
 				'part' => $frm_settings->blank_msg,
 			),
-			'conf_msg'   => array(
-				'full' => $conf_msg,
-				'part' => $conf_msg,
-			),
 		);
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array $defaults
+		 * @param array|object $field
+		 *
+		 * @return string
+		 */
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
 
 		$msg = FrmField::get_option( $field, $error );
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
