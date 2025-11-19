@@ -17,12 +17,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<h2>
 					<?php
 					printf(
-						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag, %$4s: Optional "Activate the " prefix. */
-						esc_html__( '%4$s%1$s %2$sare not available%3$s', 'formidable' ),
+						/* translators: %$1s: Feature name, %$2s: open span tag, %$3s: close span tag, %$4s: open prefix span tag, %$5s: close prefix span tag, %$6s: open suffix span tag, %$7s: close suffix span tag. */
+						esc_html__( '%4$sActivate the %5$s%1$s %2$sare not available%3$s%6$s are now activated%7$s', 'formidable' ),
 						'<span class="frm_feature_label"></span>',
 						'<span class="frm_are_not_installed">',
 						'</span>',
-						'<span class="frm-upgrade-modal-title-prefix">' . esc_html__( 'Activate the ', 'formidable' ) . '</span>'
+						'<span class="frm-upgrade-modal-title-prefix">',
+						'</span>',
+						'<span class="frm-upgrade-modal-title-suffix">',
+						'</span>'
 					);
 					?>
 				</h2>
