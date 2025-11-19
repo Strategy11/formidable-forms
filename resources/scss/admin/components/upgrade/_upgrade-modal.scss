@@ -26,6 +26,38 @@
 	.frm-oneclick-button {
 		margin-left: auto;
 	}
+
+	&.frm-success {
+
+		.frm-circled-icon svg {
+			width: 24px;
+			height: 24px;
+		}
+
+		.frm-upgrade-modal-title-prefix,
+		.frm_are_not_installed {
+			display: none !important;
+		}
+
+		.frm-upgrade-modal-title-suffix {
+			display: inline !important;
+		}
+
+		.frm-addon-status {
+			margin: 0;
+
+			.frm-save-and-reload-options {
+					display: flex;
+					gap: var(--gap-xs);
+					flex-direction: row-reverse;
+					margin: 0;
+
+					.frm-save-and-reload {
+						margin: 0;
+					}
+			}
+		}
+	}
 }
 
 .frm-dialog[aria-describedby="frm_upgrade_modal"] {
