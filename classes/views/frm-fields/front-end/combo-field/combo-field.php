@@ -69,6 +69,9 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 						if ( empty( $args['remove_names'] ) ) {
 							$attrs['name'] = $field_name . '[' . $name . ']';
 						}
+						if ( ! empty( $sub_field['autocomplete'] ) ) {
+							$attrs['autocomplete'] = $sub_field['autocomplete'];
+						}
 
 						echo '<input ';
 						FrmAppHelper::array_to_html_params( $attrs, true );

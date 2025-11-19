@@ -37,9 +37,15 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$this->register_sub_fields(
 			array(
-				'first'  => __( 'First Name', 'formidable' ),
+				'first'  => array(
+					'label'        => __( 'First Name', 'formidable' ),
+					'autocomplete' => 'given-name',
+				),
 				'middle' => __( 'Middle Name', 'formidable' ),
-				'last'   => __( 'Last Name', 'formidable' ),
+				'last'   => array(
+					'label'        => __( 'Last Name', 'formidable' ),
+					'autocomplete' => 'family-name',
+				),
 			)
 		);
 	}
