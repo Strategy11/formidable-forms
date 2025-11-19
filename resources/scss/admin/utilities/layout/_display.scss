@@ -2,7 +2,8 @@
  * Utilities - Display
  */
 
-#wpwrap .frm-force-hidden {
+#wpwrap .frm-force-hidden,
+.frm-force-hidden {
 	display: none !important;
 }
 

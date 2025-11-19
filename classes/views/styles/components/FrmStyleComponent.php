@@ -83,7 +83,6 @@ class FrmStyleComponent {
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
 
-		wp_register_style( self::ASSETS_SLUG, $plugin_url . '/css/admin/style-components.css', array(), $version );
 		wp_register_script( self::ASSETS_SLUG, $plugin_url . '/js/formidable_styles.js', array( 'formidable_admin' ), $version, true );
 	}
 

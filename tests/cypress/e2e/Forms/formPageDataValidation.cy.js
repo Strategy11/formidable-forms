@@ -18,7 +18,15 @@ describe( 'Forms page', () => {
 				const text = $el.text().trim();
 				const href = $el.attr( 'href' );
 
-				if ( href && ( text.includes( 'upgrading to PRO' ) || text.includes( 'Get 60% Off Pro!' ) || text.includes( 'Get the Deal' ) || text.match( /GET \d+% OFF|SAVE \d+%/ ) || text.includes( 'upgrading for 60% off during our No Brainer Sale!' ) ) ) {
+				const substrings = [
+					'upgrading to PRO',
+					'Get 60% Off Pro!',
+					'Get the Deal',
+					'upgrading for 60% off during our No Brainer Sale!',
+					'Black Friday Deals',
+				];
+
+				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
 					cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 						cy.visit( href );
 						cy.get( 'h1' ).should( $h1 => {

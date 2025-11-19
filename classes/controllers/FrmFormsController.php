@@ -319,7 +319,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return string
 	 */
@@ -1509,12 +1509,6 @@ class FrmFormsController {
 
 		if ( ! has_action( 'frm_add_form_style_tab_options' ) && ! has_action( 'frm_add_form_button_options' ) ) {
 			unset( $sections['buttons'] );
-		}
-
-		foreach ( array( 'landing', 'chat', 'abandonment' ) as $feature ) {
-			if ( ! FrmAppHelper::show_new_feature( $feature ) ) {
-				unset( $sections[ $feature ] );
-			}
 		}
 
 		$sections = apply_filters( 'frm_add_form_settings_section', $sections, $values );

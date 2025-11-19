@@ -3552,15 +3552,36 @@ window.frmAdminBuildJS = function() {
 			newOption = newOption.replace( 'frm_hidden frm_option_template', '' );
 			newOption = { newOption };
 			addSaveAndDragIconsToOption( fieldId, newOption );
-			this.closest( '.frm_single_option' ).after( newOption.newOption );
+
+			const $thisOption = this.closest( '.frm_single_option' );
+			if ( $thisOption ) {
+				$thisOption.after( newOption.newOption );
+			} else {
+				// Backwards compatibility "@since 6.24"
+				// Note: Keep it jQuery since some events are attached to the element
+				jQuery( `#frm_field_${ fieldId }_opts` ).append( newOption.newOption );
+			}
+
 			resetDisplayedOpts( fieldId );
 		}
 
-		// Make sure all remove buttons are enabled
-		this.closest( '.frm_sortable_field_opts' )?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
-			forEach( button => button.classList.remove( 'frm_disabled' ) );
-
+		fieldOptionEnableAllRemoveButtons( this );
 		fieldUpdated();
+	}
+
+	/**
+	 * Enable all remove buttons for field options.
+	 *
+	 * @param {HTMLElement} element The add option button element.
+	 */
+	function fieldOptionEnableAllRemoveButtons( element ) {
+		// Make sure all remove buttons are enabled
+		const parentEl = element.classList.contains( 'frm-add-option-legacy' ) // Backwards compatibility "@since 6.24"
+			? element.closest( '.frm-collapse-me' )?.querySelector( '.frm_sortable_field_opts' )
+			: element.closest( '.frm_sortable_field_opts' );
+
+		parentEl?.querySelectorAll( '.frm_remove_tag.frm_disabled' )?.
+			forEach( button => button.classList.remove( 'frm_disabled' ) );
 	}
 
 	function getHighestOptKey( fieldId ) {
@@ -6183,14 +6204,14 @@ window.frmAdminBuildJS = function() {
 			opts = [],
 			imageUrl = '';
 
-		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' );
+		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ).filter( '[name*="[label]"]' );
 		const isProduct = isProductField( fieldId );
 		const showLabelWithImage = showingLabelWithImage( fieldId );
 		const hasImageOptions = imagesAsOptions( fieldId );
 		const separateValues = usingSeparateValues( fieldId );
 
 		for ( i = 0; i < optVals.length; i++ ) {
-			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 || optVals[ i ].name.indexOf( '[value]' ) > 0 || optVals[ i ].name.indexOf( '[image]' ) > 0 || optVals[ i ].name.indexOf( '[price]' ) > 0 ) {
+			if ( optVals[ i ].name.indexOf( '[000]' ) > 0 ) {
 				continue;
 			}
 
