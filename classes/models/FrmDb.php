@@ -482,6 +482,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $order_query
+	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
 		if ( empty( $order_query ) ) {

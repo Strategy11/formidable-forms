@@ -376,7 +376,12 @@ class FrmEntriesHelper {
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
 		} elseif ( is_object( $field ) ) {
 			$field_id  = $field->id;
-			$field_obj = FrmFieldFactory::get_field_object( $field );
+
+			if ( 'hidden' === $field->type && ! empty( $field->field_options['original_type'] ) ) {
+				$field_obj = FrmFieldFactory::get_field_type( $field->field_options['original_type'], $field );
+			} else {
+				$field_obj = FrmFieldFactory::get_field_object( $field );
+			}
 		} elseif ( is_numeric( $field ) ) {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
@@ -718,7 +723,7 @@ class FrmEntriesHelper {
 			'icon'  => 'frm_icon_font frm_email_icon',
 		);
 
-		if ( ! function_exists( 'frm_pdfs_autoloader' ) && FrmAppHelper::show_new_feature( 'pdfs' ) ) {
+		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
 			$actions['frm_download_pdf'] = array(
 				'url'   => '#',
 				'label' => __( 'Download as PDF', 'formidable' ),

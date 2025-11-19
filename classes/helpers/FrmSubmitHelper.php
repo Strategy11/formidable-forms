@@ -203,7 +203,7 @@ class FrmSubmitHelper {
 	/**
 	 * Updates fields in the last row when new field is added.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param int $field_count The current field count.
 	 */
@@ -232,7 +232,7 @@ class FrmSubmitHelper {
 	/**
 	 * Prints the hidden input that contains the last row fields order to be processed in JS after adding new field.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 */
 	public static function print_last_row_fields_order_input() {
 		if ( ! self::$last_row_fields_order ) {

@@ -297,7 +297,7 @@ class FrmFieldValueSelector {
 	/**
 	 * Whether to use the field value as the option label in the dropdown when the label is empty.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return bool
 	 */
