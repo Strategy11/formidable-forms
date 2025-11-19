@@ -33,21 +33,17 @@ $preview_link = FrmFormsHelper::get_direct_link( $values['form_key'] );
 						<?php esc_html_e( 'In Theme', 'formidable' ); ?>
 					</a>
 				</li>
-				<?php if ( FrmAppHelper::show_new_feature( 'test-mode' ) ) { ?>
-					<li>
-						<a href="<?php echo esc_url( $preview_link ); ?>&testmode=1" target="_blank">
-							<?php
-							esc_html_e( 'In Test Mode', 'formidable' );
-							FrmAppHelper::show_pill_text();
-							?>
-						</a>
-					</li>
-				<?php } ?>
-				<?php if ( FrmAppHelper::show_landing_pages() ) { ?>
-					<li>
-						<?php FrmFormsController::landing_page_preview_option(); ?>
-					</li>
-				<?php } ?>
+				<li>
+					<a href="<?php echo esc_url( $preview_link ); ?>&testmode=1" target="_blank">
+						<?php
+						esc_html_e( 'In Test Mode', 'formidable' );
+						FrmAppHelper::show_pill_text();
+						?>
+					</a>
+				</li>
+				<li>
+					<?php FrmFormsController::landing_page_preview_option(); ?>
+				</li>
 			</ul>
 		</div>
 		<?php
