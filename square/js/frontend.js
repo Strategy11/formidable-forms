@@ -383,7 +383,7 @@
 				return;
 			}
 
-			const shouldEnable = 'none' === mutation.target.display || squareCardElementIsComplete || squareIsConditionallyDisabled( form );
+			const shouldEnable = 'none' === mutation.target.display || ! squareCardElementIsComplete || squareIsConditionallyDisabled( form );
 			if ( ! shouldEnable ) {
 				disableSubmit( form );
 				return;
@@ -392,6 +392,8 @@
 			thisForm = form;
 			running  = 0;
 			enableSubmit();
+
+			cardGlobal.recalculateSize();
 		}
 	}
 
