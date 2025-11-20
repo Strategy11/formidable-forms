@@ -110,7 +110,7 @@ export function initModal( id, width ) {
 	}
 
 	if ( typeof width === 'undefined' ) {
-		width = '550px';
+		width = '552px';
 	}
 
 	const dialogArgs = {
