@@ -240,7 +240,7 @@ class FrmFieldFormHtml {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
 			}
-		} elseif ( ! $include_alert_role_on_field_errors && ! $has_alert_role ) {
+		} elseif ( ! $include_alert_role_on_field_errors && $has_alert_role ) {
 			$this->html = str_replace( 'role="alert"', '', $this->html );
 		}
 
