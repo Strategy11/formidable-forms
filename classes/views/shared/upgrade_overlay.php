@@ -58,7 +58,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							?>
 						</a>
 					<?php } else { ?>
-						<div class="frm-upgrade-modal-actions frm-flex frm-flex-row-reverse frm-items-center frm-gap-xs">
+						<div class="frm-upgrade-modal-actions frm-flex-center frm-gap-xs frm-mt-xs frm-mb-md">
 							<a href="<?php echo esc_url( $default_link ); ?>" class="button button-primary frm-button-primary frm-upgrade-link" target="_blank" rel="noopener noreferrer" data-default="<?php echo esc_url( $default_link ); ?>">
 								<?php
 								printf(

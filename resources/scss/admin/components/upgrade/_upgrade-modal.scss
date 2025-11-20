@@ -27,6 +27,12 @@
 		margin-left: auto;
 	}
 
+	.frm-upgrade-modal-actions {
+		flex-direction: row-reverse;
+		justify-content: flex-start;
+		margin: 0 !important;
+	}
+
 	&.frm-success {
 
 		.frm-circled-icon svg {
