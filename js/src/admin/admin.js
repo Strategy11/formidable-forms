@@ -7151,14 +7151,13 @@ window.frmAdminBuildJS = function() {
 		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
 		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
-			const upgradeButton = upgradeModalLink.cloneNode( true );
+			const upgradeActions = upgradeModalLink.closest( '.frm-upgrade-modal-actions' ).cloneNode( true );
+			const upgradeButton = upgradeActions.querySelector( '.frm-upgrade-link' );
 			const level = upgradeButton.querySelector( '.license-level' );
-
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
-
-			container.appendChild( upgradeButton );
+			container.appendChild( upgradeActions );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
