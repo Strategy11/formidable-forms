@@ -245,6 +245,7 @@ export function initUpgradeModal() {
 		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
 		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
+		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
 		modal.querySelector( 'h2' ).style.display = 'block';
 
 		$info.dialog( 'open' );
