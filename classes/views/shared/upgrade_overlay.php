@@ -68,7 +68,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								);
 								?>
 							</a>
-							<a href="#" class="button button-secondary frm-button-secondary" target="_blank" rel="noopener noreferrer">
+							<a href="#" class="button button-secondary frm-button-secondary frm-learn-more" target="_blank" rel="noopener noreferrer">
 								<?php echo esc_html_x( 'Learn More', 'upgrade overlay', 'formidable' ); ?>
 							</a>
 						</div>

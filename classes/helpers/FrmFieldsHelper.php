@@ -2189,6 +2189,10 @@ class FrmFieldsHelper {
 			$li_params['data-upsell-image'] = $field_type['upsell_image'];
 		}
 
+		if ( ! empty( $field_type['learn-more'] ) ) {
+			$li_params['data-learn-more'] = $field_type['learn-more'];
+		}
+
 		if ( isset( $upgrading['url'] ) ) {
 			$li_params['data-message'] = sprintf(
 				// translators: %s: Field name

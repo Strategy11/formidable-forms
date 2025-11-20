@@ -47,6 +47,11 @@ export function addOneClick( link, context, upgradeLabel ) {
 		}
 	}
 
+	const learnMoreLink = container.querySelector( '.frm-learn-more' );
+	if ( learnMoreLink ) {
+		learnMoreLink.href = link.dataset.learnMore;
+	}
+
 	// If one click upgrade, hide other content.
 	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
 		if ( newMessage === null ) {
