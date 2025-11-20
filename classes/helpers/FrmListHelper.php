@@ -1001,7 +1001,9 @@ class FrmListHelper {
 	 * Display the table
 	 *
 	 * @since 2.0.18
+	 *
 	 * @param array $args
+	 * @return void
 	 */
 	public function display( $args = array() ) {
 		$singular     = $this->_args['singular'];

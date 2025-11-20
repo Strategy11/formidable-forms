@@ -4229,15 +4229,6 @@ class FrmAppHelper {
 	/**
 	 * @since 5.0.16
 	 *
-	 * @return bool
-	 */
-	public static function show_landing_pages() {
-		return self::show_new_feature( 'landing' );
-	}
-
-	/**
-	 * @since 5.0.16
-	 *
 	 * @return array
 	 */
 	public static function get_landing_page_upgrade_data_params( $medium = 'landing' ) {
@@ -4661,5 +4652,16 @@ class FrmAppHelper {
 			return seems_utf8( $string );
 		}
 		return false;
+	}
+
+	/**
+	 * @since 5.0.16
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function show_landing_pages() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return true;
 	}
 }
