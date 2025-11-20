@@ -979,10 +979,23 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
-		if ( 'inline' === $align ) {
-			$align = 'horizontal_radio';
-		} elseif ( 'block' === $align ) {
-			$align = 'vertical_radio';
+		switch ( $align ) {
+			case 'inline':
+				$align = 'horizontal_radio';
+				break;
+			case 'block':
+				$align = 'vertical_radio';
+				break;
+			case 'use_style_settings':
+				$key    = 'checkbox' === $this->type ? 'check_align' : 'radio_align';
+				$action = FrmAppHelper::simple_get( 'frm_action', '', 'sanitize_text_field' );
+				if ( 'edit' === $action ) {
+					$form_id = FrmAppHelper::get_param( 'id', 0, 'int' );
+				} else {
+					$form_id = $this->field['parent_form_id'] ?? $this->field['form_id'];
+				}
+				$align = FrmStylesController::get_style_val( $key, $form_id );
+				break;
 		}
 	}
 
