@@ -986,7 +986,7 @@ DEFAULT_HTML;
 			case 'block':
 				$align = 'vertical_radio';
 				break;
-			case 'use_style_settings':
+			case 'use_style_settings': // TODO: Move this to Pro
 				$key    = 'checkbox' === $this->type ? 'check_align' : 'radio_align';
 				$action = FrmAppHelper::simple_get( 'frm_action', '', 'sanitize_text_field' );
 				if ( 'edit' === $action ) {
