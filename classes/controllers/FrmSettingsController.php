@@ -114,6 +114,7 @@ class FrmSettingsController {
 					'medium'     => 'white-label',
 					'upgrade'    => __( 'White labeling options', 'formidable' ),
 					'screenshot' => 'white-label.png',
+					'learn-more' => 'https://formidableforms.com/features/white-label-form-builder-wordpress/',
 				),
 			),
 			'inbox'         => array(
@@ -124,6 +125,7 @@ class FrmSettingsController {
 					'medium'     => 'inbox-settings',
 					'upgrade'    => __( 'Inbox settings', 'formidable' ),
 					'screenshot' => 'inbox.png',
+					'learn-more' => 'https://formidableforms.com/knowledgebase/global-settings-overview/#kb-inbox',
 				),
 			),
 		);

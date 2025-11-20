@@ -1449,6 +1449,7 @@ class FrmFormsController {
 					'upgrade'    => __( 'Form Permissions', 'formidable' ),
 					'message'    => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
 					'screenshot' => 'permissions.png',
+					'learn-more' => 'https://formidableforms.com/knowledgebase/general-form-settings/#kb-form-permissions',
 				),
 			),
 			'scheduling'  => array(
@@ -1459,6 +1460,7 @@ class FrmFormsController {
 					'medium'     => 'scheduling',
 					'upgrade'    => __( 'Form scheduling settings', 'formidable' ),
 					'screenshot' => 'scheduling.png',
+					'learn-more' => 'https://formidableforms.com/knowledgebase/general-form-settings/#kb-form-scheduling',
 				),
 			),
 			'buttons'     => array(
@@ -1483,6 +1485,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Conversational Forms', 'formidable' ),
 						'message'    => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
 						'screenshot' => 'chat.png',
+						'learn-more' => 'https://formidableforms.com/conversational-forms/',
 					)
 				),
 			),
@@ -1496,6 +1499,8 @@ class FrmFormsController {
 						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
 						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
+						// TODO: Get the link from Greg
+						'learn-more' => '#',
 					)
 				),
 			),
