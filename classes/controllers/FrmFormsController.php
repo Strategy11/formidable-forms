@@ -1499,8 +1499,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
 						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
-						// TODO: Get the link from Greg
-						'learn-more' => '#',
+						'learn-more' => 'https://formidableforms.com/features/form-abandonment-wordpress-plugin/',
 					)
 				),
 			),
