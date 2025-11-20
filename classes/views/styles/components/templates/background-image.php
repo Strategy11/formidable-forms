@@ -29,6 +29,7 @@
 					'data-message'      => __( 'Elevate your form\'s design by adding full-width background images to your forms.', 'formidable' ),
 					'data-upsell-image' => FrmAppHelper::plugin_url() . '/images/upsell/background-image-styles-preview.webp',
 					'data-medium'       => 'background-image',
+					'data-learn-more'   => 'https://formidableforms.com/knowledgebase/visual-form-styler/#kb-add-a-background-image',
 				);
 				?>
 				<div <?php FrmAppHelper::array_to_html_params( $image_preview_wrapper_attrs, true ); ?>>
