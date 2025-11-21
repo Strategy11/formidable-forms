@@ -57,18 +57,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<?php
 				switch ( $sub_field['type'] ) {
 					default:
-						$attrs = array(
-							'type'  => $sub_field['type'],
-							'id'    => $html_id . '_' . $name,
-							'value' => $field_value[ $name ] ?? '',
-						);
-
-						if ( ! empty( $field_value[ $name ] ) ) {
-							$attrs['data-frmval'] = $field_value[ $name ];
-						}
-						if ( empty( $args['remove_names'] ) ) {
-							$attrs['name'] = $field_name . '[' . $name . ']';
-						}
+						$attrs = $this->get_sub_field_input_attrs( $sub_field, $field_value );
 
 						echo '<input ';
 						FrmAppHelper::array_to_html_params( $attrs, true );

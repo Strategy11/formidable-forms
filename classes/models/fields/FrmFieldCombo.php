@@ -504,4 +504,31 @@ class FrmFieldCombo extends FrmFieldType {
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,
 		);
 	}
+
+	/**
+	 * Gets subfield input attributes.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $sub_field   Subfield data.
+	 * @param array $field_value Field value.
+	 * @return array
+	 */
+	protected function get_sub_field_input_attrs( $sub_field, $field_value ) {
+		$attrs = array(
+			'type'  => $sub_field['type'],
+			'id'    => $this->html_id() . '_' . $sub_field['name'],
+			'value' => '',
+		);
+
+		if ( ! empty( $field_value[ $sub_field['name'] ] ) ) {
+			$attrs['value']       = $field_value[ $sub_field['name'] ];
+			$attrs['data-frmval'] = $field_value[ $sub_field['name'] ];
+		}
+		if ( empty( $args['remove_names'] ) ) {
+			$attrs['name'] = $this->html_name() . '[' . $sub_field['name'] . ']';
+		}
+
+		return $attrs;
+	}
 }
