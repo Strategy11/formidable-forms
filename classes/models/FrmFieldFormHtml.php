@@ -232,7 +232,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( empty( $error ) ) {
+		if ( empty( $error ) ) { // @phpstan-ignore-line
 			return FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
 		}
 
