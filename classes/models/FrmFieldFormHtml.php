@@ -232,8 +232,8 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( empty( $error ) ) { // @phpstan-ignore-line
-			return FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+		if ( empty( $error ) ) {
+			return FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
 		}
 
 		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
@@ -248,7 +248,7 @@ class FrmFieldFormHtml {
 			$this->html = str_replace( 'role="alert"', '', $this->html );
 		}
 
-		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+		FrmShortcodeHelper::remove_inline_conditions( true, 'error', $error, $this->html );
 	}
 
 	/**
