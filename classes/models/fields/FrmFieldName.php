@@ -13,6 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldName extends FrmFieldCombo {
 
 	/**
+	 * Track if the autocomplete attribute is added to a name field in each form.
+	 * This is an array with keys are form IDs and values are boolean values.
+	 *
+	 * @var array
+	 */
+	protected static $added_autocomplete_attr = array();
+
+	/**
 	 * Field name.
 	 *
 	 * @var string
@@ -284,5 +292,37 @@ class FrmFieldName extends FrmFieldCombo {
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Gets subfield input attributes.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $sub_field Subfield data.
+	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
+	 * @return array
+	 */
+	protected function get_sub_field_input_attrs( $sub_field, $args ) {
+		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
+
+		$parent_form_id = (int) FrmField::get_option( $args['field'], 'parent_form_id' );
+		$form_id        = (int) is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id;
+		if ( $form_id !== $parent_form_id ) {
+			// Do not add autocomplete attribute to a name field inside repeater.
+			return $attrs;
+		}
+
+		if ( empty( self::$added_autocomplete_attr[ $form_id ] ) ) {
+			if ( 'first' === $sub_field['name'] ) {
+				$attrs['autocomplete'] = 'given-name';
+			} elseif ( 'last' === $sub_field['name'] ) {
+				$attrs['autocomplete'] = 'family-name';
+			}
+
+			self::$added_autocomplete_attr[ $form_id ] = true;
+		}
+
+		return $attrs;
 	}
 }
