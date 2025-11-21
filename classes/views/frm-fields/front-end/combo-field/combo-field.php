@@ -57,7 +57,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				<?php
 				switch ( $sub_field['type'] ) {
 					default:
-						$attrs = $this->get_sub_field_input_attrs( $sub_field, $field_value );
+						$attrs = $this->get_sub_field_input_attrs( $sub_field, $args );
 
 						echo '<input ';
 						FrmAppHelper::array_to_html_params( $attrs, true );

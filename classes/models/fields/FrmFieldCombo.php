@@ -510,23 +510,23 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @since x.x
 	 *
-	 * @param array $sub_field   Subfield data.
-	 * @param array $field_value Field value.
+	 * @param array $sub_field Subfield data.
+	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
 	 * @return array
 	 */
-	protected function get_sub_field_input_attrs( $sub_field, $field_value ) {
+	protected function get_sub_field_input_attrs( $sub_field, $args ) {
 		$attrs = array(
 			'type'  => $sub_field['type'],
-			'id'    => $this->html_id() . '_' . $sub_field['name'],
+			'id'    => $args['html_id'] . '_' . $sub_field['name'],
 			'value' => '',
 		);
 
-		if ( ! empty( $field_value[ $sub_field['name'] ] ) ) {
-			$attrs['value']       = $field_value[ $sub_field['name'] ];
-			$attrs['data-frmval'] = $field_value[ $sub_field['name'] ];
+		if ( ! empty( $args['field']['value'][ $sub_field['name'] ] ) ) {
+			$attrs['value']       = $args['field']['value'][ $sub_field['name'] ];
+			$attrs['data-frmval'] = $args['field']['value'][ $sub_field['name'] ];
 		}
 		if ( empty( $args['remove_names'] ) ) {
-			$attrs['name'] = $this->html_name() . '[' . $sub_field['name'] . ']';
+			$attrs['name'] = $args['field_name'] . '[' . $sub_field['name'] . ']';
 		}
 
 		return $attrs;
