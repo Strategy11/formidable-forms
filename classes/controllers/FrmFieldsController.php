@@ -527,7 +527,7 @@ class FrmFieldsController {
 		$html     = ' ' . implode( ' ', $add_html ) . '  ';
 
 		if ( isset( $field['args'] ) ) {
-			$field_object = FrmFieldFactory::get_field_type( FrmField::get_option( $field, 'type' ), $field );
+			$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
 			$field_object->add_aria_description( $field['args'], $html );
 		}
 

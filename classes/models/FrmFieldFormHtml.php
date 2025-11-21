@@ -232,9 +232,13 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
+		if ( empty( $error ) ) {
+			return FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+		}
+
 		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
 		$has_alert_role                     = false !== strpos( $this->html, 'role="alert"' );
-		if ( ! empty( $error ) && ! $has_alert_role && $include_alert_role_on_field_errors ) {
+		if ( ! $has_alert_role && $include_alert_role_on_field_errors ) {
 			$error_body = self::get_error_body( $this->html );
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
