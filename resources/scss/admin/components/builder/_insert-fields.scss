@@ -231,3 +231,7 @@ input[disabled] {
 		box-shadow: var(--box-shadow-md);
 	}
 }
+
+.frmbutton.frm_at_limit {
+	opacity: .5;
+}
