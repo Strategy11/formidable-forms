@@ -38,13 +38,14 @@ export function addOneClick( link, context, upgradeLabel ) {
 	let hideIt = 'none';
 
 	let modalIcon;
-	const modalIconSvg = container.querySelector( '.frm-circled-icon svg' );
-	if ( modalIconSvg ) {
+	let modalIconSvg;
+	const modalIconWrapper = container.querySelector( '.frm-circled-icon' );
+	if ( modalIconWrapper ) {
+		modalIconSvg = modalIconWrapper.querySelector( 'svg' );
 		modalIcon = modalIconSvg.querySelector( 'use' );
-		if ( modalIconSvg.classList.contains( 'frm_svg32' ) ) {
-			modalIconSvg.classList.remove( 'frm_svg32' );
-			modalIcon.setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
-		}
+		modalIconWrapper.classList.remove( 'frm-circled-icon-green' );
+		modalIconSvg.classList.remove( 'frm_svg32' );
+		modalIcon.setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
 	}
 
 	const learnMoreLink = container.querySelector( '.frm-learn-more' );
