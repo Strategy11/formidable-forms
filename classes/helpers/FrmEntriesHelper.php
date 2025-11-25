@@ -547,7 +547,7 @@ class FrmEntriesHelper {
 	public static function entry_array_to_string( $values ) {
 		$content = '';
 		foreach ( $values['item_meta'] as $val ) {
-			if ( $content != '' ) {
+			if ( $content !== '' ) {
 				$content .= "\n\n";
 			}
 
@@ -633,7 +633,7 @@ class FrmEntriesHelper {
 		}
 
 		// check if we have a number
-		if ( $version == '' ) {
+		if ( $version === '' ) {
 			$version = '?';
 		}
 
