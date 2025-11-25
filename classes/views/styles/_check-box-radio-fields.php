@@ -64,7 +64,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <div class="frm7 frm_form_field">
 	<?php
-	$checkbox_align_options = array(
+	$align_options = array(
 		'block'  => __( 'One Column', 'formidable' ),
 		'inline' => __( 'Inline Options', 'formidable' ),
 	);
@@ -72,9 +72,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/**
 	 * @since x.x
 	 *
-	 * @param array $checkbox_align_options
+	 * @param array $align_options
+	 * @param array $atts
 	 */
-	$checkbox_align_options = apply_filters( 'frm_checkbox_align_options', $checkbox_align_options );
+	$checkbox_align_options = apply_filters( 'frm_checkbox_align_options', $align_options, $atts );
 
 	new FrmDropdownStyleComponent(
 		$frm_style->get_field_name( 'check_align' ),
@@ -94,17 +95,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 </div>
 <div class="frm7 frm_form_field">
 	<?php
-	$radio_align_options = array(
-		'block'  => __( 'One Column', 'formidable' ),
-		'inline' => __( 'Inline Options', 'formidable' ),
-	);
-
 	/**
 	 * @since x.x
 	 *
-	 * @param array $radio_align_options
+	 * @param array $align_options
+	 * @param array $atts
 	 */
-	$radio_align_options = apply_filters( 'frm_radio_align_options', $radio_align_options );
+	$radio_align_options = apply_filters( 'frm_radio_align_options', $align_options, $atts );
 
 	new FrmDropdownStyleComponent(
 		$frm_style->get_field_name( 'radio_align' ),
