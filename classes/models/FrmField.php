@@ -644,6 +644,10 @@ class FrmField {
 		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @return void
+	 */
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );

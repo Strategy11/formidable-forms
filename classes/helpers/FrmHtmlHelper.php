@@ -22,7 +22,7 @@ class FrmHtmlHelper {
 	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function toggle( $id, $name, $args ) {
 		wp_enqueue_script( 'formidable_settings' );
