@@ -35,7 +35,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
-use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
@@ -116,7 +115,6 @@ return RectorConfig::configure()
 			RemoveUnusedPrivateMethodParameterRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
-			RemoveUnusedVariableAssignRector::class,
 			RemoveUnusedConstructorParamRector::class,
 			RemoveNonExistingVarAnnotationRector::class,
 			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
