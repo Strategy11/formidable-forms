@@ -291,7 +291,7 @@ class FrmField {
 				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
 					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
-					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/">',
+					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/" target="_blank" rel="noopener">',
 					'</a>'
 				),
 				'link'         => 'https://simplyscheduleappointments.com/meet/formidable/',
