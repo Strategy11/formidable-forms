@@ -1703,7 +1703,7 @@ class FrmXMLHelper {
 
 		// Account for some of the older field default HTML.
 		$default_html = str_replace( ' id="frm_desc_field_[key]"', '', $default_html );
-		if ( $old_html == $default_html ) {
+		if ( $old_html === $default_html ) {
 			unset( $options[ $html_name ] );
 		}
 	}
