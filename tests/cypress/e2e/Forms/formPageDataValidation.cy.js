@@ -40,6 +40,7 @@ describe( 'Forms page', () => {
 								'power your wordpress site like never before',
 								'tired of workarounds? build what you really need.',
 								'build powerful forms, web apps, dashboards, and more',
+								'black friday sales are happening now!',
 							] ).to.include( headingText );
 						} );
 					} );

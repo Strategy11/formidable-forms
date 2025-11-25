@@ -3071,10 +3071,16 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Gets message placement.
+	 *
 	 * @since 4.05.02
-	 * @return string - 'before', 'after', or 'submit'
+	 * @since x.x This method changed from `private` to `public`.
+	 *
+	 * @param object $form    Form object.
+	 * @param string $message The message.
+	 * @return string Accepts 'before', 'after', or 'submit'.
 	 */
-	private static function message_placement( $form, $message ) {
+	public static function message_placement( $form, $message ) {
 		$place = 'before';
 
 		if ( $message && isset( $form->options['form_class'] ) ) {
@@ -3086,8 +3092,12 @@ class FrmFormsController {
 		}
 
 		/**
+		 * Filter the message placement.
+		 *
 		 * @since 4.05.02
-		 * @return string - 'before' or 'after'
+		 *
+		 * @param string $place Accepts 'before', 'after', or 'submit'.
+		 * @param array  $args  Args.
 		 */
 		return apply_filters( 'frm_message_placement', $place, compact( 'form', 'message' ) );
 	}
