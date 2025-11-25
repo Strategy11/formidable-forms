@@ -1289,8 +1289,6 @@ class FrmAddonsController {
 	public static function install_addon_api() {
 		self::$plugin = FrmAppHelper::get_param( 'file_url', '', 'request', 'esc_url_raw' );
 
-		$error = esc_html__( 'Could not install an upgrade. Please download from formidableforms.com and install manually.', 'formidable' );
-
 		// Delete so cannot replay.
 		delete_option( 'frm_connect_token' );
 
