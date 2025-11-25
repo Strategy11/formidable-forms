@@ -3739,6 +3739,10 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addImageToOption( event ) {
+		if ( ! wp?.media ) {
+			return;
+		}
+
 		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
