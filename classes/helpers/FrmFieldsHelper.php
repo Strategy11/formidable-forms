@@ -2579,27 +2579,6 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * Check if the choice limit is reached.
-	 *
-	 * @since x.x
-	 *
-	 * @param array  $field
-	 * @param string $opt_key
-	 *
-	 * @return bool
-	 */
-	public static function choice_limit_reached( $field, $opt_key ) {
-		/**
-		 * @since x.x
-		 *
-		 * @param bool  $disabled
-		 * @param array $field
-		 * @param string $opt_key
-		 */
-		return (bool) apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
-	}
-
-	/**
 	 * Returns array that contains whether each field choice has reached its limit.
 	 *
 	 * @since x.x
@@ -2608,14 +2587,14 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function get_choices_limit_reached_statuses( $field ) {
-		if ( ! has_filter( 'frm_choice_limit_reached' ) ) {
-			return array_fill_keys( array_keys( $field['options'] ), false );
-		}
+		$statuses = array_fill_keys( array_keys( $field['options'] ), false );
 
-		$choices_limit_reached_statuses = array();
-		foreach ( $field['options'] as $opt_key => $opt ) {
-			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
-		}
-		return $choices_limit_reached_statuses;
+		/**
+		 * @since x.x
+		 *
+		 * @param array $statuses
+		 * @param array $field
+		 */
+		return apply_filters( 'frm_choices_limit_reached_statuses', $statuses, $field );
 	}
 }
