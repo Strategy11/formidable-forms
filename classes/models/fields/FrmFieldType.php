@@ -1324,6 +1324,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values
+	 *
+	 * @return string
 	 */
 	protected function select_tag( $values ) {
 		$field       = $values['field'] ?? $this->field;

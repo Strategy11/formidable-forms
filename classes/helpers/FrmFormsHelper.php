@@ -1295,6 +1295,9 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int $id
+	 * @return array
 	 */
 	public static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
