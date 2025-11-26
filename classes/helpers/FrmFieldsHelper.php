@@ -2527,36 +2527,6 @@ class FrmFieldsHelper {
 			return false;
 		}
 
-		return self::should_hide_maxed_out_field_choices( $form_id );
-	}
-
-	/**
-	 * Determines if the choices limit validation message should be shown.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $statuses
-	 * @param array $field
-	 *
-	 * @return bool
-	 */
-	public static function should_show_choices_limit_message( $statuses, $field ) {
-		foreach ( $statuses as $choice_limit_reached ) {
-			if ( ! $choice_limit_reached ) {
-				return false;
-			}
-		}
-
-		return self::should_hide_maxed_out_field_choices( $field['form_id'] );
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param int|string $form_id
-	 * @return bool
-	 */
-	public static function should_hide_maxed_out_field_choices( $form_id ) {
 		/**
 		 * @since x.x
 		 *
@@ -2566,6 +2536,25 @@ class FrmFieldsHelper {
 		 * @return bool
 		 */
 		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_choices_limit_reached_statuses
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $should_skip_rendering_options_for_field
+		 * @param array $field_choices_limit_reached_statuses
+		 * @param array $field
+		 */
+		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field_choices_limit_reached_statuses, $field );
 	}
 
 	/**
