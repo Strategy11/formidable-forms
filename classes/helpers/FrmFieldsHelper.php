@@ -98,7 +98,7 @@ class FrmFieldsHelper {
 	 * @since 3.0
 	 *
 	 * @param array          $field_array Field values array, passed by reference.
-	 * @param stdClass|array $field       Field object or array.
+	 * @param array|stdClass $field       Field object or array.
 	 * @param int            $entry_id    Entry ID.
 	 * @param array          $args        Additional arguments.
 	 * @return void

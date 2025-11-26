@@ -876,7 +876,7 @@ class FrmForm {
 	/**
 	 * @param array|string $where    Where conditions array or raw WHERE string.
 	 * @param string       $order_by Order by clause.
-	 * @param string|int   $limit    Limit clause or number.
+	 * @param int|string   $limit    Limit clause or number.
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
