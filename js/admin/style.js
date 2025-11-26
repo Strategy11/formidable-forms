@@ -633,8 +633,8 @@
 			className: 'frm-dropdown-toggle dropdown-toggle',
 			child: svg( { href: '#frm_thick_more_vert_icon' } )
 		} );
-		hamburgerMenu.setAttribute( 'data-toggle', 'dropdown' );
-		hamburgerMenu.setAttribute( 'data-container', 'body' );
+		hamburgerMenu.setAttribute( 'data-bs-toggle', 'dropdown' );
+		hamburgerMenu.setAttribute( 'data-bs-container', 'body' );
 		hamburgerMenu.setAttribute( 'role', 'button' );
 		hamburgerMenu.setAttribute( 'tabindex', 0 );
 

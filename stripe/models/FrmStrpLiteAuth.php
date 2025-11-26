@@ -45,9 +45,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		$intent  = $details['intent'];
-		$payment = $details['payment'];
-
+		$intent = $details['intent'];
 		if ( self::intent_has_failed_status( $intent ) ) {
 			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
 			self::insert_error_message( $message, $html );
@@ -670,7 +668,6 @@ class FrmStrpLiteAuth {
 	 * @return string
 	 */
 	private static function get_amount_before_submit( $atts ) {
-		$amount = $atts['action']->post_content['amount'];
 		return FrmStrpLiteActionsController::prepare_amount( $atts['action']->post_content['amount'], $atts );
 	}
 

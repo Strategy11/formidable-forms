@@ -1516,7 +1516,7 @@ class FrmFieldsHelper {
 		}
 
 		$classes = array( 'frm_other_input' );
-		if ( ! $args['checked'] || trim( $args['checked'] ) == '' ) {
+		if ( ! $args['checked'] || trim( $args['checked'] ) === '' ) {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}

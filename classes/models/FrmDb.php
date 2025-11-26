@@ -139,7 +139,7 @@ class FrmDb {
 			if ( $lowercase_key === 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
-			} elseif ( $lowercase_key == '%like' ) {
+			} elseif ( $lowercase_key === '%like' ) {
 				$end    = '';
 				$where  = rtrim( rtrim( $where, '%like' ), '%LIKE' );
 				$where .= 'like';

@@ -324,7 +324,7 @@ class FrmEntriesController {
 
 			$form_prefix = explode( '_', $prev_hidden );
 			$form_prefix = $form_prefix[0];
-			if ( $form_prefix == $cur_form_prefix ) {
+			if ( $form_prefix === $cur_form_prefix ) {
 				// Don't add back columns that are meant to be hidden.
 				continue;
 			}
