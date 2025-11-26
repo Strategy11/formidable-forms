@@ -1337,7 +1337,7 @@ class FrmFormsController {
 	 * @param array $fields
 	 * @return array
 	 */
-	public static function update_form_builder_fields( $fields, $form ) {
+	public static function update_form_builder_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			$field->do_not_include_icons = true;
 		}
@@ -2148,6 +2148,7 @@ class FrmFormsController {
 	 *
 	 * @since 4.07
 	 *
+	 * @param array $values
 	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {

@@ -206,6 +206,10 @@ class FrmFormAction {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $action_options
+	 *
+	 * @return array
 	 */
 	protected function get_group( $action_options ) {
 		$groups = FrmFormActionsController::form_action_groups();
@@ -234,6 +238,7 @@ class FrmFormAction {
 	 * This function should be used in form() methods to create name attributes for fields to be saved by update()
 	 *
 	 * @param string $field_name Field name.
+	 * @param string $post_field
 	 *
 	 * @return string Name attribute for $field_name
 	 */
@@ -338,6 +343,8 @@ class FrmFormAction {
 	 * @since 2.0
 	 *
 	 * @param array $action
+	 * @param array $forms
+	 *
 	 * @return int $post_id
 	 */
 	public function maybe_create_action( $action, $forms ) {
@@ -637,6 +644,9 @@ class FrmFormAction {
 
 	/**
 	 * @param int $action_id
+	 * @param string $type
+	 *
+	 * @return bool|FrmFormAction
 	 */
 	public static function get_single_action_type( $action_id, $type ) {
 		if ( ! $type ) {
@@ -652,16 +662,22 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param int $form_id
+	 * @param int    $form_id
+	 * @param string $type
 	 *
 	 * @return bool
 	 */
 	public static function form_has_action_type( $form_id, $type ) {
-		$payment_actions = self::get_action_for_form( $form_id, $type );
-
-		return ! empty( $payment_actions );
+		$actions = self::get_action_for_form( $form_id, $type );
+		return ! empty( $actions );
 	}
 
+	/**
+	 * @param false|int|string $form_id
+	 * @param array            $atts
+	 *
+	 * @return array
+	 */
 	public function get_all( $form_id = false, $atts = array() ) {
 		if ( is_array( $atts ) && ! isset( $atts['limit'] ) && $this->action_options['limit'] > 99 ) {
 			$atts['limit'] = $this->action_options['limit'];
@@ -713,6 +729,9 @@ class FrmFormAction {
 	}
 
 	/**
+	 * @param int $form_id
+	 * @param int $limit
+	 *
 	 * @return array
 	 */
 	public static function action_args( $form_id = 0, $limit = 99 ) {
@@ -732,7 +751,8 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param array|WP_Post $action
+	 * @param WP_Post $action
+	 * @return WP_Post
 	 */
 	public function prepare_action( $action ) {
 		$action->post_content = (array) FrmAppHelper::maybe_json_decode( $action->post_content );
@@ -760,6 +780,9 @@ class FrmFormAction {
 	}
 
 	/**
+	 * @param false|int|string $form_id
+	 * @param string $type
+	 *
 	 * @return void
 	 */
 	public function destroy( $form_id = false, $type = 'default' ) {

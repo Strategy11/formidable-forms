@@ -3310,6 +3310,10 @@ class FrmAppHelper {
 	/**
 	 * @param string $name
 	 * @param string $l1
+	 * @param mixed  $val
+	 * @param array  $vars
+	 * 
+	 * @return void
 	 */
 	public static function add_value_to_array( $name, $l1, $val, &$vars ) {
 		if ( $name == '' ) {

@@ -1117,6 +1117,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int|object|string $form_id
+	 * @param mixed             $form
+	 * @return array
 	 */
 	public static function get_action_links( $form_id, $form ) {
 		if ( ! is_object( $form ) ) {
@@ -1219,6 +1223,12 @@ BEFORE_HTML;
 		return $form_name;
 	}
 
+	/**
+	 * @param int    $id
+	 * @param string $status
+	 * @param string $length
+	 * @return string
+	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
 
@@ -1259,6 +1269,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int    $id
+	 * @param string $status
+	 *
+	 * @return array
 	 */
 	public static function delete_trash_info( $id, $status ) {
 		$labels = self::delete_trash_links( $id );
@@ -1353,6 +1368,9 @@ BEFORE_HTML;
 		return apply_filters( 'frm_layout_classes', $classes );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function grid_classes() {
 		return array(
 			'frm_half'          => '1/2',
@@ -1368,6 +1386,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param mixed $style
+	 * @param string $class
+	 *
+	 * @return string
 	 */
 	public static function style_class_label( $style, $class ) {
 		$label = '';
@@ -1382,6 +1405,11 @@ BEFORE_HTML;
 		return $label;
 	}
 
+	/**
+	 * @param string $status
+	 *
+	 * @return string
+	 */
 	public static function status_nice_name( $status ) {
 		$nice_names = array(
 			'draft'   => __( 'Draft', 'formidable' ),

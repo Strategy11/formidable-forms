@@ -381,6 +381,10 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param string $menu_name
+	 *
+	 * @return string
 	 */
 	private static function hidden_column_key( $menu_name = '' ) {
 		$base = self::base_column_key( $menu_name );
@@ -390,6 +394,10 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param string $menu_name
+	 *
+	 * @return string
 	 */
 	private static function base_column_key( $menu_name = '' ) {
 		if ( empty( $menu_name ) ) {
@@ -401,6 +409,13 @@ class FrmEntriesController {
 		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}
 
+	/**
+	 * @param int    $save
+	 * @param string $option
+	 * @param string $value
+	 *
+	 * @return int
+	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
@@ -575,6 +590,12 @@ class FrmEntriesController {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php';
 	}
 
+	/**
+	 * @param object $form
+	 * @param array  $errors
+	 *
+	 * @return void
+	 */
 	private static function get_delete_form_time( $form, &$errors ) {
 		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
@@ -730,6 +751,15 @@ class FrmEntriesController {
 		return str_replace( array( ' ', '[', ']', '|', '@' ), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
 	}
 
+	/**
+	 * Delete entry if redirected.
+	 *
+	 * @param string $url
+	 * @param object $form
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
 	public static function delete_entry_before_redirect( $url, $form, $atts ) {
 		self::_delete_entry( $atts['id'], $form );
 
@@ -740,11 +770,20 @@ class FrmEntriesController {
 	 * Delete entry if not redirected.
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	public static function delete_entry_after_save( $atts ) {
 		self::_delete_entry( $atts['entry_id'], $atts['form'] );
 	}
 
+	/**
+	 * Delete entry if not redirected.
+	 *
+	 * @param int $entry_id
+	 * @param object $form
+	 *
+	 * @return void
+	 */
 	private static function _delete_entry( $entry_id, $form ) {
 		if ( ! $form ) {
 			return;
@@ -759,6 +798,10 @@ class FrmEntriesController {
 
 	/**
 	 * Unlink entry from post
+	 *
+	 * @param int $entry_id
+	 *
+	 * @return void
 	 */
 	private static function unlink_post( $entry_id ) {
 		global $wpdb;

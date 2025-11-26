@@ -1631,6 +1631,10 @@ class FrmXMLHelper {
 	 * Remove extra settings from field to keep file size down
 	 *
 	 * @since 3.06
+	 *
+	 * @param object $field
+	 *
+	 * @return void
 	 */
 	public static function prepare_field_for_export( &$field ) {
 		self::remove_default_field_options( $field );

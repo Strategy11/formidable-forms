@@ -228,6 +228,7 @@ class FrmFormActionsController {
 	 *
 	 * @since 4.0
 	 *
+	 * @param array $action_controls
 	 * @return array
 	 */
 	private static function active_actions( $action_controls ) {
@@ -326,6 +327,11 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param object $form
+	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function list_actions( $form, $values ) {
 		if ( empty( $form ) ) {
@@ -570,7 +576,7 @@ class FrmFormActionsController {
 	 * @param int|string $entry_id
 	 * @param int|string $form_id
 	 * @param array      $args
-	 *
+	 * 
 	 * @return void
 	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
@@ -591,7 +597,13 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * @param string $event
+	 * @param string            $event
+	 * @param int|object|string $form
+	 * @param int|string        $entry
+	 * @param string            $type
+	 * @param array             $args
+	 * 
+	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
 		$action_status = array(
