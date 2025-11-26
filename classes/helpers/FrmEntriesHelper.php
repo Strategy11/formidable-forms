@@ -355,6 +355,12 @@ class FrmEntriesHelper {
 	 * Init arrays if necessary, else we get fatal error.
 	 *
 	 * @since 4.01
+	 *
+	 * @param object $field Field object.
+	 * @param mixed  $value Value to set.
+	 * @param array  $args  Additional arguments.
+	 *
+	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
 		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -398,6 +404,11 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 *
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Additional arguments.
+	 *
+	 * @return mixed
 	 */
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {

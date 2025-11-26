@@ -216,6 +216,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $text    Text.
+	 * @param string $input_id Input ID.
+	 *
 	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
