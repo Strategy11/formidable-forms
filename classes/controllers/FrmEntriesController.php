@@ -131,6 +131,11 @@ class FrmEntriesController {
 	 * editing or creating an entry
 	 *
 	 * @since 3.0
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen object.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
@@ -209,6 +214,12 @@ class FrmEntriesController {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @param object     $field The field object.
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
 	 */
 	private static function add_subform_cols( $field, $form_id, &$columns ) {
 		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
@@ -228,6 +239,12 @@ class FrmEntriesController {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @param object     $field The field object.
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
 	 */
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
@@ -266,12 +283,27 @@ class FrmEntriesController {
 		return sprintf( '%s (%s)', $field_name, $append_text );
 	}
 
+	/**
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
+	 */
 	private static function maybe_add_ip_col( $form_id, &$columns ) {
 		if ( FrmAppHelper::ips_saved() ) {
 			$columns[ $form_id . '_ip' ] = 'IP';
 		}
 	}
 
+	/**
+	 * @param bool   $check The check value.
+	 * @param int    $object_id The object ID.
+	 * @param string $meta_key The meta key.
+	 * @param mixed  $meta_value The meta value.
+	 * @param mixed  $prev_value The previous value.
+	 *
+	 * @return bool
+	 */
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$this_page_name = self::hidden_column_key();
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
@@ -291,6 +323,13 @@ class FrmEntriesController {
 
 	/**
 	 * Add hidden columns back from other forms
+	 *
+	 * @param int    $meta_id The meta ID.
+	 * @param int    $object_id The object ID.
+	 * @param string $meta_key The meta key.
+	 * @param array  $meta_value The meta value.
+	 *
+	 * @return void
 	 */
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();

@@ -250,6 +250,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {

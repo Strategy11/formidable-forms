@@ -1017,6 +1017,9 @@ class FrmField {
 	 * Unserialize all the serialized field data
 	 *
 	 * @since 2.0
+	 *
+	 * @param object $results
+	 * @return void
 	 */
 	private static function prepare_options( &$results ) {
 		FrmAppHelper::unserialize_or_decode( $results->field_options );
@@ -1163,6 +1166,8 @@ class FrmField {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|object $field
 	 * @return string
 	 */
 	public static function get_original_field_type( $field ) {

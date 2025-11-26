@@ -707,7 +707,7 @@ class FrmXMLHelper {
 	 *
 	 * @since 4.0
 	 *
-	 * @param array $field
+	 * @param array  $field
 	 * @param string $type
 	 *
 	 * @return array
@@ -1336,6 +1336,10 @@ class FrmXMLHelper {
 
 	/**
 	 * Edit post if the key and created time match.
+	 *
+	 * @param array $post By reference.
+	 *
+	 * @return void
 	 */
 	private static function maybe_editing_post( &$post ) {
 		$match_by = array(
@@ -1610,6 +1614,10 @@ class FrmXMLHelper {
 	 * This keeps file size down and prevents overriding global settings after import
 	 *
 	 * @since 3.06
+	 *
+	 * @param array $options By reference.
+	 *
+	 * @return void
 	 */
 	private static function remove_default_form_options( &$options ) {
 		$defaults = FrmFormsHelper::get_default_opts();
@@ -1633,6 +1641,9 @@ class FrmXMLHelper {
 	 * Remove defaults from field options too
 	 *
 	 * @since 3.06
+	 *
+	 * @param object $field
+	 * @return void
 	 */
 	private static function remove_default_field_options( &$field ) {
 		$defaults = self::default_field_options( $field->type );
@@ -1694,6 +1705,10 @@ class FrmXMLHelper {
 
 	/**
 	 * @since 3.06.03
+	 *
+	 * @param string $type
+	 *
+	 * @return array
 	 */
 	private static function default_field_options( $type ) {
 		$defaults = FrmFieldsHelper::get_default_field_options( $type );
@@ -1708,6 +1723,11 @@ class FrmXMLHelper {
 	 * remove if they are the same
 	 *
 	 * @since 3.06
+	 *
+	 * @param array $defaults
+	 * @param array $saved
+	 *
+	 * @return void
 	 */
 	private static function remove_defaults( $defaults, &$saved ) {
 		foreach ( $saved as $key => $value ) {
@@ -1721,6 +1741,12 @@ class FrmXMLHelper {
 	 * The line endings may prevent html from being equal when it should
 	 *
 	 * @since 3.06
+	 *
+	 * @param string $html_name
+	 * @param array  $defaults
+	 * @param array  $options
+	 *
+	 * @return void
 	 */
 	private static function remove_default_html( $html_name, $defaults, &$options ) {
 		if ( ! isset( $options[ $html_name ] ) || ! isset( $defaults[ $html_name ] ) ) {
@@ -1742,6 +1768,11 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param string $str
+	 *
+	 * @return string
+	 */
 	public static function cdata( $str ) {
 		FrmAppHelper::unserialize_or_decode( $str );
 		if ( is_array( $str ) ) {
@@ -1768,12 +1799,24 @@ class FrmXMLHelper {
 	 * @since 2.0.22
 	 *
 	 * @param string $str
+	 *
+	 * @return void
 	 */
 	private static function remove_invalid_characters_from_xml( &$str ) {
 		// Remove <US> character
 		$str = str_replace( '\x1F', '', $str );
 	}
 
+	/**
+	 * Migrate form settings to actions
+	 *
+	 * @param array $form_options
+	 * @param int   $form_id
+	 * @param array $imported
+	 * @param bool  $switch
+	 *
+	 * @return void
+	 */
 	public static function migrate_form_settings_to_actions( $form_options, $form_id, &$imported = array(), $switch = false ) {
 		// Get post type
 		$post_type = FrmFormActionsController::$action_post_type;
@@ -1914,6 +1957,17 @@ class FrmXMLHelper {
 		return $post_content;
 	}
 
+	/**
+	 * Migrate email settings to action
+	 *
+	 * @param array  $form_options
+	 * @param int    $form_id
+	 * @param string $post_type
+	 * @param array  $imported
+	 * @param bool   $switch
+	 *
+	 * @return void
+	 */
 	private static function migrate_email_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
 		// No old notifications or autoresponders to carry over
 		if ( ! isset( $form_options['auto_responder'] ) && ! isset( $form_options['notification'] ) && ! isset( $form_options['email_to'] ) ) {
@@ -1977,6 +2031,8 @@ class FrmXMLHelper {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $form_options
+	 *
+	 * @return void
 	 */
 	private static function remove_deprecated_notification_settings( $form_id, $form_options ) {
 		$delete_settings = array( 'notification', 'autoresponder', 'email_to' );
@@ -1988,6 +2044,15 @@ class FrmXMLHelper {
 		FrmForm::update( $form_id, array( 'options' => $form_options ) );
 	}
 
+	/**
+	 * Migrate notifications to action
+	 *
+	 * @param array $form_options
+	 * @param int   $form_id
+	 * @param array $notifications
+	 *
+	 * @return void
+	 */
 	private static function migrate_notifications_to_action( $form_options, $form_id, &$notifications ) {
 		if ( ! isset( $form_options['notification'] ) && ! empty( $form_options['email_to'] ) ) {
 			// add old settings into notification array
@@ -2025,6 +2090,14 @@ class FrmXMLHelper {
 		}//end if
 	}
 
+	/**
+	 * Format email data
+	 *
+	 * @param array $atts
+	 * @param array $notification
+	 *
+	 * @return void
+	 */
 	private static function format_email_data( &$atts, $notification ) {
 		// Format email_to
 		self::format_email_to_data( $atts, $notification );
@@ -2055,6 +2128,14 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * Format email_to data
+	 *
+	 * @param array $atts
+	 * @param array $notification
+	 *
+	 * @return void
+	 */
 	private static function format_email_to_data( &$atts, $notification ) {
 		if ( isset( $notification['email_to'] ) ) {
 			$atts['email_to'] = preg_split( '/ (,|;) /', $notification['email_to'] );
@@ -2085,6 +2166,15 @@ class FrmXMLHelper {
 		$atts['email_to'] = implode( ', ', $atts['email_to'] );
 	}
 
+	/**
+	 * Setup new notification
+	 *
+	 * @param array $new_notification
+	 * @param array $notification
+	 * @param array $atts
+	 *
+	 * @return void
+	 */
 	private static function setup_new_notification( &$new_notification, $notification, $atts ) {
 		// Set up new notification
 		$new_notification = array(
@@ -2121,6 +2211,8 @@ class FrmXMLHelper {
 	 * Switch field IDs in pre-2.0 email conditional logic
 	 *
 	 * @param array $post_content Pass by reference.
+	 *
+	 * @return void
 	 */
 	private static function switch_email_condition_field_ids( &$post_content ) {
 		// Switch field IDs in conditional logic
@@ -2134,6 +2226,15 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * Migrate autoresponder to action
+	 *
+	 * @param array $form_options
+	 * @param int   $form_id
+	 * @param array $notifications
+	 *
+	 * @return void
+	 */
 	private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
 		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
 			// migrate autoresponder
@@ -2193,6 +2294,11 @@ class FrmXMLHelper {
 		return $loader;
 	}
 
+	/**
+	 * PHP 8 backward compatibility for the libxml_disable_entity_loader function
+	 *
+	 * @return bool
+	 */
 	public static function check_if_libxml_disable_entity_loader_exists() {
 		return version_compare( phpversion(), '8.0', '<' ) && ! function_exists( 'libxml_disable_entity_loader' );
 	}
