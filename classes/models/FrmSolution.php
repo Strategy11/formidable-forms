@@ -663,6 +663,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step
+	 *
 	 * @return void
 	 */
 	protected function show_page_links( $step ) {

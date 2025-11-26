@@ -226,6 +226,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
@@ -304,6 +306,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param string $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
