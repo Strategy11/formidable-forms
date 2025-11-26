@@ -90,7 +90,6 @@ parameters:
 			paths:
 				- classes/helpers/FrmFormsListHelper.php
 				- classes/models/FrmInstallerSkin.php
-				- stripe/controllers/FrmStrpLiteActionsController.php
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
 		-
 			message: '#Foreach overwrites \$ip with its value variable.#'

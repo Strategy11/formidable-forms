@@ -17,7 +17,7 @@ jobs:
       matrix:
         include:
           - php: 7.0
-          - php: 8.3
+          - php: 8.4
     steps:
       - uses: actions/checkout@v4.1.1
 
