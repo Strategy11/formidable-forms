@@ -135,6 +135,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * Load the captcha script.
+	 *
 	 * @param array $args
 	 * @return void
 	 */
