@@ -512,6 +512,9 @@ class FrmAddonsController {
 
 	/**
 	 * @since 3.04.03
+	 *
+	 * @param mixed $transient
+	 * @return object
 	 */
 	public static function check_update( $transient ) {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -744,6 +747,8 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @param array $addons
+	 *
 	 * @return void
 	 */
 	protected static function prepare_addons( &$addons ) {
@@ -831,6 +836,8 @@ class FrmAddonsController {
 	/**
 	 * @since 3.04.02
 	 *
+	 * @param string $link
+	 *
 	 * @return void
 	 */
 	protected static function prepare_addon_link( &$link ) {
@@ -851,6 +858,8 @@ class FrmAddonsController {
 	 * installed, active, not installed
 	 *
 	 * @since 3.04.02
+	 *
+	 * @param array $addon
 	 *
 	 * @return void
 	 */
@@ -1489,6 +1498,8 @@ class FrmAddonsController {
 	 * Gets required plan for an addon.
 	 *
 	 * @since 6.4.2
+	 *
+	 * @param int|string $addon_id
 	 *
 	 * @return string Empty string if no plan is required for active license.
 	 */

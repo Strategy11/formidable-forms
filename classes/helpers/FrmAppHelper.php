@@ -2372,6 +2372,11 @@ class FrmAppHelper {
 
 	/**
 	 * Flatten a multi-dimensional array
+	 *
+	 * @param array  $array
+	 * @param string $keys
+	 *
+	 * @return array
 	 */
 	public static function array_flatten( $array, $keys = 'keep' ) {
 		$return = array();
@@ -2437,6 +2442,13 @@ class FrmAppHelper {
 		return $content;
 	}
 
+	/**
+	 * Replace quotes with their HTML entities.
+	 *
+	 * @param string $val
+	 *
+	 * @return string©
+	 */
 	public static function replace_quotes( $val ) {
 		// Replace double quotes.
 		$val = str_replace( array( '&#8220;', '&#8221;', '&#8243;' ), '"', $val );
@@ -3238,6 +3250,8 @@ class FrmAppHelper {
 	}
 
 	/**
+	 * @param array $json_vars
+	 *
 	 * @return array
 	 */
 	public static function json_to_array( $json_vars ) {
@@ -3335,6 +3349,12 @@ class FrmAppHelper {
 
 	/**
 	 * Add the current_page class to that page in the form nav
+	 *
+	 * @param int|string $page
+	 * @param int|string $current_page
+	 * @param array      $action
+	 *
+	 * @return void
 	 */
 	public static function select_current_page( $page, $current_page, $action = array() ) {
 		if ( $current_page != $page ) {
@@ -4076,6 +4096,11 @@ class FrmAppHelper {
 
 	/**
 	 * @since 6.7.1
+	 *
+	 * @param array $option Option data.
+	 * @param array $args   The arguments of images_dropdown() method.
+	 *
+	 * @return array
 	 */
 	public static function get_images_dropdown_atts( $option, $args ) {
 		$image        = self::get_images_dropdown_option_image( $option, $args );

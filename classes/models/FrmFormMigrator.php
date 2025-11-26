@@ -159,6 +159,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Import a single form
+	 *
+	 * @param int $source_id Source form ID.
+	 *
+	 * @return array
 	 */
 	protected function import_form( $source_id ) {
 

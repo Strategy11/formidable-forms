@@ -1177,8 +1177,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param array  $atts
-	 * @param bool   $return_array
+	 * @param array $atts
+	 * @param bool  $return_array
 	 *
 	 * @return array|string
 	 */

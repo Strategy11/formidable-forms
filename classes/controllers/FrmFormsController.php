@@ -77,6 +77,10 @@ class FrmFormsController {
 	 * Now that won't do.
 	 *
 	 * @since 3.01
+	 *
+	 * @param array $shortcodes List of shortcodes to process.
+	 *
+	 * @return array
 	 */
 	public static function prevent_divi_conflict( $shortcodes ) {
 		$shortcodes[] = 'formidable';
@@ -194,6 +198,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @param array|false $values
+	 *
 	 * @return void
 	 */
 	public static function edit( $values = false ) {
@@ -272,6 +278,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function update( $values = array() ) {
@@ -625,6 +633,9 @@ class FrmFormsController {
 	 * Set the page title for the theme preview page
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $title
+	 * @return string
 	 */
 	public static function preview_page_title( $title ) {
 		if ( in_the_loop() ) {
@@ -1333,6 +1344,10 @@ class FrmFormsController {
 		return $fields;
 	}
 
+	/**
+	 * @param string $message
+	 * @return void
+	 */
 	public static function maybe_update_form_builder_message( &$message ) {
 		if ( 'form_duplicated' === FrmAppHelper::simple_get( 'message' ) ) {
 			$message = __( 'Form was Successfully Copied', 'formidable' );
@@ -1412,6 +1427,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function form_publish_button( $atts ) {
 		$values = $atts['values'];
@@ -1645,6 +1663,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.04.01
+	 *
+	 * @param array $atts
+	 * @return array
 	 */
 	private static function advanced_helpers( $atts ) {
 		$advanced_helpers = array(
@@ -1683,6 +1704,8 @@ class FrmFormsController {
 	 * of the customization panel
 	 *
 	 * @since 2.0.6
+	 *
+	 * @return array
 	 */
 	private static function get_advanced_shortcodes() {
 		$adv_shortcodes = array(
@@ -1710,6 +1733,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.04.01
+	 *
+	 * @return array
 	 */
 	private static function user_shortcodes() {
 		$options = array(
@@ -1730,6 +1755,9 @@ class FrmFormsController {
 	 * Get an array of the helper shortcodes to display in the customization panel
 	 *
 	 * @since 2.0.6
+	 *
+	 * @param bool $settings_tab
+	 * @return array
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
 		$entry_shortcodes = array(
@@ -1755,6 +1783,9 @@ class FrmFormsController {
 		 * in the customization panel
 		 *
 		 * @since 2.0.6
+		 *
+		 * @param array $entry_shortcodes
+		 * @param bool  $settings_tab
 		 */
 		$entry_shortcodes = apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
 
