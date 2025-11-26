@@ -2133,6 +2133,8 @@ class FrmFormsController {
 	 *
 	 * @since 4.07
 	 *
+	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
@@ -2224,6 +2226,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param array $actions
+	 * @return void
 	 */
 	private static function add_forms_to_admin_bar( $actions ) {
 		global $wp_admin_bar;
@@ -2432,6 +2437,11 @@ class FrmFormsController {
 	 * If the form was processed earlier (init), get the generated errors
 	 *
 	 * @since 2.05
+	 *
+	 * @param object $form
+	 * @param array  $params
+	 *
+	 * @return array
 	 */
 	private static function get_saved_errors( $form, $params ) {
 		global $frm_vars;
@@ -3045,6 +3055,10 @@ class FrmFormsController {
 	 * Prepare to show the success message and empty form after submit
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	public static function show_message_after_save( $atts ) {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
@@ -3070,6 +3084,10 @@ class FrmFormsController {
 	 * Show an empty form
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $args
+	 *
+	 * @return void
 	 */
 	private static function show_form_after_submit( $args ) {
 		self::fill_atts_for_form_display( $args );
@@ -3138,6 +3156,10 @@ class FrmFormsController {
 	 * Get all the values needed on the new.php entry page
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $args
+	 *
+	 * @return void
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
 		if ( ! isset( $args['title'] ) && isset( $args['show_title'] ) ) {
@@ -3164,6 +3186,10 @@ class FrmFormsController {
 	 * Show the success message without the form
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private static function show_lone_success_message( $atts ) {
 		global $frm_vars;

@@ -540,8 +540,14 @@ class FrmFormAction {
 		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 
+	/**
+	 * @param int $id
+	 *
+	 * @return object|null
+	 */
 	public function get_single_action( $id ) {
 		$action = get_post( $id );
+
 		if ( $action ) {
 			$action = $this->prepare_action( $action );
 			$this->_set( $id );
@@ -643,7 +649,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param int $action_id
+	 * @param int    $action_id
 	 * @param string $type
 	 *
 	 * @return bool|FrmFormAction
@@ -781,7 +787,7 @@ class FrmFormAction {
 
 	/**
 	 * @param false|int|string $form_id
-	 * @param string $type
+	 * @param string           $type
 	 *
 	 * @return void
 	 */
@@ -852,6 +858,11 @@ class FrmFormAction {
 
 	/**
 	 * Migrate settings from form->options into new action.
+	 *
+	 * @param object $form
+	 * @param string $update
+	 *
+	 * @return void
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
 		$action = $this->prepare_new( $form->id );

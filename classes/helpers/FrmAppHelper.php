@@ -3537,6 +3537,9 @@ class FrmAppHelper {
 	 * Reformat the json serialized array in name => value array.
 	 *
 	 * @since 4.02.03
+	 *
+	 * @param array $form 
+	 * @return void
 	 */
 	public static function format_form_data( &$form ) {
 		$formatted = array();

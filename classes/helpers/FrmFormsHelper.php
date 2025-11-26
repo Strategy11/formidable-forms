@@ -1390,7 +1390,7 @@ BEFORE_HTML;
 	/**
 	 * @since 3.0
 	 *
-	 * @param mixed $style
+	 * @param mixed  $style
 	 * @param string $class
 	 *
 	 * @return string

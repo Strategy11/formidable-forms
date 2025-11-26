@@ -499,6 +499,11 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param int|string $form_id
+	 * @param mixed      $result
+	 *
+	 * @return array
 	 */
 	private static function user_hidden_columns_for_form( $form_id, $result ) {
 		$hidden = array();
@@ -608,6 +613,9 @@ class FrmEntriesController {
 
 	/**
 	 * Back End CRUD.
+	 *
+	 * @param int $id
+	 * @return void
 	 */
 	public static function show( $id = 0 ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
@@ -779,7 +787,7 @@ class FrmEntriesController {
 	/**
 	 * Delete entry if not redirected.
 	 *
-	 * @param int $entry_id
+	 * @param int    $entry_id
 	 * @param object $form
 	 *
 	 * @return void
