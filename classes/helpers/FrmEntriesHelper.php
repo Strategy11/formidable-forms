@@ -414,9 +414,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
@@ -455,9 +455,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
 		if ( ! $args['parent_field_id'] ) {
@@ -642,6 +642,9 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Action dropdown attributes.
+	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {
 		$id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
@@ -675,6 +678,10 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int          $id    Entry ID.
+	 * @param object|array $entry Entry object.
+	 * @return array
 	 */
 	private static function get_action_links( $id, $entry ) {
 		$page    = FrmAppHelper::get_param( 'frm_action' );
