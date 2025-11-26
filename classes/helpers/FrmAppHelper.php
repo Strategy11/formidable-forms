@@ -173,7 +173,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	private static function maybe_add_utm_license( $query_args ) {
-		if ( 'pro' === $query_args['utm_medium'] && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
+		if ( isset( $query_args['utm_medium'] ) && 'pro' === $query_args['utm_medium'] && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
 		}
 
