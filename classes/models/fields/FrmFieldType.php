@@ -1741,6 +1741,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		$unsanitized_value = $value;
