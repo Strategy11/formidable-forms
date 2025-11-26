@@ -712,7 +712,7 @@ class FrmForm {
 	/**
 	 * Delete trashed forms based on how long they have been trashed
 	 *
-	 * @param int $delete_timestamp Timestamp cutoff for deletion.
+	 * @param int|string $delete_timestamp Timestamp cutoff for deletion.
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {

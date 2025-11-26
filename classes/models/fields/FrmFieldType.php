@@ -970,6 +970,12 @@ DEFAULT_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param array  $args
+	 * @param string $html
+	 *
+	 * @return string
+	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		return $html;
 	}
