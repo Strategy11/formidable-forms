@@ -182,6 +182,7 @@ class FrmHooksController {
 
 		// Simple Blocks Controller.
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
+		add_action( 'enqueue_block_assets', 'FrmSimpleBlocksController::block_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 

@@ -65,6 +65,13 @@ class FrmSimpleBlocksController {
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations( 'formidable-form-selector', 'formidable' );
 		}
+	}
+
+	/**
+	 * Enqueue Formidable Simple Blocks' JS and CSS for the content.
+	 */
+	public static function block_assets() {
+		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
