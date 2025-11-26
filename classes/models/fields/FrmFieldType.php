@@ -1339,6 +1339,12 @@ DEFAULT_HTML;
 		return $select_atts;
 	}
 
+	/**
+	 * Load field scripts.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
 	protected function load_field_scripts( $args ) {
 		// Override me
 	}
