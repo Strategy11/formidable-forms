@@ -378,26 +378,6 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Determines if the choices limit validation message should be shown.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $statuses
-	 * @param array $field
-	 *
-	 * @return bool
-	 */
-	public static function should_show_choices_limit_message( $statuses, $field ) {
-		foreach ( $statuses as $choice_limit_reached ) {
-			if ( ! $choice_limit_reached ) {
-				return false;
-			}
-		}
-
-		return FrmFieldsHelper::should_hide_maxed_out_field_choices( $field['form_id'] );
-	}
-
-	/**
 	 * Get the list of default value types that can be toggled in the builder.
 	 *
 	 * @since 4.0

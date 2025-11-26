@@ -420,7 +420,7 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param array $defaults
+		 * @param array        $defaults
 		 * @param array|object $field
 		 */
 		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
@@ -2511,15 +2511,15 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool   $choice_limit_is_reached
-	 * @param array  $shortcode_atts
-	 * @param string $opt_key
-	 * @param int    $form_id
+	 * @param bool       $choice_limit_is_reached
+	 * @param array      $shortcode_atts
+	 * @param string     $opt_key
+	 * @param int|string $form_id
 	 *
 	 * @return bool
 	 */
 	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
-		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+		if ( isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			return true;
 		}
 
@@ -2531,16 +2531,36 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * Determines if the choices limit validation message should be shown.
+	 *
 	 * @since x.x
 	 *
-	 * @param int $form_id
+	 * @param array $statuses
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_show_choices_limit_message( $statuses, $field ) {
+		foreach ( $statuses as $choice_limit_reached ) {
+			if ( ! $choice_limit_reached ) {
+				return false;
+			}
+		}
+
+		return self::should_hide_maxed_out_field_choices( $field['form_id'] );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int|string $form_id
 	 * @return bool
 	 */
 	public static function should_hide_maxed_out_field_choices( $form_id ) {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool $should_hide_field_choice_by_form_id
+		 * @param bool $should_hide_field_choice
 		 * @param int  $form_id
 		 *
 		 * @return bool
@@ -2587,7 +2607,7 @@ class FrmFieldsHelper {
 		 * @param array $field
 		 * @param string $opt_key
 		 */
-		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
+		return (bool) apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
 	}
 
 	/**
