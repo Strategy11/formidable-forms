@@ -48,6 +48,7 @@ class FrmFieldUrl extends FrmFieldType {
 	}
 
 	/**
+	 * @param array $atts
 	 * @return void
 	 */
 	protected function fill_default_atts( &$atts ) {

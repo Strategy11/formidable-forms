@@ -306,6 +306,10 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when a form is created
+	 *
+	 * @param array $values
+	 *
+	 * @return array
 	 */
 	public static function setup_new_vars( $values = array() ) {
 		global $wpdb;
@@ -356,6 +360,12 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when editing a form
+	 *
+	 * @param array  $values
+	 * @param object $record
+	 * @param array  $post_values
+	 *
+	 * @return array
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
@@ -789,6 +799,13 @@ BEFORE_HTML;
 	/**
 	 * Create end section field if it doesn't exist. This is for migration from < 2.0
 	 * Fix any ordering that may be messed up
+	 *
+	 * @param bool   $open
+	 * @param bool   $reset_fields
+	 * @param int    $add_order
+	 * @param array  $end_section_values
+	 * @param object $field
+	 * @param string $move
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -1208,6 +1225,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $link_details
+	 * @param string $length
+	 *
+	 * @return string
 	 */
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
@@ -1524,6 +1546,10 @@ BEFORE_HTML;
 	 * about which plan is required.
 	 *
 	 * @since 4.0
+	 *
+	 * @param string $requires
+	 * @param string $link
+	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
 		if ( empty( $requires ) ) {

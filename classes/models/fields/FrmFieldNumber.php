@@ -49,6 +49,9 @@ class FrmFieldNumber extends FrmFieldType {
 	/**
 	 * @since 3.01.03
 	 *
+	 * @param array  $args
+	 * @param string $input_html
+	 *
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
@@ -163,6 +166,9 @@ class FrmFieldNumber extends FrmFieldType {
 
 	/**
 	 * Force the value to be numeric before it's saved in the DB
+	 *
+	 * @param array|string $value
+	 * @return float
 	 */
 	public function set_value_before_save( $value ) {
 		if ( ! is_numeric( $value ) ) {
