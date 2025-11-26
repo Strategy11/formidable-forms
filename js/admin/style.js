@@ -1085,9 +1085,25 @@
 			}
 		}
 
+		resetCustomCSSEditor();
 		jQuery( '#frm_submit_style, #frm_auto_width' ).prop( 'checked', false );
 		jQuery( document.getElementById( 'frm_fieldset' ) ).trigger( 'change' );
 		showStyleResetSuccessMessage();
+	}
+
+	/**
+	 * Reset the custom CSS editor.
+	 *
+	 * @return {void}
+	 */
+	function resetCustomCSSEditor() {
+		const checkbox = document.getElementById( 'frm_enable_single_style_custom_css' );
+		const editorWrapper = document.getElementById( 'frm_single_style_custom_css_editor' );
+		if ( ! checkbox || ! editorWrapper ) {
+			return;
+		}
+		checkbox.checked = false;
+		editorWrapper.classList.add( 'frm_hidden' );
 	}
 
 	/**

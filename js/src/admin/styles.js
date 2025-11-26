@@ -9,8 +9,16 @@ import frmStyleDependentUpdaterComponent from './components/dependent-updater-co
 class frmStyleOptions {
 	constructor() {
 		this.success = frmDom.success;
+		this.cssEditorInstance = null;
+		this.cssInlineStyleElement = null;
+		this.cssEditorOptions = {
+			retryLimit: 5, // Stop after 5 retries.
+			retryInterval: 500, // Retry every 500ms.
+			retryCount: 0, // Count the number of retries.
+		};
 		this.init();
 		this.initHover();
+		this.initCustomCSSEditorInstance();
 	}
 
 	/**
@@ -19,6 +27,58 @@ class frmStyleOptions {
 	init() {
 		this.initColorPickerDependentUpdaterComponents();
 		this.initStyleClassCopyToClipboard( __( 'The class name has been copied.', 'formidable' ) );
+		this.toggleVisibilityOfCustomCSSEditor();
+	}
+
+	/**
+	 * Initialize the custom CSS editor instance.
+	 *
+	 * @return {void}
+	 */
+	initCustomCSSEditorInstance() {
+		if ( null !== this.cssEditorInstance || this.cssEditorOptions.retryCount >= this.cssEditorOptions.retryLimit ) {
+			return;
+		}
+
+		if ( 'undefined' === typeof window.frm_single_style_custom_css_wp_editor || 'undefined' === typeof window.frm_single_style_custom_css_wp_editor.codemirror ) {
+			setTimeout( () => {
+				this.cssEditorOptions.retryCount++;
+				this.initCustomCSSEditorInstance();
+			}, 500 );
+			return;
+		}
+
+		this.cssEditorInstance = window.frm_single_style_custom_css_wp_editor.codemirror;
+		this.onCssEditorReady();
+	}
+
+	/**
+	 * Get the inline style element.
+	 *
+	 * @return {HTMLElement}
+	 */
+	getInlineStyleElement() {
+		if ( null !== this.cssInlineStyleElement ) {
+			return this.cssInlineStyleElement;
+		}
+
+		this.cssInlineStyleElement = document.createElement( 'style' );
+		document.head.appendChild( this.cssInlineStyleElement );
+		return this.cssInlineStyleElement;
+	}
+
+	/**
+	 * On the CSS editor ready, add an event listener to the editor to update the inline style element.
+	 *
+	 * @return {void}
+	 */
+	onCssEditorReady() {
+		const cssScope = document.getElementById( 'frm_style_class_custom_css' )?.dataset?.cssScope;
+		if ( null === cssScope ) {
+			return;
+		}
+
+		this.cssEditorInstance.on( 'change', editor => this.getInlineStyleElement().textContent = `.${ cssScope } { ${ editor.getValue() } }` );
 	}
 
 	/**
@@ -100,12 +160,29 @@ class frmStyleOptions {
 	 * @param {string} successMessage - The success message to display.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
-		const copyLabel = document.querySelector( '.frm-copy-text' );
-		copyLabel.addEventListener( 'click', event => {
-			const className = event.currentTarget.innerText;
-			navigator.clipboard.writeText( className ).then( () => {
-				this.success( successMessage );
-			} );
+		if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
+			return;
+		}
+
+		const labels = document.querySelectorAll( '.frm-copy-text' );
+		labels.forEach( label => {
+			label.addEventListener( 'click', event => {
+				const className = event.currentTarget.innerText;
+				navigator.clipboard.writeText( className ).then( () => {
+					this.success( successMessage );
+				} );
+			});
+		});
+	}
+
+	toggleVisibilityOfCustomCSSEditor() {
+		const toggle = document.querySelector( '#frm_enable_single_style_custom_css' );
+		const editor = document.querySelector( '#frm_single_style_custom_css_editor' );
+		if ( ! toggle || ! editor ) {
+			return;
+		}
+		toggle.addEventListener( 'change', event => {
+			editor.classList.toggle( 'frm_hidden', ! event.target.checked );
 		} );
 	}
 }
