@@ -378,64 +378,23 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Check if the choice limit is reached.
-	 *
-	 * @since x.x
-	 *
-	 * @param array  $field
-	 * @param string $opt_key
-	 *
-	 * @return bool
-	 */
-	public static function choice_limit_reached( $field, $opt_key ) {
-		/**
-		 * @since x.x
-		 *
-		 * @param bool  $disabled
-		 * @param array $field
-		 * @param string $opt_key
-		 */
-		return apply_filters( 'frm_choice_limit_reached', false, $field, $opt_key );
-	}
-
-	/**
 	 * Determines if the choices limit validation message should be shown.
 	 *
 	 * @since x.x
 	 *
-	 * @param array $field_choices_limit_reached_statuses
+	 * @param array $statuses
 	 * @param array $field
 	 *
 	 * @return bool
 	 */
-	public static function should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) {
-		foreach ( $field_choices_limit_reached_statuses as $choice_limit_reached ) {
+	public static function should_show_choices_limit_message( $statuses, $field ) {
+		foreach ( $statuses as $choice_limit_reached ) {
 			if ( ! $choice_limit_reached ) {
 				return false;
 			}
 		}
 
 		return FrmFieldsHelper::should_hide_maxed_out_field_choices( $field['form_id'] );
-	}
-
-	/**
-	 * Returns array that contains whether each field choice has reached its limit.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $field
-	 * @return array
-	 */
-	public static function get_choices_limit_reached_statuses( $field ) {
-		if ( ! has_filter( 'frm_choice_limit_reached' ) ) {
-			return array_fill_keys( array_keys( $field['options'] ), false );
-		}
-
-		$choices_limit_reached_statuses = array();
-		foreach ( $field['options'] as $opt_key => $opt ) {
-			$choices_limit_reached_statuses[ $opt_key ] = self::choice_limit_reached( $field, $opt_key );
-		}
-		return $choices_limit_reached_statuses;
 	}
 
 	/**
