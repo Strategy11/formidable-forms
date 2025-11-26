@@ -78,9 +78,14 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * Prepare field while creating a new entry
+	 * Prepare field while creating a new entry.
 	 *
 	 * @since 3.0
+	 *
+	 * @param array    $field_array Field values array, passed by reference.
+	 * @param stdClass $field       Field object.
+	 * @param array    $args        Additional arguments.
+	 * @return void
 	 */
 	public static function prepare_new_front_field( &$field_array, $field, $args = array() ) {
 		$args['action'] = 'new';
@@ -88,9 +93,15 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * Prepare field while editing an entry
+	 * Prepare field while editing an entry.
 	 *
 	 * @since 3.0
+	 *
+	 * @param array          $field_array Field values array, passed by reference.
+	 * @param stdClass|array $field       Field object or array.
+	 * @param int            $entry_id    Entry ID.
+	 * @param array          $args        Additional arguments.
+	 * @return void
 	 */
 	public static function prepare_edit_front_field( &$field_array, $field, $entry_id = 0, $args = array() ) {
 		$args['entry_id'] = $entry_id;
