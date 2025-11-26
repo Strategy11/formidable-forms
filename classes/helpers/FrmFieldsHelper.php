@@ -2502,4 +2502,46 @@ class FrmFieldsHelper {
 			)
 		);
 	}
+
+	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool   $choice_limit_is_reached
+	 * @param array  $shortcode_atts
+	 * @param string $opt_key
+	 * @param int    $form_id
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
+		if ( isset( $shortcode_atts['opt'] ) && ( $shortcode_atts['opt'] !== $opt_key ) ) {
+			return true;
+		}
+
+		if ( ! $choice_limit_is_reached ) {
+			return false;
+		}
+
+		return self::should_hide_maxed_out_field_choices( $form_id );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param int $form_id
+	 * @return bool
+	 */
+	public static function should_hide_maxed_out_field_choices( $form_id ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_hide_field_choice_by_form_id
+		 * @param int  $form_id
+		 *
+		 * @return bool
+		 */
+		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
+	}
 }
