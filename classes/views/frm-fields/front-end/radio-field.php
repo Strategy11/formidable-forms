@@ -15,7 +15,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
-	$field_choices_limit_reached_statuses = FrmFieldsController::get_choices_limit_reached_statuses( $field );
+	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
 
 	if ( FrmFieldsController::should_show_choices_limit_message( $field_choices_limit_reached_statuses, $field ) ) {
 		echo esc_html( FrmFieldsHelper::get_error_msg( $field, 'choice_limit_msg' ) );
