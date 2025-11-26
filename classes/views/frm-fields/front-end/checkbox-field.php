@@ -77,7 +77,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( FrmFieldsController::should_echo_disabled_attribute( $choice_limit_reached, $checked ) ) {
+		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked ) ) {
 			echo 'disabled="disabled" data-max-reached="1" ';
 		}
 

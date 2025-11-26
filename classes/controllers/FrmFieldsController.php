@@ -399,27 +399,6 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * Determine if 'disabled' attribute should be echoed for a field choice.
-	 *
-	 * @since x.x
-	 *
-	 * @param bool $choice_limit_reached
-	 * @param bool $choice_selected
-	 *
-	 * @return bool
-	 */
-	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
-		/**
-		 * @since x.x
-		 *
-		 * @param bool $should_echo_disabled_attribute
-		 * @param bool $choice_limit_reached
-		 * @param bool $choice_selected
-		 */
-		return apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
-	}
-
-	/**
 	 * Determines if the choices limit validation message should be shown.
 	 *
 	 * @since x.x
