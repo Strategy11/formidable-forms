@@ -458,7 +458,7 @@ class FrmMigrate {
 	 *
 	 * @since 4.0
 	 *
-	 * @param string $type Field option key to migrate.d
+	 * @param string $type Field option key to migrate.
 	 */
 	private function migrate_to_placeholder( $type = 'clear_on_focus' ) {
 		$query = array(

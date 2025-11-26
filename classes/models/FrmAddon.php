@@ -340,6 +340,10 @@ class FrmAddon {
 	 * We need an extra check before we allow it to show a message.
 	 *
 	 * @since 3.04.03
+	 *
+	 * @param string $file File path of the plugin.
+	 * @param array $plugin Plugin data.
+	 * @return void
 	 */
 	public function maybe_show_license_message( $file, $plugin ) {
 		if ( $this->is_expired_addon || isset( $plugin['package'] ) ) {
@@ -350,6 +354,11 @@ class FrmAddon {
 		$this->show_license_message( $file, $plugin );
 	}
 
+	/**
+	 * @param string $file File path of the plugin.
+	 * @param array  $plugin Plugin data.
+	 * @return void
+	 */
 	public function show_license_message( $file, $plugin ) {
 		$message = '';
 		if ( empty( $this->license ) ) {
@@ -435,6 +444,9 @@ class FrmAddon {
 	 * Get the API info for this plugin
 	 *
 	 * @since 3.04.03
+	 *
+	 * @param string $license The license key.
+	 * @return array The API info for the plugin.
 	 */
 	protected function get_api_info( $license ) {
 		$api   = new FrmFormApi( $license );
@@ -457,6 +469,9 @@ class FrmAddon {
 	 * don't save the transient expiration
 	 *
 	 * @since 2.05.05
+	 *
+	 * @param object $version_info The version info for the plugin.
+	 * @return void
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
 		$timeout = ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
@@ -473,6 +488,9 @@ class FrmAddon {
 	 * Check if the beta should be downloaded.
 	 *
 	 * @since 3.04.03
+	 *
+	 * @param object $version_info The version info for the plugin.
+	 * @return void
 	 */
 	private function maybe_use_beta_url( &$version_info ) {
 		if ( $this->get_beta && ! empty( $version_info->beta ) ) {
@@ -618,12 +636,20 @@ class FrmAddon {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @param string $license     The license key.
+	 * @param string $plugin_slug The plugin slug.
+	 * @return array The response from the license activation.
 	 */
 	public static function activate_license_for_plugin( $license, $plugin_slug ) {
 		$this_plugin = self::get_addon( $plugin_slug );
 		return $this_plugin->activate_license( $license );
 	}
 
+	/**
+	 * @param string $license The license key.
+	 * @return array The response from the license activation.
+	 */
 	private function activate_license( $license ) {
 		$this->set_license( $license );
 		$this->license = $license;

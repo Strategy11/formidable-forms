@@ -320,6 +320,9 @@ class FrmEntryValidate {
 	 *
 	 * @since 6.21
 	 *
+	 * @param object $field_object The field object.
+	 * @param array|string $value  The value to validate.
+	 *
 	 * @return bool
 	 */
 	private static function options_are_dynamic_based_on_hook( $field_object, $value ) {
@@ -590,6 +593,7 @@ class FrmEntryValidate {
 	/**
 	 * Check entries for Akismet spam
 	 *
+	 * @param array $values Entry values.
 	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
@@ -619,6 +623,10 @@ class FrmEntryValidate {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param array $datas The array of values being sent to Akismet.
+	 * @param array $values Entry values.
+	 * @return void
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );

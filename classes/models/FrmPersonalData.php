@@ -51,6 +51,9 @@ class FrmPersonalData {
 	}
 
 	/**
+	 * @param string $email
+	 * @param int    $page
+	 *
 	 * @return array
 	 */
 	public function export_data( $email, $page = 1 ) {
@@ -81,6 +84,9 @@ class FrmPersonalData {
 	}
 
 	/**
+	 * @param string $email
+	 * @param int    $page
+	 *
 	 * @return array
 	 */
 	public function erase_data( $email, $page = 1 ) {
