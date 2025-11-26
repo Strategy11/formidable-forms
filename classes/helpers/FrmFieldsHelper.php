@@ -422,8 +422,6 @@ class FrmFieldsHelper {
 		 *
 		 * @param array $defaults
 		 * @param array|object $field
-		 *
-		 * @return string
 		 */
 		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
 
