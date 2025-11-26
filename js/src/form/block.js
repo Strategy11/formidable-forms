@@ -16,6 +16,7 @@ const { Notice } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
 
 registerBlockType( 'formidable/simple-form', {
+	apiVersion: 3,
 	title: formidable_form_selector.name,
 	description: __( 'Display a Form', 'formidable' ),
 	icon: FormidableIcon,

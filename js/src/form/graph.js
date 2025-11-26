@@ -26,6 +26,7 @@ import FormidableIcon from '../common/components/icon';
 	const blockName = __( 'Formidable Chart', 'formidable' );
 
 	registerBlockType( 'frm-charts/graph', {
+		apiVersion: 3,
 		title: blockName,
 		description: __( 'Display a chart or graph', 'formidable' ),
 		icon: (

@@ -23,6 +23,7 @@ const FrmCalcIcon = wp.element.createElement(
 );
 
 registerBlockType( 'formidable/calculator', {
+	apiVersion: 3,
 	title: __( 'Calculator Form', 'formidable' ),
 	description: __( 'Display a Calculator Form', 'formidable' ),
 	icon: FrmCalcIcon,

@@ -13,7 +13,7 @@ const blockData = formidable_form_selector; // eslint-disable-line camelcase
 const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link : blockData.link;
 
 registerBlockType( 'formidable/simple-view', {
-
+	apiVersion: 3,
 	title: __( 'Formidable Views', 'formidable' ),
 	description: __( 'Display a Visual View', 'formidable' ),
 	icon: FormidableIcon,
