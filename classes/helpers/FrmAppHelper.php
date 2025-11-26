@@ -2447,7 +2447,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $val
 	 *
-	 * @return string©
+	 * @return string
 	 */
 	public static function replace_quotes( $val ) {
 		// Replace double quotes.

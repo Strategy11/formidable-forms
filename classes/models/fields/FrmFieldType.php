@@ -631,6 +631,7 @@ DEFAULT_HTML;
 	 * @since 4.02.01
 	 *
 	 * @param array|object $field Field settings array.
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
