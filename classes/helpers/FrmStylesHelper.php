@@ -135,7 +135,7 @@ class FrmStylesHelper {
 	/**
 	 * @since 2.0
 	 *
-	 * @param string|int $key  Icon key.
+	 * @param int|string $key  Icon key.
 	 * @param string     $icon Icon state, `+` or `-`.
 	 * @param string     $type Icon type, such as `arrow`.
 	 *

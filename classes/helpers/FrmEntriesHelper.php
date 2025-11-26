@@ -680,7 +680,7 @@ class FrmEntriesHelper {
 	 * @since 3.0
 	 *
 	 * @param int          $id    Entry ID.
-	 * @param object|array $entry Entry object.
+	 * @param array|object $entry Entry object.
 	 * @return array
 	 */
 	private static function get_action_links( $id, $entry ) {
