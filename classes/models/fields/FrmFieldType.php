@@ -436,6 +436,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @param array $field   Field settings array.
+	 * @param array $display Display settings.
+	 * @param array $values  Form values.
 	 */
 	public function show_options( $field, $display, $values ) {
 		do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
@@ -474,6 +478,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_field_options( $args ) {
 		if ( ! $this->should_continue_to_field_options( $args ) ) {
@@ -593,6 +599,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args Includes field configuration.
 	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
@@ -609,6 +617,9 @@ DEFAULT_HTML;
 	 * Should the section for adding choices show for this field?
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field Field settings array.
+	 * @return bool
 	 */
 	protected function has_field_choices( $field ) {
 		return ! empty( $this->displayed_field_type( $field ) );
@@ -618,6 +629,8 @@ DEFAULT_HTML;
 	 * Get the type of field being displayed for lookups and dynamic fields.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field Field settings array.
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -715,6 +728,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param mixed $default_value Default value passed by reference.
 	 */
 	public function default_value_to_string( &$default_value ) {
 		if ( ! is_array( $default_value ) ) {
@@ -892,6 +907,7 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @param array $args Field rendering arguments.
 	 * @return void
 	 */
 	protected function get_field_scripts_hook( $args ) {
@@ -1418,6 +1434,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.02
+	 *
+	 * @param mixed $value Value passed by reference.
 	 */
 	public function maybe_trim_excess_values( &$value ) {
 		// Override in a child class.

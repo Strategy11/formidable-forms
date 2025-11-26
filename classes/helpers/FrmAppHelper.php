@@ -909,6 +909,8 @@ class FrmAppHelper {
 	 * this MUST be done, else we'll be back to the '& entity' problem.
 	 *
 	 * @since 4.0.04
+	 *
+	 * @param mixed $value Value to decode, passed by reference.
 	 */
 	public static function decode_specialchars( &$value ) {
 		if ( is_array( $value ) ) {
@@ -928,7 +930,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.03.01
 	 *
-	 * @param string $string The string to prep.
+	 * @param string $string The string to prep, passed by reference.
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
@@ -972,8 +974,8 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param string       $value
-	 * @param array|string $allowed 'all' for everything included as defaults.
+	 * @param string       $value   The value to sanitize.
+	 * @param array|string $allowed Allowed HTML tags and attributes, or 'all' for defaults.
 	 *
 	 * @return string
 	 */
@@ -1640,7 +1642,8 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string $type
+	 * @param string      $type   Hook type slug.
+	 * @param object|null $object Optional related object.
 	 * @return void
 	 */
 	public static function trigger_hook_load( $type, $object = null ) {
@@ -2966,8 +2969,9 @@ class FrmAppHelper {
 	/**
 	 * Gets the time ago in words.
 	 *
-	 * @param int        $from In seconds.
-	 * @param int|string $to   In seconds.
+	 * @param int        $from   In seconds.
+	 * @param int|string $to     In seconds.
+	 * @param int|string $levels Number of time units to include or a specific unit.
 	 *
 	 * @return string $time_ago
 	 */
