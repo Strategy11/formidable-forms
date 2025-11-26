@@ -81,6 +81,11 @@ class FrmTransLiteListsController {
 	 * viewing a payment or subscription
 	 *
 	 * @since 6.5
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
