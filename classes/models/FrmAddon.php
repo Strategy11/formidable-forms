@@ -342,7 +342,7 @@ class FrmAddon {
 	 * @since 3.04.03
 	 *
 	 * @param string $file File path of the plugin.
-	 * @param array $plugin Plugin data.
+	 * @param array  $plugin Plugin data.
 	 * @return void
 	 */
 	public function maybe_show_license_message( $file, $plugin ) {
@@ -808,6 +808,7 @@ class FrmAddon {
 	}
 
 	/**
+	 * @param string $action
 	 * @return string
 	 */
 	public function send_mothership_request( $action ) {

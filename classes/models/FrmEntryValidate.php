@@ -320,8 +320,8 @@ class FrmEntryValidate {
 	 *
 	 * @since 6.21
 	 *
-	 * @param object $field_object The field object.
-	 * @param array|string $value  The value to validate.
+	 * @param object       $field_object The field object.
+	 * @param array|string $value        The value to validate.
 	 *
 	 * @return bool
 	 */
