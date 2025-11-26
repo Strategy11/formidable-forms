@@ -71,6 +71,10 @@ class FrmSimpleBlocksController {
 	 * Enqueue Formidable Simple Blocks' JS and CSS for the content.
 	 */
 	public static function block_assets() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
 		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style(
