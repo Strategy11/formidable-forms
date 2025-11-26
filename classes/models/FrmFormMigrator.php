@@ -454,7 +454,9 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param array $form
+	 * @param array      $form
+	 * @param int|string $form_id
+	 * @return void
 	 */
 	protected function create_emails( $form, $form_id ) {
 		foreach ( $form['actions'] as $action ) {

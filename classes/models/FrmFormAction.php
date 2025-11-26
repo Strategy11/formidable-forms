@@ -275,6 +275,7 @@ class FrmFormAction {
 	/**
 	 * @param false|int|string $form_id
 	 *
+	 * @param false|int|string $form_id
 	 * @return object
 	 */
 	public function prepare_new( $form_id = false ) {
@@ -307,6 +308,11 @@ class FrmFormAction {
 		return (object) $form_action;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return int|WP_Error
+	 */
 	public function create( $form_id ) {
 		$this->form_id = $form_id;
 
@@ -862,7 +868,7 @@ class FrmFormAction {
 	 * @param object $form
 	 * @param string $update
 	 *
-	 * @return void
+	 * @return int|WP_Error
 	 */
 	public function migrate_to_2( $form, $update = 'update' ) {
 		$action = $this->prepare_new( $form->id );

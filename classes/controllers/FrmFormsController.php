@@ -2465,6 +2465,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.2.7
+	 *
+	 * @param int|string $form_id
+	 * @return int
 	 */
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
@@ -3311,14 +3314,25 @@ class FrmFormsController {
 		return ! function_exists( 'aioseo' );
 	}
 
+	/**
+	 * @param string $tag
+	 * @param string $handle
+	 *
+	 * @return string
+	 */
 	public static function defer_script_loading( $tag, $handle ) {
-		if ( 'captcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
+		if ( 'captcha-api' === $handle && ! strpos( $tag, 'defer' ) ) {
 			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 
 		return $tag;
 	}
 
+	/**
+	 * @param string $location
+	 *
+	 * @return void
+	 */
 	public static function footer_js( $location = 'footer' ) {
 		global $frm_vars;
 
@@ -3334,6 +3348,11 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param array  $atts
+	 * @param string $content
+	 *
+	 * @return void
 	 */
 	private static function maybe_minimize_form( $atts, &$content ) {
 		// check if minimizing is turned on
@@ -3344,6 +3363,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param array $atts
 	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
@@ -3468,6 +3489,9 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 4.0
+	 *
+	 * @param array $values
+	 * @return void
 	 */
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
