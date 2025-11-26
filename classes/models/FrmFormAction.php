@@ -275,7 +275,6 @@ class FrmFormAction {
 	/**
 	 * @param false|int|string $form_id
 	 *
-	 * @param false|int|string $form_id
 	 * @return object
 	 */
 	public function prepare_new( $form_id = false ) {

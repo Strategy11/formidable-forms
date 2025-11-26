@@ -2823,6 +2823,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 
+	 * @param array $args
+	 * @reutrn void
 	 */
 	private static function load_page_after_submit( $args ) {
 		global $post;
