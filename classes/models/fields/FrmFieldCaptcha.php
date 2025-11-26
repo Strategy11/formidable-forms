@@ -135,6 +135,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * @param array $args
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {

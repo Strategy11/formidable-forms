@@ -158,6 +158,9 @@ class FrmXMLController {
 	 *
 	 * @since 4.06.02
 	 *
+	 * @param array  $form The posted form values.
+	 * @param string $url The URL to override.
+	 *
 	 * @return void
 	 */
 	private static function override_url( $form, &$url ) {
@@ -577,6 +580,9 @@ class FrmXMLController {
 	}
 
 	/**
+	 * Prepare the types array.
+	 *
+	 * @param array $type
 	 * @return void
 	 */
 	private static function prepare_types_array( &$type ) {
@@ -653,6 +659,9 @@ class FrmXMLController {
 	 *
 	 * @since 2.0.19
 	 *
+	 * @param int|false|string $form_id
+	 * @param string           $search
+	 * @param string           $fid
 	 * @return void
 	 */
 	public static function csv( $form_id = false, $search = '', $fid = '' ) {

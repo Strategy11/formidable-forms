@@ -549,6 +549,12 @@ class FrmFieldsHelper {
 	 * Get the class to use for the label position
 	 *
 	 * @since 2.05
+	 *
+	 * @param string             $position
+	 * @param array              $field
+	 * @param bool|object|string $form
+	 *
+	 * @return string
 	 */
 	public static function &label_position( $position, $field, $form ) {
 		if ( $position && $position != '' ) {
@@ -803,6 +809,9 @@ class FrmFieldsHelper {
 	 * Trim and sanitize the values
 	 *
 	 * @since 2.05
+	 *
+	 * @param array|string $value
+	 * @return string
 	 */
 	private static function get_value_for_comparison( $value ) {
 		// Remove white space from hide_opt
@@ -869,6 +878,11 @@ class FrmFieldsHelper {
 	 * Replace a few basic shortcodes and field ids
 	 *
 	 * @since 2.0
+	 *
+	 * @param string $value
+	 * @param object $form
+	 * @param object $entry
+	 *
 	 * @return string
 	 */
 	public static function basic_replace_shortcodes( $value, $form, $entry ) {
@@ -1121,6 +1135,11 @@ class FrmFieldsHelper {
 	 * Get the value to replace a few standard shortcodes
 	 *
 	 * @since 2.0
+	 *
+	 * @param string $tag
+	 * @param array  $atts
+	 * @param bool   $return_array
+	 *
 	 * @return string
 	 */
 	public static function dynamic_default_values( $tag, $atts = array(), $return_array = false ) {
@@ -1157,6 +1176,10 @@ class FrmFieldsHelper {
 	 * Process the [get] shortcode
 	 *
 	 * @since 2.0
+	 *
+	 * @param array  $atts
+	 * @param bool   $return_array
+	 *
 	 * @return array|string
 	 */
 	public static function process_get_shortcode( $atts, $return_array = false ) {
@@ -1218,6 +1241,10 @@ class FrmFieldsHelper {
 	 * Get a value from the user profile from the user ID
 	 *
 	 * @since 3.0
+	 *
+	 * @param int|string $user_id
+	 * @param string     $user_info
+	 * @param array      $args
 	 *
 	 * @return string
 	 */
@@ -2310,6 +2337,10 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 5.0.04
+	 *
+	 * @param array $options Options.
+	 * @param array $args    Arguments.
+	 * @return void
 	 */
 	private static function fill_image_setting_options( $options, &$args ) {
 		foreach ( $options as $key => $option ) {
@@ -2329,6 +2360,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 5.0.04
+	 *
+	 * @param array $option Option.
 	 *
 	 * @return array
 	 */
