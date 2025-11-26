@@ -907,6 +907,8 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string|null
 	 */
 	public static function get_form_style_class( $form = false ) {

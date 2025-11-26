@@ -415,6 +415,10 @@ class FrmEntry {
 	 * we can no longer use 'name', but check it as a fallback
 	 *
 	 * @since 2.0.11
+	 *
+	 * @param array        $values
+	 * @param array|string $default
+	 * @return string
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
 		$name = $values['item_name'] ?? $values['name'] ?? $default;

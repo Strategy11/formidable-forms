@@ -181,6 +181,9 @@ class FrmFormAction {
 
 	/**
 	 * @param string $id_base
+	 * @param string $name
+	 * @param array  $action_options
+	 * @param array  $control_options
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
@@ -265,6 +268,8 @@ class FrmFormAction {
 	}
 
 	/**
+	 * @param false|int|string $form_id
+	 *
 	 * @return object
 	 */
 	public function prepare_new( $form_id = false ) {
@@ -306,6 +311,9 @@ class FrmFormAction {
 	}
 
 	/**
+	 * @param int|string $form_id
+	 * @param int|string $old_id
+	 *
 	 * @return void
 	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
@@ -347,7 +355,10 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param object $action
+	 * @param object     $action
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	public function duplicate_one( $action, $form_id ) {
 		global $frm_duplicate_ids;
@@ -410,6 +421,10 @@ class FrmFormAction {
 	 * Deal with changed settings.
 	 *
 	 * Do NOT over-ride this function
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return array|null
 	 */
 	public function update_callback( $form_id ) {
 		$this->form_id = $form_id;

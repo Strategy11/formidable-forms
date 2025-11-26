@@ -813,6 +813,9 @@ class FrmAddonsController {
 	}
 
 	/**
+	 * @param string $file_name
+	 * @param string $slug
+	 *
 	 * @return bool
 	 */
 	private static function is_plugin_active( $file_name, $slug ) {

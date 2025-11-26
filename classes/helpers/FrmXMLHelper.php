@@ -357,6 +357,9 @@ class FrmXMLHelper {
 
 	/**
 	 * Delete any fields attached to this form that were not included in the template
+	 *
+	 * @param array $form_fields
+	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
 		if ( ! empty( $form_fields ) ) {
@@ -434,6 +437,12 @@ class FrmXMLHelper {
 	 * @since 2.0.13
 	 *
 	 * TODO: Cut down on params
+	 *
+	 * @param SimpleXMLElement $xml_fields
+	 * @param int|string       $form_id
+	 * @param object           $this_form
+	 * @param array            $form_fields
+	 * @param array            $imported
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
 		$in_section                = 0;
@@ -550,6 +559,9 @@ class FrmXMLHelper {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @param array $f
+	 * @return void
 	 */
 	private static function set_default_value( &$f ) {
 		$has_default = array(
@@ -578,6 +590,9 @@ class FrmXMLHelper {
 	 * Make sure the required indicator is set.
 	 *
 	 * @since 4.05
+	 *
+	 * @param array $f
+	 * @return void
 	 */
 	private static function maybe_add_required( &$f ) {
 		if ( $f['required'] && ! isset( $f['field_options']['required_indicator'] ) ) {
@@ -591,6 +606,7 @@ class FrmXMLHelper {
 	 * @since 2.0.25
 	 * @param int   $in_section
 	 * @param array $f
+	 * @return void
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
 		// If we're at the end of a section, switch $in_section is 0
@@ -639,6 +655,7 @@ class FrmXMLHelper {
 	 *
 	 * @param array $imported
 	 * @param array $f
+	 * @return void
 	 */
 	private static function maybe_update_get_values_form_setting( $imported, &$f ) {
 		if ( ! isset( $imported['forms'] ) ) {
@@ -657,6 +674,9 @@ class FrmXMLHelper {
 	 * If field settings have been migrated, update the values during import.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $f
+	 * @return void
 	 */
 	private static function run_field_migrations( &$f ) {
 		self::migrate_placeholders( $f );
@@ -665,6 +685,9 @@ class FrmXMLHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $f
+	 * @return void
 	 */
 	private static function migrate_placeholders( &$f ) {
 		$update_values = self::migrate_field_placeholder( $f, 'clear_on_focus' );
@@ -683,6 +706,10 @@ class FrmXMLHelper {
 	 * Also called during database migration in FrmMigrate.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $field
+	 * @param string $type
+	 *
 	 * @return array
 	 */
 	public static function migrate_field_placeholder( $field, $type ) {
@@ -731,6 +758,7 @@ class FrmXMLHelper {
 	 *
 	 * @param array $f
 	 * @param array $imported
+	 * @return void
 	 */
 	private static function create_imported_field( $f, &$imported ) {
 		$f = self::update_field_options_with_defaults( $f );
@@ -786,6 +814,7 @@ class FrmXMLHelper {
 	 * @since 4.07
 	 * @param int   $form_id
 	 * @param array $keys_by_original_field_id
+	 * @return void
 	 */
 	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
 		global $frm_duplicate_ids;
@@ -827,6 +856,7 @@ class FrmXMLHelper {
 	 * @since 2.0.19
 	 *
 	 * @param array $form
+	 * @return void
 	 */
 	private static function update_custom_style_setting_on_import( &$form ) {
 		if ( ! isset( $form['options']['custom_style'] ) ) {
@@ -864,6 +894,9 @@ class FrmXMLHelper {
 	 * and link them back up.
 	 *
 	 * @since 2.2.7
+	 *
+	 * @param int|string $form_id
+	 * @return void
 	 */
 	private static function update_custom_style_setting_after_import( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
@@ -1016,6 +1049,7 @@ class FrmXMLHelper {
 	 * Clears styles from cache for imported forms
 	 *
 	 * @param array $imported_forms
+	 * @return void
 	 */
 	private static function clear_forms_style_caches( $imported_forms ) {
 		$where = array(

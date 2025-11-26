@@ -213,6 +213,12 @@ abstract class FrmFormMigrator {
 		// customize this function
 	}
 
+	/**
+	 * @param array $fields
+	 * @param array $form
+	 *
+	 * @return void
+	 */
 	protected function prepare_fields( $fields, &$form ) {
 		$field_order = 1;
 

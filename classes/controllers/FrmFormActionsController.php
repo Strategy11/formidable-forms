@@ -119,6 +119,10 @@ class FrmFormActionsController {
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $action_controls
+	 * @param array $groups
+	 * @return void
 	 */
 	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
 		$grouped = array();
@@ -457,6 +461,9 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param string $action_type
+	 *
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
@@ -464,6 +471,12 @@ class FrmFormActionsController {
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 *
+	 * @return object
+	 */
 	private static function fields_to_values( $form_id, array &$values ) {
 		$form = FrmForm::getOne( $form_id );
 
@@ -553,6 +566,13 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param int|string $form_id
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
 		$filter_args             = $args;
 		$filter_args['entry_id'] = $entry_id;

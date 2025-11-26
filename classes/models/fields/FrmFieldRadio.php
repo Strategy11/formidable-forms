@@ -93,6 +93,8 @@ class FrmFieldRadio extends FrmFieldType {
 	/**
 	 * @since 4.06
 	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {

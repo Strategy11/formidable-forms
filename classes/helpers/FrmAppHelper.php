@@ -2460,7 +2460,9 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param string $handle
+	 * @param string     $handle
+	 * @param int|string $default
+	 * @return int|string
 	 */
 	public static function script_version( $handle, $default = 0 ) {
 		global $wp_scripts;
@@ -3815,6 +3817,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.0.01
 	 *
+	 * @param string $min_version
 	 * @return void
 	 */
 	public static function min_pro_version_notice( $min_version ) {

@@ -1164,6 +1164,10 @@ DEFAULT_HTML;
 	 * using the frm_field_input_html hook
 	 *
 	 * @since 3.01.03
+	 *
+	 * @param array  $args
+	 * @param string $input_html
+	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		// override from other fields
@@ -1171,6 +1175,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @param array  $args
+	 * @param string $input_html
 	 *
 	 * @return void
 	 */
@@ -1270,6 +1277,12 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 
+	/**
+	 * @param string $selected
+	 * @param array  $args
+	 *
+	 * @return string
+	 */
 	protected function show_single_hidden( $selected, $args ) {
 		if ( $args['save_array'] ) {
 			$args['field_name'] .= '[]';
@@ -1283,6 +1296,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values
+	 *
+	 * @return string
 	 */
 	protected function get_select_box( $values ) {
 		$options  = $this->get_field_column( 'options' );
