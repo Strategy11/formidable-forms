@@ -358,7 +358,7 @@ class FrmFormAction {
 	 * @param object     $action
 	 * @param int|string $form_id
 	 *
-	 * @return void
+	 * @return int|WP_Error
 	 */
 	public function duplicate_one( $action, $form_id ) {
 		global $frm_duplicate_ids;
