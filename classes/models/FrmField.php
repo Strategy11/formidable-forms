@@ -97,15 +97,6 @@ class FrmField {
 	}
 
 	public static function pro_field_selection() {
-		$make_tracked_url = static function ( $url ) {
-			$utm_params = array(
-				'utm_source'   => 'WordPress',
-				'utm_medium'   => 'form-builder-add-fields',
-				'utm_campaign' => 'liteplugin',
-			);
-			return FrmAppHelper::make_affiliate_url( add_query_arg( $utm_params, $url ) );
-		};
-
 		$upsell_images_url = FrmAppHelper::plugin_url() . '/images/upsell/';
 		$fields            = array(
 			'file'            => array(
@@ -113,7 +104,7 @@ class FrmField {
 				'icon'         => 'frm_icon_font frm_upload3_icon',
 				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/features/wordpress-multiple-file-upload-form/' ),
+				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
@@ -121,77 +112,77 @@ class FrmField {
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ranking-field-preview.webp',
 				'addon'        => 'surveys',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/ranking-survey/' ),
+				'learn-more'   => 'ranking-survey',
 			),
 			'rte'             => array(
 				'name'         => __( 'Rich Text', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_align_right_icon',
 				'message'      => __( 'Go beyond plain text, let your users format their content with bolding, italics, links, lists and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'rich-text-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/rich-text/' ),
+				'learn-more'   => 'rich-text',
 			),
 			'date'            => array(
 				'name'         => __( 'Date', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_calendar2_icon',
 				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'date-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/date/' ),
+				'learn-more'   => 'date',
 			),
 			'time'            => array(
 				'name'         => __( 'Time', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_clock_icon',
 				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'time-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/time/' ),
+				'learn-more'   => 'time',
 			),
 			'scale'           => array(
 				'name'         => __( 'Scale', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_linear_scale_icon',
 				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'scale-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/scale/' ),
+				'learn-more'   => 'scale',
 			),
 			'star'            => array(
 				'name'         => __( 'Star Rating', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_star2_icon',
 				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'star-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/star-ratings/' ),
+				'learn-more'   => 'star-ratings',
 			),
 			'range'           => array(
 				'name'         => __( 'Slider', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_code_commit_icon',
 				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'slider-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/slider/' ),
+				'learn-more'   => 'slider',
 			),
 			'toggle'          => array(
 				'name'         => __( 'Toggle', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_toggle_on_icon',
 				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'toggle-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/toggle/' ),
+				'learn-more'   => 'toggle',
 			),
 			'data'            => array(
 				'name'         => __( 'Dynamic', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_dynamic_icon',
 				'message'      => __( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'dynamic-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/dynamic/' ),
+				'learn-more'   => 'dynamic',
 			),
 			'lookup'          => array(
 				'name'         => __( 'Lookup', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_search_icon',
 				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'lookup-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/lookup/' ),
+				'learn-more'   => 'lookup',
 			),
 			'divider|repeat'  => array(
 				'name'         => __( 'Repeater', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_refresh_icon',
 				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'repeater-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/repeatable-section/' ),
+				'learn-more'   => 'repeatable-section',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
@@ -202,21 +193,21 @@ class FrmField {
 				'icon'         => 'frm_icon_font frm_header_icon',
 				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'section-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/section-heading/' ),
+				'learn-more'   => 'section-heading',
 			),
 			'break'           => array(
 				'name'         => __( 'Page Break', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_page_break_icon',
 				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'page-break-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/page-breaks/' ),
+				'learn-more'   => 'page-breaks',
 			),
 			'form'            => array(
 				'name'         => __( 'Embed Form', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_file_text2_icon',
 				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'embed-form-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/embed-form/' ),
+				'learn-more'   => 'embed-form',
 			),
 			'likert'          => array(
 				'name'         => __( 'Likert Scale', 'formidable' ),
@@ -224,7 +215,7 @@ class FrmField {
 				'addon'        => 'surveys',
 				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'likert-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/likert-scale/' ),
+				'learn-more'   => 'likert-scale',
 			),
 			'nps'             => array(
 				'name'         => __( 'NPS', 'formidable' ),
@@ -232,21 +223,21 @@ class FrmField {
 				'addon'        => 'surveys',
 				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/net-promoter-score/' ),
+				'learn-more'   => 'net-promoter-score',
 			),
 			'password'        => array(
 				'name'         => __( 'Password', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_lock_closed2_icon',
 				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'password-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/password-2/' ),
+				'learn-more'   => 'password-2',
 			),
 			'tag'             => array(
 				'name'         => __( 'Tags', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_price_tags2_icon',
 				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'tags-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/tags/' ),
+				'learn-more'   => 'tags',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -259,14 +250,14 @@ class FrmField {
 				'icon'         => 'frm_icon_font frm_location2_icon',
 				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'address-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/address/' ),
+				'learn-more'   => 'address',
 			),
 			'summary'         => array(
 				'name'         => __( 'Summary', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_file_text3_icon',
 				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'summary-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/summary-review-before-submit/' ),
+				'learn-more'   => 'summary-review-before-submit',
 			),
 			'signature'       => array(
 				'name'         => __( 'Signature', 'formidable' ),
@@ -274,7 +265,7 @@ class FrmField {
 				'addon'        => 'signature',
 				'message'      => __( 'Capture digital e-signatures directly within your form, making official agreements and authorizations straightforward.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'signature-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/formidable-signature/' ),
+				'learn-more'   => 'formidable-signature',
 			),
 			'ai'              => array(
 				'name'         => __( 'AI', 'formidable' ),
@@ -282,7 +273,7 @@ class FrmField {
 				'addon'        => 'ai',
 				'message'      => __( 'Harness artificial intelligence by taking user input and let the model of your choice create an output, quickly and easily.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ai-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/form-ai/' ),
+				'learn-more'   => 'form-ai',
 			),
 			'ssa-appointment' => array(
 				'name'         => __( 'Appointment', 'formidable' ),
@@ -296,7 +287,7 @@ class FrmField {
 				),
 				'link'         => 'https://simplyscheduleappointments.com/meet/formidable/',
 				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/knowledgebase/simply-schedule-appointments-forms/' ),
+				'learn-more'   => 'simply-schedule-appointments-forms',
 			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
@@ -304,7 +295,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/features/pricing-fields/' ),
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'quantity'        => array(
 				'name'         => __( 'Quantity', 'formidable' ),
@@ -312,7 +303,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/features/pricing-fields/' ),
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'total'           => array(
 				'name'         => __( 'Total', 'formidable' ),
@@ -320,7 +311,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
-				'learn-more'   => $make_tracked_url( 'https://formidableforms.com/features/pricing-fields/' ),
+				'learn-more'   => 'features/pricing-fields',
 			),
 		);
 
