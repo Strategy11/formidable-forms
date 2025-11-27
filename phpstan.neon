@@ -58,7 +58,6 @@ parameters:
 		-
 			message: '#Possibly invalid array key type#'
 			paths:
-				- classes/helpers/FrmCSVExportHelper.php
 				- classes/helpers/FrmFormsListHelper.php
 		-
 			message: '#get_mailer\(\) expects#'
@@ -147,7 +146,6 @@ parameters:
 				- classes/controllers/FrmAddonsController.php
 				- classes/controllers/FrmAppController.php
 				- classes/controllers/FrmFormsController.php
-				- classes/controllers/FrmEntriesController.php
 				- classes/controllers/FrmStylesController.php
 				- classes/models/FrmSalesApi.php
 				- square/controllers/FrmSquareLiteAppController.php
