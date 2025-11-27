@@ -355,6 +355,12 @@ class FrmEntriesHelper {
 	 * Init arrays if necessary, else we get fatal error.
 	 *
 	 * @since 4.01
+	 *
+	 * @param object $field Field object.
+	 * @param mixed  $value Value to set.
+	 * @param array  $args  Additional arguments.
+	 *
+	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
 		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -398,6 +404,11 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 *
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Additional arguments.
+	 *
+	 * @return mixed
 	 */
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
@@ -414,9 +425,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
@@ -455,9 +466,9 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
 		if ( ! $args['parent_field_id'] ) {
@@ -642,6 +653,9 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Action dropdown attributes.
+	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {
 		$id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
@@ -675,6 +689,10 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int          $id    Entry ID.
+	 * @param array|object $entry Entry object.
+	 * @return array
 	 */
 	private static function get_action_links( $id, $entry ) {
 		$page    = FrmAppHelper::get_param( 'frm_action' );

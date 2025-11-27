@@ -113,14 +113,4 @@ class FrmInboxController {
 			$message->dismiss( 'free_templates' );
 		}
 	}
-
-	/**
-	 * @since 4.06
-	 * @deprecated 6.16
-	 *
-	 * @return void
-	 */
-	public static function dismiss_all_button( $atts ) {
-		_deprecated_function( __METHOD__, '6.16' );
-	}
 }

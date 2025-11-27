@@ -19,7 +19,6 @@
 		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
 		<exclude name="Squiz.Commenting.VariableComment.Missing" />
 		<exclude name="Squiz.Commenting.ClassComment.Missing" />
-		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
 		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 

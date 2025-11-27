@@ -59,6 +59,8 @@ if ( is_array( spl_autoload_functions() ) && in_array( '__autoload', spl_autoloa
 spl_autoload_register( 'frm_forms_autoloader' );
 
 /**
+ * @param string $class_name Class name.
+ *
  * @return void
  */
 function frm_forms_autoloader( $class_name ) {
@@ -74,6 +76,9 @@ function frm_forms_autoloader( $class_name ) {
  * Autoload the Formidable and Pro classes
  *
  * @since 3.0
+ *
+ * @param string $class_name Class name.
+ * @param string $filepath   File path.
  *
  * @return void
  */

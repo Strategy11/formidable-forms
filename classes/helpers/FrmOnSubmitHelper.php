@@ -427,6 +427,8 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.1.1
 	 *
+	 * @param array $atts 
+	 *
 	 * @return string
 	 */
 	public static function current_event( $atts ) {
