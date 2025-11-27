@@ -8,6 +8,7 @@ const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
 const { useState, useEffect } = wp.element;
+const { useBlockProps } = wp.blockEditor;
 
 const blockData = formidable_form_selector; // eslint-disable-line camelcase
 const upgradeLink = blockData.viewsAddon.hasAccess ? blockData.viewsAddon.link : blockData.link;
@@ -61,35 +62,39 @@ registerBlockType( 'formidable/simple-view', {
 			marginTop: '24px'
 		};
 
-		return (
-			<div className="frm-block-intro-screen">
-				<div className="frm-block-intro-content">
-					<FormidableIcon></FormidableIcon>
-					<div className="frm-block-title">{ blockName }</div>
-					<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
-						{ ! blockData.viewsAddon.hasAccess &&
-							<Notice status="warning" isDismissible={ false }>
-								<div style={ { maxWidth: '500px', margin: 'auto' } }>
-									{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
-								</div>
-								<br />
-								<a href={ upgradeLink } rel="noreferrer" target="_blank" >
-									{ __( 'Upgrade Formidable Forms', 'formidable' ) }
-								</a>
-							</Notice>
+		const blockProps = useBlockProps();
 
-						}
-						{ blockData.viewsAddon.hasAccess &&
-							<Notice status="warning" isDismissible={ false }>
-								<div style={ { maxWidth: '500px', margin: 'auto' } }>
-									{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
-								</div>
-								<br />
-								<button className={ addonActivateButton.classnames } onClick={ activateViewsAddon } type="button"> { addonActivateButton.label } </button>
-							</Notice>
-						}
-						<div style={ imageWrapperStyles }>
-							<img src={ blockData.url + '/images/blocks/views-block-placeholder.jpg' } alt={ blockName } style={ imageStyles } />
+		return (
+			<div { ...blockProps }>
+				<div className="frm-block-intro-screen">
+					<div className="frm-block-intro-content">
+						<FormidableIcon></FormidableIcon>
+						<div className="frm-block-title">{ blockName }</div>
+						<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
+							{ ! blockData.viewsAddon.hasAccess &&
+								<Notice status="warning" isDismissible={ false }>
+									<div style={ { maxWidth: '500px', margin: 'auto' } }>
+										{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
+									</div>
+									<br />
+									<a href={ upgradeLink } rel="noreferrer" target="_blank" >
+										{ __( 'Upgrade Formidable Forms', 'formidable' ) }
+									</a>
+								</Notice>
+
+							}
+							{ blockData.viewsAddon.hasAccess &&
+								<Notice status="warning" isDismissible={ false }>
+									<div style={ { maxWidth: '500px', margin: 'auto' } }>
+										{ __( 'Effortlessly transform form data into webpages with Views, the only integrated form & application builder.', 'formidable' ) }
+									</div>
+									<br />
+									<button className={ addonActivateButton.classnames } onClick={ activateViewsAddon } type="button"> { addonActivateButton.label } </button>
+								</Notice>
+							}
+							<div style={ imageWrapperStyles }>
+								<img src={ blockData.url + '/images/blocks/views-block-placeholder.jpg' } alt={ blockName } style={ imageStyles } />
+							</div>
 						</div>
 					</div>
 				</div>

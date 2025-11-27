@@ -5,6 +5,7 @@ import FormidableIcon from '../common/components/icon';
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
+const { useBlockProps } = wp.blockEditor;
 
 const UpgradeNotice = ( { text, buttonText, link } ) => (
 	<Notice status="warning" isDismissible={ false }>
@@ -41,28 +42,32 @@ registerBlockType( 'frm-modal/modal', {
 			marginTop: '24px',
 		};
 
-		return (
-			<div className="frm-block-intro-screen">
-				<div className="frm-block-intro-content">
-					<FormidableIcon></FormidableIcon>
-					<div className="frm-block-title">{ blockName }</div>
-					<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
-						{ formidable_form_selector.modalAddon.hasAccess ? (
-							<UpgradeNotice
-								text={ __( 'This site does not have popup modals active.', 'formidable' ) }
-								buttonText={ __( 'Install Formidable Modals', 'formidable' ) }
-								link={ formidable_form_selector.modalAddon.link }
-							/>
-						) : (
-							<UpgradeNotice
-								text={ __( 'This site does not have popup modals.', 'formidable' ) }
-								buttonText={ __( 'Upgrade Formidable Forms', 'formidable' ) }
-								link={ formidable_form_selector.link }
-							/>
-						) }
+		const blockProps = useBlockProps();
 
-						<div style={ imageWrapperStyles }>
-							<img src={ formidable_form_selector.url + '/images/modal.png' } alt={ blockName } style={ imageStyles } />
+		return (
+			<div { ...blockProps }>
+				<div className="frm-block-intro-screen">
+					<div className="frm-block-intro-content">
+						<FormidableIcon></FormidableIcon>
+						<div className="frm-block-title">{ blockName }</div>
+						<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
+							{ formidable_form_selector.modalAddon.hasAccess ? (
+								<UpgradeNotice
+									text={ __( 'This site does not have popup modals active.', 'formidable' ) }
+									buttonText={ __( 'Install Formidable Modals', 'formidable' ) }
+									link={ formidable_form_selector.modalAddon.link }
+								/>
+							) : (
+								<UpgradeNotice
+									text={ __( 'This site does not have popup modals.', 'formidable' ) }
+									buttonText={ __( 'Upgrade Formidable Forms', 'formidable' ) }
+									link={ formidable_form_selector.link }
+								/>
+							) }
+
+							<div style={ imageWrapperStyles }>
+								<img src={ formidable_form_selector.url + '/images/modal.png' } alt={ blockName } style={ imageStyles } />
+							</div>
 						</div>
 					</div>
 				</div>

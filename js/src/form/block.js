@@ -9,6 +9,7 @@ import FormidableIcon from '../common/components/icon';
 import FormSelect from './formselect';
 import { cssHideAdvancedSettings } from '../common/utilities/values';
 
+const { useBlockProps } = wp.blockEditor;
 const { Fragment } = wp.element;
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
@@ -31,26 +32,32 @@ registerBlockType( 'formidable/simple-form', {
 
 		const forms = formidable_form_selector.forms;
 
+		const blockProps = useBlockProps();
+
 		if ( forms.length === 0 ) {
 			return (
-				<Notice status="warning" isDismissible={ false }>
-					{ __( 'This site does not have any forms.', 'formidable' ) }
-				</Notice>
+				<div { ...blockProps }>
+					<Notice status="warning" isDismissible={ false }>
+						{ __( 'This site does not have any forms.', 'formidable' ) }
+					</Notice>
+				</div>
 			);
 		}
 
 		if ( ! formId ) {
 			return (
-				<div className="frm-block-intro-screen">
-					<div className="frm-block-intro-content">
-						<FormidableIcon></FormidableIcon>
-						<div className="frm-block-title">{ formidable_form_selector.name }</div>
-						<div className="frm-block-selector-screen">
-							<FormSelect
-								formId={ formId }
-								setAttributes={ setAttributes }
-								forms={ forms }
-							/>
+				<div { ...blockProps }>
+					<div className="frm-block-intro-screen">
+						<div className="frm-block-intro-content">
+							<FormidableIcon></FormidableIcon>
+							<div className="frm-block-title">{ formidable_form_selector.name }</div>
+							<div className="frm-block-selector-screen">
+								<FormSelect
+									formId={ formId }
+									setAttributes={ setAttributes }
+									forms={ forms }
+								/>
+							</div>
 						</div>
 					</div>
 				</div>
@@ -58,7 +65,7 @@ registerBlockType( 'formidable/simple-form', {
 		}
 
 		return (
-			<Fragment>
+			<div { ...blockProps }>
 				<Inspector
 					attributes={ attributes }
 					setAttributes={ setAttributes }
@@ -69,7 +76,7 @@ registerBlockType( 'formidable/simple-form', {
 					block="formidable/simple-form"
 					attributes={ attributes }
 				></ServerSideRender>
-			</Fragment>
+			</div>
 		);
 	},
 
