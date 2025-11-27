@@ -473,6 +473,7 @@
 		<PossiblyFalseIterator>
 			<errorLevel type="suppress">
 				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
 			</errorLevel>
 		</PossiblyFalseIterator>
 		<UndefinedMethod>
@@ -539,6 +540,7 @@
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmPersonalData.php" />
 				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="stripe/controllers/FrmStrpLiteEventsController.php" />
 			</errorLevel>
 		</PossiblyNullIterator>
 	</issueHandlers>
