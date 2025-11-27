@@ -10,6 +10,9 @@ class FrmSquareLiteEventsController {
 	 */
 	public static $events_to_skip_option_name = 'frm_square_events_to_skip';
 
+	/**
+	 * @var object|null
+	 */
 	private $event;
 
 	/**

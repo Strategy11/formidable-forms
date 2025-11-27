@@ -13,8 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSolution {
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_slug = '';
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_file = '';
 
 	/**
@@ -25,6 +31,9 @@ class FrmSolution {
 	 */
 	protected $page = '';
 
+	/**
+	 * @var string
+	 */
 	protected $icon = 'frm_icon_font frm_settings_icon';
 
 	/**

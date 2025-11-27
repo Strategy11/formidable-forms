@@ -5,10 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmReviews {
 
+	/**
+	 * @var string
+	 */
 	private $option_name = 'frm_reviewed';
 
+	/**
+	 * @var array
+	 */
 	private $review_status = array();
 
+	/**
+	 * @var string
+	 */
 	private $inbox_key = 'review';
 
 	/**

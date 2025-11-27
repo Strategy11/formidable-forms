@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormsListHelper extends FrmListHelper {
+
+	/**
+	 * @var string
+	 */
 	public $status = '';
 
 	public $total_items = 0;

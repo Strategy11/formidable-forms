@@ -4,9 +4,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmDb {
+
+	/**
+	 * The table name for Formidable Fields.
+	 *
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * The table name for Formidable Forms.
+	 *
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * The table name for Formidable Entries.
+	 *
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * The table name for Formidable Entry Metas.
+	 *
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {

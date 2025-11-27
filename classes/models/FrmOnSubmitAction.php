@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmOnSubmitAction extends FrmFormAction {
 
+	/**
+	 * @var string
+	 */
 	public static $slug = 'on_submit';
 
 	public function __construct() {

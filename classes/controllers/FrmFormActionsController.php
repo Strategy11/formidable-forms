@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormActionsController {
+
+	/**
+	 * @var string
+	 */
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
@@ -779,6 +783,10 @@ class FrmFormActionsController {
 }
 
 class Frm_Form_Action_Factory {
+
+	/**
+	 * @var array
+	 */
 	public $actions = array();
 
 	public function __construct() {

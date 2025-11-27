@@ -5,7 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmField {
 
+	/**
+	 * @var bool
+	 */
 	public static $use_cache      = true;
+
+	/**
+	 * @var int
+	 */
 	public static $transient_size = 200;
 
 	/**

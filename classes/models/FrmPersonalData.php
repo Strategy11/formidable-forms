@@ -5,8 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPersonalData {
 
+	/**
+	 * @var int
+	 */
 	private $limit = 200;
 
+	/**
+	 * @var int
+	 */
 	private $page = 1;
 
 	public function __construct() {

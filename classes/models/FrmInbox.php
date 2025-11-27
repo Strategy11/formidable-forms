@@ -10,8 +10,14 @@ class FrmInbox extends FrmFormApi {
 
 	protected $cache_key;
 
+	/**
+	 * @var string
+	 */
 	private $option = 'frm_inbox';
 
+	/**
+	 * @var array|false
+	 */
 	private static $messages = false;
 
 	/**

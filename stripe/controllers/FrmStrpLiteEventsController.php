@@ -10,9 +10,24 @@ class FrmStrpLiteEventsController {
 	 */
 	public static $events_to_skip_option_name = 'frm_strp_events_to_skip';
 
+	/**
+	 * @var object|null
+	 */
 	private $event;
+
+	/**
+	 * @var object|null
+	 */
 	private $invoice;
+
+	/**
+	 * @var string|null
+	 */
 	private $charge;
+
+	/**
+	 * @var string|null
+	 */
 	private $status;
 
 	/**

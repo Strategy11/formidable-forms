@@ -4,9 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmMigrate {
+
+	/**
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {
