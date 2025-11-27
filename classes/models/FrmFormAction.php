@@ -657,7 +657,7 @@ class FrmFormAction {
 	 * @param int    $action_id
 	 * @param string $type
 	 *
-	 * @return bool|FrmFormAction
+	 * @return bool|object
 	 */
 	public static function get_single_action_type( $action_id, $type ) {
 		if ( ! $type ) {
