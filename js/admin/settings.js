@@ -31,7 +31,7 @@
 		}
 	}
 
-	function handleClickEvent( e ) {
+	function handleClickDismissDefaultEmailMessage( e ) {
 		if ( ! e.target.classList.contains( 'frm_dismiss_default_email_message' ) ) {
 			return;
 		}
@@ -65,6 +65,10 @@
 
 		if ( 'frm-send-test-email-btn' === e.target.id ) {
 			handleClickSendTestEmailBtn( e );
+		}
+		if ( e.target.classList.contains( 'frm_dismiss_default_email_message' ) ) {
+			handleClickDismissDefaultEmailMessage( e );
+			return;
 		}
 	}
 
