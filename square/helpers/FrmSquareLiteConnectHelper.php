@@ -201,7 +201,7 @@ class FrmSquareLiteConnectHelper {
 			return 'Response from server was not successful';
 		}
 
-		return isset( $body->data ) ? $body->data : array();
+		return $body->data ?? array();
 	}
 
 	private static function pull_response_body( $response ) {
