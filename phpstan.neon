@@ -32,17 +32,14 @@ parameters:
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
 		- '#is always (false|true)+.#'
 		- '#no value type specified.#'
-		- '#of echo cannot be converted to string.#'
 		- '#only iterables are supported#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
 		- '#in isset\(\) does not exist.#'
 		- '#is unused.#'
-		- '#is never read, only written#'
 		- '#in empty\(\) is not falsy.#'
 		- '#always exists and is not falsy.#'
-		- '#of function random_int expects lower number#'
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
 		- "#on left side of ??#"
 		-
@@ -161,3 +158,19 @@ parameters:
 		-
 			message: '#in isset\(\) is not nullable#'
 			path: stripe/helpers/FrmTransLiteAppHelper.php
+		-
+			message: '#of echo cannot be converted to string.#'
+			paths:
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmListHelper.php
+				- classes/views/frm-entries/show.php
+				- classes/views/frm-forms/add_field.php
+		-
+			message: '#is never read, only written#'
+			path: classes/helpers/FrmFieldGridHelper.php
+		-
+			message: '#of function random_int expects lower number#'
+			path: classes/helpers/FrmTipsHelper.php
+		
