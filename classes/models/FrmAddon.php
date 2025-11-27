@@ -69,12 +69,22 @@ class FrmAddon {
 		new static();
 	}
 
+	/**
+	 * @param array $plugins
+	 *
+	 * @return array
+	 */
 	public function insert_installed_addon( $plugins ) {
 		$plugins[ $this->plugin_slug ] = $this;
 
 		return $plugins;
 	}
 
+	/**
+	 * @param string $plugin_slug
+	 *
+	 * @return false|FrmAddon
+	 */
 	public static function get_addon( $plugin_slug ) {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 		$plugin  = false;
@@ -220,6 +230,11 @@ class FrmAddon {
 		return defined( $constant_name ) ? constant( $constant_name ) : false;
 	}
 
+	/**
+	 * @param string $license
+	 *
+	 * @return void
+	 */
 	public function set_license( $license ) {
 		update_option( $this->option_name . 'key', $license );
 	}
@@ -274,6 +289,11 @@ class FrmAddon {
 		$this->license = '';
 	}
 
+	/**
+	 * @param bool $is_active
+	 *
+	 * @return void
+	 */
 	public function set_active( $is_active ) {
 		$this->delete_cache();
 		FrmAppHelper::save_combined_js();
@@ -385,6 +405,11 @@ class FrmAddon {
 		echo '</p></div></td></tr>';
 	}
 
+	/**
+	 * @param mixed $transient
+	 *
+	 * @return mixed
+	 */
 	public function clear_expired_download( $transient ) {
 		if ( ! is_object( $transient ) ) {
 			return $transient;
@@ -502,6 +527,11 @@ class FrmAddon {
 		}
 	}
 
+	/**
+	 * @param object $transient
+	 *
+	 * @return bool
+	 */
 	private function is_current_version( $transient ) {
 		if ( empty( $transient->checked ) || ! isset( $transient->checked[ $this->plugin_folder ] ) ) {
 			return false;

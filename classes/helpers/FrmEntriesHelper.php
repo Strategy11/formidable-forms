@@ -22,10 +22,10 @@ class FrmEntriesHelper {
 	const DRAFT_ENTRY_STATUS = 1;
 
 	/**
-	 * @param array       $fields
+	 * @param array         $fields
 	 * @param object|string $form
-	 * @param bool        $reset
-	 * @param array       $args
+	 * @param bool          $reset
+	 * @param array         $args
 	 *
 	 * @return array
 	 */

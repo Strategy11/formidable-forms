@@ -176,17 +176,9 @@ parameters:
 		-
 			message: '#with no type specified#'
 			paths:
-				- classes/controllers/FrmEmailStylesController.php
-				- classes/controllers/FrmFieldsController.php
 				- classes/helpers/FrmFieldsHelper.php
 				- classes/helpers/FrmFormsHelper.php
-				- classes/helpers/FrmXMLHelper.php
 				- classes/models/fields/FrmFieldType.php
 				- classes/models/FrmForm.php
-				- classes/models/FrmAddon.php
-				- square/helpers/FrmSquareLiteConnectHelper.php
-				- classes/models/FrmEntryValidate.php
-				- classes/models/FrmEntryFormatter.php
-				- classes/helpers/FrmListHelper.php
 				- classes/helpers/FrmAppHelper.php
 				- stubs.php

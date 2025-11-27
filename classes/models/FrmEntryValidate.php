@@ -84,6 +84,11 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	private static function set_item_key( &$values ) {
 		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
 			global $wpdb;
@@ -92,6 +97,12 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array        $values
+	 * @param array|string $exclude
+	 *
+	 * @return array
+	 */
 	private static function get_fields_to_validate( $values, $exclude ) {
 		$where = apply_filters( 'frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
 
@@ -116,6 +127,14 @@ class FrmEntryValidate {
 		return apply_filters( 'frm_fields_to_validate', $fields, compact( 'values', 'exclude', 'where' ) );
 	}
 
+	/**
+	 * @param object $posted_field
+	 * @param array  $errors
+	 * @param array  $values
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
 		$defaults = array(
 			'id'              => $posted_field->id,
@@ -387,6 +406,14 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $posted_field
+	 * @param mixed  $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field_types( &$errors, $posted_field, $value, $args ) {
 		$field_obj      = FrmFieldFactory::get_field_object( $posted_field );
 		$args['value']  = $value;
@@ -398,6 +425,14 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $field
+	 * @param string $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		$format_value = FrmField::get_option( $field, 'format' );
 
@@ -410,6 +445,11 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 *
+	 * @return string
+	 */
 	public static function phone_format( $field ) {
 		if ( FrmField::is_option_empty( $field, 'format' ) ) {
 			$pattern = self::default_phone_format();
@@ -639,6 +679,11 @@ class FrmEntryValidate {
 		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_site_info_to_akismet( &$datas ) {
 		$datas['blog']         = FrmAppHelper::site_url();
 		$datas['user_ip']      = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
@@ -652,6 +697,12 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array $datas
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	private static function add_user_info_to_akismet( &$datas, $values ) {
 		$user_info = self::get_spam_check_user_info( $values );
 		$datas     = $datas + $user_info;
@@ -830,6 +881,11 @@ class FrmEntryValidate {
 		return self::$name_text_fields[ $form_id ];
 	}
 
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_server_values_to_akismet( &$datas ) {
 		foreach ( $_SERVER as $key => $value ) {
 			$include_value = is_string( $value ) && ! preg_match( '/^HTTP_COOKIE/', $key ) && preg_match( '/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/', $key );

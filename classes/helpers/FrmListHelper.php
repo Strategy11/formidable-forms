@@ -275,6 +275,11 @@ class FrmListHelper {
 		FrmAppHelper::show_search_box( compact( 'text', 'input_id' ) );
 	}
 
+	/**
+	 * @param string $param_name
+	 *
+	 * @return void
+	 */
 	private function hidden_search_inputs( $param_name ) {
 		if ( ! empty( $_REQUEST[ $param_name ] ) ) {
 			$value = sanitize_text_field( wp_unslash( $_REQUEST[ $param_name ] ) );
@@ -444,6 +449,11 @@ class FrmListHelper {
 		return $action;
 	}
 
+	/**
+	 * @param string $action_name
+	 *
+	 * @return false|string
+	 */
 	private function get_bulk_action( $action_name ) {
 		$action       = false;
 		$action_param = $this->get_param(
@@ -669,6 +679,11 @@ class FrmListHelper {
 		echo $this->_pagination; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
+	/**
+	 * @param int $total_pages
+	 *
+	 * @return array
+	 */
 	private function disabled_pages( $total_pages ) {
 		$current = $this->get_pagenum();
 		$disable = array(
@@ -695,6 +710,11 @@ class FrmListHelper {
 		return $disable;
 	}
 
+	/**
+	 * @param string $link
+	 *
+	 * @return string
+	 */
 	private function link_label( $link ) {
 		$labels = array(
 			'first' => __( 'First page', 'formidable' ),
@@ -712,6 +732,11 @@ class FrmListHelper {
 		return remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 	}
 
+	/**
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	private function add_page_link( $atts ) {
 		if ( $atts['disabled'] ) {
 			$link = $this->add_disabled_link( $atts['arrow'] );
@@ -722,10 +747,20 @@ class FrmListHelper {
 		return $link;
 	}
 
+	/**
+	 * @param string $label
+	 *
+	 * @return string
+	 */
 	private function add_disabled_link( $label ) {
 		return '<span class="tablenav-pages-navspan button disabled" aria-hidden="true">' . $label . '</span>';
 	}
 
+	/**
+	 * @param array $atts
+	 *
+	 * @return string
+	 */
 	private function add_active_link( $atts ) {
 		$url   = esc_url( add_query_arg( 'paged', $atts['number'], $this->current_url() ) );
 		$label = $this->link_label( $atts['page'] );

@@ -171,6 +171,7 @@
 			<errorLevel type="suppress">
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
 				<file name="square/models/FrmSquareLiteSettings.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -367,6 +368,7 @@
 		<PossiblyInvalidPropertyAssignment>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignment>
 		<PossiblyInvalidArgument>
@@ -411,6 +413,7 @@
 		<NoValue>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmEntryValidate.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</NoValue>
 		<UnsafeInstantiation>
@@ -531,5 +534,10 @@
 				<file name="classes/controllers/FrmStylesController.php" />
 			</errorLevel>
 		</PossiblyNullArrayAccess>
+		<PossiblyNullIterator>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmPersonalData.php" />
+			</errorLevel>
+		</PossiblyNullIterator>
 	</issueHandlers>
 </psalm>
