@@ -2228,7 +2228,7 @@ class FrmFieldsHelper {
 		}
 
 		if ( ! empty( $field_type['learn-more'] ) ) {
-			$li_params['data-learn-more'] = $field_type['learn-more'];
+			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url( $field_type['learn-more'], 'form-builder-add-fields' );
 		}
 
 		if ( isset( $upgrading['url'] ) ) {

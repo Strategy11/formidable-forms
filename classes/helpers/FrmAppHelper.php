@@ -3343,7 +3343,7 @@ class FrmAppHelper {
 	 * @param string $l1
 	 * @param mixed  $val
 	 * @param array  $vars
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function add_value_to_array( $name, $l1, $val, &$vars ) {
@@ -3569,7 +3569,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.02.03
 	 *
-	 * @param array $form 
+	 * @param array $form
 	 * @return void
 	 */
 	public static function format_form_data( &$form ) {
@@ -4803,6 +4803,29 @@ class FrmAppHelper {
 			return seems_utf8( $string );
 		}
 		return false;
+	}
+
+	/**
+	 * Get a documentation URL with UTM parameters and affiliate tracking.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $path     The relative path to append to the base URL.
+	 * @param string $campaign The campaign to use for UTM parameters.
+	 * @return string The processed URL with UTM parameters and affiliate tracking.
+	 */
+	public static function get_doc_url( $path, $campaign ) {
+		$path = trim( $path, '/' );
+		if ( false === strpos( $path, '/' ) ) {
+			$path = 'knowledgebase/' . $path;
+		}
+
+		return self::maybe_add_missing_utm(
+			'https://formidableforms.com/' . $path . '/',
+			array(
+				'campaign' => $campaign,
+			)
+		);
 	}
 
 	/**
