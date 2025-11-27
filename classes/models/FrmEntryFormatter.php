@@ -188,15 +188,10 @@ class FrmEntryFormatter {
 	 */
 	protected function init_format( $atts ) {
 		if ( $atts['format'] === 'array' ) {
-
 			$this->format = 'array';
-
 		} elseif ( $atts['format'] === 'json' ) {
-
 			$this->format = 'json';
-
 		} elseif ( $atts['format'] === 'text' ) {
-
 			if ( $this->is_plain_text === true ) {
 				$this->format = 'plain_text_block';
 			} else {
@@ -484,7 +479,6 @@ class FrmEntryFormatter {
 	 */
 	protected function add_field_values_to_content( &$content ) {
 		foreach ( $this->entry_values->get_field_values() as $field_value ) {
-
 			/**
 			 * @var FrmFieldValue $field_value
 			 */
@@ -582,7 +576,7 @@ class FrmEntryFormatter {
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
 		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
 
-		if ( 'rtl' == $this->direction ) {
+		if ( 'rtl' === $this->direction ) {
 			$content .= wp_kses_post( $display_value . ' :' . $label ) . "\r\n";
 		} else {
 			$content .= wp_kses_post( $label . ': ' . $display_value ) . "\r\n";
@@ -800,9 +794,7 @@ class FrmEntryFormatter {
 	 */
 	protected function add_user_info_to_html_table( &$content ) {
 		if ( $this->include_user_info ) {
-
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
-
 				$value_args = array(
 					'label'      => $user_info['label'],
 					'value'      => $user_info['value'],
@@ -980,9 +972,7 @@ class FrmEntryFormatter {
 	 * @return mixed
 	 */
 	protected function strip_html( $value ) {
-
 		if ( $this->is_plain_text ) {
-
 			if ( is_array( $value ) ) {
 				foreach ( $value as $key => $single_value ) {
 					$value[ $key ] = $this->strip_html( $single_value );
