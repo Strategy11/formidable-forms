@@ -2,7 +2,7 @@
 import FormidableIcon from '../common/components/icon';
 import { frmAddonAPI } from '../api/index';
 
-import buttonStyles from './css/button.module.css';
+import './css/button.module.css';
 
 const { __ } = wp.i18n;
 const { registerBlockType } = wp.blocks;
@@ -27,7 +27,7 @@ registerBlockType( 'formidable/simple-view', {
 	edit: () => {
 		const [ addonActivateButton, updateAddonActivateButton ] = useState( { // eslint-disable-line react-hooks/rules-of-hooks
 			defaultClassname: 'frm-activate-addon frm-button-primary button button-primary',
-			loadingClassname: buttonStyles[ 'frm-loading' ],
+			loadingClassname: 'frm-loading',
 			classnames: 'frm-activate-addon frm-button-primary button button-primary',
 			label: ! blockData.viewsAddon.installed && blockData.viewsAddon.hasAccess ? __( 'Install', 'formidable' ) : __( 'Activate', 'formidable' ),
 			isLoading: false
