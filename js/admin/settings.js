@@ -40,12 +40,12 @@
 		formData.append( 'action', 'frm_dismiss_default_email_message' );
 		formData.append( 'nonce', frmGlobal.nonce );
 		doJsonPost( 'dismiss_default_email_message', formData )
-		.then( () => {
-			e.target.closest( '.frm_default_email_message' ).remove();
-		})
-		.catch( error => {
-			console.error( error );
-		});
+			.then( () => {
+				e.target.closest( '.frm_default_email_message' ).remove();
+			} )
+			.catch( error => {
+				console.error( error );
+			} );
 	}
 
 	function handleToggleChangeEvent( e ) {
@@ -66,9 +66,9 @@
 		if ( 'frm-send-test-email-btn' === e.target.id ) {
 			handleClickSendTestEmailBtn( e );
 		}
+
 		if ( e.target.classList.contains( 'frm_dismiss_default_email_message' ) ) {
 			handleClickDismissDefaultEmailMessage( e );
-			return;
 		}
 	}
 
