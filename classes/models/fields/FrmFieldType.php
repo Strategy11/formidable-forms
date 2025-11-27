@@ -339,12 +339,22 @@ DEFAULT_HTML;
 		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return string
+	 */
 	protected function html_name( $name = '' ) {
 		$prefix = empty( $name ) ? 'item_meta' : $name;
 
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
+	/**
+	 * @param string $plus
+	 *
+	 * @return string
+	 */
 	protected function html_id( $plus = '' ) {
 		return apply_filters( 'frm_field_get_html_id', 'field_' . $this->get_field_column( 'field_key' ) . $plus, $this->field );
 	}
@@ -424,12 +434,22 @@ DEFAULT_HTML;
 		);
 	}
 
+	/**
+	 * @param string $display_type
+	 *
+	 * @return string
+	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
 
 		return $this->alter_builder_classes( $classes );
 	}
 
+	/**
+	 * @param string $classes
+	 *
+	 * @return string
+	 */
 	protected function alter_builder_classes( $classes ) {
 		return $classes;
 	}
@@ -1091,6 +1111,12 @@ DEFAULT_HTML;
 		return '';
 	}
 
+	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
+	 * @return string|void
+	 */
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
 
@@ -1200,6 +1226,11 @@ DEFAULT_HTML;
 		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function maybe_include_hidden_values( $args ) {
 		$hidden       = '';
 		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
@@ -1261,6 +1292,11 @@ DEFAULT_HTML;
 		return false;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function show_hidden_values( $args ) {
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
@@ -1371,6 +1407,11 @@ DEFAULT_HTML;
 		// Override me
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
 	protected function fill_display_field_values( $args = array() ) {
 		$defaults        = array(
 			'field_name'    => 'item_meta[' . $this->get_field_column( 'id' ) . ']',
@@ -1388,6 +1429,11 @@ DEFAULT_HTML;
 		return $args;
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return string
+	 */
 	protected function get_field_input_html_hook( $field ) {
 		$field['input_class'] = $this->add_input_class();
 

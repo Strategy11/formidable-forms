@@ -133,6 +133,12 @@ class FrmForm {
 		return false;
 	}
 
+	/**
+	 * @param int   $form_id
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	public static function after_duplicate( $form_id, $values ) {
 		$new_opts = $values['options'];
 		FrmAppHelper::unserialize_or_decode( $new_opts );
@@ -528,6 +534,13 @@ class FrmForm {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 * @param array  $values
+	 * @param array  $new_field
+	 *
+	 * @return void
+	 */
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
 			'field_order' => 0,
@@ -1002,6 +1015,11 @@ class FrmForm {
 		return apply_filters( 'frm_validate_form', $errors, $values );
 	}
 
+	/**
+	 * @param object|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 
@@ -1081,6 +1099,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param int|string|object|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;
 		if ( $form === null ) {
@@ -1109,6 +1132,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param string $default_form
+	 *
+	 * @return int|string
+	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
@@ -1120,6 +1148,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
@@ -1135,6 +1168,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
 		if ( is_numeric( $form ) ) {
@@ -1144,6 +1182,11 @@ class FrmForm {
 		return $form;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function set_current_form( $form_id ) {
 		global $frm_vars;
 
@@ -1157,6 +1200,13 @@ class FrmForm {
 		return $frm_vars['current_form'];
 	}
 
+	/**
+	 * @param object     $form
+	 * @param int|string $this_load
+	 * @param bool       $global_load
+	 *
+	 * @return bool
+	 */
 	public static function is_form_loaded( $form, $this_load, $global_load ) {
 		global $frm_vars;
 		$small_form = new stdClass();
@@ -1200,6 +1250,11 @@ class FrmForm {
 		return $visible;
 	}
 
+	/**
+	 * @param object $form
+	 *
+	 * @return bool
+	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );

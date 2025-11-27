@@ -12,6 +12,12 @@ class FrmFieldsHelper {
 	 */
 	private static $context_is_safe_to_load_field_options_from_request_data;
 
+	/**
+	 * @param string     $type
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
 		if ( strpos( $type, '|' ) ) {
@@ -48,16 +54,33 @@ class FrmFieldsHelper {
 		return $values;
 	}
 
+	/**
+	 * @param array  $field
+	 * @param string $plus
+	 *
+	 * @return string
+	 */
 	public static function get_html_id( $field, $plus = '' ) {
 		return apply_filters( 'frm_field_html_id', 'field_' . $field['field_key'] . $plus, $field );
 	}
 
+	/**
+	 * @param object $field
+	 * @param bool   $doing_ajax
+	 *
+	 * @return array
+	 */
 	public static function setup_edit_vars( $field, $doing_ajax = false ) {
 		$values = self::field_object_to_array( $field );
 
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
 	}
 
+	/**
+	 * @param object $field
+	 *
+	 * @return array
+	 */
 	public static function field_object_to_array( $field ) {
 		$values = (array) $field;
 
@@ -68,6 +91,12 @@ class FrmFieldsHelper {
 		return $values;
 	}
 
+	/**
+	 * @param object $field
+	 * @param array  $field_array
+	 *
+	 * @return void
+	 */
 	private static function fill_field_array( $field, array &$field_array ) {
 		$field_array['options'] = $field->options;
 		$field_array['value']   = $field->default_value;
@@ -382,6 +411,14 @@ class FrmFieldsHelper {
 		return $field_type->get_new_field_defaults();
 	}
 
+	/**
+	 * @param array      $values
+	 * @param object     $field
+	 * @param int|string $form_id
+	 * @param string     $new_key
+	 *
+	 * @return void
+	 */
 	public static function fill_field( &$values, $field, $form_id, $new_key = '' ) {
 		global $wpdb;
 
@@ -498,12 +535,23 @@ class FrmFieldsHelper {
 		return $substrings;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $error
+	 *
+	 * @return array
+	 */
 	public static function get_form_fields( $form_id, $error = array() ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
 		return apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return string
+	 */
 	public static function get_default_html( $type = 'text' ) {
 		$field        = FrmFieldFactory::get_field_type( $type );
 		$default_html = $field->default_html();
@@ -591,6 +639,13 @@ class FrmFieldsHelper {
 		return ! in_array( $type, array( 'radio', 'checkbox', 'hidden', 'file' ), true );
 	}
 
+	/**
+	 * @param array      $field
+	 * @param int|string $opt_key
+	 * @param string     $type
+	 *
+	 * @return string
+	 */
 	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
 		$id = $field['id'];
 		if ( isset( $field['in_section'] ) && $field['in_section'] && ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
@@ -600,6 +655,11 @@ class FrmFieldsHelper {
 		return 'frm_' . $type . '_' . $id . '-' . $opt_key;
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return void
+	 */
 	public static function show_single_option( $field ) {
 		self::hidden_field_option( $field );
 
@@ -674,12 +734,26 @@ class FrmFieldsHelper {
 		return $default_type;
 	}
 
+	/**
+	 * @param array|string $opt
+	 * @param int|string   $opt_key
+	 * @param array        $field
+	 *
+	 * @return mixed
+	 */
 	public static function get_value_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
 
 		return FrmFieldsController::check_value( $opt, $opt_key, $field );
 	}
 
+	/**
+	 * @param array|string $opt
+	 * @param int|string   $opt_key
+	 * @param array        $field
+	 *
+	 * @return string
+	 */
 	public static function get_label_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
 
@@ -762,6 +836,13 @@ class FrmFieldsHelper {
 		return $link;
 	}
 
+	/**
+	 * @param array|string $observed_value
+	 * @param string       $cond
+	 * @param array|string $hide_opt
+	 *
+	 * @return bool
+	 */
 	public static function value_meets_condition( $observed_value, $cond, $hide_opt ) {
 		$hide_opt       = self::get_value_for_comparison( $hide_opt );
 		$observed_value = self::get_value_for_comparison( $observed_value );
@@ -824,6 +905,13 @@ class FrmFieldsHelper {
 		return $value;
 	}
 
+	/**
+	 * @param array        $observed_value
+	 * @param string       $cond
+	 * @param array|string $hide_opt
+	 *
+	 * @return bool
+	 */
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
 		$m = false;
 		if ( $cond === '==' ) {
@@ -897,6 +985,12 @@ class FrmFieldsHelper {
 		return $value;
 	}
 
+	/**
+	 * @param string     $content
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	public static function get_shortcodes( $content, $form_id ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			return FrmProDisplaysHelper::get_shortcodes( $content, $form_id );
@@ -916,6 +1010,11 @@ class FrmFieldsHelper {
 		return $matches;
 	}
 
+	/**
+	 * @param array $fields
+	 *
+	 * @return string
+	 */
 	public static function allowed_shortcodes( $fields = array() ) {
 		$tagregexp = array(
 			'editlink',
@@ -945,6 +1044,13 @@ class FrmFieldsHelper {
 		return $tagregexp;
 	}
 
+	/**
+	 * @param string       $content
+	 * @param false|object $entry
+	 * @param array        $shortcodes
+	 *
+	 * @return string
+	 */
 	public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			if ( empty( $tag ) ) {
@@ -1210,6 +1316,13 @@ class FrmFieldsHelper {
 		return $new_value;
 	}
 
+	/**
+	 * @param mixed  $value
+	 * @param object $field
+	 * @param array  $atts
+	 *
+	 * @return mixed
+	 */
 	public static function get_display_value( $value, $field, $atts = array() ) {
 
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
@@ -1604,6 +1717,11 @@ class FrmFieldsHelper {
 		return $other_id;
 	}
 
+	/**
+	 * @param string $val
+	 *
+	 * @return string
+	 */
 	public static function switch_field_ids( $val ) {
 		global $frm_duplicate_ids;
 		$replace      = array();

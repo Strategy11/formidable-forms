@@ -139,27 +139,10 @@ parameters:
 			paths:
 				- classes/controllers/FrmEmailStylesController.php 
 				- classes/controllers/FrmFieldsController.php
-				- classes/helpers/FrmFieldsHelper.php
-				- classes/helpers/FrmFormsHelper.php
 				- classes/helpers/FrmXMLHelper.php
-				- classes/models/fields/FrmFieldType.php
-				- classes/models/FrmForm.php
-				- classes/models/FrmAddon.php
 				- square/helpers/FrmSquareLiteConnectHelper.php
-				- classes/models/FrmEntryValidate.php
-				- classes/models/FrmEntryFormatter.php
 				- classes/helpers/FrmListHelper.php
 				- classes/helpers/FrmAppHelper.php
-				- classes/helpers/FrmEntriesHelper.php
-				- classes/models/FrmMigrate.php
-				- classes/models/FrmFormMigrator.php
-				- classes/models/FrmFieldFormHtml.php
-				- classes/models/FrmField.php
-				- classes/models/FrmEntryValidate.php
-				- classes/models/FrmEntryMeta.php
-				- classes/models/FrmEntry.php
-				- classes/models/FrmEntryValidate.php
-				- classes/models/FrmFormAction.php
 				- classes/controllers/FrmFormActionsController.php
 				- classes/controllers/FrmAddonsController.php
 				- classes/controllers/FrmAppController.php
@@ -176,9 +159,4 @@ parameters:
 		-
 			message: '#with no type specified#'
 			paths:
-				- classes/helpers/FrmFieldsHelper.php
-				- classes/helpers/FrmFormsHelper.php
-				- classes/models/fields/FrmFieldType.php
-				- classes/models/FrmForm.php
-				- classes/helpers/FrmAppHelper.php
 				- stubs.php
