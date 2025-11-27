@@ -574,7 +574,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param array $info
 	 *
-	 * @return false|object|string
+	 * @return false|object
 	 */
 	public static function create_subscription( $info ) {
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );

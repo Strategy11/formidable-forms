@@ -650,7 +650,7 @@ class FrmField {
 	/**
 	 * @param int|string $id
 	 *
-	 * @return bool
+	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
 		global $wpdb;
@@ -954,7 +954,7 @@ class FrmField {
 	 * @param string       $limit
 	 * @param false|int    $blog_id
 	 *
-	 * @return array
+	 * @return array|object|null
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
@@ -1017,7 +1017,7 @@ class FrmField {
 	/**
 	 * @since 2.0.8
 	 *
-	 * @param array|object $results Results.
+	 * @param array|object|null $results Results.
 	 * @return void
 	 */
 	private static function format_field_results( &$results ) {

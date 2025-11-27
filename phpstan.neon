@@ -136,7 +136,7 @@ parameters:
 		-
 			message: '#has no return type specified#'
 			paths:
-				- classes/controllers/FrmEmailStylesController.php 
+				- classes/controllers/FrmEmailStylesController.php
 				- classes/controllers/FrmFieldsController.php
 				- classes/helpers/FrmXMLHelper.php
 				- square/helpers/FrmSquareLiteConnectHelper.php
