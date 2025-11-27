@@ -580,7 +580,14 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		if ( ! empty( $settings['font'] ) ) {
-			$style['input']['fontFamily'] = $settings['font'];
+			if ( false !== strpos( $settings['font'], ',' ) ) {
+				$fonts       = explode( ',', $settings['font'] );
+				$font_family = trim( reset( $fonts ) );
+			} else {
+				$font_family = $settings['font'];
+			}
+
+			$style['input']['fontFamily'] = $font_family;
 		}
 
 		/**
