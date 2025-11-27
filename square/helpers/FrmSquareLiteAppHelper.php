@@ -54,6 +54,9 @@ class FrmSquareLiteAppHelper {
 	/**
 	 * Add education about Stripe fees.
 	 *
+	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
 	 * @return void
 	 */
 	public static function fee_education( $medium = 'tip', $gateway = false ) {

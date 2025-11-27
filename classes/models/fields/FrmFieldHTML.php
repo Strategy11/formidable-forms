@@ -43,6 +43,11 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $args
+	 * @param string $html
+	 *
+	 * @return string
 	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );

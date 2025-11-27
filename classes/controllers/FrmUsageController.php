@@ -56,6 +56,9 @@ class FrmUsageController {
 	 * Adds once weekly to the existing schedules.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @param array $schedules Schedules.
+	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
 		$schedules['weekly'] = array(

@@ -77,6 +77,10 @@ class FrmFormsController {
 	 * Now that won't do.
 	 *
 	 * @since 3.01
+	 *
+	 * @param array $shortcodes List of shortcodes to process.
+	 *
+	 * @return array
 	 */
 	public static function prevent_divi_conflict( $shortcodes ) {
 		$shortcodes[] = 'formidable';
@@ -194,6 +198,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @param array|false $values
+	 *
 	 * @return void
 	 */
 	public static function edit( $values = false ) {
@@ -272,6 +278,8 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function update( $values = array() ) {
@@ -625,6 +633,9 @@ class FrmFormsController {
 	 * Set the page title for the theme preview page
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $title
+	 * @return string
 	 */
 	public static function preview_page_title( $title ) {
 		if ( in_the_loop() ) {
@@ -1326,13 +1337,17 @@ class FrmFormsController {
 	 * @param array $fields
 	 * @return array
 	 */
-	public static function update_form_builder_fields( $fields, $form ) {
+	public static function update_form_builder_fields( $fields ) {
 		foreach ( $fields as $field ) {
 			$field->do_not_include_icons = true;
 		}
 		return $fields;
 	}
 
+	/**
+	 * @param string $message
+	 * @return void
+	 */
 	public static function maybe_update_form_builder_message( &$message ) {
 		if ( 'form_duplicated' === FrmAppHelper::simple_get( 'message' ) ) {
 			$message = __( 'Form was Successfully Copied', 'formidable' );
@@ -1412,6 +1427,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	public static function form_publish_button( $atts ) {
 		$values = $atts['values'];
@@ -1645,6 +1663,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.04.01
+	 *
+	 * @param array $atts
+	 * @return array
 	 */
 	private static function advanced_helpers( $atts ) {
 		$advanced_helpers = array(
@@ -1683,6 +1704,8 @@ class FrmFormsController {
 	 * of the customization panel
 	 *
 	 * @since 2.0.6
+	 *
+	 * @return array
 	 */
 	private static function get_advanced_shortcodes() {
 		$adv_shortcodes = array(
@@ -1710,6 +1733,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.04.01
+	 *
+	 * @return array
 	 */
 	private static function user_shortcodes() {
 		$options = array(
@@ -1730,6 +1755,9 @@ class FrmFormsController {
 	 * Get an array of the helper shortcodes to display in the customization panel
 	 *
 	 * @since 2.0.6
+	 *
+	 * @param bool $settings_tab
+	 * @return array
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
 		$entry_shortcodes = array(
@@ -1755,6 +1783,9 @@ class FrmFormsController {
 		 * in the customization panel
 		 *
 		 * @since 2.0.6
+		 *
+		 * @param array $entry_shortcodes
+		 * @param bool  $settings_tab
 		 */
 		$entry_shortcodes = apply_filters( 'frm_helper_shortcodes', $entry_shortcodes, $settings_tab );
 
@@ -2102,6 +2133,8 @@ class FrmFormsController {
 	 *
 	 * @since 4.07
 	 *
+	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function no_views( $values = array() ) {
@@ -2117,6 +2150,7 @@ class FrmFormsController {
 	 *
 	 * @since 4.07
 	 *
+	 * @param array $values
 	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
@@ -2192,6 +2226,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param array $actions
+	 * @return void
 	 */
 	private static function add_forms_to_admin_bar( $actions ) {
 		global $wp_admin_bar;
@@ -2400,6 +2437,11 @@ class FrmFormsController {
 	 * If the form was processed earlier (init), get the generated errors
 	 *
 	 * @since 2.05
+	 *
+	 * @param object $form
+	 * @param array  $params
+	 *
+	 * @return array
 	 */
 	private static function get_saved_errors( $form, $params ) {
 		global $frm_vars;
@@ -2423,6 +2465,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.2.7
+	 *
+	 * @param int|string $form_id
+	 * @return int
 	 */
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
@@ -2795,6 +2840,9 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	private static function load_page_after_submit( $args ) {
 		global $post;
@@ -3030,6 +3078,10 @@ class FrmFormsController {
 	 * Prepare to show the success message and empty form after submit
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	public static function show_message_after_save( $atts ) {
 		$atts['message'] = self::prepare_submit_message( $atts['form'], $atts['entry_id'], $atts );
@@ -3055,6 +3107,10 @@ class FrmFormsController {
 	 * Show an empty form
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $args
+	 *
+	 * @return void
 	 */
 	private static function show_form_after_submit( $args ) {
 		self::fill_atts_for_form_display( $args );
@@ -3123,6 +3179,10 @@ class FrmFormsController {
 	 * Get all the values needed on the new.php entry page
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $args
+	 *
+	 * @return void
 	 */
 	private static function fill_atts_for_form_display( &$args ) {
 		if ( ! isset( $args['title'] ) && isset( $args['show_title'] ) ) {
@@ -3149,6 +3209,10 @@ class FrmFormsController {
 	 * Show the success message without the form
 	 *
 	 * @since 2.05
+	 *
+	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private static function show_lone_success_message( $atts ) {
 		global $frm_vars;
@@ -3270,14 +3334,25 @@ class FrmFormsController {
 		return ! function_exists( 'aioseo' );
 	}
 
+	/**
+	 * @param string $tag
+	 * @param string $handle
+	 *
+	 * @return string
+	 */
 	public static function defer_script_loading( $tag, $handle ) {
-		if ( 'captcha-api' == $handle && ! strpos( $tag, 'defer' ) ) {
+		if ( 'captcha-api' === $handle && ! strpos( $tag, 'defer' ) ) {
 			$tag = str_replace( ' src', ' defer="defer" async="async" src', $tag );
 		}
 
 		return $tag;
 	}
 
+	/**
+	 * @param string $location
+	 *
+	 * @return void
+	 */
 	public static function footer_js( $location = 'footer' ) {
 		global $frm_vars;
 
@@ -3293,6 +3368,11 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param array  $atts
+	 * @param string $content
+	 *
+	 * @return void
 	 */
 	private static function maybe_minimize_form( $atts, &$content ) {
 		// check if minimizing is turned on
@@ -3303,6 +3383,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param array $atts
 	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
@@ -3427,6 +3509,9 @@ class FrmFormsController {
 
 	/**
 	 * @deprecated 4.0
+	 *
+	 * @param array $values
+	 * @return void
 	 */
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );

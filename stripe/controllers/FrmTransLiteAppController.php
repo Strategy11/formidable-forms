@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppController {
 
 	/**
+	 * Install or upgrade database structures.
+	 *
+	 * @param mixed $old_db_version Previous database version, or false on fresh install.
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
