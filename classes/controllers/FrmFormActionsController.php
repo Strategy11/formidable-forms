@@ -119,6 +119,10 @@ class FrmFormActionsController {
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $action_controls
+	 * @param array $groups
+	 * @return void
 	 */
 	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
 		$grouped = array();
@@ -224,6 +228,7 @@ class FrmFormActionsController {
 	 *
 	 * @since 4.0
 	 *
+	 * @param array $action_controls
 	 * @return array
 	 */
 	private static function active_actions( $action_controls ) {
@@ -322,6 +327,11 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param object $form
+	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function list_actions( $form, $values ) {
 		if ( empty( $form ) ) {
@@ -457,6 +467,9 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param string $action_type
+	 *
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
@@ -464,6 +477,12 @@ class FrmFormActionsController {
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 *
+	 * @return object
+	 */
 	private static function fields_to_values( $form_id, array &$values ) {
 		$form = FrmForm::getOne( $form_id );
 
@@ -553,6 +572,13 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param int|string $form_id
+	 * @param array      $args
+	 * 
+	 * @return void
+	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
 		$filter_args             = $args;
 		$filter_args['entry_id'] = $entry_id;
@@ -571,7 +597,13 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * @param string $event
+	 * @param string            $event
+	 * @param int|object|string $form
+	 * @param int|string        $entry
+	 * @param string            $type
+	 * @param array             $args
+	 * 
+	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
 		$action_status = array(

@@ -45,6 +45,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param bool $regenerate
+	 *
 	 * @return string
 	 */
 	public function uuid( $regenerate = false ) {
@@ -385,6 +388,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_field_count( $form_id ) {
@@ -403,6 +409,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_action_count( $form_id ) {
@@ -471,6 +480,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param mixed $value Value.
+	 *
 	 * @return string
 	 */
 	private function maybe_json( $value ) {

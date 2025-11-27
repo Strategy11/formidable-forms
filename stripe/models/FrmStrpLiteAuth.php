@@ -174,6 +174,11 @@ class FrmStrpLiteAuth {
 	 * Insert a message/error where the form styling will be applied.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
+	 * @param string $message Message.
+	 * @param string $form    Form.
+	 *
+	 * @return void
 	 */
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';

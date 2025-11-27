@@ -6,6 +6,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormMigratorsHelper {
 
 	/**
+	 * @param array      $form
+	 * @param array|null $dismissed
+	 *
 	 * @return bool
 	 */
 	private static function is_dismissed( $form, $dismissed = null ) {

@@ -67,6 +67,8 @@ class FrmStyle {
 	}
 
 	/**
+	 * @param int|string $id The id of the stylesheet or 'default'.
+	 *
 	 * @return void
 	 */
 	public function duplicate( $id ) {
