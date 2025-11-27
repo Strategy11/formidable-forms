@@ -1,13 +1,12 @@
+name: PHP Syntax Check
+
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
   push:
     branches:
       - master
   pull_request:
-    types: [ opened, labeled, synchronize ]
+    types: [opened, labeled, synchronize]
 
-name: PHP Syntax Check
 jobs:
   runPHPSyntaxCheck:
     if: contains(github.event.pull_request.labels.*.name, 'run analysis')
@@ -19,9 +18,11 @@ jobs:
           - php: 7.0
           - php: 8.3
     steps:
-      - uses: actions/checkout@v4.1.1
+      - name: Checkout code
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
 
-      - uses: shivammathur/setup-php@2.25.5
+      - name: Set up PHP
+        uses: shivammathur/setup-php@2.25.5
         with:
           php-version: ${{ matrix.php }}
       - name: Check PHP ${{ matrix.multisite }} syntax

@@ -1,6 +1,7 @@
+name: Branch Deleted
+
 on: delete
 
-name: Branch Deleted
 jobs:
   delete:
     if: github.event.ref_type == 'branch'
