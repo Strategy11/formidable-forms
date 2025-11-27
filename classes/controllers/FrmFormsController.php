@@ -1467,7 +1467,7 @@ class FrmFormsController {
 					'upgrade'    => __( 'Form Permissions', 'formidable' ),
 					'message'    => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
 					'screenshot' => 'permissions.png',
-					'learn-more' => 'https://formidableforms.com/knowledgebase/general-form-settings/#kb-form-permissions',
+					'learn-more' => FrmAppHelper::get_doc_url( 'general-form-settings/#kb-form-permissions', 'form-permissions-settings' ),
 				),
 			),
 			'scheduling'  => array(
@@ -1478,7 +1478,7 @@ class FrmFormsController {
 					'medium'     => 'scheduling',
 					'upgrade'    => __( 'Form scheduling settings', 'formidable' ),
 					'screenshot' => 'scheduling.png',
-					'learn-more' => 'https://formidableforms.com/knowledgebase/general-form-settings/#kb-form-scheduling',
+					'learn-more' => FrmAppHelper::get_doc_url( 'general-form-settings/#kb-form-scheduling', 'form-scheduling-settings' ),
 				),
 			),
 			'buttons'     => array(
@@ -1503,7 +1503,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Conversational Forms', 'formidable' ),
 						'message'    => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
 						'screenshot' => 'chat.png',
-						'learn-more' => 'https://formidableforms.com/conversational-forms/',
+						'learn-more' => FrmAppHelper::get_doc_url( 'conversational-forms', 'conversational-forms-settings', false ),
 					)
 				),
 			),
@@ -1517,7 +1517,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
 						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
-						'learn-more' => 'https://formidableforms.com/features/form-abandonment-wordpress-plugin/',
+						'learn-more' => FrmAppHelper::get_doc_url( 'features/form-abandonment-wordpress-plugin', 'form-abandonment-settings', false ),
 					)
 				),
 			),
