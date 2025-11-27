@@ -134,6 +134,11 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param int|string $key  Icon key.
+	 * @param string     $icon Icon state, `+` or `-`.
+	 * @param string     $type Icon type, such as `arrow`.
+	 *
 	 * @return string The class for this icon.
 	 */
 	public static function icon_key_to_class( $key, $icon = '+', $type = 'arrow' ) {
@@ -253,6 +258,9 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param string           $hex Hex color string.
+	 * @param float|int|string $a   Alpha channel value.
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
@@ -410,6 +418,7 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.0
 	 *
+	 * @param string $color Color value, passed by reference.
 	 * @return void
 	 */
 	private static function fill_hex( &$color ) {
@@ -420,6 +429,9 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @param array $vars CSS variable keys.
+	 * @return array
 	 */
 	public static function get_css_vars( $vars = array() ) {
 		$vars = apply_filters( 'frm_css_vars', $vars );
@@ -428,6 +440,11 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @param array $settings Style settings.
+	 * @param array $defaults Default style settings.
+	 * @param array $vars     CSS variable keys to output.
+	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
 		if ( empty( $vars ) ) {
@@ -655,6 +672,7 @@ class FrmStylesHelper {
 	 * @since 6.14
 	 *
 	 * @param array $settings An array of css style.
+	 * @param array $defaults Default style settings.
 	 *
 	 * @return array
 	 */
@@ -695,6 +713,10 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.14
 	 *
+	 * @param string $key      Setting key.
+	 * @param int    $value    Base font size value.
+	 * @param array  $defaults Default style settings.
+	 *
 	 * @return float
 	 */
 	private static function get_base_font_size_scale( $key, $value, $defaults ) {
@@ -707,6 +729,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param array $settings          Style settings, passed by reference.
+	 * @param bool  $allow_transparent Whether transparent colors are allowed.
+	 * @return void
 	 */
 	public static function prepare_color_output( &$settings, $allow_transparent = true ) {
 		$colors = self::allow_color_override();
@@ -755,6 +781,10 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param string $default Default color value.
+	 * @param string $color   Color value, passed by reference.
+	 * @return void
 	 */
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
@@ -799,6 +829,9 @@ class FrmStylesHelper {
 	 * adjust the field description margin at a different screen size
 	 *
 	 * @since 2.3
+	 *
+	 * @param string $width Label width value.
+	 * @return false|string
 	 */
 	private static function description_margin_for_screensize( $width ) {
 		$temp_label_width = str_replace( 'px', '', $width );

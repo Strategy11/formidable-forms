@@ -64,6 +64,9 @@ class FrmEntry {
 	/**
 	 * Check for duplicate entries created in the last minute
 	 *
+	 * @param array $new_values New values.
+	 * @param array $values     Values.
+	 *
 	 * @return bool
 	 */
 	public static function is_duplicate( $new_values, $values ) {
@@ -316,8 +319,9 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int   $id
-	 * @param array $values
+	 * @param int    $id
+	 * @param array  $values
+	 * @param string $update_type
 	 *
 	 * @return bool|int $query_results
 	 */
@@ -411,6 +415,10 @@ class FrmEntry {
 	 * we can no longer use 'name', but check it as a fallback
 	 *
 	 * @since 2.0.11
+	 *
+	 * @param array        $values
+	 * @param array|string $default
+	 * @return string
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
 		$name = $values['item_name'] ?? $values['name'] ?? $default;
@@ -692,7 +700,9 @@ class FrmEntry {
 	}
 
 	/**
-	 * @param int|string $p_size
+	 * @param int|string       $p_size
+	 * @param array|int|string $where
+	 *
 	 * @return int
 	 */
 	public static function getPageCount( $p_size, $where = '' ) {

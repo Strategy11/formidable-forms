@@ -131,6 +131,11 @@ class FrmEntriesController {
 	 * editing or creating an entry
 	 *
 	 * @since 3.0
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen object.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
@@ -209,6 +214,12 @@ class FrmEntriesController {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @param object     $field The field object.
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
 	 */
 	private static function add_subform_cols( $field, $form_id, &$columns ) {
 		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
@@ -228,6 +239,12 @@ class FrmEntriesController {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @param object     $field The field object.
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
 	 */
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
@@ -248,7 +265,7 @@ class FrmEntriesController {
 	/**
 	 * Appends "(Value)" or "(Label)" to the field name if it's an option field that has a separate value/label.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param object $field
 	 * @param bool   $include_column_for_sep_val
@@ -266,12 +283,27 @@ class FrmEntriesController {
 		return sprintf( '%s (%s)', $field_name, $append_text );
 	}
 
+	/**
+	 * @param int|string $form_id The form ID.
+	 * @param array      $columns The columns array.
+	 *
+	 * @return void
+	 */
 	private static function maybe_add_ip_col( $form_id, &$columns ) {
 		if ( FrmAppHelper::ips_saved() ) {
 			$columns[ $form_id . '_ip' ] = 'IP';
 		}
 	}
 
+	/**
+	 * @param bool   $check The check value.
+	 * @param int    $object_id The object ID.
+	 * @param string $meta_key The meta key.
+	 * @param mixed  $meta_value The meta value.
+	 * @param mixed  $prev_value The previous value.
+	 *
+	 * @return bool
+	 */
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$this_page_name = self::hidden_column_key();
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
@@ -291,6 +323,13 @@ class FrmEntriesController {
 
 	/**
 	 * Add hidden columns back from other forms
+	 *
+	 * @param int    $meta_id The meta ID.
+	 * @param int    $object_id The object ID.
+	 * @param string $meta_key The meta key.
+	 * @param array  $meta_value The meta value.
+	 *
+	 * @return void
 	 */
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();
@@ -324,7 +363,7 @@ class FrmEntriesController {
 
 			$form_prefix = explode( '_', $prev_hidden );
 			$form_prefix = $form_prefix[0];
-			if ( $form_prefix == $cur_form_prefix ) {
+			if ( $form_prefix === $cur_form_prefix ) {
 				// Don't add back columns that are meant to be hidden.
 				continue;
 			}
@@ -342,6 +381,10 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param string $menu_name
+	 *
+	 * @return string
 	 */
 	private static function hidden_column_key( $menu_name = '' ) {
 		$base = self::base_column_key( $menu_name );
@@ -351,6 +394,10 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param string $menu_name
+	 *
+	 * @return string
 	 */
 	private static function base_column_key( $menu_name = '' ) {
 		if ( empty( $menu_name ) ) {
@@ -362,6 +409,13 @@ class FrmEntriesController {
 		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
 	}
 
+	/**
+	 * @param int    $save
+	 * @param string $option
+	 * @param string $value
+	 *
+	 * @return int
+	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_entries_per_page' ) {
 			$save = (int) $value;
@@ -445,6 +499,11 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param int|string $form_id
+	 * @param mixed      $result
+	 *
+	 * @return array
 	 */
 	private static function user_hidden_columns_for_form( $form_id, $result ) {
 		$hidden = array();
@@ -536,6 +595,12 @@ class FrmEntriesController {
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-entries/list.php';
 	}
 
+	/**
+	 * @param object $form
+	 * @param array  $errors
+	 *
+	 * @return void
+	 */
 	private static function get_delete_form_time( $form, &$errors ) {
 		if ( 'trash' === $form->status ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
@@ -548,6 +613,9 @@ class FrmEntriesController {
 
 	/**
 	 * Back End CRUD.
+	 *
+	 * @param int $id
+	 * @return void
 	 */
 	public static function show( $id = 0 ) {
 		FrmAppHelper::permission_check( 'frm_view_entries' );
@@ -691,6 +759,15 @@ class FrmEntriesController {
 		return str_replace( array( ' ', '[', ']', '|', '@' ), array( '%20', '%5B', '%5D', '%7C', '%40' ), $url );
 	}
 
+	/**
+	 * Delete entry if redirected.
+	 *
+	 * @param string $url
+	 * @param object $form
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
 	public static function delete_entry_before_redirect( $url, $form, $atts ) {
 		self::_delete_entry( $atts['id'], $form );
 
@@ -701,11 +778,20 @@ class FrmEntriesController {
 	 * Delete entry if not redirected.
 	 *
 	 * @param array $atts
+	 * @return void
 	 */
 	public static function delete_entry_after_save( $atts ) {
 		self::_delete_entry( $atts['entry_id'], $atts['form'] );
 	}
 
+	/**
+	 * Delete entry if not redirected.
+	 *
+	 * @param int    $entry_id
+	 * @param object $form
+	 *
+	 * @return void
+	 */
 	private static function _delete_entry( $entry_id, $form ) {
 		if ( ! $form ) {
 			return;
@@ -720,6 +806,10 @@ class FrmEntriesController {
 
 	/**
 	 * Unlink entry from post
+	 *
+	 * @param int $entry_id
+	 *
+	 * @return void
 	 */
 	private static function unlink_post( $entry_id ) {
 		global $wpdb;

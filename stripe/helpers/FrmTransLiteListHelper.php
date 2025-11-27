@@ -452,6 +452,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_amount_column( $item ) {

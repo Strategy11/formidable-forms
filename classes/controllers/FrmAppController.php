@@ -47,6 +47,9 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $classes
+	 * @return string
 	 */
 	public static function add_admin_class( $classes ) {
 		if ( self::is_white_page() ) {
@@ -674,8 +677,8 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
-		self::register_popper1();
-		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+		self::register_popper2();
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '5.0.2', true );
 
 		$settings_js_vars = array(
 			'currencies' => FrmCurrencyHelper::get_currencies(),
@@ -714,7 +717,7 @@ class FrmAppController {
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 		}
 
-		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
 			/**
@@ -736,7 +739,7 @@ class FrmAppController {
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
-			self::maybe_deregister_popper2();
+			self::maybe_deregister_popper1();
 			wp_enqueue_script( 'formidable_admin' );
 			wp_set_script_translations( 'formidable_admin', 'formidable' );
 			wp_enqueue_script( 'formidable_embed' );
@@ -855,10 +858,19 @@ class FrmAppController {
 			return false;
 		}
 
-		return FrmAppHelper::is_formidable_admin() &&
+		$should_show = FrmAppHelper::is_formidable_admin() &&
 			! FrmAppHelper::is_style_editor_page() &&
 			! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) &&
 			! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+
+		/**
+		 * Filters whether the floating links should be displayed.
+		 *
+		 * @since 6.25.1
+		 *
+		 * @param bool $should_show Whether the floating links should be shown.
+		 */
+		return apply_filters( 'frm_should_show_floating_links', $should_show );
 	}
 
 	/**
@@ -887,7 +899,7 @@ class FrmAppController {
 	private static function enqueue_legacy_views_assets() {
 		wp_enqueue_style( 'formidable-grids' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
-		self::maybe_deregister_popper2();
+		self::maybe_deregister_popper1();
 		wp_enqueue_script( 'formidable_admin' );
 		wp_add_inline_style(
 			'formidable-admin',
@@ -918,13 +930,13 @@ class FrmAppController {
 	}
 
 	/**
-	 * Fix a Duplicator Pro conflict because it uses Popper 2. See issue #3459.
+	 * Unregister Popper if the registered version is outdated.
 	 *
-	 * @since 5.2.02.01
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function maybe_deregister_popper2() {
+	private static function maybe_deregister_popper1() {
 		global $wp_scripts;
 
 		if ( ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
@@ -932,24 +944,24 @@ class FrmAppController {
 		}
 
 		$popper = $wp_scripts->registered['popper'];
-		if ( version_compare( $popper->ver, '2.0', '>=' ) ) {
+		if ( version_compare( $popper->ver, '2.0', '<' ) ) {
 			wp_deregister_script( 'popper' );
-			self::register_popper1();
+			self::register_popper2();
 		}
 	}
 
 	/**
-	 * Register Popper required for Bootstrap 4.
+	 * Register Popper required for Bootstrap 5.
 	 *
-	 * @since 5.2.02.01
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function register_popper1() {
+	private static function register_popper2() {
 		if ( ! self::should_register_popper() ) {
 			return;
 		}
-		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array(), '2.11.8', true );
 	}
 
 	/**
@@ -1512,7 +1524,7 @@ class FrmAppController {
 	/**
 	 * Get a simple user meta key that only includes the screen ID.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return false|string
 	 */

@@ -306,6 +306,10 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when a form is created
+	 *
+	 * @param array $values
+	 *
+	 * @return array
 	 */
 	public static function setup_new_vars( $values = array() ) {
 		global $wpdb;
@@ -356,6 +360,12 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when editing a form
+	 *
+	 * @param array  $values
+	 * @param object $record
+	 * @param array  $post_values
+	 *
+	 * @return array
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
@@ -789,6 +799,13 @@ BEFORE_HTML;
 	/**
 	 * Create end section field if it doesn't exist. This is for migration from < 2.0
 	 * Fix any ordering that may be messed up
+	 *
+	 * @param bool   $open
+	 * @param bool   $reset_fields
+	 * @param int    $add_order
+	 * @param array  $end_section_values
+	 * @param object $field
+	 * @param string $move
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -890,6 +907,8 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string|null
 	 */
 	public static function get_form_style_class( $form = false ) {
@@ -1098,6 +1117,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int|object|string $form_id
+	 * @param mixed             $form
+	 * @return array
 	 */
 	public static function get_action_links( $form_id, $form ) {
 		if ( ! is_object( $form ) ) {
@@ -1200,6 +1223,12 @@ BEFORE_HTML;
 		return $form_name;
 	}
 
+	/**
+	 * @param int    $id
+	 * @param string $status
+	 * @param string $length
+	 * @return string
+	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
 
@@ -1208,6 +1237,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $link_details
+	 * @param string $length
+	 *
+	 * @return string
 	 */
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
@@ -1235,6 +1269,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int    $id
+	 * @param string $status
+	 *
+	 * @return array
 	 */
 	public static function delete_trash_info( $id, $status ) {
 		$labels = self::delete_trash_links( $id );
@@ -1256,6 +1295,9 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int $id
+	 * @return array
 	 */
 	public static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
@@ -1329,6 +1371,9 @@ BEFORE_HTML;
 		return apply_filters( 'frm_layout_classes', $classes );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function grid_classes() {
 		return array(
 			'frm_half'          => '1/2',
@@ -1344,6 +1389,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param mixed  $style
+	 * @param string $class
+	 *
+	 * @return string
 	 */
 	public static function style_class_label( $style, $class ) {
 		$label = '';
@@ -1358,6 +1408,11 @@ BEFORE_HTML;
 		return $label;
 	}
 
+	/**
+	 * @param string $status
+	 *
+	 * @return string
+	 */
 	public static function status_nice_name( $status ) {
 		$nice_names = array(
 			'draft'   => __( 'Draft', 'formidable' ),
@@ -1524,6 +1579,10 @@ BEFORE_HTML;
 	 * about which plan is required.
 	 *
 	 * @since 4.0
+	 *
+	 * @param string $requires
+	 * @param string $link
+	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
 		if ( empty( $requires ) ) {
@@ -1923,6 +1982,10 @@ BEFORE_HTML;
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+			return true;
+		}
+
+		if ( false !== strpos( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
 			return true;
 		}
 

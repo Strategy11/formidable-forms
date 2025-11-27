@@ -657,6 +657,10 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @since 2.0.23
+	 *
+	 * @param array $row
+	 * @param array $atts
+	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
 		if ( is_array( $atts['field_value'] ) ) {

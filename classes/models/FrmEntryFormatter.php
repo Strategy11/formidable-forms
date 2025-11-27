@@ -344,6 +344,9 @@ class FrmEntryFormatter {
 	 * interaction with processing field values like time format.
 	 *
 	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	protected function init_atts( $atts ) {
 		$atts['source']       = 'entry_formatter';
@@ -834,7 +837,11 @@ class FrmEntryFormatter {
 	protected function add_html_row( $value_args, &$content ) {
 		$display_value = $this->prepare_display_value_for_html_table( $value_args['value'], $value_args['field_type'] );
 
-		$content .= $this->table_generator->generate_two_cell_table_row( $value_args['label'], $display_value );
+		$content .= $this->table_generator->generate_two_cell_table_row(
+			$value_args['label'],
+			$display_value,
+			array( 'field_type' => $value_args['field_type'] )
+		);
 	}
 
 	/**

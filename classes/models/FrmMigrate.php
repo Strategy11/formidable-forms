@@ -79,7 +79,8 @@ class FrmMigrate {
 	private function update_settings_for_new_install() {
 		$settings = FrmAppHelper::get_settings();
 
-		$settings->denylist_check = 1;
+		$settings->denylist_check                      = 1;
+		$settings->installed_after_welcome_tour_update = 1;
 		$settings->store();
 	}
 
@@ -456,6 +457,8 @@ class FrmMigrate {
 	 * Move clear_on_focus or default_blank to placeholder.
 	 *
 	 * @since 4.0
+	 *
+	 * @param string $type Field option key to migrate.
 	 */
 	private function migrate_to_placeholder( $type = 'clear_on_focus' ) {
 		$query = array(
@@ -572,6 +575,9 @@ class FrmMigrate {
 	 * Divide by 9 to reverse the multiplication
 	 *
 	 * @since 3.0.05
+	 *
+	 * @param string $size Size string to maybe convert, passed by reference.
+	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
 		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );

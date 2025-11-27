@@ -118,7 +118,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * Only add the "frm-" prefix if multiple reCAPTCHA fields are allowed.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @param bool $allow_multiple
 	 * @return string

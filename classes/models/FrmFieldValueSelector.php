@@ -86,7 +86,8 @@ class FrmFieldValueSelector {
 	/**
 	 * FrmFieldValueSelector constructor
 	 *
-	 * @param int|string $field_id
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Arguments for configuring the value selector.
 	 */
 	public function __construct( $field_id, $args ) {
 		$this->set_html_name( $args );
@@ -297,7 +298,7 @@ class FrmFieldValueSelector {
 	/**
 	 * Whether to use the field value as the option label in the dropdown when the label is empty.
 	 *
-	 * @since x.x
+	 * @since 6.25.1
 	 *
 	 * @return bool
 	 */

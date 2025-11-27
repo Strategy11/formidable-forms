@@ -97,6 +97,13 @@ class FrmSettings {
 
 	public $denylist_check;
 
+	/**
+	 * @since 6.25.1
+	 *
+	 * @var int|null 1 if installed after welcome tour update, null otherwise.
+	 */
+	public $installed_after_welcome_tour_update;
+
 	public $disallowed_words;
 
 	public $allowed_words;
@@ -350,6 +357,7 @@ class FrmSettings {
 	 *
 	 * @since 3.06.01
 	 *
+	 * @param array $args
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
@@ -438,6 +446,7 @@ class FrmSettings {
 	}
 
 	/**
+	 * @param array $params
 	 * @return void
 	 */
 	private function update_roles( $params ) {
