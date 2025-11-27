@@ -13,7 +13,7 @@ echo '<div class="frm-long-icon-buttons" role="tablist">';
 
 foreach ( $payment_sections as $key => $section ) {
 	$is_active    = $tab === $key;
-	$name         = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );
+	$name         = $section['name'] ?? ucfirst( $key );
 	$input_params = array(
 		'id'           => "frm_toggle_{$key}_settings",
 		'type'         => 'radio',
@@ -74,7 +74,7 @@ foreach ( $payment_sections as $key => $section ) {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		?>
 	</div>

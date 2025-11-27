@@ -34,6 +34,9 @@ export function showLockedTemplateModal( template ) {
 		case PLANS.RENEW:
 			showRenewAccountModal();
 			break;
+		case PLANS.FREE:
+			showLeaveEmailModal();
+			break;
 	}
 }
 
@@ -43,7 +46,7 @@ export function showLockedTemplateModal( template ) {
  * @param {Function} executePreOpen The function to be executed before opening the modal dialog.
  * @return {Function} A higher-order function that can be invoked to display the modal dialog.
  */
-const showModal = executePreOpen => async( ...params ) => {
+const showModal = executePreOpen => async ( ...params ) => {
 	const dialogWidget = getModalWidget();
 	if ( ! dialogWidget ) {
 		return;
@@ -68,7 +71,7 @@ const upgradablePlans = {
 /**
  * Display the modal dialog to prompt the user to upgrade their account.
  *
- * @param {string} plan Current plan name
+ * @param {string}      plan     Current plan name
  * @param {HTMLElement} template The template element
  * @return {void}
  */
@@ -82,7 +85,7 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 	// Update plan icons and their availability
 	upgradeModalPlansIcons.forEach( icon => {
 		const planType = icon.dataset.plan;
-		const shouldDisplayCheck = upgradablePlans[plan].includes( planType );
+		const shouldDisplayCheck = upgradablePlans[ plan ].includes( planType );
 
 		// Toggle icon class based on plan availability
 		icon.classList.toggle( 'frm_green', shouldDisplayCheck );
@@ -90,14 +93,14 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 		// Update SVG icon
 		const svg = icon.querySelector( 'svg > use' );
 		svg.setAttribute( 'xlink:href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
-	});
+	} );
 
 	// Append template slug to the upgrade modal link URL
-	const templateSlug = template.dataset.slug ? `-${template.dataset.slug}` : '';
+	const templateSlug = template.dataset.slug ? `-${ template.dataset.slug }` : '';
 	upgradeModalLink.href = upgradeLink + templateSlug;
 
 	show( upgradeModal );
-});
+} );
 
 /**
  * Display the modal dialog to prompt the user to renew their account.
@@ -107,7 +110,17 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 export const showRenewAccountModal = showModal( () => {
 	const { renewAccountModal } = getElements();
 	show( renewAccountModal );
-});
+} );
+
+/**
+ * Display the modal dialog to prompt the user to leave an email.
+ *
+ * @return {void}
+ */
+export const showLeaveEmailModal = showModal( () => {
+	const { leaveEmailModal } = getElements();
+	show( leaveEmailModal );
+} );
 
 /**
  * Displays a modal dialog prompting the user to create a new template.
@@ -120,4 +133,4 @@ export const showCreateTemplateModal = showModal( () => {
 
 	const { createTemplateModal } = getElements();
 	show( createTemplateModal );
-});
+} );

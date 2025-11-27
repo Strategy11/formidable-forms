@@ -3,9 +3,9 @@ Plugin Name: Formidable Forms - Contact Form, Survey & Quiz Form Builder for Wor
 Contributors: formidableforms, sswells, srwells
 Tags: forms, form builder, survey, payment form, custom form, contact form, form maker, form creator, paypal, stripe, stripe form, quote form, contact button, form manager, free, survey form, email subscription, donation form, user registration form, wordpress registration, feedback form, contact form plugin, wordpress form plugin, lead form, registration form, contact form builder
 Requires at least: 5.2
-Tested up to: 6.8.1
+Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 6.22.3
+Stable tag: 6.25.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -65,7 +65,7 @@ Introducing sophisticated payment forms, donation forms, and other credit card f
 
 == Data-Driven Web Applications Made Easy ==
 
-With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, and much more.
+With Formidable Views, unlock the potential to display submitted data on the front-end, enabling dynamic, data-driven web applications including searchable databases. From real estate to job boards, Formidable empowers you to craft comprehensive employment listings, event calendars, business or member directories, timelines, and much more.
 
 == Elevate Your Online Store with WooCommerce Product Order Forms ==
 
@@ -372,42 +372,46 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
-= 6.22.3 =
-* Fix: Additional cached data issues have been fixed, including fatal errors and issues with data incorrectly appearing as empty.
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
 
-= 6.22.2 =
-* Fix: A fatal error on some websites would occur because of an issue with incorrect cached data types.
+= 6.25 =
+* New: Style settings have been added to Email actions.
+* New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
+* New: Square forms will now automatically enforce JavaScript validation before attempting to make the Square payment.
+* New: Payment hooks like frm_payment_status_complete are now called even when no payments add-ons (Stripe or Authorize.Net) are active.
+* Fix: An empty address will no longer be sent to Square when verifying the buyer to help reduce buyer verification issues.
+* Fix: Square location IDs could be incorrectly set when connecting when another mode was active.
+* Fix: Calculation settings would not properly load if the field was loaded using AJAX.
+* Fix: Checkbox and radio button fields no longer include the aria-invalid attribute. Instead, this is applied to the group for better accessibility.
+* Fix: Buttons could be cut off in an application pop-up when there was a lot of content in the description.
+* Fix: Field unit dropdowns would lose its unit value.
+* Fix: An Undefined property: stdClass::$item_key PHP warning when making Square payments has been fixed.
+* Fix: The country code would not properly get sent to Square when using US as the address type.
+* Fix: A Cannot access offset of type string on string fatal error that occurs when field options data is in an unexpected format has been fixed.
+* Fix: Font sizes would not scale as expected after changing the base font size style setting for a second time.
 
-= 6.22.1 =
-* New: Stripe, Square, PayPal, and Authorize.Net settings have now been moved to a new Payments section in Global Settings.
-* Fix: The honeypot field would appear incorrectly when editing in-place.
-* Fix: Field IDs would not properly update when importing a Timeline view.
-* Fix: Database queries would not use cached query data when the query resulted in no results.
-* Fix: Name fields would not work correctly when using the minimize=1 option.
-* Form previews are now automatically restricted to privileged users for the contact-us form key to help prevent spam.
+= 6.24.1 =
+* Fix: Importing entries with a CSV file stopped working with v6.24.
 
-= 6.22 =
-* New: Support for Square payments has been added.
-* Fix: Option validation would fail in some cases where shortcodes were used in options.
-* Fix: Option validation would fail in cases where option data included unexpected additional whitespace.
-* Fix: Option validation would fail in cases where field data have separate values defined for label and value, but where the separate values setting was since disabled.
-* Fix: Option validation would fail in cases where the option data was modified using the_content filter.
-* Fix: The global setting to check denylist data for spam would incorrectly remain checked after trying to disable it.
-* Fix: The first input with an error would not focus properly when the input was a radio button or checkbox field.
-* Fix: Users with access to forms but not global settings would see inbox messages but not have the proper permissions to dismiss the messages.
-* Fix: Honeypot fields would not properly get hidden for forms loaded in the footer.
-* Fix: An extra empty set of columns would appear for comments when exporting as CSV.
-* Fix: A JavaScript error would occur for inline modals in the form builder after deleting a field.
-* Fix: Too many hidden inputs would get added to the page when using the opt option in input shortcodes for a readonly checkbox field.
-* Fix: Multiple forms would appear in the in-theme preview when using some WordPress themes.
-
-= 6.21.1 =
-* New: A new setting, Check denylist data to validate for spam, has been added to Global spam settings. This new spam check was causing too many false positives, so it is now disabled by default.
-* New: When a denylist check is enabled, spam keywords that are detected are now stored in a transient and displayed in Global spam settings, under Custom allowed words. This makes it easier to detect and add exceptions when spam is detected.
-* New: Denylist checks will no longer check radio buttons, checkboxes, dropdowns, signature, password, and CAPTCHA fields to help avoid issues with false positive matches. Fields with options will still validate "Other" input values.
-* New: All spam checks are now disabled when importing forms.
-* Fix: The way the honeypot field ID is determined has been updated to avoid conflicts with other forms.
-* Fix: User defined product fields would fail validation.
+= 6.24 =
+* New: Field settings have been redesigned.
+* Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
+* Fix: Conditional logic field IDs would not properly update after importing an XML.
+* Fix: Line breaks used in Quiz Outcome actions would not properly import.
+* Fix: In some cases, a field group would not be draggable after a field was added beside another field.
+* Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
+* Fix: JS errors would occur in some cases after deleting a field group or section.
+* Fix: The line height style setting is no longer applied to the label in the visual styler preview.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

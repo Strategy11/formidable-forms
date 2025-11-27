@@ -174,8 +174,8 @@ class FrmListHelper {
 		return FrmAppHelper::get_simple_request(
 			array(
 				'param'    => $args['param'],
-				'default'  => isset( $args['default'] ) ? $args['default'] : '',
-				'sanitize' => isset( $args['sanitize'] ) ? $args['sanitize'] : 'sanitize_title',
+				'default'  => $args['default'] ?? '',
+				'sanitize' => $args['sanitize'] ?? 'sanitize_title',
 				'type'     => 'request',
 			)
 		);
@@ -1001,7 +1001,9 @@ class FrmListHelper {
 	 * Display the table
 	 *
 	 * @since 2.0.18
+	 *
 	 * @param array $args
+	 * @return void
 	 */
 	public function display( $args = array() ) {
 		$singular     = $this->_args['singular'];

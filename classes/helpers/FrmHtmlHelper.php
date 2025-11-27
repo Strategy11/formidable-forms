@@ -22,7 +22,7 @@ class FrmHtmlHelper {
 	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function toggle( $id, $name, $args ) {
 		wp_enqueue_script( 'formidable_settings' );
@@ -31,7 +31,7 @@ class FrmHtmlHelper {
 			function () use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},
-			isset( $args['echo'] ) ? $args['echo'] : false
+			$args['echo'] ?? false
 		);
 	}
 
@@ -54,5 +54,76 @@ class FrmHtmlHelper {
 		echo '>';
 		echo esc_html( $option === '' ? ' ' : $option );
 		echo '</option>';
+	}
+
+	/**
+	 * Renders a number input with unit selector.
+	 *
+	 * @since 6.24
+	 *
+	 * @param array $args {
+	 *     Optional. Arguments to customize the unit input.
+	 *
+	 *     @type array  $field_attrs        Attributes for the hidden input storing the field value.
+	 *     @type array  $input_number_attrs Attributes for the visible number input.
+	 *     @type array  $units              Available units for selection. Default is ['px', '%', 'em'].
+	 *     @type string $value              Initial value with optional unit (e.g. '10px', '50%').
+	 * }
+	 *
+	 * @return void
+	 */
+	public static function echo_unit_input( $args = array() ) {
+		$args = wp_parse_args(
+			$args,
+			array(
+				'field_attrs'        => array(),
+				'input_number_attrs' => array(),
+				'units'              => array( '', 'px', '%', 'em' ),
+				'default_unit'       => 'px',
+				'value'              => '',
+			)
+		);
+
+		$units = $args['units'];
+		$value = $args['value'];
+
+		// Extract unit and number value if value is a string
+		if ( '' !== $value && ! is_numeric( $value ) ) {
+			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')?$/';
+			preg_match( $pattern, $value, $matches );
+			$selected_unit = $matches[2] ?? '';
+			if ( ! empty( $matches[1] ) ) {
+				$value = $matches[1];
+			}
+		}
+
+		$input_number_attrs          = array_merge(
+			$args['input_number_attrs'],
+			array(
+				'type'  => ! empty( $selected_unit ) ? 'number' : 'text',
+				'value' => $value,
+				'class' => trim( 'frm-unit-input-control ' . ( $args['input_number_attrs']['class'] ?? '' ) ),
+			)
+		);
+
+		$hidden_value = $args['value'];
+		if ( is_numeric( $hidden_value ) ) {
+			$hidden_value .= $args['default_unit'];
+		}
+		?>
+		<span class="frm-unit-input">
+			<input type="hidden" value="<?php echo esc_attr( $hidden_value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
+			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
+			<span class="frm-input-group-suffix">
+				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>" tabindex="0">
+					<?php
+					foreach ( $units as $unit ) {
+						self::echo_dropdown_option( $unit, $unit === ( $selected_unit ?? $args['default_unit'] ), array( 'value' => $unit ) );
+					}
+					?>
+				</select>
+			</span>
+		</span>
+		<?php
 	}
 }

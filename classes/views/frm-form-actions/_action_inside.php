@@ -20,7 +20,17 @@ if ( FrmFormActionsController::should_show_notice_about_using_the_same_to_from_e
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-settings' ) ); ?>" class="button frm-button-primary"><?php esc_html_e( 'Setup emails', 'formidable' ); ?></a>
 		</p>
 	</div>
-<?php } ?>
+	<?php
+}
+
+/**
+ * @since 6.25
+ *
+ * @param WP_Post $form_action
+ */
+do_action( 'frm_action_settings_before_action_name', $form_action );
+?>
+
 <div class="frm_grid_container frm_no_p_margin">
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
@@ -57,7 +67,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	$event_labels = FrmFormAction::trigger_labels();
 	foreach ( $action_control->action_options['event'] as $event ) {
 		?>
-		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( isset( $event_labels[ $event ] ) ? $event_labels[ $event ] : $event ); ?></option>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>

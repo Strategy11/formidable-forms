@@ -15,13 +15,11 @@
 		document.addEventListener( 'frm_legacy_views_handle_field_focus', function( event ) {
 			const { idAttrValue } = event.frmData;
 			toggleAllowedShortcodes( idAttrValue );
-		});
-	});
+		} );
+	} );
 
 	function viewInit() {
-		let $addRemove,
-			$advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
-
+		const $advInfo = jQuery( document.getElementById( 'frm_adv_info' ) );
 		$advInfo.before( '<div id="frm_position_ele"></div>' );
 		setupMenuOffset();
 
@@ -31,7 +29,7 @@
 		// Show loading indicator.
 		jQuery( '#publish' ).on( 'mousedown', function() {
 			this.classList.add( 'frm_loading_button' );
-		});
+		} );
 
 		// move content tabs
 		jQuery( '#frm_dyncontent .handlediv' ).before( jQuery( '#frm_dyncontent .nav-menus-php' ) );
@@ -49,7 +47,7 @@
 
 		jQuery( document.getElementById( 'form_id' ) ).on( 'change', displayFormSelected );
 
-		$addRemove = jQuery( '.frm_repeat_rows' );
+		const $addRemove = jQuery( '.frm_repeat_rows' );
 		$addRemove.on( 'click', '.frm_add_order_row', addOrderRow );
 		$addRemove.on( 'click', '.frm_add_where_row', addWhereRow );
 		$addRemove.on( 'change', '.frm_insert_where_options', insertWhereOptions );
@@ -67,24 +65,24 @@
 		slug = slug.trim().toLowerCase();
 		if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( slug ) ) {
 			msg = frmAdminJs.slug_is_reserved;
-			msg =  msg.replace( '****', addHtmlTags( slug, 'strong' ) );
+			msg = msg.replace( '****', addHtmlTags( slug, 'strong' ) );
 			msg += '<br /><br />';
 			msg += addHtmlTags( '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>', 'div' );
 			infoModal( msg );
 		}
 	}
-	
+
 	/**
 	 * Checks View filter value for params named with reserved words and displays a message if any are found.
 	 */
 	function checkFilterParamNames() {
-		let regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig,
-			filterValue = jQuery( this ).val(),
-			match = regEx.exec( filterValue ),
-			unsafeParams = '';
+		const regEx = /\[\s*get\s*param\s*=\s*['"]?([a-zA-Z-_]+)['"]?/ig;
+		const filterValue = jQuery( this ).val();
+		let match = regEx.exec( filterValue );
+		let	unsafeParams = '';
 
 		while ( match !== null ) {
-			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[1]) ) {
+			if ( Array.isArray( frmAdminJs.unsafe_params ) && frmAdminJs.unsafe_params.includes( match[ 1 ] ) ) {
 				if ( unsafeParams !== '' ) {
 					unsafeParams += '", "' + match[ 1 ];
 				} else {
@@ -95,8 +93,8 @@
 		}
 
 		if ( unsafeParams !== '' ) {
-			let msg =  frmAdminJs.param_is_reserved;
-			msg =  msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
+			let msg = frmAdminJs.param_is_reserved;
+			msg = msg.replace( '****', addHtmlTags( unsafeParams, 'strong' ) );
 			msg += '<br /><br />';
 			msg += ' <a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank" class="frm-standard-link">' + frmAdminJs.reserved_words + '</a>';
 
@@ -123,7 +121,7 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 			DOM.events.add( DOM.select( '.wp-editor-wrap' ), 'mouseout', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
 					return;
@@ -131,7 +129,7 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 		} else {
 			jQuery( '#frm_dyncontent' ).on( 'mouseover mouseout', '.wp-editor-wrap', function() {
 				if ( jQuery( '*:focus' ).length > 0 ) {
@@ -140,7 +138,7 @@
 				if ( this.id ) {
 					toggleAllowedShortcodes( this.id.slice( 3, -5 ) );
 				}
-			});
+			} );
 		}
 	}
 
@@ -148,8 +146,8 @@
 		const urlQuery = window.location.search.substring( 1 );
 		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
 			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
-			document.getElementById( 'hidden-post-visibility' ).value        = 'private';
-			document.getElementById( 'visibility-radio-private' ).checked    = true;
+			document.getElementById( 'hidden-post-visibility' ).value = 'private';
+			document.getElementById( 'visibility-radio-private' ).checked = true;
 		}
 	}
 
@@ -234,7 +232,7 @@
 			return;
 		}
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -245,9 +243,9 @@
 			success: function( html ) {
 				jQuery( '#frm_adv_info .categorydiv' ).html( html );
 			}
-		});
+		} );
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -258,7 +256,7 @@
 			success: function( html ) {
 				jQuery( document.getElementById( 'date_select_container' ) ).html( html );
 			}
-		});
+		} );
 	}
 
 	function clickTabsAfterAjax() {
@@ -288,7 +286,7 @@
 
 	function addOrderRow() {
 		const logicRows = document.getElementById( 'frm_order_options' ).querySelectorAll( '.frm_logic_rows div' );
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -300,12 +298,12 @@
 			success: function( html ) {
 				jQuery( '#frm_order_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_order_row' ).hide();
 			}
-		});
+		} );
 	}
 
 	function addWhereRow() {
 		const rowDivs = document.getElementById( 'frm_where_options' ).querySelectorAll( '.frm_logic_rows div' );
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -317,7 +315,7 @@
 			success: function( html ) {
 				jQuery( '#frm_where_options .frm_logic_rows' ).append( html ).show().prev( '.frm_add_where_row' ).hide();
 			}
-		});
+		} );
 	}
 
 	function insertWhereOptions() {
@@ -325,7 +323,7 @@
 		const value = this.value,
 			whereKey = jQuery( this ).closest( '.frm_where_row' ).attr( 'id' ).replace( 'frm_where_field_', '' );
 
-		jQuery.ajax({
+		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
 			data: {
@@ -337,7 +335,7 @@
 			success: function( html ) {
 				jQuery( document.getElementById( 'where_field_options_' + whereKey ) ).html( html );
 			}
-		});
+		} );
 	}
 
 	function hideWhereOptions() {
@@ -373,7 +371,7 @@
 		if ( id !== '' ) {
 			const $ele = jQuery( document.getElementById( id ) );
 			if ( $ele.attr( 'class' ) && id !== 'wpbody-content' && id !== 'content' && id !== 'dyncontent' && id !== 'success_msg' ) {
-				let d = $ele.attr( 'class' ).split( ' ' )[0];
+				let d = $ele.attr( 'class' ).split( ' ' )[ 0 ];
 				if ( d === 'frm_long_input' || d === 'frm_98_width' || typeof d === 'undefined' ) {
 					d = '';
 				} else {

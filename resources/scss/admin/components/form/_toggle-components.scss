@@ -28,7 +28,7 @@
 
 .frm_toggle_block {
 	display: inline-flex !important;
-	gap: var(--gap-sm);
+	gap: var(--gap-xs);
 	align-items: center;
 }
 
@@ -44,26 +44,28 @@
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-color: var(--grey-border);
+	background-color: var(--grey-200);
 	transition: .4s;
 	border-radius: 30px;
 }
 
 .frm_toggle_slider::before {
-	border-radius: 50%;
-	position: absolute;
-	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 20 20%27><path d=%27M16.8 4.5l-1.3-1.3L10 8.6 4.5 3.2 3.2 4.5 8.6 10l-5.4 5.5 1.3 1.3 5.5-5.4 5.5 5.4 1.3-1.3-5.4-5.5 5.4-5.5z%27 fill=%27%2398A2B3%27/%3E</svg>");
-	height: 22px;
-	width: 22px;
-	padding: 0 5.5px;
-	left: 1px;
-	bottom: 1px;
-	background-color: #fff;
-	transition: .4s;
 	box-sizing: border-box;
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%2398A2B3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m10.063 3.938-6.126 6.124M3.938 3.938l6.124 6.124'/%3E%3C/svg%3E");
+	position: absolute;
+	left: 2px;
+	bottom: 2px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	font-size: 20px;
+	line-height: 20px;
+	background-color: #fff;
+	border-radius: 50%;
+	transition: 0.4s;
 	box-shadow: var(--box-shadow-md);
-	font-size: 21px;
-	line-height: 18px;
 }
 
 input:checked + .frm_toggle .frm_toggle_slider {
@@ -75,9 +77,8 @@ input:focus + .frm_toggle .frm_toggle_slider {
 }
 
 input:checked + .frm_toggle .frm_toggle_slider::before {
-	padding: 0 6px;
 	transform: translateX(16px);
-	content: url("data:image/svg+xml;utf8,<svg xmlns=%27http://www.w3.org/2000/svg%27 height=%2711px%27 width=%2711px%27 viewBox=%270 0 10 10%27><path d=%27M9.2 2c.2.3.2.7 0 1l-5 5c-.3.2-.6.2-.9 0L.8 5.3a.6.6 0 0 1 .9-.8l2 2 4.6-4.5c.3-.3.6-.3.9 0Z%27 fill=%27%234199FD%27/%3E</svg>");
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' fill='none'%3E%3Cpath stroke='%234199FD' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='m4.52 7.437 1.313 1.459L9.48 5.104'/%3E%3C/svg%3E");
 }
 
 input[disabled] + .frm_toggle_slider,
@@ -87,7 +88,7 @@ input[disabled] + .frm_toggle .frm_toggle_slider {
 	opacity: .5;
 }
 
-.frm_toggle_opt ~ .frm_toggle .frm_toggle_slider::before {
+.frm_toggle_opt ~ .frm_toggle:not(#frm_testing_mode .frm_toggle) .frm_toggle_slider::before {
 	content: '' !important; /* Don't show x/check if off label included or on builder page */
 }
 

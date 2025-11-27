@@ -26,6 +26,16 @@
 .frmbutton.ui-sortable-helper {
 	transition: opacity .2s;
 	opacity: 1;
+	position: fixed;
+	z-index: 99999;
+}
+
+#frm-insert-fields,
+#frm-show-fields {
+
+	.frmbutton.ui-sortable-helper a {
+		min-width: 100px;
+	}
 }
 
 /* End dragging */

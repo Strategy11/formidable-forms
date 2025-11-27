@@ -124,7 +124,6 @@ class FrmStylesController {
 		self::load_pro_hooks();
 
 		$version = FrmAppHelper::plugin_version();
-		wp_enqueue_script( 'jquery-ui-datepicker' );
 
 		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
 			wp_enqueue_style( 'wp-color-picker' );
@@ -498,6 +497,8 @@ class FrmStylesController {
 			return;
 		}
 
+		$previous_style_id = $form->options['custom_style'];
+
 		// If the default style is selected, use the "Always use default" legacy option instead of the default style.
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
@@ -509,10 +510,24 @@ class FrmStylesController {
 		// We want to save a string for consistency. FrmStylesHelper::get_form_count_for_style expects the custom style ID is a string.
 		$form->options['custom_style'] = (string) $style_id;
 
+		if ( $previous_style_id === $form->options['custom_style'] ) {
+			// Exit early before updating DB if nothing actually changed.
+			self::$message = __( 'Successfully updated style.', 'formidable' );
+			return;
+		}
+
 		global $wpdb;
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $form->options ) ), array( 'id' => $form->id ) );
 
 		FrmForm::clear_form_cache();
+
+		/**
+		 * @since 6.25.1
+		 *
+		 * @param int $form_id
+		 * @param int $style_id
+		 */
+		do_action( 'frm_after_changed_form_style', absint( $form_id ), absint( $style_id ) );
 
 		self::$message = __( 'Successfully updated style.', 'formidable' );
 	}
@@ -541,7 +556,7 @@ class FrmStylesController {
 		$version         = FrmAppHelper::plugin_version();
 		$js_dependencies = array( 'wp-i18n', 'wp-hooks', 'formidable_dom' );
 
-		if ( FrmAppHelper::pro_is_installed() ) {
+		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::use_jquery_datepicker' ) && FrmProAppHelper::use_jquery_datepicker() ) {
 			$js_dependencies[] = 'jquery-ui-datepicker';
 		}
 
@@ -683,6 +698,13 @@ class FrmStylesController {
 			// Set the post id to the new style so it will be loaded for editing.
 			$post_id = reset( $id );
 		}
+
+		/**
+		 * @since 6.25.1
+		 *
+		 * @param int $post_id
+		 */
+		do_action( 'frm_after_saved_style', absint( $post_id ) );
 
 		self::$message = __( 'Your styling settings have been saved.', 'formidable' );
 	}
@@ -1266,13 +1288,11 @@ class FrmStylesController {
 						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>">
 							<h3 class="accordion-section-title hndle">
 								<?php
-								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id );
+								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
 								echo esc_html( $box['title'] );
 								?>
 								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>">
-									<?php
-									FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' );
-									?>
+									<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
 								</button>
 							</h3>
 							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">

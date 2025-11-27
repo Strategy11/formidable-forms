@@ -355,7 +355,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	protected function column_style( $form ) {
-		$style_setting = isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : '';
+		$style_setting = $form->options['custom_style'] ?? '';
 		$frm_settings  = FrmAppHelper::get_settings();
 
 		if ( $style_setting === '0' || 'none' === $frm_settings->load_style ) {
@@ -385,7 +385,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	protected function column_views( $form ) {
 		$attributes = array(
 			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
-			'title'  => __( 'View Form', 'formidable' ),
+			'title'  => __( 'Link to list of all views for this form.', 'formidable' ),
 			'target' => '_blank',
 		);
 

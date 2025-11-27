@@ -20,15 +20,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</p>
 		<?php
 		$upgrade_link_args = array(
-			'medium' => 'views-info',
-			'plan'   => 'view',
-			'class'  => 'frm-mb-md frm-button-primary frm-gradient',
-			'text'   => __( 'Get Formidable Views', 'formidable' ),
+			'campaign' => 'views-info',
+			'content'  => 'get-views-button',
+			'plan'     => 'view',
+			'class'    => 'frm-mb-md frm-button-primary frm-gradient',
+			'text'     => __( 'Get Formidable Views', 'formidable' ),
 		);
 		FrmAddonsController::conditional_action_button( 'views', $upgrade_link_args );
-		?>
 
-		<a href="https://formidableforms.com/demos/" class="frm-mb-md frm-ml-xs frm-button-secondary"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
+		$demo_link_args = array(
+			'campaign' => 'views-info',
+			'content'  => 'view-demos-button',
+		);
+		?>
+		<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $demo_link_args, 'demos/' ) ); ?>" class="frm-mb-md frm-ml-xs frm-button-secondary"><?php esc_html_e( 'View Demos', 'formidable' ); ?></a>
 
 		<div class="frm-views-features frm_grid_container">
 			<div class="frm4">
@@ -99,12 +104,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		</div><!--- End .frm-views-features -->
 
+		<?php
+		$learn_more_utm = array(
+			'campaign' => 'views-info',
+			'content'  => 'views-info-learn-more',
+		);
+		?>
+
 		<div class="frm_grid_container">
 			<div class="frm6">
 				<div class="frm-views-learn-more">
 					<h3><?php esc_html_e( 'Learn more', 'formidable' ); ?></h3>
 					<p style="margin-bottom: var(--gap-md);"><?php esc_html_e( 'Bring entries to the front-end of your site for full-featured applications or just to show the content.', 'formidable' ); ?></p>
-					<a href="https://formidableforms.com/features/display-form-data-views/" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
+					<a href="<?php echo esc_url( FrmAppHelper::admin_upgrade_link( $learn_more_utm, 'features/display-form-data-views/' ) ); ?>" class="frm-button-secondary"><?php esc_html_e( 'Learn more', 'formidable' ); ?></a>
 				</div>
 			</div>
 			<div class="frm6">

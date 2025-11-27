@@ -23,6 +23,7 @@ export default class ItemSelect extends Component {
 
 		return [
 			{
+				// translators: %s is the name of the item
 				label: sprintf( __( 'Select a %s', 'formidable' ), itemName ),
 				value: '',
 			},
@@ -44,7 +45,11 @@ export default class ItemSelect extends Component {
 		if ( ( ! items || items.length === 0 ) ) {
 			return (
 				<p className="frm-block-select-no-items">
-					{ sprintf( __( 'Currently, there are no %s', 'formidable' ), itemNamePlural ) }
+					{ sprintf(
+						// translators: %s is the name of the item
+						__( 'Currently, there are no %s', 'formidable' ),
+						itemNamePlural
+					) }
 				</p>
 			);
 		}

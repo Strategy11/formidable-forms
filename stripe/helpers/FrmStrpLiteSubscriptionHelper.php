@@ -47,7 +47,7 @@ class FrmStrpLiteSubscriptionHelper {
 			'paysys'         => 'stripe',
 			'item_id'        => $atts['entry']->id,
 			'action_id'      => $atts['action']->ID,
-			'sub_id'         => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'sub_id'         => $atts['charge']->sub_id ?? '',
 			'interval_count' => $atts['action']->post_content['interval_count'],
 			'time_interval'  => $atts['action']->post_content['interval'],
 			'status'         => 'active',

@@ -28,7 +28,7 @@ class FrmApplicationsController {
 
 		if ( ! isset( $slug ) ) {
 			$slug     = 'formidable-applications';
-			$callback = array( __CLASS__, 'landing_page' );
+			$callback = array( self::class, 'landing_page' );
 		}
 
 		add_submenu_page( 'formidable', 'Formidable | ' . $label, $label, $cap, $slug, $callback );
@@ -131,7 +131,7 @@ class FrmApplicationsController {
 
 		FrmApplicationTemplate::init();
 
-		return array_reduce( $applications, array( __CLASS__, 'reduce_template' ), array() );
+		return array_reduce( $applications, array( self::class, 'reduce_template' ), array() );
 	}
 
 	/**

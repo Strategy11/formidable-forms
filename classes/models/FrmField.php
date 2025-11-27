@@ -28,15 +28,15 @@ class FrmField {
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_caret_square_down_icon',
+				'icon' => 'frm_icon_font frm_dropdown_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email_icon',
+				'icon' => 'frm_icon_font frm_email2_icon',
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link_icon',
+				'icon' => 'frm_icon_font frm_link2_icon',
 			),
 			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
@@ -52,23 +52,23 @@ class FrmField {
 			),
 			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_icon',
+				'icon' => 'frm_icon_font frm_code2_icon',
 			),
 			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash_icon',
+				'icon' => 'frm_icon_font frm_eye_slash2_icon',
 			),
 			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_icon',
+				'icon' => 'frm_icon_font frm_user2_icon',
 			),
 			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check_icon',
+				'icon' => 'frm_icon_font frm_shield_check2_icon',
 			),
 			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card_icon',
+				'icon' => 'frm_icon_font frm_credit_card2_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -101,17 +101,23 @@ class FrmField {
 		$fields     = array(
 			'file'            => array(
 				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload_icon',
+				'icon'    => 'frm_icon_font frm_upload3_icon',
 				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 			),
-			'ranking'         => array(),
+			'ranking'         => array(
+				'name'         => __( 'Ranking', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
+				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
+				'addon'        => 'surveys',
+			),
 			'rte'             => array(
 				'name' => __( 'Rich Text', 'formidable' ),
 				'icon' => 'frm_icon_font frm_align_right_icon',
 			),
 			'date'            => array(
 				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar_icon',
+				'icon' => 'frm_icon_font frm_calendar2_icon',
 			),
 			'time'            => array(
 				'name' => __( 'Time', 'formidable' ),
@@ -124,7 +130,7 @@ class FrmField {
 			),
 			'star'            => array(
 				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star_icon',
+				'icon' => 'frm_icon_font frm_star2_icon',
 			),
 			'range'           => array(
 				'name' => __( 'Slider', 'formidable' ),
@@ -136,7 +142,7 @@ class FrmField {
 			),
 			'data'            => array(
 				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_sitemap_icon',
+				'icon'    => 'frm_icon_font frm_dynamic_icon',
 				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
 			),
 			'lookup'          => array(
@@ -146,7 +152,7 @@ class FrmField {
 			),
 			'divider|repeat'  => array(
 				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_repeater_icon',
+				'icon'    => 'frm_icon_font frm_refresh_icon',
 				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
 			),
 			'end_divider'     => array(
@@ -164,7 +170,7 @@ class FrmField {
 			),
 			'form'            => array(
 				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text_icon',
+				'icon' => 'frm_icon_font frm_file_text2_icon',
 			),
 			'likert'          => array(
 				'name'  => __( 'Likert Scale', 'formidable' ),
@@ -178,11 +184,11 @@ class FrmField {
 			),
 			'password'        => array(
 				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_open_icon',
+				'icon' => 'frm_icon_font frm_lock_closed2_icon',
 			),
 			'tag'             => array(
 				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags_icon',
+				'icon' => 'frm_icon_font frm_price_tags2_icon',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -192,11 +198,11 @@ class FrmField {
 			),
 			'address'         => array(
 				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location_icon',
+				'icon' => 'frm_icon_font frm_location2_icon',
 			),
 			'summary'         => array(
 				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text_icon',
+				'icon'    => 'frm_icon_font frm_file_text3_icon',
 				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
 			),
 			'signature'       => array(
@@ -206,13 +212,13 @@ class FrmField {
 			),
 			'ai'              => array(
 				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_eye_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm-ai-icon frm_show_upgrade',
 				'addon'   => 'ai',
 				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
 			),
 			'ssa-appointment' => array(
 				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calendar_icon frm_show_upgrade',
+				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
 				'require' => 'Simply Schedule Appointments',
 				'message' => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
@@ -224,7 +230,7 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product_icon',
+				'icon'    => 'frm_icon_font frm_product2_icon',
 				'section' => 'pricing',
 			),
 			'quantity'        => array(
@@ -234,27 +240,10 @@ class FrmField {
 			),
 			'total'           => array(
 				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total_icon',
+				'icon'    => 'frm_icon_font frm_total2_icon',
 				'section' => 'pricing',
 			),
 		);
-
-		if ( self::include_ranking_fields() ) {
-			$fields['ranking'] = array(
-				'name'         => __( 'Ranking', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
-				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
-				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
-				'addon'        => 'surveys',
-				'is_new'       => self::field_is_new( 'ranking' ),
-			);
-		} else {
-			unset( $fields['ranking'] );
-		}
-
-		if ( ! FrmAppHelper::show_new_feature( 'ai' ) ) {
-			unset( $fields['ai'] );
-		}
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -266,80 +255,6 @@ class FrmField {
 	}
 
 	/**
-	 * Check if we should show ranking fields in the builder.
-	 * This is based on the active version coming from our API data.
-	 * If Surveys v1.1 is not released yet, we don't want to display ranking fields yet.
-	 *
-	 * @since 6.8.3
-	 *
-	 * @return bool
-	 */
-	private static function include_ranking_fields() {
-		if ( class_exists( 'FrmSurveys\models\fields\Ranking' ) ) {
-			// Always return true if Ranking fields exist.
-			return true;
-		}
-
-		$plugin           = 'formidable-surveys/formidable-surveys.php';
-		$expected_version = '1.1';
-
-		return self::installed_plugin_meets_version( $plugin, $expected_version ) || self::api_meets_version( $plugin, $expected_version );
-	}
-
-	/**
-	 * @since 6.8.3
-	 *
-	 * @param string $plugin
-	 * @param string $expected_version
-	 * @return bool
-	 */
-	private static function installed_plugin_meets_version( $plugin, $expected_version ) {
-		$installed_version = self::get_installed_version( $plugin );
-		return $installed_version && version_compare( $installed_version, $expected_version, '>=' );
-	}
-
-	/**
-	 * @since 6.8.3
-	 *
-	 * @param string $plugin
-	 * @return false|string String version. False if the plugin is not installed.
-	 */
-	private static function get_installed_version( $plugin ) {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		$plugins = get_plugins();
-		if ( isset( $plugins[ $plugin ] ) && ! empty( $plugins[ $plugin ]['Version'] ) ) {
-			return $plugins[ $plugin ]['Version'];
-		}
-		return false;
-	}
-
-	/**
-	 * @since 6.8.3
-	 *
-	 * @param string $plugin
-	 * @param string $expected_version
-	 * @return bool
-	 */
-	private static function api_meets_version( $plugin, $expected_version ) {
-		$api     = new FrmFormApi();
-		$addons  = $api->get_api_info();
-		$matches = wp_list_filter( $addons, array( 'plugin' => $plugin ) );
-		if ( ! $matches ) {
-			return false;
-		}
-
-		$match = reset( $matches );
-		if ( empty( $match['new_version'] ) ) {
-			return false;
-		}
-
-		$api_version = $match['new_version'];
-		return version_compare( $api_version, $expected_version, '>=' );
-	}
-
-	/**
 	 * Consider a field new for 90 days after the release date.
 	 *
 	 * @since 6.8.3
@@ -348,12 +263,18 @@ class FrmField {
 	 * @return bool
 	 */
 	private static function field_is_new( $type ) {
-		if ( 'ranking' === $type ) {
-			$ranking_release_date       = '2024-03-12';
-			$three_months_after_release = gmdate( 'Y-m-d', strtotime( $ranking_release_date . ' + 90 days' ) );
-			return gmdate( 'Y-m-d' ) < $three_months_after_release;
+		$release_dates = array(
+			'ranking' => '2024-03-12',
+		);
+
+		if ( ! isset( $release_dates[ $type ] ) ) {
+			return false;
 		}
-		return false;
+
+		$release_date = $release_dates[ $type ];
+
+		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
+		return gmdate( 'Y-m-d' ) < $three_months_after_release;
 	}
 
 	/**
@@ -377,7 +298,7 @@ class FrmField {
 		global $wpdb, $frm_duplicate_ids;
 
 		$new_values              = array();
-		$key                     = isset( $values['field_key'] ) ? $values['field_key'] : $values['name'];
+		$key                     = $values['field_key'] ?? $values['name'];
 		$new_values['field_key'] = FrmAppHelper::get_unique_key( $key, $wpdb->prefix . 'frm_fields', 'field_key' );
 
 		$values = FrmAppHelper::maybe_filter_array( $values, array( 'name', 'description' ) );
@@ -723,6 +644,10 @@ class FrmField {
 		return $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_fields WHERE id=%d', $id ) );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @return void
+	 */
 	public static function delete_form_transient( $form_id ) {
 		$form_id = absint( $form_id );
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeinclude' );
@@ -1384,7 +1309,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) ? $field->field_options[ $option ] : '';
+		return $field->field_options[ $option ] ?? '';
 	}
 
 	/**

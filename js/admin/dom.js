@@ -10,15 +10,15 @@
 	}
 
 	const modal = {
-		maybeCreateModal: ( id, { title, content, footer, width } = {}) => {
+		maybeCreateModal: ( id, { title, content, footer, width, dialogClass } = {} ) => {
 			let modal = document.getElementById( id );
 
 			if ( ! modal ) {
 				modal = createEmptyModal( id );
 
-				const titleElement = div({
+				const titleElement = div( {
 					className: 'frm-modal-title'
-				});
+				} );
 
 				if ( 'string' === typeof title ) {
 					titleElement.textContent = title;
@@ -27,28 +27,28 @@
 				const a = tag(
 					'a',
 					{
-						child: svg({ href: '#frm_close_icon' }),
+						child: svg( { href: '#frm_close_icon' } ),
 						className: 'dismiss'
 					}
 				);
 				const postbox = modal.querySelector( '.postbox' );
 
 				postbox.appendChild(
-					div({
+					div( {
 						className: 'frm_modal_top',
 						children: [
 							titleElement,
-							div({ child: a })
+							div( { child: a } )
 						]
-					})
+					} )
 				);
 				postbox.appendChild(
-					div({ className: 'frm_modal_content' })
+					div( { className: 'frm_modal_content' } )
 				);
 
 				if ( footer ) {
 					postbox.appendChild(
-						div({ className: 'frm_modal_footer' })
+						div( { className: 'frm_modal_footer' } )
 					);
 				}
 			} else if ( 'string' === typeof title ) {
@@ -57,7 +57,7 @@
 			}
 
 			if ( ! content && ! footer ) {
-				makeModalIntoADialogAndOpen( modal, { width });
+				makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 				return modal;
 			}
 
@@ -72,7 +72,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal );
+			makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 			return modal;
 		},
 		footerButton: args => {
@@ -121,7 +121,7 @@
 			}
 			return Promise.resolve( json.data );
 		},
-		doJsonPost: async function( action, formData, { signal } = {}) {
+		doJsonPost: async function( action, formData, { signal } = {} ) {
 			formData.append( 'nonce', frmGlobal.nonce );
 			const init = {
 				method: 'POST',
@@ -131,7 +131,7 @@
 				init.signal = signal;
 			}
 			const response = await fetch( ajaxurl + '?action=frm_' + action, init );
-			const json     = await response.json();
+			const json = await response.json();
 			if ( ! json.success ) {
 				return Promise.reject( json.data || 'JSON result is not successful' );
 			}
@@ -145,15 +145,15 @@
 			const id = $select.is( '[id]' ) ? $select.attr( 'id' ).replace( '[]', '' ) : false;
 
 			let labelledBy = id ? jQuery( '#for_' + id ) : false;
-			labelledBy     = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
+			labelledBy = id && labelledBy.length ? 'aria-labelledby="' + labelledBy.attr( 'id' ) + '"' : '';
 
 			// Set empty title attributes so that none of the dropdown options include title attributes.
 			$select.find( 'option' ).attr( 'title', ' ' );
-			$select.multiselect({
+			$select.multiselect( {
 				templates: {
-					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
-					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+					button: '<button type="button" class="multiselect dropdown-toggle btn" data-bs-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: __( '— Select —', 'formidable' ),
@@ -171,14 +171,14 @@
 							if ( jQuery( '.multiselect-container.frm-dropdown-menu' ).is( ':visible' ) ) {
 								jQuery( event.currentTarget ).removeClass( 'open' );
 							}
-						});
+						} );
 					}
 
 					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
 					$dropdown.find( '.dropdown-item' ).each(
 						function() {
-							const option         = this;
-							const dropdownInput  = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
+							const option = this;
+							const dropdownInput = option.querySelector( 'input[type="checkbox"], input[type="radio"]' );
 							if ( dropdownInput ) {
 								option.setAttribute( 'role', 'checkbox' );
 								option.setAttribute( 'aria-checked', dropdownInput.checked ? 'true' : 'false' );
@@ -189,8 +189,8 @@
 				onChange: function( $option, checked ) {
 					$select.trigger( 'frm-multiselect-changed', $option, checked );
 
-					const $dropdown     = $select.next( '.frm-btn-group.dropdown' );
-					const optionValue   = $option.val();
+					const $dropdown = $select.next( '.frm-btn-group.dropdown' );
+					const optionValue = $option.val();
 					const $dropdownItem = $dropdown.find( 'input[value="' + optionValue + '"]' ).closest( 'button.dropdown-item' );
 					if ( $dropdownItem.length ) {
 						$dropdownItem.attr( 'aria-checked', checked ? 'true' : 'false' );
@@ -200,50 +200,14 @@
 						setTimeout( () => $dropdownItem.get( 0 ).focus(), 0 );
 					}
 				}
-			});
+			} );
 		}
 	};
 
 	const bootstrap = {
-		setupBootstrapDropdowns( callback ) {
-			if ( ! window.bootstrap || ! window.bootstrap.Dropdown ) {
-				return;
-			}
-
-			window.bootstrap.Dropdown._getParentFromElement = getParentFromElement;
-			window.bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
-
-			function getParentFromElement( element ) {
-				let parent;
-				const selector = window.bootstrap.Util.getSelectorFromElement( element );
-
-				if ( selector ) {
-					parent = document.querySelector( selector );
-				}
-
-				const result = parent || element.parentNode;
-				const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
-
-				if ( ! frmDropdownMenu ) {
-					// Not a formidable dropdown, treat like Bootstrap does normally.
-					return result;
-				}
-
-				// Temporarily add dropdown-menu class so bootstrap can initialize.
-				frmDropdownMenu.classList.add( 'dropdown-menu' );
-				setTimeout(
-					function() {
-						frmDropdownMenu.classList.remove( 'dropdown-menu' );
-					},
-					0
-				);
-
-				if ( 'function' === typeof callback ) {
-					callback( frmDropdownMenu );
-				}
-
-				return result;
-			}
+		setupBootstrapDropdowns: function() {
+			// This function is no longer necessary.
+			// It's call in Pro though, so keep it to avoid any errors for now.
 		},
 		multiselect
 	};
@@ -261,12 +225,12 @@
 		 *
 		 * @since 4.10.01 Add container param to init autocomplete elements inside an element.
 		 *
-		 * @param {String} type Type of data. Accepts `page` or `user`.
-		 * @param {String|Object} container Container class or element. Default is null.
+		 * @param {string}        type      Type of data. Accepts `page` or `user`.
+		 * @param {string|Object} container Container class or element. Default is null.
 		 */
 		initAutocomplete: function( type, container ) {
 			const basedUrlParams = '?action=frm_' + type + '_search&nonce=' + frmGlobal.nonce;
-			const elements       = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
+			const elements = ! container ? jQuery( '.frm-' + type + '-search' ) : jQuery( container ).find( '.frm-' + type + '-search' );
 
 			elements.each( initAutocompleteForElement );
 
@@ -288,7 +252,7 @@
 					}
 				}
 
-				element.autocomplete({
+				element.autocomplete( {
 					delay: 100,
 					minLength: 0,
 					source: source,
@@ -318,19 +282,19 @@
 
 						jQuery( this ).autocomplete( 'option', 'appendTo', $container );
 					}
-				})
-				.on( 'focus', function() {
+				} )
+					.on( 'focus', function() {
 					// Show options on click to make it work more like a dropdown.
-					if ( this.value === '' || this.nextElementSibling.value < 1 ) {
-						jQuery( this ).autocomplete( 'search', this.value );
-					}
-				})
-				.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
-					return jQuery( '<li>' )
-					.attr( 'aria-label', item.label )
-					.append( jQuery( '<div>' ).text( item.label ) )
-					.appendTo( ul );
-				};
+						if ( this.value === '' || this.nextElementSibling.value < 1 ) {
+							jQuery( this ).autocomplete( 'search', this.value );
+						}
+					} )
+					.data( 'ui-autocomplete' )._renderItem = function( ul, item ) {
+						return jQuery( '<li>' )
+							.attr( 'aria-label', item.label )
+							.append( jQuery( '<div>' ).text( item.label ) )
+							.appendTo( ul );
+					};
 			}
 		},
 
@@ -377,13 +341,13 @@
 					className: 'frm-search',
 					children: [
 						label,
-						span({ className: 'frmfont frm_search_icon' }),
+						span( { className: 'frmfont frm_search_icon' } ),
 						searchInput
 					]
 				}
 			);
 		},
-		newSearchInput: ( id, placeholder, targetClassName, args = {}) => {
+		newSearchInput: ( id, placeholder, targetClassName, args = {} ) => {
 			const input = getAutoSearchInput( id, placeholder );
 			const wrappedSearch = search.wrapInput( input, placeholder );
 			search.init( input, targetClassName, args );
@@ -398,7 +362,7 @@
 
 			return wrappedSearch;
 		},
-		init: ( input, targetClassName, { handleSearchResult } = {}) => {
+		init: ( input, targetClassName, { handleSearchResult } = {} ) => {
 			input.setAttribute( 'type', 'search' );
 			input.setAttribute( 'autocomplete', 'off' );
 
@@ -414,7 +378,7 @@
 				let foundSomething = false;
 				items.forEach( toggleSearchClassesForItem );
 				if ( 'function' === typeof handleSearchResult ) {
-					handleSearchResult({ foundSomething, notEmptySearchText }, event );
+					handleSearchResult( { foundSomething, notEmptySearchText }, event );
 				}
 
 				function toggleSearchClassesForItem( item ) {
@@ -464,10 +428,10 @@
 		 *
 		 * @since 6.0
 		 *
-		 * @param {String}         event    Event name.
-		 * @param {String}         selector Selector.
+		 * @param {string}         event    Event name.
+		 * @param {string}         selector Selector.
 		 * @param {Function}       handler  Handler.
-		 * @param {Boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
+		 * @param {boolean|Object} options  Options to be added to `addEventListener()` method. Default is `false`.
 		 */
 		documentOn: ( event, selector, handler, options ) => {
 			if ( 'undefined' === typeof options ) {
@@ -493,11 +457,11 @@
 		 * @param {string} name - The name of the cookie.
 		 * @return {string|null} The value of the cookie, or undefined if the cookie does not exist.
 		 */
-		getCookie: ( name ) => {
-			const cookie = document.cookie.split('; ').find( cookie => cookie.startsWith( `${name}=` ) );
+		getCookie: name => {
+			const cookie = document.cookie.split( '; ' ).find( cookie => cookie.startsWith( `${ name }=` ) );
 
 			if ( cookie ) {
-				return cookie.split( '=' )[1];
+				return cookie.split( '=' )[ 1 ];
 			}
 			return null;
 		},
@@ -512,12 +476,12 @@
 		setCookie: ( name, value, minutes ) => {
 			const expires = new Date();
 			expires.setTime( expires.getTime() + ( minutes * 60 * 1000 ) );
-			document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/`;
+			document.cookie = `${ name }=${ value };expires=${ expires.toUTCString() };path=/`;
 		}
 	};
 
 	const wysiwyg = {
-		init( editor, { setupCallback, height, addFocusEvents } = {}) {
+		init( editor, { setupCallback, height, addFocusEvents } = {} ) {
 			if ( isTinyMceActive() ) {
 				setTimeout( resetTinyMce, 0 );
 			} else {
@@ -533,18 +497,18 @@
 				}
 
 				const id = editor.id;
-				window.quicktags({
+				window.quicktags( {
 					name: 'qt_' + id,
 					id: id,
 					canvas: editor,
 					settings: { id },
 					toolbar: document.getElementById( 'qt_' + id + '_toolbar' ),
 					theButtons: {}
-				});
+				} );
 			}
 
 			function initRichText() {
-				const key = Object.keys( tinyMCEPreInit.mceInit )[0];
+				const key = Object.keys( tinyMCEPreInit.mceInit )[ 0 ];
 				const orgSettings = tinyMCEPreInit.mceInit[ key ];
 
 				const settings = Object.assign(
@@ -567,7 +531,7 @@
 
 						editor.on( 'focusout', function() {
 							editor.on( 'focusin', focusInCallback );
-						});
+						} );
 					}
 					if ( setupCallback ) {
 						setupCallback( editor );
@@ -628,10 +592,10 @@
 		return function( child, uniqueClassName ) {
 			let element = modal.querySelector( '.' + uniqueClassName );
 			if ( null === element ) {
-				element = div({
+				element = div( {
 					child: child,
 					className: uniqueClassName
-				});
+				} );
 				appendTo.appendChild( element );
 			} else {
 				redraw( element, child );
@@ -640,21 +604,21 @@
 	}
 
 	function createEmptyModal( id ) {
-		const modal = div({ id, className: 'frm-modal' });
-		const postbox = div({ className: 'postbox' });
-		const metaboxHolder = div({ className: 'metabox-holder', child: postbox });
+		const modal = div( { id, className: 'frm-modal' } );
+		const postbox = div( { className: 'postbox' } );
+		const metaboxHolder = div( { className: 'metabox-holder', child: postbox } );
 		modal.appendChild( metaboxHolder );
 		document.body.appendChild( modal );
 		return modal;
 	}
 
-	function makeModalIntoADialogAndOpen( modal, { width } = {}) {
+	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '' } = {} ) {
 		const bodyWithModalClassName = 'frm-body-with-open-modal';
 
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
-			$modal.dialog({
-				dialogClass: 'frm-dialog',
+			$modal.dialog( {
+				dialogClass: 'frm-dialog ' + dialogClass,
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,
@@ -671,7 +635,7 @@
 					$modal.on( 'click', 'a.dismiss', function( event ) {
 						event.preventDefault();
 						$modal.dialog( 'close' );
-					});
+					} );
 
 					const overlay = document.querySelector( '.ui-widget-overlay' );
 					if ( overlay ) {
@@ -689,7 +653,7 @@
 					jQuery( '#wpwrap' ).removeClass( 'frm_overlay' );
 					jQuery( '.spinner' ).css( 'visibility', 'hidden' );
 				}
-			});
+			} );
 		}
 
 		document.body.classList.add( bodyWithModalClassName );
@@ -706,7 +670,7 @@
 		return tag( 'span', args );
 	}
 
-	function a( args = {}) {
+	function a( args = {} ) {
 		const anchor = tag( 'a', args );
 		anchor.setAttribute( 'href', 'string' === typeof args.href ? args.href : '#' );
 		if ( 'string' === typeof args.target ) {
@@ -715,7 +679,7 @@
 		return anchor;
 	}
 
-	function img( args = {}) {
+	function img( args = {} ) {
 		const output = tag( 'img', args );
 		if ( 'string' === typeof args.src ) {
 			output.setAttribute( 'src', args.src );
@@ -731,10 +695,10 @@
 	 *
 	 * @since 6.0
 	 *
-	 * @param {String} inputId
-	 * @param {String} labelText
-	 * @param {String} inputName
-	 * @returns {Element}
+	 * @param {string} inputId
+	 * @param {string} labelText
+	 * @param {string} inputName
+	 * @return {Element} The div element containing the label and input.
 	 */
 	function labelledTextInput( inputId, labelText, inputName ) {
 		const label = tag( 'label', labelText );
@@ -750,7 +714,7 @@
 		input.type = 'text';
 		input.setAttribute( 'name', inputName );
 
-		return div({ children: [ label, input ] });
+		return div( { children: [ label, input ] } );
 	}
 
 	/**
@@ -758,11 +722,11 @@
 	 *
 	 * @since 6.4.1 Accept a string as one of `children` to append a text node inside the element.
 	 *
-	 * @param {String} type Element tag name.
+	 * @param {string} type Element tag name.
 	 * @param {Object} args The args.
-	 * @return {Object}
+	 * @return {Object} The created DOM element.
 	 */
-	function tag( type, args = {}) {
+	function tag( type, args = {} ) {
 		const output = document.createElement( type );
 
 		if ( 'string' === typeof args ) {
@@ -784,7 +748,7 @@
 				if ( 'string' === typeof child ) {
 					output.appendChild( document.createTextNode( child ) );
 				} else {
-					output.appendChild( child )
+					output.appendChild( child );
 				}
 			} );
 		} else if ( child ) {
@@ -794,13 +758,13 @@
 		}
 		if ( data ) {
 			Object.keys( data ).forEach( function( dataKey ) {
-				output.setAttribute( 'data-' + dataKey, data[dataKey] );
-			});
+				output.setAttribute( 'data-' + dataKey, data[ dataKey ] );
+			} );
 		}
 		return output;
 	}
 
-	function svg({ href, classList } = {}) {
+	function svg( { href, classList } = {} ) {
 		const namespace = 'http://www.w3.org/2000/svg';
 		const output = document.createElementNS( namespace, 'svg' );
 		if ( classList ) {
@@ -820,18 +784,18 @@
 	 * Pop up a success message in the lower right corner.
 	 * It then fades out and gets deleted automatically.
 	 *
-	 * @param {HTMLElement|String} content
-	 * @returns {void}
+	 * @param {HTMLElement|string} content
+	 * @return {void}
 	 */
 	function success( content ) {
-		const container           = document.getElementById( 'wpbody' );
-		const notice              = div({
+		const container = document.getElementById( 'wpbody' );
+		const notice = div( {
 			className: 'frm_updated_message frm-floating-success-message',
-			child: div({
+			child: div( {
 				className: 'frm-satisfied',
 				child: 'string' === typeof content ? document.createTextNode( content ) : content
-			})
-		});
+			} )
+		} );
 		container.appendChild( notice );
 
 		setTimeout(
@@ -842,7 +806,7 @@
 
 	function setAttributes( element, attrs ) {
 		Object.entries( attrs ).forEach(
-			([ key, value ]) => element.setAttribute( key, value )
+			( [ key, value ] ) => element.setAttribute( key, value )
 		);
 	}
 
@@ -887,12 +851,12 @@
 			return svg( svgArgs );
 		}
 
-		const newNode = document.createElement( tagType );
-
-		if ( 'undefined' === typeof allowedHtml[ tagType ]) {
+		if ( 'undefined' === typeof allowedHtml[ tagType ] ) {
 			// Tag type is not allowed.
 			return document.createTextNode( '' );
 		}
+
+		const newNode = document.createElement( tagType );
 
 		allowedHtml[ tagType ].forEach(
 			allowedTag => {

@@ -223,7 +223,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 */
 	protected function get_words_from_setting( $setting_key ) {
 		$frm_settings = FrmAppHelper::get_settings();
-		$words        = isset( $frm_settings->$setting_key ) ? $frm_settings->$setting_key : '';
+		$words        = $frm_settings->$setting_key ?? '';
 		if ( ! $words ) {
 			return array();
 		}
@@ -278,7 +278,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
-		return FrmAppHelper::maybe_json_encode( $values );
+		// Unslash the forward slashes so strings like /joomla/ are not stuck as \/joomla\/.
+		return str_replace( '\\/', '/', FrmAppHelper::maybe_json_encode( $values ) );
 	}
 
 	/**

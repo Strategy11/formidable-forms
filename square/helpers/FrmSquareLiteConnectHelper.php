@@ -350,7 +350,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $mode
+	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return bool|string
 	 */
 	public static function get_merchant_id( $mode = 'auto' ) {
@@ -376,6 +376,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
 	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
@@ -450,8 +451,8 @@ class FrmSquareLiteConnectHelper {
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
 			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
 
-			$currency    = self::get_merchant_currency( true );
-			$location_id = self::get_location_id( true );
+			$currency    = self::get_merchant_currency( true, $mode );
+			$location_id = self::get_location_id( true, $mode );
 
 			if ( $currency ) {
 				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
@@ -547,17 +548,23 @@ class FrmSquareLiteConnectHelper {
 	 * @param bool $force
 	 * @return false|string
 	 */
-	public static function get_location_id( $force = false ) {
+	public static function get_location_id( $force = false, $mode = 'auto' ) {
 		if ( ! $force ) {
-			$location_id = get_option( self::get_location_id_option_name() );
+			$location_id = get_option( self::get_location_id_option_name( $mode ) );
 			if ( $location_id ) {
 				return $location_id;
 			}
 		}
 
-		$response = self::post_with_authenticated_body( 'get_location_id' );
+		$request_body = array();
+		if ( 'auto' !== $mode ) {
+			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
+			$request_body['frm_square_api_mode'] = $mode;
+		}
+
+		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
 		if ( is_object( $response ) ) {
-			update_option( self::get_location_id_option_name(), $response->id, 'no' );
+			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
 			return $response->id;
 		}
 
@@ -650,20 +657,27 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param bool $force
+	 * @param bool   $force
+	 * @param string $mode
 	 * @return false|string
 	 */
-	public static function get_merchant_currency( $force = false ) {
+	public static function get_merchant_currency( $force = false, $mode = 'auto' ) {
 		if ( ! $force ) {
-			$currency = get_option( self::get_merchant_currency_option_name() );
+			$currency = get_option( self::get_merchant_currency_option_name( $mode ) );
 			if ( $currency ) {
 				return $currency;
 			}
 		}
 
-		$response = self::post_with_authenticated_body( 'get_merchant_currency' );
+		$request_body = array();
+		if ( 'auto' !== $mode ) {
+			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
+			$request_body['frm_square_api_mode'] = $mode;
+		}
+
+		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
 		if ( is_object( $response ) && ! empty( $response->currency ) ) {
-			update_option( self::get_merchant_currency_option_name(), $response->currency, 'no' );
+			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
 			return $response->currency;
 		}
 

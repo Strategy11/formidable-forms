@@ -2,6 +2,18 @@
  * Utilities - Border Radius
  */
 
+.frm-rounded-6 {
+	border-radius: 6px !important;
+}
+
 .frm-rounded-sm {
 	border-radius: var(--small-radius) !important;
+}
+
+.frm-rounded-12 {
+	border-radius: 12px !important;
+}
+
+.frm-rounded-md {
+	border-radius: var(--medium-radius) !important;
 }
