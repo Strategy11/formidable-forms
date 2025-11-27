@@ -396,6 +396,8 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Gets CSS for button.
 	 *
+	 * @param bool $display_block Whether to display the button as block.
+	 *
 	 * @return string
 	 */
 	public static function get_button_style( $display_block = false ) {

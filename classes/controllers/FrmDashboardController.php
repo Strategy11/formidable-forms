@@ -428,6 +428,7 @@ class FrmDashboardController {
 	/**
 	 * Prepare inbox messages data.
 	 *
+	 * @param array $data
 	 * @return array
 	 */
 	private static function inbox_prepare_messages( $data ) {

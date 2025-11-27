@@ -133,3 +133,6 @@ parameters:
 			paths:
 				- classes/views/*
 				- stripe/views/action-settings/payments-options.php
+		-
+			message: '#FrmFormAction::prepare_action\(\) expects WP_Post, mixed given#'
+			path: classes/models/FrmFormAction.php

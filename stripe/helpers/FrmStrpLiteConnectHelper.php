@@ -531,6 +531,9 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * WPML might add a language to the url. Don't send that to the server.
+	 *
+	 * @param string $url URL.
+	 * @return string
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );

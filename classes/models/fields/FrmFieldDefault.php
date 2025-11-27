@@ -27,6 +27,8 @@ class FrmFieldDefault extends FrmFieldType {
 	}
 
 	/**
+	 * @param string $name
+	 *
 	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
@@ -47,6 +49,8 @@ class FrmFieldDefault extends FrmFieldType {
 
 	/**
 	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {

@@ -151,6 +151,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
