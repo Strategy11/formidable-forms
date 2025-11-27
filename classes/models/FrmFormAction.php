@@ -89,6 +89,8 @@ class FrmFormAction {
 	 *
 	 * @param WP_Post $instance Current settings.
 	 * @param array   $args
+	 *
+	 * @return string
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -190,6 +192,8 @@ class FrmFormAction {
 	 * @param string $name
 	 * @param array  $action_options
 	 * @param array  $control_options
+	 *
+	 * @return void
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
@@ -853,6 +857,9 @@ class FrmFormAction {
 		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_settings() {
 		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
@@ -877,6 +884,9 @@ class FrmFormAction {
 		return $defaults;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_global_switch_fields() {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
@@ -992,6 +1002,9 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function trigger_labels() {
 		$triggers = array(
 			'draft'  => __( 'Draft is saved', 'formidable' ),

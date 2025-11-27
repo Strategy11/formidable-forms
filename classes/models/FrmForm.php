@@ -164,6 +164,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param int $form_id Form ID.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_fields( $form_id ) {
 		global $wpdb;
@@ -200,6 +202,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param array $field Field array.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_field( $field ) {
 		$new_values = array();
@@ -571,7 +575,10 @@ class FrmForm {
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
+	 *
 	 * @param object $form The form object.
+	 *
+	 * @return array
 	 */
 	public static function translatable_strings( $form ) {
 		$strings = array(
@@ -812,7 +819,10 @@ class FrmForm {
 	 * If $form is numeric, get the form object
 	 *
 	 * @since 2.0.9
+	 *
 	 * @param int|object $form
+	 *
+	 * @return void
 	 */
 	public static function maybe_get_form( &$form ) {
 		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
@@ -1001,6 +1011,8 @@ class FrmForm {
 	 * or when the form status is changed
 	 *
 	 * @since 2.0.4
+	 *
+	 * @return void
 	 */
 	public static function clear_form_cache() {
 		FrmDb::cache_delete_group( 'frm_form' );
@@ -1081,6 +1093,9 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function list_page_params() {
 		$values   = array();
 		$defaults = array(
@@ -1279,7 +1294,10 @@ class FrmForm {
 	 * Get the link to edit this form.
 	 *
 	 * @since 4.0
+	 *
 	 * @param int $form_id The id of the form.
+	 *
+	 * @return string
 	 */
 	public static function get_edit_link( $form_id ) {
 		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );

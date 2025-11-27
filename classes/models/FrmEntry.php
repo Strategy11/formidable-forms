@@ -201,6 +201,8 @@ class FrmEntry {
 
 	/**
 	 * @since 6.16.3
+	 *
+	 * @return bool
 	 */
 	private static function should_check_for_unique_id_match() {
 		/**
@@ -414,6 +416,8 @@ class FrmEntry {
 	 * Called when an entry is changed
 	 *
 	 * @since 2.0.5
+	 *
+	 * @return void
 	 */
 	public static function clear_cache() {
 		FrmDb::cache_delete_group( 'frm_entry' );
@@ -496,6 +500,8 @@ class FrmEntry {
 	 * @since 4.02.03
 	 *
 	 * @param object $entry
+	 *
+	 * @return void
 	 */
 	private static function prepare_entry( &$entry ) {
 		if ( empty( $entry ) ) {
@@ -511,6 +517,8 @@ class FrmEntry {
 	 * @since 4.02.03
 	 *
 	 * @param array $entries
+	 *
+	 * @return void
 	 */
 	private static function prepare_entries( &$entries ) {
 		foreach ( $entries as $k => $entry ) {
@@ -571,6 +579,8 @@ class FrmEntry {
 
 	/**
 	 * @param string $id
+	 *
+	 * @return bool
 	 */
 	public static function exists( $id ) {
 		global $wpdb;
@@ -800,6 +810,8 @@ class FrmEntry {
 	 * @since 2.0
 	 *
 	 * @param array $values The POST values by reference.
+	 *
+	 * @return void
 	 */
 	public static function sanitize_entry_post( &$values ) {
 		$sanitize_method = array(
@@ -1011,6 +1023,8 @@ class FrmEntry {
 	 * @since 2.0.16
 	 *
 	 * @param int $entry_id
+	 *
+	 * @return void
 	 */
 	private static function add_new_entry_to_frm_vars( $entry_id ) {
 		global $frm_vars;
@@ -1083,6 +1097,8 @@ class FrmEntry {
 	 * @param int   $entry_id
 	 * @param array $values
 	 * @param array $new_values
+	 *
+	 * @return void
 	 */
 	private static function after_entry_created_actions( $entry_id, $values, $new_values ) {
 		// This is a child entry.
@@ -1100,6 +1116,8 @@ class FrmEntry {
 	 * @param array $values
 	 * @param array $new_values
 	 * @param int   $entry_id
+	 *
+	 * @return void
 	 */
 	private static function after_insert_entry_in_database( $values, $new_values, $entry_id ) {
 
@@ -1190,6 +1208,8 @@ class FrmEntry {
 	 * @param int      $id
 	 * @param array    $values
 	 * @param array    $new_values
+	 *
+	 * @return void
 	 */
 	private static function after_update_entry( $query_results, $id, $values, $new_values ) {
 		if ( $query_results ) {

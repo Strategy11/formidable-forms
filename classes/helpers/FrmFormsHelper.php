@@ -584,7 +584,7 @@ BEFORE_HTML;
 	/**
 	 * @since 4.0
 	 *
-	 * @return void
+	 * @return array
 	 */
 	public static function html_shortcodes() {
 		$codes = array(

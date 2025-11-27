@@ -8,6 +8,9 @@ class FrmField {
 	public static $use_cache      = true;
 	public static $transient_size = 200;
 
+	/**
+	 * @return array
+	 */
 	public static function field_selection() {
 		$fields = array(
 			'text'                         => array(
@@ -96,6 +99,9 @@ class FrmField {
 		return 'Captcha';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function pro_field_selection() {
 		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
@@ -632,6 +638,8 @@ class FrmField {
 	 * @since 2.0.8
 	 *
 	 * @param array $values Pass by reference.
+	 *
+	 * @return void
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -699,6 +707,8 @@ class FrmField {
 	/**
 	 * @param int|string $id The field id or key.
 	 * @param bool       $filter When true, run the frm_field filter.
+	 *
+	 * @return object|null
 	 */
 	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
@@ -731,8 +741,11 @@ class FrmField {
 
 	/**
 	 * @since 3.06.01
+	 *
 	 * @param bool   $filter When true, run the frm_field filter.
 	 * @param object $results
+	 *
+	 * @return void
 	 */
 	private static function filter_field( $filter, &$results ) {
 		if ( $filter ) {
@@ -748,6 +761,8 @@ class FrmField {
 	 *
 	 * @param int|string $id  The field id or key.
 	 * @param mixed      $col The name of the column in the fields database table.
+	 *
+	 * @return mixed
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -770,6 +785,8 @@ class FrmField {
 	 * @param string     $type
 	 * @param int|string $limit
 	 * @param string     $inc_sub
+	 *
+	 * @return array|object
 	 */
 	public static function get_all_types_in_form( $form_id, $type, $limit = '', $inc_sub = 'exclude' ) {
 		if ( ! $form_id ) {
@@ -875,6 +892,8 @@ class FrmField {
 	 *
 	 * @param string $inc_repeat
 	 * @param array  $where      Pass by reference.
+	 *
+	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat === 'include' ) {

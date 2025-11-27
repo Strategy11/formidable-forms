@@ -373,6 +373,8 @@ class FrmEntryValidate {
 	 *
 	 * @param array|string $value Field value.
 	 * @param object       $field Field object.
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
 		$item_name = false;
@@ -394,6 +396,8 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field
 	 * @param string $value
+	 *
+	 * @return void
 	 */
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
 		$position = FrmField::get_option( $field, 'label' );
@@ -474,6 +478,8 @@ class FrmEntryValidate {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @return string
 	 */
 	private static function default_phone_format() {
 		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
@@ -523,6 +529,8 @@ class FrmEntryValidate {
 	 * @param bool  $exclude
 	 * @param array $values
 	 * @param array $errors By reference.
+	 *
+	 * @return void
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
@@ -776,6 +784,8 @@ class FrmEntryValidate {
 	 * @param array    $datas        Guest data.
 	 * @param array    $values       The values.
 	 * @param int|null $custom_index Custom index (or field ID).
+	 *
+	 * @return void
 	 */
 	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
@@ -905,6 +915,8 @@ class FrmEntryValidate {
 	 *
 	 * @param array $datas  The array of values being sent to Akismet.
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function add_comment_content_to_akismet( &$datas, $values ) {
 		if ( isset( $datas['frm_duplicated'] ) ) {
@@ -927,6 +939,8 @@ class FrmEntryValidate {
 	 * @since 5.0.09
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
 		$skipped_fields = self::get_akismet_skipped_field_ids( $values );
@@ -1024,6 +1038,8 @@ class FrmEntryValidate {
 	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
 		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );

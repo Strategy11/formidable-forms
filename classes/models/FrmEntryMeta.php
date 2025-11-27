@@ -230,6 +230,8 @@ class FrmEntryMeta {
 	 * Called when a meta is added or changed
 	 *
 	 * @since 2.0.5
+	 *
+	 * @return void
 	 */
 	public static function clear_cache() {
 		FrmDb::cache_delete_group( 'frm_entry_meta' );
@@ -337,6 +339,8 @@ class FrmEntryMeta {
 	 * @param string     $limit
 	 * @param array      $args
 	 * @param array      $query
+	 *
+	 * @return void
 	 */
 	private static function meta_field_query( $field_id, $order, $limit, $args, array &$query ) {
 		global $wpdb;

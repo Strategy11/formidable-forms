@@ -917,7 +917,7 @@ class FrmFieldsHelper {
 	 * @since 2.05
 	 *
 	 * @param array|string $value
-	 * @return string
+	 * @return array|string
 	 */
 	private static function get_value_for_comparison( $value ) {
 		// Remove white space from hide_opt
