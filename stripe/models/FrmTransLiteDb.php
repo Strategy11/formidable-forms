@@ -257,7 +257,7 @@ class FrmTransLiteDb {
 	 * @return array
 	 */
 	public function get_all_for_entry( $id ) {
-		return $this->get_all_by( $id, $field = 'item_id' );
+		return $this->get_all_by( $id, 'item_id' );
 	}
 
 	/**
