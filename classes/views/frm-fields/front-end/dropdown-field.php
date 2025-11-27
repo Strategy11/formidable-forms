@@ -52,15 +52,14 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	}
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
+		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ];
+		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
+			continue;
+		}
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
 
-		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ];
-		$sc_atts              = isset( $shortcode_atts ) && is_array( $shortcode_atts ) ? $shortcode_atts : array();
-		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $sc_atts, $opt_key, $field['form_id'] ) ) {
-			continue;
-		}
 		if ( $other_opt === false ) {
 			$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $selected );
 			if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {

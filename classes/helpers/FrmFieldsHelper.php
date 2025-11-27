@@ -2512,17 +2512,11 @@ class FrmFieldsHelper {
 	 * @since x.x
 	 *
 	 * @param bool       $choice_limit_is_reached
-	 * @param array      $shortcode_atts
-	 * @param string     $opt_key
 	 * @param int|string $form_id
 	 *
 	 * @return bool
 	 */
-	public static function should_hide_field_choice( $choice_limit_is_reached, $shortcode_atts, $opt_key, $form_id ) {
-		if ( isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
-			return true;
-		}
-
+	public static function should_hide_field_choice( $choice_limit_is_reached, $form_id ) {
 		if ( ! $choice_limit_is_reached ) {
 			return false;
 		}
