@@ -29,6 +29,8 @@ class FrmCreateFile {
 	/**
 	 * @since 3.0
 	 *
+	 * @param array $atts Attributes.
+	 *
 	 * @return void
 	 */
 	private function set_new_file_path( $atts ) {
@@ -61,6 +63,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $file_content File content.
 	 *
 	 * @return void
 	 */
@@ -98,6 +102,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return string
 	 */
 	public function get_file_contents() {
 		$content = '';
@@ -111,6 +117,10 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $file File.
+	 *
+	 * @return string
 	 */
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
@@ -232,7 +242,7 @@ class FrmCreateFile {
 		}
 
 		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
 			if ( ! empty( $stored_credentials['port'] ) ) {

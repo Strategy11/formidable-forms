@@ -169,6 +169,9 @@ class FrmReviews {
 	 *
 	 * @since 4.05.02
 	 *
+	 * @param array $requests Array of requests.
+	 * @param int   $asked    Number of times the review has been asked.
+	 *
 	 * @return bool
 	 */
 	private function has_later_request( $requests, $asked ) {

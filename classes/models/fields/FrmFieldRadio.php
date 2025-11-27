@@ -54,6 +54,9 @@ class FrmFieldRadio extends FrmFieldType {
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -89,6 +92,8 @@ class FrmFieldRadio extends FrmFieldType {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @param array $args
 	 *
 	 * @return void
 	 */

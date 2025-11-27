@@ -139,6 +139,8 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
+	 * @param string|null $value
+	 *
 	 * @return string
 	 */
 	private function detect_unit_measurement( $value = null ) {

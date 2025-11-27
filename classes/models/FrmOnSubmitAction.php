@@ -39,6 +39,9 @@ class FrmOnSubmitAction extends FrmFormAction {
 	}
 
 	/**
+	 * @param object $instance
+	 * @param array  $args
+	 *
 	 * @return void
 	 */
 	public function form( $instance, $args = array() ) {

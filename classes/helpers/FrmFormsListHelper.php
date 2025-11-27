@@ -151,6 +151,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
@@ -385,7 +387,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	protected function column_views( $form ) {
 		$attributes = array(
 			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
-			'title'  => __( 'View Form', 'formidable' ),
+			'title'  => __( 'Link to list of all views for this form.', 'formidable' ),
 			'target' => '_blank',
 		);
 
@@ -431,7 +433,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
-		if ( is_null( $form_name ) || trim( $form_name ) == '' ) {
+		if ( is_null( $form_name ) || trim( $form_name ) === '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
 		$form_name = FrmAppHelper::kses( $form_name );

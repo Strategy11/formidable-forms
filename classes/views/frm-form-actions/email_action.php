@@ -20,6 +20,9 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	/**
+	 * @param object $form_action
+	 * @param array  $args
+	 *
 	 * @return void
 	 */
 	public function form( $form_action, $args = array() ) {
