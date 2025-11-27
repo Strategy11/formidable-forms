@@ -69,6 +69,8 @@ class FrmSimpleBlocksController {
 
 	/**
 	 * Enqueue Formidable Simple Blocks' JS and CSS for the content.
+	 *
+	 * @since x.x
 	 */
 	public static function block_assets() {
 		if ( ! is_admin() ) {
