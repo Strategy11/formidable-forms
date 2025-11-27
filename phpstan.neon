@@ -170,7 +170,3 @@ parameters:
 		-
 			message: '#is never read, only written#'
 			path: classes/helpers/FrmFieldGridHelper.php
-		-
-			message: '#of function random_int expects lower number#'
-			path: classes/helpers/FrmTipsHelper.php
-		
