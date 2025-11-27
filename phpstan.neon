@@ -165,6 +165,13 @@ parameters:
 				- classes/controllers/FrmAppController.php
 				- classes/controllers/FrmFormsController.php
 				- classes/controllers/FrmEntriesController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/models/FrmSalesApi.php
+				- square/controllers/FrmSquareLiteAppController.php
+				- stripe/helpers/FrmStrpLiteConnectHelper.php
+				- classes/models/FrmInstallerSkin.php
+				- classes/controllers/FrmSettingsController.php
+				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
 				- stubs.php
 		-
 			message: '#with no type specified#'

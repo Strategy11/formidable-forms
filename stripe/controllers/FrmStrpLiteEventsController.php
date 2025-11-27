@@ -327,11 +327,12 @@ class FrmStrpLiteEventsController {
 	/**
 	 * @param string $sub_id
 	 *
-	 * @return object|false|null
+	 * @return object|null
 	 */
 	private function get_subscription( $sub_id ) {
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
+
 		if ( ! $sub ) {
 			// If this isn't an existing subscription, it must be a charge for another site/plugin.
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
