@@ -77,7 +77,7 @@ class FrmAddon {
 	protected $get_beta = false;
 
 	/**
-	 * @var string|null
+	 * @var array|null
 	 */
 	protected $save_status;
 
