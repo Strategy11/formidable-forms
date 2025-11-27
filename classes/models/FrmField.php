@@ -976,12 +976,7 @@ class FrmField {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			global $wpmuBaseTablePrefix;
-			if ( $wpmuBaseTablePrefix ) {
-				$prefix = $wpmuBaseTablePrefix . $blog_id . '_';
-			} else {
-				$prefix = $wpdb->get_blog_prefix( $blog_id );
-			}
+			$prefix = $wpdb->get_blog_prefix( $blog_id );
 
 			$table_name      = $prefix . 'frm_fields';
 			$form_table_name = $prefix . 'frm_forms';
