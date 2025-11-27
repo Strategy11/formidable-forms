@@ -15,6 +15,13 @@
 .frm-style-component .wp-picker-holder {
 	right: 0;
 }
+.frm-style-component .CodeMirror {
+	min-height: unset !important;
+	height: 350px !important;
+	.CodeMirror-placeholder {
+		color: var( --grey-400 );
+	}
+}
 
 .formidable_page_formidable-styles .accordion-section-content .frm-style-item-heading {
 	font-weight: 500;

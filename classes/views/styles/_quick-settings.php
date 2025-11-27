@@ -226,6 +226,64 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 </div>
 
+<div class="frm5 frm_form_field">
+	<label 
+		for="frm_enable_single_style_custom_css"
+		class="frm-style-item-heading">
+		<?php esc_html_e( 'Custom CSS', 'formidable' ); ?>
+	</label>
+</div>
+<div class="frm7 frm_form_field frm-style-component">
+	<?php
+		FrmHtmlHelper::toggle(
+			'frm_enable_single_style_custom_css',
+			$frm_style->get_field_name( 'enable_style_custom_css' ),
+			array(
+				'div_class'       => 'with_frm_style frm_toggle',
+				'checked'         => ! empty( $style->post_content['enable_style_custom_css'] ),
+				'echo'            => true,
+				'aria-label-attr' => __( 'Custom CSS', 'formidable' ),
+			)
+		);
+		?>
+</div>
+
+<div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo empty( $style->post_content['enable_style_custom_css'] ) ? 'frm_hidden' : ''; ?>">
+	<?php
+	$css_scope_helper = new FrmCssScopeHelper();
+	$custom_css       = $style->post_content['single_style_custom_css'];
+	if ( ! empty( $custom_css ) ) {
+		$custom_css = $css_scope_helper->unnest( $custom_css, 'frm_style_formidable-style-8' );
+	}
+		FrmStylesController::custom_css(
+			'',
+			array(
+				'heading'         => '',
+				'id'              => 'frm_single_style_custom_css',
+				'textarea_params' => array(
+					'name' => $frm_style->get_field_name( 'single_style_custom_css' ),
+					'id'   => 'frm_single_style_custom_css',
+				),
+				'custom_css'      => $custom_css,
+				'placeholder'     => __( '/* Enter your custom CSS here */', 'formidable' ),
+				'show_errors'     => false,
+			)
+		);
+		?>
+</div>
+<div class="frm3 frm_form_field">
+	<label 
+		for="frm_style_class"
+		class="frm-style-item-heading"><?php esc_html_e( 'Style Class', 'formidable' ); ?></label>
+</div>
+<div class="frm9 frm_form_field frm-style-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
+	<label class="frm-copy-text">.frm_style_<?php
+		echo esc_html( $style->post_name );
+		FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' );
+	?>
+	</label>
+</div>
+
 <hr class="frm12"/>
 
 <a id="frm-style-advanced-settings-button" class="frm-button-secondary frm-mt-md frmcenter" href="#"><?php esc_html_e( 'Show advanced settings', 'formidable' ); ?></a>
