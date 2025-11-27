@@ -193,6 +193,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param object $field
 	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	private static function fill_default_field_opts( $field, array &$values ) {
 		$check_post = self::context_is_safe_to_load_field_options_from_request_data();
@@ -269,6 +271,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param object $field
 	 * @param array  $field_array
+	 *
+	 * @return void
 	 */
 	private static function fill_cleared_strings( $field, array &$field_array ) {
 		if ( '' == $field_array['blank'] && '1' === $field_array['required'] ) {
@@ -330,6 +334,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param string $setting
 	 * @param mixed  $value
+	 *
+	 * @return void
 	 */
 	private static function get_posted_field_setting( $setting, &$value ) {
 		if ( ! isset( $_POST['field_options'][ $setting ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -392,6 +398,8 @@ class FrmFieldsHelper {
 	 * @param array  $field_array
 	 * @param object $field
 	 * @param array  $atts
+	 *
+	 * @return void
 	 */
 	private static function prepare_field_options_for_display( &$field_array, $field, $atts ) {
 		$field_obj   = FrmFieldFactory::get_field_object( $field );
@@ -480,6 +488,8 @@ class FrmFieldsHelper {
 	 * @param string       $msg
 	 * @param string       $error
 	 * @param array|object $field
+	 *
+	 * @return string
 	 */
 	private static function maybe_replace_substrings_with_field_name( $msg, $error, $field ) {
 		$field_name = is_array( $field ) ? $field['name'] : $field->name;
@@ -569,6 +579,8 @@ class FrmFieldsHelper {
 	 * @param array  $errors
 	 * @param object $form
 	 * @param object $form_action
+	 *
+	 * @return void
 	 */
 	public static function show_fields( $fields, $errors, $form, $form_action ) {
 		foreach ( $fields as $field ) {
@@ -582,6 +594,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param array        $atts
 	 * @param array|string $value
+	 *
+	 * @return void
 	 */
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = $atts['wpautop'] ?? true;
@@ -698,7 +712,10 @@ class FrmFieldsHelper {
 	 * Include hidden row for javascript to duplicate.
 	 *
 	 * @since 4.0
+	 *
 	 * @param array $field
+	 *
+	 * @return void
 	 */
 	private static function hidden_field_option( $field ) {
 		// Don't duplicate during an ajax add option.
@@ -767,6 +784,8 @@ class FrmFieldsHelper {
 	 * @since 6.4.1 Added `inside_class` in the arguments.
 	 *
 	 * @param array $args The arguments.
+	 *
+	 * @return void
 	 */
 	public static function inline_modal( $args ) {
 		$defaults = array(
@@ -786,6 +805,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function smart_values() {
 		$continue = apply_filters( 'frm_smart_values_box', true );
@@ -800,6 +821,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function input_mask() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/input-mask-info.php';
@@ -807,6 +830,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function layout_classes() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/layout-classes.php';
@@ -1335,6 +1360,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @param array $atts Includes value, field, and atts.
+	 *
+	 * @return mixed
 	 */
 	public static function get_unfiltered_display_value( $atts ) {
 		$value = $atts['value'];
@@ -1421,6 +1448,8 @@ class FrmFieldsHelper {
 	 * Get a list of all fields that use a single value input.
 	 *
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function single_input_fields() {
 		$fields = array(
@@ -1476,6 +1505,8 @@ class FrmFieldsHelper {
 	 * @since 2.0.6
 	 *
 	 * @param array $args
+	 *
+	 * @return string
 	 */
 	public static function get_other_val( $args ) {
 		$defaults = array(
@@ -1608,8 +1639,11 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param array $args
 	 * @param array $other_args
+	 *
+	 * @return void
 	 */
 	private static function set_other_name( $args, &$other_args ) {
 		// Set up name for other field
@@ -1628,8 +1662,11 @@ class FrmFieldsHelper {
 	 * Find the parent and pointer, and get text for "other" text field
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args
 	 * @param array $other_args
+	 *
+	 * @return void
 	 */
 	private static function set_other_value( $args, &$other_args ) {
 		$parent  = '';
@@ -1659,7 +1696,10 @@ class FrmFieldsHelper {
 	 * If this field includes an other option, show it
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public static function include_other_input( $args ) {
 		if ( ! $args['other_opt'] ) {
@@ -1800,6 +1840,8 @@ class FrmFieldsHelper {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function bulk_options_overlay() {
 		$prepop = array();
@@ -1808,6 +1850,9 @@ class FrmFieldsHelper {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/bulk-options-overlay.php';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_us_states() {
 		$states = array(
 			'AL' => 'Alabama',
@@ -1866,6 +1911,9 @@ class FrmFieldsHelper {
 		return apply_filters( 'frm_us_states', $states );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_countries() {
 		$countries = array(
 			__( 'Afghanistan', 'formidable' ),
@@ -2132,6 +2180,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param array       $prepop        Bulk options.
 	 * @param array|false $include_class Include the class in the bulk options.
+	 *
+	 * @return void
 	 */
 	public static function get_bulk_prefilled_opts( array &$prepop, $include_class = false ) {
 		// Countries.
@@ -2249,6 +2299,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param int   $selector_field_id
 	 * @param array $selector_args
+	 *
+	 * @return void
 	 */
 	public static function display_field_value_selector( $selector_field_id, $selector_args ) {
 		$field_value_selector = FrmFieldFactory::create_field_value_selector( $selector_field_id, $selector_args );
@@ -2366,6 +2418,8 @@ class FrmFieldsHelper {
 	 * @since 5.0.04
 	 *
 	 * @param array $field Field data.
+	 *
+	 * @return void
 	 */
 	public static function show_radio_display_format( $field ) {
 		$options = self::get_display_format_options( $field );
@@ -2589,6 +2643,8 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $args Field arguments.
 	 * @param bool  $should_hide_bulk_edit Whether to hide bulk edit.
+	 *
+	 * @return void
 	 */
 	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
 		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );

@@ -1100,7 +1100,7 @@ class FrmForm {
 	}
 
 	/**
-	 * @param int|string|object|null $form
+	 * @param int|object|string|null $form
 	 *
 	 * @return array
 	 */

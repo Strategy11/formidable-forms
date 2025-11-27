@@ -16,6 +16,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.2.10
+	 *
+	 * @return string
 	 */
 	public static function form_error_class() {
 		return apply_filters( 'frm_form_error_class', 'frm_error_style' );
@@ -85,9 +87,12 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
+	 *
+	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -97,6 +102,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param false|object|string $selected - The label for the placeholder, or the form object.
+	 *
+	 * @return void
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -469,8 +476,11 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param array $options
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
@@ -482,6 +492,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param string $loc
+	 *
+	 * @return string
 	 */
 	public static function get_default_html( $loc ) {
 		if ( $loc === 'submit' ) {
@@ -508,6 +520,9 @@ BEFORE_HTML;
 		return $default_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_draft_link() {
 		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 
@@ -568,6 +583,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
@@ -727,7 +744,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public static function insert_code_html( $args ) {
 		$defaults = array(
@@ -780,6 +800,8 @@ BEFORE_HTML;
 	 * @param object $form
 	 * @param array  $fields
 	 * @param bool   $reset_fields
+	 *
+	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {
@@ -842,6 +864,8 @@ BEFORE_HTML;
 	 * @param array  $end_section_values
 	 * @param object $field
 	 * @param string $move
+	 *
+	 * @return void
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -1100,7 +1124,10 @@ BEFORE_HTML;
 	 * Display the validation error messages when an entry is submitted
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors.
+	 *
+	 * @return void
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -1127,7 +1154,10 @@ BEFORE_HTML;
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors, and show_img.
+	 *
+	 * @return void
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
@@ -1395,6 +1425,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return array
 	 */
 	public static function css_classes() {
 		$classes = array(

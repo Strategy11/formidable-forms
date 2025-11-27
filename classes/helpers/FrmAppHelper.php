@@ -713,9 +713,9 @@ class FrmAppHelper {
 
 	/**
 	 * @param string          $param
-	 * @param mixed            $default
-	 * @param string           $src
-	 * @param callable|string  $sanitize
+	 * @param mixed           $default
+	 * @param string          $src
+	 * @param callable|string $sanitize
 	 *
 	 * @return mixed
 	 */

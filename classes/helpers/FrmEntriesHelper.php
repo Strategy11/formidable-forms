@@ -88,6 +88,8 @@ class FrmEntriesHelper {
 	 * @since 2.05
 	 *
 	 * @param object $field
+	 *
+	 * @return void
 	 */
 	private static function prepare_field_default_value( &$field ) {
 		// If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array.
@@ -462,6 +464,8 @@ class FrmEntriesHelper {
 	 * @param object       $field Field object.
 	 * @param array|string $value Field value, passed by reference.
 	 * @param array        $args  Arguments array, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
@@ -503,6 +507,8 @@ class FrmEntriesHelper {
 	 * @param object       $field Field object.
 	 * @param array|string $value Field value, passed by reference.
 	 * @param array        $args  Arguments array, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
 		if ( ! $args['parent_field_id'] ) {
@@ -536,6 +542,8 @@ class FrmEntriesHelper {
 	 * @param array|string $other_vals (usually of posted values).
 	 * @param object       $field
 	 * @param array        $args
+	 *
+	 * @return void
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
 		// Checkboxes and multi-select dropdowns.
