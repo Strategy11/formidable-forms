@@ -414,6 +414,7 @@
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmEntryValidate.php" />
 				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 			</errorLevel>
 		</NoValue>
 		<UnsafeInstantiation>
