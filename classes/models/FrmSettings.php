@@ -135,7 +135,7 @@ class FrmSettings {
 	/**
 	 * @param false|object $settings
 	 *
-	 * @return false|object
+	 * @return object
 	 */
 	private function translate_settings( $settings ) {
 		if ( $settings ) {

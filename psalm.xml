@@ -537,6 +537,7 @@
 		<PossiblyNullIterator>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmPersonalData.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
 			</errorLevel>
 		</PossiblyNullIterator>
 	</issueHandlers>
