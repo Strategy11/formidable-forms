@@ -839,7 +839,7 @@ class FrmForm {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			$prefix = $wpdb->get_blog_prefix( $blog_id );
+			$prefix     = $wpdb->get_blog_prefix( $blog_id );
 			$table_name = $prefix . 'frm_forms';
 		} else {
 			$table_name = $wpdb->prefix . 'frm_forms';
