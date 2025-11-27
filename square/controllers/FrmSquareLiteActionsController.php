@@ -567,7 +567,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
 			),
-			// How does input placeholder work??
 			'input::placeholder'        => array(
 				'color' => $settings['text_color_disabled'],
 			),
