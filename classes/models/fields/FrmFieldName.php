@@ -170,6 +170,7 @@ class FrmFieldName extends FrmFieldCombo {
 	/**
 	 * @since 4.0.04
 	 *
+	 * @param array|string $value
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
