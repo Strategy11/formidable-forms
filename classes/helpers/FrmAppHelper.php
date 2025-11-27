@@ -4810,24 +4810,18 @@ class FrmAppHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param string $path      The relative path to append to the base URL.
-	 * @param string $campaign  The campaign to use for UTM parameters.
-	 * @param string $base_path The base path to prepend. Default 'knowledgebase'. Pass empty string to skip.
+	 * @param string $path           The relative path to append to the base URL.
+	 * @param string $campaign       The campaign to use for UTM parameters.
+	 * @param bool   $add_kb_base    Whether to prepend 'knowledgebase/' to the path. Default true.
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
-	public static function get_doc_url( $path, $campaign, $base_path = 'knowledgebase' ) {
+	public static function get_doc_url( $path, $campaign, $add_kb_base = true ) {
 		$path = trim( $path, '/' );
-		if ( '' !== $base_path ) {
-			$base_path = trim( $base_path, '/' );
-			$path      = $base_path . '/' . $path;
+		if ( $add_kb_base ) {
+			$path = 'knowledgebase/' . $path;
 		}
 
-		return self::maybe_add_missing_utm(
-			'https://formidableforms.com/' . $path . '/',
-			array(
-				'campaign' => $campaign,
-			)
-		);
+		return self::maybe_add_missing_utm( 'https://formidableforms.com/' . $path, array( 'campaign' => $campaign ) );
 	}
 
 	/**

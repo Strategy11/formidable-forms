@@ -2228,13 +2228,11 @@ class FrmFieldsHelper {
 		}
 
 		if ( ! empty( $field_type['learn-more'] ) ) {
-			$learn_more_base_path = 'knowledgebase';
-			if ( is_array( $field_type['learn-more'] ) ) {
-				$learn_more_base_path     = $field_type['learn-more']['base_path'];
-				$field_type['learn-more'] = $field_type['learn-more']['path'];
-			}
-
-			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url( $field_type['learn-more'], 'form-builder-add-fields', $learn_more_base_path );
+			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url(
+				$field_type['learn-more'],
+				'form-builder-add-fields',
+				false !== strpos( $field_type['learn-more'], '/' )
+			);
 		}
 
 		if ( isset( $upgrading['url'] ) ) {
