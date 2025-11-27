@@ -159,7 +159,7 @@ class FrmField {
 			'toggle'          => array(
 				'name'         => __( 'Toggle', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_toggle_on_icon',
-				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'message'      => esc_html__( 'Quickly and easily create cascading fields, populate fields by search and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'toggle-field-preview.webp',
 				'learn-more'   => 'toggle',
 			),
