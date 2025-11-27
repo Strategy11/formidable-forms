@@ -169,15 +169,46 @@ class FrmAppHelper {
 	 *
 	 * @since 6.25.1
 	 *
-	 * @param array $query_args
+	 * @param array  $query_args
+	 * @param string $link
 	 * @return array
 	 */
-	private static function maybe_add_utm_license( $query_args ) {
-		if ( 'pro' === $query_args['utm_medium'] && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
+	private static function maybe_add_utm_license( $query_args, $link = '' ) {
+		if ( isset( $query_args['utm_medium'] ) ) {
+			$medium = $query_args['utm_medium'];
+		} else {
+			$medium = self::pull_medium_from_link( $link );
+		}
+
+		if ( 'pro' === $medium && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
 		}
 
 		return $query_args;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param string $link
+	 * @return string
+	 */
+	private static function pull_medium_from_link( $link ) {
+		if ( ! $link ) {
+			return '';
+		}
+
+		$parsed = parse_url( $link );
+		if ( ! is_array( $parsed ) || ! isset( $parsed['query'] ) ) {
+			return '';
+		}
+
+		$query_args = wp_parse_args( $parsed['query'] );
+		if ( empty( $query_args['utm_medium'] ) ) {
+			return '';
+		}
+
+		return $query_args['utm_medium'];
 	}
 
 	/**
@@ -232,7 +263,7 @@ class FrmAppHelper {
 			$query_args['utm_content'] = $utm['content'];
 		}
 
-		$query_args = self::maybe_add_utm_license( $query_args );
+		$query_args = self::maybe_add_utm_license( $query_args, $cta_link );
 
 		return $query_args ? add_query_arg( $query_args, $cta_link ) : $cta_link;
 	}
