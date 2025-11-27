@@ -180,6 +180,9 @@ class FrmSolution {
 
 	/**
 	 * Add page to global settings.
+	 *
+	 * @param array $sections Sections.
+	 * @return array
 	 */
 	public function add_settings( $sections ) {
 		wp_enqueue_style( 'formidable-pro-fields' );
@@ -417,6 +420,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function step_top( $step ) {
@@ -455,6 +460,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
@@ -466,6 +473,8 @@ class FrmSolution {
 
 	/**
 	 * Generate and output Connect step section HTML.
+	 *
+	 * @param array $step Step.
 	 *
 	 * @return void
 	 */
@@ -486,6 +495,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function show_plugin_install( $step ) {
@@ -505,6 +516,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function show_app_install( $step ) {
@@ -582,6 +595,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param string $xml
+	 *
 	 * @return void
 	 */
 	protected function show_form_options( $xml ) {
@@ -648,6 +663,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step
+	 *
 	 * @return void
 	 */
 	protected function show_page_links( $step ) {

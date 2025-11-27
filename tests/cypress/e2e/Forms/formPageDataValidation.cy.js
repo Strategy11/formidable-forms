@@ -41,6 +41,7 @@ describe( 'Forms page', () => {
 								'tired of workarounds? build what you really need.',
 								'build powerful forms, web apps, dashboards, and more',
 								'black friday sales are happening now!',
+								'save 65% on the best wordpress form builder',
 							] ).to.include( headingText );
 						} );
 					} );

@@ -521,6 +521,11 @@ class FrmField {
 	 * Process the field duplication.
 	 *
 	 * @since 5.0.05
+	 *
+	 * @param int|string $field_id Field ID.
+	 * @param int|string $form_id  Form ID.
+	 *
+	 * @return array|false
 	 */
 	public static function duplicate_single_field( $field_id, $form_id ) {
 		$copy_field = self::getOne( $field_id );
@@ -1042,6 +1047,9 @@ class FrmField {
 
 	/**
 	 * @since 2.0.8
+	 *
+	 * @param array|object $results Results.
+	 * @return void
 	 */
 	private static function format_field_results( &$results ) {
 		if ( is_array( $results ) ) {
@@ -1088,6 +1096,9 @@ class FrmField {
 	 * Unserialize all the serialized field data
 	 *
 	 * @since 2.0
+	 *
+	 * @param object $results
+	 * @return void
 	 */
 	private static function prepare_options( &$results ) {
 		FrmAppHelper::unserialize_or_decode( $results->field_options );
@@ -1111,6 +1122,11 @@ class FrmField {
 	 * We'll break them into groups of 200
 	 *
 	 * @since 2.0.1
+	 *
+	 * @param int|string $form_id Form ID.
+	 * @param array      $args    Additional arguments.
+	 *
+	 * @return array
 	 */
 	private static function get_fields_from_transients( $form_id, $args ) {
 		$fields = array();
@@ -1123,6 +1139,12 @@ class FrmField {
 	 * Called by get_fields_from_transients
 	 *
 	 * @since 2.0.1
+	 *
+	 * @param array  $fields    Array of fields.
+	 * @param string $base_name Base name.
+	 * @param int    $next      Next transient number.
+	 *
+	 * @return void
 	 */
 	private static function get_next_transient( &$fields, $base_name, $next = 0 ) {
 		$name        = $next ? $base_name . $next : $base_name;
@@ -1143,6 +1165,13 @@ class FrmField {
 	 * Save the transients in chunks for large forms
 	 *
 	 * @since 2.0.1
+	 *
+	 * @param array      $fields    Array of fields.
+	 * @param int|string $form_id   Form ID.
+	 * @param int        $next      Next transient number.
+	 * @param array      $args      Additional arguments.
+	 *
+	 * @return void
 	 */
 	private static function set_field_transient( &$fields, $form_id, $next = 0, $args = array() ) {
 		$base_name    = 'frm_form_fields_' . $form_id . $args['inc_embed'] . $args['inc_repeat'];
@@ -1153,7 +1182,7 @@ class FrmField {
 			$set  = set_transient( $name, $field, 60 * 60 * 6 );
 			if ( ! $set ) {
 				// the transient didn't save
-				if ( $name != $base_name ) {
+				if ( $name !== $base_name ) {
 					// if the first saved an others fail, this will show an incomplete form
 					self::delete_form_transient( $form_id );
 				}
@@ -1216,6 +1245,8 @@ class FrmField {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array|object $field
 	 * @return string
 	 */
 	public static function get_original_field_type( $field ) {
@@ -1234,6 +1265,8 @@ class FrmField {
 	 * Check if this is a multiselect dropdown field
 	 *
 	 * @since 2.0.9
+	 *
+	 * @param array|object $field Field object.
 	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {

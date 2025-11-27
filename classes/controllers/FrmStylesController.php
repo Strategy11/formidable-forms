@@ -1196,7 +1196,8 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @param string $val
+	 * @param string     $val  Style setting key.
+	 * @param int|string $form Form ID or 'default'.
 	 */
 	public static function get_style_val( $val, $form = 'default' ) {
 		$style = self::get_form_style( $form );
@@ -1237,6 +1238,10 @@ class FrmStylesController {
 	 * Duplicate of WordPress do_accordion_section function, it adds an additional svg icon support.
 	 *
 	 * @since 6.8.3
+	 *
+	 * @param string|WP_Screen $screen      Screen ID or screen object.
+	 * @param string           $context     Meta box context.
+	 * @param mixed            $data_object Data object passed to callbacks.
 	 *
 	 * @return int
 	 */

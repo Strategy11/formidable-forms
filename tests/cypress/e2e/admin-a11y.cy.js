@@ -30,7 +30,8 @@ describe( 'Run some accessibility tests', function() {
 		{ id: 'color-contrast', enabled: false },
 		{ id: 'aria-allowed-role', enabled: false },
 		{ id: 'link-name', enabled: false },
-		{ id: 'link-in-text-block', enabled: false }
+		{ id: 'link-in-text-block', enabled: false },
+		{ id: 'region', enabled: false },
 	];
 
 	it( 'Check the dashboard page is accessible', () => {

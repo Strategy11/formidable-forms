@@ -9,7 +9,6 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
 use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
-use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
 use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
@@ -36,7 +35,6 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
-use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
 use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
@@ -51,6 +49,7 @@ return RectorConfig::configure()
 		array(
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
+			__DIR__ . '/square',
 		)
 	)
 	// here we can define, what prepared sets of rules will be applied
@@ -90,7 +89,6 @@ return RectorConfig::configure()
 			CombinedAssignRector::class,
 			ExplicitReturnNullRector::class,
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
-			UseIdenticalOverEqualWithSameTypeRector::class,
 			SimplifyUselessVariableRector::class,
 			ReduceAlwaysFalseIfOrRector::class,
 			CountArrayToEmptyArrayComparisonRector::class,
@@ -118,7 +116,6 @@ return RectorConfig::configure()
 			RemoveUnusedPrivateMethodParameterRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
-			RemoveUnusedVariableAssignRector::class,
 			RemoveUnusedConstructorParamRector::class,
 			RemoveNonExistingVarAnnotationRector::class,
 			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,

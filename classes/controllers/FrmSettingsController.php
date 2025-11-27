@@ -420,8 +420,10 @@ class FrmSettingsController {
 	 * Add CTA to the bottom on the plugin settings pages.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
-	public static function settings_cta( $view ) {
+	public static function settings_cta() {
 		if ( get_option( 'frm_lite_settings_upgrade', false ) ) {
 			return;
 		}

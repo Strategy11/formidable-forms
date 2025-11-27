@@ -100,6 +100,9 @@ class FrmListHelper {
 
 	/**
 	 * Construct the table object
+	 *
+	 * @param array $args
+	 * @return void
 	 */
 	public function __construct( $args ) {
 		$args = wp_parse_args(
@@ -169,6 +172,9 @@ class FrmListHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $args
+	 * @return array|string
 	 */
 	protected function get_param( $args ) {
 		return FrmAppHelper::get_simple_request(
@@ -475,7 +481,7 @@ class FrmListHelper {
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 		foreach ( $actions as $action => $link ) {
 			++$i;
-			$sep  = $i == $action_count ? '' : ' | ';
+			$sep  = $i === $action_count ? '' : ' | ';
 			$out .= "<span class='$action'>$link$sep</span>";
 		}
 		$out .= '</div>';
@@ -1106,6 +1112,9 @@ class FrmListHelper {
 	 * When close together, it feels like duplicates.
 	 *
 	 * @since 4.07
+	 *
+	 * @param int $limit
+	 * @return bool
 	 */
 	protected function has_min_items( $limit = 5 ) {
 		return $this->has_items() && ( $this->total_items === false || $this->total_items >= $limit );

@@ -47,6 +47,9 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $classes
+	 * @return string
 	 */
 	public static function add_admin_class( $classes ) {
 		if ( self::is_white_page() ) {

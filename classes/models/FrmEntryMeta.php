@@ -80,6 +80,10 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values 
+	 *
+	 * @return void
 	 */
 	private static function set_value_before_save( &$values ) {
 		$field = FrmField::getOne( $values['field_id'] );
@@ -92,6 +96,11 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @param mixed $value
+	 *
+	 * @return void
 	 */
 	private static function get_value_to_save( $atts, &$value ) {
 		if ( is_object( $atts['field'] ) ) {
@@ -144,7 +153,7 @@ class FrmEntryMeta {
 
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
-				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
+				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
@@ -432,6 +441,11 @@ class FrmEntryMeta {
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
+	 * @param bool         $unique
+	 * @param array        $args
+	 * @param array        $query
+	 *
+	 * @return void
 	 */
 	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
 		global $wpdb;

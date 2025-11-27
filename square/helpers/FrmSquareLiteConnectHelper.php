@@ -201,7 +201,7 @@ class FrmSquareLiteConnectHelper {
 			return 'Response from server was not successful';
 		}
 
-		return isset( $body->data ) ? $body->data : array();
+		return $body->data ?? array();
 	}
 
 	private static function pull_response_body( $response ) {
@@ -260,6 +260,9 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * WPML might add a language to the url. Don't send that to the server.
+	 *
+	 * @param string $url URL to strip language from.
+	 * @return string
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
@@ -273,7 +276,7 @@ class FrmSquareLiteConnectHelper {
 	 * WPML alters the output of home_url.
 	 * If it is active, use the WPML "absolute home" URL which is not modified.
 	 *
-	 * @param string $url
+	 * @param string $url URL to maybe fix.
 	 * @return string
 	 */
 	private static function maybe_fix_wpml_url( $url ) {
@@ -369,6 +372,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
 	private static function get_location_id_option_name( $mode = 'auto' ) {
@@ -384,7 +388,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $key 'merchant_id', 'client_password', 'server_password'.
+	 * @param string $key  'merchant_id', 'client_password', 'server_password'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
 	 * @return string
 	 */
@@ -545,7 +549,8 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param bool $force
+	 * @param bool   $force Whether to force refreshing the location id.
+	 * @param string $mode  Either 'auto', 'live', or 'test'.
 	 * @return false|string
 	 */
 	public static function get_location_id( $force = false, $mode = 'auto' ) {
