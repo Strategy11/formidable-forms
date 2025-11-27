@@ -44,7 +44,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
-		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
+
+		if ( ! is_string( $orderby ) ) {
+			$orderby = 'id';
+		}
+
+		if ( ! is_string( $order ) || ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
 			$order = 'DESC';
 		}
 

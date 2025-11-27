@@ -155,6 +155,7 @@ parameters:
 				- classes/models/FrmInstallerSkin.php
 				- classes/controllers/FrmSettingsController.php
 				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
+				- classes/models/FrmMigrate.php
 				- stubs.php
 		-
 			message: '#with no type specified#'

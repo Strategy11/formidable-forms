@@ -23,8 +23,6 @@ class FrmTransLiteAction extends FrmFormAction {
 	/**
 	 * @param WP_Post $instance
 	 * @param array   $args
-	 *
-	 * @return void
 	 */
 	public function form( $instance, $args = array() ) {
 		$form_action = $instance;

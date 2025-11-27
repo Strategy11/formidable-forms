@@ -125,6 +125,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_entry( $atts ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
@@ -145,6 +147,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_entry_values( $atts ) {
 		$entry_atts         = $this->prepare_entry_attributes( $atts );
@@ -179,6 +183,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_format( $atts ) {
 		if ( $atts['format'] === 'array' ) {
@@ -223,6 +229,8 @@ class FrmEntryFormatter {
 	 * @since 2.05
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_array_key( $atts ) {
 		if ( isset( $atts['array_key'] ) && $atts['array_key'] === 'id' ) {
@@ -236,6 +244,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_is_plain_text( $atts ) {
 		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
@@ -251,6 +261,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_include_blank( $atts ) {
 		if ( isset( $atts['include_blank'] ) && $atts['include_blank'] ) {
@@ -264,6 +276,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_direction( $atts ) {
 		if ( isset( $atts['direction'] ) && $atts['direction'] === 'rtl' ) {
@@ -277,6 +291,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_include_user_info( $atts ) {
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] ) {
@@ -288,6 +304,8 @@ class FrmEntryFormatter {
 	 * Which fields to skip by default
 	 *
 	 * @since 3.0
+	 *
+	 * @return array
 	 */
 	protected function skip_fields() {
 		return array( 'captcha', 'html', FrmSubmitHelper::FIELD_TYPE );
@@ -299,6 +317,8 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_include_extras( $atts ) {
 		if ( isset( $atts['include_extras'] ) && $atts['include_extras'] ) {
@@ -310,6 +330,8 @@ class FrmEntryFormatter {
 	 * Initialize the single_cell_fields property
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	protected function init_single_cell_fields() {
 		$this->single_cell_fields = array( 'html' );
@@ -321,6 +343,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_table_generator( $atts ) {
 		$this->table_generator = new FrmTableHTMLGenerator( 'entry', $atts );
@@ -332,6 +356,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	protected function init_is_clickable( $atts ) {
 		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
@@ -453,6 +479,8 @@ class FrmEntryFormatter {
 	 * @since 2.05
 	 *
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_field_values_to_content( &$content ) {
 		foreach ( $this->entry_values->get_field_values() as $field_value ) {
@@ -503,6 +531,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param array $field_values
 	 * @param array $output
+	 *
+	 * @return void
 	 */
 	protected function push_field_values_to_array( $field_values, &$output ) {
 		foreach ( $field_values as $field_value ) {
@@ -521,6 +551,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param array         $output
+	 *
+	 * @return void
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
@@ -544,6 +576,8 @@ class FrmEntryFormatter {
 	 * @param string $label
 	 * @param mixed  $display_value
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_plain_text_row( $label, $display_value, &$content ) {
 		$display_value = $this->prepare_display_value_for_plain_text_content( $display_value );
@@ -562,6 +596,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_field_value_to_content( $field_value, &$content ) {
 		if ( $this->is_extra_field( $field_value ) ) {
@@ -579,6 +615,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_row_for_extra_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -599,6 +637,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_row_for_standard_field( $field_value, &$content ) {
 		if ( ! $this->include_field_in_content( $field_value ) ) {
@@ -620,6 +660,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_html_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_html_display_value_for_extra_fields( $field_value, $display_value );
@@ -639,6 +681,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
@@ -657,6 +701,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param string $display_value
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_single_cell_html_row( $display_value, &$content ) {
 		// TODO: maybe move to FrmFieldValue
@@ -672,6 +718,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param string $display_value
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_single_value_plain_text_row( $display_value, &$content ) {
 		$content .= $this->prepare_display_value_for_plain_text_content( $display_value );
@@ -684,6 +732,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param mixed         $display_value
+	 *
+	 * @return void
 	 */
 	protected function prepare_html_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value();
@@ -696,6 +746,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param mixed         $display_value
+	 *
+	 * @return void
 	 */
 	protected function prepare_plain_text_display_value_for_extra_fields( $field_value, &$display_value ) {
 		$display_value = $field_value->get_displayed_value() . "\r\n";
@@ -708,6 +760,8 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 * @param string        $content
+	 *
+	 * @return void
 	 */
 	protected function add_standard_row( $field_value, &$content ) {
 		if ( $this->format === 'plain_text_block' ) {
@@ -741,6 +795,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_user_info_to_html_table( &$content ) {
 		if ( $this->include_user_info ) {
@@ -764,6 +820,8 @@ class FrmEntryFormatter {
 	 * @since 2.04
 	 *
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_user_info_to_plain_text_content( &$content ) {
 		if ( $this->include_user_info ) {
@@ -833,6 +891,8 @@ class FrmEntryFormatter {
 	 *     'field_type' => (string) The field type. Blank string if not a field.
 	 *   ]
 	 * @param string $content
+	 *
+	 * @return void
 	 */
 	protected function add_html_row( $value_args, &$content ) {
 		$display_value = $this->prepare_display_value_for_html_table( $value_args['value'], $value_args['field_type'] );
