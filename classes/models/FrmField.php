@@ -104,10 +104,7 @@ class FrmField {
 				'icon'         => 'frm_icon_font frm_upload3_icon',
 				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
-				'learn-more'   => array(
-					'base_path' => 'features',
-					'path'      => 'wordpress-multiple-file-upload-form',
-				),
+				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
@@ -298,10 +295,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
-				'learn-more'   => array(
-					'base_path' => 'features',
-					'path'      => 'pricing-fields',
-				),
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'quantity'        => array(
 				'name'         => __( 'Quantity', 'formidable' ),
@@ -309,10 +303,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
-				'learn-more'   => array(
-					'base_path' => 'features',
-					'path'      => 'pricing-fields',
-				),
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'total'           => array(
 				'name'         => __( 'Total', 'formidable' ),
@@ -320,10 +311,7 @@ class FrmField {
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
-				'learn-more'   => array(
-					'base_path' => 'features',
-					'path'      => 'pricing-fields',
-				),
+				'learn-more'   => 'features/pricing-fields',
 			),
 		);
 
