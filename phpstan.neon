@@ -163,6 +163,8 @@ parameters:
 				- classes/controllers/FrmFormActionsController.php
 				- classes/controllers/FrmAddonsController.php
 				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmEntriesController.php
 				- stubs.php
 		-
 			message: '#with no type specified#'
@@ -191,4 +193,6 @@ parameters:
 				- classes/models/FrmEntryValidate.php
 				- classes/models/FrmFormAction.php
 				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmEntriesController.php
 				- stubs.php

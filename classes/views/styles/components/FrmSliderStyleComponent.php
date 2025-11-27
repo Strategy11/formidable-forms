@@ -22,6 +22,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 */
 	protected $data;
 
+	/**
+	 * @param string $field_name
+	 * @param mixed  $field_value
+	 * @param array  $data
+	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->init_field_data( $data, $field_name, $field_value );

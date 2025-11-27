@@ -157,6 +157,8 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $plan
+	 *
+	 * @return mixed
 	 */
 	public static function maybe_create_plan( $plan ) {
 		return FrmStrpLiteConnectHelper::maybe_create_plan( $plan );

@@ -203,6 +203,9 @@ class FrmStrpLiteEventsController {
 		return true;
 	}
 
+	/**
+	 * @return object|false
+	 */
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
 			// This isn't a subscription.
@@ -321,6 +324,11 @@ class FrmStrpLiteEventsController {
 		return ! $payment->receipt_id || 0 === strpos( $payment->receipt_id, 'pi_' );
 	}
 
+	/**
+	 * @param string $sub_id
+	 *
+	 * @return object|false|null
+	 */
 	private function get_subscription( $sub_id ) {
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
@@ -338,6 +346,11 @@ class FrmStrpLiteEventsController {
 		return $sub;
 	}
 
+	/**
+	 * @param string $sub_id
+	 *
+	 * @return object|null
+	 */
 	private function get_payment_for_sub( $sub_id ) {
 		$frm_payment = new FrmTransLitePayment();
 		return $frm_payment->get_one_by( $sub_id, 'sub_id' );
