@@ -6,28 +6,28 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmDb {
 
 	/**
-	 * The table name for Formdidable Fields.
+	 * The table name for Formidable Fields.
 	 *
 	 * @var string
 	 */
 	public $fields;
 
 	/**
-	 * The table name for Formdidable Forms.
+	 * The table name for Formidable Forms.
 	 *
 	 * @var string
 	 */
 	public $forms;
 
 	/**
-	 * The table name for Formdidable Entries.
+	 * The table name for Formidable Entries.
 	 *
 	 * @var string
 	 */
 	public $entries;
 
 	/**
-	 * The table name for Formdidable Entry Metas.
+	 * The table name for Formidable Entry Metas.
 	 *
 	 * @var string
 	 */
