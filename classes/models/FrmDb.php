@@ -365,13 +365,13 @@ class FrmDb {
 	 * @return void
 	 */
 	private static function get_group_and_table_name( &$table, &$group ) {
-		global $wpdb, $wpmuBaseTablePrefix;
+		global $wpdb;
 
 		$table_parts = explode( ' ', $table );
 		$group       = reset( $table_parts );
 		self::maybe_remove_prefix( $wpdb->prefix, $group );
 
-		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
+		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
 		if ( $group == $table ) {
