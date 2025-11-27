@@ -79,8 +79,14 @@ class FrmListHelper {
 	 */
 	protected $_column_headers;
 
+	/**
+	 * @var array
+	 */
 	protected $compat_fields = array( '_args', '_pagination_args', 'screen', '_actions', '_pagination' );
 
+	/**
+	 * @var array
+	 */
 	protected $compat_methods = array(
 		'set_pagination_args',
 		'get_views',

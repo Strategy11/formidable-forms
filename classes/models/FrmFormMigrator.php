@@ -5,17 +5,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 abstract class FrmFormMigrator {
 
+	/**
+	 * @var bool
+	 */
 	public $source_active;
 
+	/**
+	 * @var string
+	 */
 	public $slug;
+
+	/**
+	 * @var string
+	 */
 	public $path;
+
+	/**
+	 * @var string
+	 */
 	public $name;
 
+	/**
+	 * @var array
+	 */
 	public $response = array();
+
+	/**
+	 * @var string
+	 */
 	public $tracking = 'frm_forms_imported';
 
+	/**
+	 * @var array
+	 */
 	protected $fields_map          = array();
+
+	/**
+	 * @var mixed
+	 */
 	protected $current_source_form;
+
+	/**
+	 * @var array
+	 */
 	protected $current_section     = array();
 
 	/**

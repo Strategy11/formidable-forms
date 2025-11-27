@@ -5,9 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesListHelper extends FrmListHelper {
 
+	/**
+	 * @var string|null
+	 */
 	protected $column_name;
-	protected $item;
-	protected $field;
 
 	/**
 	 * @since 4.07

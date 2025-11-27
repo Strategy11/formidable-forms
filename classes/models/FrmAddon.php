@@ -5,20 +5,80 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /** @phpstan-consistent-constructor */
 class FrmAddon {
+
+	/**
+	 * @var string
+	 */
 	public $store_url = 'https://formidableforms.com';
+
+	/**
+	 * @var int|string|null
+	 */
 	public $download_id;
+
+	/**
+	 * @var string|null
+	 */
 	public $plugin_file;
+
+	/**
+	 * @var string
+	 */
 	public $plugin_folder;
+
+	/**
+	 * @var string
+	 */
 	public $plugin_name;
+
+	/**
+	 * @var string
+	 */
 	public $plugin_slug;
+
+	/**
+	 * @var string
+	 */
 	public $option_name;
+
+	/**
+	 * @var string|null
+	 */
 	public $version;
+
+	/**
+	 * @var string
+	 */
 	public $author            = 'Strategy11';
+
+	/**
+	 * @var bool
+	 */
 	public $is_parent_licence = false;
+
+	/**
+	 * @var bool
+	 */
 	public $needs_license     = true;
+
+	/**
+	 * @var bool
+	 */
 	private $is_expired_addon = false;
+
+	/**
+	 * @var string|null
+	 */
 	public $license;
+
+	/**
+	 * @var bool
+	 */
 	protected $get_beta = false;
+
+	/**
+	 * @var string|null
+	 */
 	protected $save_status;
 
 	/**

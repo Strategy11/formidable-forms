@@ -8,8 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmFieldFormHtml {
 
+	/**
+	 * @var string
+	 */
 	private $html;
 
+	/**
+	 * @var string
+	 */
 	private $html_id;
 
 	/**
@@ -17,10 +23,19 @@ class FrmFieldFormHtml {
 	 */
 	private $field_obj;
 
+	/**
+	 * @var int|string
+	 */
 	private $field_id;
 
+	/**
+	 * @var array
+	 */
 	private $form = array();
 
+	/**
+	 * @var array
+	 */
 	private $pass_args = array();
 
 	/**

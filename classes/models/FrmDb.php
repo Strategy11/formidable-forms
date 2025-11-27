@@ -4,9 +4,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmDb {
+
+	/**
+	 * The table name for Formdidable Fields.
+	 *
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * The table name for Formdidable Forms.
+	 *
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * The table name for Formdidable Entries.
+	 *
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * The table name for Formdidable Entry Metas.
+	 *
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {

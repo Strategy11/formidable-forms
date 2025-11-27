@@ -16,8 +16,14 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	const COMPARE_EQUALS = 'equals';
 
+	/**
+	 * @var array
+	 */
 	protected $posted_fields;
 
+	/**
+	 * @var array
+	 */
 	protected $denylist;
 
 	/**

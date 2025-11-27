@@ -5,13 +5,44 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCreateFile {
 
+	/**
+	 * @var string
+	 */
 	public $folder_name;
+
+	/**
+	 * @var string
+	 */
 	public $file_name;
+
+	/**
+	 * @var string
+	 */
 	public $error_message;
+
+	/**
+	 * @var array
+	 */
 	public $uploads;
+
+	/**
+	 * @var string
+	 */
 	private $new_file_path;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_dir       = 0755;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_file      = 0644;
+
+	/**
+	 * @var bool
+	 */
 	private $has_permission = false;
 
 	/**

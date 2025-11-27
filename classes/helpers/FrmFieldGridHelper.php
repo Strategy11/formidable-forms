@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFieldGridHelper {
 
+	/**
+	 * @var bool|string
+	 */
 	private $parent_li;
 
 	/**
@@ -52,6 +55,9 @@ class FrmFieldGridHelper {
 	 */
 	private $section_size;
 
+	/**
+	 * @var bool
+	 */
 	private $section_is_open = false;
 
 	/**
