@@ -154,7 +154,7 @@ class FrmEntryShortcodeFormatter {
 	 *
 	 * @since 2.04
 	 *
-	 * @return string|array
+	 * @return array|string
 	 */
 	public function content() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {

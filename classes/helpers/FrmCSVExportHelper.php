@@ -628,7 +628,7 @@ class FrmCSVExportHelper {
 	/**
 	 * @param int|string $field_id
 	 *
-	 * @return object|false
+	 * @return false|object
 	 */
 	private static function get_field( $field_id ) {
 		$field_id = (int) $field_id;

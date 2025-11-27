@@ -266,7 +266,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @param object|array|int|float $payment
+	 * @param array|float|int|object $payment
 	 *
 	 * @return string
 	 */

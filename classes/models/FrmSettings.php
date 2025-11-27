@@ -133,7 +133,7 @@ class FrmSettings {
 	}
 
 	/**
-	 * @param object|false $settings
+	 * @param false|object $settings
 	 *
 	 * @return object
 	 */

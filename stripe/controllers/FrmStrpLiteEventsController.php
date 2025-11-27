@@ -204,7 +204,7 @@ class FrmStrpLiteEventsController {
 	}
 
 	/**
-	 * @return object|false
+	 * @return false|object
 	 */
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {

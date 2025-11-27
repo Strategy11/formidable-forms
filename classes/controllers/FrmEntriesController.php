@@ -705,7 +705,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param string|array $errors
+	 * @param array|string $errors
 	 * @param bool         $ajax
 	 *
 	 * @return void
@@ -904,7 +904,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param object|false $entry
+	 * @param false|object $entry
 	 *
 	 * @return void
 	 */
