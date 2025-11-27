@@ -120,6 +120,8 @@ class FrmOnboardingWizardController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.9
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();

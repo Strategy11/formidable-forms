@@ -130,6 +130,9 @@ class FrmSquareLiteConnectHelper {
 		wp_enqueue_script( 'formidable_square_settings' );
 	}
 
+	/**
+	 * @return false|string
+	 */
 	public static function get_oauth_redirect_url() {
 		$mode = FrmAppHelper::get_post_param( 'mode', 'test', 'sanitize_text_field' );
 
@@ -204,6 +207,10 @@ class FrmSquareLiteConnectHelper {
 		return $body->data ?? array();
 	}
 
+	/**
+	 * @param array $response
+	 * @return mixed
+	 */
 	private static function pull_response_body( $response ) {
 		$http_response   = $response['http_response'];
 		$response_object = $http_response->get_response_object();
@@ -474,6 +481,15 @@ class FrmSquareLiteConnectHelper {
 		return false;
 	}
 
+	/**
+	 * @param string $amount
+	 * @param string $currency
+	 * @param string $square_token
+	 * @param string $verification_token
+	 * @param string $description
+	 *
+	 * @return false|object
+	 */
 	public static function create_payment( $amount, $currency, $square_token, $verification_token, $description ) {
 		return self::post_with_authenticated_body(
 			'create_payment',
@@ -513,6 +529,9 @@ class FrmSquareLiteConnectHelper {
 		return false;
 	}
 
+	/**
+	 * @return array
+	 */
 	private static function get_standard_authenticated_body() {
 		$mode = self::get_mode_value_from_post();
 		return array(
@@ -536,14 +555,27 @@ class FrmSquareLiteConnectHelper {
 		return $test_mode ? 'test' : 'live';
 	}
 
+	/**
+	 * @return string|null
+	 */
 	public static function get_latest_error_from_square_api() {
 		return self::$latest_error_from_square_api;
 	}
 
+	/**
+	 * @param string $receipt_id
+	 *
+	 * @return false|object
+	 */
 	public static function refund_payment( $receipt_id ) {
 		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
 	}
 
+	/**
+	 * @param array $info
+	 *
+	 * @return false|object|string
+	 */
 	public static function create_subscription( $info ) {
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );
 	}
@@ -610,27 +642,39 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
-	 * @return mixed
+	 * @return false|object
 	 */
 	public static function process_event( $event_id ) {
 		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
 	}
 
+	/**
+	 * @param string $payment_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_payment( $payment_id ) {
 		return self::post_with_authenticated_body( 'get_payment', compact( 'payment_id' ) );
 	}
 
+	/**
+	 * @param string $payment_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_subscription_id_for_payment( $payment_id ) {
 		return self::post_with_authenticated_body( 'get_subscription_id_for_payment', compact( 'payment_id' ) );
 	}
 
+	/**
+	 * @param string $subscription_id
+	 *
+	 * @return false|object
+	 */
 	public static function cancel_subscription( $subscription_id ) {
 		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
 
-	/**
-	 * @return void
-	 */
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_square_api_integration();
@@ -721,6 +765,11 @@ class FrmSquareLiteConnectHelper {
 		wp_send_json_error();
 	}
 
+	/**
+	 * @param string $subscription_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_subscription( $subscription_id ) {
 		$response = self::post_with_authenticated_body( 'get_subscription', array( 'subscription_id' => $subscription_id ) );
 		if ( is_object( $response ) && is_object( $response->subscription ) ) {

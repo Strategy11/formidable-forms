@@ -261,6 +261,8 @@
 		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
 	</rule>
 
+	
+
 	<!-- Treat these warnings as errors -->
 	<rule ref="Generic.Formatting.MultipleStatementAlignment.NotSameWarning">
 		<severity>8</severity>

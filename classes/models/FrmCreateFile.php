@@ -14,6 +14,9 @@ class FrmCreateFile {
 	public $chmod_file      = 0644;
 	private $has_permission = false;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
 		$this->folder_name   = $atts['folder_name'] ?? '';
 		$this->file_name     = $atts['file_name'];
@@ -183,6 +186,9 @@ class FrmCreateFile {
 		return $needed_dirs;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
@@ -200,6 +206,8 @@ class FrmCreateFile {
 
 	/**
 	 * @param string $type
+	 *
+	 * @return array|false
 	 */
 	private function get_ftp_creds( $type ) {
 		$credentials = get_option(

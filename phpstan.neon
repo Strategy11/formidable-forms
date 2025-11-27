@@ -31,14 +31,12 @@ parameters:
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
 		- '#is always (false|true)+.#'
-		- '#no (typehint|value type|return typehint)+ specified.#'
+		- '#no value type specified.#'
 		- '#of echo cannot be converted to string.#'
 		- '#only iterables are supported#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#has no return type specified#'
-		- '#with no type specified#'
 		- '#in isset\(\) does not exist.#'
 		- '#is unused.#'
 		- '#is never read, only written#'
@@ -136,3 +134,61 @@ parameters:
 		-
 			message: '#FrmFormAction::prepare_action\(\) expects WP_Post, mixed given#'
 			path: classes/models/FrmFormAction.php
+		-
+			message: '#has no return type specified#'
+			paths:
+				- classes/controllers/FrmEmailStylesController.php 
+				- classes/controllers/FrmFieldsController.php
+				- classes/helpers/FrmFieldsHelper.php
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/fields/FrmFieldType.php
+				- classes/models/FrmForm.php
+				- classes/models/FrmAddon.php
+				- square/helpers/FrmSquareLiteConnectHelper.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmEntryFormatter.php
+				- classes/helpers/FrmListHelper.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmEntriesHelper.php
+				- classes/models/FrmMigrate.php
+				- classes/models/FrmFormMigrator.php
+				- classes/models/FrmFieldFormHtml.php
+				- classes/models/FrmField.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmEntryMeta.php
+				- classes/models/FrmEntry.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmFormAction.php
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAppController.php
+				- stubs.php
+		-
+			message: '#with no type specified#'
+			paths:
+				- classes/controllers/FrmEmailStylesController.php 
+				- classes/controllers/FrmFieldsController.php
+				- classes/helpers/FrmFieldsHelper.php
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/fields/FrmFieldType.php
+				- classes/models/FrmForm.php
+				- classes/models/FrmAddon.php
+				- square/helpers/FrmSquareLiteConnectHelper.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmEntryFormatter.php
+				- classes/helpers/FrmListHelper.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmEntriesHelper.php
+				- classes/models/FrmMigrate.php
+				- classes/models/FrmFormMigrator.php
+				- classes/models/FrmFieldFormHtml.php
+				- classes/models/FrmField.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmEntryMeta.php
+				- classes/models/FrmEntry.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmFormAction.php
+				- classes/controllers/FrmFormActionsController.php
+				- stubs.php

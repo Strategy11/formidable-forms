@@ -43,7 +43,6 @@
 		</UndefinedDocblockClass>
 		<UndefinedFunction>
 			 <errorLevel type="suppress">
-				<referencedFunction name="WP_Optimize" />
 				<referencedFunction name="bp_core_email_from_address_filter" />
 				<referencedFunction name="bp_core_email_from_name_filter" />
 				<referencedFunction name="__autoload" />

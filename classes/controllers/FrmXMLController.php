@@ -182,6 +182,8 @@ class FrmXMLController {
 	 *
 	 * @param array  $form
 	 * @param string $value
+	 *
+	 * @return string
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
 		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
@@ -750,6 +752,11 @@ class FrmXMLController {
 		return apply_filters( 'frm_fields_for_csv_export', $csv_fields, compact( 'form' ) );
 	}
 
+	/**
+	 * @param array $mimes
+	 *
+	 * @return array
+	 */
 	public static function allow_mime( $mimes ) {
 		if ( ! isset( $mimes['csv'] ) ) {
 			// allow csv files

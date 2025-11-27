@@ -108,6 +108,9 @@ class FrmSettings {
 
 	public $allowed_words;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -129,6 +132,11 @@ class FrmSettings {
 		$this->maybe_filter_for_form( $args );
 	}
 
+	/**
+	 * @param object|false $settings
+	 *
+	 * @return object
+	 */
 	private function translate_settings( $settings ) {
 		if ( $settings ) {
 			// Workaround for W3 total cache conflict.
@@ -373,6 +381,8 @@ class FrmSettings {
 	/**
 	 * @param array $params
 	 * @param array $errors
+	 *
+	 * @return array
 	 */
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );

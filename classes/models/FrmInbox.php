@@ -49,6 +49,8 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05
 	 *
 	 * @param array|false $filter
+	 *
+	 * @return array
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
@@ -325,6 +327,9 @@ class FrmInbox extends FrmFormApi {
 		$this->update_list();
 	}
 
+	/**
+	 * @return array
+	 */
 	public function unread() {
 		$messages = $this->get_messages( 'filter' );
 		$user_id  = get_current_user_id();
