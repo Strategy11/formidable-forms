@@ -29,6 +29,9 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @param string|null $license The license key.
+	 * @return void
 	 */
 	public function __construct( $license = null ) {
 		$this->set_license( $license );
@@ -38,6 +41,7 @@ class FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
+	 * @param string|null $license The license key.
 	 * @return void
 	 */
 	private function set_license( $license ) {
@@ -386,6 +390,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @param array $addons
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {

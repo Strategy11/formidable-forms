@@ -357,6 +357,7 @@ class FrmSettings {
 	 *
 	 * @since 3.06.01
 	 *
+	 * @param array $args
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
@@ -445,6 +446,7 @@ class FrmSettings {
 	}
 
 	/**
+	 * @param array $params
 	 * @return void
 	 */
 	private function update_roles( $params ) {

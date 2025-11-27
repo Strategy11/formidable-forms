@@ -70,6 +70,13 @@ class FrmForm {
 	}
 
 	/**
+	 * Duplicate a form.
+	 *
+	 * @param int       $id        Form ID to duplicate.
+	 * @param bool      $template  Whether the duplicated form is a template.
+	 * @param bool      $copy_keys Whether to copy the original form key.
+	 * @param false|int $blog_id   Blog ID when duplicating across sites, or false for current site.
+	 *
 	 * @return bool|int ID on success or false on failure
 	 */
 	public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
@@ -219,6 +226,12 @@ class FrmForm {
 	}
 
 	/**
+	 * Update a form.
+	 *
+	 * @param int   $id          Form ID.
+	 * @param array $values      Form values to update.
+	 * @param bool  $create_link Whether this is being called from link creation.
+	 *
 	 * @return bool|int
 	 */
 	public static function update( $id, $values, $create_link = false ) {
@@ -302,6 +315,8 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int   $id     Form ID.
+	 * @param array $values Form values array.
 	 * @return array
 	 */
 	public static function update_fields( $id, $values ) {
@@ -490,6 +505,10 @@ class FrmForm {
 
 	/**
 	 * Updating the settings page
+	 *
+	 * @param array  $values Form values array.
+	 * @param object $field Field object, passed by reference.
+	 * @return void
 	 */
 	private static function get_settings_page_html( $values, &$field ) {
 		if ( isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ) {
@@ -598,6 +617,7 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID.
 	 * @return bool|int
 	 */
 	public static function trash( $id ) {
@@ -648,6 +668,7 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID.
 	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
@@ -691,6 +712,7 @@ class FrmForm {
 	/**
 	 * Delete trashed forms based on how long they have been trashed
 	 *
+	 * @param int|string $delete_timestamp Timestamp cutoff for deletion.
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
@@ -723,6 +745,7 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID or key.
 	 * @return string form name
 	 */
 	public static function getName( $id ) {
@@ -851,6 +874,9 @@ class FrmForm {
 	}
 
 	/**
+	 * @param array|string $where    Where conditions array or raw WHERE string.
+	 * @param string       $order_by Order by clause.
+	 * @param int|string   $limit    Limit clause or number.
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
@@ -968,11 +994,11 @@ class FrmForm {
 	}
 
 	/**
+	 * @param array $values Form values to validate.
 	 * @return array of errors
 	 */
 	public static function validate( $values ) {
 		$errors = array();
-
 		return apply_filters( 'frm_validate_form', $errors, $values );
 	}
 
@@ -1183,6 +1209,9 @@ class FrmForm {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param array $atts Attributes including form, option, and default.
+	 * @return mixed
 	 */
 	public static function get_option( $atts ) {
 		$form    = $atts['form'];

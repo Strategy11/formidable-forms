@@ -159,6 +159,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Import a single form
+	 *
+	 * @param int $source_id Source form ID.
+	 *
+	 * @return array
 	 */
 	protected function import_form( $source_id ) {
 
@@ -209,6 +213,12 @@ abstract class FrmFormMigrator {
 		// customize this function
 	}
 
+	/**
+	 * @param array $fields
+	 * @param array $form
+	 *
+	 * @return void
+	 */
 	protected function prepare_fields( $fields, &$form ) {
 		$field_order = 1;
 
@@ -280,6 +290,9 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $fields
+	 * @return void
 	 */
 	protected function maybe_add_end_fields( &$fields ) {
 		$with_end = $this->fields_with_end();
@@ -315,6 +328,11 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $fields
+	 * @param int   $order
+	 *
+	 * @return void
 	 */
 	protected function insert_end_section( &$fields, &$order ) {
 		$sub         = FrmFieldsHelper::setup_new_vars( 'end_divider' );
@@ -329,6 +347,13 @@ abstract class FrmFormMigrator {
 	 * This switches the name field to individual fields.
 	 *
 	 * @since 4.04.03
+	 *
+	 * @param array $subs
+	 * @param int   $start
+	 * @param int   $remove
+	 * @param array $fields
+	 *
+	 * @return void
 	 */
 	protected function insert_fields_in_array( $subs, $start, $remove, &$fields ) {
 		array_splice( $fields, $start, $remove, $subs );
@@ -400,6 +425,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $form
+	 *
+	 * @return array
 	 */
 	protected function form_creation_error_response( $form ) {
 		return array(
@@ -425,7 +454,9 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param array $form
+	 * @param array      $form
+	 * @param int|string $form_id
+	 * @return void
 	 */
 	protected function create_emails( $form, $form_id ) {
 		foreach ( $form['actions'] as $action ) {
