@@ -526,5 +526,10 @@
 				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
 			</errorLevel>
 		</DeprecatedFunction>
+		<PossiblyNullArrayAccess>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmStylesController.php" />
+			</errorLevel>
+		</PossiblyNullArrayAccess>
 	</issueHandlers>
 </psalm>
