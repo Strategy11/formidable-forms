@@ -4388,7 +4388,7 @@ class FrmAppHelper {
 			'upgrade'    => __( 'Form Landing Pages', 'formidable' ),
 			'message'    => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 			'screenshot' => 'landing.png',
-			'learn-more' => 'https://formidableforms.com/landing-page-forms/',
+			'learn-more' => self::get_doc_url( 'landing-page-forms', 'form-landing-page-settings', false ),
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
 	}
