@@ -153,6 +153,8 @@ class FrmEntryShortcodeFormatter {
 	 * Return the default HTML for an entry
 	 *
 	 * @since 2.04
+	 *
+	 * @return array|string
 	 */
 	public function content() {
 		if ( ! $this->form_id || empty( $this->fields ) ) {

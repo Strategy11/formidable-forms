@@ -31,14 +31,12 @@ parameters:
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
 		- '#is always (false|true)+.#'
-		- '#no (typehint|value type|return typehint)+ specified.#'
+		- '#no value type specified.#'
 		- '#of echo cannot be converted to string.#'
 		- '#only iterables are supported#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#has no return type specified#'
-		- '#with no type specified#'
 		- '#in isset\(\) does not exist.#'
 		- '#is unused.#'
 		- '#is never read, only written#'
@@ -60,7 +58,6 @@ parameters:
 		-
 			message: '#Possibly invalid array key type#'
 			paths:
-				- classes/helpers/FrmCSVExportHelper.php
 				- classes/helpers/FrmFormsListHelper.php
 		-
 			message: '#get_mailer\(\) expects#'
@@ -136,3 +133,29 @@ parameters:
 		-
 			message: '#FrmFormAction::prepare_action\(\) expects WP_Post, mixed given#'
 			path: classes/models/FrmFormAction.php
+		-
+			message: '#has no return type specified#'
+			paths:
+				- classes/controllers/FrmEmailStylesController.php
+				- classes/controllers/FrmFieldsController.php
+				- classes/helpers/FrmXMLHelper.php
+				- square/helpers/FrmSquareLiteConnectHelper.php
+				- classes/helpers/FrmListHelper.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/models/FrmSalesApi.php
+				- square/controllers/FrmSquareLiteAppController.php
+				- stripe/helpers/FrmStrpLiteConnectHelper.php
+				- classes/models/FrmInstallerSkin.php
+				- classes/controllers/FrmSettingsController.php
+				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
+				- classes/models/FrmMigrate.php
+				- stubs.php
+		-
+			message: '#with no type specified#'
+			paths:
+				- stubs.php

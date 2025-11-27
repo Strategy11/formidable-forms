@@ -133,6 +133,12 @@ class FrmForm {
 		return false;
 	}
 
+	/**
+	 * @param int   $form_id
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	public static function after_duplicate( $form_id, $values ) {
 		$new_opts = $values['options'];
 		FrmAppHelper::unserialize_or_decode( $new_opts );
@@ -158,6 +164,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param int $form_id Form ID.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_fields( $form_id ) {
 		global $wpdb;
@@ -194,6 +202,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param array $field Field array.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_field( $field ) {
 		$new_values = array();
@@ -528,6 +538,13 @@ class FrmForm {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 * @param array  $values
+	 * @param array  $new_field
+	 *
+	 * @return void
+	 */
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
 			'field_order' => 0,
@@ -558,7 +575,10 @@ class FrmForm {
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
+	 *
 	 * @param object $form The form object.
+	 *
+	 * @return array
 	 */
 	public static function translatable_strings( $form ) {
 		$strings = array(
@@ -799,7 +819,10 @@ class FrmForm {
 	 * If $form is numeric, get the form object
 	 *
 	 * @since 2.0.9
+	 *
 	 * @param int|object $form
+	 *
+	 * @return void
 	 */
 	public static function maybe_get_form( &$form ) {
 		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
@@ -988,6 +1011,8 @@ class FrmForm {
 	 * or when the form status is changed
 	 *
 	 * @since 2.0.4
+	 *
+	 * @return void
 	 */
 	public static function clear_form_cache() {
 		FrmDb::cache_delete_group( 'frm_form' );
@@ -1002,6 +1027,11 @@ class FrmForm {
 		return apply_filters( 'frm_validate_form', $errors, $values );
 	}
 
+	/**
+	 * @param object|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 
@@ -1063,6 +1093,9 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function list_page_params() {
 		$values   = array();
 		$defaults = array(
@@ -1081,6 +1114,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param int|object|string|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;
 		if ( $form === null ) {
@@ -1109,6 +1147,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param string $default_form
+	 *
+	 * @return int|string
+	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
@@ -1120,6 +1163,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return false|int|object|string
+	 */
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
@@ -1135,6 +1183,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
 		if ( is_numeric( $form ) ) {
@@ -1144,6 +1197,11 @@ class FrmForm {
 		return $form;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function set_current_form( $form_id ) {
 		global $frm_vars;
 
@@ -1157,6 +1215,13 @@ class FrmForm {
 		return $frm_vars['current_form'];
 	}
 
+	/**
+	 * @param object     $form
+	 * @param int|string $this_load
+	 * @param bool       $global_load
+	 *
+	 * @return bool
+	 */
 	public static function is_form_loaded( $form, $this_load, $global_load ) {
 		global $frm_vars;
 		$small_form = new stdClass();
@@ -1200,6 +1265,11 @@ class FrmForm {
 		return $visible;
 	}
 
+	/**
+	 * @param object $form
+	 *
+	 * @return bool
+	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
@@ -1224,7 +1294,10 @@ class FrmForm {
 	 * Get the link to edit this form.
 	 *
 	 * @since 4.0
+	 *
 	 * @param int $form_id The id of the form.
+	 *
+	 * @return string
 	 */
 	public static function get_edit_link( $form_id ) {
 		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );

@@ -159,6 +159,8 @@ class FrmFieldsController {
 	 * @param array|int|object $field_object
 	 * @param array            $values
 	 * @param int              $form_id
+	 *
+	 * @return void
 	 */
 	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
 		global $frm_vars;
@@ -506,6 +508,12 @@ class FrmFieldsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/value-format.php';
 	}
 
+	/**
+	 * @param array $field
+	 * @param bool  $echo
+	 *
+	 * @return string
+	 */
 	public static function input_html( $field, $echo = true ) {
 		$class = array();
 		self::add_input_classes( $field, $class );
@@ -767,6 +775,12 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 *
+	 * @return void
+	 */
 	private static function add_validation_messages( $field, array &$add_html ) {
 		$field_validation_messages_status = self::get_validation_data_attribute_visibility_info( $field );
 
@@ -999,6 +1013,13 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param mixed        $opt
+	 * @param mixed        $opt_key
+	 * @param array|object $field
+	 *
+	 * @return mixed
+	 */
 	public static function check_value( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
@@ -1011,6 +1032,11 @@ class FrmFieldsController {
 		return $opt;
 	}
 
+	/**
+	 * @param mixed $opt
+	 *
+	 * @return mixed
+	 */
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
 			$opt = $opt['label'] ?? reset( $opt );

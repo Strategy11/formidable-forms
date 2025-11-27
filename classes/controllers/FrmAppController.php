@@ -32,6 +32,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.05
+	 *
+	 * @return string
 	 */
 	private static function menu_icon() {
 		$icon = FrmAppHelper::svg_logo(
@@ -136,6 +138,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return bool
 	 */
 	private static function is_white_page() {
 		$white_pages = array(
@@ -818,6 +822,8 @@ class FrmAppController {
 	 * Enqueues global settings scripts.
 	 *
 	 * @param string $page The `page` param in URL.
+	 *
+	 * @return void
 	 */
 	private static function enqueue_global_settings_scripts( $page ) {
 		if ( 'formidable-settings' === $page ) {
@@ -1076,6 +1082,8 @@ class FrmAppController {
 	 * We don't want to run manually by people calling the API.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return bool
 	 */
 	public static function can_update_db() {
 		return get_transient( 'frm_updating_api' );
@@ -1187,6 +1195,11 @@ class FrmAppController {
 		wp_die();
 	}
 
+	/**
+	 * @param array $tables
+	 *
+	 * @return array
+	 */
 	public static function drop_tables( $tables ) {
 		global $wpdb;
 		$tables[] = $wpdb->prefix . 'frm_fields';
@@ -1236,6 +1249,11 @@ class FrmAppController {
 		FrmTransLiteAppController::maybe_schedule_cron();
 	}
 
+	/**
+	 * @param string $text
+	 *
+	 * @return string
+	 */
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
 			$text = '';

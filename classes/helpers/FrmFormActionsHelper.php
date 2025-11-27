@@ -12,6 +12,8 @@ class FrmFormActionsHelper {
 	 * @param int|string $form_id
 	 * @param string     $type
 	 * @param int        $limit
+	 *
+	 * @return array
 	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $limit = 99 ) {
 		_deprecated_function( __FUNCTION__, '2.0.9', 'FrmFormAction::get_action_for_form' );

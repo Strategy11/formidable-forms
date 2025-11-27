@@ -157,6 +157,9 @@ class FrmPersonalData {
 		return $entry_ids;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
 

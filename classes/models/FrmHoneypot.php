@@ -29,6 +29,9 @@ class FrmHoneypot extends FrmValidate {
 		return 'honeypot';
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function is_enabled() {
 		$frm_settings = FrmAppHelper::get_settings();
 		return $frm_settings->honeypot;
@@ -127,6 +130,8 @@ class FrmHoneypot extends FrmValidate {
 	 * Maybe print honeypot JS.
 	 *
 	 * @since 6.21
+	 *
+	 * @return void
 	 */
 	public static function maybe_print_honeypot_js() {
 		if ( FrmAppHelper::is_admin() || ! self::is_enabled() ) {
@@ -159,6 +164,8 @@ class FrmHoneypot extends FrmValidate {
 	 * Maybe print honeypot CSS in case JS doesn't run.
 	 *
 	 * @since 6.21
+	 *
+	 * @return void
 	 */
 	public static function maybe_print_honeypot_css() {
 		// Print the CSS if form is loaded by API.
@@ -235,6 +242,11 @@ class FrmHoneypot extends FrmValidate {
 		<?php
 	}
 
+	/**
+	 * @param string $html_id
+	 *
+	 * @return void
+	 */
 	private function track_html_id( $html_id ) {
 		global $frm_vars;
 		if ( ! isset( $frm_vars['honeypot_selectors'] ) ) {
@@ -244,12 +256,18 @@ class FrmHoneypot extends FrmValidate {
 		$frm_vars['honeypot_selectors'][] = '#' . $html_id;
 	}
 
+	/**
+	 * @return int
+	 */
 	private function get_honeypot_field_id() {
 		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
 		return $honeypot_field_id;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_honeypot_field_key() {
 		return FrmAppHelper::generate_new_key( 5 );
 	}

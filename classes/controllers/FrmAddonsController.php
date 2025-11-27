@@ -27,6 +27,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 6.15
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		add_action( 'admin_menu', self::class . '::menu', 100 );
@@ -420,6 +422,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.08
+	 *
+	 * @return string
 	 */
 	public static function get_pro_license() {
 		$pro_cred_store = 'frmpro-credentials';
@@ -458,6 +462,8 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @return string
 	 */
 	public static function license_type() {
 		if ( is_callable( 'FrmProAddonsController::license_type' ) ) {
@@ -1034,6 +1040,8 @@ class FrmAddonsController {
 	 * so let's install the plugin.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return array|string
 	 */
 	protected static function install_addon() {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';

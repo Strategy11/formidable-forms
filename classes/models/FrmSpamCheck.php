@@ -19,6 +19,9 @@ abstract class FrmSpamCheck {
 	 */
 	protected $values;
 
+	/**
+	 * @param array $values
+	 */
 	public function __construct( $values ) {
 		$this->values = $values;
 	}

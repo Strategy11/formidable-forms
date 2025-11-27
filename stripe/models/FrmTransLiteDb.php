@@ -157,7 +157,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param int|string $id
-	 * @return array|object|void|null
+	 * @return array|object|null
 	 */
 	public function get_one( $id ) {
 		global $wpdb;
@@ -196,6 +196,12 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param string $value
+	 * @param string $field
+	 *
+	 * @return array
+	 */
 	public function get_all_by( $value, $field = 'item_id' ) {
 		if ( ! FrmTransLiteAppHelper::payments_table_exists() ) {
 			// If no migrations have run yet return nothing.
@@ -221,6 +227,11 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param int $user_id
+	 *
+	 * @return array
+	 */
 	public function get_all_for_user( $user_id ) {
 		global $wpdb;
 		// @codingStandardsIgnoreStart
@@ -240,10 +251,18 @@ class FrmTransLiteDb {
 		// @codingStandardsIgnoreEnd
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return array
+	 */
 	public function get_all_for_entry( $id ) {
-		return $this->get_all_by( $id, $field = 'item_id' );
+		return $this->get_all_by( $id, 'item_id' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_count() {
 		global $wpdb;
 		// @codingStandardsIgnoreStart

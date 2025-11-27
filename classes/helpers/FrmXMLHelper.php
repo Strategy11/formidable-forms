@@ -10,6 +10,12 @@ class FrmXMLHelper {
 	 */
 	private static $installing_template = false;
 
+	/**
+	 * @param array|string $opt
+	 * @param string       $padding
+	 *
+	 * @return void
+	 */
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
@@ -280,6 +286,11 @@ class FrmXMLHelper {
 		return $imported;
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return array
+	 */
 	private static function fill_form( $item ) {
 		$form = array(
 			'id'             => (int) $item->id,
@@ -309,6 +320,11 @@ class FrmXMLHelper {
 		return $form;
 	}
 
+	/**
+	 * @param array $form
+	 *
+	 * @return false|object
+	 */
 	private static function maybe_get_form( $form ) {
 		// if template, allow to edit if form keys match, otherwise, creation date must also match
 		$edit_query = array(
@@ -330,6 +346,13 @@ class FrmXMLHelper {
 		return $form;
 	}
 
+	/**
+	 * @param object $this_form
+	 * @param array  $form
+	 * @param array  $imported
+	 *
+	 * @return void
+	 */
 	private static function update_form( $this_form, $form, &$imported ) {
 		$form_id = $this_form->id;
 		FrmForm::update( $form_id, $form );
@@ -342,6 +365,11 @@ class FrmXMLHelper {
 		$imported['form_status'][ $form_id ] = 'updated';
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	private static function get_form_fields( $form_id ) {
 		$form_fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );
 		$old_fields  = array();
@@ -541,6 +569,12 @@ class FrmXMLHelper {
 		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ], $old_field_id );
 	}
 
+	/**
+	 * @param object     $field
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	private static function fill_field( $field, $form_id ) {
 		return array(
 			'id'            => (int) $field->id,
@@ -1177,6 +1211,13 @@ class FrmXMLHelper {
 		return $content;
 	}
 
+	/**
+	 * @param array  $post
+	 * @param object $item
+	 * @param array  $imported
+	 *
+	 * @return void
+	 */
 	private static function populate_post( &$post, $item, $imported ) {
 		if ( isset( $item->attachment_url ) ) {
 			$post['attachment_url'] = (string) $item->attachment_url;
@@ -1296,6 +1337,12 @@ class FrmXMLHelper {
 		$post['postmeta'][ (string) $meta->meta_key ] = $m['value'];
 	}
 
+	/**
+	 * @param array  $post
+	 * @param object $layout
+	 *
+	 * @return void
+	 */
 	private static function populate_layout( &$post, $layout ) {
 		$post['layout'][ (string) $layout->type ] = (string) $layout->data;
 	}
@@ -1412,6 +1459,11 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param array $imported
+	 *
+	 * @return void
+	 */
 	private static function maybe_update_stylesheet( $imported ) {
 		$new_styles     = ! empty( $imported['imported']['styles'] );
 		$updated_styles = ! empty( $imported['updated']['styles'] );

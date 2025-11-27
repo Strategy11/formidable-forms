@@ -54,6 +54,9 @@ class FrmFieldGridHelper {
 
 	private $section_is_open = false;
 
+	/**
+	 * @param bool $nested
+	 */
 	public function __construct( $nested = false ) {
 		$this->parent_li           = false;
 		$this->current_list_size   = 0;

@@ -89,6 +89,8 @@ class FrmFormAction {
 	 *
 	 * @param WP_Post $instance Current settings.
 	 * @param array   $args
+	 *
+	 * @return string
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -110,6 +112,12 @@ class FrmFormAction {
 		return array();
 	}
 
+	/**
+	 * @param object $action
+	 * @param object $form
+	 *
+	 * @return object
+	 */
 	public function migrate_values( $action, $form ) {
 		return $action;
 	}
@@ -184,6 +192,8 @@ class FrmFormAction {
 	 * @param string $name
 	 * @param array  $action_options
 	 * @param array  $control_options
+	 *
+	 * @return void
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
@@ -401,6 +411,13 @@ class FrmFormAction {
 		return $this->save_settings( $action );
 	}
 
+	/**
+	 * @param array        $action
+	 * @param array|string $subkey
+	 * @param mixed        $val
+	 *
+	 * @return array
+	 */
 	private function duplicate_array_walk( $action, $subkey, $val ) {
 		global $frm_duplicate_ids;
 
@@ -561,10 +578,22 @@ class FrmFormAction {
 		return $action;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	public function get_one( $form_id ) {
 		return $this->get_all( $form_id, 1 );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param string     $type
+	 * @param array      $atts
+	 *
+	 * @return array
+	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 		if ( empty( $action_controls ) ) {
@@ -828,6 +857,9 @@ class FrmFormAction {
 		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_settings() {
 		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
@@ -852,6 +884,9 @@ class FrmFormAction {
 		return $defaults;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_global_switch_fields() {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
@@ -967,6 +1002,9 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function trigger_labels() {
 		$triggers = array(
 			'draft'  => __( 'Draft is saved', 'formidable' ),

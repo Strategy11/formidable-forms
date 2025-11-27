@@ -94,6 +94,8 @@ class FrmUsageController {
 	 * Loads scripts.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function load_scripts() {
 		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) || FrmAppHelper::is_admin_page() ) {
@@ -122,6 +124,8 @@ class FrmUsageController {
 	 * AJAX handler to track flows.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function ajax_track_flows() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );

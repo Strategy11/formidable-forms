@@ -22,6 +22,8 @@ class FrmFormTemplatesHelper {
 	 * @param array  $template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
+	 *
+	 * @return void
 	 */
 	public static function prepare_template_details( &$template, $pricing, $license_type ) {
 		$template['is_featured']   = ! empty( $template['is_featured'] );

@@ -739,6 +739,8 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
+	 *
+	 * @return string
 	 */
 	private static function get_message_url( $atts ) {
 		$url = self::get_referer_url( $atts['entry_id'], false );

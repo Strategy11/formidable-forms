@@ -34,6 +34,13 @@ class FrmFieldOption {
 	 */
 	protected $option_label = '';
 
+	/**
+	 * @param int|string   $option_key
+	 * @param array|string $option
+	 * @param array        $args
+	 *
+	 * @return void
+	 */
 	public function __construct( $option_key, $option, $args = array() ) {
 		$this->option_key = $option_key;
 		$this->option     = $option;

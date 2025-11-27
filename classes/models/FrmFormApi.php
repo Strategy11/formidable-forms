@@ -262,6 +262,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return false|object
 	 */
 	public function get_pro_updater() {
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {

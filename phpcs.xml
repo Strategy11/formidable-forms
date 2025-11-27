@@ -210,6 +210,7 @@
 		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
 		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->

@@ -28,6 +28,9 @@ class FrmFieldCheckbox extends FrmFieldType {
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @return string
+	 */
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}

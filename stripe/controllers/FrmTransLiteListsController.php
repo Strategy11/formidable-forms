@@ -175,6 +175,8 @@ class FrmTransLiteListsController {
 	 * @param mixed  $save
 	 * @param string $option
 	 * @param int    $value
+	 *
+	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {

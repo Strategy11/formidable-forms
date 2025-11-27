@@ -20,6 +20,9 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	protected $denylist;
 
+	/**
+	 * @param array $values
+	 */
 	public function __construct( $values ) {
 		$this->maybe_add_form_id_to_values( $values );
 
@@ -28,6 +31,9 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$this->denylist = $this->get_denylist_array();
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_posted_fields() {
 		if ( is_null( $this->posted_fields ) ) {
 			$this->posted_fields = FrmField::get_all_for_form( $this->values['form_id'] );
@@ -39,6 +45,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Maybe add form ID to values. In file name validation, only item_meta in $values.
 	 *
 	 * @param array $values Spam check values.
+	 *
+	 * @return void
 	 */
 	protected function maybe_add_form_id_to_values( &$values ) {
 		if ( ! empty( $values['form_id'] ) || empty( $values['item_meta'] ) ) {
@@ -189,6 +197,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Fills default denylist data.
 	 *
 	 * @param array $denylist Denylist.
+	 *
+	 * @return void
 	 */
 	protected function fill_default_denylist_data( &$denylist ) {
 		$denylist = wp_parse_args(
@@ -386,6 +396,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param array $values_to_check Values to check array.
 	 * @param mixed $value           The value.
+	 *
+	 * @return void
 	 */
 	protected function add_to_values_to_check( &$values_to_check, $value ) {
 		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
@@ -480,6 +492,12 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return $this->ip_matches_array( $ip, FrmAntiSpamController::get_allowed_ips() );
 	}
 
+	/**
+	 * @param string $line
+	 * @param array  $args
+	 *
+	 * @return bool
+	 */
 	protected function single_line_check_ip( $line, $args ) {
 		return $this->ip_matches( $args['ip'], $line );
 	}
@@ -539,6 +557,11 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return __( 'Your entry appears to be blocked spam!', 'formidable' );
 	}
 
+	/**
+	 * @param string $keyword
+	 *
+	 * @return void
+	 */
 	private function add_spam_keyword_to_option( $keyword ) {
 		$transient_name = 'frm_recent_spam_detected';
 		$transient      = get_transient( $transient_name );

@@ -300,6 +300,8 @@ class FrmWelcomeTourController {
 	 * Shows links after completing the Welcome tour.
 	 *
 	 * @param int $current_form_id Current form ID.
+	 *
+	 * @return void
 	 */
 	public static function show_completed_links( $current_form_id ) {
 		$links = array(
@@ -516,6 +518,8 @@ class FrmWelcomeTourController {
 	 * Saves the checklist data.
 	 *
 	 * @param array|null $checklist The checklist data to set.
+	 *
+	 * @return void
 	 */
 	public static function save_checklist( $checklist = null ) {
 		update_option( self::CHECKLIST_OPTION, $checklist ?? self::$checklist, false );
