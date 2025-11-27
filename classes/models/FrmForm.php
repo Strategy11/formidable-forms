@@ -1166,7 +1166,7 @@ class FrmForm {
 	/**
 	 * @param int|string $form_id
 	 *
-	 * @return false|object
+	 * @return false|int|object|string
 	 */
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
