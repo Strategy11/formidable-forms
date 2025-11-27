@@ -49,7 +49,7 @@ class FrmAddon {
 	/**
 	 * @var string
 	 */
-	public $author            = 'Strategy11';
+	public $author = 'Strategy11';
 
 	/**
 	 * @var bool
@@ -59,7 +59,7 @@ class FrmAddon {
 	/**
 	 * @var bool
 	 */
-	public $needs_license     = true;
+	public $needs_license = true;
 
 	/**
 	 * @var bool
