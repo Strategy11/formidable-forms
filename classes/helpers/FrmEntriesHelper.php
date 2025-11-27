@@ -21,6 +21,14 @@ class FrmEntriesHelper {
 	 */
 	const DRAFT_ENTRY_STATUS = 1;
 
+	/**
+	 * @param array       $fields
+	 * @param object|string $form
+	 * @param bool        $reset
+	 * @param array       $args
+	 *
+	 * @return array
+	 */
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -148,6 +156,12 @@ class FrmEntriesHelper {
 		return $value_is_posted;
 	}
 
+	/**
+	 * @param array  $values
+	 * @param object $record
+	 *
+	 * @return array
+	 */
 	public static function setup_edit_vars( $values, $record ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -158,6 +172,12 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_setup_edit_entry_vars', $values, $record );
 	}
 
+	/**
+	 * @param string $message
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
 	public static function replace_default_message( $message, $atts ) {
 		if ( strpos( $message, '[default-message' ) === false &&
 			strpos( $message, '[default_message' ) === false &&
@@ -339,6 +359,13 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
 	}
 
+	/**
+	 * @param object $field
+	 * @param mixed  $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function set_posted_value( $field, $value, $args ) {
 		// If validating a field with "other" opt, set back to prev value now.
 		if ( ! empty( $args['other'] ) ) {
@@ -376,6 +403,13 @@ class FrmEntriesHelper {
 		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
+	/**
+	 * @param array|object|int $field
+	 * @param mixed            $value
+	 * @param array            $args
+	 *
+	 * @return void
+	 */
 	public static function get_posted_value( $field, &$value, $args ) {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];

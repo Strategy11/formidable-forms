@@ -673,6 +673,11 @@ class FrmMigrate {
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
+	/**
+	 * @param string $size
+	 *
+	 * @return void
+	 */
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
 

@@ -484,6 +484,14 @@ class FrmField {
 		return compact( 'field_id', 'values' );
 	}
 
+	/**
+	 * @param int|string $old_form_id
+	 * @param int|string $form_id
+	 * @param bool       $copy_keys
+	 * @param int|false  $blog_id
+	 *
+	 * @return void
+	 */
 	public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
 		global $frm_duplicate_ids;
 
@@ -631,6 +639,11 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return bool
+	 */
 	public static function destroy( $id ) {
 		global $wpdb;
 
@@ -875,6 +888,14 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param array      $results
+	 * @param string     $inc_embed
+	 * @param string     $type
+	 * @param int|string $form_id
+	 *
+	 * @return void
+	 */
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
 		if ( 'include' != $inc_embed || $no_sub_forms ) {
@@ -908,6 +929,14 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param array|string $where
+	 * @param string       $order_by
+	 * @param string       $limit
+	 * @param int|false    $blog_id
+	 *
+	 * @return array
+	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
 		if ( self::$use_cache ) {
@@ -1381,6 +1410,11 @@ class FrmField {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
 	}
 
+	/**
+	 * @param array|object $field
+	 *
+	 * @return bool
+	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
 

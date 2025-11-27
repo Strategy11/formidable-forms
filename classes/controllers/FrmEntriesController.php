@@ -129,7 +129,8 @@ class FrmEntriesController {
 					return;
 				}
 
-				return self::display_list();
+				self::display_list();
+				return;
 		}
 	}
 
@@ -577,6 +578,12 @@ class FrmEntriesController {
 		}
 	}
 
+	/**
+	 * @param string $message
+	 * @param array  $errors
+	 *
+	 * @return void
+	 */
 	public static function display_list( $message = '', $errors = array() ) {
 		global $wpdb, $frm_vars;
 

@@ -110,6 +110,12 @@ class FrmFormAction {
 		return array();
 	}
 
+	/**
+	 * @param object $action
+	 * @param object $form
+	 *
+	 * @return object
+	 */
 	public function migrate_values( $action, $form ) {
 		return $action;
 	}
@@ -401,6 +407,13 @@ class FrmFormAction {
 		return $this->save_settings( $action );
 	}
 
+	/**
+	 * @param array        $action
+	 * @param array|string $subkey
+	 * @param mixed        $val
+	 *
+	 * @return array
+	 */
 	private function duplicate_array_walk( $action, $subkey, $val ) {
 		global $frm_duplicate_ids;
 
@@ -561,10 +574,22 @@ class FrmFormAction {
 		return $action;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	public function get_one( $form_id ) {
 		return $this->get_all( $form_id, 1 );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param string     $type
+	 * @param array      $atts
+	 *
+	 * @return array
+	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 		if ( empty( $action_controls ) ) {

@@ -198,6 +198,12 @@ abstract class FrmFormMigrator {
 		return $response;
 	}
 
+	/**
+	 * @param int|string $source_id
+	 * @param string     $source_form_name
+	 *
+	 * @return array
+	 */
 	protected function prepare_new_form( $source_id, $source_form_name ) {
 		return array(
 			'import_form_id' => $source_id,
@@ -209,6 +215,12 @@ abstract class FrmFormMigrator {
 		);
 	}
 
+	/**
+	 * @param array|object $form
+	 * @param array        $new_form
+	 *
+	 * @return void
+	 */
 	protected function prepare_form( $form, &$new_form ) {
 		// customize this function
 	}
@@ -275,6 +287,12 @@ abstract class FrmFormMigrator {
 		}//end foreach
 	}
 
+	/**
+	 * @param array|object $field
+	 * @param array        $new_field
+	 *
+	 * @return void
+	 */
 	protected function prepare_field( $field, &$new_field ) {
 		// customize this function
 	}
@@ -549,6 +567,11 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	private function is_unsupported_field( $type ) {
 		$fields = $this->unsupported_field_types();
 
@@ -564,6 +587,11 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	protected function should_skip_field( $type ) {
 		$skip_pro_fields = $this->skip_pro_fields();
 
@@ -591,6 +619,11 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return array
+	 */
 	public function get_form( $id ) {
 		return array();
 	}

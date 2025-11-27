@@ -264,6 +264,11 @@ class FrmEntry {
 		return true;
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return int|false
+	 */
 	public static function duplicate( $id ) {
 		global $wpdb;
 
@@ -386,6 +391,13 @@ class FrmEntry {
 		return $result;
 	}
 
+	/**
+	 * @param int        $id
+	 * @param mixed      $value
+	 * @param int|string $form_id
+	 *
+	 * @return int|false
+	 */
 	public static function update_form( $id, $value, $form_id ) {
 		global $wpdb;
 		$form_id = isset( $value ) ? $form_id : null;
@@ -445,6 +457,12 @@ class FrmEntry {
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 * @param bool       $meta
+	 *
+	 * @return object|null
+	 */
 	public static function getOne( $id, $meta = false ) {
 		global $wpdb;
 
@@ -501,6 +519,11 @@ class FrmEntry {
 		}
 	}
 
+	/**
+	 * @param object|null $entry
+	 *
+	 * @return object|null
+	 */
 	public static function get_meta( $entry ) {
 		if ( ! $entry ) {
 			return $entry;
@@ -568,6 +591,15 @@ class FrmEntry {
 		return $id && $id > 0;
 	}
 
+	/**
+	 * @param array|string $where
+	 * @param string       $order_by
+	 * @param string       $limit
+	 * @param bool         $meta
+	 * @param bool         $inc_form
+	 *
+	 * @return array
+	 */
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
@@ -823,6 +855,13 @@ class FrmEntry {
 		return $new_values;
 	}
 
+	/**
+	 * @param array  $values
+	 * @param string $name
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
 	private static function get_entry_value( $values, $name, $default ) {
 		return $values[ $name ] ?? $default;
 	}

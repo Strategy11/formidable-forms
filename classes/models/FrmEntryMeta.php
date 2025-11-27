@@ -188,6 +188,12 @@ class FrmEntryMeta {
 		self::clear_cache();
 	}
 
+	/**
+	 * @param int $old_id
+	 * @param int $new_id
+	 *
+	 * @return void
+	 */
 	public static function duplicate_entry_metas( $old_id, $new_id ) {
 		$metas = self::get_entry_meta_info( $old_id );
 
@@ -206,6 +212,12 @@ class FrmEntryMeta {
 		self::clear_cache();
 	}
 
+	/**
+	 * @param int $entry_id
+	 * @param int $field_id
+	 *
+	 * @return int|false
+	 */
 	public static function delete_entry_meta( $entry_id, $field_id ) {
 		global $wpdb;
 		self::clear_cache();
@@ -282,6 +294,14 @@ class FrmEntryMeta {
 		return $result;
 	}
 
+	/**
+	 * @param int|string $field_id
+	 * @param string     $order
+	 * @param string     $limit
+	 * @param array      $args
+	 *
+	 * @return array
+	 */
 	public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
 		$defaults = array(
 			'value'        => false,
@@ -344,6 +364,11 @@ class FrmEntryMeta {
 		$query[] = $order . $limit;
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 *
+	 * @return array
+	 */
 	public static function get_entry_meta_info( $entry_id ) {
 		return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id ) );
 	}
@@ -378,6 +403,15 @@ class FrmEntryMeta {
 		return $results;
 	}
 
+	/**
+	 * @param array|string $where
+	 * @param string       $order_by
+	 * @param string       $limit
+	 * @param bool         $unique
+	 * @param array        $args
+	 *
+	 * @return array|string|null
+	 */
 	public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
 		$defaults = array(
 			'is_draft' => false,
@@ -543,6 +577,13 @@ class FrmEntryMeta {
 		$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 	}
 
+	/**
+	 * @param array|string $search
+	 * @param int|string   $field_id
+	 * @param string       $operator
+	 *
+	 * @return array
+	 */
 	public static function search_entry_metas( $search, $field_id, $operator ) {
 		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
