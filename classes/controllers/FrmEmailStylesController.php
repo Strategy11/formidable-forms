@@ -169,6 +169,9 @@ class FrmEmailStylesController {
 
 		foreach ( $table_rows as $index => $row ) {
 			if ( 'compact' === $style_key ) {
+				// Add some spaces after the label. Maybe change it to the left in RTL.
+				$row['label'] = '<div style="padding-right:10px;">' . $row['label'] . '</div>';
+
 				// Compact table has two columns layout.
 				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 			} else {
