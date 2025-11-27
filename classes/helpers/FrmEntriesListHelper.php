@@ -216,6 +216,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $text    Text.
+	 * @param string $input_id Input ID.
+	 *
 	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
@@ -223,6 +226,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
@@ -245,6 +250,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
@@ -301,6 +308,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param string $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {

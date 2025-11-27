@@ -74,6 +74,8 @@ class FrmSMTPController {
 	/**
 	 * Customize the upgrade link.
 	 *
+	 * @param string $link
+	 *
 	 * @return string
 	 */
 	public function link( $link ) {
@@ -86,6 +88,10 @@ class FrmSMTPController {
 	 * Don't nag people to install WPForms
 	 *
 	 * @since 4.04.04
+	 *
+	 * @param array $upsell
+	 *
+	 * @return array
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
 		if ( is_array( $upsell ) ) {
