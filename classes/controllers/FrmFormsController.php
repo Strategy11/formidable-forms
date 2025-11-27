@@ -1921,7 +1921,7 @@ class FrmFormsController {
 
 	/**
 	 * @param string       $content
-	 * @param object|false $entry
+	 * @param false|object $entry
 	 * @param array        $shortcodes
 	 *
 	 * @return string
@@ -3331,7 +3331,7 @@ class FrmFormsController {
 
 	/**
 	 * @param object     $form
-	 * @param string|int $this_load
+	 * @param int|string $this_load
 	 * @param bool       $global_load
 	 *
 	 * @return void

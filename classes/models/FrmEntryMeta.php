@@ -216,7 +216,7 @@ class FrmEntryMeta {
 	 * @param int $entry_id
 	 * @param int $field_id
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	public static function delete_entry_meta( $entry_id, $field_id ) {
 		global $wpdb;

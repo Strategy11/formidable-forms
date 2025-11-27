@@ -267,7 +267,7 @@ class FrmEntry {
 	/**
 	 * @param int|string $id
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	public static function duplicate( $id ) {
 		global $wpdb;
@@ -396,7 +396,7 @@ class FrmEntry {
 	 * @param mixed      $value
 	 * @param int|string $form_id
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	public static function update_form( $id, $value, $form_id ) {
 		global $wpdb;

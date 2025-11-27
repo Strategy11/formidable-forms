@@ -488,7 +488,7 @@ class FrmField {
 	 * @param int|string $old_form_id
 	 * @param int|string $form_id
 	 * @param bool       $copy_keys
-	 * @param int|false  $blog_id
+	 * @param false|int  $blog_id
 	 *
 	 * @return void
 	 */
@@ -933,7 +933,7 @@ class FrmField {
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
-	 * @param int|false    $blog_id
+	 * @param false|int    $blog_id
 	 *
 	 * @return array
 	 */

@@ -404,7 +404,7 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @param array|object|int $field
+	 * @param array|int|object $field
 	 * @param mixed            $value
 	 * @param array            $args
 	 *
