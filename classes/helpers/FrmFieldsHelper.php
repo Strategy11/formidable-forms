@@ -2796,6 +2796,7 @@ class FrmFieldsHelper {
 	 * @since x.x
 	 *
 	 * @param array $field
+	 *
 	 * @return array
 	 */
 	public static function get_choices_limit_reached_statuses( $field ) {
