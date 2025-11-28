@@ -15,13 +15,20 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	$option_index = 0;
+	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
+	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) ) {
+		return;
+	}
 
+	$option_index = 0;
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			continue;
 		}
-
+		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
+		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
+			continue;
+		}
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
@@ -65,9 +72,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		}
 
 		?><input type="checkbox" name="<?php echo esc_attr( $field_name ); ?>[<?php echo esc_attr( $other_opt ? $opt_key : '' ); ?>]" id="<?php echo esc_attr( $html_id ); ?>-<?php echo esc_attr( $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"<?php
-		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
 		do_action( 'frm_field_input_html', $field );
+		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, ! empty( $checked ) ) ) {
+			echo 'disabled="disabled" data-max-reached="1" ';
+		}
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
 			echo ' aria-required="true" ';
