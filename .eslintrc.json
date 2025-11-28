@@ -43,11 +43,6 @@
 		},
 		"react": {
 			"pragma": "wp"
-		},
-		"react-hooks/rules-of-hooks": {
-			// This regex tells ESLint to allow Hooks inside any function 
-			// named 'edit' or 'save', in addition to standard components.
-			"additionalHooks": "edit|save" 
 		}
 	},
 	"rules": {
