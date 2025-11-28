@@ -1,5 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
+const { svg } = frmDom;
+
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
 	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
@@ -37,15 +39,10 @@ export function addOneClick( link, context, upgradeLabel ) {
 	let showMsg = 'block';
 	let hideIt = 'none';
 
-	let modalIcon;
-	let modalIconSvg;
 	const modalIconWrapper = container.querySelector( '.frm-circled-icon' );
 	if ( modalIconWrapper ) {
-		modalIconSvg = modalIconWrapper.querySelector( 'svg' );
-		modalIcon = modalIconSvg.querySelector( 'use' );
 		modalIconWrapper.classList.remove( 'frm-circled-icon-green' );
-		modalIconSvg.classList.remove( 'frm_svg32' );
-		modalIcon.setAttribute( 'xlink:href', '#frm_filled_lock_icon' );
+		modalIconWrapper.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_filled_lock_icon' } ) );
 	}
 
 	const learnMoreLink = container.querySelector( '.frm-learn-more' );
@@ -69,10 +66,12 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
 		button.textContent = __( 'Activate', 'formidable' );
 
-		if ( modalIcon ) {
-			modalIconSvg.classList.add( 'frm_svg32' );
-			modalIcon.setAttribute( 'xlink:href', link.querySelector( 'use' ).getAttribute( 'xlink:href' ) );
-		}
+		modalIconWrapper?.querySelector( 'svg' ).replaceWith(
+			svg( {
+				href: link.querySelector( 'use' )?.getAttribute( 'href' ) || link.querySelector( 'use' )?.getAttribute( 'xlink:href' ), // Get the icon from xlink:href if it has not been updated to use href
+				classList: [ 'frm_svg32' ]
+			} )
+		);
 	}
 
 	if ( ! newMessage ) {

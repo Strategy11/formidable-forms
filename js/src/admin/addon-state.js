@@ -1,6 +1,6 @@
 import { __, sprintf } from '@wordpress/i18n';
 
-const { div } = frmDom;
+const { div, svg } = frmDom;
 
 /**
  * Toggles the state of an add-on (ie. enable or disable an add-on).
@@ -228,6 +228,7 @@ function showUpgradeModalSuccess() {
 	if ( upgradeMessage ) {
 		const image = upgradeMessage.querySelector( 'img' );
 		upgradeMessage.innerHTML = sprintf(
+			// translators: %s: Line break
 			__( 'Great! Everything\'s ready to go!%sWe just need to refresh the builder so the new field becomes available.', 'formidable' ),
 			'<br>'
 		);
@@ -244,7 +245,6 @@ function showUpgradeModalSuccess() {
 	const circledIcon = upgradeModal.querySelector( '.frm-circled-icon' );
 	if ( circledIcon ) {
 		circledIcon.classList.add( 'frm-circled-icon-green' );
-		circledIcon.querySelector( 'svg' )?.classList.remove( 'frm_svg32' );
-		circledIcon.querySelector( 'use' )?.setAttribute( 'xlink:href', '#frm_checkmark_icon' );
+		circledIcon.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_checkmark_icon' } ) );
 	}
 }
