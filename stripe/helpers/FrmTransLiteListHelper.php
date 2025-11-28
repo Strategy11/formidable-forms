@@ -44,7 +44,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
-		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
+
+		if ( ! is_string( $orderby ) ) {
+			$orderby = 'id';
+		}
+
+		if ( ! is_string( $order ) || ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
 			$order = 'DESC';
 		}
 
@@ -261,6 +266,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $args
+	 *
+	 * @return string
 	 */
 	private function get_column_value( $item, $args ) {
 		$column_name   = $args['column_name'];
@@ -478,6 +485,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
 	private function get_status_column( $item ) {
 		$status = esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $item ) ) );
 

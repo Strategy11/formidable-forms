@@ -10,6 +10,12 @@ class FrmShowForm extends WP_Widget {
 		parent::__construct( 'frm_show_form', __( 'Formidable Form', 'formidable' ), $widget_ops );
 	}
 
+	/**
+	 * @param array $args
+	 * @param array $instance
+	 *
+	 * @return void
+	 */
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 

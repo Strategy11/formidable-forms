@@ -186,7 +186,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'item_id'    => $atts['entry']->id,
 			'action_id'  => $atts['action']->ID,
 			'receipt_id' => $atts['charge']->id,
-			'sub_id'     => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'sub_id'     => $atts['charge']->sub_id ?? '',
 			'test'       => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
@@ -264,7 +264,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		// Add subscription database row.
 		// We do not add a payment row at this time. This is handled with our webhook handling.
-		$subscription_id = self::create_new_subscription( $response->id, $atts );
+		self::create_new_subscription( $response->id, $atts );
 
 		return true;
 	}
@@ -567,7 +567,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
 			),
-			// How does input placeholder work??
 			'input::placeholder'        => array(
 				'color' => $settings['text_color_disabled'],
 			),
@@ -580,7 +579,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		if ( ! empty( $settings['font'] ) ) {
-			$style['input']['fontFamily'] = $settings['font'];
+			$style['input']['fontFamily'] = self::prepare_font_family_setting( $settings['font'] );
 		}
 
 		/**
@@ -591,6 +590,23 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		 * @param int   $form_id
 		 */
 		return apply_filters( 'frm_square_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Prepare the font family setting for the Stripe element.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $font
+	 * @return string
+	 */
+	private static function prepare_font_family_setting( $font ) {
+		if ( false === strpos( $font, ',' ) ) {
+			return $font;
+		}
+
+		$fonts = explode( ',', $font );
+		return trim( reset( $fonts ) );
 	}
 
 	/**
@@ -660,7 +676,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+		$field_id = $field->temp_id ?? $field->id;
 
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );

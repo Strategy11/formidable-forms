@@ -143,6 +143,8 @@ class FrmFormTemplatesController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.7
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::init_template_resources();

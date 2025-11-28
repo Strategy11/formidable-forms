@@ -82,6 +82,8 @@ class FrmEmailSummaryHelper {
 	 * Saves summary emails options.
 	 *
 	 * @param array $options Options data.
+	 *
+	 * @return void
 	 */
 	private static function save_options( $options ) {
 		update_option( self::$option_name, $options );
@@ -133,6 +135,8 @@ class FrmEmailSummaryHelper {
 
 	/**
 	 * Sends monthly email.
+	 *
+	 * @return void
 	 */
 	public static function send_monthly() {
 		$monthly_email = new FrmEmailMonthly();
@@ -144,6 +148,8 @@ class FrmEmailSummaryHelper {
 
 	/**
 	 * Sends yearly email.
+	 *
+	 * @return void
 	 */
 	public static function send_yearly() {
 		$yearly_email = new FrmEmailYearly();
@@ -249,6 +255,8 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $type Email type.
 	 * @param mixed  $value Set custom value. If this is null, set the current date.
+	 *
+	 * @return void
 	 */
 	public static function set_last_sent_date( $type, $value = null ) {
 		$options = self::get_options();
@@ -339,6 +347,8 @@ class FrmEmailSummaryHelper {
 	 * Shows the comparison HTML in the email.
 	 *
 	 * @param float $diff Percentage of difference.
+	 *
+	 * @return void
 	 */
 	public static function show_comparison( $diff ) {
 		if ( ! $diff ) {
@@ -409,6 +419,8 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $icon Icon file name, without file path and extension. Use .png image.
 	 * @param string $text Heading text.
+	 *
+	 * @return void
 	 */
 	public static function section_heading_with_icon( $icon, $text ) {
 		?>
@@ -555,6 +567,8 @@ class FrmEmailSummaryHelper {
 	 * @since 6.8
 	 *
 	 * @param string $string string.
+	 *
+	 * @return void
 	 */
 	public static function plain_text_echo( $string ) {
 		echo wp_strip_all_tags( $string ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

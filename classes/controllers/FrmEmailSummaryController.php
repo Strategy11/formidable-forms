@@ -17,6 +17,8 @@ class FrmEmailSummaryController {
 
 	/**
 	 * Maybe send summary emails.
+	 *
+	 * @return void
 	 */
 	public static function maybe_send_emails() {
 		$emails = FrmEmailSummaryHelper::should_send_emails();

@@ -12,6 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmFieldTypeOptionData {
 
+	/**
+	 * @var array
+	 */
 	private static $data = array();
 
 	/**

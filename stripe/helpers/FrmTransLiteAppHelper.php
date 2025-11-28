@@ -149,6 +149,8 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param string $option
 	 * @param array  $atts
+	 *
+	 * @return mixed
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
@@ -158,6 +160,8 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param array $atts
+	 *
+	 * @return array
 	 */
 	public static function get_action_settings( $atts ) {
 		if ( ! isset( $atts['payment'] ) ) {
@@ -261,6 +265,11 @@ class FrmTransLiteAppHelper {
 		return $value;
 	}
 
+	/**
+	 * @param array|float|int|object $payment
+	 *
+	 * @return string
+	 */
 	public static function formatted_amount( $payment ) {
 		$currency = '';
 		$amount   = $payment;
@@ -511,6 +520,9 @@ class FrmTransLiteAppHelper {
 		return $count;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_gateways() {
 		$gateways = apply_filters( 'frm_payment_gateways', array() );
 		return $gateways;
@@ -519,6 +531,8 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param array|string $gateway
 	 * @param string       $setting
+	 *
+	 * @return mixed
 	 */
 	public static function get_setting_for_gateway( $gateway, $setting ) {
 		$gateways = self::get_gateways();
@@ -541,6 +555,8 @@ class FrmTransLiteAppHelper {
 	 * @param string $id
 	 * @param string $name
 	 * @param array  $action_settings
+	 *
+	 * @return void
 	 */
 	public static function show_currency_dropdown( $id, $name, $action_settings ) {
 		$selected     = $action_settings['currency'];

@@ -56,6 +56,8 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @since 4.03.06
 	 *
 	 * @param array $args Field display arguments.
+	 *
+	 * @return int|string
 	 */
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();

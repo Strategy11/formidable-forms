@@ -15,7 +15,7 @@ class FrmSquareLiteSettingsController {
 	 */
 	public static function add_settings_section( $sections ) {
 		$sections['square'] = array(
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'route',
 			'icon'     => 'frm_icon_font frm_square_icon',
 		);

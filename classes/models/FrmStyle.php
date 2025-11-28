@@ -560,6 +560,8 @@ class FrmStyle {
 
 	/**
 	 * @param array|null $styles
+	 *
+	 * @return object|null
 	 */
 	public function get_default_style( $styles = null ) {
 		if ( ! isset( $styles ) ) {

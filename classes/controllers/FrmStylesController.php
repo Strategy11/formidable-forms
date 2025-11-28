@@ -20,12 +20,18 @@ class FrmStylesController {
 	 */
 	private static $message;
 
+	/**
+	 * @return void
+	 */
 	public static function load_pro_hooks() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProStylesController::load_pro_hooks();
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function register_post_types() {
 		register_post_type(
 			self::$post_type,
@@ -240,6 +246,8 @@ class FrmStylesController {
 	 * Use a different stylesheet per site in a multisite install
 	 *
 	 * @since 3.0.03
+	 *
+	 * @return string
 	 */
 	public static function get_file_name() {
 		if ( is_multisite() ) {
@@ -252,8 +260,14 @@ class FrmStylesController {
 		return $name;
 	}
 
+	/**
+	 * @param string $css_key
+	 * @param string $version
+	 *
+	 * @return string
+	 */
 	private static function get_css_version( $css_key, $version ) {
-		if ( 'formidable' == $css_key ) {
+		if ( 'formidable' === $css_key ) {
 			$this_version = get_option( 'frm_last_style_update' );
 			if ( ! $this_version ) {
 				$this_version = $version;
@@ -1118,6 +1132,8 @@ class FrmStylesController {
 	 * then enqueue it for the footer
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
 	public static function enqueue_style() {
 		global $frm_vars;
@@ -1166,6 +1182,8 @@ class FrmStylesController {
 	/**
 	 * @param string $class
 	 * @param string $style
+	 *
+	 * @return string
 	 */
 	public static function get_form_style_class( $class, $style ) {
 		if ( 1 == $style ) {
@@ -1187,6 +1205,8 @@ class FrmStylesController {
 	 * @since 3.0
 	 * @param object $style
 	 * @param string $class
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
@@ -1198,6 +1218,8 @@ class FrmStylesController {
 	/**
 	 * @param string     $val  Style setting key.
 	 * @param int|string $form Form ID or 'default'.
+	 *
+	 * @return mixed
 	 */
 	public static function get_style_val( $val, $form = 'default' ) {
 		$style = self::get_form_style( $form );
@@ -1206,6 +1228,11 @@ class FrmStylesController {
 		}
 	}
 
+	/**
+	 * @param array $default_styles
+	 *
+	 * @return array
+	 */
 	public static function show_entry_styles( $default_styles ) {
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
@@ -1228,6 +1255,12 @@ class FrmStylesController {
 		return $default_styles;
 	}
 
+	/**
+	 * @param string $important
+	 * @param array  $field
+	 *
+	 * @return string
+	 */
 	public static function &important_style( $important, $field ) {
 		$important = self::get_style_val( 'important_style', $field['form_id'] );
 
