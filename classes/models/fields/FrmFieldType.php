@@ -10,18 +10,21 @@ abstract class FrmFieldType {
 
 	/**
 	 * @var array|int|object
+	 *
 	 * @since 3.0
 	 */
 	protected $field;
 
 	/**
 	 * @var int
+	 *
 	 * @since 3.0
 	 */
 	protected $field_id = 0;
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type;
@@ -30,6 +33,7 @@ abstract class FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = true;
@@ -38,6 +42,7 @@ abstract class FrmFieldType {
 	 * Does the field include a input box to type into?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = true;
@@ -46,6 +51,7 @@ abstract class FrmFieldType {
 	 * Is the HTML customizable?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = true;
@@ -54,6 +60,7 @@ abstract class FrmFieldType {
 	 * Could this field hold email values?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = false;
@@ -62,6 +69,7 @@ abstract class FrmFieldType {
 	 * Does this field show on the page?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $normal_field = true;
@@ -70,6 +78,7 @@ abstract class FrmFieldType {
 	 * Is this field a lot taller than the submit button?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $is_tall = false;
@@ -78,6 +87,7 @@ abstract class FrmFieldType {
 	 * Does this type support array values (like a checkbox or a name field).
 	 *
 	 * @var bool
+	 *
 	 * @since 6.2
 	 */
 	protected $array_allowed = true;
@@ -329,6 +339,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param string $name
+	 *
 	 * @return string
 	 */
 	protected function builder_text_field( $name = '' ) {
@@ -503,6 +514,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
 	 * @return void
 	 */
 	public function show_primary_options( $args ) {
@@ -624,6 +636,7 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 *
 	 * @param array $args
+	 *
 	 * @return bool
 	 */
 	protected function should_continue_to_field_options( $args ) {
@@ -683,6 +696,7 @@ DEFAULT_HTML;
 	 * @since 4.02.01
 	 *
 	 * @param array|object $field Field settings array.
+	 *
 	 * @return bool
 	 */
 	protected function has_field_choices( $field ) {
@@ -713,6 +727,7 @@ DEFAULT_HTML;
 	 * @since 4.02.01
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function field_choices_heading( $args ) {
@@ -749,6 +764,7 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function field_choices_heading_attrs( $args ) {
@@ -761,6 +777,7 @@ DEFAULT_HTML;
 	 * @since 4.06
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
@@ -773,6 +790,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
 	 * @return void
 	 */
 	public function show_extra_field_choices( $args ) {
@@ -785,6 +803,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args - Includes 'field', 'display'.
+	 *
 	 * @return void
 	 */
 	public function show_after_default( $args ) {
@@ -980,6 +999,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args Field rendering arguments.
+	 *
 	 * @return void
 	 */
 	protected function get_field_scripts_hook( $args ) {
@@ -1073,6 +1093,7 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param string $align
+	 *
 	 * @return void
 	 */
 	public function prepare_align_class( &$align ) {
@@ -1203,6 +1224,7 @@ DEFAULT_HTML;
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -1250,6 +1272,7 @@ DEFAULT_HTML;
 	 *
 	 * @param array  $args
 	 * @param string $input_html
+	 *
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
@@ -1305,6 +1328,7 @@ DEFAULT_HTML;
 	 *
 	 * @param array      $args
 	 * @param int|string $opt
+	 *
 	 * @return string
 	 */
 	private function include_hidden_values_for_single_opt( $args, $opt ) {
@@ -1462,6 +1486,7 @@ DEFAULT_HTML;
 	 * Load field scripts.
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
@@ -1513,6 +1538,7 @@ DEFAULT_HTML;
 	 *
 	 * @param array  $args
 	 * @param string $input_html
+	 *
 	 * @return void
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
@@ -1567,6 +1593,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -1589,6 +1616,7 @@ DEFAULT_HTML;
 	 *
 	 * @param mixed $value
 	 * @param int   $entry_id
+	 *
 	 * @return bool
 	 */
 	public function is_not_unique( $value, $entry_id ) {
@@ -1606,6 +1634,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param mixed $value
+	 *
 	 * @return bool
 	 */
 	private function value_has_already_been_validated_as_unique( $value ) {
@@ -1629,6 +1658,7 @@ DEFAULT_HTML;
 	/**
 	 * @param mixed $value
 	 * @param int   $entry_id
+	 *
 	 * @return bool
 	 */
 	private function value_exists_in_meta_for_another_entry( $value, $entry_id ) {
@@ -1655,6 +1685,7 @@ DEFAULT_HTML;
 	/**
 	 * @param array|string $value
 	 * @param array        $atts
+	 *
 	 * @return array|string
 	 */
 	public function get_value_to_save( $value, $atts ) {
@@ -1709,6 +1740,7 @@ DEFAULT_HTML;
 	 * @since 6.7.1
 	 *
 	 * @param array $atts
+	 *
 	 * @return bool
 	 */
 	protected function should_strip_most_html_before_preparing_display_value( $atts ) {
@@ -1732,6 +1764,7 @@ DEFAULT_HTML;
 	 * @since 6.7.1
 	 *
 	 * @param stdClass $entry
+	 *
 	 * @return bool
 	 */
 	protected function should_strip_most_html( $entry ) {
@@ -1754,6 +1787,7 @@ DEFAULT_HTML;
 	 * @since 6.8
 	 *
 	 * @param int|string $user_id
+	 *
 	 * @return bool
 	 */
 	private function user_id_is_privileged( $user_id ) {
@@ -1762,6 +1796,7 @@ DEFAULT_HTML;
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	protected function fill_default_atts( &$atts ) {
@@ -1890,6 +1925,7 @@ DEFAULT_HTML;
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
@@ -1907,6 +1943,7 @@ DEFAULT_HTML;
 	 *
 	 * @param array|string $value
 	 * @param array|string $unsanitized_value
+	 *
 	 * @return array|string
 	 */
 	private function maintain_option_values( $value, $unsanitized_value ) {
@@ -1958,6 +1995,7 @@ DEFAULT_HTML;
 	 * @since 6.2
 	 *
 	 * @param mixed $value
+	 *
 	 * @return mixed
 	 */
 	public function maybe_decode_value( $value ) {
@@ -1982,6 +2020,7 @@ DEFAULT_HTML;
 	 * @since x.x
 	 *
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	public function filter_value_for_table_html( $value ) {

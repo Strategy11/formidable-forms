@@ -15,6 +15,7 @@ class FrmInboxController {
 	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param bool $filtered Set this to false to avoid the frm_inbox_badge filter.
+	 *
 	 * @return string
 	 */
 	public static function get_notice_count( $filtered = true ) {

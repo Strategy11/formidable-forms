@@ -10,12 +10,14 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'html';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
@@ -82,6 +84,7 @@ class FrmFieldHTML extends FrmFieldType {
 	 * @since 6.8.3
 	 *
 	 * @param array $atts
+	 *
 	 * @return bool
 	 */
 	protected function should_strip_most_html_before_preparing_display_value( $atts ) {

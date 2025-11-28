@@ -182,6 +182,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @param array  $messages
 	 * @param string $type
+	 *
 	 * @return void
 	 */
 	public function filter_messages( &$messages, $type = 'unread' ) {
@@ -203,6 +204,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 6.25
 	 *
 	 * @param array $message
+	 *
 	 * @return bool
 	 */
 	private function within_valid_timeframe( $message ) {
@@ -215,6 +217,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 6.25
 	 *
 	 * @param array $message
+	 *
 	 * @return bool
 	 */
 	private function has_started( $message ) {
@@ -238,6 +241,7 @@ class FrmInbox extends FrmFormApi {
 	 * Show different messages for different accounts.
 	 *
 	 * @param array $message
+	 *
 	 * @return bool
 	 */
 	private function is_for_user( $message ) {
@@ -281,6 +285,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 *
 	 * @param string $key
+	 *
 	 * @return void
 	 */
 	public function mark_unread( $key ) {
@@ -351,6 +356,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param bool $filtered
+	 *
 	 * @return string
 	 */
 	public function unread_html( $filtered = true ) {
@@ -377,6 +383,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 4.05.02
 	 *
 	 * @param string $key
+	 *
 	 * @return void
 	 */
 	public function remove( $key ) {
@@ -415,6 +422,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 6.8.4
 	 *
 	 * @param string $cta
+	 *
 	 * @return string
 	 */
 	private static function get_prepared_banner_cta( $cta ) {
@@ -425,6 +433,7 @@ class FrmInbox extends FrmFormApi {
 			 * Replace a single href attribute in the CTA.
 			 *
 			 * @param array $matches The regex results for a single match.
+			 *
 			 * @return string
 			 */
 			function ( $matches ) {
@@ -484,6 +493,7 @@ class FrmInbox extends FrmFormApi {
 	 * @since 6.8.4
 	 *
 	 * @param string $key The key we are checking for (ie. banner or slidein).
+	 *
 	 * @return array
 	 */
 	private static function get_messages_with_key( $key ) {

@@ -7,6 +7,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $subscription ) {
@@ -24,6 +25,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @since 6.5
 	 *
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function show_receipt_link( $subscription ) {
@@ -46,6 +48,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_cancel_link( $sub, $atts = array() ) {
@@ -61,6 +64,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	public static function cancel_link( $sub, $atts = array() ) {
@@ -135,6 +139,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function change_subscription_status( $atts ) {

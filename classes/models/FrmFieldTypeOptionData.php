@@ -19,6 +19,7 @@ class FrmFieldTypeOptionData {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return array
 	 */
 	public static function get_field_types( $type ) {

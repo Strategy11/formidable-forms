@@ -273,6 +273,7 @@ class FrmField {
 	 * @since 6.8.3
 	 *
 	 * @param string $type
+	 *
 	 * @return bool
 	 */
 	private static function field_is_new( $type ) {
@@ -305,6 +306,7 @@ class FrmField {
 	 *
 	 * @param array $values
 	 * @param bool  $return
+	 *
 	 * @return false|int
 	 */
 	public static function create( $values, $return = true ) {
@@ -375,6 +377,7 @@ class FrmField {
 	 * @since 5.0.08
 	 *
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	private static function maybe_filter_options( $options ) {
@@ -398,6 +401,7 @@ class FrmField {
 	 * @since 6.11.2
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	private static function maybe_filter_custom_html_input_attributes( $html ) {
@@ -410,6 +414,7 @@ class FrmField {
 			"/$pattern/",
 			/**
 			 * @param array $match Shortcode data.
+			 *
 			 * @return string
 			 */
 			function ( $match ) {
@@ -563,6 +568,7 @@ class FrmField {
 	/**
 	 * @param int|string $id
 	 * @param array      $values
+	 *
 	 * @return false|int
 	 */
 	public static function update( $id, $values ) {
@@ -679,6 +685,7 @@ class FrmField {
 
 	/**
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	public static function delete_form_transient( $form_id ) {
@@ -703,6 +710,7 @@ class FrmField {
 	 * If $field is numeric, get the field object
 	 *
 	 * @param int|object|string $field
+	 *
 	 * @return void
 	 */
 	public static function maybe_get_field( &$field ) {
@@ -851,6 +859,7 @@ class FrmField {
 	 * @param int|string $limit
 	 * @param string     $inc_embed
 	 * @param string     $inc_repeat
+	 *
 	 * @return array
 	 */
 	public static function get_all_for_form( $form_id, $limit = '', $inc_embed = 'exclude', $inc_repeat = 'include' ) {
@@ -1020,6 +1029,7 @@ class FrmField {
 	 * @since 2.0.8
 	 *
 	 * @param array|object|null $results Results.
+	 *
 	 * @return void
 	 */
 	private static function format_field_results( &$results ) {
@@ -1053,6 +1063,7 @@ class FrmField {
 	 * @since 6.15
 	 *
 	 * @param stdClass $result
+	 *
 	 * @return void
 	 */
 	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
@@ -1069,6 +1080,7 @@ class FrmField {
 	 * @since 2.0
 	 *
 	 * @param object $results
+	 *
 	 * @return void
 	 */
 	private static function prepare_options( &$results ) {
@@ -1167,6 +1179,7 @@ class FrmField {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return bool
 	 */
 	public static function is_no_save_field( $type ) {
@@ -1207,7 +1220,9 @@ class FrmField {
 
 	/**
 	 * @since 3.0
+	 *
 	 * @param array|object $field
+	 *
 	 * @return string
 	 */
 	public static function get_field_type( $field ) {
@@ -1218,6 +1233,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 *
 	 * @return string
 	 */
 	public static function get_original_field_type( $field ) {
@@ -1238,6 +1254,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array|object $field Field object.
+	 *
 	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
@@ -1254,6 +1271,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array|object $field
+	 *
 	 * @return bool
 	 */
 	public static function is_read_only( $field ) {
@@ -1265,6 +1283,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array $field
+	 *
 	 * @return bool
 	 */
 	public static function is_required( $field ) {
@@ -1284,6 +1303,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true( $field, $option ) {
@@ -1298,6 +1318,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty( $field, $option ) {
@@ -1310,6 +1331,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true_in_array( $field, $option ) {
@@ -1319,6 +1341,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
@@ -1328,6 +1351,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty_in_array( $field, $option ) {
@@ -1337,6 +1361,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty_in_object( $field, $option ) {
@@ -1346,6 +1371,7 @@ class FrmField {
 	/**
 	 * @param stdClass $field
 	 * @param string   $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_value_in_object( $field, $option ) {
@@ -1357,6 +1383,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
@@ -1372,6 +1399,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option_in_array( $field, $option ) {
@@ -1389,6 +1417,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option_in_object( $field, $option ) {
@@ -1399,6 +1428,7 @@ class FrmField {
 	 * @since 2.0.09
 	 *
 	 * @param array|object $field
+	 *
 	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
@@ -1504,6 +1534,7 @@ class FrmField {
 	 * @since 4.10.02
 	 *
 	 * @param array $field Field array.
+	 *
 	 * @return bool
 	 */
 	public static function is_combo_field( $field ) {

@@ -10,6 +10,7 @@ class FrmFieldNumber extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'number';
@@ -128,6 +129,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 *
 	 * @param numeric $value The value.
 	 * @param numeric $step  The step.
+	 *
 	 * @return array|int     Return `0` if valid. Otherwise, return an array contains two nearest values.
 	 */
 	protected function check_value_is_valid_with_step( $value, $step ) {
@@ -168,6 +170,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * Force the value to be numeric before it's saved in the DB
 	 *
 	 * @param array|string $value
+	 *
 	 * @return float
 	 */
 	public function set_value_before_save( $value ) {
@@ -182,6 +185,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {

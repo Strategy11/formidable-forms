@@ -213,6 +213,7 @@ class FrmFieldsController {
 	 * @param array        $field
 	 * @param array        $display
 	 * @param FrmFieldType $field_info
+	 *
 	 * @return string
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
@@ -262,6 +263,7 @@ class FrmFieldsController {
 		 * @since 6.8.4
 		 *
 		 * @param array $bulk_edit_types
+		 *
 		 * @return array
 		 */
 		$bulk_edit_types = apply_filters( 'frm_bulk_edit_field_types', $bulk_edit_types );
@@ -317,6 +319,7 @@ class FrmFieldsController {
 	 * @since 4.0
 	 *
 	 * @param array $atts - Includes field array, field_obj, display array, values array.
+	 *
 	 * @return void
 	 */
 	public static function load_single_field_settings( $atts ) {
@@ -386,6 +389,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $atts
+	 *
 	 * @return array
 	 */
 	private static function default_value_types( $field, $atts ) {
@@ -442,6 +446,7 @@ class FrmFieldsController {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return string
 	 */
 	public static function change_type( $type ) {
@@ -493,6 +498,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field Field data.
 	 * @param bool  $is_hidden Whether the format option should be hidden.
+	 *
 	 * @return void
 	 */
 	public static function show_format_option( $field, $is_hidden = false ) {
@@ -544,6 +550,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $class
+	 *
 	 * @return void
 	 */
 	private static function add_input_classes( $field, array &$class ) {
@@ -563,6 +570,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_size( $field, array &$add_html ) {
@@ -597,6 +605,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_cols( $field, array &$add_html ) {
@@ -627,6 +636,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_length( $field, array &$add_html ) {
@@ -654,6 +664,7 @@ class FrmFieldsController {
 	 * @param array $field
 	 * @param array $add_html
 	 * @param array $class
+	 *
 	 * @return void
 	 */
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
@@ -680,6 +691,7 @@ class FrmFieldsController {
 	 * @since 5.4 This doesn't call `FrmFieldsController::get_default_value_from_name()` anymore.
 	 *
 	 * @param array $field Field array.
+	 *
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
@@ -748,6 +760,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_placeholder_to_input( $field, &$add_html ) {
@@ -759,6 +772,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_frmval_to_input( $field, &$add_html ) {
@@ -806,6 +820,7 @@ class FrmFieldsController {
 	 * @since 6.9
 	 *
 	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	private static function get_validation_data_attribute_visibility_info( $field ) {
@@ -837,6 +852,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
@@ -856,6 +872,7 @@ class FrmFieldsController {
 	 * @since 5.0.03
 	 *
 	 * @param array $field
+	 *
 	 * @return false|stdClass false if there is no form object found with JS validation active.
 	 */
 	private static function get_form_for_js_validation( $field ) {
@@ -875,6 +892,7 @@ class FrmFieldsController {
 	 * @param stdClass $form
 	 * @param array    $field
 	 * @param array    $errors
+	 *
 	 * @return false|string
 	 */
 	public static function pull_custom_error_body_from_custom_html( $form, $field, $errors = array() ) {
@@ -916,8 +934,10 @@ class FrmFieldsController {
 	 * remove it is present if needed.
 	 *
 	 * @since 3.06.01
+	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
@@ -938,6 +958,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_shortcodes_to_html( $field, array &$add_html ) {
@@ -982,6 +1003,7 @@ class FrmFieldsController {
 	 * @since 6.11.2
 	 *
 	 * @param string $key The option key.
+	 *
 	 * @return bool
 	 */
 	private static function should_allow_input_attribute( $key ) {
@@ -998,6 +1020,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {

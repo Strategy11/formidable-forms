@@ -8,12 +8,14 @@ class FrmListHelper {
 	 * The current list of items
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var array
 	 */
 	public $items;
 
 	/**
 	 * @since 4.07
+	 *
 	 * @var bool|int
 	 */
 	public $total_items = false;
@@ -22,6 +24,7 @@ class FrmListHelper {
 	 * Various information about the current table
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var array
 	 */
 	protected $_args;
@@ -30,6 +33,7 @@ class FrmListHelper {
 	 * Various information needed for displaying the pagination
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var array
 	 */
 	protected $_pagination_args = array();
@@ -47,6 +51,7 @@ class FrmListHelper {
 	 * Cached bulk actions
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var array
 	 */
 	private $_actions;
@@ -55,6 +60,7 @@ class FrmListHelper {
 	 * Cached pagination output
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var string
 	 */
 	private $_pagination;
@@ -63,6 +69,7 @@ class FrmListHelper {
 	 * The view switcher modes.
 	 *
 	 * @since 2.0.18
+	 *
 	 * @var array
 	 */
 	protected $modes = array();
@@ -108,6 +115,7 @@ class FrmListHelper {
 	 * Construct the table object
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function __construct( $args ) {
@@ -170,6 +178,7 @@ class FrmListHelper {
 	 * @uses FrmListHelper::set_pagination_args()
 	 *
 	 * @since 2.0.18
+	 *
 	 * @abstract
 	 */
 	public function prepare_items() {
@@ -180,6 +189,7 @@ class FrmListHelper {
 	 * @since 3.0
 	 *
 	 * @param array $args
+	 *
 	 * @return array|string
 	 */
 	protected function get_param( $args ) {
@@ -934,6 +944,7 @@ class FrmListHelper {
 	 * @staticvar int $cb_counter
 	 *
 	 * @param bool $with_id Whether to set the id attribute or not.
+	 *
 	 * @return void
 	 */
 	public function print_column_headers( $with_id = true ) {
@@ -1050,6 +1061,7 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function display( $args = array() ) {
@@ -1155,6 +1167,7 @@ class FrmListHelper {
 	 * @since 4.07
 	 *
 	 * @param int $limit
+	 *
 	 * @return bool
 	 */
 	protected function has_min_items( $limit = 5 ) {

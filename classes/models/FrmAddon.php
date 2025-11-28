@@ -450,6 +450,7 @@ class FrmAddon {
 	 *
 	 * @param string $file File path of the plugin.
 	 * @param array  $plugin Plugin data.
+	 *
 	 * @return void
 	 */
 	public function maybe_show_license_message( $file, $plugin ) {
@@ -464,6 +465,7 @@ class FrmAddon {
 	/**
 	 * @param string $file File path of the plugin.
 	 * @param array  $plugin Plugin data.
+	 *
 	 * @return void
 	 */
 	public function show_license_message( $file, $plugin ) {
@@ -560,6 +562,7 @@ class FrmAddon {
 	 * @since 3.04.03
 	 *
 	 * @param string $license The license key.
+	 *
 	 * @return array The API info for the plugin.
 	 */
 	protected function get_api_info( $license ) {
@@ -585,6 +588,7 @@ class FrmAddon {
 	 * @since 2.05.05
 	 *
 	 * @param object $version_info The version info for the plugin.
+	 *
 	 * @return void
 	 */
 	private function clear_old_plugin_version( &$version_info ) {
@@ -604,6 +608,7 @@ class FrmAddon {
 	 * @since 3.04.03
 	 *
 	 * @param object $version_info The version info for the plugin.
+	 *
 	 * @return void
 	 */
 	private function maybe_use_beta_url( &$version_info ) {
@@ -769,6 +774,7 @@ class FrmAddon {
 	 *
 	 * @param string $license     The license key.
 	 * @param string $plugin_slug The plugin slug.
+	 *
 	 * @return array The response from the license activation.
 	 */
 	public static function activate_license_for_plugin( $license, $plugin_slug ) {
@@ -778,6 +784,7 @@ class FrmAddon {
 
 	/**
 	 * @param string $license The license key.
+	 *
 	 * @return array The response from the license activation.
 	 */
 	private function activate_license( $license ) {
@@ -952,6 +959,7 @@ class FrmAddon {
 
 	/**
 	 * @param string $action
+	 *
 	 * @return string
 	 */
 	public function send_mothership_request( $action ) {

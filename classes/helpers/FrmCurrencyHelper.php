@@ -11,6 +11,7 @@ class FrmCurrencyHelper {
 
 	/**
 	 * @param string $currency
+	 *
 	 * @return array
 	 */
 	public static function get_currency( $currency ) {
@@ -32,6 +33,7 @@ class FrmCurrencyHelper {
 	 * @since 6.18
 	 *
 	 * @param string $format_value The format value to check.
+	 *
 	 * @return bool
 	 */
 	public static function is_currency_format( $format_value ) {

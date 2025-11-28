@@ -62,6 +62,7 @@ class FrmTransLiteAppHelper {
 	 * Get a payment status label.
 	 *
 	 * @param string $status The lowercase payment status value.
+	 *
 	 * @return string
 	 */
 	public static function show_status( $status ) {
@@ -73,6 +74,7 @@ class FrmTransLiteAppHelper {
 	 * Get Payment status from a payment with support for PayPal backward compatibility.
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return string
 	 */
 	public static function get_payment_status( $payment ) {
@@ -117,6 +119,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param array  $payment_values
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function add_note_to_payment( &$payment_values, $message = '' ) {
@@ -185,6 +188,7 @@ class FrmTransLiteAppHelper {
 	 * Allow entry values, default values, and other shortcodes
 	 *
 	 * @param array $atts Includes value (required), form, entry.
+	 *
 	 * @return int|string
 	 */
 	public static function process_shortcodes( $atts ) {
@@ -210,6 +214,7 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param object $sub
+	 *
 	 * @return string
 	 */
 	public static function format_billing_cycle( $sub ) {
@@ -239,6 +244,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param int $number
+	 *
 	 * @return array
 	 */
 	private static function get_plural_repeat_times( $number ) {
@@ -255,6 +261,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param string $value
 	 * @param int    $number
+	 *
 	 * @return string
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
@@ -297,6 +304,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.7
 	 *
 	 * @param array|float|object|string $payment Payment object, payment array or amount.
+	 *
 	 * @return array Return the array with the first element is the amount, the second one is the currency value.
 	 */
 	public static function get_amount_and_currency_from_payment( $payment ) {
@@ -319,6 +327,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param array $currency
 	 * @param float $amount
+	 *
 	 * @return void
 	 */
 	public static function format_amount_for_currency( $currency, &$amount ) {
@@ -348,6 +357,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param string $date
 	 * @param string $format
+	 *
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
@@ -372,6 +382,7 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param int $user_id
+	 *
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
@@ -388,6 +399,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param mixed  $value
 	 * @param string $label
+	 *
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
@@ -409,6 +421,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param string $link
+	 *
 	 * @return void
 	 */
 	public static function echo_confirmation_link( $link ) {
@@ -425,6 +438,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param array $allowed
+	 *
 	 * @return array
 	 */
 	public static function allow_deleteconfirm_data_attribute( $allowed ) {
@@ -491,6 +505,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.6
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return string
 	 */
 	public static function get_test_mode_display_string( $payment ) {

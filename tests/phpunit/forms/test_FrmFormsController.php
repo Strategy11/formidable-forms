@@ -291,6 +291,10 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Trigger migration check and the flag.
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	private function trigger_migrate_actions( $form_id ) {
 		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );

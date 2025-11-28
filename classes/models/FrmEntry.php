@@ -53,6 +53,7 @@ class FrmEntry {
 	 * @since 6.16.3
 	 *
 	 * @param string $unique_id
+	 *
 	 * @return void
 	 */
 	private static function flag_new_unique_key( $unique_id ) {
@@ -160,6 +161,7 @@ class FrmEntry {
 	 *
 	 * @param array  $values     POST request data.
 	 * @param string $created_at The timestamp of the entry we are checking for.
+	 *
 	 * @return bool
 	 */
 	private static function maybe_check_for_unique_id_match( $values, $created_at ) {
@@ -222,6 +224,7 @@ class FrmEntry {
 	 *
 	 * @param array $filter_vals
 	 * @param int   $entry_id
+	 *
 	 * @return array
 	 */
 	private static function convert_values_to_their_saved_value( $filter_vals, $entry_id ) {
@@ -353,6 +356,7 @@ class FrmEntry {
 	 * Delete an entry.
 	 *
 	 * @param int|string $id
+	 *
 	 * @return bool True on success, false if nothing was deleted.
 	 */
 	public static function destroy( $id ) {
@@ -434,6 +438,7 @@ class FrmEntry {
 	 *
 	 * @param array        $values
 	 * @param array|string $default
+	 *
 	 * @return string
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
@@ -451,6 +456,7 @@ class FrmEntry {
 	 * @since 2.0.9
 	 *
 	 * @param int|object $entry By reference.
+	 *
 	 * @return void
 	 */
 	public static function maybe_get_entry( &$entry ) {
@@ -698,6 +704,7 @@ class FrmEntry {
 
 	/**
 	 * @param int $field_id
+	 *
 	 * @return string
 	 */
 	private static function sort_by_field( $field_id ) {
@@ -719,6 +726,7 @@ class FrmEntry {
 	// Pagination Methods
 	/**
 	 * @param array|int|string $where If int, use the form id.
+	 *
 	 * @return int|string
 	 */
 	public static function getRecordCount( $where = '' ) {
@@ -1043,6 +1051,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 * @param int   $entry_id
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_entry_metas( $values, $entry_id ) {
@@ -1058,6 +1067,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 * @param int   $entry_id
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_unique_id_meta( $values, $entry_id ) {
@@ -1079,6 +1089,7 @@ class FrmEntry {
 	 *
 	 * @param int $form_id
 	 * @param int $entry_id
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {

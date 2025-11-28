@@ -231,6 +231,7 @@ class FrmAddonsController {
 	 * @since 6.15
 	 *
 	 * @param array $addon The addon array that will be modified by reference.
+	 *
 	 * @return void
 	 */
 	protected static function set_categories( &$addon ) {
@@ -311,6 +312,7 @@ class FrmAddonsController {
 	 * If the API is unable to connect, show something on the addons page
 	 *
 	 * @since 3.04.03
+	 *
 	 * @return array
 	 */
 	protected static function fallback_plugin_list() {
@@ -409,6 +411,7 @@ class FrmAddonsController {
 	 * If Pro is missing but has been authenticated, include a download URL
 	 *
 	 * @since 3.04.03
+	 *
 	 * @return string
 	 */
 	public static function get_pro_download_url() {
@@ -454,6 +457,7 @@ class FrmAddonsController {
 	 * @since 4.08
 	 *
 	 * @param array $addons
+	 *
 	 * @return array
 	 */
 	protected static function get_pro_from_addons( $addons ) {
@@ -520,6 +524,7 @@ class FrmAddonsController {
 	 * @since 3.04.03
 	 *
 	 * @param mixed $transient
+	 *
 	 * @return object
 	 */
 	public static function check_update( $transient ) {
@@ -581,6 +586,7 @@ class FrmAddonsController {
 	 * This means that trying to access FrmAppHelper::get_plugins when upgrading from a Lite version before v5.5 results in a one-off error.
 	 *
 	 * @since 5.5.2
+	 *
 	 * @return array
 	 */
 	protected static function get_plugins() {
@@ -661,7 +667,9 @@ class FrmAddonsController {
 	 * Get the action link for an addon that isn't active.
 	 *
 	 * @since 3.06.03
+	 *
 	 * @param string $plugin The plugin slug.
+	 *
 	 * @return array
 	 */
 	public static function install_link( $plugin ) {
@@ -700,7 +708,9 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.09
+	 *
 	 * @param string $plugin The plugin slug.
+	 *
 	 * @return array|false
 	 */
 	public static function get_addon( $plugin ) {
@@ -717,6 +727,7 @@ class FrmAddonsController {
 
 	/**
 	 * @since 4.09
+	 *
 	 * @return string
 	 */
 	protected static function get_license_type() {
@@ -898,6 +909,7 @@ class FrmAddonsController {
 	 * @param string $redirect
 	 * @param bool   $network_wide
 	 * @param bool   $silent
+	 *
 	 * @return WP_Error|null Null on success, WP_Error on invalid file.
 	 */
 	protected static function activate_plugin( $plugin, $redirect = '', $network_wide = false, $silent = false ) {
@@ -914,6 +926,7 @@ class FrmAddonsController {
 	 *
 	 * @param string $plugin
 	 * @param bool   $silent
+	 *
 	 * @return void
 	 */
 	protected static function deactivate_plugin( $plugin, $silent = false ) {
@@ -929,6 +942,7 @@ class FrmAddonsController {
 	 * @since 6.8
 	 *
 	 * @param string $plugin
+	 *
 	 * @return true|WP_Error True on success, WP_Error on invalid file.
 	 */
 	protected static function uninstall_plugin( $plugin ) {
@@ -1134,6 +1148,7 @@ class FrmAddonsController {
 	 *
 	 * @param callable      $action_callback The specific add-on action to be executed.
 	 * @param callable|null $response_callback Optional. The response handling callback. Default null.
+	 *
 	 * @return void
 	 */
 	private static function process_addon_action( $action_callback, $response_callback = null ) {
@@ -1158,6 +1173,7 @@ class FrmAddonsController {
 	 *
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
+	 *
 	 * @return array|void
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
@@ -1375,6 +1391,7 @@ class FrmAddonsController {
 	 *
 	 * @param string       $plugin
 	 * @param array|string $upgrade_link_args
+	 *
 	 * @return void
 	 */
 	public static function conditional_action_button( $plugin, $upgrade_link_args ) {
@@ -1411,6 +1428,7 @@ class FrmAddonsController {
 	 *     @type string $plan_required
 	 *     @type string $upgrade_link
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function show_conditional_action_button( $atts ) {

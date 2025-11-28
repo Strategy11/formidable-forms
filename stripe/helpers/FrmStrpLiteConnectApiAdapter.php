@@ -18,6 +18,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param string $sub_id
+	 *
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
@@ -36,6 +37,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param string $payment_id
+	 *
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
@@ -46,6 +48,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * Get the payment intent from Stripe
 	 *
 	 * @param string $payment_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_intent( $payment_id ) {
@@ -61,6 +64,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $options
+	 *
 	 * @return object|string
 	 */
 	public static function get_customer( $options = array() ) {
@@ -118,6 +122,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param string $customer_id
+	 *
 	 * @return object
 	 */
 	private static function create_decoy_customer( $customer_id ) {
@@ -129,6 +134,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param int $user_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_customer_by_id( $user_id ) {
@@ -149,6 +155,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_event( $event_id ) {
@@ -166,6 +173,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return false|object|string
 	 */
 	public static function create_subscription( $new_charge ) {
@@ -174,6 +182,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return mixed
 	 */
 	public static function create_intent( $new_charge ) {
@@ -183,6 +192,7 @@ class FrmStrpLiteConnectApiAdapter {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 *
 	 * @return mixed
 	 */
 	public static function update_intent( $intent_id, $data ) {
@@ -197,6 +207,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 *
 	 * @param string      $customer_id Customer ID beginning with cus_.
 	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
+	 *
 	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
@@ -209,6 +220,7 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
+	 *
 	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {

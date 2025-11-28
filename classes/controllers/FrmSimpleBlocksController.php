@@ -80,6 +80,7 @@ class FrmSimpleBlocksController {
 	 * @since 6.8
 	 *
 	 * @param int $addon_id Addon ID.
+	 *
 	 * @return array|false
 	 */
 	private static function get_addon_info( $addon_id ) {
@@ -175,6 +176,7 @@ class FrmSimpleBlocksController {
 	 * Renders a form given the specified attributes.
 	 *
 	 * @param array $attributes
+	 *
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {
@@ -186,6 +188,7 @@ class FrmSimpleBlocksController {
 
 		/**
 		 * @since 5.5.2
+		 *
 		 * @param array $attributes
 		 */
 		do_action( 'frm_before_simple_form_render', $attributes );
@@ -217,6 +220,7 @@ class FrmSimpleBlocksController {
 	 * With the class set, the form never appears in the form block preview.
 	 *
 	 * @param string $form
+	 *
 	 * @return string
 	 */
 	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {

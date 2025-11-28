@@ -373,6 +373,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function fill_with_defaults( $params = array() ) {
@@ -412,6 +413,7 @@ class FrmSettings {
 	 * @param mixed  $value       The unsanitized global setting value.
 	 * @param string $key         The key of the global setting being saved.
 	 * @param array  $filter_keys These keys that are filtered with kses.
+	 *
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
@@ -500,6 +502,7 @@ class FrmSettings {
 	 * @since 3.06.01
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
@@ -550,6 +553,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_settings( $params ) {
@@ -591,6 +595,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_roles( $params ) {
@@ -624,6 +629,7 @@ class FrmSettings {
 	 * @param string $key The setting key to update.
 	 * @param mixed  $value The new value for the setting.
 	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_setting( $key, $value, $sanitize ) {

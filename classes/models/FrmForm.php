@@ -7,6 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool|int id on success or false on failure.
 	 */
 	public static function create( $values ) {
@@ -60,6 +61,7 @@ class FrmForm {
 	 * @since 5.0.08
 	 *
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	private static function maybe_filter_form_options( $options ) {
@@ -293,6 +295,7 @@ class FrmForm {
 	 * @param array $new_values
 	 * @param array $values
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function set_update_options( $new_values, $values, $args = array() ) {
@@ -327,6 +330,7 @@ class FrmForm {
 	/**
 	 * @param int   $id     Form ID.
 	 * @param array $values Form values array.
+	 *
 	 * @return array
 	 */
 	public static function update_fields( $id, $values ) {
@@ -426,6 +430,7 @@ class FrmForm {
 	 * @param array $field
 	 * @param array $values
 	 * @param array $new_field
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_max_option( $field, $values, &$new_field ) {
@@ -446,6 +451,7 @@ class FrmForm {
 	/**
 	 * @param string $opt
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	private static function sanitize_field_opt( $opt, &$value ) {
@@ -479,6 +485,7 @@ class FrmForm {
 
 	/**
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	private static function sanitize_calc( $value ) {
@@ -499,6 +506,7 @@ class FrmForm {
 	 * This is to avoid an issue with unspaced calculations being recognized as HTML that gets removed when strip_tags is called.
 	 *
 	 * @param string $calc
+	 *
 	 * @return string
 	 */
 	private static function normalize_calc_spaces( $calc ) {
@@ -518,6 +526,7 @@ class FrmForm {
 	 *
 	 * @param array  $values Form values array.
 	 * @param object $field Field object, passed by reference.
+	 *
 	 * @return void
 	 */
 	private static function get_settings_page_html( $values, &$field ) {
@@ -638,6 +647,7 @@ class FrmForm {
 
 	/**
 	 * @param int|string $id Form ID.
+	 *
 	 * @return bool|int
 	 */
 	public static function trash( $id ) {
@@ -689,6 +699,7 @@ class FrmForm {
 
 	/**
 	 * @param int|string $id Form ID.
+	 *
 	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
@@ -733,6 +744,7 @@ class FrmForm {
 	 * Delete trashed forms based on how long they have been trashed
 	 *
 	 * @param int|string $delete_timestamp Timestamp cutoff for deletion.
+	 *
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
@@ -766,6 +778,7 @@ class FrmForm {
 
 	/**
 	 * @param int|string $id Form ID or key.
+	 *
 	 * @return string form name
 	 */
 	public static function getName( $id ) {
@@ -833,6 +846,7 @@ class FrmForm {
 	/**
 	 * @param int|string $id
 	 * @param false|int  $blog_id
+	 *
 	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
@@ -874,6 +888,7 @@ class FrmForm {
 	 * @since 6.8.3
 	 *
 	 * @param stdClass|null $row The database row for a target form.
+	 *
 	 * @return stdClass|null
 	 */
 	private static function prepare_form_row_data( $row ) {
@@ -898,6 +913,7 @@ class FrmForm {
 	 * @param array|string $where    Where conditions array or raw WHERE string.
 	 * @param string       $order_by Order by clause.
 	 * @param int|string   $limit    Limit clause or number.
+	 *
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
@@ -939,6 +955,7 @@ class FrmForm {
 	 * @param array  $query
 	 * @param int    $limit
 	 * @param string $inc_children
+	 *
 	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
@@ -1018,6 +1035,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values Form values to validate.
+	 *
 	 * @return array of errors
 	 */
 	public static function validate( $values ) {
@@ -1279,6 +1297,7 @@ class FrmForm {
 	 * @since 2.3
 	 *
 	 * @param array $atts Attributes including form, option, and default.
+	 *
 	 * @return mixed
 	 */
 	public static function get_option( $atts ) {
@@ -1307,6 +1326,7 @@ class FrmForm {
 	 * @since 6.2
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return bool
 	 */
 	public static function is_ajax_on( $form ) {
@@ -1317,6 +1337,7 @@ class FrmForm {
 	 * Get the latest form available.
 	 *
 	 * @since 6.8
+	 *
 	 * @return object
 	 */
 	public static function get_latest_form() {
@@ -1338,6 +1359,7 @@ class FrmForm {
 	 * Count and return total forms.
 	 *
 	 * @since 6.8
+	 *
 	 * @return int
 	 */
 	public static function get_forms_count() {
@@ -1357,9 +1379,11 @@ class FrmForm {
 
 	/**
 	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
+	 *
 	 * @codeCoverageIgnore
 	 *
 	 * @param string $key
+	 *
 	 * @return int form id
 	 */
 	public static function getIdByKey( $key ) {
@@ -1369,9 +1393,11 @@ class FrmForm {
 
 	/**
 	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
+	 *
 	 * @codeCoverageIgnore
 	 *
 	 * @param int|string $id
+	 *
 	 * @return string
 	 */
 	public static function getKeyById( $id ) {

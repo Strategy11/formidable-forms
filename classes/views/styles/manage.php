@@ -51,6 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @param array<WP_Post> $styles
 					 * @param WP_Post        $default_style
 					 * @param string         $row_view_file_path
+					 *
 					 * @return void
 					 */
 					function ( $form ) use ( $styles, $default_style, $row_view_file_path ) {

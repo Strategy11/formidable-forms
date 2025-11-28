@@ -3,6 +3,7 @@
  * Sub field options
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var FrmFieldCombo $this            Field type object.
