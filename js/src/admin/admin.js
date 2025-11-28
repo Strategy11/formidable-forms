@@ -465,7 +465,7 @@ window.frmAdminBuildJS = function() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
-	 * @param {boolean} show
+	 * @param {boolean}     show
 	 */
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;

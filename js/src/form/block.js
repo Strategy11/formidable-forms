@@ -16,6 +16,57 @@ const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
 const { serverSideRender: ServerSideRender } = wp;
 
+function Edit( { setAttributes, attributes, isSelected } ) {
+	const { formId } = attributes;
+	const forms = formidable_form_selector.forms;
+	const blockProps = useBlockProps();
+
+	if ( forms.length === 0 ) {
+		return (
+			<div { ...blockProps }>
+				<Notice status="warning" isDismissible={ false }>
+					{ __( 'This site does not have any forms.', 'formidable' ) }
+				</Notice>
+			</div>
+		);
+	}
+
+	if ( ! formId ) {
+		return (
+			<div { ...blockProps }>
+				<div className="frm-block-intro-screen">
+					<div className="frm-block-intro-content">
+						<FormidableIcon></FormidableIcon>
+						<div className="frm-block-title">{ formidable_form_selector.name }</div>
+						<div className="frm-block-selector-screen">
+							<FormSelect
+								formId={ formId }
+								setAttributes={ setAttributes }
+								forms={ forms }
+							/>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
+	return (
+		<div { ...blockProps }>
+			<Inspector
+				attributes={ attributes }
+				setAttributes={ setAttributes }
+				forms={ forms }
+			/>
+			{ isSelected && <style>{ cssHideAdvancedSettings }</style> }
+			<ServerSideRender
+				block="formidable/simple-form"
+				attributes={ attributes }
+			></ServerSideRender>
+		</div>
+	);
+}
+
 registerBlockType( 'formidable/simple-form', {
 	apiVersion: 3,
 	title: formidable_form_selector.name,
@@ -27,58 +78,7 @@ registerBlockType( 'formidable/simple-form', {
 		'formidable',
 	],
 
-	edit: function( { setAttributes, attributes, isSelected } ) {
-		const { formId } = attributes;
-
-		const forms = formidable_form_selector.forms;
-
-		const blockProps = useBlockProps();
-
-		if ( forms.length === 0 ) {
-			return (
-				<div { ...blockProps }>
-					<Notice status="warning" isDismissible={ false }>
-						{ __( 'This site does not have any forms.', 'formidable' ) }
-					</Notice>
-				</div>
-			);
-		}
-
-		if ( ! formId ) {
-			return (
-				<div { ...blockProps }>
-					<div className="frm-block-intro-screen">
-						<div className="frm-block-intro-content">
-							<FormidableIcon></FormidableIcon>
-							<div className="frm-block-title">{ formidable_form_selector.name }</div>
-							<div className="frm-block-selector-screen">
-								<FormSelect
-									formId={ formId }
-									setAttributes={ setAttributes }
-									forms={ forms }
-								/>
-							</div>
-						</div>
-					</div>
-				</div>
-			);
-		}
-
-		return (
-			<div { ...blockProps }>
-				<Inspector
-					attributes={ attributes }
-					setAttributes={ setAttributes }
-					forms={ forms }
-				/>
-				{ isSelected && <style>{ cssHideAdvancedSettings }</style> }
-				<ServerSideRender
-					block="formidable/simple-form"
-					attributes={ attributes }
-				></ServerSideRender>
-			</div>
-		);
-	},
+	edit: Edit,
 
 	save: function( props ) {
 		const {
