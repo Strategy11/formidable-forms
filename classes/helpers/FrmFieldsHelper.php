@@ -2411,7 +2411,7 @@ class FrmFieldsHelper {
 				esc_html__( 'You already have access to %s fields, you\'ll just need to activate to start using them.', 'formidable' ),
 				$field_name
 			);
-		} else if ( $upgrade_message ) {
+		} elseif ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
 		?>
