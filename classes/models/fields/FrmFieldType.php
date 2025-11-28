@@ -436,6 +436,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.01
+	 *
+	 * @param array $field   Field settings array.
+	 * @param array $display Display settings.
+	 * @param array $values  Form values.
 	 */
 	public function show_options( $field, $display, $values ) {
 		do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
@@ -474,6 +478,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args Includes 'field', 'display', and 'values'.
 	 */
 	public function show_field_options( $args ) {
 		if ( ! $this->should_continue_to_field_options( $args ) ) {
@@ -593,6 +599,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @param array $args Includes field configuration.
 	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
@@ -609,6 +617,9 @@ DEFAULT_HTML;
 	 * Should the section for adding choices show for this field?
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field Field settings array.
+	 * @return bool
 	 */
 	protected function has_field_choices( $field ) {
 		return ! empty( $this->displayed_field_type( $field ) );
@@ -618,6 +629,9 @@ DEFAULT_HTML;
 	 * Get the type of field being displayed for lookups and dynamic fields.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field Field settings array.
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -715,6 +729,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @param mixed $default_value Default value passed by reference.
 	 */
 	public function default_value_to_string( &$default_value ) {
 		if ( ! is_array( $default_value ) ) {
@@ -892,6 +908,7 @@ DEFAULT_HTML;
 	}
 
 	/**
+	 * @param array $args Field rendering arguments.
 	 * @return void
 	 */
 	protected function get_field_scripts_hook( $args ) {
@@ -954,6 +971,12 @@ DEFAULT_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param array  $args
+	 * @param string $html
+	 *
+	 * @return string
+	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		return $html;
 	}
@@ -1141,6 +1164,10 @@ DEFAULT_HTML;
 	 * using the frm_field_input_html hook
 	 *
 	 * @since 3.01.03
+	 *
+	 * @param array  $args
+	 * @param string $input_html
+	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
 		// override from other fields
@@ -1148,6 +1175,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.01.03
+	 *
+	 * @param array  $args
+	 * @param string $input_html
 	 *
 	 * @return void
 	 */
@@ -1247,6 +1277,12 @@ DEFAULT_HTML;
 		return $hidden;
 	}
 
+	/**
+	 * @param string $selected
+	 * @param array  $args
+	 *
+	 * @return string
+	 */
 	protected function show_single_hidden( $selected, $args ) {
 		if ( $args['save_array'] ) {
 			$args['field_name'] .= '[]';
@@ -1260,6 +1296,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values
+	 *
+	 * @return string
 	 */
 	protected function get_select_box( $values ) {
 		$options  = $this->get_field_column( 'options' );
@@ -1284,6 +1324,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values
+	 *
+	 * @return string
 	 */
 	protected function select_tag( $values ) {
 		$field       = $values['field'] ?? $this->field;
@@ -1317,6 +1361,12 @@ DEFAULT_HTML;
 		return $select_atts;
 	}
 
+	/**
+	 * Load field scripts.
+	 *
+	 * @param array $args
+	 * @return void
+	 */
 	protected function load_field_scripts( $args ) {
 		// Override me
 	}
@@ -1418,6 +1468,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.02
+	 *
+	 * @param mixed $value Value passed by reference.
 	 */
 	public function maybe_trim_excess_values( &$value ) {
 		// Override in a child class.
@@ -1723,6 +1775,9 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value
+	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
 		$unsanitized_value = $value;

@@ -54,6 +54,13 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	/**
 	 * For WP 5.5 compatibility.
 	 *
+	 * @param string $author
+	 * @param string $email
+	 * @param string $url
+	 * @param string $content
+	 * @param string $ip
+	 * @param string $user_agent
+	 *
 	 * @return bool Return `true` if contains disallowed words.
 	 */
 	private function do_check_wp_disallowed_words( $author, $email, $url, $content, $ip, $user_agent ) {

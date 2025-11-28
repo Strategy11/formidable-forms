@@ -281,6 +281,10 @@ class FrmTransLiteDb {
 	}
 
 	/**
+	 * Run database migrations starting from a previous DB version.
+	 *
+	 * @param int $old_db_version Previous database version.
+	 *
 	 * @return void
 	 */
 	private function migrate_data( $old_db_version ) {
