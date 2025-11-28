@@ -10,6 +10,7 @@ class FrmFieldDefault extends FrmFieldType {
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;

@@ -3,6 +3,7 @@
  * Spam check using WordPress disallowed words
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 

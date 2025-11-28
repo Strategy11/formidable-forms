@@ -275,6 +275,7 @@ class FrmFormAction {
 
 	/**
 	 * @param int|string $number
+	 *
 	 * @return void
 	 */
 	public function _set( $number ) {
@@ -536,6 +537,7 @@ class FrmFormAction {
 	 *
 	 * @param array          $new_instance
 	 * @param array|stdClass $old_instance
+	 *
 	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
@@ -554,6 +556,7 @@ class FrmFormAction {
 
 	/**
 	 * @param array $settings
+	 *
 	 * @return int|WP_Error
 	 */
 	public function save_settings( $settings ) {
@@ -792,6 +795,7 @@ class FrmFormAction {
 
 	/**
 	 * @param WP_Post $action
+	 *
 	 * @return WP_Post
 	 */
 	public function prepare_action( $action ) {
@@ -948,6 +952,7 @@ class FrmFormAction {
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
+	 *
 	 * @return bool
 	 */
 	public static function action_conditions_met( $action, $entry ) {
@@ -1043,6 +1048,7 @@ class FrmFormAction {
 	 * @since 6.10
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return object[]
 	 */
 	protected function get_form_fields( $form_id ) {

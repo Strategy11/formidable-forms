@@ -3,6 +3,7 @@
  * Combo field - Field contains sub fields
  *
  * @package Formidable
+ *
  * @since 4.11
  */
 
@@ -16,6 +17,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = false;
@@ -267,6 +269,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @param array $args           Arguments.
 	 * @param array $shortcode_atts Shortcode attributes.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -414,6 +417,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
+	 *
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {

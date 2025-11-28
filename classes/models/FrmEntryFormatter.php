@@ -17,72 +17,84 @@ class FrmEntryFormatter {
 
 	/**
 	 * @var FrmEntryValues|null
+	 *
 	 * @since 2.04
 	 */
 	protected $entry_values;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	protected $is_plain_text = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	protected $include_user_info = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	protected $include_blank = false;
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 */
 	protected $format = 'text';
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.05
 	 */
 	protected $array_key = 'key';
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 */
 	protected $direction = 'ltr';
 
 	/**
 	 * @var FrmTableHTMLGenerator|null
+	 *
 	 * @since 2.04
 	 */
 	protected $table_generator;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	protected $is_clickable = false;
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $include_extras = array();
 
 	/**
 	 * @var array
+	 *
 	 * @since 3.0
 	 */
 	protected $single_cell_fields = array();
 
 	/**
 	 * @var array
+	 *
 	 * @since 3.0
 	 */
 	protected $atts = array();
@@ -367,6 +379,7 @@ class FrmEntryFormatter {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	protected function init_atts( $atts ) {

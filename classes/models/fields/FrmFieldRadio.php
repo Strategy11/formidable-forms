@@ -10,12 +10,14 @@ class FrmFieldRadio extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'radio';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -24,6 +26,7 @@ class FrmFieldRadio extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.06.01
 	 */
 	protected $has_for_label = false;

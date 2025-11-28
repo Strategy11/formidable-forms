@@ -22,6 +22,7 @@ class FrmTransLiteListsController {
 
 	/**
 	 * @param array $columns
+	 *
 	 * @return array
 	 */
 	public static function payment_columns( $columns = array() ) {
@@ -110,6 +111,7 @@ class FrmTransLiteListsController {
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
+	 *
 	 * @return void
 	 */
 	public static function route( $action ) {
@@ -139,6 +141,7 @@ class FrmTransLiteListsController {
 	 * Display a list.
 	 *
 	 * @param array $response
+	 *
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {

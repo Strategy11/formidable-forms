@@ -93,6 +93,7 @@ class FrmFormActionsController {
 	 * @since 6.23
 	 *
 	 * @param array $action_classes
+	 *
 	 * @return array
 	 */
 	private static function maybe_unset_highrise( $action_classes ) {
@@ -126,6 +127,7 @@ class FrmFormActionsController {
 	 *
 	 * @param array $action_controls
 	 * @param array $groups
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
@@ -233,6 +235,7 @@ class FrmFormActionsController {
 	 * @since 4.0
 	 *
 	 * @param array $action_controls
+	 *
 	 * @return array
 	 */
 	private static function active_actions( $action_controls ) {
@@ -249,6 +252,7 @@ class FrmFormActionsController {
 	 * For each add-on, add an li, class, and javascript function. If active, add an additional class.
 	 *
 	 * @since 4.0
+	 *
 	 * @param object $action_control
 	 * @param array  $allowed
 	 */
@@ -305,6 +309,7 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
+	 *
 	 * @return array|FrmFormAction A single form action is returned when a specific $action value is requested.
 	 */
 	public static function get_form_actions( $action = 'all' ) {
@@ -385,6 +390,7 @@ class FrmFormActionsController {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $form_actions
+	 *
 	 * @return void
 	 */
 	private static function maybe_show_limit_warning( $form_id, $form_actions ) {
@@ -521,6 +527,7 @@ class FrmFormActionsController {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function update_settings( $form_id ) {
@@ -772,6 +779,7 @@ class FrmFormActionsController {
 	 *
 	 * @param bool|null $null
 	 * @param string    $post_type
+	 *
 	 * @return bool|null
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {

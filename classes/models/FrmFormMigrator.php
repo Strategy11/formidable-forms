@@ -352,6 +352,7 @@ abstract class FrmFormMigrator {
 	 * @since 4.04.03
 	 *
 	 * @param array $fields
+	 *
 	 * @return void
 	 */
 	protected function maybe_add_end_fields( &$fields ) {
@@ -522,6 +523,7 @@ abstract class FrmFormMigrator {
 	 *
 	 * @param array      $form
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	protected function create_emails( $form, $form_id ) {

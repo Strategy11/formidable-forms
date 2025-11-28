@@ -3,6 +3,7 @@
  * Frontend template for combo field
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var array         $args           Data passed to this view. See FrmFieldCombo::load_field_output().

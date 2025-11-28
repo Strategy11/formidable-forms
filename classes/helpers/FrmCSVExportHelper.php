@@ -125,6 +125,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return false|string|null returns a string file path or false if $atts['mode'] is set to 'file'.
 	 */
 	public static function generate_csv( $atts ) {
@@ -203,6 +204,7 @@ class FrmCSVExportHelper {
 	 * @since 6.8.4
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function after_generate_csv( $atts ) {
@@ -210,6 +212,7 @@ class FrmCSVExportHelper {
 		 * @since 6.8.4
 		 *
 		 * @param array $atts {
+		 *
 		 *   @type object $form
 		 *   @type array  $entry_ids
 		 *   @type array  $form_cols
@@ -222,6 +225,7 @@ class FrmCSVExportHelper {
 	 * @since 5.0.16
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	private static function generate_csv_filename( $form ) {
@@ -464,6 +468,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param object $field
+	 *
 	 * @return bool
 	 */
 	private static function is_the_child_of_a_repeater( $field ) {
@@ -594,6 +599,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param array $metas
 	 * @param array $entries
+	 *
 	 * @return array
 	 */
 	private static function fill_missing_repeater_metas( $metas, &$entries ) {
@@ -690,6 +696,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param mixed    $field_value
 	 * @param stdClass $field
+	 *
 	 * @return string
 	 */
 	private static function get_separate_value_label( $field_value, $field ) {
@@ -712,6 +719,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param array $row
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
@@ -848,7 +856,9 @@ class FrmCSVExportHelper {
 	 * Escape a " in a csv with another "
 	 *
 	 * @since 2.0
+	 *
 	 * @param mixed $value
+	 *
 	 * @return mixed
 	 */
 	public static function escape_csv( $value ) {

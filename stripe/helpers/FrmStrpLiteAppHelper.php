@@ -34,6 +34,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * @param string $function
 	 * @param array  ...$params
+	 *
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {

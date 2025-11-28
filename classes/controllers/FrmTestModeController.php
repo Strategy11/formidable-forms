@@ -14,6 +14,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_test_mode_container( $html ) {
@@ -188,6 +189,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param array $form_actions
+	 *
 	 * @return array
 	 */
 	private static function get_enabled_form_action_ids( $form_actions ) {
