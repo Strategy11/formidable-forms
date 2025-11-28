@@ -120,6 +120,8 @@ abstract class FrmFieldType {
 
 	/**
 	 * @param string $type
+	 *
+	 * @return void
 	 */
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
@@ -132,6 +134,8 @@ abstract class FrmFieldType {
 
 	/**
 	 * @since 4.02
+	 *
+	 * @return void
 	 */
 	protected function set_field_id() {
 		if ( empty( $this->field ) ) {
@@ -166,6 +170,8 @@ abstract class FrmFieldType {
 	/**
 	 * @param string $column
 	 * @param mixed  $value
+	 *
+	 * @return void
 	 */
 	public function set_field_column( $column, $value ) {
 		if ( is_object( $this->field ) ) {
@@ -184,6 +190,8 @@ abstract class FrmFieldType {
 
 	/**
 	 * Field HTML
+	 *
+	 * @return string
 	 */
 	public function default_html() {
 		if ( ! $this->has_html ) {
@@ -208,6 +216,9 @@ DEFAULT_HTML;
 		return $default_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function input_html() {
 		return '[input]';
 	}
@@ -226,10 +237,16 @@ DEFAULT_HTML;
 		return '<div class="frm_opt_container" aria-labelledby="field_[key]_label" role="group">[input]</div>';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function primary_label_element() {
 		return $this->has_for_label ? 'label' : 'div';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function for_label_html() {
 		if ( $this->has_for_label ) {
 			$for = 'for="field_[key]"';
@@ -244,6 +261,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @param string $name
+	 *
+	 * @return void
 	 */
 	public function show_on_form_builder( $name = '' ) {
 		$field        = FrmFieldsHelper::setup_edit_vars( $this->field );
@@ -285,6 +304,8 @@ DEFAULT_HTML;
 	 *
 	 * @param string $name
 	 * @param array  $field
+	 *
+	 * @return void
 	 */
 	protected function include_on_form_builder( $name, $field ) {
 		$field_name = $this->html_name( $name );
@@ -339,16 +360,29 @@ DEFAULT_HTML;
 		return '<input ' . FrmAppHelper::array_to_html_params( $input_atts ) . ' />';
 	}
 
+	/**
+	 * @param string $name
+	 *
+	 * @return string
+	 */
 	protected function html_name( $name = '' ) {
 		$prefix = empty( $name ) ? 'item_meta' : $name;
 
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
+	/**
+	 * @param string $plus
+	 *
+	 * @return string
+	 */
 	protected function html_id( $plus = '' ) {
 		return apply_filters( 'frm_field_get_html_id', 'field_' . $this->get_field_column( 'field_key' ) . $plus, $this->field );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function display_field_settings() {
 		$default_settings    = $this->default_field_settings();
 		$field_type_settings = $this->field_settings_for_type();
@@ -387,6 +421,9 @@ DEFAULT_HTML;
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
 		$settings = array();
 		if ( ! $this->has_input ) {
@@ -396,6 +433,9 @@ DEFAULT_HTML;
 		return $settings;
 	}
 
+	/**
+	 * @return array
+	 */
 	private function no_input_settings() {
 		return array(
 			'required'       => false,
@@ -410,6 +450,8 @@ DEFAULT_HTML;
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
+	 *
+	 * @return array
 	 */
 	public function translatable_strings() {
 		return array(
@@ -424,12 +466,22 @@ DEFAULT_HTML;
 		);
 	}
 
+	/**
+	 * @param string $display_type
+	 *
+	 * @return string
+	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
 
 		return $this->alter_builder_classes( $classes );
 	}
 
+	/**
+	 * @param string $classes
+	 *
+	 * @return string
+	 */
 	protected function alter_builder_classes( $classes ) {
 		return $classes;
 	}
@@ -440,6 +492,8 @@ DEFAULT_HTML;
 	 * @param array $field   Field settings array.
 	 * @param array $display Display settings.
 	 * @param array $values  Form values.
+	 *
+	 * @return void
 	 */
 	public function show_options( $field, $display, $values ) {
 		do_action( 'frm_' . $field['type'] . '_field_options_form', $field, $display, $values );
@@ -461,6 +515,8 @@ DEFAULT_HTML;
 	 * @since 4.02.01
 	 *
 	 * @param array $args - Includes field, display, and values.
+	 *
+	 * @return void
 	 */
 	public function show_field_choices( $args ) {
 		if ( ! $this->has_field_choices( $args['field'] ) ) {
@@ -480,6 +536,8 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
+	 * @return void
 	 */
 	public function show_field_options( $args ) {
 		if ( ! $this->should_continue_to_field_options( $args ) ) {
@@ -592,6 +650,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @return string
 	 */
 	protected function get_bulk_edit_string() {
 		return __( 'Bulk Edit Options', 'formidable' );
@@ -601,6 +661,8 @@ DEFAULT_HTML;
 	 * @since 4.04
 	 *
 	 * @param array $args Includes field configuration.
+	 *
+	 * @return void
 	 */
 	protected function show_single_option( $args ) {
 		FrmFieldsHelper::show_single_option( $args['field'] );
@@ -608,6 +670,8 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.04
+	 *
+	 * @return string
 	 */
 	protected function extra_field_choices_class() {
 		return '';
@@ -731,6 +795,8 @@ DEFAULT_HTML;
 	 * @since 4.0
 	 *
 	 * @param mixed $default_value Default value passed by reference.
+	 *
+	 * @return void
 	 */
 	public function default_value_to_string( &$default_value ) {
 		if ( ! is_array( $default_value ) ) {
@@ -747,7 +813,10 @@ DEFAULT_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args Includes 'field', 'display', and 'values'.
+	 *
+	 * @return void
 	 */
 	protected function auto_width_setting( $args ) {
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
@@ -759,6 +828,8 @@ DEFAULT_HTML;
 
 	/**
 	 * New field
+	 *
+	 * @return array
 	 */
 	public function get_new_field_defaults() {
 		$field        = array(
@@ -981,6 +1052,9 @@ DEFAULT_HTML;
 		return $html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_container_class() {
 		$is_radio    = FrmField::is_radio( $this->field );
 		$is_checkbox = FrmField::is_checkbox( $this->field );
@@ -1091,6 +1165,12 @@ DEFAULT_HTML;
 		return '';
 	}
 
+	/**
+	 * @param array $args
+	 * @param array $shortcode_atts
+	 *
+	 * @return string|void
+	 */
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
 
@@ -1134,6 +1214,9 @@ DEFAULT_HTML;
 		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function html5_input_type() {
 		return $this->type;
 	}
@@ -1200,6 +1283,11 @@ DEFAULT_HTML;
 		$input_html .= ' min="' . esc_attr( $min ) . '" max="' . esc_attr( $max ) . '" step="' . esc_attr( $step ) . '"';
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function maybe_include_hidden_values( $args ) {
 		$hidden       = '';
 		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
@@ -1248,6 +1336,8 @@ DEFAULT_HTML;
 	/**
 	 * When the field is read only, does it need it include hidden fields?
 	 * Checkboxes and dropdowns need this
+	 *
+	 * @return bool
 	 */
 	protected function show_readonly_hidden() {
 		return false;
@@ -1256,11 +1346,18 @@ DEFAULT_HTML;
 	/**
 	 * When the field has a single value, should the name include
 	 * name[] to indicate an array?
+	 *
+	 * @return bool
 	 */
 	protected function is_readonly_array() {
 		return false;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	protected function show_hidden_values( $args ) {
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
@@ -1371,6 +1468,11 @@ DEFAULT_HTML;
 		// Override me
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return array
+	 */
 	protected function fill_display_field_values( $args = array() ) {
 		$defaults        = array(
 			'field_name'    => 'item_meta[' . $this->get_field_column( 'id' ) . ']',
@@ -1388,6 +1490,11 @@ DEFAULT_HTML;
 		return $args;
 	}
 
+	/**
+	 * @param array $field
+	 *
+	 * @return string
+	 */
 	protected function get_field_input_html_hook( $field ) {
 		$field['input_class'] = $this->add_input_class();
 
@@ -1470,6 +1577,8 @@ DEFAULT_HTML;
 	 * @since 4.02
 	 *
 	 * @param mixed $value Value passed by reference.
+	 *
+	 * @return void
 	 */
 	public function maybe_trim_excess_values( &$value ) {
 		// Override in a child class.
@@ -1534,6 +1643,8 @@ DEFAULT_HTML;
 	 * Track that a value has been flagged as unique so that no other iterations can be for the same value for this field
 	 *
 	 * @param mixed $value
+	 *
+	 * @return void
 	 */
 	private function value_validated_as_unique( $value ) {
 		global $frm_validated_unique_values;
@@ -1764,6 +1875,8 @@ DEFAULT_HTML;
 	/**
 	 * @param array|string $value
 	 * @param array        $defaults
+	 *
+	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
 		if ( empty( $value ) ) {
@@ -1893,6 +2006,8 @@ DEFAULT_HTML;
 	/**
 	 * @since 4.04
 	 * @deprecated 6.24
+	 *
+	 * @return string
 	 */
 	protected function get_add_option_string() {
 		_deprecated_function( __METHOD__, '6.24' );

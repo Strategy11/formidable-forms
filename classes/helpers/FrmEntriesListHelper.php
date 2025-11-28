@@ -5,9 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesListHelper extends FrmListHelper {
 
+	/**
+	 * @var string|null
+	 */
 	protected $column_name;
-	protected $item;
-	protected $field;
 
 	/**
 	 * @since 4.07
@@ -38,6 +39,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$this->prepare_pagination();
 	}
 
+	/**
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
 	protected function set_total_items( $s_query ) {
 		$this->total_items = FrmEntry::getRecordCount( $s_query );
 	}
@@ -46,6 +52,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Prepares pagination.
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -62,6 +70,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Sets the global $per_page variable
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -390,6 +400,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
+	 * @return mixed
 	 */
 	private function column_value( $item ) {
 		$col_name = $this->maybe_fix_column_name( $this->column_name );

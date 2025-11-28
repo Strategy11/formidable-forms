@@ -275,6 +275,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $settings->get_element_class_name();
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 *
+	 * @return bool
+	 */
 	protected function allow_multiple( $frm_settings ) {
 		return $frm_settings->re_multi;
 	}
@@ -396,6 +401,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
+	 * @return array|WP_Error
 	 */
 	protected function send_api_check( $frm_settings ) {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();

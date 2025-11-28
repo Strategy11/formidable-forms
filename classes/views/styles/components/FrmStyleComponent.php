@@ -102,6 +102,13 @@ class FrmStyleComponent {
 		return self::$instance;
 	}
 
+	/**
+	 * @param array  $data
+	 * @param string $field_name
+	 * @param mixed  $field_value
+	 *
+	 * @return void
+	 */
 	protected function init( $data, $field_name, $field_value ) {
 		$this->init_field_data( $data, $field_name, $field_value );
 		self::get_instance();
@@ -212,6 +219,9 @@ class FrmStyleComponent {
 		include $this->view_folder . $this->view_name . '.php';
 	}
 
+	/**
+	 * @return bool
+	 */
 	protected function hide_component() {
 		if ( empty( $this->data['not_show_in'] ) ) {
 			return false;

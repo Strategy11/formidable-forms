@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmStylesHelper {
 
+	/**
+	 * @return array
+	 */
 	public static function get_upload_base() {
 		$uploads = wp_upload_dir();
 		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
@@ -18,6 +21,8 @@ class FrmStylesHelper {
 	 * Called from the admin header.
 	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function save_button() {
 		?>
@@ -27,6 +32,8 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.05
+	 *
+	 * @return array
 	 */
 	public static function get_css_label_positions() {
 		return array(
@@ -67,6 +74,9 @@ class FrmStylesHelper {
 		return apply_filters( 'frm_single_label_positions', $label_positions, $field );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function minus_icons() {
 		return array(
 			0 => array(
@@ -92,6 +102,9 @@ class FrmStylesHelper {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function arrow_icons() {
 		$minus_icons = self::minus_icons();
 
@@ -261,6 +274,8 @@ class FrmStylesHelper {
 	 *
 	 * @param string           $hex Hex color string.
 	 * @param float|int|string $a   Alpha channel value.
+	 *
+	 * @return string
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
@@ -349,6 +364,8 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
+	 *
+	 * @return string
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );

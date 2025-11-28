@@ -60,6 +60,9 @@ class FrmStrpLiteSettings {
 		}
 	}
 
+	/**
+	 * @return object
+	 */
 	public function get_options() {
 		$settings = get_option( 'frm_' . $this->param() . '_options' );
 

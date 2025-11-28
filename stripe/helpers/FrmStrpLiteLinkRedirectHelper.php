@@ -112,6 +112,8 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Determine if a redirect URL is going to an external site or not.
 	 *
 	 * @param string $url
+	 *
+	 * @return bool
 	 */
 	private function url_is_external( $url ) {
 		if ( false === strpos( $url, 'http' ) ) {

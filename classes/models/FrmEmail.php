@@ -816,6 +816,8 @@ class FrmEmail {
 	 *
 	 * @param string $name
 	 * @param string $email
+	 *
+	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
 		if ( '' !== $name ) {

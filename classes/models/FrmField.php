@@ -5,9 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmField {
 
+	/**
+	 * @var bool
+	 */
 	public static $use_cache      = true;
+
+	/**
+	 * @var int
+	 */
 	public static $transient_size = 200;
 
+	/**
+	 * @return array
+	 */
 	public static function field_selection() {
 		$fields = array(
 			'text'                         => array(
@@ -96,6 +106,9 @@ class FrmField {
 		return 'Captcha';
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function pro_field_selection() {
 		$images_url = FrmAppHelper::plugin_url() . '/images/';
 		$fields     = array(
@@ -484,6 +497,14 @@ class FrmField {
 		return compact( 'field_id', 'values' );
 	}
 
+	/**
+	 * @param int|string $old_form_id
+	 * @param int|string $form_id
+	 * @param bool       $copy_keys
+	 * @param false|int  $blog_id
+	 *
+	 * @return void
+	 */
 	public static function duplicate( $old_form_id, $form_id, $copy_keys = false, $blog_id = false ) {
 		global $frm_duplicate_ids;
 
@@ -624,6 +645,8 @@ class FrmField {
 	 * @since 2.0.8
 	 *
 	 * @param array $values Pass by reference.
+	 *
+	 * @return void
 	 */
 	private static function preserve_format_option_backslashes( &$values ) {
 		if ( isset( $values['field_options']['format'] ) ) {
@@ -631,6 +654,11 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return bool|int
+	 */
 	public static function destroy( $id ) {
 		global $wpdb;
 
@@ -686,6 +714,8 @@ class FrmField {
 	/**
 	 * @param int|string $id The field id or key.
 	 * @param bool       $filter When true, run the frm_field filter.
+	 *
+	 * @return object|null
 	 */
 	public static function getOne( $id, $filter = false ) {
 		if ( empty( $id ) ) {
@@ -718,8 +748,11 @@ class FrmField {
 
 	/**
 	 * @since 3.06.01
+	 *
 	 * @param bool   $filter When true, run the frm_field filter.
 	 * @param object $results
+	 *
+	 * @return void
 	 */
 	private static function filter_field( $filter, &$results ) {
 		if ( $filter ) {
@@ -735,6 +768,8 @@ class FrmField {
 	 *
 	 * @param int|string $id  The field id or key.
 	 * @param mixed      $col The name of the column in the fields database table.
+	 *
+	 * @return mixed
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
@@ -757,6 +792,8 @@ class FrmField {
 	 * @param string     $type
 	 * @param int|string $limit
 	 * @param string     $inc_sub
+	 *
+	 * @return array|object
 	 */
 	public static function get_all_types_in_form( $form_id, $type, $limit = '', $inc_sub = 'exclude' ) {
 		if ( ! $form_id ) {
@@ -862,6 +899,8 @@ class FrmField {
 	 *
 	 * @param string $inc_repeat
 	 * @param array  $where      Pass by reference.
+	 *
+	 * @return void
 	 */
 	private static function maybe_include_repeating_fields( $inc_repeat, &$where ) {
 		if ( $inc_repeat === 'include' ) {
@@ -875,6 +914,14 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param array      $results
+	 * @param string     $inc_embed
+	 * @param string     $type
+	 * @param int|string $form_id
+	 *
+	 * @return void
+	 */
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
 		if ( 'include' != $inc_embed || $no_sub_forms ) {
@@ -908,6 +955,14 @@ class FrmField {
 		}
 	}
 
+	/**
+	 * @param array|string $where
+	 * @param string       $order_by
+	 * @param string       $limit
+	 * @param false|int    $blog_id
+	 *
+	 * @return array|object|null
+	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
 		if ( self::$use_cache ) {
@@ -921,12 +976,7 @@ class FrmField {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			global $wpmuBaseTablePrefix;
-			if ( $wpmuBaseTablePrefix ) {
-				$prefix = $wpmuBaseTablePrefix . $blog_id . '_';
-			} else {
-				$prefix = $wpdb->get_blog_prefix( $blog_id );
-			}
+			$prefix = $wpdb->get_blog_prefix( $blog_id );
 
 			$table_name      = $prefix . 'frm_fields';
 			$form_table_name = $prefix . 'frm_forms';
@@ -969,7 +1019,7 @@ class FrmField {
 	/**
 	 * @since 2.0.8
 	 *
-	 * @param array|object $results Results.
+	 * @param array|object|null $results Results.
 	 * @return void
 	 */
 	private static function format_field_results( &$results ) {
@@ -1381,6 +1431,11 @@ class FrmField {
 		return FrmDb::get_var( 'frm_fields', array( 'id' => $id ), 'field_key' );
 	}
 
+	/**
+	 * @param array|object $field
+	 *
+	 * @return bool
+	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
 

@@ -330,6 +330,8 @@ class FrmEmailStylesController {
 
 	/**
 	 * Shows placeholder Pro settings.
+	 *
+	 * @return void
 	 */
 	public static function show_upsell_settings() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';

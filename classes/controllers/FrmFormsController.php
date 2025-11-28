@@ -1234,6 +1234,13 @@ class FrmFormsController {
 		return $hidden_columns;
 	}
 
+	/**
+	 * @param mixed  $save
+	 * @param string $option
+	 * @param int    $value
+	 *
+	 * @return mixed
+	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_per_page' ) {
 			$save = (int) $value;
@@ -1912,6 +1919,13 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @param string       $content
+	 * @param false|object $entry
+	 * @param array        $shortcodes
+	 *
+	 * @return string
+	 */
 	public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
 		return FrmFieldsHelper::replace_content_shortcodes( $content, $entry, $shortcodes );
 	}
@@ -2122,6 +2136,11 @@ class FrmFormsController {
 		wp_send_json_success( compact( 'form_key' ) );
 	}
 
+	/**
+	 * @param array $errors
+	 *
+	 * @return array
+	 */
 	public static function json_error( $errors ) {
 		$errors['json'] = __( 'Abnormal HTML characters prevented your form from saving correctly', 'formidable' );
 
@@ -2366,10 +2385,23 @@ class FrmFormsController {
 		return $form;
 	}
 
+	/**
+	 * @param object $form
+	 *
+	 * @return bool
+	 */
 	private static function is_viewable_draft_form( $form ) {
 		return $form->status === 'draft' && current_user_can( 'frm_edit_forms' ) && ! FrmAppHelper::is_preview_page();
 	}
 
+	/**
+	 * @param object $form
+	 * @param bool   $title
+	 * @param bool   $description
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
 	public static function get_form( $form, $title, $description, $atts = array() ) {
 		ob_start();
 
@@ -2386,10 +2418,23 @@ class FrmFormsController {
 		return $contents;
 	}
 
+	/**
+	 * @param array $params
+	 *
+	 * @return void
+	 */
 	public static function enqueue_scripts( $params ) {
 		do_action( 'frm_enqueue_form_scripts', $params );
 	}
 
+	/**
+	 * @param object $form
+	 * @param bool   $title
+	 * @param bool   $description
+	 * @param array  $atts
+	 *
+	 * @return void
+	 */
 	public static function get_form_contents( $form, $title, $description, $atts ) {
 		$params    = FrmForm::get_params( $form );
 		$errors    = self::get_saved_errors( $form, $params );
@@ -2510,6 +2555,13 @@ class FrmFormsController {
 		return $method;
 	}
 
+	/**
+	 * @param object $form
+	 * @param array  $params
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function maybe_trigger_redirect( $form, $params, $args ) {
 		if ( ! isset( $params['id'] ) ) {
 			global $frm_vars;
@@ -2551,6 +2603,13 @@ class FrmFormsController {
 		}
 	}
 
+	/**
+	 * @param object $form
+	 * @param array  $params
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function trigger_redirect( $form, $params, $args ) {
 		$success_args = array(
 			'action'      => $params['action'],
@@ -3270,6 +3329,13 @@ class FrmFormsController {
 		return is_readable( FrmAppHelper::plugin_path() . '/js/frm.min.js' );
 	}
 
+	/**
+	 * @param object     $form
+	 * @param int|string $this_load
+	 * @param bool       $global_load
+	 *
+	 * @return void
+	 */
 	public static function maybe_load_css( $form, $this_load, $global_load ) {
 		$load_css = FrmForm::is_form_loaded( $form, $this_load, $global_load );
 

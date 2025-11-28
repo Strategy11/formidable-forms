@@ -5,25 +5,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 #[\AllowDynamicProperties]
 class FrmSettings {
+
+	/**
+	 * @var string
+	 */
 	public $option_name = 'frm_options';
+
+	/**
+	 * @var int
+	 */
 	public $menu;
+
+	/**
+	 * @var int
+	 */
 	public $mu_menu;
+
+	/**
+	 * @var int
+	 */
 	public $fade_form;
+
+	/**
+	 * @var bool
+	 */
 	public $admin_bar;
 
+	/**
+	 * @var string
+	 */
 	public $success_msg;
+
+	/**
+	 * @var string
+	 */
 	public $blank_msg;
+
+	/**
+	 * @var string
+	 */
 	public $unique_msg;
+
+	/**
+	 * @var string
+	 */
 	public $invalid_msg;
+
+	/**
+	 * @var string
+	 */
 	public $failed_msg;
+
+	/**
+	 * @var string
+	 */
 	public $submit_value;
+
+	/**
+	 * @var string
+	 */
 	public $login_msg;
+
+	/**
+	 * @var string
+	 */
 	public $admin_permission;
 
+	/**
+	 * @var string
+	 */
 	public $email_to;
+
+	/**
+	 * @var string|null
+	 */
 	public $load_style;
+
+	/**
+	 * @var bool|int|null
+	 */
 	public $custom_style;
 
+	/**
+	 * @var string|null
+	 */
 	public $active_captcha;
 
 	/**
@@ -39,10 +104,30 @@ class FrmSettings {
 	 * @var string|null
 	 */
 	public $privkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_lang;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_type;
+
+	/**
+	 * @var string
+	 */
 	public $re_msg;
+
+	/**
+	 * @var bool
+	 */
 	public $re_multi;
+
+	/**
+	 * @var float|string|null
+	 */
 	public $re_threshold;
 
 	/**
@@ -73,15 +158,49 @@ class FrmSettings {
 	 */
 	public $turnstile_privkey;
 
+	/**
+	 * @var bool
+	 */
 	public $no_ips;
+
+	/**
+	 * @var string
+	 */
 	public $custom_header_ip;
+
+	/**
+	 * @var int
+	 */
 	public $current_form = 0;
+
+	/**
+	 * @var bool
+	 */
 	public $tracking;
+
+	/**
+	 * @var bool
+	 */
 	public $summary_emails;
+
+	/**
+	 * @var string
+	 */
 	public $summary_emails_recipients;
 
+	/**
+	 * @var string|null
+	 */
 	public $default_email;
+
+	/**
+	 * @var string
+	 */
 	public $from_email;
+
+	/**
+	 * @var string|null
+	 */
 	public $currency;
 
 	/**
@@ -91,10 +210,19 @@ class FrmSettings {
 	 */
 	public $custom_css;
 
+	/**
+	 * @var string
+	 */
 	public $honeypot;
 
+	/**
+	 * @var bool
+	 */
 	public $wp_spam_check;
 
+	/**
+	 * @var bool
+	 */
 	public $denylist_check;
 
 	/**
@@ -104,10 +232,19 @@ class FrmSettings {
 	 */
 	public $installed_after_welcome_tour_update;
 
+	/**
+	 * @var string
+	 */
 	public $disallowed_words;
 
+	/**
+	 * @var string
+	 */
 	public $allowed_words;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -129,6 +266,11 @@ class FrmSettings {
 		$this->maybe_filter_for_form( $args );
 	}
 
+	/**
+	 * @param false|object $settings
+	 *
+	 * @return object
+	 */
 	private function translate_settings( $settings ) {
 		if ( $settings ) {
 			// Workaround for W3 total cache conflict.
@@ -373,6 +515,8 @@ class FrmSettings {
 	/**
 	 * @param array $params
 	 * @param array $errors
+	 *
+	 * @return array
 	 */
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );

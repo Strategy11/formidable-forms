@@ -485,6 +485,9 @@ class FrmSalesApi extends FrmFormApi {
 		return is_array( $dismissed_sales ) && in_array( $key, $dismissed_sales, true );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		if ( false === self::$sales ) {
 			new self();

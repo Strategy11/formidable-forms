@@ -74,6 +74,12 @@ class FrmFormState {
 		return self::$instance->get( $key, $default );
 	}
 
+	/**
+	 * @param string $key
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
 	public function get( $key, $default ) {
 		return $this->state[ $key ] ?? $default;
 	}

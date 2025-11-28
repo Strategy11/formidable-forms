@@ -485,6 +485,11 @@ class FrmStrpLiteConnectHelper {
 		return ! is_wp_error( $response ) && is_array( $response ) && isset( $response['http_response'] );
 	}
 
+	/**
+	 * @param array $response
+	 *
+	 * @return object|null
+	 */
 	private static function pull_response_body( $response ) {
 		$http_response   = $response['http_response'];
 		$response_object = $http_response->get_response_object();

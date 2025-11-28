@@ -13,8 +13,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSolution {
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_slug = '';
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_file = '';
 
 	/**
@@ -25,8 +31,14 @@ class FrmSolution {
 	 */
 	protected $page = '';
 
+	/**
+	 * @var string
+	 */
 	protected $icon = 'frm_icon_font frm_settings_icon';
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts = array() ) {
 		if ( empty( $this->plugin_slug ) ) {
 			return;
@@ -69,6 +81,11 @@ class FrmSolution {
 		add_action( 'admin_head', array( $this, 'hide_menu' ) );
 	}
 
+	/**
+	 * @param array $links
+	 *
+	 * @return array
+	 */
 	public function plugin_links( $links ) {
 		if ( ! $this->is_complete() ) {
 			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
@@ -309,6 +326,9 @@ class FrmSolution {
 		$this->show_page_links( $steps['complete'] );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_steps_data() {
 		$pro_installed = FrmAppHelper::pro_is_connected();
 
