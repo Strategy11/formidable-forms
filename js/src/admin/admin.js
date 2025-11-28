@@ -11092,13 +11092,18 @@ window.frmAdminBuildJS = function() {
 					nonce: frmGlobal.nonce
 				},
 				success: function( html ) {
-					document.getElementById( 'frm_field_' + fieldId + '_opts' ).innerHTML = html;
+					const optionsListEl = document.getElementById( 'frm_field_' + fieldId + '_opts' );
+					const hasOtherOption = optionsListEl.querySelector( '.frm_single_option.frm_other_option' );
+					optionsListEl.innerHTML = html;
 					wp.hooks.doAction( 'frm_after_bulk_edit_opts', fieldId );
 					resetDisplayedOpts( fieldId );
 
 					if ( typeof modal !== 'undefined' ) {
 						modal.dialog( 'close' );
 						document.getElementById( 'frm-update-bulk-opts' ).classList.remove( 'frm_loading_button' );
+						if ( hasOtherOption ) {
+							document.getElementById( `other_button_${ fieldId }` )?.style.removeProperty( 'display' );
+						}
 					}
 				}
 			} );
