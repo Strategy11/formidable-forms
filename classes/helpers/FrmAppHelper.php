@@ -3451,7 +3451,7 @@ class FrmAppHelper {
 	 * @param string $l1
 	 * @param mixed  $val
 	 * @param array  $vars
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function add_value_to_array( $name, $l1, $val, &$vars ) {
@@ -4534,6 +4534,7 @@ class FrmAppHelper {
 			'upgrade'    => __( 'Form Landing Pages', 'formidable' ),
 			'message'    => __( 'Easily manage a landing page for your form. Upgrade to get form landing pages.', 'formidable' ),
 			'screenshot' => 'landing.png',
+			'learn-more' => self::get_doc_url( 'landing-page-forms', 'form-landing-page-settings', false ),
 		);
 		return self::get_upgrade_data_params( 'landing', $params );
 	}
@@ -4949,6 +4950,26 @@ class FrmAppHelper {
 			return seems_utf8( $string );
 		}
 		return false;
+	}
+
+	/**
+	 * Get a documentation URL with UTM parameters and affiliate tracking.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $path           The relative path to append to the base URL.
+	 * @param string $campaign       The campaign to use for UTM parameters.
+	 * @param bool   $add_kb_base    Whether to prepend 'knowledgebase/' to the path. Default true.
+	 *
+	 * @return string The processed URL with UTM parameters and affiliate tracking.
+	 */
+	public static function get_doc_url( $path, $campaign, $add_kb_base = true ) {
+		$path = trim( $path, '/' );
+		if ( $add_kb_base ) {
+			$path = 'knowledgebase/' . $path;
+		}
+
+		return self::maybe_add_missing_utm( 'https://formidableforms.com/' . $path, array( 'campaign' => $campaign ) );
 	}
 
 	/**

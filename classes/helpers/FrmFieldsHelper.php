@@ -2412,7 +2412,21 @@ class FrmFieldsHelper {
 			$li_params['data-upsell-image'] = $field_type['upsell_image'];
 		}
 
-		if ( $upgrade_message ) {
+		if ( ! empty( $field_type['learn-more'] ) ) {
+			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url(
+				$field_type['learn-more'],
+				'form-builder-add-fields',
+				false !== strpos( $field_type['learn-more'], '/' )
+			);
+		}
+
+		if ( isset( $upgrading['url'] ) ) {
+			$li_params['data-message'] = sprintf(
+				// translators: %s: Field name
+				esc_html__( 'You already have access to %s fields, you\'ll just need to activate to start using them.', 'formidable' ),
+				$field_name
+			);
+		} elseif ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
 		?>
