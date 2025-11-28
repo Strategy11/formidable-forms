@@ -1,4 +1,4 @@
-import { __, sprintf } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 
 const { div, svg } = frmDom;
 
@@ -227,10 +227,10 @@ function showUpgradeModalSuccess() {
 	const upgradeMessage = upgradeModal.querySelector( '.frm-upgrade-message' );
 	if ( upgradeMessage ) {
 		const image = upgradeMessage.querySelector( 'img' );
-		upgradeMessage.innerHTML = sprintf(
-			// translators: %s: Line break
-			__( 'Great! Everything\'s ready to go!%sWe just need to refresh the builder so the new field becomes available.', 'formidable' ),
-			'<br>'
+		upgradeMessage.replaceChildren(
+			__( 'Great! Everything\'s ready to go!', 'formidable' ),
+			document.createElement( 'br' ),
+			__( 'You just need to refresh the builder so the new field becomes available.', 'formidable' )
 		);
 		if ( image ) {
 			upgradeMessage.append( image );
