@@ -291,17 +291,6 @@ namespace {
 		public static function &is_field_visible_to_user( $field ) {
 		}
 	}
-	class FrmProFieldsController {
-		/**
-		 * @param bool $should_hide_field_choice
-		 * @param bool $choice_limit_is_reached
-		 * @param int  $form_id
-		 *
-		 * @return bool
-		 */
-		public static function should_hide_field_choice( $should_hide_field_choice, $choice_limit_is_reached, $form_id ) {
-		}
-	}
 	class FrmViewsAppHelper {
 		/**
 		 * @return string
