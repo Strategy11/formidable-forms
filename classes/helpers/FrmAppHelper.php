@@ -4960,6 +4960,7 @@ class FrmAppHelper {
 	 * @param string $path           The relative path to append to the base URL.
 	 * @param string $campaign       The campaign to use for UTM parameters.
 	 * @param bool   $add_kb_base    Whether to prepend 'knowledgebase/' to the path. Default true.
+	 *
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
 	public static function get_doc_url( $path, $campaign, $add_kb_base = true ) {
