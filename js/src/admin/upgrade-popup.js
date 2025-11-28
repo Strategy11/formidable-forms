@@ -66,12 +66,15 @@ export function addOneClick( link, context, upgradeLabel ) {
 		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
 		button.textContent = __( 'Activate', 'formidable' );
 
-		modalIconWrapper?.querySelector( 'svg' ).replaceWith(
-			svg( {
-				href: link.querySelector( 'use' )?.getAttribute( 'href' ) || link.querySelector( 'use' )?.getAttribute( 'xlink:href' ), // Get the icon from xlink:href if it has not been updated to use href
-				classList: [ 'frm_svg32' ]
-			} )
-		);
+		const linkIcon = link.querySelector( 'use' );
+		if ( linkIcon ) {
+			modalIconWrapper?.querySelector( 'svg' ).replaceWith(
+				svg( {
+					href: linkIcon.getAttribute( 'href' ) || linkIcon.getAttribute( 'xlink:href' ), // Get the icon from xlink:href if it has not been updated to use href
+					classList: [ 'frm_svg32' ]
+				} )
+			);
+		}
 	}
 
 	if ( ! newMessage ) {
