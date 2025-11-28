@@ -281,6 +281,7 @@ class FrmHooksController {
 		add_action( 'wp_ajax_frm_lite_settings_upgrade', 'FrmSettingsController::settings_cta_dismiss' );
 		add_action( 'wp_ajax_frm_settings_tab', 'FrmSettingsController::load_settings_tab' );
 		add_action( 'wp_ajax_frm_page_search', 'FrmSettingsController::page_search' );
+		add_action( 'wp_ajax_frm_dismiss_default_email_message', 'FrmFormsController::dismiss_default_email_message' );
 
 		// Styles Controller.
 		add_action( 'wp_ajax_frm_settings_reset', 'FrmStylesController::reset_styling' );

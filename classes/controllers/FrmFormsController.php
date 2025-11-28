@@ -2737,6 +2737,23 @@ class FrmFormsController {
 	}
 
 	/**
+	 * Handles the AJAX request to dismiss the default email message.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function dismiss_default_email_message() {
+		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'nonce', 'frm_ajax' );
+
+		if ( $permission_error !== false ) {
+			wp_send_json_error( $permission_error, 403 );
+		}
+		update_user_meta( get_current_user_id(), 'frm_dismiss_default_email_message', 1 );
+		wp_send_json_success();
+	}
+
+	/**
 	 * Checks if a Confirmation action has the valid data.
 	 *
 	 * @since 6.1.2
