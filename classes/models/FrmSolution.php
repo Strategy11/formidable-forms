@@ -4,6 +4,7 @@
  * This page is shown when a Formidable plugin is activated.
  *
  * @since 4.06.02
+ *
  * @package Formidable
  */
 
@@ -27,6 +28,7 @@ class FrmSolution {
 	 * Hidden welcome page slug.
 	 *
 	 * @since 4.06.02
+	 *
 	 * @var string
 	 */
 	protected $page = '';
@@ -199,6 +201,7 @@ class FrmSolution {
 	 * Add page to global settings.
 	 *
 	 * @param array $sections Sections.
+	 *
 	 * @return array
 	 */
 	public function add_settings( $sections ) {

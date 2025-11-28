@@ -198,6 +198,7 @@ class FrmWelcomeTourController {
 	 *
 	 * @param array $steps The steps to fill.
 	 * @param array $steps_keys The steps keys.
+	 *
 	 * @return array The steps with the completed data.
 	 */
 	private static function fill_step_completed_data( $steps, $steps_keys ) {
@@ -460,6 +461,7 @@ class FrmWelcomeTourController {
 	 * Adds custom classes to the existing string of admin body classes.
 	 *
 	 * @param string $classes Existing body classes.
+	 *
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
 	public static function add_admin_body_classes( $classes ) {
@@ -544,6 +546,7 @@ class FrmWelcomeTourController {
 	 * Build a tracked URL with UTM parameters and affiliate tracking.
 	 *
 	 * @param string $url The base URL to process.
+	 *
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
 	public static function make_tracked_url( $url ) {

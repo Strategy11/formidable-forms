@@ -10,6 +10,7 @@ class FrmSquareLiteAppController {
 	 * This adds the Stripe checkbox option to the list of gateways.
 	 *
 	 * @param array $gateways
+	 *
 	 * @return array
 	 */
 	public static function add_gateway( $gateways ) {
@@ -98,6 +99,7 @@ class FrmSquareLiteAppController {
 	 * Get the amount value for verification.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return string
 	 */
 	private static function get_amount_value_for_verification( $action ) {
@@ -120,6 +122,7 @@ class FrmSquareLiteAppController {
 
 	/**
 	 * @param WP_Post $action
+	 *
 	 * @return array
 	 */
 	public static function get_billing_contact( $action ) {
@@ -166,6 +169,7 @@ class FrmSquareLiteAppController {
 	 * @param array $details
 	 * @param array $address
 	 * @param int   $address_field_id
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_address_data( &$details, $address, $address_field_id ) {
@@ -199,6 +203,7 @@ class FrmSquareLiteAppController {
 	 * Create an entry object with posted values.
 	 *
 	 * @since 6.22
+	 *
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {

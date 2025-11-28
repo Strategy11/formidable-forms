@@ -206,6 +206,7 @@ class FrmSettingsController {
 	 * @since 6.22.1
 	 *
 	 * @param array $sections
+	 *
 	 * @return void
 	 */
 	private static function remove_payments_sections( &$sections ) {
@@ -228,6 +229,7 @@ class FrmSettingsController {
 	 *
 	 * @param string $a
 	 * @param string $b
+	 *
 	 * @return int
 	 */
 	private static function payment_sections_sort_callback( $a, $b ) {
@@ -280,6 +282,7 @@ class FrmSettingsController {
 	 *
 	 * @param FrmSettings $frm_settings
 	 * @param string      $more_html
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {

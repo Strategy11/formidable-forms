@@ -60,6 +60,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode
+	 *
 	 * @return void
 	 */
 	private static function render_settings_for_mode( $mode ) {
@@ -169,6 +170,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $action
 	 * @param array  $additional_body
+	 *
 	 * @return object|string
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
@@ -209,6 +211,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param array $response
+	 *
 	 * @return mixed
 	 */
 	private static function pull_response_body( $response ) {
@@ -219,6 +222,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param mixed $response
+	 *
 	 * @return bool
 	 */
 	private static function validate_response( $response ) {
@@ -269,6 +273,7 @@ class FrmSquareLiteConnectHelper {
 	 * WPML might add a language to the url. Don't send that to the server.
 	 *
 	 * @param string $url URL to strip language from.
+	 *
 	 * @return string
 	 */
 	private static function strip_lang_from_url( $url ) {
@@ -284,6 +289,7 @@ class FrmSquareLiteConnectHelper {
 	 * If it is active, use the WPML "absolute home" URL which is not modified.
 	 *
 	 * @param string $url URL to maybe fix.
+	 *
 	 * @return string
 	 */
 	private static function maybe_fix_wpml_url( $url ) {
@@ -325,6 +331,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_server_side_token_option_name( $mode = 'auto' ) {
@@ -335,6 +342,7 @@ class FrmSquareLiteConnectHelper {
 	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
 	 *
 	 * @param string $mode 'live' or 'test'.
+	 *
 	 * @return string the client password.
 	 */
 	private static function generate_client_password( $mode ) {
@@ -345,6 +353,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_client_side_token_option_name( $mode = 'auto' ) {
@@ -361,6 +370,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return bool|string
 	 */
 	public static function get_merchant_id( $mode = 'auto' ) {
@@ -372,6 +382,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_merchant_id_option_name( $mode = 'auto' ) {
@@ -380,6 +391,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_location_id_option_name( $mode = 'auto' ) {
@@ -388,6 +400,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
@@ -397,6 +410,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param string $key  'merchant_id', 'client_password', 'server_password'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_square_connect_option_name( $key, $mode = 'auto' ) {
@@ -405,6 +419,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string either _test or _live.
 	 */
 	private static function get_active_mode_option_name_suffix( $mode = 'auto' ) {
@@ -435,6 +450,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param bool $connected
+	 *
 	 * @return string
 	 */
 	private static function get_url_for_square_settings( $connected ) {
@@ -583,6 +599,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param bool   $force Whether to force refreshing the location id.
 	 * @param string $mode  Either 'auto', 'live', or 'test'.
+	 *
 	 * @return false|string
 	 */
 	public static function get_location_id( $force = false, $mode = 'auto' ) {
@@ -621,6 +638,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
@@ -642,6 +660,7 @@ class FrmSquareLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return false|object
 	 */
 	public static function process_event( $event_id ) {
@@ -708,6 +727,7 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @param bool   $force
 	 * @param string $mode
+	 *
 	 * @return false|string
 	 */
 	public static function get_merchant_currency( $force = false, $mode = 'auto' ) {

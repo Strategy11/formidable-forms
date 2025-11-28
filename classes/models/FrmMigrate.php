@@ -288,6 +288,7 @@ class FrmMigrate {
 	 *
 	 * @param string $table_name
 	 * @param string $index_name
+	 *
 	 * @return bool
 	 */
 	private static function index_exists( $table_name, $index_name ) {
@@ -625,6 +626,7 @@ class FrmMigrate {
 	 * @since 3.0.05
 	 *
 	 * @param string $size Size string to maybe convert, passed by reference.
+	 *
 	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {

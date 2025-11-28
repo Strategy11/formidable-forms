@@ -32,6 +32,7 @@ class FrmSquareLiteSettings {
 
 	/**
 	 * @param mixed $settings
+	 *
 	 * @return void
 	 */
 	public function set_default_options( $settings = false ) {
@@ -79,6 +80,7 @@ class FrmSquareLiteSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function update( $params ) {

@@ -153,6 +153,7 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	 * @since 6.5
 	 *
 	 * @param array $args {
+	 *
 	 *     @type FrmFormAction $action_control
 	 *     @type array         $field_dropdown_atts
 	 * }

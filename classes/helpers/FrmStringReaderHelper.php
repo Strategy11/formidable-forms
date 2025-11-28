@@ -46,6 +46,7 @@ class FrmStringReaderHelper {
 	 * By default, discard that final matching character and return the rest.
 	 *
 	 * @param string $char
+	 *
 	 * @return string
 	 */
 	public function read_until( $char ) {
@@ -62,6 +63,7 @@ class FrmStringReaderHelper {
 	 * By default, remove enclosing double-quotes from the result.
 	 *
 	 * @param int $count
+	 *
 	 * @return string
 	 */
 	public function read( $count ) {

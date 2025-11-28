@@ -17,6 +17,7 @@ class FrmTransLiteActionsController {
 	 * Register payment action type.
 	 *
 	 * @param array $actions
+	 *
 	 * @return array
 	 */
 	public static function register_actions( $actions ) {
@@ -51,6 +52,7 @@ class FrmTransLiteActionsController {
 	 * Add event types for actions so an email can trigger on a successful payment.
 	 *
 	 * @param array $triggers
+	 *
 	 * @return array
 	 */
 	public static function add_payment_trigger( $triggers ) {
@@ -65,6 +67,7 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	public static function add_trigger_to_action( $options ) {
@@ -81,6 +84,7 @@ class FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return void
 	 */
 	public static function trigger_action( $action, $entry, $form ) {
@@ -107,6 +111,7 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param WP_Post $action
+	 *
 	 * @return array|string
 	 */
 	private static function get_gateway_for_action( $action ) {
@@ -117,6 +122,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.10
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	private static function show_failed_message( $args ) {
@@ -136,6 +142,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.10
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return stdClass
 	 */
 	public static function include_form_with_success( $form ) {
@@ -162,6 +169,7 @@ class FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -184,6 +192,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param object $sub
+	 *
 	 * @return void
 	 */
 	public static function trigger_subscription_status_change( $sub ) {
@@ -202,6 +211,7 @@ class FrmTransLiteActionsController {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function trigger_payment_status_change( $atts ) {
@@ -242,6 +252,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param object $payment
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function trigger_actions_after_payment( $payment, $atts = array() ) {
@@ -270,6 +281,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param WP_Post $action
 	 * @param array   $atts
+	 *
 	 * @return void
 	 */
 	public static function prepare_description( &$action, $atts ) {
@@ -286,6 +298,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param mixed $amount
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_amount( $amount, $atts = array() ) {
@@ -318,6 +331,7 @@ class FrmTransLiteActionsController {
 	 * Get currency to use when preparing amount.
 	 *
 	 * @param array $atts
+	 *
 	 * @return array
 	 */
 	public static function get_currency_for_action( $atts ) {
@@ -347,6 +361,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return void
 	 */
 	private static function maybe_use_decimal( &$amount, $currency ) {
@@ -370,6 +385,7 @@ class FrmTransLiteActionsController {
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return void
 	 */
 	private static function normalize_number( &$amount, $currency ) {
@@ -382,6 +398,7 @@ class FrmTransLiteActionsController {
 	 * These settings are included in frm_stripe_vars.settings global JavaScript object on Stripe forms.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	public static function prepare_settings_for_js( $form_id ) {
@@ -416,6 +433,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v2.0 of the Payments submodule.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return array|int
 	 */
 	private static function get_fields_for_price( $action ) {
@@ -428,6 +446,7 @@ class FrmTransLiteActionsController {
 	 * Get all published payment actions.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_actions_for_form( $form_id ) {
@@ -446,6 +465,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param array    $values
 	 * @param stdClass $field
+	 *
 	 * @return array
 	 */
 	public static function hide_gateway_field_on_front_end( $values, $field ) {
@@ -470,6 +490,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param array    $values
 	 * @param stdClass $field
+	 *
 	 * @return array
 	 */
 	public static function fill_entry_from_previous( $values, $field ) {
@@ -499,6 +520,7 @@ class FrmTransLiteActionsController {
 	 * @since 6.5.1
 	 *
 	 * @param int|string $entry_id
+	 *
 	 * @return void
 	 */
 	private static function destroy_entry_later( $entry_id ) {
@@ -513,6 +535,7 @@ class FrmTransLiteActionsController {
 			 *
 			 * @param int|string $entry_id
 			 * @param Closure    $destroy_callback
+			 *
 			 * @return void
 			 */
 			function () use ( $entry_id, &$destroy_callback ) {
@@ -532,6 +555,7 @@ class FrmTransLiteActionsController {
 	 *
 	 * @param array $settings
 	 * @param array $action
+	 *
 	 * @return array
 	 */
 	public static function before_save_settings( $settings, $action ) {
@@ -584,6 +608,7 @@ class FrmTransLiteActionsController {
 	 * A credit card field is added automatically if missing before a Stripe action is updated.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return false|int
 	 */
 	protected static function add_a_credit_card_field( $form_id ) {
@@ -595,6 +620,7 @@ class FrmTransLiteActionsController {
 	 * The gateway field is not important for the Stripe Lite implementation.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return false|int
 	 */
 	protected static function add_a_gateway_field( $form_id ) {
@@ -605,6 +631,7 @@ class FrmTransLiteActionsController {
 	 * @param int    $form_id
 	 * @param string $field_type
 	 * @param string $field_name
+	 *
 	 * @return false|int
 	 */
 	protected static function add_a_field( $form_id, $field_type, $field_name ) {

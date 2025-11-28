@@ -30,6 +30,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	public static function set_initial_value( $key, $value ) {
@@ -56,6 +57,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	public function set( $key, $value ) {
@@ -65,6 +67,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $default
+	 *
 	 * @return mixed
 	 */
 	public static function get_from_request( $key, $default ) {
@@ -90,6 +93,7 @@ class FrmFormState {
 	 * It is used to track the value of a title=1|0 or description=1|0 option in a [formidable] shortcode.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_state_field( $form ) {
@@ -178,6 +182,7 @@ class FrmFormState {
 	 * Returns true if open SSL is installed.
 	 *
 	 * @since 6.12
+	 *
 	 * @return bool
 	 */
 	private static function open_ssl_is_installed() {
@@ -203,6 +208,7 @@ class FrmFormState {
 	 * "description" => "d".
 	 *
 	 * @param string $key
+	 *
 	 * @return string
 	 */
 	private static function compressed_key( $key ) {
@@ -215,6 +221,7 @@ class FrmFormState {
 	 * To avoid conflicts, we should not add "i" or "g" in Lite for another state property.
 	 *
 	 * @param string $key
+	 *
 	 * @return string The full key name if one is found. If nothing is found, the $key param is passed back.
 	 */
 	private static function decompressed_key( $key ) {

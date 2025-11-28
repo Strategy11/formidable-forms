@@ -3,6 +3,7 @@
  * Submit helper
  *
  * @since 6.9
+ *
  * @package Formidable
  */
 
@@ -40,6 +41,7 @@ class FrmSubmitHelper {
 	 * Gets submit field object.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return object
 	 */
 	public static function get_submit_field( $form_id ) {
@@ -50,6 +52,7 @@ class FrmSubmitHelper {
 	 * Checks if there is submit button field on the current page.
 	 *
 	 * @param array $values Prepared form values.
+	 *
 	 * @return bool
 	 */
 	public static function has_submit_field_on_current_page( $values ) {
@@ -64,6 +67,7 @@ class FrmSubmitHelper {
 	 * Checks if the given fields list contains a submit field.
 	 *
 	 * @param array $fields Array of fields.
+	 *
 	 * @return bool
 	 */
 	private static function has_submit_field_in_list( $fields ) {
@@ -80,6 +84,7 @@ class FrmSubmitHelper {
 	 * Gets current action (create or update) from the global variable.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return string
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
@@ -92,6 +97,7 @@ class FrmSubmitHelper {
 	 * Gets submit button settings from form option.
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return array
 	 */
 	private static function get_submit_settings_from_form( $form ) {
@@ -127,6 +133,7 @@ class FrmSubmitHelper {
 	 * Copies submit field settings to form options.
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return object
 	 */
 	public static function copy_submit_field_settings_to_form( $form ) {
@@ -191,6 +198,7 @@ class FrmSubmitHelper {
 	 * Checks if the given fields array only contains the submit field.
 	 *
 	 * @param array $fields Array of fields.
+	 *
 	 * @return false|object Return the last found submit field, or `false` if there is at least another field.
 	 */
 	public static function only_contains_submit_field( $fields ) {

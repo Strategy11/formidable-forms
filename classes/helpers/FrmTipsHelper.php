@@ -36,6 +36,7 @@ class FrmTipsHelper {
 	 *     @type string $tip  Tip text.
 	 *     @type string $call Call to action text.
 	 * }
+	 *
 	 * @param string $html
 	 *
 	 * @return void
@@ -80,6 +81,7 @@ class FrmTipsHelper {
 	 * @since 6.21
 	 *
 	 * @param array $tip
+	 *
 	 * @return string
 	 */
 	private static function get_tip_link( $tip ) {

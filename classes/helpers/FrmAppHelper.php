@@ -86,6 +86,7 @@ class FrmAppHelper {
 	 * Used for [sitename] shortcode
 	 *
 	 * @since 2.0
+	 *
 	 * @return string
 	 */
 	public static function site_name() {
@@ -94,6 +95,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $url
+	 *
 	 * @return string
 	 */
 	public static function make_affiliate_url( $url ) {
@@ -171,6 +173,7 @@ class FrmAppHelper {
 	 *
 	 * @param array  $query_args
 	 * @param string $link
+	 *
 	 * @return array
 	 */
 	private static function maybe_add_utm_license( $query_args, $link = '' ) {
@@ -191,6 +194,7 @@ class FrmAppHelper {
 	 * @since x.x
 	 *
 	 * @param string $link
+	 *
 	 * @return string
 	 */
 	private static function pull_medium_from_link( $link ) {
@@ -226,6 +230,7 @@ class FrmAppHelper {
 	 * @since 6.25.1
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	private static function adjust_legacy_utm_args( $args ) {
@@ -274,6 +279,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param array $args - May include the form id when values need translation.
+	 *
 	 * @return FrmSettings $frm_settings
 	 */
 	public static function get_settings( $args = array() ) {
@@ -318,6 +324,7 @@ class FrmAppHelper {
 	 * @since 3.05
 	 *
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function svg_logo( $atts = array() ) {
@@ -339,6 +346,7 @@ class FrmAppHelper {
 	 * @since 4.0
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function show_logo( $atts = array() ) {
@@ -444,6 +452,7 @@ class FrmAppHelper {
 	 * @since 6.19
 	 *
 	 * @param string $page The name of the page to check.
+	 *
 	 * @return bool
 	 */
 	public static function is_admin_list_page( $page = 'formidable' ) {
@@ -558,6 +567,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0.8
+	 *
 	 * @return bool
 	 */
 	public static function prevent_caching() {
@@ -577,6 +587,7 @@ class FrmAppHelper {
 
 		/**
 		 * @since 6.0
+		 *
 		 * @param bool $is_admin
 		 */
 		return apply_filters( 'frm_is_admin', $is_admin );
@@ -599,6 +610,7 @@ class FrmAppHelper {
 	/**
 	 * @param mixed  $value
 	 * @param string $empty
+	 *
 	 * @return bool
 	 */
 	public static function is_not_empty_value( $value, $empty = '' ) {
@@ -764,6 +776,7 @@ class FrmAppHelper {
 	 * @param mixed           $default    The default if nothing is being sent.
 	 * @param callable|string $sanitize   Make sure to pass a sanitize method here. This function will NOT sanitize by default.
 	 * @param bool            $serialized
+	 *
 	 * @return mixed
 	 */
 	public static function get_post_param( $param, $default = '', $sanitize = '', $serialized = false ) {
@@ -866,6 +879,7 @@ class FrmAppHelper {
 	 *
 	 * @param callable $sanitize
 	 * @param mixed    $value
+	 *
 	 * @return void
 	 */
 	public static function sanitize_value( $sanitize, &$value ) {
@@ -908,6 +922,7 @@ class FrmAppHelper {
 	 * @since 4.0.04
 	 *
 	 * @param mixed $value
+	 *
 	 * @return void
 	 */
 	public static function sanitize_with_html( &$value ) {
@@ -1037,6 +1052,7 @@ class FrmAppHelper {
 	 *
 	 * @param string       $value   The value to sanitize and output.
 	 * @param array|string $allowed Allowed HTML tags and attributes.
+	 *
 	 * @return void
 	 */
 	public static function kses_echo( $value, $allowed = array() ) {
@@ -1049,6 +1065,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	public static function kses_submit_button( $html ) {
@@ -1082,6 +1099,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param array $allowed_attr
+	 *
 	 * @return array
 	 */
 	public static function allow_visibility_style( $allowed_attr ) {
@@ -1093,6 +1111,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param array $allowed_html
+	 *
 	 * @return array
 	 */
 	public static function add_allowed_submit_button_tags( $allowed_html ) {
@@ -1113,6 +1132,7 @@ class FrmAppHelper {
 	 * @since 2.05.03
 	 *
 	 * @param array|string $allowed
+	 *
 	 * @return array
 	 */
 	private static function allowed_html( $allowed ) {
@@ -1324,6 +1344,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $class
 	 * @param array  $atts
+	 *
 	 * @return string|null
 	 */
 	public static function icon_by_class( $class, $atts = array() ) {
@@ -1371,6 +1392,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param string $icon
+	 *
 	 * @return string
 	 */
 	public static function kses_icon( $icon ) {
@@ -1388,6 +1410,7 @@ class FrmAppHelper {
 	 * @since 5.0.13.1
 	 *
 	 * @param array $allowed_html
+	 *
 	 * @return array
 	 */
 	public static function add_allowed_icon_tags( $allowed_html ) {
@@ -1401,6 +1424,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param array $allowed_attr
+	 *
 	 * @return array
 	 */
 	public static function allow_vars_in_styles( $allowed_attr ) {
@@ -1426,6 +1450,7 @@ class FrmAppHelper {
 	 * @since 5.0.13
 	 *
 	 * @param string $value
+	 *
 	 * @return bool
 	 */
 	private static function is_a_valid_color( $value ) {
@@ -1444,6 +1469,7 @@ class FrmAppHelper {
 	 * Include svg images.
 	 *
 	 * @since 4.0.02
+	 *
 	 * @return void
 	 */
 	public static function include_svg() {
@@ -1464,6 +1490,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $atts
 	 * @param bool  $echo
+	 *
 	 * @return string|void
 	 */
 	public static function array_to_html_params( $atts, $echo = false ) {
@@ -1484,6 +1511,7 @@ class FrmAppHelper {
 	 *
 	 * @param Closure $echo_function
 	 * @param bool    $echo
+	 *
 	 * @return string|null
 	 */
 	public static function clip( $echo_function, $echo = false ) {
@@ -1506,6 +1534,7 @@ class FrmAppHelper {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function get_admin_header( $atts ) {
@@ -1524,6 +1553,7 @@ class FrmAppHelper {
 	 * @since 6.0
 	 *
 	 * @param string $type
+	 *
 	 * @return void
 	 */
 	public static function import_link( $type = 'secondary' ) {
@@ -1540,6 +1570,7 @@ class FrmAppHelper {
 	 * @since 5.4.2
 	 *
 	 * @param bool $should_show_lite_upgrade
+	 *
 	 * @return void
 	 */
 	public static function print_admin_banner( $should_show_lite_upgrade ) {
@@ -1600,6 +1631,7 @@ class FrmAppHelper {
 	 * Render a button for a new item (Form, Application, etc).
 	 *
 	 * @since 3.0
+	 *
 	 * @param array $atts {
 	 *     Details about the button.
 	 *
@@ -1608,6 +1640,7 @@ class FrmAppHelper {
 	 *     @type string $class        Custom class names, space separated.
 	 *     @type string $button_text  Button text. Default "Add New".
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function add_new_item_link( $atts ) {
@@ -1637,6 +1670,7 @@ class FrmAppHelper {
 	 * @since 3.06
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function show_search_box( $atts ) {
@@ -1699,6 +1733,7 @@ class FrmAppHelper {
 	/**
 	 * @param string      $type   Hook type slug.
 	 * @param object|null $object Optional related object.
+	 *
 	 * @return void
 	 */
 	public static function trigger_hook_load( $type, $object = null ) {
@@ -1779,6 +1814,7 @@ class FrmAppHelper {
 	 * @since 4.10.01 Add `$post_type` argument.
 	 *
 	 * @param string $post_type Post type to query. Default is `page`.
+	 *
 	 * @return WP_Post[]
 	 */
 	public static function get_pages( $post_type = 'page' ) {
@@ -1799,6 +1835,7 @@ class FrmAppHelper {
 	 * @since 5.0.09
 	 *
 	 * @param string $post_type Post type to query. Default is `page`.
+	 *
 	 * @return array
 	 */
 	public static function get_post_ids_and_titles( $post_type = 'page' ) {
@@ -1935,6 +1972,7 @@ class FrmAppHelper {
 	 * @param array|string $option Autocomplete option.
 	 * @param string       $key    Array key of the option.
 	 * @param array        $args   See {@see FrmAppHelper::maybe_autocomplete_options()}.
+	 *
 	 * @return array
 	 */
 	private static function get_dropdown_value_and_label_from_option( $option, $key, $args ) {
@@ -2002,6 +2040,7 @@ class FrmAppHelper {
 	 * @since 4.10.01 Added `post_type` and `autocomplete_placeholder` to the arguments array.
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	private static function preformat_selection_args( $args ) {
@@ -2055,6 +2094,7 @@ class FrmAppHelper {
 	 * @since 6.0 Added the $view parameter. Previously there was only a 'edit' view.
 	 *
 	 * @param string $view Supports 'edit', 'list', and ''. If '', both 'edit' and 'list' will match.
+	 *
 	 * @return bool
 	 */
 	public static function is_style_editor_page( $view = '' ) {
@@ -2104,6 +2144,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 4.07
+	 *
 	 * @param array|string $selected
 	 * @param string       $current
 	 */
@@ -2142,6 +2183,7 @@ class FrmAppHelper {
 	 * @since 5.0 Parameter `$type` supports `pro_only` value.
 	 *
 	 * @param string $type Supports `auto`, `pro`, or `pro_only`.
+	 *
 	 * @return array
 	 */
 	public static function frm_capabilities( $type = 'auto' ) {
@@ -2221,6 +2263,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $needed_role
+	 *
 	 * @return bool
 	 */
 	public static function user_has_permission( $needed_role ) {
@@ -2280,6 +2323,7 @@ class FrmAppHelper {
 	 * @since 2.0.6
 	 *
 	 * @param string $cap
+	 *
 	 * @return void
 	 */
 	public static function force_capability( $cap = 'frm_change_settings' ) {
@@ -2405,8 +2449,10 @@ class FrmAppHelper {
 	 * Updates value to empty string if it is null and being passed to a string function.
 	 *
 	 * @since 6.8.4
+	 *
 	 * @param mixed  $value
 	 * @param string $function
+	 *
 	 * @return mixed
 	 */
 	private static function maybe_update_value_if_null( $value, $function ) {
@@ -2456,6 +2502,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $sep
 	 * @param array  $array
+	 *
 	 * @return string
 	 */
 	public static function safe_implode( $sep, $array ) {
@@ -2466,6 +2513,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $text
 	 * @param bool   $is_rich_text
+	 *
 	 * @return string
 	 */
 	public static function esc_textarea( $text, $is_rich_text = false ) {
@@ -2488,6 +2536,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param mixed $content
+	 *
 	 * @return mixed
 	 */
 	public static function use_wpautop( $content ) {
@@ -2518,6 +2567,7 @@ class FrmAppHelper {
 	/**
 	 * @param string     $handle
 	 * @param int|string $default
+	 *
 	 * @return int|string
 	 */
 	public static function script_version( $handle, $default = 0 ) {
@@ -2544,6 +2594,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $url
 	 * @param bool   $echo
+	 *
 	 * @return string|null
 	 */
 	public static function js_redirect( $url, $echo = false ) {
@@ -2585,6 +2636,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $filename
 	 * @param array  $atts
+	 *
 	 * @return false|string
 	 */
 	public static function get_file_contents( $filename, $atts = array() ) {
@@ -2662,6 +2714,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $column
 	 * @param string $key
+	 *
 	 * @return string
 	 */
 	private static function maybe_truncate_key_before_appending( $column, $key ) {
@@ -2682,6 +2735,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $key
 	 * @param string $column
+	 *
 	 * @return string either the original key value, or an empty string if the key was too long.
 	 */
 	private static function maybe_clear_long_key( $key, $column ) {
@@ -2695,6 +2749,7 @@ class FrmAppHelper {
 	 * @since 6.21 This is changed from `private` to `public`.
 	 *
 	 * @param int $num_chars
+	 *
 	 * @return string
 	 */
 	public static function generate_new_key( $num_chars ) {
@@ -2707,6 +2762,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $key
+	 *
 	 * @return string
 	 */
 	private static function prevent_numeric_and_reserved_keys( $key ) {
@@ -2967,6 +3023,7 @@ class FrmAppHelper {
 	 * @param int|string $length
 	 * @param int        $minword
 	 * @param string     $continue
+	 *
 	 * @return string
 	 */
 	public static function truncate( $original_string, $length, $minword = 3, $continue = '...' ) {
@@ -3025,6 +3082,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $sub    Current substring.
 	 * @param int    $length The length limit.
+	 *
 	 * @return string
 	 */
 	private static function maybe_force_truncate_on_string_with_no_spaces( $sub, $length ) {
@@ -3092,6 +3150,7 @@ class FrmAppHelper {
 	/**
 	 * @param string $time_format
 	 * @param string $date
+	 *
 	 * @return string
 	 */
 	private static function add_time_to_date( $time_format, $date ) {
@@ -3261,6 +3320,7 @@ class FrmAppHelper {
 	 * in case languages are changing for the unit set in the shortcode.
 	 *
 	 * @since 2.0.20
+	 *
 	 * @return array
 	 */
 	private static function get_time_strings() {
@@ -3309,6 +3369,7 @@ class FrmAppHelper {
 	 * @param int $r_count
 	 * @param int $current_p
 	 * @param int $p_size
+	 *
 	 * @return int
 	 */
 	public static function get_last_record_num( $r_count, $current_p, $p_size ) {
@@ -3319,6 +3380,7 @@ class FrmAppHelper {
 	 * @param int $r_count
 	 * @param int $current_p
 	 * @param int $p_size
+	 *
 	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
@@ -3527,6 +3589,7 @@ class FrmAppHelper {
 	 * @since 4.02.03
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public static function unserialize_or_decode( &$value ) {
@@ -3548,6 +3611,7 @@ class FrmAppHelper {
 	 * @since 6.2
 	 *
 	 * @param mixed $value
+	 *
 	 * @return mixed
 	 */
 	public static function maybe_unserialize_array( $value ) {
@@ -3574,6 +3638,7 @@ class FrmAppHelper {
 	 *
 	 * @param mixed $string
 	 * @param bool  $single_to_array
+	 *
 	 * @return mixed
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
@@ -3600,6 +3665,7 @@ class FrmAppHelper {
 	 * @since 6.2.3
 	 *
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	public static function maybe_utf8_encode( $value ) {
@@ -3630,6 +3696,7 @@ class FrmAppHelper {
 	 * @since 4.02.03
 	 *
 	 * @param array $form 
+	 *
 	 * @return void
 	 */
 	public static function format_form_data( &$form ) {
@@ -3658,6 +3725,7 @@ class FrmAppHelper {
 	 * @since 4.02.03
 	 *
 	 * @param array|string $value
+	 *
 	 * @return string
 	 */
 	public static function maybe_json_encode( $value ) {
@@ -3673,6 +3741,7 @@ class FrmAppHelper {
 	 * @since 1.07.10
 	 *
 	 * @param string $post_type The name of the post type that may need to be highlighted.
+	 *
 	 * @return void
 	 */
 	public static function maybe_highlight_menu( $post_type ) {
@@ -3696,6 +3765,7 @@ class FrmAppHelper {
 	 * @since 2.0
 	 *
 	 * @param bool $load
+	 *
 	 * @return void
 	 */
 	public static function load_admin_wide_js( $load = true ) {
@@ -3723,6 +3793,7 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.0.9
+	 *
 	 * @return void
 	 */
 	public static function load_font_style() {
@@ -3731,6 +3802,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $location
+	 *
 	 * @return void
 	 */
 	public static function localize_script( $location ) {
@@ -3894,6 +3966,7 @@ class FrmAppHelper {
 	 * @since 1.07.10
 	 *
 	 * @param float $min_version The version the add-on requires.
+	 *
 	 * @return void
 	 */
 	public static function min_version_notice( $min_version ) {
@@ -3916,6 +3989,7 @@ class FrmAppHelper {
 	 * @since 4.0.01
 	 *
 	 * @param string $min_version
+	 *
 	 * @return void
 	 */
 	public static function min_pro_version_notice( $min_version ) {
@@ -3940,6 +4014,7 @@ class FrmAppHelper {
 	 * @since 4.0.01
 	 *
 	 * @param string $min_version
+	 *
 	 * @return bool
 	 */
 	public static function meets_min_pro_version( $min_version ) {
@@ -3950,6 +4025,7 @@ class FrmAppHelper {
 	 * Show a message if the PHP version is below the recommendations.
 	 *
 	 * @since 4.0.02
+	 *
 	 * @return void
 	 */
 	private static function php_version_notice() {
@@ -3969,6 +4045,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return array<string,string>
 	 */
 	public static function locales( $type = 'date' ) {
@@ -4080,6 +4157,7 @@ class FrmAppHelper {
 		 *
 		 * @param array<string,string> $locales
 		 * @param array                $args {
+		 *
 		 *     @type string $type
 		 * }
 		 */
@@ -4141,6 +4219,7 @@ class FrmAppHelper {
 	 * @since 5.0.04
 	 *
 	 * @param array $args The arguments.
+	 *
 	 * @return array
 	 */
 	private static function fill_default_images_dropdown_args( $args ) {
@@ -4172,6 +4251,7 @@ class FrmAppHelper {
 	 * @since 5.0.04
 	 *
 	 * @param array $args The arguments.
+	 *
 	 * @return string
 	 */
 	private static function get_images_dropdown_input_attrs( $args ) {
@@ -4217,6 +4297,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
+	 *
 	 * @return string
 	 */
 	private static function get_images_dropdown_option_image( $option, $args ) {
@@ -4247,6 +4328,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
+	 *
 	 * @return string
 	 */
 	private static function get_images_dropdown_option_classes( $option, $args ) {
@@ -4276,6 +4358,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $option Option data.
 	 * @param array $args   The arguments of images_dropdown() method.
+	 *
 	 * @return string
 	 */
 	private static function get_images_dropdown_option_html_attrs( $option, $args ) {
@@ -4344,6 +4427,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $values
 	 * @param array $keys
+	 *
 	 * @return array
 	 */
 	public static function maybe_filter_array( $values, $keys ) {
@@ -4370,6 +4454,7 @@ class FrmAppHelper {
 	 *
 	 * @param string       $value
 	 * @param array|string $allowed 'all' for everything included as defaults.
+	 *
 	 * @return string
 	 */
 	public static function maybe_kses( $value, $allowed = 'all' ) {
@@ -4386,6 +4471,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $key
 	 * @param string $context Either 'display' or 'update'. On update, we want to allow a few keys that are never displayed.
+	 *
 	 * @return bool
 	 */
 	public static function input_key_is_safe( $key, $context = 'display' ) {
@@ -4456,6 +4542,7 @@ class FrmAppHelper {
 	 * @since 5.0.17
 	 *
 	 * @param string $feature
+	 *
 	 * @return bool
 	 */
 	public static function show_new_feature( $feature ) {
@@ -4471,6 +4558,7 @@ class FrmAppHelper {
 	 * @param string $plugin   The plugin slug to get installation data for.
 	 * @param array  $params   Initial parameters for the upgrade data.
 	 * @param bool   $detailed Whether to include detailed information.
+	 *
 	 * @return array Modified parameters with installation data.
 	 */
 	public static function get_upgrade_data_params( $plugin, $params, $detailed = false ) {
@@ -4503,6 +4591,7 @@ class FrmAppHelper {
 	 * @since 5.0.17
 	 *
 	 * @param string $text
+	 *
 	 * @return bool
 	 */
 	public static function ctype_xdigit( $text ) {
@@ -4546,6 +4635,7 @@ class FrmAppHelper {
 	 * @since 5.2.07
 	 *
 	 * @param mixed $num Number.
+	 *
 	 * @return false|int Returns `false` if the passed parameter is not number.
 	 */
 	public static function count_decimals( $num ) {
@@ -4638,6 +4728,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $url
 	 * @param string $expected_extension
+	 *
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
@@ -4669,6 +4760,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $message The warning message to display.
 	 * @param string $option  The unique identifier for the dismissal state of the message and the WP Ajax action.
+	 *
 	 * @return void
 	 */
 	public static function add_dismissable_warning_message( $message = '', $option = '' ) {
@@ -4713,6 +4805,7 @@ class FrmAppHelper {
 	 * @since 6.3
 	 *
 	 * @param string $option The unique identifier for the dismissal state of the message.
+	 *
 	 * @return void
 	 */
 	public static function dismiss_warning_message( $option = '' ) {
@@ -4744,6 +4837,7 @@ class FrmAppHelper {
 	 * Removes scripts that are unnecessarily loaded across the pages!
 	 *
 	 * @since 6.9
+	 *
 	 * @return void
 	 */
 	public static function dequeue_extra_global_scripts() {
@@ -4842,6 +4936,7 @@ class FrmAppHelper {
 	 * @since 6.24
 	 *
 	 * @param string $string The string to check.
+	 *
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {

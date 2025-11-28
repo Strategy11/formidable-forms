@@ -42,10 +42,10 @@ class FrmOverlayController {
 	 * The controller data. It will handle the options from multiple instances of the controller
 	 *
 	 * @var array Option data {
+	 *
 	 *     @type array $options_data[ '[instance1-option_name_provided_via-->config-option-name]' ] {
 	 *       @type string $execution-frequency Values example: '1 day' | '10 days' | '1 week' | '10 weeks' | '1 month' | '10 months' | '1 year' | '10 years'
 	 *     }
-	 *
 	 *     @type array $options_data[ '[instance2-option_name_provided_via-->config-option-name]' ] {
 	 *       @type string $execution-frequency Values example: '1 day' | '10 days' | '1 week' | '10 weeks' | '1 month' | '10 months' | '1 year' | '10 years'
 	 *     }
@@ -148,6 +148,7 @@ class FrmOverlayController {
 	 *       @type string $buttons[]['target'] Target attribute for the button link.
 	 *       @type string $buttons[]['label'] Label/text of the button.
 	 * }
+	 *
 	 * @return bool
 	 */
 	public function open_overlay( $data = array() ) {

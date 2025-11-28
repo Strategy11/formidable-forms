@@ -3,6 +3,7 @@
  * Deactivation feedback controller
  *
  * @package Formidable
+ *
  * @since 6.15
  */
 

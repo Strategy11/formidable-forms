@@ -36,6 +36,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 *
 	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
@@ -121,6 +122,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param string $type
+	 *
 	 * @return mixed
 	 */
 	public static function field_has_html( $type ) {

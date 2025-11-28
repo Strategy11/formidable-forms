@@ -10,6 +10,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'url';
@@ -49,6 +50,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	protected function fill_default_atts( &$atts ) {
@@ -108,6 +110,7 @@ class FrmFieldUrl extends FrmFieldType {
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {

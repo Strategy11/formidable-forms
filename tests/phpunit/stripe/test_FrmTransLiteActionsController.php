@@ -73,6 +73,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return string
 	 */
 	private function maybe_use_decimal( &$amount, $currency ) {

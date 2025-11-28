@@ -27,6 +27,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param mixed $old_db_version
+	 *
 	 * @return void
 	 */
 	public function upgrade( $old_db_version = false ) {
@@ -99,6 +100,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return int
 	 */
 	public function create( $values ) {
@@ -116,6 +118,7 @@ class FrmTransLiteDb {
 	/**
 	 * @param int|string $id
 	 * @param array      $values
+	 *
 	 * @return false|int
 	 */
 	public function update( $id, $values ) {
@@ -130,6 +133,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param int|string $id
+	 *
 	 * @return bool|int
 	 */
 	public function &destroy( $id ) {
@@ -157,6 +161,7 @@ class FrmTransLiteDb {
 
 	/**
 	 * @param int|string $id
+	 *
 	 * @return array|object|null
 	 */
 	public function get_one( $id ) {
@@ -174,6 +179,7 @@ class FrmTransLiteDb {
 	/**
 	 * @param int|string $id
 	 * @param string     $field
+	 *
 	 * @return object|null
 	 */
 	public function get_one_by( $id, $field = 'receipt_id' ) {
@@ -282,6 +288,7 @@ class FrmTransLiteDb {
 	/**
 	 * @param array $values
 	 * @param array $new_values
+	 *
 	 * @return void
 	 */
 	private function fill_values( $values, &$new_values ) {

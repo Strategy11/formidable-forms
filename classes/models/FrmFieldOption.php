@@ -24,12 +24,14 @@ class FrmFieldOption {
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.03.05
 	 */
 	protected $saved_value = '';
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.03.05
 	 */
 	protected $option_label = '';

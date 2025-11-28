@@ -3,6 +3,7 @@
  * In-plugin summary emails controller
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 

@@ -3,6 +3,7 @@
  * On Submit action helper
  *
  * @package Formidable
+ *
  * @since 6.0
  */
 
@@ -135,6 +136,7 @@ class FrmOnSubmitHelper {
 	 * {@see FrmFormAction::save_settings()}.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return array
 	 */
 	public static function get_actions( $form_id ) {
@@ -153,6 +155,7 @@ class FrmOnSubmitHelper {
 	 * Gets On Submit action type (message, redirect or page).
 	 *
 	 * @param object $action Form action object.
+	 *
 	 * @return string
 	 */
 	public static function get_action_type( $action ) {
@@ -346,6 +349,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @param array  $form_options Form options.
 	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
+	 *
 	 * @return array
 	 */
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
@@ -377,6 +381,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return bool
 	 */
 	public static function form_has_migrated( $form ) {
@@ -387,6 +392,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Limited form object.
+	 *
 	 * @return void
 	 */
 	private static function save_migrated_success_actions( $form ) {
@@ -433,6 +439,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.3.1
 	 *
 	 * @param array|string $event Uses 'create' or 'update'.
+	 *
 	 * @return object
 	 */
 	public static function get_fallback_action_after_open_in_new_tab( $event ) {

@@ -3,6 +3,7 @@
  * Stats email class
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -203,6 +204,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 *
 	 * @param float        $amount Amount.
 	 * @param array|string $currency Currency string value or array.
+	 *
 	 * @return string
 	 */
 	protected function get_formatted_price( $amount, $currency ) {
@@ -218,6 +220,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 *
 	 * @param float $current Current value.
 	 * @param float $prev    Previous value.
+	 *
 	 * @return float
 	 */
 	public function get_compare_diff( $current, $prev ) {
