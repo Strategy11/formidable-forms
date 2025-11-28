@@ -404,16 +404,76 @@ class FrmStyle {
 		$this->clear_cache();
 
 		$css         = $this->get_css_content( $filename );
-		$create_file = new FrmCreateFile(
-			array(
-				'file_name'     => FrmStylesController::get_file_name(),
-				'new_file_path' => FrmAppHelper::plugin_path() . '/css',
-			)
-		);
+		$create_file = new FrmCreateFile( self::get_create_style_file_args() );
 		$create_file->create_file( $css );
 
 		update_option( 'frmpro_css', $css, 'no' );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_create_style_file_args() {
+		$add_css_to_uploads_dir = self::add_css_to_uploads_dir();
+		$create_file_args       = array(
+			'file_name'     => FrmStylesController::get_file_name(),
+			'new_file_path' => self::get_generated_css_file_path( $add_css_to_uploads_dir ),
+		);
+
+		if ( $add_css_to_uploads_dir ) {
+			$create_file_args['folder_name'] = 'formidable/css';
+		}
+		return $create_file_args;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param bool $add_css_to_uploads_dir
+	 * @return string
+	 */
+	public static function get_generated_css_file_path( $add_css_to_uploads_dir ) {
+		if ( $add_css_to_uploads_dir ) {
+			return self::target_css_uploads_dir();
+		}
+		return self::target_css_plugin_dir();
+	}
+
+	/**
+	 * Returns true if generated css file should be saved in the uploads directory.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function add_css_to_uploads_dir() {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $add_css_to_uploads_dir
+		 */
+		return apply_filters( 'frm_add_css_to_uploads_dir', ! wp_is_file_mod_allowed( 'frm_save_css_to_plugin_folder' ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function target_css_uploads_dir() {
+		return wp_upload_dir()['basedir'] . '/formidable/css';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function target_css_plugin_dir() {
+		return FrmAppHelper::plugin_path() . '/css';
 	}
 
 	/**
