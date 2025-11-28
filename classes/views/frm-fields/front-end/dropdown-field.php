@@ -52,7 +52,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	}
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ];
+		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
 		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
 			continue;
 		}
