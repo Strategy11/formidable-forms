@@ -165,6 +165,9 @@ namespace {
 		public static function normalize_formatted_numbers( $field, $formatted_value ) {}
 	}
 	class FrmProDb {
+		/**
+		 * @var string
+		 */
 		public static $plug_version;
 	}
 	class FrmProStylesController extends FrmStylesController {
@@ -329,6 +332,9 @@ namespace {
 		}
 	}
 	class FrmPaymentsController {
+		/**
+		 * @var string
+		 */
 		public static $db_opt_name = 'frm_pay_db_version';
 		/**
 		 * @param array $cols

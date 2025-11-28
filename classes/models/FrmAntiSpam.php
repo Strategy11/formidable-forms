@@ -72,6 +72,9 @@ class FrmAntiSpam extends FrmValidate {
 		return $form_token_string;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_antispam_secret_key() {
 		$secret_key = get_option( 'frm_antispam_secret_key' );
 

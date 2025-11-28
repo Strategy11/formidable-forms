@@ -442,6 +442,12 @@ class FrmDashboardController {
 		return $data;
 	}
 
+	/**
+	 * Clean messages CTA.
+	 *
+	 * @param string $cta
+	 * @return string
+	 */
 	private static function inbox_clean_messages_cta( $cta ) {
 
 		// remove dismiss button

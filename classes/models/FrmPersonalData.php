@@ -5,8 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPersonalData {
 
+	/**
+	 * @var int
+	 */
 	private $limit = 200;
 
+	/**
+	 * @var int
+	 */
 	private $page = 1;
 
 	public function __construct() {
@@ -157,6 +163,9 @@ class FrmPersonalData {
 		return $entry_ids;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
 

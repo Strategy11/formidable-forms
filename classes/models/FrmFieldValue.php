@@ -115,6 +115,8 @@ class FrmFieldValue {
 	 * @since 2.05.06
 	 *
 	 * @param string $value
+	 *
+	 * @return mixed
 	 */
 	public function get_field_option( $value ) {
 		return FrmField::get_option( $this->field, $value );
@@ -124,6 +126,8 @@ class FrmFieldValue {
 	 * @since 4.03
 	 *
 	 * @param string $option
+	 *
+	 * @return mixed
 	 */
 	public function get_field_attr( $option ) {
 		return is_object( $this->field ) ? $this->field->{$option} : '';
@@ -142,6 +146,8 @@ class FrmFieldValue {
 	 * Get the field property's label
 	 *
 	 * @since 2.04
+	 *
+	 * @return string
 	 */
 	public function get_field_label() {
 		return $this->get_field_attr( 'name' );
@@ -151,6 +157,8 @@ class FrmFieldValue {
 	 * Get the field property's id
 	 *
 	 * @since 2.05
+	 *
+	 * @return string
 	 */
 	public function get_field_id() {
 		return $this->get_field_attr( 'id' );
@@ -160,6 +168,8 @@ class FrmFieldValue {
 	 * Get the field property's key
 	 *
 	 * @since 2.04
+	 *
+	 * @return string
 	 */
 	public function get_field_key() {
 		return $this->get_field_attr( 'field_key' );
@@ -169,6 +179,8 @@ class FrmFieldValue {
 	 * Get the field property's type
 	 *
 	 * @since 2.04
+	 *
+	 * @return string
 	 */
 	public function get_field_type() {
 		return $this->get_field_attr( 'type' );
@@ -178,6 +190,8 @@ class FrmFieldValue {
 	 * Get the saved_value property
 	 *
 	 * @since 2.04
+	 *
+	 * @return mixed
 	 */
 	public function get_saved_value() {
 		return $this->saved_value;
@@ -187,6 +201,8 @@ class FrmFieldValue {
 	 * Get the displayed_value property
 	 *
 	 * @since 2.04
+	 *
+	 * @return mixed
 	 */
 	public function get_displayed_value() {
 		if ( $this->displayed_value === 'frm_not_prepared' ) {

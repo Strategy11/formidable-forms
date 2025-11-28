@@ -135,6 +135,8 @@ class FrmFieldFactory {
 	 *
 	 * @param string $type
 	 * @param string $property
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );

@@ -567,7 +567,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
 			),
-			// How does input placeholder work??
 			'input::placeholder'        => array(
 				'color' => $settings['text_color_disabled'],
 			),
@@ -580,7 +579,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		if ( ! empty( $settings['font'] ) ) {
-			$style['input']['fontFamily'] = $settings['font'];
+			$style['input']['fontFamily'] = self::prepare_font_family_setting( $settings['font'] );
 		}
 
 		/**
@@ -591,6 +590,23 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		 * @param int   $form_id
 		 */
 		return apply_filters( 'frm_square_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Prepare the font family setting for the Stripe element.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $font
+	 * @return string
+	 */
+	private static function prepare_font_family_setting( $font ) {
+		if ( false === strpos( $font, ',' ) ) {
+			return $font;
+		}
+
+		$fonts = explode( ',', $font );
+		return trim( reset( $fonts ) );
 	}
 
 	/**

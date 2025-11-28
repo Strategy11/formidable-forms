@@ -711,6 +711,14 @@ class FrmAppHelper {
 		return apply_filters( 'frm_use_custom_header_ip', $should_use_custom_header_ip );
 	}
 
+	/**
+	 * @param string          $param
+	 * @param mixed           $default
+	 * @param string          $src
+	 * @param callable|string $sanitize
+	 *
+	 * @return mixed
+	 */
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
 		if ( strpos( $param, '[' ) ) {
 			$params = explode( '[', $param );
@@ -881,6 +889,12 @@ class FrmAppHelper {
 		$value = call_user_func( $sanitize, $value );
 	}
 
+	/**
+	 * @param array $sanitize_method
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	public static function sanitize_request( $sanitize_method, &$values ) {
 		$temp_values = $values;
 		foreach ( $temp_values as $k => $val ) {
@@ -2356,6 +2370,12 @@ class FrmAppHelper {
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
 
+	/**
+	 * @param array|string    $value
+	 * @param callable|string $function
+	 *
+	 * @return array|string
+	 */
 	public static function recursive_function_map( $value, $function ) {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
@@ -2397,6 +2417,11 @@ class FrmAppHelper {
 		return $value;
 	}
 
+	/**
+	 * @param array $array
+	 *
+	 * @return bool
+	 */
 	public static function is_assoc( $array ) {
 		return (bool) count( array_filter( array_keys( $array ), 'is_string' ) );
 	}
@@ -2528,6 +2553,11 @@ class FrmAppHelper {
 		return self::clip( $callback, $echo );
 	}
 
+	/**
+	 * @param int|string $user_id
+	 *
+	 * @return int|string
+	 */
 	public static function get_user_id_param( $user_id ) {
 		if ( ! $user_id || is_numeric( $user_id ) ) {
 			return $user_id;
@@ -2746,6 +2776,14 @@ class FrmAppHelper {
 		return $values;
 	}
 
+	/**
+	 * @param array  $fields
+	 * @param object $record
+	 * @param array  $values
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
 		if ( ! empty( $fields ) ) {
 			foreach ( (array) $fields as $field ) {
@@ -2759,6 +2797,14 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 * @param object $record
+	 * @param array  $values
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	private static function fill_field_defaults( $field, $record, array &$values, $args ) {
 		$post_values = $args['post_values'];
 
@@ -3354,6 +3400,13 @@ class FrmAppHelper {
 		}
 	}
 
+	/**
+	 * @param string $name
+	 * @param string $class
+	 * @param string $form_name
+	 *
+	 * @return void
+	 */
 	public static function maybe_add_tooltip( $name, $class = 'closed', $form_name = '' ) {
 		$tooltips = array(
 			'action_title'  => __( 'Give this action a label for easy reference.', 'formidable' ),
@@ -3441,6 +3494,13 @@ class FrmAppHelper {
 		return $post_content;
 	}
 
+	/**
+	 * @param array|string $val
+	 * @param int|string   $key
+	 * @param array        $post_content
+	 *
+	 * @return void
+	 */
 	private static function prepare_action_slashes( $val, $key, &$post_content ) {
 		if ( ! isset( $post_content[ $key ] ) || is_numeric( $val ) ) {
 			return;
@@ -4677,14 +4737,6 @@ class FrmAppHelper {
 	 */
 	public static function copy_for_lite_license() {
 		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
-
-		if ( is_callable( 'FrmProAddonsController::get_readable_license_type' ) && ! class_exists( 'FrmProDashboardController' ) ) {
-			// Manage PRO versions without PRO dashboard functionality.
-			$license_type = FrmProAddonsController::get_readable_license_type();
-			if ( 'lite' !== strtolower( $license_type ) ) {
-				$message = 'Formidable Pro ' . $license_type;
-			}
-		}
 
 		return apply_filters( 'frm_license_type_text', $message );
 	}

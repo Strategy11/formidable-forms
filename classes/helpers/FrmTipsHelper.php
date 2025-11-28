@@ -390,9 +390,18 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @param array $tips
+	 *
+	 * @return array
+	 */
 	public static function get_random_tip( $tips ) {
-		$random = random_int( 0, count( $tips ) - 1 );
+		$count = count( $tips );
+		if ( $count === 0 ) {
+			return array();
+		}
 
+		$random = random_int( 0, $count - 1 );
 		return $tips[ $random ];
 	}
 

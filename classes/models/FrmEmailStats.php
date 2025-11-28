@@ -125,6 +125,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Adds entries comparison data.
 	 *
 	 * @param array $stats Statistics section data.
+	 *
+	 * @return void
 	 */
 	protected function add_entries_comparison_data( &$stats ) {
 		if ( ! $this->has_comparison ) {
@@ -139,6 +141,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Adds payments count and total data.
 	 *
 	 * @param array $stats Statistics section data.
+	 *
+	 * @return void
 	 */
 	protected function add_payments_data( &$stats ) {
 		$payment_data            = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );

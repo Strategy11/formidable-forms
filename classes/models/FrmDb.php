@@ -4,9 +4,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmDb {
+
+	/**
+	 * The table name for Formidable Fields.
+	 *
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * The table name for Formidable Forms.
+	 *
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * The table name for Formidable Entries.
+	 *
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * The table name for Formidable Entry Metas.
+	 *
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {
@@ -56,6 +80,8 @@ class FrmDb {
 	 * @param string $base_where
 	 * @param string $where
 	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
 		$condition = ' AND';
@@ -172,6 +198,8 @@ class FrmDb {
 	 * @param string     $key
 	 * @param int|string $value
 	 * @param string     $where
+	 *
+	 * @return void
 	 */
 	private static function add_query_placeholder( $key, $value, &$where ) {
 		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
@@ -333,15 +361,17 @@ class FrmDb {
 	 *
 	 * @param string $table
 	 * @param string $group
+	 *
+	 * @return void
 	 */
 	private static function get_group_and_table_name( &$table, &$group ) {
-		global $wpdb, $wpmuBaseTablePrefix;
+		global $wpdb;
 
 		$table_parts = explode( ' ', $table );
 		$group       = reset( $table_parts );
 		self::maybe_remove_prefix( $wpdb->prefix, $group );
 
-		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
+		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
 		if ( $group == $table ) {
@@ -367,6 +397,13 @@ class FrmDb {
 		}
 	}
 
+	/**
+	 * @param array|string $args
+	 * @param string       $order_by
+	 * @param int|string   $limit
+	 *
+	 * @return void
+	 */
 	private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
 		if ( ! is_array( $args ) ) {
 			$args = array( 'order_by' => $args );
@@ -537,6 +574,8 @@ class FrmDb {
 	/**
 	 * @since 2.05.06
 	 * @param string $limit
+	 *
+	 * @return string
 	 */
 	public static function esc_limit( $limit ) {
 		if ( empty( $limit ) ) {

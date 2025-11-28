@@ -21,6 +21,9 @@ class FrmFieldCreditCard extends FrmFieldType {
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
 		$settings = array(
 			'clear_on_focus' => false,

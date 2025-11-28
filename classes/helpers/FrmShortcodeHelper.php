@@ -128,6 +128,14 @@ class FrmShortcodeHelper {
 		return $tag;
 	}
 
+	/**
+	 * @param bool   $no_vars
+	 * @param string $code
+	 * @param string $replace_with
+	 * @param string $html
+	 *
+	 * @return void
+	 */
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
 		if ( $no_vars ) {
 			$html = str_replace( '[if ' . $code . ']', '', $html );

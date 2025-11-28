@@ -53,6 +53,9 @@ class FrmOverlayController {
 	 */
 	private $options_data = array();
 
+	/**
+	 * @param array $config
+	 */
 	public function __construct( $config = array() ) {
 		if ( ! isset( $config['config-option-name'] ) || ! isset( $config['execution-frequency'] ) ) {
 			return;

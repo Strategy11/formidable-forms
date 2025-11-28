@@ -16,11 +16,19 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.2.10
+	 *
+	 * @return string
 	 */
 	public static function form_error_class() {
 		return apply_filters( 'frm_form_error_class', 'frm_error_style' );
 	}
 
+	/**
+	 * @param string       $key
+	 * @param false|object $form
+	 *
+	 * @return string
+	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
 		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
@@ -28,6 +36,13 @@ class FrmFormsHelper {
 		return $target_url;
 	}
 
+	/**
+	 * @param string     $field_name
+	 * @param int|string $field_value
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function forms_dropdown( $field_name, $field_value = '', $args = array() ) {
 		$defaults = array(
 			'blank'        => true,
@@ -72,9 +87,12 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
+	 *
+	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -84,6 +102,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param false|object|string $selected - The label for the placeholder, or the form object.
+	 *
+	 * @return void
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -209,6 +229,13 @@ class FrmFormsHelper {
 		<?php
 	}
 
+	/**
+	 * @param string $col
+	 * @param string $sort_col
+	 * @param string $sort_dir
+	 *
+	 * @return void
+	 */
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo $sort_col == $col ? 'sorted' : 'sortable';
 		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
@@ -381,6 +408,13 @@ class FrmFormsHelper {
 		return apply_filters( 'frm_setup_edit_form_vars', $values );
 	}
 
+	/**
+	 * @param array        $values
+	 * @param false|object $record
+	 * @param array|false  $post_values
+	 *
+	 * @return array
+	 */
 	public static function fill_default_opts( $values, $record, $post_values ) {
 
 		$defaults = self::get_default_opts();
@@ -442,8 +476,11 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param array $options
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
@@ -455,6 +492,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param string $loc
+	 *
+	 * @return string
 	 */
 	public static function get_default_html( $loc ) {
 		if ( $loc === 'submit' ) {
@@ -481,6 +520,9 @@ BEFORE_HTML;
 		return $default_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_draft_link() {
 		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 
@@ -498,6 +540,15 @@ BEFORE_HTML;
 		return '[if start_over]<a href="#" tabindex="0" class="frm_start_over" [start_over_hook]>[start_over_label]</a>[/if start_over]';
 	}
 
+	/**
+	 * @param string      $html
+	 * @param object      $form
+	 * @param string      $submit
+	 * @param object|null $form_action
+	 * @param array       $values
+	 *
+	 * @return void
+	 */
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
@@ -532,6 +583,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
@@ -691,7 +744,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public static function insert_code_html( $args ) {
 		$defaults = array(
@@ -744,6 +800,8 @@ BEFORE_HTML;
 	 * @param object $form
 	 * @param array  $fields
 	 * @param bool   $reset_fields
+	 *
+	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {
@@ -806,6 +864,8 @@ BEFORE_HTML;
 	 * @param array  $end_section_values
 	 * @param object $field
 	 * @param string $move
+	 *
+	 * @return void
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -826,6 +886,15 @@ BEFORE_HTML;
 		$reset_fields = true;
 	}
 
+	/**
+	 * @param string $html
+	 * @param object $form
+	 * @param bool   $title
+	 * @param bool   $description
+	 * @param array  $values
+	 *
+	 * @return string
+	 */
 	public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
 		$codes = array(
 			'form_name'        => $title,
@@ -880,6 +949,11 @@ BEFORE_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param string $submit
+	 *
+	 * @return string
+	 */
 	public static function submit_button_label( $submit ) {
 		if ( ! $submit ) {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -1050,7 +1124,10 @@ BEFORE_HTML;
 	 * Display the validation error messages when an entry is submitted
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors.
+	 *
+	 * @return void
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -1077,7 +1154,10 @@ BEFORE_HTML;
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors, and show_img.
+	 *
+	 * @return void
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
@@ -1104,6 +1184,11 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return void
+	 */
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4, array( 'form_id' => $id ) );
 		if ( $offset != - 1 ) {
@@ -1111,6 +1196,11 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return void
+	 */
 	public static function get_scroll_js( $form_id ) {
 		echo '<script type="text/javascript">document.addEventListener(\'DOMContentLoaded\',function(){frmFrontForm.scrollMsg(' . (int) $form_id . ');})</script>';
 	}
@@ -1335,6 +1425,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return array
 	 */
 	public static function css_classes() {
 		$classes = array(

@@ -67,6 +67,9 @@ class FrmTransLiteHooksController {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function load_ajax_hooks() {
 		add_action( 'wp_ajax_frm_trans_refund', 'FrmTransLitePaymentsController::refund_payment' );
 		add_action( 'wp_ajax_frm_trans_cancel', 'FrmTransLiteSubscriptionsController::cancel_subscription' );

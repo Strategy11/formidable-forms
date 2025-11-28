@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormActionsController {
+
+	/**
+	 * @var string
+	 */
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
@@ -407,6 +411,15 @@ class FrmFormActionsController {
 		echo '</div>';
 	}
 
+	/**
+	 * @param WP_Post       $form_action
+	 * @param object        $form
+	 * @param int           $action_key Action ID.
+	 * @param FrmFormAction $action_control
+	 * @param array         $values
+	 *
+	 * @return void
+	 */
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
 		$action_control->_set( $action_key );
 
@@ -563,6 +576,11 @@ class FrmFormActionsController {
 		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
+	/**
+	 * @param array $old_actions
+	 *
+	 * @return void
+	 */
 	public static function delete_missing_actions( $old_actions ) {
 		if ( ! empty( $old_actions ) ) {
 			foreach ( $old_actions as $old_id ) {
@@ -706,6 +724,13 @@ class FrmFormActionsController {
 		}//end if
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
 		if ( empty( $args['old_id'] ) ) {
 			// Continue if we know which actions to copy.
@@ -723,6 +748,11 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param string $where
+	 *
+	 * @return string
+	 */
 	public static function limit_by_type( $where ) {
 		global $frm_vars, $wpdb;
 
@@ -753,16 +783,30 @@ class FrmFormActionsController {
 }
 
 class Frm_Form_Action_Factory {
+
+	/**
+	 * @var array
+	 */
 	public $actions = array();
 
 	public function __construct() {
 		add_action( 'frm_form_actions_init', array( $this, '_register_actions' ), 100 );
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function register( $action_class ) {
 		$this->actions[ $action_class ] = new $action_class();
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function unregister( $action_class ) {
 		if ( isset( $this->actions[ $action_class ] ) ) {
 			unset( $this->actions[ $action_class ] );

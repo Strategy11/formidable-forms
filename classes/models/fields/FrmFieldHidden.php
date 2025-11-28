@@ -37,6 +37,9 @@ class FrmFieldHidden extends FrmFieldType {
 	 */
 	protected $array_allowed = false;
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
 		$settings            = parent::field_settings_for_type();
 		$settings['css']     = false;

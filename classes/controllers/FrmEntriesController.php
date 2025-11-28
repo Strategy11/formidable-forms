@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesController {
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
@@ -90,6 +93,8 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
@@ -106,6 +111,8 @@ class FrmEntriesController {
 
 	/**
 	 * Display in Back End.
+	 *
+	 * @return mixed
 	 */
 	public static function route() {
 		$action = FrmAppHelper::get_param( 'frm_action', '', 'get', 'sanitize_title' );
@@ -122,7 +129,8 @@ class FrmEntriesController {
 					return;
 				}
 
-				return self::display_list();
+				self::display_list();
+				return;
 		}
 	}
 
@@ -148,6 +156,11 @@ class FrmEntriesController {
 		return $show_screen;
 	}
 
+	/**
+	 * @param array $columns
+	 *
+	 * @return array
+	 */
 	public static function manage_columns( $columns ) {
 		global $frm_vars;
 		$form_id = FrmForm::get_current_form_id();
@@ -185,6 +198,12 @@ class FrmEntriesController {
 		return $columns;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $columns
+	 *
+	 * @return void
+	 */
 	private static function get_columns_for_form( $form_id, &$columns ) {
 		$form_cols = FrmField::get_all_for_form( $form_id, '', 'include' );
 
@@ -424,6 +443,9 @@ class FrmEntriesController {
 		return $save;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function sortable_columns() {
 		$form_id = FrmForm::get_current_form_id();
 		$fields  = FrmField::get_all_for_form( $form_id );
@@ -556,6 +578,12 @@ class FrmEntriesController {
 		}
 	}
 
+	/**
+	 * @param string $message
+	 * @param array  $errors
+	 *
+	 * @return void
+	 */
 	public static function display_list( $message = '', $errors = array() ) {
 		global $wpdb, $frm_vars;
 
@@ -683,6 +711,12 @@ class FrmEntriesController {
 		self::display_list( $message );
 	}
 
+	/**
+	 * @param array|string $errors
+	 * @param bool         $ajax
+	 *
+	 * @return void
+	 */
 	public static function process_entry( $errors = '', $ajax = false ) {
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		if ( FrmAppHelper::is_admin() || empty( $_POST ) || empty( $form_id ) || ! isset( $_POST['item_key'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -876,6 +910,11 @@ class FrmEntriesController {
 		return $formatted_entry;
 	}
 
+	/**
+	 * @param false|object $entry
+	 *
+	 * @return void
+	 */
 	public static function entry_sidebar( $entry = false ) {
 		$data = array();
 		$id   = 0;
