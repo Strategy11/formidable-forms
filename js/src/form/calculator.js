@@ -10,6 +10,42 @@ const { registerBlockType } = wp.blocks;
 const { Notice } = wp.components;
 const { useBlockProps } = wp.blockEditor;
 
+function Edit( { setAttributes, attributes } ) {
+	const forms = formidable_form_selector.forms;
+	const blockProps = useBlockProps();
+
+	if ( forms.length === 0 ) {
+		return (
+			<div { ...blockProps }>
+				<Notice status="warning" isDismissible={ false }>
+					{ __( 'This site does not have any forms.', 'formidable' ) }
+				</Notice>
+			</div>
+		);
+	}
+
+	return (
+		<div { ...blockProps }>
+			<div className="frm-block-intro-screen">
+				<div className="frm-block-intro-content">
+					<FormidableIcon></FormidableIcon>
+					<div className="frm-block-title">{ __( 'Calculator Form', 'formidable' ) }</div>
+					<div className="frm-block-selector-screen frm_pro_tip">
+						<Notice status="warning" isDismissible={ false }>
+							{ __( 'This site does not have any calculator forms.', 'formidable' ) }
+							<br />
+							<a href={ formidable_form_selector.link } target="_blank">
+								{ __( 'Upgrade Formidable Forms.', 'formidable' ) }
+							</a>
+						</Notice>
+						<img src={ formidable_form_selector.url + '/images/conversion-calc.jpg' } alt={ __( 'Calculator Form', 'formidable' ) } />
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+}
+
 const FrmCalcIcon = wp.element.createElement(
 	'svg',
 	{
@@ -34,39 +70,5 @@ registerBlockType( 'formidable/calculator', {
 		'formidable',
 	],
 
-	edit: function( { setAttributes, attributes } ) {
-		const forms = formidable_form_selector.forms;
-		const blockProps = useBlockProps();
-
-		if ( forms.length === 0 ) {
-			return (
-				<div { ...blockProps }>
-					<Notice status="warning" isDismissible={ false }>
-						{ __( 'This site does not have any forms.', 'formidable' ) }
-					</Notice>
-				</div>
-			);
-		}
-
-		return (
-			<div { ...blockProps }>
-				<div className="frm-block-intro-screen">
-					<div className="frm-block-intro-content">
-						<FormidableIcon></FormidableIcon>
-						<div className="frm-block-title">{ __( 'Calculator Form', 'formidable' ) }</div>
-						<div className="frm-block-selector-screen frm_pro_tip">
-							<Notice status="warning" isDismissible={ false }>
-								{ __( 'This site does not have any calculator forms.', 'formidable' ) }
-								<br />
-								<a href={ formidable_form_selector.link } target="_blank">
-									{ __( 'Upgrade Formidable Forms.', 'formidable' ) }
-								</a>
-							</Notice>
-							<img src={ formidable_form_selector.url + '/images/conversion-calc.jpg' } alt={ __( 'Calculator Form', 'formidable' ) } />
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	},
+	edit: Edit,
 } );

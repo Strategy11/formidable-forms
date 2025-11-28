@@ -26,6 +26,46 @@ import FormidableIcon from '../common/components/icon';
 
 	const blockName = __( 'Formidable Chart', 'formidable' );
 
+	function Edit() {
+		const imageWrapperStyles = {
+			padding: '38px',
+			margin: '0 auto',
+			maxWidth: '600px'
+		};
+
+		const blockProps = useBlockProps();
+
+		return (
+			<div { ...blockProps }>
+				<div className="frm-block-intro-screen">
+					<div className="frm-block-intro-content">
+						<FormidableIcon></FormidableIcon>
+						<div className="frm-block-title">{ blockName }</div>
+						<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
+							{ formidable_form_selector.chartsAddon.hasAccess ? (
+								<UpgradeNotice
+									text={ __( 'This site does not have Formidable Charts active.', 'formidable' ) }
+									buttonText={ __( 'Install Formidable Charts', 'formidable' ) }
+									link={ formidable_form_selector.chartsAddon.link }
+								/>
+							) : (
+								<UpgradeNotice
+									text={ __( 'This site does not have Formidable Charts installed.', 'formidable' ) }
+									buttonText={ __( 'Upgrade Formidable Forms', 'formidable' ) }
+									link={ formidable_form_selector.link }
+								/>
+							) }
+
+							<div style={ imageWrapperStyles }>
+								<img src={ formidable_form_selector.url + '/images/demo-graph.svg' } alt={ blockName } />
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		);
+	}
+
 	registerBlockType( 'frm-charts/graph', {
 		apiVersion: 3,
 		title: blockName,
@@ -37,44 +77,6 @@ import FormidableIcon from '../common/components/icon';
 		),
 		category: 'design',
 
-		edit: () => {
-			const imageWrapperStyles = {
-				padding: '38px',
-				margin: '0 auto',
-				maxWidth: '600px'
-			};
-
-			const blockProps = useBlockProps();
-
-			return (
-				<div { ...blockProps }>
-					<div className="frm-block-intro-screen">
-						<div className="frm-block-intro-content">
-							<FormidableIcon></FormidableIcon>
-							<div className="frm-block-title">{ blockName }</div>
-							<div className="frm-block-selector-screen frm_pro_tip" style={ { alignSelf: 'stretch' } }>
-								{ formidable_form_selector.chartsAddon.hasAccess ? (
-									<UpgradeNotice
-										text={ __( 'This site does not have Formidable Charts active.', 'formidable' ) }
-										buttonText={ __( 'Install Formidable Charts', 'formidable' ) }
-										link={ formidable_form_selector.chartsAddon.link }
-									/>
-								) : (
-									<UpgradeNotice
-										text={ __( 'This site does not have Formidable Charts installed.', 'formidable' ) }
-										buttonText={ __( 'Upgrade Formidable Forms', 'formidable' ) }
-										link={ formidable_form_selector.link }
-									/>
-								) }
-
-								<div style={ imageWrapperStyles }>
-									<img src={ formidable_form_selector.url + '/images/demo-graph.svg' } alt={ blockName } />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			);
-		}
+		edit: Edit
 	} );
 }() );
