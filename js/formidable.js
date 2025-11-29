@@ -1198,8 +1198,11 @@ function frmFrontFormJS() {
 
 	function removeAllErrors() {
 		jQuery( '.form-field' ).removeClass( 'frm_blank_field has-error' );
-		jQuery( '.form-field .frm_error' ).replaceWith( '' );
 		jQuery( '.frm_error_style' ).remove();
+		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+			document.querySelector( `[aria-describedby="${el.id}"]` )?.removeAttribute( 'aria-describedby' );
+			el.remove();
+		});
 	}
 
 	/**
