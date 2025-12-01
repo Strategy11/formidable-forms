@@ -173,6 +173,9 @@ class FrmEmailStylesController {
 
 		foreach ( $table_rows as $index => $row ) {
 			if ( 'compact' === $style_key ) {
+				// Add some spaces after the label. Maybe change it to the left in RTL.
+				$row['label'] = '<div style="padding-right:10px;">' . $row['label'] . '</div>';
+
 				// Compact table has two columns layout.
 				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 			} else {
@@ -407,14 +410,14 @@ class FrmEmailStylesController {
 		// Wrapper.
 		$font_family = $style_settings['font'] ? $style_settings['font'] : 'Inter,sans-serif';
 		$new_message = sprintf(
-			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 0;">',
+			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 10px;">',
 			esc_attr( $style_settings['bg_color'] ),
 			esc_attr( $style_settings['text_color'] ),
 			esc_attr( $font_family )
 		);
 
 		// Container.
-		$new_message .= '<div style="width:640px;margin:auto;">';
+		$new_message .= '<div style="max-width:640px;margin:auto;">';
 
 		// Header image if outside.
 		if ( $style_settings['img'] && 'inside' !== $style_settings['img_location'] ) {
