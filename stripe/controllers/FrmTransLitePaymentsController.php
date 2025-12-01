@@ -9,16 +9,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function menu() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$frm_settings = FrmAppHelper::get_settings();
 
 		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).
 		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 );
 
-		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
 			// Use the PayPal addon for add new and edit routing if it is active.
 			// This is required to support the "edit" link when using the Stripe Lite table view.
 			// It is also required for the "Add New" button to work on the payments table page.
