@@ -3,6 +3,7 @@
  * Summary email base class
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -110,6 +111,7 @@ abstract class FrmEmailSummary {
 	 * Gets include file path from the given file name.
 	 *
 	 * @param string $file_name File name.
+	 *
 	 * @return string
 	 */
 	protected function get_include_file( $file_name ) {

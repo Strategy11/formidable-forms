@@ -137,6 +137,7 @@ class FrmApplicationsController {
 	/**
 	 * @param array $total the accumulated array of reduced application data.
 	 * @param array $current data for the current template from the API.
+	 *
 	 * @return array<array>
 	 */
 	private static function reduce_template( $total, $current ) {
@@ -154,6 +155,7 @@ class FrmApplicationsController {
 	 * Sort applications alphabetically.
 	 *
 	 * @param array<array> $applications
+	 *
 	 * @return array<array>
 	 */
 	private static function sort_templates( $applications ) {
@@ -220,6 +222,7 @@ class FrmApplicationsController {
 	/**
 	 * @param string $title
 	 * @param string $context values include 'index', 'list', and 'edit'.
+	 *
 	 * @return void
 	 */
 	public static function render_applications_header( $title, $context ) {

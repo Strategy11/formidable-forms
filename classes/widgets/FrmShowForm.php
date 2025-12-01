@@ -10,6 +10,12 @@ class FrmShowForm extends WP_Widget {
 		parent::__construct( 'frm_show_form', __( 'Formidable Form', 'formidable' ), $widget_ops );
 	}
 
+	/**
+	 * @param array $args
+	 * @param array $instance
+	 *
+	 * @return void
+	 */
 	public function widget( $args, $instance ) {
 		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
 
@@ -36,6 +42,7 @@ class FrmShowForm extends WP_Widget {
 	 * @param array $new_instance New settings for this instance as input by the user via
 	 *                            WP_Widget::form().
 	 * @param array $old_instance Old settings for this instance.
+	 *
 	 * @return array Settings to save or bool false to cancel saving.
 	 */
 	public function update( $new_instance, $old_instance ) {
@@ -46,6 +53,7 @@ class FrmShowForm extends WP_Widget {
 	 * Outputs the settings update form.
 	 *
 	 * @param array $instance Current settings.
+	 *
 	 * @return string Default return is 'noform'.
 	 */
 	public function form( $instance ) {

@@ -9,6 +9,7 @@ class FrmTransLiteEntriesController {
 	 * Include payment details in the entry sidebar.
 	 *
 	 * @param stdClass $entry
+	 *
 	 * @return void
 	 */
 	public static function sidebar_list( $entry ) {
@@ -21,6 +22,7 @@ class FrmTransLiteEntriesController {
 	 * Show the payment details in the entry sidebar.
 	 *
 	 * @param stdClass $entry
+	 *
 	 * @return void
 	 */
 	public static function show_sidebar_list( $entry ) {

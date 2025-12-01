@@ -109,6 +109,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array $api_data
+	 *
 	 * @return void
 	 */
 	public function __construct( $api_data ) {
@@ -121,6 +122,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array<string> $categories
+	 *
 	 * @return void
 	 */
 	private static function populate_category_information( $categories ) {
@@ -139,6 +141,7 @@ class FrmApplicationTemplate {
 	 * @since 5.5.2
 	 *
 	 * @param string $category
+	 *
 	 * @return bool
 	 */
 	private static function category_matches_a_license_type( $category ) {

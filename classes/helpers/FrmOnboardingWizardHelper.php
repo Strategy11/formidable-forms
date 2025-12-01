@@ -23,6 +23,7 @@ class FrmOnboardingWizardHelper {
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
+	 *
 	 * @return void
 	 */
 	public static function add_addon_label_attributes( $addon_key, $addon ) {
@@ -59,6 +60,7 @@ class FrmOnboardingWizardHelper {
 	 *
 	 * @param string $addon_key The key of addon.
 	 * @param array  $addon     The array of addon's information.
+	 *
 	 * @return void
 	 */
 	public static function add_addon_input_attributes( $addon_key, $addon ) {
@@ -85,6 +87,7 @@ class FrmOnboardingWizardHelper {
 	 * @since 6.9
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function print_footer( $args = array() ) {

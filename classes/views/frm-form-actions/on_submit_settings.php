@@ -3,6 +3,7 @@
  * On Submit form action settings
  *
  * @package Formidable
+ *
  * @since 6.0
  *
  * @var object        $instance Form action post object.

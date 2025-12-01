@@ -7,6 +7,9 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 
 	/**
 	 * @param string $dir
+	 * @param array $results
+	 *
+	 * @return array
 	 */
 	private function all_php_file_paths( $dir = false, &$results = array() ) {
 		if ( ! $dir ) {

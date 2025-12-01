@@ -143,6 +143,8 @@ class FrmFormTemplatesController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.7
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::init_template_resources();
@@ -654,6 +656,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @param array $nav_items Navigation items.
 	 * @param array $nav_args Additional navigation arguments.
+	 *
 	 * @return array Modified navigation items with 'new_template' query parameter.
 	 */
 	public static function append_new_template_to_nav( $nav_items, $nav_args ) {

@@ -969,6 +969,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * @param stdClass $entry
 	 * @param stdClass $field
+	 * @param array    $atts
 	 *
 	 * @return mixed|string
 	 */

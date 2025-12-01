@@ -18,6 +18,7 @@ class FrmTransLiteListsController {
 
 	/**
 	 * @param array $columns
+	 *
 	 * @return array
 	 */
 	public static function payment_columns( $columns = array() ) {
@@ -80,6 +81,11 @@ class FrmTransLiteListsController {
 	 * viewing a payment or subscription
 	 *
 	 * @since 6.5
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
@@ -104,6 +110,7 @@ class FrmTransLiteListsController {
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
+	 *
 	 * @return void
 	 */
 	public static function route( $action ) {
@@ -149,6 +156,7 @@ class FrmTransLiteListsController {
 	 * Display a list.
 	 *
 	 * @param array $response
+	 *
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
@@ -185,6 +193,8 @@ class FrmTransLiteListsController {
 	 * @param mixed  $save
 	 * @param string $option
 	 * @param int    $value
+	 *
+	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {

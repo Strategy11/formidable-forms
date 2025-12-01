@@ -120,6 +120,8 @@ class FrmOnboardingWizardController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.9
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
@@ -424,6 +426,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param string $classes Existing body classes.
+	 *
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
 	public static function add_admin_body_classes( $classes ) {
@@ -434,6 +437,7 @@ class FrmOnboardingWizardController {
 	 * Checks if the Onboarding Wizard was skipped during the plugin's installation.
 	 *
 	 * @since 6.9
+	 *
 	 * @return bool True if the Onboarding Wizard was skipped, false otherwise.
 	 */
 	public static function has_onboarding_been_skipped() {
@@ -444,6 +448,7 @@ class FrmOnboardingWizardController {
 	 * Marks the Onboarding Wizard as skipped to prevent automatic redirects to the wizard.
 	 *
 	 * @since 6.9
+	 *
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
@@ -456,6 +461,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param array $inbox_messages The array of existing inbox messages.
+	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
