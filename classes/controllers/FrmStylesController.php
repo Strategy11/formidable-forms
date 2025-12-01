@@ -881,6 +881,7 @@ class FrmStylesController {
 	 * The Custom CSS page uses codemirror.
 	 *
 	 * @since 6.0 Previously this code was embedded in self::custom_css.
+	 *
 	 * @param string $id The ID of the codemirror box.
 	 * @param string $placeholder The placeholder text for the codemirror box.
 	 *
