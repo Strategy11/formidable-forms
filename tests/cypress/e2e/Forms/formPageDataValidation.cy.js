@@ -24,6 +24,7 @@ describe( 'Forms page', () => {
 					'Get the Deal',
 					'upgrading for 60% off during our No Brainer Sale!',
 					'Black Friday Deals',
+					'Cyber Monday Deals',
 				];
 
 				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
