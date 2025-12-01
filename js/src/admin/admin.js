@@ -3121,9 +3121,35 @@ window.frmAdminBuildJS = function() {
 					}
 				}
 			}
+		} else {
+			// Check if this is a Math calculation (not Text)
+			const isMathCalc = ! isTextCalculationForBox( calcBox );
+			if ( isMathCalc ) {
+				// Add non-numeric field types to exclusions for Math calculations
+				const nonNumericTypes = codeList.getAttribute( 'data-exclude-non-numeric' );
+				if ( nonNumericTypes ) {
+					const nonNumeric = JSON.parse( nonNumericTypes );
+					exclude.push( ...nonNumeric );
+				}
+			}
 		}
 
 		return exclude;
+	}
+
+	function isTextCalculationForBox( calcBox ) {
+		const calcContainer = calcBox.closest( '[class*="frm-calc-for-"]' );
+		if ( ! calcContainer ) {
+			return false;
+		}
+		// Check if calc_type is set to 'text' - for new toggle style
+		const textToggle = calcContainer.querySelector( 'input[name*="calc_type"]:checked' );
+		if ( textToggle && 'text' === textToggle.value ) {
+			return true;
+		}
+		// Check for old checkbox style - backwards compatibility
+		const calcTypeCheckbox = calcContainer.querySelector( 'input[id^="calc_type"]' );
+		return calcTypeCheckbox && calcTypeCheckbox.checked;
 	}
 
 	function getIncludedExtras() {
