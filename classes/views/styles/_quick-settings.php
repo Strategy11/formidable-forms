@@ -251,25 +251,26 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo empty( $style->post_content['enable_style_custom_css'] ) ? 'frm_hidden' : ''; ?>">
 	<?php
 	$css_scope_helper = new FrmCssScopeHelper();
-	$custom_css       = $style->post_content['single_style_custom_css'];
+	$custom_css       = $style->post_content['single_style_custom_css'] ?? '';
 	if ( ! empty( $custom_css ) ) {
-		$custom_css = $css_scope_helper->unnest( $custom_css, 'frm_style_formidable-style-8' );
+		$custom_css = $css_scope_helper->unnest( $custom_css, 'frm_style_' . $style->post_name );
 	}
-		FrmStylesController::custom_css(
-			'',
-			array(
-				'heading'         => '',
-				'id'              => 'frm_single_style_custom_css',
-				'textarea_params' => array(
-					'name' => $frm_style->get_field_name( 'single_style_custom_css' ),
-					'id'   => 'frm_single_style_custom_css',
-				),
-				'custom_css'      => $custom_css,
-				'placeholder'     => __( '/* Enter your custom CSS here */', 'formidable' ),
-				'show_errors'     => false,
-			)
-		);
-		?>
+
+	FrmStylesController::custom_css(
+		'',
+		array(
+			'heading'         => '',
+			'id'              => 'frm_single_style_custom_css',
+			'textarea_params' => array(
+				'name' => $frm_style->get_field_name( 'single_style_custom_css' ),
+				'id'   => 'frm_single_style_custom_css',
+			),
+			'custom_css'      => $custom_css,
+			'placeholder'     => __( '/* Enter your custom CSS here */', 'formidable' ),
+			'show_errors'     => false,
+		)
+	);
+	?>
 </div>
 <div class="frm3 frm_form_field">
 	<label 

@@ -25,7 +25,7 @@ class FrmCssScopeHelper {
 
 		while ( $i < $length ) {
 			$char = $css[ $i ];
-			
+
 			if ( '@' === $char ) {
 				$brace_pos = strpos( $css, '{', $i );
 				if ( false === $brace_pos ) {
@@ -64,7 +64,7 @@ class FrmCssScopeHelper {
 					// Handle multiple selectors
 					$selectors          = array_map( 'trim', explode( ',', $selector ) );
 					$prefixed_selectors = array();
-					
+
 					foreach ( $selectors as $single_selector ) {
 						if ( '' !== $single_selector ) {
 							$prefixed_selectors[] = '.' . $class_name . ' ' . $single_selector;
@@ -80,11 +80,11 @@ class FrmCssScopeHelper {
 				$buffer = '';
 				continue;
 			}//end if
-			
+
 			$buffer .= $char;
 			++$i;
 		}//end while
-		
+
 		return implode( '', $output );
 	}
 
@@ -110,7 +110,7 @@ class FrmCssScopeHelper {
 
 		while ( $i < $length ) {
 			$char = $css[ $i ];
-			
+
 			if ( '@' === $char ) {
 				$brace_pos = strpos( $css, '{', $i );
 				if ( false === $brace_pos ) {
@@ -118,28 +118,28 @@ class FrmCssScopeHelper {
 					++$i;
 					continue;
 				}
-				
+
 				$rule          = substr( $css, $i, $brace_pos - $i );
 				$closing_brace = $this->find_matching_brace( $css, $brace_pos );
 				$inner_content = substr( $css, $brace_pos + 1, $closing_brace - $brace_pos - 1 );
-				
+
 				$output[] = "\n" . $rule . ' {';
 				$output[] = $this->unnest( $inner_content, $class_name );
 				$output[] = '}' . "\n";
-				
+
 				$i      = $closing_brace + 1;
 				$buffer = '';
 				continue;
 			}
-			
+
 			if ( '{' === $char ) {
 				$selector      = trim( $buffer );
 				$closing_brace = $this->find_matching_brace( $css, $i );
 				$declarations  = substr( $css, $i + 1, $closing_brace - $i - 1 );
-				
+
 				// Preserve indentation and formatting of declarations
 				$declarations = $this->preserve_declaration_formatting( $declarations );
-				
+
 				if ( '' !== $selector && '' !== trim( $declarations ) ) {
 					// Handle multiple selectors
 					$selectors            = array_filter(
@@ -149,7 +149,7 @@ class FrmCssScopeHelper {
 						}
 					);
 					$unprefixed_selectors = array();
-					
+
 					foreach ( $selectors as $single_selector ) {
 						$unprefixed_selectors[] = 0 === strpos( $single_selector, $prefix )
 							? trim( substr( $single_selector, $prefix_length ) )
@@ -165,7 +165,7 @@ class FrmCssScopeHelper {
 				$buffer = '';
 				continue;
 			}//end if
-			
+
 			$buffer .= $char;
 			++$i;
 		}//end while
@@ -181,29 +181,29 @@ class FrmCssScopeHelper {
 	private function preserve_declaration_formatting( $declarations ) {
 		// Trim the entire block but keep internal structure
 		$declarations = trim( $declarations );
-		
+
 		if ( '' === $declarations ) {
 			return '';
 		}
-		
+
 		// Check if declarations are already on multiple lines
 		if ( strpos( $declarations, "\n" ) !== false ) {
 			// Already formatted - preserve it
 			$lines           = explode( "\n", $declarations );
 			$formatted_lines = array();
-			
+
 			foreach ( $lines as $line ) {
 				$trimmed = trim( $line );
 				if ( '' !== $trimmed ) {
 					$formatted_lines[] = "\n\t" . $trimmed;
 				}
 			}
-			
+
 			return implode( '', $formatted_lines ) . "\n";
-		} else {
-			// Single line - add minimal formatting
-			return ' ' . $declarations . ' ';
 		}
+
+		// Single line - add minimal formatting
+		return ' ' . $declarations . ' ';
 	}
 
 	/**
@@ -218,10 +218,10 @@ class FrmCssScopeHelper {
 		$length      = strlen( $css );
 		$in_string   = false;
 		$string_char = '';
-		
+
 		for ( $i = $open_pos + 1; $i < $length; $i++ ) {
 			$char = $css[ $i ];
-			
+
 			// Handle string literals to avoid matching braces inside strings
 			if ( ( '"' === $char || "'" === $char ) && ( 0 === $i || '\\' !== $css[ $i - 1 ] ) ) {
 				if ( ! $in_string ) {
@@ -232,12 +232,12 @@ class FrmCssScopeHelper {
 				}
 				continue;
 			}
-			
+
 			// Skip braces inside strings
 			if ( $in_string ) {
 				continue;
 			}
-			
+
 			if ( '{' === $char ) {
 				++$level;
 			} elseif ( '}' === $char ) {

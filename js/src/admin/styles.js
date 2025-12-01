@@ -55,7 +55,7 @@ class frmStyleOptions {
 	/**
 	 * Get the inline style element.
 	 *
-	 * @return {HTMLElement}
+	 * @return {HTMLElement} The inline style element.
 	 */
 	getInlineStyleElement() {
 		if ( null !== this.cssInlineStyleElement ) {
@@ -77,8 +77,12 @@ class frmStyleOptions {
 		if ( null === cssScope ) {
 			return;
 		}
+		const sanitizedCssScope = CSS.escape( cssScope );
 
-		this.cssEditorInstance.on( 'change', editor => this.getInlineStyleElement().textContent = `.${ cssScope } { ${ editor.getValue() } }` );
+		this.cssEditorInstance.on( 'change', editor => {
+			const value = editor.getValue().replace( /<[^>]*>/g, '' ).trim();
+			this.getInlineStyleElement().textContent = `.${ sanitizedCssScope } { ${ value } }`;
+		} );
 	}
 
 	/**
@@ -160,30 +164,80 @@ class frmStyleOptions {
 	 * @param {string} successMessage - The success message to display.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
-		if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
-			return;
-		}
 
 		const labels = document.querySelectorAll( '.frm-copy-text' );
 		labels.forEach( label => {
 			label.addEventListener( 'click', event => {
 				const className = event.currentTarget.innerText;
+
+				if ( ! navigator.clipboard || ! navigator.clipboard.writeText ) {
+					if ( true === this.fallbackCopyToClipboard( className, event.currentTarget ) ) {
+						this.success( successMessage );
+					}
+					return;
+				}
+
 				navigator.clipboard.writeText( className ).then( () => {
 					this.success( successMessage );
 				} );
-			});
-		});
+			} );
+		} );
 	}
 
+	/**
+	 * Toggle the visibility of the custom CSS editor.
+	 *
+	 * @return {void}
+	 */
 	toggleVisibilityOfCustomCSSEditor() {
-		const toggle = document.querySelector( '#frm_enable_single_style_custom_css' );
-		const editor = document.querySelector( '#frm_single_style_custom_css_editor' );
+		const toggle = document.getElementById( 'frm_enable_single_style_custom_css' );
+		const editor = document.getElementById( 'frm_single_style_custom_css_editor' );
 		if ( ! toggle || ! editor ) {
 			return;
 		}
 		toggle.addEventListener( 'change', event => {
 			editor.classList.toggle( 'frm_hidden', ! event.target.checked );
 		} );
+	}
+
+	/**
+	 * Copy to clipboard if the Clipboard API is not available.
+	 *
+	 * @param {string} couponCode      The string being copied to the clipboard.
+	 * @param {HTMLElement} copyButton Used to position the temporary input element.
+	 * @return {bool}
+	 */
+	fallbackCopyToClipboard( couponCode, copyButton ) {
+		if ( 'function' !== typeof document.execCommand ) {
+			return false;
+		}
+
+		let copySuccess;
+
+		const temp = document.createElement( 'input' );
+		temp.setAttribute( 'type', 'text' );
+		temp.value = couponCode;
+
+		copyButton.parentElement.appendChild( temp );
+
+		temp.focus();
+		temp.select();
+		temp.setSelectionRange( 0, 99999 );
+
+		// Hide the input so it doesn't show up in the UI.
+		temp.style.position = 'absolute';
+		temp.style.left = '-9999px';
+		temp.style.top = '-9999px';
+
+		try {
+			copySuccess = document.execCommand( 'copy' );
+		} catch ( error ) {
+			copySuccess = false;
+		}
+
+		temp.remove();
+
+		return copySuccess;
 	}
 }
 

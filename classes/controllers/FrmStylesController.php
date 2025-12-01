@@ -818,6 +818,9 @@ class FrmStylesController {
 			'id'   => $id,
 		);
 
+		if ( ! empty( $settings ) ) {
+			$textarea_params['class'] = 'hide-if-js';
+		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -826,6 +829,7 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
+	 * @param array|null $single_style_settings The single style settings.
 	 * @return string
 	 */
 	public static function get_custom_css( $single_style_settings = null ) {
@@ -852,6 +856,8 @@ class FrmStylesController {
 	 * The Custom CSS page uses codemirror.
 	 *
 	 * @since 6.0 Previously this code was embedded in self::custom_css.
+	 * @param string $id The ID of the codemirror box.
+	 * @param string $placeholder The placeholder text for the codemirror box.
 	 *
 	 * @return array|false
 	 */
