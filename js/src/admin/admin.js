@@ -2185,11 +2185,11 @@ window.frmAdminBuildJS = function() {
 
 		if ( $button.hasClass( 'frm_at_limit' ) ) {
 			showLimitModal();
-			return;
+			return false;
 		}
 
 		if ( shouldStopInsertingField( fieldType ) ) {
-			return;
+			return false;
 		}
 
 		let hasBreak = 0;
