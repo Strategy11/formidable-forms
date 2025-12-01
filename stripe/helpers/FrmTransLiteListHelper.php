@@ -402,10 +402,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return '<strong>' . $link . '</strong><br />' . $this->row_actions( $this->get_row_actions( $item ) );
 	}
 
-	private function get_edit_payment_link( $item ) {
-		return '';
-	}
-
 	/**
 	 * @since x.x
 	 *
