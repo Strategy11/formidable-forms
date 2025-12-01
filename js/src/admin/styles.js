@@ -161,10 +161,10 @@ class frmStyleOptions {
 	 * Adds a click event listener to the copyLabel element.
 	 * Copies the class name to the clipboard and displays a success message.
 	 *
-	 * @param {string} successMessage - The success message to display.
+	 * @param {string} successMessage The success message to display.
+	 * @return {void} Initializes the copy to clipboard functionality for style classes.
 	 */
 	initStyleClassCopyToClipboard( successMessage ) {
-
 		const labels = document.querySelectorAll( '.frm-copy-text' );
 		labels.forEach( label => {
 			label.addEventListener( 'click', event => {
@@ -203,9 +203,9 @@ class frmStyleOptions {
 	/**
 	 * Copy to clipboard if the Clipboard API is not available.
 	 *
-	 * @param {string} couponCode      The string being copied to the clipboard.
+	 * @param {string}      couponCode The string being copied to the clipboard.
 	 * @param {HTMLElement} copyButton Used to position the temporary input element.
-	 * @return {bool}
+	 * @return {boolean} True if the copy was successful, false otherwise.
 	 */
 	fallbackCopyToClipboard( couponCode, copyButton ) {
 		if ( 'function' !== typeof document.execCommand ) {

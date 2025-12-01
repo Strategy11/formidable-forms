@@ -827,6 +827,7 @@ class FrmStylesController {
 	 *
 	 * @param string $message
 	 * @param array  $extra_args An array of extra arguments.
+	 *
 	 * @return void
 	 */
 	public static function custom_css( $message = '', $extra_args = array() ) {
@@ -853,6 +854,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param array|null $single_style_settings The single style settings.
+	 *
 	 * @return string
 	 */
 	public static function get_custom_css( $single_style_settings = null ) {

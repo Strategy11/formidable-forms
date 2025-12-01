@@ -11,6 +11,7 @@ class FrmCssScopeHelper {
 	 *
 	 * @param string $css
 	 * @param string $class_name
+	 *
 	 * @return string
 	 */
 	public function nest( $css, $class_name ) {
@@ -94,6 +95,7 @@ class FrmCssScopeHelper {
 	 *
 	 * @param string $css
 	 * @param string $class_name
+	 *
 	 * @return string
 	 */
 	public function unnest( $css, $class_name ) {
@@ -176,6 +178,7 @@ class FrmCssScopeHelper {
 	 * Preserve declaration formatting with proper indentation.
 	 *
 	 * @param string $declarations
+	 *
 	 * @return string
 	 */
 	private function preserve_declaration_formatting( $declarations ) {
@@ -211,6 +214,7 @@ class FrmCssScopeHelper {
 	 *
 	 * @param string $css
 	 * @param int    $open_pos
+	 *
 	 * @return int
 	 */
 	private function find_matching_brace( $css, $open_pos ) {

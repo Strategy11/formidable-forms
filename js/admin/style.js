@@ -161,7 +161,7 @@
 
 	/**
 	 * @param {string} labelPosition
-	 * @return {void}
+	 * @return {void} Changes the label position in the preview.
 	 */
 	function changeLabelPositionsInPreview( labelPosition ) {
 		const input = tag( 'input' );
