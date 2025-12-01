@@ -123,6 +123,7 @@ class FrmSettingsController {
 					'medium'     => 'white-label',
 					'upgrade'    => __( 'White labeling options', 'formidable' ),
 					'screenshot' => 'white-label.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'features/white-label-form-builder-wordpress', 'white-labeling-global-settings', false ),
 				),
 			),
 			'inbox'         => array(
@@ -133,6 +134,7 @@ class FrmSettingsController {
 					'medium'     => 'inbox-settings',
 					'upgrade'    => __( 'Inbox settings', 'formidable' ),
 					'screenshot' => 'inbox.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'global-settings-overview/#kb-inbox', 'inbox-global-settings' ),
 				),
 			),
 		);
