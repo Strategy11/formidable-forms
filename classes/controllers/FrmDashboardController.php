@@ -248,6 +248,7 @@ class FrmDashboardController {
 	 * Init view args for entries placeholder.
 	 *
 	 * @param array $forms_count The total forms count. If there are no any forms yet, we'll have CTA pointing to creating a form.
+	 *
 	 * @return array
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
@@ -290,6 +291,7 @@ class FrmDashboardController {
 	 * @param string       $counter_type
 	 * @param int          $counter_value
 	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 *
 	 * @return array
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
@@ -345,6 +347,7 @@ class FrmDashboardController {
 	 * Hook name: manage_formidable_page_formidable-dashboard_columns.
 	 *
 	 * @param array $columns An associative array of column headings.
+	 *
 	 * @return array
 	 */
 	public static function entries_columns( $columns = array() ) {
@@ -383,6 +386,7 @@ class FrmDashboardController {
 	 * Detect if the logged user's email is subscribed. Used for inbox email subscribe.
 	 *
 	 * @param string $email The logged user's email.
+	 *
 	 * @return bool
 	 */
 	public static function email_is_subscribed( $email ) {
@@ -428,6 +432,8 @@ class FrmDashboardController {
 	/**
 	 * Prepare inbox messages data.
 	 *
+	 * @param array $data
+	 *
 	 * @return array
 	 */
 	private static function inbox_prepare_messages( $data ) {
@@ -441,6 +447,13 @@ class FrmDashboardController {
 		return $data;
 	}
 
+	/**
+	 * Clean messages CTA.
+	 *
+	 * @param string $cta
+	 *
+	 * @return string
+	 */
 	private static function inbox_clean_messages_cta( $cta ) {
 
 		// remove dismiss button
@@ -452,6 +465,7 @@ class FrmDashboardController {
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
 	 * @param int $entries_count The total entries available.
+	 *
 	 * @return string|null The YouTube video ID.
 	 */
 	private static function get_youtube_embed_video( $entries_count ) {
@@ -477,6 +491,7 @@ class FrmDashboardController {
 	 * Used for Inbox widget - email subscribe.
 	 *
 	 * @param string $email The user email address.
+	 *
 	 * @return void
 	 */
 	private static function save_subscribed_email( $email ) {
@@ -509,6 +524,7 @@ class FrmDashboardController {
 	 * Get the dashboard options from db.
 	 *
 	 * @param string|null $option_name The dashboard option name. If null it will return all dashboard options.
+	 *
 	 * @return array
 	 */
 	private static function get_dashboard_options( $option_name = null ) {

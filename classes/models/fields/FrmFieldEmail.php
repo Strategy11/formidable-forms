@@ -10,12 +10,14 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'email';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -56,6 +58,8 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value Email value passed by reference.
 	 *
 	 * @return void
 	 */

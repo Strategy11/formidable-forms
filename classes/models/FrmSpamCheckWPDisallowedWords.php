@@ -3,6 +3,7 @@
  * Spam check using WordPress disallowed words
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -53,6 +54,13 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
 	/**
 	 * For WP 5.5 compatibility.
+	 *
+	 * @param string $author
+	 * @param string $email
+	 * @param string $url
+	 * @param string $content
+	 * @param string $ip
+	 * @param string $user_agent
 	 *
 	 * @return bool Return `true` if contains disallowed words.
 	 */

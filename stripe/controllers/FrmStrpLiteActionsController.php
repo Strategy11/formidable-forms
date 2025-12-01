@@ -15,6 +15,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field
+	 *
 	 * @return string
 	 */
 	public static function maybe_show_card( $callback, $field = false ) {
@@ -43,6 +44,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array  $field
 	 * @param string $field_name
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_card( $field, $field_name, $atts ) {
@@ -64,6 +66,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_actions_before_submit( $form_id ) {
@@ -86,6 +89,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return false|WP_Post
 	 */
 	public static function get_stripe_link_action( $form_id ) {
@@ -101,6 +105,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -148,6 +153,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Set a customer object to $_POST['customer'] to use later.
 	 *
 	 * @param array $atts
+	 *
 	 * @return object|string
 	 */
 	private static function set_customer_with_token( $atts ) {
@@ -178,6 +184,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Replace an [email] shortcode with the current user email.
 	 *
 	 * @param string $email
+	 *
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
@@ -200,6 +207,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param array $atts
 	 * @param array $payment_info
+	 *
 	 * @return void
 	 */
 	private static function add_customer_name( $atts, &$payment_info ) {
@@ -221,6 +229,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v1.16 of the Stripe add on.
 	 *
 	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
+	 *
 	 * @return int The timestamp when the trial should end. 0 for no trial
 	 */
 	public static function get_trial_end_time( $atts ) {
@@ -251,6 +260,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param mixed $amount
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_amount( $amount, $atts = array() ) {
@@ -263,6 +273,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Add defaults for additional Stripe action options.
 	 *
 	 * @param array $defaults
+	 *
 	 * @return array
 	 */
 	public static function add_action_defaults( $defaults ) {
@@ -276,6 +287,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Print additional options for Stripe action settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function add_action_options( $atts ) {
@@ -289,6 +301,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param array $settings
 	 * @param array $action
+	 *
 	 * @return array
 	 */
 	public static function before_save_settings( $settings, $action ) {
@@ -314,6 +327,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Create any required Stripe plans, used for subscriptions.
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	public static function create_plans( $settings ) {
@@ -335,6 +349,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Include settings in the plan description in order to make sure the correct plan is used.
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	public static function create_plan_id( $settings ) {
@@ -347,6 +362,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * If this form submits with ajax, load the scripts on the first page.
 	 *
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
@@ -377,6 +393,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Load front end JavaScript for a Stripe form.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function load_scripts( $form_id ) {
@@ -471,6 +488,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_style_settings_for_form( $form_id ) {
@@ -503,6 +521,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	private static function get_appearance_rules( $settings ) {
@@ -555,6 +574,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.21
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	private static function get_border_width( $settings ) {
@@ -570,6 +590,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.21
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	private static function get_border_radius( $settings ) {
@@ -589,6 +610,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * Get the language to use for Stripe elements.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
 	 * @return string
 	 */
 	private static function get_locale() {
@@ -608,6 +630,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array    $errors
 	 * @param stdClass $field
 	 * @param array    $values
+	 *
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {

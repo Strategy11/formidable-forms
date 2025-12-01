@@ -5,10 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmReviews {
 
+	/**
+	 * @var string
+	 */
 	private $option_name = 'frm_reviewed';
 
+	/**
+	 * @var array
+	 */
 	private $review_status = array();
 
+	/**
+	 * @var string
+	 */
 	private $inbox_key = 'review';
 
 	/**
@@ -168,6 +177,9 @@ class FrmReviews {
 	 * If there are already later requests, don't add it to the inbox again.
 	 *
 	 * @since 4.05.02
+	 *
+	 * @param array $requests Array of requests.
+	 * @param int   $asked    Number of times the review has been asked.
 	 *
 	 * @return bool
 	 */

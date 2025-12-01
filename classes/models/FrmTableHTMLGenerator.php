@@ -10,24 +10,28 @@ class FrmTableHTMLGenerator {
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 */
 	private $type = '';
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	private $style_settings = array();
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	private $use_inline_style = true;
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
@@ -35,12 +39,14 @@ class FrmTableHTMLGenerator {
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.04
 	 */
 	private $odd = true;
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
@@ -48,6 +54,7 @@ class FrmTableHTMLGenerator {
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 * @since 5.0.16 Changed scope from `private` to `protected`.
 	 */
@@ -75,6 +82,7 @@ class FrmTableHTMLGenerator {
 	 * Used to add a class in tables. Set in Pro.
 	 *
 	 * @var bool
+	 *
 	 * @since 5.4.2
 	 */
 	public $is_child = false;
@@ -110,6 +118,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private function init_style_settings( $atts ) {
@@ -142,6 +151,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private function init_use_inline_style( $atts ) {
@@ -156,6 +166,7 @@ class FrmTableHTMLGenerator {
 	 * @since 2.04
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private function init_direction( $atts ) {
@@ -168,6 +179,7 @@ class FrmTableHTMLGenerator {
 	 * Set the table_style property
 	 *
 	 * @since 2.04
+	 *
 	 * @return void
 	 */
 	private function init_table_style() {
@@ -191,6 +203,7 @@ class FrmTableHTMLGenerator {
 	 * Set the td_style property
 	 *
 	 * @since 2.04
+	 *
 	 * @return void
 	 */
 	private function init_td_style() {
@@ -211,6 +224,7 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $html The HTML.
 	 * @param string $position The border position. Default is `top`.
+	 *
 	 * @return string
 	 */
 	public function remove_border( $html, $position = 'top' ) {
@@ -228,6 +242,7 @@ class FrmTableHTMLGenerator {
 	 * Determine if setting is for a color, e.g. text color, background color, or border color
 	 *
 	 * @since 2.05
+	 *
 	 * @param string $setting_key Name of setting.
 	 *
 	 * @return bool
@@ -240,6 +255,7 @@ class FrmTableHTMLGenerator {
 	 * Get color markup from color setting value
 	 *
 	 * @since 2.05
+	 *
 	 * @param string $color_markup value of a color setting, with format #FFFFF, FFFFFF, or white.
 	 *
 	 * @return string
@@ -353,16 +369,17 @@ class FrmTableHTMLGenerator {
 	 *
 	 * @param string $label The label.
 	 * @param string $value The value.
+	 * @param array  $args  Additional arguments. May include "field_type" string.
 	 *
 	 * @return string
 	 */
-	public function generate_two_cell_table_row( $label, $value ) {
+	public function generate_two_cell_table_row( $label, $value, $args = array() ) {
 		$row  = '<tr' . $this->tr_style();
 		$row .= $this->add_row_class( $value === '' );
 		$row .= '>';
 
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
-		$value = '<td' . $this->td_style . '>' . wp_kses_post( $value ) . '</td>';
+		$value = '<td' . $this->td_style . '>' . $this->filter_value_for_display( $value, $args ) . '</td>';
 
 		if ( 'rtl' == $this->direction ) {
 			$row .= $value;
@@ -377,6 +394,21 @@ class FrmTableHTMLGenerator {
 		$this->switch_odd();
 
 		return $row;
+	}
+
+	/**
+	 * @param string $value
+	 * @param array  $args
+	 *
+	 * @return string
+	 */
+	private function filter_value_for_display( $value, $args ) {
+		if ( empty( $args['field_type'] ) ) {
+			return wp_kses_post( $value );
+		}
+
+		$field_object = FrmFieldFactory::get_field_type( $args['field_type'] );
+		return $field_object->filter_value_for_table_html( $value );
 	}
 
 	/**

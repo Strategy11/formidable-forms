@@ -9,9 +9,7 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
 use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
-use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
-use Rector\DeadCode\Rector\If_\ReduceAlwaysFalseIfOrRector;
 use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
@@ -36,11 +34,7 @@ use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodParameterRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
-use Rector\DeadCode\Rector\Assign\RemoveUnusedVariableAssignRector;
-use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
-use Rector\DeadCode\Rector\If_\RemoveUnusedNonEmptyArrayBeforeForeachRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
-use Rector\CodeQuality\Rector\Ternary\UnnecessaryTernaryExpressionRector;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 
@@ -51,6 +45,7 @@ return RectorConfig::configure()
 		array(
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
+			__DIR__ . '/square',
 		)
 	)
 	// here we can define, what prepared sets of rules will be applied
@@ -90,27 +85,27 @@ return RectorConfig::configure()
 			CombinedAssignRector::class,
 			ExplicitReturnNullRector::class,
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
-			UseIdenticalOverEqualWithSameTypeRector::class,
 			SimplifyUselessVariableRector::class,
-			ReduceAlwaysFalseIfOrRector::class,
 			CountArrayToEmptyArrayComparisonRector::class,
 			DisallowedEmptyRuleFixerRector::class,
 			SimplifyIfReturnBoolRector::class,
 			SimplifyIfElseToTernaryRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
+			// This changes \t to an actual tab character. We don't want this rule.
 			JoinStringConcatRector::class,
 			ChangeArrayPushToArrayAssignRector::class,
+			// We never want to remove a param tag. Leave this exception.
 			RemoveUselessParamTagRector::class,
 			RemoveDeadReturnRector::class,
 			RemoveAlwaysTrueIfConditionRector::class,
 			RemoveUnreachableStatementRector::class,
+			// This changes if is_array() && empty() to if === [].
 			SimplifyEmptyArrayCheckRector::class,
 			LongArrayToShortArrayRector::class,
 			TernaryToElvisRector::class,
 			// TODO: Try this for some files and not others.
 			RemoveUnusedPrivateMethodRector::class,
 			ShortenElseIfRector::class,
-			// Fix these.
 			CombineIfRector::class,
 			SingleInArrayToCompareRector::class,
 			RemoveUnusedForeachKeyRector::class,
@@ -118,10 +113,6 @@ return RectorConfig::configure()
 			RemoveUnusedPrivateMethodParameterRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
-			RemoveUnusedVariableAssignRector::class,
 			RemoveUnusedConstructorParamRector::class,
-			RemoveNonExistingVarAnnotationRector::class,
-			RemoveUnusedNonEmptyArrayBeforeForeachRector::class,
-			UnnecessaryTernaryExpressionRector::class,
 		)
 	);

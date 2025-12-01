@@ -10,9 +10,24 @@ class FrmStrpLiteEventsController {
 	 */
 	public static $events_to_skip_option_name = 'frm_strp_events_to_skip';
 
+	/**
+	 * @var object|null
+	 */
 	private $event;
+
+	/**
+	 * @var object|null
+	 */
 	private $invoice;
+
+	/**
+	 * @var string|null
+	 */
 	private $charge;
+
+	/**
+	 * @var string|null
+	 */
 	private $status;
 
 	/**
@@ -99,6 +114,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return bool
 	 */
 	private function should_skip_status_update_for_first_recurring_payment( $payment ) {
@@ -147,6 +163,7 @@ class FrmStrpLiteEventsController {
 	 * When a customer is deleted in Stripe, remove the link to a user.
 	 *
 	 * @since 6.5, introduced in v2.01 of the Stripe add on.
+	 *
 	 * @return void
 	 */
 	private function reset_customer() {
@@ -175,6 +192,7 @@ class FrmStrpLiteEventsController {
 
 	/**
 	 * @param string $status
+	 *
 	 * @return bool
 	 */
 	private function subscription_canceled( $status = 'canceled' ) {
@@ -203,6 +221,9 @@ class FrmStrpLiteEventsController {
 		return true;
 	}
 
+	/**
+	 * @return false|object
+	 */
 	private function prepare_from_invoice() {
 		if ( empty( $this->invoice->subscription ) ) {
 			// This isn't a subscription.
@@ -251,6 +272,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.11
 	 *
 	 * @param object $sub
+	 *
 	 * @return void
 	 */
 	private function maybe_cancel_subscription( $sub ) {
@@ -301,6 +323,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.11
 	 *
 	 * @param string $sub_id Stripe subscriptino id prefixed with 'sub_'.
+	 *
 	 * @return int
 	 */
 	private function get_payments_count( $sub_id ) {
@@ -315,15 +338,22 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return bool
 	 */
 	private function is_first_payment( $payment ) {
 		return ! $payment->receipt_id || 0 === strpos( $payment->receipt_id, 'pi_' );
 	}
 
+	/**
+	 * @param string $sub_id
+	 *
+	 * @return object|null
+	 */
 	private function get_subscription( $sub_id ) {
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $sub_id, 'sub_id' );
+
 		if ( ! $sub ) {
 			// If this isn't an existing subscription, it must be a charge for another site/plugin.
 			FrmTransLiteLog::log_message( 'Stripe Webhook Message', 'No action taken since there is not a matching subscription for ' . $sub_id );
@@ -338,6 +368,11 @@ class FrmStrpLiteEventsController {
 		return $sub;
 	}
 
+	/**
+	 * @param string $sub_id
+	 *
+	 * @return object|null
+	 */
 	private function get_payment_for_sub( $sub_id ) {
 		$frm_payment = new FrmTransLitePayment();
 		return $frm_payment->get_one_by( $sub_id, 'sub_id' );
@@ -345,6 +380,7 @@ class FrmStrpLiteEventsController {
 
 	/**
 	 * @param array $payment_values
+	 *
 	 * @return void
 	 */
 	private function set_payment_values( &$payment_values ) {
@@ -368,6 +404,7 @@ class FrmStrpLiteEventsController {
 	/**
 	 * @param object $sub
 	 * @param array  $payment
+	 *
 	 * @return void
 	 */
 	private function update_next_bill_date( $sub, $payment ) {
@@ -394,6 +431,7 @@ class FrmStrpLiteEventsController {
 
 	/**
 	 * @param array $payment_values
+	 *
 	 * @return void
 	 */
 	private function set_partial_refund( &$payment_values ) {
@@ -418,6 +456,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param array<string> $event_ids
+	 *
 	 * @return void
 	 */
 	private function process_event_ids( $event_ids ) {
@@ -443,6 +482,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
+	 *
 	 * @return bool True if the event should be skipped.
 	 */
 	private function should_skip_event( $event_id ) {
@@ -460,6 +500,7 @@ class FrmStrpLiteEventsController {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return bool
 	 */
 	private function last_attempt_to_process_event_is_too_recent( $event_id ) {
@@ -471,6 +512,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function count_failed_event( $event_id ) {
@@ -497,6 +539,7 @@ class FrmStrpLiteEventsController {
 	 * @since 6.5, introduced in v2.07 of the Stripe add on.
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function track_handled_event( $event_id ) {

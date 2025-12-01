@@ -10,6 +10,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string             $callback
 	 * @param array|false|object $field
+	 *
 	 * @return string
 	 */
 	public static function maybe_show_card( $callback, $field = false ) {
@@ -42,6 +43,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array  $field
 	 * @param string $field_name
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_card( $field, $field_name, $atts ) {
@@ -68,6 +70,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.22
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_actions_before_submit( $form_id ) {
@@ -89,6 +92,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
 	 * @param mixed    $form
+	 *
 	 * @return array
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
@@ -132,6 +136,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * Trigger a one time payment.
 	 *
 	 * @param array $atts The arguments for the payment.
+	 *
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
@@ -174,6 +179,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * Add a payment row for the payments table.
 	 *
 	 * @param array $atts The arguments for the payment.
+	 *
 	 * @return int
 	 */
 	private static function create_new_payment( $atts ) {
@@ -186,7 +192,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'item_id'    => $atts['entry']->id,
 			'action_id'  => $atts['action']->ID,
 			'receipt_id' => $atts['charge']->id,
-			'sub_id'     => isset( $atts['charge']->sub_id ) ? $atts['charge']->sub_id : '',
+			'sub_id'     => $atts['charge']->sub_id ?? '',
 			'test'       => 'test' === FrmSquareLiteAppHelper::active_mode() ? 1 : 0,
 		);
 
@@ -199,6 +205,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * Create a new Square subscription and a subscription and payment for the payments tables.
 	 *
 	 * @param array $atts Includes 'customer', 'entry', 'action', 'amount'.
+	 *
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
@@ -264,7 +271,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		// Add subscription database row.
 		// We do not add a payment row at this time. This is handled with our webhook handling.
-		$subscription_id = self::create_new_subscription( $response->id, $atts );
+		self::create_new_subscription( $response->id, $atts );
 
 		return true;
 	}
@@ -274,6 +281,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string $description
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private static function prepare_subscription_description( $description, $atts ) {
@@ -290,6 +298,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param string $subscription_id
 	 * @param array  $atts
+	 *
 	 * @return int
 	 */
 	private static function create_new_subscription( $subscription_id, $atts ) {
@@ -318,6 +327,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * @param string $repeat_cadence
+	 *
 	 * @return int
 	 */
 	private static function get_interval_count_from_repeat_cadence( $repeat_cadence ) {
@@ -349,6 +359,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * @param string $repeat_cadence
+	 *
 	 * @return string
 	 */
 	private static function get_interval_from_repeat_cadence( $repeat_cadence ) {
@@ -390,6 +401,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * Replace an [email] shortcode with the current user email.
 	 *
 	 * @param string $email
+	 *
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
@@ -410,6 +422,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 *
 	 * @param mixed $amount
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_amount( $amount, $atts = array() ) {
@@ -422,6 +435,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * If this form submits with ajax, load the scripts on the first page.
 	 *
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
@@ -470,6 +484,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * Load front end JavaScript for a Stripe form.
 	 *
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function load_scripts( $form_id ) {
@@ -556,6 +571,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_style( $form_id ) {
@@ -567,7 +583,6 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'backgroundColor' => $settings['bg_color'],
 				'fontWeight'      => $settings['field_weight'],
 			),
-			// How does input placeholder work??
 			'input::placeholder'        => array(
 				'color' => $settings['text_color_disabled'],
 			),
@@ -580,7 +595,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		if ( ! empty( $settings['font'] ) ) {
-			$style['input']['fontFamily'] = $settings['font'];
+			$style['input']['fontFamily'] = self::prepare_font_family_setting( $settings['font'] );
 		}
 
 		/**
@@ -594,11 +609,30 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * Prepare the font family setting for the Stripe element.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $font
+	 *
+	 * @return string
+	 */
+	private static function prepare_font_family_setting( $font ) {
+		if ( false === strpos( $font, ',' ) ) {
+			return $font;
+		}
+
+		$fonts = explode( ',', $font );
+		return trim( reset( $fonts ) );
+	}
+
+	/**
 	 * Get the border radius for Stripe elements.
 	 *
 	 * @since 6.22
 	 *
 	 * @param array $settings
+	 *
 	 * @return string
 	 */
 	private static function get_border_radius( $settings ) {
@@ -620,6 +654,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @since 6.22
 	 *
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_style_settings_for_form( $form_id ) {
@@ -652,6 +687,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @param array    $errors
 	 * @param stdClass $field
 	 * @param array    $values
+	 *
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
@@ -660,7 +696,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			return $errors;
 		}
 
-		$field_id = isset( $field->temp_id ) ? $field->temp_id : $field->id;
+		$field_id = $field->temp_id ?? $field->id;
 
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );

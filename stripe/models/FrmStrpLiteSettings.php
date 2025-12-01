@@ -34,6 +34,7 @@ class FrmStrpLiteSettings {
 
 	/**
 	 * @param mixed $settings
+	 *
 	 * @return void
 	 */
 	public function set_default_options( $settings = false ) {
@@ -60,6 +61,9 @@ class FrmStrpLiteSettings {
 		}
 	}
 
+	/**
+	 * @return object
+	 */
 	public function get_options() {
 		$settings = get_option( 'frm_' . $this->param() . '_options' );
 
@@ -78,6 +82,7 @@ class FrmStrpLiteSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function update( $params ) {

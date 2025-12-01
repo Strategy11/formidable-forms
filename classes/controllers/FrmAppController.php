@@ -32,6 +32,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.05
+	 *
+	 * @return string
 	 */
 	private static function menu_icon() {
 		$icon = FrmAppHelper::svg_logo(
@@ -47,6 +49,10 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $classes
+	 *
+	 * @return string
 	 */
 	public static function add_admin_class( $classes ) {
 		if ( self::is_white_page() ) {
@@ -133,6 +139,8 @@ class FrmAppController {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return bool
 	 */
 	private static function is_white_page() {
 		$white_pages = array(
@@ -197,6 +205,7 @@ class FrmAppController {
 		 * @since 6.8
 		 *
 		 * @param bool $is_grey_page
+		 *
 		 * @return bool
 		 */
 		return apply_filters( 'frm_is_grey_page', $is_grey_page );
@@ -206,6 +215,7 @@ class FrmAppController {
 	 * @since 6.8
 	 *
 	 * @param array $pages A list of page names to check.
+	 *
 	 * @return bool
 	 */
 	private static function is_page_in_list( $pages ) {
@@ -264,6 +274,7 @@ class FrmAppController {
 
 	/**
 	 * @param object $form
+	 *
 	 * @return array
 	 */
 	private static function get_form_nav_items( $form ) {
@@ -341,6 +352,7 @@ class FrmAppController {
 	 * Adds a settings link to the plugins page
 	 *
 	 * @param array $links
+	 *
 	 * @return array
 	 */
 	public static function settings_link( $links ) {
@@ -453,6 +465,7 @@ class FrmAppController {
 	 * @param string $form_key
 	 * @param string $title
 	 * @param string $description
+	 *
 	 * @return void
 	 */
 	public static function api_email_form( $form_key, $title = '', $description = '' ) {
@@ -511,6 +524,7 @@ class FrmAppController {
 	 * Check if the database is outdated
 	 *
 	 * @since 2.0.1
+	 *
 	 * @return bool
 	 */
 	public static function needs_update() {
@@ -535,6 +549,7 @@ class FrmAppController {
 	 * @since 3.0.04
 	 *
 	 * @param array $atts
+	 *
 	 * @return bool
 	 */
 	public static function compare_for_update( $atts ) {
@@ -674,8 +689,8 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 		wp_register_script( 'formidable_embed', $plugin_url . '/js/admin/embed.js', array( 'formidable_dom', 'jquery-ui-autocomplete' ), $version, true );
-		self::register_popper1();
-		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
+		self::register_popper2();
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '5.0.2', true );
 
 		$settings_js_vars = array(
 			'currencies' => FrmCurrencyHelper::get_currencies(),
@@ -714,7 +729,7 @@ class FrmAppController {
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
 		}
 
-		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );
 
 		if ( ! class_exists( 'FrmTransHooksController', false ) ) {
 			/**
@@ -736,7 +751,7 @@ class FrmAppController {
 
 			wp_enqueue_script( 'admin-widgets' );
 			wp_enqueue_style( 'widgets' );
-			self::maybe_deregister_popper2();
+			self::maybe_deregister_popper1();
 			wp_enqueue_script( 'formidable_admin' );
 			wp_set_script_translations( 'formidable_admin', 'formidable' );
 			wp_enqueue_script( 'formidable_embed' );
@@ -797,6 +812,7 @@ class FrmAppController {
 	 *
 	 * @param string $plugin_url The plugin URL.
 	 * @param string $version    The plugin version.
+	 *
 	 * @return void
 	 */
 	private static function enqueue_builder_assets( $plugin_url, $version ) {
@@ -815,6 +831,8 @@ class FrmAppController {
 	 * Enqueues global settings scripts.
 	 *
 	 * @param string $page The `page` param in URL.
+	 *
+	 * @return void
 	 */
 	private static function enqueue_global_settings_scripts( $page ) {
 		if ( 'formidable-settings' === $page ) {
@@ -829,6 +847,7 @@ class FrmAppController {
 	 * @since 6.11
 	 *
 	 * @param string $page
+	 *
 	 * @return void
 	 */
 	private static function maybe_enqueue_dropzone_css( $page ) {
@@ -896,7 +915,7 @@ class FrmAppController {
 	private static function enqueue_legacy_views_assets() {
 		wp_enqueue_style( 'formidable-grids' );
 		wp_enqueue_script( 'jquery-ui-draggable' );
-		self::maybe_deregister_popper2();
+		self::maybe_deregister_popper1();
 		wp_enqueue_script( 'formidable_admin' );
 		wp_add_inline_style(
 			'formidable-admin',
@@ -927,13 +946,13 @@ class FrmAppController {
 	}
 
 	/**
-	 * Fix a Duplicator Pro conflict because it uses Popper 2. See issue #3459.
+	 * Unregister Popper if the registered version is outdated.
 	 *
-	 * @since 5.2.02.01
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function maybe_deregister_popper2() {
+	private static function maybe_deregister_popper1() {
 		global $wp_scripts;
 
 		if ( ! array_key_exists( 'popper', $wp_scripts->registered ) ) {
@@ -941,24 +960,24 @@ class FrmAppController {
 		}
 
 		$popper = $wp_scripts->registered['popper'];
-		if ( version_compare( $popper->ver, '2.0', '>=' ) ) {
+		if ( version_compare( $popper->ver, '2.0', '<' ) ) {
 			wp_deregister_script( 'popper' );
-			self::register_popper1();
+			self::register_popper2();
 		}
 	}
 
 	/**
-	 * Register Popper required for Bootstrap 4.
+	 * Register Popper required for Bootstrap 5.
 	 *
-	 * @since 5.2.02.01
+	 * @since x.x
 	 *
 	 * @return void
 	 */
-	private static function register_popper1() {
+	private static function register_popper2() {
 		if ( ! self::should_register_popper() ) {
 			return;
 		}
-		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array(), '2.11.8', true );
 	}
 
 	/**
@@ -1073,6 +1092,8 @@ class FrmAppController {
 	 * We don't want to run manually by people calling the API.
 	 *
 	 * @since 4.06.02
+	 *
+	 * @return bool
 	 */
 	public static function can_update_db() {
 		return get_transient( 'frm_updating_api' );
@@ -1184,6 +1205,11 @@ class FrmAppController {
 		wp_die();
 	}
 
+	/**
+	 * @param array $tables
+	 *
+	 * @return array
+	 */
 	public static function drop_tables( $tables ) {
 		global $wpdb;
 		$tables[] = $wpdb->prefix . 'frm_fields';
@@ -1233,6 +1259,11 @@ class FrmAppController {
 		FrmTransLiteAppController::maybe_schedule_cron();
 	}
 
+	/**
+	 * @param string $text
+	 *
+	 * @return string
+	 */
 	public static function set_footer_text( $text ) {
 		if ( FrmAppHelper::is_formidable_admin() ) {
 			$text = '';
@@ -1276,6 +1307,7 @@ class FrmAppController {
 		 * @since 6.7
 		 *
 		 * @param bool $show_footer_links
+		 *
 		 * @return bool
 		 */
 		return apply_filters( 'frm_show_footer_links', $show_footer_links );
@@ -1322,6 +1354,7 @@ class FrmAppController {
 	 *
 	 * @param string $plugin_url URL of the plugin.
 	 * @param string $version Current version of the plugin.
+	 *
 	 * @return void
 	 */
 	private static function enqueue_floating_links( $plugin_url, $version ) {
@@ -1493,6 +1526,7 @@ class FrmAppController {
 	 *
 	 * @param string &$orderby Reference to the current 'orderby' parameter.
 	 * @param string &$order   Reference to the current 'order' parameter.
+	 *
 	 * @return void
 	 */
 	public static function apply_saved_sort_preference( &$orderby, &$order ) {
