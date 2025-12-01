@@ -652,6 +652,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public static function render_tabs( $active_tab = 'payments' ) {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			// Coupons are only available to people who can access global settings.
+			return;
+		}
+
 		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
 			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
 		}
