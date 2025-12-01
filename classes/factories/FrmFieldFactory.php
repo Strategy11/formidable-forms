@@ -119,6 +119,9 @@ class FrmFieldFactory {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $type
+	 * @return mixed
 	 */
 	public static function field_has_html( $type ) {
 		$has_html = self::field_has_property( $type, 'has_html' );

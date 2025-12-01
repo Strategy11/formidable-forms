@@ -170,6 +170,10 @@ class FrmFieldFormHtml {
 	 * In this case, we don't want to run the wp shortcodes with the description included.
 	 *
 	 * @since 3.0
+	 *
+	 * @param bool $wp_processed
+	 *
+	 * @return void
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
@@ -205,6 +209,11 @@ class FrmFieldFormHtml {
 	 * Insert an ID if it doesn't exist.
 	 *
 	 * @since 3.06.02
+	 *
+	 * @param string $param
+	 * @param string $id
+	 *
+	 * @return void
 	 */
 	private function add_element_id( $param, $id ) {
 		preg_match_all( '/(\[if\s+' . $param . '\])(.*?)(\[\/if\s+' . $param . '\])/mis', $this->html, $inner_html );

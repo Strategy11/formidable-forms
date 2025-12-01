@@ -700,6 +700,9 @@ class FrmFieldsController {
 	 * in a dropdown.
 	 *
 	 * @since 4.04
+	 *
+	 * @param array|object $field
+	 *
 	 * @return bool True if placeholder was added.
 	 */
 	public static function add_placeholder_to_select( $field ) {

@@ -344,6 +344,9 @@ class FrmEntryFormatter {
 	 * interaction with processing field values like time format.
 	 *
 	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @return void
 	 */
 	protected function init_atts( $atts ) {
 		$atts['source']       = 'entry_formatter';

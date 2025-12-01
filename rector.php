@@ -49,6 +49,7 @@ return RectorConfig::configure()
 		array(
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
+			__DIR__ . '/square',
 		)
 	)
 	// here we can define, what prepared sets of rules will be applied
