@@ -41,6 +41,7 @@ class FrmXMLController {
 	 * Use the template link to install the XML template
 	 *
 	 * @since 3.06
+	 *
 	 * @return void
 	 */
 	public static function install_template() {
@@ -131,6 +132,7 @@ class FrmXMLController {
 	 * This is to make sure that the URL can't be exploited for a SSRF attack.
 	 *
 	 * @since 5.5.5
+	 *
 	 * @param string $url
 	 *
 	 * @return bool True on success, False on error.
@@ -182,6 +184,8 @@ class FrmXMLController {
 	 *
 	 * @param array  $form
 	 * @param string $value
+	 *
+	 * @return string
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
 		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
@@ -195,6 +199,7 @@ class FrmXMLController {
 	 * @since 4.06.02
 	 *
 	 * @param array $form The posted form values.
+	 *
 	 * @return array|null The array of created pages.
 	 */
 	private static function create_pages_for_import( $form ) {
@@ -248,6 +253,7 @@ class FrmXMLController {
 	 * @since 3.06
 	 *
 	 * @param object $xml The values included in the XML.
+	 *
 	 * @return void
 	 */
 	private static function set_new_form_name( &$xml ) {
@@ -562,7 +568,9 @@ class FrmXMLController {
 	 * Returns an array that has parent term slugs for the terms provided.
 	 *
 	 * @since 6.8.3
+	 *
 	 * @param array $terms
+	 *
 	 * @return array
 	 */
 	public static function get_parent_terms_slugs( $terms ) {
@@ -583,6 +591,7 @@ class FrmXMLController {
 	 * Prepare the types array.
 	 *
 	 * @param array $type
+	 *
 	 * @return void
 	 */
 	private static function prepare_types_array( &$type ) {
@@ -606,6 +615,7 @@ class FrmXMLController {
 	 *
 	 * @param array $args
 	 * @param array $records
+	 *
 	 * @return string
 	 */
 	private static function get_file_name( $args, $records ) {
@@ -662,6 +672,7 @@ class FrmXMLController {
 	 * @param false|int|string $form_id
 	 * @param string           $search
 	 * @param string           $fid
+	 *
 	 * @return void
 	 */
 	public static function csv( $form_id = false, $search = '', $fid = '' ) {
@@ -750,6 +761,11 @@ class FrmXMLController {
 		return apply_filters( 'frm_fields_for_csv_export', $csv_fields, compact( 'form' ) );
 	}
 
+	/**
+	 * @param array $mimes
+	 *
+	 * @return array
+	 */
 	public static function allow_mime( $mimes ) {
 		if ( ! isset( $mimes['csv'] ) ) {
 			// allow csv files

@@ -76,6 +76,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return array            Contains `count` and `total`.
 	 */
 	public function get_payments_stats( $from_date = null, $to_date = null ) {
@@ -126,6 +127,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 * @since 6.7
 	 *
 	 * @param object[] $payments Array of payment objects.
+	 *
 	 * @return array Return array of total amount for each currency.
 	 */
 	private function get_payment_total_data( $payments ) {

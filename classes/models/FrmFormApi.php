@@ -31,6 +31,7 @@ class FrmFormApi {
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
+	 *
 	 * @return void
 	 */
 	public function __construct( $license = null ) {
@@ -42,6 +43,7 @@ class FrmFormApi {
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
+	 *
 	 * @return void
 	 */
 	private function set_license( $license ) {
@@ -56,6 +58,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return string
 	 */
 	public function get_license() {
@@ -73,6 +76,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return string
 	 */
 	public function get_cache_key() {
@@ -81,6 +85,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return array
 	 */
 	public function get_api_info() {
@@ -262,6 +267,8 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return false|object
 	 */
 	public function get_pro_updater() {
 		if ( FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) ) {
@@ -377,6 +384,7 @@ class FrmFormApi {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return array
 	 */
 	public function error_for_license() {
@@ -392,6 +400,7 @@ class FrmFormApi {
 	 * @since 3.06
 	 *
 	 * @param array $addons
+	 *
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {
@@ -418,6 +427,7 @@ class FrmFormApi {
 	 * @since 6.0
 	 *
 	 * @param array $addon
+	 *
 	 * @return bool
 	 */
 	protected function is_new( $addon ) {

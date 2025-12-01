@@ -111,6 +111,11 @@ class FrmFormMigratorsHelper {
 		);
 	}
 
+	/**
+	 * @param array $install
+	 *
+	 * @return string|null
+	 */
 	private static function install_banner( $install ) {
 		if ( empty( $install['link'] ) ) {
 			return '';

@@ -11,6 +11,7 @@ class FrmSquareLiteSettingsController {
 	 * @since 6.22
 	 *
 	 * @param array $sections
+	 *
 	 * @return array
 	 */
 	public static function add_settings_section( $sections ) {
@@ -36,6 +37,7 @@ class FrmSquareLiteSettingsController {
 	 * Print the Stripe section for Global settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {

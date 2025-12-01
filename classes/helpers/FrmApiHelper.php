@@ -14,6 +14,7 @@ class FrmApiHelper {
 	 * @since 6.17
 	 *
 	 * @param array $item Inbox or Sale item.
+	 *
 	 * @return bool
 	 */
 	public static function is_for_user( $item ) {
@@ -43,6 +44,7 @@ class FrmApiHelper {
 	 * @since 6.17
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function is_for_everyone( $who ) {
@@ -53,6 +55,7 @@ class FrmApiHelper {
 	 * @since 6.17
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function is_user_type( $who ) {
@@ -124,6 +127,7 @@ class FrmApiHelper {
 	 * @since 6.18
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function check_free_segments( $who ) {
@@ -161,6 +165,7 @@ class FrmApiHelper {
 	 *
 	 * @param string $key
 	 * @param int    $activation_timestamp
+	 *
 	 * @return bool
 	 */
 	private static function matches_segment( $key, $activation_timestamp ) {

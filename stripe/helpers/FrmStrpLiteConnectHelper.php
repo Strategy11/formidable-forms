@@ -129,6 +129,7 @@ class FrmStrpLiteConnectHelper {
 	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
 	 *
 	 * @param string $mode 'live' or 'test'.
+	 *
 	 * @return string the client password.
 	 */
 	private static function generate_client_password( $mode ) {
@@ -140,6 +141,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $action
 	 * @param array  $additional_body
+	 *
 	 * @return object|string
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
@@ -193,6 +195,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string either _test or _live.
 	 */
 	private static function get_active_mode_option_name_suffix( $mode = 'auto' ) {
@@ -205,6 +208,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_strp_connect_option_name( $key, $mode = 'auto' ) {
@@ -213,6 +217,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_account_id_option_name( $mode = 'auto' ) {
@@ -221,6 +226,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_client_side_token_option_name( $mode = 'auto' ) {
@@ -229,6 +235,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_server_side_token_option_name( $mode = 'auto' ) {
@@ -237,6 +244,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_stripe_details_submitted_option_name( $mode = 'auto' ) {
@@ -397,6 +405,7 @@ class FrmStrpLiteConnectHelper {
 	 * On a successful account status check, set details_submitted option.
 	 *
 	 * @param string $mode 'live' or 'test'.
+	 *
 	 * @return void
 	 */
 	private static function set_stripe_details_as_submitted( $mode ) {
@@ -471,6 +480,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode
+	 *
 	 * @return bool
 	 */
 	public static function stripe_connect_is_setup( $mode = 'auto' ) {
@@ -479,12 +489,18 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param mixed $response
+	 *
 	 * @return bool
 	 */
 	private static function validate_response( $response ) {
 		return ! is_wp_error( $response ) && is_array( $response ) && isset( $response['http_response'] );
 	}
 
+	/**
+	 * @param array $response
+	 *
+	 * @return object|null
+	 */
 	private static function pull_response_body( $response ) {
 		$http_response   = $response['http_response'];
 		$response_object = $http_response->get_response_object();
@@ -519,6 +535,7 @@ class FrmStrpLiteConnectHelper {
 	 * If it is active, use the WPML "absolute home" URL which is not modified.
 	 *
 	 * @param string $url
+	 *
 	 * @return string
 	 */
 	private static function maybe_fix_wpml_url( $url ) {
@@ -533,6 +550,7 @@ class FrmStrpLiteConnectHelper {
 	 * WPML might add a language to the url. Don't send that to the server.
 	 *
 	 * @param string $url URL.
+	 *
 	 * @return string
 	 */
 	private static function strip_lang_from_url( $url ) {
@@ -571,6 +589,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param bool $connected
+	 *
 	 * @return string
 	 */
 	private static function get_url_for_stripe_settings( $connected ) {
@@ -620,6 +639,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @todo I can probably remove this.
+	 *
 	 * @return void
 	 */
 	public static function stripe_icon() {
@@ -652,6 +672,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode
+	 *
 	 * @return bool|string
 	 */
 	public static function get_account_id( $mode = 'auto' ) {
@@ -660,6 +681,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $options
+	 *
 	 * @return false|string
 	 */
 	public static function get_customer_id( $options ) {
@@ -676,6 +698,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $customer_id
+	 *
 	 * @return bool
 	 */
 	public static function validate_customer( $customer_id ) {
@@ -711,6 +734,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return mixed
 	 */
 	public static function create_intent( $new_charge ) {
@@ -724,6 +748,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $payment_id
+	 *
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
@@ -734,6 +759,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return mixed
 	 */
 	public static function create_subscription( $new_charge ) {
@@ -752,6 +778,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 *
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
@@ -763,6 +790,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $payment_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_intent( $payment_id ) {
@@ -787,6 +815,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
@@ -806,6 +835,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return mixed
 	 */
 	public static function process_event( $event_id ) {
@@ -814,6 +844,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $plan
+	 *
 	 * @return false|string
 	 */
 	public static function maybe_create_plan( $plan ) {
@@ -826,6 +857,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $plan
+	 *
 	 * @return mixed
 	 */
 	public static function create_plan( $plan ) {
@@ -835,6 +867,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 *
 	 * @return bool
 	 */
 	public static function update_intent( $intent_id, $data ) {
@@ -862,6 +895,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string      $customer_id
 	 * @param array|false $payment_method_types
+	 *
 	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
@@ -884,6 +918,7 @@ class FrmStrpLiteConnectHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
+	 *
 	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {

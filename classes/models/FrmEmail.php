@@ -237,6 +237,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
 	 * @return void
 	 */
 	private function set_from( $user_id_args ) {
@@ -816,6 +817,8 @@ class FrmEmail {
 	 *
 	 * @param string $name
 	 * @param string $email
+	 *
+	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
 		if ( '' !== $name ) {

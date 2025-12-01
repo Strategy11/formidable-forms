@@ -10,6 +10,12 @@ class FrmXMLHelper {
 	 */
 	private static $installing_template = false;
 
+	/**
+	 * @param array|string $opt
+	 * @param string       $padding
+	 *
+	 * @return void
+	 */
 	public static function get_xml_values( $opt, $padding ) {
 		if ( is_array( $opt ) ) {
 			foreach ( $opt as $ok => $ov ) {
@@ -29,6 +35,7 @@ class FrmXMLHelper {
 
 	/**
 	 * @param string $file
+	 *
 	 * @return array|WP_Error The items imported
 	 */
 	public static function import_xml( $file ) {
@@ -77,6 +84,7 @@ class FrmXMLHelper {
 	 * @since 6.2.3
 	 *
 	 * @param string $xml_string
+	 *
 	 * @return void
 	 */
 	private static function maybe_fix_xml( &$xml_string ) {
@@ -107,6 +115,7 @@ class FrmXMLHelper {
 	 *
 	 * @param object $xml
 	 * @param bool   $installing_template
+	 *
 	 * @return array The number of items imported
 	 */
 	public static function import_xml_now( $xml, $installing_template = false ) {
@@ -140,6 +149,7 @@ class FrmXMLHelper {
 
 	/**
 	 * @since 3.06
+	 *
 	 * @return array
 	 */
 	private static function pre_import_data() {
@@ -164,6 +174,7 @@ class FrmXMLHelper {
 	/**
 	 * @param SimpleXMLElement $terms
 	 * @param array            $imported
+	 *
 	 * @return array
 	 */
 	public static function import_xml_terms( $terms, $imported ) {
@@ -199,6 +210,7 @@ class FrmXMLHelper {
 	 * @since 2.0.8
 	 *
 	 * @param object $t
+	 *
 	 * @return int|string
 	 */
 	private static function get_term_parent_id( $t ) {
@@ -218,6 +230,7 @@ class FrmXMLHelper {
 	/**
 	 * @param SimpleXMLElement $forms
 	 * @param array            $imported
+	 *
 	 * @return array
 	 */
 	public static function import_xml_forms( $forms, $imported ) {
@@ -280,6 +293,11 @@ class FrmXMLHelper {
 		return $imported;
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return array
+	 */
 	private static function fill_form( $item ) {
 		$form = array(
 			'id'             => (int) $item->id,
@@ -309,6 +327,11 @@ class FrmXMLHelper {
 		return $form;
 	}
 
+	/**
+	 * @param array $form
+	 *
+	 * @return false|object
+	 */
 	private static function maybe_get_form( $form ) {
 		// if template, allow to edit if form keys match, otherwise, creation date must also match
 		$edit_query = array(
@@ -330,6 +353,13 @@ class FrmXMLHelper {
 		return $form;
 	}
 
+	/**
+	 * @param object $this_form
+	 * @param array  $form
+	 * @param array  $imported
+	 *
+	 * @return void
+	 */
 	private static function update_form( $this_form, $form, &$imported ) {
 		$form_id = $this_form->id;
 		FrmForm::update( $form_id, $form );
@@ -342,6 +372,11 @@ class FrmXMLHelper {
 		$imported['form_status'][ $form_id ] = 'updated';
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	private static function get_form_fields( $form_id ) {
 		$form_fields = FrmField::get_all_for_form( $form_id, '', 'exclude', 'exclude' );
 		$old_fields  = array();
@@ -359,6 +394,7 @@ class FrmXMLHelper {
 	 * Delete any fields attached to this form that were not included in the template
 	 *
 	 * @param array $form_fields
+	 *
 	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
@@ -507,6 +543,7 @@ class FrmXMLHelper {
 	 * @since 6.8.4
 	 *
 	 * @param array $field_array
+	 *
 	 * @return array
 	 */
 	private static function update_field_options_with_defaults( $field_array ) {
@@ -541,6 +578,12 @@ class FrmXMLHelper {
 		do_action( 'frm_after_existing_field_is_imported', $field_array, $form_fields[ $field_array['field_key'] ], $old_field_id );
 	}
 
+	/**
+	 * @param object     $field
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	private static function fill_field( $field, $form_id ) {
 		return array(
 			'id'            => (int) $field->id,
@@ -561,6 +604,7 @@ class FrmXMLHelper {
 	 * @since 4.06
 	 *
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function set_default_value( &$f ) {
@@ -592,6 +636,7 @@ class FrmXMLHelper {
 	 * @since 4.05
 	 *
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_required( &$f ) {
@@ -604,8 +649,10 @@ class FrmXMLHelper {
 	 * Update the current in_section value at the beginning of the field loop
 	 *
 	 * @since 2.0.25
+	 *
 	 * @param int   $in_section
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
@@ -655,6 +702,7 @@ class FrmXMLHelper {
 	 *
 	 * @param array $imported
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_get_values_form_setting( $imported, &$f ) {
@@ -676,6 +724,7 @@ class FrmXMLHelper {
 	 * @since 4.0
 	 *
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function run_field_migrations( &$f ) {
@@ -687,6 +736,7 @@ class FrmXMLHelper {
 	 * @since 4.0
 	 *
 	 * @param array $f
+	 *
 	 * @return void
 	 */
 	private static function migrate_placeholders( &$f ) {
@@ -758,6 +808,7 @@ class FrmXMLHelper {
 	 *
 	 * @param array $f
 	 * @param array $imported
+	 *
 	 * @return void
 	 */
 	private static function create_imported_field( $f, &$imported ) {
@@ -780,6 +831,7 @@ class FrmXMLHelper {
 	 * @since 5.5.1
 	 *
 	 * @param array $field
+	 *
 	 * @return array
 	 */
 	private static function maybe_import_images_for_options( $field ) {
@@ -812,8 +864,10 @@ class FrmXMLHelper {
 	 * Fix field ids for fields that already exist prior to import.
 	 *
 	 * @since 4.07
+	 *
 	 * @param int   $form_id
 	 * @param array $keys_by_original_field_id
+	 *
 	 * @return void
 	 */
 	protected static function maybe_update_field_ids( $form_id, $keys_by_original_field_id ) {
@@ -856,6 +910,7 @@ class FrmXMLHelper {
 	 * @since 2.0.19
 	 *
 	 * @param array $form
+	 *
 	 * @return void
 	 */
 	private static function update_custom_style_setting_on_import( &$form ) {
@@ -896,6 +951,7 @@ class FrmXMLHelper {
 	 * @since 2.2.7
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	private static function update_custom_style_setting_after_import( $form_id ) {
@@ -918,6 +974,7 @@ class FrmXMLHelper {
 	 *
 	 * @param SimpleXMLElement $views
 	 * @param array            $imported
+	 *
 	 * @return array
 	 */
 	public static function import_xml_views( $views, $imported ) {
@@ -1049,6 +1106,7 @@ class FrmXMLHelper {
 	 * Clears styles from cache for imported forms
 	 *
 	 * @param array $imported_forms
+	 *
 	 * @return void
 	 */
 	private static function clear_forms_style_caches( $imported_forms ) {
@@ -1080,6 +1138,7 @@ class FrmXMLHelper {
 	 *
 	 * @param string     $string
 	 * @param array<int> $form_ids new form ids indexed by old form id.
+	 *
 	 * @return string
 	 */
 	private static function switch_form_ids( $string, $form_ids ) {
@@ -1112,6 +1171,7 @@ class FrmXMLHelper {
 	/**
 	 * @param array<array> $posts_with_shortcodes indexed by current post id.
 	 * @param array<int>   $view_ids new view ids indexed by old view id.
+	 *
 	 * @return void
 	 */
 	private static function maybe_switch_view_ids_after_importing_posts( $posts_with_shortcodes, $view_ids ) {
@@ -1135,6 +1195,7 @@ class FrmXMLHelper {
 	 *
 	 * @param string     $string
 	 * @param array<int> $view_ids new view ids indexed by old view id.
+	 *
 	 * @return string
 	 */
 	private static function switch_view_ids( $string, $view_ids ) {
@@ -1167,6 +1228,7 @@ class FrmXMLHelper {
 
 	/**
 	 * @param string $content
+	 *
 	 * @return string
 	 */
 	private static function maybe_prepare_json_view_content( $content ) {
@@ -1177,6 +1239,13 @@ class FrmXMLHelper {
 		return $content;
 	}
 
+	/**
+	 * @param array  $post
+	 * @param object $item
+	 * @param array  $imported
+	 *
+	 * @return void
+	 */
 	private static function populate_post( &$post, $item, $imported ) {
 		if ( isset( $item->attachment_url ) ) {
 			$post['attachment_url'] = (string) $item->attachment_url;
@@ -1296,6 +1365,12 @@ class FrmXMLHelper {
 		$post['postmeta'][ (string) $meta->meta_key ] = $m['value'];
 	}
 
+	/**
+	 * @param array  $post
+	 * @param object $layout
+	 *
+	 * @return void
+	 */
 	private static function populate_layout( &$post, $layout ) {
 		$post['layout'][ (string) $layout->type ] = (string) $layout->data;
 	}
@@ -1365,6 +1440,7 @@ class FrmXMLHelper {
 	/**
 	 * @param array $post
 	 * @param int   $post_id
+	 *
 	 * @return void
 	 */
 	private static function update_postmeta( &$post, $post_id ) {
@@ -1412,6 +1488,11 @@ class FrmXMLHelper {
 		}
 	}
 
+	/**
+	 * @param array $imported
+	 *
+	 * @return void
+	 */
 	private static function maybe_update_stylesheet( $imported ) {
 		$new_styles     = ! empty( $imported['imported']['styles'] );
 		$updated_styles = ! empty( $imported['updated']['styles'] );
@@ -1558,6 +1639,7 @@ class FrmXMLHelper {
 	 * If a single form was imported, include a link in the success message.
 	 *
 	 * @since 4.0
+	 *
 	 * @param array  $result The response from the XML import.
 	 * @param string $message The response shown on the page after import.
 	 */
@@ -1647,6 +1729,7 @@ class FrmXMLHelper {
 	 * @since 3.06
 	 *
 	 * @param object $field
+	 *
 	 * @return void
 	 */
 	private static function remove_default_field_options( &$field ) {
@@ -1680,6 +1763,7 @@ class FrmXMLHelper {
 	 * @since 5.5.1
 	 *
 	 * @param stdClass $field
+	 *
 	 * @return void
 	 */
 	private static function add_image_src_to_image_options( $field ) {

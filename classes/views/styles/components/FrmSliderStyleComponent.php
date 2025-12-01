@@ -22,6 +22,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 */
 	protected $data;
 
+	/**
+	 * @param string $field_name
+	 * @param mixed  $field_value
+	 * @param array  $data
+	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->init_field_data( $data, $field_name, $field_value );
@@ -50,6 +55,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Otherwise, it merges the units array from the provided data with the default units array and returns the result.
 	 *
 	 * @param array $data The data containing the units array.
+	 *
 	 * @return array The list of units for the slider style component.
 	 */
 	private function get_units_list( $data ) {

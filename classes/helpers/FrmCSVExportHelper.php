@@ -125,6 +125,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return false|string|null returns a string file path or false if $atts['mode'] is set to 'file'.
 	 */
 	public static function generate_csv( $atts ) {
@@ -203,6 +204,7 @@ class FrmCSVExportHelper {
 	 * @since 6.8.4
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function after_generate_csv( $atts ) {
@@ -210,6 +212,7 @@ class FrmCSVExportHelper {
 		 * @since 6.8.4
 		 *
 		 * @param array $atts {
+		 *
 		 *   @type object $form
 		 *   @type array  $entry_ids
 		 *   @type array  $form_cols
@@ -222,6 +225,7 @@ class FrmCSVExportHelper {
 	 * @since 5.0.16
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	private static function generate_csv_filename( $form ) {
@@ -241,6 +245,9 @@ class FrmCSVExportHelper {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function set_class_parameters() {
 		$args                 = self::get_standard_filter_args();
 		self::$separator      = apply_filters( 'frm_csv_sep', self::$separator, $args );
@@ -254,10 +261,20 @@ class FrmCSVExportHelper {
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
 
+	/**
+	 * @param object $form
+	 *
+	 * @return void
+	 */
 	private static function set_has_parent_id( $form ) {
 		self::$has_parent_id = $form->parent_form_id > 0;
 	}
 
+	/**
+	 * @param string $filename
+	 *
+	 * @return void
+	 */
 	private static function print_file_headers( $filename ) {
 		header( 'Content-Description: File Transfer' );
 		header( 'Content-Disposition: attachment; filename="' . esc_attr( $filename ) . '"' );
@@ -297,6 +314,9 @@ class FrmCSVExportHelper {
 		self::$to_encoding = $csv_format;
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function prepare_csv_headings() {
 		$headings = array();
 		self::csv_headings( $headings );
@@ -314,6 +334,11 @@ class FrmCSVExportHelper {
 		self::print_csv_row( $headings );
 	}
 
+	/**
+	 * @param object $col
+	 *
+	 * @return array
+	 */
 	private static function field_headings( $col ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $col );
 		if ( ! empty( $field_type_obj->is_combo_field ) ) {
@@ -344,6 +369,11 @@ class FrmCSVExportHelper {
 		return $field_headings;
 	}
 
+	/**
+	 * @param array $headings
+	 *
+	 * @return void
+	 */
 	private static function csv_headings( &$headings ) {
 		$fields_by_repeater_id = array();
 		$repeater_ids          = array();
@@ -438,6 +468,7 @@ class FrmCSVExportHelper {
 
 	/**
 	 * @param object $field
+	 *
 	 * @return bool
 	 */
 	private static function is_the_child_of_a_repeater( $field ) {
@@ -455,10 +486,18 @@ class FrmCSVExportHelper {
 		return FrmField::is_repeating_field( $section );
 	}
 
+	/**
+	 * @return bool
+	 */
 	private static function has_parent_id() {
 		return self::$has_parent_id;
 	}
 
+	/**
+	 * @param array $next_set
+	 *
+	 * @return void
+	 */
 	private static function prepare_next_csv_rows( $next_set ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$where    = array(
@@ -491,6 +530,9 @@ class FrmCSVExportHelper {
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	private static function prepare_csv_row() {
 		$row = array();
 		self::add_field_values_to_csv( $row );
@@ -508,6 +550,11 @@ class FrmCSVExportHelper {
 		self::print_csv_row( $row );
 	}
 
+	/**
+	 * @param array $entries
+	 *
+	 * @return void
+	 */
 	private static function add_repeat_field_values_to_csv( &$entries ) {
 		if ( isset( self::$entry->metas ) ) {
 			// add child entries to the parent
@@ -552,6 +599,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param array $metas
 	 * @param array $entries
+	 *
 	 * @return array
 	 */
 	private static function fill_missing_repeater_metas( $metas, &$entries ) {
@@ -583,6 +631,11 @@ class FrmCSVExportHelper {
 		return $metas;
 	}
 
+	/**
+	 * @param int|string $field_id
+	 *
+	 * @return false|object
+	 */
 	private static function get_field( $field_id ) {
 		$field_id = (int) $field_id;
 		foreach ( self::$fields as $field ) {
@@ -593,6 +646,11 @@ class FrmCSVExportHelper {
 		return false;
 	}
 
+	/**
+	 * @param array $row
+	 *
+	 * @return void
+	 */
 	private static function add_field_values_to_csv( &$row ) {
 		foreach ( self::$fields as $col ) {
 			$field_value = self::$entry->metas[ $col->id ] ?? false;
@@ -638,6 +696,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param mixed    $field_value
 	 * @param stdClass $field
+	 *
 	 * @return string
 	 */
 	private static function get_separate_value_label( $field_value, $field ) {
@@ -660,6 +719,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @param array $row
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
@@ -685,6 +745,11 @@ class FrmCSVExportHelper {
 		}
 	}
 
+	/**
+	 * @param array $row
+	 *
+	 * @return void
+	 */
 	private static function add_entry_data_to_csv( &$row ) {
 		$row['created_at'] = FrmAppHelper::get_formatted_time( self::$entry->created_at, self::$wp_date_format, ' ' );
 		$row['updated_at'] = FrmAppHelper::get_formatted_time( self::$entry->updated_at, self::$wp_date_format, ' ' );
@@ -699,6 +764,11 @@ class FrmCSVExportHelper {
 		}
 	}
 
+	/**
+	 * @param array $rows
+	 *
+	 * @return void
+	 */
 	private static function print_csv_row( $rows ) {
 		$sep  = '';
 		$echo = 'echo' === self::$mode;
@@ -748,6 +818,11 @@ class FrmCSVExportHelper {
 		}
 	}
 
+	/**
+	 * @param string $line
+	 *
+	 * @return string
+	 */
 	public static function encode_value( $line ) {
 		if ( '' === $line ) {
 			return $line;
@@ -781,7 +856,9 @@ class FrmCSVExportHelper {
 	 * Escape a " in a csv with another "
 	 *
 	 * @since 2.0
+	 *
 	 * @param mixed $value
+	 *
 	 * @return mixed
 	 */
 	public static function escape_csv( $value ) {

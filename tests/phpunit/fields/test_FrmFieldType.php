@@ -353,6 +353,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @param string   $html
 	 * @param stdClass $field
+	 *
 	 * @return void
 	 */
 	private function make_text_field_html_assertions( $html, $field ) {

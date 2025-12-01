@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormsListHelper extends FrmListHelper {
+
+	/**
+	 * @var string
+	 */
 	public $status = '';
 
 	public $total_items = 0;
@@ -215,6 +219,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function pagination( $which ) {
@@ -230,6 +235,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * @param stdClass $item
 	 * @param string   $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -335,6 +341,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
@@ -354,6 +361,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_style( $form ) {
@@ -382,6 +390,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.19
 	 *
 	 * @param stdClass $form Form object.
+	 *
 	 * @return string
 	 */
 	protected function column_views( $form ) {

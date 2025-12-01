@@ -93,12 +93,6 @@
 		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
-	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
-		<!-- wpmuBaseTablePrefix breaks this rule -->
-		<exclude-pattern>models/FrmField.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmDb.php</exclude-pattern>
-	</rule>
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
@@ -210,6 +204,8 @@
 		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
 		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryFormatter.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->

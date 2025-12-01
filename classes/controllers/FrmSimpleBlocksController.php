@@ -65,6 +65,21 @@ class FrmSimpleBlocksController {
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations( 'formidable-form-selector', 'formidable' );
 		}
+	}
+
+	/**
+	 * Enqueue Formidable Simple Blocks' JS and CSS for the content.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function block_assets() {
+		if ( ! is_admin() ) {
+			return;
+		}
+
+		$version = FrmAppHelper::plugin_version();
 
 		wp_enqueue_style(
 			'formidable_block-editor-css',
@@ -80,6 +95,7 @@ class FrmSimpleBlocksController {
 	 * @since 6.8
 	 *
 	 * @param int $addon_id Addon ID.
+	 *
 	 * @return array|false
 	 */
 	private static function get_addon_info( $addon_id ) {
@@ -175,6 +191,7 @@ class FrmSimpleBlocksController {
 	 * Renders a form given the specified attributes.
 	 *
 	 * @param array $attributes
+	 *
 	 * @return string
 	 */
 	public static function simple_form_render( $attributes ) {
@@ -186,6 +203,7 @@ class FrmSimpleBlocksController {
 
 		/**
 		 * @since 5.5.2
+		 *
 		 * @param array $attributes
 		 */
 		do_action( 'frm_before_simple_form_render', $attributes );
@@ -217,6 +235,7 @@ class FrmSimpleBlocksController {
 	 * With the class set, the form never appears in the form block preview.
 	 *
 	 * @param string $form
+	 *
 	 * @return string
 	 */
 	private static function maybe_remove_fade_on_load_for_block_preview( $form ) {

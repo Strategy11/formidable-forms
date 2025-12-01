@@ -10,24 +10,28 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'user_id';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -56,6 +60,8 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @since 4.03.06
 	 *
 	 * @param array $args Field display arguments.
+	 *
+	 * @return int|string
 	 */
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();

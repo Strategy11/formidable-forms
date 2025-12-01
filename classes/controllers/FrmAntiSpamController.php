@@ -3,6 +3,7 @@
  * Anti-spam controller
  *
  * @package Formidable
+ *
  * @since 6.21
  */
 
@@ -102,6 +103,7 @@ class FrmAntiSpamController {
 	 * Extracts email addresses from values.
 	 *
 	 * @param array $values Values to check.
+	 *
 	 * @return string[]
 	 */
 	public static function extract_emails_from_values( $values ) {

@@ -5,6 +5,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmStylesHelper {
 
+	/**
+	 * @return array
+	 */
 	public static function get_upload_base() {
 		$uploads = wp_upload_dir();
 		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
@@ -18,6 +21,8 @@ class FrmStylesHelper {
 	 * Called from the admin header.
 	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function save_button() {
 		?>
@@ -27,6 +32,8 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.05
+	 *
+	 * @return array
 	 */
 	public static function get_css_label_positions() {
 		return array(
@@ -67,6 +74,9 @@ class FrmStylesHelper {
 		return apply_filters( 'frm_single_label_positions', $label_positions, $field );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function minus_icons() {
 		return array(
 			0 => array(
@@ -92,6 +102,9 @@ class FrmStylesHelper {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function arrow_icons() {
 		$minus_icons = self::minus_icons();
 
@@ -171,6 +184,7 @@ class FrmStylesHelper {
 	 * @param WP_Post  $style
 	 * @param FrmStyle $frm_style
 	 * @param string   $type
+	 *
 	 * @return void
 	 */
 	public static function bs_icon_select( $style, $frm_style, $type = 'arrow' ) {
@@ -213,6 +227,7 @@ class FrmStylesHelper {
 	 * @since 2.0
 	 *
 	 * @param string $color Color setting value. This could be hex or rgb.
+	 *
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
@@ -230,6 +245,7 @@ class FrmStylesHelper {
 	 * @since 6.8.3
 	 *
 	 * @param string $rgb    RGB value including the rgb() or rgba() wrapper.
+	 *
 	 * @return array<string> including three numeric values for R, G, and B.
 	 */
 	private static function get_rgb_array_from_rgb( $rgb ) {
@@ -248,6 +264,7 @@ class FrmStylesHelper {
 	 * @since 6.8.3
 	 *
 	 * @param string $hex    A hex color string.
+	 *
 	 * @return array<string> Including three numeric values for R, G, and B.
 	 */
 	private static function get_rgb_array_from_hex( $hex ) {
@@ -261,6 +278,8 @@ class FrmStylesHelper {
 	 *
 	 * @param string           $hex Hex color string.
 	 * @param float|int|string $a   Alpha channel value.
+	 *
+	 * @return string
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
@@ -272,6 +291,7 @@ class FrmStylesHelper {
 	 * @since 6.0
 	 *
 	 * @param string $rgba Color setting value. This could be hex or rgb.
+	 *
 	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
@@ -287,6 +307,7 @@ class FrmStylesHelper {
 	 * @since 6.8
 	 *
 	 * @param string $hsl
+	 *
 	 * @return string|null Null if it fails to parse the HSL string.
 	 */
 	private static function hsl_to_hex( $hsl ) {
@@ -347,8 +368,11 @@ class FrmStylesHelper {
 
 	/**
 	 * @since 2.3
+	 *
 	 * @param string $hex   string  The original color in hex format #ffffff.
 	 * @param int    $steps integer Should be between -255 and 255. Negative = darker, positive = lighter.
+	 *
+	 * @return string
 	 */
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
@@ -387,6 +411,7 @@ class FrmStylesHelper {
 	 * @since 6.0
 	 *
 	 * @param string $color
+	 *
 	 * @return int
 	 */
 	public static function get_color_brightness( $color ) {
@@ -419,6 +444,7 @@ class FrmStylesHelper {
 	 * @since 6.0
 	 *
 	 * @param string $color Color value, passed by reference.
+	 *
 	 * @return void
 	 */
 	private static function fill_hex( &$color ) {
@@ -431,6 +457,7 @@ class FrmStylesHelper {
 	 * @since 4.05.02
 	 *
 	 * @param array $vars CSS variable keys.
+	 *
 	 * @return array
 	 */
 	public static function get_css_vars( $vars = array() ) {
@@ -444,6 +471,7 @@ class FrmStylesHelper {
 	 * @param array $settings Style settings.
 	 * @param array $defaults Default style settings.
 	 * @param array $vars     CSS variable keys to output.
+	 *
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
@@ -477,6 +505,7 @@ class FrmStylesHelper {
 	 * @param array  $defaults       Array of default values.
 	 * @param string $var            The setting key name.
 	 * @param string $prepared_value The value from calling css_var_prepare_value. This is set by reference so it can be used after this function is called.
+	 *
 	 * @return bool True if the CSS value should be printed.
 	 */
 	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
@@ -498,6 +527,7 @@ class FrmStylesHelper {
 	 * @since 6.20
 	 *
 	 * @param string $key
+	 *
 	 * @return bool
 	 */
 	private static function css_key_is_valid( $key ) {
@@ -513,6 +543,7 @@ class FrmStylesHelper {
 	 * @since 6.20
 	 *
 	 * @param string $var
+	 *
 	 * @return bool
 	 */
 	private static function css_value_is_valid( $var ) {
@@ -545,6 +576,7 @@ class FrmStylesHelper {
 	 * Remove anything that isn't used as a CSS variable name.
 	 *
 	 * @param string $var_name
+	 *
 	 * @return string
 	 */
 	private static function clean_var_name( $var_name ) {
@@ -605,6 +637,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 *
 	 * @param WP_Post $style
+	 *
 	 * @return array
 	 */
 	public static function get_settings_for_output( $style ) {
@@ -732,6 +765,7 @@ class FrmStylesHelper {
 	 *
 	 * @param array $settings          Style settings, passed by reference.
 	 * @param bool  $allow_transparent Whether transparent colors are allowed.
+	 *
 	 * @return void
 	 */
 	public static function prepare_color_output( &$settings, $allow_transparent = true ) {
@@ -784,6 +818,7 @@ class FrmStylesHelper {
 	 *
 	 * @param string $default Default color value.
 	 * @param string $color   Color value, passed by reference.
+	 *
 	 * @return void
 	 */
 	private static function get_color_output( $default, &$color ) {
@@ -805,6 +840,7 @@ class FrmStylesHelper {
 	 * @since 6.8
 	 *
 	 * @param string $color
+	 *
 	 * @return bool
 	 */
 	private static function is_hex( $color ) {
@@ -831,6 +867,7 @@ class FrmStylesHelper {
 	 * @since 2.3
 	 *
 	 * @param string $width Label width value.
+	 *
 	 * @return false|string
 	 */
 	private static function description_margin_for_screensize( $width ) {
@@ -864,6 +901,7 @@ class FrmStylesHelper {
 	 * @since 6.0
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return string
 	 */
 	public static function get_list_url( $form_id ) {
@@ -877,6 +915,7 @@ class FrmStylesHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param int              $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_style_options_back_button_args( $style, $form_id ) {
@@ -925,6 +964,7 @@ class FrmStylesHelper {
 	 *
 	 * @param int|string $style_id
 	 * @param bool       $is_default
+	 *
 	 * @return int
 	 */
 	public static function get_form_count_for_style( $style_id, $is_default ) {
@@ -957,6 +997,7 @@ class FrmStylesHelper {
 	 *
 	 * @param int|string $style_id
 	 * @param mixed      $conversational_style_id
+	 *
 	 * @return int
 	 */
 	private static function get_default_style_count( $style_id, $conversational_style_id ) {
@@ -1025,6 +1066,7 @@ class FrmStylesHelper {
 	 * @since 6.14
 	 *
 	 * @param array $settings
+	 *
 	 * @return false|string Return image url or false.
 	 */
 	public static function get_submit_image_bg_url( $settings ) {
@@ -1063,6 +1105,7 @@ class FrmStylesHelper {
 	 * @since 6.17
 	 *
 	 * @param string $value The margin/padding value.
+	 *
 	 * @return string
 	 */
 	public static function get_bottom_value( $value ) {

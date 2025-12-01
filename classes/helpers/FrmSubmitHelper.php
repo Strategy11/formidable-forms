@@ -3,6 +3,7 @@
  * Submit helper
  *
  * @since 6.9
+ *
  * @package Formidable
  */
 
@@ -40,6 +41,7 @@ class FrmSubmitHelper {
 	 * Gets submit field object.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return object
 	 */
 	public static function get_submit_field( $form_id ) {
@@ -50,6 +52,7 @@ class FrmSubmitHelper {
 	 * Checks if there is submit button field on the current page.
 	 *
 	 * @param array $values Prepared form values.
+	 *
 	 * @return bool
 	 */
 	public static function has_submit_field_on_current_page( $values ) {
@@ -64,6 +67,7 @@ class FrmSubmitHelper {
 	 * Checks if the given fields list contains a submit field.
 	 *
 	 * @param array $fields Array of fields.
+	 *
 	 * @return bool
 	 */
 	private static function has_submit_field_in_list( $fields ) {
@@ -80,6 +84,7 @@ class FrmSubmitHelper {
 	 * Gets current action (create or update) from the global variable.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return string
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
@@ -92,6 +97,7 @@ class FrmSubmitHelper {
 	 * Gets submit button settings from form option.
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return array
 	 */
 	private static function get_submit_settings_from_form( $form ) {
@@ -127,6 +133,7 @@ class FrmSubmitHelper {
 	 * Copies submit field settings to form options.
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return object
 	 */
 	public static function copy_submit_field_settings_to_form( $form ) {
@@ -146,6 +153,8 @@ class FrmSubmitHelper {
 	 * @param object $form         Form object.
 	 * @param array  $fields       Array of fields.
 	 * @param bool   $reset_fields Flag to refresh fields after one is created or updated.
+	 *
+	 * @return void
 	 */
 	public static function maybe_create_submit_field( $form, $fields, &$reset_fields ) {
 		if ( self::has_submit_field_in_list( $fields ) ) {
@@ -173,6 +182,8 @@ class FrmSubmitHelper {
 	 * Removes submit field from the list of fields.
 	 *
 	 * @param array $fields Array of fields.
+	 *
+	 * @return void
 	 */
 	public static function remove_submit_field_from_list( &$fields ) {
 		foreach ( $fields as $key => $field ) {
@@ -187,6 +198,7 @@ class FrmSubmitHelper {
 	 * Checks if the given fields array only contains the submit field.
 	 *
 	 * @param array $fields Array of fields.
+	 *
 	 * @return false|object Return the last found submit field, or `false` if there is at least another field.
 	 */
 	public static function only_contains_submit_field( $fields ) {
@@ -206,6 +218,8 @@ class FrmSubmitHelper {
 	 * @since 6.25.1
 	 *
 	 * @param int $field_count The current field count.
+	 *
+	 * @return void
 	 */
 	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
@@ -233,6 +247,8 @@ class FrmSubmitHelper {
 	 * Prints the hidden input that contains the last row fields order to be processed in JS after adding new field.
 	 *
 	 * @since 6.25.1
+	 *
+	 * @return void
 	 */
 	public static function print_last_row_fields_order_input() {
 		if ( ! self::$last_row_fields_order ) {

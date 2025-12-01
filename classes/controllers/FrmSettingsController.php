@@ -14,6 +14,9 @@ class FrmSettingsController {
 	 */
 	private static $removed_payments_sections = array();
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
@@ -33,6 +36,12 @@ class FrmSettingsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/license_box.php';
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param string $message
+	 *
+	 * @return void
+	 */
 	public static function display_form( $errors = array(), $message = '' ) {
 		global $frm_vars;
 
@@ -197,6 +206,7 @@ class FrmSettingsController {
 	 * @since 6.22.1
 	 *
 	 * @param array $sections
+	 *
 	 * @return void
 	 */
 	private static function remove_payments_sections( &$sections ) {
@@ -219,6 +229,7 @@ class FrmSettingsController {
 	 *
 	 * @param string $a
 	 * @param string $b
+	 *
 	 * @return int
 	 */
 	private static function payment_sections_sort_callback( $a, $b ) {
@@ -271,6 +282,7 @@ class FrmSettingsController {
 	 *
 	 * @param FrmSettings $frm_settings
 	 * @param string      $more_html
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
@@ -285,6 +297,8 @@ class FrmSettingsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -294,6 +308,8 @@ class FrmSettingsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function captcha_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -306,6 +322,8 @@ class FrmSettingsController {
 	 * Shows email settings.
 	 *
 	 * @since 6.25
+	 *
+	 * @return void
 	 */
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -315,6 +333,8 @@ class FrmSettingsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function permission_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -323,6 +343,9 @@ class FrmSettingsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/permissions.php';
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function payments_settings() {
 		$payment_sections = self::$removed_payments_sections;
 
@@ -338,6 +361,8 @@ class FrmSettingsController {
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -396,12 +421,19 @@ class FrmSettingsController {
 	 * Include the Update button on the global settings page.
 	 *
 	 * @since 4.0.02
+	 *
+	 * @return void
 	 */
 	public static function save_button() {
 		echo '<input class="button-primary frm-button-primary" type="submit"
 			value="' . esc_attr__( 'Update', 'formidable' ) . '"/>';
 	}
 
+	/**
+	 * @param bool|string $stop_load
+	 *
+	 * @return void
+	 */
 	public static function route( $stop_load = false ) {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
@@ -487,6 +519,8 @@ class FrmSettingsController {
 	 * @since 6.25
 	 *
 	 * @param string $color Color value.
+	 *
+	 * @return void
 	 */
 	public static function fake_color_picker( $color ) {
 		?>
