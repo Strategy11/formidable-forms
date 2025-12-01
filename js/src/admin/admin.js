@@ -3152,6 +3152,24 @@ window.frmAdminBuildJS = function() {
 		return calcTypeCheckbox && calcTypeCheckbox.checked;
 	}
 
+	function refreshCalcFieldListOnTypeChange( event ) {
+		const calcTypeInput = event.target;
+		const calcContainer = calcTypeInput.closest( '[class*="frm-calc-for-"]' );
+		if ( ! calcContainer ) {
+			return;
+		}
+
+		// Find the modal containing the field list
+		const modal = calcContainer.querySelector( '.frm-inline-modal' );
+		if ( ! modal || modal.classList.contains( 'frm_hidden' ) ) {
+			// Modal is not open, no need to refresh
+			return;
+		}
+
+		// Refresh the field list by calling popCalcFields
+		popCalcFields( modal, true );
+	}
+
 	function getIncludedExtras() {
 		const checked = [];
 		const checkboxes = document.getElementsByClassName( 'frm_include_extras_field' );
@@ -10591,6 +10609,7 @@ window.frmAdminBuildJS = function() {
 			$newFields.on( 'dblclick', 'li.ui-state-default', openAdvanced );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			$builderForm.on( 'change', 'select.conf_field', addConf );
+			$builderForm.on( 'change', 'input[name*="calc_type"]', refreshCalcFieldListOnTypeChange );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
