@@ -282,7 +282,7 @@ class FrmFieldFormHtml {
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
 		if ( empty( $error ) ) {
-			return FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
+			FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
 		}
 
 		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
