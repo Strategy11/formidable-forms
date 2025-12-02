@@ -34,6 +34,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * @param string $function
 	 * @param array  ...$params
+	 *
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
@@ -95,6 +96,9 @@ class FrmStrpLiteAppHelper {
 
 	/**
 	 * Add education about Stripe fees.
+	 *
+	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
 	 *
 	 * @return void
 	 */

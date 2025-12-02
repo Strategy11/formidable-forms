@@ -10,6 +10,9 @@ class FrmSquareLiteEventsController {
 	 */
 	public static $events_to_skip_option_name = 'frm_square_events_to_skip';
 
+	/**
+	 * @var object|null
+	 */
 	private $event;
 
 	/**
@@ -59,6 +62,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param array<string> $event_ids
+	 *
 	 * @return void
 	 */
 	private function process_event_ids( $event_ids ) {
@@ -85,6 +89,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return bool True if the event should be skipped.
 	 */
 	private function should_skip_event( $event_id ) {
@@ -102,6 +107,7 @@ class FrmSquareLiteEventsController {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return bool
 	 */
 	private function last_attempt_to_process_event_is_too_recent( $event_id ) {
@@ -113,6 +119,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function count_failed_event( $event_id ) {
@@ -139,6 +146,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function track_handled_event( $event_id ) {
@@ -221,6 +229,7 @@ class FrmSquareLiteEventsController {
 	 * Add a payment row for the payments table.
 	 *
 	 * @param string $subscription_id The Square ID for the current subscription.
+	 *
 	 * @return void
 	 */
 	private function add_subscription_payment( $subscription_id ) {

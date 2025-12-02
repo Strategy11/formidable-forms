@@ -45,6 +45,7 @@ class FrmStyleApi extends FrmFormApi {
 
 	/**
 	 * @param array $api_info
+	 *
 	 * @return array
 	 */
 	private function fill_missing_style_settings( $api_info ) {

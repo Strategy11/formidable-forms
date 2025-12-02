@@ -60,6 +60,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 *
 	 * @param array $attributes
 	 * @param array $field
+	 *
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
@@ -77,6 +78,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @since 6.8.4
 	 *
 	 * @param array $field
+	 *
 	 * @return string
 	 */
 	protected function get_captcha_size( $field ) {
@@ -121,6 +123,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	 * @since 6.25.1
 	 *
 	 * @param bool $allow_multiple
+	 *
 	 * @return string
 	 */
 	public function get_class_prefix( $allow_multiple ) {
@@ -130,6 +133,7 @@ class FrmRecaptchaSettings extends FrmFieldCaptchaSettings {
 	/**
 	 * @since 6.8.4
 	 * @deprecated 6.11.1
+	 *
 	 * @return string
 	 */
 	public function getName() {

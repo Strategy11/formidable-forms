@@ -9,6 +9,7 @@ class FrmEntriesHelper {
 	 * "Submitted" entry status.
 	 *
 	 * @since 6.4.2
+	 *
 	 * @var int
 	 */
 	const SUBMITTED_ENTRY_STATUS = 0;
@@ -17,10 +18,19 @@ class FrmEntriesHelper {
 	 * "Draft" entry status.
 	 *
 	 * @since 6.4.2
+	 *
 	 * @var int
 	 */
 	const DRAFT_ENTRY_STATUS = 1;
 
+	/**
+	 * @param array         $fields
+	 * @param object|string $form
+	 * @param bool          $reset
+	 * @param array         $args
+	 *
+	 * @return array
+	 */
 	public static function setup_new_vars( $fields, $form = '', $reset = false, $args = array() ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -80,6 +90,8 @@ class FrmEntriesHelper {
 	 * @since 2.05
 	 *
 	 * @param object $field
+	 *
+	 * @return void
 	 */
 	private static function prepare_field_default_value( &$field ) {
 		// If checkbox, multi-select dropdown, or checkbox data from entries field, the value should be an array.
@@ -148,6 +160,12 @@ class FrmEntriesHelper {
 		return $value_is_posted;
 	}
 
+	/**
+	 * @param array  $values
+	 * @param object $record
+	 *
+	 * @return array
+	 */
 	public static function setup_edit_vars( $values, $record ) {
 		remove_action( 'media_buttons', 'FrmFormsController::insert_form_button' );
 
@@ -158,6 +176,12 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_setup_edit_entry_vars', $values, $record );
 	}
 
+	/**
+	 * @param string $message
+	 * @param array  $atts
+	 *
+	 * @return string
+	 */
 	public static function replace_default_message( $message, $atts ) {
 		if ( strpos( $message, '[default-message' ) === false &&
 			strpos( $message, '[default_message' ) === false &&
@@ -192,6 +216,7 @@ class FrmEntriesHelper {
 	 * @param stdClass $entry
 	 * @param stdClass $field
 	 * @param array    $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
@@ -339,6 +364,13 @@ class FrmEntriesHelper {
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
 	}
 
+	/**
+	 * @param object $field
+	 * @param mixed  $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function set_posted_value( $field, $value, $args ) {
 		// If validating a field with "other" opt, set back to prev value now.
 		if ( ! empty( $args['other'] ) ) {
@@ -355,6 +387,12 @@ class FrmEntriesHelper {
 	 * Init arrays if necessary, else we get fatal error.
 	 *
 	 * @since 4.01
+	 *
+	 * @param object $field Field object.
+	 * @param mixed  $value Value to set.
+	 * @param array  $args  Additional arguments.
+	 *
+	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
 		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -370,13 +408,25 @@ class FrmEntriesHelper {
 		$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] = $value; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 	}
 
+	/**
+	 * @param array|int|object $field
+	 * @param mixed            $value
+	 * @param array            $args
+	 *
+	 * @return void
+	 */
 	public static function get_posted_value( $field, &$value, $args ) {
 		if ( is_array( $field ) ) {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
 		} elseif ( is_object( $field ) ) {
 			$field_id  = $field->id;
-			$field_obj = FrmFieldFactory::get_field_object( $field );
+
+			if ( 'hidden' === $field->type && ! empty( $field->field_options['original_type'] ) ) {
+				$field_obj = FrmFieldFactory::get_field_type( $field->field_options['original_type'], $field );
+			} else {
+				$field_obj = FrmFieldFactory::get_field_object( $field );
+			}
 		} elseif ( is_numeric( $field ) ) {
 			$field_id  = $field;
 			$field_obj = FrmFieldFactory::get_field_object( $field );
@@ -393,6 +443,11 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 4.02.04
+	 *
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Additional arguments.
+	 *
+	 * @return mixed
 	 */
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
@@ -409,9 +464,11 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
@@ -450,9 +507,11 @@ class FrmEntriesHelper {
 	 *
 	 * @since 2.0
 	 *
-	 * @param object       $field
-	 * @param array|string $value
-	 * @param array        $args
+	 * @param object       $field Field object.
+	 * @param array|string $value Field value, passed by reference.
+	 * @param array        $args  Arguments array, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function set_other_repeating_vals( $field, &$value, &$args ) {
 		if ( ! $args['parent_field_id'] ) {
@@ -486,6 +545,8 @@ class FrmEntriesHelper {
 	 * @param array|string $other_vals (usually of posted values).
 	 * @param object       $field
 	 * @param array        $args
+	 *
+	 * @return void
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
 		// Checkboxes and multi-select dropdowns.
@@ -537,12 +598,13 @@ class FrmEntriesHelper {
 	 * Add submitted values to a string for spam checking.
 	 *
 	 * @param array $values
+	 *
 	 * @return string
 	 */
 	public static function entry_array_to_string( $values ) {
 		$content = '';
 		foreach ( $values['item_meta'] as $val ) {
-			if ( $content != '' ) {
+			if ( $content !== '' ) {
 				$content .= "\n\n";
 			}
 
@@ -628,7 +690,7 @@ class FrmEntriesHelper {
 		}
 
 		// check if we have a number
-		if ( $version == '' ) {
+		if ( $version === '' ) {
 			$version = '?';
 		}
 
@@ -637,6 +699,10 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Action dropdown attributes.
+	 *
+	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {
 		$id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
@@ -670,6 +736,11 @@ class FrmEntriesHelper {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int          $id    Entry ID.
+	 * @param array|object $entry Entry object.
+	 *
+	 * @return array
 	 */
 	private static function get_action_links( $id, $entry ) {
 		$page    = FrmAppHelper::get_param( 'frm_action' );
@@ -747,6 +818,7 @@ class FrmEntriesHelper {
 	 * Gets data attributes for PDFs addon upgrade link.
 	 *
 	 * @param string $medium The source of the upgrade link used for analytics data.
+	 *
 	 * @return array
 	 */
 	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
@@ -771,6 +843,7 @@ class FrmEntriesHelper {
 	 * @since 5.0.15
 	 *
 	 * @param int|string $entry_id
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_captcha_score( $entry_id ) {

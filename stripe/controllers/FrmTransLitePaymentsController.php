@@ -71,6 +71,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $payment ) {
@@ -85,6 +86,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Echo a receipt link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_receipt_link( $payment ) {
@@ -118,6 +120,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Echo a refund link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_refund_link( $payment ) {
@@ -129,6 +132,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Show a link to a payment entry (unless it is deleted).
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_entry_link( $payment ) {
@@ -151,6 +155,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Get a refund link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return string
 	 */
 	public static function refund_link( $payment ) {
@@ -234,6 +239,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 *
 	 * @param object $payment
 	 * @param string $status
+	 *
 	 * @return void
 	 */
 	public static function change_payment_status( $payment, $status ) {

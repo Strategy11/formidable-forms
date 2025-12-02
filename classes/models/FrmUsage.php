@@ -45,6 +45,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param bool $regenerate
+	 *
 	 * @return string
 	 */
 	public function uuid( $regenerate = false ) {
@@ -63,6 +66,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	public function snapshot() {
@@ -139,6 +143,7 @@ class FrmUsage {
 	 * @since 6.16.1
 	 *
 	 * @param string $table Database table name.
+	 *
 	 * @return array
 	 */
 	private function payments( $table = 'frm_payments' ) {
@@ -174,6 +179,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function plugins() {
@@ -196,6 +202,7 @@ class FrmUsage {
 	 * Add global settings to tracking data.
 	 *
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function settings() {
@@ -247,6 +254,7 @@ class FrmUsage {
 	 * @since 3.06.04
 	 *
 	 * @param FrmSettings $settings_list
+	 *
 	 * @return array
 	 */
 	private function messages( $settings_list ) {
@@ -277,6 +285,7 @@ class FrmUsage {
 	 * @since 3.06.04
 	 *
 	 * @param FrmSettings $settings_list
+	 *
 	 * @return array
 	 */
 	private function permissions( $settings_list ) {
@@ -294,6 +303,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function forms() {
@@ -385,6 +395,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_field_count( $form_id ) {
@@ -403,6 +416,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param int|string $form_id Form ID.
+	 *
 	 * @return int
 	 */
 	private function form_action_count( $form_id ) {
@@ -420,6 +436,7 @@ class FrmUsage {
 	 * Get the last 100 fields created.
 	 *
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function fields() {
@@ -438,6 +455,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return array
 	 */
 	private function actions() {
@@ -463,6 +481,7 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
 	 * @return bool
 	 */
 	private function tracking_allowed() {
@@ -471,6 +490,9 @@ class FrmUsage {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param mixed $value Value.
+	 *
 	 * @return string
 	 */
 	private function maybe_json( $value ) {

@@ -115,6 +115,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	/**
 	 * Get all fields in a form
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return array
 	 */
 	public function get_fields_from_form( $form_id ) {
 		return FrmField::get_all_for_form( $form_id );
@@ -122,6 +126,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	/**
 	 * When creating an entry, set the correct data formats
+	 *
+	 * @param object $field
+	 *
+	 * @return mixed
 	 */
 	public function set_field_value( $field ) {
 		$value        = rand_str();

@@ -50,6 +50,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $intent_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_one_time_stripe_link_return_url( $intent_id, $client_secret ) {
@@ -138,6 +139,7 @@ class FrmStrpLiteLinkController {
 	 * @param object           $intent
 	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_intent( $intent, $action, $entry ) {
@@ -163,6 +165,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $setup_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_recurring_stripe_link_return_url( $setup_id, $client_secret ) {
@@ -318,6 +321,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
+	 *
 	 * @return false|string
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
@@ -353,6 +357,7 @@ class FrmStrpLiteLinkController {
 	 *     @type string   $amount
 	 *     @type object   $customer
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function create_pending_stripe_link_payment( $atts ) {
@@ -408,6 +413,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
 	private static function verify_intent( $form_id ) {
@@ -439,6 +445,7 @@ class FrmStrpLiteLinkController {
 	 * It is deleted after the redirect happens.
 	 *
 	 * @param int $entry_id
+	 *
 	 * @return void
 	 */
 	private static function add_temporary_referer_meta( $entry_id ) {
@@ -464,6 +471,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function add_form_classes( $form ) {
@@ -480,6 +488,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form
+	 *
 	 * @return mixed
 	 */
 	public static function force_ajax_submit_for_stripe_link( $form ) {

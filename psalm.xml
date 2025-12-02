@@ -43,7 +43,6 @@
 		</UndefinedDocblockClass>
 		<UndefinedFunction>
 			 <errorLevel type="suppress">
-				<referencedFunction name="WP_Optimize" />
 				<referencedFunction name="bp_core_email_from_address_filter" />
 				<referencedFunction name="bp_core_email_from_name_filter" />
 				<referencedFunction name="__autoload" />
@@ -172,6 +171,7 @@
 			<errorLevel type="suppress">
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
 				<file name="square/models/FrmSquareLiteSettings.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -368,6 +368,7 @@
 		<PossiblyInvalidPropertyAssignment>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignment>
 		<PossiblyInvalidArgument>
@@ -412,6 +413,8 @@
 		<NoValue>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmEntryValidate.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 			</errorLevel>
 		</NoValue>
 		<UnsafeInstantiation>
@@ -470,6 +473,7 @@
 		<PossiblyFalseIterator>
 			<errorLevel type="suppress">
 				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
 			</errorLevel>
 		</PossiblyFalseIterator>
 		<UndefinedMethod>
@@ -527,5 +531,17 @@
 				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
 			</errorLevel>
 		</DeprecatedFunction>
+		<PossiblyNullArrayAccess>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmStylesController.php" />
+			</errorLevel>
+		</PossiblyNullArrayAccess>
+		<PossiblyNullIterator>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmPersonalData.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="stripe/controllers/FrmStrpLiteEventsController.php" />
+			</errorLevel>
+		</PossiblyNullIterator>
 	</issueHandlers>
 </psalm>

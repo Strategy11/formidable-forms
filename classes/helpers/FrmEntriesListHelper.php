@@ -5,12 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesListHelper extends FrmListHelper {
 
+	/**
+	 * @var string|null
+	 */
 	protected $column_name;
-	protected $item;
-	protected $field;
 
 	/**
 	 * @since 4.07
+	 *
 	 * @var bool|int
 	 */
 	public $total_items = 0;
@@ -38,6 +40,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$this->prepare_pagination();
 	}
 
+	/**
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
 	protected function set_total_items( $s_query ) {
 		$this->total_items = FrmEntry::getRecordCount( $s_query );
 	}
@@ -46,6 +53,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Prepares pagination.
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -62,6 +71,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Sets the global $per_page variable
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -87,6 +98,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 6.5.4
+	 *
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -120,6 +132,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int $per_page
+	 *
 	 * @return string
 	 */
 	protected function get_limit( $per_page ) {
@@ -138,6 +151,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
+	 *
 	 * @return array
 	 */
 	protected function get_search_query( &$join_form_in_query ) {
@@ -175,6 +189,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array<int>
 	 */
 	protected function get_form_ids( $form_id ) {
@@ -216,6 +231,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $text    Text.
+	 * @param string $input_id Input ID.
+	 *
 	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
@@ -223,6 +241,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
@@ -245,6 +265,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
@@ -290,6 +312,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.12
 	 *
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private static function get_entry_label( $item ) {
@@ -301,6 +324,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param string $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -380,6 +406,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
+	 * @return mixed
 	 */
 	private function column_value( $item ) {
 		$col_name = $this->maybe_fix_column_name( $this->column_name );
@@ -451,6 +479,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.11.2
 	 *
 	 * @param string $column_name
+	 *
 	 * @return string
 	 */
 	private function maybe_fix_column_name( $column_name ) {

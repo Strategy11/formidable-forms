@@ -33,6 +33,7 @@ class FrmStylesPreviewHelper {
 
 	/**
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
@@ -63,6 +64,7 @@ class FrmStylesPreviewHelper {
 	 * A field with a custom label position shouldn't ever change in the styler preview.
 	 *
 	 * @since 6.0.1
+	 *
 	 * @return void
 	 */
 	private function add_a_div_class_for_default_label_positions() {
@@ -72,6 +74,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param string $position
 			 * @param array|object $field
+			 *
 			 * @return string
 			 */
 			function ( $position, $field ) {
@@ -89,6 +92,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param string       $classes
 			 * @param array|object $field
+			 *
 			 * @return string
 			 */
 			function ( $classes, $field ) {
@@ -116,6 +120,7 @@ class FrmStylesPreviewHelper {
 			 * @param bool   $show
 			 * @param string $field_type
 			 * @param string $target_field_type
+			 *
 			 * @return bool
 			 */
 			function ( $show, $field_type ) {
@@ -144,6 +149,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param stdClass|null $form
 			 * @param int           $form_id
+			 *
 			 * @return stdClass|null
 			 */
 			function ( $form ) {
@@ -251,6 +257,7 @@ class FrmStylesPreviewHelper {
 	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
 	 * @param string           $view Either 'list' or 'edit'.
+	 *
 	 * @return array<string>
 	 */
 	public function get_warnings_for_styler_preview( $style, $default_style, $view ) {
@@ -268,6 +275,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @param int $style_id
 	 * @param int $default_style_id
+	 *
 	 * @return bool
 	 */
 	private function should_show_multiple_forms_warning( $style_id, $default_style_id ) {
@@ -304,6 +312,7 @@ class FrmStylesPreviewHelper {
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
+	 *
 	 * @return void
 	 */
 	public static function disable_conflicting_wp_admin_css( $styles ) {
@@ -374,6 +383,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @param WP_Styles $styles
 	 * @param string    $key
+	 *
 	 * @return void
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {

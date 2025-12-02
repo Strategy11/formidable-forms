@@ -237,6 +237,7 @@ class FrmEmail {
 	 * @since 2.03.04
 	 *
 	 * @param array $user_id_args
+	 *
 	 * @return void
 	 */
 	private function set_from( $user_id_args ) {
@@ -438,7 +439,7 @@ class FrmEmail {
 	 */
 	private function add_autop() {
 		$message = $this->message;
-		$result  = preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
+		preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
 		if ( ! empty( $match[1] ) ) {
 			$this->message = str_replace( $match[1], trim( wpautop( $match[1] ) ), $message );
 		} else {
@@ -816,6 +817,8 @@ class FrmEmail {
 	 *
 	 * @param string $name
 	 * @param string $email
+	 *
+	 * @return string
 	 */
 	private function format_from_email( $name, $email ) {
 		if ( '' !== $name ) {

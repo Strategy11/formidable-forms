@@ -22,7 +22,7 @@ class FrmHtmlHelper {
 	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function toggle( $id, $name, $args ) {
 		wp_enqueue_script( 'formidable_settings' );
@@ -45,6 +45,7 @@ class FrmHtmlHelper {
 	 * @param string $option   The string used as the option label.
 	 * @param bool   $selected True if the option should be selected.
 	 * @param array  $params   Other HTML params for the option.
+	 *
 	 * @return void
 	 */
 	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
