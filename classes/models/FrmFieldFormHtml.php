@@ -327,10 +327,7 @@ class FrmFieldFormHtml {
 	 * This ID was added to the HTML in v3.06.02.
 	 *
 	 * @since 3.06.02
-<<<<<<< HEAD
-=======
 	 *
->>>>>>> d09ccd132fba0a6716633023b136cfc726479470
 	 * @return void
 	 */
 	private function maybe_add_error_id() {
