@@ -381,10 +381,6 @@ class FrmFieldsController {
 			$show_upsell_for_read_only              = $field_has_read_only_option;
 			$field_has_before_after_contents_option = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
 			$show_upsell_for_before_after_contents  = $field_has_before_after_contents_option;
-		} else {
-			$show_upsell_for_unique_value          = false;
-			$show_upsell_for_read_only             = false;
-			$show_upsell_for_before_after_contents = false;
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';

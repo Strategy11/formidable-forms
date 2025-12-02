@@ -102,7 +102,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['unique'] || $show_upsell_for_unique_value ) {
+			if ( $display['unique'] || ! empty( $show_upsell_for_unique_value ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
@@ -114,7 +114,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php
 			}
 
-			if ( $display['read_only'] || $show_upsell_for_read_only ) {
+			if ( $display['read_only'] || ! empty( $show_upsell_for_read_only ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
@@ -373,7 +373,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<?php
 		}//end if
 
-		if ( $show_upsell_for_before_after_contents ) {
+		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
 			?>
 		<p class="frm_form_field frm6">
 			<label class="frm-h-stack-xs frm_show_upgrade" for="prepend_<?php echo absint( $field['id'] ); ?>">
