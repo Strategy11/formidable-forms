@@ -3739,11 +3739,10 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addImageToOption( event ) {
-		if ( ! wp?.media || event.target.closest( '.frm_image_preview_wrapper' )?.dataset.upgrade ) {
+		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
+		if ( ! wp?.media || imagePreview?.dataset.upgrade ) {
 			return;
 		}
-
-		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
 
 		event.preventDefault();
 
