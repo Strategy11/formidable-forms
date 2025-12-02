@@ -72,6 +72,7 @@ $pos_class = 'frm_' . ( $style->post_content['position'] === 'none' ? 'top' : ( 
 					 * @since 2.03
 					 *
 					 * @param array $args {
+					 *
 					 *     @type WP_Post $style
 					 *     @type string  $pos_class
 					 * }

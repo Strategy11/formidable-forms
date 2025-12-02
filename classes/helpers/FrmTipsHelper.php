@@ -36,6 +36,7 @@ class FrmTipsHelper {
 	 *     @type string $tip  Tip text.
 	 *     @type string $call Call to action text.
 	 * }
+	 *
 	 * @param string $html
 	 *
 	 * @return void
@@ -80,6 +81,7 @@ class FrmTipsHelper {
 	 * @since 6.21
 	 *
 	 * @param array $tip
+	 *
 	 * @return string
 	 */
 	private static function get_tip_link( $tip ) {
@@ -390,9 +392,18 @@ class FrmTipsHelper {
 		return $tips;
 	}
 
+	/**
+	 * @param array $tips
+	 *
+	 * @return array
+	 */
 	public static function get_random_tip( $tips ) {
-		$random = random_int( 0, count( $tips ) - 1 );
+		$count = count( $tips );
+		if ( $count === 0 ) {
+			return array();
+		}
 
+		$random = random_int( 0, $count - 1 );
 		return $tips[ $random ];
 	}
 

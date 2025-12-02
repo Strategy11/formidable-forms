@@ -5,15 +5,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCreateFile {
 
+	/**
+	 * @var string
+	 */
 	public $folder_name;
+
+	/**
+	 * @var string
+	 */
 	public $file_name;
+
+	/**
+	 * @var string
+	 */
 	public $error_message;
+
+	/**
+	 * @var array
+	 */
 	public $uploads;
+
+	/**
+	 * @var string
+	 */
 	private $new_file_path;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_dir       = 0755;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_file      = 0644;
+
+	/**
+	 * @var bool
+	 */
 	private $has_permission = false;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
 		$this->folder_name   = $atts['folder_name'] ?? '';
 		$this->file_name     = $atts['file_name'];
@@ -28,6 +62,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Attributes.
 	 *
 	 * @return void
 	 */
@@ -61,6 +97,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $file_content File content.
 	 *
 	 * @return void
 	 */
@@ -98,6 +136,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return string
 	 */
 	public function get_file_contents() {
 		$content = '';
@@ -111,6 +151,10 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $file File.
+	 *
+	 * @return string
 	 */
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
@@ -173,6 +217,9 @@ class FrmCreateFile {
 		return $needed_dirs;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
@@ -190,6 +237,8 @@ class FrmCreateFile {
 
 	/**
 	 * @param string $type
+	 *
+	 * @return array|false
 	 */
 	private function get_ftp_creds( $type ) {
 		$credentials = get_option(
@@ -232,7 +281,7 @@ class FrmCreateFile {
 		}
 
 		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
 			if ( ! empty( $stored_credentials['port'] ) ) {

@@ -4,9 +4,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmMigrate {
+
+	/**
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {
@@ -17,6 +33,9 @@ class FrmMigrate {
 		$this->entry_metas = $wpdb->prefix . 'frm_item_metas';
 	}
 
+	/**
+	 * @return void
+	 */
 	public function upgrade() {
 		do_action( 'frm_before_install' );
 
@@ -75,6 +94,8 @@ class FrmMigrate {
 	 * Updates some settings for new installs.
 	 *
 	 * @since 6.23
+	 *
+	 * @return void
 	 */
 	private function update_settings_for_new_install() {
 		$settings = FrmAppHelper::get_settings();
@@ -127,6 +148,9 @@ class FrmMigrate {
 		return $wpdb->get_charset_collate();
 	}
 
+	/**
+	 * @return void
+	 */
 	private function create_tables() {
 		$charset_collate = $this->collation();
 		$sql             = array();
@@ -264,6 +288,7 @@ class FrmMigrate {
 	 *
 	 * @param string $table_name
 	 * @param string $index_name
+	 *
 	 * @return bool
 	 */
 	private static function index_exists( $table_name, $index_name ) {
@@ -281,6 +306,9 @@ class FrmMigrate {
 		return (bool) $row;
 	}
 
+	/**
+	 * @return void
+	 */
 	private function maybe_create_contact_form() {
 		$form_exists = FrmForm::get_id_by_key( 'contact-form' );
 		if ( ! $form_exists ) {
@@ -292,6 +320,8 @@ class FrmMigrate {
 	 * Create the default contact form
 	 *
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	private function add_default_template() {
 		if ( FrmXMLHelper::check_if_libxml_disable_entity_loader_exists() ) {
@@ -311,6 +341,8 @@ class FrmMigrate {
 
 	/**
 	 * @param int|string $old_db_version
+	 *
+	 * @return void
 	 */
 	private function migrate_data( $old_db_version ) {
 		if ( ! $old_db_version ) {
@@ -418,6 +450,8 @@ class FrmMigrate {
 	 * Disables summary email for multisite (not the main site) if recipient setting isn't changed.
 	 *
 	 * @since 6.8
+	 *
+	 * @return void
 	 */
 	private function migrate_to_101() {
 		if ( ! is_multisite() || get_main_site_id() === get_current_blog_id() ) {
@@ -438,6 +472,8 @@ class FrmMigrate {
 	 * Clear frmpro_css transient.
 	 *
 	 * @since 4.10.02
+	 *
+	 * @return void
 	 */
 	private function migrate_to_98() {
 		delete_transient( 'frmpro_css' );
@@ -447,6 +483,8 @@ class FrmMigrate {
 	 * Move default_blank and clear_on_focus to placeholder.
 	 *
 	 * @since 4.0
+	 *
+	 * @return void
 	 */
 	private function migrate_to_97() {
 		$this->migrate_to_placeholder( 'clear_on_focus' );
@@ -457,6 +495,10 @@ class FrmMigrate {
 	 * Move clear_on_focus or default_blank to placeholder.
 	 *
 	 * @since 4.0
+	 *
+	 * @param string $type Field option key to migrate.
+	 *
+	 * @return void
 	 */
 	private function migrate_to_placeholder( $type = 'clear_on_focus' ) {
 		$query = array(
@@ -482,6 +524,8 @@ class FrmMigrate {
 	 * Delete unneeded default templates
 	 *
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	private function migrate_to_90() {
 		$form = FrmForm::getOne( 'contact' );
@@ -494,6 +538,8 @@ class FrmMigrate {
 	 * Reverse migration 17 -- Divide by 9
 	 *
 	 * @since 3.0.05
+	 *
+	 * @return void
 	 */
 	private function migrate_to_86() {
 
@@ -522,6 +568,9 @@ class FrmMigrate {
 		$this->revert_widget_field_size();
 	}
 
+	/**
+	 * @return array
+	 */
 	private function get_fields_with_size() {
 		$field_types = array(
 			'textarea',
@@ -551,6 +600,8 @@ class FrmMigrate {
 	 * Reverse the extra size changes in widgets
 	 *
 	 * @since 3.0.05
+	 *
+	 * @return void
 	 */
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
@@ -573,6 +624,10 @@ class FrmMigrate {
 	 * Divide by 9 to reverse the multiplication
 	 *
 	 * @since 3.0.05
+	 *
+	 * @param string $size Size string to maybe convert, passed by reference.
+	 *
+	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
 		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );
@@ -595,6 +650,8 @@ class FrmMigrate {
 	 * default 400px field width, switch it to 100%
 	 *
 	 * @since 2.0.4
+	 *
+	 * @return void
 	 */
 	private function migrate_to_25() {
 		// get the style that was created with the style migration
@@ -619,6 +676,8 @@ class FrmMigrate {
 	 * If not, try and add it again
 	 *
 	 * @since 2.0.2
+	 *
+	 * @return void
 	 */
 	private function migrate_to_23() {
 		global $wpdb;
@@ -630,6 +689,8 @@ class FrmMigrate {
 
 	/**
 	 * Change field size from character to pixel -- Multiply by 9
+	 *
+	 * @return void
 	 */
 	private function migrate_to_17() {
 		$fields = $this->get_fields_with_size();
@@ -651,6 +712,8 @@ class FrmMigrate {
 
 	/**
 	 * Change the characters in widgets to pixels
+	 *
+	 * @return void
 	 */
 	private function adjust_widget_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
@@ -668,6 +731,11 @@ class FrmMigrate {
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
+	/**
+	 * @param string $size
+	 *
+	 * @return void
+	 */
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
 

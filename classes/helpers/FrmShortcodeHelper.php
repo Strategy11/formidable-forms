@@ -34,6 +34,7 @@ class FrmShortcodeHelper {
 	 * Returns shortcodes that are shown/hidden based on the context.
 	 *
 	 * @since 6.16.3
+	 *
 	 * @return array
 	 */
 	public static function get_contextual_shortcodes() {
@@ -128,6 +129,14 @@ class FrmShortcodeHelper {
 		return $tag;
 	}
 
+	/**
+	 * @param bool   $no_vars
+	 * @param string $code
+	 * @param string $replace_with
+	 * @param string $html
+	 *
+	 * @return void
+	 */
 	public static function remove_inline_conditions( $no_vars, $code, $replace_with, &$html ) {
 		if ( $no_vars ) {
 			$html = str_replace( '[if ' . $code . ']', '', $html );

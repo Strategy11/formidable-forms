@@ -72,6 +72,7 @@ class test_FrmForm extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmForm::is_visible_to_user
 	 */
 	public function test_is_form_visible_to_user() {
@@ -103,6 +104,7 @@ class test_FrmForm extends FrmUnitTest {
 	/**
 	 * @param string       $capability
 	 * @param array|string $visibility
+	 *
 	 * @return bool
 	 */
 	private function form_is_visible( $capability, $visibility ) {

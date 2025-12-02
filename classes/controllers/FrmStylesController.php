@@ -20,12 +20,18 @@ class FrmStylesController {
 	 */
 	private static $message;
 
+	/**
+	 * @return void
+	 */
 	public static function load_pro_hooks() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			FrmProStylesController::load_pro_hooks();
 		}
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function register_post_types() {
 		register_post_type(
 			self::$post_type,
@@ -162,6 +168,7 @@ class FrmStylesController {
 	/**
 	 * @param string $register Either 'enqueue' or 'register'.
 	 * @param bool   $force True to enqueue/register the style if a form has not been loaded.
+	 *
 	 * @return void
 	 */
 	public static function enqueue_css( $register = 'enqueue', $force = false ) {
@@ -224,6 +231,7 @@ class FrmStylesController {
 
 	/**
 	 * @param array $stylesheet_urls
+	 *
 	 * @return void
 	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
@@ -240,6 +248,8 @@ class FrmStylesController {
 	 * Use a different stylesheet per site in a multisite install
 	 *
 	 * @since 3.0.03
+	 *
+	 * @return string
 	 */
 	public static function get_file_name() {
 		if ( is_multisite() ) {
@@ -252,8 +262,14 @@ class FrmStylesController {
 		return $name;
 	}
 
+	/**
+	 * @param string $css_key
+	 * @param string $version
+	 *
+	 * @return string
+	 */
 	private static function get_css_version( $css_key, $version ) {
-		if ( 'formidable' == $css_key ) {
+		if ( 'formidable' === $css_key ) {
 			$this_version = get_option( 'frm_last_style_update' );
 			if ( ! $this_version ) {
 				$this_version = $version;
@@ -268,6 +284,7 @@ class FrmStylesController {
 	/**
 	 * @param string $tag
 	 * @param string $handle
+	 *
 	 * @return string
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
@@ -398,6 +415,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param int $style_id
+	 *
 	 * @return int
 	 */
 	private static function get_form_id_for_style( $style_id ) {
@@ -536,6 +554,7 @@ class FrmStylesController {
 	 * Validate that we're assigning a form to a style that actually exists before assigning it to a form.
 	 *
 	 * @param int $style_id
+	 *
 	 * @return bool True if the style actually exists.
 	 */
 	private static function confirm_style_exists_before_setting( $style_id ) {
@@ -577,6 +596,7 @@ class FrmStylesController {
 	 * @param stdClass|WP_Post $active_style
 	 * @param stdClass         $form
 	 * @param WP_Post          $default_style
+	 *
 	 * @return void
 	 */
 	private static function render_style_page( $active_style, $form, $default_style ) {
@@ -653,6 +673,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
+	 *
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
@@ -726,6 +747,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param array $ids
+	 *
 	 * @return void
 	 */
 	private static function maybe_redirect_after_save( $ids ) {
@@ -761,6 +783,7 @@ class FrmStylesController {
 	 *
 	 * @param string       $message
 	 * @param array|object $forms
+	 *
 	 * @return void
 	 */
 	public static function manage( $message = '', $forms = array() ) {
@@ -803,6 +826,7 @@ class FrmStylesController {
 	 * Echo content for the Custom CSS page.
 	 *
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function custom_css( $message = '' ) {
@@ -1011,6 +1035,7 @@ class FrmStylesController {
 	/**
 	 * @param array $atts
 	 * @param array $sec
+	 *
 	 * @return void
 	 */
 	public static function include_style_section( $atts, $sec ) {
@@ -1094,6 +1119,7 @@ class FrmStylesController {
 	 * @since 4.11.03
 	 *
 	 * @param string $css CSS content.
+	 *
 	 * @return string
 	 */
 	public static function replace_relative_url( $css ) {
@@ -1118,6 +1144,8 @@ class FrmStylesController {
 	 * then enqueue it for the footer
 	 *
 	 * @since 2.0
+	 *
+	 * @return void
 	 */
 	public static function enqueue_style() {
 		global $frm_vars;
@@ -1150,6 +1178,7 @@ class FrmStylesController {
 	 * Get the style post object for a target form.
 	 *
 	 * @param bool|object|string $form
+	 *
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {
@@ -1166,6 +1195,8 @@ class FrmStylesController {
 	/**
 	 * @param string $class
 	 * @param string $style
+	 *
+	 * @return string
 	 */
 	public static function get_form_style_class( $class, $style ) {
 		if ( 1 == $style ) {
@@ -1185,8 +1216,11 @@ class FrmStylesController {
 
 	/**
 	 * @since 3.0
+	 *
 	 * @param object $style
 	 * @param string $class
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
@@ -1196,7 +1230,10 @@ class FrmStylesController {
 	}
 
 	/**
-	 * @param string $val
+	 * @param string     $val  Style setting key.
+	 * @param int|string $form Form ID or 'default'.
+	 *
+	 * @return mixed
 	 */
 	public static function get_style_val( $val, $form = 'default' ) {
 		$style = self::get_form_style( $form );
@@ -1205,6 +1242,11 @@ class FrmStylesController {
 		}
 	}
 
+	/**
+	 * @param array $default_styles
+	 *
+	 * @return array
+	 */
 	public static function show_entry_styles( $default_styles ) {
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
@@ -1227,6 +1269,12 @@ class FrmStylesController {
 		return $default_styles;
 	}
 
+	/**
+	 * @param string $important
+	 * @param array  $field
+	 *
+	 * @return string
+	 */
 	public static function &important_style( $important, $field ) {
 		$important = self::get_style_val( 'important_style', $field['form_id'] );
 
@@ -1237,6 +1285,10 @@ class FrmStylesController {
 	 * Duplicate of WordPress do_accordion_section function, it adds an additional svg icon support.
 	 *
 	 * @since 6.8.3
+	 *
+	 * @param string|WP_Screen $screen      Screen ID or screen object.
+	 * @param string           $context     Meta box context.
+	 * @param mixed            $data_object Data object passed to callbacks.
 	 *
 	 * @return int
 	 */
@@ -1364,6 +1416,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
+	 *
 	 * @return void
 	 */
 	public static function disable_conflicting_wp_admin_css( $styles ) {

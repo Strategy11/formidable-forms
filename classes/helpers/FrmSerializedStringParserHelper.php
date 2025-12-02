@@ -38,6 +38,7 @@ class FrmSerializedStringParserHelper {
 	 * This is the initial entry point into the recursive parser.
 	 *
 	 * @param string $string
+	 *
 	 * @return mixed
 	 */
 	public function parse( $string ) {
@@ -56,6 +57,7 @@ class FrmSerializedStringParserHelper {
 	 * @since 6.20
 	 *
 	 * @param mixed $value
+	 *
 	 * @return bool
 	 */
 	private function serialized_value_is_valid( $value ) {
@@ -66,6 +68,7 @@ class FrmSerializedStringParserHelper {
 	 * @since 6.20
 	 *
 	 * @param string $string
+	 *
 	 * @return bool
 	 */
 	private function serialized_string_is_invalid( $string ) {
@@ -87,6 +90,7 @@ class FrmSerializedStringParserHelper {
 	 * This is the recursive parser.
 	 *
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return array|bool|float|int|string|null
 	 */
 	private function do_parse( $string ) {
@@ -118,6 +122,7 @@ class FrmSerializedStringParserHelper {
 
 	/**
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return array
 	 */
 	private function parse_array( $string ) {
@@ -145,6 +150,7 @@ class FrmSerializedStringParserHelper {
 
 	/**
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return string
 	 */
 	private function parse_string( $string ) {
@@ -159,6 +165,7 @@ class FrmSerializedStringParserHelper {
 
 	/**
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return int
 	 */
 	private function parse_int( $string ) {
@@ -167,6 +174,7 @@ class FrmSerializedStringParserHelper {
 
 	/**
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return float
 	 */
 	private function parse_float( $string ) {
@@ -175,6 +183,7 @@ class FrmSerializedStringParserHelper {
 
 	/**
 	 * @param FrmStringReaderHelper $string
+	 *
 	 * @return bool
 	 */
 	private function parse_bool( $string ) {

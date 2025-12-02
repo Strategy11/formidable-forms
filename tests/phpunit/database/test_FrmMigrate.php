@@ -7,6 +7,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 	/**
 	 * @covers FrmMigrate::upgrade
+	 *
 	 * @todo Check if style was created
 	 */
 	public function test_upgrade() {

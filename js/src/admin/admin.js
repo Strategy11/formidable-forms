@@ -465,7 +465,7 @@ window.frmAdminBuildJS = function() {
 	 * @since x.x
 	 *
 	 * @param {HTMLElement} element
-	 * @param {boolean} show
+	 * @param {boolean}     show
 	 */
 	function loadTooltip( element, show = false ) {
 		let tooltipTarget = element;
@@ -7211,14 +7211,19 @@ window.frmAdminBuildJS = function() {
 		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
 		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
-			const upgradeButton = upgradeModalLink.cloneNode( true );
+			let upgradeButton;
+			let upgradeActions = upgradeModalLink.closest( '.frm-upgrade-modal-actions' );
+			if ( upgradeActions ) {
+				upgradeActions = upgradeActions.cloneNode( true );
+				upgradeButton = upgradeActions.querySelector( '.frm-upgrade-link' );
+			} else {
+				upgradeButton = upgradeModalLink.cloneNode( true );
+			}
 			const level = upgradeButton.querySelector( '.license-level' );
-
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
-
-			container.appendChild( upgradeButton );
+			container.appendChild( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {

@@ -68,6 +68,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden Used for pagination.
+	 *
 	 * @return void
 	 */
 	private function echo_style_card( $style, $hidden = false ) {
@@ -86,6 +87,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style
 	 * @param bool             $hidden
+	 *
 	 * @return array
 	 */
 	private function get_params_for_style_card( $style, $hidden = false ) {
@@ -125,6 +127,7 @@ class FrmStylesCardHelper {
 		 *
 		 * @param array $params
 		 * @param array $args {
+		 *
 		 *     @type WP_Post $style
 		 * }
 		 */
@@ -133,6 +136,7 @@ class FrmStylesCardHelper {
 
 	/**
 	 * @param stdClass|WP_Post $style
+	 *
 	 * @return bool
 	 */
 	private static function has_dark_background( $style ) {
@@ -170,7 +174,9 @@ class FrmStylesCardHelper {
 	 *     @type string $name
 	 *     @type string $slug
 	 * }
+	 *
 	 * @param bool  $hidden
+	 *
 	 * @return bool True if the template was valid and echoed.
 	 */
 	private function echo_card_template( $style, $hidden = false ) {
@@ -196,8 +202,10 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $args {
+			 *
 			 *     @type stdClass|WP_Post $style
 			 * }
+			 *
 			 * @param stdClass $style_object
 			 * @param array    $style
 			 */
@@ -223,6 +231,7 @@ class FrmStylesCardHelper {
 			 *
 			 * @param array $params
 			 * @param array $style
+			 *
 			 * @return array
 			 */
 			$param_filter = function ( $params ) use ( $style ) {
@@ -248,6 +257,7 @@ class FrmStylesCardHelper {
 	 *
 	 * @param stdClass|WP_Post $style A new style (including duplicated styles) is not a WP_Post object.
 	 *                                Template cards also use an stdClss instead of a WP_Post object.
+	 *
 	 * @return string
 	 */
 	public static function get_style_param_for_card( $style ) {
@@ -383,6 +393,7 @@ class FrmStylesCardHelper {
 	 * @since 6.0
 	 *
 	 * @param array<array> $styles
+	 *
 	 * @return void
 	 */
 	private function echo_template_cards( $styles ) {
@@ -394,6 +405,7 @@ class FrmStylesCardHelper {
 			 * @param array|string $style
 			 * @param string       $key   The key for the API data. It may be a numeric ID, or a key like "active_sub" or "expires".
 			 * @param int          $count Used for pagination.
+			 *
 			 * @return void
 			 */
 			function ( $style, $key ) {
@@ -409,6 +421,7 @@ class FrmStylesCardHelper {
 
 	/**
 	 * @param array<WP_Post> $styles
+	 *
 	 * @return void
 	 */
 	private function echo_custom_cards( $styles ) {
@@ -421,6 +434,7 @@ class FrmStylesCardHelper {
 			 *
 			 * @param WP_Post $style
 			 * @param int     $count Used for pagination.
+			 *
 			 * @return void
 			 */
 			function ( $style ) use ( &$count ) {
@@ -437,6 +451,7 @@ class FrmStylesCardHelper {
 	 * @since 6.0
 	 *
 	 * @param int $count
+	 *
 	 * @return void
 	 */
 	private function maybe_echo_card_pagination( $count ) {
@@ -475,6 +490,7 @@ class FrmStylesCardHelper {
 	 * Remove the default style from an array of styles.
 	 *
 	 * @param array $styles
+	 *
 	 * @return array
 	 */
 	public function filter_custom_styles( $styles ) {
@@ -482,6 +498,7 @@ class FrmStylesCardHelper {
 			$styles,
 			/**
 			 * @param WP_Post $style
+			 *
 			 * @return bool
 			 */
 			function ( $style ) {

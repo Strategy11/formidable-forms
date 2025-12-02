@@ -160,6 +160,7 @@ class FrmEntriesAJAXSubmitController {
 	 * @param string   $field_id
 	 * @param stdClass $form the form being submitted (not necessarily the field's form when embedded/repeated).
 	 * @param array    $errors all errors that were caught in this form submission, passed into the frm_before_replace_shortcodes filter for reference.
+	 *
 	 * @return string
 	 */
 	private static function maybe_modify_ajax_error( $error, $field_id, $form, $errors ) {
@@ -192,6 +193,7 @@ class FrmEntriesAJAXSubmitController {
 	 *
 	 * @param array      $response
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	private static function check_for_failed_form_submission( $response, $form_id ) {

@@ -172,6 +172,8 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
+	 * @param array $metadata
+	 *
 	 * @return object
 	 */
 	protected function create_payment_intent( $metadata = array() ) {
@@ -398,6 +400,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 
 	/**
 	 * @param object $setup_intent
+	 *
 	 * @return void
 	 */
 	protected function assert_setup_intent( $setup_intent ) {

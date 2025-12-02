@@ -10,6 +10,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'textarea';

@@ -7,6 +7,7 @@ class FrmForm {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool|int id on success or false on failure.
 	 */
 	public static function create( $values ) {
@@ -60,6 +61,7 @@ class FrmForm {
 	 * @since 5.0.08
 	 *
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	private static function maybe_filter_form_options( $options ) {
@@ -70,6 +72,13 @@ class FrmForm {
 	}
 
 	/**
+	 * Duplicate a form.
+	 *
+	 * @param int       $id        Form ID to duplicate.
+	 * @param bool      $template  Whether the duplicated form is a template.
+	 * @param bool      $copy_keys Whether to copy the original form key.
+	 * @param false|int $blog_id   Blog ID when duplicating across sites, or false for current site.
+	 *
 	 * @return bool|int ID on success or false on failure
 	 */
 	public static function duplicate( $id, $template = false, $copy_keys = false, $blog_id = false ) {
@@ -126,6 +135,12 @@ class FrmForm {
 		return false;
 	}
 
+	/**
+	 * @param int   $form_id
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	public static function after_duplicate( $form_id, $values ) {
 		$new_opts = $values['options'];
 		FrmAppHelper::unserialize_or_decode( $new_opts );
@@ -151,6 +166,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param int $form_id Form ID.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_fields( $form_id ) {
 		global $wpdb;
@@ -187,6 +204,8 @@ class FrmForm {
 	 * @since 5.3
 	 *
 	 * @param array $field Field array.
+	 *
+	 * @return void
 	 */
 	private static function switch_field_ids_in_field( $field ) {
 		$new_values = array();
@@ -219,6 +238,12 @@ class FrmForm {
 	}
 
 	/**
+	 * Update a form.
+	 *
+	 * @param int   $id          Form ID.
+	 * @param array $values      Form values to update.
+	 * @param bool  $create_link Whether this is being called from link creation.
+	 *
 	 * @return bool|int
 	 */
 	public static function update( $id, $values, $create_link = false ) {
@@ -270,6 +295,7 @@ class FrmForm {
 	 * @param array $new_values
 	 * @param array $values
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function set_update_options( $new_values, $values, $args = array() ) {
@@ -302,6 +328,9 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int   $id     Form ID.
+	 * @param array $values Form values array.
+	 *
 	 * @return array
 	 */
 	public static function update_fields( $id, $values ) {
@@ -401,6 +430,7 @@ class FrmForm {
 	 * @param array $field
 	 * @param array $values
 	 * @param array $new_field
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_max_option( $field, $values, &$new_field ) {
@@ -421,6 +451,7 @@ class FrmForm {
 	/**
 	 * @param string $opt
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	private static function sanitize_field_opt( $opt, &$value ) {
@@ -454,6 +485,7 @@ class FrmForm {
 
 	/**
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	private static function sanitize_calc( $value ) {
@@ -474,6 +506,7 @@ class FrmForm {
 	 * This is to avoid an issue with unspaced calculations being recognized as HTML that gets removed when strip_tags is called.
 	 *
 	 * @param string $calc
+	 *
 	 * @return string
 	 */
 	private static function normalize_calc_spaces( $calc ) {
@@ -490,6 +523,11 @@ class FrmForm {
 
 	/**
 	 * Updating the settings page
+	 *
+	 * @param array  $values Form values array.
+	 * @param object $field Field object, passed by reference.
+	 *
+	 * @return void
 	 */
 	private static function get_settings_page_html( $values, &$field ) {
 		if ( isset( $values['field_options'][ 'custom_html_' . $field->id ] ) ) {
@@ -509,6 +547,13 @@ class FrmForm {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 * @param array  $values
+	 * @param array  $new_field
+	 *
+	 * @return void
+	 */
 	private static function prepare_field_update_values( $field, $values, &$new_field ) {
 		$field_cols = array(
 			'field_order' => 0,
@@ -539,7 +584,10 @@ class FrmForm {
 	 * on a multilingual site.
 	 *
 	 * @since 3.06.01
+	 *
 	 * @param object $form The form object.
+	 *
+	 * @return array
 	 */
 	public static function translatable_strings( $form ) {
 		$strings = array(
@@ -598,6 +646,8 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID.
+	 *
 	 * @return bool|int
 	 */
 	public static function trash( $id ) {
@@ -648,6 +698,8 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID.
+	 *
 	 * @return bool|int
 	 */
 	public static function destroy( $id ) {
@@ -691,6 +743,8 @@ class FrmForm {
 	/**
 	 * Delete trashed forms based on how long they have been trashed
 	 *
+	 * @param int|string $delete_timestamp Timestamp cutoff for deletion.
+	 *
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
@@ -723,6 +777,8 @@ class FrmForm {
 	}
 
 	/**
+	 * @param int|string $id Form ID or key.
+	 *
 	 * @return string form name
 	 */
 	public static function getName( $id ) {
@@ -776,7 +832,10 @@ class FrmForm {
 	 * If $form is numeric, get the form object
 	 *
 	 * @since 2.0.9
+	 *
 	 * @param int|object $form
+	 *
+	 * @return void
 	 */
 	public static function maybe_get_form( &$form ) {
 		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
@@ -787,15 +846,14 @@ class FrmForm {
 	/**
 	 * @param int|string $id
 	 * @param false|int  $blog_id
+	 *
 	 * @return stdClass|null
 	 */
 	public static function getOne( $id, $blog_id = false ) {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			global $wpmuBaseTablePrefix;
-			$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix . $blog_id . '_' : $wpdb->get_blog_prefix( $blog_id );
-
+			$prefix     = $wpdb->get_blog_prefix( $blog_id );
 			$table_name = $prefix . 'frm_forms';
 		} else {
 			$table_name = $wpdb->prefix . 'frm_forms';
@@ -830,6 +888,7 @@ class FrmForm {
 	 * @since 6.8.3
 	 *
 	 * @param stdClass|null $row The database row for a target form.
+	 *
 	 * @return stdClass|null
 	 */
 	private static function prepare_form_row_data( $row ) {
@@ -851,6 +910,10 @@ class FrmForm {
 	}
 
 	/**
+	 * @param array|string $where    Where conditions array or raw WHERE string.
+	 * @param string       $order_by Order by clause.
+	 * @param int|string   $limit    Limit clause or number.
+	 *
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
@@ -892,6 +955,7 @@ class FrmForm {
 	 * @param array  $query
 	 * @param int    $limit
 	 * @param string $inc_children
+	 *
 	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
@@ -962,20 +1026,28 @@ class FrmForm {
 	 * or when the form status is changed
 	 *
 	 * @since 2.0.4
+	 *
+	 * @return void
 	 */
 	public static function clear_form_cache() {
 		FrmDb::cache_delete_group( 'frm_form' );
 	}
 
 	/**
+	 * @param array $values Form values to validate.
+	 *
 	 * @return array of errors
 	 */
 	public static function validate( $values ) {
 		$errors = array();
-
 		return apply_filters( 'frm_validate_form', $errors, $values );
 	}
 
+	/**
+	 * @param object|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_params( $form = null ) {
 		global $frm_vars;
 
@@ -1037,6 +1109,9 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function list_page_params() {
 		$values   = array();
 		$defaults = array(
@@ -1055,6 +1130,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param int|object|string|null $form
+	 *
+	 * @return array
+	 */
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;
 		if ( $form === null ) {
@@ -1083,6 +1163,11 @@ class FrmForm {
 		return $values;
 	}
 
+	/**
+	 * @param string $default_form
+	 *
+	 * @return int|string
+	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		if ( 'first' === $default_form ) {
 			$form = self::get_current_form();
@@ -1094,6 +1179,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return false|int|object|string
+	 */
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
@@ -1109,6 +1199,11 @@ class FrmForm {
 		return $form_id;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
 		if ( is_numeric( $form ) ) {
@@ -1118,6 +1213,11 @@ class FrmForm {
 		return $form;
 	}
 
+	/**
+	 * @param int $form_id
+	 *
+	 * @return false|object
+	 */
 	public static function set_current_form( $form_id ) {
 		global $frm_vars;
 
@@ -1131,6 +1231,13 @@ class FrmForm {
 		return $frm_vars['current_form'];
 	}
 
+	/**
+	 * @param object     $form
+	 * @param int|string $this_load
+	 * @param bool       $global_load
+	 *
+	 * @return bool
+	 */
 	public static function is_form_loaded( $form, $this_load, $global_load ) {
 		global $frm_vars;
 		$small_form = new stdClass();
@@ -1174,6 +1281,11 @@ class FrmForm {
 		return $visible;
 	}
 
+	/**
+	 * @param object $form
+	 *
+	 * @return bool
+	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
 		$show = apply_filters( 'frm_show_submit_button', $show, $form );
@@ -1183,6 +1295,10 @@ class FrmForm {
 
 	/**
 	 * @since 2.3
+	 *
+	 * @param array $atts Attributes including form, option, and default.
+	 *
+	 * @return mixed
 	 */
 	public static function get_option( $atts ) {
 		$form    = $atts['form'];
@@ -1195,7 +1311,10 @@ class FrmForm {
 	 * Get the link to edit this form.
 	 *
 	 * @since 4.0
+	 *
 	 * @param int $form_id The id of the form.
+	 *
+	 * @return string
 	 */
 	public static function get_edit_link( $form_id ) {
 		return admin_url( 'admin.php?page=formidable&frm_action=edit&id=' . $form_id );
@@ -1207,6 +1326,7 @@ class FrmForm {
 	 * @since 6.2
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return bool
 	 */
 	public static function is_ajax_on( $form ) {
@@ -1217,6 +1337,7 @@ class FrmForm {
 	 * Get the latest form available.
 	 *
 	 * @since 6.8
+	 *
 	 * @return object
 	 */
 	public static function get_latest_form() {
@@ -1238,6 +1359,7 @@ class FrmForm {
 	 * Count and return total forms.
 	 *
 	 * @since 6.8
+	 *
 	 * @return int
 	 */
 	public static function get_forms_count() {
@@ -1257,9 +1379,11 @@ class FrmForm {
 
 	/**
 	 * @deprecated 2.03.05 This is still referenced in a few add ons (API, locations).
+	 *
 	 * @codeCoverageIgnore
 	 *
 	 * @param string $key
+	 *
 	 * @return int form id
 	 */
 	public static function getIdByKey( $key ) {
@@ -1269,9 +1393,11 @@ class FrmForm {
 
 	/**
 	 * @deprecated 2.03.05 This is still referenced in the API add on as of v1.13.
+	 *
 	 * @codeCoverageIgnore
 	 *
 	 * @param int|string $id
+	 *
 	 * @return string
 	 */
 	public static function getKeyById( $id ) {

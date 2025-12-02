@@ -3,6 +3,7 @@
  * On Submit action helper
  *
  * @package Formidable
+ *
  * @since 6.0
  */
 
@@ -24,6 +25,8 @@ class FrmOnSubmitHelper {
 	 *     @type string        $action_key     Action key.
 	 *     @type array         $values         Contains `fields` (form fields) and `id` (form ID).
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function show_message_settings( $args ) {
 		$id_attr = $args['action_control']->get_field_id( 'success_msg' );
@@ -81,6 +84,8 @@ class FrmOnSubmitHelper {
 	 *     @type string        $action_key     Action key.
 	 *     @type array         $values         Contains `fields` (form fields) and `id` (form ID).
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function show_redirect_settings( $args ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_redirect_settings.php';
@@ -98,6 +103,8 @@ class FrmOnSubmitHelper {
 	 *     @type string        $action_key     Action key.
 	 *     @type array         $values         Contains `fields` (form fields) and `id` (form ID).
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function show_page_settings( $args ) {
 		$name_attr = $args['action_control']->get_field_name( 'success_page_id' );
@@ -129,6 +136,7 @@ class FrmOnSubmitHelper {
 	 * {@see FrmFormAction::save_settings()}.
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return array
 	 */
 	public static function get_actions( $form_id ) {
@@ -147,21 +155,31 @@ class FrmOnSubmitHelper {
 	 * Gets On Submit action type (message, redirect or page).
 	 *
 	 * @param object $action Form action object.
+	 *
 	 * @return string
 	 */
 	public static function get_action_type( $action ) {
 		return $action->post_content['success_action'] ?? self::get_default_action_type();
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_default_action_type() {
 		return 'message';
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_default_msg() {
 		$msg = FrmAppHelper::get_settings()->success_msg;
 		return $msg ? $msg : __( 'Your responses were successfully submitted. Thank you!', 'formidable' );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_default_redirect_msg() {
 		return __( 'Please wait while you are redirected.', 'formidable' );
 	}
@@ -181,6 +199,8 @@ class FrmOnSubmitHelper {
 	 * Adds the first On Submit action data to the form options to be saved.
 	 *
 	 * @param int $form_id Form ID.
+	 *
+	 * @return void
 	 */
 	public static function save_on_submit_settings( $form_id ) {
 		$actions             = self::get_actions( $form_id );
@@ -215,6 +235,8 @@ class FrmOnSubmitHelper {
 	 * @param array  $form_options Form options.
 	 * @param object $action       Optional. The On Submit action object.
 	 * @param string $event        Form event. Default is `create`.
+	 *
+	 * @return void
 	 */
 	public static function populate_on_submit_data( &$form_options, $action = null, $event = 'create' ) {
 		$opt = 'update' === $event ? 'edit_' : 'success_';
@@ -253,6 +275,8 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param int $form_id Form ID.
+	 *
+	 * @return void
 	 */
 	public static function maybe_migrate_submit_settings_to_action( $form_id ) {
 		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
@@ -325,6 +349,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @param array  $form_options Form options.
 	 * @param string $event        Action event. Accepts `create` or `update`. Default is `create`.
+	 *
 	 * @return array
 	 */
 	private static function get_on_submit_action_data_from_form_options( $form_options, $event = 'create' ) {
@@ -356,6 +381,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Form object.
+	 *
 	 * @return bool
 	 */
 	public static function form_has_migrated( $form ) {
@@ -366,6 +392,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.1.1
 	 *
 	 * @param object $form Limited form object.
+	 *
 	 * @return void
 	 */
 	private static function save_migrated_success_actions( $form ) {
@@ -412,6 +439,7 @@ class FrmOnSubmitHelper {
 	 * @since 6.3.1
 	 *
 	 * @param array|string $event Uses 'create' or 'update'.
+	 *
 	 * @return object
 	 */
 	public static function get_fallback_action_after_open_in_new_tab( $event ) {
@@ -426,6 +454,8 @@ class FrmOnSubmitHelper {
 	 * Check if the current event has been passed. If not, use create actions.
 	 *
 	 * @since 6.1.1
+	 *
+	 * @param array $atts 
 	 *
 	 * @return string
 	 */

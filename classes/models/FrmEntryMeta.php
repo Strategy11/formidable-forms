@@ -10,6 +10,7 @@ class FrmEntryMeta {
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
 	 * @param mixed  $meta_value
+	 *
 	 * @return int
 	 */
 	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
@@ -80,6 +81,10 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $values 
+	 *
+	 * @return void
 	 */
 	private static function set_value_before_save( &$values ) {
 		$field = FrmField::getOne( $values['field_id'] );
@@ -92,6 +97,11 @@ class FrmEntryMeta {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts
+	 * @param mixed $value
+	 *
+	 * @return void
 	 */
 	private static function get_value_to_save( $atts, &$value ) {
 		if ( is_object( $atts['field'] ) ) {
@@ -111,6 +121,7 @@ class FrmEntryMeta {
 	/**
 	 * @param int|string $entry_id
 	 * @param array      $values Either indexed by field ID or field key.
+	 *
 	 * @return void
 	 */
 	public static function update_entry_metas( $entry_id, $values ) {
@@ -144,7 +155,7 @@ class FrmEntryMeta {
 
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
-				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) == '' ) ) {
+				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
@@ -179,6 +190,12 @@ class FrmEntryMeta {
 		self::clear_cache();
 	}
 
+	/**
+	 * @param int $old_id
+	 * @param int $new_id
+	 *
+	 * @return void
+	 */
 	public static function duplicate_entry_metas( $old_id, $new_id ) {
 		$metas = self::get_entry_meta_info( $old_id );
 
@@ -197,6 +214,12 @@ class FrmEntryMeta {
 		self::clear_cache();
 	}
 
+	/**
+	 * @param int $entry_id
+	 * @param int $field_id
+	 *
+	 * @return false|int
+	 */
 	public static function delete_entry_meta( $entry_id, $field_id ) {
 		global $wpdb;
 		self::clear_cache();
@@ -209,6 +232,8 @@ class FrmEntryMeta {
 	 * Called when a meta is added or changed
 	 *
 	 * @since 2.0.5
+	 *
+	 * @return void
 	 */
 	public static function clear_cache() {
 		FrmDb::cache_delete_group( 'frm_entry_meta' );
@@ -220,6 +245,7 @@ class FrmEntryMeta {
 	 *
 	 * @param stdClass   $entry
 	 * @param int|string $field_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
@@ -232,6 +258,7 @@ class FrmEntryMeta {
 	/**
 	 * @param int|object|string $entry_id
 	 * @param int|string        $field_id This function supports field keys as field id.
+	 *
 	 * @return mixed
 	 */
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
@@ -273,6 +300,14 @@ class FrmEntryMeta {
 		return $result;
 	}
 
+	/**
+	 * @param int|string $field_id
+	 * @param string     $order
+	 * @param string     $limit
+	 * @param array      $args
+	 *
+	 * @return array
+	 */
 	public static function get_entry_metas_for_field( $field_id, $order = '', $limit = '', $args = array() ) {
 		$defaults = array(
 			'value'        => false,
@@ -308,6 +343,8 @@ class FrmEntryMeta {
 	 * @param string     $limit
 	 * @param array      $args
 	 * @param array      $query
+	 *
+	 * @return void
 	 */
 	private static function meta_field_query( $field_id, $order, $limit, $args, array &$query ) {
 		global $wpdb;
@@ -335,6 +372,11 @@ class FrmEntryMeta {
 		$query[] = $order . $limit;
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 *
+	 * @return array
+	 */
 	public static function get_entry_meta_info( $entry_id ) {
 		return FrmDb::get_results( 'frm_item_metas', array( 'item_id' => $entry_id ) );
 	}
@@ -344,6 +386,7 @@ class FrmEntryMeta {
 	 * @param string $order_by
 	 * @param string $limit
 	 * @param bool   $stripslashes
+	 *
 	 * @return array
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
@@ -369,6 +412,15 @@ class FrmEntryMeta {
 		return $results;
 	}
 
+	/**
+	 * @param array|string $where
+	 * @param string       $order_by
+	 * @param string       $limit
+	 * @param bool         $unique
+	 * @param array        $args
+	 *
+	 * @return array|string|null
+	 */
 	public static function getEntryIds( $where = array(), $order_by = '', $limit = '', $unique = true, $args = array() ) {
 		$defaults = array(
 			'is_draft' => false,
@@ -392,6 +444,7 @@ class FrmEntryMeta {
 	 *
 	 * @param array $query
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function get_top_level_entry_ids( $query, $args ) {
@@ -404,7 +457,9 @@ class FrmEntryMeta {
 	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
 	 *
 	 * @since 6.16.1
+	 *
 	 * @param array|string $where
+	 *
 	 * @return bool
 	 */
 	private static function should_join_fields_table( &$where ) {
@@ -432,6 +487,11 @@ class FrmEntryMeta {
 	 * @param array|string $where
 	 * @param string       $order_by
 	 * @param string       $limit
+	 * @param bool         $unique
+	 * @param array        $args
+	 * @param array        $query
+	 *
+	 * @return void
 	 */
 	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
 		global $wpdb;
@@ -529,6 +589,13 @@ class FrmEntryMeta {
 		$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 	}
 
+	/**
+	 * @param array|string $search
+	 * @param int|string   $field_id
+	 * @param string       $operator
+	 *
+	 * @return array
+	 */
 	public static function search_entry_metas( $search, $field_id, $operator ) {
 		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
