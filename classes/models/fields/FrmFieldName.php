@@ -13,12 +13,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldName extends FrmFieldCombo {
 
 	/**
-	 * Track if the autocomplete attribute is added to a name field in each form.
-	 * This is an array with keys are form IDs and values are boolean values.
+	 * Track the first name field ID in forms.
 	 *
-	 * @var array
+	 * @var array Array with keys are form ID and values are name field IDs.
 	 */
-	protected static $added_autocomplete_attr = array();
+	private static $first_name_field_ids = array();
 
 	/**
 	 * Field name.
@@ -295,6 +294,24 @@ class FrmFieldName extends FrmFieldCombo {
 	}
 
 	/**
+	 * Tracks the first name field ID in a form.
+	 *
+	 * @since x.x
+	 *
+	 * @param object[] $fields Array of fields in a form.
+	 *
+	 * @return void
+	 */
+	public static function track_first_name_field( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( 'name' === $field->type ) {
+				self::$first_name_field_ids[ $field->form_id ] = $field->id;
+				return;
+			}
+		}
+	}
+
+	/**
 	 * Gets subfield input attributes.
 	 *
 	 * @since x.x
@@ -306,21 +323,25 @@ class FrmFieldName extends FrmFieldCombo {
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
 		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
 
+		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
+		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {
+			return $attrs;
+		}
+
 		$parent_form_id = (int) FrmField::get_option( $args['field'], 'parent_form_id' );
-		$form_id        = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 		if ( $form_id !== $parent_form_id ) {
 			// Do not add autocomplete attribute to a name field inside repeater.
 			return $attrs;
 		}
 
-		if ( empty( self::$added_autocomplete_attr[ $form_id ] ) ) {
+		$field_id = (int) ( is_array( $args['field'] ) ? $args['field']['id'] : $args['field']->id );
+
+		if ( intval( self::$first_name_field_ids[ $form_id ] ) === $field_id ) {
 			if ( 'first' === $sub_field['name'] ) {
 				$attrs['autocomplete'] = 'given-name';
 			} elseif ( 'last' === $sub_field['name'] ) {
 				$attrs['autocomplete'] = 'family-name';
 			}
-
-			self::$added_autocomplete_attr[ $form_id ] = true;
 		}
 
 		return $attrs;
