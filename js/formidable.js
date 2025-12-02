@@ -1203,7 +1203,14 @@ function frmFrontFormJS() {
 			const inputs = document.querySelectorAll( `[aria-describedby*="${ el.id }"]` );
 			if ( inputs.length ) {
 				inputs.forEach( input => {
-					input.setAttribute( 'aria-describedby', input.getAttribute( 'aria-describedby' ).replace( el.id, '' ) );
+					let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+					ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
+
+					if ( ariaDescribedBy.length ) {
+						input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+					} else {
+						input.removeAttribute( 'aria-describedby' );
+					}
 				} );
 			}
 			el.remove();
