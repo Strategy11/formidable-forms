@@ -277,6 +277,7 @@ class FrmFieldFormHtml {
 	 * This ID was added to the HTML in v3.06.02.
 	 *
 	 * @since 3.06.02
+	 * @return void
 	 */
 	private function maybe_add_error_id() {
 		if ( ! isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
