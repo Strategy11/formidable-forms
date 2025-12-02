@@ -395,6 +395,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * Set the admin page parameters for the later code to use
 	 *
 	 * @since 3.0
+	 *
+	 * @param string $url
+	 *
+	 * @return void
 	 */
 	protected function set_get_params( $url ) {
 		if ( strpos( $url, '?' ) === false ) {
@@ -637,6 +641,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 *
 	 * @param mixed $object
 	 * @param string $property
+	 *
 	 * @return ReflectionProperty
 	 */
 	protected function get_accessible_property( $object, $property ) {

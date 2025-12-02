@@ -14,6 +14,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_test_mode_container( $html ) {
@@ -188,6 +189,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param array $form_actions
+	 *
 	 * @return array
 	 */
 	private static function get_enabled_form_action_ids( $form_actions ) {
@@ -365,9 +367,9 @@ class FrmTestModeController {
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
 
-		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
-		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
-		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array(), '2.11.8', true );
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '5.0.2', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 
 		wp_enqueue_script( 'bootstrap-multiselect' );

@@ -235,6 +235,8 @@ window.frmAdminBuildJS = function() {
 
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
 
+	const MAX_FIELD_GROUP_SIZE = 12;
+
 	const frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
 	const { tag, div, span, a, svg, img } = frmDom;
 	const { onClickPreventDefault } = frmDom.util;
@@ -457,6 +459,34 @@ window.frmAdminBuildJS = function() {
 		return 'INPUT' === element.nodeName && 'checkbox' === element.type && ! element.checked;
 	}
 
+	/**
+	 * Load a tooltip for a single element.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} element
+	 * @param {boolean}     show
+	 */
+	function loadTooltip( element, show = false ) {
+		let tooltipTarget = element;
+
+		// Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
+		if ( tooltipTarget.hasAttribute( 'data-toggle' ) || tooltipTarget.hasAttribute( 'data-bs-toggle' ) ) {
+			tooltipTarget.parentElement.setAttribute( 'title', tooltipTarget.getAttribute( 'title' ) );
+			tooltipTarget.removeAttribute( 'title' );
+			tooltipTarget.classList.remove( 'frm_bstooltip' );
+			tooltipTarget.parentElement.classList.add( 'frm_bstooltip' );
+			tooltipTarget = tooltipTarget.parentElement;
+		}
+
+		jQuery( tooltipTarget ).tooltip();
+
+		if ( show ) {
+			deleteTooltips();
+			jQuery( tooltipTarget ).tooltip( 'show' );
+		}
+	}
+
 	function loadTooltips() {
 		let wrapClass = jQuery( '.wrap, .frm_wrap' ),
 			confirmModal = document.getElementById( 'frm_confirm_modal' ),
@@ -476,12 +506,8 @@ window.frmAdminBuildJS = function() {
 
 		wrapClass.on( 'mouseenter.frm', '.frm_bstooltip, .frm_help', function() {
 			jQuery( this ).off( 'mouseenter.frm' );
-
-			jQuery( '.frm_bstooltip, .frm_help' ).tooltip();
-			jQuery( this ).tooltip( 'show' );
+			loadTooltip( this, true );
 		} );
-
-		jQuery( '.frm_bstooltip, .frm_help' ).tooltip( );
 
 		jQuery( document ).on( 'click', '#doaction, #doaction2', function( event ) {
 			const isTop = this.id === 'doaction',
@@ -1388,8 +1414,8 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function addTooltip( element, title ) {
-		element.setAttribute( 'data-toggle', 'tooltip' );
-		element.setAttribute( 'data-container', 'body' );
+		element.setAttribute( 'data-bs-toggle', 'tooltip' );
+		element.setAttribute( 'data-bs-container', 'body' );
 		element.setAttribute( 'title', title );
 		element.addEventListener(
 			'mouseover',
@@ -1420,8 +1446,9 @@ window.frmAdminBuildJS = function() {
 			trigger,
 			{
 				title: __( 'More Options', 'formidable' ),
-				'data-toggle': 'dropdown',
-				'data-container': 'body'
+				'data-bs-toggle': 'dropdown',
+				'data-bs-container': 'body',
+				'data-bs-display': 'static'
 			}
 		);
 		makeTabbable( trigger, __( 'More Options', 'formidable' ) );
@@ -2029,14 +2056,14 @@ window.frmAdminBuildJS = function() {
 
 	function groupCanFitAnotherField( fieldsInRow, $field ) {
 		let fieldId;
-		if ( fieldsInRow.length < 6 ) {
+		if ( fieldsInRow.length < MAX_FIELD_GROUP_SIZE ) {
 			return true;
 		}
-		if ( fieldsInRow.length > 6 ) {
+		if ( fieldsInRow.length > MAX_FIELD_GROUP_SIZE ) {
 			return false;
 		}
 		fieldId = $field.attr( 'data-fid' );
-		// allow 6 if we're not changing field groups.
+		// Allow the maximum number if we're not changing field groups.
 		return 1 === jQuery( fieldsInRow ).filter( '[data-fid="' + fieldId + '"]' ).length;
 	}
 
@@ -2279,7 +2306,7 @@ window.frmAdminBuildJS = function() {
 
 	function duplicateField() {
 		let $field, fieldId, children, newRowId, fieldOrder;
-		const maxFieldsInGroup = 6;
+		const maxFieldsInGroup = MAX_FIELD_GROUP_SIZE;
 
 		$field = jQuery( this ).closest( 'li.form-field' );
 		newRowId = this.getAttribute( 'frm-target-row-id' );
@@ -2546,15 +2573,19 @@ window.frmAdminBuildJS = function() {
 			return;
 		}
 		maybeRemoveGroupHoverTarget();
+		deleteTooltips();
 	}
 
 	function onFieldActionDropdownShow( isFieldGroup ) {
 		unselectFieldGroups();
+
 		// maybe offset the dropdown if it goes off of the right of the screen.
 		setTimeout(
 			function() {
 				let ul, $ul;
-				ul = document.querySelector( '.dropdown.show .frm-dropdown-menu' );
+
+				ul = document.querySelector( '.dropdown .frm-dropdown-menu.show' );
+
 				if ( null === ul ) {
 					return;
 				}
@@ -2761,6 +2792,10 @@ window.frmAdminBuildJS = function() {
 		initiateMultiselect();
 
 		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
+
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle, and requires that elements have the dropdown-menu class.
+		field.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+		field.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
 
 		const addedEvent = new Event( 'frm_added_field', { bubbles: false } );
 		addedEvent.frmField = field;
@@ -4085,7 +4120,10 @@ window.frmAdminBuildJS = function() {
 		popup.appendChild( wrapper );
 		popup.appendChild( separator() );
 
-		popup.appendChild( getCustomLayoutOption() );
+		if ( sizeOfFieldGroup <= 6 ) {
+			popup.appendChild( getCustomLayoutOption() );
+		}
+
 		popup.appendChild( getBreakIntoDifferentRowsOption() );
 
 		return popup;
@@ -4151,6 +4189,12 @@ window.frmAdminBuildJS = function() {
 		let wrapper, padding;
 
 		wrapper = getEmptyGridContainer();
+
+		if ( size > 6 ) {
+			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
+			return wrapper;
+		}
+
 		if ( 5 !== size ) {
 			wrapper.appendChild( getRowLayoutOption( size, 'even' ) );
 		}
@@ -4185,7 +4229,12 @@ window.frmAdminBuildJS = function() {
 				useClass = 'frm_third';
 				break;
 			default:
-				useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+				if ( size > 6 ) {
+					// We only show a single option at 6-12, so we use the full width.
+					useClass = 'frm_full';
+				} else {
+					useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+				}
 				break;
 		}
 
@@ -4233,7 +4282,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @param {number} size  2-6.
+	 * @param {number} size  2-12.
 	 * @param {string} type  even, middle, left, or right.
 	 * @param {number} index 0-5.
 	 * @return {string} The class name.
@@ -4256,7 +4305,15 @@ window.frmAdminBuildJS = function() {
 		return 'frm12';
 	}
 
+	/**
+	 * @param {number}           size  2-12.
+	 * @param {number|undefined} index 0-5.
+	 * @return {string} The class name.
+	 */
 	function getEvenClassForSize( size, index ) {
+		if ( size > 6 ) {
+			return 'frm1';
+		}
 		if ( -1 !== [ 2, 3, 4, 6 ].indexOf( size ) ) {
 			return getLayoutClassForSize( 12 / size );
 		}
@@ -4891,7 +4948,7 @@ window.frmAdminBuildJS = function() {
 				return false;
 			}
 			totalFieldCount += getFieldsInRow( jQuery( fieldGroup ) ).length;
-			if ( totalFieldCount > 6 ) {
+			if ( totalFieldCount > MAX_FIELD_GROUP_SIZE ) {
 				return false;
 			}
 		}
@@ -7151,14 +7208,19 @@ window.frmAdminBuildJS = function() {
 		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
 		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
-			const upgradeButton = upgradeModalLink.cloneNode( true );
+			let upgradeButton;
+			let upgradeActions = upgradeModalLink.closest( '.frm-upgrade-modal-actions' );
+			if ( upgradeActions ) {
+				upgradeActions = upgradeActions.cloneNode( true );
+				upgradeButton = upgradeActions.querySelector( '.frm-upgrade-link' );
+			} else {
+				upgradeButton = upgradeModalLink.cloneNode( true );
+			}
 			const level = upgradeButton.querySelector( '.license-level' );
-
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
-
-			container.appendChild( upgradeButton );
+			container.appendChild( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
@@ -10167,6 +10229,11 @@ window.frmAdminBuildJS = function() {
 			initAddMyEmailAddress();
 			addAdminFooterLinks();
 
+			document.addEventListener( 'show.bs.dropdown', function() {
+				// Fixes issues with tooltips lingering after a dropdown is shown.
+				deleteTooltips();
+			} );
+
 			s = {};
 
 			// Bootstrap dropdown button
@@ -11103,10 +11170,15 @@ jQuery( document ).ready(
 	() => {
 		frmAdminBuild.init();
 
-		frmDom.bootstrap.setupBootstrapDropdowns( convertOldBootstrapDropdownsToBootstrap4 );
-		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-toggle', 'dropdown' );
+		document.querySelectorAll( '.frm-dropdown-menu' ).forEach( convertOldBootstrapDropdownsToBootstrap5 );
+		document.querySelector( '.preview.dropdown .frm-dropdown-toggle' )?.setAttribute( 'data-bs-toggle', 'dropdown' );
 
-		function convertOldBootstrapDropdownsToBootstrap4( frmDropdownMenu ) {
+		// Bootstrap 5 uses data-bs-toggle instead of data-toggle.
+		document.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+
+		function convertOldBootstrapDropdownsToBootstrap5( frmDropdownMenu ) {
+			frmDropdownMenu.classList.add( 'dropdown-menu' );
+
 			const toggle = frmDropdownMenu.querySelector( '.frm-dropdown-toggle' );
 			if ( toggle ) {
 				if ( ! toggle.hasAttribute( 'role' ) ) {

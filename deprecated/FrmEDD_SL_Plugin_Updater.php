@@ -9,6 +9,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Allows plugins to use their own update API.
  *
  * @author Easy Digital Downloads
+ *
  * @version 1.6.15
  */
 class FrmEDD_SL_Plugin_Updater {
@@ -68,6 +69,7 @@ class FrmEDD_SL_Plugin_Updater {
 	 * @param mixed   $_data
 	 * @param string  $_action
 	 * @param object  $_args
+	 *
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
@@ -88,14 +90,28 @@ class FrmEDD_SL_Plugin_Updater {
 		return $args;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function show_changelog() {
 	}
 
+	/**
+	 * @param string $cache_key
+	 *
+	 * @return false
+	 */
 	public function get_cached_version_info( $cache_key = '' ) {
 		_deprecated_function( __METHOD__, '6.16.1' );
 		return false;
 	}
 
+	/**
+	 * @param string $value
+	 * @param string $cache_key
+	 *
+	 * @return void
+	 */
 	public function set_version_info_cache( $value = '', $cache_key = '' ) {
 		_deprecated_function( __METHOD__, '6.16.1' );
 	}

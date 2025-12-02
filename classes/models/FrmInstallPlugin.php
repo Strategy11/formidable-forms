@@ -20,12 +20,18 @@ class FrmInstallPlugin {
 	 */
 	protected $plugin_slug;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
 		$this->plugin_file   = $atts['plugin_file'];
 		list( $slug, $file ) = explode( '/', $this->plugin_file );
 		$this->plugin_slug   = $slug;
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_activate_link() {
 		if ( $this->is_installed() && $this->is_active() ) {
 			return '';
@@ -160,6 +166,7 @@ class FrmInstallPlugin {
 	 * @since 6.16
 	 *
 	 * @param string $plugin_file
+	 *
 	 * @return bool
 	 */
 	private static function is_plugin_installed( $plugin_file ) {

@@ -20,7 +20,8 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	/**
-	 * @return void
+	 * @param object $form_action
+	 * @param array  $args
 	 */
 	public function form( $form_action, $args = array() ) {
 		extract( $args ); // phpcs:ignore WordPress.PHP.DontExtract

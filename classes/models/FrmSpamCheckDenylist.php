@@ -3,6 +3,7 @@
  * Spam check using denylist
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -16,10 +17,19 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 	const COMPARE_EQUALS = 'equals';
 
+	/**
+	 * @var array
+	 */
 	protected $posted_fields;
 
+	/**
+	 * @var array
+	 */
 	protected $denylist;
 
+	/**
+	 * @param array $values
+	 */
 	public function __construct( $values ) {
 		$this->maybe_add_form_id_to_values( $values );
 
@@ -28,6 +38,9 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		$this->denylist = $this->get_denylist_array();
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_posted_fields() {
 		if ( is_null( $this->posted_fields ) ) {
 			$this->posted_fields = FrmField::get_all_for_form( $this->values['form_id'] );
@@ -39,6 +52,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Maybe add form ID to values. In file name validation, only item_meta in $values.
 	 *
 	 * @param array $values Spam check values.
+	 *
+	 * @return void
 	 */
 	protected function maybe_add_form_id_to_values( &$values ) {
 		if ( ! empty( $values['form_id'] ) || empty( $values['item_meta'] ) ) {
@@ -189,6 +204,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Fills default denylist data.
 	 *
 	 * @param array $denylist Denylist.
+	 *
+	 * @return void
 	 */
 	protected function fill_default_denylist_data( &$denylist ) {
 		$denylist = wp_parse_args(
@@ -219,6 +236,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Gets words from setting.
 	 *
 	 * @param string $setting_key Setting key.
+	 *
 	 * @return array
 	 */
 	protected function get_words_from_setting( $setting_key ) {
@@ -238,6 +256,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string $line Single line.
 	 * @param array  $args Check args.
+	 *
 	 * @return bool
 	 */
 	protected function single_line_check_values( $line, $args ) {
@@ -275,6 +294,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Converts values to string to check.
 	 *
 	 * @param array $values Values array.
+	 *
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
@@ -286,6 +306,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Converts string to lowercase.
 	 *
 	 * @param string $str String.
+	 *
 	 * @return string
 	 */
 	protected function convert_to_lowercase( $str ) {
@@ -329,6 +350,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Gets values to check.
 	 *
 	 * @param array $denylist Single denylist data.
+	 *
 	 * @return array|false Return `false` if no values need to check, or return array of values.
 	 */
 	protected function get_values_to_check( $denylist ) {
@@ -374,6 +396,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param int   $field_id           Field ID.
 	 * @param int[] $field_ids_to_check Field IDs to check.
+	 *
 	 * @return bool
 	 */
 	protected function should_check_this_field( $field_id, $field_ids_to_check ) {
@@ -386,6 +409,8 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param array $values_to_check Values to check array.
 	 * @param mixed $value           The value.
+	 *
+	 * @return void
 	 */
 	protected function add_to_values_to_check( &$values_to_check, $value ) {
 		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
@@ -437,6 +462,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @param string   $file_path     File path.
 	 * @param callable $callback      Check callback.
 	 * @param array    $callback_args Callback args.
+	 *
 	 * @return bool
 	 */
 	protected function read_lines_and_check( $file_path, $callback, $callback_args = array() ) {
@@ -474,12 +500,19 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Checks if the given IP is allowed.
 	 *
 	 * @param string $ip IP address.
+	 *
 	 * @return bool
 	 */
 	protected function is_allowed_ip( $ip ) {
 		return $this->ip_matches_array( $ip, FrmAntiSpamController::get_allowed_ips() );
 	}
 
+	/**
+	 * @param string $line
+	 * @param array  $args
+	 *
+	 * @return bool
+	 */
 	protected function single_line_check_ip( $line, $args ) {
 		return $this->ip_matches( $args['ip'], $line );
 	}
@@ -489,6 +522,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string $ip      IP address.
 	 * @param string $cidr_ip IP address with CIDR format (x.x.x.x/24).
+	 *
 	 * @return bool
 	 */
 	protected function ip_matches( $ip, $cidr_ip ) {
@@ -524,6 +558,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string   $ip       The IP address.
 	 * @param string[] $ip_array Array of IP addresses.
+	 *
 	 * @return bool
 	 */
 	protected function ip_matches_array( $ip, $ip_array ) {
@@ -539,6 +574,11 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		return __( 'Your entry appears to be blocked spam!', 'formidable' );
 	}
 
+	/**
+	 * @param string $keyword
+	 *
+	 * @return void
+	 */
 	private function add_spam_keyword_to_option( $keyword ) {
 		$transient_name = 'frm_recent_spam_detected';
 		$transient      = get_transient( $transient_name );

@@ -16,11 +16,19 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.2.10
+	 *
+	 * @return string
 	 */
 	public static function form_error_class() {
 		return apply_filters( 'frm_form_error_class', 'frm_error_style' );
 	}
 
+	/**
+	 * @param string       $key
+	 * @param false|object $form
+	 *
+	 * @return string
+	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
 		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
@@ -28,6 +36,13 @@ class FrmFormsHelper {
 		return $target_url;
 	}
 
+	/**
+	 * @param string     $field_name
+	 * @param int|string $field_value
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function forms_dropdown( $field_name, $field_value = '', $args = array() ) {
 		$defaults = array(
 			'blank'        => true,
@@ -72,9 +87,12 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
+	 *
+	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -84,6 +102,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param false|object|string $selected - The label for the placeholder, or the form object.
+	 *
+	 * @return void
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -209,6 +229,13 @@ class FrmFormsHelper {
 		<?php
 	}
 
+	/**
+	 * @param string $col
+	 * @param string $sort_col
+	 * @param string $sort_dir
+	 *
+	 * @return void
+	 */
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo $sort_col == $col ? 'sorted' : 'sortable';
 		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
@@ -218,6 +245,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
@@ -234,6 +262,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
@@ -275,6 +304,7 @@ class FrmFormsHelper {
 	 *     @type int      $entry_id
 	 *     @type string   $class
 	 * }
+	 *
 	 * @return string
 	 */
 	public static function get_success_message( $atts ) {
@@ -306,6 +336,10 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when a form is created
+	 *
+	 * @param array $values
+	 *
+	 * @return array
 	 */
 	public static function setup_new_vars( $values = array() ) {
 		global $wpdb;
@@ -356,6 +390,12 @@ class FrmFormsHelper {
 
 	/**
 	 * Used when editing a form
+	 *
+	 * @param array  $values
+	 * @param object $record
+	 * @param array  $post_values
+	 *
+	 * @return array
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
 		if ( empty( $post_values ) ) {
@@ -371,6 +411,13 @@ class FrmFormsHelper {
 		return apply_filters( 'frm_setup_edit_form_vars', $values );
 	}
 
+	/**
+	 * @param array        $values
+	 * @param false|object $record
+	 * @param array|false  $post_values
+	 *
+	 * @return array
+	 */
 	public static function fill_default_opts( $values, $record, $post_values ) {
 
 		$defaults = self::get_default_opts();
@@ -432,8 +479,11 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param array $options
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
@@ -445,6 +495,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param string $loc
+	 *
+	 * @return string
 	 */
 	public static function get_default_html( $loc ) {
 		if ( $loc === 'submit' ) {
@@ -471,6 +523,9 @@ BEFORE_HTML;
 		return $default_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_draft_link() {
 		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 
@@ -488,6 +543,15 @@ BEFORE_HTML;
 		return '[if start_over]<a href="#" tabindex="0" class="frm_start_over" [start_over_hook]>[start_over_label]</a>[/if start_over]';
 	}
 
+	/**
+	 * @param string      $html
+	 * @param object      $form
+	 * @param string      $submit
+	 * @param object|null $form_action
+	 * @param array       $values
+	 *
+	 * @return void
+	 */
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 		if ( ! strpos( $button, '[button_action]' ) ) {
@@ -522,6 +586,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
@@ -610,6 +676,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
@@ -681,7 +748,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public static function insert_code_html( $args ) {
 		$defaults = array(
@@ -715,6 +785,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array|string $field
+	 *
 	 * @return void
 	 */
 	public static function prepare_field_type( &$field ) {
@@ -734,6 +805,8 @@ BEFORE_HTML;
 	 * @param object $form
 	 * @param array  $fields
 	 * @param bool   $reset_fields
+	 *
+	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {
@@ -789,6 +862,15 @@ BEFORE_HTML;
 	/**
 	 * Create end section field if it doesn't exist. This is for migration from < 2.0
 	 * Fix any ordering that may be messed up
+	 *
+	 * @param bool   $open
+	 * @param bool   $reset_fields
+	 * @param int    $add_order
+	 * @param array  $end_section_values
+	 * @param object $field
+	 * @param string $move
+	 *
+	 * @return void
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -809,6 +891,15 @@ BEFORE_HTML;
 		$reset_fields = true;
 	}
 
+	/**
+	 * @param string $html
+	 * @param object $form
+	 * @param bool   $title
+	 * @param bool   $description
+	 * @param array  $values
+	 *
+	 * @return string
+	 */
 	public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
 		$codes = array(
 			'form_name'        => $title,
@@ -863,6 +954,11 @@ BEFORE_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param string $submit
+	 *
+	 * @return string
+	 */
 	public static function submit_button_label( $submit ) {
 		if ( ! $submit ) {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -890,6 +986,8 @@ BEFORE_HTML;
 	}
 
 	/**
+	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string|null
 	 */
 	public static function get_form_style_class( $form = false ) {
@@ -934,6 +1032,7 @@ BEFORE_HTML;
 	 * @since 5.0.12
 	 *
 	 * @param array $form
+	 *
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
@@ -1001,6 +1100,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -1031,7 +1131,10 @@ BEFORE_HTML;
 	 * Display the validation error messages when an entry is submitted
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors.
+	 *
+	 * @return void
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -1058,7 +1161,10 @@ BEFORE_HTML;
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors, and show_img.
+	 *
+	 * @return void
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
@@ -1085,6 +1191,11 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return void
+	 */
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4, array( 'form_id' => $id ) );
 		if ( $offset != - 1 ) {
@@ -1092,12 +1203,22 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return void
+	 */
 	public static function get_scroll_js( $form_id ) {
 		echo '<script type="text/javascript">document.addEventListener(\'DOMContentLoaded\',function(){frmFrontForm.scrollMsg(' . (int) $form_id . ');})</script>';
 	}
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int|object|string $form_id
+	 * @param mixed             $form
+	 *
+	 * @return array
 	 */
 	public static function get_action_links( $form_id, $form ) {
 		if ( ! is_object( $form ) ) {
@@ -1136,6 +1257,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link( $data ) {
@@ -1163,6 +1285,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link_label( $data ) {
@@ -1175,6 +1298,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
@@ -1188,6 +1312,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param mixed $data
+	 *
 	 * @return string
 	 */
 	private static function get_form_name_from_data( $data ) {
@@ -1200,6 +1325,13 @@ BEFORE_HTML;
 		return $form_name;
 	}
 
+	/**
+	 * @param int    $id
+	 * @param string $status
+	 * @param string $length
+	 *
+	 * @return string
+	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
 
@@ -1208,6 +1340,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $link_details
+	 * @param string $length
+	 *
+	 * @return string
 	 */
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
@@ -1235,6 +1372,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int    $id
+	 * @param string $status
+	 *
+	 * @return array
 	 */
 	public static function delete_trash_info( $id, $status ) {
 		$labels = self::delete_trash_links( $id );
@@ -1256,6 +1398,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param int $id
+	 *
+	 * @return array
 	 */
 	public static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
@@ -1293,6 +1439,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return array
 	 */
 	public static function css_classes() {
 		$classes = array(
@@ -1329,6 +1477,9 @@ BEFORE_HTML;
 		return apply_filters( 'frm_layout_classes', $classes );
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function grid_classes() {
 		return array(
 			'frm_half'          => '1/2',
@@ -1344,6 +1495,11 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param mixed  $style
+	 * @param string $class
+	 *
+	 * @return string
 	 */
 	public static function style_class_label( $style, $class ) {
 		$label = '';
@@ -1358,6 +1514,11 @@ BEFORE_HTML;
 		return $label;
 	}
 
+	/**
+	 * @param string $status
+	 *
+	 * @return string
+	 */
 	public static function status_nice_name( $status ) {
 		$nice_names = array(
 			'draft'   => __( 'Draft', 'formidable' ),
@@ -1380,6 +1541,7 @@ BEFORE_HTML;
 	 * @param array $categories The categories to render the icon for.
 	 * @param array $atts {
 	 *     Optional. An array of attributes for rendering.
+	 *
 	 *     @type string  $html 'span' or 'div'. Default 'span'.
 	 *     @type bool $bg   Whether to add a background color or not. Default false.
 	 * }
@@ -1460,6 +1622,7 @@ BEFORE_HTML;
 	 *
 	 * @param array $template Template details.
 	 * @param array $args Additional arguments.
+	 *
 	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
@@ -1493,6 +1656,7 @@ BEFORE_HTML;
 	 * @since 4.02.02
 	 *
 	 * @param array $args
+	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
@@ -1524,6 +1688,11 @@ BEFORE_HTML;
 	 * about which plan is required.
 	 *
 	 * @since 4.0
+	 *
+	 * @param string $requires
+	 * @param string $link
+	 *
+	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
 		if ( empty( $requires ) ) {
@@ -1544,6 +1713,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $item
+	 *
 	 * @return false|string
 	 */
 	public static function get_plan_required( &$item ) {
@@ -1570,7 +1740,9 @@ BEFORE_HTML;
 	 * Converts legacy package names to the current standard package name.
 	 *
 	 * @since 6.15
+	 *
 	 * @param string $package_name
+	 *
 	 * @return string The updated package name.
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
@@ -1587,6 +1759,7 @@ BEFORE_HTML;
 	 * @since 6.15
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function get_license_types( $args = array() ) {
@@ -1773,6 +1946,7 @@ BEFORE_HTML;
 	 *
 	 * @param string $url
 	 * @param int    $form_id
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
@@ -1848,6 +2022,7 @@ BEFORE_HTML;
 	 * @since 6.16
 	 *
 	 * @param string $classname
+	 *
 	 * @return string
 	 */
 	public static function sanitize_layout_class( $classname ) {
@@ -1866,6 +2041,7 @@ BEFORE_HTML;
 	 * @since 6.20
 	 *
 	 * @param string $form_key
+	 *
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
@@ -1971,6 +2147,7 @@ BEFORE_HTML;
 	 * @deprecated 6.11
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {

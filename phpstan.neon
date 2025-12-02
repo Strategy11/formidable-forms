@@ -31,21 +31,15 @@ parameters:
 		- '#does not (accept|exist on)+#'
 		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
 		- '#is always (false|true)+.#'
-		- '#no (typehint|value type|return typehint)+ specified.#'
-		- '#of echo cannot be converted to string.#'
+		- '#no value type specified.#'
 		- '#only iterables are supported#'
 		- '#results in an error.#'
 		- '#should return#'
 		- '#will always evaluate to#'
-		- '#has no return type specified#'
-		- '#with no type specified#'
 		- '#in isset\(\) does not exist.#'
 		- '#is unused.#'
-		- '#is never read, only written#'
 		- '#in empty\(\) is not falsy.#'
 		- '#always exists and is not falsy.#'
-		- '#has no type specified.#'
-		- '#of function random_int expects lower number#'
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
 		- "#on left side of ??#"
 		-
@@ -60,7 +54,6 @@ parameters:
 		-
 			message: '#Possibly invalid array key type#'
 			paths:
-				- classes/helpers/FrmCSVExportHelper.php
 				- classes/helpers/FrmFormsListHelper.php
 		-
 			message: '#get_mailer\(\) expects#'
@@ -90,7 +83,6 @@ parameters:
 			paths:
 				- classes/helpers/FrmFormsListHelper.php
 				- classes/models/FrmInstallerSkin.php
-				- stripe/controllers/FrmStrpLiteActionsController.php
 		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
 		-
 			message: '#Foreach overwrites \$ip with its value variable.#'
@@ -134,3 +126,47 @@ parameters:
 			paths:
 				- classes/views/*
 				- stripe/views/action-settings/payments-options.php
+		-
+			message: '#FrmFormAction::prepare_action\(\) expects WP_Post, mixed given#'
+			path: classes/models/FrmFormAction.php
+		-
+			message: '#has no return type specified#'
+			paths:
+				- classes/controllers/FrmEmailStylesController.php
+				- classes/controllers/FrmFieldsController.php
+				- classes/helpers/FrmXMLHelper.php
+				- square/helpers/FrmSquareLiteConnectHelper.php
+				- classes/helpers/FrmListHelper.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/models/FrmSalesApi.php
+				- square/controllers/FrmSquareLiteAppController.php
+				- stripe/helpers/FrmStrpLiteConnectHelper.php
+				- classes/models/FrmInstallerSkin.php
+				- classes/controllers/FrmSettingsController.php
+				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
+				- classes/models/FrmMigrate.php
+				- stubs.php
+		-
+			message: '#with no type specified#'
+			paths:
+				- stubs.php
+		-
+			message: '#in isset\(\) is not nullable#'
+			path: stripe/helpers/FrmTransLiteAppHelper.php
+		-
+			message: '#of echo cannot be converted to string.#'
+			paths:
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmListHelper.php
+				- classes/views/frm-entries/show.php
+				- classes/views/frm-forms/add_field.php
+		-
+			message: '#is never read, only written#'
+			path: classes/helpers/FrmFieldGridHelper.php

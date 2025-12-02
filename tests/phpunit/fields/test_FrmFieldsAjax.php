@@ -100,6 +100,10 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Get a field object by key.
+	 *
+	 * @param string $field_key
+	 *
+	 * @return object
 	 */
 	protected function get_field_by_key( $field_key ) {
 		$divider_field_id = FrmField::get_id_by_key( $field_key );
@@ -111,6 +115,10 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Check in_section variable prior to duplication.
+	 *
+	 * @param mixed $field
+	 *
+	 * @return void
 	 */
 	protected function check_field_prior_to_duplication( $field ) {
 		$this->assertTrue( isset( $field->field_options['in_section'] ), 'The in_section variable is not set correctly on import.' );
@@ -118,6 +126,10 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Check if a field is created correctly.
+	 *
+	 * @param int|string $newest_field_id
+	 *
+	 * @return void
 	 */
 	protected function check_if_field_id_is_created_correctly( $newest_field_id ) {
 		$this->assertTrue( is_numeric( $newest_field_id ) );
@@ -126,6 +138,11 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 	/**
 	 * Check for a specific in section value.
+	 *
+	 * @param mixed $field
+	 * @param mixed $expected
+	 *
+	 * @return void
 	 */
 	protected function check_in_section_variable( $field, $expected ) {
 		$message = 'The in_section variable is not set correctly when a ' . $field->type . ' field is duplicated.';

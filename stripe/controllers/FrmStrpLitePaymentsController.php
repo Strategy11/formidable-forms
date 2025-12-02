@@ -9,6 +9,7 @@ class FrmStrpLitePaymentsController {
 	 * Get the receipt link for a Stripe payment.
 	 *
 	 * @param string $receipt
+	 *
 	 * @return string
 	 */
 	public static function get_receipt_link( $receipt ) {

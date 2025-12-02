@@ -24,6 +24,7 @@ describe( 'Forms page', () => {
 					'Get the Deal',
 					'upgrading for 60% off during our No Brainer Sale!',
 					'Black Friday Deals',
+					'Cyber Monday Deals',
 				];
 
 				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
@@ -40,6 +41,9 @@ describe( 'Forms page', () => {
 								'power your wordpress site like never before',
 								'tired of workarounds? build what you really need.',
 								'build powerful forms, web apps, dashboards, and more',
+								'black friday sales are happening now!',
+								'save 65% on the best wordpress form builder',
+								'don\'t miss the best deals for cyber monday!',
 							] ).to.include( headingText );
 						} );
 					} );
