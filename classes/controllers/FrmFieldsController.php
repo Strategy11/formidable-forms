@@ -370,16 +370,23 @@ class FrmFieldsController {
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 		$no_allow         = ! $pro_is_installed ? 'frm_noallow' : '';
 
-		$field_has_unique_option                = in_array(
-			$field['type'],
-			array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
-			true
-		);
-		$show_upsell_for_unique_value           = ! $pro_is_installed && $field_has_unique_option;
-		$field_has_read_only_option             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
-		$show_upsell_for_read_only              = ! $pro_is_installed && $field_has_read_only_option;
-		$field_has_before_after_contents_option = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
-		$show_upsell_for_before_after_contents  = ! $pro_is_installed && $field_has_before_after_contents_option;
+		if ( ! $pro_is_installed ) {
+			$field_has_unique_option                = in_array(
+				$field['type'],
+				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				true
+			);
+			$show_upsell_for_unique_value           = $field_has_unique_option;
+			$field_has_read_only_option             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_read_only              = $field_has_read_only_option;
+			$field_has_before_after_contents_option = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
+			$show_upsell_for_before_after_contents  = $field_has_before_after_contents_option;
+		} else {
+			$show_upsell_for_unique_value          = false;
+			$show_upsell_for_read_only             = false;
+			$show_upsell_for_before_after_contents = false;
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
