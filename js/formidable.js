@@ -1200,7 +1200,7 @@ function frmFrontFormJS() {
 		jQuery( '.form-field' ).removeClass( 'frm_blank_field has-error' );
 		jQuery( '.frm_error_style' ).remove();
 		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
-			const inputs = document.querySelectorAll( `[aria-describedby*="${el.id}"]` )
+			const inputs = document.querySelectorAll( `[aria-describedby*="${ el.id }"]` )
 			if ( inputs.length ) {
 				inputs.forEach( input => {
 					input.setAttribute( 'aria-describedby', input.getAttribute( 'aria-describedby' ).replace( el.id, '' ) );
