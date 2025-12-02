@@ -307,7 +307,7 @@ class FrmFieldName extends FrmFieldCombo {
 		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
 
 		$parent_form_id = (int) FrmField::get_option( $args['field'], 'parent_form_id' );
-		$form_id        = (int) is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id;
+		$form_id        = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 		if ( $form_id !== $parent_form_id ) {
 			// Do not add autocomplete attribute to a name field inside repeater.
 			return $attrs;
