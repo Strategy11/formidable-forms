@@ -267,6 +267,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @param array $args           Arguments.
 	 * @param array $shortcode_atts Shortcode attributes.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -414,6 +415,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
+	 *
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
@@ -512,6 +514,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @param array $sub_field Subfield data.
 	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
+	 *
 	 * @return array
 	 */
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
