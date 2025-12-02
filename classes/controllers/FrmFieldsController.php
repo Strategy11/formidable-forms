@@ -370,7 +370,11 @@ class FrmFieldsController {
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 		$no_allow         = ! $pro_is_installed ? 'frm_noallow' : '';
 
-		$field_has_unique_option                = in_array( $field['type'], array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+		$field_has_unique_option                = in_array(
+			$field['type'],
+			array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+			true
+		);
 		$show_upsell_for_unique_value           = ! $pro_is_installed && $field_has_unique_option;
 		$field_has_read_only_option             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
 		$show_upsell_for_read_only              = ! $pro_is_installed && $field_has_read_only_option;

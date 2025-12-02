@@ -389,7 +389,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				?>
 			</label>
 
-			<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['prepend'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+			<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
 		</p>
 
 		<p class="frm_form_field frm6">
@@ -397,9 +397,9 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<?php esc_html_e( 'After Input', 'formidable' ); ?>
 			</label>
 
-			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" value="<?php echo esc_attr( $field['append'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
 		</p>
-		<?php } ?>
+		<?php }//end if ?>
 		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
