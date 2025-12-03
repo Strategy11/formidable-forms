@@ -1,1 +1,13239 @@
-(()=>{var e={65:(e,t,r)=>{"use strict";r.d(t,{A:()=>o});var n=r(8793),i=r(1323);function o(e){var t=(0,n.A)(e);return function(e){return(0,i.A)(t,e)}}},1323:(e,t,r)=>{"use strict";r.d(t,{A:()=>i});var n={"!":function(e){return!e},"*":function(e,t){return e*t},"/":function(e,t){return e/t},"%":function(e,t){return e%t},"+":function(e,t){return e+t},"-":function(e,t){return e-t},"<":function(e,t){return e<t},"<=":function(e,t){return e<=t},">":function(e,t){return e>t},">=":function(e,t){return e>=t},"==":function(e,t){return e===t},"!=":function(e,t){return e!==t},"&&":function(e,t){return e&&t},"||":function(e,t){return e||t},"?:":function(e,t,r){if(e)throw t;return r}};function i(e,t){var r,i,o,a,l,s,d=[];for(r=0;r<e.length;r++){if(l=e[r],a=n[l]){for(i=a.length,o=Array(i);i--;)o[i]=d.pop();try{s=a.apply(null,o)}catch(e){return e}}else s=t.hasOwnProperty(l)?t[l]:+l;d.push(s)}return d[0]}},1364:(e,t,r)=>{"use strict";r.d(t,{A:()=>i});var n=r(65);function i(e){var t=(0,n.A)(e);return function(e){return+t({n:e})}}},8793:(e,t,r)=>{"use strict";var n,i,o,a;function l(e){for(var t,r,l,s,d=[],c=[];t=e.match(a);){for(r=t[0],(l=e.substr(0,t.index).trim())&&d.push(l);s=c.pop();){if(o[r]){if(o[r][0]===s){r=o[r][1]||r;break}}else if(i.indexOf(s)>=0||n[s]<n[r]){c.push(s);break}d.push(s)}o[r]||c.push(r),e=e.substr(t.index+r.length)}return(e=e.trim())&&d.push(e),d.concat(c.reverse())}r.d(t,{A:()=>l}),n={"(":9,"!":8,"*":7,"/":7,"%":7,"+":6,"-":6,"<":5,"<=":5,">":5,">=":5,"==":4,"!=":4,"&&":3,"||":2,"?":1,"?:":1},i=["(","?"],o={")":["("],":":["?","?:"]},a=/<=|>=|==|!=|&&|\|\||\?:|\(|!|\*|\/|%|\+|-|<|>|\?|\)|:/},7521:(e,t,r)=>{"use strict";r.d(t,{A:()=>o});var n=r(6956),i=r(7395);const o=function(e,t){return function(r,o,a){var l=arguments.length>3&&void 0!==arguments[3]?arguments[3]:10,s=e[t];if((0,i.A)(r)&&(0,n.A)(o))if("function"==typeof a)if("number"==typeof l){var d={callback:a,priority:l,namespace:o};if(s[r]){var c,u=s[r].handlers;for(c=u.length;c>0&&!(l>=u[c-1].priority);c--);c===u.length?u[c]=d:u.splice(c,0,d),s.__current.forEach(function(e){e.name===r&&e.currentIndex>=c&&e.currentIndex++})}else s[r]={handlers:[d],runs:0};"hookAdded"!==r&&e.doAction("hookAdded",r,o,a,l)}else console.error("If specified, the hook priority must be a number.");else console.error("The hook callback must be a function.")}}},11:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e,t){return function(){var r,n,i=e[t];return null!==(r=null===(n=i.__current[i.__current.length-1])||void 0===n?void 0:n.name)&&void 0!==r?r:null}}},5375:(e,t,r)=>{"use strict";r.d(t,{A:()=>i});var n=r(7395);const i=function(e,t){return function(r){var i=e[t];if((0,n.A)(r))return i[r]&&i[r].runs?i[r].runs:0}}},3561:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e,t){return function(r){var n=e[t];return void 0===r?void 0!==n.__current[0]:!!n.__current[0]&&r===n.__current[0].name}}},8830:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e,t){return function(r,n){var i=e[t];return void 0!==n?r in i&&i[r].handlers.some(function(e){return e.namespace===n}):r in i}}},7765:(e,t,r)=>{"use strict";r.d(t,{A:()=>f});var n=r(3029),i=r(7521),o=r(4194),a=r(8830),l=r(6763),s=r(11),d=r(3561),c=r(5375),u=function e(){(0,n.A)(this,e),this.actions=Object.create(null),this.actions.__current=[],this.filters=Object.create(null),this.filters.__current=[],this.addAction=(0,i.A)(this,"actions"),this.addFilter=(0,i.A)(this,"filters"),this.removeAction=(0,o.A)(this,"actions"),this.removeFilter=(0,o.A)(this,"filters"),this.hasAction=(0,a.A)(this,"actions"),this.hasFilter=(0,a.A)(this,"filters"),this.removeAllActions=(0,o.A)(this,"actions",!0),this.removeAllFilters=(0,o.A)(this,"filters",!0),this.doAction=(0,l.A)(this,"actions"),this.applyFilters=(0,l.A)(this,"filters",!0),this.currentAction=(0,s.A)(this,"actions"),this.currentFilter=(0,s.A)(this,"filters"),this.doingAction=(0,d.A)(this,"actions"),this.doingFilter=(0,d.A)(this,"filters"),this.didAction=(0,c.A)(this,"actions"),this.didFilter=(0,c.A)(this,"filters")};const f=function(){return new u}},4194:(e,t,r)=>{"use strict";r.d(t,{A:()=>o});var n=r(6956),i=r(7395);const o=function(e,t){var r=arguments.length>2&&void 0!==arguments[2]&&arguments[2];return function(o,a){var l=e[t];if((0,i.A)(o)&&(r||(0,n.A)(a))){if(!l[o])return 0;var s=0;if(r)s=l[o].handlers.length,l[o]={runs:l[o].runs,handlers:[]};else for(var d=l[o].handlers,c=function(e){d[e].namespace===a&&(d.splice(e,1),s++,l.__current.forEach(function(t){t.name===o&&t.currentIndex>=e&&t.currentIndex--}))},u=d.length-1;u>=0;u--)c(u);return"hookRemoved"!==o&&e.doAction("hookRemoved",o,a),s}}}},6763:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e,t){var r=arguments.length>2&&void 0!==arguments[2]&&arguments[2];return function(n){var i=e[t];i[n]||(i[n]={handlers:[],runs:0}),i[n].runs++;for(var o=i[n].handlers,a=arguments.length,l=new Array(a>1?a-1:0),s=1;s<a;s++)l[s-1]=arguments[s];if(!o||!o.length)return r?l[0]:void 0;var d={name:n,currentIndex:0};for(i.__current.push(d);d.currentIndex<o.length;){var c=o[d.currentIndex].callback.apply(null,l);r&&(l[0]=c),d.currentIndex++}return i.__current.pop(),r?l[0]:void 0}}},2133:(e,t,r)=>{"use strict";r.d(t,{se:()=>n});var n=(0,r(7765).A)();n.addAction,n.addFilter,n.removeAction,n.removeFilter,n.hasAction,n.hasFilter,n.removeAllActions,n.removeAllFilters,n.doAction,n.applyFilters,n.currentAction,n.currentFilter,n.doingAction,n.doingFilter,n.didAction,n.didFilter,n.actions,n.filters},7395:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e){return"string"!=typeof e||""===e?(console.error("The hook name must be a non-empty string."),!1):/^__/.test(e)?(console.error("The hook name cannot begin with `__`."),!1):!!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(e)||(console.error("The hook name can only contain numbers, letters, dashes, periods and underscores."),!1)}},6956:(e,t,r)=>{"use strict";r.d(t,{A:()=>n});const n=function(e){return"string"!=typeof e||""===e?(console.error("The namespace must be a non-empty string."),!1):!!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(e)||(console.error("The namespace can only contain numbers, letters, dashes, periods, underscores and slashes."),!1)}},772:(e,t,r)=>{"use strict";r.d(t,{h:()=>d});var n=r(4467),i=r(5397);function o(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter(function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable})),r.push.apply(r,n)}return r}function a(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?o(Object(r),!0).forEach(function(t){(0,n.A)(e,t,r[t])}):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):o(Object(r)).forEach(function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))})}return e}var l={"":{plural_forms:function(e){return 1===e?0:1}}},s=/^i18n\.(n?gettext|has_translation)(_|$)/,d=function(e,t,r){var n=new i.A({}),o=new Set,d=function(){o.forEach(function(e){return e()})},c=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:"default";n.data[t]=a(a(a({},l),n.data[t]),e),n.data[t][""]=a(a({},l[""]),n.data[t][""])},u=function(e,t){c(e,t),d()},f=function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"default",t=arguments.length>1?arguments[1]:void 0,r=arguments.length>2?arguments[2]:void 0,i=arguments.length>3?arguments[3]:void 0,o=arguments.length>4?arguments[4]:void 0;return n.data[e]||c(void 0,e),n.dcnpgettext(e,t,r,i,o)},m=function(){return arguments.length>0&&void 0!==arguments[0]?arguments[0]:"default"},_=function(e,t,n){var i=f(n,t,e);return r?(i=r.applyFilters("i18n.gettext_with_context",i,e,t,n),r.applyFilters("i18n.gettext_with_context_"+m(n),i,e,t,n)):i};if(e&&u(e,t),r){var p=function(e){s.test(e)&&d()};r.addAction("hookAdded","core/i18n",p),r.addAction("hookRemoved","core/i18n",p)}return{getLocaleData:function(){var e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:"default";return n.data[e]},setLocaleData:u,resetLocaleData:function(e,t){n.data={},n.pluralForms={},u(e,t)},subscribe:function(e){return o.add(e),function(){return o.delete(e)}},__:function(e,t){var n=f(t,void 0,e);return r?(n=r.applyFilters("i18n.gettext",n,e,t),r.applyFilters("i18n.gettext_"+m(t),n,e,t)):n},_x:_,_n:function(e,t,n,i){var o=f(i,void 0,e,t,n);return r?(o=r.applyFilters("i18n.ngettext",o,e,t,n,i),r.applyFilters("i18n.ngettext_"+m(i),o,e,t,n,i)):o},_nx:function(e,t,n,i,o){var a=f(o,i,e,t,n);return r?(a=r.applyFilters("i18n.ngettext_with_context",a,e,t,n,i,o),r.applyFilters("i18n.ngettext_with_context_"+m(o),a,e,t,n,i,o)):a},isRTL:function(){return"rtl"===_("ltr","text direction")},hasTranslation:function(e,t,i){var o,a,l=t?t+""+e:e,s=!(null===(o=n.data)||void 0===o||null===(a=o[null!=i?i:"default"])||void 0===a||!a[l]);return r&&(s=r.applyFilters("i18n.has_translation",s,e,t,i),s=r.applyFilters("i18n.has_translation_"+m(i),s,e,t,i)),s}}}},5839:(e,t,r)=>{"use strict";r.d(t,{__:()=>a});var n=r(772),i=r(2133),o=(0,n.h)(void 0,void 0,i.se),a=(o.getLocaleData.bind(o),o.setLocaleData.bind(o),o.resetLocaleData.bind(o),o.subscribe.bind(o),o.__.bind(o));o._x.bind(o),o._n.bind(o),o._nx.bind(o),o.isRTL.bind(o),o.hasTranslation.bind(o)},9575:(e,t,r)=>{"use strict";r.d(t,{__:()=>n.__}),r(181),r(772);var n=r(5839)},181:(e,t,r)=>{"use strict";var n=r(8616),i=r.n(n);r(7604),i()(console.error)},1105:(e,t,r)=>{"use strict";r.r(t),r.d(t,{addonError:()=>c,afterAddonInstall:()=>d,extractErrorFromAddOnResponse:()=>s,toggleAddonState:()=>l});var n=r(9575),i=frmDom,o=i.div,a=i.svg;function l(e,t){var r,n=null!==(r=window.ajaxurl)&&void 0!==r?r:frm_js.ajax_url;jQuery(".frm-addon-error").remove();var i=jQuery(e),o=i.attr("rel"),a=i.parent(),l=a.parent().find(".addon-status-label");i.addClass("frm_loading_button"),jQuery.ajax({url:n,type:"POST",async:!0,cache:!1,dataType:"json",data:{action:t,nonce:frmGlobal.nonce,plugin:o},success:function(e){var r,n,o;"string"!=typeof(e=null!==(r=null===(n=e)||void 0===n?void 0:n.data)&&void 0!==r?r:e)&&"string"==typeof e.message&&(void 0!==e.saveAndReload&&(o=e.saveAndReload),e=e.message);var u=s(e);u?c(u,a,i):(d(e,i,l,a,o,t),wp.hooks.doAction("frm_update_addon_state",e))},error:function(){i.removeClass("frm_loading_button")}})}function s(e){return"string"!=typeof e&&(void 0===e.success||!e.success)&&(e.form&&jQuery(e.form).is("#message")?{message:jQuery(e.form).find("p").html()}:e)}function d(e,t,r,i,l){var s=arguments.length>5&&void 0!==arguments[5]?arguments[5]:"frm_activate_addon",d=frm_admin_js,c=document.querySelectorAll(".frm-addon-status");c.forEach(function(t){t.textContent=e,t.style.display="block"}),t.css({opacity:"0"}),document.querySelectorAll(".frm-oneclick").forEach(function(e){e.style.display="none"}),function(){var e=document.getElementById("frm_upgrade_modal");if(e){e.classList.add("frm-success");var t=e.querySelector(".frm-upgrade-message");if(t){var r=t.querySelector("img");t.replaceChildren((0,n.__)("Great! Everything's ready to go!","formidable"),document.createElement("br"),(0,n.__)("You just need to refresh the builder so the new field becomes available.","formidable")),r&&t.append(r)}var i=document.querySelector(".frm-addon-status");i&&(i.textContent="");var o,l=e.querySelector(".frm-circled-icon");if(l)l.classList.add("frm-circled-icon-green"),null===(o=l.querySelector("svg"))||void 0===o||o.replaceWith(a({href:"#frm_checkmark_icon"}))}}();var f={frm_activate_addon:{class:"frm-addon-active",message:d.active},frm_deactivate_addon:{class:"frm-addon-installed",message:d.installed},frm_uninstall_addon:{class:"frm-addon-not-installed",message:d.not_installed}};f.frm_install_addon=f.frm_activate_addon;var m=r[0];m&&(m.textContent=f[s].message);var _=i[0].parentElement;_.classList.remove("frm-addon-not-installed","frm-addon-installed","frm-addon-active"),_.classList.add(f[s].class),t[0].classList.remove("frm_loading_button"),document.querySelectorAll(".frm-admin-page-import, #frm-admin-smtp, #frm-welcome").length>0?window.location.reload():["settings","form_builder"].includes(l)&&c.forEach(function(e){var t=null!==e.closest("#frm_upgrade_modal");e.appendChild(function(e,t){var r,i=[u(e)];return t&&i.push(((r=document.createElement("a")).setAttribute("href","#"),r.classList.add("button","button-secondary","frm-button-secondary","dismiss"),r.textContent=(0,n.__)("Not Now","formidable"),r)),o({className:"frm-save-and-reload-options",children:i})}(l,t))})}function c(e,t,r){e.form?(jQuery(".frm-inline-error").remove(),r.closest(".frm-card").html(e.form).css({padding:5}).find("#upgrade").attr("rel",r.attr("rel")).on("click",installAddonWithCreds)):(t.append('<div class="frm-addon-error frm_error_style"><p><strong>'+e.message+"</strong></p></div>"),r.removeClass("frm_loading_button"),jQuery(".frm-addon-error").delay(4e3).fadeOut())}function u(e){var t=document.createElement("button");return t.classList.add("frm-save-and-reload","button","button-primary","frm-button-primary"),t.textContent=(0,n.__)("Save and Reload","formidable"),t.addEventListener("click",function(){var t;"form_builder"===e?((t=document.getElementById("frm_submit_side_top")).classList.contains("frm_submit_ajax")&&t.setAttribute("data-new-addon-installed",!0),t.click()):"settings"===e&&function(){var e=document.getElementById("form_settings_page");if(null!==e){var t=e.querySelector("form.frm_form_settings");null!==t&&(wp.hooks.doAction("frm_reset_fields_updated"),t.submit())}}()}),t}},4260:(e,t,r)=>{"use strict";r.r(t),r.d(t,{addOneClick:()=>o,initModal:()=>a,initUpgradeModal:()=>l});var n=r(9575),i=frmDom.svg;function o(e,t,r){var o;if("modal"===t)o=document.getElementById("frm_upgrade_modal");else{if("tab"!==t)return;o=document.getElementById(e.getAttribute("href").substr(1))}var a,l=o.querySelector(".frm-oneclick"),s=o.querySelector(".frm-upgrade-message"),d=o.querySelector(".frm-upgrade-link"),c=o.querySelector(".frm-oneclick-button"),u=o.querySelector(".frm-addon-status"),f=e.getAttribute("data-oneclick"),m=e.getAttribute("data-message"),_="block",p="block",g="none",h=o.querySelector(".frm-circled-icon");h&&(h.classList.remove("frm-circled-icon-green"),null===(a=h.querySelector("svg"))||void 0===a||a.replaceWith(i({href:"#frm_filled_lock_icon"})));var y=o.querySelector(".frm-learn-more");if(y&&(y.href=e.dataset.learnMore),null!==l&&void 0!==f&&f){null===m&&(p="none"),_="none",g="block",f=JSON.parse(f),c.className=c.className.replace(" frm-install-addon","").replace(" frm-activate-addon",""),c.className=c.className+" "+f.class,c.rel=f.url,l.textContent=(0,n.__)("This plugin is not activated. Would you like to activate it now?","formidable"),c.textContent=(0,n.__)("Activate","formidable");var v=e.querySelector("use");v&&(null==h||h.querySelector("svg").replaceWith(i({href:v.getAttribute("href")||v.getAttribute("xlink:href"),classList:["frm_svg32"]})))}m||(m=s.getAttribute("data-default")),void 0!==r&&(m=m.replace('<span class="frm_feature_label"></span>',r)),s.innerHTML=m,e.dataset.upsellImage&&s.appendChild(frmDom.img({src:e.dataset.upsellImage,alt:e.dataset.upgrade})),d.href=function(e,t){var r=e.getAttribute("data-link");return null!=r&&""!==r||(r=t.getAttribute("data-default")),r}(e,d),u.style.display="none",l.style.display=g,c.style.display="block"===g?"inline-block":g,s.style.display=p,d.style.display="block"===_?"inline-block":_;var b=d.closest(".frm-upgrade-modal-actions");b&&(b.style.display="block"===_?"flex":_)}function a(e,t){var r=jQuery(e);if(!r.length)return!1;void 0===t&&(t="552px");var n={dialogClass:"frm-dialog",modal:!0,autoOpen:!1,closeOnEscape:!0,width:t,resizable:!1,draggable:!1,open:function(){var e,t;jQuery(".ui-dialog-titlebar").addClass("frm_hidden").removeClass("ui-helper-clearfix"),jQuery("#wpwrap").addClass("frm_overlay"),jQuery(".frm-dialog").removeClass("ui-widget ui-widget-content ui-corner-all"),r.removeClass("ui-dialog-content ui-widget-content"),e=r,t=function(){e.dialog("close")},jQuery(".ui-widget-overlay").on("click",t),e.on("click","a.dismiss",t)},close:function(){jQuery("#wpwrap").removeClass("frm_overlay"),jQuery(".spinner").css("visibility","hidden"),this.removeAttribute("data-option-type");var e=document.getElementById("bulk-option-type");e&&(e.value="")}};return r.dialog(n),r}function l(){var e=a("#frm_upgrade_modal");function t(t){var r,n,i;if((r=t.target).classList){var a=r.classList.contains("frm_show_expired_modal")||null!==r.querySelector(".frm_show_expired_modal")||r.closest(".frm_show_expired_modal");if("change"===t.type&&r.classList.contains("frm_select_with_upgrade")){var l=r.options[r.selectedIndex];l&&l.dataset.upgrade&&(r=l)}if(!r.dataset.upgrade){var s=r.closest("[data-upgrade]");if(!s){if(!(s=r.closest(".frm_field_box")))return;r.dataset.upgrade=""}r=s}if(a)wp.hooks.doAction("frm_show_expired_modal",r);else{var d=r.dataset.upgrade;if(d&&!r.classList.contains("frm_show_upgrade_tab")){t.preventDefault();var c=e.get(0),u=c.querySelector(".frm_lock_icon");u&&(u.style.display="block",u.classList.remove("frm_lock_open_icon"),u.querySelector("use").setAttribute("href","#frm_lock_icon"));var f="frm_upgrade_modal_image",m=document.getElementById(f);m&&m.remove(),r.dataset.image&&(u&&(u.style.display="none"),u.parentNode.insertBefore(frmDom.img({id:f,src:frmGlobal.url+"/images/"+r.dataset.image}),u));var _=c.querySelector(".license-level");_&&(_.textContent=function(e){return e.dataset.requires?e.dataset.requires:"Pro"}(r)),o(r,"modal",d),c.querySelector(".frm_are_not_installed").style.display=r.dataset.image||r.dataset.oneclick?"none":"inline-block",c.querySelector(".frm-upgrade-modal-title-prefix").style.display=r.dataset.oneclick?"inline":"none",c.querySelector(".frm_feature_label").textContent=d,c.querySelector(".frm-upgrade-modal-title-suffix").style.display="none",c.querySelector("h2").style.display="block",e.dialog("open");var p=c.querySelector(".button-primary:not(.frm-oneclick-button)");n=p.getAttribute("href").replace(/(medium=)[a-z_-]+/gi,"$1"+r.getAttribute("data-medium")),null===(i=r.getAttribute("data-content"))&&(i=""),n=n.replace(/(content=)[a-z_-]+/gi,"$1"+i),p.setAttribute("href",n)}}}}!1!==e&&(document.addEventListener("click",t),frmDom.util.documentOn("change","select.frm_select_with_upgrade",t))}},8616:e=>{e.exports=function(e,t){var r,n,i=0;function o(){var o,a,l=r,s=arguments.length;e:for(;l;){if(l.args.length===arguments.length){for(a=0;a<s;a++)if(l.args[a]!==arguments[a]){l=l.next;continue e}return l!==r&&(l===n&&(n=l.prev),l.prev.next=l.next,l.next&&(l.next.prev=l.prev),l.next=r,l.prev=null,r.prev=l,r=l),l.val}l=l.next}for(o=new Array(s),a=0;a<s;a++)o[a]=arguments[a];return l={args:o,val:e.apply(null,o)},r?(r.prev=l,l.next=r):n=l,i===t.maxSize?(n=n.prev).next=null:i++,r=l,l.val}return t=t||{},o.clear=function(){r=null,n=null,i=0},o}},7604:(e,t,r)=>{var n;!function(){"use strict";var i={not_string:/[^s]/,not_bool:/[^t]/,not_type:/[^T]/,not_primitive:/[^v]/,number:/[diefg]/,numeric_arg:/[bcdiefguxX]/,json:/[j]/,not_json:/[^j]/,text:/^[^\x25]+/,modulo:/^\x25{2}/,placeholder:/^\x25(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/,key:/^([a-z_][a-z_\d]*)/i,key_access:/^\.([a-z_][a-z_\d]*)/i,index_access:/^\[(\d+)\]/,sign:/^[+-]/};function o(e){return function(e,t){var r,n,a,l,s,d,c,u,f,m=1,_=e.length,p="";for(n=0;n<_;n++)if("string"==typeof e[n])p+=e[n];else if("object"==typeof e[n]){if((l=e[n]).keys)for(r=t[m],a=0;a<l.keys.length;a++){if(null==r)throw new Error(o('[sprintf] Cannot access property "%s" of undefined value "%s"',l.keys[a],l.keys[a-1]));r=r[l.keys[a]]}else r=l.param_no?t[l.param_no]:t[m++];if(i.not_type.test(l.type)&&i.not_primitive.test(l.type)&&r instanceof Function&&(r=r()),i.numeric_arg.test(l.type)&&"number"!=typeof r&&isNaN(r))throw new TypeError(o("[sprintf] expecting number but found %T",r));switch(i.number.test(l.type)&&(u=r>=0),l.type){case"b":r=parseInt(r,10).toString(2);break;case"c":r=String.fromCharCode(parseInt(r,10));break;case"d":case"i":r=parseInt(r,10);break;case"j":r=JSON.stringify(r,null,l.width?parseInt(l.width):0);break;case"e":r=l.precision?parseFloat(r).toExponential(l.precision):parseFloat(r).toExponential();break;case"f":r=l.precision?parseFloat(r).toFixed(l.precision):parseFloat(r);break;case"g":r=l.precision?String(Number(r.toPrecision(l.precision))):parseFloat(r);break;case"o":r=(parseInt(r,10)>>>0).toString(8);break;case"s":r=String(r),r=l.precision?r.substring(0,l.precision):r;break;case"t":r=String(!!r),r=l.precision?r.substring(0,l.precision):r;break;case"T":r=Object.prototype.toString.call(r).slice(8,-1).toLowerCase(),r=l.precision?r.substring(0,l.precision):r;break;case"u":r=parseInt(r,10)>>>0;break;case"v":r=r.valueOf(),r=l.precision?r.substring(0,l.precision):r;break;case"x":r=(parseInt(r,10)>>>0).toString(16);break;case"X":r=(parseInt(r,10)>>>0).toString(16).toUpperCase()}i.json.test(l.type)?p+=r:(!i.number.test(l.type)||u&&!l.sign?f="":(f=u?"+":"-",r=r.toString().replace(i.sign,"")),d=l.pad_char?"0"===l.pad_char?"0":l.pad_char.charAt(1):" ",c=l.width-(f+r).length,s=l.width&&c>0?d.repeat(c):"",p+=l.align?f+r+s:"0"===d?f+s+r:s+f+r)}return p}(function(e){if(l[e])return l[e];for(var t,r=e,n=[],o=0;r;){if(null!==(t=i.text.exec(r)))n.push(t[0]);else if(null!==(t=i.modulo.exec(r)))n.push("%");else{if(null===(t=i.placeholder.exec(r)))throw new SyntaxError("[sprintf] unexpected placeholder");if(t[2]){o|=1;var a=[],s=t[2],d=[];if(null===(d=i.key.exec(s)))throw new SyntaxError("[sprintf] failed to parse named argument key");for(a.push(d[1]);""!==(s=s.substring(d[0].length));)if(null!==(d=i.key_access.exec(s)))a.push(d[1]);else{if(null===(d=i.index_access.exec(s)))throw new SyntaxError("[sprintf] failed to parse named argument key");a.push(d[1])}t[2]=a}else o|=2;if(3===o)throw new Error("[sprintf] mixing positional and named placeholders is not (yet) supported");n.push({placeholder:t[0],param_no:t[1],keys:t[2],sign:t[3],pad_char:t[4],align:t[5],width:t[6],precision:t[7],type:t[8]})}r=r.substring(t[0].length)}return l[e]=n}(e),arguments)}function a(e,t){return o.apply(null,[e].concat(t||[]))}var l=Object.create(null);"undefined"!=typeof window&&(window.sprintf=o,window.vsprintf=a,void 0===(n=function(){return{sprintf:o,vsprintf:a}}.call(t,r,t,e))||(e.exports=n))}()},5397:(e,t,r)=>{"use strict";r.d(t,{A:()=>o});var n=r(1364),i={contextDelimiter:"",onMissingKey:null};function o(e,t){var r;for(r in this.data=e,this.pluralForms={},this.options={},i)this.options[r]=void 0!==t&&r in t?t[r]:i[r]}o.prototype.getPluralForm=function(e,t){var r,i,o,a=this.pluralForms[e];return a||("function"!=typeof(o=(r=this.data[e][""])["Plural-Forms"]||r["plural-forms"]||r.plural_forms)&&(i=function(e){var t,r,n;for(t=e.split(";"),r=0;r<t.length;r++)if(0===(n=t[r].trim()).indexOf("plural="))return n.substr(7)}(r["Plural-Forms"]||r["plural-forms"]||r.plural_forms),o=(0,n.A)(i)),a=this.pluralForms[e]=o),a(t)},o.prototype.dcnpgettext=function(e,t,r,n,i){var o,a,l;return o=void 0===i?0:this.getPluralForm(e,i),a=r,t&&(a=t+this.options.contextDelimiter+r),(l=this.data[e][a])&&l[o]?l[o]:(this.options.onMissingKey&&this.options.onMissingKey(r,e),0===o?r:n)}},3029:(e,t,r)=>{"use strict";function n(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}r.d(t,{A:()=>n})},4467:(e,t,r)=>{"use strict";r.d(t,{A:()=>i});var n=r(9922);function i(e,t,r){return(t=(0,n.A)(t))in e?Object.defineProperty(e,t,{value:r,enumerable:!0,configurable:!0,writable:!0}):e[t]=r,e}},2327:(e,t,r)=>{"use strict";r.d(t,{A:()=>i});var n=r(2284);function i(e,t){if("object"!=(0,n.A)(e)||!e)return e;var r=e[Symbol.toPrimitive];if(void 0!==r){var i=r.call(e,t||"default");if("object"!=(0,n.A)(i))return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===t?String:Number)(e)}},9922:(e,t,r)=>{"use strict";r.d(t,{A:()=>o});var n=r(2284),i=r(2327);function o(e){var t=(0,i.A)(e,"string");return"symbol"==(0,n.A)(t)?t:t+""}},2284:(e,t,r)=>{"use strict";function n(e){return n="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},n(e)}r.d(t,{A:()=>n})}},t={};function r(n){var i=t[n];if(void 0!==i)return i.exports;var o=t[n]={exports:{}};return e[n](o,o.exports,r),o.exports}function n(e){return function(e){if(Array.isArray(e))return a(e)}(e)||function(e){if("undefined"!=typeof Symbol&&null!=e[Symbol.iterator]||null!=e["@@iterator"])return Array.from(e)}(e)||o(e)||function(){throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}()}function o(e,t){if(e){if("string"==typeof e)return a(e,t);var r={}.toString.call(e).slice(8,-1);return"Object"===r&&e.constructor&&(r=e.constructor.name),"Map"===r||"Set"===r?Array.from(e):"Arguments"===r||/^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r)?a(e,t):void 0}}function a(e,t){(null==t||t>e.length)&&(t=e.length);for(var r=0,n=Array(t);r<t;r++)n[r]=e[r];return n}function l(e){return l="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},l(e)}r.n=e=>{var t=e&&e.__esModule?()=>e.default:()=>e;return r.d(t,{a:t}),t},r.d=(e,t)=>{for(var n in t)r.o(t,n)&&!r.o(e,n)&&Object.defineProperty(e,n,{enumerable:!0,get:t[n]})},r.o=(e,t)=>Object.prototype.hasOwnProperty.call(e,t),r.r=e=>{"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(e,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(e,"__esModule",{value:!0})},window.FrmFormsConnect=window.FrmFormsConnect||function(e,t,r){var n={messageBox:null,reset:null,setElements:function(){n.messageBox=e.querySelector(".frm_pro_license_msg"),n.reset=e.getElementById("frm_reconnect_link")}},i={init:function(){n.setElements(),r(e.getElementById("frm_deauthorize_link")).on("click",i.deauthorize),r(".frm_authorize_link").on("click",i.authorize),r(".frm-dashboard-license-options").on("click","#frm_deauthorize_link",i.deauthorize),r(".frm-dashboard-license-options").on("click","#frm_reconnect_link",i.reauthorize),null!==n.reset&&r(n.reset).on("click",i.reauthorize)},authorize:function(){var t=this,n=this.getAttribute("data-plugin"),o=e.getElementById("edd_"+n+"_license_key"),a=o.value,l=e.getElementById("proplug-wpmu");this.classList.add("frm_loading_button"),l=null===l?0:l.checked?1:0,r.ajax({type:"POST",url:ajaxurl,dataType:"json",data:{action:"frm_addon_activate",license:a,plugin:n,wpmu:l,nonce:frmGlobal.nonce},success:function(e){i.afterAuthorize(e,o),t.classList.remove("frm_loading_button")}})},afterAuthorize:function(e,t){!0===e.success&&(t.value="•••••••••••••••••••"),wp.hooks.doAction("frm_after_authorize",e),i.showMessage(e)},showProgress:function(e){null===n.messageBox&&n.setElements();var t=n.messageBox;null!==t&&(!0===e.success?(t.classList.remove("frm_error_style"),t.classList.add("frm_message","frm_updated_message")):(t.classList.add("frm_error_style"),t.classList.remove("frm_message","frm_updated_message")),t.classList.remove("frm_hidden"),t.innerHTML=e.message)},showMessage:function(r){null===n.messageBox&&n.setElements();var o=n.messageBox;!0===r.success&&(i.showAuthorized(!0),i.showInlineSuccess(),wp.hooks.doAction("frmAdmin.afterLicenseAuthorizeSuccess",{msg:r})),i.showProgress(r),""!==r.message&&(setTimeout(function(){o.innerHTML="",o.classList.add("frm_hidden"),o.classList.remove("frm_error_style","frm_message","frm_updated_message")},1e4),e.querySelector(".frm-admin-page-dashboard")&&setTimeout(function(){t.location.reload()},1e3))},showAuthorized:function(t){var r=t?"unauthorized":"authorized",n=t?"authorized":"unauthorized",i=e.querySelectorAll(".frm_"+r+"_box");i.length&&i.forEach(function(e){e.className=e.className.replace("frm_"+r+"_box","frm_"+n+"_box")})},showInlineSuccess:function(){var t=e.querySelectorAll(".frm-confirm-msg [data-success]");t.length&&t.forEach(function(e){e.innerHTML=frmAdminBuild.purifyHtml(e.getAttribute("data-success"))})},reauthorize:function(){return this.innerHTML='<span class="frm-wait frm_spinner" style="visibility:visible;float:none"></span>',r.ajax({type:"POST",url:ajaxurl,dataType:"json",data:{action:"frm_reset_cache",plugin:"formidable_pro",nonce:frmGlobal.nonce},success:function(e){n.reset.textContent=e.message,"1"===n.reset.getAttribute("data-refresh")&&t.location.reload()}}),!1},deauthorize:function(){if(!confirm(frmGlobal.deauthorize))return!1;var t=this.getAttribute("data-plugin"),n=e.getElementById("edd_"+t+"_license_key"),o=n.value,a=this;return this.innerHTML='<span class="frm-wait frm_spinner" style="visibility:visible;"></span>',r.ajax({type:"POST",url:ajaxurl,data:{action:"frm_addon_deactivate",license:o,plugin:t,nonce:frmGlobal.nonce},success:function(){i.showAuthorized(!1),n.value="",a.replaceWith("Disconnected"),wp.hooks.doAction("frmAdmin.afterLicenseDeauthorizeSuccess",{})}}),!1}};return i}(document,window,jQuery),window.frmAdminBuildJS=function(){var e,t,a=frm_admin_js,s=frmDom,d=s.tag,c=s.div,u=s.span,f=s.a,m=s.svg,_=s.img,p=frmDom.util.onClickPreventDefault,g=frmDom.ajax,h=(g.doJsonFetch,g.doJsonPost);a.contextualShortcodes=(t=null===(e=document.getElementById("frm_adv_info"))||void 0===e?void 0:e.dataset.contextualShortcodes)?((t=JSON.parse(t)).addressSelector="[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]",t.bodySelector="[id^=email_message_]",t):[];var y,v,b,j={save:m({href:"#frm_save_icon"}),drag:m({href:"#frm_drag_icon",classList:["frm_drag_icon","frm-drag"]})},w=jQuery(document.getElementById("frm-show-fields")),x=document.getElementById("new_fields"),Q=document.getElementById("form_id"),k=!1,E=0,A=0,S=0,L={},I=0,B=wp.i18n,q=B.__,C=B.sprintf,N={dragging:!1};null!==Q&&(A=Q.value);var O,T=new URL(window.location.href),F=T.searchParams,D=document.getElementById("frm_builder_page");function M(e){e.stopPropagation(),e.preventDefault(),P(this)}function P(e){var t=e.getAttribute("data-frmverify"),r=e.getAttribute("data-loaded-from");return null===t||"frm-confirmed-click"===e.id||("entries-list"===r?wp.hooks.applyFilters("frm_on_multiple_entries_delete",{link:e,initModal:Bo}):function(e){var t,r,n,i,o,a=Bo("#frm_confirm_modal","400px"),l=document.getElementById("frm-confirmed-click");if(!1===a)return!1;for(n in o=(t=e.getAttribute("data-frmverify"))?e.getAttribute("data-frmverify-btn"):"",(r=jQuery(".frm-confirm-msg")).empty(),t&&(r.append(document.createTextNode(t)),o&&l.classList.add(o)),removeAtts=l.dataset,i)l.removeAttribute("data-"+n);for(n in i=e.dataset)"frmverify"!==n&&l.setAttribute("data-"+n,i[n]);return wp.hooks.doAction("frmAdmin.beforeOpenConfirmModal",{$info:a,link:e}),a.dialog("open"),l.setAttribute("href",e.getAttribute("href")||e.getAttribute("data-href")),!1}(e))}function H(e){var t=Bo("#frm_info_modal","400px");return!1===t||(jQuery(".frm-info-msg").html(e),t.dialog("open")),!1}function z(e){var t=this.getAttribute("data-frmtoggle"),r=this.getAttribute("data-toggletext"),n=jQuery(t);return e.preventDefault(),n.toggle(),null!==r&&""!==r&&(this.setAttribute("data-toggletext",this.innerHTML),this.textContent=r),!1}function R(e){var t=this.getAttribute("data-frmhide"),r=this.getAttribute("data-frmshow"),n=this.getAttribute("data-frmuncheck"),i=n?n.split(","):[];"INPUT"!==this.nodeName||"checkbox"!==this.type||this.checked||(null!==t?(r=t,t=null):null!==r&&(t=r,r=null)),e.preventDefault();var o=this.getAttribute("data-toggleclass")||"frm_hidden";null!==t&&jQuery(t).addClass(o),null!==r&&jQuery(r).removeClass(o);var a=this.parentNode.querySelectorAll("a.current");if(null!==a){for(var l=0;l<a.length;l++)a[l].classList.remove("current");this.classList.add("current")}return i.length&&i.forEach(function(e){var t=document.querySelector(e);t&&(t.checked=!1)}),!1}function G(){document.querySelectorAll(".tooltip").forEach(function(e){e.remove()})}function $(){var e,t,r;if(!parseInt(this.getAttribute("data-skip-frm-js"))&&!1!==P(this)){var n=jQuery(this),i=n.attr("data-removeid");void 0===(e=n.attr("data-showlast"))&&(e=""),void 0===(t=n.attr("data-hidelast"))&&(t=""),r=n.attr("data-removemore"),""!==e?n.closest(".frm_add_remove").find(".frm_remove_tag:visible").length>1&&(e="",t=""):0===i.indexOf("frm_postmeta_")&&(jQuery("#frm_postmeta_rows .frm_postmeta_row").length<2&&(e=".frm_add_postmeta_row.button"),jQuery(".frm_toggle_cf_opts").length&&jQuery("#frm_postmeta_rows .frm_postmeta_row:not(#"+i+")").last().length&&(""!==e&&(e+=","),e+="#"+jQuery("#frm_postmeta_rows .frm_postmeta_row:not(#"+i+")").last().attr("id")+" .frm_toggle_cf_opts"));var o=document.getElementById(i),a=jQuery(o);return a.fadeOut(300,function(){var r;a.remove(),Mi(),""!==t&&jQuery(t).hide(),""!==e&&jQuery(e+" a,"+e).removeClass("frm_hidden").fadeIn("slow"),this.closest(".frm_form_action_settings")&&function(e){di(e);var t={type:e};wp.hooks.doAction("frm_after_action_removed",t)}(this.closest(".frm_form_action_settings").querySelector(".frm_action_name").value),null===(r=document.querySelector(".tooltip"))||void 0===r||r.remove()}),void 0!==r&&(r=jQuery(r)).fadeOut(400,function(){r.remove()}),""!==e&&jQuery(this).closest(".frm_logic_rows").fadeOut("slow"),wp.hooks.doAction("frm_admin_tag_removed",i,o),!1}}function W(e,t){void 0===t&&(t=this),et(t,!1);var r=jQuery(t).closest(".frm_form_action_settings"),n=e.target;if(r.length&&void 0!==n){var i=n.parentElement.className;if("string"==typeof i&&(i.indexOf("frm_email_icons")>-1||i.indexOf("frm_toggle")>-1))return void e.stopPropagation()}var o=r.children(".widget-inside");if(r.length&&o.find("p, div, table").length<1){var a=r.find('input[name$="[ID]"]').val(),l=r.find('input[name$="[post_excerpt]"]').val();l&&(o.html('<span class="frm-wait frm_spinner"></span>'),r.find(".spinner").fadeIn("slow"),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_form_action_fill",action_id:a,action_type:l,nonce:frmGlobal.nonce},success:function(e){o.html(e),so(),Yn("#"+r.attr("id")),ho(o),jQuery(t).trigger("frm-action-loaded"),wp.hooks.doAction("frm_filled_form_action",o)}}))}jQuery(t).closest(".frm_field_box").siblings().find(".widget-inside").slideUp("fast"),void 0!==t.className&&-1!==t.className.indexOf("widget-action")||jQuery(t).closest(".start_divider").length<1||((o=jQuery(t).closest("div.widget").children(".widget-inside")).is(":hidden")?o.slideDown("fast"):o.slideUp("fast"))}function U(){var e=this.getAttribute("href");if(void 0===e)return!1;var t=e.replace("#","."),r=jQuery(this);r.closest("li").addClass("frm-tabs active").siblings("li").removeClass("frm-tabs active starttab"),r.closest("div").children(".tabs-panel").not(e).not(t).hide();var n=document.getElementById(e.replace("#",""));return n&&(n.style.display="block"),"frm_insert_fields_tab"!==this.id||this.closest("#frm_adv_info")||Ke(),!1}function V(e,t){var r=(e=jQuery(e)).attr("href");if(void 0!==r){var n,i,o=r.replace("#",".");if(e.closest("li").addClass("frm-tabs active").siblings("li").removeClass("frm-tabs active starttab"),e.closest("div").find(".tabs-panel").length)e.closest("div").children(".tabs-panel").not(r).not(o).hide();else if(null!==document.getElementById("form_global_settings")){var a=e.data("frmajax");e.closest(".frm_wrap").find(".tabs-panel, .hide_with_tabs").hide(),void 0!==a&&"1"==a&&(n=r.replace("#",""),(i=jQuery(".frm_"+n+"_ajax")).length&&jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_settings_tab",tab:n.replace("_settings",""),nonce:frmGlobal.nonce},success:function(e){i.replaceWith(e)}}))}else jQuery("#frm-categorydiv .tabs-panel, .hide_with_tabs").hide();jQuery(r).show(),jQuery(o).show(),Ui(),"auto"!==t&&(jQuery(".frm_updated_message").hide(),jQuery(".frm_warning_style").hide()),jQuery(e).closest("#frm_adv_info").length||(jQuery(".frm_form_settings").length?jQuery(".frm_form_settings").attr("action","?page=formidable&frm_action=settings&id="+jQuery('.frm_form_settings input[name="id"]').val()+"&t="+r.replace("#","")):jQuery(".frm_settings_form").attr("action","?page=formidable-settings&t="+r.replace("#","")))}}function K(e){var t,r;document.querySelectorAll(e).forEach(function(e){J(e),Array.from(e.children).forEach(function(e){return Z(e,".frm-move")});var t=jQuery(e).children('[data-type="divider"]').children(".divider_section_only");t.length&&J(t)}),t=jQuery("#frm_builder_page"),r={items:".frm_sortable_field_opts li",axis:"y",opacity:.65,forcePlaceholderSize:!1,handle:".frm-drag",helper:function(e,t){return k=t.clone().insertAfter(t),t.clone()},stop:function(e,t){k&&k.remove(),on(t.item.attr("id").replace("frm_delete_field_","").replace("-"+t.item.data("optkey")+"_container","")),Mi()}},jQuery(t).sortable(r)}function J(e){jQuery(e).droppable({accept:".frmbutton, li.frm_field_box",deactivate:ie,over:X,out:Y,tolerance:"pointer"})}function X(e,t){var r=function(e){return e.classList.contains("divider_section_only")&&(e=jQuery(e).nextAll(".start_divider.frm_sorting").get(0)),e}(e.target);if(!xe(t.draggable[0],r,e))return r.classList.remove("frm-over-droppable"),void jQuery(r).parents("ul.frm_sorting").addClass("frm-over-droppable");document.querySelectorAll(".frm-over-droppable").forEach(function(e){return e.classList.remove("frm-over-droppable")}),r.classList.add("frm-over-droppable"),jQuery(r).parents("ul.frm_sorting").addClass("frm-over-droppable")}function Y(e){e.target.classList.remove("frm-over-droppable")}function Z(e,t){var r={helper:ee,revert:"invalid",delay:10,start:te,stop:re,drag:ne,cursor:"grabbing",refreshPositions:!0,cursorAt:{top:0,left:90}};"string"==typeof t&&(r.handle=t),jQuery(e).draggable(r)}function ee(e){var t,r=e.delegateTarget;if(ke(r)){var n=document.getElementById("frm-insert-fields").querySelector(".frm_ttext").cloneNode(!0);return n.querySelector("use").setAttributeNS("http://www.w3.org/1999/xlink","href","#frm_field_group_layout_icon"),n.querySelector("span").textContent=q("Field Group","formidable"),n.classList.add("frm_field_box"),n.classList.add("ui-sortable-helper"),n}if(r.classList.contains("frmbutton"))return(t=r.cloneNode(!0)).classList.add("ui-sortable-helper"),r.classList.add("frm-new-field"),t;if(r.hasAttribute("data-ftype")){var i=r.getAttribute("data-ftype");if((t=(t=document.getElementById("frm-insert-fields").querySelector(".frm_t"+i)).cloneNode(!0)).classList.add("form-field"),t.classList.add("ui-sortable-helper"),t)return t.cloneNode(!0)}return c({className:"frmbutton"})}function te(e,t){N.dragging=!0;var r,n=v;n.classList.add("frm-dragging-field"),document.body.classList.add("frm-dragging"),t.helper.addClass("frm-sortable-helper"),t.helper.initialOffset=n.scrollTop,e.target.classList.add("frm-drag-fade"),yr(),(r=document.querySelectorAll("ul.start_divider")).length&&r.forEach(function(e){[].slice.call(e.children).forEach(function(e){(0===e.children.length||1===e.children.length&&"ul"===e.firstElementChild.nodeName.toLowerCase()&&0===e.firstElementChild.children.length)&&e.remove()})}),De(),Oe(),G()}function re(){v.classList.remove("frm-dragging-field"),document.body.classList.remove("frm-dragging");var e=document.querySelector(".frm-drag-fade");e&&e.classList.remove("frm-drag-fade")}function ne(e,t){!function(e){b.scrollTop(function(t,r){var n=e.clientY,i=v.offsetHeight,o=e.clientY-v.offsetTop,a=o-i/2;return o>i-50&&n>5?r+.1*a:o<70&&n<130?r-Math.abs(.1*a):r})}(e);var r=e.target,n=function(){for(var e=document.getElementById("frm-show-fields");e.querySelector(".frm-over-droppable");)e=e.querySelector(".frm-over-droppable");return"frm-show-fields"!==e.id||e.classList.contains("frm-over-droppable")||(e=!1),e}(),i=document.getElementById("frm_drag_placeholder");if(xe(r,n,e)){i||(i=d("li",{id:"frm_drag_placeholder",className:"sortable-placeholder"}));var o,a=t.helper.get(0);if((a.classList.contains("form-field")||a.classList.contains("frm_field_box"))&&(a.style.transform="translateY("+(o=t.helper,v.scrollTop-o.initialOffset+"px)")),"frm-show-fields"===n.id||n.classList.contains("start_divider"))return i.style.left=0,void function(e){var t,r=e.y,n=e.placeholder,i=jQuery(e.droppable);if($children=i.children().not(".edit_field_type_end_divider"),0===$children.length)i.prepend(n),t=0;else{var o=oe(i,r);if(o===$children.length){var a=jQuery($children.get(o-1));t=a.offset().top+a.outerHeight(),i.append(n);var l=i.children(".edit_field_type_end_divider");l.length&&i.append(l)}else t=jQuery($children.get(o)).offset().top,jQuery($children.get(o)).before(n)}t-=i.offset().top,n.style.top=t+"px"}({droppable:n,y:e.clientY,placeholder:i});i.style.top="",function(e){var t,r=e.x,n=e.placeholder,i=jQuery(e.droppable),o=le(i);if(o.length){var a=function(e,t){var r,n,i,o,a=le(e);for(o=0,r=a.length-1;r>=0;--r)if(n=a.get(r),t>(i=jQuery(n).offset().left)){o=r,t>i+jQuery(n).outerWidth()/2&&(o=r+1);break}return o}(i,r);if(a===o.length){var l=jQuery(o.get(a-1));t=l.offset().left+l.outerWidth(),i.append(n)}else t=jQuery(o.get(a)).offset().left,jQuery(o.get(a)).before(n),t-=0===a?4:8;t-=i.offset().left,n.style.left=t+"px"}}({droppable:n,x:e.clientX,placeholder:i})}else i&&i.remove()}function ie(e,t){if(N.dragging){N.dragging=!1;var r=t.draggable[0],n=document.getElementById("frm_drag_placeholder");if(!n)return t.helper.remove(),void y();!function(e){if(e.previousElementSibling&&e.previousElementSibling.classList.contains("frm-is-collapsed")){var t=jQuery(e).prevUntil('[data-type="break"]');if(t.length){var r=t.find(".frm-collapse-page").get(0);r&&r.click()}}}(n);var i=t.helper.parent(),o=t.helper.get(0).closest("ul.start_divider"),a=n.closest("ul.start_divider");r.classList.contains("frm-new-field")?function(e){if(he(e))wp.hooks.doAction("frm_stopped_inserting_by_dragging",e);else{var t=document.getElementById("frm_drag_placeholder"),r=e.replace("|","-")+"_"+we(),n=d("li",{id:r,className:"frm-wait frmbutton_loadingnow"}),i=jQuery(n),o=fe(jQuery(t)),a=me(o),l=_e(o);t.parentNode.insertBefore(n,t),t.remove(),se(i);var s=0;"summary"===e&&(s=jQuery(".frmbutton_loadingnow#"+r).prevAll('li[data-type="break"]').length?1:0),jQuery.ajax({type:"POST",url:ajaxurl,data:ge(e,l,a,s),success:function(t){ye(t,i);var r=ve(t);r&&wp.hooks.doAction("frm_after_field_added_in_form_builder",{field:t,fieldId:r,fieldType:e,form_id:a})},error:je})}}(r.id):(function(e,t){t.parentNode.insertBefore(e,t)}(r,n),function(e){if("UL"===e.nodeName&&!e.classList.contains("start_divider")&&"frm-show-fields"!==e.id){var t=e.closest("li");t&&!t.classList.contains("ui-draggable")&&Z(t,".frm-move")}}(n.parentElement));var l=o?parseInt(o.closest(".edit_field_type_divider").getAttribute("data-fid")):0,s=a?parseInt(a.closest(".edit_field_type_divider").getAttribute("data-fid")):0;n.remove(),t.helper.remove();var c=i.length?le(i):[];!function(e,t){var r;e.length&&(t.length?se(t.first()):(r=e.get(0).closest("li.frm_field_box"))&&!r.classList.contains("edit_field_type_divider")&&r.remove())}(i,c),function(e,t){0===t.length&&1===le(jQuery(e.parentNode)).length||se(jQuery(e))}(r,c),l!==s&&pe(jQuery(r),o),y()}}function oe(e,t){var r,n,i,o,a=e.children().not(".edit_field_type_end_divider"),l=a.length;if(!document.querySelector(".frm-has-fields .frm_no_fields"))return 0;for(o=0,r=l-1;r>=0;--r)if(n=a.get(r),t>(i=jQuery(n).offset().top)){o=r,t>i+jQuery(n).outerHeight()/2&&(o=r+1);break}return o}function ae(){document.querySelectorAll("ul#frm-show-fields, ul.start_divider").forEach(function(e){e.childNodes.forEach(function(e){void 0!==e.classList&&(e.classList.contains("edit_field_type_end_divider")||void 0!==e.classList&&e.classList.contains("form-field")&&We(e))})}),An(),document.querySelectorAll(".edit_field_type_end_divider").forEach(function(e){return e.parentNode.appendChild(e)}),document.querySelectorAll("li.form_field_box:not(.form-field)").forEach(function(e){return!e.children.length&&e.remove()}),En();var e=new Event("frm_sync_after_drag_and_drop",{bubbles:!1});document.dispatchEvent(e)}function le(e){var t=jQuery(),r=e.get(0);return r.children?(Array.from(r.children).forEach(function(e){if("none"!==e.style.display){var r=e.classList;!r.contains("form-field")||r.contains("edit_field_type_end_divider")||r.contains("frm-sortable-helper")||(t=t.add(e))}}),t):t}function se(e,t){var r,n,i,o;void 0===t&&(t="even"),r=e.parent().children("li.form-field, li.frmbutton_loadingnow").not(".edit_field_type_end_divider"),n=r.length,i=["frm_full","frm_half","frm_third","frm_fourth","frm_sixth","frm_two_thirds","frm_three_fourths","frm1","frm2","frm3","frm4","frm5","frm6","frm7","frm8","frm9","frm10","frm11","frm12"],"even"===t&&5!==n?r.each(ue(i,Kt(n))):"clear"===t?r.each(ue(i,"")):(o=-1!==["left","right","middle","even"].indexOf(t)?function(e){return Vt(n,t,e)}:function(e){return sr(t[e])},r.each(ue(i,o))),de(e.parent(),r.length)}function de(e,t){var r,n;if(void 0!==e.offset()){if(r=t>=2,null===(n=document.getElementById("frm_field_group_controls"))){if(!r)return;(n=c()).id="frm_field_group_controls",n.setAttribute("role","group"),n.setAttribute("tabindex",0),function(e){var t,r;(t=document.createElement("span")).innerHTML='<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';var n=q("Set Row Layout","formidable");ce(t,n),Rt(t,n),(r=document.createElement("span")).innerHTML='<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>',r.classList.add("frm-move");var i=q("Move Field Group","formidable");ce(r,i),Rt(r,i),e.innerHTML="",e.appendChild(t),e.appendChild(r),e.appendChild(function(){var e=u({className:"dropdown"}),t=f({className:"frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle",children:[u({child:m({href:"#frm_thick_more_vert_icon"})}),u({className:"screen-reader-text",text:q("Toggle More Options Dropdown","formidable")})]});frmDom.setAttributes(t,{title:q("More Options","formidable"),"data-bs-toggle":"dropdown","data-bs-container":"body","data-bs-display":"static"}),Rt(t,q("More Options","formidable")),e.appendChild(t);var r=c({className:"frm-dropdown-menu dropdown-menu dropdown-menu-right"});return r.setAttribute("role","menu"),e.appendChild(r),e}())}(n),D.appendChild(n)}e.append(n),n.style.display=r?"block":"none"}}function ce(e,t){e.setAttribute("data-bs-toggle","tooltip"),e.setAttribute("data-bs-container","body"),e.setAttribute("title",t),e.addEventListener("mouseover",function(){null===e.getAttribute("data-original-title")&&jQuery(e).tooltip()})}function ue(e,t){return function(r){var n,i,o,a,l,s,d;for(n="function"==typeof t?t(r):t,i=e.length,l=!1,o=0;o<i;++o)if(a=e[o],this.classList.contains(a)){l=a;break}void 0!==(s=this.dataset.fid)?(oi(document.getElementById("frm-single-settings-"+s)),null!==(d=document.getElementById("frm_classes_"+s))&&(!1===l?""!==n&&(d.value=d.value.concat(" "+n)):(this.classList.remove(l),d.value=d.value.replace(l,n)),this.classList.contains("frm_first")&&(this.classList.remove("frm_first"),d.value=d.value.replace("frm_first","").trim()),0===r&&(this.classList.add("frm_first"),d.value=d.value.concat(" frm_first")),jQuery(d).trigger("change"))):this.classList.add(n)}}function fe(e){var t="";return void 0===e||e.hasClass("edit_field_type_divider")||(t=e.closest(".edit_field_type_divider")),t}function me(e){var t="";if(void 0!==e[0]){var r=e.children(".start_divider");if(r.children(".edit_field_type_end_divider").appendTo(r),void 0!==e.attr("data-formid")){var n=e.attr("data-fid");t=jQuery('input[name="field_options[form_select_'+n+']"]').val()}}return void 0!==t&&""!==t||(t=A),t}function _e(e){var t=0;return void 0!==e[0]&&(t=e.attr("id").replace("frm_field_id_","")),t}function pe(e,t){if(e.hasClass("form-field")){var r=e.attr("id").replace("frm_field_id_",""),n=fe(e),i=me(n),o=_e(n),a=t?me(jQuery(t.parentNode)):0;jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_update_field_after_move",form_id:i,field:r,section_id:o,previous_form_id:a,nonce:frmGlobal.nonce},success:function(){An(),function(e,t){document.getElementById("frm_in_section_"+e).value=t}(r,o)}})}else le(jQuery(e.get(0).firstChild)).each(function(){pe(jQuery(this),t)})}function ge(e,t,r,n){var i={action:"frm_insert_field",form_id:r,field_type:e,section_id:t,nonce:frmGlobal.nonce,has_break:n};return t>0&&document.getElementById("form_id").value!==r||(i.last_row_field_ids=function(){var e=document.querySelector(".edit_field_type_submit");if(!e)return[];for(var t=e.parentNode.children,r=[],n=0;n<t.length;n++)r.push(t[n].dataset.fid);return r}()),i}function he(e){return wp.hooks.applyFilters("frm_should_stop_inserting_field",!1,e)}function ye(e,t){var r;document.getElementById("frm_form_editor_container").classList.add("frm-has-fields");var n=t.siblings("li.form-field").not(".edit_field_type_end_divider");n.length?(r=be(e),t.get(0).parentNode.parentNode.classList.contains("ui-draggable")||Z(t.get(0).parentNode.parentNode,".frm-move")):r=$e(e),t.replaceWith(r),En(),Ue(e,!1),n.length&&se(n.first()),An(),n.length?Z(r.get(0),".frm-move"):(J(r.get(0).querySelector("ul.frm_sorting")),Z(r.get(0).querySelector("li.form-field"),".frm-move"))}function ve(e){var t=e.match(/data-fid="(\d+)"/);return t?parseInt(t[1]):0}function be(e){var t=c();return t.innerHTML=e,jQuery(t.firstChild)}function je(e,t,r){!function(e,t){(function(e){return 0===e.status||0===e.readyState})(t)||H(e+". Please try again.")}(r,e)}function we(){return++S}function xe(e,t,r){if(!1===t)return!1;if(t.closest(".frm-sortable-helper"))return!1;var n,i,o,a=e.classList.contains("edit_field_type_submit"),l=!e.classList.contains("form_field")&&!!e.querySelector(".edit_field_type_submit");if("frm-show-fields"===t.id){var s=oe(jQuery(t),r.clientY);return a||l?s>t.childElementCount-1:s<=jQuery(t.querySelector(".edit_field_type_submit").closest("#frm-show-fields > li")).index()}if(a)return!(t.classList.contains("start_divider")||!Qe(t.parentElement)&&(!Qe(t.parentElement.nextElementSibling)||e.parentElement.querySelector("li.frm_field_box:not(.edit_field_type_submit)")));if(t.classList.contains("start_divider")&&(e.classList.contains("edit_field_type_gdpr")||"gdpr"===e.id)&&t.closest(".repeat_section"))return!1;if(!t.classList.contains("start_divider")){if(n=le(jQuery(t)),i=jQuery(e),!(n.length<12)&&(n.length>12||(o=i.attr("data-fid"),1!==jQuery(n).filter('[data-fid="'+o+'"]').length)))return!1;if("divider"===e.id&&t.closest(".start_divider"))return!1}return e.classList.contains("frm-new-field")?function(e,t){var r=e.classList,n=r.contains("frm_tbreak"),i=r.contains("frm_thidden"),o=r.contains("frm_tdivider"),a=r.contains("frm_tform"),l=r.contains("frm_tuser_id");return"frm-show-fields"===t.id||t.classList.contains("start_divider")?!(n||i||o||a)||(!(t.classList.contains("start_divider")||null!==t.closest(".start_divider"))||!a&&!o):!(Ee(t)||i||n||l)}(e,t):function(e,t){if(ke(e))return function(e,t){return!(!t.classList.contains("start_divider")||null!==e.querySelector(".start_divider"))}(e,t);if(e.classList.contains("edit_field_type_break"))return!1;if(t.classList.contains("start_divider"))return function(e){return!e.classList.contains("edit_field_type_form")&&!e.querySelector(".edit_field_type_form")&&!(e.classList.contains("edit_field_type_divider")||e.querySelector(".edit_field_type_divider"))}(e);var r=e.classList.contains("edit_field_type_hidden"),n=e.classList.contains("edit_field_type_user_id");return!r&&!n&&function(e,t){if(Ee(t))return!1;if(jQuery(e).children("ul.frm_sorting").not(".start_divider").length>0)return!1;var r=e.classList.contains("edit_field_type_divider")||e.querySelector(".edit_field_type_divider"),n=e.classList.contains("edit_field_type_form");return null===t.closest(".start_divider")||!r&&!n}(e,t)}(e,t)}function Qe(e){return e&&e.matches("#frm-show-fields > li:last-child")}function ke(e){return e.classList.contains("frm_field_box")&&!e.classList.contains("form-field")}function Ee(e){return null!==e.querySelector(".edit_field_type_break, .edit_field_type_hidden, .edit_field_type_user_id")}function Ae(e){var t=document.getElementById(e),r=jQuery(t),n=[],i=function(e){var t=e.querySelector(".frm_hidden_fdata");e.classList.add("frm_load_now"),null!==t&&n.push(t.innerHTML)},o=t;i(o);for(var a=Se(o);a&&n.length<15;)i(a),o=a,a=Se(a);jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_load_field",field:n,form_id:A,nonce:frmGlobal.nonce},success:function(e){return function(e,t,r){var n,i;if(0===(e=e.replace(/^\s+|\s+$/g,"")).indexOf("{")){for(n in e=JSON.parse(e))jQuery("#frm_field_id_"+n).replaceWith(e[n]),K("#frm_field_id_"+n+".edit_field_type_divider ul.frm_sorting"),Z(document.getElementById("frm_field_id_"+n));((i=t.nextAll(".frm_field_loading:not(.frm_load_now)")).length||(i=jQuery(document.getElementById("frm-show-fields")).find(".frm_field_loading:not(.frm_load_now)")).length)&&Ae(i.attr("id")),so(),Fr(),Be();var o=new Event("frm_ajax_loaded_field",{bubbles:!1});o.frmFields=r.map(function(e){return JSON.parse(e)}),document.dispatchEvent(o)}else jQuery(".frm_load_now").removeClass(".frm_load_now").html("Error")}(e,r,n)}})}function Se(e){var t;return e.nextElementSibling?e.nextElementSibling:null===(t=e.parentNode)||void 0===t||null===(t=t.closest(".frm_field_box"))||void 0===t||null===(t=t.nextElementSibling)||void 0===t?void 0:t.querySelector(".form-field")}function Le(){var e=jQuery(this);if(e.hasClass("disabled"))return!1;var t=e.closest(".frmbutton").attr("id");if(!he(t)){var r=0;"summary"===t&&(r=w.children('li[data-type="break"]').length>0?1:0);var n=A;return jQuery.ajax({type:"POST",url:ajaxurl,data:ge(t,0,n,r),success:function(e){Ie(e);var r=ve(e);r&&wp.hooks.doAction("frm_after_field_added_in_form_builder",{field:e,fieldId:r,fieldType:t,form_id:n})},error:je}),!1}}function Ie(e){document.getElementById("frm_form_editor_container").classList.add("frm-has-fields");var t=$e(e),r=w[0].querySelector(".edit_field_type_submit");r?jQuery(r.closest(".frm_field_box:not(.form-field)")).before(t):w.append(t),Ue(e,!0),t.each(function(){J(this.querySelector("ul.frm_sorting")),Z(this.querySelector(".form-field"),".frm-move")})}function Be(){var e=!0,t=document.querySelectorAll(".frmjs_prod_field_opt_cont");w.find("li.edit_field_type_product").length>1&&(e=!1);for(var r=0;r<t.length;r++)e?t[r].classList.add("frm_hidden"):t[r].classList.remove("frm_hidden")}function qe(){var e,t,r,n,i;if(e=jQuery(this).closest("li.form-field"),(n=this.getAttribute("frm-target-row-id"))&&n.startsWith("frm_field_group_")||function(e){if(e.classList.contains("frm-page-collapsed"))return!1;var t=e.closest("li.frm_field_box:not(.form-field)");return!t||le(jQuery(t.querySelector("ul"))).length<12}(e.get(0)))return Oe(),r=function(e){var t=[];return jQuery(document.getElementById("frm_field_id_"+e)).find("li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)").each(function(){t.push(jQuery(this).data("fid"))}),t}(t=e.data("fid")),null!==n&&(i=this.getAttribute("frm-field-order")),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_duplicate_field",field_id:t,form_id:A,children:r,nonce:frmGlobal.nonce},success:function(r){var o,a,l;if(null!==n&&null!==(a=document.getElementById(n)))return l=be(r),jQuery(a).append(l),Z(l.get(0),".frm-move"),null!==i&&a.lastElementChild.setAttribute("frm-field-order",i),jQuery(a).trigger("frm_added_duplicated_field_to_row",{duplicatedFieldHtml:r,originalFieldId:t}),Ue(r,!1),void Ce(e.get(0),l.get(0));e.siblings("li.form-field").length?(l=be(r),e.after(l),se(e),Z(l.get(0),".frm-move")):(l=$e(r),e.parent().parent().after(l),J(l.get(0).querySelector("ul.frm_sorting")),Z(l.get(0).querySelector("li.form-field"),".frm-move")),En(),Ue(r,!1),Ne(t,r),Sn(l.find(".start_divider")),null===(o=e[0].querySelector(".frm-dropdown-menu.dropdown-menu-right"))||void 0===o||o.classList.remove("show"),Ce(e.get(0),l.get(0))}}),!1;H(C(q("You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.","formidable"),12))}function Ce(e,t){var r,n=e.closest(".frm-field-group-hover-target");if(n&&ke(n.parentElement)){var i=e.dataset.fid,o=null===(r=document.getElementById("frm_classes_"+i))||void 0===r?void 0:r.value;if(o&&(o=o.replace("frm_first",""),!t.className.includes(o))){t.className+=" "+o;var a=document.getElementById("frm_classes_"+t.dataset.fid);a&&(a.value=o)}}}function Ne(e,t){var r,n,i,o,a,l;null!==(r=document.getElementById("frm-single-settings-"+e))&&void 0!==(n=jQuery(t).attr("data-fid"))&&null!==(i=document.getElementById("frm-single-settings-"+n))&&(o=["name","required","unique","read_only","placeholder","description","size","max","format","prepend","append","separate_value"],r.querySelectorAll('input[name^="field_options["], textarea[name^="field_options["]').forEach(function(t){var r,a,l,s;(s=t.name.substr(14).split("_")).pop(),"options"!==(r=s.join("_"))?-1!==o.indexOf(r)&&(a=t.matches("input")?"input":"textarea",null!==(l=i.querySelector(a+'[name="field_options['+r+"_"+n+']"]'))&&("checkbox"===t.type?t.checked!==l.checked&&jQuery(l).trigger("click"):"text"!==t.type&&"textarea"!==a||t.value!==l.value&&(l.value=t.value,jQuery(l).trigger("change")))):function(e,t,r,n){var i,o;i="field_options[options_"+n+"]"+e.name.substr(23+(""+r).length),null!==(o=t.querySelector('input[name="'+i+'"]'))&&o.value!==e.value&&(o.value=e.value,jQuery(o).trigger("change"))}(t,i,e,n)}),null!==(a=r.querySelector('input[name="default_value_'+e+'"]'))&&null!==(l=i.querySelector('input[name="default_value_'+n+'"]'))&&a.value!==l.value&&(l.value=a.value,jQuery(l).trigger("change")))}function Oe(){var e=document.querySelector(".frm-field-settings-open");null!==e&&(e.classList.remove("frm-field-settings-open"),jQuery(document).off("click","#frm_builder_page",Te),jQuery(".frm-field-action-icons .dropdown.open").removeClass("open"))}function Te(e){jQuery(e.originalEvent.target).closest(".frm-field-action-icons").length||Oe()}function Fe(e){var t=!!(e.ctrlKey||e.metaKey||e.shiftKey);jQuery(D).toggleClass("frm-multiselect-key-is-down",t),function(e){var t,r,n;v.classList.contains("frm-dragging-field")||null===document.querySelector(".frm-field-group-hover-target .frm-field-settings-open")&&(null===(t=document.elementFromPoint(e.clientX,e.clientY))||t.classList.contains("edit_field_type_divider")||null===(r=t.closest("ul.frm_sorting"))||r.classList.contains("start_divider")||"frm-show-fields"===r.id||(!1===(n=De())||jQuery(n).is(r)||fr(),de(jQuery(r),le(jQuery(r)).length),r.classList.add("frm-field-group-hover-target"),jQuery("#wpbody-content").on("mousemove",Me)))}(e)}function De(){var e,t;return null!==(e=document.getElementById("frm_field_group_controls"))&&(e.style.display="none"),null!==(t=document.querySelector(".frm-field-group-hover-target"))&&(jQuery("#wpbody-content").off("mousemove",Me),t.classList.remove("frm-field-group-hover-target"),t)}function Me(e){var t=document.elementFromPoint(e.clientX,e.clientY);null!==t&&null!==t.closest("#frm-show-fields")||(De(),G())}function Pe(e){yr(),setTimeout(function(){var t,r;if(null!==(t=document.querySelector(".dropdown .frm-dropdown-menu.show"))){null===t.getAttribute("aria-label")&&t.setAttribute("aria-label",q("More Options","formidable")),0===t.children.length&&function(e,t){var r,n;r=t?"_field_group":"_field",n=[Re(t),Ge(t)],t||n.push({class:"frm_select",icon:"frm_settings_icon",label:q("Field Settings","formidable")}),n.forEach(function(t){var n,i,o;(n=document.createElement("div")).classList.add("frm_more_options_li","dropdown-item"),(i=document.createElement("a")).classList.add(t.class+r),i.setAttribute("href","#"),Rt(i),(o=document.createElement("span")).textContent=t.label,i.innerHTML='<svg class="frmsvg"><use xlink:href="#'+t.icon+'"></use></svg>',i.appendChild(document.createTextNode(" ")),i.appendChild(o),n.appendChild(i),e.appendChild(n)})}(t,!0===e),(r=jQuery(t)).offset().left>jQuery(window).width()-r.outerWidth()&&(t.style.left=-r.outerWidth()+"px");var n=t.firstElementChild.querySelector("a");n&&n.focus()}},0)}function He(){Pe(!0)}function ze(e){var t=e.target.closest(".frm-section-collapsed");t&&("show"===e.type?t.style.zIndex=3:t.style.zIndex=1)}function Re(e){var t={class:"frm_delete",icon:"frm_delete_icon"};return t.label=q(e?"Delete Group":"Delete","formidable"),t}function Ge(e){var t={class:"frm_clone",icon:"frm_clone_icon"};return t.label=q(e?"Duplicate Group":"Duplicate","formidable"),t}function $e(e){var t=c();"string"==typeof e?t.innerHTML=e:t.appendChild(e);var r=jQuery();return Array.from(t.children).forEach(function(e){r=r.add(jQuery("<li>").addClass("frm_field_box").html(jQuery("<ul>").addClass("frm_grid_container frm_sorting").append(e)))}),r}function We(e){var t=d("ul",{className:"frm_grid_container frm_sorting"}),r=d("li",{className:"frm_field_box",child:t});e.replaceWith(r),t.appendChild(e),J(t),Z(r,".frm-move")}function Ue(e,t){var r,n,i=/id="(\S+)"/.exec(e),o=document.getElementById(i[1]),a="#"+i[1]+".edit_field_type_divider ul.frm_sorting.start_divider",s=jQuery(a),d=o.getAttribute("data-type");r=e,(n=c()).innerHTML=r,n.querySelectorAll(".form-field").forEach(Ve);var u,f,m=!1;if(Mi(),K(a),"quantity"===d&&function(e){var t=e.getAttribute("data-fid"),r=document.getElementById("field_options[product_field_"+t+"]");null!==r&&(nt(r),oi(document.getElementById("frm-single-settings-"+t)))}(o),"product"!==d&&"quantity"!==d||Be(),s.length)s.parent(".frm_field_box").children(".frm_no_section_fields").addClass("frm_block");else{var _=jQuery(o).closest("ul.frm_sorting.start_divider");_.length&&(Sn(_),m=!0)}-1!==e.indexOf("frm-collapse-page")&&Fr(),f="frm-newly-added",(u=o).classList?u.classList.add(f):u.className+=" "+f,setTimeout(function(){o.classList.remove("frm-newly-added")},1e3);var p,g=o.querySelector("#frm-last-row-fields-order");if(g&&((p=JSON.parse(g.value))&&"object"===l(p)&&Object.keys(p).forEach(function(e){var t=document.querySelector('input[name="field_options[field_order_'+e+']"]');t&&(t.value=p[e])})),t){var h=o.getBoundingClientRect(),y=document.getElementById("post-body-content");h.top>=0&&h.left>=0&&h.right<=(window.innerWidth||document.documentElement.clientWidth)&&h.bottom<=(window.innerHeight||document.documentElement.clientHeight)||y.scroll({top:y.scrollHeight,left:0,behavior:"smooth"}),!1===m&&Sn(s)}Je(),so(),document.getElementById("frm-show-fields").classList.remove("frm-over-droppable"),o.querySelectorAll("[data-toggle]").forEach(function(e){return e.setAttribute("data-bs-toggle",e.getAttribute("data-toggle"))}),o.querySelectorAll(".frm-dropdown-menu").forEach(function(e){return e.classList.add("dropdown-menu")});var v=new Event("frm_added_field",{bubbles:!1});v.frmField=o,v.frmSection=a,v.frmType=d,v.frmToggles=m,document.dispatchEvent(v)}function Ve(e){if(e.dataset.fid){var t=document.getElementById("draft_fields");t&&(""===t.value?t.value=e.dataset.fid:t.value.split(",").includes(e.dataset.fid)||(t.value+=","+e.dataset.fid))}}function Ke(e){jQuery("#new_fields .frm-single-settings").addClass("frm_hidden"),jQuery("#frm-options-panel > .frm-single-settings").removeClass("frm_hidden"),Je(e)}function Je(e){jQuery("li.ui-state-default.selected").removeClass("selected"),jQuery(".frm-show-field-settings.selected").removeClass("selected"),e||yr()}function Xe(){var e=this.value,t=function(e){var t,r=[],n=e.split(""),i=n.length,o=["{","[","("],l={"}":"{",")":"(","]":"["},s=[];for(t=0;t<i;t++)o.includes(n[t])?r.push(n[t]):l.hasOwnProperty(n[t])&&r.pop()!==l[n[t]]&&s.push(n[t]);return r.length>0||s.length>0?a.unmatched_parens+"\n\n":""}(e);t+=function(e,t){var r=function(e,t){var r="";return function(e){return jQuery(e).siblings('label[for^="calc_type"]').children("input").prop("checked")}(t)||/\[(date|time|email|ip)\]/.test(e)&&(r=a.text_shortcodes+"\n\n"),r}(e,t);return r+=function(e){var t="";return/\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g.test(e)&&(t+=a.view_shortcodes+"\n\n"),t}(e)}(e,this),""!==t&&H(e+"\n\n"+t)}function Ye(e,t){for(var r=!1,n=0;n<t.length;n++){var i=document.getElementsByName(Ze(t[n],e.fieldId));if(i.length&&jQuery(i[0]).val()){r=!0;break}}return r}function Ze(e,t){var r=e.indexOf("]");return"field_options"+e.substring(0,r)+"_"+t+e.substring(r)}function et(e,t){var r,n,i,o,a=jQuery(e).closest(".frm-single-settings"),l=a.find(".frm-calc-field");if(t||l.length&&""!==l.val()&&!l.is(":hidden")){var s=function(e){var t=jQuery(e).find(".frm_code_list");return 1===t.length&&t.hasClass("frm_js_summary_list")}(e),d=a.find('input[name="frm_fields_submitted[]"]').val();r=function(e,t){var r=e.querySelector(".frm_code_list"),n=JSON.parse(r.getAttribute("data-exclude"));if(t){var i=function(){for(var e=[],t=document.getElementsByClassName("frm_include_extras_field"),r=0;r<t.length;r++)t[r].checked&&e.push(t[r].value);return e}();if(i.length)for(var o=0;o<n.length;o++)i.includes(n[o])&&(n.splice(o,1),o--)}return n}(t?e:document.getElementById("frm-calc-box-"+d),s);var c=function(e){var t=[];if(!Array.isArray(e))return t;for(var r=0;r<e.length;r++)e[r].startsWith("[")&&(t.push(e[r]),e.splice(r,1),r--);return t}(r);for(n=rt(),(o=document.getElementById("frm-calc-list-"+d)).innerHTML="",i=0;i<n.length;i++)if(!(r&&r.includes(n[i].fieldType)||c.length&&Ye(n[i],c))){var f=document.createElement("a");f.setAttribute("href","#"),f.setAttribute("data-code",n[i].fieldId),f.classList.add("frm_insert_code"),f.appendChild(u(n[i].fieldName)),f.appendChild(u({className:"frm-text-sm frm-text-grey-500",text:"["+n[i].fieldId+"]"}));var m=document.createElement("li");m.classList.add("frm-field-list-"+d),m.classList.add("frm-field-list-"+n[i].fieldType),m.appendChild(f),o.appendChild(m)}}}function tt(){et(jQuery(".frm-inline-modal.postbox:has(.frm_js_summary_list)")[0],!0)}function rt(e){var t,r=[],n=document.querySelectorAll("li.frm_field_box"),i=void 0!==e;for(t=0;t<n.length;t++)if(!i||n[t].getAttribute("data-ftype")===e){var o=n[t].getAttribute("data-fid");void 0!==o&&o&&r.push({fieldId:o,fieldName:ot("frm_name_"+o),fieldType:ot("field_options_type_"+o),fieldKey:ot("field_options_field_key_"+o)})}return wp.hooks.applyFilters("frm_admin_get_field_list",r,e,n)}function nt(e){var t,r,n,i=[],o=function(e){for(var t=e.querySelectorAll('[type="checkbox"]:checked'),r=[],n=0;n<t.length;n++)r.push(t[n].value);return r}(e),a=e.getAttribute("data-frmfname"),l=rt("product"),s=rt("quantity"),d="SELECT"===e.tagName,c=1===s.length&&1===l.length;for(d&&(o=e.getAttribute("data-frmcurrent")),t=0;t<l.length;t++)n=l[t].fieldId.toString(),r=c||-1!==o.indexOf(n),d?(r=r?" selected":"",i.push('<option value="'+n+'"'+r+">"+l[t].fieldName+"</option>")):(r=r?" checked":"",i.push('<label class="frm6">'),i.push('<input type="checkbox" name="'+a+'" value="'+n+'"'+r+"> "+l[t].fieldName),i.push("</label>"));e.innerHTML=i.join("")}function it(){for(var e=document.querySelectorAll(".frmjs_prod_field_opt"),t=0;t<e.length;t++)nt(e[t])}function ot(e){var t=document.getElementById(e);return null!==t?t.value:""}function at(){var e,t,r=this.value,n=document.getElementById(this.getAttribute("data-changeme")),i=this.getAttribute("data-changeatt");null!==n&&(null!==i?"SELECT"===n.tagName&&"placeholder"===i?""===(e=n.options[0]).value?e.innerHTML=r:un(n,r):"class"===i?function(e,t){var r,n,i,o=" "+t.value,a=e.getAttribute("data-fid");void 0!==a&&(t.classList.contains("field_options_align")?o+=" "+document.getElementById("frm_classes_"+a).value:t.classList.contains("frm_classes")&&null!==(i=document.getElementById("field_options_align_"+a))&&(o+=" "+i.value)),o=(o+=" ").replace(" block "," vertical_radio ").replace(" inline "," horizontal_radio "),""===(r=0===(r=e.className.split(" frmstart ")[1]).indexOf("frmend ")?"":r.split(" frmend ")[0]).trim()?(n=" frmstart  frmend ",-1===e.className.indexOf(n)&&(n=" frmstart frmend "),o=" frmstart "+o.trim()+" frmend "):(n=r.trim(),o=o.trim()),e.className=e.className.replace(n,o)}(n,this):"range"===(t=n).type&&t.parentNode.classList.contains("frm_range_container")?function(e,t,r){if(frmGlobal.proIncludesSliderJs){var n={field:e,att:t,newValue:r};wp.hooks.doAction("frm_update_slider_field_preview",n)}else{var i;if("value"===t?(""===r&&(r=lt(e)),e.value=r):e.setAttribute(t,r),-1!==["value","min","max"].indexOf(t))"max"!==t&&"min"!==t||""!==(i=e.id,document.querySelector('input[data-changeme="'+i+'"][data-changeatt="value"]').value)||(e.value=lt(e)),e.parentNode.querySelector(".frm_range_value").textContent=e.value}}(n,i,r):n.setAttribute(i,r):0===n.id.indexOf("setup-message")?""!==r&&(n.innerHTML='<input type="text" value="" disabled />'):(n.innerHTML=pn(r),"TEXTAREA"===n.nodeName&&n.classList.contains("wp-editor-area")&&jQuery(n).trigger("change"),n.classList.contains("frm_primary_label")&&"break"===n.nextElementSibling.getAttribute("data-ftype")&&(n.nextElementSibling.querySelector(".frm_button_submit").textContent=r)))}function lt(e){var t=parseFloat(e.getAttribute("max")),r=parseFloat(e.getAttribute("min"));return(t-r)/2+r}function st(){var e,t=this.getAttribute("data-fid"),r="";["field_options_max_","frm_format_"].forEach(function(e){var n=document.getElementById(e+t);n&&(r+=n.value)}),"text"===(e=document.getElementsByName("field_options[type_"+t+"]")[0]).options[e.selectedIndex].value&&ct(""!==r,".frm_invalid_msg"+t)}function dt(){var e=this.id.replace("frm_","").replace("req_field_",""),t=this.checked,r=jQuery("#field_label_"+e+" .frm_required");if(ct(t,".frm_required_details"+e),t){var n=jQuery('input[name="field_options[required_indicator_'+e+']"]');""===n.val()&&n.val("*"),r.removeClass("frm_hidden")}else r.addClass("frm_hidden")}function ct(e,t){if($msg=jQuery(t),e)$msg.fadeIn("fast").closest(".frm_validation_msg").fadeIn("fast");else{var r=$msg.fadeOut("fast").closest(".frm_validation_box"),n=r.css("display","block").children(":not("+t+"):visible").length;r.css("display",""),0===n&&$msg.closest(".frm_validation_msg").fadeOut("fast")}}function ut(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=jQuery(".frm_unique_details"+e);if(this.checked)t.fadeIn("fast").closest(".frm_validation_msg").fadeIn("fast"),$unqDetail=jQuery(".frm_unique_details"+e+" input"),""===$unqDetail.val()&&$unqDetail.val(a.default_unique);else{var r=t.fadeOut("fast").closest(".frm_validation_box"),n=r.css("display","block").children(":not(.frm_unique_details"+e+"):visible").length;r.css("display",""),0===n&&t.closest(".frm_validation_msg").fadeOut("fast")}}function ft(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=jQuery(this).val(),r=jQuery(document.getElementById("frm_field_id_"+e));if(ct(""!==t,".frm_conf_details"+e),""!==t){var n=jQuery(".frm_validation_box .frm_conf_details"+e+" input");""===n.val()&&n.val(a.default_conf),function(e){var t=document.getElementsByName("field_options[type_"+e+"]")[0].value;mt(document.getElementById("field_description_"+e),"field_options[description_"+e+"]",a["enter_"+t]),mt(document.getElementById("conf_field_description_"+e),"field_options[conf_desc_"+e+"]",a["confirm_"+t])}(e),"inline"===t?r.removeClass("frm_conf_below").addClass("frm_conf_inline"):"below"===t&&r.removeClass("frm_conf_inline").addClass("frm_conf_below"),jQuery(".frm-conf-box-"+e).removeClass("frm_hidden")}else jQuery(".frm-conf-box-"+e).addClass("frm_hidden"),setTimeout(function(){r.removeClass("frm_conf_inline frm_conf_below")},200)}function mt(e,t,r){e.innerHTML===a.desc&&(e.innerHTML=r,document.getElementsByName(t)[0].value=r)}function _t(e){var t=JSON.parse(this.getAttribute("data-opts"));return e.preventDefault(),document.getElementById("frm_bulk_options").value=t.join("\n"),!1}function pt(){var e,t,r,n,i=jQuery(this).closest(".frm-single-settings").data("fid"),o=jQuery("#frm_field_"+i+"_opts .frm_option_template").prop("outerHTML"),a=jQuery(this).data("opttype"),l=0,s=function(e){for(var t=0,r=0,n=jQuery("#frm_field_"+e+"_opts li"),i=0;t<n.length;t++){if(r=n[t].getAttribute("data-optkey"),1===n.length)return r;"000"!==r&&(r=r.replace("other_",""),r=parseInt(r,10)),!isNaN(i)&&(r>i||"000"===i)&&(i=r)}return i}(i);if("000"!==s&&(l=s+1),"other"===a){document.getElementById("other_input_"+i).value=1;var d=jQuery(this).data("ftype");"radio"!==d&&"select"!==d||jQuery(this).fadeOut("slow");var c={action:"frm_add_field_option",field_id:i,opt_key:l,opt_type:a,nonce:frmGlobal.nonce};jQuery.post(ajaxurl,c,function(e){jQuery(document.getElementById("frm_field_"+i+"_opts")).append(e),on(i)})}else{o=(o=(o=(o=(o=o.replace(new RegExp('optkey="000"',"g"),'optkey="'+l+'"')).replace(new RegExp("-000_","g"),"-"+l+"_")).replace(new RegExp('-000"',"g"),"-"+l+'"')).replace(new RegExp("\\[000\\]","g"),"["+l+"]")).replace("frm_hidden frm_option_template",""),Do(i,o={newOption:o});var u=this.closest(".frm_single_option");u?u.after(o.newOption):jQuery("#frm_field_".concat(i,"_opts")).append(o.newOption),on(i)}null==(n=(e=this).classList.contains("frm-add-option-legacy")?null===(t=e.closest(".frm-collapse-me"))||void 0===t?void 0:t.querySelector(".frm_sortable_field_opts"):e.closest(".frm_sortable_field_opts"))||null===(r=n.querySelectorAll(".frm_remove_tag.frm_disabled"))||void 0===r||r.forEach(function(e){return e.classList.remove("frm_disabled")}),Mi()}function gt(){ht(jQuery(this).closest(".frm-single-settings").data("fid"),this.value)}function ht(e,t){var r=jQuery(".frm_multiple_cont_"+e);"select"===t?r.fadeIn("fast"):r.fadeOut("fast")}function yt(){var e=jQuery(this).closest(".frm-single-settings").data("fid");qo(jQuery(".field_"+e+"_option_key")),jQuery(".field_"+e+"_option").toggleClass("frm_with_key")}function vt(){var e,t,r=jQuery(this).closest(".frm-single-settings"),n=r.data("fid"),i=document.getElementById("frm_field_id_"+n);xt(jQuery(this)),qo(jQuery(".field_"+n+"_image_id")),qo(jQuery(".frm_toggle_image_options_"+n)),qo(jQuery(".frm_image_size_"+n)),qo(jQuery(".frm_alignment_"+n)),qo(jQuery(".frm-add-other#frm_add_field_"+n)),(e=vn(n))?(jt(n,"inline"),bt(i),t=nn(n),i.classList.add("frm_image_options"),i.classList.add("frm_image_size_"+t),r.find(".frm-bulk-edit-link").hide()):(i.classList.remove("frm_image_options"),bt(i),jt(n,"block"),r.find(".frm-bulk-edit-link").show()),wp.hooks.doAction("frm_image_options_toggled",r[0],e)}function bt(e){e.classList.remove("frm_image_size_","frm_image_size_small","frm_image_size_medium","frm_image_size_large","frm_image_size_xlarge")}function jt(e,t){jQuery("#field_options_align_"+e).val(t).trigger("change")}function wt(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=document.getElementById("frm_field_id_"+e);Qt(),vn(e)&&(bt(t),t.classList.add("frm_image_options"),t.classList.add("frm_image_size_"+nn(e)))}function xt(e){var t=e.closest(".frm-single-settings").data("fid");jQuery(".field_"+t+"_option").trigger("change")}function Qt(){xt(jQuery(this))}function kt(e){var t,r=e.target.closest(".frm_image_preview_wrapper");if(null!==(t=wp)&&void 0!==t&&t.media&&(null==r||!r.dataset.upgrade)){e.preventDefault(),wp.media.model.settings.post.id=0;var n=wp.media.frames.file_frame=wp.media({multiple:!1,library:{type:["image"]}});n.on("select",function(){var e=n.state().get("selection").first().toJSON(),t=r.querySelector("img");t.setAttribute("src",e.url),t.classList.remove("frm_hidden"),t.removeAttribute("srcset"),r.querySelector(".frm_image_preview_frame").style.display="block",r.querySelector(".frm_image_preview_title").textContent=e.filename,r.querySelector(".frm_choose_image_box").style.display="none";var i=jQuery(r);i.siblings('input[name*="[label]"]').data("frmimgurl",e.url),i.find("input.frm_image_id").val(e.id).trigger("change"),wp.media.model.settings.post.id=0}),n.open()}}function Et(e){var t=jQuery(this).closest(".frm_image_preview_wrapper");e.preventDefault(),e.stopPropagation(),t.find("img").attr("src",""),t.find(".frm_image_preview_frame").hide(),t.find(".frm_choose_image_box").show(),t.find("input.frm_image_id").val(0).trigger("change")}function At(){var e=jQuery(this).closest("li").find(".frm_form_fields select");this.checked?e.attr("multiple","multiple"):e.removeAttr("multiple")}function St(){var e=document.getElementById("dropform-search-input");null!==e&&setTimeout(function(){e.focus()},100)}function Lt(e){var t=e.target,r=t.closest(".frm_warning_style");jQuery(r).fadeOut(400,function(){return r.remove()});var n=t.dataset.action,i=new FormData;h(n,i)}function It(e){e.preventDefault()}function Bt(){var e,t=this.parentNode,r=t.parentNode,n=r.querySelectorAll("li:not(.frm_hidden)");2===n.length&&(null===(e=Array.from(n).find(function(e){return e!==t}).querySelector(".frm_remove_tag"))||void 0===e||e.classList.add("frm_disabled"));var i,o=this.getAttribute("data-fid");jQuery(t).fadeOut("fast",function(){wp.hooks.doAction("frm_before_delete_field_option",this),jQuery(t).remove(),jQuery(r).find(".frm_other_option").length<1&&(null!==(i=document.getElementById("other_input_"+o))&&(i.value=0),jQuery("#other_button_"+o).fadeIn("fast"))}),Mi()}function qt(){var e,t,r,n;(e=jQuery(this)).is(":checked")&&(t=function(){setTimeout(function(){e.prop("checked",!1)},0)},r=function(){e.off("mouseup",n)},n=function(){t(),r()},e.on("mouseup",n),e.one("mouseout",r))}function Ct(){this.value===a.new_option&&(this.setAttribute("data-value-on-focus",this.value),this.value="")}function Nt(e){return C(q("Are you sure you want to delete these %1$s selected field(s)?","formidable"),e)}function Ot(){var e=a.conf_delete,t=this.parentNode.parentNode.parentNode.parentNode.parentNode,r=t.parentNode,n=jQuery(this).closest("li.form-field"),i=n.data("fid");if("divider"===n.data("ftype")){var o=document.querySelectorAll(".frm-field-group-hover-target .start_divider .frm_field_box"),l=0;o.forEach(function(e){var t=e.querySelectorAll("li.form-field");t&&(l+=t.length)}),l&&(e=Nt(++l))}return r.classList.contains("frm-section-collapsed")||r.classList.contains("frm-page-collapsed")||("divider_section_only"===t.className&&(e=a.conf_delete_sec),this.setAttribute("data-frmverify",e),this.setAttribute("data-frmverify-btn","frm-button-red"),this.setAttribute("data-deletefield",i),Oe(),P(this)),!1}function Tt(){this.closest("li.form-field").click()}function Ft(){var e,t;null!==(e=document.querySelector(".frm-field-group-hover-target"))&&(e.classList.add("frm-selected-field-group"),(t=document.createElement("div")).classList.add("frm-delete-field-groups","frm_hidden"),document.body.appendChild(t),t.click())}function Dt(){var e=document.querySelector(".frm-field-group-hover-target");if(null!==e){var t="frm_field_group_"+we(),r=document.createTextNode("");We(r);var n=jQuery(r).closest("li").get(0);n.classList.add("frm_hidden");var i=n.querySelector("ul");i.id=t,jQuery(e.closest("li.frm_field_box")).after(n);var o=le(jQuery(e)),a=[],l=[],s=o.length,d={},c=0;jQuery(n).on("frm_added_duplicated_field_to_row",function(e,t){if(d[jQuery(t.duplicatedFieldHtml).attr("data-fid")]=t.originalFieldId,!(s>++c)){var r=jQuery(i),o=le(r);l.forEach(function(e){e.remove()});for(var u=0;u<s;++u)r.append(r.children('li.form-field[frm-field-order="'+u+'"]'));se(o.first(),a),n.classList.remove("frm_hidden"),En(),le(r).each(function(){Ne(d[this.getAttribute("data-fid")],jQuery(this).prop("outerHTML"))})}}),o.each(function(e){var r;(r=document.createElement("li")).classList.add("frm_clone_field"),r.setAttribute("frm-target-row-id",t),r.setAttribute("frm-field-order",e),this.appendChild(r),r.click(),l.push(r),a.push(ar(lr(this.classList)))})}}function Mt(){var e,t,r;if(null!==(e=document.querySelector(".frm-field-group-hover-target"))){Je(),t=Ht(e.querySelector("li.form-field")),e.classList.add("frm-has-open-field-group-popup"),jQuery(document).on("click","#frm_builder_page",Pt),(r=c()).style.position="relative",r.appendChild(zt(t,this)),this.parentNode.appendChild(r);var n=r.querySelector(".frm-row-layout-option");n&&n.focus()}}function Pt(e){e.target.classList.contains("frm-custom-field-group-layout")||e.target.classList.contains("frm-cancel-custom-field-group-layout")||jQuery(e.target).closest("#frm_field_group_controls").length||jQuery(e.target).closest("#frm_field_group_popup").length||fr()}function Ht(e){var t=jQuery(e).closest("ul");return t.length?le(t).length:wr()}function zt(e,t){var r,n,i,o,a,l;return null===(r=document.getElementById("frm_field_group_popup"))?r=c():r.innerHTML="",r.id="frm_field_group_popup",(n=c()).style.padding="0 24px 12px",n.appendChild(((a=c()).classList.add("frm-row-layout-title"),a.textContent=q("Row Layout","formidable"),a)),i=function(e){var t,r;return t=Yt(),e>6?(t.appendChild($t(e,"even")),t):(5!==e&&t.appendChild($t(e,"even")),e%2==1&&t.appendChild($t(e,"middle")),e<6?(t.appendChild($t(e,"left")),t.appendChild($t(e,"right"))):((r=c()).classList.add("frm_fourth"),t.prepend(r)),t)}(e),null!==(o=t.closest("ul.frm_sorting"))&&function(e,t){var r,n,i;for(r=t.children.length,n=0;n<r;++n)if(Wt(i=t.children[n],e))return void i.classList.add("frm-active-row-layout")}(o,i),n.appendChild(i),r.appendChild(n),r.appendChild(document.createElement("hr")),e<=6&&r.appendChild(((l=c()).textContent=q("Custom layout","formidable"),jQuery(l).prepend(Gt("frm_gear_svg")),l.classList.add("frm-custom-field-group-layout"),Rt(l),l)),r.appendChild(function(){var e=c();return e.textContent=q("Break into rows","formidable"),jQuery(e).prepend(Gt("frm_break_field_group_svg")),e.classList.add("frm-break-field-group"),Rt(e),e}()),r}function Rt(e,t){e.setAttribute("tabindex",0),e.setAttribute("role","button"),void 0!==t&&e.setAttribute("aria-label",t)}function Gt(e){var t=document.getElementById(e).cloneNode(!0);return t.id="",t}function $t(e,t){var r,n;switch((r=c()).classList.add("frm-row-layout-option"),Rt(r,t),e){case 6:n="frm_half";break;case 5:n="frm_third";break;default:n=e>6?"frm_full":e%2==1?"frm_fourth":"frm_third"}return r.classList.add(n),r.setAttribute("layout-type",t),r.appendChild(function(e,t){var r,n,i;for(r=Yt(),n=0;n<e;++n)(i=c()).classList.add(Vt(e,t,n)),i.style.height="16px",i.style.background="#9EA9B8",i.style.borderRadius="1px",r.appendChild(i);return r}(e,t)),r}function Wt(e,t){return Ut(e)===Ut(t)}function Ut(e){var t,r;return t=e.classList.contains("frm-row-layout-option")?jQuery(e).find(".frm_grid_container").children():le(jQuery(e)),r=[],t.each(function(){r.push(ar(lr(this.classList)))}),r.join("-")}function Vt(e,t,r){if("even"===t)return Kt(e,r);if("middle"===t){if(3===e)return 1===r?"frm6":"frm3";if(5===e)return 2===r?"frm4":"frm2"}else{if("left"===t)return 0===r?Xt(e):Jt(e);if("right"===t)return r===e-1?Xt(e):Jt(e)}return"frm12"}function Kt(e,t){return e>6?"frm1":-1!==[2,3,4,6].indexOf(e)?sr(12/e):5===e&&void 0!==t?0===t?"frm4":"frm2":"frm12"}function Jt(e){switch(e){case 2:case 3:return"frm3";case 4:case 5:return"frm2";case 6:return"frm1"}return"frm12"}function Xt(e){switch(e){case 2:return"frm9";case 3:case 4:return"frm6";case 5:return"frm4";case 6:return"frm7"}return"frm12"}function Yt(){var e=c();return e.classList.add("frm_grid_container"),e}function Zt(){var e=document.querySelector(".frm-field-group-hover-target");if(e){var t=this.getAttribute("layout-type");se(le(jQuery(e)).first(),t),fr()}}function er(){var e,t;e=tr(),t=this.getAttribute("layout-type"),se(le(e).first(),t),yr()}function tr(){var e=jQuery(".frm-selected-field-group"),t=e.first();return e.not(t).each(function(){le(jQuery(this)).each(function(){var e=this.parentNode;le(t).last().after(this),jQuery(e).children("li.form-field").length||e.closest("li.frm_field_box").remove()})}),En(),se(le(t).first()),t}function rr(){null===this.closest(".frm-merge-fields-into-row")&&nr(le(jQuery(".frm-field-group-hover-target")))}function nr(e){var t,r,n,i,o,a,l,s,d,u,f,m,_,p,g;for(t=e.length,(r=document.getElementById("frm_field_group_popup")).innerHTML="",(n=c()).style.padding="0 24px",i=Kt(5===t?6:t),(o=c()).style.padding="20px 0",o.classList.add("frm_grid_container"),5===t&&((a=document.createElement("span")).classList.add("frm1"),o.appendChild(a)),!1!==(l=wr()>0&&ar(Kt(t)))&&l>=12&&(l=Math.floor(12/t)),s=0;s<t;++s)(d=document.createElement("input")).type="text",d.classList.add(i),d.classList.add("frm-custom-grid-size-input"),d.value=!1!==l?l:ar(lr(e.get(s).classList)),o.appendChild(d);(u=c()).classList.add("frm-builder-popup-heading"),u.textContent=q("Enter number of columns for each field","formidable"),(f=c()).classList.add("frm-builder-popup-subheading"),f.textContent=q("Layouts are based on a 12-column grid system","formidable"),n.appendChild(u),n.appendChild(f),n.appendChild(o),(m=c()).style.textAlign="right",(g=or()).classList.add("button-secondary","frm-button-secondary"),(_=g).textContent=q("Cancel","formidable"),_.classList.add("frm-cancel-custom-field-group-layout"),_.style.marginRight="10px",p=function(){var e=or();return e.classList.add("button-primary","frm-button-primary"),e}(),p.textContent=q("Save","formidable"),p.classList.add("frm-save-custom-field-group-layout"),m.appendChild(_),m.appendChild(p),n.appendChild(m),r.appendChild(n),setTimeout(function(){var e=r.querySelector("input.frm-custom-grid-size-input").focus();e&&e.focus()},0)}function ir(){$fields=jQuery(".frm-selected-field-group li.form-field"),nr($fields)}function or(){var e=document.createElement("a");return e.setAttribute("href","#"),e.classList.add("button"),e.style.textDecoration="none",e}function ar(e){switch(e){case"frm_half":return 6;case"frm_third":return 4;case"frm_two_thirds":return 8;case"frm_fourth":return 3;case"frm_three_fourths":return 9;case"frm_sixth":return 2}return 0===e.indexOf("frm")?parseInt(e.substr(3)):12}function lr(e){var t,r,n;for(t=["frm_full","frm_half","frm_third","frm_fourth","frm_sixth","frm_two_thirds","frm_three_fourths","frm1","frm2","frm3","frm4","frm5","frm6","frm7","frm8","frm9","frm10","frm11","frm12"],r=0;r<t.length;++r)if(n=t[r],e.contains(n))return n;return""}function sr(e){return"frm"+e}function dr(){var e,t;e=document.querySelector(".frm-field-group-hover-target"),le(t=jQuery(e)).each(function(e){0!==e&&t.parent().after($e(this)),function(e){se(e,"clear")}(jQuery(this))}),fr()}function cr(){this.select()}function ur(){jQuery(document.getElementById("frm_field_group_popup")).replaceWith(zt(Ht(this),this))}function fr(){var e,t;null!==(e=document.getElementById("frm_field_group_popup"))&&(null!==(t=document.querySelector(".frm-has-open-field-group-popup"))&&(t.classList.remove("frm-has-open-field-group-popup"),e.parentNode.remove()),jQuery(document).off("click","#frm_builder_page",Pt))}function mr(){var e,t;e=[],jQuery(document.getElementById("frm_field_group_popup").querySelectorAll(".frm_grid_container input")).each(function(){e.push(parseInt(this.value))}),(t=jQuery(document.getElementById("frm_field_group_controls"))).length&&"none"!==t.get(0).style.display?se(le(jQuery(document.querySelector(".frm-field-group-hover-target"))).first(),e):(se(le(tr()).first(),e),yr()),fr()}function _r(e){if(function(){var e=document.getElementById("frm-field-group-message");if(document.querySelectorAll(".edit_form_item:not(.edit_field_type_end_divider)").length<2)pr(e);else if(e)!function(e){e&&(e.classList.remove("frm_hidden"),e.classList.add("frm-fadein-up-back"))}(e);else{e=c({id:"frm-field-group-message",className:"frm-flex-center frm-fadein-up-back",children:[u({id:"frm-field-group-message-dismiss",className:"frm-flex-center",child:m({href:"#frm_close_icon"})})]}),document.getElementById("post-body-content").appendChild(e);var t,r=((t=document.createElement("span")).classList.add("frm-field-group-message-text","frm-flex-center"),t.innerHTML=C(frm_admin_js.holdShiftMsg,'<span class="frm-meta-tag frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>',"</span>"),t);e.prepend(r),document.getElementById("frm-field-group-message-dismiss").addEventListener("click",function(){pr(document.getElementById("frm-field-group-message"))})}}(),"ul"===e.originalEvent.target.nodeName.toLowerCase()){var t=document.querySelector(".frm-field-group-hover-target");if(t){var r=e.ctrlKey||e.metaKey,n=e.shiftKey,i=t.classList.contains("frm-selected-field-group"),o=function(){var e=jQuery(".frm-selected-field-group");if(e.length)return e;var t=gr();if(t){var r=t.closest("ul");if(r&&1===le(jQuery(r)).length)return r.classList.add("frm-selected-field-group"),jQuery(r)}return jQuery()}(),a=o.length;if(r||n){var l=gr();if(null===l||jQuery(l).siblings("li.form-field").length||(l.parentNode.classList.add("frm-selected-field-group"),++a),r){if(i)return--a,t.classList.remove("frm-selected-field-group"),void hr(a);++a}else if(n&&!i){++a;var s=o.first();(s.parent().index()<jQuery(t.parentNode).index()?s.parent().nextUntil(t.parentNode):s.parent().prevUntil(t.parentNode)).each(function(){var e=jQuery(this).closest("li").find("ul.frm_sorting");e.hasClass("frm-selected-field-group")||(++a,e.addClass("frm-selected-field-group"))})}}else yr(),a=1;t.classList.add("frm-selected-field-group"),hr(a),document.querySelectorAll(".frm-selected-field-group").length<2||pr(document.getElementById("frm-field-group-message")),jQuery(document).off("click",yr),jQuery(document).on("click",yr)}}}function pr(e){e&&(e.classList.add("frm_hidden"),e.classList.remove("frm-fadein-up-back"))}function gr(){return document.getElementById("frm-show-fields").querySelector("li.form-field.selected")}function hr(e){Ke(!0),e>=2||1===e&&le(jQuery(document.querySelector(".frm-selected-field-group"))).length>1?function(){var e,t,r,n,i;if(null!==(e=document.getElementById("frm_field_multiselect_popup")))return e.classList.toggle("frm-unmergable",!br()),e;(e=c()).id="frm_field_multiselect_popup",br()||e.classList.add("frm-unmergable"),(t=c()).classList.add("frm-merge-fields-into-row"),t.textContent=q("Merge into row","formidable"),(r=document.createElement("a")).style.marginLeft="5px",r.classList.add("frm_icon_font","frm_arrowdown6_icon"),r.setAttribute("href","#"),t.appendChild(r),e.appendChild(t),(n=c()).classList.add("frm-multiselect-popup-separator"),e.appendChild(n),(i=c()).classList.add("frm-delete-field-groups"),i.appendChild(Gt("frm_trash_svg")),e.appendChild(i),document.getElementById("post-body-content").appendChild(e),jQuery(e).hide().fadeIn()}():vr(),De()}function yr(e){if(void 0!==e){if(null!==e.originalEvent.target.closest("#frm-show-fields"))return;if(e.originalEvent.target.classList.contains("frm-merge-fields-into-row"))return;if(null!==e.originalEvent.target.closest(".frm-merge-fields-into-row"))return;if(e.originalEvent.target.classList.contains("frm-custom-field-group-layout"))return;if(e.originalEvent.target.classList.contains("frm-cancel-custom-field-group-layout"))return}jQuery(".frm-selected-field-group").removeClass("frm-selected-field-group"),jQuery(document).off("click",yr),vr()}function vr(){var e=document.getElementById("frm_field_multiselect_popup");null!==e&&e.remove()}function br(){var e,t,r,n,i;if(1===(r=(e=document.querySelectorAll(".frm-selected-field-group")).length))return!1;for(t=0,n=0;n<r;++n){if(null!==(i=e[n]).querySelector(".edit_field_type_break, .edit_field_type_hidden"))return!1;if((t+=le(jQuery(i)).length)>12)return!1}return!0}function jr(e){var t;null===e.originalEvent.target.closest("#frm_field_group_popup")&&(e.originalEvent.target.classList.contains("frm-custom-field-group-layout")||(t=zt(wr(),document.querySelector(".frm-selected-field-group").firstChild),this.appendChild(t)))}function wr(){var e=0;return jQuery(document.querySelectorAll(".frm-selected-field-group")).each(function(){e+=le(jQuery(this)).length}),e}function xr(){var e,t,r,n;n=[],jQuery(".frm-selected-field-group > li.form-field").each(function(){n.push(this.dataset.fid)}),t=function(e){return function(t){t.preventDefault(),function(e){e.forEach(function(e){kr(e)})}(e)}}(e=n),null!==(r=document.getElementById("frm_field_multiselect_popup"))&&r.remove(),this.setAttribute("data-frmverify",Nt(e.length)),P(this);var i=document.getElementById("frm-confirmed-click");null==i||i.removeAttribute("data-deletefield"),jQuery(i).on("click",t),jQuery("#frm_confirm_modal").one("dialogclose",function(){jQuery(i).off("click",t)})}function Qr(){kr(this.getAttribute("data-deletefield"))}function kr(e){var t=jQuery("#frm_field_id_"+e);Er(e),t.hasClass("edit_field_type_divider")&&t.find("li.frm_field_box[data-fid]").each(function(){Er(this.getAttribute("data-fid"))}),An()}function Er(e){jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_delete_field",field_id:e,nonce:frmGlobal.nonce},success:function(){var t,r=jQuery(document.getElementById("frm_field_id_"+e)),n=jQuery("#frm-single-settings-"+e);n.is(":visible")&&(null===(t=document.querySelector(".frm-settings-panel .frm-tabs-navs ul > li:first-child"))||void 0===t||t.click(),document.querySelector("#frm-options-panel .frm-single-settings").classList.remove("frm_hidden")),function(e){var t=e[0].querySelectorAll(".frm-inline-modal[data-fills]");t.length&&t.forEach(function(e){e.classList.add("frm_hidden"),e.removeAttribute("data-fills"),e.closest("form").appendChild(e)})}(n),n.remove(),r.fadeOut("slow",function(){var e,t=r.closest(".start_divider"),n=r.data("type"),i=r.siblings("li.form-field");if(i.length||(r.is(".edit_field_type_end_divider")?i.length=r.closest("li.form-field").siblings():e=r.closest("ul.frm_sorting").parent()),r.remove(),"break"===n?Fr():"product"===n&&(Be(),it()),i.length?se(i.first()):e.remove(),0===jQuery("#frm-show-fields li").length||function(){if(w.get(0).childElementCount>1)return!1;var e=w.get(0).firstElementChild.firstElementChild.querySelectorAll("li.frm_field_box");return!(e.length>1)&&e[0].classList.contains("edit_field_type_submit")}()){var o=document.getElementById("frm_form_editor_container");o.classList.remove("frm-has-fields"),o.classList.add("frm-empty-fields")}else t.length&&Sn(t);G()}),r.length&&wp.hooks.doAction("frm_after_delete_field",r[0])}})}function Ar(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=A,r=document.getElementById("frm_logic_row_"+e).querySelectorAll(".frm_logic_row");return jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_logic_row",form_id:t,field_id:e,nonce:frmGlobal.nonce,meta_name:Sr(r,"frm_logic_"+e+"_"),fields:rt()},success:function(t){jQuery(document.getElementById("logic_"+e)).fadeOut("fast",function(){var r=document.getElementById("frm_logic_row_"+e);r.insertAdjacentHTML("beforeend",t);var n=r.querySelector(".frm_logic_row:last-child .frm-logic-rule-text");n&&(n.textContent=r.dataset.ruleText);var i=r.closest(".frm_logic_rows");i.style.height="auto",jQuery(i).fadeIn("fast")})}}),!1}function Sr(e,t,r){return e.length?parseInt(e[e.length-1].id.replace(t,""),10)+1:void 0!==r?r:0}function Lr(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=A,r=document.getElementById("frm_watch_lookup_block_"+e).children;return jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_watch_lookup_row",form_id:t,field_id:e,row_key:Sr(r,"frm_watch_lookup_"+e+"_"),nonce:frmGlobal.nonce},success:function(t){var r,n=jQuery(document.getElementById("frm_watch_lookup_block_"+e));n.append(t),n.fadeIn("slow"),null===(r=document.getElementById("frm_watch_lookup_label_".concat(e)))||void 0===r||r.classList.remove("frm-force-hidden")}}),!1}function Ir(e){var t,r,n=jQuery(e).closest(".frm-single-settings").attr("data-fid"),i=jQuery(e).closest("ul").get(0).querySelectorAll(".field_"+n+"_option");for(t in i)if((r=i[t]).id!==e.id&&r.value===e.value&&"true"!==r.getAttribute("data-duplicate"))return!0;return!1}function Br(){var e,t;null===this.getAttribute("data-value-on-load")&&(this.setAttribute("data-value-on-load",this.value),t=jQuery(this).closest(".frm-single-settings").attr("data-fid"),(e=document.createElement("input")).value=this.value,e.setAttribute("type","hidden"),e.setAttribute("name","optionmap["+t+"]["+this.value+"]"),this.parentNode.appendChild(e),void 0===L[t]&&(L[t]={}),L[t][this.value]=e),"true"===this.getAttribute("data-duplicate")&&(this.removeAttribute("data-duplicate"),Ir(this))?this.setAttribute("data-value-on-focus",this.getAttribute("data-value-on-load")):""===this.value&&a.new_option===this.getAttribute("data-value-on-focus")||this.setAttribute("data-value-on-focus",this.value)}function qr(e){var t,r=e.closest(".frm_single_option");return e.parentElement.classList.contains("frm_single_option")?{newValue:r.querySelector('.frm_option_key input[type="text"]').value,newLabel:t=e.value}:(t=r.querySelector('input[type="text"]').value,{newValue:e.value,newLabel:t})}function Cr(){var e,t,r,n,i,o,a,l,s,d,c,u,f=function(e){var t=function(e){var t,r,n=null!==(t=null===(r=e.closest(".frm-single-settings").querySelector(".frm_toggle_sep_values"))||void 0===r?void 0:r.checked)&&void 0!==t&&t,i=e.closest(".frm_single_option");return n&&e.parentElement.classList.contains("frm_single_option")?{oldValue:i.querySelector('.frm_option_key input[type="text"]').getAttribute("data-value-on-focus"),oldLabel:e.getAttribute("data-value-on-focus")}:{oldValue:e.getAttribute("data-value-on-focus"),oldLabel:i.querySelector('input[type="text"]').getAttribute("data-value-on-focus")}}(e),r=t.oldValue,n=t.oldLabel,i=qr(e);return{oldValue:r,oldLabel:n,newValue:i.newValue,newLabel:i.newLabel}}(this),m=f.oldValue,_=f.oldLabel,p=f.newValue,g=f.newLabel;if(m!==p||_!==g){var h=this.closest(".frm-single-settings");if(t=h.getAttribute("data-fid"),e=this.getAttribute("data-value-on-load"),Ir(this))return this.setAttribute("data-duplicate","true"),void(void 0!==L[t]&&void 0!==L[t][e]&&(L[t][e].value=e));for(void 0!==L[t]&&void 0!==L[t][e]&&(L[t][e].value=p),s=[],rows=D.querySelectorAll(".frm_logic_row"),o=rows.length,a=0;a<o;a++)if((i=rows[a]).querySelector(".frm_logic_field_opts").value===t){var y;n=i.id.split("_")[2],l=i.querySelector('select[name="field_options[hide_opt_'+n+'][]"]'),(c=""===m?[]:l.querySelectorAll('option[value="'+m+'"]')).length||(c=l.querySelectorAll('option[value="'+p+'"]')).length||(null!==(y=h.querySelector(".frm_toggle_sep_values"))&&void 0!==y&&y.checked||(u=Nr(l,m)),u||(u=document.createElement("option"),l.appendChild(u))),c.length&&(u=c[c.length-1]),u.setAttribute("value",p),u.textContent=g,-1===s.indexOf(n)&&s.push(n)}for(r in s)d=s[r],oi(document.getElementById("frm-single-settings-"+d))}}function Nr(e,t){for(var r=e.options,n=0;n<r.length;n++){var i=r[n];if(t===i.textContent)return i}return null}function Or(){var e=this.id.replace("get_values_form_",""),t=document.getElementById("get_values_field_"+e),r=this.getAttribute("data-fieldtype");if(""===this.value)t.options.length=1;else{var n=this.value;jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_get_options_for_get_values_field",form_id:n,field_type:r,nonce:frmGlobal.nonce},success:function(e){t.innerHTML=e}})}}function Tr(){var e,t,r=this.name.replace("field_options[data_type_","").replace("]","");(e=document.getElementById("frm_add_watch_lookup_link_"+r))&&(e=e.parentNode,"text"===this.value?null!==(t=document.getElementById("frm_watch_lookup_block_"+r))&&(t.innerHTML="",e.classList.add("frm_hidden"),e.previousElementSibling.style.display="none",e.previousElementSibling.previousElementSibling.style.display="none",e.previousElementSibling.previousElementSibling.previousElementSibling.style.display="none"):e.classList.remove("frm_hidden"),ht(r,this.value))}function Fr(){var e,t,r=document.getElementsByClassName("frm-page-num");if(r.length>1)for(document.getElementById("frm-fake-page").style.display="block",e=0;e<r.length;e++)t=r[e].parentNode.parentNode.parentNode.classList,1===e?t.add("frm-first-page"):t.remove("frm-first-page"),r[e].textContent=e+1;else document.getElementById("frm-fake-page").style.display="none";wp.hooks.doAction("frm_renumber_page_breaks",r)}function Dr(){var e,t,r,n=jQuery(this).closest(".frm_field_box[data-ftype=break]");n.length?function(e){var t=Mr(e.get(0).parentNode.closest("li.frm_field_box").nextElementSibling);Pr(e,t)}(n):(e=document.getElementById("frm-fake-page"),t=document.getElementById("frm-show-fields").firstElementChild,r=Mr(t),"break"!==t.getAttribute("data-ftype")&&Pr(jQuery(e),r))}function Mr(e){var t,r;if(t=jQuery(),null===e)return t;r=e;do{if(null!==r.querySelector(".edit_field_type_break"))break;t=t.add(jQuery(r)),r=r.nextElementSibling}while(null!==r);return t}function Pr(e,t){var r,n=t.length,i=Math.min(n,3);if(e.hasClass("frm-page-collapsed"))for(e.removeClass("frm-page-collapsed"),t.removeClass("frm-is-collapsed"),r=0;r<i;r++)r===i-1?jQuery(t[r]).slideDown(150,function(){t.show()}):jQuery(t[r]).slideDown(150);else for(e.addClass("frm-page-collapsed"),t.addClass("frm-is-collapsed"),r=0;r<i;r++)r===i-1?jQuery(t[r]).slideUp(150,function(){t.css("cssText","display:none !important;")}):jQuery(t[r]).slideUp(150)}function Hr(){this.parentNode.parentNode.parentNode.parentNode.classList.toggle("frm-section-collapsed")}function zr(){this.classList.toggle("frm-collapsed");var e="true"===this.getAttribute("aria-expanded")||!1;this.setAttribute("aria-expanded",!e),Rr(this.nextElementSibling)}function Rr(e){if(e){var t=e.scrollHeight;t<=0||(t+=250,e.style.setProperty("--slide-height","".concat(t,"px")),e.style.setProperty("--slide-time","".concat(Math.ceil(.8*t),"ms")))}}function Gr(){if(this.id){var e=document.querySelectorAll('[data-changeme="'+this.id+'"]')[0],t=this.id.replace("field_label_",""),r=document.getElementById("field_options_type_"+t),n=r.value;void 0!==e&&(n=function(e){return"divider"===e?e="section":"range"===e?e="slider":"data"===e?e="dynamic":"form"===e&&(e="embed form"),e}(n="SELECT"===r.tagName?r.options[r.selectedIndex].text.toLowerCase():n.replace("_"," ")),setTimeout(function(){e.value.toLowerCase()===n?e.select():e.focus()},50))}}function $r(){var e=document.querySelectorAll('[data-changeme="'+this.id+'"]')[0];void 0!==e&&setTimeout(function(){e.focus(),Wr(e)},50)}function Wr(e){var t=e.closest(".frm-collapse-me");null!==t&&t.previousElementSibling.classList.remove("frm-collapsed")}function Ur(e){var t,r;(t=e.target.classList).contains("frm-collapse-page")||t.contains("frm-sub-label")||null!==e.target.closest(".dropdown")||(null!==this.closest(".start_divider")&&e.stopPropagation(),this.classList.contains("edit_field_type_divider")&&null!==(r=e.originalEvent.target.closest("ul.frm_sorting"))&&(r.classList.contains("edit_field_type_divider")||r.parentNode.parentNode.classList.contains("start_divider"))||function(e){var t=jQuery(e);-1===e.className.indexOf("selected")&&(-1!==e.className.indexOf("edit_field_type_end_divider")&&t.closest(".edit_field_type_divider").hasClass("no_repeat_section")||(Je(),t.addClass("selected"),function(e){var t,r,n,i=e.getAttribute("data-fid"),o=e.getAttribute("data-type"),a=document.querySelectorAll(".frm-single-settings:not(.frm_hidden)");for(r=0;r<a.length;r++)a[r].classList.add("frm_hidden");oi(n=document.getElementById("frm-single-settings-"+i)),o&&"quantity"===o&&nt(jQuery(n).find(".frmjs_prod_field_opt")[0]),null===(t=document.querySelector(".frm-settings-panel.frm-scrollbar-wrapper"))||void 0===t||t.scrollTo({top:0,behavior:"instant"}),n.classList.remove("frm_hidden"),document.getElementById("frm-options-panel-tab").click();var l=n.querySelector(".wp-editor-area");l&&frmDom.wysiwyg.init(l,{setupCallback:ii}),wp.hooks.doAction("frmShowedFieldSettings",e,n),function(e,t,r){var n;if(function(e){return wp.hooks.applyFilters("frm_fields_with_shortcode_popup",["html"]).includes(e)}(e)){var i="#frm-single-settings-"+t;if(!document.querySelector(i+" .frm-show-box")){null===(n=r.querySelector(".wp-editor-container"))||void 0===n||n.classList.add("frm_has_shortcodes");var o=function(){return frmDom.svg({href:"#frm_more_horiz_solid_icon",classList:["frm-show-box"]})};document.querySelectorAll(i+" .frm_has_shortcodes textarea").forEach(function(e){var t=u({className:"frm-with-right-icon"});e.parentNode.insertBefore(t,e),t.appendChild(o()),t.appendChild(e)})}}}(o,i,n)}(e)))}(this))}function Vr(e){var t=e.target;if("custom"===t.value){var r=t.dataset.fieldId,n=document.getElementById("frm-field-format-custom-".concat(r)).querySelector(".frm_format_opt");"international"!==n.value&&"currency"!==n.value&&"number"!==n.value||n.setAttribute("value","")}setTimeout(function(){t.querySelectorAll("option").forEach(function(e){e.selected&&e.classList.contains("frm_show_upgrade")&&(t.value="none")})},0)}function Kr(){var e=this.getAttribute("data-fid");Wr(document.getElementById("field_options_field_key_"+e))}function Jr(){var e=jQuery(this).closest(".frm_field_box");e.find(".repeat_icon_links").removeClass("repeat_format repeat_formatboth repeat_formattext").addClass("repeat_format"+this.value),"text"===this.value||"both"===this.value?(e.find(".frm_repeat_text").show(),e.find(".repeat_icon_links a").addClass("frm_button")):(e.find(".frm_repeat_text").hide(),e.find(".repeat_icon_links a").removeClass("frm_button"))}function Xr(){var e=this.value;""!==e&&(e<2||e>200)&&(H(a.repeat_limit_min),this.value="")}function Yr(){var e=this.value;""!==e&&(e<1||e>200)&&(H(a.checkbox_limit),this.value="")}function Zr(e,t){jQuery(e).closest(".frm_field_box").find(".frm_"+t+"_form_row .frm_repeat_label").text(e.value)}function en(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=this.value,r=document.getElementById("frm_show_selected_fields_"+e),n=document.getElementById("frm_show_selected_forms_"+e);jQuery(n).find("select").val(""),"form"===t?(n.style.display="inline",function(e){if(null!==e)for(;e.firstChild;)e.removeChild(e.firstChild)}(r)):(r.style.display="none",n.style.display="none",kn(t,e))}function tn(){var e,t;(e=rn(this))&&(t=jQuery(this).closest(".frm_single_option"),function(e,t,r){var n,i,o,a,l,s,d=r.data("optkey"),u=yn(e),f=jQuery('label[for="field_'+t+"-"+d+'"]'),m="field_options[options_"+e+"]["+d+"]",_=jQuery('input[name="'+m+'[label]"]');if(f.length<1)return on(e),void((o=r.find('input[name^="default_value_"]')).is(":checked")&&_.length>0&&jQuery('select[name^="item_meta['+e+']"]').val(_.val()));if(a=f.children("input"),n=_.length<1?(_=jQuery('input[name="'+m+'"]')).val():u?jQuery('input[name="'+m+'[value]"]').val():_.val(),!(_.length<1)){if(i=f[0].childNodes,vn(e))l=function(e,t,r){var n,i,o;return(n=e.find("img"))&&(i=n.attr("src")),o=bn(t),mn(t),gn(r.val(),o,i)}(r,e,_),(s=f.find(".frm_image_option_container")).length>0?s.replaceWith(l):(i[i.length-1].nodeValue="",f.append(l));else{var p=!1;i.forEach(function(t,r){if(!1===p)"INPUT"===t.tagName&&(p=r);else if(r===p+1){var n="";!function(e){var t=document.getElementsByName("field_options[image_options_"+e+"]"),r=Array.from(t).find(function(e){return e.checked&&"buttons"===e.value});return void 0!==r}(e)?t.nodeValue=" "+_.val():(n=c({className:"frm_label_button_container",text:" "+_.val()}),f[0].replaceChild(n,t))}else f[0].removeChild(t)})}a.val(n),o=r.find('input[name^="default_value_"]'),a.prop("checked",!!o.is(":checked"))}}(e.fieldId,e.fieldKey,t))}function rn(e){var t;return!!(t=jQuery(e).closest(".frm_sortable_field_opts")).length&&{fieldId:t.attr("id").replace("frm_field_","").replace("_opts",""),fieldKey:t.data("key")}}function nn(e){var t,r=document.getElementById("field_options_image_size_"+e),n="";return null!==r&&""!==(t=r.value)&&(n=t),n}function on(e){var t,r,n,i,o,a=jQuery('[name^="item_meta['+e+']"]');if(!(a.length<1)){if(a.is("select"))null!==(i=document.getElementById("frm_placeholder_"+e))&&""===i.value?cn(a[0],{sourceID:e}):cn(a[0],{sourceID:e,placeholder:i.value});else{r=fn(e),jQuery("#field_"+e+"_inner_container > .frm_form_fields").html(""),o=rn(jQuery("#frm_delete_field_"+e+"-000_container"));var l=jQuery("#field_"+e+"_inner_container > .frm_form_fields"),s=vn(e),d=s?nn(e):"",c=s?"frm_image_option frm_image_"+d+" ":"",u=To(e);for(n="hidden"===a.attr("type")?a.data("field-type"):a.attr("type"),t=0;t<r.length;t++)l.append(dn(n,r[t],e,o.fieldKey,u,c))}ln(e)}}function an(e,t){var r=document.getElementById("frm_field_"+e+"_opts").querySelector('input[value="'+t+'"]');return r?qr(r):{newValue:t,newLabel:t}}function ln(e,t){var r,n,i,o,a,l,s,d,c=D.querySelectorAll(".frm_logic_row"),u=c.length;for(o=(d=wp.hooks.applyFilters("frm_conditional_logic_field_options",function(e){var t,r,n,i,o,a,l=[];if(!(o=document.getElementById("frm_field_"+e+"_opts")))return l;for(a=(i=o.querySelectorAll(".frm_single_option")).length,t=0;t<a;t++)(n=i[t]).classList.contains("frm_hidden")||(r=n.querySelector(".field_"+e+"_option"),l.push(r.value));return l}(e),{type:t,fieldId:e})).length,rowIndex=0;rowIndex<u;rowIndex++)if((r=c[rowIndex]).querySelector(".frm_logic_field_opts").value==e){for(n=r.id.split("_")[2],i=r.querySelector('select[name="field_options[hide_opt_'+n+'][]"]'),a=o-1;a>=0;a--){var f;l=d[a];var m=null===(f=document.getElementById("frm_field_"+e+"_opts").querySelector('.frm_option_key input[type="text"]'))||void 0===f?void 0:f.value;m||(m=l),s=i.querySelector('option[value="'+m+'"]');var _=an(e,l),p=_.newValue,g=_.newLabel,h=document.querySelectorAll("#frm_field_"+e+"_opts input[data-value-on-focus]"),y=Array.from(h).find(function(e){return e.value===l});if(y){var v=y.dataset.valueOnFocus;if(v&&i.querySelector('option[value="'+v+'"]'))continue}sn(i,s,p,g)}null!==(s=i.querySelector('option[value=""]'))&&i.prepend(s)}}function sn(e,t,r,n){null!==t||e.querySelector('option[value="'+r+'"]')||((t=frmDom.tag("option",{text:n})).value=r),e.prepend(t)}function dn(e,t,r,n,i,o){var a,l="",s=-1!==t.key.indexOf("other"),d="field_"+n+"-"+t.key,c="scale"===e?"radio":e;return a='<input type="text" id="field_'+n+"-"+t.key+'-otext" class="frm_other_input frm_pos_none" name="item_meta[other]['+r+"]["+t.key+']" value="" />',this.getSingle=function(){return""!==(l=wp.hooks.applyFilters("frm_admin.build_single_option_template",l,{opt:t,type:e,fieldId:r,classes:o,id:d}))?l:'<div class="frm_'+e+" "+e+" "+o+'" id="frm_'+e+"_"+r+"-"+t.key+'"><label for="'+d+'"><input type="'+c+'" name="item_meta['+r+"]"+("checkbox"===e?"[]":"")+'" value="'+pn(t.saved)+'" id="'+d+'"'+(i?' data-price="'+t.price+'"':"")+(t.checked?' checked="checked"':"")+"> "+pn(t.label)+"</label>"+(s?a:"")+"</div>"},this.getSingle()}function cn(e,t){if(null!==e){var r=t.sourceID,n=t.placeholder,i=To(r),o=t.other;!function(e){var t;if(void 0!==e.options)for(t=e.options.length-1;t>=0;t--)e.remove(t)}(e);for(var a=fn(r,e.id.includes("frm_field_logic_opt")),l=void 0!==n,s=0;s<a.length;s++){var d=a[s].label,c=-1!==a[s].key.indexOf("other");if(l&&""!==d?un(e,n):l&&(d=n),l=!1,!c||o){var u=document.createElement("option");u.value=a[s].saved,u.innerHTML=pn(d),i&&u.setAttribute("data-price",a[s].price),e.appendChild(u)}}}}function un(e,t){var r=document.createElement("option"),n=e.firstChild;r.value="",r.innerHTML=t,null!==n?(e.insertBefore(r,n),e.selectedIndex=0):e.appendChild(r)}function fn(e){var t,r,n,i,o,a,l=arguments.length>1&&void 0!==arguments[1]&&arguments[1],s=[],d=jQuery('input[name^="field_options[options_'+e+']"]').filter('[name*="[label]"]'),c=To(e),u=bn(e),f=vn(e),m=yn(e);for(t=0;t<d.length;t++)d[t].name.indexOf("[000]")>0||(i=r=d[t].value,o=d[t].name.replace("field_options[options_"+e+"][","").replace("[label]","").replace("]",""),m&&(n=d[t].name.replace("[label]","[value]"),r=jQuery('input[name="'+n+'"]').val(),l&&""===i&&(i=""!==r?r:frm_admin_js.no_label)),f&&(i=gn(i,u,_n(d[t]),mn(e))),a={saved:r,label:i=frmAdminBuild.hooks.applyFilters("frm_choice_field_label",i,e,d[t],f),checked:hn(d[t].id),key:o},c&&(n=d[t].name.replace("[label]","[price]"),a.price=jQuery('input[name="'+n+'"]').val()),s.push(a));return s}function mn(e){var t=document.getElementById("frm-single-settings-"+e);return null===t?"radio":t.classList.contains("frm-type-checkbox")?"checkbox":"radio"}function _n(e){var t,r=jQuery(e).siblings(".frm_image_preview_wrapper");return r.length&&(t=r.find("img")).length?t.attr("src"):""}function pn(e){(e instanceof Element||e instanceof Document)&&(e=e.outerHTML);var t=jQuery.parseHTML(e).reduce(function(e,t){var r=frmDom.cleanNode(t);return"#text"===r.nodeName?e+r.textContent:e+r.outerHTML},"");return t!==e?pn(t):t}function gn(e,t,r,n){var i,o,l,s=e;return s=pn(s),r?o=_({src:r,alt:s}):(o=c({className:"frm_empty_url"})).innerHTML=a.image_placeholder_icon,i=t?" frm_label_with_image":"",(l=d("span",{className:"frm_text_label_for_image_inner"})).innerHTML=s,d("span",{className:"frm_image_option_container"+i,children:[o,d("span",{className:"frm_text_label_for_image",child:l})]})}function hn(e){return field=jQuery("#"+e),0!==field.length&&(checkbox=field.siblings("input[type=checkbox]"),checkbox.length&&checkbox.prop("checked"))}function yn(e){return jn("separate_value_"+e)}function vn(e){for(var t=!1,r=document.getElementsByName("field_options[image_options_"+e+"]"),n=0;n<r.length;n++)r[n].checked&&(t="0"!==r[n].value);return frmAdminBuild.hooks.applyFilters("frm_choice_field_images_as_options",t,e)}function bn(e){var t=!jn("hide_image_text_"+e);return frmAdminBuild.hooks.applyFilters("frm_choice_field_showing_label_with_image",t,e)}function jn(e){var t=document.getElementById(e);return null!==t&&t.checked}function wn(e){var t=e.closest(".frm-single-settings"),r=t.getAttribute("data-fid"),n=t.querySelector('[name="field_options[separate_value_'+r+']"]').checked;if(!n||e.name.endsWith("[value]")){var i=document.getElementById("frm_field_"+r+"_opts");Array.from(i.querySelectorAll('input[type="text"]')).filter(function(t){return t.id!==e.id&&n===t.name.endsWith("[value]")&&t.value===e.value}).length&&H(C(q('Duplicate option value "%s" detected',"formidable"),pn(e.value)))}}function xn(){var e=this.value;if(e){var t=this.parentNode.id.replace("frm_logic_","").split("_"),r=t[0],n=t[1],i=document.getElementById("frm_field_id_"+e).getAttribute("data-ftype"),o=document.getElementById("frm_show_selected_values_"+r+"_"+n),a="field_options[hide_opt_"+r+"][]",l="frm_field_logic_opt_"+r,s=!1,d="select"===i||"checkbox"===i||"radio"===i,c="text"===i||"email"===i||"phone"===i||"url"===i||"number"===i;if(d&&null!==document.getElementById("frm_has_hidden_options_"+e)&&(d=!1),d||c){var u=document.querySelector("#frm_logic_".concat(r,"_").concat(n,' [name="field_options[hide_field_cond_').concat(r,'][]"]')).value;o.innerHTML="";var f=d&&!["LIKE","not LIKE","LIKE%","%LIKE"].includes(u);f?s=document.createElement("select"):(s=document.createElement("input")).type="text",s.name=a,s.id=l+"_"+n,o.appendChild(s),f&&cn(document.getElementById(s.id),{sourceID:e,placeholder:"",other:!0})}else{var m=this.getAttribute("data-type");frmGetFieldValues(e,r,n,m,void 0,function(){var e=new CustomEvent("frm_logic_options_loaded");e.frmData={valueFieldType:i,fieldID:r,metaKey:n},document.dispatchEvent(e)})}}}function Qn(){var e=this.value;e&&kn(e,jQuery(this).closest(".frm-single-settings").data("fid"))}function kn(e,t){e&&jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_get_field_selection",field_id:t,form_id:e,nonce:frmGlobal.nonce},success:function(e){var r=jQuery("#frm_show_selected_fields_"+t);r.toggleClass("frm6",!e.includes("frm-inline-message")),r.html(e).show()}})}function En(){var e=this;return this.initOnceInAllInstances=function(){void 0===En.prototype.orderFieldsObject&&(En.prototype.orderFieldsObject={},En.prototype.fieldSettingsForm=document.getElementById("frm-end-form-marker").closest("form"))},this.getFieldOrderInputById=function(e,t){var r,n=En.prototype.orderFieldsObject,i=En.prototype.fieldSettingsForm;return void 0===n[e]?(null===(r=i.querySelector('input[name="field_options[field_order_'+e+']"]'))&&(r=t.querySelector('input[name="field_options[field_order_'+e+']"]')),n[e]=r,r):n[e]},this.initOnceInAllInstances(),Fr(),function(){var t,r,n,o,a=new oi,l=jQuery("li.frm_field_box",jQuery("#frm-show-fields"));for(i=0;i<l.length;i++)t=l[i].getAttribute("data-fid"),(n=null!==(r=e.getFieldOrderInputById(t,l[i]))?Object.assign({},r.value)[0]:null)!=(o=i+1)&&null!==n&&(r.value=o,singleField=l[i].querySelector("#frm-single-settings-"+t),a.append(singleField),Mi());a.moveFields()}()}function An(){document.querySelectorAll(".start_divider").forEach(function(e){Sn(jQuery(e))})}function Sn(e){var t,r,n,i;if(e.length){for(i=!1,r=(t=e.find("ul.frm_sorting")).length,n=0;n<r;++n)if(0!==le(jQuery(t.get(n))).length){i=!0;break}e.parent().children(".frm_no_section_fields").get(0).classList.toggle("frm_block",!i)}}function Ln(){var e=jQuery(this).data("slidedown"),t=jQuery(document.getElementById(e));return t.is(":hidden")&&(t.slideDown("fast"),this.style.display="none"),!1}function In(){var e=jQuery(this).data("slideup"),t=jQuery(document.getElementById(e));return t.slideUp("fast"),t.siblings("a").show(),!1}function Bn(e,t){""===t.getAttribute("value")?qn(jQuery(this)):function(e){var t,r=e.val();if(null===r)return e.next(".btn-group").find('.multiselect-container input[value=""]').prop("checked",!0),void qn(e);(t=r.indexOf(""))>=0&&(r.splice(t,1),e.val(r),e.next(".btn-group").find('.multiselect-container input[value=""]').prop("checked",!1))}(jQuery(this))}function qn(e){e.val(""),e.next(".btn-group").find('.multiselect-container input[value!=""]').prop("checked",!1)}function Cn(){jQuery(".frm-hide-empty").each(function(){0===jQuery(this).text().trim().length&&jQuery(this).remove()})}function Nn(e){e.preventDefault(),function(e,t,r){var n=document.getElementById(e.getAttribute("data-open")),i=jQuery(e).closest("p,ul"),o=void 0!==t;if(i.hasClass("frm-open"))i.removeClass("frm-open"),n.classList.add("frm_hidden");else{if(o||(t=$i(e)),null!==t){if(!o){var a=r.key;"Enter"!==a&&" "!==a&&t.focus()}i.after(n),n.setAttribute("data-fills",t.id.replace("-proxy-input","")),0===n.id.indexOf("frm-calc-box")&&et(n,!0)}i.addClass("frm-open"),n.classList.remove("frm_hidden"),wp.hooks.doAction("frm_show_inline_modal",n,e)}}(this,void 0,e)}function On(e){e.preventDefault(),this.parentNode.classList.add("frm_hidden"),jQuery('.frm-open [data-open="'+this.parentNode.id+'"]').closest(".frm-open").removeClass("frm-open")}function Tn(e){var t=e.target;t.closest(".frm-inline-modal.frm-modal-no-dismiss")||t.closest(".frm-show-inline-modal")||t.closest("#frm_adv_info")||t.closest(".frm-token-proxy-input")||document.querySelectorAll(".frm-inline-modal.frm-modal-no-dismiss:not(.frm_hidden)").forEach(function(e){e.classList.add("frm_hidden"),e.previousElementSibling.classList.remove("frm-open")})}function Fn(){var e,t=this.getAttribute("data-frmchange").split(",");for(e=0;e<t.length;e++)"updateOption"===t[e]?Mn(this):"updateDefault"===t[e]?Dn(this):"checkUniqueOpt"===t[e]?wn(this):this.value=this.value[t[e]]()}function Dn(e){var t=Pn(e),r=t.getAttribute("data-optkey"),n=Hn(t,r),i=t.querySelector('input[name="default_value_'+n+'"]');null!==i&&(i.value=e.value)}function Mn(e){var t,r=Pn(e),n=r.getAttribute("data-optkey"),i=Hn(r,n),o=document.getElementById("separate_value_"+i);null!==o&&!1===o.checked&&((t=document.getElementById("field_key_"+i+"-"+n)).value=e.value,Dn(t))}function Pn(e){var t=e.parentNode;return"LI"!==t.tagName&&(t=t.parentNode),t}function Hn(e,t){return e.id.replace("frm_delete_field_","").replace("-"+t+"_container","")}function zn(){var e=this;if(!Wn()){Kn(this);var t=jQuery(x),r=JSON.stringify(t.serializeArray());jQuery(document.getElementById("frm_compact_fields")).val(r),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_save_form",frm_compact_fields:r,nonce:frmGlobal.nonce},success:function(t){var r;(r=e).classList.remove("frm_loading_form"),r.classList.remove("frm_loading_button"),jQuery('.frm-single-settings ul input[type="text"][name^="field_options[options_"]').filter("[data-value-on-load]").removeAttr("data-value-on-load"),jQuery('input[type="hidden"][name^=optionmap]').remove(),E=0,r.setAttribute("aria-busy","false"),setTimeout(function(){jQuery(".frm_updated_message").fadeOut("slow",function(){this.parentNode.removeChild(this)})},5e3);var n,i=document.getElementById("post-body-content"),o=document.createElement("div");o.setAttribute("class","frm_updated_message"),o.innerHTML=t,i.insertBefore(o,i.firstChild),(n=document.getElementById("frm_submit_side_top")).hasAttribute("data-new-addon-installed")&&"true"===n.getAttribute("data-new-addon-installed")&&(n.removeAttribute("data-new-addon-installed"),window.location.reload())},error:function(){Rn(document.getElementById("frm_js_build_form"))}})}}function Rn(e){var t=e.ownerDocument.createElement("input");t.style.display="none",t.type="submit",e.appendChild(t).click(),e.removeChild(t)}function Gn(e){jQuery(e).trigger("change")}function $n(){var e;Wn()||(Kn(this),e=jQuery(x),jQuery(document.getElementById("frm_compact_fields")).val(JSON.stringify(e.serializeArray())),Rn(document.getElementById("frm_js_build_form")))}function Wn(){if((t=document.getElementById("frm_form_name"))&&""!==t.value.trim()||"true"!==F.get("new_template")||(null===(e=document.querySelector("#frm_top_bar #frm_bs_dropdown .frm_bstooltip"))||void 0===e?void 0:e.textContent.trim())!==frm_admin_js.noTitleText)return!1;var e,t,r=Bo("#frm-form-templates-modal","440px");return!!r&&(Gi(r,"72px"),r.dialog("open"),!0)}function Un(){var e=document.getElementById("frm-save-form-name-button"),t=document.getElementById("frm_new_form_name_input");p(e,Vn),t.addEventListener("keydown",function(e){"Enter"===e.key&&Vn.call(this,e)})}var Vn=function(e){var t=document.getElementById("frm_new_form_name_input").value.trim(),r=new FormData;r.append("form_id",F.get("id")),r.append("form_name",t),h("rename_form",r).then(function(e){F.delete("new_template"),T.search=F.toString(),history.replaceState({},"",T.toString()),null!==document.getElementById("frm_notification_settings")&&(document.getElementById("frm_form_name").value=t,document.getElementById("frm_form_key").value=e.form_key),jQuery("#frm-publishing").find(".frm_button_submit").trigger("click")})};function Kn(e){var t,r;Co(),jQuery("form.inplace_form").length&&jQuery(".inplace_save, .postbox").trigger("click"),e.classList.contains("frm_button_submit")?e.classList.add("frm_loading_form"):e.classList.add("frm_loading_button"),e.setAttribute("aria-busy","true"),t=document.querySelectorAll(".frm_format_dropdown, .frm_phone_type_dropdown"),r={none:"",international:"international",currency:"currency",number:"number"},t.forEach(function(e){var t=e.value;t in r&&(document.getElementById("frm_format_".concat(e.dataset.fieldId)).value=r[t])})}function Jn(e){var t,r=null!==(t=e.target.dataset)&&void 0!==t&&t.modalTitle?e.target:e.target.closest("[data-modal-title]");if(r){var n=r.dataset,i=n.modalTitle,o=n.modalContent;i&&o&&(e.preventDefault(),frmDom.modal.maybeCreateModal("frmBasicModal",{title:i,content:c({className:"inside",child:u(o)})}))}}function Xn(e){var t,n,i,o=e.dataset.upgrade,a=e.getAttribute("href").replace("#",""),l=document.querySelector(".frm_"+a)||document.querySelector("."+a);if(l&&!l.querySelector(".frm-upgrade-message")){var s=l.querySelector("h2");s.style.borderBottom="none",s.textContent=C(q("%s are not installed","formidable"),o),l.classList.add("frmcenter");var d=document.getElementById("frm_upgrade_modal");h("frm-oneclick"),h("frm-addon-status");var u=d.querySelector(".frm-upgrade-link");if(u){var f,m=u.closest(".frm-upgrade-modal-actions"),p=(f=m?(m=m.cloneNode(!0)).querySelector(".frm-upgrade-link"):u.cloneNode(!0)).querySelector(".license-level");p&&(p.textContent=function(e){return e.dataset.requires?e.dataset.requires:"Pro"}(e)),l.appendChild(m||f),u.nextElementSibling&&u.nextElementSibling.querySelector(".frm-link-secondary")&&l.appendChild(u.nextElementSibling.cloneNode(!0)),h("frm-oneclick-button")}h("frm-upgrade-message");var g=e.dataset.message;void 0===g&&(g=e.dataset.upgrade),function(e,t,n){r(4260).addOneClick(e,"tab",n)}(e,0,g),e.dataset.screenshot&&l.appendChild((t=e.dataset.screenshot,i=frmGlobal.url+"/images/screenshots/",c({className:"frm-settings-screenshot-wrapper",children:[(n=["#ED8181","#EDE06A","#80BE30"].map(function(e){var t=c({className:"frm-minmax-icon"});return t.style.backgroundColor=e,t}),n.push(_({src:frmGlobal.url+"/images/tab.svg"})),c({className:"frm-settings-screenshot-toolbar",children:n})),c({child:_({src:i+t})})]})))}function h(e){l.appendChild(d.querySelector("."+e).cloneNode(!0))}}function Yn(e){void 0===e&&(e=""),function(e){var t,r=jQuery(e+" :not(.frm_has_shortcodes) .frm_not_email_message, "+e+" :not(.frm_has_shortcodes) .frm_not_email_to, "+e+" :not(.frm_has_shortcodes) .frm_not_email_subject");for(t=0;t<r.length;t++)r[t].parentNode.classList.add("frm_has_shortcodes")}(e),jQuery(e+" .frm_has_shortcodes:not(.frm-with-right-icon) input,"+e+" .frm_has_shortcodes:not(.frm-with-right-icon) textarea").wrap('<span class="frm-with-right-icon"></span>').before('<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>')}function Zn(){var e="success";"options[edit_action]"===this.name&&(e="edit");var t=jQuery(this).val();jQuery("."+e+"_action_box").hide(),"redirect"===t?jQuery("."+e+"_action_redirect_box."+e+"_action_box").fadeIn("slow"):"page"===t?jQuery("."+e+"_action_page_box."+e+"_action_box").fadeIn("slow"):jQuery("."+e+"_action_message_box."+e+"_action_box").fadeIn("slow")}function ei(e){if(m=e.target,p=jQuery(m),g=p.closest(".frm_form_action_settings"),(h=g.find(".widget-inside")).find("p, div, table").length||((_=g.find(".widget-top")).on("frm-action-loaded",function(){p.trigger("click"),g.removeClass("open"),h.hide()}),_.trigger("click"),0)){var t=e.target.closest(".frm_form_action_settings"),r=t.querySelectorAll(".wp-editor-area");r.length&&r.forEach(function(e){tinymce.EditorManager.execCommand("mceRemoveEditor",!0,e.id)});var n=jQuery(t).clone(),i=n.attr("id").replace("frm_form_action_",""),o=ti(i);n.find(".frm_action_id, .frm-btn-group").remove(),n.find('input[name$="['+i+'][ID]"]').val(""),n.find(".widget-inside").hide(),n.find("input[type=text], textarea, input[type=number]").prop("defaultValue",function(){return this.value}),n.find("input[type=checkbox], input[type=radio]").prop("defaultChecked",function(){return this.checked});var a=new RegExp("\\["+i+"\\]","g"),l=new RegExp("_"+i+'"',"g"),s=new RegExp("-"+i+'"',"g"),d=new RegExp('"'+i+'"',"g"),u=n.html().replace(a,"["+o+"]").replace(l,"_"+o+'"');u=u.replace(s,"-"+o+'"').replace(d,'"'+o+'"');var f=c({id:"frm_form_action_"+o,className:n.get(0).className});f.setAttribute("data-actionkey",o),f.innerHTML=u,f.querySelectorAll(".wp-editor-wrap, .wp-editor-wrap *").forEach(function(e){"string"==typeof e.className&&(e.className=e.className.replace(i,o)),e.id=e.id.replace(i,o)}),f.classList.remove("open"),document.getElementById("frm_notification_settings").appendChild(f),r.length&&(r.forEach(function(e){frmDom.wysiwyg.init(e)}),f.querySelectorAll(".wp-editor-area").forEach(function(e){frmDom.wysiwyg.init(e)})),f.classList.contains("frm_single_on_submit_settings")&&f.querySelector("input.frm-page-search")&&ho(f),so(),wp.hooks.doAction("frm_after_duplicate_action",f)}var m,_,p,g,h}function ti(e){var t=parseInt(e,10)+11;return null!==document.getElementById("frm_form_action_"+t)&&(t=ti(++t)),t}function ri(){var e,t=jQuery(this).data("actiontype");if(!ci(t)){var r=(e=Sr(document.querySelectorAll(".frm_form_action_settings"),"frm_form_action_"),void 0!==document.getElementById("frm_form_action_"+e)&&(e+=100),I>=e&&(e=I+1),I=e,e),n=A,i=document.createElement("div");i.classList.add("frm_single_"+t+"_settings");var o=document.getElementById("frm_notification_settings");o.appendChild(i),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_form_action",type:t,list_id:r,form_id:n,nonce:frmGlobal.nonce},success:function(e){Mi(),i.remove(),document.querySelectorAll(".frm_form_action_settings.open").forEach(function(e){return e.classList.remove("open")});var n=c();n.innerHTML=e;var a=n.querySelector(".widget-top");Array.from(n.children).forEach(function(e){return o.appendChild(e)}),jQuery(".frm_form_action_settings").fadeIn("slow");var l=document.getElementById("frm_form_action_"+r);l.classList.add("open"),document.getElementById("post-body-content").scroll({top:l.offsetTop+10,left:0,behavior:"smooth"}),di(t),Yn("#frm_form_action_"+r),so(),ho(l),a&&jQuery(a).trigger("frm-action-loaded"),frmAdminBuild.hooks.doAction("frm_added_form_action",l)}})}}function ni(){var e=document.getElementById("frm_email_addon_menu").classList,t=document.getElementById("actions-search-input");e.contains("frm-all-actions")?(e.remove("frm-all-actions"),e.add("frm-limited-actions")):(e.add("frm-all-actions"),e.remove("frm-limited-actions")),t.value="",Eo(t,"input")}function ii(e){e.on("Change",function(){!function(e){var t,r;(t=document.querySelector(".frm-single-settings:not(.frm_hidden)"))&&null!==(r=t.querySelector(".wp-editor-wrap"))&&r.classList.contains("tmce-active")&&!tinyMCE.activeEditor.isHidden()&&(e.targetElm.value=e.getContent(),jQuery(e.targetElm).trigger("change"))}(e)})}function oi(e){var t=this;if(null!==e)return this.fragment=document.createDocumentFragment(),this.initOnceInAllInstances=function(){void 0===oi.prototype.endMarker&&(oi.prototype.endMarker=document.getElementById("frm-end-form-marker"))},this.append=function(e){var r=null!==e?e.parentElement.classList:"";null!==e&&(r.contains("frm_field_box")||r.contains("divider_section_only"))&&t.fragment.appendChild(e)},this.moveFields=function(){x.insertBefore(t.fragment,oi.prototype.endMarker)},this.initOnceInAllInstances(),void 0!==e?(this.append(e),void this.moveFields()):{append:this.append,moveFields:this.moveFields}}function ai(){var e=jQuery(this).closest(".frm_form_action_settings").data("actionkey"),t=this.getAttribute("data-emailrow");jQuery("#frm_form_action_"+e+" .frm_"+t+"_row").fadeIn("slow"),jQuery(this).fadeOut("slow")}function li(){var e=jQuery(this).closest(".frm_form_action_settings"),t=this.getAttribute("data-emailrow"),r=".frm_"+t+"_row",n=".frm_"+t+"_button";jQuery(e).find(n).fadeIn("slow"),jQuery(e).find(r).fadeOut("slow",function(){jQuery(e).find(r+" input").val("")})}function si(){var e=jQuery(this).closest(".frm_form_action_settings"),t=".frm_from_to_match_row";e.find('input[name$="[post_content][from]"]').val()===e.find('input[name$="[post_content][email_to]"]').val()?jQuery(e).find(t).fadeIn("slow"):jQuery(e).find(t).fadeOut("slow")}function di(e){var t,r,n=document.querySelectorAll(".frm_"+e+"_action");ci(e)?(t=n,r=ui(e)>0,t.forEach(function(e){e.classList.remove("frm_active_action"),e.classList.add("frm_inactive_action"),r&&e.classList.add("frm_already_used")})):n.forEach(function(e){e.querySelector(".frm_show_upgrade")||(e.classList.remove("frm_inactive_action","frm_already_used"),e.classList.add("frm_active_action"))})}function ci(e){var t=function(e){return jQuery(".frm_single_"+e+"_settings").length}(e)>=ui(e),r={type:e};return wp.hooks.applyFilters("frm_action_at_limit",t,r)}function ui(e){return parseInt(jQuery(".frm_"+e+"_action").data("limit"),10)}function fi(){var e=a.only_one_action,t=this.dataset.limit;void 0!==t&&((t=parseInt(t))>1?e=e.replace(1,t).trim():e+=" "+a.edit_action_text),H(e)}function mi(){var e=jQuery(this).data("emailkey"),t=jQuery(this).closest(".frm_form_action_settings").find(".frm_action_name").val(),r=document.getElementById("form_id").value,n=document.getElementById("frm_logic_row_"+e),i=Sr(n.querySelectorAll(".frm_logic_row"),"frm_logic_"+e+"_"),o=c({id:"frm_logic_"+e+"_"+i,className:"frm_logic_row frm_hidden"});return n.appendChild(o),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_form_logic_row",email_id:e,form_id:r,meta_name:i,type:t,nonce:frmGlobal.nonce},success:function(t){jQuery(document.getElementById("logic_link_"+e)).fadeOut("slow",function(){o.insertAdjacentHTML("beforebegin",t),o.remove(),jQuery(n).parent(".frm_logic_rows").fadeIn("slow")})}}),!1}function _i(){var e=jQuery("select.frm_single_post_field");e.css("border-color","");var t=this,r=jQuery(t).val();if(""===r||"checkbox"===r)return!1;e.each(function(){if(jQuery(this).val()===r&&this.name!==t.name)return this.style.borderColor="red",jQuery(t).val(""),H(a.field_already_used),!1})}function pi(){var e=jQuery(this).val();""===e?(jQuery(".frm_post_content_opt, select.frm_dyncontent_opt").hide().val(""),jQuery(".frm_dyncontent_opt").hide()):"post_content"===e?(jQuery(".frm_post_content_opt").show(),jQuery(".frm_dyncontent_opt").hide(),jQuery("select.frm_dyncontent_opt").val("")):(jQuery(".frm_post_content_opt").hide().val(""),jQuery("select.frm_dyncontent_opt, .frm_form_field.frm_dyncontent_opt").show())}function gi(){var e=jQuery(this).val(),t=jQuery(document.getElementById("frm_dyncontent"));""===e||"new"===e?(t.val(""),jQuery(".frm_dyncontent_opt").show()):jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_display_get_content",id:e,nonce:frmGlobal.nonce},success:function(e){t.val(e),jQuery(".frm_dyncontent_opt").show()}})}function hi(){var e,t,r=document.getElementById("frm_posttax_rows").childNodes,n=document.querySelector(".frm_post_parent_field"),o=document.querySelector(".frm_post_menu_order_field"),a=this.value;jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_replace_posttax_options",post_type:a,nonce:frmGlobal.nonce},success:function(n){for(i=0;i<r.length;i++)"DIV"===r[i].tagName&&(e=r[i].getElementsByTagName("select")[0],(t=document.createElement("select")).innerHTML=n,t.className=e.className,t.name=e.name,r[i].replaceChild(t,e))}}),n&&yi(n,a,"frm_get_post_parent_option",function(e,t){n.querySelector(".frm_post_parent_opt_wrapper").innerHTML=e.replaceAll("REPLACETHISNAME",t),ho(n)}),o&&yi(o,a,"frm_should_use_post_menu_order_option")}function yi(e,t,r,n){var i=(e.querySelector(".frm_autocomplete_value_input")||e.querySelector("select")).getAttribute("name");jQuery.ajax({url:ajaxurl,method:"POST",data:{action:r,post_type:t,_wpnonce:frmGlobal.nonce},success:function(t){if("string"==typeof t){if("0"===t)return e.classList.add("frm_hidden"),void(e.value="");e.classList.remove("frm_hidden"),"function"==typeof n&&n(t,i)}else console.error(t)},error:function(e){return console.error(e)}})}function vi(){ji("tax",this)}function bi(){ji("meta",this)}function ji(e,t){var r,n,i=jQuery('input[name="id"]').val(),o=jQuery(t).closest(".frm_form_action_settings"),a=o.data("actionkey"),l=o.find(".frm_post_type").val(),s=0,d=document.querySelectorAll(".frm_post"+e+"_row");d.length&&(n=r=d[d.length-1].id.replace("frm_post"+e+"_",""),s=!isNaN(parseFloat(n))&&isFinite(n)?1+parseInt(r,10):1),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_post"+e+"_row",form_id:i,meta_name:s,tax_key:s,post_type:l,action_key:a,nonce:frmGlobal.nonce},success:function(t){var r,n;if(jQuery(document.getElementById("frm_post"+e+"_rows")).append(t),jQuery(".frm_add_post"+e+"_row.button").hide(),"meta"===e)for(jQuery(".frm_name_value").show(),r=document.querySelectorAll(".frm_toggle_cf_opts"),n=0;n<r.length-1;++n)r[n].style.display="none";else"tax"===e&&jQuery(".frm_posttax_labels").show()}})}function wi(){if(jQuery(this).closest(".frm_posttax_row").find(".frm_posttax_opt_list").length){jQuery(this).closest(".frm_posttax_row").find(".frm_posttax_opt_list").html('<div class="spinner frm_spinner" style="display:block"></div>');var e=jQuery(this).closest(".frm_form_action_settings").find('select[name$="[post_content][post_type]"]').val(),t=jQuery(this).closest(".frm_form_action_settings").data("actionkey"),r=jQuery(this).closest(".frm_posttax_row").attr("id").replace("frm_posttax_",""),n=jQuery(this).val(),i=jQuery(document.getElementById(r+"_show_exclude")).is(":checked")?1:0,o=jQuery('select[name$="[post_category]['+r+'][field_id]"]').val(),a=jQuery('input[name="id"]').val();jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_add_posttax_row",form_id:a,post_type:e,tax_key:r,action_key:t,meta_name:n,field_id:o,show_exclude:i,nonce:frmGlobal.nonce},success:function(e){jQuery(document.getElementById("frm_posttax_"+r)).replaceWith(e)}})}}function xi(){var e=jQuery(this).closest(".frm_postmeta_row"),t=e.find(".frm_cancelnew"),r=e.find(".frm_enternew");return e.find("select.frm_cancelnew").is(":visible")?(t.hide(),r.show()):(t.show(),r.hide()),e.find("input.frm_enternew, select.frm_cancelnew").val(""),!1}function Qi(){var e=jQuery(this),t=e.val();"checkbox"===e.attr("type")&&!1===this.checked&&(t="");var r=e.data("toggleclass");""===t?jQuery("."+r).hide():(jQuery("."+r).show(),jQuery(".hide_"+r+"_"+t).hide())}function ki(){Wn()||(Kn(this),Rn(document.querySelector(".frm_form_settings")))}function Ei(e){return e.preventDefault(),Ai(jQuery(this),this.getAttribute("data-code")),!1}function Ai(e,t){var r=!1,n=e;if("object"===l(e)){if(e.hasClass("frm_noallow"))return;void 0===(n=jQuery(e).closest("[data-fills]").attr("data-fills"))&&void 0!==(n=e.closest("div").attr("class"))&&(n=n.split(" ")[1])}if(void 0===n){var i=document.activeElement;"search"===i.type?null===(n=i.id.replace("-search-input","")).match(/\d/gi)&&(n=(i=jQuery(".frm-single-settings:visible ."+n)).attr("id")):n=i.id}n&&(r=jQuery("#wp-"+n+"-wrap.wp-editor-wrap").length>0);var o=jQuery(document.getElementById(n));if(void 0===e.attr("data-shortcode")&&(!o.length||void 0===o.attr("data-shortcode"))){var a=e.parents("ul.frm_code_list").attr("data-shortcode");"undefined"!==a&&"no"===a||(t="["+t+"]")}if(r&&(wpActiveEditor=n),!o.length)return!1;if("[default-html]"===t||"[default-plain]"===t){var s=0;"[default-plain]"===t&&(s=1),jQuery.ajax({type:"POST",url:ajaxurl,data:{action:"frm_get_default_html",form_id:jQuery('input[name="id"]').val(),plain_text:s,nonce:frmGlobal.nonce},elementId:n,success:function(e){if(r){var t=document.createElement("p");t.innerText=e,send_to_editor(t.innerHTML)}else Si(o,e)}})}else t=function(e,t,r){return"object"===l(t)&&t instanceof jQuery&&0===r[0].id.indexOf("success_url_")&&(t=t[0]).closest("#frm-insert-fields-box")?(t.parentNode.classList.contains("frm_insert_url")||(e=e.replace("]"," sanitize_url=1]")),e):e}(t,e,o),r?send_to_editor(t):Si(o,t);return!1}function Si(e,t){if(document.selection)e[0].focus(),document.selection.createRange().text=t;else{obj=e[0];var r=obj.selectionEnd;t=function(e,t,r,n){var i=e.data("sep");if(void 0===i)return t;var o=e.val();if(!o.trim().length)return t;var a=new RegExp(i+"\\s*$"),l=new RegExp("^\\s*"+i);return o.substr(0,r).trim().length&&!1===a.test(o.substr(0,r))&&(t=i+t),o.substr(n,o.length).trim().length&&!1===l.test(o.substr(n,o.length))&&(t+=i),t}(e,t,obj.selectionStart,r),obj.value=obj.value.substr(0,obj.selectionStart)+t+obj.value.substr(obj.selectionEnd,obj.value.length);var n=r+t.length;!function(e,t){if(e.classList.contains("frm_classes")&&Li(t)){var r=e.value.split(" ").filter(Li);r.length&&(e.value=function(e,t,r){var n=e.split(" ").filter(function(e){return(e=e.trim()).length&&!t.includes(e)});return n.includes(r)||n.push(r),n.join(" ")}(e.value,r,t.trim()))}}(obj,t),obj.focus(),obj.setSelectionRange(n,n)}Gn(e)}function Li(e){return["frm_half","frm_third","frm_two_thirds","frm_fourth","frm_three_fourths","frm_fifth","frm_sixth","frm2","frm3","frm4","frm6","frm8","frm9","frm10","frm12"].includes(e.trim())}function Ii(){var e=document.getElementById("frm-id-condition"),t=document.getElementById("frm-key-condition");"id"===this.value?(e.classList.remove("frm_hidden"),t.classList.add("frm_hidden"),Eo(t,"change")):(e.classList.add("frm_hidden"),t.classList.remove("frm_hidden"),Eo(e,"change"))}function Bi(){var e,t,r=document.getElementById("frm-id-key-condition-id").checked?"frm-id-condition":"frm-key-condition",n=document.getElementById("frm-is-condition").value,i=document.getElementById("frm-text-condition").value,o=document.getElementById("frm-insert-condition");t="if "+(e=(r=document.getElementById(r)).options[r.selectedIndex].value)+" "+n+'="'+i+'"]',o.setAttribute("data-code",t+a.conditional_text+"[/if "+e),o.innerHTML="["+t+"[/if "+e+"]"}function qi(e){var t;e.parentNode.parentNode.classList.contains("frm_has_shortcodes")&&(Ui(),"use"===(t=Wi(e)).tagName?-1===(t=t.firstElementChild).getAttributeNS("http://www.w3.org/1999/xlink","href").indexOf("frm_close_icon")&&Fi(t,"nofocus"):t.classList.contains("frm_close_icon")||Fi(t,"nofocus"))}function Ci(e){e.preventDefault(),e.stopPropagation(),Fi(this)}function Ni(e){!function(e){var t;if(e.id.startsWith("field_options_type_")){var r=e.id.split("_"),n=r.length&&r[r.length-1];null!==(t=document.querySelector("#frm-single-settings-".concat(n)))&&void 0!==t&&t.classList.contains("frm-type-".concat(e.value))||Oi()}}(e.target)}function Oi(e){var t;void 0===e&&(e=q("You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?","formidable")),frmDom.modal.maybeCreateModal("frmSaveAndReloadModal",{title:q("Save and Reload?","formidable"),content:(t=c(e),t.style.padding="var(--gap-md)",t),footer:function(){var e=frmDom.modal.footerButton({text:q("Save and Reload","formidable"),buttonType:"primary"});p(e,function(){var e;(e=document.getElementById("frm_submit_side_top")).classList.contains("frm_submit_ajax")&&e.setAttribute("data-new-addon-installed",!0),e.click()});var t=frmDom.modal.footerButton({text:q("Cancel","formidable"),buttonType:"cancel"});return t.classList.add("dismiss"),frmDom.div({children:[t,e]})}()})}function Ti(e){var t;if(e instanceof Event){var r=document.querySelectorAll(".frm-single-settings .frm-show-box.frmsvg use"),n=Array.from(r).find(function(e){return"#frm_close_icon"===e.getAttribute("href")});if(void 0===n)return;t=n.parentElement}else t=e;var i=t.getBoundingClientRect(),o=document.getElementById("frm_adv_info"),a=o.parentElement.getBoundingClientRect();o.style.top=i.top-a.top+32+"px",o.style.left=i.left-a.left-280+"px"}function Fi(e,t){var r=$i(e),n=document.getElementById("frm_adv_info"),i=e.className;if("svg"===e.tagName&&(e=e.firstElementChild),"use"===e.tagName&&null===(i=e.getAttributeNS("http://www.w3.org/1999/xlink","href"))&&(i=e.getAttribute("href")),-1!==i.indexOf("frm_close_icon"))Ui(n);else{if(Ti(e),jQuery(".frm_code_list a").removeClass("frm_noallow"),r.classList.contains("frm_not_email_to")?jQuery("#frm-insert-fields-box .frm_code_list li:not(.show_frm_not_email_to) a").addClass("frm_noallow"):r.classList.contains("frm_not_email_subject")&&jQuery(".frm_code_list li.hide_frm_not_email_subject a").addClass("frm_noallow"),n.setAttribute("data-fills",r.id),n.style.display="block","use"===e.tagName)if(e.hasAttributeNS("http://www.w3.org/1999/xlink","href"))e.setAttributeNS("http://www.w3.org/1999/xlink","href","#frm_close_icon");else{var l=document.createElementNS("http://www.w3.org/2000/svg","use");l.setAttributeNS("http://www.w3.org/1999/xlink","href","#frm_close_icon"),e.parentNode.replaceChild(l,e)}else e.className=i.replace("frm_more_horiz_solid_icon","frm_close_icon");"nofocus"!==t&&("none"!==r.style.display?r.focus():jQuery(tinymce.get(r.id)).trigger("focus")),function(e){["address","body"].forEach(function(t){!function(e,t){var r,n;r=a.contextualShortcodes[t+"Selector"],n=a.contextualShortcodes[t];var i,l=e.matches(r),s=function(e){var t="undefined"!=typeof Symbol&&e[Symbol.iterator]||e["@@iterator"];if(!t){if(Array.isArray(e)||(t=o(e))){t&&(e=t);var r=0,n=function(){};return{s:n,n:function(){return r>=e.length?{done:!0}:{done:!1,value:e[r++]}},e:function(e){throw e},f:n}}throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.")}var i,a=!0,l=!1;return{s:function(){t=t.call(e)},n:function(){var e=t.next();return a=e.done,e},e:function(e){l=!0,i=e},f:function(){try{a||null==t.return||t.return()}finally{if(l)throw i}}}}(n);try{for(s.s();!(i=s.n()).done;){var d,c=i.value,u=null===(d=document.querySelector('#frm-adv-info-tab .frm_code_list [data-code="'+c+'"]'))||void 0===d?void 0:d.closest("li");null==u||u.classList.toggle("frm_hidden",!l)}}catch(e){s.e(e)}finally{s.f()}}(e,t)})}(r)}}function Di(e){return 0===a.contextualShortcodes.length||!function(e){var t=e.querySelector("a");if(!t)return!1;var r=t.dataset.code;return a.contextualShortcodes.address.includes(r)||a.contextualShortcodes.body.includes(r)}(e)||function(e){var t=e.querySelector("a").dataset.code,r=document.getElementById("frm_adv_info").dataset.fills,n=document.getElementById(r),i=a.contextualShortcodes;return i.address.includes(t)?n.matches(i.addressSelector):n.matches(i.bodySelector)}(e)}function Mi(){E||(E=1,window.addEventListener("beforeunload",Ri))}function Pi(){E=0}function Hi(){E=0}function zi(){E=0}function Ri(e){E&&(e.preventDefault(),e.returnValue="")}function Gi(e,t){var r={my:"top",at:"top+"+t,of:window};e.dialog("option","position",r)}function $i(e){if(e.classList.contains("frm-input-icon"))return e.previousElementSibling;for(var t,r=e.nextElementSibling;null!==r&&("INPUT"!==r.tagName&&"TEXTAREA"!==r.tagName||r.classList.contains("frm-token-input-field"));)r=$i(r);return r||(r=null===(t=e.closest(".frm-field-formula"))||void 0===t?void 0:t.querySelector(".frm-calc-field")),r}function Wi(e){var t;if(null!==(t=e.nextElementSibling)&&void 0!==t&&t.classList.contains("frm-input-icon"))return e.nextElementSibling;for(var r=e.previousElementSibling;null!==r&&"I"!==r.tagName&&"svg"!==r.tagName;)r=Wi(r);return r}function Ui(e){var t,r,n,i;if((void 0!==e||null!==(e=document.getElementById("frm_adv_info")))&&null===document.getElementById("frm_dyncontent")){for(e.style.display="none",n=document.querySelectorAll(".frm-show-box.frm_close_icon"),t=0;t<n.length;t++)n[t].classList.remove("frm_close_icon"),n[t].classList.add("frm_more_horiz_solid_icon");for(i=document.querySelectorAll(".frm_has_shortcodes use"),r=0;r<i.length;r++)if("#frm_close_icon"===i[r].getAttributeNS("http://www.w3.org/1999/xlink","href")){if(i[r].closest(".frm_remove_field"))continue;i[r].setAttributeNS("http://www.w3.org/1999/xlink","href","#frm_more_horiz_solid_icon")}}}function Vi(e,t){t.stopPropagation(),jQuery(".frm_code_list .frmids, .frm_code_list .frmkeys").addClass("frm_hidden"),jQuery(".frm_code_list ."+e).removeClass("frm_hidden"),jQuery(".frmids, .frmkeys").removeClass("current"),jQuery("."+e).addClass("current")}function Ki(e){var t=e.target.closest(".frm_form_action_settings");t&&(t.classList.contains("frm_single_email_settings")||t.classList.contains("frm_single_on_submit_settings"))&&function(e){e.querySelectorAll(".wp-editor-area").forEach(function(e){frmDom.wysiwyg.init(e,{height:160,addFocusEvents:!0})})}(t)}function Ji(){return!0===P(this)&&(jQuery(".frm_uninstall .frm-wait").css("visibility","visible"),jQuery.ajax({type:"POST",url:ajaxurl,data:"action=frm_uninstall&nonce="+frmGlobal.nonce,success:function(e){jQuery(".frm_uninstall").fadeOut("slow"),window.location=e}})),!1}function Xi(){var e=jQuery(this),t=this.name,r=this.getAttribute("data-plugin"),n=t.replace("edd_"+r+"_license_",""),i=document.getElementById("edd_"+r+"_license_key").value;e.get(0).disabled=!0,jQuery.ajax({type:"POST",url:ajaxurl,dataType:"json",data:{action:"frm_addon_"+n,license:i,plugin:r,nonce:frmGlobal.nonce},success:function(t){e.get(0).disabled=!1;var o=e.closest(".edd_frm_license_row");"deactivate"===n&&(i="",document.getElementById("edd_"+r+"_license_key").value=""),o.find(".edd_frm_license").html(i);var a=e.get(0).closest(".frm_form_field"),l=!0===t.success;a.querySelector(".frm_icon_font.frm_action_success").classList.toggle("frm_hidden",!l||"deactivate"===n),a.querySelector(".frm_icon_font.frm_action_error").classList.toggle("frm_hidden",l);var s=o.find(".frm_license_msg");s.html(t.message),""!==t.message&&setTimeout(function(){if(s.html(""),o.find(".frm_icon_font").addClass("frm_hidden"),l){var e="activate"===n;o.get(0).querySelector(".edd_frm_unauthorized").classList.toggle("frm_hidden",e),o.get(0).querySelector(".edd_frm_authorized").classList.toggle("frm_hidden",!e)}},2e3)}})}function Yi(e){e.preventDefault();var t=jQuery(e.target).find("input:checked");if(t.length){var r,n,i,o,a=[];t.each(function(e){a[e]=this.value}),r=a,n=e.target,(o=(i=jQuery(n)).next(".frm-importer-process")).find(".form-total").text(r.length),o.find(".form-current").text("1"),i.hide(),o.find(".process-completed").hide(),o.show(),O.importQueue=r,O.imported=0,Zi(o)}}function Zi(e){var t=O.importQueue[0],r={action:"frm_import_"+jQuery("#welcome-panel").find('input[name="slug"]').val(),form_id:t,nonce:frmGlobal.nonce};jQuery.post(ajaxurl,r,function(r){var n;r.success&&(n=r.data.error?"<p>"+r.data.name+": "+r.data.msg+"</p>":'<p>Imported <a href="'+r.data.link+'" target="_blank">'+r.data.name+"</a></p>",e.find(".status").prepend(n),e.find(".status").show(),O.importQueue=jQuery.grep(O.importQueue,function(e){return e!=t}),O.imported++,0===O.importQueue.length?(e.find(".process-count").hide(),e.find(".forms-completed").text(O.imported),e.find(".process-completed").show()):(e.find(".form-current").text(O.imported+1),Zi(e)))})}function eo(e){e.preventDefault();var t=!1,r=jQuery('input[name="frm_export_forms[]"]');jQuery('input[name="frm_export_forms[]"]:checked').val()||(r.closest(".frm-table-box").addClass("frm_blank_field"),t="stop");var n=jQuery('input[name="type[]"]');if(jQuery('input[name="type[]"]:checked').val()||"checkbox"!==n.attr("type")||(n.closest("p").addClass("frm_blank_field"),t="stop"),"stop"===t)return!1;e.stopPropagation(),this.submit()}function to(){var e=jQuery(this).closest(".frm_blank_field");if(void 0!==e){var t=this.name;("type[]"===t&&jQuery('input[name="type[]"]:checked').val()||"frm_export_forms[]"===t&&jQuery(this).val())&&e.removeClass("frm_blank_field")}}function ro(){null!==jQuery(this).val().match(/\.csv$/i)?jQuery(".show_csv").fadeIn():jQuery(".show_csv").fadeOut()}function no(){var e=document.querySelector('select[name="format"]');return e?e.value:""}function io(e){var t,r,n=e.target.value;ao(n),oo.call(e.target),t=n,r=document.getElementById("frm-export-select-all"),"csv"===t?(r.checked=!1,r.disabled=!0):r.disabled=!1}function oo(){var e=jQuery(this),t=e.find(":selected"),r=t.data("support"),n=r.indexOf("|");jQuery('input[name="type[]"]').each(function(){this.checked=!1,r.indexOf(this.value)>=0?(this.disabled=!1,-1===n&&(this.checked=!0)):this.disabled=!0}),"csv"===e.val()?(jQuery(".csv_opts").show(),jQuery(".xml_opts").hide()):(jQuery(".csv_opts").hide(),jQuery(".xml_opts").show());var i=t.data("count"),o=jQuery('input[name="frm_export_forms[]"]');"single"===i?(o.prop("multiple",!1),o.prop("checked",!1)):(o.prop("multiple",!0),o.prop("disabled",!1)),e.trigger("change")}function ao(e){if(""!==e){var t=document.querySelectorAll(".frm-is-repeater");t.length&&("csv"===e?t.forEach(function(e){e.classList.remove("frm_hidden")}):t.forEach(function(e){e.classList.add("frm_hidden")}),xo.call(document.querySelector(".frm-auto-search")))}}function lo(){var e=jQuery("select[name=format]").find(":selected").data("count"),t=jQuery('input[name="frm_export_forms[]"]');"single"===e&&this.checked?(t.prop("disabled",!0),this.removeAttribute("disabled")):t.prop("disabled",!1)}function so(){jQuery(".frm_multiselect").hide().each(frmDom.bootstrap.multiselect.init)}function co(e){e.preventDefault(),mo(this,"frm_multiple_addons")}function uo(e){e.preventDefault(),mo(this,"frm_activate_addon")}function fo(e){e.preventDefault(),mo(this,"frm_install_addon")}function mo(e,t){r(1105).toggleAddonState(e,t)}function _o(){go()}function po(e){!function(e,t,r){var n=jQuery("#frm_leave_email_error");n.removeClass("frm_hidden").attr("frm-error",r),jQuery("#frm_leave_email").one("keyup",function(){n.addClass("frm_hidden")})}(0,0,e)}function go(){var e=document.getElementById("frmapi-email-form");jQuery.ajax({dataType:"json",url:e.getAttribute("data-url"),success:function(t){var r=t.renderedHtml;r=r.replace(/<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi,""),e.innerHTML=r}})}function ho(e){frmDom.autocomplete.initSelectionAutocomplete(e)}function yo(e){var t=this.parentNode.parentNode,r=t.elements.type.value;e.preventDefault(),this.classList.add("frm_loading_button"),bo(t,r,this)}function vo(e){var t=this.elements.type.value,r=this.querySelector("button");e.preventDefault(),r.classList.add("frm_loading_button"),bo(this,t,r)}function bo(e,t,r){var n=function(e){var t,r,n={},i=e.elements;for(r=0;r<i.length;r++){var o=i[r],a=o.name,l=o.value,s=a.match(/(.*)\[(.*)\]/);("radio"!==o.type&&"checkbox"!==o.type||o.checked)&&(null===s?Reflect.has(n,a)?(Array.isArray(n[a])||(n[a]=[n[a]]),n[a].push(l)):n[a]=l:(a=s[1],t=s[2],Reflect.has(n,a)||(n[a]={}),n[a][t]=l))}return n}(e),i=n.template_name,o=n.template_desc,a=e.elements.link.value,l={action:t,xml:a,name:i,desc:o,form:JSON.stringify(n),nonce:frmGlobal.nonce},s={formData:n};Ao(l=wp.hooks.applyFilters("frm_before_install_new_form",l,s),function(t){if(void 0!==t.redirect){var n=t.redirect;if(void 0===e.elements.redirect)window.location=n;else{var i=document.getElementById("frm-redirect-link");void 0!==a&&null!==i&&(i.setAttribute("href",n),i.classList.remove("frm_grey","disabled"),(s=e.parentNode.parentNode).classList.add("frm_grey"),s.nextElementSibling.classList.remove("frm_grey"),r.classList.add("frm_grey","disabled"))}}else jQuery(".spinner").css("visibility","hidden"),"string"==typeof t.message&&(o=t.message,(l=c(o)).style.padding="20px 40px",frmDom.modal.maybeCreateModal("frmInstallFormErrorModal",{title:q("Unable to install template","formidable"),content:l}).classList.add("frm_common_modal"));var o,l,s;r.classList.remove("frm_loading_button")})}function jo(e){var t=document.getElementById("frm_captcha_threshold_container");t&&t.classList.toggle("frm_hidden","v3"!==e.target.value)}function wo(e){var t=this.getAttribute("data-id");e.preventDefault(),data={action:"frm_forms_trash",id:t,nonce:frmGlobal.nonce},Ao(data,function(){var e=document.getElementById("frm-template-custom-"+t);So(e,function(){e.parentNode.removeChild(e)})})}function xo(){var e,t,r=!1,n=this.value.toLowerCase(),i=this.getAttribute("data-tosearch"),o=document.getElementsByClassName(i);if("SELECT"===this.tagName&&(n=(n=function(e){for(var t,r=[],n=e&&e.options,i=0,o=n.length;i<o;i++)(t=n[i]).selected&&r.push(t.value);return r}(this)).join("|").toLowerCase(),r=!0),"frm-action"===i&&""!==n){var a=document.getElementById("frm_email_addon_menu").classList;a.remove("frm-all-actions"),a.add("frm-limited-actions")}for(e=0;e<o.length;e++){var l=o[e].innerText.toLowerCase(),s=!("xml"===no()&&o[e].classList.contains("frm-is-repeater"));""===n?(s&&Di(o[e])&&o[e].classList.remove("frm_hidden"),o[e].classList.remove("frm-search-result")):r&&new RegExp(n).test(l)||l.indexOf(n)>=0||Qo(l,n)?(s&&Di(o[e])&&o[e].classList.remove("frm_hidden"),o[e].classList.add("frm-search-result")):(o[e].classList.add("frm_hidden"),o[e].classList.remove("frm-search-result"))}(t=document.querySelector("#frm-insert-fields"))&&t.querySelectorAll(":scope > .frm-with-line").forEach(function(e){var t=e.nextElementSibling;if(t){var r=t.querySelectorAll(":scope > li.frmbutton"),n=Array.from(r).every(function(e){return e.classList.contains("frm_hidden")});e.classList.toggle("frm_hidden",n)}}),jQuery(this).trigger("frmAfterSearch")}function Qo(e,t){return"s"!==t&&"s"!==e[e.length-1]&&(e+"s").indexOf(t)>=0}function ko(e){e.stopPropagation()}function Eo(e,t){var r=document.createEvent("HTMLEvents");r.initEvent(t,!1,!0),e.dispatchEvent(r)}function Ao(e,t){var r,n=new XMLHttpRequest,i="string"==typeof e?e:Object.keys(e).map(function(t){return encodeURIComponent(t)+"="+encodeURIComponent(e[t])}).join("&");return n.open("post",ajaxurl,!0),n.onreadystatechange=function(){if(n.readyState>3&&200==n.status){r=n.responseText;try{r=JSON.parse(r)}catch(e){}t(r)}},n.setRequestHeader("X-Requested-With","XMLHttpRequest"),n.setRequestHeader("Content-type","application/x-www-form-urlencoded"),n.send(i),n}function So(e,t){e.classList.add("frm-fade"),setTimeout(t,1e3)}function Lo(e){jQuery(e).css("visibility","hidden")}function Io(e){jQuery(e).css("visibility","visible")}function Bo(e,t){return r(4260).initModal(e,t)}function qo(e,t){if("#"===t){var r=document.getElementById(e),n=r.style.display;r.style.display="none"===n?"block":"none"}else e.is(":visible")?e.hide():e.show()}function Co(){window.onbeforeunload=null;var e=jQuery(window);e.off("beforeunload.widgets"),e.off("beforeunload.edit-post")}function No(){var e=jQuery(this).closest(".frm-single-settings").data("fid"),t=document.getElementById("frm_field_id_"+e);if(null!==t&&"form"===t.dataset.type)if(t=jQuery(t),this.options[this.selectedIndex].value){t.find(".frm-not-set")[0].classList.add("frm_hidden");var r=t.find(".frm-embed-message");r.html(r.data("embedmsg")+this.options[this.selectedIndex].text),t.find(".frm-embed-field-placeholder")[0].classList.remove("frm_hidden")}else t.find(".frm-not-set")[0].classList.remove("frm_hidden"),t.find(".frm-embed-field-placeholder")[0].classList.add("frm_hidden")}function Oo(){var e=jQuery(this).closest(".frm-single-settings"),t=e.find(".frmjs_product_choices"),r=e.find(".frm_prod_options_heading"),n=this.options[this.selectedIndex].value;t.removeClass("frm_prod_type_single frm_prod_type_user_def"),r.removeClass("frm_prod_user_def"),"single"===n?t.addClass("frm_prod_type_single"):"user_def"===n&&(t.addClass("frm_prod_type_user_def"),r.addClass("frm_prod_user_def"))}function To(e){var t=document.getElementById("frm_field_id_"+e);return null!==t&&"product"===t.getAttribute("data-type")}function Fo(){var e=function(e,t){return window.frmCachedSubFields=window.frmCachedSubFields||{},window.frmCachedSubFields[e]=window.frmCachedSubFields[e]||{},window.frmCachedSubFields[e][t]},t=function(e,t,r){window.frmCachedSubFields=window.frmCachedSubFields||{},window.frmCachedSubFields[e]=window.frmCachedSubFields[e]||{},window.frmCachedSubFields[e][t]=r},r=[1,2,3,4,5,6,7,8,9,10,11,12].map(function(e){return"frm"+e}),i=["first","middle","last"];document.addEventListener("change",function(o){o.target.matches(".frm_name_layout_dropdown")&&function(o){var a,l=o.target.value.split("_"),s=o.target.dataset.fieldId,d=document.querySelector("#field_"+s+"_inner_container .frm_combo_inputs_container"),c=(a=l.length,"frm"+parseInt(12/a));i.forEach(function(e){var i,o=d.querySelector('[data-sub-field-name="'+e+'"]');o&&(o.classList.add("frm_hidden"),(i=o.classList).remove.apply(i,n(r)),t(s,e,o))}),l.forEach(function(t){var r=e(s,t);r&&(r.classList.remove("frm_hidden"),r.classList.add(c),d.append(r))}),i.forEach(function(e){var r=document.querySelector(".frm_sub_field_options-"+e+'[data-field-id="'+s+'"]');r&&(r.classList.add("frm_hidden"),t(s,e+"_options",r))}),l.forEach(function(t){var r=e(s,t+"_options");r&&r.classList.remove("frm_hidden")})}(o)},!1)}function Do(e,t){var r,n,i,o=!1,a=!1;(r=t.newOption?(new DOMParser).parseFromString(t.newOption,"text/html").body.childNodes[0]:t).querySelectorAll("svg").forEach(function(e,t){(n=e.getElementsByTagNameNS("http://www.w3.org/2000/svg","use")[0])&&("#frm_drag_icon"===(i=n.getAttributeNS("http://www.w3.org/1999/xlink","href")||n.getAttribute("href"))&&(o=!0),"#frm_save_icon"===i&&(a=!0))}),o||r.prepend(j.drag.cloneNode(!0)),r.querySelector("[id^=field_key_".concat(e,"-]"))&&!a&&r.querySelector("[id^=field_key_".concat(e,"-]")).after(j.save.cloneNode(!0)),t.newOption&&(t.newOption=r)}function Mo(){var e=document.getElementById("frm_leave_email").value.trim();if(""!==e)if(!1!==/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i.test(e)){var t=jQuery("#frmapi-email-form").find("form"),r=t.find('[type="email"]').not(".frm_verify");if(r.length){if(document.getElementById("frm_empty_inbox")){document.getElementById("frm-add-my-email-address").remove();var n=document.getElementById("frm_leave_email_wrapper");if(n){n.classList.add("frm_hidden");var i=u({className:"frm-wait frm_spinner"});i.style.visibility="visible",i.style.float="none",i.style.width="unset",n.parentElement.insertBefore(i,n.nextElementSibling)}}r.val(e),jQuery.ajax({type:"POST",url:t.attr("action"),data:t.serialize()+"&action=frm_forms_preview"}).done(function(e){if(-1!==jQuery(e).find(".frm_message").text().trim().indexOf("Thanks!")){var t=document.getElementById("frmapi-email-form").parentElement.querySelector(".frm_spinner");t&&t.remove(),wp.hooks.applyFilters("frm_thank_you_on_signup",!0)&&document.getElementById("frm_leave_email_wrapper").replaceWith(u(q("Thank you for signing up!","formidable")))}else po("invalid")})}}else po("invalid");else po("empty")}function Po(e){if(D||e.stopPropagation(),!(e.target.classList.contains("frm-show-box")||e.target.parentElement&&e.target.parentElement.classList.contains("frm-show-box"))){var t=document.getElementById("frm_adv_info");t&&(t.dataset.fills===e.target.id&&void 0!==e.target.id||e.target.closest("#frm_adv_info")||"none"===t.style.display||Ui(t))}}return{init:function(){var e,t,i,o,a,l,s;!function(){jQuery(document).on("click","#frm-add-my-email-address",function(e){e.preventDefault(),Mo()});var e=document.getElementById("frm_empty_inbox"),t=document.getElementById("frm_leave_email");if(e&&t){var r=document.getElementById("frm-leave-email-modal");r.classList.remove("frm_hidden"),r.querySelector(".frm_modal_footer").classList.add("frm_hidden"),t.addEventListener("keyup",function(e){if("Enter"===e.key){var t=document.getElementById("frm-add-my-email-address");t&&t.click()}})}}(),t=document.querySelector(".frm-admin-footer-links"),i=null!==(e=document.querySelector(".frm_page_container"))&&void 0!==e?e:document.getElementById("wpbody-content"),t&&i&&(i.appendChild(t),t.classList.remove("frm_hidden")),document.addEventListener("show.bs.dropdown",function(){G()}),O={},jQuery(".wp-admin").on("click",function(e){var t=jQuery(e.target),r=jQuery(".dropdown.open");!r.length||t.hasClass("dropdown")||t.closest(".dropdown").length||r.removeClass("open")}),jQuery("#frm_bs_dropdown:not(.open) a").on("click",St),void 0===A&&(A=jQuery(document.getElementById("form_id")).val()),document.querySelectorAll(".frm-warning-dismiss").forEach(function(e){p(e,Lt)}),frmAdminBuild.inboxBannerInit(),w.length>0?frmAdminBuild.buildInit():null!==document.getElementById("frm_notification_settings")?frmAdminBuild.settingsInit():null!==document.getElementById("frm_styling_form")?frmAdminBuild.styleInit():null!==document.getElementById("form_global_settings")?frmAdminBuild.globalSettingsInit():null!==document.getElementById("frm_export_xml")?frmAdminBuild.exportInit():null!==document.querySelector(".frm-inbox-wrapper")?frmAdminBuild.inboxInit():null!==document.getElementById("frm-welcome")?frmAdminBuild.solutionInit():(function(){if(document.body.classList.contains("frm-admin-page-entries")){var e=document.getElementById("screen-options-wrap");if(e){var t=c({className:"frm_warning_style",text:q("Only 10 columns can be selected at a time.","formidable")});t.style.margin=0;var r=e.querySelector("legend");r.parentNode.insertBefore(t,r.nextElementSibling);var n=Array.from(e.querySelectorAll('input[type="checkbox"]')),i=function(){n.reduce(function(e,t){return t.checked?e+1:e},0)>=10?(t.classList.remove("frm_hidden"),n.forEach(function(e){e.checked||(e.parentNode.classList.add("frm_noallow"),e.disabled=!0)})):t.classList.add("frm_hidden")};i(),n.forEach(function(e){e.addEventListener("change",function(e){e.target.checked?i():(t.classList.add("frm_hidden"),n.forEach(function(e){e.parentNode.classList.remove("frm_noallow"),e.disabled=!1}))})})}}}(),ho(),jQuery("[data-frmprint]").on("click",function(){return window.print(),!1})),jQuery(document).on("change","select[data-toggleclass], input[data-toggleclass]",Qi),function(){function e(e){var t=e.options[e.selectedIndex];e.querySelectorAll("option[data-dependency]:not([data-dependency-skip])").forEach(function(e){var r=document.querySelector(e.dataset.dependency);null==r||r.classList.toggle("frm_hidden",t!==e)})}document.querySelectorAll("select.frm_select_with_dependency").forEach(e),frmDom.util.documentOn("change","select.frm_select_with_dependency",function(t){return e(t.target)})}(),(jQuery(document.getElementById("frm_adv_info")).length>0||jQuery(".frm_field_list").length>0)&&frmAdminBuild.panelInit(),o=jQuery(".wrap, .frm_wrap"),a=document.getElementById("frm_confirm_modal"),l=!1,s=!1,jQuery(a).on("click","[data-deletefield]",Qr),jQuery(a).on("click","[data-removeid]",$),jQuery(a).on("click","[data-trashtemplate]",wo),o.on("click",".frm_remove_tag, .frm_remove_form_action",$),o.on("click","a[data-frmverify]",M),o.on("click","a[data-frmtoggle]",z),o.on("click","a[data-frmhide], a[data-frmshow]",R),o.on("change","input[data-frmhide], input[data-frmshow]",R),o.on("click",".widget-top,a.widget-action",W),o.on("mouseenter.frm",".frm_bstooltip, .frm_help",function(){jQuery(this).off("mouseenter.frm"),function(e){var t=arguments.length>1&&void 0!==arguments[1]&&arguments[1],r=e;(r.hasAttribute("data-toggle")||r.hasAttribute("data-bs-toggle"))&&(r.parentElement.setAttribute("title",r.getAttribute("title")),r.removeAttribute("title"),r.classList.remove("frm_bstooltip"),r.parentElement.classList.add("frm_bstooltip"),r=r.parentElement),jQuery(r).tooltip(),t&&(G(),jQuery(r).tooltip("show"))}(this,!0)}),jQuery(document).on("click","#doaction, #doaction2",function(e){var t="doaction"===this.id?"top":"bottom",r=document.getElementById("bulk-action-selector-"+t),n=document.getElementById("confirm-bulk-delete-"+t);if(null!==r&&null!==n){if(l=this,!s&&"bulk_delete"===r.value)return e.preventDefault(),P(n),!1}else l=!1}),jQuery(document).on("click","#frm-confirmed-click",function(e){if(!1!==l&&!e.target.classList.contains("frm-btn-inactive"))return"confirm-bulk-delete"===this.getAttribute("href")?(e.preventDefault(),s=!0,l.click(),!1):void 0}),r(4260).initUpgradeModal(),frmDom.util.documentOn("click","[data-modal-title]",Jn);var d=jQuery(document.getElementById("frm_shortcodediv"));d.length>0&&(jQuery("a.edit-frm_shortcode").on("click",function(){return d.is(":hidden")&&(d.slideDown("fast"),this.style.display="none"),!1}),jQuery(".cancel-frm_shortcode","#frm_shortcodediv").on("click",function(){return d.slideUp("fast"),d.siblings("a.edit-frm_shortcode").show(),!1})),jQuery(document).on("click","#frm-nav-tabs a",U),jQuery(".post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a").on("click",function(){var e=this.classList.contains("frm_show_upgrade_tab");if(!this.classList.contains("frm_noallow")||e)return e&&Xn(this),V(this),!1}),V(jQuery(".starttab a"),"auto"),jQuery(document).on("click","#frm-fid-search-menu a",function(){var e=this.id.replace("fid-","");return jQuery('select[name="fid"]').val(e),Rn(document.getElementById("posts-filter")),!1}),jQuery(".frm_select_box").on("click focus",function(){this.select()}),jQuery(document).on("input search change",".frm-auto-search:not(#frm-form-templates-page #template-search-input)",xo),jQuery(document).on("focusin click",".frm-auto-search",ko);var u=jQuery(".frm-auto-search");""!==u.val()&&u.trigger("keyup"),FrmFormsConnect.init(),jQuery(document).on("click",".frm-install-addon",fo),jQuery(document).on("click",".frm-activate-addon",uo),jQuery(document).on("click",".frm-solution-multiple",co),jQuery("button, input[type=submit]").on("click",Co),document.addEventListener("click",function(e){if("LABEL"===e.target.nodeName){var t=e.target.getAttribute("for");if(t){var r=document.getElementById(t);if(r&&r.nextElementSibling){var n=r.nextElementSibling.querySelector("button.dropdown-toggle.multiselect");n&&setTimeout(function(){return n.click()},0)}}}}),frmAdminBuild.hooks.addFilter("frm_before_embed_modal",function(e,t){var r,n,i=t.element;if("form"!==t.type)return e;var o=i.closest("tr");if(o)r=parseInt(o.querySelector(".column-id").textContent),n=o.querySelector(".column-form_key").textContent;else{r=document.getElementById("form_id").value;var a=document.getElementById("frm_form_key");if(a)n=a.value;else{var l=document.getElementById("frm-previewDrop");l&&(n=l.nextElementSibling.querySelector(".dropdown-item a").getAttribute("href").split("form=")[1])}}return[r,n]}),document.querySelectorAll("#frm-show-fields > li, .frm_grid_container li").forEach(function(e,t){e.addEventListener("click",function(){var e,t,r;t=(null===(e=this.querySelector("li"))||void 0===e?void 0:e.dataset.fid)||this.dataset.fid,(r=document.querySelectorAll("[id^=frm_delete_field_".concat(t,"-]"))).length<2||n(r).slice(1).forEach(function(e,r){e.classList.contains("frm_other_option")||Do(t,e)})})});var f=document.getElementById("frm_small_screen_proceed_button");f&&p(f,function(){var e;null===(e=document.getElementById("frm_small_device_message_container"))||void 0===e||e.remove(),h("small_screen_proceed",new FormData)});var m=document.getElementById("frm_sale_banner"),_=null==m?void 0:m.querySelector(".dismiss");m&&(p(m,function(e){e.target.closest(".dismiss")||(window.location.href=m.getAttribute("data-url"))}),_&&p(_,function(){m.remove();var e=new FormData;h("sale_banner_dismiss",e)}))},buildInit:function(){var e,t,r;jQuery("#frm_builder_page").on("mouseup","*:not(.frm-show-box)",Po),y=function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:100;return frmDom.util.debounce(e,t)}(ae,10),v=document.getElementById("post-body-content"),b=jQuery(v),jQuery(".frm_field_loading").length&&Ae(jQuery(".frm_field_loading").first().attr("id")),K("ul.frm_sorting"),document.querySelectorAll(".field_type_list > li:not(.frm_show_upgrade)").forEach(Z),jQuery("ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a").disableSelection(),jQuery(".frm_submit_ajax").on("click",zn),jQuery(".frm_submit_no_ajax").on("click",$n),Un(),jQuery("a.edit-form-status").on("click",Ln),jQuery(".cancel-form-status").on("click",In),jQuery(".save-form-status").on("click",function(){var e=jQuery(document.getElementById("form_change_status")).val();return jQuery('input[name="new_status"]').val(e),jQuery(document.getElementById("form-status-display")).html(e),jQuery(".cancel-form-status").trigger("click"),!1}),jQuery(".frm_form_builder form").first().on("submit",function(){jQuery(".inplace_field").trigger("blur")}),so(),Fr(),e=jQuery(x),t=document.getElementById("frm_form_editor_container"),e.on("click",".frm_add_logic_row",Ar),e.on("click",".frm_add_watch_lookup_row",Lr),e.on("change",".frm_get_values_form",Or),e.on("change",".frm_logic_field_opts",xn),e.on("frm-multiselect-changed",'select[name^="field_options[admin_only_"]',Bn),jQuery(document.getElementById("frm-insert-fields")).on("click",".frm_add_field",Le),w.on("click",".frm_clone_field",qe),e.on("blur",'input[id^="frm_calc"]',Xe),e.on("change","input.frm_format_opt, input.frm_max_length_opt",st),e.on("change click","[data-changeme]",at),e.on("click","input.frm_req_field",dt),e.on("click",".frm_mark_unique",ut),e.on("change",".frm_repeat_format",Jr),e.on("change",".frm_repeat_limit",Xr),e.on("change",".frm_js_checkbox_limit",Yr),e.on("input",'input[name^="field_options[add_label_"]',function(){Zr(this,"add")}),e.on("input",'input[name^="field_options[remove_label_"]',function(){Zr(this,"remove")}),e.on("change",'select[name^="field_options[data_type_"]',Tr),jQuery(t).on("click",".frm-collapse-page",Dr),jQuery(t).on("click",".frm-collapse-section",Hr),e.on("click",".frm-single-settings h3, .frm-single-settings h4.frm-collapsible",zr),e.on("keydown",".frm-single-settings h3, .frm-single-settings h4.frm-collapsible",function(e){"Enter"!==e.key&&" "!==e.key||(e.preventDefault(),zr.call(this,e))}),jQuery(t).on("show.bs.dropdown hide.bs.dropdown",ze),e.on("click",".frm_toggle_sep_values",yt),e.on("click",".frm_toggle_image_options",vt),e.on("click",".frm_remove_image_option",Et),e.on("click",".frm_choose_image_box",kt),e.on("change",".frm_hide_image_text",Qt),e.on("change",".frm_field_options_image_size",wt),e.on("click",".frm_multiselect_opt",At),w.on("mousedown","input, textarea, select",It),w.on("click","input[type=radio], input[type=checkbox]",It),w.on("click",".frm_delete_field",Ot),w.on("click",".frm_select_field",Tt),jQuery(document).on("click",".frm_delete_field_group",Ft),jQuery(document).on("click",".frm_clone_field_group",Dt),jQuery(document).on("click","#frm_field_group_controls > span:first-child",Mt),jQuery(document).on("click",".frm-row-layout-option",Zt),jQuery(document).on("click",".frm-merge-fields-into-row .frm-row-layout-option",er),jQuery(document).on("click",".frm-custom-field-group-layout",rr),jQuery(document).on("click",".frm-merge-fields-into-row .frm-custom-field-group-layout",ir),jQuery(document).on("click",".frm-break-field-group",dr),w.on("click","#frm_field_group_popup .frm_grid_container input",cr),jQuery(document).on("click",".frm-cancel-custom-field-group-layout",ur),jQuery(document).on("click",".frm-save-custom-field-group-layout",mr),w.on("click","ul.frm_sorting",_r),jQuery(document).on("click",".frm-merge-fields-into-row",jr),jQuery(document).on("click",".frm-delete-field-groups",xr),w.on("click",'.frm-field-action-icons [data-toggle="dropdown"]',function(){this.closest("li.form-field").classList.add("frm-field-settings-open"),jQuery(document).on("click","#frm_builder_page",Te)}),w.on("mousemove","ul.frm_sorting",Fe),w.on("show.bs.dropdown",".frm-field-action-icons",Pe),jQuery(document).on("show.bs.dropdown","#frm_field_group_controls",He),e.on("click",".frm_single_option a[data-removeid]",Bt),e.on("mousedown",".frm_single_option input[type=radio]",qt),e.on("focusin",".frm_single_option input[type=text]",Ct),e.on("click",".frm_add_opt",pt),e.on("change",".frm_single_option input",tn),e.on("change",".frm_image_id",tn),e.on("change",".frm_toggle_mult_sel",gt),w.on("click",".frm_primary_label",Gr),w.on("click",".frm_description",$r),w.on("click","li.ui-state-default:not(.frm_noallow)",Ur),w.on("dblclick","li.ui-state-default",Kr),e.on("change",".frm_tax_form_select",en),e.on("change","select.conf_field",ft),e.on("change",".frm_get_field_selection",Qn),e.on("click",".frm-show-inline-modal",Nn),e.on("keydown",".frm-show-inline-modal",function(e){var t=e.key;"Enter"!==t&&" "!==t||(e.preventDefault(),Nn.call(this,e))}),e.on("click",".frm-inline-modal .dismiss",On),jQuery(document).on("change","[data-frmchange]",Fn),document.addEventListener("click",Tn),e.on("change",".frm_include_extras_field",tt),e.on("change",'select[name^="field_options[form_select_"]',No),jQuery(document).on("submit","#frm_js_build_form",Pi),jQuery(document).on("change","#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea",Mi),it(),jQuery(document).on("change",".frmjs_prod_data_type_opt",Oo),jQuery(document).on("focus",'.frm-single-settings ul input[type="text"][name^="field_options[options_"]',Br),jQuery(document).on("blur",'.frm-single-settings ul input[type="text"][name^="field_options[options_"]',Cr),frmDom.util.documentOn("click",".frm-show-field-settings",Ur),frmDom.util.documentOn("change","select.frm_format_dropdown, select.frm_phone_type_dropdown",Vr),e.on("keydown",'.frm_single_option input[name^="field_options["], .frm_single_option input[name^="rows_"]',function(e){"Enter"===e.key&&function(e){var t=e.closest(".frm_single_option").parentElement.querySelectorAll('.frm_single_option input[name^="field_options[" ], .frm_single_option input[name^="rows_"]'),r=Array.from(t),n=r.indexOf(e);if(!(n<0)){var i=r.slice(n+1).find(function(e){return null!==e.offsetParent});if(i){i.focus();var o=i.value.length;i.setSelectionRange(o,o)}}}(e.currentTarget)}),!1!==(r=Bo("#frm-bulk-modal","700px"))&&(jQuery(".frm-insert-preset").on("click",_t),jQuery(x).on("click","a.frm-bulk-edit-link",function(e){e.preventDefault();var t,n,i,o,a,l="",s=jQuery(this).closest("[data-fid]").data("fid"),d=yn(s),c=To(s);if(o=document.getElementById("frm_field_"+s+"_opts")){for(a=o.getElementsByTagName("li"),document.getElementById("bulk-field-id").value=s,t=0;t<a.length;t++)"000"!==(n=a[t].getAttribute("data-optkey"))&&void 0!==(i=document.getElementsByName("field_options[options_"+s+"]["+n+"][label]")[0])&&(l+=i.value,d&&(l+="|"+document.getElementsByName("field_options[options_"+s+"]["+n+"][value]")[0].value),c&&(l+="|"+document.getElementsByName("field_options[options_"+s+"]["+n+"][price]")[0].value),l+="\r\n"),t>=a.length-1&&(document.getElementById("frm_bulk_options").value=l);return r.dialog("open"),!1}}),jQuery("#frm-update-bulk-opts").on("click",function(){var e=document.getElementById("bulk-field-id").value;document.getElementById("bulk-option-type").value||(this.classList.add("frm_loading_button"),frmAdminBuild.updateOpts(e,document.getElementById("frm_bulk_options").value,r),Mi())})),Cn(),document.addEventListener("frm_added_field",Cn),Be(),Fo(),An(),frmDom.util.documentOn("change",".frm_show_password_setting_input",function(e){var t=e.target.getAttribute("data-fid"),r=document.getElementById("frm_field_id_"+t);r&&r.classList.toggle("frm_disabled_show_password",!e.target.checked)}),document.addEventListener("scroll",Ti,!0),document.addEventListener("change",Ni),document.querySelector(".frm_form_builder").addEventListener("mousedown",function(e){e.shiftKey&&e.preventDefault()}),wp.hooks.addAction("frmShowedFieldSettings","formidableAdmin",function(e,t){t.querySelectorAll(".frm-collapse-me").forEach(Rr)},9999)},settingsInit:function(){var e,t,r,n,i=jQuery(document.getElementById("frm_notification_settings"));i.on("click",".frm_email_buttons",ai),i.on("click",".frm_remove_field",li),i.on("change",".frm_to_row, .frm_from_row",si),i.on("change",".frm_tax_selector",wi),i.on("change","select.frm_single_post_field",_i),i.on("change","select.frm_toggle_post_content",pi),i.on("change","select.frm_dyncontent_opt",gi),i.on("change",".frm_post_type",hi),i.on("click",".frm_add_postmeta_row",bi),i.on("click",".frm_add_posttax_row",vi),i.on("click",".frm_toggle_cf_opts",xi),i.on("click",".frm_duplicate_form_action",ei),jQuery(".frm_actions_list").on("click",".frm_active_action",ri),jQuery("#frm-show-groups, #frm-hide-groups").on("click",ni),so(),jQuery("ul.frm_actions_list li").each(function(){di(jQuery(this).children("a").data("actiontype"));var e=jQuery(this).find("i");"none"!==e.css("background-image")&&e.addClass("frm-inverse")}),jQuery(".frm_submit_settings_btn").on("click",ki),Un(),(e=jQuery(".frm_form_settings")).on("click",".frm_add_form_logic",mi),e.on("click",".frm_already_used",fi),document.addEventListener("click",function(e){var t=e.target;t.closest(".frm_image_preview_wrapper")&&(t.closest(".frm_choose_image_box")?kt.bind(t)(e):t.closest(".frm_remove_image_option")&&Et.bind(t)(e))}),e.on("mouseup","*:not(.frm-show-box)",Po),jQuery(document.getElementById("no_save")).on("change",function(){this.checked&&!0!==confirm(a.no_save_warning)&&jQuery(this).attr("checked",!1)}),jQuery('select[name="options[edit_action]"]').on("change",Zn),t=document.getElementById("logged_in"),jQuery(t).on("change",function(){this.checked?Io(".hide_logged_in"):Lo(".hide_logged_in")}),r=jQuery(document.getElementById("frm_cookie_expiration")),jQuery(document.getElementById("frm_single_entry_type")).on("change",function(){"cookie"===this.value?r.fadeIn("slow"):r.fadeOut("slow")});var o=document.getElementById("single_entry");jQuery(o).on("change",function(){this.checked?Io(".hide_single_entry"):Lo(".hide_single_entry"),this.checked&&"cookie"===jQuery(document.getElementById("frm_single_entry_type")).val()?r.fadeIn("slow"):r.fadeOut("slow")}),jQuery(".hide_save_draft").hide();var l=jQuery(document.getElementById("save_draft"));l.on("change",function(){this.checked?jQuery(".hide_save_draft").fadeIn("slow"):jQuery(".hide_save_draft").fadeOut("slow")}),Gn(l),n=document.getElementById("editable"),jQuery(n).on("change",function(){this.checked?(jQuery(".hide_editable").fadeIn("slow"),Gn(document.getElementById("edit_action"))):(jQuery(".hide_editable").fadeOut("slow"),jQuery(".edit_action_message_box").fadeOut("slow"))}),jQuery(document).on("change","#protect_files",function(){this.checked?jQuery(".hide_protect_files").fadeIn("slow"):jQuery(".hide_protect_files").fadeOut("slow")}),jQuery(document).on("frm-multiselect-changed","#protect_files_role",Bn),jQuery(document).on("submit",".frm_form_settings",Hi),jQuery(document).on("change","#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea",Mi),ho(),jQuery(document).on("frm-action-loaded",Ki),frmDom.util.documentOn("change",'.frm_on_submit_type input[type="radio"]',function(e){if(e.target.checked){var t=e.target.closest(".frm_form_action_settings");t.querySelectorAll(".frm_on_submit_dependent_setting:not(.frm_hidden)").forEach(function(e){e.classList.add("frm_hidden")}),t.querySelectorAll(".frm_on_submit_dependent_setting[data-show-if-"+e.target.value+"]").forEach(function(e){e.classList.remove("frm_hidden")}),t.setAttribute("data-on-submit-type",e.target.value)}}),wp.hooks.addAction("frm_reset_fields_updated","formidableAdmin",zi)},panelInit:function(){var e,t,r,n;jQuery(".frm_wrap, #postbox-container-1").on("click",".frm_insert_code",Ei),jQuery(document).on("change",".frm_insert_val",function(){Ai(jQuery(this).data("target"),jQuery(this).val()),jQuery(this).val("")}),jQuery(document).on("click change",'[name="frm-id-key-condition"]',Ii),jQuery(document).on("keyup change",".frm-build-logic",Bi),Yn(),jQuery(document).on("frmElementAdded",function(e,t){Yn(t)}),jQuery(document).on("mousedown",".frm-show-box",Ci),t=document.getElementById("form_settings_page"),r=document.body.classList.contains("post-type-frm_display"),n=document.getElementById("frm_insert_fields_tab"),(null!==t||r||D)&&jQuery(document).on("focusin","form input, form textarea",function(e){var i,o,a,l;if(e.stopPropagation(),qi(this),jQuery(this).is(":not(:submit, input[type=button], .frm-search-input, input[type=checkbox])")){if(jQuery(e.target).closest("#frm_adv_info").length)return;if(null!==t||D)i=jQuery("#frm_html_tab"),jQuery(this).closest("#html_settings").length>0?(i.show(),i.siblings().hide(),jQuery("#frm_html_tab a").trigger("click"),void 0!==(l=this.id)&&-1===l.indexOf("-search-input")&&(jQuery("#frm-adv-info-tab").attr("data-fills",l.trim()),this.classList.contains("field_custom_html")&&(l="field_custom_html"),a=["after_html","before_html","submit_html","field_custom_html"],jQuery.inArray(l,a)>=0&&(jQuery(".frm_code_list li:not(.show_"+l+")").addClass("frm_hidden"),jQuery(".frm_code_list li.show_"+l).removeClass("frm_hidden")))):((o=jQuery(".frm-category-tabs li"))[0]&&(o[0].style.display=""),n.click(),i.hide(),i.siblings().show());else if(r){var s=new CustomEvent("frm_legacy_views_handle_field_focus");s.frmData={idAttrValue:this.id},document.dispatchEvent(s)}}}),jQuery(".frm_wrap, #postbox-container-1").on("mousedown","#frm_adv_info a, .frm_field_list a",function(e){e.preventDefault()}),(e=jQuery("#frm_adv_info")).on("click",".subsubsub a.frmids",function(e){Vi("frmids",e)}),e.on("click",".subsubsub a.frmkeys",function(e){Vi("frmkeys",e)})},inboxInit:function(){var e;jQuery(".frm_inbox_dismiss").on("click",function(e){var t=this.parentNode.parentNode,r=t.getAttribute("data-message"),n=this.getAttribute("href"),i=t.cloneNode(!0),o=document.querySelector(".frm-dismissed-inbox-messages");if("free_templates"!==r||this.classList.contains("frm_inbox_dismiss")){e.preventDefault(),data={action:"frm_inbox_dismiss",key:r,nonce:frmGlobal.nonce};var a="frm_inbox_slide_in"===t.id;a&&(t.classList.remove("s11-fadein"),t.classList.add("s11-fadeout"),t.addEventListener("animationend",function(){return t.remove()},{once:!0})),Ao(data,function(){if(!a)return"#"!==n?(window.location=n,!0):void So(t,function(){var e;null!==o&&(i.classList.remove("frm-fade"),null===(e=i.querySelector(".frm-inbox-message-heading"))||void 0===e||e.removeChild(i.querySelector(".frm-inbox-message-heading .frm_inbox_dismiss")),o.append(i)),1===t.parentNode.querySelectorAll(".frm-inbox-message-container").length&&(document.getElementById("frm_empty_inbox").classList.remove("frm_hidden"),t.parentNode.closest(".frm-active").classList.add("frm-empty-inbox"),_o()),t.parentNode.removeChild(t)})})}}),!1===(null===(e=document.getElementById("frm_empty_inbox"))||void 0===e?void 0:e.classList.contains("frm_hidden"))&&_o()},solutionInit:function(){jQuery(document).on("submit","#frm-new-template",vo)},styleInit:function(){var e=jQuery(".frm_image_preview_wrapper");e.on("click",".frm_choose_image_box",kt),e.on("click",".frm_remove_image_option",Et),wp.hooks.doAction("frm_style_editor_init")},customCSSInit:function(){console.warn("Calling frmAdminBuild.customCSSInit is deprecated.")},globalSettingsInit:function(){var e;jQuery(document).on("click","[data-frmuninstall]",Ji),so(),null!==(e=document.getElementById("licenses_settings"))&&jQuery(e).on("click",".edd_frm_save_license",Xi),jQuery(document).on("click","#frm-new-template button",yo),jQuery("#frm-dismissable-cta .dismiss").on("click",function(e){e.preventDefault(),jQuery.post(ajaxurl,{action:"frm_lite_settings_upgrade",nonce:frmGlobal.nonce}),jQuery(".settings-lite-cta").remove()});var t=document.getElementById("frm_re_type");t&&t.addEventListener("change",jo),document.querySelector(".frm_captchas").addEventListener("change",function(e){var t,r=null===(t=document.querySelector('.frm_captchas input[checked="checked"]'))||void 0===t?void 0:t.value,n=e.target.value!==r;document.querySelector(".captcha_settings .frm_note_style").classList.toggle("frm_hidden",!n)}),frmDom.util.documentOn("submit",".frm_settings_form",function(){return E=0});var r=document.getElementById("manage_styles_settings");r&&r.addEventListener("change",function(e){var t=e.target;"SELECT"===t.nodeName&&t.dataset.name&&!t.getAttribute("name")&&t.setAttribute("name",t.dataset.name)});var n=document.getElementById("payments_settings"),i=null==n?void 0:n.querySelectorAll('[name="frm_payment_section"]');i&&i.forEach(function(e){e.addEventListener("change",function(){if(e.checked){var t=n.querySelector('label[for="'.concat(e.id,'"]'));t&&t.setAttribute("aria-selected","true"),i.forEach(function(t){if(t!==e){var r=n.querySelector('label[for="'.concat(t.id,'"]'));r&&r.setAttribute("aria-selected","false")}})}})})},exportInit:function(){jQuery(".frm_form_importer").on("submit",Yi),jQuery(document.getElementById("frm_export_xml")).on("submit",eo),jQuery("#frm_export_xml input, #frm_export_xml select").on("change",to),jQuery('input[name="frm_import_file"]').on("change",ro),document.querySelector('select[name="format"]').addEventListener("change",io),jQuery('input[name="frm_export_forms[]"]').on("click",lo),so(),jQuery(".frm-feature-banner .dismiss").on("click",function(e){e.preventDefault(),jQuery.post(ajaxurl,{action:"frm_dismiss_migrator",plugin:this.id,nonce:frmGlobal.nonce}),this.parentElement.remove()}),ao(no()),document.querySelector("#frm-export-select-all").addEventListener("change",function(e){document.querySelectorAll('[name="frm_export_forms[]"]').forEach(function(t){return t.checked=e.target.checked})})},inboxBannerInit:function(){var e=document.getElementById("frm_banner");if(e){var t=e.querySelector(".frm-banner-dismiss");document.addEventListener("click",function(r){r.target===t&&Ao({action:"frm_inbox_dismiss",key:e.dataset.key,nonce:frmGlobal.nonce},function(){jQuery(e).fadeOut(400,function(){e.remove()})})})}},updateOpts:function(e,t,r){var n=yn(e),i=To(e)?"frm_bulk_products":"frm_import_options";jQuery.ajax({type:"POST",url:ajaxurl,data:{action:i,field_id:e,opts:t,separate:n,nonce:frmGlobal.nonce},success:function(t){document.getElementById("frm_field_"+e+"_opts").innerHTML=t,wp.hooks.doAction("frm_after_bulk_edit_opts",e),on(e),void 0!==r&&(r.dialog("close"),document.getElementById("frm-update-bulk-opts").classList.remove("frm_loading_button"))}})},triggerRemoveLogic:function(e,t){jQuery("#frm_logic_"+e+"_"+t+" .frm_remove_tag").trigger("click")},downloadXML:function(e,t,r){var n=ajaxurl+"?action=frm_"+e+"_xml&ids="+t;null!==r&&(n=n+"&is_template="+r),location.href=n},hooks:{applyFilters:function(e){for(var t,r=arguments.length,n=new Array(r>1?r-1:0),i=1;i<r;i++)n[i-1]=arguments[i];return(t=wp.hooks).applyFilters.apply(t,[e].concat(n))},addFilter:function(e,t,r){return wp.hooks.addFilter(e,"formidable",t,r)},doAction:function(e){for(var t,r=arguments.length,n=new Array(r>1?r-1:0),i=1;i<r;i++)n[i-1]=arguments[i];return(t=wp.hooks).doAction.apply(t,[e].concat(n))},addAction:function(e,t,r){return wp.hooks.addAction(e,"formidable",t,r)}},applyZebraStriping:function(e,t){var r=document.querySelectorAll("".concat(e," tr").concat(t?":not(.".concat(t,")"):""));if(!(r.length<1)){var n=!0;r.forEach(function(e){e.classList.remove("frm-odd","frm-even"),e.classList.add(n?"frm-odd":"frm-even"),n=!n}),document.querySelectorAll(e).forEach(function(e){return e.classList.add("frm-zebra-striping")})}},initModal:Bo,infoModal:H,offsetModalY:Gi,adjustConditionalLogicOptionOrders:ln,addRadioCheckboxOpt:dn,installNewForm:bo,toggleAddonState:mo,purifyHtml:pn,loadApiEmailForm:go,addMyEmailAddress:Mo,fillDropdownOpts:cn,showSaveAndReloadModal:Oi,clearSettingsBox:Ke,deleteField:Er,insertFormField:function(e){var t=arguments.length>1&&void 0!==arguments[1]?arguments[1]:{};return new Promise(function(r){var n=A,i=0;"summary"===e&&(i=w.children('li[data-type="break"]').length>0?1:0),jQuery.ajax({type:"POST",url:ajaxurl,data:Object.assign(ge(e,0,n,i),{field_options:t}),success:function(t){r(t),setTimeout(function(){En(),Ue(t,!0);var r=ve(t);r&&wp.hooks.doAction("frm_after_field_added_in_form_builder",{field:t,fieldId:r,fieldType:e,form_id:n})},10)},error:je})})},confirmLinkClick:P,handleInsertFieldByDraggingResponse:ye,handleAddFieldClickResponse:Ie,syncLayoutClasses:se,moveFieldSettings:oi}},window.frmAdminBuild=frmAdminBuildJS(),jQuery(document).ready(function(){var e;frmAdminBuild.init(),document.querySelectorAll(".frm-dropdown-menu").forEach(function(e){e.classList.add("dropdown-menu");var t,r,n=e.querySelector(".frm-dropdown-toggle");n&&(n.hasAttribute("role")||n.setAttribute("role","button"),n.hasAttribute("tabindex")||n.setAttribute("tabindex",0)),"UL"===e.tagName&&(r=(r=(r=(r=(r=(r=(t=e).outerHTML).replace("<ul ","<div ")).replace("</ul>","</div>")).replaceAll("<li>",'<div class="dropdown-item">')).replaceAll('<li class="','<div class="dropdown-item ')).replaceAll("</li>","</div>"),t.outerHTML=r)}),null===(e=document.querySelector(".preview.dropdown .frm-dropdown-toggle"))||void 0===e||e.setAttribute("data-bs-toggle","dropdown"),document.querySelectorAll("[data-toggle]").forEach(function(e){return e.setAttribute("data-bs-toggle",e.getAttribute("data-toggle"))})}),window.frm_show_div=function(e,t,r,n){t==r?jQuery(n+e).fadeIn("slow").css("visibility","visible"):jQuery(n+e).fadeOut("slow")},window.frmCheckAll=function(e,t){jQuery('input[name^="'+t+'"]').prop("checked",!!e)},window.frmCheckAllLevel=function(e,t,r){jQuery(".frm_catlevel_"+r).children(".frm_checkbox").children("label").children('input[name^="'+t+'"]').prop("checked",!!e)},window.frmGetFieldValues=function(e,t,r,n,i,o){e&&jQuery.ajax({type:"POST",url:ajaxurl,data:"action=frm_get_field_values&current_field="+t+"&field_id="+e+"&name="+i+"&t="+n+"&form_action="+jQuery('input[name="frm_action"]').val()+"&nonce="+frmGlobal.nonce,success:function(e){document.getElementById("frm_show_selected_values_"+t+"_"+r).innerHTML=e,"function"==typeof o&&o()}})},window.frmImportCsv=function(e){var t="";"undefined"!=typeof __FRMURLVARS&&(t=__FRMURLVARS),jQuery.ajax({type:"POST",url:ajaxurl,data:"action=frm_import_csv&nonce="+frmGlobal.nonce+"&frm_skip_cookie=1"+t,success:function(t){var r=jQuery(".frm_admin_progress_bar").attr("aria-valuemax"),n=r-t,i=n/r*100;jQuery(".frm_admin_progress_bar").css("width",i+"%").attr("aria-valuenow",n),parseInt(t,10)>0?(jQuery(".frm_csv_remaining").html(t),frmImportCsv(e)):(jQuery(document.getElementById("frm_import_message")).html(frm_admin_js.import_complete),setTimeout(function(){location.href="?page=formidable-entries&frm_action=list&form="+e+"&import-message=1"},2e3))}})}})();
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./node_modules/@tannin/compile/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/@tannin/compile/index.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ compile)
+/* harmony export */ });
+/* harmony import */ var _tannin_postfix__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tannin/postfix */ "./node_modules/@tannin/postfix/index.js");
+/* harmony import */ var _tannin_evaluate__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @tannin/evaluate */ "./node_modules/@tannin/evaluate/index.js");
+
+
+
+/**
+ * Given a C expression, returns a function which can be called to evaluate its
+ * result.
+ *
+ * @example
+ *
+ * ```js
+ * import compile from '@tannin/compile';
+ *
+ * const evaluate = compile( 'n > 1' );
+ *
+ * evaluate( { n: 2 } );
+ * // ⇒ true
+ * ```
+ *
+ * @param {string} expression C expression.
+ *
+ * @return {(variables?:{[variable:string]:*})=>*} Compiled evaluator.
+ */
+function compile( expression ) {
+	var terms = (0,_tannin_postfix__WEBPACK_IMPORTED_MODULE_0__["default"])( expression );
+
+	return function( variables ) {
+		return (0,_tannin_evaluate__WEBPACK_IMPORTED_MODULE_1__["default"])( terms, variables );
+	};
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@tannin/evaluate/index.js":
+/*!************************************************!*\
+  !*** ./node_modules/@tannin/evaluate/index.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ evaluate)
+/* harmony export */ });
+/**
+ * Operator callback functions.
+ *
+ * @type {Object}
+ */
+var OPERATORS = {
+	'!': function( a ) {
+		return ! a;
+	},
+	'*': function( a, b ) {
+		return a * b;
+	},
+	'/': function( a, b ) {
+		return a / b;
+	},
+	'%': function( a, b ) {
+		return a % b;
+	},
+	'+': function( a, b ) {
+		return a + b;
+	},
+	'-': function( a, b ) {
+		return a - b;
+	},
+	'<': function( a, b ) {
+		return a < b;
+	},
+	'<=': function( a, b ) {
+		return a <= b;
+	},
+	'>': function( a, b ) {
+		return a > b;
+	},
+	'>=': function( a, b ) {
+		return a >= b;
+	},
+	'==': function( a, b ) {
+		return a === b;
+	},
+	'!=': function( a, b ) {
+		return a !== b;
+	},
+	'&&': function( a, b ) {
+		return a && b;
+	},
+	'||': function( a, b ) {
+		return a || b;
+	},
+	'?:': function( a, b, c ) {
+		if ( a ) {
+			throw b;
+		}
+
+		return c;
+	},
+};
+
+/**
+ * Given an array of postfix terms and operand variables, returns the result of
+ * the postfix evaluation.
+ *
+ * @example
+ *
+ * ```js
+ * import evaluate from '@tannin/evaluate';
+ *
+ * // 3 + 4 * 5 / 6 ⇒ '3 4 5 * 6 / +'
+ * const terms = [ '3', '4', '5', '*', '6', '/', '+' ];
+ *
+ * evaluate( terms, {} );
+ * // ⇒ 6.333333333333334
+ * ```
+ *
+ * @param {string[]} postfix   Postfix terms.
+ * @param {Object}   variables Operand variables.
+ *
+ * @return {*} Result of evaluation.
+ */
+function evaluate( postfix, variables ) {
+	var stack = [],
+		i, j, args, getOperatorResult, term, value;
+
+	for ( i = 0; i < postfix.length; i++ ) {
+		term = postfix[ i ];
+
+		getOperatorResult = OPERATORS[ term ];
+		if ( getOperatorResult ) {
+			// Pop from stack by number of function arguments.
+			j = getOperatorResult.length;
+			args = Array( j );
+			while ( j-- ) {
+				args[ j ] = stack.pop();
+			}
+
+			try {
+				value = getOperatorResult.apply( null, args );
+			} catch ( earlyReturn ) {
+				return earlyReturn;
+			}
+		} else if ( variables.hasOwnProperty( term ) ) {
+			value = variables[ term ];
+		} else {
+			value = +term;
+		}
+
+		stack.push( value );
+	}
+
+	return stack[ 0 ];
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@tannin/plural-forms/index.js":
+/*!****************************************************!*\
+  !*** ./node_modules/@tannin/plural-forms/index.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ pluralForms)
+/* harmony export */ });
+/* harmony import */ var _tannin_compile__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tannin/compile */ "./node_modules/@tannin/compile/index.js");
+
+
+/**
+ * Given a C expression, returns a function which, when called with a value,
+ * evaluates the result with the value assumed to be the "n" variable of the
+ * expression. The result will be coerced to its numeric equivalent.
+ *
+ * @param {string} expression C expression.
+ *
+ * @return {Function} Evaluator function.
+ */
+function pluralForms( expression ) {
+	var evaluate = (0,_tannin_compile__WEBPACK_IMPORTED_MODULE_0__["default"])( expression );
+
+	return function( n ) {
+		return +evaluate( { n: n } );
+	};
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@tannin/postfix/index.js":
+/*!***********************************************!*\
+  !*** ./node_modules/@tannin/postfix/index.js ***!
+  \***********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ postfix)
+/* harmony export */ });
+var PRECEDENCE, OPENERS, TERMINATORS, PATTERN;
+
+/**
+ * Operator precedence mapping.
+ *
+ * @type {Object}
+ */
+PRECEDENCE = {
+	'(': 9,
+	'!': 8,
+	'*': 7,
+	'/': 7,
+	'%': 7,
+	'+': 6,
+	'-': 6,
+	'<': 5,
+	'<=': 5,
+	'>': 5,
+	'>=': 5,
+	'==': 4,
+	'!=': 4,
+	'&&': 3,
+	'||': 2,
+	'?': 1,
+	'?:': 1,
+};
+
+/**
+ * Characters which signal pair opening, to be terminated by terminators.
+ *
+ * @type {string[]}
+ */
+OPENERS = [ '(', '?' ];
+
+/**
+ * Characters which signal pair termination, the value an array with the
+ * opener as its first member. The second member is an optional operator
+ * replacement to push to the stack.
+ *
+ * @type {string[]}
+ */
+TERMINATORS = {
+	')': [ '(' ],
+	':': [ '?', '?:' ],
+};
+
+/**
+ * Pattern matching operators and openers.
+ *
+ * @type {RegExp}
+ */
+PATTERN = /<=|>=|==|!=|&&|\|\||\?:|\(|!|\*|\/|%|\+|-|<|>|\?|\)|:/;
+
+/**
+ * Given a C expression, returns the equivalent postfix (Reverse Polish)
+ * notation terms as an array.
+ *
+ * If a postfix string is desired, simply `.join( ' ' )` the result.
+ *
+ * @example
+ *
+ * ```js
+ * import postfix from '@tannin/postfix';
+ *
+ * postfix( 'n > 1' );
+ * // ⇒ [ 'n', '1', '>' ]
+ * ```
+ *
+ * @param {string} expression C expression.
+ *
+ * @return {string[]} Postfix terms.
+ */
+function postfix( expression ) {
+	var terms = [],
+		stack = [],
+		match, operator, term, element;
+
+	while ( ( match = expression.match( PATTERN ) ) ) {
+		operator = match[ 0 ];
+
+		// Term is the string preceding the operator match. It may contain
+		// whitespace, and may be empty (if operator is at beginning).
+		term = expression.substr( 0, match.index ).trim();
+		if ( term ) {
+			terms.push( term );
+		}
+
+		while ( ( element = stack.pop() ) ) {
+			if ( TERMINATORS[ operator ] ) {
+				if ( TERMINATORS[ operator ][ 0 ] === element ) {
+					// Substitution works here under assumption that because
+					// the assigned operator will no longer be a terminator, it
+					// will be pushed to the stack during the condition below.
+					operator = TERMINATORS[ operator ][ 1 ] || operator;
+					break;
+				}
+			} else if ( OPENERS.indexOf( element ) >= 0 || PRECEDENCE[ element ] < PRECEDENCE[ operator ] ) {
+				// Push to stack if either an opener or when pop reveals an
+				// element of lower precedence.
+				stack.push( element );
+				break;
+			}
+
+			// For each popped from stack, push to terms.
+			terms.push( element );
+		}
+
+		if ( ! TERMINATORS[ operator ] ) {
+			stack.push( operator );
+		}
+
+		// Slice matched fragment from expression to continue match.
+		expression = expression.substr( match.index + operator.length );
+	}
+
+	// Push remainder of operand, if exists, to terms.
+	expression = expression.trim();
+	if ( expression ) {
+		terms.push( expression );
+	}
+
+	// Pop remaining items from stack into terms.
+	return terms.concat( stack.reverse() );
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createAddHook.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createAddHook.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback AddHook
+ *
+ * Adds the hook to the appropriate hooks container.
+ *
+ * @param {string}               hookName  Name of hook to add
+ * @param {string}               namespace The unique namespace identifying the callback in the form `vendor/plugin/function`.
+ * @param {import('.').Callback} callback  Function to call when the hook is run
+ * @param {number}               [priority=10]  Priority of this hook
+ */
+
+/**
+ * Returns a function which, when invoked, will add a hook.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ *
+ * @return {AddHook} Function that adds a new hook.
+ */
+
+function createAddHook(hooks, storeKey) {
+  return function addHook(hookName, namespace, callback) {
+    var priority = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 10;
+    var hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    }
+
+    if ('function' !== typeof callback) {
+      // eslint-disable-next-line no-console
+      console.error('The hook callback must be a function.');
+      return;
+    } // Validate numeric priority
+
+
+    if ('number' !== typeof priority) {
+      // eslint-disable-next-line no-console
+      console.error('If specified, the hook priority must be a number.');
+      return;
+    }
+
+    var handler = {
+      callback: callback,
+      priority: priority,
+      namespace: namespace
+    };
+
+    if (hooksStore[hookName]) {
+      // Find the correct insert index of the new hook.
+      var handlers = hooksStore[hookName].handlers;
+      /** @type {number} */
+
+      var i;
+
+      for (i = handlers.length; i > 0; i--) {
+        if (priority >= handlers[i - 1].priority) {
+          break;
+        }
+      }
+
+      if (i === handlers.length) {
+        // If append, operate via direct assignment.
+        handlers[i] = handler;
+      } else {
+        // Otherwise, insert before index via splice.
+        handlers.splice(i, 0, handler);
+      } // We may also be currently executing this hook.  If the callback
+      // we're adding would come after the current callback, there's no
+      // problem; otherwise we need to increase the execution index of
+      // any other runs by 1 to account for the added element.
+
+
+      hooksStore.__current.forEach(function (hookInfo) {
+        if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+          hookInfo.currentIndex++;
+        }
+      });
+    } else {
+      // This is the first hook of its type.
+      hooksStore[hookName] = {
+        handlers: [handler],
+        runs: 0
+      };
+    }
+
+    if (hookName !== 'hookAdded') {
+      hooks.doAction('hookAdded', hookName, namespace, callback, priority);
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createAddHook);
+//# sourceMappingURL=createAddHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createCurrentHook.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createCurrentHook.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Returns a function which, when invoked, will return the name of the
+ * currently running hook, or `null` if no hook of the given type is currently
+ * running.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ *
+ * @return {() => string | null} Function that returns the current hook name or null.
+ */
+function createCurrentHook(hooks, storeKey) {
+  return function currentHook() {
+    var _hooksStore$__current, _hooksStore$__current2;
+
+    var hooksStore = hooks[storeKey];
+    return (_hooksStore$__current = (_hooksStore$__current2 = hooksStore.__current[hooksStore.__current.length - 1]) === null || _hooksStore$__current2 === void 0 ? void 0 : _hooksStore$__current2.name) !== null && _hooksStore$__current !== void 0 ? _hooksStore$__current : null;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createCurrentHook);
+//# sourceMappingURL=createCurrentHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createDidHook.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createDidHook.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * @callback DidHook
+ *
+ * Returns the number of times an action has been fired.
+ *
+ * @param  {string} hookName The hook name to check.
+ *
+ * @return {number | undefined} The number of times the hook has run.
+ */
+
+/**
+ * Returns a function which, when invoked, will return the number of times a
+ * hook has been called.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ *
+ * @return {DidHook} Function that returns a hook's call count.
+ */
+
+function createDidHook(hooks, storeKey) {
+  return function didHook(hookName) {
+    var hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_0__["default"])(hookName)) {
+      return;
+    }
+
+    return hooksStore[hookName] && hooksStore[hookName].runs ? hooksStore[hookName].runs : 0;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDidHook);
+//# sourceMappingURL=createDidHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createDoingHook.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createDoingHook.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback DoingHook
+ * Returns whether a hook is currently being executed.
+ *
+ * @param  {string} [hookName] The name of the hook to check for.  If
+ *                             omitted, will check for any hook being executed.
+ *
+ * @return {boolean} Whether the hook is being executed.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether a hook is
+ * currently being executed.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ *
+ * @return {DoingHook} Function that returns whether a hook is currently
+ *                     being executed.
+ */
+function createDoingHook(hooks, storeKey) {
+  return function doingHook(hookName) {
+    var hooksStore = hooks[storeKey]; // If the hookName was not passed, check for any current hook.
+
+    if ('undefined' === typeof hookName) {
+      return 'undefined' !== typeof hooksStore.__current[0];
+    } // Return the __current hook.
+
+
+    return hooksStore.__current[0] ? hookName === hooksStore.__current[0].name : false;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createDoingHook);
+//# sourceMappingURL=createDoingHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createHasHook.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createHasHook.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * @callback HasHook
+ *
+ * Returns whether any handlers are attached for the given hookName and optional namespace.
+ *
+ * @param {string} hookName    The name of the hook to check for.
+ * @param {string} [namespace] Optional. The unique namespace identifying the callback
+ *                             in the form `vendor/plugin/function`.
+ *
+ * @return {boolean} Whether there are handlers that are attached to the given hook.
+ */
+
+/**
+ * Returns a function which, when invoked, will return whether any handlers are
+ * attached to a particular hook.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ *
+ * @return {HasHook} Function that returns whether any handlers are
+ *                   attached to a particular hook and optional namespace.
+ */
+function createHasHook(hooks, storeKey) {
+  return function hasHook(hookName, namespace) {
+    var hooksStore = hooks[storeKey]; // Use the namespace if provided.
+
+    if ('undefined' !== typeof namespace) {
+      return hookName in hooksStore && hooksStore[hookName].handlers.some(function (hook) {
+        return hook.namespace === namespace;
+      });
+    }
+
+    return hookName in hooksStore;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHasHook);
+//# sourceMappingURL=createHasHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createHooks.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createHooks.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   _Hooks: () => (/* binding */ _Hooks),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/classCallCheck */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/classCallCheck.js");
+/* harmony import */ var _createAddHook__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./createAddHook */ "./node_modules/@wordpress/hooks/build-module/createAddHook.js");
+/* harmony import */ var _createRemoveHook__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./createRemoveHook */ "./node_modules/@wordpress/hooks/build-module/createRemoveHook.js");
+/* harmony import */ var _createHasHook__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./createHasHook */ "./node_modules/@wordpress/hooks/build-module/createHasHook.js");
+/* harmony import */ var _createRunHook__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./createRunHook */ "./node_modules/@wordpress/hooks/build-module/createRunHook.js");
+/* harmony import */ var _createCurrentHook__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./createCurrentHook */ "./node_modules/@wordpress/hooks/build-module/createCurrentHook.js");
+/* harmony import */ var _createDoingHook__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./createDoingHook */ "./node_modules/@wordpress/hooks/build-module/createDoingHook.js");
+/* harmony import */ var _createDidHook__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./createDidHook */ "./node_modules/@wordpress/hooks/build-module/createDidHook.js");
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+
+
+/**
+ * Internal class for constructing hooks. Use `createHooks()` function
+ *
+ * Note, it is necessary to expose this class to make its type public.
+ *
+ * @private
+ */
+
+var _Hooks = function _Hooks() {
+  (0,_babel_runtime_helpers_esm_classCallCheck__WEBPACK_IMPORTED_MODULE_0__["default"])(this, _Hooks);
+
+  /** @type {import('.').Store} actions */
+  this.actions = Object.create(null);
+  this.actions.__current = [];
+  /** @type {import('.').Store} filters */
+
+  this.filters = Object.create(null);
+  this.filters.__current = [];
+  this.addAction = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'actions');
+  this.addFilter = (0,_createAddHook__WEBPACK_IMPORTED_MODULE_1__["default"])(this, 'filters');
+  this.removeAction = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions');
+  this.removeFilter = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters');
+  this.hasAction = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'actions');
+  this.hasFilter = (0,_createHasHook__WEBPACK_IMPORTED_MODULE_3__["default"])(this, 'filters');
+  this.removeAllActions = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'actions', true);
+  this.removeAllFilters = (0,_createRemoveHook__WEBPACK_IMPORTED_MODULE_2__["default"])(this, 'filters', true);
+  this.doAction = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'actions');
+  this.applyFilters = (0,_createRunHook__WEBPACK_IMPORTED_MODULE_4__["default"])(this, 'filters', true);
+  this.currentAction = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'actions');
+  this.currentFilter = (0,_createCurrentHook__WEBPACK_IMPORTED_MODULE_5__["default"])(this, 'filters');
+  this.doingAction = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'actions');
+  this.doingFilter = (0,_createDoingHook__WEBPACK_IMPORTED_MODULE_6__["default"])(this, 'filters');
+  this.didAction = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_7__["default"])(this, 'actions');
+  this.didFilter = (0,_createDidHook__WEBPACK_IMPORTED_MODULE_7__["default"])(this, 'filters');
+};
+/** @typedef {_Hooks} Hooks */
+
+/**
+ * Returns an instance of the hooks object.
+ *
+ * @return {Hooks} A Hooks instance.
+ */
+
+function createHooks() {
+  return new _Hooks();
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createHooks);
+//# sourceMappingURL=createHooks.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createRemoveHook.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createRemoveHook.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validateNamespace.js */ "./node_modules/@wordpress/hooks/build-module/validateNamespace.js");
+/* harmony import */ var _validateHookName_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./validateHookName.js */ "./node_modules/@wordpress/hooks/build-module/validateHookName.js");
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * @callback RemoveHook
+ * Removes the specified callback (or all callbacks) from the hook with a given hookName
+ * and namespace.
+ *
+ * @param {string} hookName  The name of the hook to modify.
+ * @param {string} namespace The unique namespace identifying the callback in the
+ *                           form `vendor/plugin/function`.
+ *
+ * @return {number | undefined} The number of callbacks removed.
+ */
+
+/**
+ * Returns a function which, when invoked, will remove a specified hook or all
+ * hooks by the given name.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ * @param  {boolean}              [removeAll=false] Whether to remove all callbacks for a hookName,
+ *                                                  without regard to namespace. Used to create
+ *                                                  `removeAll*` functions.
+ *
+ * @return {RemoveHook} Function that removes hooks.
+ */
+
+function createRemoveHook(hooks, storeKey) {
+  var removeAll = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function removeHook(hookName, namespace) {
+    var hooksStore = hooks[storeKey];
+
+    if (!(0,_validateHookName_js__WEBPACK_IMPORTED_MODULE_1__["default"])(hookName)) {
+      return;
+    }
+
+    if (!removeAll && !(0,_validateNamespace_js__WEBPACK_IMPORTED_MODULE_0__["default"])(namespace)) {
+      return;
+    } // Bail if no hooks exist by this name
+
+
+    if (!hooksStore[hookName]) {
+      return 0;
+    }
+
+    var handlersRemoved = 0;
+
+    if (removeAll) {
+      handlersRemoved = hooksStore[hookName].handlers.length;
+      hooksStore[hookName] = {
+        runs: hooksStore[hookName].runs,
+        handlers: []
+      };
+    } else {
+      // Try to find the specified callback to remove.
+      var handlers = hooksStore[hookName].handlers;
+
+      var _loop = function _loop(i) {
+        if (handlers[i].namespace === namespace) {
+          handlers.splice(i, 1);
+          handlersRemoved++; // This callback may also be part of a hook that is
+          // currently executing.  If the callback we're removing
+          // comes after the current callback, there's no problem;
+          // otherwise we need to decrease the execution index of any
+          // other runs by 1 to account for the removed element.
+
+          hooksStore.__current.forEach(function (hookInfo) {
+            if (hookInfo.name === hookName && hookInfo.currentIndex >= i) {
+              hookInfo.currentIndex--;
+            }
+          });
+        }
+      };
+
+      for (var i = handlers.length - 1; i >= 0; i--) {
+        _loop(i);
+      }
+    }
+
+    if (hookName !== 'hookRemoved') {
+      hooks.doAction('hookRemoved', hookName, namespace);
+    }
+
+    return handlersRemoved;
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRemoveHook);
+//# sourceMappingURL=createRemoveHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/createRunHook.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/createRunHook.js ***!
+  \*********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/toConsumableArray */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/toConsumableArray.js");
+
+
+/**
+ * Returns a function which, when invoked, will execute all callbacks
+ * registered to a hook of the specified type, optionally returning the final
+ * value of the call chain.
+ *
+ * @param  {import('.').Hooks}    hooks Hooks instance.
+ * @param  {import('.').StoreKey} storeKey
+ * @param  {boolean}              [returnFirstArg=false] Whether each hook callback is expected to
+ *                                                       return its first argument.
+ *
+ * @return {(hookName:string, ...args: unknown[]) => unknown} Function that runs hook callbacks.
+ */
+function createRunHook(hooks, storeKey) {
+  var returnFirstArg = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  return function runHooks(hookName) {
+    var hooksStore = hooks[storeKey];
+
+    if (!hooksStore[hookName]) {
+      hooksStore[hookName] = {
+        handlers: [],
+        runs: 0
+      };
+    }
+
+    hooksStore[hookName].runs++;
+    var handlers = hooksStore[hookName].handlers; // The following code is stripped from production builds.
+
+    if (true) {
+      // Handle any 'all' hooks registered.
+      if ('hookAdded' !== hookName && hooksStore.all) {
+        handlers.push.apply(handlers, (0,_babel_runtime_helpers_esm_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__["default"])(hooksStore.all.handlers));
+      }
+    }
+
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    if (!handlers || !handlers.length) {
+      return returnFirstArg ? args[0] : undefined;
+    }
+
+    var hookInfo = {
+      name: hookName,
+      currentIndex: 0
+    };
+
+    hooksStore.__current.push(hookInfo);
+
+    while (hookInfo.currentIndex < handlers.length) {
+      var handler = handlers[hookInfo.currentIndex];
+      var result = handler.callback.apply(null, args);
+
+      if (returnFirstArg) {
+        args[0] = result;
+      }
+
+      hookInfo.currentIndex++;
+    }
+
+    hooksStore.__current.pop();
+
+    if (returnFirstArg) {
+      return args[0];
+    }
+  };
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (createRunHook);
+//# sourceMappingURL=createRunHook.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/index.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/index.js ***!
+  \*************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   actions: () => (/* binding */ actions),
+/* harmony export */   addAction: () => (/* binding */ addAction),
+/* harmony export */   addFilter: () => (/* binding */ addFilter),
+/* harmony export */   applyFilters: () => (/* binding */ applyFilters),
+/* harmony export */   createHooks: () => (/* reexport safe */ _createHooks__WEBPACK_IMPORTED_MODULE_0__["default"]),
+/* harmony export */   currentAction: () => (/* binding */ currentAction),
+/* harmony export */   currentFilter: () => (/* binding */ currentFilter),
+/* harmony export */   defaultHooks: () => (/* binding */ defaultHooks),
+/* harmony export */   didAction: () => (/* binding */ didAction),
+/* harmony export */   didFilter: () => (/* binding */ didFilter),
+/* harmony export */   doAction: () => (/* binding */ doAction),
+/* harmony export */   doingAction: () => (/* binding */ doingAction),
+/* harmony export */   doingFilter: () => (/* binding */ doingFilter),
+/* harmony export */   filters: () => (/* binding */ filters),
+/* harmony export */   hasAction: () => (/* binding */ hasAction),
+/* harmony export */   hasFilter: () => (/* binding */ hasFilter),
+/* harmony export */   removeAction: () => (/* binding */ removeAction),
+/* harmony export */   removeAllActions: () => (/* binding */ removeAllActions),
+/* harmony export */   removeAllFilters: () => (/* binding */ removeAllFilters),
+/* harmony export */   removeFilter: () => (/* binding */ removeFilter)
+/* harmony export */ });
+/* harmony import */ var _createHooks__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./createHooks */ "./node_modules/@wordpress/hooks/build-module/createHooks.js");
+/**
+ * Internal dependencies
+ */
+
+/** @typedef {(...args: any[])=>any} Callback */
+
+/**
+ * @typedef Handler
+ * @property {Callback} callback  The callback
+ * @property {string}   namespace The namespace
+ * @property {number}   priority  The namespace
+ */
+
+/**
+ * @typedef Hook
+ * @property {Handler[]} handlers Array of handlers
+ * @property {number}    runs     Run counter
+ */
+
+/**
+ * @typedef Current
+ * @property {string} name         Hook name
+ * @property {number} currentIndex The index
+ */
+
+/**
+ * @typedef {Record<string, Hook> & {__current: Current[]}} Store
+ */
+
+/**
+ * @typedef {'actions' | 'filters'} StoreKey
+ */
+
+/**
+ * @typedef {import('./createHooks').Hooks} Hooks
+ */
+
+var defaultHooks = (0,_createHooks__WEBPACK_IMPORTED_MODULE_0__["default"])();
+var addAction = defaultHooks.addAction,
+    addFilter = defaultHooks.addFilter,
+    removeAction = defaultHooks.removeAction,
+    removeFilter = defaultHooks.removeFilter,
+    hasAction = defaultHooks.hasAction,
+    hasFilter = defaultHooks.hasFilter,
+    removeAllActions = defaultHooks.removeAllActions,
+    removeAllFilters = defaultHooks.removeAllFilters,
+    doAction = defaultHooks.doAction,
+    applyFilters = defaultHooks.applyFilters,
+    currentAction = defaultHooks.currentAction,
+    currentFilter = defaultHooks.currentFilter,
+    doingAction = defaultHooks.doingAction,
+    doingFilter = defaultHooks.doingFilter,
+    didAction = defaultHooks.didAction,
+    didFilter = defaultHooks.didFilter,
+    actions = defaultHooks.actions,
+    filters = defaultHooks.filters;
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/validateHookName.js":
+/*!************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/validateHookName.js ***!
+  \************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a hookName string.
+ *
+ * @param  {string} hookName The hook name to validate. Should be a non empty string containing
+ *                           only numbers, letters, dashes, periods and underscores. Also,
+ *                           the hook name cannot begin with `__`.
+ *
+ * @return {boolean}            Whether the hook name is valid.
+ */
+function validateHookName(hookName) {
+  if ('string' !== typeof hookName || '' === hookName) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name must be a non-empty string.');
+    return false;
+  }
+
+  if (/^__/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name cannot begin with `__`.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.-]*$/.test(hookName)) {
+    // eslint-disable-next-line no-console
+    console.error('The hook name can only contain numbers, letters, dashes, periods and underscores.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateHookName);
+//# sourceMappingURL=validateHookName.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/build-module/validateNamespace.js":
+/*!*************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/build-module/validateNamespace.js ***!
+  \*************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/**
+ * Validate a namespace string.
+ *
+ * @param  {string} namespace The namespace to validate - should take the form
+ *                            `vendor/plugin/function`.
+ *
+ * @return {boolean}             Whether the namespace is valid.
+ */
+function validateNamespace(namespace) {
+  if ('string' !== typeof namespace || '' === namespace) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace must be a non-empty string.');
+    return false;
+  }
+
+  if (!/^[a-zA-Z][a-zA-Z0-9_.\-\/]*$/.test(namespace)) {
+    // eslint-disable-next-line no-console
+    console.error('The namespace can only contain numbers, letters, dashes, periods, underscores and slashes.');
+    return false;
+  }
+
+  return true;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validateNamespace);
+//# sourceMappingURL=validateNamespace.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/build-module/create-i18n.js":
+/*!******************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/build-module/create-i18n.js ***!
+  \******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   createI18n: () => (/* binding */ createI18n)
+/* harmony export */ });
+/* harmony import */ var _babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/esm/defineProperty */ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/defineProperty.js");
+/* harmony import */ var tannin__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tannin */ "./node_modules/tannin/index.js");
+
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { (0,_babel_runtime_helpers_esm_defineProperty__WEBPACK_IMPORTED_MODULE_0__["default"])(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+/**
+ * External dependencies
+ */
+
+/**
+ * @typedef {Record<string,any>} LocaleData
+ */
+
+/**
+ * Default locale data to use for Tannin domain when not otherwise provided.
+ * Assumes an English plural forms expression.
+ *
+ * @type {LocaleData}
+ */
+
+var DEFAULT_LOCALE_DATA = {
+  '': {
+    /** @param {number} n */
+    plural_forms: function plural_forms(n) {
+      return n === 1 ? 0 : 1;
+    }
+  }
+};
+/*
+ * Regular expression that matches i18n hooks like `i18n.gettext`, `i18n.ngettext`,
+ * `i18n.gettext_domain` or `i18n.ngettext_with_context` or `i18n.has_translation`.
+ */
+
+var I18N_HOOK_REGEXP = /^i18n\.(n?gettext|has_translation)(_|$)/;
+/**
+ * @typedef {(domain?: string) => LocaleData} GetLocaleData
+ *
+ * Returns locale data by domain in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} SetLocaleData
+ *
+ * Merges locale data into the Tannin instance by domain. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/**
+ * @typedef {(data?: LocaleData, domain?: string) => void} ResetLocaleData
+ *
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ */
+
+/** @typedef {() => void} SubscribeCallback */
+
+/** @typedef {() => void} UnsubscribeCallback */
+
+/**
+ * @typedef {(callback: SubscribeCallback) => UnsubscribeCallback} Subscribe
+ *
+ * Subscribes to changes of locale data
+ */
+
+/**
+ * @typedef {(domain?: string) => string} GetFilterDomain
+ * Retrieve the domain to use when calling domain-specific filters.
+ */
+
+/**
+ * @typedef {(text: string, domain?: string) => string} __
+ *
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ */
+
+/**
+ * @typedef {(text: string, context: string, domain?: string) => string} _x
+ *
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, domain?: string) => string} _n
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ */
+
+/**
+ * @typedef {(single: string, plural: string, number: number, context: string, domain?: string) => string} _nx
+ *
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ */
+
+/**
+ * @typedef {() => boolean} IsRtl
+ *
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ */
+
+/**
+ * @typedef {(single: string, context?: string, domain?: string) => boolean} HasTranslation
+ *
+ * Check if there is a translation for a given string in singular form.
+ */
+
+/** @typedef {import('@wordpress/hooks').Hooks} Hooks */
+
+/**
+ * An i18n instance
+ *
+ * @typedef I18n
+ * @property {GetLocaleData} getLocaleData     Returns locale data by domain in a Jed-formatted JSON object shape.
+ * @property {SetLocaleData} setLocaleData     Merges locale data into the Tannin instance by domain. Accepts data in a
+ *                                             Jed-formatted JSON object shape.
+ * @property {ResetLocaleData} resetLocaleData Resets all current Tannin instance locale data and sets the specified
+ *                                             locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ * @property {Subscribe} subscribe             Subscribes to changes of Tannin locale data.
+ * @property {__} __                           Retrieve the translation of text.
+ * @property {_x} _x                           Retrieve translated string with gettext context.
+ * @property {_n} _n                           Translates and retrieves the singular or plural form based on the supplied
+ *                                             number.
+ * @property {_nx} _nx                         Translates and retrieves the singular or plural form based on the supplied
+ *                                             number, with gettext context.
+ * @property {IsRtl} isRTL                     Check if current locale is RTL.
+ * @property {HasTranslation} hasTranslation   Check if there is a translation for a given string.
+ */
+
+/**
+ * Create an i18n instance
+ *
+ * @param {LocaleData} [initialData]    Locale data configuration.
+ * @param {string}     [initialDomain]  Domain for which configuration applies.
+ * @param {Hooks} [hooks]     Hooks implementation.
+ * @return {I18n}                       I18n instance
+ */
+
+var createI18n = function createI18n(initialData, initialDomain, hooks) {
+  /**
+   * The underlying instance of Tannin to which exported functions interface.
+   *
+   * @type {Tannin}
+   */
+  var tannin = new tannin__WEBPACK_IMPORTED_MODULE_1__["default"]({});
+  var listeners = new Set();
+
+  var notifyListeners = function notifyListeners() {
+    listeners.forEach(function (listener) {
+      return listener();
+    });
+  };
+  /**
+   * Subscribe to changes of locale data.
+   *
+   * @param {SubscribeCallback} callback Subscription callback.
+   * @return {UnsubscribeCallback} Unsubscribe callback.
+   */
+
+
+  var subscribe = function subscribe(callback) {
+    listeners.add(callback);
+    return function () {
+      return listeners.delete(callback);
+    };
+  };
+  /** @type {GetLocaleData} */
+
+
+  var getLocaleData = function getLocaleData() {
+    var domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return tannin.data[domain];
+  };
+  /**
+   * @param {LocaleData} [data]
+   * @param {string} [domain]
+   */
+
+
+  var doSetLocaleData = function doSetLocaleData(data) {
+    var domain = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'default';
+    tannin.data[domain] = _objectSpread(_objectSpread(_objectSpread({}, DEFAULT_LOCALE_DATA), tannin.data[domain]), data); // Populate default domain configuration (supported locale date which omits
+    // a plural forms expression).
+
+    tannin.data[domain][''] = _objectSpread(_objectSpread({}, DEFAULT_LOCALE_DATA['']), tannin.data[domain]['']);
+  };
+  /** @type {SetLocaleData} */
+
+
+  var setLocaleData = function setLocaleData(data, domain) {
+    doSetLocaleData(data, domain);
+    notifyListeners();
+  };
+  /** @type {ResetLocaleData} */
+
+
+  var resetLocaleData = function resetLocaleData(data, domain) {
+    // Reset all current Tannin locale data.
+    tannin.data = {}; // Reset cached plural forms functions cache.
+
+    tannin.pluralForms = {};
+    setLocaleData(data, domain);
+  };
+  /**
+   * Wrapper for Tannin's `dcnpgettext`. Populates default locale data if not
+   * otherwise previously assigned.
+   *
+   * @param {string|undefined} domain   Domain to retrieve the translated text.
+   * @param {string|undefined} context  Context information for the translators.
+   * @param {string}           single   Text to translate if non-plural. Used as
+   *                                    fallback return value on a caught error.
+   * @param {string}           [plural] The text to be used if the number is
+   *                                    plural.
+   * @param {number}           [number] The number to compare against to use
+   *                                    either the singular or plural form.
+   *
+   * @return {string} The translated string.
+   */
+
+
+  var dcnpgettext = function dcnpgettext() {
+    var domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    var context = arguments.length > 1 ? arguments[1] : undefined;
+    var single = arguments.length > 2 ? arguments[2] : undefined;
+    var plural = arguments.length > 3 ? arguments[3] : undefined;
+    var number = arguments.length > 4 ? arguments[4] : undefined;
+
+    if (!tannin.data[domain]) {
+      // use `doSetLocaleData` to set silently, without notifying listeners
+      doSetLocaleData(undefined, domain);
+    }
+
+    return tannin.dcnpgettext(domain, context, single, plural, number);
+  };
+  /** @type {GetFilterDomain} */
+
+
+  var getFilterDomain = function getFilterDomain() {
+    var domain = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'default';
+    return domain;
+  };
+  /** @type {__} */
+
+
+  var __ = function __(text, domain) {
+    var translation = dcnpgettext(domain, undefined, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext', translation, text, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_' + getFilterDomain(domain), translation, text, domain)
+    );
+  };
+  /** @type {_x} */
+
+
+  var _x = function _x(text, context, domain) {
+    var translation = dcnpgettext(domain, context, text);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters text with its translation based on context information.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} text        Text to translate.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.gettext_with_context', translation, text, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.gettext_with_context_' + getFilterDomain(domain), translation, text, context, domain)
+    );
+  };
+  /** @type {_n} */
+
+
+  var _n = function _n(single, plural, number, domain) {
+    var translation = dcnpgettext(domain, undefined, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext', translation, single, plural, number, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_' + getFilterDomain(domain), translation, single, plural, number, domain)
+    );
+  };
+  /** @type {_nx} */
+
+
+  var _nx = function _nx(single, plural, number, context, domain) {
+    var translation = dcnpgettext(domain, context, single, plural, number);
+
+    if (!hooks) {
+      return translation;
+    }
+    /**
+     * Filters the singular or plural form of a string with gettext context.
+     *
+     * @param {string} translation Translated text.
+     * @param {string} single      The text to be used if the number is singular.
+     * @param {string} plural      The text to be used if the number is plural.
+     * @param {string} number      The number to compare against to use either the singular or plural form.
+     * @param {string} context     Context information for the translators.
+     * @param {string} domain      Text domain. Unique identifier for retrieving translated strings.
+     */
+
+
+    translation =
+    /** @type {string} */
+
+    /** @type {*} */
+    hooks.applyFilters('i18n.ngettext_with_context', translation, single, plural, number, context, domain);
+    return (
+      /** @type {string} */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.ngettext_with_context_' + getFilterDomain(domain), translation, single, plural, number, context, domain)
+    );
+  };
+  /** @type {IsRtl} */
+
+
+  var isRTL = function isRTL() {
+    return 'rtl' === _x('ltr', 'text direction');
+  };
+  /** @type {HasTranslation} */
+
+
+  var hasTranslation = function hasTranslation(single, context, domain) {
+    var _tannin$data, _tannin$data2;
+
+    var key = context ? context + "\x04" + single : single;
+    var result = !!((_tannin$data = tannin.data) !== null && _tannin$data !== void 0 && (_tannin$data2 = _tannin$data[domain !== null && domain !== void 0 ? domain : 'default']) !== null && _tannin$data2 !== void 0 && _tannin$data2[key]);
+
+    if (hooks) {
+      /**
+       * Filters the presence of a translation in the locale data.
+       *
+       * @param {boolean} hasTranslation Whether the translation is present or not..
+       * @param {string} single The singular form of the translated text (used as key in locale data)
+       * @param {string} context Context information for the translators.
+       * @param {string} domain Text domain. Unique identifier for retrieving translated strings.
+       */
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation', result, single, context, domain);
+      result =
+      /** @type { boolean } */
+
+      /** @type {*} */
+      hooks.applyFilters('i18n.has_translation_' + getFilterDomain(domain), result, single, context, domain);
+    }
+
+    return result;
+  };
+
+  if (initialData) {
+    setLocaleData(initialData, initialDomain);
+  }
+
+  if (hooks) {
+    /**
+     * @param {string} hookName
+     */
+    var onHookAddedOrRemoved = function onHookAddedOrRemoved(hookName) {
+      if (I18N_HOOK_REGEXP.test(hookName)) {
+        notifyListeners();
+      }
+    };
+
+    hooks.addAction('hookAdded', 'core/i18n', onHookAddedOrRemoved);
+    hooks.addAction('hookRemoved', 'core/i18n', onHookAddedOrRemoved);
+  }
+
+  return {
+    getLocaleData: getLocaleData,
+    setLocaleData: setLocaleData,
+    resetLocaleData: resetLocaleData,
+    subscribe: subscribe,
+    __: __,
+    _x: _x,
+    _n: _n,
+    _nx: _nx,
+    isRTL: isRTL,
+    hasTranslation: hasTranslation
+  };
+};
+//# sourceMappingURL=create-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/build-module/default-i18n.js":
+/*!*******************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/build-module/default-i18n.js ***!
+  \*******************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __: () => (/* binding */ __),
+/* harmony export */   _n: () => (/* binding */ _n),
+/* harmony export */   _nx: () => (/* binding */ _nx),
+/* harmony export */   _x: () => (/* binding */ _x),
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   getLocaleData: () => (/* binding */ getLocaleData),
+/* harmony export */   hasTranslation: () => (/* binding */ hasTranslation),
+/* harmony export */   isRTL: () => (/* binding */ isRTL),
+/* harmony export */   resetLocaleData: () => (/* binding */ resetLocaleData),
+/* harmony export */   setLocaleData: () => (/* binding */ setLocaleData),
+/* harmony export */   subscribe: () => (/* binding */ subscribe)
+/* harmony export */ });
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/hooks */ "./node_modules/@wordpress/hooks/build-module/index.js");
+/**
+ * Internal dependencies
+ */
+
+/**
+ * WordPress dependencies
+ */
+
+
+var i18n = (0,_create_i18n__WEBPACK_IMPORTED_MODULE_0__.createI18n)(undefined, undefined, _wordpress_hooks__WEBPACK_IMPORTED_MODULE_1__.defaultHooks);
+/**
+ * Default, singleton instance of `I18n`.
+ */
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (i18n);
+/*
+ * Comments in this file are duplicated from ./i18n due to
+ * https://github.com/WordPress/gutenberg/pull/20318#issuecomment-590837722
+ */
+
+/**
+ * @typedef {import('./create-i18n').LocaleData} LocaleData
+ * @typedef {import('./create-i18n').SubscribeCallback} SubscribeCallback
+ * @typedef {import('./create-i18n').UnsubscribeCallback} UnsubscribeCallback
+ */
+
+/**
+ * Returns locale data by domain in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {string} [domain] Domain for which to get the data.
+ * @return {LocaleData} Locale data.
+ */
+
+var getLocaleData = i18n.getLocaleData.bind(i18n);
+/**
+ * Merges locale data into the Tannin instance by domain. Accepts data in a
+ * Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+var setLocaleData = i18n.setLocaleData.bind(i18n);
+/**
+ * Resets all current Tannin instance locale data and sets the specified
+ * locale data for the domain. Accepts data in a Jed-formatted JSON object shape.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @param {LocaleData} [data]   Locale data configuration.
+ * @param {string}     [domain] Domain for which configuration applies.
+ */
+
+var resetLocaleData = i18n.resetLocaleData.bind(i18n);
+/**
+ * Subscribes to changes of locale data
+ *
+ * @param {SubscribeCallback} callback Subscription callback
+ * @return {UnsubscribeCallback} Unsubscribe callback
+ */
+
+var subscribe = i18n.subscribe.bind(i18n);
+/**
+ * Retrieve the translation of text.
+ *
+ * @see https://developer.wordpress.org/reference/functions/__/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated text.
+ */
+
+var __ = i18n.__.bind(i18n);
+/**
+ * Retrieve translated string with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_x/
+ *
+ * @param {string} text     Text to translate.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} Translated context string without pipe.
+ */
+
+var _x = i18n._x.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_n/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+var _n = i18n._n.bind(i18n);
+/**
+ * Translates and retrieves the singular or plural form based on the supplied
+ * number, with gettext context.
+ *
+ * @see https://developer.wordpress.org/reference/functions/_nx/
+ *
+ * @param {string} single   The text to be used if the number is singular.
+ * @param {string} plural   The text to be used if the number is plural.
+ * @param {number} number   The number to compare against to use either the
+ *                          singular or plural form.
+ * @param {string} context  Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ *
+ * @return {string} The translated singular or plural form.
+ */
+
+var _nx = i18n._nx.bind(i18n);
+/**
+ * Check if current locale is RTL.
+ *
+ * **RTL (Right To Left)** is a locale property indicating that text is written from right to left.
+ * For example, the `he` locale (for Hebrew) specifies right-to-left. Arabic (ar) is another common
+ * language written RTL. The opposite of RTL, LTR (Left To Right) is used in other languages,
+ * including English (`en`, `en-US`, `en-GB`, etc.), Spanish (`es`), and French (`fr`).
+ *
+ * @return {boolean} Whether locale is RTL.
+ */
+
+var isRTL = i18n.isRTL.bind(i18n);
+/**
+ * Check if there is a translation for a given string (in singular form).
+ *
+ * @param {string} single Singular form of the string to look up.
+ * @param {string} [context] Context information for the translators.
+ * @param {string} [domain] Domain to retrieve the translated text.
+ * @return {boolean} Whether the translation exists or not.
+ */
+
+var hasTranslation = i18n.hasTranslation.bind(i18n);
+//# sourceMappingURL=default-i18n.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/build-module/index.js":
+/*!************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/build-module/index.js ***!
+  \************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   __: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.__),
+/* harmony export */   _n: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._n),
+/* harmony export */   _nx: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._nx),
+/* harmony export */   _x: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__._x),
+/* harmony export */   createI18n: () => (/* reexport safe */ _create_i18n__WEBPACK_IMPORTED_MODULE_1__.createI18n),
+/* harmony export */   defaultI18n: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__["default"]),
+/* harmony export */   getLocaleData: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.getLocaleData),
+/* harmony export */   hasTranslation: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.hasTranslation),
+/* harmony export */   isRTL: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.isRTL),
+/* harmony export */   resetLocaleData: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.resetLocaleData),
+/* harmony export */   setLocaleData: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.setLocaleData),
+/* harmony export */   sprintf: () => (/* reexport safe */ _sprintf__WEBPACK_IMPORTED_MODULE_0__.sprintf),
+/* harmony export */   subscribe: () => (/* reexport safe */ _default_i18n__WEBPACK_IMPORTED_MODULE_2__.subscribe)
+/* harmony export */ });
+/* harmony import */ var _sprintf__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./sprintf */ "./node_modules/@wordpress/i18n/build-module/sprintf.js");
+/* harmony import */ var _create_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./create-i18n */ "./node_modules/@wordpress/i18n/build-module/create-i18n.js");
+/* harmony import */ var _default_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./default-i18n */ "./node_modules/@wordpress/i18n/build-module/default-i18n.js");
+
+
+
+//# sourceMappingURL=index.js.map
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/build-module/sprintf.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/build-module/sprintf.js ***!
+  \**************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   sprintf: () => (/* binding */ sprintf)
+/* harmony export */ });
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! memize */ "./node_modules/memize/index.js");
+/* harmony import */ var memize__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(memize__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! sprintf-js */ "./node_modules/sprintf-js/src/sprintf.js");
+/* harmony import */ var sprintf_js__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(sprintf_js__WEBPACK_IMPORTED_MODULE_1__);
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Log to console, once per message; or more precisely, per referentially equal
+ * argument set. Because Jed throws errors, we log these to the console instead
+ * to avoid crashing the application.
+ *
+ * @param {...*} args Arguments to pass to `console.error`
+ */
+
+var logErrorOnce = memize__WEBPACK_IMPORTED_MODULE_0___default()(console.error); // eslint-disable-line no-console
+
+/**
+ * Returns a formatted string. If an error occurs in applying the format, the
+ * original format string is returned.
+ *
+ * @param {string}    format The format of the string to generate.
+ * @param {...*} args Arguments to apply to the format.
+ *
+ * @see https://www.npmjs.com/package/sprintf-js
+ *
+ * @return {string} The formatted string.
+ */
+
+function sprintf(format) {
+  try {
+    for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+      args[_key - 1] = arguments[_key];
+    }
+
+    return sprintf_js__WEBPACK_IMPORTED_MODULE_1___default().sprintf.apply((sprintf_js__WEBPACK_IMPORTED_MODULE_1___default()), [format].concat(args));
+  } catch (error) {
+    logErrorOnce('sprintf error: \n\n' + error.toString());
+    return format;
+  }
+}
+//# sourceMappingURL=sprintf.js.map
+
+/***/ }),
+
+/***/ "./js/src/admin/addon-state.js":
+/*!*************************************!*\
+  !*** ./js/src/admin/addon-state.js ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addonError: () => (/* binding */ addonError),
+/* harmony export */   afterAddonInstall: () => (/* binding */ afterAddonInstall),
+/* harmony export */   extractErrorFromAddOnResponse: () => (/* binding */ extractErrorFromAddOnResponse),
+/* harmony export */   toggleAddonState: () => (/* binding */ toggleAddonState)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+
+var _frmDom = frmDom,
+  div = _frmDom.div,
+  svg = _frmDom.svg;
+
+/**
+ * Toggles the state of an add-on (ie. enable or disable an add-on).
+ *
+ * @param {Element} clicked
+ * @param {string}  action
+ */
+function toggleAddonState(clicked, action) {
+  var _window$ajaxurl;
+  var ajaxurl = (_window$ajaxurl = window.ajaxurl) !== null && _window$ajaxurl !== void 0 ? _window$ajaxurl : frm_js.ajax_url; // eslint-disable-line camelcase
+
+  // Remove any leftover error messages, output an icon and get the plugin basename that needs to be activated.
+  jQuery('.frm-addon-error').remove();
+  var button = jQuery(clicked);
+  var plugin = button.attr('rel');
+  var el = button.parent();
+  var message = el.parent().find('.addon-status-label');
+  button.addClass('frm_loading_button');
+
+  // Process the Ajax to perform the activation.
+  jQuery.ajax({
+    url: ajaxurl,
+    type: 'POST',
+    async: true,
+    cache: false,
+    dataType: 'json',
+    data: {
+      action: action,
+      nonce: frmGlobal.nonce,
+      plugin: plugin
+    },
+    success: function success(response) {
+      var _response$data, _response;
+      response = (_response$data = (_response = response) === null || _response === void 0 ? void 0 : _response.data) !== null && _response$data !== void 0 ? _response$data : response;
+      var saveAndReload;
+      if ('string' !== typeof response && 'string' === typeof response.message) {
+        if ('undefined' !== typeof response.saveAndReload) {
+          saveAndReload = response.saveAndReload;
+        }
+        response = response.message;
+      }
+      var error = extractErrorFromAddOnResponse(response);
+      if (error) {
+        addonError(error, el, button);
+        return;
+      }
+      afterAddonInstall(response, button, message, el, saveAndReload, action);
+
+      /**
+       * Trigger an action after successfully toggling the addon state.
+       *
+       * @param {Object} response
+       */
+      wp.hooks.doAction('frm_update_addon_state', response);
+    },
+    error: function error() {
+      button.removeClass('frm_loading_button');
+    }
+  });
+}
+function extractErrorFromAddOnResponse(response) {
+  if (typeof response !== 'string') {
+    if (typeof response.success !== 'undefined' && response.success) {
+      return false;
+    }
+    if (response.form) {
+      if (jQuery(response.form).is('#message')) {
+        return {
+          message: jQuery(response.form).find('p').html()
+        };
+      }
+    }
+    return response;
+  }
+  return false;
+}
+function afterAddonInstall(response, button, message, el, saveAndReload) {
+  var action = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'frm_activate_addon';
+  var frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+
+  var addonStatuses = document.querySelectorAll('.frm-addon-status');
+  addonStatuses.forEach(function (addonStatus) {
+    addonStatus.textContent = response;
+    addonStatus.style.display = 'block';
+  });
+
+  // The Ajax request was successful, so let's update the output.
+  button.css({
+    opacity: '0'
+  });
+  document.querySelectorAll('.frm-oneclick').forEach(function (oneClick) {
+    oneClick.style.display = 'none';
+  });
+  showUpgradeModalSuccess();
+
+  // Proceed with CSS changes
+  var actionMap = {
+    frm_activate_addon: {
+      class: 'frm-addon-active',
+      message: frmAdminJs.active
+    },
+    frm_deactivate_addon: {
+      class: 'frm-addon-installed',
+      message: frmAdminJs.installed
+    },
+    frm_uninstall_addon: {
+      class: 'frm-addon-not-installed',
+      message: frmAdminJs.not_installed
+    }
+  };
+  actionMap.frm_install_addon = actionMap.frm_activate_addon;
+  var messageElement = message[0];
+  if (messageElement) {
+    messageElement.textContent = actionMap[action].message;
+  }
+  var parentElement = el[0].parentElement;
+  parentElement.classList.remove('frm-addon-not-installed', 'frm-addon-installed', 'frm-addon-active');
+  parentElement.classList.add(actionMap[action].class);
+  var buttonElement = button[0];
+  buttonElement.classList.remove('frm_loading_button');
+
+  // Maybe refresh import and SMTP pages
+  var refreshPage = document.querySelectorAll('.frm-admin-page-import, #frm-admin-smtp, #frm-welcome');
+  if (refreshPage.length > 0) {
+    window.location.reload();
+    return;
+  }
+  if (['settings', 'form_builder'].includes(saveAndReload)) {
+    addonStatuses.forEach(function (addonStatus) {
+      var inModal = null !== addonStatus.closest('#frm_upgrade_modal');
+      addonStatus.appendChild(getSaveAndReloadSettingsOptions(saveAndReload, inModal));
+    });
+  }
+}
+function addonError(response, el, button) {
+  if (response.form) {
+    jQuery('.frm-inline-error').remove();
+    button.closest('.frm-card').html(response.form).css({
+      padding: 5
+    }).find('#upgrade').attr('rel', button.attr('rel')).on('click', installAddonWithCreds);
+  } else {
+    el.append('<div class="frm-addon-error frm_error_style"><p><strong>' + response.message + '</strong></p></div>');
+    button.removeClass('frm_loading_button');
+    jQuery('.frm-addon-error').delay(4000).fadeOut();
+  }
+}
+function getSaveAndReloadSettingsOptions(saveAndReload, inModal) {
+  var className = 'frm-save-and-reload-options';
+  var children = [saveAndReloadSettingsButton(saveAndReload)];
+  if (inModal) {
+    children.push(closePopupButton());
+  }
+  return div({
+    className: className,
+    children: children
+  });
+}
+function saveAndReloadSettingsButton(saveAndReload) {
+  var button = document.createElement('button');
+  button.classList.add('frm-save-and-reload', 'button', 'button-primary', 'frm-button-primary');
+  button.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Save and Reload', 'formidable');
+  button.addEventListener('click', function () {
+    if (saveAndReload === 'form_builder') {
+      saveAndReloadFormBuilder();
+    } else if (saveAndReload === 'settings') {
+      saveAndReloadSettings();
+    }
+  });
+  return button;
+}
+function saveAndReloadSettings() {
+  var page = document.getElementById('form_settings_page');
+  if (null !== page) {
+    var form = page.querySelector('form.frm_form_settings');
+    if (null !== form) {
+      wp.hooks.doAction('frm_reset_fields_updated');
+      form.submit();
+    }
+  }
+}
+function closePopupButton() {
+  var a = document.createElement('a');
+  a.setAttribute('href', '#');
+  a.classList.add('button', 'button-secondary', 'frm-button-secondary', 'dismiss');
+  a.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Not Now', 'formidable');
+  return a;
+}
+function saveAndReloadFormBuilder() {
+  var submitButton = document.getElementById('frm_submit_side_top');
+  if (submitButton.classList.contains('frm_submit_ajax')) {
+    submitButton.setAttribute('data-new-addon-installed', true);
+  }
+  submitButton.click();
+}
+
+/**
+ * Updates the upgrade modal to show successful addon installation state.
+ *
+ * @private
+ * @return {void}
+ */
+function showUpgradeModalSuccess() {
+  var upgradeModal = document.getElementById('frm_upgrade_modal');
+  if (!upgradeModal) {
+    return;
+  }
+  upgradeModal.classList.add('frm-success');
+  var upgradeMessage = upgradeModal.querySelector('.frm-upgrade-message');
+  if (upgradeMessage) {
+    var image = upgradeMessage.querySelector('img');
+    upgradeMessage.replaceChildren((0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Great! Everything\'s ready to go!', 'formidable'), document.createElement('br'), (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('You just need to refresh the builder so the new field becomes available.', 'formidable'));
+    if (image) {
+      upgradeMessage.append(image);
+    }
+  }
+  var frmAddonStatus = document.querySelector('.frm-addon-status');
+  if (frmAddonStatus) {
+    frmAddonStatus.textContent = '';
+  }
+  var circledIcon = upgradeModal.querySelector('.frm-circled-icon');
+  if (circledIcon) {
+    var _circledIcon$querySel;
+    circledIcon.classList.add('frm-circled-icon-green');
+    (_circledIcon$querySel = circledIcon.querySelector('svg')) === null || _circledIcon$querySel === void 0 || _circledIcon$querySel.replaceWith(svg({
+      href: '#frm_checkmark_icon'
+    }));
+  }
+}
+
+/***/ }),
+
+/***/ "./js/src/admin/upgrade-popup.js":
+/*!***************************************!*\
+  !*** ./js/src/admin/upgrade-popup.js ***!
+  \***************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   addOneClick: () => (/* binding */ addOneClick),
+/* harmony export */   initModal: () => (/* binding */ initModal),
+/* harmony export */   initUpgradeModal: () => (/* binding */ initUpgradeModal)
+/* harmony export */ });
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/i18n */ "./node_modules/@wordpress/i18n/build-module/index.js");
+
+var _frmDom = frmDom,
+  svg = _frmDom.svg;
+function getShowLinkHrefValue(link, showLink) {
+  var customLink = link.getAttribute('data-link');
+  if (customLink === null || typeof customLink === 'undefined' || customLink === '') {
+    customLink = showLink.getAttribute('data-default');
+  }
+  return customLink;
+}
+
+/**
+ * Allow addons to be installed from the upgrade modal.
+ *
+ * @param {Element}          link
+ * @param {string}           context      Either 'modal' or 'tab'.
+ * @param {string|undefined} upgradeLabel
+ */
+function addOneClick(link, context, upgradeLabel) {
+  var container;
+  if ('modal' === context) {
+    container = document.getElementById('frm_upgrade_modal');
+  } else if ('tab' === context) {
+    container = document.getElementById(link.getAttribute('href').substr(1));
+  } else {
+    return;
+  }
+  var oneclickMessage = container.querySelector('.frm-oneclick');
+  var upgradeMessage = container.querySelector('.frm-upgrade-message');
+  var showLink = container.querySelector('.frm-upgrade-link');
+  var button = container.querySelector('.frm-oneclick-button');
+  var addonStatus = container.querySelector('.frm-addon-status');
+  var oneclick = link.getAttribute('data-oneclick');
+  var newMessage = link.getAttribute('data-message');
+  var showIt = 'block';
+  var showMsg = 'block';
+  var hideIt = 'none';
+  var modalIconWrapper = container.querySelector('.frm-circled-icon');
+  if (modalIconWrapper) {
+    var _modalIconWrapper$que;
+    modalIconWrapper.classList.remove('frm-circled-icon-green');
+    (_modalIconWrapper$que = modalIconWrapper.querySelector('svg')) === null || _modalIconWrapper$que === void 0 || _modalIconWrapper$que.replaceWith(svg({
+      href: '#frm_filled_lock_icon'
+    }));
+  }
+  var learnMoreLink = container.querySelector('.frm-learn-more');
+  if (learnMoreLink) {
+    learnMoreLink.href = link.dataset.learnMore;
+  }
+
+  // If one click upgrade, hide other content.
+  if (oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick) {
+    if (newMessage === null) {
+      showMsg = 'none';
+    }
+    showIt = 'none';
+    hideIt = 'block';
+    oneclick = JSON.parse(oneclick);
+    button.className = button.className.replace(' frm-install-addon', '').replace(' frm-activate-addon', '');
+    button.className = button.className + ' ' + oneclick.class;
+    button.rel = oneclick.url;
+    oneclickMessage.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('This plugin is not activated. Would you like to activate it now?', 'formidable');
+    button.textContent = (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Activate', 'formidable');
+    var linkIcon = link.querySelector('use');
+    if (linkIcon) {
+      modalIconWrapper === null || modalIconWrapper === void 0 || modalIconWrapper.querySelector('svg').replaceWith(svg({
+        href: linkIcon.getAttribute('href') || linkIcon.getAttribute('xlink:href'),
+        // Get the icon from xlink:href if it has not been updated to use href
+        classList: ['frm_svg32']
+      }));
+    }
+  }
+  if (!newMessage) {
+    newMessage = upgradeMessage.getAttribute('data-default');
+  }
+  if (undefined !== upgradeLabel) {
+    newMessage = newMessage.replace('<span class="frm_feature_label"></span>', upgradeLabel);
+  }
+  upgradeMessage.innerHTML = newMessage;
+  if (link.dataset.upsellImage) {
+    upgradeMessage.appendChild(frmDom.img({
+      src: link.dataset.upsellImage,
+      alt: link.dataset.upgrade
+    }));
+  }
+
+  // Either set the link or use the default.
+  showLink.href = getShowLinkHrefValue(link, showLink);
+  addonStatus.style.display = 'none';
+  oneclickMessage.style.display = hideIt;
+  button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
+  upgradeMessage.style.display = showMsg;
+  showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
+  var showLinkParent = showLink.closest('.frm-upgrade-modal-actions');
+  if (showLinkParent) {
+    showLinkParent.style.display = showIt === 'block' ? 'flex' : showIt;
+  }
+}
+function initModal(id, width) {
+  var $info = jQuery(id);
+  if (!$info.length) {
+    return false;
+  }
+  if (typeof width === 'undefined') {
+    width = '552px';
+  }
+  var dialogArgs = {
+    dialogClass: 'frm-dialog',
+    modal: true,
+    autoOpen: false,
+    closeOnEscape: true,
+    width: width,
+    resizable: false,
+    draggable: false,
+    open: function open() {
+      jQuery('.ui-dialog-titlebar').addClass('frm_hidden').removeClass('ui-helper-clearfix');
+      jQuery('#wpwrap').addClass('frm_overlay');
+      jQuery('.frm-dialog').removeClass('ui-widget ui-widget-content ui-corner-all');
+      $info.removeClass('ui-dialog-content ui-widget-content');
+      bindClickForDialogClose($info);
+    },
+    close: function close() {
+      jQuery('#wpwrap').removeClass('frm_overlay');
+      jQuery('.spinner').css('visibility', 'hidden');
+      this.removeAttribute('data-option-type');
+      var optionType = document.getElementById('bulk-option-type');
+      if (optionType) {
+        optionType.value = '';
+      }
+    }
+  };
+  $info.dialog(dialogArgs);
+  return $info;
+}
+function bindClickForDialogClose($modal) {
+  var closeModal = function closeModal() {
+    $modal.dialog('close');
+  };
+  jQuery('.ui-widget-overlay').on('click', closeModal);
+  $modal.on('click', 'a.dismiss', closeModal);
+}
+function initUpgradeModal() {
+  var $info = initModal('#frm_upgrade_modal');
+  if ($info === false) {
+    return;
+  }
+  document.addEventListener('click', handleUpgradeClick);
+  frmDom.util.documentOn('change', 'select.frm_select_with_upgrade', handleUpgradeClick);
+  function handleUpgradeClick(event) {
+    var element, link, content;
+    element = event.target;
+    if (!element.classList) {
+      return;
+    }
+    var showExpiredModal = element.classList.contains('frm_show_expired_modal') || null !== element.querySelector('.frm_show_expired_modal') || element.closest('.frm_show_expired_modal');
+
+    // If a `select` element is clicked, check if the selected option has a 'data-upgrade' attribute
+    if (event.type === 'change' && element.classList.contains('frm_select_with_upgrade')) {
+      var selectedOption = element.options[element.selectedIndex];
+      if (selectedOption && selectedOption.dataset.upgrade) {
+        element = selectedOption;
+      }
+    }
+    if (!element.dataset.upgrade) {
+      var parent = element.closest('[data-upgrade]');
+      if (!parent) {
+        parent = element.closest('.frm_field_box');
+        if (!parent) {
+          return;
+        }
+        // Fake it if it's missing to avoid error.
+        element.dataset.upgrade = '';
+      }
+      element = parent;
+    }
+    if (showExpiredModal) {
+      var hookName = 'frm_show_expired_modal';
+      wp.hooks.doAction(hookName, element);
+      return;
+    }
+    var upgradeLabel = element.dataset.upgrade;
+    if (!upgradeLabel || element.classList.contains('frm_show_upgrade_tab')) {
+      return;
+    }
+    event.preventDefault();
+    var modal = $info.get(0);
+    var lockIcon = modal.querySelector('.frm_lock_icon');
+    if (lockIcon) {
+      lockIcon.style.display = 'block';
+      lockIcon.classList.remove('frm_lock_open_icon');
+      lockIcon.querySelector('use').setAttribute('href', '#frm_lock_icon');
+    }
+    var upgradeImageId = 'frm_upgrade_modal_image';
+    var oldImage = document.getElementById(upgradeImageId);
+    if (oldImage) {
+      oldImage.remove();
+    }
+    if (element.dataset.image) {
+      if (lockIcon) {
+        lockIcon.style.display = 'none';
+      }
+      lockIcon.parentNode.insertBefore(frmDom.img({
+        id: upgradeImageId,
+        src: frmGlobal.url + '/images/' + element.dataset.image
+      }), lockIcon);
+    }
+    var level = modal.querySelector('.license-level');
+    if (level) {
+      level.textContent = getRequiredLicenseFromTrigger(element);
+    }
+
+    // If one click upgrade, hide other content
+    addOneClick(element, 'modal', upgradeLabel);
+    modal.querySelector('.frm_are_not_installed').style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+    modal.querySelector('.frm-upgrade-modal-title-prefix').style.display = element.dataset.oneclick ? 'inline' : 'none';
+    modal.querySelector('.frm_feature_label').textContent = upgradeLabel;
+    modal.querySelector('.frm-upgrade-modal-title-suffix').style.display = 'none';
+    modal.querySelector('h2').style.display = 'block';
+    $info.dialog('open');
+
+    // set the utm medium
+    var button = modal.querySelector('.button-primary:not(.frm-oneclick-button)');
+    link = button.getAttribute('href').replace(/(medium=)[a-z_-]+/ig, '$1' + element.getAttribute('data-medium'));
+    content = element.getAttribute('data-content');
+    if (content === null) {
+      content = '';
+    }
+    link = link.replace(/(content=)[a-z_-]+/ig, '$1' + content);
+    button.setAttribute('href', link);
+  }
+}
+function getRequiredLicenseFromTrigger(element) {
+  if (element.dataset.requires) {
+    return element.dataset.requires;
+  }
+  return 'Pro';
+}
+
+/***/ }),
+
+/***/ "./node_modules/memize/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/memize/index.js ***!
+  \**************************************/
+/***/ ((module) => {
+
+/**
+ * Memize options object.
+ *
+ * @typedef MemizeOptions
+ *
+ * @property {number} [maxSize] Maximum size of the cache.
+ */
+
+/**
+ * Internal cache entry.
+ *
+ * @typedef MemizeCacheNode
+ *
+ * @property {?MemizeCacheNode|undefined} [prev] Previous node.
+ * @property {?MemizeCacheNode|undefined} [next] Next node.
+ * @property {Array<*>}                   args   Function arguments for cache
+ *                                               entry.
+ * @property {*}                          val    Function result.
+ */
+
+/**
+ * Properties of the enhanced function for controlling cache.
+ *
+ * @typedef MemizeMemoizedFunction
+ *
+ * @property {()=>void} clear Clear the cache.
+ */
+
+/**
+ * Accepts a function to be memoized, and returns a new memoized function, with
+ * optional options.
+ *
+ * @template {Function} F
+ *
+ * @param {F}             fn        Function to memoize.
+ * @param {MemizeOptions} [options] Options object.
+ *
+ * @return {F & MemizeMemoizedFunction} Memoized function.
+ */
+function memize( fn, options ) {
+	var size = 0;
+
+	/** @type {?MemizeCacheNode|undefined} */
+	var head;
+
+	/** @type {?MemizeCacheNode|undefined} */
+	var tail;
+
+	options = options || {};
+
+	function memoized( /* ...args */ ) {
+		var node = head,
+			len = arguments.length,
+			args, i;
+
+		searchCache: while ( node ) {
+			// Perform a shallow equality test to confirm that whether the node
+			// under test is a candidate for the arguments passed. Two arrays
+			// are shallowly equal if their length matches and each entry is
+			// strictly equal between the two sets. Avoid abstracting to a
+			// function which could incur an arguments leaking deoptimization.
+
+			// Check whether node arguments match arguments length
+			if ( node.args.length !== arguments.length ) {
+				node = node.next;
+				continue;
+			}
+
+			// Check whether node arguments match arguments values
+			for ( i = 0; i < len; i++ ) {
+				if ( node.args[ i ] !== arguments[ i ] ) {
+					node = node.next;
+					continue searchCache;
+				}
+			}
+
+			// At this point we can assume we've found a match
+
+			// Surface matched node to head if not already
+			if ( node !== head ) {
+				// As tail, shift to previous. Must only shift if not also
+				// head, since if both head and tail, there is no previous.
+				if ( node === tail ) {
+					tail = node.prev;
+				}
+
+				// Adjust siblings to point to each other. If node was tail,
+				// this also handles new tail's empty `next` assignment.
+				/** @type {MemizeCacheNode} */ ( node.prev ).next = node.next;
+				if ( node.next ) {
+					node.next.prev = node.prev;
+				}
+
+				node.next = head;
+				node.prev = null;
+				/** @type {MemizeCacheNode} */ ( head ).prev = node;
+				head = node;
+			}
+
+			// Return immediately
+			return node.val;
+		}
+
+		// No cached value found. Continue to insertion phase:
+
+		// Create a copy of arguments (avoid leaking deoptimization)
+		args = new Array( len );
+		for ( i = 0; i < len; i++ ) {
+			args[ i ] = arguments[ i ];
+		}
+
+		node = {
+			args: args,
+
+			// Generate the result from original function
+			val: fn.apply( null, args ),
+		};
+
+		// Don't need to check whether node is already head, since it would
+		// have been returned above already if it was
+
+		// Shift existing head down list
+		if ( head ) {
+			head.prev = node;
+			node.next = head;
+		} else {
+			// If no head, follows that there's no tail (at initial or reset)
+			tail = node;
+		}
+
+		// Trim tail if we're reached max size and are pending cache insertion
+		if ( size === /** @type {MemizeOptions} */ ( options ).maxSize ) {
+			tail = /** @type {MemizeCacheNode} */ ( tail ).prev;
+			/** @type {MemizeCacheNode} */ ( tail ).next = null;
+		} else {
+			size++;
+		}
+
+		head = node;
+
+		return node.val;
+	}
+
+	memoized.clear = function() {
+		head = null;
+		tail = null;
+		size = 0;
+	};
+
+	if ( false ) {}
+
+	// Ignore reason: There's not a clear solution to create an intersection of
+	// the function with additional properties, where the goal is to retain the
+	// function signature of the incoming argument and add control properties
+	// on the return value.
+
+	// @ts-ignore
+	return memoized;
+}
+
+module.exports = memize;
+
+
+/***/ }),
+
+/***/ "./node_modules/sprintf-js/src/sprintf.js":
+/*!************************************************!*\
+  !*** ./node_modules/sprintf-js/src/sprintf.js ***!
+  \************************************************/
+/***/ ((module, exports, __webpack_require__) => {
+
+var __WEBPACK_AMD_DEFINE_RESULT__;/* global window, exports, define */
+
+!function() {
+    'use strict'
+
+    var re = {
+        not_string: /[^s]/,
+        not_bool: /[^t]/,
+        not_type: /[^T]/,
+        not_primitive: /[^v]/,
+        number: /[diefg]/,
+        numeric_arg: /[bcdiefguxX]/,
+        json: /[j]/,
+        not_json: /[^j]/,
+        text: /^[^\x25]+/,
+        modulo: /^\x25{2}/,
+        placeholder: /^\x25(?:([1-9]\d*)\$|\(([^)]+)\))?(\+)?(0|'[^$])?(-)?(\d+)?(?:\.(\d+))?([b-gijostTuvxX])/,
+        key: /^([a-z_][a-z_\d]*)/i,
+        key_access: /^\.([a-z_][a-z_\d]*)/i,
+        index_access: /^\[(\d+)\]/,
+        sign: /^[+-]/
+    }
+
+    function sprintf(key) {
+        // `arguments` is not an array, but should be fine for this call
+        return sprintf_format(sprintf_parse(key), arguments)
+    }
+
+    function vsprintf(fmt, argv) {
+        return sprintf.apply(null, [fmt].concat(argv || []))
+    }
+
+    function sprintf_format(parse_tree, argv) {
+        var cursor = 1, tree_length = parse_tree.length, arg, output = '', i, k, ph, pad, pad_character, pad_length, is_positive, sign
+        for (i = 0; i < tree_length; i++) {
+            if (typeof parse_tree[i] === 'string') {
+                output += parse_tree[i]
+            }
+            else if (typeof parse_tree[i] === 'object') {
+                ph = parse_tree[i] // convenience purposes only
+                if (ph.keys) { // keyword argument
+                    arg = argv[cursor]
+                    for (k = 0; k < ph.keys.length; k++) {
+                        if (arg == undefined) {
+                            throw new Error(sprintf('[sprintf] Cannot access property "%s" of undefined value "%s"', ph.keys[k], ph.keys[k-1]))
+                        }
+                        arg = arg[ph.keys[k]]
+                    }
+                }
+                else if (ph.param_no) { // positional argument (explicit)
+                    arg = argv[ph.param_no]
+                }
+                else { // positional argument (implicit)
+                    arg = argv[cursor++]
+                }
+
+                if (re.not_type.test(ph.type) && re.not_primitive.test(ph.type) && arg instanceof Function) {
+                    arg = arg()
+                }
+
+                if (re.numeric_arg.test(ph.type) && (typeof arg !== 'number' && isNaN(arg))) {
+                    throw new TypeError(sprintf('[sprintf] expecting number but found %T', arg))
+                }
+
+                if (re.number.test(ph.type)) {
+                    is_positive = arg >= 0
+                }
+
+                switch (ph.type) {
+                    case 'b':
+                        arg = parseInt(arg, 10).toString(2)
+                        break
+                    case 'c':
+                        arg = String.fromCharCode(parseInt(arg, 10))
+                        break
+                    case 'd':
+                    case 'i':
+                        arg = parseInt(arg, 10)
+                        break
+                    case 'j':
+                        arg = JSON.stringify(arg, null, ph.width ? parseInt(ph.width) : 0)
+                        break
+                    case 'e':
+                        arg = ph.precision ? parseFloat(arg).toExponential(ph.precision) : parseFloat(arg).toExponential()
+                        break
+                    case 'f':
+                        arg = ph.precision ? parseFloat(arg).toFixed(ph.precision) : parseFloat(arg)
+                        break
+                    case 'g':
+                        arg = ph.precision ? String(Number(arg.toPrecision(ph.precision))) : parseFloat(arg)
+                        break
+                    case 'o':
+                        arg = (parseInt(arg, 10) >>> 0).toString(8)
+                        break
+                    case 's':
+                        arg = String(arg)
+                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
+                        break
+                    case 't':
+                        arg = String(!!arg)
+                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
+                        break
+                    case 'T':
+                        arg = Object.prototype.toString.call(arg).slice(8, -1).toLowerCase()
+                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
+                        break
+                    case 'u':
+                        arg = parseInt(arg, 10) >>> 0
+                        break
+                    case 'v':
+                        arg = arg.valueOf()
+                        arg = (ph.precision ? arg.substring(0, ph.precision) : arg)
+                        break
+                    case 'x':
+                        arg = (parseInt(arg, 10) >>> 0).toString(16)
+                        break
+                    case 'X':
+                        arg = (parseInt(arg, 10) >>> 0).toString(16).toUpperCase()
+                        break
+                }
+                if (re.json.test(ph.type)) {
+                    output += arg
+                }
+                else {
+                    if (re.number.test(ph.type) && (!is_positive || ph.sign)) {
+                        sign = is_positive ? '+' : '-'
+                        arg = arg.toString().replace(re.sign, '')
+                    }
+                    else {
+                        sign = ''
+                    }
+                    pad_character = ph.pad_char ? ph.pad_char === '0' ? '0' : ph.pad_char.charAt(1) : ' '
+                    pad_length = ph.width - (sign + arg).length
+                    pad = ph.width ? (pad_length > 0 ? pad_character.repeat(pad_length) : '') : ''
+                    output += ph.align ? sign + arg + pad : (pad_character === '0' ? sign + pad + arg : pad + sign + arg)
+                }
+            }
+        }
+        return output
+    }
+
+    var sprintf_cache = Object.create(null)
+
+    function sprintf_parse(fmt) {
+        if (sprintf_cache[fmt]) {
+            return sprintf_cache[fmt]
+        }
+
+        var _fmt = fmt, match, parse_tree = [], arg_names = 0
+        while (_fmt) {
+            if ((match = re.text.exec(_fmt)) !== null) {
+                parse_tree.push(match[0])
+            }
+            else if ((match = re.modulo.exec(_fmt)) !== null) {
+                parse_tree.push('%')
+            }
+            else if ((match = re.placeholder.exec(_fmt)) !== null) {
+                if (match[2]) {
+                    arg_names |= 1
+                    var field_list = [], replacement_field = match[2], field_match = []
+                    if ((field_match = re.key.exec(replacement_field)) !== null) {
+                        field_list.push(field_match[1])
+                        while ((replacement_field = replacement_field.substring(field_match[0].length)) !== '') {
+                            if ((field_match = re.key_access.exec(replacement_field)) !== null) {
+                                field_list.push(field_match[1])
+                            }
+                            else if ((field_match = re.index_access.exec(replacement_field)) !== null) {
+                                field_list.push(field_match[1])
+                            }
+                            else {
+                                throw new SyntaxError('[sprintf] failed to parse named argument key')
+                            }
+                        }
+                    }
+                    else {
+                        throw new SyntaxError('[sprintf] failed to parse named argument key')
+                    }
+                    match[2] = field_list
+                }
+                else {
+                    arg_names |= 2
+                }
+                if (arg_names === 3) {
+                    throw new Error('[sprintf] mixing positional and named placeholders is not (yet) supported')
+                }
+
+                parse_tree.push(
+                    {
+                        placeholder: match[0],
+                        param_no:    match[1],
+                        keys:        match[2],
+                        sign:        match[3],
+                        pad_char:    match[4],
+                        align:       match[5],
+                        width:       match[6],
+                        precision:   match[7],
+                        type:        match[8]
+                    }
+                )
+            }
+            else {
+                throw new SyntaxError('[sprintf] unexpected placeholder')
+            }
+            _fmt = _fmt.substring(match[0].length)
+        }
+        return sprintf_cache[fmt] = parse_tree
+    }
+
+    /**
+     * export to either browser or node.js
+     */
+    /* eslint-disable quote-props */
+    if (true) {
+        exports.sprintf = sprintf
+        exports.vsprintf = vsprintf
+    }
+    if (typeof window !== 'undefined') {
+        window['sprintf'] = sprintf
+        window['vsprintf'] = vsprintf
+
+        if (true) {
+            !(__WEBPACK_AMD_DEFINE_RESULT__ = (function() {
+                return {
+                    'sprintf': sprintf,
+                    'vsprintf': vsprintf
+                }
+            }).call(exports, __webpack_require__, exports, module),
+		__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__))
+        }
+    }
+    /* eslint-enable quote-props */
+}(); // eslint-disable-line
+
+
+/***/ }),
+
+/***/ "./node_modules/tannin/index.js":
+/*!**************************************!*\
+  !*** ./node_modules/tannin/index.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ Tannin)
+/* harmony export */ });
+/* harmony import */ var _tannin_plural_forms__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @tannin/plural-forms */ "./node_modules/@tannin/plural-forms/index.js");
+
+
+/**
+ * Tannin constructor options.
+ *
+ * @typedef {Object} TanninOptions
+ *
+ * @property {string}   [contextDelimiter] Joiner in string lookup with context.
+ * @property {Function} [onMissingKey]     Callback to invoke when key missing.
+ */
+
+/**
+ * Domain metadata.
+ *
+ * @typedef {Object} TanninDomainMetadata
+ *
+ * @property {string}            [domain]       Domain name.
+ * @property {string}            [lang]         Language code.
+ * @property {(string|Function)} [plural_forms] Plural forms expression or
+ *                                              function evaluator.
+ */
+
+/**
+ * Domain translation pair respectively representing the singular and plural
+ * translation.
+ *
+ * @typedef {[string,string]} TanninTranslation
+ */
+
+/**
+ * Locale data domain. The key is used as reference for lookup, the value an
+ * array of two string entries respectively representing the singular and plural
+ * translation.
+ *
+ * @typedef {{[key:string]:TanninDomainMetadata|TanninTranslation,'':TanninDomainMetadata|TanninTranslation}} TanninLocaleDomain
+ */
+
+/**
+ * Jed-formatted locale data.
+ *
+ * @see http://messageformat.github.io/Jed/
+ *
+ * @typedef {{[domain:string]:TanninLocaleDomain}} TanninLocaleData
+ */
+
+/**
+ * Default Tannin constructor options.
+ *
+ * @type {TanninOptions}
+ */
+var DEFAULT_OPTIONS = {
+	contextDelimiter: '\u0004',
+	onMissingKey: null,
+};
+
+/**
+ * Given a specific locale data's config `plural_forms` value, returns the
+ * expression.
+ *
+ * @example
+ *
+ * ```
+ * getPluralExpression( 'nplurals=2; plural=(n != 1);' ) === '(n != 1)'
+ * ```
+ *
+ * @param {string} pf Locale data plural forms.
+ *
+ * @return {string} Plural forms expression.
+ */
+function getPluralExpression( pf ) {
+	var parts, i, part;
+
+	parts = pf.split( ';' );
+
+	for ( i = 0; i < parts.length; i++ ) {
+		part = parts[ i ].trim();
+		if ( part.indexOf( 'plural=' ) === 0 ) {
+			return part.substr( 7 );
+		}
+	}
+}
+
+/**
+ * Tannin constructor.
+ *
+ * @class
+ *
+ * @param {TanninLocaleData} data      Jed-formatted locale data.
+ * @param {TanninOptions}    [options] Tannin options.
+ */
+function Tannin( data, options ) {
+	var key;
+
+	/**
+	 * Jed-formatted locale data.
+	 *
+	 * @name Tannin#data
+	 * @type {TanninLocaleData}
+	 */
+	this.data = data;
+
+	/**
+	 * Plural forms function cache, keyed by plural forms string.
+	 *
+	 * @name Tannin#pluralForms
+	 * @type {Object<string,Function>}
+	 */
+	this.pluralForms = {};
+
+	/**
+	 * Effective options for instance, including defaults.
+	 *
+	 * @name Tannin#options
+	 * @type {TanninOptions}
+	 */
+	this.options = {};
+
+	for ( key in DEFAULT_OPTIONS ) {
+		this.options[ key ] = options !== undefined && key in options
+			? options[ key ]
+			: DEFAULT_OPTIONS[ key ];
+	}
+}
+
+/**
+ * Returns the plural form index for the given domain and value.
+ *
+ * @param {string} domain Domain on which to calculate plural form.
+ * @param {number} n      Value for which plural form is to be calculated.
+ *
+ * @return {number} Plural form index.
+ */
+Tannin.prototype.getPluralForm = function( domain, n ) {
+	var getPluralForm = this.pluralForms[ domain ],
+		config, plural, pf;
+
+	if ( ! getPluralForm ) {
+		config = this.data[ domain ][ '' ];
+
+		pf = (
+			config[ 'Plural-Forms' ] ||
+			config[ 'plural-forms' ] ||
+			// Ignore reason: As known, there's no way to document the empty
+			// string property on a key to guarantee this as metadata.
+			// @ts-ignore
+			config.plural_forms
+		);
+
+		if ( typeof pf !== 'function' ) {
+			plural = getPluralExpression(
+				config[ 'Plural-Forms' ] ||
+				config[ 'plural-forms' ] ||
+				// Ignore reason: As known, there's no way to document the empty
+				// string property on a key to guarantee this as metadata.
+				// @ts-ignore
+				config.plural_forms
+			);
+
+			pf = (0,_tannin_plural_forms__WEBPACK_IMPORTED_MODULE_0__["default"])( plural );
+		}
+
+		getPluralForm = this.pluralForms[ domain ] = pf;
+	}
+
+	return getPluralForm( n );
+};
+
+/**
+ * Translate a string.
+ *
+ * @param {string}      domain   Translation domain.
+ * @param {string|void} context  Context distinguishing terms of the same name.
+ * @param {string}      singular Primary key for translation lookup.
+ * @param {string=}     plural   Fallback value used for non-zero plural
+ *                               form index.
+ * @param {number=}     n        Value to use in calculating plural form.
+ *
+ * @return {string} Translated string.
+ */
+Tannin.prototype.dcnpgettext = function( domain, context, singular, plural, n ) {
+	var index, key, entry;
+
+	if ( n === undefined ) {
+		// Default to singular.
+		index = 0;
+	} else {
+		// Find index by evaluating plural form for value.
+		index = this.getPluralForm( domain, n );
+	}
+
+	key = singular;
+
+	// If provided, context is prepended to key with delimiter.
+	if ( context ) {
+		key = context + this.options.contextDelimiter + singular;
+	}
+
+	entry = this.data[ domain ][ key ];
+
+	// Verify not only that entry exists, but that the intended index is within
+	// range and non-empty.
+	if ( entry && entry[ index ] ) {
+		return entry[ index ];
+	}
+
+	if ( this.options.onMissingKey ) {
+		this.options.onMissingKey( singular, domain );
+	}
+
+	// If entry not found, fall back to singular vs. plural with zero index
+	// representing the singular value.
+	return index === 0 ? singular : plural;
+};
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js":
+/*!***************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js ***!
+  \***************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _arrayLikeToArray)
+/* harmony export */ });
+function _arrayLikeToArray(r, a) {
+  (null == a || a > r.length) && (a = r.length);
+  for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e];
+  return n;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _arrayWithoutHoles)
+/* harmony export */ });
+/* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js");
+
+function _arrayWithoutHoles(r) {
+  if (Array.isArray(r)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/classCallCheck.js":
+/*!*************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/classCallCheck.js ***!
+  \*************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _classCallCheck)
+/* harmony export */ });
+function _classCallCheck(a, n) {
+  if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/iterableToArray.js":
+/*!**************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/iterableToArray.js ***!
+  \**************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _iterableToArray)
+/* harmony export */ });
+function _iterableToArray(r) {
+  if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _nonIterableSpread)
+/* harmony export */ });
+function _nonIterableSpread() {
+  throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/toConsumableArray.js":
+/*!****************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/toConsumableArray.js ***!
+  \****************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _toConsumableArray)
+/* harmony export */ });
+/* harmony import */ var _arrayWithoutHoles_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayWithoutHoles.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayWithoutHoles.js");
+/* harmony import */ var _iterableToArray_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./iterableToArray.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/iterableToArray.js");
+/* harmony import */ var _unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./unsupportedIterableToArray.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js");
+/* harmony import */ var _nonIterableSpread_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./nonIterableSpread.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/nonIterableSpread.js");
+
+
+
+
+function _toConsumableArray(r) {
+  return (0,_arrayWithoutHoles_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r) || (0,_iterableToArray_js__WEBPACK_IMPORTED_MODULE_1__["default"])(r) || (0,_unsupportedIterableToArray_js__WEBPACK_IMPORTED_MODULE_2__["default"])(r) || (0,_nonIterableSpread_js__WEBPACK_IMPORTED_MODULE_3__["default"])();
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js":
+/*!*************************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/unsupportedIterableToArray.js ***!
+  \*************************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _unsupportedIterableToArray)
+/* harmony export */ });
+/* harmony import */ var _arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./arrayLikeToArray.js */ "./node_modules/@wordpress/hooks/node_modules/@babel/runtime/helpers/esm/arrayLikeToArray.js");
+
+function _unsupportedIterableToArray(r, a) {
+  if (r) {
+    if ("string" == typeof r) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r, a);
+    var t = {}.toString.call(r).slice(8, -1);
+    return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r, a) : void 0;
+  }
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/defineProperty.js":
+/*!************************************************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/defineProperty.js ***!
+  \************************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _defineProperty)
+/* harmony export */ });
+/* harmony import */ var _toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./toPropertyKey.js */ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPropertyKey.js");
+
+function _defineProperty(e, r, t) {
+  return (r = (0,_toPropertyKey_js__WEBPACK_IMPORTED_MODULE_0__["default"])(r)) in e ? Object.defineProperty(e, r, {
+    value: t,
+    enumerable: !0,
+    configurable: !0,
+    writable: !0
+  }) : e[r] = t, e;
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPrimitive.js":
+/*!*********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPrimitive.js ***!
+  \*********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ toPrimitive)
+/* harmony export */ });
+/* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/typeof.js");
+
+function toPrimitive(t, r) {
+  if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i)) return i;
+    throw new TypeError("@@toPrimitive must return a primitive value.");
+  }
+  return ("string" === r ? String : Number)(t);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPropertyKey.js":
+/*!***********************************************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPropertyKey.js ***!
+  \***********************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ toPropertyKey)
+/* harmony export */ });
+/* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/typeof.js");
+/* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
+
+
+function toPropertyKey(t) {
+  var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/typeof.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/@wordpress/i18n/node_modules/@babel/runtime/helpers/esm/typeof.js ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ _typeof)
+/* harmony export */ });
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, _typeof(o);
+}
+
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+/*!*******************************!*\
+  !*** ./js/src/admin/admin.js ***!
+  \*******************************/
+function _toConsumableArray(r) { return _arrayWithoutHoles(r) || _iterableToArray(r) || _unsupportedIterableToArray(r) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(r) { if ("undefined" != typeof Symbol && null != r[Symbol.iterator] || null != r["@@iterator"]) return Array.from(r); }
+function _arrayWithoutHoles(r) { if (Array.isArray(r)) return _arrayLikeToArray(r); }
+function _createForOfIteratorHelper(r, e) { var t = "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (!t) { if (Array.isArray(r) || (t = _unsupportedIterableToArray(r)) || e && r && "number" == typeof r.length) { t && (r = t); var _n = 0, F = function F() {}; return { s: F, n: function n() { return _n >= r.length ? { done: !0 } : { done: !1, value: r[_n++] }; }, e: function e(r) { throw r; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var o, a = !0, u = !1; return { s: function s() { t = t.call(r); }, n: function n() { var r = t.next(); return a = r.done, r; }, e: function e(r) { u = !0, o = r; }, f: function f() { try { a || null == t.return || t.return(); } finally { if (u) throw o; } } }; }
+function _unsupportedIterableToArray(r, a) { if (r) { if ("string" == typeof r) return _arrayLikeToArray(r, a); var t = {}.toString.call(r).slice(8, -1); return "Object" === t && r.constructor && (t = r.constructor.name), "Map" === t || "Set" === t ? Array.from(r) : "Arguments" === t || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(t) ? _arrayLikeToArray(r, a) : void 0; } }
+function _arrayLikeToArray(r, a) { (null == a || a > r.length) && (a = r.length); for (var e = 0, n = Array(a); e < a; e++) n[e] = r[e]; return n; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+/* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
+/* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
+
+window.FrmFormsConnect = window.FrmFormsConnect || function (document, window, $) {
+  /*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
+
+  var el = {
+    messageBox: null,
+    reset: null,
+    setElements: function setElements() {
+      el.messageBox = document.querySelector('.frm_pro_license_msg');
+      el.reset = document.getElementById('frm_reconnect_link');
+    }
+  };
+
+  /**
+   * Public functions and properties.
+   *
+   * @since 4.03
+   *
+   * @type {Object}
+   */
+  var app = {
+    /**
+     * Register connect button event.
+     *
+     * @since 4.03
+     */
+    init: function init() {
+      el.setElements();
+      $(document.getElementById('frm_deauthorize_link')).on('click', app.deauthorize);
+      $('.frm_authorize_link').on('click', app.authorize);
+      // Handles FF dashboard Authorize & Reauthorize events.
+      // Attach click event to parent as #frm_deauthorize_link & #frm_reconnect_link dynamically recreated by bootstrap.setupBootstrapDropdowns in dom.js
+      $('.frm-dashboard-license-options').on('click', '#frm_deauthorize_link', app.deauthorize);
+      $('.frm-dashboard-license-options').on('click', '#frm_reconnect_link', app.reauthorize);
+      if (el.reset !== null) {
+        $(el.reset).on('click', app.reauthorize);
+      }
+    },
+    /* Manual license authorization */
+    authorize: function authorize() {
+      /*jshint validthis:true */
+      var button = this;
+      var pluginSlug = this.getAttribute('data-plugin');
+      var input = document.getElementById('edd_' + pluginSlug + '_license_key');
+      var license = input.value;
+      var wpmu = document.getElementById('proplug-wpmu');
+      this.classList.add('frm_loading_button');
+      if (wpmu === null) {
+        wpmu = 0;
+      } else if (wpmu.checked) {
+        wpmu = 1;
+      } else {
+        wpmu = 0;
+      }
+      $.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        dataType: 'json',
+        data: {
+          action: 'frm_addon_activate',
+          license: license,
+          plugin: pluginSlug,
+          wpmu: wpmu,
+          nonce: frmGlobal.nonce
+        },
+        success: function success(msg) {
+          app.afterAuthorize(msg, input);
+          button.classList.remove('frm_loading_button');
+        }
+      });
+    },
+    afterAuthorize: function afterAuthorize(msg, input) {
+      if (msg.success === true) {
+        input.value = '•••••••••••••••••••';
+      }
+      wp.hooks.doAction('frm_after_authorize', msg);
+      app.showMessage(msg);
+    },
+    showProgress: function showProgress(msg) {
+      if (el.messageBox === null) {
+        // In case the message box was added after page load.
+        el.setElements();
+      }
+      var messageBox = el.messageBox;
+      if (messageBox === null) {
+        return;
+      }
+      if (msg.success === true) {
+        messageBox.classList.remove('frm_error_style');
+        messageBox.classList.add('frm_message', 'frm_updated_message');
+      } else {
+        messageBox.classList.add('frm_error_style');
+        messageBox.classList.remove('frm_message', 'frm_updated_message');
+      }
+      messageBox.classList.remove('frm_hidden');
+      messageBox.innerHTML = msg.message;
+    },
+    showMessage: function showMessage(msg) {
+      if (el.messageBox === null) {
+        // In case the message box was added after page load.
+        el.setElements();
+      }
+      var messageBox = el.messageBox;
+      if (msg.success === true) {
+        app.showAuthorized(true);
+        app.showInlineSuccess();
+
+        /**
+         * Triggers the after license is authorized action for a confirmation/success modal.
+         *
+         * @param {Object} msg An object containing message data received from Authorize request.
+         */
+        wp.hooks.doAction('frmAdmin.afterLicenseAuthorizeSuccess', {
+          msg: msg
+        });
+      }
+      app.showProgress(msg);
+      if (msg.message !== '') {
+        setTimeout(function () {
+          messageBox.innerHTML = '';
+          messageBox.classList.add('frm_hidden');
+          messageBox.classList.remove('frm_error_style', 'frm_message', 'frm_updated_message');
+        }, 10000);
+        var refreshPage = document.querySelector('.frm-admin-page-dashboard');
+        if (refreshPage) {
+          setTimeout(function () {
+            window.location.reload();
+          }, 1000);
+        }
+      }
+    },
+    showAuthorized: function showAuthorized(show) {
+      var from = show ? 'unauthorized' : 'authorized';
+      var to = show ? 'authorized' : 'unauthorized';
+      var container = document.querySelectorAll('.frm_' + from + '_box');
+      if (container.length) {
+        // Replace all authorized boxes with unauthorized boxes.
+        container.forEach(function (box) {
+          box.className = box.className.replace('frm_' + from + '_box', 'frm_' + to + '_box');
+        });
+      }
+    },
+    /**
+     * Use the data-success element to replace the element content.
+     */
+    showInlineSuccess: function showInlineSuccess() {
+      var successElement = document.querySelectorAll('.frm-confirm-msg [data-success]');
+      if (successElement.length) {
+        successElement.forEach(function (element) {
+          element.innerHTML = frmAdminBuild.purifyHtml(element.getAttribute('data-success'));
+        });
+      }
+    },
+    /* Clear the site license cache */
+    reauthorize: function reauthorize() {
+      /*jshint validthis:true */
+      this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;float:none"></span>';
+      $.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        dataType: 'json',
+        data: {
+          action: 'frm_reset_cache',
+          plugin: 'formidable_pro',
+          nonce: frmGlobal.nonce
+        },
+        success: function success(msg) {
+          el.reset.textContent = msg.message;
+          if (el.reset.getAttribute('data-refresh') === '1') {
+            window.location.reload();
+          }
+        }
+      });
+      return false;
+    },
+    deauthorize: function deauthorize() {
+      /*jshint validthis:true */
+      if (!confirm(frmGlobal.deauthorize)) {
+        return false;
+      }
+      var pluginSlug = this.getAttribute('data-plugin'),
+        input = document.getElementById('edd_' + pluginSlug + '_license_key'),
+        license = input.value,
+        link = this;
+      this.innerHTML = '<span class="frm-wait frm_spinner" style="visibility:visible;"></span>';
+      $.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_addon_deactivate',
+          license: license,
+          plugin: pluginSlug,
+          nonce: frmGlobal.nonce
+        },
+        success: function success() {
+          app.showAuthorized(false);
+          input.value = '';
+          link.replaceWith('Disconnected');
+
+          /**
+           * Triggers the after license is deauthorized sruccess action.
+           */
+          wp.hooks.doAction('frmAdmin.afterLicenseDeauthorizeSuccess', {});
+        }
+      });
+      return false;
+    }
+  };
+
+  // Provide access to public functions/properties.
+  return app;
+}(document, window, jQuery);
+window.frmAdminBuildJS = function () {
+  //'use strict';
+
+  /*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl, fromDom */
+
+  var MAX_FIELD_GROUP_SIZE = 12;
+  var frmAdminJs = frm_admin_js; // eslint-disable-line camelcase
+  var _frmDom = frmDom,
+    tag = _frmDom.tag,
+    div = _frmDom.div,
+    span = _frmDom.span,
+    a = _frmDom.a,
+    svg = _frmDom.svg,
+    img = _frmDom.img;
+  var onClickPreventDefault = frmDom.util.onClickPreventDefault;
+  var _frmDom$ajax = frmDom.ajax,
+    doJsonFetch = _frmDom$ajax.doJsonFetch,
+    doJsonPost = _frmDom$ajax.doJsonPost;
+  frmAdminJs.contextualShortcodes = getContextualShortcodes();
+  var icons = {
+    save: svg({
+      href: '#frm_save_icon'
+    }),
+    drag: svg({
+      href: '#frm_drag_icon',
+      classList: ['frm_drag_icon', 'frm-drag']
+    })
+  };
+  var $newFields = jQuery(document.getElementById('frm-show-fields')),
+    builderForm = document.getElementById('new_fields'),
+    thisForm = document.getElementById('form_id'),
+    copyHelper = false,
+    fieldsUpdated = 0,
+    thisFormId = 0,
+    autoId = 0,
+    optionMap = {},
+    lastNewActionIdReturned = 0;
+  var _wp$i18n = wp.i18n,
+    __ = _wp$i18n.__,
+    sprintf = _wp$i18n.sprintf;
+  var debouncedSyncAfterDragAndDrop, postBodyContent, $postBodyContent;
+  var dragState = {
+    dragging: false
+  };
+  if (thisForm !== null) {
+    thisFormId = thisForm.value;
+  }
+  var currentURL = new URL(window.location.href);
+  var urlParams = currentURL.searchParams;
+  var builderPage = document.getElementById('frm_builder_page');
+
+  // Global settings
+  var s;
+  function showElement(element) {
+    if (!element[0]) {
+      return;
+    }
+    element[0].style.display = '';
+  }
+  function empty($obj) {
+    if ($obj !== null) {
+      while ($obj.firstChild) {
+        $obj.removeChild($obj.firstChild);
+      }
+    }
+  }
+  function addClass($obj, className) {
+    if ($obj.classList) {
+      $obj.classList.add(className);
+    } else {
+      $obj.className += ' ' + className;
+    }
+  }
+  function confirmClick(e) {
+    /*jshint validthis:true */
+    e.stopPropagation();
+    e.preventDefault();
+    confirmLinkClick(this);
+  }
+  function confirmLinkClick(link) {
+    var message = link.getAttribute('data-frmverify'),
+      loadedFrom = link.getAttribute('data-loaded-from');
+    if (message === null || link.id === 'frm-confirmed-click') {
+      return true;
+    }
+    if ('entries-list' === loadedFrom) {
+      return wp.hooks.applyFilters('frm_on_multiple_entries_delete', {
+        link: link,
+        initModal: initModal
+      });
+    }
+    return confirmModal(link);
+  }
+  function confirmModal(link) {
+    var verify,
+      $confirmMessage,
+      i,
+      dataAtts,
+      btnClass,
+      $info = initModal('#frm_confirm_modal', '400px'),
+      continueButton = document.getElementById('frm-confirmed-click');
+    if ($info === false) {
+      return false;
+    }
+    verify = link.getAttribute('data-frmverify');
+    btnClass = verify ? link.getAttribute('data-frmverify-btn') : '';
+    $confirmMessage = jQuery('.frm-confirm-msg');
+    $confirmMessage.empty();
+    if (verify) {
+      $confirmMessage.append(document.createTextNode(verify));
+      if (btnClass) {
+        continueButton.classList.add(btnClass);
+      }
+    }
+    removeAtts = continueButton.dataset;
+    for (i in dataAtts) {
+      continueButton.removeAttribute('data-' + i);
+    }
+    dataAtts = link.dataset;
+    for (i in dataAtts) {
+      if (i !== 'frmverify') {
+        continueButton.setAttribute('data-' + i, dataAtts[i]);
+      }
+    }
+
+    /**
+     * Triggers the pre-open action for a confirmation modal. This action passes
+     * relevant modal information and associated link to any listening hooks.
+     *
+     * @param {Object}      options       An object containing modal elements and data.
+     * @param {HTMLElement} options.$info The HTML element containing modal information.
+     * @param {string}      options.link  The link associated with the modal action.
+     */
+    wp.hooks.doAction('frmAdmin.beforeOpenConfirmModal', {
+      $info: $info,
+      link: link
+    });
+    $info.dialog('open');
+    continueButton.setAttribute('href', link.getAttribute('href') || link.getAttribute('data-href'));
+    return false;
+  }
+  function infoModal(msg) {
+    var $info = initModal('#frm_info_modal', '400px');
+    if ($info === false) {
+      return false;
+    }
+    jQuery('.frm-info-msg').html(msg);
+    $info.dialog('open');
+    return false;
+  }
+  function toggleItem(e) {
+    /*jshint validthis:true */
+    var toggle = this.getAttribute('data-frmtoggle');
+    var text = this.getAttribute('data-toggletext');
+    var $items = jQuery(toggle);
+    e.preventDefault();
+    $items.toggle();
+    if (text !== null && text !== '') {
+      this.setAttribute('data-toggletext', this.innerHTML);
+      this.textContent = text;
+    }
+    return false;
+  }
+
+  /**
+   * Toggle a class on target elements when an anchor is clicked, or when a radio or checkbox has been selected.
+   *
+   * @param {Event} e Event with either the change or click type.
+   * @return {false}
+   */
+  function hideShowItem(e) {
+    /*jshint validthis:true */
+    var hide = this.getAttribute('data-frmhide');
+    var show = this.getAttribute('data-frmshow');
+    var uncheckList = this.getAttribute('data-frmuncheck');
+    var uncheckListArray = uncheckList ? uncheckList.split(',') : [];
+
+    // Flip unchecked checkboxes so an off value undoes the on value.
+    if (isUncheckedCheckbox(this)) {
+      if (hide !== null) {
+        show = hide;
+        hide = null;
+      } else if (show !== null) {
+        hide = show;
+        show = null;
+      }
+    }
+    e.preventDefault();
+    var toggleClass = this.getAttribute('data-toggleclass') || 'frm_hidden';
+    if (hide !== null) {
+      jQuery(hide).addClass(toggleClass);
+    }
+    if (show !== null) {
+      jQuery(show).removeClass(toggleClass);
+    }
+    var current = this.parentNode.querySelectorAll('a.current');
+    if (current !== null) {
+      for (var _i = 0; _i < current.length; _i++) {
+        current[_i].classList.remove('current');
+      }
+      this.classList.add('current');
+    }
+    if (uncheckListArray.length) {
+      uncheckListArray.forEach(function (uncheckItem) {
+        var uncheckItemElement = document.querySelector(uncheckItem);
+        if (uncheckItemElement) {
+          uncheckItemElement.checked = false;
+        }
+      });
+    }
+    return false;
+  }
+  function isUncheckedCheckbox(element) {
+    return 'INPUT' === element.nodeName && 'checkbox' === element.type && !element.checked;
+  }
+
+  /**
+   * Load a tooltip for a single element.
+   *
+   * @since x.x
+   *
+   * @param {HTMLElement} element
+   * @param {boolean}     show
+   */
+  function loadTooltip(element) {
+    var show = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var tooltipTarget = element;
+
+    // Bootstrap 5 does not allow tooltips on dropdown triggers, so move the tooltip to the parent element.
+    if (tooltipTarget.hasAttribute('data-toggle') || tooltipTarget.hasAttribute('data-bs-toggle')) {
+      tooltipTarget.parentElement.setAttribute('title', tooltipTarget.getAttribute('title'));
+      tooltipTarget.removeAttribute('title');
+      tooltipTarget.classList.remove('frm_bstooltip');
+      tooltipTarget.parentElement.classList.add('frm_bstooltip');
+      tooltipTarget = tooltipTarget.parentElement;
+    }
+    jQuery(tooltipTarget).tooltip();
+    if (show) {
+      deleteTooltips();
+      jQuery(tooltipTarget).tooltip('show');
+    }
+  }
+  function loadTooltips() {
+    var wrapClass = jQuery('.wrap, .frm_wrap'),
+      confirmModal = document.getElementById('frm_confirm_modal'),
+      doAction = false,
+      confirmedBulkDelete = false;
+    jQuery(confirmModal).on('click', '[data-deletefield]', deleteFieldConfirmed);
+    jQuery(confirmModal).on('click', '[data-removeid]', removeThisTag);
+    jQuery(confirmModal).on('click', '[data-trashtemplate]', trashTemplate);
+    wrapClass.on('click', '.frm_remove_tag, .frm_remove_form_action', removeThisTag);
+    wrapClass.on('click', 'a[data-frmverify]', confirmClick);
+    wrapClass.on('click', 'a[data-frmtoggle]', toggleItem);
+    wrapClass.on('click', 'a[data-frmhide], a[data-frmshow]', hideShowItem);
+    wrapClass.on('change', 'input[data-frmhide], input[data-frmshow]', hideShowItem);
+    wrapClass.on('click', '.widget-top,a.widget-action', clickWidget);
+    wrapClass.on('mouseenter.frm', '.frm_bstooltip, .frm_help', function () {
+      jQuery(this).off('mouseenter.frm');
+      loadTooltip(this, true);
+    });
+    jQuery(document).on('click', '#doaction, #doaction2', function (event) {
+      var isTop = this.id === 'doaction',
+        suffix = isTop ? 'top' : 'bottom',
+        bulkActionSelector = document.getElementById('bulk-action-selector-' + suffix),
+        confirmBulkDelete = document.getElementById('confirm-bulk-delete-' + suffix);
+      if (bulkActionSelector !== null && confirmBulkDelete !== null) {
+        doAction = this;
+        if (!confirmedBulkDelete && bulkActionSelector.value === 'bulk_delete') {
+          event.preventDefault();
+          confirmLinkClick(confirmBulkDelete);
+          return false;
+        }
+      } else {
+        doAction = false;
+      }
+    });
+    jQuery(document).on('click', '#frm-confirmed-click', function (event) {
+      if (doAction === false || event.target.classList.contains('frm-btn-inactive')) {
+        return;
+      }
+      if (this.getAttribute('href') === 'confirm-bulk-delete') {
+        event.preventDefault();
+        confirmedBulkDelete = true;
+        doAction.click();
+        return false;
+      }
+    });
+  }
+  function deleteTooltips() {
+    document.querySelectorAll('.tooltip').forEach(function (tooltip) {
+      tooltip.remove();
+    });
+  }
+  function removeThisTag() {
+    /*jshint validthis:true */
+    var show, hide, removeMore;
+    if (parseInt(this.getAttribute('data-skip-frm-js')) || confirmLinkClick(this) === false) {
+      return;
+    }
+    var deleteButton = jQuery(this);
+    var id = deleteButton.attr('data-removeid');
+    show = deleteButton.attr('data-showlast');
+    if (typeof show === 'undefined') {
+      show = '';
+    }
+    hide = deleteButton.attr('data-hidelast');
+    if (typeof hide === 'undefined') {
+      hide = '';
+    }
+    removeMore = deleteButton.attr('data-removemore');
+    if (show !== '') {
+      if (deleteButton.closest('.frm_add_remove').find('.frm_remove_tag:visible').length > 1) {
+        show = '';
+        hide = '';
+      }
+    } else if (id.indexOf('frm_postmeta_') === 0) {
+      if (jQuery('#frm_postmeta_rows .frm_postmeta_row').length < 2) {
+        show = '.frm_add_postmeta_row.button';
+      }
+      if (jQuery('.frm_toggle_cf_opts').length && jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#' + id + ')').last().length) {
+        if (show !== '') {
+          show += ',';
+        }
+        show += '#' + jQuery('#frm_postmeta_rows .frm_postmeta_row:not(#' + id + ')').last().attr('id') + ' .frm_toggle_cf_opts';
+      }
+    }
+    var fadeEle = document.getElementById(id);
+    var $fadeEle = jQuery(fadeEle);
+    $fadeEle.fadeOut(300, function () {
+      var _document$querySelect;
+      $fadeEle.remove();
+      fieldUpdated();
+      if (hide !== '') {
+        jQuery(hide).hide();
+      }
+      if (show !== '') {
+        jQuery(show + ' a,' + show).removeClass('frm_hidden').fadeIn('slow');
+      }
+      if (this.closest('.frm_form_action_settings')) {
+        var type = this.closest('.frm_form_action_settings').querySelector('.frm_action_name').value;
+        afterActionRemoved(type);
+      }
+      (_document$querySelect = document.querySelector('.tooltip')) === null || _document$querySelect === void 0 || _document$querySelect.remove();
+    });
+    if (typeof removeMore !== 'undefined') {
+      removeMore = jQuery(removeMore);
+      removeMore.fadeOut(400, function () {
+        removeMore.remove();
+      });
+    }
+    if (show !== '') {
+      jQuery(this).closest('.frm_logic_rows').fadeOut('slow');
+    }
+
+    /**
+     * Fires after a tag element has been removed in the admin interface.
+     *
+     * @param {string}      id      The ID of the removed element
+     * @param {HTMLElement} fadeEle The removed element that was faded out
+     */
+    wp.hooks.doAction('frm_admin_tag_removed', id, fadeEle);
+    return false;
+  }
+  function afterActionRemoved(type) {
+    checkActiveAction(type);
+    var hookName = 'frm_after_action_removed';
+    var hookArgs = {
+      type: type
+    };
+    wp.hooks.doAction(hookName, hookArgs);
+  }
+  function clickWidget(event, b) {
+    /*jshint validthis:true */
+    if (typeof b === 'undefined') {
+      b = this;
+    }
+    popCalcFields(b, false);
+    var cont = jQuery(b).closest('.frm_form_action_settings');
+    var target = event.target;
+    if (cont.length && typeof target !== 'undefined') {
+      var className = target.parentElement.className;
+      if ('string' === typeof className) {
+        if (className.indexOf('frm_email_icons') > -1 || className.indexOf('frm_toggle') > -1) {
+          // clicking on delete icon shouldn't open it
+          event.stopPropagation();
+          return;
+        }
+      }
+    }
+    var inside = cont.children('.widget-inside');
+    if (cont.length && inside.find('p, div, table').length < 1) {
+      var actionId = cont.find('input[name$="[ID]"]').val();
+      var actionType = cont.find('input[name$="[post_excerpt]"]').val();
+      if (actionType) {
+        inside.html('<span class="frm-wait frm_spinner"></span>');
+        cont.find('.spinner').fadeIn('slow');
+        jQuery.ajax({
+          type: 'POST',
+          url: ajaxurl,
+          data: {
+            action: 'frm_form_action_fill',
+            action_id: actionId,
+            action_type: actionType,
+            nonce: frmGlobal.nonce
+          },
+          success: function success(html) {
+            inside.html(html);
+            initiateMultiselect();
+            showInputIcon('#' + cont.attr('id'));
+            initAutocomplete(inside);
+            jQuery(b).trigger('frm-action-loaded');
+
+            /**
+             * Fires after filling form action content when opening.
+             *
+             * @since 5.5.4
+             *
+             * @param {Object} insideElement JQuery object of form action inside element.
+             */
+            wp.hooks.doAction('frm_filled_form_action', inside);
+          }
+        });
+      }
+    }
+    jQuery(b).closest('.frm_field_box').siblings().find('.widget-inside').slideUp('fast');
+    if (typeof b.className !== 'undefined' && b.className.indexOf('widget-action') !== -1 || jQuery(b).closest('.start_divider').length < 1) {
+      return;
+    }
+    inside = jQuery(b).closest('div.widget').children('.widget-inside');
+    if (inside.is(':hidden')) {
+      inside.slideDown('fast');
+    } else {
+      inside.slideUp('fast');
+    }
+  }
+  function clickNewTab() {
+    /*jshint validthis:true */
+    var t = this.getAttribute('href');
+    if (typeof t === 'undefined') {
+      return false;
+    }
+    var c = t.replace('#', '.');
+    var $link = jQuery(this);
+    $link.closest('li').addClass('frm-tabs active').siblings('li').removeClass('frm-tabs active starttab');
+    $link.closest('div').children('.tabs-panel').not(t).not(c).hide();
+    var tabContent = document.getElementById(t.replace('#', ''));
+    if (tabContent) {
+      tabContent.style.display = 'block';
+    }
+
+    // clearSettingsBox would hide field settings when opening the fields modal and we want to skip it there.
+    if (this.id === 'frm_insert_fields_tab' && !this.closest('#frm_adv_info')) {
+      clearSettingsBox();
+    }
+    return false;
+  }
+  function clickTab(link, auto) {
+    link = jQuery(link);
+    var t = link.attr('href');
+    if (typeof t === 'undefined') {
+      return;
+    }
+    var c = t.replace('#', '.');
+    link.closest('li').addClass('frm-tabs active').siblings('li').removeClass('frm-tabs active starttab');
+    if (link.closest('div').find('.tabs-panel').length) {
+      link.closest('div').children('.tabs-panel').not(t).not(c).hide();
+    } else if (document.getElementById('form_global_settings') !== null) {
+      /* global settings */
+      var ajax = link.data('frmajax');
+      link.closest('.frm_wrap').find('.tabs-panel, .hide_with_tabs').hide();
+      if (typeof ajax !== 'undefined' && ajax == '1') {
+        loadSettingsTab(t);
+      }
+    } else {
+      /* form settings page */
+      jQuery('#frm-categorydiv .tabs-panel, .hide_with_tabs').hide();
+    }
+    jQuery(t).show();
+    jQuery(c).show();
+    hideShortcodes();
+    if (auto !== 'auto') {
+      // Hide success message on tab change.
+      jQuery('.frm_updated_message').hide();
+      jQuery('.frm_warning_style').hide();
+    }
+    if (jQuery(link).closest('#frm_adv_info').length) {
+      return;
+    }
+    if (jQuery('.frm_form_settings').length) {
+      jQuery('.frm_form_settings').attr('action', '?page=formidable&frm_action=settings&id=' + jQuery('.frm_form_settings input[name="id"]').val() + '&t=' + t.replace('#', ''));
+    } else {
+      jQuery('.frm_settings_form').attr('action', '?page=formidable-settings&t=' + t.replace('#', ''));
+    }
+  }
+  function setupSortable(sortableSelector) {
+    document.querySelectorAll(sortableSelector).forEach(function (list) {
+      makeDroppable(list);
+      Array.from(list.children).forEach(function (child) {
+        return makeDraggable(child, '.frm-move');
+      });
+      var $sectionTitle = jQuery(list).children('[data-type="divider"]').children('.divider_section_only');
+      if ($sectionTitle.length) {
+        makeDroppable($sectionTitle);
+      }
+    });
+    setupFieldOptionSorting(jQuery('#frm_builder_page'));
+  }
+  function makeDroppable(list) {
+    jQuery(list).droppable({
+      accept: '.frmbutton, li.frm_field_box',
+      deactivate: handleFieldDrop,
+      over: onDragOverDroppable,
+      out: onDraggableLeavesDroppable,
+      tolerance: 'pointer'
+    });
+  }
+  function onDragOverDroppable(event, ui) {
+    var droppable = getDroppableForOnDragOver(event.target);
+    var draggable = ui.draggable[0];
+    if (!allowDrop(draggable, droppable, event)) {
+      droppable.classList.remove('frm-over-droppable');
+      jQuery(droppable).parents('ul.frm_sorting').addClass('frm-over-droppable');
+      return;
+    }
+    document.querySelectorAll('.frm-over-droppable').forEach(function (droppable) {
+      return droppable.classList.remove('frm-over-droppable');
+    });
+    droppable.classList.add('frm-over-droppable');
+    jQuery(droppable).parents('ul.frm_sorting').addClass('frm-over-droppable');
+  }
+
+  /**
+   * Maybe change the droppable.
+   * Section titles are made droppable, but are not a list, so we need to change the droppable to the section's list instead.
+   *
+   * @param {Element} droppable
+   * @return {Element}
+   */
+  function getDroppableForOnDragOver(droppable) {
+    if (droppable.classList.contains('divider_section_only')) {
+      droppable = jQuery(droppable).nextAll('.start_divider.frm_sorting').get(0);
+    }
+    return droppable;
+  }
+  function onDraggableLeavesDroppable(event) {
+    var droppable = event.target;
+    droppable.classList.remove('frm-over-droppable');
+  }
+  function makeDraggable(draggable, handle) {
+    var settings = {
+      helper: getDraggableHelper,
+      revert: 'invalid',
+      delay: 10,
+      start: handleDragStart,
+      stop: handleDragStop,
+      drag: handleDrag,
+      cursor: 'grabbing',
+      refreshPositions: true,
+      cursorAt: {
+        top: 0,
+        left: 90 // The width of draggable button is 180. 90 should center the draggable on the cursor.
+      }
+    };
+    if ('string' === typeof handle) {
+      settings.handle = handle;
+    }
+    jQuery(draggable).draggable(settings);
+  }
+  function getDraggableHelper(event) {
+    var draggable = event.delegateTarget;
+    if (isFieldGroup(draggable)) {
+      var newTextFieldClone = document.getElementById('frm-insert-fields').querySelector('.frm_ttext').cloneNode(true);
+      newTextFieldClone.querySelector('use').setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_field_group_layout_icon');
+      newTextFieldClone.querySelector('span').textContent = __('Field Group', 'formidable');
+      newTextFieldClone.classList.add('frm_field_box');
+      newTextFieldClone.classList.add('ui-sortable-helper');
+      return newTextFieldClone;
+    }
+    var copyTarget;
+    var isNewField = draggable.classList.contains('frmbutton');
+    if (isNewField) {
+      copyTarget = draggable.cloneNode(true);
+      copyTarget.classList.add('ui-sortable-helper');
+      draggable.classList.add('frm-new-field');
+      return copyTarget;
+    }
+    if (draggable.hasAttribute('data-ftype')) {
+      var fieldType = draggable.getAttribute('data-ftype');
+      copyTarget = document.getElementById('frm-insert-fields').querySelector('.frm_t' + fieldType);
+      copyTarget = copyTarget.cloneNode(true);
+      copyTarget.classList.add('form-field');
+      copyTarget.classList.add('ui-sortable-helper');
+      if (copyTarget) {
+        return copyTarget.cloneNode(true);
+      }
+    }
+    return div({
+      className: 'frmbutton'
+    });
+  }
+  function handleDragStart(event, ui) {
+    dragState.dragging = true;
+    var container = postBodyContent;
+    container.classList.add('frm-dragging-field');
+    document.body.classList.add('frm-dragging');
+    ui.helper.addClass('frm-sortable-helper');
+    ui.helper.initialOffset = container.scrollTop;
+    event.target.classList.add('frm-drag-fade');
+    unselectFieldGroups();
+    deleteEmptyDividerWrappers();
+    maybeRemoveGroupHoverTarget();
+    closeOpenFieldDropdowns();
+    deleteTooltips();
+  }
+  function handleDragStop() {
+    var container = postBodyContent;
+    container.classList.remove('frm-dragging-field');
+    document.body.classList.remove('frm-dragging');
+    var fade = document.querySelector('.frm-drag-fade');
+    if (fade) {
+      fade.classList.remove('frm-drag-fade');
+    }
+  }
+  function handleDrag(event, ui) {
+    maybeScrollBuilder(event);
+    var draggable = event.target;
+    var droppable = getDroppableTarget();
+    var placeholder = document.getElementById('frm_drag_placeholder');
+    if (!allowDrop(draggable, droppable, event)) {
+      if (placeholder) {
+        placeholder.remove();
+      }
+      return;
+    }
+    if (!placeholder) {
+      placeholder = tag('li', {
+        id: 'frm_drag_placeholder',
+        className: 'sortable-placeholder'
+      });
+    }
+    var frmSortableHelper = ui.helper.get(0);
+    if (frmSortableHelper.classList.contains('form-field') || frmSortableHelper.classList.contains('frm_field_box')) {
+      // Sync the y position of the draggable so it still follows the cursor after scrolling up and down the field list.
+      frmSortableHelper.style.transform = 'translateY(' + getDragOffset(ui.helper) + 'px)';
+    }
+    if ('frm-show-fields' === droppable.id || droppable.classList.contains('start_divider')) {
+      placeholder.style.left = 0;
+      handleDragOverYAxis({
+        droppable: droppable,
+        y: event.clientY,
+        placeholder: placeholder
+      });
+      return;
+    }
+    placeholder.style.top = '';
+    handleDragOverFieldGroup({
+      droppable: droppable,
+      x: event.clientX,
+      placeholder: placeholder
+    });
+  }
+  function maybeScrollBuilder(event) {
+    $postBodyContent.scrollTop(function (_, v) {
+      var moved = event.clientY;
+      var h = postBodyContent.offsetHeight;
+      var relativePos = event.clientY - postBodyContent.offsetTop;
+      var y = relativePos - h / 2;
+      if (relativePos > h - 50 && moved > 5) {
+        // Scrolling down.
+        return v + y * 0.1;
+      }
+      if (relativePos < 70 && moved < 130) {
+        // Scrolling up.
+        return v - Math.abs(y * 0.1);
+      }
+      return v;
+    });
+  }
+  function getDragOffset($helper) {
+    return postBodyContent.scrollTop - $helper.initialOffset;
+  }
+  function getDroppableTarget() {
+    var droppable = document.getElementById('frm-show-fields');
+    while (droppable.querySelector('.frm-over-droppable')) {
+      droppable = droppable.querySelector('.frm-over-droppable');
+    }
+    if ('frm-show-fields' === droppable.id && !droppable.classList.contains('frm-over-droppable')) {
+      droppable = false;
+    }
+    return droppable;
+  }
+  function handleFieldDrop(_, ui) {
+    if (!dragState.dragging) {
+      // dragState.dragging is set to true on drag start.
+      // The deactivate event gets called for every droppable. This check to make sure it happens once.
+      return;
+    }
+    dragState.dragging = false;
+    var draggable = ui.draggable[0];
+    var placeholder = document.getElementById('frm_drag_placeholder');
+    if (!placeholder) {
+      ui.helper.remove();
+      debouncedSyncAfterDragAndDrop();
+      return;
+    }
+    maybeOpenCollapsedPage(placeholder);
+    var $previousFieldContainer = ui.helper.parent();
+    var previousSection = ui.helper.get(0).closest('ul.start_divider');
+    var newSection = placeholder.closest('ul.start_divider');
+    if (draggable.classList.contains('frm-new-field')) {
+      insertNewFieldByDragging(draggable.id);
+    } else {
+      moveFieldThatAlreadyExists(draggable, placeholder);
+      maybeMakeFieldGroupDraggableAfterDragging(placeholder.parentElement);
+    }
+    var previousSectionId = previousSection ? parseInt(previousSection.closest('.edit_field_type_divider').getAttribute('data-fid')) : 0;
+    var newSectionId = newSection ? parseInt(newSection.closest('.edit_field_type_divider').getAttribute('data-fid')) : 0;
+    placeholder.remove();
+    ui.helper.remove();
+    var $previousContainerFields = $previousFieldContainer.length ? getFieldsInRow($previousFieldContainer) : [];
+    maybeUpdatePreviousFieldContainerAfterDrop($previousFieldContainer, $previousContainerFields);
+    maybeUpdateDraggableClassAfterDrop(draggable, $previousContainerFields);
+    if (previousSectionId !== newSectionId) {
+      updateFieldAfterMovingBetweenSections(jQuery(draggable), previousSection);
+    }
+    debouncedSyncAfterDragAndDrop();
+  }
+
+  /**
+   * When a field is moved into a field group, make sure the field group is draggable.
+   *
+   * @since 6.24
+   *
+   * @param {HTMLElement} placeholderParent
+   * @return {void}
+   */
+  function maybeMakeFieldGroupDraggableAfterDragging(placeholderParent) {
+    var isDroppingIntoFieldGroup = placeholderParent.nodeName === 'UL' && !placeholderParent.classList.contains('start_divider') && 'frm-show-fields' !== placeholderParent.id;
+    if (!isDroppingIntoFieldGroup) {
+      return;
+    }
+    var fieldGroupLi = placeholderParent.closest('li');
+    if (fieldGroupLi && !fieldGroupLi.classList.contains('ui-draggable')) {
+      makeDraggable(fieldGroupLi, '.frm-move');
+    }
+  }
+
+  /**
+   * If a page if collapsed, expand it before dragging since only the page break will move.
+   *
+   * @param {Element} placeholder
+   * @return {void}
+   */
+  function maybeOpenCollapsedPage(placeholder) {
+    if (!placeholder.previousElementSibling || !placeholder.previousElementSibling.classList.contains('frm-is-collapsed')) {
+      return;
+    }
+    var $pageBreakField = jQuery(placeholder).prevUntil('[data-type="break"]');
+    if (!$pageBreakField.length) {
+      return;
+    }
+    var collapseButton = $pageBreakField.find('.frm-collapse-page').get(0);
+    if (collapseButton) {
+      collapseButton.click();
+    }
+  }
+  function maybeUpdatePreviousFieldContainerAfterDrop($previousFieldContainer, $previousContainerFields) {
+    if (!$previousFieldContainer.length) {
+      return;
+    }
+    if ($previousContainerFields.length) {
+      syncLayoutClasses($previousContainerFields.first());
+    } else {
+      maybeDeleteAnEmptyFieldGroup($previousFieldContainer.get(0));
+    }
+  }
+  function maybeUpdateDraggableClassAfterDrop(draggable, $previousContainerFields) {
+    if (0 !== $previousContainerFields.length || 1 !== getFieldsInRow(jQuery(draggable.parentNode)).length) {
+      syncLayoutClasses(jQuery(draggable));
+    }
+  }
+
+  /**
+   * Remove an empty field group, but don't remove an empty section.
+   *
+   * @param {Element} previousFieldContainer
+   * @return {void}
+   */
+  function maybeDeleteAnEmptyFieldGroup(previousFieldContainer) {
+    var closestFieldBox = previousFieldContainer.closest('li.frm_field_box');
+    if (closestFieldBox && !closestFieldBox.classList.contains('edit_field_type_divider')) {
+      closestFieldBox.remove();
+    }
+  }
+  function handleDragOverYAxis(_ref) {
+    var droppable = _ref.droppable,
+      y = _ref.y,
+      placeholder = _ref.placeholder;
+    var $list = jQuery(droppable);
+    var top;
+    $children = $list.children().not('.edit_field_type_end_divider');
+    if (0 === $children.length) {
+      $list.prepend(placeholder);
+      top = 0;
+    } else {
+      var insertAtIndex = determineIndexBasedOffOfMousePositionInList($list, y);
+      if (insertAtIndex === $children.length) {
+        var $lastChild = jQuery($children.get(insertAtIndex - 1));
+        top = $lastChild.offset().top + $lastChild.outerHeight();
+        $list.append(placeholder);
+
+        // Make sure nothing gets inserted after the end divider.
+        var $endDivider = $list.children('.edit_field_type_end_divider');
+        if ($endDivider.length) {
+          $list.append($endDivider);
+        }
+      } else {
+        top = jQuery($children.get(insertAtIndex)).offset().top;
+        jQuery($children.get(insertAtIndex)).before(placeholder);
+      }
+    }
+    top -= $list.offset().top;
+    placeholder.style.top = top + 'px';
+  }
+  function determineIndexBasedOffOfMousePositionInList($list, y) {
+    var $items = $list.children().not('.edit_field_type_end_divider');
+    var length = $items.length;
+    var index, item, itemTop, returnIndex;
+    if (!document.querySelector('.frm-has-fields .frm_no_fields')) {
+      // Always return 0 when there are no fields.
+      return 0;
+    }
+    returnIndex = 0;
+    for (index = length - 1; index >= 0; --index) {
+      item = $items.get(index);
+      itemTop = jQuery(item).offset().top;
+      if (y > itemTop) {
+        returnIndex = index;
+        if (y > itemTop + jQuery(item).outerHeight() / 2) {
+          returnIndex = index + 1;
+        }
+        break;
+      }
+    }
+    return returnIndex;
+  }
+  function handleDragOverFieldGroup(_ref2) {
+    var droppable = _ref2.droppable,
+      x = _ref2.x,
+      placeholder = _ref2.placeholder;
+    var $row = jQuery(droppable);
+    var $children = getFieldsInRow($row);
+    if (!$children.length) {
+      return;
+    }
+    var left;
+    var insertAtIndex = determineIndexBasedOffOfMousePositionInRow($row, x);
+    if (insertAtIndex === $children.length) {
+      var $lastChild = jQuery($children.get(insertAtIndex - 1));
+      left = $lastChild.offset().left + $lastChild.outerWidth();
+      $row.append(placeholder);
+    } else {
+      left = jQuery($children.get(insertAtIndex)).offset().left;
+      jQuery($children.get(insertAtIndex)).before(placeholder);
+      var amountToOffsetLeftBy = 0 === insertAtIndex ? 4 : 8; // Offset by 8 in between rows, but only 4 for the first item in a group.
+      left -= amountToOffsetLeftBy; // Offset the placeholder slightly so it appears between two fields.
+    }
+    left -= $row.offset().left;
+    placeholder.style.left = left + 'px';
+  }
+  function syncAfterDragAndDrop() {
+    fixUnwrappedListItems();
+    toggleSectionHolder();
+    maybeFixEndDividers();
+    maybeDeleteEmptyFieldGroups();
+    updateFieldOrder();
+    var event = new Event('frm_sync_after_drag_and_drop', {
+      bubbles: false
+    });
+    document.dispatchEvent(event);
+  }
+  function maybeFixEndDividers() {
+    document.querySelectorAll('.edit_field_type_end_divider').forEach(function (endDivider) {
+      return endDivider.parentNode.appendChild(endDivider);
+    });
+  }
+  function maybeDeleteEmptyFieldGroups() {
+    document.querySelectorAll('li.form_field_box:not(.form-field)').forEach(function (fieldGroup) {
+      return !fieldGroup.children.length && fieldGroup.remove();
+    });
+  }
+  function fixUnwrappedListItems() {
+    var lists = document.querySelectorAll('ul#frm-show-fields, ul.start_divider');
+    lists.forEach(function (list) {
+      list.childNodes.forEach(function (child) {
+        if ('undefined' === typeof child.classList) {
+          return;
+        }
+        if (child.classList.contains('edit_field_type_end_divider')) {
+          // Never wrap end divider in place.
+          return;
+        }
+        if ('undefined' !== typeof child.classList && child.classList.contains('form-field')) {
+          wrapFieldLiInPlace(child);
+        }
+      });
+    });
+  }
+  function deleteEmptyDividerWrappers() {
+    var dividers = document.querySelectorAll('ul.start_divider');
+    if (!dividers.length) {
+      return;
+    }
+    dividers.forEach(function (divider) {
+      var children = [].slice.call(divider.children);
+      children.forEach(function (child) {
+        if (0 === child.children.length) {
+          child.remove();
+        } else if (1 === child.children.length && 'ul' === child.firstElementChild.nodeName.toLowerCase() && 0 === child.firstElementChild.children.length) {
+          child.remove();
+        }
+      });
+    });
+  }
+  function getFieldsInRow($row) {
+    var $fields = jQuery();
+    var row = $row.get(0);
+    if (!row.children) {
+      return $fields;
+    }
+    Array.from(row.children).forEach(function (child) {
+      if ('none' === child.style.display) {
+        return;
+      }
+      var classes = child.classList;
+      if (!classes.contains('form-field') || classes.contains('edit_field_type_end_divider') || classes.contains('frm-sortable-helper')) {
+        return;
+      }
+      $fields = $fields.add(child);
+    });
+    return $fields;
+  }
+  function determineIndexBasedOffOfMousePositionInRow($row, x) {
+    var $inputs = getFieldsInRow($row),
+      length = $inputs.length,
+      index,
+      input,
+      inputLeft,
+      returnIndex;
+    returnIndex = 0;
+    for (index = length - 1; index >= 0; --index) {
+      input = $inputs.get(index);
+      inputLeft = jQuery(input).offset().left;
+      if (x > inputLeft) {
+        returnIndex = index;
+        if (x > inputLeft + jQuery(input).outerWidth() / 2) {
+          returnIndex = index + 1;
+        }
+        break;
+      }
+    }
+    return returnIndex;
+  }
+  function syncLayoutClasses($item, type) {
+    var $fields, size, layoutClasses, classToAddFunction;
+    if ('undefined' === typeof type) {
+      type = 'even';
+    }
+    $fields = $item.parent().children('li.form-field, li.frmbutton_loadingnow').not('.edit_field_type_end_divider');
+    size = $fields.length;
+    layoutClasses = getLayoutClasses();
+    if ('even' === type && 5 !== size) {
+      $fields.each(getSyncLayoutClass(layoutClasses, getEvenClassForSize(size)));
+    } else if ('clear' === type) {
+      $fields.each(getSyncLayoutClass(layoutClasses, ''));
+    } else {
+      if (-1 !== ['left', 'right', 'middle', 'even'].indexOf(type)) {
+        classToAddFunction = function classToAddFunction(index) {
+          return getClassForBlock(size, type, index);
+        };
+      } else {
+        classToAddFunction = function classToAddFunction(index) {
+          var size = type[index];
+          return getLayoutClassForSize(size);
+        };
+      }
+      $fields.each(getSyncLayoutClass(layoutClasses, classToAddFunction));
+    }
+    updateFieldGroupControls($item.parent(), $fields.length);
+  }
+  function updateFieldGroupControls($row, count) {
+    var rowOffset, shouldShowControls, controls;
+    rowOffset = $row.offset();
+    if ('undefined' === typeof rowOffset) {
+      return;
+    }
+    shouldShowControls = count >= 2;
+    controls = document.getElementById('frm_field_group_controls');
+    if (null === controls) {
+      if (!shouldShowControls) {
+        // exit early. if we do not need controls and they do not exist, do nothing.
+        return;
+      }
+      controls = div();
+      controls.id = 'frm_field_group_controls';
+      controls.setAttribute('role', 'group');
+      controls.setAttribute('tabindex', 0);
+      setFieldControlsHtml(controls);
+      builderPage.appendChild(controls);
+    }
+    $row.append(controls);
+    controls.style.display = shouldShowControls ? 'block' : 'none';
+  }
+  function setFieldControlsHtml(controls) {
+    var layoutOption, moveOption;
+    layoutOption = document.createElement('span');
+    layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+    var layoutOptionLabel = __('Set Row Layout', 'formidable');
+    addTooltip(layoutOption, layoutOptionLabel);
+    makeTabbable(layoutOption, layoutOptionLabel);
+    moveOption = document.createElement('span');
+    moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+    moveOption.classList.add('frm-move');
+    var moveOptionLabel = __('Move Field Group', 'formidable');
+    addTooltip(moveOption, moveOptionLabel);
+    makeTabbable(moveOption, moveOptionLabel);
+    controls.innerHTML = '';
+    controls.appendChild(layoutOption);
+    controls.appendChild(moveOption);
+    controls.appendChild(getFieldControlsDropdown());
+  }
+  function addTooltip(element, title) {
+    element.setAttribute('data-bs-toggle', 'tooltip');
+    element.setAttribute('data-bs-container', 'body');
+    element.setAttribute('title', title);
+    element.addEventListener('mouseover', function () {
+      if (null === element.getAttribute('data-original-title')) {
+        jQuery(element).tooltip();
+      }
+    });
+  }
+  function getFieldControlsDropdown() {
+    var dropdown = span({
+      className: 'dropdown'
+    });
+    var trigger = a({
+      className: 'frm_bstooltip frm-hover-icon frm-dropdown-toggle dropdown-toggle',
+      children: [span({
+        child: svg({
+          href: '#frm_thick_more_vert_icon'
+        })
+      }), span({
+        className: 'screen-reader-text',
+        text: __('Toggle More Options Dropdown', 'formidable')
+      })]
+    });
+    frmDom.setAttributes(trigger, {
+      title: __('More Options', 'formidable'),
+      'data-bs-toggle': 'dropdown',
+      'data-bs-container': 'body',
+      'data-bs-display': 'static'
+    });
+    makeTabbable(trigger, __('More Options', 'formidable'));
+    dropdown.appendChild(trigger);
+    var ul = div({
+      className: 'frm-dropdown-menu dropdown-menu dropdown-menu-right'
+    });
+    ul.setAttribute('role', 'menu');
+    dropdown.appendChild(ul);
+    return dropdown;
+  }
+  function getSyncLayoutClass(layoutClasses, classToAdd) {
+    return function (itemIndex) {
+      var currentClassToAdd, length, layoutClassIndex, currentClass, activeLayoutClass, fieldId, layoutClassesInput;
+      currentClassToAdd = 'function' === typeof classToAdd ? classToAdd(itemIndex) : classToAdd;
+      length = layoutClasses.length;
+      activeLayoutClass = false;
+      for (layoutClassIndex = 0; layoutClassIndex < length; ++layoutClassIndex) {
+        currentClass = layoutClasses[layoutClassIndex];
+        if (this.classList.contains(currentClass)) {
+          activeLayoutClass = currentClass;
+          break;
+        }
+      }
+      fieldId = this.dataset.fid;
+      if ('undefined' === typeof fieldId) {
+        // we are syncing the drag/drop placeholder before the actual field has loaded.
+        // this will get called again afterward and the input will exist then.
+        this.classList.add(currentClassToAdd);
+        return;
+      }
+      moveFieldSettings(document.getElementById('frm-single-settings-' + fieldId));
+      layoutClassesInput = document.getElementById('frm_classes_' + fieldId);
+      if (null === layoutClassesInput) {
+        // not every field type has a layout class input.
+        return;
+      }
+      if (false === activeLayoutClass) {
+        if ('' !== currentClassToAdd) {
+          layoutClassesInput.value = layoutClassesInput.value.concat(' ' + currentClassToAdd);
+        }
+      } else {
+        this.classList.remove(activeLayoutClass);
+        layoutClassesInput.value = layoutClassesInput.value.replace(activeLayoutClass, currentClassToAdd);
+      }
+      if (this.classList.contains('frm_first')) {
+        this.classList.remove('frm_first');
+        layoutClassesInput.value = layoutClassesInput.value.replace('frm_first', '').trim();
+      }
+      if (0 === itemIndex) {
+        this.classList.add('frm_first');
+        layoutClassesInput.value = layoutClassesInput.value.concat(' frm_first');
+      }
+      jQuery(layoutClassesInput).trigger('change');
+    };
+  }
+  function getLayoutClasses() {
+    return ['frm_full', 'frm_half', 'frm_third', 'frm_fourth', 'frm_sixth', 'frm_two_thirds', 'frm_three_fourths', 'frm1', 'frm2', 'frm3', 'frm4', 'frm5', 'frm6', 'frm7', 'frm8', 'frm9', 'frm10', 'frm11', 'frm12'];
+  }
+  function setupFieldOptionSorting(sort) {
+    var opts = {
+      items: '.frm_sortable_field_opts li',
+      axis: 'y',
+      opacity: 0.65,
+      forcePlaceholderSize: false,
+      handle: '.frm-drag',
+      helper: function helper(e, li) {
+        copyHelper = li.clone().insertAfter(li);
+        return li.clone();
+      },
+      stop: function stop(e, ui) {
+        copyHelper && copyHelper.remove();
+        var fieldId = ui.item.attr('id').replace('frm_delete_field_', '').replace('-' + ui.item.data('optkey') + '_container', '');
+        resetDisplayedOpts(fieldId);
+        fieldUpdated();
+      }
+    };
+    jQuery(sort).sortable(opts);
+  }
+
+  // Get the section where a field is dropped
+  function getSectionForFieldPlacement(currentItem) {
+    var section = '';
+    if (typeof currentItem !== 'undefined' && !currentItem.hasClass('edit_field_type_divider')) {
+      section = currentItem.closest('.edit_field_type_divider');
+    }
+    return section;
+  }
+
+  // Get the form ID where a field is dropped
+  function getFormIdForFieldPlacement(section) {
+    var formId = '';
+    if (typeof section[0] !== 'undefined') {
+      var sDivide = section.children('.start_divider');
+      sDivide.children('.edit_field_type_end_divider').appendTo(sDivide);
+      if (typeof section.attr('data-formid') !== 'undefined') {
+        var fieldId = section.attr('data-fid');
+        formId = jQuery('input[name="field_options[form_select_' + fieldId + ']"]').val();
+      }
+    }
+    if (typeof formId === 'undefined' || formId === '') {
+      formId = thisFormId;
+    }
+    return formId;
+  }
+
+  // Get the section ID where a field is dropped
+  function getSectionIdForFieldPlacement(section) {
+    var sectionId = 0;
+    if (typeof section[0] !== 'undefined') {
+      sectionId = section.attr('id').replace('frm_field_id_', '');
+    }
+    return sectionId;
+  }
+
+  /**
+   * Update a field after it is dragged and dropped into, out of, or between sections
+   *
+   * @param {Object} currentItem
+   * @param {Object} previousSection
+   * @return {void}
+   */
+  function updateFieldAfterMovingBetweenSections(currentItem, previousSection) {
+    if (!currentItem.hasClass('form-field')) {
+      // currentItem is a field group. Call for children recursively.
+      getFieldsInRow(jQuery(currentItem.get(0).firstChild)).each(function () {
+        updateFieldAfterMovingBetweenSections(jQuery(this), previousSection);
+      });
+      return;
+    }
+    var fieldId = currentItem.attr('id').replace('frm_field_id_', '');
+    var section = getSectionForFieldPlacement(currentItem);
+    var formId = getFormIdForFieldPlacement(section);
+    var sectionId = getSectionIdForFieldPlacement(section);
+    var previousFormId = previousSection ? getFormIdForFieldPlacement(jQuery(previousSection.parentNode)) : 0;
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_update_field_after_move',
+        form_id: formId,
+        field: fieldId,
+        section_id: sectionId,
+        previous_form_id: previousFormId,
+        nonce: frmGlobal.nonce
+      },
+      success: function success() {
+        toggleSectionHolder();
+        updateInSectionValue(fieldId, sectionId);
+      }
+    });
+  }
+
+  // Update the in_section field value
+  function updateInSectionValue(fieldId, sectionId) {
+    document.getElementById('frm_in_section_' + fieldId).value = sectionId;
+  }
+
+  /**
+   * Get the arguments for inserting a new field.
+   *
+   * @since 6.23
+   *
+   * @param {string} fieldType
+   * @param {string} sectionId
+   * @param {string} formId
+   * @param {Number} hasBreak
+   *
+   * @return {Object}
+   */
+  function getInsertNewFieldArgs(fieldType, sectionId, formId, hasBreak) {
+    var fieldArgs = {
+      action: 'frm_insert_field',
+      form_id: formId,
+      field_type: fieldType,
+      section_id: sectionId,
+      nonce: frmGlobal.nonce,
+      has_break: hasBreak
+    };
+
+    // Only send last row field IDs to update their order if this field isn't added to a repeater.
+    var isInRepeater = sectionId > 0 && document.getElementById('form_id').value !== formId;
+    if (!isInRepeater) {
+      fieldArgs.last_row_field_ids = getFieldIdsInSubmitRow();
+    }
+    return fieldArgs;
+  }
+
+  /**
+   * Returns true if it's a range field type and slider type is not selected.
+   *
+   * @since 6.23
+   *
+   * @param {string} fieldType
+   * @return {boolean}
+   */
+  function shouldStopInsertingField(fieldType) {
+    return wp.hooks.applyFilters('frm_should_stop_inserting_field', false, fieldType);
+  }
+
+  /**
+   * Add a new field by dragging and dropping it from the Fields sidebar
+   *
+   * @param {string} fieldType
+   */
+  function insertNewFieldByDragging(fieldType) {
+    if (shouldStopInsertingField(fieldType)) {
+      wp.hooks.doAction('frm_stopped_inserting_by_dragging', fieldType);
+      return;
+    }
+    var placeholder = document.getElementById('frm_drag_placeholder');
+    var loadingID = fieldType.replace('|', '-') + '_' + getAutoId();
+    var loading = tag('li', {
+      id: loadingID,
+      className: 'frm-wait frmbutton_loadingnow'
+    });
+    var $placeholder = jQuery(loading);
+    var currentItem = jQuery(placeholder);
+    var section = getSectionForFieldPlacement(currentItem);
+    var formId = getFormIdForFieldPlacement(section);
+    var sectionId = getSectionIdForFieldPlacement(section);
+    placeholder.parentNode.insertBefore(loading, placeholder);
+    placeholder.remove();
+    syncLayoutClasses($placeholder);
+    var hasBreak = 0;
+    if ('summary' === fieldType) {
+      // see if we need to insert a page break before this newly-added summary field. Check for at least 1 page break
+      hasBreak = jQuery('.frmbutton_loadingnow#' + loadingID).prevAll('li[data-type="break"]').length ? 1 : 0;
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: getInsertNewFieldArgs(fieldType, sectionId, formId, hasBreak),
+      success: function success(msg) {
+        handleInsertFieldByDraggingResponse(msg, $placeholder);
+        var fieldId = checkMsgForFieldId(msg);
+        if (fieldId) {
+          /**
+           * Fires after a field is added.
+           *
+           * @since 6.23
+           *
+           * @param {Object} fieldData            The field data.
+           * @param {string} fieldData.field      The field HTML.
+           * @param {string} fieldData.field_type The field type.
+           * @param {string} fieldData.form_id    The form ID.
+           */
+          wp.hooks.doAction('frm_after_field_added_in_form_builder', {
+            field: msg,
+            fieldId: fieldId,
+            fieldType: fieldType,
+            form_id: formId
+          });
+        }
+      },
+      error: handleInsertFieldError
+    });
+  }
+
+  /**
+   * @param {string} msg
+   * @param {Object} $placeholder jQuery object.
+   */
+  function handleInsertFieldByDraggingResponse(msg, $placeholder) {
+    var replaceWith;
+    document.getElementById('frm_form_editor_container').classList.add('frm-has-fields');
+    var $siblings = $placeholder.siblings('li.form-field').not('.edit_field_type_end_divider');
+    if (!$siblings.length) {
+      // if dragging into a new row, we need to wrap the li first.
+      replaceWith = wrapFieldLi(msg);
+    } else {
+      replaceWith = msgAsjQueryObject(msg);
+      if (!$placeholder.get(0).parentNode.parentNode.classList.contains('ui-draggable')) {
+        // If a field group wasn't draggable because it only had a single field, make it draggable.
+        makeDraggable($placeholder.get(0).parentNode.parentNode, '.frm-move');
+      }
+    }
+    $placeholder.replaceWith(replaceWith);
+    updateFieldOrder();
+    afterAddField(msg, false);
+    if ($siblings.length) {
+      syncLayoutClasses($siblings.first());
+    }
+    toggleSectionHolder();
+    if (!$siblings.length) {
+      makeDroppable(replaceWith.get(0).querySelector('ul.frm_sorting'));
+      makeDraggable(replaceWith.get(0).querySelector('li.form-field'), '.frm-move');
+    } else {
+      makeDraggable(replaceWith.get(0), '.frm-move');
+    }
+  }
+
+  /**
+   * Get the field ID from the response message.
+   *
+   * @since 6.23
+   *
+   * @param {string} msg
+   * @return {Number}
+   */
+  function checkMsgForFieldId(msg) {
+    var result = msg.match(/data-fid="(\d+)"/);
+    return result ? parseInt(result[1]) : 0;
+  }
+  function getFieldIdsInSubmitRow() {
+    var submitField = document.querySelector('.edit_field_type_submit');
+    if (!submitField) {
+      return [];
+    }
+    var lastRowFields = submitField.parentNode.children;
+    var ids = [];
+    for (var _i2 = 0; _i2 < lastRowFields.length; _i2++) {
+      ids.push(lastRowFields[_i2].dataset.fid);
+    }
+    return ids;
+  }
+  function moveFieldThatAlreadyExists(draggable, placeholder) {
+    placeholder.parentNode.insertBefore(draggable, placeholder);
+  }
+  function msgAsjQueryObject(msg) {
+    var element = div();
+    element.innerHTML = msg;
+    return jQuery(element.firstChild);
+  }
+  function handleInsertFieldError(jqXHR, _, errorThrown) {
+    maybeShowInsertFieldError(errorThrown, jqXHR);
+  }
+  function maybeShowInsertFieldError(errorThrown, jqXHR) {
+    if (!jqXHRAborted(jqXHR)) {
+      infoModal(errorThrown + '. Please try again.');
+    }
+  }
+  function jqXHRAborted(jqXHR) {
+    return jqXHR.status === 0 || jqXHR.readyState === 0;
+  }
+
+  /**
+   * Get a unique id that automatically increments with every function call.
+   * Can be used for any UI that requires a unique id.
+   * Not to be used in data.
+   *
+   * @return {number}
+   */
+  function getAutoId() {
+    return ++autoId;
+  }
+
+  /**
+   * Determine if a draggable element can be droppable into a droppable element.
+   *
+   * Don't allow page break, embed form, or section inside section field
+   * Don't allow page breaks inside of field groups.
+   * Don't allow field groups with sections inside of sections.
+   * Don't allow field groups in field groups.
+   * Don't allow hidden fields inside of field groups but allow them in sections.
+   * Don't allow any fields below the submit button field.
+   * Don't allow submit button field above any fields.
+   * Don't allow GDPR fields in repeaters.
+   *
+   * @param {HTMLElement} draggable
+   * @param {HTMLElement} droppable
+   * @param {Event}       event
+   * @return {Boolean}
+   */
+  function allowDrop(draggable, droppable, event) {
+    if (false === droppable) {
+      // Don't show drop placeholder if dragging somewhere off of the droppable area.
+      return false;
+    }
+    if (droppable.closest('.frm-sortable-helper')) {
+      // Do not allow drop into draggable.
+      return false;
+    }
+    var isSubmitBtn = draggable.classList.contains('edit_field_type_submit');
+    var containSubmitBtn = !draggable.classList.contains('form_field') && !!draggable.querySelector('.edit_field_type_submit');
+    if ('frm-show-fields' === droppable.id) {
+      var draggableIndex = determineIndexBasedOffOfMousePositionInList(jQuery(droppable), event.clientY);
+      if (isSubmitBtn || containSubmitBtn) {
+        // Do not allow dropping submit button to above position.
+        var lastRowIndex = droppable.childElementCount - 1;
+        return draggableIndex > lastRowIndex;
+      }
+
+      // Do not allow dropping other fields to below submit button.
+      var submitButtonIndex = jQuery(droppable.querySelector('.edit_field_type_submit').closest('#frm-show-fields > li')).index();
+      return draggableIndex <= submitButtonIndex;
+    }
+    if (isSubmitBtn) {
+      if (droppable.classList.contains('start_divider')) {
+        // Don't allow dropping submit button into a repeater.
+        return false;
+      }
+      if (isLastRow(droppable.parentElement)) {
+        // Allow dropping submit button into the last row.
+        return true;
+      }
+      if (!isLastRow(droppable.parentElement.nextElementSibling)) {
+        // Don't a dropping submit button into the row that isn't the second one from bottom.
+        return false;
+      }
+
+      // Allow dropping submit button into the second row from bottom if there is only submit button in the last row.
+      return !draggable.parentElement.querySelector('li.frm_field_box:not(.edit_field_type_submit)');
+    }
+    if (droppable.classList.contains('start_divider') && (draggable.classList.contains('edit_field_type_gdpr') || draggable.id === 'gdpr') && droppable.closest('.repeat_section')) {
+      // Don't allow GDPR fields in repeaters.
+      return false;
+    }
+    if (!droppable.classList.contains('start_divider')) {
+      var $fieldsInRow = getFieldsInRow(jQuery(droppable));
+      if (!groupCanFitAnotherField($fieldsInRow, jQuery(draggable))) {
+        // Field group is full and cannot accept another field.
+        return false;
+      }
+      if (draggable.id === 'divider' && droppable.closest('.start_divider')) {
+        return false;
+      }
+    }
+    var isNewField = draggable.classList.contains('frm-new-field');
+    if (isNewField) {
+      return allowNewFieldDrop(draggable, droppable);
+    }
+    return allowMoveField(draggable, droppable);
+  }
+
+  /**
+   * Checks if given element is the last row in form builder.
+   *
+   * @param {HTMLElement} element Element.
+   * @return {Boolean}
+   */
+  function isLastRow(element) {
+    return element && element.matches('#frm-show-fields > li:last-child');
+  }
+
+  // Don't allow a new page break or hidden field in a field group.
+  // Don't allow a new field into a field group that includes a page break or hidden field.
+  // Don't allow a new section inside of a section.
+  // Don't allow an embedded form in a section.
+  function allowNewFieldDrop(draggable, droppable) {
+    var classes = draggable.classList;
+    var newPageBreakField = classes.contains('frm_tbreak');
+    var newHiddenField = classes.contains('frm_thidden');
+    var newSectionField = classes.contains('frm_tdivider');
+    var newEmbedField = classes.contains('frm_tform');
+    var newUserIdField = classes.contains('frm_tuser_id');
+    var newFieldWillBeAddedToAGroup = !('frm-show-fields' === droppable.id || droppable.classList.contains('start_divider'));
+    if (newFieldWillBeAddedToAGroup) {
+      if (groupIncludesBreakOrHiddenOrUserId(droppable)) {
+        // Never allow any field beside a page break or a hidden field.
+        return false;
+      }
+      return !newHiddenField && !newPageBreakField && !newUserIdField;
+    }
+    var fieldTypeIsAlwaysAllowed = !newPageBreakField && !newHiddenField && !newSectionField && !newEmbedField;
+    if (fieldTypeIsAlwaysAllowed) {
+      return true;
+    }
+    var newFieldWillBeAddedToASection = droppable.classList.contains('start_divider') || null !== droppable.closest('.start_divider');
+    if (newFieldWillBeAddedToASection) {
+      // Don't allow a section or an embedded form in a section.
+      return !newEmbedField && !newSectionField;
+    }
+    return true;
+  }
+  function allowMoveField(draggable, droppable) {
+    if (isFieldGroup(draggable)) {
+      return allowMoveFieldGroup(draggable, droppable);
+    }
+    var isPageBreak = draggable.classList.contains('edit_field_type_break');
+    if (isPageBreak) {
+      // Page breaks are only allowed in the main list of fields, not in sections or in field groups.
+      return false;
+    }
+    if (droppable.classList.contains('start_divider')) {
+      return allowMoveFieldToSection(draggable);
+    }
+    var isHiddenField = draggable.classList.contains('edit_field_type_hidden');
+    var isUserIdField = draggable.classList.contains('edit_field_type_user_id');
+    if (isHiddenField || isUserIdField) {
+      // Hidden fields and user id fields should not be added to field groups since they're not shown
+      // and don't make sense with the grid distribution.
+      return false;
+    }
+    return allowMoveFieldToGroup(draggable, droppable);
+  }
+  function isFieldGroup(draggable) {
+    return draggable.classList.contains('frm_field_box') && !draggable.classList.contains('form-field');
+  }
+  function allowMoveFieldGroup(fieldGroup, droppable) {
+    if (droppable.classList.contains('start_divider') && null === fieldGroup.querySelector('.start_divider')) {
+      // Allow a field group with no section inside of a section.
+      return true;
+    }
+    return false;
+  }
+  function allowMoveFieldToSection(draggable) {
+    var draggableIncludeEmbedForm = draggable.classList.contains('edit_field_type_form') || draggable.querySelector('.edit_field_type_form');
+    if (draggableIncludeEmbedForm) {
+      // Do not allow an embedded form inside of a section.
+      return false;
+    }
+    var draggableIncludesSection = draggable.classList.contains('edit_field_type_divider') || draggable.querySelector('.edit_field_type_divider');
+    if (draggableIncludesSection) {
+      // Do not allow a section inside of a section.
+      return false;
+    }
+    return true;
+  }
+  function allowMoveFieldToGroup(draggable, group) {
+    if (groupIncludesBreakOrHiddenOrUserId(group)) {
+      // Never allow any field beside a page break or a hidden field.
+      return false;
+    }
+    var isFieldGroup = jQuery(draggable).children('ul.frm_sorting').not('.start_divider').length > 0;
+    if (isFieldGroup) {
+      // Do not allow a field group directly inside of a field group unless it's in a section.
+      return false;
+    }
+    var draggableIncludesASection = draggable.classList.contains('edit_field_type_divider') || draggable.querySelector('.edit_field_type_divider');
+    var draggableIsEmbedField = draggable.classList.contains('edit_field_type_form');
+    var groupIsInASection = null !== group.closest('.start_divider');
+    if (groupIsInASection && (draggableIncludesASection || draggableIsEmbedField)) {
+      // Do not allow a section or an embed field inside of a section.
+      return false;
+    }
+    return true;
+  }
+  function groupIncludesBreakOrHiddenOrUserId(group) {
+    return null !== group.querySelector('.edit_field_type_break, .edit_field_type_hidden, .edit_field_type_user_id');
+  }
+  function groupCanFitAnotherField(fieldsInRow, $field) {
+    var fieldId;
+    if (fieldsInRow.length < MAX_FIELD_GROUP_SIZE) {
+      return true;
+    }
+    if (fieldsInRow.length > MAX_FIELD_GROUP_SIZE) {
+      return false;
+    }
+    fieldId = $field.attr('data-fid');
+    // Allow the maximum number if we're not changing field groups.
+    return 1 === jQuery(fieldsInRow).filter('[data-fid="' + fieldId + '"]').length;
+  }
+  function loadFields(fieldId) {
+    var thisField = document.getElementById(fieldId);
+    var $thisField = jQuery(thisField);
+    var field = [];
+    var addHtmlToField = function addHtmlToField(element) {
+      var frmHiddenFdata = element.querySelector('.frm_hidden_fdata');
+      element.classList.add('frm_load_now');
+      if (frmHiddenFdata !== null) {
+        field.push(frmHiddenFdata.innerHTML);
+      }
+    };
+    var nextElement = thisField;
+    addHtmlToField(nextElement);
+    var nextField = getNextField(nextElement);
+    while (nextField && field.length < 15) {
+      addHtmlToField(nextField);
+      nextElement = nextField;
+      nextField = getNextField(nextField);
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_load_field',
+        field: field,
+        form_id: thisFormId,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(html) {
+        return handleAjaxLoadFieldSuccess(html, $thisField, field);
+      }
+    });
+  }
+  function getNextField(field) {
+    var _field$parentNode;
+    if (field.nextElementSibling) {
+      return field.nextElementSibling;
+    }
+    return (_field$parentNode = field.parentNode) === null || _field$parentNode === void 0 || (_field$parentNode = _field$parentNode.closest('.frm_field_box')) === null || _field$parentNode === void 0 || (_field$parentNode = _field$parentNode.nextElementSibling) === null || _field$parentNode === void 0 ? void 0 : _field$parentNode.querySelector('.form-field');
+  }
+  function handleAjaxLoadFieldSuccess(html, $thisField, field) {
+    var key, $nextSet;
+    html = html.replace(/^\s+|\s+$/g, '');
+    if (html.indexOf('{') !== 0) {
+      jQuery('.frm_load_now').removeClass('.frm_load_now').html('Error');
+      return;
+    }
+    html = JSON.parse(html);
+    for (key in html) {
+      jQuery('#frm_field_id_' + key).replaceWith(html[key]);
+      setupSortable('#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting');
+      makeDraggable(document.getElementById('frm_field_id_' + key));
+    }
+    $nextSet = $thisField.nextAll('.frm_field_loading:not(.frm_load_now)');
+    if ($nextSet.length) {
+      loadFields($nextSet.attr('id'));
+    } else {
+      // go up a level
+      $nextSet = jQuery(document.getElementById('frm-show-fields')).find('.frm_field_loading:not(.frm_load_now)');
+      if ($nextSet.length) {
+        loadFields($nextSet.attr('id'));
+      }
+    }
+    initiateMultiselect();
+    renumberPageBreaks();
+    maybeHideQuantityProductFieldOption();
+    var loadedEvent = new Event('frm_ajax_loaded_field', {
+      bubbles: false
+    });
+    loadedEvent.frmFields = field.map(function (f) {
+      return JSON.parse(f);
+    });
+    document.dispatchEvent(loadedEvent);
+  }
+  function addFieldClick() {
+    /*jshint validthis:true */
+    var $thisObj = jQuery(this);
+    // there is no real way to disable a <a> (with a valid href attribute) in HTML - https://css-tricks.com/how-to-disable-links/
+    if ($thisObj.hasClass('disabled')) {
+      return false;
+    }
+    var $button = $thisObj.closest('.frmbutton');
+    var fieldType = $button.attr('id');
+    if (shouldStopInsertingField(fieldType)) {
+      return;
+    }
+    var hasBreak = 0;
+    if ('summary' === fieldType) {
+      hasBreak = $newFields.children('li[data-type="break"]').length > 0 ? 1 : 0;
+    }
+    var formId = thisFormId;
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: getInsertNewFieldArgs(fieldType, 0, formId, hasBreak),
+      success: function success(msg) {
+        handleAddFieldClickResponse(msg);
+        var fieldId = checkMsgForFieldId(msg);
+        if (fieldId) {
+          /**
+           * Fires after a field is added.
+           *
+           * @since 6.23
+           *
+           * @param {Object} fieldData            The field data.
+           * @param {string} fieldData.field      The field HTML.
+           * @param {string} fieldData.field_type The field type.
+           * @param {string} fieldData.form_id    The form ID.
+           */
+          wp.hooks.doAction('frm_after_field_added_in_form_builder', {
+            field: msg,
+            fieldId: fieldId,
+            fieldType: fieldType,
+            form_id: formId
+          });
+        }
+      },
+      error: handleInsertFieldError
+    });
+    return false;
+  }
+  function handleAddFieldClickResponse(msg) {
+    document.getElementById('frm_form_editor_container').classList.add('frm-has-fields');
+    var replaceWith = wrapFieldLi(msg);
+    var submitField = $newFields[0].querySelector('.edit_field_type_submit');
+    if (!submitField) {
+      $newFields.append(replaceWith);
+    } else {
+      jQuery(submitField.closest('.frm_field_box:not(.form-field)')).before(replaceWith);
+    }
+    afterAddField(msg, true);
+    replaceWith.each(function () {
+      makeDroppable(this.querySelector('ul.frm_sorting'));
+      makeDraggable(this.querySelector('.form-field'), '.frm-move');
+    });
+  }
+  function insertFormField(fieldType) {
+    var fieldOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+    return new Promise(function (resolve) {
+      var formId = thisFormId;
+      var hasBreak = 0;
+      if ('summary' === fieldType) {
+        hasBreak = $newFields.children('li[data-type="break"]').length > 0 ? 1 : 0;
+      }
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: Object.assign(getInsertNewFieldArgs(fieldType, 0, formId, hasBreak), {
+          field_options: fieldOptions
+        }),
+        success: function success(msg) {
+          resolve(msg);
+          setTimeout(function () {
+            updateFieldOrder();
+            afterAddField(msg, true);
+            var fieldId = checkMsgForFieldId(msg);
+            if (fieldId) {
+              /**
+               * Fires after a field is added.
+               *
+               * @since 6.23
+               *
+               * @param {Object} fieldData            The field data.
+               * @param {string} fieldData.field      The field HTML.
+               * @param {string} fieldData.field_type The field type.
+               * @param {string} fieldData.form_id    The form ID.
+               */
+              wp.hooks.doAction('frm_after_field_added_in_form_builder', {
+                field: msg,
+                fieldId: fieldId,
+                fieldType: fieldType,
+                form_id: formId
+              });
+            }
+          }, 10);
+        },
+        error: handleInsertFieldError
+      });
+    });
+  }
+  function maybeHideQuantityProductFieldOption() {
+    var hide = true,
+      opts = document.querySelectorAll('.frmjs_prod_field_opt_cont');
+    if ($newFields.find('li.edit_field_type_product').length > 1) {
+      hide = false;
+    }
+    for (var _i3 = 0; _i3 < opts.length; _i3++) {
+      if (hide) {
+        opts[_i3].classList.add('frm_hidden');
+      } else {
+        opts[_i3].classList.remove('frm_hidden');
+      }
+    }
+  }
+
+  /**
+   * Returns true if a field can be duplicated.
+   *
+   * @since 6.19
+   *
+   * @param {HTMLElement} field
+   * @param {number}      maxFieldsInGroup
+   *
+   * @return {Boolean}
+   */
+  function canDuplicateField(field, maxFieldsInGroup) {
+    if (field.classList.contains('frm-page-collapsed')) {
+      return false;
+    }
+    var fieldGroup = field.closest('li.frm_field_box:not(.form-field)');
+    if (!fieldGroup) {
+      return true;
+    }
+    var fieldsInGroup = getFieldsInRow(jQuery(fieldGroup.querySelector('ul'))).length;
+    return fieldsInGroup < maxFieldsInGroup;
+  }
+  function duplicateField() {
+    var $field, fieldId, children, newRowId, fieldOrder;
+    var maxFieldsInGroup = MAX_FIELD_GROUP_SIZE;
+    $field = jQuery(this).closest('li.form-field');
+    newRowId = this.getAttribute('frm-target-row-id');
+    if (!(newRowId && newRowId.startsWith('frm_field_group_')) && !canDuplicateField($field.get(0), maxFieldsInGroup)) {
+      /* translators: %1$d: Maximum number of fields allowed in a field group. */
+      infoModal(sprintf(__('You can only have a maximum of %1$d fields in a field group. Delete or move out a field from the group and try again.', 'formidable'), maxFieldsInGroup));
+      return;
+    }
+    closeOpenFieldDropdowns();
+    fieldId = $field.data('fid');
+    children = fieldsInSection(fieldId);
+    if (null !== newRowId) {
+      fieldOrder = this.getAttribute('frm-field-order');
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_duplicate_field',
+        field_id: fieldId,
+        form_id: thisFormId,
+        children: children,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(msg) {
+        var _$field$0$querySelect;
+        var newRow;
+        var replaceWith;
+        if (null !== newRowId) {
+          newRow = document.getElementById(newRowId);
+          if (null !== newRow) {
+            replaceWith = msgAsjQueryObject(msg);
+            jQuery(newRow).append(replaceWith);
+            makeDraggable(replaceWith.get(0), '.frm-move');
+            if (null !== fieldOrder) {
+              newRow.lastElementChild.setAttribute('frm-field-order', fieldOrder);
+            }
+            jQuery(newRow).trigger('frm_added_duplicated_field_to_row', {
+              duplicatedFieldHtml: msg,
+              originalFieldId: fieldId
+            });
+            afterAddField(msg, false);
+            setLayoutClassesForDuplicatedFieldInGroup($field.get(0), replaceWith.get(0));
+            return;
+          }
+        }
+        if ($field.siblings('li.form-field').length) {
+          replaceWith = msgAsjQueryObject(msg);
+          $field.after(replaceWith);
+          syncLayoutClasses($field);
+          makeDraggable(replaceWith.get(0), '.frm-move');
+        } else {
+          replaceWith = wrapFieldLi(msg);
+          $field.parent().parent().after(replaceWith);
+          makeDroppable(replaceWith.get(0).querySelector('ul.frm_sorting'));
+          makeDraggable(replaceWith.get(0).querySelector('li.form-field'), '.frm-move');
+        }
+        updateFieldOrder();
+        afterAddField(msg, false);
+        maybeDuplicateUnsavedSettings(fieldId, msg);
+        toggleOneSectionHolder(replaceWith.find('.start_divider'));
+        (_$field$0$querySelect = $field[0].querySelector('.frm-dropdown-menu.dropdown-menu-right')) === null || _$field$0$querySelect === void 0 || _$field$0$querySelect.classList.remove('show');
+        setLayoutClassesForDuplicatedFieldInGroup($field.get(0), replaceWith.get(0));
+      }
+    });
+    return false;
+  }
+
+  /**
+   * Sets the layout classes for a duplicated field in a field group from the layout classes of the original field.
+   *
+   * @param {HTMLElement} field    The original field.
+   * @param {HTMLElement} newField The duplicated field.
+   *
+   * @return {void}
+   */
+  function setLayoutClassesForDuplicatedFieldInGroup(field, newField) {
+    var _document$getElementB;
+    var hoverTarget = field.closest('.frm-field-group-hover-target');
+    if (!hoverTarget || !isFieldGroup(hoverTarget.parentElement)) {
+      return;
+    }
+    var fieldId = field.dataset.fid;
+    var fieldClasses = (_document$getElementB = document.getElementById('frm_classes_' + fieldId)) === null || _document$getElementB === void 0 ? void 0 : _document$getElementB.value;
+    if (!fieldClasses) {
+      return;
+    }
+    fieldClasses = fieldClasses.replace('frm_first', '');
+    if (!newField.className.includes(fieldClasses)) {
+      newField.className += ' ' + fieldClasses;
+      var classesInput = document.getElementById('frm_classes_' + newField.dataset.fid);
+      if (classesInput) {
+        classesInput.value = fieldClasses;
+      }
+    }
+  }
+  function maybeDuplicateUnsavedSettings(originalFieldId, newFieldHtml) {
+    var originalSettings, newFieldId, copySettings, fieldOptionKeys, originalDefault, copyDefault;
+    originalSettings = document.getElementById('frm-single-settings-' + originalFieldId);
+    if (null === originalSettings) {
+      return;
+    }
+    newFieldId = jQuery(newFieldHtml).attr('data-fid');
+    if ('undefined' === typeof newFieldId) {
+      return;
+    }
+    copySettings = document.getElementById('frm-single-settings-' + newFieldId);
+    if (null === copySettings) {
+      return;
+    }
+    fieldOptionKeys = ['name', 'required', 'unique', 'read_only', 'placeholder', 'description', 'size', 'max', 'format', 'prepend', 'append', 'separate_value'];
+    originalSettings.querySelectorAll('input[name^="field_options["], textarea[name^="field_options["]').forEach(function (originalSetting) {
+      var key, tagType, copySetting;
+      key = getKeyFromSettingInput(originalSetting);
+      if ('options' === key) {
+        copyOption(originalSetting, copySettings, originalFieldId, newFieldId);
+        return;
+      }
+      if (-1 === fieldOptionKeys.indexOf(key)) {
+        return;
+      }
+      tagType = originalSetting.matches('input') ? 'input' : 'textarea';
+      copySetting = copySettings.querySelector(tagType + '[name="field_options[' + key + '_' + newFieldId + ']"]');
+      if (null === copySetting) {
+        return;
+      }
+      if ('checkbox' === originalSetting.type) {
+        if (originalSetting.checked !== copySetting.checked) {
+          jQuery(copySetting).trigger('click');
+        }
+      } else if ('text' === originalSetting.type || 'textarea' === tagType) {
+        if (originalSetting.value !== copySetting.value) {
+          copySetting.value = originalSetting.value;
+          jQuery(copySetting).trigger('change');
+        }
+      }
+    });
+    originalDefault = originalSettings.querySelector('input[name="default_value_' + originalFieldId + '"]');
+    if (null !== originalDefault) {
+      copyDefault = copySettings.querySelector('input[name="default_value_' + newFieldId + '"]');
+      if (null !== copyDefault && originalDefault.value !== copyDefault.value) {
+        copyDefault.value = originalDefault.value;
+        jQuery(copyDefault).trigger('change');
+      }
+    }
+  }
+  function copyOption(originalSetting, copySettings, originalFieldId, newFieldId) {
+    var remainingKeyDetails, copyKey, copySetting;
+    remainingKeyDetails = originalSetting.name.substr(23 + ('' + originalFieldId).length);
+    copyKey = 'field_options[options_' + newFieldId + ']' + remainingKeyDetails;
+    copySetting = copySettings.querySelector('input[name="' + copyKey + '"]');
+    if (null !== copySetting && copySetting.value !== originalSetting.value) {
+      copySetting.value = originalSetting.value;
+      jQuery(copySetting).trigger('change');
+    }
+  }
+  function getKeyFromSettingInput(input) {
+    var nameWithoutPrefix, nameSplit;
+    nameWithoutPrefix = input.name.substr(14);
+    nameSplit = nameWithoutPrefix.split('_');
+    nameSplit.pop();
+    return nameSplit.join('_');
+  }
+  function closeOpenFieldDropdowns() {
+    var openSettings = document.querySelector('.frm-field-settings-open');
+    if (null !== openSettings) {
+      openSettings.classList.remove('frm-field-settings-open');
+      jQuery(document).off('click', '#frm_builder_page', handleClickOutsideOfFieldSettings);
+      jQuery('.frm-field-action-icons .dropdown.open').removeClass('open');
+    }
+  }
+  function handleClickOutsideOfFieldSettings(event) {
+    if (!jQuery(event.originalEvent.target).closest('.frm-field-action-icons').length) {
+      closeOpenFieldDropdowns();
+    }
+  }
+  function checkForMultiselectKeysOnMouseMove(event) {
+    var keyIsDown = !!(event.ctrlKey || event.metaKey || event.shiftKey);
+    jQuery(builderPage).toggleClass('frm-multiselect-key-is-down', keyIsDown);
+    checkForActiveHoverTarget(event);
+  }
+  function checkForActiveHoverTarget(event) {
+    var container, elementFromPoint, list, previousHoverTarget;
+    container = postBodyContent;
+    if (container.classList.contains('frm-dragging-field')) {
+      return;
+    }
+    if (null !== document.querySelector('.frm-field-group-hover-target .frm-field-settings-open')) {
+      // do not set a hover target if a dropdown is open for the current hover target.
+      return;
+    }
+    elementFromPoint = document.elementFromPoint(event.clientX, event.clientY);
+    if (null !== elementFromPoint && !elementFromPoint.classList.contains('edit_field_type_divider')) {
+      list = elementFromPoint.closest('ul.frm_sorting');
+      if (null !== list && !list.classList.contains('start_divider') && 'frm-show-fields' !== list.id) {
+        previousHoverTarget = maybeRemoveGroupHoverTarget();
+        if (false !== previousHoverTarget && !jQuery(previousHoverTarget).is(list)) {
+          destroyFieldGroupPopup();
+        }
+        updateFieldGroupControls(jQuery(list), getFieldsInRow(jQuery(list)).length);
+        list.classList.add('frm-field-group-hover-target');
+        jQuery('#wpbody-content').on('mousemove', maybeRemoveHoverTargetOnMouseMove);
+      }
+    }
+  }
+  function maybeRemoveGroupHoverTarget() {
+    var controls, previousHoverTarget;
+    controls = document.getElementById('frm_field_group_controls');
+    if (null !== controls) {
+      controls.style.display = 'none';
+    }
+    previousHoverTarget = document.querySelector('.frm-field-group-hover-target');
+    if (null === previousHoverTarget) {
+      return false;
+    }
+    jQuery('#wpbody-content').off('mousemove', maybeRemoveHoverTargetOnMouseMove);
+    previousHoverTarget.classList.remove('frm-field-group-hover-target');
+    return previousHoverTarget;
+  }
+  function maybeRemoveHoverTargetOnMouseMove(event) {
+    var elementFromPoint = document.elementFromPoint(event.clientX, event.clientY);
+    if (null !== elementFromPoint && null !== elementFromPoint.closest('#frm-show-fields')) {
+      return;
+    }
+    maybeRemoveGroupHoverTarget();
+    deleteTooltips();
+  }
+  function onFieldActionDropdownShow(isFieldGroup) {
+    unselectFieldGroups();
+
+    // maybe offset the dropdown if it goes off of the right of the screen.
+    setTimeout(function () {
+      var ul, $ul;
+      ul = document.querySelector('.dropdown .frm-dropdown-menu.show');
+      if (null === ul) {
+        return;
+      }
+      if (null === ul.getAttribute('aria-label')) {
+        ul.setAttribute('aria-label', __('More Options', 'formidable'));
+      }
+      if (0 === ul.children.length) {
+        fillFieldActionDropdown(ul, true === isFieldGroup);
+      }
+      $ul = jQuery(ul);
+      if ($ul.offset().left > jQuery(window).width() - $ul.outerWidth()) {
+        ul.style.left = -$ul.outerWidth() + 'px';
+      }
+      var firstAnchor = ul.firstElementChild.querySelector('a');
+      if (firstAnchor) {
+        firstAnchor.focus();
+      }
+    }, 0);
+  }
+  function onFieldGroupActionDropdownShow() {
+    onFieldActionDropdownShow(true);
+  }
+  function changeSectionStyle(e) {
+    var collapsedSection = e.target.closest('.frm-section-collapsed');
+    if (!collapsedSection) {
+      return;
+    }
+    if (e.type === 'show') {
+      collapsedSection.style.zIndex = 3;
+    } else {
+      collapsedSection.style.zIndex = 1;
+    }
+  }
+  function fillFieldActionDropdown(ul, isFieldGroup) {
+    var classSuffix, options;
+    classSuffix = isFieldGroup ? '_field_group' : '_field';
+    options = [getDeleteActionOption(isFieldGroup), getDuplicateActionOption(isFieldGroup)];
+    if (!isFieldGroup) {
+      options.push({
+        class: 'frm_select',
+        icon: 'frm_settings_icon',
+        label: __('Field Settings', 'formidable')
+      });
+    }
+    options.forEach(function (option) {
+      var li, anchor, span;
+      li = document.createElement('div');
+      li.classList.add('frm_more_options_li', 'dropdown-item');
+      anchor = document.createElement('a');
+      anchor.classList.add(option.class + classSuffix);
+      anchor.setAttribute('href', '#');
+      makeTabbable(anchor);
+      span = document.createElement('span');
+      span.textContent = option.label;
+      anchor.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+      anchor.appendChild(document.createTextNode(' '));
+      anchor.appendChild(span);
+      li.appendChild(anchor);
+      ul.appendChild(li);
+    });
+  }
+  function getDeleteActionOption(isFieldGroup) {
+    var option = {
+      class: 'frm_delete',
+      icon: 'frm_delete_icon'
+    };
+    option.label = isFieldGroup ? __('Delete Group', 'formidable') : __('Delete', 'formidable');
+    return option;
+  }
+  function getDuplicateActionOption(isFieldGroup) {
+    var option = {
+      class: 'frm_clone',
+      icon: 'frm_clone_icon'
+    };
+    option.label = isFieldGroup ? __('Duplicate Group', 'formidable') : __('Duplicate', 'formidable');
+    return option;
+  }
+  function wrapFieldLi(field) {
+    var wrapper = div();
+    if ('string' === typeof field) {
+      wrapper.innerHTML = field;
+    } else {
+      wrapper.appendChild(field);
+    }
+    var result = jQuery();
+    Array.from(wrapper.children).forEach(function (li) {
+      result = result.add(jQuery('<li>').addClass('frm_field_box').html(jQuery('<ul>').addClass('frm_grid_container frm_sorting').append(li)));
+    });
+    return result;
+  }
+  function wrapFieldLiInPlace(li) {
+    var ul = tag('ul', {
+      className: 'frm_grid_container frm_sorting'
+    });
+    var wrapper = tag('li', {
+      className: 'frm_field_box',
+      child: ul
+    });
+    li.replaceWith(wrapper);
+    ul.appendChild(li);
+    makeDroppable(ul);
+    makeDraggable(wrapper, '.frm-move');
+  }
+  function afterAddField(msg, addFocus) {
+    var regex = /id="(\S+)"/;
+    var match = regex.exec(msg);
+    var field = document.getElementById(match[1]);
+    var section = '#' + match[1] + '.edit_field_type_divider ul.frm_sorting.start_divider';
+    var $thisSection = jQuery(section);
+    var type = field.getAttribute('data-type');
+    checkHtmlForNewFields(msg);
+    var toggled = false;
+    fieldUpdated();
+    setupSortable(section);
+    if ('quantity' === type) {
+      // try to automatically attach a product field
+      maybeSetProductField(field);
+    }
+    if ('product' === type || 'quantity' === type) {
+      // quantity too needs to be a part of the if stmt especially cos of the very
+      // 1st quantity field (or even if it's just one quantity field in the form).
+      maybeHideQuantityProductFieldOption();
+    }
+    if ($thisSection.length) {
+      $thisSection.parent('.frm_field_box').children('.frm_no_section_fields').addClass('frm_block');
+    } else {
+      var $parentSection = jQuery(field).closest('ul.frm_sorting.start_divider');
+      if ($parentSection.length) {
+        toggleOneSectionHolder($parentSection);
+        toggled = true;
+      }
+    }
+    if (msg.indexOf('frm-collapse-page') !== -1) {
+      renumberPageBreaks();
+    }
+    addClass(field, 'frm-newly-added');
+    setTimeout(function () {
+      field.classList.remove('frm-newly-added');
+    }, 1000);
+    var lastRowOrderInput = field.querySelector('#frm-last-row-fields-order');
+    if (lastRowOrderInput) {
+      updateLastRowFieldsOrder(JSON.parse(lastRowOrderInput.value));
+    }
+    if (addFocus) {
+      var bounding = field.getBoundingClientRect(),
+        container = document.getElementById('post-body-content'),
+        inView = bounding.top >= 0 && bounding.left >= 0 && bounding.right <= (window.innerWidth || document.documentElement.clientWidth) && bounding.bottom <= (window.innerHeight || document.documentElement.clientHeight);
+      if (!inView) {
+        container.scroll({
+          top: container.scrollHeight,
+          left: 0,
+          behavior: 'smooth'
+        });
+      }
+      if (toggled === false) {
+        toggleOneSectionHolder($thisSection);
+      }
+    }
+    deselectFields();
+    initiateMultiselect();
+    document.getElementById('frm-show-fields').classList.remove('frm-over-droppable');
+
+    // Bootstrap 5 uses data-bs-toggle instead of data-toggle, and requires that elements have the dropdown-menu class.
+    field.querySelectorAll('[data-toggle]').forEach(function (toggle) {
+      return toggle.setAttribute('data-bs-toggle', toggle.getAttribute('data-toggle'));
+    });
+    field.querySelectorAll('.frm-dropdown-menu').forEach(function (dropdownMenu) {
+      return dropdownMenu.classList.add('dropdown-menu');
+    });
+    var addedEvent = new Event('frm_added_field', {
+      bubbles: false
+    });
+    addedEvent.frmField = field;
+    addedEvent.frmSection = section;
+    addedEvent.frmType = type;
+    addedEvent.frmToggles = toggled;
+    document.dispatchEvent(addedEvent);
+  }
+  function updateLastRowFieldsOrder(fieldsOrder) {
+    if (!fieldsOrder || 'object' !== _typeof(fieldsOrder)) {
+      return;
+    }
+    Object.keys(fieldsOrder).forEach(function (fieldId) {
+      var orderInput = document.querySelector('input[name="field_options[field_order_' + fieldId + ']"]');
+      if (orderInput) {
+        orderInput.value = fieldsOrder[fieldId];
+      }
+    });
+  }
+
+  /**
+   * Since multiple new fields may get added when a new field is inserted, check the HTML.
+   *
+   * @param {string} html
+   * @return {void}
+   */
+  function checkHtmlForNewFields(html) {
+    var element = div();
+    element.innerHTML = html;
+    element.querySelectorAll('.form-field').forEach(addFieldIdToDraftFieldsInput);
+  }
+
+  /**
+   * @param {HTMLElement} field
+   * @return {void}
+   */
+  function addFieldIdToDraftFieldsInput(field) {
+    if (!field.dataset.fid) {
+      return;
+    }
+    var draftInput = document.getElementById('draft_fields');
+    if (!draftInput) {
+      return;
+    }
+    if ('' === draftInput.value) {
+      draftInput.value = field.dataset.fid;
+    } else {
+      var split = draftInput.value.split(',');
+      if (!split.includes(field.dataset.fid)) {
+        draftInput.value += ',' + field.dataset.fid;
+      }
+    }
+  }
+  function clearSettingsBox(preventFieldGroups) {
+    jQuery('#new_fields .frm-single-settings').addClass('frm_hidden');
+    jQuery('#frm-options-panel > .frm-single-settings').removeClass('frm_hidden');
+    deselectFields(preventFieldGroups);
+  }
+  function deselectFields(preventFieldGroups) {
+    jQuery('li.ui-state-default.selected').removeClass('selected');
+    jQuery('.frm-show-field-settings.selected').removeClass('selected');
+    if (!preventFieldGroups) {
+      unselectFieldGroups();
+    }
+  }
+  function scrollToField(field) {
+    var newPos = field.getBoundingClientRect().top,
+      container = document.getElementById('post-body-content');
+    if (typeof animate === 'undefined') {
+      jQuery(container).scrollTop(newPos);
+    } else {
+      // TODO: smooth scroll
+      jQuery(container).animate({
+        scrollTop: newPos
+      }, 500);
+    }
+  }
+  function checkCalculationCreatedByUser() {
+    var calculation = this.value;
+    var warningMessage = checkMatchingParens(calculation);
+    warningMessage += checkShortcodes(calculation, this);
+    if (warningMessage !== '') {
+      infoModal(calculation + '\n\n' + warningMessage);
+    }
+  }
+
+  /**
+   * Checks a string for parens, brackets, and curly braces and returns a message if any unmatched are found.
+   *
+   * @param  formula
+   * @return {string}
+   */
+  function checkMatchingParens(formula) {
+    var stack = [],
+      formulaArray = formula.split(''),
+      length = formulaArray.length,
+      opening = ['{', '[', '('],
+      closing = {
+        '}': '{',
+        ')': '(',
+        ']': '['
+      },
+      unmatchedClosing = [],
+      msg = '',
+      i,
+      top;
+    for (i = 0; i < length; i++) {
+      if (opening.includes(formulaArray[i])) {
+        stack.push(formulaArray[i]);
+        continue;
+      }
+      if (closing.hasOwnProperty(formulaArray[i])) {
+        top = stack.pop();
+        if (top !== closing[formulaArray[i]]) {
+          unmatchedClosing.push(formulaArray[i]);
+        }
+      }
+    }
+    if (stack.length > 0 || unmatchedClosing.length > 0) {
+      msg = frmAdminJs.unmatched_parens + '\n\n';
+      return msg;
+    }
+    return '';
+  }
+
+  /**
+   * Checks a calculation for shortcodes that shouldn't be in it and returns a message if found.
+   *
+   * @param  calculation
+   * @param  inputElement
+   * @return {string}
+   */
+  function checkShortcodes(calculation, inputElement) {
+    var msg = checkNonNumericShortcodes(calculation, inputElement);
+    msg += checkNonFormShortcodes(calculation);
+    return msg;
+  }
+
+  /**
+   * Checks if a numeric calculation has shortcodes that output non-numeric strings and returns a message if found.
+   *
+   * @param  calculation
+   *
+   * @param  inputElement
+   * @return {string}
+   */
+  function checkNonNumericShortcodes(calculation, inputElement) {
+    var msg = '';
+    if (isTextCalculation(inputElement)) {
+      return msg;
+    }
+    var nonNumericShortcodes = getNonNumericShortcodes();
+    if (nonNumericShortcodes.test(calculation)) {
+      msg = frmAdminJs.text_shortcodes + '\n\n';
+    }
+    return msg;
+  }
+
+  /**
+   * Determines if the calculation input is from a text calculation.
+   *
+   * @param inputElement
+   */
+  function isTextCalculation(inputElement) {
+    return jQuery(inputElement).siblings('label[for^="calc_type"]').children('input').prop('checked');
+  }
+
+  /**
+   * Returns a regular expression of shortcodes that can't be used in numeric calculations.
+   *
+   * @return {RegExp}
+   */
+  function getNonNumericShortcodes() {
+    return /\[(date|time|email|ip)\]/;
+  }
+
+  /**
+   * Checks if a string has any shortcodes that do not belong in forms and returns a message if any are found.
+   *
+   * @param  formula
+   * @return {string}
+   */
+  function checkNonFormShortcodes(formula) {
+    var nonFormShortcodes = getNonFormShortcodes(),
+      msg = '';
+    if (nonFormShortcodes.test(formula)) {
+      msg += frmAdminJs.view_shortcodes + '\n\n';
+    }
+    return msg;
+  }
+
+  /**
+   * Returns a regular expression of shortcodes that can't be used in forms but can be used in Views, Email
+   * Notifications, and other Formidable areas.
+   *
+   * @return {RegExp}
+   */
+  function getNonFormShortcodes() {
+    return /\[id\]|\[key\]|\[if\s\w+\]|\[foreach\s\w+\]|\[created-at(\s*)?/g;
+  }
+  function isCalcBoxType(box, listClass) {
+    var list = jQuery(box).find('.frm_code_list');
+    return 1 === list.length && list.hasClass(listClass);
+  }
+  function extractExcludedOptions(exclude) {
+    var opts = [];
+    if (!Array.isArray(exclude)) {
+      return opts;
+    }
+    for (var _i4 = 0; _i4 < exclude.length; _i4++) {
+      if (exclude[_i4].startsWith('[')) {
+        opts.push(exclude[_i4]);
+        // remove it
+        exclude.splice(_i4, 1);
+        // https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
+        _i4--;
+      }
+    }
+    return opts;
+  }
+  function hasExcludedOption(field, excludedOpts) {
+    var hasOption = false;
+    for (var _i5 = 0; _i5 < excludedOpts.length; _i5++) {
+      var inputs = document.getElementsByName(getFieldOptionInputName(excludedOpts[_i5], field.fieldId));
+      // 2nd condition checks that there's at least one non-empty value
+      if (inputs.length && jQuery(inputs[0]).val()) {
+        hasOption = true;
+        break;
+      }
+    }
+    return hasOption;
+  }
+  function getFieldOptionInputName(opt, fieldId) {
+    var at = opt.indexOf(']');
+    return 'field_options' + opt.substring(0, at) + '_' + fieldId + opt.substring(at);
+  }
+  function popCalcFields(v, force) {
+    var box,
+      exclude,
+      fields,
+      i,
+      list,
+      p = jQuery(v).closest('.frm-single-settings'),
+      calc = p.find('.frm-calc-field');
+    if (!force && (!calc.length || calc.val() === '' || calc.is(':hidden'))) {
+      return;
+    }
+    var isSummary = isCalcBoxType(v, 'frm_js_summary_list');
+    var fieldId = p.find('input[name="frm_fields_submitted[]"]').val();
+    if (force) {
+      box = v;
+    } else {
+      box = document.getElementById('frm-calc-box-' + fieldId);
+    }
+    exclude = getExcludeArray(box, isSummary);
+    var excludedOpts = extractExcludedOptions(exclude);
+    fields = getFieldList();
+    list = document.getElementById('frm-calc-list-' + fieldId);
+    list.innerHTML = '';
+    for (i = 0; i < fields.length; i++) {
+      if (exclude && exclude.includes(fields[i].fieldType) || excludedOpts.length && hasExcludedOption(fields[i], excludedOpts)) {
+        continue;
+      }
+      var _a = document.createElement('a');
+      _a.setAttribute('href', '#');
+      _a.setAttribute('data-code', fields[i].fieldId);
+      _a.classList.add('frm_insert_code');
+      _a.appendChild(span(fields[i].fieldName));
+      _a.appendChild(span({
+        className: 'frm-text-sm frm-text-grey-500',
+        text: '[' + fields[i].fieldId + ']'
+      }));
+      var li = document.createElement('li');
+      li.classList.add('frm-field-list-' + fieldId);
+      li.classList.add('frm-field-list-' + fields[i].fieldType);
+      li.appendChild(_a);
+      list.appendChild(li);
+    }
+  }
+  function getExcludeArray(calcBox, isSummary) {
+    var codeList = calcBox.querySelector('.frm_code_list');
+    var exclude = JSON.parse(codeList.getAttribute('data-exclude'));
+    if (isSummary) {
+      // includedExtras are those that are normally excluded from the summary but the form owner can choose to include,
+      // when they have been chosen to be included, then they can now be manually excluded in the calc box.
+      var includedExtras = getIncludedExtras();
+      if (includedExtras.length) {
+        for (var _i6 = 0; _i6 < exclude.length; _i6++) {
+          if (includedExtras.includes(exclude[_i6])) {
+            // remove it
+            exclude.splice(_i6, 1);
+            // https://love2dev.com/blog/javascript-remove-from-array/#remove-from-array-splice-value
+            _i6--;
+          }
+        }
+      }
+    }
+    return exclude;
+  }
+  function getIncludedExtras() {
+    var checked = [];
+    var checkboxes = document.getElementsByClassName('frm_include_extras_field');
+    for (var _i7 = 0; _i7 < checkboxes.length; _i7++) {
+      if (checkboxes[_i7].checked) {
+        checked.push(checkboxes[_i7].value);
+      }
+    }
+    return checked;
+  }
+  function rePopCalcFieldsForSummary() {
+    popCalcFields(jQuery('.frm-inline-modal.postbox:has(.frm_js_summary_list)')[0], true);
+  }
+  function getFieldList(fieldType) {
+    var i,
+      fields = [],
+      allFields = document.querySelectorAll('li.frm_field_box'),
+      checkType = 'undefined' !== typeof fieldType;
+    for (i = 0; i < allFields.length; i++) {
+      // data-ftype is better (than data-type) cos of fields loaded by AJAX - which might not be ready yet
+      if (checkType && allFields[i].getAttribute('data-ftype') !== fieldType) {
+        continue;
+      }
+      var fieldId = allFields[i].getAttribute('data-fid');
+      if (typeof fieldId !== 'undefined' && fieldId) {
+        fields.push({
+          fieldId: fieldId,
+          fieldName: getPossibleValue('frm_name_' + fieldId),
+          fieldType: getPossibleValue('field_options_type_' + fieldId),
+          fieldKey: getPossibleValue('field_options_field_key_' + fieldId)
+        });
+      }
+    }
+    return wp.hooks.applyFilters('frm_admin_get_field_list', fields, fieldType, allFields);
+  }
+  function popProductFields(field) {
+    var i,
+      checked,
+      id,
+      options = [],
+      current = getCurrentProductFields(field),
+      fName = field.getAttribute('data-frmfname'),
+      products = getFieldList('product'),
+      quantities = getFieldList('quantity'),
+      isSelect = field.tagName === 'SELECT',
+      // for reverse compatibility.
+      // whether we have just 1 product and 1 quantity field & should therefore attach the latter to the former
+      auto = 1 === quantities.length && 1 === products.length;
+    if (isSelect) {
+      // This fallback can be removed after 4.05.
+      current = field.getAttribute('data-frmcurrent');
+    }
+    for (i = 0; i < products.length; i++) {
+      // let's be double sure it's string, else indexOf will fail
+      id = products[i].fieldId.toString();
+      checked = auto || -1 !== current.indexOf(id);
+      if (isSelect) {
+        // This fallback can be removed after 4.05.
+        checked = checked ? ' selected' : '';
+        options.push('<option value="' + id + '"' + checked + '>' + products[i].fieldName + '</option>');
+      } else {
+        checked = checked ? ' checked' : '';
+        options.push('<label class="frm6">');
+        options.push('<input type="checkbox" name="' + fName + '" value="' + id + '"' + checked + '> ' + products[i].fieldName);
+        options.push('</label>');
+      }
+    }
+    field.innerHTML = options.join('');
+  }
+  function getCurrentProductFields(prodFieldOpt) {
+    var products = prodFieldOpt.querySelectorAll('[type="checkbox"]:checked'),
+      idsArray = [];
+    for (var _i8 = 0; _i8 < products.length; _i8++) {
+      idsArray.push(products[_i8].value);
+    }
+    return idsArray;
+  }
+  function popAllProductFields() {
+    var opts = document.querySelectorAll('.frmjs_prod_field_opt');
+    for (var _i9 = 0; _i9 < opts.length; _i9++) {
+      popProductFields(opts[_i9]);
+    }
+  }
+  function maybeSetProductField(field) {
+    var fieldId = field.getAttribute('data-fid'),
+      productFieldOpt = document.getElementById('field_options[product_field_' + fieldId + ']');
+    if (null === productFieldOpt) {
+      return;
+    }
+    popProductFields(productFieldOpt);
+    // in order to move its settings to that LHS panel where
+    // the update form resides, else it'll lose this setting
+    moveFieldSettings(document.getElementById('frm-single-settings-' + fieldId));
+  }
+
+  /**
+   * If the element doesn't exist, use a blank value.
+   */
+  function getPossibleValue(id) {
+    var field = document.getElementById(id);
+    if (field !== null) {
+      return field.value;
+    }
+    return '';
+  }
+  function liveChanges() {
+    /*jshint validthis:true */
+    var option,
+      newValue = this.value,
+      changes = document.getElementById(this.getAttribute('data-changeme')),
+      att = this.getAttribute('data-changeatt');
+    if (changes === null) {
+      return;
+    }
+    if (att !== null) {
+      if (changes.tagName === 'SELECT' && att === 'placeholder') {
+        option = changes.options[0];
+        if (option.value === '') {
+          option.innerHTML = newValue;
+        } else {
+          // Create a placeholder option if there are no blank values.
+          addBlankSelectOption(changes, newValue);
+        }
+      } else if (att === 'class') {
+        changeFieldClass(changes, this);
+      } else if (isSliderField(changes)) {
+        updateSliderFieldPreview(changes, att, newValue);
+      } else {
+        changes.setAttribute(att, newValue);
+      }
+    } else if (changes.id.indexOf('setup-message') === 0) {
+      if (newValue !== '') {
+        changes.innerHTML = '<input type="text" value="" disabled />';
+      }
+    } else {
+      changes.innerHTML = purifyHtml(newValue);
+      if ('TEXTAREA' === changes.nodeName && changes.classList.contains('wp-editor-area')) {
+        // Trigger change events on wysiwyg textareas so we can also sync default values in the visual tab.
+        jQuery(changes).trigger('change');
+      }
+      if (changes.classList.contains('frm_primary_label') && 'break' === changes.nextElementSibling.getAttribute('data-ftype')) {
+        changes.nextElementSibling.querySelector('.frm_button_submit').textContent = newValue;
+      }
+    }
+  }
+  function updateSliderFieldPreview(field, att, newValue) {
+    if (frmGlobal.proIncludesSliderJs) {
+      var hookName = 'frm_update_slider_field_preview';
+      var hookArgs = {
+        field: field,
+        att: att,
+        newValue: newValue
+      };
+      wp.hooks.doAction(hookName, hookArgs);
+      return;
+    }
+
+    // This functionality has been moved to pro since v5.4.3. This code should be removed eventually.
+    if ('value' === att) {
+      if ('' === newValue) {
+        newValue = getSliderMidpoint(field);
+      }
+      field.value = newValue;
+    } else {
+      field.setAttribute(att, newValue);
+    }
+    if (-1 === ['value', 'min', 'max'].indexOf(att)) {
+      return;
+    }
+    if (('max' === att || 'min' === att) && '' === getSliderDefaultValueInput(field.id)) {
+      field.value = getSliderMidpoint(field);
+    }
+    field.parentNode.querySelector('.frm_range_value').textContent = field.value;
+  }
+  function getSliderDefaultValueInput(previewInputId) {
+    return document.querySelector('input[data-changeme="' + previewInputId + '"][data-changeatt="value"]').value;
+  }
+  function getSliderMidpoint(sliderInput) {
+    var max = parseFloat(sliderInput.getAttribute('max'));
+    var min = parseFloat(sliderInput.getAttribute('min'));
+    return (max - min) / 2 + min;
+  }
+  function isSliderField(previewInput) {
+    return 'range' === previewInput.type && previewInput.parentNode.classList.contains('frm_range_container');
+  }
+  function toggleInvalidMsg() {
+    /*jshint validthis:true */
+    var typeDropdown,
+      fieldType,
+      fieldId = this.getAttribute('data-fid'),
+      value = '';
+    ['field_options_max_', 'frm_format_'].forEach(function (id) {
+      var input = document.getElementById(id + fieldId);
+      if (!input) {
+        return;
+      }
+      value += input.value;
+    });
+    typeDropdown = document.getElementsByName('field_options[type_' + fieldId + ']')[0];
+    fieldType = typeDropdown.options[typeDropdown.selectedIndex].value;
+    if (fieldType === 'text') {
+      toggleValidationBox('' !== value, '.frm_invalid_msg' + fieldId);
+    }
+  }
+  function markRequired() {
+    /*jshint validthis:true */
+    var thisid = this.id.replace('frm_', ''),
+      fieldId = thisid.replace('req_field_', ''),
+      checked = this.checked,
+      label = jQuery('#field_label_' + fieldId + ' .frm_required');
+    toggleValidationBox(checked, '.frm_required_details' + fieldId);
+    if (checked) {
+      var $reqBox = jQuery('input[name="field_options[required_indicator_' + fieldId + ']"]');
+      if ($reqBox.val() === '') {
+        $reqBox.val('*');
+      }
+      label.removeClass('frm_hidden');
+    } else {
+      label.addClass('frm_hidden');
+    }
+  }
+  function toggleValidationBox(hasValue, messageClass) {
+    $msg = jQuery(messageClass);
+    if (hasValue) {
+      $msg.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
+    } else {
+      // Fade out validation options
+      var $validationBox = $msg.fadeOut('fast').closest('.frm_validation_box');
+      var v = $validationBox.css('display', 'block').children(':not(' + messageClass + '):visible').length;
+      $validationBox.css('display', '');
+      if (v === 0) {
+        $msg.closest('.frm_validation_msg').fadeOut('fast');
+      }
+    }
+  }
+  function markUnique() {
+    /*jshint validthis:true */
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+    var $thisField = jQuery('.frm_unique_details' + fieldId);
+    if (this.checked) {
+      $thisField.fadeIn('fast').closest('.frm_validation_msg').fadeIn('fast');
+      $unqDetail = jQuery('.frm_unique_details' + fieldId + ' input');
+      if ($unqDetail.val() === '') {
+        $unqDetail.val(frmAdminJs.default_unique);
+      }
+    } else {
+      var $validationBox = $thisField.fadeOut('fast').closest('.frm_validation_box');
+      var v = $validationBox.css('display', 'block').children(':not(.frm_unique_details' + fieldId + '):visible').length;
+      $validationBox.css('display', '');
+      if (v === 0) {
+        $thisField.closest('.frm_validation_msg').fadeOut('fast');
+      }
+    }
+  }
+
+  //Fade confirmation field and validation option in or out
+  function addConf() {
+    /*jshint validthis:true */
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+    var val = jQuery(this).val();
+    var $thisField = jQuery(document.getElementById('frm_field_id_' + fieldId));
+    toggleValidationBox(val !== '', '.frm_conf_details' + fieldId);
+    if (val !== '') {
+      //Add default validation message if empty
+      var valMsg = jQuery('.frm_validation_box .frm_conf_details' + fieldId + ' input');
+      if (valMsg.val() === '') {
+        valMsg.val(frmAdminJs.default_conf);
+      }
+      setConfirmationFieldDescriptions(fieldId);
+
+      //Add or remove class for confirmation field styling
+      if (val === 'inline') {
+        $thisField.removeClass('frm_conf_below').addClass('frm_conf_inline');
+      } else if (val === 'below') {
+        $thisField.removeClass('frm_conf_inline').addClass('frm_conf_below');
+      }
+      jQuery('.frm-conf-box-' + fieldId).removeClass('frm_hidden');
+    } else {
+      jQuery('.frm-conf-box-' + fieldId).addClass('frm_hidden');
+      setTimeout(function () {
+        $thisField.removeClass('frm_conf_inline frm_conf_below');
+      }, 200);
+    }
+  }
+  function setConfirmationFieldDescriptions(fieldId) {
+    var fieldType = document.getElementsByName('field_options[type_' + fieldId + ']')[0].value;
+    var fieldDescription = document.getElementById('field_description_' + fieldId);
+    var hiddenDescName = 'field_options[description_' + fieldId + ']';
+    var newValue = frmAdminJs['enter_' + fieldType];
+    maybeSetNewDescription(fieldDescription, hiddenDescName, newValue);
+    var confFieldDescription = document.getElementById('conf_field_description_' + fieldId);
+    var hiddenConfName = 'field_options[conf_desc_' + fieldId + ']';
+    var newConfValue = frmAdminJs['confirm_' + fieldType];
+    maybeSetNewDescription(confFieldDescription, hiddenConfName, newConfValue);
+  }
+  function maybeSetNewDescription(descriptionDiv, hiddenName, newValue) {
+    if (descriptionDiv.innerHTML === frmAdminJs.desc) {
+      // Set the visible description value and the hidden description value
+      descriptionDiv.innerHTML = newValue;
+      document.getElementsByName(hiddenName)[0].value = newValue;
+    }
+  }
+  function initBulkOptionsOverlay() {
+    /*jshint validthis:true */
+    var $info = initModal('#frm-bulk-modal', '700px');
+    if ($info === false) {
+      return;
+    }
+    jQuery('.frm-insert-preset').on('click', insertBulkPreset);
+    jQuery(builderForm).on('click', 'a.frm-bulk-edit-link', function (event) {
+      event.preventDefault();
+      var i,
+        key,
+        label,
+        content = '',
+        optList,
+        opts,
+        fieldId = jQuery(this).closest('[data-fid]').data('fid'),
+        separate = usingSeparateValues(fieldId),
+        product = isProductField(fieldId);
+      optList = document.getElementById('frm_field_' + fieldId + '_opts');
+      if (!optList) {
+        return;
+      }
+      opts = optList.getElementsByTagName('li');
+      document.getElementById('bulk-field-id').value = fieldId;
+      for (i = 0; i < opts.length; i++) {
+        key = opts[i].getAttribute('data-optkey');
+        if (key !== '000') {
+          label = document.getElementsByName('field_options[options_' + fieldId + '][' + key + '][label]')[0];
+          if (typeof label !== 'undefined') {
+            content += label.value;
+            if (separate) {
+              content += '|' + document.getElementsByName('field_options[options_' + fieldId + '][' + key + '][value]')[0].value;
+            }
+            if (product) {
+              content += '|' + document.getElementsByName('field_options[options_' + fieldId + '][' + key + '][price]')[0].value;
+            }
+            content += '\r\n';
+          }
+        }
+        if (i >= opts.length - 1) {
+          document.getElementById('frm_bulk_options').value = content;
+        }
+      }
+      $info.dialog('open');
+      return false;
+    });
+    jQuery('#frm-update-bulk-opts').on('click', function () {
+      var fieldId = document.getElementById('bulk-field-id').value;
+      var optionType = document.getElementById('bulk-option-type').value;
+      if (optionType) {
+        // Use custom handler for custom option type.
+        return;
+      }
+      this.classList.add('frm_loading_button');
+      frmAdminBuild.updateOpts(fieldId, document.getElementById('frm_bulk_options').value, $info);
+      fieldUpdated();
+    });
+  }
+  function insertBulkPreset(event) {
+    /*jshint validthis:true */
+    var opts = JSON.parse(this.getAttribute('data-opts'));
+    event.preventDefault();
+    document.getElementById('frm_bulk_options').value = opts.join('\n');
+    return false;
+  }
+
+  //Add new option or "Other" option to radio/checkbox/dropdown
+  function addFieldOption() {
+    /*jshint validthis:true */
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid'),
+      newOption = jQuery('#frm_field_' + fieldId + '_opts .frm_option_template').prop('outerHTML'),
+      optType = jQuery(this).data('opttype'),
+      optKey = 0,
+      oldKey = '000',
+      lastKey = getHighestOptKey(fieldId);
+    if (lastKey !== oldKey) {
+      optKey = lastKey + 1;
+    }
+
+    //Update hidden field
+    if (optType === 'other') {
+      document.getElementById('other_input_' + fieldId).value = 1;
+
+      //Hide "Add Other" option now if this is radio field
+      var ftype = jQuery(this).data('ftype');
+      if (ftype === 'radio' || ftype === 'select') {
+        jQuery(this).fadeOut('slow');
+      }
+      var _data = {
+        action: 'frm_add_field_option',
+        field_id: fieldId,
+        opt_key: optKey,
+        opt_type: optType,
+        nonce: frmGlobal.nonce
+      };
+      jQuery.post(ajaxurl, _data, function (msg) {
+        jQuery(document.getElementById('frm_field_' + fieldId + '_opts')).append(msg);
+        resetDisplayedOpts(fieldId);
+      });
+    } else {
+      newOption = newOption.replace(new RegExp('optkey="' + oldKey + '"', 'g'), 'optkey="' + optKey + '"');
+      newOption = newOption.replace(new RegExp('-' + oldKey + '_', 'g'), '-' + optKey + '_');
+      newOption = newOption.replace(new RegExp('-' + oldKey + '"', 'g'), '-' + optKey + '"');
+      newOption = newOption.replace(new RegExp('\\[' + oldKey + '\\]', 'g'), '[' + optKey + ']');
+      newOption = newOption.replace('frm_hidden frm_option_template', '');
+      newOption = {
+        newOption: newOption
+      };
+      addSaveAndDragIconsToOption(fieldId, newOption);
+      var $thisOption = this.closest('.frm_single_option');
+      if ($thisOption) {
+        $thisOption.after(newOption.newOption);
+      } else {
+        // Backwards compatibility "@since 6.24"
+        // Note: Keep it jQuery since some events are attached to the element
+        jQuery("#frm_field_".concat(fieldId, "_opts")).append(newOption.newOption);
+      }
+      resetDisplayedOpts(fieldId);
+    }
+    fieldOptionEnableAllRemoveButtons(this);
+    fieldUpdated();
+  }
+
+  /**
+   * Enable all remove buttons for field options.
+   *
+   * @param {HTMLElement} element The add option button element.
+   */
+  function fieldOptionEnableAllRemoveButtons(element) {
+    var _element$closest, _parentEl$querySelect;
+    // Make sure all remove buttons are enabled
+    var parentEl = element.classList.contains('frm-add-option-legacy') // Backwards compatibility "@since 6.24"
+    ? (_element$closest = element.closest('.frm-collapse-me')) === null || _element$closest === void 0 ? void 0 : _element$closest.querySelector('.frm_sortable_field_opts') : element.closest('.frm_sortable_field_opts');
+    parentEl === null || parentEl === void 0 || (_parentEl$querySelect = parentEl.querySelectorAll('.frm_remove_tag.frm_disabled')) === null || _parentEl$querySelect === void 0 || _parentEl$querySelect.forEach(function (button) {
+      return button.classList.remove('frm_disabled');
+    });
+  }
+  function getHighestOptKey(fieldId) {
+    var i = 0,
+      optKey = 0,
+      opts = jQuery('#frm_field_' + fieldId + '_opts li'),
+      lastKey = 0;
+    for (i; i < opts.length; i++) {
+      optKey = opts[i].getAttribute('data-optkey');
+      if (opts.length === 1) {
+        return optKey;
+      }
+      if (optKey !== '000') {
+        optKey = optKey.replace('other_', '');
+        optKey = parseInt(optKey, 10);
+      }
+      if (!isNaN(lastKey) && (optKey > lastKey || lastKey === '000')) {
+        lastKey = optKey;
+      }
+    }
+    return lastKey;
+  }
+  function toggleMultSel() {
+    /*jshint validthis:true */
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+    toggleMultiSelect(fieldId, this.value);
+  }
+  function toggleMultiSelect(fieldId, value) {
+    var setting = jQuery('.frm_multiple_cont_' + fieldId);
+    if (value === 'select') {
+      setting.fadeIn('fast');
+    } else {
+      setting.fadeOut('fast');
+    }
+  }
+  function toggleSepValues() {
+    /*jshint validthis:true */
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+    toggle(jQuery('.field_' + fieldId + '_option_key'));
+    jQuery('.field_' + fieldId + '_option').toggleClass('frm_with_key');
+  }
+  function toggleImageOptions() {
+    /*jshint validthis:true */
+    var hasImageOptions,
+      imageSize,
+      $field = jQuery(this).closest('.frm-single-settings'),
+      fieldId = $field.data('fid'),
+      displayField = document.getElementById('frm_field_id_' + fieldId);
+    refreshOptionDisplayNow(jQuery(this));
+    toggle(jQuery('.field_' + fieldId + '_image_id'));
+    toggle(jQuery('.frm_toggle_image_options_' + fieldId));
+    toggle(jQuery('.frm_image_size_' + fieldId));
+    toggle(jQuery('.frm_alignment_' + fieldId));
+    toggle(jQuery('.frm-add-other#frm_add_field_' + fieldId));
+    hasImageOptions = imagesAsOptions(fieldId);
+    if (hasImageOptions) {
+      setAlignment(fieldId, 'inline');
+      removeImageSizeClasses(displayField);
+      imageSize = getImageOptionSize(fieldId);
+      displayField.classList.add('frm_image_options');
+      displayField.classList.add('frm_image_size_' + imageSize);
+      $field.find('.frm-bulk-edit-link').hide();
+    } else {
+      displayField.classList.remove('frm_image_options');
+      removeImageSizeClasses(displayField);
+      setAlignment(fieldId, 'block');
+      $field.find('.frm-bulk-edit-link').show();
+    }
+
+    /**
+     * Fires when image options are toggled for a field.
+     *
+     * @param {HTMLElement} field           The field element.
+     * @param {boolean}     hasImageOptions Whether the field has image options enabled.
+     */
+    wp.hooks.doAction('frm_image_options_toggled', $field[0], hasImageOptions);
+  }
+  function removeImageSizeClasses(field) {
+    field.classList.remove('frm_image_size_', 'frm_image_size_small', 'frm_image_size_medium', 'frm_image_size_large', 'frm_image_size_xlarge');
+  }
+  function setAlignment(fieldId, alignment) {
+    jQuery('#field_options_align_' + fieldId).val(alignment).trigger('change');
+  }
+  function setImageSize() {
+    var $field = jQuery(this).closest('.frm-single-settings'),
+      fieldId = $field.data('fid'),
+      displayField = document.getElementById('frm_field_id_' + fieldId);
+    refreshOptionDisplay();
+    if (imagesAsOptions(fieldId)) {
+      removeImageSizeClasses(displayField);
+      displayField.classList.add('frm_image_options');
+      displayField.classList.add('frm_image_size_' + getImageOptionSize(fieldId));
+    }
+  }
+  function refreshOptionDisplayNow(object) {
+    var $field = object.closest('.frm-single-settings'),
+      fieldID = $field.data('fid');
+    jQuery('.field_' + fieldID + '_option').trigger('change');
+  }
+  function refreshOptionDisplay() {
+    /*jshint validthis:true */
+    refreshOptionDisplayNow(jQuery(this));
+  }
+  function addImageToOption(event) {
+    var _wp;
+    var imagePreview = event.target.closest('.frm_image_preview_wrapper');
+    if (!((_wp = wp) !== null && _wp !== void 0 && _wp.media) || imagePreview !== null && imagePreview !== void 0 && imagePreview.dataset.upgrade) {
+      return;
+    }
+    event.preventDefault();
+    wp.media.model.settings.post.id = 0;
+    var fileFrame = wp.media.frames.file_frame = wp.media({
+      multiple: false,
+      library: {
+        type: ['image']
+      }
+    });
+    fileFrame.on('select', function () {
+      var attachment = fileFrame.state().get('selection').first().toJSON();
+      var img = imagePreview.querySelector('img');
+      img.setAttribute('src', attachment.url);
+      img.classList.remove('frm_hidden');
+      img.removeAttribute('srcset'); // Prevent the old image from sticking around.
+
+      imagePreview.querySelector('.frm_image_preview_frame').style.display = 'block';
+      imagePreview.querySelector('.frm_image_preview_title').textContent = attachment.filename;
+      imagePreview.querySelector('.frm_choose_image_box').style.display = 'none';
+      var $imagePreview = jQuery(imagePreview);
+      $imagePreview.siblings('input[name*="[label]"]').data('frmimgurl', attachment.url);
+      $imagePreview.find('input.frm_image_id').val(attachment.id).trigger('change');
+      wp.media.model.settings.post.id = 0;
+    });
+    fileFrame.open();
+  }
+  function removeImageFromOption(event) {
+    var $this = jQuery(this),
+      previewWrapper = $this.closest('.frm_image_preview_wrapper');
+    event.preventDefault();
+    event.stopPropagation();
+    previewWrapper.find('img').attr('src', '');
+    previewWrapper.find('.frm_image_preview_frame').hide();
+    previewWrapper.find('.frm_choose_image_box').show();
+    previewWrapper.find('input.frm_image_id').val(0).trigger('change');
+  }
+  function toggleMultiselect() {
+    /*jshint validthis:true */
+    var dropdown = jQuery(this).closest('li').find('.frm_form_fields select');
+    if (this.checked) {
+      dropdown.attr('multiple', 'multiple');
+    } else {
+      dropdown.removeAttr('multiple');
+    }
+  }
+
+  /**
+   * Allow typing on form switcher click without an extra click to search.
+   */
+  function focusSearchBox() {
+    var searchBox = document.getElementById('dropform-search-input');
+    if (searchBox !== null) {
+      setTimeout(function () {
+        searchBox.focus();
+      }, 100);
+    }
+  }
+
+  /**
+   * Dismiss a warning message and send an AJAX request to update the dismissal state.
+   *
+   * @since 6.3
+   *
+   * @param {Event} event The event object associated with the click on the dismiss icon.
+   */
+  function dismissWarningMessage(event) {
+    var target = event.target;
+    var warningEl = target.closest('.frm_warning_style');
+    jQuery(warningEl).fadeOut(400, function () {
+      return warningEl.remove();
+    });
+    var action = target.dataset.action;
+    var formData = new FormData();
+    doJsonPost(action, formData);
+  }
+
+  /**
+   * If a field is clicked in the builder, prevent inputs from changing.
+   */
+  function stopFieldFocus(e) {
+    e.preventDefault();
+  }
+
+  /**
+   * Delete a field option.
+   */
+  function deleteFieldOption() {
+    var parentLi = this.parentNode;
+    var parentUl = parentLi.parentNode;
+
+    // If only 2 visible options, add disabled class to the other delete button
+    var visibleOptions = parentUl.querySelectorAll('li:not(.frm_hidden)');
+    if (visibleOptions.length === 2) {
+      var _Array$from$find$quer;
+      (_Array$from$find$quer = Array.from(visibleOptions).find(function (li) {
+        return li !== parentLi;
+      }).querySelector('.frm_remove_tag')) === null || _Array$from$find$quer === void 0 || _Array$from$find$quer.classList.add('frm_disabled');
+    }
+
+    /*jshint validthis:true */
+    var otherInput,
+      fieldId = this.getAttribute('data-fid');
+    jQuery(parentLi).fadeOut('fast', function () {
+      wp.hooks.doAction('frm_before_delete_field_option', this);
+      jQuery(parentLi).remove();
+      var hasOther = jQuery(parentUl).find('.frm_other_option');
+      if (hasOther.length < 1) {
+        otherInput = document.getElementById('other_input_' + fieldId);
+        if (otherInput !== null) {
+          otherInput.value = 0;
+        }
+        jQuery('#other_button_' + fieldId).fadeIn('fast');
+      }
+    });
+    fieldUpdated();
+  }
+
+  /**
+   * If a radio button is set as default, allow a click to
+   * deselect it.
+   */
+  function maybeUncheckRadio() {
+    var $self, uncheck, unbind, up;
+
+    /*jshint validthis:true */
+    $self = jQuery(this);
+    if ($self.is(':checked')) {
+      uncheck = function uncheck() {
+        setTimeout(function () {
+          $self.prop('checked', false);
+        }, 0);
+      };
+      unbind = function unbind() {
+        $self.off('mouseup', up);
+      };
+      up = function up() {
+        uncheck();
+        unbind();
+      };
+      $self.on('mouseup', up);
+      $self.one('mouseout', unbind);
+    }
+  }
+
+  /**
+   * If the field option has the default text, clear it out on click.
+   */
+  function maybeClearOptText() {
+    /*jshint validthis:true */
+    if (this.value === frmAdminJs.new_option) {
+      this.setAttribute('data-value-on-focus', this.value);
+      this.value = '';
+    }
+  }
+  function confirmFieldsDeleteMessage(numberOfFields) {
+    /* translators: %1$s: Number of fields that are selected to be deleted. */
+    return sprintf(__('Are you sure you want to delete these %1$s selected field(s)?', 'formidable'), numberOfFields);
+  }
+  function clickDeleteField() {
+    /*jshint validthis:true */
+    var confirmMsg = frmAdminJs.conf_delete,
+      maybeDivider = this.parentNode.parentNode.parentNode.parentNode.parentNode,
+      li = maybeDivider.parentNode,
+      field = jQuery(this).closest('li.form-field'),
+      fieldId = field.data('fid');
+    if (field.data('ftype') === 'divider') {
+      var fieldBoxes = document.querySelectorAll('.frm-field-group-hover-target .start_divider .frm_field_box');
+      var fieldIdsToDelete = 0;
+      fieldBoxes.forEach(function (fieldBox) {
+        var fieldsInsideFieldBox = fieldBox.querySelectorAll('li.form-field');
+        if (fieldsInsideFieldBox) {
+          fieldIdsToDelete += fieldsInsideFieldBox.length;
+        }
+      });
+      if (fieldIdsToDelete) {
+        confirmMsg = confirmFieldsDeleteMessage(++fieldIdsToDelete);
+      }
+    }
+    if (li.classList.contains('frm-section-collapsed') || li.classList.contains('frm-page-collapsed')) {
+      return false;
+    }
+
+    // If deleting a section, use a special message.
+    if (maybeDivider.className === 'divider_section_only') {
+      confirmMsg = frmAdminJs.conf_delete_sec;
+    }
+    this.setAttribute('data-frmverify', confirmMsg);
+    this.setAttribute('data-frmverify-btn', 'frm-button-red');
+    this.setAttribute('data-deletefield', fieldId);
+    closeOpenFieldDropdowns();
+    confirmLinkClick(this);
+    return false;
+  }
+  function clickSelectField() {
+    this.closest('li.form-field').click();
+  }
+  function clickDeleteFieldGroup() {
+    var hoverTarget, decoy;
+    hoverTarget = document.querySelector('.frm-field-group-hover-target');
+    if (null === hoverTarget) {
+      return;
+    }
+    hoverTarget.classList.add('frm-selected-field-group');
+    decoy = document.createElement('div');
+    decoy.classList.add('frm-delete-field-groups', 'frm_hidden');
+    document.body.appendChild(decoy);
+    decoy.click();
+  }
+  function duplicateFieldGroup() {
+    var hoverTarget = document.querySelector('.frm-field-group-hover-target');
+    if (null === hoverTarget) {
+      return;
+    }
+    var newRowId = 'frm_field_group_' + getAutoId();
+    var placeholderUlChild = document.createTextNode('');
+    wrapFieldLiInPlace(placeholderUlChild);
+    var newRow = jQuery(placeholderUlChild).closest('li').get(0);
+    newRow.classList.add('frm_hidden');
+    var newRowUl = newRow.querySelector('ul');
+    newRowUl.id = newRowId;
+    jQuery(hoverTarget.closest('li.frm_field_box')).after(newRow);
+    var $fields = getFieldsInRow(jQuery(hoverTarget));
+    var syncDetails = [];
+    var injectedCloneOptions = [];
+    var expectedLength = $fields.length;
+    var originalFieldIdByDuplicatedFieldId = {};
+    var duplicatedCount = 0;
+    jQuery(newRow).on('frm_added_duplicated_field_to_row', function (_, args) {
+      originalFieldIdByDuplicatedFieldId[jQuery(args.duplicatedFieldHtml).attr('data-fid')] = args.originalFieldId;
+      if (expectedLength > ++duplicatedCount) {
+        return;
+      }
+      var $newRowUl = jQuery(newRowUl);
+      var $duplicatedFields = getFieldsInRow($newRowUl);
+      injectedCloneOptions.forEach(function (cloneOption) {
+        cloneOption.remove();
+      });
+      for (var index = 0; index < expectedLength; ++index) {
+        $newRowUl.append($newRowUl.children('li.form-field[frm-field-order="' + index + '"]'));
+      }
+      syncLayoutClasses($duplicatedFields.first(), syncDetails);
+      newRow.classList.remove('frm_hidden');
+      updateFieldOrder();
+      getFieldsInRow($newRowUl).each(function () {
+        maybeDuplicateUnsavedSettings(originalFieldIdByDuplicatedFieldId[this.getAttribute('data-fid')], jQuery(this).prop('outerHTML'));
+      });
+    });
+    $fields.each(function (index) {
+      var cloneOption;
+      cloneOption = document.createElement('li');
+      cloneOption.classList.add('frm_clone_field');
+      cloneOption.setAttribute('frm-target-row-id', newRowId);
+      cloneOption.setAttribute('frm-field-order', index);
+      this.appendChild(cloneOption);
+      cloneOption.click();
+      injectedCloneOptions.push(cloneOption);
+      syncDetails.push(getSizeOfLayoutClass(getLayoutClassName(this.classList)));
+    });
+  }
+  function clickFieldGroupLayout() {
+    var hoverTarget, sizeOfFieldGroup, popupWrapper;
+    hoverTarget = document.querySelector('.frm-field-group-hover-target');
+    if (null === hoverTarget) {
+      return;
+    }
+    deselectFields();
+    sizeOfFieldGroup = getSizeOfFieldGroupFromChildElement(hoverTarget.querySelector('li.form-field'));
+    hoverTarget.classList.add('frm-has-open-field-group-popup');
+    jQuery(document).on('click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick);
+    popupWrapper = div();
+    popupWrapper.style.position = 'relative';
+    popupWrapper.appendChild(getFieldGroupPopup(sizeOfFieldGroup, this));
+    this.parentNode.appendChild(popupWrapper);
+    var firstLayoutOption = popupWrapper.querySelector('.frm-row-layout-option');
+    if (firstLayoutOption) {
+      firstLayoutOption.focus();
+    }
+  }
+  function destroyFieldGroupPopupOnOutsideClick(event) {
+    if (event.target.classList.contains('frm-custom-field-group-layout') || event.target.classList.contains('frm-cancel-custom-field-group-layout')) {
+      return;
+    }
+    if (!jQuery(event.target).closest('#frm_field_group_controls').length && !jQuery(event.target).closest('#frm_field_group_popup').length) {
+      destroyFieldGroupPopup();
+    }
+  }
+  function getSizeOfFieldGroupFromChildElement(element) {
+    var $ul = jQuery(element).closest('ul');
+    if ($ul.length) {
+      return getFieldsInRow($ul).length;
+    }
+    return getSelectedFieldCount();
+  }
+  function getFieldGroupPopup(sizeOfFieldGroup, childElement) {
+    var popup, wrapper, rowLayoutOptions, ul;
+    popup = document.getElementById('frm_field_group_popup');
+    if (null === popup) {
+      popup = div();
+    } else {
+      popup.innerHTML = '';
+    }
+    popup.id = 'frm_field_group_popup';
+    wrapper = div();
+    wrapper.style.padding = '0 24px 12px';
+    wrapper.appendChild(getRowLayoutTitle());
+    rowLayoutOptions = getRowLayoutOptions(sizeOfFieldGroup);
+    ul = childElement.closest('ul.frm_sorting');
+    if (null !== ul) {
+      maybeMarkRowLayoutAsActive(ul, rowLayoutOptions);
+    }
+    wrapper.appendChild(rowLayoutOptions);
+    popup.appendChild(wrapper);
+    popup.appendChild(separator());
+    if (sizeOfFieldGroup <= 6) {
+      popup.appendChild(getCustomLayoutOption());
+    }
+    popup.appendChild(getBreakIntoDifferentRowsOption());
+    return popup;
+  }
+  function maybeMarkRowLayoutAsActive(activeRow, options) {
+    var length, index, currentRow;
+    length = options.children.length;
+    for (index = 0; index < length; ++index) {
+      currentRow = options.children[index];
+      if (rowLayoutsMatch(currentRow, activeRow)) {
+        currentRow.classList.add('frm-active-row-layout');
+        return;
+      }
+    }
+  }
+  function separator() {
+    return document.createElement('hr');
+  }
+  function getCustomLayoutOption() {
+    var option = div();
+    option.textContent = __('Custom layout', 'formidable');
+    jQuery(option).prepend(getIconClone('frm_gear_svg'));
+    option.classList.add('frm-custom-field-group-layout');
+    makeTabbable(option);
+    return option;
+  }
+  function makeTabbable(element, ariaLabel) {
+    element.setAttribute('tabindex', 0);
+    element.setAttribute('role', 'button');
+    if ('undefined' !== typeof ariaLabel) {
+      element.setAttribute('aria-label', ariaLabel);
+    }
+  }
+  function getIconClone(iconId) {
+    var clone = document.getElementById(iconId).cloneNode(true);
+    clone.id = '';
+    return clone;
+  }
+  function getBreakIntoDifferentRowsOption() {
+    var option = div();
+    option.textContent = __('Break into rows', 'formidable');
+    jQuery(option).prepend(getIconClone('frm_break_field_group_svg'));
+    option.classList.add('frm-break-field-group');
+    makeTabbable(option);
+    return option;
+  }
+  function getRowLayoutTitle() {
+    var rowLayoutTitle = div();
+    rowLayoutTitle.classList.add('frm-row-layout-title');
+    rowLayoutTitle.textContent = __('Row Layout', 'formidable');
+    return rowLayoutTitle;
+  }
+  function getRowLayoutOptions(size) {
+    var wrapper, padding;
+    wrapper = getEmptyGridContainer();
+    if (size > 6) {
+      wrapper.appendChild(getRowLayoutOption(size, 'even'));
+      return wrapper;
+    }
+    if (5 !== size) {
+      wrapper.appendChild(getRowLayoutOption(size, 'even'));
+    }
+    if (size % 2 === 1) {
+      // only include the middle option for odd numbers because even doesn't make a lot of sense.
+      wrapper.appendChild(getRowLayoutOption(size, 'middle'));
+    }
+    if (size < 6) {
+      wrapper.appendChild(getRowLayoutOption(size, 'left'));
+      wrapper.appendChild(getRowLayoutOption(size, 'right'));
+    } else {
+      padding = div();
+      padding.classList.add('frm_fourth');
+      wrapper.prepend(padding);
+    }
+    return wrapper;
+  }
+  function getRowLayoutOption(size, type) {
+    var option, useClass;
+    option = div();
+    option.classList.add('frm-row-layout-option');
+    makeTabbable(option, type);
+    switch (size) {
+      case 6:
+        useClass = 'frm_half';
+        break;
+      case 5:
+        useClass = 'frm_third';
+        break;
+      default:
+        if (size > 6) {
+          // We only show a single option at 6-12, so we use the full width.
+          useClass = 'frm_full';
+        } else {
+          useClass = size % 2 === 1 ? 'frm_fourth' : 'frm_third';
+        }
+        break;
+    }
+    option.classList.add(useClass);
+    option.setAttribute('layout-type', type);
+    option.appendChild(getRowForSizeAndType(size, type));
+    return option;
+  }
+  function rowLayoutsMatch(row1, row2) {
+    return getRowLayoutAsKey(row1) === getRowLayoutAsKey(row2);
+  }
+  function getRowLayoutAsKey(row) {
+    var $fields, sizes;
+    if (row.classList.contains('frm-row-layout-option')) {
+      $fields = jQuery(row).find('.frm_grid_container').children();
+    } else {
+      $fields = getFieldsInRow(jQuery(row));
+    }
+    sizes = [];
+    $fields.each(function () {
+      sizes.push(getSizeOfLayoutClass(getLayoutClassName(this.classList)));
+    });
+    return sizes.join('-');
+  }
+  function getRowForSizeAndType(size, type) {
+    var row, index, block;
+    row = getEmptyGridContainer();
+    for (index = 0; index < size; ++index) {
+      block = div();
+      block.classList.add(getClassForBlock(size, type, index));
+      block.style.height = '16px';
+      block.style.background = '#9EA9B8';
+      block.style.borderRadius = '1px';
+      row.appendChild(block);
+    }
+    return row;
+  }
+
+  /**
+   * @param {number} size  2-12.
+   * @param {string} type  even, middle, left, or right.
+   * @param {number} index 0-5.
+   * @return {string} The class name.
+   */
+  function getClassForBlock(size, type, index) {
+    if ('even' === type) {
+      return getEvenClassForSize(size, index);
+    } else if ('middle' === type) {
+      if (3 === size) {
+        return 1 === index ? 'frm6' : 'frm3';
+      }
+      if (5 === size) {
+        return 2 === index ? 'frm4' : 'frm2';
+      }
+    } else if ('left' === type) {
+      return 0 === index ? getLargeClassForSize(size) : getSmallClassForSize(size);
+    } else if ('right' === type) {
+      return index === size - 1 ? getLargeClassForSize(size) : getSmallClassForSize(size);
+    }
+    return 'frm12';
+  }
+
+  /**
+   * @param {number}           size  2-12.
+   * @param {number|undefined} index 0-5.
+   * @return {string} The class name.
+   */
+  function getEvenClassForSize(size, index) {
+    if (size > 6) {
+      return 'frm1';
+    }
+    if (-1 !== [2, 3, 4, 6].indexOf(size)) {
+      return getLayoutClassForSize(12 / size);
+    }
+    if (5 === size && 'undefined' !== typeof index) {
+      return 0 === index ? 'frm4' : 'frm2';
+    }
+    return 'frm12';
+  }
+  function getSmallClassForSize(size) {
+    switch (size) {
+      case 2:
+      case 3:
+        return 'frm3';
+      case 4:
+        return 'frm2';
+      case 5:
+        return 'frm2';
+      case 6:
+        return 'frm1';
+    }
+    return 'frm12';
+  }
+  function getLargeClassForSize(size) {
+    switch (size) {
+      case 2:
+        return 'frm9';
+      case 3:
+      case 4:
+        return 'frm6';
+      case 5:
+        return 'frm4';
+      case 6:
+        return 'frm7';
+    }
+    return 'frm12';
+  }
+  function getEmptyGridContainer() {
+    var wrapper = div();
+    wrapper.classList.add('frm_grid_container');
+    return wrapper;
+  }
+
+  /**
+   * Handle when a field group layout option (that sets grid classes/column sizing) is selected in the "Row Layout" popup.
+   *
+   * @return {void}
+   */
+  function handleFieldGroupLayoutOptionClick() {
+    var row = document.querySelector('.frm-field-group-hover-target');
+    if (!row) {
+      // The field group layout options also get clicked when merging multiple rows.
+      // The following code isn't required for multiple rows though so just exit early.
+      return;
+    }
+    var type = this.getAttribute('layout-type');
+    syncLayoutClasses(getFieldsInRow(jQuery(row)).first(), type);
+    destroyFieldGroupPopup();
+  }
+  function handleFieldGroupLayoutOptionInsideMergeClick() {
+    var $ul, type;
+    $ul = mergeSelectedFieldGroups();
+    type = this.getAttribute('layout-type');
+    syncLayoutClasses(getFieldsInRow($ul).first(), type);
+    unselectFieldGroups();
+  }
+  function mergeSelectedFieldGroups() {
+    var $selectedFieldGroups = jQuery('.frm-selected-field-group'),
+      $firstGroupUl = $selectedFieldGroups.first();
+    $selectedFieldGroups.not($firstGroupUl).each(function () {
+      getFieldsInRow(jQuery(this)).each(function () {
+        var previousParent = this.parentNode;
+        getFieldsInRow($firstGroupUl).last().after(this);
+        if (!jQuery(previousParent).children('li.form-field').length) {
+          // clean up the previous field group if we've removed all of its fields.
+          previousParent.closest('li.frm_field_box').remove();
+        }
+      });
+    });
+    updateFieldOrder();
+    syncLayoutClasses(getFieldsInRow($firstGroupUl).first());
+    return $firstGroupUl;
+  }
+  function customFieldGroupLayoutClick() {
+    var $fields;
+    if (null !== this.closest('.frm-merge-fields-into-row')) {
+      return;
+    }
+    $fields = getFieldsInRow(jQuery('.frm-field-group-hover-target'));
+    setupCustomLayoutOptions($fields);
+  }
+  function setupCustomLayoutOptions($fields) {
+    var size, popup, wrapper, layoutClass, inputRow, paddingElement, inputValueOverride, index, inputField, heading, label, buttonsWrapper, cancelButton, saveButton;
+    size = $fields.length;
+    popup = document.getElementById('frm_field_group_popup');
+    popup.innerHTML = '';
+    wrapper = div();
+    wrapper.style.padding = '0 24px';
+    layoutClass = getEvenClassForSize(5 === size ? 6 : size);
+    inputRow = div();
+    inputRow.style.padding = '20px 0';
+    inputRow.classList.add('frm_grid_container');
+    if (5 === size) {
+      // add a span to pad the inputs by 1 column, to account for the missing 2 columns.
+      paddingElement = document.createElement('span');
+      paddingElement.classList.add('frm1');
+      inputRow.appendChild(paddingElement);
+    }
+    inputValueOverride = getSelectedFieldCount() > 0 ? getSizeOfLayoutClass(getEvenClassForSize(size)) : false;
+    if (false !== inputValueOverride && inputValueOverride >= 12) {
+      inputValueOverride = Math.floor(12 / size);
+    }
+    for (index = 0; index < size; ++index) {
+      inputField = document.createElement('input');
+      inputField.type = 'text';
+      inputField.classList.add(layoutClass);
+      inputField.classList.add('frm-custom-grid-size-input');
+      inputField.value = false !== inputValueOverride ? inputValueOverride : getSizeOfLayoutClass(getLayoutClassName($fields.get(index).classList));
+      inputRow.appendChild(inputField);
+    }
+    heading = div();
+    heading.classList.add('frm-builder-popup-heading');
+    heading.textContent = __('Enter number of columns for each field', 'formidable');
+    label = div();
+    label.classList.add('frm-builder-popup-subheading');
+    label.textContent = __('Layouts are based on a 12-column grid system', 'formidable');
+    wrapper.appendChild(heading);
+    wrapper.appendChild(label);
+    wrapper.appendChild(inputRow);
+    buttonsWrapper = div();
+    buttonsWrapper.style.textAlign = 'right';
+    cancelButton = getSecondaryButton();
+    cancelButton.textContent = __('Cancel', 'formidable');
+    cancelButton.classList.add('frm-cancel-custom-field-group-layout');
+    cancelButton.style.marginRight = '10px';
+    saveButton = getPrimaryButton();
+    saveButton.textContent = __('Save', 'formidable');
+    saveButton.classList.add('frm-save-custom-field-group-layout');
+    buttonsWrapper.appendChild(cancelButton);
+    buttonsWrapper.appendChild(saveButton);
+    wrapper.appendChild(buttonsWrapper);
+    popup.appendChild(wrapper);
+    setTimeout(function () {
+      var firstInput = popup.querySelector('input.frm-custom-grid-size-input').focus();
+      if (firstInput) {
+        firstInput.focus();
+      }
+    }, 0);
+  }
+  function customFieldGroupLayoutInsideMergeClick() {
+    $fields = jQuery('.frm-selected-field-group li.form-field');
+    setupCustomLayoutOptions($fields);
+  }
+  function getPrimaryButton() {
+    var button = getButton();
+    button.classList.add('button-primary', 'frm-button-primary');
+    return button;
+  }
+  function getSecondaryButton() {
+    var button = getButton();
+    button.classList.add('button-secondary', 'frm-button-secondary');
+    return button;
+  }
+  function getButton() {
+    var button = document.createElement('a');
+    button.setAttribute('href', '#');
+    button.classList.add('button');
+    button.style.textDecoration = 'none';
+    return button;
+  }
+  function getSizeOfLayoutClass(className) {
+    switch (className) {
+      case 'frm_half':
+        return 6;
+      case 'frm_third':
+        return 4;
+      case 'frm_two_thirds':
+        return 8;
+      case 'frm_fourth':
+        return 3;
+      case 'frm_three_fourths':
+        return 9;
+      case 'frm_sixth':
+        return 2;
+    }
+    if (0 === className.indexOf('frm')) {
+      return parseInt(className.substr(3));
+    }
+
+    // Anything missing a layout class should be a full width row.
+    return 12;
+  }
+  function getLayoutClassName(classList) {
+    var classes, index, currentClass;
+    classes = getLayoutClasses();
+    for (index = 0; index < classes.length; ++index) {
+      currentClass = classes[index];
+      if (classList.contains(currentClass)) {
+        return currentClass;
+      }
+    }
+    return '';
+  }
+  function getLayoutClassForSize(size) {
+    return 'frm' + size;
+  }
+  function breakFieldGroupClick() {
+    var row = document.querySelector('.frm-field-group-hover-target');
+    breakRow(row);
+    destroyFieldGroupPopup();
+  }
+  function breakRow(row) {
+    var $row = jQuery(row);
+    getFieldsInRow($row).each(function (index) {
+      var field = this;
+      if (0 !== index) {
+        $row.parent().after(wrapFieldLi(field));
+      }
+      stripLayoutFromFields(jQuery(field));
+    });
+  }
+  function stripLayoutFromFields(field) {
+    syncLayoutClasses(field, 'clear');
+  }
+  function focusFieldGroupInputOnClick() {
+    this.select();
+  }
+  function cancelCustomFieldGroupClick() {
+    revertToFieldGroupPopupFirstPage(this);
+  }
+  function revertToFieldGroupPopupFirstPage(triggerElement) {
+    jQuery(document.getElementById('frm_field_group_popup')).replaceWith(getFieldGroupPopup(getSizeOfFieldGroupFromChildElement(triggerElement), triggerElement));
+  }
+  function destroyFieldGroupPopup() {
+    var popup, wrapper;
+    popup = document.getElementById('frm_field_group_popup');
+    if (popup === null) {
+      return;
+    }
+    wrapper = document.querySelector('.frm-has-open-field-group-popup');
+    if (null !== wrapper) {
+      wrapper.classList.remove('frm-has-open-field-group-popup');
+      popup.parentNode.remove();
+    }
+    jQuery(document).off('click', '#frm_builder_page', destroyFieldGroupPopupOnOutsideClick);
+  }
+  function saveCustomFieldGroupClick() {
+    var syncDetails, $controls, $ul;
+    syncDetails = [];
+    jQuery(document.getElementById('frm_field_group_popup').querySelectorAll('.frm_grid_container input')).each(function () {
+      syncDetails.push(parseInt(this.value));
+    });
+    $controls = jQuery(document.getElementById('frm_field_group_controls'));
+    if ($controls.length && 'none' !== $controls.get(0).style.display) {
+      syncLayoutClasses(getFieldsInRow(jQuery(document.querySelector('.frm-field-group-hover-target'))).first(), syncDetails);
+    } else {
+      $ul = mergeSelectedFieldGroups();
+      syncLayoutClasses(getFieldsInRow($ul).first(), syncDetails);
+      unselectFieldGroups();
+    }
+    destroyFieldGroupPopup();
+  }
+  function fieldGroupClick(e) {
+    maybeShowFieldGroupMessage();
+    if ('ul' !== e.originalEvent.target.nodeName.toLowerCase()) {
+      // only continue if the group itself was clicked / ignore when a field is clicked.
+      return;
+    }
+    var hoverTarget = document.querySelector('.frm-field-group-hover-target');
+    if (!hoverTarget) {
+      return;
+    }
+    var ctrlOrCmdKeyIsDown = e.ctrlKey || e.metaKey;
+    var shiftKeyIsDown = e.shiftKey;
+    var groupIsActive = hoverTarget.classList.contains('frm-selected-field-group');
+    var $selectedFieldGroups = getSelectedFieldGroups();
+    var numberOfSelectedGroups = $selectedFieldGroups.length;
+    if (ctrlOrCmdKeyIsDown || shiftKeyIsDown) {
+      // multi-selecting
+
+      var selectedField = getSelectedField();
+      if (null !== selectedField && !jQuery(selectedField).siblings('li.form-field').length) {
+        // count a selected field on its own as a selected field group when multiselecting.
+        selectedField.parentNode.classList.add('frm-selected-field-group');
+        ++numberOfSelectedGroups;
+      }
+      if (ctrlOrCmdKeyIsDown) {
+        if (groupIsActive) {
+          // unselect if holding ctrl or cmd and the group was already active.
+          --numberOfSelectedGroups;
+          hoverTarget.classList.remove('frm-selected-field-group');
+          syncAfterMultiSelect(numberOfSelectedGroups);
+          return; // exit early to avoid adding back frm-selected-field-group
+        }
+        ++numberOfSelectedGroups;
+      } else if (shiftKeyIsDown && !groupIsActive) {
+        ++numberOfSelectedGroups; // include the one we're selecting right now.
+        var $firstGroup = $selectedFieldGroups.first();
+        var $range;
+        if ($firstGroup.parent().index() < jQuery(hoverTarget.parentNode).index()) {
+          $range = $firstGroup.parent().nextUntil(hoverTarget.parentNode);
+        } else {
+          $range = $firstGroup.parent().prevUntil(hoverTarget.parentNode);
+        }
+        $range.each(function () {
+          var $fieldGroup = jQuery(this).closest('li').find('ul.frm_sorting');
+          if (!$fieldGroup.hasClass('frm-selected-field-group')) {
+            ++numberOfSelectedGroups;
+            $fieldGroup.addClass('frm-selected-field-group');
+          }
+        });
+      }
+    } else {
+      // not multi-selecting
+      unselectFieldGroups();
+      numberOfSelectedGroups = 1;
+    }
+    hoverTarget.classList.add('frm-selected-field-group');
+    syncAfterMultiSelect(numberOfSelectedGroups);
+    maybeHideFieldGroupMessage();
+    jQuery(document).off('click', unselectFieldGroups);
+    jQuery(document).on('click', unselectFieldGroups);
+  }
+
+  /**
+   * Hide the field group message by manipulating classes.
+   *
+   * @param {Element} fieldGroupMessage The field group message element.
+   * @return {void}
+   */
+  function hideFieldGroupMessage(fieldGroupMessage) {
+    if (!fieldGroupMessage) {
+      return;
+    }
+    fieldGroupMessage.classList.add('frm_hidden');
+    fieldGroupMessage.classList.remove('frm-fadein-up-back');
+  }
+
+  /**
+   * Show the field group message by manipulating classes.
+   *
+   * @param {Element} fieldGroupMessage The field group message element.
+   * @return {void}
+   */
+  function showFieldGroupMessage(fieldGroupMessage) {
+    if (!fieldGroupMessage) {
+      return;
+    }
+    fieldGroupMessage.classList.remove('frm_hidden');
+    fieldGroupMessage.classList.add('frm-fadein-up-back');
+  }
+
+  /**
+   * Maybe show a message if there are at least two rows.
+   *
+   * @return {void}
+   */
+  function maybeShowFieldGroupMessage() {
+    var fieldGroupMessage = document.getElementById('frm-field-group-message');
+    var rows = document.querySelectorAll('.edit_form_item:not(.edit_field_type_end_divider)');
+    if (rows.length < 2) {
+      hideFieldGroupMessage(fieldGroupMessage);
+      return;
+    }
+    if (fieldGroupMessage) {
+      showFieldGroupMessage(fieldGroupMessage);
+      return;
+    }
+    fieldGroupMessage = div({
+      id: 'frm-field-group-message',
+      className: 'frm-flex-center frm-fadein-up-back',
+      children: [span({
+        id: 'frm-field-group-message-dismiss',
+        className: 'frm-flex-center',
+        child: svg({
+          href: '#frm_close_icon'
+        })
+      })]
+    });
+
+    // Insert the field group into the DOM
+    document.getElementById('post-body-content').appendChild(fieldGroupMessage);
+
+    // Get and add the field group message text
+    var messageText = getFieldGroupMessageText();
+    fieldGroupMessage.prepend(messageText);
+
+    // Set up a click event listener
+    document.getElementById('frm-field-group-message-dismiss').addEventListener('click', function () {
+      hideFieldGroupMessage(document.getElementById('frm-field-group-message'));
+    });
+  }
+
+  /**
+   * Get a span element with text about selecting multiple fields.
+   *
+   * @return {HTMLElement} A span element with the message and style classes.
+   */
+  function getFieldGroupMessageText() {
+    var text = document.createElement('span');
+    text.classList.add('frm-field-group-message-text', 'frm-flex-center');
+    text.innerHTML = sprintf(/* translators: %1$s: Start span HTML, %2$s: end span HTML */
+    frm_admin_js.holdShiftMsg,
+    // eslint-disable-line camelcase
+    '<span class="frm-meta-tag frm-flex-center"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shift" viewBox="0 0 16 16"><path d="M7.3 2a1 1 0 0 1 1.4 0l6.4 6.8a1 1 0 0 1-.8 1.7h-2.8v3a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-3H1.7a1 1 0 0 1-.8-1.7L7.3 2zm7 7.5L8 2.7 1.7 9.5h2.8a1 1 0 0 1 1 1v3h5v-3a1 1 0 0 1 1-1h2.8z"/></svg>', '</span>');
+    return text;
+  }
+
+  /**
+   * Maybe hide the field group message based on the number of selected rows.
+   *
+   * @return {void}
+   */
+  function maybeHideFieldGroupMessage() {
+    var selectedRowCount = document.querySelectorAll('.frm-selected-field-group').length;
+    if (selectedRowCount < 2) {
+      return;
+    }
+    var fieldGroupMessage = document.getElementById('frm-field-group-message');
+    hideFieldGroupMessage(fieldGroupMessage);
+  }
+  function getSelectedField() {
+    return document.getElementById('frm-show-fields').querySelector('li.form-field.selected');
+  }
+  function getSelectedFieldGroups() {
+    var $fieldGroups = jQuery('.frm-selected-field-group');
+    if ($fieldGroups.length) {
+      return $fieldGroups;
+    }
+    var selectedField = getSelectedField();
+    if (selectedField) {
+      // If there is only one field in a group and the field is selected, consider the field's group as selected for multi-select.
+      var selectedFieldGroup = selectedField.closest('ul');
+      if (selectedFieldGroup && 1 === getFieldsInRow(jQuery(selectedFieldGroup)).length) {
+        selectedFieldGroup.classList.add('frm-selected-field-group');
+        return jQuery(selectedFieldGroup);
+      }
+    }
+    return jQuery();
+  }
+  function syncAfterMultiSelect(numberOfSelectedGroups) {
+    clearSettingsBox(true); // unselect any fields if one is selected.
+    if (numberOfSelectedGroups >= 2 || 1 === numberOfSelectedGroups && selectedGroupHasMultipleFields()) {
+      addFieldMultiselectPopup();
+    } else {
+      maybeRemoveMultiselectPopup();
+    }
+    maybeRemoveGroupHoverTarget();
+  }
+  function selectedGroupHasMultipleFields() {
+    return getFieldsInRow(jQuery(document.querySelector('.frm-selected-field-group'))).length > 1;
+  }
+  function unselectFieldGroups(event) {
+    if ('undefined' !== typeof event) {
+      if (null !== event.originalEvent.target.closest('#frm-show-fields')) {
+        return;
+      }
+      if (event.originalEvent.target.classList.contains('frm-merge-fields-into-row')) {
+        return;
+      }
+      if (null !== event.originalEvent.target.closest('.frm-merge-fields-into-row')) {
+        return;
+      }
+      if (event.originalEvent.target.classList.contains('frm-custom-field-group-layout')) {
+        return;
+      }
+      if (event.originalEvent.target.classList.contains('frm-cancel-custom-field-group-layout')) {
+        return;
+      }
+    }
+    jQuery('.frm-selected-field-group').removeClass('frm-selected-field-group');
+    jQuery(document).off('click', unselectFieldGroups);
+    maybeRemoveMultiselectPopup();
+  }
+  function maybeRemoveMultiselectPopup() {
+    var popup = document.getElementById('frm_field_multiselect_popup');
+    if (null !== popup) {
+      popup.remove();
+    }
+  }
+  function addFieldMultiselectPopup() {
+    getFieldMultiselectPopup();
+  }
+  function getFieldMultiselectPopup() {
+    var popup, mergeOption, caret, verticalSeparator, deleteOption;
+    popup = document.getElementById('frm_field_multiselect_popup');
+    if (null !== popup) {
+      popup.classList.toggle('frm-unmergable', !selectedFieldsAreMergeable());
+      return popup;
+    }
+    popup = div();
+    popup.id = 'frm_field_multiselect_popup';
+    if (!selectedFieldsAreMergeable()) {
+      popup.classList.add('frm-unmergable');
+    }
+    mergeOption = div();
+    mergeOption.classList.add('frm-merge-fields-into-row');
+    mergeOption.textContent = __('Merge into row', 'formidable');
+    caret = document.createElement('a');
+    caret.style.marginLeft = '5px';
+    caret.classList.add('frm_icon_font', 'frm_arrowdown6_icon');
+    caret.setAttribute('href', '#');
+    mergeOption.appendChild(caret);
+    popup.appendChild(mergeOption);
+    verticalSeparator = div();
+    verticalSeparator.classList.add('frm-multiselect-popup-separator');
+    popup.appendChild(verticalSeparator);
+    deleteOption = div();
+    deleteOption.classList.add('frm-delete-field-groups');
+    deleteOption.appendChild(getIconClone('frm_trash_svg'));
+    popup.appendChild(deleteOption);
+    document.getElementById('post-body-content').appendChild(popup);
+    jQuery(popup).hide().fadeIn();
+    return popup;
+  }
+  function selectedFieldsAreMergeable() {
+    var selectedFieldGroups, totalFieldCount, length, index, fieldGroup;
+    selectedFieldGroups = document.querySelectorAll('.frm-selected-field-group');
+    length = selectedFieldGroups.length;
+    if (1 === length) {
+      return false;
+    }
+    totalFieldCount = 0;
+    for (index = 0; index < length; ++index) {
+      fieldGroup = selectedFieldGroups[index];
+      if (null !== fieldGroup.querySelector('.edit_field_type_break, .edit_field_type_hidden')) {
+        return false;
+      }
+      totalFieldCount += getFieldsInRow(jQuery(fieldGroup)).length;
+      if (totalFieldCount > MAX_FIELD_GROUP_SIZE) {
+        return false;
+      }
+    }
+    return true;
+  }
+  function mergeFieldsIntoRowClick(event) {
+    var size, popup;
+    if (null !== event.originalEvent.target.closest('#frm_field_group_popup')) {
+      // prevent clicks within the popup from triggering the button again.
+      return;
+    }
+    if (event.originalEvent.target.classList.contains('frm-custom-field-group-layout')) {
+      // avoid switching back to the first page when clicking the custom option nested inside of the merge option.
+      return;
+    }
+    size = getSelectedFieldCount();
+    popup = getFieldGroupPopup(size, document.querySelector('.frm-selected-field-group').firstChild);
+    this.appendChild(popup);
+  }
+  function getSelectedFieldCount() {
+    var count = 0;
+    jQuery(document.querySelectorAll('.frm-selected-field-group')).each(function () {
+      count += getFieldsInRow(jQuery(this)).length;
+    });
+    return count;
+  }
+  function deleteFieldGroupsClick() {
+    var fieldIdsToDelete, deleteOnConfirm, multiselectPopup;
+    fieldIdsToDelete = getSelectedFieldIds();
+    deleteOnConfirm = getDeleteSelectedFieldGroupsOnConfirmFunction(fieldIdsToDelete);
+    multiselectPopup = document.getElementById('frm_field_multiselect_popup');
+    if (null !== multiselectPopup) {
+      multiselectPopup.remove();
+    }
+    this.setAttribute('data-frmverify', confirmFieldsDeleteMessage(fieldIdsToDelete.length));
+    confirmLinkClick(this);
+    var confirmedClick = document.getElementById('frm-confirmed-click');
+
+    // Remove any previous delete field data so delete confirmation does not attempt
+    // to delete a field that was already deleted or previously attempted and cancelled.
+    confirmedClick === null || confirmedClick === void 0 || confirmedClick.removeAttribute('data-deletefield');
+    jQuery(confirmedClick).on('click', deleteOnConfirm);
+    jQuery('#frm_confirm_modal').one('dialogclose', function () {
+      jQuery(confirmedClick).off('click', deleteOnConfirm);
+    });
+  }
+  function getSelectedFieldIds() {
+    var deleteFieldIds = [];
+    jQuery('.frm-selected-field-group > li.form-field').each(function () {
+      deleteFieldIds.push(this.dataset.fid);
+    });
+    return deleteFieldIds;
+  }
+  function getDeleteSelectedFieldGroupsOnConfirmFunction(deleteFieldIds) {
+    return function (event) {
+      event.preventDefault();
+      deleteAllSelectedFieldGroups(deleteFieldIds);
+    };
+  }
+  function deleteAllSelectedFieldGroups(deleteFieldIds) {
+    deleteFieldIds.forEach(function (fieldId) {
+      deleteFields(fieldId);
+    });
+  }
+  function deleteFieldConfirmed() {
+    /*jshint validthis:true */
+    deleteFields(this.getAttribute('data-deletefield'));
+  }
+  function deleteFields(fieldId) {
+    var field = jQuery('#frm_field_id_' + fieldId);
+    deleteField(fieldId);
+    if (field.hasClass('edit_field_type_divider')) {
+      field.find('li.frm_field_box[data-fid]').each(function () {
+        deleteField(this.getAttribute('data-fid'));
+      });
+    }
+    toggleSectionHolder();
+  }
+
+  /**
+   * Checks if there is only submit field in the form builder.
+   *
+   * @return {Boolean}
+   */
+  function hasOnlySubmitField() {
+    // If there are at least 2 rows, return false.
+    if ($newFields.get(0).childElementCount > 1) {
+      return false;
+    }
+    var childUl = $newFields.get(0).firstElementChild.firstElementChild;
+
+    // Use query instead of children because there might be a div inside this ul.
+    var childLi = childUl.querySelectorAll('li.frm_field_box');
+
+    // If there are at least 2 items in the row, return false.
+    if (childLi.length > 1) {
+      return false;
+    }
+    return childLi[0].classList.contains('edit_field_type_submit');
+  }
+
+  /**
+   * Moves open modals out of the field options form.
+   *
+   * When a modal is open, it is moved in the DOM and appended to the parent element of the modal trigger input. That
+   * creates a problem since deleting the field also deletes the modal and this function fixes that problem.
+   *
+   * @since 6.22
+   *
+   * @param {Object} settings
+   * @return {void}
+   */
+  function moveOpenModalsOutOfFieldOptions(settings) {
+    var openModals = settings[0].querySelectorAll('.frm-inline-modal[data-fills]');
+    if (!openModals.length) {
+      return;
+    }
+    openModals.forEach(function (modal) {
+      modal.classList.add('frm_hidden');
+      modal.removeAttribute('data-fills');
+      modal.closest('form').appendChild(modal);
+    });
+  }
+  function deleteField(fieldId) {
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_delete_field',
+        field_id: fieldId,
+        nonce: frmGlobal.nonce
+      },
+      success: function success() {
+        var $thisField = jQuery(document.getElementById('frm_field_id_' + fieldId)),
+          settings = jQuery('#frm-single-settings-' + fieldId);
+
+        // Remove settings from sidebar.
+        if (settings.is(':visible')) {
+          var _document$querySelect2;
+          (_document$querySelect2 = document.querySelector('.frm-settings-panel .frm-tabs-navs ul > li:first-child')) === null || _document$querySelect2 === void 0 || _document$querySelect2.click();
+          document.querySelector('#frm-options-panel .frm-single-settings').classList.remove('frm_hidden');
+        }
+        moveOpenModalsOutOfFieldOptions(settings);
+        settings.remove();
+        $thisField.fadeOut('slow', function () {
+          var $section = $thisField.closest('.start_divider'),
+            type = $thisField.data('type'),
+            $adjacentFields = $thisField.siblings('li.form-field'),
+            $liWrapper;
+          if (!$adjacentFields.length) {
+            if ($thisField.is('.edit_field_type_end_divider')) {
+              $adjacentFields.length = $thisField.closest('li.form-field').siblings();
+            } else {
+              $liWrapper = $thisField.closest('ul.frm_sorting').parent();
+            }
+          }
+          $thisField.remove();
+          if (type === 'break') {
+            renumberPageBreaks();
+          } else if (type === 'product') {
+            maybeHideQuantityProductFieldOption();
+            // a product field attached to a quantity field earlier might be the one deleted, so re-populate
+            popAllProductFields();
+          }
+          if ($adjacentFields.length) {
+            syncLayoutClasses($adjacentFields.first());
+          } else {
+            $liWrapper.remove();
+          }
+          if (jQuery('#frm-show-fields li').length === 0 || hasOnlySubmitField()) {
+            var formEditorContainer = document.getElementById('frm_form_editor_container');
+            formEditorContainer.classList.remove('frm-has-fields');
+            formEditorContainer.classList.add('frm-empty-fields');
+          } else if ($section.length) {
+            toggleOneSectionHolder($section);
+          }
+
+          // prevent "More Options" tooltips from staying around after their target field is deleted.
+          deleteTooltips();
+        });
+        if ($thisField.length) {
+          wp.hooks.doAction('frm_after_delete_field', $thisField[0]);
+        }
+      }
+    });
+  }
+  function addFieldLogicRow() {
+    /*jshint validthis:true */
+    var id = jQuery(this).closest('.frm-single-settings').data('fid'),
+      formId = thisFormId,
+      logicRows = document.getElementById('frm_logic_row_' + id).querySelectorAll('.frm_logic_row');
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_logic_row',
+        form_id: formId,
+        field_id: id,
+        nonce: frmGlobal.nonce,
+        meta_name: getNewRowId(logicRows, 'frm_logic_' + id + '_'),
+        fields: getFieldList()
+      },
+      success: function success(html) {
+        jQuery(document.getElementById('logic_' + id)).fadeOut('fast', function () {
+          var logicRow = document.getElementById('frm_logic_row_' + id);
+          logicRow.insertAdjacentHTML('beforeend', html);
+          var logicRowText = logicRow.querySelector('.frm_logic_row:last-child .frm-logic-rule-text');
+          if (logicRowText) {
+            logicRowText.textContent = logicRow.dataset.ruleText;
+          }
+          var logicRows = logicRow.closest('.frm_logic_rows');
+          logicRows.style.height = 'auto';
+          jQuery(logicRows).fadeIn('fast');
+        });
+      }
+    });
+    return false;
+  }
+  function getNewRowId(rows, replace, defaultValue) {
+    if (!rows.length) {
+      return 'undefined' !== typeof defaultValue ? defaultValue : 0;
+    }
+    return parseInt(rows[rows.length - 1].id.replace(replace, ''), 10) + 1;
+  }
+  function addWatchLookupRow() {
+    /*jshint validthis:true */
+    var lastRowId,
+      id = jQuery(this).closest('.frm-single-settings').data('fid'),
+      formId = thisFormId,
+      lookupBlockRows = document.getElementById('frm_watch_lookup_block_' + id).children;
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_watch_lookup_row',
+        form_id: formId,
+        field_id: id,
+        row_key: getNewRowId(lookupBlockRows, 'frm_watch_lookup_' + id + '_'),
+        nonce: frmGlobal.nonce
+      },
+      success: function success(newRow) {
+        var _document$getElementB2;
+        var watchRowBlock = jQuery(document.getElementById('frm_watch_lookup_block_' + id));
+        watchRowBlock.append(newRow);
+        watchRowBlock.fadeIn('slow');
+
+        // Show the "Watch Lookup Fields" label if it was hidden
+        (_document$getElementB2 = document.getElementById("frm_watch_lookup_label_".concat(id))) === null || _document$getElementB2 === void 0 || _document$getElementB2.classList.remove('frm-force-hidden');
+      }
+    });
+    return false;
+  }
+  function resetOptionTextDetails() {
+    jQuery('.frm-single-settings ul input[type="text"][name^="field_options[options_"]').filter('[data-value-on-load]').removeAttr('data-value-on-load');
+    jQuery('input[type="hidden"][name^=optionmap]').remove();
+  }
+  function optionTextAlreadyExists(input) {
+    var fieldId = jQuery(input).closest('.frm-single-settings').attr('data-fid'),
+      optionInputs = jQuery(input).closest('ul').get(0).querySelectorAll('.field_' + fieldId + '_option'),
+      index,
+      optionInput;
+    for (index in optionInputs) {
+      optionInput = optionInputs[index];
+      if (optionInput.id !== input.id && optionInput.value === input.value && optionInput.getAttribute('data-duplicate') !== 'true') {
+        return true;
+      }
+    }
+    return false;
+  }
+  function onOptionTextFocus() {
+    var input, fieldId;
+    if (this.getAttribute('data-value-on-load') === null) {
+      this.setAttribute('data-value-on-load', this.value);
+      fieldId = jQuery(this).closest('.frm-single-settings').attr('data-fid');
+      input = document.createElement('input');
+      input.value = this.value;
+      input.setAttribute('type', 'hidden');
+      input.setAttribute('name', 'optionmap[' + fieldId + '][' + this.value + ']');
+      this.parentNode.appendChild(input);
+      if (typeof optionMap[fieldId] === 'undefined') {
+        optionMap[fieldId] = {};
+      }
+      optionMap[fieldId][this.value] = input;
+    }
+    if (this.getAttribute('data-duplicate') === 'true') {
+      this.removeAttribute('data-duplicate');
+
+      // we want to use original value if actually still a duplicate
+      if (optionTextAlreadyExists(this)) {
+        this.setAttribute('data-value-on-focus', this.getAttribute('data-value-on-load'));
+        return;
+      }
+    }
+    if ('' !== this.value || frmAdminJs.new_option !== this.getAttribute('data-value-on-focus')) {
+      this.setAttribute('data-value-on-focus', this.value);
+    }
+  }
+
+  /**
+   * Returns an object that has the old and new values and labels, when a field choice is changed.
+   *
+   * @param {HTMLElement} input
+   * @return {Object}
+   */
+  function getChoiceOldAndNewValues(input) {
+    var _getChoiceOldValueAnd = getChoiceOldValueAndLabel(input),
+      oldValue = _getChoiceOldValueAnd.oldValue,
+      oldLabel = _getChoiceOldValueAnd.oldLabel;
+    var _getChoiceNewValueAnd = getChoiceNewValueAndLabel(input),
+      newValue = _getChoiceNewValueAnd.newValue,
+      newLabel = _getChoiceNewValueAnd.newLabel;
+    return {
+      oldValue: oldValue,
+      oldLabel: oldLabel,
+      newValue: newValue,
+      newLabel: newLabel
+    };
+  }
+
+  /**
+   * Returns an object that has the new value and label, when a field choice is changed.
+   *
+   * @param {HTMLElement} choiceElement
+   * @return {Object}
+   */
+  function getChoiceNewValueAndLabel(choiceElement) {
+    var singleOptionContainer = choiceElement.closest('.frm_single_option');
+    var newValue, newLabel;
+    if (choiceElement.parentElement.classList.contains('frm_single_option')) {
+      // label changed
+      newValue = singleOptionContainer.querySelector('.frm_option_key input[type="text"]').value;
+      newLabel = choiceElement.value;
+      return {
+        newValue: newValue,
+        newLabel: newLabel
+      };
+    }
+
+    // saved value changed
+    newLabel = singleOptionContainer.querySelector('input[type="text"]').value;
+    newValue = choiceElement.value;
+    return {
+      newValue: newValue,
+      newLabel: newLabel
+    };
+  }
+
+  /**
+   * Returns an object that has the old value and label, when a field choice is changed.
+   *
+   * @param {HTMLElement} choiceElement
+   * @return {Object}
+   */
+  function getChoiceOldValueAndLabel(choiceElement) {
+    var _choiceElement$closes, _choiceElement$closes2;
+    var usingSeparateValues = (_choiceElement$closes = (_choiceElement$closes2 = choiceElement.closest('.frm-single-settings').querySelector('.frm_toggle_sep_values')) === null || _choiceElement$closes2 === void 0 ? void 0 : _choiceElement$closes2.checked) !== null && _choiceElement$closes !== void 0 ? _choiceElement$closes : false;
+    var singleOptionContainer = choiceElement.closest('.frm_single_option');
+    var oldValue, oldLabel;
+    if (usingSeparateValues) {
+      if (choiceElement.parentElement.classList.contains('frm_single_option')) {
+        // label changed
+        oldValue = singleOptionContainer.querySelector('.frm_option_key input[type="text"]').getAttribute('data-value-on-focus');
+        oldLabel = choiceElement.getAttribute('data-value-on-focus');
+        return {
+          oldValue: oldValue,
+          oldLabel: oldLabel
+        };
+      }
+    }
+    oldValue = choiceElement.getAttribute('data-value-on-focus');
+    oldLabel = singleOptionContainer.querySelector('input[type="text"]').getAttribute('data-value-on-focus');
+    return {
+      oldValue: oldValue,
+      oldLabel: oldLabel
+    };
+  }
+  function onOptionTextBlur() {
+    var originalValue, fieldId, fieldIndex, logicId, row, rowLength, rowIndex, valueSelect, opts, fieldIds, settingId, setting, optionMatches, option;
+    var _getChoiceOldAndNewVa = getChoiceOldAndNewValues(this),
+      oldValue = _getChoiceOldAndNewVa.oldValue,
+      oldLabel = _getChoiceOldAndNewVa.oldLabel,
+      newValue = _getChoiceOldAndNewVa.newValue,
+      newLabel = _getChoiceOldAndNewVa.newLabel;
+    if (oldValue === newValue && oldLabel === newLabel) {
+      return;
+    }
+    var singleSettingsContainer = this.closest('.frm-single-settings');
+    fieldId = singleSettingsContainer.getAttribute('data-fid');
+    originalValue = this.getAttribute('data-value-on-load');
+
+    // check if the newValue is already mapped to another option
+    // if it is, mark as duplicate and return
+    if (optionTextAlreadyExists(this)) {
+      this.setAttribute('data-duplicate', 'true');
+      if (typeof optionMap[fieldId] !== 'undefined' && typeof optionMap[fieldId][originalValue] !== 'undefined') {
+        // unmap any other change that may have happened before instead of changing it to something unused
+        optionMap[fieldId][originalValue].value = originalValue;
+      }
+      return;
+    }
+    if (typeof optionMap[fieldId] !== 'undefined' && typeof optionMap[fieldId][originalValue] !== 'undefined') {
+      optionMap[fieldId][originalValue].value = newValue;
+    }
+    fieldIds = [];
+    rows = builderPage.querySelectorAll('.frm_logic_row');
+    rowLength = rows.length;
+    for (rowIndex = 0; rowIndex < rowLength; rowIndex++) {
+      row = rows[rowIndex];
+      opts = row.querySelector('.frm_logic_field_opts');
+      if (opts.value !== fieldId) {
+        continue;
+      }
+      logicId = row.id.split('_')[2];
+      valueSelect = row.querySelector('select[name="field_options[hide_opt_' + logicId + '][]"]');
+      if ('' === oldValue) {
+        optionMatches = [];
+      } else {
+        optionMatches = valueSelect.querySelectorAll('option[value="' + oldValue + '"]');
+      }
+      if (!optionMatches.length) {
+        optionMatches = valueSelect.querySelectorAll('option[value="' + newValue + '"]');
+        if (!optionMatches.length) {
+          var _singleSettingsContai;
+          if (!((_singleSettingsContai = singleSettingsContainer.querySelector('.frm_toggle_sep_values')) !== null && _singleSettingsContai !== void 0 && _singleSettingsContai.checked)) {
+            option = searchSelectByText(valueSelect, oldValue); // Find conditional logic option with oldValue
+          }
+          if (!option) {
+            option = document.createElement('option');
+            valueSelect.appendChild(option);
+          }
+        }
+      }
+      if (optionMatches.length) {
+        option = optionMatches[optionMatches.length - 1];
+      }
+      option.setAttribute('value', newValue);
+      option.textContent = newLabel;
+      if (fieldIds.indexOf(logicId) === -1) {
+        fieldIds.push(logicId);
+      }
+    }
+    for (fieldIndex in fieldIds) {
+      settingId = fieldIds[fieldIndex];
+      setting = document.getElementById('frm-single-settings-' + settingId);
+      moveFieldSettings(setting);
+    }
+  }
+
+  /**
+   * Returns an option element that matches a string with its text content.
+   *
+   * @param {HTMLElement} selectElement
+   * @param {string}      searchText
+   * @return {HTMLElement|null}
+   */
+  function searchSelectByText(selectElement, searchText) {
+    var options = selectElement.options;
+    for (var _i10 = 0; _i10 < options.length; _i10++) {
+      var option = options[_i10];
+      if (searchText === option.textContent) {
+        return option;
+      }
+    }
+    return null;
+  }
+  function updateGetValueFieldSelection() {
+    /*jshint validthis:true */
+    var fieldID = this.id.replace('get_values_form_', '');
+    var fieldSelect = document.getElementById('get_values_field_' + fieldID);
+    var fieldType = this.getAttribute('data-fieldtype');
+    if (this.value === '') {
+      fieldSelect.options.length = 1;
+    } else {
+      var formID = this.value;
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_get_options_for_get_values_field',
+          form_id: formID,
+          field_type: fieldType,
+          nonce: frmGlobal.nonce
+        },
+        success: function success(fields) {
+          fieldSelect.innerHTML = fields;
+        }
+      });
+    }
+  }
+
+  // Clear the Watch Fields option when Lookup field switches to "Text" option
+  function maybeClearWatchFields() {
+    /*jshint validthis:true */
+    var link,
+      lookupBlock,
+      fieldID = this.name.replace('field_options[data_type_', '').replace(']', '');
+    link = document.getElementById('frm_add_watch_lookup_link_' + fieldID);
+    if (!link) {
+      return;
+    }
+    link = link.parentNode;
+    if (this.value === 'text') {
+      lookupBlock = document.getElementById('frm_watch_lookup_block_' + fieldID);
+      if (lookupBlock !== null) {
+        // Clear and hide the Watch Fields option
+        lookupBlock.innerHTML = '';
+        link.classList.add('frm_hidden');
+
+        // Hide the Watch Fields row
+        link.previousElementSibling.style.display = 'none';
+        link.previousElementSibling.previousElementSibling.style.display = 'none';
+        link.previousElementSibling.previousElementSibling.previousElementSibling.style.display = 'none';
+      }
+    } else {
+      // Show the Watch Fields option
+      link.classList.remove('frm_hidden');
+    }
+    toggleMultiSelect(fieldID, this.value);
+  }
+
+  // Number the pages and hide/show the first page as needed.
+  function renumberPageBreaks() {
+    var i,
+      containerClass,
+      pages = document.getElementsByClassName('frm-page-num');
+    if (pages.length > 1) {
+      document.getElementById('frm-fake-page').style.display = 'block';
+      for (i = 0; i < pages.length; i++) {
+        containerClass = pages[i].parentNode.parentNode.parentNode.classList;
+        if (i === 1) {
+          // Hide previous button on page 1
+          containerClass.add('frm-first-page');
+        } else {
+          containerClass.remove('frm-first-page');
+        }
+        pages[i].textContent = i + 1;
+      }
+    } else {
+      document.getElementById('frm-fake-page').style.display = 'none';
+    }
+    wp.hooks.doAction('frm_renumber_page_breaks', pages);
+  }
+
+  // The fake field works differently than real fields.
+  function maybeCollapsePage() {
+    /*jshint validthis:true */
+    var field = jQuery(this).closest('.frm_field_box[data-ftype=break]');
+    if (field.length) {
+      toggleCollapsePage(field);
+    } else {
+      toggleCollapseFakePage();
+    }
+  }
+
+  // Find all fields in a page and hide/show them
+  function toggleCollapsePage(field) {
+    var toCollapse = getAllFieldsForPage(field.get(0).parentNode.closest('li.frm_field_box').nextElementSibling);
+    togglePage(field, toCollapse);
+  }
+  function toggleCollapseFakePage() {
+    var topLevel = document.getElementById('frm-fake-page'),
+      firstField = document.getElementById('frm-show-fields').firstElementChild,
+      toCollapse = getAllFieldsForPage(firstField);
+    if (firstField.getAttribute('data-ftype') === 'break') {
+      // Don't collapse if the first field is a page break.
+      return;
+    }
+    togglePage(jQuery(topLevel), toCollapse);
+  }
+  function getAllFieldsForPage(firstWrapper) {
+    var $fieldsForPage, currentWrapper;
+    $fieldsForPage = jQuery();
+    if (null === firstWrapper) {
+      return $fieldsForPage;
+    }
+    currentWrapper = firstWrapper;
+    do {
+      if (null !== currentWrapper.querySelector('.edit_field_type_break')) {
+        break;
+      }
+      $fieldsForPage = $fieldsForPage.add(jQuery(currentWrapper));
+      currentWrapper = currentWrapper.nextElementSibling;
+    } while (null !== currentWrapper);
+    return $fieldsForPage;
+  }
+  function togglePage(field, toCollapse) {
+    var i,
+      fieldCount = toCollapse.length,
+      slide = Math.min(fieldCount, 3);
+    if (field.hasClass('frm-page-collapsed')) {
+      field.removeClass('frm-page-collapsed');
+      toCollapse.removeClass('frm-is-collapsed');
+      for (i = 0; i < slide; i++) {
+        if (i === slide - 1) {
+          jQuery(toCollapse[i]).slideDown(150, function () {
+            toCollapse.show();
+          });
+        } else {
+          jQuery(toCollapse[i]).slideDown(150);
+        }
+      }
+    } else {
+      field.addClass('frm-page-collapsed');
+      toCollapse.addClass('frm-is-collapsed');
+      for (i = 0; i < slide; i++) {
+        if (i === slide - 1) {
+          jQuery(toCollapse[i]).slideUp(150, function () {
+            toCollapse.css('cssText', 'display:none !important;');
+          });
+        } else {
+          jQuery(toCollapse[i]).slideUp(150);
+        }
+      }
+    }
+  }
+  function maybeCollapseSection() {
+    /*jshint validthis:true */
+    var parentCont = this.parentNode.parentNode.parentNode.parentNode;
+    parentCont.classList.toggle('frm-section-collapsed');
+  }
+  function maybeCollapseSettings() {
+    /*jshint validthis:true */
+    this.classList.toggle('frm-collapsed');
+
+    // Toggles the "aria-expanded" attribute
+    var expanded = this.getAttribute('aria-expanded') === 'true' || false;
+    this.setAttribute('aria-expanded', !expanded);
+    addSlideAnimationCssVars(this.nextElementSibling);
+  }
+
+  /**
+   * Add slide animation CSS variables to the element
+   *
+   * @param {HTMLElement} element The element to add CSS variables to
+   * @return {void}
+   */
+  function addSlideAnimationCssVars(element) {
+    if (!element) {
+      return;
+    }
+    var height = element.scrollHeight;
+    if (height <= 0) {
+      return;
+    }
+    height += 250;
+    element.style.setProperty('--slide-height', "".concat(height, "px"));
+    element.style.setProperty('--slide-time', "".concat(Math.ceil(height * 0.8), "ms"));
+  }
+  function clickLabel() {
+    if (!this.id) {
+      return;
+    }
+
+    /*jshint validthis:true */
+    var setting = document.querySelectorAll('[data-changeme="' + this.id + '"]')[0],
+      fieldId = this.id.replace('field_label_', ''),
+      fieldType = document.getElementById('field_options_type_' + fieldId),
+      fieldTypeName = fieldType.value;
+    if (typeof setting !== 'undefined') {
+      if (fieldType.tagName === 'SELECT') {
+        fieldTypeName = fieldType.options[fieldType.selectedIndex].text.toLowerCase();
+      } else {
+        fieldTypeName = fieldTypeName.replace('_', ' ');
+      }
+      fieldTypeName = normalizeFieldName(fieldTypeName);
+      setTimeout(function () {
+        if (setting.value.toLowerCase() === fieldTypeName) {
+          setting.select();
+        } else {
+          setting.focus();
+        }
+      }, 50);
+    }
+  }
+  function clickDescription() {
+    /*jshint validthis:true */
+    var setting = document.querySelectorAll('[data-changeme="' + this.id + '"]')[0];
+    if (typeof setting !== 'undefined') {
+      setTimeout(function () {
+        setting.focus();
+        autoExpandSettings(setting);
+      }, 50);
+    }
+  }
+  function autoExpandSettings(setting) {
+    var inSection = setting.closest('.frm-collapse-me');
+    if (inSection !== null) {
+      inSection.previousElementSibling.classList.remove('frm-collapsed');
+    }
+  }
+  function normalizeFieldName(fieldTypeName) {
+    if (fieldTypeName === 'divider') {
+      fieldTypeName = 'section';
+    } else if (fieldTypeName === 'range') {
+      fieldTypeName = 'slider';
+    } else if (fieldTypeName === 'data') {
+      fieldTypeName = 'dynamic';
+    } else if (fieldTypeName === 'form') {
+      fieldTypeName = 'embed form';
+    }
+    return fieldTypeName;
+  }
+  function clickVis(e) {
+    /*jshint validthis:true */
+    var currentClass, originalList;
+    currentClass = e.target.classList;
+    if (currentClass.contains('frm-collapse-page') || currentClass.contains('frm-sub-label') || e.target.closest('.dropdown') !== null) {
+      return;
+    }
+    if (this.closest('.start_divider') !== null) {
+      e.stopPropagation();
+    }
+    if (this.classList.contains('edit_field_type_divider')) {
+      originalList = e.originalEvent.target.closest('ul.frm_sorting');
+      if (null !== originalList) {
+        // prevent section click if clicking a field group within a section.
+        if (originalList.classList.contains('edit_field_type_divider') || originalList.parentNode.parentNode.classList.contains('start_divider')) {
+          return;
+        }
+      }
+    }
+    clickAction(this);
+  }
+
+  /**
+   * Update the format input based on the selected format type.
+   *
+   * @since 6.9
+   *
+   * @param {Event} event The event object from the format type selection.
+   * @return {void}
+   */
+  function maybeUpdateFormatInput(event) {
+    var formatElement = event.target;
+    var type = formatElement.value;
+    if ('custom' === type) {
+      var fieldId = formatElement.dataset.fieldId;
+      var formatInput = document.getElementById("frm-field-format-custom-".concat(fieldId)).querySelector('.frm_format_opt');
+      if ('international' === formatInput.value || 'currency' === formatInput.value || 'number' === formatInput.value) {
+        formatInput.setAttribute('value', '');
+      }
+    }
+    setTimeout(function () {
+      formatElement.querySelectorAll('option').forEach(function (option) {
+        if (option.selected && option.classList.contains('frm_show_upgrade')) {
+          formatElement.value = 'none';
+        }
+      });
+    }, 0);
+  }
+
+  /**
+   * Open Advanced settings on double click.
+   */
+  function openAdvanced() {
+    var fieldId = this.getAttribute('data-fid');
+    autoExpandSettings(document.getElementById('field_options_field_key_' + fieldId));
+  }
+  function toggleRepeatButtons() {
+    /*jshint validthis:true */
+    var $thisField = jQuery(this).closest('.frm_field_box');
+    $thisField.find('.repeat_icon_links').removeClass('repeat_format repeat_formatboth repeat_formattext').addClass('repeat_format' + this.value);
+    if (this.value === 'text' || this.value === 'both') {
+      $thisField.find('.frm_repeat_text').show();
+      $thisField.find('.repeat_icon_links a').addClass('frm_button');
+    } else {
+      $thisField.find('.frm_repeat_text').hide();
+      $thisField.find('.repeat_icon_links a').removeClass('frm_button');
+    }
+  }
+  function checkRepeatLimit() {
+    /*jshint validthis:true */
+    var val = this.value;
+    if (val !== '' && (val < 2 || val > 200)) {
+      infoModal(frmAdminJs.repeat_limit_min);
+      this.value = '';
+    }
+  }
+  function checkCheckboxSelectionsLimit() {
+    /*jshint validthis:true */
+    var val = this.value;
+    if (val !== '' && (val < 1 || val > 200)) {
+      infoModal(frmAdminJs.checkbox_limit);
+      this.value = '';
+    }
+  }
+  function updateRepeatText(obj, addRemove) {
+    var $thisField = jQuery(obj).closest('.frm_field_box');
+    $thisField.find('.frm_' + addRemove + '_form_row .frm_repeat_label').text(obj.value);
+  }
+  function fieldsInSection(id) {
+    var children = [];
+    jQuery(document.getElementById('frm_field_id_' + id)).find('li.frm_field_box:not(.no_repeat_section .edit_field_type_end_divider)').each(function () {
+      children.push(jQuery(this).data('fid'));
+    });
+    return children;
+  }
+  function toggleFormTax() {
+    /*jshint validthis:true */
+    var id = jQuery(this).closest('.frm-single-settings').data('fid');
+    var val = this.value;
+    var $showFields = document.getElementById('frm_show_selected_fields_' + id);
+    var $showForms = document.getElementById('frm_show_selected_forms_' + id);
+    jQuery($showForms).find('select').val('');
+    if (val === 'form') {
+      $showForms.style.display = 'inline';
+      empty($showFields);
+    } else {
+      $showFields.style.display = 'none';
+      $showForms.style.display = 'none';
+      getTaxOrFieldSelection(val, id);
+    }
+  }
+  function resetOptOnChange() {
+    /*jshint validthis:true */
+    var field, thisOpt;
+    field = getFieldKeyFromOpt(this);
+    if (!field) {
+      return;
+    }
+    thisOpt = jQuery(this).closest('.frm_single_option');
+    resetSingleOpt(field.fieldId, field.fieldKey, thisOpt);
+  }
+  function getFieldKeyFromOpt(object) {
+    var allOpts, fieldId, fieldKey;
+    allOpts = jQuery(object).closest('.frm_sortable_field_opts');
+    if (!allOpts.length) {
+      return false;
+    }
+    fieldId = allOpts.attr('id').replace('frm_field_', '').replace('_opts', '');
+    fieldKey = allOpts.data('key');
+    return {
+      fieldId: fieldId,
+      fieldKey: fieldKey
+    };
+  }
+  function resetSingleOpt(fieldId, fieldKey, thisOpt) {
+    var saved,
+      text,
+      defaultVal,
+      previewInput,
+      labelForDisplay,
+      optContainer,
+      optKey = thisOpt.data('optkey'),
+      separateValues = usingSeparateValues(fieldId),
+      single = jQuery('label[for="field_' + fieldKey + '-' + optKey + '"]'),
+      baseName = 'field_options[options_' + fieldId + '][' + optKey + ']',
+      label = jQuery('input[name="' + baseName + '[label]"]');
+    if (single.length < 1) {
+      resetDisplayedOpts(fieldId);
+
+      // Set the default value.
+      defaultVal = thisOpt.find('input[name^="default_value_"]');
+      if (defaultVal.is(':checked') && label.length > 0) {
+        jQuery('select[name^="item_meta[' + fieldId + ']"]').val(label.val());
+      }
+      return;
+    }
+    previewInput = single.children('input');
+    if (label.length < 1) {
+      // Check for other label.
+      label = jQuery('input[name="' + baseName + '"]');
+      saved = label.val();
+    } else if (separateValues) {
+      saved = jQuery('input[name="' + baseName + '[value]"]').val();
+    } else {
+      saved = label.val();
+    }
+    if (label.length < 1) {
+      return;
+    }
+
+    // Set the displayed value.
+    text = single[0].childNodes;
+    if (imagesAsOptions(fieldId)) {
+      labelForDisplay = getImageDisplayValue(thisOpt, fieldId, label);
+      optContainer = single.find('.frm_image_option_container');
+      if (optContainer.length > 0) {
+        optContainer.replaceWith(labelForDisplay);
+      } else {
+        text[text.length - 1].nodeValue = '';
+        single.append(labelForDisplay);
+      }
+    } else {
+      var firstInputIndex = false;
+      text.forEach(function (node, index) {
+        if (firstInputIndex === false) {
+          if (node.tagName === 'INPUT') {
+            firstInputIndex = index;
+          }
+        } else if (index === firstInputIndex + 1) {
+          var nodeValue = '';
+          if (buttonsAsOptions(fieldId)) {
+            nodeValue = div({
+              className: 'frm_label_button_container',
+              text: ' ' + label.val()
+            });
+            single[0].replaceChild(nodeValue, node);
+          } else {
+            node.nodeValue = ' ' + label.val();
+          }
+        } else {
+          single[0].removeChild(node);
+        }
+      });
+    }
+
+    // Set saved value.
+    previewInput.val(saved);
+
+    // Set the default value.
+    defaultVal = thisOpt.find('input[name^="default_value_"]');
+    previewInput.prop('checked', defaultVal.is(':checked') ? true : false);
+  }
+  function buttonsAsOptions(fieldId) {
+    var fields = document.getElementsByName('field_options[image_options_' + fieldId + ']');
+    var result = Array.from(fields).find(function (field) {
+      return field.checked && 'buttons' === field.value;
+    });
+    return typeof result !== 'undefined';
+  }
+
+  /**
+   * Set the displayed value for an image option.
+   */
+  function getImageDisplayValue(thisOpt, fieldId, label) {
+    var image, imageUrl, showLabelWithImage, fieldType;
+    image = thisOpt.find('img');
+    if (image) {
+      imageUrl = image.attr('src');
+    }
+    showLabelWithImage = showingLabelWithImage(fieldId);
+    fieldType = radioOrCheckbox(fieldId);
+    return getImageLabel(label.val(), showLabelWithImage, imageUrl, fieldType);
+  }
+  function getImageOptionSize(fieldId) {
+    var val,
+      field = document.getElementById('field_options_image_size_' + fieldId),
+      size = '';
+    if (field !== null) {
+      val = field.value;
+      if (val !== '') {
+        size = val;
+      }
+    }
+    return size;
+  }
+  function resetDisplayedOpts(fieldId) {
+    var i,
+      opts,
+      type,
+      placeholder,
+      fieldInfo,
+      input = jQuery('[name^="item_meta[' + fieldId + ']"]');
+    if (input.length < 1) {
+      return;
+    }
+    if (input.is('select')) {
+      placeholder = document.getElementById('frm_placeholder_' + fieldId);
+      if (placeholder !== null && placeholder.value === '') {
+        fillDropdownOpts(input[0], {
+          sourceID: fieldId
+        });
+      } else {
+        fillDropdownOpts(input[0], {
+          sourceID: fieldId,
+          placeholder: placeholder.value
+        });
+      }
+    } else {
+      opts = getMultipleOpts(fieldId);
+      jQuery('#field_' + fieldId + '_inner_container > .frm_form_fields').html('');
+      fieldInfo = getFieldKeyFromOpt(jQuery('#frm_delete_field_' + fieldId + '-000_container'));
+      var container = jQuery('#field_' + fieldId + '_inner_container > .frm_form_fields'),
+        hasImageOptions = imagesAsOptions(fieldId),
+        imageSize = hasImageOptions ? getImageOptionSize(fieldId) : '',
+        imageOptionClass = hasImageOptions ? 'frm_image_option frm_image_' + imageSize + ' ' : '',
+        isProduct = isProductField(fieldId);
+      type = 'hidden' === input.attr('type') ? input.data('field-type') : input.attr('type');
+      for (i = 0; i < opts.length; i++) {
+        container.append(addRadioCheckboxOpt(type, opts[i], fieldId, fieldInfo.fieldKey, isProduct, imageOptionClass));
+      }
+    }
+    adjustConditionalLogicOptionOrders(fieldId);
+  }
+
+  /**
+   * Returns an object that has a value and label for new conditional logic option, for a given option value.
+   *
+   * @param {Number} fieldId
+   * @param {string} expectedOption
+   * @return {Object}
+   */
+  function getNewConditionalLogicOption(fieldId, expectedOption) {
+    var optionsContainer = document.getElementById('frm_field_' + fieldId + '_opts');
+    var expectedOptionInput = optionsContainer.querySelector('input[value="' + expectedOption + '"]');
+    if (expectedOptionInput) {
+      return getChoiceNewValueAndLabel(expectedOptionInput);
+    }
+    return {
+      newValue: expectedOption,
+      newLabel: expectedOption
+    };
+  }
+  function adjustConditionalLogicOptionOrders(fieldId, type) {
+    var row,
+      opts,
+      logicId,
+      valueSelect,
+      optionLength,
+      optionIndex,
+      expectedOption,
+      optionMatch,
+      fieldOptions,
+      rows = builderPage.querySelectorAll('.frm_logic_row'),
+      rowLength = rows.length;
+    fieldOptions = wp.hooks.applyFilters('frm_conditional_logic_field_options', getFieldOptions(fieldId), {
+      type: type,
+      fieldId: fieldId
+    });
+    optionLength = fieldOptions.length;
+    for (rowIndex = 0; rowIndex < rowLength; rowIndex++) {
+      row = rows[rowIndex];
+      opts = row.querySelector('.frm_logic_field_opts');
+      if (opts.value != fieldId) {
+        continue;
+      }
+      logicId = row.id.split('_')[2];
+      valueSelect = row.querySelector('select[name="field_options[hide_opt_' + logicId + '][]"]');
+      for (optionIndex = optionLength - 1; optionIndex >= 0; optionIndex--) {
+        var _document$getElementB3;
+        expectedOption = fieldOptions[optionIndex];
+        var expectedOptionValue = (_document$getElementB3 = document.getElementById('frm_field_' + fieldId + '_opts').querySelector('.frm_option_key input[type="text"]')) === null || _document$getElementB3 === void 0 ? void 0 : _document$getElementB3.value;
+        if (!expectedOptionValue) {
+          expectedOptionValue = expectedOption;
+        }
+        optionMatch = valueSelect.querySelector('option[value="' + expectedOptionValue + '"]');
+        var _getNewConditionalLog = getNewConditionalLogicOption(fieldId, expectedOption),
+          newValue = _getNewConditionalLog.newValue,
+          newLabel = _getNewConditionalLog.newLabel;
+        var fieldChoices = document.querySelectorAll('#frm_field_' + fieldId + '_opts input[data-value-on-focus]');
+        var expectedChoiceEl = Array.from(fieldChoices).find(function (element) {
+          return element.value === expectedOption;
+        });
+        if (expectedChoiceEl) {
+          var oldValue = expectedChoiceEl.dataset.valueOnFocus;
+          var hasMatch = oldValue && valueSelect.querySelector('option[value="' + oldValue + '"]');
+          if (hasMatch) {
+            continue;
+          }
+        }
+        prependValueSelectWithOptionMatch(valueSelect, optionMatch, newValue, newLabel);
+      }
+      optionMatch = valueSelect.querySelector('option[value=""]');
+      if (optionMatch !== null) {
+        valueSelect.prepend(optionMatch);
+      }
+    }
+  }
+  function prependValueSelectWithOptionMatch(valueSelect, optionMatch, newValue, newLabel) {
+    if (optionMatch === null && !valueSelect.querySelector('option[value="' + newValue + '"]')) {
+      optionMatch = frmDom.tag('option', {
+        text: newLabel
+      });
+      optionMatch.value = newValue;
+    }
+    valueSelect.prepend(optionMatch);
+  }
+  function getFieldOptions(fieldId) {
+    var index,
+      input,
+      li,
+      listItems,
+      optsContainer,
+      length,
+      options = [];
+    optsContainer = document.getElementById('frm_field_' + fieldId + '_opts');
+    if (!optsContainer) {
+      return options;
+    }
+    listItems = optsContainer.querySelectorAll('.frm_single_option');
+    length = listItems.length;
+    for (index = 0; index < length; index++) {
+      li = listItems[index];
+      if (li.classList.contains('frm_hidden')) {
+        continue;
+      }
+      input = li.querySelector('.field_' + fieldId + '_option');
+      options.push(input.value);
+    }
+    return options;
+  }
+  function addRadioCheckboxOpt(type, opt, fieldId, fieldKey, isProduct, classes) {
+    var other,
+      single = '',
+      isOther = opt.key.indexOf('other') !== -1,
+      id = 'field_' + fieldKey + '-' + opt.key,
+      inputType = type === 'scale' ? 'radio' : type;
+    other = '<input type="text" id="field_' + fieldKey + '-' + opt.key + '-otext" class="frm_other_input frm_pos_none" name="item_meta[other][' + fieldId + '][' + opt.key + ']" value="" />';
+    this.getSingle = function () {
+      /**
+       * Get single option template.
+       *
+       * @param {Object} option  Object containing the option data.
+       * @param {string} type    The field type.
+       * @param {string} fieldId The field id.
+       * @param {string} classes The option clasnames.
+       * @param {string} id      The input id attribute.
+       */
+      single = wp.hooks.applyFilters('frm_admin.build_single_option_template', single, {
+        opt: opt,
+        type: type,
+        fieldId: fieldId,
+        classes: classes,
+        id: id
+      });
+      if ('' !== single) {
+        return single;
+      }
+      return '<div class="frm_' + type + ' ' + type + ' ' + classes + '" id="frm_' + type + '_' + fieldId + '-' + opt.key + '"><label for="' + id + '"><input type="' + inputType + '" name="item_meta[' + fieldId + ']' + (type === 'checkbox' ? '[]' : '') + '" value="' + purifyHtml(opt.saved) + '" id="' + id + '"' + (isProduct ? ' data-price="' + opt.price + '"' : '') + (opt.checked ? ' checked="checked"' : '') + '> ' + purifyHtml(opt.label) + '</label>' + (isOther ? other : '') + '</div>';
+    };
+    return this.getSingle();
+  }
+  function fillDropdownOpts(field, atts) {
+    if (field === null) {
+      return;
+    }
+    var sourceID = atts.sourceID,
+      placeholder = atts.placeholder,
+      isProduct = isProductField(sourceID),
+      showOther = atts.other;
+    removeDropdownOpts(field);
+    var opts = getMultipleOpts(sourceID, field.id.includes('frm_field_logic_opt'));
+    var hasPlaceholder = typeof placeholder !== 'undefined';
+    for (var _i11 = 0; _i11 < opts.length; _i11++) {
+      var label = opts[_i11].label,
+        isOther = opts[_i11].key.indexOf('other') !== -1;
+      if (hasPlaceholder && label !== '') {
+        addBlankSelectOption(field, placeholder);
+      } else if (hasPlaceholder) {
+        label = placeholder;
+      }
+      hasPlaceholder = false;
+      if (!isOther || showOther) {
+        var opt = document.createElement('option');
+        opt.value = opts[_i11].saved;
+        opt.innerHTML = purifyHtml(label);
+        if (isProduct) {
+          opt.setAttribute('data-price', opts[_i11].price);
+        }
+        field.appendChild(opt);
+      }
+    }
+  }
+  function addBlankSelectOption(field, placeholder) {
+    var opt = document.createElement('option'),
+      firstChild = field.firstChild;
+    opt.value = '';
+    opt.innerHTML = placeholder;
+    if (firstChild !== null) {
+      field.insertBefore(opt, firstChild);
+      field.selectedIndex = 0;
+    } else {
+      field.appendChild(opt);
+    }
+  }
+
+  /**
+   * Get multiple options for a field.
+   *
+   * @param {string}  fieldId          The field id.
+   * @param {boolean} showValueAsLabel Whether to show the value as label for empty labels.
+   */
+  function getMultipleOpts(fieldId) {
+    var showValueAsLabel = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    var i,
+      saved,
+      labelName,
+      label,
+      key,
+      optObj,
+      fieldType,
+      checked = false,
+      opts = [],
+      imageUrl = '';
+    var optVals = jQuery('input[name^="field_options[options_' + fieldId + ']"]').filter('[name*="[label]"]');
+    var isProduct = isProductField(fieldId);
+    var showLabelWithImage = showingLabelWithImage(fieldId);
+    var hasImageOptions = imagesAsOptions(fieldId);
+    var separateValues = usingSeparateValues(fieldId);
+    for (i = 0; i < optVals.length; i++) {
+      if (optVals[i].name.indexOf('[000]') > 0) {
+        continue;
+      }
+      saved = optVals[i].value;
+      label = saved;
+      key = optVals[i].name.replace('field_options[options_' + fieldId + '][', '').replace('[label]', '').replace(']', '');
+      if (separateValues) {
+        labelName = optVals[i].name.replace('[label]', '[value]');
+        saved = jQuery('input[name="' + labelName + '"]').val();
+        if (showValueAsLabel && '' === label) {
+          label = '' !== saved ? saved : frm_admin_js.no_label; // eslint-disable-line camelcase
+        }
+      }
+      if (hasImageOptions) {
+        imageUrl = getImageUrlFromInput(optVals[i]);
+        fieldType = radioOrCheckbox(fieldId);
+        label = getImageLabel(label, showLabelWithImage, imageUrl, fieldType);
+      }
+
+      /**
+       * @since 5.0.04
+       */
+      label = frmAdminBuild.hooks.applyFilters('frm_choice_field_label', label, fieldId, optVals[i], hasImageOptions);
+      checked = getChecked(optVals[i].id);
+      optObj = {
+        saved: saved,
+        label: label,
+        checked: checked,
+        key: key
+      };
+      if (isProduct) {
+        labelName = optVals[i].name.replace('[label]', '[price]');
+        optObj.price = jQuery('input[name="' + labelName + '"]').val();
+      }
+      opts.push(optObj);
+    }
+    return opts;
+  }
+  function radioOrCheckbox(fieldId) {
+    var settings = document.getElementById('frm-single-settings-' + fieldId);
+    if (settings === null) {
+      return 'radio';
+    }
+    return settings.classList.contains('frm-type-checkbox') ? 'checkbox' : 'radio';
+  }
+  function getImageUrlFromInput(optVal) {
+    var img,
+      wrapper = jQuery(optVal).siblings('.frm_image_preview_wrapper');
+    if (!wrapper.length) {
+      return '';
+    }
+    img = wrapper.find('img');
+    if (!img.length) {
+      return '';
+    }
+    return img.attr('src');
+  }
+  function purifyHtml(html) {
+    if (html instanceof Element || html instanceof Document) {
+      html = html.outerHTML;
+    }
+    var clean = jQuery.parseHTML(html).reduce(function (total, currentNode) {
+      var cleanNode = frmDom.cleanNode(currentNode);
+      if ('#text' === cleanNode.nodeName) {
+        return total += cleanNode.textContent;
+      }
+      return total + cleanNode.outerHTML;
+    }, '');
+    if (clean !== html) {
+      // Clean it until nothing changes, in case the stripped result is now unsafe.
+      return purifyHtml(clean);
+    }
+    return clean;
+  }
+  function getImageLabel(label, showLabelWithImage, imageUrl, fieldType) {
+    var imageLabelClass,
+      originalLabel = label,
+      shape = fieldType === 'checkbox' ? 'square' : 'circle',
+      labelImage,
+      labelNode,
+      imageLabel;
+    originalLabel = purifyHtml(originalLabel);
+    if (imageUrl) {
+      labelImage = img({
+        src: imageUrl,
+        alt: originalLabel
+      });
+    } else {
+      labelImage = div({
+        className: 'frm_empty_url'
+      });
+      labelImage.innerHTML = frmAdminJs.image_placeholder_icon;
+    }
+    imageLabelClass = showLabelWithImage ? ' frm_label_with_image' : '';
+    imageLabel = tag('span', {
+      className: 'frm_text_label_for_image_inner'
+    });
+    imageLabel.innerHTML = originalLabel;
+    labelNode = tag('span', {
+      className: 'frm_image_option_container' + imageLabelClass,
+      children: [labelImage, tag('span', {
+        className: 'frm_text_label_for_image',
+        child: imageLabel
+      })]
+    });
+    return labelNode;
+  }
+  function getChecked(id) {
+    field = jQuery('#' + id);
+    if (field.length === 0) {
+      return false;
+    }
+    checkbox = field.siblings('input[type=checkbox]');
+    return checkbox.length && checkbox.prop('checked');
+  }
+  function removeDropdownOpts(field) {
+    var i;
+    if (typeof field.options === 'undefined') {
+      return;
+    }
+    for (i = field.options.length - 1; i >= 0; i--) {
+      field.remove(i);
+    }
+  }
+
+  /**
+   * Is the box checked to use separate values?
+   */
+  function usingSeparateValues(fieldId) {
+    return isChecked('separate_value_' + fieldId);
+  }
+
+  /**
+   * Is the box checked to use images as options?
+   */
+  function imagesAsOptions(fieldId) {
+    var checked = false,
+      field = document.getElementsByName('field_options[image_options_' + fieldId + ']');
+    for (var _i12 = 0; _i12 < field.length; _i12++) {
+      if (field[_i12].checked) {
+        checked = '0' !== field[_i12].value;
+      }
+    }
+
+    /**
+     * @since 5.0.04
+     */
+    return frmAdminBuild.hooks.applyFilters('frm_choice_field_images_as_options', checked, fieldId);
+  }
+  function showingLabelWithImage(fieldId) {
+    var isShowing = !isChecked('hide_image_text_' + fieldId);
+
+    /**
+     * @since 5.0.04
+     */
+    return frmAdminBuild.hooks.applyFilters('frm_choice_field_showing_label_with_image', isShowing, fieldId);
+  }
+  function isChecked(id) {
+    var field = document.getElementById(id);
+    if (field === null) {
+      return false;
+    }
+    return field.checked;
+  }
+  function checkUniqueOpt(targetInput) {
+    var settingsContainer = targetInput.closest('.frm-single-settings');
+    var fieldId = settingsContainer.getAttribute('data-fid');
+    var areValuesSeparate = settingsContainer.querySelector('[name="field_options[separate_value_' + fieldId + ']"]').checked;
+    if (areValuesSeparate && !targetInput.name.endsWith('[value]')) {
+      return;
+    }
+    var container = document.getElementById('frm_field_' + fieldId + '_opts');
+    var conflicts = Array.from(container.querySelectorAll('input[type="text"]')).filter(function (input) {
+      return input.id !== targetInput.id && areValuesSeparate === input.name.endsWith('[value]') && input.value === targetInput.value;
+    });
+    if (conflicts.length) {
+      /* translators: %s: The detected option value. */
+      infoModal(sprintf(__('Duplicate option value "%s" detected', 'formidable'), purifyHtml(targetInput.value)));
+    }
+  }
+  function getFieldValues() {
+    /*jshint validthis:true */
+    var isTaxonomy,
+      val = this.value;
+    if (val) {
+      var parentIDs = this.parentNode.id.replace('frm_logic_', '').split('_');
+      var fieldID = parentIDs[0];
+      var metaKey = parentIDs[1];
+      var valueField = document.getElementById('frm_field_id_' + val);
+      var valueFieldType = valueField.getAttribute('data-ftype');
+      var fill = document.getElementById('frm_show_selected_values_' + fieldID + '_' + metaKey);
+      var optionName = 'field_options[hide_opt_' + fieldID + '][]';
+      var optionID = 'frm_field_logic_opt_' + fieldID;
+      var input = false;
+      var showSelect = valueFieldType === 'select' || valueFieldType === 'checkbox' || valueFieldType === 'radio';
+      var showText = valueFieldType === 'text' || valueFieldType === 'email' || valueFieldType === 'phone' || valueFieldType === 'url' || valueFieldType === 'number';
+      if (showSelect) {
+        isTaxonomy = document.getElementById('frm_has_hidden_options_' + val);
+        if (isTaxonomy !== null) {
+          // get the category options with ajax
+          showSelect = false;
+        }
+      }
+      if (showSelect || showText) {
+        var comparison = document.querySelector("#frm_logic_".concat(fieldID, "_").concat(metaKey, " [name=\"field_options[hide_field_cond_").concat(fieldID, "][]\"]")).value;
+        fill.innerHTML = '';
+        var creatingValuesDropdown = showSelect && !['LIKE', 'not LIKE', 'LIKE%', '%LIKE'].includes(comparison);
+        if (creatingValuesDropdown) {
+          input = document.createElement('select');
+        } else {
+          input = document.createElement('input');
+          input.type = 'text';
+        }
+        input.name = optionName;
+        input.id = optionID + '_' + metaKey;
+        fill.appendChild(input);
+        if (creatingValuesDropdown) {
+          var fillField = document.getElementById(input.id);
+          fillDropdownOpts(fillField, {
+            sourceID: val,
+            placeholder: '',
+            other: true
+          });
+        }
+      } else {
+        var thisType = this.getAttribute('data-type');
+        var callback = function callback() {
+          var event = new CustomEvent('frm_logic_options_loaded');
+          event.frmData = {
+            valueFieldType: valueFieldType,
+            fieldID: fieldID,
+            metaKey: metaKey
+          };
+          document.dispatchEvent(event);
+        };
+        frmGetFieldValues(val, fieldID, metaKey, thisType, undefined, callback);
+      }
+    }
+  }
+  function getFieldSelection() {
+    /*jshint validthis:true */
+    var formId = this.value;
+    if (formId) {
+      var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+      getTaxOrFieldSelection(formId, fieldId);
+    }
+  }
+  function getTaxOrFieldSelection(formId, fieldId) {
+    if (formId) {
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_get_field_selection',
+          field_id: fieldId,
+          form_id: formId,
+          nonce: frmGlobal.nonce
+        },
+        success: function success(msg) {
+          var $selectedFields = jQuery('#frm_show_selected_fields_' + fieldId);
+          $selectedFields.toggleClass('frm6', !msg.includes('frm-inline-message'));
+          $selectedFields.html(msg).show();
+        }
+      });
+    }
+  }
+  function updateFieldOrder() {
+    var self = this;
+    this.initOnceInAllInstances = function () {
+      if ('undefined' !== typeof updateFieldOrder.prototype.orderFieldsObject) {
+        return;
+      }
+
+      // It will store the order input fields ( input[name="field_options[field_order_{fieldId}]"] ).
+      // It will help to reduce the DOM searches based on fieldId.
+      // The same object data is used across all "updateFieldOrder" instances.
+      updateFieldOrder.prototype.orderFieldsObject = {};
+
+      // Get the Form group that will handle the fields settings.
+      // Perform a single DOM search and use it across all "updateFieldOrder" instances.
+      updateFieldOrder.prototype.fieldSettingsForm = document.getElementById('frm-end-form-marker').closest('form');
+    };
+    this.getFieldOrderInputById = function (fieldId, parent) {
+      var field;
+      var orderFieldsObject = updateFieldOrder.prototype.orderFieldsObject;
+      var fieldSettingsForm = updateFieldOrder.prototype.fieldSettingsForm;
+      if ('undefined' === typeof orderFieldsObject[fieldId]) {
+        field = fieldSettingsForm.querySelector('input[name="field_options[field_order_' + fieldId + ']"]');
+        if (null === field) {
+          field = parent.querySelector('input[name="field_options[field_order_' + fieldId + ']"]');
+        }
+        orderFieldsObject[fieldId] = field;
+        return field;
+      }
+      return orderFieldsObject[fieldId];
+    };
+    this.initOnceInAllInstances();
+    renumberPageBreaks();
+    return function () {
+      var fieldId,
+        field,
+        currentOrder,
+        newOrder,
+        moveFieldsClass = new moveFieldSettings(),
+        fields = jQuery('li.frm_field_box', jQuery('#frm-show-fields'));
+      for (i = 0; i < fields.length; i++) {
+        fieldId = fields[i].getAttribute('data-fid');
+        field = self.getFieldOrderInputById(fieldId, fields[i]);
+
+        // get current field order, make sure we don't get the "field" reference as the "field" value will get updated later.
+        currentOrder = null !== field ? Object.assign({}, field.value)[0] : null;
+        newOrder = i + 1;
+        if (currentOrder != newOrder && null !== currentOrder) {
+          field.value = newOrder;
+          singleField = fields[i].querySelector('#frm-single-settings-' + fieldId);
+
+          // add field that needs to be moved to "updateFieldOrder.prototype.fieldSettingsForm"
+          moveFieldsClass.append(singleField);
+          fieldUpdated();
+        }
+      }
+      // move all appended fields
+      moveFieldsClass.moveFields();
+    }();
+  }
+  function toggleSectionHolder() {
+    document.querySelectorAll('.start_divider').forEach(function (divider) {
+      toggleOneSectionHolder(jQuery(divider));
+    });
+  }
+  function toggleOneSectionHolder($section) {
+    var noSectionFields, $rows, length, index, sectionHasFields;
+    if (!$section.length) {
+      return;
+    }
+    $rows = $section.find('ul.frm_sorting');
+    sectionHasFields = false;
+    length = $rows.length;
+    for (index = 0; index < length; ++index) {
+      if (0 !== getFieldsInRow(jQuery($rows.get(index))).length) {
+        sectionHasFields = true;
+        break;
+      }
+    }
+    noSectionFields = $section.parent().children('.frm_no_section_fields').get(0);
+    noSectionFields.classList.toggle('frm_block', !sectionHasFields);
+  }
+  function handleShowPasswordLiveUpdate() {
+    frmDom.util.documentOn('change', '.frm_show_password_setting_input', function (event) {
+      var fieldId = event.target.getAttribute('data-fid');
+      var fieldEl = document.getElementById('frm_field_id_' + fieldId);
+      if (!fieldEl) {
+        return;
+      }
+      fieldEl.classList.toggle('frm_disabled_show_password', !event.target.checked);
+    });
+  }
+  function slideDown() {
+    /*jshint validthis:true */
+    var id = jQuery(this).data('slidedown');
+    var $thisId = jQuery(document.getElementById(id));
+    if ($thisId.is(':hidden')) {
+      $thisId.slideDown('fast');
+      this.style.display = 'none';
+    }
+    return false;
+  }
+  function slideUp() {
+    /*jshint validthis:true */
+    var id = jQuery(this).data('slideup');
+    var $thisId = jQuery(document.getElementById(id));
+    $thisId.slideUp('fast');
+    $thisId.siblings('a').show();
+    return false;
+  }
+  function adjustVisibilityValuesForEveryoneValues(element, option) {
+    if ('' === option.getAttribute('value')) {
+      onEveryoneOptionSelected(jQuery(this));
+    } else {
+      unselectEveryoneOptionIfSelected(jQuery(this));
+    }
+  }
+  function onEveryoneOptionSelected($select) {
+    $select.val('');
+    $select.next('.btn-group').find('.multiselect-container input[value!=""]').prop('checked', false);
+  }
+  function unselectEveryoneOptionIfSelected($select) {
+    var selectedValues = $select.val(),
+      index;
+    if (selectedValues === null) {
+      $select.next('.btn-group').find('.multiselect-container input[value=""]').prop('checked', true);
+      onEveryoneOptionSelected($select);
+      return;
+    }
+    index = selectedValues.indexOf('');
+    if (index >= 0) {
+      selectedValues.splice(index, 1);
+      $select.val(selectedValues);
+      $select.next('.btn-group').find('.multiselect-container input[value=""]').prop('checked', false);
+    }
+  }
+
+  /**
+   * Get rid of empty container that inserts extra space.
+   */
+  function hideEmptyEle() {
+    jQuery('.frm-hide-empty').each(function () {
+      if (jQuery(this).text().trim().length === 0) {
+        jQuery(this).remove();
+      }
+    });
+  }
+
+  /* Change the classes in the builder */
+  function changeFieldClass(field, setting) {
+    var classes,
+      replace,
+      alignField,
+      replaceWith = ' ' + setting.value,
+      fieldId = field.getAttribute('data-fid');
+
+    // Include classes from multiple settings.
+    if (typeof fieldId !== 'undefined') {
+      if (setting.classList.contains('field_options_align')) {
+        replaceWith += ' ' + document.getElementById('frm_classes_' + fieldId).value;
+      } else if (setting.classList.contains('frm_classes')) {
+        alignField = document.getElementById('field_options_align_' + fieldId);
+        if (alignField !== null) {
+          replaceWith += ' ' + alignField.value;
+        }
+      }
+    }
+    replaceWith += ' ';
+
+    // Allow for the column number dropdown.
+    replaceWith = replaceWith.replace(' block ', ' vertical_radio ').replace(' inline ', ' horizontal_radio ');
+    classes = field.className.split(' frmstart ')[1];
+    classes = 0 === classes.indexOf('frmend ') ? '' : classes.split(' frmend ')[0];
+    if (classes.trim() === '') {
+      replace = ' frmstart  frmend ';
+      if (-1 === field.className.indexOf(replace)) {
+        replace = ' frmstart frmend ';
+      }
+      replaceWith = ' frmstart ' + replaceWith.trim() + ' frmend ';
+    } else {
+      replace = classes.trim();
+      replaceWith = replaceWith.trim();
+    }
+    field.className = field.className.replace(replace, replaceWith);
+  }
+  function maybeShowInlineModal(e) {
+    /*jshint validthis:true */
+    e.preventDefault();
+    showInlineModal(this, undefined, e);
+  }
+  function showInlineModal(icon, input, event) {
+    var box = document.getElementById(icon.getAttribute('data-open')),
+      container = jQuery(icon).closest('p,ul'),
+      inputTrigger = typeof input !== 'undefined';
+    if (container.hasClass('frm-open')) {
+      container.removeClass('frm-open');
+      box.classList.add('frm_hidden');
+    } else {
+      if (!inputTrigger) {
+        input = getInputForIcon(icon);
+      }
+      if (input !== null) {
+        if (!inputTrigger) {
+          var key = event.key;
+          if (key !== 'Enter' && key !== ' ') {
+            input.focus();
+          }
+        }
+        container.after(box);
+        box.setAttribute('data-fills', input.id.replace('-proxy-input', ''));
+        if (box.id.indexOf('frm-calc-box') === 0) {
+          popCalcFields(box, true);
+        }
+      }
+      container.addClass('frm-open');
+      box.classList.remove('frm_hidden');
+
+      /**
+       * @since 6.4.1
+       */
+      wp.hooks.doAction('frm_show_inline_modal', box, icon);
+    }
+  }
+  function dismissInlineModal(e) {
+    /*jshint validthis:true */
+    e.preventDefault();
+    this.parentNode.classList.add('frm_hidden');
+    jQuery('.frm-open [data-open="' + this.parentNode.id + '"]').closest('.frm-open').removeClass('frm-open');
+  }
+
+  /**
+   * Close frm-modal-no-dismiss element when clicking outside of it
+   *
+   * @param {Event} event The click event
+   */
+  function closeModalOnOutsideClick(_ref3) {
+    var target = _ref3.target;
+    if (target.closest('.frm-inline-modal.frm-modal-no-dismiss') || target.closest('.frm-show-inline-modal') || target.closest('#frm_adv_info') || target.closest('.frm-token-proxy-input')) {
+      return;
+    }
+
+    // Close all inline modals (without close button) that are not hidden
+    document.querySelectorAll('.frm-inline-modal.frm-modal-no-dismiss:not(.frm_hidden)').forEach(function (modal) {
+      modal.classList.add('frm_hidden');
+      modal.previousElementSibling.classList.remove('frm-open');
+    });
+  }
+  function changeInputtedValue() {
+    /*jshint validthis:true */
+    var i,
+      action = this.getAttribute('data-frmchange').split(',');
+    for (i = 0; i < action.length; i++) {
+      if (action[i] === 'updateOption') {
+        changeHiddenSeparateValue(this);
+      } else if (action[i] === 'updateDefault') {
+        changeDefaultRadioValue(this);
+      } else if (action[i] === 'checkUniqueOpt') {
+        checkUniqueOpt(this);
+      } else {
+        this.value = this.value[action[i]]();
+      }
+    }
+  }
+
+  /**
+   * When the saved value is changed, update the default value radio.
+   */
+  function changeDefaultRadioValue(input) {
+    var parentLi = getOptionParent(input),
+      key = parentLi.getAttribute('data-optkey'),
+      fieldId = getOptionFieldId(parentLi, key),
+      defaultRadio = parentLi.querySelector('input[name="default_value_' + fieldId + '"]');
+    if (defaultRadio !== null) {
+      defaultRadio.value = input.value;
+    }
+  }
+
+  /**
+   * If separate values are not enabled, change the saved value when
+   * the displayed value is changed.
+   */
+  function changeHiddenSeparateValue(input) {
+    var savedVal,
+      parentLi = getOptionParent(input),
+      key = parentLi.getAttribute('data-optkey'),
+      fieldId = getOptionFieldId(parentLi, key),
+      sep = document.getElementById('separate_value_' + fieldId);
+    if (sep !== null && sep.checked === false) {
+      // If separate values are not turned on.
+      savedVal = document.getElementById('field_key_' + fieldId + '-' + key);
+      savedVal.value = input.value;
+      changeDefaultRadioValue(savedVal);
+    }
+  }
+  function getOptionParent(input) {
+    var parentLi = input.parentNode;
+    if (parentLi.tagName !== 'LI') {
+      parentLi = parentLi.parentNode;
+    }
+    return parentLi;
+  }
+  function getOptionFieldId(li, key) {
+    var liId = li.id;
+    return liId.replace('frm_delete_field_', '').replace('-' + key + '_container', '');
+  }
+  function submitBuild() {
+    /*jshint validthis:true */
+    var $thisEle = this;
+    if (showNameYourFormModal()) {
+      return;
+    }
+    preFormSave(this);
+    var $form = jQuery(builderForm);
+    var v = JSON.stringify($form.serializeArray());
+    jQuery(document.getElementById('frm_compact_fields')).val(v);
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_save_form',
+        frm_compact_fields: v,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(msg) {
+        afterFormSave($thisEle);
+        var $postStuff = document.getElementById('post-body-content');
+        var $html = document.createElement('div');
+        $html.setAttribute('class', 'frm_updated_message');
+        $html.innerHTML = msg;
+        $postStuff.insertBefore($html, $postStuff.firstChild);
+        reloadIfAddonActivatedAjaxSubmitOnly();
+      },
+      error: function error() {
+        triggerSubmit(document.getElementById('frm_js_build_form'));
+      }
+    });
+  }
+  function triggerSubmit(form) {
+    var button = form.ownerDocument.createElement('input');
+    button.style.display = 'none';
+    button.type = 'submit';
+    form.appendChild(button).click();
+    form.removeChild(button);
+  }
+  function triggerChange(element) {
+    jQuery(element).trigger('change');
+  }
+  function submitNoAjax() {
+    /*jshint validthis:true */
+    var form;
+    if (showNameYourFormModal()) {
+      return;
+    }
+    preFormSave(this);
+    form = jQuery(builderForm);
+    jQuery(document.getElementById('frm_compact_fields')).val(JSON.stringify(form.serializeArray()));
+    triggerSubmit(document.getElementById('frm_js_build_form'));
+  }
+
+  /**
+   * Display a modal dialog for naming a new form template, if applicable.
+   *
+   * @return {boolean} True if the modal is successfully initialized and displayed; false otherwise.
+   */
+  function showNameYourFormModal() {
+    // Exit early if the 'new_template' URL parameter is not set to 'true'
+    if (!shouldShowNameYourFormNameModal()) {
+      return false;
+    }
+    var modalWidget = initModal('#frm-form-templates-modal', '440px');
+    if (!modalWidget) {
+      return false;
+    }
+
+    // Set the vertical offset for the modal and open it
+    offsetModalY(modalWidget, '72px');
+    modalWidget.dialog('open');
+    return true;
+  }
+
+  /**
+   * Returns true if 'Name Your Form' modal should be displayed.
+   *
+   * @return {Boolean}
+   */
+  function shouldShowNameYourFormNameModal() {
+    var _document$querySelect3;
+    var formNameInput = document.getElementById('frm_form_name');
+    if (formNameInput && formNameInput.value.trim() !== '') {
+      return false;
+    }
+    return 'true' === urlParams.get('new_template') && ((_document$querySelect3 = document.querySelector('#frm_top_bar #frm_bs_dropdown .frm_bstooltip')) === null || _document$querySelect3 === void 0 ? void 0 : _document$querySelect3.textContent.trim()) === frm_admin_js.noTitleText; // eslint-disable-line camelcase
+  }
+
+  /**
+   * Manages event handling for the 'Name your form' modal.
+   *
+   * Attaches click and keydown event listeners to the save button and input field.
+   *
+   * @return {void}
+   */
+  function addFormNameModalEvents() {
+    var saveFormNameButton = document.getElementById('frm-save-form-name-button');
+    var newFormNameInput = document.getElementById('frm_new_form_name_input');
+
+    // Attach click event listener
+    onClickPreventDefault(saveFormNameButton, onSaveFormNameButton);
+
+    // Attach keydown event listener
+    newFormNameInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        onSaveFormNameButton.call(this, event);
+      }
+    });
+  }
+
+  /**
+   * Handles the click event on the save form name button.
+   *
+   * @param {Event} event The click event object.
+   * @return {void}
+   */
+  var onSaveFormNameButton = function onSaveFormNameButton(event) {
+    var newFormName = document.getElementById('frm_new_form_name_input').value.trim();
+
+    // Prepare FormData for the POST request
+    var formData = new FormData();
+    formData.append('form_id', urlParams.get('id'));
+    formData.append('form_name', newFormName);
+
+    // Perform the POST request
+    doJsonPost('rename_form', formData).then(function (data) {
+      // Remove the 'new_template' parameter from the URL and update the browser history
+      urlParams.delete('new_template');
+      currentURL.search = urlParams.toString();
+      history.replaceState({}, '', currentURL.toString());
+      if (null !== document.getElementById('frm_notification_settings')) {
+        document.getElementById('frm_form_name').value = newFormName;
+        document.getElementById('frm_form_key').value = data.form_key;
+      }
+
+      // Trigger the 'Save' button click using jQuery
+      jQuery('#frm-publishing').find('.frm_button_submit').trigger('click');
+    });
+  };
+  function preFormSave(b) {
+    removeWPUnload();
+    if (jQuery('form.inplace_form').length) {
+      jQuery('.inplace_save, .postbox').trigger('click');
+    }
+    if (b.classList.contains('frm_button_submit')) {
+      b.classList.add('frm_loading_form');
+    } else {
+      b.classList.add('frm_loading_button');
+    }
+    b.setAttribute('aria-busy', 'true');
+    adjustFormatInputBeforeSave();
+  }
+
+  /**
+   * Updates the format input based on the selected format type from dropdowns during the form save process.
+   *
+   * @since 6.9
+   *
+   * @return {void}
+   */
+  function adjustFormatInputBeforeSave() {
+    var formatTypes = document.querySelectorAll('.frm_format_dropdown, .frm_phone_type_dropdown');
+    var valueMap = {
+      none: '',
+      international: 'international',
+      currency: 'currency',
+      number: 'number'
+    };
+    formatTypes.forEach(function (formatType) {
+      var value = formatType.value;
+      if (value in valueMap) {
+        var formatInput = document.getElementById("frm_format_".concat(formatType.dataset.fieldId));
+        formatInput.value = valueMap[value];
+      }
+    });
+  }
+  function afterFormSave(button) {
+    button.classList.remove('frm_loading_form');
+    button.classList.remove('frm_loading_button');
+    resetOptionTextDetails();
+    fieldsUpdated = 0;
+    button.setAttribute('aria-busy', 'false');
+    setTimeout(function () {
+      jQuery('.frm_updated_message').fadeOut('slow', function () {
+        this.parentNode.removeChild(this);
+      });
+    }, 5000);
+  }
+  function initUpgradeModal() {
+    var upgradePopup = __webpack_require__(/*! ./upgrade-popup */ "./js/src/admin/upgrade-popup.js");
+    upgradePopup.initUpgradeModal();
+  }
+  function addOneClick(element, type, upgradeLabel) {
+    var upgradePopup = __webpack_require__(/*! ./upgrade-popup */ "./js/src/admin/upgrade-popup.js");
+    upgradePopup.addOneClick(element, type, upgradeLabel);
+  }
+
+  /**
+   * Opens a basic modal with the given title and content.
+   *
+   * @param {Event} event The event object.
+   * @return {void}
+   */
+  function showBasicModal(event) {
+    var _event$target$dataset;
+    var button = (_event$target$dataset = event.target.dataset) !== null && _event$target$dataset !== void 0 && _event$target$dataset.modalTitle ? event.target : event.target.closest('[data-modal-title]');
+    if (!button) {
+      return;
+    }
+    var _button$dataset = button.dataset,
+      modalTitle = _button$dataset.modalTitle,
+      modalContent = _button$dataset.modalContent;
+    if (!modalTitle || !modalContent) {
+      return;
+    }
+    event.preventDefault();
+    frmDom.modal.maybeCreateModal('frmBasicModal', {
+      title: modalTitle,
+      content: div({
+        className: 'inside',
+        child: span(modalContent)
+      })
+    });
+  }
+  function getRequiredLicenseFromTrigger(element) {
+    if (element.dataset.requires) {
+      return element.dataset.requires;
+    }
+    return 'Pro';
+  }
+  function populateUpgradeTab(element) {
+    var title = element.dataset.upgrade;
+    var tab = element.getAttribute('href').replace('#', '');
+    var container = document.querySelector('.frm_' + tab) || document.querySelector('.' + tab);
+    if (!container) {
+      return;
+    }
+    if (container.querySelector('.frm-upgrade-message')) {
+      // Tab has already been populated.
+      return;
+    }
+    var h2 = container.querySelector('h2');
+    h2.style.borderBottom = 'none';
+
+    /* translators: %s: Form Setting section name (ie Form Permissions, Form Scheduling). */
+    h2.textContent = sprintf(__('%s are not installed', 'formidable'), title);
+    container.classList.add('frmcenter');
+    var upgradeModal = document.getElementById('frm_upgrade_modal');
+    appendClonedModalElementToContainer('frm-oneclick');
+    appendClonedModalElementToContainer('frm-addon-status');
+
+    // Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
+    var upgradeModalLink = upgradeModal.querySelector('.frm-upgrade-link');
+    if (upgradeModalLink) {
+      var upgradeButton;
+      var upgradeActions = upgradeModalLink.closest('.frm-upgrade-modal-actions');
+      if (upgradeActions) {
+        upgradeActions = upgradeActions.cloneNode(true);
+        upgradeButton = upgradeActions.querySelector('.frm-upgrade-link');
+      } else {
+        upgradeButton = upgradeModalLink.cloneNode(true);
+      }
+      var level = upgradeButton.querySelector('.license-level');
+      if (level) {
+        level.textContent = getRequiredLicenseFromTrigger(element);
+      }
+      container.appendChild(upgradeActions || upgradeButton);
+
+      // Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
+      if (upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector('.frm-link-secondary')) {
+        container.appendChild(upgradeModalLink.nextElementSibling.cloneNode(true));
+      }
+      appendClonedModalElementToContainer('frm-oneclick-button');
+    }
+    appendClonedModalElementToContainer('frm-upgrade-message');
+    var upgradeLabel = element.dataset.message;
+    if (upgradeLabel === undefined) {
+      upgradeLabel = element.dataset.upgrade;
+    }
+    addOneClick(element, 'tab', upgradeLabel);
+    if (element.dataset.screenshot) {
+      container.appendChild(getScreenshotWrapper(element.dataset.screenshot));
+    }
+    function appendClonedModalElementToContainer(className) {
+      container.appendChild(upgradeModal.querySelector('.' + className).cloneNode(true));
+    }
+  }
+  function getScreenshotWrapper(screenshot) {
+    var folderUrl = frmGlobal.url + '/images/screenshots/';
+    var wrapper = div({
+      className: 'frm-settings-screenshot-wrapper',
+      children: [getToolbar(), div({
+        child: img({
+          src: folderUrl + screenshot
+        })
+      })]
+    });
+    function getToolbar() {
+      var children = getColorIcons();
+      children.push(img({
+        src: frmGlobal.url + '/images/tab.svg'
+      }));
+      return div({
+        className: 'frm-settings-screenshot-toolbar',
+        children: children
+      });
+    }
+    function getColorIcons() {
+      return ['#ED8181', '#EDE06A', '#80BE30'].map(function (color) {
+        var circle = div({
+          className: 'frm-minmax-icon'
+        });
+        circle.style.backgroundColor = color;
+        return circle;
+      });
+    }
+    return wrapper;
+  }
+
+  /* Form settings */
+
+  function showInputIcon(parentClass) {
+    if (typeof parentClass === 'undefined') {
+      parentClass = '';
+    }
+    maybeAddFieldSelection(parentClass);
+    jQuery(parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea').wrap('<span class="frm-with-right-icon"></span>').before('<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>');
+  }
+
+  /**
+   * For reverse compatibility. Check for fields that were
+   * using the old sidebar.
+   */
+  function maybeAddFieldSelection(parentClass) {
+    var i,
+      missingClass = jQuery(parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_message, ' + parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_to, ' + parentClass + ' :not(.frm_has_shortcodes) .frm_not_email_subject');
+    for (i = 0; i < missingClass.length; i++) {
+      missingClass[i].parentNode.classList.add('frm_has_shortcodes');
+    }
+  }
+  function showSuccessOpt() {
+    /*jshint validthis:true */
+    var c = 'success';
+    if (this.name === 'options[edit_action]') {
+      c = 'edit';
+    }
+    var v = jQuery(this).val();
+    jQuery('.' + c + '_action_box').hide();
+    if (v === 'redirect') {
+      jQuery('.' + c + '_action_redirect_box.' + c + '_action_box').fadeIn('slow');
+    } else if (v === 'page') {
+      jQuery('.' + c + '_action_page_box.' + c + '_action_box').fadeIn('slow');
+    } else {
+      jQuery('.' + c + '_action_message_box.' + c + '_action_box').fadeIn('slow');
+    }
+  }
+  function copyFormAction(event) {
+    if (waitForActionToLoadBeforeCopy(event.target)) {
+      return;
+    }
+    var targetSettings = event.target.closest('.frm_form_action_settings');
+    var wysiwygs = targetSettings.querySelectorAll('.wp-editor-area');
+    if (wysiwygs.length) {
+      // Temporary remove TinyMCE before cloning to avoid TinyMCE conflicts.
+      wysiwygs.forEach(function (wysiwyg) {
+        tinymce.EditorManager.execCommand('mceRemoveEditor', true, wysiwyg.id);
+      });
+    }
+    var $action = jQuery(targetSettings).clone();
+    var currentID = $action.attr('id').replace('frm_form_action_', '');
+    var newID = newActionId(currentID);
+    $action.find('.frm_action_id, .frm-btn-group').remove();
+    $action.find('input[name$="[' + currentID + '][ID]"]').val('');
+    $action.find('.widget-inside').hide();
+
+    // the .html() gets original values, so they need to be set
+    $action.find('input[type=text], textarea, input[type=number]').prop('defaultValue', function () {
+      return this.value;
+    });
+    $action.find('input[type=checkbox], input[type=radio]').prop('defaultChecked', function () {
+      return this.checked;
+    });
+    var rename = new RegExp('\\[' + currentID + '\\]', 'g');
+    var reid = new RegExp('_' + currentID + '"', 'g');
+    var reclass = new RegExp('-' + currentID + '"', 'g');
+    var revalue = new RegExp('"' + currentID + '"', 'g'); // if a field id matches, this could cause trouble
+
+    var html = $action.html().replace(rename, '[' + newID + ']').replace(reid, '_' + newID + '"');
+    html = html.replace(reclass, '-' + newID + '"').replace(revalue, '"' + newID + '"');
+    var newAction = div({
+      id: 'frm_form_action_' + newID,
+      className: $action.get(0).className
+    });
+    newAction.setAttribute('data-actionkey', newID);
+    newAction.innerHTML = html;
+    newAction.querySelectorAll('.wp-editor-wrap, .wp-editor-wrap *').forEach(function (element) {
+      if ('string' === typeof element.className) {
+        element.className = element.className.replace(currentID, newID);
+      }
+      element.id = element.id.replace(currentID, newID);
+    });
+    newAction.classList.remove('open');
+    document.getElementById('frm_notification_settings').appendChild(newAction);
+    if (wysiwygs.length) {
+      // Re-initialize the original wysiwyg which was removed before cloning.
+      wysiwygs.forEach(function (wysiwyg) {
+        frmDom.wysiwyg.init(wysiwyg);
+      });
+      newAction.querySelectorAll('.wp-editor-area').forEach(function (wysiwyg) {
+        frmDom.wysiwyg.init(wysiwyg);
+      });
+    }
+    if (newAction.classList.contains('frm_single_on_submit_settings')) {
+      var autocompleteInput = newAction.querySelector('input.frm-page-search');
+      if (autocompleteInput) {
+        initAutocomplete(newAction);
+      }
+    }
+    initiateMultiselect();
+    var hookName = 'frm_after_duplicate_action';
+    wp.hooks.doAction(hookName, newAction);
+  }
+  function waitForActionToLoadBeforeCopy(element) {
+    var $trigger = jQuery(element),
+      $original = $trigger.closest('.frm_form_action_settings'),
+      $inside = $original.find('.widget-inside'),
+      $top;
+    if ($inside.find('p, div, table').length) {
+      return false;
+    }
+    $top = $original.find('.widget-top');
+    $top.on('frm-action-loaded', function () {
+      $trigger.trigger('click');
+      $original.removeClass('open');
+      $inside.hide();
+    });
+    $top.trigger('click');
+    return true;
+  }
+  function newActionId(currentID) {
+    var newID = parseInt(currentID, 10) + 11;
+    var exists = document.getElementById('frm_form_action_' + newID);
+    if (exists !== null) {
+      newID++;
+      newID = newActionId(newID);
+    }
+    return newID;
+  }
+  function addFormAction() {
+    /*jshint validthis:true */
+    var type = jQuery(this).data('actiontype');
+    if (isAtLimitForActionType(type)) {
+      return;
+    }
+    var actionId = getNewActionId();
+    var formId = thisFormId;
+    var placeholderSetting = document.createElement('div');
+    placeholderSetting.classList.add('frm_single_' + type + '_settings');
+    var actionsList = document.getElementById('frm_notification_settings');
+    actionsList.appendChild(placeholderSetting);
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_form_action',
+        type: type,
+        list_id: actionId,
+        form_id: formId,
+        nonce: frmGlobal.nonce
+      },
+      success: handleAddFormActionSuccess
+    });
+    function handleAddFormActionSuccess(html) {
+      fieldUpdated();
+      placeholderSetting.remove();
+      closeOpenActions();
+      var newActionContainer = div();
+      newActionContainer.innerHTML = html;
+      var widgetTop = newActionContainer.querySelector('.widget-top');
+      Array.from(newActionContainer.children).forEach(function (child) {
+        return actionsList.appendChild(child);
+      });
+      jQuery('.frm_form_action_settings').fadeIn('slow');
+      var newAction = document.getElementById('frm_form_action_' + actionId);
+      newAction.classList.add('open');
+      document.getElementById('post-body-content').scroll({
+        top: newAction.offsetTop + 10,
+        left: 0,
+        behavior: 'smooth'
+      });
+
+      // Check if icon should be active
+      checkActiveAction(type);
+      showInputIcon('#frm_form_action_' + actionId);
+      initiateMultiselect();
+      initAutocomplete(newAction);
+      if (widgetTop) {
+        jQuery(widgetTop).trigger('frm-action-loaded');
+      }
+
+      /**
+       * Fires after added a new form action.
+       *
+       * @since 5.5.4
+       *
+       * @param {HTMLElement} formAction Form action element.
+       */
+      frmAdminBuild.hooks.doAction('frm_added_form_action', newAction);
+    }
+  }
+  function closeOpenActions() {
+    document.querySelectorAll('.frm_form_action_settings.open').forEach(function (setting) {
+      return setting.classList.remove('open');
+    });
+  }
+  function toggleActionGroups() {
+    /*jshint validthis:true */
+    var actions = document.getElementById('frm_email_addon_menu').classList,
+      search = document.getElementById('actions-search-input');
+    if (actions.contains('frm-all-actions')) {
+      actions.remove('frm-all-actions');
+      actions.add('frm-limited-actions');
+    } else {
+      actions.add('frm-all-actions');
+      actions.remove('frm-limited-actions');
+    }
+
+    // Reset search.
+    search.value = '';
+    triggerEvent(search, 'input');
+  }
+  function getNewActionId() {
+    var actionSettings = document.querySelectorAll('.frm_form_action_settings'),
+      len = getNewRowId(actionSettings, 'frm_form_action_');
+    if (typeof document.getElementById('frm_form_action_' + len) !== 'undefined') {
+      len = len + 100;
+    }
+    if (lastNewActionIdReturned >= len) {
+      len = lastNewActionIdReturned + 1;
+    }
+    lastNewActionIdReturned = len;
+    return len;
+  }
+  function clickAction(obj) {
+    var $thisobj = jQuery(obj);
+    if (obj.className.indexOf('selected') !== -1) {
+      return;
+    }
+    if (obj.className.indexOf('edit_field_type_end_divider') !== -1 && $thisobj.closest('.edit_field_type_divider').hasClass('no_repeat_section')) {
+      return;
+    }
+    deselectFields();
+    $thisobj.addClass('selected');
+    showFieldOptions(obj);
+  }
+
+  /**
+   * When a field is selected, show the field settings in the sidebar.
+   */
+  function showFieldOptions(obj) {
+    var _document$querySelect4;
+    var i,
+      singleField,
+      fieldId = obj.getAttribute('data-fid'),
+      fieldType = obj.getAttribute('data-type'),
+      allFieldSettings = document.querySelectorAll('.frm-single-settings:not(.frm_hidden)');
+    for (i = 0; i < allFieldSettings.length; i++) {
+      allFieldSettings[i].classList.add('frm_hidden');
+    }
+    singleField = document.getElementById('frm-single-settings-' + fieldId);
+    moveFieldSettings(singleField);
+    if (fieldType && 'quantity' === fieldType) {
+      popProductFields(jQuery(singleField).find('.frmjs_prod_field_opt')[0]);
+    }
+
+    // Scroll settings panel to top
+    (_document$querySelect4 = document.querySelector('.frm-settings-panel.frm-scrollbar-wrapper')) === null || _document$querySelect4 === void 0 || _document$querySelect4.scrollTo({
+      top: 0,
+      behavior: 'instant'
+    });
+    singleField.classList.remove('frm_hidden');
+    document.getElementById('frm-options-panel-tab').click();
+    var editor = singleField.querySelector('.wp-editor-area');
+    if (editor) {
+      frmDom.wysiwyg.init(editor, {
+        setupCallback: setupTinyMceEventHandlers
+      });
+    }
+    wp.hooks.doAction('frmShowedFieldSettings', obj, singleField);
+    maybeAddShortcodesModalTriggerIcon(fieldType, fieldId, singleField);
+  }
+  function maybeAddShortcodesModalTriggerIcon(fieldType, fieldId, singleField) {
+    var _singleField$querySel;
+    if (!shouldAddShortcodesModalTriggerIcon(fieldType)) {
+      return;
+    }
+    var fieldSettingsSelector = '#frm-single-settings-' + fieldId;
+    if (document.querySelector(fieldSettingsSelector + ' .frm-show-box')) {
+      return;
+    }
+    (_singleField$querySel = singleField.querySelector('.wp-editor-container')) === null || _singleField$querySel === void 0 || _singleField$querySel.classList.add('frm_has_shortcodes');
+    var wrapTextareaWithIconContainer = function wrapTextareaWithIconContainer() {
+      var textareas = document.querySelectorAll(fieldSettingsSelector + ' .frm_has_shortcodes textarea');
+      textareas.forEach(function (textarea) {
+        var wrapperSpan = span({
+          className: 'frm-with-right-icon'
+        });
+        textarea.parentNode.insertBefore(wrapperSpan, textarea);
+        wrapperSpan.appendChild(createModalTriggerIcon());
+        wrapperSpan.appendChild(textarea);
+      });
+    };
+    var createModalTriggerIcon = function createModalTriggerIcon() {
+      return frmDom.svg({
+        href: '#frm_more_horiz_solid_icon',
+        classList: ['frm-show-box']
+      });
+    };
+    wrapTextareaWithIconContainer();
+  }
+  function shouldAddShortcodesModalTriggerIcon(fieldType) {
+    var fieldsWithShortcodesBox = wp.hooks.applyFilters('frm_fields_with_shortcode_popup', ['html']);
+    return fieldsWithShortcodesBox.includes(fieldType);
+  }
+  function setupTinyMceEventHandlers(editor) {
+    editor.on('Change', function () {
+      handleTinyMceChange(editor);
+    });
+  }
+  function handleTinyMceChange(editor) {
+    if (!isTinyMceActive() || tinyMCE.activeEditor.isHidden()) {
+      return;
+    }
+    editor.targetElm.value = editor.getContent();
+    jQuery(editor.targetElm).trigger('change');
+  }
+  function isTinyMceActive() {
+    var activeSettings, wrapper;
+    activeSettings = document.querySelector('.frm-single-settings:not(.frm_hidden)');
+    if (!activeSettings) {
+      return false;
+    }
+    wrapper = activeSettings.querySelector('.wp-editor-wrap');
+    return null !== wrapper && wrapper.classList.contains('tmce-active');
+  }
+
+  /**
+   * Move the settings to the sidebar the first time they are changed or selected.
+   * Keep the end marker at the end of the form.
+   */
+  function moveFieldSettings(singleField) {
+    var self = this;
+    if (singleField === null) {
+      // The field may have not been loaded yet via ajax.
+      return;
+    }
+    this.fragment = document.createDocumentFragment();
+    this.initOnceInAllInstances = function () {
+      if ('undefined' !== typeof moveFieldSettings.prototype.endMarker) {
+        return;
+      }
+      // perform a single search in the DOM and use it across all moveFieldSettings instances
+      moveFieldSettings.prototype.endMarker = document.getElementById('frm-end-form-marker');
+    };
+    this.append = function (field) {
+      var classname = null !== field ? field.parentElement.classList : '';
+      if (null === field || !classname.contains('frm_field_box') && !classname.contains('divider_section_only')) {
+        return;
+      }
+      self.fragment.appendChild(field);
+    };
+    this.moveFields = function () {
+      builderForm.insertBefore(self.fragment, moveFieldSettings.prototype.endMarker);
+    };
+    this.initOnceInAllInstances();
+
+    // Move the field if function is called as function with a singleField passed as arg.
+    // In this particular case only 1 field is needed to be moved so the field will get instantly moved.
+    // "singleField" may be undefined when it's called as a constructor instead of a function. Use the constructor to add multiple fields which are passed through "append" and move these all at once via "moveFields".
+    if ('undefined' !== typeof singleField) {
+      this.append(singleField);
+      this.moveFields();
+      return;
+    }
+    return {
+      append: this.append,
+      moveFields: this.moveFields
+    };
+  }
+  function showEmailRow() {
+    /*jshint validthis:true */
+    var actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey');
+    var rowType = this.getAttribute('data-emailrow');
+    jQuery('#frm_form_action_' + actionKey + ' .frm_' + rowType + '_row').fadeIn('slow');
+    jQuery(this).fadeOut('slow');
+  }
+  function hideEmailRow() {
+    /*jshint validthis:true */
+    var actionBox = jQuery(this).closest('.frm_form_action_settings'),
+      rowType = this.getAttribute('data-emailrow'),
+      emailRowSelector = '.frm_' + rowType + '_row',
+      emailButtonSelector = '.frm_' + rowType + '_button';
+    jQuery(actionBox).find(emailButtonSelector).fadeIn('slow');
+    jQuery(actionBox).find(emailRowSelector).fadeOut('slow', function () {
+      jQuery(actionBox).find(emailRowSelector + ' input').val('');
+    });
+  }
+  function showEmailWarning() {
+    /*jshint validthis:true */
+    var actionBox = jQuery(this).closest('.frm_form_action_settings'),
+      emailRowSelector = '.frm_from_to_match_row',
+      fromVal = actionBox.find('input[name$="[post_content][from]"]').val(),
+      toVal = actionBox.find('input[name$="[post_content][email_to]"]').val();
+    if (fromVal === toVal) {
+      jQuery(actionBox).find(emailRowSelector).fadeIn('slow');
+    } else {
+      jQuery(actionBox).find(emailRowSelector).fadeOut('slow');
+    }
+  }
+  function checkActiveAction(type) {
+    var actionTriggers = document.querySelectorAll('.frm_' + type + '_action');
+    if (isAtLimitForActionType(type)) {
+      var addAlreadyUsedClass = getLimitForActionType(type) > 0;
+      markActionTriggersInactive(actionTriggers, addAlreadyUsedClass);
+      return;
+    }
+    markActionTriggersActive(actionTriggers);
+  }
+  function markActionTriggersActive(triggers) {
+    triggers.forEach(function (trigger) {
+      if (trigger.querySelector('.frm_show_upgrade')) {
+        // Prevent disabled action becoming active.
+        return;
+      }
+      trigger.classList.remove('frm_inactive_action', 'frm_already_used');
+      trigger.classList.add('frm_active_action');
+    });
+  }
+  function markActionTriggersInactive(triggers, addAlreadyUsedClass) {
+    triggers.forEach(function (trigger) {
+      trigger.classList.remove('frm_active_action');
+      trigger.classList.add('frm_inactive_action');
+      if (addAlreadyUsedClass) {
+        trigger.classList.add('frm_already_used');
+      }
+    });
+  }
+  function isAtLimitForActionType(type) {
+    var atLimit = getNumberOfActionsForType(type) >= getLimitForActionType(type);
+    var hookName = 'frm_action_at_limit';
+    var hookArgs = {
+      type: type
+    };
+    atLimit = wp.hooks.applyFilters(hookName, atLimit, hookArgs);
+    return atLimit;
+  }
+  function getLimitForActionType(type) {
+    return parseInt(jQuery('.frm_' + type + '_action').data('limit'), 10);
+  }
+  function getNumberOfActionsForType(type) {
+    return jQuery('.frm_single_' + type + '_settings').length;
+  }
+  function actionLimitMessage() {
+    var message = frmAdminJs.only_one_action;
+    var limit = this.dataset.limit;
+    if ('undefined' !== typeof limit) {
+      limit = parseInt(limit);
+      if (limit > 1) {
+        message = message.replace(1, limit).trim();
+      } else {
+        message += ' ' + frmAdminJs.edit_action_text;
+      }
+    }
+    infoModal(message);
+  }
+  function addFormLogicRow() {
+    /*jshint validthis:true */
+    var id = jQuery(this).data('emailkey');
+    var type = jQuery(this).closest('.frm_form_action_settings').find('.frm_action_name').val();
+    var formId = document.getElementById('form_id').value;
+    var logicRowsContainer = document.getElementById('frm_logic_row_' + id);
+    var logicRows = logicRowsContainer.querySelectorAll('.frm_logic_row');
+    var newRowID = getNewRowId(logicRows, 'frm_logic_' + id + '_');
+    var placeholder = div({
+      id: 'frm_logic_' + id + '_' + newRowID,
+      className: 'frm_logic_row frm_hidden'
+    });
+    logicRowsContainer.appendChild(placeholder);
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_form_logic_row',
+        email_id: id,
+        form_id: formId,
+        meta_name: newRowID,
+        type: type,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(html) {
+        jQuery(document.getElementById('logic_link_' + id)).fadeOut('slow', function () {
+          placeholder.insertAdjacentHTML('beforebegin', html);
+          placeholder.remove();
+
+          // Show conditional logic options after "Add Conditional Logic" is clicked.
+          jQuery(logicRowsContainer).parent('.frm_logic_rows').fadeIn('slow');
+        });
+      }
+    });
+    return false;
+  }
+  function checkDupPost() {
+    /*jshint validthis:true */
+    var postField = jQuery('select.frm_single_post_field');
+    postField.css('border-color', '');
+    var $t = this;
+    var v = jQuery($t).val();
+    if (v === '' || v === 'checkbox') {
+      return false;
+    }
+    postField.each(function () {
+      if (jQuery(this).val() === v && this.name !== $t.name) {
+        this.style.borderColor = 'red';
+        jQuery($t).val('');
+        infoModal(frmAdminJs.field_already_used);
+        return false;
+      }
+    });
+  }
+  function togglePostContent() {
+    /*jshint validthis:true */
+    var v = jQuery(this).val();
+    if ('' === v) {
+      jQuery('.frm_post_content_opt, select.frm_dyncontent_opt').hide().val('');
+      jQuery('.frm_dyncontent_opt').hide();
+    } else if ('post_content' === v) {
+      jQuery('.frm_post_content_opt').show();
+      jQuery('.frm_dyncontent_opt').hide();
+      jQuery('select.frm_dyncontent_opt').val('');
+    } else {
+      jQuery('.frm_post_content_opt').hide().val('');
+      jQuery('select.frm_dyncontent_opt, .frm_form_field.frm_dyncontent_opt').show();
+    }
+  }
+  function fillDyncontent() {
+    /*jshint validthis:true */
+    var v = jQuery(this).val();
+    var $dyn = jQuery(document.getElementById('frm_dyncontent'));
+    if ('' === v || 'new' === v) {
+      $dyn.val('');
+      jQuery('.frm_dyncontent_opt').show();
+    } else {
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_display_get_content',
+          id: v,
+          nonce: frmGlobal.nonce
+        },
+        success: function success(val) {
+          $dyn.val(val);
+          jQuery('.frm_dyncontent_opt').show();
+        }
+      });
+    }
+  }
+  function switchPostType() {
+    /*jshint validthis:true */
+    // update all rows of categories/taxonomies
+    var curSelect,
+      newSelect,
+      catRows = document.getElementById('frm_posttax_rows').childNodes,
+      postParentField = document.querySelector('.frm_post_parent_field'),
+      postMenuOrderField = document.querySelector('.frm_post_menu_order_field'),
+      postType = this.value;
+
+    // Get new category/taxonomy options
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_replace_posttax_options',
+        post_type: postType,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(html) {
+        // Loop through each category row, and replace the first dropdown
+        for (i = 0; i < catRows.length; i++) {
+          // Check if current element is a div
+          if (catRows[i].tagName !== 'DIV') {
+            continue;
+          }
+
+          // Get current category select
+          curSelect = catRows[i].getElementsByTagName('select')[0];
+
+          // Set up new select
+          newSelect = document.createElement('select');
+          newSelect.innerHTML = html;
+          newSelect.className = curSelect.className;
+          newSelect.name = curSelect.name;
+
+          // Replace the old select with the new select
+          catRows[i].replaceChild(newSelect, curSelect);
+        }
+      }
+    });
+
+    // Get new post parent option.
+    if (postParentField) {
+      getActionOption(postParentField, postType, 'frm_get_post_parent_option', function (response, optName) {
+        // The replaced string is declared in FrmProFormActionController::ajax_get_post_menu_order_option() in the pro version.
+        postParentField.querySelector('.frm_post_parent_opt_wrapper').innerHTML = response.replaceAll('REPLACETHISNAME', optName);
+        initAutocomplete(postParentField);
+      });
+    }
+    if (postMenuOrderField) {
+      getActionOption(postMenuOrderField, postType, 'frm_should_use_post_menu_order_option');
+    }
+  }
+  function getActionOption(field, postType, action, successHandler) {
+    var opt = field.querySelector('.frm_autocomplete_value_input') || field.querySelector('select'),
+      optName = opt.getAttribute('name');
+    jQuery.ajax({
+      url: ajaxurl,
+      method: 'POST',
+      data: {
+        action: action,
+        post_type: postType,
+        _wpnonce: frmGlobal.nonce
+      },
+      success: function success(response) {
+        if ('string' !== typeof response) {
+          console.error(response);
+          return;
+        }
+        if ('0' === response) {
+          // This post type does not support this field.
+          field.classList.add('frm_hidden');
+          field.value = '';
+          return;
+        }
+        field.classList.remove('frm_hidden');
+        if ('function' === typeof successHandler) {
+          successHandler(response, optName);
+        }
+      },
+      error: function error(response) {
+        return console.error(response);
+      }
+    });
+  }
+  function addPosttaxRow() {
+    /*jshint validthis:true */
+    addPostRow('tax', this);
+  }
+  function addPostmetaRow() {
+    /*jshint validthis:true */
+    addPostRow('meta', this);
+  }
+  function addPostRow(type, button) {
+    var name,
+      id = jQuery('input[name="id"]').val(),
+      settings = jQuery(button).closest('.frm_form_action_settings'),
+      key = settings.data('actionkey'),
+      postType = settings.find('.frm_post_type').val(),
+      metaName = 0,
+      postTypeRows = document.querySelectorAll('.frm_post' + type + '_row');
+    if (postTypeRows.length) {
+      name = postTypeRows[postTypeRows.length - 1].id.replace('frm_post' + type + '_', '');
+      if (isNumeric(name)) {
+        metaName = 1 + parseInt(name, 10);
+      } else {
+        metaName = 1;
+      }
+    }
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_post' + type + '_row',
+        form_id: id,
+        meta_name: metaName,
+        tax_key: metaName,
+        post_type: postType,
+        action_key: key,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(html) {
+        var cfOpts, optIndex;
+        jQuery(document.getElementById('frm_post' + type + '_rows')).append(html);
+        jQuery('.frm_add_post' + type + '_row.button').hide();
+        if (type === 'meta') {
+          jQuery('.frm_name_value').show();
+          cfOpts = document.querySelectorAll('.frm_toggle_cf_opts');
+          for (optIndex = 0; optIndex < cfOpts.length - 1; ++optIndex) {
+            cfOpts[optIndex].style.display = 'none';
+          }
+        } else if (type === 'tax') {
+          jQuery('.frm_posttax_labels').show();
+        }
+      }
+    });
+  }
+  function isNumeric(value) {
+    return !isNaN(parseFloat(value)) && isFinite(value);
+  }
+  function changePosttaxRow() {
+    /*jshint validthis:true */
+    if (!jQuery(this).closest('.frm_posttax_row').find('.frm_posttax_opt_list').length) {
+      return;
+    }
+    jQuery(this).closest('.frm_posttax_row').find('.frm_posttax_opt_list').html('<div class="spinner frm_spinner" style="display:block"></div>');
+    var postType = jQuery(this).closest('.frm_form_action_settings').find('select[name$="[post_content][post_type]"]').val(),
+      actionKey = jQuery(this).closest('.frm_form_action_settings').data('actionkey'),
+      taxKey = jQuery(this).closest('.frm_posttax_row').attr('id').replace('frm_posttax_', ''),
+      metaName = jQuery(this).val(),
+      showExclude = jQuery(document.getElementById(taxKey + '_show_exclude')).is(':checked') ? 1 : 0,
+      fieldId = jQuery('select[name$="[post_category][' + taxKey + '][field_id]"]').val(),
+      id = jQuery('input[name="id"]').val();
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      data: {
+        action: 'frm_add_posttax_row',
+        form_id: id,
+        post_type: postType,
+        tax_key: taxKey,
+        action_key: actionKey,
+        meta_name: metaName,
+        field_id: fieldId,
+        show_exclude: showExclude,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(html) {
+        var $tax = jQuery(document.getElementById('frm_posttax_' + taxKey));
+        $tax.replaceWith(html);
+      }
+    });
+  }
+  function toggleCfOpts() {
+    /*jshint validthis:true */
+    var row = jQuery(this).closest('.frm_postmeta_row');
+    var cancel = row.find('.frm_cancelnew');
+    var select = row.find('.frm_enternew');
+    if (row.find('select.frm_cancelnew').is(':visible')) {
+      cancel.hide();
+      select.show();
+    } else {
+      cancel.show();
+      select.hide();
+    }
+    row.find('input.frm_enternew, select.frm_cancelnew').val('');
+    return false;
+  }
+  function toggleFormOpts() {
+    /*jshint validthis:true */
+    var changedOpt = jQuery(this);
+    var val = changedOpt.val();
+    if (changedOpt.attr('type') === 'checkbox') {
+      if (this.checked === false) {
+        val = '';
+      }
+    }
+    var toggleClass = changedOpt.data('toggleclass');
+    if (val === '') {
+      jQuery('.' + toggleClass).hide();
+    } else {
+      jQuery('.' + toggleClass).show();
+      jQuery('.hide_' + toggleClass + '_' + val).hide();
+    }
+  }
+  function submitSettings() {
+    if (showNameYourFormModal()) {
+      return;
+    }
+
+    /*jshint validthis:true */
+    preFormSave(this);
+    triggerSubmit(document.querySelector('.frm_form_settings'));
+  }
+
+  /* Customization Panel */
+  function insertCode(e) {
+    /*jshint validthis:true */
+    e.preventDefault();
+    insertFieldCode(jQuery(this), this.getAttribute('data-code'));
+    return false;
+  }
+  function insertFieldCode(element, variable) {
+    var rich = false,
+      elementId = element;
+    if (_typeof(element) === 'object') {
+      if (element.hasClass('frm_noallow')) {
+        return;
+      }
+      elementId = jQuery(element).closest('[data-fills]').attr('data-fills');
+      if (typeof elementId === 'undefined') {
+        elementId = element.closest('div').attr('class');
+        if (typeof elementId !== 'undefined') {
+          elementId = elementId.split(' ')[1];
+        }
+      }
+    }
+    if (typeof elementId === 'undefined') {
+      var active = document.activeElement;
+      if (active.type === 'search') {
+        // If the search field has focus, find the correct field.
+        elementId = active.id.replace('-search-input', '');
+        if (elementId.match(/\d/gi) === null) {
+          active = jQuery('.frm-single-settings:visible .' + elementId);
+          elementId = active.attr('id');
+        }
+      } else {
+        elementId = active.id;
+      }
+    }
+    if (elementId) {
+      rich = jQuery('#wp-' + elementId + '-wrap.wp-editor-wrap').length > 0;
+    }
+    var contentBox = jQuery(document.getElementById(elementId));
+    if (typeof element.attr('data-shortcode') === 'undefined' && (!contentBox.length || typeof contentBox.attr('data-shortcode') === 'undefined')) {
+      // this helps to exclude those that don't want shortcode-like inserted content e.g. frm-pro's summary field
+      var doShortcode = element.parents('ul.frm_code_list').attr('data-shortcode');
+      if (doShortcode === 'undefined' || doShortcode !== 'no') {
+        variable = '[' + variable + ']';
+      }
+    }
+    if (rich) {
+      wpActiveEditor = elementId;
+    }
+    if (!contentBox.length) {
+      return false;
+    }
+    if (variable === '[default-html]' || variable === '[default-plain]') {
+      var p = 0;
+      if (variable === '[default-plain]') {
+        p = 1;
+      }
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_get_default_html',
+          form_id: jQuery('input[name="id"]').val(),
+          plain_text: p,
+          nonce: frmGlobal.nonce
+        },
+        elementId: elementId,
+        success: function success(msg) {
+          if (rich) {
+            var _p = document.createElement('p');
+            _p.innerText = msg;
+            send_to_editor(_p.innerHTML);
+          } else {
+            insertContent(contentBox, msg);
+          }
+        }
+      });
+    } else {
+      variable = maybeAddSanitizeUrlToShortcodeVariable(variable, element, contentBox);
+      if (rich) {
+        send_to_editor(variable);
+      } else {
+        insertContent(contentBox, variable);
+      }
+    }
+    return false;
+  }
+  function maybeAddSanitizeUrlToShortcodeVariable(variable, element, contentBox) {
+    if ('object' !== _typeof(element) || !(element instanceof jQuery) || 0 !== contentBox[0].id.indexOf('success_url_')) {
+      return variable;
+    }
+    element = element[0];
+    if (!element.closest('#frm-insert-fields-box')) {
+      // Only add sanitize_url=1 to field shortcodes.
+      return variable;
+    }
+    if (!element.parentNode.classList.contains('frm_insert_url')) {
+      variable = variable.replace(']', ' sanitize_url=1]');
+    }
+    return variable;
+  }
+  function insertContent(contentBox, variable) {
+    if (document.selection) {
+      contentBox[0].focus();
+      document.selection.createRange().text = variable;
+    } else {
+      obj = contentBox[0];
+      var e = obj.selectionEnd;
+      variable = maybeFormatInsertedContent(contentBox, variable, obj.selectionStart, e);
+      obj.value = obj.value.substr(0, obj.selectionStart) + variable + obj.value.substr(obj.selectionEnd, obj.value.length);
+      var _s = e + variable.length;
+      maybeRemoveLayoutClasses(obj, variable);
+      obj.focus();
+      obj.setSelectionRange(_s, _s);
+    }
+    triggerChange(contentBox);
+  }
+
+  /**
+   * When a layout class is added, remove any previous layout classes to avoid conflicts.
+   * We only expect one layout class to exist for a given field.
+   * For example, if a field has frm_half and we set it to frm_third, frm_half will be removed.
+   *
+   * @since 6.11
+   *
+   * @param {HTMLElement} obj
+   * @param {string}      variable
+   * @return {void}
+   */
+  function maybeRemoveLayoutClasses(obj, variable) {
+    if (!obj.classList.contains('frm_classes') || !isALayoutClass(variable)) {
+      return;
+    }
+    var removeClasses = obj.value.split(' ').filter(isALayoutClass);
+    if (removeClasses.length) {
+      obj.value = maybeRemoveClasses(obj.value, removeClasses, variable.trim());
+    }
+  }
+
+  /**
+   * Check if a given class is a layout class.
+   *
+   * @since 6.11
+   *
+   * @param {string} className
+   * @return {boolean}
+   */
+  function isALayoutClass(className) {
+    var layoutClasses = ['frm_half', 'frm_third', 'frm_two_thirds', 'frm_fourth', 'frm_three_fourths', 'frm_fifth', 'frm_sixth', 'frm2', 'frm3', 'frm4', 'frm6', 'frm8', 'frm9', 'frm10', 'frm12'];
+    return layoutClasses.includes(className.trim());
+  }
+
+  /**
+   * @since 6.11
+   *
+   * @param {string} beforeValue
+   * @param {Array}  removeClasses
+   * @param {string} variable
+   * @return {string}
+   */
+  function maybeRemoveClasses(beforeValue, removeClasses, variable) {
+    var currentClasses = beforeValue.split(' ').filter(function (currentClass) {
+      currentClass = currentClass.trim();
+      return currentClass.length && !removeClasses.includes(currentClass);
+    });
+    if (!currentClasses.includes(variable)) {
+      currentClasses.push(variable);
+    }
+    return currentClasses.join(' ');
+  }
+  function maybeFormatInsertedContent(input, textToInsert, selectionStart, selectionEnd) {
+    var separator = input.data('sep');
+    if (undefined === separator) {
+      return textToInsert;
+    }
+    var value = input.val();
+    if (!value.trim().length) {
+      return textToInsert;
+    }
+    var startPattern = new RegExp(separator + '\\s*$');
+    var endPattern = new RegExp('^\\s*' + separator);
+    if (value.substr(0, selectionStart).trim().length && false === startPattern.test(value.substr(0, selectionStart))) {
+      textToInsert = separator + textToInsert;
+    }
+    if (value.substr(selectionEnd, value.length).trim().length && false === endPattern.test(value.substr(selectionEnd, value.length))) {
+      textToInsert += separator;
+    }
+    return textToInsert;
+  }
+  function resetLogicBuilder() {
+    /*jshint validthis:true */
+    var id = document.getElementById('frm-id-condition'),
+      key = document.getElementById('frm-key-condition');
+    if (this.value === 'id') {
+      id.classList.remove('frm_hidden');
+      key.classList.add('frm_hidden');
+      triggerEvent(key, 'change');
+    } else {
+      id.classList.add('frm_hidden');
+      key.classList.remove('frm_hidden');
+      triggerEvent(id, 'change');
+    }
+  }
+  function setLogicExample() {
+    var field,
+      code,
+      idKey = document.getElementById('frm-id-key-condition-id').checked ? 'frm-id-condition' : 'frm-key-condition',
+      is = document.getElementById('frm-is-condition').value,
+      text = document.getElementById('frm-text-condition').value,
+      result = document.getElementById('frm-insert-condition');
+    idKey = document.getElementById(idKey);
+    field = idKey.options[idKey.selectedIndex].value;
+    code = 'if ' + field + ' ' + is + '="' + text + '"]';
+    result.setAttribute('data-code', code + frmAdminJs.conditional_text + '[/if ' + field);
+    result.innerHTML = '[' + code + '[/if ' + field + ']';
+  }
+  function maybeShowModal(input) {
+    var moreIcon;
+    if (input.parentNode.parentNode.classList.contains('frm_has_shortcodes')) {
+      hideShortcodes();
+      moreIcon = getIconForInput(input);
+      if (moreIcon.tagName === 'use') {
+        moreIcon = moreIcon.firstElementChild;
+        if (moreIcon.getAttributeNS('http://www.w3.org/1999/xlink', 'href').indexOf('frm_close_icon') === -1) {
+          showShortcodeBox(moreIcon, 'nofocus');
+        }
+      } else if (!moreIcon.classList.contains('frm_close_icon')) {
+        showShortcodeBox(moreIcon, 'nofocus');
+      }
+    }
+  }
+  function showShortcodes(e) {
+    /*jshint validthis:true */
+    e.preventDefault();
+    e.stopPropagation();
+    showShortcodeBox(this);
+  }
+
+  /**
+   * Handles 'change' event on the document.
+   *
+   * @since 6.16.3
+   *
+   * @param {Event} event
+   * @return {void}
+   */
+  function handleBuilderChangeEvent(event) {
+    maybeShowSaveAndReloadModal(event.target);
+  }
+
+  /**
+   * Shows 'Save and Reload' modal if the target field's type is changed.
+   *
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} target
+   * @return {void}
+   */
+  function maybeShowSaveAndReloadModal(target) {
+    var _document$querySelect5;
+    if (!target.id.startsWith('field_options_type_')) {
+      return;
+    }
+    var idParts = target.id.split('_');
+    var fieldId = idParts.length && idParts[idParts.length - 1];
+    if ((_document$querySelect5 = document.querySelector("#frm-single-settings-".concat(fieldId))) !== null && _document$querySelect5 !== void 0 && _document$querySelect5.classList.contains("frm-type-".concat(target.value))) {
+      // Do not show modal if the field type is reverted back to the original type when builder is loaded.
+      return;
+    }
+    showSaveAndReloadModal();
+  }
+
+  /**
+   * Shows 'Save and Reload' modal with the given message.
+   *
+   * @since 6.16.3
+   *
+   * @param {string} message
+   * @return {void}
+   */
+  function showSaveAndReloadModal(message) {
+    if ('undefined' === typeof message) {
+      message = __('You are changing the field type. Not all field settings will appear as expected until you reload the page. Would you like to reload the page now?', 'formidable');
+    }
+    frmDom.modal.maybeCreateModal('frmSaveAndReloadModal', {
+      title: __('Save and Reload?', 'formidable'),
+      content: getModalContent(),
+      footer: getModalFooter()
+    });
+    function getModalContent() {
+      var modalContent = div(message);
+      modalContent.style.padding = 'var(--gap-md)';
+      return modalContent;
+    }
+    function getModalFooter() {
+      var continueButton = frmDom.modal.footerButton({
+        text: __('Save and Reload', 'formidable'),
+        buttonType: 'primary'
+      });
+      onClickPreventDefault(continueButton, function () {
+        saveAndReloadFormBuilder();
+      });
+      var cancelButton = frmDom.modal.footerButton({
+        text: __('Cancel', 'formidable'),
+        buttonType: 'cancel'
+      });
+      cancelButton.classList.add('dismiss');
+      return frmDom.div({
+        children: [cancelButton, continueButton]
+      });
+    }
+  }
+  function updateShortcodesPopupPosition(target) {
+    var moreIcon;
+    if (target instanceof Event) {
+      var useElements = document.querySelectorAll('.frm-single-settings .frm-show-box.frmsvg use');
+      var openTrigger = Array.from(useElements).find(function (use) {
+        return use.getAttribute('href') === '#frm_close_icon';
+      });
+      if ('undefined' === typeof openTrigger) {
+        return;
+      }
+      moreIcon = openTrigger.parentElement;
+    } else {
+      moreIcon = target;
+    }
+    var moreIconPosition = moreIcon.getBoundingClientRect();
+    var shortCodesPopup = document.getElementById('frm_adv_info');
+    var parentPos = shortCodesPopup.parentElement.getBoundingClientRect();
+    shortCodesPopup.style.top = moreIconPosition.top - parentPos.top + 32 + 'px';
+    shortCodesPopup.style.left = moreIconPosition.left - parentPos.left - 280 + 'px';
+  }
+  function showShortcodeBox(moreIcon, shouldFocus) {
+    var input = getInputForIcon(moreIcon),
+      box = document.getElementById('frm_adv_info'),
+      classes = moreIcon.className;
+    if (moreIcon.tagName === 'svg') {
+      moreIcon = moreIcon.firstElementChild;
+    }
+    if (moreIcon.tagName === 'use') {
+      classes = moreIcon.getAttributeNS('http://www.w3.org/1999/xlink', 'href');
+      if (null === classes) {
+        // If the deprecated xlink:href is not defined, check for href.
+        classes = moreIcon.getAttribute('href');
+      }
+    }
+    if (classes.indexOf('frm_close_icon') !== -1) {
+      hideShortcodes(box);
+    } else {
+      updateShortcodesPopupPosition(moreIcon);
+      jQuery('.frm_code_list a').removeClass('frm_noallow');
+      if (input.classList.contains('frm_not_email_to')) {
+        jQuery('#frm-insert-fields-box .frm_code_list li:not(.show_frm_not_email_to) a').addClass('frm_noallow');
+      } else if (input.classList.contains('frm_not_email_subject')) {
+        jQuery('.frm_code_list li.hide_frm_not_email_subject a').addClass('frm_noallow');
+      }
+      box.setAttribute('data-fills', input.id);
+      box.style.display = 'block';
+      if (moreIcon.tagName === 'use') {
+        if (moreIcon.hasAttributeNS('http://www.w3.org/1999/xlink', 'href')) {
+          moreIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_close_icon');
+        } else {
+          var newMoreIcon = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+          newMoreIcon.setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_close_icon');
+          moreIcon.parentNode.replaceChild(newMoreIcon, moreIcon);
+        }
+      } else {
+        moreIcon.className = classes.replace('frm_more_horiz_solid_icon', 'frm_close_icon');
+      }
+      if (shouldFocus !== 'nofocus') {
+        if ('none' !== input.style.display) {
+          input.focus();
+        } else {
+          jQuery(tinymce.get(input.id)).trigger('focus');
+        }
+      }
+      showOrHideContextualShortcodes(input);
+    }
+  }
+
+  /**
+   * Returns true if a shortcode could be shown in the search result.
+   *
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} item
+   * @return {Boolean}
+   */
+  function checkContextualShortcode(item) {
+    if (frmAdminJs.contextualShortcodes.length === 0) {
+      return true;
+    }
+    return !isContextualShortcode(item) || canShowContextualShortcode(item);
+  }
+
+  /**
+   * Returns true if a shortcode is contextual to fields.
+   *
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} item
+   * @return {Boolean}
+   */
+  function isContextualShortcode(item) {
+    var anchor = item.querySelector('a');
+    if (!anchor) {
+      return false;
+    }
+    var shortcode = anchor.dataset.code;
+    return frmAdminJs.contextualShortcodes.address.includes(shortcode) || frmAdminJs.contextualShortcodes.body.includes(shortcode);
+  }
+
+  /**
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} item
+   * @return {Boolean}
+   */
+  function canShowContextualShortcode(item) {
+    var shortcode = item.querySelector('a').dataset.code;
+    var inputId = document.getElementById('frm_adv_info').dataset.fills;
+    var input = document.getElementById(inputId);
+    var contextualShortcodes = frmAdminJs.contextualShortcodes;
+    if (contextualShortcodes.address.includes(shortcode)) {
+      return input.matches(contextualShortcodes.addressSelector);
+    }
+    return input.matches(contextualShortcodes.bodySelector);
+  }
+
+  /**
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} input
+   * @return {void}
+   */
+  function showOrHideContextualShortcodes(input) {
+    ['address', 'body'].forEach(function (type) {
+      toggleContextualShortcodes(input, type);
+    });
+  }
+
+  /**
+   * @since 6.16.3
+   *
+   * @param {HTMLElement} input
+   * @param {string}      type
+   *
+   * @return {void}
+   */
+  function toggleContextualShortcodes(input, type) {
+    var selector, contextualShortcodes;
+    selector = frmAdminJs.contextualShortcodes[type + 'Selector'];
+    contextualShortcodes = frmAdminJs.contextualShortcodes[type];
+    var shouldShowShortcodes = input.matches(selector);
+    var _iterator = _createForOfIteratorHelper(contextualShortcodes),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var _document$querySelect6;
+        var shortcode = _step.value;
+        var shortcodeLi = (_document$querySelect6 = document.querySelector('#frm-adv-info-tab .frm_code_list [data-code="' + shortcode + '"]')) === null || _document$querySelect6 === void 0 ? void 0 : _document$querySelect6.closest('li');
+        shortcodeLi === null || shortcodeLi === void 0 || shortcodeLi.classList.toggle('frm_hidden', !shouldShowShortcodes);
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }
+
+  /**
+   * Returns shortcodes that are contextual to the current input field.
+   *
+   * @since 6.16.3
+   *
+   * @return {Array}
+   */
+  function getContextualShortcodes() {
+    var _document$getElementB4;
+    var contextualShortcodes = (_document$getElementB4 = document.getElementById('frm_adv_info')) === null || _document$getElementB4 === void 0 ? void 0 : _document$getElementB4.dataset.contextualShortcodes;
+    if (!contextualShortcodes) {
+      return [];
+    }
+    contextualShortcodes = JSON.parse(contextualShortcodes);
+    contextualShortcodes.addressSelector = '[id^=email_to], [id^=from_], [id^=cc], [id^=bcc]';
+    contextualShortcodes.bodySelector = '[id^=email_message_]';
+    return contextualShortcodes;
+  }
+  function fieldUpdated() {
+    if (!fieldsUpdated) {
+      fieldsUpdated = 1;
+      window.addEventListener('beforeunload', confirmExit);
+    }
+  }
+  function buildSubmittedNoAjax() {
+    // set fieldsUpdated to 0 to avoid the unsaved changes pop up
+    fieldsUpdated = 0;
+  }
+  function settingsSubmitted() {
+    // set fieldsUpdated to 0 to avoid the unsaved changes pop up
+    fieldsUpdated = 0;
+  }
+  function resetFieldsUpdated() {
+    fieldsUpdated = 0;
+  }
+  function reloadIfAddonActivatedAjaxSubmitOnly() {
+    var submitButton = document.getElementById('frm_submit_side_top');
+    if (submitButton.hasAttribute('data-new-addon-installed') && 'true' === submitButton.getAttribute('data-new-addon-installed')) {
+      submitButton.removeAttribute('data-new-addon-installed');
+      window.location.reload();
+    }
+  }
+  function saveAndReloadFormBuilder() {
+    var submitButton = document.getElementById('frm_submit_side_top');
+    if (submitButton.classList.contains('frm_submit_ajax')) {
+      submitButton.setAttribute('data-new-addon-installed', true);
+    }
+    submitButton.click();
+  }
+  function confirmExit(event) {
+    if (fieldsUpdated) {
+      event.preventDefault();
+      event.returnValue = '';
+    }
+  }
+  function offsetModalY($modal, amount) {
+    var position = {
+      my: 'top',
+      at: 'top+' + amount,
+      of: window
+    };
+    $modal.dialog('option', 'position', position);
+  }
+
+  /**
+   * Get the input box for the selected icon or calculation field.
+   *
+   * @param {Element} moreIcon The icon element
+   * @return {Element} The associated input or textarea
+   */
+  function getInputForIcon(moreIcon) {
+    if (moreIcon.classList.contains('frm-input-icon')) {
+      return moreIcon.previousElementSibling;
+    }
+
+    // For regular fields
+    var input = moreIcon.nextElementSibling;
+    while (input !== null && (input.tagName !== 'INPUT' && input.tagName !== 'TEXTAREA' || input.classList.contains('frm-token-input-field'))) {
+      input = getInputForIcon(input);
+    }
+
+    // For calculation fields
+    if (!input) {
+      var _moreIcon$closest;
+      input = (_moreIcon$closest = moreIcon.closest('.frm-field-formula')) === null || _moreIcon$closest === void 0 ? void 0 : _moreIcon$closest.querySelector('.frm-calc-field');
+    }
+    return input;
+  }
+
+  /**
+   * Get the ... icon for the selected input box.
+   */
+  function getIconForInput(input) {
+    var _input$nextElementSib;
+    if ((_input$nextElementSib = input.nextElementSibling) !== null && _input$nextElementSib !== void 0 && _input$nextElementSib.classList.contains('frm-input-icon')) {
+      return input.nextElementSibling;
+    }
+    var moreIcon = input.previousElementSibling;
+    while (moreIcon !== null && moreIcon.tagName !== 'I' && moreIcon.tagName !== 'svg') {
+      moreIcon = getIconForInput(moreIcon);
+    }
+    return moreIcon;
+  }
+  function hideShortcodes(box) {
+    var i, u, closeIcons, closeSvg;
+    if (typeof box === 'undefined') {
+      box = document.getElementById('frm_adv_info');
+      if (box === null) {
+        return;
+      }
+    }
+    if (document.getElementById('frm_dyncontent') !== null) {
+      // Don't run when in the sidebar.
+      return;
+    }
+    box.style.display = 'none';
+    closeIcons = document.querySelectorAll('.frm-show-box.frm_close_icon');
+    for (i = 0; i < closeIcons.length; i++) {
+      closeIcons[i].classList.remove('frm_close_icon');
+      closeIcons[i].classList.add('frm_more_horiz_solid_icon');
+    }
+    closeSvg = document.querySelectorAll('.frm_has_shortcodes use');
+    for (u = 0; u < closeSvg.length; u++) {
+      if (closeSvg[u].getAttributeNS('http://www.w3.org/1999/xlink', 'href') === '#frm_close_icon') {
+        if (closeSvg[u].closest('.frm_remove_field')) {
+          // Don't change the icon for the email fields remove button.
+          continue;
+        }
+        closeSvg[u].setAttributeNS('http://www.w3.org/1999/xlink', 'href', '#frm_more_horiz_solid_icon');
+      }
+    }
+  }
+  function toggleAllowedHTML(input) {
+    var b,
+      id = input.id;
+    if (typeof id === 'undefined' || id.indexOf('-search-input') !== -1) {
+      return;
+    }
+    jQuery('#frm-adv-info-tab').attr('data-fills', id.trim());
+    if (input.classList.contains('field_custom_html')) {
+      id = 'field_custom_html';
+    }
+    b = ['after_html', 'before_html', 'submit_html', 'field_custom_html'];
+    if (jQuery.inArray(id, b) >= 0) {
+      jQuery('.frm_code_list li:not(.show_' + id + ')').addClass('frm_hidden');
+      jQuery('.frm_code_list li.show_' + id).removeClass('frm_hidden');
+    }
+  }
+  function toggleKeyID(switchTo, e) {
+    e.stopPropagation();
+    jQuery('.frm_code_list .frmids, .frm_code_list .frmkeys').addClass('frm_hidden');
+    jQuery('.frm_code_list .' + switchTo).removeClass('frm_hidden');
+    jQuery('.frmids, .frmkeys').removeClass('current');
+    jQuery('.' + switchTo).addClass('current');
+  }
+  function onActionLoaded(event) {
+    var settings = event.target.closest('.frm_form_action_settings');
+    if (settings && (settings.classList.contains('frm_single_email_settings') || settings.classList.contains('frm_single_on_submit_settings'))) {
+      initWysiwygOnActionLoaded(settings);
+    }
+  }
+  function initWysiwygOnActionLoaded(settings) {
+    settings.querySelectorAll('.wp-editor-area').forEach(function (wysiwyg) {
+      frmDom.wysiwyg.init(wysiwyg, {
+        height: 160,
+        addFocusEvents: true
+      });
+    });
+  }
+
+  /* Global settings page */
+  function loadSettingsTab(anchor) {
+    var holder = anchor.replace('#', '');
+    var holderContainer = jQuery('.frm_' + holder + '_ajax');
+    if (holderContainer.length) {
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: 'frm_settings_tab',
+          tab: holder.replace('_settings', ''),
+          nonce: frmGlobal.nonce
+        },
+        success: function success(html) {
+          holderContainer.replaceWith(html);
+        }
+      });
+    }
+  }
+  function uninstallNow() {
+    /*jshint validthis:true */
+    if (confirmLinkClick(this) === true) {
+      jQuery('.frm_uninstall .frm-wait').css('visibility', 'visible');
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: 'action=frm_uninstall&nonce=' + frmGlobal.nonce,
+        success: function success(msg) {
+          jQuery('.frm_uninstall').fadeOut('slow');
+          window.location = msg;
+        }
+      });
+    }
+    return false;
+  }
+  function saveAddonLicense() {
+    /*jshint validthis:true */
+    var button = jQuery(this);
+    var buttonName = this.name;
+    var pluginSlug = this.getAttribute('data-plugin');
+    var action = buttonName.replace('edd_' + pluginSlug + '_license_', '');
+    var license = document.getElementById('edd_' + pluginSlug + '_license_key').value;
+    button.get(0).disabled = true;
+    jQuery.ajax({
+      type: 'POST',
+      url: ajaxurl,
+      dataType: 'json',
+      data: {
+        action: 'frm_addon_' + action,
+        license: license,
+        plugin: pluginSlug,
+        nonce: frmGlobal.nonce
+      },
+      success: function success(msg) {
+        button.get(0).disabled = false;
+        var thisRow = button.closest('.edd_frm_license_row');
+        if (action === 'deactivate') {
+          license = '';
+          document.getElementById('edd_' + pluginSlug + '_license_key').value = '';
+        }
+        thisRow.find('.edd_frm_license').html(license);
+        var eddWrapper = button.get(0).closest('.frm_form_field');
+        var actionIsSuccess = msg.success === true;
+        eddWrapper.querySelector(".frm_icon_font.frm_action_success").classList.toggle('frm_hidden', !actionIsSuccess || action === 'deactivate');
+        eddWrapper.querySelector(".frm_icon_font.frm_action_error").classList.toggle('frm_hidden', actionIsSuccess);
+        var messageBox = thisRow.find('.frm_license_msg');
+        messageBox.html(msg.message);
+        if (msg.message !== '') {
+          setTimeout(function () {
+            messageBox.html('');
+            thisRow.find('.frm_icon_font').addClass('frm_hidden');
+            if (actionIsSuccess) {
+              var actionIsActivate = action === 'activate';
+              thisRow.get(0).querySelector('.edd_frm_unauthorized').classList.toggle('frm_hidden', actionIsActivate);
+              thisRow.get(0).querySelector('.edd_frm_authorized').classList.toggle('frm_hidden', !actionIsActivate);
+            }
+          }, 2000);
+        }
+      }
+    });
+  }
+
+  /* Import/Export page */
+
+  function startFormMigration(event) {
+    event.preventDefault();
+    var checkedBoxes = jQuery(event.target).find('input:checked');
+    if (!checkedBoxes.length) {
+      return;
+    }
+    var ids = [];
+    checkedBoxes.each(function (i) {
+      ids[i] = this.value;
+    });
+
+    // Begin the import process.
+    importForms(ids, event.target);
+  }
+
+  /**
+   * Begins the process of importing the forms.
+   */
+  function importForms(forms, targetForm) {
+    // Hide the form select section.
+    var $form = jQuery(targetForm),
+      $processSettings = $form.next('.frm-importer-process');
+
+    // Display total number of forms we have to import.
+    $processSettings.find('.form-total').text(forms.length);
+    $processSettings.find('.form-current').text('1');
+    $form.hide();
+
+    // Show processing status.
+    // '.process-completed' might have been shown earlier during a previous import, so hide now.
+    $processSettings.find('.process-completed').hide();
+    $processSettings.show();
+
+    // Create global import queue.
+    s.importQueue = forms;
+    s.imported = 0;
+
+    // Import the first form in the queue.
+    importForm($processSettings);
+  }
+
+  /**
+   * Imports a single form from the import queue.
+   */
+  function importForm($processSettings) {
+    var formID = s.importQueue[0],
+      provider = jQuery('#welcome-panel').find('input[name="slug"]').val(),
+      data = {
+        action: 'frm_import_' + provider,
+        form_id: formID,
+        nonce: frmGlobal.nonce
+      };
+
+    // Trigger AJAX import for this form.
+    jQuery.post(ajaxurl, data, function (res) {
+      if (res.success) {
+        var statusUpdate;
+        if (res.data.error) {
+          statusUpdate = '<p>' + res.data.name + ': ' + res.data.msg + '</p>';
+        } else {
+          statusUpdate = '<p>Imported <a href="' + res.data.link + '" target="_blank">' + res.data.name + '</a></p>';
+        }
+        $processSettings.find('.status').prepend(statusUpdate);
+        $processSettings.find('.status').show();
+
+        // Remove this form ID from the queue.
+        s.importQueue = jQuery.grep(s.importQueue, function (value) {
+          return value != formID;
+        });
+        s.imported++;
+        if (s.importQueue.length === 0) {
+          $processSettings.find('.process-count').hide();
+          $processSettings.find('.forms-completed').text(s.imported);
+          $processSettings.find('.process-completed').show();
+        } else {
+          // Import next form in the queue.
+          $processSettings.find('.form-current').text(s.imported + 1);
+          importForm($processSettings);
+        }
+      }
+    });
+  }
+  function validateExport(e) {
+    /*jshint validthis:true */
+    e.preventDefault();
+    var s = false;
+    var $exportForms = jQuery('input[name="frm_export_forms[]"]');
+    if (!jQuery('input[name="frm_export_forms[]"]:checked').val()) {
+      $exportForms.closest('.frm-table-box').addClass('frm_blank_field');
+      s = 'stop';
+    }
+    var $exportType = jQuery('input[name="type[]"]');
+    if (!jQuery('input[name="type[]"]:checked').val() && $exportType.attr('type') === 'checkbox') {
+      $exportType.closest('p').addClass('frm_blank_field');
+      s = 'stop';
+    }
+    if (s === 'stop') {
+      return false;
+    }
+    e.stopPropagation();
+    this.submit();
+  }
+  function removeExportError() {
+    /*jshint validthis:true */
+    var t = jQuery(this).closest('.frm_blank_field');
+    if (typeof t === 'undefined') {
+      return;
+    }
+    var $thisName = this.name;
+    if ($thisName === 'type[]' && jQuery('input[name="type[]"]:checked').val()) {
+      t.removeClass('frm_blank_field');
+    } else if ($thisName === 'frm_export_forms[]' && jQuery(this).val()) {
+      t.removeClass('frm_blank_field');
+    }
+  }
+  function checkCSVExtension() {
+    /*jshint validthis:true */
+    var f = jQuery(this).val();
+    var re = /\.csv$/i;
+    if (f.match(re) !== null) {
+      jQuery('.show_csv').fadeIn();
+    } else {
+      jQuery('.show_csv').fadeOut();
+    }
+  }
+  function getExportOption() {
+    var exportFormatSelect = document.querySelector('select[name="format"]');
+    if (exportFormatSelect) {
+      return exportFormatSelect.value;
+    }
+    return '';
+  }
+  function exportTypeChanged(event) {
+    var value = event.target.value;
+    showOrHideRepeaters(value);
+    checkExportTypes.call(event.target);
+    checkSelectedAllFormsCheckbox(value);
+  }
+  function checkSelectedAllFormsCheckbox(exportType) {
+    var selectAllCheckbox = document.getElementById('frm-export-select-all');
+    if (exportType === 'csv') {
+      selectAllCheckbox.checked = false;
+      selectAllCheckbox.disabled = true;
+    } else {
+      selectAllCheckbox.disabled = false;
+    }
+  }
+  function checkExportTypes() {
+    /*jshint validthis:true */
+    var $dropdown = jQuery(this);
+    var $selected = $dropdown.find(':selected');
+    var s = $selected.data('support');
+    var multiple = s.indexOf('|');
+    jQuery('input[name="type[]"]').each(function () {
+      this.checked = false;
+      if (s.indexOf(this.value) >= 0) {
+        this.disabled = false;
+        if (multiple === -1) {
+          this.checked = true;
+        }
+      } else {
+        this.disabled = true;
+      }
+    });
+    if ($dropdown.val() === 'csv') {
+      jQuery('.csv_opts').show();
+      jQuery('.xml_opts').hide();
+    } else {
+      jQuery('.csv_opts').hide();
+      jQuery('.xml_opts').show();
+    }
+    var c = $selected.data('count');
+    var exportField = jQuery('input[name="frm_export_forms[]"]');
+    if (c === 'single') {
+      exportField.prop('multiple', false);
+      exportField.prop('checked', false);
+    } else {
+      exportField.prop('multiple', true);
+      exportField.prop('disabled', false);
+    }
+    $dropdown.trigger('change');
+  }
+  function showOrHideRepeaters(exportOption) {
+    if (exportOption === '') {
+      return;
+    }
+    var repeaters = document.querySelectorAll('.frm-is-repeater');
+    if (!repeaters.length) {
+      return;
+    }
+    if (exportOption === 'csv') {
+      repeaters.forEach(function (form) {
+        form.classList.remove('frm_hidden');
+      });
+    } else {
+      repeaters.forEach(function (form) {
+        form.classList.add('frm_hidden');
+      });
+    }
+    searchContent.call(document.querySelector('.frm-auto-search'));
+  }
+  function preventMultipleExport() {
+    var type = jQuery('select[name=format]'),
+      selected = type.find(':selected'),
+      count = selected.data('count'),
+      exportField = jQuery('input[name="frm_export_forms[]"]');
+    if (count === 'single') {
+      // Disable all other fields to prevent multiple selections.
+      if (this.checked) {
+        exportField.prop('disabled', true);
+        this.removeAttribute('disabled');
+      } else {
+        exportField.prop('disabled', false);
+      }
+    } else {
+      exportField.prop('disabled', false);
+    }
+  }
+  function initiateMultiselect() {
+    jQuery('.frm_multiselect').hide().each(frmDom.bootstrap.multiselect.init);
+  }
+
+  /* Addons page */
+  function installMultipleAddons(e) {
+    e.preventDefault();
+    toggleAddonState(this, 'frm_multiple_addons');
+  }
+  function activateAddon(e) {
+    if (e.target.closest('#frm-form-templates-page')) {
+      return;
+    }
+    e.preventDefault();
+    toggleAddonState(this, 'frm_activate_addon');
+  }
+  function installAddon(e) {
+    if (e.target.closest('#frm-form-templates-page')) {
+      return;
+    }
+    e.preventDefault();
+    toggleAddonState(this, 'frm_install_addon');
+  }
+  function toggleAddonState(clicked, action) {
+    var addonState = __webpack_require__(/*! ./addon-state */ "./js/src/admin/addon-state.js");
+    addonState.toggleAddonState(clicked, action);
+  }
+  function installAddonWithCreds(e) {
+    // Prevent the default action, let the user know we are attempting to install again and go with it.
+    e.preventDefault();
+
+    // Now let's make another Ajax request once the user has submitted their credentials.
+    var proceed = jQuery(this);
+    var el = proceed.parent().parent();
+    var plugin = proceed.attr('rel');
+    proceed.addClass('frm_loading_button');
+    jQuery.ajax({
+      url: ajaxurl,
+      type: 'POST',
+      async: true,
+      cache: false,
+      dataType: 'json',
+      data: {
+        action: 'frm_install_addon',
+        nonce: frmAdminJs.nonce,
+        plugin: plugin,
+        hostname: el.find('#hostname').val(),
+        username: el.find('#username').val(),
+        password: el.find('#password').val()
+      },
+      success: function success(response) {
+        var _response$data, _response;
+        response = (_response$data = (_response = response) === null || _response === void 0 ? void 0 : _response.data) !== null && _response$data !== void 0 ? _response$data : response;
+        var error = extractErrorFromAddOnResponse(response);
+        if (error) {
+          addonError(error, el, proceed);
+          return;
+        }
+        afterAddonInstall(response, proceed, message, el);
+      },
+      error: function error() {
+        proceed.removeClass('frm_loading_button');
+      }
+    });
+  }
+  function afterAddonInstall(response, button, message, el, saveAndReload) {
+    var action = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : 'frm_activate_addon';
+    var addonState = __webpack_require__(/*! ./addon-state */ "./js/src/admin/addon-state.js");
+    addonState.afterAddonInstall(response, button, message, el, saveAndReload, action);
+  }
+  function extractErrorFromAddOnResponse(response) {
+    var addonState = __webpack_require__(/*! ./addon-state */ "./js/src/admin/addon-state.js");
+    return addonState.extractErrorFromAddOnResponse(response);
+  }
+  function addonError(response, el, button) {
+    var addonState = __webpack_require__(/*! ./addon-state */ "./js/src/admin/addon-state.js");
+    addonState.addonError(response, el, button);
+  }
+
+  /* Templates */
+  function showActiveCampaignForm() {
+    loadApiEmailForm();
+  }
+  function handleApiFormError(inputId, errorId, type, message) {
+    var $error = jQuery(errorId);
+    $error.removeClass('frm_hidden').attr('frm-error', type);
+    if (typeof message !== 'undefined') {
+      $error.find('span[frm-error="' + type + '"]').text(message);
+    }
+    jQuery(inputId).one('keyup', function () {
+      $error.addClass('frm_hidden');
+    });
+  }
+  function handleEmailAddressError(type) {
+    handleApiFormError('#frm_leave_email', '#frm_leave_email_error', type);
+  }
+  function loadApiEmailForm() {
+    var formContainer = document.getElementById('frmapi-email-form');
+    jQuery.ajax({
+      dataType: 'json',
+      url: formContainer.getAttribute('data-url'),
+      success: function success(json) {
+        var form = json.renderedHtml;
+        form = form.replace(/<link\b[^>]*(formidableforms.css|action=frmpro_css)[^>]*>/gi, '');
+        formContainer.innerHTML = form;
+      }
+    });
+  }
+  function initAutocomplete(container) {
+    frmDom.autocomplete.initSelectionAutocomplete(container);
+  }
+  function nextInstallStep(thisStep) {
+    thisStep.classList.add('frm_grey');
+    thisStep.nextElementSibling.classList.remove('frm_grey');
+  }
+  function installTemplateFieldset(e) {
+    /*jshint validthis:true */
+    var fieldset = this.parentNode.parentNode,
+      action = fieldset.elements.type.value,
+      button = this;
+    e.preventDefault();
+    button.classList.add('frm_loading_button');
+    installNewForm(fieldset, action, button);
+  }
+  function installTemplate(e) {
+    /*jshint validthis:true */
+    var action = this.elements.type.value,
+      button = this.querySelector('button');
+    e.preventDefault();
+    button.classList.add('frm_loading_button');
+    installNewForm(this, action, button);
+  }
+  function installNewForm(form, action, button) {
+    var formData = formToData(form);
+    var formName = formData.template_name;
+    var formDesc = formData.template_desc;
+    var link = form.elements.link.value;
+    var data = {
+      action: action,
+      xml: link,
+      name: formName,
+      desc: formDesc,
+      form: JSON.stringify(formData),
+      nonce: frmGlobal.nonce
+    };
+    var hookName = 'frm_before_install_new_form';
+    var filterArgs = {
+      formData: formData
+    };
+    data = wp.hooks.applyFilters(hookName, data, filterArgs);
+    postAjax(data, function (response) {
+      if (typeof response.redirect !== 'undefined') {
+        var redirect = response.redirect;
+        if (typeof form.elements.redirect === 'undefined') {
+          window.location = redirect;
+        } else {
+          var href = document.getElementById('frm-redirect-link');
+          if (typeof link !== 'undefined' && href !== null) {
+            // Show the next installation step.
+            href.setAttribute('href', redirect);
+            href.classList.remove('frm_grey', 'disabled');
+            nextInstallStep(form.parentNode.parentNode);
+            button.classList.add('frm_grey', 'disabled');
+          }
+        }
+      } else {
+        jQuery('.spinner').css('visibility', 'hidden');
+
+        // Show response.message
+        if ('string' === typeof response.message) {
+          showInstallFormErrorModal(response.message);
+        }
+      }
+      button.classList.remove('frm_loading_button');
+    });
+  }
+  function showInstallFormErrorModal(message) {
+    var modalContent = div(message);
+    modalContent.style.padding = '20px 40px';
+    var modal = frmDom.modal.maybeCreateModal('frmInstallFormErrorModal', {
+      title: __('Unable to install template', 'formidable'),
+      content: modalContent
+    });
+    modal.classList.add('frm_common_modal');
+  }
+  function handleCaptchaTypeChange(e) {
+    var thresholdContainer = document.getElementById('frm_captcha_threshold_container');
+    if (thresholdContainer) {
+      thresholdContainer.classList.toggle('frm_hidden', 'v3' !== e.target.value);
+    }
+  }
+  function trashTemplate(e) {
+    /*jshint validthis:true */
+    var id = this.getAttribute('data-id');
+    e.preventDefault();
+    data = {
+      action: 'frm_forms_trash',
+      id: id,
+      nonce: frmGlobal.nonce
+    };
+    postAjax(data, function () {
+      var card = document.getElementById('frm-template-custom-' + id);
+      fadeOut(card, function () {
+        card.parentNode.removeChild(card);
+      });
+    });
+  }
+  function searchContent() {
+    /*jshint validthis:true */
+    var i,
+      regEx = false,
+      searchText = this.value.toLowerCase(),
+      toSearch = this.getAttribute('data-tosearch'),
+      items = document.getElementsByClassName(toSearch);
+    if (this.tagName === 'SELECT') {
+      searchText = selectedOptions(this);
+      searchText = searchText.join('|').toLowerCase();
+      regEx = true;
+    }
+    if (toSearch === 'frm-action' && searchText !== '') {
+      var addons = document.getElementById('frm_email_addon_menu').classList;
+      addons.remove('frm-all-actions');
+      addons.add('frm-limited-actions');
+    }
+    for (i = 0; i < items.length; i++) {
+      var innerText = items[i].innerText.toLowerCase();
+      var itemCanBeShown = !(getExportOption() === 'xml' && items[i].classList.contains('frm-is-repeater'));
+      if (searchText === '') {
+        if (itemCanBeShown && checkContextualShortcode(items[i])) {
+          items[i].classList.remove('frm_hidden');
+        }
+        items[i].classList.remove('frm-search-result');
+      } else if (regEx && new RegExp(searchText).test(innerText) || innerText.indexOf(searchText) >= 0 || textMatchesPlural(innerText, searchText)) {
+        if (itemCanBeShown && checkContextualShortcode(items[i])) {
+          items[i].classList.remove('frm_hidden');
+        }
+        items[i].classList.add('frm-search-result');
+      } else {
+        items[i].classList.add('frm_hidden');
+        items[i].classList.remove('frm-search-result');
+      }
+    }
+
+    // Updates the visibility of category headings based on search results.
+    updateCatHeadingVisibility();
+    jQuery(this).trigger('frmAfterSearch');
+  }
+
+  /**
+   * Allow a search for "signatures" to still match "signature" for example when searching fields.
+   *
+   * @since 6.15
+   *
+   * @param {string} text       The text in the element we are checking for a match.
+   * @param {string} searchText The text value that is being searched.
+   * @return {boolean}
+   */
+  function textMatchesPlural(text, searchText) {
+    if (searchText === 's') {
+      // Don't match everything when just "s" is searched.
+      return false;
+    }
+    if (text[text.length - 1] === 's') {
+      // Do not match something with double s if the text already ends in s.
+      return false;
+    }
+    return (text + 's').indexOf(searchText) >= 0;
+  }
+
+  /**
+   * Updates the visibility of category headings based on search results.
+   * If all associated fields are hidden (indicating no search matches),
+   * the heading is hidden.
+   *
+   * @since 6.4.1
+   */
+  function updateCatHeadingVisibility() {
+    var insertFieldsElement = document.querySelector('#frm-insert-fields');
+    if (!insertFieldsElement) {
+      return;
+    }
+    var headingElements = insertFieldsElement.querySelectorAll(':scope > .frm-with-line');
+    headingElements.forEach(function (heading) {
+      var fieldsListElement = heading.nextElementSibling;
+      if (!fieldsListElement) {
+        return;
+      }
+      var listItemElements = fieldsListElement.querySelectorAll(':scope > li.frmbutton');
+      var allHidden = Array.from(listItemElements).every(function (li) {
+        return li.classList.contains('frm_hidden');
+      });
+
+      // Add or remove class based on `allHidden` condition
+      heading.classList.toggle('frm_hidden', allHidden);
+    });
+  }
+  function stopPropagation(e) {
+    e.stopPropagation();
+  }
+
+  /* Helpers */
+
+  function selectedOptions(select) {
+    var opt,
+      result = [],
+      options = select && select.options;
+    for (var _i13 = 0, iLen = options.length; _i13 < iLen; _i13++) {
+      opt = options[_i13];
+      if (opt.selected) {
+        result.push(opt.value);
+      }
+    }
+    return result;
+  }
+  function triggerEvent(element, event) {
+    var evt = document.createEvent('HTMLEvents');
+    evt.initEvent(event, false, true);
+    element.dispatchEvent(evt);
+  }
+  function postAjax(data, success) {
+    var response;
+    var xmlHttp = new XMLHttpRequest();
+    var params = typeof data === 'string' ? data : Object.keys(data).map(function (k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(data[k]);
+    }).join('&');
+    xmlHttp.open('post', ajaxurl, true);
+    xmlHttp.onreadystatechange = function () {
+      if (xmlHttp.readyState > 3 && xmlHttp.status == 200) {
+        response = xmlHttp.responseText;
+        try {
+          response = JSON.parse(response);
+        } catch (e) {
+          // The response may not be JSON, so just return it.
+        }
+        success(response);
+      }
+    };
+    xmlHttp.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    xmlHttp.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+    xmlHttp.send(params);
+    return xmlHttp;
+  }
+  function fadeOut(element, success) {
+    element.classList.add('frm-fade');
+    setTimeout(success, 1000);
+  }
+  function invisible(classes) {
+    jQuery(classes).css('visibility', 'hidden');
+  }
+  function visible(classes) {
+    jQuery(classes).css('visibility', 'visible');
+  }
+  function initModal(id, width) {
+    var upgradePopup = __webpack_require__(/*! ./upgrade-popup */ "./js/src/admin/upgrade-popup.js");
+    return upgradePopup.initModal(id, width);
+  }
+  function toggle(cname, id) {
+    if (id === '#') {
+      var cont = document.getElementById(cname);
+      var hidden = cont.style.display;
+      if (hidden === 'none') {
+        cont.style.display = 'block';
+      } else {
+        cont.style.display = 'none';
+      }
+    } else {
+      var vis = cname.is(':visible');
+      if (vis) {
+        cname.hide();
+      } else {
+        cname.show();
+      }
+    }
+  }
+  function removeWPUnload() {
+    window.onbeforeunload = null;
+    var w = jQuery(window);
+    w.off('beforeunload.widgets');
+    w.off('beforeunload.edit-post');
+  }
+  function addMultiselectLabelListener() {
+    var clickListener = function clickListener(e) {
+      if ('LABEL' !== e.target.nodeName) {
+        return;
+      }
+      var labelFor = e.target.getAttribute('for');
+      if (!labelFor) {
+        return;
+      }
+      var input = document.getElementById(labelFor);
+      if (!input || !input.nextElementSibling) {
+        return;
+      }
+      var buttonToggle = input.nextElementSibling.querySelector('button.dropdown-toggle.multiselect');
+      if (!buttonToggle) {
+        return;
+      }
+      var triggerMultiselectClick = function triggerMultiselectClick() {
+        return buttonToggle.click();
+      };
+      setTimeout(triggerMultiselectClick, 0);
+    };
+    document.addEventListener('click', clickListener);
+  }
+  function maybeChangeEmbedFormMsg() {
+    var fieldId = jQuery(this).closest('.frm-single-settings').data('fid');
+    var fieldItem = document.getElementById('frm_field_id_' + fieldId);
+    if (null === fieldItem || 'form' !== fieldItem.dataset.type) {
+      return;
+    }
+    fieldItem = jQuery(fieldItem);
+    if (this.options[this.selectedIndex].value) {
+      fieldItem.find('.frm-not-set')[0].classList.add('frm_hidden');
+      var embedMsg = fieldItem.find('.frm-embed-message');
+      embedMsg.html(embedMsg.data('embedmsg') + this.options[this.selectedIndex].text);
+      fieldItem.find('.frm-embed-field-placeholder')[0].classList.remove('frm_hidden');
+    } else {
+      fieldItem.find('.frm-not-set')[0].classList.remove('frm_hidden');
+      fieldItem.find('.frm-embed-field-placeholder')[0].classList.add('frm_hidden');
+    }
+  }
+  function toggleProductType() {
+    var settings = jQuery(this).closest('.frm-single-settings'),
+      container = settings.find('.frmjs_product_choices'),
+      heading = settings.find('.frm_prod_options_heading'),
+      currentVal = this.options[this.selectedIndex].value;
+    container.removeClass('frm_prod_type_single frm_prod_type_user_def');
+    heading.removeClass('frm_prod_user_def');
+    if ('single' === currentVal) {
+      container.addClass('frm_prod_type_single');
+    } else if ('user_def' === currentVal) {
+      container.addClass('frm_prod_type_user_def');
+      heading.addClass('frm_prod_user_def');
+    }
+  }
+
+  /**
+   * @param {Number | string} fieldId
+   * @return {boolean} True if the field is a product field.
+   */
+  function isProductField(fieldId) {
+    var field = document.getElementById('frm_field_id_' + fieldId);
+    if (field === null) {
+      return false;
+    }
+    return 'product' === field.getAttribute('data-type');
+  }
+
+  /**
+   * Serialize form data with vanilla JS.
+   */
+  function formToData(form) {
+    var subKey,
+      i,
+      object = {},
+      formData = form.elements;
+    for (i = 0; i < formData.length; i++) {
+      var input = formData[i],
+        key = input.name,
+        value = input.value,
+        names = key.match(/(.*)\[(.*)\]/);
+      if ((input.type === 'radio' || input.type === 'checkbox') && !input.checked) {
+        continue;
+      }
+      if (names !== null) {
+        key = names[1];
+        subKey = names[2];
+        if (!Reflect.has(object, key)) {
+          object[key] = {};
+        }
+        object[key][subKey] = value;
+        continue;
+      }
+
+      // Reflect.has in favor of: object.hasOwnProperty(key)
+      if (!Reflect.has(object, key)) {
+        object[key] = value;
+        continue;
+      }
+      if (!Array.isArray(object[key])) {
+        object[key] = [object[key]];
+      }
+      object[key].push(value);
+    }
+    return object;
+  }
+
+  /**
+   * Show, hide, and sort subfields of Name field on form builder.
+   *
+   * @since 4.11
+   */
+  function handleNameFieldOnFormBuilder() {
+    /**
+     * Gets subfield element from cache.
+     *
+     * @param {string} fieldId Field ID.
+     * @param {string} key     Cache key.
+     * @return {HTMLElement|undefined} Return the element from cache or undefined if not found.
+     */
+    var getSubFieldElFromCache = function getSubFieldElFromCache(fieldId, key) {
+      window.frmCachedSubFields = window.frmCachedSubFields || {};
+      window.frmCachedSubFields[fieldId] = window.frmCachedSubFields[fieldId] || {};
+      return window.frmCachedSubFields[fieldId][key];
+    };
+
+    /**
+     * Sets subfield element to cache.
+     *
+     * @param {string}      fieldId Field ID.
+     * @param {string}      key     Cache key.
+     * @param {HTMLElement} el      Element.
+     */
+    var setSubFieldElToCache = function setSubFieldElToCache(fieldId, key, el) {
+      window.frmCachedSubFields = window.frmCachedSubFields || {};
+      window.frmCachedSubFields[fieldId] = window.frmCachedSubFields[fieldId] || {};
+      window.frmCachedSubFields[fieldId][key] = el;
+    };
+
+    /**
+     * Gets column class from the number of columns.
+     *
+     * @param {Number} colCount Number of columns.
+     * @return {string}
+     */
+    var getColClass = function getColClass(colCount) {
+      return 'frm' + parseInt(12 / colCount);
+    };
+    var colClasses = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map(function (num) {
+      return 'frm' + num;
+    });
+    var allSubFieldNames = ['first', 'middle', 'last'];
+
+    /**
+     * Handles name layout change.
+     *
+     * @param {Event} event Event object.
+     */
+    var onChangeLayout = function onChangeLayout(event) {
+      var value = event.target.value;
+      var subFieldNames = value.split('_');
+      var fieldId = event.target.dataset.fieldId;
+
+      /*
+       * Live update form on the form builder.
+       */
+      var container = document.querySelector('#field_' + fieldId + '_inner_container .frm_combo_inputs_container');
+      var newColClass = getColClass(subFieldNames.length);
+
+      // Set all sub field elements to cache and hide all of them first.
+      allSubFieldNames.forEach(function (name) {
+        var subFieldEl = container.querySelector('[data-sub-field-name="' + name + '"]');
+        if (subFieldEl) {
+          var _subFieldEl$classList;
+          subFieldEl.classList.add('frm_hidden');
+          (_subFieldEl$classList = subFieldEl.classList).remove.apply(_subFieldEl$classList, _toConsumableArray(colClasses));
+          setSubFieldElToCache(fieldId, name, subFieldEl);
+        }
+      });
+      subFieldNames.forEach(function (subFieldName) {
+        var subFieldEl = getSubFieldElFromCache(fieldId, subFieldName);
+        if (!subFieldEl) {
+          return;
+        }
+        subFieldEl.classList.remove('frm_hidden');
+        subFieldEl.classList.add(newColClass);
+        container.append(subFieldEl);
+      });
+
+      /*
+       * Live update subfield options.
+       */
+      // Hide all subfield options.
+      allSubFieldNames.forEach(function (name) {
+        var optionsEl = document.querySelector('.frm_sub_field_options-' + name + '[data-field-id="' + fieldId + '"]');
+        if (optionsEl) {
+          optionsEl.classList.add('frm_hidden');
+          setSubFieldElToCache(fieldId, name + '_options', optionsEl);
+        }
+      });
+      subFieldNames.forEach(function (subFieldName) {
+        var optionsEl = getSubFieldElFromCache(fieldId, subFieldName + '_options');
+        if (!optionsEl) {
+          return;
+        }
+        optionsEl.classList.remove('frm_hidden');
+      });
+    };
+    var dropdownSelector = '.frm_name_layout_dropdown';
+    document.addEventListener('change', function (event) {
+      if (event.target.matches(dropdownSelector)) {
+        onChangeLayout(event);
+      }
+    }, false);
+  }
+  function debounce(func) {
+    var wait = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 100;
+    return frmDom.util.debounce(func, wait);
+  }
+  function addSaveAndDragIconsToOption(fieldId, liObject) {
+    var li, useTag, useTagHref;
+    var hasDragIcon = false;
+    var hasSaveIcon = false;
+    if (liObject.newOption) {
+      var parser = new DOMParser();
+      li = parser.parseFromString(liObject.newOption, 'text/html').body.childNodes[0];
+    } else {
+      li = liObject;
+    }
+    var liIcons = li.querySelectorAll('svg');
+    liIcons.forEach(function (svg, key) {
+      useTag = svg.getElementsByTagNameNS('http://www.w3.org/2000/svg', 'use')[0];
+      if (!useTag) {
+        return;
+      }
+      useTagHref = useTag.getAttributeNS('http://www.w3.org/1999/xlink', 'href') || useTag.getAttribute('href');
+      if (useTagHref === '#frm_drag_icon') {
+        hasDragIcon = true;
+      }
+      if (useTagHref === '#frm_save_icon') {
+        hasSaveIcon = true;
+      }
+    });
+    if (!hasDragIcon) {
+      li.prepend(icons.drag.cloneNode(true));
+    }
+    if (li.querySelector("[id^=field_key_".concat(fieldId, "-]")) && !hasSaveIcon) {
+      li.querySelector("[id^=field_key_".concat(fieldId, "-]")).after(icons.save.cloneNode(true));
+    }
+    if (liObject.newOption) {
+      liObject.newOption = li;
+    }
+  }
+  function maybeAddSaveAndDragIcons(fieldId) {
+    var fieldOptions = document.querySelectorAll("[id^=frm_delete_field_".concat(fieldId, "-]"));
+    // return if there are no options.
+    if (fieldOptions.length < 2) {
+      return;
+    }
+    var options = _toConsumableArray(fieldOptions).slice(1);
+    options.forEach(function (li, _key) {
+      if (li.classList.contains('frm_other_option')) {
+        return;
+      }
+      addSaveAndDragIconsToOption(fieldId, li);
+    });
+  }
+
+  /**
+   * Enforce the maximum number of entries list columns dynamically.
+   *
+   * @since 6.24
+   *
+   * @return {void}
+   */
+  function maybeInitEntriesListPage() {
+    if (!document.body.classList.contains('frm-admin-page-entries')) {
+      return;
+    }
+    var screenOptionsWrapper = document.getElementById('screen-options-wrap');
+    if (!screenOptionsWrapper) {
+      return;
+    }
+    var maxSelectionsNote = div({
+      className: 'frm_warning_style',
+      text: __('Only 10 columns can be selected at a time.', 'formidable')
+    });
+    maxSelectionsNote.style.margin = 0;
+    var legend = screenOptionsWrapper.querySelector('legend');
+    legend.parentNode.insertBefore(maxSelectionsNote, legend.nextElementSibling);
+    var checkboxes = Array.from(screenOptionsWrapper.querySelectorAll('input[type="checkbox"]'));
+    var maximumColumns = 10;
+    var getSelectedCount = function getSelectedCount() {
+      return checkboxes.reduce(function (count, checkbox) {
+        return checkbox.checked ? count + 1 : count;
+      }, 0);
+    };
+    var disableCheckboxesIfAtMax = function disableCheckboxesIfAtMax() {
+      if (getSelectedCount() >= maximumColumns) {
+        maxSelectionsNote.classList.remove('frm_hidden');
+        checkboxes.forEach(function (checkbox) {
+          if (!checkbox.checked) {
+            checkbox.parentNode.classList.add('frm_noallow');
+            checkbox.disabled = true;
+          }
+        });
+      } else {
+        maxSelectionsNote.classList.add('frm_hidden');
+      }
+    };
+    var addCheckboxListeners = function addCheckboxListeners() {
+      checkboxes.forEach(function (checkbox) {
+        checkbox.addEventListener('change', function (event) {
+          if (event.target.checked) {
+            disableCheckboxesIfAtMax();
+          } else {
+            maxSelectionsNote.classList.add('frm_hidden');
+
+            // Enable all checkboxes when a checkbox is unchecked.
+            checkboxes.forEach(function (checkbox) {
+              checkbox.parentNode.classList.remove('frm_noallow');
+              checkbox.disabled = false;
+            });
+          }
+        });
+      });
+    };
+    disableCheckboxesIfAtMax();
+    addCheckboxListeners();
+  }
+  function initOnSubmitAction() {
+    var onChangeType = function onChangeType(event) {
+      if (!event.target.checked) {
+        return;
+      }
+      var actionEl = event.target.closest('.frm_form_action_settings');
+      actionEl.querySelectorAll('.frm_on_submit_dependent_setting:not(.frm_hidden)').forEach(function (el) {
+        el.classList.add('frm_hidden');
+      });
+      var activeEls = actionEl.querySelectorAll('.frm_on_submit_dependent_setting[data-show-if-' + event.target.value + ']');
+      activeEls.forEach(function (activeEl) {
+        activeEl.classList.remove('frm_hidden');
+      });
+      actionEl.setAttribute('data-on-submit-type', event.target.value);
+    };
+    frmDom.util.documentOn('change', '.frm_on_submit_type input[type="radio"]', onChangeType);
+  }
+
+  /**
+   * Listen for click events for an API-loaded email collection form.
+   *
+   * This is used for the Active Campaign sign-up form in the inbox page (when there are no messages).
+   */
+  function initAddMyEmailAddress() {
+    jQuery(document).on('click', '#frm-add-my-email-address', function (event) {
+      event.preventDefault();
+      addMyEmailAddress();
+    });
+    var emptyInbox = document.getElementById('frm_empty_inbox');
+    var leaveEmailInput = document.getElementById('frm_leave_email');
+    if (emptyInbox && leaveEmailInput) {
+      var leaveEmailModal = document.getElementById('frm-leave-email-modal');
+      leaveEmailModal.classList.remove('frm_hidden');
+      leaveEmailModal.querySelector('.frm_modal_footer').classList.add('frm_hidden');
+      leaveEmailInput.addEventListener('keyup', function (event) {
+        if ('Enter' === event.key) {
+          var button = document.getElementById('frm-add-my-email-address');
+          if (button) {
+            button.click();
+          }
+        }
+      });
+    }
+  }
+  function addMyEmailAddress() {
+    var email = document.getElementById('frm_leave_email').value.trim();
+    if ('' === email) {
+      handleEmailAddressError('empty');
+      return;
+    }
+    var regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/i;
+    if (regex.test(email) === false) {
+      handleEmailAddressError('invalid');
+      return;
+    }
+    var $hiddenForm = jQuery('#frmapi-email-form').find('form');
+    var $hiddenEmailField = $hiddenForm.find('[type="email"]').not('.frm_verify');
+    if (!$hiddenEmailField.length) {
+      return;
+    }
+    var emptyInbox = document.getElementById('frm_empty_inbox');
+    if (emptyInbox) {
+      document.getElementById('frm-add-my-email-address').remove();
+      var emailWrapper = document.getElementById('frm_leave_email_wrapper');
+      if (emailWrapper) {
+        emailWrapper.classList.add('frm_hidden');
+        var spinner = span({
+          className: 'frm-wait frm_spinner'
+        });
+        spinner.style.visibility = 'visible';
+        spinner.style.float = 'none';
+        spinner.style.width = 'unset';
+        emailWrapper.parentElement.insertBefore(spinner, emailWrapper.nextElementSibling);
+      }
+    }
+    $hiddenEmailField.val(email);
+    jQuery.ajax({
+      type: 'POST',
+      url: $hiddenForm.attr('action'),
+      data: $hiddenForm.serialize() + '&action=frm_forms_preview'
+    }).done(function (data) {
+      var message = jQuery(data).find('.frm_message').text().trim();
+      if (message.indexOf('Thanks!') === -1) {
+        handleEmailAddressError('invalid');
+        return;
+      }
+      var apiForm = document.getElementById('frmapi-email-form');
+      var spinner = apiForm.parentElement.querySelector('.frm_spinner');
+      if (spinner) {
+        spinner.remove();
+      }
+      var showSuccessMessage = wp.hooks.applyFilters('frm_thank_you_on_signup', true);
+      if (showSuccessMessage) {
+        // Handle successful form submission.
+        // handle the Active Campaign form on the inbox page.
+        document.getElementById('frm_leave_email_wrapper').replaceWith(span(__('Thank you for signing up!', 'formidable')));
+      }
+    });
+  }
+
+  /**
+   * Adds footer links to the admin body content.
+   *
+   * @return {void}
+   */
+  function addAdminFooterLinks() {
+    var _document$querySelect7;
+    var footerLinks = document.querySelector('.frm-admin-footer-links');
+    var container = (_document$querySelect7 = document.querySelector('.frm_page_container')) !== null && _document$querySelect7 !== void 0 ? _document$querySelect7 : document.getElementById('wpbody-content');
+    if (!footerLinks || !container) {
+      return;
+    }
+    container.appendChild(footerLinks);
+    footerLinks.classList.remove('frm_hidden');
+  }
+
+  /**
+   * Apply zebra striping to a table while ignoring empty rows.
+   *
+   * @param {string} tableSelector The CSS selector for the table.
+   * @param {string} emptyRowClass The class name used to identify empty rows.
+   */
+  function applyZebraStriping(tableSelector, emptyRowClass) {
+    // Get all non-empty table rows within the specified table
+    var rows = document.querySelectorAll("".concat(tableSelector, " tr").concat(emptyRowClass ? ":not(.".concat(emptyRowClass, ")") : ''));
+    if (rows.length < 1) {
+      return;
+    }
+    var isOdd = true;
+    rows.forEach(function (row) {
+      // Clean old "frm-odd" or "frm-even" classes and add the appropriate new class
+      row.classList.remove('frm-odd', 'frm-even');
+      row.classList.add(isOdd ? 'frm-odd' : 'frm-even');
+      isOdd = !isOdd;
+    });
+    var tables = document.querySelectorAll(tableSelector);
+    tables.forEach(function (table) {
+      return table.classList.add('frm-zebra-striping');
+    });
+  }
+  function maybeHideShortcodes(e) {
+    if (!builderPage) {
+      e.stopPropagation();
+    }
+    if (e.target.classList.contains('frm-show-box') || e.target.parentElement && e.target.parentElement.classList.contains('frm-show-box')) {
+      return;
+    }
+    var sidebar = document.getElementById('frm_adv_info');
+    if (!sidebar) {
+      return;
+    }
+    if (sidebar.dataset.fills === e.target.id && typeof e.target.id !== 'undefined') {
+      return;
+    }
+    var isChild = e.target.closest('#frm_adv_info');
+    if (!isChild && sidebar.style.display !== 'none') {
+      hideShortcodes(sidebar);
+    }
+  }
+
+  /**
+   * Initializes and manages the visibility of dependent elements based on the selected options in dropdowns with the 'frm_select_with_dependency' class.
+   * It sets up initial visibility at page load and updates it on each dropdown change.
+   *
+   * @since 6.9
+   *
+   * @return {void}
+   */
+  function initSelectDependencies() {
+    var selects = document.querySelectorAll('select.frm_select_with_dependency');
+
+    /**
+     * Toggles the visibility of dependent elements associated with a select element based on its current selection.
+     *
+     * @since 6.9
+     *
+     * @param {HTMLElement} select The select element whose dependencies need to be managed.
+     * @return {void}
+     */
+    function toggleDependencyVisibility(select) {
+      var selectedOption = select.options[select.selectedIndex];
+      select.querySelectorAll('option[data-dependency]:not([data-dependency-skip])').forEach(function (option) {
+        var dependencyElement = document.querySelector(option.dataset.dependency);
+        dependencyElement === null || dependencyElement === void 0 || dependencyElement.classList.toggle('frm_hidden', selectedOption !== option);
+      });
+    }
+
+    // Initial setup: Show dependencies based on the current selection in each dropdown
+    selects.forEach(toggleDependencyVisibility);
+
+    // Update dependencies visibility on dropdown change
+    frmDom.util.documentOn('change', 'select.frm_select_with_dependency', function (event) {
+      return toggleDependencyVisibility(event.target);
+    });
+  }
+
+  /**
+   * Moves the focus to the next single option input field in the list and positions the cursor at the end of the text.
+   *
+   * @param {HTMLElement} currentInput The currently focused input element.
+   */
+  function focusNextSingleOptionInput(currentInput) {
+    var optionsList = currentInput.closest('.frm_single_option').parentElement;
+    var inputs = optionsList.querySelectorAll('.frm_single_option input[name^="field_options[" ], .frm_single_option input[name^="rows_"]');
+    var inputsArray = Array.from(inputs);
+
+    // Find the index of the currently focused input
+    var currentIndex = inputsArray.indexOf(currentInput);
+    if (currentIndex < 0) {
+      return;
+    }
+
+    // Find the next visible input field
+    var nextInput = inputsArray.slice(currentIndex + 1).find(function (input) {
+      return input.offsetParent !== null;
+    });
+    if (nextInput) {
+      nextInput.focus();
+
+      // Move the cursor to the end of the text in the next input field
+      var textLength = nextInput.value.length;
+      nextInput.setSelectionRange(textLength, textLength);
+    }
+  }
+  return {
+    init: function init() {
+      initAddMyEmailAddress();
+      addAdminFooterLinks();
+      document.addEventListener('show.bs.dropdown', function () {
+        // Fixes issues with tooltips lingering after a dropdown is shown.
+        deleteTooltips();
+      });
+      s = {};
+
+      // Bootstrap dropdown button
+      jQuery('.wp-admin').on('click', function (e) {
+        var t = jQuery(e.target);
+        var $openDrop = jQuery('.dropdown.open');
+        if ($openDrop.length && !t.hasClass('dropdown') && !t.closest('.dropdown').length) {
+          $openDrop.removeClass('open');
+        }
+      });
+      jQuery('#frm_bs_dropdown:not(.open) a').on('click', focusSearchBox);
+      if (typeof thisFormId === 'undefined') {
+        thisFormId = jQuery(document.getElementById('form_id')).val();
+      }
+
+      // Add event listener for dismissible warning messages.
+      document.querySelectorAll('.frm-warning-dismiss').forEach(function (dismissIcon) {
+        onClickPreventDefault(dismissIcon, dismissWarningMessage);
+      });
+      frmAdminBuild.inboxBannerInit();
+      if ($newFields.length > 0) {
+        // only load this on the form builder page
+        frmAdminBuild.buildInit();
+      } else if (document.getElementById('frm_notification_settings') !== null) {
+        // only load on form settings page
+        frmAdminBuild.settingsInit();
+      } else if (document.getElementById('frm_styling_form') !== null) {
+        // load styling settings js
+        frmAdminBuild.styleInit();
+      } else if (document.getElementById('form_global_settings') !== null) {
+        // global settings page
+        frmAdminBuild.globalSettingsInit();
+      } else if (document.getElementById('frm_export_xml') !== null) {
+        // import/export page
+        frmAdminBuild.exportInit();
+      } else if (null !== document.querySelector('.frm-inbox-wrapper')) {
+        // Dashboard page inbox.
+        frmAdminBuild.inboxInit();
+      } else if (document.getElementById('frm-welcome') !== null) {
+        // Solution install page
+        frmAdminBuild.solutionInit();
+      } else {
+        maybeInitEntriesListPage();
+        initAutocomplete();
+        jQuery('[data-frmprint]').on('click', function () {
+          window.print();
+          return false;
+        });
+      }
+      jQuery(document).on('change', 'select[data-toggleclass], input[data-toggleclass]', toggleFormOpts);
+      initSelectDependencies();
+      var $advInfo = jQuery(document.getElementById('frm_adv_info'));
+      if ($advInfo.length > 0 || jQuery('.frm_field_list').length > 0) {
+        // only load on the form, form settings, and view settings pages
+        frmAdminBuild.panelInit();
+      }
+      loadTooltips();
+      initUpgradeModal();
+      frmDom.util.documentOn('click', '[data-modal-title]', showBasicModal);
+
+      // used on build, form settings, and view settings
+      var $shortCodeDiv = jQuery(document.getElementById('frm_shortcodediv'));
+      if ($shortCodeDiv.length > 0) {
+        jQuery('a.edit-frm_shortcode').on('click', function () {
+          if ($shortCodeDiv.is(':hidden')) {
+            $shortCodeDiv.slideDown('fast');
+            this.style.display = 'none';
+          }
+          return false;
+        });
+        jQuery('.cancel-frm_shortcode', '#frm_shortcodediv').on('click', function () {
+          $shortCodeDiv.slideUp('fast');
+          $shortCodeDiv.siblings('a.edit-frm_shortcode').show();
+          return false;
+        });
+      }
+
+      // tabs
+      jQuery(document).on('click', '#frm-nav-tabs a', clickNewTab);
+      jQuery('.post-type-frm_display .frm-nav-tabs a, .frm-category-tabs a').on('click', function () {
+        var showUpgradeTab = this.classList.contains('frm_show_upgrade_tab');
+        if (this.classList.contains('frm_noallow') && !showUpgradeTab) {
+          return;
+        }
+        if (showUpgradeTab) {
+          populateUpgradeTab(this);
+        }
+        clickTab(this);
+        return false;
+      });
+      clickTab(jQuery('.starttab a'), 'auto');
+
+      // submit the search form with dropdown
+      jQuery(document).on('click', '#frm-fid-search-menu a', function () {
+        var val = this.id.replace('fid-', '');
+        jQuery('select[name="fid"]').val(val);
+        triggerSubmit(document.getElementById('posts-filter'));
+        return false;
+      });
+      jQuery('.frm_select_box').on('click focus', function () {
+        this.select();
+      });
+      jQuery(document).on('input search change', '.frm-auto-search:not(#frm-form-templates-page #template-search-input)', searchContent);
+      jQuery(document).on('focusin click', '.frm-auto-search', stopPropagation);
+      var autoSearch = jQuery('.frm-auto-search');
+      if (autoSearch.val() !== '') {
+        autoSearch.trigger('keyup');
+      }
+
+      // Initialize Formidable Connection.
+      FrmFormsConnect.init();
+      jQuery(document).on('click', '.frm-install-addon', installAddon);
+      jQuery(document).on('click', '.frm-activate-addon', activateAddon);
+      jQuery(document).on('click', '.frm-solution-multiple', installMultipleAddons);
+
+      // prevent annoying confirmation message from WordPress
+      jQuery('button, input[type=submit]').on('click', removeWPUnload);
+      addMultiselectLabelListener();
+      frmAdminBuild.hooks.addFilter('frm_before_embed_modal', function (ids, _ref4) {
+        var element = _ref4.element,
+          type = _ref4.type;
+        if ('form' !== type) {
+          return ids;
+        }
+        var formId, formKey;
+        var row = element.closest('tr');
+        if (row) {
+          // Embed icon on form index.
+          formId = parseInt(row.querySelector('.column-id').textContent);
+          formKey = row.querySelector('.column-form_key').textContent;
+        } else {
+          // Embed button in form builder / form settings.
+          formId = document.getElementById('form_id').value;
+          var formKeyInput = document.getElementById('frm_form_key');
+          if (formKeyInput) {
+            formKey = formKeyInput.value;
+          } else {
+            var previewDrop = document.getElementById('frm-previewDrop');
+            if (previewDrop) {
+              formKey = previewDrop.nextElementSibling.querySelector('.dropdown-item a').getAttribute('href').split('form=')[1];
+            }
+          }
+        }
+        return [formId, formKey];
+      });
+      document.querySelectorAll('#frm-show-fields > li, .frm_grid_container li').forEach(function (el, _key) {
+        el.addEventListener('click', function () {
+          var _this$querySelector;
+          var fieldId = ((_this$querySelector = this.querySelector('li')) === null || _this$querySelector === void 0 ? void 0 : _this$querySelector.dataset.fid) || this.dataset.fid;
+          maybeAddSaveAndDragIcons(fieldId);
+        });
+      });
+      var smallScreenProceedButton = document.getElementById('frm_small_screen_proceed_button');
+      if (smallScreenProceedButton) {
+        onClickPreventDefault(smallScreenProceedButton, function () {
+          var _document$getElementB5;
+          (_document$getElementB5 = document.getElementById('frm_small_device_message_container')) === null || _document$getElementB5 === void 0 || _document$getElementB5.remove();
+          doJsonPost('small_screen_proceed', new FormData());
+        });
+      }
+      var saleBanner = document.getElementById('frm_sale_banner');
+      var saleDismiss = saleBanner === null || saleBanner === void 0 ? void 0 : saleBanner.querySelector('.dismiss');
+      if (saleBanner) {
+        onClickPreventDefault(saleBanner, function (event) {
+          var target = event.target;
+          if (target.closest('.dismiss')) {
+            return;
+          }
+          window.location.href = saleBanner.getAttribute('data-url');
+        });
+        if (saleDismiss) {
+          onClickPreventDefault(saleDismiss, function () {
+            saleBanner.remove();
+            var formData = new FormData();
+            doJsonPost('sale_banner_dismiss', formData);
+          });
+        }
+      }
+    },
+    buildInit: function buildInit() {
+      jQuery('#frm_builder_page').on('mouseup', '*:not(.frm-show-box)', maybeHideShortcodes);
+      var loadFieldId, $builderForm, builderArea;
+      debouncedSyncAfterDragAndDrop = debounce(syncAfterDragAndDrop, 10);
+      postBodyContent = document.getElementById('post-body-content');
+      $postBodyContent = jQuery(postBodyContent);
+      if (jQuery('.frm_field_loading').length) {
+        loadFieldId = jQuery('.frm_field_loading').first().attr('id');
+        loadFields(loadFieldId);
+      }
+      setupSortable('ul.frm_sorting');
+      document.querySelectorAll('.field_type_list > li:not(.frm_show_upgrade)').forEach(makeDraggable);
+      jQuery('ul.field_type_list, .field_type_list li, ul.frm_code_list, .frm_code_list li, .frm_code_list li a, #frm_adv_info #category-tabs li, #frm_adv_info #category-tabs li a').disableSelection();
+      jQuery('.frm_submit_ajax').on('click', submitBuild);
+      jQuery('.frm_submit_no_ajax').on('click', submitNoAjax);
+      addFormNameModalEvents();
+      jQuery('a.edit-form-status').on('click', slideDown);
+      jQuery('.cancel-form-status').on('click', slideUp);
+      jQuery('.save-form-status').on('click', function () {
+        var newStatus = jQuery(document.getElementById('form_change_status')).val();
+        jQuery('input[name="new_status"]').val(newStatus);
+        jQuery(document.getElementById('form-status-display')).html(newStatus);
+        jQuery('.cancel-form-status').trigger('click');
+        return false;
+      });
+      jQuery('.frm_form_builder form').first().on('submit', function () {
+        jQuery('.inplace_field').trigger('blur');
+      });
+      initiateMultiselect();
+      renumberPageBreaks();
+      $builderForm = jQuery(builderForm);
+      builderArea = document.getElementById('frm_form_editor_container');
+      $builderForm.on('click', '.frm_add_logic_row', addFieldLogicRow);
+      $builderForm.on('click', '.frm_add_watch_lookup_row', addWatchLookupRow);
+      $builderForm.on('change', '.frm_get_values_form', updateGetValueFieldSelection);
+      $builderForm.on('change', '.frm_logic_field_opts', getFieldValues);
+      $builderForm.on('frm-multiselect-changed', 'select[name^="field_options[admin_only_"]', adjustVisibilityValuesForEveryoneValues);
+      jQuery(document.getElementById('frm-insert-fields')).on('click', '.frm_add_field', addFieldClick);
+      $newFields.on('click', '.frm_clone_field', duplicateField);
+      $builderForm.on('blur', 'input[id^="frm_calc"]', checkCalculationCreatedByUser);
+      $builderForm.on('change', 'input.frm_format_opt, input.frm_max_length_opt', toggleInvalidMsg);
+      $builderForm.on('change click', '[data-changeme]', liveChanges);
+      $builderForm.on('click', 'input.frm_req_field', markRequired);
+      $builderForm.on('click', '.frm_mark_unique', markUnique);
+      $builderForm.on('change', '.frm_repeat_format', toggleRepeatButtons);
+      $builderForm.on('change', '.frm_repeat_limit', checkRepeatLimit);
+      $builderForm.on('change', '.frm_js_checkbox_limit', checkCheckboxSelectionsLimit);
+      $builderForm.on('input', 'input[name^="field_options[add_label_"]', function () {
+        updateRepeatText(this, 'add');
+      });
+      $builderForm.on('input', 'input[name^="field_options[remove_label_"]', function () {
+        updateRepeatText(this, 'remove');
+      });
+      $builderForm.on('change', 'select[name^="field_options[data_type_"]', maybeClearWatchFields);
+      jQuery(builderArea).on('click', '.frm-collapse-page', maybeCollapsePage);
+      jQuery(builderArea).on('click', '.frm-collapse-section', maybeCollapseSection);
+      $builderForm.on('click', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', maybeCollapseSettings);
+      $builderForm.on('keydown', '.frm-single-settings h3, .frm-single-settings h4.frm-collapsible', function (event) {
+        // If so, only proceed if the key pressed was 'Enter' or 'Space'
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          maybeCollapseSettings.call(this, event);
+        }
+      });
+      jQuery(builderArea).on('show.bs.dropdown hide.bs.dropdown', changeSectionStyle);
+      $builderForm.on('click', '.frm_toggle_sep_values', toggleSepValues);
+      $builderForm.on('click', '.frm_toggle_image_options', toggleImageOptions);
+      $builderForm.on('click', '.frm_remove_image_option', removeImageFromOption);
+      $builderForm.on('click', '.frm_choose_image_box', addImageToOption);
+      $builderForm.on('change', '.frm_hide_image_text', refreshOptionDisplay);
+      $builderForm.on('change', '.frm_field_options_image_size', setImageSize);
+      $builderForm.on('click', '.frm_multiselect_opt', toggleMultiselect);
+      $newFields.on('mousedown', 'input, textarea, select', stopFieldFocus);
+      $newFields.on('click', 'input[type=radio], input[type=checkbox]', stopFieldFocus);
+      $newFields.on('click', '.frm_delete_field', clickDeleteField);
+      $newFields.on('click', '.frm_select_field', clickSelectField);
+      jQuery(document).on('click', '.frm_delete_field_group', clickDeleteFieldGroup);
+      jQuery(document).on('click', '.frm_clone_field_group', duplicateFieldGroup);
+      jQuery(document).on('click', '#frm_field_group_controls > span:first-child', clickFieldGroupLayout);
+      jQuery(document).on('click', '.frm-row-layout-option', handleFieldGroupLayoutOptionClick);
+      jQuery(document).on('click', '.frm-merge-fields-into-row .frm-row-layout-option', handleFieldGroupLayoutOptionInsideMergeClick);
+      jQuery(document).on('click', '.frm-custom-field-group-layout', customFieldGroupLayoutClick);
+      jQuery(document).on('click', '.frm-merge-fields-into-row .frm-custom-field-group-layout', customFieldGroupLayoutInsideMergeClick);
+      jQuery(document).on('click', '.frm-break-field-group', breakFieldGroupClick);
+      $newFields.on('click', '#frm_field_group_popup .frm_grid_container input', focusFieldGroupInputOnClick);
+      jQuery(document).on('click', '.frm-cancel-custom-field-group-layout', cancelCustomFieldGroupClick);
+      jQuery(document).on('click', '.frm-save-custom-field-group-layout', saveCustomFieldGroupClick);
+      $newFields.on('click', 'ul.frm_sorting', fieldGroupClick);
+      jQuery(document).on('click', '.frm-merge-fields-into-row', mergeFieldsIntoRowClick);
+      jQuery(document).on('click', '.frm-delete-field-groups', deleteFieldGroupsClick);
+      $newFields.on('click', '.frm-field-action-icons [data-toggle="dropdown"]', function () {
+        this.closest('li.form-field').classList.add('frm-field-settings-open');
+        jQuery(document).on('click', '#frm_builder_page', handleClickOutsideOfFieldSettings);
+      });
+      $newFields.on('mousemove', 'ul.frm_sorting', checkForMultiselectKeysOnMouseMove);
+      $newFields.on('show.bs.dropdown', '.frm-field-action-icons', onFieldActionDropdownShow);
+      jQuery(document).on('show.bs.dropdown', '#frm_field_group_controls', onFieldGroupActionDropdownShow);
+      $builderForm.on('click', '.frm_single_option a[data-removeid]', deleteFieldOption);
+      $builderForm.on('mousedown', '.frm_single_option input[type=radio]', maybeUncheckRadio);
+      $builderForm.on('focusin', '.frm_single_option input[type=text]', maybeClearOptText);
+      $builderForm.on('click', '.frm_add_opt', addFieldOption);
+      $builderForm.on('change', '.frm_single_option input', resetOptOnChange);
+      $builderForm.on('change', '.frm_image_id', resetOptOnChange);
+      $builderForm.on('change', '.frm_toggle_mult_sel', toggleMultSel);
+      $newFields.on('click', '.frm_primary_label', clickLabel);
+      $newFields.on('click', '.frm_description', clickDescription);
+      $newFields.on('click', 'li.ui-state-default:not(.frm_noallow)', clickVis);
+      $newFields.on('dblclick', 'li.ui-state-default', openAdvanced);
+      $builderForm.on('change', '.frm_tax_form_select', toggleFormTax);
+      $builderForm.on('change', 'select.conf_field', addConf);
+      $builderForm.on('change', '.frm_get_field_selection', getFieldSelection);
+      $builderForm.on('click', '.frm-show-inline-modal', maybeShowInlineModal);
+      $builderForm.on('keydown', '.frm-show-inline-modal', function (event) {
+        var key = event.key;
+        if (key === 'Enter' || key === ' ') {
+          event.preventDefault();
+          maybeShowInlineModal.call(this, event);
+        }
+      });
+      $builderForm.on('click', '.frm-inline-modal .dismiss', dismissInlineModal);
+      jQuery(document).on('change', '[data-frmchange]', changeInputtedValue);
+      document.addEventListener('click', closeModalOnOutsideClick);
+      $builderForm.on('change', '.frm_include_extras_field', rePopCalcFieldsForSummary);
+      $builderForm.on('change', 'select[name^="field_options[form_select_"]', maybeChangeEmbedFormMsg);
+      jQuery(document).on('submit', '#frm_js_build_form', buildSubmittedNoAjax);
+      jQuery(document).on('change', '#frm_builder_page input:not(.frm-search-input):not(.frm-custom-grid-size-input), #frm_builder_page select, #frm_builder_page textarea', fieldUpdated);
+      popAllProductFields();
+      jQuery(document).on('change', '.frmjs_prod_data_type_opt', toggleProductType);
+      jQuery(document).on('focus', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextFocus);
+      jQuery(document).on('blur', '.frm-single-settings ul input[type="text"][name^="field_options[options_"]', onOptionTextBlur);
+      frmDom.util.documentOn('click', '.frm-show-field-settings', clickVis);
+      frmDom.util.documentOn('change', 'select.frm_format_dropdown, select.frm_phone_type_dropdown', maybeUpdateFormatInput);
+
+      // Navigate to the next input field on pressing Enter in a single option field
+      $builderForm.on('keydown', '.frm_single_option input[name^="field_options["], .frm_single_option input[name^="rows_"]', function (event) {
+        if ('Enter' === event.key) {
+          focusNextSingleOptionInput(event.currentTarget);
+        }
+      });
+      initBulkOptionsOverlay();
+      hideEmptyEle();
+      document.addEventListener('frm_added_field', hideEmptyEle);
+      maybeHideQuantityProductFieldOption();
+      handleNameFieldOnFormBuilder();
+      toggleSectionHolder();
+      handleShowPasswordLiveUpdate();
+      document.addEventListener('scroll', updateShortcodesPopupPosition, true);
+      document.addEventListener('change', handleBuilderChangeEvent);
+      document.querySelector('.frm_form_builder').addEventListener('mousedown', function (event) {
+        if (event.shiftKey) {
+          event.preventDefault();
+        }
+      });
+      wp.hooks.addAction('frmShowedFieldSettings', 'formidableAdmin', function (showBtn, fieldSettingsEl) {
+        fieldSettingsEl.querySelectorAll('.frm-collapse-me').forEach(addSlideAnimationCssVars);
+      }, 9999);
+    },
+    settingsInit: function settingsInit() {
+      var $formActions = jQuery(document.getElementById('frm_notification_settings'));
+      var formSettings, $loggedIn, $cookieExp, $editable;
+
+      // BCC, CC, and Reply To button functionality
+      $formActions.on('click', '.frm_email_buttons', showEmailRow);
+      $formActions.on('click', '.frm_remove_field', hideEmailRow);
+      $formActions.on('change', '.frm_to_row, .frm_from_row', showEmailWarning);
+      $formActions.on('change', '.frm_tax_selector', changePosttaxRow);
+      $formActions.on('change', 'select.frm_single_post_field', checkDupPost);
+      $formActions.on('change', 'select.frm_toggle_post_content', togglePostContent);
+      $formActions.on('change', 'select.frm_dyncontent_opt', fillDyncontent);
+      $formActions.on('change', '.frm_post_type', switchPostType);
+      $formActions.on('click', '.frm_add_postmeta_row', addPostmetaRow);
+      $formActions.on('click', '.frm_add_posttax_row', addPosttaxRow);
+      $formActions.on('click', '.frm_toggle_cf_opts', toggleCfOpts);
+      $formActions.on('click', '.frm_duplicate_form_action', copyFormAction);
+      jQuery('.frm_actions_list').on('click', '.frm_active_action', addFormAction);
+      jQuery('#frm-show-groups, #frm-hide-groups').on('click', toggleActionGroups);
+      initiateMultiselect();
+
+      //set actions icons to inactive
+      jQuery('ul.frm_actions_list li').each(function () {
+        checkActiveAction(jQuery(this).children('a').data('actiontype'));
+
+        // If the icon is a background image, don't add BG color.
+        var icon = jQuery(this).find('i');
+        if (icon.css('background-image') !== 'none') {
+          icon.addClass('frm-inverse');
+        }
+      });
+      jQuery('.frm_submit_settings_btn').on('click', submitSettings);
+      addFormNameModalEvents();
+      formSettings = jQuery('.frm_form_settings');
+      formSettings.on('click', '.frm_add_form_logic', addFormLogicRow);
+      formSettings.on('click', '.frm_already_used', actionLimitMessage);
+      document.addEventListener('click', function handleImageUploadClickEvents(event) {
+        var target = event.target;
+        if (!target.closest('.frm_image_preview_wrapper')) {
+          return;
+        }
+        if (target.closest('.frm_choose_image_box')) {
+          addImageToOption.bind(target)(event);
+          return;
+        }
+        if (target.closest('.frm_remove_image_option')) {
+          removeImageFromOption.bind(target)(event);
+        }
+      });
+
+      // Close shortcode modal on click.
+      formSettings.on('mouseup', '*:not(.frm-show-box)', maybeHideShortcodes);
+
+      //Warning when user selects "Do not store entries ..."
+      jQuery(document.getElementById('no_save')).on('change', function () {
+        if (this.checked) {
+          if (confirm(frmAdminJs.no_save_warning) !== true) {
+            // Uncheck box if user hits "Cancel"
+            jQuery(this).attr('checked', false);
+          }
+        }
+      });
+      jQuery('select[name="options[edit_action]"]').on('change', showSuccessOpt);
+      $loggedIn = document.getElementById('logged_in');
+      jQuery($loggedIn).on('change', function () {
+        if (this.checked) {
+          visible('.hide_logged_in');
+        } else {
+          invisible('.hide_logged_in');
+        }
+      });
+      $cookieExp = jQuery(document.getElementById('frm_cookie_expiration'));
+      jQuery(document.getElementById('frm_single_entry_type')).on('change', function () {
+        if (this.value === 'cookie') {
+          $cookieExp.fadeIn('slow');
+        } else {
+          $cookieExp.fadeOut('slow');
+        }
+      });
+      var $singleEntry = document.getElementById('single_entry');
+      jQuery($singleEntry).on('change', function () {
+        if (this.checked) {
+          visible('.hide_single_entry');
+        } else {
+          invisible('.hide_single_entry');
+        }
+        if (this.checked && jQuery(document.getElementById('frm_single_entry_type')).val() === 'cookie') {
+          $cookieExp.fadeIn('slow');
+        } else {
+          $cookieExp.fadeOut('slow');
+        }
+      });
+      jQuery('.hide_save_draft').hide();
+      var $saveDraft = jQuery(document.getElementById('save_draft'));
+      $saveDraft.on('change', function () {
+        if (this.checked) {
+          jQuery('.hide_save_draft').fadeIn('slow');
+        } else {
+          jQuery('.hide_save_draft').fadeOut('slow');
+        }
+      });
+      triggerChange($saveDraft);
+
+      //If Allow editing is checked/unchecked
+      $editable = document.getElementById('editable');
+      jQuery($editable).on('change', function () {
+        if (this.checked) {
+          jQuery('.hide_editable').fadeIn('slow');
+          triggerChange(document.getElementById('edit_action'));
+        } else {
+          jQuery('.hide_editable').fadeOut('slow');
+          jQuery('.edit_action_message_box').fadeOut('slow'); //Hide On Update message box
+        }
+      });
+
+      //If File Protection is checked/unchecked
+      jQuery(document).on('change', '#protect_files', function () {
+        if (this.checked) {
+          jQuery('.hide_protect_files').fadeIn('slow');
+        } else {
+          jQuery('.hide_protect_files').fadeOut('slow');
+        }
+      });
+      jQuery(document).on('frm-multiselect-changed', '#protect_files_role', adjustVisibilityValuesForEveryoneValues);
+      jQuery(document).on('submit', '.frm_form_settings', settingsSubmitted);
+      jQuery(document).on('change', '#form_settings_page input:not(.frm-search-input), #form_settings_page select, #form_settings_page textarea', fieldUpdated);
+
+      // Page Selection Autocomplete
+      initAutocomplete();
+      jQuery(document).on('frm-action-loaded', onActionLoaded);
+      initOnSubmitAction();
+      wp.hooks.addAction('frm_reset_fields_updated', 'formidableAdmin', resetFieldsUpdated);
+    },
+    panelInit: function panelInit() {
+      var customPanel, settingsPage, viewPage, insertFieldsTab;
+      jQuery('.frm_wrap, #postbox-container-1').on('click', '.frm_insert_code', insertCode);
+      jQuery(document).on('change', '.frm_insert_val', function () {
+        insertFieldCode(jQuery(this).data('target'), jQuery(this).val());
+        jQuery(this).val('');
+      });
+      jQuery(document).on('click change', '[name="frm-id-key-condition"]', resetLogicBuilder);
+      jQuery(document).on('keyup change', '.frm-build-logic', setLogicExample);
+      showInputIcon();
+      jQuery(document).on('frmElementAdded', function (event, parentEle) {
+        /* This is here for add-ons to trigger */
+        showInputIcon(parentEle);
+      });
+      jQuery(document).on('mousedown', '.frm-show-box', showShortcodes);
+      settingsPage = document.getElementById('form_settings_page');
+      viewPage = document.body.classList.contains('post-type-frm_display');
+      insertFieldsTab = document.getElementById('frm_insert_fields_tab');
+      if (settingsPage !== null || viewPage || builderPage) {
+        jQuery(document).on('focusin', 'form input, form textarea', function (e) {
+          var htmlTab;
+          e.stopPropagation();
+          maybeShowModal(this);
+          if (jQuery(this).is(':not(:submit, input[type=button], .frm-search-input, input[type=checkbox])')) {
+            if (jQuery(e.target).closest('#frm_adv_info').length) {
+              // Don't trigger for fields inside of the modal.
+              return;
+            }
+            if (settingsPage !== null || builderPage) {
+              /* form settings page */
+              htmlTab = jQuery('#frm_html_tab');
+              if (jQuery(this).closest('#html_settings').length > 0) {
+                htmlTab.show();
+                htmlTab.siblings().hide();
+                jQuery('#frm_html_tab a').trigger('click');
+                toggleAllowedHTML(this);
+              } else {
+                showElement(jQuery('.frm-category-tabs li'));
+                insertFieldsTab.click();
+                htmlTab.hide();
+                htmlTab.siblings().show();
+              }
+            } else if (viewPage) {
+              var event = new CustomEvent('frm_legacy_views_handle_field_focus');
+              event.frmData = {
+                idAttrValue: this.id
+              };
+              document.dispatchEvent(event);
+            }
+          }
+        });
+      }
+      jQuery('.frm_wrap, #postbox-container-1').on('mousedown', '#frm_adv_info a, .frm_field_list a', function (e) {
+        e.preventDefault();
+      });
+      customPanel = jQuery('#frm_adv_info');
+      customPanel.on('click', '.subsubsub a.frmids', function (e) {
+        toggleKeyID('frmids', e);
+      });
+      customPanel.on('click', '.subsubsub a.frmkeys', function (e) {
+        toggleKeyID('frmkeys', e);
+      });
+    },
+    inboxInit: function inboxInit() {
+      var _document$getElementB6;
+      jQuery('.frm_inbox_dismiss').on('click', function (e) {
+        var message = this.parentNode.parentNode;
+        var key = message.getAttribute('data-message');
+        var href = this.getAttribute('href');
+        var dismissedMessage = message.cloneNode(true);
+        var dismissedMessagesWrapper = document.querySelector('.frm-dismissed-inbox-messages');
+        if ('free_templates' === key && !this.classList.contains('frm_inbox_dismiss')) {
+          return;
+        }
+        e.preventDefault();
+        data = {
+          action: 'frm_inbox_dismiss',
+          key: key,
+          nonce: frmGlobal.nonce
+        };
+        var isInboxSlideIn = 'frm_inbox_slide_in' === message.id;
+        if (isInboxSlideIn) {
+          message.classList.remove('s11-fadein');
+          message.classList.add('s11-fadeout');
+          message.addEventListener('animationend', function () {
+            return message.remove();
+          }, {
+            once: true
+          });
+        }
+        postAjax(data, function () {
+          if (isInboxSlideIn) {
+            return;
+          }
+          if (href !== '#') {
+            window.location = href;
+            return true;
+          }
+          fadeOut(message, function () {
+            if (null !== dismissedMessagesWrapper) {
+              var _dismissedMessage$que;
+              dismissedMessage.classList.remove('frm-fade');
+              (_dismissedMessage$que = dismissedMessage.querySelector('.frm-inbox-message-heading')) === null || _dismissedMessage$que === void 0 || _dismissedMessage$que.removeChild(dismissedMessage.querySelector('.frm-inbox-message-heading .frm_inbox_dismiss'));
+              dismissedMessagesWrapper.append(dismissedMessage);
+            }
+            if (1 === message.parentNode.querySelectorAll('.frm-inbox-message-container').length) {
+              document.getElementById('frm_empty_inbox').classList.remove('frm_hidden');
+              message.parentNode.closest('.frm-active').classList.add('frm-empty-inbox');
+              showActiveCampaignForm();
+            }
+            message.parentNode.removeChild(message);
+          });
+        });
+      });
+      if (false === ((_document$getElementB6 = document.getElementById('frm_empty_inbox')) === null || _document$getElementB6 === void 0 ? void 0 : _document$getElementB6.classList.contains('frm_hidden'))) {
+        showActiveCampaignForm();
+      }
+    },
+    solutionInit: function solutionInit() {
+      jQuery(document).on('submit', '#frm-new-template', installTemplate);
+    },
+    styleInit: function styleInit() {
+      var $previewWrapper = jQuery('.frm_image_preview_wrapper');
+      $previewWrapper.on('click', '.frm_choose_image_box', addImageToOption);
+      $previewWrapper.on('click', '.frm_remove_image_option', removeImageFromOption);
+      wp.hooks.doAction('frm_style_editor_init');
+    },
+    customCSSInit: function customCSSInit() {
+      console.warn('Calling frmAdminBuild.customCSSInit is deprecated.');
+    },
+    globalSettingsInit: function globalSettingsInit() {
+      var licenseTab;
+      jQuery(document).on('click', '[data-frmuninstall]', uninstallNow);
+      initiateMultiselect();
+
+      // activate addon licenses
+      licenseTab = document.getElementById('licenses_settings');
+      if (licenseTab !== null) {
+        jQuery(licenseTab).on('click', '.edd_frm_save_license', saveAddonLicense);
+      }
+
+      // Solution install page
+      jQuery(document).on('click', '#frm-new-template button', installTemplateFieldset);
+      jQuery('#frm-dismissable-cta .dismiss').on('click', function (event) {
+        event.preventDefault();
+        jQuery.post(ajaxurl, {
+          action: 'frm_lite_settings_upgrade',
+          nonce: frmGlobal.nonce
+        });
+        jQuery('.settings-lite-cta').remove();
+      });
+      var captchaType = document.getElementById('frm_re_type');
+      if (captchaType) {
+        captchaType.addEventListener('change', handleCaptchaTypeChange);
+      }
+      document.querySelector('.frm_captchas').addEventListener('change', function (event) {
+        var _document$querySelect8;
+        var captchaValueOnLoad = (_document$querySelect8 = document.querySelector('.frm_captchas input[checked="checked"]')) === null || _document$querySelect8 === void 0 ? void 0 : _document$querySelect8.value;
+        var showNote = event.target.value !== captchaValueOnLoad;
+        document.querySelector('.captcha_settings .frm_note_style').classList.toggle('frm_hidden', !showNote);
+      });
+
+      // Set fieldsUpdated to 0 to avoid the unsaved changes pop up.
+      frmDom.util.documentOn('submit', '.frm_settings_form', function () {
+        return fieldsUpdated = 0;
+      });
+      var manageStyleSettings = document.getElementById('manage_styles_settings');
+      if (manageStyleSettings) {
+        manageStyleSettings.addEventListener('change', function (event) {
+          var target = event.target;
+          if ('SELECT' !== target.nodeName || !target.dataset.name || target.getAttribute('name')) {
+            return;
+          }
+          target.setAttribute('name', target.dataset.name);
+        });
+      }
+      var paymentsSettings = document.getElementById('payments_settings');
+      var paymentSettingsTabs = paymentsSettings === null || paymentsSettings === void 0 ? void 0 : paymentsSettings.querySelectorAll('[name="frm_payment_section"]');
+      if (paymentSettingsTabs) {
+        paymentSettingsTabs.forEach(function (element) {
+          element.addEventListener('change', function () {
+            if (!element.checked) {
+              return;
+            }
+            var label = paymentsSettings.querySelector("label[for=\"".concat(element.id, "\"]"));
+            if (label) {
+              label.setAttribute('aria-selected', 'true');
+            }
+            paymentSettingsTabs.forEach(function (tab) {
+              if (tab === element) {
+                return;
+              }
+              var label = paymentsSettings.querySelector("label[for=\"".concat(tab.id, "\"]"));
+              if (label) {
+                label.setAttribute('aria-selected', 'false');
+              }
+            });
+          });
+        });
+      }
+    },
+    exportInit: function exportInit() {
+      jQuery('.frm_form_importer').on('submit', startFormMigration);
+      jQuery(document.getElementById('frm_export_xml')).on('submit', validateExport);
+      jQuery('#frm_export_xml input, #frm_export_xml select').on('change', removeExportError);
+      jQuery('input[name="frm_import_file"]').on('change', checkCSVExtension);
+      document.querySelector('select[name="format"]').addEventListener('change', exportTypeChanged);
+      jQuery('input[name="frm_export_forms[]"]').on('click', preventMultipleExport);
+      initiateMultiselect();
+      jQuery('.frm-feature-banner .dismiss').on('click', function (event) {
+        event.preventDefault();
+        jQuery.post(ajaxurl, {
+          action: 'frm_dismiss_migrator',
+          plugin: this.id,
+          nonce: frmGlobal.nonce
+        });
+        this.parentElement.remove();
+      });
+      showOrHideRepeaters(getExportOption());
+      document.querySelector('#frm-export-select-all').addEventListener('change', function (event) {
+        document.querySelectorAll('[name="frm_export_forms[]"]').forEach(function (cb) {
+          return cb.checked = event.target.checked;
+        });
+      });
+    },
+    inboxBannerInit: function inboxBannerInit() {
+      var banner = document.getElementById('frm_banner');
+      if (!banner) {
+        return;
+      }
+      var dismissButton = banner.querySelector('.frm-banner-dismiss');
+      document.addEventListener('click', function (event) {
+        if (event.target !== dismissButton) {
+          return;
+        }
+        var data = {
+          action: 'frm_inbox_dismiss',
+          key: banner.dataset.key,
+          nonce: frmGlobal.nonce
+        };
+        postAjax(data, function () {
+          jQuery(banner).fadeOut(400, function () {
+            banner.remove();
+          });
+        });
+      });
+    },
+    updateOpts: function updateOpts(fieldId, opts, modal) {
+      var separate = usingSeparateValues(fieldId),
+        action = isProductField(fieldId) ? 'frm_bulk_products' : 'frm_import_options';
+      jQuery.ajax({
+        type: 'POST',
+        url: ajaxurl,
+        data: {
+          action: action,
+          field_id: fieldId,
+          opts: opts,
+          separate: separate,
+          nonce: frmGlobal.nonce
+        },
+        success: function success(html) {
+          document.getElementById('frm_field_' + fieldId + '_opts').innerHTML = html;
+          wp.hooks.doAction('frm_after_bulk_edit_opts', fieldId);
+          resetDisplayedOpts(fieldId);
+          if (typeof modal !== 'undefined') {
+            modal.dialog('close');
+            document.getElementById('frm-update-bulk-opts').classList.remove('frm_loading_button');
+          }
+        }
+      });
+    },
+    /* remove conditional logic if the field doesn't exist */
+    triggerRemoveLogic: function triggerRemoveLogic(fieldID, metaName) {
+      jQuery('#frm_logic_' + fieldID + '_' + metaName + ' .frm_remove_tag').trigger('click');
+    },
+    downloadXML: function downloadXML(controller, ids, isTemplate) {
+      var url = ajaxurl + '?action=frm_' + controller + '_xml&ids=' + ids;
+      if (isTemplate !== null) {
+        url = url + '&is_template=' + isTemplate;
+      }
+      location.href = url;
+    },
+    /**
+     * @since 5.0.04
+     */
+    hooks: {
+      applyFilters: function applyFilters(hookName) {
+        var _wp$hooks;
+        for (var _len = arguments.length, args = new Array(_len > 1 ? _len - 1 : 0), _key2 = 1; _key2 < _len; _key2++) {
+          args[_key2 - 1] = arguments[_key2];
+        }
+        return (_wp$hooks = wp.hooks).applyFilters.apply(_wp$hooks, [hookName].concat(args));
+      },
+      addFilter: function addFilter(hookName, callback, priority) {
+        return wp.hooks.addFilter(hookName, 'formidable', callback, priority);
+      },
+      doAction: function doAction(hookName) {
+        var _wp$hooks2;
+        for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key3 = 1; _key3 < _len2; _key3++) {
+          args[_key3 - 1] = arguments[_key3];
+        }
+        return (_wp$hooks2 = wp.hooks).doAction.apply(_wp$hooks2, [hookName].concat(args));
+      },
+      addAction: function addAction(hookName, callback, priority) {
+        return wp.hooks.addAction(hookName, 'formidable', callback, priority);
+      }
+    },
+    applyZebraStriping: applyZebraStriping,
+    initModal: initModal,
+    infoModal: infoModal,
+    offsetModalY: offsetModalY,
+    adjustConditionalLogicOptionOrders: adjustConditionalLogicOptionOrders,
+    addRadioCheckboxOpt: addRadioCheckboxOpt,
+    installNewForm: installNewForm,
+    toggleAddonState: toggleAddonState,
+    purifyHtml: purifyHtml,
+    loadApiEmailForm: loadApiEmailForm,
+    addMyEmailAddress: addMyEmailAddress,
+    fillDropdownOpts: fillDropdownOpts,
+    showSaveAndReloadModal: showSaveAndReloadModal,
+    clearSettingsBox: clearSettingsBox,
+    deleteField: deleteField,
+    insertFormField: insertFormField,
+    confirmLinkClick: confirmLinkClick,
+    handleInsertFieldByDraggingResponse: handleInsertFieldByDraggingResponse,
+    handleAddFieldClickResponse: handleAddFieldClickResponse,
+    syncLayoutClasses: syncLayoutClasses,
+    moveFieldSettings: moveFieldSettings
+  };
+};
+window.frmAdminBuild = frmAdminBuildJS();
+jQuery(document).ready(function () {
+  var _document$querySelect9;
+  frmAdminBuild.init();
+  document.querySelectorAll('.frm-dropdown-menu').forEach(convertOldBootstrapDropdownsToBootstrap5);
+  (_document$querySelect9 = document.querySelector('.preview.dropdown .frm-dropdown-toggle')) === null || _document$querySelect9 === void 0 || _document$querySelect9.setAttribute('data-bs-toggle', 'dropdown');
+
+  // Bootstrap 5 uses data-bs-toggle instead of data-toggle.
+  document.querySelectorAll('[data-toggle]').forEach(function (toggle) {
+    return toggle.setAttribute('data-bs-toggle', toggle.getAttribute('data-toggle'));
+  });
+  function convertOldBootstrapDropdownsToBootstrap5(frmDropdownMenu) {
+    frmDropdownMenu.classList.add('dropdown-menu');
+    var toggle = frmDropdownMenu.querySelector('.frm-dropdown-toggle');
+    if (toggle) {
+      if (!toggle.hasAttribute('role')) {
+        toggle.setAttribute('role', 'button');
+      }
+      if (!toggle.hasAttribute('tabindex')) {
+        toggle.setAttribute('tabindex', 0);
+      }
+    }
+
+    // Convert <li> and <ul> tags.
+    if ('UL' === frmDropdownMenu.tagName) {
+      convertBootstrapUl(frmDropdownMenu);
+    }
+  }
+  function convertBootstrapUl(ul) {
+    var html = ul.outerHTML;
+    html = html.replace('<ul ', '<div ');
+    html = html.replace('</ul>', '</div>');
+    html = html.replaceAll('<li>', '<div class="dropdown-item">');
+    html = html.replaceAll('<li class="', '<div class="dropdown-item ');
+    html = html.replaceAll('</li>', '</div>');
+    ul.outerHTML = html;
+  }
+});
+window.frm_show_div = function (div, value, showIf, classId) {
+  // eslint-disable-line camelcase
+  if (value == showIf) {
+    jQuery(classId + div).fadeIn('slow').css('visibility', 'visible');
+  } else {
+    jQuery(classId + div).fadeOut('slow');
+  }
+};
+window.frmCheckAll = function (checked, n) {
+  jQuery('input[name^="' + n + '"]').prop('checked', !!checked);
+};
+window.frmCheckAllLevel = function (checked, n, level) {
+  var $kids = jQuery('.frm_catlevel_' + level).children('.frm_checkbox').children('label');
+  $kids.children('input[name^="' + n + '"]').prop('checked', !!checked);
+};
+window.frmGetFieldValues = function (fieldId, cur, rowNumber, fieldType, htmlName, callback) {
+  if (!fieldId) {
+    return;
+  }
+  jQuery.ajax({
+    type: 'POST',
+    url: ajaxurl,
+    data: 'action=frm_get_field_values&current_field=' + cur + '&field_id=' + fieldId + '&name=' + htmlName + '&t=' + fieldType + '&form_action=' + jQuery('input[name="frm_action"]').val() + '&nonce=' + frmGlobal.nonce,
+    success: function success(msg) {
+      document.getElementById('frm_show_selected_values_' + cur + '_' + rowNumber).innerHTML = msg;
+      if ('function' === typeof callback) {
+        callback();
+      }
+    }
+  });
+};
+window.frmImportCsv = function (formID) {
+  var urlVars = '';
+  if (typeof __FRMURLVARS !== 'undefined') {
+    urlVars = __FRMURLVARS;
+  }
+  jQuery.ajax({
+    type: 'POST',
+    url: ajaxurl,
+    data: 'action=frm_import_csv&nonce=' + frmGlobal.nonce + '&frm_skip_cookie=1' + urlVars,
+    success: function success(count) {
+      var max = jQuery('.frm_admin_progress_bar').attr('aria-valuemax');
+      var imported = max - count;
+      var percent = imported / max * 100;
+      jQuery('.frm_admin_progress_bar').css('width', percent + '%').attr('aria-valuenow', imported);
+      if (parseInt(count, 10) > 0) {
+        jQuery('.frm_csv_remaining').html(count);
+        frmImportCsv(formID);
+      } else {
+        jQuery(document.getElementById('frm_import_message')).html(frm_admin_js.import_complete); // eslint-disable-line camelcase
+        setTimeout(function () {
+          location.href = '?page=formidable-entries&frm_action=list&form=' + formID + '&import-message=1';
+        }, 2000);
+      }
+    }
+  });
+};
+/******/ })()
+;
+//# sourceMappingURL=formidable_admin.js.map

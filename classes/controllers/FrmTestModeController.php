@@ -109,7 +109,7 @@ class FrmTestModeController {
 		$show_all_hidden_fields_toggle_args   = self::get_show_all_hidden_fields_toggle_args();
 		$form_id                              = is_numeric( $form_key ) ? $form_key : FrmForm::get_id_by_key( $form_key );
 		$should_show_upsell                   = self::should_show_upsell();
-		$should_suggest_test_mode_install     = ! $enabled && ! $should_show_upsell;
+		$should_suggest_test_mode_install     = ! $enabled;
 		$should_suggest_ai_install            = $enabled && ! $ai_enabled;
 		$should_show_warning                  = $should_suggest_test_mode_install || $should_suggest_ai_install;
 		$form_actions                         = FrmFormAction::get_action_for_form( $form_id );

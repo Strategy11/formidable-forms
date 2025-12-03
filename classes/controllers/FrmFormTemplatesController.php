@@ -698,6 +698,12 @@ class FrmFormTemplatesController {
 		wp_register_style( self::SCRIPT_HANDLE, $plugin_url . '/css/admin/form-templates.css', array(), $version );
 		wp_enqueue_style( self::SCRIPT_HANDLE );
 
+		$page = FrmAppHelper::simple_get( 'page' );
+		if ( FrmFormTemplatesController::PAGE_SLUG === $page ) {
+			wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
+			wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array( 'jquery', 'formidable_dom' ), $version, true );
+		}
+
 		// Register and enqueue "Form Templates" script.
 		wp_register_script( self::SCRIPT_HANDLE, $plugin_url . '/js/form-templates.js', $js_dependencies, $version, true );
 		wp_localize_script( self::SCRIPT_HANDLE, 'frmFormTemplatesVars', self::get_js_variables() );

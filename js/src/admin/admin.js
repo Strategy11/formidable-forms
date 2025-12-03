@@ -9191,11 +9191,17 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function activateAddon( e ) {
+		if ( e.target.closest( '#frm-form-templates-page' ) ) {
+			return;
+		}
 		e.preventDefault();
 		toggleAddonState( this, 'frm_activate_addon' );
 	}
 
 	function installAddon( e ) {
+		if ( e.target.closest( '#frm-form-templates-page' ) ) {
+			return;
+		}
 		e.preventDefault();
 		toggleAddonState( this, 'frm_install_addon' );
 	}
