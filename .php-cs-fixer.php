@@ -20,6 +20,7 @@ $rules  = array(
 	'no_superfluous_elseif'                => true,
 	'elseif'                               => true,
 	'phpdoc_add_missing_param_annotation'  => true,
+	'no_extra_blank_lines'                 => true,
 	'phpdoc_types_order'                   => array(
 		'null_adjustment' => 'always_last',
 	),

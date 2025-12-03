@@ -277,7 +277,6 @@ class FrmSquareLiteEventsController {
 			}
 		}
 
-
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(
 			array(

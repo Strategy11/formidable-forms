@@ -571,7 +571,6 @@ class FrmStylesHelper {
 		return true;
 	}
 
-
 	/**
 	 * Remove anything that isn't used as a CSS variable name.
 	 *
