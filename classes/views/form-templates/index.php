@@ -55,6 +55,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @since 6.10
 					 */
 					do_action( 'frm_after_create_blank_form_button' );
+					if ( ! class_exists( 'FrmAIAppHelper' ) ) {
+						include $view_path . 'ai-upsell-button.php';
+					}
 					?>
 				</div>
 				<span id="frm-form-templates-create-form-divider" class="frm-page-skeleton-divider frm-mt-xs frm-mb-xs"></span>
