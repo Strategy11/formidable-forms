@@ -143,7 +143,7 @@ class FrmFormsHelper {
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
-		}
+		}//end if
 
 		$form_id = 0;
 

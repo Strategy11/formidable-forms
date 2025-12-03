@@ -755,7 +755,7 @@ class FrmCSVExportHelper {
 					$row[ $column_key ] = $sub_value;
 				}
 			}
-		}
+		}//end if
 	}
 
 	/**

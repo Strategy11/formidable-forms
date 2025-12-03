@@ -518,7 +518,7 @@ class FrmField {
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
 						$safe_atts[ $key ] = $value;
 					}
-				}
+				}//end foreach
 
 				if ( ! $safe_atts ) {
 					return '[input]';

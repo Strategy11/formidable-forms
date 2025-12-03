@@ -1292,7 +1292,7 @@ class FrmFieldsHelper {
 				$atts['entry_key'] = $atts['entry']->item_key;
 				$replace_with      = self::get_display_value( $replace_with, $field, $atts );
 			}
-		}
+		}//end if
 
 		return $replace_with;
 	}

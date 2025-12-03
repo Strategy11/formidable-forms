@@ -393,7 +393,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				}
 
 				$r .= '</td>';
-			}
+			}//end if
 			unset( $val );
 		}//end foreach
 		$r .= '</tr>';

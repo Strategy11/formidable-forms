@@ -2488,7 +2488,7 @@ class FrmAppHelper {
 		} else {
 			$value = self::maybe_update_value_if_null( $value, $function );
 			$value = call_user_func( $function, $value );
-		}
+		}//end if
 
 		return $value;
 	}

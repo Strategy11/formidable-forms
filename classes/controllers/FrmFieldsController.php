@@ -52,7 +52,7 @@ class FrmFieldsController {
 			self::load_single_field( $field, $values );
 			$field_html[ absint( $field->id ) ] = ob_get_contents();
 			ob_end_clean();
-		}
+		}//end foreach
 
 		echo json_encode( $field_html );
 

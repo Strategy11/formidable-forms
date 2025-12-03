@@ -573,7 +573,7 @@ class FrmStyle {
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
 			$styles[ $style->ID ] = $style;
-		}
+		}//end foreach
 
 		if ( ! $default_style ) {
 			$default_style = reset( $styles );

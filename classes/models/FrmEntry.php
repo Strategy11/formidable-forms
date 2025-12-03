@@ -591,7 +591,7 @@ class FrmEntry {
 			$entry->metas[ $meta_val->field_id ][] = $meta_val->meta_value;
 
 			unset( $meta_val );
-		}
+		}//end foreach
 		unset( $metas );
 
 		FrmDb::set_cache( $entry->id, $entry, 'frm_entry' );

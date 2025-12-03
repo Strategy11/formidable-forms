@@ -116,7 +116,7 @@ class FrmDb {
 				$where .= ' ) ';
 			} else {
 				self::interpret_array_to_sql( $key, $value, $where, $values );
-			}
+			}//end if
 		}//end foreach
 	}
 
