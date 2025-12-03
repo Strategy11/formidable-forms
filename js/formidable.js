@@ -1874,7 +1874,7 @@ function frmFrontFormJS() {
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
 				classList = object.className.trim().split( /\s+/gi );
 
-			if ( classList && invisibleRecaptcha.length < 1 ) {
+			if ( classList && ! invisibleRecaptcha ) {
 				isPro = classList.indexOf( 'frm_pro_form' ) > -1;
 				if ( ! isPro ) {
 					return;
