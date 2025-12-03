@@ -320,7 +320,6 @@ class FrmOnboardingWizardController {
 		wp_send_json_success();
 	}
 
-
 	/**
 	 * Handle AJAX request to set up usage data for the Onboarding Wizard.
 	 *

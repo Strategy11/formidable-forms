@@ -94,7 +94,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_content_type( $expected, $mock_email );
 	}
 
-
 	/**
 	 * Tests multiple to addresses, double quotes, user-defined subject
 	 *

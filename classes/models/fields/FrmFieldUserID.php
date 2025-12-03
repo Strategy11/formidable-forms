@@ -41,7 +41,6 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected $array_allowed = false;
 
-
 	/**
 	 * @return string
 	 */
