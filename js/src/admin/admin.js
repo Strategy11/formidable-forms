@@ -3056,6 +3056,12 @@ window.frmAdminBuildJS = function() {
 		return 'field_options' + opt.substring( 0, at ) + '_' + fieldId + opt.substring( at );
 	}
 
+	/**
+	 * Populates the calculation field list.
+	 *
+	 * @param {HTMLElement} v     The calculation box element.
+	 * @param {boolean}     force Whether to force the refresh.
+	 */
 	function popCalcFields( v, force ) {
 		let box, exclude, fields, i, list,
 			p = jQuery( v ).closest( '.frm-single-settings' ),
@@ -3066,7 +3072,6 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
-
 		const fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
 
 		if ( force ) {
@@ -3101,8 +3106,21 @@ window.frmAdminBuildJS = function() {
 			li.appendChild( a );
 			list.appendChild( li );
 		}
-	}
 
+		// If the calc type is math and there are no fields, hide search and show a message
+		const search = box.querySelector( '.frm-search' );
+		if ( ! list.hasChildNodes() && isMathCalcType( box ) ) {
+			search.classList.add( 'frm_hidden' );
+			list.appendChild(
+				tag( 'li', {
+					className: 'frm-px-sm',
+					child: span( { text: __( 'This form has no numeric fields to insert into the calculation.', 'formidable' ) } )
+				} )
+			);
+		} else {
+			search.classList.remove( 'frm_hidden' );
+		}
+	}
 	function getExcludeArray( calcBox, isSummary ) {
 		const codeList = calcBox.querySelector( '.frm_code_list' );
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
