@@ -127,6 +127,7 @@ class FrmCreateFile {
 	public function combine_files( $file_names ) {
 		if ( $this->has_permission ) {
 			$content = '';
+
 			foreach ( $file_names as $file_name ) {
 				$content .= $this->get_contents( $file_name ) . "\n";
 			}
@@ -158,6 +159,7 @@ class FrmCreateFile {
 	 */
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
+
 		if ( empty( $file ) ) {
 			$file = $this->new_file_path;
 		}
@@ -174,6 +176,7 @@ class FrmCreateFile {
 		$creds = $this->get_creds();
 
 		$this->has_permission = true;
+
 		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
 			// initialize the API - any problems and we exit
 			$this->show_error_message();
@@ -190,6 +193,7 @@ class FrmCreateFile {
 		global $wp_filesystem;
 
 		$needed_dirs = $this->get_needed_dirs();
+
 		foreach ( $needed_dirs as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
 			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
@@ -209,6 +213,7 @@ class FrmCreateFile {
 		$needed_dirs = array();
 
 		$next_dir = '';
+
 		foreach ( $dir_names as $dir ) {
 			$next_dir     .= '/' . $dir;
 			$needed_dirs[] = $this->uploads['basedir'] . $next_dir;
@@ -226,6 +231,7 @@ class FrmCreateFile {
 		}
 
 		$access_type = get_filesystem_method();
+
 		if ( $access_type === 'direct' ) {
 			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		} else {
@@ -263,6 +269,7 @@ class FrmCreateFile {
 
 		if ( strpos( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
+
 			if ( ! is_numeric( $credentials['port'] ) ) {
 				unset( $credentials['port'] );
 			}
@@ -282,8 +289,10 @@ class FrmCreateFile {
 
 		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
 		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
+
 			if ( ! empty( $stored_credentials['port'] ) ) {
 				// Save port as part of hostname to simplify above code.
 				$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];

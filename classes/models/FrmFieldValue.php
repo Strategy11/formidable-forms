@@ -242,6 +242,7 @@ class FrmFieldValue {
 	protected function filter_displayed_value( $atts ) {
 		if ( ! is_object( $this->entry ) || empty( $this->entry->metas ) ) {
 			$this->entry = FrmEntry::getOne( $this->entry_id, true );
+
 			if ( ! is_object( $this->entry ) ) {
 				return;
 			}

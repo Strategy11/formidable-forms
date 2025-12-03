@@ -105,11 +105,13 @@ class FrmFieldNumber extends FrmFieldType {
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );
+
 		if ( ! $step || ! is_numeric( $step ) ) {
 			return;
 		}
 
 		$result = $this->check_value_is_valid_with_step( $args['value'], $step );
+
 		if ( ! $result ) {
 			return;
 		}
@@ -141,6 +143,7 @@ class FrmFieldNumber extends FrmFieldType {
 		$value = intval( $pow * $value );
 		$step  = intval( $pow * $step );
 		$div   = $value / $step;
+
 		if ( is_int( $div ) ) {
 			return 0;
 		}

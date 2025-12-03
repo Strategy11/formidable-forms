@@ -36,11 +36,13 @@ class FrmSquareLiteAppController {
 	 */
 	public static function handle_oauth() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
 			wp_send_json_error();
 		}
 
 		$redirect_url = FrmSquareLiteConnectHelper::get_oauth_redirect_url();
+
 		if ( false === $redirect_url ) {
 			wp_send_json_error( 'Unable to connect to Square successfully' );
 		}
@@ -53,6 +55,7 @@ class FrmSquareLiteAppController {
 
 	public static function handle_disconnect() {
 		FrmAppHelper::permission_check( 'frm_change_settings' );
+
 		if ( ! check_admin_referer( 'frm_ajax', 'nonce' ) ) {
 			wp_send_json_error();
 		}
@@ -70,11 +73,13 @@ class FrmSquareLiteAppController {
 		check_ajax_referer( 'frm_square_ajax', 'nonce' );
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
 		if ( ! $form_id ) {
 			wp_send_json_error( __( 'Invalid form ID', 'formidable' ) );
 		}
 
 		$actions = FrmSquareLiteActionsController::get_actions_before_submit( $form_id );
+
 		if ( empty( $actions ) ) {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
@@ -104,11 +109,13 @@ class FrmSquareLiteAppController {
 	 */
 	private static function get_amount_value_for_verification( $action ) {
 		$amount = $action->post_content['amount'];
+
 		if ( strpos( $amount, '[' ) === false ) {
 			return $amount;
 		}
 
 		$form = FrmForm::getOne( $action->menu_order );
+
 		if ( ! $form ) {
 			return $amount;
 		}
@@ -178,6 +185,7 @@ class FrmSquareLiteAppController {
 		}
 
 		$address_field = FrmField::getOne( $address_field_id );
+
 		if ( ! $address_field ) {
 			return;
 		}

@@ -24,6 +24,7 @@ class FrmStrpLiteAuth {
 	 */
 	public static function maybe_show_message( $html ) {
 		$link_error = FrmAppHelper::simple_get( 'frm_link_error' );
+
 		if ( $link_error ) {
 			$message = '<div class="frm_error_style">' . self::get_message_for_stripe_link_code( $link_error ) . '</div>';
 			self::insert_error_message( $message, $html );
@@ -31,11 +32,13 @@ class FrmStrpLiteAuth {
 		}
 
 		$form_id = self::check_html_for_form_id_match( $html );
+
 		if ( false === $form_id ) {
 			return $html;
 		}
 
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return $html;
 		}
@@ -47,6 +50,7 @@ class FrmStrpLiteAuth {
 		self::prepare_success_atts( $atts );
 
 		$intent = $details['intent'];
+
 		if ( self::intent_has_failed_status( $intent ) ) {
 			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
 			self::insert_error_message( $message, $html );
@@ -54,6 +58,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$intent_is_processing = 'processing' === $intent->status;
+
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
@@ -88,6 +93,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return false;
 		}
@@ -111,6 +117,7 @@ class FrmStrpLiteAuth {
 	private static function check_html_for_form_id_match( $html ) {
 		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
+
 			if ( strpos( $html, $substring ) ) {
 				return $form_id;
 			}
@@ -167,8 +174,10 @@ class FrmStrpLiteAuth {
 		$atts['conf_method'] = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
+
 		if ( $actions ) {
 			$action = reset( $actions );
+
 			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
 				$atts['conf_method'] = $action->post_content['success_action'];
 			}
@@ -188,6 +197,7 @@ class FrmStrpLiteAuth {
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';
 		$pos       = strpos( $form, $add_after );
+
 		if ( $pos !== false ) {
 			$form = substr_replace( $form, $add_after . $message, $pos, strlen( $add_after ) );
 		}
@@ -202,6 +212,7 @@ class FrmStrpLiteAuth {
 	 */
 	public static function add_hidden_token_field( $form ) {
 		$posted_form = FrmAppHelper::get_param( 'form_id', 0, 'post', 'absint' );
+
 		if ( $posted_form != $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
 			// Check to make sure the correct form was submitted.
 			// Was an entry already created and the form should be loaded fresh?
@@ -213,6 +224,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
+
 		if ( ! empty( $intents ) ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
@@ -260,6 +272,7 @@ class FrmStrpLiteAuth {
 		if ( ! isset( $_POST[ $name ] ) ) {
 			return array();
 		}
+
 		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
@@ -280,6 +293,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
 		if ( ! is_array( $form ) ) {
 			wp_die();
 		}
@@ -326,6 +340,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
+
 		if ( empty( $actions ) || empty( $intents ) ) {
 			return;
 		}
@@ -344,11 +359,13 @@ class FrmStrpLiteAuth {
 		foreach ( $intents as $k => $intent ) {
 			$intent_id       = explode( '_secret_', $intent )[0];
 			$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+
 			if ( $is_setup_intent ) {
 				continue;
 			}
 
 			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
 			if ( empty( $saved->metadata->action ) ) {
 				continue;
 			}
@@ -363,6 +380,7 @@ class FrmStrpLiteAuth {
 				);
 
 				$amount = $action->post_content['amount'];
+
 				if ( strpos( $amount, '[' ) === false ) {
 					// The amount is static, so it doesn't need an update.
 					continue;
@@ -371,6 +389,7 @@ class FrmStrpLiteAuth {
 				// Update amount based on field shortcodes.
 				$entry  = self::generate_false_entry();
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+
 				if ( $saved->amount == $amount || $amount == '000' ) {
 					continue;
 				}
@@ -427,6 +446,7 @@ class FrmStrpLiteAuth {
 
 		foreach ( $form as $input ) {
 			$key = $input['name'];
+
 			if ( isset( $formatted[ $key ] ) ) {
 				if ( is_array( $formatted[ $key ] ) ) {
 					$formatted[ $key ][] = $input['value'];
@@ -455,6 +475,7 @@ class FrmStrpLiteAuth {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
+
 		if ( is_array( $details ) ) {
 			$payment        = $details['payment'];
 			$intent         = $details['intent'];
@@ -485,6 +506,7 @@ class FrmStrpLiteAuth {
 			}
 
 			$intent = self::create_intent( $action );
+
 			if ( ! is_object( $intent ) ) {
 				// A non-object is a string error message.
 				// The error gets logged to results.log so we can just skip it.
@@ -555,6 +577,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_add_statement_descriptor( $intent_data ) {
 		$statement_descriptor = self::get_statement_descriptor();
+
 		if ( false !== $statement_descriptor ) {
 			$intent_data['statement_descriptor'] = $statement_descriptor;
 		}
@@ -658,6 +681,7 @@ class FrmStrpLiteAuth {
 
 		// We need to add a customer to support subscriptions with link.
 		$customer = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
+
 		if ( ! is_object( $customer ) ) {
 			return false;
 		}
@@ -677,6 +701,7 @@ class FrmStrpLiteAuth {
 		if ( empty( $actions ) ) {
 			return;
 		}
+
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {
@@ -738,6 +763,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function get_redirect_url( $atts ) {
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts );
+
 		if ( $actions ) {
 			$success_url = reset( $actions )->post_content['success_url'];
 		}
@@ -766,6 +792,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function get_message_url( $atts ) {
 		$url = self::get_referer_url( $atts['entry_id'], false );
+
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
@@ -790,6 +817,7 @@ class FrmStrpLiteAuth {
 			),
 			'id, meta_value'
 		);
+
 		if ( ! $row ) {
 			return false;
 		}

@@ -170,6 +170,7 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		$body = self::pull_response_body( $response );
+
 		if ( empty( $body->success ) ) {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
@@ -306,6 +307,7 @@ class FrmStrpLiteConnectHelper {
 
 		$event     = 'frm_payment_cron';
 		$timestamp = wp_next_scheduled( $event );
+
 		if ( false !== $timestamp ) {
 			wp_unschedule_event( $timestamp, $event );
 		}
@@ -372,6 +374,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function check_server_for_oauth_account_id() {
 		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+
 		if ( 'live' !== $mode ) {
 			$mode = 'test';
 		}
@@ -464,14 +467,17 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function check_server_for_connected_account_status() {
 		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+
 		if ( 'live' !== $mode ) {
 			$mode = 'test';
 		}
+
 		$additional_body = array(
 			'frm_strp_connect_mode' => $mode,
 		);
 		$data            = self::post_with_authenticated_body( 'account_status', $additional_body );
 		$success         = false !== $data && ! empty( $data->details_submitted );
+
 		if ( $success ) {
 			self::set_stripe_details_as_submitted( $mode );
 		}
@@ -512,6 +518,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();
+
 		if ( false === $password ) {
 			$password = 'lite_' . self::get_uuid();
 		}
@@ -555,6 +562,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
+
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
@@ -570,6 +578,7 @@ class FrmStrpLiteConnectHelper {
 	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$pro_license = FrmAddonsController::get_pro_license();
+
 			if ( $pro_license ) {
 				$password = $pro_license;
 			}
@@ -619,6 +628,7 @@ class FrmStrpLiteConnectHelper {
 	private static function render_settings() {
 		$modes = array( 'test', 'live' );
 		$html  = '';
+
 		foreach ( $modes as $mode ) {
 			$account_id = self::get_account_id( $mode );
 			$connected  = self::stripe_connect_is_setup( $mode );
@@ -658,6 +668,7 @@ class FrmStrpLiteConnectHelper {
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
 		}
+
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
 	}
@@ -687,9 +698,11 @@ class FrmStrpLiteConnectHelper {
 	public static function get_customer_id( $options ) {
 		$data    = self::post_with_authenticated_body( 'get_customer', compact( 'options' ) );
 		$success = false !== $data;
+
 		if ( ! $success ) {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
+
 		if ( empty( $data->customer_id ) ) {
 			return false;
 		}
@@ -715,14 +728,17 @@ class FrmStrpLiteConnectHelper {
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
 		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
 		$response = self::post_to_connect_server( $action, $body );
+
 		if ( is_object( $response ) ) {
 			return $response;
 		}
+
 		if ( is_array( $response ) ) {
 			// reformat empty arrays as empty objects
 			// if the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
+
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_stripe_connect = $response;
 			FrmTransLiteLog::log_message( 'Stripe Connect Error', $response );
@@ -740,6 +756,7 @@ class FrmStrpLiteConnectHelper {
 	public static function create_intent( $new_charge ) {
 		$data    = self::post_with_authenticated_body( 'create_intent', compact( 'new_charge' ) );
 		$success = false !== $data;
+
 		if ( ! $success ) {
 			return false;
 		}
@@ -764,6 +781,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function create_subscription( $new_charge ) {
 		$data = self::post_with_authenticated_body( 'create_subscription', compact( 'new_charge' ) );
+
 		if ( is_object( $data ) ) {
 			return $data;
 		}
@@ -820,11 +838,13 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function get_event( $event_id ) {
 		$event = wp_cache_get( $event_id, 'frm_strp' );
+
 		if ( is_object( $event ) ) {
 			return $event;
 		}
 
 		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+
 		if ( false === $event || empty( $event->event ) ) {
 			return false;
 		}
@@ -849,6 +869,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function maybe_create_plan( $plan ) {
 		$data = self::post_with_authenticated_body( 'maybe_create_plan', compact( 'plan' ) );
+
 		if ( false === $data || empty( $data->plan_id ) ) {
 			return false;
 		}
@@ -881,6 +902,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function get_unprocessed_event_ids() {
 		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}

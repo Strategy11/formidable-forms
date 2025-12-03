@@ -15,6 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		'name' => 'frm_custom_css',
 		'id'   => $id,
 	);
+
 	if ( ! empty( $settings ) ) {
 		$textarea_params['class'] = 'hide-if-js';
 	}

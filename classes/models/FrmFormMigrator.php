@@ -63,6 +63,7 @@ abstract class FrmFormMigrator {
 		}
 
 		$this->source_active = is_plugin_active( $this->path );
+
 		if ( ! $this->source_active ) {
 			// if source plugin is not installed, do nothing
 			return;
@@ -130,6 +131,7 @@ abstract class FrmFormMigrator {
 							'type'  => 'submit',
 							'class' => 'button button-primary frm-button-primary',
 						);
+
 						if ( ! $forms ) {
 							$button_atts['disabled'] = 'disabled';
 						}
@@ -187,6 +189,7 @@ abstract class FrmFormMigrator {
 
 		if ( is_array( $forms ) ) {
 			$imported = array();
+
 			foreach ( $forms as $form_id ) {
 				$imported[] = $this->import_form( $form_id );
 			}
@@ -301,6 +304,7 @@ abstract class FrmFormMigrator {
 			$this->prepare_field( $field, $new_field );
 
 			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break';
+
 			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];
 			}
@@ -357,6 +361,7 @@ abstract class FrmFormMigrator {
 	 */
 	protected function maybe_add_end_fields( &$fields ) {
 		$with_end = $this->fields_with_end();
+
 		if ( empty( $with_end ) ) {
 			return;
 		}
@@ -364,10 +369,12 @@ abstract class FrmFormMigrator {
 		$open = array();
 
 		$order = 0;
+
 		foreach ( $fields as $field ) {
 			++$order;
 			$type     = $this->get_field_type( $field );
 			$new_type = $this->convert_field_type( $type, $field );
+
 			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
 				continue;
 			}
@@ -548,6 +555,7 @@ abstract class FrmFormMigrator {
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
 		unset( $action['type'] );
 		$new_action = $action_control->prepare_new( $form_id );
+
 		foreach ( $action as $key => $value ) {
 			if ( $key === 'post_title' ) {
 				$new_action->post_title = $value;
@@ -599,11 +607,13 @@ abstract class FrmFormMigrator {
 	private function is_imported( $source_id ) {
 		$imported    = $this->get_tracked_import();
 		$new_form_id = 0;
+
 		if ( ! isset( $imported[ $this->slug ] ) || ! in_array( $source_id, $imported[ $this->slug ] ) ) {
 			return $new_form_id;
 		}
 
 		$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
+
 		if ( ! empty( $new_form_id ) && empty( FrmForm::get_key_by_id( $new_form_id ) ) ) {
 			// Allow reimport if the form was deleted.
 			$new_form_id = 0;
@@ -716,6 +726,7 @@ abstract class FrmFormMigrator {
 	 */
 	protected function get_field_label( $field ) {
 		$label = $field['label'] ?? '';
+
 		if ( ! empty( $label ) ) {
 			return $label;
 		}

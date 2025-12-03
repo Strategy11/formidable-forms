@@ -84,6 +84,7 @@ class FrmTransLiteHooksController {
 	 */
 	private static function fix_addon_hooks() {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
 		if ( ! $unread_count ) {
 			// Nothing to fix.
 			return;

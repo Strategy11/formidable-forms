@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $email_styles   = FrmEmailStylesController::get_email_styles();
 $selected_style = ! empty( $form_action->post_content['email_style'] ) ? $form_action->post_content['email_style'] : 'classic';
+
 if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 	$selected_style = 'plain';
 }

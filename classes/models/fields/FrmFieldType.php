@@ -121,6 +121,7 @@ abstract class FrmFieldType {
 	 */
 	public function __get( $key ) {
 		$value = '';
+
 		if ( property_exists( $this, $key ) ) {
 			$value = $this->{$key};
 		}
@@ -136,6 +137,7 @@ abstract class FrmFieldType {
 	protected function set_type( $type ) {
 		if ( empty( $this->type ) ) {
 			$this->type = $this->get_field_column( 'type' );
+
 			if ( empty( $this->type ) && ! empty( $type ) ) {
 				$this->type = $type;
 			}
@@ -168,6 +170,7 @@ abstract class FrmFieldType {
 	 */
 	public function get_field_column( $column ) {
 		$field_val = '';
+
 		if ( is_object( $this->field ) ) {
 			$field_val = $this->field->{$column};
 		} elseif ( is_array( $this->field ) && isset( $this->field[ $column ] ) ) {
@@ -346,11 +349,13 @@ DEFAULT_HTML;
 		$read_only = FrmField::get_option( $this->field, 'read_only' );
 
 		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
+
 		if ( is_array( $placeholder ) ) {
 			$placeholder = '';
 		}
 
 		$value = $this->get_field_column( 'default_value' );
+
 		if ( is_array( $value ) ) {
 			$value = '';
 		}
@@ -437,6 +442,7 @@ DEFAULT_HTML;
 	 */
 	protected function field_settings_for_type() {
 		$settings = array();
+
 		if ( ! $this->has_input ) {
 			$settings = $this->no_input_settings();
 		}
@@ -823,6 +829,7 @@ DEFAULT_HTML;
 		}
 
 		$is_empty = array_filter( $default_value );
+
 		if ( empty( $is_empty ) ) {
 			$default_value = '';
 		} else {
@@ -839,6 +846,7 @@ DEFAULT_HTML;
 	 */
 	protected function auto_width_setting( $args ) {
 		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
+
 		if ( $use_style ) {
 			$field = $args['field'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/automatic-width.php';
@@ -1019,6 +1027,7 @@ DEFAULT_HTML;
 		}
 
 		$args = $this->fill_display_field_values( $args );
+
 		if ( $this->has_html ) {
 			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
 			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
@@ -1081,6 +1090,7 @@ DEFAULT_HTML;
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
+
 		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
@@ -1121,6 +1131,7 @@ DEFAULT_HTML;
 	protected function add_input_class() {
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
 		$extra_classes = $this->get_input_class();
+
 		if ( ! empty( $extra_classes ) ) {
 			$input_class .= ' ' . $extra_classes;
 		}
@@ -1196,6 +1207,7 @@ DEFAULT_HTML;
 		global $frm_vars;
 
 		$include_file = $this->include_front_form_file();
+
 		if ( empty( $include_file ) ) {
 			return;
 		}
@@ -1252,12 +1264,15 @@ DEFAULT_HTML;
 	 */
 	protected function prepare_esc_value() {
 		$value = $this->field['value'];
+
 		if ( is_null( $value ) ) {
 			return '';
 		}
+
 		if ( is_array( $value ) ) {
 			$value = implode( ', ', $value );
 		}
+
 		if ( strpos( $value, '&lt;' ) !== false ) {
 			$value = htmlentities( $value );
 		}
@@ -1289,16 +1304,19 @@ DEFAULT_HTML;
 	 */
 	protected function add_min_max( $args, &$input_html ) {
 		$min = FrmField::get_option( $this->field, 'minnum' );
+
 		if ( ! is_numeric( $min ) ) {
 			$min = 0;
 		}
 
 		$max = FrmField::get_option( $this->field, 'maxnum' );
+
 		if ( ! is_numeric( $max ) ) {
 			$max = 9999999;
 		}
 
 		$step = FrmField::get_option( $this->field, 'step' );
+
 		if ( ! is_numeric( $step ) && $step !== 'any' ) {
 			$step = 1;
 		}
@@ -1314,6 +1332,7 @@ DEFAULT_HTML;
 	protected function maybe_include_hidden_values( $args ) {
 		$hidden       = '';
 		$is_read_only = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
+
 		if ( $is_read_only && $this->show_readonly_hidden() ) {
 			$hidden = $this->show_hidden_values( $args );
 		}
@@ -1340,11 +1359,13 @@ DEFAULT_HTML;
 		}
 
 		$options = array_values( $this->field['options'] );
+
 		if ( ! isset( $options[ $opt ] ) ) {
 			return $hidden;
 		}
 
 		$option = $options[ $opt ];
+
 		if ( is_array( $option ) ) {
 			$option = $option['value'];
 		}
@@ -1385,8 +1406,10 @@ DEFAULT_HTML;
 	protected function show_hidden_values( $args ) {
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
+
 		if ( is_array( $selected_value ) ) {
 			$args['save_array'] = true;
+
 			foreach ( $selected_value as $selected ) {
 				$hidden .= $this->show_single_hidden( $selected, $args );
 			}
@@ -1438,6 +1461,7 @@ DEFAULT_HTML;
 			$input .= esc_html( $option );
 			$input .= '</option>';
 		}
+
 		$input .= '</select>';
 
 		return $input;
@@ -1469,6 +1493,7 @@ DEFAULT_HTML;
 	protected function get_select_attributes( $values ) {
 		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
 		$select_atts = array();
+
 		if ( ! $readonly ) {
 			if ( isset( $values['combo_name'] ) ) {
 				$values['field_name'] .= '[' . $values['combo_name'] . ']';
@@ -1543,6 +1568,7 @@ DEFAULT_HTML;
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
+
 		if ( $aria_describedby_exists ) {
 			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
 		} else {
@@ -1557,6 +1583,7 @@ DEFAULT_HTML;
 		if ( $custom_desc_fields && $custom_error_fields ) {
 			reset( $custom_error_fields );
 			reset( $custom_desc_fields );
+
 			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
@@ -1646,6 +1673,7 @@ DEFAULT_HTML;
 		}
 
 		$field_id = $this->get_field_column( 'id' );
+
 		if ( ! array_key_exists( $field_id, $frm_validated_unique_values ) ) {
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
@@ -1665,6 +1693,7 @@ DEFAULT_HTML;
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			return false;
 		}
+
 		$field_id = $this->get_field_column( 'id' );
 		return FrmProEntryMetaHelper::value_exists( $field_id, $value, $entry_id );
 	}
@@ -1773,6 +1802,7 @@ DEFAULT_HTML;
 		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
+
 		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
 			return false;
 		}
@@ -1859,6 +1889,7 @@ DEFAULT_HTML;
 	protected function get_new_child_ids( $value, $atts ) {
 		$saved_entries = $atts['ids'];
 		$new_value     = array();
+
 		foreach ( (array) $value as $old_child_id ) {
 			if ( isset( $saved_entries[ $old_child_id ] ) ) {
 				$new_value[] = $saved_entries[ $old_child_id ];
@@ -1953,6 +1984,7 @@ DEFAULT_HTML;
 		}
 
 		$options = $this->get_options( array() );
+
 		if ( ! $options || ! is_array( $options ) ) {
 			// No options to match, so return early.
 			return $value;
@@ -1964,9 +1996,11 @@ DEFAULT_HTML;
 			}
 
 			$return_value = array();
+
 			foreach ( $unsanitized_value as $v ) {
 				foreach ( $options as $option ) {
 					$option_value = is_array( $option ) ? $option['value'] : $option;
+
 					if ( $v === $option_value ) {
 						$return_value[] = $option_value;
 						break;
@@ -1979,6 +2013,7 @@ DEFAULT_HTML;
 		// $value is a string.
 		foreach ( $options as $option ) {
 			$option_value = is_array( $option ) ? $option['value'] : $option;
+
 			if ( $unsanitized_value === $option_value ) {
 				return $option_value;
 			}

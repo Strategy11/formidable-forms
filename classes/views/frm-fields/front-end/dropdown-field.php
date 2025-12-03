@@ -62,6 +62,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 
 		if ( $other_opt === false ) {
 			$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $selected );
+
 			if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {
 				$other_checked = true;
 			}

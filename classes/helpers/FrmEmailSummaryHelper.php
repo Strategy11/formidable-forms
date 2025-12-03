@@ -64,6 +64,7 @@ class FrmEmailSummaryHelper {
 	 */
 	private static function get_options() {
 		$options = get_option( self::$option_name );
+
 		if ( ! $options ) {
 			$default_options = array(
 				// Do not send email within 15 days after updating.
@@ -122,6 +123,7 @@ class FrmEmailSummaryHelper {
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
 			$renewal_date = self::get_renewal_date();
+
 			if ( $renewal_date && self::BEFORE_RENEWAL_PERIOD >= self::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
@@ -175,6 +177,7 @@ class FrmEmailSummaryHelper {
 
 		// Return the actual renewal date if it exists.
 		$license_info = FrmAddonsController::get_primary_license_info();
+
 		if ( ! empty( $license_info['expires'] ) ) {
 			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
 
@@ -185,6 +188,7 @@ class FrmEmailSummaryHelper {
 
 		// If renewal date doesn't exist, get from the first form creation date.
 		$first_form_date = self::get_earliest_form_created_date();
+
 		if ( $first_form_date ) {
 			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
 
@@ -226,11 +230,13 @@ class FrmEmailSummaryHelper {
 	 */
 	private static function get_date_diff( $date1, $date2 ) {
 		$date1 = self::get_date_obj( $date1 );
+
 		if ( ! $date1 ) {
 			return false;
 		}
 
 		$date2 = self::get_date_obj( $date2 );
+
 		if ( ! $date2 ) {
 			return false;
 		}
@@ -247,6 +253,7 @@ class FrmEmailSummaryHelper {
 	 */
 	public static function get_last_sent_date( $type ) {
 		$options = self::get_options();
+
 		if ( empty( $options[ 'last_' . $type ] ) ) {
 			return false;
 		}
@@ -371,6 +378,7 @@ class FrmEmailSummaryHelper {
 		}
 
 		$displayed_value = round( $diff * 100 );
+
 		if ( ! $displayed_value ) {
 			// Do not show 0 value.
 			$displayed_value = $diff > 0 ? 1 : -1;
@@ -474,11 +482,13 @@ class FrmEmailSummaryHelper {
 	public static function get_latest_inbox_message() {
 		$inbox    = new FrmInbox();
 		$messages = $inbox->get_messages( 'filter' );
+
 		if ( ! $messages || ! is_array( $messages ) ) {
 			return false;
 		}
 
 		$messages = array_reverse( $messages );
+
 		foreach ( $messages as $message ) {
 			if ( 'news' !== $message['type'] ) {
 				continue;
@@ -497,11 +507,13 @@ class FrmEmailSummaryHelper {
 	 */
 	public static function get_out_of_date_plugins() {
 		$update_data = FrmAddonsController::check_update( '' );
+
 		if ( ! $update_data || ! is_object( $update_data ) || empty( $update_data->response ) ) {
 			return array();
 		}
 
 		$plugins = array();
+
 		foreach ( $update_data->response as $plugin_data ) {
 			$plugins[] = $plugin_data->display_name;
 		}
@@ -562,6 +574,7 @@ class FrmEmailSummaryHelper {
 	public static function maybe_remove_recipients_from_api( &$recipients ) {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
+
 		if ( empty( $addons['no_emails'] ) ) {
 			return;
 		}

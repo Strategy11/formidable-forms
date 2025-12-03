@@ -91,11 +91,13 @@ class FrmTransLiteActionsController {
 		self::prepare_description( $action, compact( 'entry', 'form' ) );
 
 		$gateway = self::get_gateway_for_action( $action );
+
 		if ( ! $gateway ) {
 			return;
 		}
 
 		$class_name = FrmTransLiteAppHelper::get_setting_for_gateway( $gateway, 'class' );
+
 		if ( ! $class_name ) {
 			return;
 		}
@@ -156,6 +158,7 @@ class FrmTransLiteActionsController {
 	public static function replace_success_message() {
 		global $frm_vars;
 		$message = $frm_vars['frm_trans']['error'] ?? '';
+
 		if ( empty( $message ) ) {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
@@ -270,6 +273,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
+
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
 			$trigger_event = $payment->status === 'complete' ? 'payment-success' : 'payment-failed';
 		}
@@ -286,6 +290,7 @@ class FrmTransLiteActionsController {
 	 */
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
+
 		if ( ! empty( $description ) ) {
 			$atts['value']                       = $description;
 			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
@@ -315,6 +320,7 @@ class FrmTransLiteActionsController {
 		$currency = self::get_currency_for_action( $atts );
 
 		$total = 0;
+
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
 			self::maybe_use_decimal( $this_amount, $currency );
@@ -336,6 +342,7 @@ class FrmTransLiteActionsController {
 	 */
 	public static function get_currency_for_action( $atts ) {
 		$currency = 'usd';
+
 		if ( isset( $atts['form'] ) ) {
 			$currency = $atts['action']->post_content['currency'];
 		} elseif ( isset( $atts['currency'] ) ) {
@@ -370,6 +377,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$amount_parts = explode( '.', $amount );
+
 		if ( 2 !== count( $amount_parts ) ) {
 			return;
 		}
@@ -404,6 +412,7 @@ class FrmTransLiteActionsController {
 	public static function prepare_settings_for_js( $form_id ) {
 		$payment_actions = self::get_actions_for_form( $form_id );
 		$action_settings = array();
+
 		foreach ( $payment_actions as $payment_action ) {
 			$settings_for_action = array(
 				'id'         => $payment_action->ID,
@@ -454,6 +463,7 @@ class FrmTransLiteActionsController {
 			'post_status' => 'publish',
 		);
 		$payment_actions = FrmFormAction::get_action_for_form( $form_id, 'payment', $action_status );
+
 		if ( ! $payment_actions ) {
 			$payment_actions = array();
 		}
@@ -496,6 +506,7 @@ class FrmTransLiteActionsController {
 	public static function fill_entry_from_previous( $values, $field ) {
 		global $frm_vars;
 		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
+
 		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}
@@ -563,6 +574,7 @@ class FrmTransLiteActionsController {
 
 		if ( in_array( 'square', $settings['gateway'] ) ) {
 			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
+
 			if ( false !== $currency ) {
 				$settings['currency'] = strtolower( $currency );
 			} else {
@@ -582,9 +594,11 @@ class FrmTransLiteActionsController {
 					'form_id' => $form_id,
 				)
 			);
+
 			if ( ! $credit_card_field_id ) {
 				$credit_card_field_id = self::add_a_credit_card_field( $form_id );
 			}
+
 			if ( $credit_card_field_id ) {
 				$settings['credit_card'] = $credit_card_field_id;
 			}
@@ -597,6 +611,7 @@ class FrmTransLiteActionsController {
 				'form_id' => $form_id,
 			)
 		);
+
 		if ( ! $gateway_field_id ) {
 			self::add_a_gateway_field( $form_id );
 		}

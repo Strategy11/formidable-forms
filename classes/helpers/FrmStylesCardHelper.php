@@ -110,12 +110,15 @@ class FrmStylesCardHelper {
 		);
 
 		$is_active_style = $style->ID === $this->active_style->ID;
+
 		if ( $is_active_style ) {
 			$params['class'] .= ' frm-active-style-card frm-currently-set-style-card';
 		}
+
 		if ( $hidden ) {
 			$params['class'] .= ' frm_hidden';
 		}
+
 		if ( self::has_dark_background( $style ) ) {
 			$params['class'] .= ' frm-dark-style';
 		}
@@ -154,6 +157,7 @@ class FrmStylesCardHelper {
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
 				// Consider a faded out rgba value as light even when the color is dark.
 				$color_opacity = floatval( $matches[1][3] );
+
 				if ( $color_opacity < 0.5 ) {
 					return false;
 				}
@@ -290,6 +294,7 @@ class FrmStylesCardHelper {
 			$value = $style->post_content[ $key ];
 
 			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
+
 			if ( $is_hex ) {
 				$value = '#' . $value;
 			}
@@ -345,6 +350,7 @@ class FrmStylesCardHelper {
 			'class' => 'frm-style-card-wrapper with_frm_style',
 			'style' => $wrapper_style,
 		);
+
 		if ( $this->enabled ) {
 			$card_wrapper_params['class'] .= ' frm-styles-enabled';
 		}

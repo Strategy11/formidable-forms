@@ -23,6 +23,7 @@ class test_FrmMisc extends FrmUnitTest {
 	 */
 	public function test_frm_class_autoloader() {
 		$test_classes = array( 'FrmTipsHelper', 'FrmFormActionsController', 'FrmEntryFactory', 'FrmFieldDefault' );
+
 		foreach ( $test_classes as $class_name ) {
 			if ( ! class_exists( $class_name ) ) {
 				frm_forms_autoloader( $class_name );

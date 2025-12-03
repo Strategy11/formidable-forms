@@ -44,6 +44,8 @@ describe( 'Forms page', () => {
 								'black friday sales are happening now!',
 								'save 65% on the best wordpress form builder',
 								'don\'t miss the best deals for cyber monday!',
+								'don\'t miss the giving tuesday flash sale!',
+								'don\'t miss 65% off on the best wordpress form builder!',
 							] ).to.include( headingText );
 						} );
 					} );

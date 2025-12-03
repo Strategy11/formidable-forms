@@ -206,6 +206,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
+
 		if ( ! empty( $s ) ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
 
@@ -218,6 +219,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $form_id ) {
 			$form = FrmForm::getOne( $form_id );
 		}
+
 		$has_form = ! empty( $form );
 
 		if ( ! $has_form ) {
@@ -247,6 +249,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	protected function display_tablenav( $which ) {
 		$is_footer = ( $which !== 'top' );
+
 		if ( $is_footer && ! empty( $this->items ) ) {
 			$utm = array(
 				'campaign' => 'spam-protection',
@@ -271,6 +274,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+
 		if ( $which === 'top' && ! $form_id ) {
 			echo '<div class="alignleft actions">';
 
@@ -379,6 +383,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				}
 
 				$r .= "<td $attributes>";
+
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
@@ -386,8 +391,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				} else {
 					$r .= $val;
 				}
+
 				$r .= '</td>';
-			}
+			}//end if
 			unset( $val );
 		}//end foreach
 		$r .= '</tr>';
@@ -437,6 +443,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			case 'form_id':
 				$form_id             = $item->form_id;
 				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+
 				if ( $user_can_edit_forms ) {
 					$val = FrmFormsHelper::edit_form_link( $form_id );
 				} else {
@@ -455,6 +462,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			default:
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
+
 				if ( $val === false ) {
 					$this->get_column_value( $item, $val );
 				}
@@ -528,6 +536,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$field = FrmField::getOne( $col_name );
+
 		if ( ! $field ) {
 			return;
 		}

@@ -97,6 +97,7 @@ DEFAULT_HTML;
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$form = $args['form'];
+
 		if ( ! FrmForm::show_submit( $form ) ) {
 			return '';
 		}

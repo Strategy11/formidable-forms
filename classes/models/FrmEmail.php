@@ -440,6 +440,7 @@ class FrmEmail {
 	private function add_autop() {
 		$message = $this->message;
 		preg_match( '/<body[^>]*>([\s\S]*?)<\/body>/', $message, $match );
+
 		if ( ! empty( $match[1] ) ) {
 			$this->message = str_replace( $match[1], trim( wpautop( $match[1] ) ), $message );
 		} else {
@@ -534,6 +535,7 @@ class FrmEmail {
 		$this->add_mandrill_filter();
 
 		$sent = false;
+
 		if ( count( $this->to ) > 1 && $this->is_single_recipient ) {
 			foreach ( $this->to as $recipient ) {
 				$sent = $this->send_single( $recipient );
@@ -574,6 +576,7 @@ class FrmEmail {
 			if ( is_array( $header ) ) {
 				$header = implode( "\r\n", $header );
 			}
+
 			$recipient = implode( ',', (array) $recipient );
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}
@@ -624,6 +627,7 @@ class FrmEmail {
 		);
 
 		$user_id_args['field_id'] = FrmEmailHelper::get_user_id_field_for_form( $form_id );
+
 		if ( $user_id_args['field_id'] ) {
 			$user_id_args['field_key'] = FrmField::get_key_by_id( $user_id_args['field_id'] );
 		}
@@ -669,6 +673,7 @@ class FrmEmail {
 	 */
 	private function explode_emails( $emails ) {
 		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
+
 		if ( is_array( $emails ) ) {
 			$emails = array_map( 'trim', $emails );
 		} else {
@@ -739,6 +744,7 @@ class FrmEmail {
 
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
+
 			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
 				$sitename = substr( $sitename, 4 );
 			}
@@ -780,6 +786,7 @@ class FrmEmail {
 	 */
 	private function get_email_from_name( $name ) {
 		$email = trim( trim( $name, '>' ), '<' );
+
 		if ( strpos( $email, '<' ) !== false ) {
 			$parts = explode( '<', $email );
 			$email = trim( $parts[1], '>' );

@@ -39,6 +39,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		}
 
 		$emails = FrmAntiSpamController::extract_emails_from_values( $this->values['item_meta'] );
+
 		if ( ! $emails ) {
 			return false;
 		}

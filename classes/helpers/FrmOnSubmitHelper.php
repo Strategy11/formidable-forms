@@ -142,6 +142,7 @@ class FrmOnSubmitHelper {
 	public static function get_actions( $form_id ) {
 		$cache_key = 'frm_on_submit_actions_' . $form_id;
 		$actions   = wp_cache_get( $cache_key, 'frm_actions' );
+
 		if ( false !== $actions ) {
 			return $actions;
 		}
@@ -206,10 +207,12 @@ class FrmOnSubmitHelper {
 		$actions             = self::get_actions( $form_id );
 		$first_create_action = null;
 		$first_edit_action   = null;
+
 		foreach ( $actions as $action ) {
 			if ( ! $first_create_action && in_array( 'create', $action->post_content['event'], true ) ) {
 				$first_create_action = $action;
 			}
+
 			if ( ! $first_edit_action && in_array( 'update', $action->post_content['event'], true ) ) {
 				$first_edit_action = $action;
 			}
@@ -217,8 +220,10 @@ class FrmOnSubmitHelper {
 
 		$form_options = array();
 		self::populate_on_submit_data( $form_options, $first_create_action );
+
 		if ( method_exists( 'FrmProFormActionsController', 'change_on_submit_action_ops' ) && FrmAppHelper::pro_is_connected() ) {
 			$form_editable = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'editable' );
+
 			if ( $form_editable ) {
 				self::populate_on_submit_data( $form_options, $first_edit_action, 'update' );
 			}
@@ -240,6 +245,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function populate_on_submit_data( &$form_options, $action = null, $event = 'create' ) {
 		$opt = 'update' === $event ? 'edit_' : 'success_';
+
 		if ( ! $action || ! is_object( $action ) ) {
 			$form_options[ $opt . 'action' ] = self::get_default_action_type();
 			$form_options[ $opt . 'msg' ]    = self::get_default_msg();
@@ -280,6 +286,7 @@ class FrmOnSubmitHelper {
 	 */
 	public static function maybe_migrate_submit_settings_to_action( $form_id ) {
 		$form = FrmDb::get_row( 'frm_forms', array( 'id' => $form_id ), 'options,editable' );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -295,6 +302,7 @@ class FrmOnSubmitHelper {
 
 		// Check if form already has form actions to avoid creating duplicates.
 		$has_actions = FrmFormAction::form_has_action_type( $form_id, $action_type );
+
 		if ( ! empty( $has_actions ) ) {
 			// Don't migrate again.
 			self::save_migrated_success_actions( $form );
@@ -417,6 +425,7 @@ class FrmOnSubmitHelper {
 		$action = new stdClass();
 
 		$default_msg = self::get_default_msg();
+
 		if ( current_user_can( 'frm_edit_forms' ) ) {
 			$default_msg .= '<br />';
 			$default_msg .= '<span style="font-weight: 600; font-style: italic;">';

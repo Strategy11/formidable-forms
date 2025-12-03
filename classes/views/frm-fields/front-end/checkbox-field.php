@@ -63,6 +63,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
+
 			if ( $read_only ) {
 				$label_attributes['class'] = 'frm-label-disabled';
 			}
