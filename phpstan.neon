@@ -14,6 +14,7 @@ parameters:
 		- */vendor/*
 		- */fonts/*
 		- */rector.php
+		- */phpcs-sniffs/*
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
