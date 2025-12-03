@@ -385,6 +385,7 @@ class FrmXMLHelper {
 			$old_fields[ $f->field_key ] = $f->id;
 			unset( $f );
 		}
+
 		$form_fields = $old_fields;
 
 		return $form_fields;
@@ -1121,6 +1122,7 @@ class FrmXMLHelper {
 			if ( ! $form->options ) {
 				continue;
 			}
+
 			$where = array(
 				'post_name' => $form->options['old_style'],
 				'post_type' => FrmStylesController::$post_type,

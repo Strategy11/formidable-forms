@@ -655,6 +655,7 @@ class FrmSolution {
 				--$count;
 			}
 		}
+
 		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
 		unset( $count );
 

@@ -134,6 +134,7 @@ class FrmFormsHelper {
 			if ( $frm_action ) {
 				$query_args['frm_action'] = $frm_action;
 			}
+
 			$base = add_query_arg( $query_args, admin_url( 'admin.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
@@ -566,6 +567,7 @@ BEFORE_HTML;
 		if ( FrmAppHelper::should_never_allow_unfiltered_html() ) {
 			$button = FrmAppHelper::kses_submit_button( $button );
 		}
+
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
@@ -1677,6 +1679,7 @@ BEFORE_HTML;
 			if ( $included || $plan === $license_type ) {
 				break;
 			}
+
 			$included = $plan === $plan_required;
 		}
 
@@ -1987,6 +1990,7 @@ BEFORE_HTML;
 			if ( $options ) {
 				$new_shortcode .= ' ' . $options;
 			}
+
 			$new_shortcode .= ' sanitize_url=1]';
 
 			$query = str_replace( $shortcode, $new_shortcode, $query );

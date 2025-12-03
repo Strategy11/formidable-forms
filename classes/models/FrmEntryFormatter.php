@@ -995,6 +995,7 @@ class FrmEntryFormatter {
 					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
 					$value = trim( $value );
 				}
+
 				$value = strip_tags( $value );
 			}
 		}

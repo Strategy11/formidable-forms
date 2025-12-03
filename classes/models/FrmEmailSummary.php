@@ -188,6 +188,7 @@ abstract class FrmEmailSummary {
 		if ( false === $content ) {
 			return true;
 		}
+
 		$subject = $this->get_subject();
 		$headers = $this->get_headers();
 

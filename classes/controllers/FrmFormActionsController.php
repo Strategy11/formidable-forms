@@ -576,6 +576,7 @@ class FrmFormActionsController {
 		if ( ! empty( $new_actions ) ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
+
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );

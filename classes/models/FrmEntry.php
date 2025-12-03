@@ -602,6 +602,7 @@ class FrmEntry {
 		} else {
 			$where = array( 'item_key' => $id );
 		}
+
 		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
 		return $id && $id > 0;
@@ -762,6 +763,7 @@ class FrmEntry {
 			if ( ! is_numeric( $where ) ) {
 				$where = self::getRecordCount( $where );
 			}
+
 			$count = ceil( (int) $where / $p_size );
 		}
 

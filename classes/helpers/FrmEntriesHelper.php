@@ -280,6 +280,7 @@ class FrmEntriesHelper {
 		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
 			$sep = '<br/>';
 		}
+
 		$val = implode( $sep, $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );

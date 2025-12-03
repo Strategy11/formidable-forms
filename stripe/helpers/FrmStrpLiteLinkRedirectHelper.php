@@ -102,6 +102,7 @@ class FrmStrpLiteLinkRedirectHelper {
 			if ( 2 === count( $parts ) ) {
 				$redirect = $parts[1];
 			}
+
 			$redirect = $referer_url . '?' . $redirect;
 		}
 

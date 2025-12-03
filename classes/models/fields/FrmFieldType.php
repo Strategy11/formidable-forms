@@ -1438,6 +1438,7 @@ DEFAULT_HTML;
 			$input .= esc_html( $option );
 			$input .= '</option>';
 		}
+
 		$input .= '</select>';
 
 		return $input;
@@ -1665,6 +1666,7 @@ DEFAULT_HTML;
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			return false;
 		}
+
 		$field_id = $this->get_field_column( 'id' );
 		return FrmProEntryMetaHelper::value_exists( $field_id, $value, $entry_id );
 	}

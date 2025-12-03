@@ -507,6 +507,7 @@ class FrmField {
 						if ( 2 !== count( $split ) ) {
 							continue;
 						}
+
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
 					}
@@ -859,6 +860,7 @@ class FrmField {
 			} else {
 				$where = array( 'field_key' => $id );
 			}
+
 			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 

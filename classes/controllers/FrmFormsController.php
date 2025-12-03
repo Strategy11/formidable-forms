@@ -101,6 +101,7 @@ class FrmFormsController {
 			$message = $errors['message'];
 			unset( $errors['message'] );
 		}
+
 		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
 		self::display_forms_list( $params, $message, $errors );
@@ -1096,6 +1097,7 @@ class FrmFormsController {
 		if ( FrmAppHelper::is_form_builder_page() ) {
 			return true;
 		}
+
 		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
 		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
@@ -1132,6 +1134,7 @@ class FrmFormsController {
 					),
 				);
 		}
+
 		$opts = apply_filters( 'frm_sc_popup_opts', $opts, $shortcode );
 
 		if ( isset( $opts['form_id'] ) && is_string( $opts['form_id'] ) ) {

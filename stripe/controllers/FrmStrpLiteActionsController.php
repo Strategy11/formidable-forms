@@ -437,6 +437,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				// The unminified file is not included in releases so force the minified script.
 				$suffix = '.min';
 			}
+
 			$script_url = FrmStrpLiteAppHelper::plugin_url() . 'js/frmstrp' . $suffix . '.js';
 		}
 

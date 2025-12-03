@@ -71,6 +71,7 @@ class FrmEntryMeta {
 		if ( is_array( $values['meta_value'] ) ) {
 			$values['meta_value'] = array_filter( $values['meta_value'], 'FrmAppHelper::is_not_empty_value' );
 		}
+
 		$meta_value = maybe_serialize( $values['meta_value'] );
 
 		wp_cache_delete( $entry_id, 'frm_entry' );
@@ -467,9 +468,11 @@ class FrmEntryMeta {
 			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
 				return true;
 			}
+
 			$where = str_ireplace( 'fi.form_id', 'e.form_id', $where );
 			return false;
 		}
+
 		$where_fields = array_keys( $where );
 		foreach ( $where_fields as $where_field ) {
 			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
@@ -621,14 +624,17 @@ class FrmEntryMeta {
 					case 'day':
 						$value = '%' . $value . '%';
 				}
+
 				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
+
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
 			$query  = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 		} else {
 			if ( $operator === 'LIKE' ) {
 				$search = '%' . $search . '%';
 			}
+
 			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}//end if
 

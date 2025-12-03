@@ -1376,6 +1376,7 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
+
 			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use xlink:href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
@@ -2521,6 +2522,7 @@ class FrmAppHelper {
 		if ( ! $is_rich_text ) {
 			$safe_text = htmlspecialchars( $safe_text, ENT_NOQUOTES );
 		}
+
 		$safe_text = str_replace( '&amp; ', '& ', $safe_text );
 
 		/**
@@ -2870,6 +2872,7 @@ class FrmAppHelper {
 			if ( ! isset( $field->field_options['custom_field'] ) ) {
 				$field->field_options['custom_field'] = '';
 			}
+
 				$meta_value = FrmProEntryMetaHelper::get_post_value(
 					$record->post_id,
 					$field->field_options['post_field'],
@@ -3196,6 +3199,7 @@ class FrmAppHelper {
 		} else {
 			$now = new DateTime( '@' . $to );
 		}
+
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference
@@ -3219,6 +3223,7 @@ class FrmAppHelper {
 					$levels => $time_strings[ $levels ],
 				);
 			}
+
 			$levels = 1;
 		}
 
@@ -3706,6 +3711,7 @@ class FrmAppHelper {
 			if ( ! isset( $input['name'] ) ) {
 				continue;
 			}
+
 			$key = $input['name'];
 			if ( isset( $formatted[ $key ] ) ) {
 				if ( is_array( $formatted[ $key ] ) ) {

@@ -250,6 +250,7 @@ class FrmFormApi {
 		if ( empty( $addons ) ) {
 			$addons = $this->get_api_info();
 		}
+
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
@@ -407,6 +408,7 @@ class FrmFormApi {
 		if ( empty( $addons ) ) {
 			$addons = $this->get_api_info();
 		}
+
 		$errors = array();
 		if ( isset( $addons['error'] ) ) {
 			if ( is_string( $addons['error'] ) ) {

@@ -46,6 +46,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			<label <?php FrmAppHelper::array_to_html_params( $label_attributes, true ); ?>>
 			<?php
 		}
+
 		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 
 		$other_opt  = false;

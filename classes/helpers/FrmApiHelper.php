@@ -21,6 +21,7 @@ class FrmApiHelper {
 		if ( ! isset( $item['who'] ) || $item['who'] === 'all' ) {
 			return true;
 		}
+
 		$who = (array) $item['who'];
 		if ( self::is_for_everyone( $who ) ) {
 			return true;
@@ -99,6 +100,7 @@ class FrmApiHelper {
 			// because the user was active before this option was introduced.
 			return false;
 		}
+
 		$cutoff = strtotime( '-30 days' );
 		return $activation_timestamp > $cutoff;
 	}

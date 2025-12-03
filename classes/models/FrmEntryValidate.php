@@ -329,6 +329,7 @@ class FrmEntryValidate {
 		if ( is_numeric( $filter_priority ) ) {
 			remove_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		$filtered_option = apply_filters( 'the_content', $option_value );
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
@@ -359,6 +360,7 @@ class FrmEntryValidate {
 			} else {
 				$option_value = $option;
 			}
+
 			$option_value = do_shortcode( $option_value );
 			return $option_value;
 		};
@@ -521,6 +523,7 @@ class FrmEntryValidate {
 				}
 			}
 		}
+
 		$pattern = '^' . $pattern . '$';
 
 		return $pattern;
@@ -852,6 +855,7 @@ class FrmEntryValidate {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
 				}
+
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 				$fields  = self::get_name_text_fields( $form_id );
 
@@ -863,6 +867,7 @@ class FrmEntryValidate {
 						if ( empty( $values[ absint( $fields[ $index + 1 ]->id ) ] ) ) {
 							continue;
 						}
+
 						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 						return true;
 					}

@@ -86,6 +86,7 @@ class FrmAppController {
 				// Load the CSS for .is-fullscreen-mode.
 				wp_enqueue_style( 'wp-edit-post' );
 			}
+
 			$classes .= apply_filters( 'frm_admin_full_screen_class', $add_class );
 		}
 
@@ -787,6 +788,7 @@ class FrmAppController {
 				if ( ! $post ) {
 					return;
 				}
+
 				$post_type = $post->post_type;
 			} else {
 				return;

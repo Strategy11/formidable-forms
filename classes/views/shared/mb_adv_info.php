@@ -240,6 +240,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				} else {
 					$code = str_replace( '|user_id|', 'x', $code );
 				}
+
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 
 				if ( ! is_array( $code_label ) ) {

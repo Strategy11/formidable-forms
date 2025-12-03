@@ -205,6 +205,7 @@ class FrmTransLiteAppHelper {
 			if ( ! isset( $atts['form'] ) ) {
 				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
 			}
+
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
 
@@ -584,6 +585,7 @@ class FrmTransLiteAppHelper {
 			$select_attrs['disabled'] = 'disabled';
 			$selected                 = '';
 		}
+
 		$currencies = FrmCurrencyHelper::get_currencies();
 		?>
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>

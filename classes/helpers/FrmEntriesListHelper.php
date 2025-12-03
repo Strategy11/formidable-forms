@@ -218,6 +218,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $form_id ) {
 			$form = FrmForm::getOne( $form_id );
 		}
+
 		$has_form = ! empty( $form );
 
 		if ( ! $has_form ) {
@@ -386,6 +387,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				} else {
 					$r .= $val;
 				}
+
 				$r .= '</td>';
 			}
 			unset( $val );

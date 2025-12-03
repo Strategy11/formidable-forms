@@ -678,6 +678,7 @@ class FrmFormAction {
 				'limit' => $args,
 			);
 		}
+
 		$defaults = array(
 			'limit'       => 99,
 			'post_status' => $default_status,
