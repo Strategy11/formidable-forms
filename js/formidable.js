@@ -1334,7 +1334,7 @@ function frmFrontFormJS() {
 		const fileval = fileInput ? fileInput.value : '';
 		if ( fileval !== '' ) {
 			setTimeout( function() {
-				loading.style.display = 'block';
+				jQuery( loading ).fadeIn( 'slow' );
 			}, 2000 );
 		}
 	}
