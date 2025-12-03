@@ -4,7 +4,6 @@
 
 	<exclude-pattern>vendor/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>deprecated/*</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
