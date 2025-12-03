@@ -28,6 +28,7 @@ $spotlight_attributes['class'] .= 'bottom' === $placement ? ' frm-flex-col' : ' 
 if ( ! empty( $spotlight['offset']['top'] ) ) {
 	$spotlight_attributes['style'] .= 'margin-top: ' . $spotlight['offset']['top'] . 'px;';
 }
+
 if ( ! empty( $spotlight['offset']['left'] ) ) {
 	$spotlight_attributes['style'] .= 'margin-left: ' . $spotlight['offset']['left'] . 'px;';
 }

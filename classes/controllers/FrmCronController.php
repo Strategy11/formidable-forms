@@ -64,6 +64,7 @@ class FrmCronController {
 
 		foreach ( $events as $event => $recurrence ) {
 			$timestamp = wp_next_scheduled( $event );
+
 			if ( false !== $timestamp ) {
 				wp_unschedule_event( $timestamp, $event );
 			}

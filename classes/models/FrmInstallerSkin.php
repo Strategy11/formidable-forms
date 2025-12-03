@@ -83,6 +83,7 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 					'success' => false,
 				)
 			);
+
 			if ( wp_doing_ajax() ) {
 				wp_die();
 			} else {

@@ -41,18 +41,21 @@ class FrmEntriesAJAXSubmitController {
 		);
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
 		if ( ! $form_id ) {
 			echo json_encode( $response );
 			wp_die();
 		}
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! $form ) {
 			echo json_encode( $response );
 			wp_die();
 		}
 
 		$is_ajax_on = FrmForm::is_ajax_on( $form );
+
 		if ( ! $is_ajax_on ) {
 			// This continues in the Pro version as it is required for other features including in-place edit.
 			// In Lite, if AJAX submit is not on, just exit early as this function is getting called incorrectly.
@@ -85,6 +88,7 @@ class FrmEntriesAJAXSubmitController {
 			}
 		} else {
 			$obj = array();
+
 			foreach ( $errors as $field => $error ) {
 				$field_id         = str_replace( 'field', '', $field );
 				$error            = self::maybe_modify_ajax_error( $error, $field_id, $form, $errors );

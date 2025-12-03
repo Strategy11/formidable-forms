@@ -62,6 +62,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 
 		$field_id = key( $values['item_meta'] );
 		$field    = FrmField::getOne( $field_id );
+
 		if ( $field ) {
 			$values['form_id'] = $field->form_id;
 		}
@@ -115,6 +116,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		);
 
 		$custom_denylist = $this->get_words_from_setting( 'disallowed_words' );
+
 		if ( $custom_denylist ) {
 			$denylist_data['custom'] = array(
 				'words' => $custom_denylist,
@@ -191,6 +193,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 				}
 			} elseif ( file_exists( $denylist['file'] ) ) {
 				$is_spam = $this->read_lines_and_check( $denylist['file'], array( $this, 'single_line_check_values' ), $denylist );
+
 				if ( $is_spam ) {
 					return true;
 				}
@@ -242,6 +245,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	protected function get_words_from_setting( $setting_key ) {
 		$frm_settings = FrmAppHelper::get_settings();
 		$words        = $frm_settings->$setting_key ?? '';
+
 		if ( ! $words ) {
 			return array();
 		}
@@ -261,12 +265,14 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 */
 	protected function single_line_check_values( $line, $args ) {
 		$line = $this->convert_to_lowercase( $line );
+
 		// Do not check if this word is in the allowed words.
 		if ( ! empty( $args['allowed_words'] ) && in_array( $line, $args['allowed_words'], true ) ) {
 			return false;
 		}
 
 		$values_to_check = $this->get_values_to_check( $args );
+
 		if ( ! $values_to_check ) {
 			// Nothing needs to be checked.
 			return false;
@@ -279,6 +285,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		if ( self::COMPARE_EQUALS === $args['compare'] ) {
 			foreach ( $values_to_check as $value ) {
 				$value = $this->convert_to_lowercase( $value );
+
 				if ( $line === $value ) {
 					return true;
 				}
@@ -330,8 +337,10 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$field_ids_to_check = array();
+
 		foreach ( $this->get_posted_fields() as $field ) {
 			$field_type = FrmField::get_field_type( $field );
+
 			if ( in_array( $field_type, $skip_field_types, true ) ) {
 				continue;
 			}
@@ -355,12 +364,14 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 */
 	protected function get_values_to_check( $denylist ) {
 		$field_ids_to_check = $this->get_field_ids_to_check( $denylist );
+
 		if ( array() === $field_ids_to_check ) {
 			// No values need to check.
 			return false;
 		}
 
 		$values_to_check = array();
+
 		foreach ( $this->values['item_meta'] as $key => $value ) {
 			if ( is_array( $value ) && isset( $value['form'] ) ) {
 				// This is a repeater value, loop through sub values.
@@ -423,6 +434,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 */
 	protected function check_ip() {
 		$ip = FrmAppHelper::get_ip_address();
+
 		if ( $this->is_allowed_ip( $ip ) ) {
 			return false;
 		}
@@ -471,17 +483,20 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$fp = @fopen( $file_path, 'r' );
+
 		if ( ! $fp ) {
 			return false;
 		}
 
 		while ( ( $line = fgets( $fp ) ) !== false ) {
 			$line = trim( $line );
+
 			if ( $line === '' ) {
 				continue;
 			}
 
 			$is_spam = $callback( $line, $callback_args );
+
 			if ( $is_spam ) {
 				if ( is_array( $callback ) && isset( $callback[1] ) && 'single_line_check_values' === $callback[1] ) {
 					self::add_spam_keyword_to_option( $line );
@@ -582,6 +597,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	private function add_spam_keyword_to_option( $keyword ) {
 		$transient_name = 'frm_recent_spam_detected';
 		$transient      = get_transient( $transient_name );
+
 		if ( ! is_array( $transient ) ) {
 			$transient = array();
 		}

@@ -141,9 +141,11 @@ class FrmStyleComponent {
 	 */
 	protected function get_default_wrapper_class_names() {
 		$class = 'frm-style-component';
+
 		if ( ! empty( $this->data['classname'] ) ) {
 			$class .= ' ' . $this->data['classname'];
 		}
+
 		if ( ! empty( $this->data['will_change'] ) ) {
 			return $class . ' frm-style-dependent-updater-component';
 		}
@@ -170,6 +172,7 @@ class FrmStyleComponent {
 	 */
 	private function get_component_attributes() {
 		$attributes = '';
+
 		if ( ! empty( $this->data['will_change'] ) ) {
 			$attributes .= 'data-will-change=' . wp_json_encode( $this->data['will_change'] );
 		}

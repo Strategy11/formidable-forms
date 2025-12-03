@@ -60,6 +60,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	private function sync_current_field_once( $assert_size = false, $assert_message = '' ) {
 		$this->helper->maybe_begin_field_wrapper();
 		$this->helper->sync_list_size();
+
 		if ( false !== $assert_size ) {
 			$this->assert_current_list_size( $assert_size, $assert_message );
 		}

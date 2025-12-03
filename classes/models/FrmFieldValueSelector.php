@@ -96,6 +96,7 @@ class FrmFieldValueSelector {
 		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
+
 		if ( $this->field_id === 0 ) {
 			return;
 		}

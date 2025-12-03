@@ -1,0 +1,4 @@
+<?xml version="1.0"?>
+<ruleset name="Formidable">
+	<description>Custom sniffs for Formidable Forms</description>
+</ruleset>

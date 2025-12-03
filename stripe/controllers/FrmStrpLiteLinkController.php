@@ -58,12 +58,14 @@ class FrmStrpLiteLinkController {
 		$frm_payment     = new FrmTransLitePayment();
 
 		$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+
 		if ( ! $payment ) {
 			$redirect_helper->handle_error( 'no_payment_record' );
 			die();
 		}
 
 		$intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
 		if ( ! is_object( $intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -95,6 +97,7 @@ class FrmStrpLiteLinkController {
 		$redirect_helper->set_entry_id( $entry->id );
 
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+
 		if ( ! $action ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
@@ -180,6 +183,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify the setup intent.
 		$setup_intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $setup_id );
+
 		if ( ! is_object( $setup_intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -193,6 +197,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify the entry.
 		$entry = FrmEntry::getOne( $payment->item_id );
+
 		if ( ! is_object( $entry ) ) {
 			$redirect_helper->handle_error( 'no_entry_found' );
 			die();
@@ -202,6 +207,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify it's an action with Stripe link enabled.
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+
 		if ( ! is_object( $action ) ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
@@ -209,6 +215,7 @@ class FrmStrpLiteLinkController {
 
 		$customer_id       = $setup_intent->customer;
 		$payment_method_id = self::get_link_payment_method( $setup_intent );
+
 		if ( ! $payment_method_id ) {
 			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'did_not_complete' );
@@ -240,6 +247,7 @@ class FrmStrpLiteLinkController {
 		);
 
 		$trial_end = FrmStrpLiteActionsController::get_trial_end_time( $atts );
+
 		if ( $trial_end ) {
 			$new_charge['trial_end'] = $trial_end;
 		}
@@ -278,6 +286,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -298,6 +307,7 @@ class FrmStrpLiteLinkController {
 
 			// Update the next billing date.
 			$next_bill_date = gmdate( 'Y-m-d' );
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$next_bill_date = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -327,6 +337,7 @@ class FrmStrpLiteLinkController {
 	private static function get_link_payment_method( $setup_intent ) {
 		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
 			$payment_method_details = $setup_intent->latest_attempt->payment_method_details;
+
 			foreach ( array( 'ideal', 'sofort', 'bancontact' ) as $payment_method_type ) {
 				if ( ! empty( $payment_method_details->$payment_method_type ) ) {
 					return $payment_method_details->$payment_method_type->generated_sepa_debit;
@@ -418,6 +429,7 @@ class FrmStrpLiteLinkController {
 	 */
 	private static function verify_intent( $form_id ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );
+
 		if ( ! $client_secrets ) {
 			return false;
 		}
@@ -457,6 +469,7 @@ class FrmStrpLiteLinkController {
 			'setup_intent',
 			'setup_intent_client_secret',
 		);
+
 		foreach ( $query_args_to_strip_from_referer as $arg ) {
 			$referer = remove_query_arg( $arg, $referer );
 		}

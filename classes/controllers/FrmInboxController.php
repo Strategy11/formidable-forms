@@ -58,6 +58,7 @@ class FrmInboxController {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
+
 		if ( ! empty( $key ) ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
@@ -83,6 +84,7 @@ class FrmInboxController {
 	 */
 	private static function add_tracking_request() {
 		$settings = FrmAppHelper::get_settings();
+
 		if ( $settings->tracking ) {
 			return;
 		}

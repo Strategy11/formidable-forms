@@ -31,6 +31,7 @@ $div_params = array(
 	// It uses --toggle-on-color so just set the variable.
 	'style' => '--toggle-on-color:var(--primary-color);',
 );
+
 if ( $div_class ) {
 	$use_container       = true;
 	$div_params['class'] = $div_class;
