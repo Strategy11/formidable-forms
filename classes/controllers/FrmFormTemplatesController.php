@@ -700,7 +700,6 @@ class FrmFormTemplatesController {
 
 		$page = FrmAppHelper::simple_get( 'page' );
 		if ( FrmFormTemplatesController::PAGE_SLUG === $page ) {
-			wp_enqueue_style( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/css/frm_testing_mode.css', array(), $version );
 			wp_enqueue_script( 'frm_testing_mode', FrmAppHelper::plugin_url() . '/js/frm_testing_mode.js', array( 'jquery', 'formidable_dom' ), $version, true );
 		}
 

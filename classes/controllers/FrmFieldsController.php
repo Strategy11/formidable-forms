@@ -394,19 +394,19 @@ class FrmFieldsController {
 	 *
 	 * @return array
 	 */
-	private static function get_unique_element_atts( $field, $pro_is_installed, $no_allow ) {
+	public static function get_unique_element_atts( $field, $pro_is_installed, $no_allow ) {
 		$unique_element_atts = array(
 			'type'  => 'checkbox',
-			'name'  => 'field_options[unique_' . esc_attr( $field['id'] ) . ']',
-			'id'    => 'frm_uniq_field_' . esc_attr( $field['id'] ),
+			'name'  => 'field_options[unique_' . $field['id'] . ']',
+			'id'    => 'frm_uniq_field_' . $field['id'],
 			'value' => '1',
-			'class' => 'frm_mark_unique ' . esc_attr( $no_allow ),
+			'class' => 'frm_mark_unique ' . $no_allow,
 		);
 		if ( ! empty( $field['unique'] ) ) {
-			$unique_element_atts['checked'] = true;
+			$unique_element_atts['checked'] = 'checked';
 		}
 		if ( ! $pro_is_installed ) {
-			$unique_element_atts['data-upgrade'] = esc_attr( __( 'Unique fields', 'formidable' ) );
+			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 		}
 
 		return $unique_element_atts;
@@ -421,19 +421,19 @@ class FrmFieldsController {
 	 *
 	 * @return array
 	 */
-	private static function get_read_only_element_atts( $field, $pro_is_installed, $no_allow ) {
+	public static function get_read_only_element_atts( $field, $pro_is_installed, $no_allow ) {
 		$read_only_element_atts = array(
 			'type'  => 'checkbox',
-			'name'  => 'field_options[read_only_' . esc_attr( $field['id'] ) . ']',
-			'id'    => 'frm_read_only_field_' . esc_attr( $field['id'] ),
+			'name'  => 'field_options[read_only_' . $field['id'] . ']',
+			'id'    => 'frm_read_only_field_' . $field['id'],
 			'value' => '1',
-			'class' => esc_attr( $no_allow ),
+			'class' => $no_allow,
 		);
 		if ( ! empty( $field['read_only'] ) ) {
-			$read_only_element_atts['checked'] = true;
+			$read_only_element_atts['checked'] = 'checked';
 		}
 		if ( ! $pro_is_installed ) {
-			$read_only_element_atts['data-upgrade'] = esc_attr( __( 'Unique fields', 'formidable' ) );
+			$read_only_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 		}
 
 		return $read_only_element_atts;

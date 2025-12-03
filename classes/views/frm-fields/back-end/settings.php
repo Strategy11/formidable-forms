@@ -106,7 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input <?php FrmAppHelper::array_to_html_params(self::get_unique_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
+						<input <?php FrmAppHelper::array_to_html_params( FrmFieldsController::get_unique_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
@@ -117,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input <?php FrmAppHelper::array_to_html_params( self::get_read_only_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
+						<input <?php FrmAppHelper::array_to_html_params( FrmFieldsController::get_read_only_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
