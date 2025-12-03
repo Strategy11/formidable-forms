@@ -145,7 +145,7 @@ function frmFrontFormJS() {
 		if ( ! form ) {
 			return;
 		}
-		form.querySelectorAll( 'input[type="submit"], input[type="button"], button[type="submit"]' ).forEach(
+		form.querySelectorAll( 'input[type="submit"], input[type="button"], button[type="submit"], button.frm_save_draft' ).forEach(
 			button => button.disabled = false
 		);
 	}
