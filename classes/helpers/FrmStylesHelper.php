@@ -759,9 +759,9 @@ class FrmStylesHelper {
 	 *
 	 * @since 6.14
 	 *
-	 * @param string $key      Setting key.
-	 * @param int    $value    Base font size value.
-	 * @param array  $defaults Default style settings.
+	 * @param string     $key      Setting key.
+	 * @param int|string $value    Base font size value.
+	 * @param array      $defaults Default style settings.
 	 *
 	 * @return float
 	 */

@@ -63,7 +63,7 @@ class FrmShowForm extends WP_Widget {
 			'form'        => false,
 			'description' => false,
 		);
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( $instance, $defaults );
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">

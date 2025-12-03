@@ -460,8 +460,8 @@ class FrmXMLController {
 	}
 
 	/**
-	 * @param string[] $type
-	 * @param array    $args
+	 * @param array<string>|string $type
+	 * @param array                $args
 	 *
 	 * @psalm-param array{ids?: mixed} $args
 	 *
@@ -608,7 +608,7 @@ class FrmXMLController {
 	/**
 	 * Prepare the types array.
 	 *
-	 * @param array $type
+	 * @param array<string>|string $type
 	 *
 	 * @return void
 	 */

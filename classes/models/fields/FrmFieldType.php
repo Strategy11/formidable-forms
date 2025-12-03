@@ -166,7 +166,7 @@ abstract class FrmFieldType {
 	/**
 	 * @param string $column
 	 *
-	 * @return array|string
+	 * @return array|object|string
 	 */
 	public function get_field_column( $column ) {
 		$field_val = '';

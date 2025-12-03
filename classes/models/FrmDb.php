@@ -677,8 +677,8 @@ class FrmDb {
 	 *
 	 * @since 2.05.06
 	 *
-	 * @param array  $settings
-	 * @param string $group
+	 * @param array|object $settings
+	 * @param string       $group
 	 *
 	 * @return int|WP_Error
 	 */

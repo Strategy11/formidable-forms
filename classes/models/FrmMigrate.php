@@ -554,7 +554,7 @@ class FrmMigrate {
 
 		$fields = $this->get_fields_with_size();
 
-		foreach ( (array) $fields as $f ) {
+		foreach ( $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
 			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );

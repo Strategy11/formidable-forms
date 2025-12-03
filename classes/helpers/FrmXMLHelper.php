@@ -773,8 +773,8 @@ class FrmXMLHelper {
 	 *
 	 * @since 4.0
 	 *
-	 * @param array  $field
-	 * @param string $type
+	 * @param array|object $field
+	 * @param string       $type
 	 *
 	 * @return array
 	 */

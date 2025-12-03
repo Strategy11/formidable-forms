@@ -94,8 +94,7 @@ class FrmTableHTMLGenerator {
 	 * @param array  $atts
 	 */
 	public function __construct( $type, $atts = array() ) {
-
-		$this->type = (string) $type;
+		$this->type = $type;
 
 		if ( isset( $atts['cell_padding'] ) ) {
 			$this->cell_padding = $atts['cell_padding'];
