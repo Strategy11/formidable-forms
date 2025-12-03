@@ -283,6 +283,7 @@ class FrmFieldFormHtml {
 
 		if ( empty( $error ) ) {
 			FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
+			return;
 		}
 
 		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
