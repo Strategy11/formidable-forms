@@ -83,27 +83,21 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater' );
-	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
+	$filepath         .= '/classes/';
 
-	if ( $is_deprecated ) {
-		$filepath .= '/deprecated/';
+	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+		$filepath .= 'helpers/';
+	} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		$filepath .= 'controllers/';
+	} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		$filepath .= 'factories/';
+	} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
+		$filepath .= 'views/styles/components/';
 	} else {
-		$filepath .= '/classes/';
-		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-			$filepath .= 'helpers/';
-		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
-			$filepath .= 'controllers/';
-		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
-			$filepath .= 'factories/';
-		} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
-			$filepath .= 'views/styles/components/';
-		} else {
-			$filepath .= 'models/';
-			if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
-				$filepath .= 'fields/';
-			}
+		$filepath .= 'models/';
+		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+			$filepath .= 'fields/';
 		}
 	}
 
