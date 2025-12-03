@@ -112,6 +112,7 @@ class FrmXMLController {
 			} else {
 				$message = __( 'There was an error importing form', 'formidable' );
 			}
+
 			$response = array(
 				'message' => $message,
 			);
@@ -151,6 +152,7 @@ class FrmXMLController {
 		if ( empty( $form ) ) {
 			return $form;
 		}
+
 		$form = json_decode( $form, true );
 		return $form;
 	}
@@ -530,6 +532,7 @@ class FrmXMLController {
 						}
 						unset( $form_id, $form_data );
 					}
+
 					$select             = $table . '.ID';
 					$where['post_type'] = 'frm_styles';
 
@@ -640,6 +643,7 @@ class FrmXMLController {
 			if ( ! empty( $sitename ) ) {
 				$sitename .= '.';
 			}
+
 			$filename = $sitename . 'formidable.' . gmdate( 'Y-m-d' ) . '.xml';
 		}//end if
 
@@ -688,6 +692,7 @@ class FrmXMLController {
 		if ( function_exists( 'set_time_limit' ) ) {
 			set_time_limit( 0 );
 		}
+
 		$mem_limit = str_replace( 'M', '', ini_get( 'memory_limit' ) );
 		if ( (int) $mem_limit < 256 ) {
 			wp_raise_memory_limit();

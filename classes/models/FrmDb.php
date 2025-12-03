@@ -108,6 +108,7 @@ class FrmDb {
 				} else {
 					self::parse_where_from_array( $value, '', $nested_where, $values );
 				}
+
 				$where .= $nested_where;
 				$where .= ' ) ';
 			} else {
@@ -147,10 +148,12 @@ class FrmDb {
 					if ( ! $start ) {
 						$where .= ' OR ';
 					}
+
 					$start    = false;
 					$where   .= $key . ' %s';
 					$values[] = '%' . self::esc_like( $v ) . '%';
 				}
+
 				$where .= ')';
 			} elseif ( ! empty( $value ) ) {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
@@ -270,6 +273,7 @@ class FrmDb {
 		foreach ( $where as $key => $value ) {
 			$cache_key .= $key . '_' . $value;
 		}
+
 		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
 		$cache_key  = str_replace( array( ' ', ',' ), '_', $cache_key );
 

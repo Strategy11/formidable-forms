@@ -135,11 +135,13 @@ class FrmFormState {
 		if ( ! $encrypted_state ) {
 			return false;
 		}
+
 		$secret          = self::get_encryption_secret();
 		$decrypted_state = openssl_decrypt( $encrypted_state, 'AES-128-ECB', $secret );
 		if ( false === $decrypted_state ) {
 			return false;
 		}
+
 		$decoded_state = json_decode( $decrypted_state, true );
 		if ( ! is_array( $decoded_state ) ) {
 			return false;
@@ -160,6 +162,7 @@ class FrmFormState {
 		if ( ! $this->state && ! self::get_state_from_request() ) {
 			return;
 		}
+
 		$state_string = $this->get_state_string();
 		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $state_string ) . '" />';
 	}
@@ -171,6 +174,7 @@ class FrmFormState {
 		if ( ! self::open_ssl_is_installed() ) {
 			return '';
 		}
+
 		$secret           = self::get_encryption_secret();
 		$compressed_state = $this->compressed_state();
 		$json_encoded     = json_encode( $compressed_state );

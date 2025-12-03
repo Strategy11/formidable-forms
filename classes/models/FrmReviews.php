@@ -113,6 +113,7 @@ class FrmReviews {
 			// round to the nearest 50
 			$entries = floor( $entries / 50 ) * 50;
 		}
+
 		$name = $user->first_name;
 		if ( ! empty( $name ) ) {
 			$name = ' ' . $name;

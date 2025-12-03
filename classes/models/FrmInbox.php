@@ -195,6 +195,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $k ] );
 			}
 		}
+
 		$messages = apply_filters( 'frm_filter_inbox', $messages );
 	}
 
@@ -409,6 +410,7 @@ class FrmInbox extends FrmFormApi {
 		if ( empty( self::$banner_messages ) ) {
 			return false;
 		}
+
 		$message = end( self::$banner_messages );
 		$cta     = self::get_prepared_banner_cta( $message['cta'] );
 

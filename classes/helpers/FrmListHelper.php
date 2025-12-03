@@ -510,6 +510,7 @@ class FrmListHelper {
 			$sep  = $i === $action_count ? '' : ' | ';
 			$out .= "<span class='$action'>$link$sep</span>";
 		}
+
 		$out .= '</div>';
 
 		$out .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', 'formidable' ) . '</span></button>';
@@ -656,6 +657,7 @@ class FrmListHelper {
 				strlen( $total_pages )
 			);
 		}
+
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 
 		/* translators: %1$s: Current page number, %2$s: Total pages */
@@ -683,6 +685,7 @@ class FrmListHelper {
 		if ( ! empty( $infinite_scroll ) ) {
 			$pagination_links_class = ' hide-if-js';
 		}
+
 		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . implode( "\n", $page_links ) . '</span>';
 
 		if ( $total_pages ) {

@@ -574,6 +574,7 @@ class FrmEmail {
 			if ( is_array( $header ) ) {
 				$header = implode( "\r\n", $header );
 			}
+
 			$recipient = implode( ',', (array) $recipient );
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}

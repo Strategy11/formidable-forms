@@ -538,6 +538,7 @@ class FrmFieldFormHtml {
 			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
+
 			$classes .= ' ' . $extra_classes;
 		}
 

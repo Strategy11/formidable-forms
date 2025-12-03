@@ -298,6 +298,7 @@ class FrmEntriesController {
 		if ( ! $include_column_for_sep_val || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
 			return $field_name;
 		}
+
 		$append_text = $is_value ? esc_html__( 'value', 'formidable' ) : esc_html__( 'label', 'formidable' );
 
 		return sprintf( '%s (%s)', $field_name, $append_text );

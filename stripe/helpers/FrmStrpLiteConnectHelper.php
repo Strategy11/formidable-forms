@@ -467,6 +467,7 @@ class FrmStrpLiteConnectHelper {
 		if ( 'live' !== $mode ) {
 			$mode = 'test';
 		}
+
 		$additional_body = array(
 			'frm_strp_connect_mode' => $mode,
 		);
@@ -658,6 +659,7 @@ class FrmStrpLiteConnectHelper {
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
 		}
+
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
 	}

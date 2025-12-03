@@ -260,6 +260,7 @@ class FrmStrpLiteAuth {
 		if ( ! isset( $_POST[ $name ] ) ) {
 			return array();
 		}
+
 		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
@@ -677,6 +678,7 @@ class FrmStrpLiteAuth {
 		if ( empty( $actions ) ) {
 			return;
 		}
+
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {

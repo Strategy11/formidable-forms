@@ -348,6 +348,7 @@ class FrmStylesPreviewHelper {
 		if ( ! $is_preview ) {
 			return;
 		}
+
 		$radio_display_type = 'inline' === $settings['radio_align'] ? 'inline-block' : 'block';
 		$check_display_type = 'inline' === $settings['check_align'] ? 'inline-block' : 'block';
 

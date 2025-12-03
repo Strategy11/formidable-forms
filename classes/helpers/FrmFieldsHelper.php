@@ -609,6 +609,7 @@ class FrmFieldsHelper {
 			if ( is_array( $value ) ) {
 				$value = implode( "\n", $value );
 			}
+
 			$value = wpautop( $value );
 		}
 	}
@@ -1125,6 +1126,7 @@ class FrmFieldsHelper {
 				// Skip any option that uses 0 so sanitize_url=0 does not encode.
 				continue;
 			}
+
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with, $atts );
 		}
@@ -1850,6 +1852,7 @@ class FrmFieldsHelper {
 			unset( $replace[ $index ] );
 			unset( $replace_with[ $index ] );
 		}
+
 		$value = str_replace( $replace, $replace_with, $value );
 		return $value;
 	}
@@ -2378,6 +2381,7 @@ class FrmFieldsHelper {
 				if ( isset( $upgrading['url'] ) ) {
 					$install_data = json_encode( $upgrading );
 				}
+
 				$requires = FrmFormsHelper::get_plan_required( $upgrading );
 			} elseif ( isset( $field_type['require'] ) ) {
 				$requires = $field_type['require'];

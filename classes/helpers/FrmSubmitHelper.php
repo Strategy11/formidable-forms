@@ -207,6 +207,7 @@ class FrmSubmitHelper {
 			if ( self::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
 				return false;
 			}
+
 			$submit_field = $field;
 		}
 		return $submit_field;

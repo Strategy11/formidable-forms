@@ -113,6 +113,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 				$div_attributes['data-language'] = $captcha_language;
 			}
 		}
+
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
 		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
@@ -347,6 +348,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( ! isset( $frm_vars['captcha_scores'] ) ) {
 			$frm_vars['captcha_scores'] = array();
 		}
+
 		$form_id = is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'];
 		if ( ! isset( $frm_vars['captcha_scores'][ $form_id ] ) ) {
 			$frm_vars['captcha_scores'][ $form_id ] = $score;

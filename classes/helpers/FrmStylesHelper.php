@@ -175,6 +175,7 @@ class FrmStylesHelper {
 		if ( $key ) {
 			$class .= $key;
 		}
+
 		$class .= '_icon';
 
 		return $class;
@@ -425,6 +426,7 @@ class FrmStylesHelper {
 				// Fallback if we cannot convert the HSL value.
 				return 0;
 			}
+
 			$color = $hsl_to_hex;
 		}
 
@@ -478,6 +480,7 @@ class FrmStylesHelper {
 		if ( empty( $vars ) ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
+
 		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
 		$vars   = array_diff( $vars, $remove );
 
@@ -712,6 +715,7 @@ class FrmStylesHelper {
 		if ( empty( $settings['base_font_size'] ) || empty( $settings['use_base_font_size'] ) || 'false' === $settings['use_base_font_size'] ) {
 			return $settings;
 		}
+
 		$base_font_size       = (int) $settings['base_font_size'];
 		$font_size            = $defaults['font_size'];
 		$font_sizes_to_update = array(
@@ -1111,6 +1115,7 @@ class FrmStylesHelper {
 		if ( ! $value ) {
 			return $value;
 		}
+
 		$parts = explode( ' ', $value );
 		if ( count( $parts ) < 3 ) {
 			return $parts[0];

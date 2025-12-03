@@ -357,6 +357,7 @@ class FrmCSVExportHelper {
 		} else {
 			$field_headings[ $col->id ] = strip_tags( $col->name );
 		}
+
 		$field_headings             = apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
@@ -807,6 +808,7 @@ class FrmCSVExportHelper {
 			} else {
 				fwrite( self::$fp, $sep . '"' . $val . '"' );
 			}
+
 			$sep = self::$column_separator;
 
 			unset( $k, $row );
@@ -870,6 +872,7 @@ class FrmCSVExportHelper {
 			// escape the = to prevent vulnerability
 			$value = "'" . $value;
 		}
+
 		$value = str_replace( '"', '""', $value );
 
 		return $value;

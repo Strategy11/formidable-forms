@@ -513,6 +513,7 @@ class FrmAddonsController {
 		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
 		}
+
 		$installed_addons = array(
 			'formidable_pro' => $installed_addons['formidable_pro'],
 		);
@@ -786,6 +787,7 @@ class FrmAddonsController {
 				} else {
 					$base_file = 'formidable-' . $slug;
 				}
+
 				$file_name = $base_file . '/' . $base_file . '.php';
 				if ( ! isset( $addon['plugin'] ) ) {
 					$addon['plugin'] = $file_name;
@@ -849,6 +851,7 @@ class FrmAddonsController {
 		if ( ! is_callable( 'FrmViewsAppHelper::plugin_version' ) ) {
 			return false;
 		}
+
 		$plugin_version = FrmViewsAppHelper::plugin_version();
 		return version_compare( $plugin_version, '5.0', '>=' ) ? 'visual-views' : 'views';
 	}
@@ -865,6 +868,7 @@ class FrmAddonsController {
 		if ( strpos( $link, 'http' ) !== 0 ) {
 			$link = $site_url . $link;
 		}
+
 		$link       = FrmAppHelper::make_affiliate_url( $link );
 
 		$utm  = array(
@@ -1272,6 +1276,7 @@ class FrmAddonsController {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}
+
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
 		$link = 'https://formidableforms.com/api-connect/';
 		$args = array(

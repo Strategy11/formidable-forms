@@ -38,6 +38,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 						/* translators: %s: Feature name */
 						$message = __( '%s are not available on your plan. Did you know you can upgrade to PRO to unlock more awesome features?', 'formidable' );
 					}
+
 					$message = sprintf( esc_html( $message ), '<span class="frm_feature_label"></span>' );
 					?>
 					<p class="frm-upgrade-message frm-my-xs" data-default="<?php echo esc_attr( $message ); ?>">

@@ -445,6 +445,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( is_null( $form_name ) || trim( $form_name ) === '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
+
 		$form_name = FrmAppHelper::kses( $form_name );
 		if ( 'excerpt' != $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );

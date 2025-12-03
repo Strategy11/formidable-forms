@@ -829,6 +829,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( $this->is_repeater_child ) {
 			$html .= ' class="frm-child-row"';
 		}
+
 		$html .= '>';
 
 		$label       = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';

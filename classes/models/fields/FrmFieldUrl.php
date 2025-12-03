@@ -100,6 +100,7 @@ class FrmFieldUrl extends FrmFieldType {
 					$images .= strip_tags( $url );
 				}
 			}
+
 			$value = $images;
 		}
 

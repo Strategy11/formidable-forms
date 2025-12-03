@@ -208,6 +208,7 @@ class FrmEmailStylesController {
 						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
 					</style>';
 		}
+
 		$wrapped_content .= '</head><body>' . $content . '</body></html>';
 
 		return $wrapped_content;

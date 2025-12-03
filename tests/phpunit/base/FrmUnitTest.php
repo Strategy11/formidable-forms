@@ -231,6 +231,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					if ( ! is_array( $media_ids ) ) {
 						$media_ids = array();
 					}
+
 					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 					$media_ids[] = $id;
 				}
@@ -546,6 +547,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 						}
 						unset( $form_id, $form_data );
 					}
+
 					$select             = $table . '.ID';
 					$where['post_type'] = 'frm_styles';
 

@@ -24,6 +24,7 @@ foreach ( $payment_sections as $key => $section ) {
 	if ( $is_active ) {
 		$input_params['checked'] = 'checked';
 	}
+
 	$other_section_selectors      = array_map(
 		function ( $section ) {
 			return "#frm_{$section}_settings_section";

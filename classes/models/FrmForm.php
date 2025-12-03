@@ -709,6 +709,7 @@ class FrmForm {
 		if ( ! $form ) {
 			return false;
 		}
+
 		$id = $form->id;
 
 		// Disconnect the entries from this form
@@ -1174,6 +1175,7 @@ class FrmForm {
 		} else {
 			$form = self::maybe_get_current_form();
 		}
+
 		$form_id = $form ? $form->id : 0;
 
 		return $form_id;
