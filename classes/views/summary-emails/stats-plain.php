@@ -3,6 +3,7 @@
  * Template for plain text stats email
  *
  * @since 6.7
+ *
  * @package Formidable
  *
  * @var array $args Content args.
@@ -25,7 +26,7 @@ FrmEmailSummaryHelper::plain_text_echo( __( 'Statistics', 'formidable' ) );
 echo "\r\n\r\n";
 
 foreach ( $args['stats'] as $stat ) {
-	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( isset( $stat['display'] ) ? $stat['display'] : intval( $stat['count'] ) ) . "\r\n" );
+	FrmEmailSummaryHelper::plain_text_echo( $stat['label'] . ': ' . ( $stat['display'] ?? intval( $stat['count'] ) ) . "\r\n" );
 }
 
 echo "\r\n";

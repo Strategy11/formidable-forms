@@ -17,6 +17,7 @@ class test_FrmXMLController extends FrmUnitTest {
 
 	/**
 	 * @param string $url
+	 *
 	 * @return bool
 	 */
 	private function validate_xml_url( $url ) {

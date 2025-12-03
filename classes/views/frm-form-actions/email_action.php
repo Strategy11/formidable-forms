@@ -20,7 +20,8 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	/**
-	 * @return void
+	 * @param object $form_action
+	 * @param array  $args
 	 */
 	public function form( $form_action, $args = array() ) {
 		extract( $args ); // phpcs:ignore WordPress.PHP.DontExtract
@@ -42,6 +43,7 @@ class FrmEmailAction extends FrmFormAction {
 			'email_message' => '[default-message]',
 			'inc_user_info' => 0,
 			'plain_text'    => 0,
+			'email_style'   => '',
 			'event'         => array( 'create' ),
 		);
 	}

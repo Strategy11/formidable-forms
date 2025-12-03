@@ -793,7 +793,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
 			$border_color = $atts['border_color'];
 
-			$header .= ' style="font-size:' . $font_size . ';line-height:135%;';
+			$header .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
 			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
 
@@ -826,9 +826,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style;
+
 		if ( $this->is_repeater_child ) {
 			$html .= ' class="frm-child-row"';
 		}
+
 		$html .= '>';
 
 		$label       = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
@@ -969,6 +971,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * @param stdClass $entry
 	 * @param stdClass $field
+	 * @param array    $atts
 	 *
 	 * @return mixed|string
 	 */

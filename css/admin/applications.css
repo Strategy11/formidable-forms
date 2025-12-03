@@ -183,6 +183,7 @@
 }
 
 #frm_view_application_modal .frm_modal_content {
+	max-height: 75vh !important;
 	flex: 1;
 	overflow-y: auto;
 }

@@ -22,12 +22,18 @@ class FrmFormTemplatesHelper {
 	 * @param array  $template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
+	 *
+	 * @return void
 	 */
 	public static function prepare_template_details( &$template, $pricing, $license_type ) {
 		$template['is_featured']   = ! empty( $template['is_featured'] );
 		$template['is_favorite']   = ! empty( $template['is_favorite'] );
 		$template['is_custom']     = ! empty( $template['is_custom'] );
 		$template['plan_required'] = FrmFormsHelper::get_plan_required( $template );
+
+		if ( self::needs_free_plan( $template ) ) {
+			$template['plan_required'] = 'free';
+		}
 
 		if ( ! empty( $template['name'] ) ) {
 			$template['name'] = $template['is_custom'] ? $template['name'] : preg_replace( '/(\sForm)?(\sTemplate)?$/', '', $template['name'] );
@@ -36,6 +42,7 @@ class FrmFormTemplatesHelper {
 		}
 
 		$template['use_template'] = '#';
+
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
 		} elseif ( ! $template['plan_required'] ) {
@@ -52,6 +59,7 @@ class FrmFormTemplatesHelper {
 	 *
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the API request is expired or not.
+	 *
 	 * @return void
 	 */
 	public static function add_template_attributes( $template, $expired ) {
@@ -83,16 +91,20 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return string
 	 */
 	private static function prepare_single_template_classes( $template ) {
 		$class_names = array( 'frm-card-item' );
+
 		if ( $template['is_featured'] ) {
 			$class_names[] = 'frm-form-templates-featured-item';
 		}
+
 		if ( $template['is_favorite'] ) {
 			$class_names[] = 'frm-form-templates-favorite-item';
 		}
+
 		if ( $template['is_custom'] ) {
 			$class_names[] = 'frm-form-templates-custom-item';
 		}
@@ -108,6 +120,7 @@ class FrmFormTemplatesHelper {
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the license is expired.
 	 * @param array $attributes The template attributes.
+	 *
 	 * @return void
 	 */
 	private static function prepare_single_template_plan( $template, $expired, &$attributes ) {
@@ -117,6 +130,7 @@ class FrmFormTemplatesHelper {
 
 		$required_plan_slug               = sanitize_title( $template['plan_required'] );
 		$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
+
 		if ( 'free' === $required_plan_slug ) {
 			$attributes['data-key'] = $template['key'];
 		}
@@ -130,6 +144,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return void
 	 */
 	public static function add_template_link_attributes( $template ) {
@@ -163,6 +178,7 @@ class FrmFormTemplatesHelper {
 	 *    @type string $upgrade_link Upgrade link URL.
 	 *    @type string $renew_link Renew link URL.
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta( $args ) {
@@ -199,5 +215,51 @@ class FrmFormTemplatesHelper {
 				)
 			);
 		}
+	}
+
+	/**
+	 * Echo the get free templates banner.
+	 *
+	 * @since 6.25
+	 *
+	 * @return void
+	 */
+	public static function echo_get_free_templates_banner() {
+		$args = array(
+			'direction' => 'vertical',
+		);
+
+		?>
+		<div class="frm-card-item frm-px-sm">
+			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php'; ?>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Checks if the get free templates banner should be displayed.
+	 *
+	 * @since 6.25
+	 *
+	 * @return bool
+	 */
+	public static function needs_get_free_templates_banner() {
+		return ! FrmAppHelper::pro_is_installed() && ! FrmFormTemplateApi::get_free_license_code();
+	}
+
+	/**
+	 * Checks if a template needs the free plan override.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $template The template data.
+	 *
+	 * @return bool
+	 */
+	private static function needs_free_plan( $template ) {
+		return self::needs_get_free_templates_banner()
+			&& ! empty( $template['category_slugs'] )
+			&& in_array( 'free', $template['category_slugs'], true )
+			&& ! in_array( $template['id'], FrmFormTemplatesController::FREE_TEMPLATES_IDS, true );
 	}
 }

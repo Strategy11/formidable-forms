@@ -47,7 +47,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							if ( isset( $section['class'] ) ) {
 								call_user_func( array( $section['class'], $section['function'] ), $values );
 							} elseif ( ! isset( $section['data'] ) ) {
-								call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ), $values );
+								call_user_func( ( $section['function'] ?? $section ), $values );
 							}
 							?>
 						</div>

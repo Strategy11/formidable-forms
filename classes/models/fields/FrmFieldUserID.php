@@ -10,24 +10,28 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'user_id';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -36,7 +40,6 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @var bool
 	 */
 	protected $array_allowed = false;
-
 
 	/**
 	 * @return string
@@ -54,12 +57,16 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @since 4.03.06
+	 *
+	 * @param array $args Field display arguments.
+	 *
+	 * @return int|string
 	 */
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();
 		$user_ID      = ( $user_ID ? $user_ID : '' );
 		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		$action       = ( isset( $args['action'] ) ? $args['action'] : ( isset( $args['form_action'] ) ? $args['form_action'] : '' ) );
+		$action       = ( $args['action'] ?? $args['form_action'] ?? '' );
 		$updating     = $action === 'update';
 		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;
 	}
@@ -130,6 +137,8 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param mixed $value Field value passed by reference.
 	 *
 	 * @return void
 	 */

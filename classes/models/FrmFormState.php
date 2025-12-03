@@ -30,6 +30,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	public static function set_initial_value( $key, $value ) {
@@ -56,6 +57,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $value
+	 *
 	 * @return void
 	 */
 	public function set( $key, $value ) {
@@ -65,6 +67,7 @@ class FrmFormState {
 	/**
 	 * @param string $key
 	 * @param mixed  $default
+	 *
 	 * @return mixed
 	 */
 	public static function get_from_request( $key, $default ) {
@@ -74,11 +77,14 @@ class FrmFormState {
 		return self::$instance->get( $key, $default );
 	}
 
+	/**
+	 * @param string $key
+	 * @param mixed  $default
+	 *
+	 * @return mixed
+	 */
 	public function get( $key, $default ) {
-		if ( isset( $this->state[ $key ] ) ) {
-			return $this->state[ $key ];
-		}
-		return $default;
+		return $this->state[ $key ] ?? $default;
 	}
 
 	/**
@@ -87,6 +93,7 @@ class FrmFormState {
 	 * It is used to track the value of a title=1|0 or description=1|0 option in a [formidable] shortcode.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_state_field( $form ) {
@@ -125,18 +132,24 @@ class FrmFormState {
 	 */
 	private static function get_state_from_request() {
 		$encrypted_state = FrmAppHelper::get_post_param( 'frm_state', '', 'sanitize_text_field' );
+
 		if ( ! $encrypted_state ) {
 			return false;
 		}
+
 		$secret          = self::get_encryption_secret();
 		$decrypted_state = openssl_decrypt( $encrypted_state, 'AES-128-ECB', $secret );
+
 		if ( false === $decrypted_state ) {
 			return false;
 		}
+
 		$decoded_state = json_decode( $decrypted_state, true );
+
 		if ( ! is_array( $decoded_state ) ) {
 			return false;
 		}
+
 		foreach ( $decoded_state as $key => $value ) {
 			self::set_initial_value( self::decompressed_key( $key ), $value );
 		}
@@ -150,9 +163,11 @@ class FrmFormState {
 		if ( ! self::open_ssl_is_installed() ) {
 			return;
 		}
+
 		if ( ! $this->state && ! self::get_state_from_request() ) {
 			return;
 		}
+
 		$state_string = $this->get_state_string();
 		echo '<input name="frm_state" type="hidden" value="' . esc_attr( $state_string ) . '" />';
 	}
@@ -164,6 +179,7 @@ class FrmFormState {
 		if ( ! self::open_ssl_is_installed() ) {
 			return '';
 		}
+
 		$secret           = self::get_encryption_secret();
 		$compressed_state = $this->compressed_state();
 		$json_encoded     = json_encode( $compressed_state );
@@ -175,6 +191,7 @@ class FrmFormState {
 	 * Returns true if open SSL is installed.
 	 *
 	 * @since 6.12
+	 *
 	 * @return bool
 	 */
 	private static function open_ssl_is_installed() {
@@ -188,6 +205,7 @@ class FrmFormState {
 	 */
 	private function compressed_state() {
 		$compressed = array();
+
 		foreach ( $this->state as $key => $value ) {
 			$compressed[ self::compressed_key( $key ) ] = $value;
 		}
@@ -200,6 +218,7 @@ class FrmFormState {
 	 * "description" => "d".
 	 *
 	 * @param string $key
+	 *
 	 * @return string
 	 */
 	private static function compressed_key( $key ) {
@@ -212,6 +231,7 @@ class FrmFormState {
 	 * To avoid conflicts, we should not add "i" or "g" in Lite for another state property.
 	 *
 	 * @param string $key
+	 *
 	 * @return string The full key name if one is found. If nothing is found, the $key param is passed back.
 	 */
 	private static function decompressed_key( $key ) {

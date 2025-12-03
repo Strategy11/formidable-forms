@@ -23,6 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<a href="<?php echo esc_url( $error_args['cancel_url'] ); ?>" class="button button-secondary frm-button-secondary dismiss frm-modal-cancel <?php echo esc_attr( $error_args['cancel_classes'] ); ?>"><?php echo esc_html( $error_args['cancel_text'] ); ?></a>
 					<?php
 					endif;
+
 				if ( ! empty( $error_args['continue_text'] ) ) :
 					?>
 					<a href="<?php echo esc_url( $error_args['continue_url'] ); ?>" class="button button-primary dismiss frm-button-primary <?php echo esc_attr( $error_args['continue_classes'] ); ?>"><?php echo esc_html( $error_args['continue_text'] ); ?></a>

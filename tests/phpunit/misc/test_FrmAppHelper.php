@@ -71,6 +71,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_make_affiliate_url() {
 		add_filter( 'frm_affiliate_id', '__return_false' );
 		$urls = array( 'http://site.com', 'https://site.com/page/' );
+
 		foreach ( $urls as $url ) {
 			$new_url = FrmAppHelper::make_affiliate_url( $url );
 			$this->assertEquals( $url, $new_url );
@@ -81,6 +82,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 			'http://site.com'        => 'site.com',
 			'https://site.com/page/' => 'site.com/page/',
 		);
+
 		foreach ( $urls as $url => $expected ) {
 			$new_url  = FrmAppHelper::make_affiliate_url( $url );
 			$expected = 'http://www.shareasale.com/r.cfm?u=1&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $expected );
@@ -103,6 +105,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 */
 	public function test_pro_is_installed() {
 		$active = FrmAppHelper::pro_is_installed();
+
 		if ( is_callable( 'FrmProEddController::pro_is_authorized' ) ) {
 			$this->assertTrue( $active );
 		} else {
@@ -120,6 +123,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 			'formidable-entries' => true,
 			'entry-formidable'   => true,
 		);
+
 		foreach ( $page_names as $page => $expected ) {
 			$_GET['page'] = $page;
 			$is_admin     = FrmAppHelper::is_formidable_admin();
@@ -138,6 +142,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 			'post.php?post=' . $view . '&action=edit&view=1' => true,
 			'post.php?post=' . $page . '&action=edit' => false,
 		);
+
 		foreach ( $admin_pages as $admin_page => $expected ) {
 			$this->set_admin_screen( $admin_page );
 			$is_admin = FrmAppHelper::is_formidable_admin();
@@ -227,6 +232,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				),
 			),
 		);
+
 		foreach ( $values as $value ) {
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $value['value'] );
 			$this->assertEquals( $value['expected'], $value['value'] );
@@ -361,7 +367,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use xlink:href="#frm_wordpress_icon" /></svg>';
@@ -429,6 +435,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				),
 			),
 		);
+
 		foreach ( $tests as $test ) {
 			$allowed = $this->run_private_method( array( 'FrmAppHelper', 'allowed_html' ), array( $test['start'] ) );
 			$this->assertSame( $test['expected'], $allowed );
@@ -445,6 +452,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$this->set_user_by_role( 'administrator' );
 		$frm_roles = FrmAppHelper::frm_capabilities();
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->assertTrue( current_user_can( $frm_role ), 'Admin cannot ' . $frm_role );
 		}
@@ -452,6 +460,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::wp_roles_dropdown (single)
 	 */
 	public function test_wp_roles_dropdown() {
@@ -468,6 +477,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::roles_options ($public = 'private')
 	 */
 	public function test_roles_options() {
@@ -485,6 +495,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::roles_options
 	 */
 	public function test_roles_options_empty_string_option() {
@@ -775,6 +786,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				'expected' => array( '>', '&' ),
 			),
 		);
+
 		foreach ( $test_cases as $test_case ) {
 			$result = FrmAppHelper::recursive_function_map( $test_case['input'], $test_case['function'] );
 			$this->assertEquals( $test_case['expected'], $result );

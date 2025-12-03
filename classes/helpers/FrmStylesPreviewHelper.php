@@ -33,6 +33,7 @@ class FrmStylesPreviewHelper {
 
 	/**
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	public function __construct( $form_id ) {
@@ -63,6 +64,7 @@ class FrmStylesPreviewHelper {
 	 * A field with a custom label position shouldn't ever change in the styler preview.
 	 *
 	 * @since 6.0.1
+	 *
 	 * @return void
 	 */
 	private function add_a_div_class_for_default_label_positions() {
@@ -72,6 +74,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param string $position
 			 * @param array|object $field
+			 *
 			 * @return string
 			 */
 			function ( $position, $field ) {
@@ -89,6 +92,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param string       $classes
 			 * @param array|object $field
+			 *
 			 * @return string
 			 */
 			function ( $classes, $field ) {
@@ -116,6 +120,7 @@ class FrmStylesPreviewHelper {
 			 * @param bool   $show
 			 * @param string $field_type
 			 * @param string $target_field_type
+			 *
 			 * @return bool
 			 */
 			function ( $show, $field_type ) {
@@ -144,6 +149,7 @@ class FrmStylesPreviewHelper {
 			/**
 			 * @param stdClass|null $form
 			 * @param int           $form_id
+			 *
 			 * @return stdClass|null
 			 */
 			function ( $form ) {
@@ -167,6 +173,7 @@ class FrmStylesPreviewHelper {
 		$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
 
 		$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+
 		if ( $this->form_includes_captcha ) {
 			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
 			wp_dequeue_script( 'captcha-api' );
@@ -190,11 +197,13 @@ class FrmStylesPreviewHelper {
 		$notes = array();
 
 		$fallback_form_note = $this->get_fallback_form_note();
+
 		if ( is_string( $fallback_form_note ) ) {
 			$notes[] = $fallback_form_note;
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( 'none' === $frm_settings->load_style ) {
 			$notes[] = function () {
 				printf(
@@ -215,6 +224,7 @@ class FrmStylesPreviewHelper {
 		}
 
 		$disabled_features_note = $this->get_disabled_features_note();
+
 		if ( is_string( $disabled_features_note ) ) {
 			$notes[] = $disabled_features_note;
 		}
@@ -251,6 +261,7 @@ class FrmStylesPreviewHelper {
 	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
 	 * @param WP_Post          $default_style
 	 * @param string           $view Either 'list' or 'edit'.
+	 *
 	 * @return array<string>
 	 */
 	public function get_warnings_for_styler_preview( $style, $default_style, $view ) {
@@ -268,6 +279,7 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @param int $style_id
 	 * @param int $default_style_id
+	 *
 	 * @return bool
 	 */
 	private function should_show_multiple_forms_warning( $style_id, $default_style_id ) {
@@ -276,6 +288,7 @@ class FrmStylesPreviewHelper {
 		if ( ! $is_default_style ) {
 			// Also check for the conversational default.
 			$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
+
 			if ( $conversational_style_id && (int) $conversational_style_id === $style_id ) {
 				$is_default_style = true;
 			}
@@ -304,6 +317,7 @@ class FrmStylesPreviewHelper {
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
+	 *
 	 * @return void
 	 */
 	public static function disable_conflicting_wp_admin_css( $styles ) {
@@ -315,6 +329,7 @@ class FrmStylesPreviewHelper {
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
 		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+
 		if ( false === $edit_key ) {
 			return;
 		}
@@ -339,6 +354,7 @@ class FrmStylesPreviewHelper {
 		if ( ! $is_preview ) {
 			return;
 		}
+
 		$radio_display_type = 'inline' === $settings['radio_align'] ? 'inline-block' : 'block';
 		$check_display_type = 'inline' === $settings['check_align'] ? 'inline-block' : 'block';
 
@@ -374,11 +390,13 @@ class FrmStylesPreviewHelper {
 	 *
 	 * @param WP_Styles $styles
 	 * @param string    $key
+	 *
 	 * @return void
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
 		$index        = array_search( $key, $dependencies );
+
 		if ( false === $index ) {
 			return;
 		}

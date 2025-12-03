@@ -100,6 +100,7 @@ class test_FrmAddon extends FrmUnitTest {
 		// Remove the roles first so we're not getting false positives for data that already exists prior to running FrmAddon::update_pro_capabilities.
 		$caps       = array_keys( FrmAppHelper::frm_capabilities( 'pro_only' ) );
 		$admin_role = get_role( 'administrator' );
+
 		foreach ( $caps as $cap ) {
 			$admin_role->remove_cap( $cap );
 		}
@@ -112,6 +113,7 @@ class test_FrmAddon extends FrmUnitTest {
 		$wp_roles = new WP_Roles(); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 
 		$admin_role = get_role( 'administrator' );
+
 		foreach ( $caps as $cap ) {
 			$this->assertTrue( $admin_role->has_cap( $cap ) );
 		}

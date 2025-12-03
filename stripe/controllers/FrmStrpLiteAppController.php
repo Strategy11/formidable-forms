@@ -18,6 +18,7 @@ class FrmStrpLiteAppController {
 	 * Install required tables.
 	 *
 	 * @param mixed $old_db_version
+	 *
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
@@ -44,6 +45,7 @@ class FrmStrpLiteAppController {
 
 		$modes            = array( 'test', 'live' );
 		$option_name_keys = array( 'account_id', 'client_password', 'server_password', 'details_submitted' );
+
 		foreach ( $modes as $mode ) {
 			foreach ( $option_name_keys as $key ) {
 				$options_to_delete[] = 'frm_strp_connect_' . $key . '_' . $mode;
@@ -75,6 +77,7 @@ class FrmStrpLiteAppController {
 	 * This adds the Stripe checkbox option to the list of gateways.
 	 *
 	 * @param array $gateways
+	 *
 	 * @return array
 	 */
 	public static function add_gateway( $gateways ) {
@@ -100,6 +103,7 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array $errors Errors data. Is empty array if no errors found.
 	 * @param array $params Form params. See {@FrmForm::get_params()}.
+	 *
 	 * @return array
 	 */
 	public static function maybe_add_payment_error( $errors, $params ) {
@@ -117,10 +121,12 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array $errors
 	 * @param int   $form_id
+	 *
 	 * @return array
 	 */
 	private static function maybe_add_payment_error_on_redirect( $errors, $form_id ) {
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return $errors;
 		}
@@ -142,11 +148,13 @@ class FrmStrpLiteAppController {
 				'form_id' => $entry->form_id,
 			)
 		);
+
 		if ( ! $cc_field_id ) {
 			return $errors;
 		}
 
 		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
+
 		if ( $is_setup_intent ) {
 			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';
 		} else {
@@ -175,6 +183,7 @@ class FrmStrpLiteAppController {
 	 * @param int                  $form_id
 	 * @param int                  $entry_id
 	 * @param array<string,string> $errors
+	 *
 	 * @return void
 	 */
 	private static function setup_form_after_payment_error( $form_id, $entry_id, $errors ) {
@@ -202,6 +211,7 @@ class FrmStrpLiteAppController {
 			 *
 			 * @param string $html
 			 * @param int    $entry_id
+			 *
 			 * @return string
 			 */
 			function ( $html ) use ( $entry_id ) {
@@ -219,6 +229,7 @@ class FrmStrpLiteAppController {
 	 *
 	 * @param array  $values Entry edit values.
 	 * @param object $field  Field object.
+	 *
 	 * @return array
 	 */
 	public static function maybe_delete_pay_entry( $values, $field ) {

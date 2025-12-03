@@ -16,12 +16,13 @@ class FrmTransLiteListsController {
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
 
-		add_filter( $hook_name, __CLASS__ . '::payment_columns' );
-		add_filter( 'screen_options_show_screen', __CLASS__ . '::remove_screen_options', 10, 2 );
+		add_filter( $hook_name, self::class . '::payment_columns' );
+		add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
 	}
 
 	/**
 	 * @param array $columns
+	 *
 	 * @return array
 	 */
 	public static function payment_columns( $columns = array() ) {
@@ -81,6 +82,11 @@ class FrmTransLiteListsController {
 	 * viewing a payment or subscription
 	 *
 	 * @since 6.5
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
@@ -90,6 +96,7 @@ class FrmTransLiteListsController {
 		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
 		if ( $unread_count ) {
 			$menu_name .= '-' . $unread_count;
 		}
@@ -105,6 +112,7 @@ class FrmTransLiteListsController {
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
+	 *
 	 * @return void
 	 */
 	public static function route( $action ) {
@@ -116,6 +124,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function list_page_params() {
 		$values = array();
+
 		foreach ( array(
 			'id'     => '',
 			'paged'  => 1,
@@ -134,6 +143,7 @@ class FrmTransLiteListsController {
 	 * Display a list.
 	 *
 	 * @param array $response
+	 *
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
@@ -154,6 +164,7 @@ class FrmTransLiteListsController {
 		$wp_list_table->prepare_items();
 
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
+
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			// if the current page is higher than the total pages,
 			// reset it and prepare again to get the right entries.
@@ -170,6 +181,8 @@ class FrmTransLiteListsController {
 	 * @param mixed  $save
 	 * @param string $option
 	 * @param int    $value
+	 *
+	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {

@@ -3,6 +3,7 @@
  * Sub field options
  *
  * @package Formidable
+ *
  * @since 4.10.02
  *
  * @var FrmFieldCombo $this            Field type object.
@@ -26,9 +27,9 @@ $labels    = $this->get_built_in_option_labels();
 	data-sub-field-name="<?php echo esc_attr( $sub_field['name'] ); ?>"
 	data-field-id="<?php echo intval( $field_id ); ?>"
 >
-	<label id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label">
+	<h4 id="<?php echo esc_attr( $uniq_str ); ?>" class="frm_primary_label frm-font-semibold frm-text-grey-600 frm-mt-xs frm-mb-xs">
 		<?php echo esc_html( $sub_field['label'] ); ?>
-	</label>
+	</h4>
 
 	<?php
 	// Loop through $sub_field['options'] to show options.
@@ -39,27 +40,28 @@ $labels    = $this->get_built_in_option_labels();
 				$input_id   = $option . '_' . $uniq_str;
 				?>
 				<p class="frm6 frm_form_field">
+					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
+						<?php echo esc_html( $labels[ $option ] ); ?>
+					</label>
 					<span class="frm-with-right-icon">
-						<?php
-						FrmAppHelper::icon_by_class(
-							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal',
-							array(
-								'data-open' => 'frm-smart-values-box',
-							)
-						);
-						?>
 						<input
 							type="text"
 							name="<?php echo esc_attr( $input_name ); ?>"
 							id="<?php echo esc_attr( $input_id ); ?>"
-							value="<?php echo esc_attr( isset( $default_value[ $sub_field['name'] ] ) ? $default_value[ $sub_field['name'] ] : '' ); ?>"
+							value="<?php echo esc_attr( $default_value[ $sub_field['name'] ] ?? '' ); ?>"
 							data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 							data-changeatt="value"
 						/>
+						<?php
+						FrmAppHelper::icon_by_class(
+							'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+							array(
+								'data-open' => 'frm-smart-values-box',
+								'tabindex'  => '0',
+							)
+						);
+						?>
 					</span>
-					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
-						<?php echo esc_html( $labels[ $option ] ); ?>
-					</label>
 				</p>
 				<?php
 				break;
@@ -71,17 +73,17 @@ $labels    = $this->get_built_in_option_labels();
 				$input_value = FrmField::get_option( $field, $option );
 				?>
 				<p class="frm6 frm_form_field">
+					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
+						<?php echo esc_html( $labels[ $option ] ); ?>
+					</label>
 					<input
 						type="text"
 						name="<?php echo esc_attr( $input_name ); ?>"
 						id="<?php echo esc_attr( $input_id ); ?>"
-						value="<?php echo esc_attr( isset( $input_value[ $sub_field['name'] ] ) ? $input_value[ $sub_field['name'] ] : '' ); ?>"
+						value="<?php echo esc_attr( $input_value[ $sub_field['name'] ] ?? '' ); ?>"
 						data-changeme="field_<?php echo esc_attr( $field_key . '_' . $sub_field['name'] ); ?>"
 						data-changeatt="<?php echo esc_attr( $option ); ?>"
 					/>
-					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
-						<?php echo esc_html( $labels[ $option ] ); ?>
-					</label>
 				</p>
 				<?php
 				break;
@@ -92,17 +94,16 @@ $labels    = $this->get_built_in_option_labels();
 				$input_id    = 'field_options_' . $option . '_' . $uniq_str;
 				$input_value = FrmField::get_option( $field, $sub_field['name'] . '_' . $option );
 				?>
-				<p class="frm6 frm_form_field">
-					<input
-						type="text"
-						name="<?php echo esc_attr( $input_name ); ?>"
-						id="<?php echo esc_attr( $input_id ); ?>"
-						value="<?php echo esc_attr( $input_value ); ?>"
-						data-changeme="frm_field_<?php echo esc_attr( $field_id . '_' . $sub_field['name'] ); ?>_desc"
-					/>
+				<p class="frm_form_field frm-flex-col">
 					<label class="frm_description" for="<?php echo esc_attr( $input_id ); ?>">
 						<?php echo esc_html( $labels[ $option ] ); ?>
 					</label>
+					<textarea
+						name="<?php echo esc_attr( $input_name ); ?>"
+						id="<?php echo esc_attr( $input_id ); ?>"
+						data-changeme="frm_field_<?php echo esc_attr( $field_id . '_' . $sub_field['name'] ); ?>_desc"
+						rows="2"
+					><?php echo esc_html( $input_value ); ?></textarea>
 				</p>
 				<?php
 				break;

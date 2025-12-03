@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormActionsController {
+
+	/**
+	 * @var string
+	 */
 	public static $action_post_type = 'frm_form_actions';
 
 	/**
@@ -86,9 +90,10 @@ class FrmFormActionsController {
 	/**
 	 * Remove the Highrise action if it is not registered.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @param array $action_classes
+	 *
 	 * @return array
 	 */
 	private static function maybe_unset_highrise( $action_classes ) {
@@ -119,9 +124,15 @@ class FrmFormActionsController {
 	 * Add unknown actions to a group.
 	 *
 	 * @since 4.0
+	 *
+	 * @param array $action_controls
+	 * @param array $groups
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_action_to_group( $action_controls, &$groups ) {
 		$grouped = array();
+
 		foreach ( $groups as $group ) {
 			if ( isset( $group['actions'] ) ) {
 				$grouped = array_merge( $grouped, $group['actions'] );
@@ -134,6 +145,7 @@ class FrmFormActionsController {
 			}
 
 			$this_group = $action->action_options['group'];
+
 			if ( ! isset( $groups[ $this_group ] ) ) {
 				$this_group = 'misc';
 			}
@@ -184,6 +196,7 @@ class FrmFormActionsController {
 					'getresponse',
 					'aweber',
 					'mailpoet',
+					'convertkit',
 				),
 			),
 			'crm'       => array(
@@ -199,7 +212,7 @@ class FrmFormActionsController {
 	/**
 	 * Get the actions to include in the CRM section.
 	 *
-	 * @since x.x
+	 * @since 6.23
 	 *
 	 * @return array
 	 */
@@ -223,10 +236,13 @@ class FrmFormActionsController {
 	 *
 	 * @since 4.0
 	 *
+	 * @param array $action_controls
+	 *
 	 * @return array
 	 */
 	private static function active_actions( $action_controls ) {
 		$allowed = array();
+
 		foreach ( $action_controls as $action_control ) {
 			if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
 				$allowed[] = $action_control->id_base;
@@ -239,6 +255,7 @@ class FrmFormActionsController {
 	 * For each add-on, add an li, class, and javascript function. If active, add an additional class.
 	 *
 	 * @since 4.0
+	 *
 	 * @param object $action_control
 	 * @param array  $allowed
 	 */
@@ -260,6 +277,7 @@ class FrmFormActionsController {
 			$classes .= ' frm_active_action';
 		} else {
 			$classes .= ' frm_inactive_action';
+
 			if ( $default_position !== false && ( $allowed_count + $default_position ) < 6 ) {
 				$group_class .= ' frm-default-show';
 			}
@@ -268,6 +286,7 @@ class FrmFormActionsController {
 			$data['data-medium']  = 'settings-' . $action_control->id_base;
 
 			$upgrading = FrmAddonsController::install_link( $action_control->action_options['plugin'] );
+
 			if ( isset( $upgrading['url'] ) ) {
 				$data['data-oneclick'] = json_encode( $upgrading );
 			}
@@ -277,6 +296,7 @@ class FrmFormActionsController {
 			}
 
 			$requires = FrmFormsHelper::get_plan_required( $upgrading );
+
 			if ( $requires && 'free' !== $requires ) {
 				$data['data-requires'] = $requires;
 			}
@@ -284,6 +304,7 @@ class FrmFormActionsController {
 
 		// HTML to include on the icon.
 		$icon_atts = array();
+
 		if ( $action_control->action_options['color'] !== 'var(--primary-700)' ) {
 			$icon_atts = array(
 				'style' => '--primary-700:' . $action_control->action_options['color'],
@@ -295,10 +316,12 @@ class FrmFormActionsController {
 
 	/**
 	 * @param string $action
+	 *
 	 * @return array|FrmFormAction A single form action is returned when a specific $action value is requested.
 	 */
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
+
 		if ( empty( $temp_actions ) ) {
 			self::actions_init();
 			$temp_actions = self::$registered_actions->actions;
@@ -321,6 +344,11 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param object $form
+	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function list_actions( $form, $values ) {
 		if ( empty( $form ) ) {
@@ -370,15 +398,18 @@ class FrmFormActionsController {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $form_actions
+	 *
 	 * @return void
 	 */
 	private static function maybe_show_limit_warning( $form_id, $form_actions ) {
 		$count = count( $form_actions );
+
 		if ( $count < 99 ) {
 			return;
 		}
 
 		$limit = FrmFormAction::get_action_limit( $form_id );
+
 		if ( $limit < 99 || $count < $limit ) {
 			return;
 		}
@@ -396,6 +427,15 @@ class FrmFormActionsController {
 		echo '</div>';
 	}
 
+	/**
+	 * @param WP_Post       $form_action
+	 * @param object        $form
+	 * @param int           $action_key Action ID.
+	 * @param FrmFormAction $action_control
+	 * @param array         $values
+	 *
+	 * @return void
+	 */
 	public static function action_control( $form_action, $form, $action_key, $action_control, $values ) {
 		$action_control->_set( $action_key );
 
@@ -439,6 +479,7 @@ class FrmFormActionsController {
 		$action_type = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
 
 		$action_control = self::get_form_actions( $action_type );
+
 		if ( empty( $action_control ) ) {
 			wp_die();
 		}
@@ -456,6 +497,9 @@ class FrmFormActionsController {
 
 	/**
 	 * @since 3.06.04
+	 *
+	 * @param string $action_type
+	 *
 	 * @return bool
 	 */
 	private static function should_show_log_message( $action_type ) {
@@ -463,6 +507,12 @@ class FrmFormActionsController {
 		return in_array( $action_type, $logging, true ) && ! function_exists( 'frm_log_autoloader' );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 *
+	 * @return object
+	 */
 	private static function fields_to_values( $form_id, array &$values ) {
 		$form = FrmForm::getOne( $form_id );
 
@@ -472,10 +522,12 @@ class FrmFormActionsController {
 		);
 
 		$fields = FrmField::get_all_for_form( $form->id );
+
 		foreach ( $fields as $k => $f ) {
 			$f    = (array) $f;
 			$opts = (array) $f['field_options'];
 			$f    = array_merge( $opts, $f );
+
 			if ( ! isset( $f['post_field'] ) ) {
 				$f['post_field'] = '';
 			}
@@ -488,11 +540,13 @@ class FrmFormActionsController {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	public static function update_settings( $form_id ) {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		$process_form = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+
 		if ( ! wp_verify_nonce( $process_form, 'process_form_nonce' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			$error_args   = array(
@@ -527,6 +581,7 @@ class FrmFormActionsController {
 
 		foreach ( $registered_actions as $registered_action ) {
 			$action_ids = $registered_action->update_callback( $form_id );
+
 			if ( ! empty( $action_ids ) ) {
 				$new_actions[] = $action_ids;
 			}
@@ -536,6 +591,7 @@ class FrmFormActionsController {
 		if ( ! empty( $new_actions ) ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
+
 		$old_actions = array_diff( $old_actions, $new_actions );
 
 		self::delete_missing_actions( $old_actions );
@@ -543,6 +599,11 @@ class FrmFormActionsController {
 		FrmOnSubmitHelper::save_on_submit_settings( $form_id );
 	}
 
+	/**
+	 * @param array $old_actions
+	 *
+	 * @return void
+	 */
 	public static function delete_missing_actions( $old_actions ) {
 		if ( ! empty( $old_actions ) ) {
 			foreach ( $old_actions as $old_id ) {
@@ -552,6 +613,13 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param int|string $entry_id
+	 * @param int|string $form_id
+	 * @param array      $args
+	 * 
+	 * @return void
+	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
 		$filter_args             = $args;
 		$filter_args['entry_id'] = $entry_id;
@@ -570,7 +638,13 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * @param string $event
+	 * @param string            $event
+	 * @param int|object|string $form
+	 * @param int|string        $entry
+	 * @param string            $type
+	 * @param array             $args
+	 * 
+	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
 		$action_status = array(
@@ -583,11 +657,13 @@ class FrmFormActionsController {
 		}
 
 		FrmForm::maybe_get_form( $form );
+
 		if ( ! is_object( $form ) ) {
 			return;
 		}
 
 		$link_settings = self::get_form_actions( $type );
+
 		if ( 'all' !== $type ) {
 			$link_settings = array( $type => $link_settings );
 		}
@@ -605,6 +681,7 @@ class FrmFormActionsController {
 
 			$skip_this_action = ! in_array( $this_event, $action->post_content['event'], true ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
+
 			if ( $skip_this_action ) {
 				continue;
 			}
@@ -622,6 +699,7 @@ class FrmFormActionsController {
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
 				$trigger_children = apply_filters( 'frm_use_embedded_form_actions', false, compact( 'form', 'entry' ) );
+
 				if ( ! $trigger_children ) {
 					continue;
 				}
@@ -629,6 +707,7 @@ class FrmFormActionsController {
 
 			// Check conditional logic.
 			$stop = FrmFormAction::action_conditions_met( $action, $entry );
+
 			if ( $stop ) {
 				continue;
 			}
@@ -673,6 +752,13 @@ class FrmFormActionsController {
 		}//end if
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param array      $values
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function duplicate_form_actions( $form_id, $values, $args = array() ) {
 		if ( empty( $args['old_id'] ) ) {
 			// Continue if we know which actions to copy.
@@ -690,6 +776,11 @@ class FrmFormActionsController {
 		}
 	}
 
+	/**
+	 * @param string $where
+	 *
+	 * @return string
+	 */
 	public static function limit_by_type( $where ) {
 		global $frm_vars, $wpdb;
 
@@ -709,6 +800,7 @@ class FrmFormActionsController {
 	 *
 	 * @param bool|null $null
 	 * @param string    $post_type
+	 *
 	 * @return bool|null
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {
@@ -720,16 +812,30 @@ class FrmFormActionsController {
 }
 
 class Frm_Form_Action_Factory {
+
+	/**
+	 * @var array
+	 */
 	public $actions = array();
 
 	public function __construct() {
 		add_action( 'frm_form_actions_init', array( $this, '_register_actions' ), 100 );
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function register( $action_class ) {
 		$this->actions[ $action_class ] = new $action_class();
 	}
 
+	/**
+	 * @param string $action_class
+	 *
+	 * @return void
+	 */
 	public function unregister( $action_class ) {
 		if ( isset( $this->actions[ $action_class ] ) ) {
 			unset( $this->actions[ $action_class ] );
