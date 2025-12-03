@@ -742,7 +742,8 @@ class FrmAddon {
 			// Get string into array for existing values.
 			$last_checked = array( 'time' => $last_checked );
 		}
-		return $last_checked ? (array) $last_checked : array();
+
+		return $last_checked ? $last_checked : array();
 	}
 
 	/**

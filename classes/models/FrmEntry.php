@@ -721,7 +721,7 @@ class FrmEntry {
 	}
 
 	/**
-	 * @param int $field_id
+	 * @param int|string $field_id
 	 *
 	 * @return string
 	 */
@@ -1052,7 +1052,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int $entry_id
+	 * @param int|string $entry_id
 	 *
 	 * @return void
 	 */
@@ -1071,8 +1071,8 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param array $values
-	 * @param int   $entry_id
+	 * @param array      $values
+	 * @param int|string $entry_id
 	 *
 	 * @return void
 	 */
@@ -1170,9 +1170,9 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param int    $id
-	 * @param array  $values
-	 * @param string $update_type
+	 * @param int|string $id
+	 * @param array      $values
+	 * @param string     $update_type
 	 *
 	 * @return bool $update
 	 */
@@ -1239,10 +1239,10 @@ class FrmEntry {
 	 *
 	 * @since 2.0.16
 	 *
-	 * @param bool|int $query_results
-	 * @param int      $id
-	 * @param array    $values
-	 * @param array    $new_values
+	 * @param bool|int   $query_results
+	 * @param int|string $id
+	 * @param array      $values
+	 * @param array      $new_values
 	 *
 	 * @return void
 	 */

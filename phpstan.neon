@@ -18,7 +18,6 @@ parameters:
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
-		uselessCast: false
 		requireParentConstructorCall: false
 		strictCalls: false
 		noVariableVariables: false

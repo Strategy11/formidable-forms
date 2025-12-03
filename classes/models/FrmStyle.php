@@ -844,7 +844,7 @@ class FrmStyle {
 	 *
 	 * @since 6.14
 	 *
-	 * @param int $style_id The post type "frm_styles" ID.
+	 * @param int|string $style_id The post type "frm_styles" ID.
 	 *
 	 * @return string The json encoded template data
 	 */

@@ -76,7 +76,7 @@ class FrmPersonalData {
 			return $data_to_export;
 		}
 
-		foreach ( (array) $entries as $entry ) {
+		foreach ( $entries as $entry ) {
 			$data_to_export['data'][] = array(
 				'group_id'    => 'formidable',
 				'group_label' => __( 'Form Submissions', 'formidable' ),
@@ -117,7 +117,7 @@ class FrmPersonalData {
 
 		// TODO: Add an option to anonymize the entries with wp_privacy_anonymize_data( 'email', 'e@e.com' );
 
-		foreach ( (array) $entries as $entry ) {
+		foreach ( $entries as $entry ) {
 			$removed = FrmEntry::destroy( $entry );
 
 			if ( $removed ) {
@@ -138,7 +138,7 @@ class FrmPersonalData {
 	 *
 	 * @param string $email
 	 *
-	 * @return array of entry ids
+	 * @return array Entry ids
 	 */
 	private function get_user_entries( $email ) {
 		$query_args = array(
@@ -159,7 +159,7 @@ class FrmPersonalData {
 
 		$entries_by_user = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
 
-		$entry_ids = array_merge( (array) $entries_by_user, (array) $entries_by_email );
+		$entry_ids = array_merge( $entries_by_user, $entries_by_email );
 		$entry_ids = array_unique( array_filter( $entry_ids ) );
 
 		return $entry_ids;

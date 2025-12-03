@@ -2892,10 +2892,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param array  $fields
-	 * @param object $record
-	 * @param array  $values
-	 * @param array  $args
+	 * @param array|string $fields
+	 * @param object       $record
+	 * @param array        $values
+	 * @param array        $args
 	 *
 	 * @return void
 	 */

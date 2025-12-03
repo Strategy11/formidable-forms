@@ -1291,9 +1291,9 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param mixed  $save
-	 * @param string $option
-	 * @param int    $value
+	 * @param mixed      $save
+	 * @param string     $option
+	 * @param int|string $value
 	 *
 	 * @return mixed
 	 */

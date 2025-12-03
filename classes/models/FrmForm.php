@@ -831,7 +831,7 @@ class FrmForm {
 	/**
 	 * @since 3.0
 	 *
-	 * @param int $id
+	 * @param int|string $id
 	 *
 	 * @return string form key
 	 */
@@ -1007,7 +1007,7 @@ class FrmForm {
 			return $counts;
 		}
 
-		$results = (array) FrmDb::get_results(
+		$results = FrmDb::get_results(
 			'frm_forms',
 			array(
 				'or'               => 1,
