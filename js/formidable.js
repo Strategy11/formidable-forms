@@ -711,7 +711,8 @@ function frmFrontFormJS() {
 
 	/**
 	 * @param {HTMLElement|jQuery} object
-	 * @return {boolean} True if there is an invisible recaptcha.
+	 *
+	 * @return {HTMLElement|false} Captcha element if there is an invisible recaptcha.
 	 */
 	function hasInvisibleRecaptcha( object ) {
 		if ( isGoingToPrevPage( object ) ) {
@@ -731,11 +732,14 @@ function frmFrontFormJS() {
 				return recaptcha;
 			}
 		}
+
 		return false;
 	}
 
 	/**
 	 * @param {HTMLElement} invisibleRecaptcha
+	 *
+	 * @return {void}
 	 */
 	function executeInvisibleRecaptcha( invisibleRecaptcha ) {
 		const recaptchaID = invisibleRecaptcha.dataset.rid;
@@ -1892,7 +1896,7 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			if ( invisibleRecaptcha.length ) {
+			if ( invisibleRecaptcha ) {
 				showLoadingIndicator( jQuery( object ) );
 				executeInvisibleRecaptcha( invisibleRecaptcha );
 			} else {
