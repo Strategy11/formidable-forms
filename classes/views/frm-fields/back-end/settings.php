@@ -351,7 +351,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		</p>
 			<?php
 		}//end if
-		if ( ! $pro_is_installed ) {
+		if ( ! empty( $show_upsell_for_visibility ) ) {
 			?>
 		<p class="frm6 frm_form_field frm_show_upgrade">
 			<label class="frm-h-stack-xs" id="for_field_options_admin_only_<?php echo absint( $field['id'] ); ?>" for="field_options_admin_only_<?php echo absint( $field['id'] ); ?>">

@@ -55,14 +55,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 * @since 6.10
 					 */
 					do_action( 'frm_after_create_blank_form_button' );
-					if ( ! FrmAppHelper::pro_is_installed() ) {
-						?>
-					<button id="frm-form-templates-create-ai-form" class="frm-flex-box frm-items-center frm-form-templates-create-button frm_show_upgrade" data-upgrade="<?php esc_attr_e( 'Create with AI options', 'formidable' ); ?>">
-						<?php FrmAppHelper::icon_by_class( 'frmfont frm-ai-form-icon', array( 'aria-label' => _x( 'Create', 'form templates: create an AI generated form', 'formidable' ) ) ); ?>
-						<span><?php esc_html_e( 'Create with AI', 'formidable' ); ?></span>
-						<?php FrmAppHelper::show_pill_text( __( 'BETA', 'formidable' ) ); ?>
-					</button>
-					<?php } ?>
+					if ( ! class_exists( 'FrmAIAppHelper' ) ) {
+						include $view_path . 'ai-upsell-button.php';
+					}
+					?>
 				</div>
 				<span id="frm-form-templates-create-form-divider" class="frm-page-skeleton-divider frm-mt-xs frm-mb-xs"></span>
 
