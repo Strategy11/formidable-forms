@@ -1200,19 +1200,16 @@ function frmFrontFormJS() {
 		jQuery( '.form-field' ).removeClass( 'frm_blank_field has-error' );
 		jQuery( '.frm_error_style' ).remove();
 		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
-			const inputs = document.querySelectorAll( `[aria-describedby*="${ el.id }"]` );
-			if ( inputs.length ) {
-				inputs.forEach( input => {
-					let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
-					ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
+			document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+				let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+				ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
 
-					if ( ariaDescribedBy.length ) {
-						input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
-					} else {
-						input.removeAttribute( 'aria-describedby' );
-					}
-				} );
-			}
+				if ( ariaDescribedBy.length ) {
+					input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				} else {
+					input.removeAttribute( 'aria-describedby' );
+				}
+			} );
 			el.remove();
 		} );
 	}
