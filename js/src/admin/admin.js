@@ -3121,6 +3121,14 @@ window.frmAdminBuildJS = function() {
 			search.classList.remove( 'frm_hidden' );
 		}
 	}
+
+	/**
+	 * Gets the exclude array for the calculation box.
+	 *
+	 * @param {HTMLElement} calcBox   The calculation box element.
+	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
+	 * @returns {Array} The exclude array.
+	 */
 	function getExcludeArray( calcBox, isSummary ) {
 		const codeList = calcBox.querySelector( '.frm_code_list' );
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
@@ -3139,16 +3147,10 @@ window.frmAdminBuildJS = function() {
 					}
 				}
 			}
-		} else {
-			// Check if this is a Math calculation (not Text)
-			const isMathCalc = ! isTextCalculationForBox( calcBox );
-			if ( isMathCalc ) {
-				// Add non-numeric field types to exclusions for Math calculations
-				const nonNumericTypes = codeList.getAttribute( 'data-exclude-non-numeric' );
-				if ( nonNumericTypes ) {
-					const nonNumeric = JSON.parse( nonNumericTypes );
-					exclude.push( ...nonNumeric );
-				}
+		} else if ( isMathCalcType( calcBox ) ) {
+			const nonNumericTypes = codeList.getAttribute( 'data-exclude-non-numeric' );
+			if ( nonNumericTypes ) {
+				exclude.push( ...JSON.parse( nonNumericTypes ) );
 			}
 		}
 
