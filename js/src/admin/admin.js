@@ -3137,37 +3137,19 @@ window.frmAdminBuildJS = function() {
 		return exclude;
 	}
 
-	function isTextCalculationForBox( calcBox ) {
-		const calcContainer = calcBox.closest( '[class*="frm-calc-for-"]' );
-		if ( ! calcContainer ) {
+	/**
+	 * Checks if the calculation is a math calculation.
+	 *
+	 * @param {HTMLElement} calcBox The calculation box element.
+	 * @returns {boolean} True if the calculation is a math calculation, false otherwise.
+	 */
+	function isMathCalcType( calcBox ) {
+		const fieldFormula = calcBox.parentElement;
+		if ( ! fieldFormula.classList.contains( 'frm-field-formula' ) ) {
 			return false;
 		}
-		// Check if calc_type is set to 'text' - for new toggle style
-		const textToggle = calcContainer.querySelector( 'input[name*="calc_type"]:checked' );
-		if ( textToggle && 'text' === textToggle.value ) {
-			return true;
-		}
-		// Check for old checkbox style - backwards compatibility
-		const calcTypeCheckbox = calcContainer.querySelector( 'input[id^="calc_type"]' );
-		return calcTypeCheckbox && calcTypeCheckbox.checked;
-	}
 
-	function refreshCalcFieldListOnTypeChange( event ) {
-		const calcTypeInput = event.target;
-		const calcContainer = calcTypeInput.closest( '[class*="frm-calc-for-"]' );
-		if ( ! calcContainer ) {
-			return;
-		}
-
-		// Find the modal containing the field list
-		const modal = calcContainer.querySelector( '.frm-inline-modal' );
-		if ( ! modal || modal.classList.contains( 'frm_hidden' ) ) {
-			// Modal is not open, no need to refresh
-			return;
-		}
-
-		// Refresh the field list by calling popCalcFields
-		popCalcFields( modal, true );
+		return document.querySelector( `input[name="field_options[calc_type_${ fieldFormula.dataset.fieldId }]"]:checked` ).value !== 'text';
 	}
 
 	function getIncludedExtras() {
@@ -10609,7 +10591,6 @@ window.frmAdminBuildJS = function() {
 			$newFields.on( 'dblclick', 'li.ui-state-default', openAdvanced );
 			$builderForm.on( 'change', '.frm_tax_form_select', toggleFormTax );
 			$builderForm.on( 'change', 'select.conf_field', addConf );
-			$builderForm.on( 'change', 'input[name*="calc_type"]', refreshCalcFieldListOnTypeChange );
 
 			$builderForm.on( 'change', '.frm_get_field_selection', getFieldSelection );
 
