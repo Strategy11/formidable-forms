@@ -59,6 +59,7 @@ class FrmTransLiteAction extends FrmFormAction {
 		// Add an upsell placeholder for the capture payment setting.
 		$upgrading      = FrmAddonsController::install_link( 'stripe' );
 		$upgrade_params = array();
+
 		if ( isset( $upgrading['url'] ) ) {
 			$upgrade_params['data-oneclick'] = json_encode( $upgrading );
 		} else {
@@ -98,6 +99,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	private function default_currency() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$currency     = trim( $frm_settings->currency );
+
 		if ( ! $currency ) {
 			$currency = 'USD';
 		}

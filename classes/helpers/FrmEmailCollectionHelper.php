@@ -27,6 +27,7 @@ class FrmEmailCollectionHelper {
 	 */
 	public static function subscribe_to_active_campaign( $email = '' ) {
 		$user = wp_get_current_user();
+
 		if ( ! $email ) {
 			$email = $user->user_email;
 		}

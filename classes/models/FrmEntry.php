@@ -103,12 +103,14 @@ class FrmEntry {
 		$frm_vars['checking_duplicates'] = true;
 
 		$is_duplicate = false;
+
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
 
 			// make sure it's a duplicate
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
+
 			foreach ( $metas as $meta ) {
 				if ( 0 === (int) $meta->field_id ) {
 					continue;
@@ -140,6 +142,7 @@ class FrmEntry {
 			}
 
 			$diff = array_diff_assoc( $field_metas, $new_meta );
+
 			foreach ( $diff as $meta_value ) {
 				if ( ! empty( $meta_value ) ) {
 					$is_duplicate = false;
@@ -174,6 +177,7 @@ class FrmEntry {
 		}
 
 		$unique_id = sanitize_key( $values['unique_id'] );
+
 		if ( ! $unique_id ) {
 			// Only continue if a unique ID was generated on form submit.
 			return false;
@@ -184,6 +188,7 @@ class FrmEntry {
 		}
 
 		$timestamp = strtotime( $created_at );
+
 		if ( false === $timestamp ) {
 			$timestamp = time();
 		}
@@ -229,10 +234,12 @@ class FrmEntry {
 	 */
 	private static function convert_values_to_their_saved_value( $filter_vals, $entry_id ) {
 		$reduced = array();
+
 		foreach ( $filter_vals as $field_id => $value ) {
 			$field                = FrmFieldFactory::get_field_object( $field_id );
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
+
 			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
 				unset( $reduced[ $field_id ] );
 			}
@@ -290,6 +297,7 @@ class FrmEntry {
 		$new_values['updated_at'] = $new_values['created_at'];
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
+
 		if ( ! $query_results ) {
 			return false;
 		}
@@ -297,6 +305,7 @@ class FrmEntry {
 		$entry_id = $wpdb->insert_id;
 
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['saved_entries'] ) ) {
 			$frm_vars['saved_entries'] = array();
 		}
@@ -339,6 +348,7 @@ class FrmEntry {
 		global $wpdb;
 
 		$update = self::before_update_entry( $id, $values, $update_type );
+
 		if ( ! $update ) {
 			return false;
 		}
@@ -365,6 +375,7 @@ class FrmEntry {
 
 		// Item meta is required for conditional logic in actions with 'delete' events.
 		$entry = self::getOne( $id, true );
+
 		if ( ! $entry ) {
 			$result = false;
 			return $result;
@@ -408,6 +419,7 @@ class FrmEntry {
 		global $wpdb;
 		$form_id = isset( $value ) ? $form_id : null;
 		$result  = $wpdb->update( $wpdb->prefix . 'frm_items', array( 'form_id' => $form_id ), array( 'id' => $id ) );
+
 		if ( $result ) {
 			self::clear_cache();
 		}
@@ -443,6 +455,7 @@ class FrmEntry {
 	 */
 	public static function get_new_entry_name( $values, $default = '' ) {
 		$name = $values['item_name'] ?? $values['name'] ?? $default;
+
 		if ( is_array( $name ) ) {
 			$name = reset( $name );
 		}
@@ -490,6 +503,7 @@ class FrmEntry {
 		}
 
 		$entry = FrmDb::check_cache( $id, 'frm_entry' );
+
 		if ( $entry !== false ) {
 			self::prepare_entry( $entry );
 			return $entry;
@@ -556,11 +570,13 @@ class FrmEntry {
 		$entry->metas = array();
 
 		$include_key = apply_filters( 'frm_include_meta_keys', false, array( 'form_id' => $entry->form_id ) );
+
 		foreach ( $metas as $meta_val ) {
 			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 
 			if ( $meta_val->item_id == $entry->id ) {
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
+
 				if ( $include_key ) {
 					$entry->metas[ $meta_val->field_key ] = $entry->metas[ $meta_val->field_id ];
 				}
@@ -659,6 +675,7 @@ class FrmEntry {
 		}
 
 		$meta_where = array( 'field_id !' => 0 );
+
 		if ( $limit == '' && is_array( $where ) && count( $where ) == 1 && isset( $where['it.form_id'] ) ) {
 			$meta_where['fi.form_id'] = $where['it.form_id'];
 		} else {
@@ -759,6 +776,7 @@ class FrmEntry {
 	public static function getPageCount( $p_size, $where = '' ) {
 		$p_size = (int) $p_size;
 		$count  = 1;
+
 		if ( $p_size ) {
 			if ( ! is_numeric( $where ) ) {
 				$where = self::getRecordCount( $where );
@@ -805,6 +823,7 @@ class FrmEntry {
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
 		$entry_id = self::insert_entry_into_database( $new_values );
+
 		if ( ! $entry_id ) {
 			return false;
 		}
@@ -904,6 +923,7 @@ class FrmEntry {
 		}
 
 		$ip = FrmAppHelper::get_ip_address();
+
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			$ip = self::get_entry_value( $values, 'ip', $ip );
 		}
@@ -1080,6 +1100,7 @@ class FrmEntry {
 		// This unique ID is inserted with JS on form submit.
 		// It is used to check for duplicate entries.
 		$unique_id = sanitize_key( $values['unique_id'] );
+
 		if ( $unique_id ) {
 			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', compact( 'unique_id' ) );
 			self::flag_new_unique_key( $unique_id );
@@ -1096,6 +1117,7 @@ class FrmEntry {
 	 */
 	private static function maybe_add_captcha_meta( $form_id, $entry_id ) {
 		global $frm_vars;
+
 		if ( array_key_exists( 'captcha_scores', $frm_vars ) && array_key_exists( $form_id, $frm_vars['captcha_scores'] ) ) {
 			$captcha_score_meta = array( 'captcha_score' => $frm_vars['captcha_scores'][ $form_id ] );
 			FrmEntryMeta::add_entry_meta( $entry_id, 0, '', maybe_serialize( $captcha_score_meta ) );
@@ -1230,6 +1252,7 @@ class FrmEntry {
 		}
 
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['saved_entries'] ) ) {
 			$frm_vars['saved_entries'] = array();
 		}

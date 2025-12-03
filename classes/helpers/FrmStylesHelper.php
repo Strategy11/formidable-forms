@@ -10,6 +10,7 @@ class FrmStylesHelper {
 	 */
 	public static function get_upload_base() {
 		$uploads = wp_upload_dir();
+
 		if ( is_ssl() && ! preg_match( '/^https:\/\/.*\..*$/', $uploads['baseurl'] ) ) {
 			$uploads['baseurl'] = str_replace( 'http://', 'https://', $uploads['baseurl'] );
 		}
@@ -252,6 +253,7 @@ class FrmStylesHelper {
 	private static function get_rgb_array_from_rgb( $rgb ) {
 		$rgb = str_replace( array( 'rgb(', 'rgba(', ')' ), '', $rgb );
 		$rgb = explode( ',', $rgb );
+
 		if ( 4 === count( $rgb ) ) {
 			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
@@ -422,6 +424,7 @@ class FrmStylesHelper {
 
 		if ( 0 === strpos( $color, 'hsl' ) ) {
 			$hsl_to_hex = self::hsl_to_hex( $color );
+
 			if ( is_null( $hsl_to_hex ) ) {
 				// Fallback if we cannot convert the HSL value.
 				return 0;
@@ -488,11 +491,13 @@ class FrmStylesHelper {
 			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
 				continue;
 			}
+
 			if ( ! isset( $defaults[ $var ] ) ) {
 				$defaults[ $var ] = '';
 			}
 
 			$prepared_value = '';
+
 			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
@@ -513,6 +518,7 @@ class FrmStylesHelper {
 	 */
 	private static function should_add_css_var( $settings, $defaults, $var, &$prepared_value ) {
 		$prepared_value = self::css_var_prepare_value( $settings, $var );
+
 		if ( $prepared_value === '' ) {
 			return false;
 		}
@@ -645,10 +651,12 @@ class FrmStylesHelper {
 	public static function get_settings_for_output( $style ) {
 		if ( self::previewing_style() ) {
 			$frm_style = new FrmStyle();
+
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// Sanitizing is done later.
 				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
 					FrmAppHelper::format_form_data( $posted );
@@ -668,6 +676,7 @@ class FrmStylesHelper {
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $settings );
 
 			$settings['style_class'] = '';
+
 			if ( ! empty( $style_name ) ) {
 				$settings['style_class'] = $style_name . '.';
 			}
@@ -681,6 +690,7 @@ class FrmStylesHelper {
 		$settings['change_margin'] = self::description_margin_for_screensize( $settings['width'] );
 
 		$checkbox_opts = array( 'important_style', 'auto_width', 'submit_style', 'collapse_icon', 'center_form' );
+
 		foreach ( $checkbox_opts as $opt ) {
 			if ( ! isset( $settings[ $opt ] ) ) {
 				$settings[ $opt ] = 0;
@@ -773,10 +783,12 @@ class FrmStylesHelper {
 	 */
 	public static function prepare_color_output( &$settings, $allow_transparent = true ) {
 		$colors = self::allow_color_override();
+
 		foreach ( $colors as $css => $opts ) {
 			if ( $css === 'transparent' && ! $allow_transparent ) {
 				$css = '';
 			}
+
 			foreach ( $opts as $opt ) {
 				self::get_color_output( $css, $settings[ $opt ] );
 			}
@@ -826,6 +838,7 @@ class FrmStylesHelper {
 	 */
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
+
 		if ( empty( $color ) ) {
 			$color = $default;
 		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
@@ -876,6 +889,7 @@ class FrmStylesHelper {
 	private static function description_margin_for_screensize( $width ) {
 		$temp_label_width = str_replace( 'px', '', $width );
 		$change_margin    = false;
+
 		if ( $temp_label_width >= 230 ) {
 			$change_margin = '800px';
 		} elseif ( $width >= 215 ) {
@@ -1074,9 +1088,11 @@ class FrmStylesHelper {
 	 */
 	public static function get_submit_image_bg_url( $settings ) {
 		$background_image = $settings['submit_bg_img'];
+
 		if ( empty( $background_image ) ) {
 			return false;
 		}
+
 		// Handle the case where the submit_bg_img is a full URL string. If the settings were saved with the older styler version prior to 6.14, the submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
@@ -1117,6 +1133,7 @@ class FrmStylesHelper {
 		}
 
 		$parts = explode( ' ', $value );
+
 		if ( count( $parts ) < 3 ) {
 			return $parts[0];
 		}

@@ -21,6 +21,7 @@ foreach ( $payment_sections as $key => $section ) {
 		'value'        => $key,
 		'data-frmshow' => "#frm_{$key}_settings_section",
 	);
+
 	if ( $is_active ) {
 		$input_params['checked'] = 'checked';
 	}

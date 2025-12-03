@@ -22,6 +22,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 
 		foreach ( $files as $key => $value ) {
 			$path = realpath( $dir . DIRECTORY_SEPARATOR . $value );
+
 			if ( ! is_dir( $path ) ) {
 				if ( substr( $value, strlen( $value ) - 4 ) === '.php' && ! in_array( $value, $files_to_ignore, true ) ) {
 					$results[] = $path;
@@ -32,6 +33,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 				}
 
 				$this->all_php_file_paths( $path, $results );
+
 				if ( substr( $path, strlen( $path ) - 4 ) === '.php' ) {
 					$results[] = $path;
 				}

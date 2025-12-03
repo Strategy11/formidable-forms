@@ -111,6 +111,7 @@ class FrmFieldFormHtml {
 		$this->pass_args = $atts;
 
 		$exclude = array( 'field_obj', 'html' );
+
 		foreach ( $exclude as $ex ) {
 			if ( isset( $atts[ $ex ] ) ) {
 				unset( $this->pass_args[ $ex ] );
@@ -212,6 +213,7 @@ class FrmFieldFormHtml {
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
 		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
 		}
@@ -238,6 +240,7 @@ class FrmFieldFormHtml {
 	 */
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
+
 		if ( $description != '' ) {
 			$this->add_element_id( 'description', 'desc' );
 		}
@@ -255,6 +258,7 @@ class FrmFieldFormHtml {
 	 */
 	private function add_element_id( $param, $id ) {
 		preg_match_all( '/(\[if\s+' . $param . '\])(.*?)(\[\/if\s+' . $param . '\])/mis', $this->html, $inner_html );
+
 		if ( ! isset( $inner_html[2] ) ) {
 			return;
 		}
@@ -265,6 +269,7 @@ class FrmFieldFormHtml {
 
 		if ( is_string( $inner_html[2] ) ) {
 			$has_id = strpos( $inner_html[2], ' id=' );
+
 			if ( ! $has_id ) {
 				$id         = 'frm_' . $id . '_' . $this->html_id;
 				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
@@ -283,6 +288,7 @@ class FrmFieldFormHtml {
 
 		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
+
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
@@ -301,11 +307,13 @@ class FrmFieldFormHtml {
 	 */
 	private static function get_error_body( $html ) {
 		$start = strpos( $html, '[if error]' );
+
 		if ( false === $start ) {
 			return false;
 		}
 
 		$end = strpos( $html, '[/if error]', $start );
+
 		if ( false === $end ) {
 			return false;
 		}
@@ -522,6 +530,7 @@ class FrmFieldFormHtml {
 
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
+
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
@@ -534,6 +543,7 @@ class FrmFieldFormHtml {
 
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
+
 		if ( ! empty( $extra_classes ) ) {
 			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';

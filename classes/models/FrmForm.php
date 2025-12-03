@@ -85,6 +85,7 @@ class FrmForm {
 		global $wpdb;
 
 		$values = self::getOne( $id, $blog_id );
+
 		if ( ! $values ) {
 			return false;
 		}
@@ -175,6 +176,7 @@ class FrmForm {
 		// Keys of fields that you want to check to replace field ID.
 		$keys     = array( 'default_value', 'field_options' );
 		$sql_cols = 'fi.id';
+
 		foreach ( $keys as $key ) {
 			$sql_cols .= ',fi.' . $key;
 		}
@@ -209,6 +211,7 @@ class FrmForm {
 	 */
 	private static function switch_field_ids_in_field( $field ) {
 		$new_values = array();
+
 		foreach ( $field as $key => $value ) {
 			if ( 'id' === $key || ! $value ) {
 				continue;
@@ -275,6 +278,7 @@ class FrmForm {
 
 		if ( ! empty( $new_values ) ) {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $id ) );
+
 			if ( $query_results ) {
 				self::clear_form_cache();
 			}
@@ -340,6 +344,7 @@ class FrmForm {
 		}
 
 		$all_fields = FrmField::get_all_for_form( $id );
+
 		if ( empty( $all_fields ) ) {
 			return $values;
 		}
@@ -350,6 +355,7 @@ class FrmForm {
 
 		$field_array   = array();
 		$existing_keys = array_keys( $values['item_meta'] );
+
 		foreach ( $all_fields as $fid ) {
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
@@ -370,6 +376,7 @@ class FrmForm {
 			}
 
 			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+
 			if ( $is_settings_page ) {
 				self::get_settings_page_html( $values, $field );
 
@@ -541,6 +548,7 @@ class FrmForm {
 
 		if ( isset( $prev_opts ) ) {
 			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
+
 			if ( $prev_opts != $field->field_options ) {
 				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
 			}
@@ -564,6 +572,7 @@ class FrmForm {
 			'options'     => '',
 			'name'        => '',
 		);
+
 		foreach ( $field_cols as $col => $default ) {
 			$default           = $default === '' ? $field->{$col} : $default;
 			$new_field[ $col ] = $values['field_options'][ $col . '_' . $field->id ] ?? $default;
@@ -617,6 +626,7 @@ class FrmForm {
 		}
 
 		$statuses = array( 'published', 'draft', 'trash' );
+
 		if ( ! in_array( $status, $statuses, true ) ) {
 			return false;
 		}
@@ -656,6 +666,7 @@ class FrmForm {
 		}
 
 		$form = self::getOne( $id );
+
 		if ( ! $form ) {
 			return false;
 		}
@@ -706,6 +717,7 @@ class FrmForm {
 		global $wpdb;
 
 		$form = self::getOne( $id );
+
 		if ( ! $form ) {
 			return false;
 		}
@@ -714,6 +726,7 @@ class FrmForm {
 
 		// Disconnect the entries from this form
 		$entries = FrmDb::get_col( $wpdb->prefix . 'frm_items', array( 'form_id' => $id ) );
+
 		foreach ( $entries as $entry_id ) {
 			FrmEntry::destroy( $entry_id );
 			unset( $entry_id );
@@ -723,6 +736,7 @@ class FrmForm {
 		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM ' . $wpdb->prefix . 'frm_fields AS fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id ) );
 
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
+
 		if ( $query_results ) {
 			// Delete all form actions linked to this form
 			/**
@@ -762,10 +776,13 @@ class FrmForm {
 		}
 
 		$count = 0;
+
 		foreach ( $trash_forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
+
 			if ( ! isset( $form->options['trash_time'] ) || $form->options['trash_time'] < $delete_timestamp ) {
 				self::destroy( $form->id );
+
 				if ( empty( $form->parent_form_id ) ) {
 					++$count;
 				}
@@ -784,6 +801,7 @@ class FrmForm {
 	 */
 	public static function getName( $id ) {
 		$form = FrmDb::check_cache( $id, 'frm_form' );
+
 		if ( $form ) {
 			$r = stripslashes( $form->name );
 
@@ -820,6 +838,7 @@ class FrmForm {
 	public static function get_key_by_id( $id ) {
 		$id    = (int) $id;
 		$cache = FrmDb::check_cache( $id, 'frm_form' );
+
 		if ( $cache ) {
 			return $cache->form_key;
 		}
@@ -859,6 +878,7 @@ class FrmForm {
 		} else {
 			$table_name = $wpdb->prefix . 'frm_forms';
 			$cache      = wp_cache_get( $id, 'frm_form' );
+
 			if ( $cache ) {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
@@ -894,6 +914,7 @@ class FrmForm {
 	 */
 	private static function prepare_form_row_data( $row ) {
 		$row = wp_unslash( $row );
+
 		if ( ! is_object( $row ) ) {
 			return $row;
 		}
@@ -962,6 +983,7 @@ class FrmForm {
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
 		$query['status']      = array( null, '', 'published' );
+
 		if ( $inc_children === 'exclude' ) {
 			$query['parent_form_id'] = array( null, 0 );
 		}
@@ -980,6 +1002,7 @@ class FrmForm {
 		$cache_key = 'frm_form_counts';
 
 		$counts = wp_cache_get( $cache_key, 'frm_form' );
+
 		if ( false !== $counts ) {
 			return $counts;
 		}
@@ -1080,6 +1103,7 @@ class FrmForm {
 
 		$values                   = array();
 		$values['posted_form_id'] = FrmAppHelper::get_param( 'form_id', '', 'get', 'absint' );
+
 		if ( ! $values['posted_form_id'] ) {
 			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
 		}
@@ -1124,6 +1148,7 @@ class FrmForm {
 			'sort'     => '',
 			'sdir'     => '',
 		);
+
 		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
@@ -1138,6 +1163,7 @@ class FrmForm {
 	 */
 	public static function get_admin_params( $form = null ) {
 		$form_id = $form;
+
 		if ( $form === null ) {
 			$form_id = self::get_current_form_id();
 		} elseif ( $form && is_object( $form ) ) {
@@ -1157,6 +1183,7 @@ class FrmForm {
 			'fid'       => '',
 			'keep_post' => '',
 		);
+
 		foreach ( $defaults as $var => $default ) {
 			$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
 		}
@@ -1194,6 +1221,7 @@ class FrmForm {
 		}
 
 		$form_id = FrmAppHelper::get_param( 'form', $form_id, 'get', 'absint' );
+
 		if ( $form_id ) {
 			$form_id = self::set_current_form( $form_id );
 		}
@@ -1208,6 +1236,7 @@ class FrmForm {
 	 */
 	public static function get_current_form( $form_id = 0 ) {
 		$form = self::maybe_get_current_form( $form_id );
+
 		if ( is_numeric( $form ) ) {
 			$form = self::set_current_form( $form );
 		}
@@ -1224,6 +1253,7 @@ class FrmForm {
 		global $frm_vars;
 
 		$query = array();
+
 		if ( $form_id ) {
 			$query['id'] = $form_id;
 		}
@@ -1243,6 +1273,7 @@ class FrmForm {
 	public static function is_form_loaded( $form, $this_load, $global_load ) {
 		global $frm_vars;
 		$small_form = new stdClass();
+
 		foreach ( array( 'id', 'form_key', 'name' ) as $var ) {
 			$small_form->{$var} = $form->{$var};
 			unset( $var );

@@ -17,6 +17,7 @@ class FrmCurrencyHelper {
 	public static function get_currency( $currency ) {
 		$currency   = strtoupper( $currency );
 		$currencies = self::get_currencies();
+
 		if ( isset( $currencies[ $currency ] ) ) {
 			$currency = $currencies[ $currency ];
 		} elseif ( isset( $currencies[ strtolower( $currency ) ] ) ) {

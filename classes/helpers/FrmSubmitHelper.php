@@ -138,6 +138,7 @@ class FrmSubmitHelper {
 	 */
 	public static function copy_submit_field_settings_to_form( $form ) {
 		$submit_field = self::get_submit_field( $form->id );
+
 		if ( ! $submit_field ) {
 			return $form;
 		}
@@ -203,6 +204,7 @@ class FrmSubmitHelper {
 	 */
 	public static function only_contains_submit_field( $fields ) {
 		$submit_field = false;
+
 		foreach ( $fields as $field ) {
 			if ( self::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
 				return false;
@@ -224,11 +226,14 @@ class FrmSubmitHelper {
 	 */
 	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
+
 		if ( ! is_array( $last_row_field_ids ) || empty( $last_row_field_ids ) ) {
 			return;
 		}
+
 		foreach ( $last_row_field_ids as $index => $last_row_field_id ) {
 			$last_row_field_id = absint( $last_row_field_id );
+
 			if ( ! $last_row_field_id ) {
 				continue;
 			}
@@ -238,6 +243,7 @@ class FrmSubmitHelper {
 				$last_row_field_id,
 				array( 'field_order' => $new_order )
 			);
+
 			if ( false !== $updated ) {
 				self::$last_row_fields_order[ $last_row_field_id ] = $new_order;
 			}

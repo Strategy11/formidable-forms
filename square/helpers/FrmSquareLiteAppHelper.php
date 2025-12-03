@@ -61,11 +61,13 @@ class FrmSquareLiteAppHelper {
 	 */
 	public static function fee_education( $medium = 'tip', $gateway = false ) {
 		$license_type = FrmAddonsController::license_type();
+
 		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
 			return;
 		}
 
 		$classes = 'frm-light-tip show_square';
+
 		if ( $gateway && ! array_intersect( (array) $gateway, array( 'square' ) ) ) {
 			$classes .= ' frm_hidden';
 		}

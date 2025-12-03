@@ -89,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	$show_logic = ! empty( $cond_shortcodes ) && ! empty( $fields );
+
 	if ( $show_logic ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel frm-text-grey-700 frm-px-xs">
@@ -196,6 +197,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul class="frm_code_list frm-full-hover frm-mt-0">
 		<?php
 		$contextual_codes = FrmShortcodeHelper::get_contextual_codes();
+
 		foreach ( $entry_shortcodes as $skey => $sname ) {
 			if ( ! $skey ) {
 				echo '<li class="clear frm_block"></li>';

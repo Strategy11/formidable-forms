@@ -143,6 +143,7 @@ class FrmDefHubspotAction extends FrmFormAction {
 		$action_ops['color'] = 'var(--orange)';
 
 		$action_ops['message'] = '';
+
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$action_ops['message'] .= __( 'The HubSpot integration is not available on your plan. Did you know you can upgrade to unlock more awesome features?', 'formidable' ) . '<br/><br/>';
 		}

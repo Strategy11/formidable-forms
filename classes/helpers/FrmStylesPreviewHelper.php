@@ -173,6 +173,7 @@ class FrmStylesPreviewHelper {
 		$target_form_preview_html = FrmFormsController::show_form( $this->form_id, '', 'auto', 'auto' );
 
 		$this->form_includes_captcha = wp_script_is( 'captcha-api', 'enqueued' );
+
 		if ( $this->form_includes_captcha ) {
 			// If a form includes a CAPTCHA field, don't try to load the CAPTCHA scripts for the visual styler preview.
 			wp_dequeue_script( 'captcha-api' );
@@ -196,11 +197,13 @@ class FrmStylesPreviewHelper {
 		$notes = array();
 
 		$fallback_form_note = $this->get_fallback_form_note();
+
 		if ( is_string( $fallback_form_note ) ) {
 			$notes[] = $fallback_form_note;
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( 'none' === $frm_settings->load_style ) {
 			$notes[] = function () {
 				printf(
@@ -221,6 +224,7 @@ class FrmStylesPreviewHelper {
 		}
 
 		$disabled_features_note = $this->get_disabled_features_note();
+
 		if ( is_string( $disabled_features_note ) ) {
 			$notes[] = $disabled_features_note;
 		}
@@ -284,6 +288,7 @@ class FrmStylesPreviewHelper {
 		if ( ! $is_default_style ) {
 			// Also check for the conversational default.
 			$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
+
 			if ( $conversational_style_id && (int) $conversational_style_id === $style_id ) {
 				$is_default_style = true;
 			}
@@ -324,6 +329,7 @@ class FrmStylesPreviewHelper {
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
 		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+
 		if ( false === $edit_key ) {
 			return;
 		}
@@ -390,6 +396,7 @@ class FrmStylesPreviewHelper {
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
 		$index        = array_search( $key, $dependencies );
+
 		if ( false === $index ) {
 			return;
 		}

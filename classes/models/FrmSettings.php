@@ -349,6 +349,7 @@ class FrmSettings {
 
 		if ( is_multisite() && is_admin() ) {
 			$mu_menu = get_site_option( 'frm_admin_menu_name' );
+
 			if ( $mu_menu && ! empty( $mu_menu ) ) {
 				$this->menu    = $mu_menu;
 				$this->mu_menu = 1;
@@ -356,6 +357,7 @@ class FrmSettings {
 		}
 
 		$frm_roles = FrmAppHelper::frm_capabilities( 'pro' );
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
@@ -382,6 +384,7 @@ class FrmSettings {
 
 		if ( $filter_html ) {
 			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+
 			if ( ! empty( $params['additional_filter_keys'] ) ) {
 				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
 			}
@@ -508,6 +511,7 @@ class FrmSettings {
 	public function maybe_filter_for_form( $args ) {
 		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
 			$this->current_form = $args['current_form'];
+
 			foreach ( $this->translatable_strings() as $string ) {
 				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
 				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
@@ -588,6 +592,7 @@ class FrmSettings {
 			'wp_spam_check',
 			'denylist_check',
 		);
+
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
@@ -603,6 +608,7 @@ class FrmSettings {
 
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
 

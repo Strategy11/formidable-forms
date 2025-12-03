@@ -826,6 +826,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style;
+
 		if ( $this->is_repeater_child ) {
 			$html .= ' class="frm-child-row"';
 		}

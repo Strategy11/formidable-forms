@@ -132,20 +132,24 @@ class FrmFormState {
 	 */
 	private static function get_state_from_request() {
 		$encrypted_state = FrmAppHelper::get_post_param( 'frm_state', '', 'sanitize_text_field' );
+
 		if ( ! $encrypted_state ) {
 			return false;
 		}
 
 		$secret          = self::get_encryption_secret();
 		$decrypted_state = openssl_decrypt( $encrypted_state, 'AES-128-ECB', $secret );
+
 		if ( false === $decrypted_state ) {
 			return false;
 		}
 
 		$decoded_state = json_decode( $decrypted_state, true );
+
 		if ( ! is_array( $decoded_state ) ) {
 			return false;
 		}
+
 		foreach ( $decoded_state as $key => $value ) {
 			self::set_initial_value( self::decompressed_key( $key ), $value );
 		}
@@ -159,6 +163,7 @@ class FrmFormState {
 		if ( ! self::open_ssl_is_installed() ) {
 			return;
 		}
+
 		if ( ! $this->state && ! self::get_state_from_request() ) {
 			return;
 		}
@@ -200,6 +205,7 @@ class FrmFormState {
 	 */
 	private function compressed_state() {
 		$compressed = array();
+
 		foreach ( $this->state as $key => $value ) {
 			$compressed[ self::compressed_key( $key ) ] = $value;
 		}

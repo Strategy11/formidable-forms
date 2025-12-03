@@ -29,6 +29,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
+
 		if ( empty( $actions ) ) {
 			return $callback;
 		}
@@ -71,9 +72,11 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function get_actions_before_submit( $form_id ) {
 		$payment_actions = self::get_actions_for_form( $form_id );
+
 		foreach ( $payment_actions as $k => $payment_action ) {
 			$gateway   = $payment_action->post_content['gateway'];
 			$is_stripe = $gateway === 'stripe' || ( is_array( $gateway ) && in_array( 'stripe', $gateway, true ) );
+
 			if ( ! $is_stripe || empty( $payment_action->post_content['amount'] ) ) {
 				unset( $payment_actions[ $k ] );
 			}
@@ -117,6 +120,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$atts     = compact( 'action', 'entry', 'form' );
 
 		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
+
 		if ( empty( $amount ) || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
@@ -128,6 +132,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$customer = self::set_customer_with_token( $atts );
+
 		if ( ! is_object( $customer ) ) {
 			$response['error'] = $customer;
 			return $response;
@@ -216,6 +221,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$name = '[' . $atts['action']->post_content['billing_first_name'] . ' show="first"]';
+
 		if ( ! empty( $atts['action']->post_content['billing_last_name'] ) ) {
 			$name .= ' [' . $atts['action']->post_content['billing_last_name'] . ' show="last"]';
 		}
@@ -234,11 +240,13 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function get_trial_end_time( $atts ) {
 		$settings = $atts['action']->post_content;
+
 		if ( empty( $settings['trial_interval_count'] ) ) {
 			return 0;
 		}
 
 		$trial = $settings['trial_interval_count'];
+
 		if ( ! is_numeric( $trial ) ) {
 			$trial = FrmTransLiteAppHelper::process_shortcodes(
 				array(
@@ -312,6 +320,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
+
 		if ( ! $is_stripe ) {
 			return $settings;
 		}
@@ -338,6 +347,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
+
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}
@@ -372,6 +382,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$form = FrmForm::getOne( $params['form_id'] );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -382,6 +393,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				'type'       => 'credit_card',
 			)
 		);
+
 		if ( ! $credit_card_field ) {
 			return;
 		}
@@ -406,6 +418,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$stripe_connect_is_setup = FrmStrpLiteConnectHelper::stripe_connect_is_setup();
+
 		if ( ! $stripe_connect_is_setup ) {
 			return;
 		}
@@ -447,8 +460,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
+
 		foreach ( $action_settings as $action ) {
 			$gateways = $action['gateways'];
+
 			if ( ! $gateways || in_array( 'stripe', (array) $gateways, true ) ) {
 				$found_gateway = true;
 				break;
@@ -498,12 +513,14 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$style = FrmStylesController::get_form_style( $form_id );
+
 		if ( ! $style ) {
 			return array();
 		}
 
 		$settings   = FrmStylesHelper::get_settings_for_output( $style );
 		$disallowed = array( ';', ':', '!important' );
+
 		foreach ( $settings as $k => $s ) {
 			if ( is_string( $s ) ) {
 				$settings[ $k ] = str_replace( $disallowed, '', $s );
@@ -636,6 +653,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
 		$has_processed = isset( $_POST[ 'frmintent' . $field->form_id ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( ! $has_processed ) {
 			return $errors;
 		}
@@ -645,6 +663,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );
 		}
+
 		if ( isset( $errors[ 'field' . $field_id ] ) ) {
 			unset( $errors[ 'field' . $field_id ] );
 		}

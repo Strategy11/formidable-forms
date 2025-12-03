@@ -293,6 +293,7 @@ class FrmTransLiteDb {
 	 */
 	private function fill_values( $values, &$new_values ) {
 		$defaults = $this->get_defaults();
+
 		foreach ( $defaults as $val => $default ) {
 			if ( isset( $values[ $val ] ) ) {
 				if ( $default['sanitize'] === 'float' ) {
@@ -315,6 +316,7 @@ class FrmTransLiteDb {
 	 */
 	private function migrate_data( $old_db_version ) {
 		$migrations = array( 4 );
+
 		foreach ( $migrations as $migration ) {
 			if ( $this->db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -331,6 +333,7 @@ class FrmTransLiteDb {
 	private function migrate_to_4() {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
+
 		if ( empty( $result ) ) {
 			return;
 		}
@@ -338,6 +341,7 @@ class FrmTransLiteDb {
 		$payments = $wpdb->get_results(
 			"SELECT * FROM {$wpdb->prefix}frm_payments WHERE completed is NOT NULL AND status is NULL"
 		);
+
 		foreach ( $payments as $payment ) {
 			$status = $payment->completed ? 'complete' : 'failed';
 			$wpdb->update( $wpdb->prefix . 'frm_payments', compact( 'status' ), array( 'id' => $payment->id ) );

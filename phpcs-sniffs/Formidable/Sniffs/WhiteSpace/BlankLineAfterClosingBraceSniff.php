@@ -53,6 +53,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 		// Check if this variable is at the start of a statement (assignment).
 		// We need to verify this is an assignment by looking for an equals sign.
 		$nextToken = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
 		if ( false === $nextToken ) {
 			return;
 		}
@@ -81,6 +82,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 
 		// Find the first token on the current line.
 		$firstOnLine = $stackPtr;
+
 		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
 			if ( $tokens[ $i ]['line'] < $tokens[ $stackPtr ]['line'] ) {
 				break;
@@ -90,6 +92,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 
 		// Check if the variable is the first non-whitespace token on the line.
 		$firstNonWhitespace = $phpcsFile->findNext( T_WHITESPACE, $firstOnLine, $stackPtr + 1, true );
+
 		if ( $firstNonWhitespace !== $stackPtr ) {
 			return;
 		}
@@ -104,10 +107,12 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 
 		// Find the last non-whitespace token on the previous line.
 		$lastTokenOnPrevLine = null;
+
 		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
 			if ( $tokens[ $i ]['line'] < $previousLine ) {
 				break;
 			}
+
 			if ( $tokens[ $i ]['line'] === $previousLine && $tokens[ $i ]['code'] !== T_WHITESPACE ) {
 				$lastTokenOnPrevLine = $i;
 				break;

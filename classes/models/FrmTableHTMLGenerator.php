@@ -443,13 +443,16 @@ class FrmTableHTMLGenerator {
 	 */
 	protected function add_row_class( $empty = false ) {
 		$class = '';
+
 		if ( $empty ) {
 			// Only add this class on two cell rows.
 			$class .= ' frm-empty-row';
 		}
+
 		if ( $this->is_child ) {
 			$class .= ' frm-child-row';
 		}
+
 		if ( $class ) {
 			$class = ' class="' . trim( $class ) . '"';
 		}

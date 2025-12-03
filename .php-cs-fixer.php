@@ -21,6 +21,15 @@ $rules  = array(
 	'elseif'                               => true,
 	'phpdoc_add_missing_param_annotation'  => true,
 	'no_extra_blank_lines'                 => true,
+	'blank_line_before_statement'          => array(
+		'statements' => array(
+			'try',
+			'for',
+			'if',
+			'foreach',
+			'while',
+		),
+	),
 	'phpdoc_types_order'                   => array(
 		'null_adjustment' => 'always_last',
 	),

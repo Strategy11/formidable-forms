@@ -114,6 +114,7 @@ class FrmCSVExportHelper {
 		// This is to improve compatibility with the Export View as CSV add-on (v1.10).
 		// Otherwise, the option will appear twice since it is added in the add-on as well.
 		$on_global_settings_page = 'formidable-settings' === FrmAppHelper::get_param( 'page' );
+
 		if ( ! $on_global_settings_page ) {
 			array_splice( $formats, 1, 0, 'UTF-8 with BOM' );
 		}
@@ -146,6 +147,7 @@ class FrmCSVExportHelper {
 		if ( 'file' === self::$mode ) {
 			$filepath = get_temp_dir() . $filename;
 			self::$fp = @fopen( $filepath, 'w' );
+
 			if ( ! self::$fp ) {
 				return false;
 			}
@@ -341,6 +343,7 @@ class FrmCSVExportHelper {
 	 */
 	private static function field_headings( $col ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $col );
+
 		if ( ! empty( $field_type_obj->is_combo_field ) ) {
 			// This is combo field.
 			return $field_type_obj->get_export_headings();
@@ -348,6 +351,7 @@ class FrmCSVExportHelper {
 
 		$field_headings  = array();
 		$separate_values = array( 'user_id', 'file', 'data', 'date' );
+
 		if ( ! empty( $col->field_options['separate_value'] ) && ! in_array( $col->type, $separate_values, true ) ) {
 			$field_headings[ $col->id . '_label' ] = strip_tags( $col->name . ' ' . __( '(label)', 'formidable' ) );
 		}
@@ -416,11 +420,13 @@ class FrmCSVExportHelper {
 			unset( $start, $end, $length, $row, $repeater_meta, $where );
 
 			$flat = array();
+
 			foreach ( $headings as $key => $heading ) {
 				if ( is_array( $heading ) ) {
 					$repeater_id = str_replace( 'repeater', '', $key );
 
 					$repeater_headings = array();
+
 					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
 						$repeater_headings += self::field_headings( $col );
 					}
@@ -460,6 +466,7 @@ class FrmCSVExportHelper {
 		$headings['ip']         = __( 'IP', 'formidable' );
 		$headings['id']         = __( 'ID', 'formidable' );
 		$headings['item_key']   = __( 'Key', 'formidable' );
+
 		if ( self::has_parent_id() ) {
 			$headings['parent_id'] = __( 'Parent ID', 'formidable' );
 		}
@@ -613,6 +620,7 @@ class FrmCSVExportHelper {
 		}
 
 		$repeater_id = $field->field_options['in_section'];
+
 		if ( ! isset( self::$fields_by_repeater_id[ $repeater_id ] ) ) {
 			return $metas;
 		}
@@ -639,6 +647,7 @@ class FrmCSVExportHelper {
 	 */
 	private static function get_field( $field_id ) {
 		$field_id = (int) $field_id;
+
 		foreach ( self::$fields as $field ) {
 			if ( $field_id === (int) $field->id ) {
 				return $field;
@@ -672,6 +681,7 @@ class FrmCSVExportHelper {
 
 			if ( ! empty( $col->field_options['separate_value'] ) ) {
 				$label_key = $col->id . '_label';
+
 				if ( self::is_the_child_of_a_repeater( $col ) ) {
 					$row[ $label_key ] = array();
 
@@ -730,6 +740,7 @@ class FrmCSVExportHelper {
 					// This is combo field inside repeater. The heading key has this format: [86_first[0]].
 					foreach ( $sub_value as $sub_key => $sub_sub_value ) {
 						$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+
 						if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
 							$row[ $column_key ] = $sub_sub_value;
 						}
@@ -739,6 +750,7 @@ class FrmCSVExportHelper {
 				}
 
 				$column_key = $atts['col']->id . '_' . $key;
+
 				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
 					$row[ $column_key ] = $sub_value;
 				}
@@ -760,6 +772,7 @@ class FrmCSVExportHelper {
 		$row['ip']         = self::$entry->ip;
 		$row['id']         = self::$entry->id;
 		$row['item_key']   = self::$entry->item_key;
+
 		if ( self::has_parent_id() ) {
 			$row['parent_id'] = self::$entry->parent_item_id;
 		}
@@ -779,6 +792,7 @@ class FrmCSVExportHelper {
 				$row = $rows[ $k ];
 			} else {
 				$row = '';
+
 				// array indexed data is not at $rows[ $k ]
 				if ( $k[ strlen( $k ) - 1 ] === ']' ) {
 					$start = strrpos( $k, '[' );
@@ -799,6 +813,7 @@ class FrmCSVExportHelper {
 			}
 
 			$val = self::encode_value( $row );
+
 			if ( 'return' !== self::$line_break ) {
 				$val = str_replace( array( "\r\n", "\r", "\n" ), self::$line_break, $val );
 			}
@@ -813,6 +828,7 @@ class FrmCSVExportHelper {
 
 			unset( $k, $row );
 		}//end foreach
+
 		if ( $echo ) {
 			echo "\n";
 		} else {

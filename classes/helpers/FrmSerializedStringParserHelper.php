@@ -133,6 +133,7 @@ class FrmSerializedStringParserHelper {
 		$string->skip_next_character();
 
 		$val = array();
+
 		for ( $i = 0; $i < $count; $i++ ) {
 			$array_key   = $this->do_parse( $string );
 			$array_value = $this->do_parse( $string );

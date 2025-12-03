@@ -67,11 +67,13 @@ class FrmTransLiteAppController {
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
+
 			if ( ! $last_payment ) {
 				continue;
 			}
 
 			$log_message = 'Subscription #' . $sub->id . ': ';
+
 			if ( $sub->status === 'future_cancel' ) {
 				FrmTransLiteSubscriptionsController::change_subscription_status(
 					array(
@@ -105,6 +107,7 @@ class FrmTransLiteAppController {
 				}
 
 				$log_message .= $status . ' triggers run ';
+
 				if ( $last_payment ) {
 					$log_message .= 'on payment #' . $last_payment->id;
 				}
@@ -131,6 +134,7 @@ class FrmTransLiteAppController {
 	 */
 	private static function update_sub_for_new_payment( $sub, $last_payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
+
 		if ( $last_payment->status === 'complete' ) {
 			$frm_sub->update(
 				$sub->id,
@@ -191,6 +195,7 @@ class FrmTransLiteAppController {
 	 */
 	public static function add_repeat_cadence_value( $args ) {
 		$action = $args['form_action'];
+
 		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
 			$params = array(
 				'type'  => 'hidden',
