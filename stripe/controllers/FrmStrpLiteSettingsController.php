@@ -9,6 +9,7 @@ class FrmStrpLiteSettingsController {
 	 * Add Stripe section to Global Settings.
 	 *
 	 * @param array $sections
+	 *
 	 * @return array
 	 */
 	public static function add_settings_section( $sections ) {
@@ -22,6 +23,7 @@ class FrmStrpLiteSettingsController {
 			'frm_messages_settings_form',
 			/**
 			 * @param object $frm_settings
+			 *
 			 * @return void
 			 */
 			function ( $frm_settings ) {
@@ -46,6 +48,7 @@ class FrmStrpLiteSettingsController {
 	 * Print the Stripe section for Global settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {

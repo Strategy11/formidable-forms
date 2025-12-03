@@ -3,6 +3,7 @@
  * Spam check abstract class
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 

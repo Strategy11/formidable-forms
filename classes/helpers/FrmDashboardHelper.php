@@ -361,6 +361,7 @@ class FrmDashboardHelper {
 	 * Dashboard - load the entries list template.
 	 *
 	 * @param array $template
+	 *
 	 * @return void
 	 */
 	private static function load_entries_list_template( $template ) {

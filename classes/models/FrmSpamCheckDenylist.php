@@ -3,6 +3,7 @@
  * Spam check using denylist
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -235,6 +236,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Gets words from setting.
 	 *
 	 * @param string $setting_key Setting key.
+	 *
 	 * @return array
 	 */
 	protected function get_words_from_setting( $setting_key ) {
@@ -254,6 +256,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string $line Single line.
 	 * @param array  $args Check args.
+	 *
 	 * @return bool
 	 */
 	protected function single_line_check_values( $line, $args ) {
@@ -291,6 +294,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Converts values to string to check.
 	 *
 	 * @param array $values Values array.
+	 *
 	 * @return string
 	 */
 	protected function convert_values_to_string( $values ) {
@@ -302,6 +306,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Converts string to lowercase.
 	 *
 	 * @param string $str String.
+	 *
 	 * @return string
 	 */
 	protected function convert_to_lowercase( $str ) {
@@ -345,6 +350,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Gets values to check.
 	 *
 	 * @param array $denylist Single denylist data.
+	 *
 	 * @return array|false Return `false` if no values need to check, or return array of values.
 	 */
 	protected function get_values_to_check( $denylist ) {
@@ -390,6 +396,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param int   $field_id           Field ID.
 	 * @param int[] $field_ids_to_check Field IDs to check.
+	 *
 	 * @return bool
 	 */
 	protected function should_check_this_field( $field_id, $field_ids_to_check ) {
@@ -455,6 +462,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @param string   $file_path     File path.
 	 * @param callable $callback      Check callback.
 	 * @param array    $callback_args Callback args.
+	 *
 	 * @return bool
 	 */
 	protected function read_lines_and_check( $file_path, $callback, $callback_args = array() ) {
@@ -492,6 +500,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * Checks if the given IP is allowed.
 	 *
 	 * @param string $ip IP address.
+	 *
 	 * @return bool
 	 */
 	protected function is_allowed_ip( $ip ) {
@@ -513,6 +522,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string $ip      IP address.
 	 * @param string $cidr_ip IP address with CIDR format (x.x.x.x/24).
+	 *
 	 * @return bool
 	 */
 	protected function ip_matches( $ip, $cidr_ip ) {
@@ -548,6 +558,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 *
 	 * @param string   $ip       The IP address.
 	 * @param string[] $ip_array Array of IP addresses.
+	 *
 	 * @return bool
 	 */
 	protected function ip_matches_array( $ip, $ip_array ) {

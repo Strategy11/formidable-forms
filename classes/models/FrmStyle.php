@@ -9,6 +9,7 @@ class FrmStyle {
 	 * The meta name of default template style.
 	 *
 	 * @since 6.14
+	 *
 	 * @var string
 	 */
 	private $default_template_style_meta_name = 'frm_style_default';
@@ -60,6 +61,7 @@ class FrmStyle {
 
 	/**
 	 * @param array $settings
+	 *
 	 * @return int|WP_Error
 	 */
 	public function save( $settings ) {
@@ -79,6 +81,7 @@ class FrmStyle {
 	 * Handle save actions in the visual styler edit page.
 	 *
 	 * @param mixed $id
+	 *
 	 * @return array<int|WP_Error>
 	 */
 	public function update( $id = 'default' ) {
@@ -159,6 +162,7 @@ class FrmStyle {
 	 * @since 5.3.2
 	 *
 	 * @param string $color_val The color value, by reference.
+	 *
 	 * @return void
 	 */
 	private function maybe_sanitize_rgba_value( &$color_val ) {
@@ -242,6 +246,7 @@ class FrmStyle {
 	 * @since 5.0.13
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	public function sanitize_post_content( $settings ) {
@@ -268,6 +273,7 @@ class FrmStyle {
 	 * @since 6.2.3
 	 *
 	 * @param string $setting
+	 *
 	 * @return string
 	 */
 	private function strip_invalid_characters( $setting ) {
@@ -286,6 +292,7 @@ class FrmStyle {
 	 *
 	 * @param string $setting
 	 * @param array  $characters_to_remove
+	 *
 	 * @return string
 	 */
 	private function maybe_fix_braces( $setting, &$characters_to_remove ) {
@@ -309,6 +316,7 @@ class FrmStyle {
 	 * @since 6.2.3
 	 *
 	 * @param string $input
+	 *
 	 * @return string
 	 */
 	private function trim_braces( $input ) {
@@ -331,6 +339,7 @@ class FrmStyle {
 	 * @since 6.2.3
 	 *
 	 * @param string $setting
+	 *
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
@@ -359,6 +368,7 @@ class FrmStyle {
 	 * @since 3.01.01
 	 *
 	 * @param string $setting
+	 *
 	 * @return bool
 	 */
 	private function is_color( $setting ) {
@@ -408,6 +418,7 @@ class FrmStyle {
 
 	/**
 	 * @param string $filename
+	 *
 	 * @return string
 	 */
 	private function get_css_content( $filename ) {
@@ -445,6 +456,7 @@ class FrmStyle {
 	 * Delete a style by its post ID.
 	 *
 	 * @param int $id
+	 *
 	 * @return false|WP_Post|null
 	 */
 	public function destroy( $id ) {
@@ -490,6 +502,7 @@ class FrmStyle {
 	 * @param string $orderby
 	 * @param string $order
 	 * @param int    $limit
+	 *
 	 * @return array
 	 */
 	public function get_all( $orderby = 'title', $order = 'ASC', $limit = 99 ) {
@@ -577,6 +590,7 @@ class FrmStyle {
 
 	/**
 	 * @param mixed $settings
+	 *
 	 * @return mixed
 	 */
 	public function override_defaults( $settings ) {
@@ -761,6 +775,7 @@ class FrmStyle {
 	 *
 	 * @param string $field_name
 	 * @param string $post_field
+	 *
 	 * @return string
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
@@ -788,6 +803,7 @@ class FrmStyle {
 	 * Don't let imbalanced font families ruin the whole stylesheet.
 	 *
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	public function force_balanced_quotation( $value ) {
@@ -813,6 +829,7 @@ class FrmStyle {
 	 * Get the default template style
 	 *
 	 * @since 6.14
+	 *
 	 * @param int $style_id The post type "frm_styles" ID.
 	 *
 	 * @return string The json encoded template data

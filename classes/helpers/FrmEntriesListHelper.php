@@ -12,6 +12,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 4.07
+	 *
 	 * @var bool|int
 	 */
 	public $total_items = 0;
@@ -97,6 +98,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 6.5.4
+	 *
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -130,6 +132,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int $per_page
+	 *
 	 * @return string
 	 */
 	protected function get_limit( $per_page ) {
@@ -148,6 +151,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
+	 *
 	 * @return array
 	 */
 	protected function get_search_query( &$join_form_in_query ) {
@@ -185,6 +189,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array<int>
 	 */
 	protected function get_form_ids( $form_id ) {
@@ -307,6 +312,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.12
 	 *
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private static function get_entry_label( $item ) {
@@ -473,6 +479,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.11.2
 	 *
 	 * @param string $column_name
+	 *
 	 * @return string
 	 */
 	private function maybe_fix_column_name( $column_name ) {

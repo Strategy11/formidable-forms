@@ -3,6 +3,7 @@
  * In-plugin summary emails helper
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -204,6 +205,7 @@ class FrmEmailSummaryHelper {
 	 * Gets date object.
 	 *
 	 * @param DateTime|string $date Date string or object.
+	 *
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
@@ -219,6 +221,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param DateTime|string $date1 Date 1.
 	 * @param DateTime|string $date2 Date 2.
+	 *
 	 * @return false|int
 	 */
 	private static function get_date_diff( $date1, $date2 ) {
@@ -239,6 +242,7 @@ class FrmEmailSummaryHelper {
 	 * Gets sent date of the last monthly or yearly email.
 	 *
 	 * @param string $type Accepts `monthly`, `yearly`.
+	 *
 	 * @return false|string
 	 */
 	public static function get_last_sent_date( $type ) {
@@ -284,6 +288,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return array            Contains `count` and `total`.
 	 */
 	public static function get_payments_data( $from_date, $to_date ) {
@@ -296,6 +301,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return int
 	 */
 	public static function get_entries_count( $from_date, $to_date ) {
@@ -318,6 +324,7 @@ class FrmEmailSummaryHelper {
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
 	 * @param int    $limit     Limit the result. Default is 5.
+	 *
 	 * @return array            Contains `form_id`, `form_name`, and `items_count`.
 	 */
 	public static function get_top_forms( $from_date, $to_date, $limit = 5 ) {
@@ -383,6 +390,7 @@ class FrmEmailSummaryHelper {
 	 * Gets section CSS in the email.
 	 *
 	 * @param string $border_pos Border position. Default is `top`. Set to empty if no border.
+	 *
 	 * @return string
 	 */
 	public static function get_section_style( $border_pos = 'top' ) {
@@ -436,6 +444,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string       $url  The URL.
 	 * @param array|string $args Custom tracking args if is array, or `utm_content` if is string.
+	 *
 	 * @return string
 	 */
 	public static function get_frm_url( $url, $args = array() ) {
@@ -504,6 +513,7 @@ class FrmEmailSummaryHelper {
 	 * Processes inbox CTA button before showing in email.
 	 *
 	 * @param string $button_html Button HTML. This usually contains 1 button and 1 dismiss button.
+	 *
 	 * @return string
 	 */
 	public static function process_inbox_cta_button( $button_html ) {
@@ -530,6 +540,7 @@ class FrmEmailSummaryHelper {
 	 * Gets the localized date with the date diff from today.
 	 *
 	 * @param string $date_diff Date diff string. By default, this is empty, the result will be the current date.
+	 *
 	 * @return string
 	 */
 	public static function get_date_from_today( $date_diff = '' ) {
@@ -545,6 +556,7 @@ class FrmEmailSummaryHelper {
 	 * @since 6.8
 	 *
 	 * @param string $recipients Recipients.
+	 *
 	 * @return void
 	 */
 	public static function maybe_remove_recipients_from_api( &$recipients ) {

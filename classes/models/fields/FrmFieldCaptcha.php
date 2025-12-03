@@ -10,6 +10,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'captcha';
@@ -91,6 +92,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
@@ -138,6 +140,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * Load the captcha script.
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
@@ -169,6 +172,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
 	 * @return string
 	 */
 	protected function recaptcha_api_url( $frm_settings ) {
@@ -286,7 +290,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @since 4.07
+	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	protected function validate_against_api( $args ) {
@@ -333,6 +339,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param float $score
+	 *
 	 * @return void
 	 */
 	private function set_score( $score ) {
@@ -348,6 +355,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -439,6 +447,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
 	 * @return string
 	 */
 	protected function captcha_size( $frm_settings ) {

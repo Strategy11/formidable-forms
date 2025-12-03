@@ -182,6 +182,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
@@ -380,6 +381,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return array
 	 */
 	private function get_row_actions( $item ) {
@@ -404,6 +406,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Get the column value for displaying an entry ID.
 	 *
 	 * @param object $item A payment or subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_item_id_column( $item ) {
@@ -421,6 +424,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return mixed
 	 */
 	private function get_form_id_column( $item, $atts ) {
@@ -434,6 +438,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_user_id_column( $item ) {
@@ -445,6 +450,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_created_at_column( $item, $atts ) {
@@ -515,6 +521,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_sub_id_column( $item ) {
@@ -535,6 +542,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 *
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_paysys_column( $item, $atts ) {
@@ -556,6 +564,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @since 6.6
 	 *
 	 * @param stdClass $item Payment or Subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_mode_column( $item ) {

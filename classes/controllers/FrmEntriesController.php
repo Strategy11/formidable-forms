@@ -78,6 +78,7 @@ class FrmEntriesController {
 	 * @since 6.14.1
 	 *
 	 * @param array $query_args
+	 *
 	 * @return array
 	 */
 	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
@@ -479,6 +480,7 @@ class FrmEntriesController {
 	 * Some post content can be sorted but not everything.
 	 *
 	 * @param stdClass $field
+	 *
 	 * @return bool
 	 */
 	private static function field_supports_sorting( $field ) {
@@ -488,6 +490,7 @@ class FrmEntriesController {
 
 	/**
 	 * @param mixed $result Option value from database for hidden columns in entries table.
+	 *
 	 * @return array
 	 */
 	public static function hidden_columns( $result ) {
@@ -551,6 +554,7 @@ class FrmEntriesController {
 	 *
 	 * @param array $atts
 	 * @param array $result
+	 *
 	 * @return void
 	 */
 	private static function remove_excess_cols( $atts, &$result ) {
@@ -643,6 +647,7 @@ class FrmEntriesController {
 	 * Back End CRUD.
 	 *
 	 * @param int $id
+	 *
 	 * @return void
 	 */
 	public static function show( $id = 0 ) {
@@ -812,6 +817,7 @@ class FrmEntriesController {
 	 * Delete entry if not redirected.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function delete_entry_after_save( $atts ) {

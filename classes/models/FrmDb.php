@@ -51,6 +51,7 @@ class FrmDb {
 	 *
 	 * @param array  $args
 	 * @param string $starts_with
+	 *
 	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
@@ -120,6 +121,7 @@ class FrmDb {
 	 * @param array|string $value
 	 * @param string       $where
 	 * @param array        $values
+	 *
 	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
@@ -389,6 +391,7 @@ class FrmDb {
 	 *
 	 * @param string $prefix Prefix to remove.
 	 * @param string $name   Name to strip prefix from, passed by reference.
+	 *
 	 * @return void
 	 */
 	private static function maybe_remove_prefix( $prefix, &$name ) {
@@ -491,6 +494,7 @@ class FrmDb {
 	 * @since 2.05.07
 	 *
 	 * @param array $args Query arguments, passed by reference.
+	 *
 	 * @return void
 	 */
 	private static function esc_query_args( &$args ) {
@@ -526,6 +530,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $order_query
+	 *
 	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
@@ -562,6 +567,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $order_by Sort direction, passed by reference.
+	 *
 	 * @return void
 	 */
 	public static function esc_order_by( &$order_by ) {
@@ -573,6 +579,7 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.06
+	 *
 	 * @param string $limit
 	 *
 	 * @return string
@@ -606,6 +613,7 @@ class FrmDb {
 	 *
 	 * @param array  $array Array of values.
 	 * @param string $type  Placeholder type.
+	 *
 	 * @return string
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
@@ -619,6 +627,7 @@ class FrmDb {
 	 *
 	 * @param string       $starts_with
 	 * @param array|string $where
+	 *
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
@@ -647,8 +656,10 @@ class FrmDb {
 	 * Prepare and save settings in styles and actions
 	 *
 	 * @since 2.05.06
+	 *
 	 * @param array  $settings
 	 * @param string $group
+	 *
 	 * @return int|WP_Error
 	 */
 	public static function save_settings( $settings, $group ) {
@@ -675,6 +686,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param array $settings
+	 *
 	 * @return int|WP_Error
 	 */
 	public static function save_json_post( $settings ) {
@@ -739,6 +751,7 @@ class FrmDb {
 	 * @param mixed  $results   Cached results.
 	 * @param string $group     The name of the cache group.
 	 * @param int    $time      Cache expiration time in seconds.
+	 *
 	 * @return void
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
@@ -756,6 +769,7 @@ class FrmDb {
 	 *
 	 * @param string $key   Cache key.
 	 * @param string $group Cache group name.
+	 *
 	 * @return void
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {
@@ -768,6 +782,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $group Cache group name.
+	 *
 	 * @return array
 	 */
 	public static function get_group_cached_keys( $group ) {
@@ -784,6 +799,7 @@ class FrmDb {
 	 *
 	 * @param string $cache_key Cache key to delete.
 	 * @param string $group     Cache group name.
+	 *
 	 * @return void
 	 */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
@@ -797,6 +813,7 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $group The name of the cache group.
+	 *
 	 * @return void
 	 */
 	public static function cache_delete_group( $group ) {
@@ -818,6 +835,7 @@ class FrmDb {
 	 *
 	 * @param string $table Table name without `$wpdb->prefix`.
 	 * @param string $column Column name.
+	 *
 	 * @return bool
 	 */
 	public static function db_column_exists( $table, $column ) {

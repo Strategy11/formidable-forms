@@ -58,6 +58,7 @@ class FrmFormTemplatesHelper {
 	 *
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the API request is expired or not.
+	 *
 	 * @return void
 	 */
 	public static function add_template_attributes( $template, $expired ) {
@@ -89,6 +90,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return string
 	 */
 	private static function prepare_single_template_classes( $template ) {
@@ -114,6 +116,7 @@ class FrmFormTemplatesHelper {
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the license is expired.
 	 * @param array $attributes The template attributes.
+	 *
 	 * @return void
 	 */
 	private static function prepare_single_template_plan( $template, $expired, &$attributes ) {
@@ -136,6 +139,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return void
 	 */
 	public static function add_template_link_attributes( $template ) {
@@ -169,6 +173,7 @@ class FrmFormTemplatesHelper {
 	 *    @type string $upgrade_link Upgrade link URL.
 	 *    @type string $renew_link Renew link URL.
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta( $args ) {
@@ -243,6 +248,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.25
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return bool
 	 */
 	private static function needs_free_plan( $template ) {

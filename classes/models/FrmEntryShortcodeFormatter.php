@@ -10,48 +10,56 @@ class FrmEntryShortcodeFormatter {
 
 	/**
 	 * @var int
+	 *
 	 * @since 2.04
 	 */
 	protected $form_id = 0;
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $skip_fields = array( 'captcha', 'html' );
 
 	/**
 	 * @var array
+	 *
 	 * @since 3.0
 	 */
 	protected $single_cell_fields = array( 'html' );
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $fields = array();
 
 	/**
 	 * @var bool
+	 *
 	 * @since 2.05
 	 */
 	protected $is_plain_text = false;
 
 	/**
 	 * @var string
+	 *
 	 * @since 2.04
 	 */
 	protected $format = 'text';
 
 	/**
 	 * @var FrmTableHTMLGenerator|null
+	 *
 	 * @since 2.04
 	 */
 	protected $table_generator;
 
 	/**
 	 * @var array
+	 *
 	 * @since 2.04
 	 */
 	protected $array_content = array();

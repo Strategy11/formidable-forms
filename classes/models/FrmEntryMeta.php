@@ -10,6 +10,7 @@ class FrmEntryMeta {
 	 * @param int    $field_id
 	 * @param string $meta_key usually set to '' as this parameter is no longer used.
 	 * @param mixed  $meta_value
+	 *
 	 * @return int
 	 */
 	public static function add_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
@@ -120,6 +121,7 @@ class FrmEntryMeta {
 	/**
 	 * @param int|string $entry_id
 	 * @param array      $values Either indexed by field ID or field key.
+	 *
 	 * @return void
 	 */
 	public static function update_entry_metas( $entry_id, $values ) {
@@ -243,6 +245,7 @@ class FrmEntryMeta {
 	 *
 	 * @param stdClass   $entry
 	 * @param int|string $field_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_meta_value( $entry, $field_id ) {
@@ -255,6 +258,7 @@ class FrmEntryMeta {
 	/**
 	 * @param int|object|string $entry_id
 	 * @param int|string        $field_id This function supports field keys as field id.
+	 *
 	 * @return mixed
 	 */
 	public static function get_entry_meta_by_field( $entry_id, $field_id ) {
@@ -382,6 +386,7 @@ class FrmEntryMeta {
 	 * @param string $order_by
 	 * @param string $limit
 	 * @param bool   $stripslashes
+	 *
 	 * @return array
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
@@ -439,6 +444,7 @@ class FrmEntryMeta {
 	 *
 	 * @param array $query
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function get_top_level_entry_ids( $query, $args ) {
@@ -451,7 +457,9 @@ class FrmEntryMeta {
 	 * the where clause to refer to the entry table for form_id if fields table should not be joined.
 	 *
 	 * @since 6.16.1
+	 *
 	 * @param array|string $where
+	 *
 	 * @return bool
 	 */
 	private static function should_join_fields_table( &$where ) {

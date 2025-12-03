@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * @todo Show opt-in popup after plugin activation.
+ *
  * @since 3.06.04
  */
 class FrmUsageController {
@@ -58,6 +59,7 @@ class FrmUsageController {
 	 * @since 3.06.04
 	 *
 	 * @param array $schedules Schedules.
+	 *
 	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {

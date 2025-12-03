@@ -128,6 +128,7 @@ $default_style = FrmEmailStylesController::get_default_email_style();
 	 *
 	 * @param bool  $rich_text_emails True by default unless plain text is selected.
 	 * @param array $args {
+	 *
 	 *     @type stdClass $form
 	 *     @type WP_Post  $form_action
 	 * }

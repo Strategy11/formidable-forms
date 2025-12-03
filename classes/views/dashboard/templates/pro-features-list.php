@@ -3,6 +3,7 @@
  * @since 6.8
  *
  * @var array $features The list of pro features.
+ *
  * @package Formidable
  */
 

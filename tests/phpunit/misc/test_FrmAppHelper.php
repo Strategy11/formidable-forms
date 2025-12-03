@@ -452,6 +452,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::wp_roles_dropdown (single)
 	 */
 	public function test_wp_roles_dropdown() {
@@ -468,6 +469,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::roles_options ($public = 'private')
 	 */
 	public function test_roles_options() {
@@ -485,6 +487,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 	/**
 	 * @group visibility
+	 *
 	 * @covers FrmAppHelper::roles_options
 	 */
 	public function test_roles_options_empty_string_option() {

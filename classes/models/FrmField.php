@@ -110,98 +110,147 @@ class FrmField {
 	 * @return array
 	 */
 	public static function pro_field_selection() {
-		$images_url = FrmAppHelper::plugin_url() . '/images/';
-		$fields     = array(
+		$upsell_images_url = FrmAppHelper::plugin_url() . '/images/upsell/';
+		$fields            = array(
 			'file'            => array(
-				'name'    => __( 'File Upload', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_upload3_icon',
-				'message' => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
+				'name'         => __( 'File Upload', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_upload3_icon',
+				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
+				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
 				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
-				'upsell_image' => esc_url( $images_url ) . 'ranking-field.svg',
+				'upsell_image' => $upsell_images_url . 'ranking-field-preview.webp',
 				'addon'        => 'surveys',
+				'learn-more'   => 'ranking-survey',
 			),
 			'rte'             => array(
-				'name' => __( 'Rich Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_align_right_icon',
+				'name'         => __( 'Rich Text', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_align_right_icon',
+				'message'      => __( 'Go beyond plain text, let your users format their content with bolding, italics, links, lists and more.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'rich-text-field-preview.webp',
+				'learn-more'   => 'rich-text',
 			),
 			'date'            => array(
-				'name' => __( 'Date', 'formidable' ),
-				'icon' => 'frm_icon_font frm_calendar2_icon',
+				'name'         => __( 'Date', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_calendar2_icon',
+				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'date-field-preview.webp',
+				'learn-more'   => 'date',
 			),
 			'time'            => array(
-				'name' => __( 'Time', 'formidable' ),
-				'icon' => 'frm_icon_font frm_clock_icon',
+				'name'         => __( 'Time', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_clock_icon',
+				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'time-field-preview.webp',
+				'learn-more'   => 'time',
 			),
 			'scale'           => array(
-				'name'    => __( 'Scale', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_linear_scale_icon',
-				'message' => esc_html__( 'Add a set of radio buttons with whatever range you choose.', 'formidable' ) . '<img src="' . esc_url( $images_url ) . 'scale_field.png" alt="' . esc_attr__( 'Scale Field', 'formidable' ) . '" />',
+				'name'         => __( 'Scale', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_linear_scale_icon',
+				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'scale-field-preview.webp',
+				'learn-more'   => 'scale',
 			),
 			'star'            => array(
-				'name' => __( 'Star Rating', 'formidable' ),
-				'icon' => 'frm_icon_font frm_star2_icon',
+				'name'         => __( 'Star Rating', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_star2_icon',
+				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'star-field-preview.webp',
+				'learn-more'   => 'star-ratings',
 			),
 			'range'           => array(
-				'name' => __( 'Slider', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code_commit_icon',
+				'name'         => __( 'Slider', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_code_commit_icon',
+				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'slider-field-preview.webp',
+				'learn-more'   => 'slider',
 			),
 			'toggle'          => array(
-				'name' => __( 'Toggle', 'formidable' ),
-				'icon' => 'frm_icon_font frm_toggle_on_icon',
+				'name'         => __( 'Toggle', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_toggle_on_icon',
+				'message'      => esc_html__( 'Quickly and easily create cascading fields, populate fields by search and more.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'toggle-field-preview.webp',
+				'learn-more'   => 'toggle',
 			),
 			'data'            => array(
-				'name'    => __( 'Dynamic', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_dynamic_icon',
-				'message' => __( 'Create relationships between multiple forms. You can link a member to a team, a rating to a product, a comment to a submission, and much more.', 'formidable' ),
+				'name'         => __( 'Dynamic', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_dynamic_icon',
+				'message'      => __( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'dynamic-field-preview.webp',
+				'learn-more'   => 'dynamic',
 			),
 			'lookup'          => array(
-				'name'    => __( 'Lookup', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_search_icon',
-				'message' => esc_html__( 'Filter the options in the next field and automatically add values to other fields. Upgrade to Pro to get Lookup fields and more.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'look-up_year-make-model.gif" alt="' . esc_attr__( 'cascading lookup fields', 'formidable' ) . '" />',
+				'name'         => __( 'Lookup', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_search_icon',
+				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'lookup-field-preview.webp',
+				'learn-more'   => 'lookup',
 			),
 			'divider|repeat'  => array(
-				'name'    => __( 'Repeater', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_refresh_icon',
-				'message' => esc_html__( 'Allow your visitors to add new sets of fields while filling out forms. Increase conversions while saving building time and server resources.', 'formidable' ) . ' <img src="' . esc_url( $images_url ) . 'repeatable-section_frontend.gif" alt="' . esc_attr__( 'Dynamically Add Form Fields with repeatable sections', 'formidable' ) . '" />',
+				'name'         => __( 'Repeater', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_refresh_icon',
+				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'repeater-field-preview.webp',
+				'learn-more'   => 'repeatable-section',
 			),
 			'end_divider'     => array(
 				'name'        => __( 'Section Buttons', 'formidable' ),
 				'switch_from' => 'divider',
 			),
 			'divider'         => array(
-				'name' => __( 'Section', 'formidable' ),
-				'icon' => 'frm_icon_font frm_header_icon',
+				'name'         => __( 'Section', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_header_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'section-field-preview.webp',
+				'learn-more'   => 'section-heading',
 			),
 			'break'           => array(
-				'name'    => __( 'Page Break', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_page_break_icon',
-				'message' => __( 'Get multi-paged forms with progress bars. Did you know you can upgrade to PRO to unlock multi-step forms with more awesome features?', 'formidable' ),
+				'name'         => __( 'Page Break', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_page_break_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'page-break-field-preview.webp',
+				'learn-more'   => 'page-breaks',
 			),
 			'form'            => array(
-				'name' => __( 'Embed Form', 'formidable' ),
-				'icon' => 'frm_icon_font frm_file_text2_icon',
+				'name'         => __( 'Embed Form', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_file_text2_icon',
+				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'embed-form-field-preview.webp',
+				'learn-more'   => 'embed-form',
 			),
 			'likert'          => array(
-				'name'  => __( 'Likert Scale', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_likert_scale frm_show_upgrade',
-				'addon' => 'surveys',
+				'name'         => __( 'Likert Scale', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'addon'        => 'surveys',
+				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'likert-field-preview.webp',
+				'learn-more'   => 'likert-scale',
 			),
 			'nps'             => array(
-				'name'  => __( 'NPS', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_nps frm_show_upgrade',
-				'addon' => 'surveys',
+				'name'         => __( 'NPS', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_nps frm_show_upgrade',
+				'addon'        => 'surveys',
+				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
+				'learn-more'   => 'net-promoter-score',
 			),
 			'password'        => array(
-				'name' => __( 'Password', 'formidable' ),
-				'icon' => 'frm_icon_font frm_lock_closed2_icon',
+				'name'         => __( 'Password', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_lock_closed2_icon',
+				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'password-field-preview.webp',
+				'learn-more'   => 'password-2',
 			),
 			'tag'             => array(
-				'name' => __( 'Tags', 'formidable' ),
-				'icon' => 'frm_icon_font frm_price_tags2_icon',
+				'name'         => __( 'Tags', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_price_tags2_icon',
+				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'tags-field-preview.webp',
+				'learn-more'   => 'tags',
 			),
 			// This is no longer a Pro field, but without this here, Pro triggers "undefined index" notices.
 			// Right now it leaves a gap. Maybe we can skip anything without a name or something.
@@ -210,51 +259,72 @@ class FrmField {
 				'icon' => '',
 			),
 			'address'         => array(
-				'name' => __( 'Address', 'formidable' ),
-				'icon' => 'frm_icon_font frm_location2_icon',
+				'name'         => __( 'Address', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_location2_icon',
+				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'address-field-preview.webp',
+				'learn-more'   => 'address',
 			),
 			'summary'         => array(
-				'name'    => __( 'Summary', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_file_text3_icon',
-				'message' => __( 'Allow visitors to review their responses before a form is submitted. Upgrade to Pro to get Summary fields and more.', 'formidable' ),
+				'name'         => __( 'Summary', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_file_text3_icon',
+				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'summary-field-preview.webp',
+				'learn-more'   => 'summary-review-before-submit',
 			),
 			'signature'       => array(
-				'name'  => __( 'Signature', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_signature_icon frm_show_upgrade',
-				'addon' => 'signature',
+				'name'         => __( 'Signature', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_signature_icon frm_show_upgrade',
+				'addon'        => 'signature',
+				'message'      => __( 'Capture digital e-signatures directly within your form, making official agreements and authorizations straightforward.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'signature-field-preview.webp',
+				'learn-more'   => 'formidable-signature',
 			),
 			'ai'              => array(
-				'name'    => __( 'AI', 'formidable' ),
-				'icon'    => 'frm_icon_font frm-ai-icon frm_show_upgrade',
-				'addon'   => 'ai',
-				'message' => __( 'Streamline workflows and reclaim valuable time with the power of AI. You can effortlessly respond to your visitors in real-time with ChatGPT as your automated assistant. Upgrade to Pro and unlock AI-powered fields.', 'formidable' ),
+				'name'         => __( 'AI', 'formidable' ),
+				'icon'         => 'frm_icon_font frm-ai-icon frm_show_upgrade',
+				'addon'        => 'ai',
+				'message'      => __( 'Harness artificial intelligence by taking user input and let the model of your choice create an output, quickly and easily.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'ai-field-preview.webp',
+				'learn-more'   => 'form-ai',
 			),
 			'ssa-appointment' => array(
-				'name'    => __( 'Appointment', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
-				'require' => 'Simply Schedule Appointments',
-				'message' => sprintf(
+				'name'         => __( 'Appointment', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
+				'require'      => 'Simply Schedule Appointments',
+				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
 					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
-					'<a href="https://simplyscheduleappointments.com/meet/formidable/">',
+					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/" target="_blank" rel="noopener">',
 					'</a>'
-				) . '<img src="' . esc_url( $images_url ) . 'appointments.png" alt="' . esc_attr__( 'Scheduling', 'formidable' ) . '" />',
-				'link'    => 'https://simplyscheduleappointments.com/meet/formidable/',
+				),
+				'link'         => 'https://simplyscheduleappointments.com/meet/formidable/',
+				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
+				'learn-more'   => 'simply-schedule-appointments-forms',
 			),
 			'product'         => array(
-				'name'    => __( 'Product', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_product2_icon',
-				'section' => 'pricing',
+				'name'         => __( 'Product', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_product2_icon',
+				'section'      => 'pricing',
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'quantity'        => array(
-				'name'    => __( 'Quantity', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_quantity_icon',
-				'section' => 'pricing',
+				'name'         => __( 'Quantity', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_quantity_icon',
+				'section'      => 'pricing',
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
+				'learn-more'   => 'features/pricing-fields',
 			),
 			'total'           => array(
-				'name'    => __( 'Total', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_total2_icon',
-				'section' => 'pricing',
+				'name'         => __( 'Total', 'formidable' ),
+				'icon'         => 'frm_icon_font frm_total2_icon',
+				'section'      => 'pricing',
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
+				'learn-more'   => 'features/pricing-fields',
 			),
 		);
 
@@ -273,6 +343,7 @@ class FrmField {
 	 * @since 6.8.3
 	 *
 	 * @param string $type
+	 *
 	 * @return bool
 	 */
 	private static function field_is_new( $type ) {
@@ -305,6 +376,7 @@ class FrmField {
 	 *
 	 * @param array $values
 	 * @param bool  $return
+	 *
 	 * @return false|int
 	 */
 	public static function create( $values, $return = true ) {
@@ -375,6 +447,7 @@ class FrmField {
 	 * @since 5.0.08
 	 *
 	 * @param array $options
+	 *
 	 * @return array
 	 */
 	private static function maybe_filter_options( $options ) {
@@ -398,6 +471,7 @@ class FrmField {
 	 * @since 6.11.2
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	private static function maybe_filter_custom_html_input_attributes( $html ) {
@@ -410,6 +484,7 @@ class FrmField {
 			"/$pattern/",
 			/**
 			 * @param array $match Shortcode data.
+			 *
 			 * @return string
 			 */
 			function ( $match ) {
@@ -563,6 +638,7 @@ class FrmField {
 	/**
 	 * @param int|string $id
 	 * @param array      $values
+	 *
 	 * @return false|int
 	 */
 	public static function update( $id, $values ) {
@@ -679,6 +755,7 @@ class FrmField {
 
 	/**
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	public static function delete_form_transient( $form_id ) {
@@ -703,6 +780,7 @@ class FrmField {
 	 * If $field is numeric, get the field object
 	 *
 	 * @param int|object|string $field
+	 *
 	 * @return void
 	 */
 	public static function maybe_get_field( &$field ) {
@@ -851,6 +929,7 @@ class FrmField {
 	 * @param int|string $limit
 	 * @param string     $inc_embed
 	 * @param string     $inc_repeat
+	 *
 	 * @return array
 	 */
 	public static function get_all_for_form( $form_id, $limit = '', $inc_embed = 'exclude', $inc_repeat = 'include' ) {
@@ -1020,6 +1099,7 @@ class FrmField {
 	 * @since 2.0.8
 	 *
 	 * @param array|object|null $results Results.
+	 *
 	 * @return void
 	 */
 	private static function format_field_results( &$results ) {
@@ -1053,6 +1133,7 @@ class FrmField {
 	 * @since 6.15
 	 *
 	 * @param stdClass $result
+	 *
 	 * @return void
 	 */
 	private static function add_slashes_to_format_before_setting_field_cache( $result ) {
@@ -1069,6 +1150,7 @@ class FrmField {
 	 * @since 2.0
 	 *
 	 * @param object $results
+	 *
 	 * @return void
 	 */
 	private static function prepare_options( &$results ) {
@@ -1167,6 +1249,7 @@ class FrmField {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return bool
 	 */
 	public static function is_no_save_field( $type ) {
@@ -1207,7 +1290,9 @@ class FrmField {
 
 	/**
 	 * @since 3.0
+	 *
 	 * @param array|object $field
+	 *
 	 * @return string
 	 */
 	public static function get_field_type( $field ) {
@@ -1218,6 +1303,7 @@ class FrmField {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 *
 	 * @return string
 	 */
 	public static function get_original_field_type( $field ) {
@@ -1238,6 +1324,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array|object $field Field object.
+	 *
 	 * @return bool
 	 */
 	public static function is_multiple_select( $field ) {
@@ -1254,6 +1341,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array|object $field
+	 *
 	 * @return bool
 	 */
 	public static function is_read_only( $field ) {
@@ -1265,6 +1353,7 @@ class FrmField {
 	 * @since 2.0.9
 	 *
 	 * @param array $field
+	 *
 	 * @return bool
 	 */
 	public static function is_required( $field ) {
@@ -1284,6 +1373,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true( $field, $option ) {
@@ -1298,6 +1388,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty( $field, $option ) {
@@ -1310,6 +1401,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true_in_array( $field, $option ) {
@@ -1319,6 +1411,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
@@ -1328,6 +1421,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty_in_array( $field, $option ) {
@@ -1337,6 +1431,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_empty_in_object( $field, $option ) {
@@ -1346,6 +1441,7 @@ class FrmField {
 	/**
 	 * @param stdClass $field
 	 * @param string   $option
+	 *
 	 * @return bool
 	 */
 	public static function is_option_value_in_object( $field, $option ) {
@@ -1357,6 +1453,7 @@ class FrmField {
 	 *
 	 * @param array|object $field
 	 * @param string       $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
@@ -1372,6 +1469,7 @@ class FrmField {
 	/**
 	 * @param array  $field
 	 * @param string $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option_in_array( $field, $option ) {
@@ -1389,6 +1487,7 @@ class FrmField {
 	/**
 	 * @param object $field
 	 * @param string $option
+	 *
 	 * @return mixed
 	 */
 	public static function get_option_in_object( $field, $option ) {
@@ -1399,6 +1498,7 @@ class FrmField {
 	 * @since 2.0.09
 	 *
 	 * @param array|object $field
+	 *
 	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
@@ -1504,6 +1604,7 @@ class FrmField {
 	 * @since 4.10.02
 	 *
 	 * @param array $field Field array.
+	 *
 	 * @return bool
 	 */
 	public static function is_combo_field( $field ) {

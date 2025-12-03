@@ -114,6 +114,7 @@ class FrmFieldsHelper {
 	 * @param array    $field_array Field values array, passed by reference.
 	 * @param stdClass $field       Field object.
 	 * @param array    $args        Additional arguments.
+	 *
 	 * @return void
 	 */
 	public static function prepare_new_front_field( &$field_array, $field, $args = array() ) {
@@ -130,6 +131,7 @@ class FrmFieldsHelper {
 	 * @param array|stdClass $field       Field object or array.
 	 * @param int            $entry_id    Entry ID.
 	 * @param array          $args        Additional arguments.
+	 *
 	 * @return void
 	 */
 	public static function prepare_edit_front_field( &$field_array, $field, $entry_id = 0, $args = array() ) {
@@ -146,6 +148,7 @@ class FrmFieldsHelper {
 	 * @param array    $field_array
 	 * @param stdClass $field
 	 * @param array    $args
+	 *
 	 * @return void
 	 */
 	private static function prepare_front_field( &$field_array, $field, $args ) {
@@ -528,6 +531,7 @@ class FrmFieldsHelper {
 	 *     @type string       $error A key including 'unique_msg', 'invalid', 'blank', or 'conf_msg'.
 	 *     @type array|object $field The field with the error.
 	 * }
+	 *
 	 * @return array
 	 */
 	private static function get_substrings_to_replace_with_field_name( $field_name, $filter_args ) {
@@ -561,6 +565,8 @@ class FrmFieldsHelper {
 	 */
 	public static function get_form_fields( $form_id, $error = array() ) {
 		$fields = FrmField::get_all_for_form( $form_id );
+
+		FrmFieldName::track_first_name_field( $fields );
 
 		return apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
 	}
@@ -654,7 +660,9 @@ class FrmFieldsHelper {
 	 * Check if this field type allows placeholders
 	 *
 	 * @since 2.05
+	 *
 	 * @param string $type
+	 *
 	 * @return bool
 	 */
 	public static function is_placeholder_field_type( $type ) {
@@ -749,6 +757,7 @@ class FrmFieldsHelper {
 	 * @since 4.0
 	 *
 	 * @param array $field
+	 *
 	 * @return string radio or checkbox
 	 */
 	private static function get_default_value_type( $field ) {
@@ -925,6 +934,7 @@ class FrmFieldsHelper {
 	 * @since 2.05
 	 *
 	 * @param array|string $value
+	 *
 	 * @return array|string
 	 */
 	private static function get_value_for_comparison( $value ) {
@@ -1112,6 +1122,7 @@ class FrmFieldsHelper {
 	/**
 	 * @param string $replace_with
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
@@ -1143,6 +1154,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @param string $replace_with
+	 *
 	 * @return string
 	 */
 	private static function atts_sanitize( $replace_with ) {
@@ -1151,6 +1163,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @param string $replace_with
+	 *
 	 * @return string
 	 */
 	private static function atts_sanitize_url( $replace_with ) {
@@ -1164,6 +1177,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array       $atts  Includes entry object.
 	 * @param string|null $value
+	 *
 	 * @return void
 	 */
 	public static function sanitize_embedded_shortcodes( $atts, &$value ) {
@@ -1431,6 +1445,7 @@ class FrmFieldsHelper {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return array
 	 */
 	public static function get_field_types( $type ) {
@@ -1482,6 +1497,7 @@ class FrmFieldsHelper {
 	 * @param string[] $inputs
 	 * @param array    $fields
 	 * @param array    $field_types
+	 *
 	 * @return void
 	 */
 	private static function field_types_for_input( $inputs, $fields, &$field_types ) {
@@ -2336,6 +2352,7 @@ class FrmFieldsHelper {
 	 * @since 4.04
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function show_add_field_buttons( $args ) {
@@ -2405,7 +2422,21 @@ class FrmFieldsHelper {
 			$li_params['data-upsell-image'] = $field_type['upsell_image'];
 		}
 
-		if ( $upgrade_message ) {
+		if ( ! empty( $field_type['learn-more'] ) ) {
+			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url(
+				$field_type['learn-more'],
+				'form-builder-add-fields',
+				false !== strpos( $field_type['learn-more'], '/' )
+			);
+		}
+
+		if ( isset( $upgrading['url'] ) ) {
+			$li_params['data-message'] = sprintf(
+				// translators: %s: Field name
+				esc_html__( 'You already have access to %s fields, you\'ll just need to activate to start using them.', 'formidable' ),
+				$field_name
+			);
+		} elseif ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
 		?>
@@ -2490,6 +2521,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $field   Field data.
 	 * @param array $options Options array.
+	 *
 	 * @return array
 	 */
 	public static function get_display_format_args( $field, $options ) {
@@ -2520,6 +2552,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param array $options Options.
 	 * @param array $args    Arguments.
+	 *
 	 * @return void
 	 */
 	private static function fill_image_setting_options( $options, &$args ) {
@@ -2587,6 +2620,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param mixed  $value
 	 * @param string $field_type
+	 *
 	 * @return void
 	 */
 	public static function prepare_field_value( &$value, $field_type ) {
@@ -2599,6 +2633,7 @@ class FrmFieldsHelper {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $field_ids If this is not empty, the results will be filtered by field id.
+	 *
 	 * @return array
 	 */
 	public static function get_draft_field_results( $form_id, $field_ids = array() ) {
@@ -2637,6 +2672,7 @@ class FrmFieldsHelper {
 	 * @since 6.8
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	public static function get_all_draft_field_ids( $form_id ) {
