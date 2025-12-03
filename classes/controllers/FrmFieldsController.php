@@ -540,6 +540,8 @@ class FrmFieldsController {
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
 		$html     = ' ' . implode( ' ', $add_html ) . '  ';
 
+		unset( $add_html );
+
 		if ( isset( $field['args'] ) ) {
 			$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
 			$field_object->add_aria_description( $field['args'], $html );

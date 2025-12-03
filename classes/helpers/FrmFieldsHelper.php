@@ -558,6 +558,8 @@ class FrmFieldsHelper {
 	public static function get_form_fields( $form_id, $error = array() ) {
 		$fields = FrmField::get_all_for_form( $form_id );
 
+		FrmFieldName::track_first_name_field( $fields );
+
 		return apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
 	}
 
