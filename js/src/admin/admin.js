@@ -3080,7 +3080,8 @@ window.frmAdminBuildJS = function() {
 			box = document.getElementById( 'frm-calc-box-' + fieldId );
 		}
 
-		exclude = getExcludeArray( box, isSummary );
+		const isMathCalc = isMathCalcType( box );
+		exclude = getExcludeArray( box, isSummary, isMathCalc );
 		const excludedOpts = extractExcludedOptions( exclude );
 
 		fields = getFieldList();
@@ -3109,7 +3110,7 @@ window.frmAdminBuildJS = function() {
 
 		// If the calc type is math and there are no fields, hide search and show a message
 		const search = box.querySelector( '.frm-search' );
-		if ( ! list.hasChildNodes() && isMathCalcType( box ) ) {
+		if ( ! list.hasChildNodes() && isMathCalc ) {
 			search.classList.add( 'frm_hidden' );
 			list.appendChild(
 				tag( 'li', {
@@ -3125,11 +3126,12 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Gets the exclude array for the calculation box.
 	 *
-	 * @param {HTMLElement} calcBox   The calculation box element.
-	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
+	 * @param {HTMLElement} calcBox    The calculation box element.
+	 * @param {boolean}     isSummary  Whether the calculation box is for a summary.
+	 * @param {boolean}     isMathCalc Whether the calculation box is for a math calculation.
 	 * @returns {Array} The exclude array.
 	 */
-	function getExcludeArray( calcBox, isSummary ) {
+	function getExcludeArray( calcBox, isSummary, isMathCalc ) {
 		const codeList = calcBox.querySelector( '.frm_code_list' );
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
@@ -3147,7 +3149,7 @@ window.frmAdminBuildJS = function() {
 					}
 				}
 			}
-		} else if ( isMathCalcType( calcBox ) ) {
+		} else if ( isMathCalc ) {
 			const nonNumericTypes = codeList.getAttribute( 'data-exclude-non-numeric' );
 			if ( nonNumericTypes ) {
 				exclude.push( ...JSON.parse( nonNumericTypes ) );
@@ -3165,7 +3167,7 @@ window.frmAdminBuildJS = function() {
 	 */
 	function isMathCalcType( calcBox ) {
 		const fieldFormula = calcBox.parentElement;
-		if ( ! fieldFormula.classList.contains( 'frm-field-formula' ) ) {
+		if ( ! fieldFormula?.classList.contains( 'frm-field-formula' ) ) {
 			return false;
 		}
 
