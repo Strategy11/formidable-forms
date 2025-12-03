@@ -3114,7 +3114,7 @@ window.frmAdminBuildJS = function() {
 			search.classList.add( 'frm_hidden' );
 			list.appendChild(
 				tag( 'li', {
-					className: 'frm-px-sm',
+					className: 'frm-pt-xs frm-px-sm',
 					child: span( { text: __( 'This form has no numeric fields to insert into the calculation.', 'formidable' ) } )
 				} )
 			);
