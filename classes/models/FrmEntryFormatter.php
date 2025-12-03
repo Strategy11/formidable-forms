@@ -180,6 +180,7 @@ class FrmEntryFormatter {
 		$entry_atts = array();
 
 		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields', 'entry' );
+
 		foreach ( $conditionally_add as $index ) {
 			if ( isset( $atts[ $index ] ) ) {
 				$entry_atts[ $index ] = $atts[ $index ];
@@ -388,6 +389,7 @@ class FrmEntryFormatter {
 		$atts['return_array'] = true;
 
 		$unset = array( 'id', 'form_id', 'format' );
+
 		foreach ( $unset as $param ) {
 			if ( isset( $atts[ $param ] ) ) {
 				unset( $atts[ $param ] );
@@ -569,6 +571,7 @@ class FrmEntryFormatter {
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 
 			$has_separate_value = (bool) $field_value->get_field_option( 'separate_value' );
+
 			if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
 				$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
 			}
@@ -934,6 +937,7 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_html_table( $display_value, $field_type = '' ) {
 		$display_value = $this->flatten_array( $display_value );
+
 		if ( ! isset( $this->atts['line_breaks'] ) || ! empty( $this->atts['line_breaks'] ) ) {
 			$display_value = str_replace( array( "\r\n", "\n" ), '<br/>', $display_value );
 		}

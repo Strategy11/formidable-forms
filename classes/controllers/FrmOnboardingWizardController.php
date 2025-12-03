@@ -161,6 +161,7 @@ class FrmOnboardingWizardController {
 		}
 
 		$transient_value = get_transient( self::TRANSIENT_NAME );
+
 		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
 			return;
 		}
@@ -188,6 +189,7 @@ class FrmOnboardingWizardController {
 
 		// Redirect to the onboarding wizard's initial step.
 		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
+
 		if ( wp_safe_redirect( esc_url_raw( $page_url ) ) ) {
 			exit;
 		}
@@ -649,6 +651,7 @@ class FrmOnboardingWizardController {
 
 		// Gravity Forms Migrator add-on.
 		$gravity_forms_plugin = 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php';
+
 		if ( class_exists( 'GFForms' ) && ! is_plugin_active( $gravity_forms_plugin ) ) {
 			$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
 

@@ -6,6 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $data      = FrmAppHelper::get_landing_page_upgrade_data_params( 'landing-preview' );
 $data_keys = array_keys( $data );
 $params    = array();
+
 foreach ( $data_keys as $key ) {
 	$params[ 'data-' . $key ] = $data[ $key ];
 }

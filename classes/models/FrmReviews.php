@@ -39,6 +39,7 @@ class FrmReviews {
 
 		// Check if it has been dismissed or if we can ask later
 		$dismissed = $this->review_status['dismissed'];
+
 		if ( $dismissed === 'later' && $this->review_status['asked'] < 3 ) {
 			$dismissed = false;
 		}
@@ -115,6 +116,7 @@ class FrmReviews {
 		}
 
 		$name = $user->first_name;
+
 		if ( ! empty( $name ) ) {
 			$name = ' ' . $name;
 		}
@@ -151,6 +153,7 @@ class FrmReviews {
 		if ( $asked > 0 ) {
 			$message->remove( $this->inbox_key );
 		}
+
 		if ( $asked > 1 ) {
 			$message->remove( $this->inbox_key . '1' );
 		}
@@ -208,6 +211,7 @@ class FrmReviews {
 	 */
 	private function set_inbox_dismissed() {
 		$message = new FrmInbox();
+
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->dismiss( $key );
 		}
@@ -220,6 +224,7 @@ class FrmReviews {
 	 */
 	private function set_inbox_read() {
 		$message = new FrmInbox();
+
 		foreach ( $this->inbox_keys() as $key ) {
 			$message->mark_read( $key );
 		}
@@ -238,6 +243,7 @@ class FrmReviews {
 
 		$user_id = get_current_user_id();
 		$review  = get_user_meta( $user_id, $this->option_name, true );
+
 		if ( empty( $review ) ) {
 			$review = array();
 		}

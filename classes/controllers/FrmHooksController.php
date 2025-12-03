@@ -21,6 +21,7 @@ class FrmHooksController {
 		if ( 'load_hooks' == $trigger_hooks ) {
 			if ( is_admin() ) {
 				$hooks[] = 'load_admin_hooks';
+
 				if ( defined( 'DOING_AJAX' ) ) {
 					$hooks[] = 'load_ajax_hooks';
 					$hooks[] = 'load_form_hooks';

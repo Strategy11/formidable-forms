@@ -23,6 +23,7 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 				'order'   => 'DESC',
 			)
 		);
+
 		if ( ! is_array( $spam_comments ) ) {
 			return false;
 		}

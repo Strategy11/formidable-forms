@@ -60,6 +60,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function get_messages( $filter = false ) {
 		$messages = self::$messages;
+
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
@@ -73,6 +74,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function set_messages() {
 		self::$messages = get_option( $this->option );
+
 		if ( ! is_array( self::$messages ) ) {
 			self::$messages = array();
 		}
@@ -92,6 +94,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function add_api_messages() {
 		$api = $this->get_api_info();
+
 		if ( empty( $api ) ) {
 			return;
 		}
@@ -164,6 +167,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function clean_messages() {
 		$removed = false;
+
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
 			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
@@ -187,8 +191,10 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function filter_messages( &$messages, $type = 'unread' ) {
 		$user_id = get_current_user_id();
+
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
+
 			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
@@ -291,6 +297,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function mark_unread( $key ) {
 		$is_read = isset( self::$messages[ $key ] ) && isset( self::$messages[ $key ]['read'] ) && isset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
+
 		if ( $is_read ) {
 			unset( self::$messages[ $key ]['read'][ get_current_user_id() ] );
 			$this->update_list();
@@ -327,6 +334,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	private function dismiss_all() {
 		$user_id = get_current_user_id();
+
 		foreach ( self::$messages as $key => $message ) {
 			if ( ! isset( $message['dismissed'] ) ) {
 				self::$messages[ $key ]['dismissed'] = array();
@@ -345,6 +353,7 @@ class FrmInbox extends FrmFormApi {
 	public function unread() {
 		$messages = $this->get_messages( 'filter' );
 		$user_id  = get_current_user_id();
+
 		foreach ( $messages as $t => $message ) {
 			if ( isset( $message['read'] ) && isset( $message['read'][ $user_id ] ) ) {
 				unset( $messages[ $t ] );
@@ -362,6 +371,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function unread_html( $filtered = true ) {
 		$count = count( $this->unread() );
+
 		if ( ! $count ) {
 			return '';
 		}
@@ -447,6 +457,7 @@ class FrmInbox extends FrmFormApi {
 				}
 
 				$query = array();
+
 				if ( isset( $parts['query'] ) ) {
 					parse_str( $parts['query'], $query );
 				}
@@ -463,6 +474,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public static function maybe_disable_screen_options() {
 		self::$banner_messages = self::get_banner_messages();
+
 		if ( self::$banner_messages ) {
 			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
 			add_filter( 'screen_options_show_screen', '__return_false' );
@@ -528,6 +540,7 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public static function get_inbox_slide_in_value_for_js() {
 		$messages = self::get_slidein_messages();
+
 		if ( ! $messages ) {
 			return false;
 		}
@@ -578,6 +591,7 @@ class FrmInbox extends FrmFormApi {
 	public static function check_for_error() {
 		$inbox    = new self();
 		$messages = $inbox->get_messages( 'filter' );
+
 		foreach ( $messages as $message ) {
 			if ( is_array( $message ) && isset( $message['type'] ) && 'error' === $message['type'] ) {
 				return $message;

@@ -86,6 +86,7 @@ class FrmDb {
 	 */
 	public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
 		$condition = ' AND';
+
 		if ( isset( $args['or'] ) ) {
 			$condition = ' OR';
 			unset( $args['or'] );
@@ -94,9 +95,11 @@ class FrmDb {
 		foreach ( $args as $key => $value ) {
 			$where         .= empty( $where ) ? $base_where : $condition;
 			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+
 			if ( is_numeric( $key ) || $array_inc_null ) {
 				$where       .= ' ( ';
 				$nested_where = '';
+
 				if ( $array_inc_null ) {
 					foreach ( $value as $val ) {
 						$parse_where = array(
@@ -113,7 +116,7 @@ class FrmDb {
 				$where .= ' ) ';
 			} else {
 				self::interpret_array_to_sql( $key, $value, $where, $values );
-			}
+			}//end if
 		}//end foreach
 	}
 
@@ -144,6 +147,7 @@ class FrmDb {
 				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
 				$start  = true;
+
 				foreach ( $value as $v ) {
 					if ( ! $start ) {
 						$where .= ' OR ';
@@ -167,6 +171,7 @@ class FrmDb {
 			 */
 			$start = '%';
 			$end   = '%';
+
 			if ( $lowercase_key === 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
@@ -243,6 +248,7 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
+
 		if ( $type === 'var' && ! isset( $args['limit'] ) ) {
 			$args['limit'] = 1;
 		}
@@ -270,6 +276,7 @@ class FrmDb {
 	public static function generate_cache_key( $where, $args, $field, $type ) {
 		$cache_key = '';
 		$where     = FrmAppHelper::array_flatten( $where );
+
 		foreach ( $where as $key => $value ) {
 			$cache_key .= $key . '_' . $value;
 		}
@@ -347,6 +354,7 @@ class FrmDb {
 		);
 
 		$where_is = strtolower( $where_is );
+
 		if ( isset( $switch_to[ $where_is ] ) ) {
 			return ' ' . $switch_to[ $where_is ];
 		}
@@ -425,6 +433,7 @@ class FrmDb {
 		}
 
 		$temp_args = $args;
+
 		foreach ( $temp_args as $k => $v ) {
 			if ( $v == '' ) {
 				unset( $args[ $k ] );
@@ -432,6 +441,7 @@ class FrmDb {
 			}
 
 			$db_name = strtoupper( str_replace( '_', ' ', $k ) );
+
 			if ( strpos( $v, $db_name ) === false ) {
 				$args[ $k ] = $db_name . ' ' . $v;
 			}
@@ -544,6 +554,7 @@ class FrmDb {
 
 		// Remove ORDER BY before sanitizing.
 		$order_query = strtolower( $order_query );
+
 		if ( strpos( $order_query, 'order by' ) !== false ) {
 			$order_query = str_replace( 'order by', '', $order_query );
 		}
@@ -552,11 +563,13 @@ class FrmDb {
 
 		$order      = trim( reset( $order_query ) );
 		$safe_order = array( 'count(*)' );
+
 		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 
 		$order_by = '';
+
 		if ( count( $order_query ) > 1 ) {
 			$order_by = end( $order_query );
 			self::esc_order_by( $order_by );
@@ -576,6 +589,7 @@ class FrmDb {
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
+
 		if ( ! in_array( strtolower( $order_by ), $sort_options, true ) ) {
 			$order_by = 'asc';
 		}
@@ -594,11 +608,13 @@ class FrmDb {
 		}
 
 		$limit = trim( str_replace( 'limit ', '', strtolower( $limit ) ) );
+
 		if ( is_numeric( $limit ) ) {
 			return ' LIMIT ' . $limit;
 		}
 
 		$limit = explode( ',', trim( $limit ) );
+
 		foreach ( $limit as $k => $l ) {
 			if ( is_numeric( $l ) ) {
 				$limit[ $k ] = $l;
@@ -695,6 +711,7 @@ class FrmDb {
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
+
 		if ( isset( $wp_filter['content_save_pre'] ) ) {
 			$filters = $wp_filter['content_save_pre'];
 		}
@@ -791,6 +808,7 @@ class FrmDb {
 	 */
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
+
 		if ( ! $cached || ! is_array( $cached ) ) {
 			$cached = array();
 		}

@@ -89,6 +89,7 @@ class FrmEntryMeta {
 	 */
 	private static function set_value_before_save( &$values ) {
 		$field = FrmField::getOne( $values['field_id'] );
+
 		if ( $field ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 
@@ -138,6 +139,7 @@ class FrmEntryMeta {
 		);
 
 		$values_indexed_by_field_id = array();
+
 		foreach ( $values as $field_id_or_key => $meta_value ) {
 			$field_id = $field_id_or_key;
 			$field    = null;
@@ -208,6 +210,7 @@ class FrmEntryMeta {
 		 * @param array $metas The list of entry meta values.
 		 */
 		$metas = apply_filters( 'frm_before_duplicate_entry_values', $metas );
+
 		foreach ( $metas as $meta ) {
 			self::add_entry_meta( $new_id, $meta->field_id, '', $meta->meta_value );
 			unset( $meta );
@@ -282,6 +285,7 @@ class FrmEntryMeta {
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
 		$query     = array( 'item_id' => $entry_id );
+
 		if ( is_numeric( $field_id ) ) {
 			// Query by field ID.
 			$query['field_id'] = $field_id;
@@ -474,11 +478,13 @@ class FrmEntryMeta {
 		}
 
 		$where_fields = array_keys( $where );
+
 		foreach ( $where_fields as $where_field ) {
 			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
 				return true;
 			}
 		}
+
 		if ( isset( $where['fi.form_id'] ) ) {
 			$where['e.form_id'] = $where['fi.form_id'];
 			unset( $where['fi.form_id'] );
@@ -521,12 +527,14 @@ class FrmEntryMeta {
 
 		$should_join_fields_table__where    = self::should_join_fields_table( $where );
 		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+
 		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
 			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 		}
 
 		$query[] = $from;
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
+
 		if ( is_array( $where ) ) {
 			if ( ! $args['is_draft'] ) {
 				$where['e.is_draft'] = 0;
@@ -549,6 +557,7 @@ class FrmEntryMeta {
 					},
 					array()
 				);
+
 				if ( $is_draft ) {
 					$where['e.is_draft'] = $is_draft;
 				}
@@ -568,6 +577,7 @@ class FrmEntryMeta {
 
 		$draft_where = '';
 		$user_where  = '';
+
 		if ( ! $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
 		} elseif ( $args['is_draft'] == 1 ) {
@@ -602,13 +612,16 @@ class FrmEntryMeta {
 	public static function search_entry_metas( $search, $field_id, $operator ) {
 		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
+
 		if ( false !== $results ) {
 			return $results;
 		}
 
 		global $wpdb;
+
 		if ( is_array( $search ) ) {
 			$where = '';
+
 			foreach ( $search as $field => $value ) {
 				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ) ) ) {
 					continue;

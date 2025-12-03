@@ -43,6 +43,7 @@ function load_formidable_forms() {
 
 	// For reverse compatibility. Load Pro if it's still nested.
 	$frm_path = __DIR__;
+
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include $frm_path . '/pro/formidable-pro.php';
 	}
@@ -96,6 +97,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		$filepath .= 'views/styles/components/';
 	} else {
 		$filepath .= 'models/';
+
 		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
 			$filepath .= 'fields/';
 		}
@@ -109,6 +111,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	if ( preg_match( '/^FrmStrpLite.+$/', $class_name ) || preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
 		// Autoload for /stripe/ folder.
 		$filepath = $original_filepath . '/stripe/';
+
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
 		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
@@ -128,6 +131,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 
 	if ( preg_match( '/^FrmSquareLite.+$/', $class_name ) ) {
 		$filepath = $original_filepath . '/square/';
+
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
 		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {

@@ -27,6 +27,7 @@ class FrmStrpLiteConnectApiAdapter {
 		} else {
 			$user_id  = get_current_user_id();
 			$customer = self::get_customer_by_id( $user_id );
+
 			if ( ! is_object( $customer ) ) {
 				return false;
 			}
@@ -76,12 +77,15 @@ class FrmStrpLiteConnectApiAdapter {
 
 		if ( $user_id ) {
 			$customer_id = get_user_meta( $user_id, $meta_name, true );
+
 			if ( ! isset( $options['email'] ) ) {
 				$user_info = get_userdata( $user_id );
+
 				if ( ! empty( $user_info->user_email ) ) {
 					$options['email'] = $user_info->user_email;
 				}
 			}
+
 			if ( $customer_id ) {
 				$options['customer_id'] = $customer_id;
 			}
@@ -96,6 +100,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 		if ( $customer_id ) {
 			$customer_id_is_actually_an_error_message = false === strpos( $customer_id, 'cus_' );
+
 			if ( $customer_id_is_actually_an_error_message ) {
 				$customer_id_error_message = $customer_id;
 				$customer_id               = false;

@@ -18,6 +18,7 @@ if ( ! isset( $show_messages ) ) {
 }
 
 $show_messages = apply_filters( 'frm_message_list', $show_messages );
+
 if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 	// Define a callback function to add 'data-action' attribute to allowed HTML tags
 	$add_data_action_callback = function ( $allowed_html ) {
@@ -30,6 +31,7 @@ if ( is_array( $show_messages ) && count( $show_messages ) > 0 ) {
 			<?php
 			// Add the callback function to the 'frm_striphtml_allowed_tags' filter
 			add_filter( 'frm_striphtml_allowed_tags', $add_data_action_callback );
+
 			foreach ( $show_messages as $m ) {
 				echo '<li>' . FrmAppHelper::kses( $m, array( 'a', 'br', 'span', 'p', 'svg', 'use' ) ) . '</li>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}

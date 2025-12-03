@@ -168,6 +168,7 @@ class FrmSolution {
 	public function redirect() {
 
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+
 		if ( $current_page === $this->page ) {
 			// Prevent endless loop.
 			return;
@@ -224,6 +225,7 @@ class FrmSolution {
 	 */
 	public function settings_page() {
 		$steps = $this->get_steps_data();
+
 		if ( ! $steps['license']['complete'] || ( isset( $steps['plugin'] ) && ! $steps['plugin']['complete'] ) ) {
 			// Redirect to the welcome page if install hasn't been done.
 			$url = $this->settings_link();
@@ -244,6 +246,7 @@ class FrmSolution {
 			$new_class            = $all_imported ? ' button frm_hidden' : '';
 			$step['button_class'] = str_replace( 'frm_grey disabled', $new_class, $step['button_class'] );
 		}
+
 		if ( $all_imported ) {
 			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
@@ -322,6 +325,7 @@ class FrmSolution {
 	protected function main_content() {
 		$steps = $this->get_steps_data();
 		$this->license_box( $steps['license'] );
+
 		if ( isset( $steps['plugin'] ) ) {
 			$this->show_plugin_install( $steps['plugin'] );
 		}
@@ -371,6 +375,7 @@ class FrmSolution {
 		$this->adjust_plugin_install_step( $steps );
 
 		$has_current = false;
+
 		foreach ( $steps as $k => $step ) {
 			// Set the current step.
 			if ( ! isset( $step['current'] ) ) {
@@ -387,6 +392,7 @@ class FrmSolution {
 			// Set disabled buttons.
 			$class  = $step['button_class'] ?? '';
 			$class .= ' button-primary frm-button-primary';
+
 			if ( ! $steps[ $k ]['current'] ) {
 				$class .= ' frm_grey disabled';
 			}
@@ -403,6 +409,7 @@ class FrmSolution {
 	 */
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
+
 		if ( empty( $plugins ) ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
@@ -412,11 +419,14 @@ class FrmSolution {
 
 		$missing = array();
 		$rel     = array();
+
 		foreach ( $plugins as $plugin_key ) {
 			$plugin = FrmAddonsController::install_link( $plugin_key );
+
 			if ( $plugin['status'] === 'active' ) {
 				continue;
 			}
+
 			if ( isset( $plugin['url'] ) ) {
 				$rel[] = $plugin['url'];
 			} else {
@@ -424,6 +434,7 @@ class FrmSolution {
 				$missing[] = $plugin_key;
 			}
 		}
+
 		if ( empty( $rel ) && empty( $missing ) ) {
 			$steps['plugin']['complete'] = true;
 		} elseif ( ! empty( $missing ) ) {
@@ -545,6 +556,7 @@ class FrmSolution {
 	 */
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
+
 		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
@@ -574,6 +586,7 @@ class FrmSolution {
 			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
 		} else {
 			$xml = $addons[ $id ]['beta']['package'];
+
 			if ( is_array( $xml ) ) {
 				$xml = reset( $xml );
 			}
@@ -649,6 +662,7 @@ class FrmSolution {
 
 		$imported = $this->previously_imported_forms();
 		$count    = count( $options );
+
 		foreach ( $options as $info ) {
 			// Count the number of options displayed for css.
 			if ( $count > 1 && ! isset( $info['img'] ) ) {
@@ -669,11 +683,13 @@ class FrmSolution {
 	 */
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
+
 		if ( empty( $pages ) ) {
 			return;
 		}
 
 		echo '<h3>Choose New Page Title</h3>';
+
 		foreach ( $pages as $page ) {
 			?>
 			<p>
@@ -728,6 +744,7 @@ class FrmSolution {
 	 */
 	protected function is_complete( $count = 1 ) {
 		$imported = $this->previously_imported_forms();
+
 		if ( $count === 'all' ) {
 			return count( $imported ) >= count( $this->form_options() );
 		}
@@ -742,8 +759,10 @@ class FrmSolution {
 	protected function previously_imported_forms() {
 		$imported = array();
 		$forms    = $this->form_options();
+
 		foreach ( $forms as $form ) {
 			$was_imported = isset( $form['form'] ) ? FrmForm::get_id_by_key( $form['form'] ) : false;
+
 			if ( $was_imported ) {
 				$imported[ $form['form'] ] = $was_imported;
 			}
