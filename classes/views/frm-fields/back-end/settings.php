@@ -106,8 +106,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique <?php echo esc_attr( $no_allow ); ?>"
-						<?php echo 'data-upgrade="' . esc_attr( $pro_is_installed ? '' : __( 'Unique fields', 'formidable' ) ) . '"'; ?>/>
+						<input <?php FrmAppHelper::array_to_html_params(self::get_unique_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
@@ -118,10 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>
-						class="<?php echo esc_attr( $no_allow ); ?>"
-						<?php echo 'data-upgrade="' . esc_attr( $pro_is_installed ? '' : __( 'Read only fields', 'formidable' ) ) . '"'; ?>
-						/>
+						<input <?php FrmAppHelper::array_to_html_params( self::get_read_only_element_atts( $field, $pro_is_installed, $no_allow ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
@@ -334,7 +330,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
-		if ( ! $pro_is_installed ) {
+		if ( ! empty( $show_upsell_for_autocomplete ) ) {
 			?>
 		<p class="frm6 frm_form_field frm_show_upgrade">
 			<label class="frm-h-stack-xs" id="for_field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" for="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>">
@@ -353,6 +349,10 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 				<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 			</select>
 		</p>
+			<?php
+		}//end if
+		if ( ! $pro_is_installed ) {
+			?>
 		<p class="frm6 frm_form_field frm_show_upgrade">
 			<label class="frm-h-stack-xs" id="for_field_options_admin_only_<?php echo absint( $field['id'] ); ?>" for="field_options_admin_only_<?php echo absint( $field['id'] ); ?>">
 				<span><?php esc_html_e( 'Visibility', 'formidable' ); ?></span>

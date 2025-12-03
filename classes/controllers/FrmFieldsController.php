@@ -371,19 +371,71 @@ class FrmFieldsController {
 		$no_allow         = ! $pro_is_installed ? 'frm_noallow' : '';
 
 		if ( ! $pro_is_installed ) {
-			$field_has_unique_option                = in_array(
+			$show_upsell_for_unique_value          = in_array(
 				$field['type'],
 				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
 				true
 			);
-			$show_upsell_for_unique_value           = $field_has_unique_option;
-			$field_has_read_only_option             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
-			$show_upsell_for_read_only              = $field_has_read_only_option;
-			$field_has_before_after_contents_option = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
-			$show_upsell_for_before_after_contents  = $field_has_before_after_contents_option;
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
+			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param bool   $pro_is_installed
+	 * @param string $no_allow
+	 *
+	 * @return array
+	 */
+	private static function get_unique_element_atts( $field, $pro_is_installed, $no_allow ) {
+		$unique_element_atts = array(
+			'type'  => 'checkbox',
+			'name'  => 'field_options[unique_' . esc_attr( $field['id'] ) . ']',
+			'id'    => 'frm_uniq_field_' . esc_attr( $field['id'] ),
+			'value' => '1',
+			'class' => 'frm_mark_unique ' . esc_attr( $no_allow ),
+		);
+		if ( ! empty( $field['unique'] ) ) {
+			$unique_element_atts['checked'] = true;
+		}
+		if ( ! $pro_is_installed ) {
+			$unique_element_atts['data-upgrade'] = esc_attr( __( 'Unique fields', 'formidable' ) );
+		}
+
+		return $unique_element_atts;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param bool   $pro_is_installed
+	 * @param string $no_allow
+	 *
+	 * @return array
+	 */
+	private static function get_read_only_element_atts( $field, $pro_is_installed, $no_allow ) {
+		$read_only_element_atts = array(
+			'type'  => 'checkbox',
+			'name'  => 'field_options[read_only_' . esc_attr( $field['id'] ) . ']',
+			'id'    => 'frm_read_only_field_' . esc_attr( $field['id'] ),
+			'value' => '1',
+			'class' => esc_attr( $no_allow ),
+		);
+		if ( ! empty( $field['read_only'] ) ) {
+			$read_only_element_atts['checked'] = true;
+		}
+		if ( ! $pro_is_installed ) {
+			$read_only_element_atts['data-upgrade'] = esc_attr( __( 'Unique fields', 'formidable' ) );
+		}
+
+		return $read_only_element_atts;
 	}
 
 	/**
