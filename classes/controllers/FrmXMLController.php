@@ -472,6 +472,13 @@ class FrmXMLController {
 
 		self::prepare_types_array( $type );
 
+		if ( ! is_array( $type ) ) {
+			// This shouldn't be possible.
+			// It is cast to array in prepare_types_array.
+			// This is just for static analysis.
+			return;
+		}
+
 		$tables = array(
 			'items'   => $wpdb->prefix . 'frm_items',
 			'forms'   => $wpdb->prefix . 'frm_forms',
