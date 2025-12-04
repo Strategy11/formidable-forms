@@ -1196,20 +1196,32 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Updates the aria-describedby attribute of input elements to remove the error element ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} el The error element.
+	 * @return {void}
+	 */
+	function updateInputElementsAriaDescribedBy( el ) {
+		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+			ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
+
+			if ( ariaDescribedBy.length ) {
+				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				return;
+			}
+			input.removeAttribute( 'aria-describedby' );
+		} );
+	}
+
 	function removeAllErrors() {
 		jQuery( '.form-field' ).removeClass( 'frm_blank_field has-error' );
 		jQuery( '.frm_error_style' ).remove();
 		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
-			document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
-				let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
-				ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
-
-				if ( ariaDescribedBy.length ) {
-					input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
-				} else {
-					input.removeAttribute( 'aria-describedby' );
-				}
-			} );
+			updateInputElementsAriaDescribedBy( el );
 			el.remove();
 		} );
 	}
