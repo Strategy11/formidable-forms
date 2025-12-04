@@ -40,22 +40,19 @@ function frmFrontFormJS() {
 		let nameParts, fieldId,
 			isRepeating = false,
 			fieldName = '';
+
 		if ( field instanceof jQuery ) {
-			fieldName = field.attr( 'name' );
-		} else {
-			fieldName = field.name;
+			field = field.get( 0 );
 		}
+
+		fieldName = field.name;
 
 		if ( typeof fieldName === 'undefined' ) {
 			fieldName = '';
 		}
 
 		if ( fieldName === '' ) {
-			if ( field instanceof jQuery ) {
-				fieldName = field.data( 'name' );
-			} else {
-				fieldName = field.getAttribute( 'data-name' );
-			}
+			fieldName = field.getAttribute( 'data-name' );
 
 			if ( typeof fieldName === 'undefined' ) {
 				fieldName = '';
