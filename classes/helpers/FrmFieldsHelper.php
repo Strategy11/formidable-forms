@@ -479,6 +479,14 @@ class FrmFieldsHelper {
 			),
 		);
 
+		/**
+		 * @since x.x
+		 *
+		 * @param array        $defaults
+		 * @param array|object $field
+		 */
+		$defaults = apply_filters( 'frm_default_field_validation_messages', $defaults, $field );
+
 		$msg = FrmField::get_option( $field, $error );
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
 		$msg = do_shortcode( $msg );
@@ -2796,5 +2804,92 @@ class FrmFieldsHelper {
 				'frm-mb-12',
 			)
 		);
+	}
+
+	/**
+	 * Checks if the field choice should be hidden due to choice limit being reached.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool       $choice_limit_is_reached
+	 * @param int|string $form_id
+	 *
+	 * @return bool
+	 */
+	public static function should_hide_field_choice( $choice_limit_is_reached, $form_id ) {
+		if ( ! $choice_limit_is_reached ) {
+			return false;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_hide_field_choice
+		 * @param int  $form_id
+		 *
+		 * @return bool
+		 */
+		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field_choices_limit_reached_statuses
+	 * @param array $field
+	 *
+	 * @return bool
+	 */
+	public static function should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool  $should_skip_rendering_options_for_field
+		 * @param array $field_choices_limit_reached_statuses
+		 * @param array $field
+		 */
+		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field_choices_limit_reached_statuses, $field );
+	}
+
+	/**
+	 * Determine if 'disabled' attribute should be echoed for a field choice.
+	 *
+	 * @since x.x
+	 *
+	 * @param bool $choice_limit_reached
+	 * @param bool $choice_selected
+	 *
+	 * @return bool
+	 */
+	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
+		/**
+		 * @since x.x
+		 *
+		 * @param bool $should_echo_disabled_attribute
+		 * @param bool $choice_limit_reached
+		 * @param bool $choice_selected
+		 */
+		return (bool) apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+	}
+
+	/**
+	 * Returns array that contains whether each field choice has reached its limit.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $field
+	 *
+	 * @return array
+	 */
+	public static function get_choices_limit_reached_statuses( $field ) {
+		$statuses = array_fill_keys( array_keys( $field['options'] ), false );
+
+		/**
+		 * @since x.x
+		 *
+		 * @param array $statuses
+		 * @param array $field
+		 */
+		return apply_filters( 'frm_choices_limit_reached_statuses', $statuses, $field );
 	}
 }
