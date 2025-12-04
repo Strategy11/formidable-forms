@@ -16,6 +16,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( is_array( $field['options'] ) ) {
 	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
+
 	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) ) {
 		return;
 	}
@@ -25,6 +26,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			continue;
 		}
 		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
+
 		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
 			continue;
 		}
@@ -65,6 +67,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<?php
 		do_action( 'frm_field_input_html', $field );
 		echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked ) ) {
 			echo 'disabled="disabled" ';
 		}

@@ -16,16 +16,19 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
 	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
+
 	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) ) {
 		return;
 	}
 
 	$option_index = 0;
+
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			continue;
 		}
 		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
+
 		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
 			continue;
 		}
