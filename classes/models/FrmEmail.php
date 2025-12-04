@@ -581,7 +581,7 @@ class FrmEmail {
 			$sent      = mail( $recipient, $subject, $this->message, $header );
 		}
 
-		do_action( 'frm_notification', $recipient, $subject, $this->message );
+		do_action( 'frm_notification', $recipient, $subject, $this->message, $this );
 
 		return $sent;
 	}
