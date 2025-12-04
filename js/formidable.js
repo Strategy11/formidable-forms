@@ -422,7 +422,8 @@ function frmFrontFormJS() {
 				return errors;
 			}
 
-			val = field.value;
+			val = jQuery( field ).val();
+
 			if ( val === null ) {
 				val = '';
 			} else if ( typeof val !== 'string' ) {
