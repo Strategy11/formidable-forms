@@ -67,6 +67,7 @@ class FrmPluginSearch {
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
 		$normalized_term = $this->search_to_array( $args->search );
+
 		if ( empty( $normalized_term ) ) {
 			// Don't add anything extra.
 			return $result;
@@ -207,6 +208,7 @@ class FrmPluginSearch {
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
+
 		if ( ! empty( $addon ) ) {
 			$this->add_to_dismissed_hints( $addon );
 		}

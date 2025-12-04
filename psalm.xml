@@ -14,7 +14,6 @@
 		<directory name="classes" />
 		<directory name="stripe" />
 		<directory name="square" />
-		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		</ignoreFiles>
@@ -87,7 +86,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</MissingParamType>
@@ -103,7 +101,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RiskyTruthyFalsyComparison>
@@ -112,7 +109,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</MissingReturnType>
 		<InvalidArgument>
@@ -179,7 +175,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</MissingPropertyType>
 		<TooManyArguments>
@@ -266,7 +261,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantConditionGivenDocblockType>
@@ -303,7 +297,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidPropertyFetch>
 		<InvalidStringClass>
@@ -371,11 +364,6 @@
 				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignment>
-		<PossiblyInvalidArgument>
-			<errorLevel type="suppress">
-				<directory name="deprecated" />
-			</errorLevel>
-		</PossiblyInvalidArgument>
 		<InvalidPropertyAssignmentValue>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -451,7 +439,6 @@
 		</DeprecatedMethod>
 		<DeprecatedFunction>
 			<errorLevel type="suppress">
-				<directory name="deprecated" />
 				<file name="classes/models/FrmEntryValidate.php" />
 			</errorLevel>
 		</DeprecatedFunction>
@@ -511,7 +498,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</ClassMustBeFinal>
 		<MissingOverrideAttribute>

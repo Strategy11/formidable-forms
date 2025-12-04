@@ -30,6 +30,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 */
 	public static function show_receipt_link( $subscription ) {
 		$link = esc_html( $subscription->sub_id );
+
 		if ( $subscription->sub_id !== 'None' ) {
 			/**
 			 * Filter a receipt link for a specific gateway.
@@ -96,9 +97,11 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
 		$sub_id = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+
 		if ( $sub_id ) {
 			$frm_sub = new FrmTransLiteSubscription();
 			$sub     = $frm_sub->get_one( $sub_id );
+
 			if ( $sub ) {
 				switch ( $sub->paysys ) {
 					case 'stripe':
@@ -160,6 +163,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 		$frm_sub       = new FrmTransLiteSubscription();
 		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
+
 		if ( empty( $subscriptions ) ) {
 			return;
 		}

@@ -56,6 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					 */
 					function ( $form ) use ( $styles, $default_style, $row_view_file_path ) {
 						$active_style_id = isset( $form->options['custom_style'] ) ? (int) $form->options['custom_style'] : 1;
+
 						if ( 1 === $active_style_id ) {
 							// use the default style
 							$active_style_id = $default_style->ID;

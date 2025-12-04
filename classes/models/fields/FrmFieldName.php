@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldName extends FrmFieldCombo {
 
 	/**
+	 * Track the first name field ID in forms.
+	 *
+	 * @var array Array with keys are form ID and values are name field IDs.
+	 */
+	private static $first_name_field_ids = array();
+
+	/**
 	 * Field name.
 	 *
 	 * @var string
@@ -86,6 +93,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 */
 	protected function get_name_layout() {
 		$name_layout = FrmField::get_option( $this->field, 'name_layout' );
+
 		if ( ! $name_layout ) {
 			$name_layout = 'first_last';
 		}
@@ -272,8 +280,10 @@ class FrmFieldName extends FrmFieldCombo {
 		$field = $args['field'];
 
 		$show_warning = false;
+
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
+
 			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {
 				$show_warning = true;
 				break;
@@ -292,5 +302,62 @@ class FrmFieldName extends FrmFieldCombo {
 			?>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Tracks the first name field ID in a form.
+	 *
+	 * @since x.x
+	 *
+	 * @param object[] $fields Array of fields in a form.
+	 *
+	 * @return void
+	 */
+	public static function track_first_name_field( $fields ) {
+		foreach ( $fields as $field ) {
+			if ( 'name' === $field->type ) {
+				self::$first_name_field_ids[ $field->form_id ] = $field->id;
+				return;
+			}
+		}
+	}
+
+	/**
+	 * Gets subfield input attributes.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $sub_field Subfield data.
+	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
+	 *
+	 * @return array
+	 */
+	protected function get_sub_field_input_attrs( $sub_field, $args ) {
+		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
+
+		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
+
+		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {
+			return $attrs;
+		}
+
+		$parent_form_id = (int) FrmField::get_option( $args['field'], 'parent_form_id' );
+
+		if ( $form_id !== $parent_form_id ) {
+			// Do not add autocomplete attribute to a name field inside repeater.
+			return $attrs;
+		}
+
+		$field_id = (int) ( is_array( $args['field'] ) ? $args['field']['id'] : $args['field']->id );
+
+		if ( intval( self::$first_name_field_ids[ $form_id ] ) === $field_id ) {
+			if ( 'first' === $sub_field['name'] ) {
+				$attrs['autocomplete'] = 'given-name';
+			} elseif ( 'last' === $sub_field['name'] ) {
+				$attrs['autocomplete'] = 'family-name';
+			}
+		}
+
+		return $attrs;
 	}
 }

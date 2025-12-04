@@ -98,6 +98,7 @@ class FrmSquareLiteEventsController {
 		}
 
 		$option = get_option( self::$events_to_skip_option_name );
+
 		if ( ! is_array( $option ) ) {
 			return false;
 		}
@@ -125,6 +126,7 @@ class FrmSquareLiteEventsController {
 	private function count_failed_event( $event_id ) {
 		$transient_name = 'frm_square_failed_event_' . $event_id;
 		$transient      = get_transient( $transient_name );
+
 		if ( is_int( $transient ) ) {
 			$failed_count = $transient + 1;
 		} else {
@@ -132,6 +134,7 @@ class FrmSquareLiteEventsController {
 		}
 
 		$maximum_retries = 3;
+
 		if ( $failed_count >= $maximum_retries ) {
 			$this->track_handled_event( $event_id );
 		} else {
@@ -245,6 +248,7 @@ class FrmSquareLiteEventsController {
 
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
+
 		if ( ! $sub ) {
 			return;
 		}
@@ -276,7 +280,6 @@ class FrmSquareLiteEventsController {
 				);
 			}
 		}
-
 
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(

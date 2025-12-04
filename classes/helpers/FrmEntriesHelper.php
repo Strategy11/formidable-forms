@@ -41,6 +41,7 @@ class FrmEntriesHelper {
 		);
 
 		$values['fields'] = array();
+
 		if ( empty( $fields ) ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
 		}
@@ -74,6 +75,7 @@ class FrmEntriesHelper {
 		}//end foreach
 
 		FrmAppHelper::unserialize_or_decode( $form->options );
+
 		if ( is_array( $form->options ) ) {
 			$values = array_merge( $values, $form->options );
 		}
@@ -146,8 +148,10 @@ class FrmEntriesHelper {
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;
+
 		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+
 			if ( $repeating ) {
 				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 					$value_is_posted = true;
@@ -197,6 +201,7 @@ class FrmEntriesHelper {
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
+
 			if ( ! empty( $add_atts ) ) {
 				$this_atts = array_merge( $atts, $add_atts );
 			} else {
@@ -225,6 +230,7 @@ class FrmEntriesHelper {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$empty = empty( $field_value );
 			FrmProEntriesHelper::get_dynamic_list_values( $field, $entry, $field_value );
+
 			if ( $empty && ! empty( $field_value ) ) {
 				// We've got an entry id, so switch it to a value.
 				$atts['force_id'] = true;
@@ -238,6 +244,7 @@ class FrmEntriesHelper {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			return '';
 		}
+
 		if ( is_callable( 'FrmProEntriesHelper::prepare_child_display_value' ) ) {
 			return FrmProEntriesHelper::prepare_child_display_value( $entry, $field, $atts );
 		}
@@ -277,9 +284,11 @@ class FrmEntriesHelper {
 		}
 
 		$sep = ', ';
+
 		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
 			$sep = '<br/>';
 		}
+
 		$val = implode( $sep, $field_value );
 
 		return FrmAppHelper::kses( $val, 'all' );
@@ -376,6 +385,7 @@ class FrmEntriesHelper {
 		if ( ! empty( $args['other'] ) ) {
 			$value = $args['temp_value'];
 		}
+
 		if ( empty( $args['parent_field_id'] ) ) {
 			$_POST['item_meta'][ $field->id ] = $value;
 		} else {
@@ -472,6 +482,7 @@ class FrmEntriesHelper {
 	 */
 	public static function maybe_set_other_validation( $field, &$value, &$args ) {
 		$args['other'] = false;
+
 		if ( ! $value || ! FrmAppHelper::pro_is_installed() ) {
 			return;
 		}
@@ -584,6 +595,7 @@ class FrmEntriesHelper {
 
 					$args['temp_value']  = $value;
 					$value[ $other_key ] = reset( $other_vals );
+
 					if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
 						unset( $value[ $other_key ] );
 					}
@@ -603,6 +615,7 @@ class FrmEntriesHelper {
 	 */
 	public static function entry_array_to_string( $values ) {
 		$content = '';
+
 		foreach ( $values['item_meta'] as $val ) {
 			if ( $content !== '' ) {
 				$content .= "\n\n";
@@ -718,9 +731,11 @@ class FrmEntriesHelper {
 						echo 'data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '" ';
 					}
 				}
+
 				if ( isset( $link['class'] ) ) {
 					echo 'class="' . esc_attr( $link['class'] ) . '" ';
 				}
+
 				if ( isset( $link['id'] ) ) {
 					echo 'id="' . esc_attr( $link['id'] ) . '" ';
 				}
@@ -830,6 +845,7 @@ class FrmEntriesHelper {
 		);
 
 		$upgrading = FrmAddonsController::install_link( 'pdfs' );
+
 		if ( isset( $upgrading['url'] ) ) {
 			$data['oneclick'] = json_encode( $upgrading );
 		} else {
@@ -852,6 +868,7 @@ class FrmEntriesHelper {
 			'field_id' => 0,
 		);
 		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
+
 		foreach ( $metas_without_a_field as $meta ) {
 			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
 				echo '<div class="misc-pub-section">';
@@ -948,6 +965,7 @@ class FrmEntriesHelper {
 	 */
 	public static function get_visible_unread_inbox_count() {
 		$menu_name = FrmAppHelper::get_menu_name();
+
 		if ( ! in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
 			return 0;
 		}
@@ -961,6 +979,7 @@ class FrmEntriesHelper {
 
 		if ( is_callable( 'FrmProSettingsController::inbox_badge' ) ) {
 			$inbox_count = FrmProSettingsController::inbox_badge( $inbox_count );
+
 			if ( ! $inbox_count ) {
 				return 0;
 			}

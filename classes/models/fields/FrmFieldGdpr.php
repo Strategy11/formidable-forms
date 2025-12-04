@@ -103,6 +103,7 @@ class FrmFieldGdpr extends FrmFieldType {
 		if ( FrmFieldGdprHelper::hide_gdpr_field() ) {
 			return;
 		}
+
 		$field = $args['field'];
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/gdpr/primary-options.php';
 	}

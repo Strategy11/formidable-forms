@@ -11,6 +11,7 @@ $utm          = array(
 	'campaign' => 'admin-footer-link',
 	'content'  => 'footer-link-upgrade',
 );
+
 if ( $upgrade_link ) {
 	$upgrade_link = FrmAppHelper::maybe_add_missing_utm( $upgrade_link, $utm );
 } else {
@@ -46,6 +47,7 @@ if ( $upgrade_link ) {
 		<?php if ( 'elite' !== FrmAddonsController::license_type() ) : ?>
 			<?php
 			$cta_text = FrmSalesApi::get_best_sale_value( 'footer_cta_text' );
+
 			if ( ! $cta_text ) {
 				$cta_text = __( 'Upgrade', 'formidable' );
 			}

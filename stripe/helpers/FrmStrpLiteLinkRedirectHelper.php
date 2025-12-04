@@ -97,11 +97,14 @@ class FrmStrpLiteLinkRedirectHelper {
 
 		// $redirect may not include the whole link to the form, breaking the redirect as iDEAL/Sofort have an additional redirect.
 		$referer_url = $this->get_referer_url( $entry->id );
+
 		if ( is_string( $referer_url ) ) {
 			$parts = explode( '?', $redirect, 2 );
+
 			if ( 2 === count( $parts ) ) {
 				$redirect = $parts[1];
 			}
+
 			$redirect = $referer_url . '?' . $redirect;
 		}
 
@@ -126,6 +129,7 @@ class FrmStrpLiteLinkRedirectHelper {
 
 		$home_url = home_url();
 		$parsed   = parse_url( $home_url );
+
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
@@ -150,6 +154,7 @@ class FrmStrpLiteLinkRedirectHelper {
 			),
 			'id, meta_value'
 		);
+
 		if ( ! $row ) {
 			return false;
 		}

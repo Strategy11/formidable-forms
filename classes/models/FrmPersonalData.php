@@ -71,6 +71,7 @@ class FrmPersonalData {
 		);
 
 		$entries = $this->get_user_entries( $email );
+
 		if ( empty( $entries ) ) {
 			return $data_to_export;
 		}
@@ -109,6 +110,7 @@ class FrmPersonalData {
 
 		$this->page = absint( $page );
 		$entries    = $this->get_user_entries( $email );
+
 		if ( empty( $entries ) ) {
 			return $data_removed;
 		}
@@ -181,6 +183,7 @@ class FrmPersonalData {
 		$entry = FrmEntry::getOne( $entry, true );
 
 		$entry_data = array();
+
 		foreach ( $entry->metas as $field_id => $meta ) {
 			$field = FrmField::getOne( $field_id );
 

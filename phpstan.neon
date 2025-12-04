@@ -13,8 +13,8 @@ parameters:
 		- */js/*
 		- */vendor/*
 		- */fonts/*
-		- */deprecated/*
 		- */rector.php
+		- */phpcs-sniffs/*
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false

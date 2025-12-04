@@ -44,6 +44,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 	private function create_post_entry( $form, $entry_key ) {
 		$exists = FrmEntry::get_id_by_key( $entry_key );
+
 		if ( $exists ) {
 			FrmEntry::destroy( $exists );
 		}

@@ -243,6 +243,7 @@ class FrmFieldsHelper {
 			}
 
 			$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+
 			if ( 'frm_forms_preview' === $action ) {
 				// Never trigger when previewing.
 				return false;
@@ -255,6 +256,7 @@ class FrmFieldsHelper {
 			}
 
 			$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
+
 			if ( 'update_settings' === $action ) {
 				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
 				return wp_verify_nonce( $nonce, 'process_form_nonce' );
@@ -388,6 +390,7 @@ class FrmFieldsHelper {
 	 */
 	private static function get_original_field( $field ) {
 		$original_type = FrmField::get_option( $field, 'original_type' );
+
 		if ( ! empty( $original_type ) && $field->type != $original_type ) {
 			$field->type = $original_type;
 		}
@@ -536,6 +539,7 @@ class FrmFieldsHelper {
 	 */
 	private static function get_substrings_to_replace_with_field_name( $field_name, $filter_args ) {
 		$substrings = array( '[field_name]' );
+
 		if ( $field_name ) {
 			array_push( $substrings, 'This value', 'This field' );
 		}
@@ -565,6 +569,8 @@ class FrmFieldsHelper {
 	 */
 	public static function get_form_fields( $form_id, $error = array() ) {
 		$fields = FrmField::get_all_for_form( $form_id );
+
+		FrmFieldName::track_first_name_field( $fields );
 
 		return apply_filters( 'frm_get_paged_fields', $fields, $form_id, $error );
 	}
@@ -611,10 +617,12 @@ class FrmFieldsHelper {
 	 */
 	public static function run_wpautop( $atts, &$value ) {
 		$autop = $atts['wpautop'] ?? true;
+
 		if ( apply_filters( 'frm_use_wpautop', $autop ) ) {
 			if ( is_array( $value ) ) {
 				$value = implode( "\n", $value );
 			}
+
 			$value = wpautop( $value );
 		}
 	}
@@ -640,6 +648,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = FrmStylesController::get_style_val( 'position', $form );
+
 		if ( $position === 'none' ) {
 			$position = 'top';
 		} elseif ( $position === 'no_label' ) {
@@ -676,6 +685,7 @@ class FrmFieldsHelper {
 	 */
 	public static function get_checkbox_id( $field, $opt_key, $type = 'checkbox' ) {
 		$id = $field['id'];
+
 		if ( isset( $field['in_section'] ) && $field['in_section'] && ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
 			$id .= '-' . $field['in_section'];
 		}
@@ -734,6 +744,7 @@ class FrmFieldsHelper {
 	private static function hidden_field_option( $field ) {
 		// Don't duplicate during an ajax add option.
 		$ajax_action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
+
 		if ( $ajax_action === 'frm_add_field_option' ) {
 			return;
 		}
@@ -760,6 +771,7 @@ class FrmFieldsHelper {
 	 */
 	private static function get_default_value_type( $field ) {
 		$default_type = $field['type'];
+
 		if ( $field['type'] === 'select' ) {
 			$default_type = FrmField::is_multiple_select( $field ) ? 'checkbox' : 'radio';
 		}
@@ -825,6 +837,7 @@ class FrmFieldsHelper {
 	 */
 	public static function smart_values() {
 		$continue = apply_filters( 'frm_smart_values_box', true );
+
 		if ( $continue === true ) {
 			$upgrade_link = array(
 				'medium'  => 'builder',
@@ -859,6 +872,7 @@ class FrmFieldsHelper {
 	 */
 	public static function get_term_link( $tax_id ) {
 		$tax = get_taxonomy( $tax_id );
+
 		if ( ! $tax ) {
 			return '';
 		}
@@ -892,6 +906,7 @@ class FrmFieldsHelper {
 		}
 
 		$m = false;
+
 		if ( $cond === '==' ) {
 			$m = $observed_value == $hide_opt;
 		} elseif ( $cond === '!=' ) {
@@ -906,6 +921,7 @@ class FrmFieldsHelper {
 			$m = $observed_value <= $hide_opt;
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
+
 			if ( $cond === 'not LIKE' ) {
 				$m = $m === false;
 			} else {
@@ -955,6 +971,7 @@ class FrmFieldsHelper {
 	 */
 	public static function array_value_condition( $observed_value, $cond, $hide_opt ) {
 		$m = false;
+
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
@@ -973,6 +990,7 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			foreach ( $observed_value as $ob ) {
 				$m = strpos( $ob, $hide_opt );
+
 				if ( $m !== false ) {
 					$m = true;
 					break;
@@ -1126,11 +1144,13 @@ class FrmFieldsHelper {
 	private static function trigger_shortcode_atts( $replace_with, $atts ) {
 		$supported_atts = array( 'remove_accents', 'sanitize', 'sanitize_url' );
 		$included_atts  = array_intersect( $supported_atts, array_keys( $atts ) );
+
 		foreach ( $included_atts as $included_att ) {
 			if ( '0' === $atts[ $included_att ] ) {
 				// Skip any option that uses 0 so sanitize_url=0 does not encode.
 				continue;
 			}
+
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with, $atts );
 		}
@@ -1185,6 +1205,7 @@ class FrmFieldsHelper {
 
 		$atts['value']   = $value;
 		$should_sanitize = apply_filters( 'frm_sanitize_shortcodes', true, $atts );
+
 		if ( $should_sanitize ) {
 			$value = str_replace( '[', '&#91;', $value );
 		}
@@ -1254,6 +1275,7 @@ class FrmFieldsHelper {
 	 */
 	private static function get_field_shortcode_value( $atts ) {
 		$field = FrmField::getOne( $atts['tag'] );
+
 		if ( empty( $field ) ) {
 			return null;
 		}
@@ -1265,6 +1287,7 @@ class FrmFieldsHelper {
 		} else {
 			$replace_with = FrmEntryMeta::get_meta_value( $atts['entry'], $field->id );
 			$string_value = $replace_with;
+
 			if ( is_array( $replace_with ) ) {
 				$sep          = $atts['sep'] ?? ', ';
 				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
@@ -1277,7 +1300,7 @@ class FrmFieldsHelper {
 				$atts['entry_key'] = $atts['entry']->item_key;
 				$replace_with      = self::get_display_value( $replace_with, $field, $atts );
 			}
-		}
+		}//end if
 
 		return $replace_with;
 	}
@@ -1591,9 +1614,11 @@ class FrmFieldsHelper {
 			 */
 			foreach ( $field['options'] as $opt_val ) {
 				$temp_val = is_array( $opt_val ) ? $opt_val['value'] : $opt_val;
+
 				// Multi-select dropdowns - key is not preserved
 				if ( is_array( $field['value'] ) ) {
 					$o_key = array_search( $temp_val, $field['value'] );
+
 					if ( isset( $field['value'][ $o_key ] ) ) {
 						unset( $field['value'][ $o_key ], $o_key );
 					}
@@ -1605,6 +1630,7 @@ class FrmFieldsHelper {
 				}
 				unset( $opt_val, $temp_val );
 			}
+
 			// For multi-select dropdowns only
 			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
 				$other_val = reset( $field['value'] );
@@ -1729,10 +1755,12 @@ class FrmFieldsHelper {
 		}
 
 		$classes = array( 'frm_other_input' );
+
 		if ( ! $args['checked'] || trim( $args['checked'] ) === '' ) {
 			// hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
+
 		if ( $args['field']['type'] === 'select' && ! empty( $args['field']['multiple'] ) ) {
 			$classes[] = 'frm_other_full';
 		}
@@ -1788,6 +1816,7 @@ class FrmFieldsHelper {
 		global $frm_duplicate_ids;
 		$replace      = array();
 		$replace_with = array();
+
 		foreach ( (array) $frm_duplicate_ids as $old => $new ) {
 			$replace[]      = '[if ' . $old . ']';
 			$replace_with[] = '[if ' . $new . ']';
@@ -1816,6 +1845,7 @@ class FrmFieldsHelper {
 			$replace_with[] = '_field":"' . $new . '","';
 			unset( $old, $new );
 		}//end foreach
+
 		if ( is_array( $val ) ) {
 			foreach ( $val as $k => $v ) {
 				if ( is_string( $v ) ) {
@@ -1850,12 +1880,14 @@ class FrmFieldsHelper {
 	private static function switch_ids_except_strings( $replace, $replace_with, $exceptions, $value ) {
 		foreach ( $exceptions as $exception ) {
 			$index = array_search( $exception, $replace, true );
+
 			if ( false === $index ) {
 				continue;
 			}
 			unset( $replace[ $index ] );
 			unset( $replace_with[ $index ] );
 		}
+
 		$value = str_replace( $replace, $replace_with, $value );
 		return $value;
 	}
@@ -2208,6 +2240,7 @@ class FrmFieldsHelper {
 	public static function get_bulk_prefilled_opts( array &$prepop, $include_class = false ) {
 		// Countries.
 		$countries = self::get_countries();
+
 		if ( $include_class ) {
 			$countries['class'] = 'frm-countries-opts';
 		}
@@ -2218,6 +2251,7 @@ class FrmFieldsHelper {
 		$states    = self::get_us_states();
 		$state_abv = array_keys( $states );
 		sort( $state_abv );
+
 		if ( $include_class ) {
 			$state_abv['class'] = 'frm-state-abv-opts';
 		}
@@ -2227,6 +2261,7 @@ class FrmFieldsHelper {
 		// States.
 		$states = array_values( $states );
 		sort( $states );
+
 		if ( $include_class ) {
 			$states['class'] = 'frm-states-opts';
 		}
@@ -2245,6 +2280,7 @@ class FrmFieldsHelper {
 			__( '65 or Above', 'formidable' ),
 			__( 'Prefer Not to Answer', 'formidable' ),
 		);
+
 		if ( $include_class ) {
 			$ages['class'] = 'frm-age-opts';
 		}
@@ -2260,6 +2296,7 @@ class FrmFieldsHelper {
 			__( 'Very Satisfied', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+
 		if ( $include_class ) {
 			$satisfaction['class'] = 'frm-satisfaction-opts';
 		}
@@ -2275,6 +2312,7 @@ class FrmFieldsHelper {
 			__( 'Very Important', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+
 		if ( $include_class ) {
 			$importance['class'] = 'frm-importance-opts';
 		}
@@ -2290,6 +2328,7 @@ class FrmFieldsHelper {
 			__( 'Strongly Agree', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+
 		if ( $include_class ) {
 			$agreement['class'] = 'frm-agreement-opts';
 		}
@@ -2305,6 +2344,7 @@ class FrmFieldsHelper {
 			__( 'Extremely Likely', 'formidable' ),
 			__( 'N/A', 'formidable' ),
 		);
+
 		if ( $include_class ) {
 			$likely['class'] = 'frm-likely-opts';
 		}
@@ -2379,11 +2419,14 @@ class FrmFieldsHelper {
 			$single_no_allow   .= 'frm_show_upgrade';
 			$field_type['icon'] = str_replace( ' frm_show_upgrade', '', $field_type['icon'] );
 			$run_filter         = false;
+
 			if ( isset( $field_type['addon'] ) ) {
 				$upgrading = FrmAddonsController::install_link( $field_type['addon'] );
+
 				if ( isset( $upgrading['url'] ) ) {
 					$install_data = json_encode( $upgrading );
 				}
+
 				$requires = FrmFormsHelper::get_plan_required( $upgrading );
 			} elseif ( isset( $field_type['require'] ) ) {
 				$requires = $field_type['require'];
@@ -2392,6 +2435,7 @@ class FrmFieldsHelper {
 
 		$upgrade_label   = '';
 		$upgrade_message = '';
+
 		if ( $show_upgrade ) {
 			/* translators: %s: Field name */
 			$upgrade_label = sprintf( esc_html__( '%s fields', 'formidable' ), $field_name );
@@ -2563,6 +2607,7 @@ class FrmFieldsHelper {
 
 			unset( $args['options'][ $key ]['addon'] );
 			$fill = array( 'upgrade', 'message', 'content' );
+
 			foreach ( $fill as $f ) {
 				unset( $args['options'][ $key ][ $f ], $f );
 			}
@@ -2586,6 +2631,7 @@ class FrmFieldsHelper {
 		$custom_attrs['data-upgrade'] = sprintf( __( 'Formidable %s', 'formidable' ), ucwords( $option['addon'] ) );
 
 		$fill = array( 'upgrade', 'message', 'content' );
+
 		foreach ( $fill as $f ) {
 			if ( isset( $option[ $f ] ) ) {
 				$custom_attrs[ 'data-' . $f ] = $option[ $f ];
@@ -2597,6 +2643,7 @@ class FrmFieldsHelper {
 		}
 
 		$upgrading = FrmAddonsController::install_link( $option['addon'] );
+
 		if ( isset( $upgrading['url'] ) ) {
 			$install_data = wp_json_encode( $upgrading );
 		} else {
@@ -2721,6 +2768,7 @@ class FrmFieldsHelper {
 
 		if ( empty( $attributes['data-fid'] ) ) {
 			unset( $data['plugin-status'] );
+
 			foreach ( $data as $key => $value ) {
 				$attributes[ 'data-' . $key ] = $value;
 			}

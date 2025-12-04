@@ -28,6 +28,7 @@ class FrmUsageController {
 	 */
 	public static function schedule_send() {
 		$timestamp = wp_next_scheduled( 'formidable_send_usage' );
+
 		if ( ! self::tracking_allowed() ) {
 			if ( $timestamp ) {
 				// Remove the scheduled event if it's not allowed and it's scheduled.
