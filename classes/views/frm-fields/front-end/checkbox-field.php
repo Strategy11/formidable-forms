@@ -61,6 +61,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key', 'field_val' ), $other_opt, $checked );
 
+		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, ! empty( $checked ) );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
@@ -69,9 +70,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 				'for' => $html_id . '-' . $opt_key,
 			);
 
-			if ( $read_only ) {
+			if ( $read_only || $should_echo_disabled_att ) {
 				$label_attributes['class'] = 'frm-label-disabled';
 			}
+
 			?>
 			<label <?php FrmAppHelper::array_to_html_params( $label_attributes, true ); ?>>
 			<?php
@@ -82,7 +84,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, ! empty( $checked ) ) ) {
+		if ( $should_echo_disabled_att ) {
 			echo 'disabled="disabled" data-max-reached="1" ';
 		}
 

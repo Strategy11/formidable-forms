@@ -820,6 +820,11 @@ a.frm_save_draft{
 	margin-right: 4px;
 }
 
+.with_frm_style .frm_checkbox label.frm-label-disabled,
+.with_frm_style .frm_radio label.frm-label-disabled {
+	opacity: 0.5;
+}
+
 .with_frm_style .frm_checkbox label:not(.frm-label-disabled),
 .with_frm_style .frm_radio label:not(.frm-label-disabled) {
 	cursor: pointer;

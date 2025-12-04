@@ -47,20 +47,21 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
+		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
+
+		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked );
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
 
-			if ( $read_only ) {
+			if ( $read_only || $should_echo_disabled_att ) {
 				$label_attributes['class'] = 'frm-label-disabled';
 			}
 			?>
 			<label <?php FrmAppHelper::array_to_html_params( $label_attributes, true ); ?>>
 			<?php
 		}
-
-		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 
 		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );
@@ -70,7 +71,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 		echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 
-		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked ) ) {
+		if ( $should_echo_disabled_att ) {
 			echo 'disabled="disabled" ';
 		}
 		?>/><?php
