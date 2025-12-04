@@ -2787,7 +2787,7 @@ class FrmFieldsHelper {
 		 * @param bool $choice_limit_reached
 		 * @param bool $choice_selected
 		 */
-		return apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+		return (bool) apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
 	}
 
 	/**
