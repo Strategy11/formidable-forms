@@ -162,6 +162,7 @@ class FrmEntryValidate {
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
 		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+
 		if ( $should_trim ) {
 			$value = reset( $value );
 		}
@@ -245,6 +246,7 @@ class FrmEntryValidate {
 		}
 
 		$field_object = FrmFieldFactory::get_field_type( $field->type, $field );
+
 		if ( ! $field_object->field_type_has_options_settings() ) {
 			return true;
 		}
@@ -281,22 +283,26 @@ class FrmEntryValidate {
 				}
 
 				$match = trim( $current_value ) === trim( $option_value );
+
 				if ( $match ) {
 					break;
 				}
 
 				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
+
 				if ( $match ) {
 					break;
 				}
 
 				$match = self::is_filtered_match( $current_value, $option_value );
+
 				if ( $match ) {
 					break;
 				}
 
 				if ( is_numeric( $current_value ) ) {
 					$match = (int) $current_value === (int) $option_value;
+
 					if ( $match ) {
 						break;
 					}
@@ -326,10 +332,13 @@ class FrmEntryValidate {
 	private static function is_filtered_match( $value, $option_value ) {
 		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
 		$filter_priority = has_filter( 'the_content', 'wpautop' );
+
 		if ( is_numeric( $filter_priority ) ) {
 			remove_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		$filtered_option = apply_filters( 'the_content', $option_value );
+
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
@@ -359,6 +368,7 @@ class FrmEntryValidate {
 			} else {
 				$option_value = $option;
 			}
+
 			$option_value = do_shortcode( $option_value );
 			return $option_value;
 		};
@@ -381,6 +391,7 @@ class FrmEntryValidate {
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
 		$item_name = false;
+
 		if ( 'name' === $field->type ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 			$item_name = $field_obj->get_display_value( $value );
@@ -404,6 +415,7 @@ class FrmEntryValidate {
 	 */
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
 		$position = FrmField::get_option( $field, 'label' );
+
 		if ( ! $position ) {
 			$position = FrmStylesController::get_style_val( 'position', $field->form_id );
 		}
@@ -427,6 +439,7 @@ class FrmEntryValidate {
 		$args['errors'] = $errors;
 
 		$new_errors = $field_obj->validate( $args );
+
 		if ( ! empty( $new_errors ) ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
@@ -513,6 +526,7 @@ class FrmEntryValidate {
 		if ( strpos( $pattern, '\?' ) !== false ) {
 			$parts   = explode( '\?', $pattern );
 			$pattern = '';
+
 			foreach ( $parts as $part ) {
 				if ( empty( $pattern ) ) {
 					$pattern .= $part;
@@ -521,6 +535,7 @@ class FrmEntryValidate {
 				}
 			}
 		}
+
 		$pattern = '^' . $pattern . '$';
 
 		return $pattern;
@@ -548,12 +563,14 @@ class FrmEntryValidate {
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
 		} else {
 			$is_spam = FrmAntiSpamController::is_spam( $values );
+
 			if ( $is_spam ) {
 				$errors['spam'] = $is_spam;
 			}
@@ -811,8 +828,10 @@ class FrmEntryValidate {
 			}
 
 			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
+
 				if ( $found ) {
 					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
@@ -852,6 +871,7 @@ class FrmEntryValidate {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
 				}
+
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 				$fields  = self::get_name_text_fields( $form_id );
 
@@ -859,10 +879,12 @@ class FrmEntryValidate {
 					if ( 'Name' !== $field->name ) {
 						continue;
 					}
+
 					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
 						if ( empty( $values[ absint( $fields[ $index + 1 ]->id ) ] ) ) {
 							continue;
 						}
+
 						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 						return true;
 					}
@@ -883,9 +905,11 @@ class FrmEntryValidate {
 	 */
 	private static function get_name_text_fields( $form_id ) {
 		$name_text_fields_is_initialized = is_array( self::$name_text_fields );
+
 		if ( $name_text_fields_is_initialized && isset( self::$name_text_fields[ $form_id ] ) ) {
 			return self::$name_text_fields[ $form_id ];
 		}
+
 		if ( ! $name_text_fields_is_initialized ) {
 			self::$name_text_fields = array();
 		}
@@ -956,6 +980,7 @@ class FrmEntryValidate {
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
 		$skipped_fields = self::get_akismet_skipped_field_ids( $values );
+
 		foreach ( $skipped_fields as $skipped_field ) {
 			if ( ! isset( $values['item_meta'][ $skipped_field->id ] ) ) {
 				continue;
@@ -963,6 +988,7 @@ class FrmEntryValidate {
 
 			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
 				unset( $values['item_meta'][ $skipped_field->id ] );
+
 				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
 					unset( $values['item_meta']['other'][ $skipped_field->id ] );
 				}
@@ -987,6 +1013,7 @@ class FrmEntryValidate {
 		}
 
 		FrmAppHelper::unserialize_or_decode( $field_data->options );
+
 		if ( ! $field_data->options ) {
 			// Check if an error happens when unserializing, or empty options.
 			return true;
@@ -1008,6 +1035,7 @@ class FrmEntryValidate {
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
 			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
 			}
@@ -1076,6 +1104,7 @@ class FrmEntryValidate {
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
+
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) {
 				// Maybe `other`.

@@ -179,6 +179,7 @@ class FrmAddonsHelper {
 		);
 
 		$icon = array_key_exists( $slug, $icons_map ) ? 'frm_' . $icons_map[ $slug ] . '_icon' : 'frm_logo_icon';
+
 		if ( 'ai' === $slug ) {
 			$icon = str_replace( '_', '-', $icon );
 		}

@@ -19,6 +19,7 @@ class FrmTransLiteCRUDController {
 	public static function show( $id = 0 ) {
 		if ( ! $id ) {
 			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+
 			if ( ! $id ) {
 				wp_die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 			}

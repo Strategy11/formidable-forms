@@ -90,6 +90,7 @@ class FrmTipsHelper {
 		}
 
 		$cta_link = FrmSalesApi::get_best_sale_value( 'pro_tip_cta_link' );
+
 		if ( $cta_link ) {
 			if ( is_array( $tip['link'] ) ) {
 				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
@@ -109,6 +110,7 @@ class FrmTipsHelper {
 	 */
 	private static function cta_label() {
 		$cta_text = FrmSalesApi::get_best_sale_value( 'pro_tip_cta_text' );
+
 		if ( $cta_text ) {
 			return $cta_text;
 		}
@@ -399,6 +401,7 @@ class FrmTipsHelper {
 	 */
 	public static function get_random_tip( $tips ) {
 		$count = count( $tips );
+
 		if ( $count === 0 ) {
 			return array();
 		}

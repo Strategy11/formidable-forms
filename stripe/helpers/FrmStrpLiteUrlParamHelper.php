@@ -88,6 +88,7 @@ class FrmStrpLiteUrlParamHelper {
 		}
 
 		$entry = FrmEntry::getOne( $payment->item_id, true );
+
 		if ( ! is_object( $entry ) || (int) $entry->form_id !== $form_id ) {
 			return;
 		}

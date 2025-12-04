@@ -64,6 +64,7 @@ class FrmStrpLiteSubscriptionHelper {
 				(int) $atts['entry']->form_id,
 				(int) $atts['entry']->id
 			);
+
 			if ( is_int( $end_count ) ) {
 				$new_values['end_count'] = $end_count;
 			}
@@ -103,6 +104,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 */
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
+
 		if ( ! $plan_id ) {
 			// The amount has already been formatted, so add the decimal back in.
 			$amount                         = $action->post_content['amount'];
@@ -237,6 +239,7 @@ class FrmStrpLiteSubscriptionHelper {
 				'entry' => $entry_id,
 			)
 		);
+
 		if ( ! is_numeric( $payment_limit ) ) {
 			return self::get_invalid_payment_limit_error( $payment_limit );
 		}

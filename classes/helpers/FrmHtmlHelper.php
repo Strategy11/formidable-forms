@@ -93,6 +93,7 @@ class FrmHtmlHelper {
 			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')?$/';
 			preg_match( $pattern, $value, $matches );
 			$selected_unit = $matches[2] ?? '';
+
 			if ( ! empty( $matches[1] ) ) {
 				$value = $matches[1];
 			}
@@ -108,6 +109,7 @@ class FrmHtmlHelper {
 		);
 
 		$hidden_value = $args['value'];
+
 		if ( is_numeric( $hidden_value ) ) {
 			$hidden_value .= $args['default_unit'];
 		}

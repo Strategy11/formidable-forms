@@ -71,6 +71,7 @@ class FrmEntryMeta {
 		if ( is_array( $values['meta_value'] ) ) {
 			$values['meta_value'] = array_filter( $values['meta_value'], 'FrmAppHelper::is_not_empty_value' );
 		}
+
 		$meta_value = maybe_serialize( $values['meta_value'] );
 
 		wp_cache_delete( $entry_id, 'frm_entry' );
@@ -88,6 +89,7 @@ class FrmEntryMeta {
 	 */
 	private static function set_value_before_save( &$values ) {
 		$field = FrmField::getOne( $values['field_id'] );
+
 		if ( $field ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 
@@ -137,6 +139,7 @@ class FrmEntryMeta {
 		);
 
 		$values_indexed_by_field_id = array();
+
 		foreach ( $values as $field_id_or_key => $meta_value ) {
 			$field_id = $field_id_or_key;
 			$field    = null;
@@ -207,6 +210,7 @@ class FrmEntryMeta {
 		 * @param array $metas The list of entry meta values.
 		 */
 		$metas = apply_filters( 'frm_before_duplicate_entry_values', $metas );
+
 		foreach ( $metas as $meta ) {
 			self::add_entry_meta( $new_id, $meta->field_id, '', $meta->meta_value );
 			unset( $meta );
@@ -281,6 +285,7 @@ class FrmEntryMeta {
 
 		$get_table = $wpdb->prefix . 'frm_item_metas';
 		$query     = array( 'item_id' => $entry_id );
+
 		if ( is_numeric( $field_id ) ) {
 			// Query by field ID.
 			$query['field_id'] = $field_id;
@@ -387,7 +392,7 @@ class FrmEntryMeta {
 	 * @param string $limit
 	 * @param bool   $stripslashes
 	 *
-	 * @return array
+	 * @return mixed
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
@@ -467,15 +472,19 @@ class FrmEntryMeta {
 			if ( preg_match( '/\bfi\.(?!form_id)\w+/i', $where ) ) {
 				return true;
 			}
+
 			$where = str_ireplace( 'fi.form_id', 'e.form_id', $where );
 			return false;
 		}
+
 		$where_fields = array_keys( $where );
+
 		foreach ( $where_fields as $where_field ) {
 			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
 				return true;
 			}
 		}
+
 		if ( isset( $where['fi.form_id'] ) ) {
 			$where['e.form_id'] = $where['fi.form_id'];
 			unset( $where['fi.form_id'] );
@@ -518,12 +527,14 @@ class FrmEntryMeta {
 
 		$should_join_fields_table__where    = self::should_join_fields_table( $where );
 		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
+
 		if ( $should_join_fields_table__where || $should_join_fields_table__order_by ) {
 			$from .= ' LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id';
 		}
 
 		$query[] = $from;
 		$query[] = 'INNER JOIN ' . $wpdb->prefix . 'frm_items e ON (e.id=it.item_id)';
+
 		if ( is_array( $where ) ) {
 			if ( ! $args['is_draft'] ) {
 				$where['e.is_draft'] = 0;
@@ -546,6 +557,7 @@ class FrmEntryMeta {
 					},
 					array()
 				);
+
 				if ( $is_draft ) {
 					$where['e.is_draft'] = $is_draft;
 				}
@@ -565,6 +577,7 @@ class FrmEntryMeta {
 
 		$draft_where = '';
 		$user_where  = '';
+
 		if ( ! $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
 		} elseif ( $args['is_draft'] == 1 ) {
@@ -599,13 +612,16 @@ class FrmEntryMeta {
 	public static function search_entry_metas( $search, $field_id, $operator ) {
 		$cache_key = 'search_' . FrmAppHelper::maybe_json_encode( $search ) . $field_id . $operator;
 		$results   = wp_cache_get( $cache_key, 'frm_entry' );
+
 		if ( false !== $results ) {
 			return $results;
 		}
 
 		global $wpdb;
+
 		if ( is_array( $search ) ) {
 			$where = '';
+
 			foreach ( $search as $field => $value ) {
 				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ) ) ) {
 					continue;
@@ -621,14 +637,17 @@ class FrmEntryMeta {
 					case 'day':
 						$value = '%' . $value . '%';
 				}
+
 				$where .= $wpdb->prepare( ' meta_value ' . $operator . ' %s and', $value ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 			}
+
 			$where .= $wpdb->prepare( ' field_id=%d', $field_id );
 			$query  = 'SELECT DISTINCT item_id FROM ' . $wpdb->prefix . 'frm_item_metas' . FrmDb::prepend_and_or_where( ' WHERE ', $where );
 		} else {
 			if ( $operator === 'LIKE' ) {
 				$search = '%' . $search . '%';
 			}
+
 			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		}//end if
 

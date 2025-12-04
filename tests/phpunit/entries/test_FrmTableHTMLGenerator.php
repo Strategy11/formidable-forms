@@ -31,12 +31,14 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		$table_generator = new FrmTableHTMLGenerator( 'entry' );
 
 		$colors = array( 'border_color', 'bg_color', 'text_color', 'alt_bg_color' );
+
 		foreach ( $colors as $color ) {
 			$is_color = $this->run_private_method( array( $table_generator, 'is_color_setting' ), array( $color ) );
 			$this->assertTrue( $is_color, $color . ' is a color' );
 		}
 
 		$non_colors = array( 'font_size', 'border_width' );
+
 		foreach ( $non_colors as $color ) {
 			$is_color = $this->run_private_method( array( $table_generator, 'is_color_setting' ), array( $color ) );
 			$this->assertFalse( $is_color, $color . ' is not a color' );

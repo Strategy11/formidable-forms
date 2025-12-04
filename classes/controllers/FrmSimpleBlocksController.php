@@ -22,6 +22,7 @@ class FrmSimpleBlocksController {
 		);
 
 		$icon = apply_filters( 'frm_icon', 'svg' );
+
 		if ( 0 === strpos( $icon, 'data:image/svg+xml;base64,' ) ) {
 			$icon = ' ' . FrmAppHelper::get_menu_icon_class();
 		} else {
@@ -29,6 +30,7 @@ class FrmSimpleBlocksController {
 		}
 
 		$block_name = FrmAppHelper::get_menu_name();
+
 		if ( $block_name === 'Formidable' ) {
 			$block_name = 'Formidable Forms';
 		}
@@ -62,6 +64,7 @@ class FrmSimpleBlocksController {
 		);
 
 		wp_localize_script( 'formidable-form-selector', 'formidable_form_selector', $script_vars );
+
 		if ( function_exists( 'wp_set_script_translations' ) ) {
 			wp_set_script_translations( 'formidable-form-selector', 'formidable' );
 		}
@@ -224,6 +227,7 @@ class FrmSimpleBlocksController {
 		$params['description'] = ! empty( $params['description'] );
 
 		$form .= FrmFormsController::get_form_shortcode( $params );
+
 		if ( ! empty( $attributes['className'] ) ) {
 			$form = preg_replace( '/\bfrm_forms\b/', 'frm_forms ' . esc_attr( $attributes['className'] ), $form, 1 );
 		}

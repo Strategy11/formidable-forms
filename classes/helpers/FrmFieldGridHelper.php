@@ -158,6 +158,7 @@ class FrmFieldGridHelper {
 		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
 			return false;
 		}
+
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
@@ -197,6 +198,7 @@ class FrmFieldGridHelper {
 
 		if ( 0 === strpos( $class, 'frm' ) ) {
 			$substr = substr( $class, 3 );
+
 			if ( is_numeric( $substr ) ) {
 				return (int) $substr;
 			}
@@ -220,6 +222,7 @@ class FrmFieldGridHelper {
 
 		if ( ! empty( $this->section_helper ) ) {
 			$this->section_helper->sync_list_size();
+
 			if ( 'end_divider' === $this->field->type ) {
 				$this->maybe_close_section_helper();
 			}
@@ -229,6 +232,7 @@ class FrmFieldGridHelper {
 		if ( false !== $this->parent_li ) {
 			++$this->current_field_count;
 			$this->current_list_size += $this->active_field_size;
+
 			if ( 12 === $this->current_list_size ) {
 				$this->close_field_wrapper();
 			}

@@ -54,9 +54,11 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	private function is_honeypot_spam() {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
+
 		if ( ! $is_honeypot_spam ) {
 
 			$field_id = $this->get_honeypot_field_id();
+
 			if ( ! $field_id ) {
 				return false;
 			}
@@ -103,6 +105,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	public static function maybe_render_field( $form_id ) {
 		$honeypot = new self( $form_id );
+
 		if ( ! $honeypot->should_render_field() ) {
 			return;
 		}
@@ -140,6 +143,7 @@ class FrmHoneypot extends FrmValidate {
 		}
 
 		$css = self::get_honeypot_field_css();
+
 		if ( ! $css ) {
 			return;
 		}
@@ -175,6 +179,7 @@ class FrmHoneypot extends FrmValidate {
 		}
 
 		$css = self::get_honeypot_field_css();
+
 		if ( $css ) {
 			echo '<style>' . esc_html( $css ) . '</style>';
 		}
@@ -187,13 +192,16 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	private static function get_honeypot_field_css() {
 		global $frm_vars;
+
 		if ( empty( $frm_vars['honeypot_selectors'] ) ) {
 			return '';
 		}
 
 		$selectors = $frm_vars['honeypot_selectors'];
+
 		if ( self::$printed_honeypot_selectors ) {
 			$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+
 			if ( ! $selectors ) {
 				return '';
 			}
@@ -251,6 +259,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	private function track_html_id( $html_id ) {
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['honeypot_selectors'] ) ) {
 			$frm_vars['honeypot_selectors'] = array();
 		}
@@ -304,6 +313,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	public static function generate_class_name() {
 		$class_name = self::get_honeypot_class_name();
+
 		if ( 'frm_verify' !== $class_name ) {
 			// Re-use the option.
 			// We can't generate a new class too often or the field may not be hidden.
@@ -321,6 +331,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	private static function get_honeypot_class_name() {
 		$option = get_option( 'frm_honeypot_class' );
+
 		if ( ! is_string( $option ) ) {
 			// For backward compatibility use the old class name.
 			return 'frm_verify';
