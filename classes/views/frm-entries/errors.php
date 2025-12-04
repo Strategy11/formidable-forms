@@ -7,6 +7,7 @@ if ( isset( $include_extra_container ) ) { ?>
 <div class="<?php echo esc_attr( $include_extra_container ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<?php
 }
+
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>
@@ -28,8 +29,10 @@ if ( ! empty( $errors ) && is_array( $errors ) ) {
 <div class="<?php echo esc_attr( FrmFormsHelper::form_error_class() ); ?>" role="alert">
 	<?php
 	$img = '';
+
 	if ( ! FrmAppHelper::is_admin() ) {
 		$img = apply_filters( 'frm_error_icon', $img );
+
 		if ( $img && ! empty( $img ) ) {
 			echo '<img src="' . esc_url( $img ) . '" alt="" />';
 		}

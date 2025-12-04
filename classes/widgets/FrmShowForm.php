@@ -22,6 +22,7 @@ class FrmShowForm extends WP_Widget {
 		FrmAppHelper::kses_echo( $args['before_widget'], 'all' );
 
 		echo '<div class="frm_form_widget">';
+
 		if ( $title ) {
 			FrmAppHelper::kses_echo( $args['before_title'] . stripslashes( $title ) . $args['after_title'], 'all' );
 		}
@@ -62,7 +63,7 @@ class FrmShowForm extends WP_Widget {
 			'form'        => false,
 			'description' => false,
 		);
-		$instance = wp_parse_args( (array) $instance, $defaults );
+		$instance = wp_parse_args( $instance, $defaults );
 		?>
 		<p>
 			<label for="<?php echo esc_attr( $this->get_field_id( 'title' ) ); ?>">

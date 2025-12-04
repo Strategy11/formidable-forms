@@ -105,9 +105,11 @@ class FrmInstallPlugin {
 					),
 				)
 			);
+
 			if ( is_wp_error( $api ) ) {
 				wp_send_json_error( $api->get_error_message() );
 			}
+
 			if ( ! FrmAddonsController::url_is_allowed( $api->versions['trunk'] ) ) {
 				wp_send_json_error( 'This download is not allowed' );
 			}
@@ -117,6 +119,7 @@ class FrmInstallPlugin {
 
 			// Install the plugin.
 			$result = $upgrader->install( $api->versions['trunk'] );
+
 			if ( is_wp_error( $result ) ) {
 				wp_send_json_error( $result->get_error_message() );
 			}

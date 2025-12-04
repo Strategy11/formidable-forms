@@ -17,6 +17,7 @@ $include_info = $is_active_style;
 			if ( $is_active_style ) {
 				FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_circle_icon' );
 			}
+
 			if ( ! empty( $is_locked ) ) {
 				FrmAppHelper::icon_by_class( 'frmfont frm_lock_icon' );
 			}
@@ -46,6 +47,7 @@ $include_info = $is_active_style;
 				'submit-bg-color' => $style->post_content['submit_bg_color'],
 			);
 			$index  = 0;
+
 			foreach ( $colors as $css_var_name => $color ) {
 				if ( 0 !== strpos( $color, 'rgb' ) ) {
 					$color = '#' . $color;

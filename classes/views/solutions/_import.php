@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			$disabled = isset( $imported[ $info['form'] ] ) ? ' disabled' : '';
 			$url      = $info['url'] ?? '';
 			$value    = $importing === 'form' ? $info['form'] : $info['key'];
+
 			if ( ! isset( $info['img'] ) ) {
 				?>
 				<input type="hidden" name="<?php echo esc_attr( $importing ); ?>[<?php echo esc_attr( $info['form'] ); ?>]" value="<?php echo esc_attr( $value ); ?>" <?php echo esc_attr( $disabled ); ?>/>
@@ -31,6 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input type="radio" name="<?php echo esc_attr( $importing . ( $importing === 'view' ? '[' . $info['form'] . ']' : '' ) ); ?>" value="<?php echo esc_attr( $value ); ?>"
 					<?php
 					echo esc_attr( $disabled );
+
 					if ( ! $selected && empty( $disabled ) ) {
 						echo ' checked="checked"';
 						$selected = $info['form'];

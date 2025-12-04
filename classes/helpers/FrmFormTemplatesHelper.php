@@ -42,6 +42,7 @@ class FrmFormTemplatesHelper {
 		}
 
 		$template['use_template'] = '#';
+
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
 		} elseif ( ! $template['plan_required'] ) {
@@ -95,12 +96,15 @@ class FrmFormTemplatesHelper {
 	 */
 	private static function prepare_single_template_classes( $template ) {
 		$class_names = array( 'frm-card-item' );
+
 		if ( $template['is_featured'] ) {
 			$class_names[] = 'frm-form-templates-featured-item';
 		}
+
 		if ( $template['is_favorite'] ) {
 			$class_names[] = 'frm-form-templates-favorite-item';
 		}
+
 		if ( $template['is_custom'] ) {
 			$class_names[] = 'frm-form-templates-custom-item';
 		}
@@ -126,6 +130,7 @@ class FrmFormTemplatesHelper {
 
 		$required_plan_slug               = sanitize_title( $template['plan_required'] );
 		$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
+
 		if ( 'free' === $required_plan_slug ) {
 			$attributes['data-key'] = $template['key'];
 		}

@@ -22,6 +22,7 @@
 					'image_id_input_name' => $component['image_id_input_name'],
 				)
 			);
+
 			if ( ! FrmAppHelper::pro_is_installed() ) {
 				$image_preview_wrapper_attrs = array(
 					'class'             => 'frm_image_preview_wrapper',

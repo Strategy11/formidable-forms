@@ -165,6 +165,7 @@ class FrmFieldCombo extends FrmFieldType {
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 			$wrapper_classes   = 'frm_grid_container frm_sub_field_options frm_sub_field_options-' . $sub_field['name'];
+
 			if ( ! isset( $processed_sub_fields[ $name ] ) ) {
 				// Options for this subfield should be hidden.
 				$wrapper_classes .= ' frm_hidden';
@@ -276,6 +277,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$field = (array) $this->field;
 
 		$field['default_value'] = $this->get_default_value();
+
 		if ( empty( $field['value'] ) ) {
 			$field['value'] = $field['default_value'];
 		}
@@ -378,6 +380,7 @@ class FrmFieldCombo extends FrmFieldType {
 		// Placeholder.
 		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
 			$placeholders = FrmField::get_option( $field, 'placeholder' );
+
 			if ( ! empty( $placeholders[ $sub_field['name'] ] ) ) {
 				$field['placeholder'] = $placeholders[ $sub_field['name'] ];
 			}
@@ -385,6 +388,7 @@ class FrmFieldCombo extends FrmFieldType {
 
 		// Add optional class.
 		$classes = $sub_field['classes'] ?? '';
+
 		if ( is_array( $classes ) ) {
 			$classes = implode( ' ', $classes );
 		}
@@ -461,6 +465,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$field_name = $this->field->name ?? $this->field['name'];
 		$field_key  = $this->field->field_key ?? $this->field['field_key'];
 		$sub_fields = $this->get_processed_sub_fields();
+
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];
 		}
@@ -530,6 +535,7 @@ class FrmFieldCombo extends FrmFieldType {
 			$attrs['value']       = $args['field']['value'][ $sub_field['name'] ];
 			$attrs['data-frmval'] = $args['field']['value'][ $sub_field['name'] ];
 		}
+
 		if ( empty( $args['remove_names'] ) ) {
 			$attrs['name'] = $args['field_name'] . '[' . $sub_field['name'] . ']';
 		}

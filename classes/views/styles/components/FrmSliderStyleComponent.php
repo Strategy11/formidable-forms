@@ -157,9 +157,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		if ( preg_match( '/%$/', $value ) ) {
 			return '%';
 		}
+
 		if ( preg_match( '/em$/', $value ) ) {
 			return 'em';
 		}
+
 		if ( preg_match( '/px$/', $value ) ) {
 			return 'px';
 		}

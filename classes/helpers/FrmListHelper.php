@@ -339,6 +339,7 @@ class FrmListHelper {
 		}
 
 		echo "<ul class='subsubsub'>\n";
+
 		foreach ( $views as $class => $view ) {
 			$views[ $class ] = "\t" . '<li class="' . esc_attr( $class ) . '">' . $view;
 		}
@@ -403,6 +404,7 @@ class FrmListHelper {
 			$params = array(
 				'value' => $name,
 			);
+
 			if ( 'edit' === $name ) {
 				$params['class'] = 'hide-if-no-js';
 			}
@@ -458,6 +460,7 @@ class FrmListHelper {
 		}
 
 		$action = $this->get_bulk_action( 'action' );
+
 		if ( $action === false ) {
 			$action = $this->get_bulk_action( 'action2' );
 		}
@@ -478,6 +481,7 @@ class FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
+
 		if ( $action_param && - 1 != $action_param ) {
 			$action = $action_param;
 		}
@@ -505,11 +509,13 @@ class FrmListHelper {
 		}
 
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
+
 		foreach ( $actions as $action => $link ) {
 			++$i;
 			$sep  = $i === $action_count ? '' : ' | ';
 			$out .= "<span class='$action'>$link$sep</span>";
 		}
+
 		$out .= '</div>';
 
 		$out .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', 'formidable' ) . '</span></button>';
@@ -531,6 +537,7 @@ class FrmListHelper {
 			<?php
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
+
 				if ( $current_mode == $mode ) {
 					$classes[] = 'current';
 				}
@@ -576,6 +583,7 @@ class FrmListHelper {
 	 */
 	protected function get_items_per_page( $option, $default = 20 ) {
 		$per_page = (int) get_user_option( $option );
+
 		if ( empty( $per_page ) || $per_page < 1 ) {
 			$per_page = $default;
 		}
@@ -611,6 +619,7 @@ class FrmListHelper {
 		$total_items     = $this->_pagination_args['total_items'];
 		$total_pages     = $this->_pagination_args['total_pages'];
 		$infinite_scroll = false;
+
 		if ( isset( $this->_pagination_args['infinite_scroll'] ) ) {
 			$infinite_scroll = $this->_pagination_args['infinite_scroll'];
 		}
@@ -656,6 +665,7 @@ class FrmListHelper {
 				strlen( $total_pages )
 			);
 		}
+
 		$html_total_pages = sprintf( "<span class='total-pages'>%s</span>", number_format_i18n( $total_pages ) );
 
 		/* translators: %1$s: Current page number, %2$s: Total pages */
@@ -680,9 +690,11 @@ class FrmListHelper {
 		);
 
 		$pagination_links_class = 'pagination-links';
+
 		if ( ! empty( $infinite_scroll ) ) {
 			$pagination_links_class = ' hide-if-js';
 		}
+
 		$output .= "\n" . '<span class="' . esc_attr( $pagination_links_class ) . '">' . implode( "\n", $page_links ) . '</span>';
 
 		if ( $total_pages ) {
@@ -878,6 +890,7 @@ class FrmListHelper {
 			// Back-compat for list tables that have been manually setting $_column_headers for horse reasons.
 			// In 4.3, we added a fourth argument for primary column.
 			$column_headers = array( array(), array(), array(), $this->get_primary_column_name() );
+
 			foreach ( $this->_column_headers as $key => $value ) {
 				$column_headers[ $key ] = $value;
 			}
@@ -902,12 +915,14 @@ class FrmListHelper {
 		$_sortable = apply_filters( "manage_{$this->screen->id}_sortable_columns", $sortable_columns );
 
 		$sortable = array();
+
 		foreach ( $_sortable as $id => $data ) {
 			if ( empty( $data ) ) {
 				continue;
 			}
 
 			$data = (array) $data;
+
 			if ( ! isset( $data[1] ) ) {
 				$data[1] = false;
 			}
@@ -1067,9 +1082,11 @@ class FrmListHelper {
 	public function display( $args = array() ) {
 		$singular     = $this->_args['singular'];
 		$tbody_params = array();
+
 		if ( $singular ) {
 			$tbody_params['data-wp-lists'] = 'list:' . $singular;
 		}
+
 		if ( $this->should_display( $args, 'display-top-nav' ) ) {
 			$this->display_tablenav( 'top' );
 		}
@@ -1136,6 +1153,7 @@ class FrmListHelper {
 	protected function display_tablenav( $which ) {
 		if ( 'top' === $which ) {
 			wp_nonce_field( 'bulk-' . $this->_args['plural'], '_wpnonce', false );
+
 			if ( ! $this->has_min_items( 1 ) ) {
 				// Don't show bulk actions if no items.
 				return;
@@ -1224,6 +1242,7 @@ class FrmListHelper {
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$classes = "$column_name column-$column_name";
+
 			if ( $primary === $column_name ) {
 				$classes .= ' has-row-actions column-primary';
 			}
@@ -1280,6 +1299,7 @@ class FrmListHelper {
 		$this->prepare_items();
 
 		ob_start();
+
 		if ( ! empty( $_REQUEST['no_placeholder'] ) ) {
 			$this->display_rows();
 		} else {
@@ -1297,6 +1317,7 @@ class FrmListHelper {
 				number_format_i18n( $this->_pagination_args['total_items'] )
 			);
 		}
+
 		if ( isset( $this->_pagination_args['total_pages'] ) ) {
 			$response['total_pages']      = $this->_pagination_args['total_pages'];
 			$response['total_pages_i18n'] = number_format_i18n( $this->_pagination_args['total_pages'] );

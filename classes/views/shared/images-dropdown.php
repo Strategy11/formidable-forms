@@ -14,6 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 $component_options = array();
+
 foreach ( $args['options'] as $key => $option ) {
 	$option['key'] = $key;
 	$image_details = FrmAppHelper::get_images_dropdown_atts( $option, $args );

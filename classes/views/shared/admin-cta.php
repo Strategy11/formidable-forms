@@ -11,6 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 if ( false === strpos( $attributes['class'], 'frm-gradient' ) ) {
 	$button_class = 'frm-button-primary';
 } else {
