@@ -1153,10 +1153,8 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		id = getErrorElementId( key, input );
-
-		describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		id = getErrorElementId( key, inputs[0] );
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1169,8 +1167,8 @@ function frmFrontFormJS() {
 				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
-			if ( input ) {
+			inputs.forEach( input => {
+				describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_' ) === -1 ) {
@@ -1181,11 +1179,10 @@ function frmFrontFormJS() {
 						describedBy = id + ' ' + describedBy;
 					}
 				}
-				input.setAttribute( 'aria-describedby', describedBy );
-			}
+			})
 		}
 
-		if ( input ) {
+		inputs.forEach( input => {
 			if ( [ 'radio', 'checkbox' ].includes( input.type ) ) {
 				const group = input.closest( '[role="radiogroup"], [role="group"]' );
 				if ( group ) {
@@ -1194,7 +1191,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		}
+		})
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1209,9 +1206,9 @@ function frmFrontFormJS() {
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
-			return 'frm_error_field_' + key;
+			return 'frm_error_field_' + key.split( '-' )[0];
 		}
-		return 'frm_error_' + input.id;
+		return 'frm_error_' + input.id.split( '-' )[0];
 	}
 
 	/**
