@@ -29,7 +29,7 @@ class FrmFieldFormHtml {
 	private $field_id;
 
 	/**
-	 * @var array
+	 * @var array|object
 	 */
 	private $form = array();
 

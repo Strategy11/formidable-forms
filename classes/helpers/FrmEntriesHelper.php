@@ -24,7 +24,7 @@ class FrmEntriesHelper {
 	const DRAFT_ENTRY_STATUS = 1;
 
 	/**
-	 * @param array         $fields
+	 * @param mixed         $fields
 	 * @param object|string $form
 	 * @param bool          $reset
 	 * @param array         $args

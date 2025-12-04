@@ -460,8 +460,8 @@ class FrmXMLController {
 	}
 
 	/**
-	 * @param string[] $type
-	 * @param array    $args
+	 * @param array<string>|string $type
+	 * @param array                $args
 	 *
 	 * @psalm-param array{ids?: mixed} $args
 	 *
@@ -471,6 +471,13 @@ class FrmXMLController {
 		global $wpdb;
 
 		self::prepare_types_array( $type );
+
+		if ( ! is_array( $type ) ) {
+			// This shouldn't be possible.
+			// It is cast to array in prepare_types_array.
+			// This is just for static analysis.
+			return;
+		}
 
 		$tables = array(
 			'items'   => $wpdb->prefix . 'frm_items',
@@ -608,7 +615,7 @@ class FrmXMLController {
 	/**
 	 * Prepare the types array.
 	 *
-	 * @param array $type
+	 * @param array<string>|string $type
 	 *
 	 * @return void
 	 */

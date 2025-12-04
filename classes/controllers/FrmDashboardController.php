@@ -467,7 +467,7 @@ class FrmDashboardController {
 	/**
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
-	 * @param int $entries_count The total entries available.
+	 * @param int|string $entries_count The total entries available.
 	 *
 	 * @return string|null The YouTube video ID.
 	 */
@@ -488,6 +488,7 @@ class FrmDashboardController {
 		if ( isset( $featured_video[0] ) ) {
 			return $featured_video[0]['video-id'];
 		}
+
 		return $featured_video['video-id'] ?? null;
 	}
 

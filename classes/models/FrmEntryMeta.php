@@ -392,7 +392,7 @@ class FrmEntryMeta {
 	 * @param string $limit
 	 * @param bool   $stripslashes
 	 *
-	 * @return array
+	 * @return mixed
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
