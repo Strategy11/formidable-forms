@@ -1,3 +1,318 @@
 ( function() {
-	// TODO
+	if ( ! window.frmPayPalVars ) {
+		return;
+	}
+
+	const clientId = frmPayPalVars.clientId;
+
+	// Track the state of the PayPal card fields
+	let cardFieldsValid = false;
+	let thisForm = null;
+	let running = 0;
+	let cardFieldsInstance = null;
+
+	// Track the state of each field in the card form
+	const cardFields = {
+		number: false,
+		expiry: false,
+		cvv: false
+	};
+
+	/**
+	 * Initialize PayPal Card Fields (Advanced Card Payments).
+	 *
+	 * @return {Promise<Object>} The card fields instance.
+	 */
+	async function initializeCardFields() {
+		const cardElement = document.querySelector( '.frm-card-element' );
+		if ( ! cardElement ) {
+			return null;
+		}
+
+		// Create the card fields container structure
+		cardElement.innerHTML = `
+			<div class="frm-paypal-card-number" id="frm-paypal-card-number"></div>
+			<div class="frm-paypal-card-expiry" id="frm-paypal-card-expiry"></div>
+			<div class="frm-paypal-card-cvv" id="frm-paypal-card-cvv"></div>
+		`;
+
+		const cardFieldsConfig = {
+			createOrder: createOrder,
+			onApprove: onApprove,
+			onError: onError,
+			style: getCardFieldStyles()
+		};
+
+		const cardFields = window.paypal.CardFields( cardFieldsConfig );
+
+		// Check eligibility for card fields
+		if ( ! cardFields.isEligible() ) {
+			console.warn( 'PayPal Card Fields not eligible for this configuration' );
+			return null;
+		}
+
+		// Render individual card fields
+		cardFields.NumberField().render( '#frm-paypal-card-number' );
+		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
+		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
+
+		return cardFields;
+	}
+
+	/**
+	 * Get card field styles from localized vars or use defaults.
+	 *
+	 * @return {Object} Style configuration for PayPal card fields.
+	 */
+	function getCardFieldStyles() {
+		if ( frmPayPalVars.style ) {
+			return frmPayPalVars.style;
+		}
+
+		return {
+			input: {
+				'font-size': '16px',
+				'font-family': 'inherit',
+				color: '#333'
+			},
+			'.invalid': {
+				color: '#c00'
+			}
+		};
+	}
+
+	/**
+	 * Create a PayPal order via AJAX.
+	 *
+	 * @return {Promise<string>} The order ID.
+	 */
+	async function createOrder() {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_order' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to create PayPal order' );
+		}
+
+		const data = await response.json();
+
+		if ( ! data.success || ! data.data.orderID ) {
+			throw new Error( data.data || 'Failed to create PayPal order' );
+		}
+
+		return data.data.orderID;
+	}
+
+	/**
+	 * Handle approved payment.
+	 *
+	 * @param {Object} data The approval data containing orderID.
+	 */
+	async function onApprove( data ) {
+		// Add the order ID to the form
+		const orderInput = document.createElement( 'input' );
+		orderInput.type = 'hidden';
+		orderInput.name = 'paypal_order_id';
+		orderInput.value = data.orderID;
+		thisForm.appendChild( orderInput );
+
+		// Submit the form
+		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
+			frmFrontForm.submitFormManual( null, thisForm );
+		} else {
+			thisForm.submit();
+		}
+	}
+
+	/**
+	 * Handle payment errors.
+	 *
+	 * @param {Error} err The error object.
+	 */
+	function onError( err ) {
+		running--;
+		if ( running === 0 && thisForm ) {
+			enableSubmit();
+		}
+		displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+	}
+
+	/**
+	 * Enable the submit button for the form.
+	 */
+	function enableSubmit() {
+		if ( running > 0 ) {
+			return;
+		}
+
+		thisForm.classList.add( 'frm_loading_form' );
+		frmFrontForm.removeSubmitLoading( jQuery( thisForm ), 'enable', 0 );
+
+		// Trigger custom event for other scripts to hook into
+		const event = new CustomEvent( 'frmPayPalLiteEnableSubmit', {
+			detail: { form: thisForm }
+		} );
+		document.dispatchEvent( event );
+	}
+
+	/**
+	 * Disable submit button for a target form.
+	 *
+	 * @param {Element} form
+	 * @return {void}
+	 */
+	function disableSubmit( form ) {
+		jQuery( form ).find( 'input[type="submit"],input[type="button"],button[type="submit"]' ).not( '.frm_prev_page' ).attr( 'disabled', 'disabled' );
+
+		// Trigger custom event for other scripts to hook into
+		const event = new CustomEvent( 'frmPayPalLiteDisableSubmit', {
+			detail: { form: form }
+		} );
+		document.dispatchEvent( event );
+	}
+
+	/**
+	 * Display an error message in the payment form.
+	 *
+	 * @param {string} errorMessage
+	 * @return {void}
+	 */
+	function displayPaymentFailure( errorMessage ) {
+		if ( ! thisForm ) {
+			return;
+		}
+
+		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
+		if ( statusContainer ) {
+			statusContainer.textContent = errorMessage;
+			statusContainer.style.display = 'block';
+		}
+	}
+
+	/**
+	 * Clear error messages.
+	 */
+	function clearErrors() {
+		if ( ! thisForm ) {
+			return;
+		}
+
+		const statusContainer = thisForm.querySelector( '.frm-card-errors' );
+		if ( statusContainer ) {
+			statusContainer.textContent = '';
+			statusContainer.style.display = 'none';
+		}
+	}
+
+	/**
+	 * Validate the form before submission.
+	 *
+	 * @param {Element} form
+	 * @return {boolean} True if valid.
+	 */
+	function validateFormSubmit( form ) {
+		if ( typeof frmFrontForm.validateFormSubmit !== 'function' ) {
+			return true;
+		}
+
+		const errors = frmFrontForm.validateFormSubmit( form );
+		const keys = Object.keys( errors );
+
+		if ( 1 === keys.length && errors[ keys[ 0 ] ] === '' ) {
+			// Pop the empty error that gets added by invisible recaptcha.
+			keys.pop();
+		}
+
+		return 0 === keys.length;
+	}
+
+	/**
+	 * Handle form submission with card fields.
+	 *
+	 * @param {Event} event
+	 */
+	async function handleCardSubmission( event ) {
+		event.preventDefault();
+		event.stopPropagation();
+
+		clearErrors();
+
+		// Validate the form first
+		thisForm.classList.add( 'frm_js_validate' );
+		if ( ! validateFormSubmit( thisForm ) ) {
+			return;
+		}
+
+		// Increment running counter and disable the submit button
+		running++;
+		disableSubmit( thisForm );
+
+		try {
+			// Submit the card fields - this triggers createOrder and onApprove
+			await cardFieldsInstance.submit();
+		} catch ( err ) {
+			running--;
+			if ( running === 0 && thisForm ) {
+				enableSubmit();
+			}
+			displayPaymentFailure( err.message || 'Payment failed. Please try again.' );
+		}
+	}
+
+	/**
+	 * Initialize PayPal integration.
+	 */
+	async function paypalInit() {
+		// Find the form containing the PayPal payment element
+		const cardContainer = document.querySelector( '.frm-card-element' );
+		if ( ! cardContainer ) {
+			return;
+		}
+
+		thisForm = cardContainer.closest( 'form' );
+		if ( ! thisForm ) {
+			return;
+		}
+
+		// Initially disable the submit button until PayPal is ready
+		disableSubmit( thisForm );
+
+		try {
+			cardFieldsInstance = await initializeCardFields();
+
+			if ( ! cardFieldsInstance ) {
+				displayPaymentFailure( 'PayPal Card Fields could not be initialized.' );
+				return;
+			}
+
+			// Enable submit once card fields are ready
+			enableSubmit();
+
+			// Add event listener for form submission
+			thisForm.addEventListener( 'submit', handleCardSubmission );
+
+		} catch ( e ) {
+			console.error( 'Initializing PayPal Card Fields failed', e );
+			displayPaymentFailure( 'Failed to initialize payment form.' );
+		}
+	}
+
+	document.addEventListener( 'DOMContentLoaded', async function() {
+		if ( ! window.paypal ) {
+			console.error( 'PayPal JS SDK failed to load properly' );
+			return;
+		}
+
+		paypalInit();
+
+		jQuery( document ).on( 'frmPageChanged', function() {
+			paypalInit();
+		} );
+	} );
 }() );

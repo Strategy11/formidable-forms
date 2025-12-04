@@ -274,15 +274,28 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
+		// TODO: Stop hard coding this.
+		$client_id = 'AV8DLwHFtnUai9Yuy8B5ocRSgtlCBiRAh6Vkl4vhgeuiKRLzilt-vzjd6O1tjIVI_5AiPG0H-HtBssrE';
+
+		// Build the PayPal SDK URL with required parameters.
+		$sdk_url = add_query_arg(
+			array(
+				'client-id'  => $client_id,
+				'components' => 'card-fields',
+				'intent'     => 'capture',
+			),
+			'https://www.paypal.com/sdk/js'
+		);
+
 		wp_register_script(
-			'paypal',
-			FrmPayPalLiteAppHelper::active_mode() === 'live' ? 'https://web.paypal.com/v1/paypal.js' : 'https://sandbox.web.paypal.com/v1/paypal.js',
+			'paypal-sdk',
+			$sdk_url,
 			array(),
-			'1.0',
+			null,
 			false
 		);
 
-		$dependencies = array( 'paypal', 'formidable' );
+		$dependencies = array( 'paypal-sdk', 'formidable' );
 		$script_url   = FrmPayPalLiteAppHelper::plugin_url() . 'js/frontend.js';
 
 		wp_enqueue_script(
@@ -293,7 +306,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$paypal_vars     = array(
+		$paypal_vars = array(
+			'clientId' => $client_id,
 			'formId'   => $form_id,
 			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
 			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
