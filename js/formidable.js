@@ -138,7 +138,7 @@ function frmFrontFormJS() {
 	 *
 	 * @since 2.03.02
 	 *
-	 * @param {HTMLElement} $form
+	 * @param {HTMLElement} form
 	 *
 	 * @return {void}
 	 */
