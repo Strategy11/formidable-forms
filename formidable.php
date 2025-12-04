@@ -145,6 +145,26 @@ function frm_class_autoloader( $class_name, $filepath ) {
 		if ( file_exists( $filepath ) ) {
 			require $filepath;
 		}
+
+		return;
+	}
+
+	if ( preg_match( '/^FrmPayPalLite.+$/', $class_name ) ) {
+		$filepath = $original_filepath . '/paypal/';
+
+		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+			$filepath .= 'helpers/';
+		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+			$filepath .= 'controllers/';
+		} else {
+			$filepath .= 'models/';
+		}
+
+		$filepath .= $class_name . '.php';
+
+		if ( file_exists( $filepath ) ) {
+			require $filepath;
+		}
 	}
 }
 
