@@ -289,6 +289,7 @@ class FrmFieldFormHtml {
 
 		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
 		$has_alert_role                     = false !== strpos( $this->html, 'role="alert"' );
+
 		if ( ! $has_alert_role && $include_alert_role_on_field_errors ) {
 			$error_body = self::get_error_body( $this->html );
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
