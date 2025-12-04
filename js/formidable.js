@@ -1207,7 +1207,7 @@ function frmFrontFormJS() {
 	function updateInputElementsAriaDescribedBy( el ) {
 		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
 			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
-			ariaDescribedBy = ariaDescribedBy.filter( value => value !== el.id );
+			ariaDescribedBy = ariaDescribedBy.filter( value => value.trim() && value !== el.id );
 
 			if ( ariaDescribedBy.length ) {
 				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
