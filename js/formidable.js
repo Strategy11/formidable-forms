@@ -168,17 +168,18 @@ function frmFrontFormJS() {
 	}
 
 	/**
-	 * Enable the save draft link for a given jQuery form object
+	 * Enable the save draft link for a given form object.
 	 *
 	 * @since 4.04.03
 	 *
-	 * @param {jQuery} $form
+	 * @param {jQuery|HTMLElement} $form
 	 */
 	function enableSaveDraft( $form ) {
-		if ( ! $form.length ) {
+		const form = $form instanceof jQuery ? $form.get( 0 ) : $form;
+		if ( ! form ) {
 			return;
 		}
-		$form[ 0 ].querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
+		form.querySelectorAll( '.frm_save_draft' ).forEach( saveDraftButton => {
 			saveDraftButton.disabled = false;
 			saveDraftButton.style.pointerEvents = '';
 		} );
