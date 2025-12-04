@@ -138,13 +138,11 @@ function frmFrontFormJS() {
 	 *
 	 * @since 2.03.02
 	 *
-	 * @param {Object} $form
+	 * @param {HTMLElement} $form
+	 *
+	 * @return {void}
 	 */
-	function enableSubmitButton( $form ) {
-		const form = $form instanceof jQuery ? $form.get( 0 ) : $form;
-		if ( ! form ) {
-			return;
-		}
+	function enableSubmitButton( form ) {
 		form.querySelectorAll( 'input[type="submit"], input[type="button"], button[type="submit"]' ).forEach(
 			button => button.disabled = false
 		);
@@ -1680,7 +1678,7 @@ function frmFrontFormJS() {
 			if ( event.persisted ) {
 				document.querySelectorAll( '.frm_loading_form' ).forEach(
 					function( form ) {
-						enableSubmitButton( jQuery( form ) );
+						enableSubmitButton( form );
 					}
 				);
 				removeSubmitLoading();
