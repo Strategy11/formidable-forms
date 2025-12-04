@@ -25,11 +25,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
 			continue;
 		}
+
 		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
 
 		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
 			continue;
 		}
+
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 
