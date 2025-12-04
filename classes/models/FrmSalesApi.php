@@ -100,6 +100,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $data
+	 *
 	 * @return void
 	 */
 	private function set_cross_sell( $data ) {
@@ -121,6 +122,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $data
+	 *
 	 * @return bool
 	 */
 	private function cross_sell_is_valid( $data ) {
@@ -142,6 +144,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $cross_sell_text
+	 *
 	 * @return int
 	 */
 	private static function determine_cross_sell_index( $cross_sell_text ) {
@@ -201,6 +204,7 @@ class FrmSalesApi extends FrmFormApi {
 
 	/**
 	 * @param array $sale
+	 *
 	 * @return array
 	 */
 	private function fill_sale( $sale ) {
@@ -245,6 +249,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param array $sale
+	 *
 	 * @return bool
 	 */
 	private function sale_is_active( $sale ) {
@@ -294,6 +299,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param string $key
+	 *
 	 * @return false|string False if no sale is active.
 	 */
 	public static function get_best_sale_value( $key ) {
@@ -310,6 +316,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param array $sale
+	 *
 	 * @return bool True if the sale is a match for the applicable group (if one is defined).
 	 */
 	private function matches_ab_group( $sale ) {
@@ -478,6 +485,7 @@ class FrmSalesApi extends FrmFormApi {
 
 	/**
 	 * @param string $key
+	 *
 	 * @return bool
 	 */
 	private static function is_banner_dismissed( $key ) {

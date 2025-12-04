@@ -166,6 +166,7 @@ class FrmInstallPlugin {
 	 * @since 6.16
 	 *
 	 * @param string $plugin_file
+	 *
 	 * @return bool
 	 */
 	private static function is_plugin_installed( $plugin_file ) {

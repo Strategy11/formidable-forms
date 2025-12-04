@@ -9,6 +9,7 @@ class FrmTransLiteAppController {
 	 * Install or upgrade database structures.
 	 *
 	 * @param mixed $old_db_version Previous database version, or false on fresh install.
+	 *
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
@@ -148,6 +149,7 @@ class FrmTransLiteAppController {
 	 * If the subscription has failed > 3 times, set it to canceled.
 	 *
 	 * @param object $sub
+	 *
 	 * @return void
 	 */
 	private static function add_one_fail( $sub ) {
@@ -168,6 +170,7 @@ class FrmTransLiteAppController {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function maybe_trigger_changes( $atts ) {
@@ -183,6 +186,7 @@ class FrmTransLiteAppController {
 	 * @since 6.22
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function add_repeat_cadence_value( $args ) {

@@ -10,18 +10,21 @@ class FrmFieldGdpr extends FrmFieldType {
 
 	/**
 	 * @since 6.19
+	 *
 	 * @var string
 	 */
 	protected $type = 'gdpr';
 
 	/**
 	 * @since 6.19
+	 *
 	 * @var bool
 	 */
 	protected $has_for_label = false;
 
 	/**
 	 * @since 6.19
+	 *
 	 * @var string
 	 */
 	const VIEW_PATH = '/classes/views/frm-fields/front-end/gdpr/gdpr-field.php';
@@ -30,6 +33,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Get the new field defaults.
 	 *
 	 * @since 6.19
+	 *
 	 * @return array
 	 */
 	public function get_new_field_defaults() {
@@ -58,6 +62,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Get the field settings for the field type.
 	 *
 	 * @since 6.19
+	 *
 	 * @return bool[]
 	 */
 	protected function field_settings_for_type() {
@@ -91,6 +96,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Show the primary options for the field.
 	 *
 	 * @since 6.19
+	 *
 	 * @param array $args The arguments.
 	 */
 	public function show_primary_options( $args ) {
@@ -112,6 +118,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Gets extra field options.
 	 *
 	 * @since 6.19
+	 *
 	 * @return string[]
 	 */
 	protected function extra_field_opts() {
@@ -124,6 +131,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Include the form builder file.
 	 *
 	 * @since 6.19
+	 *
 	 * @return string
 	 */
 	protected function include_form_builder_file() {
@@ -134,6 +142,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * Include the front form file.
 	 *
 	 * @since 6.19
+	 *
 	 * @return string
 	 */
 	protected function include_front_form_file() {
@@ -147,6 +156,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 *
 	 * @param array  $args The arguments.
 	 * @param string $html The HTML.
+	 *
 	 * @return string
 	 */
 	protected function before_replace_html_shortcodes( $args, $html ) {
@@ -162,6 +172,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 * @since 6.20
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -186,6 +197,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	 *
 	 * @param bool  $required
 	 * @param array $field
+	 *
 	 * @return bool
 	 */
 	public static function force_required_field( $required, $field ) {

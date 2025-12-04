@@ -22,6 +22,7 @@ class FrmEmailCollectionHelper {
 	 * @since 6.25
 	 *
 	 * @param string $email The email address to subscribe to ActiveCampaign.
+	 *
 	 * @return void
 	 */
 	public static function subscribe_to_active_campaign( $email = '' ) {
@@ -64,6 +65,7 @@ class FrmEmailCollectionHelper {
 	 * @since 6.25
 	 *
 	 * @param string $email The email address to check.
+	 *
 	 * @return bool True if the email is fake/test, false if valid.
 	 */
 	public static function is_fake_email( $email ) {

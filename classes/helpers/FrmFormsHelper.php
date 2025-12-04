@@ -245,6 +245,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
@@ -261,6 +262,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
@@ -302,6 +304,7 @@ class FrmFormsHelper {
 	 *     @type int      $entry_id
 	 *     @type string   $class
 	 * }
+	 *
 	 * @return string
 	 */
 	public static function get_success_message( $atts ) {
@@ -673,6 +676,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
@@ -781,6 +785,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array|string $field
+	 *
 	 * @return void
 	 */
 	public static function prepare_field_type( &$field ) {
@@ -1027,6 +1032,7 @@ BEFORE_HTML;
 	 * @since 5.0.12
 	 *
 	 * @param array $form
+	 *
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
@@ -1094,6 +1100,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
@@ -1210,6 +1217,7 @@ BEFORE_HTML;
 	 *
 	 * @param int|object|string $form_id
 	 * @param mixed             $form
+	 *
 	 * @return array
 	 */
 	public static function get_action_links( $form_id, $form ) {
@@ -1249,6 +1257,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link( $data ) {
@@ -1276,6 +1285,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link_label( $data ) {
@@ -1288,6 +1298,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
@@ -1301,6 +1312,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param mixed $data
+	 *
 	 * @return string
 	 */
 	private static function get_form_name_from_data( $data ) {
@@ -1317,6 +1329,7 @@ BEFORE_HTML;
 	 * @param int    $id
 	 * @param string $status
 	 * @param string $length
+	 *
 	 * @return string
 	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
@@ -1387,6 +1400,7 @@ BEFORE_HTML;
 	 * @since 3.0
 	 *
 	 * @param int $id
+	 *
 	 * @return array
 	 */
 	public static function delete_trash_links( $id ) {
@@ -1527,6 +1541,7 @@ BEFORE_HTML;
 	 * @param array $categories The categories to render the icon for.
 	 * @param array $atts {
 	 *     Optional. An array of attributes for rendering.
+	 *
 	 *     @type string  $html 'span' or 'div'. Default 'span'.
 	 *     @type bool $bg   Whether to add a background color or not. Default false.
 	 * }
@@ -1607,6 +1622,7 @@ BEFORE_HTML;
 	 *
 	 * @param array $template Template details.
 	 * @param array $args Additional arguments.
+	 *
 	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
@@ -1640,6 +1656,7 @@ BEFORE_HTML;
 	 * @since 4.02.02
 	 *
 	 * @param array $args
+	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
@@ -1674,6 +1691,7 @@ BEFORE_HTML;
 	 *
 	 * @param string $requires
 	 * @param string $link
+	 *
 	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
@@ -1695,6 +1713,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $item
+	 *
 	 * @return false|string
 	 */
 	public static function get_plan_required( &$item ) {
@@ -1721,7 +1740,9 @@ BEFORE_HTML;
 	 * Converts legacy package names to the current standard package name.
 	 *
 	 * @since 6.15
+	 *
 	 * @param string $package_name
+	 *
 	 * @return string The updated package name.
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
@@ -1738,6 +1759,7 @@ BEFORE_HTML;
 	 * @since 6.15
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function get_license_types( $args = array() ) {
@@ -1924,6 +1946,7 @@ BEFORE_HTML;
 	 *
 	 * @param string $url
 	 * @param int    $form_id
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
@@ -1999,6 +2022,7 @@ BEFORE_HTML;
 	 * @since 6.16
 	 *
 	 * @param string $classname
+	 *
 	 * @return string
 	 */
 	public static function sanitize_layout_class( $classname ) {
@@ -2017,6 +2041,7 @@ BEFORE_HTML;
 	 * @since 6.20
 	 *
 	 * @param string $form_key
+	 *
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
@@ -2122,6 +2147,7 @@ BEFORE_HTML;
 	 * @deprecated 6.11
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {

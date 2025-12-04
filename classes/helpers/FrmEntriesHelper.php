@@ -9,6 +9,7 @@ class FrmEntriesHelper {
 	 * "Submitted" entry status.
 	 *
 	 * @since 6.4.2
+	 *
 	 * @var int
 	 */
 	const SUBMITTED_ENTRY_STATUS = 0;
@@ -17,6 +18,7 @@ class FrmEntriesHelper {
 	 * "Draft" entry status.
 	 *
 	 * @since 6.4.2
+	 *
 	 * @var int
 	 */
 	const DRAFT_ENTRY_STATUS = 1;
@@ -214,6 +216,7 @@ class FrmEntriesHelper {
 	 * @param stdClass $entry
 	 * @param stdClass $field
 	 * @param array    $atts
+	 *
 	 * @return string
 	 */
 	public static function prepare_display_value( $entry, $field, $atts ) {
@@ -595,6 +598,7 @@ class FrmEntriesHelper {
 	 * Add submitted values to a string for spam checking.
 	 *
 	 * @param array $values
+	 *
 	 * @return string
 	 */
 	public static function entry_array_to_string( $values ) {
@@ -697,6 +701,7 @@ class FrmEntriesHelper {
 	 * @since 3.0
 	 *
 	 * @param array $atts Action dropdown attributes.
+	 *
 	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {
@@ -734,6 +739,7 @@ class FrmEntriesHelper {
 	 *
 	 * @param int          $id    Entry ID.
 	 * @param array|object $entry Entry object.
+	 *
 	 * @return array
 	 */
 	private static function get_action_links( $id, $entry ) {
@@ -812,6 +818,7 @@ class FrmEntriesHelper {
 	 * Gets data attributes for PDFs addon upgrade link.
 	 *
 	 * @param string $medium The source of the upgrade link used for analytics data.
+	 *
 	 * @return array
 	 */
 	private static function get_pdfs_upgrade_link_data( $medium = 'pdfs' ) {
@@ -836,6 +843,7 @@ class FrmEntriesHelper {
 	 * @since 5.0.15
 	 *
 	 * @param int|string $entry_id
+	 *
 	 * @return void
 	 */
 	public static function maybe_render_captcha_score( $entry_id ) {

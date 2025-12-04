@@ -296,6 +296,7 @@ class FrmFieldFormHtml {
 	 * Pull the HTML between [if error] and [/if error] shortcodes.
 	 *
 	 * @param string $html
+	 *
 	 * @return false|string
 	 */
 	private static function get_error_body( $html ) {
@@ -568,6 +569,7 @@ class FrmFieldFormHtml {
 	 * Adds multiple input attributes.
 	 *
 	 * @since 6.4.1
+	 *
 	 * @return void
 	 */
 	private function add_multiple_input_attributes() {

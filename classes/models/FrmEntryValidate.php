@@ -15,6 +15,7 @@ class FrmEntryValidate {
 	/**
 	 * @param array         $values
 	 * @param bool|string[] $exclude
+	 *
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -235,6 +236,7 @@ class FrmEntryValidate {
 	 * @param stdClass     $field
 	 * @param array|string $value
 	 * @param array        $options
+	 *
 	 * @return bool
 	 */
 	private static function option_is_valid( $field, $value, $options ) {
@@ -318,6 +320,7 @@ class FrmEntryValidate {
 	 *
 	 * @param string $value
 	 * @param string $option_value
+	 *
 	 * @return bool
 	 */
 	private static function is_filtered_match( $value, $option_value ) {
@@ -571,6 +574,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values The values.
+	 *
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
@@ -591,6 +595,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool
 	 */
 	private static function is_honeypot_spam( $values ) {
@@ -609,6 +614,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_spam( $values ) {
@@ -619,6 +625,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
@@ -642,6 +649,7 @@ class FrmEntryValidate {
 	 * Check entries for Akismet spam
 	 *
 	 * @param array $values Entry values.
+	 *
 	 * @return bool true if is spam
 	 */
 	public static function akismet( $values ) {
@@ -674,6 +682,7 @@ class FrmEntryValidate {
 	 *
 	 * @param array $datas The array of values being sent to Akismet.
 	 * @param array $values Entry values.
+	 *
 	 * @return void
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
@@ -727,6 +736,7 @@ class FrmEntryValidate {
 	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
 	public static function get_spam_check_user_info( $values ) {
@@ -751,6 +761,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values Entry values after flattened.
+	 *
 	 * @return array
 	 */
 	private static function get_spam_check_user_info_for_guest( $values ) {
@@ -867,6 +878,7 @@ class FrmEntryValidate {
 	 * @since 6.17
 	 *
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_name_text_fields( $form_id ) {
@@ -965,6 +977,7 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field_data Object contains `id` and `options`.
 	 * @param array  $values     Entry values.
+	 *
 	 * @return bool
 	 */
 	private static function should_really_skip_field( $field_data, $values ) {
@@ -1011,6 +1024,7 @@ class FrmEntryValidate {
 	 * @since 5.2.04 This method returns array of object contains `id` and `options` instead of array of `id` only.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
@@ -1054,6 +1068,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
+	 *
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {

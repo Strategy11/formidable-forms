@@ -34,6 +34,7 @@ class FrmShortcodeHelper {
 	 * Returns shortcodes that are shown/hidden based on the context.
 	 *
 	 * @since 6.16.3
+	 *
 	 * @return array
 	 */
 	public static function get_contextual_shortcodes() {

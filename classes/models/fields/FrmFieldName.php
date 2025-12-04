@@ -3,6 +3,7 @@
  * Name field
  *
  * @package Formidable
+ *
  * @since 4.11
  */
 
@@ -16,6 +17,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * Field name.
 	 *
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'name';
@@ -24,6 +26,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * Could this field hold email values?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -129,6 +132,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 *
 	 * @param mixed $value Field value before processing.
 	 * @param array $atts  Shortcode attributes.
+	 *
 	 * @return string      Most of cases, this will return string.
 	 */
 	protected function prepare_display_value( $value, $atts ) {
@@ -171,6 +175,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
@@ -181,6 +186,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
+	 *
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
@@ -252,6 +258,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @since 6.16
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function show_after_default( $args ) {

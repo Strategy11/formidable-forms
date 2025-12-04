@@ -168,6 +168,7 @@ class FrmStylesController {
 	/**
 	 * @param string $register Either 'enqueue' or 'register'.
 	 * @param bool   $force True to enqueue/register the style if a form has not been loaded.
+	 *
 	 * @return void
 	 */
 	public static function enqueue_css( $register = 'enqueue', $force = false ) {
@@ -230,6 +231,7 @@ class FrmStylesController {
 
 	/**
 	 * @param array $stylesheet_urls
+	 *
 	 * @return void
 	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
@@ -282,6 +284,7 @@ class FrmStylesController {
 	/**
 	 * @param string $tag
 	 * @param string $handle
+	 *
 	 * @return string
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
@@ -412,6 +415,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param int $style_id
+	 *
 	 * @return int
 	 */
 	private static function get_form_id_for_style( $style_id ) {
@@ -550,6 +554,7 @@ class FrmStylesController {
 	 * Validate that we're assigning a form to a style that actually exists before assigning it to a form.
 	 *
 	 * @param int $style_id
+	 *
 	 * @return bool True if the style actually exists.
 	 */
 	private static function confirm_style_exists_before_setting( $style_id ) {
@@ -591,6 +596,7 @@ class FrmStylesController {
 	 * @param stdClass|WP_Post $active_style
 	 * @param stdClass         $form
 	 * @param WP_Post          $default_style
+	 *
 	 * @return void
 	 */
 	private static function render_style_page( $active_style, $form, $default_style ) {
@@ -667,6 +673,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param stdClass|WP_Post $style A new style is not a WP_Post object.
+	 *
 	 * @return void
 	 */
 	private static function force_form_style( $style ) {
@@ -740,6 +747,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param array $ids
+	 *
 	 * @return void
 	 */
 	private static function maybe_redirect_after_save( $ids ) {
@@ -775,6 +783,7 @@ class FrmStylesController {
 	 *
 	 * @param string       $message
 	 * @param array|object $forms
+	 *
 	 * @return void
 	 */
 	public static function manage( $message = '', $forms = array() ) {
@@ -817,6 +826,7 @@ class FrmStylesController {
 	 * Echo content for the Custom CSS page.
 	 *
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function custom_css( $message = '' ) {
@@ -1025,6 +1035,7 @@ class FrmStylesController {
 	/**
 	 * @param array $atts
 	 * @param array $sec
+	 *
 	 * @return void
 	 */
 	public static function include_style_section( $atts, $sec ) {
@@ -1108,6 +1119,7 @@ class FrmStylesController {
 	 * @since 4.11.03
 	 *
 	 * @param string $css CSS content.
+	 *
 	 * @return string
 	 */
 	public static function replace_relative_url( $css ) {
@@ -1166,6 +1178,7 @@ class FrmStylesController {
 	 * Get the style post object for a target form.
 	 *
 	 * @param bool|object|string $form
+	 *
 	 * @return WP_Post|null
 	 */
 	public static function get_form_style( $form = 'default' ) {
@@ -1203,6 +1216,7 @@ class FrmStylesController {
 
 	/**
 	 * @since 3.0
+	 *
 	 * @param object $style
 	 * @param string $class
 	 *
@@ -1402,6 +1416,7 @@ class FrmStylesController {
 	 * @since 6.0
 	 *
 	 * @param WP_Styles $styles
+	 *
 	 * @return void
 	 */
 	public static function disable_conflicting_wp_admin_css( $styles ) {

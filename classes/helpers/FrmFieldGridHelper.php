@@ -176,6 +176,7 @@ class FrmFieldGridHelper {
 
 	/**
 	 * @param string $class
+	 *
 	 * @return int
 	 */
 	private static function get_size_of_class( $class ) {
@@ -269,6 +270,7 @@ class FrmFieldGridHelper {
 
 	/**
 	 * @param string $class
+	 *
 	 * @return bool
 	 */
 	private function can_support_an_additional_layout( $class ) {

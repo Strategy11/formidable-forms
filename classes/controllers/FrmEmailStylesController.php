@@ -63,6 +63,7 @@ class FrmEmailStylesController {
 		 * @since 6.25
 		 *
 		 * @param array[] $email_styles The email styles.
+		 *
 		 * @return array
 		 */
 		return apply_filters( 'frm_email_styles', $email_styles );
@@ -72,6 +73,7 @@ class FrmEmailStylesController {
 	 * Gets email style preview URL.
 	 *
 	 * @param string $style_key Style key.
+	 *
 	 * @return string
 	 */
 	public static function get_email_style_preview_url( $style_key ) {
@@ -103,6 +105,7 @@ class FrmEmailStylesController {
 	 * Gets the test email content.
 	 *
 	 * @param false|string $style_key Default is `false`, using the one in settings.
+	 *
 	 * @return string
 	 */
 	private static function get_test_email_content( $style_key = false ) {
@@ -147,6 +150,7 @@ class FrmEmailStylesController {
 	 *
 	 * @param string $style_key  Style key.
 	 * @param array  $table_rows Table rows.
+	 *
 	 * @return string
 	 */
 	private static function get_test_rich_text_email_content( $style_key, $table_rows ) {
@@ -169,6 +173,9 @@ class FrmEmailStylesController {
 
 		foreach ( $table_rows as $index => $row ) {
 			if ( 'compact' === $style_key ) {
+				// Add some spaces after the label. Maybe change it to the left in RTL.
+				$row['label'] = '<div style="padding-right:10px;">' . $row['label'] . '</div>';
+
 				// Compact table has two columns layout.
 				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 			} else {
@@ -211,6 +218,7 @@ class FrmEmailStylesController {
 	 *
 	 * @param string $label Field label.
 	 * @param string $value Prepared field value.
+	 *
 	 * @return string
 	 */
 	public static function get_content_for_one_column_cell( $label, $value ) {
@@ -221,6 +229,7 @@ class FrmEmailStylesController {
 	 * Gets table generator object for an email style.
 	 *
 	 * @param false|string $email_style Email style. Default is `false`: using the one in global settings.
+	 *
 	 * @return FrmTableHTMLGenerator
 	 */
 	public static function get_table_generator( $email_style = false ) {
@@ -321,6 +330,7 @@ class FrmEmailStylesController {
 	 * Gets Content-Type header.
 	 *
 	 * @param string $email_style Email style.
+	 *
 	 * @return string
 	 */
 	private static function get_content_type_header( $email_style ) {
@@ -372,6 +382,7 @@ class FrmEmailStylesController {
 	 * Wraps email message with new settings.
 	 *
 	 * @param string $message Email message.
+	 *
 	 * @return string
 	 */
 	public static function wrap_email_message( $message ) {
@@ -399,14 +410,14 @@ class FrmEmailStylesController {
 		// Wrapper.
 		$font_family = $style_settings['font'] ? $style_settings['font'] : 'Inter,sans-serif';
 		$new_message = sprintf(
-			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 0;">',
+			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 10px;">',
 			esc_attr( $style_settings['bg_color'] ),
 			esc_attr( $style_settings['text_color'] ),
 			esc_attr( $font_family )
 		);
 
 		// Container.
-		$new_message .= '<div style="width:640px;margin:auto;">';
+		$new_message .= '<div style="max-width:640px;margin:auto;">';
 
 		// Header image if outside.
 		if ( $style_settings['img'] && 'inside' !== $style_settings['img_location'] ) {
@@ -438,6 +449,7 @@ class FrmEmailStylesController {
 	 * @param string $tag     Tag name.
 	 * @param string $css     CSS code.
 	 * @param string $content The content.
+	 *
 	 * @return string
 	 */
 	private static function add_inline_css( $tag, $css, $content ) {
@@ -465,6 +477,7 @@ class FrmEmailStylesController {
 	 * @param string $tag  Tag name.
 	 * @param string $css  CSS code.
 	 * @param string $html The HTML tag.
+	 *
 	 * @return string
 	 */
 	private static function add_css_to_style_attr( $tag, $css, $html ) {

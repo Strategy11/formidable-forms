@@ -10,12 +10,14 @@ class FrmFieldSelect extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'select';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;

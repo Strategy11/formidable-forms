@@ -112,6 +112,7 @@ class FrmFormsController {
 	 * @since 2.02.11
 	 *
 	 * @param int|object $form
+	 *
 	 * @return void
 	 */
 	private static function create_default_email_action( $form ) {
@@ -137,6 +138,7 @@ class FrmFormsController {
 	 * @since 6.0.0
 	 *
 	 * @param int|object $form Form object or ID.
+	 *
 	 * @return void
 	 */
 	private static function create_default_on_submit_action( $form ) {
@@ -170,6 +172,7 @@ class FrmFormsController {
 	 * @since 6.9
 	 *
 	 * @param int|object $form Form ID or object.
+	 *
 	 * @return void
 	 */
 	private static function create_submit_button_field( $form ) {
@@ -213,6 +216,7 @@ class FrmFormsController {
 	/**
 	 * @param mixed  $id
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function settings( $id = false, $message = '' ) {
@@ -270,6 +274,7 @@ class FrmFormsController {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return bool
 	 */
 	private static function antispam_was_on( $form_id ) {
@@ -345,6 +350,7 @@ class FrmFormsController {
 	 * @since 6.8
 	 *
 	 * @param int $form_id
+	 *
 	 * @return void
 	 */
 	private static function maybe_remove_draft_option_from_fields( $form_id ) {
@@ -375,6 +381,7 @@ class FrmFormsController {
 	 * @since 3.06.01
 	 *
 	 * @param array $values
+	 *
 	 * @return bool
 	 */
 	private static function is_too_long( $values ) {
@@ -522,6 +529,7 @@ class FrmFormsController {
 	 * @since 5.5.2
 	 *
 	 * @param WP_Post $page The page object.
+	 *
 	 * @return void
 	 */
 	private static function set_post_global( $page ) {
@@ -556,6 +564,7 @@ class FrmFormsController {
 	 * @since 6.5.2
 	 *
 	 * @param array $classes The body classes list.
+	 *
 	 * @return array
 	 */
 	public static function preview_block_theme_body_classnames( $classes ) {
@@ -594,7 +603,9 @@ class FrmFormsController {
 	 * and renders required html fragments calling required functions.
 	 *
 	 * @since 6.7.1
+	 *
 	 * @param string $template
+	 *
 	 * @return void
 	 */
 	private static function get_template( $template ) {
@@ -617,7 +628,9 @@ class FrmFormsController {
 	 * Returns true if calling a template function doesn't trigger deprecation warnings.
 	 *
 	 * @since 6.7.1
+	 *
 	 * @param string $template
+	 *
 	 * @return bool
 	 */
 	private static function should_try_getting_template( $template ) {
@@ -635,6 +648,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 *
 	 * @param string $title
+	 *
 	 * @return string
 	 */
 	public static function preview_page_title( $title ) {
@@ -651,6 +665,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 *
 	 * @param string $title
+	 *
 	 * @return string
 	 */
 	public static function preview_title( $title ) {
@@ -663,6 +678,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 *
 	 * @param string $content
+	 *
 	 * @return string
 	 */
 	public static function preview_content( $content ) {
@@ -721,6 +737,7 @@ class FrmFormsController {
 	 * @since 6.20
 	 *
 	 * @param string $form_key Form key.
+	 *
 	 * @return void
 	 */
 	public static function maybe_block_preview( $form_key ) {
@@ -748,6 +765,7 @@ class FrmFormsController {
 			'script_loader_src',
 			/**
 			 * @param string|null $src
+			 *
 			 * @return string
 			 */
 			function ( $src ) {
@@ -765,6 +783,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $ids
+	 *
 	 * @return string
 	 */
 	public static function bulk_untrash( $ids ) {
@@ -851,6 +870,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $ids
+	 *
 	 * @return string
 	 */
 	public static function bulk_trash( $ids ) {
@@ -905,6 +925,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $ids
+	 *
 	 * @return string
 	 */
 	public static function bulk_destroy( $ids ) {
@@ -1132,6 +1153,7 @@ class FrmFormsController {
 	 * @param array  $params
 	 * @param string $message
 	 * @param array  $errors
+	 *
 	 * @return void
 	 */
 	public static function display_forms_list( $params = array(), $message = '', $errors = array() ) {
@@ -1172,6 +1194,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array<string,string> $columns
+	 *
 	 * @return array<string,string>
 	 */
 	public static function get_columns( $columns ) {
@@ -1212,6 +1235,7 @@ class FrmFormsController {
 
 	/**
 	 * @param mixed $hidden_columns
+	 *
 	 * @return array
 	 */
 	public static function hidden_columns( $hidden_columns ) {
@@ -1254,6 +1278,7 @@ class FrmFormsController {
 	 * @param array      $errors
 	 * @param string     $message
 	 * @param bool       $create_link
+	 *
 	 * @return void
 	 */
 	private static function get_edit_vars( $id, $errors = array(), $message = '', $create_link = false ) {
@@ -1342,6 +1367,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $fields
+	 *
 	 * @return array
 	 */
 	public static function update_form_builder_fields( $fields ) {
@@ -1353,6 +1379,7 @@ class FrmFormsController {
 
 	/**
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function maybe_update_form_builder_message( &$message ) {
@@ -1365,6 +1392,7 @@ class FrmFormsController {
 	 * @param int|string   $id
 	 * @param array        $errors
 	 * @param array|string $args
+	 *
 	 * @return void
 	 */
 	public static function get_settings_vars( $id, $errors = array(), $args = array() ) {
@@ -1436,6 +1464,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function form_publish_button( $atts ) {
@@ -1449,6 +1478,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
 	 * @return array
 	 */
 	private static function get_settings_tabs( $values ) {
@@ -1474,6 +1504,7 @@ class FrmFormsController {
 					'upgrade'    => __( 'Form Permissions', 'formidable' ),
 					'message'    => __( 'Allow editing, protect forms and files, limit entries, and save drafts. Upgrade to get form and entry permissions.', 'formidable' ),
 					'screenshot' => 'permissions.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'general-form-settings/#kb-form-permissions', 'form-permissions-settings' ),
 				),
 			),
 			'scheduling'  => array(
@@ -1484,6 +1515,7 @@ class FrmFormsController {
 					'medium'     => 'scheduling',
 					'upgrade'    => __( 'Form scheduling settings', 'formidable' ),
 					'screenshot' => 'scheduling.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'general-form-settings/#kb-form-scheduling', 'form-scheduling-settings' ),
 				),
 			),
 			'buttons'     => array(
@@ -1508,6 +1540,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Conversational Forms', 'formidable' ),
 						'message'    => __( 'Ask one question at a time for automated conversations.', 'formidable' ),
 						'screenshot' => 'chat.png',
+						'learn-more' => FrmAppHelper::get_doc_url( 'conversational-forms', 'conversational-forms-settings', false ),
 					)
 				),
 			),
@@ -1521,6 +1554,7 @@ class FrmFormsController {
 						'upgrade'    => __( 'Form abandonment settings', 'formidable' ),
 						'message'    => __( 'Unlock the power of data capture to boost lead generation and master the art of form optimization.', 'formidable' ),
 						'screenshot' => 'abandonment.png',
+						'learn-more' => FrmAppHelper::get_doc_url( 'features/form-abandonment-wordpress-plugin', 'form-abandonment-settings', false ),
 					)
 				),
 			),
@@ -1570,6 +1604,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function advanced_settings( $values ) {
@@ -1580,6 +1615,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function render_spam_settings( $values ) {
@@ -1594,6 +1630,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function buttons_settings( $values ) {
@@ -1604,6 +1641,7 @@ class FrmFormsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function html_settings( $values ) {
@@ -1616,6 +1654,7 @@ class FrmFormsController {
 	 * @since 2.03.08
 	 *
 	 * @param array|bool $values
+	 *
 	 * @return void
 	 */
 	private static function clean_submit_html( &$values ) {
@@ -1642,6 +1681,7 @@ class FrmFormsController {
 	/**
 	 * @param int|string $form_id
 	 * @param string     $class
+	 *
 	 * @return void
 	 */
 	public static function mb_tags_box( $form_id, $class = '' ) {
@@ -1672,6 +1712,7 @@ class FrmFormsController {
 	 * @since 3.04.01
 	 *
 	 * @param array $atts
+	 *
 	 * @return array
 	 */
 	private static function advanced_helpers( $atts ) {
@@ -1764,6 +1805,7 @@ class FrmFormsController {
 	 * @since 2.0.6
 	 *
 	 * @param bool $settings_tab
+	 *
 	 * @return array
 	 */
 	private static function get_shortcode_helpers( $settings_tab ) {
@@ -1803,6 +1845,7 @@ class FrmFormsController {
 	 * Insert the form class setting into the form.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function form_classes( $form ) {
@@ -1851,6 +1894,7 @@ class FrmFormsController {
 	 * @param string                    $content
 	 * @param int|stdClass|string       $form
 	 * @param false|int|stdClass|string $entry
+	 *
 	 * @return string
 	 */
 	public static function filter_content( $content, $form, $entry = false ) {
@@ -1886,6 +1930,7 @@ class FrmFormsController {
 	 *
 	 * @param array|string        $string
 	 * @param int|stdClass|string $form
+	 *
 	 * @return array|string
 	 */
 	public static function replace_form_name_shortcodes( $string, $form ) {
@@ -1907,6 +1952,7 @@ class FrmFormsController {
 
 	/**
 	 * @param false|int|stdClass|string $entry
+	 *
 	 * @return void
 	 */
 	private static function get_entry_by_param( &$entry ) {
@@ -1932,6 +1978,7 @@ class FrmFormsController {
 
 	/**
 	 * @param array $errors
+	 *
 	 * @return array
 	 */
 	public static function process_bulk_form_actions( $errors ) {
@@ -1990,6 +2037,7 @@ class FrmFormsController {
 	 * Includes html that shows a message when the device is too small to use Formidable Forms admin pages.
 	 *
 	 * @since 6.20
+	 *
 	 * @return void
 	 */
 	public static function include_device_too_small_message() {
@@ -2170,6 +2218,7 @@ class FrmFormsController {
 	 * @since 4.07
 	 *
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function no_reports( $values = array() ) {
@@ -2247,6 +2296,7 @@ class FrmFormsController {
 	 * @since 2.05.07
 	 *
 	 * @param array $actions
+	 *
 	 * @return void
 	 */
 	private static function add_forms_to_admin_bar( $actions ) {
@@ -2271,6 +2321,7 @@ class FrmFormsController {
 	 * The formidable shortcode
 	 *
 	 * @param array $atts The params from the shortcode.
+	 *
 	 * @return string
 	 */
 	public static function get_form_shortcode( $atts ) {
@@ -2305,6 +2356,7 @@ class FrmFormsController {
 	 *
 	 * @param false|int|string $id
 	 * @param false|string     $key
+	 *
 	 * @return false|stdClass
 	 */
 	private static function maybe_get_form_by_id_or_key( $id, $key ) {
@@ -2320,6 +2372,7 @@ class FrmFormsController {
 	 * @param bool|int|string  $title may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
 	 * @param bool|int|string  $description may be 'auto', true, false, 'true', 'false', 'yes', '1', 1, '0', 0.
 	 * @param array            $atts
+	 *
 	 * @return string
 	 */
 	public static function show_form( $id = '', $key = '', $title = false, $description = false, $atts = array() ) {
@@ -2369,6 +2422,7 @@ class FrmFormsController {
 
 	/**
 	 * @param false|int|string $id
+	 *
 	 * @return false|stdClass
 	 */
 	private static function maybe_get_form_to_show( $id ) {
@@ -2512,6 +2566,7 @@ class FrmFormsController {
 	 * @since 2.2.7
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return int
 	 */
 	public static function just_created_entry( $form_id ) {
@@ -2532,6 +2587,7 @@ class FrmFormsController {
 	 *     @type object $form     Form object.
 	 *     @type int    $entry_id Entry ID.
 	 * }
+	 *
 	 * @return array|string
 	 */
 	private static function get_confirmation_method( $atts ) {
@@ -2670,6 +2726,7 @@ class FrmFormsController {
 	 *
 	 * @param array  $args  See {@see FrmFormsController::run_success_action()}.
 	 * @param string $event Form event. Default is `create`.
+	 *
 	 * @return array Array of actions that meet the conditional logics.
 	 */
 	public static function get_met_on_submit_actions( $args, $event = 'create' ) {
@@ -2744,6 +2801,7 @@ class FrmFormsController {
 	 * @param object $action Form action object.
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param string $event  Form event. Default is `create`.
+	 *
 	 * @return bool
 	 */
 	private static function is_valid_on_submit_action( $action, $args, $event = 'create' ) {
@@ -2857,6 +2915,7 @@ class FrmFormsController {
 	 *
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param object $action On Submit action object.
+	 *
 	 * @return array
 	 */
 	private static function get_run_success_action_args( $args, $action ) {
@@ -2884,6 +2943,7 @@ class FrmFormsController {
 	 * @since 3.0
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	private static function load_page_after_submit( $args ) {
@@ -2914,6 +2974,7 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.0
+	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
 	 */
 	private static function redirect_after_submit( $args ) {
@@ -2982,6 +3043,7 @@ class FrmFormsController {
 	 * @since 6.3.1
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
 	 * @return array
 	 */
 	private static function get_ajax_redirect_response_data( $args ) {
@@ -3100,6 +3162,7 @@ class FrmFormsController {
 	 *
 	 * @param string $success_url Redirect URL.
 	 * @param array  $args        Contains `form` object.
+	 *
 	 * @return string
 	 */
 	private static function get_redirect_fallback_message( $success_url, $args ) {
@@ -3193,6 +3256,7 @@ class FrmFormsController {
 	 *
 	 * @param object $form    Form object.
 	 * @param string $message The message.
+	 *
 	 * @return string Accepts 'before', 'after', or 'submit'.
 	 */
 	public static function message_placement( $form, $message ) {
@@ -3279,6 +3343,7 @@ class FrmFormsController {
 	 * @param object $form     Form object.
 	 * @param int    $entry_id Entry ID.
 	 * @param array  $args     See {@see FrmFormsController::run_success_action()}.
+	 *
 	 * @return string
 	 */
 	private static function prepare_submit_message( $form, $entry_id, $args = array() ) {
@@ -3434,6 +3499,7 @@ class FrmFormsController {
 	 * @since 2.0.8
 	 *
 	 * @param array $atts
+	 *
 	 * @return bool
 	 */
 	private static function is_minification_on( $atts ) {
@@ -3515,6 +3581,7 @@ class FrmFormsController {
 	 * @since 5.3
 	 *
 	 * @param int $form_id
+	 *
 	 * @return string
 	 */
 	private static function get_page_shortcode_content_for_form( $form_id ) {
@@ -3560,6 +3627,7 @@ class FrmFormsController {
 	 * @deprecated 4.0
 	 *
 	 * @param array $values
+	 *
 	 * @return void
 	 */
 	public static function create( $values = array() ) {
