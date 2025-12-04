@@ -8,6 +8,12 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Extra line breaks show as space on the front-end when
  * the form is double filtered and not minimized.
  *
+ * @var array      $field
+ * @var string     $field_name
+ * @var bool       $read_only
+ * @var string     $html_id
+ * @var array|null $args
+ *
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
@@ -56,6 +62,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<input type="radio" name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>" value="<?php echo esc_attr( $field_val ); ?>"
 		<?php
 		echo $checked . ' '; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		if ( isset( $args ) ) {
+			$field['args'] = $args;
+		}
 		do_action( 'frm_field_input_html', $field );
 		?>/><?php
 

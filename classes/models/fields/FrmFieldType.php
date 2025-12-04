@@ -1557,16 +1557,17 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * Link input to field description for screen readers
+	 * Link input to field description for screen readers.
 	 *
 	 * @since 3.0
+	 * @since x.x Function privacy changed from `protected` to `public`.
 	 *
 	 * @param array  $args
 	 * @param string $input_html
 	 *
 	 * @return void
 	 */
-	protected function add_aria_description( $args, &$input_html ) {
+	public function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 
 		if ( $aria_describedby_exists ) {
