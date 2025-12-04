@@ -1154,7 +1154,7 @@ function frmFrontFormJS() {
 
 		container.classList.add( 'frm_blank_field' );
 		const inputs = container.querySelectorAll( 'input, select, textarea' );
-		id = getErrorElementId( key, inputs[0] );
+		id = getErrorElementId( key, inputs[ 0 ] );
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1179,7 +1179,7 @@ function frmFrontFormJS() {
 						describedBy = id + ' ' + describedBy;
 					}
 				}
-			})
+			} );
 		}
 
 		inputs.forEach( input => {
@@ -1191,7 +1191,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		})
+		} );
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1206,9 +1206,9 @@ function frmFrontFormJS() {
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
-			return 'frm_error_field_' + key.split( '-' )[0];
+			return 'frm_error_field_' + key.split( '-' )[ 0 ];
 		}
-		return 'frm_error_' + input.id.split( '-' )[0];
+		return 'frm_error_' + input.id.split( '-' )[ 0 ];
 	}
 
 	/**
