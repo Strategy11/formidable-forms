@@ -332,11 +332,10 @@ function frmFrontFormJS() {
 			validateFieldValue( field, errors, false );
 		}
 
-		const $fieldCont = jQuery( fieldContainer );
-		removeFieldError( $fieldCont );
+		removeFieldError( fieldContainer );
 		if ( Object.keys( errors ).length > 0 ) {
 			for ( key in errors ) {
-				addFieldError( $fieldCont, key, errors );
+				addFieldError( fieldContainer, key, errors );
 			}
 		}
 	}
@@ -422,7 +421,7 @@ function frmFrontFormJS() {
 				return errors;
 			}
 
-			val = jQuery( field ).val();
+			val = field.value;
 			if ( val === null ) {
 				val = '';
 			} else if ( typeof val !== 'string' ) {
@@ -511,12 +510,12 @@ function frmFrontFormJS() {
 	 * @return {string} File input value.
 	 */
 	function getFileVals( fileID ) {
-		let val = '',
-			fileFields = jQuery( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
+		let val = '';
+		const fileFields = document.querySelectorAll( 'input[name="file' + fileID + '"], input[name="file' + fileID + '[]"], input[name^="item_meta[' + fileID + ']"]' );
 
-		fileFields.each( function() {
+		fileFields.forEach( function( field ) {
 			if ( val === '' ) {
-				val = this.value;
+				val = field.value;
 			}
 		} );
 		return val;
@@ -1093,10 +1092,10 @@ function frmFrontFormJS() {
 	}
 
 	function removeAddedScripts( formContainer, formID ) {
-		const endReplace = jQuery( '.frm_end_ajax_' + formID );
+		const endReplace = document.querySelectorAll( '.frm_end_ajax_' + formID );
 		if ( endReplace.length ) {
 			formContainer.nextUntil( '.frm_end_ajax_' + formID ).remove();
-			endReplace.remove();
+			endReplace.forEach( el => el.remove() );
 		}
 	}
 
@@ -1311,22 +1310,19 @@ function frmFrontFormJS() {
 	}
 
 	function removeSubmitLoading( _, enable, processesRunning ) {
-		let loadingForm;
-
 		if ( processesRunning > 0 ) {
 			return;
 		}
 
-		loadingForm = jQuery( '.frm_loading_form' );
-		loadingForm.removeClass( 'frm_loading_form' );
-		loadingForm.removeClass( 'frm_loading_prev' );
+		document.querySelectorAll( '.frm_loading_form' ).forEach( function( form ) {
+			form.classList.remove( 'frm_loading_form', 'frm_loading_prev' );
+			jQuery( form ).trigger( 'frmEndFormLoading' );
 
-		loadingForm.trigger( 'frmEndFormLoading' );
-
-		if ( enable === 'enable' ) {
-			enableSubmitButton( loadingForm );
-			enableSaveDraft( loadingForm );
-		}
+			if ( enable === 'enable' ) {
+				enableSubmitButton( form );
+				enableSaveDraft( form );
+			}
+		} );
 	}
 
 	function showFileLoading( object ) {
@@ -1771,9 +1767,9 @@ function frmFrontFormJS() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
-			jQuery( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).each( function() {
-				if ( jQuery( this ).val() === '' ) {
-					jQuery( this ).trigger( 'blur' );
+			document.querySelectorAll( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).forEach( function( field ) {
+				if ( field.value === '' ) {
+					jQuery( field ).trigger( 'blur' );
 				}
 			} );
 
@@ -1852,12 +1848,13 @@ function frmFrontFormJS() {
 		},
 
 		afterSingleRecaptcha: function() {
-			const object = jQuery( '.frm-show-form .g-recaptcha' ).closest( 'form' )[ 0 ];
+			const recaptcha = document.querySelector( '.frm-show-form .g-recaptcha' );
+			const object = recaptcha ? recaptcha.closest( 'form' ) : null;
 			frmFrontForm.submitFormNow( object );
 		},
 
 		afterRecaptcha: function( _, formID ) {
-			const object = jQuery( '#frm_form_' + formID + '_container form' )[ 0 ];
+			const object = document.querySelector( '#frm_form_' + formID + '_container form' );
 			frmFrontForm.submitFormNow( object );
 		},
 
@@ -1871,7 +1868,7 @@ function frmFrontFormJS() {
 		 * @return {void}
 		 */
 		submitFormManual: function( e, object ) {
-			if ( jQuery( 'body' ).hasClass( 'wp-admin' ) && jQuery( object ).closest( '.frmapi-form' ).length < 1 ) {
+			if ( document.body.classList.contains( 'wp-admin' ) && ! object.closest( '.frmapi-form' ) ) {
 				return;
 			}
 
@@ -2042,8 +2039,8 @@ function frmFrontFormJS() {
 			}
 			newPos = newPos - frm_js.offset; // eslint-disable-line camelcase
 
-			m = jQuery( 'html' ).css( 'margin-top' );
-			b = jQuery( 'body' ).css( 'margin-top' );
+			m = getComputedStyle( document.documentElement ).marginTop;
+			b = getComputedStyle( document.body ).marginTop;
 			if ( m || b ) {
 				newPos = newPos - parseInt( m ) - parseInt( b );
 			}
