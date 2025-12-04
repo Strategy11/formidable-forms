@@ -283,6 +283,7 @@ class FrmFieldFormHtml {
 
 		if ( empty( $error ) ) {
 			FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
+
 			return;
 		}
 
