@@ -987,8 +987,8 @@ function frmFrontFormJS() {
 					}
 				}
 
-				object.querySelectorAll( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).forEach( function( recaptchaEl ) {
-					const recaptchaID = recaptchaEl.dataset.rid;
+				object.querySelectorAll( '.frm-g-recaptcha, .g-recaptcha, .h-captcha' ).forEach( function( captchaEl ) {
+					const recaptchaID = captchaEl.dataset.rid;
 
 					if ( typeof grecaptcha !== 'undefined' && grecaptcha ) {
 						if ( recaptchaID ) {
@@ -997,6 +997,7 @@ function frmFrontFormJS() {
 							grecaptcha.reset();
 						}
 					}
+
 					if ( typeof hcaptcha !== 'undefined' && hcaptcha ) {
 						hcaptcha.reset();
 					}
@@ -1873,13 +1874,6 @@ function frmFrontFormJS() {
 			let isPro, errors,
 				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
 				classList = object.className.trim().split( /\s+/gi );
-
-			if ( classList && ! invisibleRecaptcha ) {
-				isPro = classList.indexOf( 'frm_pro_form' ) > -1;
-				if ( ! isPro ) {
-					return;
-				}
-			}
 
 			if ( jQuery( 'body' ).hasClass( 'wp-admin' ) && jQuery( object ).closest( '.frmapi-form' ).length < 1 ) {
 				return;
