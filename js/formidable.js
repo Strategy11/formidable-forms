@@ -1871,10 +1871,6 @@ function frmFrontFormJS() {
 		 * @return {void}
 		 */
 		submitFormManual: function( e, object ) {
-			let isPro, errors,
-				invisibleRecaptcha = hasInvisibleRecaptcha( object ),
-				classList = object.className.trim().split( /\s+/gi );
-
 			if ( jQuery( 'body' ).hasClass( 'wp-admin' ) && jQuery( object ).closest( '.frmapi-form' ).length < 1 ) {
 				return;
 			}
@@ -1885,10 +1881,12 @@ function frmFrontFormJS() {
 				return;
 			}
 
-			errors = frmFrontForm.validateFormSubmit( object );
+			const errors = frmFrontForm.validateFormSubmit( object );
 			if ( Object.keys( errors ).length !== 0 ) {
 				return;
 			}
+
+			const invisibleRecaptcha = hasInvisibleRecaptcha( object );
 
 			if ( invisibleRecaptcha ) {
 				showLoadingIndicator( jQuery( object ) );
