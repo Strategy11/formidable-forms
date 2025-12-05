@@ -3,6 +3,7 @@
  * Base template for summary emails
  *
  * @since 6.7
+ *
  * @package Formidable
  *
  * @var array $args Content args.

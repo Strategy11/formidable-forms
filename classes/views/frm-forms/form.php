@@ -51,6 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $values['fields'] ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
+
 			foreach ( $values['fields'] as $field ) {
 				++$values['count'];
 				$grid_helper->set_field( $field );
@@ -68,19 +69,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! FrmAppHelper::is_admin_page() ) : ?>
 		<p id="frm-form-button">
 			<button class="frm_button_submit" disabled="disabled">
-				<?php echo esc_html( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+				<?php echo esc_html( $form->options['submit_value'] ?? __( 'Submit', 'formidable' ) ); ?>
 			</button>
 		</p>
 	<?php endif; ?>
 
 	<div class="frm_no_fields">
-
-		<div class="frm_drag_inst">
-			<?php esc_html_e( 'Add Fields Here', 'formidable' ); ?>
+		<img src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/form-empty.png' ); ?>" alt="<?php esc_attr_e( 'Start Building Your Form', 'formidable' ); ?>" />
+		<div class="frm-no-fields-content">
+			<h4 class="frm_drag_inst"><?php esc_html_e( 'Start Building Your Form', 'formidable' ); ?></h4>
+			<p><?php esc_html_e( 'Drag and drop fields from the left or click a field to add it to your form.', 'formidable' ); ?></p>
 		</div>
-		<p>
-			<?php esc_html_e( 'Click or drag a field from the sidebar to add it to your form', 'formidable' ); ?>
-		</p>
 		<div class="clear"></div>
 	</div>
 

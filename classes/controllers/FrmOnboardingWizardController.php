@@ -120,13 +120,15 @@ class FrmOnboardingWizardController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.9
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
-		add_action( 'admin_init', __CLASS__ . '::do_admin_redirects' );
+		add_action( 'admin_init', self::class . '::do_admin_redirects' );
 
 		if ( self::has_onboarding_been_skipped() ) {
-			add_filter( 'option_frm_inbox', __CLASS__ . '::add_wizard_to_floating_links' );
+			add_filter( 'option_frm_inbox', self::class . '::add_wizard_to_floating_links' );
 		}
 
 		// Load page if admin page is Onboarding Wizard.
@@ -159,6 +161,7 @@ class FrmOnboardingWizardController {
 		}
 
 		$transient_value = get_transient( self::TRANSIENT_NAME );
+
 		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
 			return;
 		}
@@ -186,6 +189,7 @@ class FrmOnboardingWizardController {
 
 		// Redirect to the onboarding wizard's initial step.
 		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
+
 		if ( wp_safe_redirect( esc_url_raw( $page_url ) ) ) {
 			exit;
 		}
@@ -204,12 +208,12 @@ class FrmOnboardingWizardController {
 			$message = new FrmInbox();
 			$message->dismiss( 'onboarding_wizard' );
 
-			add_action( 'admin_menu', __CLASS__ . '::menu', 99 );
-			add_action( 'admin_init', __CLASS__ . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', __CLASS__ . '::enqueue_assets', 15 );
-			add_action( 'admin_head', __CLASS__ . '::remove_menu' );
+			add_action( 'admin_menu', self::class . '::menu', 99 );
+			add_action( 'admin_init', self::class . '::assign_properties' );
+			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+			add_action( 'admin_head', self::class . '::remove_menu' );
 
-			add_filter( 'admin_body_class', __CLASS__ . '::add_admin_body_classes', 999 );
+			add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
 			add_filter( 'frm_show_footer_links', '__return_false' );
 		}
 	}
@@ -254,7 +258,7 @@ class FrmOnboardingWizardController {
 			$label,
 			self::REQUIRED_CAPABILITY,
 			self::PAGE_SLUG,
-			array( __CLASS__, 'render' )
+			array( self::class, 'render' )
 		);
 	}
 
@@ -312,78 +316,10 @@ class FrmOnboardingWizardController {
 		remove_action( 'frm_store_settings', 'FrmProSettingsController::store' );
 		$frm_settings->store();
 
-		self::subscribe_to_active_campaign();
+		FrmEmailCollectionHelper::subscribe_to_active_campaign();
 
 		// Send response.
 		wp_send_json_success();
-	}
-
-	/**
-	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
-	 *
-	 * @since 6.16
-	 *
-	 * @return void
-	 */
-	private static function subscribe_to_active_campaign() {
-		$user = wp_get_current_user();
-		if ( empty( $user->user_email ) ) {
-			return;
-		}
-
-		if ( ! self::should_send_email_to_active_campaign( $user->user_email ) ) {
-			return;
-		}
-
-		$user_id    = $user->ID;
-		$first_name = get_user_meta( $user_id, 'first_name', true );
-		$last_name  = get_user_meta( $user_id, 'last_name', true );
-
-		wp_remote_post(
-			'https://sandbox.formidableforms.com/api/wp-admin/admin-ajax.php?action=frm_forms_preview&form=subscribe-onboarding',
-			array(
-				'body' => http_build_query(
-					array(
-						'form_key'      => 'subscribe-onboarding',
-						'frm_action'    => 'create',
-						'form_id'       => 5,
-						'item_key'      => '',
-						'item_meta[0]'  => '',
-						'item_meta[15]' => $user->user_email,
-						'item_meta[17]' => 'Source - FF Lite Plugin Onboarding',
-						'item_meta[18]' => is_string( $first_name ) ? $first_name : '',
-						'item_meta[19]' => is_string( $last_name ) ? $last_name : '',
-					)
-				),
-			)
-		);
-	}
-
-	/**
-	 * Try to skip any fake emails.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $email
-	 * @return bool
-	 */
-	private static function should_send_email_to_active_campaign( $email ) {
-		$substrings = array(
-			'@wpengine.local',
-			'@example.com',
-			'@localhost',
-			'@local.dev',
-			'@local.test',
-			'test@gmail.com',
-			'admin@gmail.com',
-			
-		);
-		foreach ( $substrings as $substring ) {
-			if ( false !== strpos( $email, $substring ) ) {
-				return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -491,6 +427,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param string $classes Existing body classes.
+	 *
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
 	public static function add_admin_body_classes( $classes ) {
@@ -501,6 +438,7 @@ class FrmOnboardingWizardController {
 	 * Checks if the Onboarding Wizard was skipped during the plugin's installation.
 	 *
 	 * @since 6.9
+	 *
 	 * @return bool True if the Onboarding Wizard was skipped, false otherwise.
 	 */
 	public static function has_onboarding_been_skipped() {
@@ -511,6 +449,7 @@ class FrmOnboardingWizardController {
 	 * Marks the Onboarding Wizard as skipped to prevent automatic redirects to the wizard.
 	 *
 	 * @since 6.9
+	 *
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
@@ -523,6 +462,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param array $inbox_messages The array of existing inbox messages.
+	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
@@ -711,6 +651,7 @@ class FrmOnboardingWizardController {
 
 		// Gravity Forms Migrator add-on.
 		$gravity_forms_plugin = 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php';
+
 		if ( class_exists( 'GFForms' ) && ! is_plugin_active( $gravity_forms_plugin ) ) {
 			$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
 

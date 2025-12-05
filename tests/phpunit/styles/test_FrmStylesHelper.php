@@ -122,6 +122,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 
 		$data_for_all_published_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'published' ), 'id, options' );
 		$default_count                = 0;
+
 		foreach ( $data_for_all_published_forms as $row ) {
 			$form_id = $row->id;
 			$options = $row->options;
@@ -229,6 +230,7 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	/**
 	 * @param float  $expected
 	 * @param string $color
+	 *
 	 * @return void
 	 */
 	private function assert_color_brightness( $expected, $color ) {

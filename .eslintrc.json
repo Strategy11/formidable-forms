@@ -13,10 +13,10 @@
 		}
 	},
 	"extends": [
-		"plugin:@wordpress/eslint-plugin/recommended",
+		"plugin:@wordpress/eslint-plugin/recommended-with-formatting",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended",
-		"plugin:sonarjs/recommended-legacy",
+		"plugin:sonarjs/recommended",
 		"plugin:cypress/recommended",
 		"plugin:no-jquery/deprecated",
 		"plugin:compat/recommended"
@@ -34,11 +34,11 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "jsdoc"],
 	"settings": {
 		"import/resolver": {
 			"webpack": {
-				"config": "webpack.config.js"
+				"config": "./webpack.config.js"
 			}
 		},
 		"react": {
@@ -46,9 +46,27 @@
 		}
 	},
 	"rules": {
+		"sonarjs/cognitive-complexity": "off",
 		"cypress/unsafe-to-chain-command": "off",
 		"cypress/no-assigning-return-values": "off",
-		"camelcase": ["error", { "properties": "never" }],
+		"camelcase": [
+			"error",
+			{
+				"properties": "never",
+				"allow": [
+					"frm_admin_js",
+					"frm_stripe_vars",
+					"frm_trans_vars",
+					"formidable_form_selector",
+					"frm_js",
+					"frm_password_checks",
+					"formidable_block_calculator",
+					"formidable_view_selector",
+					"frmdates_admin_js",
+					"frm_abdn"
+				]
+			}
+		],
 		"lines-around-comment": "off",
 		"react/display-name": "off",
 		"react/jsx-curly-spacing": [
@@ -77,7 +95,7 @@
 		"@wordpress/no-global-active-element": "off",
 		"no-alert": "off",
 		"no-undef": "off",
-		"jsdoc/no-undefined-types": "off",
+		"jsdoc/check-tag-names": "error",
 		"no-shadow": "off",
 		"sonarjs/no-duplicate-string": "off",
 		"sonarjs/prefer-single-boolean-return": "off",
@@ -128,6 +146,9 @@
 		"no-jquery/no-trim": "error",
 		"no-jquery/no-type": "error",
 		"no-jquery/no-unique": "error",
-		"no-jquery/no-when": "error"
+		"no-jquery/no-when": "error",
+		"react/jsx-no-target-blank": "off",
+		"comma-dangle": "off",
+		"arrow-parens": ["error", "as-needed"]
 	}
 }

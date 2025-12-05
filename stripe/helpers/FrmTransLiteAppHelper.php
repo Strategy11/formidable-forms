@@ -44,12 +44,14 @@ class FrmTransLiteAppHelper {
 	public static function payments_table_exists() {
 		$db     = new FrmTransLiteDb();
 		$option = get_option( $db->db_opt_name );
+
 		if ( false !== $option ) {
 			return true;
 		}
 
 		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
 			$option = get_option( FrmPaymentsController::$db_opt_name );
+
 			if ( false !== $option ) {
 				return true;
 			}
@@ -62,17 +64,19 @@ class FrmTransLiteAppHelper {
 	 * Get a payment status label.
 	 *
 	 * @param string $status The lowercase payment status value.
+	 *
 	 * @return string
 	 */
 	public static function show_status( $status ) {
 		$statuses = array_merge( self::get_payment_statuses(), self::get_subscription_statuses() );
-		return isset( $statuses[ $status ] ) ? $statuses[ $status ] : $status;
+		return $statuses[ $status ] ?? $status;
 	}
 
 	/**
 	 * Get Payment status from a payment with support for PayPal backward compatibility.
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return string
 	 */
 	public static function get_payment_status( $payment ) {
@@ -117,6 +121,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param array  $payment_values
 	 * @param string $message
+	 *
 	 * @return void
 	 */
 	public static function add_note_to_payment( &$payment_values, $message = '' ) {
@@ -127,7 +132,7 @@ class FrmTransLiteAppHelper {
 				$payment_values['status']
 			);
 		}
-		$payment_values['meta_value'] = isset( $payment_values['meta_value'] ) ? $payment_values['meta_value'] : array();
+		$payment_values['meta_value'] = $payment_values['meta_value'] ?? array();
 		$payment_values['meta_value'] = self::add_meta_to_payment( $payment_values['meta_value'], $message );
 	}
 
@@ -149,15 +154,19 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param string $option
 	 * @param array  $atts
+	 *
+	 * @return mixed
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = isset( $settings[ $option ] ) ? $settings[ $option ] : '';
+		$value    = $settings[ $option ] ?? '';
 		return $value;
 	}
 
 	/**
 	 * @param array $atts
+	 *
+	 * @return array
 	 */
 	public static function get_action_settings( $atts ) {
 		if ( ! isset( $atts['payment'] ) ) {
@@ -165,11 +174,13 @@ class FrmTransLiteAppHelper {
 		}
 
 		$atts['payment'] = (array) $atts['payment'];
+
 		if ( empty( $atts['payment']['action_id'] ) ) {
 			return array();
 		}
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
+
 		if ( ! $form_action ) {
 			return array();
 		}
@@ -181,10 +192,12 @@ class FrmTransLiteAppHelper {
 	 * Allow entry values, default values, and other shortcodes
 	 *
 	 * @param array $atts Includes value (required), form, entry.
+	 *
 	 * @return int|string
 	 */
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
+
 		if ( strpos( $value, '[' ) === false ) {
 			return $value;
 		}
@@ -197,6 +210,7 @@ class FrmTransLiteAppHelper {
 			if ( ! isset( $atts['form'] ) ) {
 				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
 			}
+
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
 
@@ -206,11 +220,13 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param object $sub
+	 *
 	 * @return string
 	 */
 	public static function format_billing_cycle( $sub ) {
 		$amount   = self::formatted_amount( $sub );
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
+
 		if ( $sub->interval_count == 1 ) {
 			$amount = $amount . '/' . $interval;
 		} else {
@@ -235,6 +251,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5, introduced in v1.16 of the Payments submodule.
 	 *
 	 * @param int $number
+	 *
 	 * @return array
 	 */
 	private static function get_plural_repeat_times( $number ) {
@@ -251,16 +268,23 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param string $value
 	 * @param int    $number
+	 *
 	 * @return string
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
 		$times = self::get_plural_repeat_times( $number );
+
 		if ( isset( $times[ $value ] ) ) {
 			$value = $times[ $value ];
 		}
 		return $value;
 	}
 
+	/**
+	 * @param array|float|int|object $payment
+	 *
+	 * @return string
+	 */
 	public static function formatted_amount( $payment ) {
 		$currency = '';
 		$amount   = $payment;
@@ -288,6 +312,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.7
 	 *
 	 * @param array|float|object|string $payment Payment object, payment array or amount.
+	 *
 	 * @return array Return the array with the first element is the amount, the second one is the currency value.
 	 */
 	public static function get_amount_and_currency_from_payment( $payment ) {
@@ -310,6 +335,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param array $currency
 	 * @param float $amount
+	 *
 	 * @return void
 	 */
 	public static function format_amount_for_currency( $currency, &$amount ) {
@@ -324,8 +350,10 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_date_format() {
 		$date_format = 'm/d/Y';
+
 		if ( class_exists( 'FrmProAppHelper' ) ) {
 			$frmpro_settings = FrmProAppHelper::get_settings();
+
 			if ( $frmpro_settings ) {
 				$date_format = $frmpro_settings->date_format;
 			}
@@ -339,6 +367,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param string $date
 	 * @param string $format
+	 *
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
@@ -355,6 +384,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_user_id_for_current_payment() {
 		$user_id = 0;
+
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 		}
@@ -363,12 +393,15 @@ class FrmTransLiteAppHelper {
 
 	/**
 	 * @param int $user_id
+	 *
 	 * @return string
 	 */
 	public static function get_user_link( $user_id ) {
 		$user_link = esc_html__( 'Guest', 'formidable' );
+
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
+
 			if ( $user ) {
 				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
@@ -379,6 +412,7 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param mixed  $value
 	 * @param string $label
+	 *
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
@@ -400,10 +434,11 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param string $link
+	 *
 	 * @return void
 	 */
 	public static function echo_confirmation_link( $link ) {
-		$filter = __CLASS__ . '::allow_deleteconfirm_data_attribute';
+		$filter = self::class . '::allow_deleteconfirm_data_attribute';
 		add_filter( 'frm_striphtml_allowed_tags', $filter );
 		FrmAppHelper::kses_echo( $link, array( 'a' ) );
 		remove_filter( 'frm_striphtml_allowed_tags', $filter );
@@ -416,6 +451,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.5
 	 *
 	 * @param array $allowed
+	 *
 	 * @return array
 	 */
 	public static function allow_deleteconfirm_data_attribute( $allowed ) {
@@ -441,6 +477,7 @@ class FrmTransLiteAppHelper {
 		}
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
+
 		if ( ! empty( $currency['decimals'] ) ) {
 			$amount = number_format( $amount / 100, 2, '.', '' );
 		}
@@ -463,6 +500,7 @@ class FrmTransLiteAppHelper {
 
 		$db     = new FrmTransLiteDb();
 		$option = get_option( $db->db_opt_name );
+
 		if ( false !== $option ) {
 			// Don't fallback to PayPal if Stripe migrations have run.
 			self::$should_fallback_to_paypal = false;
@@ -482,6 +520,7 @@ class FrmTransLiteAppHelper {
 	 * @since 6.6
 	 *
 	 * @param stdClass $payment
+	 *
 	 * @return string
 	 */
 	public static function get_test_mode_display_string( $payment ) {
@@ -502,6 +541,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function count_completed_payments( $payments ) {
 		$count = 0;
+
 		foreach ( $payments as $payment ) {
 			if ( $payment->status === 'complete' ) {
 				$count++;
@@ -511,6 +551,9 @@ class FrmTransLiteAppHelper {
 		return $count;
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function get_gateways() {
 		$gateways = apply_filters( 'frm_payment_gateways', array() );
 		return $gateways;
@@ -519,13 +562,17 @@ class FrmTransLiteAppHelper {
 	/**
 	 * @param array|string $gateway
 	 * @param string       $setting
+	 *
+	 * @return mixed
 	 */
 	public static function get_setting_for_gateway( $gateway, $setting ) {
 		$gateways = self::get_gateways();
 		$value    = '';
+
 		if ( is_array( $gateway ) ) {
 			$gateway = reset( $gateway );
 		}
+
 		if ( isset( $gateways[ $gateway ] ) ) {
 			$value = $gateways[ $gateway ][ $setting ];
 		}
@@ -541,6 +588,8 @@ class FrmTransLiteAppHelper {
 	 * @param string $id
 	 * @param string $name
 	 * @param array  $action_settings
+	 *
+	 * @return void
 	 */
 	public static function show_currency_dropdown( $id, $name, $action_settings ) {
 		$selected     = $action_settings['currency'];
@@ -549,10 +598,12 @@ class FrmTransLiteAppHelper {
 			'id'   => $id,
 			'name' => $name,
 		);
+
 		if ( in_array( 'square', $gateways, true ) ) {
 			$select_attrs['disabled'] = 'disabled';
 			$selected                 = '';
 		}
+
 		$currencies = FrmCurrencyHelper::get_currencies();
 		?>
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>

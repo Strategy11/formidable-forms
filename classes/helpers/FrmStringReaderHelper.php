@@ -46,10 +46,12 @@ class FrmStringReaderHelper {
 	 * By default, discard that final matching character and return the rest.
 	 *
 	 * @param string $char
+	 *
 	 * @return string
 	 */
 	public function read_until( $char ) {
 		$value = '';
+
 		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) !== $char ) {
 			$value .= $one;
 		}
@@ -62,6 +64,7 @@ class FrmStringReaderHelper {
 	 * By default, remove enclosing double-quotes from the result.
 	 *
 	 * @param int $count
+	 *
 	 * @return string
 	 */
 	public function read( $count ) {

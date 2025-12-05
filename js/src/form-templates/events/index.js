@@ -11,6 +11,7 @@ import addFavoriteButtonEvents from './favoriteButtonListener';
 import addUseTemplateButtonEvents from './useTemplateButtonListener';
 import addSearchEvents from './searchListener';
 import addCreateTemplateEvents from './createTemplateListeners';
+import addGetFreeTemplatesEvents from './getFreeTemplatesListener';
 import { showSelectedCategory } from '../ui';
 
 /**
@@ -23,13 +24,14 @@ export function addEventListeners() {
 	wp.hooks.addAction( 'frmPage.onCategoryClick', 'frmFormTemplates', selectedCategory => {
 		// Display templates of the selected category
 		showSelectedCategory( selectedCategory );
-	});
+	} );
 
 	addCreateFormButtonEvents();
 	addFavoriteButtonEvents();
 	addUseTemplateButtonEvents();
 	addSearchEvents();
 	addCreateTemplateEvents();
+	addGetFreeTemplatesEvents();
 }
 
 export { addApplicationTemplateEvents } from './applicationTemplateListener';

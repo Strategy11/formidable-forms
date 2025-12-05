@@ -21,6 +21,7 @@ class FrmHooksController {
 		if ( 'load_hooks' == $trigger_hooks ) {
 			if ( is_admin() ) {
 				$hooks[] = 'load_admin_hooks';
+
 				if ( defined( 'DOING_AJAX' ) ) {
 					$hooks[] = 'load_ajax_hooks';
 					$hooks[] = 'load_form_hooks';
@@ -151,7 +152,7 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
-		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
+		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields' );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
@@ -182,6 +183,7 @@ class FrmHooksController {
 
 		// Simple Blocks Controller.
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
+		add_action( 'enqueue_block_assets', 'FrmSimpleBlocksController::block_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 
@@ -199,10 +201,17 @@ class FrmHooksController {
 		// Cronjob.
 		add_action( 'admin_init', 'FrmCronController::schedule_events' );
 
+		// Cross sell.
+		add_action( 'admin_menu', 'FrmSalesApi::menu', 1000 );
+
 		// Deactivation feedback.
 		add_action( 'admin_enqueue_scripts', 'FrmDeactivationFeedbackController::enqueue_assets' );
 		add_action( 'admin_footer', 'FrmDeactivationFeedbackController::footer_html' );
 		add_action( 'deactivated_plugin', 'FrmDeactivationFeedbackController::set_feedback_expired_date' );
+
+		add_action( 'frm_email_styles_extra_settings', 'FrmEmailStylesController::show_upsell_settings' );
+
+		add_action( 'admin_init', 'FrmWelcomeTourController::admin_init' );
 
 		FrmDashboardController::load_admin_hooks();
 		FrmTransLiteHooksController::load_admin_hooks();
@@ -265,6 +274,7 @@ class FrmHooksController {
 		// Form Templates Controller.
 		add_action( 'wp_ajax_frm_add_or_remove_favorite_template', 'FrmFormTemplatesController::ajax_add_or_remove_favorite' );
 		add_action( 'wp_ajax_frm_create_template', 'FrmFormTemplatesController::ajax_create_template' );
+		add_action( 'wp_ajax_frm_get_free_templates', 'FrmFormTemplatesController::ajax_get_free_templates' );
 
 		// Inbox.
 		add_action( 'wp_ajax_frm_inbox_dismiss', 'FrmInboxController::dismiss_message' );
@@ -304,10 +314,15 @@ class FrmHooksController {
 
 		// Reviews.
 		add_action( 'wp_ajax_frm_dismiss_review', 'FrmAppController::dismiss_review' );
-
 		add_action( 'wp_ajax_frm_small_screen_proceed', 'FrmAppController::small_screen_proceed' );
-
 		add_action( 'wp_ajax_frm_sale_banner_dismiss', 'FrmSalesApi::dismiss_banner' );
+
+		add_action( 'wp_ajax_frm_email_style_preview', 'FrmEmailStylesController::ajax_preview' );
+		add_action( 'wp_ajax_frm_send_test_email', 'FrmEmailStylesController::ajax_send_test_email' );
+
+		// Welcome Tour.
+		add_action( 'wp_ajax_frm_mark_checklist_step_as_completed', 'FrmWelcomeTourController::ajax_mark_checklist_step_as_completed' );
+		add_action( 'wp_ajax_frm_dismiss_welcome_tour', 'FrmWelcomeTourController::ajax_dismiss_welcome_tour' );
 	}
 
 	/**

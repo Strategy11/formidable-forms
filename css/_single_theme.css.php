@@ -207,6 +207,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background:
 	<?php
 	echo esc_html( $submit_bg_color );
+
 	if ( ! empty( $submit_bg_img ) ) {
 		echo esc_html( ' url(' . $submit_bg_img . ')' );
 	}

@@ -6,6 +6,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppController {
 
 	/**
+	 * Install or upgrade database structures.
+	 *
+	 * @param mixed $old_db_version Previous database version, or false on fresh install.
+	 *
 	 * @return void
 	 */
 	public static function install( $old_db_version = false ) {
@@ -63,11 +67,13 @@ class FrmTransLiteAppController {
 
 		foreach ( $overdue_subscriptions as $sub ) {
 			$last_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
+
 			if ( ! $last_payment ) {
 				continue;
 			}
 
 			$log_message = 'Subscription #' . $sub->id . ': ';
+
 			if ( $sub->status === 'future_cancel' ) {
 				FrmTransLiteSubscriptionsController::change_subscription_status(
 					array(
@@ -101,6 +107,7 @@ class FrmTransLiteAppController {
 				}
 
 				$log_message .= $status . ' triggers run ';
+
 				if ( $last_payment ) {
 					$log_message .= 'on payment #' . $last_payment->id;
 				}
@@ -127,6 +134,7 @@ class FrmTransLiteAppController {
 	 */
 	private static function update_sub_for_new_payment( $sub, $last_payment ) {
 		$frm_sub = new FrmTransLiteSubscription();
+
 		if ( $last_payment->status === 'complete' ) {
 			$frm_sub->update(
 				$sub->id,
@@ -145,6 +153,7 @@ class FrmTransLiteAppController {
 	 * If the subscription has failed > 3 times, set it to canceled.
 	 *
 	 * @param object $sub
+	 *
 	 * @return void
 	 */
 	private static function add_one_fail( $sub ) {
@@ -165,6 +174,7 @@ class FrmTransLiteAppController {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function maybe_trigger_changes( $atts ) {
@@ -180,10 +190,12 @@ class FrmTransLiteAppController {
 	 * @since 6.22
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function add_repeat_cadence_value( $args ) {
 		$action = $args['form_action'];
+
 		if ( ! empty( $action->post_content['repeat_cadence'] ) ) {
 			$params = array(
 				'type'  => 'hidden',
