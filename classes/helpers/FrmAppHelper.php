@@ -1290,7 +1290,8 @@ class FrmAppHelper {
 				'aria-hidden' => true,
 			),
 			'use'        => array(
-				'href' => true,
+				'href'       => true,
+				'xlink:href' => true,
 			),
 			'ul'         => $allow_class,
 			'label'      => array(
