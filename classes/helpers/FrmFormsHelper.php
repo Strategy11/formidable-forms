@@ -303,6 +303,7 @@ class FrmFormsHelper {
 		$field_error_messages = self::get_clickable_field_error_messages( $args );
 
 		$invalid_msg = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+
 		if ( $field_error_messages ) {
 			$invalid_msg .= "<ul>$field_error_messages</ul>";
 		}
