@@ -299,10 +299,13 @@ class FrmFormsHelper {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg  = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
 
 		$field_error_messages = self::get_clickable_field_error_messages( $args );
-		$invalid_msg         .= $field_error_messages ? '<ul>' . $field_error_messages . '</ul>' : '';
+
+		$invalid_msg = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+		if ( $field_error_messages ) {
+			$invalid_msg .= "<ul>$field_error_messages</ul>";
+		}
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
 	}
 
