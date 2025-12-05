@@ -1269,8 +1269,7 @@ class FrmAppHelper {
 				'aria-hidden' => true,
 			),
 			'use'        => array(
-				'href'       => true,
-				'xlink:href' => true,
+				'href' => true,
 			),
 			'ul'         => $allow_class,
 			'label'      => array(
@@ -1376,7 +1375,7 @@ class FrmAppHelper {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
-			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use xlink:href="#' . esc_attr( $icon ) . '" /></svg>';
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
 		if ( $echo ) {
@@ -3695,7 +3694,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.02.03
 	 *
-	 * @param array $form 
+	 * @param array $form
 	 *
 	 * @return void
 	 */

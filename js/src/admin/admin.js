@@ -1395,13 +1395,13 @@ window.frmAdminBuildJS = function() {
 		let layoutOption, moveOption;
 
 		layoutOption = document.createElement( 'span' );
-		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+		layoutOption.innerHTML = '<svg class="frmsvg"><use href="#frm_field_group_layout_icon"></use></svg>';
 		const layoutOptionLabel = __( 'Set Row Layout', 'formidable' );
 		addTooltip( layoutOption, layoutOptionLabel );
 		makeTabbable( layoutOption, layoutOptionLabel );
 
 		moveOption = document.createElement( 'span' );
-		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		moveOption.innerHTML = '<svg class="frmsvg"><use href="#frm_thick_move_icon"></use></svg>';
 		moveOption.classList.add( 'frm-move' );
 		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
 		addTooltip( moveOption, moveOptionLabel );
@@ -2647,7 +2647,7 @@ window.frmAdminBuildJS = function() {
 
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
-				anchor.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				anchor.innerHTML = '<svg class="frmsvg"><use href="#' + option.icon + '"></use></svg>';
 				anchor.appendChild( document.createTextNode( ' ' ) );
 				anchor.appendChild( span );
 
@@ -7290,7 +7290,7 @@ window.frmAdminBuildJS = function() {
 			parentClass = '';
 		}
 		maybeAddFieldSelection( parentClass );
-		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
+		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use href="#frm_more_horiz_solid_icon"/></svg>' );
 	}
 
 	/**
