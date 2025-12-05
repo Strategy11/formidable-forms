@@ -843,9 +843,9 @@
 			};
 			const use = node.querySelector( 'use' );
 			if ( use ) {
-				svgArgs.href = use.getAttribute( 'xlink:href' );
+				svgArgs.href = use.getAttribute( 'href' );
 				if ( ! svgArgs.href ) {
-					svgArgs.href = use.getAttribute( 'href' );
+					svgArgs.href = use.getAttribute( 'xlink:href' );
 				}
 			}
 			return svg( svgArgs );

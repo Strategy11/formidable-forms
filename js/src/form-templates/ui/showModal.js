@@ -92,7 +92,7 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 
 		// Update SVG icon
 		const svg = icon.querySelector( 'svg > use' );
-		svg.setAttribute( 'xlink:href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
+		svg.setAttribute( 'href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
 	} );
 
 	// Append template slug to the upgrade modal link URL
