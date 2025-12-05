@@ -134,6 +134,7 @@ class FrmStyle {
 
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
+
 					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
 						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
@@ -174,6 +175,7 @@ class FrmStyle {
 		// Remove leading braces so (rgba(1,1,1,1) doesn't cause inconsistent braces.
 		$color_val = ltrim( $color_val, '(' );
 		$patterns  = array( '/rgba\((\s*\d+\s*,){3}[[0-1]\.]+\)/', '/rgb\((\s*\d+\s*,){2}\s*[\d]+\)/' );
+
 		foreach ( $patterns as $pattern ) {
 			if ( preg_match( $pattern, $color_val ) === 1 ) {
 				return;
@@ -222,6 +224,7 @@ class FrmStyle {
 
 		// add more 0s and 1 (if alpha position) if needed.
 		$missing_values = $length_of_color_codes - count( $new_color_values );
+
 		if ( $missing_values > 1 ) {
 			$insert_values = array_fill( 0, $missing_values - 1, 0 );
 			$last_value    = 4 === $length_of_color_codes ? 1 : 0;
@@ -229,6 +232,7 @@ class FrmStyle {
 		} elseif ( $missing_values === 1 ) {
 			$insert_values = 4 === $length_of_color_codes ? array( 1 ) : array( 0 );
 		}
+
 		if ( ! empty( $insert_values ) ) {
 			$new_color_values = array_merge( $new_color_values, $insert_values );
 		}
@@ -253,6 +257,7 @@ class FrmStyle {
 		$defaults           = $this->get_defaults();
 		$valid_keys         = array_keys( $defaults );
 		$sanitized_settings = array();
+
 		foreach ( $valid_keys as $key ) {
 			if ( isset( $settings[ $key ] ) ) {
 				$sanitized_settings[ $key ] = sanitize_textarea_field( $settings[ $key ] );
@@ -321,13 +326,16 @@ class FrmStyle {
 	 */
 	private function trim_braces( $input ) {
 		$output = $input;
+
 		// Remove any ( from the start of the string as no CSS values expect at the first character.
 		if ( $output && in_array( $output[0], array( '(', ')' ), true ) ) {
 			$output = ltrim( $output, '()' );
 		}
+
 		// Remove extra braces from the end.
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
 			$output = rtrim( $output, '()' );
+
 			if ( false !== strpos( $output, '(' ) ) {
 				$output .= ')';
 			}
@@ -350,6 +358,7 @@ class FrmStyle {
 
 		// Matches hex values but also checks for unexpected ( and ).
 		$looks_like_a_hex_value = preg_match( '/^(?:\()?(?!#?[a-fA-F0-9]*[^\(#\)\da-fA-F])[a-fA-F0-9\(\)]*(?:\))?$/', $setting );
+
 		if ( $looks_like_a_hex_value ) {
 			return true;
 		}
@@ -357,6 +366,7 @@ class FrmStyle {
 		// Matches size values but also checks for unexpected ( and ).
 		// This is case insensitive so it will catch PX, PT, etc, as well.
 		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
+
 		if ( $looks_like_a_size ) {
 			return true;
 		}
@@ -472,6 +482,7 @@ class FrmStyle {
 	public function get_one() {
 		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
+
 			if ( $style ) {
 				$this->id = $style->ID;
 			} else {
@@ -541,8 +552,10 @@ class FrmStyle {
 		$default_style  = false;
 
 		$styles = array();
+
 		foreach ( $temp_styles as $style ) {
 			$this->id = $style->ID;
+
 			if ( $style->menu_order ) {
 				if ( $default_style ) {
 					// only return one default
@@ -560,7 +573,7 @@ class FrmStyle {
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
 			$styles[ $style->ID ] = $style;
-		}
+		}//end foreach
 
 		if ( ! $default_style ) {
 			$default_style = reset( $styles );
@@ -808,6 +821,7 @@ class FrmStyle {
 	 */
 	public function force_balanced_quotation( $value ) {
 		$balanced_characters = array( '"', "'" );
+
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
 			$is_balanced = $char_count % 2 == 0;
@@ -830,12 +844,13 @@ class FrmStyle {
 	 *
 	 * @since 6.14
 	 *
-	 * @param int $style_id The post type "frm_styles" ID.
+	 * @param int|string $style_id The post type "frm_styles" ID.
 	 *
 	 * @return string The json encoded template data
 	 */
 	public function get_default_template_style( $style_id ) {
 		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
+
 		if ( empty( $default_template ) ) {
 			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
 		}

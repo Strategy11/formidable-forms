@@ -98,6 +98,7 @@ zip -r $zipname $destination \
 	-x "*/_typos.toml" \
 	-x "formidable-ai/resources/*" \
 	-x "*/webpack.dev.js"
+	-x "*/phpcs-sniffs/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

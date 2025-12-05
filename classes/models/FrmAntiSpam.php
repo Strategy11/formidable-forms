@@ -26,6 +26,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public static function maybe_init( $form_id ) {
 		$antispam = new self( $form_id );
+
 		if ( $antispam->run_antispam() ) {
 			$antispam->init();
 		}
@@ -185,6 +186,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public static function maybe_echo_token( $form_id ) {
 		$antispam = new self( $form_id );
+
 		if ( $antispam->run_antispam() ) {
 			echo 'data-token="' . esc_attr( $antispam->get() ) . '"';
 		}

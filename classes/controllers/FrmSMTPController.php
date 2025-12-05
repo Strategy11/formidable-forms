@@ -52,6 +52,7 @@ class FrmSMTPController {
 		add_filter( 'wp_mail_smtp_is_white_labeled', '__return_true' );
 
 		$self = new self();
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_frm_smtp_page_check_plugin_status', array( $self, 'ajax_check_plugin_status' ) );
 		}
@@ -320,6 +321,7 @@ class FrmSMTPController {
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
+
 		if ( ! $is_installed ) {
 			// Return the download url.
 			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );

@@ -3,8 +3,8 @@
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
 	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>phpcs-sniffs/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>deprecated/*</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
@@ -266,4 +266,7 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+
+	<!-- Custom Formidable sniffs -->
+	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
 </ruleset>
