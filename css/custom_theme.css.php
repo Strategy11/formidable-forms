@@ -448,12 +448,6 @@ legend.frm_hidden{
 	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
 }
 
-.with_frm_style .frm_inside_container > input:-ms-input-placeholder,
-.with_frm_style .frm_inside_container > textarea:-ms-input-placeholder {
-	opacity: 0;
-	transition: opacity 0.3s ease-in;
-}
-
 .with_frm_style .frm_inside_container > input::placeholder,
 .with_frm_style .frm_inside_container > textarea::placeholder {
 	opacity: 0;
@@ -498,12 +492,6 @@ legend.frm_hidden{
 }
 
 /* These do not work if they are combined */
-.with_frm_style .frm_inside_container.frm_label_float_top > input:-ms-input-placeholder,
-.with_frm_style .frm_inside_container.frm_label_float_top > textarea:-ms-input-placeholder {
-	opacity: 1;
-	transition: opacity 0.3s ease-in;
-}
-
 .with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
 .with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
 	opacity: 1;
