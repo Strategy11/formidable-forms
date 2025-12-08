@@ -29,6 +29,7 @@ class FrmCssScopeHelper {
 
 			if ( '@' === $char ) {
 				$brace_pos = strpos( $css, '{', $i );
+
 				if ( false === $brace_pos ) {
 					$buffer .= $char;
 					++$i;
@@ -115,9 +116,11 @@ class FrmCssScopeHelper {
 
 			if ( '@' === $char ) {
 				$brace_pos = strpos( $css, '{', $i );
+
 				if ( false === $brace_pos ) {
 					$buffer .= $char;
 					++$i;
+
 					continue;
 				}
 
@@ -197,9 +200,11 @@ class FrmCssScopeHelper {
 
 			foreach ( $lines as $line ) {
 				$trimmed = trim( $line );
+
 				if ( '' !== $trimmed ) {
 					$formatted_lines[] = "\n\t" . $trimmed;
 				}
+
 			}
 
 			return implode( '', $formatted_lines ) . "\n";
@@ -246,6 +251,7 @@ class FrmCssScopeHelper {
 				++$level;
 			} elseif ( '}' === $char ) {
 				--$level;
+
 				if ( 0 === $level ) {
 					return $i;
 				}
