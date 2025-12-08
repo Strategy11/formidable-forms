@@ -160,3 +160,7 @@
 	@extend %h-stack-base;
 	gap: var(--gap-sm);
 }
+
+.frm-flex-row-reverse {
+	flex-direction: row-reverse;
+}

@@ -3,6 +3,7 @@
  * Deactivation feedback controller
  *
  * @package Formidable
+ *
  * @since 6.15
  */
 
@@ -31,11 +32,13 @@ class FrmDeactivationFeedbackController {
 	 */
 	private static function feedback_is_expired() {
 		$feedback_expired = get_option( 'frm_feedback_expired' );
+
 		if ( ! $feedback_expired ) {
 			return true;
 		}
 
 		$expired_date = strtotime( $feedback_expired );
+
 		if ( ! $expired_date ) {
 			return true;
 		}
@@ -54,6 +57,7 @@ class FrmDeactivationFeedbackController {
 		if ( empty( $_GET['frm_feedback_submitted'] ) ) {
 			return;
 		}
+
 		if ( ! strpos( $plugin, 'formidable.php' ) && ! strpos( $plugin, 'formidable-pro.php' ) ) {
 			return;
 		}

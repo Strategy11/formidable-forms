@@ -3,6 +3,7 @@
  * Primary options for gdpr field
  *
  * @package Formidable
+ *
  * @since 6.19
  *
  * @var array        $field Field array.

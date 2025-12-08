@@ -10,6 +10,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'captcha';
@@ -29,6 +30,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	public static function get_captcha_image_name() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
+
 		if ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
 			$image_name = 'recaptcha_v3';
 		} else {
@@ -91,10 +93,12 @@ class FrmFieldCaptcha extends FrmFieldType {
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( ! self::should_show_captcha() ) {
 			return '';
 		}
@@ -105,12 +109,15 @@ class FrmFieldCaptcha extends FrmFieldType {
 			'class'        => $this->class_prefix( $frm_settings ) . $this->captcha_class( $frm_settings ),
 			'data-sitekey' => $settings->get_pubkey(),
 		);
+
 		if ( 'turnstile' === $frm_settings->active_captcha ) {
 			$captcha_language = $this->get_captcha_language();
+
 			if ( $captcha_language ) {
 				$div_attributes['data-language'] = $captcha_language;
 			}
 		}
+
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
 		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
@@ -135,6 +142,10 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
+	 * Load the captcha script.
+	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function load_field_scripts( $args ) {
@@ -166,6 +177,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
 	 * @return string
 	 */
 	protected function recaptcha_api_url( $frm_settings ) {
@@ -176,6 +188,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$lang = apply_filters( 'frm_recaptcha_lang', $frm_settings->re_lang, $this->field );
+
 		if ( $lang ) {
 			$api_js_url .= '&hl=' . $lang;
 		}
@@ -201,6 +214,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
 
 		$lang = $this->get_captcha_language();
+
 		if ( $lang ) {
 			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
 			$lang_parts  = explode( '-', $lang );
@@ -272,13 +286,20 @@ class FrmFieldCaptcha extends FrmFieldType {
 		return $settings->get_element_class_name();
 	}
 
+	/**
+	 * @param FrmSettings $frm_settings
+	 *
+	 * @return bool
+	 */
 	protected function allow_multiple( $frm_settings ) {
 		return $frm_settings->re_multi;
 	}
 
 	/**
 	 * @since 4.07
+	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	protected function validate_against_api( $args ) {
@@ -314,6 +335,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( isset( $response['success'] ) && ! $response['success'] ) {
 			// What happens when the CAPTCHA was entered incorrectly
 			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+
 			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
 				$invalid_message = '';
 			}
@@ -325,14 +347,18 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param float $score
+	 *
 	 * @return void
 	 */
 	private function set_score( $score ) {
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['captcha_scores'] ) ) {
 			$frm_vars['captcha_scores'] = array();
 		}
+
 		$form_id = is_object( $this->field ) ? $this->field->form_id : $this->field['form_id'];
+
 		if ( ! isset( $frm_vars['captcha_scores'][ $form_id ] ) ) {
 			$frm_vars['captcha_scores'][ $form_id ] = $score;
 		}
@@ -340,6 +366,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public function validate( $args ) {
@@ -348,6 +375,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$missing_token = ! self::post_data_includes_token();
+
 		if ( $missing_token ) {
 			return array( 'field' . $args['id'] => __( 'The captcha is missing from this form', 'formidable' ) );
 		}
@@ -383,6 +411,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function should_validate() {
 		$is_hidden_field = apply_filters( 'frm_is_field_hidden', false, $this->field, wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( FrmAppHelper::is_admin() || $is_hidden_field ) {
 			return false;
 		}
@@ -393,6 +422,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
+	 * @return array|WP_Error
 	 */
 	protected function send_api_check( $frm_settings ) {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
@@ -419,6 +450,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	public static function update_field_name( $values ) {
 		if ( $values['type'] === 'captcha' ) {
 			$name = $values['name'];
+
 			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
 				$values['name'] = __( 'Captcha', 'formidable' );
 			}
@@ -429,6 +461,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 	/**
 	 * @param FrmSettings $frm_settings
+	 *
 	 * @return string
 	 */
 	protected function captcha_size( $frm_settings ) {

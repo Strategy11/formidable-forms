@@ -86,7 +86,8 @@ class FrmFieldValueSelector {
 	/**
 	 * FrmFieldValueSelector constructor
 	 *
-	 * @param int|string $field_id
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Arguments for configuring the value selector.
 	 */
 	public function __construct( $field_id, $args ) {
 		$this->set_html_name( $args );
@@ -95,6 +96,7 @@ class FrmFieldValueSelector {
 		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
+
 		if ( $this->field_id === 0 ) {
 			return;
 		}

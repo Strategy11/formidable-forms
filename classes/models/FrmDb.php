@@ -4,9 +4,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmDb {
+
+	/**
+	 * The table name for Formidable Fields.
+	 *
+	 * @var string
+	 */
 	public $fields;
+
+	/**
+	 * The table name for Formidable Forms.
+	 *
+	 * @var string
+	 */
 	public $forms;
+
+	/**
+	 * The table name for Formidable Entries.
+	 *
+	 * @var string
+	 */
 	public $entries;
+
+	/**
+	 * The table name for Formidable Entry Metas.
+	 *
+	 * @var string
+	 */
 	public $entry_metas;
 
 	public function __construct() {
@@ -27,6 +51,7 @@ class FrmDb {
 	 *
 	 * @param array  $args
 	 * @param string $starts_with
+	 *
 	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
@@ -56,9 +81,12 @@ class FrmDb {
 	 * @param string $base_where
 	 * @param string $where
 	 * @param array  $values
+	 *
+	 * @return void
 	 */
 	public static function parse_where_from_array( $args, $base_where, &$where, &$values ) {
 		$condition = ' AND';
+
 		if ( isset( $args['or'] ) ) {
 			$condition = ' OR';
 			unset( $args['or'] );
@@ -67,9 +95,11 @@ class FrmDb {
 		foreach ( $args as $key => $value ) {
 			$where         .= empty( $where ) ? $base_where : $condition;
 			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+
 			if ( is_numeric( $key ) || $array_inc_null ) {
 				$where       .= ' ( ';
 				$nested_where = '';
+
 				if ( $array_inc_null ) {
 					foreach ( $value as $val ) {
 						$parse_where = array(
@@ -81,11 +111,12 @@ class FrmDb {
 				} else {
 					self::parse_where_from_array( $value, '', $nested_where, $values );
 				}
+
 				$where .= $nested_where;
 				$where .= ' ) ';
 			} else {
 				self::interpret_array_to_sql( $key, $value, $where, $values );
-			}
+			}//end if
 		}//end foreach
 	}
 
@@ -94,6 +125,7 @@ class FrmDb {
 	 * @param array|string $value
 	 * @param string       $where
 	 * @param array        $values
+	 *
 	 * @return void
 	 */
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
@@ -115,14 +147,17 @@ class FrmDb {
 				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
 				$start  = true;
+
 				foreach ( $value as $v ) {
 					if ( ! $start ) {
 						$where .= ' OR ';
 					}
+
 					$start    = false;
 					$where   .= $key . ' %s';
 					$values[] = '%' . self::esc_like( $v ) . '%';
 				}
+
 				$where .= ')';
 			} elseif ( ! empty( $value ) ) {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
@@ -136,10 +171,11 @@ class FrmDb {
 			 */
 			$start = '%';
 			$end   = '%';
+
 			if ( $lowercase_key === 'like%' ) {
 				$start = '';
 				$where = rtrim( $where, '%' );
-			} elseif ( $lowercase_key == '%like' ) {
+			} elseif ( $lowercase_key === '%like' ) {
 				$end    = '';
 				$where  = rtrim( rtrim( $where, '%like' ), '%LIKE' );
 				$where .= 'like';
@@ -172,6 +208,8 @@ class FrmDb {
 	 * @param string     $key
 	 * @param int|string $value
 	 * @param string     $where
+	 *
+	 * @return void
 	 */
 	private static function add_query_placeholder( $key, $value, &$where ) {
 		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
@@ -210,6 +248,7 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 		self::convert_options_to_array( $args, '', $limit );
+
 		if ( $type === 'var' && ! isset( $args['limit'] ) ) {
 			$args['limit'] = 1;
 		}
@@ -237,9 +276,11 @@ class FrmDb {
 	public static function generate_cache_key( $where, $args, $field, $type ) {
 		$cache_key = '';
 		$where     = FrmAppHelper::array_flatten( $where );
+
 		foreach ( $where as $key => $value ) {
 			$cache_key .= $key . '_' . $value;
 		}
+
 		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
 		$cache_key  = str_replace( array( ' ', ',' ), '_', $cache_key );
 
@@ -313,6 +354,7 @@ class FrmDb {
 		);
 
 		$where_is = strtolower( $where_is );
+
 		if ( isset( $switch_to[ $where_is ] ) ) {
 			return ' ' . $switch_to[ $where_is ];
 		}
@@ -333,15 +375,17 @@ class FrmDb {
 	 *
 	 * @param string $table
 	 * @param string $group
+	 *
+	 * @return void
 	 */
 	private static function get_group_and_table_name( &$table, &$group ) {
-		global $wpdb, $wpmuBaseTablePrefix;
+		global $wpdb;
 
 		$table_parts = explode( ' ', $table );
 		$group       = reset( $table_parts );
 		self::maybe_remove_prefix( $wpdb->prefix, $group );
 
-		$prefix = $wpmuBaseTablePrefix ? $wpmuBaseTablePrefix : $wpdb->base_prefix;
+		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
 		if ( $group == $table ) {
@@ -356,6 +400,11 @@ class FrmDb {
 	 * Only remove the db prefix when at the beginning.
 	 *
 	 * @since 4.04.02
+	 *
+	 * @param string $prefix Prefix to remove.
+	 * @param string $name   Name to strip prefix from, passed by reference.
+	 *
+	 * @return void
 	 */
 	private static function maybe_remove_prefix( $prefix, &$name ) {
 		if ( substr( $name, 0, strlen( $prefix ) ) === $prefix ) {
@@ -363,6 +412,13 @@ class FrmDb {
 		}
 	}
 
+	/**
+	 * @param array|string $args
+	 * @param string       $order_by
+	 * @param int|string   $limit
+	 *
+	 * @return void
+	 */
 	private static function convert_options_to_array( &$args, $order_by = '', $limit = '' ) {
 		if ( ! is_array( $args ) ) {
 			$args = array( 'order_by' => $args );
@@ -377,6 +433,7 @@ class FrmDb {
 		}
 
 		$temp_args = $args;
+
 		foreach ( $temp_args as $k => $v ) {
 			if ( $v == '' ) {
 				unset( $args[ $k ] );
@@ -384,6 +441,7 @@ class FrmDb {
 			}
 
 			$db_name = strtoupper( str_replace( '_', ' ', $k ) );
+
 			if ( strpos( $v, $db_name ) === false ) {
 				$args[ $k ] = $db_name . ' ' . $v;
 			}
@@ -448,6 +506,10 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @param array $args Query arguments, passed by reference.
+	 *
+	 * @return void
 	 */
 	private static function esc_query_args( &$args ) {
 		foreach ( $args as $param => $value ) {
@@ -482,6 +544,8 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $order_query
+	 *
+	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
 		if ( empty( $order_query ) ) {
@@ -490,6 +554,7 @@ class FrmDb {
 
 		// Remove ORDER BY before sanitizing.
 		$order_query = strtolower( $order_query );
+
 		if ( strpos( $order_query, 'order by' ) !== false ) {
 			$order_query = str_replace( 'order by', '', $order_query );
 		}
@@ -498,11 +563,13 @@ class FrmDb {
 
 		$order      = trim( reset( $order_query ) );
 		$safe_order = array( 'count(*)' );
+
 		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 
 		$order_by = '';
+
 		if ( count( $order_query ) > 1 ) {
 			$order_by = end( $order_query );
 			self::esc_order_by( $order_by );
@@ -515,9 +582,14 @@ class FrmDb {
 	 * Make sure this is ordering by either ASC or DESC
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param string $order_by Sort direction, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function esc_order_by( &$order_by ) {
 		$sort_options = array( 'asc', 'desc' );
+
 		if ( ! in_array( strtolower( $order_by ), $sort_options, true ) ) {
 			$order_by = 'asc';
 		}
@@ -525,7 +597,10 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.06
+	 *
 	 * @param string $limit
+	 *
+	 * @return string
 	 */
 	public static function esc_limit( $limit ) {
 		if ( empty( $limit ) ) {
@@ -533,11 +608,13 @@ class FrmDb {
 		}
 
 		$limit = trim( str_replace( 'limit ', '', strtolower( $limit ) ) );
+
 		if ( is_numeric( $limit ) ) {
 			return ' LIMIT ' . $limit;
 		}
 
 		$limit = explode( ',', trim( $limit ) );
+
 		foreach ( $limit as $k => $l ) {
 			if ( is_numeric( $l ) ) {
 				$limit[ $k ] = $l;
@@ -553,6 +630,11 @@ class FrmDb {
 	 * Get an array of values ready to go through $wpdb->prepare
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param array  $array Array of values.
+	 * @param string $type  Placeholder type.
+	 *
+	 * @return string
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
@@ -565,6 +647,7 @@ class FrmDb {
 	 *
 	 * @param string       $starts_with
 	 * @param array|string $where
+	 *
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
@@ -593,8 +676,10 @@ class FrmDb {
 	 * Prepare and save settings in styles and actions
 	 *
 	 * @since 2.05.06
-	 * @param array  $settings
-	 * @param string $group
+	 *
+	 * @param array|object $settings
+	 * @param string       $group
+	 *
 	 * @return int|WP_Error
 	 */
 	public static function save_settings( $settings, $group ) {
@@ -621,10 +706,12 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param array $settings
+	 *
 	 * @return int|WP_Error
 	 */
 	public static function save_json_post( $settings ) {
 		global $wp_filter;
+
 		if ( isset( $wp_filter['content_save_pre'] ) ) {
 			$filters = $wp_filter['content_save_pre'];
 		}
@@ -651,6 +738,7 @@ class FrmDb {
 	 * @param string $group     The name of the cache group.
 	 * @param string $query     If blank, don't run a db call.
 	 * @param string $type      The wpdb function to use with this query.
+	 * @param int    $time      Cache expiration time in seconds.
 	 *
 	 * @return mixed $results The cache or query results
 	 */
@@ -679,6 +767,13 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.06
+	 *
+	 * @param string $cache_key The unique name for this cache.
+	 * @param mixed  $results   Cached results.
+	 * @param string $group     The name of the cache group.
+	 * @param int    $time      Cache expiration time in seconds.
+	 *
+	 * @return void
 	 */
 	public static function set_cache( $cache_key, $results, $group = '', $time = 300 ) {
 		if ( ! FrmAppHelper::prevent_caching() ) {
@@ -692,6 +787,11 @@ class FrmDb {
 	 * in Redis and Memcache
 	 *
 	 * @since 2.05.06
+	 *
+	 * @param string $key   Cache key.
+	 * @param string $group Cache group name.
+	 *
+	 * @return void
 	 */
 	public static function add_key_to_group_cache( $key, $group ) {
 		$cached         = self::get_group_cached_keys( $group );
@@ -701,9 +801,14 @@ class FrmDb {
 
 	/**
 	 * @since 2.05.06
+	 *
+	 * @param string $group Cache group name.
+	 *
+	 * @return array
 	 */
 	public static function get_group_cached_keys( $group ) {
 		$cached = wp_cache_get( 'cached_keys', $group );
+
 		if ( ! $cached || ! is_array( $cached ) ) {
 			$cached = array();
 		}
@@ -714,7 +819,10 @@ class FrmDb {
 	/**
 	 * @since 2.05.06
 	 *
-	 * @param string $cache_key
+	 * @param string $cache_key Cache key to delete.
+	 * @param string $group     Cache group name.
+	 *
+	 * @return void
 	 */
 	public static function delete_cache_and_transient( $cache_key, $group = 'default' ) {
 		delete_transient( $cache_key );
@@ -727,6 +835,8 @@ class FrmDb {
 	 * @since 2.05.06
 	 *
 	 * @param string $group The name of the cache group.
+	 *
+	 * @return void
 	 */
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
@@ -747,6 +857,7 @@ class FrmDb {
 	 *
 	 * @param string $table Table name without `$wpdb->prefix`.
 	 * @param string $column Column name.
+	 *
 	 * @return bool
 	 */
 	public static function db_column_exists( $table, $column ) {

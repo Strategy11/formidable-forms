@@ -120,6 +120,8 @@ class FrmOnboardingWizardController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.9
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::set_page_url();
@@ -159,6 +161,7 @@ class FrmOnboardingWizardController {
 		}
 
 		$transient_value = get_transient( self::TRANSIENT_NAME );
+
 		if ( ! in_array( $transient_value, array( self::TRANSIENT_VALUE, self::TRANSIENT_MULTI_VALUE ), true ) ) {
 			return;
 		}
@@ -186,6 +189,7 @@ class FrmOnboardingWizardController {
 
 		// Redirect to the onboarding wizard's initial step.
 		$page_url = add_query_arg( 'step', self::INITIAL_STEP, self::$page_url );
+
 		if ( wp_safe_redirect( esc_url_raw( $page_url ) ) ) {
 			exit;
 		}
@@ -318,7 +322,6 @@ class FrmOnboardingWizardController {
 		wp_send_json_success();
 	}
 
-
 	/**
 	 * Handle AJAX request to set up usage data for the Onboarding Wizard.
 	 *
@@ -424,6 +427,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param string $classes Existing body classes.
+	 *
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
 	public static function add_admin_body_classes( $classes ) {
@@ -434,6 +438,7 @@ class FrmOnboardingWizardController {
 	 * Checks if the Onboarding Wizard was skipped during the plugin's installation.
 	 *
 	 * @since 6.9
+	 *
 	 * @return bool True if the Onboarding Wizard was skipped, false otherwise.
 	 */
 	public static function has_onboarding_been_skipped() {
@@ -444,6 +449,7 @@ class FrmOnboardingWizardController {
 	 * Marks the Onboarding Wizard as skipped to prevent automatic redirects to the wizard.
 	 *
 	 * @since 6.9
+	 *
 	 * @return void
 	 */
 	public static function mark_onboarding_as_skipped() {
@@ -456,6 +462,7 @@ class FrmOnboardingWizardController {
 	 * @since 6.9
 	 *
 	 * @param array $inbox_messages The array of existing inbox messages.
+	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
@@ -644,6 +651,7 @@ class FrmOnboardingWizardController {
 
 		// Gravity Forms Migrator add-on.
 		$gravity_forms_plugin = 'formidable-gravity-forms-importer/formidable-gravity-forms-importer.php';
+
 		if ( class_exists( 'GFForms' ) && ! is_plugin_active( $gravity_forms_plugin ) ) {
 			$is_installed_gravity_forms = array_key_exists( $gravity_forms_plugin, $plugins );
 

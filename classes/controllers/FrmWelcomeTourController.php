@@ -94,6 +94,7 @@ class FrmWelcomeTourController {
 		}
 
 		self::$checklist = self::get_checklist();
+
 		if (
 			self::is_tour_completed() && ( ! empty( self::$checklist['completed_seen'] ) || ! self::get_current_form_id() )
 			|| ! empty( self::$checklist['dismissed'] )
@@ -102,6 +103,7 @@ class FrmWelcomeTourController {
 		}
 
 		self::$is_dashboard_page = FrmDashboardController::is_dashboard_page();
+
 		if ( self::$is_dashboard_page ) {
 			return empty( self::$checklist['seen'] );
 		}
@@ -198,6 +200,7 @@ class FrmWelcomeTourController {
 	 *
 	 * @param array $steps The steps to fill.
 	 * @param array $steps_keys The steps keys.
+	 *
 	 * @return array The steps with the completed data.
 	 */
 	private static function fill_step_completed_data( $steps, $steps_keys ) {
@@ -300,6 +303,8 @@ class FrmWelcomeTourController {
 	 * Shows links after completing the Welcome tour.
 	 *
 	 * @param int $current_form_id Current form ID.
+	 *
+	 * @return void
 	 */
 	public static function show_completed_links( $current_form_id ) {
 		$links = array(
@@ -379,6 +384,7 @@ class FrmWelcomeTourController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
 		$step_key = FrmAppHelper::get_post_param( 'step_key' );
+
 		if ( ! $step_key ) {
 			wp_send_json_error( __( 'Invalid step', 'formidable' ) );
 		}
@@ -413,6 +419,7 @@ class FrmWelcomeTourController {
 	 */
 	private static function more_than_the_default_form_exists() {
 		$form_keys = FrmDb::get_col( 'frm_forms', array(), 'form_key' );
+
 		if ( count( $form_keys ) > 1 ) {
 			return true;
 		}
@@ -458,6 +465,7 @@ class FrmWelcomeTourController {
 	 * Adds custom classes to the existing string of admin body classes.
 	 *
 	 * @param string $classes Existing body classes.
+	 *
 	 * @return string Updated list of body classes, including the newly added classes.
 	 */
 	public static function add_admin_body_classes( $classes ) {
@@ -516,6 +524,8 @@ class FrmWelcomeTourController {
 	 * Saves the checklist data.
 	 *
 	 * @param array|null $checklist The checklist data to set.
+	 *
+	 * @return void
 	 */
 	public static function save_checklist( $checklist = null ) {
 		update_option( self::CHECKLIST_OPTION, $checklist ?? self::$checklist, false );
@@ -540,16 +550,17 @@ class FrmWelcomeTourController {
 	 * Build a tracked URL with UTM parameters and affiliate tracking.
 	 *
 	 * @param string $url The base URL to process.
+	 *
 	 * @return string The processed URL with UTM parameters and affiliate tracking.
 	 */
 	public static function make_tracked_url( $url ) {
-		$utm_params = array(
-			'utm_source'   => 'WordPress',
-			'utm_medium'   => 'welcome-tour',
-			'utm_campaign' => 'liteplugin',
+		$url = FrmAppHelper::maybe_add_missing_utm(
+			$url,
+			array(
+				'campaign' => 'welcome-tour',
+			)
 		);
-
-		return FrmAppHelper::make_affiliate_url( add_query_arg( $utm_params, $url ) );
+		return FrmAppHelper::make_affiliate_url( $url );
 	}
 
 	/**
@@ -563,6 +574,7 @@ class FrmWelcomeTourController {
 		}
 
 		self::$current_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( ! self::$current_form_id ) {
 			self::$current_form_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
 		}
@@ -601,6 +613,7 @@ class FrmWelcomeTourController {
 	public static function get_usage_data() {
 		// Do not use the get_checklist() method to prevent adding default value.
 		$option = get_option( self::CHECKLIST_OPTION );
+
 		if ( ! $option ) {
 			// Welcome tour doesn't show on this site.
 			return array();

@@ -14,6 +14,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param string $html
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_test_mode_container( $html ) {
@@ -85,11 +86,13 @@ class FrmTestModeController {
 	 */
 	private static function render_testing_mode_container() {
 		$form_key = self::get_form_key_from_request();
+
 		if ( ! $form_key ) {
 			return;
 		}
 
 		$form = FrmForm::getOne( $form_key );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -129,11 +132,13 @@ class FrmTestModeController {
 		);
 
 		$oneclick_data = FrmAddonsController::install_link( 'ai' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
 
 		$oneclick_data = FrmAddonsController::install_link( 'test-mode' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$test_mode_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
@@ -165,16 +170,19 @@ class FrmTestModeController {
 	 */
 	private static function get_form_key_from_request() {
 		$form_key = FrmAppHelper::simple_get( 'form' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'sanitize_text_field' );
+
 		if ( $form_id && is_numeric( $form_id ) ) {
 			return FrmForm::get_key_by_id( $form_id );
 		}
@@ -188,6 +196,7 @@ class FrmTestModeController {
 	 * @since 6.25
 	 *
 	 * @param array $form_actions
+	 *
 	 * @return array
 	 */
 	private static function get_enabled_form_action_ids( $form_actions ) {
@@ -365,9 +374,9 @@ class FrmTestModeController {
 		$plugin_url = FrmAppHelper::plugin_url();
 		$version    = FrmAppHelper::plugin_version();
 
-		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array( 'jquery' ), '1.16.0', true );
-		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '4.6.1', true );
-		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '1.1.1', true );
+		wp_register_script( 'popper', FrmAppHelper::plugin_url() . '/js/popper.min.js', array(), '2.11.8', true );
+		wp_register_script( 'bootstrap_tooltip', $plugin_url . '/js/bootstrap.min.js', array( 'jquery', 'popper' ), '5.0.2', true );
+		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );
 		wp_register_script( 'formidable_dom', $plugin_url . '/js/admin/dom.js', array( 'jquery', 'jquery-ui-dialog', 'wp-i18n' ), $version, true );
 
 		wp_enqueue_script( 'bootstrap-multiselect' );

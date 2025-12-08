@@ -21,6 +21,7 @@ class FrmHooksController {
 		if ( 'load_hooks' == $trigger_hooks ) {
 			if ( is_admin() ) {
 				$hooks[] = 'load_admin_hooks';
+
 				if ( defined( 'DOING_AJAX' ) ) {
 					$hooks[] = 'load_ajax_hooks';
 					$hooks[] = 'load_form_hooks';
@@ -151,7 +152,7 @@ class FrmHooksController {
 		add_action( 'admin_menu', 'FrmFormsController::menu', 10 );
 		add_action( 'admin_head-toplevel_page_formidable', 'FrmFormsController::head' );
 		add_action( 'frm_after_field_options', 'FrmFormsController::logic_tip' );
-		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields', 10, 2 );
+		add_filter( 'frm_fields_in_form_builder', 'FrmFormsController::update_form_builder_fields' );
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
@@ -182,6 +183,7 @@ class FrmHooksController {
 
 		// Simple Blocks Controller.
 		add_action( 'enqueue_block_editor_assets', 'FrmSimpleBlocksController::block_editor_assets' );
+		add_action( 'enqueue_block_assets', 'FrmSimpleBlocksController::block_assets' );
 
 		add_action( 'admin_init', 'FrmUsageController::schedule_send' );
 

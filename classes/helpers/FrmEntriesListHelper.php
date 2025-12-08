@@ -5,12 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesListHelper extends FrmListHelper {
 
+	/**
+	 * @var string|null
+	 */
 	protected $column_name;
-	protected $item;
-	protected $field;
 
 	/**
 	 * @since 4.07
+	 *
 	 * @var bool|int
 	 */
 	public $total_items = 0;
@@ -38,6 +40,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$this->prepare_pagination();
 	}
 
+	/**
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
 	protected function set_total_items( $s_query ) {
 		$this->total_items = FrmEntry::getRecordCount( $s_query );
 	}
@@ -46,6 +53,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Prepares pagination.
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -62,6 +71,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Sets the global $per_page variable
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -87,6 +98,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 6.5.4
+	 *
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -120,6 +132,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int $per_page
+	 *
 	 * @return string
 	 */
 	protected function get_limit( $per_page ) {
@@ -138,6 +151,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
+	 *
 	 * @return array
 	 */
 	protected function get_search_query( &$join_form_in_query ) {
@@ -175,6 +189,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array<int>
 	 */
 	protected function get_form_ids( $form_id ) {
@@ -191,6 +206,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
+
 		if ( ! empty( $s ) ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
 
@@ -203,6 +219,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $form_id ) {
 			$form = FrmForm::getOne( $form_id );
 		}
+
 		$has_form = ! empty( $form );
 
 		if ( ! $has_form ) {
@@ -216,6 +233,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $text    Text.
+	 * @param string $input_id Input ID.
+	 *
 	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
@@ -223,10 +243,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
 		$is_footer = ( $which !== 'top' );
+
 		if ( $is_footer && ! empty( $this->items ) ) {
 			$utm = array(
 				'campaign' => 'spam-protection',
@@ -245,10 +268,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which 
+	 *
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+
 		if ( $which === 'top' && ! $form_id ) {
 			echo '<div class="alignleft actions">';
 
@@ -290,6 +316,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.12
 	 *
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private static function get_entry_label( $item ) {
@@ -301,6 +328,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param string $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -353,6 +383,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				}
 
 				$r .= "<td $attributes>";
+
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
@@ -360,8 +391,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				} else {
 					$r .= $val;
 				}
+
 				$r .= '</td>';
-			}
+			}//end if
 			unset( $val );
 		}//end foreach
 		$r .= '</tr>';
@@ -380,6 +412,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
+	 * @return mixed
 	 */
 	private function column_value( $item ) {
 		$col_name = $this->maybe_fix_column_name( $this->column_name );
@@ -409,6 +443,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			case 'form_id':
 				$form_id             = $item->form_id;
 				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+
 				if ( $user_can_edit_forms ) {
 					$val = FrmFormsHelper::edit_form_link( $form_id );
 				} else {
@@ -427,6 +462,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			default:
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
+
 				if ( $val === false ) {
 					$this->get_column_value( $item, $val );
 				}
@@ -451,6 +487,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.11.2
 	 *
 	 * @param string $column_name
+	 *
 	 * @return string
 	 */
 	private function maybe_fix_column_name( $column_name ) {
@@ -499,6 +536,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$field = FrmField::getOne( $col_name );
+
 		if ( ! $field ) {
 			return;
 		}

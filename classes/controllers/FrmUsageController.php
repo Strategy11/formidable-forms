@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * @todo Show opt-in popup after plugin activation.
+ *
  * @since 3.06.04
  */
 class FrmUsageController {
@@ -27,6 +28,7 @@ class FrmUsageController {
 	 */
 	public static function schedule_send() {
 		$timestamp = wp_next_scheduled( 'formidable_send_usage' );
+
 		if ( ! self::tracking_allowed() ) {
 			if ( $timestamp ) {
 				// Remove the scheduled event if it's not allowed and it's scheduled.
@@ -56,6 +58,10 @@ class FrmUsageController {
 	 * Adds once weekly to the existing schedules.
 	 *
 	 * @since 3.06.04
+	 *
+	 * @param array $schedules Schedules.
+	 *
+	 * @return array
 	 */
 	public static function add_schedules( $schedules = array() ) {
 		$schedules['weekly'] = array(
@@ -91,6 +97,8 @@ class FrmUsageController {
 	 * Loads scripts.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function load_scripts() {
 		if ( self::is_forms_list_page() || FrmAppHelper::is_admin_page( 'formidable-form-templates' ) || FrmAppHelper::is_admin_page() ) {
@@ -119,6 +127,8 @@ class FrmUsageController {
 	 * AJAX handler to track flows.
 	 *
 	 * @since 6.16.1
+	 *
+	 * @return void
 	 */
 	public static function ajax_track_flows() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );

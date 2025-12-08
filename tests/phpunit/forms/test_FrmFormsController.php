@@ -150,6 +150,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( FrmAppHelper::js_suffix() === '.min' ) {
 			$file = 'frm.min.js';
+
 			if ( strpos( $formidable_js->src, $file ) === false ) {
 				$file = 'formidable.min.js';
 			}
@@ -246,6 +247,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			'window.location="http://example.com"',
 			'Test page content',
 		);
+
 		foreach ( $contains as $c ) {
 			$this->assertStringContainsString( $c, $response );
 		}
@@ -291,6 +293,10 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Trigger migration check and the flag.
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	private function trigger_migrate_actions( $form_id ) {
 		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
@@ -361,6 +367,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$class  = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 
 		$max_field_id = 0;
+
 		foreach ( $fields as $field ) {
 			$max_field_id = max( (int) $field->id, $max_field_id );
 		}

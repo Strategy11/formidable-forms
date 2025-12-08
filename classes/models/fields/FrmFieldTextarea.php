@@ -10,6 +10,7 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'textarea';
@@ -61,6 +62,7 @@ class FrmFieldTextarea extends FrmFieldType {
 			if ( is_numeric( $size ) ) {
 				$size .= 'px';
 			}
+
 			$style = 'width:' . $size . ';';
 			echo ' style="' . esc_attr( $style ) . '"';
 		}

@@ -44,7 +44,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
-		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
+
+		if ( ! is_string( $orderby ) ) {
+			$orderby = 'id';
+		}
+
+		if ( ! is_string( $order ) || ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
 			$order = 'DESC';
 		}
 
@@ -177,15 +182,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
 		$footer = $which !== 'top';
+
 		if ( $footer ) {
 			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( $form_id ) {
 			// Don't show the switcher if it's already in the header.
 			return;
@@ -261,6 +269,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $args
+	 *
+	 * @return string
 	 */
 	private function get_column_value( $item, $args ) {
 		$column_name   = $args['column_name'];
@@ -288,6 +298,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_form_ids() {
 		$entry_ids = array();
+
 		foreach ( $this->items as $item ) {
 			$entry_ids[] = absint( $item->item_id );
 			unset( $item );
@@ -308,6 +319,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		unset( $entry_ids );
 
 		$form_ids = array();
+
 		foreach ( $forms as $form ) {
 			$form_ids[ $form->id ] = $form;
 			unset( $form );
@@ -373,6 +385,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return array
 	 */
 	private function get_row_actions( $item ) {
@@ -397,6 +410,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Get the column value for displaying an entry ID.
 	 *
 	 * @param object $item A payment or subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_item_id_column( $item ) {
@@ -414,6 +428,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return mixed
 	 */
 	private function get_form_id_column( $item, $atts ) {
@@ -427,6 +442,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_user_id_column( $item ) {
@@ -438,6 +454,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_created_at_column( $item, $atts ) {
@@ -452,6 +469,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_amount_column( $item ) {
@@ -476,6 +495,11 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
 	private function get_status_column( $item ) {
 		$status = esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $item ) ) );
 
@@ -501,6 +525,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_sub_id_column( $item ) {
@@ -521,6 +546,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 *
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_paysys_column( $item, $atts ) {
@@ -542,6 +568,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @since 6.6
 	 *
 	 * @param stdClass $item Payment or Subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_mode_column( $item ) {
