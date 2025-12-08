@@ -374,7 +374,16 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 == Changelog ==
 = 6.26 =
 * New: Gutenberg blocks now use API version 3. As of WordPress 6.9, a deprecated message would appear for older block API versions.
+* New: Styles now include a Custom CSS setting in Quick Settings that can be exported and imported to other sites. The custom CSS is automatically prefixed with the style's class name to prevent conflicts.
+* New: Admin pages now use Bootstrap 5 and Popper 2, updated from Bootstrap 4 and Popper 1.
+* New: 12 Fields can now be added to a row in the form builder, up from the previous limit of 6.
+* New: An htaccess file is now included that prevents access to text files included in this plugin on Apache servers.
+* New: The first name field in a form will now automatically include the given-name and family-name autocomplete attributes to improve accessibility and user experience.
+* Fix: Field errors were using the input text error color setting incorrectly. This has been reverted to use the error border color setting like it did in older versions.
+* Fix: Square would throw a styling error when using a style with comma separated font family options. To prevent this error, the first font is used only.
+* Fix: The mobile responsiveness of email styles has been improved.
 * The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
+* The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
 
 = 6.25.1 =
 * New: The frm_email_message filter now includes email_key in the passed attribute data.
@@ -403,19 +412,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The country code would not properly get sent to Square when using US as the address type.
 * Fix: A Cannot access offset of type string on string fatal error that occurs when field options data is in an unexpected format has been fixed.
 * Fix: Font sizes would not scale as expected after changing the base font size style setting for a second time.
-
-= 6.24.1 =
-* Fix: Importing entries with a CSV file stopped working with v6.24.
-
-= 6.24 =
-* New: Field settings have been redesigned.
-* Fix: A section ID would not properly get set when dragging a field into a field group within a section or repeater. This could cause issues with fields unexpectedly appearing outside of a repeater.
-* Fix: Conditional logic field IDs would not properly update after importing an XML.
-* Fix: Line breaks used in Quiz Outcome actions would not properly import.
-* Fix: In some cases, a field group would not be draggable after a field was added beside another field.
-* Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
-* Fix: JS errors would occur in some cases after deleting a field group or section.
-* Fix: The line height style setting is no longer applied to the label in the visual styler preview.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
