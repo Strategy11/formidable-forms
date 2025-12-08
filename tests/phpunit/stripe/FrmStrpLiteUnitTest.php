@@ -64,6 +64,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 
 	protected function initialize_connect_api( $user_id = 1 ) {
 		wp_set_current_user( $user_id );
+
 		if ( 1 === $user_id ) {
 			$this->set_user_by_role( 'administrator' );
 		}
@@ -76,6 +77,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		}
 
 		$initialized = $this->run_private_method( array( 'FrmStrpLiteConnectHelper', 'initialize' ), array() );
+
 		if ( ! $initialized ) {
 			$this->fail();
 		}
@@ -207,6 +209,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			'capture_method'       => 'manual',
 			'payment_method'       => $this->create_payment_method()->id,
 		);
+
 		if ( $action_id ) {
 			$new_charge['metadata'] = array(
 				'action' => $action_id,

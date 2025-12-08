@@ -55,6 +55,7 @@ class FrmFieldHTML extends FrmFieldType {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );
 		$pre_filter = $html;
 		$html       = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
+
 		if ( $pre_filter === $html ) {
 			$html = do_shortcode( $html );
 		}

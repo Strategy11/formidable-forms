@@ -207,6 +207,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background:
 	<?php
 	echo esc_html( $submit_bg_color );
+
 	if ( ! empty( $submit_bg_img ) ) {
 		echo esc_html( ' url(' . $submit_bg_img . ')' );
 	}
@@ -366,7 +367,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
 	font-weight:<?php echo esc_html( $weight . $important ); ?>;
-	color:<?php echo esc_html( $text_color_error . $important ); ?>;
+	color:<?php echo esc_html( $border_color_error . $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{

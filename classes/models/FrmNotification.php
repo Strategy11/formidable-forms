@@ -69,7 +69,7 @@ class FrmNotification {
 			$sent_to = array_filter( $sent_to );
 
 			$temp = str_replace( '<', '&lt;', $sent_to );
-			echo ' ' . FrmAppHelper::kses( implode( ', ', (array) $temp ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo ' ' . FrmAppHelper::kses( implode( ', ', $temp ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}
 }

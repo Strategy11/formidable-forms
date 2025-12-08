@@ -2,6 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 $is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
 
 ?>
@@ -59,10 +60,13 @@ unset( $more_html );
 <h3><?php esc_html_e( 'GDPR', 'formidable' ); ?></h3>
 <?php
 $gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
+
 if ( ! $is_gdpr_enabled ) {
 	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
 }
+
 $custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont frm_gdpr_options' );
+
 if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }

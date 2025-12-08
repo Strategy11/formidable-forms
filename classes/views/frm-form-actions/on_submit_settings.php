@@ -36,6 +36,7 @@ $types = array(
 );
 
 $col_count = count( $types );
+
 if ( $col_count <= 4 ) {
 	$col_class = 'frm' . ( 12 / $col_count );
 } else {
@@ -69,8 +70,10 @@ if ( $col_count <= 4 ) {
 $type_args                   = $args;
 $type_args['form_action']    = $instance;
 $type_args['action_control'] = $this;
+
 foreach ( $types as $type_name => $type ) {
 	$css_class = 'frm_on_submit_' . esc_attr( $type_name ) . '_settings frm_on_submit_dependent_setting';
+
 	if ( $success_action !== $type_name ) {
 		$css_class .= ' frm_hidden';
 	}

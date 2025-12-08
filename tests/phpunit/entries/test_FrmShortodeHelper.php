@@ -34,10 +34,12 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 			'[if 25 show=label]content[/if 25]',
 			'[foreach 25]content[/foreach 25]',
 		);
+
 		foreach ( $shortcodes as $shortcode ) {
 			preg_match_all( "/\[(if |foreach )?(\d+)\b(.*?)(?:(\/))?\](?:(.+?)\[\/\2\])?/s", $shortcode, $matches, PREG_PATTERN_ORDER );
 
 			$args = array();
+
 			if ( strpos( $shortcode, '[foreach' ) !== false ) {
 				$args['foreach'] = true;
 			} elseif ( strpos( $shortcode, '[if' ) !== false ) {

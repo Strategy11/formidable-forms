@@ -123,6 +123,7 @@ class FrmSettingsController {
 					'medium'     => 'white-label',
 					'upgrade'    => __( 'White labeling options', 'formidable' ),
 					'screenshot' => 'white-label.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'features/white-label-form-builder-wordpress', 'white-labeling-global-settings', false ),
 				),
 			),
 			'inbox'         => array(
@@ -133,6 +134,7 @@ class FrmSettingsController {
 					'medium'     => 'inbox-settings',
 					'upgrade'    => __( 'Inbox settings', 'formidable' ),
 					'screenshot' => 'inbox.png',
+					'learn-more' => FrmAppHelper::get_doc_url( 'global-settings-overview/#kb-inbox', 'inbox-global-settings' ),
 				),
 			),
 		);
@@ -141,6 +143,7 @@ class FrmSettingsController {
 			// If no addons need a license, skip this page
 			$show_licenses    = false;
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
+
 			foreach ( $installed_addons as $installed_addon ) {
 				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
@@ -236,6 +239,7 @@ class FrmSettingsController {
 		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
 		$first_key  = array_search( $a, $order );
 		$second_key = array_search( $b, $order );
+
 		if ( false === $first_key || false === $second_key ) {
 			return 0;
 		}
@@ -248,6 +252,7 @@ class FrmSettingsController {
 
 		$section  = FrmAppHelper::get_post_param( 'tab', '', 'sanitize_text_field' );
 		$sections = self::get_settings_tabs();
+
 		if ( ! isset( $sections[ $section ] ) ) {
 			wp_die();
 		}
@@ -350,6 +355,7 @@ class FrmSettingsController {
 		$payment_sections = self::$removed_payments_sections;
 
 		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+
 		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$tab = str_replace( '_settings', '', $tab );
 		} else {
@@ -503,6 +509,7 @@ class FrmSettingsController {
 		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
 
 		$results = array();
+
 		foreach ( $pages as $page ) {
 			$results[] = array(
 				'value' => $page->ID,

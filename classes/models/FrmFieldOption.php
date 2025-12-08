@@ -93,7 +93,7 @@ class FrmFieldOption {
 		}
 
 		if ( $use_value_as_label && '' === trim( $this->option_label ) ) {
-			$label = '' !== (string) $this->saved_value ? $this->saved_value : FrmAppHelper::get_no_label_text();
+			$label = '' !== $this->saved_value ? $this->saved_value : FrmAppHelper::get_no_label_text();
 		} else {
 			$label = $this->option_label;
 		}

@@ -3740,6 +3740,9 @@ window.frmAdminBuildJS = function() {
 
 	function addImageToOption( event ) {
 		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
+		if ( ! wp?.media || imagePreview?.dataset.upgrade ) {
+			return;
+		}
 
 		event.preventDefault();
 
@@ -6261,7 +6264,7 @@ window.frmAdminBuildJS = function() {
 			opts = [],
 			imageUrl = '';
 
-		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ).filter( '[name*="[label]"]' );
+		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ).filter( '[name$="[label]"], [name*="[other_"]' );
 		const isProduct = isProductField( fieldId );
 		const showLabelWithImage = showingLabelWithImage( fieldId );
 		const hasImageOptions = imagesAsOptions( fieldId );
@@ -7208,14 +7211,19 @@ window.frmAdminBuildJS = function() {
 		// Borrow the call to action from the Upgrade upgradeModal which should exist on the settings page (it is still used for other upgrades including Actions).
 		const upgradeModalLink = upgradeModal.querySelector( '.frm-upgrade-link' );
 		if ( upgradeModalLink ) {
-			const upgradeButton = upgradeModalLink.cloneNode( true );
+			let upgradeButton;
+			let upgradeActions = upgradeModalLink.closest( '.frm-upgrade-modal-actions' );
+			if ( upgradeActions ) {
+				upgradeActions = upgradeActions.cloneNode( true );
+				upgradeButton = upgradeActions.querySelector( '.frm-upgrade-link' );
+			} else {
+				upgradeButton = upgradeModalLink.cloneNode( true );
+			}
 			const level = upgradeButton.querySelector( '.license-level' );
-
 			if ( level ) {
 				level.textContent = getRequiredLicenseFromTrigger( element );
 			}
-
-			container.appendChild( upgradeButton );
+			container.appendChild( upgradeActions || upgradeButton );
 
 			// Maybe append the secondary "Already purchased?" link from the upgradeModal as well.
 			if ( upgradeModalLink.nextElementSibling && upgradeModalLink.nextElementSibling.querySelector( '.frm-link-secondary' ) ) {
