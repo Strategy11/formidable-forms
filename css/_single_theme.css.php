@@ -400,4 +400,5 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	padding:0<?php echo esc_html( $important ); ?>;
 }
 
+<?php echo strip_tags( FrmStylesController::get_custom_css( $settings ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 <?php do_action( 'frm_output_single_style', $settings ); ?>
