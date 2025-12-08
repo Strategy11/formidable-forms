@@ -3058,6 +3058,7 @@ window.frmAdminBuildJS = function() {
 				addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
 			}
 			maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
+			maybeAddAddressPartShortcodes( fields[ i ], fieldId, list );
 		}
 	}
 
@@ -3080,6 +3081,41 @@ window.frmAdminBuildJS = function() {
 			first: __( 'First', 'formidable' ),
 			middle: __( 'Middle', 'formidable' ),
 			last: __( 'Last', 'formidable' ),
+		} ).forEach(
+			( [ code, label ] ) => {
+				addCalcFieldLiToList(
+					list,
+					fieldId,
+					field.fieldId + ' show=' + code,
+					field.fieldName + ' (' + label + ')',
+					field.fieldType
+				);
+			}
+		);
+	}
+
+	/**
+	 * Adds shortcodes like [addressFieldId show=city] to the calculation popup.
+	 *
+	 * @since x.x
+	 *
+	 * @param {Object}      field
+	 * @param {Number}      fieldId
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 *
+	 * @returns {void}
+	 */
+	function maybeAddAddressPartShortcodes( field, fieldId, list ) {
+		if ( 'address' !== field.fieldType ) {
+			return;
+		}
+		Object.entries( {
+			line1: __( 'Line 1', 'formidable' ),
+			line2: __( 'Line 2', 'formidable' ),
+			city: __( 'City', 'formidable' ),
+			state: __( 'State', 'formidable' ),
+			zip: __( 'Zip', 'formidable' ),
+			country: __( 'Country', 'formidable' ),
 		} ).forEach(
 			( [ code, label ] ) => {
 				addCalcFieldLiToList(
