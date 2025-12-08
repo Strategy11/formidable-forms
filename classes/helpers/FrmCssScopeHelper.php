@@ -135,7 +135,7 @@ class FrmCssScopeHelper {
 				$i      = $closing_brace + 1;
 				$buffer = '';
 				continue;
-			} //end if
+			}//end if
 
 			if ( '{' === $char ) {
 				$selector      = trim( $buffer );
