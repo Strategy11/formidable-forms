@@ -442,7 +442,6 @@ legend.frm_hidden{
 	display: block;
 }
 
-/* These do not work if they are combined */
 .with_frm_style input::placeholder,
 .with_frm_style textarea::placeholder {
 	font-size: var(--field-font-size)<?php echo esc_html( $important ); ?>;
@@ -491,13 +490,11 @@ legend.frm_hidden{
 	font-size: calc(0.85 * var(--field-font-size));
 }
 
-/* These do not work if they are combined */
 .with_frm_style .frm_inside_container.frm_label_float_top > input::placeholder,
 .with_frm_style .frm_inside_container.frm_label_float_top > textarea::placeholder {
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
-/* End floating label */
 
 .with_frm_style .frm_description,
 .with_frm_style .frm_pro_max_limit_desc{
