@@ -63,4 +63,19 @@ class FrmPayPalLiteAppController {
 		FrmPayPalLiteConnectHelper::handle_disconnect();
 		wp_send_json_success();
 	}
+
+	/**
+	 * Create a PayPal order via AJAX.
+	 *
+	 * @return void
+	 */
+	public static function create_order() {
+		$order_id = FrmPayPalLiteConnectHelper::create_order();
+
+		if ( false === $order_id ) {
+			wp_send_json_error( 'Failed to create PayPal order' );
+		}
+
+		wp_send_json_success( array( 'orderID' => $order_id ) );
+	}
 }

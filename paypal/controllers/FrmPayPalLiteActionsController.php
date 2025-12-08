@@ -274,7 +274,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		// TODO: Stop hard coding this.
+		// TODO: Stop hard coding this here.
+		// It should be in a function.
 		$client_id = 'AV8DLwHFtnUai9Yuy8B5ocRSgtlCBiRAh6Vkl4vhgeuiKRLzilt-vzjd6O1tjIVI_5AiPG0H-HtBssrE';
 
 		// Build the PayPal SDK URL with required parameters.

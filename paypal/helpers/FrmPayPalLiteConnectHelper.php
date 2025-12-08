@@ -197,6 +197,10 @@ class FrmPayPalLiteConnectHelper {
 		$response = wp_remote_post( $url, $args );
 
 		if ( ! self::validate_response( $response ) ) {
+			ob_start();
+			var_dump($response);
+			$output = ob_get_clean();
+			return $output;
 			return 'Response from server is invalid';
 		}
 
@@ -206,6 +210,10 @@ class FrmPayPalLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+			ob_start();
+			var_dump($body);
+			$output = ob_get_clean();
+			return $output;
 			return 'Response from server was not successful';
 		}
 
@@ -236,7 +244,8 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		return 'https://api.strategy11.com/';
+		// return 'https://api.strategy11.com/';
+		return 'https://dev-site.local/';
 	}
 
 	/**
@@ -504,28 +513,6 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $amount
-	 * @param string $currency
-	 * @param string $paypal_token
-	 * @param string $verification_token
-	 * @param string $description
-	 *
-	 * @return false|object
-	 */
-	public static function create_payment( $amount, $currency, $paypal_token, $verification_token, $description ) {
-		return self::post_with_authenticated_body(
-			'create_payment',
-			array(
-				'amount'             => $amount,
-				'currency'           => $currency,
-				'paypal_token'       => $paypal_token,
-				'verification_token' => $verification_token,
-				'description'        => $description,
-			)
-		);
-	}
-
-	/**
 	 * @param string $action
 	 * @param array  $additional_body
 	 *
@@ -589,56 +576,6 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $receipt_id
-	 *
-	 * @return false|object
-	 */
-	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
-	}
-
-	/**
-	 * @param array $info
-	 *
-	 * @return false|object
-	 */
-	public static function create_subscription( $info ) {
-		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );
-	}
-
-	/**
-	 * @param bool   $force Whether to force refreshing the location id.
-	 * @param string $mode  Either 'auto', 'live', or 'test'.
-	 *
-	 * @return false|string
-	 */
-	public static function get_location_id( $force = false, $mode = 'auto' ) {
-		if ( ! $force ) {
-			$location_id = get_option( self::get_location_id_option_name( $mode ) );
-
-			if ( $location_id ) {
-				return $location_id;
-			}
-		}
-
-		$request_body = array();
-
-		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                    = 'test' === $mode ? 1 : 0;
-			$request_body['frm_paypal_api_mode'] = $mode;
-		}
-
-		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
-
-		if ( is_object( $response ) ) {
-			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
-			return $response->id;
-		}
-
-		return false;
-	}
-
-	/**
 	 * @return array
 	 */
 	public static function get_unprocessed_event_ids() {
@@ -682,33 +619,6 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
 	}
 
-	/**
-	 * @param string $payment_id
-	 *
-	 * @return false|object
-	 */
-	public static function get_payment( $payment_id ) {
-		return self::post_with_authenticated_body( 'get_payment', compact( 'payment_id' ) );
-	}
-
-	/**
-	 * @param string $payment_id
-	 *
-	 * @return false|object
-	 */
-	public static function get_subscription_id_for_payment( $payment_id ) {
-		return self::post_with_authenticated_body( 'get_subscription_id_for_payment', compact( 'payment_id' ) );
-	}
-
-	/**
-	 * @param string $subscription_id
-	 *
-	 * @return false|object
-	 */
-	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
-	}
-
 	public static function handle_disconnect() {
 		self::disconnect();
 		self::reset_paypal_api_integration();
@@ -737,38 +647,6 @@ class FrmPayPalLiteConnectHelper {
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_merchant_currency_option_name( $mode ) );
 		delete_option( self::get_location_id_option_name( $mode ) );
-	}
-
-	/**
-	 * @param bool   $force
-	 * @param string $mode
-	 *
-	 * @return false|string
-	 */
-	public static function get_merchant_currency( $force = false, $mode = 'auto' ) {
-		if ( ! $force ) {
-			$currency = get_option( self::get_merchant_currency_option_name( $mode ) );
-
-			if ( $currency ) {
-				return $currency;
-			}
-		}
-
-		$request_body = array();
-
-		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                    = 'test' === $mode ? 1 : 0;
-			$request_body['frm_paypal_api_mode'] = $mode;
-		}
-
-		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
-
-		if ( is_object( $response ) && ! empty( $response->currency ) ) {
-			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
-			return $response->currency;
-		}
-
-		return false;
 	}
 
 	/**
@@ -804,17 +682,11 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	/**
-	 * @param string $subscription_id
+	 * Create a PayPal order.
 	 *
-	 * @return false|object
+	 * @return false|string
 	 */
-	public static function get_subscription( $subscription_id ) {
-		$response = self::post_with_authenticated_body( 'get_subscription', array( 'subscription_id' => $subscription_id ) );
-
-		if ( is_object( $response ) && is_object( $response->subscription ) ) {
-			return $response->subscription;
-		}
-
-		return false;
+	public static function create_order() {
+		return self::post_with_authenticated_body( 'create_order' );
 	}
 }

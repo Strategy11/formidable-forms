@@ -39,14 +39,14 @@ class FrmPayPalLiteHooksController {
 		add_action( 'wp_ajax_frm_paypal_oauth', 'FrmPayPalLiteAppController::handle_oauth' );
 		add_action( 'wp_ajax_frm_paypal_disconnect', 'FrmPayPalLiteAppController::handle_disconnect' );
 
-		add_action( 'wp_ajax_frm_verify_buyer', 'FrmPayPalLiteAppController::verify_buyer' );
-		add_action( 'wp_ajax_nopriv_frm_verify_buyer', 'FrmPayPalLiteAppController::verify_buyer' );
-
 		$frm_paypal_events_controller = new FrmPayPalLiteEventsController();
 		add_action( 'wp_ajax_nopriv_frm_paypal_process_events', array( &$frm_paypal_events_controller, 'process_events' ) );
 		add_action( 'wp_ajax_frm_paypal_process_events', array( &$frm_paypal_events_controller, 'process_events' ) );
 
 		// Verify PayPal Lite sites.
 		add_action( 'wp_ajax_nopriv_frm_paypal_lite_verify', 'FrmPayPalLiteConnectHelper::verify' );
+
+		add_action( 'wp_ajax_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
+		add_action( 'wp_ajax_nopriv_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
 	}
 }
