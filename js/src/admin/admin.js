@@ -3099,9 +3099,9 @@ window.frmAdminBuildJS = function() {
 	 *
 	 * @since x.x
 	 *
-	 * @param {Object}      field   - Field object containing fieldType, fieldId, and fieldName.
-	 * @param {Number}      fieldId - ID of the field triggering the popup.
-	 * @param {HTMLElement} list    - The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {Object}      field   Field object containing fieldType, fieldId, and fieldName.
+	 * @param {Number}      fieldId ID of the field triggering the popup.
+	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
 	 *
 	 * @returns {void}
 	 */
