@@ -85,7 +85,8 @@ class FrmStyle {
 	 * @return array<int|WP_Error>
 	 */
 	public function update( $id = 'default' ) {
-		$all_instances = $this->get_all();
+		$all_instances    = $this->get_all();
+		$css_scope_helper = new FrmCssScopeHelper();
 
 		if ( ! $id ) {
 			$new_style       = (array) $this->get_new();
@@ -117,6 +118,11 @@ class FrmStyle {
 			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
+
+			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
+				$css_scope = 'frm_style_' . $new_instance['post_name'];
+				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
+			}
 
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
@@ -265,7 +271,7 @@ class FrmStyle {
 				$sanitized_settings[ $key ] = $defaults[ $key ];
 			}
 
-			if ( 'custom_css' !== $key ) {
+			if ( 'custom_css' !== $key && 'single_style_custom_css' !== $key ) {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
 			}
 		}
@@ -778,6 +784,9 @@ class FrmStyle {
 			'use_base_font_size'         => false,
 			'base_font_size'             => '15px',
 			'field_shape_type'           => 'rounded-corner',
+
+			'enable_style_custom_css'    => false,
+			'single_style_custom_css'    => '',
 		);
 
 		return apply_filters( 'frm_default_style_settings', $defaults );
