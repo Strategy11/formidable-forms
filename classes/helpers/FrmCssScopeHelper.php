@@ -135,7 +135,7 @@ class FrmCssScopeHelper {
 				$i      = $closing_brace + 1;
 				$buffer = '';
 				continue;
-			}
+			} //end if
 
 			if ( '{' === $char ) {
 				$selector      = trim( $buffer );
@@ -204,7 +204,6 @@ class FrmCssScopeHelper {
 				if ( '' !== $trimmed ) {
 					$formatted_lines[] = "\n\t" . $trimmed;
 				}
-
 			}
 
 			return implode( '', $formatted_lines ) . "\n";
