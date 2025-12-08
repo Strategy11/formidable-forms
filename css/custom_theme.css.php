@@ -495,6 +495,7 @@ legend.frm_hidden{
 	opacity: 1;
 	transition: opacity 0.3s ease-in;
 }
+/* End floating label */
 
 .with_frm_style .frm_description,
 .with_frm_style .frm_pro_max_limit_desc{
