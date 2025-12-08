@@ -384,6 +384,7 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: The mobile responsiveness of email styles has been improved.
 * The minimum required WordPress version is now 6.3. This is because older versions do not support Gutenberg's API version 3.
 * The deprecated FrmEDD_SL_Plugin_Updater class has been removed.
+* The deprecated frmFrontForm.visible and frmFrontForm.invisible functions have been removed.
 
 = 6.25.1 =
 * New: The frm_email_message filter now includes email_key in the passed attribute data.
