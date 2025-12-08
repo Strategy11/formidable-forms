@@ -3775,7 +3775,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.02.03
 	 *
-	 * @param array $form 
+	 * @param array $form
 	 *
 	 * @return void
 	 */
@@ -5069,6 +5069,31 @@ class FrmAppHelper {
 		}
 
 		return self::maybe_add_missing_utm( 'https://formidableforms.com/' . $path, array( 'campaign' => $campaign ) );
+	}
+
+	/**
+	 * Get a list of field types that are non-numeric.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public static function non_numeric_field_types() {
+		return array(
+			'text',
+			'textarea',
+			'email',
+			'url',
+			'name',
+			'phone',
+			'password',
+			'tag',
+			'address',
+			'rte',
+			'file',
+			'signature',
+			'ai',
+		);
 	}
 
 	/**
