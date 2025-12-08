@@ -5,7 +5,7 @@ pro
 frm.min.js
 frmstrp.min.js
 formidableforms.css
-formidableforms1.css
+formidableforms[0-9]*.css
 formidable.zip
 languages/formidable-js.pot
 languages/formidable-js-strings.php
