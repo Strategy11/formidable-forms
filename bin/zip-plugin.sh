@@ -97,7 +97,7 @@ zip -r $zipname $destination \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
 	-x "formidable-ai/resources/*" \
-	-x "*/webpack.dev.js"
+	-x "*/webpack.dev.js" \
 	-x "*/phpcs-sniffs/*"
 
 if [ ! -z "$3" ]; then
