@@ -3095,13 +3095,13 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * Adds shortcodes like [addressFieldId show=city] to the calculation popup.
+	 * Populates calculation popup with address part shortcodes for separate field value access.
 	 *
 	 * @since x.x
 	 *
-	 * @param {Object}      field
-	 * @param {Number}      fieldId
-	 * @param {HTMLElement} list    The 'ul' element that contains field shortcodes available for calculation.
+	 * @param {Object}      field   - Field object containing fieldType, fieldId, and fieldName.
+	 * @param {Number}      fieldId - ID of the field triggering the popup.
+	 * @param {HTMLElement} list    - The 'ul' element that contains field shortcodes available for calculation.
 	 *
 	 * @returns {void}
 	 */
@@ -3109,24 +3109,25 @@ window.frmAdminBuildJS = function() {
 		if ( 'address' !== field.fieldType ) {
 			return;
 		}
-		Object.entries( {
+
+		const addressParts = {
 			line1: __( 'Line 1', 'formidable' ),
 			line2: __( 'Line 2', 'formidable' ),
 			city: __( 'City', 'formidable' ),
 			state: __( 'State', 'formidable' ),
 			zip: __( 'Zip', 'formidable' ),
 			country: __( 'Country', 'formidable' ),
-		} ).forEach(
-			( [ code, label ] ) => {
-				addCalcFieldLiToList(
-					list,
-					fieldId,
-					field.fieldId + ' show=' + code,
-					field.fieldName + ' (' + label + ')',
-					field.fieldType
-				);
-			}
-		);
+		};
+
+		Object.entries( addressParts ).forEach( ( [ code, label ] ) => {
+			addCalcFieldLiToList(
+				list,
+				fieldId,
+				`${ field.fieldId } show=${ code }`,
+				`${ field.fieldName } (${ label })`,
+				field.fieldType
+			);
+		} );
 	}
 
 	/**
