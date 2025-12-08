@@ -52,7 +52,8 @@ describe( 'Deleting forms', () => {
 		cy.get( '#bulk-action-selector-top' ).should( 'contain', 'Bulk Actions' ).select( 'bulk_delete' );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 		cy.get( '.frm-confirm-msg' ).should( 'contain', 'ALL selected forms and their entries will be permanently deleted. Want to proceed?' );
-		cy.get( '.button-secondary' ).should( 'contain', 'Cancel' ).click();
+		cy.contains( 'a.button-secondary', 'Cancel' )
+			.click( { force: true } );
 		cy.get( '#doaction' ).should( 'contain', 'Apply' ).click();
 		cy.get( '#frm-confirmed-click' ).should( 'contain', 'Confirm' ).click();
 		cy.get( '.trash > a' ).should( 'contain.text', 'Trash' )

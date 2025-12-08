@@ -22,16 +22,25 @@
 					'image_id_input_name' => $component['image_id_input_name'],
 				)
 			);
+
 			if ( ! FrmAppHelper::pro_is_installed() ) {
+				$image_preview_wrapper_attrs = array(
+					'class'             => 'frm_image_preview_wrapper',
+					'data-upgrade'      => __( 'Background image styles', 'formidable' ),
+					'data-message'      => __( 'Elevate your form\'s design by adding full-width background images to your forms.', 'formidable' ),
+					'data-upsell-image' => FrmAppHelper::plugin_url() . '/images/upsell/background-image-styles-preview.webp',
+					'data-medium'       => 'background-image',
+					'data-learn-more'   => FrmAppHelper::get_doc_url( 'visual-form-styler/#kb-add-a-background-image', 'form-styler' ),
+				);
 				?>
-				<div class="frm_image_preview_wrapper" data-upgrade="<?php esc_attr_e( 'Background image styles', 'formidable' ); ?>" data-medium="background-image">
+				<div <?php FrmAppHelper::array_to_html_params( $image_preview_wrapper_attrs, true ); ?>>
 					<button type="button" class="frm_choose_image_box frm_button frm-flex-center frm_no_style_button frm_noallow" tabindex="0">
 						<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_upload_icon' ); ?>
 						<?php esc_attr_e( 'Upload background image', 'formidable' ); ?>
 					</button>
 				</div>
 				<?php
-			}
+			}//end if
 			?>
 		</div>
 	</div>

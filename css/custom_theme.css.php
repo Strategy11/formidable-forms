@@ -1584,6 +1584,7 @@ select.frm_loading_lookup{
  * Call action so other plugins can add additional CSS.
  *
  * @param array $args {
+ *
  *     @type array $defaults
  * }
  */

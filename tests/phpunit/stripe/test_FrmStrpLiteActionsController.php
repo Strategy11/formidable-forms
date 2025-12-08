@@ -19,6 +19,7 @@ class test_FrmStrpLiteActionsController extends FrmUnitTest {
 
 	/**
 	 * @param string $email
+	 *
 	 * @return string
 	 */
 	private function replace_email_shortcode( $email ) {

@@ -10,7 +10,7 @@
 	}
 
 	const modal = {
-		maybeCreateModal: ( id, { title, content, footer, width } = {} ) => {
+		maybeCreateModal: ( id, { title, content, footer, width, dialogClass } = {} ) => {
 			let modal = document.getElementById( id );
 
 			if ( ! modal ) {
@@ -57,7 +57,7 @@
 			}
 
 			if ( ! content && ! footer ) {
-				makeModalIntoADialogAndOpen( modal, { width } );
+				makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 				return modal;
 			}
 
@@ -72,7 +72,7 @@
 				modalHelper( footer, 'frm_modal_footer' );
 			}
 
-			makeModalIntoADialogAndOpen( modal );
+			makeModalIntoADialogAndOpen( modal, { width, dialogClass } );
 			return modal;
 		},
 		footerButton: args => {
@@ -151,9 +151,9 @@
 			$select.find( 'option' ).attr( 'title', ' ' );
 			$select.multiselect( {
 				templates: {
-					popupContainer: '<div class="multiselect-container frm-dropdown-menu"></div>',
+					popupContainer: '<div class="multiselect-container frm-dropdown-menu dropdown-menu"></div>',
 					option: '<button type="button" class="multiselect-option dropdown-item frm_no_style_button"></button>',
-					button: '<button type="button" class="multiselect dropdown-toggle btn" data-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
+					button: '<button type="button" class="multiselect dropdown-toggle btn" data-bs-toggle="dropdown" ' + labelledBy + '><span class="multiselect-selected-text"></span> <b class="caret"></b></button>'
 				},
 				buttonContainer: '<div class="btn-group frm-btn-group dropdown" />',
 				nonSelectedText: __( '— Select —', 'formidable' ),
@@ -205,45 +205,9 @@
 	};
 
 	const bootstrap = {
-		setupBootstrapDropdowns( callback ) {
-			if ( ! window.bootstrap || ! window.bootstrap.Dropdown ) {
-				return;
-			}
-
-			window.bootstrap.Dropdown._getParentFromElement = getParentFromElement;
-			window.bootstrap.Dropdown.prototype._getParentFromElement = getParentFromElement;
-
-			function getParentFromElement( element ) {
-				let parent;
-				const selector = window.bootstrap.Util.getSelectorFromElement( element );
-
-				if ( selector ) {
-					parent = document.querySelector( selector );
-				}
-
-				const result = parent || element.parentNode;
-				const frmDropdownMenu = result.querySelector( '.frm-dropdown-menu' );
-
-				if ( ! frmDropdownMenu ) {
-					// Not a formidable dropdown, treat like Bootstrap does normally.
-					return result;
-				}
-
-				// Temporarily add dropdown-menu class so bootstrap can initialize.
-				frmDropdownMenu.classList.add( 'dropdown-menu' );
-				setTimeout(
-					function() {
-						frmDropdownMenu.classList.remove( 'dropdown-menu' );
-					},
-					0
-				);
-
-				if ( 'function' === typeof callback ) {
-					callback( frmDropdownMenu );
-				}
-
-				return result;
-			}
+		setupBootstrapDropdowns: function() {
+			// This function is no longer necessary.
+			// It's call in Pro though, so keep it to avoid any errors for now.
 		},
 		multiselect
 	};
@@ -648,13 +612,13 @@
 		return modal;
 	}
 
-	function makeModalIntoADialogAndOpen( modal, { width } = {} ) {
+	function makeModalIntoADialogAndOpen( modal, { width, dialogClass = '' } = {} ) {
 		const bodyWithModalClassName = 'frm-body-with-open-modal';
 
 		const $modal = jQuery( modal );
 		if ( ! $modal.hasClass( 'frm-dialog' ) ) {
 			$modal.dialog( {
-				dialogClass: 'frm-dialog',
+				dialogClass: 'frm-dialog ' + dialogClass,
 				modal: true,
 				autoOpen: false,
 				closeOnEscape: true,

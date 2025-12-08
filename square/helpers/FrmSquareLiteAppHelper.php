@@ -54,15 +54,20 @@ class FrmSquareLiteAppHelper {
 	/**
 	 * Add education about Stripe fees.
 	 *
+	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
 	 * @return void
 	 */
 	public static function fee_education( $medium = 'tip', $gateway = false ) {
 		$license_type = FrmAddonsController::license_type();
+
 		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
 			return;
 		}
 
 		$classes = 'frm-light-tip show_square';
+
 		if ( $gateway && ! array_intersect( (array) $gateway, array( 'square' ) ) ) {
 			$classes .= ' frm_hidden';
 		}

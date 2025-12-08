@@ -3,6 +3,7 @@
  * Submit field class
  *
  * @since 6.9
+ *
  * @package Formidable
  */
 
@@ -91,10 +92,12 @@ DEFAULT_HTML;
 	 *
 	 * @param array $args           Args.
 	 * @param array $shortcode_atts Shortcode atts.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$form = $args['form'];
+
 		if ( ! FrmForm::show_submit( $form ) ) {
 			return '';
 		}

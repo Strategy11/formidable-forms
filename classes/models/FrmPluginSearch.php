@@ -27,6 +27,7 @@ class FrmPluginSearch {
 	 * Add actions and filters only if this is the plugin installation screen and it's the first page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param object $screen WP Screen object.
 	 *
 	 * @return void
@@ -66,6 +67,7 @@ class FrmPluginSearch {
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
 		$normalized_term = $this->search_to_array( $args->search );
+
 		if ( empty( $normalized_term ) ) {
 			// Don't add anything extra.
 			return $result;
@@ -188,6 +190,7 @@ class FrmPluginSearch {
 	 * Modify URL used to fetch to plugin information so it pulls Formidable plugin page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
 	 *
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
@@ -205,6 +208,7 @@ class FrmPluginSearch {
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
+
 		if ( ! empty( $addon ) ) {
 			$this->add_to_dismissed_hints( $addon );
 		}
@@ -263,6 +267,7 @@ class FrmPluginSearch {
 	 * easy to work with.
 	 *
 	 * @param  string $term The raw search term.
+	 *
 	 * @return string A simplified/sanitized version.
 	 */
 	private function sanitize_search_term( $term ) {
@@ -281,6 +286,7 @@ class FrmPluginSearch {
 	 * @since 4.12
 	 *
 	 * @param string $terms
+	 *
 	 * @return array
 	 */
 	private function search_to_array( $terms ) {
@@ -351,6 +357,7 @@ class FrmPluginSearch {
 
 	/**
 	 * @param string $plugin
+	 *
 	 * @return bool
 	 */
 	protected function is_installed( $plugin ) {

@@ -9,9 +9,11 @@ $square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
 if ( $stripe_connected ) {
 	FrmStrpLiteAppHelper::fee_education( 'tip', $form_action->post_content['gateway'] );
 }
+
 if ( $square_connected ) {
 	FrmSquareLiteAppHelper::fee_education( 'tip', $form_action->post_content['gateway'] );
 }
+
 if ( ! $stripe_connected && ! $square_connected ) {
 	FrmStrpLiteAppHelper::not_connected_warning();
 }
@@ -153,6 +155,7 @@ if ( ! $stripe_connected && ! $square_connected ) {
 	 * @since 6.5
 	 *
 	 * @param array $args {
+	 *
 	 *     @type FrmFormAction $action_control
 	 *     @type array         $field_dropdown_atts
 	 * }

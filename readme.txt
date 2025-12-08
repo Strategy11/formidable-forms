@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 5.2
 Tested up to: 6.8
 Requires PHP: 7.0
-Stable tag: 6.25
+Stable tag: 6.25.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,18 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.25.1 =
+* New: The frm_email_message filter now includes email_key in the passed attribute data.
+* New: Entries list sort preferences are now saved individually for every form, preventing issues with sort preferences overwriting existing sort preferences in another form.
+* New: The entries columns for fields with options that have separate values will now include (value) and (label) so they are easier to tell apart.
+* Fix: Turnstile captcha widgets now use a prefixed class name to prevent conflicts with other Turnstile integrations that add a second captcha widget to a form.
+* Fix: Actions that trigger based on a Square payment would trigger twice when the Stripe or Authorize.Net add-ons were active.
+* Fix: Large email header images used in emails would extend beyond the image container boundaries.
+* Fix: The payments list would not properly sort in descending order.
+* Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
+* Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
+* Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
+
 = 6.25 =
 * New: Style settings have been added to Email actions.
 * New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
@@ -400,24 +412,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: In some cases, field shape settings would not work if another setting was blank or matched the default.
 * Fix: JS errors would occur in some cases after deleting a field group or section.
 * Fix: The line height style setting is no longer applied to the label in the visual styler preview.
-
-= 6.23 =
-* New: The GDPR agreement text can now be translated using the WPML or Polylang add-ons.
-* New: GDPR agreement text will no longer strip a few additional HTML tag types including b, br, div, em, i, p, span, and strong.
-* New: Message spacing on the front end has been updated to improve consistency. Margins for paragraph tags in messages have been reduced, and single line success messages will no longer have paragraph tags automatically added. A new frm_wpautop_success_message filter has been added to modify this behavior.
-* New: URL fields will now automatically add https:// instead of http:// to the beginning of the URL if it is missing.
-* New: One time Stripe payments will now include a Statement Descriptor matching the active Site name by default. A new frm_stripe_statement_descriptor filter has been added to modify the value sent to Stripe.
-* New: Generated table data row labels will now include scope="row" to help with accessibility.
-* Fix: Option validation would fail in rare cases when a field that does not support options incorrectly has option data defined.
-* Fix: In some cases, calculation settings using < and > characters would only partially save.
-* Fix: The auto width setting for dropdowns would not properly appear enabled.
-* Fix: The deactivation pop-up has been updated to help prevent issues where the confirmation buttons were not visible because of an overflow issue.
-* Fix: Denylist terms using forward slashes would not match spam data as expected.
-* Fix: Square buyer tokens are now re-used when nothing has changed to prevent an "An unexpected error occurred verifying buyer" error from Square.
-* Fix: Captcha validation would fail when trying to submit a Square payment.
-* Fix: Stripe payment fields would not appear correctly when using a version of Pro older than 6.21.
-* Fix: Previous attempts to delete a field would re-trigger when deleting a field group, causing unexpected JS errors and issues with deleting a field unintentionally.
-* The deprecated filter frm_email_value has been removed.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 

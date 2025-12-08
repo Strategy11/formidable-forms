@@ -130,6 +130,7 @@ class test_FrmFieldType extends FrmUnitTest {
 				),
 			),
 		);
+
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
@@ -154,6 +155,7 @@ class test_FrmFieldType extends FrmUnitTest {
 				'expected' => '<p>Here</p>',
 			),
 		);
+
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
@@ -353,6 +355,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @param string   $html
 	 * @param stdClass $field
+	 *
 	 * @return void
 	 */
 	private function make_text_field_html_assertions( $html, $field ) {

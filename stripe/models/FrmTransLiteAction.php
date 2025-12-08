@@ -52,12 +52,14 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @since 6.5
 	 *
 	 * @param string $selected_gateway The selected gateway for the given payment action.
+	 *
 	 * @return void
 	 */
 	public function echo_capture_payment_upsell( $selected_gateway = 'stripe' ) {
 		// Add an upsell placeholder for the capture payment setting.
 		$upgrading      = FrmAddonsController::install_link( 'stripe' );
 		$upgrade_params = array();
+
 		if ( isset( $upgrading['url'] ) ) {
 			$upgrade_params['data-oneclick'] = json_encode( $upgrading );
 		} else {
@@ -97,6 +99,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	private function default_currency() {
 		$frm_settings = FrmAppHelper::get_settings();
 		$currency     = trim( $frm_settings->currency );
+
 		if ( ! $currency ) {
 			$currency = 'USD';
 		}
@@ -106,6 +109,7 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	/**
 	 * @param mixed $form_id
+	 *
 	 * @return array
 	 */
 	public function get_field_options( $form_id ) {
@@ -140,6 +144,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * This is saved as part of the Stripe payment action.
 	 *
 	 * @param array $form_atts
+	 *
 	 * @return int
 	 */
 	public function get_credit_card_field_id( $form_atts ) {
@@ -163,6 +168,7 @@ class FrmTransLiteAction extends FrmFormAction {
 	 *
 	 * @param  array $form_atts
 	 * @param  array $field_atts
+	 *
 	 * @return void
 	 */
 	public function show_fields_dropdown( $form_atts, $field_atts ) {

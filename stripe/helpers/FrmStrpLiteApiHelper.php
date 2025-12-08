@@ -14,6 +14,7 @@ class FrmStrpLiteApiHelper {
 	 * This function exists so payments can be refunded when Authorize.Net is active.
 	 *
 	 * @param int $payment_id
+	 *
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
@@ -28,6 +29,7 @@ class FrmStrpLiteApiHelper {
 	 * This function exists so subscriptions can be cancelled when Authorize.Net is active.
 	 *
 	 * @param string $sub_id
+	 *
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id ) {
