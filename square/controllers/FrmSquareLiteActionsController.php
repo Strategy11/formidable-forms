@@ -625,7 +625,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Prepare the font family setting for the Stripe element.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $font
 	 *

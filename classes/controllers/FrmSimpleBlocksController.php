@@ -73,7 +73,7 @@ class FrmSimpleBlocksController {
 	/**
 	 * Enqueue Formidable Simple Blocks' JS and CSS for the content.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @return void
 	 */
