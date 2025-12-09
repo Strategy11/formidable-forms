@@ -3058,6 +3058,19 @@ window.frmAdminBuildJS = function() {
 				addCalcFieldLiToList( list, fieldId, fields[ i ].fieldId + ' show=label', fields[ i ].fieldName + ' (Label)', fields[ i ].fieldType );
 			}
 			maybeAddNamePartShortcodes( fields[ i ], fieldId, list );
+
+			/**
+			 * Allows add-ons to add field part shortcodes to calculation popup.
+			 *
+			 * @since x.x
+			 *
+			 * @param {Object}      hookArgs                      Arguments passed to the hook.
+			 * @param {Object}      hookArgs.field                Field object containing fieldType, fieldId, and fieldName.
+			 * @param {Number}      hookArgs.fieldId              ID of the field triggering the popup.
+			 * @param {HTMLElement} hookArgs.list                 The 'ul' element containing field shortcodes.
+			 * @param {Function}    hookArgs.addCalcFieldLiToList Helper function: addCalcFieldLiToList(list, fieldId, code, label, fieldType).
+			 */
+			wp.hooks.doAction( 'frm_add_calc_field_shortcodes', { field: fields[ i ], fieldId, list, addCalcFieldLiToList } );
 		}
 	}
 
