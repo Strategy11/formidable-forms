@@ -192,7 +192,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $link
 	 *
@@ -5053,7 +5053,7 @@ class FrmAppHelper {
 	/**
 	 * Get a documentation URL with UTM parameters and affiliate tracking.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $path           The relative path to append to the base URL.
 	 * @param string $campaign       The campaign to use for UTM parameters.
@@ -5073,12 +5073,12 @@ class FrmAppHelper {
 
 	/**
 	 * @since 5.0.16
-	 * @deprecated x.x
+	 * @deprecated 6.26
 	 *
 	 * @return bool
 	 */
 	public static function show_landing_pages() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.26' );
 		return true;
 	}
 }

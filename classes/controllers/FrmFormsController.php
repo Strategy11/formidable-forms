@@ -3318,7 +3318,7 @@ class FrmFormsController {
 	 * Gets message placement.
 	 *
 	 * @since 4.05.02
-	 * @since x.x This method changed from `private` to `public`.
+	 * @since 6.26 This method changed from `private` to `public`.
 	 *
 	 * @param object $form    Form object.
 	 * @param string $message The message.

@@ -462,7 +462,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Load a tooltip for a single element.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param {HTMLElement} element
 	 * @param {boolean}     show
