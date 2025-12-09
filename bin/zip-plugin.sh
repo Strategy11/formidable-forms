@@ -50,6 +50,7 @@ zip -r $zipname $destination \
 	-x "*/.stylelintrc.json" \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
 	-x "*/bin/*" \
