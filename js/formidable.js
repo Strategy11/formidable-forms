@@ -1179,6 +1179,7 @@ function frmFrontFormJS() {
 						describedBy = id + ' ' + describedBy;
 					}
 				}
+				input.setAttribute( 'aria-describedby', describedBy );
 			} );
 		}
 
@@ -1282,7 +1283,7 @@ function frmFrontFormJS() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( el => {
+		document.querySelectorAll( '.frm_form_field .frm_error' ).forEach( el => {
 			updateInputElementsAriaDescribedBy( el );
 			el.remove();
 		} );
