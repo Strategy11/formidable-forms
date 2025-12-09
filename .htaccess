@@ -33,6 +33,17 @@
 	</IfModule>
 </FilesMatch>
 
+# Allow all font files
+<FilesMatch "\.(ttf|woff)$">
+	<IfModule !mod_authz_core.c>
+		Allow from all
+	</IfModule>
+	
+	<IfModule mod_authz_core.c>
+		Require all granted
+	</IfModule>
+</FilesMatch>
+
 # Allow all image files
 <FilesMatch "\.(png|jpg|jpeg|gif|svg|webp|ico)$">
 	<IfModule !mod_authz_core.c>
