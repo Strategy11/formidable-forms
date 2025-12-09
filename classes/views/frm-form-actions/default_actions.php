@@ -96,6 +96,17 @@ class FrmDefZapierAction extends FrmFormAction {
 }
 
 /**
+ * Add n8n action.
+ */
+class FrmDefN8NAction extends FrmFormAction {
+	public function __construct() {
+		$action_ops          = FrmFormAction::default_action_opts( 'frm_n8n_icon frm_show_upgrade' );
+		$action_ops['color'] = '#EA4B71';
+		parent::__construct( 'n8n', 'n8n', $action_ops );
+	}
+}
+
+/**
  * Add twilio action.
  */
 class FrmDefTwilioAction extends FrmFormAction {

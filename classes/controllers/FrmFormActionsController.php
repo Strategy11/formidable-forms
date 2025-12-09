@@ -68,6 +68,7 @@ class FrmFormActionsController {
 			'getresponse'       => 'FrmDefGetResponseAction',
 			'hubspot'           => 'FrmDefHubspotAction',
 			'zapier'            => 'FrmDefZapierAction',
+			'n8n'               => 'FrmDefN8NAction',
 			'twilio'            => 'FrmDefTwilioAction',
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
@@ -75,6 +76,10 @@ class FrmFormActionsController {
 			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
+
+		if ( ! FrmAppHelper::show_new_feature( 'n8n' ) ) {
+			unset( $action_classes['n8n'] );
+		}
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 		$action_classes = self::maybe_unset_highrise( $action_classes );
