@@ -118,7 +118,7 @@ describe( 'Add-Ons page', () => {
 		cy.log( 'Validate add-ons category plans' );
 
 		cy.get( 'li[data-category="basic"]' ).within( () => {
-			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'basic' );
+			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Basic' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
 				expect( count ).to.be.at.least( 2 );
@@ -126,7 +126,7 @@ describe( 'Add-Ons page', () => {
 		} );
 
 		cy.get( 'li[data-category="plus"]' ).within( () => {
-			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'plus' );
+			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Plus' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
 				expect( count ).to.be.at.least( 14 );
@@ -134,7 +134,7 @@ describe( 'Add-Ons page', () => {
 		} );
 
 		cy.get( 'li[data-category="business"]' ).within( () => {
-			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'business' );
+			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Business' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
 				expect( count ).to.be.at.least( 37 );
@@ -142,7 +142,7 @@ describe( 'Add-Ons page', () => {
 		} );
 
 		cy.get( 'li[data-category="elite"]' ).within( () => {
-			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'elite' );
+			cy.get( '.frm-page-skeleton-cat-text' ).should( 'have.text', 'Elite' );
 			cy.get( '.frm-page-skeleton-cat-count' ).invoke( 'text' ).then( text => {
 				const count = parseInt( text );
 				expect( count ).to.be.at.least( 43 );
