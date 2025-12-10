@@ -33,13 +33,25 @@ fi
 # Generate the plugin zip file.
 status "Creating archive..."
 zip -r $zipname $destination \
-	-x "*/.*" \
+	-x "*/.DS_Store" \
+	-x "*/.babelrc" \
+	-x "*/.browserslistrc" \
+	-x "*/.editorconfig" \
+	-x "*/.eslintignore" \
+	-x "*/.eslintrc.json" \
 	-x "*/.git/*" \
+	-x "*/.gitattributes" \
 	-x "*/.github/*" \
-	-x "*/.phpunit.result.cache" \
-	-x "*/.php-cs-fixer.yml" \
+	-x "*/.gitignore" \
+	-x "*/.jshintignore" \
 	-x "*/.php-cs-fixer.cache" \
+	-x "*/.php-cs-fixer.php" \
+	-x "*/.phpunit.result.cache" \
+	-x "*/.stylelintrc.json" \
+	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.jshintrc" \
+	-x "*/.jshintignore" \
 	-x "*/bin/*" \
 	-x "*/scss/*" \
 	-x "*/css/*.css.map" \
@@ -97,7 +109,8 @@ zip -r $zipname $destination \
 	-x "*/cypress.config.js" \
 	-x "*/_typos.toml" \
 	-x "formidable-ai/resources/*" \
-	-x "*/webpack.dev.js"
+	-x "*/webpack.dev.js" \
+	-x "*/phpcs-sniffs/*"
 
 if [ ! -z "$3" ]; then
 	rm -rf $destination

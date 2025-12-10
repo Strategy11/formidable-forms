@@ -5,15 +5,49 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmCreateFile {
 
+	/**
+	 * @var string
+	 */
 	public $folder_name;
+
+	/**
+	 * @var string
+	 */
 	public $file_name;
+
+	/**
+	 * @var string
+	 */
 	public $error_message;
+
+	/**
+	 * @var array
+	 */
 	public $uploads;
+
+	/**
+	 * @var string
+	 */
 	private $new_file_path;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_dir       = 0755;
+
+	/**
+	 * @var int
+	 */
 	public $chmod_file      = 0644;
+
+	/**
+	 * @var bool
+	 */
 	private $has_permission = false;
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts ) {
 		$this->folder_name   = $atts['folder_name'] ?? '';
 		$this->file_name     = $atts['file_name'];
@@ -28,6 +62,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array $atts Attributes.
 	 *
 	 * @return void
 	 */
@@ -62,6 +98,8 @@ class FrmCreateFile {
 	/**
 	 * @since 3.0
 	 *
+	 * @param string $file_content File content.
+	 *
 	 * @return void
 	 */
 	public function append_file( $file_content ) {
@@ -89,6 +127,7 @@ class FrmCreateFile {
 	public function combine_files( $file_names ) {
 		if ( $this->has_permission ) {
 			$content = '';
+
 			foreach ( $file_names as $file_name ) {
 				$content .= $this->get_contents( $file_name ) . "\n";
 			}
@@ -98,6 +137,8 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return string
 	 */
 	public function get_file_contents() {
 		$content = '';
@@ -111,9 +152,14 @@ class FrmCreateFile {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $file File.
+	 *
+	 * @return string
 	 */
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
+
 		if ( empty( $file ) ) {
 			$file = $this->new_file_path;
 		}
@@ -130,6 +176,7 @@ class FrmCreateFile {
 		$creds = $this->get_creds();
 
 		$this->has_permission = true;
+
 		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
 			// initialize the API - any problems and we exit
 			$this->show_error_message();
@@ -146,6 +193,7 @@ class FrmCreateFile {
 		global $wp_filesystem;
 
 		$needed_dirs = $this->get_needed_dirs();
+
 		foreach ( $needed_dirs as $_dir ) {
 			// Only check to see if the Dir exists upon creation failure. Less I/O this way.
 			if ( $wp_filesystem->mkdir( $_dir, $this->chmod_dir ) ) {
@@ -165,6 +213,7 @@ class FrmCreateFile {
 		$needed_dirs = array();
 
 		$next_dir = '';
+
 		foreach ( $dir_names as $dir ) {
 			$next_dir     .= '/' . $dir;
 			$needed_dirs[] = $this->uploads['basedir'] . $next_dir;
@@ -173,12 +222,16 @@ class FrmCreateFile {
 		return $needed_dirs;
 	}
 
+	/**
+	 * @return array|bool
+	 */
 	private function get_creds() {
 		if ( ! function_exists( 'get_filesystem_method' ) ) {
 			include_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 
 		$access_type = get_filesystem_method();
+
 		if ( $access_type === 'direct' ) {
 			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		} else {
@@ -190,6 +243,8 @@ class FrmCreateFile {
 
 	/**
 	 * @param string $type
+	 *
+	 * @return array|false
 	 */
 	private function get_ftp_creds( $type ) {
 		$credentials = get_option(
@@ -214,6 +269,7 @@ class FrmCreateFile {
 
 		if ( strpos( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
+
 			if ( ! is_numeric( $credentials['port'] ) ) {
 				unset( $credentials['port'] );
 			}
@@ -232,9 +288,11 @@ class FrmCreateFile {
 		}
 
 		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' == $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
+
 			if ( ! empty( $stored_credentials['port'] ) ) {
 				// Save port as part of hostname to simplify above code.
 				$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];

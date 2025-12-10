@@ -8,8 +8,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class FrmFieldFormHtml {
 
+	/**
+	 * @var string
+	 */
 	private $html;
 
+	/**
+	 * @var string
+	 */
 	private $html_id;
 
 	/**
@@ -17,10 +23,19 @@ class FrmFieldFormHtml {
 	 */
 	private $field_obj;
 
+	/**
+	 * @var int|string
+	 */
 	private $field_id;
 
+	/**
+	 * @var array|object
+	 */
 	private $form = array();
 
+	/**
+	 * @var array
+	 */
 	private $pass_args = array();
 
 	/**
@@ -42,6 +57,8 @@ class FrmFieldFormHtml {
 	 *
 	 * @param string $param
 	 * @param array  $atts
+	 *
+	 * @return void
 	 */
 	private function _set( $param, $atts ) {
 		if ( isset( $atts[ $param ] ) ) {
@@ -53,6 +70,8 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private function set_html( $atts ) {
 		$this->set_from_field(
@@ -68,6 +87,8 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private function set_field_id( $atts ) {
 		$this->set_from_field(
@@ -83,11 +104,14 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param array $atts
+	 *
+	 * @return void
 	 */
 	private function set_pass_args( $atts ) {
 		$this->pass_args = $atts;
 
 		$exclude = array( 'field_obj', 'html' );
+
 		foreach ( $exclude as $ex ) {
 			if ( isset( $atts[ $ex ] ) ) {
 				unset( $this->pass_args[ $ex ] );
@@ -100,6 +124,8 @@ class FrmFieldFormHtml {
 	 *
 	 * @param array $atts
 	 * @param array $set
+	 *
+	 * @return void
 	 */
 	private function set_from_field( $atts, $set ) {
 		if ( isset( $atts[ $set['param'] ] ) ) {
@@ -109,6 +135,9 @@ class FrmFieldFormHtml {
 		}
 	}
 
+	/**
+	 * @return string
+	 */
 	public function get_html() {
 		$this->replace_shortcodes_before_input();
 		$this->replace_shortcodes_with_atts();
@@ -119,6 +148,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_shortcodes_before_input() {
 		$this->html = apply_filters( 'frm_before_replace_shortcodes', $this->html, $this->field_obj->get_field(), $this->pass_args['errors'], $this->form );
@@ -142,6 +173,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_field_values() {
 		// Replace [id].
@@ -159,6 +192,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_required_label_shortcode() {
 		$required = FrmField::is_required( $this->field_obj->get_field() ) ? $this->field_obj->get_field_column( 'required_indicator' ) : '';
@@ -170,10 +205,15 @@ class FrmFieldFormHtml {
 	 * In this case, we don't want to run the wp shortcodes with the description included.
 	 *
 	 * @since 3.0
+	 *
+	 * @param bool $wp_processed
+	 *
+	 * @return void
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
 		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
 		}
@@ -181,6 +221,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
@@ -193,9 +235,12 @@ class FrmFieldFormHtml {
 	 * This ID was added to the HTML in v3.0.
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
+
 		if ( $description != '' ) {
 			$this->add_element_id( 'description', 'desc' );
 		}
@@ -205,9 +250,15 @@ class FrmFieldFormHtml {
 	 * Insert an ID if it doesn't exist.
 	 *
 	 * @since 3.06.02
+	 *
+	 * @param string $param
+	 * @param string $id
+	 *
+	 * @return void
 	 */
 	private function add_element_id( $param, $id ) {
 		preg_match_all( '/(\[if\s+' . $param . '\])(.*?)(\[\/if\s+' . $param . '\])/mis', $this->html, $inner_html );
+
 		if ( ! isset( $inner_html[2] ) ) {
 			return;
 		}
@@ -218,6 +269,7 @@ class FrmFieldFormHtml {
 
 		if ( is_string( $inner_html[2] ) ) {
 			$has_id = strpos( $inner_html[2], ' id=' );
+
 			if ( ! $has_id ) {
 				$id         = 'frm_' . $id . '_' . $this->html_id;
 				$this->html = str_replace( 'class="frm_' . $param, 'id="' . esc_attr( $id ) . '" class="frm_' . esc_attr( $param ), $this->html );
@@ -227,6 +279,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_error_shortcode() {
 		$this->maybe_add_error_id();
@@ -234,6 +288,7 @@ class FrmFieldFormHtml {
 
 		if ( ! empty( $error ) && false === strpos( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
+
 			if ( is_string( $error_body ) && false === strpos( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
@@ -247,15 +302,18 @@ class FrmFieldFormHtml {
 	 * Pull the HTML between [if error] and [/if error] shortcodes.
 	 *
 	 * @param string $html
+	 *
 	 * @return false|string
 	 */
 	private static function get_error_body( $html ) {
 		$start = strpos( $html, '[if error]' );
+
 		if ( false === $start ) {
 			return false;
 		}
 
 		$end = strpos( $html, '[/if error]', $start );
+
 		if ( false === $end ) {
 			return false;
 		}
@@ -269,6 +327,8 @@ class FrmFieldFormHtml {
 	 * This ID was added to the HTML in v3.06.02.
 	 *
 	 * @since 3.06.02
+	 *
+	 * @return void
 	 */
 	private function maybe_add_error_id() {
 		if ( ! isset( $this->pass_args['errors'][ 'field' . $this->field_id ] ) ) {
@@ -282,6 +342,8 @@ class FrmFieldFormHtml {
 	 * Replace [required_class]
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_required_class() {
 		$required_class = FrmField::is_required( $this->field_obj->get_field() ) ? ' frm_required_field' : '';
@@ -290,6 +352,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_form_shortcodes() {
 		if ( ! empty( $this->form ) ) {
@@ -305,6 +369,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	public function replace_shortcodes_after_input() {
 		$this->html .= "\n";
@@ -317,6 +383,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function filter_for_more_shortcodes() {
 		$atts = $this->pass_args;
@@ -337,6 +405,8 @@ class FrmFieldFormHtml {
 	 * @since 3.0
 	 *
 	 * @param string $html
+	 *
+	 * @return void
 	 */
 	public function remove_collapse_shortcode( &$html ) {
 		if ( strpos( $html, '[collapse_this]' ) ) {
@@ -346,6 +416,8 @@ class FrmFieldFormHtml {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_shortcodes_with_atts() {
 		preg_match_all( "/\[(input|deletelink)\b(.*?)(?:(\/))?\]/s", $this->html, $shortcodes, PREG_PATTERN_ORDER );
@@ -406,6 +478,8 @@ class FrmFieldFormHtml {
 	 * If the label position is inside, add a class to show the label if the field has a value.
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function add_class_to_label() {
 		$label_class = $this->field_obj->get_label_class();
@@ -416,6 +490,8 @@ class FrmFieldFormHtml {
 	 * Replace [entry_key]
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function replace_entry_key() {
 		$entry_key  = FrmAppHelper::simple_get( 'entry', 'sanitize_title' );
@@ -426,6 +502,8 @@ class FrmFieldFormHtml {
 	 * Add classes to a field div
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function add_field_div_classes() {
 		$classes = $this->get_field_div_classes();
@@ -452,6 +530,7 @@ class FrmFieldFormHtml {
 
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
+
 		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
@@ -464,10 +543,12 @@ class FrmFieldFormHtml {
 
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
+
 		if ( ! empty( $extra_classes ) ) {
 			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
+
 			$classes .= ' ' . $extra_classes;
 		}
 
@@ -486,6 +567,8 @@ class FrmFieldFormHtml {
 	 * This filters shortcodes in the field HTML
 	 *
 	 * @since 3.0
+	 *
+	 * @return void
 	 */
 	private function process_wp_shortcodes() {
 		if ( apply_filters( 'frm_do_html_shortcodes', true ) ) {
@@ -497,6 +580,7 @@ class FrmFieldFormHtml {
 	 * Adds multiple input attributes.
 	 *
 	 * @since 6.4.1
+	 *
 	 * @return void
 	 */
 	private function add_multiple_input_attributes() {

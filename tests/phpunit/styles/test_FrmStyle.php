@@ -146,6 +146,7 @@ class test_FrmStyle extends FrmUnitTest {
 
 	/**
 	 * @param string $value
+	 *
 	 * @return string
 	 */
 	private function trim_braces( $value ) {

@@ -3,8 +3,8 @@
 	<description>Formidable Forms rules for PHP_CodeSniffer</description>
 
 	<exclude-pattern>vendor/*</exclude-pattern>
+	<exclude-pattern>phpcs-sniffs/*</exclude-pattern>
 	<exclude-pattern>node_modules/*</exclude-pattern>
-	<exclude-pattern>deprecated/*</exclude-pattern>
 	<exclude-pattern>bin/*</exclude-pattern>
 	<exclude-pattern>languages/formidable-js-strings.php</exclude-pattern>
 	<exclude-pattern>stubs.php</exclude-pattern>
@@ -19,7 +19,6 @@
 		<exclude name="Squiz.Commenting.FunctionComment.Missing" />
 		<exclude name="Squiz.Commenting.VariableComment.Missing" />
 		<exclude name="Squiz.Commenting.ClassComment.Missing" />
-		<exclude name="Squiz.Commenting.FunctionComment.MissingParamTag" />
 		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar" />
 		<exclude name="Generic.Commenting.DocComment.MissingShort" />
 
@@ -93,12 +92,6 @@
 		<exclude-pattern>models/FrmForm.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
-	</rule>
-	<rule ref="WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase">
-		<!-- wpmuBaseTablePrefix breaks this rule -->
-		<exclude-pattern>models/FrmField.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmDb.php</exclude-pattern>
 	</rule>
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
@@ -211,6 +204,8 @@
 		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
 		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
 		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
+		<exclude-pattern>models/FrmEntryFormatter.php</exclude-pattern>
 	</rule>
 
 	<!-- Set rules for Cognitive Complexity -->
@@ -271,4 +266,7 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+
+	<!-- Custom Formidable sniffs -->
+	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
 </ruleset>

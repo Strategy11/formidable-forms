@@ -76,6 +76,7 @@ class test_FrmEmailSummaryHelper extends FrmUnitTest {
 		$renewal_date = $this->run_private_method(
 			array( 'FrmEmailSummaryHelper', 'get_renewal_date' )
 		);
+
 		if ( FrmEmailSummaryHelper::get_date_from_today( '+' . FrmEmailSummaryHelper::BEFORE_RENEWAL_PERIOD . ' days' ) < $renewal_date ) {
 			$expected = array( 'monthly' );
 		} else {

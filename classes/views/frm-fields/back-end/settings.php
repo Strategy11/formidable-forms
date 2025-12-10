@@ -33,6 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php
 		}
+
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
@@ -146,7 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span><?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?></span>
 					<?php FrmAppHelper::tooltip_icon( __( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 				</label>
-				<span class="frm-with-right-icon">
+				<span class="frm-with-right-icon frm-block">
 					<?php
 					$css_layout_classes_attrs = array(
 						'type'           => 'text',
@@ -409,6 +410,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							)
 						);
 					}
+
 					if ( $field['type'] === 'divider' ) {
 						FrmHtmlHelper::echo_dropdown_option(
 							__( 'Center', 'formidable' ),
@@ -444,6 +446,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
 						$type_option_params = array( 'value' => $type_option_value );
+
 						if ( array_key_exists( $fkey, $disabled_fields ) ) {
 							$type_option_params['disabled'] = 'disabled';
 						}

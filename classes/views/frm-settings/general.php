@@ -2,6 +2,7 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 $is_gdpr_enabled = FrmAppHelper::is_gdpr_enabled();
 
 ?>
@@ -59,10 +60,13 @@ unset( $more_html );
 <h3><?php esc_html_e( 'GDPR', 'formidable' ); ?></h3>
 <?php
 $gdpr_options_wrapper_params = array( 'class' => 'frm_gdpr_options' );
+
 if ( ! $is_gdpr_enabled ) {
 	$gdpr_options_wrapper_params['class'] .= ' frm_hidden';
 }
+
 $custom_header_ip_wrapper_params = array( 'class' => 'frm_custom_header_ip_cont frm_gdpr_options' );
+
 if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 	$custom_header_ip_wrapper_params['class'] .= ' frm_hidden';
 }
@@ -96,8 +100,16 @@ if ( $frm_settings->no_ips || ! $is_gdpr_enabled ) {
 </p>
 <p class="frm-text-xs frm-mb-0">
 	<?php
-	// translators: %s: Knowledge base URL
-	printf( esc_html__( 'Learn more about our GDPR settings', 'formidable' ) . ' <a href="%s" target="_blank">%s</a>', 'https://formidableforms.com/knowledgebase/gdpr-settings/', esc_html__( 'here', 'formidable' ) );
+	$gdpr_utm = array(
+		'campaign' => 'gdpr-settings',
+		'content'  => 'gdpr-settings-docs',
+	);
+	printf(
+		// translators: %1$s: Opening tag for a link, %2$s: Closing tag for a link
+		esc_html__( 'Learn more about our GDPR settings %1$shere%2$s', 'formidable' ),
+		'<a href="' . esc_url( FrmAppHelper::admin_upgrade_link( $gdpr_utm, 'knowledgebase/gdpr-settings/' ) ) . '" target="_blank">',
+		'</a>'
+	);
 	?>
 </p>
 <h3 class="frm-mt-xs"><?php esc_html_e( 'Other', 'formidable' ); ?></h3>

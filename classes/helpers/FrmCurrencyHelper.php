@@ -11,11 +11,13 @@ class FrmCurrencyHelper {
 
 	/**
 	 * @param string $currency
+	 *
 	 * @return array
 	 */
 	public static function get_currency( $currency ) {
 		$currency   = strtoupper( $currency );
 		$currencies = self::get_currencies();
+
 		if ( isset( $currencies[ $currency ] ) ) {
 			$currency = $currencies[ $currency ];
 		} elseif ( isset( $currencies[ strtolower( $currency ) ] ) ) {
@@ -32,6 +34,7 @@ class FrmCurrencyHelper {
 	 * @since 6.18
 	 *
 	 * @param string $format_value The format value to check.
+	 *
 	 * @return bool
 	 */
 	public static function is_currency_format( $format_value ) {

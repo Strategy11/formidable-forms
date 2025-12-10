@@ -3,6 +3,7 @@
  * Spam check using WordPress disallowed words
  *
  * @since 6.21
+ *
  * @package Formidable
  */
 
@@ -14,6 +15,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
 	public function check() {
 		$mod_keys = trim( $this->get_disallowed_words() );
+
 		if ( empty( $mod_keys ) ) {
 			return false;
 		}
@@ -43,6 +45,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	 */
 	private function get_disallowed_words() {
 		$keys = get_option( 'disallowed_keys' );
+
 		if ( false === $keys ) {
 			// Fallback for WP < 5.5.
 			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
@@ -53,6 +56,13 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
 	/**
 	 * For WP 5.5 compatibility.
+	 *
+	 * @param string $author
+	 * @param string $email
+	 * @param string $url
+	 * @param string $content
+	 * @param string $ip
+	 * @param string $user_agent
 	 *
 	 * @return bool Return `true` if contains disallowed words.
 	 */

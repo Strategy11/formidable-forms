@@ -63,6 +63,7 @@ class FrmEmailStylesController {
 		 * @since 6.25
 		 *
 		 * @param array[] $email_styles The email styles.
+		 *
 		 * @return array
 		 */
 		return apply_filters( 'frm_email_styles', $email_styles );
@@ -72,6 +73,7 @@ class FrmEmailStylesController {
 	 * Gets email style preview URL.
 	 *
 	 * @param string $style_key Style key.
+	 *
 	 * @return string
 	 */
 	public static function get_email_style_preview_url( $style_key ) {
@@ -85,6 +87,7 @@ class FrmEmailStylesController {
 	 */
 	public static function get_default_email_style() {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( empty( $frm_settings->email_style ) ) {
 			return 'classic';
 		}
@@ -92,6 +95,7 @@ class FrmEmailStylesController {
 		// Check if the selected style is available and selectable.
 		$styles = self::get_email_styles();
 		$style  = $frm_settings->email_style;
+
 		if ( isset( $styles[ $style ] ) && ! empty( $styles[ $style ]['selectable'] ) ) {
 			return $style;
 		}
@@ -103,6 +107,7 @@ class FrmEmailStylesController {
 	 * Gets the test email content.
 	 *
 	 * @param false|string $style_key Default is `false`, using the one in settings.
+	 *
 	 * @return string
 	 */
 	private static function get_test_email_content( $style_key = false ) {
@@ -134,6 +139,7 @@ class FrmEmailStylesController {
 			$content = self::get_test_rich_text_email_content( $style_key, $table_rows );
 		} else {
 			$content = '';
+
 			foreach ( $table_rows as $row ) {
 				$content .= $row['label'] . ': ' . $row['value'] . "\r\n";
 			}
@@ -147,6 +153,7 @@ class FrmEmailStylesController {
 	 *
 	 * @param string $style_key  Style key.
 	 * @param array  $table_rows Table rows.
+	 *
 	 * @return string
 	 */
 	private static function get_test_rich_text_email_content( $style_key, $table_rows ) {
@@ -169,6 +176,9 @@ class FrmEmailStylesController {
 
 		foreach ( $table_rows as $index => $row ) {
 			if ( 'compact' === $style_key ) {
+				// Add some spaces after the label. Maybe change it to the left in RTL.
+				$row['label'] = '<div style="padding-right:10px;">' . $row['label'] . '</div>';
+
 				// Compact table has two columns layout.
 				$table_row = $table_generator->generate_two_cell_table_row( $row['label'], $row['value'] );
 			} else {
@@ -194,6 +204,7 @@ class FrmEmailStylesController {
 		}
 
 		$wrapped_content = '<html><head><meta charset="utf-8" /></head>';
+
 		if ( 'classic' !== $style_key ) {
 			// This works in previewing and as a fallback for email content.
 			$wrapped_content .= '<style>
@@ -201,6 +212,7 @@ class FrmEmailStylesController {
 						a {color:' . esc_attr( $style_settings['link_color'] ) . ';}
 					</style>';
 		}
+
 		$wrapped_content .= '</head><body>' . $content . '</body></html>';
 
 		return $wrapped_content;
@@ -211,6 +223,7 @@ class FrmEmailStylesController {
 	 *
 	 * @param string $label Field label.
 	 * @param string $value Prepared field value.
+	 *
 	 * @return string
 	 */
 	public static function get_content_for_one_column_cell( $label, $value ) {
@@ -221,6 +234,7 @@ class FrmEmailStylesController {
 	 * Gets table generator object for an email style.
 	 *
 	 * @param false|string $email_style Email style. Default is `false`: using the one in global settings.
+	 *
 	 * @return FrmTableHTMLGenerator
 	 */
 	public static function get_table_generator( $email_style = false ) {
@@ -257,11 +271,13 @@ class FrmEmailStylesController {
 
 		$style_key     = FrmAppHelper::get_param( 'style_key', '', 'get', 'sanitize_text_field' );
 		$not_exist_msg = __( "This email style doesn't exist", 'formidable' );
+
 		if ( ! $style_key ) {
 			die( esc_html( $not_exist_msg ) );
 		}
 
 		$styles = self::get_email_styles();
+
 		if ( ! isset( $styles[ $style_key ] ) ) {
 			die( esc_html( $not_exist_msg ) );
 		}
@@ -287,8 +303,10 @@ class FrmEmailStylesController {
 		$emails_str   = FrmAppHelper::get_post_param( 'emails_str', '', 'sanitize_text_field' );
 		$emails       = explode( ',', $emails_str );
 		$valid_emails = array();
+
 		foreach ( $emails as $email ) {
 			$email = trim( $email );
+
 			if ( empty( $email ) || ! is_email( $email ) ) {
 				continue;
 			}
@@ -310,6 +328,7 @@ class FrmEmailStylesController {
 		FrmUsageController::update_flows_data( 'send_test_email', $email_style );
 
 		$result = wp_mail( $valid_emails, $subject, $content, $headers );
+
 		if ( $result ) {
 			wp_send_json_success( __( 'Test email sent successfully!', 'formidable' ) );
 		}
@@ -321,6 +340,7 @@ class FrmEmailStylesController {
 	 * Gets Content-Type header.
 	 *
 	 * @param string $email_style Email style.
+	 *
 	 * @return string
 	 */
 	private static function get_content_type_header( $email_style ) {
@@ -330,6 +350,8 @@ class FrmEmailStylesController {
 
 	/**
 	 * Shows placeholder Pro settings.
+	 *
+	 * @return void
 	 */
 	public static function show_upsell_settings() {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/settings.php';
@@ -370,12 +392,14 @@ class FrmEmailStylesController {
 	 * Wraps email message with new settings.
 	 *
 	 * @param string $message Email message.
+	 *
 	 * @return string
 	 */
 	public static function wrap_email_message( $message ) {
 		$style_settings = self::get_email_style_settings();
 
 		$header_img = '';
+
 		if ( $style_settings['img'] ) {
 			$img_align = $style_settings['img_align'] ? $style_settings['img_align'] : 'center';
 			$img_size  = $style_settings['img_size'] ? $style_settings['img_size'] : 'thumbnail';
@@ -387,7 +411,7 @@ class FrmEmailStylesController {
 			);
 
 			$header_img .= sprintf(
-				'<img src="%s" alt="" />',
+				'<img src="%s" alt="" style="max-width:100%%;height:auto;" />',
 				esc_url( $img_url )
 			);
 
@@ -397,14 +421,14 @@ class FrmEmailStylesController {
 		// Wrapper.
 		$font_family = $style_settings['font'] ? $style_settings['font'] : 'Inter,sans-serif';
 		$new_message = sprintf(
-			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 0;">',
+			'<div style="background-color:%1$s;color:%2$s;font-family:%3$s;padding:40px 10px;">',
 			esc_attr( $style_settings['bg_color'] ),
 			esc_attr( $style_settings['text_color'] ),
 			esc_attr( $font_family )
 		);
 
 		// Container.
-		$new_message .= '<div style="width:640px;margin:auto;">';
+		$new_message .= '<div style="max-width:640px;margin:auto;">';
 
 		// Header image if outside.
 		if ( $style_settings['img'] && 'inside' !== $style_settings['img_location'] ) {
@@ -436,6 +460,7 @@ class FrmEmailStylesController {
 	 * @param string $tag     Tag name.
 	 * @param string $css     CSS code.
 	 * @param string $content The content.
+	 *
 	 * @return string
 	 */
 	private static function add_inline_css( $tag, $css, $content ) {
@@ -463,10 +488,12 @@ class FrmEmailStylesController {
 	 * @param string $tag  Tag name.
 	 * @param string $css  CSS code.
 	 * @param string $html The HTML tag.
+	 *
 	 * @return string
 	 */
 	private static function add_css_to_style_attr( $tag, $css, $html ) {
 		$regex = '/\sstyle=("|\')/mi';
+
 		if ( preg_match( $regex, $html, $matches ) ) {
 			$search  = $matches[0];
 			$replace = $search . $css;

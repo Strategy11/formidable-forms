@@ -3,6 +3,7 @@
  * Summary email base class
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -93,6 +94,7 @@ abstract class FrmEmailSummary {
 	 */
 	protected function get_content() {
 		$args = $this->get_content_args();
+
 		if ( false === $args ) {
 			return false;
 		}
@@ -110,6 +112,7 @@ abstract class FrmEmailSummary {
 	 * Gets include file path from the given file name.
 	 *
 	 * @param string $file_name File name.
+	 *
 	 * @return string
 	 */
 	protected function get_include_file( $file_name ) {
@@ -177,19 +180,23 @@ abstract class FrmEmailSummary {
 		}
 
 		$recipients = $this->get_recipients();
+
 		if ( ! $recipients ) {
 			// Return true to not try to send this email on the next day.
 			return true;
 		}
 
 		$content = $this->get_content();
+
 		if ( false === $content ) {
 			return true;
 		}
+
 		$subject = $this->get_subject();
 		$headers = $this->get_headers();
 
 		$sent = wp_mail( $recipients, $subject, $content, $headers );
+
 		if ( ! $sent ) {
 			$headers = implode( "\r\n", $headers );
 			$sent    = mail( $recipients, $subject, $content, $headers );

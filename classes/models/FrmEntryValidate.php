@@ -15,6 +15,7 @@ class FrmEntryValidate {
 	/**
 	 * @param array         $values
 	 * @param bool|string[] $exclude
+	 *
 	 * @return array
 	 */
 	public static function validate( $values, $exclude = false ) {
@@ -84,6 +85,11 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	private static function set_item_key( &$values ) {
 		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
 			global $wpdb;
@@ -92,6 +98,12 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array        $values
+	 * @param array|string $exclude
+	 *
+	 * @return array
+	 */
 	private static function get_fields_to_validate( $values, $exclude ) {
 		$where = apply_filters( 'frm_posted_field_ids', array( 'fi.form_id' => $values['form_id'] ) );
 
@@ -116,6 +128,14 @@ class FrmEntryValidate {
 		return apply_filters( 'frm_fields_to_validate', $fields, compact( 'values', 'exclude', 'where' ) );
 	}
 
+	/**
+	 * @param object $posted_field
+	 * @param array  $errors
+	 * @param array  $values
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field( $posted_field, &$errors, $values, $args = array() ) {
 		$defaults = array(
 			'id'              => $posted_field->id,
@@ -142,6 +162,7 @@ class FrmEntryValidate {
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
 		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+
 		if ( $should_trim ) {
 			$value = reset( $value );
 		}
@@ -216,6 +237,7 @@ class FrmEntryValidate {
 	 * @param stdClass     $field
 	 * @param array|string $value
 	 * @param array        $options
+	 *
 	 * @return bool
 	 */
 	private static function option_is_valid( $field, $value, $options ) {
@@ -224,6 +246,7 @@ class FrmEntryValidate {
 		}
 
 		$field_object = FrmFieldFactory::get_field_type( $field->type, $field );
+
 		if ( ! $field_object->field_type_has_options_settings() ) {
 			return true;
 		}
@@ -260,22 +283,26 @@ class FrmEntryValidate {
 				}
 
 				$match = trim( $current_value ) === trim( $option_value );
+
 				if ( $match ) {
 					break;
 				}
 
 				$match = trim( $current_value ) === trim( do_shortcode( $option_value ) );
+
 				if ( $match ) {
 					break;
 				}
 
 				$match = self::is_filtered_match( $current_value, $option_value );
+
 				if ( $match ) {
 					break;
 				}
 
 				if ( is_numeric( $current_value ) ) {
 					$match = (int) $current_value === (int) $option_value;
+
 					if ( $match ) {
 						break;
 					}
@@ -299,15 +326,19 @@ class FrmEntryValidate {
 	 *
 	 * @param string $value
 	 * @param string $option_value
+	 *
 	 * @return bool
 	 */
 	private static function is_filtered_match( $value, $option_value ) {
 		// First remove the wpautop filter so it doesn't add extra tags to $option_value.
 		$filter_priority = has_filter( 'the_content', 'wpautop' );
+
 		if ( is_numeric( $filter_priority ) ) {
 			remove_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		$filtered_option = apply_filters( 'the_content', $option_value );
+
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
@@ -319,6 +350,9 @@ class FrmEntryValidate {
 	 * This is to help avoid issues where the options could be based on a URL param for example.
 	 *
 	 * @since 6.21
+	 *
+	 * @param object       $field_object The field object.
+	 * @param array|string $value        The value to validate.
 	 *
 	 * @return bool
 	 */
@@ -334,6 +368,7 @@ class FrmEntryValidate {
 			} else {
 				$option_value = $option;
 			}
+
 			$option_value = do_shortcode( $option_value );
 			return $option_value;
 		};
@@ -351,9 +386,12 @@ class FrmEntryValidate {
 	 *
 	 * @param array|string $value Field value.
 	 * @param object       $field Field object.
+	 *
+	 * @return void
 	 */
 	private static function maybe_add_item_name( $value, $field ) {
 		$item_name = false;
+
 		if ( 'name' === $field->type ) {
 			$field_obj = FrmFieldFactory::get_field_object( $field );
 			$item_name = $field_obj->get_display_value( $value );
@@ -372,9 +410,12 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field
 	 * @param string $value
+	 *
+	 * @return void
 	 */
 	private static function maybe_clear_value_for_default_blank_setting( $field, &$value ) {
 		$position = FrmField::get_option( $field, 'label' );
+
 		if ( ! $position ) {
 			$position = FrmStylesController::get_style_val( 'position', $field->form_id );
 		}
@@ -384,17 +425,34 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $posted_field
+	 * @param mixed  $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_field_types( &$errors, $posted_field, $value, $args ) {
 		$field_obj      = FrmFieldFactory::get_field_object( $posted_field );
 		$args['value']  = $value;
 		$args['errors'] = $errors;
 
 		$new_errors = $field_obj->validate( $args );
+
 		if ( ! empty( $new_errors ) ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
 	}
 
+	/**
+	 * @param array  $errors
+	 * @param object $field
+	 * @param string $value
+	 * @param array  $args
+	 *
+	 * @return void
+	 */
 	public static function validate_phone_field( &$errors, $field, $value, $args ) {
 		$format_value = FrmField::get_option( $field, 'format' );
 
@@ -407,6 +465,11 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param object $field
+	 *
+	 * @return string
+	 */
 	public static function phone_format( $field ) {
 		if ( FrmField::is_option_empty( $field, 'format' ) ) {
 			$pattern = self::default_phone_format();
@@ -431,6 +494,8 @@ class FrmEntryValidate {
 
 	/**
 	 * @since 3.01
+	 *
+	 * @return string
 	 */
 	private static function default_phone_format() {
 		return '^((\+\d{1,3}(-|.| )?\(?\d\)?(-| |.)?\d{1,5})|(\(?\d{2,6}\)?))(-|.| )?(\d{3,4})(-|.| )?(\d{4})(( x| ext)\d{1,5}){0,1}$';
@@ -461,6 +526,7 @@ class FrmEntryValidate {
 		if ( strpos( $pattern, '\?' ) !== false ) {
 			$parts   = explode( '\?', $pattern );
 			$pattern = '';
+
 			foreach ( $parts as $part ) {
 				if ( empty( $pattern ) ) {
 					$pattern .= $part;
@@ -469,6 +535,7 @@ class FrmEntryValidate {
 				}
 			}
 		}
+
 		$pattern = '^' . $pattern . '$';
 
 		return $pattern;
@@ -480,6 +547,8 @@ class FrmEntryValidate {
 	 * @param bool  $exclude
 	 * @param array $values
 	 * @param array $errors By reference.
+	 *
+	 * @return void
 	 */
 	public static function spam_check( $exclude, $values, &$errors ) {
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
@@ -494,12 +563,14 @@ class FrmEntryValidate {
 
 		$antispam_check = self::is_antispam_check( $values['form_id'] );
 		$spam_msg       = FrmAntiSpamController::get_default_spam_message();
+
 		if ( is_string( $antispam_check ) ) {
 			$errors['spam'] = $antispam_check;
 		} elseif ( self::is_honeypot_spam( $values ) || self::is_spam_bot() ) {
 			$errors['spam'] = $spam_msg;
 		} else {
 			$is_spam = FrmAntiSpamController::is_spam( $values );
+
 			if ( $is_spam ) {
 				$errors['spam'] = $is_spam;
 			}
@@ -520,6 +591,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values The values.
+	 *
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
@@ -540,6 +612,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool
 	 */
 	private static function is_honeypot_spam( $values ) {
@@ -558,6 +631,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param array $values
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_spam( $values ) {
@@ -568,6 +642,7 @@ class FrmEntryValidate {
 
 	/**
 	 * @param int $form_id
+	 *
 	 * @return bool
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
@@ -589,6 +664,8 @@ class FrmEntryValidate {
 
 	/**
 	 * Check entries for Akismet spam
+	 *
+	 * @param array $values Entry values.
 	 *
 	 * @return bool true if is spam
 	 */
@@ -619,6 +696,11 @@ class FrmEntryValidate {
 
 	/**
 	 * @since 2.0
+	 *
+	 * @param array $datas The array of values being sent to Akismet.
+	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function parse_akismet_array( &$datas, $values ) {
 		self::add_site_info_to_akismet( $datas );
@@ -631,6 +713,11 @@ class FrmEntryValidate {
 		self::add_comment_content_to_akismet( $datas, $values );
 	}
 
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_site_info_to_akismet( &$datas ) {
 		$datas['blog']         = FrmAppHelper::site_url();
 		$datas['user_ip']      = preg_replace( '/[^0-9., ]/', '', FrmAppHelper::get_ip_address() );
@@ -644,6 +731,12 @@ class FrmEntryValidate {
 		}
 	}
 
+	/**
+	 * @param array $datas
+	 * @param array $values
+	 *
+	 * @return void
+	 */
 	private static function add_user_info_to_akismet( &$datas, $values ) {
 		$user_info = self::get_spam_check_user_info( $values );
 		$datas     = $datas + $user_info;
@@ -660,6 +753,7 @@ class FrmEntryValidate {
 	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
 	public static function get_spam_check_user_info( $values ) {
@@ -684,6 +778,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13
 	 *
 	 * @param array $values Entry values after flattened.
+	 *
 	 * @return array
 	 */
 	private static function get_spam_check_user_info_for_guest( $values ) {
@@ -717,6 +812,8 @@ class FrmEntryValidate {
 	 * @param array    $datas        Guest data.
 	 * @param array    $values       The values.
 	 * @param int|null $custom_index Custom index (or field ID).
+	 *
+	 * @return void
 	 */
 	private static function recursive_add_akismet_guest_info( &$datas, $values, $custom_index = null ) {
 		foreach ( $values as $index => $value ) {
@@ -731,8 +828,10 @@ class FrmEntryValidate {
 			}
 
 			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
+
 				if ( $found ) {
 					$datas[ $key ]             = $value;
 					$datas['frm_duplicated'][] = $field_id;
@@ -772,6 +871,7 @@ class FrmEntryValidate {
 					// If there is name field in the form, we should always use it as author name.
 					return true;
 				}
+
 				$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 				$fields  = self::get_name_text_fields( $form_id );
 
@@ -779,10 +879,12 @@ class FrmEntryValidate {
 					if ( 'Name' !== $field->name ) {
 						continue;
 					}
+
 					if ( isset( $fields[ $index + 1 ] ) && 'Last' === $fields[ $index + 1 ]->name ) {
 						if ( empty( $values[ absint( $fields[ $index + 1 ]->id ) ] ) ) {
 							continue;
 						}
+
 						$value .= ' ' . $values[ $fields[ $index + 1 ]->id ];
 						return true;
 					}
@@ -798,13 +900,16 @@ class FrmEntryValidate {
 	 * @since 6.17
 	 *
 	 * @param int $form_id
+	 *
 	 * @return array
 	 */
 	private static function get_name_text_fields( $form_id ) {
 		$name_text_fields_is_initialized = is_array( self::$name_text_fields );
+
 		if ( $name_text_fields_is_initialized && isset( self::$name_text_fields[ $form_id ] ) ) {
 			return self::$name_text_fields[ $form_id ];
 		}
+
 		if ( ! $name_text_fields_is_initialized ) {
 			self::$name_text_fields = array();
 		}
@@ -822,6 +927,11 @@ class FrmEntryValidate {
 		return self::$name_text_fields[ $form_id ];
 	}
 
+	/**
+	 * @param array $datas
+	 *
+	 * @return void
+	 */
 	private static function add_server_values_to_akismet( &$datas ) {
 		foreach ( $_SERVER as $key => $value ) {
 			$include_value = is_string( $value ) && ! preg_match( '/^HTTP_COOKIE/', $key ) && preg_match( '/^(HTTP_|REMOTE_ADDR|REQUEST_URI|DOCUMENT_URI)/', $key );
@@ -841,6 +951,8 @@ class FrmEntryValidate {
 	 *
 	 * @param array $datas  The array of values being sent to Akismet.
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function add_comment_content_to_akismet( &$datas, $values ) {
 		if ( isset( $datas['frm_duplicated'] ) ) {
@@ -863,9 +975,12 @@ class FrmEntryValidate {
 	 * @since 5.0.09
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	private static function skip_adding_values_to_akismet( &$values ) {
 		$skipped_fields = self::get_akismet_skipped_field_ids( $values );
+
 		foreach ( $skipped_fields as $skipped_field ) {
 			if ( ! isset( $values['item_meta'][ $skipped_field->id ] ) ) {
 				continue;
@@ -873,6 +988,7 @@ class FrmEntryValidate {
 
 			if ( self::should_really_skip_field( $skipped_field, $values ) ) {
 				unset( $values['item_meta'][ $skipped_field->id ] );
+
 				if ( isset( $values['item_meta']['other'][ $skipped_field->id ] ) ) {
 					unset( $values['item_meta']['other'][ $skipped_field->id ] );
 				}
@@ -887,6 +1003,7 @@ class FrmEntryValidate {
 	 *
 	 * @param object $field_data Object contains `id` and `options`.
 	 * @param array  $values     Entry values.
+	 *
 	 * @return bool
 	 */
 	private static function should_really_skip_field( $field_data, $values ) {
@@ -896,6 +1013,7 @@ class FrmEntryValidate {
 		}
 
 		FrmAppHelper::unserialize_or_decode( $field_data->options );
+
 		if ( ! $field_data->options ) {
 			// Check if an error happens when unserializing, or empty options.
 			return true;
@@ -917,6 +1035,7 @@ class FrmEntryValidate {
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
 			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
 			}
@@ -933,6 +1052,7 @@ class FrmEntryValidate {
 	 * @since 5.2.04 This method returns array of object contains `id` and `options` instead of array of `id` only.
 	 *
 	 * @param array $values Entry values after running through {@see FrmEntryValidate::prepare_values_for_spam_check()}.
+	 *
 	 * @return array
 	 */
 	private static function get_akismet_skipped_field_ids( $values ) {
@@ -960,6 +1080,8 @@ class FrmEntryValidate {
 	 * @since 6.21 This changed from private to public.
 	 *
 	 * @param array $values Entry values.
+	 *
+	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
 		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
@@ -974,6 +1096,7 @@ class FrmEntryValidate {
 	 * @since 5.0.13 Convert name field value to string.
 	 *
 	 * @param array $values Entry values.
+	 *
 	 * @return array Form IDs.
 	 */
 	private static function get_all_form_ids_and_flatten_meta( &$values ) {
@@ -981,6 +1104,7 @@ class FrmEntryValidate {
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.
 		$form_ids = isset( $values['form_id'] ) ? array( absint( $values['form_id'] ) ) : array();
+
 		foreach ( $values['item_meta'] as $field_id => $value ) {
 			if ( ! is_numeric( $field_id ) ) {
 				// Maybe `other`.

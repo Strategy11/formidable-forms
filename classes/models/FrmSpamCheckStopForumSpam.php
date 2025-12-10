@@ -39,6 +39,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 		}
 
 		$emails = FrmAntiSpamController::extract_emails_from_values( $this->values['item_meta'] );
+
 		if ( ! $emails ) {
 			return false;
 		}
@@ -64,6 +65,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 	 * Sends API request.
 	 *
 	 * @param array $request_data Request data.
+	 *
 	 * @return string
 	 */
 	private function send_request( $request_data ) {
@@ -98,6 +100,7 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 	 * Checks if the response is spam.
 	 *
 	 * @param string $response Response body.
+	 *
 	 * @return bool
 	 */
 	private function response_is_spam( $response ) {

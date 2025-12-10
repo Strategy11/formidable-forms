@@ -13,11 +13,13 @@ class FrmTransLiteCRUDController {
 	 * Show a table of either payments for subscriptions.
 	 *
 	 * @param int $id
+	 *
 	 * @return void
 	 */
 	public static function show( $id = 0 ) {
 		if ( ! $id ) {
 			$id = FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
+
 			if ( ! $id ) {
 				wp_die( esc_html__( 'Please select a payment to view', 'formidable' ) );
 			}
@@ -57,6 +59,7 @@ class FrmTransLiteCRUDController {
 
 	/**
 	 * @param int $id
+	 *
 	 * @return object|null
 	 */
 	private static function get_payment_row( $id ) {

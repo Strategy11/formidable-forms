@@ -109,6 +109,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array $api_data
+	 *
 	 * @return void
 	 */
 	public function __construct( $api_data ) {
@@ -121,6 +122,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array<string> $categories
+	 *
 	 * @return void
 	 */
 	private static function populate_category_information( $categories ) {
@@ -128,6 +130,7 @@ class FrmApplicationTemplate {
 			if ( self::category_matches_a_license_type( $category ) ) {
 				continue;
 			}
+
 			if ( in_array( $category, self::$categories, true ) ) {
 				continue;
 			}
@@ -139,6 +142,7 @@ class FrmApplicationTemplate {
 	 * @since 5.5.2
 	 *
 	 * @param string $category
+	 *
 	 * @return bool
 	 */
 	private static function category_matches_a_license_type( $category ) {
@@ -164,6 +168,7 @@ class FrmApplicationTemplate {
 		}
 
 		$application = array();
+
 		foreach ( self::$keys as $key ) {
 			if ( ! isset( $this->api_data[ $key ] ) ) {
 				continue;
@@ -210,6 +215,7 @@ class FrmApplicationTemplate {
 			}
 
 			$purchase_url = $this->is_available_for_purchase();
+
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
@@ -220,6 +226,7 @@ class FrmApplicationTemplate {
 		$application['isNew'] = $this->is_new();
 
 		$application['usedAddons'] = array();
+
 		if ( isset( $application['used_addons'] ) ) {
 			// Change key to camel case.
 			$application['usedAddons'] = $application['used_addons'];
@@ -246,6 +253,7 @@ class FrmApplicationTemplate {
 		}
 
 		$pro = $addons[93790];
+
 		if ( ! array_key_exists( 'type', $pro ) ) {
 			return false;
 		}
@@ -255,6 +263,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
+
 		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
 			return false;
 		}
@@ -278,6 +287,7 @@ class FrmApplicationTemplate {
 	 */
 	private function get_required_license() {
 		$required_license = strtolower( $this->api_data['min_plan'] );
+
 		if ( 'plus' === $required_license ) {
 			$required_license = 'personal';
 		}
