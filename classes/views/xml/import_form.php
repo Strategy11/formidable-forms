@@ -188,6 +188,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<td class="column-entries">
 									<?php
 									$style = $form->options['custom_style'] ?? 1;
+
 									if ( empty( $style ) ) {
 										echo '0';
 									} else {

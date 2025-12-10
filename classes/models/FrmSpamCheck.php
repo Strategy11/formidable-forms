@@ -38,6 +38,7 @@ abstract class FrmSpamCheck {
 		}
 
 		$is_spam = $this->check();
+
 		if ( ! $is_spam ) {
 			return false;
 		}

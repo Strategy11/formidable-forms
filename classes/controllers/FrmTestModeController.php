@@ -86,11 +86,13 @@ class FrmTestModeController {
 	 */
 	private static function render_testing_mode_container() {
 		$form_key = self::get_form_key_from_request();
+
 		if ( ! $form_key ) {
 			return;
 		}
 
 		$form = FrmForm::getOne( $form_key );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -130,11 +132,13 @@ class FrmTestModeController {
 		);
 
 		$oneclick_data = FrmAddonsController::install_link( 'ai' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
 
 		$oneclick_data = FrmAddonsController::install_link( 'test-mode' );
+
 		if ( isset( $oneclick_data['url'] ) ) {
 			$test_mode_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 		}
@@ -166,16 +170,19 @@ class FrmTestModeController {
 	 */
 	private static function get_form_key_from_request() {
 		$form_key = FrmAppHelper::simple_get( 'form' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_text_field' );
+
 		if ( $form_key ) {
 			return $form_key;
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'sanitize_text_field' );
+
 		if ( $form_id && is_numeric( $form_id ) ) {
 			return FrmForm::get_key_by_id( $form_id );
 		}

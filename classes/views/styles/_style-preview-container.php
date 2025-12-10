@@ -11,6 +11,7 @@ $sample_toggle_text         = $sample_form_is_on ? __( 'View my form', 'formidab
 $active_form_wrapper_params = array(
 	'id' => 'frm_active_style_form',
 );
+
 if ( $sample_form_is_on ) {
 	$active_form_wrapper_params['class'] = 'frm_hidden';
 }

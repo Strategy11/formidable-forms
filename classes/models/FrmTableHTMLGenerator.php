@@ -94,8 +94,7 @@ class FrmTableHTMLGenerator {
 	 * @param array  $atts
 	 */
 	public function __construct( $type, $atts = array() ) {
-
-		$this->type = (string) $type;
+		$this->type = $type;
 
 		if ( isset( $atts['cell_padding'] ) ) {
 			$this->cell_padding = $atts['cell_padding'];
@@ -443,13 +442,16 @@ class FrmTableHTMLGenerator {
 	 */
 	protected function add_row_class( $empty = false ) {
 		$class = '';
+
 		if ( $empty ) {
 			// Only add this class on two cell rows.
 			$class .= ' frm-empty-row';
 		}
+
 		if ( $this->is_child ) {
 			$class .= ' frm-child-row';
 		}
+
 		if ( $class ) {
 			$class = ' class="' . trim( $class ) . '"';
 		}

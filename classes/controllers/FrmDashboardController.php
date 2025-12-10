@@ -197,6 +197,7 @@ class FrmDashboardController {
 			'counter' => $value,
 			'type'    => 'default',
 		);
+
 		if ( ! empty( $cta ) ) {
 			$counter_args['cta'] = $cta;
 		}
@@ -232,6 +233,7 @@ class FrmDashboardController {
 
 		$model_payments = new FrmTransLitePayment();
 		$payments       = $model_payments->get_payments_stats();
+
 		foreach ( $payments['total'] as $currency => $total_payments ) {
 			if ( 0 < (int) $total_payments ) {
 				$prepared_data[] = array(
@@ -313,6 +315,7 @@ class FrmDashboardController {
 		}
 
 		global $wp_filter;
+
 		if ( isset( $wp_filter['admin_notices'] ) ) {
 			unset( $wp_filter['admin_notices'] );
 		}
@@ -464,7 +467,7 @@ class FrmDashboardController {
 	/**
 	 * Get the embed YouTube video from YouTube feed api. If there are 0 entries we show the welcome video otherwise latest video from FF YouTube channel is displayed.
 	 *
-	 * @param int $entries_count The total entries available.
+	 * @param int|string $entries_count The total entries available.
 	 *
 	 * @return string|null The YouTube video ID.
 	 */
@@ -476,13 +479,16 @@ class FrmDashboardController {
 		if ( 0 === (int) $entries_count && false === $welcome_video && false === $featured_video ) {
 			return null;
 		}
+
 		if ( 0 === (int) $entries_count && false !== $welcome_video ) {
 			return $welcome_video['video-id'] ?? null;
 		}
+
 		// We might receive the most recent video feed as the featured selection.
 		if ( isset( $featured_video[0] ) ) {
 			return $featured_video[0]['video-id'];
 		}
+
 		return $featured_video['video-id'] ?? null;
 	}
 
@@ -496,6 +502,7 @@ class FrmDashboardController {
 	 */
 	private static function save_subscribed_email( $email ) {
 		$subscribed_emails = self::get_subscribed_emails();
+
 		if ( ! in_array( $email, $subscribed_emails, true ) ) {
 			$subscribed_emails[] = $email;
 			self::update_dashboard_options( $subscribed_emails, 'inbox-subscribed-emails' );
@@ -529,9 +536,11 @@ class FrmDashboardController {
 	 */
 	private static function get_dashboard_options( $option_name = null ) {
 		$options = get_option( self::OPTION_META_NAME, array() );
+
 		if ( null !== $option_name && ! isset( $options[ $option_name ] ) ) {
 			return array();
 		}
+
 		if ( null !== $option_name ) {
 			return $options[ $option_name ];
 		}
@@ -560,6 +569,7 @@ class FrmDashboardController {
 	private static function add_welcome_closed_banner_user_id() {
 		$users_list = self::get_closed_welcome_banner_user_ids();
 		$user_id    = get_current_user_id();
+
 		if ( ! in_array( $user_id, $users_list, true ) ) {
 			$users_list[] = $user_id;
 			self::update_dashboard_options( $users_list, 'closed-welcome-banner-user-ids' );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.25.1
+ * Version: 6.26
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -43,6 +43,7 @@ function load_formidable_forms() {
 
 	// For reverse compatibility. Load Pro if it's still nested.
 	$frm_path = __DIR__;
+
 	if ( file_exists( $frm_path . '/pro/formidable-pro.php' ) ) {
 		include $frm_path . '/pro/formidable-pro.php';
 	}
@@ -83,27 +84,22 @@ function frm_forms_autoloader( $class_name ) {
  * @return void
  */
 function frm_class_autoloader( $class_name, $filepath ) {
-	$deprecated        = array( 'FrmEDD_SL_Plugin_Updater' );
-	$is_deprecated     = in_array( $class_name, $deprecated, true ) || preg_match( '/^.+Deprecate/', $class_name );
 	$original_filepath = $filepath;
+	$filepath         .= '/classes/';
 
-	if ( $is_deprecated ) {
-		$filepath .= '/deprecated/';
+	if ( preg_match( '/^.+Helper$/', $class_name ) ) {
+		$filepath .= 'helpers/';
+	} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
+		$filepath .= 'controllers/';
+	} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
+		$filepath .= 'factories/';
+	} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
+		$filepath .= 'views/styles/components/';
 	} else {
-		$filepath .= '/classes/';
-		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
-			$filepath .= 'helpers/';
-		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
-			$filepath .= 'controllers/';
-		} elseif ( preg_match( '/^.+Factory$/', $class_name ) ) {
-			$filepath .= 'factories/';
-		} elseif ( preg_match( '/^.+StyleComponent$/', $class_name ) ) {
-			$filepath .= 'views/styles/components/';
-		} else {
-			$filepath .= 'models/';
-			if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
-				$filepath .= 'fields/';
-			}
+		$filepath .= 'models/';
+
+		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+			$filepath .= 'fields/';
 		}
 	}
 
@@ -115,6 +111,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	if ( preg_match( '/^FrmStrpLite.+$/', $class_name ) || preg_match( '/^FrmTransLite.+$/', $class_name ) ) {
 		// Autoload for /stripe/ folder.
 		$filepath = $original_filepath . '/stripe/';
+
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
 		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
@@ -134,6 +131,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 
 	if ( preg_match( '/^FrmSquareLite.+$/', $class_name ) ) {
 		$filepath = $original_filepath . '/square/';
+
 		if ( preg_match( '/^.+Helper$/', $class_name ) ) {
 			$filepath .= 'helpers/';
 		} elseif ( preg_match( '/^.+Controller$/', $class_name ) ) {
