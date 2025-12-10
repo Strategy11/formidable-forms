@@ -844,14 +844,25 @@ class FrmStylesController {
 	 * Echo content for the Custom CSS page.
 	 *
 	 * @param string $message
+	 * @param array  $extra_args An array of extra arguments.
 	 *
 	 * @return void
 	 */
-	public static function custom_css( $message = '' ) {
-		$settings   = self::enqueue_codemirror();
-		$id         = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
-		$custom_css = self::get_custom_css();
+	public static function custom_css( $message = '', $extra_args = array() ) {
+		$id              = $extra_args['id'] ?? 'frm_codemirror_box';
+		$settings        = self::enqueue_codemirror( $id, $extra_args['placeholder'] ?? '' );
+		$id              = $settings ? $id : 'frm_custom_css_box';
+		$show_errors     = $extra_args['show_errors'] ?? true;
+		$custom_css      = $extra_args['custom_css'] ?? self::get_custom_css();
+		$heading         = $extra_args['heading'] ?? __( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' );
+		$textarea_params = ! empty( $extra_args['textarea_params'] ) ? $extra_args['textarea_params'] : array(
+			'name' => 'frm_custom_css',
+			'id'   => $id,
+		);
 
+		if ( ! empty( $settings ) ) {
+			$textarea_params['class'] = 'hide-if-js';
+		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -860,9 +871,16 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
+	 * @param array|null $single_style_settings The single style settings.
+	 *
 	 * @return string
 	 */
-	public static function get_custom_css() {
+	public static function get_custom_css( $single_style_settings = null ) {
+		// If the single style settings are passed, return the custom CSS from the single style settings.
+		if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
+			return $single_style_settings['single_style_custom_css'];
+		}
+
 		$settings = FrmAppHelper::get_settings();
 
 		if ( is_string( $settings->custom_css ) ) {
@@ -883,9 +901,12 @@ class FrmStylesController {
 	 *
 	 * @since 6.0 Previously this code was embedded in self::custom_css.
 	 *
+	 * @param string $id The ID of the codemirror box.
+	 * @param string $placeholder The placeholder text for the codemirror box.
+	 *
 	 * @return array|false
 	 */
-	private static function enqueue_codemirror() {
+	private static function enqueue_codemirror( $id = 'frm_codemirror_box', $placeholder = '' ) {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			// The WordPress version is likely older than 4.9.
 			return false;
@@ -900,6 +921,7 @@ class FrmStylesController {
 					// As the codemirror box only appears once you click into the Custom CSS tab, we need to auto-refresh.
 					// Otherwise the line numbers all end up with a 1px width causing overlap issues with the text in the content.
 					'autoRefresh' => true,
+					'placeholder' => $placeholder,
 				),
 			)
 		);
@@ -908,7 +930,9 @@ class FrmStylesController {
 			wp_add_inline_script(
 				'code-editor',
 				sprintf(
-					'jQuery( function() { wp.codeEditor.initialize( \'frm_codemirror_box\', %s ); } );',
+					'jQuery( function() { window.%s_wp_editor = wp.codeEditor.initialize( \'%s\', %s ); } );',
+					$id,
+					$id,
 					wp_json_encode( $settings )
 				)
 			);

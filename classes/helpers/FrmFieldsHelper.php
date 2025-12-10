@@ -2728,7 +2728,10 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
-		$attributes = array( 'class' => self::get_ai_generate_options_button_class() );
+		$attributes = array(
+			'type'  => 'button',
+			'class' => self::get_ai_generate_options_button_class(),
+		);
 
 		if ( ! empty( $should_hide_bulk_edit ) ) {
 			$attributes['class'] .= ' frm-force-hidden';
