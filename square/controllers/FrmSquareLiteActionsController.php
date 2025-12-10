@@ -115,7 +115,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::square_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Square. Please try again.', 'formidable' );
+			$response['error'] = __( 'Square still needs to be configured.', 'formidable' );
 			return $response;
 		}
 

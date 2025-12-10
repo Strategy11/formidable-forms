@@ -10,6 +10,7 @@
 	let thisForm = null;
 	let running = 0;
 	let cardFieldsInstance = null;
+	let submitEvent = null;
 
 	// Track the state of each field in the card form
 	const cardFields = {
@@ -124,7 +125,7 @@
 
 		// Submit the form
 		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
-			frmFrontForm.submitFormManual( null, thisForm );
+			frmFrontForm.submitFormManual( submitEvent, thisForm );
 		} else {
 			thisForm.submit();
 		}
@@ -240,6 +241,8 @@
 	async function handleCardSubmission( event ) {
 		event.preventDefault();
 		event.stopPropagation();
+
+		submitEvent = event;
 
 		clearErrors();
 

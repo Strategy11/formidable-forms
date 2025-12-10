@@ -115,7 +115,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::paypal_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with PayPal. Please try again.', 'formidable' );
+			$response['error'] = __( 'PayPal still needs to be configured.', 'formidable' );
 			return $response;
 		}
 

@@ -70,12 +70,16 @@ class FrmPayPalLiteAppController {
 	 * @return void
 	 */
 	public static function create_order() {
-		$order_id = FrmPayPalLiteConnectHelper::create_order();
+		$order_response = FrmPayPalLiteConnectHelper::create_order();
 
-		if ( false === $order_id ) {
+		if ( false === $order_response ) {
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
 
-		wp_send_json_success( array( 'orderID' => $order_id ) );
+		if ( ! isset( $order_response->order_id ) ) {
+			wp_send_json_error( 'Failed to create PayPal order' );
+		}
+
+		wp_send_json_success( array( 'orderID' => $order_response->order_id ) );
 	}
 }

@@ -484,25 +484,14 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		$body = array(
-			'server_password'      => get_option( self::get_server_side_token_option_name( $mode ) ),
-			'client_password'      => get_option( self::get_client_side_token_option_name( $mode ) ),
+			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
+			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
 			'frm_paypal_api_mode' => $mode,
 		);
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
 			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
-
-			$currency    = self::get_merchant_currency( true, $mode );
-			$location_id = self::get_location_id( true, $mode );
-
-			if ( $currency ) {
-				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
-			}
-
-			if ( $location_id ) {
-				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
-			}
 
 			FrmTransLiteAppController::install();
 
