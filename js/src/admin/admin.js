@@ -2344,7 +2344,11 @@ window.frmAdminBuildJS = function() {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
 						replaceWith = msgAsjQueryObject( msg );
-						jQuery( newRow ).append( replaceWith );
+						if ( replaceWith.get(0).querySelector( 'ul li[data-ftype="divider"]' ) ) {
+							jQuery( newRow ).append( jQuery( replaceWith.get(0).querySelector( 'ul li' ) ) );
+						} else {
+							jQuery( newRow ).append( replaceWith );
+						}
 						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
