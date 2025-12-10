@@ -968,7 +968,7 @@ class FrmAppController {
 	/**
 	 * Unregister Popper if the registered version is outdated.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @return void
 	 */
@@ -990,7 +990,7 @@ class FrmAppController {
 	/**
 	 * Register Popper required for Bootstrap 5.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @return void
 	 */
