@@ -96,7 +96,12 @@ class FrmEntriesAJAXSubmitController {
 			}
 
 			$response['errors']        = $obj;
-			$invalid_msg               = FrmFormsHelper::get_invalid_error_message( array( 'form' => $form ) );
+			$invalid_msg               = FrmFormsHelper::get_invalid_error_message(
+				array(
+					'form'   => $form,
+					'errors' => $errors,
+				)
+			);
 			$response['error_message'] = FrmFormsHelper::get_success_message(
 				array(
 					'message'  => $invalid_msg,
