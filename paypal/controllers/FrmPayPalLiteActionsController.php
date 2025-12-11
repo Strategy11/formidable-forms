@@ -145,7 +145,19 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
-		return 'Payments are not yet implemented for PayPal.';
+		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id' );
+
+		if ( empty( $paypal_order_id ) ) {
+			return 'No PayPal order ID found.';
+		}
+
+		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
+
+		if ( false === $response ) {
+			return 'Failed to confirm order.';
+		}
+
+		return true;
 	}
 
 	/**
@@ -156,7 +168,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
-		
 		return 'Recurring payments are not yet implemented for PayPal.';
 	}
 

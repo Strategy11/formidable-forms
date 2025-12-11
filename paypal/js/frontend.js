@@ -87,10 +87,15 @@
 	 *
 	 * @return {Promise<string>} The order ID.
 	 */
-	async function createOrder() {
+	async function createOrder( data ) {
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_paypal_create_order' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
 
 		const response = await fetch( frmPayPalVars.ajax, {
 			method: 'POST',
@@ -101,13 +106,13 @@
 			throw new Error( 'Failed to create PayPal order' );
 		}
 
-		const data = await response.json();
+		const orderData = await response.json();
 
-		if ( ! data.success || ! data.data.orderID ) {
-			throw new Error( data.data || 'Failed to create PayPal order' );
+		if ( ! orderData.success || ! orderData.data.orderID ) {
+			throw new Error( orderData.data || 'Failed to create PayPal order' );
 		}
 
-		return data.data.orderID;
+		return orderData.data.orderID;
 	}
 
 	/**

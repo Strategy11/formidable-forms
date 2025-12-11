@@ -673,9 +673,18 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Create a PayPal order.
 	 *
-	 * @return false|string
+	 * @return false|object
 	 */
 	public static function create_order() {
 		return self::post_with_authenticated_body( 'create_order' );
+	}
+
+	/**
+	 * @param string $order_id
+	 *
+	 * @return false|object
+	 */
+	public static function capture_order( $order_id ) {
+		return self::post_with_authenticated_body( 'capture_order', compact( 'order_id' ) );
 	}
 }

@@ -70,6 +70,8 @@ class FrmPayPalLiteAppController {
 	 * @return void
 	 */
 	public static function create_order() {
+		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
+
 		$order_response = FrmPayPalLiteConnectHelper::create_order();
 
 		if ( false === $order_response ) {
