@@ -325,7 +325,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 <?php
 // Only include this CSS when the math captcha plugin is active.
 if ( class_exists( 'FrmCptController' ) ) :
-?>
+	?>
 .<?php echo esc_html( $style_class ); ?> #frm_field_cptch_number_container{
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
@@ -335,7 +335,7 @@ if ( class_exists( 'FrmCptController' ) ) :
 	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
 	clear:both;
 }
-<?php
+	<?php
 endif;
 ?>
 
@@ -369,11 +369,11 @@ endif;
 <?php
 // Only include this style when the signatures add-on is active
 if ( class_exists( 'FrmSigField' ) ) :
-?>
+	?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .sigWrapper{
 	border-color:var(--border-color-error) !important;
 }
-<?php
+	<?php
 endif;
 ?>
 
