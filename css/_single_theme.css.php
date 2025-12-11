@@ -322,8 +322,10 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin: 0 !important;
 }
 
-<?php // Only inclide this CSS when the math captcha plugin is active. ?>
-<?php if ( class_exists( 'FrmCptController' ) ) : ?>
+<?php
+// Only include this CSS when the math captcha plugin is active.
+if ( class_exists( 'FrmCptController' ) ) :
+?>
 .<?php echo esc_html( $style_class ); ?> #frm_field_cptch_number_container{
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
@@ -333,7 +335,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
 	clear:both;
 }
-<?php endif; ?>
+<?php
+endif;
+?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=text],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=password],
@@ -362,12 +366,16 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-style:var(--border-style-error)<?php echo esc_html( $important ); ?>;
 }
 
-<?php // Only include this style when the signatures add-on is active ?>
-<?php if ( class_exists( 'FrmSigField' ) ) : ?>
+<?php
+// Only include this style when the signatures add-on is active
+if ( class_exists( 'FrmSigField' ) ) :
+?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .sigWrapper{
 	border-color:var(--border-color-error) !important;
 }
-<?php endif; ?>
+<?php
+endif;
+?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
