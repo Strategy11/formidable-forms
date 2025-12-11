@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		}
 		?>
 	</span>
-	<?php if ( $args['show_pill'] ) : ?>
+	<?php if ( isset( $args['show_pill'] ) ) : ?>
 		<?php FrmAppHelper::show_pill_text( __( 'BETA', 'formidable' ) ); ?>
 	<?php endif; ?>
 </button>
