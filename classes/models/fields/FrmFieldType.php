@@ -2053,7 +2053,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $value
 	 *

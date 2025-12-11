@@ -517,7 +517,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Gets subfield input attributes.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param array $sub_field Subfield data.
 	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.

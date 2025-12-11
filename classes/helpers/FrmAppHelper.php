@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.25.1';
+	public static $plug_version = '6.26';
 
 	/**
 	 * @var bool
@@ -192,7 +192,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $link
 	 *
@@ -1404,7 +1404,7 @@ class FrmAppHelper {
 				$icon = reset( $icon );
 			}
 
-			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use xlink:href="#' . esc_attr( $icon ) . '" /></svg>';
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
 		if ( $echo ) {
@@ -3775,7 +3775,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.02.03
 	 *
-	 * @param array $form 
+	 * @param array $form
 	 *
 	 * @return void
 	 */
@@ -5053,7 +5053,7 @@ class FrmAppHelper {
 	/**
 	 * Get a documentation URL with UTM parameters and affiliate tracking.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $path           The relative path to append to the base URL.
 	 * @param string $campaign       The campaign to use for UTM parameters.
@@ -5073,12 +5073,12 @@ class FrmAppHelper {
 
 	/**
 	 * @since 5.0.16
-	 * @deprecated x.x
+	 * @deprecated 6.26
 	 *
 	 * @return bool
 	 */
 	public static function show_landing_pages() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.26' );
 		return true;
 	}
 }
