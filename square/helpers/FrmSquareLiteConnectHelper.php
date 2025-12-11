@@ -67,7 +67,7 @@ class FrmSquareLiteConnectHelper {
 	private static function render_settings_for_mode( $mode ) {
 		?>
 		<div class="frm-card-item frm4">
-			<div class="frm-flex-col">
+			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
 						<?php

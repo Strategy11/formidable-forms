@@ -153,6 +153,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
+		/*
+		echo '<pre>';
+		var_dump( $response );
+		echo '</pre>';
+		die();
+		*/
+
 		if ( false === $response ) {
 			return 'Failed to confirm order.';
 		}
