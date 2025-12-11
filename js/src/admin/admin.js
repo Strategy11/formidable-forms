@@ -8443,6 +8443,9 @@ window.frmAdminBuildJS = function() {
 	 */
 	function handleBuilderChangeEvent( event ) {
 		maybeShowSaveAndReloadModal( event.target );
+
+		const numberFieldSettingsValidation = require( './number-field-settings-validation' );
+		numberFieldSettingsValidation.handleNumberFieldSettingsChange( event.target );
 	}
 
 	/**
