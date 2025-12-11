@@ -45,6 +45,11 @@
 	border-color: var(--primary-700);
 }
 
+.frm-form-templates-create-button .frmsvg {
+	width: 32px;
+	height: 32px;
+}
+
 #frm-form-templates-create-form .frmsvg {
 	width: 20px;
 	height: 20px;
