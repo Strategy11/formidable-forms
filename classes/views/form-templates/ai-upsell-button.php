@@ -18,17 +18,10 @@ if ( isset( $oneclick_data['url'] ) ) {
 	$ai_install_span_attrs['data-oneclick'] = json_encode( $oneclick_data );
 }
 ?>
-<div class="frm-activate-addon frm-flex-box frm-form-templates-create-button frm-items-center frm_show_upgrade">
-	<?php FrmAppHelper::icon_by_class( 'frmfont frm-ai-form-icon', array( 'aria-label' => _x( 'Create', 'form templates: create an AI generated form', 'formidable' ) ) ); ?>
-	<span <?php FrmAppHelper::array_to_html_params( $ai_install_span_attrs, true ); ?>>
+<div class="frm-flex-box frm-items-center frm_show_upgrade">
 	<?php
-	FrmAddonsController::conditional_action_button(
-		'ai',
-		array(
-			'medium' => 'ai-autofill',
-		)
-	);
+	FrmFieldsHelper::render_ai_generate_options_button( array(), false );
+	FrmAppHelper::show_pill_text( __( 'BETA', 'formidable' ) );
 	?>
-	</span>
-	<?php FrmAppHelper::show_pill_text( __( 'BETA', 'formidable' ) ); ?>
 </div>
+
