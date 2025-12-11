@@ -331,6 +331,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			$display_max = $display['max'];
 			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/pixels-wide.php';
 		}
+
 		if ( ! empty( $show_upsell_for_autocomplete ) ) {
 			?>
 		<p class="frm6 frm_form_field frm_show_upgrade">
@@ -352,6 +353,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		</p>
 			<?php
 		}//end if
+
 		if ( ! empty( $show_upsell_for_visibility ) ) {
 			?>
 		<p class="frm6 frm_form_field frm_show_upgrade">
@@ -401,6 +403,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
 		</p>
 		<?php }//end if ?>
+
 		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">

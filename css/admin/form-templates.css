@@ -45,14 +45,6 @@
 	border-color: var(--primary-700);
 }
 
-.frm-form-templates-create-button .button-primary.frm-button-primary.frm-addon-button {
-	background-color: #fff !important;
-    color: var(--grey-900) !important;
-    border: none;
-    font-size: var(--text-sm) !important;
-    font-weight: 400;
-}
-
 #frm-form-templates-create-form .frmsvg {
 	width: 20px;
 	height: 20px;

@@ -2777,7 +2777,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 6.24
 	 *
-	 * @param string|false $classes Additional classes.
+	 * @param false|string $classes
 	 *
 	 * @return string Button class.
 	 */
@@ -2803,7 +2803,6 @@ class FrmFieldsHelper {
 				'frm-px-xs',
 				'frm-mt-xs',
 				'frm-mb-12',
-				'frm-form-templates-create-button',
 			)
 		);
 	}

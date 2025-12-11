@@ -409,9 +409,11 @@ class FrmFieldsController {
 			'value' => '1',
 			'class' => 'frm_mark_unique ' . $no_allow,
 		);
+
 		if ( ! empty( $field['unique'] ) ) {
 			$unique_element_atts['checked'] = 'checked';
 		}
+
 		if ( ! $pro_is_installed ) {
 			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 		}
@@ -436,9 +438,11 @@ class FrmFieldsController {
 			'value' => '1',
 			'class' => $no_allow,
 		);
+
 		if ( ! empty( $field['read_only'] ) ) {
 			$read_only_element_atts['checked'] = 'checked';
 		}
+
 		if ( ! $pro_is_installed ) {
 			$read_only_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
 		}
