@@ -49,3 +49,31 @@ function getNumberFieldSettingsValidationMessage( target, fieldId ) {
 		{ target, fieldId, minNum, maxNum }
 	);
 }
+
+/**
+ * Handles number field settings validation on change.
+ *
+ * @since x.x
+ *
+ * @param {HTMLElement} target The changed input element.
+ *
+ * @return {void}
+ */
+export function handleNumberFieldSettingsChange( target ) {
+	if ( ! target.closest( '.frm-number-range' ) && ! target.closest( '.frm-step' ) ) {
+		return;
+	}
+
+	const fieldId = jQuery( target ).closest( '.frm-single-settings' ).data( 'fid' );
+	if ( ! fieldId ) {
+		return;
+	}
+
+	const errorMessage = getNumberFieldSettingsValidationMessage( target, fieldId );
+	if ( errorMessage ) {
+		frmAdminBuild.infoModal( errorMessage );
+		target.classList.add( 'frm_invalid_field' );
+	} else {
+		target.classList.remove( 'frm_invalid_field' );
+	}
+}
