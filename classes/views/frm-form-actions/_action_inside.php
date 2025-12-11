@@ -50,6 +50,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 	<?php
 
 	$event_labels = FrmFormAction::trigger_labels();
+
 	foreach ( $action_control->action_options['event'] as $event ) {
 		?>
 		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
@@ -127,6 +128,7 @@ if ( ! function_exists( 'load_frm_autoresponder' ) && in_array( $form_action->po
 // Show link to install logs.
 if ( $use_logging ) {
 	$upgrading = FrmAddonsController::install_link( 'logs' );
+
 	if ( isset( $upgrading['url'] ) ) {
 		?>
 		<p>

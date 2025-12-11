@@ -44,6 +44,7 @@ abstract class FrmValidate {
 	 */
 	protected function is_option_on() {
 		$key = $this->get_option_key();
+
 		if ( 'global' === $this->option_type ) {
 			$frm_settings = FrmAppHelper::get_settings();
 			return ! empty( $frm_settings->$key );

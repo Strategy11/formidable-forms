@@ -62,6 +62,7 @@ class FrmFieldTextarea extends FrmFieldType {
 			if ( is_numeric( $size ) ) {
 				$size .= 'px';
 			}
+
 			$style = 'width:' . $size . ';';
 			echo ' style="' . esc_attr( $style ) . '"';
 		}

@@ -138,6 +138,7 @@ class FrmStylesController {
 		wp_enqueue_style( 'frm-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_css' ), array(), $version );
 
 		$style = apply_filters( 'frm_style_head', false );
+
 		if ( $style ) {
 			wp_enqueue_style( 'frm-single-custom-theme', admin_url( 'admin-ajax.php?action=frmpro_load_css&flat=1' ) . '&' . http_build_query( $style->post_content ), array(), $version );
 		}
@@ -182,6 +183,7 @@ class FrmStylesController {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( $frm_settings->load_style === 'none' ) {
 			return;
 		}
@@ -199,6 +201,7 @@ class FrmStylesController {
 				}
 
 				$load_on_all = ! FrmAppHelper::is_admin() && 'all' === $frm_settings->load_style;
+
 				if ( $load_on_all || $register !== 'register' ) {
 					wp_enqueue_style( $css_key );
 				}
@@ -236,6 +239,7 @@ class FrmStylesController {
 	 */
 	private static function get_url_to_custom_style( &$stylesheet_urls ) {
 		$file_name = '/css/' . self::get_file_name();
+
 		if ( is_readable( FrmAppHelper::plugin_path() . $file_name ) ) {
 			$url = FrmAppHelper::plugin_url() . $file_name;
 		} else {
@@ -271,6 +275,7 @@ class FrmStylesController {
 	private static function get_css_version( $css_key, $version ) {
 		if ( 'formidable' === $css_key ) {
 			$this_version = get_option( 'frm_last_style_update' );
+
 			if ( ! $this_version ) {
 				$this_version = $version;
 			}
@@ -340,6 +345,7 @@ class FrmStylesController {
 		self::setup_styles_and_scripts_for_styler();
 
 		$style_id = self::get_style_id_for_styler();
+
 		if ( ! $style_id ) {
 			$error_args   = array(
 				'title'      => __( 'No styles', 'formidable' ),
@@ -351,6 +357,7 @@ class FrmStylesController {
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( ! $form_id ) {
 			$form_id = self::get_form_id_for_style( $style_id );
 		}
@@ -390,18 +397,21 @@ class FrmStylesController {
 	 */
 	private static function get_style_id_for_styler() {
 		$action = FrmAppHelper::simple_get( 'frm_action' );
+
 		if ( 'duplicate' === $action ) {
 			// The duplicate action uses style_id instead of id for better backward compatibility.
 			return FrmAppHelper::simple_get( 'style_id', 'absint', 0 );
 		}
 
 		$style_id = FrmAppHelper::simple_get( 'id', 'absint', 0 );
+
 		if ( $style_id ) {
 			// Always use the style ID from the URL if one is specified.
 			return $style_id;
 		}
 
 		$request_form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( $request_form_id && is_callable( 'FrmProStylesController::get_active_style_for_form' ) ) {
 			return FrmProStylesController::get_active_style_for_form( $request_form_id )->ID;
 		}
@@ -478,11 +488,13 @@ class FrmStylesController {
 	 */
 	private static function save_form_style() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form_style', 'frm_save_form_style_nonce' );
+
 		if ( $permission_error !== false ) {
 			wp_die( 'Unable to save form', '', 403 );
 		}
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', 0, 'absint' );
+
 		if ( $style_id && ! self::confirm_style_exists_before_setting( $style_id ) ) {
 			wp_die( esc_html__( 'Invalid target style', 'formidable' ), esc_html__( 'Invalid target style', 'formidable' ), 400 );
 			return;
@@ -504,12 +516,14 @@ class FrmStylesController {
 		}
 
 		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
 		if ( ! $form_id ) {
 			wp_die( esc_html__( 'No form specified', 'formidable' ), esc_html__( 'No form specified', 'formidable' ), 400 );
 			return;
 		}
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! $form ) {
 			wp_die( esc_html__( 'Form does not exist', 'formidable' ), esc_html__( 'Form does not exist', 'formidable' ), 400 );
 			return;
@@ -521,6 +535,7 @@ class FrmStylesController {
 		// There's also a check here for conversational forms.
 		// Without the check it isn't possible to select "Default" because "Always use default" will convert to "Lines" dynamically.
 		$default_style = self::get_default_style();
+
 		if ( $style_id === $default_style->ID && empty( $form->options['chat'] ) ) {
 			$style_id = 1;
 		}
@@ -714,6 +729,7 @@ class FrmStylesController {
 		}
 
 		$id = $frm_style->update( $post_id );
+
 		if ( ! $post_id && $id ) {
 			self::maybe_redirect_after_save( $id );
 			// Set the post id to the new style so it will be loaded for editing.
@@ -757,6 +773,7 @@ class FrmStylesController {
 
 		$current_action      = false;
 		$actions_to_redirect = array( 'duplicate', 'new_style' );
+
 		foreach ( $actions_to_redirect as $action ) {
 			if ( false !== strpos( $query, 'frm_action=' . $action ) ) {
 				$current_action = $action;
@@ -809,6 +826,7 @@ class FrmStylesController {
 		global $wpdb;
 
 		$forms = FrmForm::get_published_forms();
+
 		foreach ( $forms as $form ) {
 			if ( ! isset( $_POST['style'] ) || ! isset( $_POST['style'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				continue;
@@ -826,14 +844,25 @@ class FrmStylesController {
 	 * Echo content for the Custom CSS page.
 	 *
 	 * @param string $message
+	 * @param array  $extra_args An array of extra arguments.
 	 *
 	 * @return void
 	 */
-	public static function custom_css( $message = '' ) {
-		$settings   = self::enqueue_codemirror();
-		$id         = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
-		$custom_css = self::get_custom_css();
+	public static function custom_css( $message = '', $extra_args = array() ) {
+		$id              = $extra_args['id'] ?? 'frm_codemirror_box';
+		$settings        = self::enqueue_codemirror( $id, $extra_args['placeholder'] ?? '' );
+		$id              = $settings ? $id : 'frm_custom_css_box';
+		$show_errors     = $extra_args['show_errors'] ?? true;
+		$custom_css      = $extra_args['custom_css'] ?? self::get_custom_css();
+		$heading         = $extra_args['heading'] ?? __( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' );
+		$textarea_params = ! empty( $extra_args['textarea_params'] ) ? $extra_args['textarea_params'] : array(
+			'name' => 'frm_custom_css',
+			'id'   => $id,
+		);
 
+		if ( ! empty( $settings ) ) {
+			$textarea_params['class'] = 'hide-if-js';
+		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -842,10 +871,18 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
+	 * @param array|null $single_style_settings The single style settings.
+	 *
 	 * @return string
 	 */
-	public static function get_custom_css() {
+	public static function get_custom_css( $single_style_settings = null ) {
+		// If the single style settings are passed, return the custom CSS from the single style settings.
+		if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
+			return $single_style_settings['single_style_custom_css'];
+		}
+
 		$settings = FrmAppHelper::get_settings();
+
 		if ( is_string( $settings->custom_css ) ) {
 			return $settings->custom_css;
 		}
@@ -864,9 +901,12 @@ class FrmStylesController {
 	 *
 	 * @since 6.0 Previously this code was embedded in self::custom_css.
 	 *
+	 * @param string $id The ID of the codemirror box.
+	 * @param string $placeholder The placeholder text for the codemirror box.
+	 *
 	 * @return array|false
 	 */
-	private static function enqueue_codemirror() {
+	private static function enqueue_codemirror( $id = 'frm_codemirror_box', $placeholder = '' ) {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			// The WordPress version is likely older than 4.9.
 			return false;
@@ -881,6 +921,7 @@ class FrmStylesController {
 					// As the codemirror box only appears once you click into the Custom CSS tab, we need to auto-refresh.
 					// Otherwise the line numbers all end up with a 1px width causing overlap issues with the text in the content.
 					'autoRefresh' => true,
+					'placeholder' => $placeholder,
 				),
 			)
 		);
@@ -889,7 +930,9 @@ class FrmStylesController {
 			wp_add_inline_script(
 				'code-editor',
 				sprintf(
-					'jQuery( function() { wp.codeEditor.initialize( \'frm_codemirror_box\', %s ); } );',
+					'jQuery( function() { window.%s_wp_editor = wp.codeEditor.initialize( \'%s\', %s ); } );',
+					$id,
+					$id,
 					wp_json_encode( $settings )
 				)
 			);
@@ -943,6 +986,7 @@ class FrmStylesController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$style_id = FrmAppHelper::get_post_param( 'style_id', '', 'absint' );
+
 		if ( ! $style_id ) {
 			// A style ID is not sent when resetting on the edit page.
 			// Instead of resetting the style, send the defaults back so the inputs can be updated with JavaScript.
@@ -1108,6 +1152,7 @@ class FrmStylesController {
 	 */
 	public static function maybe_hide_sample_form_error_message() {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+
 		if ( false !== strpos( $referer, 'admin.php?page=formidable-styles' ) ) {
 			echo '#frm_broken_styles_warning { display: none; }';
 		}
@@ -1156,6 +1201,7 @@ class FrmStylesController {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( $frm_settings->load_style !== 'none' ) {
 			wp_enqueue_style( 'formidable' );
 			$frm_vars['css_loaded'] = true;
@@ -1224,6 +1270,7 @@ class FrmStylesController {
 	 */
 	private static function maybe_add_rtl_class( $style, &$class ) {
 		$is_rtl = isset( $style->post_content['direction'] ) && 'rtl' === $style->post_content['direction'];
+
 		if ( $is_rtl ) {
 			$class .= ' frm_rtl';
 		}
@@ -1237,6 +1284,7 @@ class FrmStylesController {
 	 */
 	public static function get_style_val( $val, $form = 'default' ) {
 		$style = self::get_form_style( $form );
+
 		if ( $style && isset( $style->post_content[ $val ] ) ) {
 			return $style->post_content[ $val ];
 		}
@@ -1257,6 +1305,7 @@ class FrmStylesController {
 
 		foreach ( $default_styles as $name => $val ) {
 			$setting = $name;
+
 			if ( 'border_width' == $name ) {
 				$setting = 'field_border_width';
 			} elseif ( 'alt_bg_color' == $name ) {
@@ -1330,6 +1379,7 @@ class FrmStylesController {
 						$icon_id = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
 
 						$open_class = '';
+
 						if ( ! $first_open ) {
 							$first_open = true;
 							$open_class = 'open';
@@ -1374,6 +1424,7 @@ class FrmStylesController {
 	 */
 	public static function rename_style() {
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'nonce', 'frm_ajax' );
+
 		if ( $permission_error !== false ) {
 			$data = array(
 				'message' => __( 'Unable to rename style', 'formidable' ),
@@ -1394,6 +1445,7 @@ class FrmStylesController {
 		}
 
 		$post = get_post( $style_id );
+
 		if ( ! $post || $post->post_type !== self::$post_type ) {
 			$data = array(
 				'message' => __( 'The style you are renaming either does not exist or it is not a style', 'formidable' ),

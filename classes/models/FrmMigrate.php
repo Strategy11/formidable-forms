@@ -141,6 +141,7 @@ class FrmMigrate {
 	 */
 	public function collation() {
 		global $wpdb;
+
 		if ( ! $wpdb->has_cap( 'collation' ) ) {
 			return '';
 		}
@@ -311,6 +312,7 @@ class FrmMigrate {
 	 */
 	private function maybe_create_contact_form() {
 		$form_exists = FrmForm::get_id_by_key( 'contact-form' );
+
 		if ( ! $form_exists ) {
 			$this->add_default_template();
 		}
@@ -348,6 +350,7 @@ class FrmMigrate {
 		if ( ! $old_db_version ) {
 			$old_db_version = get_option( 'frm_db_version' );
 		}
+
 		if ( strpos( $old_db_version, '-' ) ) {
 			$last_upgrade   = explode( '-', $old_db_version );
 			$old_db_version = (int) $last_upgrade[1];
@@ -359,6 +362,7 @@ class FrmMigrate {
 		}
 
 		$migrations = array( 16, 11, 16, 17, 23, 25, 86, 90, 97, 98, 101, 104 );
+
 		foreach ( $migrations as $migration ) {
 			if ( FrmAppHelper::$db_version >= $migration && $old_db_version < $migration ) {
 				$function_name = 'migrate_to_' . $migration;
@@ -393,6 +397,7 @@ class FrmMigrate {
 		// Delete roles.
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			foreach ( $roles as $role => $details ) {
 				$wp_roles->remove_cap( $role, $frm_role );
@@ -409,6 +414,7 @@ class FrmMigrate {
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
 		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
+
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
 			wp_delete_post( $post_id, true );
@@ -459,6 +465,7 @@ class FrmMigrate {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( empty( $frm_settings->summary_emails ) || '[admin_email]' !== $frm_settings->summary_emails_recipients ) {
 			// User changed it.
 			return;
@@ -511,6 +518,7 @@ class FrmMigrate {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
 			FrmAppHelper::unserialize_or_decode( $field->options );
 			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
+
 			if ( empty( $update_values ) ) {
 				continue;
 			}
@@ -529,6 +537,7 @@ class FrmMigrate {
 	 */
 	private function migrate_to_90() {
 		$form = FrmForm::getOne( 'contact' );
+
 		if ( $form && $form->default_template == 1 ) {
 			FrmForm::destroy( 'contact' );
 		}
@@ -545,7 +554,7 @@ class FrmMigrate {
 
 		$fields = $this->get_fields_with_size();
 
-		foreach ( (array) $fields as $f ) {
+		foreach ( $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
 			$size = $f->field_options['size'];
 			$this->maybe_convert_migrated_size( $size );
@@ -561,6 +570,7 @@ class FrmMigrate {
 
 		// reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
+
 		if ( empty( $widgets ) ) {
 			return;
 		}
@@ -605,11 +615,13 @@ class FrmMigrate {
 	 */
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
+
 		if ( empty( $widgets ) ) {
 			return;
 		}
 
 		FrmAppHelper::unserialize_or_decode( $widgets );
+
 		foreach ( $widgets as $k => $widget ) {
 			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
 				continue;
@@ -631,11 +643,13 @@ class FrmMigrate {
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
 		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );
+
 		if ( ! $has_px_size ) {
 			return;
 		}
 
 		$int_size = str_replace( 'px', '', $size );
+
 		if ( ! is_numeric( $int_size ) || (int) $int_size < 900 ) {
 			return;
 		}
@@ -657,6 +671,7 @@ class FrmMigrate {
 		// get the style that was created with the style migration
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
+
 		if ( empty( $styles ) ) {
 			return;
 		}
@@ -682,6 +697,7 @@ class FrmMigrate {
 	private function migrate_to_23() {
 		global $wpdb;
 		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+
 		if ( empty( $exists ) ) {
 			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
@@ -697,6 +713,7 @@ class FrmMigrate {
 
 		foreach ( $fields as $f ) {
 			FrmAppHelper::unserialize_or_decode( $f->field_options );
+
 			if ( empty( $f->field_options['size'] ) || ! is_numeric( $f->field_options['size'] ) ) {
 				continue;
 			}
@@ -717,11 +734,13 @@ class FrmMigrate {
 	 */
 	private function adjust_widget_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
+
 		if ( empty( $widgets ) ) {
 			return;
 		}
 
 		FrmAppHelper::unserialize_or_decode( $widgets );
+
 		foreach ( $widgets as $k => $widget ) {
 			if ( ! is_array( $widget ) || ! isset( $widget['size'] ) ) {
 				continue;
@@ -811,8 +830,10 @@ DEFAULT_HTML;
 
 		$new_default_html = FrmFormsHelper::get_default_html( 'submit' );
 		$draft_link       = FrmFormsHelper::get_draft_link();
+
 		foreach ( $forms as $form ) {
 			FrmAppHelper::unserialize_or_decode( $form->options );
+
 			if ( empty( $form->options['submit_html'] ) ) {
 				continue;
 			}

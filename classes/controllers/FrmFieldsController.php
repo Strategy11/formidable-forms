@@ -19,6 +19,7 @@ class FrmFieldsController {
 		// Javascript may be included in some field settings.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
+
 		if ( empty( $fields ) ) {
 			wp_die();
 		}
@@ -34,6 +35,7 @@ class FrmFieldsController {
 		foreach ( $fields as $field ) {
 			$field = htmlspecialchars_decode( nl2br( $field ) );
 			$field = json_decode( $field );
+
 			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
 				// this field may have already been loaded
 				continue;
@@ -50,7 +52,7 @@ class FrmFieldsController {
 			self::load_single_field( $field, $values );
 			$field_html[ absint( $field->id ) ] = ob_get_contents();
 			ob_end_clean();
-		}
+		}//end foreach
 
 		echo json_encode( $field_html );
 
@@ -110,10 +112,12 @@ class FrmFieldsController {
 		$field = self::get_field_array_from_id( $field_id );
 
 		$values = array();
+
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$values['post_type'] = FrmProFormsHelper::post_type( $form_id );
 
 			$parent_form_id = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
+
 			if ( $parent_form_id ) {
 				$field['parent_form_id'] = $parent_form_id;
 			}
@@ -297,12 +301,14 @@ class FrmFieldsController {
 		// Keep other options after bulk update.
 		if ( isset( $field['field_options']['other'] ) && $field['field_options']['other'] == true ) {
 			$other_array = array();
+
 			foreach ( $field['options'] as $opt_key => $opt ) {
 				if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 					$other_array[ $opt_key ] = $opt;
 				}
 				unset( $opt_key, $opt );
 			}
+
 			if ( ! empty( $other_array ) ) {
 				$opts = array_merge( $opts, $other_array );
 			}
@@ -355,6 +361,7 @@ class FrmFieldsController {
 		}
 
 		$type_name = $all_field_types[ $field['type'] ]['name'];
+
 		if ( $field['type'] === 'divider' && FrmField::is_option_true( $field, 'repeat' ) ) {
 			$type_name = $all_field_types['divider|repeat']['name'];
 		}
@@ -527,6 +534,7 @@ class FrmFieldsController {
 			'website' => 'url',
 			'image'   => 'url',
 		);
+
 		if ( isset( $type_switch[ $type ] ) ) {
 			$type = $type_switch[ $type ];
 		}
@@ -746,6 +754,7 @@ class FrmFieldsController {
 		}
 
 		$field['placeholder'] = self::prepare_placeholder( $field );
+
 		if ( $field['placeholder'] == '' || is_array( $field['placeholder'] ) ) {
 			// don't include a json placeholder
 			return;
@@ -796,6 +805,7 @@ class FrmFieldsController {
 	 */
 	public static function add_placeholder_to_select( $field ) {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
+
 		if ( empty( $placeholder ) ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
@@ -805,6 +815,7 @@ class FrmFieldsController {
 
 		if ( $autocomplete ) {
 			$use_chosen = ! is_callable( 'FrmProAppHelper::use_chosen_js' ) || FrmProAppHelper::use_chosen_js();
+
 			if ( $use_chosen ) {
 				$use_placeholder = '';
 			}
@@ -926,11 +937,13 @@ class FrmFieldsController {
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
 		$form = self::get_form_for_js_validation( $field );
+
 		if ( false === $form ) {
 			return;
 		}
 
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
+
 		if ( false !== $error_body ) {
 			$error_body                  = urlencode( $error_body );
 			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
@@ -946,10 +959,12 @@ class FrmFieldsController {
 	 */
 	private static function get_form_for_js_validation( $field ) {
 		global $frm_vars;
+
 		if ( ! empty( $frm_vars['js_validate_forms'] ) ) {
 			if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
 				return $frm_vars['js_validate_forms'][ $field['form_id'] ];
 			}
+
 			if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
 				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
 			}
@@ -973,11 +988,13 @@ class FrmFieldsController {
 		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, $errors, $form );
 
 		$start = strpos( $custom_html, '[if error]' );
+
 		if ( false === $start ) {
 			return false;
 		}
 
 		$end = strpos( $custom_html, '[/if error]' );
+
 		if ( false === $end || $end < $start ) {
 			return false;
 		}
@@ -1042,6 +1059,7 @@ class FrmFieldsController {
 		foreach ( $field['shortcodes'] as $k => $v ) {
 			if ( isset( $field['subfield_name'] ) && 0 === strpos( $k, 'aria-invalid' ) ) {
 				$subfield_name = $field['subfield_name'];
+
 				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
 					continue;
 				}
@@ -1050,6 +1068,7 @@ class FrmFieldsController {
 				$v = $field['shortcodes'][ 'aria-invalid-' . $subfield_name ];
 				unset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] );
 			}
+
 			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}

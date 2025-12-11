@@ -51,6 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $values['fields'] ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
+
 			foreach ( $values['fields'] as $field ) {
 				++$values['count'];
 				$grid_helper->set_field( $field );

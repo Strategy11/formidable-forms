@@ -19,6 +19,7 @@ class FrmApplicationsController {
 
 		if ( ! current_user_can( $cap ) && is_callable( 'FrmProApplicationsHelper::get_custom_applications_capability' ) ) {
 			$custom_applications_cap = FrmProApplicationsHelper::get_custom_applications_capability();
+
 			if ( current_user_can( $custom_applications_cap ) ) {
 				$cap      = $custom_applications_cap;
 				$slug     = 'edit-tags.php?taxonomy=frm_application';
@@ -108,6 +109,7 @@ class FrmApplicationsController {
 
 		$unlocked_templates = array();
 		$locked_templates   = array();
+
 		foreach ( $applications as $key => $application ) {
 			if ( ! is_numeric( $key ) ) {
 				// Skip "error" or any other non-numeric key.
@@ -124,6 +126,7 @@ class FrmApplicationsController {
 		$unlocked_templates = self::sort_templates( $unlocked_templates );
 
 		$applications = $unlocked_templates;
+
 		if ( current_user_can( 'administrator' ) || current_user_can( 'frm_change_settings' ) ) {
 			$locked_templates = self::sort_templates( $locked_templates );
 			$applications     = array_merge( $applications, $locked_templates );
@@ -144,6 +147,7 @@ class FrmApplicationsController {
 		$template = new FrmApplicationTemplate( $current );
 
 		$js_object = $template->as_js_object();
+
 		if ( $js_object ) {
 			$total[] = $js_object;
 		}

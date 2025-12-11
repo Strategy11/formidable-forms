@@ -23,6 +23,7 @@ class FrmEmailSummaryController {
 	 */
 	public static function maybe_send_emails() {
 		$emails = FrmEmailSummaryHelper::should_send_emails();
+
 		if ( ! $emails ) {
 			return;
 		}
