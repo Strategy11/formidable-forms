@@ -1760,12 +1760,6 @@ function frmFrontFormJS() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
 
-			document.querySelectorAll( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).forEach( function( field ) {
-				if ( field.value === '' ) {
-					jQuery( field ).trigger( 'blur' );
-				}
-			} );
-
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 
 			jQuery( document ).on( 'change', '.frm_verify[id^=field_]', onHoneypotFieldChange );
