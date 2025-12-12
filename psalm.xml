@@ -149,13 +149,6 @@
 				<directory name="square" />
 			</errorLevel>
 		</TypeDoesNotContainType>
-		<InvalidReturnStatement>
-			<errorLevel type="suppress">
-				<directory name="classes" />
-				<directory name="stripe" />
-				<directory name="square" />
-			</errorLevel>
-		</InvalidReturnStatement>
 		<InvalidArrayOffset>
 			<errorLevel type="suppress">
 				<directory name="classes" />
