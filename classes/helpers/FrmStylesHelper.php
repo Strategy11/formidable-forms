@@ -484,8 +484,7 @@ class FrmStylesHelper {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
-		$vars   = array_diff( $vars, $remove );
+		$vars = array_diff( $vars, self::get_style_keys_to_remove_from_output_vars() );
 
 		foreach ( $vars as $var ) {
 			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
@@ -502,6 +501,35 @@ class FrmStylesHelper {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * None of these style settings are used as CSS variables, so we want to exclude them to keep the CSS output clean.
+	 *
+	 * @since x.x
+	 *
+	 * @return array<string>
+	 */
+	private static function get_style_keys_to_remove_from_output_vars() {
+		return array(
+			'remove_box_shadow',
+			'remove_box_shadow_active',
+			'theme_css',
+			'theme_name',
+			'theme_selector',
+			'important_style',
+			'submit_style',
+			'collapse_icon',
+			'center_form',
+			'custom_css',
+			'style_class',
+			'submit_bg_img',
+			'change_margin',
+			'repeat_icon',
+			'use_base_font_size',
+			'field_shape_type',
+			'bg_image_id',
+		);
 	}
 
 	/**
