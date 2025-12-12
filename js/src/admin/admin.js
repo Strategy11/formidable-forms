@@ -2326,7 +2326,13 @@ window.frmAdminBuildJS = function() {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
 		}
 
-		const isSectionField = $fieldObject => $fieldObject.find( 'ul li[data-ftype="divider"]' ).length > 0;
+		const getLiElement = $fieldObject => {
+			const liElement = $fieldObject.get( 0 ).querySelector( 'ul li[data-ftype="divider"]' );
+			if ( liElement ) {
+				return jQuery( liElement );
+			}
+			return $fieldObject;
+		};
 
 		jQuery.ajax( {
 			type: 'POST',
@@ -2347,11 +2353,7 @@ window.frmAdminBuildJS = function() {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
 						replaceWith = msgAsjQueryObject( msg );
-						if ( isSectionField( replaceWith ) ) {
-							jQuery( newRow ).append( jQuery( replaceWith.get(0).querySelector( 'ul li' ) ) );
-						} else {
-							jQuery( newRow ).append( replaceWith );
-						}
+						jQuery( newRow ).append( getLiElement( replaceWith ) );
 						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
@@ -2371,21 +2373,12 @@ window.frmAdminBuildJS = function() {
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					replaceWith = msgAsjQueryObject( msg );
-					if ( isSectionField( replaceWith ) ) {
-						$field.after( jQuery( replaceWith.get(0).querySelector( 'ul li' ) ) );
-					} else {
-						$field.after( replaceWith );
-					}
-					
+					$field.after( getLiElement( replaceWith ) );
 					syncLayoutClasses( $field );
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 				} else {
 					replaceWith = wrapFieldLi( msg );
-					if ( isSectionField( replaceWith ) ) {
-						$field.parent().parent().after( jQuery( replaceWith.get(0).querySelector( 'ul li' ) ) );
-					} else {
-						$field.parent().parent().after( replaceWith );
-					}
+					$field.parent().parent().after( getLiElement( replaceWith ) );
 					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
 					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
