@@ -1329,7 +1329,6 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function syncLayoutClasses( $item, type ) {
-		console.log( 'syncLayoutClasses' );
 		let $fields, size, layoutClasses, classToAddFunction;
 
 		if ( 'undefined' === typeof type ) {
