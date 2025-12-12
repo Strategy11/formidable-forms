@@ -301,13 +301,16 @@ class FrmFormApi {
 			return false;
 		}
 
-		$is_expired  = empty( $cache['timeout'] ) || time() > $cache['timeout'];
-		$for_current = isset( $cache['version'] ) && $cache['version'] === FrmAppHelper::plugin_version();
+		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
+
+		if ( ! $is_expired && isset( $cache['version'] ) && $cache['version'] !== FrmAppHelper::plugin_version() ) {
+			$is_expired = true;
+		}
 
 		// Avoid old cached data, unless we're currently trying to query for new data.
 		// The call to $this->is_running likely triggers a database query, so only call if if we're expired.
 		// (Rather than the other way around, which is less efficient).
-		if ( ( $is_expired || ! $for_current ) && ! $this->is_running() ) {
+		if ( $is_expired && ! $this->is_running() ) {
 			return false;
 		}
 
