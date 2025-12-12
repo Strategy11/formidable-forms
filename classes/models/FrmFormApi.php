@@ -301,20 +301,17 @@ class FrmFormApi {
 			return false;
 		}
 
-		// If the api call is running, we can use the expired cache.
-		if ( ! $this->is_running() ) {
-			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
-				// Cache is expired.
-				return false;
-			}
+		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
 
-			$version     = FrmAppHelper::plugin_version();
-			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+		if ( ! $is_expired && isset( $cache['version'] ) && $cache['version'] !== FrmAppHelper::plugin_version() ) {
+			$is_expired = true;
+		}
 
-			if ( ! $for_current ) {
-				// Force a new check.
-				return false;
-			}
+		// Avoid old cached data, unless we're currently trying to query for new data.
+		// The call to $this->is_running likely triggers a database query, so only call if if we're expired.
+		// (Rather than the other way around, which is less efficient).
+		if ( $is_expired && ! $this->is_running() ) {
+			return false;
 		}
 
 		$values = json_decode( $cache['value'], true );
@@ -358,7 +355,9 @@ class FrmFormApi {
 		if ( is_multisite() ) {
 			update_site_option( $this->cache_key, $data );
 		} else {
-			update_option( $this->cache_key, $data, 'no' );
+			// Autoload the license cache because it gets called everywhere.
+			$autoload = 0 === strpos( $this->cache_key, 'frm_addons_l' );
+			update_option( $this->cache_key, $data, $autoload );
 		}
 	}
 
