@@ -167,7 +167,7 @@ class FrmTransLiteActionsController {
 
 		return $message;
 	}
-	
+
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
@@ -615,7 +615,7 @@ class FrmTransLiteActionsController {
 		if ( ! $gateway_field_id ) {
 			self::add_a_gateway_field( $form_id );
 		}
-		
+
 		return $settings;
 	}
 
