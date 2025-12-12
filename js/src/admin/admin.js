@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-const numberFieldSettingsValidation = require( './number-field-settings-validation' );
+const fieldValidation = require( './settings/fieldValidation' );
 
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
@@ -8448,7 +8448,8 @@ window.frmAdminBuildJS = function() {
 	 */
 	function handleBuilderChangeEvent( event ) {
 		maybeShowSaveAndReloadModal( event.target );
-		numberFieldSettingsValidation.handleNumberFieldSettingsChange( event.target );
+		fieldValidation.validateNumberRangeSetting( event.target );
+		fieldValidation.validateStepSetting( event.target );
 	}
 
 	/**
@@ -11154,6 +11155,8 @@ window.frmAdminBuildJS = function() {
 				return wp.hooks.addAction( hookName, 'formidable', callback, priority );
 			}
 		},
+
+		validateField: fieldValidation.validateField,
 
 		applyZebraStriping,
 		initModal,
