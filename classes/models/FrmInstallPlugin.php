@@ -162,17 +162,4 @@ class FrmInstallPlugin {
 			wp_send_json_error();
 		}
 	}
-
-	/**
-	 * Check if a plugin is installed.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $plugin_file
-	 *
-	 * @return bool
-	 */
-	private static function is_plugin_installed( $plugin_file ) {
-		return isset( get_plugins()[ $plugin_file ] );
-	}
 }

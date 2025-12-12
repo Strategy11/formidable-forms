@@ -733,20 +733,6 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * If field settings have been migrated, update the values during import.
-	 *
-	 * @since 4.0
-	 *
-	 * @param array $f
-	 *
-	 * @return void
-	 */
-	private static function run_field_migrations( &$f ) {
-		self::migrate_placeholders( $f );
-		$f = apply_filters( 'frm_import_xml_field', $f );
-	}
-
-	/**
 	 * @since 4.0
 	 *
 	 * @param array $f
