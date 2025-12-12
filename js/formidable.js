@@ -1559,10 +1559,6 @@ function frmFrontFormJS() {
 			);
 		} );
 
-		jQuery( document ).on( 'change', selector, function( event ) {
-			checkFloatLabel( event.target );
-		} );
-
 		runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
