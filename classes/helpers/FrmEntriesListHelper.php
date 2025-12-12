@@ -243,7 +243,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $which 
+	 * @param string $which
 	 *
 	 * @return void
 	 */
@@ -268,7 +268,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @param string $which 
+	 * @param string $which
 	 *
 	 * @return void
 	 */

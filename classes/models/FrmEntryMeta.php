@@ -83,7 +83,7 @@ class FrmEntryMeta {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $values 
+	 * @param array $values
 	 *
 	 * @return void
 	 */
