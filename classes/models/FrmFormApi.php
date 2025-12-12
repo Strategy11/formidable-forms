@@ -332,8 +332,6 @@ class FrmFormApi {
 		return $values;
 	}
 
-	static $count = 0;
-
 	/**
 	 * Get the cache for the network if multisite.
 	 *
