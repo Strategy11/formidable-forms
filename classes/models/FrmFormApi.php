@@ -301,21 +301,13 @@ class FrmFormApi {
 			return false;
 		}
 
+		$is_expired  = empty( $cache['timeout'] ) || time() > $cache['timeout'];
+		$version     = FrmAppHelper::plugin_version();
+		$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+
 		// If the api call is running, we can use the expired cache.
-		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
-		if ( $is_expired ) {
-			if ( ! $this->is_running() ) {
-				return false;
-			}
-
-			// If the api call is running, we can use the expired cache.
-			$version     = FrmAppHelper::plugin_version();
-			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
-
-			if ( ! $for_current ) {
-				// Force a new check.
-				return false;
-			}
+		if ( ( $is_expired || ! $for_current ) && ! $this->is_running() ) {
+			return false;
 		}
 
 		$values = json_decode( $cache['value'], true );
