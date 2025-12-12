@@ -302,8 +302,7 @@ class FrmFormApi {
 		}
 
 		$is_expired  = empty( $cache['timeout'] ) || time() > $cache['timeout'];
-		$version     = FrmAppHelper::plugin_version();
-		$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
+		$for_current = isset( $cache['version'] ) && $cache['version'] === FrmAppHelper::plugin_version();
 
 		// If the api call is running, we can use the expired cache.
 		if ( ( $is_expired || ! $for_current ) && ! $this->is_running() ) {
