@@ -190,7 +190,7 @@ if ( $component['has-multiple-values'] ) : ?>
 						</div>
 					</div>
 
-					<?php 
+					<?php
 					foreach ( $component['independent_fields'] as $field ) :
 						?>
 						<div class="frm-slider-component frm-independent-slider-field frm_hidden" data-type="<?php echo esc_attr( $field['type'] ); ?>" data-max-value="<?php echo (int) $component['max_value']; ?>">
