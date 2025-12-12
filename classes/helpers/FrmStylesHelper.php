@@ -504,6 +504,8 @@ class FrmStylesHelper {
 	}
 
 	/**
+	 * None of these style settings are used as CSS variables, so we want to exclude them to keep the CSS output clean.
+	 *
 	 * @since x.x
 	 *
 	 * @return array<string>
