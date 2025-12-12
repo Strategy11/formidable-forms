@@ -28,6 +28,15 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
+	 * Memoized API info.
+	 * This is indexed by cache key.
+	 * It allows us to avoid extra calls to get_option().
+	 *
+	 * @var array|null
+	 */
+	private static $memoized_api_info = array();
+
+	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -302,12 +311,13 @@ class FrmFormApi {
 		}
 
 		// If the api call is running, we can use the expired cache.
-		if ( ! $this->is_running() ) {
-			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
-				// Cache is expired.
+		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
+		if ( $is_expired ) {
+			if ( ! $this->is_running() ) {
 				return false;
 			}
 
+			// If the api call is running, we can use the expired cache.
 			$version     = FrmAppHelper::plugin_version();
 			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
 
@@ -322,6 +332,8 @@ class FrmFormApi {
 		return $values;
 	}
 
+	static $count = 0;
+
 	/**
 	 * Get the cache for the network if multisite.
 	 *
@@ -330,15 +342,23 @@ class FrmFormApi {
 	 * @return mixed
 	 */
 	protected function get_cached_option() {
+		$key = $this->cache_key;
+
+		if ( isset( self::$memoized_api_info[ $key ] ) ) {
+			return self::$memoized_api_info[ $key ];
+		}
+
 		if ( is_multisite() ) {
 			$cached = get_site_option( $this->cache_key );
 
 			if ( $cached ) {
+				self::$memoized_api_info[ $key ] = $cached;
 				return $cached;
 			}
 		}
 
-		return get_option( $this->cache_key );
+		self::$memoized_api_info[ $key ] = get_option( $this->cache_key );
+		return self::$memoized_api_info[ $key ];
 	}
 
 	/**
@@ -354,6 +374,8 @@ class FrmFormApi {
 			'value'   => wp_json_encode( $addons ),
 			'version' => FrmAppHelper::plugin_version(),
 		);
+
+		self::$memoized_api_info[ $this->cache_key ] = $data;
 
 		if ( is_multisite() ) {
 			update_site_option( $this->cache_key, $data );
