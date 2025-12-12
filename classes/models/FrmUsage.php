@@ -208,7 +208,7 @@ class FrmUsage {
 				continue;
 			}
 
-			if ( in_array( $key, $long_text_keys, true ) ) {
+			if ( in_array( $key, $long_text_keys, true ) || '_msg' === substr( $key, -4 ) ) {
 				// Replace it with a placeholder.
 				$value = '{{long_text}}';
 				continue;
