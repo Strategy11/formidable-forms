@@ -622,7 +622,7 @@ class FrmFormActionsController {
 	 * @param int|string $entry_id
 	 * @param int|string $form_id
 	 * @param array      $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
@@ -648,7 +648,7 @@ class FrmFormActionsController {
 	 * @param int|string        $entry
 	 * @param string            $type
 	 * @param array             $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
