@@ -28,15 +28,6 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
-	 * Memoized API info.
-	 * This is indexed by cache key.
-	 * It allows us to avoid extra calls to get_option().
-	 *
-	 * @var array|null
-	 */
-	private static $memoized_api_info = array();
-
-	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -342,21 +333,15 @@ class FrmFormApi {
 	protected function get_cached_option() {
 		$key = $this->cache_key;
 
-		if ( isset( self::$memoized_api_info[ $key ] ) ) {
-			return self::$memoized_api_info[ $key ];
-		}
-
 		if ( is_multisite() ) {
 			$cached = get_site_option( $this->cache_key );
 
 			if ( $cached ) {
-				self::$memoized_api_info[ $key ] = $cached;
 				return $cached;
 			}
 		}
 
-		self::$memoized_api_info[ $key ] = get_option( $this->cache_key );
-		return self::$memoized_api_info[ $key ];
+		return get_option( $this->cache_key );
 	}
 
 	/**
@@ -373,12 +358,12 @@ class FrmFormApi {
 			'version' => FrmAppHelper::plugin_version(),
 		);
 
-		self::$memoized_api_info[ $this->cache_key ] = $data;
-
 		if ( is_multisite() ) {
 			update_site_option( $this->cache_key, $data );
 		} else {
-			update_option( $this->cache_key, $data, 'no' );
+			// Autoload the license cache because it gets called everywhere.
+			$autoload = 0 === strpos( $this->cache_key, 'frm_addons_l' );
+			update_option( $this->cache_key, $data, $autoload );
 		}
 	}
 
