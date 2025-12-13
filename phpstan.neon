@@ -32,7 +32,6 @@ parameters:
 		- '#is always (false|true)+.#'
 		- '#no value type specified.#'
 		- '#only iterables are supported#'
-		- '#results in an error.#'
 		- '#will always evaluate to#'
 		- '#in isset\(\) does not exist.#'
 		- '#in empty\(\) is not falsy.#'
@@ -278,3 +277,21 @@ parameters:
 				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
 				- stripe/helpers/FrmTransLiteListHelper.php
 				- stripe/models/FrmStrpLiteSettings.php
+		-
+			message: '#results in an error.#'
+			paths:
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/helpers/FrmFieldsHelper.php
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmFormsListHelper.php
+				- classes/helpers/FrmStylesHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmFieldFormHtml.php
+				- classes/models/FrmHoneypot.php
+				- classes/models/FrmReviews.php
+				- classes/models/fields/FrmFieldType.php
+				- stripe/controllers/FrmStrpLiteAppController.php
+				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
