@@ -273,7 +273,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->contact_form_key     => $this->contact_form_field_count,
 			$this->repeat_sec_form_key  => 3,
 		);
-		$expected_field_num = isset( $field_totals[ $form_key ] ) ? $field_totals[ $form_key ] : 0;
+		$expected_field_num = $field_totals[ $form_key ] ?? 0;
 
 		$form_id = $this->factory->form->get_id_by_key( $form_key );
 		$fields  = FrmField::get_all_for_form( $form_id, '', 'include' );

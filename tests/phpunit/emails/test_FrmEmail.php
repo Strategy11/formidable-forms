@@ -24,17 +24,17 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @var stdClass
 	 */
-	protected $contact_form = null;
+	protected $contact_form;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $email_action = null;
+	protected $email_action;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
