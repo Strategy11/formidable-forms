@@ -173,7 +173,7 @@ parameters:
 				- classes/helpers/FrmFieldGridHelper.php
 				- square/controllers/FrmSquareLiteActionsController.php
 		-
-			message: '#on left side of ??#'
+			message: '#on left side of \?\?#'
 			path: stripe/controllers/FrmTransLiteActionsController.php
 		-
 			message: '#fwrite expects resource, resource\|null given#'
