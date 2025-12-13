@@ -162,7 +162,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		return array_filter(
 			array_merge(
 				$default_options,
-				isset( $this->plan_options ) ? $this->plan_options : array()
+				$this->plan_options ?? array()
 			)
 		);
 	}
@@ -275,7 +275,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		return array_filter(
 			array_merge(
 				$default_options,
-				isset( $this->subscription_charge_options ) ? $this->subscription_charge_options : array()
+				$this->subscription_charge_options ?? array()
 			)
 		);
 	}

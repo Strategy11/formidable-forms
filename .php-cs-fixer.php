@@ -23,6 +23,7 @@ $rules  = array(
 	'no_extra_blank_lines'                 => true,
 	'no_trailing_whitespace'               => true,
 	'no_whitespace_in_blank_line'          => true,
+	'ternary_to_null_coalescing'           => true,
 	'blank_line_before_statement'          => array(
 		'statements' => array(
 			'try',
