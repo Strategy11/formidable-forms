@@ -8447,9 +8447,10 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
-		maybeShowSaveAndReloadModal( event.target );
-		fieldValidation.validateNumberRangeSetting( event.target );
-		fieldValidation.validateStepSetting( event.target );
+		const target = event.target;
+		maybeShowSaveAndReloadModal( target );
+		fieldValidation.validateNumberRangeSetting( target );
+		fieldValidation.validateStepSetting( target );
 	}
 
 	/**

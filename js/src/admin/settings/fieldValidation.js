@@ -9,6 +9,26 @@ import { __ } from '@wordpress/i18n';
 import { getFieldId } from './utils';
 
 /**
+ * Filters the default values for range settings validation.
+ *
+ * @since x.x
+ *
+ * @param {Object} defaults        The default range settings.
+ * @param {number} defaults.maxnum Maximum allowed value. Default 9999999.
+ * @param {number} defaults.minnum Minimum allowed value. Default 0.
+ * @param {number} defaults.step   Step increment value. Default 1.
+ * @return {Object} Modified defaults object.
+ */
+const { maxnum, minnum, step } = wp.hooks.applyFilters(
+	'frm_range_settings_defaults',
+	{
+		maxnum: 9999999,
+		minnum: 0,
+		step: 1
+	}
+);
+
+/**
  * Validates number range setting.
  *
  * @since x.x
@@ -26,13 +46,13 @@ export function validateNumberRangeSetting( field ) {
 	}
 
 	validateField( field, () => {
-		const minNum = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` )?.value;
-		const maxNum = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` )?.value;
-		if ( ! minNum || ! maxNum ) {
+		const minValueInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
+		const maxValueInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
+		if ( ! minValueInput || ! maxValueInput ) {
 			return '';
 		}
 
-		return parseFloat( minNum ) >= parseFloat( maxNum )
+		return parseFloat( minValueInput.value || minnum ) >= parseFloat( maxValueInput.value || maxnum )
 			? __( 'Minimum value cannot be greater than or equal to maximum value.', 'formidable' )
 			: '';
 	} );
@@ -56,18 +76,22 @@ export function validateStepSetting( field ) {
 	}
 
 	validateField( field, () => {
-		let step = field.value;
-		if ( ! step ) {
+		const stepInput = document.querySelector( `[name="field_options[step_${ fieldId }]"]` );
+		if ( ! stepInput ) {
 			return '';
 		}
 
-		step = parseFloat( step );
-		if ( step <= 0 ) {
+		const stepInputValue = parseFloat( stepInput.value || step );
+		if ( stepInputValue <= 0 ) {
 			return __( 'Step value must be greater than 0.', 'formidable' );
 		}
 
-		const maxNum = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` )?.value;
-		return step > parseFloat( maxNum )
+		const maxValueInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
+		if ( ! maxValueInput ) {
+			return '';
+		}
+
+		return stepInputValue > parseFloat( maxValueInput.value || maxnum )
 			? __( 'Step value must be less than maximum value.', 'formidable' )
 			: '';
 	} );
