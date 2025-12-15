@@ -47,8 +47,12 @@ export function validateNumberRangeSetting( field ) {
 
 	validateField( field, () => {
 		const minValueInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
+		if ( ! minValueInput ) {
+			return '';
+		}
+
 		const maxValueInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
-		if ( ! minValueInput || ! maxValueInput ) {
+		if ( ! maxValueInput ) {
 			return '';
 		}
 

@@ -1,7 +1,7 @@
 /**
  * Internal dependencies
  */
-const fieldValidation = require( './settings/fieldValidation' );
+const rangeSettingsValidation = require( './settings/rangeSettingsValidation' );
 
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
@@ -8449,8 +8449,8 @@ window.frmAdminBuildJS = function() {
 	function handleBuilderChangeEvent( event ) {
 		const target = event.target;
 		maybeShowSaveAndReloadModal( target );
-		fieldValidation.validateNumberRangeSetting( target );
-		fieldValidation.validateStepSetting( target );
+		rangeSettingsValidation.validateNumberRangeSetting( target );
+		rangeSettingsValidation.validateStepSetting( target );
 	}
 
 	/**
@@ -11157,7 +11157,7 @@ window.frmAdminBuildJS = function() {
 			}
 		},
 
-		validateField: fieldValidation.validateField,
+		validateField: rangeSettingsValidation.validateField,
 
 		applyZebraStriping,
 		initModal,
