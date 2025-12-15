@@ -1514,7 +1514,7 @@ window.frmAdminBuildJS = function() {
 				layoutClassesInput.value = layoutClassesInput.value.concat( ' frm_first' );
 			}
 
-			jQuery( layoutClassesInput ).trigger( 'change' );
+			jQuery( layoutClassesInput ).trigger( 'change', [ false ] );
 		};
 	}
 
@@ -3254,7 +3254,7 @@ window.frmAdminBuildJS = function() {
 		return '';
 	}
 
-	function liveChanges() {
+	function liveChanges( event, shouldTryBreakFieldGroup = true ) {
 		/*jshint validthis:true */
 		let option,
 			newValue = this.value,
@@ -3275,7 +3275,7 @@ window.frmAdminBuildJS = function() {
 					addBlankSelectOption( changes, newValue );
 				}
 			} else if ( att === 'class' ) {
-				changeFieldClass( changes, this );
+				changeFieldClass( changes, this, shouldTryBreakFieldGroup );
 			} else if ( isSliderField( changes ) ) {
 				updateSliderFieldPreview( changes, att, newValue );
 			} else {
@@ -6760,7 +6760,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/* Change the classes in the builder */
-	function changeFieldClass( field, setting ) {
+	function changeFieldClass( field, setting, shouldTryBreakFieldGroup ) {
 		let classes, replace, alignField,
 			replaceWith = ' ' + setting.value,
 			fieldId = field.getAttribute( 'data-fid' );
@@ -6794,6 +6794,24 @@ window.frmAdminBuildJS = function() {
 			replace = classes.trim();
 			replaceWith = replaceWith.trim();
 		}
+
+		//
+		if ( shouldTryBreakFieldGroup && replaceWith.includes( 'frm_first' ) && ! classes.includes( 'frm_first' ) ) {
+			const fieldsInFieldBox = Array.from( field.parentElement.children );
+			const indexOfTargetField = fieldsInFieldBox.indexOf( field );
+			const fieldBox = field.parentElement.closest( 'li.frm_field_box.ui-draggable' );
+			const newFieldBox = fieldBox.cloneNode( true );
+			// Delete the singlings up to indexOfTargetField
+			for ( let i = indexOfTargetField; i < fieldsInFieldBox.length; i++ ) {
+				fieldsInFieldBox[ i ].remove();
+			}
+			fieldBox.after( newFieldBox );
+			const fieldsInNewFieldBox = Array.from( newFieldBox.firstChild.children );
+			for ( let i = 0; i < indexOfTargetField; i++ ) {
+				fieldsInNewFieldBox[ i ].remove();
+			}
+		}
+		//
 
 		field.className = field.className.replace( replace, replaceWith );
 	}
