@@ -2121,6 +2121,13 @@ window.frmAdminBuildJS = function() {
 		html = JSON.parse( html );
 		for ( key in html ) {
 			jQuery( '#frm_field_id_' + key ).replaceWith( html[ key ] );
+
+			const newReplacedField = document.getElementById( 'frm_field_id_' + key );
+			if ( newReplacedField ) {
+				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+			}
+
 			setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
 			makeDraggable( document.getElementById( 'frm_field_id_' + key ) );
 		}
