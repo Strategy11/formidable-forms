@@ -219,7 +219,7 @@ class FrmUsage {
 				// Replace it with a placeholder.
 				$value = '{{contain_email}}';
 			}
-		}
+		}//end foreach
 	}
 
 	/**
