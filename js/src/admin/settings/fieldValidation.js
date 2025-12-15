@@ -9,27 +9,6 @@ import { __ } from '@wordpress/i18n';
 import { getFieldId } from './utils';
 
 /**
- * Runs validation and handles UI feedback.
- *
- * @since x.x
- *
- * @param {HTMLElement} field    The field element being validated.
- * @param {Function}    getError Function that returns error message or empty string.
- *
- * @return {string} The error message or empty string.
- */
-export function validateField( field, getError ) {
-	const errorMessage = getError();
-	if ( errorMessage ) {
-		frmAdminBuild.infoModal( errorMessage );
-		field.classList.add( 'frm_invalid_field' );
-	} else {
-		field.classList.remove( 'frm_invalid_field' );
-	}
-	return errorMessage;
-}
-
-/**
  * Validates number range setting.
  *
  * @since x.x
@@ -47,15 +26,13 @@ export function validateNumberRangeSetting( field ) {
 	}
 
 	validateField( field, () => {
-		const minInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
-		const maxInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
-		if ( ! minInput || ! maxInput ) {
+		const minNum = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` )?.value;
+		const maxNum = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` )?.value;
+		if ( ! minNum || ! maxNum ) {
 			return '';
 		}
 
-		const minNum = parseFloat( minInput.value || 0 );
-		const maxNum = parseFloat( maxInput.value || 9999999 );
-		return minNum >= maxNum
+		return parseFloat( minNum ) >= parseFloat( maxNum )
 			? __( 'Minimum value cannot be greater than or equal to maximum value.', 'formidable' )
 			: '';
 	} );
@@ -79,14 +56,41 @@ export function validateStepSetting( field ) {
 	}
 
 	validateField( field, () => {
-		const step = parseFloat( field.value );
+		let step = field.value;
+		if ( ! step ) {
+			return '';
+		}
+
+		step = parseFloat( step );
 		if ( step <= 0 ) {
 			return __( 'Step value must be greater than 0.', 'formidable' );
 		}
 
-		const maxNum = parseFloat( document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` )?.value || 9999999 );
-		return step > maxNum
+		const maxNum = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` )?.value;
+		return step > parseFloat( maxNum )
 			? __( 'Step value must be less than maximum value.', 'formidable' )
 			: '';
 	} );
+}
+
+/**
+ * Runs validation and handles UI feedback.
+ *
+ * @since x.x
+ *
+ * @param {HTMLElement} field    The field element being validated.
+ * @param {Function}    getError Function that returns error message or empty string.
+ *
+ * @return {string} The error message or empty string.
+ */
+export function validateField( field, getError ) {
+	const errorMessage = getError();
+	if ( errorMessage ) {
+		frmAdminBuild.infoModal( errorMessage );
+		field.classList.add( 'frm_invalid_field' );
+	} else {
+		field.classList.remove( 'frm_invalid_field' );
+	}
+
+	return errorMessage;
 }
