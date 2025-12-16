@@ -59,17 +59,17 @@ export function validateNumberRangeSetting( field ) {
 		return;
 	}
 
-	validateField( field, () => {
-		const minValueInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
-		if ( ! minValueInput ) {
-			return '';
-		}
+	const minValueInput = document.querySelector( `[name="field_options[minnum_${ fieldId }]"]` );
+	if ( ! minValueInput ) {
+		return;
+	}
 
-		const maxValueInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
-		if ( ! maxValueInput ) {
-			return '';
-		}
+	const maxValueInput = document.querySelector( `[name="field_options[maxnum_${ fieldId }]"]` );
+	if ( ! maxValueInput ) {
+		return;
+	}
 
+	return validateField( field, () => {
 		const { minNum, maxNum } = getRangeSettingsDefaults( singleSettings );
 
 		return parseFloat( minValueInput.value || minNum ) >= parseFloat( maxValueInput.value || maxNum )
@@ -96,14 +96,13 @@ export function validateStepSetting( field ) {
 		return;
 	}
 
-	validateField( field, () => {
-		const stepInput = document.querySelector( `[name="field_options[step_${ fieldId }]"]` );
-		if ( ! stepInput ) {
-			return '';
-		}
+	const stepInput = document.querySelector( `[name="field_options[step_${ fieldId }]"]` );
+	if ( ! stepInput ) {
+		return;
+	}
 
+	return validateField( field, () => {
 		const { step, maxNum } = getRangeSettingsDefaults( singleSettings );
-
 		const stepInputValue = parseFloat( stepInput.value || step );
 		if ( stepInputValue <= 0 ) {
 			return __( 'Step value must be greater than 0.', 'formidable' );
