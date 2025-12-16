@@ -62,6 +62,7 @@ zip -r $zipname $destination \
 	-x "*/composer.lock" \
 	-x "*/crowdin.yml" \
 	-x "*/formidableforms.css" \
+	-x "*/formidableforms[0-9]*.css" \
 	-x "*/js/src/*" \
 	-x "*/assets/src/*" \
 	-x "*/blocks-src/*" \
