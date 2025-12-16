@@ -360,8 +360,7 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			// TODO Set a real release date. When do we plan to release this?
-			'coupon' => '2026-01-01',
+			'coupon' => '2026-01-13',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
