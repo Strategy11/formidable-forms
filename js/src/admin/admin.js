@@ -1,7 +1,9 @@
 /**
  * Internal dependencies
  */
-const rangeSettingsValidation = require( './settings/rangeSettingsValidation' );
+const { validateField } = require( './settings/validateField' );
+const { validateNumberRangeSetting, validateStepSetting } = require( './settings/validateRangeSettings' );
+const utils = require( './settings/utils' );
 
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
@@ -8449,8 +8451,10 @@ window.frmAdminBuildJS = function() {
 	function handleBuilderChangeEvent( event ) {
 		const target = event.target;
 		maybeShowSaveAndReloadModal( target );
-		rangeSettingsValidation.validateNumberRangeSetting( target );
-		rangeSettingsValidation.validateStepSetting( target );
+		if ( ! frmGlobal.proIsConnected ) {
+			validateNumberRangeSetting( target );
+			validateStepSetting( target );
+		}
 	}
 
 	/**
@@ -11157,7 +11161,10 @@ window.frmAdminBuildJS = function() {
 			}
 		},
 
-		validateField: rangeSettingsValidation.validateField,
+		utils,
+		validateField,
+		validateNumberRangeSetting,
+		validateStepSetting,
 
 		applyZebraStriping,
 		initModal,
