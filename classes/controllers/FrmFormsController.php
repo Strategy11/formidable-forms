@@ -27,6 +27,7 @@ class FrmFormsController {
 
 	public static function menu() {
 		$menu_label = __( 'Forms', 'formidable' );
+
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$menu_label .= ' (Lite)';
 		}
@@ -97,10 +98,12 @@ class FrmFormsController {
 		$message = '';
 		$params  = FrmForm::list_page_params();
 		$errors  = self::process_bulk_form_actions( array() );
+
 		if ( isset( $errors['message'] ) ) {
 			$message = $errors['message'];
 			unset( $errors['message'] );
 		}
+
 		$errors = apply_filters( 'frm_admin_list_form_action', $errors );
 
 		self::display_forms_list( $params, $message, $errors );
@@ -117,6 +120,7 @@ class FrmFormsController {
 	 */
 	private static function create_default_email_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+
 		if ( ! is_object( $form ) ) {
 			return;
 		}
@@ -143,6 +147,7 @@ class FrmFormsController {
 	 */
 	private static function create_default_on_submit_action( $form ) {
 		FrmForm::maybe_get_form( $form );
+
 		if ( ! is_object( $form ) ) {
 			return;
 		}
@@ -177,6 +182,7 @@ class FrmFormsController {
 	 */
 	private static function create_submit_button_field( $form ) {
 		FrmForm::maybe_get_form( $form );
+
 		if ( ! is_object( $form ) ) {
 			return;
 		}
@@ -263,6 +269,7 @@ class FrmFormsController {
 		FrmForm::update( $id, $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 		$antispam_is_on = ! empty( $_POST['options']['antispam'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( $antispam_is_on !== $antispam_was_on ) {
 			FrmAntiSpam::clear_caches();
 		}
@@ -299,6 +306,7 @@ class FrmFormsController {
 
 		$errors           = FrmForm::validate( $values );
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'frm_save_form', 'frm_save_form_nonce' );
+
 		if ( $permission_error !== false ) {
 			$errors['form'] = $permission_error;
 		}
@@ -355,18 +363,21 @@ class FrmFormsController {
 	 */
 	private static function maybe_remove_draft_option_from_fields( $form_id ) {
 		$draft_field_ids_csv = FrmAppHelper::get_post_param( 'draft_fields', '', 'sanitize_text_field' );
+
 		if ( ! $draft_field_ids_csv ) {
 			// If the draft_fields input is empty there are no new fields in the session.
 			return;
 		}
 
 		$draft_field_ids = array_filter( explode( ',', $draft_field_ids_csv ), 'is_numeric' );
+
 		if ( ! $draft_field_ids ) {
 			// Exit early if the draft fields input is invalid. It should be a CSV of integer values.
 			return;
 		}
 
 		$draft_field_rows = FrmFieldsHelper::get_draft_field_results( $form_id, $draft_field_ids );
+
 		foreach ( $draft_field_rows as $row ) {
 			$row->field_options['draft'] = 0;
 			FrmField::update( $row->id, array( 'field_options' => $row->field_options ) );
@@ -419,6 +430,7 @@ class FrmFormsController {
 	 */
 	public static function page_preview() {
 		$params = FrmForm::list_page_params();
+
 		if ( ! $params['form'] || is_numeric( $params['form'] ) ) {
 			return null;
 		}
@@ -426,6 +438,7 @@ class FrmFormsController {
 		self::maybe_block_preview( $params['form'] );
 
 		$form = FrmForm::getOne( $params['form'] );
+
 		if ( ! $form ) {
 			return null;
 		}
@@ -440,6 +453,7 @@ class FrmFormsController {
 	 */
 	public static function show_page_preview() {
 		$preview = self::page_preview();
+
 		if ( is_null( $preview ) ) {
 			wp_die(
 				'<h1>' . esc_html__( 'Form key is invalid', 'formidable' ) . '</h1>',
@@ -471,6 +485,7 @@ class FrmFormsController {
 		}
 
 		$include_theme = FrmAppHelper::get_param( 'theme', '', 'get', 'absint' );
+
 		if ( $include_theme ) {
 			self::set_preview_query();
 			self::load_theme_preview();
@@ -495,17 +510,20 @@ class FrmFormsController {
 		);
 
 		$page_for_posts = get_option( 'page_for_posts' );
+
 		if ( is_numeric( $page_for_posts ) ) {
 			// Avoid querying for the "Posts Page" or "Blog Page" so we don't display 10 forms.
 			$page_query['post__not_in'] = array( $page_for_posts );
 		}
 
 		$random_page = get_posts( $page_query );
+
 		if ( ! $random_page ) {
 			return;
 		}
 
 		$random_page = reset( $random_page );
+
 		if ( ! is_a( $random_page, 'WP_Post' ) ) {
 			// The return type can also be int.
 			return;
@@ -696,6 +714,7 @@ class FrmFormsController {
 	 */
 	private static function load_direct_preview() {
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
+
 		if ( $key == '' ) {
 			$key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_title' );
 		}
@@ -712,6 +731,7 @@ class FrmFormsController {
 		self::maybe_block_preview( $key );
 
 		$form = FrmForm::getAll( array( 'form_key' => $key ), '', 1 );
+
 		if ( ! $form ) {
 			$error = __( 'Form does not exist', 'formidable' );
 			wp_die(
@@ -846,6 +866,7 @@ class FrmFormsController {
 		check_admin_referer( $status . '_form_' . $params['id'] );
 
 		$count = 0;
+
 		if ( FrmForm::set_status( $params['id'], $available_status[ $status ]['new_status'] ) ) {
 			++$count;
 		}
@@ -877,6 +898,7 @@ class FrmFormsController {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
 		$count = 0;
+
 		foreach ( $ids as $id ) {
 			if ( FrmForm::trash( $id ) ) {
 				++$count;
@@ -913,6 +935,7 @@ class FrmFormsController {
 		check_admin_referer( 'destroy_form_' . $params['id'] );
 
 		$count = 0;
+
 		if ( FrmForm::destroy( $params['id'] ) ) {
 			++$count;
 		}
@@ -932,8 +955,10 @@ class FrmFormsController {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
 
 		$count = 0;
+
 		foreach ( $ids as $id ) {
 			$d = FrmForm::destroy( $id );
+
 			if ( $d ) {
 				++$count;
 			}
@@ -953,6 +978,7 @@ class FrmFormsController {
 	public static function delete_all() {
 		// Check nonce url.
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_delete_forms', '_wpnonce', 'bulk-toplevel_page_formidable' );
+
 		if ( $permission_error !== false ) {
 			self::display_forms_list( array(), '', array( $permission_error ) );
 
@@ -1096,6 +1122,7 @@ class FrmFormsController {
 		if ( FrmAppHelper::is_form_builder_page() ) {
 			return true;
 		}
+
 		$page = basename( FrmAppHelper::get_server_value( 'PHP_SELF' ) );
 		return in_array( $page, array( 'post.php', 'page.php', 'page-new.php', 'post-new.php' ), true );
 	}
@@ -1105,6 +1132,7 @@ class FrmFormsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$shortcode = FrmAppHelper::get_post_param( 'shortcode', '', 'sanitize_text_field' );
+
 		if ( empty( $shortcode ) ) {
 			wp_die();
 		}
@@ -1132,6 +1160,7 @@ class FrmFormsController {
 					),
 				);
 		}
+
 		$opts = apply_filters( 'frm_sc_popup_opts', $opts, $shortcode );
 
 		if ( isset( $opts['form_id'] ) && is_string( $opts['form_id'] ) ) {
@@ -1178,6 +1207,7 @@ class FrmFormsController {
 		$wp_list_table->prepare_items();
 
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
+
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			wp_redirect( esc_url_raw( add_query_arg( 'paged', $total_pages ) ) );
 			die();
@@ -1185,6 +1215,7 @@ class FrmFormsController {
 
 		$inbox = new FrmInbox();
 		$error = $inbox->check_for_error();
+
 		if ( $error ) {
 			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
 		}
@@ -1203,6 +1234,7 @@ class FrmFormsController {
 		$columns['entries']  = esc_html__( 'Entries', 'formidable' );
 		$columns['id']       = 'ID';
 		$columns['form_key'] = esc_html__( 'Key', 'formidable' );
+
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
@@ -1259,9 +1291,9 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param mixed  $save
-	 * @param string $option
-	 * @param int    $value
+	 * @param mixed      $save
+	 * @param string     $option
+	 * @param int|string $value
 	 *
 	 * @return mixed
 	 */
@@ -1295,6 +1327,7 @@ class FrmFormsController {
 				)
 			),
 		);
+
 		if ( ! $form ) {
 			FrmAppController::show_error_modal( $error_args );
 			return;
@@ -1350,6 +1383,7 @@ class FrmFormsController {
 		$values['fields'] = apply_filters( 'frm_fields_in_form_builder', $fields, compact( 'form' ) );
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
+
 		if ( $form->is_template && $message == $edit_message ) {
 			$message = __( 'Template was successfully updated.', 'formidable' );
 		}
@@ -1724,8 +1758,10 @@ class FrmFormsController {
 		);
 
 		$user_fields = self::user_shortcodes();
+
 		if ( $user_fields ) {
 			$user_helpers = array();
+
 			foreach ( $user_fields as $uk => $uf ) {
 				$user_helpers[ '|user_id| show="' . $uk . '"' ] = $uf;
 				unset( $uk, $uf );
@@ -1823,6 +1859,7 @@ class FrmFormsController {
 		);
 
 		$entry_shortcodes = array_merge( FrmShortcodeHelper::get_contextual_shortcode_values(), $entry_shortcodes );
+
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			unset( $entry_shortcodes['post_id'] );
 		}
@@ -1870,6 +1907,7 @@ class FrmFormsController {
 	 */
 	public static function add_js_validate_form_to_global_vars( $form ) {
 		global $frm_vars;
+
 		if ( ! isset( $frm_vars['js_validate_forms'] ) ) {
 			$frm_vars['js_validate_forms'] = array();
 		}
@@ -1901,6 +1939,7 @@ class FrmFormsController {
 		$content = self::replace_form_name_shortcodes( $content, $form );
 
 		self::get_entry_by_param( $entry );
+
 		if ( ! $entry ) {
 			return $content;
 		}
@@ -1987,6 +2026,7 @@ class FrmFormsController {
 		}
 
 		$bulkaction = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
+
 		if ( $bulkaction == - 1 ) {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 		}
@@ -1998,6 +2038,7 @@ class FrmFormsController {
 		}
 
 		$ids = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
+
 		if ( empty( $ids ) ) {
 			$errors[] = __( 'No forms were specified', 'formidable' );
 
@@ -2005,6 +2046,7 @@ class FrmFormsController {
 		}
 
 		$permission_error = FrmAppHelper::permission_nonce_error( '', '_wpnonce', 'bulk-toplevel_page_formidable' );
+
 		if ( $permission_error !== false ) {
 			$errors[] = $permission_error;
 
@@ -2052,6 +2094,7 @@ class FrmFormsController {
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
 		FrmAppHelper::include_svg();
+
 		if ( isset( $_POST['frm_compact_fields'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -2059,9 +2102,11 @@ class FrmFormsController {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
+
 			if ( empty( $json_vars ) ) {
 				// json decoding failed so we should return an error message.
 				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+
 				if ( 'edit' === $action ) {
 					$action = 'update';
 				}
@@ -2076,6 +2121,7 @@ class FrmFormsController {
 			}
 		} else {
 			$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+
 			if ( isset( $_REQUEST['delete_all'] ) ) {
 				// Override the action for this page.
 				$action = 'delete_all';
@@ -2103,11 +2149,13 @@ class FrmFormsController {
 				return;
 			default:
 				do_action( 'frm_form_action_' . $action );
+
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
 					return;
 				}
 
 				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
+
 				if ( $action == - 1 ) {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}
@@ -2120,6 +2168,7 @@ class FrmFormsController {
 				}
 
 				$message = FrmAppHelper::get_param( 'message' );
+
 				if ( 'form_duplicate_error' === $message ) {
 					self::display_forms_list( array(), '', array( __( 'There was a problem duplicating the form', 'formidable' ) ) );
 					return;
@@ -2158,6 +2207,7 @@ class FrmFormsController {
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( ! $form ) {
 			wp_send_json_error( __( 'Form not found', 'formidable' ) );
 		}
@@ -2247,6 +2297,7 @@ class FrmFormsController {
 	 */
 	private static function move_menu_to_footer() {
 		$settings = FrmAppHelper::get_settings();
+
 		if ( empty( $settings->admin_bar ) ) {
 			remove_action( 'wp_body_open', 'wp_admin_bar_render', 0 );
 		}
@@ -2254,11 +2305,13 @@ class FrmFormsController {
 
 	public static function admin_bar_configure() {
 		global $frm_vars;
+
 		if ( empty( $frm_vars['forms_loaded'] ) ) {
 			return;
 		}
 
 		$actions = array();
+
 		foreach ( $frm_vars['forms_loaded'] as $form ) {
 			if ( is_object( $form ) ) {
 				$actions[ $form->id ] = $form->name;
@@ -2326,6 +2379,7 @@ class FrmFormsController {
 	 */
 	public static function get_form_shortcode( $atts ) {
 		global $frm_vars;
+
 		if ( ! empty( $frm_vars['skip_shortcode'] ) ) {
 			$sc  = '[formidable';
 			$sc .= FrmAppHelper::array_to_html_params( $atts );
@@ -2431,6 +2485,7 @@ class FrmFormsController {
 		if ( ! empty( $id ) ) {
 			// Form id or key is set.
 			$form = FrmForm::getOne( $id );
+
 			if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
 				$form = false;
 			}
@@ -2504,6 +2559,7 @@ class FrmFormsController {
 			FrmFormState::set_initial_value( 'description', $description );
 
 			do_action( 'frm_display_form_action', $params, $fields, $form, $title, $description );
+
 			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
 				self::show_form_after_submit( $pass_args );
 			}
@@ -2597,6 +2653,7 @@ class FrmFormsController {
 
 		if ( ! empty( $atts['entry_id'] ) ) {
 			$met_actions = self::get_met_on_submit_actions( $atts, $action );
+
 			if ( $met_actions ) {
 				$method = $met_actions;
 			}
@@ -2825,6 +2882,7 @@ class FrmFormsController {
 			}
 
 			$page = get_post( $action->post_content['success_page_id'] );
+
 			if ( ! $page || 'trash' === $page->post_status ) {
 				return false;
 			}
@@ -2848,6 +2906,7 @@ class FrmFormsController {
 				'action'   => FrmOnSubmitHelper::current_event( $args ),
 			)
 		);
+
 		if ( ! is_array( $args['conf_method'] ) ) {
 			self::run_success_action( $args );
 			return;
@@ -2876,6 +2935,7 @@ class FrmFormsController {
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
+
 		foreach ( $args['conf_method'] as $action ) {
 			if ( 'redirect' === FrmOnSubmitHelper::get_action_type( $action ) ) {
 				// We catch the redirect action to run it last.
@@ -2949,6 +3009,7 @@ class FrmFormsController {
 	private static function load_page_after_submit( $args ) {
 		global $post;
 		$opt = $args['success_opt'];
+
 		if ( ! $post || $args['form']->options[ $opt . '_page_id' ] != $post->ID ) {
 			$page     = get_post( $args['form']->options[ $opt . '_page_id' ] );
 			$old_post = $post;
@@ -3068,6 +3129,7 @@ class FrmFormsController {
 
 				$args['form']->options['success_msg'] = $args['message'];
 				$args['form']->options['edit_msg']    = $args['message'];
+
 				if ( ! isset( $args['fields'] ) ) {
 					$args['fields'] = FrmField::get_all_for_form( $args['form']->id );
 				}
@@ -3121,11 +3183,13 @@ class FrmFormsController {
 
 		echo FrmAppHelper::maybe_kses( $redirect_msg ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<script>';
+
 		if ( empty( $args['doing_ajax'] ) ) {
 			// Not AJAX submit, delay JS until window.load.
 			echo 'window.onload=function(){';
 		}
 		echo 'setTimeout(function(){' . $redirect_js . '}, ' . intval( $delay_time ) . ');'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 		if ( empty( $args['doing_ajax'] ) ) {
 			echo '};';
 		}
@@ -3167,6 +3231,7 @@ class FrmFormsController {
 	 */
 	private static function get_redirect_fallback_message( $success_url, $args ) {
 		$target = '';
+
 		if ( ! empty( $args['form']->options['open_in_new_tab'] ) ) {
 			$target = ' target="_blank"';
 		}
@@ -3194,6 +3259,7 @@ class FrmFormsController {
 		if ( ! isset( $atts['form']->options['show_form'] ) || $atts['form']->options['show_form'] ) {
 			if ( isset( $atts['action'] ) && 'update' === $atts['action'] && is_callable( array( 'FrmProEntriesController', 'show_front_end_form_with_entry' ) ) ) {
 				$entry = FrmEntry::getOne( $atts['entry_id'] );
+
 				if ( $entry ) {
 					// This is copied from the Pro plugin.
 					$atts['conf_message'] = FrmProEntriesController::confirmation( 'message', $atts['form'], $atts['form']->options, $entry->id, $atts );
@@ -3252,7 +3318,7 @@ class FrmFormsController {
 	 * Gets message placement.
 	 *
 	 * @since 4.05.02
-	 * @since x.x This method changed from `private` to `public`.
+	 * @since 6.26 This method changed from `private` to `public`.
 	 *
 	 * @param object $form    Form object.
 	 * @param string $message The message.
@@ -3432,6 +3498,7 @@ class FrmFormsController {
 		}
 
 		global $wp_styles;
+
 		if ( is_array( $wp_styles->queue ) && in_array( 'formidable', $wp_styles->queue, true ) ) {
 			wp_print_styles( 'formidable' );
 		}
@@ -3513,6 +3580,7 @@ class FrmFormsController {
 	 */
 	public static function landing_page_preview_option() {
 		$dir = apply_filters( 'frm_landing_page_preview_option', false );
+
 		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
 			$dir = self::get_form_views_path();
 		}
@@ -3543,11 +3611,13 @@ class FrmFormsController {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		$type = FrmAppHelper::get_post_param( 'type', '', 'sanitize_text_field' );
+
 		if ( ! $type || ! in_array( $type, array( 'form', 'view' ), true ) ) {
 			die( 0 );
 		}
 
 		$object_id = FrmAppHelper::get_post_param( 'object_id', '', 'absint' );
+
 		if ( ! $object_id ) {
 			die( 0 );
 		}
@@ -3561,11 +3631,13 @@ class FrmFormsController {
 		}
 
 		$name = FrmAppHelper::get_post_param( 'name', '', 'sanitize_text_field' );
+
 		if ( $name ) {
 			$postarr['post_title'] = $name;
 		}
 
 		$success = wp_insert_post( $postarr );
+
 		if ( ! is_numeric( $success ) || ! $success ) {
 			die( 0 );
 		}

@@ -6,6 +6,7 @@
 	<div class="frm-radio-container frm-flex-box frm-flex-justify">
 		<?php
 		$alignments = array( 'left', 'center', 'right' );
+
 		foreach ( $alignments as $align ) :
 			if ( empty( $component['options'] ) || in_array( $align, $component['options'], true ) ) :
 				$radio_id = 'frm-align-' . $align . '-' . esc_attr( $field_name );

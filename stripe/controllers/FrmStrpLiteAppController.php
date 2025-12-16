@@ -45,6 +45,7 @@ class FrmStrpLiteAppController {
 
 		$modes            = array( 'test', 'live' );
 		$option_name_keys = array( 'account_id', 'client_password', 'server_password', 'details_submitted' );
+
 		foreach ( $modes as $mode ) {
 			foreach ( $option_name_keys as $key ) {
 				$options_to_delete[] = 'frm_strp_connect_' . $key . '_' . $mode;
@@ -134,6 +135,7 @@ class FrmStrpLiteAppController {
 	 */
 	private static function maybe_add_payment_error_on_redirect( $errors, $form_id ) {
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return $errors;
 		}
@@ -155,11 +157,13 @@ class FrmStrpLiteAppController {
 				'form_id' => $entry->form_id,
 			)
 		);
+
 		if ( ! $cc_field_id ) {
 			return $errors;
 		}
 
 		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
+
 		if ( $is_setup_intent ) {
 			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';
 		} else {

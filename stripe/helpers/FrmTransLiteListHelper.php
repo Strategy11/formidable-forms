@@ -201,11 +201,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function extra_tablenav( $which ) {
 		$footer = $which !== 'top';
+
 		if ( $footer ) {
 			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( $form_id ) {
 			// Don't show the switcher if it's already in the header.
 			return;
@@ -325,6 +327,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_form_ids() {
 		$entry_ids = array();
+
 		foreach ( $this->items as $item ) {
 			$entry_ids[] = absint( $item->item_id );
 			unset( $item );
@@ -345,6 +348,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		unset( $entry_ids );
 
 		$form_ids = array();
+
 		foreach ( $forms as $form ) {
 			$form_ids[ $form->id ] = $form;
 			unset( $form );

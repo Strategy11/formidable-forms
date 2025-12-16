@@ -49,6 +49,7 @@ class FrmFormApi {
 	private function set_license( $license ) {
 		if ( $license === null ) {
 			$edd_update = $this->get_pro_updater();
+
 			if ( ! empty( $edd_update ) ) {
 				$license = $edd_update->license;
 			}
@@ -90,11 +91,13 @@ class FrmFormApi {
 	 */
 	public function get_api_info() {
 		$url = $this->api_url();
+
 		if ( ! empty( $this->license ) ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
 		$addons = $this->get_cached();
+
 		if ( is_array( $addons ) ) {
 			return $addons;
 		}
@@ -108,6 +111,7 @@ class FrmFormApi {
 
 		// We need to know the version number to allow different downloads.
 		$agent = 'formidable/' . FrmAppHelper::plugin_version();
+
 		if ( class_exists( 'FrmProDb' ) ) {
 			$agent = 'formidable-pro/' . FrmProDb::$plug_version;
 		}
@@ -137,6 +141,7 @@ class FrmFormApi {
 
 			if ( isset( $addon['categories'] ) ) {
 				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
+
 				if ( ! empty( $cats ) ) {
 					unset( $addons[ $k ] );
 					continue;
@@ -175,6 +180,7 @@ class FrmFormApi {
 	 */
 	protected function set_running() {
 		$expires = 2 * MINUTE_IN_SECONDS;
+
 		if ( $this->run_as_multisite() ) {
 			set_site_transient( $this->transient_key(), true, $expires );
 			return;
@@ -250,8 +256,10 @@ class FrmFormApi {
 		if ( empty( $addons ) ) {
 			$addons = $this->get_api_info();
 		}
+
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
+
 		if ( empty( $download_id ) && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
@@ -288,23 +296,22 @@ class FrmFormApi {
 	 */
 	protected function get_cached() {
 		$cache = $this->get_cached_option();
+
 		if ( empty( $cache ) ) {
 			return false;
 		}
 
-		// If the api call is running, we can use the expired cache.
-		if ( ! $this->is_running() ) {
-			if ( empty( $cache['timeout'] ) || time() > $cache['timeout'] ) {
-				// Cache is expired.
-				return false;
-			}
+		$is_expired = empty( $cache['timeout'] ) || time() > $cache['timeout'];
 
-			$version     = FrmAppHelper::plugin_version();
-			$for_current = isset( $cache['version'] ) && $cache['version'] == $version;
-			if ( ! $for_current ) {
-				// Force a new check.
-				return false;
-			}
+		if ( ! $is_expired && isset( $cache['version'] ) && $cache['version'] !== FrmAppHelper::plugin_version() ) {
+			$is_expired = true;
+		}
+
+		// Avoid old cached data, unless we're currently trying to query for new data.
+		// The call to $this->is_running likely triggers a database query, so only call if if we're expired.
+		// (Rather than the other way around, which is less efficient).
+		if ( $is_expired && ! $this->is_running() ) {
+			return false;
 		}
 
 		$values = json_decode( $cache['value'], true );
@@ -322,6 +329,7 @@ class FrmFormApi {
 	protected function get_cached_option() {
 		if ( is_multisite() ) {
 			$cached = get_site_option( $this->cache_key );
+
 			if ( $cached ) {
 				return $cached;
 			}
@@ -347,7 +355,9 @@ class FrmFormApi {
 		if ( is_multisite() ) {
 			update_site_option( $this->cache_key, $data );
 		} else {
-			update_option( $this->cache_key, $data, 'no' );
+			// Autoload the license cache because it gets called everywhere.
+			$autoload = 0 === strpos( $this->cache_key, 'frm_addons_l' );
+			update_option( $this->cache_key, $data, $autoload );
 		}
 	}
 
@@ -362,6 +372,7 @@ class FrmFormApi {
 	 */
 	protected function get_cache_timeout( $addons ) {
 		$timeout = $this->cache_timeout;
+
 		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
 			$timeout = '+5 minutes';
 		}
@@ -389,6 +400,7 @@ class FrmFormApi {
 	 */
 	public function error_for_license() {
 		$errors = array();
+
 		if ( ! empty( $this->license ) ) {
 			$errors = $this->get_error_from_response();
 		}
@@ -407,7 +419,9 @@ class FrmFormApi {
 		if ( empty( $addons ) ) {
 			$addons = $this->get_api_info();
 		}
+
 		$errors = array();
+
 		if ( isset( $addons['error'] ) ) {
 			if ( is_string( $addons['error'] ) ) {
 				$errors[] = $addons['error'];

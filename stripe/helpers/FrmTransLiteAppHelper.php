@@ -39,12 +39,14 @@ class FrmTransLiteAppHelper {
 	public static function payments_table_exists() {
 		$db     = new FrmTransLiteDb();
 		$option = get_option( $db->db_opt_name );
+
 		if ( false !== $option ) {
 			return true;
 		}
 
 		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
 			$option = get_option( FrmPaymentsController::$db_opt_name );
+
 			if ( false !== $option ) {
 				return true;
 			}
@@ -167,11 +169,13 @@ class FrmTransLiteAppHelper {
 		}
 
 		$atts['payment'] = (array) $atts['payment'];
+
 		if ( empty( $atts['payment']['action_id'] ) ) {
 			return array();
 		}
 
 		$form_action = FrmTransLiteAction::get_single_action_type( $atts['payment']['action_id'], 'payment' );
+
 		if ( ! $form_action ) {
 			return array();
 		}
@@ -188,6 +192,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
+
 		if ( strpos( $value, '[' ) === false ) {
 			return $value;
 		}
@@ -200,6 +205,7 @@ class FrmTransLiteAppHelper {
 			if ( ! isset( $atts['form'] ) ) {
 				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
 			}
+
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
 
@@ -215,6 +221,7 @@ class FrmTransLiteAppHelper {
 	public static function format_billing_cycle( $sub ) {
 		$amount   = self::formatted_amount( $sub );
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
+
 		if ( $sub->interval_count == 1 ) {
 			$amount = $amount . '/' . $interval;
 		} else {
@@ -261,6 +268,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_repeat_label_from_value( $value, $number ) {
 		$times = self::get_plural_repeat_times( $number );
+
 		if ( isset( $times[ $value ] ) ) {
 			$value = $times[ $value ];
 		}
@@ -337,8 +345,10 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_date_format() {
 		$date_format = 'm/d/Y';
+
 		if ( class_exists( 'FrmProAppHelper' ) ) {
 			$frmpro_settings = FrmProAppHelper::get_settings();
+
 			if ( $frmpro_settings ) {
 				$date_format = $frmpro_settings->date_format;
 			}
@@ -369,6 +379,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_user_id_for_current_payment() {
 		$user_id = 0;
+
 		if ( is_user_logged_in() ) {
 			$user_id = get_current_user_id();
 		}
@@ -382,8 +393,10 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_user_link( $user_id ) {
 		$user_link = esc_html__( 'Guest', 'formidable' );
+
 		if ( $user_id ) {
 			$user = get_userdata( $user_id );
+
 			if ( $user ) {
 				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
@@ -459,6 +472,7 @@ class FrmTransLiteAppHelper {
 		}
 
 		$currency = FrmCurrencyHelper::get_currency( $action->post_content['currency'] );
+
 		if ( ! empty( $currency['decimals'] ) ) {
 			$amount = number_format( $amount / 100, 2, '.', '' );
 		}
@@ -494,6 +508,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function count_completed_payments( $payments ) {
 		$count = 0;
+
 		foreach ( $payments as $payment ) {
 			if ( $payment->status === 'complete' ) {
 				$count++;
@@ -520,9 +535,11 @@ class FrmTransLiteAppHelper {
 	public static function get_setting_for_gateway( $gateway, $setting ) {
 		$gateways = self::get_gateways();
 		$value    = '';
+
 		if ( is_array( $gateway ) ) {
 			$gateway = reset( $gateway );
 		}
+
 		if ( isset( $gateways[ $gateway ] ) ) {
 			$value = $gateways[ $gateway ][ $setting ];
 		}
@@ -548,10 +565,12 @@ class FrmTransLiteAppHelper {
 			'id'   => $id,
 			'name' => $name,
 		);
+
 		if ( in_array( 'square', $gateways, true ) ) {
 			$select_attrs['disabled'] = 'disabled';
 			$selected                 = '';
 		}
+
 		$currencies = FrmCurrencyHelper::get_currencies();
 		?>
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>

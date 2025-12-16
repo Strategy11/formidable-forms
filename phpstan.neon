@@ -13,12 +13,11 @@ parameters:
 		- */js/*
 		- */vendor/*
 		- */fonts/*
-		- */deprecated/*
 		- */rector.php
+		- */phpcs-sniffs/*
 	strictRules:
 		disallowedLooseComparison: false
 		booleansInConditions: false
-		uselessCast: false
 		requireParentConstructorCall: false
 		strictCalls: false
 		noVariableVariables: false
@@ -29,19 +28,15 @@ parameters:
 		- '#Function (apply_filters)+ invoked with#'
 		- '#code above always terminates.#'
 		- '#does not (accept|exist on)+#'
-		- '#expects (array|string|int|callable|object|stdClass|float|bool|resource)+#'
+		- '#expects (array|string|int|callable|object|stdClass|float|bool)+#'
 		- '#is always (false|true)+.#'
 		- '#no value type specified.#'
 		- '#only iterables are supported#'
-		- '#results in an error.#'
-		- '#should return#'
 		- '#will always evaluate to#'
 		- '#in isset\(\) does not exist.#'
-		- '#is unused.#'
 		- '#in empty\(\) is not falsy.#'
 		- '#always exists and is not falsy.#'
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
-		- "#on left side of ??#"
 		-
 			message: '#has an unused parameter#'
 			paths:
@@ -170,3 +165,129 @@ parameters:
 		-
 			message: '#is never read, only written#'
 			path: classes/helpers/FrmFieldGridHelper.php
+		-
+			message: '#is unused.#'
+			paths:
+				- classes/models/FrmField.php
+				- classes/controllers/FrmSimpleBlocksController.php
+				- classes/helpers/FrmFieldGridHelper.php
+				- square/controllers/FrmSquareLiteActionsController.php
+		-
+			message: '#on left side of \?\?#'
+			path: stripe/controllers/FrmTransLiteActionsController.php
+		-
+			message: '#fwrite expects resource, resource\|null given#'
+			path: classes/helpers/FrmCSVExportHelper.php
+		-
+			message: '#should return#'
+			paths:
+				- stubs.php
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAntiSpamController.php
+				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmDashboardController.php
+				- classes/controllers/FrmEmailStylesController.php
+				- classes/controllers/FrmEntriesController.php
+				- classes/controllers/FrmFieldsController.php
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmFormTemplatesController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/helpers/FrmEntriesHelper.php
+				- classes/helpers/FrmEntriesListHelper.php
+				- classes/helpers/FrmFieldsHelper.php
+				- classes/helpers/FrmFormMigratorsHelper.php
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmListHelper.php
+				- classes/helpers/FrmStylesHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmDb.php
+				- classes/models/FrmEntry.php
+				- classes/models/FrmEntryMeta.php
+				- classes/models/FrmField.php
+				- classes/models/FrmForm.php
+				- classes/models/FrmFormAction.php
+				- classes/models/FrmSettings.php
+				- classes/models/FrmStyle.php
+				- classes/models/fields/FrmFieldType.php
+				- stripe/controllers/FrmStrpLiteActionsController.php
+				- stripe/controllers/FrmTransLiteActionsController.php
+				- stripe/helpers/FrmStrpLiteConnectHelper.php
+				- stripe/helpers/FrmTransLiteAppHelper.php
+				- stripe/models/FrmStrpLiteAuth.php
+				- stripe/models/FrmTransLiteAction.php
+				- classes/controllers/FrmOnboardingWizardController.php
+				- classes/controllers/FrmTestModeController.php
+				- classes/controllers/FrmUsageController.php
+				- classes/controllers/FrmWelcomeTourController.php
+				- classes/controllers/FrmXMLController.php
+				- classes/factories/FrmCaptchaFactory.php
+				- classes/factories/FrmEntryFactory.php
+				- classes/factories/FrmFieldFactory.php
+				- classes/helpers/FrmEmailHelper.php
+				- classes/helpers/FrmEmailSummaryHelper.php
+				- classes/helpers/FrmOnSubmitHelper.php
+				- classes/helpers/FrmStylesCardHelper.php
+				- classes/helpers/FrmStylesPreviewHelper.php
+				- classes/helpers/FrmSubmitHelper.php
+				- classes/models/FrmAddon.php
+				- classes/models/FrmAntiSpam.php
+				- classes/models/FrmCreateFile.php
+				- classes/models/FrmEmailSummary.php
+				- classes/models/FrmEntryFormatter.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmEntryValues.php
+				- classes/models/FrmFieldValue.php
+				- classes/models/FrmFormApi.php
+				- classes/models/FrmFormMigrator.php
+				- classes/models/FrmFormState.php
+				- classes/models/FrmFormTemplateApi.php
+				- classes/models/FrmHoneypot.php
+				- classes/models/FrmInbox.php
+				- classes/models/FrmOnSubmitAction.php
+				- classes/models/FrmPluginSearch.php
+				- classes/models/FrmSpamCheckDenylist.php
+				- classes/models/FrmSpamCheckWPDisallowedWords.php
+				- classes/models/FrmUsage.php
+				- classes/models/fields/FrmFieldCaptcha.php
+				- classes/models/fields/FrmFieldCombo.php
+				- classes/models/fields/FrmFieldCreditCard.php
+				- classes/models/fields/FrmFieldHTML.php
+				- classes/models/fields/FrmFieldName.php
+				- classes/models/fields/FrmFieldNumber.php
+				- classes/models/fields/FrmFieldSubmit.php
+				- classes/models/fields/FrmFieldUserID.php
+				- classes/views/frm-form-actions/email_action.php
+				- classes/views/styles/components/FrmSliderStyleComponent.php
+				- classes/views/styles/components/FrmStyleComponent.php
+				- square/controllers/FrmSquareLiteActionsController.php
+				- square/helpers/FrmSquareLiteConnectHelper.php
+				- square/models/FrmSquareLiteSettings.php
+				- stripe/controllers/FrmStrpLiteEventsController.php
+				- stripe/controllers/FrmTransLitePaymentsController.php
+				- stripe/controllers/FrmTransLiteSubscriptionsController.php
+				- stripe/helpers/FrmStrpLiteAppHelper.php
+				- stripe/helpers/FrmStrpLiteConnectApiAdapter.php
+				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
+				- stripe/helpers/FrmTransLiteListHelper.php
+				- stripe/models/FrmStrpLiteSettings.php
+		-
+			message: '#results in an error.#'
+			paths:
+				- classes/controllers/FrmAddonsController.php
+				- classes/controllers/FrmAppController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/helpers/FrmFieldsHelper.php
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmFormsListHelper.php
+				- classes/helpers/FrmStylesHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmFieldFormHtml.php
+				- classes/models/FrmHoneypot.php
+				- classes/models/FrmReviews.php
+				- classes/models/fields/FrmFieldType.php
+				- stripe/controllers/FrmStrpLiteAppController.php
+				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php

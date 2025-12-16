@@ -24,6 +24,7 @@ $utm           = array(
 	'campaign' => 'dashboard-discount',
 	'content'  => 'dashboard-defy-limits-cta',
 );
+
 if ( $discount_link ) {
 	$discount_link = FrmAppHelper::maybe_add_missing_utm( $discount_link, $utm );
 } else {

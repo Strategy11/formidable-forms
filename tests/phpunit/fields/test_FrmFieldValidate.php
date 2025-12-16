@@ -16,6 +16,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	protected function create_validation_form() {
 		$this->form  = $this->factory->form->create_and_get();
 		$field_types = $this->get_all_fields();
+
 		foreach ( $field_types as $field_type ) {
 			$this->factory->field->create(
 				array(
@@ -48,6 +49,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
+
 			foreach ( $error_field_ids as $error_field ) {
 				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
 				$error_fields[] = $field ? $field->type : $error_field;
@@ -65,6 +67,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	 */
 	public function test_format_validation() {
 		$test_formats = $this->expected_format_errors();
+
 		foreach ( $test_formats as $test_format ) {
 			$field_key = $this->get_field_key( $test_format['type'] );
 			$field_id  = FrmField::get_id_by_key( $field_key );
@@ -138,6 +141,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
+
 			foreach ( $fields as $field ) {
 				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;
@@ -157,6 +161,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		if ( ! empty( $errors ) ) {
 			$error_field_ids = array_keys( $errors );
+
 			foreach ( $error_field_ids as $error_field ) {
 				$field          = FrmField::getOne( str_replace( 'field', '', $error_field ) );
 				$error_fields[] = $field ? $field->type : $error_field;
@@ -241,6 +246,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	protected function set_required_field( $field ) {
 		global $wpdb;
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', array( 'required' => 1 ), array( 'id' => $field->id ) );
+
 		if ( $query_results ) {
 			wp_cache_delete( $field->id, 'frm_field' );
 			FrmField::delete_form_transient( $this->form->id );

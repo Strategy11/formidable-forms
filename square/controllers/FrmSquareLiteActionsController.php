@@ -21,11 +21,13 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
+
 		if ( empty( $actions ) ) {
 			return $callback;
 		}
 
 		$field_id = is_object( $field ) ? $field->id : $field['id'];
+
 		foreach ( $actions as $action ) {
 			if ( (int) $action->post_content['credit_card'] === (int) $field_id ) {
 				return self::class . '::show_card';
@@ -75,9 +77,11 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function get_actions_before_submit( $form_id ) {
 		$payment_actions = self::get_actions_for_form( $form_id );
+
 		foreach ( $payment_actions as $k => $payment_action ) {
 			$gateway   = $payment_action->post_content['gateway'];
 			$is_square = $gateway === 'square' || ( is_array( $gateway ) && in_array( 'square', $gateway, true ) );
+
 			if ( ! $is_square || empty( $payment_action->post_content['amount'] ) ) {
 				unset( $payment_actions[ $k ] );
 			}
@@ -104,6 +108,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$atts     = compact( 'action', 'entry', 'form' );
 
 		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
+
 		if ( empty( $amount ) || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
@@ -257,6 +262,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$response = FrmSquareLiteConnectHelper::create_subscription( $info );
+
 		if ( false === $response ) {
 			return FrmSquareLiteConnectHelper::get_latest_error_from_square_api();
 		}
@@ -445,6 +451,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$form = FrmForm::getOne( $params['form_id'] );
+
 		if ( ! $form ) {
 			return;
 		}
@@ -455,18 +462,22 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				'type'       => 'credit_card',
 			)
 		);
+
 		if ( ! $credit_card_field ) {
 			return;
 		}
 
 		$payment_actions = self::get_actions_before_submit( $form->id );
+
 		if ( ! $payment_actions ) {
 			return;
 		}
 
 		$found_gateway = false;
+
 		foreach ( $payment_actions as $action ) {
 			$gateways = $action->post_content['gateway'];
+
 			if ( in_array( 'square', (array) $gateways, true ) ) {
 				$found_gateway = true;
 				break;
@@ -503,8 +514,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 
 		$action_settings = self::prepare_settings_for_js( $form_id );
 		$found_gateway   = false;
+
 		foreach ( $action_settings as $action ) {
 			$gateways = $action['gateways'];
+
 			if ( ! $gateways || in_array( 'square', (array) $gateways, true ) ) {
 				$found_gateway = true;
 				break;
@@ -554,6 +567,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	private static function get_app_id() {
 		$mode = FrmSquareLiteAppHelper::active_mode();
+
 		if ( 'live' === $mode ) {
 			return 'sq0idp-eR4XI1xgNduJAXcBvjemTg';
 		}
@@ -611,7 +625,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * Prepare the font family setting for the Stripe element.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $font
 	 *
@@ -663,12 +677,14 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		$style = FrmStylesController::get_form_style( $form_id );
+
 		if ( ! $style ) {
 			return array();
 		}
 
 		$settings   = FrmStylesHelper::get_settings_for_output( $style );
 		$disallowed = array( ';', ':', '!important' );
+
 		foreach ( $settings as $k => $s ) {
 			if ( is_string( $s ) ) {
 				$settings[ $k ] = str_replace( $disallowed, '', $s );
@@ -692,6 +708,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
 		$has_processed = ! empty( $_POST['square-token'] ) && ! empty( $_POST['square-verification-token'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
 		if ( ! $has_processed ) {
 			return $errors;
 		}
@@ -701,6 +718,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( isset( $errors[ 'field' . $field_id . '-cc' ] ) ) {
 			unset( $errors[ 'field' . $field_id . '-cc' ] );
 		}
+
 		if ( isset( $errors[ 'field' . $field_id ] ) ) {
 			unset( $errors[ 'field' . $field_id ] );
 		}

@@ -42,6 +42,7 @@ class FrmSquareLiteConnectHelper {
 			<?php
 
 			$modes = array( 'live', 'test' );
+
 			foreach ( $modes as $mode ) {
 				self::render_settings_for_mode( $mode );
 			}
@@ -78,6 +79,7 @@ class FrmSquareLiteConnectHelper {
 					$connected = (bool) self::get_merchant_id( $mode );
 
 					$tag_classes = '';
+
 					if ( $connected ) {
 						$tag_classes = 'frm-lt-green-tag';
 					} else {
@@ -199,6 +201,7 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		$body = self::pull_response_body( $response );
+
 		if ( empty( $body->success ) ) {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
@@ -241,6 +244,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();
+
 		if ( false === $password ) {
 			$password = 'lite_' . self::get_uuid();
 		}
@@ -278,6 +282,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
+
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
@@ -309,6 +314,7 @@ class FrmSquareLiteConnectHelper {
 	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$pro_license = FrmAddonsController::get_pro_license();
+
 			if ( $pro_license ) {
 				$password = $pro_license;
 			}
@@ -528,14 +534,17 @@ class FrmSquareLiteConnectHelper {
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
 		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
 		$response = self::post_to_connect_server( $action, $body );
+
 		if ( is_object( $response ) ) {
 			return $response;
 		}
+
 		if ( is_array( $response ) ) {
 			// reformat empty arrays as empty objects
 			// if the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
+
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_square_api = $response;
 			FrmTransLiteLog::log_message( 'Square API Error', $response );
@@ -567,6 +576,7 @@ class FrmSquareLiteConnectHelper {
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmSquareLiteAppHelper::active_mode();
 		}
+
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
 	}
@@ -605,18 +615,21 @@ class FrmSquareLiteConnectHelper {
 	public static function get_location_id( $force = false, $mode = 'auto' ) {
 		if ( ! $force ) {
 			$location_id = get_option( self::get_location_id_option_name( $mode ) );
+
 			if ( $location_id ) {
 				return $location_id;
 			}
 		}
 
 		$request_body = array();
+
 		if ( 'auto' !== $mode ) {
 			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
 			$request_body['frm_square_api_mode'] = $mode;
 		}
 
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
+
 		if ( is_object( $response ) ) {
 			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
 			return $response->id;
@@ -630,6 +643,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	public static function get_unprocessed_event_ids() {
 		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
@@ -643,6 +657,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	public static function get_event( $event_id ) {
 		$event = wp_cache_get( $event_id, 'frm_square' );
+
 		if ( is_object( $event ) ) {
 			return $event;
 		}
@@ -733,18 +748,21 @@ class FrmSquareLiteConnectHelper {
 	public static function get_merchant_currency( $force = false, $mode = 'auto' ) {
 		if ( ! $force ) {
 			$currency = get_option( self::get_merchant_currency_option_name( $mode ) );
+
 			if ( $currency ) {
 				return $currency;
 			}
 		}
 
 		$request_body = array();
+
 		if ( 'auto' !== $mode ) {
 			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
 			$request_body['frm_square_api_mode'] = $mode;
 		}
 
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
+
 		if ( is_object( $response ) && ! empty( $response->currency ) ) {
 			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
 			return $response->currency;
@@ -792,6 +810,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	public static function get_subscription( $subscription_id ) {
 		$response = self::post_with_authenticated_body( 'get_subscription', array( 'subscription_id' => $subscription_id ) );
+
 		if ( is_object( $response ) && is_object( $response->subscription ) ) {
 			return $response->subscription;
 		}

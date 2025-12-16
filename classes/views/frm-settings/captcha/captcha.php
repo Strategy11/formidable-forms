@@ -145,6 +145,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	$transient = get_transient( 'frm_recent_spam_detected' );
+
 	if ( ! empty( $transient ) ) {
 		?>
 		<div class="frm_note_style">

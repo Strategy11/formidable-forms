@@ -341,6 +341,7 @@ class FrmField {
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
+
 		if ( isset( $lite_fields['signature'] ) ) {
 			unset( $fields['signature'] );
 		}
@@ -508,6 +509,7 @@ class FrmField {
 				}
 
 				$safe_atts = array();
+
 				foreach ( $attr as $attr_key => $att ) {
 					if ( ! is_numeric( $attr_key ) ) {
 						// opt=1 without parentheses for example is mapped like 'opt' => 1.
@@ -516,9 +518,11 @@ class FrmField {
 					} else {
 						// Some data is mapped like 0 => 'placeholder="Placeholder"'.
 						$split = explode( '=', $att, 2 );
+
 						if ( 2 !== count( $split ) ) {
 							continue;
 						}
+
 						$key   = trim( $split[0] );
 						$value = trim( $split[1], '"' );
 					}
@@ -526,7 +530,7 @@ class FrmField {
 					if ( FrmAppHelper::input_key_is_safe( $key, 'update' ) ) {
 						$safe_atts[ $key ] = $value;
 					}
-				}
+				}//end foreach
 
 				if ( ! $safe_atts ) {
 					return '[input]';
@@ -550,6 +554,7 @@ class FrmField {
 	 */
 	public static function duplicate_single_field( $field_id, $form_id ) {
 		$copy_field = self::getOne( $field_id );
+
 		if ( ! $copy_field ) {
 			return false;
 		}
@@ -606,6 +611,7 @@ class FrmField {
 
 		foreach ( (array) $fields as $field ) {
 			$new_key = $copy_keys ? $field->field_key : '';
+
 			if ( $copy_keys && substr( $field->field_key, - 1 ) == 2 ) {
 				$new_key = rtrim( $new_key, 2 );
 			}
@@ -699,6 +705,7 @@ class FrmField {
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
+
 		if ( isset( $values['default_value'] ) && is_array( $values['default_value'] ) ) {
 			$values['default_value'] = json_encode( $values['default_value'] );
 		}
@@ -706,10 +713,12 @@ class FrmField {
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
 
 		$form_id = 0;
+
 		if ( isset( $values['form_id'] ) ) {
 			$form_id = absint( $values['form_id'] );
 		} else {
 			$field = self::getOne( $id );
+
 			if ( $field ) {
 				$form_id = $field->form_id;
 			}
@@ -719,6 +728,7 @@ class FrmField {
 
 		if ( $query_results ) {
 			wp_cache_delete( $id, 'frm_field' );
+
 			if ( $form_id ) {
 				self::delete_form_transient( $form_id );
 			}
@@ -754,6 +764,7 @@ class FrmField {
 
 		wp_cache_delete( $id, 'frm_field' );
 		$field = self::getOne( $id );
+
 		if ( ! $field ) {
 			return false;
 		}
@@ -783,6 +794,7 @@ class FrmField {
 		FrmDb::cache_delete_group( 'frm_field' );
 
 		$form = FrmForm::getOne( $form_id );
+
 		if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
@@ -863,6 +875,7 @@ class FrmField {
 	 */
 	public static function get_type( $id, $col = 'type' ) {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
+
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
@@ -871,6 +884,7 @@ class FrmField {
 			} else {
 				$where = array( 'field_key' => $id );
 			}
+
 			$type = FrmDb::get_var( 'frm_fields', $where, $col );
 		}
 
@@ -897,9 +911,11 @@ class FrmField {
 				'inc_repeat' => $inc_sub,
 			)
 		);
+
 		if ( ! empty( $results ) ) {
 			$fields = array();
 			$count  = 0;
+
 			foreach ( $results as $result ) {
 				if ( $type != $result->type ) {
 					continue;
@@ -907,6 +923,7 @@ class FrmField {
 
 				$fields[ $result->id ] = $result;
 				++$count;
+
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
@@ -950,6 +967,7 @@ class FrmField {
 		}
 
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
+
 		if ( ! empty( $results ) ) {
 			if ( empty( $limit ) ) {
 				return $results;
@@ -957,9 +975,11 @@ class FrmField {
 
 			$fields = array();
 			$count  = 0;
+
 			foreach ( $results as $result ) {
 				++$count;
 				$fields[ $result->id ] = $result;
+
 				if ( ! empty( $limit ) && $count >= $limit ) {
 					break;
 				}
@@ -1015,17 +1035,20 @@ class FrmField {
 	 */
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
+
 		if ( 'include' != $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
 		$form_fields         = $results;
 		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
+
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
 		}
 
 		$index_offset = 1;
+
 		foreach ( $form_fields as $k => $field ) {
 			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
 				continue;
@@ -1056,9 +1079,11 @@ class FrmField {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $blog_id = false ) {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
+
 		if ( self::$use_cache ) {
 			// make sure old cache doesn't get saved as a transient
 			$results = wp_cache_get( $cache_key, 'frm_field' );
+
 			if ( false !== $results ) {
 				return wp_unslash( $results );
 			}
@@ -1176,6 +1201,7 @@ class FrmField {
 
 		if ( $field_object->should_unserialize_value() ) {
 			FrmAppHelper::unserialize_or_decode( $results->default_value );
+
 			if ( $before === $results->default_value && is_string( $before ) && strpos( $before, '["' ) === 0 ) {
 				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 			}
@@ -1245,6 +1271,7 @@ class FrmField {
 		foreach ( $field_chunks as $field ) {
 			$name = $next ? $base_name . $next : $base_name;
 			$set  = set_transient( $name, $field, 60 * 60 * 6 );
+
 			if ( ! $set ) {
 				// the transient didn't save
 				if ( $name !== $base_name ) {

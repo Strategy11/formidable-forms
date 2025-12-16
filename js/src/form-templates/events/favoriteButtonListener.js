@@ -92,15 +92,15 @@ const onFavoriteButtonClick = event => {
 		++favoritesCount.total;
 		isTemplateCustom ? ++favoritesCount.custom : ++favoritesCount.default; // eslint-disable-line no-unused-expressions
 		// Set heart icon to filled
-		heartIcon.setAttribute( 'xlink:href', FILLED_HEART_ICON );
-		twinTemplateHeartIcon?.setAttribute( 'xlink:href', FILLED_HEART_ICON );
+		heartIcon.setAttribute( 'href', FILLED_HEART_ICON );
+		twinTemplateHeartIcon?.setAttribute( 'href', FILLED_HEART_ICON );
 	} else {
 		// Decrement favorite counts
 		--favoritesCount.total;
 		isTemplateCustom ? --favoritesCount.custom : --favoritesCount.default; // eslint-disable-line no-unused-expressions
 		// Set heart icon to outline
-		heartIcon.setAttribute( 'xlink:href', LINEAR_HEART_ICON );
-		twinTemplateHeartIcon?.setAttribute( 'xlink:href', LINEAR_HEART_ICON );
+		heartIcon.setAttribute( 'href', LINEAR_HEART_ICON );
+		twinTemplateHeartIcon?.setAttribute( 'href', LINEAR_HEART_ICON );
 	}
 
 	// Update UI and state to reflect new favorite counts

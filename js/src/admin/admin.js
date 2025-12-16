@@ -468,7 +468,7 @@ window.frmAdminBuildJS = function() {
 	/**
 	 * Load a tooltip for a single element.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param {HTMLElement} element
 	 * @param {boolean}     show
@@ -1406,13 +1406,13 @@ window.frmAdminBuildJS = function() {
 		let layoutOption, moveOption;
 
 		layoutOption = document.createElement( 'span' );
-		layoutOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_field_group_layout_icon"></use></svg>';
+		layoutOption.innerHTML = '<svg class="frmsvg"><use href="#frm_field_group_layout_icon"></use></svg>';
 		const layoutOptionLabel = __( 'Set Row Layout', 'formidable' );
 		addTooltip( layoutOption, layoutOptionLabel );
 		makeTabbable( layoutOption, layoutOptionLabel );
 
 		moveOption = document.createElement( 'span' );
-		moveOption.innerHTML = '<svg class="frmsvg"><use xlink:href="#frm_thick_move_icon"></use></svg>';
+		moveOption.innerHTML = '<svg class="frmsvg"><use href="#frm_thick_move_icon"></use></svg>';
 		moveOption.classList.add( 'frm-move' );
 		const moveOptionLabel = __( 'Move Field Group', 'formidable' );
 		addTooltip( moveOption, moveOptionLabel );
@@ -2148,6 +2148,13 @@ window.frmAdminBuildJS = function() {
 		html = JSON.parse( html );
 		for ( key in html ) {
 			jQuery( '#frm_field_id_' + key ).replaceWith( html[ key ] );
+
+			const newReplacedField = document.getElementById( 'frm_field_id_' + key );
+			if ( newReplacedField ) {
+				newReplacedField.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
+				newReplacedField.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
+			}
+
 			setupSortable( '#frm_field_id_' + key + '.edit_field_type_divider ul.frm_sorting' );
 			makeDraggable( document.getElementById( 'frm_field_id_' + key ) );
 		}
@@ -2698,7 +2705,7 @@ window.frmAdminBuildJS = function() {
 
 				span = document.createElement( 'span' );
 				span.textContent = option.label;
-				anchor.innerHTML = '<svg class="frmsvg"><use xlink:href="#' + option.icon + '"></use></svg>';
+				anchor.innerHTML = '<svg class="frmsvg"><use href="#' + option.icon + '"></use></svg>';
 				anchor.appendChild( document.createTextNode( ' ' ) );
 				anchor.appendChild( span );
 
@@ -3806,6 +3813,9 @@ window.frmAdminBuildJS = function() {
 
 	function addImageToOption( event ) {
 		const imagePreview = event.target.closest( '.frm_image_preview_wrapper' );
+		if ( ! wp?.media || imagePreview?.dataset.upgrade ) {
+			return;
+		}
 
 		event.preventDefault();
 
@@ -6352,7 +6362,7 @@ window.frmAdminBuildJS = function() {
 			opts = [],
 			imageUrl = '';
 
-		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ).filter( '[name*="[label]"]' );
+		const optVals = jQuery( 'input[name^="field_options[options_' + fieldId + ']"]' ).filter( '[name$="[label]"], [name*="[other_"]' );
 		const isProduct = isProductField( fieldId );
 		const showLabelWithImage = showingLabelWithImage( fieldId );
 		const hasImageOptions = imagesAsOptions( fieldId );
@@ -7378,7 +7388,7 @@ window.frmAdminBuildJS = function() {
 			parentClass = '';
 		}
 		maybeAddFieldSelection( parentClass );
-		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use xlink:href="#frm_more_horiz_solid_icon"/></svg>' );
+		jQuery( parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) input,' + parentClass + ' .frm_has_shortcodes:not(.frm-with-right-icon) textarea' ).wrap( '<span class="frm-with-right-icon"></span>' ).before( '<svg class="frmsvg frm-show-box"><use href="#frm_more_horiz_solid_icon"/></svg>' );
 	}
 
 	/**
@@ -8485,6 +8495,17 @@ window.frmAdminBuildJS = function() {
 		result.innerHTML = '[' + code + '[/if ' + field + ']';
 	}
 
+	/**
+	 * Gets data from href or xlink:href of the given element.
+	 *
+	 * @param {HTMLElement} element HTML element.
+	 *
+	 * @return {String}
+	 */
+	function getSVGHref( element ) {
+		return element.getAttribute( 'href' ) || element.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
+	}
+
 	function maybeShowModal( input ) {
 		let moreIcon;
 		if ( input.parentNode.parentNode.classList.contains( 'frm_has_shortcodes' ) ) {
@@ -8493,7 +8514,7 @@ window.frmAdminBuildJS = function() {
 			if ( moreIcon.tagName === 'use' ) {
 				moreIcon = moreIcon.firstElementChild;
 
-				if ( moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ).indexOf( 'frm_close_icon' ) === -1 ) {
+				if ( getSVGHref( moreIcon ).indexOf( 'frm_close_icon' ) === -1 ) {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
 			} else if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
@@ -8623,12 +8644,7 @@ window.frmAdminBuildJS = function() {
 			moreIcon = moreIcon.firstElementChild;
 		}
 		if ( moreIcon.tagName === 'use' ) {
-			classes = moreIcon.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' );
-
-			if ( null === classes ) {
-				// If the deprecated xlink:href is not defined, check for href.
-				classes = moreIcon.getAttribute( 'href' );
-			}
+			classes = getSVGHref( moreIcon );
 		}
 
 		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
@@ -8889,7 +8905,7 @@ window.frmAdminBuildJS = function() {
 
 		closeSvg = document.querySelectorAll( '.frm_has_shortcodes use' );
 		for ( u = 0; u < closeSvg.length; u++ ) {
-			if ( closeSvg[ u ].getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) === '#frm_close_icon' ) {
+			if ( getSVGHref( closeSvg[ u ] ) === '#frm_close_icon' ) {
 				if ( closeSvg[ u ].closest( '.frm_remove_field' ) ) {
 					// Don't change the icon for the email fields remove button.
 					continue;
@@ -9944,7 +9960,7 @@ window.frmAdminBuildJS = function() {
 			if ( ! useTag ) {
 				return;
 			}
-			useTagHref = useTag.getAttributeNS( 'http://www.w3.org/1999/xlink', 'href' ) || useTag.getAttribute( 'href' );
+			useTagHref = getSVGHref( useTag );
 
 			if ( useTagHref === '#frm_drag_icon' ) {
 				hasDragIcon = true;

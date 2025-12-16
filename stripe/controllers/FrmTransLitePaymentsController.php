@@ -57,6 +57,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$type   = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
 
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
+
 		if ( method_exists( $class_name, $action ) ) {
 			$class_name::$action();
 			return;
@@ -167,6 +168,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		}
 
 		$paysys = $payment->paysys;
+
 		if ( self::should_filter_refund_link( $paysys ) ) {
 			/**
 			 * Filter the refund link for a specific gateway.
@@ -201,6 +203,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
 		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'absint' );
+
 		if ( ! $payment_id ) {
 			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}

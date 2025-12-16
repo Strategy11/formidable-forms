@@ -172,6 +172,7 @@ class FrmFormAction {
 		}
 
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
+
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
@@ -208,6 +209,7 @@ class FrmFormAction {
 	 */
 	public function maybe_switch_field_ids( $action ) {
 		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
@@ -347,6 +349,7 @@ class FrmFormAction {
 		$actions       = $this->get_all( $old_id );
 
 		$this->form_id = $form_id;
+
 		foreach ( $actions as $action ) {
 			$this->duplicate_one( $action, $form_id );
 			unset( $action );
@@ -599,6 +602,7 @@ class FrmFormAction {
 	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
+
 		if ( empty( $action_controls ) ) {
 			// don't continue if there are no available actions
 			return array();
@@ -624,6 +628,7 @@ class FrmFormAction {
 		}
 
 		$settings = array();
+
 		foreach ( $actions as $action ) {
 			// some plugins/themes are formatting the post_excerpt
 			$action->post_excerpt = sanitize_title( $action->post_excerpt );
@@ -678,6 +683,7 @@ class FrmFormAction {
 				'limit' => $args,
 			);
 		}
+
 		$defaults = array(
 			'limit'       => 99,
 			'post_status' => $default_status,
@@ -754,6 +760,7 @@ class FrmFormAction {
 		}
 
 		$settings = array();
+
 		foreach ( $actions as $action ) {
 			if ( count( $settings ) >= $limit ) {
 				continue;
@@ -835,9 +842,11 @@ class FrmFormAction {
 		$this->form_id = $form_id;
 
 		$query = array( 'post_type' => FrmFormActionsController::$action_post_type );
+
 		if ( $form_id ) {
 			$query['menu_order'] = $form_id;
 		}
+
 		if ( 'all' != $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
@@ -962,36 +971,6 @@ class FrmFormAction {
 
 		$stop = false;
 		return $stop;
-	}
-
-	/**
-	 * Get the value from a specific field and entry
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param object $entry
-	 * @param int    $field_id
-	 *
-	 * @return array|bool|mixed|string
-	 */
-	private static function get_value_from_entry( $entry, $field_id ) {
-		$observed_value = '';
-
-		if ( isset( $entry->metas[ $field_id ] ) ) {
-			$observed_value = $entry->metas[ $field_id ];
-		} elseif ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
-			$field          = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value(
-				$entry,
-				$field,
-				array(
-					'links'    => false,
-					'truncate' => false,
-				)
-			);
-		}
-
-		return $observed_value;
 	}
 
 	/**

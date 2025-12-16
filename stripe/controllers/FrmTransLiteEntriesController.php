@@ -28,6 +28,7 @@ class FrmTransLiteEntriesController {
 	public static function show_sidebar_list( $entry ) {
 		$frm_payment = new FrmTransLitePayment();
 		$payments    = $frm_payment->get_all_for_entry( $entry->id );
+
 		if ( ! $payments ) {
 			return;
 		}

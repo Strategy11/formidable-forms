@@ -34,6 +34,7 @@ class FrmAntiSpamController {
 			}
 
 			$is_spam = call_user_func( array( self::class, $method ), $values );
+
 			if ( $is_spam ) {
 				return $is_spam;
 			}
