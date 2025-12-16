@@ -10,12 +10,14 @@ class FrmFieldPhone extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'phone';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -83,6 +85,7 @@ class FrmFieldPhone extends FrmFieldType {
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {

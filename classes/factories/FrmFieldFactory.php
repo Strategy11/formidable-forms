@@ -36,6 +36,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 *
 	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
@@ -73,6 +74,7 @@ class FrmFieldFactory {
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
+
 		if ( empty( $class ) ) {
 			$field = new FrmFieldDefault( $field, $field_type );
 		} else {
@@ -121,6 +123,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param string $type
+	 *
 	 * @return mixed
 	 */
 	public static function field_has_html( $type ) {
@@ -135,6 +138,8 @@ class FrmFieldFactory {
 	 *
 	 * @param string $type
 	 * @param string $property
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );

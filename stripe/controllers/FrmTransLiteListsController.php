@@ -22,6 +22,7 @@ class FrmTransLiteListsController {
 
 	/**
 	 * @param array $columns
+	 *
 	 * @return array
 	 */
 	public static function payment_columns( $columns = array() ) {
@@ -95,6 +96,7 @@ class FrmTransLiteListsController {
 		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
 		if ( $unread_count ) {
 			$menu_name .= '-' . $unread_count;
 		}
@@ -110,6 +112,7 @@ class FrmTransLiteListsController {
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
+	 *
 	 * @return void
 	 */
 	public static function route( $action ) {
@@ -121,6 +124,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function list_page_params() {
 		$values = array();
+
 		foreach ( array(
 			'id'     => '',
 			'paged'  => 1,
@@ -139,6 +143,7 @@ class FrmTransLiteListsController {
 	 * Display a list.
 	 *
 	 * @param array $response
+	 *
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
@@ -159,6 +164,7 @@ class FrmTransLiteListsController {
 		$wp_list_table->prepare_items();
 
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
+
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			// if the current page is higher than the total pages,
 			// reset it and prepare again to get the right entries.
@@ -175,6 +181,8 @@ class FrmTransLiteListsController {
 	 * @param mixed  $save
 	 * @param string $option
 	 * @param int    $value
+	 *
+	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {

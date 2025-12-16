@@ -45,6 +45,7 @@ class FrmHtmlHelper {
 	 * @param string $option   The string used as the option label.
 	 * @param bool   $selected True if the option should be selected.
 	 * @param array  $params   Other HTML params for the option.
+	 *
 	 * @return void
 	 */
 	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
@@ -92,6 +93,7 @@ class FrmHtmlHelper {
 			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')?$/';
 			preg_match( $pattern, $value, $matches );
 			$selected_unit = $matches[2] ?? '';
+
 			if ( ! empty( $matches[1] ) ) {
 				$value = $matches[1];
 			}
@@ -107,6 +109,7 @@ class FrmHtmlHelper {
 		);
 
 		$hidden_value = $args['value'];
+
 		if ( is_numeric( $hidden_value ) ) {
 			$hidden_value .= $args['default_unit'];
 		}

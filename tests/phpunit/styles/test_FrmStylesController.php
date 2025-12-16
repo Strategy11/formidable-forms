@@ -13,6 +13,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		// reset if the style was loaded in another test
 		global $frm_vars, $wp_styles;
 		$frm_vars['css_loaded'] = false;
+
 		if ( in_array( 'formidable', $wp_styles->done, true ) ) {
 			$k = array_search( 'formidable', $wp_styles->done );
 			unset( $wp_styles->done[ $k ] );

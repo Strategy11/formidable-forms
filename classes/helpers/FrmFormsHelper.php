@@ -16,11 +16,19 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.2.10
+	 *
+	 * @return string
 	 */
 	public static function form_error_class() {
 		return apply_filters( 'frm_form_error_class', 'frm_error_style' );
 	}
 
+	/**
+	 * @param string       $key
+	 * @param false|object $form
+	 *
+	 * @return string
+	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
 		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
@@ -28,6 +36,13 @@ class FrmFormsHelper {
 		return $target_url;
 	}
 
+	/**
+	 * @param string     $field_name
+	 * @param int|string $field_value
+	 * @param array      $args
+	 *
+	 * @return void
+	 */
 	public static function forms_dropdown( $field_name, $field_value = '', $args = array() ) {
 		$defaults = array(
 			'blank'        => true,
@@ -44,6 +59,7 @@ class FrmFormsHelper {
 		}
 
 		$query = array();
+
 		if ( $args['exclude'] ) {
 			$query['id !'] = $args['exclude'];
 		}
@@ -72,9 +88,12 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param string $class
 	 * @param string $param
 	 * @param array  $add_html
+	 *
+	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
 		if ( ! empty( $class ) ) {
@@ -84,6 +103,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param false|object|string $selected - The label for the placeholder, or the form object.
+	 *
+	 * @return void
 	 */
 	public static function form_switcher( $selected = false ) {
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
@@ -93,6 +114,7 @@ class FrmFormsHelper {
 			'id'   => 0,
 			'form' => 0,
 		);
+
 		if ( isset( $_GET['id'] ) && ! isset( $_GET['form'] ) ) {
 			unset( $args['form'] );
 		} elseif ( isset( $_GET['form'] ) && ! isset( $_GET['id'] ) ) {
@@ -100,6 +122,7 @@ class FrmFormsHelper {
 		}
 
 		$frm_action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $frm_action, array( 'edit', 'show', 'destroy', 'destroy_all' ), true ) ) {
 			$args['frm_action'] = 'list';
 			$args['form']       = 0;
@@ -111,16 +134,19 @@ class FrmFormsHelper {
 			$query_args = array(
 				'page' => 'formidable-styles',
 			);
+
 			if ( $frm_action ) {
 				$query_args['frm_action'] = $frm_action;
 			}
+
 			$base = add_query_arg( $query_args, admin_url( 'admin.php' ) );
 		} elseif ( isset( $_GET['post'] ) ) {
 			$args['form'] = 0;
 			$base         = admin_url( 'edit.php?post_type=frm_display' );
-		}
+		}//end if
 
 		$form_id = 0;
+
 		if ( is_object( $selected ) ) {
 			$form_id  = $selected->id;
 			$selected = $selected->name;
@@ -178,6 +204,7 @@ class FrmFormsHelper {
 					if ( isset( $args['id'] ) ) {
 						$args['id'] = $form->id;
 					}
+
 					if ( isset( $args['form'] ) ) {
 						$args['form'] = $form->id;
 					}
@@ -209,6 +236,13 @@ class FrmFormsHelper {
 		<?php
 	}
 
+	/**
+	 * @param string $col
+	 * @param string $sort_col
+	 * @param string $sort_dir
+	 *
+	 * @return void
+	 */
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
 		echo $sort_col == $col ? 'sorted' : 'sortable';
 		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
@@ -218,6 +252,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
@@ -234,6 +269,7 @@ class FrmFormsHelper {
 	 * @since 3.0
 	 *
 	 * @param array|string $field_type
+	 *
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
@@ -257,6 +293,7 @@ class FrmFormsHelper {
 	 */
 	public static function get_invalid_error_message( $args ) {
 		$settings_args = $args;
+
 		if ( isset( $args['form'] ) ) {
 			$settings_args['current_form'] = $args['form']->id;
 		}
@@ -275,6 +312,7 @@ class FrmFormsHelper {
 	 *     @type int      $entry_id
 	 *     @type string   $class
 	 * }
+	 *
 	 * @return string
 	 */
 	public static function get_success_message( $atts ) {
@@ -325,6 +363,7 @@ class FrmFormsHelper {
 			'name'        => '',
 			'description' => '',
 		);
+
 		foreach ( $defaults as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
@@ -341,6 +380,7 @@ class FrmFormsHelper {
 			'status'         => 'published',
 			'parent_form_id' => 0,
 		);
+
 		foreach ( $defaults as $var => $default ) {
 			if ( ! isset( $values[ $var ] ) ) {
 				$values[ $var ] = FrmAppHelper::get_param( $var, $default, 'get', 'sanitize_text_field' );
@@ -381,9 +421,17 @@ class FrmFormsHelper {
 		return apply_filters( 'frm_setup_edit_form_vars', $values );
 	}
 
+	/**
+	 * @param array        $values
+	 * @param false|object $record
+	 * @param array|false  $post_values
+	 *
+	 * @return array
+	 */
 	public static function fill_default_opts( $values, $record, $post_values ) {
 
 		$defaults = self::get_default_opts();
+
 		foreach ( $defaults as $var => $default ) {
 			if ( is_array( $default ) ) {
 				if ( ! isset( $values[ $var ] ) ) {
@@ -442,11 +490,15 @@ class FrmFormsHelper {
 
 	/**
 	 * @since 2.0.6
+	 *
 	 * @param array $options
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function fill_form_options( &$options, $values ) {
 		$defaults = self::get_default_opts();
+
 		foreach ( $defaults as $var => $default ) {
 			$options[ $var ] = $values['options'][ $var ] ?? $default;
 			unset( $var, $default );
@@ -455,6 +507,8 @@ class FrmFormsHelper {
 
 	/**
 	 * @param string $loc
+	 *
+	 * @return string
 	 */
 	public static function get_default_html( $loc ) {
 		if ( $loc === 'submit' ) {
@@ -481,6 +535,9 @@ BEFORE_HTML;
 		return $default_html;
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function get_draft_link() {
 		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 
@@ -498,8 +555,18 @@ BEFORE_HTML;
 		return '[if start_over]<a href="#" tabindex="0" class="frm_start_over" [start_over_hook]>[start_over_label]</a>[/if start_over]';
 	}
 
+	/**
+	 * @param string      $html
+	 * @param object      $form
+	 * @param string      $submit
+	 * @param object|null $form_action
+	 * @param array       $values
+	 *
+	 * @return void
+	 */
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
+
 		if ( ! strpos( $button, '[button_action]' ) ) {
 			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
@@ -509,15 +576,19 @@ BEFORE_HTML;
 		 * @since 5.0.06
 		 */
 		$button = apply_filters( 'frm_submit_button_html', $button, compact( 'form' ) );
+
 		if ( FrmAppHelper::should_never_allow_unfiltered_html() ) {
 			$button = FrmAppHelper::kses_submit_button( $button );
 		}
+
 		$button_parts = explode( '[button_action]', $button );
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
+
 		if ( ! empty( $classes ) ) {
 			$classes      = implode( ' ', $classes );
 			$button_class = 'frm_button_submit';
+
 			if ( preg_match( '/\bclass="[^"]*?\b' . preg_quote( $button_class, '/' ) . '\b[^"]*?"/', $button_parts[0] ) ) {
 				$button_parts[0] = str_replace( $button_class, $button_class . ' ' . esc_attr( $classes ), $button_parts[0] );
 			} else {
@@ -532,6 +603,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
+	 * @return array
 	 */
 	public static function html_shortcodes() {
 		$codes = array(
@@ -620,6 +693,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public static function insert_opt_html( $args ) {
@@ -634,6 +708,7 @@ BEFORE_HTML;
 		}
 
 		$possible_email_field = FrmFieldFactory::field_has_property( $args['type'], 'holds_email_values' );
+
 		if ( $possible_email_field ) {
 			$class .= ' show_frm_not_email_to';
 		}
@@ -643,6 +718,7 @@ BEFORE_HTML;
 		}
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
+
 		if ( isset( $field['icon'] ) ) {
 			$icon = FrmAppHelper::icon_by_class(
 				$field['icon'],
@@ -691,7 +767,10 @@ BEFORE_HTML;
 
 	/**
 	 * @since 4.0
+	 *
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public static function insert_code_html( $args ) {
 		$defaults = array(
@@ -725,6 +804,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array|string $field
+	 *
 	 * @return void
 	 */
 	public static function prepare_field_type( &$field ) {
@@ -744,6 +824,8 @@ BEFORE_HTML;
 	 * @param object $form
 	 * @param array  $fields
 	 * @param bool   $reset_fields
+	 *
+	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
 		if ( empty( $fields ) ) {
@@ -755,6 +837,7 @@ BEFORE_HTML;
 		$prev_order         = false;
 		$add_order          = 0;
 		$last_field         = false;
+
 		foreach ( $fields as $field ) {
 			if ( $prev_order === $field->field_order ) {
 				++$add_order;
@@ -806,6 +889,8 @@ BEFORE_HTML;
 	 * @param array  $end_section_values
 	 * @param object $field
 	 * @param string $move
+	 *
+	 * @return void
 	 */
 	public static function maybe_create_end_section( &$open, &$reset_fields, &$add_order, $end_section_values, $field, $move = 'no' ) {
 		if ( ! $open ) {
@@ -826,12 +911,22 @@ BEFORE_HTML;
 		$reset_fields = true;
 	}
 
+	/**
+	 * @param string $html
+	 * @param object $form
+	 * @param bool   $title
+	 * @param bool   $description
+	 * @param array  $values
+	 *
+	 * @return string
+	 */
 	public static function replace_shortcodes( $html, $form, $title = false, $description = false, $values = array() ) {
 		$codes = array(
 			'form_name'        => $title,
 			'form_description' => $description,
 			'entry_key'        => true,
 		);
+
 		foreach ( $codes as $code => $show ) {
 			if ( $code === 'form_name' ) {
 				$replace_with = $form->name;
@@ -880,6 +975,11 @@ BEFORE_HTML;
 		return $html;
 	}
 
+	/**
+	 * @param string $submit
+	 *
+	 * @return string
+	 */
 	public static function submit_button_label( $submit ) {
 		if ( ! $submit ) {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -899,6 +999,7 @@ BEFORE_HTML;
 	 */
 	public static function maybe_hide_inline() {
 		$frm_settings = FrmAppHelper::get_settings();
+
 		if ( $frm_settings->load_style === 'none' ) {
 			echo ' style="display:none;"';
 		} elseif ( $frm_settings->load_style === 'dynamic' ) {
@@ -953,6 +1054,7 @@ BEFORE_HTML;
 	 * @since 5.0.12
 	 *
 	 * @param array $form
+	 *
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
@@ -987,15 +1089,18 @@ BEFORE_HTML;
 		}
 
 		$fields = $form['fields'];
+
 		if ( count( $fields ) <= 0 ) {
 			return false;
 		}
 
 		// Start from the fields closest to the submit button.
 		$fields = array_reverse( $fields );
+
 		foreach ( $fields as $field ) {
 			$type      = $field['original_type'] ?? $field['type'];
 			$has_input = FrmFieldFactory::field_has_property( $type, 'has_input' );
+
 			if ( $has_input ) {
 				return self::field_has_top_label( $field, $form );
 			}
@@ -1020,10 +1125,12 @@ BEFORE_HTML;
 
 	/**
 	 * @param array|bool|int|object|string $form
+	 *
 	 * @return string
 	 */
 	public static function get_form_style( $form ) {
 		$style = 1;
+
 		if ( empty( $form ) || 'default' === $form ) {
 			return $style;
 		}
@@ -1050,7 +1157,10 @@ BEFORE_HTML;
 	 * Display the validation error messages when an entry is submitted
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors.
+	 *
+	 * @return void
 	 */
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
@@ -1077,13 +1187,17 @@ BEFORE_HTML;
 	 * If the message in the global settings is empty, show every validation message in the error box
 	 *
 	 * @since 2.0.6
+	 *
 	 * @param array $args Includes img, errors, and show_img.
+	 *
+	 * @return void
 	 */
 	public static function show_error( $args ) {
 		// remove any blank messages
 		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];
+
 		foreach ( $args['errors'] as $error_key => $error ) {
 			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
 				continue;
@@ -1104,13 +1218,24 @@ BEFORE_HTML;
 		}
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return void
+	 */
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4, array( 'form_id' => $id ) );
+
 		if ( $offset != - 1 ) {
 			self::get_scroll_js( $id );
 		}
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return void
+	 */
 	public static function get_scroll_js( $form_id ) {
 		echo '<script type="text/javascript">document.addEventListener(\'DOMContentLoaded\',function(){frmFrontForm.scrollMsg(' . (int) $form_id . ');})</script>';
 	}
@@ -1120,6 +1245,7 @@ BEFORE_HTML;
 	 *
 	 * @param int|object|string $form_id
 	 * @param mixed             $form
+	 *
 	 * @return array
 	 */
 	public static function get_action_links( $form_id, $form ) {
@@ -1129,6 +1255,7 @@ BEFORE_HTML;
 
 		$actions     = array();
 		$trash_links = self::delete_trash_links( $form_id );
+
 		if ( 'trash' == $form->status ) {
 			$actions['restore'] = $trash_links['restore'];
 
@@ -1137,6 +1264,7 @@ BEFORE_HTML;
 			}
 		} elseif ( current_user_can( 'frm_edit_forms' ) ) {
 			$duplicate_link = '?page=formidable&frm_action=duplicate&id=' . $form_id;
+
 			if ( $form->is_template ) {
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
@@ -1159,6 +1287,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link( $data ) {
@@ -1186,10 +1315,12 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return string
 	 */
 	public static function edit_form_link_label( $data ) {
 		$name = self::get_form_name_from_data( $data );
+
 		if ( ! $name ) {
 			return self::get_no_title_text();
 		}
@@ -1198,6 +1329,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param int|object|string $data
+	 *
 	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
@@ -1211,6 +1343,7 @@ BEFORE_HTML;
 
 	/**
 	 * @param mixed $data
+	 *
 	 * @return string
 	 */
 	private static function get_form_name_from_data( $data ) {
@@ -1227,6 +1360,7 @@ BEFORE_HTML;
 	 * @param int    $id
 	 * @param string $status
 	 * @param string $length
+	 *
 	 * @return string
 	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
@@ -1245,8 +1379,10 @@ BEFORE_HTML;
 	 */
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
+
 		if ( ! empty( $link_details ) ) {
 			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
+
 			if ( isset( $link_details['data'] ) ) {
 				foreach ( $link_details['data'] as $data => $value ) {
 					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
@@ -1256,6 +1392,7 @@ BEFORE_HTML;
 			}
 
 			$label = ( $link_details[ $length ] ?? $link_details['label'] );
+
 			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
 				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
@@ -1297,6 +1434,7 @@ BEFORE_HTML;
 	 * @since 3.0
 	 *
 	 * @param int $id
+	 *
 	 * @return array
 	 */
 	public static function delete_trash_links( $id ) {
@@ -1335,6 +1473,8 @@ BEFORE_HTML;
 
 	/**
 	 * @since 3.0
+	 *
+	 * @return array
 	 */
 	public static function css_classes() {
 		$classes = array(
@@ -1397,6 +1537,7 @@ BEFORE_HTML;
 	 */
 	public static function style_class_label( $style, $class ) {
 		$label = '';
+
 		if ( empty( $style ) ) {
 			$label = $class;
 		} elseif ( ! is_array( $style ) ) {
@@ -1435,6 +1576,7 @@ BEFORE_HTML;
 	 * @param array $categories The categories to render the icon for.
 	 * @param array $atts {
 	 *     Optional. An array of attributes for rendering.
+	 *
 	 *     @type string  $html 'span' or 'div'. Default 'span'.
 	 *     @type bool $bg   Whether to add a background color or not. Default false.
 	 * }
@@ -1486,6 +1628,7 @@ BEFORE_HTML;
 
 		// Determine the icon to be used.
 		$icon = $icons[''];
+
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = $icons[ $category ] ?? $icon;
@@ -1500,6 +1643,7 @@ BEFORE_HTML;
 
 		// Render the icon.
 		echo '<span class="frm-category-icon frm-icon-wrapper"';
+
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
@@ -1515,6 +1659,7 @@ BEFORE_HTML;
 	 *
 	 * @param array $template Template details.
 	 * @param array $args Additional arguments.
+	 *
 	 * @return array The link attributes.
 	 */
 	public static function get_template_install_link( $template, $args ) {
@@ -1548,6 +1693,7 @@ BEFORE_HTML;
 	 * @since 4.02.02
 	 *
 	 * @param array $args
+	 *
 	 * @return bool
 	 */
 	public static function plan_is_allowed( $args ) {
@@ -1568,6 +1714,7 @@ BEFORE_HTML;
 			if ( $included || $plan === $license_type ) {
 				break;
 			}
+
 			$included = $plan === $plan_required;
 		}
 
@@ -1582,6 +1729,7 @@ BEFORE_HTML;
 	 *
 	 * @param string $requires
 	 * @param string $link
+	 *
 	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
@@ -1603,6 +1751,7 @@ BEFORE_HTML;
 	 * @since 4.0
 	 *
 	 * @param array $item
+	 *
 	 * @return false|string
 	 */
 	public static function get_plan_required( &$item ) {
@@ -1629,7 +1778,9 @@ BEFORE_HTML;
 	 * Converts legacy package names to the current standard package name.
 	 *
 	 * @since 6.15
+	 *
 	 * @param string $package_name
+	 *
 	 * @return string The updated package name.
 	 */
 	public static function convert_legacy_package_names( $package_name ) {
@@ -1646,6 +1797,7 @@ BEFORE_HTML;
 	 * @since 6.15
 	 *
 	 * @param array $args
+	 *
 	 * @return array
 	 */
 	public static function get_license_types( $args = array() ) {
@@ -1726,6 +1878,7 @@ BEFORE_HTML;
 	 */
 	private static function get_unsafe_params( $url ) {
 		$redirect_components = parse_url( $url );
+
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
@@ -1832,6 +1985,7 @@ BEFORE_HTML;
 	 *
 	 * @param string $url
 	 * @param int    $form_id
+	 *
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
@@ -1841,6 +1995,7 @@ BEFORE_HTML;
 		}
 
 		$parsed = wp_parse_url( $url );
+
 		if ( empty( $parsed['query'] ) ) {
 			// Do nothing if no query can be detected in the url string.
 			return $url;
@@ -1850,6 +2005,7 @@ BEFORE_HTML;
 		$query          = $parsed['query'];
 
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+
 		if ( empty( $shortcodes[0] ) ) {
 			// No shortcodes found, do nothing.
 			return $url;
@@ -1869,9 +2025,11 @@ BEFORE_HTML;
 			}
 
 			$new_shortcode = '[' . $shortcodes[2][ $key ];
+
 			if ( $options ) {
 				$new_shortcode .= ' ' . $options;
 			}
+
 			$new_shortcode .= ' sanitize_url=1]';
 
 			$query = str_replace( $shortcode, $new_shortcode, $query );
@@ -1907,6 +2065,7 @@ BEFORE_HTML;
 	 * @since 6.16
 	 *
 	 * @param string $classname
+	 *
 	 * @return string
 	 */
 	public static function sanitize_layout_class( $classname ) {
@@ -1925,6 +2084,7 @@ BEFORE_HTML;
 	 * @since 6.20
 	 *
 	 * @param string $form_key
+	 *
 	 * @return bool
 	 */
 	public static function should_block_preview( $form_key ) {
@@ -1950,6 +2110,7 @@ BEFORE_HTML;
 	 */
 	public static function form_is_loaded_by_api() {
 		global $frm_vars;
+
 		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
 			return true;
 		}
@@ -1981,6 +2142,7 @@ BEFORE_HTML;
 	 */
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+
 		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
 			return true;
 		}
@@ -1990,6 +2152,7 @@ BEFORE_HTML;
 		}
 
 		global $pagenow;
+
 		if ( 'post.php' === $pagenow ) {
 			return true;
 		}
@@ -2008,6 +2171,7 @@ BEFORE_HTML;
 		}
 
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
+
 		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
 			// Prevent the honeypot from appearing for an API loaded form.
 			// This is to prevent conflicts where the script is not working.
@@ -2030,6 +2194,7 @@ BEFORE_HTML;
 	 * @deprecated 6.11
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function actions_dropdown( $atts ) {

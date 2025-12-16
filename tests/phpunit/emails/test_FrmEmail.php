@@ -24,17 +24,17 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @var stdClass
 	 */
-	protected $contact_form = null;
+	protected $contact_form;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $email_action = null;
+	protected $email_action;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
@@ -93,7 +93,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_message_body( $expected, $mock_email );
 		$this->check_content_type( $expected, $mock_email );
 	}
-
 
 	/**
 	 * Tests multiple to addresses, double quotes, user-defined subject
@@ -368,6 +367,7 @@ class test_FrmEmail extends FrmUnitTest {
 		// From
 		$this->email_action->post_content['from'] = '"Yahoo" test@yahoo.com';
 		$sitename                                 = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
+
 		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
 			$sitename = substr( $sitename, 4 );
 		}
@@ -649,6 +649,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			=>
 			'<html><head><style>label{font-size:14px;font-weight:bold;padding-bottom:5px;}</style></head><body><p>LINE 1<br />LINE 2</p></body></html>',
 		);
+
 		foreach ( $messages as $message => $expected ) {
 			$action->post_content['email_message'] = $message;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );

@@ -22,6 +22,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 */
 	protected $data;
 
+	/**
+	 * @param string $field_name
+	 * @param mixed  $field_value
+	 * @param array  $data
+	 */
 	public function __construct( $field_name, $field_value, $data ) {
 
 		$this->init_field_data( $data, $field_name, $field_value );
@@ -33,7 +38,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		$this->data['unit_measurement']    = $this->detect_unit_measurement();
 		$this->data['has-multiple-values'] = count( $this->get_values() ) > 1;
 		$this->data['units']               = $this->get_units_list( $data );
-		$this->data['value_label']         = empty( $this->detect_unit_measurement() ) ? $field_value : (float) $field_value; 
+		$this->data['value_label']         = empty( $this->detect_unit_measurement() ) ? $field_value : (float) $field_value;
 
 		$this->init_defaults();
 		$this->init_icon();
@@ -50,6 +55,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * Otherwise, it merges the units array from the provided data with the default units array and returns the result.
 	 *
 	 * @param array $data The data containing the units array.
+	 *
 	 * @return array The list of units for the slider style component.
 	 */
 	private function get_units_list( $data ) {
@@ -151,9 +157,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 		if ( preg_match( '/%$/', $value ) ) {
 			return '%';
 		}
+
 		if ( preg_match( '/em$/', $value ) ) {
 			return 'em';
 		}
+
 		if ( preg_match( '/px$/', $value ) ) {
 			return 'px';
 		}

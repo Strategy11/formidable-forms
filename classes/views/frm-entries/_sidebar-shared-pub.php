@@ -14,6 +14,7 @@ if ( ! isset( $entry ) ) {
 	<?php
 
 	$date_format = get_option( 'date_format' );
+
 	if ( $date_format ) {
 		// Use short months since the sidebar space is limited.
 		$date_format = str_replace( 'F', 'M', $date_format );

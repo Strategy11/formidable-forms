@@ -89,6 +89,8 @@ class FrmFormAction {
 	 *
 	 * @param WP_Post $instance Current settings.
 	 * @param array   $args
+	 *
+	 * @return string
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
@@ -110,6 +112,12 @@ class FrmFormAction {
 		return array();
 	}
 
+	/**
+	 * @param object $action
+	 * @param object $form
+	 *
+	 * @return object
+	 */
 	public function migrate_values( $action, $form ) {
 		return $action;
 	}
@@ -164,6 +172,7 @@ class FrmFormAction {
 		}
 
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
+
 		if ( $action_options['group'] === $id_base ) {
 			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
 			$action_options['classes'] = $group['icon'];
@@ -184,6 +193,8 @@ class FrmFormAction {
 	 * @param string $name
 	 * @param array  $action_options
 	 * @param array  $control_options
+	 *
+	 * @return void
 	 */
 	public function FrmFormAction( $id_base, $name, $action_options = array(), $control_options = array() ) {
 		self::__construct( $id_base, $name, $action_options, $control_options );
@@ -198,6 +209,7 @@ class FrmFormAction {
 	 */
 	public function maybe_switch_field_ids( $action ) {
 		$updated_action = apply_filters( 'frm_maybe_switch_field_ids', $action );
+
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
@@ -265,6 +277,7 @@ class FrmFormAction {
 
 	/**
 	 * @param int|string $number
+	 *
 	 * @return void
 	 */
 	public function _set( $number ) {
@@ -336,6 +349,7 @@ class FrmFormAction {
 		$actions       = $this->get_all( $old_id );
 
 		$this->form_id = $form_id;
+
 		foreach ( $actions as $action ) {
 			$this->duplicate_one( $action, $form_id );
 			unset( $action );
@@ -401,6 +415,13 @@ class FrmFormAction {
 		return $this->save_settings( $action );
 	}
 
+	/**
+	 * @param array        $action
+	 * @param array|string $subkey
+	 * @param mixed        $val
+	 *
+	 * @return array
+	 */
 	private function duplicate_array_walk( $action, $subkey, $val ) {
 		global $frm_duplicate_ids;
 
@@ -519,6 +540,7 @@ class FrmFormAction {
 	 *
 	 * @param array          $new_instance
 	 * @param array|stdClass $old_instance
+	 *
 	 * @return void
 	 */
 	protected function maybe_update_status( $new_instance, $old_instance ) {
@@ -537,6 +559,7 @@ class FrmFormAction {
 
 	/**
 	 * @param array $settings
+	 *
 	 * @return int|WP_Error
 	 */
 	public function save_settings( $settings ) {
@@ -561,12 +584,25 @@ class FrmFormAction {
 		return $action;
 	}
 
+	/**
+	 * @param int|string $form_id
+	 *
+	 * @return array
+	 */
 	public function get_one( $form_id ) {
 		return $this->get_all( $form_id, 1 );
 	}
 
+	/**
+	 * @param int|string $form_id
+	 * @param string     $type
+	 * @param array      $atts
+	 *
+	 * @return array
+	 */
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
+
 		if ( empty( $action_controls ) ) {
 			// don't continue if there are no available actions
 			return array();
@@ -592,6 +628,7 @@ class FrmFormAction {
 		}
 
 		$settings = array();
+
 		foreach ( $actions as $action ) {
 			// some plugins/themes are formatting the post_excerpt
 			$action->post_excerpt = sanitize_title( $action->post_excerpt );
@@ -646,6 +683,7 @@ class FrmFormAction {
 				'limit' => $args,
 			);
 		}
+
 		$defaults = array(
 			'limit'       => 99,
 			'post_status' => $default_status,
@@ -722,6 +760,7 @@ class FrmFormAction {
 		}
 
 		$settings = array();
+
 		foreach ( $actions as $action ) {
 			if ( count( $settings ) >= $limit ) {
 				continue;
@@ -763,6 +802,7 @@ class FrmFormAction {
 
 	/**
 	 * @param WP_Post $action
+	 *
 	 * @return WP_Post
 	 */
 	public function prepare_action( $action ) {
@@ -802,9 +842,11 @@ class FrmFormAction {
 		$this->form_id = $form_id;
 
 		$query = array( 'post_type' => FrmFormActionsController::$action_post_type );
+
 		if ( $form_id ) {
 			$query['menu_order'] = $form_id;
 		}
+
 		if ( 'all' != $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
@@ -828,6 +870,9 @@ class FrmFormAction {
 		FrmDb::cache_delete_group( 'frm_actions' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_settings() {
 		return self::get_action_for_form( $this->form_id, $this->id_base );
 	}
@@ -852,6 +897,9 @@ class FrmFormAction {
 		return $defaults;
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_global_switch_fields() {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
@@ -913,6 +961,7 @@ class FrmFormAction {
 	/**
 	 * @param WP_Post  $action
 	 * @param stdClass $entry
+	 *
 	 * @return bool
 	 */
 	public static function action_conditions_met( $action, $entry ) {
@@ -922,36 +971,6 @@ class FrmFormAction {
 
 		$stop = false;
 		return $stop;
-	}
-
-	/**
-	 * Get the value from a specific field and entry
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param object $entry
-	 * @param int    $field_id
-	 *
-	 * @return array|bool|mixed|string
-	 */
-	private static function get_value_from_entry( $entry, $field_id ) {
-		$observed_value = '';
-
-		if ( isset( $entry->metas[ $field_id ] ) ) {
-			$observed_value = $entry->metas[ $field_id ];
-		} elseif ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
-			$field          = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value(
-				$entry,
-				$field,
-				array(
-					'links'    => false,
-					'truncate' => false,
-				)
-			);
-		}
-
-		return $observed_value;
 	}
 
 	/**
@@ -967,6 +986,9 @@ class FrmFormAction {
 		);
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function trigger_labels() {
 		$triggers = array(
 			'draft'  => __( 'Draft is saved', 'formidable' ),
@@ -1005,6 +1027,7 @@ class FrmFormAction {
 	 * @since 6.10
 	 *
 	 * @param int $form_id Form ID.
+	 *
 	 * @return object[]
 	 */
 	protected function get_form_fields( $form_id ) {

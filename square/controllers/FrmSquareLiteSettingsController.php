@@ -11,11 +11,12 @@ class FrmSquareLiteSettingsController {
 	 * @since 6.22
 	 *
 	 * @param array $sections
+	 *
 	 * @return array
 	 */
 	public static function add_settings_section( $sections ) {
 		$sections['square'] = array(
-			'class'    => __CLASS__,
+			'class'    => self::class,
 			'function' => 'route',
 			'icon'     => 'frm_icon_font frm_square_icon',
 		);
@@ -36,20 +37,11 @@ class FrmSquareLiteSettingsController {
 	 * Print the Stripe section for Global settings.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function global_settings_form( $atts = array() ) {
 		include FrmSquareLiteAppHelper::plugin_path() . '/views/settings/form.php';
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function get_default_settings_atts() {
-		return array(
-			'errors'  => array(),
-			'message' => '',
-		);
 	}
 
 	/**

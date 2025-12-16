@@ -78,6 +78,7 @@ class FrmSalesApi extends FrmFormApi {
 		self::$sales = array();
 
 		$api = $this->get_api_info();
+
 		if ( empty( $api ) ) {
 			return;
 		}
@@ -100,6 +101,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $data
+	 *
 	 * @return void
 	 */
 	private function set_cross_sell( $data ) {
@@ -121,6 +123,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $data
+	 *
 	 * @return bool
 	 */
 	private function cross_sell_is_valid( $data ) {
@@ -142,6 +145,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.25.1
 	 *
 	 * @param array $cross_sell_text
+	 *
 	 * @return int
 	 */
 	private static function determine_cross_sell_index( $cross_sell_text ) {
@@ -164,6 +168,7 @@ class FrmSalesApi extends FrmFormApi {
 			}
 
 			$time_elapsed = time() - $cross_sell_settings[ $current_text ];
+
 			if ( $time_elapsed < DAY_IN_SECONDS * 30 ) {
 				return $index;
 			}
@@ -201,6 +206,7 @@ class FrmSalesApi extends FrmFormApi {
 
 	/**
 	 * @param array $sale
+	 *
 	 * @return array
 	 */
 	private function fill_sale( $sale ) {
@@ -245,6 +251,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param array $sale
+	 *
 	 * @return bool
 	 */
 	private function sale_is_active( $sale ) {
@@ -270,6 +277,7 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$best_sale = false;
+
 		foreach ( self::$sales as $sale ) {
 			if ( ! FrmApiHelper::is_for_user( $sale ) ) {
 				continue;
@@ -294,6 +302,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param string $key
+	 *
 	 * @return false|string False if no sale is active.
 	 */
 	public static function get_best_sale_value( $key ) {
@@ -310,6 +319,7 @@ class FrmSalesApi extends FrmFormApi {
 	 * @since 6.17
 	 *
 	 * @param array $sale
+	 *
 	 * @return bool True if the sale is a match for the applicable group (if one is defined).
 	 */
 	private function matches_ab_group( $sale ) {
@@ -329,6 +339,7 @@ class FrmSalesApi extends FrmFormApi {
 	 */
 	private function get_ab_group_for_current_site() {
 		$option = get_option( 'frm_sale_ab_group' );
+
 		if ( ! is_numeric( $option ) ) {
 			// Generate either 0 or 1.
 			$option = mt_rand( 0, 1 );
@@ -354,6 +365,7 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$sale = self::$instance->get_best_sale();
+
 		if ( ! $sale || ! is_array( $sale ) ) {
 			return false;
 		}
@@ -403,9 +415,11 @@ class FrmSalesApi extends FrmFormApi {
 			'href'  => '#',
 			'style' => '',
 		);
+
 		if ( false !== $banner_cta_text_color ) {
 			$cta_attrs['style'] .= 'color: ' . esc_attr( $banner_cta_text_color ) . ';';
 		}
+
 		if ( false !== $banner_cta_bg_color ) {
 			$cta_attrs['style'] .= 'background-color: ' . esc_attr( $banner_cta_bg_color ) . ';';
 		}
@@ -461,11 +475,13 @@ class FrmSalesApi extends FrmFormApi {
 		}
 
 		$sale = self::$instance->get_best_sale();
+
 		if ( ! $sale || ! is_array( $sale ) ) {
 			wp_send_json_error();
 		}
 
 		$dismissed_sales = get_user_option( 'frm_dismissed_sales', get_current_user_id() );
+
 		if ( ! is_array( $dismissed_sales ) ) {
 			$dismissed_sales = array();
 		}
@@ -478,6 +494,7 @@ class FrmSalesApi extends FrmFormApi {
 
 	/**
 	 * @param string $key
+	 *
 	 * @return bool
 	 */
 	private static function is_banner_dismissed( $key ) {
@@ -485,6 +502,9 @@ class FrmSalesApi extends FrmFormApi {
 		return is_array( $dismissed_sales ) && in_array( $key, $dismissed_sales, true );
 	}
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		if ( false === self::$sales ) {
 			new self();

@@ -790,7 +790,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$defaults     = $this->get_defaults();
 			$atts         = array_merge( $defaults, $atts );
 			$font_size    = $atts['font_size'];
-			$border_width = isset( $atts['border_width'] ) ? $atts['border_width'] : $atts['field_border_width'];
+			$border_width = $atts['border_width'] ?? $atts['field_border_width'];
 			$border_color = $atts['border_color'];
 
 			$header .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
@@ -826,9 +826,11 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function two_cell_table_row_for_value( $label, $field_value, $atts ) {
 		$html = '<tr' . $this->tr_style;
+
 		if ( $this->is_repeater_child ) {
 			$html .= ' class="frm-child-row"';
 		}
+
 		$html .= '>';
 
 		$label       = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
@@ -969,6 +971,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	/**
 	 * @param stdClass $entry
 	 * @param stdClass $field
+	 * @param array    $atts
 	 *
 	 * @return mixed|string
 	 */
@@ -977,7 +980,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( $field->field_key === 'free-html-field' ) {
 			$field_value = 'Lorem ipsum.';
 		} else {
-			$field_value = isset( $entry->metas[ $field->id ] ) ? $entry->metas[ $field->id ] : '';
+			$field_value = $entry->metas[ $field->id ] ?? '';
 
 			if ( is_array( $field_value ) ) {
 				$field_value = implode( ', ', $field_value );

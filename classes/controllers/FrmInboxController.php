@@ -15,6 +15,7 @@ class FrmInboxController {
 	 * @since 6.8.4 The $filtered parameter was added.
 	 *
 	 * @param bool $filtered Set this to false to avoid the frm_inbox_badge filter.
+	 *
 	 * @return string
 	 */
 	public static function get_notice_count( $filtered = true ) {
@@ -57,6 +58,7 @@ class FrmInboxController {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
+
 		if ( ! empty( $key ) ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
@@ -82,6 +84,7 @@ class FrmInboxController {
 	 */
 	private static function add_tracking_request() {
 		$settings = FrmAppHelper::get_settings();
+
 		if ( $settings->tracking ) {
 			return;
 		}

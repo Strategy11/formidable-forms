@@ -143,6 +143,8 @@ class FrmFormTemplatesController {
 	 * Initialize hooks for template page only.
 	 *
 	 * @since 6.7
+	 *
+	 * @return void
 	 */
 	public static function load_admin_hooks() {
 		self::init_template_resources();
@@ -341,6 +343,7 @@ class FrmFormTemplatesController {
 			self::$favorite_templates[ $key ][] = $template_id;
 		} elseif ( 'remove' === $operation ) {
 			$position = array_search( $template_id, self::$favorite_templates[ $key ], true );
+
 			if ( $position !== false ) {
 				unset( self::$favorite_templates[ $key ][ $position ] );
 			}
@@ -534,6 +537,7 @@ class FrmFormTemplatesController {
 		// Filter out certain and redundant categories.
 		// 'PayPal', 'Stripe', and 'Twilio' are included elsewhere and should be ignored in this context.
 		$redundant_cats = array_merge( array( 'PayPal', 'Stripe', 'Twilio' ), FrmFormsHelper::get_license_types() );
+
 		foreach ( $redundant_cats as $redundant_cat ) {
 			$category_slug = sanitize_title( $redundant_cat );
 			unset( self::$categories[ $category_slug ] );
@@ -553,6 +557,7 @@ class FrmFormTemplatesController {
 				'count' => count( self::$custom_templates ),
 			),
 		);
+
 		// Add the 'Available Templates' category for non-elite users.
 		if ( 'elite' !== FrmAddonsController::license_type() ) {
 			$special_categories['available-templates'] = array(
@@ -654,6 +659,7 @@ class FrmFormTemplatesController {
 	 *
 	 * @param array $nav_items Navigation items.
 	 * @param array $nav_args Additional navigation arguments.
+	 *
 	 * @return array Modified navigation items with 'new_template' query parameter.
 	 */
 	public static function append_new_template_to_nav( $nav_items, $nav_args ) {

@@ -10,6 +10,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'url';
@@ -49,6 +50,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	/**
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	protected function fill_default_atts( &$atts ) {
@@ -65,6 +67,7 @@ class FrmFieldUrl extends FrmFieldType {
 
 	public function validate( $args ) {
 		$value = $args['value'];
+
 		if ( trim( $value ) === 'http://' || empty( $value ) ) {
 			$value = '';
 		} else {
@@ -89,15 +92,18 @@ class FrmFieldUrl extends FrmFieldType {
 	protected function prepare_display_value( $value, $atts ) {
 		if ( $atts['html'] ) {
 			$images = '';
+
 			foreach ( (array) $value as $url ) {
 				$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
 				$is_image    = preg_match( $image_regex, $url );
+
 				if ( $is_image ) {
 					$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
 				} else {
 					$images .= strip_tags( $url );
 				}
 			}
+
 			$value = $images;
 		}
 
@@ -108,6 +114,7 @@ class FrmFieldUrl extends FrmFieldType {
 	 * @since 4.0.04
 	 *
 	 * @param array|string $value
+	 *
 	 * @return void
 	 */
 	public function sanitize_value( &$value ) {
