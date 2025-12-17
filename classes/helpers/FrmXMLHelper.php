@@ -222,11 +222,7 @@ class FrmXMLHelper {
 		if ( ! empty( $parent ) ) {
 			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
 
-			if ( $parent ) {
-				$parent = $parent['term_id'];
-			} else {
-				$parent = 0;
-			}
+			$parent = $parent ? $parent['term_id'] : 0;
 		}
 
 		return $parent;
@@ -1705,11 +1701,7 @@ class FrmXMLHelper {
 
 			$style_name = FrmDb::get_var( $table, $where, $select );
 
-			if ( $style_name ) {
-				$options['custom_style'] = $style_name;
-			} else {
-				$options['custom_style'] = 1;
-			}
+			$options['custom_style'] = $style_name ? $style_name : 1;
 		}
 		self::remove_default_form_options( $options );
 		$options = serialize( $options );
@@ -2261,11 +2253,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function format_email_to_data( &$atts, $notification ) {
-		if ( isset( $notification['email_to'] ) ) {
-			$atts['email_to'] = preg_split( '/ (,|;) /', $notification['email_to'] );
-		} else {
-			$atts['email_to'] = array();
-		}
+		$atts['email_to'] = isset( $notification['email_to'] ) ? preg_split( '/ (,|;) /', $notification['email_to'] ) : array();
 
 		if ( isset( $notification['also_email_to'] ) ) {
 			$email_fields     = (array) $notification['also_email_to'];

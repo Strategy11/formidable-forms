@@ -764,13 +764,7 @@ class FrmListHelper {
 	 * @return string
 	 */
 	private function add_page_link( $atts ) {
-		if ( $atts['disabled'] ) {
-			$link = $this->add_disabled_link( $atts['arrow'] );
-		} else {
-			$link = $this->add_active_link( $atts );
-		}
-
-		return $link;
+		return $atts['disabled'] ? $this->add_disabled_link( $atts['arrow'] ) : $this->add_active_link( $atts );
 	}
 
 	/**
@@ -966,17 +960,9 @@ class FrmListHelper {
 		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
 		$current_url = remove_query_arg( 'paged', $current_url );
 
-		if ( isset( $_GET['orderby'] ) ) {
-			$current_orderby = sanitize_text_field( wp_unslash( $_GET['orderby'] ) );
-		} else {
-			$current_orderby = '';
-		}
+		$current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : '';
 
-		if ( isset( $_GET['order'] ) && 'desc' == $_GET['order'] ) {
-			$current_order = 'desc';
-		} else {
-			$current_order = 'asc';
-		}
+		$current_order = isset( $_GET['order'] ) && 'desc' == $_GET['order'] ? 'desc' : 'asc';
 
 		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
 

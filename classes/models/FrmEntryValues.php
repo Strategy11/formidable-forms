@@ -178,14 +178,9 @@ class FrmEntryValues {
 	 * @return array
 	 */
 	private function prepare_array_property( $index, $atts ) {
-		if ( ! empty( $atts[ $index ] ) ) {
-
-			if ( is_array( $atts[ $index ] ) ) {
-				$property = $atts[ $index ];
-			} else {
-				$property = explode( ',', $atts[ $index ] );
-			}
-		} else {
+		if (! empty( $atts[ $index ] )) {
+      $property = is_array( $atts[ $index ] ) ? $atts[ $index ] : explode( ',', $atts[ $index ] );
+  } else {
 			$property = array();
 		}
 

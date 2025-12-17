@@ -264,11 +264,7 @@ class FrmTransLiteActionsController {
 
 		$entry = FrmEntry::getOne( $payment->item_id );
 
-		if ( isset( $atts['trigger'] ) ) {
-			$trigger_event = 'payment-' . $atts['trigger'];
-		} else {
-			$trigger_event = 'payment-' . $payment->status;
-		}
+		$trigger_event = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 
@@ -572,11 +568,7 @@ class FrmTransLiteActionsController {
 		if ( in_array( 'square', $settings['gateway'] ) ) {
 			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
 
-			if ( false !== $currency ) {
-				$settings['currency'] = strtolower( $currency );
-			} else {
-				$settings['currency'] = 'usd';
-			}
+			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
 		} else {
 			$settings['currency'] = strtolower( $settings['currency'] );
 		}

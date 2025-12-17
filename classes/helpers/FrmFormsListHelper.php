@@ -202,11 +202,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $statuses as $status => $name ) {
 
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : '';
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */

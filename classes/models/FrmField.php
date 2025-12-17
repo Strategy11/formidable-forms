@@ -410,13 +410,9 @@ class FrmField {
 		self::preserve_format_option_backslashes( $new_values );
 
 		foreach ( $new_values as $k => $v ) {
-			if ( is_array( $v ) ) {
-				if ( $k === 'default_value' ) {
-					$new_values[ $k ] = FrmAppHelper::maybe_json_encode( $v );
-				} else {
-					$new_values[ $k ] = serialize( $v );
-				}
-			}
+			if (is_array( $v )) {
+       $new_values[ $k ] = $k === 'default_value' ? FrmAppHelper::maybe_json_encode( $v ) : serialize( $v );
+   }
 			unset( $k, $v );
 		}
 
@@ -867,14 +863,9 @@ class FrmField {
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
-			if ( is_numeric( $id ) ) {
-				$where = array( 'id' => $id );
-			} else {
-				$where = array( 'field_key' => $id );
-			}
-
-			$type = FrmDb::get_var( 'frm_fields', $where, $col );
-		}
+      $where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
+      $type = FrmDb::get_var( 'frm_fields', $where, $col );
+  }
 
 		return $type;
 	}
@@ -1480,13 +1471,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
-		if ( is_array( $field ) ) {
-			$option = self::get_option_in_array( $field, $option );
-		} else {
-			$option = self::get_option_in_object( $field, $option );
-		}
-
-		return $option;
+		return is_array( $field ) ? self::get_option_in_array( $field, $option ) : self::get_option_in_object( $field, $option );
 	}
 
 	/**
@@ -1525,11 +1510,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
-		if ( is_array( $field ) ) {
-			$is_repeating_field = ( 'divider' === $field['type'] );
-		} else {
-			$is_repeating_field = ( 'divider' === $field->type );
-		}
+		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
 
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}

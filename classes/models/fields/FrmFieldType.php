@@ -259,13 +259,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function for_label_html() {
-		if ( $this->has_for_label ) {
-			$for = 'for="field_[key]"';
-		} else {
-			$for = '';
-		}
-
-		return $for;
+		return $this->has_for_label ? 'for="field_[key]"' : '';
 	}
 
 	/** Form builder **/
@@ -828,11 +822,7 @@ DEFAULT_HTML;
 
 		$is_empty = array_filter( $default_value );
 
-		if ( empty( $is_empty ) ) {
-			$default_value = '';
-		} else {
-			$default_value = implode( ',', $default_value );
-		}
+		$default_value = empty( $is_empty ) ? '' : implode( ',', $default_value );
 	}
 
 	/**
@@ -1565,11 +1555,7 @@ DEFAULT_HTML;
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 
-		if ( $aria_describedby_exists ) {
-			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
-		} else {
-			$describedby = array();
-		}
+		$describedby = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
 
 		$error_comes_first = true;
 
@@ -1939,11 +1925,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		if ( empty( $value ) ) {
-			$value = $defaults;
-		} else {
-			$value = array_merge( $defaults, (array) $value );
-		}
+		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
 	}
 
 	/**

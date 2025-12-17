@@ -58,11 +58,7 @@ class FrmFieldOption {
 	 * @return void
 	 */
 	private function set_option_label() {
-		if ( is_array( $this->option ) ) {
-			$this->option_label = ( $this->option['label'] ?? reset( $this->option ) );
-		} else {
-			$this->option_label = $this->option;
-		}
+		$this->option_label = is_array( $this->option ) ? $this->option['label'] ?? reset( $this->option ) : $this->option;
 	}
 
 	/**

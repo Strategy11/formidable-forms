@@ -231,11 +231,7 @@ class FrmStylesHelper {
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$rgb = self::get_rgb_array_from_rgb( $color );
-		} else {
-			$rgb = self::get_rgb_array_from_hex( $color );
-		}
+		$rgb = 0 === strpos( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
 		return implode( ',', $rgb );
 	}
 

@@ -805,11 +805,7 @@ class FrmAddonsController {
 			} else {
 				$slug = $id;
 
-				if ( isset( $addon['file'] ) ) {
-					$base_file = $addon['file'];
-				} else {
-					$base_file = 'formidable-' . $slug;
-				}
+				$base_file = $addon['file'] ?? 'formidable-' . $slug;
 
 				$file_name = $base_file . '/' . $base_file . '.php';
 

@@ -17,7 +17,6 @@ use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRe
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
-use Rector\DeadCode\Rector\Expression\RemoveDeadStmtRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
@@ -87,7 +86,6 @@ return RectorConfig::configure()
 			CountArrayToEmptyArrayComparisonRector::class,
 			DisallowedEmptyRuleFixerRector::class,
 			SimplifyIfReturnBoolRector::class,
-			SimplifyIfElseToTernaryRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
 			// This changes \t to an actual tab character. We don't want this rule.
 			JoinStringConcatRector::class,

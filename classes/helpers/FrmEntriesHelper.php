@@ -202,11 +202,7 @@ class FrmEntriesHelper {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 
-			if ( ! empty( $add_atts ) ) {
-				$this_atts = array_merge( $atts, $add_atts );
-			} else {
-				$this_atts = $atts;
-			}
+			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
 
 			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
 
@@ -688,15 +684,11 @@ class FrmEntriesHelper {
 		// see how many we have
 		$i = count( $matches['browser'] );
 
-		if ( $i > 1 ) {
-			// We will have two since we are not using 'other' argument yet
-			// see if version is before or after the name.
-			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
-				$version = $matches['version'][0];
-			} else {
-				$version = $matches['version'][1];
-			}
-		} elseif ( $i === 1 ) {
+		if ($i > 1) {
+      // We will have two since we are not using 'other' argument yet
+      // see if version is before or after the name.
+      $version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
+  } elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
 		} else {
 			$version = '';

@@ -107,13 +107,7 @@ class FrmReviews {
 			return;
 		}
 
-		if ( $entries <= 100 ) {
-			// round to the nearest 10
-			$entries = floor( $entries / 10 ) * 10;
-		} else {
-			// round to the nearest 50
-			$entries = floor( $entries / 50 ) * 50;
-		}
+		$entries = $entries <= 100 ? floor( $entries / 10 ) * 10 : floor( $entries / 50 ) * 50;
 
 		$name = $user->first_name;
 
