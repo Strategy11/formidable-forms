@@ -1,6 +1,13 @@
 /* exported frm_add_logic_row, frm_remove_tag, frm_show_div, frmCheckAll, frmCheckAllLevel */
 /* eslint-disable jsdoc/require-param, prefer-const, no-redeclare, @wordpress/no-unused-vars-before-return, jsdoc/check-types, jsdoc/check-tag-names, @wordpress/i18n-translator-comments, @wordpress/valid-sprintf, jsdoc/require-returns-description, jsdoc/require-param-type, no-unused-expressions, compat/compat */
 
+/**
+ * Internal dependencies
+ */
+const { validateField } = require( './settings/validateField' );
+const { validateNumberRangeSetting, validateStepSetting } = require( './settings/validateRangeSettings' );
+const utils = require( './settings/utils' );
+
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
 
@@ -8449,7 +8456,12 @@ window.frmAdminBuildJS = function() {
 	 * @return {void}
 	 */
 	function handleBuilderChangeEvent( event ) {
-		maybeShowSaveAndReloadModal( event.target );
+		const target = event.target;
+		maybeShowSaveAndReloadModal( target );
+		if ( ! frmGlobal.proIsConnected ) {
+			validateNumberRangeSetting( target );
+			validateStepSetting( target );
+		}
 	}
 
 	/**
@@ -11155,6 +11167,10 @@ window.frmAdminBuildJS = function() {
 				return wp.hooks.addAction( hookName, 'formidable', callback, priority );
 			}
 		},
+
+		validateField,
+		validateNumberRangeSetting,
+		validateStepSetting,
 
 		applyZebraStriping,
 		initModal,
