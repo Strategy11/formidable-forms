@@ -131,9 +131,8 @@ class FrmFormMigratorsHelper {
 			<p>Did you know you can import your forms created in <?php echo esc_html( $install['name'] ); ?>?</p>
 			<?php self::install_button( $install ); ?>
 		</div>
-		
-  return null;
 		<?php
+		return null;
 	}
 
 	/**
