@@ -132,6 +132,7 @@ class FrmFormMigratorsHelper {
 			<?php self::install_button( $install ); ?>
 		</div>
 		<?php
+		return null;
 	}
 
 	/**

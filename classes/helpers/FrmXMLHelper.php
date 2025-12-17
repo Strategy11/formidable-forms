@@ -2043,7 +2043,7 @@ class FrmXMLHelper {
 
 		// If there aren't IDs that were switched, end now
 		if ( ! $frm_duplicate_ids ) {
-			return;
+			return null;
 		}
 
 		// Get old IDs

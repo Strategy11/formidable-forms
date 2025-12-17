@@ -131,11 +131,11 @@ class FrmEntriesController {
 				do_action( 'frm_entry_action_route', $action );
 
 				if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
-					return;
+					return null;
 				}
 
 				self::display_list();
-				return;
+				return null;
 		}
 	}
 

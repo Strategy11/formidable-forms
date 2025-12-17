@@ -1401,9 +1401,10 @@ class FrmAppHelper {
 
 		if ( $echo ) {
 			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
-			return $icon;
+			return null;
 		}
+
+		return $icon;
 	}
 
 	/**
@@ -1544,11 +1545,13 @@ class FrmAppHelper {
 			$echo_function();
 		}
 
-		if ( ! $echo ) {
-			$return = ob_get_contents();
-			ob_end_clean();
-			return $return;
+		if ( $echo ) {
+			return null;
 		}
+
+		$return = ob_get_contents();
+		ob_end_clean();
+		return $return;
 	}
 
 	/**

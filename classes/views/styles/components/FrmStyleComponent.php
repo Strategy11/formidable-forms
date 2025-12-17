@@ -91,11 +91,11 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return stdClass|void
+	 * @return FrmStyleComponent|null
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {
-			return;
+			return null;
 		}
 
 		self::$instance = new FrmStyleComponent();

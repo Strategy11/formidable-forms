@@ -17,7 +17,6 @@ use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUselessParamTagRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
-use Rector\DeadCode\Rector\Stmt\RemoveUnreachableStatementRector;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedPrivateMethodRector;
@@ -79,7 +78,6 @@ return RectorConfig::configure()
 			ExplicitBoolCompareRector::class,
 			UnusedForeachValueToArrayKeysRector::class,
 			CombinedAssignRector::class,
-			ExplicitReturnNullRector::class,
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
 			CountArrayToEmptyArrayComparisonRector::class,
 			DisallowedEmptyRuleFixerRector::class,
@@ -91,7 +89,6 @@ return RectorConfig::configure()
 			RemoveUselessParamTagRector::class,
 			RemoveDeadReturnRector::class,
 			RemoveAlwaysTrueIfConditionRector::class,
-			RemoveUnreachableStatementRector::class,
 			// This changes if is_array() && empty() to if === [].
 			SimplifyEmptyArrayCheckRector::class,
 			LongArrayToShortArrayRector::class,
