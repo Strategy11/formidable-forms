@@ -18,7 +18,7 @@ import { getFieldId, getFieldType } from './utils';
  *
  * @return {Object} The defaults object with maxNum, minNum, and step.
  */
-function getRangeSettingsDefaults( singleSettings ) {
+export function getRangeSettingsDefaults( singleSettings ) {
 	const fieldType = getFieldType( singleSettings ) || 'number';
 	const defaultSettings = {
 		maxNum: 9999999,

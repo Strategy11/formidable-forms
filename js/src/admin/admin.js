@@ -5,8 +5,7 @@
  * Internal dependencies
  */
 const { validateField } = require( './settings/validateField' );
-const { validateNumberRangeSetting, validateStepSetting } = require( './settings/validateRangeSettings' );
-const utils = require( './settings/utils' );
+const { getRangeSettingsDefaults, validateNumberRangeSetting, validateStepSetting } = require( './settings/validateRangeSettings' );
 
 window.FrmFormsConnect = window.FrmFormsConnect || ( function( document, window, $ ) {
 	/*global jQuery:false, frm_admin_js, frmGlobal, ajaxurl */
@@ -11168,9 +11167,17 @@ window.frmAdminBuildJS = function() {
 			}
 		},
 
-		validateField,
-		validateNumberRangeSetting,
-		validateStepSetting,
+		/**
+		 * @since x.x
+		 */
+		settings: {
+			validate: {
+				validateField,
+				getRangeSettingsDefaults,
+				validateNumberRangeSetting,
+				validateStepSetting,
+			},
+		},
 
 		applyZebraStriping,
 		initModal,
