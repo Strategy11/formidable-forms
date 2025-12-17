@@ -962,7 +962,7 @@ class FrmListHelper {
 
 		$current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : '';
 
-		$current_order = isset( $_GET['order'] ) && 'desc' == $_GET['order'] ? 'desc' : 'asc';
+		$current_order = isset( $_GET['order'] ) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
 
