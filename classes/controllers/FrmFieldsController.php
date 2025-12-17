@@ -704,9 +704,7 @@ class FrmFieldsController {
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder = $field['placeholder'] ?? '';
-
-		return $placeholder;
+		return $field['placeholder'] ?? '';
 	}
 
 	/**

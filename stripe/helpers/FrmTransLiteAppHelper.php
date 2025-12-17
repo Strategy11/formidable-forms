@@ -154,8 +154,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = $settings[ $option ] ?? '';
-		return $value;
+		return $settings[ $option ] ?? '';
 	}
 
 	/**
@@ -208,9 +207,7 @@ class FrmTransLiteAppHelper {
 
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
-
-		$value = do_shortcode( $value );
-		return $value;
+		return do_shortcode( $value );
 	}
 
 	/**
@@ -522,8 +519,7 @@ class FrmTransLiteAppHelper {
 	 * @return array
 	 */
 	public static function get_gateways() {
-		$gateways = apply_filters( 'frm_payment_gateways', array() );
-		return $gateways;
+		return apply_filters( 'frm_payment_gateways', array() );
 	}
 
 	/**

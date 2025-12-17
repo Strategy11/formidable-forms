@@ -31,9 +31,8 @@ class FrmFormsHelper {
 	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
 
-		return $target_url;
+		return apply_filters( 'frm_direct_link', $target_url, $key, $form );
 	}
 
 	/**
@@ -256,13 +255,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
-		if ( is_array( $field_type ) ) {
-			$field_label = $field_type['name'];
-		} else {
-			$field_label = $field_type;
-		}
-
-		return $field_label;
+		return is_array( $field_type ) ? $field_type['name'] : $field_type;
 	}
 
 	/**
@@ -273,13 +266,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
-		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
-			$icon = $field_type['icon'];
-		} else {
-			$icon = 'frm_icon_font frm_pencil_icon';
-		}
-
-		return $icon;
+		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frm_icon_font frm_pencil_icon';
 	}
 
 	/**
@@ -338,8 +325,7 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
-		return $message;
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 	}
 
 	/**
@@ -539,9 +525,7 @@ BEFORE_HTML;
 	 * @return string
 	 */
 	public static function get_draft_link() {
-		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
-
-		return $link;
+		return '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 	}
 
 	/**
@@ -1043,9 +1027,7 @@ BEFORE_HTML;
 			$class .= ' frm_center_submit';
 		}
 
-		$class = apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
-
-		return $class;
+		return apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
 	}
 
 	/**
@@ -1148,9 +1130,7 @@ BEFORE_HTML;
 			$form = FrmForm::getOne( $form );
 		}
 
-		$style = $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
-
-		return $style;
+		return $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
 	}
 
 	/**
@@ -1298,8 +1278,7 @@ BEFORE_HTML;
 		}
 
 		$label = self::edit_form_link_label( $data );
-		$link  = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
-		return $link;
+		return '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
 	}
 
 	/**
@@ -1333,12 +1312,7 @@ BEFORE_HTML;
 	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
-		if ( is_object( $data ) ) {
-			$form_id = $data->id;
-		} else {
-			$form_id = $data;
-		}
-		return $form_id;
+		return is_object( $data ) ? $data->id : $data;
 	}
 
 	/**
@@ -1418,11 +1392,7 @@ BEFORE_HTML;
 		if ( 'trash' === $status ) {
 			$info = $labels['restore'];
 		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
-			if ( EMPTY_TRASH_DAYS ) {
-				$info = $labels['trash'];
-			} else {
-				$info = $labels['delete'];
-			}
+			$info = EMPTY_TRASH_DAYS ? $labels['trash'] : $labels['delete'];
 		} else {
 			$info = array();
 		}
@@ -1565,9 +1535,7 @@ BEFORE_HTML;
 			$status = 'publish';
 		}
 
-		$name = $nice_names[ $status ];
-
-		return $name;
+		return $nice_names[ $status ];
 	}
 
 	/**
@@ -1765,9 +1733,7 @@ BEFORE_HTML;
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				$category = self::convert_legacy_package_names( $category );
-
-				return $category;
+				return self::convert_legacy_package_names( $category );
 			}
 		}
 

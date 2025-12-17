@@ -215,7 +215,7 @@ abstract class FrmFieldType {
 		$for   = $this->for_label_html();
 		$label = $this->primary_label_element();
 
-		$default_html = <<<DEFAULT_HTML
+		return <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	<$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
 		<span class="frm_required" aria-hidden="true">[required_label]</span>
@@ -225,8 +225,6 @@ abstract class FrmFieldType {
 	[if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
-
-		return $default_html;
 	}
 
 	/**
@@ -261,13 +259,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function for_label_html() {
-		if ( $this->has_for_label ) {
-			$for = 'for="field_[key]"';
-		} else {
-			$for = '';
-		}
-
-		return $for;
+		return $this->has_for_label ? 'for="field_[key]"' : '';
 	}
 
 	/** Form builder **/
@@ -830,11 +822,7 @@ DEFAULT_HTML;
 
 		$is_empty = array_filter( $default_value );
 
-		if ( empty( $is_empty ) ) {
-			$default_value = '';
-		} else {
-			$default_value = implode( ',', $default_value );
-		}
+		$default_value = empty( $is_empty ) ? '' : implode( ',', $default_value );
 	}
 
 	/**
@@ -1462,9 +1450,7 @@ DEFAULT_HTML;
 			$input .= '</option>';
 		}
 
-		$input .= '</select>';
-
-		return $input;
+		return $input . '</select>';
 	}
 
 	/**
@@ -1569,11 +1555,7 @@ DEFAULT_HTML;
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 
-		if ( $aria_describedby_exists ) {
-			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
-		} else {
-			$describedby = array();
-		}
+		$describedby = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
 
 		$error_comes_first = true;
 
@@ -1678,9 +1660,7 @@ DEFAULT_HTML;
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
 		}
-
-		$already_validated_this_value = in_array( $value, $frm_validated_unique_values[ $field_id ], true );
-		return $already_validated_this_value;
+		return in_array( $value, $frm_validated_unique_values[ $field_id ], true );
 	}
 
 	/**
@@ -1945,11 +1925,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		if ( empty( $value ) ) {
-			$value = $defaults;
-		} else {
-			$value = array_merge( $defaults, (array) $value );
-		}
+		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
 	}
 
 	/**

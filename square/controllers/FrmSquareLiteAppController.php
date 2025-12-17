@@ -121,10 +121,9 @@ class FrmSquareLiteAppController {
 		}
 
 		// Update amount based on field shortcodes.
-		$entry  = self::generate_false_entry();
-		$amount = FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		$entry = self::generate_false_entry();
 
-		return $amount;
+		return FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 	}
 
 	/**

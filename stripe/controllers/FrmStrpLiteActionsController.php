@@ -327,9 +327,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
-		$settings                = self::create_plans( $settings );
 
-		return $settings;
+		return self::create_plans( $settings );
 	}
 
 	/**
@@ -364,8 +363,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function create_plan_id( $settings ) {
 		$amount = self::prepare_amount( $settings['amount'], $settings );
-		$id     = sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
-		return $id;
+		return sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
 	}
 
 	/**

@@ -805,11 +805,7 @@ class FrmAddonsController {
 			} else {
 				$slug = $id;
 
-				if ( isset( $addon['file'] ) ) {
-					$base_file = $addon['file'];
-				} else {
-					$base_file = 'formidable-' . $slug;
-				}
+				$base_file = $addon['file'] ?? 'formidable-' . $slug;
 
 				$file_name = $base_file . '/' . $base_file . '.php';
 
@@ -1251,12 +1247,10 @@ class FrmAddonsController {
 
 		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
 
-		$response = array(
+		return array(
 			'message'       => $message,
 			'saveAndReload' => $activating_page,
 		);
-
-		return $response;
 	}
 
 	/**

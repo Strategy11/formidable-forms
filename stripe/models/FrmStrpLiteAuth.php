@@ -63,8 +63,7 @@ class FrmStrpLiteAuth {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
-				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
-				return $message;
+				return $message . ( '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>' );
 			};
 			add_filter( 'frm_content', $filter );
 		}
@@ -738,13 +737,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		if ( $atts['conf_method'] === 'redirect' ) {
-			$redirect = self::get_redirect_url( $atts );
-		} else {
-			$redirect = self::get_message_url( $atts );
-		}
-
-		return $redirect;
+		return $atts['conf_method'] === 'redirect' ? self::get_redirect_url( $atts ) : self::get_message_url( $atts );
 	}
 
 	/**

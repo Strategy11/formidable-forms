@@ -202,11 +202,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $statuses as $status => $name ) {
 
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : '';
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
@@ -355,8 +351,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
-		$val = '<div>' . $val . '</div>';
-		return $val;
+		return '<div>' . $val . '</div>';
 	}
 
 	/**

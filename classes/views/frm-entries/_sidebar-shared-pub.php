@@ -15,13 +15,7 @@ if ( ! isset( $entry ) ) {
 
 	$date_format = get_option( 'date_format' );
 
-	if ( $date_format ) {
-		// Use short months since the sidebar space is limited.
-		$date_format = str_replace( 'F', 'M', $date_format );
-	} else {
-		// Fallback if there is no option in the database.
-		$date_format = __( 'M j, Y', 'formidable' );
-	}
+	$date_format = $date_format ? str_replace( 'F', 'M', $date_format ) : __( 'M j, Y', 'formidable' );
 
 	/**
 	 * @since 6.25
