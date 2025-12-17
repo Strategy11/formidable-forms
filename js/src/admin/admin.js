@@ -2196,7 +2196,10 @@ window.frmAdminBuildJS = function() {
 		}
 
 		if ( shouldStopInsertingField( fieldType ) ) {
-			return false;
+			// We do not want to return false here.
+			// Otherwise it causes issues with trying to add a new slider field
+			// when clicking the button.
+			return;
 		}
 
 		let hasBreak = 0;
