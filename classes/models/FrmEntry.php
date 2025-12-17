@@ -265,11 +265,7 @@ class FrmEntry {
 		}
 
 		// If repeating field entries are getting created, don't check for duplicates
-		if ( isset( $values['parent_form_id'] ) && $values['parent_form_id'] ) {
-			return false;
-		}
-
-		return true;
+		return empty( $values['parent_form_id'] );
 	}
 
 	/**

@@ -656,12 +656,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
-
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
 	/**
@@ -865,12 +860,7 @@ class FrmStrpLiteAuth {
 		if ( self::intent_has_failed_status( $intent ) ) {
 			return true;
 		}
-
 		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
-		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
-			return true;
-		}
-
-		return false;
+		return 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status;
 	}
 }

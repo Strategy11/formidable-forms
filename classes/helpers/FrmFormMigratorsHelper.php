@@ -15,12 +15,7 @@ class FrmFormMigratorsHelper {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
 		}
-
-		if ( ! empty( $dismissed ) && in_array( $form['class'], $dismissed ) ) {
-			return true;
-		}
-
-		return false;
+		return ! empty( $dismissed ) && in_array( $form['class'], $dismissed );
 	}
 
 	/**

@@ -4812,13 +4812,8 @@ class FrmAppHelper {
 
 		$path = $parsed['path'];
 		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-
-		if ( $expected_extension !== $ext ) {
-			// The URL isn't to an XML file.
-			return false;
-		}
-
-		return true;
+		// The URL isn't to an XML file.
+		return $expected_extension === $ext;
 	}
 
 	/**

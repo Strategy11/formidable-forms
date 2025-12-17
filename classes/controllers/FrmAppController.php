@@ -1443,12 +1443,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
-
-		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
-			return true;
-		}
-
-		return false;
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 
 	/**
