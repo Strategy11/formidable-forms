@@ -109,16 +109,10 @@ class FrmXMLController {
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
-			if ( isset( $imported['error'] ) ) {
-				$message = $imported['error'];
-			} else {
-				$message = __( 'There was an error importing form', 'formidable' );
-			}
-
+			$message  = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
 			$response = array(
 				'message' => $message,
 			);
-
 		}//end if
 
 		/**

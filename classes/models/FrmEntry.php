@@ -604,11 +604,7 @@ class FrmEntry {
 			return true;
 		}
 
-		if ( is_numeric( $id ) ) {
-			$where = array( 'id' => $id );
-		} else {
-			$where = array( 'item_key' => $id );
-		}
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'item_key' => $id );
 
 		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
@@ -960,13 +956,7 @@ class FrmEntry {
 	 * @return string
 	 */
 	private static function get_updated_at( $values ) {
-		if ( isset( $values['updated_at'] ) ) {
-			$updated_at = $values['updated_at'];
-		} else {
-			$updated_at = self::get_created_at( $values );
-		}
-
-		return $updated_at;
+		return $values['updated_at'] ?? self::get_created_at( $values );
 	}
 
 	/**
@@ -1027,13 +1017,7 @@ class FrmEntry {
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
 
-		if ( ! $query_results ) {
-			$entry_id = false;
-		} else {
-			$entry_id = $wpdb->insert_id;
-		}
-
-		return $entry_id;
+		return ! $query_results ? false : $wpdb->insert_id;
 	}
 
 	/**

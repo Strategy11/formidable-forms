@@ -149,12 +149,7 @@ class FrmEntryValidate {
 		);
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( empty( $args['parent_field_id'] ) ) {
-			$value = $values['item_meta'][ $args['id'] ] ?? '';
-		} else {
-			// value is from a nested form
-			$value = $values;
-		}
+		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );

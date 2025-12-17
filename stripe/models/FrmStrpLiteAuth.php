@@ -737,13 +737,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		if ( $atts['conf_method'] === 'redirect' ) {
-			$redirect = self::get_redirect_url( $atts );
-		} else {
-			$redirect = self::get_message_url( $atts );
-		}
-
-		return $redirect;
+		return $atts['conf_method'] === 'redirect' ? self::get_redirect_url( $atts ) : self::get_message_url( $atts );
 	}
 
 	/**

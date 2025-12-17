@@ -672,13 +672,7 @@ class FrmEmail {
 	private function explode_emails( $emails ) {
 		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
 
-		if ( is_array( $emails ) ) {
-			$emails = array_map( 'trim', $emails );
-		} else {
-			$emails = trim( $emails );
-		}
-
-		return $emails;
+		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
 	/**

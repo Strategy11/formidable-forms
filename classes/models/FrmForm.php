@@ -365,11 +365,7 @@ class FrmForm {
 		unset( $all_fields );
 
 		foreach ( $values['item_meta'] as $field_id => $default_value ) {
-			if ( isset( $field_array[ $field_id ] ) ) {
-				$field = $field_array[ $field_id ];
-			} else {
-				$field = FrmField::getOne( $field_id );
-			}
+			$field = $field_array[ $field_id ] ?? FrmField::getOne( $field_id );
 
 			if ( ! $field ) {
 				continue;
@@ -481,11 +477,7 @@ class FrmForm {
 			return;
 		}
 
-		if ( $opt === 'calc' ) {
-			$value = self::sanitize_calc( $value );
-		} else {
-			$value = FrmAppHelper::kses( $value, 'all' );
-		}
+		$value = $opt === 'calc' ? self::sanitize_calc( $value ) : FrmAppHelper::kses( $value, 'all' );
 
 		$value = trim( $value );
 	}
@@ -882,11 +874,7 @@ class FrmForm {
 			}
 		}
 
-		if ( is_numeric( $id ) ) {
-			$where = array( 'id' => $id );
-		} else {
-			$where = array( 'form_key' => $id );
-		}
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
 
 		$results = FrmDb::get_row( $table_name, $where );
 
@@ -1190,11 +1178,7 @@ class FrmForm {
 	 * @return int|string
 	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
-		if ( 'first' === $default_form ) {
-			$form = self::get_current_form();
-		} else {
-			$form = self::maybe_get_current_form();
-		}
+		$form = 'first' === $default_form ? self::get_current_form() : self::maybe_get_current_form();
 
 		return $form ? $form->id : 0;
 	}

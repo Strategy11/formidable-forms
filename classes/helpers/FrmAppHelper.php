@@ -130,11 +130,7 @@ class FrmAppHelper {
 			$page = 'https://formidableforms.com/lite-upgrade/';
 		}
 
-		if ( is_array( $args ) ) {
-			$args = self::adjust_legacy_utm_args( $args );
-		} else {
-			$args = array( 'campaign' => $args );
-		}
+		$args = is_array( $args ) ? self::adjust_legacy_utm_args( $args ) : array( 'campaign' => $args );
 
 		$query_args = array(
 			'utm_source' => 'plugin',
@@ -178,11 +174,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	private static function maybe_add_utm_license( $query_args, $link = '' ) {
-		if ( isset( $query_args['utm_medium'] ) ) {
-			$medium = $query_args['utm_medium'];
-		} else {
-			$medium = self::pull_medium_from_link( $link );
-		}
+		$medium = $query_args['utm_medium'] ?? self::pull_medium_from_link( $link );
 
 		if ( 'pro' === $medium && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
@@ -1631,11 +1623,7 @@ class FrmAppHelper {
 					'content'  => 'lite-banner',
 				);
 
-				if ( $upgrade_link ) {
-					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
-				} else {
-					$upgrade_link = self::admin_upgrade_link( $utm );
-				}
+				$upgrade_link = $upgrade_link ? self::maybe_add_missing_utm( $upgrade_link, $utm ) : self::admin_upgrade_link( $utm );
 
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
@@ -2470,11 +2458,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 
-			if ( count( $value ) ) {
-				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
-			} else {
-				$function = array( $function );
-			}
+			$function = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
 			if ( ! self::is_assoc( $value ) ) {
 				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
@@ -2673,11 +2657,7 @@ class FrmAppHelper {
 		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
-			if ( is_email( $user_id ) ) {
-				$user = get_user_by( 'email', $user_id );
-			} else {
-				$user = get_user_by( 'login', $user_id );
-			}
+			$user = is_email( $user_id ) ? get_user_by( 'email', $user_id ) : get_user_by( 'login', $user_id );
 
 			if ( $user ) {
 				$user_id = $user->ID;
@@ -3257,11 +3237,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) && 0 !== $to ) {
-			$now = new DateTime();
-		} else {
-			$now = new DateTime( '@' . $to );
-		}
+		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 
 		$ago = new DateTime( '@' . $from );
 
@@ -3671,11 +3647,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( is_serialized( $value ) ) {
-			$value = self::maybe_unserialize_array( $value );
-		} else {
-			$value = self::maybe_json_decode( $value, false );
-		}
+		$value = is_serialized( $value ) ? self::maybe_unserialize_array( $value ) : self::maybe_json_decode( $value, false );
 	}
 
 	/**

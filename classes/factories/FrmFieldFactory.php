@@ -75,13 +75,7 @@ class FrmFieldFactory {
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
 
-		if ( empty( $class ) ) {
-			$field = new FrmFieldDefault( $field, $field_type );
-		} else {
-			$field = new $class( $field, $field_type );
-		}
-
-		return $field;
+		return empty( $class ) ? new FrmFieldDefault( $field, $field_type ) : new $class( $field, $field_type );
 	}
 
 	/**

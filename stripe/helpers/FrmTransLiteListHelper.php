@@ -137,11 +137,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-			if ( $status === $type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status === $type ? ' class="current"' : '';
 
 			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'

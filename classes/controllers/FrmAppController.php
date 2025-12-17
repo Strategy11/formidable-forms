@@ -611,11 +611,7 @@ class FrmAppController {
 				'content'  => 'submenu-upgrade',
 			);
 
-			if ( $redirect ) {
-				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
-			} else {
-				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
-			}
+			$redirect = $redirect ? FrmAppHelper::maybe_add_missing_utm( $redirect, $utm ) : FrmAppHelper::admin_upgrade_link( $utm );
 
 			wp_redirect( $redirect );
 			die();

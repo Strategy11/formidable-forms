@@ -142,12 +142,7 @@ class FrmEntryFormatter {
 	 */
 	protected function init_entry( $atts ) {
 		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
-
-			if ( isset( $atts['entry']->metas ) ) {
-				$this->entry = $atts['entry'];
-			} else {
-				$this->entry = FrmEntry::getOne( $atts['entry']->id, true );
-			}
+			$this->entry = isset( $atts['entry']->metas ) ? $atts['entry'] : FrmEntry::getOne( $atts['entry']->id, true );
 		} elseif ( ! empty( $atts['id'] ) ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}
@@ -205,11 +200,7 @@ class FrmEntryFormatter {
 		} elseif ( $atts['format'] === 'json' ) {
 			$this->format = 'json';
 		} elseif ( $atts['format'] === 'text' ) {
-			if ( $this->is_plain_text === true ) {
-				$this->format = 'plain_text_block';
-			} else {
-				$this->format = 'table';
-			}
+			$this->format = $this->is_plain_text === true ? 'plain_text_block' : 'table';
 		}
 
 		/**

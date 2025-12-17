@@ -499,11 +499,7 @@ class FrmFieldsHelper {
 
 		// Use the "This value"/"This field" placeholder strings if field name is empty.
 		if ( ! $field_name ) {
-			if ( 'unique_msg' === $error ) {
-				$field_name = __( 'This value', 'formidable' );
-			} else {
-				$field_name = __( 'This field', 'formidable' );
-			}
+			$field_name = 'unique_msg' === $error ? __( 'This value', 'formidable' ) : __( 'This field', 'formidable' );
 		}
 		return str_replace( $substrings, $field_name, $msg );
 	}
@@ -907,11 +903,7 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
 
-			if ( $cond === 'not LIKE' ) {
-				$m = $m === false;
-			} else {
-				$m = $m !== false;
-			}
+			$m = $cond === 'not LIKE' ? $m === false : $m !== false;
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
 			$length = strlen( $hide_opt );
@@ -2620,11 +2612,7 @@ class FrmFieldsHelper {
 
 		$upgrading = FrmAddonsController::install_link( $option['addon'] );
 
-		if ( isset( $upgrading['url'] ) ) {
-			$install_data = wp_json_encode( $upgrading );
-		} else {
-			$install_data = '';
-		}
+		$install_data = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
 
 		$custom_attrs['data-oneclick'] = $install_data;
 		$custom_attrs['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
