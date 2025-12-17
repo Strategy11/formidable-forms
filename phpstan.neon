@@ -15,12 +15,6 @@ parameters:
 		- */fonts/*
 		- */rector.php
 		- */phpcs-sniffs/*
-	strictRules:
-		disallowedLooseComparison: false
-		booleansInConditions: false
-		requireParentConstructorCall: false
-		strictCalls: false
-		noVariableVariables: false
 	ignoreErrors:
 		- '#Access to an undefined property#'
 		- '#Cannot access (offset|property)+#'
