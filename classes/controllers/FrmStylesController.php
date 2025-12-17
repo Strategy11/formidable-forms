@@ -474,7 +474,7 @@ class FrmStylesController {
 	 * @return WP_Post
 	 */
 	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
+		$frm_style = new FrmStyle( 'default' );
 		return $frm_style->get_one();
 	}
 
