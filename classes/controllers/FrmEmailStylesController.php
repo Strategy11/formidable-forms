@@ -213,7 +213,7 @@ class FrmEmailStylesController {
 					</style>';
 		}
 
-		return $wrapped_content . ('</head><body>' . $content . '</body></html>');
+		return $wrapped_content . ( '</head><body>' . $content . '</body></html>' );
 	}
 
 	/**

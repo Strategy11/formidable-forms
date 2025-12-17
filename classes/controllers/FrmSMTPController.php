@@ -168,7 +168,7 @@ class FrmSMTPController {
 			<h1><?php esc_html_e( 'Making Email Deliverability Easy for WordPress', 'formidable' ); ?></h1>
 			<p><?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications.', 'formidable' ); ?></p>
 		</section>
-<?php
+		<?php
 	}
 
 	/**

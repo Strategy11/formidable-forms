@@ -63,7 +63,7 @@ class FrmStrpLiteAuth {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
-				return $message . ('<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>');
+				return $message . ( '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>' );
 			};
 			add_filter( 'frm_content', $filter );
 		}

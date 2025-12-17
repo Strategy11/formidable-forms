@@ -433,9 +433,9 @@ class FrmStylesHelper {
 
 		self::fill_hex( $color );
 
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
+		$c_r = hexdec( substr( $color, 0, 2 ) );
+		$c_g = hexdec( substr( $color, 2, 2 ) );
+		$c_b = hexdec( substr( $color, 4, 2 ) );
 
 		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
 	}
@@ -1096,7 +1096,7 @@ class FrmStylesHelper {
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
 
-		return $classname . (FrmAppHelper::pro_is_installed() ? ' frm-pro' : '');
+		return $classname . ( FrmAppHelper::pro_is_installed() ? ' frm-pro' : '' );
 	}
 
 	/**

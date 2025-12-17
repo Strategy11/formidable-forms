@@ -175,7 +175,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return string
 	 */
 	public function add_token_to_form( $attributes ) {
-		return $attributes . (' data-token="' . esc_attr( $this->get() ) . '"');
+		return $attributes . ( ' data-token="' . esc_attr( $this->get() ) . '"' );
 	}
 
 	/**

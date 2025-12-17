@@ -258,7 +258,7 @@ class FrmFormAction {
 		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
 
-		return $name . ('[' . $field_name . ']');
+		return $name . ( '[' . $field_name . ']' );
 	}
 
 	/**

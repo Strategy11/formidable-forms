@@ -82,7 +82,7 @@ class FrmFormsHelper {
 				</option>
 			<?php } ?>
 		</select>
-<?php
+		<?php
 	}
 
 	/**
@@ -232,7 +232,7 @@ class FrmFormsHelper {
 				?>
 			</ul>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
