@@ -91,7 +91,7 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return \stdClass|null
+	 * @return FrmStyleComponent|null
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {

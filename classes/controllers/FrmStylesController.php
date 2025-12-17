@@ -1285,6 +1285,7 @@ class FrmStylesController {
 		if ( $style && isset( $style->post_content[ $val ] ) ) {
 			return $style->post_content[ $val ];
 		}
+
 		return null;
 	}
 
