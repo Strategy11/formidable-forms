@@ -1026,9 +1026,9 @@ class FrmAddon {
 		} else {
 			$json_res = json_decode( $body, true );
 
-			if (null !== $json_res) {
-       $message = is_array( $json_res ) && isset( $json_res['error'] ) ? $json_res['error'] : $json_res;
-   } elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
+			if ( null !== $json_res ) {
+				$message = is_array( $json_res ) && isset( $json_res['error'] ) ? $json_res['error'] : $json_res;
+			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
 				$resp['body'] = wp_strip_all_tags( $resp['body'] );
 
 				$message = sprintf(

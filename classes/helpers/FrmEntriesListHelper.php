@@ -376,17 +376,18 @@ class FrmEntriesListHelper extends FrmListHelper {
 			if ( $this->column_name === 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
-       $val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
-       $r .= "<td $attributes>";
-       if ( $column_name == $action_col ) {
-   					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
-   					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
-   					$r        .= $action_links;
-   				} else {
-   					$r .= $val;
-   				}
-       $r .= '</td>';
-   }//end if
+				$val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
+				$r  .= "<td $attributes>";
+				if ( $column_name == $action_col ) {
+					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
+					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
+					$r        .= $action_links;
+				} else {
+					$r .= $val;
+				}
+
+				$r .= '</td>';
+			}//end if
 			unset( $val );
 		}//end foreach
 		$r .= '</tr>';

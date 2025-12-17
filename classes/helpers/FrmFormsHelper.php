@@ -82,7 +82,7 @@ class FrmFormsHelper {
 				</option>
 			<?php } ?>
 		</select>
-<?php
+		<?php
 	}
 
 	/**
@@ -232,7 +232,7 @@ class FrmFormsHelper {
 				?>
 			</ul>
 		</div>
-<?php
+		<?php
 	}
 
 	/**
@@ -1391,9 +1391,9 @@ BEFORE_HTML;
 
 		if ( 'trash' === $status ) {
 			$info = $labels['restore'];
-		} elseif (current_user_can( 'frm_delete_forms' )) {
-      $info = EMPTY_TRASH_DAYS ? $labels['trash'] : $labels['delete'];
-  } else {
+		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
+			$info = EMPTY_TRASH_DAYS ? $labels['trash'] : $labels['delete'];
+		} else {
 			$info = array();
 		}
 

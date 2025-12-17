@@ -109,11 +109,11 @@ class FrmXMLController {
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
-      $message = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
-      $response = array(
-   				'message' => $message,
-   			);
-  }//end if
+			$message  = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
+			$response = array(
+				'message' => $message,
+			);
+		}//end if
 
 		/**
 		 * @since 6.18 Added `url` to the $args.

@@ -410,9 +410,9 @@ class FrmField {
 		self::preserve_format_option_backslashes( $new_values );
 
 		foreach ( $new_values as $k => $v ) {
-			if (is_array( $v )) {
-       $new_values[ $k ] = $k === 'default_value' ? FrmAppHelper::maybe_json_encode( $v ) : serialize( $v );
-   }
+			if ( is_array( $v ) ) {
+				$new_values[ $k ] = $k === 'default_value' ? FrmAppHelper::maybe_json_encode( $v ) : serialize( $v );
+			}
 			unset( $k, $v );
 		}
 
@@ -863,9 +863,9 @@ class FrmField {
 		if ( $field ) {
 			$type = $field->{$col};
 		} else {
-      $where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
-      $type = FrmDb::get_var( 'frm_fields', $where, $col );
-  }
+			$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
+			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+		}
 
 		return $type;
 	}

@@ -2657,12 +2657,12 @@ class FrmAppHelper {
 		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
-      $user = is_email( $user_id ) ? get_user_by( 'email', $user_id ) : get_user_by( 'login', $user_id );
-      if ( $user ) {
-   				$user_id = $user->ID;
-   			}
-      unset( $user );
-  }
+			$user = is_email( $user_id ) ? get_user_by( 'email', $user_id ) : get_user_by( 'login', $user_id );
+			if ( $user ) {
+				$user_id = $user->ID;
+			}
+			unset( $user );
+		}
 
 		return $user_id;
 	}

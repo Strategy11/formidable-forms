@@ -141,9 +141,9 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_entry( $atts ) {
-		if (isset( $atts['entry'] ) && is_object( $atts['entry'] )) {
-      $this->entry = isset( $atts['entry']->metas ) ? $atts['entry'] : FrmEntry::getOne( $atts['entry']->id, true );
-  } elseif ( ! empty( $atts['id'] ) ) {
+		if ( isset( $atts['entry'] ) && is_object( $atts['entry'] ) ) {
+			$this->entry = isset( $atts['entry']->metas ) ? $atts['entry'] : FrmEntry::getOne( $atts['entry']->id, true );
+		} elseif ( ! empty( $atts['id'] ) ) {
 			$this->entry = FrmEntry::getOne( $atts['id'], true );
 		}
 	}
@@ -199,9 +199,9 @@ class FrmEntryFormatter {
 			$this->format = 'array';
 		} elseif ( $atts['format'] === 'json' ) {
 			$this->format = 'json';
-		} elseif ($atts['format'] === 'text') {
-      $this->format = $this->is_plain_text === true ? 'plain_text_block' : 'table';
-  }
+		} elseif ( $atts['format'] === 'text' ) {
+			$this->format = $this->is_plain_text === true ? 'plain_text_block' : 'table';
+		}
 
 		/**
 		 * Allows modifying the format property of FrmEntryFormatter object.

@@ -498,9 +498,9 @@ class FrmFieldsHelper {
 		$substrings = self::get_substrings_to_replace_with_field_name( $field_name, compact( 'msg', 'error', 'field' ) );
 
 		// Use the "This value"/"This field" placeholder strings if field name is empty.
-		if (! $field_name) {
-      $field_name = 'unique_msg' === $error ? __( 'This value', 'formidable' ) : __( 'This field', 'formidable' );
-  }
+		if ( ! $field_name ) {
+			$field_name = 'unique_msg' === $error ? __( 'This value', 'formidable' ) : __( 'This field', 'formidable' );
+		}
 		return str_replace( $substrings, $field_name, $msg );
 	}
 
