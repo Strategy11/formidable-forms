@@ -1782,11 +1782,7 @@ DEFAULT_HTML;
 		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
-
-		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
-			return false;
-		}
-		return true;
+		return ! ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) );
 	}
 
 	/**

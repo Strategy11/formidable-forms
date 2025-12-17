@@ -516,10 +516,7 @@ class FrmEmail {
 	 * @return bool
 	 */
 	private function has_recipients() {
-		if ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) ) {
-			return false;
-		}
-		return true;
+		return ! ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) );
 	}
 
 	/**

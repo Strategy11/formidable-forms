@@ -231,12 +231,7 @@ class FrmStyleComponent {
 		if ( empty( $this->data['not_show_in'] ) ) {
 			return false;
 		}
-
-		if ( FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'] ) {
-			return true;
-		}
-
-		return false;
+		return FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'];
 	}
 
 	/**

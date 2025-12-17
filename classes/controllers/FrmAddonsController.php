@@ -1339,12 +1339,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-
-		if ( empty( $auth ) || ! hash_equals( $auth, $post_auth ) ) {
-			return false;
-		}
-
-		return true;
+		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
 	}
 
 	/**

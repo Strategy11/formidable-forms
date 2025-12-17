@@ -2118,12 +2118,7 @@ BEFORE_HTML;
 		}
 
 		global $pagenow;
-
-		if ( 'post.php' === $pagenow ) {
-			return true;
-		}
-
-		return false;
+		return 'post.php' === $pagenow;
 	}
 
 	/**
