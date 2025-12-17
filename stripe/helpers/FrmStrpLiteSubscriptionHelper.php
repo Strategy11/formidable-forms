@@ -71,8 +71,7 @@ class FrmStrpLiteSubscriptionHelper {
 		}
 
 		$frm_sub = new FrmTransLiteSubscription();
-		$sub_id  = $frm_sub->create( $new_values );
-		return $sub_id;
+		return $frm_sub->create( $new_values );
 	}
 
 	/**
@@ -194,8 +193,7 @@ class FrmStrpLiteSubscriptionHelper {
 		// The full error message looks like "No such plan: '_399_1month_usd".
 		$action->post_content['plan_id'] = '';
 		$charge_data['plan']             = self::get_plan_from_atts( compact( 'action', 'amount' ) );
-		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
-		return $subscription;
+		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
 	}
 
 	/**

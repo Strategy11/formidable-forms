@@ -256,9 +256,8 @@ class FrmDb {
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
 		$cache_key = self::generate_cache_key( $where, $args, $field, $type );
-		$results   = self::check_cache( $cache_key, $group, $query, 'get_' . $type );
 
-		return $results;
+		return self::check_cache( $cache_key, $group, $query, 'get_' . $type );
 	}
 
 	/**
@@ -282,9 +281,8 @@ class FrmDb {
 		}
 
 		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
-		$cache_key  = str_replace( array( ' ', ',' ), '_', $cache_key );
 
-		return $cache_key;
+		return str_replace( array( ' ', ',' ), '_', $cache_key );
 	}
 
 	/**
@@ -473,9 +471,8 @@ class FrmDb {
 		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
 
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A', ' WHERE' ) );
-		$results   = self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 
-		return $results;
+		return self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 	}
 
 	/**

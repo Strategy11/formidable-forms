@@ -915,15 +915,14 @@ class FrmFormsController {
 				'type'  => 'request',
 			)
 		);
-		$message      = sprintf(
+
+		return sprintf(
 			/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
 			_n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ),
 			$count,
 			'<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">',
 			'</a>'
 		);
-
-		return $message;
 	}
 
 	public static function destroy() {
@@ -1808,11 +1807,10 @@ class FrmFormsController {
 				'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' ),
 			),
 		);
-		$adv_shortcodes = apply_filters( 'frm_advanced_shortcodes', $adv_shortcodes );
 
 		// __( 'Leave blank instead of defaulting to User Login', 'formidable' ) : blank=1
 
-		return $adv_shortcodes;
+		return apply_filters( 'frm_advanced_shortcodes', $adv_shortcodes );
 	}
 
 	/**
@@ -1957,9 +1955,8 @@ class FrmFormsController {
 		}
 
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
-		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
-		return $content;
+		return apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 	}
 
 	/**

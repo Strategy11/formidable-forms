@@ -1306,13 +1306,9 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		$is_multi_value_field = (
-			self::is_checkbox( $field ) ||
+		return self::is_checkbox( $field ) ||
 			$field_type === 'address' ||
-			self::is_multiple_select( $field )
-		);
-
-		return $is_multi_value_field;
+			self::is_multiple_select( $field );
 	}
 
 	/**

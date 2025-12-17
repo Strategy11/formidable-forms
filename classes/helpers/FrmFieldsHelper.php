@@ -316,8 +316,7 @@ class FrmFieldsHelper {
 	public static function default_unique_msg() {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$unique_message = $frm_settings->unique_msg;
-		$unique_message = str_replace( 'This value', '[field_name]', $unique_message );
-		return $unique_message;
+		return str_replace( 'This value', '[field_name]', $unique_message );
 	}
 
 	/**
@@ -328,8 +327,7 @@ class FrmFieldsHelper {
 	public static function default_blank_msg() {
 		$frm_settings  = FrmAppHelper::get_settings();
 		$blank_message = $frm_settings->blank_msg;
-		$blank_message = str_replace( 'This field', '[field_name]', $blank_message );
-		return $blank_message;
+		return str_replace( 'This field', '[field_name]', $blank_message );
 	}
 
 	/**
@@ -376,9 +374,8 @@ class FrmFieldsHelper {
 		$opts       = $field_type->get_default_field_options();
 
 		$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $field );
-		$opts = apply_filters( 'frm_default_' . $field->type . '_field_opts', $opts, $values, $field );
 
-		return $opts;
+		return apply_filters( 'frm_default_' . $field->type . '_field_opts', $opts, $values, $field );
 	}
 
 	/**
@@ -483,9 +480,7 @@ class FrmFieldsHelper {
 		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
 		$msg = do_shortcode( $msg );
 
-		$msg = self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
-
-		return $msg;
+		return self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
 	}
 
 	/**
@@ -510,9 +505,7 @@ class FrmFieldsHelper {
 				$field_name = __( 'This field', 'formidable' );
 			}
 		}
-
-		$msg = str_replace( $substrings, $field_name, $msg );
-		return $msg;
+		return str_replace( $substrings, $field_name, $msg );
 	}
 
 	/**
@@ -1031,9 +1024,8 @@ class FrmFieldsHelper {
 		}
 
 		$value = apply_filters( 'frm_content', $value, $form, $entry );
-		$value = do_shortcode( $value );
 
-		return $value;
+		return do_shortcode( $value );
 	}
 
 	/**
@@ -1090,9 +1082,7 @@ class FrmFieldsHelper {
 			$tagregexp[] = $field->field_key;
 		}
 
-		$tagregexp = implode( '|', $tagregexp );
-
-		return $tagregexp;
+		return implode( '|', $tagregexp );
 	}
 
 	/**
@@ -1475,9 +1465,7 @@ class FrmFieldsHelper {
 			$field_types[ $type ] = $field_selection[ $type ];
 		}
 
-		$field_types = apply_filters( 'frm_switch_field_types', $field_types, compact( 'type', 'field_selection' ) );
-
-		return $field_types;
+		return apply_filters( 'frm_switch_field_types', $field_types, compact( 'type', 'field_selection' ) );
 	}
 
 	/**
@@ -1794,9 +1782,7 @@ class FrmFieldsHelper {
 			$other_id .= '-' . $opt_key;
 		}
 
-		$other_id .= '-otext';
-
-		return $other_id;
+		return $other_id . '-otext';
 	}
 
 	/**
@@ -1879,9 +1865,7 @@ class FrmFieldsHelper {
 			unset( $replace[ $index ] );
 			unset( $replace_with[ $index ] );
 		}
-
-		$value = str_replace( $replace, $replace_with, $value );
-		return $value;
+		return str_replace( $replace, $replace_with, $value );
 	}
 
 	/**

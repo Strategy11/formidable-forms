@@ -518,9 +518,7 @@ class FrmListHelper {
 
 		$out .= '</div>';
 
-		$out .= '<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', 'formidable' ) . '</span></button>';
-
-		return $out;
+		return $out . ('<button type="button" class="toggle-row"><span class="screen-reader-text">' . __( 'Show more details', 'formidable' ) . '</span></button>');
 	}
 
 	/**

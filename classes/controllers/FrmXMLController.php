@@ -155,9 +155,7 @@ class FrmXMLController {
 		if ( empty( $form ) ) {
 			return $form;
 		}
-
-		$form = json_decode( $form, true );
-		return $form;
+		return json_decode( $form, true );
 	}
 
 	/**
@@ -607,9 +605,8 @@ class FrmXMLController {
 		}
 
 		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
-		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
 
-		return $parent_slugs;
+		return wp_list_pluck( $results, 'slug', 'term_id' );
 	}
 
 	/**

@@ -368,9 +368,7 @@ class FrmEntryValidate {
 			} else {
 				$option_value = $option;
 			}
-
-			$option_value = do_shortcode( $option_value );
-			return $option_value;
+			return do_shortcode( $option_value );
 		};
 
 		$values_options       = array_map( $map_callback, $values['options'] );
@@ -487,9 +485,7 @@ class FrmEntryValidate {
 			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
-		$pattern = '/' . $pattern . '/';
-
-		return $pattern;
+		return '/' . $pattern . '/';
 	}
 
 	/**
@@ -536,9 +532,7 @@ class FrmEntryValidate {
 			}
 		}
 
-		$pattern = '^' . $pattern . '$';
-
-		return $pattern;
+		return '^' . $pattern . '$';
 	}
 
 	/**

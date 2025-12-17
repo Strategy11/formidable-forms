@@ -226,9 +226,8 @@ class FrmEmail {
 		$recipients = $this->explode_emails( $recipients );
 
 		$recipients = array_unique( (array) $recipients );
-		$recipients = $this->format_recipients( $recipients );
 
-		return $recipients;
+		return $this->format_recipients( $recipients );
 	}
 
 	/**
@@ -656,9 +655,8 @@ class FrmEmail {
 
 		// Remove brackets and add a space in case there isn't one
 		$value = str_replace( '<', ' ', $value );
-		$value = str_replace( array( '"', '>' ), '', $value );
 
-		return $value;
+		return str_replace( array( '"', '>' ), '', $value );
 	}
 
 	/**

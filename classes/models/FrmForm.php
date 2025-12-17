@@ -504,8 +504,7 @@ class FrmForm {
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
 		$value = strip_tags( $value );
-		$value = str_replace( $temp, $allow, $value );
-		return $value;
+		return str_replace( $temp, $allow, $value );
 	}
 
 	/**
@@ -803,9 +802,7 @@ class FrmForm {
 		$form = FrmDb::check_cache( $id, 'frm_form' );
 
 		if ( $form ) {
-			$r = stripslashes( $form->name );
-
-			return $r;
+			return stripslashes( $form->name );
 		}
 
 		$query_key = is_numeric( $id ) ? 'id' : 'form_key';
@@ -843,9 +840,7 @@ class FrmForm {
 			return $cache->form_key;
 		}
 
-		$key = FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'form_key' );
-
-		return $key;
+		return FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'form_key' );
 	}
 
 	/**
@@ -988,9 +983,7 @@ class FrmForm {
 			$query['parent_form_id'] = array( null, 0 );
 		}
 
-		$forms = self::getAll( $query, 'name', $limit );
-
-		return $forms;
+		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**
@@ -1203,9 +1196,7 @@ class FrmForm {
 			$form = self::maybe_get_current_form();
 		}
 
-		$form_id = $form ? $form->id : 0;
-
-		return $form_id;
+		return $form ? $form->id : 0;
 	}
 
 	/**
@@ -1321,9 +1312,8 @@ class FrmForm {
 	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
-		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 
-		return $show;
+		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 
 	/**

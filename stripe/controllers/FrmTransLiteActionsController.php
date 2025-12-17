@@ -163,9 +163,7 @@ class FrmTransLiteActionsController {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
 
-		$message = '<div class="frm_error_style">' . $message . '</div>';
-
-		return $message;
+		return '<div class="frm_error_style">' . $message . '</div>';
 	}
 
 	/**
@@ -361,8 +359,7 @@ class FrmTransLiteActionsController {
 		$amount = html_entity_decode( $amount );
 		$amount = trim( $amount );
 		preg_match_all( '/[0-9,.]*\.?\,?[0-9]+/', $amount, $matches );
-		$amount = $matches ? end( $matches[0] ) : 0;
-		return $amount;
+		return $matches ? end( $matches[0] ) : 0;
 	}
 
 	/**
@@ -652,7 +649,6 @@ class FrmTransLiteActionsController {
 	protected static function add_a_field( $form_id, $field_type, $field_name ) {
 		$new_values         = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 		$new_values['name'] = $field_name;
-		$field_id           = FrmField::create( $new_values );
-		return $field_id;
+		return FrmField::create( $new_values );
 	}
 }

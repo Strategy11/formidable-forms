@@ -119,9 +119,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
-		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
-		return $html;
+		return '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 	}
 
 	/**

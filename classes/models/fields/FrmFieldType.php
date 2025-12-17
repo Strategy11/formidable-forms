@@ -215,7 +215,7 @@ abstract class FrmFieldType {
 		$for   = $this->for_label_html();
 		$label = $this->primary_label_element();
 
-		$default_html = <<<DEFAULT_HTML
+		return <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	<$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
 		<span class="frm_required" aria-hidden="true">[required_label]</span>
@@ -225,8 +225,6 @@ abstract class FrmFieldType {
 	[if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
-
-		return $default_html;
 	}
 
 	/**
@@ -1462,9 +1460,7 @@ DEFAULT_HTML;
 			$input .= '</option>';
 		}
 
-		$input .= '</select>';
-
-		return $input;
+		return $input . '</select>';
 	}
 
 	/**
@@ -1678,9 +1674,7 @@ DEFAULT_HTML;
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
 		}
-
-		$already_validated_this_value = in_array( $value, $frm_validated_unique_values[ $field_id ], true );
-		return $already_validated_this_value;
+		return in_array( $value, $frm_validated_unique_values[ $field_id ], true );
 	}
 
 	/**

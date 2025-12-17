@@ -9,7 +9,6 @@ use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
 use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
 use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
-use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
 use Rector\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 use Rector\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector;
@@ -85,7 +84,6 @@ return RectorConfig::configure()
 			CombinedAssignRector::class,
 			ExplicitReturnNullRector::class,
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
-			SimplifyUselessVariableRector::class,
 			CountArrayToEmptyArrayComparisonRector::class,
 			DisallowedEmptyRuleFixerRector::class,
 			SimplifyIfReturnBoolRector::class,

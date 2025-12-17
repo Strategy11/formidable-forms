@@ -257,9 +257,8 @@ class FrmFormAction {
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
-		$name .= '[' . $field_name . ']';
 
-		return $name;
+		return $name . ('[' . $field_name . ']');
 	}
 
 	/**
@@ -904,9 +903,7 @@ class FrmFormAction {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
 
-		$switch = apply_filters( 'frm_global_switch_fields', $switch );
-
-		return $switch;
+		return apply_filters( 'frm_global_switch_fields', $switch );
 	}
 
 	/**
@@ -968,9 +965,7 @@ class FrmFormAction {
 		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
 			return FrmProFormActionsController::action_conditions_met( $action, $entry );
 		}
-
-		$stop = false;
-		return $stop;
+		return false;
 	}
 
 	/**

@@ -81,8 +81,7 @@ class FrmSMTPController {
 	 */
 	public function link( $link ) {
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
-		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
-		return $link;
+		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
 
 	/**
@@ -169,7 +168,7 @@ class FrmSMTPController {
 			<h1><?php esc_html_e( 'Making Email Deliverability Easy for WordPress', 'formidable' ); ?></h1>
 			<p><?php esc_html_e( 'WP Mail SMTP allows you to easily set up WordPress to use a trusted provider to reliably send emails, including form notifications.', 'formidable' ); ?></p>
 		</section>
-		<?php
+<?php
 	}
 
 	/**

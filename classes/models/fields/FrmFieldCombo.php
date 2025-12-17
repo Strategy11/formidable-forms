@@ -225,7 +225,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'description'    => false,
 			'default'        => false,
 			// Don't use the regular placeholder option.
@@ -233,8 +233,6 @@ class FrmFieldCombo extends FrmFieldType {
 			'logic'          => true,
 			'visibility'     => true,
 		);
-
-		return $settings;
 	}
 
 	/**
@@ -287,9 +285,8 @@ class FrmFieldCombo extends FrmFieldType {
 
 		ob_start();
 		$this->load_field_output( $args );
-		$input_html = ob_get_clean();
 
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**

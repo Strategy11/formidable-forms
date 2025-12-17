@@ -397,9 +397,7 @@ class FrmXMLHelper {
 			unset( $f );
 		}
 
-		$form_fields = $old_fields;
-
-		return $form_fields;
+		return $old_fields;
 	}
 
 	/**
