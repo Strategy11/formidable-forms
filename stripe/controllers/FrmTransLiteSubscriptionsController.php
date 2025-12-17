@@ -154,27 +154,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @deprecated x.x
+	 *
 	 * @return string|null
 	 */
 	public static function list_subscriptions_shortcode() {
-		if ( ! is_user_logged_in() ) {
-			return null;
-		}
-
-		$frm_sub       = new FrmTransLiteSubscription();
-		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
-
-		if ( empty( $subscriptions ) ) {
-			return null;
-		}
-
-		FrmTransLiteActionsController::actions_js();
-
-		ob_start();
-		include FrmTransLiteAppHelper::plugin_path() . '/views/subscriptions/list_shortcode.php';
-		$content = ob_get_contents();
-		ob_end_clean();
-
-		return $content;
+		_deprecated_function( __METHOD__, 'x.x' );
+		return null;
 	}
 }
