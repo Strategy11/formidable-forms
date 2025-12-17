@@ -154,6 +154,8 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @deprecated x.x
+	 *
 	 * @return string|null
 	 */
 	public static function list_subscriptions_shortcode() {
