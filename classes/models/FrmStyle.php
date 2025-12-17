@@ -592,6 +592,7 @@ class FrmStyle {
 				return $style;
 			}
 		}
+		return null;
 	}
 
 	/**

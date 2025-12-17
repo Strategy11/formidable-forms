@@ -465,7 +465,7 @@ class FrmFormAction {
 
 		// We need to update the data
 		if ( $this->updated ) {
-			return;
+			return null;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -474,7 +474,7 @@ class FrmFormAction {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
-			return;
+			return null;
 		}
 
 		$action_ids = array();

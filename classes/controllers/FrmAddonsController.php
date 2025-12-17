@@ -1006,7 +1006,7 @@ class FrmAddonsController {
 	/**
 	 * @since 4.08
 	 *
-	 * @return array|void
+	 * @return mixed[]|null
 	 */
 	protected static function download_and_activate() {
 		if ( is_admin() ) {
@@ -1021,6 +1021,7 @@ class FrmAddonsController {
 			return $installed;
 		}
 		self::handle_addon_action( $installed, 'activate' );
+		return null;
 	}
 
 	/**
@@ -1203,11 +1204,11 @@ class FrmAddonsController {
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
 	 *
-	 * @return array|void
+	 * @return mixed[]|null
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
 		if ( ! $installed || ! $action ) {
-			return;
+			return null;
 		}
 
 		$result = null;

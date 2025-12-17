@@ -1404,6 +1404,7 @@ class FrmAppHelper {
 		} else {
 			return $icon;
 		}
+		return null;
 	}
 
 	/**
@@ -1549,6 +1550,7 @@ class FrmAppHelper {
 			ob_end_clean();
 			return $return;
 		}
+		return null;
 	}
 
 	/**

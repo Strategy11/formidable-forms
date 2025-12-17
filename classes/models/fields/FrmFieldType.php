@@ -1189,7 +1189,7 @@ DEFAULT_HTML;
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
@@ -1197,7 +1197,7 @@ DEFAULT_HTML;
 		$include_file = $this->include_front_form_file();
 
 		if ( empty( $include_file ) ) {
-			return;
+			return null;
 		}
 
 		if ( isset( $shortcode_atts['opt'] ) ) {

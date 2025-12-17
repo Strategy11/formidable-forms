@@ -2140,15 +2140,15 @@ class FrmFormsController {
 				return self::$action( $vars );
 			case 'lite-reports':
 				self::no_reports( $vars );
-				return;
+				return null;
 			case 'views':
 				self::no_views( $vars );
-				return;
+				return null;
 			default:
 				do_action( 'frm_form_action_' . $action );
 
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
-					return;
+					return null;
 				}
 
 				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
@@ -2161,14 +2161,14 @@ class FrmFormsController {
 					FrmAppHelper::remove_get_action();
 
 					self::list_form();
-					return;
+					return null;
 				}
 
 				$message = FrmAppHelper::get_param( 'message' );
 
 				if ( 'form_duplicate_error' === $message ) {
 					self::display_forms_list( array(), '', array( __( 'There was a problem duplicating the form', 'formidable' ) ) );
-					return;
+					return null;
 				}
 
 				if ( 'forms_permanently_deleted' === $message ) {
@@ -2176,12 +2176,12 @@ class FrmFormsController {
 					/* translators: %1$s: Number of forms */
 					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 					self::display_forms_list( array(), $message, '' );
-					return;
+					return null;
 				}
 
 				self::display_forms_list();
 
-				return;
+				return null;
 		}//end switch
 	}
 
