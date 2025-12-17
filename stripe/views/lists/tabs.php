@@ -21,6 +21,7 @@ $tabs = array(
 		<?php
 		$is_active = $tab_key === $active_tab;
 		$classes   = 'frm-payments-tab';
+
 		if ( $is_active ) {
 			$classes .= ' frm-active';
 		}

@@ -129,6 +129,7 @@ class FrmTransLiteListsController {
 		 * @param string $action
 		 */
 		$route_handled = apply_filters( 'frm_trans_lite_route', false, $action );
+
 		if ( $route_handled ) {
 			return;
 		}

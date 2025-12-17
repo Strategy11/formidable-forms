@@ -34,6 +34,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		 * @param bool $coupons_list_displayed
 		 */
 		$coupons_list_displayed = apply_filters( 'frm_coupons_list_displayed', false );
+
 		if ( ! $coupons_list_displayed ) {
 			include FrmAppHelper::plugin_path() . '/stripe/views/lists/coupons-upsell.php';
 		}

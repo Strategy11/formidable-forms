@@ -185,8 +185,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 *
 	 * @return array
 	 */
-	public function get_bulk_actions(){
+	public function get_bulk_actions() {
 		$actions = array();
+
 		if ( $this->payments_addon_list_helper_exists() ) {
 			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
 		}
@@ -411,6 +412,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 *
 	 * @param object $item
 	 * @param string $field
+	 *
 	 * @return string
 	 */
 	private function get_view_payment_link( $item, $field ) {
@@ -430,14 +432,14 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_url_to_payment( $payment_id, $action = 'show' ) {
 		return add_query_arg(
-				array(
-					'action' => $action,
-					'id'     => $payment_id,
-					'type'   => $this->table,
-					'page'   => FrmAppHelper::simple_get( 'page' ),
-				),
-				admin_url( 'admin.php' )
-			);
+			array(
+				'action' => $action,
+				'id'     => $payment_id,
+				'type'   => $this->table,
+				'page'   => FrmAppHelper::simple_get( 'page' ),
+			),
+			admin_url( 'admin.php' )
+		);
 	}
 
 	/**
@@ -649,6 +651,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @since x.x
 	 *
 	 * @param string $active_tab
+	 *
 	 * @return void
 	 */
 	public static function render_tabs( $active_tab = 'payments' ) {
