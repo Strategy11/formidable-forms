@@ -378,6 +378,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			} else {
 				$val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
 				$r  .= "<td $attributes>";
+
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
