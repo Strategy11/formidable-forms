@@ -263,8 +263,9 @@ class FrmEntry {
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			return false;
 		}
+
 		// If repeating field entries are getting created, don't check for duplicates
-		return ! ( isset( $values['parent_form_id'] ) && $values['parent_form_id'] );
+		return empty( $values['parent_form_id'] );
 	}
 
 	/**
