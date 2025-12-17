@@ -179,3 +179,25 @@ if ( ! $stripe_connected && ! $square_connected ) {
 		<?php $this->show_fields_dropdown( $field_dropdown_atts, array( 'name' => 'billing_last_name' ) ); ?>
 	</p>
 </div>
+
+<?php
+/**
+ * Trigger an action so Pro can include additional settings after the customer info section.
+ *
+ * @since x.x
+ *
+ * @param array $args {
+ *
+ *     @type FrmFormAction      $action_control
+ *     @type FrmFormAction      $form_action
+ *     @type FrmTransLiteAction $trans_lite_action
+ * }
+ */
+do_action(
+	'frm_payment_action_settings_after_customer_info',
+	array(
+		'action_control' => $action_control,
+		'form_action'    => $form_action,
+		'trans_action'   => $this,
+	)
+);
