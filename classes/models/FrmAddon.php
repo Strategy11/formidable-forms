@@ -151,13 +151,8 @@ class FrmAddon {
 	 */
 	public static function get_addon( $plugin_slug ) {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$plugin  = false;
 
-		if ( isset( $plugins[ $plugin_slug ] ) ) {
-			$plugin = $plugins[ $plugin_slug ];
-		}
-
-		return $plugin;
+		return $plugins[ $plugin_slug ] ?? false;
 	}
 
 	/**

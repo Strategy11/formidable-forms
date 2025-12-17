@@ -32,6 +32,61 @@ use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\DeadCode\Rector\ClassMethod\RemoveUnusedConstructorParamRector;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
+use Rector\CodingStyle\Rector\Stmt\NewlineAfterStatementRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveUselessReturnTagRector;
+use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddMethodCallBasedStrictParamTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddVoidReturnTypeWhereNoReturnRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNullableTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
+use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
+use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
+use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
+use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
+use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
+use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
+use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
+use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
+use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
+use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
+use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector;
+use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
+use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
+use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
+use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
+use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
+use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
+use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
+use Rector\Carbon\Rector\FuncCall\TimeFuncCallToCarbonRector;
+use Rector\Carbon\Rector\New_\DateTimeInstanceToCarbonRector;
+use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
+use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
+use Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector;
+use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
+use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
+use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
+use Rector\CodingStyle\Rector\If_\NullableCompareToNullRector;
+use Rector\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnNewRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
+use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 
 define( 'ABSPATH', '' );
 
@@ -48,7 +103,33 @@ return RectorConfig::configure()
 		// deadCode
 		true,
 		// codeQuality
-		true
+		true,
+		// codingStyle
+		true,
+		// typeDeclarations
+		true,
+		// privatization
+		true,
+		// naming
+		true,
+		// instanceOf
+		true,
+		// earlyReturn
+		true,
+		// strictBooleans
+		true,
+		// carbon
+		true,
+		// rectorPreset
+		true,
+		// phpunitCodeQuality
+		true,
+		// doctrineCodeQuality
+		false,
+		// symfonyCodeQuality
+		false,
+		// symfonyConfigs
+		false,
 	)
 	->withPhpSets(
 		// PHP 8.3
@@ -104,5 +185,63 @@ return RectorConfig::configure()
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedConstructorParamRector::class,
+			// Try these
+			// Enable this one soon.
+			NewlineAfterStatementRector::class,
+			RemoveUselessReturnTagRector::class,
+			ChangeOrIfContinueToMultiContinueRector::class,
+			RenameVariableToMatchNewTypeRector::class,
+			AddMethodCallBasedStrictParamTypeRector::class,
+			AddVoidReturnTypeWhereNoReturnRector::class,
+			BoolReturnTypeFromBooleanStrictReturnsRector::class,
+			ReturnNullableTypeRector::class,
+			ReturnTypeFromReturnDirectArrayRector::class,
+			ReturnTypeFromStrictNewArrayRector::class,
+			StrictArrayParamDimFetchRector::class,
+			DeclareStrictTypesRector::class,
+			NewlineBeforeNewAssignSetRector::class,
+			EncapsedStringsToSprintfRector::class,
+			StrictArraySearchRector::class,
+			SymplifyQuoteEscapeRector::class,
+			ReturnEarlyIfVariableRector::class,
+			RenameVariableToMatchMethodCallReturnTypeRector::class,
+			BooleanInBooleanNotRuleFixerRector::class,
+			ReturnTypeFromStrictNativeCallRector::class,
+			ReturnUnionTypeRector::class,
+			StringReturnTypeFromStrictStringReturnsRector::class,
+			ClosureReturnTypeRector::class,
+			WrapEncapsedVariableInCurlyBracesRector::class,
+			ReturnTypeFromStrictTypedCallRector::class,
+			StrictStringParamConcatRector::class,
+			ReturnBinaryOrToEarlyReturnRector::class,
+			RenamePropertyToMatchTypeRector::class,
+			NumericReturnTypeFromStrictReturnsRector::class,
+			TypedPropertyFromAssignsRector::class,
+			TypedPropertyFromStrictConstructorRector::class,
+			AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
+			RenameForeachValueVariableToMatchExprVariableRector::class,
+			BooleanInIfConditionRuleFixerRector::class,
+			BoolReturnTypeFromBooleanConstReturnsRector::class,
+			ReturnTypeFromReturnCastRector::class,
+			StringReturnTypeFromStrictScalarReturnsRector::class,
+			ReturnTypeFromStrictConstantReturnRector::class,
+			PostIncDecToPreIncDecRector::class,
+			TimeFuncCallToCarbonRector::class,
+			DateTimeInstanceToCarbonRector::class,
+			ChangeIfElseValueAssignToEarlyReturnRector::class,
+			MultiDirnameRector::class,
+			BooleanInTernaryOperatorRuleFixerRector::class,
+			ReturnTypeFromStrictConstantReturnRector::class,
+			ReturnTypeFromStrictTernaryRector::class,
+			AddClosureVoidReturnTypeWhereNoReturnRector::class,
+			FlipTypeControlToUseExclusiveTypeRector::class,
+			NullableCompareToNullRector::class,
+			MakeInheritedMethodVisibilitySameAsParentRector::class,
+			ReturnTypeFromReturnNewRector::class,
+			MakeInheritedMethodVisibilitySameAsParentRector::class,
+			NumericReturnTypeFromStrictScalarReturnsRector::class,
+			ReturnNeverTypeRector::class,
+			CallUserFuncArrayToVariadicRector::class,
+			CatchExceptionNameMatchingTypeRector::class,
 		)
 	);

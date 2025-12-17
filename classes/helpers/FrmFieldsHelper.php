@@ -751,12 +751,10 @@ class FrmFieldsHelper {
 	 * @return string radio or checkbox
 	 */
 	private static function get_default_value_type( $field ) {
-		$default_type = $field['type'];
-
 		if ( $field['type'] === 'select' ) {
-			$default_type = FrmField::is_multiple_select( $field ) ? 'checkbox' : 'radio';
+			return FrmField::is_multiple_select( $field ) ? 'checkbox' : 'radio';
 		}
-		return $default_type;
+		return $field['type'];
 	}
 
 	/**

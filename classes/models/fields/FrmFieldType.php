@@ -120,13 +120,10 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		$value = '';
-
 		if ( property_exists( $this, $key ) ) {
-			$value = $this->{$key};
+			return $this->{$key};
 		}
-
-		return $value;
+		return '';
 	}
 
 	/**
@@ -433,13 +430,10 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array();
-
 		if ( ! $this->has_input ) {
-			$settings = $this->no_input_settings();
+			return $this->no_input_settings();
 		}
-
-		return $settings;
+		return array();
 	}
 
 	/**
