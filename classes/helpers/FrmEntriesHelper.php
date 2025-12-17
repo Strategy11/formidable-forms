@@ -953,9 +953,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		$existing_entry_statuses = array_replace( $default_entry_statuses, $extended_entry_status );
-
-		return $existing_entry_statuses;
+		return array_replace( $default_entry_statuses, $extended_entry_status );
 	}
 
 	/**

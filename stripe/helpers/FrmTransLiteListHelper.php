@@ -433,8 +433,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_form_id_column( $item, $atts ) {
 		if ( isset( $atts['form_ids'][ $item->item_id ] ) ) {
-			$form_link = FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
-			return $form_link;
+			return FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
 		}
 
 		return '';
@@ -464,8 +463,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$date       = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
 		$date_title = FrmAppHelper::get_localized_date( $atts['date_format'] . ' g:i:s A', $item->created_at );
-		$val        = '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
-		return $val;
+		return '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
 	}
 
 	/**

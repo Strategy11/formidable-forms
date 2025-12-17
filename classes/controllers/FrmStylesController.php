@@ -474,9 +474,8 @@ class FrmStylesController {
 	 * @return WP_Post
 	 */
 	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-		return $default_style;
+		$frm_style = new FrmStyle( 'default' );
+		return $frm_style->get_one();
 	}
 
 	/**
@@ -888,11 +887,10 @@ class FrmStylesController {
 		}
 
 		// If it does not exist, check the default style as a fallback.
-		$frm_style  = new FrmStyle();
-		$style      = $frm_style->get_default_style();
-		$custom_css = $style->post_content['custom_css'];
+		$frm_style = new FrmStyle();
+		$style     = $frm_style->get_default_style();
 
-		return $custom_css;
+		return $style->post_content['custom_css'];
 	}
 
 	/**
@@ -1215,9 +1213,8 @@ class FrmStylesController {
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
-		$styles    = $frm_style->get_all();
 
-		return $styles;
+		return $frm_style->get_all();
 	}
 
 	/**

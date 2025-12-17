@@ -177,9 +177,7 @@ class FrmStylesHelper {
 			$class .= $key;
 		}
 
-		$class .= '_icon';
-
-		return $class;
+		return $class . '_icon';
 	}
 
 	/**
@@ -435,12 +433,11 @@ class FrmStylesHelper {
 
 		self::fill_hex( $color );
 
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+		$c_r = hexdec( substr( $color, 0, 2 ) );
+		$c_g = hexdec( substr( $color, 2, 2 ) );
+		$c_b = hexdec( substr( $color, 4, 2 ) );
 
-		return $brightness;
+		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
 	}
 
 	/**
@@ -1030,9 +1027,8 @@ class FrmStylesHelper {
 		}
 
 		$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
-		$number_of_forms        += self::get_default_style_count( $style_id, $conversational_style_id );
 
-		return $number_of_forms;
+		return $number_of_forms + self::get_default_style_count( $style_id, $conversational_style_id );
 	}
 
 	/**
@@ -1099,9 +1095,8 @@ class FrmStylesHelper {
 		$is_quick_settings = ( 'quick-settings' === $section_type );
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
-		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
 
-		return $classname;
+		return $classname . ( FrmAppHelper::pro_is_installed() ? ' frm-pro' : '' );
 	}
 
 	/**

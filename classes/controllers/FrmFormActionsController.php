@@ -793,9 +793,7 @@ class FrmFormActionsController {
 			return $where;
 		}
 
-		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
-
-		return $where;
+		return $where . $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 	}
 
 	/**

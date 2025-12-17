@@ -264,9 +264,7 @@ class FrmStrpLiteEventsController {
 
 		$this->maybe_cancel_subscription( $sub );
 		$this->update_next_bill_date( $sub, $payment_values );
-
-		$payment = $frm_payment->get_one( $payment_id );
-		return $payment;
+		return $frm_payment->get_one( $payment_id );
 	}
 
 	/**
@@ -336,9 +334,8 @@ class FrmStrpLiteEventsController {
 	private function get_payments_count( $sub_id ) {
 		$frm_payment  = new FrmTransLitePayment();
 		$all_payments = $frm_payment->get_all_by( $sub_id, 'sub_id' );
-		$count        = FrmTransLiteAppHelper::count_completed_payments( $all_payments );
 
-		return $count;
+		return FrmTransLiteAppHelper::count_completed_payments( $all_payments );
 	}
 
 	/**

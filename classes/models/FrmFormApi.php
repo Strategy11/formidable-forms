@@ -314,9 +314,7 @@ class FrmFormApi {
 			return false;
 		}
 
-		$values = json_decode( $cache['value'], true );
-
-		return $values;
+		return json_decode( $cache['value'], true );
 	}
 
 	/**

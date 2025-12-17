@@ -20,9 +20,7 @@ class FrmEntry {
 	 * @return bool|int $entry_id
 	 */
 	public static function create( $values ) {
-		$entry_id = self::create_entry( $values, 'standard' );
-
-		return $entry_id;
+		return self::create_entry( $values, 'standard' );
 	}
 
 	/**
@@ -41,9 +39,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$entry_id = self::continue_to_create_entry( $values, $new_values );
-
-		return $entry_id;
+		return self::continue_to_create_entry( $values, $new_values );
 	}
 
 	/**
@@ -328,9 +324,7 @@ class FrmEntry {
 	 * @return bool|int $update_results
 	 */
 	public static function update( $id, $values ) {
-		$update_results = self::update_entry( $id, $values, 'standard' );
-
-		return $update_results;
+		return self::update_entry( $id, $values, 'standard' );
 	}
 
 	/**
@@ -377,8 +371,7 @@ class FrmEntry {
 		$entry = self::getOne( $id, true );
 
 		if ( ! $entry ) {
-			$result = false;
-			return $result;
+			return false;
 		}
 
 		/**
@@ -608,9 +601,7 @@ class FrmEntry {
 		global $wpdb;
 
 		if ( FrmDb::check_cache( $id, 'frm_entry' ) ) {
-			$exists = true;
-
-			return $exists;
+			return true;
 		}
 
 		if ( is_numeric( $id ) ) {
@@ -806,9 +797,7 @@ class FrmEntry {
 			$values = apply_filters( 'frm_pre_create_entry', $values );
 		}
 
-		$new_values = self::package_entry_data( $values );
-
-		return $new_values;
+		return self::package_entry_data( $values );
 	}
 
 	/**
@@ -1229,9 +1218,7 @@ class FrmEntry {
 			$new_values['user_id'] = $values['frm_user_id'];
 		}
 
-		$new_values = apply_filters( 'frm_update_entry', $new_values, $id );
-
-		return $new_values;
+		return apply_filters( 'frm_update_entry', $new_values, $id );
 	}
 
 	/**
@@ -1278,9 +1265,7 @@ class FrmEntry {
 	 * @return bool|int $entry_id
 	 */
 	public static function create_entry_from_xml( $values ) {
-		$entry_id = self::create_entry( $values, 'xml' );
-
-		return $entry_id;
+		return self::create_entry( $values, 'xml' );
 	}
 
 	/**
@@ -1295,9 +1280,7 @@ class FrmEntry {
 	 * @return bool|int $updated
 	 */
 	public static function update_entry_from_xml( $id, $values ) {
-		$updated = self::update_entry( $id, $values, 'xml' );
-
-		return $updated;
+		return self::update_entry( $id, $values, 'xml' );
 	}
 
 	/**
