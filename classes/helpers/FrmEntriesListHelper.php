@@ -512,7 +512,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
-	 * @param false  $val
+	 * @param mixed  $val
 	 *
 	 * @return void
 	 */

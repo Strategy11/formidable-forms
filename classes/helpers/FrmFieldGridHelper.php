@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFieldGridHelper {
 
 	/**
-	 * @var bool|string
+	 * @var bool
 	 */
 	private $parent_li;
 
