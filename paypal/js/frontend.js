@@ -100,6 +100,8 @@
 	 * @return {Promise<string>} The order ID.
 	 */
 	async function createOrder( data ) {
+		thisForm.classList.add( 'frm_loading_form' );
+
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_paypal_create_order' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
@@ -115,12 +117,14 @@
 		} );
 
 		if ( ! response.ok ) {
+			thisForm.classList.remove( 'frm_loading_form' );
 			throw new Error( 'Failed to create PayPal order' );
 		}
 
 		const orderData = await response.json();
 
 		if ( ! orderData.success || ! orderData.data.orderID ) {
+			thisForm.classList.remove( 'frm_loading_form' );
 			throw new Error( orderData.data || 'Failed to create PayPal order' );
 		}
 
