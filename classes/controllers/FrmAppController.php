@@ -1639,8 +1639,7 @@ class FrmAppController {
 	private static function add_missing_tables() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
-		$inbox = new FrmInbox();
-		$error = $inbox->check_for_error();
+		$error = FrmInbox::check_for_error();
 
 		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
 			// Confirm the inbox item with this CTA exists.

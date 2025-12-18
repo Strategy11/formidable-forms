@@ -1212,8 +1212,7 @@ class FrmFormsController {
 			die();
 		}
 
-		$inbox = new FrmInbox();
-		$error = $inbox->check_for_error();
+		$error = FrmInbox::check_for_error();
 
 		if ( $error ) {
 			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
