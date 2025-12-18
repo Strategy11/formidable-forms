@@ -238,7 +238,6 @@ return RectorConfig::configure()
 			ReturnTypeFromStrictConstantReturnRector::class,
 			PostIncDecToPreIncDecRector::class,
 			MultiDirnameRector::class,
-			ReturnTypeFromStrictConstantReturnRector::class,
 			ReturnTypeFromStrictTernaryRector::class,
 			AddClosureVoidReturnTypeWhereNoReturnRector::class,
 			FlipTypeControlToUseExclusiveTypeRector::class,
