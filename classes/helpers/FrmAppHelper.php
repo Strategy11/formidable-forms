@@ -4611,12 +4611,7 @@ class FrmAppHelper {
 		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
 			return true;
 		}
-
-		if ( 'coupons' === $feature && class_exists( 'FrmCouponsAppController' ) ) {
-			return true;
-		}
-
-		return false;
+        return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
 	}
 
 	/**

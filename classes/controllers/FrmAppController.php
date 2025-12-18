@@ -197,12 +197,7 @@ class FrmAppController {
 	private static function is_white_payments_page() {
 		$action       = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
 		$on_edit_page = in_array( $action, array( 'edit', 'new' ), true );
-
-		if ( $on_edit_page || 'bulk_delete' === $action ) {
-			return false;
-		}
-
-		return true;
+        return ! $on_edit_page && 'bulk_delete' !== $action;
 	}
 
 	/**
