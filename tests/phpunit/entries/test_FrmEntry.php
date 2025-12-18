@@ -5,7 +5,6 @@
  */
 class test_FrmEntry extends FrmUnitTest {
 
-	public $factory;
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
 		self::empty_tables();

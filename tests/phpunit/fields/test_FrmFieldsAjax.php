@@ -6,7 +6,6 @@
  */
 class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
-	public $factory;
 	protected $form_id = 0;
 
 	protected $user_id = 0;

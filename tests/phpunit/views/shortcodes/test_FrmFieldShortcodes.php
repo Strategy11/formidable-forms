@@ -7,7 +7,6 @@
  */
 class test_FrmFieldShortcodes extends FrmUnitTest {
 
-	public $factory;
 	protected $test_form;
 	protected $test_entry;
 

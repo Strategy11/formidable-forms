@@ -5,7 +5,6 @@
  */
 class test_FrmFieldsController extends FrmUnitTest {
 
-	public $factory;
 	/**
 	 * @covers FrmFieldsController::prepare_placeholder
 	 */

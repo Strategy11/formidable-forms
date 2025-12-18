@@ -5,7 +5,6 @@
  */
 class test_FrmOnSubmitAction extends FrmUnitTest {
 
-	public $factory;
 	public function test_adding_sanitize_url_after_updating() {
 		$form_id     = $this->factory->form->create();
 		$field_id    = $this->factory->field->create(

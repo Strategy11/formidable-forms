@@ -3,7 +3,6 @@
  * @group fields
  */
 class test_FrmFieldFormHtml extends FrmUnitTest {
-	public $factory;
 	/**
 	 * @covers FrmFieldFormHtml::add_multiple_input_attributes
 	 */

@@ -5,7 +5,6 @@
  */
 class test_FrmFieldGridHelper extends FrmUnitTest {
 
-	public $factory;
 	private $form_id;
 
 	private $helper;

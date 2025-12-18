@@ -5,7 +5,6 @@
  */
 class test_FrmEntriesController extends FrmUnitTest {
 
-	public $factory;
 	/**
 	 * @covers FrmEntriesController::delete_entry_after_save
 	 * @covers FrmEntriesController::_delete_entry

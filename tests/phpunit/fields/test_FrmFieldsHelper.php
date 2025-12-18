@@ -7,7 +7,6 @@
  */
 class test_FrmFieldsHelper extends FrmUnitTest {
 
-	public $factory;
 	/**
 	 * Tests where $observed_value is a single value, not an array.
 	 *

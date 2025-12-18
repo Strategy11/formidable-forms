@@ -5,7 +5,6 @@
  */
 class test_FrmFieldValidate extends FrmUnitTest {
 
-	public $factory;
 	protected $form;
 
 	public function setUp(): void {

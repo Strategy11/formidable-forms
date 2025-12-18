@@ -5,7 +5,6 @@
  */
 class test_FrmStylesHelper extends FrmUnitTest {
 
-	public $factory;
 	/**
 	 * @covers FrmStylesHelper::get_upload_base
 	 */

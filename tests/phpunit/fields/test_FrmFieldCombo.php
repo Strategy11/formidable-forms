@@ -5,7 +5,6 @@
  */
 class test_FrmFieldCombo extends FrmUnitTest {
 
-	public $factory;
 	protected function get_combo_field_without_sub_field_options() {
 		$combo_field = new FrmFieldCombo();
 

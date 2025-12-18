@@ -2,7 +2,6 @@
 
 class FrmStrpLiteUnitTest extends FrmUnitTest {
 
-	public $factory;
 	public static function wpSetUpBeforeClass() {
 		parent::wpSetUpBeforeClass();
 		self::empty_tables();

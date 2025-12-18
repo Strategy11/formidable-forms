@@ -4,7 +4,6 @@
  */
 class test_FrmCSVExportHelper extends FrmUnitTest {
 
-	public $factory;
 	private $form;
 
 	/**

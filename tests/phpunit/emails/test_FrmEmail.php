@@ -6,7 +6,6 @@
  */
 class test_FrmEmail extends FrmUnitTest {
 
-	public $factory;
 	/**
 	 * @var string
 	 */

@@ -2,7 +2,6 @@
 
 class test_FrmSubmitHelper extends FrmUnitTest {
 
-	public $factory;
 	public function test_copy_submit_field_settings_to_form() {
 		$form = $this->factory->form->create_and_get();
 		$this->assertEquals( $form, FrmSubmitHelper::copy_submit_field_settings_to_form( $form ) );

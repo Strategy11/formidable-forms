@@ -6,7 +6,6 @@
  */
 class test_FrmFormsController extends FrmUnitTest {
 
-	public $factory;
 	public function test_register_widgets() {
 		global $wp_widget_factory;
 		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );

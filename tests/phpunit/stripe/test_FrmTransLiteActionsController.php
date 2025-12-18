@@ -5,7 +5,6 @@
  */
 class test_FrmTransLiteActionsController extends FrmUnitTest {
 
-	public $factory;
 	public function test_get_fields_for_price() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
