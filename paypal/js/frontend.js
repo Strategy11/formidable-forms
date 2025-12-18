@@ -30,11 +30,14 @@
 			return null;
 		}
 
+		cardElement.classList.add( 'frm_grid_container' );
+
 		// Create the card fields container structure
+		// TODO: Make these IDs unique.
 		cardElement.innerHTML = `
-			<div class="frm-paypal-card-number" id="frm-paypal-card-number"></div>
-			<div class="frm-paypal-card-expiry" id="frm-paypal-card-expiry"></div>
-			<div class="frm-paypal-card-cvv" id="frm-paypal-card-cvv"></div>
+			<div class="frm-paypal-card-number frm12" id="frm-paypal-card-number"></div>
+			<div class="frm-paypal-card-expiry frm6" id="frm-paypal-card-expiry"></div>
+			<div class="frm-paypal-card-cvv frm6" id="frm-paypal-card-cvv"></div>
 		`;
 
 		const cardFieldsConfig = {
@@ -70,16 +73,7 @@
 			return frmPayPalVars.style;
 		}
 
-		return {
-			input: {
-				'font-size': '16px',
-				'font-family': 'inherit',
-				color: '#333'
-			},
-			'.invalid': {
-				color: '#c00'
-			}
-		};
+		return {};
 	}
 
 	/**

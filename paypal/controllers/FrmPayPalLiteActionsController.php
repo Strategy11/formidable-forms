@@ -331,9 +331,146 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
 			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
 			'settings' => $action_settings,
+			'style'    => self::get_style_for_js( $form_id ),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );
+	}
+
+	/**
+	 * Get the style for the PayPal form.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	public static function get_style_for_js( $form_id ) {
+		$settings = self::get_style_settings_for_form( $form_id );
+
+		$style = array(
+			'body'               => array(
+				'padding' => 0,
+			),
+			'input'              => array(
+				'font-size'        => $settings['field_font_size'],
+				'color'            => $settings['text_color'],
+				'background-color' => $settings['bg_color'],
+				'font-weight'      => $settings['field_weight'],
+				'padding'          => $settings['field_pad'],
+				'line-height'      => 1.3,
+				'border'           => self::get_border_shorthand( $settings ),
+				'border-radius'    => self::get_border_radius( $settings ),
+			),
+			'input::placeholder' => array(
+				'color' => $settings['text_color_disabled'],
+			),
+			'input:focus'        => array(
+				'background-color' => $settings['bg_color_active'],
+			),
+			'.invalid'           => array(
+				'color' => $settings['border_color_error'],
+			),
+		);
+
+		if ( ! empty( $settings['font'] ) ) {
+			$style['input']['font-family'] = $settings['font'];
+		}
+
+		/**
+		 * Filter the PayPal card field styles.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $style
+		 * @param array $settings
+		 * @param int   $form_id
+		 */
+		return apply_filters( 'frm_paypal_style', $style, $settings, $form_id );
+	}
+
+	/**
+	 * Get and format the style settings for JavaScript to use with the get_style function.
+	 *
+	 * @param int $form_id
+	 *
+	 * @return array
+	 */
+	private static function get_style_settings_for_form( $form_id ) {
+		if ( ! $form_id ) {
+			return array();
+		}
+
+		$style = FrmStylesController::get_form_style( $form_id );
+
+		if ( ! $style ) {
+			return array();
+		}
+
+		$settings   = FrmStylesHelper::get_settings_for_output( $style );
+		$disallowed = array( ';', ':', '!important' );
+
+		foreach ( $settings as $k => $s ) {
+			if ( is_string( $s ) ) {
+				$settings[ $k ] = str_replace( $disallowed, '', $s );
+			}
+		}
+
+		return $settings;
+	}
+
+	/**
+	 * Get the border width for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_width( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) && 'underline' === $settings['field_shape_type'] ) {
+			return '0 0 ' . $settings['field_border_width'] . ' 0';
+		}
+		return $settings['field_border_width'];
+	}
+
+	/**
+	 * Get the border radius for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_radius( $settings ) {
+		if ( ! empty( $settings['field_shape_type'] ) ) {
+			switch ( $settings['field_shape_type'] ) {
+				case 'underline':
+				case 'regular':
+					return '0px';
+				case 'circle':
+					return '30px';
+			}
+		}
+		return $settings['border_radius'];
+	}
+
+	/**
+	 * Get the border shorthand for PayPal card fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $settings
+	 *
+	 * @return string
+	 */
+	private static function get_border_shorthand( $settings ) {
+		$width = self::get_border_width( $settings );
+		$style = $settings['field_border_style'];
+		$color = $settings['border_color'];
+
+		return "{$width} {$style} {$color}";
 	}
 
 	/**

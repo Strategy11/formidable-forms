@@ -1624,6 +1624,6 @@ do_action( 'frm_include_front_css', compact( 'defaults' ) );
 .frm-card-errors:empty {
 	margin: 0;
 }
-<?php
 
+<?php
 echo strip_tags( FrmStylesController::get_custom_css() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
