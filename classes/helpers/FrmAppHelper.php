@@ -3052,13 +3052,11 @@ class FrmAppHelper {
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
-			$custom_style = absint( $post_values['options']['custom_style'] );
-		} else {
-			$frm_settings = self::get_settings();
-			$custom_style = ( $frm_settings->load_style !== 'none' );
+			return absint( $post_values['options']['custom_style'] );
 		}
 
-		return $custom_style;
+		$frm_settings = self::get_settings();
+		return $frm_settings->load_style !== 'none';
 	}
 
 	/**

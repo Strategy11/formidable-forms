@@ -1322,12 +1322,11 @@ BEFORE_HTML;
 	 */
 	private static function get_form_name_from_data( $data ) {
 		if ( is_object( $data ) ) {
-			$form_name = $data->name;
-		} else {
-			$form_id   = $data;
-			$form_name = FrmForm::getName( $form_id );
+			return $data->name;
 		}
-		return $form_name;
+
+		$form_id   = $data;
+		return FrmForm::getName( $form_id );
 	}
 
 	/**

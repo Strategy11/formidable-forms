@@ -567,15 +567,14 @@ class FrmAppController {
 		$db_version = get_option( $atts['option'] );
 
 		if ( strpos( $db_version, '-' ) === false ) {
-			$needs_upgrade = true;
-		} else {
-			$last_upgrade     = explode( '-', $db_version );
-			$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-			$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
-			$needs_upgrade    = $needs_db_upgrade || $new_version;
+			return true;
 		}
 
-		return $needs_upgrade;
+		$last_upgrade     = explode( '-', $db_version );
+		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
+		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
+
+		return $needs_db_upgrade || $new_version;
 	}
 
 	/**

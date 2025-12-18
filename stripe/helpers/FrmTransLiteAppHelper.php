@@ -225,11 +225,9 @@ class FrmTransLiteAppHelper {
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
 
 		if ( $sub->interval_count == 1 ) {
-			$amount = $amount . '/' . $interval;
-		} else {
-			$amount = $amount . ' every ' . $sub->interval_count . ' ' . $interval;
+			return $amount . '/' . $interval;
 		}
-		return $amount;
+		return $amount . ' every ' . $sub->interval_count . ' ' . $interval;
 	}
 
 	/**

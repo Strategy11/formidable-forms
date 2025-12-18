@@ -861,13 +861,12 @@ class FrmField {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
 
 		if ( $field ) {
-			$type = $field->{$col};
-		} else {
-			$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
-			$type  = FrmDb::get_var( 'frm_fields', $where, $col );
+			return $field->{$col};
 		}
 
-		return $type;
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
+
+		return FrmDb::get_var( 'frm_fields', $where, $col );
 	}
 
 	/**

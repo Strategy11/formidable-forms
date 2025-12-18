@@ -36,12 +36,10 @@ class FrmEntryMeta {
 		if ( $query_results ) {
 			self::clear_cache();
 			wp_cache_delete( $entry_id, 'frm_entry' );
-			$id = $wpdb->insert_id;
-		} else {
-			$id = 0;
+			return $wpdb->insert_id;
 		}
 
-		return $id;
+		return 0;
 	}
 
 	/**
