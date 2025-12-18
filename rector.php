@@ -144,7 +144,7 @@ return RectorConfig::configure()
 		// symfonyCodeQuality
 		false,
 		// symfonyConfigs
-		false,
+		false
 	)
 	->withPhpSets(
 		// PHP 8.3
@@ -270,7 +270,6 @@ return RectorConfig::configure()
 			RenameParamToMatchTypeRector::class,
 			AddArrowFunctionParamArrayWhereDimFetchRector::class,
 			NewlineBetweenClassLikeStmtsRector::class,
-
 			AddClosureParamTypeForArrayMapRector::class,
 			KnownMagicClassMethodTypeRector::class,
 			AddParamStringTypeFromSprintfUseRector::class,
