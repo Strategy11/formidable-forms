@@ -88,7 +88,7 @@ class FrmPayPalLiteAppController {
 		$amount = self::get_amount_value_for_verification( $action );
 
 		// PayPal expects the amount in a format like 10.00, so format it.
-		$amount         = number_format( floatval( $amount ), 2 );
+		$amount         = number_format( floatval( $amount ), 2, '.', '' );
 		$currency       = strtoupper( $action->post_content['currency'] );
 		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency );
 
