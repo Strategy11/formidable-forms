@@ -43,15 +43,11 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRec
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNewArrayRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictArrayParamDimFetchRector;
 use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
-use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
-use Rector\CodingStyle\Rector\String_\SymplifyQuoteEscapeRector;
 use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
-use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
-use Rector\Strict\Rector\BooleanNot\BooleanInBooleanNotRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector;
@@ -59,24 +55,18 @@ use Rector\TypeDeclaration\Rector\Closure\ClosureReturnTypeRector;
 use Rector\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector;
-use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictReturnsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddReturnTypeDeclarationBasedOnParentClassMethodRector;
 use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
-use Rector\Strict\Rector\If_\BooleanInIfConditionRuleFixerRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanConstReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictScalarReturnsRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictConstantReturnRector;
 use Rector\CodingStyle\Rector\PostInc\PostIncDecToPreIncDecRector;
-use Rector\Carbon\Rector\FuncCall\TimeFuncCallToCarbonRector;
-use Rector\Carbon\Rector\New_\DateTimeInstanceToCarbonRector;
-use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
-use Rector\Strict\Rector\Ternary\BooleanInTernaryOperatorRuleFixerRector;
 use Rector\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector;
 use Rector\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector;
 use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
@@ -87,6 +77,29 @@ use Rector\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarR
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
+use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
+use Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector;
+use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
+use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
+use Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector;
+use Rector\Php80\Rector\Identical\StrStartsWithRector;
+use Rector\Php80\Rector\NotIdentical\StrContainsRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
+use Rector\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector;
+use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
+use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
+use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
+use Rector\Php80\Rector\Identical\StrEndsWithRector;
+use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
+use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
+use Rector\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector;
+use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
+use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayMapRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\KnownMagicClassMethodTypeRector;
+use Rector\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector;
 
 define( 'ABSPATH', '' );
 
@@ -108,6 +121,8 @@ return RectorConfig::configure()
 		true,
 		// typeDeclarations
 		true,
+		// typeDeclarationDocblocks
+		true,
 		// privatization
 		true,
 		// naming
@@ -117,9 +132,9 @@ return RectorConfig::configure()
 		// earlyReturn
 		true,
 		// strictBooleans
-		true,
+		false,
 		// carbon
-		true,
+		false,
 		// rectorPreset
 		true,
 		// phpunitCodeQuality
@@ -185,11 +200,10 @@ return RectorConfig::configure()
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedConstructorParamRector::class,
-			// Try these
 			// Enable this one soon.
 			NewlineAfterStatementRector::class,
+			// Try these
 			RemoveUselessReturnTagRector::class,
-			ChangeOrIfContinueToMultiContinueRector::class,
 			RenameVariableToMatchNewTypeRector::class,
 			AddMethodCallBasedStrictParamTypeRector::class,
 			AddVoidReturnTypeWhereNoReturnRector::class,
@@ -202,10 +216,7 @@ return RectorConfig::configure()
 			NewlineBeforeNewAssignSetRector::class,
 			EncapsedStringsToSprintfRector::class,
 			StrictArraySearchRector::class,
-			SymplifyQuoteEscapeRector::class,
-			ReturnEarlyIfVariableRector::class,
 			RenameVariableToMatchMethodCallReturnTypeRector::class,
-			BooleanInBooleanNotRuleFixerRector::class,
 			ReturnTypeFromStrictNativeCallRector::class,
 			ReturnUnionTypeRector::class,
 			StringReturnTypeFromStrictStringReturnsRector::class,
@@ -220,17 +231,12 @@ return RectorConfig::configure()
 			TypedPropertyFromStrictConstructorRector::class,
 			AddReturnTypeDeclarationBasedOnParentClassMethodRector::class,
 			RenameForeachValueVariableToMatchExprVariableRector::class,
-			BooleanInIfConditionRuleFixerRector::class,
 			BoolReturnTypeFromBooleanConstReturnsRector::class,
 			ReturnTypeFromReturnCastRector::class,
 			StringReturnTypeFromStrictScalarReturnsRector::class,
 			ReturnTypeFromStrictConstantReturnRector::class,
 			PostIncDecToPreIncDecRector::class,
-			TimeFuncCallToCarbonRector::class,
-			DateTimeInstanceToCarbonRector::class,
-			ChangeIfElseValueAssignToEarlyReturnRector::class,
 			MultiDirnameRector::class,
-			BooleanInTernaryOperatorRuleFixerRector::class,
 			ReturnTypeFromStrictConstantReturnRector::class,
 			ReturnTypeFromStrictTernaryRector::class,
 			AddClosureVoidReturnTypeWhereNoReturnRector::class,
@@ -243,5 +249,30 @@ return RectorConfig::configure()
 			ReturnNeverTypeRector::class,
 			CallUserFuncArrayToVariadicRector::class,
 			CatchExceptionNameMatchingTypeRector::class,
+			ReturnBinaryOrToEarlyReturnRector::class,
+			CompleteMissingIfElseBracketRector::class,
+			ChangeOrIfContinueToMultiContinueRector::class,
+			ReturnEarlyIfVariableRector::class,
+			CompleteMissingIfElseBracketRector::class,
+			SimplifyQuoteEscapeRector::class,
+			StrStartsWithRector::class,
+			StrContainsRector::class,
+			AddParamArrayDocblockFromAssignsParamToParamReferenceRector::class,
+			AddParamArrayDocblockFromDimFetchAccessRector::class,
+			RepeatedAndNotEqualToNotInArrayRector::class,
+			UseIdenticalOverEqualWithSameTypeRector::class,
+			ChangeIfElseValueAssignToEarlyReturnRector::class,
+			AddParamFromDimFetchKeyUseRector::class,
+			ArrayKeyFirstLastRector::class,
+			DocblockReturnArrayFromDirectArrayInstanceRector::class,
+			StrEndsWithRector::class,
+			AddArrayFunctionClosureParamTypeRector::class,
+			RenameParamToMatchTypeRector::class,
+			AddArrowFunctionParamArrayWhereDimFetchRector::class,
+			NewlineBetweenClassLikeStmtsRector::class,
+
+			AddClosureParamTypeForArrayMapRector::class,
+			KnownMagicClassMethodTypeRector::class,
+			AddParamStringTypeFromSprintfUseRector::class,
 		)
 	);
