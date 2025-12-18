@@ -273,6 +273,31 @@ parameters:
 		- message: '#function array_map expects#'
 		- message: '#expects resource#'
 		- message: '#might not be defined#'
-		- message: '#expects false, string given#'
 		- message: '#array given#'
 		- message: '#Cannot use \+\+ on int\|false#'
+		- message: '#Only booleans are allowed in an (elseif|if) condition#'
+		- message: '#Only booleans are allowed in a negated boolean#'
+		- message: '#Only booleans are allowed in a ternary operator condition#'
+		- message: '#Loose comparison via "(!=|==)" is not allowed#'
+		- message: '#Variable property access on#'
+		- message: '#does not call parent constructor#'
+		- message: '#Only booleans are allowed in (&&|\|\|)#'
+		- message: '#Variable method call on#'
+		- message: '#requires parameter \#[\d]* to be set#'
+		- message: '#array_filter\(\) requires parameter \#2 to be passed to avoid loose comparison semantics.#'
+		- message: '#Static call to __construct\(\) is only allowed on a parent class in the constructor#'
+		- message: '#Variable static method call on#'
+		-
+			message: '#should be contravariant with#'
+			paths:
+				- classes/helpers/FrmFormsListHelper.php
+				- classes/models/FrmInstallerSkin.php
+		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
+		-
+			message: '#Foreach overwrites \$ip with its value variable.#'
+			path: classes/helpers/FrmAppHelper.php
+		-
+			message: '#Only numeric types are allowed#'
+			paths:
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/models/FrmStyle.php
