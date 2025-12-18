@@ -153,18 +153,53 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$response = FrmPayPalLiteConnectHelper::capture_order( $paypal_order_id );
 
-		/*
-		echo '<pre>';
-		var_dump( $response );
-		echo '</pre>';
-		die();
-		*/
-
 		if ( false === $response ) {
 			return 'Failed to confirm order.';
 		}
 
+		if ( ! isset( $response->status ) || $response->status !== 'COMPLETED' ) {
+			return 'Failed to capture order.';
+		}
+
+		// Create a payment record.
+		$atts['status']         = 'complete';
+		$atts['charge']         = new stdClass();
+		$atts['charge']->id     = $paypal_order_id;
+		$atts['charge']->amount = $atts['amount'];
+
+		$payment_id  = self::create_new_payment( $atts );
+		$frm_payment = new FrmTransLitePayment();
+		$payment     = $frm_payment->get_one( $payment_id );
+		$status      = $atts['status'];
+
+		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
+
 		return true;
+	}
+
+		/**
+	 * Add a payment row for the payments table.
+	 *
+	 * @param array $atts The arguments for the payment.
+	 *
+	 * @return int
+	 */
+	private static function create_new_payment( $atts ) {
+		$atts['charge'] = (object) $atts['charge'];
+
+		$new_values = array(
+			'amount'     => FrmTransLiteAppHelper::get_formatted_amount_for_currency( $atts['charge']->amount, $atts['action'] ),
+			'status'     => $atts['status'],
+			'paysys'     => 'paypal',
+			'item_id'    => $atts['entry']->id,
+			'action_id'  => $atts['action']->ID,
+			'receipt_id' => $atts['charge']->id,
+			'sub_id'     => $atts['charge']->sub_id ?? '',
+			'test'       => 'test' === FrmPayPalLiteAppHelper::active_mode() ? 1 : 0,
+		);
+
+		$frm_payment = new FrmTransLitePayment();
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
