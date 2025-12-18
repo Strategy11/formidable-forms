@@ -30,7 +30,7 @@
 		]
 	},
 	"require-dev": {
-		"php-stubs/wordpress-stubs": "^5.9",
+		"php-stubs/wordpress-stubs": "^v6.9.0",
 		"yoast/phpunit-polyfills": "^1.0",
 		"wp-coding-standards/wpcs": "^3.0",
 		"automattic/vipwpcs": "^3.0",

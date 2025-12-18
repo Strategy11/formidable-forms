@@ -276,3 +276,7 @@ parameters:
 		- message: '#expects false, string given#'
 		- message: '#array given#'
 		- message: '#Cannot use \+\+ on int\|false#'
+		- message: '#expects lowercase-string&non-empty-string, string given#'
+		- message: '#expects non-empty-string, string given#'
+		- message: '#class WP_Widget but does not specify its types#'
+		- message: "#add_submenu_page expects ''#"
