@@ -53,7 +53,6 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmFormsController::update();
-		ob_get_contents();
 		ob_end_clean();
 
 		self::_check_updated_values( $form_id );
