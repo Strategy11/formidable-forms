@@ -4,8 +4,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @todo Show opt-in popup after plugin activation.
- *
  * @since 3.06.04
  */
 class FrmUsageController {

@@ -263,12 +263,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
-
-		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
-			return false;
-		}
-
-		return true;
+		return FrmFormsHelper::plan_is_allowed( $args );
 	}
 
 	/**

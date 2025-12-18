@@ -213,9 +213,7 @@ class FrmEmailStylesController {
 					</style>';
 		}
 
-		$wrapped_content .= '</head><body>' . $content . '</body></html>';
-
-		return $wrapped_content;
+		return $wrapped_content . ( '</head><body>' . $content . '</body></html>' );
 	}
 
 	/**
@@ -449,9 +447,7 @@ class FrmEmailStylesController {
 		// The message.
 		$new_message .= self::add_inline_css( 'a', 'color:' . $style_settings['link_color'] . ';', $message );
 
-		$new_message .= '</div></div></div>';
-
-		return $new_message;
+		return $new_message . '</div></div></div>';
 	}
 
 	/**

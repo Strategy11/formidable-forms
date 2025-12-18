@@ -26,5 +26,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<label for="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>">
 		<?php esc_html_e( 'Step', 'formidable' ); ?>
 	</label>
-	<input type="number" name="field_options[step_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['step'] ); ?>" id="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>" />
+	<?php
+	// Make sure to use type="text" for step because we also support "any" as a value.
+	?>
+	<input type="text" name="field_options[step_<?php echo absint( $field['id'] ); ?>]" value="<?php echo esc_attr( $field['step'] ); ?>" id="frm_step_<?php echo esc_attr( $field['field_key'] ); ?>" />
 </p>

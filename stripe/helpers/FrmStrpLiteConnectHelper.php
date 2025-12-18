@@ -648,8 +648,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @todo I can probably remove this.
-	 *
 	 * @return void
 	 */
 	public static function stripe_icon() {
@@ -769,9 +767,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
-		$data     = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
-		$refunded = is_object( $data );
-		return $refunded;
+		$data = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -802,8 +799,7 @@ class FrmStrpLiteConnectHelper {
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
 		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
-		$canceled             = false !== $data;
-		return $canceled;
+		return false !== $data;
 	}
 
 	/**
@@ -893,8 +889,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function update_intent( $intent_id, $data ) {
 		$data    = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
-		$success = false !== $data;
-		return $success;
+		return false !== $data;
 	}
 
 	/**

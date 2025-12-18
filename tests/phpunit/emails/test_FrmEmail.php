@@ -24,17 +24,17 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @var stdClass
 	 */
-	protected $contact_form = null;
+	protected $contact_form;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $email_action = null;
+	protected $email_action;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
@@ -430,12 +430,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function prepare_subject( $subject ) {
-		$subject = wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
-		return $subject;
-
-		// TODO: Run this with the frm_encode_subject filter.
-		$charset = get_option( 'blog_charset' );
-		return '=?' . $charset . '?B?' . base64_encode( $subject ) . '?=';
+		return wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
 	}
 
 	protected function get_email_action_for_form( $form_id ) {
@@ -507,8 +502,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	public function change_email_subject( $subject, $args ) {
-		$subject = 'New subject';
-		return $subject;
+		return 'New subject';
 	}
 
 	public function send_separate_emails( $is_single, $args ) {

@@ -271,15 +271,14 @@ class FrmAppController {
 	 * @return string
 	 */
 	private static function get_current_page() {
-		$page         = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type    = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
-		$current_page = isset( $_GET['page'] ) ? $page : $post_type;
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
 		if ( FrmAppHelper::is_view_builder_page() ) {
-			$current_page = 'frm_display';
+			return 'frm_display';
 		}
 
-		return $current_page;
+		return isset( $_GET['page'] ) ? $page : $post_type;
 	}
 
 	/**
@@ -568,15 +567,14 @@ class FrmAppController {
 		$db_version = get_option( $atts['option'] );
 
 		if ( strpos( $db_version, '-' ) === false ) {
-			$needs_upgrade = true;
-		} else {
-			$last_upgrade     = explode( '-', $db_version );
-			$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-			$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
-			$needs_upgrade    = $needs_db_upgrade || $new_version;
+			return true;
 		}
 
-		return $needs_upgrade;
+		$last_upgrade     = explode( '-', $db_version );
+		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
+		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
+
+		return $needs_db_upgrade || $new_version;
 	}
 
 	/**
@@ -611,11 +609,7 @@ class FrmAppController {
 				'content'  => 'submenu-upgrade',
 			);
 
-			if ( $redirect ) {
-				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
-			} else {
-				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
-			}
+			$redirect = $redirect ? FrmAppHelper::maybe_add_missing_utm( $redirect, $utm ) : FrmAppHelper::admin_upgrade_link( $utm );
 
 			wp_redirect( $redirect );
 			die();
@@ -1447,12 +1441,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
-
-		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
-			return true;
-		}
-
-		return false;
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 
 	/**

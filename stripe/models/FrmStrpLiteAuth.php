@@ -63,8 +63,7 @@ class FrmStrpLiteAuth {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
-				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
-				return $message;
+				return $message . ( '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>' );
 			};
 			add_filter( 'frm_content', $filter );
 		}
@@ -657,12 +656,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
-
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
 	/**
@@ -738,13 +732,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		if ( $atts['conf_method'] === 'redirect' ) {
-			$redirect = self::get_redirect_url( $atts );
-		} else {
-			$redirect = self::get_message_url( $atts );
-		}
-
-		return $redirect;
+		return $atts['conf_method'] === 'redirect' ? self::get_redirect_url( $atts ) : self::get_message_url( $atts );
 	}
 
 	/**
@@ -872,12 +860,7 @@ class FrmStrpLiteAuth {
 		if ( self::intent_has_failed_status( $intent ) ) {
 			return true;
 		}
-
 		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
-		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
-			return true;
-		}
-
-		return false;
+		return 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status;
 	}
 }

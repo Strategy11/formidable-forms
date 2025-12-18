@@ -113,16 +113,10 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	private function prepare_user_info_attribute( $atts ) {
 		if ( isset( $atts['show'] ) ) {
-			if ( $atts['show'] === 'id' ) {
-				$user_info = 'ID';
-			} else {
-				$user_info = $atts['show'];
-			}
-		} else {
-			$user_info = apply_filters( 'frm_user_id_display', 'display_name' );
+			return $atts['show'] === 'id' ? 'ID' : $atts['show'];
 		}
 
-		return $user_info;
+		return apply_filters( 'frm_user_id_display', 'display_name' );
 	}
 
 	/**

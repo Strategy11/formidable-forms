@@ -266,6 +266,10 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="Squiz.WhiteSpace.SuperfluousWhitespace.EndLine">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />

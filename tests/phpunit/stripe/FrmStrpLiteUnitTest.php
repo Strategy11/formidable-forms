@@ -162,7 +162,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		return array_filter(
 			array_merge(
 				$default_options,
-				isset( $this->plan_options ) ? $this->plan_options : array()
+				$this->plan_options ?? array()
 			)
 		);
 	}
@@ -234,10 +234,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	 * @return string
 	 */
 	protected function get_test_credit_card_number() {
-		if ( isset( $this->use_test_credit_card_number ) ) {
-			return $this->use_test_credit_card_number;
-		}
-		return '4242424242424242';
+		return $this->use_test_credit_card_number ?? '4242424242424242';
 	}
 
 	/**
@@ -275,7 +272,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		return array_filter(
 			array_merge(
 				$default_options,
-				isset( $this->subscription_charge_options ) ? $this->subscription_charge_options : array()
+				$this->subscription_charge_options ?? array()
 			)
 		);
 	}
@@ -291,7 +288,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 			'card' => $this->get_test_credit_card(),
 		);
 
-		$account_details = $this->get_stripe_account_id_details( $this->account_id );
+		$account_details = $this->get_stripe_account_id_details();
 
 		// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		return $stripe->paymentMethods->create( $card_details, $account_details );
@@ -303,13 +300,12 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	protected function prepare_new_charge_array() {
 		$customer_id = $this->get_customer_id();
 		$this->add_card( $customer_id );
-		$new_charge = array(
+		return array(
 			'customer' => $customer_id,
 			'currency' => 'usd',
 			'amount'   => 1000,
 			'capture'  => false,
 		);
-		return $new_charge;
 	}
 
 	protected function assert_run_new_charge( $charge ) {
@@ -452,7 +448,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	 * @return false|string
 	 */
 	protected function maybe_create_plan() {
-		$customer = $this->get_customer();
+		$this->get_customer();
 		$plan     = $this->get_plan_options();
 		return FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan );
 	}

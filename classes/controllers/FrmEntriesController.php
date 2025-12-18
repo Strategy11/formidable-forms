@@ -131,11 +131,11 @@ class FrmEntriesController {
 				do_action( 'frm_entry_action_route', $action );
 
 				if ( apply_filters( 'frm_entry_stop_action_route', false, $action ) ) {
-					return;
+					return null;
 				}
 
 				self::display_list();
-				return;
+				return null;
 		}
 	}
 
@@ -926,22 +926,17 @@ class FrmEntriesController {
 		$atts = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
-			$shortcode_atts = array(
+			$shortcode_atts  = array(
 				'format'     => $atts['format'],
 				'plain_text' => $atts['plain_text'],
 			);
-
 			$entry_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $shortcode_atts );
-			$formatted_entry = $entry_formatter->content();
-
-		} else {
-
-			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
-			$formatted_entry = $entry_formatter->get_formatted_entry_values();
-
+			return $entry_formatter->content();
 		}
 
-		return $formatted_entry;
+		$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
+
+		return $entry_formatter->get_formatted_entry_values();
 	}
 
 	/**

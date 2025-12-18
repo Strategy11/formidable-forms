@@ -202,8 +202,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLitePayment();
-		$payment_id  = $frm_payment->create( $new_values );
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
@@ -326,9 +325,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLiteSubscription();
-		$payment_id  = $frm_payment->create( $new_values );
 
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**

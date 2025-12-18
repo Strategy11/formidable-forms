@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.26';
+	public static $plug_version = '6.26.1';
 
 	/**
 	 * @var bool
@@ -130,11 +130,7 @@ class FrmAppHelper {
 			$page = 'https://formidableforms.com/lite-upgrade/';
 		}
 
-		if ( is_array( $args ) ) {
-			$args = self::adjust_legacy_utm_args( $args );
-		} else {
-			$args = array( 'campaign' => $args );
-		}
+		$args = is_array( $args ) ? self::adjust_legacy_utm_args( $args ) : array( 'campaign' => $args );
 
 		$query_args = array(
 			'utm_source' => 'plugin',
@@ -178,11 +174,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	private static function maybe_add_utm_license( $query_args, $link = '' ) {
-		if ( isset( $query_args['utm_medium'] ) ) {
-			$medium = $query_args['utm_medium'];
-		} else {
-			$medium = self::pull_medium_from_link( $link );
-		}
+		$medium = $query_args['utm_medium'] ?? self::pull_medium_from_link( $link );
 
 		if ( 'pro' === $medium && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
@@ -444,13 +436,12 @@ class FrmAppHelper {
 	 */
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
-		$is_formidable = strpos( $page, 'formidable' ) !== false;
 
 		if ( empty( $page ) ) {
-			$is_formidable = self::is_view_builder_page();
+			return self::is_view_builder_page();
 		}
 
-		return $is_formidable;
+		return strpos( $page, 'formidable' ) !== false;
 	}
 
 	/**
@@ -1409,9 +1400,10 @@ class FrmAppHelper {
 
 		if ( $echo ) {
 			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
-			return $icon;
+			return null;
 		}
+
+		return $icon;
 	}
 
 	/**
@@ -1552,11 +1544,13 @@ class FrmAppHelper {
 			$echo_function();
 		}
 
-		if ( ! $echo ) {
-			$return = ob_get_contents();
-			ob_end_clean();
-			return $return;
+		if ( $echo ) {
+			return null;
 		}
+
+		$return = ob_get_contents();
+		ob_end_clean();
+		return $return;
 	}
 
 	/**
@@ -1631,11 +1625,7 @@ class FrmAppHelper {
 					'content'  => 'lite-banner',
 				);
 
-				if ( $upgrade_link ) {
-					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
-				} else {
-					$upgrade_link = self::admin_upgrade_link( $utm );
-				}
+				$upgrade_link = $upgrade_link ? self::maybe_add_missing_utm( $upgrade_link, $utm ) : self::admin_upgrade_link( $utm );
 
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
@@ -2470,11 +2460,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 
-			if ( count( $value ) ) {
-				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
-			} else {
-				$function = array( $function );
-			}
+			$function = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
 			if ( ! self::is_assoc( $value ) ) {
 				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
@@ -2673,11 +2659,7 @@ class FrmAppHelper {
 		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
-			if ( is_email( $user_id ) ) {
-				$user = get_user_by( 'email', $user_id );
-			} else {
-				$user = get_user_by( 'login', $user_id );
-			}
+			$user = is_email( $user_id ) ? get_user_by( 'email', $user_id ) : get_user_by( 'login', $user_id );
 
 			if ( $user ) {
 				$user_id = $user->ID;
@@ -3070,13 +3052,11 @@ class FrmAppHelper {
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
-			$custom_style = absint( $post_values['options']['custom_style'] );
-		} else {
-			$frm_settings = self::get_settings();
-			$custom_style = ( $frm_settings->load_style !== 'none' );
+			return absint( $post_values['options']['custom_style'] );
 		}
 
-		return $custom_style;
+		$frm_settings = self::get_settings();
+		return $frm_settings->load_style !== 'none';
 	}
 
 	/**
@@ -3224,13 +3204,12 @@ class FrmAppHelper {
 		}
 
 		$trimmed_format = trim( $time_format );
-		$time           = '';
 
 		if ( $time_format && ! empty( $trimmed_format ) ) {
-			$time = ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
-		return $time;
+		return '';
 	}
 
 	/**
@@ -3257,11 +3236,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) && 0 !== $to ) {
-			$now = new DateTime();
-		} else {
-			$now = new DateTime( '@' . $to );
-		}
+		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 
 		$ago = new DateTime( '@' . $from );
 
@@ -3302,11 +3277,10 @@ class FrmAppHelper {
 			}
 		}
 
-		$levels_deep     = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
-		$time_strings    = array_slice( $time_strings, 0, absint( $levels_deep ) );
-		$time_ago_string = implode( ' ', $time_strings );
+		$levels_deep  = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
+		$time_strings = array_slice( $time_strings, 0, absint( $levels_deep ) );
 
-		return $time_ago_string;
+		return implode( ' ', $time_strings );
 	}
 
 	/**
@@ -3672,11 +3646,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( is_serialized( $value ) ) {
-			$value = self::maybe_unserialize_array( $value );
-		} else {
-			$value = self::maybe_json_decode( $value, false );
-		}
+		$value = is_serialized( $value ) ? self::maybe_unserialize_array( $value ) : self::maybe_json_decode( $value, false );
 	}
 
 	/**
@@ -4841,13 +4811,8 @@ class FrmAppHelper {
 
 		$path = $parsed['path'];
 		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-
-		if ( $expected_extension !== $ext ) {
-			// The URL isn't to an XML file.
-			return false;
-		}
-
-		return true;
+		// The URL isn't to an XML file.
+		return $expected_extension === $ext;
 	}
 
 	/**

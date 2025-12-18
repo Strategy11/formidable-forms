@@ -119,9 +119,7 @@ class FrmCSVExportHelper {
 			array_splice( $formats, 1, 0, 'UTF-8 with BOM' );
 		}
 
-		$formats = apply_filters( 'frm_csv_format_options', $formats );
-
-		return $formats;
+		return apply_filters( 'frm_csv_format_options', $formats );
 	}
 
 	/**
@@ -362,7 +360,7 @@ class FrmCSVExportHelper {
 			$field_headings[ $col->id ] = strip_tags( $col->name );
 		}
 
-		$field_headings             = apply_filters(
+		return apply_filters(
 			'frm_csv_field_columns',
 			$field_headings,
 			array_merge(
@@ -370,8 +368,6 @@ class FrmCSVExportHelper {
 				array( 'field' => $col )
 			)
 		);
-
-		return $field_headings;
 	}
 
 	/**
@@ -889,8 +885,6 @@ class FrmCSVExportHelper {
 			$value = "'" . $value;
 		}
 
-		$value = str_replace( '"', '""', $value );
-
-		return $value;
+		return str_replace( '"', '""', $value );
 	}
 }

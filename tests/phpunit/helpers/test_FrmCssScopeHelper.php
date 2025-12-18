@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 /**
  * @group helpers
@@ -30,7 +30,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 		$css      = '.button { color: red; }';
 		$result   = $this->helper->nest( $css, $this->scope_name );
 		$expected = "\n." . $this->scope_name . " .button { color: red; }\n";
-		
+
 		$this->assertEquals( $expected, $result );
 	}
 
@@ -40,7 +40,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_multiple_selectors() {
 		$css    = '.button, .link { color: blue; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .link', $result );
 	}
@@ -51,7 +51,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_multiple_properties() {
 		$css    = '.button { color: red; background: blue; padding: 10px; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 		$this->assertStringContainsString( 'color: red;', $result );
 		$this->assertStringContainsString( 'background: blue;', $result );
@@ -64,7 +64,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_descendant_selectors() {
 		$css    = '.parent .child { color: green; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .parent .child', $result );
 	}
 
@@ -74,7 +74,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_pseudo_classes() {
 		$css    = '.button:hover { color: red; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button:hover', $result );
 	}
 
@@ -84,7 +84,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_pseudo_elements() {
 		$css    = '.button::before { content: "→"; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button::before', $result );
 	}
 
@@ -94,7 +94,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_media_query() {
 		$css    = '@media (max-width: 768px) { .button { color: red; } }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '@media (max-width: 768px)', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 	}
@@ -105,7 +105,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_keyframes() {
 		$css    = '@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '@keyframes fadeIn', $result );
 		$this->assertStringContainsString( 'from { opacity: 0; }', $result );
 		$this->assertStringContainsString( 'to { opacity: 1; }', $result );
@@ -119,7 +119,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_removes_comments() {
 		$css    = '/* Formidable CSS comment */ .button { color: red; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringNotContainsString( '/* Formidable CSS comment */', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 	}
@@ -134,7 +134,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 			padding: 10px;
 		}';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 		$this->assertStringContainsString( 'color: red;', $result );
 	}
@@ -145,7 +145,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_attribute_selectors() {
 		$css    = 'input[type="text"] { border: 1px solid #ccc; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' input[type="text"]', $result );
 	}
 
@@ -155,7 +155,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_empty_css() {
 		$css    = '';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertEquals( '', $result );
 	}
 
@@ -165,7 +165,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_basic_selector() {
 		$css    = '.' . $this->scope_name . ' .button { color: red; }';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.button { color: red; }', $result );
 		$this->assertStringNotContainsString( '.' . $this->scope_name . ' .button', $result );
 	}
@@ -176,7 +176,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_multiple_selectors() {
 		$css    = '.' . $this->scope_name . ' .button, ' . $this->scope_name . ' .link { color: blue; }';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.button', $result );
 		$this->assertStringContainsString( '.link', $result );
 		$this->assertStringNotContainsString( '.' . $this->scope_name, $result );
@@ -188,7 +188,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_media_query() {
 		$css    = '@media (max-width: 768px) { ' . $this->scope_name . ' .button { color: red; } }';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '@media (max-width: 768px)', $result );
 		$this->assertStringContainsString( '.button', $result );
 		$this->assertStringNotContainsString( '.' . $this->scope_name . ' .button', $result );
@@ -200,7 +200,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_non_prefixed_selector() {
 		$css    = '.other-scope .button { color: red; }';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.other-scope .button', $result );
 	}
 
@@ -210,7 +210,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_mixed_selectors() {
 		$css    = '.' . $this->scope_name . ' .button, .other .link { color: blue; }';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.button', $result );
 		$this->assertStringContainsString( '.other .link', $result );
 	}
@@ -224,7 +224,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 			.link { color: blue; }
 		}';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '@media (max-width: 768px)', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .link', $result );
@@ -236,7 +236,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_id_selector() {
 		$css    = '#element-id { color: red; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' #element-id', $result );
 	}
 
@@ -246,7 +246,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_child_combinator() {
 		$css    = '.parent > .child { color: red; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .parent > .child', $result );
 	}
 
@@ -256,7 +256,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_adjacent_sibling_combinator() {
 		$css    = '.first + .second { margin-left: 10px; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .first + .second', $result );
 	}
 
@@ -266,7 +266,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_general_sibling_combinator() {
 		$css    = '.first ~ .second { color: blue; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .first ~ .second', $result );
 	}
 
@@ -276,7 +276,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_with_braces_in_strings() {
 		$css    = '.button::after { content: "{test}"; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .button::after', $result );
 		$this->assertStringContainsString( 'content: "{test}"', $result );
 	}
@@ -287,7 +287,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_supports_rule() {
 		$css    = '@supports (display: grid) { .container { display: grid; } }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '@supports (display: grid)', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' .container', $result );
 	}
@@ -298,7 +298,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_nest_element_selectors() {
 		$css    = 'div { margin: 0; } p { padding: 10px; }';
 		$result = $this->helper->nest( $css, $this->scope_name );
-		
+
 		$this->assertStringContainsString( '.' . $this->scope_name . ' div', $result );
 		$this->assertStringContainsString( '.' . $this->scope_name . ' p', $result );
 	}
@@ -309,7 +309,7 @@ class test_FrmCssScopeHelper extends FrmUnitTest {
 	public function test_unnest_empty_css() {
 		$css    = '';
 		$result = $this->helper->unnest( $css, $this->scope_name );
-		
+
 		$this->assertEquals( '', $result );
 	}
 }

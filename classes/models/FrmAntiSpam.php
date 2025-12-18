@@ -56,11 +56,7 @@ class FrmAntiSpam extends FrmValidate {
 	private function get( $current = true ) {
 		// If $current was not passed, or it is true, we use the current timestamp.
 		// If $current was passed in as a string, we'll use that passed in timestamp.
-		if ( $current !== true ) {
-			$time = $current;
-		} else {
-			$time = time();
-		}
+		$time = $current !== true ? $current : time();
 
 		// Format the timestamp to be less exact, as we want to deal in days.
 		// June 19th, 2020 would get formatted as: 1906202017125.
@@ -175,8 +171,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return string
 	 */
 	public function add_token_to_form( $attributes ) {
-		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
-		return $attributes;
+		return $attributes . ( ' data-token="' . esc_attr( $this->get() ) . '"' );
 	}
 
 	/**

@@ -226,9 +226,8 @@ class FrmEmail {
 		$recipients = $this->explode_emails( $recipients );
 
 		$recipients = array_unique( (array) $recipients );
-		$recipients = $this->format_recipients( $recipients );
 
-		return $recipients;
+		return $this->format_recipients( $recipients );
 	}
 
 	/**
@@ -487,26 +486,22 @@ class FrmEmail {
 	 */
 	public function should_send() {
 		if ( ! $this->has_recipients() ) {
-			$send = false;
-		} else {
-
-			$filter_args = array(
-				'message'   => $this->message,
-				'subject'   => $this->subject,
-				'recipient' => $this->to,
-				'header'    => $this->package_header(),
-			);
-
-			/**
-			 * Stop an email based on the message, subject, recipient,
-			 * or any information included in the email header
-			 *
-			 * @since 2.2.8
-			 */
-			$send = apply_filters( 'frm_send_email', true, $filter_args );
+			return false;
 		}
 
-		return $send;
+		$filter_args = array(
+			'message'   => $this->message,
+			'subject'   => $this->subject,
+			'recipient' => $this->to,
+			'header'    => $this->package_header(),
+		);
+		/**
+		 * Stop an email based on the message, subject, recipient,
+		 * or any information included in the email header
+		 *
+		 * @since 2.2.8
+		 */
+		return apply_filters( 'frm_send_email', true, $filter_args );
 	}
 
 	/**
@@ -517,10 +512,7 @@ class FrmEmail {
 	 * @return bool
 	 */
 	private function has_recipients() {
-		if ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) ) {
-			return false;
-		}
-		return true;
+		return ! ( empty( $this->to ) && empty( $this->cc ) && empty( $this->bcc ) );
 	}
 
 	/**
@@ -656,9 +648,8 @@ class FrmEmail {
 
 		// Remove brackets and add a space in case there isn't one
 		$value = str_replace( '<', ' ', $value );
-		$value = str_replace( array( '"', '>' ), '', $value );
 
-		return $value;
+		return str_replace( array( '"', '>' ), '', $value );
 	}
 
 	/**
@@ -674,13 +665,7 @@ class FrmEmail {
 	private function explode_emails( $emails ) {
 		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
 
-		if ( is_array( $emails ) ) {
-			$emails = array_map( 'trim', $emails );
-		} else {
-			$emails = trim( $emails );
-		}
-
-		return $emails;
+		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
 	/**

@@ -189,8 +189,6 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @todo Only show the note once for a form per user per month or something.
-	 *
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
@@ -213,10 +211,6 @@ class FrmStylesPreviewHelper {
 					'</a>'
 				);
 			};
-		}
-
-		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
-			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
 		}
 
 		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {

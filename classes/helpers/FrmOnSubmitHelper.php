@@ -464,7 +464,7 @@ class FrmOnSubmitHelper {
 	 *
 	 * @since 6.1.1
 	 *
-	 * @param array $atts 
+	 * @param array $atts
 	 *
 	 * @return string
 	 */
