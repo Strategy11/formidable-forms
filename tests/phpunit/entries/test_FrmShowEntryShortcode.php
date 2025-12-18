@@ -756,9 +756,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$table .= $this->user_info_rows( $atts );
 
-		$table .= $this->table_footer();
-
-		return $table;
+		return $table . $this->table_footer();
 	}
 
 	protected function expected_plain_text_content( $atts ) {
@@ -774,9 +772,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$content .= $this->label_and_value_plain_text_row( 'free-hidden-field', $atts );
 		$content .= $this->single_value_plain_text_row( 'free-html-field', $atts );
 
-		$content .= $this->user_info_plain_text_rows( $atts );
-
-		return $content;
+		return $content . $this->user_info_plain_text_rows( $atts );
 	}
 
 	protected function table_header( $atts ) {
@@ -797,9 +793,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
 
-		$header .= '><tbody>' . "\r\n";
-
-		return $header;
+		return $header . '><tbody>' . "\r\n";
 	}
 
 	protected function get_defaults() {
@@ -844,9 +838,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html .= $field_value;
 		}
 
-		$html .= '</tr>' . "\r\n";
-
-		return $html;
+		return $html . '</tr>' . "\r\n";
 	}
 
 	protected function one_cell_table_row( $field_key, $atts ) {
@@ -859,9 +851,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$html  = '<tr' . $this->tr_style . '>';
 		$html .= '<td colspan="2"' . $this->td_style . '>' . $field_value . '</td>';
-		$html .= '</tr>' . "\r\n";
 
-		return $html;
+		return $html . '</tr>' . "\r\n";
 	}
 
 	protected function label_and_value_plain_text_row( $field_key, $atts ) {
@@ -878,9 +869,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$content = $field->name . ': ' . $field_value;
 		}
 
-		$content .= "\r\n";
-
-		return $content;
+		return $content . "\r\n";
 	}
 
 	protected function single_value_plain_text_row( $field_key, $atts ) {
@@ -891,9 +880,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			return '';
 		}
 
-		$content = $field_value . "\r\n";
-
-		return $content;
+		return $field_value . "\r\n";
 	}
 
 	/**
@@ -910,7 +897,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$include = in_array( $field->type, $this->include_extras, true );
 		}
 
-		if ( $include === true ) {
+		if ( $include ) {
 			if ( ! empty( $this->include_fields ) ) {
 				$include = $this->is_self_or_parent_in_array( $field->field_key, $this->include_fields );
 			} elseif ( ! empty( $this->exclude_fields ) ) {
@@ -957,15 +944,12 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function get_field_html_value( $entry, $field, $atts ) {
 		$field_value = $this->get_field_value( $entry, $field, $atts );
-		$field_value = str_replace( array( "\r\n", "\n" ), '<br/>', $field_value );
 
-		return $field_value;
+		return str_replace( array( "\r\n", "\n" ), '<br/>', $field_value );
 	}
 
 	protected function get_field_plain_text_value( $entry, $field, $atts ) {
-		$field_value = $this->get_field_value( $entry, $field, $atts );
-
-		return $field_value;
+		return $this->get_field_value( $entry, $field, $atts );
 	}
 
 	/**
@@ -1101,43 +1085,19 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function table_row_start_tags( $type, $field ) {
-		if ( $type === 'html' ) {
-			$html = '<tr style="[frm-alt-color]"><th scope="row"' . $this->td_style . '>';
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? '<tr style="[frm-alt-color]"><th scope="row"' . $this->td_style . '>' : '';
 	}
 
 	protected function cell_separator( $type ) {
-		if ( $type === 'html' ) {
-			$html = '</th><td' . $this->td_style . '>';
-		} else {
-			$html = ': ';
-		}
-
-		return $html;
+		return $type === 'html' ? '</th><td' . $this->td_style . '>' : ': ';
 	}
 
 	protected function table_row_end_tags( $type ) {
-		if ( $type === 'html' ) {
-			$html = '</td></tr>';
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? '</td></tr>' : '';
 	}
 
 	protected function after_table_row_tags( $type ) {
-		if ( $type === 'html' ) {
-			$html = "\r\n";
-		} else {
-			$html = '';
-		}
-
-		return $html;
+		return $type === 'html' ? "\r\n" : '';
 	}
 
 	protected function expected_default_array( $atts ) {

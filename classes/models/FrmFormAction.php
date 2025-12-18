@@ -369,14 +369,11 @@ class FrmFormAction {
 		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->save_settings( $action );
-		} else {
-			// Create action
-			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->duplicate_one( (object) $action, $action['menu_order'] );
+			return $this->save_settings( $action );
 		}
-
-		return $post_id;
+		// Create action
+		$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
+		return $this->duplicate_one( (object) $action, $action['menu_order'] );
 	}
 
 	/**
@@ -465,7 +462,7 @@ class FrmFormAction {
 
 		// We need to update the data
 		if ( $this->updated ) {
-			return;
+			return null;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -474,7 +471,7 @@ class FrmFormAction {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
-			return;
+			return null;
 		}
 
 		$action_ids = array();

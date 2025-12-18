@@ -120,13 +120,10 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		$value = '';
-
 		if ( property_exists( $this, $key ) ) {
-			$value = $this->{$key};
+			return $this->{$key};
 		}
-
-		return $value;
+		return '';
 	}
 
 	/**
@@ -433,13 +430,10 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array();
-
 		if ( ! $this->has_input ) {
-			$settings = $this->no_input_settings();
+			return $this->no_input_settings();
 		}
-
-		return $settings;
+		return array();
 	}
 
 	/**
@@ -1189,7 +1183,7 @@ DEFAULT_HTML;
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
@@ -1197,7 +1191,7 @@ DEFAULT_HTML;
 		$include_file = $this->include_front_form_file();
 
 		if ( empty( $include_file ) ) {
-			return;
+			return null;
 		}
 
 		if ( isset( $shortcode_atts['opt'] ) ) {
@@ -1782,11 +1776,7 @@ DEFAULT_HTML;
 		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
-
-		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
-			return false;
-		}
-		return true;
+		return empty( $entry->user_id ) || ! $this->user_id_is_privileged( $entry->user_id );
 	}
 
 	/**

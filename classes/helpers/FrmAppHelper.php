@@ -436,13 +436,12 @@ class FrmAppHelper {
 	 */
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
-		$is_formidable = strpos( $page, 'formidable' ) !== false;
 
 		if ( empty( $page ) ) {
-			$is_formidable = self::is_view_builder_page();
+			return self::is_view_builder_page();
 		}
 
-		return $is_formidable;
+		return strpos( $page, 'formidable' ) !== false;
 	}
 
 	/**
@@ -1401,9 +1400,10 @@ class FrmAppHelper {
 
 		if ( $echo ) {
 			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
-			return $icon;
+			return null;
 		}
+
+		return $icon;
 	}
 
 	/**
@@ -1544,11 +1544,13 @@ class FrmAppHelper {
 			$echo_function();
 		}
 
-		if ( ! $echo ) {
-			$return = ob_get_contents();
-			ob_end_clean();
-			return $return;
+		if ( $echo ) {
+			return null;
 		}
+
+		$return = ob_get_contents();
+		ob_end_clean();
+		return $return;
 	}
 
 	/**
@@ -3050,13 +3052,11 @@ class FrmAppHelper {
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
-			$custom_style = absint( $post_values['options']['custom_style'] );
-		} else {
-			$frm_settings = self::get_settings();
-			$custom_style = ( $frm_settings->load_style !== 'none' );
+			return absint( $post_values['options']['custom_style'] );
 		}
 
-		return $custom_style;
+		$frm_settings = self::get_settings();
+		return $frm_settings->load_style !== 'none';
 	}
 
 	/**
@@ -3204,13 +3204,12 @@ class FrmAppHelper {
 		}
 
 		$trimmed_format = trim( $time_format );
-		$time           = '';
 
 		if ( $time_format && ! empty( $trimmed_format ) ) {
-			$time = ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
-		return $time;
+		return '';
 	}
 
 	/**
@@ -4821,13 +4820,8 @@ class FrmAppHelper {
 
 		$path = $parsed['path'];
 		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-
-		if ( $expected_extension !== $ext ) {
-			// The URL isn't to an XML file.
-			return false;
-		}
-
-		return true;
+		// The URL isn't to an XML file.
+		return $expected_extension === $ext;
 	}
 
 	/**

@@ -368,12 +368,7 @@ class FrmStyle {
 		// Matches size values but also checks for unexpected ( and ).
 		// This is case insensitive so it will catch PX, PT, etc, as well.
 		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
-
-		if ( $looks_like_a_size ) {
-			return true;
-		}
-
-		return false;
+		return (bool) $looks_like_a_size;
 	}
 
 	/**
@@ -597,6 +592,8 @@ class FrmStyle {
 				return $style;
 			}
 		}
+
+		return null;
 	}
 
 	/**

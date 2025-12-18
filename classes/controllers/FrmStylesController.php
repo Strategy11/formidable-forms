@@ -258,12 +258,10 @@ class FrmStylesController {
 	public static function get_file_name() {
 		if ( is_multisite() ) {
 			$blog_id = get_current_blog_id();
-			$name    = 'formidableforms' . absint( $blog_id ) . '.css';
-		} else {
-			$name = 'formidableforms.css';
+			return 'formidableforms' . absint( $blog_id ) . '.css';
 		}
 
-		return $name;
+		return 'formidableforms.css';
 	}
 
 	/**
@@ -1285,6 +1283,8 @@ class FrmStylesController {
 		if ( $style && isset( $style->post_content[ $val ] ) ) {
 			return $style->post_content[ $val ];
 		}
+
+		return null;
 	}
 
 	/**

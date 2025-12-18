@@ -28,18 +28,16 @@ class FrmTestModeController {
 		do_action( 'frm_test_mode_container' );
 
 		if ( false !== strpos( $html, '<div class="frm_form_fields' ) ) {
-			$html = preg_replace(
+			return preg_replace(
 				'/<div class="frm_form_fields/',
 				self::get_testing_mode_container() . '<div class="frm_form_fields',
 				$html,
 				1
 			);
-		} else {
-			// If there no form, add before an error message.
-			$html = '<div class="with_frm_style">' . self::get_testing_mode_container() . '</div>' . $html;
 		}
 
-		return $html;
+		// If there no form, add before an error message.
+		return '<div class="with_frm_style">' . self::get_testing_mode_container() . '</div>' . $html;
 	}
 
 	/**

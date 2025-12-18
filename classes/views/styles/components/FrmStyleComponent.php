@@ -91,11 +91,11 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return stdClass|void
+	 * @return FrmStyleComponent|null
 	 */
 	protected static function get_instance() {
 		if ( self::$instance ) {
-			return;
+			return null;
 		}
 
 		self::$instance = new FrmStyleComponent();
@@ -231,12 +231,7 @@ class FrmStyleComponent {
 		if ( empty( $this->data['not_show_in'] ) ) {
 			return false;
 		}
-
-		if ( FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'] ) {
-			return true;
-		}
-
-		return false;
+		return FrmAppHelper::get_param( 'section', '', 'get', 'sanitize_text_field' ) === $this->data['not_show_in'];
 	}
 
 	/**

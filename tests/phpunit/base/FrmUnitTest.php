@@ -334,12 +334,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 
 		if ( empty( $users ) ) {
 			$this->fail( 'No users with this role currently exist.' );
-			$user = null;
-		} else {
-			$user = reset( $users );
+			return null;
 		}
 
-		return $user;
+		return reset( $users );
 	}
 
 	public function go_to_new_post() {
@@ -601,7 +599,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$path = "{$cwd}/temp.xml";
 		@chmod( $path, 0755 );
 		$fw = fopen( $path, 'w' );
-		fputs( $fw, $xml, strlen( $xml ) );
+		fwrite( $fw, $xml, strlen( $xml ) );
 		fclose( $fw );
 
 		return $path;

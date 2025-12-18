@@ -1004,7 +1004,7 @@ BEFORE_HTML;
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
 			}
-			return;
+			return null;
 		}
 
 		// If submit button needs to be inline or centered.
@@ -1322,12 +1322,11 @@ BEFORE_HTML;
 	 */
 	private static function get_form_name_from_data( $data ) {
 		if ( is_object( $data ) ) {
-			$form_name = $data->name;
-		} else {
-			$form_id   = $data;
-			$form_name = FrmForm::getName( $form_id );
+			return $data->name;
 		}
-		return $form_name;
+
+		$form_id = $data;
+		return FrmForm::getName( $form_id );
 	}
 
 	/**
@@ -2118,12 +2117,7 @@ BEFORE_HTML;
 		}
 
 		global $pagenow;
-
-		if ( 'post.php' === $pagenow ) {
-			return true;
-		}
-
-		return false;
+		return 'post.php' === $pagenow;
 	}
 
 	/**

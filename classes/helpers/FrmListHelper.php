@@ -246,9 +246,7 @@ class FrmListHelper {
 			return $this->get_pagenum();
 		}
 
-		if ( isset( $this->_pagination_args[ $key ] ) ) {
-			return $this->_pagination_args[ $key ];
-		}
+		return $this->_pagination_args[ $key ] ?? null;
 	}
 
 	/**

@@ -369,12 +369,10 @@ class FrmFormApi {
 	 * @return string
 	 */
 	protected function get_cache_timeout( $addons ) {
-		$timeout = $this->cache_timeout;
-
 		if ( isset( $addons['response_code'] ) && 429 === $addons['response_code'] ) {
-			$timeout = '+5 minutes';
+			return '+5 minutes';
 		}
-		return $timeout;
+		return $this->cache_timeout;
 	}
 
 	/**
@@ -397,13 +395,10 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function error_for_license() {
-		$errors = array();
-
 		if ( ! empty( $this->license ) ) {
-			$errors = $this->get_error_from_response();
+			return $this->get_error_from_response();
 		}
-
-		return $errors;
+		return array();
 	}
 
 	/**

@@ -220,11 +220,9 @@ class FrmTransLiteAppHelper {
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
 
 		if ( $sub->interval_count == 1 ) {
-			$amount = $amount . '/' . $interval;
-		} else {
-			$amount = $amount . ' every ' . $sub->interval_count . ' ' . $interval;
+			return $amount . '/' . $interval;
 		}
-		return $amount;
+		return $amount . ' every ' . $sub->interval_count . ' ' . $interval;
 	}
 
 	/**
@@ -375,12 +373,10 @@ class FrmTransLiteAppHelper {
 	 * @return int
 	 */
 	public static function get_user_id_for_current_payment() {
-		$user_id = 0;
-
 		if ( is_user_logged_in() ) {
-			$user_id = get_current_user_id();
+			return get_current_user_id();
 		}
-		return $user_id;
+		return 0;
 	}
 
 	/**
