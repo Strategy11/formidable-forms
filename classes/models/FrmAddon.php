@@ -447,6 +447,9 @@ class FrmAddon {
 
 		$api = new FrmSalesApi();
 		$api->reset_cached();
+
+		$api = new FrmStyleApi();
+		$api->reset_cached();
 	}
 
 	/**
