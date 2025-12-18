@@ -6,6 +6,7 @@
  */
 class test_FrmFormsController extends FrmUnitTest {
 
+	public $factory;
 	public function test_register_widgets() {
 		global $wp_widget_factory;
 		$this->assertTrue( isset( $wp_widget_factory->widgets['FrmShowForm'] ) );
@@ -53,7 +54,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmFormsController::update();
-		$html = ob_get_contents();
+		ob_get_contents();
 		ob_end_clean();
 
 		self::_check_updated_values( $form_id );
@@ -111,11 +112,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * Make sure DOING_AJAX is false.
 	 */
 	private function _check_doing_ajax() {
-		if ( defined( 'DOING_AJAX' ) ) {
-			$doing_ajax = true;
-		} else {
-			$doing_ajax = false;
-		}
+		$doing_ajax = defined( 'DOING_AJAX' );
 
 		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
 	}

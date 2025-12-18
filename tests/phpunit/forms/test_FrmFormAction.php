@@ -5,6 +5,7 @@
  */
 class test_FrmFormAction extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmFormAction::update_callback
 	 */

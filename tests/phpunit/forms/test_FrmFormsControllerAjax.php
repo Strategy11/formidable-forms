@@ -5,6 +5,7 @@
  */
 class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
+	public $factory;
 	public function setUp(): void {
 		parent::setUp();
 

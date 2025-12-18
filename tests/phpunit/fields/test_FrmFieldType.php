@@ -5,6 +5,7 @@
  */
 class test_FrmFieldType extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmFieldNumber::add_min_max
 	 */

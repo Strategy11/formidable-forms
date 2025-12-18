@@ -109,6 +109,7 @@ return RectorConfig::configure()
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
 			__DIR__ . '/square',
+			__DIR__ . '/tests',
 		)
 	)
 	// here we can define, what prepared sets of rules will be applied

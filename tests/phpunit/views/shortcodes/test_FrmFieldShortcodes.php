@@ -7,6 +7,7 @@
  */
 class test_FrmFieldShortcodes extends FrmUnitTest {
 
+	public $factory;
 	protected $test_form;
 	protected $test_entry;
 
@@ -71,7 +72,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	}
 
 	protected function get_expected_field_values() {
-		$expected = array(
+		return array(
 			'free-text-field'         => 'Test Testerson',
 			'free-paragraph-field'    => "<p>Test<br />\nMiddle<br />\nTesterson</p>\n",
 			'free-checkboxes'         => 'Red, Green',
@@ -84,8 +85,6 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 			'free-hidden-field'       => '',
 			'free-user-id-field'      => '',
 		);
-
-		return $expected;
 	}
 
 	protected function get_actual_value( $value ) {

@@ -5,6 +5,7 @@
  */
 class test_FrmFormsHelper extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @var stdClass|null
 	 */

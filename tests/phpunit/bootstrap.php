@@ -23,7 +23,7 @@ if ( file_exists( __DIR__ . '/../vendor/autoload.php' ) ) {
 if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require getenv( 'WP_DEVELOP_DIR' ) . 'tests/phpunit/includes/bootstrap.php';
 } else {
-	require '../../../../tests/phpunit/includes/bootstrap.php';
+	require __DIR__ . '/../../../../tests/phpunit/includes/bootstrap.php';
 }
 
 require_once __DIR__ . '/base/frm_factory.php';

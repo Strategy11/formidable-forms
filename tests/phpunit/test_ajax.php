@@ -4,6 +4,7 @@
  */
 class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 
+	public $factory;
 	public function test_plugin_activated() {
 		$this->assertTrue( is_plugin_active( 'formidable/formidable.php' ) );
 	}

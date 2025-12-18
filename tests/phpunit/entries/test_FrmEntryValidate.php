@@ -6,6 +6,7 @@
  */
 class test_FrmEntryValidate extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmEntryValidate::validate
 	 */

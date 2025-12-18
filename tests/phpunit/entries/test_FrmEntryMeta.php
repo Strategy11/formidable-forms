@@ -5,6 +5,7 @@
  */
 class test_FrmEntryMeta extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmEntryMeta::update_entry_metas
 	 */

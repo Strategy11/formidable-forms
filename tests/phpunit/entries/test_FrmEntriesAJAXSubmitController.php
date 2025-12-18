@@ -5,6 +5,7 @@
  */
 class test_FrmEntriesAJAXSubmitController extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmEntriesAJAXSubmitController::maybe_modify_ajax_error
 	 */

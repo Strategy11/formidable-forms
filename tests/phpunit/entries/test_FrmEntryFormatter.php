@@ -5,6 +5,7 @@
  */
 class test_FrmEntryFormatter extends FrmUnitTest {
 
+	public $factory;
 	private $formatter;
 
 	/**

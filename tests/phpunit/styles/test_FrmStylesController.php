@@ -57,7 +57,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	public function test_save() {
 		$frm_style = new FrmStyle( 'default' );
 		$style     = $frm_style->get_one();
-		$defaults  = $frm_style->get_defaults();
+		$frm_style->get_defaults();
 
 		$_POST = array(
 			'ID'                => $style->ID,

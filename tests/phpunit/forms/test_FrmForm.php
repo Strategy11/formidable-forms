@@ -5,6 +5,7 @@
  */
 class test_FrmForm extends FrmUnitTest {
 
+	public $factory;
 	public function setUp(): void {
 		parent::setUp();
 		$this->create_users();

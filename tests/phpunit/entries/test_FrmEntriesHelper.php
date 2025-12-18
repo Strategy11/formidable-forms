@@ -5,6 +5,7 @@
  */
 class test_FrmEntriesHelper extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmEntriesHelper::display_value
 	 */

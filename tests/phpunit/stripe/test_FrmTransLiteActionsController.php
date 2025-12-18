@@ -5,6 +5,7 @@
  */
 class test_FrmTransLiteActionsController extends FrmUnitTest {
 
+	public $factory;
 	public function test_get_fields_for_price() {
 		$form_id  = $this->factory->form->create();
 		$field_id = $this->factory->field->create(
@@ -14,7 +15,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 			)
 		);
 
-		$action_id = $this->factory->post->create(
+		$this->factory->post->create(
 			array(
 				'post_content' => json_encode(
 					array(
@@ -27,8 +28,8 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 				'post_excerpt' => 'payment',
 			)
 		);
-		$actions   = FrmTransLiteActionsController::get_actions_for_form( $form_id );
-		$action    = reset( $actions );
+		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
+		$action  = reset( $actions );
 
 		$fields = $this->get_fields_for_price( $action );
 

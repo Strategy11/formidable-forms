@@ -5,6 +5,7 @@
  */
 class test_FrmMigrate extends FrmUnitTest {
 
+	public $factory;
 	/**
 	 * @covers FrmMigrate::upgrade
 	 *
