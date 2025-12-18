@@ -86,7 +86,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 *    @type string  $amount
 	 * }
 	 *
-	 * @return string Plan id.
+	 * @return false|string Plan id.
 	 */
 	public static function get_plan_from_atts( $atts ) {
 		$action                         = $atts['action'];

@@ -68,20 +68,6 @@ parameters:
 			message: '#Cannot use array destructuring on#'
 			path: classes/helpers/FrmStylesHelper.php
 		-
-			message: '#should be contravariant with#'
-			paths:
-				- classes/helpers/FrmFormsListHelper.php
-				- classes/models/FrmInstallerSkin.php
-		- '#Construct empty\(\) is not allowed. Use more strict comparison#'
-		-
-			message: '#Foreach overwrites \$ip with its value variable.#'
-			path: classes/helpers/FrmAppHelper.php
-		-
-			message: '#Only numeric types are allowed#'
-			paths:
-				- classes/helpers/FrmCSVExportHelper.php
-				- classes/models/FrmStyle.php
-		-
 			message: '#Call to an undefined method FrmFieldType::get_export_headings#'
 			path: classes/helpers/FrmCSVExportHelper.php
 		-
@@ -192,7 +178,6 @@ parameters:
 				- classes/helpers/FrmEntriesHelper.php
 				- classes/helpers/FrmEntriesListHelper.php
 				- classes/helpers/FrmFieldsHelper.php
-				- classes/helpers/FrmFormMigratorsHelper.php
 				- classes/helpers/FrmFormsHelper.php
 				- classes/helpers/FrmListHelper.php
 				- classes/helpers/FrmStylesHelper.php
@@ -255,33 +240,38 @@ parameters:
 				- classes/models/fields/FrmFieldUserID.php
 				- classes/views/frm-form-actions/email_action.php
 				- classes/views/styles/components/FrmSliderStyleComponent.php
-				- classes/views/styles/components/FrmStyleComponent.php
 				- square/controllers/FrmSquareLiteActionsController.php
 				- square/helpers/FrmSquareLiteConnectHelper.php
 				- square/models/FrmSquareLiteSettings.php
 				- stripe/controllers/FrmStrpLiteEventsController.php
 				- stripe/controllers/FrmTransLitePaymentsController.php
-				- stripe/controllers/FrmTransLiteSubscriptionsController.php
 				- stripe/helpers/FrmStrpLiteAppHelper.php
 				- stripe/helpers/FrmStrpLiteConnectApiAdapter.php
-				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
 				- stripe/helpers/FrmTransLiteListHelper.php
 				- stripe/models/FrmStrpLiteSettings.php
-		-
-			message: '#results in an error.#'
-			paths:
-				- classes/controllers/FrmAddonsController.php
-				- classes/controllers/FrmAppController.php
-				- classes/controllers/FrmFormsController.php
-				- classes/helpers/FrmCSVExportHelper.php
-				- classes/helpers/FrmFieldsHelper.php
-				- classes/helpers/FrmFormsHelper.php
-				- classes/helpers/FrmFormsListHelper.php
-				- classes/helpers/FrmStylesHelper.php
-				- classes/helpers/FrmXMLHelper.php
-				- classes/models/FrmFieldFormHtml.php
-				- classes/models/FrmHoneypot.php
-				- classes/models/FrmReviews.php
-				- classes/models/fields/FrmFieldType.php
-				- stripe/controllers/FrmStrpLiteAppController.php
-				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
+		- message: '#results in an error.#'
+		- message: '#Possibly invalid array key type mixed#'
+		- message: '#of encapsed string cannot be cast to string#'
+		- message: '#but returns mixed#'
+		- message: '#mixed given#'
+		- message: '#cannot be converted to string.#'
+		- message: '#Cannot access an offset on mixed#'
+		- message: '#might not exist on#'
+		- message: '#is not a file or it does not exist#'
+		- message: '#so it can be removed from the property type#'
+		- message: '#Cannot use \+\+ on mixed#'
+		- message: '#Cannot use -- on mixed#'
+		- message: '#Cannot use array destructuring on mixed#'
+		- message: '#always exists and is not nullable#'
+		- message: '#Possibly invalid array key#'
+		- message: '#should return string but returns float#'
+		- message: '#on a separate line has no effect#'
+		- message: '#but returns array#'
+		- message: '#Cannot clone non-object variable#'
+		- message: '#so it can be removed from the by-ref type#'
+		- message: '#function array_map expects#'
+		- message: '#expects resource#'
+		- message: '#might not be defined#'
+		- message: '#expects false, string given#'
+		- message: '#array given#'
+		- message: '#Cannot use \+\+ on int\|false#'

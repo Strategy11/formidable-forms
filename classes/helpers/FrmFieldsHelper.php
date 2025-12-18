@@ -1124,7 +1124,7 @@ class FrmFieldsHelper {
 			}
 
 			$function     = 'atts_' . $included_att;
-			$replace_with = self::$function( $replace_with, $atts );
+			$replace_with = self::$function( $replace_with );
 		}
 		return $replace_with;
 	}
