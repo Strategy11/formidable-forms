@@ -94,7 +94,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		);
 
 		$parent_form = $this->factory->form->create_and_get();
-		$this->factory->field->create_and_get(
+		$this->factory->field->create(
 			array(
 				'form_id'       => $parent_form->id,
 				'type'          => 'embed',

@@ -620,8 +620,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_ip_address
 	 */
 	public function test_get_ip_address() {
-		FrmAppHelper::get_ip_address();
-
 		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
 
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '1.2.3.4';

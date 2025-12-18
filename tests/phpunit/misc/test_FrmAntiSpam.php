@@ -5,7 +5,6 @@
  */
 class test_FrmAntiSpam extends FrmUnitTest {
 
-	private $factory;
 	private $antispam;
 
 	public function setUp(): void {
