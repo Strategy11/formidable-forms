@@ -100,7 +100,7 @@ use Rector\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector;
 use Rector\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayMapRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\KnownMagicClassMethodTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector;
-
+use Rector\CodeQuality\Rector\Include_\AbsolutizeRequireAndIncludePathRector;
 define( 'ABSPATH', '' );
 
 return RectorConfig::configure()
@@ -271,5 +271,7 @@ return RectorConfig::configure()
 			AddClosureParamTypeForArrayMapRector::class,
 			KnownMagicClassMethodTypeRector::class,
 			AddParamStringTypeFromSprintfUseRector::class,
+			AbsolutizeRequireAndIncludePathRector::class,
+			CompleteDynamicPropertiesRector::class,
 		)
 	);
