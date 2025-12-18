@@ -15,9 +15,6 @@ class FrmStrpLiteSubscriptionHelper {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
-	 *       Make sure that if/when we re-use this in Stripe that we still include that.
-	 *
 	 * @param object $subscription A Stripe Subscription object.
 	 * @param string $amount
 	 *

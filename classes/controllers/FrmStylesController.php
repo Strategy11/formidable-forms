@@ -438,7 +438,6 @@ class FrmStylesController {
 		);
 
 		if ( ! $form_id ) {
-			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
 			$where   = array(
 				'status'         => 'published',
