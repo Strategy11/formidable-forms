@@ -675,8 +675,8 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return false|object
 	 */
-	public static function create_order() {
-		return self::post_with_authenticated_body( 'create_order' );
+	public static function create_order( $amount, $currency ) {
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency' ) );
 	}
 
 	/**
