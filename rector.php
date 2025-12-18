@@ -46,7 +46,6 @@ use Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector;
 use Rector\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector;
 use Rector\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector;
 use Rector\CodingStyle\Rector\FuncCall\StrictArraySearchRector;
-use Rector\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector;
 use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictNativeCallRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnUnionTypeRector;
@@ -87,7 +86,6 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
-use Rector\EarlyReturn\Rector\If_\ChangeIfElseValueAssignToEarlyReturnRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
 use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
@@ -258,7 +256,6 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			RepeatedAndNotEqualToNotInArrayRector::class,
 			UseIdenticalOverEqualWithSameTypeRector::class,
-			ChangeIfElseValueAssignToEarlyReturnRector::class,
 			AddParamFromDimFetchKeyUseRector::class,
 			ArrayKeyFirstLastRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,

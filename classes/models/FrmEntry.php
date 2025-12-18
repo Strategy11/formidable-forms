@@ -740,14 +740,13 @@ class FrmEntry {
 		}
 
 		if ( is_array( $where ) ) {
-			$count = FrmDb::get_count( $table_join, $where );
-		} else {
-			$cache_key = 'count_' . FrmAppHelper::maybe_json_encode( $where );
-			$query     = 'SELECT COUNT(*) FROM ' . $table_join . FrmDb::prepend_and_or_where( ' WHERE ', $where );
-			$count     = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
+			return FrmDb::get_count( $table_join, $where );
 		}
 
-		return $count;
+		$cache_key = 'count_' . FrmAppHelper::maybe_json_encode( $where );
+		$query     = 'SELECT COUNT(*) FROM ' . $table_join . FrmDb::prepend_and_or_where( ' WHERE ', $where );
+
+		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_var' );
 	}
 
 	/**
@@ -966,17 +965,15 @@ class FrmEntry {
 	 */
 	private static function get_entry_description( $values ) {
 		if ( ! empty( $values['description'] ) ) {
-			$description = FrmAppHelper::maybe_json_encode( $values['description'] );
-		} else {
-			$description = json_encode(
-				array(
-					'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
-					'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
-				)
-			);
+			return FrmAppHelper::maybe_json_encode( $values['description'] );
 		}
 
-		return $description;
+		return json_encode(
+			array(
+				'browser'  => FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ),
+				'referrer' => FrmAppHelper::get_server_value( 'HTTP_REFERER' ),
+			)
+		);
 	}
 
 	/**
@@ -990,13 +987,11 @@ class FrmEntry {
 	 */
 	private static function get_entry_user_id( $values ) {
 		if ( isset( $values['frm_user_id'] ) && ( is_numeric( $values['frm_user_id'] ) || FrmAppHelper::is_admin() ) ) {
-			$user_id = $values['frm_user_id'];
-		} else {
-			$current_user_id = get_current_user_id();
-			$user_id         = $current_user_id ? $current_user_id : 0;
+			return $values['frm_user_id'];
 		}
 
-		return $user_id;
+		$current_user_id = get_current_user_id();
+		return $current_user_id ? $current_user_id : 0;
 	}
 
 	/**

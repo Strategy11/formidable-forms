@@ -230,12 +230,10 @@ class FrmCreateFile {
 		$access_type = get_filesystem_method();
 
 		if ( $access_type === 'direct' ) {
-			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
-		} else {
-			$creds = $this->get_ftp_creds( $access_type );
+			return request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		}
 
-		return $creds;
+		return $this->get_ftp_creds( $access_type );
 	}
 
 	/**

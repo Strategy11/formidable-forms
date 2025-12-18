@@ -486,26 +486,22 @@ class FrmEmail {
 	 */
 	public function should_send() {
 		if ( ! $this->has_recipients() ) {
-			$send = false;
-		} else {
-
-			$filter_args = array(
-				'message'   => $this->message,
-				'subject'   => $this->subject,
-				'recipient' => $this->to,
-				'header'    => $this->package_header(),
-			);
-
-			/**
-			 * Stop an email based on the message, subject, recipient,
-			 * or any information included in the email header
-			 *
-			 * @since 2.2.8
-			 */
-			$send = apply_filters( 'frm_send_email', true, $filter_args );
+			return false;
 		}
 
-		return $send;
+		$filter_args = array(
+			'message'   => $this->message,
+			'subject'   => $this->subject,
+			'recipient' => $this->to,
+			'header'    => $this->package_header(),
+		);
+		/**
+		 * Stop an email based on the message, subject, recipient,
+		 * or any information included in the email header
+		 *
+		 * @since 2.2.8
+		 */
+		return apply_filters( 'frm_send_email', true, $filter_args );
 	}
 
 	/**
