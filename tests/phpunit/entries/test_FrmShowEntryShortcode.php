@@ -27,6 +27,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $is_repeater_child = false;
 
 	public function __construct() {
+		parent::__construct();
+
 		$defaults       = $this->get_defaults();
 		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
 		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );

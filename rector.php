@@ -78,7 +78,6 @@ use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
 use Rector\CodingStyle\Rector\FuncCall\CallUserFuncArrayToVariadicRector;
 use Rector\CodingStyle\Rector\Catch_\CatchExceptionNameMatchingTypeRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
-use Rector\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector;
 use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector;
@@ -250,7 +249,6 @@ return RectorConfig::configure()
 			CatchExceptionNameMatchingTypeRector::class,
 			ChangeOrIfContinueToMultiContinueRector::class,
 			ReturnEarlyIfVariableRector::class,
-			CompleteMissingIfElseBracketRector::class,
 			SimplifyQuoteEscapeRector::class,
 			StrStartsWithRector::class,
 			StrContainsRector::class,
