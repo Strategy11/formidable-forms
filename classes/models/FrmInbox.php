@@ -597,6 +597,7 @@ class FrmInbox extends FrmFormApi {
 				return $message;
 			}
 		}
+
 		return false;
 	}
 }
