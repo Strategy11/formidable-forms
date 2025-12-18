@@ -1325,7 +1325,7 @@ BEFORE_HTML;
 			return $data->name;
 		}
 
-		$form_id   = $data;
+		$form_id = $data;
 		return FrmForm::getName( $form_id );
 	}
 
