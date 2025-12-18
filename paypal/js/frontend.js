@@ -3,6 +3,9 @@
 		return;
 	}
 
+	// TODO:
+	// Only enable the submit button when we check the state for isFormValid = true.
+
 	const clientId = frmPayPalVars.clientId;
 
 	// Track the state of the PayPal card fields
@@ -40,12 +43,27 @@
 			<div class="frm-paypal-card-cvv frm6" id="frm-paypal-card-cvv"></div>
 		`;
 
+		thisForm = cardElement.closest( 'form' );
+
 		const cardFieldsConfig = {
 			createOrder: createOrder,
 			onApprove: onApprove,
 			onError: onError,
-			style: getCardFieldStyles()
+			style: getCardFieldStyles(),
+			inputEvents: {
+				onChange: ( data) => {
+					cardFieldsValid = data.isFormValid;
+
+					if ( cardFieldsValid ) {
+						enableSubmit();
+					} else {
+						disableSubmit( thisForm );
+					}
+				}
+			}
 		};
+
+		disableSubmit( thisForm );
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );
 
@@ -292,9 +310,6 @@
 				displayPaymentFailure( 'PayPal Card Fields could not be initialized.' );
 				return;
 			}
-
-			// Enable submit once card fields are ready
-			enableSubmit();
 
 			// Add event listener for form submission
 			thisForm.addEventListener( 'submit', handleCardSubmission );
