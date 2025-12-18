@@ -63,7 +63,7 @@ class FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @var stdClass|null
+	 * @var FrmStyleComponent|null
 	 */
 	private static $instance;
 
