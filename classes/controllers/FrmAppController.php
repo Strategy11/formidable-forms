@@ -271,15 +271,14 @@ class FrmAppController {
 	 * @return string
 	 */
 	private static function get_current_page() {
-		$page         = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type    = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
-		$current_page = isset( $_GET['page'] ) ? $page : $post_type;
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
 		if ( FrmAppHelper::is_view_builder_page() ) {
-			$current_page = 'frm_display';
+			return 'frm_display';
 		}
 
-		return $current_page;
+		return isset( $_GET['page'] ) ? $page : $post_type;
 	}
 
 	/**

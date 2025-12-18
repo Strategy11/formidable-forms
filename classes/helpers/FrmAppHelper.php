@@ -436,13 +436,12 @@ class FrmAppHelper {
 	 */
 	public static function is_formidable_admin() {
 		$page          = self::simple_get( 'page', 'sanitize_title' );
-		$is_formidable = strpos( $page, 'formidable' ) !== false;
 
 		if ( empty( $page ) ) {
-			$is_formidable = self::is_view_builder_page();
+			return self::is_view_builder_page();
 		}
 
-		return $is_formidable;
+		return strpos( $page, 'formidable' ) !== false;
 	}
 
 	/**
@@ -3207,13 +3206,12 @@ class FrmAppHelper {
 		}
 
 		$trimmed_format = trim( $time_format );
-		$time           = '';
 
 		if ( $time_format && ! empty( $trimmed_format ) ) {
-			$time = ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
-		return $time;
+		return '';
 	}
 
 	/**
