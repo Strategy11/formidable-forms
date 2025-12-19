@@ -687,4 +687,22 @@ class FrmPayPalLiteConnectHelper {
 	public static function capture_order( $order_id ) {
 		return self::post_with_authenticated_body( 'capture_order', compact( 'order_id' ) );
 	}
+
+	/**
+	 * @param string $capture_id
+	 *
+	 * @return false|object
+	 */
+	public static function refund_payment( $capture_id ) {
+		return self::post_with_authenticated_body( 'refund_capture', array( 'capture_id' => $capture_id ) );
+	}
+
+	/**
+	 * @param string $subscription_id
+	 *
+	 * @return false|object
+	 */
+	public static function cancel_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+	}
 }

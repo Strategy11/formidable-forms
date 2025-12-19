@@ -161,10 +161,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return 'Failed to capture order.';
 		}
 
+		$capture_id = self::get_capture_id_from_response( $response );
+
 		// Create a payment record.
 		$atts['status']         = 'complete';
 		$atts['charge']         = new stdClass();
-		$atts['charge']->id     = $paypal_order_id;
+		$atts['charge']->id     = $capture_id ? $capture_id : $paypal_order_id;
 		$atts['charge']->amount = $atts['amount'];
 
 		$payment_id  = self::create_new_payment( $atts );
@@ -174,7 +176,43 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		FrmTransLiteActionsController::trigger_payment_status_change( compact( 'status', 'payment' ) );
 
+		/*
+		echo '<pre>';
+		var_dump( $response );
+		echo '</pre>';
+		die();
+		*/
+
 		return true;
+	}
+
+	/**
+	 * @param object $response
+	 *
+	 * @return string
+	 */
+	private static function get_capture_id_from_response( $response ) {
+		if ( ! isset( $response->id ) ) {
+			return '';
+		}
+
+		foreach ( $response->purchase_units as $purchase_unit ) {
+			if ( empty( $purchase_unit->payments ) || ! is_object( $purchase_unit->payments ) ) {
+				continue;
+			}
+
+			$payments = $purchase_unit->payments;
+			if ( empty( $payments->captures ) || ! is_array( $payments->captures ) ) {
+				continue;
+			}
+
+			$captures = $payments->captures;
+			foreach ( $captures as $capture ) {
+				return $capture->id;
+			}
+		}
+
+		return '';
 	}
 
 	/**

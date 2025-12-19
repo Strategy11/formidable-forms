@@ -222,6 +222,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			case 'square':
 				$refunded = FrmSquareLiteConnectHelper::refund_payment( $payment->receipt_id );
 				break;
+			case 'paypal':
+				$refunded = FrmPayPalLiteConnectHelper::refund_payment( $payment->receipt_id );
+				break;
 			default:
 				$refunded = false;
 				break;
