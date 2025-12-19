@@ -177,7 +177,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		return true;
 	}
 
-		/**
+	/**
 	 * Add a payment row for the payments table.
 	 *
 	 * @param array $atts The arguments for the payment.
