@@ -892,7 +892,7 @@ class FrmAddonsController {
 			$link = $site_url . $link;
 		}
 
-		$link       = FrmAppHelper::make_affiliate_url( $link );
+		$link = FrmAppHelper::make_affiliate_url( $link );
 
 		$utm  = array(
 			'campaign' => 'addons',
@@ -1053,7 +1053,6 @@ class FrmAddonsController {
 		if ( $show_form ) {
 			$form     = ob_get_clean();
 			$message  = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
-			$data     = $form;
 			$response = array(
 				'success' => false,
 				'message' => $message,

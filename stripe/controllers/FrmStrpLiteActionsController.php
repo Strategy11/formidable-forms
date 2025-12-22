@@ -317,7 +317,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// Gateway is a radio button but it should always be an array in the database for
 		// compatibility with the payments submodule where it is a checkbox.
-		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
 

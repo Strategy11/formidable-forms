@@ -281,7 +281,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$show_warning = false;
 
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		foreach ( $this->sub_fields as $sub_field ) {
 			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
 
 			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {

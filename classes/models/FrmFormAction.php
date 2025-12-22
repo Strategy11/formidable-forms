@@ -660,7 +660,7 @@ class FrmFormAction {
 	 * @return int The filtered limit value.
 	 */
 	public static function get_action_limit( $form_id, $limit = 99 ) {
-		$type  = 'all';
+		$type = 'all';
 		return (int) apply_filters( 'frm_form_action_limit', (int) $limit, compact( 'type', 'form_id' ) );
 	}
 

@@ -888,7 +888,7 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function update_intent( $intent_id, $data ) {
-		$data    = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
 		return false !== $data;
 	}
 

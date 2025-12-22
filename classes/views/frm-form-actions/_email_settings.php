@@ -10,7 +10,6 @@ if ( ! empty( $form_action->post_content['plain_text'] ) ) {
 	$selected_style = 'plain';
 }
 
-$frm_settings  = FrmAppHelper::get_settings();
 $default_style = FrmEmailStylesController::get_default_email_style();
 ?>
 <p class="frm-email-style-container">

@@ -841,7 +841,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_new_field_defaults() {
-		$field        = array(
+		$field = array(
 			'name'          => $this->get_new_field_name(),
 			'description'   => '',
 			'type'          => $this->type,

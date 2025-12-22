@@ -545,7 +545,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$square_vars     = array(
+		$square_vars = array(
 			'formId'     => $form_id,
 			'nonce'      => wp_create_nonce( 'frm_square_ajax' ),
 			'ajax'       => esc_url_raw( FrmAppHelper::get_ajax_url() ),
