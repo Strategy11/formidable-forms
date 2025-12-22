@@ -43,7 +43,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		 * @param string $label Label HTML.
 		 * @param array  $args  The arguments. Contains `field`.
 		 */
-		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field' ) );
+		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field', 'field_val' ) );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
