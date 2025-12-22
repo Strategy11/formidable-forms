@@ -36,7 +36,23 @@
 		card.configure( { style: cardStyle } );
 
 		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
+		card.addEventListener( 'focusClassRemoved', event => {
+			const field = event.detail.field;
+			const value = event.detail.currentState.isCompletelyValid;
+			cardFields[ field ] = value;
+
+			// Check if all fields are valid
+			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
+
+			// Update form submit button based on form validity
+			if ( thisForm ) {
+				if ( squareCardElementIsComplete ) {
+					enableSubmit();
+				} else {
+					disableSubmit( thisForm );
+				}
+			}
+		} );
 
 		/**
 		 * Enable the submit button when postal code is completed.
@@ -54,24 +70,6 @@
 				disableSubmit();
 			}
 		} );
-
-		function syncSubmitButton( event ) {
-			const field = event.detail.field;
-			const value = event.detail.currentState.isCompletelyValid;
-			cardFields[ field ] = value;
-
-			// Check if all fields are valid
-			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
-
-			// Update form submit button based on form validity
-			if ( thisForm ) {
-				if ( squareCardElementIsComplete ) {
-					enableSubmit();
-				} else {
-					disableSubmit( thisForm );
-				}
-			}
-		}
 
 		return card;
 	}
