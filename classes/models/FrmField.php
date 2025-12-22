@@ -8,7 +8,7 @@ class FrmField {
 	/**
 	 * @var bool
 	 */
-	public static $use_cache      = true;
+	public static $use_cache = true;
 
 	/**
 	 * @var int

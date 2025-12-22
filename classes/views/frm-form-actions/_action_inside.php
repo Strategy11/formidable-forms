@@ -27,7 +27,7 @@ do_action( 'frm_action_settings_before_action_name', $form_action );
 <?php
 
 if ( ! isset( $action_control->action_options['event'] ) ) {
-	$events = 'create';
+	$action_control->action_options['event'] = 'create';
 }
 
 if ( ! is_array( $action_control->action_options['event'] ) ) {

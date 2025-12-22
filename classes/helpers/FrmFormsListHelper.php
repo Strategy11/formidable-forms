@@ -27,7 +27,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $wpdb, $per_page, $mode;
+		global $per_page, $mode;
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
@@ -53,7 +53,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		$start   = self::get_param(
+		$start = self::get_param(
 			array(
 				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
@@ -237,7 +237,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
-		global $frm_vars, $mode;
+		global $mode;
 
 		// Set up the hover actions for this user
 		$actions   = array();

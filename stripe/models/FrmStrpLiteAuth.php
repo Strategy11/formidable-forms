@@ -817,7 +817,10 @@ class FrmStrpLiteAuth {
 			return false;
 		}
 
-		self::delete_temporary_referer_meta( (int) $row->id );
+		if ( $delete_meta ) {
+			self::delete_temporary_referer_meta( (int) $row->id );
+		}
+
 		return $meta['referer'];
 	}
 

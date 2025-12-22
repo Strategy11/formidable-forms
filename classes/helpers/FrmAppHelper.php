@@ -435,7 +435,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_formidable_admin() {
-		$page          = self::simple_get( 'page', 'sanitize_title' );
+		$page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( empty( $page ) ) {
 			return self::is_view_builder_page();

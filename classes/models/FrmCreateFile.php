@@ -33,12 +33,12 @@ class FrmCreateFile {
 	/**
 	 * @var int
 	 */
-	public $chmod_dir       = 0755;
+	public $chmod_dir = 0755;
 
 	/**
 	 * @var int
 	 */
-	public $chmod_file      = 0644;
+	public $chmod_file = 0644;
 
 	/**
 	 * @var bool

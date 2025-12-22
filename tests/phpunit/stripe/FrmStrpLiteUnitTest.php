@@ -449,7 +449,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	 */
 	protected function maybe_create_plan() {
 		$this->get_customer();
-		$plan     = $this->get_plan_options();
+		$plan = $this->get_plan_options();
 		return FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan );
 	}
 }
