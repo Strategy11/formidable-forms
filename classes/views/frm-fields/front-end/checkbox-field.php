@@ -45,7 +45,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		 * @param string $label Label HTML.
 		 * @param array  $args  The arguments. Contains `field`.
 		 */
-		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field' ) );
+		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field', 'field_val' ) );
 
 		// init.
 		$checked = '';
