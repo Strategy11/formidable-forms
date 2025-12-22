@@ -225,11 +225,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
+		$gateways    = FrmTransLiteAppHelper::get_gateways();
 
 		$alt = 0;
 
 		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format' );
+		$args     = compact( 'form_ids', 'date_format', 'gateways' );
 		// $form_ids is indexed by entry ID.
 		$this->valid_entry_ids = array_keys( $form_ids );
 
@@ -615,14 +616,17 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_paysys_column( $item, $atts ) {
-		switch ( $item->paysys ) {
-			case 'stripe':
-				return 'Stripe';
-			case 'paypal':
-				return 'PayPal';
-			case 'square':
-				return 'Square';
+		if ( isset( $atts['gateways'][ $item->paysys ] ) ) {
+			return $atts['gateways'][ $item->paysys ]['label'];
 		}
+
+		if ( 'paypal' === $item->paysys ) {
+			// The PayPal add-on does not use a gateway.
+			// This should be safe to remove once we release
+			// PayPal Commerce in Lite.
+			return 'PayPal';
+		}
+
 		return $item->paysys;
 	}
 
