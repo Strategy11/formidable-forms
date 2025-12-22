@@ -286,8 +286,75 @@ class FrmFormsHelper {
 		}
 
 		$frm_settings = FrmAppHelper::get_settings( $settings_args );
-		$invalid_msg  = do_shortcode( $frm_settings->invalid_msg );
+
+		$field_error_messages = self::get_clickable_field_error_messages( $args );
+
+		$invalid_msg = '<span>' . do_shortcode( $frm_settings->invalid_msg ) . '</span>';
+
+		if ( $field_error_messages ) {
+			$invalid_msg .= "<ul>$field_error_messages</ul>";
+		}
 		return apply_filters( 'frm_invalid_error_message', $invalid_msg, $args );
+	}
+
+	/**
+	 * Get clickable field error messages.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $args
+	 *
+	 * @return string
+	 */
+	private static function get_clickable_field_error_messages( $args ) {
+		$field_error_messages = '';
+
+		if ( empty( $args['errors'] ) ) {
+			return $field_error_messages;
+		}
+
+		$field_ids  = array_map(
+			function ( $field_plus_id ) {
+				$field_id = str_replace( 'field', '', $field_plus_id );
+
+				if ( strpos( $field_id, '-' ) !== false ) {
+					$field_id = explode( '-', $field_id )[0];
+				}
+				return $field_id;
+			},
+			array_keys( $args['errors'] )
+		);
+		$field_keys = FrmDb::get_results( 'frm_fields', array( 'id' => $field_ids ), 'id,field_key,type' );
+
+		foreach ( $args['errors'] as $field_plus_id => $error ) {
+			$field_id = str_replace( 'field', '', $field_plus_id );
+			$row      = '';
+
+			if ( strpos( $field_id, '-' ) !== false ) {
+				$field_id_parts = explode( '-', $field_id );
+
+				if ( count( $field_id_parts ) === 3 ) {
+					$field_id = $field_id_parts[0];
+					$row      = '-' . $field_id_parts[2];
+				}
+			}
+
+			$index = array_search( $field_id, array_column( $field_keys, 'id' ), true );
+
+			if ( false === $index ) {
+				continue;
+			}
+
+			$html_id = 'field_' . $field_keys[ $index ]->field_key . $row;
+
+			if ( in_array( $field_keys[ $index ]->type, array( 'checkbox', 'radio' ), true ) ) {
+				// Needed to focus on the first option when error link is clicked.
+				$html_id .= '-0';
+			}
+
+			$field_error_messages .= '<li><a href="#' . $html_id . '">' . $error . '</a></li>';
+		}//end foreach
+		return $field_error_messages;
 	}
 
 	/**

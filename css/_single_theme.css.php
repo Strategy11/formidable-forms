@@ -393,6 +393,23 @@ endif;
 	margin-bottom:var(--field-margin);
 }
 
+.<?php echo esc_html( $style_class ); ?> .frm_error_style span{
+	font-weight: bold<?php echo esc_html( $important ); ?>;;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul{
+	list-style: inside<?php echo esc_html( $important ); ?>;;
+	color: <?php echo esc_html( $error_text . $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a{
+	color: <?php echo esc_html( $error_text . $important ); ?>;
+}
+
+.<?php echo esc_html( $style_class ); ?> .frm_error_style ul li a:hover{
+	text-decoration: underline<?php echo esc_html( $important ); ?>;;
+}
+
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-striped .progress-bar{
 	background-image:linear-gradient(45deg, <?php echo esc_html( $border_color ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $border_color ); ?> 50%, <?php echo esc_html( $border_color ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 }
