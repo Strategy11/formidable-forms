@@ -530,8 +530,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_unique_key
 	 */
 	public function test_get_unique_key() {
-		global $wpdb;
-
 		// Test field keys
 		$table_name = 'frm_fields';
 		$column     = 'field_key';

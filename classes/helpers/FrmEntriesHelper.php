@@ -426,7 +426,7 @@ class FrmEntriesHelper {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
 		} elseif ( is_object( $field ) ) {
-			$field_id  = $field->id;
+			$field_id = $field->id;
 
 			if ( 'hidden' === $field->type && ! empty( $field->field_options['original_type'] ) ) {
 				$field_obj = FrmFieldFactory::get_field_type( $field->field_options['original_type'], $field );

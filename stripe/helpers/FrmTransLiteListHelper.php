@@ -441,7 +441,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_user_id_column( $item ) {
-		global $wpdb;
 		$val = FrmDb::get_var( 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
