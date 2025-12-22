@@ -270,6 +270,10 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="Generic.Formatting.MultipleStatementAlignment.IncorrectWarning">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
