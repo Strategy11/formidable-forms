@@ -38,6 +38,9 @@
 		// Create the card fields container structure
 		// TODO: Make these IDs unique.
 		cardElement.innerHTML = `
+			<div id="paypal-button-container"></div>
+			<div class="separator">OR</div>
+			<div id="card-name-field-container"></div>
 			<div class="frm-paypal-card-number frm12" id="frm-paypal-card-number"></div>
 			<div class="frm-paypal-card-expiry frm6" id="frm-paypal-card-expiry"></div>
 			<div class="frm-paypal-card-cvv frm6" id="frm-paypal-card-cvv"></div>
@@ -64,6 +67,13 @@
 		};
 
 		disableSubmit( thisForm );
+
+		paypal.Buttons({
+			createOrder: createOrder,
+			onApprove: onApprove,
+			onError: onError,
+			style: {},
+		}).render('#paypal-button-container');
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );
 
@@ -279,7 +289,15 @@
 
 		try {
 			// Submit the card fields - this triggers createOrder and onApprove
-			await cardFieldsInstance.submit();
+			await cardFieldsInstance.submit({
+				billingAddress: {
+					addressLine1: "555 Billing Ave",
+					adminArea1: "NY",
+					adminArea2: "New York",
+					postalCode: "10001",
+					countryCode: "US"
+				}
+			});
 		} catch ( err ) {
 			running--;
 			if ( running === 0 && thisForm ) {

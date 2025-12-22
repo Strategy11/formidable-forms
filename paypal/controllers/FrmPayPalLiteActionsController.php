@@ -373,7 +373,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$sdk_url = add_query_arg(
 			array(
 				'client-id'  => $client_id,
-				'components' => 'card-fields',
+				'components' => 'buttons,card-fields',
 				'intent'     => 'capture',
 			),
 			'https://www.paypal.com/sdk/js'
