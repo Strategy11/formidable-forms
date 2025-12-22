@@ -38,6 +38,11 @@
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
 
+		/**
+		 * Enable the submit button when postal code is completed.
+		 * This is the best we can do for now as Square does not provide
+		 * any way of knowing that the credit card was auto-filled.
+		 */
 		card.addEventListener( 'postalCodeChanged', function( event ) {
 			if ( event.detail.currentState.isCompletelyValid ) {
 				cardFields.cardNumber = true;
