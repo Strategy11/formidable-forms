@@ -38,7 +38,7 @@
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
 
-		card.addEventListener( 'postalCodeChanged', function ( event ) {
+		card.addEventListener( 'postalCodeChanged', function( event ) {
 			if ( event.detail.currentState.isCompletelyValid ) {
 				cardFields.cardNumber = true;
 				cardFields.expirationDate = true;
