@@ -77,8 +77,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>/><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-	echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo ' ' . FrmAppHelper::kses( $label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
+
+		do_action( 'frm_after_option_input', $field, $opt_key );
+
+		echo '</label>';
 
 		$other_args = array(
 			'other_opt' => $other_opt,
