@@ -292,8 +292,7 @@ class FrmStylesController {
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
 		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$tag          = str_replace( ' type="', ' property="stylesheet" type="', $tag );
+			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -345,7 +344,7 @@ class FrmStylesController {
 		$style_id = self::get_style_id_for_styler();
 
 		if ( ! $style_id ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No styles', 'formidable' ),
 				'body'       => __( 'You must have a style to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
@@ -363,7 +362,7 @@ class FrmStylesController {
 		$form = FrmForm::getOne( $form_id );
 
 		if ( ! is_object( $form ) ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No forms', 'formidable' ),
 				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),

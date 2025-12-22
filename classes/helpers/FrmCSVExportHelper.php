@@ -504,7 +504,7 @@ class FrmCSVExportHelper {
 	 */
 	private static function prepare_next_csv_rows( $next_set ) {
 		if ( FrmAppHelper::pro_is_installed() ) {
-			$where    = array(
+			$where = array(
 				'or'             => 1,
 				'id'             => $next_set,
 				'parent_item_id' => $next_set,

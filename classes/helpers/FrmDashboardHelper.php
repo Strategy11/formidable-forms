@@ -189,7 +189,7 @@ class FrmDashboardHelper {
 			$buttons = self::get_license_buttons();
 		}
 
-		foreach ( $buttons as $i => $button ) {
+		foreach ( $buttons as $button ) {
 			$add_classes = ! empty( $button['classes'] ) ? ' ' . $button['classes'] : ' frm-button-secondary';
 			?>
 			<a href="<?php echo esc_url( $button['link'] ); ?>" target="_blank"
