@@ -358,19 +358,19 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses_icon
 	 */
 	public function test_kses_icon() {
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:var(--purple)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:var(--purple)"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:rgb(0,160,210)"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:rgb(0,160,210)"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use xlink:href="#frm_zapier_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use xlink:href="#frm_more_horiz_solid_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use xlink:href="#frm_wordpress_icon" /></svg>';
+		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use href="#frm_wordpress_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 	}
 
@@ -530,8 +530,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_unique_key
 	 */
 	public function test_get_unique_key() {
-		global $wpdb;
-
 		// Test field keys
 		$table_name = 'frm_fields';
 		$column     = 'field_key';
@@ -566,7 +564,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertEquals( $name . 3, $key, 'Key value should increment' );
 
-		add_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+		add_filter( 'frm_unique_field_key_separator', array( self::class, 'underscore_key_separator' ) );
 
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
@@ -574,7 +572,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
 		$this->assertEquals( $name . '___2', $key );
 
-		remove_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+		remove_filter( 'frm_unique_field_key_separator', array( self::class, 'underscore_key_separator' ) );
 
 		// Test form keys
 		$table_name = 'frm_forms';
@@ -620,8 +618,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_ip_address
 	 */
 	public function test_get_ip_address() {
-		$ip_address = FrmAppHelper::get_ip_address();
-
 		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
 
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '1.2.3.4';
@@ -696,13 +692,13 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( '<div>My html</div>', $html );
 
 		// Test a callable string.
-		$echo_function = __CLASS__ . '::echo_function';
+		$echo_function = self::class . '::echo_function';
 		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '<div>My echo function content</div>', $html );
 
 		// Test something uncallable.
 		// Make sure it isn't fatal just in case.
-		$echo_function = __CLASS__ . '::something_uncallable';
+		$echo_function = self::class . '::something_uncallable';
 		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '', $html );
 	}

@@ -149,12 +149,7 @@ class FrmEntryValidate {
 		);
 		$args = wp_parse_args( $args, $defaults );
 
-		if ( empty( $args['parent_field_id'] ) ) {
-			$value = $values['item_meta'][ $args['id'] ] ?? '';
-		} else {
-			// value is from a nested form
-			$value = $values;
-		}
+		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
 
 		// Check for values in "Other" fields
 		FrmEntriesHelper::maybe_set_other_validation( $posted_field, $value, $args );
@@ -368,9 +363,7 @@ class FrmEntryValidate {
 			} else {
 				$option_value = $option;
 			}
-
-			$option_value = do_shortcode( $option_value );
-			return $option_value;
+			return do_shortcode( $option_value );
 		};
 
 		$values_options       = array_map( $map_callback, $values['options'] );
@@ -487,9 +480,7 @@ class FrmEntryValidate {
 			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
-		$pattern = '/' . $pattern . '/';
-
-		return $pattern;
+		return '/' . $pattern . '/';
 	}
 
 	/**
@@ -536,9 +527,7 @@ class FrmEntryValidate {
 			}
 		}
 
-		$pattern = '^' . $pattern . '$';
-
-		return $pattern;
+		return '^' . $pattern . '$';
 	}
 
 	/**

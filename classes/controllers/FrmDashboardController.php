@@ -297,11 +297,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	public static function display_counter_cta( $counter_type, $counter_value, $latest_available_form = false ) {
-		if ( $counter_value > 0 || ( 'entries' === $counter_type && false === $latest_available_form ) ) {
-			return false;
-		}
-
-		return true;
+		return $counter_value <= 0 && ! ( 'entries' === $counter_type && false === $latest_available_form );
 	}
 
 	/**
@@ -369,11 +365,7 @@ class FrmDashboardController {
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
-
-		if ( ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true ) ) {
-			return true;
-		}
-		return false;
+		return ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true );
 	}
 
 	/**

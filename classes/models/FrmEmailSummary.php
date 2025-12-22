@@ -103,9 +103,7 @@ abstract class FrmEmailSummary {
 		include $this->get_include_file( $this->template );
 		$content = ob_get_clean();
 
-		$content = str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
-
-		return $content;
+		return str_replace( '%%INNER_CONTENT%%', $this->get_inner_content(), $content );
 	}
 
 	/**

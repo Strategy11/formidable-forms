@@ -61,6 +61,12 @@ class test_FrmPersonalData extends FrmUnitTest {
 		return $entry_ids;
 	}
 
+	/**
+	 * @param mixed $entry_data
+	 * @param mixed $email
+	 *
+	 * @return string[]
+	 */
 	private function create_entries_for_email( $entry_data, $email ) {
 		$email_field = $this->factory->field->get_id_by_key( 'contact-email' );
 

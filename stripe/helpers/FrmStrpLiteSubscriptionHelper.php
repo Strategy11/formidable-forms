@@ -15,9 +15,6 @@ class FrmStrpLiteSubscriptionHelper {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
-	 *       Make sure that if/when we re-use this in Stripe that we still include that.
-	 *
 	 * @param object $subscription A Stripe Subscription object.
 	 * @param string $amount
 	 *
@@ -71,8 +68,7 @@ class FrmStrpLiteSubscriptionHelper {
 		}
 
 		$frm_sub = new FrmTransLiteSubscription();
-		$sub_id  = $frm_sub->create( $new_values );
-		return $sub_id;
+		return $frm_sub->create( $new_values );
 	}
 
 	/**
@@ -87,7 +83,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 *    @type string  $amount
 	 * }
 	 *
-	 * @return string Plan id.
+	 * @return false|string Plan id.
 	 */
 	public static function get_plan_from_atts( $atts ) {
 		$action                         = $atts['action'];
@@ -194,8 +190,7 @@ class FrmStrpLiteSubscriptionHelper {
 		// The full error message looks like "No such plan: '_399_1month_usd".
 		$action->post_content['plan_id'] = '';
 		$charge_data['plan']             = self::get_plan_from_atts( compact( 'action', 'amount' ) );
-		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
-		return $subscription;
+		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
 	}
 
 	/**

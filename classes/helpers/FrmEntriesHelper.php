@@ -202,11 +202,7 @@ class FrmEntriesHelper {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 
-			if ( ! empty( $add_atts ) ) {
-				$this_atts = array_merge( $atts, $add_atts );
-			} else {
-				$this_atts = $atts;
-			}
+			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
 
 			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
 
@@ -430,7 +426,7 @@ class FrmEntriesHelper {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
 		} elseif ( is_object( $field ) ) {
-			$field_id  = $field->id;
+			$field_id = $field->id;
 
 			if ( 'hidden' === $field->type && ! empty( $field->field_options['original_type'] ) ) {
 				$field_obj = FrmFieldFactory::get_field_type( $field->field_options['original_type'], $field );
@@ -691,11 +687,7 @@ class FrmEntriesHelper {
 		if ( $i > 1 ) {
 			// We will have two since we are not using 'other' argument yet
 			// see if version is before or after the name.
-			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
-				$version = $matches['version'][0];
-			} else {
-				$version = $matches['version'][1];
-			}
+			$version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
 		} elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
 		} else {
@@ -953,9 +945,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		$existing_entry_statuses = array_replace( $default_entry_statuses, $extended_entry_status );
-
-		return $existing_entry_statuses;
+		return array_replace( $default_entry_statuses, $extended_entry_status );
 	}
 
 	/**

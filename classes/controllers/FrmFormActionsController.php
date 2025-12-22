@@ -68,6 +68,7 @@ class FrmFormActionsController {
 			'getresponse'       => 'FrmDefGetResponseAction',
 			'hubspot'           => 'FrmDefHubspotAction',
 			'zapier'            => 'FrmDefZapierAction',
+			'n8n'               => 'FrmDefN8NAction',
 			'twilio'            => 'FrmDefTwilioAction',
 			'highrise'          => 'FrmDefHighriseAction',
 			'mailpoet'          => 'FrmDefMailpoetAction',
@@ -75,6 +76,10 @@ class FrmFormActionsController {
 			'convertkit'        => 'FrmDefConvertKitAction',
 			'googlespreadsheet' => 'FrmDefGoogleSpreadsheetAction',
 		);
+
+		if ( ! FrmAppHelper::show_new_feature( 'n8n' ) ) {
+			unset( $action_classes['n8n'] );
+		}
 
 		$action_classes = apply_filters( 'frm_registered_form_actions', $action_classes );
 		$action_classes = self::maybe_unset_highrise( $action_classes );
@@ -617,7 +622,7 @@ class FrmFormActionsController {
 	 * @param int|string $entry_id
 	 * @param int|string $form_id
 	 * @param array      $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
@@ -643,7 +648,7 @@ class FrmFormActionsController {
 	 * @param int|string        $entry
 	 * @param string            $type
 	 * @param array             $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
@@ -788,9 +793,7 @@ class FrmFormActionsController {
 			return $where;
 		}
 
-		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
-
-		return $where;
+		return $where . $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 	}
 
 	/**

@@ -258,12 +258,10 @@ class FrmStylesController {
 	public static function get_file_name() {
 		if ( is_multisite() ) {
 			$blog_id = get_current_blog_id();
-			$name    = 'formidableforms' . absint( $blog_id ) . '.css';
-		} else {
-			$name = 'formidableforms.css';
+			return 'formidableforms' . absint( $blog_id ) . '.css';
 		}
 
-		return $name;
+		return 'formidableforms.css';
 	}
 
 	/**
@@ -294,8 +292,7 @@ class FrmStylesController {
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
 		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$tag          = str_replace( ' type="', ' property="stylesheet" type="', $tag );
+			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -347,7 +344,7 @@ class FrmStylesController {
 		$style_id = self::get_style_id_for_styler();
 
 		if ( ! $style_id ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No styles', 'formidable' ),
 				'body'       => __( 'You must have a style to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
@@ -365,7 +362,7 @@ class FrmStylesController {
 		$form = FrmForm::getOne( $form_id );
 
 		if ( ! is_object( $form ) ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No forms', 'formidable' ),
 				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
@@ -440,7 +437,6 @@ class FrmStylesController {
 		);
 
 		if ( ! $form_id ) {
-			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
 			$where   = array(
 				'status'         => 'published',
@@ -474,9 +470,8 @@ class FrmStylesController {
 	 * @return WP_Post
 	 */
 	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-		return $default_style;
+		$frm_style = new FrmStyle( 'default' );
+		return $frm_style->get_one();
 	}
 
 	/**
@@ -844,14 +839,25 @@ class FrmStylesController {
 	 * Echo content for the Custom CSS page.
 	 *
 	 * @param string $message
+	 * @param array  $extra_args An array of extra arguments.
 	 *
 	 * @return void
 	 */
-	public static function custom_css( $message = '' ) {
-		$settings   = self::enqueue_codemirror();
-		$id         = $settings ? 'frm_codemirror_box' : 'frm_custom_css_box';
-		$custom_css = self::get_custom_css();
+	public static function custom_css( $message = '', $extra_args = array() ) {
+		$id              = $extra_args['id'] ?? 'frm_codemirror_box';
+		$settings        = self::enqueue_codemirror( $id, $extra_args['placeholder'] ?? '' );
+		$id              = $settings ? $id : 'frm_custom_css_box';
+		$show_errors     = $extra_args['show_errors'] ?? true;
+		$custom_css      = $extra_args['custom_css'] ?? self::get_custom_css();
+		$heading         = $extra_args['heading'] ?? __( 'You can add custom css here or in your theme style.css. Any CSS added here will be used anywhere the Formidable CSS is loaded.', 'formidable' );
+		$textarea_params = ! empty( $extra_args['textarea_params'] ) ? $extra_args['textarea_params'] : array(
+			'name' => 'frm_custom_css',
+			'id'   => $id,
+		);
 
+		if ( ! empty( $settings ) ) {
+			$textarea_params['class'] = 'hide-if-js';
+		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -860,9 +866,16 @@ class FrmStylesController {
 	 *
 	 * @since 6.0
 	 *
+	 * @param array|null $single_style_settings The single style settings.
+	 *
 	 * @return string
 	 */
-	public static function get_custom_css() {
+	public static function get_custom_css( $single_style_settings = null ) {
+		// If the single style settings are passed, return the custom CSS from the single style settings.
+		if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
+			return $single_style_settings['single_style_custom_css'];
+		}
+
 		$settings = FrmAppHelper::get_settings();
 
 		if ( is_string( $settings->custom_css ) ) {
@@ -870,11 +883,10 @@ class FrmStylesController {
 		}
 
 		// If it does not exist, check the default style as a fallback.
-		$frm_style  = new FrmStyle();
-		$style      = $frm_style->get_default_style();
-		$custom_css = $style->post_content['custom_css'];
+		$frm_style = new FrmStyle();
+		$style     = $frm_style->get_default_style();
 
-		return $custom_css;
+		return $style->post_content['custom_css'];
 	}
 
 	/**
@@ -883,9 +895,12 @@ class FrmStylesController {
 	 *
 	 * @since 6.0 Previously this code was embedded in self::custom_css.
 	 *
+	 * @param string $id The ID of the codemirror box.
+	 * @param string $placeholder The placeholder text for the codemirror box.
+	 *
 	 * @return array|false
 	 */
-	private static function enqueue_codemirror() {
+	private static function enqueue_codemirror( $id = 'frm_codemirror_box', $placeholder = '' ) {
 		if ( ! function_exists( 'wp_enqueue_code_editor' ) ) {
 			// The WordPress version is likely older than 4.9.
 			return false;
@@ -900,6 +915,7 @@ class FrmStylesController {
 					// As the codemirror box only appears once you click into the Custom CSS tab, we need to auto-refresh.
 					// Otherwise the line numbers all end up with a 1px width causing overlap issues with the text in the content.
 					'autoRefresh' => true,
+					'placeholder' => $placeholder,
 				),
 			)
 		);
@@ -908,7 +924,9 @@ class FrmStylesController {
 			wp_add_inline_script(
 				'code-editor',
 				sprintf(
-					'jQuery( function() { wp.codeEditor.initialize( \'frm_codemirror_box\', %s ); } );',
+					'jQuery( function() { window.%s_wp_editor = wp.codeEditor.initialize( \'%s\', %s ); } );',
+					$id,
+					$id,
 					wp_json_encode( $settings )
 				)
 			);
@@ -1191,9 +1209,8 @@ class FrmStylesController {
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
-		$styles    = $frm_style->get_all();
 
-		return $styles;
+		return $frm_style->get_all();
 	}
 
 	/**
@@ -1264,6 +1281,8 @@ class FrmStylesController {
 		if ( $style && isset( $style->post_content[ $val ] ) ) {
 			return $style->post_content[ $val ];
 		}
+
+		return null;
 	}
 
 	/**

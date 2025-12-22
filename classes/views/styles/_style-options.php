@@ -11,7 +11,7 @@ $back_button_attr = array_intersect_key( array_filter( $back_button_args ), arra
 		tabindex="0" role="button"
 		title="<?php esc_attr_e( 'Back', 'formidable' ); ?>">
 			<svg class="frmsvg">
-				<use xlink:href="#frm_back"></use>
+				<use href="#frm_back"></use>
 			</svg>
 	</a>
 	<span id="frm_style_name"><?php echo esc_html( $back_button_args['title'] ); ?></span>

@@ -20,7 +20,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 		$files_to_ignore   = array( 'set-php-version.php', 'stubs.php', '.php-cs-fixer.php', 'rector.php' );
 		$folders_to_ignore = array( 'tests', 'vendor', 'languages', 'node_modules', 'js', 'phpcs-sniffs' );
 
-		foreach ( $files as $key => $value ) {
+		foreach ( $files as $value ) {
 			$path = realpath( $dir . DIRECTORY_SEPARATOR . $value );
 
 			if ( ! is_dir( $path ) ) {

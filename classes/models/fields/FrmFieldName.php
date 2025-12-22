@@ -281,7 +281,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$show_warning = false;
 
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		foreach ( $this->sub_fields as $sub_field ) {
 			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
 
 			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {
@@ -307,7 +307,7 @@ class FrmFieldName extends FrmFieldCombo {
 	/**
 	 * Tracks the first name field ID in a form.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param object[] $fields Array of fields in a form.
 	 *
@@ -325,7 +325,7 @@ class FrmFieldName extends FrmFieldCombo {
 	/**
 	 * Gets subfield input attributes.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param array $sub_field Subfield data.
 	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.

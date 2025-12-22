@@ -805,11 +805,7 @@ class FrmAddonsController {
 			} else {
 				$slug = $id;
 
-				if ( isset( $addon['file'] ) ) {
-					$base_file = $addon['file'];
-				} else {
-					$base_file = 'formidable-' . $slug;
-				}
+				$base_file = $addon['file'] ?? 'formidable-' . $slug;
 
 				$file_name = $base_file . '/' . $base_file . '.php';
 
@@ -896,7 +892,7 @@ class FrmAddonsController {
 			$link = $site_url . $link;
 		}
 
-		$link       = FrmAppHelper::make_affiliate_url( $link );
+		$link = FrmAppHelper::make_affiliate_url( $link );
 
 		$utm  = array(
 			'campaign' => 'addons',
@@ -1010,7 +1006,7 @@ class FrmAddonsController {
 	/**
 	 * @since 4.08
 	 *
-	 * @return array|void
+	 * @return mixed[]|null
 	 */
 	protected static function download_and_activate() {
 		if ( is_admin() ) {
@@ -1025,6 +1021,7 @@ class FrmAddonsController {
 			return $installed;
 		}
 		self::handle_addon_action( $installed, 'activate' );
+		return null;
 	}
 
 	/**
@@ -1056,7 +1053,6 @@ class FrmAddonsController {
 		if ( $show_form ) {
 			$form     = ob_get_clean();
 			$message  = __( 'Sorry, your site requires FTP authentication. Please download plugins from FormidableForms.com and install them manually.', 'formidable' );
-			$data     = $form;
 			$response = array(
 				'success' => false,
 				'message' => $message,
@@ -1207,11 +1203,11 @@ class FrmAddonsController {
 	 * @param string $installed The plugin folder name with file name.
 	 * @param string $action The action type ('activate', 'deactivate', 'uninstall').
 	 *
-	 * @return array|void
+	 * @return mixed[]|null
 	 */
 	protected static function handle_addon_action( $installed, $action ) {
 		if ( ! $installed || ! $action ) {
-			return;
+			return null;
 		}
 
 		$result = null;
@@ -1251,12 +1247,10 @@ class FrmAddonsController {
 
 		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
 
-		$response = array(
+		return array(
 			'message'       => $message,
 			'saveAndReload' => $activating_page,
 		);
-
-		return $response;
 	}
 
 	/**
@@ -1345,12 +1339,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-
-		if ( empty( $auth ) || ! hash_equals( $auth, $post_auth ) ) {
-			return false;
-		}
-
-		return true;
+		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
 	}
 
 	/**

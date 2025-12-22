@@ -140,8 +140,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$error_fields = array();
 
 		if ( ! empty( $errors ) ) {
-			$error_field_ids = array_keys( $errors );
-
 			foreach ( $fields as $field ) {
 				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;

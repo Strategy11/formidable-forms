@@ -237,11 +237,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				if ( isset( $uid ) ) {
-					$code = str_replace( '|user_id|', $uid, $code );
-				} else {
-					$code = str_replace( '|user_id|', 'x', $code );
-				}
+				$code = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
 
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 

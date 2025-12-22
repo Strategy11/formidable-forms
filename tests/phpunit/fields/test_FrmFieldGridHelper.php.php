@@ -83,9 +83,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	public function test_with_sections() {
-		$this->form_id         = $this->factory->form->create();
-		$half_width_field      = $this->create_field_with_classes( 'text', 'frm_half' );
-		$quarter_width_field   = $this->create_field_with_classes( 'text', 'frm_fourth' );
+		$this->form_id    = $this->factory->form->create();
+		$half_width_field = $this->create_field_with_classes( 'text', 'frm_half' );
+		$this->create_field_with_classes( 'text', 'frm_fourth' );
 		$half_width_section    = $this->create_field_with_classes( 'divider', 'frm_half' );
 		$quarter_width_section = $this->create_field_with_classes( 'divider', 'frm_fourth' );
 		$end_divider           = $this->create_field_with_classes( 'end_divider' );
