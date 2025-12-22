@@ -77,14 +77,7 @@ class FrmPayPalLiteConnectHelper {
 					<?php
 
 					$connected = (bool) self::get_merchant_id( $mode );
-
-					$tag_classes = '';
-
-					if ( $connected ) {
-						$tag_classes = 'frm-lt-green-tag';
-					} else {
-						$tag_classes = 'frm-grey-tag';
-					}
+                    $tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
 					?>
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php
@@ -197,10 +190,6 @@ class FrmPayPalLiteConnectHelper {
 		$response = wp_remote_post( $url, $args );
 
 		if ( ! self::validate_response( $response ) ) {
-			ob_start();
-			var_dump($response);
-			$output = ob_get_clean();
-			return $output;
 			return 'Response from server is invalid';
 		}
 
@@ -210,10 +199,6 @@ class FrmPayPalLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
-			ob_start();
-			var_dump($body);
-			$output = ob_get_clean();
-			return $output;
 			return 'Response from server was not successful';
 		}
 

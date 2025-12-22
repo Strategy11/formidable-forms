@@ -127,11 +127,7 @@ class FrmPayPalLiteEventsController {
 		$transient_name = 'frm_paypal_failed_event_' . $event_id;
 		$transient      = get_transient( $transient_name );
 
-		if ( is_int( $transient ) ) {
-			$failed_count = $transient + 1;
-		} else {
-			$failed_count = 1;
-		}
+		$failed_count = is_int( $transient ) ? $transient + 1 : 1;
 
 		$maximum_retries = 3;
 
