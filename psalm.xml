@@ -14,6 +14,7 @@
 		<directory name="classes" />
 		<directory name="stripe" />
 		<directory name="square" />
+		<directory name="paypal" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		</ignoreFiles>
