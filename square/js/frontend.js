@@ -35,10 +35,13 @@
 
 		card.configure( { style: cardStyle } );
 
-		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', e => {
-			const field = e.detail.field;
-			const value = e.detail.currentState.isCompletelyValid;
+		// Add event listeners to track when the card form is valid
+		card.addEventListener( 'postalCodeChanged', syncSubmitButton );
+		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
+
+		function syncSubmitButton( event ) {
+			const field = event.detail.field;
+			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
 
 			// Check if all fields are valid
@@ -52,7 +55,7 @@
 					disableSubmit( thisForm );
 				}
 			}
-		} );
+		}
 
 		return card;
 	}
