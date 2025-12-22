@@ -38,9 +38,12 @@
 		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
 
-		card.addEventListener( 'postalCodeChanged', async function () {
-			const tokenResult = await card.tokenize()
-			if ( tokenResult.status === 'OK' ) {
+		card.addEventListener( 'postalCodeChanged', function ( event ) {
+			if ( event.detail.currentState.isCompletelyValid ) {
+				cardFields.cardNumber = true;
+				cardFields.expirationDate = true;
+				cardFields.cvv = true;
+				cardFields.postalCode = true;
 				enableSubmit();
 			} else {
 				disableSubmit();
@@ -51,8 +54,6 @@
 			const field = event.detail.field;
 			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
-
-			console.log( event.detail );
 
 			// Check if all fields are valid
 			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
