@@ -35,14 +35,24 @@
 
 		card.configure( { style: cardStyle } );
 
-		// Add event listeners to track when the card form is valid
-		card.addEventListener( 'postalCodeChanged', syncSubmitButton );
+		// Add event listener to track when the card form is valid
 		card.addEventListener( 'focusClassRemoved', syncSubmitButton );
+
+		card.addEventListener( 'postalCodeChanged', async function () {
+			const tokenResult = await card.tokenize()
+			if ( tokenResult.status === 'OK' ) {
+				enableSubmit();
+			} else {
+				disableSubmit();
+			}
+		} );
 
 		function syncSubmitButton( event ) {
 			const field = event.detail.field;
 			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
+
+			console.log( event.detail );
 
 			// Check if all fields are valid
 			squareCardElementIsComplete = Object.values( cardFields ).every( item => item === true );
