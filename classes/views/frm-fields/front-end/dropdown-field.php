@@ -87,7 +87,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $selected ) ) {
 			$option_params['disabled'] = 'disabled';
 		}
+		$option_params['field'] = $field;
+		$option_params['opt_key'] = $opt_key;
 		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params );
+
 		unset( $option_params );
 	}//end foreach
 	?>

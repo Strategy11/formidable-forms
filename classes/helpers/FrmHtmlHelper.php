@@ -54,6 +54,11 @@ class FrmHtmlHelper {
 		selected( $selected );
 		echo '>';
 		echo esc_html( $option === '' ? ' ' : $option );
+
+		if ( isset( $params['field'] ) && isset( $params['opt_key'] ) ) {
+			do_action( 'frm_after_option_input', $params['field'], $params['opt_key'] );
+		}
+
 		echo '</option>';
 	}
 
