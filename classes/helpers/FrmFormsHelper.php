@@ -325,7 +325,7 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status" tabindex="-1">' . $message . '</div>';
 	}
 
 	/**
