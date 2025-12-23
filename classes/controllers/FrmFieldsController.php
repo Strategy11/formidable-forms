@@ -375,7 +375,6 @@ class FrmFieldsController {
 		}
 
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
-		$no_allow         = ! $pro_is_installed ? 'frm_noallow' : '';
 
 		if ( ! $pro_is_installed ) {
 			$show_upsell_for_unique_value          = in_array(
