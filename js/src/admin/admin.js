@@ -6795,25 +6795,33 @@ window.frmAdminBuildJS = function() {
 			replaceWith = replaceWith.trim();
 		}
 
-		//
-		if ( shouldTryBreakFieldGroup && replaceWith.includes( 'frm_first' ) && ! classes.includes( 'frm_first' ) ) {
-			const fieldsInFieldBox = Array.from( field.parentElement.children );
-			const indexOfTargetField = fieldsInFieldBox.indexOf( field );
-			const fieldBox = field.parentElement.closest( 'li.frm_field_box.ui-draggable' );
-			const newFieldBox = fieldBox.cloneNode( true );
-			// Delete the singlings up to indexOfTargetField
-			for ( let i = indexOfTargetField; i < fieldsInFieldBox.length; i++ ) {
-				fieldsInFieldBox[ i ].remove();
-			}
-			fieldBox.after( newFieldBox );
-			const fieldsInNewFieldBox = Array.from( newFieldBox.firstChild.children );
-			for ( let i = 0; i < indexOfTargetField; i++ ) {
-				fieldsInNewFieldBox[ i ].remove();
-			}
-		}
-		//
+		maybeBreakFieldGroup( !! shouldTryBreakFieldGroup, field, classes, replaceWith );
 
 		field.className = field.className.replace( replace, replaceWith );
+	}
+
+	/**
+	 * @param {Boolean} shouldTryBreakFieldGroup
+	 * @param {HTMLElement} field
+	 * @param {String} classes
+	 * @param {String} replaceWith
+	 *
+	 * @returns {void}
+	 */
+	function maybeBreakFieldGroup( shouldTryBreakFieldGroup, field, classes, replaceWith ) {
+		if ( ! shouldTryBreakFieldGroup || ! replaceWith.includes( 'frm_first' ) || classes.includes( 'frm_first' ) ) {
+			return;
+		}
+
+		const fieldsInFieldGroup = Array.from( field.parentElement.children );
+		const indexOfTargetField = fieldsInFieldGroup.indexOf( field );
+		const fieldGroup = field.parentElement.closest( 'li.frm_field_box.ui-draggable' );
+
+		const newFieldGroup = fieldGroup.cloneNode( true );
+		fieldsInFieldGroup.slice( indexOfTargetField ).map( field => field.remove() );
+		fieldGroup.after( newFieldGroup );
+		const fieldsInNewFieldGroup = Array.from( newFieldGroup.firstChild.children );
+		fieldsInNewFieldGroup.slice( 0, indexOfTargetField ).map( field => field.remove() );
 	}
 
 	function maybeShowInlineModal( e ) {
