@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.26
+Stable tag: 6.26.1
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,13 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.26.1 =
+* New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
+* New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
+* Fix: Field step settings were changed to only accept numbers in last release, causing issues with "any" as a value.
+* Fix: Bootstrap dropdowns would not properly initialize for fields loaded with AJAX in long forms, preventing access to the more options dropdown, hiding the option to delete a field.
+* Breaking: Old logic that would trigger blur events for inputs with no value set with the onblur attribute has been removed.
+
 = 6.26 =
 * New: Gutenberg blocks now use API version 3. As of WordPress 6.9, a deprecated message would appear for older block API versions.
 * New: Styles now include a Custom CSS setting in Quick Settings that can be exported and imported to other sites. The custom CSS is automatically prefixed with the style's class name to prevent conflicts.

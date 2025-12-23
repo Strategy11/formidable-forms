@@ -127,15 +127,13 @@ class FrmTransLiteAction extends FrmFormAction {
 		 */
 		$form_ids = apply_filters( 'frm_trans_action_get_field_options_form_id', $form_ids, $form_id );
 
-		$form_fields = FrmField::getAll(
+		return FrmField::getAll(
 			array(
 				'fi.form_id'  => $form_ids,
 				'fi.type not' => array( 'divider', 'end_divider', 'html', 'break', 'captcha', 'rte', 'form' ),
 			),
 			'field_order'
 		);
-
-		return $form_fields;
 	}
 
 	/**

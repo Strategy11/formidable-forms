@@ -137,11 +137,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-			if ( $status === $type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status === $type ? ' class="current"' : '';
 
 			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
@@ -433,8 +429,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_form_id_column( $item, $atts ) {
 		if ( isset( $atts['form_ids'][ $item->item_id ] ) ) {
-			$form_link = FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
-			return $form_link;
+			return FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
 		}
 
 		return '';
@@ -446,7 +441,6 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_user_id_column( $item ) {
-		global $wpdb;
 		$val = FrmDb::get_var( 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
@@ -464,8 +458,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$date       = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
 		$date_title = FrmAppHelper::get_localized_date( $atts['date_format'] . ' g:i:s A', $item->created_at );
-		$val        = '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
-		return $val;
+		return '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
 	}
 
 	/**

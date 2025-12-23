@@ -27,7 +27,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $wpdb, $per_page, $mode;
+		global $per_page, $mode;
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
@@ -53,7 +53,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		$start   = self::get_param(
+		$start = self::get_param(
 			array(
 				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
@@ -202,11 +202,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $statuses as $status => $name ) {
 
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : '';
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
@@ -241,7 +237,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
-		global $frm_vars, $mode;
+		global $mode;
 
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -355,8 +351,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
-		$val = '<div>' . $val . '</div>';
-		return $val;
+		return '<div>' . $val . '</div>';
 	}
 
 	/**

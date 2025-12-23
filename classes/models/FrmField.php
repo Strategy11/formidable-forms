@@ -8,7 +8,7 @@ class FrmField {
 	/**
 	 * @var bool
 	 */
-	public static $use_cache      = true;
+	public static $use_cache = true;
 
 	/**
 	 * @var int
@@ -411,11 +411,7 @@ class FrmField {
 
 		foreach ( $new_values as $k => $v ) {
 			if ( is_array( $v ) ) {
-				if ( $k === 'default_value' ) {
-					$new_values[ $k ] = FrmAppHelper::maybe_json_encode( $v );
-				} else {
-					$new_values[ $k ] = serialize( $v );
-				}
+				$new_values[ $k ] = $k === 'default_value' ? FrmAppHelper::maybe_json_encode( $v ) : serialize( $v );
 			}
 			unset( $k, $v );
 		}
@@ -865,18 +861,12 @@ class FrmField {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
 
 		if ( $field ) {
-			$type = $field->{$col};
-		} else {
-			if ( is_numeric( $id ) ) {
-				$where = array( 'id' => $id );
-			} else {
-				$where = array( 'field_key' => $id );
-			}
-
-			$type = FrmDb::get_var( 'frm_fields', $where, $col );
+			return $field->{$col};
 		}
 
-		return $type;
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
+
+		return FrmDb::get_var( 'frm_fields', $where, $col );
 	}
 
 	/**
@@ -1306,13 +1296,9 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		$is_multi_value_field = (
-			self::is_checkbox( $field ) ||
+		return self::is_checkbox( $field ) ||
 			$field_type === 'address' ||
-			self::is_multiple_select( $field )
-		);
-
-		return $is_multi_value_field;
+			self::is_multiple_select( $field );
 	}
 
 	/**
@@ -1484,13 +1470,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
-		if ( is_array( $field ) ) {
-			$option = self::get_option_in_array( $field, $option );
-		} else {
-			$option = self::get_option_in_object( $field, $option );
-		}
-
-		return $option;
+		return is_array( $field ) ? self::get_option_in_array( $field, $option ) : self::get_option_in_object( $field, $option );
 	}
 
 	/**
@@ -1529,11 +1509,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
-		if ( is_array( $field ) ) {
-			$is_repeating_field = ( 'divider' === $field['type'] );
-		} else {
-			$is_repeating_field = ( 'divider' === $field->type );
-		}
+		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
 
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}

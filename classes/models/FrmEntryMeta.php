@@ -36,12 +36,10 @@ class FrmEntryMeta {
 		if ( $query_results ) {
 			self::clear_cache();
 			wp_cache_delete( $entry_id, 'frm_entry' );
-			$id = $wpdb->insert_id;
-		} else {
-			$id = 0;
+			return $wpdb->insert_id;
 		}
 
-		return $id;
+		return 0;
 	}
 
 	/**
@@ -83,7 +81,7 @@ class FrmEntryMeta {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array $values 
+	 * @param array $values
 	 *
 	 * @return void
 	 */
@@ -300,9 +298,7 @@ class FrmEntryMeta {
 		$field_type = FrmField::get_type( $field_id );
 		FrmFieldsHelper::prepare_field_value( $result, $field_type );
 
-		$result = wp_unslash( $result );
-
-		return $result;
+		return wp_unslash( $result );
 	}
 
 	/**
@@ -539,11 +535,7 @@ class FrmEntryMeta {
 			if ( ! $args['is_draft'] ) {
 				$where['e.is_draft'] = 0;
 			} elseif ( is_numeric( $args['is_draft'] ) ) {
-				if ( class_exists( 'FrmAbandonmentHooksController', false ) ) {
-					$where['e.is_draft'] = absint( $args['is_draft'] );
-				} else {
-					$where['e.is_draft'] = 1;
-				}
+				$where['e.is_draft'] = class_exists( 'FrmAbandonmentHooksController', false ) ? absint( $args['is_draft'] ) : 1;
 			} elseif ( 'both' === $args['is_draft'] && class_exists( 'FrmAbandonmentHooksController', false ) ) {
 				$where['e.is_draft'] = array( 0, 1 );
 			} elseif ( false !== strpos( $args['is_draft'], ',' ) ) {
