@@ -6806,7 +6806,7 @@ window.frmAdminBuildJS = function() {
 	 * @param {String} classes
 	 * @param {String} replaceWith
 	 *
-	 * @returns {void}
+	 * @return {void}
 	 */
 	function maybeBreakFieldGroup( shouldTryBreakFieldGroup, field, classes, replaceWith ) {
 		if ( ! shouldTryBreakFieldGroup || ! replaceWith.includes( 'frm_first' ) || classes.includes( 'frm_first' ) ) {
