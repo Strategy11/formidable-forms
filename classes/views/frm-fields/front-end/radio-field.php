@@ -50,6 +50,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 
 		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked );
+
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
