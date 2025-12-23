@@ -374,7 +374,76 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+
+		if ( ! $pro_is_installed ) {
+			$show_upsell_for_unique_value          = in_array(
+				$field['type'],
+				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				true
+			);
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
+			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
+			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @param bool  $pro_is_installed
+	 *
+	 * @return array
+	 */
+	public static function get_unique_element_atts( $field, $pro_is_installed ) {
+		$unique_element_atts = array(
+			'type'  => 'checkbox',
+			'name'  => 'field_options[unique_' . $field['id'] . ']',
+			'id'    => 'frm_uniq_field_' . $field['id'],
+			'value' => '1',
+			'class' => 'frm_mark_unique',
+		);
+
+		if ( ! empty( $field['unique'] ) ) {
+			$unique_element_atts['checked'] = 'checked';
+		}
+
+		if ( ! $pro_is_installed ) {
+			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
+		}
+
+		return $unique_element_atts;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $field
+	 * @param bool  $pro_is_installed
+	 *
+	 * @return array
+	 */
+	public static function get_read_only_element_atts( $field, $pro_is_installed ) {
+		$read_only_element_atts = array(
+			'type'  => 'checkbox',
+			'name'  => 'field_options[read_only_' . $field['id'] . ']',
+			'id'    => 'frm_read_only_field_' . $field['id'],
+			'value' => '1',
+		);
+
+		if ( ! empty( $field['read_only'] ) ) {
+			$read_only_element_atts['checked'] = 'checked';
+		}
+
+		if ( ! $pro_is_installed ) {
+			$read_only_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
+		}
+
+		return $read_only_element_atts;
 	}
 
 	/**
