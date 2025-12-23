@@ -395,19 +395,18 @@ class FrmFieldsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param array  $field
-	 * @param bool   $pro_is_installed
-	 * @param string $no_allow
+	 * @param array $field
+	 * @param bool  $pro_is_installed
 	 *
 	 * @return array
 	 */
-	public static function get_unique_element_atts( $field, $pro_is_installed, $no_allow ) {
+	public static function get_unique_element_atts( $field, $pro_is_installed ) {
 		$unique_element_atts = array(
 			'type'  => 'checkbox',
 			'name'  => 'field_options[unique_' . $field['id'] . ']',
 			'id'    => 'frm_uniq_field_' . $field['id'],
 			'value' => '1',
-			'class' => 'frm_mark_unique ' . $no_allow,
+			'class' => 'frm_mark_unique',
 		);
 
 		if ( ! empty( $field['unique'] ) ) {
@@ -424,19 +423,17 @@ class FrmFieldsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param array  $field
-	 * @param bool   $pro_is_installed
-	 * @param string $no_allow
+	 * @param array $field
+	 * @param bool  $pro_is_installed
 	 *
 	 * @return array
 	 */
-	public static function get_read_only_element_atts( $field, $pro_is_installed, $no_allow ) {
+	public static function get_read_only_element_atts( $field, $pro_is_installed ) {
 		$read_only_element_atts = array(
 			'type'  => 'checkbox',
 			'name'  => 'field_options[read_only_' . $field['id'] . ']',
 			'id'    => 'frm_read_only_field_' . $field['id'],
 			'value' => '1',
-			'class' => $no_allow,
 		);
 
 		if ( ! empty( $field['read_only'] ) ) {
