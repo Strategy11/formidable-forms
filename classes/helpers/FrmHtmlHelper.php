@@ -50,7 +50,8 @@ class FrmHtmlHelper {
 	 */
 	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
 		$field = $params['field'] ?? null;
-		unset( $params['field'] ); // Off load the field from the params to avoid error when calling FrmAppHelper::array_to_html_params.
+		// Off load the field from the params to avoid error when calling FrmAppHelper::array_to_html_params.
+		unset( $params['field'] );
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $params, true );
 		selected( $selected );
