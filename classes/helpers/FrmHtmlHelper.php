@@ -49,17 +49,16 @@ class FrmHtmlHelper {
 	 * @return void
 	 */
 	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
-		$field   = $params['field'] ?? null;
-		$opt_key = $params['opt_key'] ?? null;
-		unset( $params['field'], $params['opt_key'] );
+		$field = $params['field'] ?? null;
+		unset( $params['field'] ); // Off load the field from the params to avoid error when calling FrmAppHelper::array_to_html_params.
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $params, true );
 		selected( $selected );
 		echo '>';
 		echo esc_html( $option === '' ? ' ' : $option );
 
-		if ( isset( $field ) && isset( $opt_key ) ) {
-			do_action( 'frm_after_option_input', $field, $opt_key );
+		if ( $field && isset( $params['opt_key'] ) ) {
+			FrmFieldsHelper::after_choice_input( $field, $params['opt_key'] );
 		}
 
 		echo '</option>';

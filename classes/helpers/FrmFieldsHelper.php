@@ -792,6 +792,27 @@ class FrmFieldsHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @param array  $field
+	 * @param string $choice_key
+	 *
+	 * @return void
+	 */
+	public static function after_choice_input( $field, $choice_key ) {
+
+		/**
+		 * Allows adding content after the checkbox input.
+		 *
+		 * @since x.x
+		 *
+		 * @param array  $field The field data.
+		 * @param string $opt_key The option key.
+		 */
+		do_action( 'frm_after_option_input', $field, $choice_key );
+	}
+
+	/**
 	 * Shows the inline modal.
 	 *
 	 * @since 4.0
