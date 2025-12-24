@@ -45,16 +45,6 @@ class FrmSquareLiteSettingsController {
 	}
 
 	/**
-	 * @return array
-	 */
-	private static function get_default_settings_atts() {
-		return array(
-			'errors'  => array(),
-			'message' => '',
-		);
-	}
-
-	/**
 	 * Handle processing changes to global Stripe Settings.
 	 *
 	 * @return void

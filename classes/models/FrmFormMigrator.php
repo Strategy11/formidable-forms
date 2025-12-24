@@ -38,7 +38,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @var array
 	 */
-	protected $fields_map          = array();
+	protected $fields_map = array();
 
 	/**
 	 * @var mixed
@@ -48,7 +48,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @var array
 	 */
-	protected $current_section     = array();
+	protected $current_section = array();
 
 	/**
 	 * Define required properties.

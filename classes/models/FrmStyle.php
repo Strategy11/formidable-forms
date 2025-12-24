@@ -265,11 +265,7 @@ class FrmStyle {
 		$sanitized_settings = array();
 
 		foreach ( $valid_keys as $key ) {
-			if ( isset( $settings[ $key ] ) ) {
-				$sanitized_settings[ $key ] = sanitize_textarea_field( $settings[ $key ] );
-			} else {
-				$sanitized_settings[ $key ] = $defaults[ $key ];
-			}
+			$sanitized_settings[ $key ] = isset( $settings[ $key ] ) ? sanitize_textarea_field( $settings[ $key ] ) : $defaults[ $key ];
 
 			if ( 'custom_css' !== $key && 'single_style_custom_css' !== $key ) {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
@@ -372,12 +368,7 @@ class FrmStyle {
 		// Matches size values but also checks for unexpected ( and ).
 		// This is case insensitive so it will catch PX, PT, etc, as well.
 		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
-
-		if ( $looks_like_a_size ) {
-			return true;
-		}
-
-		return false;
+		return (bool) $looks_like_a_size;
 	}
 
 	/**
@@ -489,11 +480,7 @@ class FrmStyle {
 		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
 
-			if ( $style ) {
-				$this->id = $style->ID;
-			} else {
-				$this->id = 0;
-			}
+			$this->id = $style ? $style->ID : 0;
 
 			return $style;
 		}
@@ -605,6 +592,8 @@ class FrmStyle {
 				return $style;
 			}
 		}
+
+		return null;
 	}
 
 	/**

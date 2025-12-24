@@ -76,15 +76,8 @@ class FrmSquareLiteConnectHelper {
 					</span>
 					<?php
 
-					$connected = (bool) self::get_merchant_id( $mode );
-
-					$tag_classes = '';
-
-					if ( $connected ) {
-						$tag_classes = 'frm-lt-green-tag';
-					} else {
-						$tag_classes = 'frm-grey-tag';
-					}
+					$connected   = (bool) self::get_merchant_id( $mode );
+					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
 					?>
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php

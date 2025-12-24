@@ -402,11 +402,7 @@ class FrmEmailSummaryHelper {
 	 * @return string
 	 */
 	public static function get_section_style( $border_pos = 'top' ) {
-		if ( $border_pos ) {
-			$border = 'border-' . $border_pos . ': 1px solid #eaecf0;';
-		} else {
-			$border = '';
-		}
+		$border = $border_pos ? 'border-' . $border_pos . ': 1px solid #eaecf0;' : '';
 		return 'padding: 3em 4.375em;' . $border;
 	}
 

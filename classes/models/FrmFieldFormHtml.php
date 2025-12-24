@@ -317,9 +317,7 @@ class FrmFieldFormHtml {
 		if ( false === $end ) {
 			return false;
 		}
-
-		$error_body = substr( $html, $start + 10, $end - $start - 10 );
-		return $error_body;
+		return substr( $html, $start + 10, $end - $start - 10 );
 	}
 
 	/**

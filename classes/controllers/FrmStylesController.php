@@ -258,12 +258,10 @@ class FrmStylesController {
 	public static function get_file_name() {
 		if ( is_multisite() ) {
 			$blog_id = get_current_blog_id();
-			$name    = 'formidableforms' . absint( $blog_id ) . '.css';
-		} else {
-			$name = 'formidableforms.css';
+			return 'formidableforms' . absint( $blog_id ) . '.css';
 		}
 
-		return $name;
+		return 'formidableforms.css';
 	}
 
 	/**
@@ -294,8 +292,7 @@ class FrmStylesController {
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
 		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
-			$frm_settings = FrmAppHelper::get_settings();
-			$tag          = str_replace( ' type="', ' property="stylesheet" type="', $tag );
+			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
 		return $tag;
@@ -347,7 +344,7 @@ class FrmStylesController {
 		$style_id = self::get_style_id_for_styler();
 
 		if ( ! $style_id ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No styles', 'formidable' ),
 				'body'       => __( 'You must have a style to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
@@ -365,7 +362,7 @@ class FrmStylesController {
 		$form = FrmForm::getOne( $form_id );
 
 		if ( ! is_object( $form ) ) {
-			$error_args   = array(
+			$error_args = array(
 				'title'      => __( 'No forms', 'formidable' ),
 				'body'       => __( 'You must have a form to use the Visual Styler.', 'formidable' ),
 				'cancel_url' => admin_url( 'admin.php?page=formidable' ),
@@ -440,7 +437,6 @@ class FrmStylesController {
 		);
 
 		if ( ! $form_id ) {
-			// TODO: Show a message why a random form is being shown (because no form is assigned to the style).
 			// Fallback to any form.
 			$where   = array(
 				'status'         => 'published',
@@ -474,9 +470,8 @@ class FrmStylesController {
 	 * @return WP_Post
 	 */
 	private static function get_default_style() {
-		$frm_style     = new FrmStyle( 'default' );
-		$default_style = $frm_style->get_one();
-		return $default_style;
+		$frm_style = new FrmStyle( 'default' );
+		return $frm_style->get_one();
 	}
 
 	/**
@@ -888,11 +883,10 @@ class FrmStylesController {
 		}
 
 		// If it does not exist, check the default style as a fallback.
-		$frm_style  = new FrmStyle();
-		$style      = $frm_style->get_default_style();
-		$custom_css = $style->post_content['custom_css'];
+		$frm_style = new FrmStyle();
+		$style     = $frm_style->get_default_style();
 
-		return $custom_css;
+		return $style->post_content['custom_css'];
 	}
 
 	/**
@@ -1215,9 +1209,8 @@ class FrmStylesController {
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
-		$styles    = $frm_style->get_all();
 
-		return $styles;
+		return $frm_style->get_all();
 	}
 
 	/**
@@ -1288,6 +1281,8 @@ class FrmStylesController {
 		if ( $style && isset( $style->post_content[ $val ] ) ) {
 			return $style->post_content[ $val ];
 		}
+
+		return null;
 	}
 
 	/**

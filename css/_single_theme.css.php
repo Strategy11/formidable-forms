@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 $settings = FrmStylesHelper::get_settings_for_output( $style );
 extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 
-$is_loaded_via_ajax = isset( $is_loaded_via_ajax ) ? $is_loaded_via_ajax : false;
+$is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
 $important = empty( $important_style ) ? '' : ' !important';
@@ -20,8 +20,8 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 }
 
 .frm_forms.<?php echo esc_html( $style_class ); ?>{
-	max-width:<?php echo esc_html( $form_width . $important ); ?>;
-	direction:<?php echo esc_html( $direction . $important ); ?>;
+	max-width:var(--form-width)<?php echo esc_html( $important ); ?>;
+	direction:var(--direction)<?php echo esc_html( $important ); ?>;
 	<?php if ( 'rtl' === $direction ) { ?>
 	unicode-bidi:embed;
 	<?php } ?>
@@ -38,7 +38,7 @@ $use_chosen_js = FrmStylesHelper::use_chosen_js();
 
 <?php if ( ! empty( $field_margin ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field{
-	margin-bottom:<?php echo esc_html( $field_margin . $important ); ?>;
+	margin-bottom:var(--field-margin)<?php echo esc_html( $important ); ?>;
 }
 <?php } ?>
 
@@ -119,7 +119,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 
 .<?php echo esc_html( $style_class ); ?> .frm_pos_right{
 	display:inline<?php echo esc_html( $important ); ?>;
-	width:<?php echo esc_html( $width . $important ); ?>;
+	width:var(--width)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_none_container .frm_primary_label,
@@ -144,10 +144,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 <?php endif; ?>
 
-/* These do not work if they are combined */
 .<?php echo esc_html( $style_class ); ?> input::placeholder,
 .<?php echo esc_html( $style_class ); ?> textarea::placeholder{
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_default,
@@ -159,7 +158,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .chosen-container-single .chosen-default,
 <?php } ?>
 .<?php echo esc_html( $style_class ); ?> .placeholder {
-	color: <?php echo esc_html( $text_color_disabled . $important ); ?>;
+	color:var(--text-color-disabled)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .form-field input:not([type=file]):not([type=range]):not([readonly]):focus,
@@ -178,9 +177,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .chosen-container-active .chosen-choices,
 <?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_focus_field .frm-card-element.StripeElement {
-	background-color:<?php echo esc_html( $bg_color_active . $important ); ?>;
-	border-color:<?php echo esc_html( $border_color_active . $important ); ?>;
-	color: var(--text-color);
+	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
+	border-color:var(--border-color-active)<?php echo esc_html( $important ); ?>;
+	color:var(--text-color);
 	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
 	box-shadow:none;
 	outline: none;
@@ -249,9 +248,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
-	background: <?php echo esc_html( $submit_hover_bg_color . $important ); ?>;
-	border-color: <?php echo esc_html( $submit_hover_border_color . $important ); ?>;
-	color: <?php echo esc_html( $submit_hover_color . $important ); ?>;
+	background:var(--submit-hover-bg-color)<?php echo esc_html( $important ); ?>;
+	border-color:var(--submit-hover-border-color)<?php echo esc_html( $important ); ?>;
+	color:var(--submit-hover-color)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?>.frm_center_submit .frm_submit .frm_ajax_loading{
@@ -265,9 +264,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:active,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:active,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:active{
-	background: <?php echo esc_html( $submit_active_bg_color . $important ); ?>;
-	border-color: <?php echo esc_html( $submit_active_border_color . $important ); ?>;
-	color: <?php echo esc_html( $submit_active_color . $important ); ?>;
+	background:var(--submit-active-bg-color)<?php echo esc_html( $important ); ?>;
+	border-color:var(--submit-active-border-color)<?php echo esc_html( $important ); ?>;
+	color:var(--submit-active-color)<?php echo esc_html( $important ); ?>;
 	outline: none;
 }
 
@@ -279,20 +278,20 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:focus{
-	color: transparent <?php echo esc_html( $important ); ?>;
-	background: <?php echo esc_html( $submit_bg_color . $important ); ?>;
-	border-color: <?php echo esc_html( $submit_bg_color . $important ); ?>;
+	color: transparent<?php echo esc_html( $important ); ?>;
+	background:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
+	border-color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:before {
-	border-bottom-color: <?php echo esc_html( $submit_text_color . $important ); ?>;
-	border-right-color: <?php echo esc_html( $submit_text_color . $important ); ?>;
+	border-bottom-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
+	border-right-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 		<?php if ( $submit_height !== 'auto' ) { ?>
-			max-height:<?php echo esc_html( $submit_height ); ?>;
+			max-height:var(--submit-height)<?php echo esc_html( $important ); ?>;
 		<?php } ?>
 		<?php if ( $submit_width !== 'auto' ) { ?>
-			max-width:<?php echo esc_html( $submit_width ); ?>;
+			max-width:var(--submit-width)<?php echo esc_html( $important ); ?>;
 		<?php } ?>
 }
 		<?php
@@ -306,11 +305,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
 	<?php } ?>
-	font-size:<?php echo esc_html( $font_size . $important ); ?>;
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-	font-weight:<?php echo esc_html( $weight . $important ); ?>;
+	font-size:var(--font-size)<?php echo esc_html( $important ); ?>;
+	color:var(--label-color)<?php echo esc_html( $important ); ?>;
+	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
 	margin:0;
-	padding:<?php echo esc_html( $label_padding . $important ); ?>;
+	padding:var(--label-padding)<?php echo esc_html( $important ); ?>;
 	width:auto;
 	display:block;
 	visibility:hidden;
@@ -323,15 +322,22 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin: 0 !important;
 }
 
+<?php
+// Only include this CSS when the math captcha plugin is active.
+if ( class_exists( 'FrmCptController' ) ) :
+	?>
 .<?php echo esc_html( $style_class ); ?> #frm_field_cptch_number_container{
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
 	<?php } ?>
-	font-size:<?php echo esc_html( $font_size . $important ); ?>;
-	color:<?php echo esc_html( $label_color . $important ); ?>;
-	font-weight:<?php echo esc_html( $weight . $important ); ?>;
+	font-size:var(--font-size)<?php echo esc_html( $important ); ?>;
+	color:var(--label-color)<?php echo esc_html( $important ); ?>;
+	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
 	clear:both;
 }
+	<?php
+endif;
+?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=text],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=password],
@@ -353,31 +359,38 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .chosen-container-single .chosen-single,
 <?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_form_field :invalid {
-	color:<?php echo esc_html( $text_color_error . $important ); ?>;
-	background-color:<?php echo esc_html( $bg_color_error . $important ); ?>;
-	border-color:<?php echo esc_html( $border_color_error . $important ); ?>;
-	border-width:var(--border-width-error) <?php echo esc_html( $important ); ?>;
-	border-style:<?php echo esc_html( $border_style_error . $important ); ?>;
+	color:var(--text-color-error)<?php echo esc_html( $important ); ?>;
+	background-color:var(--bg-color-error)<?php echo esc_html( $important ); ?>;
+	border-color:var(--border-color-error)<?php echo esc_html( $important ); ?>;
+	border-width:var(--border-width-error)<?php echo esc_html( $important ); ?>;
+	border-style:var(--border-style-error)<?php echo esc_html( $important ); ?>;
 }
 
+<?php
+// Only include this style when the signatures add-on is active
+if ( class_exists( 'FrmSigField' ) ) :
+	?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .sigWrapper{
-	border-color:<?php echo esc_html( $border_color_error ); ?> !important;
+	border-color:var(--border-color-error) !important;
 }
+	<?php
+endif;
+?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_error,
 .<?php echo esc_html( $style_class ); ?> .frm_limit_error{
-	font-weight:<?php echo esc_html( $weight . $important ); ?>;
-	color:<?php echo esc_html( $border_color_error . $important ); ?>;
+	font-weight:var(--weight)<?php echo esc_html( $important ); ?>;
+	color:var(--border-color-error)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_error_style{
-	background-color:<?php echo esc_html( $error_bg . $important ); ?>;
-	border:1px solid <?php echo esc_html( $error_border . $important ); ?>;
-	border-radius:<?php echo esc_html( $border_radius . $important ); ?>;
-	color: <?php echo esc_html( $error_text . $important ); ?>;
-	font-size:<?php echo esc_html( $error_font_size . $important ); ?>;
+	background-color:var(--error-bg)<?php echo esc_html( $important ); ?>;
+	border:1px solid var(--error-border)<?php echo esc_html( $important ); ?>;
+	border-radius:var(--border-radius)<?php echo esc_html( $important ); ?>;
+	color:var(--error-text)<?php echo esc_html( $important ); ?>;
+	font-size:var(--error-font-size)<?php echo esc_html( $important ); ?>;
 	margin:0;
-	margin-bottom:<?php echo esc_html( $field_margin ); ?>;
+	margin-bottom:var(--field-margin);
 }
 
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-striped .progress-bar{
@@ -385,7 +398,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-bar{
-	background-color:<?php echo esc_html( $bg_color . $important ); ?>;
+	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,

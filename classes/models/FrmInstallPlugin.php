@@ -36,13 +36,7 @@ class FrmInstallPlugin {
 		if ( $this->is_installed() && $this->is_active() ) {
 			return '';
 		}
-
-		if ( $this->is_installed() ) {
-			$url = $this->activate_url();
-		} else {
-			$url = $this->install_url();
-		}
-		return $url;
+		return $this->is_installed() ? $this->activate_url() : $this->install_url();
 	}
 
 	/**
@@ -161,18 +155,5 @@ class FrmInstallPlugin {
 		} else {
 			wp_send_json_error();
 		}
-	}
-
-	/**
-	 * Check if a plugin is installed.
-	 *
-	 * @since 6.16
-	 *
-	 * @param string $plugin_file
-	 *
-	 * @return bool
-	 */
-	private static function is_plugin_installed( $plugin_file ) {
-		return isset( get_plugins()[ $plugin_file ] );
 	}
 }
