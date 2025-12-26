@@ -2427,6 +2427,8 @@ window.frmAdminBuildJS = function() {
 				classesInput.value = fieldClasses;
 			}
 		}
+		const layoutClass = getLayoutClassName( field.classList );
+		console.log( layoutClass );
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
