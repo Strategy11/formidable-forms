@@ -6822,6 +6822,9 @@ window.frmAdminBuildJS = function() {
 		fieldGroup.after( newFieldGroup );
 		const fieldsInNewFieldGroup = Array.from( newFieldGroup.firstChild.children );
 		fieldsInNewFieldGroup.slice( 0, indexOfTargetField ).map( field => field.remove() );
+
+		makeDroppable( newFieldGroup.querySelector( 'ul.frm_sorting' ) );
+		newFieldGroup.querySelectorAll( '.form-field' ).forEach( field => makeDraggable( field, '.frm-move' ) );
 	}
 
 	function maybeShowInlineModal( e ) {
