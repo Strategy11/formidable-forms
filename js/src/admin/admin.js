@@ -2359,7 +2359,10 @@ window.frmAdminBuildJS = function() {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
 						replaceWith = msgAsjQueryObject( msg );
-						jQuery( newRow ).append( getLiElement( replaceWith ) );
+						const newField = getLiElement( replaceWith );
+
+						jQuery( newRow ).append( newField );
+
 						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
@@ -2379,9 +2382,15 @@ window.frmAdminBuildJS = function() {
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					replaceWith = msgAsjQueryObject( msg );
-					$field.after( getLiElement( replaceWith ) );
+					const newField = getLiElement( replaceWith );
+					$field.after( newField );
 					syncLayoutClasses( $field );
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+
+					const layoutClass = getLayoutClassName( $field.get(0).classList );
+					if ( ! newField.get( 0 ).classList.contains( layoutClass ) ) {
+						newField.get( 0 ).classList.add( layoutClass );
+					}
 				} else {
 					replaceWith = wrapFieldLi( msg );
 					$field.parent().parent().after( getLiElement( replaceWith ) );
@@ -2427,8 +2436,6 @@ window.frmAdminBuildJS = function() {
 				classesInput.value = fieldClasses;
 			}
 		}
-		const layoutClass = getLayoutClassName( field.classList );
-		console.log( layoutClass );
 	}
 
 	function maybeDuplicateUnsavedSettings( originalFieldId, newFieldHtml ) {
