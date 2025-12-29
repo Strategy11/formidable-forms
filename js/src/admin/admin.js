@@ -10882,7 +10882,7 @@ window.frmAdminBuildJS = function() {
 
 				e.preventDefault();
 
-				data = {
+				const data = {
 					action: 'frm_inbox_dismiss',
 					key,
 					nonce: frmGlobal.nonce
