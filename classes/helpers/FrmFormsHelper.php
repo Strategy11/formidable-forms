@@ -2150,28 +2150,6 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @since 3.0
-	 * @deprecated 6.11
-	 *
-	 * @param array $atts
-	 *
-	 * @return void
-	 */
-	public static function actions_dropdown( $atts ) {
-		_deprecated_function( __METHOD__, '6.11' );
-
-		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			return;
-		}
-
-		$status     = $atts['status'];
-		$form_id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
-		$trash_link = self::delete_trash_info( $form_id, $status );
-		$links      = self::get_action_links( $form_id, $status );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
-	}
-
-	/**
 	 * Check if Pro isn't up to date yet.
 	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
 	 *
