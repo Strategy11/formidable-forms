@@ -24,17 +24,17 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-top">
 		<div class="widget-title-action">
 			<button type="button" class="widget-action hide-if-no-js" aria-expanded="false">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_arrow_right_icon' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrow_right_icon' ); ?>
 			</button>
 		</div>
 		<span class="frm_email_icons alignright">
 			<?php if ( $action_control->action_options['limit'] > 2 ) { ?>
 				<a href="javascript:void(0)" class="frm_duplicate_form_action" title="<?php esc_attr_e( 'Duplicate', 'formidable' ); ?>">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_clone_icon' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_clone_icon' ); ?>
 				</a>
 			<?php } ?>
 			<a href="javascript:void(0)" data-removeid="frm_form_action_<?php echo esc_attr( $action_key ); ?>" class="frm_remove_form_action" data-frmverify="<?php esc_attr_e( 'Delete this form action?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon ' ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon ' ); ?>
 			</a>
 
 			<?php

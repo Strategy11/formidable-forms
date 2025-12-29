@@ -972,7 +972,7 @@ class FrmFormAction {
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
-			'classes' => 'frm_icon_font ' . $class,
+			'classes' => 'frmfont ' . $class,
 			'active'  => false,
 			'limit'   => 0,
 		);

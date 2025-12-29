@@ -757,7 +757,7 @@ class FrmEntriesHelper {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_save_icon',
+				'icon'  => 'frmfont frm_save_icon',
 			);
 		}
 
@@ -765,7 +765,7 @@ class FrmEntriesHelper {
 			$actions['frm_delete'] = array(
 				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
 				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -780,7 +780,7 @@ class FrmEntriesHelper {
 				'data'  => array(
 					'frmprint' => '1',
 				),
-				'icon'  => 'frm_icon_font frm_printer_icon',
+				'icon'  => 'frmfont frm_printer_icon',
 			);
 		}
 
@@ -793,7 +793,7 @@ class FrmEntriesHelper {
 				'medium'  => 'resend-email',
 				'content' => 'entry',
 			),
-			'icon'  => 'frm_icon_font frm_email_icon',
+			'icon'  => 'frmfont frm_email_icon',
 		);
 
 		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
@@ -802,7 +802,7 @@ class FrmEntriesHelper {
 				'label' => __( 'Download as PDF', 'formidable' ),
 				'class' => 'frm_noallow',
 				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
-				'icon'  => 'frm_icon_font frm_download_icon',
+				'icon'  => 'frmfont frm_download_icon',
 			);
 		}
 
@@ -815,7 +815,7 @@ class FrmEntriesHelper {
 				'medium'  => 'edit-entries',
 				'content' => 'entry',
 			),
-			'icon'  => 'frm_icon_font frm_pencil_icon',
+			'icon'  => 'frmfont frm_pencil_icon',
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
@@ -864,7 +864,7 @@ class FrmEntriesHelper {
 		foreach ( $metas_without_a_field as $meta ) {
 			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
 				echo '<div class="misc-pub-section">';
-				FrmAppHelper::icon_by_class( 'frm_icon_font frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+				FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
 				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
 				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
 				echo '</div>';

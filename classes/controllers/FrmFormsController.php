@@ -1519,17 +1519,17 @@ class FrmFormsController {
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
 				'function' => array( self::class, 'advanced_settings' ),
-				'icon'     => 'frm_icon_font frm_settings_icon',
+				'icon'     => 'frmfont frm_settings_icon',
 			),
 			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'frm_icon_font frm_mail_bulk_icon',
+				'icon'     => 'frmfont frm_mail_bulk_icon',
 			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_lock_closed_icon',
+				'icon'       => 'frmfont frm_lock_closed_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'permissions',
@@ -1541,7 +1541,7 @@ class FrmFormsController {
 			),
 			'scheduling'  => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_calendar_icon',
+				'icon'       => 'frmfont frm_calendar_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'scheduling',
@@ -1554,17 +1554,17 @@ class FrmFormsController {
 				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'buttons_settings',
-				'icon'     => 'frm_icon_font frm_button_icon',
+				'icon'     => 'frmfont frm_button_icon',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_file_text_icon',
+				'icon'       => 'frmfont frm_file_text_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
 				'name'       => __( 'Conversational Forms', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_chat_forms_icon',
+				'icon'       => 'frmfont frm_chat_forms_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'chat',
@@ -1578,7 +1578,7 @@ class FrmFormsController {
 			),
 			'abandonment' => array(
 				'name'       => __( 'Form Abandonment', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_abandoned_icon',
+				'icon'       => 'frmfont frm_abandoned_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'abandonment',
@@ -1594,7 +1594,7 @@ class FrmFormsController {
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'html_settings',
-				'icon'     => 'frm_icon_font frm_code_icon',
+				'icon'     => 'frmfont frm_code_icon',
 			),
 		);
 
@@ -1608,7 +1608,7 @@ class FrmFormsController {
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
-				'icon'       => 'frm_icon_font frm_settings_icon',
+				'icon'       => 'frmfont frm_settings_icon',
 			);
 
 			$section = array_merge( $defaults, $section );
