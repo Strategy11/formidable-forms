@@ -266,7 +266,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
-		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frm_icon_font frm_pencil_icon';
+		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frmfont frm_pencil_icon';
 	}
 
 	/**
@@ -795,7 +795,7 @@ BEFORE_HTML;
 		if ( ! is_array( $field ) ) {
 			$field = array(
 				'name' => $field,
-				'icon' => 'frm_icon_font frm_pencil_icon',
+				'icon' => 'frmfont frm_pencil_icon',
 			);
 		}
 	}
@@ -1249,13 +1249,13 @@ BEFORE_HTML;
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Create Form from Template', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			}
 
@@ -1420,7 +1420,7 @@ BEFORE_HTML;
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -1431,7 +1431,7 @@ BEFORE_HTML;
 				'short'   => __( 'Delete', 'formidable' ),
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_delete_icon',
+				'icon'    => 'frmfont frm_delete_icon',
 				'data'    => array(
 					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',

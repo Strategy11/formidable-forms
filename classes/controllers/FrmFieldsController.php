@@ -353,7 +353,7 @@ class FrmFieldsController {
 			// Add fallback for an add-on field type that has been deactivated.
 			$all_field_types[ $field['type'] ] = array(
 				'name' => ucfirst( $field['type'] ),
-				'icon' => 'frm_icon_font frm_pencil_icon',
+				'icon' => 'frmfont frm_pencil_icon',
 			);
 		} elseif ( ! is_array( $all_field_types[ $field['type'] ] ) ) {
 			// Fallback for fields added in a more basic way.
@@ -403,7 +403,7 @@ class FrmFieldsController {
 		$types = array(
 			'default_value'    => array(
 				'class' => '',
-				'icon'  => 'frm_icon_font frm_text2_icon',
+				'icon'  => 'frmfont frm_text2_icon',
 				'title' => __( 'Default Value', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
@@ -412,7 +412,7 @@ class FrmFieldsController {
 			'calc'             => array(
 				'class'   => 'frm_show_upgrade frm_noallow',
 				'title'   => __( 'Calculate Value', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calculator_icon',
+				'icon'    => 'frmfont frm_calculator_icon',
 				'data'    => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
@@ -422,7 +422,7 @@ class FrmFieldsController {
 			'get_values_field' => array(
 				'class'   => 'frm_show_upgrade frm_noallow',
 				'title'   => __( 'Lookup', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_search_icon',
+				'icon'    => 'frmfont frm_search_icon',
 				'data'    => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),

@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
 			?>
 			<div class="frm_note_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -164,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 					<?php
 					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 						array(
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),

@@ -9,7 +9,7 @@ if ( ! isset( $entry ) ) {
 ?>
 
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 
@@ -40,7 +40,7 @@ if ( ! isset( $entry ) ) {
 
 <?php if ( $entry->updated_at && $entry->updated_at != $entry->created_at ) { ?>
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon', array( 'aria-hidden' => 'true' ) ); ?>
 	<span id="timestamp">
 	<?php
 	printf(
