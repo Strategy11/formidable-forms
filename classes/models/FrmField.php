@@ -1079,7 +1079,7 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && strpos( $order_by, 'ORDER BY' ) === false ) {
+		if ( ! empty( $order_by ) && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
@@ -1180,7 +1180,7 @@ class FrmField {
 		if ( $field_object->should_unserialize_value() ) {
 			FrmAppHelper::unserialize_or_decode( $results->default_value );
 
-			if ( $before === $results->default_value && is_string( $before ) && strpos( $before, '["' ) === 0 ) {
+			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
 				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 			}
 		}

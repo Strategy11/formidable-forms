@@ -174,7 +174,7 @@ class FrmFormAction {
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = str_contains( $action_options['classes'], 'frm_show_upgrade' );
 			$action_options['classes'] = $group['icon'];
 		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];

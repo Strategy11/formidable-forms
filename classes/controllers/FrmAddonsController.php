@@ -888,7 +888,7 @@ class FrmAddonsController {
 	protected static function prepare_addon_link( &$link ) {
 		$site_url = 'https://formidableforms.com/';
 
-		if ( strpos( $link, 'http' ) !== 0 ) {
+		if ( ! str_starts_with( $link, 'http' ) ) {
 			$link = $site_url . $link;
 		}
 
@@ -1262,11 +1262,11 @@ class FrmAddonsController {
 	private static function get_activating_page() {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 
-		if ( false !== strpos( $referer, 'frm_action=settings' ) ) {
+		if ( str_contains( $referer, 'frm_action=settings' ) ) {
 			return 'settings';
 		}
 
-		if ( false !== strpos( $referer, 'frm_action=edit' ) ) {
+		if ( str_contains( $referer, 'frm_action=edit' ) ) {
 			return 'form_builder';
 		}
 
@@ -1496,7 +1496,7 @@ class FrmAddonsController {
 
 		$class = ! empty( $atts['class'] ) ? $atts['class'] : '';
 
-		if ( strpos( $class, 'frm-button' ) === false ) {
+		if ( ! str_contains( $class, 'frm-button' ) ) {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
 		?>

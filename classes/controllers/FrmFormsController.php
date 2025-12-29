@@ -1973,7 +1973,7 @@ class FrmFormsController {
 			return $string;
 		}
 
-		if ( false === strpos( $string, '[form_name]' ) ) {
+		if ( ! str_contains( $string, '[form_name]' ) ) {
 			return $string;
 		}
 
@@ -2027,7 +2027,7 @@ class FrmFormsController {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 		}
 
-		if ( ! empty( $bulkaction ) && strpos( $bulkaction, 'bulk_' ) === 0 ) {
+		if ( ! empty( $bulkaction ) && str_starts_with( $bulkaction, 'bulk_' ) ) {
 			FrmAppHelper::remove_get_action();
 
 			$bulkaction = str_replace( 'bulk_', '', $bulkaction );
@@ -2156,7 +2156,7 @@ class FrmFormsController {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}
 
-				if ( strpos( $action, 'bulk_' ) === 0 ) {
+				if ( str_starts_with( $action, 'bulk_' ) ) {
 					FrmAppHelper::remove_get_action();
 
 					self::list_form();
@@ -3325,9 +3325,9 @@ class FrmFormsController {
 		$place = 'before';
 
 		if ( $message && isset( $form->options['form_class'] ) ) {
-			if ( strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
+			if ( str_contains( $form->options['form_class'], 'frm_below_success' ) ) {
 				$place = 'after';
-			} elseif ( strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
+			} elseif ( str_contains( $form->options['form_class'], 'frm_inline_success' ) ) {
 				$place = 'submit';
 			}
 		}

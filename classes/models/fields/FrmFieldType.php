@@ -1255,7 +1255,7 @@ DEFAULT_HTML;
 			$value = implode( ', ', $value );
 		}
 
-		if ( strpos( $value, '&lt;' ) !== false ) {
+		if ( str_contains( $value, '&lt;' ) ) {
 			$value = htmlentities( $value );
 		}
 		return $value;
@@ -1890,7 +1890,7 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
 					$csv_values_checked[] = $option['value'];
 					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 				}

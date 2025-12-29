@@ -187,8 +187,8 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function replace_default_message( $message, $atts ) {
-		if ( strpos( $message, '[default-message' ) === false &&
-			strpos( $message, '[default_message' ) === false &&
+		if ( ! str_contains( $message, '[default-message' ) &&
+			! str_contains( $message, '[default_message' ) &&
 			! empty( $message ) ) {
 			return $message;
 		}
@@ -246,7 +246,7 @@ class FrmEntriesHelper {
 		}
 
 		// This is an embedded form.
-		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+		if ( str_starts_with( $atts['embedded_field_id'], 'form' ) ) {
 			// This is a repeating section.
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
 		} else {
@@ -281,7 +281,7 @@ class FrmEntriesHelper {
 
 		$sep = ', ';
 
-		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
+		if ( str_contains( implode( ' ', $field_value ), '<img' ) ) {
 			$sep = '<br/>';
 		}
 
@@ -662,12 +662,12 @@ class FrmEntriesHelper {
 		);
 
 		// Next get the name of the useragent yes separately and for good reason.
-		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
+		if ( str_contains( $u_agent, 'MSIE' ) && ! str_contains( $u_agent, 'Opera' ) ) {
 			$bname = 'Internet Explorer';
 			$ub    = 'MSIE';
 		} else {
 			foreach ( $agent_options as $agent_key => $agent_name ) {
-				if ( strpos( $u_agent, $agent_key ) !== false ) {
+				if ( str_contains( $u_agent, $agent_key ) ) {
 					$bname = $agent_name;
 					$ub    = $agent_key;
 					break;

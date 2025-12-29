@@ -265,7 +265,7 @@ class FrmEntryValidate {
 			$match = false;
 
 			foreach ( $options as $key => $option ) {
-				if ( strpos( $key, 'other_' ) === 0 ) {
+				if ( str_starts_with( $key, 'other_' ) ) {
 					// Always return true if an other option is found.
 					return true;
 				}
@@ -476,7 +476,7 @@ class FrmEntryValidate {
 		$pattern = apply_filters( 'frm_phone_pattern', $pattern, $field );
 
 		// Create a regexp if format is not already a regexp
-		if ( strpos( $pattern, '^' ) !== 0 ) {
+		if ( ! str_starts_with( $pattern, '^' ) ) {
 			$pattern = self::create_regular_expression_from_format( $pattern );
 		}
 
@@ -514,7 +514,7 @@ class FrmEntryValidate {
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 
-		if ( strpos( $pattern, '\?' ) !== false ) {
+		if ( str_contains( $pattern, '\?' ) ) {
 			$parts   = explode( '\?', $pattern );
 			$pattern = '';
 
@@ -626,7 +626,7 @@ class FrmEntryValidate {
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
 
-		return ( is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values ) );
+		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
 	}
 
 	/**
@@ -637,7 +637,7 @@ class FrmEntryValidate {
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		return ( ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() ) );
+		return ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() );
 	}
 
 	/**
@@ -853,7 +853,7 @@ class FrmEntryValidate {
 				return strpos( $value, '@' ) && is_email( $value );
 
 			case 'comment_author_url':
-				return 0 === strpos( $value, 'http' );
+				return str_starts_with( $value, 'http' );
 
 			case 'comment_author':
 				if ( $name_field_ids && in_array( $field_id, $name_field_ids, true ) ) {
@@ -1012,7 +1012,7 @@ class FrmEntryValidate {
 		$last_key = key( $field_data->options );
 
 		// If a choice field has no Other option.
-		if ( is_numeric( $last_key ) || 0 !== strpos( $last_key, 'other_' ) ) {
+		if ( is_numeric( $last_key ) || ! str_starts_with( $last_key, 'other_' ) ) {
 			return true;
 		}
 

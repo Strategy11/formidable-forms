@@ -286,7 +286,7 @@ class FrmFieldsController {
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
-				if ( strpos( $opt, '|' ) !== false ) {
+				if ( str_contains( $opt, '|' ) ) {
 					$vals             = explode( '|', $opt );
 					$opts[ $opt_key ] = array(
 						'label' => trim( $vals[0] ),
@@ -986,7 +986,7 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( isset( $field['subfield_name'] ) && 0 === strpos( $k, 'aria-invalid' ) ) {
+			if ( isset( $field['subfield_name'] ) && str_starts_with( $k, 'aria-invalid' ) ) {
 				$subfield_name = $field['subfield_name'];
 
 				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
