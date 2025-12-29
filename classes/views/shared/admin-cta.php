@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$button_class = false === strpos( $attributes['class'], 'frm-gradient' ) ? 'frm-button-primary' : 'frm-button-secondary';
+$button_class = ! str_contains( $attributes['class'], 'frm-gradient' ) ? 'frm-button-primary' : 'frm-button-secondary';
 ?>
 <div <?php FrmAppHelper::array_to_html_params( $attributes, true ); ?>>
 	<?php

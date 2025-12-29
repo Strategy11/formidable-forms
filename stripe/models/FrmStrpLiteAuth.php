@@ -357,7 +357,7 @@ class FrmStrpLiteAuth {
 
 		foreach ( $intents as $k => $intent ) {
 			$intent_id       = explode( '_secret_', $intent )[0];
-			$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+			$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 
 			if ( $is_setup_intent ) {
 				continue;
@@ -380,7 +380,7 @@ class FrmStrpLiteAuth {
 
 				$amount = $action->post_content['amount'];
 
-				if ( strpos( $amount, '[' ) === false ) {
+				if ( ! str_contains( $amount, '[' ) ) {
 					// The amount is static, so it doesn't need an update.
 					continue;
 				}

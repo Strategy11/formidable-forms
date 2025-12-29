@@ -34,7 +34,7 @@ class FrmStrpLiteConnectHelper {
 		$action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
 		$prefix = 'frm_stripe_connect_';
 
-		if ( ! $action || 0 !== strpos( $action, $prefix ) ) {
+		if ( ! $action || ! str_starts_with( $action, $prefix ) ) {
 			if ( 'frm_strp_connect_get_settings_button' === $action ) {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
@@ -783,7 +783,7 @@ class FrmStrpLiteConnectHelper {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && 0 === strpos( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 

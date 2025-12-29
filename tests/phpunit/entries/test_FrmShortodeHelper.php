@@ -40,9 +40,9 @@ class test_FrmShortcodeHelper extends FrmUnitTest {
 
 			$args = array();
 
-			if ( strpos( $shortcode, '[foreach' ) !== false ) {
+			if ( str_contains( $shortcode, '[foreach' ) ) {
 				$args['foreach'] = true;
-			} elseif ( strpos( $shortcode, '[if' ) !== false ) {
+			} elseif ( str_contains( $shortcode, '[if' ) ) {
 				$args['conditional'] = true;
 			}
 

@@ -246,7 +246,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						);
 
 						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
-							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( str_ends_with( $data_value, '-' ) ? $field['id'] : '' );
 						}
 
 						?>

@@ -354,7 +354,7 @@ class FrmFormApi {
 			update_site_option( $this->cache_key, $data );
 		} else {
 			// Autoload the license cache because it gets called everywhere.
-			$autoload = 0 === strpos( $this->cache_key, 'frm_addons_l' );
+			$autoload = str_starts_with( $this->cache_key, 'frm_addons_l' );
 			update_option( $this->cache_key, $data, $autoload );
 		}
 	}

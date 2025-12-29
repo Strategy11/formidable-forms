@@ -109,6 +109,6 @@ class FrmSpamCheckStopForumSpam extends FrmSpamCheck {
 			return false;
 		}
 
-		return false !== strpos( $response, '<appears>yes</appears>' ) || false !== strpos( $response, '<appears>1</appears>' );
+		return str_contains( $response, '<appears>yes</appears>' ) || str_contains( $response, '<appears>1</appears>' );
 	}
 }

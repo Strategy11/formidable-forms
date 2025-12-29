@@ -306,7 +306,7 @@ class FrmFormsHelper {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
 
 		// Only autop if the message includes line breaks.
-		$autop = strpos( $message, "\n" ) !== false;
+		$autop = str_contains( $message, "\n" );
 
 		/**
 		 * Filters whether to autop the success message.
@@ -1040,11 +1040,11 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
-		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
 			// not missing class, avoid adding it twice.
 			return false;
 		}
-		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
+		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**
@@ -1179,7 +1179,7 @@ BEFORE_HTML;
 		$line_break_first = $args['show_img'];
 
 		foreach ( $args['errors'] as $error_key => $error ) {
-			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || str_starts_with( $error_key, 'field' ) ) ) {
 				continue;
 			}
 
@@ -1954,7 +1954,7 @@ BEFORE_HTML;
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
-		if ( false === strpos( $url, '[' ) ) {
+		if ( ! str_contains( $url, '[' ) ) {
 			// Do nothing if no shortcodes are detected.
 			return $url;
 		}
@@ -1984,7 +1984,7 @@ BEFORE_HTML;
 				continue;
 			}
 
-			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
+			if ( str_contains( $options, 'sanitize_url=' ) || str_contains( $options, 'sanitize=' ) ) {
 				// A sanitize option is already set so leave it alone.
 				continue;
 			}
@@ -2108,11 +2108,11 @@ BEFORE_HTML;
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+		if ( str_contains( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
 			return true;
 		}
 
-		if ( false !== strpos( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
+		if ( str_contains( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
 			return true;
 		}
 
@@ -2132,7 +2132,7 @@ BEFORE_HTML;
 
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+		if ( str_contains( $url, '/wp-json/frm/v2/forms/' ) ) {
 			// Prevent the honeypot from appearing for an API loaded form.
 			// This is to prevent conflicts where the script is not working.
 			return true;

@@ -53,7 +53,7 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 		</span>
 		<div class="widget-title">
 			<h4>
-				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>">
+				<span class="frm_form_action_icon frm-outer-circle <?php echo esc_attr( ! str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? '' : ' frm-inverse' ); ?>">
 					<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'] ); ?>
 				</span>
 				<?php echo esc_html( $form_action->post_title ); ?>
