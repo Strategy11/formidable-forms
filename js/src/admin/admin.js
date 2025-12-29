@@ -7938,7 +7938,7 @@ window.frmAdminBuildJS = function() {
 			},
 			success: function( html ) {
 				// Loop through each category row, and replace the first dropdown
-				for ( i = 0; i < catRows.length; i++ ) {
+				for ( let i = 0; i < catRows.length; i++ ) {
 					// Check if current element is a div
 					if ( catRows[ i ].tagName !== 'DIV' ) {
 						continue;
