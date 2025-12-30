@@ -127,7 +127,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		}
 
 		if ( ! self::stripe_is_configured() ) {
-			$response['error'] = __( 'There was a problem communicating with Stripe. Please try again.', 'formidable' );
+			$response['error'] = __( 'Stripe still needs to be configured.', 'formidable' );
 			return $response;
 		}
 

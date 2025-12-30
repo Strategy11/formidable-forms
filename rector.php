@@ -104,6 +104,7 @@ return RectorConfig::configure()
 			__DIR__ . '/classes',
 			__DIR__ . '/stripe',
 			__DIR__ . '/square',
+			__DIR__ . '/paypal',
 			__DIR__ . '/tests',
 		)
 	)

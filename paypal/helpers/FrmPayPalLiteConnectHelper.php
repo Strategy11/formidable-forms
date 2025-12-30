@@ -3,22 +3,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-class FrmSquareLiteConnectHelper {
+class FrmPayPalLiteConnectHelper {
 
 	/**
-	 * Track the latest error when calling the Square API.
+	 * Track the latest error when calling the PayPal API.
 	 *
-	 * @since 6.22
+	 * @since x.x
 	 *
 	 * @var string|null
 	 */
-	public static $latest_error_from_square_api;
+	public static $latest_error_from_paypal_api;
 
 	/**
 	 * @return void
 	 */
 	public static function render_settings_container() {
-		$settings = FrmSquareLiteAppHelper::get_settings();
+		$settings = FrmPayPalLiteAppHelper::get_settings();
 
 		self::register_settings_scripts();
 
@@ -30,8 +30,8 @@ class FrmSquareLiteConnectHelper {
 				</td>
 				<td>
 					<label>
-						<input type="checkbox" name="frm_square_test_mode" id="frm_square_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
-						<?php esc_html_e( 'Use the Square test mode', 'formidable' ); ?>
+						<input type="checkbox" name="frm_paypal_test_mode" id="frm_paypal_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
+						<?php esc_html_e( 'Use the PayPal test mode', 'formidable' ); ?>
 					</label>
 				</td>
 			</tr>
@@ -52,7 +52,7 @@ class FrmSquareLiteConnectHelper {
 		<?php if ( ! is_ssl() ) { ?>
 			<div>
 				<em>
-					<?php esc_html_e( 'Your site is not using SSL. Before using Square to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+					<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				</em>
 			</div>
 		<?php } ?>
@@ -82,7 +82,7 @@ class FrmSquareLiteConnectHelper {
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php
 						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
+							FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
 							echo 'Connected';
 						} else {
 							echo 'Not configured';
@@ -101,11 +101,11 @@ class FrmSquareLiteConnectHelper {
 				</div>
 				<div class="frm-card-bottom">
 					<?php if ( $connected ) { ?>
-						<a id="frm_disconnect_square_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
+						<a id="frm_disconnect_paypal_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
 							<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>
-						<a class="frm-connect-square-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
+						<a class="frm-connect-paypal-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
 							<?php esc_html_e( 'Connect', 'formidable' ); ?>
 						</a>
 					<?php } ?>
@@ -119,11 +119,11 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function register_settings_scripts() {
-		$script_url     = FrmSquareLiteAppHelper::plugin_url() . '/js/settings.js';
+		$script_url     = FrmPayPalLiteAppHelper::plugin_url() . '/js/settings.js';
 		$dependencies   = array( 'formidable_dom' );
 		$plugin_version = FrmAppHelper::plugin_version();
-		wp_register_script( 'formidable_square_settings', $script_url, $dependencies, $plugin_version, true );
-		wp_enqueue_script( 'formidable_square_settings' );
+		wp_register_script( 'formidable_paypal_settings', $script_url, $dependencies, $plugin_version, true );
+		wp_enqueue_script( 'formidable_paypal_settings' );
 	}
 
 	/**
@@ -140,11 +140,11 @@ class FrmSquareLiteConnectHelper {
 		$additional_body = array(
 			'password'            => self::generate_client_password( $mode ),
 			'user_id'             => get_current_user_id(),
-			'frm_square_api_mode' => $mode,
+			'frm_paypal_api_mode' => $mode,
 		);
 
 		// Clear the transient so it doesn't fail.
-		delete_option( 'frm_square_lite_last_verify_attempt' );
+		delete_option( 'frm_paypal_lite_last_verify_attempt' );
 		$data = self::post_to_connect_server( 'oauth_request', $additional_body );
 
 		if ( is_string( $data ) ) {
@@ -170,8 +170,8 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
 		$body    = array(
-			'frm_square_api_action' => $action,
-			'frm_square_api_mode'   => FrmSquareLiteAppHelper::active_mode(),
+			'frm_paypal_api_action' => $action,
+			'frm_paypal_api_mode'   => FrmPayPalLiteAppHelper::active_mode(),
 		);
 		$body    = array_merge( $body, $additional_body );
 		$url     = self::get_url_to_connect_server();
@@ -229,7 +229,8 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		return 'https://api.strategy11.com/';
+		// return 'https://api.strategy11.com/';
+		return 'https://dev-site.local/';
 	}
 
 	/**
@@ -334,7 +335,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_server_side_token_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'server_password', $mode );
+		return self::get_paypal_connect_option_name( 'server_password', $mode );
 	}
 
 	/**
@@ -356,14 +357,14 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_client_side_token_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'client_password', $mode );
+		return self::get_paypal_connect_option_name( 'client_password', $mode );
 	}
 
 	/**
 	 * @return string
 	 */
 	private static function get_mode_value() {
-		$settings = FrmSquareLiteAppHelper::get_settings();
+		$settings = FrmPayPalLiteAppHelper::get_settings();
 		return $settings->settings->test_mode ? 'test' : 'live';
 	}
 
@@ -385,7 +386,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_merchant_id_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'merchant_id', $mode );
+		return self::get_paypal_connect_option_name( 'merchant_id', $mode );
 	}
 
 	/**
@@ -394,7 +395,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_location_id_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'merchant_location_id', $mode );
+		return self::get_paypal_connect_option_name( 'merchant_location_id', $mode );
 	}
 
 	/**
@@ -403,7 +404,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_merchant_currency_option_name( $mode = 'auto' ) {
-		return self::get_square_connect_option_name( 'merchant_currency', $mode );
+		return self::get_paypal_connect_option_name( 'merchant_currency', $mode );
 	}
 
 	/**
@@ -412,8 +413,8 @@ class FrmSquareLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_square_connect_option_name( $key, $mode = 'auto' ) {
-		return 'frm_square_connect_' . $key . self::get_active_mode_option_name_suffix( $mode );
+	private static function get_paypal_connect_option_name( $key, $mode = 'auto' ) {
+		return 'frm_paypal_connect_' . $key . self::get_active_mode_option_name_suffix( $mode );
 	}
 
 	/**
@@ -425,7 +426,7 @@ class FrmSquareLiteConnectHelper {
 		if ( 'auto' !== $mode ) {
 			return '_' . $mode;
 		}
-		return '_' . FrmSquareLiteAppHelper::active_mode();
+		return '_' . FrmPayPalLiteAppHelper::active_mode();
 	}
 
 	public static function check_for_redirects() {
@@ -438,12 +439,12 @@ class FrmSquareLiteConnectHelper {
 	 * @return bool
 	 */
 	private static function user_landed_on_the_oauth_return_url() {
-		return isset( $_GET['frm_square_api_return_oauth'] );
+		return isset( $_GET['frm_paypal_api_return_oauth'] );
 	}
 
 	private static function redirect_oauth() {
 		$connected = self::check_server_for_oauth_merchant_id();
-		wp_safe_redirect( self::get_url_for_square_settings( $connected ) );
+		wp_safe_redirect( self::get_url_for_paypal_settings( $connected ) );
 		exit;
 	}
 
@@ -452,8 +453,8 @@ class FrmSquareLiteConnectHelper {
 	 *
 	 * @return string
 	 */
-	private static function get_url_for_square_settings( $connected ) {
-		return admin_url( 'admin.php?page=formidable-settings&t=square_settings&connected=' . intval( $connected ) );
+	private static function get_url_for_paypal_settings( $connected ) {
+		return admin_url( 'admin.php?page=formidable-settings&t=paypal_settings&connected=' . intval( $connected ) );
 	}
 
 	/**
@@ -470,23 +471,12 @@ class FrmSquareLiteConnectHelper {
 		$body = array(
 			'server_password'     => get_option( self::get_server_side_token_option_name( $mode ) ),
 			'client_password'     => get_option( self::get_client_side_token_option_name( $mode ) ),
-			'frm_square_api_mode' => $mode,
+			'frm_paypal_api_mode' => $mode,
 		);
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
 			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
-
-			$currency    = self::get_merchant_currency( true, $mode );
-			$location_id = self::get_location_id( true, $mode );
-
-			if ( $currency ) {
-				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
-			}
-
-			if ( $location_id ) {
-				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
-			}
 
 			FrmTransLiteAppController::install();
 
@@ -494,28 +484,6 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		return false;
-	}
-
-	/**
-	 * @param string $amount
-	 * @param string $currency
-	 * @param string $square_token
-	 * @param string $verification_token
-	 * @param string $description
-	 *
-	 * @return false|object
-	 */
-	public static function create_payment( $amount, $currency, $square_token, $verification_token, $description ) {
-		return self::post_with_authenticated_body(
-			'create_payment',
-			array(
-				'amount'             => $amount,
-				'currency'           => $currency,
-				'square_token'       => $square_token,
-				'verification_token' => $verification_token,
-				'description'        => $description,
-			)
-		);
 	}
 
 	/**
@@ -539,10 +507,10 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		if ( is_string( $response ) ) {
-			self::$latest_error_from_square_api = $response;
-			FrmTransLiteLog::log_message( 'Square API Error', $response );
+			self::$latest_error_from_paypal_api = $response;
+			FrmTransLiteLog::log_message( 'PayPal API Error', $response );
 		} else {
-			self::$latest_error_from_square_api = '';
+			self::$latest_error_from_paypal_api = '';
 		}
 		return false;
 	}
@@ -560,14 +528,14 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * Check $_POST for live or test mode value as it can be updated in real time from Stripe Settings and can be configured before the update is saved.
+	 * Check $_POST for live or test mode value as it can be updated in real time from PayPal Settings and can be configured before the update is saved.
 	 *
 	 * @return string 'test' or 'live'
 	 */
 	private static function get_mode_value_from_post() {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
-			return FrmSquareLiteAppHelper::active_mode();
+			return FrmPayPalLiteAppHelper::active_mode();
 		}
 
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
@@ -577,58 +545,8 @@ class FrmSquareLiteConnectHelper {
 	/**
 	 * @return string|null
 	 */
-	public static function get_latest_error_from_square_api() {
-		return self::$latest_error_from_square_api;
-	}
-
-	/**
-	 * @param string $receipt_id
-	 *
-	 * @return false|object
-	 */
-	public static function refund_payment( $receipt_id ) {
-		return self::post_with_authenticated_body( 'refund_payment', array( 'receipt_id' => $receipt_id ) );
-	}
-
-	/**
-	 * @param array $info
-	 *
-	 * @return false|object
-	 */
-	public static function create_subscription( $info ) {
-		return self::post_with_authenticated_body( 'create_subscription', compact( 'info' ) );
-	}
-
-	/**
-	 * @param bool   $force Whether to force refreshing the location id.
-	 * @param string $mode  Either 'auto', 'live', or 'test'.
-	 *
-	 * @return false|string
-	 */
-	public static function get_location_id( $force = false, $mode = 'auto' ) {
-		if ( ! $force ) {
-			$location_id = get_option( self::get_location_id_option_name( $mode ) );
-
-			if ( $location_id ) {
-				return $location_id;
-			}
-		}
-
-		$request_body = array();
-
-		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
-		}
-
-		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
-
-		if ( is_object( $response ) ) {
-			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
-			return $response->id;
-		}
-
-		return false;
+	public static function get_latest_error_from_paypal_api() {
+		return self::$latest_error_from_paypal_api;
 	}
 
 	/**
@@ -649,7 +567,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
-		$event = wp_cache_get( $event_id, 'frm_square' );
+		$event = wp_cache_get( $event_id, 'frm_paypal' );
 
 		if ( is_object( $event ) ) {
 			return $event;
@@ -661,7 +579,7 @@ class FrmSquareLiteConnectHelper {
 			return false;
 		}
 
-		wp_cache_set( $event_id, $event->event, 'frm_square' );
+		wp_cache_set( $event_id, $event->event, 'frm_paypal' );
 
 		return $event->event;
 	}
@@ -675,36 +593,9 @@ class FrmSquareLiteConnectHelper {
 		return self::post_with_authenticated_body( 'process_event', compact( 'event_id' ) );
 	}
 
-	/**
-	 * @param string $payment_id
-	 *
-	 * @return false|object
-	 */
-	public static function get_payment( $payment_id ) {
-		return self::post_with_authenticated_body( 'get_payment', compact( 'payment_id' ) );
-	}
-
-	/**
-	 * @param string $payment_id
-	 *
-	 * @return false|object
-	 */
-	public static function get_subscription_id_for_payment( $payment_id ) {
-		return self::post_with_authenticated_body( 'get_subscription_id_for_payment', compact( 'payment_id' ) );
-	}
-
-	/**
-	 * @param string $subscription_id
-	 *
-	 * @return false|object
-	 */
-	public static function cancel_subscription( $subscription_id ) {
-		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
-	}
-
 	public static function handle_disconnect() {
 		self::disconnect();
-		self::reset_square_api_integration();
+		self::reset_paypal_api_integration();
 		wp_send_json_success();
 	}
 
@@ -713,17 +604,17 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function disconnect() {
 		$additional_body = array(
-			'frm_square_api_mode' => self::get_mode_value_from_post(),
+			'frm_paypal_api_mode' => self::get_mode_value_from_post(),
 		);
 		return self::post_with_authenticated_body( 'disconnect', $additional_body );
 	}
 
 	/**
-	 * Delete every Square API option, calling when disconnecting.
+	 * Delete every PayPal API option, calling when disconnecting.
 	 *
 	 * @return void
 	 */
-	public static function reset_square_api_integration() {
+	public static function reset_paypal_api_integration() {
 		$mode = self::get_mode_value_from_post();
 		delete_option( self::get_merchant_id_option_name( $mode ) );
 		delete_option( self::get_server_side_token_option_name( $mode ) );
@@ -733,39 +624,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @param bool   $force
-	 * @param string $mode
-	 *
-	 * @return false|string
-	 */
-	public static function get_merchant_currency( $force = false, $mode = 'auto' ) {
-		if ( ! $force ) {
-			$currency = get_option( self::get_merchant_currency_option_name( $mode ) );
-
-			if ( $currency ) {
-				return $currency;
-			}
-		}
-
-		$request_body = array();
-
-		if ( 'auto' !== $mode ) {
-			$_POST['testMode']                   = 'test' === $mode ? 1 : 0;
-			$request_body['frm_square_api_mode'] = $mode;
-		}
-
-		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
-
-		if ( is_object( $response ) && ! empty( $response->currency ) ) {
-			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
-			return $response->currency;
-		}
-
-		return false;
-	}
-
-	/**
-	 * @since 6.22
+	 * @since x.x
 	 *
 	 * @return bool
 	 */
@@ -777,7 +636,7 @@ class FrmSquareLiteConnectHelper {
 	 * Verify a site identifier is a match.
 	 */
 	public static function verify() {
-		$option_name  = 'frm_square_lite_last_verify_attempt';
+		$option_name  = 'frm_paypal_lite_last_verify_attempt';
 		$last_request = get_option( $option_name );
 
 		if ( $last_request && $last_request > strtotime( '-1 day' ) ) {
@@ -797,16 +656,50 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
+	 * Create a PayPal order.
+	 *
+	 * @param string $amount
+	 * @param string $currency
+	 *
+	 * @return false|object
+	 */
+	public static function create_order( $amount, $currency ) {
+		return self::post_with_authenticated_body( 'create_order', compact( 'amount', 'currency' ) );
+	}
+
+	/**
+	 * @param string $order_id
+	 *
+	 * @return false|object
+	 */
+	public static function capture_order( $order_id ) {
+		return self::post_with_authenticated_body( 'capture_order', compact( 'order_id' ) );
+	}
+
+	/**
+	 * @param string $capture_id
+	 *
+	 * @return false|object
+	 */
+	public static function refund_payment( $capture_id ) {
+		return self::post_with_authenticated_body( 'refund_capture', array( 'capture_id' => $capture_id ) );
+	}
+
+	/**
 	 * @param string $subscription_id
 	 *
 	 * @return false|object
 	 */
-	public static function get_subscription( $subscription_id ) {
-		$response = self::post_with_authenticated_body( 'get_subscription', array( 'subscription_id' => $subscription_id ) );
+	public static function cancel_subscription( $subscription_id ) {
+		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
+	}
 
-		if ( is_object( $response ) && is_object( $response->subscription ) ) {
-			return $response->subscription;
-		}
-		return false;
+	/**
+	 * @param array $data Subscription data.
+	 *
+	 * @return false|object
+	 */
+	public static function create_subscription( $data ) {
+		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
 	}
 }
