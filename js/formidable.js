@@ -437,6 +437,9 @@ function frmFrontFormJS() {
 				if ( val === '' ) {
 					field = document.getElementById( field.id.replace( '-otext', '' ) );
 				}
+			} else if ( isEmptyRankingField( field, val ) ) {
+				fieldID = getFieldId( field, false );
+				val = '';
 			} else {
 				fieldID = getFieldId( field, true );
 			}
