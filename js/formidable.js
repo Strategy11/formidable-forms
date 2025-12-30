@@ -515,12 +515,12 @@ function frmFrontFormJS() {
 	 * @return {boolean} True if all ranking positions in the container are '0'.
 	 */
 	function isEmptyRankingField( field, val ) {
-		if ( ! hasClass( field, 'frm-ranking-position' ) || val !== '0' ) {
-			return false;
+		if ( hasClass( field, 'frm-ranking-position' ) && val === '0' ) {
+			return Array.from( field.closest( '.frm-ranking-field-container' ).querySelectorAll( '.frm-ranking-position' ) )
+				.every( pos => pos.value === '0' );
 		}
 
-		return Array.from( field.closest( '.frm-ranking-field-container' )?.querySelectorAll( '.frm-ranking-position' ) ?? [] )
-			.every( pos => pos.value === '0' );
+		return false;
 	}
 
 	/**
