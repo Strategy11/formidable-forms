@@ -561,7 +561,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return array
 	 */
 	public static function remove_cc_validation( $errors, $field, $values ) {
-        // TODO
+		// TODO
 		$has_processed = false;
 
 		if ( ! $has_processed ) {

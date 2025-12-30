@@ -168,7 +168,5 @@ class FrmPayPalLiteEventsController {
 	 * @return void
 	 */
 	private function handle_event() {
-
 	}
-
 }

@@ -76,8 +76,8 @@ class FrmPayPalLiteConnectHelper {
 					</span>
 					<?php
 
-					$connected = (bool) self::get_merchant_id( $mode );
-                    $tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
+					$connected   = (bool) self::get_merchant_id( $mode );
+					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
 					?>
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php
@@ -138,8 +138,8 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		$additional_body = array(
-			'password'             => self::generate_client_password( $mode ),
-			'user_id'              => get_current_user_id(),
+			'password'            => self::generate_client_password( $mode ),
+			'user_id'             => get_current_user_id(),
 			'frm_paypal_api_mode' => $mode,
 		);
 
