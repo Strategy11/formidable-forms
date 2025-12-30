@@ -503,6 +503,24 @@ function frmFrontFormJS() {
 	}
 
 	/**
+	 * Check if a ranking position field and all sibling positions have value '0'.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} field The ranking position element (.frm-ranking-position).
+	 * @param {string}      val   The position's value.
+	 * @return {boolean} True if all ranking positions in the container are '0'.
+	 */
+	function isEmptyRankingField( field, val ) {
+		if ( ! hasClass( field, 'frm-ranking-position' ) || val !== '0' ) {
+			return false;
+		}
+
+		return Array.from( field.closest( '.frm-ranking-field-container' )?.querySelectorAll( '.frm-ranking-position' ) ?? [] )
+			.every( pos => pos.value === '0' );
+	}
+
+	/**
 	 * @param {string|number} fileID
 	 * @return {string} File input value.
 	 */
