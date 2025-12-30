@@ -1007,6 +1007,7 @@ class FrmEntryValidate {
 			// Check if an error happens when unserializing, or empty options.
 			return true;
 		}
+
 		$last_key = array_key_last( $field_data->options );
 
 		// If a choice field has no Other option.

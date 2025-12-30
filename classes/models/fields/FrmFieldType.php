@@ -1557,9 +1557,7 @@ DEFAULT_HTML;
 		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
-			reset( $custom_error_fields );
-
-			if ( key( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
+			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
