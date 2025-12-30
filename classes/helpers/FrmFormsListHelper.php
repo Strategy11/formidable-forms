@@ -315,6 +315,9 @@ class FrmFormsListHelper extends FrmListHelper {
 						unset( $text );
 					}
 					break;
+				case 'settings':
+					$val = '&nbsp;';
+					break;
 				default:
 					if ( method_exists( $this, 'column_' . $column_name ) ) {
 						$val = call_user_func( array( $this, 'column_' . $column_name ), $item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

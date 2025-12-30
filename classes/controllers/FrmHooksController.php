@@ -156,6 +156,7 @@ class FrmHooksController {
 
 		add_filter( 'set-screen-option', 'FrmFormsController::save_per_page', 10, 3 );
 		add_action( 'admin_footer', 'FrmFormsController::insert_form_popup' );
+		add_action( 'admin_footer', 'FrmFormsController::print_forms_list_templates' );
 
 		// Elementor.
 		add_action( 'elementor/editor/footer', 'FrmElementorController::admin_init' );

@@ -1238,6 +1238,10 @@ class FrmFormsController {
 		}
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
+		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
+			$columns['settings'] = '<a href="#" id="frm-forms-list-settings-btn"><span class="dashicons dashicons-admin-generic"></span><span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span></a>';
+		}
+
 		add_screen_option(
 			'per_page',
 			array(
@@ -3689,6 +3693,45 @@ class FrmFormsController {
 				'edit_page_url' => admin_url( sprintf( $post_type_object->_edit_link . '&action=edit', 0 ) ),
 			)
 		);
+	}
+
+	/**
+	 * Prints necessary templates for the forms list page.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function print_forms_list_templates() {
+		$screen    = get_current_screen();
+		$columns   = get_column_headers( $screen );
+		$skip_cols = array( 'cb', 'settings' );
+		?>
+		<div id="frm-forms-list-settings">
+			<div class="frm-collapsible">
+				<div class="frm-collapsible__header">
+					<a href="#" class="frm-collapsible__btn"><?php esc_html_e( 'Columns', 'formidable' ); ?></a>
+				</div>
+
+				<div class="frm-collapsible__content">
+					<?php
+					foreach ( $columns as $key => $label ) {
+						if ( in_array( $key, $skip_cols, true ) ) {
+							continue;
+						}
+						?>
+						<label>
+							<input type="checkbox" name="frm_forms_list_columns[]" value="<?php echo esc_attr( $key ); ?>" <?php // checked( in_array( $key, $frm_vars['forms_list_columns'], true ) ); ?> />
+							<?php echo esc_html( $label ); ?>
+						</label>
+						<?php
+					}//end foreach
+					?>
+				</div>
+			</div>
+		</div>
+		<script type="text/html" id="tmpl-frm-forms-list-settings"></script>
+		<?php
 	}
 
 	/**
