@@ -437,8 +437,17 @@ function frmFrontFormJS() {
 				if ( val === '' ) {
 					field = document.getElementById( field.id.replace( '-otext', '' ) );
 				}
-			} else if ( isEmptyRankingField( field, val ) ) {
+			} else if ( hasClass( field, 'frm-ranking-position' ) && val === '0' ) {
 				fieldID = getFieldId( field, false );
+				if (
+					fieldID in errors ||
+					// Check if any sibling ranking positions have a value other than '0'.
+					Array.from( field.closest( '.frm-ranking-field-container' ).querySelectorAll( '.frm-ranking-position' ) )
+						.some( rankingPosition => rankingPosition.value !== '0' )
+				) {
+					return errors;
+				}
+
 				val = '';
 			} else {
 				fieldID = getFieldId( field, true );
@@ -503,24 +512,6 @@ function frmFrontFormJS() {
 	 */
 	function isInlineDatepickerField( field ) {
 		return 'hidden' === field.type && '_alt' === field.id.substr( -4 ) && hasClass( field.nextElementSibling, 'frm_date_inline' );
-	}
-
-	/**
-	 * Check if a ranking position field and all sibling positions have value '0'.
-	 *
-	 * @since x.x
-	 *
-	 * @param {HTMLElement} field The ranking position element (.frm-ranking-position).
-	 * @param {string}      val   The position's value.
-	 * @return {boolean} True if all ranking positions in the container are '0'.
-	 */
-	function isEmptyRankingField( field, val ) {
-		if ( hasClass( field, 'frm-ranking-position' ) && val === '0' ) {
-			return Array.from( field.closest( '.frm-ranking-field-container' ).querySelectorAll( '.frm-ranking-position' ) )
-				.every( pos => pos.value === '0' );
-		}
-
-		return false;
 	}
 
 	/**
