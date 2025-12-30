@@ -163,4 +163,64 @@ class FrmPayPalLiteAppController {
 
 		return $entry;
 	}
+
+	public static function create_subscription() {
+		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
+
+		$form_id = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
+
+		if ( ! $form_id ) {
+			wp_send_json_error( __( 'Invalid form ID', 'formidable' ) );
+		}
+
+		$actions = FrmPayPalLiteActionsController::get_actions_before_submit( $form_id );
+
+		if ( empty( $actions ) ) {
+			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
+		}
+
+		$action = reset( $actions );
+		$amount = self::get_amount_value_for_verification( $action );
+
+		// PayPal expects the amount in a format like 10.00, so format it.
+		$amount   = number_format( floatval( $amount ), 2, '.', '' );
+		$currency = strtoupper( $action->post_content['currency'] );
+
+		// Pass $product_name, $interval and $interval_count to the helper
+		// As well as trial period and the maximum number of payments.
+		// Also send subscriber email.
+		// TODO Process the description.
+		// TODO Do we want a new Product Name setting?
+		$product_name   = $action->post_content['description'] ?? '';
+		$interval       = $action->post_content['interval'] ?? '';
+		$interval_count = $action->post_content['interval_count'] ?? 1;
+		$trial_period   = $action->post_content['trial_period'] ?? '';
+		$payment_limit  = $action->post_content['payment_limit'] ?? '';
+
+		// TODO Process email properly.
+		$email = $action->post_content['email'] ?? '';
+
+		$data           = array(
+			'amount'         => $amount,
+			'currency'       => $currency,
+			'product_name'   => $product_name,
+			'interval'       => $interval,
+			'interval_count' => $interval_count,
+			'trial_period'   => $trial_period,
+			'payment_limit'  => $payment_limit,
+			'email'          => $email,
+		);
+
+		$response = FrmPayPalLiteConnectHelper::create_subscription( $data );
+
+		if ( false === $response ) {
+			wp_send_json_error( 'Failed to create PayPal subscription' );
+		}
+
+		if ( ! isset( $response->subscription_id ) ) {
+			wp_send_json_error( 'Failed to create PayPal subscription' );
+		}
+
+		wp_send_json_success( array( 'subscriptionID' => $response->subscription_id ) );
+	}
 }

@@ -693,4 +693,13 @@ class FrmPayPalLiteConnectHelper {
 	public static function cancel_subscription( $subscription_id ) {
 		return self::post_with_authenticated_body( 'cancel_subscription', compact( 'subscription_id' ) );
 	}
+
+	/**
+	 * @param array $data Subscription data.
+	 *
+	 * @return false|object
+	 */
+	public static function create_subscription( $data ) {
+		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
+	}
 }

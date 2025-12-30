@@ -145,7 +145,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string|true string on error, true on success.
 	 */
 	private static function trigger_one_time_payment( $atts ) {
-		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id' );
+		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
 
 		if ( empty( $paypal_order_id ) ) {
 			return 'No PayPal order ID found.';
@@ -250,7 +250,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
-		return 'Recurring payments are not yet implemented for PayPal.';
+		return 'Recurring payments are not yet implemented for PayPal Lite.';
 	}
 
 	/**
@@ -376,7 +376,11 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			array(
 				'client-id'  => $client_id,
 				'components' => 'buttons,card-fields',
-				'intent'     => 'capture',
+				// Use capture for one time payments.
+				// 'intent'     => 'capture',
+				// Subscriptions require vault=true.
+				'intent'     => 'subscription',
+				'vault'      => 'true',
 			),
 			'https://www.paypal.com/sdk/js'
 		);

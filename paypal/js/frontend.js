@@ -69,7 +69,8 @@
 		disableSubmit( thisForm );
 
 		paypal.Buttons( {
-			createOrder: createOrder,
+		//	createOrder: createOrder,
+			createSubscription: createSubscription,
 			onApprove: onApprove,
 			onError: onError,
 			style: {},
@@ -115,6 +116,38 @@
 
 		const formData = new FormData( thisForm );
 		formData.append( 'action', 'frm_paypal_create_order' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+			throw new Error( 'Failed to create PayPal order' );
+		}
+
+		const orderData = await response.json();
+
+		if ( ! orderData.success || ! orderData.data.orderID ) {
+			thisForm.classList.remove( 'frm_loading_form' );
+			throw new Error( orderData.data || 'Failed to create PayPal order' );
+		}
+
+		return orderData.data.orderID;
+	}
+
+	async function createSubscription() {
+		thisForm.classList.add( 'frm_loading_form' );
+
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_subscription' );
 		formData.append( 'nonce', frmPayPalVars.nonce );
 
 		// Remove a few fields so form validation does not incorrectly trigger.

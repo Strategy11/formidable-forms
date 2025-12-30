@@ -50,5 +50,8 @@ class FrmPayPalLiteHooksController {
 
 		add_action( 'wp_ajax_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
 		add_action( 'wp_ajax_nopriv_frm_paypal_create_order', 'FrmPayPalLiteAppController::create_order' );
+
+		add_action( 'wp_ajax_frm_paypal_create_subscription', 'FrmPayPalLiteAppController::create_subscription' );
+		add_action( 'wp_ajax_nopriv_frm_paypal_create_subscription', 'FrmPayPalLiteAppController::create_subscription' );
 	}
 }
