@@ -86,8 +86,7 @@ class FrmXMLController {
 
 		if ( ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
-			end( $imported['form_status'] );
-			$form_id  = key( $imported['form_status'] );
+			$form_id  = array_key_last( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
 				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
