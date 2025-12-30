@@ -51,11 +51,6 @@
 		padding: 2px;
 	}
 
-	#frm_builder_page .frm_actions_dropdown > .frm-dropdown-menu {
-		right: 0;
-		left: auto;
-	}
-
 	.frm-right-panel h3.accordion-section-title {
 		padding-right: 10px;
 		padding-left: 10px;
@@ -67,11 +62,6 @@
 	.frm-right-panel .accordion-section-title::before {
 		margin-left: 0;
 		margin-right: 3px;
-	}
-
-	.rtl #frm_builder_page .frm_actions_dropdown > .frm-dropdown-menu {
-		right: auto;
-		left: 0;
 	}
 
 	.frm_on_submit_type svg {

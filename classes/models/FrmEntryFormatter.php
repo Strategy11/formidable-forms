@@ -985,7 +985,7 @@ class FrmEntryFormatter {
 					$value[ $key ] = $this->strip_html( $single_value );
 				}
 			} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
-				if ( strpos( $value, '<img' ) !== false ) {
+				if ( str_contains( $value, '<img' ) ) {
 					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
 					$value = trim( $value );
 				}

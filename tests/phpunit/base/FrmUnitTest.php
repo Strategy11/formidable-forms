@@ -410,7 +410,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	 * @return void
 	 */
 	protected function set_get_params( $url ) {
-		if ( strpos( $url, '?' ) === false ) {
+		if ( ! str_contains( $url, '?' ) ) {
 			return;
 		}
 

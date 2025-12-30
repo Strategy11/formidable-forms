@@ -346,7 +346,7 @@ class FrmStrpLiteEventsController {
 	 * @return bool
 	 */
 	private function is_first_payment( $payment ) {
-		return ! $payment->receipt_id || 0 === strpos( $payment->receipt_id, 'pi_' );
+		return ! $payment->receipt_id || str_starts_with( $payment->receipt_id, 'pi_' );
 	}
 
 	/**

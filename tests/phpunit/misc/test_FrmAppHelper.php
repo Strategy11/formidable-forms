@@ -514,7 +514,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( strpos( $output, $substring ) !== false, $message );
+		$this->assertTrue( str_contains( $output, $substring ), $message );
 	}
 
 	/**
@@ -523,7 +523,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_not_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( strpos( $output, $substring ) === false, $message );
+		$this->assertTrue( ! str_contains( $output, $substring ), $message );
 	}
 
 	/**

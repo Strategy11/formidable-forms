@@ -277,7 +277,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		} else {
 			$val = $item->$column_name ? $item->$column_name : '';
 
-			if ( strpos( $column_name, '_date' ) !== false ) {
+			if ( str_contains( $column_name, '_date' ) ) {
 				if ( ! empty( $item->$column_name ) && $item->$column_name !== '0000-00-00' ) {
 					$val = FrmTransLiteAppHelper::format_the_date( $item->$column_name, $args['date_format'] );
 				} else {

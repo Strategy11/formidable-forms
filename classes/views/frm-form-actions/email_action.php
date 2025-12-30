@@ -7,7 +7,7 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_email_solid_icon',
+			'classes'  => 'frmfont frm_email_solid_icon',
 			'active'   => true,
 			'event'    => array( 'create' ),
 			'limit'    => 99,

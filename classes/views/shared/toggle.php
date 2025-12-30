@@ -19,7 +19,7 @@ $show_labels  = $args['show_labels'] ?? false;
 $off_label    = $args['off_label'] ?? '';
 $on_label     = $args['on_label'] ?? 1;
 $value        = $args['value'] ?? $on_label;
-$checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
+$checked      = isset( $args['checked'] ) && ( true === $args['checked'] || str_contains( $args['checked'], 'checked="checked"' ) );
 $disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
 $input_html   = $args['input_html'] ?? array();
@@ -37,7 +37,7 @@ if ( $div_class ) {
 	$div_params['class'] = $div_class;
 }
 
-if ( strpos( $name, '[' ) === false ) {
+if ( ! str_contains( $name, '[' ) ) {
 	$name .= '[]';
 }
 

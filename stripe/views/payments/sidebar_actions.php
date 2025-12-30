@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 
 <div class="misc-pub-section">
-	<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_calendar_icon' ); ?>
+	<?php FrmAppHelper::icon_by_class( 'frmfont frm_calendar_icon' ); ?>
 	<span id="timestamp">
 		<?php
 		printf(
@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <?php if ( $payment->status === 'complete' && ! empty( $payment->receipt_id ) ) { ?>
 	<div class="misc-pub-section">
-		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_product_icon' ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_product_icon' ); ?>
 		<?php esc_html_e( 'Payment:', 'formidable' ); ?>
 		<?php FrmTransLitePaymentsController::show_refund_link( $payment ); ?>
 	</div>
