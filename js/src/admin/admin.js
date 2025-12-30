@@ -341,8 +341,7 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		removeAtts = continueButton.dataset;
-		for ( i in dataAtts ) {
+		for ( i in continueButton.dataset ) {
 			continueButton.removeAttribute( 'data-' + i );
 		}
 
