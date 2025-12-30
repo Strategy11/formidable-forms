@@ -2387,7 +2387,7 @@ window.frmAdminBuildJS = function() {
 					syncLayoutClasses( $field );
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 
-					const layoutClass = getLayoutClassName( $field.get(0).classList );
+					const layoutClass = getLayoutClassName( $field.get( 0 ).classList );
 					if ( ! newField.get( 0 ).classList.contains( layoutClass ) ) {
 						newField.get( 0 ).classList.add( layoutClass );
 					}
@@ -6812,7 +6812,7 @@ window.frmAdminBuildJS = function() {
 			replaceWith = replaceWith.trim();
 		}
 
-		field.className = field.className.replace(/\s+/g, ' ').replace( replace, replaceWith );
+		field.className = field.className.replace( /\s+/g, ' ' ).replace( replace, replaceWith );
 	}
 
 	function maybeShowInlineModal( e ) {
