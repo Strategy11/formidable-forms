@@ -85,6 +85,7 @@ class FrmXMLController {
 		$imported = FrmXMLHelper::import_xml_now( $xml, true );
 
 		if ( ! empty( $imported['form_status'] ) ) {
+			// Get the last form id in case there are child forms.
 			$form_id  = array_key_last( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
