@@ -135,11 +135,11 @@ class FrmAppController {
 		$agent = strtolower( FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
 		$os    = '';
 
-		if ( strpos( $agent, 'mac' ) !== false ) {
+		if ( str_contains( $agent, 'mac' ) ) {
 			$os = ' osx';
-		} elseif ( strpos( $agent, 'linux' ) !== false ) {
+		} elseif ( str_contains( $agent, 'linux' ) ) {
 			$os = ' linux';
-		} elseif ( strpos( $agent, 'windows' ) !== false ) {
+		} elseif ( str_contains( $agent, 'windows' ) ) {
 			$os = ' windows';
 		}
 		return $os;
@@ -575,7 +575,7 @@ class FrmAppController {
 	public static function compare_for_update( $atts ) {
 		$db_version = get_option( $atts['option'] );
 
-		if ( strpos( $db_version, '-' ) === false ) {
+		if ( ! str_contains( $db_version, '-' ) ) {
 			return true;
 		}
 
@@ -667,7 +667,7 @@ class FrmAppController {
 	private static function trigger_page_load_hooks() {
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
-		if ( strpos( $page, 'formidable-' ) !== 0 ) {
+		if ( ! str_starts_with( $page, 'formidable-' ) ) {
 			// Only trigger hooks on Formidable pages.
 			return;
 		}
@@ -765,7 +765,7 @@ class FrmAppController {
 
 		global $pagenow;
 
-		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+		if ( str_starts_with( $page, 'formidable' ) || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
 			self::enqueue_global_settings_scripts( $page );
 
 			wp_enqueue_script( 'admin-widgets' );
@@ -1030,7 +1030,7 @@ class FrmAppController {
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
-		if ( strpos( $page, 'formidable' ) === 0 ) {
+		if ( str_starts_with( $page, 'formidable' ) ) {
 			return true;
 		}
 

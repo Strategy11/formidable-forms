@@ -171,7 +171,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 					<div class="misc-pub-section">
 						<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this payment?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-							<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
 							<span class="frm_link_label">
 								<?php esc_html_e( 'Delete Payment', 'formidable' ); ?>
 							</span>

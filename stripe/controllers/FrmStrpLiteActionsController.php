@@ -193,7 +193,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 

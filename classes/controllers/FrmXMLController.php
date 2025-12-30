@@ -171,7 +171,7 @@ class FrmXMLController {
 
 		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 
-		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
+		if ( empty( $selected_xml ) || ! str_starts_with( $selected_xml, 'http' ) ) {
 			return;
 		}
 

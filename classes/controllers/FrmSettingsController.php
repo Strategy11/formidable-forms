@@ -71,23 +71,23 @@ class FrmSettingsController {
 				'class'    => self::class,
 				'function' => 'general_settings',
 				'name'     => __( 'General Settings', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_settings_icon',
+				'icon'     => 'frmfont frm_settings_icon',
 			),
 			'messages'      => array(
 				'class'    => self::class,
 				'function' => 'message_settings',
 				'name'     => __( 'Message Defaults', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_stamp_icon',
+				'icon'     => 'frmfont frm_stamp_icon',
 			),
 			'permissions'   => array(
 				'class'    => self::class,
 				'function' => 'permission_settings',
 				'name'     => __( 'Permissions', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_lock_icon',
+				'icon'     => 'frmfont frm_lock_icon',
 			),
 			'payments'      => array(
 				'name'     => __( 'Payments', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_simple_cc_icon',
+				'icon'     => 'frmfont frm_simple_cc_icon',
 				'class'    => self::class,
 				'function' => 'payments_settings',
 			),
@@ -95,29 +95,29 @@ class FrmSettingsController {
 				'class'    => 'FrmStylesController',
 				'function' => 'custom_css',
 				'name'     => __( 'Custom CSS', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_code_icon',
+				'icon'     => 'frmfont frm_code_icon',
 			),
 			'manage_styles' => array(
 				'class'    => 'FrmStylesController',
 				'function' => 'manage',
 				'name'     => __( 'Manage Styles', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_pallet_icon',
+				'icon'     => 'frmfont frm_pallet_icon',
 			),
 			'captcha'       => array(
 				'class'    => self::class,
 				'function' => 'captcha_settings',
 				'name'     => __( 'Captcha/Spam', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_shield_check_icon',
+				'icon'     => 'frmfont frm_shield_check_icon',
 			),
 			'email'         => array(
 				'class'    => self::class,
 				'function' => 'email_settings',
 				'name'     => __( 'Email', 'formidable' ),
-				'icon'     => 'frm_icon_font frm_email_icon',
+				'icon'     => 'frmfont frm_email_icon',
 			),
 			'white_label'   => array(
 				'name'       => __( 'White Labeling', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_ghost_icon',
+				'icon'       => 'frmfont frm_ghost_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'white-label',
@@ -128,7 +128,7 @@ class FrmSettingsController {
 			),
 			'inbox'         => array(
 				'name'       => __( 'Inbox', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_email_icon',
+				'icon'       => 'frmfont frm_email_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'inbox-settings',
@@ -170,7 +170,7 @@ class FrmSettingsController {
 
 		$sections['misc'] = array(
 			'name'     => __( 'Miscellaneous', 'formidable' ),
-			'icon'     => 'frm_icon_font frm_shuffle_icon',
+			'icon'     => 'frmfont frm_shuffle_icon',
 			'class'    => self::class,
 			'function' => 'misc_settings',
 		);
@@ -180,7 +180,7 @@ class FrmSettingsController {
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
-				'icon'       => 'frm_icon_font frm_settings_icon',
+				'icon'       => 'frmfont frm_settings_icon',
 				'anchor'     => $key . '_settings',
 				'data'       => array(),
 			);

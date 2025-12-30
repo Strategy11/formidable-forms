@@ -294,7 +294,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		}
 
 		$values_str = strtolower( $this->convert_values_to_string( $values_to_check ) );
-		return strpos( $values_str, $line ) !== false;
+		return str_contains( $values_str, $line );
 	}
 
 	/**
@@ -548,7 +548,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 			return $ip === $cidr_ip;
 		}
 
-		if ( 0 === strpos( $ip . '/', $cidr_ip ) ) {
+		if ( str_starts_with( $ip . '/', $cidr_ip ) ) {
 			// 1.1.1.1 and 1.1.1.1/24 matches.
 			return true;
 		}
