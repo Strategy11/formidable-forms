@@ -155,13 +155,25 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function should_first_close_the_active_field_wrapper() {
-		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+		if ( false === $this->parent_li ) {
+			return false;
+		}
+
+		// Fix for issue: When at a divider field itself (section_helper exists but section not yet open),
+		// check if the section fits in the current row based on section_size.
+		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
+			return $this->current_list_size + $this->section_size > 12;
+		}
+
+		// Inside an open section - let section_helper handle grouping.
+		if ( ! empty( $this->section_helper ) ) {
 			return false;
 		}
 
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
+
 		return ! $this->can_support_current_layout() || $this->is_frm_first;
 	}
 
