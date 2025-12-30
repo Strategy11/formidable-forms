@@ -9,7 +9,7 @@ FrmPayPalLiteConnectHelper::render_settings_container();
 if ( is_callable( array( 'FrmPaymentSettingsController', 'route' ) ) ) {
 	?>
 	<hr style="margin: var(--gap-lg) 0;">
-	<h3><?php _e( 'PayPal Standard (Legacy) Settings', 'formidable' ); ?></h3>
+	<h3><?php esc_html_e( 'PayPal Standard (Legacy) Settings', 'formidable' ); ?></h3>
 	<div>
 		<?php FrmPaymentSettingsController::route(); ?>
 	</div>
