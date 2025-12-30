@@ -429,7 +429,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'input'              => array(
 				'font-size'        => $settings['field_font_size'],
 				'color'            => $settings['text_color'],
-				'background-color' => $settings['bg_color'],
 				'font-weight'      => $settings['field_weight'],
 				'padding'          => $settings['field_pad'],
 				'line-height'      => 1.3,
@@ -438,9 +437,6 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			),
 			'input::placeholder' => array(
 				'color' => $settings['text_color_disabled'],
-			),
-			'input:focus'        => array(
-				'background-color' => $settings['bg_color_active'],
 			),
 			'.invalid'           => array(
 				'color' => $settings['border_color_error'],
