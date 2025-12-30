@@ -1007,9 +1007,7 @@ class FrmEntryValidate {
 			// Check if an error happens when unserializing, or empty options.
 			return true;
 		}
-
-		end( $field_data->options );
-		$last_key = key( $field_data->options );
+		$last_key = array_key_last( $field_data->options );
 
 		// If a choice field has no Other option.
 		if ( is_numeric( $last_key ) || ! str_starts_with( $last_key, 'other_' ) ) {

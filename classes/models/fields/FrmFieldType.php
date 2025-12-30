@@ -1558,9 +1558,8 @@ DEFAULT_HTML;
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
 			reset( $custom_error_fields );
-			reset( $custom_desc_fields );
 
-			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
+			if ( key( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
