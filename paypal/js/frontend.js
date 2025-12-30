@@ -40,10 +40,10 @@
 		cardElement.innerHTML = `
 			<div id="paypal-button-container"></div>
 			<div class="separator">OR</div>
-			<div id="card-name-field-container"></div>
-			<div class="frm-paypal-card-number frm12" id="frm-paypal-card-number"></div>
-			<div class="frm-paypal-card-expiry frm6" id="frm-paypal-card-expiry"></div>
-			<div class="frm-paypal-card-cvv frm6" id="frm-paypal-card-cvv"></div>
+			<div class="frm-paypal-card-name frm12" id="frm-paypal-card-name"></div>
+			<div class="frm-paypal-card-number frm6" id="frm-paypal-card-number"></div>
+			<div class="frm-paypal-card-expiry frm3" id="frm-paypal-card-expiry"></div>
+			<div class="frm-paypal-card-cvv frm3" id="frm-paypal-card-cvv"></div>
 		`;
 
 		thisForm = cardElement.closest( 'form' );
@@ -84,6 +84,7 @@
 		}
 
 		// Render individual card fields
+		cardFields.NameField().render( '#frm-paypal-card-name' );
 		cardFields.NumberField().render( '#frm-paypal-card-number' );
 		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
@@ -153,6 +154,12 @@
 		orderInput.name = 'paypal_order_id';
 		orderInput.value = data.orderID;
 		thisForm.appendChild( orderInput );
+
+		// If someone uses the PayPal checkout button, the form submit event doesn't actually get triggered.
+		if ( ! submitEvent ) {
+			submitEvent        = new Event( 'submit', { cancelable: true, bubbles: true } );
+			submitEvent.target = thisForm;
+		}
 
 		// Submit the form
 		if ( typeof frmFrontForm.submitFormManual === 'function' ) {
@@ -289,15 +296,18 @@
 
 		try {
 			// Submit the card fields - this triggers createOrder and onApprove
-			await cardFieldsInstance.submit( {
-				billingAddress: {
-					addressLine1: '555 Billing Ave',
-					adminArea1: 'NY',
-					adminArea2: 'New York',
-					postalCode: '10001',
-					countryCode: 'US'
+			// TODO: Stop hard coding the billing address and use actual form data.
+			await cardFieldsInstance.submit(
+				{
+					billingAddress: {
+						addressLine1: '555 Billing Ave',
+						adminArea1: 'NY',
+						adminArea2: 'New York',
+						postalCode: '10001',
+						countryCode: 'US'
+					}
 				}
-			} );
+			);
 		} catch ( err ) {
 			running--;
 			if ( running === 0 && thisForm ) {
