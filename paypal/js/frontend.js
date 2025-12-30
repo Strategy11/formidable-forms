@@ -54,7 +54,7 @@
 			onError: onError,
 			style: getCardFieldStyles(),
 			inputEvents: {
-				onChange: ( data) => {
+				onChange: data => {
 					cardFieldsValid = data.isFormValid;
 
 					if ( cardFieldsValid ) {
@@ -68,12 +68,12 @@
 
 		disableSubmit( thisForm );
 
-		paypal.Buttons({
+		paypal.Buttons( {
 			createOrder: createOrder,
 			onApprove: onApprove,
 			onError: onError,
 			style: {},
-		}).render('#paypal-button-container');
+		} ).render( '#paypal-button-container' );
 
 		const cardFields = window.paypal.CardFields( cardFieldsConfig );
 
@@ -109,7 +109,7 @@
 	 *
 	 * @return {Promise<string>} The order ID.
 	 */
-	async function createOrder( data ) {
+	async function createOrder() {
 		thisForm.classList.add( 'frm_loading_form' );
 
 		const formData = new FormData( thisForm );
@@ -289,15 +289,15 @@
 
 		try {
 			// Submit the card fields - this triggers createOrder and onApprove
-			await cardFieldsInstance.submit({
+			await cardFieldsInstance.submit( {
 				billingAddress: {
-					addressLine1: "555 Billing Ave",
-					adminArea1: "NY",
-					adminArea2: "New York",
-					postalCode: "10001",
-					countryCode: "US"
+					addressLine1: '555 Billing Ave',
+					adminArea1: 'NY',
+					adminArea2: 'New York',
+					postalCode: '10001',
+					countryCode: 'US'
 				}
-			});
+			} );
 		} catch ( err ) {
 			running--;
 			if ( running === 0 && thisForm ) {
@@ -335,7 +335,6 @@
 
 			// Add event listener for form submission
 			thisForm.addEventListener( 'submit', handleCardSubmission );
-
 		} catch ( e ) {
 			console.error( 'Initializing PayPal Card Fields failed', e );
 			displayPaymentFailure( 'Failed to initialize payment form.' );
