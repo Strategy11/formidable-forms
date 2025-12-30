@@ -197,7 +197,7 @@ class FrmTransLiteAppHelper {
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
 
-		if ( strpos( $value, '[' ) === false ) {
+		if ( ! str_contains( $value, '[' ) ) {
 			return $value;
 		}
 

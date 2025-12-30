@@ -82,7 +82,7 @@ class FrmSquareLiteConnectHelper {
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php
 						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
+							FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
 							echo 'Connected';
 						} else {
 							echo 'Not configured';

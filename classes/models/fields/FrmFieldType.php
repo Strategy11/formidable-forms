@@ -602,7 +602,7 @@ DEFAULT_HTML;
 	public function display_smart_values_modal_trigger_icon( $field ) {
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+			'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -1255,7 +1255,7 @@ DEFAULT_HTML;
 			$value = implode( ', ', $value );
 		}
 
-		if ( strpos( $value, '&lt;' ) !== false ) {
+		if ( str_contains( $value, '&lt;' ) ) {
 			$value = htmlentities( $value );
 		}
 		return $value;
@@ -1557,10 +1557,7 @@ DEFAULT_HTML;
 		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
-			reset( $custom_error_fields );
-			reset( $custom_desc_fields );
-
-			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
+			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
@@ -1890,7 +1887,7 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
 					$csv_values_checked[] = $option['value'];
 					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 				}

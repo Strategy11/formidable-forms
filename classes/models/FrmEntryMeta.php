@@ -476,7 +476,7 @@ class FrmEntryMeta {
 		$where_fields = array_keys( $where );
 
 		foreach ( $where_fields as $where_field ) {
-			if ( strpos( $where_field, 'fi.' ) === 0 && 'fi.form_id' !== $where_field ) {
+			if ( str_starts_with( $where_field, 'fi.' ) && 'fi.form_id' !== $where_field ) {
 				return true;
 			}
 		}
@@ -538,7 +538,7 @@ class FrmEntryMeta {
 				$where['e.is_draft'] = class_exists( 'FrmAbandonmentHooksController', false ) ? absint( $args['is_draft'] ) : 1;
 			} elseif ( 'both' === $args['is_draft'] && class_exists( 'FrmAbandonmentHooksController', false ) ) {
 				$where['e.is_draft'] = array( 0, 1 );
-			} elseif ( false !== strpos( $args['is_draft'], ',' ) ) {
+			} elseif ( str_contains( $args['is_draft'], ',' ) ) {
 				$is_draft = array_reduce(
 					explode( ',', $args['is_draft'] ),
 					function ( $total, $current ) {

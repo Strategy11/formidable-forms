@@ -383,7 +383,7 @@ class FrmStrpLiteLinkController {
 			return;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 		$entry           = $atts['entry'];
 		$action          = $atts['action'];
 		$amount          = $atts['amount'];
@@ -438,7 +438,7 @@ class FrmStrpLiteLinkController {
 		list( $prefix, $intent_id ) = explode( '_', $client_secret );
 		$intent_id                  = $prefix . '_' . $intent_id;
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 
 		$function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
 		$intent        = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );

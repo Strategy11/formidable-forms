@@ -80,16 +80,12 @@ use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector;
-use Rector\Php80\Rector\Identical\StrStartsWithRector;
-use Rector\Php80\Rector\NotIdentical\StrContainsRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
-use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
-use Rector\Php80\Rector\Identical\StrEndsWithRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector;
@@ -251,16 +247,12 @@ return RectorConfig::configure()
 			ChangeOrIfContinueToMultiContinueRector::class,
 			ReturnEarlyIfVariableRector::class,
 			SimplifyQuoteEscapeRector::class,
-			StrStartsWithRector::class,
-			StrContainsRector::class,
 			AddParamArrayDocblockFromAssignsParamToParamReferenceRector::class,
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			RepeatedAndNotEqualToNotInArrayRector::class,
 			UseIdenticalOverEqualWithSameTypeRector::class,
 			AddParamFromDimFetchKeyUseRector::class,
-			ArrayKeyFirstLastRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
-			StrEndsWithRector::class,
 			AddArrayFunctionClosureParamTypeRector::class,
 			RenameParamToMatchTypeRector::class,
 			AddArrowFunctionParamArrayWhereDimFetchRector::class,

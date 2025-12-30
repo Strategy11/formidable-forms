@@ -189,11 +189,11 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		switch ( $this->data['type'] ) {
 			case 'vertical-margin':
-				$this->data['icon'] = 'frm_icon_font frm-margin-top-bottom';
+				$this->data['icon'] = 'frmfont frm-margin-top-bottom';
 				return;
 
 			case 'horizontal-margin':
-				$this->data['icon'] = 'frm_icon_font frm-margin-left-right';
+				$this->data['icon'] = 'frmfont frm-margin-left-right';
 				return;
 
 			default:

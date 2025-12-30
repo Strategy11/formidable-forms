@@ -231,7 +231,7 @@ class FrmStylesHelper {
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
-		$rgb = 0 === strpos( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
+		$rgb = str_starts_with( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
 		return implode( ',', $rgb );
 	}
 
@@ -292,7 +292,7 @@ class FrmStylesHelper {
 	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
+		if ( str_starts_with( $rgba, '#' ) ) {
 			// Color is already hex.
 			return $rgba;
 		}
@@ -374,7 +374,7 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
-		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+		if ( str_starts_with( $hex, 'rgba(' ) ) {
 			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
 			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
 			$r                      = max( 0, min( 255, $r + $steps ) );
@@ -412,11 +412,11 @@ class FrmStylesHelper {
 	 * @return int
 	 */
 	public static function get_color_brightness( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
+		if ( str_starts_with( $color, 'rgb' ) ) {
 			$color = self::rgb_to_hex( $color );
 		}
 
-		if ( 0 === strpos( $color, 'hsl' ) ) {
+		if ( str_starts_with( $color, 'hsl' ) ) {
 			$hsl_to_hex = self::hsl_to_hex( $color );
 
 			if ( is_null( $hsl_to_hex ) ) {
@@ -563,7 +563,7 @@ class FrmStylesHelper {
 	private static function css_key_is_valid( $key ) {
 		// Any key that is abnormally large is not valid.
 		// Any key that contains a '{' is not valid.
-		return strlen( $key ) < 100 && false === strpos( $key, '{' );
+		return strlen( $key ) < 100 && ! str_contains( $key, '{' );
 	}
 
 	/**
@@ -593,7 +593,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $invalid_substrings as $substring ) {
-			if ( strpos( $var, $substring ) !== false ) {
+			if ( str_contains( $var, $substring ) ) {
 				return false;
 			}
 		}
@@ -862,10 +862,10 @@ class FrmStylesHelper {
 
 		if ( empty( $color ) ) {
 			$color = $default;
-		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
+		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
+		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
 	}
@@ -889,7 +889,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $non_hex_substrings as $substring ) {
-			if ( false !== strpos( $color, $substring ) ) {
+			if ( str_contains( $color, $substring ) ) {
 				return false;
 			}
 		}

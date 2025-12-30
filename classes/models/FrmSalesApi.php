@@ -454,7 +454,7 @@ class FrmSalesApi extends FrmFormApi {
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
-			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
+			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
 		</div>
 		<?php
 

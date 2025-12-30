@@ -151,7 +151,7 @@ class FrmStylesCardHelper {
 
 		$color = $style->post_content[ $key ];
 
-		if ( 0 === strpos( $color, 'rgba' ) ) {
+		if ( str_starts_with( $color, 'rgba' ) ) {
 			preg_match_all( '/([\\d.]+)/', $color, $matches );
 
 			if ( isset( $matches[1][3] ) && is_numeric( $matches[1][3] ) ) {
@@ -271,7 +271,7 @@ class FrmStylesCardHelper {
 		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
-			$background_color = ( 0 === strpos( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
+			$background_color = ( str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
 		}
 		$styles[] = '--preview-background-color: ' . $background_color;
 
@@ -293,7 +293,7 @@ class FrmStylesCardHelper {
 
 			$value = $style->post_content[ $key ];
 
-			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && false === strpos( $value, 'rgb' ) && $value !== 'transparent';
+			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
 
 			if ( $is_hex ) {
 				$value = '#' . $value;
