@@ -658,6 +658,9 @@ class FrmPayPalLiteConnectHelper {
 	/**
 	 * Create a PayPal order.
 	 *
+	 * @param string $amount
+	 * @param string $currency
+	 *
 	 * @return false|object
 	 */
 	public static function create_order( $amount, $currency ) {

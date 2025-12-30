@@ -202,11 +202,13 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			}
 
 			$payments = $purchase_unit->payments;
+
 			if ( empty( $payments->captures ) || ! is_array( $payments->captures ) ) {
 				continue;
 			}
 
 			$captures = $payments->captures;
+
 			foreach ( $captures as $capture ) {
 				return $capture->id;
 			}
