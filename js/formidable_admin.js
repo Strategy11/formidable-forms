@@ -9272,7 +9272,7 @@ window.frmAdminBuildJS = function () {
       replace = classes.trim();
       replaceWith = replaceWith.trim();
     }
-    field.className = field.className.replace(replace, replaceWith);
+    field.className = field.className.replace(/\s+/g, ' ').replace(replace, replaceWith);
   }
   function maybeShowInlineModal(e) {
     /*jshint validthis:true */
