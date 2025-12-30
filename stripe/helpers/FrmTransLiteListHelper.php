@@ -177,6 +177,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * If the Payments submodule or the PayPal add-on is active, add a bulk delete action.
+	 *
 	 * @since x.x
 	 *
 	 * @return array
@@ -645,6 +647,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * Render the tabs for the payments list, if the user has access to coupons.
+	 *
 	 * @since x.x
 	 *
 	 * @param string $active_tab
