@@ -409,7 +409,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 
@@ -630,7 +630,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function prepare_font_family_setting( $font ) {
-		if ( false === strpos( $font, ',' ) ) {
+		if ( ! str_contains( $font, ',' ) ) {
 			return $font;
 		}
 

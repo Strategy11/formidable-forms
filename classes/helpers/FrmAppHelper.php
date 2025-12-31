@@ -247,19 +247,19 @@ class FrmAppHelper {
 		$utm        = self::adjust_legacy_utm_args( $utm );
 		$query_args = array();
 
-		if ( false === strpos( $cta_link, 'utm_source' ) ) {
+		if ( ! str_contains( $cta_link, 'utm_source' ) ) {
 			$query_args['utm_source'] = 'plugin';
 		}
 
-		if ( false === strpos( $cta_link, 'utm_medium' ) ) {
+		if ( ! str_contains( $cta_link, 'utm_medium' ) ) {
 			$query_args['utm_medium'] = self::get_utm_medium();
 		}
 
-		if ( false === strpos( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
+		if ( ! str_contains( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
 			$query_args['utm_campaign'] = $utm['campaign'];
 		}
 
-		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
+		if ( ! str_contains( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
 			$query_args['utm_content'] = $utm['content'];
 		}
 
@@ -313,7 +313,7 @@ class FrmAppHelper {
 		}
 
 		$menu_icon = self::get_menu_icon_class();
-		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
+		return str_contains( $menu_icon, 'frm_logo_icon' );
 	}
 
 	/**
@@ -365,7 +365,7 @@ class FrmAppHelper {
 		$new_icon = apply_filters( 'frm_icon', $icon, true );
 
 		if ( $new_icon !== $icon ) {
-			if ( strpos( $new_icon, '<svg' ) === 0 ) {
+			if ( str_starts_with( $new_icon, '<svg' ) ) {
 				$icon = str_replace( 'viewBox="0 0 20', 'width="30" height="35" style="color:#929699" viewBox="0 0 20', $new_icon );
 			} else {
 				// Show nothing if it isn't an SVG.
@@ -441,7 +441,7 @@ class FrmAppHelper {
 			return self::is_view_builder_page();
 		}
 
-		return strpos( $page, 'formidable' ) !== false;
+		return str_contains( $page, 'formidable' );
 	}
 
 	/**
@@ -871,7 +871,7 @@ class FrmAppHelper {
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
-		if ( strpos( $value, '\\\\' ) === false ) {
+		if ( ! str_contains( $value, '\\\\' ) ) {
 			$value = addslashes( $value );
 		}
 
@@ -1002,7 +1002,7 @@ class FrmAppHelper {
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
-		if ( empty( $string ) || strpos( $string, '&' ) === false ) {
+		if ( empty( $string ) || ! str_contains( $string, '&' ) ) {
 			return;
 		}
 
@@ -1077,9 +1077,9 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses_submit_button( $html ) {
-		$included_button_action = false !== strpos( $html, '[button_action]' );
-		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
-		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		$included_button_action = str_contains( $html, '[button_action]' );
+		$included_back_hook     = str_contains( $html, '[back_hook]' );
+		$included_draft_hook    = str_contains( $html, '[draft_hook]' );
 		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
 		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 		$html = self::kses( $html, 'all' );
@@ -1087,7 +1087,7 @@ class FrmAppHelper {
 		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 
 		if ( $included_button_action ) {
-			if ( false !== strpos( $html, '<input type="submit"' ) ) {
+			if ( str_contains( $html, '<input type="submit"' ) ) {
 				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
 				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
 			} else {
@@ -1388,7 +1388,7 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = strpos( $icon, ' ' ) === false ? '' : ' ' . $icon;
+			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
 
 			if ( strpos( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
@@ -1459,7 +1459,7 @@ class FrmAppHelper {
 	 * @param string $css_string
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
-		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-700:' ) ) {
+		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
 			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
 		}
@@ -1476,11 +1476,11 @@ class FrmAppHelper {
 	private static function is_a_valid_color( $value ) {
 		$match = 0;
 
-		if ( 0 === strpos( $value, 'rgba(' ) ) {
+		if ( str_starts_with( $value, 'rgba(' ) ) {
 			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
+		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
 			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( 0 === strpos( $value, '#' ) ) {
+		} elseif ( str_starts_with( $value, '#' ) ) {
 			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
 		}
 		return (bool) $match;
@@ -1742,7 +1742,7 @@ class FrmAppHelper {
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<?php self::icon_by_class( 'frm_icon_font frm_search_icon frm_svg20' ); ?>
+			<?php self::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -3665,7 +3665,7 @@ class FrmAppHelper {
 		}
 
 		// Since we only expect an array, skip anything that doesn't start with a:.
-		if ( ! is_serialized( $value ) || 'a:' !== substr( $value, 0, 2 ) ) {
+		if ( ! is_serialized( $value ) || ! str_starts_with( $value, 'a:' ) ) {
 			return $value;
 		}
 
@@ -4536,10 +4536,10 @@ class FrmAppHelper {
 	public static function input_key_is_safe( $key, $context = 'display' ) {
 		if ( 'update' === $context && in_array( $key, array( 'opt', 'label' ), true ) ) {
 			$safe = true;
-		} elseif ( 0 === strpos( $key, 'data-' ) ) {
+		} elseif ( str_starts_with( $key, 'data-' ) ) {
 			// Allow all data attributes.
 			$safe = true;
-		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
+		} elseif ( str_starts_with( $key, 'aria-' ) ) {
 			// Allow all aria attributes.
 			$safe = true;
 		} else {
@@ -4796,7 +4796,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = 0 === strpos( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;

@@ -117,7 +117,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		if ( strpos( $orderby, 'meta' ) !== false ) {
+		if ( str_contains( $orderby, 'meta' ) ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 
 			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
@@ -486,7 +486,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function maybe_fix_column_name( $column_name ) {
-		if ( 0 === strpos( $column_name, '0_' ) ) {
+		if ( str_starts_with( $column_name, '0_' ) ) {
 			$column_name = substr( $column_name, 2 );
 		}
 		return $column_name;
@@ -519,7 +519,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	private function get_column_value( $item, &$val ) {
 		$col_name = $this->column_name;
 
-		if ( strpos( $col_name, 'frmsep_' ) === 0 ) {
+		if ( str_starts_with( $col_name, 'frmsep_' ) ) {
 			$sep_val  = true;
 			$col_name = str_replace( 'frmsep_', '', $col_name );
 		} else {

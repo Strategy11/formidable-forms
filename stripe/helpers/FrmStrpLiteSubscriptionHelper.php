@@ -182,7 +182,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @return false|object|string
 	 */
 	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
-		if ( ! is_string( $subscription ) || 0 !== strpos( $subscription, 'No such plan: ' ) ) {
+		if ( ! is_string( $subscription ) || ! str_starts_with( $subscription, 'No such plan: ' ) ) {
 			// Only retry when there is a No such plan string error.
 			return $subscription;
 		}
@@ -223,7 +223,7 @@ class FrmStrpLiteSubscriptionHelper {
 			return (int) $payment_limit;
 		}
 
-		if ( false === strpos( $payment_limit, '[' ) ) {
+		if ( ! str_contains( $payment_limit, '[' ) ) {
 			return self::get_invalid_payment_limit_error( $payment_limit );
 		}
 

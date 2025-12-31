@@ -99,7 +99,7 @@ class FrmStrpLiteConnectApiAdapter {
 		$customer_id                            = FrmStrpLiteConnectHelper::get_customer_id( $options );
 
 		if ( $customer_id ) {
-			$customer_id_is_actually_an_error_message = false === strpos( $customer_id, 'cus_' );
+			$customer_id_is_actually_an_error_message = ! str_contains( $customer_id, 'cus_' );
 
 			if ( $customer_id_is_actually_an_error_message ) {
 				$customer_id_error_message = $customer_id;

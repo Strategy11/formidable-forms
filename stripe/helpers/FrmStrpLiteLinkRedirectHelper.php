@@ -88,7 +88,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		// Let a stripe link success message get handled the same as a 3D secure redirect.
 		// When it shows a message, it adds a &frmstrp= param to the URL.
 		$redirect            = FrmStrpLiteAuth::return_url( compact( 'form', 'entry' ) );
-		$is_message_redirect = false !== strpos( $redirect, 'frmstrp=' );
+		$is_message_redirect = str_contains( $redirect, 'frmstrp=' );
 
 		if ( $this->url_is_external( $redirect ) || ! $is_message_redirect ) {
 			wp_redirect( $redirect );
@@ -123,7 +123,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * @return bool
 	 */
 	private function url_is_external( $url ) {
-		if ( false === strpos( $url, 'http' ) ) {
+		if ( ! str_contains( $url, 'http' ) ) {
 			return false;
 		}
 
@@ -133,7 +133,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
-		return 0 !== strpos( $url, $home_url );
+		return ! str_starts_with( $url, $home_url );
 	}
 
 	/**
@@ -188,7 +188,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * @param string $url
 	 */
 	private function add_intent_info_and_redirect( $url ) {
-		if ( 0 === strpos( $this->stripe_id, 'pi_' ) ) {
+		if ( str_starts_with( $this->stripe_id, 'pi_' ) ) {
 			$url = add_query_arg( 'payment_intent', $this->stripe_id, $url );
 			$url = add_query_arg( 'payment_intent_client_secret', $this->client_secret, $url );
 		} else {

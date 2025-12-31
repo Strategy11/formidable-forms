@@ -58,7 +58,7 @@ class FrmFieldGdprHelper {
 	public static function add_gdpr_field( $fields ) {
 		$fields[ self::FIELD_TYPE ] = array(
 			'name' => __( 'GDPR', 'formidable' ),
-			'icon' => 'frm_icon_font frm-gdpr-icon',
+			'icon' => 'frmfont frm-gdpr-icon',
 		);
 		return $fields;
 	}

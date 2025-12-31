@@ -281,7 +281,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <div class="frm9 frm_form_field frm-style-component" id="frm_style_class_custom_css" data-css-scope="<?php echo esc_attr( 'frm_style_' . $style->post_name ); ?>">
 	<label class="frm-copy-text">.frm_style_<?php
 		echo esc_html( $style->post_name );
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm-copy-icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm-copy-icon' );
 	?>
 	</label>
 </div>

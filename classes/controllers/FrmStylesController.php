@@ -291,7 +291,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function add_tags_to_css( $tag, $handle ) {
-		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && strpos( $tag, ' property=' ) === false ) {
+		if ( ( 'formidable' === $handle || 'jquery-theme' === $handle ) && ! str_contains( $tag, ' property=' ) ) {
 			$tag = str_replace( ' type="', ' property="stylesheet" type="', $tag );
 		}
 
@@ -696,7 +696,7 @@ class FrmStylesController {
 					 * @param string $class
 					 */
 					function ( $class ) {
-						return $class && 0 !== strpos( $class, 'frm_style_' );
+						return $class && ! str_starts_with( $class, 'frm_style_' );
 					}
 				);
 				$split[] = 'frm_style_' . $style->post_name;
@@ -770,7 +770,7 @@ class FrmStylesController {
 		$actions_to_redirect = array( 'duplicate', 'new_style' );
 
 		foreach ( $actions_to_redirect as $action ) {
-			if ( false !== strpos( $query, 'frm_action=' . $action ) ) {
+			if ( str_contains( $query, 'frm_action=' . $action ) ) {
 				$current_action = $action;
 				break;
 			}
@@ -1147,7 +1147,7 @@ class FrmStylesController {
 	public static function maybe_hide_sample_form_error_message() {
 		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 
-		if ( false !== strpos( $referer, 'admin.php?page=formidable-styles' ) ) {
+		if ( str_contains( $referer, 'admin.php?page=formidable-styles' ) ) {
 			echo '#frm_broken_styles_warning { display: none; }';
 		}
 	}

@@ -333,7 +333,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_plain_text_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === true );
+		return $this->format === 'text' && $this->is_plain_text === true;
 	}
 
 	/**
@@ -344,6 +344,6 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_table_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === false );
+		return $this->format === 'text' && $this->is_plain_text === false;
 	}
 }

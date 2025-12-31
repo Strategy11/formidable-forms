@@ -153,7 +153,7 @@ class FrmStrpLiteAppController {
 			return $errors;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent->id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent->id, 'seti_' );
 
 		if ( $is_setup_intent ) {
 			$errors[ 'field' . $cc_field_id ] = is_object( $intent->last_setup_error ) ? $intent->last_setup_error->message : '';
