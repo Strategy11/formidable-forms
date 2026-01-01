@@ -85,7 +85,6 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector;
 use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\AddParamFromDimFetchKeyUseRector;
-use Rector\Php73\Rector\FuncCall\ArrayKeyFirstLastRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 use Rector\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector;
 use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
@@ -252,7 +251,6 @@ return RectorConfig::configure()
 			RepeatedAndNotEqualToNotInArrayRector::class,
 			UseIdenticalOverEqualWithSameTypeRector::class,
 			AddParamFromDimFetchKeyUseRector::class,
-			ArrayKeyFirstLastRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
 			AddArrayFunctionClosureParamTypeRector::class,
 			RenameParamToMatchTypeRector::class,
