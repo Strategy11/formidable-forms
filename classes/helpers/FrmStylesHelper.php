@@ -523,6 +523,7 @@ class FrmStylesHelper {
 			'field_shape_type',
 			'bg_image_id',
 			'single_style_custom_css',
+			'enable_style_custom_css',
 		);
 	}
 
