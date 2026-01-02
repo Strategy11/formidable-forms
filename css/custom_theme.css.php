@@ -743,7 +743,7 @@ a.frm_save_draft{
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style a.frm_save_draft,
 .with_frm_style a.frm_start_over{
-<?php if ( ! empty( $defaults['font'] ) ) { ?>
+	<?php if ( ! empty( $defaults['font'] ) ) { ?>
 	font-family: var(--font);
 <?php } ?>
 	font-size: var(--submit-font-size);
@@ -1173,9 +1173,9 @@ table.form_results.with_frm_style tr.frm_odd,
 	animation:2s linear 0s normal none infinite progress-bar-stripes;
 }
 
-<?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
+	<?php if ( ! empty( $defaults['bg_color'] ) ) { ?>
 #frm_loading .progress-striped .progress-bar {
-	<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
+		<?php if ( ! empty( $defaults['border_color'] ) ) { ?>
 		background-image: linear-gradient(45deg, var(--border-color) 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, var(--border-color) 50%, var(--border-color) 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 	<?php } ?>
 	background-size:40px 40px;
@@ -1192,7 +1192,9 @@ table.form_results.with_frm_style tr.frm_odd,
 	transition: width 0.6s ease 0s;
 	width: 100%;
 }
-<?php } ?>
+	<?php
+}//end if
+?>
 
 .frm_image_from_url{
 	height:50px;
