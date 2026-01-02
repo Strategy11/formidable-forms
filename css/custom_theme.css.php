@@ -320,6 +320,7 @@ legend.frm_hidden{
 	color:transparent<?php echo esc_html( $important ); ?>;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .wp-editor-wrap{
 	width: var(--field-width)<?php echo esc_html( $important ); ?>;
 	max-width:100%;
@@ -330,7 +331,6 @@ legend.frm_hidden{
 	box-shadow:none !important;
 }
 
-<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .mceIframeContainer{
 	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
