@@ -14,6 +14,7 @@ $important = empty( $important_style ) ? '' : ' !important';
 $submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js = FrmStylesHelper::use_chosen_js();
 
+$pro_is_installed = FrmAppHelper::pro_is_installed();
 ?>
 .<?php echo esc_html( $style_class ); ?>{
 <?php FrmStylesHelper::output_vars( $settings, $defaults ); ?>
@@ -127,7 +128,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	display:none<?php echo esc_html( $important ); ?>;
 }
 
-<?php if ( FrmAppHelper::pro_is_installed() ) : ?>
+<?php if ( $pro_is_installed ) : ?>
 .<?php echo esc_html( $style_class ); ?> .frm_scale label{
 	<?php if ( ! empty( $check_weight ) ) { ?>
 		font-weight:<?php echo esc_html( $check_weight . $important ); ?>;
@@ -189,7 +190,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 }
 
 <?php if ( ! $submit_style ) { ?>
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
+<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
@@ -239,9 +242,11 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	vertical-align:middle;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message{
 	margin:0;
 }
+<?php } ?>
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
