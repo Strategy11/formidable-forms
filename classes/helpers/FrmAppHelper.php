@@ -3870,6 +3870,8 @@ class FrmAppHelper {
 			'id'                   => __( 'ID', 'formidable' ),
 			'no_results'           => __( 'No results match', 'formidable' ),
 			'file_spam'            => __( 'That file looks like Spam.', 'formidable' ),
+			'uploading'            => __( 'Uploading', 'formidable' ),
+			'file_uploaded'        => __( 'File uploaded:', 'formidable' ),
 			'calc_error'           => __( 'There is an error in the calculation in the field with key', 'formidable' ),
 			'empty_fields'         => __( 'Please complete the preceding required fields before uploading a file.', 'formidable' ),
 			'focus_first_error'    => self::should_focus_first_error(),

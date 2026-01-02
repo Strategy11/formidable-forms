@@ -1065,9 +1065,27 @@ function frmFrontFormJS() {
 		const formCompleted = tempDiv.querySelector( '.frm_message' );
 		if ( formCompleted ) {
 			jQuery( document ).trigger( 'frmFormComplete', [ object, response ] );
+			// Focus success message for screen reader accessibility
+			object.closest( '.frm_forms' )?.parentNode?.querySelector( '.frm_message' )?.focus();
 		} else {
 			jQuery( document ).trigger( 'frmPageChanged', [ object, response ] );
+			focusPageHeading( object );
 		}
+	}
+
+	/**
+	 * Focus first heading after multi-page navigation for screen reader accessibility.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} object The form element.
+	 * @return {void}
+	 */
+	function focusPageHeading( object ) {
+		const container = object.closest( '.frm_forms' );
+		const heading = container?.parentNode?.querySelector( '.frm_page_num_active h2, .frm_page_num_active h3, .frm_rootline_title' );
+		heading?.setAttribute( 'tabindex', '-1' );
+		heading?.focus();
 	}
 
 	/**
