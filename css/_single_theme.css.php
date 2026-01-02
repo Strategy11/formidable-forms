@@ -353,7 +353,9 @@ endif;
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=checkbox],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field input[type=radio],
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field textarea,
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .mce-edit-area iframe,
+<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field select:not(.ui-datepicker-month):not(.ui-datepicker-year),
 .frm_form_fields_error_style,
 .<?php echo esc_html( $style_class ); ?> .frm_blank_field .frm-g-recaptcha iframe,
