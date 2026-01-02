@@ -2,17 +2,23 @@
  * Components - Form Rows
  */
 
-#frm_builder_page .frm_remove_form_row.frm_button,
-#frm_builder_page .frm_add_form_row.frm_button {
-	border-radius: var(--small-radius);
-	border: 1px solid var(--blue-border);
-}
-
-#frm_builder_page .frm_remove_form_row .frmsvg,
-#frm_builder_page .frm_remove_form_row i::before,
-#frm_builder_page .frm_add_form_row .frmsvg,
-#frm_builder_page .frm_add_form_row i::before {
-	color: var(--primary-700);
+#frm_builder_page {
+	.frm_remove_form_row.frm_button,
+	.frm_add_form_row.frm_button {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		height: var(--submit-height);
+		color: var(--submit-text-color);
+		background: var(--submit-bg-color);
+		font-size: var(--submit-font-size);
+		font-weight: var(--submit-weight);
+		line-height: normal;
+		border-radius: var(--border-radius);
+		border-width: var(--submit-border-width);
+		border-color: var(--submit-border-color);
+		padding: var(--submit-padding);
+	}
 }
 
 .frm-preview-buttons .frm_button_submit {
@@ -23,15 +29,15 @@
 	border-top: 1px dashed var(--primary-700);
 	margin-top: var(--gap-lg);
 	position: relative;
-}
 
-.frm-page-break::before,
-.frm-page-break::after {
-	content: '';
-	position: absolute;
-	background-color: #fff;
-	border-radius: 50%;
-	border: 1px solid var(--primary-700);
-	text-rendering: auto;
-	-webkit-font-smoothing: antialiased;
+	&::before,
+	&::after {
+		content: '';
+		position: absolute;
+		background-color: #fff;
+		border-radius: 50%;
+		border: 1px solid var(--primary-700);
+		text-rendering: auto;
+		-webkit-font-smoothing: antialiased;
+	}
 }
