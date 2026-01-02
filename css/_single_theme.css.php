@@ -277,12 +277,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	outline: none;
 }
 
-<?php if ( $pro_is_installed ) { ?>
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:active,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:focus,
-<?php } ?>
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
@@ -292,9 +292,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 }
 
-<?php if ( $pro_is_installed ) { ?>
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
-<?php } ?>
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 	border-right-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
