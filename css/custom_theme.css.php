@@ -330,9 +330,11 @@ legend.frm_hidden{
 	box-shadow:none !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .mceIframeContainer{
 	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 .with_frm_style select{
 	width: var(--auto-width)<?php echo esc_html( $important ); ?>;
