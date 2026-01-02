@@ -416,7 +416,7 @@ legend.frm_hidden{
 	display:none;
 }
 
-<?php if ( $pro_is_installed) { ?>
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_section_heading.frm_hide_section{
 	margin-top:0 !important;
 }
@@ -1091,7 +1091,7 @@ table.form_results.with_frm_style tr.frm_odd,
 	padding: 40px;
 }
 
-<?php if ( $pro_is_installed ) { ?>
+	<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm-show-form .frm_color_block.frm_section_heading h3,
 .frm_color_block.frm_section_heading h3 {
 	border-width: 0 !important;
