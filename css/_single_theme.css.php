@@ -43,9 +43,11 @@ $pro_is_installed = FrmAppHelper::pro_is_installed();
 }
 <?php } ?>
 
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .form-field.frm_section_heading{
 	margin-bottom:0<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> p.description,
 .<?php echo esc_html( $style_class ); ?> div.description,

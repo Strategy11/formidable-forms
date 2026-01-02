@@ -416,9 +416,11 @@ legend.frm_hidden{
 	display:none;
 }
 
+<?php if ( $pro_is_installed) { ?>
 .with_frm_style .frm_section_heading.frm_hide_section{
 	margin-top:0 !important;
 }
+<?php } ?>
 
 .with_frm_style .frm_hidden_container .frm_primary_label,
 .with_frm_style .frm_pos_hidden,
@@ -1089,15 +1091,16 @@ table.form_results.with_frm_style tr.frm_odd,
 	padding: 40px;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm-show-form .frm_color_block.frm_section_heading h3,
 .frm_color_block.frm_section_heading h3 {
 	border-width: 0 !important;
 }
-<?php } ?>
 
 .frm_collapse .ui-icon{
 	display:inline-block;
 }
+<?php } ?>
 
 .frm_toggle_container{
 	/* Prevent the slide and bounce */
