@@ -1201,12 +1201,14 @@ table.form_results.with_frm_style tr.frm_odd,
 	padding:6px 12px;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 select.frm_loading_lookup{
 	background-image: url(../images/ajax_loader.gif) !important;
 	background-position: 10px;
 	background-repeat: no-repeat;
 	color: transparent !important;
 }
+<?php } ?>
 
 <?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
