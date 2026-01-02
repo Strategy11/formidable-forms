@@ -368,7 +368,7 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->email_action->post_content['from'] = '"Yahoo" test@yahoo.com';
 		$sitename                                 = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 
-		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+		if ( str_starts_with( $sitename, 'www.' ) ) {
 			$sitename = substr( $sitename, 4 );
 		}
 		$expected['from'] = 'Yahoo <wordpress@' . $sitename . '>';
