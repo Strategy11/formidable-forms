@@ -103,10 +103,14 @@ class FrmMigrate {
 	 */
 	private function maybe_delete_htaccess_file() {
 		$css_file_request = wp_remote_get( FrmAppHelper::plugin_url() . '/css/frm_fonts.css' );
-		$htaccess_is_safe = 200 === wp_remote_retrieve_response_code( $css_file_request );
 
-		if ( ! $htaccess_is_safe && file_exists( FrmAppHelper::plugin_path() . '/.htaccess' ) ) {
-			unlink( FrmAppHelper::plugin_path() . '/.htaccess' );
+		if ( 200 === wp_remote_retrieve_response_code( $css_file_request ) ) {
+			return;
+		}
+
+		$htaccess_path = FrmAppHelper::plugin_path() . '/.htaccess';
+		if ( file_exists( $htaccess_path ) ) {
+			wp_delete_file( $htaccess_path );
 		}
 	}
 
