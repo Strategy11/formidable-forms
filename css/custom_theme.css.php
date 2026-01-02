@@ -1126,6 +1126,7 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 <?php } ?>
 
+<?php if ( $pro_is_installed ) { ?>
 #frm_loading{
 	display:none;
 	position:fixed;
@@ -1189,6 +1190,7 @@ table.form_results.with_frm_style tr.frm_odd,
 	transition: width 0.6s ease 0s;
 	width: 100%;
 }
+<?php } ?>
 
 .frm_image_from_url{
 	height:50px;
