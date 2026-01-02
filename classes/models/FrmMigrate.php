@@ -109,6 +109,7 @@ class FrmMigrate {
 		}
 
 		$htaccess_path = FrmAppHelper::plugin_path() . '/.htaccess';
+
 		if ( file_exists( $htaccess_path ) ) {
 			wp_delete_file( $htaccess_path );
 		}
