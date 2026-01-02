@@ -52,6 +52,8 @@ class FrmMigrate {
 		);
 
 		if ( $needs_upgrade ) {
+			$this->maybe_delete_htaccess_file();
+
 			// update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
@@ -87,6 +89,24 @@ class FrmMigrate {
 		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
+		}
+	}
+
+	/**
+	 * Check if the .htaccess file should be deleted based on server response.
+	 * If a server has AllowOverride FileInfo but not AllowOverride AuthConfig, JS and CSS files
+	 * will result in a 500 error.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private function maybe_delete_htaccess_file() {
+		$css_file_request = wp_remote_get( FrmAppHelper::plugin_url() . '/css/frm_fonts.css' );
+		$htaccess_is_safe = 200 === wp_remote_retrieve_response_code( $css_file_request );
+
+		if ( ! $htaccess_is_safe && file_exists( FrmAppHelper::plugin_path() . '/.htaccess' ) ) {
+			unlink( FrmAppHelper::plugin_path() . '/.htaccess' );
 		}
 	}
 
