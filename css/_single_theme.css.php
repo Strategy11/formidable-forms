@@ -277,10 +277,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	outline: none;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:active,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:focus,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:active,
@@ -290,7 +292,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	border-color:var(--submit-bg-color)<?php echo esc_html( $important ); ?>;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_prev .frm_prev_page:before,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> .frm_loading_form .frm_button_submit:before {
 	border-bottom-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
 	border-right-color:var(--submit-text-color)<?php echo esc_html( $important ); ?>;
@@ -402,6 +406,7 @@ endif;
 	margin-bottom:var(--field-margin);
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-striped .progress-bar{
 	background-image:linear-gradient(45deg, <?php echo esc_html( $border_color ); ?> 25%, rgba(0, 0, 0, 0) 25%, rgba(0, 0, 0, 0) 50%, <?php echo esc_html( $border_color ); ?> 50%, <?php echo esc_html( $border_color ); ?> 75%, rgba(0, 0, 0, 0) 75%, rgba(0, 0, 0, 0));
 }
@@ -409,6 +414,7 @@ endif;
 .<?php echo esc_html( $style_class ); ?> #frm_loading .progress-bar{
 	background-color:var(--bg-color)<?php echo esc_html( $important ); ?>;
 }
+<?php } ?>
 
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big input,
 .<?php echo esc_html( $style_class ); ?> .frm_form_field.frm_total_big textarea,
