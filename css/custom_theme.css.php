@@ -520,6 +520,7 @@ legend.frm_hidden{
 	margin-left:18px;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .wp-editor-container{
 	border:1px solid #e5e5e5;
 }
@@ -531,6 +532,7 @@ legend.frm_hidden{
 .with_frm_style .wp-editor-container textarea{
 	border:none;
 }
+<?php } ?>
 
 .with_frm_style .auto_width #loginform input,
 .with_frm_style .auto_width input,
@@ -1198,11 +1200,13 @@ select.frm_loading_lookup{
 	display:none;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .wp-editor-wrap *,
 .wp-editor-wrap *:after,
 .wp-editor-wrap *:before{
 	box-sizing:content-box;
 }
+<?php } ?>
 
 .with_frm_style .frm_grid,
 .with_frm_style .frm_grid_first,
