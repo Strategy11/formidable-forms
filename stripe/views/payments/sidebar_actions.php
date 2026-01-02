@@ -17,10 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</span>
 </div>
 
-<?php if ( $payment->status === 'complete' && ! empty( $payment->receipt_id ) ) { ?>
+<?php if ( isset( $payment->status ) && $payment->status === 'complete' && ! empty( $payment->receipt_id ) ) { ?>
 	<div class="misc-pub-section">
 		<?php FrmAppHelper::icon_by_class( 'frmfont frm_product_icon' ); ?>
 		<?php esc_html_e( 'Payment:', 'formidable' ); ?>
 		<?php FrmTransLitePaymentsController::show_refund_link( $payment ); ?>
 	</div>
 <?php } ?>
+
+<?php
+do_action( 'frm_pay_' . $payment->paysys . '_sidebar', $payment );
+?>
