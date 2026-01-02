@@ -159,13 +159,13 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		// Fix for issue: When at a divider field itself (section_helper exists but section not yet open),
-		// check if the section fits in the current row based on section_size.
+		// Close the current row before a section if it would overflow the grid.
+		// @see https://github.com/Strategy11/formidable-pro/issues/3820
 		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
 			return $this->current_list_size + $this->section_size > 12;
 		}
 
-		// Inside an open section - let section_helper handle grouping.
+		// When a section is open, let section_helper handle field grouping.
 		if ( ! empty( $this->section_helper ) ) {
 			return false;
 		}
