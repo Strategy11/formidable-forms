@@ -436,8 +436,7 @@ class FrmStyle {
 
 		ob_start();
 		include $filename;
-	//	$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
-		$css .= ob_get_contents();
+		$css .= preg_replace( '/\/\*(.|\s)*?\*\//', '', str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', ob_get_contents() ) );
 		ob_end_clean();
 
 		return FrmStylesController::replace_relative_url( $css );
