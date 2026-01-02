@@ -1105,6 +1105,7 @@ table.form_results.with_frm_style tr.frm_odd,
 }
 <?php } ?>
 
+<?php if ( $pro_is_installed ) { ?>
 .frm_toggle_container{
 	/* Prevent the slide and bounce */
 	border:1px solid transparent;
@@ -1123,6 +1124,7 @@ table.form_results.with_frm_style tr.frm_odd,
 .frm_toggle_container .frm_month_listing{
 	margin-left:40px;
 }
+<?php } ?>
 
 #frm_loading{
 	display:none;
