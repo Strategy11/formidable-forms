@@ -1063,6 +1063,7 @@ a.frm_save_draft{
 	background-color:<?php echo esc_html( FrmStylesHelper::adjust_brightness( $defaults['border_color'], 45 ) ); ?>;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 table.form_results.with_frm_style{
 	border-style: solid;
 	border-width: var(--field-border-width)<?php echo esc_html( $important ); ?>;
@@ -1081,6 +1082,7 @@ table.form_results.with_frm_style tr td{
 	border-top-color: var(--border-color)<?php echo esc_html( $important ); ?>;
 <?php } ?>
 }
+<?php } ?>
 
 table.form_results.with_frm_style tr.frm_even,
 .frm-grid .frm_even{
