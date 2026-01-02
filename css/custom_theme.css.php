@@ -668,16 +668,20 @@ legend.frm_hidden{
 	visibility:visible !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_loading_prev .frm_prev_page,
+<?php } ?>
 .with_frm_style .frm_loading_form .frm_button_submit {
 	position: relative;
 	color: transparent !important;
 	text-shadow: none !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_loading_prev .frm_prev_page:hover,
 .with_frm_style .frm_loading_prev .frm_prev_page:active,
 .with_frm_style .frm_loading_prev .frm_prev_page:focus,
+<?php } ?>
 .with_frm_style .frm_loading_form .frm_button_submit:hover,
 .with_frm_style .frm_loading_form .frm_button_submit:active,
 .with_frm_style .frm_loading_form .frm_button_submit:focus {
@@ -687,7 +691,9 @@ legend.frm_hidden{
 	box-shadow: none;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_loading_prev .frm_prev_page::before,
+<?php } ?>
 .with_frm_style .frm_loading_form .frm_button_submit:before {
 	content: '';
 	display: inline-block;
@@ -713,9 +719,11 @@ legend.frm_hidden{
 	gap: 2%;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_submit.frm_flex button.frm_button_submit ~ .frm_prev_page {
 	order: -1;
 }
+<?php } ?>
 
 <?php
 foreach ( $styles as $style ) {
