@@ -740,6 +740,7 @@ a.frm_save_draft{
 	cursor:pointer;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style a.frm_save_draft,
 .with_frm_style a.frm_start_over{
 <?php if ( ! empty( $defaults['font'] ) ) { ?>
@@ -748,6 +749,7 @@ a.frm_save_draft{
 	font-size: var(--submit-font-size);
 	font-weight: var(--submit-weight);
 }
+<?php } ?>
 
 .horizontal_radio .frm_radio{
 	margin:0 5px 0 0;
