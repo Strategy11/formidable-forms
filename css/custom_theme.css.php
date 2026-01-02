@@ -513,12 +513,14 @@ legend.frm_hidden{
 	line-height:normal;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm_catlevel_2,
 .with_frm_style .frm_catlevel_3,
 .with_frm_style .frm_catlevel_4,
 .with_frm_style .frm_catlevel_5{
 	margin-left:18px;
 }
+<?php } ?>
 
 <?php if ( $pro_is_installed ) { ?>
 .with_frm_style .wp-editor-container{
