@@ -1208,9 +1208,11 @@ select.frm_loading_lookup{
 
 <?php readfile( __DIR__ . '/frm_grids.css' ); ?>
 
+<?php if ( $pro_is_installed ) { ?>
 .frm_conf_field.frm_left_container .frm_primary_label{
 	display:none;
 }
+<?php } ?>
 
 <?php if ( $pro_is_installed ) { ?>
 .wp-editor-wrap *,
