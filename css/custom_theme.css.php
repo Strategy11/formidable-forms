@@ -1096,7 +1096,10 @@ table.form_results.with_frm_style tr.frm_odd,
 .frm_color_block.frm_section_heading h3 {
 	border-width: 0 !important;
 }
+<?php } ?>
+<?php } ?>
 
+<?php if ( $pro_is_installed ) { ?>
 .frm_collapse .ui-icon{
 	display:inline-block;
 }
