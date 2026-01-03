@@ -61,6 +61,17 @@ class FrmFieldGridHelper {
 	private $section_is_open = false;
 
 	/**
+	 * Indicates the row was intentionally grouped. Set when the first field in a row has frm_first.
+	 *
+	 * Example: Two fields grouped in one row.
+	 * - First field has frm_first → is_grouped_row = true.
+	 * - Second field has no frm_first, but is_grouped_row is true → stays in the same row.
+	 *
+	 * @var bool
+	 */
+	private $is_grouped_row = false;
+
+	/**
 	 * @param bool $nested
 	 */
 	public function __construct( $nested = false ) {
@@ -155,14 +166,27 @@ class FrmFieldGridHelper {
 	 * @return bool
 	 */
 	private function should_first_close_the_active_field_wrapper() {
-		if ( false === $this->parent_li || ! empty( $this->section_helper ) ) {
+		if ( false === $this->parent_li ) {
+			return false;
+		}
+
+		// Handle sections (dividers) before section_helper check.
+		// section_helper is created in set_field() before this runs.
+		// @see https://github.com/Strategy11/formidable-pro/issues/3820
+		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
+			return $this->current_list_size + $this->section_size > 12 || $this->is_frm_first || ! $this->is_grouped_row;
+		}
+
+		// When a section is open, let section_helper handle field grouping.
+		if ( ! empty( $this->section_helper ) ) {
 			return false;
 		}
 
 		if ( 'end_divider' === $this->field->type ) {
 			return false;
 		}
-		return ! $this->can_support_current_layout() || $this->is_frm_first;
+
+		return ! $this->can_support_current_layout() || $this->is_frm_first || ! $this->is_grouped_row;
 	}
 
 	/**
@@ -173,6 +197,7 @@ class FrmFieldGridHelper {
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
+		$this->is_grouped_row      = $this->is_frm_first;
 	}
 
 	/**
