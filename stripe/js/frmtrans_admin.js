@@ -95,6 +95,11 @@
 			} );
 		};
 
+		if ( ! e.currentTarget.dataset.frmverify ) {
+			handleConfirmedClick( e );
+			return;
+		}
+
 		jQuery( '#frm-confirmed-click' ).one( 'click', handleConfirmedClick );
 
 		// Prevent handleConfirmedClick from triggering when the current modal is closed so that it won't be run by other elements.

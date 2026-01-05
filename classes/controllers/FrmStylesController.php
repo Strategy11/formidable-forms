@@ -871,9 +871,12 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function get_custom_css( $single_style_settings = null ) {
-		// If the single style settings are passed, return the custom CSS from the single style settings.
-		if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
-			return $single_style_settings['single_style_custom_css'];
+		if ( $single_style_settings ) {
+			// If the single style settings are passed, return the custom CSS from the single style settings.
+			if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
+				return $single_style_settings['single_style_custom_css'];
+			}
+			return '';
 		}
 
 		$settings = FrmAppHelper::get_settings();
