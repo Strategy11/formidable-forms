@@ -61,15 +61,22 @@ class FrmFieldGridHelper {
 	private $section_is_open = false;
 
 	/**
-	 * Indicates the row was intentionally grouped. Set when the first field in a row has frm_first.
+	 * True if the first field in the row had frm_first, indicating an intentional group.
 	 *
 	 * Example: Two fields grouped in one row.
-	 * - First field has frm_first → is_grouped_row = true.
-	 * - Second field has no frm_first, but is_grouped_row is true → stays in the same row.
+	 * - First field has frm_first → is_group_start = true.
+	 * - Second field has no frm_first, but is_group_start is true → stays in the same row.
 	 *
 	 * @var bool
 	 */
-	private $is_grouped_row = false;
+	private $is_group_start = false;
+
+	/**
+	 * True if the first field in the row was a section (divider).
+	 *
+	 * @var bool
+	 */
+	private $is_section_start = false;
 
 	/**
 	 * @param bool $nested
@@ -174,7 +181,7 @@ class FrmFieldGridHelper {
 		// section_helper is created in set_field() before this runs.
 		// @see https://github.com/Strategy11/formidable-pro/issues/3820
 		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
-			return $this->current_list_size + $this->section_size > 12 || $this->is_frm_first || ! $this->is_grouped_row;
+			return $this->current_list_size + $this->section_size > 12 || $this->is_frm_first || ! $this->is_group_start;
 		}
 
 		// When a section is open, let section_helper handle field grouping.
@@ -186,7 +193,7 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		return ! $this->can_support_current_layout() || $this->is_frm_first || ! $this->is_grouped_row;
+		return ! $this->can_support_current_layout() || $this->is_frm_first || ( $this->is_section_start && ! $this->is_group_start );
 	}
 
 	/**
@@ -197,7 +204,8 @@ class FrmFieldGridHelper {
 		$this->parent_li           = true;
 		$this->current_list_size   = 0;
 		$this->current_field_count = 0;
-		$this->is_grouped_row      = $this->is_frm_first;
+		$this->is_group_start      = $this->is_frm_first;
+		$this->is_section_start    = 'divider' === $this->field->type;
 	}
 
 	/**
