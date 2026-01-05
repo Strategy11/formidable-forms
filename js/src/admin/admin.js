@@ -329,6 +329,12 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
+		// The confirm button is hidden when showLimitModal is called,
+		// so make sure it is visible every time we open the modal.
+		if ( continueButton ) {
+			continueButton.style.display = 'block';
+		}
+
 		verify = link.getAttribute( 'data-frmverify' );
 		btnClass = verify ? link.getAttribute( 'data-frmverify-btn' ) : '';
 		$confirmMessage = jQuery( '.frm-confirm-msg' );
@@ -900,6 +906,11 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function handleDragStart( event, ui ) {
+		if ( event.target.classList.contains( 'frm_at_limit' ) ) {
+			showLimitModal();
+			return false;
+		}
+
 		dragState.dragging = true;
 
 		const container = postBodyContent;
@@ -1901,12 +1912,28 @@ window.frmAdminBuildJS = function() {
 			return ! draggable.parentElement.querySelector( 'li.frm_field_box:not(.edit_field_type_submit)' );
 		}
 
-		if ( droppable.classList.contains( 'start_divider' ) && ( draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr' ) && droppable.closest( '.repeat_section' ) ) {
-			// Don't allow GDPR fields in repeaters.
-			return false;
+		const droppableIsARepeater = droppable.classList.contains( 'start_divider' ) && null !== droppable.closest( '.repeat_section' );
+		const droppableIsInsideOfARepeater = null !== droppable.closest( '.repeat_section' );
+
+		if ( droppableIsARepeater || droppableIsInsideOfARepeater ) {
+			const isGdpr = draggable.classList.contains( 'edit_field_type_gdpr' ) || draggable.id === 'gdpr';
+			if ( isGdpr ) {
+				return false;
+			}
+
+			/**
+			 * @since x.x
+			 *
+			 * @param {boolean} denyDropInRepeater
+			 * @param {HTMLElement} draggable
+			 */
+			const shouldDenyDropInRepeater = wp.hooks.applyFilters( 'frm_deny_drop_in_repeater', false, draggable );
+			if ( shouldDenyDropInRepeater ) {
+				return false;
+			}
 		}
 
-		if ( ! droppable.classList.contains( 'start_divider' ) ) {
+		if ( ! droppableIsARepeater ) {
 			const $fieldsInRow = getFieldsInRow( jQuery( droppable ) );
 			if ( ! groupCanFitAnotherField( $fieldsInRow, jQuery( draggable ) ) ) {
 				// Field group is full and cannot accept another field.
@@ -2162,7 +2189,15 @@ window.frmAdminBuildJS = function() {
 		const $button = $thisObj.closest( '.frmbutton' );
 		const fieldType = $button.attr( 'id' );
 
+		if ( $button.hasClass( 'frm_at_limit' ) ) {
+			showLimitModal();
+			return false;
+		}
+
 		if ( shouldStopInsertingField( fieldType ) ) {
+			// We do not want to return false here.
+			// Otherwise it causes issues with trying to add a new slider field
+			// when clicking the button.
 			return;
 		}
 
@@ -2202,6 +2237,25 @@ window.frmAdminBuildJS = function() {
 			error: handleInsertFieldError
 		} );
 		return false;
+	}
+
+	function showLimitModal() {
+		const wrapper = document.querySelector( '.frm_wrap' );
+		if ( ! wrapper ) {
+			return;
+		}
+
+		const temporaryAnchor = document.createElement( 'a' );
+		temporaryAnchor.setAttribute( 'data-frmverify', __( 'This field type has reached its limit.', 'formidable' ) );
+
+		wrapper.appendChild( temporaryAnchor );
+		temporaryAnchor.click();
+		wrapper.removeChild( temporaryAnchor );
+
+		const confirmButton = document.getElementById( 'frm-confirmed-click' );
+		if ( confirmButton ) {
+			confirmButton.style.display = 'none';
+		}
 	}
 
 	function handleAddFieldClickResponse( msg ) {
@@ -2799,6 +2853,8 @@ window.frmAdminBuildJS = function() {
 
 		document.getElementById( 'frm-show-fields' ).classList.remove( 'frm-over-droppable' );
 
+		maybeDisableFieldButtonAtLimit( type );
+
 		// Bootstrap 5 uses data-bs-toggle instead of data-toggle, and requires that elements have the dropdown-menu class.
 		field.querySelectorAll( '[data-toggle]' ).forEach( toggle => toggle.setAttribute( 'data-bs-toggle', toggle.getAttribute( 'data-toggle' ) ) );
 		field.querySelectorAll( '.frm-dropdown-menu' ).forEach( dropdownMenu => dropdownMenu.classList.add( 'dropdown-menu' ) );
@@ -2809,6 +2865,19 @@ window.frmAdminBuildJS = function() {
 		addedEvent.frmType = type;
 		addedEvent.frmToggles = toggled;
 		document.dispatchEvent( addedEvent );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} type
+	 * @return {void}
+	 */
+	function maybeDisableFieldButtonAtLimit( type ) {
+		const button = document.getElementById( type );
+		if ( button && button.dataset.limit && countFieldTypeInForm( type ) >= button.dataset.limit ) {
+			button.classList.add( 'frm_at_limit' );
+		}
 	}
 
 	function updateLastRowFieldsOrder( fieldsOrder ) {
@@ -5174,10 +5243,35 @@ window.frmAdminBuildJS = function() {
 				} );
 
 				if ( $thisField.length ) {
+					maybeEnableFieldButtonAtLimit( $thisField.data( 'type' ) );
 					wp.hooks.doAction( 'frm_after_delete_field', $thisField[ 0 ] );
 				}
 			}
 		} );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param {string} type
+	 * @return {void}
+	 */
+	function maybeEnableFieldButtonAtLimit( type ) {
+		const button = document.getElementById( type );
+
+		if ( ! button || ! button.dataset.limit ) {
+			return;
+		}
+
+		// Subtract one because the field has not really been removed from the page yet.
+		const fieldTypeCount = countFieldTypeInForm( type ) - 1;
+		if ( fieldTypeCount < button.dataset.limit ) {
+			button.classList.remove( 'frm_at_limit' );
+		}
+	}
+
+	function countFieldTypeInForm( type ) {
+		return document.getElementById( 'frm-show-fields' ).querySelectorAll( 'li.form-field[data-ftype="' + type + '"]' ).length;
 	}
 
 	function addFieldLogicRow() {
