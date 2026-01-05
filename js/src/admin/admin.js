@@ -2331,12 +2331,9 @@ window.frmAdminBuildJS = function() {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
 		}
 
-		const getLiElement = $fieldObject => {
+		const getSectionField = $fieldObject => {
 			const liElement = $fieldObject.get( 0 ).querySelector( 'ul li[data-ftype="divider"]' );
-			if ( liElement ) {
-				return jQuery( liElement );
-			}
-			return $fieldObject;
+			return liElement ? jQuery( liElement ) : $fieldObject;
 		};
 
 		jQuery.ajax( {
@@ -2358,7 +2355,7 @@ window.frmAdminBuildJS = function() {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
 						replaceWith = msgAsjQueryObject( msg );
-						const newField = getLiElement( replaceWith );
+						const newField = getSectionField( replaceWith );
 
 						jQuery( newRow ).append( newField );
 
@@ -2381,7 +2378,7 @@ window.frmAdminBuildJS = function() {
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					replaceWith = msgAsjQueryObject( msg );
-					const newField = getLiElement( replaceWith );
+					const newField = getSectionField( replaceWith );
 					$field.after( newField );
 					syncLayoutClasses( $field );
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
@@ -2392,7 +2389,7 @@ window.frmAdminBuildJS = function() {
 					}
 				} else {
 					replaceWith = wrapFieldLi( msg );
-					$field.parent().parent().after( getLiElement( replaceWith ) );
+					$field.parent().parent().after( getSectionField( replaceWith ) );
 					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
 					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
