@@ -177,14 +177,12 @@ class FrmFieldGridHelper {
 			return false;
 		}
 
-		// Handle sections (dividers) before section_helper check.
-		// section_helper is created in set_field() before this runs.
+		// Close the current row before a section if it would overflow the grid.
 		// @see https://github.com/Strategy11/formidable-pro/issues/3820
 		if ( 'divider' === $this->field->type && ! $this->section_is_open ) {
 			return $this->current_list_size + $this->section_size > 12 || $this->is_frm_first || ! $this->is_group_start;
 		}
 
-		// When a section is open, let section_helper handle field grouping.
 		if ( ! empty( $this->section_helper ) ) {
 			return false;
 		}
