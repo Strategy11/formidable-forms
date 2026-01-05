@@ -328,6 +328,17 @@ class FrmField {
 			),
 		);
 
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			$fields['coupon'] = array(
+				'name'    => __( 'Coupon', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
+				'addon'   => 'coupons',
+				'section' => 'pricing',
+				'limit'   => 1,
+				'is_new'  => self::field_is_new( 'coupon' ),
+			);
+		}
+
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
 
@@ -349,7 +360,7 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'ranking' => '2024-03-12',
+			'coupon' => '2026-01-13',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
