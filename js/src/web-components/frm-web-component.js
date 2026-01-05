@@ -1,14 +1,14 @@
 export class frmWebComponent extends HTMLElement {
 	constructor() {
 		if ( new.target === frmWebComponent ) {
-			throw new Error('frmWebComponent is an abstract class and cannot be instantiated directly');
+			throw new Error( 'frmWebComponent is an abstract class and cannot be instantiated directly' );
 		}
 		super();
 
 		this.initOptions();
 
 		if ( this.useShadowDom ) {
-			this.attachShadow({ mode: 'open' });
+			this.attachShadow( { mode: 'open' } );
 		}
 	}
 
@@ -42,11 +42,12 @@ export class frmWebComponent extends HTMLElement {
 
 		this.whenElementBecomesVisible().then( () => {
 			this.afterViewInit( this );
-		});
+		} );
 	}
 
 	/**
 	 * Waits for the element to become visible in the viewport.
+	 *
 	 * @return {Promise} - A promise that resolves when the element is visible.
 	 */
 	whenElementBecomesVisible() {
@@ -66,17 +67,18 @@ export class frmWebComponent extends HTMLElement {
 						observer.disconnect();
 						requestAnimationFrame( () => resolve() );
 					}
-				});
+				} );
 			}, { threshold: 0.1 } );
 
 			const element = this.useShadowDom ? this.shadowRoot : this;
 
 			observer.observe( element );
-		});
+		} );
 	}
 
 	/**
 	 * After the view is initialized and the element/wrapper is visible in the viewport.
+	 *
 	 * @param {Element} wrapper - The wrapper element.
 	 */
 	afterViewInit( wrapper ) {

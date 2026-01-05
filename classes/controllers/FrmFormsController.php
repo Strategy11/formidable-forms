@@ -1713,6 +1713,7 @@ class FrmFormsController {
 	/**
 	 * @param int|string $form_id
 	 * @param string     $class
+	 * @param mixed      $template_path
 	 *
 	 * @return void
 	 */

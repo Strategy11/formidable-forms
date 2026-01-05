@@ -1924,7 +1924,7 @@ window.frmAdminBuildJS = function() {
 			/**
 			 * @since x.x
 			 *
-			 * @param {boolean} denyDropInRepeater
+			 * @param {boolean}     denyDropInRepeater
 			 * @param {HTMLElement} draggable
 			 */
 			const shouldDenyDropInRepeater = wp.hooks.applyFilters( 'frm_deny_drop_in_repeater', false, draggable );
