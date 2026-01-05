@@ -90,7 +90,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function maybe_fix_xml( &$xml_string ) {
-		if ( '<?xml' !== substr( $xml_string, 0, 5 ) ) {
+		if ( ! str_starts_with( $xml_string, '<?xml' ) ) {
 			// Some XML files have may have unexpected characters at the start.
 			$xml_string = substr( $xml_string, strpos( $xml_string, '<?xml' ) );
 		}
@@ -100,7 +100,7 @@ class FrmXMLHelper {
 		$channel_start_position     = strpos( $xml_string, '<channel>' );
 		$content_before_channel_tag = substr( $xml_string, 0, $channel_start_position );
 
-		if ( 0 !== strpos( $content_before_channel_tag, '<meta name="generator" ' ) ) {
+		if ( ! str_starts_with( $content_before_channel_tag, '<meta name="generator" ' ) ) {
 			$content_before_channel_tag = preg_replace(
 				'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
 				'',
@@ -1059,7 +1059,7 @@ class FrmXMLHelper {
 				continue;
 			}
 
-			if ( false !== strpos( $post['post_content'], '[display-frm-data' ) || false !== strpos( $post['post_content'], '[formidable' ) ) {
+			if ( str_contains( $post['post_content'], '[display-frm-data' ) || str_contains( $post['post_content'], '[formidable' ) ) {
 				$posts_with_shortcodes[ $post_id ] = $post;
 			}
 
@@ -1148,7 +1148,7 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	private static function switch_form_ids( $string, $form_ids ) {
-		if ( false === strpos( $string, '[formidable' ) ) {
+		if ( ! str_contains( $string, '[formidable' ) ) {
 			// Skip string replacing if there are no form shortcodes in string.
 			return $string;
 		}
@@ -1206,7 +1206,7 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	private static function switch_view_ids( $string, $view_ids ) {
-		if ( false === strpos( $string, '[display-frm-data' ) ) {
+		if ( ! str_contains( $string, '[display-frm-data' ) ) {
 			// Skip string replacing if there are no view shortcodes in string.
 			return $string;
 		}
@@ -1787,7 +1787,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function add_image_src_to_image_options( $field ) {
-		if ( empty( $field->options ) || false === strpos( $field->options, 'image' ) ) {
+		if ( empty( $field->options ) || ! str_contains( $field->options, 'image' ) ) {
 			return;
 		}
 

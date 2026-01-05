@@ -296,7 +296,7 @@ class FrmFieldName extends FrmFieldCombo {
 		?>
 		<div class="frm_warning_style">
 			<?php
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) );
 			echo ' ';
 			esc_html_e( 'Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like "First Name" instead of "First".', 'formidable' );
 			?>

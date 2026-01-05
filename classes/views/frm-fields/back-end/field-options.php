@@ -36,7 +36,7 @@ if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper
 	?>
 	<div class="frm6 frm_form_field frm_add_opt_container">
 		<a href="javascript:void(0);" data-opttype="single" class="frm-h-stack frm_cb_button frm_add_opt frm6 frm_form_field frm-add-option-legacy" id="frm_add_opt_<?php echo esc_attr( $args['field']['id'] ); ?>">
-			<span><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_plus1_icon frm_add_tag frm_svg13' ); ?></span>
+			<span><?php FrmAppHelper::icon_by_class( 'frmfont frm_plus1_icon frm_add_tag frm_svg13' ); ?></span>
 			<span><?php echo esc_html( $this->get_add_option_string() ); ?></span>
 		</a>
 	</div>

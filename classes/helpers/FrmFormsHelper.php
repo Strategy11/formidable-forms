@@ -266,7 +266,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
-		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frm_icon_font frm_pencil_icon';
+		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frmfont frm_pencil_icon';
 	}
 
 	/**
@@ -306,7 +306,7 @@ class FrmFormsHelper {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
 
 		// Only autop if the message includes line breaks.
-		$autop = strpos( $message, "\n" ) !== false;
+		$autop = str_contains( $message, "\n" );
 
 		/**
 		 * Filters whether to autop the success message.
@@ -795,7 +795,7 @@ BEFORE_HTML;
 		if ( ! is_array( $field ) ) {
 			$field = array(
 				'name' => $field,
-				'icon' => 'frm_icon_font frm_pencil_icon',
+				'icon' => 'frmfont frm_pencil_icon',
 			);
 		}
 	}
@@ -1040,11 +1040,11 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
-		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
 			// not missing class, avoid adding it twice.
 			return false;
 		}
-		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
+		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**
@@ -1179,7 +1179,7 @@ BEFORE_HTML;
 		$line_break_first = $args['show_img'];
 
 		foreach ( $args['errors'] as $error_key => $error ) {
-			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || str_starts_with( $error_key, 'field' ) ) ) {
 				continue;
 			}
 
@@ -1249,13 +1249,13 @@ BEFORE_HTML;
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Create Form from Template', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			}
 
@@ -1420,7 +1420,7 @@ BEFORE_HTML;
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -1431,7 +1431,7 @@ BEFORE_HTML;
 				'short'   => __( 'Delete', 'formidable' ),
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_delete_icon',
+				'icon'    => 'frmfont frm_delete_icon',
 				'data'    => array(
 					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -1954,7 +1954,7 @@ BEFORE_HTML;
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
-		if ( false === strpos( $url, '[' ) ) {
+		if ( ! str_contains( $url, '[' ) ) {
 			// Do nothing if no shortcodes are detected.
 			return $url;
 		}
@@ -1984,7 +1984,7 @@ BEFORE_HTML;
 				continue;
 			}
 
-			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
+			if ( str_contains( $options, 'sanitize_url=' ) || str_contains( $options, 'sanitize=' ) ) {
 				// A sanitize option is already set so leave it alone.
 				continue;
 			}
@@ -2108,11 +2108,11 @@ BEFORE_HTML;
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+		if ( str_contains( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
 			return true;
 		}
 
-		if ( false !== strpos( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
+		if ( str_contains( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
 			return true;
 		}
 
@@ -2132,7 +2132,7 @@ BEFORE_HTML;
 
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+		if ( str_contains( $url, '/wp-json/frm/v2/forms/' ) ) {
 			// Prevent the honeypot from appearing for an API loaded form.
 			// This is to prevent conflicts where the script is not working.
 			return true;
@@ -2147,28 +2147,6 @@ BEFORE_HTML;
 		}
 
 		return false;
-	}
-
-	/**
-	 * @since 3.0
-	 * @deprecated 6.11
-	 *
-	 * @param array $atts
-	 *
-	 * @return void
-	 */
-	public static function actions_dropdown( $atts ) {
-		_deprecated_function( __METHOD__, '6.11' );
-
-		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			return;
-		}
-
-		$status     = $atts['status'];
-		$form_id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
-		$trash_link = self::delete_trash_info( $form_id, $status );
-		$links      = self::get_action_links( $form_id, $status );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
 	}
 
 	/**

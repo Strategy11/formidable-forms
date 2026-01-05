@@ -141,7 +141,7 @@ class FrmStyle {
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
 
-					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
+					if ( $color_val !== '' && str_contains( $color_val, 'rgb' ) ) {
 						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -287,7 +287,7 @@ class FrmStyle {
 		$characters_to_remove = array( '{', '}', ';', '[', ']' );
 
 		// RGB is handled instead in self::maybe_sanitize_rgba_value.
-		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+		if ( ! str_starts_with( $setting, 'rgb' ) ) {
 			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
 		}
 
@@ -338,7 +338,7 @@ class FrmStyle {
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
 			$output = rtrim( $output, '()' );
 
-			if ( false !== strpos( $output, '(' ) ) {
+			if ( str_contains( $output, '(' ) ) {
 				$output .= ')';
 			}
 		}
@@ -353,7 +353,7 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
-		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+		if ( str_starts_with( trim( $setting, '()' ), 'calc' ) ) {
 			// Support calc() sizes. We do not want to remove all braces when calc is used.
 			return false;
 		}
@@ -380,7 +380,7 @@ class FrmStyle {
 	 */
 	private function is_color( $setting ) {
 		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
+		return str_contains( $setting, 'color' ) || in_array( $setting, $extra_colors, true );
 	}
 
 	/**
