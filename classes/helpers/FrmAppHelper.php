@@ -4607,7 +4607,12 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
+
+		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
+			return true;
+		}
+
+		return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
 	}
 
 	/**
