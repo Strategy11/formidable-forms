@@ -187,8 +187,8 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function replace_default_message( $message, $atts ) {
-		if ( strpos( $message, '[default-message' ) === false &&
-			strpos( $message, '[default_message' ) === false &&
+		if ( ! str_contains( $message, '[default-message' ) &&
+			! str_contains( $message, '[default_message' ) &&
 			! empty( $message ) ) {
 			return $message;
 		}
@@ -202,11 +202,7 @@ class FrmEntriesHelper {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 
-			if ( ! empty( $add_atts ) ) {
-				$this_atts = array_merge( $atts, $add_atts );
-			} else {
-				$this_atts = $atts;
-			}
+			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
 
 			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
 
@@ -250,7 +246,7 @@ class FrmEntriesHelper {
 		}
 
 		// This is an embedded form.
-		if ( strpos( $atts['embedded_field_id'], 'form' ) === 0 ) {
+		if ( str_starts_with( $atts['embedded_field_id'], 'form' ) ) {
 			// This is a repeating section.
 			$child_entries = FrmEntry::getAll( array( 'it.parent_item_id' => $entry->id ), '', '', true );
 		} else {
@@ -285,7 +281,7 @@ class FrmEntriesHelper {
 
 		$sep = ', ';
 
-		if ( strpos( implode( ' ', $field_value ), '<img' ) !== false ) {
+		if ( str_contains( implode( ' ', $field_value ), '<img' ) ) {
 			$sep = '<br/>';
 		}
 
@@ -430,7 +426,7 @@ class FrmEntriesHelper {
 			$field_id  = $field['id'];
 			$field_obj = FrmFieldFactory::get_field_object( $field['id'] );
 		} elseif ( is_object( $field ) ) {
-			$field_id  = $field->id;
+			$field_id = $field->id;
 
 			if ( 'hidden' === $field->type && ! empty( $field->field_options['original_type'] ) ) {
 				$field_obj = FrmFieldFactory::get_field_type( $field->field_options['original_type'], $field );
@@ -666,12 +662,12 @@ class FrmEntriesHelper {
 		);
 
 		// Next get the name of the useragent yes separately and for good reason.
-		if ( strpos( $u_agent, 'MSIE' ) !== false && strpos( $u_agent, 'Opera' ) === false ) {
+		if ( str_contains( $u_agent, 'MSIE' ) && ! str_contains( $u_agent, 'Opera' ) ) {
 			$bname = 'Internet Explorer';
 			$ub    = 'MSIE';
 		} else {
 			foreach ( $agent_options as $agent_key => $agent_name ) {
-				if ( strpos( $u_agent, $agent_key ) !== false ) {
+				if ( str_contains( $u_agent, $agent_key ) ) {
 					$bname = $agent_name;
 					$ub    = $agent_key;
 					break;
@@ -691,11 +687,7 @@ class FrmEntriesHelper {
 		if ( $i > 1 ) {
 			// We will have two since we are not using 'other' argument yet
 			// see if version is before or after the name.
-			if ( strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ) {
-				$version = $matches['version'][0];
-			} else {
-				$version = $matches['version'][1];
-			}
+			$version = strripos( $u_agent, 'Version' ) < strripos( $u_agent, $ub ) ? $matches['version'][0] : $matches['version'][1];
 		} elseif ( $i === 1 ) {
 			$version = $matches['version'][0];
 		} else {
@@ -765,7 +757,7 @@ class FrmEntriesHelper {
 			$actions['frm_view'] = array(
 				'url'   => admin_url( 'admin.php?page=formidable-entries&frm_action=show&id=' . $id . '&form=' . $entry->form_id ),
 				'label' => __( 'View Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_save_icon',
+				'icon'  => 'frmfont frm_save_icon',
 			);
 		}
 
@@ -773,7 +765,7 @@ class FrmEntriesHelper {
 			$actions['frm_delete'] = array(
 				'url'   => wp_nonce_url( admin_url( 'admin.php?page=formidable-entries&frm_action=destroy&id=' . $id . '&form=' . $entry->form_id ) ),
 				'label' => __( 'Delete Entry', 'formidable' ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Permanently delete this entry?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -788,7 +780,7 @@ class FrmEntriesHelper {
 				'data'  => array(
 					'frmprint' => '1',
 				),
-				'icon'  => 'frm_icon_font frm_printer_icon',
+				'icon'  => 'frmfont frm_printer_icon',
 			);
 		}
 
@@ -801,7 +793,7 @@ class FrmEntriesHelper {
 				'medium'  => 'resend-email',
 				'content' => 'entry',
 			),
-			'icon'  => 'frm_icon_font frm_email_icon',
+			'icon'  => 'frmfont frm_email_icon',
 		);
 
 		if ( ! function_exists( 'frm_pdfs_autoloader' ) ) {
@@ -810,7 +802,7 @@ class FrmEntriesHelper {
 				'label' => __( 'Download as PDF', 'formidable' ),
 				'class' => 'frm_noallow',
 				'data'  => self::get_pdfs_upgrade_link_data( 'download-pdf-entry' ),
-				'icon'  => 'frm_icon_font frm_download_icon',
+				'icon'  => 'frmfont frm_download_icon',
 			);
 		}
 
@@ -823,7 +815,7 @@ class FrmEntriesHelper {
 				'medium'  => 'edit-entries',
 				'content' => 'entry',
 			),
-			'icon'  => 'frm_icon_font frm_pencil_icon',
+			'icon'  => 'frmfont frm_pencil_icon',
 		);
 
 		return apply_filters( 'frm_entry_actions_dropdown', $actions, compact( 'id', 'entry' ) );
@@ -872,7 +864,7 @@ class FrmEntriesHelper {
 		foreach ( $metas_without_a_field as $meta ) {
 			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
 				echo '<div class="misc-pub-section">';
-				FrmAppHelper::icon_by_class( 'frm_icon_font frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+				FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
 				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
 				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
 				echo '</div>';
@@ -953,9 +945,7 @@ class FrmEntriesHelper {
 			$extended_entry_status = array();
 		}
 
-		$existing_entry_statuses = array_replace( $default_entry_statuses, $extended_entry_status );
-
-		return $existing_entry_statuses;
+		return array_replace( $default_entry_statuses, $extended_entry_status );
 	}
 
 	/**

@@ -110,7 +110,7 @@ class FrmSquareLiteAppController {
 	private static function get_amount_value_for_verification( $action ) {
 		$amount = $action->post_content['amount'];
 
-		if ( strpos( $amount, '[' ) === false ) {
+		if ( ! str_contains( $amount, '[' ) ) {
 			return $amount;
 		}
 
@@ -121,10 +121,9 @@ class FrmSquareLiteAppController {
 		}
 
 		// Update amount based on field shortcodes.
-		$entry  = self::generate_false_entry();
-		$amount = FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+		$entry = self::generate_false_entry();
 
-		return $amount;
+		return FrmSquareLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 	}
 
 	/**

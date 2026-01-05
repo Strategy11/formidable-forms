@@ -202,8 +202,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLitePayment();
-		$payment_id  = $frm_payment->create( $new_values );
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
@@ -326,9 +325,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLiteSubscription();
-		$payment_id  = $frm_payment->create( $new_values );
 
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
@@ -411,7 +409,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 
@@ -547,7 +545,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$square_vars     = array(
+		$square_vars = array(
 			'formId'     => $form_id,
 			'nonce'      => wp_create_nonce( 'frm_square_ajax' ),
 			'ajax'       => esc_url_raw( FrmAppHelper::get_ajax_url() ),
@@ -632,7 +630,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function prepare_font_family_setting( $font ) {
-		if ( false === strpos( $font, ',' ) ) {
+		if ( ! str_contains( $font, ',' ) ) {
 			return $font;
 		}
 

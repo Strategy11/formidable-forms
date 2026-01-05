@@ -36,9 +36,9 @@
 		card.configure( { style: cardStyle } );
 
 		// Add event listener to track when the card form is valid
-		card.addEventListener( 'focusClassRemoved', e => {
-			const field = e.detail.field;
-			const value = e.detail.currentState.isCompletelyValid;
+		card.addEventListener( 'focusClassRemoved', event => {
+			const field = event.detail.field;
+			const value = event.detail.currentState.isCompletelyValid;
 			cardFields[ field ] = value;
 
 			// Check if all fields are valid
@@ -51,6 +51,23 @@
 				} else {
 					disableSubmit( thisForm );
 				}
+			}
+		} );
+
+		/**
+		 * Enable the submit button when postal code is completed.
+		 * This is the best we can do for now as Square does not provide
+		 * any way of knowing that the credit card was auto-filled.
+		 */
+		card.addEventListener( 'postalCodeChanged', function( event ) {
+			if ( event.detail.currentState.isCompletelyValid ) {
+				cardFields.cardNumber = true;
+				cardFields.expirationDate = true;
+				cardFields.cvv = true;
+				cardFields.postalCode = true;
+				enableSubmit();
+			} else {
+				disableSubmit();
 			}
 		} );
 

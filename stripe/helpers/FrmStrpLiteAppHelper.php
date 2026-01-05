@@ -138,7 +138,7 @@ class FrmStrpLiteAppHelper {
 	public static function not_connected_warning() {
 		?>
 		<div class="frm_warning_style frm-with-icon">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 			<span>
 				<?php
 				/* translators: %1$s: Link HTML, %2$s: End link */

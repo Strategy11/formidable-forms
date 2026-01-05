@@ -21,6 +21,10 @@ $rules  = array(
 	'elseif'                               => true,
 	'phpdoc_add_missing_param_annotation'  => true,
 	'no_extra_blank_lines'                 => true,
+	'no_trailing_whitespace'               => true,
+	'no_whitespace_in_blank_line'          => true,
+	'ternary_to_null_coalescing'           => true,
+	'no_null_property_initialization'      => true,
 	'blank_line_before_statement'          => array(
 		'statements' => array(
 			'try',

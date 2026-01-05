@@ -146,7 +146,7 @@ class FrmApplicationTemplate {
 	 * @return bool
 	 */
 	private static function category_matches_a_license_type( $category ) {
-		if ( false !== strpos( $category, '+Views' ) ) {
+		if ( str_contains( $category, '+Views' ) ) {
 			return true;
 		}
 		return in_array( $category, FrmFormsHelper::get_license_types(), true );
@@ -184,7 +184,7 @@ class FrmApplicationTemplate {
 					array_filter(
 						$value,
 						function ( $category ) {
-							return false === strpos( $category, '+Views' );
+							return ! str_contains( $category, '+Views' );
 						}
 					)
 				);
@@ -195,7 +195,7 @@ class FrmApplicationTemplate {
 					$key = 'formCount';
 				}
 
-				if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
+				if ( 'name' === $key && str_ends_with( $value, ' Template' ) ) {
 					// Strip off the " Template" text at the end of the name as it takes up space.
 					$value = substr( $value, 0, -9 );
 				}
@@ -263,12 +263,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
-
-		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
-			return false;
-		}
-
-		return true;
+		return FrmFormsHelper::plan_is_allowed( $args );
 	}
 
 	/**

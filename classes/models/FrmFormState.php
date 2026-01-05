@@ -183,8 +183,7 @@ class FrmFormState {
 		$secret           = self::get_encryption_secret();
 		$compressed_state = $this->compressed_state();
 		$json_encoded     = json_encode( $compressed_state );
-		$encrypted        = openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
-		return $encrypted;
+		return openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
 	}
 
 	/**

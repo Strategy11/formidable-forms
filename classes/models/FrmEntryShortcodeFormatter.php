@@ -216,9 +216,8 @@ class FrmEntryShortcodeFormatter {
 	protected function get_table() {
 		$content  = $this->table_generator->generate_table_header();
 		$content .= $this->generate_content_for_all_fields();
-		$content .= $this->table_generator->generate_table_footer();
 
-		return $content;
+		return $content . $this->table_generator->generate_table_footer();
 	}
 
 	/**
@@ -252,9 +251,7 @@ class FrmEntryShortcodeFormatter {
 			return '';
 		}
 
-		$row = $this->generate_two_cell_shortcode_row( $field );
-
-		return $row;
+		return $this->generate_two_cell_shortcode_row( $field );
 	}
 
 	/**
@@ -336,7 +333,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_plain_text_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === true );
+		return $this->format === 'text' && $this->is_plain_text === true;
 	}
 
 	/**
@@ -347,6 +344,6 @@ class FrmEntryShortcodeFormatter {
 	 * @return bool
 	 */
 	protected function is_table_format() {
-		return ( $this->format === 'text' && $this->is_plain_text === false );
+		return $this->format === 'text' && $this->is_plain_text === false;
 	}
 }

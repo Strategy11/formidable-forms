@@ -173,7 +173,7 @@ class FrmFormActionsController {
 		$groups = array(
 			'misc'      => array(
 				'name'    => '',
-				'icon'    => 'frm_icon_font frm_shuffle_icon',
+				'icon'    => 'frmfont frm_shuffle_icon',
 				'actions' => array(
 					'email',
 					'wppost',
@@ -185,7 +185,7 @@ class FrmFormActionsController {
 			),
 			'payment'   => array(
 				'name'    => __( 'eCommerce', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_credit_card_alt_icon',
+				'icon'    => 'frmfont frm_credit_card_alt_icon',
 				'actions' => array(
 					'paypal',
 					'payment',
@@ -193,7 +193,7 @@ class FrmFormActionsController {
 			),
 			'marketing' => array(
 				'name'    => __( 'Email Marketing', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_mail_bulk_icon',
+				'icon'    => 'frmfont frm_mail_bulk_icon',
 				'actions' => array(
 					'mailchimp',
 					'activecampaign',
@@ -206,7 +206,7 @@ class FrmFormActionsController {
 			),
 			'crm'       => array(
 				'name'    => __( 'CRM', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_address_card_icon',
+				'icon'    => 'frmfont frm_address_card_icon',
 				'actions' => self::get_crm_actions(),
 			),
 		);
@@ -422,7 +422,7 @@ class FrmFormActionsController {
 		$documentation_url = 'https://formidableforms.com/knowledgebase/frm_form_action_limit/#kb-increase-limit-of-form-actions';
 
 		echo '<div class="frm_warning_style">';
-		FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon' );
 		echo '&nbsp;';
 		printf(
 			// translators: %s: URL to documentation
@@ -622,7 +622,7 @@ class FrmFormActionsController {
 	 * @param int|string $entry_id
 	 * @param int|string $form_id
 	 * @param array      $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_create_actions( $entry_id, $form_id, $args = array() ) {
@@ -648,7 +648,7 @@ class FrmFormActionsController {
 	 * @param int|string        $entry
 	 * @param string            $type
 	 * @param array             $args
-	 * 
+	 *
 	 * @return void
 	 */
 	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
@@ -793,9 +793,7 @@ class FrmFormActionsController {
 			return $where;
 		}
 
-		$where .= $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
-
-		return $where;
+		return $where . $wpdb->prepare( ' AND post_excerpt = %s ', $frm_vars['action_type'] );
 	}
 
 	/**
