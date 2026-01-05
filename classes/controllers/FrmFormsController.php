@@ -1711,11 +1711,11 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x Added $template_path parameter.
+	 *
 	 * @param int|string $form_id
 	 * @param string     $class
 	 * @param string     $template_path The path to a template file to use instead of the default.
-	 *
-	 * @since x.x Added $template_path parameter.
 	 *
 	 * @return void
 	 */
