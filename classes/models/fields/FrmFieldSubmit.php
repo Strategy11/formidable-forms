@@ -3,6 +3,7 @@
  * Submit field class
  *
  * @since 6.9
+ *
  * @package Formidable
  */
 
@@ -42,13 +43,11 @@ class FrmFieldSubmit extends FrmFieldType {
 	 * @return string
 	 */
 	public function default_html() {
-		$default_html = <<<DEFAULT_HTML
+		return <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	[input]
 </div>
 DEFAULT_HTML;
-
-		return $default_html;
 	}
 
 	/**
@@ -57,7 +56,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'required'       => false,
 			'visibility'     => false,
 			'label_position' => false,
@@ -66,8 +65,6 @@ DEFAULT_HTML;
 			'description'    => false,
 			'logic'          => true,
 		);
-
-		return $settings;
 	}
 
 	/**
@@ -91,10 +88,12 @@ DEFAULT_HTML;
 	 *
 	 * @param array $args           Args.
 	 * @param array $shortcode_atts Shortcode atts.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$form = $args['form'];
+
 		if ( ! FrmForm::show_submit( $form ) ) {
 			return '';
 		}

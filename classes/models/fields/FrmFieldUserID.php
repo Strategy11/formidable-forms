@@ -10,24 +10,28 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'user_id';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_html = false;
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -36,7 +40,6 @@ class FrmFieldUserID extends FrmFieldType {
 	 * @var bool
 	 */
 	protected $array_allowed = false;
-
 
 	/**
 	 * @return string
@@ -54,6 +57,10 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @since 4.03.06
+	 *
+	 * @param array $args Field display arguments.
+	 *
+	 * @return int|string
 	 */
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();
@@ -106,16 +113,10 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	private function prepare_user_info_attribute( $atts ) {
 		if ( isset( $atts['show'] ) ) {
-			if ( $atts['show'] === 'id' ) {
-				$user_info = 'ID';
-			} else {
-				$user_info = $atts['show'];
-			}
-		} else {
-			$user_info = apply_filters( 'frm_user_id_display', 'display_name' );
+			return $atts['show'] === 'id' ? 'ID' : $atts['show'];
 		}
 
-		return $user_info;
+		return apply_filters( 'frm_user_id_display', 'display_name' );
 	}
 
 	/**
@@ -130,6 +131,8 @@ class FrmFieldUserID extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param mixed $value Field value passed by reference.
 	 *
 	 * @return void
 	 */

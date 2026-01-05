@@ -9,10 +9,6 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
 
@@ -22,6 +18,7 @@ class FrmTransLiteListsController {
 
 	/**
 	 * @param array $columns
+	 *
 	 * @return array
 	 */
 	public static function payment_columns( $columns = array() ) {
@@ -71,7 +68,10 @@ class FrmTransLiteListsController {
 		$columns['status']     = esc_html__( 'Status', 'formidable' );
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 		$columns['paysys']     = esc_html__( 'Processor', 'formidable' );
-		$columns['mode']       = esc_html__( 'Mode', 'formidable' );
+
+		if ( 'bulk_delete' !== FrmAppHelper::simple_get( 'action' ) && ! class_exists( 'FrmTransListHelper' ) && class_exists( 'FrmPaymentsListHelper' ) ) {
+			$columns['mode'] = esc_html__( 'Mode', 'formidable' );
+		}
 
 		return $columns;
 	}
@@ -81,6 +81,11 @@ class FrmTransLiteListsController {
 	 * viewing a payment or subscription
 	 *
 	 * @since 6.5
+	 *
+	 * @param bool   $show_screen Whether to show the screen options tab.
+	 * @param object $screen      The current screen.
+	 *
+	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
 		if ( ! in_array( FrmAppHelper::simple_get( 'action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
@@ -90,6 +95,7 @@ class FrmTransLiteListsController {
 		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+
 		if ( $unread_count ) {
 			$menu_name .= '-' . $unread_count;
 		}
@@ -105,9 +111,29 @@ class FrmTransLiteListsController {
 	 * Handle payment/subscription list routing.
 	 *
 	 * @param string $action
+	 *
 	 * @return void
 	 */
 	public static function route( $action ) {
+		if ( 'coupons' === $action ) {
+			FrmAppHelper::permission_check( 'frm_change_settings' );
+
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/coupons.php';
+			return;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $route_handled
+		 * @param string $action
+		 */
+		$route_handled = apply_filters( 'frm_trans_lite_route', false, $action );
+
+		if ( $route_handled ) {
+			return;
+		}
+
 		self::display_list();
 	}
 
@@ -116,6 +142,7 @@ class FrmTransLiteListsController {
 	 */
 	public static function list_page_params() {
 		$values = array();
+
 		foreach ( array(
 			'id'     => '',
 			'paged'  => 1,
@@ -134,6 +161,7 @@ class FrmTransLiteListsController {
 	 * Display a list.
 	 *
 	 * @param array $response
+	 *
 	 * @return void
 	 */
 	public static function display_list( $response = array() ) {
@@ -154,6 +182,7 @@ class FrmTransLiteListsController {
 		$wp_list_table->prepare_items();
 
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
+
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
 			// if the current page is higher than the total pages,
 			// reset it and prepare again to get the right entries.
@@ -170,6 +199,8 @@ class FrmTransLiteListsController {
 	 * @param mixed  $save
 	 * @param string $option
 	 * @param int    $value
+	 *
+	 * @return mixed
 	 */
 	public static function save_per_page( $save, $option, $value ) {
 		if ( $option === 'formidable_page_formidable_payments_per_page' ) {

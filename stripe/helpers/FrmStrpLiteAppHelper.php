@@ -34,6 +34,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * @param string $function
 	 * @param array  ...$params
+	 *
 	 * @return mixed
 	 */
 	public static function call_stripe_helper_class( $function, ...$params ) {
@@ -67,6 +68,7 @@ class FrmStrpLiteAppHelper {
 	 */
 	public static function get_customer_id_meta_name() {
 		$meta_name = '_frmstrp_customer_id';
+
 		if ( 'test' === self::active_mode() ) {
 			$meta_name .= '_test';
 		}
@@ -96,15 +98,20 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * Add education about Stripe fees.
 	 *
+	 * @param string             $medium  Medium identifier for the tip (for example 'tip').
+	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
+	 *
 	 * @return void
 	 */
 	public static function fee_education( $medium = 'tip', $gateway = false ) {
 		$license_type = FrmAddonsController::license_type();
+
 		if ( in_array( $license_type, array( 'elite', 'business' ), true ) ) {
 			return;
 		}
 
 		$classes = 'frm-light-tip show_stripe';
+
 		if ( $gateway && ! array_intersect( (array) $gateway, array( 'stripe' ) ) ) {
 			$classes .= ' frm_hidden';
 		}
@@ -131,7 +138,7 @@ class FrmStrpLiteAppHelper {
 	public static function not_connected_warning() {
 		?>
 		<div class="frm_warning_style frm-with-icon">
-			<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+			<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 			<span>
 				<?php
 				/* translators: %1$s: Link HTML, %2$s: End link */

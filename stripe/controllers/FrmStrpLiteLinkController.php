@@ -50,6 +50,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $intent_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_one_time_stripe_link_return_url( $intent_id, $client_secret ) {
@@ -57,12 +58,14 @@ class FrmStrpLiteLinkController {
 		$frm_payment     = new FrmTransLitePayment();
 
 		$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+
 		if ( ! $payment ) {
 			$redirect_helper->handle_error( 'no_payment_record' );
 			die();
 		}
 
 		$intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
 		if ( ! is_object( $intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -94,6 +97,7 @@ class FrmStrpLiteLinkController {
 		$redirect_helper->set_entry_id( $entry->id );
 
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+
 		if ( ! $action ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
@@ -138,6 +142,7 @@ class FrmStrpLiteLinkController {
 	 * @param object           $intent
 	 * @param stdClass|WP_Post $action
 	 * @param stdClass         $entry
+	 *
 	 * @return void
 	 */
 	private static function maybe_update_intent( $intent, $action, $entry ) {
@@ -163,6 +168,7 @@ class FrmStrpLiteLinkController {
 	 *
 	 * @param string $setup_id
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	private static function handle_recurring_stripe_link_return_url( $setup_id, $client_secret ) {
@@ -177,6 +183,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify the setup intent.
 		$setup_intent = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_setup_intent', $setup_id );
+
 		if ( ! is_object( $setup_intent ) ) {
 			$redirect_helper->handle_error( 'intent_does_not_exist' );
 			die();
@@ -190,6 +197,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify the entry.
 		$entry = FrmEntry::getOne( $payment->item_id );
+
 		if ( ! is_object( $entry ) ) {
 			$redirect_helper->handle_error( 'no_entry_found' );
 			die();
@@ -199,6 +207,7 @@ class FrmStrpLiteLinkController {
 
 		// Verify it's an action with Stripe link enabled.
 		$action = FrmStrpLiteActionsController::get_stripe_link_action( $entry->form_id );
+
 		if ( ! is_object( $action ) ) {
 			$redirect_helper->handle_error( 'no_stripe_link_action' );
 			die();
@@ -206,6 +215,7 @@ class FrmStrpLiteLinkController {
 
 		$customer_id       = $setup_intent->customer;
 		$payment_method_id = self::get_link_payment_method( $setup_intent );
+
 		if ( ! $payment_method_id ) {
 			FrmTransLitePaymentsController::change_payment_status( $payment, 'failed' );
 			$redirect_helper->handle_error( 'did_not_complete' );
@@ -237,6 +247,7 @@ class FrmStrpLiteLinkController {
 		);
 
 		$trial_end = FrmStrpLiteActionsController::get_trial_end_time( $atts );
+
 		if ( $trial_end ) {
 			$new_charge['trial_end'] = $trial_end;
 		}
@@ -275,6 +286,7 @@ class FrmStrpLiteLinkController {
 			$new_payment_values['status'] = 'pending' === $charge->status ? 'processing' : 'complete';
 
 			$new_payment_values['expire_date'] = '0000-00-00';
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$new_payment_values['expire_date'] = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -295,6 +307,7 @@ class FrmStrpLiteLinkController {
 
 			// Update the next billing date.
 			$next_bill_date = gmdate( 'Y-m-d' );
+
 			foreach ( $subscription->latest_invoice->lines->data as $line ) {
 				$next_bill_date = gmdate( 'Y-m-d', $line->period->end );
 			}
@@ -318,11 +331,13 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param object $setup_intent
+	 *
 	 * @return false|string
 	 */
 	private static function get_link_payment_method( $setup_intent ) {
 		if ( is_object( $setup_intent->latest_attempt ) && ! empty( $setup_intent->latest_attempt->payment_method_details ) ) {
 			$payment_method_details = $setup_intent->latest_attempt->payment_method_details;
+
 			foreach ( array( 'ideal', 'sofort', 'bancontact' ) as $payment_method_type ) {
 				if ( ! empty( $payment_method_details->$payment_method_type ) ) {
 					return $payment_method_details->$payment_method_type->generated_sepa_debit;
@@ -353,6 +368,7 @@ class FrmStrpLiteLinkController {
 	 *     @type string   $amount
 	 *     @type object   $customer
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function create_pending_stripe_link_payment( $atts ) {
@@ -367,7 +383,7 @@ class FrmStrpLiteLinkController {
 			return;
 		}
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 		$entry           = $atts['entry'];
 		$action          = $atts['action'];
 		$amount          = $atts['amount'];
@@ -408,10 +424,12 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return false|string String intent id on success, False if intent is missing or cannot be verified.
 	 */
 	private static function verify_intent( $form_id ) {
 		$client_secrets = FrmAppHelper::get_post_param( 'frmintent' . $form_id, array(), 'sanitize_text_field' );
+
 		if ( ! $client_secrets ) {
 			return false;
 		}
@@ -420,7 +438,7 @@ class FrmStrpLiteLinkController {
 		list( $prefix, $intent_id ) = explode( '_', $client_secret );
 		$intent_id                  = $prefix . '_' . $intent_id;
 
-		$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
 
 		$function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
 		$intent        = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
@@ -439,6 +457,7 @@ class FrmStrpLiteLinkController {
 	 * It is deleted after the redirect happens.
 	 *
 	 * @param int $entry_id
+	 *
 	 * @return void
 	 */
 	private static function add_temporary_referer_meta( $entry_id ) {
@@ -450,6 +469,7 @@ class FrmStrpLiteLinkController {
 			'setup_intent',
 			'setup_intent_client_secret',
 		);
+
 		foreach ( $query_args_to_strip_from_referer as $arg ) {
 			$referer = remove_query_arg( $arg, $referer );
 		}
@@ -464,6 +484,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	public static function add_form_classes( $form ) {
@@ -480,6 +501,7 @@ class FrmStrpLiteLinkController {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param mixed $form
+	 *
 	 * @return mixed
 	 */
 	public static function force_ajax_submit_for_stripe_link( $form ) {

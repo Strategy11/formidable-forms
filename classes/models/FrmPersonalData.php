@@ -5,8 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmPersonalData {
 
+	/**
+	 * @var int
+	 */
 	private $limit = 200;
 
+	/**
+	 * @var int
+	 */
 	private $page = 1;
 
 	public function __construct() {
@@ -51,6 +57,9 @@ class FrmPersonalData {
 	}
 
 	/**
+	 * @param string $email
+	 * @param int    $page
+	 *
 	 * @return array
 	 */
 	public function export_data( $email, $page = 1 ) {
@@ -62,11 +71,12 @@ class FrmPersonalData {
 		);
 
 		$entries = $this->get_user_entries( $email );
+
 		if ( empty( $entries ) ) {
 			return $data_to_export;
 		}
 
-		foreach ( (array) $entries as $entry ) {
+		foreach ( $entries as $entry ) {
 			$data_to_export['data'][] = array(
 				'group_id'    => 'formidable',
 				'group_label' => __( 'Form Submissions', 'formidable' ),
@@ -81,6 +91,9 @@ class FrmPersonalData {
 	}
 
 	/**
+	 * @param string $email
+	 * @param int    $page
+	 *
 	 * @return array
 	 */
 	public function erase_data( $email, $page = 1 ) {
@@ -97,13 +110,14 @@ class FrmPersonalData {
 
 		$this->page = absint( $page );
 		$entries    = $this->get_user_entries( $email );
+
 		if ( empty( $entries ) ) {
 			return $data_removed;
 		}
 
 		// TODO: Add an option to anonymize the entries with wp_privacy_anonymize_data( 'email', 'e@e.com' );
 
-		foreach ( (array) $entries as $entry ) {
+		foreach ( $entries as $entry ) {
 			$removed = FrmEntry::destroy( $entry );
 
 			if ( $removed ) {
@@ -124,7 +138,7 @@ class FrmPersonalData {
 	 *
 	 * @param string $email
 	 *
-	 * @return array of entry ids
+	 * @return array Entry ids
 	 */
 	private function get_user_entries( $email ) {
 		$query_args = array(
@@ -145,12 +159,14 @@ class FrmPersonalData {
 
 		$entries_by_user = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
 
-		$entry_ids = array_merge( (array) $entries_by_user, (array) $entries_by_email );
-		$entry_ids = array_unique( array_filter( $entry_ids ) );
+		$entry_ids = array_merge( $entries_by_user, $entries_by_email );
 
-		return $entry_ids;
+		return array_unique( array_filter( $entry_ids ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
 
@@ -166,6 +182,7 @@ class FrmPersonalData {
 		$entry = FrmEntry::getOne( $entry, true );
 
 		$entry_data = array();
+
 		foreach ( $entry->metas as $field_id => $meta ) {
 			$field = FrmField::getOne( $field_id );
 

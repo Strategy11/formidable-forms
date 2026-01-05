@@ -26,6 +26,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public static function maybe_init( $form_id ) {
 		$antispam = new self( $form_id );
+
 		if ( $antispam->run_antispam() ) {
 			$antispam->init();
 		}
@@ -55,11 +56,7 @@ class FrmAntiSpam extends FrmValidate {
 	private function get( $current = true ) {
 		// If $current was not passed, or it is true, we use the current timestamp.
 		// If $current was passed in as a string, we'll use that passed in timestamp.
-		if ( $current !== true ) {
-			$time = $current;
-		} else {
-			$time = time();
-		}
+		$time = $current !== true ? $current : time();
 
 		// Format the timestamp to be less exact, as we want to deal in days.
 		// June 19th, 2020 would get formatted as: 1906202017125.
@@ -72,6 +69,9 @@ class FrmAntiSpam extends FrmValidate {
 		return $form_token_string;
 	}
 
+	/**
+	 * @return string
+	 */
 	private function get_antispam_secret_key() {
 		$secret_key = get_option( 'frm_antispam_secret_key' );
 
@@ -171,8 +171,7 @@ class FrmAntiSpam extends FrmValidate {
 	 * @return string
 	 */
 	public function add_token_to_form( $attributes ) {
-		$attributes .= ' data-token="' . esc_attr( $this->get() ) . '"';
-		return $attributes;
+		return $attributes . ( ' data-token="' . esc_attr( $this->get() ) . '"' );
 	}
 
 	/**
@@ -182,6 +181,7 @@ class FrmAntiSpam extends FrmValidate {
 	 */
 	public static function maybe_echo_token( $form_id ) {
 		$antispam = new self( $form_id );
+
 		if ( $antispam->run_antispam() ) {
 			echo 'data-token="' . esc_attr( $antispam->get() ) . '"';
 		}

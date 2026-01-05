@@ -12,7 +12,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 * @return array
 	 */
 	public function get_defaults() {
-		$values = array(
+		return array(
 			'receipt_id'  => array(
 				'sanitize' => 'sanitize_text_field',
 				'default'  => '',
@@ -66,7 +66,6 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 				'default'  => null,
 			),
 		);
-		return $values;
 	}
 
 	/**
@@ -76,6 +75,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return array            Contains `count` and `total`.
 	 */
 	public function get_payments_stats( $from_date = null, $to_date = null ) {
@@ -89,9 +89,11 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 		}
 
 		$where = array();
+
 		if ( null !== $from_date ) {
 			$where['created_at >'] = $from_date;
 		}
+
 		if ( null !== $to_date ) {
 			$where['created_at <'] = $to_date . ' 23:59:59';
 		}
@@ -126,10 +128,12 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	 * @since 6.7
 	 *
 	 * @param object[] $payments Array of payment objects.
+	 *
 	 * @return array Return array of total amount for each currency.
 	 */
 	private function get_payment_total_data( $payments ) {
 		$data = array();
+
 		foreach ( $payments as $payment ) {
 			list( $amount, $currency ) = FrmTransLiteAppHelper::get_amount_and_currency_from_payment( $payment );
 

@@ -10,12 +10,14 @@ class FrmFieldRadio extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'radio';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -24,6 +26,7 @@ class FrmFieldRadio extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.06.01
 	 */
 	protected $has_for_label = false;
@@ -33,6 +36,9 @@ class FrmFieldRadio extends FrmFieldType {
 	 */
 	protected $array_allowed = true;
 
+	/**
+	 * @return string
+	 */
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}
@@ -54,6 +60,9 @@ class FrmFieldRadio extends FrmFieldType {
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -90,6 +99,8 @@ class FrmFieldRadio extends FrmFieldType {
 	/**
 	 * @since 4.06
 	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	protected function show_priority_field_choices( $args = array() ) {
@@ -114,7 +125,7 @@ class FrmFieldRadio extends FrmFieldType {
 	 * Unset aria-invalid for radio buttons because it's not valid for radio buttons.
 	 * Instead aria-invalid is added to the radiogroup parent element.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $shortcode_atts
 	 * @param array $args

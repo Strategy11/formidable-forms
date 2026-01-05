@@ -10,12 +10,14 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'html';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_input = false;
@@ -43,11 +45,17 @@ class FrmFieldHTML extends FrmFieldType {
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param array  $args
+	 * @param string $html
+	 *
+	 * @return string
 	 */
 	protected function after_replace_html_shortcodes( $args, $html ) {
 		FrmFieldsHelper::run_wpautop( array( 'wpautop' => true ), $html );
 		$pre_filter = $html;
 		$html       = apply_filters( 'frm_get_default_value', $html, (object) $this->field, false );
+
 		if ( $pre_filter === $html ) {
 			$html = do_shortcode( $html );
 		}
@@ -77,6 +85,7 @@ class FrmFieldHTML extends FrmFieldType {
 	 * @since 6.8.3
 	 *
 	 * @param array $atts
+	 *
 	 * @return bool
 	 */
 	protected function should_strip_most_html_before_preparing_display_value( $atts ) {

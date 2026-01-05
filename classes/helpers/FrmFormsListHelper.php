@@ -4,6 +4,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class FrmFormsListHelper extends FrmListHelper {
+
+	/**
+	 * @var string
+	 */
 	public $status = '';
 
 	public $total_items = 0;
@@ -23,7 +27,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	public function prepare_items() {
-		global $wpdb, $per_page, $mode;
+		global $per_page, $mode;
 
 		$page     = $this->get_pagenum();
 		$per_page = $this->get_items_per_page( 'formidable_page_formidable_per_page' );
@@ -49,7 +53,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		$start   = self::get_param(
+		$start = self::get_param(
 			array(
 				'param'   => 'start',
 				'default' => ( $page - 1 ) * $per_page,
@@ -83,9 +87,11 @@ class FrmFormsListHelper extends FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
+
 		if ( $s != '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
+
 			foreach ( $search_terms as $term ) {
 				$s_query[] = array(
 					'or'               => true,
@@ -151,6 +157,8 @@ class FrmFormsListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
@@ -194,11 +202,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $statuses as $status => $name ) {
 
-			if ( $status == $form_type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status == $form_type ? ' class="current"' : '';
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
@@ -213,6 +217,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function pagination( $which ) {
@@ -228,10 +233,11 @@ class FrmFormsListHelper extends FrmListHelper {
 	/**
 	 * @param stdClass $item
 	 * @param string   $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
-		global $frm_vars, $mode;
+		global $mode;
 
 		// Set up the hover actions for this user
 		$actions   = array();
@@ -256,6 +262,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		list( $columns, $hidden ) = $this->get_column_info();
 
 		$format = 'Y/m/d';
+
 		if ( 'list' !== $mode ) {
 			$format .= ' \<\b\r \/\> g:i:s a';
 		}
@@ -264,6 +271,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
 
 			$style = '';
+
 			if ( in_array( $column_name, $hidden, true ) ) {
 				$class .= ' frm_hidden';
 			}
@@ -333,6 +341,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_shortcode( $form ) {
@@ -342,8 +351,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		$val  = apply_filters( 'frm_form_list_actions', $val, array( 'form' => $form ) );
 		// Remove the space hard coded in Landing pages.
 		$val = str_replace( '&nbsp;', '', $val );
-		$val = '<div>' . $val . '</div>';
-		return $val;
+		return '<div>' . $val . '</div>';
 	}
 
 	/**
@@ -352,6 +360,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.0
 	 *
 	 * @param stdClass $form
+	 *
 	 * @return string
 	 */
 	protected function column_style( $form ) {
@@ -364,6 +373,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$style = FrmStylesController::get_form_style( $form );
+
 		if ( ! $style ) {
 			// Do a second pass to avoid null values.
 			$frm_style = new FrmStyle( 'default' );
@@ -380,12 +390,13 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @since 6.19
 	 *
 	 * @param stdClass $form Form object.
+	 *
 	 * @return string
 	 */
 	protected function column_views( $form ) {
 		$attributes = array(
 			'href'   => admin_url( 'admin.php?page=formidable-views&form=' . absint( $form->id ) . '&show_nav=1' ),
-			'title'  => __( 'View Form', 'formidable' ),
+			'title'  => __( 'Link to list of all views for this form.', 'formidable' ),
 			'target' => '_blank',
 		);
 
@@ -403,6 +414,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_actions( &$actions, $item, $edit_link ) {
 		$new_actions = FrmFormsHelper::get_action_links( $item->id, $item );
+
 		foreach ( $new_actions as $link => $action ) {
 			$new_actions[ $link ] = FrmFormsHelper::format_link_html( $action, 'short' );
 		}
@@ -431,15 +443,19 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function get_form_name( $item, $actions, $edit_link, $mode = 'list' ) {
 		$form_name = $item->name;
-		if ( is_null( $form_name ) || trim( $form_name ) == '' ) {
+
+		if ( is_null( $form_name ) || trim( $form_name ) === '' ) {
 			$form_name = FrmFormsHelper::get_no_title_text();
 		}
+
 		$form_name = FrmAppHelper::kses( $form_name );
+
 		if ( 'excerpt' != $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
 		}
 
 		$val = '<strong>';
+
 		if ( 'trash' === $this->status ) {
 			$val .= $form_name;
 		} else {
@@ -474,6 +490,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 */
 	private function add_form_description( $item, &$val ) {
 		global $mode;
+
 		if ( 'excerpt' === $mode && ! is_null( $item->description ) ) {
 			$val .= FrmAppHelper::truncate( strip_tags( $item->description ), 50 );
 		}

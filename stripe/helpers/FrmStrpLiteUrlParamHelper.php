@@ -23,6 +23,7 @@ class FrmStrpLiteUrlParamHelper {
 	 * This includes the intent, the entry, and the payments table model instance.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array|false
 	 */
 	public static function get_details_for_form( $form_id ) {
@@ -45,6 +46,7 @@ class FrmStrpLiteUrlParamHelper {
 	 * @since 6.5.1
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return void
 	 */
 	private static function set_details_for_form( $form_id ) {
@@ -86,6 +88,7 @@ class FrmStrpLiteUrlParamHelper {
 		}
 
 		$entry = FrmEntry::getOne( $payment->item_id, true );
+
 		if ( ! is_object( $entry ) || (int) $entry->form_id !== $form_id ) {
 			return;
 		}
@@ -104,6 +107,7 @@ class FrmStrpLiteUrlParamHelper {
 	 *
 	 * @param object $intent
 	 * @param bool   $is_setup_intent
+	 *
 	 * @return bool True if the client secret is set and valid.
 	 */
 	private static function verify_client_secret( $intent, $is_setup_intent ) {

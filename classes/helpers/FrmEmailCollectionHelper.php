@@ -12,20 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * Provides helper functions for email collection and subscription.
  *
- * @since x.x
+ * @since 6.25
  */
 class FrmEmailCollectionHelper {
 
 	/**
 	 * When the user consents to receiving news of updates, subscribe their email to ActiveCampaign.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $email The email address to subscribe to ActiveCampaign.
+	 *
 	 * @return void
 	 */
 	public static function subscribe_to_active_campaign( $email = '' ) {
 		$user = wp_get_current_user();
+
 		if ( ! $email ) {
 			$email = $user->user_email;
 		}
@@ -61,9 +63,10 @@ class FrmEmailCollectionHelper {
 	/**
 	 * Check if an email is fake, test, or local development email.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $email The email address to check.
+	 *
 	 * @return bool True if the email is fake/test, false if valid.
 	 */
 	public static function is_fake_email( $email ) {
@@ -82,7 +85,7 @@ class FrmEmailCollectionHelper {
 		);
 
 		foreach ( $substrings as $substring ) {
-			if ( false !== strpos( $email, $substring ) ) {
+			if ( str_contains( $email, $substring ) ) {
 				return true;
 			}
 		}

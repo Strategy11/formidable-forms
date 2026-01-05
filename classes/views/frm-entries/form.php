@@ -14,6 +14,7 @@ $original_input_shortcode_callback = $shortcode_tags['input'] ?? false;
 remove_shortcode( 'input' );
 
 $only_contain_submit = isset( $values['fields'] ) && FrmSubmitHelper::only_contains_submit_field( $values['fields'] );
+
 if ( empty( $values ) || empty( $values['fields'] ) || $only_contain_submit ) { ?>
 <div class="frm_forms <?php echo esc_attr( FrmFormsHelper::get_form_style_class( $form ) ); ?>" id="frm_form_<?php echo esc_attr( $form->id ); ?>_container">
 	<div class="frm_error_style">
@@ -79,7 +80,6 @@ if ( ! $only_contain_submit ) {
 	FrmFieldsHelper::show_fields( $fields_to_show, $errors, $form, $form_action );
 }//end if
 
-$frm_settings = FrmAppHelper::get_settings();
 if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !== $_GET['action'] ) ) {
 	?>
 	<div class="frm_form_field form-field">
@@ -98,6 +98,7 @@ if ( FrmAppHelper::is_admin() && ( ! isset( $_GET['action'] ) || 'elementor' !==
 do_action( 'frm_entry_form', $form, $form_action, $errors );
 
 global $frm_vars;
+
 // close open section div
 if ( ! empty( $frm_vars['div'] ) ) {
 	echo "</div>\n";
@@ -111,6 +112,7 @@ if ( ! empty( $frm_vars['collapse_div'] ) ) {
 }
 
 echo FrmAppHelper::maybe_kses( FrmFormsHelper::replace_shortcodes( $values['after_html'], $form ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
 if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_current_page( $values ) ) {
 	/**
 	 * @since 5.5.1
@@ -120,7 +122,7 @@ if ( FrmForm::show_submit( $form ) && ! FrmSubmitHelper::has_submit_field_on_cur
 	$copy_values = $values;
 	unset( $copy_values['fields'] );
 
-	if ( isset( $form->options['form_class'] ) && strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
+	if ( isset( $form->options['form_class'] ) && str_contains( $form->options['form_class'], 'frm_inline_success' ) ) {
 		ob_start();
 		ob_implicit_flush( false );
 		FrmFormsHelper::get_custom_submit( $copy_values['submit_html'], $form, $submit, $form_action, $copy_values );

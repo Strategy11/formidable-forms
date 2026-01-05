@@ -24,6 +24,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		parent::__construct( $factory );
 
 		$defaults = FrmFormsHelper::setup_new_vars( false );
+
 		if ( isset( $defaults['submit_conditions'] ) ) {
 			// the array default is causing errors with unit test code
 			unset( $defaults['submit_conditions'] );
@@ -40,6 +41,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$form = FrmForm::create( $args );
 
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
+
 		if ( isset( $args['field_options'] ) ) {
 			$field_values = array_merge( $field_values, $args['field_options'] );
 		}
@@ -107,6 +109,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		);
 
 		$form_fields = $this->get_fields_from_form( $form_id );
+
 		foreach ( $form_fields as $field ) {
 			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
 		}
@@ -115,6 +118,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	/**
 	 * Get all fields in a form
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return array
 	 */
 	public function get_fields_from_form( $form_id ) {
 		return FrmField::get_all_for_form( $form_id );
@@ -122,6 +129,10 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 
 	/**
 	 * When creating an entry, set the correct data formats
+	 *
+	 * @param object $field
+	 *
+	 * @return mixed
 	 */
 	public function set_field_value( $field ) {
 		$value        = rand_str();

@@ -10,12 +10,14 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'email';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -47,8 +49,10 @@ class FrmFieldEmail extends FrmFieldType {
 		if ( ! $args['value'] ) {
 			return array();
 		}
+
 		$errors = array();
-		if ( false !== strpos( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
+
+		if ( str_contains( $args['value'], '.@' ) || ! is_email( $args['value'] ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		}
 		return $errors;
@@ -56,6 +60,8 @@ class FrmFieldEmail extends FrmFieldType {
 
 	/**
 	 * @since 4.0.04
+	 *
+	 * @param array|string $value Email value passed by reference.
 	 *
 	 * @return void
 	 */

@@ -26,6 +26,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	/**
 	 * @param string $stripe_id either a Payment Intent ID (prefixed with pi_) or a Setup Intent ID (prefixed with seti_).
 	 * @param string $client_secret
+	 *
 	 * @return void
 	 */
 	public function __construct( $stripe_id, $client_secret ) {
@@ -38,6 +39,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * This is separate from the constructor as the entry ID isn't known for some error cases.
 	 *
 	 * @param int|string $entry_id
+	 *
 	 * @return void
 	 */
 	public function set_entry_id( $entry_id ) {
@@ -47,6 +49,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	/**
 	 * @param string $error_code
 	 * @param string $charge_id
+	 *
 	 * @return void
 	 */
 	public function handle_error( $error_code, $charge_id = '' ) {
@@ -76,6 +79,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 *
 	 * @param stdClass $entry
 	 * @param string   $charge_id
+	 *
 	 * @return void
 	 */
 	public function handle_success( $entry, $charge_id ) {
@@ -84,7 +88,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		// Let a stripe link success message get handled the same as a 3D secure redirect.
 		// When it shows a message, it adds a &frmstrp= param to the URL.
 		$redirect            = FrmStrpLiteAuth::return_url( compact( 'form', 'entry' ) );
-		$is_message_redirect = false !== strpos( $redirect, 'frmstrp=' );
+		$is_message_redirect = str_contains( $redirect, 'frmstrp=' );
 
 		if ( $this->url_is_external( $redirect ) || ! $is_message_redirect ) {
 			wp_redirect( $redirect );
@@ -93,11 +97,14 @@ class FrmStrpLiteLinkRedirectHelper {
 
 		// $redirect may not include the whole link to the form, breaking the redirect as iDEAL/Sofort have an additional redirect.
 		$referer_url = $this->get_referer_url( $entry->id );
+
 		if ( is_string( $referer_url ) ) {
 			$parts = explode( '?', $redirect, 2 );
+
 			if ( 2 === count( $parts ) ) {
 				$redirect = $parts[1];
 			}
+
 			$redirect = $referer_url . '?' . $redirect;
 		}
 
@@ -112,18 +119,21 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Determine if a redirect URL is going to an external site or not.
 	 *
 	 * @param string $url
+	 *
+	 * @return bool
 	 */
 	private function url_is_external( $url ) {
-		if ( false === strpos( $url, 'http' ) ) {
+		if ( ! str_contains( $url, 'http' ) ) {
 			return false;
 		}
 
 		$home_url = home_url();
 		$parsed   = parse_url( $home_url );
+
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
-		return 0 !== strpos( $url, $home_url );
+		return ! str_starts_with( $url, $home_url );
 	}
 
 	/**
@@ -131,6 +141,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * If it is found, it will also be deleted as it is only required once.
 	 *
 	 * @param int|string $entry_id
+	 *
 	 * @return false|string
 	 */
 	private function get_referer_url( $entry_id ) {
@@ -143,6 +154,7 @@ class FrmStrpLiteLinkRedirectHelper {
 			),
 			'id, meta_value'
 		);
+
 		if ( ! $row ) {
 			return false;
 		}
@@ -162,6 +174,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * Delete the referer meta as we'll no longer need it.
 	 *
 	 * @param int $row_id
+	 *
 	 * @return void
 	 */
 	private static function delete_temporary_referer_meta( $row_id ) {
@@ -175,7 +188,7 @@ class FrmStrpLiteLinkRedirectHelper {
 	 * @param string $url
 	 */
 	private function add_intent_info_and_redirect( $url ) {
-		if ( 0 === strpos( $this->stripe_id, 'pi_' ) ) {
+		if ( str_starts_with( $this->stripe_id, 'pi_' ) ) {
 			$url = add_query_arg( 'payment_intent', $this->stripe_id, $url );
 			$url = add_query_arg( 'payment_intent_client_secret', $this->client_secret, $url );
 		} else {

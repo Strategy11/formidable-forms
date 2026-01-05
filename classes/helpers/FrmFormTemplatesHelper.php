@@ -22,6 +22,8 @@ class FrmFormTemplatesHelper {
 	 * @param array  $template Template data.
 	 * @param string $pricing Upgrade link URL.
 	 * @param string $license_type License type.
+	 *
+	 * @return void
 	 */
 	public static function prepare_template_details( &$template, $pricing, $license_type ) {
 		$template['is_featured']   = ! empty( $template['is_featured'] );
@@ -40,6 +42,7 @@ class FrmFormTemplatesHelper {
 		}
 
 		$template['use_template'] = '#';
+
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
 		} elseif ( ! $template['plan_required'] ) {
@@ -56,6 +59,7 @@ class FrmFormTemplatesHelper {
 	 *
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the API request is expired or not.
+	 *
 	 * @return void
 	 */
 	public static function add_template_attributes( $template, $expired ) {
@@ -87,16 +91,20 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return string
 	 */
 	private static function prepare_single_template_classes( $template ) {
 		$class_names = array( 'frm-card-item' );
+
 		if ( $template['is_featured'] ) {
 			$class_names[] = 'frm-form-templates-featured-item';
 		}
+
 		if ( $template['is_favorite'] ) {
 			$class_names[] = 'frm-form-templates-favorite-item';
 		}
+
 		if ( $template['is_custom'] ) {
 			$class_names[] = 'frm-form-templates-custom-item';
 		}
@@ -112,6 +120,7 @@ class FrmFormTemplatesHelper {
 	 * @param array $template The template data.
 	 * @param bool  $expired Whether the license is expired.
 	 * @param array $attributes The template attributes.
+	 *
 	 * @return void
 	 */
 	private static function prepare_single_template_plan( $template, $expired, &$attributes ) {
@@ -121,6 +130,7 @@ class FrmFormTemplatesHelper {
 
 		$required_plan_slug               = sanitize_title( $template['plan_required'] );
 		$attributes['data-required-plan'] = $expired && 'free' !== $required_plan_slug ? 'renew' : $required_plan_slug;
+
 		if ( 'free' === $required_plan_slug ) {
 			$attributes['data-key'] = $template['key'];
 		}
@@ -134,6 +144,7 @@ class FrmFormTemplatesHelper {
 	 * @since 6.7
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return void
 	 */
 	public static function add_template_link_attributes( $template ) {
@@ -167,6 +178,7 @@ class FrmFormTemplatesHelper {
 	 *    @type string $upgrade_link Upgrade link URL.
 	 *    @type string $renew_link Renew link URL.
 	 * }
+	 *
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta( $args ) {
@@ -208,7 +220,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Echo the get free templates banner.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return void
 	 */
@@ -227,7 +239,7 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Checks if the get free templates banner should be displayed.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return bool
 	 */
@@ -238,9 +250,10 @@ class FrmFormTemplatesHelper {
 	/**
 	 * Checks if a template needs the free plan override.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param array $template The template data.
+	 *
 	 * @return bool
 	 */
 	private static function needs_free_plan( $template ) {

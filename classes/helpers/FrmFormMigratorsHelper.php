@@ -6,18 +6,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmFormMigratorsHelper {
 
 	/**
+	 * @param array      $form
+	 * @param array|null $dismissed
+	 *
 	 * @return bool
 	 */
 	private static function is_dismissed( $form, $dismissed = null ) {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
 		}
-
-		if ( ! empty( $dismissed ) && in_array( $form['class'], $dismissed ) ) {
-			return true;
-		}
-
-		return false;
+		return ! empty( $dismissed ) && in_array( $form['class'], $dismissed );
 	}
 
 	/**
@@ -25,6 +23,7 @@ class FrmFormMigratorsHelper {
 	 */
 	public static function maybe_show_download_link() {
 		$forms = self::import_links();
+
 		foreach ( $forms as $form ) {
 			if ( ! self::is_dismissed( $form ) ) {
 				self::install_banner( $form );
@@ -43,11 +42,13 @@ class FrmFormMigratorsHelper {
 	 */
 	public static function maybe_add_to_inbox() {
 		$forms = self::import_links();
+
 		if ( ! $forms ) {
 			return;
 		}
 
 		$inbox = new FrmInbox();
+
 		foreach ( $forms as $form ) {
 			$inbox->add_message(
 				array(
@@ -71,6 +72,7 @@ class FrmFormMigratorsHelper {
 		}
 
 		$forms = array();
+
 		foreach ( self::importable_forms() as $form ) {
 			if ( class_exists( $form['class'] ) || ! is_plugin_active( $form['plugin'] ) ) {
 				// Either the importer is installed or the source plugin isn't.
@@ -108,6 +110,11 @@ class FrmFormMigratorsHelper {
 		);
 	}
 
+	/**
+	 * @param array $install
+	 *
+	 * @return string|null
+	 */
 	private static function install_banner( $install ) {
 		if ( empty( $install['link'] ) ) {
 			return '';
@@ -125,6 +132,7 @@ class FrmFormMigratorsHelper {
 			<?php self::install_button( $install ); ?>
 		</div>
 		<?php
+		return null;
 	}
 
 	/**
@@ -170,6 +178,7 @@ class FrmFormMigratorsHelper {
 	public static function dismiss_migrator() {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		$dismissed = get_option( 'frm_dismissed' );
+
 		if ( empty( $dismissed ) ) {
 			$dismissed = array();
 		}

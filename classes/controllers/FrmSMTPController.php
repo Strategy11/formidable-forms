@@ -52,6 +52,7 @@ class FrmSMTPController {
 		add_filter( 'wp_mail_smtp_is_white_labeled', '__return_true' );
 
 		$self = new self();
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_frm_smtp_page_check_plugin_status', array( $self, 'ajax_check_plugin_status' ) );
 		}
@@ -74,23 +75,28 @@ class FrmSMTPController {
 	/**
 	 * Customize the upgrade link.
 	 *
+	 * @param string $link
+	 *
 	 * @return string
 	 */
 	public function link( $link ) {
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
-		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
-		return $link;
+		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
 
 	/**
 	 * Don't nag people to install WPForms
 	 *
 	 * @since 4.04.04
+	 *
+	 * @param array $upsell
+	 *
+	 * @return array
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
 		if ( is_array( $upsell ) ) {
 			foreach ( $upsell as $k => $plugin ) {
-				if ( strpos( $plugin['slug'], 'wpforms' ) !== false ) {
+				if ( str_contains( $plugin['slug'], 'wpforms' ) ) {
 					unset( $upsell[ $k ] );
 				}
 			}
@@ -314,6 +320,7 @@ class FrmSMTPController {
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
+
 		if ( ! $is_installed ) {
 			// Return the download url.
 			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );

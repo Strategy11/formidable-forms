@@ -77,6 +77,7 @@ class test_FrmFieldFormHtml extends FrmUnitTest {
 			}
 
 			$expect_radio_group = 'radio' === $field_type['type'] || 'scale' === $field_type['type'] || ( isset( $data_type ) && 'radio' === $data_type );
+
 			if ( $expect_radio_group ) {
 				$this->assertStringContainsString( 'role="radiogroup"', $html );
 			}

@@ -1,0 +1,310 @@
+@import '../admin/base/variables';
+@import '../admin/components/form/toggle-components';
+
+// These files are all required for multiselect dropdowns to look correct.
+@import '../admin/components/form/inputs';
+@import '../admin/components/button/button';
+@import '../admin/components/tooltip';
+@import '../admin/components/select/dropdown';
+@import '../admin/components/select/multiselect';
+@import '../admin/components/select/multiselect-popup';
+@import '../admin/components/list/code-list';
+@import '../admin/components/accordion/accordion';
+@import '../admin/components/search/search-inputs';
+
+// For upsells
+@import '../admin/components/notifications/call-to-action';
+@import '../admin/components/upgrade/upgrade-bar';
+
+// For the warning message when the add-on is not active.
+@import '../admin/components/notifications/_message-styles';
+
+// For the upgrade modal.
+@import '../admin/components/modal/modal';
+@import '../admin/components/modal/dialog';
+@import '../admin/components/icons/circled-icons';
+@import '../admin/utilities/layout/flex';
+@import '../admin/components/modal/info-modals';
+
+// For the spinner
+@import '../admin/components/loading/_loading';
+
+
+.frmsvg {
+    fill:currentColor;
+    width:18px;
+    height:18px;
+    vertical-align:middle
+}
+
+body.frm_preview_page .ui-widget-overlay {
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background: var(--grey-500);
+	opacity: .5;
+	z-index: 2;
+}
+
+#frm_testing_mode {
+    border-radius: 1rem;
+    background-color: #fff;
+    border-color: #0000001a;
+    border-width: 1px;
+    border-style: solid;
+    padding: 16px 20px;
+    margin-bottom: 40px;
+    position: relative;
+
+    h2 {
+        font-size: 18px;
+        font-weight: 600;
+        color: rgba(0, 0, 0, 1);
+        margin-bottom: 0;
+    }
+
+    label {
+        font-size: 12px;
+        font-weight: 600;
+
+        span.frm_toggle_opt {
+            color: var(--grey-800);
+            font-weight: 600;
+        }
+    }
+
+    label:not(:first-child) {
+        margin-left: var(--gap-xs);
+    }
+
+    a.frm_button {
+        margin-left: auto;
+        border-radius: 20px;
+        font-size: 14px;
+    }
+
+    hr {
+        color: unset;
+        background: var(--grey-200);
+        height: 1px;
+        border: none;
+    }
+
+    & > div:nth-of-type(2) {
+        display: flex;
+        align-items: center;
+    }
+
+    .multiselect.dropdown-toggle:after {
+        border: none;
+    }
+
+    // Used for the upsell "speaker" icon.
+    .frmsvg {
+        width: 11px;
+        height: 11px;
+        margin-right: var(--gap-2xs);
+        position: relative;
+        top: 1px;
+    }
+
+    .frm_toggle_block {
+        gap: var(--gap-xs);
+    }
+
+    label:not(.frm_toggle_block) {
+        margin-right: 2px;
+    }
+
+    select {
+        width: auto !important;
+        min-height: auto !important;
+        outline: 0;
+        box-shadow: var(--box-shadow-xs);
+        border-radius: var(--small-radius);
+        border-width: 1px;
+        padding: 5px 14px;
+        border-color: var(--grey-300);
+        color: var(--grey-800);
+        font-size: var(--text-md);
+        margin: 0;
+        line-height: var(--leading);
+        appearance: none;
+        background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath stroke='%2398A2B3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12.708 8.959 10 11.875 7.292 8.96'/%3E%3C/svg%3E") no-repeat right 8px top 50%;
+        padding-right: var(--gap-lg) !important;
+    }
+
+    select:focus {
+        background-color: transparent !important;
+    }
+
+    select,
+    .btn-group button.multiselect.dropdown-toggle {
+        border-radius: var(--medium-radius);
+        font-size: 12px;
+        font-weight: 600;
+        height: 30px;
+    }
+
+    .btn-group button.multiselect.dropdown-toggle {
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+
+    .multiselect-selected-text {
+        position: relative;
+        top: 2px;
+    }
+
+    #frm_testmode_fill_in_empty_form_fields {
+        background-color: var(--primary-500);
+        color: #fff;
+        padding: 8px 18px;
+    }
+
+    .frm_help {
+        vertical-align: top;
+    }
+}
+
+#frm_testing_mode,
+#frm_testmode_disable_required_fields_modal,
+#frm_ai_autofill_error_modal {
+    .frm-button-secondary:hover {
+        border-color: var(--grey-300) !important;
+        color: var(--grey-800);
+        background: var(--grey-50) !important;
+        box-shadow: none !important;
+        outline: none !important;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}
+
+#frm_testmode_disable_required_fields_modal p {
+    font-size: 16px;
+}
+
+#frm_test_mode_pagination {
+    display: inline-block;
+    margin-left: var(--gap-xs);
+
+    input[type="button"] {
+        border: 1px solid var(--grey-300);
+        padding: 8px 12px;
+        border-radius: 8px;
+        font-size: 12px;
+        background-color: #fff;
+
+        &.frm_test_mode_active_page {
+            background-color: var(--primary-500);
+            border-color: var(--primary-500);
+            color: #fff;
+        }
+
+        &:not(.frm_noallow) {
+            cursor: pointer;
+        }
+    }
+}
+
+#frm_testmode_start_over {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background-color: #fff;
+    color: var(--grey-800);
+    border-radius: 20px;
+    padding: 4px 12px;
+    border-color: var(--grey-300);
+    font-weight: 600;
+
+    img {
+        vertical-align: middle;
+        position: relative;
+        bottom: 2px;
+    }
+}
+
+.frm_noallow {
+	opacity: .5;
+}
+
+#frm_testmode_enabled_form_actions_container {
+    vertical-align: middle;
+    display: inline-block;
+    max-width: 200px;
+}
+
+#frm_testmode_upgrade {
+    border-radius: 16px;
+    padding: var(--gap-xs) var(--gap-sm);
+    text-align: center;
+    font-size: var(--text-xs);
+    margin-top: var(--gap-sm);
+    line-height: var(--text-xs);
+    font-weight: 500;
+    text-decoration: none;
+    display: block;
+
+    // These negative margins are to counteract the padding on the parent element.
+    // The upgrade should occupy the bottom area of the card.
+    margin-left: -20px;
+    margin-right: -20px;
+    margin-bottom: -16px;
+    border-radius: 0 0 16px 16px;
+}
+
+.frm_warning_style:has(.frm-addon-button) {
+    display: flex;
+    padding: var(--gap-sm);
+    line-height: 40px;
+}
+
+.frm_warning_style .frm-addon-button,
+#frm_upgrade_modal a.frm-button-primary {
+    text-decoration: none;
+}
+
+#frm_upgrade_modal a.frm-button-primary {
+    cursor: pointer;
+}
+
+.frm-dialog {
+    z-index: 1001;
+}
+
+.frm-dialog + .ui-widget-overlay {
+    z-index: 1000;
+}
+
+@media (max-width: 1024px) {
+    #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
+        width: 100%;
+        display: block !important;
+        margin-left: 0 !important;
+    }
+
+    #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
+        margin-top: var(--gap-sm);
+    }
+
+    #frm_testmode_fill_in_empty_form_fields {
+        display: block;
+    }
+
+    #frm_testing_mode > div:nth-of-type(2) {
+        flex-direction: column;
+        align-items: normal;
+    }
+
+    #frm_test_mode_pagination {
+        margin-left: 0;
+    }
+}

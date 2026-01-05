@@ -5,10 +5,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmFormTemplateApi extends FrmFormApi {
 
+	/**
+	 * @var string
+	 */
 	protected static $code_option_name = 'frm_free_license_code';
 
+	/**
+	 * @var string
+	 */
 	private static $base_api_url = 'https://formidableforms.com/wp-json/form-templates/v1/';
 
+	/**
+	 * @var string|null
+	 */
 	protected static $free_license;
 
 	/**
@@ -63,9 +72,11 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * Set the free license code option value.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @param string $code The license code to set.
+	 *
+	 * @return void
 	 */
 	public static function set_free_license_code( $code ) {
 		update_option( self::$code_option_name, $code, 'no' );
@@ -74,7 +85,7 @@ class FrmFormTemplateApi extends FrmFormApi {
 	/**
 	 * Get the free license code option value.
 	 *
-	 * @since x.x
+	 * @since 6.25
 	 *
 	 * @return false|string The license code, or false if not set.
 	 */

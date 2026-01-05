@@ -7,7 +7,7 @@ class FrmEmailAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_email_solid_icon',
+			'classes'  => 'frmfont frm_email_solid_icon',
 			'active'   => true,
 			'event'    => array( 'create' ),
 			'limit'    => 99,
@@ -20,7 +20,8 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	/**
-	 * @return void
+	 * @param object $form_action
+	 * @param array  $args
 	 */
 	public function form( $form_action, $args = array() ) {
 		extract( $args ); // phpcs:ignore WordPress.PHP.DontExtract

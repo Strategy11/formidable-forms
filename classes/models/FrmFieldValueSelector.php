@@ -86,7 +86,8 @@ class FrmFieldValueSelector {
 	/**
 	 * FrmFieldValueSelector constructor
 	 *
-	 * @param int|string $field_id
+	 * @param int|string $field_id Field ID.
+	 * @param array      $args     Arguments for configuring the value selector.
 	 */
 	public function __construct( $field_id, $args ) {
 		$this->set_html_name( $args );
@@ -95,6 +96,7 @@ class FrmFieldValueSelector {
 		$this->set_truncate( $args );
 
 		$this->field_id = (int) $field_id;
+
 		if ( $this->field_id === 0 ) {
 			return;
 		}
@@ -287,11 +289,22 @@ class FrmFieldValueSelector {
 				}
 
 				$option = $this->get_single_field_option( $key, $value );
-				$option->print_single_option( $this->value, $truncate );
+				$option->print_single_option( $this->value, $truncate, $this->use_value_as_label_in_dropdown() );
 			}
 		}
 
 		echo '</select>';
+	}
+
+	/**
+	 * Whether to use the field value as the option label in the dropdown when the label is empty.
+	 *
+	 * @since 6.25.1
+	 *
+	 * @return bool
+	 */
+	protected function use_value_as_label_in_dropdown() {
+		return false;
 	}
 
 	/**
