@@ -196,7 +196,7 @@ class FrmFieldGridHelper {
 				return 2;
 		}
 
-		if ( 0 === strpos( $class, 'frm' ) ) {
+		if ( str_starts_with( $class, 'frm' ) ) {
 			$substr = substr( $class, 3 );
 
 			if ( is_numeric( $substr ) ) {

@@ -345,14 +345,14 @@ class FrmFieldsHelper {
 			return;
 		}
 
-		if ( strpos( $setting, 'html' ) !== false ) {
+		if ( str_contains( $setting, 'html' ) ) {
 			$value = wp_unslash( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 
 			// Conditionally strip script tags if the user sending $_POST data is not allowed to use unfiltered HTML.
 			if ( ! FrmAppHelper::allow_unfiltered_html() ) {
 				$value = FrmAppHelper::kses( $value, 'all' );
 			}
-		} elseif ( strpos( $setting, 'format_' ) === 0 ) {
+		} elseif ( str_starts_with( $setting, 'format_' ) ) {
 			// TODO: Remove stripslashes on output, and use on input only.
 			$value = sanitize_text_field( $_POST['field_options'][ $setting ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.NonceVerification.Missing
 		} else {
@@ -986,7 +986,7 @@ class FrmFieldsHelper {
 		} elseif ( $cond === 'LIKE%' ) {
 			// starts with
 			foreach ( $observed_value as $ob ) {
-				if ( $hide_opt === substr( $ob, 0, strlen( $hide_opt ) ) ) {
+				if ( str_starts_with( $ob, $hide_opt ) ) {
 					$m = true;
 					break;
 				}
@@ -1008,7 +1008,7 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function basic_replace_shortcodes( $value, $form, $entry ) {
-		if ( strpos( $value, '[sitename]' ) !== false ) {
+		if ( str_contains( $value, '[sitename]' ) ) {
 			$new_value = wp_specialchars_decode( FrmAppHelper::site_name(), ENT_QUOTES );
 			$value     = str_replace( '[sitename]', $new_value, $value );
 		}
@@ -1511,7 +1511,7 @@ class FrmFieldsHelper {
 	 * @return bool Returns true if current field option is an "Other" option
 	 */
 	public static function is_other_opt( $opt_key ) {
-		return $opt_key && strpos( $opt_key, 'other_' ) === 0;
+		return $opt_key && str_starts_with( $opt_key, 'other_' );
 	}
 
 	/**
@@ -2379,7 +2379,7 @@ class FrmFieldsHelper {
 		$requires               = '';
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
 		$has_show_upgrade_class = isset( $field_type['icon'] ) && strpos( $field_type['icon'], ' frm_show_upgrade' );
-		$show_upgrade           = $has_show_upgrade_class || false !== strpos( $args['no_allow_class'], 'frm_show_upgrade' );
+		$show_upgrade           = $has_show_upgrade_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
 
 		if ( $has_show_upgrade_class ) {
 			$single_no_allow   .= 'frm_show_upgrade';
@@ -2426,6 +2426,10 @@ class FrmFieldsHelper {
 			$li_params['class'] .= ' frm_hidden';
 		}
 
+		if ( ! $show_upgrade && ! empty( $field_type['limit'] ) ) {
+			$li_params = self::update_params_with_limit_data( $li_params, $args['id'], $field_key, $field_type['limit'] );
+		}
+
 		if ( ! empty( $field_type['upsell_image'] ) ) {
 			$li_params['data-upsell-image'] = $field_type['upsell_image'];
 		}
@@ -2434,7 +2438,7 @@ class FrmFieldsHelper {
 			$li_params['data-learn-more'] = FrmAppHelper::get_doc_url(
 				$field_type['learn-more'],
 				'form-builder-add-fields',
-				false !== strpos( $field_type['learn-more'], '/' )
+				str_contains( $field_type['learn-more'], '/' )
 			);
 		}
 
@@ -2457,6 +2461,37 @@ class FrmFieldsHelper {
 		?>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Updates the params with limit data (the data-limit attribute, and possibly the frm_at_limit class).
+	 * Some field types are limited to a certain number per form, including coupon fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $li_params  The params.
+	 * @param int    $form_id    The form ID.
+	 * @param string $field_type The field type.
+	 * @param int    $limit      The limit.
+	 *
+	 * @return array The updated params.
+	 */
+	private static function update_params_with_limit_data( $li_params, $form_id, $field_type, $limit ) {
+		$fields_in_form = FrmDb::get_count(
+			'frm_fields',
+			array(
+				'form_id' => $form_id,
+				'type'    => $field_type,
+			)
+		);
+
+		if ( $fields_in_form >= $limit ) {
+			$li_params['class'] .= ' frm_at_limit';
+		}
+
+		$li_params['data-limit'] = $limit;
+
+		return $li_params;
 	}
 
 	/**

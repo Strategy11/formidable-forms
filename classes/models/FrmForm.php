@@ -488,7 +488,7 @@ class FrmForm {
 	 * @return string
 	 */
 	private static function sanitize_calc( $value ) {
-		if ( false !== strpos( $value, '<' ) ) {
+		if ( str_contains( $value, '<' ) ) {
 			$value = self::normalize_calc_spaces( $value );
 		}
 		// Allow <= and >=.

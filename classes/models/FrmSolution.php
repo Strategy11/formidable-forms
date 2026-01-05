@@ -36,7 +36,7 @@ class FrmSolution {
 	/**
 	 * @var string
 	 */
-	protected $icon = 'frm_icon_font frm_settings_icon';
+	protected $icon = 'frmfont frm_settings_icon';
 
 	/**
 	 * @param array $atts

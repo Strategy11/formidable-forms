@@ -638,9 +638,9 @@ class FrmEmail {
 	 * @return string
 	 */
 	private function prepare_email_setting( $value, $user_id_args ) {
-		if ( strpos( $value, '[' . $user_id_args['field_id'] . ']' ) !== false ) {
+		if ( str_contains( $value, '[' . $user_id_args['field_id'] . ']' ) ) {
 			$value = str_replace( '[' . $user_id_args['field_id'] . ']', '[' . $user_id_args['field_id'] . ' show="user_email"]', $value );
-		} elseif ( strpos( $value, '[' . $user_id_args['field_key'] . ']' ) !== false ) {
+		} elseif ( str_contains( $value, '[' . $user_id_args['field_key'] . ']' ) ) {
 			$value = str_replace( '[' . $user_id_args['field_key'] . ']', '[' . $user_id_args['field_key'] . ' show="user_email"]', $value );
 		}
 
@@ -730,7 +730,7 @@ class FrmEmail {
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 
-			if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+			if ( str_starts_with( $sitename, 'www.' ) ) {
 				$sitename = substr( $sitename, 4 );
 			}
 
@@ -772,7 +772,7 @@ class FrmEmail {
 	private function get_email_from_name( $name ) {
 		$email = trim( trim( $name, '>' ), '<' );
 
-		if ( strpos( $email, '<' ) !== false ) {
+		if ( str_contains( $email, '<' ) ) {
 			$parts = explode( '<', $email );
 			$email = trim( $parts[1], '>' );
 		}

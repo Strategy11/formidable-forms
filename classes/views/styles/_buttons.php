@@ -201,7 +201,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							for="frm_submit_margin"
 							class="frm-style-item-heading">
 							<?php esc_html_e( 'Margin', 'formidable' ); ?>
-							<span class="frm_help frm_icon_font frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
+							<span class="frm_help frmfont frm_tooltip_icon" data-placement="right" data-container="body" data-original-title="<?php esc_attr_e( 'Used for navigation buttons too', 'formidable' ); ?>"></span>
 						</label>
 					</div>
 					<div class="frm7 frm_form_field">
