@@ -964,8 +964,8 @@ DEFAULT_HTML;
 		$align       = FrmField::get_option( $this->field, 'align' );
 
 		$class = '';
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
-			self::prepare_align_class( $align );
+		if ( $is_radio || $is_checkbox ) {
+			$this->prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
 
