@@ -122,7 +122,7 @@ const jsConfig = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-		    exclude: /-component\.css$/
+        exclude: /-component\.css$/
       },
 	  {
 		test: /-component\.css$/i,
