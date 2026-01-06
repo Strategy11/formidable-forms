@@ -4,7 +4,6 @@ use Rector\Config\RectorConfig;
 
 // CodeQuality
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
-use Rector\CodeQuality\Rector\BooleanAnd\RepeatedAndNotEqualToNotInArrayRector;
 use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
@@ -149,7 +148,6 @@ return RectorConfig::configure()
 			// This changes \t to an actual tab character. We don't want this rule.
 			JoinStringConcatRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
-			RepeatedAndNotEqualToNotInArrayRector::class,
 			ShortenElseIfRector::class,
 			// This changes if is_array() && empty() to if === [].
 			SimplifyEmptyArrayCheckRector::class,
@@ -157,6 +155,7 @@ return RectorConfig::configure()
 			SimplifyRegexPatternRector::class,
 			SingleInArrayToCompareRector::class,
 			SingularSwitchToIfRector::class,
+			// This flips ! empty to empty in ternary statements, but ! empty statements are typically easier to read.
 			SwitchNegatedTernaryRector::class,
 			UnusedForeachValueToArrayKeysRector::class,
 
@@ -178,19 +177,23 @@ return RectorConfig::configure()
 
 			// DeadCode
 			RemoveAlwaysTrueIfConditionRector::class,
+			// The FrmFieldType.php file has a few empty functions with only a return; line.
+			// We may want to remove that at some point, but I think it's there to prevent another
+			// static analysis error.
 			RemoveDeadReturnRector::class,
 			RemoveParentCallWithoutParentRector::class,
 			RemoveUnusedConstructorParamRector::class,
 			RemoveUnusedForeachKeyRector::class,
 			RemoveUnusedPrivateMethodParameterRector::class,
 			RemoveUnusedPrivateMethodRector::class,
-			// We never want to remove a param tag. Leave this exception.
+			// We never want to remove a valid param tag. Leave this exception.
 			RemoveUselessParamTagRector::class,
 			RemoveUselessReturnTagRector::class,
 
 			// EarlyReturn
+			// This breaks if statements up into multiple if statements. It adds too many lines.
 			ChangeOrIfContinueToMultiContinueRector::class,
-			// This breaks a return statement up into multiple return statements. It does not look very good.
+			// This breaks a return statement up into multiple return statements. It adds too many lines.
 			ReturnBinaryOrToEarlyReturnRector::class,
 			ReturnEarlyIfVariableRector::class,
 
