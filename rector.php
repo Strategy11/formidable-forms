@@ -57,20 +57,10 @@ use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
 use Rector\EarlyReturn\Rector\Return_\ReturnBinaryOrToEarlyReturnRector;
 use Rector\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector;
 
-// Naming
-use Rector\Naming\Rector\Assign\RenameVariableToMatchMethodCallReturnTypeRector;
-use Rector\Naming\Rector\Class_\RenamePropertyToMatchTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector;
-use Rector\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector;
-use Rector\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector;
-
 // Php53, Php54, Php70
 use Rector\Php53\Rector\Ternary\TernaryToElvisRector;
 use Rector\Php54\Rector\Array_\LongArrayToShortArrayRector;
 use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
-
-// Renaming
-use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 
 // Strict
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
@@ -106,7 +96,7 @@ return RectorConfig::configure()
 		// privatization
 		true,
 		// naming
-		true,
+		false,
 		// instanceOf
 		true,
 		// earlyReturn
@@ -205,13 +195,6 @@ return RectorConfig::configure()
 			ChangeOrIfContinueToMultiContinueRector::class,
 			ReturnBinaryOrToEarlyReturnRector::class,
 			ReturnEarlyIfVariableRector::class,
-
-			// Naming
-			RenameForeachValueVariableToMatchExprVariableRector::class,
-			RenameParamToMatchTypeRector::class,
-			RenamePropertyToMatchTypeRector::class,
-			RenameVariableToMatchMethodCallReturnTypeRector::class,
-			RenameVariableToMatchNewTypeRector::class,
 
 			// Php53, Php54, Php70
 			LongArrayToShortArrayRector::class,
