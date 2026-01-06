@@ -605,7 +605,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_empty_value( $value, $empty = '' ) {
-		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
+		return $value === array() || $value === $empty;
 	}
 
 	/**
