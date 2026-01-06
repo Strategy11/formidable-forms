@@ -33,7 +33,7 @@
 				);
 				const postbox = modal.querySelector( '.postbox' );
 
-				postbox.appendChild(
+				postbox.append(
 					div( {
 						className: 'frm_modal_top',
 						children: [
@@ -42,12 +42,12 @@
 						]
 					} )
 				);
-				postbox.appendChild(
+				postbox.append(
 					div( { className: 'frm_modal_content' } )
 				);
 
 				if ( footer ) {
-					postbox.appendChild(
+					postbox.append(
 						div( { className: 'frm_modal_footer' } )
 					);
 				}
@@ -596,7 +596,7 @@
 					child: child,
 					className: uniqueClassName
 				} );
-				appendTo.appendChild( element );
+				appendTo.append( element );
 			} else {
 				redraw( element, child );
 			}
@@ -607,8 +607,8 @@
 		const modal = div( { id, className: 'frm-modal' } );
 		const postbox = div( { className: 'postbox' } );
 		const metaboxHolder = div( { className: 'metabox-holder', child: postbox } );
-		modal.appendChild( metaboxHolder );
-		document.body.appendChild( modal );
+		modal.append( metaboxHolder );
+		document.body.append( modal );
 		return modal;
 	}
 
@@ -746,13 +746,13 @@
 		if ( children ) {
 			children.forEach( child => {
 				if ( 'string' === typeof child ) {
-					output.appendChild( document.createTextNode( child ) );
+					output.append( document.createTextNode( child ) );
 				} else {
-					output.appendChild( child );
+					output.append( child );
 				}
 			} );
 		} else if ( child ) {
-			output.appendChild( child );
+			output.append( child );
 		} else if ( text ) {
 			output.textContent = text;
 		}
@@ -774,7 +774,7 @@
 		if ( href ) {
 			const use = document.createElementNS( namespace, 'use' );
 			use.setAttribute( 'href', href );
-			output.appendChild( use );
+			output.append( use );
 			output.classList.add( 'frmsvg' );
 		}
 		return output;
@@ -796,7 +796,7 @@
 				child: 'string' === typeof content ? document.createTextNode( content ) : content
 			} )
 		} );
-		container.appendChild( notice );
+		container.append( notice );
 
 		setTimeout(
 			() => jQuery( notice ).fadeOut( () => notice.remove() ),
@@ -812,7 +812,7 @@
 
 	function redraw( element, child ) {
 		element.innerHTML = '';
-		element.appendChild( child );
+		element.append( child );
 	}
 
 	const allowedHtml = {

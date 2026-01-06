@@ -37,8 +37,8 @@ export class frmWebComponent extends HTMLElement {
 		}
 		const wrapper = this.useShadowDom ? this.shadowRoot : this;
 		wrapper.innerHTML = '';
-		wrapper.appendChild( this.loadStyle() );
-		wrapper.appendChild( view );
+		wrapper.append( this.loadStyle() );
+		wrapper.append( view );
 
 		this.whenElementBecomesVisible().then( () => {
 			this.afterViewInit( this );

@@ -111,7 +111,7 @@ export function addApplicationTemplatesElement() {
 		return;
 	}
 
-	elements.bodyContent.appendChild( applicationTemplates );
+	elements.bodyContent.append( applicationTemplates );
 
 	addElements( {
 		applicationTemplates,

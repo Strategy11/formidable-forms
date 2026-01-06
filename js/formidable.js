@@ -1356,7 +1356,7 @@ function frmFrontFormJS() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
 		if ( css && css.match( /inset/ ) ) {
-			this.parentNode.removeChild( this );
+			this.remove();
 		}
 	}
 
@@ -1892,7 +1892,7 @@ function frmFrontFormJS() {
 				antispamInput.type = 'hidden';
 				antispamInput.name = 'antispam_token';
 				antispamInput.value = object.getAttribute( 'data-token' );
-				object.appendChild( antispamInput );
+				object.append( antispamInput );
 			}
 
 			// Add a unique ID, used for duplicate checks.
@@ -1900,7 +1900,7 @@ function frmFrontFormJS() {
 			uniqueIDInput.type = 'hidden';
 			uniqueIDInput.name = 'unique_id';
 			uniqueIDInput.value = getUniqueKey();
-			object.appendChild( uniqueIDInput );
+			object.append( uniqueIDInput );
 
 			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
 				const fileInputs = object.querySelectorAll( 'input[type="file"]' );

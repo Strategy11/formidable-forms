@@ -121,8 +121,8 @@
 
 		// Use the thisForm variable that we set earlier
 		if ( thisForm ) {
-			thisForm.appendChild( tokenInput );
-			thisForm.appendChild( verificationInput );
+			thisForm.append( tokenInput );
+			thisForm.append( verificationInput );
 
 			if ( typeof frmFrontForm.submitFormManual === 'function' ) {
 				frmFrontForm.submitFormManual( event, thisForm );

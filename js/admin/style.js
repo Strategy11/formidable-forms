@@ -586,7 +586,7 @@
 			return;
 		}
 
-		card.appendChild( getHamburgerMenu( card.dataset ) );
+		card.append( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
@@ -1124,13 +1124,13 @@
 		newStyle.addEventListener(
 			'load',
 			() => {
-				style.parentNode.removeChild( style );
+				style.remove();
 				newStyle.id = 'frm-custom-theme-css'; // Assign the old ID to the new style so it can be removed in the next reset action.
 			}
 		);
 
 		const head = document.getElementsByTagName( 'HEAD' )[ 0 ];
-		head.appendChild( newStyle );
+		head.append( newStyle );
 	}
 
 	/**

@@ -183,8 +183,6 @@
 		"unicorn/prefer-prototype-methods": "off",
 		// Fix this soon
 		"unicorn/prefer-dom-node-dataset": "off",
-		// Apply this soon
-		"unicorn/prefer-dom-node-append": "off",
 		// Look more into this one.
 		"unicorn/numeric-separators-style": "off",
 		// Look into this
@@ -202,7 +200,6 @@
 		"unicorn/text-encoding-identifier-case": "off",
 		"unicorn/prefer-includes": "off",
 		"unicorn/prefer-modern-dom-apis": "off",
-		"unicorn/prefer-dom-node-remove": "off",
 		"unicorn/prefer-string-replace-all": "off",
 		"unicorn/no-useless-promise-resolve-reject": "off"
 	},

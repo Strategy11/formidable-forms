@@ -68,11 +68,11 @@
 		container.innerHTML = '';
 
 		const contentWrapper = div( { className: 'frm-applications-index-content' } );
-		container.appendChild( contentWrapper );
+		container.append( contentWrapper );
 
 		const customTemplatesNav = getCustomTemplatesNav();
 
-		contentWrapper.appendChild( customTemplatesNav );
+		contentWrapper.append( customTemplatesNav );
 		renderFormidableTemplates( contentWrapper, data.templates );
 
 		const hookName = 'frm_application_render_templates';
@@ -138,8 +138,8 @@
 			className: 'frm_grid_container frm-application-cards-grid'
 		} );
 		addTemplatesToGrid( templates );
-		contentWrapper.appendChild( getTemplatesNav() );
-		contentWrapper.appendChild( elements.templatesGrid );
+		contentWrapper.append( getTemplatesNav() );
+		contentWrapper.append( elements.templatesGrid );
 	}
 
 	function addTemplatesToGrid( templates ) {
@@ -187,7 +187,7 @@
 		categories.forEach( addCategoryToWrapper );
 		function addCategoryToWrapper( category, index ) {
 			if ( 0 !== index ) {
-				wrapper.appendChild( document.createTextNode( '|' ) );
+				wrapper.append( document.createTextNode( '|' ) );
 			}
 			const anchor = a( category );
 			if ( 0 === index ) {
@@ -206,7 +206,7 @@
 					elements.activeCategoryAnchor = anchor;
 				}
 			);
-			wrapper.appendChild( anchor );
+			wrapper.append( anchor );
 		}
 
 		return wrapper;
@@ -247,7 +247,7 @@
 	function handleTemplateSearch( { foundSomething, notEmptySearchText } ) {
 		if ( false === elements.noTemplateSearchResultsPlaceholder ) {
 			elements.noTemplateSearchResultsPlaceholder = getNoResultsPlaceholder();
-			elements.templatesGrid.appendChild( elements.noTemplateSearchResultsPlaceholder );
+			elements.templatesGrid.append( elements.noTemplateSearchResultsPlaceholder );
 		}
 		elements.noTemplateSearchResultsPlaceholder.classList.toggle( 'frm_hidden', ! notEmptySearchText || foundSomething );
 	}
@@ -273,8 +273,8 @@
 		if ( isTemplate ) {
 			card.classList.add( 'frm-application-template-card' );
 			card.classList.add( 'frm-locked-application-template' );
-			card.appendChild( tag( 'hr' ) );
-			card.appendChild( getCardContent() );
+			card.append( tag( 'hr' ) );
+			card.append( getCardContent() );
 
 			card.addEventListener(
 				'click',
@@ -304,17 +304,17 @@
 
 			const templateControl = getUseThisTemplateControl( data );
 			if ( templateControl.classList.contains( 'frm-delete-application-trigger' ) ) {
-				header.appendChild( templateControl );
+				header.append( templateControl );
 			} else {
-				titleWrapper.appendChild( templateControl );
+				titleWrapper.append( templateControl );
 			}
 			if ( data.isNew ) {
-				titleWrapper.appendChild( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
+				titleWrapper.append( span( { className: 'frm-new-pill frm-meta-tag frm-fadein', text: __( 'NEW', 'formidable' ) } ) );
 			}
 
 			const counter = getItemCounter();
 			if ( false !== counter ) {
-				header.appendChild( counter );
+				header.append( counter );
 			}
 
 			return header;
@@ -363,11 +363,11 @@
 
 		function addCount( countValue, pluralDescriptor, singularDescriptor ) {
 			if ( counter.children.length ) {
-				counter.appendChild( document.createTextNode( ' | ' ) );
+				counter.append( document.createTextNode( ' | ' ) );
 			}
 
 			const descriptor = '1' === countValue ? singularDescriptor : pluralDescriptor;
-			counter.appendChild(
+			counter.append(
 				span( countValue + ' ' + descriptor )
 			);
 		}
