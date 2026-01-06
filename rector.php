@@ -16,7 +16,6 @@ use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
 use Rector\CodeQuality\Rector\FuncCall\SimplifyRegexPatternRector;
 use Rector\CodeQuality\Rector\FuncCall\SingleInArrayToCompareRector;
-use Rector\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector;
 use Rector\CodeQuality\Rector\If_\CombineIfRector;
 use Rector\CodeQuality\Rector\If_\ExplicitBoolCompareRector;
 use Rector\CodeQuality\Rector\If_\ShortenElseIfRector;
@@ -145,7 +144,6 @@ return RectorConfig::configure()
 			CompactToVariablesRector::class,
 			CompleteDynamicPropertiesRector::class,
 			ExplicitBoolCompareRector::class,
-			FlipTypeControlToUseExclusiveTypeRector::class,
 			InlineConstructorDefaultToPropertyRector::class,
 			IssetOnPropertyObjectToPropertyExistsRector::class,
 			// This changes \t to an actual tab character. We don't want this rule.
