@@ -758,7 +758,7 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
+		if ( isset( $params ) && is_array( $value ) && $value ) {
 			foreach ( $params as $k => $p ) {
 				if ( ! $k || ! is_array( $value ) ) {
 					continue;

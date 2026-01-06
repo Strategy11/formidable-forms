@@ -1584,7 +1584,7 @@ class FrmXMLHelper {
 				unset( $k, $m );
 			}
 
-			if ( ! empty( $s_message ) ) {
+			if ( $s_message ) {
 				$message .= '<li><strong>' . $t_strings[ $type ] . ':</strong> ';
 				$message .= implode( ', ', $s_message );
 				$message .= '</li>';
@@ -2095,7 +2095,7 @@ class FrmXMLHelper {
 		// Migrate autoresponders
 		self::migrate_autoresponder_to_action( $form_options, $form_id, $notifications );
 
-		if ( empty( $notifications ) ) {
+		if ( ! $notifications ) {
 			return;
 		}
 

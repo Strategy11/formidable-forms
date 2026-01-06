@@ -567,7 +567,7 @@ class FrmEntriesHelper {
 				}
 			}
 
-			if ( is_array( $value ) && ! empty( $value ) ) {
+			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
 		} else {

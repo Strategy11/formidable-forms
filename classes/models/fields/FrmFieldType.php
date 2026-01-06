@@ -816,7 +816,7 @@ DEFAULT_HTML;
 
 		$is_empty = array_filter( $default_value );
 
-		$default_value = empty( $is_empty ) ? '' : implode( ',', $default_value );
+		$default_value = $is_empty === array() ? '' : implode( ',', $default_value );
 	}
 
 	/**
@@ -1898,7 +1898,7 @@ DEFAULT_HTML;
 			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
-		if ( ! empty( $checked ) && count( $checked ) > 1 ) {
+		if ( count( $checked ) > 1 ) {
 			$value = array_map( 'trim', $checked );
 		}
 

@@ -46,7 +46,7 @@ class FrmEntryValidate {
 			unset( $posted_field );
 		}
 
-		if ( empty( $errors ) ) {
+		if ( ! $errors ) {
 			self::spam_check( $exclude, $values, $errors );
 		}
 

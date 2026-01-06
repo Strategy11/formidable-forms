@@ -950,7 +950,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = ! empty( $m );
+				$m = $m !== array();
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}

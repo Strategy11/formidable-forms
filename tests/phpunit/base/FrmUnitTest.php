@@ -566,7 +566,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;

@@ -142,7 +142,7 @@ class FrmFormApi {
 			if ( isset( $addon['categories'] ) ) {
 				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
 
-				if ( ! empty( $cats ) ) {
+				if ( $cats ) {
 					unset( $addons[ $k ] );
 					continue;
 				}

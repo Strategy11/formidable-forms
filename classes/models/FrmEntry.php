@@ -119,7 +119,7 @@ class FrmEntry {
 			$field_metas   = array_filter( $field_metas );
 
 			// If prev entry is empty and current entry is not, they are not duplicates
-			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
+			if ( ! $field_metas && $filtered_vals ) {
 				return false;
 			}
 
