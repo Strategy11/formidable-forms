@@ -271,7 +271,6 @@
 
 		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
 			modifyStylerUrl( target );
-			return; // eslint-disable-line
 		}
 	}
 
@@ -327,7 +326,6 @@
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
-			return; // eslint-disable-line
 		}
 	}
 
