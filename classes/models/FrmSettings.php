@@ -5,25 +5,90 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 #[\AllowDynamicProperties]
 class FrmSettings {
+
+	/**
+	 * @var string
+	 */
 	public $option_name = 'frm_options';
+
+	/**
+	 * @var int
+	 */
 	public $menu;
+
+	/**
+	 * @var int
+	 */
 	public $mu_menu;
+
+	/**
+	 * @var int
+	 */
 	public $fade_form;
+
+	/**
+	 * @var bool
+	 */
 	public $admin_bar;
 
+	/**
+	 * @var string
+	 */
 	public $success_msg;
+
+	/**
+	 * @var string
+	 */
 	public $blank_msg;
+
+	/**
+	 * @var string
+	 */
 	public $unique_msg;
+
+	/**
+	 * @var string
+	 */
 	public $invalid_msg;
+
+	/**
+	 * @var string
+	 */
 	public $failed_msg;
+
+	/**
+	 * @var string
+	 */
 	public $submit_value;
+
+	/**
+	 * @var string
+	 */
 	public $login_msg;
+
+	/**
+	 * @var string
+	 */
 	public $admin_permission;
 
+	/**
+	 * @var string
+	 */
 	public $email_to;
+
+	/**
+	 * @var string|null
+	 */
 	public $load_style;
+
+	/**
+	 * @var bool|int|null
+	 */
 	public $custom_style;
 
+	/**
+	 * @var string|null
+	 */
 	public $active_captcha;
 
 	/**
@@ -39,10 +104,30 @@ class FrmSettings {
 	 * @var string|null
 	 */
 	public $privkey;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_lang;
+
+	/**
+	 * @var string|null
+	 */
 	public $re_type;
+
+	/**
+	 * @var string
+	 */
 	public $re_msg;
+
+	/**
+	 * @var bool
+	 */
 	public $re_multi;
+
+	/**
+	 * @var float|string|null
+	 */
 	public $re_threshold;
 
 	/**
@@ -73,15 +158,49 @@ class FrmSettings {
 	 */
 	public $turnstile_privkey;
 
+	/**
+	 * @var bool
+	 */
 	public $no_ips;
+
+	/**
+	 * @var string
+	 */
 	public $custom_header_ip;
+
+	/**
+	 * @var int
+	 */
 	public $current_form = 0;
+
+	/**
+	 * @var bool
+	 */
 	public $tracking;
+
+	/**
+	 * @var bool
+	 */
 	public $summary_emails;
+
+	/**
+	 * @var string
+	 */
 	public $summary_emails_recipients;
 
+	/**
+	 * @var string|null
+	 */
 	public $default_email;
+
+	/**
+	 * @var string
+	 */
 	public $from_email;
+
+	/**
+	 * @var string|null
+	 */
 	public $currency;
 
 	/**
@@ -91,16 +210,41 @@ class FrmSettings {
 	 */
 	public $custom_css;
 
+	/**
+	 * @var string
+	 */
 	public $honeypot;
 
+	/**
+	 * @var bool
+	 */
 	public $wp_spam_check;
 
+	/**
+	 * @var bool
+	 */
 	public $denylist_check;
 
+	/**
+	 * @since 6.25.1
+	 *
+	 * @var int|null 1 if installed after welcome tour update, null otherwise.
+	 */
+	public $installed_after_welcome_tour_update;
+
+	/**
+	 * @var string
+	 */
 	public $disallowed_words;
 
+	/**
+	 * @var string
+	 */
 	public $allowed_words;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args = array() ) {
 		if ( ! defined( 'ABSPATH' ) ) {
 			die( 'You are not allowed to call this page directly.' );
@@ -122,6 +266,11 @@ class FrmSettings {
 		$this->maybe_filter_for_form( $args );
 	}
 
+	/**
+	 * @param false|object $settings
+	 *
+	 * @return object
+	 */
 	private function translate_settings( $settings ) {
 		if ( $settings ) {
 			// Workaround for W3 total cache conflict.
@@ -178,6 +327,7 @@ class FrmSettings {
 			'denylist_check'            => 0,
 			'disallowed_words'          => '',
 			'allowed_words'             => '',
+			'email_style'               => 'classic',
 		);
 	}
 
@@ -199,6 +349,7 @@ class FrmSettings {
 
 		if ( is_multisite() && is_admin() ) {
 			$mu_menu = get_site_option( 'frm_admin_menu_name' );
+
 			if ( $mu_menu && ! empty( $mu_menu ) ) {
 				$this->menu    = $mu_menu;
 				$this->mu_menu = 1;
@@ -206,6 +357,7 @@ class FrmSettings {
 		}
 
 		$frm_roles = FrmAppHelper::frm_capabilities( 'pro' );
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
 			if ( ! isset( $this->$frm_role ) ) {
 				$this->$frm_role = 'administrator';
@@ -223,6 +375,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	public function fill_with_defaults( $params = array() ) {
@@ -231,6 +384,7 @@ class FrmSettings {
 
 		if ( $filter_html ) {
 			$filter_keys = array( 'failed_msg', 'blank_msg', 'invalid_msg', 'admin_permission', 'unique_msg', 'success_msg', 'submit_value', 'login_msg', 'menu' );
+
 			if ( ! empty( $params['additional_filter_keys'] ) ) {
 				$filter_keys = array_merge( $filter_keys, $params['additional_filter_keys'] );
 			}
@@ -262,6 +416,7 @@ class FrmSettings {
 	 * @param mixed  $value       The unsanitized global setting value.
 	 * @param string $key         The key of the global setting being saved.
 	 * @param array  $filter_keys These keys that are filtered with kses.
+	 *
 	 * @return mixed
 	 */
 	private function maybe_sanitize_global_setting( $value, $key, $filter_keys ) {
@@ -302,9 +457,9 @@ class FrmSettings {
 		if ( ! isset( $this->pubkey ) ) {
 			// Get the options from the database.
 			$recaptcha_opt = is_multisite() ? get_site_option( 'recaptcha' ) : get_option( 'recaptcha' );
-			$this->pubkey  = isset( $recaptcha_opt['pubkey'] ) ? $recaptcha_opt['pubkey'] : '';
-			$privkey       = isset( $recaptcha_opt['privkey'] ) ? $recaptcha_opt['privkey'] : $privkey;
-			$re_lang       = isset( $recaptcha_opt['re_lang'] ) ? $recaptcha_opt['re_lang'] : $re_lang;
+			$this->pubkey  = $recaptcha_opt['pubkey'] ?? '';
+			$privkey       = $recaptcha_opt['privkey'] ?? $privkey;
+			$re_lang       = $recaptcha_opt['re_lang'] ?? $re_lang;
 		}
 
 		if ( empty( $this->re_msg ) ) {
@@ -349,11 +504,14 @@ class FrmSettings {
 	 *
 	 * @since 3.06.01
 	 *
+	 * @param array $args
+	 *
 	 * @return void
 	 */
 	public function maybe_filter_for_form( $args ) {
 		if ( isset( $args['current_form'] ) && is_numeric( $args['current_form'] ) ) {
 			$this->current_form = $args['current_form'];
+
 			foreach ( $this->translatable_strings() as $string ) {
 				$this->{$string} = apply_filters( 'frm_global_setting', $this->{$string}, $string, $this );
 				$this->{$string} = apply_filters( 'frm_global_' . $string, $this->{$string}, $this );
@@ -364,6 +522,8 @@ class FrmSettings {
 	/**
 	 * @param array $params
 	 * @param array $errors
+	 *
+	 * @return array
 	 */
 	public function validate( $params, $errors ) {
 		return apply_filters( 'frm_validate_settings', $errors, $params );
@@ -397,6 +557,7 @@ class FrmSettings {
 
 	/**
 	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_settings( $params ) {
@@ -431,12 +592,15 @@ class FrmSettings {
 			'wp_spam_check',
 			'denylist_check',
 		);
+
 		foreach ( $checkboxes as $set ) {
 			$this->$set = isset( $params[ 'frm_' . $set ] ) ? absint( $params[ 'frm_' . $set ] ) : 0;
 		}
 	}
 
 	/**
+	 * @param array $params
+	 *
 	 * @return void
 	 */
 	private function update_roles( $params ) {
@@ -444,8 +608,9 @@ class FrmSettings {
 
 		$frm_roles = FrmAppHelper::frm_capabilities();
 		$roles     = get_editable_roles();
+
 		foreach ( $frm_roles as $frm_role => $frm_role_description ) {
-			$this->$frm_role = (array) ( isset( $params[ $frm_role ] ) ? $params[ $frm_role ] : 'administrator' );
+			$this->$frm_role = (array) ( $params[ $frm_role ] ?? 'administrator' );
 
 			// Make sure administrators always have permissions
 			if ( ! in_array( 'administrator', $this->$frm_role, true ) ) {
@@ -470,6 +635,7 @@ class FrmSettings {
 	 * @param string $key The setting key to update.
 	 * @param mixed  $value The new value for the setting.
 	 * @param string $sanitize The name of the sanitization function to apply to the new value.
+	 *
 	 * @return bool True on success, false on failure.
 	 */
 	public function update_setting( $key, $value, $sanitize ) {

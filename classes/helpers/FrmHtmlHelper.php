@@ -22,7 +22,7 @@ class FrmHtmlHelper {
 	 *     @type bool|null $echo True if you want the toggle to echo. False if you want it to return an HTML string.
 	 * }
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	public static function toggle( $id, $name, $args ) {
 		wp_enqueue_script( 'formidable_settings' );
@@ -31,7 +31,7 @@ class FrmHtmlHelper {
 			function () use ( $id, $name, $args ) {
 				require FrmAppHelper::plugin_path() . '/classes/views/shared/toggle.php';
 			},
-			isset( $args['echo'] ) ? $args['echo'] : false
+			$args['echo'] ?? false
 		);
 	}
 
@@ -45,6 +45,7 @@ class FrmHtmlHelper {
 	 * @param string $option   The string used as the option label.
 	 * @param bool   $selected True if the option should be selected.
 	 * @param array  $params   Other HTML params for the option.
+	 *
 	 * @return void
 	 */
 	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
@@ -92,12 +93,13 @@ class FrmHtmlHelper {
 			$pattern = '/^([0-9.]*)(' . implode( '|', array_map( 'preg_quote', $units ) ) . ')?$/';
 			preg_match( $pattern, $value, $matches );
 			$selected_unit = $matches[2] ?? '';
+
 			if ( ! empty( $matches[1] ) ) {
 				$value = $matches[1];
 			}
 		}
 
-		$input_number_attrs          = array_merge(
+		$input_number_attrs = array_merge(
 			$args['input_number_attrs'],
 			array(
 				'type'  => ! empty( $selected_unit ) ? 'number' : 'text',
@@ -105,9 +107,15 @@ class FrmHtmlHelper {
 				'class' => trim( 'frm-unit-input-control ' . ( $args['input_number_attrs']['class'] ?? '' ) ),
 			)
 		);
+
+		$hidden_value = $args['value'];
+
+		if ( is_numeric( $hidden_value ) ) {
+			$hidden_value .= $args['default_unit'];
+		}
 		?>
 		<span class="frm-unit-input">
-			<input type="hidden" value="<?php echo esc_attr( $value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
+			<input type="hidden" value="<?php echo esc_attr( $hidden_value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
 			<input <?php FrmAppHelper::array_to_html_params( $input_number_attrs, true ); ?> />
 			<span class="frm-input-group-suffix">
 				<select aria-label="<?php echo esc_attr__( 'Select unit', 'formidable' ); ?>" tabindex="0">

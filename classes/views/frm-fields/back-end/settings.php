@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -33,13 +33,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php
 		}
+
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
@@ -56,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
 			?>
 			<div class="frm_note_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -105,7 +106,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( $display['unique'] ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>"><input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
+					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
+						<input type="checkbox" name="field_options[unique_<?php echo esc_attr( $field['id'] ); ?>]" id="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" value="1" <?php checked( $field['unique'], 1 ); ?> class="frm_mark_unique" />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
@@ -115,7 +117,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ( $display['read_only'] ) {
 				?>
 				<div class="frm_form_field">
-					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" >
+					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
 						<input type="checkbox" id="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[read_only_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['read_only'], 1 ); ?>/>
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
@@ -145,7 +147,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<span><?php esc_html_e( 'CSS Layout Classes', 'formidable' ); ?></span>
 					<?php FrmAppHelper::tooltip_icon( __( 'Add a CSS class to the field container. Use our predefined classes to align multiple fields in single row.', 'formidable' ), array( 'class' => 'frm-flex' ) ); ?>
 				</label>
-				<span class="frm-with-right-icon">
+				<span class="frm-with-right-icon frm-block">
 					<?php
 					$css_layout_classes_attrs = array(
 						'type'           => 'text',
@@ -162,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 					<?php
 					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 						array(
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -217,7 +219,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
 							switch ( $type ) {
 								case 'calc':
-									$default_value_type['data']  = array(
+									$default_value_type['data'] = array(
 										'show'    => '#calc-for-{id}',
 										'disable' => '#default-value-for-{id}',
 									);
@@ -244,7 +246,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						);
 
 						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
-							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( str_ends_with( $data_value, '-' ) ? $field['id'] : '' );
 						}
 
 						?>
@@ -408,6 +410,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							)
 						);
 					}
+
 					if ( $field['type'] === 'divider' ) {
 						FrmHtmlHelper::echo_dropdown_option(
 							__( 'Center', 'formidable' ),
@@ -443,6 +446,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
 						$type_option_params = array( 'value' => $type_option_value );
+
 						if ( array_key_exists( $fkey, $disabled_fields ) ) {
 							$type_option_params['disabled'] = 'disabled';
 						}

@@ -45,6 +45,7 @@ class FrmAjaxUnitTest extends WP_Ajax_UnitTestCase {
 
 	public function trigger_action( $action ) {
 		$response = '';
+
 		try {
 			$this->_handleAjax( $action );
 		} catch ( WPAjaxDieStopException $e ) {

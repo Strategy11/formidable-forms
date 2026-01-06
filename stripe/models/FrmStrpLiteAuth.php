@@ -19,10 +19,12 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string $html Form HTML that gets filtered through frm_filter_final_form.
+	 *
 	 * @return string
 	 */
 	public static function maybe_show_message( $html ) {
 		$link_error = FrmAppHelper::simple_get( 'frm_link_error' );
+
 		if ( $link_error ) {
 			$message = '<div class="frm_error_style">' . self::get_message_for_stripe_link_code( $link_error ) . '</div>';
 			self::insert_error_message( $message, $html );
@@ -30,11 +32,13 @@ class FrmStrpLiteAuth {
 		}
 
 		$form_id = self::check_html_for_form_id_match( $html );
+
 		if ( false === $form_id ) {
 			return $html;
 		}
 
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return $html;
 		}
@@ -45,8 +49,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		$intent  = $details['intent'];
-		$payment = $details['payment'];
+		$intent = $details['intent'];
 
 		if ( self::intent_has_failed_status( $intent ) ) {
 			$message = '<div class="frm_error_style">' . $intent->last_payment_error->message . '</div>';
@@ -55,12 +58,12 @@ class FrmStrpLiteAuth {
 		}
 
 		$intent_is_processing = 'processing' === $intent->status;
+
 		if ( $intent_is_processing ) {
 			// Append an additional processing message to the end of the success message.
 			$filter = function ( $message ) {
 				$stripe_settings = FrmStrpLiteAppHelper::get_settings();
-				$message        .= '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>';
-				return $message;
+				return $message . ( '<p>' . esc_html( $stripe_settings->settings->processing_message ) . '</p>' );
 			};
 			add_filter( 'frm_content', $filter );
 		}
@@ -80,6 +83,7 @@ class FrmStrpLiteAuth {
 
 	/**
 	 * @param int|string $form_id
+	 *
 	 * @return array|false
 	 */
 	private static function check_request_params( $form_id ) {
@@ -88,6 +92,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$details = FrmStrpLiteUrlParamHelper::get_details_for_form( $form_id );
+
 		if ( ! is_array( $details ) ) {
 			return false;
 		}
@@ -105,11 +110,13 @@ class FrmStrpLiteAuth {
 	 * @since 6.5
 	 *
 	 * @param string $html
+	 *
 	 * @return false|int Matching form id or false if there is no match.
 	 */
 	private static function check_html_for_form_id_match( $html ) {
 		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
+
 			if ( strpos( $html, $substring ) ) {
 				return $form_id;
 			}
@@ -125,6 +132,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $code
+	 *
 	 * @return string
 	 */
 	private static function get_message_for_stripe_link_code( $code ) {
@@ -155,6 +163,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	private static function prepare_success_atts( &$atts ) {
@@ -164,8 +173,10 @@ class FrmStrpLiteAuth {
 		$atts['conf_method'] = ! empty( $atts['form']->options[ $opt ] ) ? $atts['form']->options[ $opt ] : 'message';
 
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts, 'create' );
+
 		if ( $actions ) {
 			$action = reset( $actions );
+
 			if ( ! empty( $action->post_content['success_action'] ) && 'message' === $action->post_content['success_action'] ) {
 				$atts['conf_method'] = $action->post_content['success_action'];
 			}
@@ -176,10 +187,16 @@ class FrmStrpLiteAuth {
 	 * Insert a message/error where the form styling will be applied.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
+	 * @param string $message Message.
+	 * @param string $form    Form.
+	 *
+	 * @return void
 	 */
 	private static function insert_error_message( $message, &$form ) {
 		$add_after = '<fieldset>';
 		$pos       = strpos( $form, $add_after );
+
 		if ( $pos !== false ) {
 			$form = substr_replace( $form, $add_after . $message, $pos, strlen( $add_after ) );
 		}
@@ -189,10 +206,12 @@ class FrmStrpLiteAuth {
 	 * Include the token if going between pages.
 	 *
 	 * @param object $form The form being submitted.
+	 *
 	 * @return void
 	 */
 	public static function add_hidden_token_field( $form ) {
 		$posted_form = FrmAppHelper::get_param( 'form_id', 0, 'post', 'absint' );
+
 		if ( $posted_form != $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
 			// Check to make sure the correct form was submitted.
 			// Was an entry already created and the form should be loaded fresh?
@@ -204,6 +223,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
+
 		if ( ! empty( $intents ) ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
@@ -220,6 +240,7 @@ class FrmStrpLiteAuth {
 	 *
 	 * @param array    $intents
 	 * @param stdClass $form
+	 *
 	 * @return void
 	 */
 	private static function include_intents_in_form( $intents, $form ) {
@@ -242,6 +263,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param string $name
+	 *
 	 * @return mixed
 	 */
 	public static function get_payment_intents( $name ) {
@@ -249,6 +271,7 @@ class FrmStrpLiteAuth {
 		if ( ! isset( $_POST[ $name ] ) ) {
 			return array();
 		}
+
 		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
@@ -269,6 +292,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+
 		if ( ! is_array( $form ) ) {
 			wp_die();
 		}
@@ -276,7 +300,7 @@ class FrmStrpLiteAuth {
 		self::format_form_data( $form );
 
 		$form_id = absint( $form['form_id'] );
-		$intents = isset( $form[ 'frmintent' . $form_id ] ) ? $form[ 'frmintent' . $form_id ] : array();
+		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
 		if ( empty( $intents ) ) {
 			wp_die();
@@ -302,8 +326,10 @@ class FrmStrpLiteAuth {
 	 * Update pricing on page turn and non-ajax validation.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
 	 * @param int   $form_id
 	 * @param array $intents
+	 *
 	 * @return void
 	 */
 	private static function update_intent_pricing( $form_id, &$intents ) {
@@ -313,6 +339,7 @@ class FrmStrpLiteAuth {
 		}
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
+
 		if ( empty( $actions ) || empty( $intents ) ) {
 			return;
 		}
@@ -330,12 +357,14 @@ class FrmStrpLiteAuth {
 
 		foreach ( $intents as $k => $intent ) {
 			$intent_id       = explode( '_secret_', $intent )[0];
-			$is_setup_intent = 0 === strpos( $intent_id, 'seti_' );
+			$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
+
 			if ( $is_setup_intent ) {
 				continue;
 			}
 
 			$saved = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_intent', $intent_id );
+
 			if ( empty( $saved->metadata->action ) ) {
 				continue;
 			}
@@ -350,7 +379,8 @@ class FrmStrpLiteAuth {
 				);
 
 				$amount = $action->post_content['amount'];
-				if ( strpos( $amount, '[' ) === false ) {
+
+				if ( ! str_contains( $amount, '[' ) ) {
 					// The amount is static, so it doesn't need an update.
 					continue;
 				}
@@ -358,6 +388,7 @@ class FrmStrpLiteAuth {
 				// Update amount based on field shortcodes.
 				$entry  = self::generate_false_entry();
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
+
 				if ( $saved->amount == $amount || $amount == '000' ) {
 					continue;
 				}
@@ -371,13 +402,15 @@ class FrmStrpLiteAuth {
 	 * Create an entry object with posted values.
 	 *
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
+	 *
 	 * @return stdClass
 	 */
 	private static function generate_false_entry() {
-		$entry          = new stdClass();
-		$entry->post_id = 0;
-		$entry->id      = 0;
-		$entry->metas   = array();
+		$entry           = new stdClass();
+		$entry->post_id  = 0;
+		$entry->id       = 0;
+		$entry->item_key = '';
+		$entry->metas    = array();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		foreach ( $_POST as $k => $v ) {
@@ -404,6 +437,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $form
+	 *
 	 * @return void
 	 */
 	private static function format_form_data( &$form ) {
@@ -411,6 +445,7 @@ class FrmStrpLiteAuth {
 
 		foreach ( $form as $input ) {
 			$key = $input['name'];
+
 			if ( isset( $formatted[ $key ] ) ) {
 				if ( is_array( $formatted[ $key ] ) ) {
 					$formatted[ $key ][] = $input['value'];
@@ -432,12 +467,14 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
 
 		$details = self::check_request_params( $form_id );
+
 		if ( is_array( $details ) ) {
 			$payment        = $details['payment'];
 			$intent         = $details['intent'];
@@ -468,6 +505,7 @@ class FrmStrpLiteAuth {
 			}
 
 			$intent = self::create_intent( $action );
+
 			if ( ! is_object( $intent ) ) {
 				// A non-object is a string error message.
 				// The error gets logged to results.log so we can just skip it.
@@ -494,6 +532,7 @@ class FrmStrpLiteAuth {
 	 * @since 3.0 This code was moved out of self::maybe_create_intents into a new function.
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return mixed
 	 */
 	private static function create_intent( $action ) {
@@ -532,10 +571,12 @@ class FrmStrpLiteAuth {
 	 * Add the statement descriptor to the intent data, if it is valid.
 	 *
 	 * @param array $intent_data
+	 *
 	 * @return array
 	 */
 	private static function maybe_add_statement_descriptor( $intent_data ) {
 		$statement_descriptor = self::get_statement_descriptor();
+
 		if ( false !== $statement_descriptor ) {
 			$intent_data['statement_descriptor'] = $statement_descriptor;
 		}
@@ -582,6 +623,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.23
 	 *
 	 * @param string $name The name of the site.
+	 *
 	 * @return string The name with special characters removed.
 	 */
 	private static function strip_special_characters_from_statement_descriptor( $name ) {
@@ -603,6 +645,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.23
 	 *
 	 * @param string $name Passed by reference, as this is updated if it is too long.
+	 *
 	 * @return bool
 	 */
 	private static function statement_descriptor_is_valid( &$name ) {
@@ -613,12 +656,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
-
-		if ( ! preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name ) ) {
-			return false;
-		}
-
-		return true;
+		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
 	/**
@@ -627,6 +665,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param array $payment_method_types
+	 *
 	 * @return false|object
 	 */
 	private static function create_setup_intent( $payment_method_types ) {
@@ -636,6 +675,7 @@ class FrmStrpLiteAuth {
 
 		// We need to add a customer to support subscriptions with link.
 		$customer = FrmStrpLiteAppHelper::call_stripe_helper_class( 'get_customer', $payment_info );
+
 		if ( ! is_object( $customer ) ) {
 			return false;
 		}
@@ -648,12 +688,14 @@ class FrmStrpLiteAuth {
 	 *
 	 * @param int|string $form_id
 	 * @param array      $actions
+	 *
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
 		if ( empty( $actions ) ) {
 			return;
 		}
+
 		$form = FrmForm::getOne( $form_id );
 
 		foreach ( $actions as $k => $action ) {
@@ -666,10 +708,10 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	private static function get_amount_before_submit( $atts ) {
-		$amount = $atts['action']->post_content['amount'];
 		return FrmStrpLiteActionsController::prepare_amount( $atts['action']->post_content['amount'], $atts );
 	}
 
@@ -681,6 +723,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
+	 *
 	 * @return string
 	 */
 	public static function return_url( $atts ) {
@@ -689,13 +732,7 @@ class FrmStrpLiteAuth {
 		);
 		self::prepare_success_atts( $atts );
 
-		if ( $atts['conf_method'] === 'redirect' ) {
-			$redirect = self::get_redirect_url( $atts );
-		} else {
-			$redirect = self::get_message_url( $atts );
-		}
-
-		return $redirect;
+		return $atts['conf_method'] === 'redirect' ? self::get_redirect_url( $atts ) : self::get_message_url( $atts );
 	}
 
 	/**
@@ -709,10 +746,12 @@ class FrmStrpLiteAuth {
 	 *     @type stdClass $form
 	 *     @type stdClass $entry
 	 * }
+	 *
 	 * @return string
 	 */
 	private static function get_redirect_url( $atts ) {
 		$actions = FrmFormsController::get_met_on_submit_actions( $atts );
+
 		if ( $actions ) {
 			$success_url = reset( $actions )->post_content['success_url'];
 		}
@@ -736,9 +775,12 @@ class FrmStrpLiteAuth {
 	 * @since 6.5, introduced in v2.0 of the Stripe add on.
 	 *
 	 * @param array $atts
+	 *
+	 * @return string
 	 */
 	private static function get_message_url( $atts ) {
 		$url = self::get_referer_url( $atts['entry_id'], false );
+
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
@@ -750,6 +792,7 @@ class FrmStrpLiteAuth {
 	 *
 	 * @param int|string $entry_id
 	 * @param bool       $delete_meta
+	 *
 	 * @return false|string
 	 */
 	public static function get_referer_url( $entry_id, $delete_meta = true ) {
@@ -762,6 +805,7 @@ class FrmStrpLiteAuth {
 			),
 			'id, meta_value'
 		);
+
 		if ( ! $row ) {
 			return false;
 		}
@@ -773,7 +817,10 @@ class FrmStrpLiteAuth {
 			return false;
 		}
 
-		self::delete_temporary_referer_meta( (int) $row->id );
+		if ( $delete_meta ) {
+			self::delete_temporary_referer_meta( (int) $row->id );
+		}
+
 		return $meta['referer'];
 	}
 
@@ -781,6 +828,7 @@ class FrmStrpLiteAuth {
 	 * Delete the referer meta as we'll no longer need it.
 	 *
 	 * @param int $row_id
+	 *
 	 * @return void
 	 */
 	private static function delete_temporary_referer_meta( $row_id ) {
@@ -794,6 +842,7 @@ class FrmStrpLiteAuth {
 	 * @since 6.5.1
 	 *
 	 * @param object $intent
+	 *
 	 * @return bool
 	 */
 	private static function intent_has_failed_status( $intent ) {
@@ -807,18 +856,14 @@ class FrmStrpLiteAuth {
 	 *
 	 * @param object $payment
 	 * @param object $intent
+	 *
 	 * @return bool
 	 */
 	public static function payment_failed( $payment, $intent ) {
 		if ( self::intent_has_failed_status( $intent ) ) {
 			return true;
 		}
-
 		// The $intent will be "succeeded" with a failed payment when testing with the 4000000000000341 credit card.
-		if ( 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status ) {
-			return true;
-		}
-
-		return false;
+		return 'payment_failed' === FrmAppHelper::simple_get( 'frm_link_error' ) && 'failed' === $payment->status;
 	}
 }

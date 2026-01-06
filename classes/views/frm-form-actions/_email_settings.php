@@ -2,7 +2,46 @@
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
+$email_styles   = FrmEmailStylesController::get_email_styles();
+$selected_style = ! empty( $form_action->post_content['email_style'] ) ? $form_action->post_content['email_style'] : 'classic';
+
+if ( ! empty( $form_action->post_content['plain_text'] ) ) {
+	$selected_style = 'plain';
+}
+
+$default_style = FrmEmailStylesController::get_default_email_style();
 ?>
+<p class="frm-email-style-container">
+	<label for="frm-email-style-value">
+		<?php esc_html_e( 'Email Style', 'formidable' ); ?>
+	</label>
+	<select name="<?php echo esc_attr( $this->get_field_name( 'email_style' ) ); ?>" id="frm-email-style-value">
+		<?php
+		foreach ( $email_styles as $style_key => $style ) {
+			$option_attrs = array( 'value' => $style_key );
+			$option_label = $style['name'];
+
+			if ( empty( $style['selectable'] ) ) {
+				$option_attrs['disabled'] = 'disabled';
+				$option_label            .= ' ' . __( '(Pro)', 'formidable' );
+			}
+
+			if ( $style_key === $default_style ) {
+				$option_label .= ' ' . __( '(Default)', 'formidable' );
+			}
+
+			printf(
+				'<option %1$s%2$s>%3$s</option>',
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				FrmAppHelper::array_to_html_params( $option_attrs ),
+				selected( $selected_style, $style_key, false ),
+				esc_html( $option_label )
+			);
+		}//end foreach
+		?>
+	</select>
+</p>
 
 <p class="frm_bcc_cc_container">
 	<a href="javascript:void(0)" class="button frm_email_buttons frm_cc_button <?php echo esc_attr( ! empty( $form_action->post_content['cc'] ) ? 'frm_hidden' : '' ); ?>" data-emailrow="cc">
@@ -16,7 +55,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_to_row frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>">
 		<?php esc_html_e( 'To', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_to'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_to' ) ); ?>" />
 </p>
@@ -24,20 +63,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_cc_row frm_email_row<?php echo empty( $form_action->post_content['cc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>">
 		<?php esc_html_e( 'CC', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'cc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'cc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['cc'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'cc' ) ); ?>" />
-	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
+	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="cc"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
 <p class="frm_has_shortcodes frm_bcc_row frm_email_row<?php echo empty( $form_action->post_content['bcc'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>">
 		<?php esc_html_e( 'BCC', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'bcc' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'bcc' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['bcc'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'bcc' ) ); ?>" />
-	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
+	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="bcc"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
 <p class="frm_reply_to_container">
@@ -49,7 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_from_row frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>">
 		<?php esc_html_e( 'From', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'from' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'from' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'from' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['from'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'from' ) ); ?>" />
@@ -62,17 +101,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 <p class="frm_has_shortcodes frm_reply_to_row frm_email_row<?php echo empty( $form_action->post_content['reply_to'] ) ? ' frm_hidden' : ''; ?>">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>">
 		<?php esc_html_e( 'Reply To', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'reply_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'reply_to' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'reply_to' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['reply_to'] ); ?>" class="frm_not_email_to large-text" id="<?php echo esc_attr( $this->get_field_id( 'reply_to' ) ); ?>" />
-	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="reply_to"><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon frm_svg14' ); ?></a>
+	<a href="javascript:void(0)" class="frm_remove_field" data-emailrow="reply_to"><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon frm_svg14' ); ?></a>
 </p>
 
 <p class="frm_has_shortcodes frm_email_row">
 	<label for="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>">
 		<?php esc_html_e( 'Subject', 'formidable' ); ?>
-		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', '', $form->name ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+		<span <?php FrmAppHelper::maybe_add_tooltip( 'email_subject', '', $form->name ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 	</label>
 	<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'email_subject' ) ); ?>" class="frm_not_email_subject large-text" id="<?php echo esc_attr( $this->get_field_id( 'email_subject' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['email_subject'] ); ?>" />
 </p>
@@ -89,6 +128,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	 *
 	 * @param bool  $rich_text_emails True by default unless plain text is selected.
 	 * @param array $args {
+	 *
 	 *     @type stdClass $form
 	 *     @type WP_Post  $form_action
 	 * }
@@ -122,10 +162,3 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'Append Browser and Referring URL to message', 'formidable' ); ?>
 	<?php } ?>
 </label>
-
-<p>
-	<label for="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>">
-		<input type="checkbox" name="<?php echo esc_attr( $this->get_field_name( 'plain_text' ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( 'plain_text' ) ); ?>" value="1" <?php checked( $form_action->post_content['plain_text'], 1 ); ?> />
-		<?php esc_html_e( 'Send Emails in Plain Text', 'formidable' ); ?>
-	</label>
-</p>

@@ -34,6 +34,9 @@ export function showLockedTemplateModal( template ) {
 		case PLANS.RENEW:
 			showRenewAccountModal();
 			break;
+		case PLANS.FREE:
+			showLeaveEmailModal();
+			break;
 	}
 }
 
@@ -89,7 +92,7 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 
 		// Update SVG icon
 		const svg = icon.querySelector( 'svg > use' );
-		svg.setAttribute( 'xlink:href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
+		svg.setAttribute( 'href', shouldDisplayCheck ? '#frm_checkmark_icon' : '#frm_close_icon' );
 	} );
 
 	// Append template slug to the upgrade modal link URL
@@ -107,6 +110,16 @@ export const showUpgradeModal = showModal( ( plan, template ) => {
 export const showRenewAccountModal = showModal( () => {
 	const { renewAccountModal } = getElements();
 	show( renewAccountModal );
+} );
+
+/**
+ * Display the modal dialog to prompt the user to leave an email.
+ *
+ * @return {void}
+ */
+export const showLeaveEmailModal = showModal( () => {
+	const { leaveEmailModal } = getElements();
+	show( leaveEmailModal );
 } );
 
 /**

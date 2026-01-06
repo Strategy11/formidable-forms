@@ -11,24 +11,28 @@ class FrmFieldCreditCard extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'credit_card';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @return array
+	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'clear_on_focus' => false,
 			'description'    => false,
 			'default'        => false,
 			'required'       => false,
 		);
-		return $settings;
 	}
 
 	protected function include_form_builder_file() {
@@ -38,6 +42,7 @@ class FrmFieldCreditCard extends FrmFieldType {
 	/**
 	 * @param array $args
 	 * @param array $shortcode_atts
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {

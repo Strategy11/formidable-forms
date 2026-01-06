@@ -34,6 +34,7 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 
 	/**
 	 * @param array $currency
+	 *
 	 * @return void
 	 */
 	private function assert_usd( $currency ) {
@@ -44,6 +45,7 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 
 	/**
 	 * @param array $currency
+	 *
 	 * @return void
 	 */
 	private function assert_euro( $currency ) {
@@ -54,6 +56,7 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 
 	/**
 	 * @param array $currency
+	 *
 	 * @return void
 	 */
 	private function assert_cad( $currency ) {

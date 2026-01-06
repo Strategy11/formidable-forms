@@ -67,6 +67,7 @@
  */
 @import 'utilities/effects/box-shadow';
 @import 'utilities/typography/text-color';
+@import 'utilities/typography/text-decoration';
 @import 'utilities/spacing/margin';
 @import 'utilities/spacing/padding';
 @import 'utilities/typography/font-size';
@@ -269,7 +270,9 @@
 @import 'components/builder/submit-field';
 @import 'components/accordion/accordion-title';
 @import 'components/square';
-@import 'components/sales/banner';
+@import 'components/coupons';
+@import 'components/banner/sale-banner';
+@import 'components/banner/get-free-templates-banner';
 
 /**
  * Backwards Compatibility

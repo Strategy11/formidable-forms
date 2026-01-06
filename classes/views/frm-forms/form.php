@@ -51,6 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( ! empty( $values['fields'] ) ) {
 			$grid_helper     = new FrmFieldGridHelper();
 			$values['count'] = 0;
+
 			foreach ( $values['fields'] as $field ) {
 				++$values['count'];
 				$grid_helper->set_field( $field );
@@ -68,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php if ( ! FrmAppHelper::is_admin_page() ) : ?>
 		<p id="frm-form-button">
 			<button class="frm_button_submit" disabled="disabled">
-				<?php echo esc_html( isset( $form->options['submit_value'] ) ? $form->options['submit_value'] : __( 'Submit', 'formidable' ) ); ?>
+				<?php echo esc_html( $form->options['submit_value'] ?? __( 'Submit', 'formidable' ) ); ?>
 			</button>
 		</p>
 	<?php endif; ?>

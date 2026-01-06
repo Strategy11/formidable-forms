@@ -87,6 +87,7 @@ class FrmEntryValues {
 	 * Gets entry property.
 	 *
 	 * @since 5.0.16
+	 *
 	 * @return stdClass
 	 */
 	public function get_entry() {
@@ -178,17 +179,10 @@ class FrmEntryValues {
 	 */
 	private function prepare_array_property( $index, $atts ) {
 		if ( ! empty( $atts[ $index ] ) ) {
-
-			if ( is_array( $atts[ $index ] ) ) {
-				$property = $atts[ $index ];
-			} else {
-				$property = explode( ',', $atts[ $index ] );
-			}
-		} else {
-			$property = array();
+			return is_array( $atts[ $index ] ) ? $atts[ $index ] : explode( ',', $atts[ $index ] );
 		}
 
-		return $property;
+		return array();
 	}
 
 	/**
@@ -272,7 +266,7 @@ class FrmEntryValues {
 		);
 		$referrer = array(
 			'label' => __( 'Referrer', 'formidable' ),
-			'value' => isset( $entry_description['referrer'] ) ? $entry_description['referrer'] : '',
+			'value' => $entry_description['referrer'] ?? '',
 		);
 
 		/**
@@ -315,12 +309,14 @@ class FrmEntryValues {
 	 */
 	protected function is_field_included( $field ) {
 		$is_included = true;
+
 		if ( ! empty( $this->include_fields ) ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
 		}
 
 		if ( ! empty( $this->exclude_fields ) ) {
 			$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+
 			if ( $is_excluded ) {
 				$is_included = false;
 			}

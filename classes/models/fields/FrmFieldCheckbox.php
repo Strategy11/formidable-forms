@@ -10,12 +10,14 @@ class FrmFieldCheckbox extends FrmFieldType {
 
 	/**
 	 * @var string
+	 *
 	 * @since 3.0
 	 */
 	protected $type = 'checkbox';
 
 	/**
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $holds_email_values = true;
@@ -24,10 +26,14 @@ class FrmFieldCheckbox extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.06.01
 	 */
 	protected $has_for_label = false;
 
+	/**
+	 * @return string
+	 */
 	protected function input_html() {
 		return $this->multiple_input_html();
 	}
@@ -63,6 +69,9 @@ class FrmFieldCheckbox extends FrmFieldType {
 	 * Get the type of field being displayed.
 	 *
 	 * @since 4.02.01
+	 *
+	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	public function displayed_field_type( $field ) {
@@ -84,6 +93,8 @@ class FrmFieldCheckbox extends FrmFieldType {
 
 	/**
 	 * @since 4.06
+	 *
+	 * @param array $args
 	 *
 	 * @return void
 	 */
@@ -107,5 +118,18 @@ class FrmFieldCheckbox extends FrmFieldType {
 
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
+	}
+
+	/**
+	 * Unset aria-invalid for checkboxes because it's not valid for checkboxes.
+	 * Instead aria-invalid is added to the checkbox group parent element.
+	 *
+	 * @since 6.25
+	 *
+	 * @param array $shortcode_atts
+	 * @param array $args
+	 */
+	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
+		unset( $shortcode_atts['aria-invalid'] );
 	}
 }

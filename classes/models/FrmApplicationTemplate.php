@@ -83,11 +83,33 @@ class FrmApplicationTemplate {
 			'product-review',
 			'real-estate-listings',
 			'business-directory',
+			'artist-gallery',
+			'classifieds',
+			'community-event-calendar',
+			'company-timeline',
+			'crowdfunding',
+			'job-board',
+			'logo-cloud',
+			'multi-property-booking-system',
+			'wedding-venue-booking',
+			'permission-slip',
+			'property-directory',
+			'radio-station',
+			'recipe',
+			'rsvp-invite',
+			'searchable-directory',
+			'shopping-cart',
+			'sports-league-calendar',
+			'staff-directory',
+			'tiered-pricing',
+			'trip-itinerary',
+			'twitterx',
 		);
 	}
 
 	/**
 	 * @param array $api_data
+	 *
 	 * @return void
 	 */
 	public function __construct( $api_data ) {
@@ -100,6 +122,7 @@ class FrmApplicationTemplate {
 
 	/**
 	 * @param array<string> $categories
+	 *
 	 * @return void
 	 */
 	private static function populate_category_information( $categories ) {
@@ -107,6 +130,7 @@ class FrmApplicationTemplate {
 			if ( self::category_matches_a_license_type( $category ) ) {
 				continue;
 			}
+
 			if ( in_array( $category, self::$categories, true ) ) {
 				continue;
 			}
@@ -118,10 +142,11 @@ class FrmApplicationTemplate {
 	 * @since 5.5.2
 	 *
 	 * @param string $category
+	 *
 	 * @return bool
 	 */
 	private static function category_matches_a_license_type( $category ) {
-		if ( false !== strpos( $category, '+Views' ) ) {
+		if ( str_contains( $category, '+Views' ) ) {
 			return true;
 		}
 		return in_array( $category, FrmFormsHelper::get_license_types(), true );
@@ -131,7 +156,7 @@ class FrmApplicationTemplate {
 	 * @return array<string>
 	 */
 	public static function get_categories() {
-		return isset( self::$categories ) ? self::$categories : array();
+		return self::$categories ?? array();
 	}
 
 	/**
@@ -143,6 +168,7 @@ class FrmApplicationTemplate {
 		}
 
 		$application = array();
+
 		foreach ( self::$keys as $key ) {
 			if ( ! isset( $this->api_data[ $key ] ) ) {
 				continue;
@@ -158,7 +184,7 @@ class FrmApplicationTemplate {
 					array_filter(
 						$value,
 						function ( $category ) {
-							return false === strpos( $category, '+Views' );
+							return ! str_contains( $category, '+Views' );
 						}
 					)
 				);
@@ -169,7 +195,7 @@ class FrmApplicationTemplate {
 					$key = 'formCount';
 				}
 
-				if ( 'name' === $key && ' Template' === substr( $value, -9 ) ) {
+				if ( 'name' === $key && str_ends_with( $value, ' Template' ) ) {
 					// Strip off the " Template" text at the end of the name as it takes up space.
 					$value = substr( $value, 0, -9 );
 				}
@@ -189,6 +215,7 @@ class FrmApplicationTemplate {
 			}
 
 			$purchase_url = $this->is_available_for_purchase();
+
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
@@ -199,6 +226,7 @@ class FrmApplicationTemplate {
 		$application['isNew'] = $this->is_new();
 
 		$application['usedAddons'] = array();
+
 		if ( isset( $application['used_addons'] ) ) {
 			// Change key to camel case.
 			$application['usedAddons'] = $application['used_addons'];
@@ -225,6 +253,7 @@ class FrmApplicationTemplate {
 		}
 
 		$pro = $addons[93790];
+
 		if ( ! array_key_exists( 'type', $pro ) ) {
 			return false;
 		}
@@ -234,11 +263,7 @@ class FrmApplicationTemplate {
 			'license_type'  => $license_type,
 			'plan_required' => $this->get_required_license(),
 		);
-		if ( ! FrmFormsHelper::plan_is_allowed( $args ) ) {
-			return false;
-		}
-
-		return true;
+		return FrmFormsHelper::plan_is_allowed( $args );
 	}
 
 	/**
@@ -257,6 +282,7 @@ class FrmApplicationTemplate {
 	 */
 	private function get_required_license() {
 		$required_license = strtolower( $this->api_data['min_plan'] );
+
 		if ( 'plus' === $required_license ) {
 			$required_license = 'personal';
 		}

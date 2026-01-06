@@ -44,9 +44,11 @@ const entries = {
     'onboarding-wizard': './js/src/onboarding-wizard/index.js',
     'addons-page': './js/src/addons-page/index.js',
     formidable_styles: './js/src/admin/styles.js',
-	formidable_admin: './js/src/admin/admin.js',
+    formidable_admin: './js/src/admin/admin.js',
+    frm_testing_mode: './js/src/frm_testing_mode.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
     'formidable-web-components': './js/src/web-components/index.js',
+    'welcome-tour': './js/src/welcome-tour',
   },
   // SCSS entries
   scss: {
@@ -54,6 +56,8 @@ const entries = {
     'admin/frm-settings-components': './resources/scss/admin/frm-settings-components.scss',
     font_icons: './resources/scss/font_icons.scss',
     // Dynamically generated web component SCSS files
+    frm_testing_mode: './resources/scss/test-mode/frm_testing_mode.scss',
+    'admin/welcome-tour': './resources/scss/admin/welcome-tour.scss',
     ...webComponentScssFiles
   }
 };
@@ -100,7 +104,8 @@ const jsConfig = {
   entry: entries.js,
   output: {
     filename: '[name].js',
-    path: paths.js
+    path: paths.js,
+    chunkFormat: false,
   },
   module: {
     rules: [
@@ -117,7 +122,7 @@ const jsConfig = {
       {
         test: /\.css$/i,
         use: ['style-loader', 'css-loader'],
-		    exclude: /-component\.css$/
+        exclude: /-component\.css$/
       },
 	  {
 		test: /-component\.css$/i,

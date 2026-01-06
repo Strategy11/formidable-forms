@@ -13,7 +13,7 @@ echo '<div class="frm-long-icon-buttons" role="tablist">';
 
 foreach ( $payment_sections as $key => $section ) {
 	$is_active    = $tab === $key;
-	$name         = isset( $section['name'] ) ? $section['name'] : ucfirst( $key );
+	$name         = $section['name'] ?? ucfirst( $key );
 	$input_params = array(
 		'id'           => "frm_toggle_{$key}_settings",
 		'type'         => 'radio',
@@ -21,9 +21,11 @@ foreach ( $payment_sections as $key => $section ) {
 		'value'        => $key,
 		'data-frmshow' => "#frm_{$key}_settings_section",
 	);
+
 	if ( $is_active ) {
 		$input_params['checked'] = 'checked';
 	}
+
 	$other_section_selectors      = array_map(
 		function ( $section ) {
 			return "#frm_{$section}_settings_section";
@@ -42,7 +44,7 @@ foreach ( $payment_sections as $key => $section ) {
 	?>
 	<input <?php FrmAppHelper::array_to_html_params( $input_params, true ); ?> />
 	<label <?php FrmAppHelper::array_to_html_params( $label_params, true ); ?>>
-		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_' . $key . '_full_icon' ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_' . $key . '_full_icon' ); ?>
 		<span class="screen-reader-text"><?php echo esc_html( $name ); ?></span>
 	</label>
 	<?php
@@ -74,7 +76,7 @@ foreach ( $payment_sections as $key => $section ) {
 		if ( isset( $section['class'] ) ) {
 			call_user_func( array( $section['class'], $section['function'] ) );
 		} else {
-			call_user_func( ( isset( $section['function'] ) ? $section['function'] : $section ) );
+			call_user_func( ( $section['function'] ?? $section ) );
 		}
 		?>
 	</div>

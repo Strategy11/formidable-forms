@@ -58,12 +58,13 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 			'Signature',
 			'Lookup Field - level 1',
 			'Checkboxes - separate values (label)',
-			'Checkboxes - separate values',
+			'Checkboxes - separate values (value)',
 			'Address - US',
 			'Credit Card',
 		);
 
 		$labels = array_values( $headings );
+
 		foreach ( $expected as $label ) {
 			$this->assertContains( $label, $labels, "{$label} is not present in CSV Headings" );
 		}
@@ -93,7 +94,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		);
 
 		$parent_form = $this->factory->form->create_and_get();
-		$embed_field = $this->factory->field->create_and_get(
+		$this->factory->field->create(
 			array(
 				'form_id'       => $parent_form->id,
 				'type'          => 'embed',
@@ -109,6 +110,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 		$expected = array( $field_in_section->name );
 
 		$labels = array_values( $headings );
+
 		foreach ( $expected as $label ) {
 			$this->assertContains( $label, $labels, "{$label} is not present in CSV Headings" );
 		}

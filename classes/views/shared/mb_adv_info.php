@@ -89,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<?php
 	$show_logic = ! empty( $cond_shortcodes ) && ! empty( $fields );
+
 	if ( $show_logic ) {
 		?>
 	<div id="frm-conditionals" class="tabs-panel frm-text-grey-700 frm-px-xs">
@@ -196,6 +197,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul class="frm_code_list frm-full-hover frm-mt-0">
 		<?php
 		$contextual_codes = FrmShortcodeHelper::get_contextual_codes();
+
 		foreach ( $entry_shortcodes as $skey => $sname ) {
 			if ( ! $skey ) {
 				echo '<li class="clear frm_block"></li>';
@@ -204,7 +206,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 			$classes  = 'frm-advanced-list';
 			$classes .= in_array( $skey, array( 'siteurl', 'sitename', 'entry_count' ), true ) ? ' show_before_content show_after_content' : '';
-			$classes .= strpos( $skey, 'default-' ) === 0 ? ' hide_frm_not_email_subject' : '';
+			$classes .= str_starts_with( $skey, 'default-' ) ? ' hide_frm_not_email_subject' : '';
 
 			if ( in_array( $skey, array_keys( $contextual_codes ), true ) ) {
 				$classes .= ' frm_hidden';
@@ -235,11 +237,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				if ( isset( $uid ) ) {
-					$code = str_replace( '|user_id|', $uid, $code );
-				} else {
-					$code = str_replace( '|user_id|', 'x', $code );
-				}
+				$code = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
+
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 
 				if ( ! is_array( $code_label ) ) {
@@ -252,7 +251,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					array(
 						'code'  => $include_x . $code,
 						'label' => $code_label['label'],
-						'title' => isset( $code_label['title'] ) ? $code_label['title'] : '',
+						'title' => $code_label['title'] ?? '',
 						'class' => 'frm-advanced-list',
 					)
 				);

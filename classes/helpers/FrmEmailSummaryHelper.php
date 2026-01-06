@@ -3,6 +3,7 @@
  * In-plugin summary emails helper
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -63,6 +64,7 @@ class FrmEmailSummaryHelper {
 	 */
 	private static function get_options() {
 		$options = get_option( self::$option_name );
+
 		if ( ! $options ) {
 			$default_options = array(
 				// Do not send email within 15 days after updating.
@@ -82,6 +84,8 @@ class FrmEmailSummaryHelper {
 	 * Saves summary emails options.
 	 *
 	 * @param array $options Options data.
+	 *
+	 * @return void
 	 */
 	private static function save_options( $options ) {
 		update_option( self::$option_name, $options );
@@ -119,6 +123,7 @@ class FrmEmailSummaryHelper {
 		} else {
 			// If no yearly email has been sent, send it if it's less than 45 days until the renewal date.
 			$renewal_date = self::get_renewal_date();
+
 			if ( $renewal_date && self::BEFORE_RENEWAL_PERIOD >= self::get_date_diff( $current_date, $renewal_date ) ) {
 				$emails[] = self::YEARLY;
 				return $emails;
@@ -133,6 +138,8 @@ class FrmEmailSummaryHelper {
 
 	/**
 	 * Sends monthly email.
+	 *
+	 * @return void
 	 */
 	public static function send_monthly() {
 		$monthly_email = new FrmEmailMonthly();
@@ -144,6 +151,8 @@ class FrmEmailSummaryHelper {
 
 	/**
 	 * Sends yearly email.
+	 *
+	 * @return void
 	 */
 	public static function send_yearly() {
 		$yearly_email = new FrmEmailYearly();
@@ -168,6 +177,7 @@ class FrmEmailSummaryHelper {
 
 		// Return the actual renewal date if it exists.
 		$license_info = FrmAddonsController::get_primary_license_info();
+
 		if ( ! empty( $license_info['expires'] ) ) {
 			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
 
@@ -178,6 +188,7 @@ class FrmEmailSummaryHelper {
 
 		// If renewal date doesn't exist, get from the first form creation date.
 		$first_form_date = self::get_earliest_form_created_date();
+
 		if ( $first_form_date ) {
 			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
 
@@ -198,6 +209,7 @@ class FrmEmailSummaryHelper {
 	 * Gets date object.
 	 *
 	 * @param DateTime|string $date Date string or object.
+	 *
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
@@ -213,15 +225,18 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param DateTime|string $date1 Date 1.
 	 * @param DateTime|string $date2 Date 2.
+	 *
 	 * @return false|int
 	 */
 	private static function get_date_diff( $date1, $date2 ) {
 		$date1 = self::get_date_obj( $date1 );
+
 		if ( ! $date1 ) {
 			return false;
 		}
 
 		$date2 = self::get_date_obj( $date2 );
+
 		if ( ! $date2 ) {
 			return false;
 		}
@@ -233,10 +248,12 @@ class FrmEmailSummaryHelper {
 	 * Gets sent date of the last monthly or yearly email.
 	 *
 	 * @param string $type Accepts `monthly`, `yearly`.
+	 *
 	 * @return false|string
 	 */
 	public static function get_last_sent_date( $type ) {
 		$options = self::get_options();
+
 		if ( empty( $options[ 'last_' . $type ] ) ) {
 			return false;
 		}
@@ -249,6 +266,8 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $type Email type.
 	 * @param mixed  $value Set custom value. If this is null, set the current date.
+	 *
+	 * @return void
 	 */
 	public static function set_last_sent_date( $type, $value = null ) {
 		$options = self::get_options();
@@ -276,6 +295,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return array            Contains `count` and `total`.
 	 */
 	public static function get_payments_data( $from_date, $to_date ) {
@@ -288,6 +308,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
+	 *
 	 * @return int
 	 */
 	public static function get_entries_count( $from_date, $to_date ) {
@@ -310,6 +331,7 @@ class FrmEmailSummaryHelper {
 	 * @param string $from_date From date.
 	 * @param string $to_date   To date.
 	 * @param int    $limit     Limit the result. Default is 5.
+	 *
 	 * @return array            Contains `form_id`, `form_name`, and `items_count`.
 	 */
 	public static function get_top_forms( $from_date, $to_date, $limit = 5 ) {
@@ -339,6 +361,8 @@ class FrmEmailSummaryHelper {
 	 * Shows the comparison HTML in the email.
 	 *
 	 * @param float $diff Percentage of difference.
+	 *
+	 * @return void
 	 */
 	public static function show_comparison( $diff ) {
 		if ( ! $diff ) {
@@ -354,6 +378,7 @@ class FrmEmailSummaryHelper {
 		}
 
 		$displayed_value = round( $diff * 100 );
+
 		if ( ! $displayed_value ) {
 			// Do not show 0 value.
 			$displayed_value = $diff > 0 ? 1 : -1;
@@ -373,14 +398,11 @@ class FrmEmailSummaryHelper {
 	 * Gets section CSS in the email.
 	 *
 	 * @param string $border_pos Border position. Default is `top`. Set to empty if no border.
+	 *
 	 * @return string
 	 */
 	public static function get_section_style( $border_pos = 'top' ) {
-		if ( $border_pos ) {
-			$border = 'border-' . $border_pos . ': 1px solid #eaecf0;';
-		} else {
-			$border = '';
-		}
+		$border = $border_pos ? 'border-' . $border_pos . ': 1px solid #eaecf0;' : '';
 		return 'padding: 3em 4.375em;' . $border;
 	}
 
@@ -396,6 +418,8 @@ class FrmEmailSummaryHelper {
 	/**
 	 * Gets CSS for button.
 	 *
+	 * @param bool $display_block Whether to display the button as block.
+	 *
 	 * @return string
 	 */
 	public static function get_button_style( $display_block = false ) {
@@ -407,6 +431,8 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string $icon Icon file name, without file path and extension. Use .png image.
 	 * @param string $text Heading text.
+	 *
+	 * @return void
 	 */
 	public static function section_heading_with_icon( $icon, $text ) {
 		?>
@@ -422,6 +448,7 @@ class FrmEmailSummaryHelper {
 	 *
 	 * @param string       $url  The URL.
 	 * @param array|string $args Custom tracking args if is array, or `utm_content` if is string.
+	 *
 	 * @return string
 	 */
 	public static function get_frm_url( $url, $args = array() ) {
@@ -451,11 +478,13 @@ class FrmEmailSummaryHelper {
 	public static function get_latest_inbox_message() {
 		$inbox    = new FrmInbox();
 		$messages = $inbox->get_messages( 'filter' );
+
 		if ( ! $messages || ! is_array( $messages ) ) {
 			return false;
 		}
 
 		$messages = array_reverse( $messages );
+
 		foreach ( $messages as $message ) {
 			if ( 'news' !== $message['type'] ) {
 				continue;
@@ -474,11 +503,13 @@ class FrmEmailSummaryHelper {
 	 */
 	public static function get_out_of_date_plugins() {
 		$update_data = FrmAddonsController::check_update( '' );
+
 		if ( ! $update_data || ! is_object( $update_data ) || empty( $update_data->response ) ) {
 			return array();
 		}
 
 		$plugins = array();
+
 		foreach ( $update_data->response as $plugin_data ) {
 			$plugins[] = $plugin_data->display_name;
 		}
@@ -490,6 +521,7 @@ class FrmEmailSummaryHelper {
 	 * Processes inbox CTA button before showing in email.
 	 *
 	 * @param string $button_html Button HTML. This usually contains 1 button and 1 dismiss button.
+	 *
 	 * @return string
 	 */
 	public static function process_inbox_cta_button( $button_html ) {
@@ -516,6 +548,7 @@ class FrmEmailSummaryHelper {
 	 * Gets the localized date with the date diff from today.
 	 *
 	 * @param string $date_diff Date diff string. By default, this is empty, the result will be the current date.
+	 *
 	 * @return string
 	 */
 	public static function get_date_from_today( $date_diff = '' ) {
@@ -531,11 +564,13 @@ class FrmEmailSummaryHelper {
 	 * @since 6.8
 	 *
 	 * @param string $recipients Recipients.
+	 *
 	 * @return void
 	 */
 	public static function maybe_remove_recipients_from_api( &$recipients ) {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
+
 		if ( empty( $addons['no_emails'] ) ) {
 			return;
 		}
@@ -553,6 +588,8 @@ class FrmEmailSummaryHelper {
 	 * @since 6.8
 	 *
 	 * @param string $string string.
+	 *
+	 * @return void
 	 */
 	public static function plain_text_echo( $string ) {
 		echo wp_strip_all_tags( $string ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

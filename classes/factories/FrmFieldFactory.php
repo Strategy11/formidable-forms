@@ -36,6 +36,7 @@ class FrmFieldFactory {
 	 * @since 3.0
 	 *
 	 * @param array|object $field
+	 *
 	 * @return FrmFieldType
 	 */
 	public static function get_field_factory( $field ) {
@@ -73,13 +74,8 @@ class FrmFieldFactory {
 	 */
 	public static function get_field_type( $field_type, $field = 0 ) {
 		$class = self::get_field_type_class( $field_type );
-		if ( empty( $class ) ) {
-			$field = new FrmFieldDefault( $field, $field_type );
-		} else {
-			$field = new $class( $field, $field_type );
-		}
 
-		return $field;
+		return empty( $class ) ? new FrmFieldDefault( $field, $field_type ) : new $class( $field, $field_type );
 	}
 
 	/**
@@ -112,13 +108,17 @@ class FrmFieldFactory {
 			FrmFieldGdprHelper::FIELD_TYPE => FrmFieldGdprHelper::get_gdpr_field_class( $field_type ),
 		);
 
-		$class = isset( $type_classes[ $field_type ] ) ? $type_classes[ $field_type ] : '';
+		$class = $type_classes[ $field_type ] ?? '';
 
 		return apply_filters( 'frm_get_field_type_class', $class, $field_type );
 	}
 
 	/**
 	 * @since 3.0
+	 *
+	 * @param string $type
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_html( $type ) {
 		$has_html = self::field_has_property( $type, 'has_html' );
@@ -132,6 +132,8 @@ class FrmFieldFactory {
 	 *
 	 * @param string $type
 	 * @param string $property
+	 *
+	 * @return mixed
 	 */
 	public static function field_has_property( $type, $property ) {
 		$field = self::get_field_type( $type );

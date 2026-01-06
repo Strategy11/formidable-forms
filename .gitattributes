@@ -43,3 +43,4 @@ _typos.toml export-ignore
 /resources/ export-ignore
 webpack.dev.js export-ignore
 .browserslistrc export-ignore
+/phpcs-sniffs/ export-ignore

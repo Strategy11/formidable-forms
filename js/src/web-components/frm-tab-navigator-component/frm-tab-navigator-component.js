@@ -10,6 +10,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 	/**
 	 * Initializes the view.
+	 *
 	 * @return {Element} - The wrapper element.
 	 */
 	initView() {
@@ -35,20 +36,22 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 	/**
 	 * Sets the initial underline width of active tab nav item.
+	 *
 	 * @param {Element} wrapper - The wrapper element.
 	 */
 	setInitialUnderlineWidth( wrapper ) {
-		const li                 = wrapper.querySelector( 'li.frm-active' );
+		const li = wrapper.querySelector( 'li.frm-active' );
 		const tabActiveUnderline = wrapper.querySelector( '.frm-tabs-delimiter .frm-tabs-active-underline' );
 
 		if ( ! li || ! tabActiveUnderline ) {
 			return;
 		}
-		tabActiveUnderline.style.width = `${li.clientWidth}px`;
+		tabActiveUnderline.style.width = `${ li.clientWidth }px`;
 	}
 
 	/**
 	 * Gets the tab delimiter.
+	 *
 	 * @return {string} - The tab delimiter.
 	 */
 	getTabDelimiter() {
@@ -65,6 +68,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 	/**
 	 * Gets the tab headings.
+	 *
 	 * @return {string} - The tab headings.
 	 */
 	getTabs() {
@@ -76,13 +80,14 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 		Array.from( this.tabs ).forEach( ( tab, index ) => {
 			ul.appendChild( this.createTabHeading( tab, index ) );
-		});
+		} );
 
 		return tabHeadings;
 	}
 
 	/**
 	 * Gets the tab container.
+	 *
 	 * @return {string} - The tab container.
 	 */
 	getTabContainer() {
@@ -95,13 +100,14 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 		Array.from( this.tabs ).forEach( ( tab, index ) => {
 			slideTrack.appendChild( this.createTabContainer( tab, index ) );
-		});
+		} );
 
 		return tabContainer;
 	}
 
 	/**
 	 * Creates a tab heading.
+	 *
 	 * @param {Element} tab   - The tab element.
 	 * @param {number}  index - The index of the tab.
 	 * @return {string} - The tab heading.
@@ -116,6 +122,7 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 
 	/**
 	 * Creates a tab container.
+	 *
 	 * @param {Element} tab   - The tab element.
 	 * @param {number}  index - The index of the tab.
 	 * @return {string} - The tab container.
@@ -124,17 +131,18 @@ export class frmTabNavigatorComponent extends frmWebComponent {
 		const className = index === 0 ? 'frm-active' : '';
 		const container = document.createElement( 'div' );
 
-		container.className = `frm-tab-container ${className}`;
+		container.className = `frm-tab-container ${ className }`;
 
 		Array.from( tab.children ).forEach( child => {
 			container.appendChild( child );
-		});
+		} );
 
 		return container;
 	}
 
 	/**
 	 * Gets the tab underline.
+	 *
 	 * @return {Element} - The tab underline.
 	 */
 	getTabUnderline() {

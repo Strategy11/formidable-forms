@@ -14,15 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
-$div_class    = isset( $args['div_class'] ) ? $args['div_class'] : false;
-$show_labels  = isset( $args['show_labels'] ) ? $args['show_labels'] : false;
-$off_label    = isset( $args['off_label'] ) ? $args['off_label'] : '';
-$on_label     = isset( $args['on_label'] ) ? $args['on_label'] : 1;
-$value        = isset( $args['value'] ) ? $args['value'] : $on_label;
-$checked      = isset( $args['checked'] ) && ( true === $args['checked'] || false !== strpos( $args['checked'], 'checked="checked"' ) );
+$div_class    = $args['div_class'] ?? false;
+$show_labels  = $args['show_labels'] ?? false;
+$off_label    = $args['off_label'] ?? '';
+$on_label     = $args['on_label'] ?? 1;
+$value        = $args['value'] ?? $on_label;
+$checked      = isset( $args['checked'] ) && ( true === $args['checked'] || str_contains( $args['checked'], 'checked="checked"' ) );
 $disabled     = ! empty( $args['disabled'] );
 $aria_checked = $checked ? 'true' : 'false';
-$input_html   = isset( $args['input_html'] ) ? $args['input_html'] : array();
+$input_html   = $args['input_html'] ?? array();
 
 $use_container = false;
 
@@ -31,12 +31,13 @@ $div_params = array(
 	// It uses --toggle-on-color so just set the variable.
 	'style' => '--toggle-on-color:var(--primary-color);',
 );
+
 if ( $div_class ) {
 	$use_container       = true;
 	$div_params['class'] = $div_class;
 }
 
-if ( strpos( $name, '[' ) === false ) {
+if ( ! str_contains( $name, '[' ) ) {
 	$name .= '[]';
 }
 

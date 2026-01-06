@@ -9,16 +9,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function menu() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$frm_settings = FrmAppHelper::get_settings();
 
 		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).
 		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 );
 
-		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
 			// Use the PayPal addon for add new and edit routing if it is active.
 			// This is required to support the "edit" link when using the Stripe Lite table view.
 			// It is also required for the "Add New" button to work on the payments table page.
@@ -61,6 +57,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		$type   = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
 
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
+
 		if ( method_exists( $class_name, $action ) ) {
 			$class_name::$action();
 			return;
@@ -71,6 +68,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $payment ) {
@@ -85,6 +83,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Echo a receipt link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_receipt_link( $payment ) {
@@ -118,6 +117,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Echo a refund link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_refund_link( $payment ) {
@@ -129,6 +129,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Show a link to a payment entry (unless it is deleted).
 	 *
 	 * @param object $payment
+	 *
 	 * @return void
 	 */
 	public static function show_entry_link( $payment ) {
@@ -151,6 +152,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * Get a refund link.
 	 *
 	 * @param object $payment
+	 *
 	 * @return string
 	 */
 	public static function refund_link( $payment ) {
@@ -166,6 +168,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		}
 
 		$paysys = $payment->paysys;
+
 		if ( self::should_filter_refund_link( $paysys ) ) {
 			/**
 			 * Filter the refund link for a specific gateway.
@@ -200,6 +203,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
 		$payment_id = FrmAppHelper::get_param( 'payment_id', '', 'get', 'absint' );
+
 		if ( ! $payment_id ) {
 			wp_die( esc_html__( 'Oops! No payment was selected for refund.', 'formidable' ) );
 		}
@@ -234,6 +238,7 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 *
 	 * @param object $payment
 	 * @param string $status
+	 *
 	 * @return void
 	 */
 	public static function change_payment_status( $payment, $status ) {

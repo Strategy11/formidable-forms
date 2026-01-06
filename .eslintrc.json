@@ -13,10 +13,10 @@
 		}
 	},
 	"extends": [
-		"plugin:@wordpress/eslint-plugin/recommended",
+		"plugin:@wordpress/eslint-plugin/recommended-with-formatting",
 		"plugin:react/recommended",
 		"plugin:jsx-a11y/recommended",
-		"plugin:sonarjs/recommended-legacy",
+		"plugin:sonarjs/recommended",
 		"plugin:cypress/recommended",
 		"plugin:no-jquery/deprecated",
 		"plugin:compat/recommended"
@@ -46,6 +46,7 @@
 		}
 	},
 	"rules": {
+		"sonarjs/cognitive-complexity": "off",
 		"cypress/unsafe-to-chain-command": "off",
 		"cypress/no-assigning-return-values": "off",
 		"camelcase": [
@@ -149,5 +150,23 @@
 		"react/jsx-no-target-blank": "off",
 		"comma-dangle": "off",
 		"arrow-parens": ["error", "as-needed"]
-	}
+	},
+	"overrides": [
+		{
+			"files": ["js/formidable.js"],
+			"rules": {
+				"no-jquery/no-find": "error",
+				"no-jquery/no-visibility": "error",
+				"no-jquery/no-slide": "error",
+				"no-jquery/no-css": "error",
+				"no-jquery/no-each": "error",
+				"no-jquery/no-append-html": "error",
+				"no-jquery/no-animate": "error",
+				"no-jquery/no-prop": "error",
+				"no-jquery/no-filter": "error",
+				"no-jquery/no-data": "error",
+				"no-jquery/no-parents": "error"
+			}
+		}
+	]
 }

@@ -14,7 +14,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 			)
 		);
 
-		$action_id = $this->factory->post->create(
+		$this->factory->post->create(
 			array(
 				'post_content' => json_encode(
 					array(
@@ -27,8 +27,8 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 				'post_excerpt' => 'payment',
 			)
 		);
-		$actions   = FrmTransLiteActionsController::get_actions_for_form( $form_id );
-		$action    = reset( $actions );
+		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
+		$action  = reset( $actions );
 
 		$fields = $this->get_fields_for_price( $action );
 
@@ -73,6 +73,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 	/**
 	 * @param string $amount
 	 * @param array  $currency
+	 *
 	 * @return string
 	 */
 	private function maybe_use_decimal( &$amount, $currency ) {

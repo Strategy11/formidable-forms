@@ -7,6 +7,7 @@ import frmDependentUpdaterComponent from '../../admin/components/dependent-updat
 
 /**
  * Represents a slider component.
+ *
  * @class frmSliderComponent
  */
 export default class frmSliderComponent {

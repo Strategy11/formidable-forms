@@ -18,11 +18,20 @@ describe( 'Forms page', () => {
 				const text = $el.text().trim();
 				const href = $el.attr( 'href' );
 
-				if ( href && ( text.includes( 'upgrading to PRO' ) || text.includes( 'Get 60% Off Pro!' ) || text.includes( 'Get the Deal' ) || text.match( /GET \d+% OFF|SAVE \d+%/ ) ) ) {
+				const substrings = [
+					'upgrading to PRO',
+					'Get 60% Off Pro!',
+					'Get the Deal',
+					'upgrading for 60% off during our No Brainer Sale!',
+					'Black Friday Deals',
+					'Cyber Monday Deals',
+				];
+
+				if ( href && substrings.some( substring => text.includes( substring ) ) ) {
 					cy.origin( 'https://formidableforms.com', { args: { href } }, ( { href } ) => {
 						cy.visit( href );
 						cy.get( 'h1' ).should( $h1 => {
-							const headingText = $h1.text().toLowerCase();
+							const headingText = $h1.text().trim().toLowerCase();
 							expect( [
 								'the only wordpress form maker & application builder plugin',
 								'upgrade today to unlock the full power of formidable forms',
@@ -30,6 +39,13 @@ describe( 'Forms page', () => {
 								'more than just a wordpress form builder',
 								'get more done in less time with better wordpress forms',
 								'power your wordpress site like never before',
+								'tired of workarounds? build what you really need.',
+								'build powerful forms, web apps, dashboards, and more',
+								'black friday sales are happening now!',
+								'save 65% on the best wordpress form builder',
+								'don\'t miss the best deals for cyber monday!',
+								'don\'t miss the giving tuesday flash sale!',
+								'don\'t miss 65% off on the best wordpress form builder!',
 							] ).to.include( headingText );
 						} );
 					} );

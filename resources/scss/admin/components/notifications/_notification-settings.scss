@@ -84,17 +84,10 @@ table td, .form-table tr td {
 
 p.frm_bcc_cc_container,
 p.frm_reply_to_container {
-	float: right;
-	z-index: 1;
 	position: relative;
-}
-
-p.frm_bcc_cc_container {
-	margin: 14px 0 0;
-}
-
-p.frm_reply_to_container {
+	float: right;
 	margin: -4px 0 0;
+	z-index: 1;
 }
 
 .frm_email_row .frm_cancel1_icon::before {
