@@ -44,7 +44,7 @@ class test_FrmDirectFileAccess extends FrmUnitTest {
 	}
 
 	private function check_for_abspath_check( $path ) {
-		return strpos( file_get_contents( $path ), "! defined( 'ABSPATH' )" ) !== false;
+		return str_contains( file_get_contents( $path ), "! defined( 'ABSPATH' )" );
 	}
 
 	public function test_direct_file_access() {

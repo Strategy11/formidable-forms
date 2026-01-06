@@ -27,7 +27,7 @@ class FrmTestModeController {
 		 */
 		do_action( 'frm_test_mode_container' );
 
-		if ( false !== strpos( $html, '<div class="frm_form_fields' ) ) {
+		if ( str_contains( $html, '<div class="frm_form_fields' ) ) {
 			return preg_replace(
 				'/<div class="frm_form_fields/',
 				self::get_testing_mode_container() . '<div class="frm_form_fields',

@@ -20,7 +20,7 @@ do_action( 'frm_action_settings_before_action_name', $form_action );
 	<p class="frm6 frm_form_field">
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>">
 			<?php esc_html_e( 'Action Name', 'formidable' ); ?>
-			<span <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_tooltip_icon frm_svg14' ); ?></span>
+			<span <?php FrmAppHelper::maybe_add_tooltip( 'action_title' ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_tooltip_icon frm_svg14' ); ?></span>
 		</label>
 		<input type="text" name="<?php echo esc_attr( $action_control->get_field_name( 'post_title', '' ) ); ?>" value="<?php echo esc_attr( $form_action->post_title ); ?>" class="large-text" id="<?php echo esc_attr( $action_control->get_field_id( 'action_post_title' ) ); ?>" />
 	</p>

@@ -110,7 +110,7 @@ class FrmSquareLiteAppController {
 	private static function get_amount_value_for_verification( $action ) {
 		$amount = $action->post_content['amount'];
 
-		if ( strpos( $amount, '[' ) === false ) {
+		if ( ! str_contains( $amount, '[' ) ) {
 			return $amount;
 		}
 

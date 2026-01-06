@@ -16,7 +16,7 @@ class FrmStrpLiteSettingsController {
 		$sections['stripe'] = array(
 			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_stripe_icon',
+			'icon'     => 'frmfont frm_stripe_icon',
 		);
 
 		add_action(

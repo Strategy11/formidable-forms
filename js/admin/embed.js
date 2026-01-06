@@ -186,7 +186,7 @@
 
 						let editPageUrl;
 
-						doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+						const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 						doneButton.classList.remove( 'dismiss' );
 						/* translators: %s: type (ie. view, form). */
 						doneButton.textContent = sprintf( __( 'Insert %s', 'formidable' ), typeDescription );
@@ -294,7 +294,7 @@
 					input.type = 'text';
 					input.focus();
 
-					doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
+					const doneButton = modal.querySelector( '.frm_modal_footer .button-primary' );
 					doneButton.textContent = __( 'Create page', 'formidable' );
 					doneButton.addEventListener(
 						'click',

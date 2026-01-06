@@ -15,9 +15,9 @@ class FrmStrpLitePaymentsController {
 	public static function get_receipt_link( $receipt ) {
 		$url = 'https://dashboard.stripe.com/';
 
-		if ( 0 === strpos( $receipt, 'sub_' ) ) {
+		if ( str_starts_with( $receipt, 'sub_' ) ) {
 			$url .= 'subscriptions/';
-		} elseif ( 0 === strpos( $receipt, 'seti_' ) ) {
+		} elseif ( str_starts_with( $receipt, 'seti_' ) ) {
 			$url .= 'setup_intents/';
 		} else {
 			$url .= 'payments/';

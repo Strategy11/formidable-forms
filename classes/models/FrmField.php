@@ -22,63 +22,63 @@ class FrmField {
 		$fields = array(
 			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_text2_icon',
+				'icon' => 'frmfont frm_text2_icon',
 			),
 			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'frm_icon_font frm_paragraph_icon',
+				'icon' => 'frmfont frm_paragraph_icon',
 			),
 			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
-				'icon' => 'frm_icon_font frm_check_square_icon',
+				'icon' => 'frmfont frm_check_square_icon',
 			),
 			'radio'                        => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
-				'icon' => 'frm_icon_font frm_radio_checked_icon',
+				'icon' => 'frmfont frm_radio_checked_icon',
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_dropdown_icon',
+				'icon' => 'frmfont frm_dropdown_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email2_icon',
+				'icon' => 'frmfont frm_email2_icon',
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link2_icon',
+				'icon' => 'frmfont frm_link2_icon',
 			),
 			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
-				'icon' => 'frm_icon_font frm_hashtag_icon',
+				'icon' => 'frmfont frm_hashtag_icon',
 			),
 			'name'                         => array(
 				'name' => __( 'Name', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_name_icon',
+				'icon' => 'frmfont frm_user_name_icon',
 			),
 			'phone'                        => array(
 				'name' => __( 'Phone', 'formidable' ),
-				'icon' => 'frm_icon_font frm_phone_icon',
+				'icon' => 'frmfont frm_phone_icon',
 			),
 			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code2_icon',
+				'icon' => 'frmfont frm_code2_icon',
 			),
 			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash2_icon',
+				'icon' => 'frmfont frm_eye_slash2_icon',
 			),
 			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user2_icon',
+				'icon' => 'frmfont frm_user2_icon',
 			),
 			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check2_icon',
+				'icon' => 'frmfont frm_shield_check2_icon',
 			),
 			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card2_icon',
+				'icon' => 'frmfont frm_credit_card2_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -86,7 +86,7 @@ class FrmField {
 			),
 			FrmFieldGdprHelper::FIELD_TYPE => array(
 				'name' => __( 'GDPR', 'formidable' ),
-				'icon' => 'frm_icon_font frm-gdpr-icon',
+				'icon' => 'frmfont frm-gdpr-icon',
 				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
 		);
@@ -114,14 +114,14 @@ class FrmField {
 		$fields            = array(
 			'file'            => array(
 				'name'         => __( 'File Upload', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_upload3_icon',
+				'icon'         => 'frmfont frm_upload3_icon',
 				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
 				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_chart_bar_icon frm_show_upgrade',
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ranking-field-preview.webp',
 				'addon'        => 'surveys',
@@ -129,70 +129,70 @@ class FrmField {
 			),
 			'rte'             => array(
 				'name'         => __( 'Rich Text', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_align_right_icon',
+				'icon'         => 'frmfont frm_align_right_icon',
 				'message'      => __( 'Go beyond plain text, let your users format their content with bolding, italics, links, lists and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'rich-text-field-preview.webp',
 				'learn-more'   => 'rich-text',
 			),
 			'date'            => array(
 				'name'         => __( 'Date', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_calendar2_icon',
+				'icon'         => 'frmfont frm_calendar2_icon',
 				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'date-field-preview.webp',
 				'learn-more'   => 'date',
 			),
 			'time'            => array(
 				'name'         => __( 'Time', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_clock_icon',
+				'icon'         => 'frmfont frm_clock_icon',
 				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'time-field-preview.webp',
 				'learn-more'   => 'time',
 			),
 			'scale'           => array(
 				'name'         => __( 'Scale', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_linear_scale_icon',
+				'icon'         => 'frmfont frm_linear_scale_icon',
 				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'scale-field-preview.webp',
 				'learn-more'   => 'scale',
 			),
 			'star'            => array(
 				'name'         => __( 'Star Rating', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_star2_icon',
+				'icon'         => 'frmfont frm_star2_icon',
 				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'star-field-preview.webp',
 				'learn-more'   => 'star-ratings',
 			),
 			'range'           => array(
 				'name'         => __( 'Slider', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_code_commit_icon',
+				'icon'         => 'frmfont frm_code_commit_icon',
 				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'slider-field-preview.webp',
 				'learn-more'   => 'slider',
 			),
 			'toggle'          => array(
 				'name'         => __( 'Toggle', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_toggle_on_icon',
+				'icon'         => 'frmfont frm_toggle_on_icon',
 				'message'      => esc_html__( 'Quickly and easily create cascading fields, populate fields by search and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'toggle-field-preview.webp',
 				'learn-more'   => 'toggle',
 			),
 			'data'            => array(
 				'name'         => __( 'Dynamic', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_dynamic_icon',
+				'icon'         => 'frmfont frm_dynamic_icon',
 				'message'      => __( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'dynamic-field-preview.webp',
 				'learn-more'   => 'dynamic',
 			),
 			'lookup'          => array(
 				'name'         => __( 'Lookup', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_search_icon',
+				'icon'         => 'frmfont frm_search_icon',
 				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'lookup-field-preview.webp',
 				'learn-more'   => 'lookup',
 			),
 			'divider|repeat'  => array(
 				'name'         => __( 'Repeater', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_refresh_icon',
+				'icon'         => 'frmfont frm_refresh_icon',
 				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'repeater-field-preview.webp',
 				'learn-more'   => 'repeatable-section',
@@ -203,28 +203,28 @@ class FrmField {
 			),
 			'divider'         => array(
 				'name'         => __( 'Section', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_header_icon',
+				'icon'         => 'frmfont frm_header_icon',
 				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'section-field-preview.webp',
 				'learn-more'   => 'section-heading',
 			),
 			'break'           => array(
 				'name'         => __( 'Page Break', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_page_break_icon',
+				'icon'         => 'frmfont frm_page_break_icon',
 				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'page-break-field-preview.webp',
 				'learn-more'   => 'page-breaks',
 			),
 			'form'            => array(
 				'name'         => __( 'Embed Form', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_file_text2_icon',
+				'icon'         => 'frmfont frm_file_text2_icon',
 				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'embed-form-field-preview.webp',
 				'learn-more'   => 'embed-form',
 			),
 			'likert'          => array(
 				'name'         => __( 'Likert Scale', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'icon'         => 'frmfont frm_likert_scale frm_show_upgrade',
 				'addon'        => 'surveys',
 				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'likert-field-preview.webp',
@@ -232,7 +232,7 @@ class FrmField {
 			),
 			'nps'             => array(
 				'name'         => __( 'NPS', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_nps frm_show_upgrade',
+				'icon'         => 'frmfont frm_nps frm_show_upgrade',
 				'addon'        => 'surveys',
 				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
@@ -240,14 +240,14 @@ class FrmField {
 			),
 			'password'        => array(
 				'name'         => __( 'Password', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_lock_closed2_icon',
+				'icon'         => 'frmfont frm_lock_closed2_icon',
 				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'password-field-preview.webp',
 				'learn-more'   => 'password-2',
 			),
 			'tag'             => array(
 				'name'         => __( 'Tags', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_price_tags2_icon',
+				'icon'         => 'frmfont frm_price_tags2_icon',
 				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'tags-field-preview.webp',
 				'learn-more'   => 'tags',
@@ -260,21 +260,21 @@ class FrmField {
 			),
 			'address'         => array(
 				'name'         => __( 'Address', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_location2_icon',
+				'icon'         => 'frmfont frm_location2_icon',
 				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'address-field-preview.webp',
 				'learn-more'   => 'address',
 			),
 			'summary'         => array(
 				'name'         => __( 'Summary', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_file_text3_icon',
+				'icon'         => 'frmfont frm_file_text3_icon',
 				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'summary-field-preview.webp',
 				'learn-more'   => 'summary-review-before-submit',
 			),
 			'signature'       => array(
 				'name'         => __( 'Signature', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_signature_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_signature_icon frm_show_upgrade',
 				'addon'        => 'signature',
 				'message'      => __( 'Capture digital e-signatures directly within your form, making official agreements and authorizations straightforward.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'signature-field-preview.webp',
@@ -282,7 +282,7 @@ class FrmField {
 			),
 			'ai'              => array(
 				'name'         => __( 'AI', 'formidable' ),
-				'icon'         => 'frm_icon_font frm-ai-icon frm_show_upgrade',
+				'icon'         => 'frmfont frm-ai-icon frm_show_upgrade',
 				'addon'        => 'ai',
 				'message'      => __( 'Harness artificial intelligence by taking user input and let the model of your choice create an output, quickly and easily.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ai-field-preview.webp',
@@ -290,7 +290,7 @@ class FrmField {
 			),
 			'ssa-appointment' => array(
 				'name'         => __( 'Appointment', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_schedule_icon frm_show_upgrade',
 				'require'      => 'Simply Schedule Appointments',
 				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
@@ -304,7 +304,7 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_product2_icon',
+				'icon'         => 'frmfont frm_product2_icon',
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
@@ -312,7 +312,7 @@ class FrmField {
 			),
 			'quantity'        => array(
 				'name'         => __( 'Quantity', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_quantity_icon',
+				'icon'         => 'frmfont frm_quantity_icon',
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
@@ -320,13 +320,24 @@ class FrmField {
 			),
 			'total'           => array(
 				'name'         => __( 'Total', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_total2_icon',
+				'icon'         => 'frmfont frm_total2_icon',
 				'section'      => 'pricing',
 				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
 		);
+
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			$fields['coupon'] = array(
+				'name'    => __( 'Coupon', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
+				'addon'   => 'coupons',
+				'section' => 'pricing',
+				'limit'   => 1,
+				'is_new'  => self::field_is_new( 'coupon' ),
+			);
+		}
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -349,7 +360,7 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'ranking' => '2024-03-12',
+			'coupon' => '2026-01-13',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
@@ -1079,7 +1090,7 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && strpos( $order_by, 'ORDER BY' ) === false ) {
+		if ( ! empty( $order_by ) && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
@@ -1180,7 +1191,7 @@ class FrmField {
 		if ( $field_object->should_unserialize_value() ) {
 			FrmAppHelper::unserialize_or_decode( $results->default_value );
 
-			if ( $before === $results->default_value && is_string( $before ) && strpos( $before, '["' ) === 0 ) {
+			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
 				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 			}
 		}

@@ -306,7 +306,7 @@ class FrmTransLiteActionsController {
 			$amount        = FrmTransLiteAppHelper::process_shortcodes( $atts );
 		}
 
-		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] === '[' && substr( $amount, -1 ) === ']' ) {
+		if ( is_string( $amount ) && strlen( $amount ) >= 2 && $amount[0] === '[' && str_ends_with( $amount, ']' ) ) {
 			// Make sure we don't use a field id as the amount.
 			$amount = 0;
 		}

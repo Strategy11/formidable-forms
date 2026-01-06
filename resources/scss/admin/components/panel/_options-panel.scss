@@ -12,7 +12,8 @@
 }
 
 .frm-right-panel a.frm_add_logic_link,
-#frm-options-panel h3 {
+#frm-options-panel h3, 
+.frm-collapsible {
 	font-size: var(--text-md);
 	font-weight: 500;
 	background-color: #fff;

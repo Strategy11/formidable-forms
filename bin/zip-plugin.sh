@@ -50,6 +50,7 @@ zip -r $zipname $destination \
 	-x "*/.stylelintrc.json" \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.prettierrc" \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
@@ -102,6 +103,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
 	-x "formidable-hubspot/js/admin.js" \
+	-x "formidable-coupons/js/frontend.js" \
+	-x "formidable-coupons/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
 	-x "*/rector.php" \
