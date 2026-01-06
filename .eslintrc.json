@@ -165,7 +165,14 @@
 				"no-jquery/no-prop": "error",
 				"no-jquery/no-filter": "error",
 				"no-jquery/no-data": "error",
-				"no-jquery/no-parents": "error"
+				"no-jquery/no-parents": "error",
+				"no-jquery/no-val": "error",
+				"no-jquery/no-serialize": "error",
+				"no-jquery/no-class": "error",
+				"no-jquery/no-closest": "error",
+				"no-jquery/no-ajax": "error",
+				"no-jquery/no-fade": "error",
+				"no-jquery/no-is": "error"
 			}
 		}
 	]
