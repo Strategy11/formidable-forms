@@ -1104,7 +1104,7 @@ class FrmForm {
 			}
 		}
 
-		if ( in_array( $values['action'], array( 'create', 'update' ) ) &&
+		if ( in_array( $values['action'], array( 'create', 'update' ), true ) &&
 			( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			) {
 			$values['action'] = 'new';

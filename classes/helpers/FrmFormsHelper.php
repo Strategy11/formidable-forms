@@ -1102,7 +1102,7 @@ BEFORE_HTML;
 	private static function field_has_top_label( $field, $form ) {
 		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
 
-		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ), true );
 	}
 
 	/**
