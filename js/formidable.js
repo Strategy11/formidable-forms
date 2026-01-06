@@ -1272,7 +1272,7 @@ function frmFrontFormJS() {
 			ariaDescribedBy = ariaDescribedBy.filter( value => {
 				const trimmedValue = value.trim();
 				return trimmedValue && trimmedValue !== el.id;
-			});
+			} );
 
 			if ( ariaDescribedBy.length ) {
 				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
