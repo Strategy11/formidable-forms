@@ -57,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					do_action( 'frm_after_create_blank_form_button' );
 
 					if ( ! class_exists( 'FrmAIAppHelper' ) ) {
-						include $view_path . 'ai-upsell-button.php';
+						include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/ai-upsell-button.php';
 					}
 					?>
 				</div>

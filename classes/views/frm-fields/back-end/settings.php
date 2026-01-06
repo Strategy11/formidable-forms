@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_uniq_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ); ?>" data-trigger="hover">
-						<input <?php FrmAppHelper::array_to_html_params( FrmFieldsController::get_unique_element_atts( $field, $pro_is_installed ), true ); ?> />
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>
@@ -118,7 +118,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label for="frm_read_only_field_<?php echo esc_attr( $field['id'] ); ?>" class="frm_help frm-mb-0 <?php echo esc_attr( $pro_is_installed ? '' : 'frm_show_upgrade' ); ?>" title="<?php esc_attr_e( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ); ?>" data-trigger="hover">
-						<input <?php FrmAppHelper::array_to_html_params( FrmFieldsController::get_read_only_element_atts( $field, $pro_is_installed ), true ); ?> />
+						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_read_only_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Read Only', 'formidable' ); ?>
 					</label>
 				</div>
@@ -333,78 +333,19 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 		}
 
 		if ( ! empty( $show_upsell_for_autocomplete ) ) {
-			?>
-		<p class="frm6 frm_form_field frm_show_upgrade">
-			<label class="frm-h-stack-xs" id="for_field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" for="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>">
-				<span><?php esc_html_e( 'Autocomplete', 'formidable' ); ?></span>
-				<?php
-				FrmAppHelper::tooltip_icon(
-					__( 'The autocomplete attribute asks the browser to attempt autocompletion, based on user history.', 'formidable' ),
-					array(
-						'data-placement' => 'right',
-						'class'          => 'frm-flex',
-					)
-				);
-				?>
-			</label>
-			<select name="field_options[autocomplete_<?php echo absint( $field['id'] ); ?>]" id="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Autocomplete options', 'formidable' ); ?>">
-				<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
-			</select>
-		</p>
-			<?php
-		}//end if
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/autocomplete.php';
+		}
 
 		if ( ! empty( $show_upsell_for_visibility ) ) {
-			?>
-		<p class="frm6 frm_form_field frm_show_upgrade">
-			<label class="frm-h-stack-xs" id="for_field_options_admin_only_<?php echo absint( $field['id'] ); ?>" for="field_options_admin_only_<?php echo absint( $field['id'] ); ?>">
-				<span><?php esc_html_e( 'Visibility', 'formidable' ); ?></span>
-				<?php
-				FrmAppHelper::tooltip_icon(
-					__( 'Determines who can see this field.', 'formidable' ),
-					array(
-						'data-placement' => 'right',
-						'class'          => 'frm-flex',
-					)
-				);
-				?>
-			</label>
-			<select readonly name="field_options[admin_only_<?php echo absint( $field['id'] ); ?>][]" id="field_options_admin_only_<?php echo absint( $field['id'] ); ?>" class="" data-upgrade="<?php esc_attr_e( 'Visibility options', 'formidable' ); ?>">
-				<option value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
-			</select>
-		</p>
-			<?php
-		}//end if
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/visibility.php';
+		}
 
 		if ( ! empty( $show_upsell_for_before_after_contents ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/upsell/before-after-contents.php';
+		}
+
+		if ( $display['show_image'] ) {
 			?>
-		<p class="frm_form_field frm6">
-			<label class="frm-h-stack-xs frm_show_upgrade" for="prepend_<?php echo absint( $field['id'] ); ?>">
-				<span><?php esc_html_e( 'Before Input', 'formidable' ); ?></span>
-				<?php
-				FrmAppHelper::tooltip_icon(
-					__( 'A value entered here will show directly before the input box in the form.', 'formidable' ),
-					array(
-						'data-placement' => 'right',
-						'class'          => 'frm-flex',
-					)
-				);
-				?>
-			</label>
-
-			<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
-		</p>
-
-		<p class="frm_form_field frm6">
-			<label for="append_<?php echo absint( $field['id'] ); ?>" class="frm_show_upgrade">
-				<?php esc_html_e( 'After Input', 'formidable' ); ?>
-			</label>
-
-			<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
-		</p>
-		<?php }//end if ?>
-
-		<?php if ( $display['show_image'] ) { ?>
 			<p class="frm_form_field">
 				<label class="frm-force-flex frm-gap-xs" for="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>">
 					<input class="frm-m-0" type="checkbox" id="frm_show_image_<?php echo esc_attr( $field['id'] ); ?>" name="field_options[show_image_<?php echo esc_attr( $field['id'] ); ?>]" value="1" <?php checked( $field['show_image'], 1 ); ?> />
