@@ -1207,7 +1207,7 @@ function frmFrontFormJS() {
 	function getErrorElementId( key, input ) {
 		if ( isNaN( key ) || ! input || ! input.id ) {
 			// If key isn't a number, assume it's already in the right format.
-			return 'frm_error_field_' + key.split( '-' )[ 0 ];
+			return 'frm_error_field_' + key;
 		}
 		return 'frm_error_' + input.id.split( '-' )[ 0 ];
 	}
@@ -1269,7 +1269,10 @@ function frmFrontFormJS() {
 	function updateInputElementsAriaDescribedBy( el ) {
 		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
 			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
-			ariaDescribedBy = ariaDescribedBy.filter( value => value.trim() && value !== el.id );
+			ariaDescribedBy = ariaDescribedBy.filter( value => {
+				const trimmedValue = value.trim();
+				return trimmedValue && trimmedValue !== el.id;
+			});
 
 			if ( ariaDescribedBy.length ) {
 				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
