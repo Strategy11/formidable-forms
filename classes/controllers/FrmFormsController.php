@@ -1711,12 +1711,15 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x Added $template_path parameter.
+	 *
 	 * @param int|string $form_id
 	 * @param string     $class
+	 * @param string     $template_path The path to a template file to use instead of the default.
 	 *
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1737,7 +1740,12 @@ class FrmFormsController {
 
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
+		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
+			return;
+		}
+
+		include $template_path;
 	}
 
 	/**
@@ -2315,7 +2323,7 @@ class FrmFormsController {
 			unset( $form );
 		}
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 

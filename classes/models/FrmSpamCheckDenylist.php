@@ -424,7 +424,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return void
 	 */
 	protected function add_to_values_to_check( &$values_to_check, $value ) {
-		$values_to_check[] = is_array( $value ) ? implode( ' ', $value ) : $value;
+		$values_to_check[] = is_array( $value ) ? FrmAppHelper::safe_implode( ' ', $value ) : $value;
 	}
 
 	/**

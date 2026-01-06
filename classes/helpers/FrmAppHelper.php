@@ -519,7 +519,7 @@ class FrmAppHelper {
 	public static function is_view_builder_page() {
 		global $pagenow;
 
-		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' && $pagenow !== 'edit.php' ) {
+		if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php', 'edit.php' ), true ) ) {
 			return false;
 		}
 
@@ -605,7 +605,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_empty_value( $value, $empty = '' ) {
-		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
+		return $value === array() || $value === $empty;
 	}
 
 	/**
@@ -758,7 +758,7 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
+		if ( isset( $params ) && is_array( $value ) && $value ) {
 			foreach ( $params as $k => $p ) {
 				if ( ! $k || ! is_array( $value ) ) {
 					continue;
@@ -3076,7 +3076,7 @@ class FrmAppHelper {
 		$str          = wp_strip_all_tags( (string) $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
-		if ( $length == 0 ) {
+		if ( $length === 0 ) {
 			return '';
 		}
 
@@ -3462,7 +3462,7 @@ class FrmAppHelper {
 					$l3 = $name;
 				}
 
-				$this_val = $p == $last ? $jv['value'] : array();
+				$this_val = $p === $last ? $jv['value'] : array();
 
 				switch ( $p ) {
 					case 0:
@@ -3702,7 +3702,7 @@ class FrmAppHelper {
 				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
 			}
 
-			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
+			if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
 				$string = $new_string;
 			}
 		}
@@ -4426,7 +4426,7 @@ class FrmAppHelper {
 			$html_attrs_arr = array();
 
 			foreach ( $option['custom_attrs'] as $key => $value ) {
-				if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
+				if ( in_array( $key, array( 'type', 'class', 'data-value' ), true ) ) {
 					continue;
 				}
 
@@ -4607,7 +4607,12 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
+
+		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
+			return true;
+		}
+
+		return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
 	}
 
 	/**

@@ -435,9 +435,9 @@ class FrmSolution {
 			}
 		}
 
-		if ( empty( $rel ) && empty( $missing ) ) {
+		if ( ! $rel && ! $missing ) {
 			$steps['plugin']['complete'] = true;
-		} elseif ( ! empty( $missing ) ) {
+		} elseif ( $missing ) {
 			$steps['plugin']['error'] = sprintf(
 				/* translators: %1$s: Plugin name */
 				esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),

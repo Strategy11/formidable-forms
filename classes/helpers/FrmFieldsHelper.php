@@ -950,7 +950,7 @@ class FrmFieldsHelper {
 		if ( $cond === '==' ) {
 			if ( is_array( $hide_opt ) ) {
 				$m = array_intersect( $hide_opt, $observed_value );
-				$m = ! empty( $m );
+				$m = $m !== array();
 			} else {
 				$m = in_array( $hide_opt, $observed_value );
 			}
@@ -2426,6 +2426,10 @@ class FrmFieldsHelper {
 			$li_params['class'] .= ' frm_hidden';
 		}
 
+		if ( ! $show_upgrade && ! empty( $field_type['limit'] ) ) {
+			$li_params = self::update_params_with_limit_data( $li_params, $args['id'], $field_key, $field_type['limit'] );
+		}
+
 		if ( ! empty( $field_type['upsell_image'] ) ) {
 			$li_params['data-upsell-image'] = $field_type['upsell_image'];
 		}
@@ -2457,6 +2461,37 @@ class FrmFieldsHelper {
 		?>
 		</li>
 		<?php
+	}
+
+	/**
+	 * Updates the params with limit data (the data-limit attribute, and possibly the frm_at_limit class).
+	 * Some field types are limited to a certain number per form, including coupon fields.
+	 *
+	 * @since x.x
+	 *
+	 * @param array  $li_params  The params.
+	 * @param int    $form_id    The form ID.
+	 * @param string $field_type The field type.
+	 * @param int    $limit      The limit.
+	 *
+	 * @return array The updated params.
+	 */
+	private static function update_params_with_limit_data( $li_params, $form_id, $field_type, $limit ) {
+		$fields_in_form = FrmDb::get_count(
+			'frm_fields',
+			array(
+				'form_id' => $form_id,
+				'type'    => $field_type,
+			)
+		);
+
+		if ( $fields_in_form >= $limit ) {
+			$li_params['class'] .= ' frm_at_limit';
+		}
+
+		$li_params['data-limit'] = $limit;
+
+		return $li_params;
 	}
 
 	/**

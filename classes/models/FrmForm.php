@@ -235,7 +235,7 @@ class FrmForm {
 			}
 		}//end foreach
 
-		if ( ! empty( $new_values ) ) {
+		if ( $new_values ) {
 			FrmField::update( $field['id'], $new_values );
 		}
 	}
@@ -922,7 +922,7 @@ class FrmForm {
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
-		if ( is_array( $where ) && ! empty( $where ) ) {
+		if ( is_array( $where ) && $where ) {
 			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
 				// don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
@@ -1104,7 +1104,7 @@ class FrmForm {
 			}
 		}
 
-		if ( in_array( $values['action'], array( 'create', 'update' ) ) &&
+		if ( in_array( $values['action'], array( 'create', 'update' ), true ) &&
 			( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			) {
 			$values['action'] = 'new';

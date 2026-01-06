@@ -1102,7 +1102,7 @@ BEFORE_HTML;
 	private static function field_has_top_label( $field, $form ) {
 		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
 
-		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ), true );
 	}
 
 	/**
@@ -1599,7 +1599,7 @@ BEFORE_HTML;
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = $icons[ $category ] ?? $icon;
-		} elseif ( ! empty( $categories ) ) {
+		} elseif ( $categories ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon  = reset( $icons );
 		}
@@ -1874,7 +1874,7 @@ BEFORE_HTML;
 			return false;
 		}
 
-		if ( $count == 1 ) {
+		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */
 			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link;
 		}

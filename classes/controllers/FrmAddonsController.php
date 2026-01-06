@@ -710,7 +710,7 @@ class FrmAddonsController {
 				);
 			}
 
-			if ( ! empty( $link ) ) {
+			if ( $link ) {
 				$link['status'] = $addon['status']['type'];
 			}
 		} elseif ( current_user_can( 'activate_plugins' ) && self::is_installed( 'formidable-' . $plugin . '/formidable-' . $plugin . '.php' ) ) {

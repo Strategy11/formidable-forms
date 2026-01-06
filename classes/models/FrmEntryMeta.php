@@ -156,7 +156,7 @@ class FrmEntryMeta {
 
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
-				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
+				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
@@ -615,7 +615,7 @@ class FrmEntryMeta {
 			$where = '';
 
 			foreach ( $search as $field => $value ) {
-				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ) ) ) {
+				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ), true ) ) {
 					continue;
 				}
 

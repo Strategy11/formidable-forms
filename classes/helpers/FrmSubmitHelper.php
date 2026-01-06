@@ -227,7 +227,7 @@ class FrmSubmitHelper {
 	public static function update_last_row_fields_order_when_adding_field( $field_count ) {
 		$last_row_field_ids = FrmAppHelper::get_post_param( 'last_row_field_ids', array() );
 
-		if ( ! is_array( $last_row_field_ids ) || empty( $last_row_field_ids ) ) {
+		if ( ! is_array( $last_row_field_ids ) || ! $last_row_field_ids ) {
 			return;
 		}
 

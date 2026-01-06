@@ -129,7 +129,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php
 		foreach ( (array) $data as $k => $d ) {
-			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ) ) ) {
+			if ( in_array( $k, array( 'browser', 'referrer', 'user_journey' ), true ) ) {
 				continue;
 			}
 			?>

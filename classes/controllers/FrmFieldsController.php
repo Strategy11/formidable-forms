@@ -309,7 +309,7 @@ class FrmFieldsController {
 				unset( $opt_key, $opt );
 			}
 
-			if ( ! empty( $other_array ) ) {
+			if ( $other_array ) {
 				$opts = array_merge( $opts, $other_array );
 			}
 		}

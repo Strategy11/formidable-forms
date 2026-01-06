@@ -275,7 +275,7 @@ class FrmFormActionsController {
 
 		$default_shown    = array( 'wppost', 'register', 'payment', 'quiz', 'hubspot' );
 		$default_shown    = array_values( array_diff( $default_shown, $allowed ) );
-		$default_position = array_search( $action_control->id_base, $default_shown );
+		$default_position = array_search( $action_control->id_base, $default_shown, true );
 		$allowed_count    = count( $allowed );
 
 		if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
@@ -593,7 +593,7 @@ class FrmFormActionsController {
 		}
 
 		// Only use array_merge if there are new actions.
-		if ( ! empty( $new_actions ) ) {
+		if ( $new_actions ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
 
@@ -724,7 +724,7 @@ class FrmFormActionsController {
 			unset( $action );
 		}//end foreach
 
-		if ( ! empty( $stored_actions ) ) {
+		if ( $stored_actions ) {
 			asort( $action_priority );
 
 			// Make sure hooks are loaded.

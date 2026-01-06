@@ -811,7 +811,7 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && ! empty( $vals ) ) {
+			if ( is_array( $vals ) && $vals ) {
 				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}

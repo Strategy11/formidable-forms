@@ -159,7 +159,7 @@ class FrmDb {
 				}
 
 				$where .= ')';
-			} elseif ( ! empty( $value ) ) {
+			} elseif ( $value ) {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
