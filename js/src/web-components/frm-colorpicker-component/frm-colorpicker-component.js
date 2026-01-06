@@ -18,7 +18,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 
 	getInput() {
 		this.input.type = 'text';
-		// this.input.classList.add( 'hex' );
+		this.input.classList.add( 'hex' );
 
 		if ( null !== this.fieldName ) {
 			this.input.name = this.fieldName;
@@ -47,14 +47,28 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 		jQuery( this.input ).wpColorPicker( colorPickerOptions );
 	}
 
+	/**
+	 * A method to get the color value.
+	 * @return {string} - The color value.
+	 */
 	get color() {
 		return jQuery( this.input ).wpColorPicker( 'color' );
 	}
 
+	/**
+	 * A method to set the color value.
+	 * @param {string} value - The value to set the color value for.
+	 * @return {void}
+	 */
 	set color( value ) {
 		this.input.value = value;
 	}
 
+	/**
+	 * A method to set the change event listener for the color picker component.
+	 * @param {Function} callback - The callback function to call when the color picker component is changed.
+	 * @return {void}
+	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new Error( 'Callback must be a function' );

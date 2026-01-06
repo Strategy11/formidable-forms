@@ -5,14 +5,12 @@ export class frmWebComponent extends HTMLElement {
 		}
 		super();
 
-		this.initOptions();
-		if ( this.useShadowDom ) {
+		if ( this.useShadowDom() ) {
 			this.attachShadow({ mode: 'open' });
 		}
 	}
 
 	initOptions() {
-		this.useShadowDom = this.useShadowDom();
 		this.fieldName = this.getAttribute( 'name' ) || null;
 		this.defaultValue = this.getAttribute( 'value' ) || null;
 		this.componentId = this.getAttribute( 'id' ) || null;
@@ -23,7 +21,7 @@ export class frmWebComponent extends HTMLElement {
 			return this._labelText;
 		}
 
-		const label = this.querySelector( 'label' );
+		const label = this.querySelector( 'span.frm-component-label' );
 		if ( null === label ) {
 			return null;
 		}
@@ -47,7 +45,7 @@ export class frmWebComponent extends HTMLElement {
 	}
 
 	getWrapper() {
-		return this.useShadowDom ? this.shadowRoot : this;
+		return this.useShadowDom() ? this.shadowRoot : this;
 	}
 
 	/*
@@ -77,7 +75,7 @@ export class frmWebComponent extends HTMLElement {
 			return;
 		}
 
-		const label = document.createElement( 'label' );
+		const label = document.createElement( 'span' );
 		label.classList.add( 'frm-component-label' );
 		label.textContent = labelText;
 
@@ -112,7 +110,7 @@ export class frmWebComponent extends HTMLElement {
 				});
 			}, { threshold: 0.1 } );
 
-			const element = this.useShadowDom ? this.shadowRoot.host : this;
+			const element = this.useShadowDom() ? this.shadowRoot.host : this;
 
 			if ( element ) {
 				observer.observe( this );
@@ -145,6 +143,7 @@ export class frmWebComponent extends HTMLElement {
 	* @return void
 	*/
 	connectedCallback() {
+		this.initOptions();
 		this.render();
 	}
 

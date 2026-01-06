@@ -8,14 +8,59 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		super();
 		this.componentStyle = style;
 		this._onChange = null;
+		this._sliderDefaultMultipleValues = null;
+		this._sliderDefaultValue = '0px';
+		this._hasMultipleValues = false;
+		this._sliderAvailableUnits = [ 'px', 'em', '%' ];
 	}
 
+	/**
+	 * A method to set the change event listener for the slider component.
+	 * @param {Function} callback - The callback function to call when the slider component is changed.
+	 * @return {void}
+	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
 			throw new Error( 'Callback must be a function' );
 		}
 
 		this._onChange = callback;
+	}
+
+	/**
+	 * A method to set the has multiple values flag. This flag is used to determine if the slider component should display multiple values.
+	 * @param {boolean} value - The value to set.
+	 * @return {void}
+	 */
+	set hasMultipleValues( value ) {
+		this._hasMultipleValues = value;
+	}
+
+	/**
+	 * A method to set the default multiple values. This values are used to determine the default values for the slider component.
+	 * @param {Object} value - The value to set.
+	 * @return {void}
+	 */
+	set sliderDefaultMultipleValues( value ) {
+		this._sliderDefaultMultipleValues = value;
+	}
+
+	/**
+	 * A method to set the default value for the single slider component. This value is used to determine the default value for the single slider component.
+	 * @param {string} value - The value to set.
+	 * @return {void}
+	 */
+	set sliderDefaultValue( value ) {
+		this._sliderDefaultValue = value;
+	}
+
+	/**
+	 * A method to set the available units for the slider component. This units are used to determine the available units for the slider component.
+	 * @param {Array} value - The value to set.
+	 * @return {void}
+	 */
+	set sliderAvailableUnits( value ) {
+		this._sliderAvailableUnits = value;
 	}
 
 	useShadowDom() {
@@ -30,101 +75,61 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		this.wrapper.classList.add( 'frm-style-component' );
 
 		// Get data from attributes
-		const hasMultipleValues = this.getAttribute( 'data-has-multiple-values' ) === 'true';
 		const maxValue = parseInt( this.getAttribute( 'data-max-value' ) || '100', 10 );
-		const units = this.parseAttributeArray( 'data-units' );
+		const units = this.getAvailableUnits();
 		const componentClass = this.getAttribute( 'data-component-class' ) || '';
 		const componentId = this.componentId;
 		const fieldName = this.fieldName ? `name="${ this.fieldName }"` : '';
-		const fieldValue = this.defaultValue || '';
+		const fieldValue = this.defaultValue || this._sliderDefaultValue;
 
-		// Parse values from data attribute
-		const values = this.parseValues();
+		if ( this.hasMultipleSliderValues() ) {
+			const defaultValues = this.parseDefaultValues();
+			this.createMultipleValuesSlider( this.slidersContainer, {
+				maxValue,
+				units,
+				componentClass,
+				componentId,
+				fieldName,
+				fieldValue,
+				defaultValues
+			} );
 
-		this.createMultipleValuesSlider( this.slidersContainer, {
-			maxValue,
-			units,
-			componentClass,
-			componentId,
-			fieldName,
-			fieldValue,
-			values
-		} );
+			this.wrapper.appendChild( this.slidersContainer );
+			return this.wrapper;
+		}
 
-		// Top slider (hidden)
 		this.slidersContainer.appendChild( this.createSlider( {
-			type: 'top',
 			maxValue,
 			units,
-			value: values.top,
-			iconSvgId: 'frm-margin-top',
-			ariaLabel: 'Top value',
-			hidden: true
-		} ) );
-
-		// Bottom slider (hidden)
-		this.slidersContainer.appendChild( this.createSlider( {
-			type: 'bottom',
-			maxValue,
-			units,
-			value: values.bottom,
-			iconSvgId: 'frm-margin-bottom',
-			ariaLabel: 'Bottom value',
-			hidden: true
-		} ) );
-
-		// Horizontal slider (group)
-		this.slidersContainer.appendChild( this.createSliderGroup( {
-			type: 'horizontal',
-			displaySliders: 'left,right',
-			maxValue,
-			units,
-			value: values.horizontal,
-			iconSvgId: 'frm-margin-left-right',
-			ariaLabel: 'Horizontal value'
-		} ) );
-
-		// Left slider (hidden)
-		this.slidersContainer.appendChild( this.createSlider( {
-			type: 'left',
-			maxValue,
-			units,
-			value: values.left,
-			iconSvgId: 'frm-margin-left',
-			ariaLabel: 'Left value',
-			hidden: true
-		} ) );
-
-		// Right slider (hidden)
-		this.slidersContainer.appendChild( this.createSlider( {
-			type: 'right',
-			maxValue,
-			units,
-			value: values.right,
-			iconSvgId: 'frm-margin-right',
-			ariaLabel: 'Right value',
-			hidden: true
+			value: this.parseValueUnit( fieldValue ),
+			addHiddenInputValue: true
 		} ) );
 
 		this.wrapper.appendChild( this.slidersContainer );
-
 		return this.wrapper;
 	}
 
-	parseAttributeArray( attrName ) {
-		const attr = this.getAttribute( attrName );
+	/**
+	 * A method to get the available units for the slider component. It will checke the data-units attribute first and if it is not set, it will return the default available units.
+	 * @return {Array} - The available units.
+	 */
+	getAvailableUnits() {
+		const attr = this.getAttribute( 'data-units' );
 		if ( ! attr ) {
-			return [ '', 'px', 'em', '%' ];
+			return this._sliderAvailableUnits;
 		}
-		try {
-			return JSON.parse( attr );
-		} catch ( e ) {
-			return attr.split( ',' ).map( u => u.trim() );
-		}
+
+		return attr.split( ',' ).map( u => u.trim() );
+
 	}
 
-	parseValues() {
-		const valuesAttr = this.getAttribute( 'data-values' );
+	/**
+	 * A method to parse the default values for the multiple values slider component. It will check the data-values attribute first and if it is not set, it will return the default values.
+	 * If the values haven't been set via data-values attribute or dynamically via this._sliderDefaultMultipleValues it will return the default values.
+	 * @return {Object} - The default values.
+	 */
+	parseDefaultValues() {
+		const valuesAttr = this.getAttribute( 'data-values' ) || this._sliderDefaultMultipleValues;
 		if ( ! valuesAttr ) {
 			return {
 				vertical: { value: 0, unit: 'px' },
@@ -136,25 +141,27 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			};
 		}
 
-		try {
-			return JSON.parse( valuesAttr );
-		} catch ( e ) {
-			const parts = valuesAttr.split( ' ' );
-			return {
-				vertical: this.parseValueUnit( parts[ 0 ] || '0px' ),
-				top: this.parseValueUnit( parts[ 0 ] || '0px' ),
-				bottom: this.parseValueUnit( parts[ 2 ] || '0px' ),
-				horizontal: this.parseValueUnit( parts[ 1 ] || '0px' ),
-				left: this.parseValueUnit( parts[ 3 ] || '0px' ),
-				right: this.parseValueUnit( parts[ 1 ] || '0px' )
-			};
-		}
+		const parts = valuesAttr.split( ' ' );
+		return {
+			vertical: this.parseValueUnit( parts[ 0 ] || '0px' ),
+			top: this.parseValueUnit( parts[ 0 ] || '0px' ),
+			bottom: this.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
+			horizontal: this.parseValueUnit( parts[ 1 ] || '0px' ),
+			left: this.parseValueUnit( parts[ 3 ] || parts[ 1 ] || '0px' ),
+			right: this.parseValueUnit( parts[ 1 ] || '0px' )
+		};
 	}
 
 	parseValueUnit( valueStr ) {
+		const defaultValue = { value: 0, unit: 'px' };
+
+		if ( ! valueStr ) {
+			return defaultValue;
+		}
+
 		const match = valueStr.match( /^(\d+)(px|em|%)?$/ );
 		if ( ! match ) {
-			return { value: 0, unit: 'px' };
+			return defaultValue;
 		}
 		return {
 			value: parseInt( match[ 1 ], 10 ),
@@ -162,8 +169,16 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		};
 	}
 
+	/**
+	 * A method to check if the slider component has multiple values. It will check the data-has-multiple-values attribute first and if it is not set, it will return the default value.
+	 * @return {boolean} - The has multiple values flag.
+	 */
+	hasMultipleSliderValues() {
+		return this.getAttribute( 'data-has-multiple-values' ) === 'true' || this._hasMultipleValues;
+	}
+
 	createMultipleValuesSlider( wrapper, options ) {
-		const { maxValue, units, componentClass, componentId, fieldName, fieldValue, values } = options;
+		const { maxValue, units, componentClass, componentId, fieldName, fieldValue, defaultValues } = options;
 
 		if ( componentClass ) {
 			wrapper.className = componentClass;
@@ -175,43 +190,103 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			displaySliders: 'top,bottom',
 			maxValue,
 			units,
-			value: values.vertical,
+			value: defaultValues.vertical,
 			iconSvgId: 'frm-margin-top-bottom',
-			ariaLabel: 'Vertical value'
+			ariaLabel: 'Vertical value',
+			defaultValues: defaultValues,
+			addHiddenInputValue: false
 		} ) );
 
+		// Horizontal slider (group)
+		wrapper.appendChild( this.createSliderGroup( {
+			type: 'horizontal',
+			displaySliders: 'left,right',
+			maxValue,
+			units,
+			value: defaultValues.horizontal,
+			iconSvgId: 'frm-margin-left-right',
+			ariaLabel: 'Horizontal value',
+			defaultValues: defaultValues,
+			addHiddenInputValue: false
+		} ) );
+
+		wrapper.appendChild( this.createSliderHiddenInputValue( { fieldName, fieldValue, componentId } ) );
+	}
+
+	/**
+	 * A method to create the hidden input value for the slider component. This hidden input value is used to store the value of the slider component.
+	 * @param {Object} options - The options for the slider.
+	 * @return {Element} - The hidden input value element.
+	 */
+	createSliderHiddenInputValue( options ) {
+		const { fieldName, fieldValue, componentId } = options;
 		const hiddenInput = document.createElement( 'input' );
-		hiddenInput.type = 'hidden';
-		if ( fieldName ) {
-			hiddenInput.setAttribute( 'name', this.fieldName );
-		}
+		hiddenInput.type  = 'hidden';
 		hiddenInput.value = fieldValue;
+
+		if ( fieldName ) {
+			hiddenInput.setAttribute( 'name', fieldName );
+		}
+
 		if ( componentId ) {
 			hiddenInput.id = componentId;
 		}
-		hiddenInput.addEventListener( 'change', () => {
-			this._onChange( hiddenInput.value );
-		});
-		wrapper.appendChild( hiddenInput );
+
+		if ( this._onChange ) {
+			hiddenInput.addEventListener( 'change', () => {
+				this._onChange( hiddenInput.value );
+			});
+		}
+
+		return hiddenInput;
 	}
 
+	/**
+	 * A method to create the slider group. This method is used to create the slider group.
+	 * @param {Object} options - The options for the slider.
+	 * @return {Element} - The slider group element.
+	 */
 	createSliderGroup( options ) {
 		const slider = this.createSlider( options );
-		slider.classList.add( 'frm-group-sliders' );
+		slider.classList.add( 'frm-group-sliders', 'frm-has-multiple-values' );
 		slider.setAttribute( 'data-display-sliders', options.displaySliders );
+
+		const slidersGroupItems = options.displaySliders.split( ',' );
+		slidersGroupItems.forEach( item => {
+			slider.appendChild( this.createSlider( {
+				type: item,
+				maxValue: options.maxValue,
+				units: options.units,
+				value: options.defaultValues[ item ],
+				iconSvgId: `frm-margin-${ item }`,
+				ariaLabel: `${ item } value`,
+				hidden: true,
+				addHiddenInputValue: false
+			} ) );
+		} );
+
 		return slider;
 	}
 
+	/**
+	 * A method to create the slider. This method is used to create the slider.
+	 * @param {Object} options - The options for the slider.
+	 * @return {Element} - The slider element.
+	 */
 	createSlider( options ) {
-		const { type, maxValue, units, value, iconSvgId, ariaLabel, hidden } = options;
+		const { type, maxValue, units, value, iconSvgId, ariaLabel, hidden, addHiddenInputValue } = options;
 
 		const sliderWrapper = document.createElement( 'div' );
-		sliderWrapper.classList.add( 'frm-slider-component', 'frm-has-multiple-values' );
+		sliderWrapper.classList.add( 'frm-slider-component' );
+		sliderWrapper.setAttribute( 'data-max-value', maxValue.toString() );
+
 		if ( hidden ) {
 			sliderWrapper.classList.add( 'frm_hidden' );
 		}
-		sliderWrapper.setAttribute( 'data-type', type );
-		sliderWrapper.setAttribute( 'data-max-value', maxValue.toString() );
+
+		if ( type ) {
+			sliderWrapper.setAttribute( 'data-type', type );
+		}
 
 		const flexContainer = document.createElement( 'div' );
 		flexContainer.classList.add( 'frm-flex-justify' );
@@ -276,6 +351,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		valueContainer.appendChild( valueInput );
 		valueContainer.appendChild( unitSelect );
+
+		if ( addHiddenInputValue ) {
+			valueContainer.appendChild( this.createSliderHiddenInputValue( options ) );
+		}
+
 		flexContainer.appendChild( valueContainer );
 
 		sliderWrapper.appendChild( flexContainer );
@@ -283,7 +363,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ) );
+		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultValues() : this.parseValueUnit( this.defaultValue );
+		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), { defaultValues } );
 	}
 }
 

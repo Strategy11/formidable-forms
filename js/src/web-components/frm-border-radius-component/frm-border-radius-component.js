@@ -8,7 +8,9 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this._onChange       = null;
 		this.componentStyle  = style;
 		this.unitTypeOptions = ['px', 'em', '%'];
-		this.value = '4px';
+		this.value = '0px';
+		this._defaultValue = '0px';
+		this.usesMultipleValues = false;
 	}
 
 	initView() {
@@ -27,6 +29,36 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.wrapper.appendChild( this.container );
 
 		return this.wrapper;
+	}
+
+	parseDefaultValues() {
+		if ( ! this._defaultValue ) {
+			return {
+				top: { value: 0, unit: 'px' },
+				bottom: { value: 0, unit: 'px' },
+				left: { value: 0, unit: 'px' },
+				right: { value: 0, unit: 'px' }
+			};
+		}
+
+		const parts = this._defaultValue.split( ' ' );
+		return {
+			top: this.parseValueUnit( parts[ 0 ] || '0px' ),
+			bottom: this.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
+			left: this.parseValueUnit( parts[ 3 ] || parts[ 1 ] || parts[ 0 ]|| '0px' ),
+			right: this.parseValueUnit( parts[ 1 ] || parts[ 0 ] || '0px' )
+		};
+	}
+
+	parseValueUnit( valueStr ) {
+		const match = valueStr.match( /^(\d+)(px|em|%)?$/ );
+		if ( ! match ) {
+			return { value: 0, unit: 'px' };
+		}
+		return {
+			value: parseInt( match[ 1 ], 10 ),
+			unit: match[ 2 ] || 'px'
+		};
 	}
 
 	getInputWrapper() {
@@ -52,7 +84,10 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.inputValue = document.createElement( 'input' );
 		this.inputValue.type = 'text';
 		this.inputValue.classList.add( 'frm-input-value' );
-		this.inputValue.value = parseInt( this.value );
+
+		if ( ! this.usesMultipleValues ) {
+			this.inputValue.value = parseInt( this._defaultValue ) || 0;
+		}
 
 		this.inputValue.addEventListener( 'change', () => {
 			const value = this.inputValue.value + this.inputUnit.value;
@@ -85,7 +120,12 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 	getBorderIndividualInputsWrapper() {
 		this.borderIndividualInputsWrapper = document.createElement( 'div' );
-		this.borderIndividualInputsWrapper.classList.add( 'frm-border-individual-inputs-wrapper', 'frm_hidden' );
+		this.borderIndividualInputsWrapper.classList.add( 'frm-border-individual-inputs-wrapper' );
+
+		if ( ! this.usesMultipleValues ) {
+			this.borderIndividualInputsWrapper.classList.add( 'frm_hidden' );
+		}
+
 		this.borderIndividualInputsWrapper.append(
 			this.getBorderInputTop(),
 			this.getBorderInputRight(),
@@ -97,65 +137,63 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	}
 
 	getBorderInputTop() {
+		const defaultValues = this.parseDefaultValues();
 		const span = document.createElement( 'span' );
 		span.classList.add( 'frm-border-input-top' );
+
 		this.borderInputTop = document.createElement( 'input' );
 		this.borderInputTop.type = 'text';
-		this.borderInputTop.value = parseInt( this.value );
+		this.borderInputTop.value = parseInt( defaultValues.top.value );
 		span.appendChild( this.borderInputTop );
 
-		this.borderInputTop.addEventListener( 'change', () => {
-			this.hiddenInput.value = this.buildBorderRadiusIndividualValue();
-		} );
+		this.borderInputTop.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 		return span;
 	}
 
 	getBorderInputBottom() {
+		const defaultValues = this.parseDefaultValues();
 		const span = document.createElement( 'span' );
 		span.classList.add( 'frm-border-input-bottom' );
 		this.borderInputBottom = document.createElement( 'input' );
 		this.borderInputBottom.type = 'text';
-		this.borderInputBottom.value = parseInt( this.value );
+		this.borderInputBottom.value = parseInt( defaultValues.bottom.value );
 		span.appendChild( this.borderInputBottom );
 
-		this.borderInputBottom.addEventListener( 'change', () => {
-			this.hiddenInput.value = this.buildBorderRadiusIndividualValue();
-		} );
+		this.borderInputBottom.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 		return span;
 	}
 
 	getBorderInputLeft() {
+		const defaultValues = this.parseDefaultValues();
 		const span = document.createElement( 'span' );
 		span.classList.add( 'frm-border-input-left' );
 		this.borderInputLeft = document.createElement( 'input' );
 		this.borderInputLeft.type = 'text';
-		this.borderInputLeft.value = parseInt( this.value );
+		this.borderInputLeft.value = parseInt( defaultValues.left.value );
 		span.appendChild( this.borderInputLeft );
 
-		this.borderInputLeft.addEventListener( 'change', () => {
-			this.hiddenInput.value = this.buildBorderRadiusIndividualValue();
-		} );
+		this.borderInputLeft.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
+
 		return span;
 	}
 
 	getBorderInputRight() {
+		const defaultValues = this.parseDefaultValues();
 		const span = document.createElement( 'span' );
 		span.classList.add( 'frm-border-input-right' );
 		this.borderInputRight = document.createElement( 'input' );
 		this.borderInputRight.type = 'text';
-		this.borderInputRight.value = parseInt( this.value );
+		this.borderInputRight.value = parseInt( defaultValues.right.value );
 		span.appendChild( this.borderInputRight );
 
-		this.borderInputRight.addEventListener( 'change', () => {
-			this.buildBorderRadiusIndividualValue();
-		} );
+		this.borderInputRight.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 
 		return span;
 	}
 
 	buildBorderRadiusIndividualValue() {
 		const unit  = this.inputUnit.value;
-		const value = `${this.borderInputTop.value}${unit} ${this.borderInputRight.value}${unit} ${this.borderInputLeft.value}${unit} ${this.borderInputBottom.value}${unit}`;
+		const value = `${this.borderInputTop.value}${unit} ${this.borderInputRight.value}${unit} ${this.borderInputBottom.value}${unit} ${this.borderInputLeft.value}${unit}`;
 		this.updateValue( value );
 	}
 
@@ -187,4 +225,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this._onChange = callback;
 	}
 
+	set borderRadiusDefaultValue( value ) {
+		this._defaultValue = value;
+		this.usesMultipleValues = ! value.match( /^(\d+)(px|em|%)?$/ ) && '' !== value;
+	}
 }

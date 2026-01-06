@@ -4,11 +4,11 @@
 	display: none;
 }
 
-.frm-component {
+.frm-component:not(.frm-tabs-wrapper) {
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
-	& > label.frm-component-label {
+	& > span.frm-component-label {
 		font-weight: 500;
 		font-size: var(--text-sm) !important;
 		color: var(--grey-900) !important;

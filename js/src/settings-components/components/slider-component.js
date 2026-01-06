@@ -10,8 +10,11 @@ import frmDependentUpdaterComponent from '../../admin/components/dependent-updat
  * @class frmSliderComponent
  */
 export default class frmSliderComponent {
-	constructor( sliderElements = [] ) {
-		this.sliderElements = sliderElements || document.querySelectorAll( '.frm-slider-component' );
+	constructor( sliderElements = [], settings = {} ) {
+		this.loadedByWebComponent = sliderElements.length > 0;
+		this.sliderElements       = sliderElements.length > 0 ? sliderElements : document.querySelectorAll( '.frm-slider-component' );
+		this.settings             = settings;
+
 		if ( 0 === this.sliderElements.length ) {
 			return;
 		}
@@ -52,8 +55,14 @@ export default class frmSliderComponent {
 	 * Initializes the slider component.
 	 */
 	init() {
-		this.initSlidersPosition();
 		this.initDraggable();
+
+		if ( this.loadedByWebComponent ) {
+			this.initSlidersPositionInsideWebComponent();
+			return;
+		}
+
+		this.initSlidersPosition();
 	}
 
 	/**
@@ -210,6 +219,12 @@ export default class frmSliderComponent {
 		return element.closest( '.frm-style-component' ).querySelectorAll( query );
 	}
 
+	initSlidersPositionInsideWebComponent() {
+		this.sliderElements.forEach( ( element, index ) => {
+			this.initSliderWidth( element, index );
+		} );
+	}
+
 	/**
 	 * Initializes the position of sliders when a accordion section is opened.
 	 */
@@ -285,14 +300,15 @@ export default class frmSliderComponent {
 	/**
 	 * Initializes the width of a slider.
 	 *
-	 * @param {HTMLElement} slider - The slider element.
+	 * @param {HTMLElement} slider      - The slider element.
+	 * @param {number}      sliderIndex - The index of the slider.
 	 * @return {void}
 	 */
-	initSliderWidth( slider ) {
+	initSliderWidth( slider, sliderIndex = null ) {
 		if ( slider.classList.contains( 'frm-disabled' ) ) {
 			return;
 		}
-		const index = this.getSliderIndex( slider );
+		const index = sliderIndex !== null ? sliderIndex : this.getSliderIndex( slider );
 		const sliderWidth = slider.querySelector( '.frm-slider' ).offsetWidth - this.sliderBulletWidth;
 		const value = parseInt( slider.querySelector( '.frm-slider-value input[type="text"]' ).value, 10 );
 		const unit = slider.querySelector( 'select' ).value;

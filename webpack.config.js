@@ -46,7 +46,7 @@ const entries = {
     formidable_styles: './js/src/admin/styles.js',
 	formidable_admin: './js/src/admin/admin.js',
     'formidable-settings-components': './js/src/settings-components/index.js',
-    'formidable-components': './js/src/web-components/index.js',
+    'formidable-web-components': './js/src/web-components/index.js',
   },
   // SCSS entries
   scss: {
