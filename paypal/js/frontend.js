@@ -186,11 +186,11 @@
 		orderInput.type = 'hidden';
 		orderInput.name = 'paypal_order_id';
 		orderInput.value = data.orderID;
-		thisForm.appendChild( orderInput );
+		thisForm.append( orderInput );
 
 		// If someone uses the PayPal checkout button, the form submit event doesn't actually get triggered.
 		if ( ! submitEvent ) {
-			submitEvent        = new Event( 'submit', { cancelable: true, bubbles: true } );
+			submitEvent = new Event( 'submit', { cancelable: true, bubbles: true } );
 			submitEvent.target = thisForm;
 		}
 
