@@ -237,8 +237,8 @@ class FrmSettingsController {
 	 */
 	private static function payment_sections_sort_callback( $a, $b ) {
 		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
-		$first_key  = array_search( $a, $order );
-		$second_key = array_search( $b, $order );
+		$first_key  = array_search( $a, $order, true );
+		$second_key = array_search( $b, $order, true );
 
 		if ( false === $first_key || false === $second_key ) {
 			return 0;

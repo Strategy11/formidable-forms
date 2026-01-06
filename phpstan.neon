@@ -252,10 +252,69 @@ parameters:
 		- message: '#results in an error.#'
 		- message: '#Possibly invalid array key type mixed#'
 		- message: '#of encapsed string cannot be cast to string#'
-		- message: '#but returns mixed#'
-		- message: '#mixed given#'
-		- message: '#cannot be converted to string.#'
-		- message: '#Cannot access an offset on mixed#'
+		-
+			message: '#but returns mixed#'
+			paths:
+				- classes/controllers/FrmSMTPController.php
+				- classes/controllers/FrmSimpleBlocksController.php
+				- classes/helpers/FrmCurrencyHelper.php
+				- classes/helpers/FrmShortcodeHelper.php
+				- classes/helpers/FrmTipsHelper.php
+				- classes/models/FrmApplicationTemplate.php
+				- classes/models/FrmFieldCaptchaSettings.php
+				- classes/models/FrmFieldTypeOptionData.php
+				- classes/models/FrmMigrate.php
+				- classes/models/FrmSalesApi.php
+				- classes/models/FrmTableHTMLGenerator.php
+				- classes/models/FrmYoutubeFeedApi.php
+				- square/controllers/FrmSquareLiteAppController.php
+				- stripe/controllers/FrmStrpLiteLinkController.php
+				- stripe/controllers/FrmTransLiteCRUDController.php
+				- stripe/helpers/FrmStrpLiteLinkRedirectHelper.php
+				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
+				- stripe/helpers/FrmStrpLiteUrlParamHelper.php
+				- stripe/models/FrmStrpLitePaymentTypeHandler.php
+				- stripe/models/FrmTransLiteDb.php
+				- stripe/models/FrmTransLiteSubscription.php
+		-
+			message: '#mixed given#'
+			paths:
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmFormsController.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmCreateFile.php
+				- classes/views/frm-settings/general.php
+				- classes/views/styles/_styles-list.php
+				- css/_single_theme.css.php
+				- css/custom_theme.css.php
+				- square/controllers/FrmSquareLiteActionsController.php
+				- square/controllers/FrmSquareLiteAppController.php
+				- stripe/controllers/FrmStrpLiteLinkController.php
+				- stripe/controllers/FrmTransLiteActionsController.php
+				- stripe/helpers/FrmStrpLiteSubscriptionHelper.php
+				- stripe/models/FrmStrpLiteAuth.php
+		-
+			message: '#cannot be converted to string.#'
+			paths:
+				- classes/views/styles/_style-preview-container.php
+				- classes/views/styles/components/templates/text-toggle.php
+		-
+			message: '#Cannot access an offset on mixed#'
+			paths:
+				- classes/controllers/FrmFormActionsController.php
+				- classes/controllers/FrmFormTemplatesController.php
+				- classes/controllers/FrmStylesController.php
+				- classes/helpers/FrmAppHelper.php
+				- classes/helpers/FrmCSVExportHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmEntry.php
+				- classes/models/FrmEntryValidate.php
+				- classes/models/FrmForm.php
+				- classes/models/FrmFormMigrator.php
+				- classes/models/FrmHoneypot.php
+				- classes/models/fields/FrmFieldType.php
+				- classes/views/xml/posts_xml.php
+				- stripe/controllers/FrmTransLiteActionsController.php
 		- message: '#might not exist on#'
 		- message: '#is not a file or it does not exist#'
 		- message: '#Cannot use \+\+ on mixed#'
@@ -270,10 +329,18 @@ parameters:
 		- message: '#on a separate line has no effect#'
 		- message: '#Cannot clone non-object variable#'
 		- message: '#so it can be removed from the by-ref type#'
-		- message: '#function array_map expects#'
+		-
+			message: '#function array_map expects#'
+			paths:
+				- classes/helpers/FrmAppHelper.php  
+				- classes/helpers/FrmHtmlHelper.php
+				- classes/models/FrmEntry.php
+				- classes/models/fields/FrmFieldType.php
 		- message: '#expects resource#'
 		- message: '#might not be defined#'
-		- message: '#array given#'
+		-
+			message: '#array given#'
+			path: classes/helpers/FrmFieldsHelper.php
 		- message: '#Cannot use \+\+ on int\|false#'
 		- message: '#Only booleans are allowed in an (elseif|if) condition#'
 		- message: '#Only booleans are allowed in a negated boolean#'

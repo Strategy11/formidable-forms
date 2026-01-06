@@ -565,7 +565,7 @@ class FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
-		if ( in_array( 'square', $settings['gateway'] ) ) {
+		if ( in_array( 'square', $settings['gateway'], true ) ) {
 			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
 
 			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
