@@ -734,7 +734,7 @@ class FrmAppHelper {
 	 * @return mixed
 	 */
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
-		if ( strpos( $param, '[' ) ) {
+		if ( str_contains( $param, '[' ) ) {
 			$params = explode( '[', $param );
 			$param  = $params[0];
 		}
@@ -1390,7 +1390,7 @@ class FrmAppHelper {
 		} else {
 			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
 
-			if ( strpos( $icon, ' ' ) ) {
+			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}

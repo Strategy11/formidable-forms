@@ -580,7 +580,7 @@ class FrmEntryMeta {
 			$user_where = $wpdb->prepare( ' AND e.user_id=%d', $args['user_id'] );
 		}
 
-		if ( strpos( $where, ' GROUP BY ' ) ) {
+		if ( str_contains( $where, ' GROUP BY ' ) ) {
 			// don't inject WHERE filtering after GROUP BY
 			$parts  = explode( ' GROUP BY ', $where );
 			$where  = $parts[0];

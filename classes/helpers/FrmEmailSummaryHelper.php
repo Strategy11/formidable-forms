@@ -531,13 +531,13 @@ class FrmEmailSummaryHelper {
 		// Replace link utm.
 		$button_html = str_replace( 'utm_medium=inbox', 'utm_medium=summary-email', $button_html );
 
-		if ( strpos( $button_html, 'style="' ) ) {
+		if ( str_contains( $button_html, 'style="' ) ) {
 			// Maybe this button contains inline style.
 			return $button_html;
 		}
 
 		// Add inline CSS for specific button types.
-		if ( strpos( $button_html, 'frm-button-primary' ) ) {
+		if ( str_contains( $button_html, 'frm-button-primary' ) ) {
 			$button_html = str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
 		}
 
