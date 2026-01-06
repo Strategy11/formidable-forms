@@ -183,7 +183,6 @@ return RectorConfig::configure()
 			SimplifyEmptyArrayCheckRector::class,
 			LongArrayToShortArrayRector::class,
 			TernaryToElvisRector::class,
-			// TODO: Try this for some files and not others.
 			RemoveUnusedPrivateMethodRector::class,
 			ShortenElseIfRector::class,
 			CombineIfRector::class,
@@ -194,9 +193,7 @@ return RectorConfig::configure()
 			InlineConstructorDefaultToPropertyRector::class,
 			SimplifyRegexPatternRector::class,
 			RemoveUnusedConstructorParamRector::class,
-			// Enable this one soon.
 			NewlineAfterStatementRector::class,
-			// Try these
 			RemoveUselessReturnTagRector::class,
 			RenameVariableToMatchNewTypeRector::class,
 			AddMethodCallBasedStrictParamTypeRector::class,
