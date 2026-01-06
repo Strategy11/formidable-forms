@@ -660,7 +660,7 @@ window.frmAdminBuildJS = function() {
 		if ( cont.length && typeof target !== 'undefined' ) {
 			const className = target.parentElement.className;
 			if ( 'string' === typeof className ) {
-				if ( className.indexOf( 'frm_email_icons' ) > -1 || className.indexOf( 'frm_toggle' ) > -1 ) {
+				if ( className.includes( 'frm_email_icons' ) || className.includes( 'frm_toggle' ) ) {
 					// clicking on delete icon shouldn't open it
 					event.stopPropagation();
 					return;
@@ -706,7 +706,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		jQuery( b ).closest( '.frm_field_box' ).siblings().find( '.widget-inside' ).slideUp( 'fast' );
-		if ( ( typeof b.className !== 'undefined' && b.className.indexOf( 'widget-action' ) !== -1 ) || jQuery( b ).closest( '.start_divider' ).length < 1 ) {
+		if ( ( typeof b.className !== 'undefined' && b.className.includes( 'widget-action' ) ) || jQuery( b ).closest( '.start_divider' ).length < 1 ) {
 			return;
 		}
 
@@ -2812,7 +2812,7 @@ window.frmAdminBuildJS = function() {
 			}
 		}
 
-		if ( msg.indexOf( 'frm-collapse-page' ) !== -1 ) {
+		if ( msg.includes( 'frm-collapse-page' ) ) {
 			renumberPageBreaks();
 		}
 
@@ -5548,7 +5548,7 @@ window.frmAdminBuildJS = function() {
 			option.setAttribute( 'value', newValue );
 			option.textContent = newLabel;
 
-			if ( fieldIds.indexOf( logicId ) === -1 ) {
+			if ( ! fieldIds.includes( logicId ) ) {
 				fieldIds.push( logicId );
 			}
 		}
@@ -6266,7 +6266,7 @@ window.frmAdminBuildJS = function() {
 	function addRadioCheckboxOpt( type, opt, fieldId, fieldKey, isProduct, classes ) {
 		let other,
 			single = '',
-			isOther = opt.key.indexOf( 'other' ) !== -1,
+			isOther = opt.key.includes( 'other' ),
 			id = 'field_' + fieldKey + '-' + opt.key,
 			inputType = type === 'scale' ? 'radio' : type;
 
@@ -6314,7 +6314,7 @@ window.frmAdminBuildJS = function() {
 
 		for ( let i = 0; i < opts.length; i++ ) {
 			let label = opts[ i ].label,
-				isOther = opts[ i ].key.indexOf( 'other' ) !== -1;
+				isOther = opts[ i ].key.includes( 'other' );
 
 			if ( hasPlaceholder && label !== '' ) {
 				addBlankSelectOption( field, placeholder );
@@ -6344,7 +6344,7 @@ window.frmAdminBuildJS = function() {
 		opt.value = '';
 		opt.innerHTML = placeholder;
 		if ( firstChild !== null ) {
-			field.insertBefore( opt, firstChild );
+			firstChild.before( opt );
 			field.selectedIndex = 0;
 		} else {
 			field.append( opt );
@@ -7648,10 +7648,10 @@ window.frmAdminBuildJS = function() {
 	function clickAction( obj ) {
 		const $thisobj = jQuery( obj );
 
-		if ( obj.className.indexOf( 'selected' ) !== -1 ) {
+		if ( obj.className.includes( 'selected' ) ) {
 			return;
 		}
-		if ( obj.className.indexOf( 'edit_field_type_end_divider' ) !== -1 && $thisobj.closest( '.edit_field_type_divider' ).hasClass( 'no_repeat_section' ) ) {
+		if ( obj.className.includes( 'edit_field_type_end_divider' ) && $thisobj.closest( '.edit_field_type_divider' ).hasClass( 'no_repeat_section' ) ) {
 			return;
 		}
 
@@ -8517,7 +8517,7 @@ window.frmAdminBuildJS = function() {
 			if ( moreIcon.tagName === 'use' ) {
 				moreIcon = moreIcon.firstElementChild;
 
-				if ( getSVGHref( moreIcon ).indexOf( 'frm_close_icon' ) === -1 ) {
+				if ( ! getSVGHref( moreIcon ).includes( 'frm_close_icon' ) ) {
 					showShortcodeBox( moreIcon, 'nofocus' );
 				}
 			} else if ( ! moreIcon.classList.contains( 'frm_close_icon' ) ) {
@@ -8650,7 +8650,7 @@ window.frmAdminBuildJS = function() {
 			classes = getSVGHref( moreIcon );
 		}
 
-		if ( classes.indexOf( 'frm_close_icon' ) !== -1 ) {
+		if ( classes.includes( 'frm_close_icon' ) ) {
 			hideShortcodes( box );
 		} else {
 			updateShortcodesPopupPosition( moreIcon );
@@ -8921,7 +8921,7 @@ window.frmAdminBuildJS = function() {
 	function toggleAllowedHTML( input ) {
 		let b,
 			id = input.id;
-		if ( typeof id === 'undefined' || id.indexOf( '-search-input' ) !== -1 ) {
+		if ( typeof id === 'undefined' || id.includes( '-search-input' ) ) {
 			return;
 		}
 
@@ -9215,7 +9215,7 @@ window.frmAdminBuildJS = function() {
 		const multiple = s.indexOf( '|' );
 		jQuery( 'input[name="type[]"]' ).each( function() {
 			this.checked = false;
-			if ( s.indexOf( this.value ) >= 0 ) {
+			if ( s.includes( this.value ) ) {
 				this.disabled = false;
 				if ( multiple === -1 ) {
 					this.checked = true;
@@ -9545,7 +9545,7 @@ window.frmAdminBuildJS = function() {
 					items[ i ].classList.remove( 'frm_hidden' );
 				}
 				items[ i ].classList.remove( 'frm-search-result' );
-			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.indexOf( searchText ) >= 0 || textMatchesPlural( innerText, searchText ) ) {
+			} else if ( ( regEx && new RegExp( searchText ).test( innerText ) ) || innerText.includes( searchText ) || textMatchesPlural( innerText, searchText ) ) {
 				if ( itemCanBeShown && checkContextualShortcode( items[ i ] ) ) {
 					items[ i ].classList.remove( 'frm_hidden' );
 				}
@@ -9582,7 +9582,7 @@ window.frmAdminBuildJS = function() {
 			return false;
 		}
 
-		return ( text + 's' ).indexOf( searchText ) >= 0;
+		return ( text + 's' ).includes( searchText );
 	}
 
 	/**
@@ -10181,7 +10181,7 @@ window.frmAdminBuildJS = function() {
 			data: $hiddenForm.serialize() + '&action=frm_forms_preview'
 		} ).done( function( data ) {
 			const message = jQuery( data ).find( '.frm_message' ).text().trim();
-			if ( message.indexOf( 'Thanks!' ) === -1 ) {
+			if ( ! message.includes( 'Thanks!' ) ) {
 				handleEmailAddressError( 'invalid' );
 				return;
 			}

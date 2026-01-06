@@ -1099,9 +1099,9 @@ function frmFrontFormJS() {
 	function maybeSlideOut( oldContent, newContent ) {
 		let c,
 			newClass = 'frm_slideout';
-		if ( newContent.indexOf( ' frm_slide' ) !== -1 ) {
+		if ( newContent.includes( ' frm_slide' ) ) {
 			c = oldContent.children();
-			if ( newContent.indexOf( ' frm_going_back' ) !== -1 ) {
+			if ( newContent.includes( ' frm_going_back' ) ) {
 				newClass += ' frm_going_back';
 			}
 			c.removeClass( 'frm_going_back' );
@@ -1173,7 +1173,7 @@ function frmFrontFormJS() {
 			if ( input ) {
 				if ( ! describedBy ) {
 					describedBy = id;
-				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_' ) === -1 ) {
+				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
 					const errorFirst = input.dataset.errorFirst;
 					if ( errorFirst === '0' ) {
 						describedBy = describedBy + ' ' + id;
@@ -1902,7 +1902,7 @@ function frmFrontFormJS() {
 			uniqueIDInput.value = getUniqueKey();
 			object.append( uniqueIDInput );
 
-			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
+			if ( classList.includes( 'frm_ajax_submit' ) ) {
 				const fileInputs = object.querySelectorAll( 'input[type="file"]' );
 				hasFileFields = Array.from( fileInputs ).filter( input => !! input.value ).length;
 				if ( hasFileFields < 1 ) {
