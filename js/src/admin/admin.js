@@ -1237,7 +1237,7 @@ window.frmAdminBuildJS = function() {
 
 	function maybeFixEndDividers() {
 		document.querySelectorAll( '.edit_field_type_end_divider' ).forEach(
-			endDivider => endDivider.parentNode.appendChild( endDivider )
+			endDivider => endDivider.parentNode.append( endDivider )
 		);
 	}
 
@@ -7066,7 +7066,8 @@ window.frmAdminBuildJS = function() {
 		const button = form.ownerDocument.createElement( 'input' );
 		button.style.display = 'none';
 		button.type = 'submit';
-		form.appendChild( button ).click();
+		form.append( button );
+		button.click();
 		button.remove();
 	}
 
@@ -7572,7 +7573,7 @@ window.frmAdminBuildJS = function() {
 			newActionContainer.innerHTML = html;
 
 			const widgetTop = newActionContainer.querySelector( '.widget-top' );
-			Array.from( newActionContainer.children ).forEach( child => actionsList.appendChild( child ) );
+			Array.from( newActionContainer.children ).forEach( child => actionsList.append( child ) );
 
 			jQuery( '.frm_form_action_settings' ).fadeIn( 'slow' );
 

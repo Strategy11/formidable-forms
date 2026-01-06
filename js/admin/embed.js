@@ -313,7 +313,7 @@
 					content.innerHTML = '';
 
 					if ( 'form' === state.type ) {
-						getEmbedFormManualExamples().forEach( example => content.appendChild( getEmbedExample( example ) ) );
+						getEmbedFormManualExamples().forEach( example => content.append( getEmbedExample( example ) ) );
 					} else {
 						const hookName = 'frm_embed_examples';
 						const hookArgs = {
@@ -322,7 +322,7 @@
 							objectKey: state.objectKey
 						};
 						wp.hooks.applyFilters( hookName, [], hookArgs ).forEach(
-							example => content.appendChild( getEmbedExample( example ) )
+							example => content.append( getEmbedExample( example ) )
 						);
 					}
 				}
@@ -330,7 +330,7 @@
 		];
 
 		options.forEach(
-			option => content.appendChild( getModalOption( option ) )
+			option => content.append( getModalOption( option ) )
 		);
 
 		return content;
@@ -495,7 +495,7 @@
 		element.textContent = message;
 		document.body.append( element );
 
-		setTimeout( () => document.body.removeChild( element ), 1000 );
+		setTimeout( () => element.remove(), 1000 );
 	}
 
 	/**

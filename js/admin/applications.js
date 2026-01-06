@@ -144,7 +144,7 @@
 
 	function addTemplatesToGrid( templates ) {
 		templates.forEach(
-			application => elements.templatesGrid.appendChild( createApplicationCard( application ) )
+			application => elements.templatesGrid.append( createApplicationCard( application ) )
 		);
 		maybeTriggerSearch();
 	}

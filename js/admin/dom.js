@@ -863,7 +863,7 @@
 			}
 		);
 
-		node.childNodes.forEach( child => newNode.appendChild( cleanNode( child ) ) );
+		node.childNodes.forEach( child => newNode.append( cleanNode( child ) ) );
 		return newNode;
 	}
 
