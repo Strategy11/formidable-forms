@@ -669,7 +669,7 @@
 	 * @return {void}
 	 */
 	function replaceEmailField( emailField, emailInput, authenticationMountTarget ) {
-		emailField.insertBefore( authenticationMountTarget, emailInput );
+		emailInput.before( authenticationMountTarget );
 		emailInput.type = 'hidden';
 		const emailLabel = emailField.querySelector( '.frm_primary_label' );
 

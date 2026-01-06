@@ -6344,7 +6344,7 @@ window.frmAdminBuildJS = function() {
 		opt.value = '';
 		opt.innerHTML = placeholder;
 		if ( firstChild !== null ) {
-			field.insertBefore( opt, firstChild );
+			firstChild.before( opt );
 			field.selectedIndex = 0;
 		} else {
 			field.append( opt );
