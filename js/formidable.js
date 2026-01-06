@@ -1153,10 +1153,8 @@ function frmFrontFormJS() {
 		}
 
 		container.classList.add( 'frm_blank_field' );
-		const input = container.querySelector( 'input, select, textarea' );
-		id = getErrorElementId( key, input );
-
-		describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
+		const inputs = container.querySelectorAll( 'input, select, textarea' );
+		id = getErrorElementId( key, inputs[ 0 ] );
 
 		if ( typeof frmThemeOverride_frmPlaceError === 'function' ) { // eslint-disable-line camelcase
 			frmThemeOverride_frmPlaceError( key, jsErrors );
@@ -1169,8 +1167,8 @@ function frmFrontFormJS() {
 				errorHtml = '<div class="frm_error" ' + roleString + ' id="' + id + '">' + jsErrors[ key ] + '</div>';
 			}
 			container.insertAdjacentHTML( 'beforeend', errorHtml );
-
-			if ( input ) {
+			inputs.forEach( input => {
+				describedBy = input ? input.getAttribute( 'aria-describedby' ) : null;
 				if ( ! describedBy ) {
 					describedBy = id;
 				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_' ) === -1 ) {
@@ -1182,10 +1180,10 @@ function frmFrontFormJS() {
 					}
 				}
 				input.setAttribute( 'aria-describedby', describedBy );
-			}
+			} );
 		}
 
-		if ( input ) {
+		inputs.forEach( input => {
 			if ( [ 'radio', 'checkbox' ].includes( input.type ) ) {
 				const group = input.closest( '[role="radiogroup"], [role="group"]' );
 				if ( group ) {
@@ -1194,7 +1192,7 @@ function frmFrontFormJS() {
 			} else {
 				input.setAttribute( 'aria-invalid', 'true' );
 			}
-		}
+		} );
 
 		jQuery( document ).trigger( 'frmAddFieldError', [ jQuery( container ), key, jsErrors ] );
 	}
@@ -1211,7 +1209,7 @@ function frmFrontFormJS() {
 			// If key isn't a number, assume it's already in the right format.
 			return 'frm_error_field_' + key;
 		}
-		return 'frm_error_' + input.id;
+		return 'frm_error_' + input.id.split( '-' )[ 0 ];
 	}
 
 	/**
@@ -1260,11 +1258,38 @@ function frmFrontFormJS() {
 		}
 	}
 
+	/**
+	 * Updates the aria-describedby attribute of input elements to remove the error element ID.
+	 *
+	 * @since x.x
+	 *
+	 * @param {HTMLElement} el The error element.
+	 * @return {void}
+	 */
+	function updateInputElementsAriaDescribedBy( el ) {
+		document.querySelectorAll( `[aria-describedby*="${ el.id }"]` ).forEach( input => {
+			let ariaDescribedBy = input.getAttribute( 'aria-describedby' ).split( ' ' );
+			ariaDescribedBy = ariaDescribedBy.filter( value => {
+				const trimmedValue = value.trim();
+				return trimmedValue && trimmedValue !== el.id;
+			} );
+
+			if ( ariaDescribedBy.length ) {
+				input.setAttribute( 'aria-describedby', ariaDescribedBy.join( ' ' ) );
+				return;
+			}
+			input.removeAttribute( 'aria-describedby' );
+		} );
+	}
+
 	function removeAllErrors() {
 		document.querySelectorAll( '.form-field' ).forEach( field => {
 			field.classList.remove( 'frm_blank_field', 'has-error' );
 		} );
-		document.querySelectorAll( '.form-field .frm_error' ).forEach( error => error.remove() );
+		document.querySelectorAll( '.frm_form_field .frm_error' ).forEach( el => {
+			updateInputElementsAriaDescribedBy( el );
+			el.remove();
+		} );
 		document.querySelectorAll( '.frm_error_style' ).forEach( error => error.remove() );
 	}
 

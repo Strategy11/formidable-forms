@@ -546,13 +546,20 @@ class FrmFieldsController {
 		self::add_pattern_attribute( $field, $add_html );
 
 		$add_html = apply_filters( 'frm_field_extra_html', $add_html, $field );
-		$add_html = ' ' . implode( ' ', $add_html ) . '  ';
+		$html     = ' ' . implode( ' ', $add_html ) . '  ';
 
-		if ( $echo ) {
-			echo $add_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		unset( $add_html );
+
+		if ( isset( $field['args'] ) ) {
+			$field_object = FrmFieldFactory::get_field_type( FrmField::get_field_type( $field ), $field );
+			$field_object->add_aria_description( $field['args'], $html );
 		}
 
-		return $add_html;
+		if ( $echo ) {
+			echo $html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+
+		return $html;
 	}
 
 	/**

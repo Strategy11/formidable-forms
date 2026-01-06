@@ -286,16 +286,27 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( ! empty( $error ) && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( empty( $error ) ) {
+			FrmShortcodeHelper::remove_inline_conditions( false, 'error', $error, $this->html );
+
+			return;
+		}
+
+		$include_alert_role_on_field_errors = FrmAppHelper::should_include_alert_role_on_field_errors();
+		$has_alert_role                     = str_contains( $this->html, 'role="alert"' );
+
+		if ( ! $has_alert_role && $include_alert_role_on_field_errors ) {
 			$error_body = self::get_error_body( $this->html );
 
 			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
 				$new_error_body = preg_replace( '/class="frm_error/', 'role="alert" class="frm_error', $error_body, 1 );
 				$this->html     = str_replace( '[if error]' . $error_body . '[/if error]', '[if error]' . $new_error_body . '[/if error]', $this->html );
 			}
+		} elseif ( ! $include_alert_role_on_field_errors && $has_alert_role ) {
+			$this->html = str_replace( 'role="alert"', '', $this->html );
 		}
 
-		FrmShortcodeHelper::remove_inline_conditions( ! empty( $error ), 'error', $error, $this->html );
+		FrmShortcodeHelper::remove_inline_conditions( true, 'error', $error, $this->html );
 	}
 
 	/**
