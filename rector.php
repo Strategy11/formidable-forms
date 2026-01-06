@@ -12,7 +12,6 @@ use Rector\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector;
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
 use Rector\CodeQuality\Rector\Concat\JoinStringConcatRector;
 use Rector\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector;
-use Rector\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector;
 use Rector\CodeQuality\Rector\Foreach_\UnusedForeachValueToArrayKeysRector;
 use Rector\CodeQuality\Rector\FuncCall\ChangeArrayPushToArrayAssignRector;
 use Rector\CodeQuality\Rector\FuncCall\CompactToVariablesRector;
@@ -173,7 +172,6 @@ return RectorConfig::configure()
 			SingularSwitchToIfRector::class,
 			SwitchNegatedTernaryRector::class,
 			UnusedForeachValueToArrayKeysRector::class,
-			UseIdenticalOverEqualWithSameTypeRector::class,
 
 			// CodingStyle
 			CallUserFuncArrayToVariadicRector::class,

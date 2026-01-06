@@ -659,7 +659,7 @@ class FrmEntry {
 
 		$meta_where = array( 'field_id !' => 0 );
 
-		if ( $limit == '' && is_array( $where ) && count( $where ) == 1 && isset( $where['it.form_id'] ) ) {
+		if ( $limit == '' && is_array( $where ) && count( $where ) === 1 && isset( $where['it.form_id'] ) ) {
 			$meta_where['fi.form_id'] = $where['it.form_id'];
 		} else {
 			$meta_where['item_id'] = array_keys( $entries );

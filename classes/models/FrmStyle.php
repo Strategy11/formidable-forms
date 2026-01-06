@@ -822,7 +822,7 @@ class FrmStyle {
 
 		foreach ( $balanced_characters as $char ) {
 			$char_count  = substr_count( $value, $char );
-			$is_balanced = $char_count % 2 == 0;
+			$is_balanced = $char_count % 2 === 0;
 
 			if ( $is_balanced ) {
 				continue;
