@@ -900,7 +900,7 @@ class FrmAddon {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private function get_messages() {
 		return array(

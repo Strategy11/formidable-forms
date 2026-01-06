@@ -774,7 +774,7 @@ class FrmSolution {
 	/**
 	 * In the new plugin has any dependencies, include them here.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function required_plugins() {
 		return array();
@@ -792,7 +792,7 @@ class FrmSolution {
 	/**
 	 * Give options for which forms to import.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function form_options() {
 		/**
@@ -811,7 +811,7 @@ class FrmSolution {
 	/**
 	 * Give options for which view to use.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function view_options() {
 		return array();
@@ -820,7 +820,7 @@ class FrmSolution {
 	/**
 	 * If the pages aren't imported automatically, set the page names.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function needed_pages() {
 		/**

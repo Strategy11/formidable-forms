@@ -36,7 +36,7 @@ class FrmShortcodeHelper {
 	 *
 	 * @since 6.16.3
 	 *
-	 * @return array
+	 * @return array<string, array<string, mixed>>
 	 */
 	public static function get_contextual_shortcodes() {
 		return array(

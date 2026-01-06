@@ -82,6 +82,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @return array<int, array<string, bool|int|string>|array<string, bool|string>>
+	 */
 	protected function expected_format_errors() {
 		return array(
 			array(

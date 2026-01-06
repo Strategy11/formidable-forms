@@ -99,14 +99,14 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @return array of the default options
+	 * @return array{} of the default options
 	 */
 	public function get_defaults() {
 		return array();
 	}
 
 	/**
-	 * @return array
+	 * @return array{}
 	 */
 	public function get_switch_fields() {
 		return array();
@@ -968,7 +968,7 @@ class FrmFormAction {
 	/**
 	 * @param string $class
 	 *
-	 * @return array
+	 * @return array<string, bool|int|string>
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(

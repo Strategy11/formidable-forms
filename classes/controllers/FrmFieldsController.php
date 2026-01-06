@@ -576,8 +576,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -611,8 +611,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -642,8 +642,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -669,9 +669,9 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
-	 * @param array $add_html
-	 * @param array $class
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
+	 * @param array                $class
 	 *
 	 * @return void
 	 */
@@ -799,8 +799,8 @@ class FrmFieldsController {
 	}
 
 	/**
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -859,8 +859,8 @@ class FrmFieldsController {
 	/**
 	 * @since 5.0.03
 	 *
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -950,8 +950,8 @@ class FrmFieldsController {
 	 *
 	 * @since 3.06.01
 	 *
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */
@@ -1035,8 +1035,8 @@ class FrmFieldsController {
 	 *
 	 * @since 3.0
 	 *
-	 * @param array $field
-	 * @param array $add_html
+	 * @param array                $field
+	 * @param array<string, mixed> $add_html
 	 *
 	 * @return void
 	 */

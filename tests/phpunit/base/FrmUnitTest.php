@@ -469,6 +469,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return $output;
 	}
 
+	/**
+	 * @return array<int, string>
+	 */
 	public static function install_data() {
 		return array(
 			__DIR__ . '/testdata.xml',

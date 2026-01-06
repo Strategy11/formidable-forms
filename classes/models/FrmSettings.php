@@ -286,7 +286,7 @@ class FrmSettings {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public function default_options() {
 		return array(

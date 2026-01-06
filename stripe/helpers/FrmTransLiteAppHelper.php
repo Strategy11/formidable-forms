@@ -226,7 +226,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function get_repeat_times() {
 		return array(
@@ -242,7 +242,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param int $number
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function get_plural_repeat_times( $number ) {
 		return array(
@@ -303,7 +303,7 @@ class FrmTransLiteAppHelper {
 	 *
 	 * @param array|float|object|string $payment Payment object, payment array or amount.
 	 *
-	 * @return array Return the array with the first element is the amount, the second one is the currency value.
+	 * @return array<int, mixed> Return the array with the first element is the amount, the second one is the currency value.
 	 */
 	public static function get_amount_and_currency_from_payment( $payment ) {
 		$currency = '';

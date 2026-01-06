@@ -70,6 +70,9 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	protected function get_expected_field_values() {
 		return array(
 			'free-text-field'         => 'Test Testerson',

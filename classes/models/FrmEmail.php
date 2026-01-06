@@ -787,7 +787,7 @@ class FrmEmail {
 	 *
 	 * @param string $sender
 	 *
-	 * @return array
+	 * @return array<int, mixed>
 	 */
 	private function get_name_and_email_for_sender( $sender ) {
 		$parts = explode( ' ', $sender );

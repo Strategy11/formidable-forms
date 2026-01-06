@@ -233,7 +233,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();
@@ -548,7 +548,7 @@ class FrmSquareLiteConnectHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function get_standard_authenticated_body() {
 		$mode = self::get_mode_value_from_post();

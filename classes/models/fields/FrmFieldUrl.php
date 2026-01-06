@@ -33,7 +33,7 @@ class FrmFieldUrl extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int>
 	 */
 	protected function extra_field_opts() {
 		return array(

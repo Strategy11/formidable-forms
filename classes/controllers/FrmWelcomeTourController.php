@@ -163,7 +163,7 @@ class FrmWelcomeTourController {
 	/**
 	 * Gets the checklist steps.
 	 *
-	 * @return array
+	 * @return array<string, mixed[]>
 	 */
 	private static function get_steps() {
 		$steps = array(
@@ -494,7 +494,7 @@ class FrmWelcomeTourController {
 	/**
 	 * Get the Welcome Tour JS variables as an array.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function get_js_variables() {
 		return array(

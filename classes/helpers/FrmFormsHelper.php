@@ -447,7 +447,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int|string>
 	 */
 	public static function get_default_opts() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -1404,7 +1404,7 @@ BEFORE_HTML;
 	 *
 	 * @param int $id
 	 *
-	 * @return array
+	 * @return array<string, array<string, mixed>>
 	 */
 	public static function delete_trash_links( $id ) {
 		$current_page = FrmAppHelper::get_simple_request( array( 'param' => 'form_type' ) );
@@ -1481,7 +1481,7 @@ BEFORE_HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	public static function grid_classes() {
 		return array(
@@ -1893,7 +1893,7 @@ BEFORE_HTML;
 	 *
 	 * @since 4.04
 	 *
-	 * @return array Array of WordPress reserved words.
+	 * @return array<int, string> Array of WordPress reserved words.
 	 */
 	public static function reserved_words() {
 		return array(

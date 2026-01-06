@@ -50,6 +50,9 @@ class FrmOnSubmitAction extends FrmFormAction {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';
 	}
 
+	/**
+	 * @return array<string, int|string>
+	 */
 	public function get_defaults() {
 		return array(
 			'success_action'      => FrmOnSubmitHelper::get_default_action_type(),

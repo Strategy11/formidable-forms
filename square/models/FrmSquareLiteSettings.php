@@ -22,7 +22,7 @@ class FrmSquareLiteSettings {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int>
 	 */
 	public function default_options() {
 		return array(

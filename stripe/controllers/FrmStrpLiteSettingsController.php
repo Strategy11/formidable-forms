@@ -63,7 +63,7 @@ class FrmStrpLiteSettingsController {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed[]|string>
 	 */
 	private static function get_default_settings_atts() {
 		return array(

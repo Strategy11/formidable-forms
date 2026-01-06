@@ -162,6 +162,9 @@ class FrmListHelper {
 		return current_user_can( 'administrator' );
 	}
 
+	/**
+	 * @return array{}
+	 */
 	public function get_columns() {
 		return array();
 	}
@@ -307,7 +310,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function get_views() {
 		return array();
@@ -351,7 +354,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function get_bulk_actions() {
 		return array();
@@ -802,7 +805,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function get_sortable_columns() {
 		return array();
@@ -1119,7 +1122,7 @@ class FrmListHelper {
 	 *
 	 * @since 2.0.18
 	 *
-	 * @return array List of CSS classes for the table tag.
+	 * @return array<int, mixed> List of CSS classes for the table tag.
 	 */
 	protected function get_table_classes() {
 		return array( 'widefat', 'fixed', 'striped', $this->_args['plural'] );

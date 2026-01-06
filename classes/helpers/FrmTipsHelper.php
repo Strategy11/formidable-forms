@@ -118,7 +118,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_builder_tip() {
 		return array(
@@ -174,7 +174,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_form_settings_tip() {
 		return array(
@@ -206,7 +206,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_form_action_tip() {
 		return array(
@@ -302,7 +302,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_styling_tip() {
 		return array(
@@ -368,7 +368,7 @@ class FrmTipsHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_import_tip() {
 		return array(
@@ -450,7 +450,7 @@ class FrmTipsHelper {
 	/**
 	 * @deprecated 6.21
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	public static function get_banner_tip() {
 		_deprecated_function( __METHOD__, '6.21' );

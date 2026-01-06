@@ -513,8 +513,8 @@ class FrmFormActionsController {
 	}
 
 	/**
-	 * @param int|string $form_id
-	 * @param array      $values
+	 * @param int|string           $form_id
+	 * @param array<string, mixed> $values
 	 *
 	 * @return object
 	 */

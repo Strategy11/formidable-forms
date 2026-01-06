@@ -23,7 +23,7 @@ class FrmStrpLiteSettings {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public function default_options() {
 		return array(

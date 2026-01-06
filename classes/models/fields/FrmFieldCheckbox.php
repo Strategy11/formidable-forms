@@ -81,7 +81,7 @@ class FrmFieldCheckbox extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function extra_field_opts() {
 		$form_id = $this->get_field_column( 'form_id' );

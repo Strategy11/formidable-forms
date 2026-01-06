@@ -53,7 +53,7 @@ DEFAULT_HTML;
 	/**
 	 * Sets settings for this field type.
 	 *
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	protected function field_settings_for_type() {
 		return array(

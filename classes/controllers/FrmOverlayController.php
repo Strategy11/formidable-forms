@@ -70,7 +70,7 @@ class FrmOverlayController {
 	/**
 	 * Get next execution time. Return the next execution timestamp and date.
 	 *
-	 * @return array
+	 * @return array<string, bool|int|string>
 	 */
 	private function get_next_execution() {
 		$next_timestamp = strtotime( '+' . $this->config['execution-frequency'], $this->get_time() );

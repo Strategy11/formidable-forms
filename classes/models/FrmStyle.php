@@ -794,7 +794,7 @@ class FrmStyle {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
 	public static function get_bold_options() {
 		return array(

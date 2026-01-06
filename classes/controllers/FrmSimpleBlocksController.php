@@ -139,7 +139,7 @@ class FrmSimpleBlocksController {
 	 *
 	 * @param object $form
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function set_form_options( $form ) {
 		return array(

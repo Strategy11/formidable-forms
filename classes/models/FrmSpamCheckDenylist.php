@@ -323,7 +323,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	/**
 	 * Get the field IDs to check.
 	 *
-	 * @param array $denylist The denylist data.
+	 * @param array<string, mixed> $denylist The denylist data.
 	 *
 	 * @return array|false Return array of field IDs or false if do not need to check.
 	 */

@@ -171,7 +171,7 @@ class FrmTransLiteActionsController {
 	 * @param stdClass $entry
 	 * @param mixed    $form
 	 *
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	public static function trigger_gateway( $action, $entry, $form ) {
 		// This function must be overridden in a subclass.

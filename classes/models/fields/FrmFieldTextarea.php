@@ -31,7 +31,7 @@ class FrmFieldTextarea extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	protected function extra_field_opts() {
 		return array(

@@ -304,7 +304,7 @@ class FrmEntryFormatter {
 	 *
 	 * @since 3.0
 	 *
-	 * @return array
+	 * @return array<int, string>
 	 */
 	protected function skip_fields() {
 		return array( 'captcha', 'html', FrmSubmitHelper::FIELD_TYPE );
@@ -780,7 +780,7 @@ class FrmEntryFormatter {
 	 *
 	 * @param FrmFieldValue $field_value
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function package_value_args( $field_value ) {
 		return array(

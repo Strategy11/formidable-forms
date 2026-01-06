@@ -81,7 +81,7 @@ class FrmAddonsController {
 	 *
 	 * @since 6.15
 	 *
-	 * @return array
+	 * @return array<string, bool|string>
 	 */
 	private static function get_js_variables() {
 		return array(
@@ -1240,7 +1240,7 @@ class FrmAddonsController {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();

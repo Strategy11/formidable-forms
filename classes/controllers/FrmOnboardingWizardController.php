@@ -399,7 +399,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @since 6.9
 	 *
-	 * @return array
+	 * @return array<string, string>
 	 */
 	private static function get_js_variables() {
 		return array(
@@ -463,7 +463,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @param array $inbox_messages The array of existing inbox messages.
 	 *
-	 * @return array Configuration for the onboarding wizard slide-in notification.
+	 * @return array<string, array<string, mixed>> Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
 		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' );

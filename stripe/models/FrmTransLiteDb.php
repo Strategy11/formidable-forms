@@ -279,7 +279,7 @@ class FrmTransLiteDb {
 	}
 
 	/**
-	 * @return array
+	 * @return array{}
 	 */
 	public function get_defaults() {
 		return array();

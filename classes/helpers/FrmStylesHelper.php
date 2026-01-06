@@ -34,7 +34,7 @@ class FrmStylesHelper {
 	/**
 	 * @since 2.05
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function get_css_label_positions() {
 		return array(
@@ -76,7 +76,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int, array<string, string>>
 	 */
 	public static function minus_icons() {
 		return array(
@@ -104,7 +104,7 @@ class FrmStylesHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<int|string, mixed>
 	 */
 	public static function arrow_icons() {
 		$minus_icons = self::minus_icons();
@@ -821,7 +821,7 @@ class FrmStylesHelper {
 	/**
 	 * @since 2.3
 	 *
-	 * @return array
+	 * @return array<string, mixed[]>
 	 */
 	private static function allow_color_override() {
 		$frm_style = new FrmStyle();

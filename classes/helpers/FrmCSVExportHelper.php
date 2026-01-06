@@ -236,7 +236,7 @@ class FrmCSVExportHelper {
 	/**
 	 * @since 5.0.16
 	 *
-	 * @return array
+	 * @return array<string, mixed[]|string>
 	 */
 	private static function get_standard_filter_args() {
 		return array(

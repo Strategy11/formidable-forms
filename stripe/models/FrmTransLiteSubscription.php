@@ -9,7 +9,7 @@ class FrmTransLiteSubscription extends FrmTransLiteDb {
 	public $singular   = 'subscription';
 
 	/**
-	 * @return array
+	 * @return array<string, array<string, mixed>>
 	 */
 	public function get_defaults() {
 		return array(

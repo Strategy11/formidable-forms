@@ -153,7 +153,7 @@ class FrmXMLHelper {
 	/**
 	 * @since 3.06
 	 *
-	 * @return array
+	 * @return array<string, array<string, int>|mixed[]>
 	 */
 	private static function pre_import_data() {
 		$defaults = array(
@@ -588,7 +588,7 @@ class FrmXMLHelper {
 	 * @param object     $field
 	 * @param int|string $form_id
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function fill_field( $field, $form_id ) {
 		return array(

@@ -98,7 +98,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Gets default sub field.
 	 *
-	 * @return array
+	 * @return array<string, bool|mixed[]|string|string[]>
 	 */
 	protected function get_default_sub_field() {
 		return array(
@@ -209,7 +209,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Gets labels for built-in options of fields or sub fields.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function get_built_in_option_labels() {
 		return array(
@@ -222,7 +222,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Which built-in settings this field supports?
 	 *
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	protected function field_settings_for_type() {
 		return array(
@@ -502,7 +502,7 @@ class FrmFieldCombo extends FrmFieldType {
 	/**
 	 * Gets inputs container attributes.
 	 *
-	 * @return array
+	 * @return array<string, lowercase-string>
 	 */
 	protected function get_inputs_container_attrs() {
 		return array(

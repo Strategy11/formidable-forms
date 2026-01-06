@@ -142,6 +142,9 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 		return $card;
 	}
 
+	/**
+	 * @return array<string, string>
+	 */
 	protected function get_stripe_account_id_details() {
 		return array(
 			'stripe_account' => self::$shared_account_id,
@@ -219,7 +222,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int|string>
 	 */
 	protected function get_test_credit_card() {
 		return array(
@@ -295,7 +298,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, bool|int|string>
 	 */
 	protected function prepare_new_charge_array() {
 		$customer_id = $this->get_customer_id();

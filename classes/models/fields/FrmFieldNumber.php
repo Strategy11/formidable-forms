@@ -37,7 +37,7 @@ class FrmFieldNumber extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int|string>
 	 */
 	protected function extra_field_opts() {
 		return array(

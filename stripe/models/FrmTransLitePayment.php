@@ -9,7 +9,7 @@ class FrmTransLitePayment extends FrmTransLiteDb {
 	public $singular   = 'payment';
 
 	/**
-	 * @return array
+	 * @return array<string, array<string, mixed>>
 	 */
 	public function get_defaults() {
 		return array(

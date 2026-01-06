@@ -28,7 +28,7 @@ class FrmInboxController {
 	/**
 	 * @since 6.8
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function get_inbox_messages() {
 		self::add_tracking_request();

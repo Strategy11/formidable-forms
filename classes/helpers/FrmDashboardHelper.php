@@ -206,7 +206,7 @@ class FrmDashboardHelper {
 	 *
 	 * @since 6.8
 	 *
-	 * @return array
+	 * @return array<int, array<string, mixed>>
 	 */
 	public static function get_license_buttons() {
 		$cta_text = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_text' );

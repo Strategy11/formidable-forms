@@ -684,7 +684,7 @@ class FrmAppHelper {
 	/**
 	 * @since 6.1
 	 *
-	 * @return array
+	 * @return array<int, string>
 	 */
 	public static function get_custom_header_keys_for_ip() {
 		return array(
@@ -1163,6 +1163,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.05.03
+	 *
+	 * @return array<string, array<string, bool>|mixed[]>
 	 */
 	private static function safe_html() {
 		$allow_class = array(
@@ -2895,10 +2897,10 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @param object $field
-	 * @param object $record
-	 * @param array  $values
-	 * @param array  $args
+	 * @param object               $field
+	 * @param object               $record
+	 * @param array<string, mixed> $values
+	 * @param array                $args
 	 *
 	 * @return void
 	 */
@@ -2959,7 +2961,7 @@ class FrmAppHelper {
 	 *
 	 * @param object $field
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	public static function start_field_array( $field ) {
 		return array(
@@ -3366,7 +3368,7 @@ class FrmAppHelper {
 	 *
 	 * @since 2.0.20
 	 *
-	 * @return array
+	 * @return array<string, array<int, mixed>>
 	 */
 	private static function get_time_strings() {
 		return array(

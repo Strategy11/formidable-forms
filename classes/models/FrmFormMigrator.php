@@ -245,7 +245,7 @@ abstract class FrmFormMigrator {
 	 * @param int|string $source_id
 	 * @param string     $source_form_name
 	 *
-	 * @return array
+	 * @return array<string, int|mixed[]|string>
 	 */
 	protected function prepare_new_form( $source_id, $source_form_name ) {
 		return array(
@@ -346,7 +346,7 @@ abstract class FrmFormMigrator {
 	 *
 	 * @since 4.04.03
 	 *
-	 * @return array
+	 * @return array<int, string>
 	 */
 	protected function fields_with_end() {
 		return array( 'divider' );
@@ -500,7 +500,7 @@ abstract class FrmFormMigrator {
 	 *
 	 * @param array $form
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	protected function form_creation_error_response( $form ) {
 		return array(
@@ -623,9 +623,8 @@ abstract class FrmFormMigrator {
 	}
 
 	/** Start functions here that should be overridden **/
-
 	/**
-	 * @return array
+	 * @return array{}
 	 */
 	protected function unsupported_field_types() {
 		return array();
@@ -645,7 +644,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * Strict PRO fields with no Lite alternatives.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function skip_pro_fields() {
 		return array();
@@ -677,7 +676,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * Get ALL THE FORMS.
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	public function get_forms() {
 		return array();
@@ -686,7 +685,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @param int|string $id
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	public function get_form( $id ) {
 		return array();
@@ -704,7 +703,7 @@ abstract class FrmFormMigrator {
 	/**
 	 * @param array|object $source_form
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	protected function get_form_fields( $source_form ) {
 		return array();

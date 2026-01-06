@@ -62,6 +62,9 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 		$this->assertEquals( $table_generator->remove_border( $html ), $html );
 	}
 
+	/**
+	 * @return array<string, array<string, string>>
+	 */
 	private function _get_colors() {
 		$atts = array(
 			'border_color' => 'ffffff',

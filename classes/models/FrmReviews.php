@@ -188,7 +188,7 @@ class FrmReviews {
 	/**
 	 * @since 4.05.02
 	 *
-	 * @return array
+	 * @return array<int, string>
 	 */
 	private function inbox_keys() {
 		return array(

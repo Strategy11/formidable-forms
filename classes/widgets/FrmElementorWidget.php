@@ -28,7 +28,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		}
 
 		/**
-		 * @return array
+		 * @return array<int, string>
 		 */
 		public function get_categories() {
 			return array( 'general' );

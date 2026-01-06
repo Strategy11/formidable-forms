@@ -396,7 +396,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, bool|string>
 	 */
 	protected function default_field_settings() {
 		return array(
@@ -437,7 +437,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	private function no_input_settings() {
 		return array(
@@ -454,7 +454,7 @@ DEFAULT_HTML;
 	 *
 	 * @since 3.06.01
 	 *
-	 * @return array
+	 * @return array<int, string>
 	 */
 	public function translatable_strings() {
 		return array(
@@ -880,7 +880,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return array{}
 	 */
 	protected function new_field_settings() {
 		return array();
@@ -920,7 +920,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @return array
+	 * @return array{}
 	 */
 	protected function extra_field_opts() {
 		return array();
@@ -1594,7 +1594,7 @@ DEFAULT_HTML;
 	/**
 	 * @param array $args
 	 *
-	 * @return array
+	 * @return array{}
 	 */
 	public function validate( $args ) {
 		return array();

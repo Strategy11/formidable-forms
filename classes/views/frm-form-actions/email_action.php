@@ -30,7 +30,7 @@ class FrmEmailAction extends FrmFormAction {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, int|string|string[]>
 	 */
 	public function get_defaults() {
 		return array(

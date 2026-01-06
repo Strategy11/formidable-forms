@@ -35,7 +35,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	protected function field_settings_for_type() {
 		$settings = FrmCaptchaFactory::get_settings_object();
@@ -50,7 +50,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	protected function new_field_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
@@ -61,7 +61,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	protected function extra_field_opts() {
 		return array(

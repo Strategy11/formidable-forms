@@ -212,7 +212,7 @@ class FrmDashboardController {
 	 * @param string $link
 	 * @param bool   $display
 	 *
-	 * @return array
+	 * @return array<string, bool|string>
 	 */
 	public static function view_args_build_cta( $title, $link = '#', $display = true ) {
 		return array(

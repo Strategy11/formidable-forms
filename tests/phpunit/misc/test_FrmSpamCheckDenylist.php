@@ -304,6 +304,9 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		$_SERVER['REMOTE_ADDR'] = '192.168.1.1';
 
 		// Test when IP is blacklisted.
+		/**
+		 * @return array<string, mixed[]|string[]>
+		 */
 		function frm_test_filter_denylist_ip_data() {
 			return array(
 				'custom' => array( '192.168.1.1' ),
@@ -313,6 +316,9 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 
+		/**
+		 * @return array<int, string>
+		 */
 		function frm_test_filter_allowed_ips() {
 			return array( '192.168.1.1' );
 		}
@@ -323,6 +329,9 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
 
 		// Test IP CIDR format.
+		/**
+		 * @return array<string, mixed[]|string[]>
+		 */
 		function frm_test_filter_denylist_ip_data_2() {
 			return array(
 				'custom' => array(),

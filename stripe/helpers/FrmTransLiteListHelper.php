@@ -160,7 +160,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @return array
+	 * @return array<string, string>
 	 */
 	public function get_sortable_columns() {
 		return array(

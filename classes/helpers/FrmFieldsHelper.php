@@ -92,8 +92,8 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param object $field
-	 * @param array  $field_array
+	 * @param object               $field
+	 * @param array<string, mixed> $field_array
 	 *
 	 * @return void
 	 */
@@ -194,8 +194,8 @@ class FrmFieldsHelper {
 	/**
 	 * @since 3.0
 	 *
-	 * @param object $field
-	 * @param array  $values
+	 * @param object  $field
+	 * @param mixed[] $values
 	 *
 	 * @return void
 	 */
@@ -274,8 +274,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since 3.0
 	 *
-	 * @param object $field
-	 * @param array  $field_array
+	 * @param object               $field
+	 * @param array<string, mixed> $field_array
 	 *
 	 * @return void
 	 */

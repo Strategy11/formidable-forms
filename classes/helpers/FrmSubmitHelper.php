@@ -98,7 +98,7 @@ class FrmSubmitHelper {
 	 *
 	 * @param object $form Form object.
 	 *
-	 * @return array
+	 * @return array<string, mixed>
 	 */
 	private static function get_submit_settings_from_form( $form ) {
 		return array(

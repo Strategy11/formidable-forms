@@ -24,7 +24,7 @@ class FrmFieldCreditCard extends FrmFieldType {
 	protected $has_for_label = false;
 
 	/**
-	 * @return array
+	 * @return array<string, bool>
 	 */
 	protected function field_settings_for_type() {
 		return array(
