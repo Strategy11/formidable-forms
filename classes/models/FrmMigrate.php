@@ -376,7 +376,7 @@ class FrmMigrate {
 			$old_db_version = get_option( 'frm_db_version' );
 		}
 
-		if ( strpos( $old_db_version, '-' ) ) {
+		if ( str_contains( $old_db_version, '-' ) ) {
 			$last_upgrade   = explode( '-', $old_db_version );
 			$old_db_version = (int) $last_upgrade[1];
 		}
@@ -667,7 +667,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
-		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );
+		$has_px_size = ! empty( $size ) && str_contains( $size, 'px' );
 
 		if ( ! $has_px_size ) {
 			return;
@@ -866,7 +866,7 @@ DEFAULT_HTML;
 			if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
 				$form->options['submit_html'] = $new_default_html;
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
-			} elseif ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
+			} elseif ( ! str_contains( $form->options['submit_html'], 'save_draft' ) ) {
 				$form->options['submit_html'] = preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $draft_link . "\r\n</div>", $form->options['submit_html'] );
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
 			}

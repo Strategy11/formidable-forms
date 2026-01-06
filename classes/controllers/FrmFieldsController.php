@@ -1002,7 +1002,7 @@ class FrmFieldsController {
 				continue;
 			}
 
-			if ( is_numeric( $k ) && strpos( $v, '=' ) ) {
+			if ( is_numeric( $k ) && str_contains( $v, '=' ) ) {
 				$add_html[] = $v;
 			} elseif ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
 				$add_html[ $k ] = str_replace( $k . '="', $k . '="' . $v, $add_html[ $k ] );

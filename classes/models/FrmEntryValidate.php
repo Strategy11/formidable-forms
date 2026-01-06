@@ -850,7 +850,7 @@ class FrmEntryValidate {
 
 		switch ( $key ) {
 			case 'comment_author_email':
-				return strpos( $value, '@' ) && is_email( $value );
+				return str_contains( $value, '@' ) && is_email( $value );
 
 			case 'comment_author_url':
 				return str_starts_with( $value, 'http' );

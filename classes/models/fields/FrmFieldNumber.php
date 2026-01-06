@@ -163,7 +163,7 @@ class FrmFieldNumber extends FrmFieldType {
 	 * @return void
 	 */
 	private function remove_commas_from_number( &$args ) {
-		if ( strpos( $args['value'], ',' ) ) {
+		if ( str_contains( $args['value'], ',' ) ) {
 			$args['value'] = str_replace( ',', '', $args['value'] );
 			FrmEntriesHelper::set_posted_value( $this->field, $args['value'], $args );
 		}

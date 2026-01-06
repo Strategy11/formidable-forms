@@ -117,7 +117,7 @@ class FrmStrpLiteAuth {
 		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
 
-			if ( strpos( $html, $substring ) ) {
+			if ( str_contains( $html, $substring ) ) {
 				return $form_id;
 			}
 		}

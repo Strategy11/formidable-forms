@@ -2267,7 +2267,7 @@ class FrmXMLHelper {
 				$atts['email_to'][ $key ] = '[' . $email_field . ']';
 			}
 
-			if ( strpos( $email_field, '|' ) ) {
+			if ( str_contains( $email_field, '|' ) ) {
 				$email_opt = explode( '|', $email_field );
 
 				if ( isset( $email_opt[0] ) ) {
@@ -2355,7 +2355,7 @@ class FrmXMLHelper {
 
 			$email_field = $form_options['ar_email_to'] ?? 0;
 
-			if ( strpos( $email_field, '|' ) ) {
+			if ( str_contains( $email_field, '|' ) ) {
 				// data from entries field
 				$email_field = explode( '|', $email_field );
 

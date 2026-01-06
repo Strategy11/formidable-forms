@@ -451,10 +451,11 @@ class FrmAddonsController {
 			return '';
 		}
 
-		if ( strpos( $license, '-' ) ) {
+		if ( str_contains( $license, '-' ) ) {
 			// this is a fix for licenses saved in the past
 			$license = strtoupper( $license );
 		}
+
 		return $license;
 	}
 

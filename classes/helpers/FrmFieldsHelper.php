@@ -20,7 +20,7 @@ class FrmFieldsHelper {
 	 */
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
 
-		if ( strpos( $type, '|' ) ) {
+		if ( str_contains( $type, '|' ) ) {
 			list( $type, $setting ) = explode( '|', $type );
 		}
 
@@ -1333,7 +1333,7 @@ class FrmFieldsHelper {
 			return '';
 		}
 
-		if ( strpos( $atts['param'], '&#91;' ) ) {
+		if ( str_contains( $atts['param'], '&#91;' ) ) {
 			$atts['param'] = str_replace( '&#91;', '[', $atts['param'] );
 			$atts['param'] = str_replace( '&#93;', ']', $atts['param'] );
 		}
@@ -2378,7 +2378,7 @@ class FrmFieldsHelper {
 		$install_data           = '';
 		$requires               = '';
 		$link                   = isset( $field_type['link'] ) ? esc_url_raw( $field_type['link'] ) : '';
-		$has_show_upgrade_class = isset( $field_type['icon'] ) && strpos( $field_type['icon'], ' frm_show_upgrade' );
+		$has_show_upgrade_class = isset( $field_type['icon'] ) && str_contains( $field_type['icon'], ' frm_show_upgrade' );
 		$show_upgrade           = $has_show_upgrade_class || str_contains( $args['no_allow_class'], 'frm_show_upgrade' );
 
 		if ( $has_show_upgrade_class ) {

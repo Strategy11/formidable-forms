@@ -526,7 +526,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$sep_val = false;
 		}
 
-		if ( strpos( $col_name, '-_-' ) ) {
+		if ( str_contains( $col_name, '-_-' ) ) {
 			list( $col_name, $embedded_field_id ) = explode( '-_-', $col_name );
 		}
 
