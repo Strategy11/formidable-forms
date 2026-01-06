@@ -198,7 +198,6 @@
 		"unicorn/prefer-array-find": "off",
 		"unicorn/prefer-add-event-listener": "off",
 		"unicorn/text-encoding-identifier-case": "off",
-		"unicorn/prefer-includes": "off",
 		"unicorn/prefer-modern-dom-apis": "off",
 		"unicorn/prefer-string-replace-all": "off",
 		"unicorn/no-useless-promise-resolve-reject": "off"
