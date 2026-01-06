@@ -3692,19 +3692,15 @@ class FrmAppHelper {
 			return $string;
 		}
 
-		$new_string = json_decode( $string, true );
+		$new_string   = json_decode( $string, true );
+		$single_value = false;
 
-		if ( function_exists( 'json_last_error' ) ) {
-			// php 5.3+
-			$single_value = false;
+		if ( ! $single_to_array ) {
+			$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+		}
 
-			if ( ! $single_to_array ) {
-				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
-			}
-
-			if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-				$string = $new_string;
-			}
+		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
+			$string = $new_string;
 		}
 
 		return $string;
