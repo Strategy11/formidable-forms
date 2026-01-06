@@ -3072,6 +3072,7 @@ window.frmAdminBuildJS = function() {
 		}
 
 		const isSummary = isCalcBoxType( v, 'frm_js_summary_list' );
+
 		const fieldId = p.find( 'input[name="frm_fields_submitted[]"]' ).val();
 
 		if ( force ) {
@@ -3080,9 +3081,10 @@ window.frmAdminBuildJS = function() {
 			box = document.getElementById( 'frm-calc-box-' + fieldId );
 		}
 
-		const isMathCalc = isMathCalcType( box );
-		exclude = getExcludeArray( box, isSummary, isMathCalc );
+		const codeList = box.querySelector( '.frm_code_list' );
+		exclude = getExcludeArray( codeList, isSummary );
 		const excludedOpts = extractExcludedOptions( exclude );
+		const numericTypes = isMathCalcType( box ) ? getNumericFieldTypes( codeList ) : null;
 
 		fields = getFieldList();
 		list = document.getElementById( 'frm-calc-list-' + fieldId );
@@ -3090,7 +3092,8 @@ window.frmAdminBuildJS = function() {
 
 		for ( i = 0; i < fields.length; i++ ) {
 			if ( ( exclude && exclude.includes( fields[ i ].fieldType ) ) ||
-				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ) {
+				( excludedOpts.length && hasExcludedOption( fields[ i ], excludedOpts ) ) ||
+				( numericTypes && ! numericTypes.includes( fields[ i ].fieldType ) ) ) {
 				continue;
 			}
 
@@ -3107,32 +3110,16 @@ window.frmAdminBuildJS = function() {
 			li.appendChild( a );
 			list.appendChild( li );
 		}
-
-		// If the calc type is math and there are no fields, hide search and show a message
-		const search = box.querySelector( '.frm-search' );
-		if ( ! list.hasChildNodes() && isMathCalc ) {
-			search.classList.add( 'frm_hidden' );
-			list.appendChild(
-				tag( 'li', {
-					className: 'frm-pt-xs frm-px-sm',
-					child: span( { text: __( 'This form has no numeric fields to insert into the calculation.', 'formidable' ) } )
-				} )
-			);
-		} else {
-			search.classList.remove( 'frm_hidden' );
-		}
 	}
 
 	/**
 	 * Gets the exclude array for the calculation box.
 	 *
-	 * @param {HTMLElement} calcBox    The calculation box element.
-	 * @param {boolean}     isSummary  Whether the calculation box is for a summary.
-	 * @param {boolean}     isMathCalc Whether the calculation box is for a math calculation.
+	 * @param {HTMLElement} codeList  The code list element.
+	 * @param {boolean}     isSummary Whether the calculation box is for a summary.
 	 * @returns {Array} The exclude array.
 	 */
-	function getExcludeArray( calcBox, isSummary, isMathCalc ) {
-		const codeList = calcBox.querySelector( '.frm_code_list' );
+	function getExcludeArray( codeList, isSummary ) {
 		const exclude = JSON.parse( codeList.getAttribute( 'data-exclude' ) );
 
 		if ( isSummary ) {
@@ -3149,14 +3136,20 @@ window.frmAdminBuildJS = function() {
 					}
 				}
 			}
-		} else if ( isMathCalc ) {
-			const nonNumericTypes = codeList.getAttribute( 'data-exclude-non-numeric' );
-			if ( nonNumericTypes ) {
-				exclude.push( ...JSON.parse( nonNumericTypes ) );
-			}
 		}
 
 		return exclude;
+	}
+
+	/**
+	 * Gets the numeric field types from the calculation box.
+	 *
+	 * @param {HTMLElement} codeList The code list element.
+	 * @returns {Array|null} The numeric field types, or null if not available.
+	 */
+	function getNumericFieldTypes( codeList ) {
+		const numericTypes = codeList.dataset.numericTypes;
+		return numericTypes ? JSON.parse( numericTypes ) : null;
 	}
 
 	/**
