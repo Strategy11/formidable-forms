@@ -58,7 +58,7 @@ class FrmSettingsUpsellHelper {
 		}
 
 		if ( ! $pro_is_installed ) {
-			$read_only_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
+			$read_only_element_atts['data-upgrade'] = __( 'Read only fields', 'formidable' );
 		}
 
 		return $read_only_element_atts;
