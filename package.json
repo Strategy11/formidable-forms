@@ -88,6 +88,7 @@
 		"eslint-plugin-prettier": "5.0.0",
 		"eslint-plugin-react": "^7.20.6",
 		"eslint-plugin-sonarjs": "0.23.0",
+		"eslint-plugin-unicorn": "^43.0.0",
 		"html-validate": "^8.20.0",
 		"mini-css-extract-plugin": "^2.9.2",
 		"prompts": "^2.4.2",

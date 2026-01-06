@@ -117,7 +117,7 @@
 				option.selected = true;
 			}
 
-			newDropdown.appendChild( option );
+			newDropdown.append( option );
 		}
 
 		intervalCountSetting.parentNode.insertBefore( newDropdown, intervalCountSetting.nextSibling );
@@ -168,7 +168,7 @@
 			option.value = 'square';
 			option.textContent = 'Use Square Merchant Currency';
 			option.classList.add( 'square-currency' );
-			currencySetting.appendChild( option );
+			currencySetting.append( option );
 
 			currencySetting.value = option.value;
 			currencySetting.disabled = true;
