@@ -3682,10 +3682,10 @@ class FrmAppHelper {
 	 * Decode a JSON string.
 	 * Do not switch shortcodes like [24] to array unless intentional ie XML values.
 	 *
-	 * @param mixed $string
-	 * @param bool  $single_to_array
+	 * @param array|string|null $string
+	 * @param bool              $single_to_array
 	 *
-	 * @return mixed
+	 * @return array|string|null
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
 		if ( is_array( $string ) || is_null( $string ) ) {
