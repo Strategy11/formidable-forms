@@ -18,7 +18,7 @@ class FrmSquareLiteSettingsController {
 		$sections['square'] = array(
 			'class'    => self::class,
 			'function' => 'route',
-			'icon'     => 'frm_icon_font frm_square_icon',
+			'icon'     => 'frmfont frm_square_icon',
 		);
 
 		return $sections;
@@ -42,16 +42,6 @@ class FrmSquareLiteSettingsController {
 	 */
 	public static function global_settings_form( $atts = array() ) {
 		include FrmSquareLiteAppHelper::plugin_path() . '/views/settings/form.php';
-	}
-
-	/**
-	 * @return array
-	 */
-	private static function get_default_settings_atts() {
-		return array(
-			'errors'  => array(),
-			'message' => '',
-		);
 	}
 
 	/**

@@ -135,11 +135,11 @@ class FrmAppController {
 		$agent = strtolower( FrmAppHelper::get_server_value( 'HTTP_USER_AGENT' ) );
 		$os    = '';
 
-		if ( strpos( $agent, 'mac' ) !== false ) {
+		if ( str_contains( $agent, 'mac' ) ) {
 			$os = ' osx';
-		} elseif ( strpos( $agent, 'linux' ) !== false ) {
+		} elseif ( str_contains( $agent, 'linux' ) ) {
 			$os = ' linux';
-		} elseif ( strpos( $agent, 'windows' ) !== false ) {
+		} elseif ( str_contains( $agent, 'windows' ) ) {
 			$os = ' windows';
 		}
 		return $os;
@@ -166,15 +166,8 @@ class FrmAppController {
 			FrmOnboardingWizardController::PAGE_SLUG,
 		);
 
-		if ( ! class_exists( 'FrmTransHooksController', false ) && ! FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			// Only consider the payments page as a "white page" when the Payments submodule is off.
-			// Otherwise this causes a lot of styling issues when the Stripe add-on (or Authorize.Net) is active.
-
-			// Add an extra check to avoid white page styling on the PayPal "edit" action.
-			// We fallback to the PayPal add on for the "edit" action since Stripe Lite does not have an edit view.
-			if ( ! in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) || ! is_callable( 'FrmPaymentsController::route' ) ) {
-				$white_pages[] = 'formidable-payments';
-			}
+		if ( self::is_white_payments_page() ) {
+			$white_pages[] = 'formidable-payments';
 		}
 
 		$is_white_page = self::is_page_in_list( $white_pages ) || self::is_grey_page() || FrmAppHelper::is_view_builder_page();
@@ -189,6 +182,22 @@ class FrmAppController {
 		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
 
 		return $is_white_page;
+	}
+
+	/**
+	 * Check if the payments page should be styled as a white page.
+	 * Fallback to the Stripe, Authorize.Net, or PayPal add on for the "edit" action since
+	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
+	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private static function is_white_payments_page() {
+		$action       = FrmAppHelper::simple_get( 'action', 'sanitize_title' );
+		$on_edit_page = in_array( $action, array( 'edit', 'new' ), true );
+		return ! $on_edit_page && 'bulk_delete' !== $action;
 	}
 
 	/**
@@ -271,15 +280,14 @@ class FrmAppController {
 	 * @return string
 	 */
 	private static function get_current_page() {
-		$page         = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type    = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
-		$current_page = isset( $_GET['page'] ) ? $page : $post_type;
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
 		if ( FrmAppHelper::is_view_builder_page() ) {
-			$current_page = 'frm_display';
+			return 'frm_display';
 		}
 
-		return $current_page;
+		return isset( $_GET['page'] ) ? $page : $post_type;
 	}
 
 	/**
@@ -567,16 +575,15 @@ class FrmAppController {
 	public static function compare_for_update( $atts ) {
 		$db_version = get_option( $atts['option'] );
 
-		if ( strpos( $db_version, '-' ) === false ) {
-			$needs_upgrade = true;
-		} else {
-			$last_upgrade     = explode( '-', $db_version );
-			$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-			$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
-			$needs_upgrade    = $needs_db_upgrade || $new_version;
+		if ( ! str_contains( $db_version, '-' ) ) {
+			return true;
 		}
 
-		return $needs_upgrade;
+		$last_upgrade     = explode( '-', $db_version );
+		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
+		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
+
+		return $needs_db_upgrade || $new_version;
 	}
 
 	/**
@@ -611,11 +618,7 @@ class FrmAppController {
 				'content'  => 'submenu-upgrade',
 			);
 
-			if ( $redirect ) {
-				$redirect = FrmAppHelper::maybe_add_missing_utm( $redirect, $utm );
-			} else {
-				$redirect = FrmAppHelper::admin_upgrade_link( $utm );
-			}
+			$redirect = $redirect ? FrmAppHelper::maybe_add_missing_utm( $redirect, $utm ) : FrmAppHelper::admin_upgrade_link( $utm );
 
 			wp_redirect( $redirect );
 			die();
@@ -664,7 +667,7 @@ class FrmAppController {
 	private static function trigger_page_load_hooks() {
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
-		if ( strpos( $page, 'formidable-' ) !== 0 ) {
+		if ( ! str_starts_with( $page, 'formidable-' ) ) {
 			// Only trigger hooks on Formidable pages.
 			return;
 		}
@@ -713,31 +716,13 @@ class FrmAppController {
 		wp_register_script( 'formidable_settings', $plugin_url . '/js/admin/settings.js', array(), $version, true );
 		wp_localize_script( 'formidable_settings', 'frmSettings', $settings_js_vars );
 
+		wp_register_script( 'formidable-web-components', $plugin_url . '/js/formidable-web-components.js', array( 'formidable_admin' ), $version, true );
+
 		if ( self::should_show_floating_links() ) {
 			self::enqueue_floating_links( $plugin_url, $version );
 		}
 
-		$dependencies = array(
-			'formidable_admin_global',
-			'jquery',
-			'jquery-ui-core',
-			'jquery-ui-draggable',
-			'jquery-ui-sortable',
-			'bootstrap_tooltip',
-			'bootstrap-multiselect',
-			'wp-i18n',
-			// Required in WP versions older than 5.7
-			'wp-hooks',
-			'formidable_dom',
-			'formidable_embed',
-		);
-
-		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
-			// We only need to load the color picker when editing styles.
-			$dependencies[] = 'wp-color-picker';
-		}
-
-		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
+		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', self::get_admin_js_dependencies(), $version, true );
 
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
@@ -762,7 +747,7 @@ class FrmAppController {
 
 		global $pagenow;
 
-		if ( strpos( $page, 'formidable' ) === 0 || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
+		if ( str_starts_with( $page, 'formidable' ) || ( $pagenow === 'edit.php' && $post_type === 'frm_display' ) ) {
 			self::enqueue_global_settings_scripts( $page );
 
 			wp_enqueue_script( 'admin-widgets' );
@@ -822,6 +807,35 @@ class FrmAppController {
 		}
 
 		self::enqueue_builder_assets( $plugin_url, $version );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	private static function get_admin_js_dependencies() {
+		$dependencies = array(
+			'formidable_admin_global',
+			'jquery',
+			'jquery-ui-core',
+			'jquery-ui-draggable',
+			'jquery-ui-sortable',
+			'bootstrap_tooltip',
+			'bootstrap-multiselect',
+			'wp-i18n',
+			// Required in WP versions older than 5.7
+			'wp-hooks',
+			'formidable_dom',
+			'formidable_embed',
+		);
+
+		if ( FrmAppHelper::is_style_editor_page( 'edit' ) ) {
+			// We only need to load the color picker when editing styles.
+			$dependencies[] = 'wp-color-picker';
+		}
+
+		return $dependencies;
 	}
 
 	/**
@@ -968,7 +982,7 @@ class FrmAppController {
 	/**
 	 * Unregister Popper if the registered version is outdated.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @return void
 	 */
@@ -990,7 +1004,7 @@ class FrmAppController {
 	/**
 	 * Register Popper required for Bootstrap 5.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @return void
 	 */
@@ -1027,7 +1041,7 @@ class FrmAppController {
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
-		if ( strpos( $page, 'formidable' ) === 0 ) {
+		if ( str_starts_with( $page, 'formidable' ) ) {
 			return true;
 		}
 
@@ -1447,12 +1461,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
-
-		if ( in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' ) ) {
-			return true;
-		}
-
-		return false;
+		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 
 	/**
@@ -1641,8 +1650,7 @@ class FrmAppController {
 	private static function add_missing_tables() {
 		FrmAppHelper::permission_check( 'frm_view_forms' );
 
-		$inbox = new FrmInbox();
-		$error = $inbox->check_for_error();
+		$error = FrmInbox::check_for_error();
 
 		if ( ! $error || 'failed-to-create-tables' !== $error['key'] ) {
 			// Confirm the inbox item with this CTA exists.

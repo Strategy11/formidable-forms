@@ -141,7 +141,7 @@ class FrmStyle {
 				if ( $this->is_color( $setting ) ) {
 					$color_val = $new_instance['post_content'][ $setting ];
 
-					if ( $color_val !== '' && false !== strpos( $color_val, 'rgb' ) ) {
+					if ( $color_val !== '' && str_contains( $color_val, 'rgb' ) ) {
 						// Maybe sanitize if invalid rgba value is entered.
 						$this->maybe_sanitize_rgba_value( $color_val );
 					}
@@ -265,11 +265,7 @@ class FrmStyle {
 		$sanitized_settings = array();
 
 		foreach ( $valid_keys as $key ) {
-			if ( isset( $settings[ $key ] ) ) {
-				$sanitized_settings[ $key ] = sanitize_textarea_field( $settings[ $key ] );
-			} else {
-				$sanitized_settings[ $key ] = $defaults[ $key ];
-			}
+			$sanitized_settings[ $key ] = isset( $settings[ $key ] ) ? sanitize_textarea_field( $settings[ $key ] ) : $defaults[ $key ];
 
 			if ( 'custom_css' !== $key && 'single_style_custom_css' !== $key ) {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
@@ -291,7 +287,7 @@ class FrmStyle {
 		$characters_to_remove = array( '{', '}', ';', '[', ']' );
 
 		// RGB is handled instead in self::maybe_sanitize_rgba_value.
-		if ( 0 !== strpos( $setting, 'rgb' ) ) {
+		if ( ! str_starts_with( $setting, 'rgb' ) ) {
 			$setting = $this->maybe_fix_braces( $setting, $characters_to_remove );
 		}
 
@@ -342,7 +338,7 @@ class FrmStyle {
 		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
 			$output = rtrim( $output, '()' );
 
-			if ( false !== strpos( $output, '(' ) ) {
+			if ( str_contains( $output, '(' ) ) {
 				$output .= ')';
 			}
 		}
@@ -357,7 +353,7 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function should_remove_every_brace( $setting ) {
-		if ( 0 === strpos( trim( $setting, '()' ), 'calc' ) ) {
+		if ( str_starts_with( trim( $setting, '()' ), 'calc' ) ) {
 			// Support calc() sizes. We do not want to remove all braces when calc is used.
 			return false;
 		}
@@ -372,12 +368,7 @@ class FrmStyle {
 		// Matches size values but also checks for unexpected ( and ).
 		// This is case insensitive so it will catch PX, PT, etc, as well.
 		$looks_like_a_size = preg_match( '/\(?[+-]?\d*\.?\d+(?:px|%|em|rem|ex|pt|pc|mm|cm|in)\)?/i', $setting );
-
-		if ( $looks_like_a_size ) {
-			return true;
-		}
-
-		return false;
+		return (bool) $looks_like_a_size;
 	}
 
 	/**
@@ -389,7 +380,7 @@ class FrmStyle {
 	 */
 	private function is_color( $setting ) {
 		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return strpos( $setting, 'color' ) !== false || in_array( $setting, $extra_colors, true );
+		return str_contains( $setting, 'color' ) || in_array( $setting, $extra_colors, true );
 	}
 
 	/**
@@ -489,11 +480,7 @@ class FrmStyle {
 		if ( 'default' === $this->id ) {
 			$style = $this->get_default_style();
 
-			if ( $style ) {
-				$this->id = $style->ID;
-			} else {
-				$this->id = 0;
-			}
+			$this->id = $style ? $style->ID : 0;
 
 			return $style;
 		}
@@ -605,6 +592,8 @@ class FrmStyle {
 				return $style;
 			}
 		}
+
+		return null;
 	}
 
 	/**

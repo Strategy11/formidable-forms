@@ -271,9 +271,8 @@ class FrmHoneypot extends FrmValidate {
 	 * @return int
 	 */
 	private function get_honeypot_field_id() {
-		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
-		$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
-		return $honeypot_field_id;
+		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		return $class::get_from_request( 'honeypot_field_id', 0 );
 	}
 
 	/**

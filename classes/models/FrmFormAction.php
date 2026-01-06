@@ -174,7 +174,7 @@ class FrmFormAction {
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = str_contains( $action_options['classes'], 'frm_show_upgrade' );
 			$action_options['classes'] = $group['icon'];
 		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
@@ -257,9 +257,8 @@ class FrmFormAction {
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
 		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
-		$name .= '[' . $field_name . ']';
 
-		return $name;
+		return $name . ( '[' . $field_name . ']' );
 	}
 
 	/**
@@ -370,14 +369,11 @@ class FrmFormAction {
 		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->save_settings( $action );
-		} else {
-			// Create action
-			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->duplicate_one( (object) $action, $action['menu_order'] );
+			return $this->save_settings( $action );
 		}
-
-		return $post_id;
+		// Create action
+		$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
+		return $this->duplicate_one( (object) $action, $action['menu_order'] );
 	}
 
 	/**
@@ -466,7 +462,7 @@ class FrmFormAction {
 
 		// We need to update the data
 		if ( $this->updated ) {
-			return;
+			return null;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -475,7 +471,7 @@ class FrmFormAction {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
-			return;
+			return null;
 		}
 
 		$action_ids = array();
@@ -664,7 +660,7 @@ class FrmFormAction {
 	 * @return int The filtered limit value.
 	 */
 	public static function get_action_limit( $form_id, $limit = 99 ) {
-		$type  = 'all';
+		$type = 'all';
 		return (int) apply_filters( 'frm_form_action_limit', (int) $limit, compact( 'type', 'form_id' ) );
 	}
 
@@ -904,9 +900,7 @@ class FrmFormAction {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
 
-		$switch = apply_filters( 'frm_global_switch_fields', $switch );
-
-		return $switch;
+		return apply_filters( 'frm_global_switch_fields', $switch );
 	}
 
 	/**
@@ -968,39 +962,7 @@ class FrmFormAction {
 		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
 			return FrmProFormActionsController::action_conditions_met( $action, $entry );
 		}
-
-		$stop = false;
-		return $stop;
-	}
-
-	/**
-	 * Get the value from a specific field and entry
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param object $entry
-	 * @param int    $field_id
-	 *
-	 * @return array|bool|mixed|string
-	 */
-	private static function get_value_from_entry( $entry, $field_id ) {
-		$observed_value = '';
-
-		if ( isset( $entry->metas[ $field_id ] ) ) {
-			$observed_value = $entry->metas[ $field_id ];
-		} elseif ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
-			$field          = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value(
-				$entry,
-				$field,
-				array(
-					'links'    => false,
-					'truncate' => false,
-				)
-			);
-		}
-
-		return $observed_value;
+		return false;
 	}
 
 	/**
@@ -1010,7 +972,7 @@ class FrmFormAction {
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
-			'classes' => 'frm_icon_font ' . $class,
+			'classes' => 'frmfont ' . $class,
 			'active'  => false,
 			'limit'   => 0,
 		);

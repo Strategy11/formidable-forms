@@ -16,7 +16,7 @@ class test_FrmSimpleBlocksController extends FrmUnitTest {
 		}
 
 		unset( $_SERVER['HTTP_ACCEPT'], $_SERVER['CONTENT_TYPE'] );
-		$this->assertTrue( false !== strpos( $this->maybe_remove_fade_on_load_for_block_preview( $form ), 'frm_logic_form' ) );
+		$this->assertTrue( str_contains( $this->maybe_remove_fade_on_load_for_block_preview( $form ), 'frm_logic_form' ) );
 	}
 
 	private function maybe_remove_fade_on_load_for_block_preview( $form ) {

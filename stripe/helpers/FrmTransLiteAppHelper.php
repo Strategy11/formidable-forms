@@ -6,11 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmTransLiteAppHelper {
 
 	/**
-	 * @var bool|null
-	 */
-	private static $should_fallback_to_paypal;
-
-	/**
 	 * @return string
 	 */
 	public static function plugin_path() {
@@ -80,7 +75,7 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_payment_status( $payment ) {
-		if ( $payment->status ) {
+		if ( ! empty( $payment->status ) ) {
 			return $payment->status;
 		}
 		// PayPal fallback.
@@ -159,8 +154,7 @@ class FrmTransLiteAppHelper {
 	 */
 	public static function get_action_setting( $option, $atts ) {
 		$settings = self::get_action_settings( $atts );
-		$value    = $settings[ $option ] ?? '';
-		return $value;
+		return $settings[ $option ] ?? '';
 	}
 
 	/**
@@ -198,7 +192,7 @@ class FrmTransLiteAppHelper {
 	public static function process_shortcodes( $atts ) {
 		$value = $atts['value'];
 
-		if ( strpos( $value, '[' ) === false ) {
+		if ( ! str_contains( $value, '[' ) ) {
 			return $value;
 		}
 
@@ -213,9 +207,7 @@ class FrmTransLiteAppHelper {
 
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
-
-		$value = do_shortcode( $value );
-		return $value;
+		return do_shortcode( $value );
 	}
 
 	/**
@@ -228,11 +220,9 @@ class FrmTransLiteAppHelper {
 		$interval = self::get_repeat_label_from_value( $sub->time_interval, $sub->interval_count );
 
 		if ( $sub->interval_count == 1 ) {
-			$amount = $amount . '/' . $interval;
-		} else {
-			$amount = $amount . ' every ' . $sub->interval_count . ' ' . $interval;
+			return $amount . '/' . $interval;
 		}
-		return $amount;
+		return $amount . ' every ' . $sub->interval_count . ' ' . $interval;
 	}
 
 	/**
@@ -383,12 +373,10 @@ class FrmTransLiteAppHelper {
 	 * @return int
 	 */
 	public static function get_user_id_for_current_payment() {
-		$user_id = 0;
-
 		if ( is_user_logged_in() ) {
-			$user_id = get_current_user_id();
+			return get_current_user_id();
 		}
-		return $user_id;
+		return 0;
 	}
 
 	/**
@@ -486,34 +474,6 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @return bool
-	 */
-	public static function should_fallback_to_paypal() {
-		if ( isset( self::$should_fallback_to_paypal ) ) {
-			return self::$should_fallback_to_paypal;
-		}
-
-		if ( ! class_exists( 'FrmPaymentsController' ) || ! isset( FrmPaymentsController::$db_opt_name ) ) {
-			self::$should_fallback_to_paypal = false;
-			return false;
-		}
-
-		$db     = new FrmTransLiteDb();
-		$option = get_option( $db->db_opt_name );
-
-		if ( false !== $option ) {
-			// Don't fallback to PayPal if Stripe migrations have run.
-			self::$should_fallback_to_paypal = false;
-			return false;
-		}
-
-		$option                          = get_option( FrmPaymentsController::$db_opt_name );
-		self::$should_fallback_to_paypal = false !== $option;
-
-		return self::$should_fallback_to_paypal;
-	}
-
-	/**
 	 * Get a human readable translated 'Test' or 'Live' string if the column value is defined.
 	 * Old payments will just output an empty string.
 	 *
@@ -555,8 +515,7 @@ class FrmTransLiteAppHelper {
 	 * @return array
 	 */
 	public static function get_gateways() {
-		$gateways = apply_filters( 'frm_payment_gateways', array() );
-		return $gateways;
+		return apply_filters( 'frm_payment_gateways', array() );
 	}
 
 	/**
@@ -632,5 +591,24 @@ class FrmTransLiteAppHelper {
 			?>
 		</select>
 		<?php
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function payments_submodule_or_paypal_is_active() {
+		return class_exists( 'FrmTransAppController' ) || class_exists( 'FrmPaymentsController' );
+	}
+
+	/**
+	 * @deprecated x.x
+	 *
+	 * @return bool
+	 */
+	public static function should_fallback_to_paypal() {
+		_deprecated_function( __METHOD__, 'x.x' );
+		return false;
 	}
 }

@@ -7,7 +7,7 @@ class FrmTransLiteAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frm_icon_font',
+			'classes'  => 'frm_stripe_icon frm_credit_card_alt_icon frmfont',
 			// This is 99 in the Payments submodule but Stripe Lite only supports a single action.
 			'limit'    => 1,
 			'active'   => true,
@@ -127,15 +127,13 @@ class FrmTransLiteAction extends FrmFormAction {
 		 */
 		$form_ids = apply_filters( 'frm_trans_action_get_field_options_form_id', $form_ids, $form_id );
 
-		$form_fields = FrmField::getAll(
+		return FrmField::getAll(
 			array(
 				'fi.form_id'  => $form_ids,
 				'fi.type not' => array( 'divider', 'end_divider', 'html', 'break', 'captcha', 'rte', 'form' ),
 			),
 			'field_order'
 		);
-
-		return $form_fields;
 	}
 
 	/**

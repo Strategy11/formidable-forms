@@ -90,7 +90,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function maybe_fix_xml( &$xml_string ) {
-		if ( '<?xml' !== substr( $xml_string, 0, 5 ) ) {
+		if ( ! str_starts_with( $xml_string, '<?xml' ) ) {
 			// Some XML files have may have unexpected characters at the start.
 			$xml_string = substr( $xml_string, strpos( $xml_string, '<?xml' ) );
 		}
@@ -100,7 +100,7 @@ class FrmXMLHelper {
 		$channel_start_position     = strpos( $xml_string, '<channel>' );
 		$content_before_channel_tag = substr( $xml_string, 0, $channel_start_position );
 
-		if ( 0 !== strpos( $content_before_channel_tag, '<meta name="generator" ' ) ) {
+		if ( ! str_starts_with( $content_before_channel_tag, '<meta name="generator" ' ) ) {
 			$content_before_channel_tag = preg_replace(
 				'/<meta\s+[^>]*name="generator"[^>]*\/>/i',
 				'',
@@ -222,11 +222,7 @@ class FrmXMLHelper {
 		if ( ! empty( $parent ) ) {
 			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
 
-			if ( $parent ) {
-				$parent = $parent['term_id'];
-			} else {
-				$parent = 0;
-			}
+			$parent = $parent ? $parent['term_id'] : 0;
 		}
 
 		return $parent;
@@ -397,9 +393,7 @@ class FrmXMLHelper {
 			unset( $f );
 		}
 
-		$form_fields = $old_fields;
-
-		return $form_fields;
+		return $old_fields;
 	}
 
 	/**
@@ -730,20 +724,6 @@ class FrmXMLHelper {
 				$f['field_options']['get_values_form'] = $imported['forms'][ $old_form ];
 			}
 		}
-	}
-
-	/**
-	 * If field settings have been migrated, update the values during import.
-	 *
-	 * @since 4.0
-	 *
-	 * @param array $f
-	 *
-	 * @return void
-	 */
-	private static function run_field_migrations( &$f ) {
-		self::migrate_placeholders( $f );
-		$f = apply_filters( 'frm_import_xml_field', $f );
 	}
 
 	/**
@@ -1079,7 +1059,7 @@ class FrmXMLHelper {
 				continue;
 			}
 
-			if ( false !== strpos( $post['post_content'], '[display-frm-data' ) || false !== strpos( $post['post_content'], '[formidable' ) ) {
+			if ( str_contains( $post['post_content'], '[display-frm-data' ) || str_contains( $post['post_content'], '[formidable' ) ) {
 				$posts_with_shortcodes[ $post_id ] = $post;
 			}
 
@@ -1168,7 +1148,7 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	private static function switch_form_ids( $string, $form_ids ) {
-		if ( false === strpos( $string, '[formidable' ) ) {
+		if ( ! str_contains( $string, '[formidable' ) ) {
 			// Skip string replacing if there are no form shortcodes in string.
 			return $string;
 		}
@@ -1226,7 +1206,7 @@ class FrmXMLHelper {
 	 * @return string
 	 */
 	private static function switch_view_ids( $string, $view_ids ) {
-		if ( false === strpos( $string, '[display-frm-data' ) ) {
+		if ( ! str_contains( $string, '[display-frm-data' ) ) {
 			// Skip string replacing if there are no view shortcodes in string.
 			return $string;
 		}
@@ -1721,11 +1701,7 @@ class FrmXMLHelper {
 
 			$style_name = FrmDb::get_var( $table, $where, $select );
 
-			if ( $style_name ) {
-				$options['custom_style'] = $style_name;
-			} else {
-				$options['custom_style'] = 1;
-			}
+			$options['custom_style'] = $style_name ? $style_name : 1;
 		}
 		self::remove_default_form_options( $options );
 		$options = serialize( $options );
@@ -1811,7 +1787,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function add_image_src_to_image_options( $field ) {
-		if ( empty( $field->options ) || false === strpos( $field->options, 'image' ) ) {
+		if ( empty( $field->options ) || ! str_contains( $field->options, 'image' ) ) {
 			return;
 		}
 
@@ -2067,7 +2043,7 @@ class FrmXMLHelper {
 
 		// If there aren't IDs that were switched, end now
 		if ( ! $frm_duplicate_ids ) {
-			return;
+			return null;
 		}
 
 		// Get old IDs
@@ -2277,11 +2253,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function format_email_to_data( &$atts, $notification ) {
-		if ( isset( $notification['email_to'] ) ) {
-			$atts['email_to'] = preg_split( '/ (,|;) /', $notification['email_to'] );
-		} else {
-			$atts['email_to'] = array();
-		}
+		$atts['email_to'] = isset( $notification['email_to'] ) ? preg_split( '/ (,|;) /', $notification['email_to'] ) : array();
 
 		if ( isset( $notification['also_email_to'] ) ) {
 			$email_fields     = (array) $notification['also_email_to'];

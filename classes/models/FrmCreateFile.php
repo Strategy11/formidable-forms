@@ -33,12 +33,12 @@ class FrmCreateFile {
 	/**
 	 * @var int
 	 */
-	public $chmod_dir       = 0755;
+	public $chmod_dir = 0755;
 
 	/**
 	 * @var int
 	 */
-	public $chmod_file      = 0644;
+	public $chmod_file = 0644;
 
 	/**
 	 * @var bool
@@ -141,13 +141,10 @@ class FrmCreateFile {
 	 * @return string
 	 */
 	public function get_file_contents() {
-		$content = '';
-
 		if ( $this->has_permission ) {
-			$content = $this->get_contents();
+			return $this->get_contents();
 		}
-
-		return $content;
+		return '';
 	}
 
 	/**
@@ -233,12 +230,10 @@ class FrmCreateFile {
 		$access_type = get_filesystem_method();
 
 		if ( $access_type === 'direct' ) {
-			$creds = request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
-		} else {
-			$creds = $this->get_ftp_creds( $access_type );
+			return request_filesystem_credentials( site_url() . '/wp-admin/', '', false, false, array() );
 		}
 
-		return $creds;
+		return $this->get_ftp_creds( $access_type );
 	}
 
 	/**

@@ -31,13 +31,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		$frm_settings   = FrmAppHelper::get_settings();
 		$active_captcha = $frm_settings->active_captcha;
 
-		if ( $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ) {
-			$image_name = 'recaptcha_v3';
-		} else {
-			$image_name = $active_captcha;
-		}
-
-		return $image_name;
+		return $active_captcha === 'recaptcha' && $frm_settings->re_type === 'v3' ? 'recaptcha_v3' : $active_captcha;
 	}
 
 	/**
@@ -119,9 +113,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		$div_attributes = $settings->add_front_end_element_attributes( $div_attributes, $this->field );
-		$html           = '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 
-		return $html;
+		return '<div ' . FrmAppHelper::array_to_html_params( $div_attributes ) . '></div>';
 	}
 
 	/**

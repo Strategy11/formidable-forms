@@ -11,11 +11,11 @@ class test_FrmStylesHelper extends FrmUnitTest {
 	public function test_get_upload_base() {
 		$base = FrmStylesHelper::get_upload_base();
 		$this->assertTrue( isset( $base['baseurl'] ) );
-		$this->assertTrue( strpos( $base['baseurl'], 'http://' ) !== false );
+		$this->assertTrue( str_contains( $base['baseurl'], 'http://' ) );
 
 		$_SERVER['HTTPS'] = 'on';
 		$base             = FrmStylesHelper::get_upload_base();
-		$this->assertTrue( strpos( $base['baseurl'], 'https://' ) !== false );
+		$this->assertTrue( str_contains( $base['baseurl'], 'https://' ) );
 	}
 
 	/**
@@ -124,7 +124,6 @@ class test_FrmStylesHelper extends FrmUnitTest {
 		$default_count                = 0;
 
 		foreach ( $data_for_all_published_forms as $row ) {
-			$form_id = $row->id;
 			$options = $row->options;
 			FrmAppHelper::unserialize_or_decode( $options );
 

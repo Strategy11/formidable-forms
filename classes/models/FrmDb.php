@@ -131,7 +131,7 @@ class FrmDb {
 	private static function interpret_array_to_sql( $key, $value, &$where, &$values ) {
 		$key = trim( $key );
 
-		if ( strpos( $key, 'created_at' ) !== false || strpos( $key, 'updated_at' ) !== false ) {
+		if ( str_contains( $key, 'created_at' ) || str_contains( $key, 'updated_at' ) ) {
 			$k      = explode( ' ', $key );
 			$where .= ' CAST(' . reset( $k ) . ' as CHAR) ' . str_replace( reset( $k ), '', $key );
 		} else {
@@ -143,7 +143,7 @@ class FrmDb {
 
 		if ( is_array( $value ) ) {
 			// translate array of values to "in"
-			if ( strpos( $lowercase_key, 'like' ) !== false ) {
+			if ( str_contains( $lowercase_key, 'like' ) ) {
 				$where  = preg_replace( '/' . $key . '$/', '', $where );
 				$where .= '(';
 				$start  = true;
@@ -163,7 +163,7 @@ class FrmDb {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
-		} elseif ( strpos( $lowercase_key, 'like' ) !== false ) {
+		} elseif ( str_contains( $lowercase_key, 'like' ) ) {
 			/**
 			 * Allow string to start or end with the value
 			 * If the key is like% then skip the first % for starts with
@@ -188,7 +188,7 @@ class FrmDb {
 			$where .= ' IS NULL';
 		} else {
 			// allow a - to prevent = from being added
-			if ( substr( $key, - 1 ) === '-' ) {
+			if ( str_ends_with( $key, '-' ) ) {
 				$where = rtrim( $where, '-' );
 			} else {
 				$where .= '=';
@@ -212,7 +212,7 @@ class FrmDb {
 	 * @return void
 	 */
 	private static function add_query_placeholder( $key, $value, &$where ) {
-		if ( is_numeric( $value ) && ( strpos( $key, 'meta_value' ) === false || strpos( $key, '+0' ) !== false ) ) {
+		if ( is_numeric( $value ) && ( ! str_contains( $key, 'meta_value' ) || str_contains( $key, '+0' ) ) ) {
 			// Switch string to number.
 			$value  = $value + 0;
 			$where .= is_float( $value ) ? '%f' : '%d';
@@ -256,9 +256,8 @@ class FrmDb {
 		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 
 		$cache_key = self::generate_cache_key( $where, $args, $field, $type );
-		$results   = self::check_cache( $cache_key, $group, $query, 'get_' . $type );
 
-		return $results;
+		return self::check_cache( $cache_key, $group, $query, 'get_' . $type );
 	}
 
 	/**
@@ -282,9 +281,8 @@ class FrmDb {
 		}
 
 		$cache_key .= implode( '_', $args ) . $field . '_' . $type;
-		$cache_key  = str_replace( array( ' ', ',' ), '_', $cache_key );
 
-		return $cache_key;
+		return str_replace( array( ' ', ',' ), '_', $cache_key );
 	}
 
 	/**
@@ -407,7 +405,7 @@ class FrmDb {
 	 * @return void
 	 */
 	private static function maybe_remove_prefix( $prefix, &$name ) {
-		if ( substr( $name, 0, strlen( $prefix ) ) === $prefix ) {
+		if ( str_starts_with( $name, $prefix ) ) {
 			$name = substr( $name, strlen( $prefix ) );
 		}
 	}
@@ -442,7 +440,7 @@ class FrmDb {
 
 			$db_name = strtoupper( str_replace( '_', ' ', $k ) );
 
-			if ( strpos( $v, $db_name ) === false ) {
+			if ( ! str_contains( $v, $db_name ) ) {
 				$args[ $k ] = $db_name . ' ' . $v;
 			}
 		}
@@ -473,9 +471,8 @@ class FrmDb {
 		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
 
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A', ' WHERE' ) );
-		$results   = self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 
-		return $results;
+		return self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
 	}
 
 	/**
@@ -555,7 +552,7 @@ class FrmDb {
 		// Remove ORDER BY before sanitizing.
 		$order_query = strtolower( $order_query );
 
-		if ( strpos( $order_query, 'order by' ) !== false ) {
+		if ( str_contains( $order_query, 'order by' ) ) {
 			$order_query = str_replace( 'order by', '', $order_query );
 		}
 

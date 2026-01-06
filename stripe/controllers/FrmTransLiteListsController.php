@@ -9,10 +9,6 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
 
@@ -72,7 +68,10 @@ class FrmTransLiteListsController {
 		$columns['status']     = esc_html__( 'Status', 'formidable' );
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 		$columns['paysys']     = esc_html__( 'Processor', 'formidable' );
-		$columns['mode']       = esc_html__( 'Mode', 'formidable' );
+
+		if ( 'bulk_delete' !== FrmAppHelper::simple_get( 'action' ) && ! class_exists( 'FrmTransListHelper' ) && class_exists( 'FrmPaymentsListHelper' ) ) {
+			$columns['mode'] = esc_html__( 'Mode', 'formidable' );
+		}
 
 		return $columns;
 	}
@@ -116,6 +115,25 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function route( $action ) {
+		if ( 'coupons' === $action ) {
+			FrmAppHelper::permission_check( 'frm_change_settings' );
+
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/coupons.php';
+			return;
+		}
+
+		/**
+		 * @since x.x
+		 *
+		 * @param bool   $route_handled
+		 * @param string $action
+		 */
+		$route_handled = apply_filters( 'frm_trans_lite_route', false, $action );
+
+		if ( $route_handled ) {
+			return;
+		}
+
 		self::display_list();
 	}
 

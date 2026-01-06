@@ -31,9 +31,8 @@ class FrmFormsHelper {
 	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-		$target_url = apply_filters( 'frm_direct_link', $target_url, $key, $form );
 
-		return $target_url;
+		return apply_filters( 'frm_direct_link', $target_url, $key, $form );
 	}
 
 	/**
@@ -256,13 +255,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_name( $field_type ) {
-		if ( is_array( $field_type ) ) {
-			$field_label = $field_type['name'];
-		} else {
-			$field_label = $field_type;
-		}
-
-		return $field_label;
+		return is_array( $field_type ) ? $field_type['name'] : $field_type;
 	}
 
 	/**
@@ -273,13 +266,7 @@ class FrmFormsHelper {
 	 * @return string
 	 */
 	public static function get_field_link_icon( $field_type ) {
-		if ( is_array( $field_type ) && isset( $field_type['icon'] ) ) {
-			$icon = $field_type['icon'];
-		} else {
-			$icon = 'frm_icon_font frm_pencil_icon';
-		}
-
-		return $icon;
+		return is_array( $field_type ) && isset( $field_type['icon'] ) ? $field_type['icon'] : 'frmfont frm_pencil_icon';
 	}
 
 	/**
@@ -319,7 +306,7 @@ class FrmFormsHelper {
 		$message = apply_filters( 'frm_content', $atts['message'], $atts['form'], $atts['entry_id'] );
 
 		// Only autop if the message includes line breaks.
-		$autop = strpos( $message, "\n" ) !== false;
+		$autop = str_contains( $message, "\n" );
 
 		/**
 		 * Filters whether to autop the success message.
@@ -338,8 +325,7 @@ class FrmFormsHelper {
 		}
 
 		$message = do_shortcode( $message );
-		$message = '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
-		return $message;
+		return '<div class="' . esc_attr( $atts['class'] ) . '" role="status">' . $message . '</div>';
 	}
 
 	/**
@@ -539,9 +525,7 @@ BEFORE_HTML;
 	 * @return string
 	 */
 	public static function get_draft_link() {
-		$link = '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
-
-		return $link;
+		return '[if save_draft]<button class="frm_save_draft" [draft_hook]>[draft_label]</button>[/if save_draft]';
 	}
 
 	/**
@@ -811,7 +795,7 @@ BEFORE_HTML;
 		if ( ! is_array( $field ) ) {
 			$field = array(
 				'name' => $field,
-				'icon' => 'frm_icon_font frm_pencil_icon',
+				'icon' => 'frmfont frm_pencil_icon',
 			);
 		}
 	}
@@ -1020,7 +1004,7 @@ BEFORE_HTML;
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
 			}
-			return;
+			return null;
 		}
 
 		// If submit button needs to be inline or centered.
@@ -1043,9 +1027,7 @@ BEFORE_HTML;
 			$class .= ' frm_center_submit';
 		}
 
-		$class = apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
-
-		return $class;
+		return apply_filters( 'frm_add_form_style_class', $class, $style, compact( 'form' ) );
 	}
 
 	/**
@@ -1058,11 +1040,11 @@ BEFORE_HTML;
 	 * @return bool
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
-		if ( isset( $form['form_class'] ) && false !== strpos( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
+		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
 			// not missing class, avoid adding it twice.
 			return false;
 		}
-		return ! empty( $form['submit_html'] ) && false !== strpos( $form['submit_html'], 'frm_inline_submit' );
+		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
 	}
 
 	/**
@@ -1148,9 +1130,7 @@ BEFORE_HTML;
 			$form = FrmForm::getOne( $form );
 		}
 
-		$style = $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
-
-		return $style;
+		return $form && is_object( $form ) && isset( $form->options['custom_style'] ) ? $form->options['custom_style'] : $style;
 	}
 
 	/**
@@ -1199,7 +1179,7 @@ BEFORE_HTML;
 		$line_break_first = $args['show_img'];
 
 		foreach ( $args['errors'] as $error_key => $error ) {
-			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || strpos( $error_key, 'field' ) === 0 ) ) {
+			if ( $line_break_first && ! is_numeric( $error_key ) && ( $error_key === 'cptch_number' || str_starts_with( $error_key, 'field' ) ) ) {
 				continue;
 			}
 
@@ -1269,13 +1249,13 @@ BEFORE_HTML;
 				$actions['frm_duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Create Form from Template', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			} else {
 				$actions['duplicate'] = array(
 					'url'   => wp_nonce_url( $duplicate_link ),
 					'label' => __( 'Duplicate Form', 'formidable' ),
-					'icon'  => 'frm_icon_font frm_clone_icon',
+					'icon'  => 'frmfont frm_clone_icon',
 				);
 			}
 
@@ -1298,8 +1278,7 @@ BEFORE_HTML;
 		}
 
 		$label = self::edit_form_link_label( $data );
-		$link  = '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
-		return $link;
+		return '<a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html( $label ) . '</a>';
 	}
 
 	/**
@@ -1333,12 +1312,7 @@ BEFORE_HTML;
 	 * @return int|string
 	 */
 	private static function get_form_id_from_data( $data ) {
-		if ( is_object( $data ) ) {
-			$form_id = $data->id;
-		} else {
-			$form_id = $data;
-		}
-		return $form_id;
+		return is_object( $data ) ? $data->id : $data;
 	}
 
 	/**
@@ -1348,12 +1322,11 @@ BEFORE_HTML;
 	 */
 	private static function get_form_name_from_data( $data ) {
 		if ( is_object( $data ) ) {
-			$form_name = $data->name;
-		} else {
-			$form_id   = $data;
-			$form_name = FrmForm::getName( $form_id );
+			return $data->name;
 		}
-		return $form_name;
+
+		$form_id = $data;
+		return FrmForm::getName( $form_id );
 	}
 
 	/**
@@ -1418,11 +1391,7 @@ BEFORE_HTML;
 		if ( 'trash' === $status ) {
 			$info = $labels['restore'];
 		} elseif ( current_user_can( 'frm_delete_forms' ) ) {
-			if ( EMPTY_TRASH_DAYS ) {
-				$info = $labels['trash'];
-			} else {
-				$info = $labels['delete'];
-			}
+			$info = EMPTY_TRASH_DAYS ? $labels['trash'] : $labels['delete'];
 		} else {
 			$info = array();
 		}
@@ -1451,7 +1420,7 @@ BEFORE_HTML;
 				'label' => __( 'Move Form to Trash', 'formidable' ),
 				'short' => __( 'Trash', 'formidable' ),
 				'url'   => wp_nonce_url( $base_url . '&frm_action=trash', 'trash_form_' . absint( $id ) ),
-				'icon'  => 'frm_icon_font frm_delete_icon',
+				'icon'  => 'frmfont frm_delete_icon',
 				'data'  => array(
 					'frmverify'     => __( 'Do you want to move this form to the trash?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -1462,7 +1431,7 @@ BEFORE_HTML;
 				'short'   => __( 'Delete', 'formidable' ),
 				'url'     => wp_nonce_url( $base_url . '&frm_action=destroy', 'destroy_form_' . absint( $id ) ),
 				'confirm' => __( 'Are you sure you want to delete this form and all its entries?', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_delete_icon',
+				'icon'    => 'frmfont frm_delete_icon',
 				'data'    => array(
 					'frmverify'     => __( 'This will permanently delete the form and all its entries. This is irreversible. Are you sure you want to continue?', 'formidable' ),
 					'frmverify-btn' => 'frm-button-red',
@@ -1565,9 +1534,7 @@ BEFORE_HTML;
 			$status = 'publish';
 		}
 
-		$name = $nice_names[ $status ];
-
-		return $name;
+		return $nice_names[ $status ];
 	}
 
 	/**
@@ -1765,9 +1732,7 @@ BEFORE_HTML;
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
 
-				$category = self::convert_legacy_package_names( $category );
-
-				return $category;
+				return self::convert_legacy_package_names( $category );
 			}
 		}
 
@@ -1989,7 +1954,7 @@ BEFORE_HTML;
 	 * @return string
 	 */
 	public static function maybe_add_sanitize_url_attr( $url, $form_id ) {
-		if ( false === strpos( $url, '[' ) ) {
+		if ( ! str_contains( $url, '[' ) ) {
 			// Do nothing if no shortcodes are detected.
 			return $url;
 		}
@@ -2019,7 +1984,7 @@ BEFORE_HTML;
 				continue;
 			}
 
-			if ( false !== strpos( $options, 'sanitize_url=' ) || false !== strpos( $options, 'sanitize=' ) ) {
+			if ( str_contains( $options, 'sanitize_url=' ) || str_contains( $options, 'sanitize=' ) ) {
 				// A sanitize option is already set so leave it alone.
 				continue;
 			}
@@ -2143,21 +2108,16 @@ BEFORE_HTML;
 	private static function is_gutenberg_editor() {
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
+		if ( str_contains( $url, '/wp-json/wp/v2/block-renderer/formidable/simple-form' ) ) {
 			return true;
 		}
 
-		if ( false !== strpos( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
+		if ( str_contains( urldecode( $url ), 'rest_route=/wp/v2/block-renderer/formidable/' ) ) {
 			return true;
 		}
 
 		global $pagenow;
-
-		if ( 'post.php' === $pagenow ) {
-			return true;
-		}
-
-		return false;
+		return 'post.php' === $pagenow;
 	}
 
 	/**
@@ -2172,7 +2132,7 @@ BEFORE_HTML;
 
 		$url = FrmAppHelper::get_server_value( 'REQUEST_URI' );
 
-		if ( false !== strpos( $url, '/wp-json/frm/v2/forms/' ) ) {
+		if ( str_contains( $url, '/wp-json/frm/v2/forms/' ) ) {
 			// Prevent the honeypot from appearing for an API loaded form.
 			// This is to prevent conflicts where the script is not working.
 			return true;
@@ -2187,28 +2147,6 @@ BEFORE_HTML;
 		}
 
 		return false;
-	}
-
-	/**
-	 * @since 3.0
-	 * @deprecated 6.11
-	 *
-	 * @param array $atts
-	 *
-	 * @return void
-	 */
-	public static function actions_dropdown( $atts ) {
-		_deprecated_function( __METHOD__, '6.11' );
-
-		if ( ! FrmAppHelper::is_admin_page( 'formidable' ) ) {
-			return;
-		}
-
-		$status     = $atts['status'];
-		$form_id    = $atts['id'] ?? FrmAppHelper::get_param( 'id', 0, 'get', 'absint' );
-		$trash_link = self::delete_trash_info( $form_id, $status );
-		$links      = self::get_action_links( $form_id, $status );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/actions-dropdown.php';
 	}
 
 	/**

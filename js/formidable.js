@@ -1584,10 +1584,6 @@ function frmFrontFormJS() {
 			);
 		} );
 
-		jQuery( document ).on( 'change', selector, function( event ) {
-			checkFloatLabel( event.target );
-		} );
-
 		runOnLoad = function( firstLoad ) {
 			if ( firstLoad && document.activeElement && -1 !== [ 'INPUT', 'SELECT', 'TEXTAREA' ].indexOf( document.activeElement.tagName ) ) {
 				checkFloatLabel( document.activeElement );
@@ -1788,12 +1784,6 @@ function frmFrontFormJS() {
 		init: function() {
 			jQuery( document ).off( 'submit.formidable', '.frm-show-form' );
 			jQuery( document ).on( 'submit.formidable', '.frm-show-form', frmFrontForm.submitForm );
-
-			document.querySelectorAll( '.frm-show-form input[onblur], .frm-show-form textarea[onblur]' ).forEach( function( field ) {
-				if ( field.value === '' ) {
-					jQuery( field ).trigger( 'blur' );
-				}
-			} );
 
 			jQuery( document ).on( 'change', '.frm-show-form input[name^="item_meta"], .frm-show-form select[name^="item_meta"], .frm-show-form textarea[name^="item_meta"]', frmFrontForm.fieldValueChanged );
 

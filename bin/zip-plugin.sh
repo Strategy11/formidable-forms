@@ -50,6 +50,8 @@ zip -r $zipname $destination \
 	-x "*/.stylelintrc.json" \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
+	-x "*/.prettierrc" \
+	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \
 	-x "*/bin/*" \
@@ -61,6 +63,7 @@ zip -r $zipname $destination \
 	-x "*/composer.lock" \
 	-x "*/crowdin.yml" \
 	-x "*/formidableforms.css" \
+	-x "*/formidableforms[0-9]*.css" \
 	-x "*/js/src/*" \
 	-x "*/assets/src/*" \
 	-x "*/blocks-src/*" \
@@ -100,6 +103,8 @@ zip -r $zipname $destination \
 	-x "formidable-api/js/embed.js" \
 	-x "formidable-api/js/iframe-embed.js" \
 	-x "formidable-hubspot/js/admin.js" \
+	-x "formidable-coupons/js/frontend.js" \
+	-x "formidable-coupons/js/admin.js" \
 	-x "*/webpack.config.js" \
 	-x "*.zip" \
 	-x "*/rector.php" \

@@ -365,11 +365,7 @@ class FrmForm {
 		unset( $all_fields );
 
 		foreach ( $values['item_meta'] as $field_id => $default_value ) {
-			if ( isset( $field_array[ $field_id ] ) ) {
-				$field = $field_array[ $field_id ];
-			} else {
-				$field = FrmField::getOne( $field_id );
-			}
+			$field = $field_array[ $field_id ] ?? FrmField::getOne( $field_id );
 
 			if ( ! $field ) {
 				continue;
@@ -481,11 +477,7 @@ class FrmForm {
 			return;
 		}
 
-		if ( $opt === 'calc' ) {
-			$value = self::sanitize_calc( $value );
-		} else {
-			$value = FrmAppHelper::kses( $value, 'all' );
-		}
+		$value = $opt === 'calc' ? self::sanitize_calc( $value ) : FrmAppHelper::kses( $value, 'all' );
 
 		$value = trim( $value );
 	}
@@ -496,7 +488,7 @@ class FrmForm {
 	 * @return string
 	 */
 	private static function sanitize_calc( $value ) {
-		if ( false !== strpos( $value, '<' ) ) {
+		if ( str_contains( $value, '<' ) ) {
 			$value = self::normalize_calc_spaces( $value );
 		}
 		// Allow <= and >=.
@@ -504,8 +496,7 @@ class FrmForm {
 		$temp  = array( '< = ', ' > =' );
 		$value = str_replace( $allow, $temp, $value );
 		$value = strip_tags( $value );
-		$value = str_replace( $temp, $allow, $value );
-		return $value;
+		return str_replace( $temp, $allow, $value );
 	}
 
 	/**
@@ -803,9 +794,7 @@ class FrmForm {
 		$form = FrmDb::check_cache( $id, 'frm_form' );
 
 		if ( $form ) {
-			$r = stripslashes( $form->name );
-
-			return $r;
+			return stripslashes( $form->name );
 		}
 
 		$query_key = is_numeric( $id ) ? 'id' : 'form_key';
@@ -843,9 +832,7 @@ class FrmForm {
 			return $cache->form_key;
 		}
 
-		$key = FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'form_key' );
-
-		return $key;
+		return FrmDb::get_var( 'frm_forms', array( 'id' => $id ), 'form_key' );
 	}
 
 	/**
@@ -887,11 +874,7 @@ class FrmForm {
 			}
 		}
 
-		if ( is_numeric( $id ) ) {
-			$where = array( 'id' => $id );
-		} else {
-			$where = array( 'form_key' => $id );
-		}
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
 
 		$results = FrmDb::get_row( $table_name, $where );
 
@@ -988,17 +971,13 @@ class FrmForm {
 			$query['parent_form_id'] = array( null, 0 );
 		}
 
-		$forms = self::getAll( $query, 'name', $limit );
-
-		return $forms;
+		return self::getAll( $query, 'name', $limit );
 	}
 
 	/**
 	 * @return object count of forms
 	 */
 	public static function get_count() {
-		global $wpdb;
-
 		$cache_key = 'frm_form_counts';
 
 		$counts = wp_cache_get( $cache_key, 'frm_form' );
@@ -1197,15 +1176,9 @@ class FrmForm {
 	 * @return int|string
 	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
-		if ( 'first' === $default_form ) {
-			$form = self::get_current_form();
-		} else {
-			$form = self::maybe_get_current_form();
-		}
+		$form = 'first' === $default_form ? self::get_current_form() : self::maybe_get_current_form();
 
-		$form_id = $form ? $form->id : 0;
-
-		return $form_id;
+		return $form ? $form->id : 0;
 	}
 
 	/**
@@ -1321,9 +1294,8 @@ class FrmForm {
 	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
-		$show = apply_filters( 'frm_show_submit_button', $show, $form );
 
-		return $show;
+		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 
 	/**

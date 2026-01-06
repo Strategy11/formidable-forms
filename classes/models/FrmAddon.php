@@ -151,13 +151,8 @@ class FrmAddon {
 	 */
 	public static function get_addon( $plugin_slug ) {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-		$plugin  = false;
 
-		if ( isset( $plugins[ $plugin_slug ] ) ) {
-			$plugin = $plugins[ $plugin_slug ];
-		}
-
-		return $plugin;
+		return $plugins[ $plugin_slug ] ?? false;
 	}
 
 	/**
@@ -452,6 +447,9 @@ class FrmAddon {
 
 		$api = new FrmSalesApi();
 		$api->reset_cached();
+
+		$api = new FrmStyleApi();
+		$api->reset_cached();
 	}
 
 	/**
@@ -732,11 +730,7 @@ class FrmAddon {
 	 * @return array
 	 */
 	private function last_checked() {
-		if ( is_multisite() ) {
-			$last_checked = get_site_option( $this->transient_key() );
-		} else {
-			$last_checked = get_option( $this->transient_key() );
-		}
+		$last_checked = is_multisite() ? get_site_option( $this->transient_key() ) : get_option( $this->transient_key() );
 
 		if ( $last_checked && ! is_array( $last_checked ) ) {
 			// Get string into array for existing values.
@@ -1031,11 +1025,7 @@ class FrmAddon {
 			$json_res = json_decode( $body, true );
 
 			if ( null !== $json_res ) {
-				if ( is_array( $json_res ) && isset( $json_res['error'] ) ) {
-					$message = $json_res['error'];
-				} else {
-					$message = $json_res;
-				}
+				$message = is_array( $json_res ) && isset( $json_res['error'] ) ? $json_res['error'] : $json_res;
 			} elseif ( ! empty( $resp['response'] ) && ! empty( $resp['response']['code'] ) ) {
 				$resp['body'] = wp_strip_all_tags( $resp['body'] );
 

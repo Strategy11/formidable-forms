@@ -53,7 +53,6 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmFormsController::update();
-		$html = ob_get_contents();
 		ob_end_clean();
 
 		self::_check_updated_values( $form_id );
@@ -111,11 +110,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * Make sure DOING_AJAX is false.
 	 */
 	private function _check_doing_ajax() {
-		if ( defined( 'DOING_AJAX' ) ) {
-			$doing_ajax = true;
-		} else {
-			$doing_ajax = false;
-		}
+		$doing_ajax = defined( 'DOING_AJAX' );
 
 		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
 	}
@@ -151,7 +146,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		if ( FrmAppHelper::js_suffix() === '.min' ) {
 			$file = 'frm.min.js';
 
-			if ( strpos( $formidable_js->src, $file ) === false ) {
+			if ( ! str_contains( $formidable_js->src, $file ) ) {
 				$file = 'formidable.min.js';
 			}
 		} else {

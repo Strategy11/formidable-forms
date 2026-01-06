@@ -34,7 +34,7 @@ class FrmStrpLiteConnectHelper {
 		$action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
 		$prefix = 'frm_stripe_connect_';
 
-		if ( ! $action || 0 !== strpos( $action, $prefix ) ) {
+		if ( ! $action || ! str_starts_with( $action, $prefix ) ) {
 			if ( 'frm_strp_connect_get_settings_button' === $action ) {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
@@ -648,8 +648,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @todo I can probably remove this.
-	 *
 	 * @return void
 	 */
 	public static function stripe_icon() {
@@ -769,9 +767,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
-		$data     = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
-		$refunded = is_object( $data );
-		return $refunded;
+		$data = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
+		return is_object( $data );
 	}
 
 	/**
@@ -786,7 +783,7 @@ class FrmStrpLiteConnectHelper {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && 0 === strpos( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 
@@ -802,8 +799,7 @@ class FrmStrpLiteConnectHelper {
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
 		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
-		$canceled             = false !== $data;
-		return $canceled;
+		return false !== $data;
 	}
 
 	/**
@@ -892,9 +888,8 @@ class FrmStrpLiteConnectHelper {
 	 * @return bool
 	 */
 	public static function update_intent( $intent_id, $data ) {
-		$data    = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
-		$success = false !== $data;
-		return $success;
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+		return false !== $data;
 	}
 
 	/**

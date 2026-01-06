@@ -86,8 +86,7 @@ class FrmXMLController {
 
 		if ( ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
-			end( $imported['form_status'] );
-			$form_id  = key( $imported['form_status'] );
+			$form_id  = array_key_last( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
 				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
@@ -109,16 +108,10 @@ class FrmXMLController {
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
-			if ( isset( $imported['error'] ) ) {
-				$message = $imported['error'];
-			} else {
-				$message = __( 'There was an error importing form', 'formidable' );
-			}
-
+			$message  = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
 			$response = array(
 				'message' => $message,
 			);
-
 		}//end if
 
 		/**
@@ -155,9 +148,7 @@ class FrmXMLController {
 		if ( empty( $form ) ) {
 			return $form;
 		}
-
-		$form = json_decode( $form, true );
-		return $form;
+		return json_decode( $form, true );
 	}
 
 	/**
@@ -179,7 +170,7 @@ class FrmXMLController {
 
 		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 
-		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
+		if ( empty( $selected_xml ) || ! str_starts_with( $selected_xml, 'http' ) ) {
 			return;
 		}
 
@@ -606,10 +597,9 @@ class FrmXMLController {
 			return $parent_slugs;
 		}
 
-		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
-		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
+		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
 
-		return $parent_slugs;
+		return wp_list_pluck( $results, 'slug', 'term_id' );
 	}
 
 	/**

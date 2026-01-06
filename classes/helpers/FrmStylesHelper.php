@@ -177,9 +177,7 @@ class FrmStylesHelper {
 			$class .= $key;
 		}
 
-		$class .= '_icon';
-
-		return $class;
+		return $class . '_icon';
 	}
 
 	/**
@@ -233,11 +231,7 @@ class FrmStylesHelper {
 	 * @return string RGB value without the rgb() wrapper.
 	 */
 	public static function hex2rgb( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
-			$rgb = self::get_rgb_array_from_rgb( $color );
-		} else {
-			$rgb = self::get_rgb_array_from_hex( $color );
-		}
+		$rgb = str_starts_with( $color, 'rgb' ) ? self::get_rgb_array_from_rgb( $color ) : self::get_rgb_array_from_hex( $color );
 		return implode( ',', $rgb );
 	}
 
@@ -298,7 +292,7 @@ class FrmStylesHelper {
 	 * @return string Hex color value.
 	 */
 	private static function rgb_to_hex( $rgba ) {
-		if ( strpos( $rgba, '#' ) === 0 ) {
+		if ( str_starts_with( $rgba, '#' ) ) {
 			// Color is already hex.
 			return $rgba;
 		}
@@ -380,7 +374,7 @@ class FrmStylesHelper {
 	public static function adjust_brightness( $hex, $steps ) {
 		$steps = max( - 255, min( 255, $steps ) );
 
-		if ( 0 === strpos( $hex, 'rgba(' ) ) {
+		if ( str_starts_with( $hex, 'rgba(' ) ) {
 			$rgba                   = str_replace( ')', '', str_replace( 'rgba(', '', $hex ) );
 			list ( $r, $g, $b, $a ) = array_map( 'trim', explode( ',', $rgba ) );
 			$r                      = max( 0, min( 255, $r + $steps ) );
@@ -418,11 +412,11 @@ class FrmStylesHelper {
 	 * @return int
 	 */
 	public static function get_color_brightness( $color ) {
-		if ( 0 === strpos( $color, 'rgb' ) ) {
+		if ( str_starts_with( $color, 'rgb' ) ) {
 			$color = self::rgb_to_hex( $color );
 		}
 
-		if ( 0 === strpos( $color, 'hsl' ) ) {
+		if ( str_starts_with( $color, 'hsl' ) ) {
 			$hsl_to_hex = self::hsl_to_hex( $color );
 
 			if ( is_null( $hsl_to_hex ) ) {
@@ -435,12 +429,11 @@ class FrmStylesHelper {
 
 		self::fill_hex( $color );
 
-		$c_r        = hexdec( substr( $color, 0, 2 ) );
-		$c_g        = hexdec( substr( $color, 2, 2 ) );
-		$c_b        = hexdec( substr( $color, 4, 2 ) );
-		$brightness = ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
+		$c_r = hexdec( substr( $color, 0, 2 ) );
+		$c_g = hexdec( substr( $color, 2, 2 ) );
+		$c_b = hexdec( substr( $color, 4, 2 ) );
 
-		return $brightness;
+		return ( ( $c_r * 299 ) + ( $c_g * 587 ) + ( $c_b * 114 ) ) / 1000;
 	}
 
 	/**
@@ -484,8 +477,7 @@ class FrmStylesHelper {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
-		$remove = array( 'remove_box_shadow', 'remove_box_shadow_active', 'theme_css', 'theme_name', 'theme_selector', 'important_style', 'submit_style', 'collapse_icon', 'center_form', 'custom_css', 'style_class', 'submit_bg_img', 'change_margin', 'repeat_icon', 'use_base_font_size', 'field_shape_type' );
-		$vars   = array_diff( $vars, $remove );
+		$vars = array_diff( $vars, self::get_style_keys_to_remove_from_output_vars() );
 
 		foreach ( $vars as $var ) {
 			if ( ! isset( $settings[ $var ] ) || ! self::css_key_is_valid( $var ) ) {
@@ -502,6 +494,37 @@ class FrmStylesHelper {
 				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
 		}
+	}
+
+	/**
+	 * None of these style settings are used as CSS variables, so we want to exclude them to keep the CSS output clean.
+	 *
+	 * @since 6.26.1
+	 *
+	 * @return array<string>
+	 */
+	private static function get_style_keys_to_remove_from_output_vars() {
+		return array(
+			'remove_box_shadow',
+			'remove_box_shadow_active',
+			'theme_css',
+			'theme_name',
+			'theme_selector',
+			'important_style',
+			'submit_style',
+			'collapse_icon',
+			'center_form',
+			'custom_css',
+			'style_class',
+			'submit_bg_img',
+			'change_margin',
+			'repeat_icon',
+			'use_base_font_size',
+			'field_shape_type',
+			'bg_image_id',
+			'single_style_custom_css',
+			'enable_style_custom_css',
+		);
 	}
 
 	/**
@@ -542,7 +565,7 @@ class FrmStylesHelper {
 	private static function css_key_is_valid( $key ) {
 		// Any key that is abnormally large is not valid.
 		// Any key that contains a '{' is not valid.
-		return strlen( $key ) < 100 && false === strpos( $key, '{' );
+		return strlen( $key ) < 100 && ! str_contains( $key, '{' );
 	}
 
 	/**
@@ -572,7 +595,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $invalid_substrings as $substring ) {
-			if ( strpos( $var, $substring ) !== false ) {
+			if ( str_contains( $var, $substring ) ) {
 				return false;
 			}
 		}
@@ -841,10 +864,10 @@ class FrmStylesHelper {
 
 		if ( empty( $color ) ) {
 			$color = $default;
-		} elseif ( false !== strpos( $color, 'rgb(' ) ) {
+		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
 			$color = str_replace( ')', ',1)', $color );
-		} elseif ( strpos( $color, '#' ) === false && self::is_hex( $color ) ) {
+		} elseif ( ! str_contains( $color, '#' ) && self::is_hex( $color ) ) {
 			$color = '#' . $color;
 		}
 	}
@@ -868,7 +891,7 @@ class FrmStylesHelper {
 		);
 
 		foreach ( $non_hex_substrings as $substring ) {
-			if ( false !== strpos( $color, $substring ) ) {
+			if ( str_contains( $color, $substring ) ) {
 				return false;
 			}
 		}
@@ -1002,9 +1025,8 @@ class FrmStylesHelper {
 		}
 
 		$conversational_style_id = FrmDb::get_var( 'posts', array( 'post_name' => 'lines-no-boxes' ), 'ID' );
-		$number_of_forms        += self::get_default_style_count( $style_id, $conversational_style_id );
 
-		return $number_of_forms;
+		return $number_of_forms + self::get_default_style_count( $style_id, $conversational_style_id );
 	}
 
 	/**
@@ -1071,9 +1093,8 @@ class FrmStylesHelper {
 		$is_quick_settings = ( 'quick-settings' === $section_type );
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
-		$classname        .= FrmAppHelper::pro_is_installed() ? ' frm-pro' : '';
 
-		return $classname;
+		return $classname . ( FrmAppHelper::pro_is_installed() ? ' frm-pro' : '' );
 	}
 
 	/**

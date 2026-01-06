@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.25.1';
+	public static $plug_version = '6.26.1';
 
 	/**
 	 * @var bool
@@ -130,11 +130,7 @@ class FrmAppHelper {
 			$page = 'https://formidableforms.com/lite-upgrade/';
 		}
 
-		if ( is_array( $args ) ) {
-			$args = self::adjust_legacy_utm_args( $args );
-		} else {
-			$args = array( 'campaign' => $args );
-		}
+		$args = is_array( $args ) ? self::adjust_legacy_utm_args( $args ) : array( 'campaign' => $args );
 
 		$query_args = array(
 			'utm_source' => 'plugin',
@@ -178,11 +174,7 @@ class FrmAppHelper {
 	 * @return array
 	 */
 	private static function maybe_add_utm_license( $query_args, $link = '' ) {
-		if ( isset( $query_args['utm_medium'] ) ) {
-			$medium = $query_args['utm_medium'];
-		} else {
-			$medium = self::pull_medium_from_link( $link );
-		}
+		$medium = $query_args['utm_medium'] ?? self::pull_medium_from_link( $link );
 
 		if ( 'pro' === $medium && is_callable( 'FrmProAddonsController::get_readable_license_type' ) ) {
 			$query_args['utm_license'] = strtolower( FrmProAddonsController::get_readable_license_type() );
@@ -192,7 +184,7 @@ class FrmAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $link
 	 *
@@ -255,19 +247,19 @@ class FrmAppHelper {
 		$utm        = self::adjust_legacy_utm_args( $utm );
 		$query_args = array();
 
-		if ( false === strpos( $cta_link, 'utm_source' ) ) {
+		if ( ! str_contains( $cta_link, 'utm_source' ) ) {
 			$query_args['utm_source'] = 'plugin';
 		}
 
-		if ( false === strpos( $cta_link, 'utm_medium' ) ) {
+		if ( ! str_contains( $cta_link, 'utm_medium' ) ) {
 			$query_args['utm_medium'] = self::get_utm_medium();
 		}
 
-		if ( false === strpos( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
+		if ( ! str_contains( $cta_link, 'utm_campaign' ) && isset( $utm['campaign'] ) ) {
 			$query_args['utm_campaign'] = $utm['campaign'];
 		}
 
-		if ( false === strpos( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
+		if ( ! str_contains( $cta_link, 'utm_content' ) && isset( $utm['content'] ) ) {
 			$query_args['utm_content'] = $utm['content'];
 		}
 
@@ -321,7 +313,7 @@ class FrmAppHelper {
 		}
 
 		$menu_icon = self::get_menu_icon_class();
-		return strpos( $menu_icon, 'frm_logo_icon' ) !== false;
+		return str_contains( $menu_icon, 'frm_logo_icon' );
 	}
 
 	/**
@@ -373,7 +365,7 @@ class FrmAppHelper {
 		$new_icon = apply_filters( 'frm_icon', $icon, true );
 
 		if ( $new_icon !== $icon ) {
-			if ( strpos( $new_icon, '<svg' ) === 0 ) {
+			if ( str_starts_with( $new_icon, '<svg' ) ) {
 				$icon = str_replace( 'viewBox="0 0 20', 'width="30" height="35" style="color:#929699" viewBox="0 0 20', $new_icon );
 			} else {
 				// Show nothing if it isn't an SVG.
@@ -443,14 +435,13 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_formidable_admin() {
-		$page          = self::simple_get( 'page', 'sanitize_title' );
-		$is_formidable = strpos( $page, 'formidable' ) !== false;
+		$page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( empty( $page ) ) {
-			$is_formidable = self::is_view_builder_page();
+			return self::is_view_builder_page();
 		}
 
-		return $is_formidable;
+		return str_contains( $page, 'formidable' );
 	}
 
 	/**
@@ -880,7 +871,7 @@ class FrmAppHelper {
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
-		if ( strpos( $value, '\\\\' ) === false ) {
+		if ( ! str_contains( $value, '\\\\' ) ) {
 			$value = addslashes( $value );
 		}
 
@@ -1011,7 +1002,7 @@ class FrmAppHelper {
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
-		if ( empty( $string ) || strpos( $string, '&' ) === false ) {
+		if ( empty( $string ) || ! str_contains( $string, '&' ) ) {
 			return;
 		}
 
@@ -1086,9 +1077,9 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function kses_submit_button( $html ) {
-		$included_button_action = false !== strpos( $html, '[button_action]' );
-		$included_back_hook     = false !== strpos( $html, '[back_hook]' );
-		$included_draft_hook    = false !== strpos( $html, '[draft_hook]' );
+		$included_button_action = str_contains( $html, '[button_action]' );
+		$included_back_hook     = str_contains( $html, '[back_hook]' );
+		$included_draft_hook    = str_contains( $html, '[draft_hook]' );
 		add_filter( 'safe_style_css', 'FrmAppHelper::allow_visibility_style' );
 		add_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 		$html = self::kses( $html, 'all' );
@@ -1096,7 +1087,7 @@ class FrmAppHelper {
 		remove_filter( 'frm_striphtml_allowed_tags', 'FrmAppHelper::add_allowed_submit_button_tags' );
 
 		if ( $included_button_action ) {
-			if ( false !== strpos( $html, '<input type="submit"' ) ) {
+			if ( str_contains( $html, '<input type="submit"' ) ) {
 				$pattern = '/(<input type="submit")([^>]*)(\/>)/';
 				$html    = preg_replace( $pattern, '$1$2[button_action] $3', $html, 1 );
 			} else {
@@ -1397,21 +1388,22 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = strpos( $icon, ' ' ) === false ? '' : ' ' . $icon;
+			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
 
 			if ( strpos( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
 
-			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use xlink:href="#' . esc_attr( $icon ) . '" /></svg>';
+			$icon = '<svg class="frmsvg' . esc_attr( $class ) . '"' . $html_atts . '><use href="#' . esc_attr( $icon ) . '" /></svg>';
 		}
 
 		if ( $echo ) {
 			echo self::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		} else {
-			return $icon;
+			return null;
 		}
+
+		return $icon;
 	}
 
 	/**
@@ -1467,7 +1459,7 @@ class FrmAppHelper {
 	 * @param string $css_string
 	 */
 	public static function allow_style( $allow_css, $css_string ) {
-		if ( ! $allow_css && 0 === strpos( $css_string, '--primary-700:' ) ) {
+		if ( ! $allow_css && str_starts_with( $css_string, '--primary-700:' ) ) {
 			$split     = explode( ':', $css_string, 2 );
 			$allow_css = 2 === count( $split ) && self::is_a_valid_color( $split[1] );
 		}
@@ -1484,11 +1476,11 @@ class FrmAppHelper {
 	private static function is_a_valid_color( $value ) {
 		$match = 0;
 
-		if ( 0 === strpos( $value, 'rgba(' ) ) {
+		if ( str_starts_with( $value, 'rgba(' ) ) {
 			$match = preg_match( '/^rgba\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3}),\s*(\d*(?:\.\d+)?)\)$/', $value );
-		} elseif ( 0 === strpos( $value, 'rgb(' ) ) {
+		} elseif ( str_starts_with( $value, 'rgb(' ) ) {
 			$match = preg_match( '/^rgb\((\d{1,3}),\s*(\d{1,3}),\s*(\d{1,3})\)$/', $value );
-		} elseif ( 0 === strpos( $value, '#' ) ) {
+		} elseif ( str_starts_with( $value, '#' ) ) {
 			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
 		}
 		return (bool) $match;
@@ -1552,11 +1544,13 @@ class FrmAppHelper {
 			$echo_function();
 		}
 
-		if ( ! $echo ) {
-			$return = ob_get_contents();
-			ob_end_clean();
-			return $return;
+		if ( $echo ) {
+			return null;
 		}
+
+		$return = ob_get_contents();
+		ob_end_clean();
+		return $return;
 	}
 
 	/**
@@ -1631,11 +1625,7 @@ class FrmAppHelper {
 					'content'  => 'lite-banner',
 				);
 
-				if ( $upgrade_link ) {
-					$upgrade_link = self::maybe_add_missing_utm( $upgrade_link, $utm );
-				} else {
-					$upgrade_link = self::admin_upgrade_link( $utm );
-				}
+				$upgrade_link = $upgrade_link ? self::maybe_add_missing_utm( $upgrade_link, $utm ) : self::admin_upgrade_link( $utm );
 
 				printf(
 					/* translators: %1$s: Start link HTML, %2$s: CTA text ("upgrading to PRO" by default), %3$s: End link HTML */
@@ -1752,7 +1742,7 @@ class FrmAppHelper {
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
 				<?php echo esc_html( $atts['text'] ); ?>:
 			</label>
-			<?php self::icon_by_class( 'frm_icon_font frm_search_icon frm_svg20' ); ?>
+			<?php self::icon_by_class( 'frmfont frm_search_icon frm_svg20' ); ?>
 			<input <?php self::array_to_html_params( $input_atts, true ); ?> />
 			<?php
 			if ( empty( $atts['tosearch'] ) ) {
@@ -2470,11 +2460,7 @@ class FrmAppHelper {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
 
-			if ( count( $value ) ) {
-				$function = explode( ', ', FrmDb::prepare_array_values( $value, $function ) );
-			} else {
-				$function = array( $function );
-			}
+			$function = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
 			if ( ! self::is_assoc( $value ) ) {
 				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
@@ -2673,11 +2659,7 @@ class FrmAppHelper {
 		if ( $user_id === 'current' ) {
 			$user_id = get_current_user_id();
 		} else {
-			if ( is_email( $user_id ) ) {
-				$user = get_user_by( 'email', $user_id );
-			} else {
-				$user = get_user_by( 'login', $user_id );
-			}
+			$user = is_email( $user_id ) ? get_user_by( 'email', $user_id ) : get_user_by( 'login', $user_id );
 
 			if ( $user ) {
 				$user_id = $user->ID;
@@ -3070,13 +3052,11 @@ class FrmAppHelper {
 	 */
 	public static function custom_style_value( $post_values ) {
 		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
-			$custom_style = absint( $post_values['options']['custom_style'] );
-		} else {
-			$frm_settings = self::get_settings();
-			$custom_style = ( $frm_settings->load_style !== 'none' );
+			return absint( $post_values['options']['custom_style'] );
 		}
 
-		return $custom_style;
+		$frm_settings = self::get_settings();
+		return $frm_settings->load_style !== 'none';
 	}
 
 	/**
@@ -3224,13 +3204,12 @@ class FrmAppHelper {
 		}
 
 		$trimmed_format = trim( $time_format );
-		$time           = '';
 
 		if ( $time_format && ! empty( $trimmed_format ) ) {
-			$time = ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
+			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
-		return $time;
+		return '';
 	}
 
 	/**
@@ -3257,11 +3236,7 @@ class FrmAppHelper {
 	 * @return string $time_ago
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		if ( empty( $to ) && 0 !== $to ) {
-			$now = new DateTime();
-		} else {
-			$now = new DateTime( '@' . $to );
-		}
+		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 
 		$ago = new DateTime( '@' . $from );
 
@@ -3302,11 +3277,10 @@ class FrmAppHelper {
 			}
 		}
 
-		$levels_deep     = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
-		$time_strings    = array_slice( $time_strings, 0, absint( $levels_deep ) );
-		$time_ago_string = implode( ' ', $time_strings );
+		$levels_deep  = apply_filters( 'frm_time_ago_levels', $levels, compact( 'time_strings', 'from', 'to' ) );
+		$time_strings = array_slice( $time_strings, 0, absint( $levels_deep ) );
 
-		return $time_ago_string;
+		return implode( ' ', $time_strings );
 	}
 
 	/**
@@ -3672,11 +3646,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( is_serialized( $value ) ) {
-			$value = self::maybe_unserialize_array( $value );
-		} else {
-			$value = self::maybe_json_decode( $value, false );
-		}
+		$value = is_serialized( $value ) ? self::maybe_unserialize_array( $value ) : self::maybe_json_decode( $value, false );
 	}
 
 	/**
@@ -3695,7 +3665,7 @@ class FrmAppHelper {
 		}
 
 		// Since we only expect an array, skip anything that doesn't start with a:.
-		if ( ! is_serialized( $value ) || 'a:' !== substr( $value, 0, 2 ) ) {
+		if ( ! is_serialized( $value ) || ! str_starts_with( $value, 'a:' ) ) {
 			return $value;
 		}
 
@@ -3775,7 +3745,7 @@ class FrmAppHelper {
 	 *
 	 * @since 4.02.03
 	 *
-	 * @param array $form 
+	 * @param array $form
 	 *
 	 * @return void
 	 */
@@ -4566,10 +4536,10 @@ class FrmAppHelper {
 	public static function input_key_is_safe( $key, $context = 'display' ) {
 		if ( 'update' === $context && in_array( $key, array( 'opt', 'label' ), true ) ) {
 			$safe = true;
-		} elseif ( 0 === strpos( $key, 'data-' ) ) {
+		} elseif ( str_starts_with( $key, 'data-' ) ) {
 			// Allow all data attributes.
 			$safe = true;
-		} elseif ( 0 === strpos( $key, 'aria-' ) ) {
+		} elseif ( str_starts_with( $key, 'aria-' ) ) {
 			// Allow all aria attributes.
 			$safe = true;
 		} else {
@@ -4637,7 +4607,12 @@ class FrmAppHelper {
 	 */
 	public static function show_new_feature( $feature ) {
 		$link = FrmAddonsController::install_link( $feature );
-		return array_key_exists( 'status', $link ) || array_key_exists( 'class', $link );
+
+		if ( array_key_exists( 'status', $link ) || array_key_exists( 'class', $link ) ) {
+			return true;
+		}
+
+		return 'coupons' === $feature && class_exists( 'FrmCouponsAppController' );
 	}
 
 	/**
@@ -4826,7 +4801,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function validate_url_is_in_s3_bucket( $url, $expected_extension ) {
-		$file_is_in_expected_s3_bucket = 0 === strpos( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
+		$file_is_in_expected_s3_bucket = str_starts_with( $url, 'https://s3.amazonaws.com/fp.strategy11.com' );
 
 		if ( ! $file_is_in_expected_s3_bucket ) {
 			return false;
@@ -4841,13 +4816,8 @@ class FrmAppHelper {
 
 		$path = $parsed['path'];
 		$ext  = pathinfo( $path, PATHINFO_EXTENSION );
-
-		if ( $expected_extension !== $ext ) {
-			// The URL isn't to an XML file.
-			return false;
-		}
-
-		return true;
+		// The URL isn't to an XML file.
+		return $expected_extension === $ext;
 	}
 
 	/**
@@ -5053,7 +5023,7 @@ class FrmAppHelper {
 	/**
 	 * Get a documentation URL with UTM parameters and affiliate tracking.
 	 *
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $path           The relative path to append to the base URL.
 	 * @param string $campaign       The campaign to use for UTM parameters.
@@ -5073,12 +5043,12 @@ class FrmAppHelper {
 
 	/**
 	 * @since 5.0.16
-	 * @deprecated x.x
+	 * @deprecated 6.26
 	 *
 	 * @return bool
 	 */
 	public static function show_landing_pages() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.26' );
 		return true;
 	}
 }

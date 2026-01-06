@@ -84,7 +84,7 @@ class FrmStringReaderHelper {
 		 * "abc" => abc
 		 * ""abc"" => "abc"
 		 */
-		if ( strlen( $value ) < 2 || substr( $value, 0, 1 ) !== '"' || substr( $value, -1, 1 ) !== '"' ) {
+		if ( strlen( $value ) < 2 || ! str_starts_with( $value, '"' ) || ! str_ends_with( $value, '"' ) ) {
 			// Only remove exactly one quote from the start and the end and then only if there is one at each end.
 			// Too short, or does not start or end with a quote.
 			return $value;

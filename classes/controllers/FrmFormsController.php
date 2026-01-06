@@ -915,15 +915,14 @@ class FrmFormsController {
 				'type'  => 'request',
 			)
 		);
-		$message      = sprintf(
+
+		return sprintf(
 			/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
 			_n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ),
 			$count,
 			'<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">',
 			'</a>'
 		);
-
-		return $message;
 	}
 
 	public static function destroy() {
@@ -1213,8 +1212,7 @@ class FrmFormsController {
 			die();
 		}
 
-		$inbox = new FrmInbox();
-		$error = $inbox->check_for_error();
+		$error = FrmInbox::check_for_error();
 
 		if ( $error ) {
 			$show_messages = array( $error['subject'] . '. ' . $error['message'] );
@@ -1521,17 +1519,17 @@ class FrmFormsController {
 				'name'     => __( 'General', 'formidable' ),
 				'title'    => __( 'General Form Settings', 'formidable' ),
 				'function' => array( self::class, 'advanced_settings' ),
-				'icon'     => 'frm_icon_font frm_settings_icon',
+				'icon'     => 'frmfont frm_settings_icon',
 			),
 			'email'       => array(
 				'name'     => __( 'Actions & Notifications', 'formidable' ),
 				'function' => array( 'FrmFormActionsController', 'email_settings' ),
 				'id'       => 'frm_notification_settings',
-				'icon'     => 'frm_icon_font frm_mail_bulk_icon',
+				'icon'     => 'frmfont frm_mail_bulk_icon',
 			),
 			'permissions' => array(
 				'name'       => __( 'Form Permissions', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_lock_closed_icon',
+				'icon'       => 'frmfont frm_lock_closed_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'permissions',
@@ -1543,7 +1541,7 @@ class FrmFormsController {
 			),
 			'scheduling'  => array(
 				'name'       => __( 'Form Scheduling', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_calendar_icon',
+				'icon'       => 'frmfont frm_calendar_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => array(
 					'medium'     => 'scheduling',
@@ -1556,17 +1554,17 @@ class FrmFormsController {
 				'name'     => __( 'Buttons', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'buttons_settings',
-				'icon'     => 'frm_icon_font frm_button_icon',
+				'icon'     => 'frmfont frm_button_icon',
 			),
 			'landing'     => array(
 				'name'       => __( 'Form Landing Page', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_file_text_icon',
+				'icon'       => 'frmfont frm_file_text_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_landing_page_upgrade_data_params(),
 			),
 			'chat'        => array(
 				'name'       => __( 'Conversational Forms', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_chat_forms_icon',
+				'icon'       => 'frmfont frm_chat_forms_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'chat',
@@ -1580,7 +1578,7 @@ class FrmFormsController {
 			),
 			'abandonment' => array(
 				'name'       => __( 'Form Abandonment', 'formidable' ),
-				'icon'       => 'frm_icon_font frm_abandoned_icon',
+				'icon'       => 'frmfont frm_abandoned_icon',
 				'html_class' => 'frm_show_upgrade_tab frm_noallow',
 				'data'       => FrmAppHelper::get_upgrade_data_params(
 					'abandonment',
@@ -1596,7 +1594,7 @@ class FrmFormsController {
 				'name'     => __( 'Customize HTML', 'formidable' ),
 				'class'    => self::class,
 				'function' => 'html_settings',
-				'icon'     => 'frm_icon_font frm_code_icon',
+				'icon'     => 'frmfont frm_code_icon',
 			),
 		);
 
@@ -1610,7 +1608,7 @@ class FrmFormsController {
 			$defaults = array(
 				'html_class' => '',
 				'name'       => ucfirst( $key ),
-				'icon'       => 'frm_icon_font frm_settings_icon',
+				'icon'       => 'frmfont frm_settings_icon',
 			);
 
 			$section = array_merge( $defaults, $section );
@@ -1713,12 +1711,15 @@ class FrmFormsController {
 	}
 
 	/**
+	 * @since x.x Added $template_path parameter.
+	 *
 	 * @param int|string $form_id
 	 * @param string     $class
+	 * @param string     $template_path The path to a template file to use instead of the default.
 	 *
 	 * @return void
 	 */
-	public static function mb_tags_box( $form_id, $class = '' ) {
+	public static function mb_tags_box( $form_id, $class = '', $template_path = 'default' ) {
 		$fields = FrmField::get_all_for_form( $form_id, '', 'include' );
 
 		/**
@@ -1739,7 +1740,12 @@ class FrmFormsController {
 
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
-		include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
+		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
+			include FrmAppHelper::plugin_path() . '/classes/views/shared/mb_adv_info.php';
+			return;
+		}
+
+		include $template_path;
 	}
 
 	/**
@@ -1808,11 +1814,10 @@ class FrmFormsController {
 				'title' => __( 'Do not automatically add any paragraphs or line breaks', 'formidable' ),
 			),
 		);
-		$adv_shortcodes = apply_filters( 'frm_advanced_shortcodes', $adv_shortcodes );
 
 		// __( 'Leave blank instead of defaulting to User Login', 'formidable' ) : blank=1
 
-		return $adv_shortcodes;
+		return apply_filters( 'frm_advanced_shortcodes', $adv_shortcodes );
 	}
 
 	/**
@@ -1957,9 +1962,8 @@ class FrmFormsController {
 		}
 
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $content, $form );
-		$content    = apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 
-		return $content;
+		return apply_filters( 'frm_replace_content_shortcodes', $content, $entry, $shortcodes );
 	}
 
 	/**
@@ -1977,7 +1981,7 @@ class FrmFormsController {
 			return $string;
 		}
 
-		if ( false === strpos( $string, '[form_name]' ) ) {
+		if ( ! str_contains( $string, '[form_name]' ) ) {
 			return $string;
 		}
 
@@ -2031,7 +2035,7 @@ class FrmFormsController {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 		}
 
-		if ( ! empty( $bulkaction ) && strpos( $bulkaction, 'bulk_' ) === 0 ) {
+		if ( ! empty( $bulkaction ) && str_starts_with( $bulkaction, 'bulk_' ) ) {
 			FrmAppHelper::remove_get_action();
 
 			$bulkaction = str_replace( 'bulk_', '', $bulkaction );
@@ -2143,15 +2147,15 @@ class FrmFormsController {
 				return self::$action( $vars );
 			case 'lite-reports':
 				self::no_reports( $vars );
-				return;
+				return null;
 			case 'views':
 				self::no_views( $vars );
-				return;
+				return null;
 			default:
 				do_action( 'frm_form_action_' . $action );
 
 				if ( apply_filters( 'frm_form_stop_action_' . $action, false ) ) {
-					return;
+					return null;
 				}
 
 				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
@@ -2160,18 +2164,18 @@ class FrmFormsController {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}
 
-				if ( strpos( $action, 'bulk_' ) === 0 ) {
+				if ( str_starts_with( $action, 'bulk_' ) ) {
 					FrmAppHelper::remove_get_action();
 
 					self::list_form();
-					return;
+					return null;
 				}
 
 				$message = FrmAppHelper::get_param( 'message' );
 
 				if ( 'form_duplicate_error' === $message ) {
 					self::display_forms_list( array(), '', array( __( 'There was a problem duplicating the form', 'formidable' ) ) );
-					return;
+					return null;
 				}
 
 				if ( 'forms_permanently_deleted' === $message ) {
@@ -2179,12 +2183,12 @@ class FrmFormsController {
 					/* translators: %1$s: Number of forms */
 					$message = sprintf( _n( '%1$s form permanently deleted.', '%1$s forms permanently deleted.', $count, 'formidable' ), $count );
 					self::display_forms_list( array(), $message, '' );
-					return;
+					return null;
 				}
 
 				self::display_forms_list();
 
-				return;
+				return null;
 		}//end switch
 	}
 
@@ -3318,7 +3322,7 @@ class FrmFormsController {
 	 * Gets message placement.
 	 *
 	 * @since 4.05.02
-	 * @since x.x This method changed from `private` to `public`.
+	 * @since 6.26 This method changed from `private` to `public`.
 	 *
 	 * @param object $form    Form object.
 	 * @param string $message The message.
@@ -3329,9 +3333,9 @@ class FrmFormsController {
 		$place = 'before';
 
 		if ( $message && isset( $form->options['form_class'] ) ) {
-			if ( strpos( $form->options['form_class'], 'frm_below_success' ) !== false ) {
+			if ( str_contains( $form->options['form_class'], 'frm_below_success' ) ) {
 				$place = 'after';
-			} elseif ( strpos( $form->options['form_class'], 'frm_inline_success' ) !== false ) {
+			} elseif ( str_contains( $form->options['form_class'], 'frm_inline_success' ) ) {
 				$place = 'submit';
 			}
 		}

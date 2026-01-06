@@ -120,13 +120,10 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		$value = '';
-
 		if ( property_exists( $this, $key ) ) {
-			$value = $this->{$key};
+			return $this->{$key};
 		}
-
-		return $value;
+		return '';
 	}
 
 	/**
@@ -215,7 +212,7 @@ abstract class FrmFieldType {
 		$for   = $this->for_label_html();
 		$label = $this->primary_label_element();
 
-		$default_html = <<<DEFAULT_HTML
+		return <<<DEFAULT_HTML
 <div id="frm_field_[id]_container" class="frm_form_field form-field [required_class][error_class]">
 	<$label $for id="field_[key]_label" class="frm_primary_label">[field_name]
 		<span class="frm_required" aria-hidden="true">[required_label]</span>
@@ -225,8 +222,6 @@ abstract class FrmFieldType {
 	[if error]<div class="frm_error" role="alert" id="frm_error_field_[key]">[error]</div>[/if error]
 </div>
 DEFAULT_HTML;
-
-		return $default_html;
 	}
 
 	/**
@@ -261,13 +256,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function for_label_html() {
-		if ( $this->has_for_label ) {
-			$for = 'for="field_[key]"';
-		} else {
-			$for = '';
-		}
-
-		return $for;
+		return $this->has_for_label ? 'for="field_[key]"' : '';
 	}
 
 	/** Form builder **/
@@ -441,13 +430,10 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array();
-
 		if ( ! $this->has_input ) {
-			$settings = $this->no_input_settings();
+			return $this->no_input_settings();
 		}
-
-		return $settings;
+		return array();
 	}
 
 	/**
@@ -616,7 +602,7 @@ DEFAULT_HTML;
 	public function display_smart_values_modal_trigger_icon( $field ) {
 		$special_default = ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) || $field['type'] === 'data';
 		FrmAppHelper::icon_by_class(
-			'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+			'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 			array(
 				'data-open' => $special_default ? 'frm-tax-box-' . $field['id'] : 'frm-smart-values-box',
 				'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -830,11 +816,7 @@ DEFAULT_HTML;
 
 		$is_empty = array_filter( $default_value );
 
-		if ( empty( $is_empty ) ) {
-			$default_value = '';
-		} else {
-			$default_value = implode( ',', $default_value );
-		}
+		$default_value = empty( $is_empty ) ? '' : implode( ',', $default_value );
 	}
 
 	/**
@@ -859,7 +841,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_new_field_defaults() {
-		$field        = array(
+		$field = array(
 			'name'          => $this->get_new_field_name(),
 			'description'   => '',
 			'type'          => $this->type,
@@ -1201,7 +1183,7 @@ DEFAULT_HTML;
 	 * @param array $args
 	 * @param array $shortcode_atts
 	 *
-	 * @return string|void
+	 * @return string|null
 	 */
 	protected function include_on_front_form( $args, $shortcode_atts ) {
 		global $frm_vars;
@@ -1209,7 +1191,7 @@ DEFAULT_HTML;
 		$include_file = $this->include_front_form_file();
 
 		if ( empty( $include_file ) ) {
-			return;
+			return null;
 		}
 
 		if ( isset( $shortcode_atts['opt'] ) ) {
@@ -1273,7 +1255,7 @@ DEFAULT_HTML;
 			$value = implode( ', ', $value );
 		}
 
-		if ( strpos( $value, '&lt;' ) !== false ) {
+		if ( str_contains( $value, '&lt;' ) ) {
 			$value = htmlentities( $value );
 		}
 		return $value;
@@ -1462,9 +1444,7 @@ DEFAULT_HTML;
 			$input .= '</option>';
 		}
 
-		$input .= '</select>';
-
-		return $input;
+		return $input . '</select>';
 	}
 
 	/**
@@ -1570,11 +1550,7 @@ DEFAULT_HTML;
 	public function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
 
-		if ( $aria_describedby_exists ) {
-			$describedby = preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) );
-		} else {
-			$describedby = array();
-		}
+		$describedby = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
 
 		$error_comes_first = true;
 
@@ -1582,10 +1558,7 @@ DEFAULT_HTML;
 		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
-			reset( $custom_error_fields );
-			reset( $custom_desc_fields );
-
-			if ( key( $custom_error_fields ) > key( $custom_desc_fields ) ) {
+			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
 				$error_comes_first = false;
 			}
 		}
@@ -1679,9 +1652,7 @@ DEFAULT_HTML;
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
 		}
-
-		$already_validated_this_value = in_array( $value, $frm_validated_unique_values[ $field_id ], true );
-		return $already_validated_this_value;
+		return in_array( $value, $frm_validated_unique_values[ $field_id ], true );
 	}
 
 	/**
@@ -1803,11 +1774,7 @@ DEFAULT_HTML;
 		if ( ! empty( $entry->updated_by ) && $this->user_id_is_privileged( $entry->updated_by ) ) {
 			return false;
 		}
-
-		if ( ! empty( $entry->user_id ) && $this->user_id_is_privileged( $entry->user_id ) ) {
-			return false;
-		}
-		return true;
+		return empty( $entry->user_id ) || ! $this->user_id_is_privileged( $entry->user_id );
 	}
 
 	/**
@@ -1921,7 +1888,7 @@ DEFAULT_HTML;
 			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
-				if ( isset( $option['value'] ) && strpos( $filtered_checked, $option['value'] ) !== false ) {
+				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
 					$csv_values_checked[] = $option['value'];
 					$filtered_checked     = str_replace( $option['value'], '', $filtered_checked );
 				}
@@ -1946,11 +1913,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function fill_values( &$value, $defaults ) {
-		if ( empty( $value ) ) {
-			$value = $defaults;
-		} else {
-			$value = array_merge( $defaults, (array) $value );
-		}
+		$value = empty( $value ) ? $defaults : array_merge( $defaults, (array) $value );
 	}
 
 	/**
@@ -2053,7 +2016,7 @@ DEFAULT_HTML;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.26
 	 *
 	 * @param string $value
 	 *
