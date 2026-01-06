@@ -2323,7 +2323,7 @@ class FrmFormsController {
 			unset( $form );
 		}
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 

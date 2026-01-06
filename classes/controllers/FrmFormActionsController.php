@@ -593,7 +593,7 @@ class FrmFormActionsController {
 		}
 
 		// Only use array_merge if there are new actions.
-		if ( ! empty( $new_actions ) ) {
+		if ( $new_actions ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
 
@@ -724,7 +724,7 @@ class FrmFormActionsController {
 			unset( $action );
 		}//end foreach
 
-		if ( ! empty( $stored_actions ) ) {
+		if ( $stored_actions ) {
 			asort( $action_priority );
 
 			// Make sure hooks are loaded.

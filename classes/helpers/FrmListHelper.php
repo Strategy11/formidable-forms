@@ -150,7 +150,7 @@ class FrmListHelper {
 			add_action( 'admin_footer', array( $this, '_js_vars' ) );
 		}
 
-		if ( empty( $this->modes ) ) {
+		if ( ! $this->modes ) {
 			$this->modes = array(
 				'list'    => __( 'List View', 'formidable' ),
 				'excerpt' => __( 'Excerpt View', 'formidable' ),
@@ -1040,7 +1040,7 @@ class FrmListHelper {
 			$scope = 'th' === $tag ? 'scope="col"' : '';
 			$id    = $with_id ? "id='" . esc_attr( $column_key ) . "'" : '';
 
-			if ( ! empty( $class ) ) {
+			if ( $class ) {
 				$class = "class='" . esc_attr( implode( ' ', $class ) ) . "'";
 			}
 

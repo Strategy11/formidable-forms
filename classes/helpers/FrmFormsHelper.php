@@ -1599,7 +1599,7 @@ BEFORE_HTML;
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = $icons[ $category ] ?? $icon;
-		} elseif ( ! empty( $categories ) ) {
+		} elseif ( $categories ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon  = reset( $icons );
 		}
