@@ -1874,7 +1874,7 @@ BEFORE_HTML;
 			return false;
 		}
 
-		if ( $count == 1 ) {
+		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */
 			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link;
 		}

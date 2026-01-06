@@ -3076,7 +3076,7 @@ class FrmAppHelper {
 		$str          = wp_strip_all_tags( (string) $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
-		if ( $length == 0 ) {
+		if ( $length === 0 ) {
 			return '';
 		}
 
@@ -3462,7 +3462,7 @@ class FrmAppHelper {
 					$l3 = $name;
 				}
 
-				$this_val = $p == $last ? $jv['value'] : array();
+				$this_val = $p === $last ? $jv['value'] : array();
 
 				switch ( $p ) {
 					case 0:
@@ -3702,7 +3702,7 @@ class FrmAppHelper {
 				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
 			}
 
-			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
+			if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
 				$string = $new_string;
 			}
 		}
