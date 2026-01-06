@@ -667,7 +667,7 @@ class FrmEntryFormatter {
 	protected function add_html_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_html_display_value_for_extra_fields( $field_value, $display_value );
 
-		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields ) ) {
+		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields, true ) ) {
 			$this->add_single_cell_html_row( $display_value, $content );
 		} else {
 			$value_args = $this->package_value_args( $field_value );
@@ -688,7 +688,7 @@ class FrmEntryFormatter {
 	protected function add_plain_text_row_for_included_extra( $field_value, &$content ) {
 		$this->prepare_plain_text_display_value_for_extra_fields( $field_value, $display_value );
 
-		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields ) ) {
+		if ( in_array( $field_value->get_field_type(), $this->single_cell_fields, true ) ) {
 			$this->add_single_value_plain_text_row( $display_value, $content );
 		} else {
 			$this->add_plain_text_row( $field_value->get_field_label(), $display_value, $content );
@@ -862,7 +862,7 @@ class FrmEntryFormatter {
 	 * @return bool
 	 */
 	protected function is_extra_field( $field_value ) {
-		return in_array( $field_value->get_field_type(), $this->skip_fields() );
+		return in_array( $field_value->get_field_type(), $this->skip_fields(), true );
 	}
 
 	/**
@@ -875,7 +875,7 @@ class FrmEntryFormatter {
 	 * @return bool
 	 */
 	protected function is_extra_field_included( $field_value ) {
-		return in_array( $field_value->get_field_type(), $this->include_extras );
+		return in_array( $field_value->get_field_type(), $this->include_extras, true );
 	}
 
 	/**
