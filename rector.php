@@ -4,7 +4,6 @@ use Rector\Config\RectorConfig;
 
 // CodeQuality
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
-use Rector\CodeQuality\Rector\BooleanAnd\SimplifyEmptyArrayCheckRector;
 use Rector\CodeQuality\Rector\Class_\CompleteDynamicPropertiesRector;
 use Rector\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector;
 use Rector\CodeQuality\Rector\ClassMethod\LocallyCalledStaticMethodToNonStaticRector;
@@ -149,8 +148,6 @@ return RectorConfig::configure()
 			JoinStringConcatRector::class,
 			LocallyCalledStaticMethodToNonStaticRector::class,
 			ShortenElseIfRector::class,
-			// This changes if is_array() && empty() to if === [].
-			SimplifyEmptyArrayCheckRector::class,
 			SimplifyEmptyCheckOnEmptyArrayRector::class,
 			SimplifyRegexPatternRector::class,
 			SingleInArrayToCompareRector::class,
