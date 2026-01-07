@@ -817,9 +817,7 @@ class FrmFormsController {
 		}
 
 		/* translators: %1$s: Number of forms */
-		$message = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
-
-		return $message;
+		return sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 	}
 
 	/**

@@ -391,9 +391,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			}//end if
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**
