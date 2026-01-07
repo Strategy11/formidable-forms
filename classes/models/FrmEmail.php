@@ -176,7 +176,7 @@ class FrmEmail {
 
 		$this->to = array_unique( (array) $to );
 
-		if ( ! $this->to ) {
+		if ( empty( $this->to ) ) {
 			return;
 		}
 
