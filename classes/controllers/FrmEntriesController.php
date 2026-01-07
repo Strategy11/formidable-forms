@@ -190,7 +190,7 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
 			add_screen_option(
 				'per_page',
 				array(

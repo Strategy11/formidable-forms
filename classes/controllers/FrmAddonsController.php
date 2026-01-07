@@ -642,7 +642,7 @@ class FrmAddonsController {
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses ) ) {
+			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
