@@ -177,7 +177,6 @@ class FrmAddonsHelper {
 			'zapier'                          => 'zapier',
 			'convertkit'                      => 'convertkit',
 			'n8n'                             => 'n8n',
-			'signature'                       => 'signature',
 		);
 
 		$icon = array_key_exists( $slug, $icons_map ) ? 'frm_' . $icons_map[ $slug ] . '_icon' : 'frm_logo_icon';
