@@ -231,7 +231,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		// Some field types should never be checked.
 		$denylist['skip_field_types'] = array_merge(
 			$denylist['skip_field_types'],
-			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select', 'ranking', 'likert' )
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select', 'ranking' )
 		);
 	}
 
