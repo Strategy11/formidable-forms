@@ -3,9 +3,6 @@
 		return;
 	}
 
-	// TODO:
-	// Only enable the submit button when we check the state for isFormValid = true.
-
 	const clientId = frmPayPalVars.clientId;
 
 	// Track the state of the PayPal card fields
