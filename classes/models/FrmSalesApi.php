@@ -79,7 +79,7 @@ class FrmSalesApi extends FrmFormApi {
 
 		$api = $this->get_api_info();
 
-		if ( empty( $api ) ) {
+		if ( ! $api ) {
 			return;
 		}
 

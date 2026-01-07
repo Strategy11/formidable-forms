@@ -95,7 +95,7 @@ class FrmInbox extends FrmFormApi {
 	private function add_api_messages() {
 		$api = $this->get_api_info();
 
-		if ( empty( $api ) ) {
+		if ( ! $api ) {
 			return;
 		}
 

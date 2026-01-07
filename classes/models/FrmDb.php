@@ -55,7 +55,7 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
-		if ( empty( $args ) ) {
+		if ( ! $args ) {
 			// add an arg to prevent prepare from failing
 			$args = array(
 				'where'  => $starts_with . '1=%d',
@@ -545,7 +545,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
-		if ( empty( $order_query ) ) {
+		if ( ! $order_query ) {
 			return '';
 		}
 
@@ -561,7 +561,7 @@ class FrmDb {
 		$order      = trim( reset( $order_query ) );
 		$safe_order = array( 'count(*)' );
 
-		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
+		if ( ! in_array( strtolower( $order ), $safe_order, true ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 
@@ -600,7 +600,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_limit( $limit ) {
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			return '';
 		}
 
@@ -648,7 +648,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		if ( empty( $where ) ) {
+		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
 				global $wpdb;

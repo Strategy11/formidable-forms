@@ -663,7 +663,7 @@ class FrmXMLHelper {
 	 */
 	private static function maybe_update_in_section_variable( &$in_section, &$f ) {
 		// If we're at the end of a section, switch $in_section is 0
-		if ( in_array( $f['type'], array( 'end_divider', 'break', 'form' ) ) ) {
+		if ( in_array( $f['type'], array( 'end_divider', 'break', 'form' ), true ) ) {
 			$in_section = 0;
 		}
 
@@ -2304,7 +2304,7 @@ class FrmXMLHelper {
 		foreach ( $add_fields as $add_field ) {
 			if ( isset( $notification[ $add_field ] ) ) {
 				$new_notification['post_content'][ $add_field ] = $notification[ $add_field ];
-			} elseif ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ) ) ) {
+			} elseif ( in_array( $add_field, array( 'plain_text', 'inc_user_info' ), true ) ) {
 				$new_notification['post_content'][ $add_field ] = 0;
 			} else {
 				$new_notification['post_content'][ $add_field ] = '';

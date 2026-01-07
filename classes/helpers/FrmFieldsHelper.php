@@ -388,7 +388,7 @@ class FrmFieldsHelper {
 	private static function get_original_field( $field ) {
 		$original_type = FrmField::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $field->type != $original_type ) {
+		if ( $original_type && $field->type !== $original_type ) {
 			$field->type = $original_type;
 		}
 
@@ -1084,7 +1084,7 @@ class FrmFieldsHelper {
 	 */
 	public static function replace_content_shortcodes( $content, $entry, $shortcodes ) {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			if ( empty( $tag ) ) {
+			if ( ! $tag ) {
 				continue;
 			}
 
@@ -1248,7 +1248,7 @@ class FrmFieldsHelper {
 	private static function get_field_shortcode_value( $atts ) {
 		$field = FrmField::getOne( $atts['tag'] );
 
-		if ( empty( $field ) ) {
+		if ( ! $field ) {
 			return null;
 		}
 
@@ -1265,7 +1265,7 @@ class FrmFieldsHelper {
 				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
-			if ( empty( $string_value ) && $string_value != '0' ) {
+			if ( ! $string_value && $string_value != '0' ) {
 				$replace_with = '';
 			} else {
 				$atts['entry_id']  = $atts['entry']->id;

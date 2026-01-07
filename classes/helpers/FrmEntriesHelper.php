@@ -42,7 +42,7 @@ class FrmEntriesHelper {
 
 		$values['fields'] = array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
 		}
 
@@ -189,11 +189,11 @@ class FrmEntriesHelper {
 	public static function replace_default_message( $message, $atts ) {
 		if ( ! str_contains( $message, '[default-message' ) &&
 			! str_contains( $message, '[default_message' ) &&
-			! empty( $message ) ) {
+			$message ) {
 			return $message;
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = '[default-message]';
 		}
 
@@ -889,7 +889,7 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( empty( $status ) ) {
+		if ( ! $status ) {
 			// If the status is empty, let's default to 0.
 			return self::SUBMITTED_ENTRY_STATUS;
 		}

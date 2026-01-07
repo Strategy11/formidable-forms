@@ -3168,11 +3168,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_formatted_time( $date, $date_format = '', $time_format = '' ) {
-		if ( empty( $date ) ) {
+		if ( ! $date ) {
 			return $date;
 		}
 
-		if ( empty( $date_format ) ) {
+		if ( ! $date_format ) {
 			$date_format = get_option( 'date_format' );
 		}
 
@@ -3199,7 +3199,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	private static function add_time_to_date( $time_format, $date ) {
-		if ( empty( $time_format ) ) {
+		if ( ! $time_format ) {
 			$time_format = get_option( 'time_format' );
 		}
 
@@ -3353,7 +3353,7 @@ class FrmAppHelper {
 		}
 
 		foreach ( $units as $u => $strings ) {
-			if ( in_array( $unit, $strings ) ) {
+			if ( in_array( $unit, $strings, true ) ) {
 				return $u;
 			}
 		}
