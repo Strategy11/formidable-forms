@@ -2596,9 +2596,7 @@ class FrmAppHelper {
 		$val = str_replace( array( '&#8220;', '&#8221;', '&#8243;' ), '"', $val );
 
 		// Replace single quotes.
-		$val = str_replace( array( '&#8216;', '&#8217;', '&#8242;', '&prime;', '&rsquo;', '&lsquo;' ), "'", $val );
-
-		return $val;
+		return str_replace( array( '&#8216;', '&#8217;', '&#8242;', '&prime;', '&rsquo;', '&lsquo;' ), "'", $val );
 	}
 
 	/**
@@ -3600,9 +3598,7 @@ class FrmAppHelper {
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
 		// allow for &quot
-		$post_content = str_replace( '&quot;', '\\"', $post_content );
-
-		return $post_content;
+		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
 	/**
@@ -4213,9 +4209,7 @@ class FrmAppHelper {
 		 *     @type string $type
 		 * }
 		 */
-		$locales = apply_filters( 'frm_locales', $locales, compact( 'type' ) );
-
-		return $locales;
+		return apply_filters( 'frm_locales', $locales, compact( 'type' ) );
 	}
 
 	/**

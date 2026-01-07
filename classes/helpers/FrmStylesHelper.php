@@ -358,9 +358,7 @@ class FrmStylesHelper {
 		$b = round( ( $b + $m ) * 255 );
 
 		// Convert RGB to hex
-		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
-
-		return $hex;
+		return sprintf( '%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**

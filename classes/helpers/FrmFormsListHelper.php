@@ -329,9 +329,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**

@@ -2038,9 +2038,7 @@ BEFORE_HTML;
 		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classname );
 
 		// Limit to A-Z, a-z, 0-9, '_', '-', '[', ']'.
-		$sanitized = preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
-
-		return $sanitized;
+		return preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
 	}
 
 	/**
@@ -2062,8 +2060,7 @@ BEFORE_HTML;
 		 * @param bool   $should_block
 		 * @param string $form_key
 		 */
-		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
-		return $should_block;
+		return (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
 	}
 
 	/**

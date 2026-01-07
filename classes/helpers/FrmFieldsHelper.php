@@ -2552,9 +2552,7 @@ class FrmFieldsHelper {
 		 * @param array $options Options.
 		 * @param array $field
 		 */
-		$options = apply_filters( 'frm_' . $field['type'] . '_display_format_options', $options, $field );
-
-		return $options;
+		return apply_filters( 'frm_' . $field['type'] . '_display_format_options', $options, $field );
 	}
 
 	/**

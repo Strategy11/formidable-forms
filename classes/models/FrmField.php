@@ -1387,9 +1387,7 @@ class FrmField {
 		 * @param bool  $required
 		 * @param array $field
 		 */
-		$required = (bool) apply_filters( 'frm_is_field_required', $required, $field );
-
-		return $required;
+		return (bool) apply_filters( 'frm_is_field_required', $required, $field );
 	}
 
 	/**
