@@ -193,9 +193,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		/**
 		 * @param string $api_js_url
 		 */
-		$api_js_url = apply_filters( 'frm_recaptcha_js_url', $api_js_url );
-
-		return $api_js_url;
+		return apply_filters( 'frm_recaptcha_js_url', $api_js_url );
 	}
 
 	/**
@@ -223,9 +221,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 		 *
 		 * @param string $api_js_url
 		 */
-		$api_js_url = apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
-
-		return $api_js_url;
+		return apply_filters( 'frm_hcaptcha_js_url', $api_js_url );
 	}
 
 	/**
@@ -247,13 +243,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		// Prevent render=explicit from happening twice in case someone patched
 		// the double rendering issue using the frm_turnstile_js_url hook.
-		$api_js_url = str_replace(
+		return str_replace(
 			'&render=explicit&render=explicit',
 			'&render=explicit',
 			$api_js_url
 		);
-
-		return $api_js_url;
 	}
 
 	/**

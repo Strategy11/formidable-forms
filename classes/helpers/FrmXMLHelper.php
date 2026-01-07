@@ -1900,9 +1900,7 @@ class FrmXMLHelper {
 		self::remove_invalid_characters_from_xml( $str );
 
 		// $str = ent2ncr(esc_html( $str));
-		$str = '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
-
-		return $str;
+		return '<![CDATA[' . str_replace( ']]>', ']]]]><![CDATA[>', $str ) . ']]>';
 	}
 
 	/**

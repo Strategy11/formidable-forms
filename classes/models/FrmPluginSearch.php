@@ -277,9 +277,7 @@ class FrmPluginSearch {
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
 		// remove strings that don't help matches.
-		$term = trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
-
-		return $term;
+		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
 	/**
