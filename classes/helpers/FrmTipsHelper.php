@@ -244,22 +244,6 @@ class FrmTipsHelper {
 			),
 			array(
 				'link' => array(
-					'content' => 'paypal-revenue',
-					'page'    => 'paypal-increase-revenue-tip',
-				),
-				'tip'  => __( 'Accept PayPal payments and grow your sales.', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
-				'link' => array(
-					'content' => 'paypal-fast',
-					'page'    => 'paypal-save-time-tip',
-				),
-				'tip'  => __( 'Accept payments now with PayPal integration.', 'formidable' ),
-				'call' => self::cta_label(),
-			),
-			array(
-				'link' => array(
 					'content' => 'registration',
 					'page'    => 'registration-tip',
 				),
