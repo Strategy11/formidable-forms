@@ -200,7 +200,7 @@ class FrmPayPalLiteAppController {
 		// TODO Process email properly.
 		$email = $action->post_content['email'] ?? '';
 
-		$data           = array(
+		$data = array(
 			'amount'         => $amount,
 			'currency'       => $currency,
 			'product_name'   => $product_name,
