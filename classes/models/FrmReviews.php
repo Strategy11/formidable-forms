@@ -46,7 +46,7 @@ class FrmReviews {
 
 		$week_ago = $this->review_status['time'] + WEEK_IN_SECONDS <= time();
 
-		if ( empty( $dismissed ) && $week_ago ) {
+		if ( ! $dismissed && $week_ago ) {
 			$this->review();
 		}
 	}
@@ -67,7 +67,7 @@ class FrmReviews {
 			'asked'     => 0,
 		);
 
-		if ( empty( $review ) ) {
+		if ( ! $review ) {
 			// Set the review request to show in a week
 			update_user_meta( $user_id, $this->option_name, $default );
 		}
@@ -238,7 +238,7 @@ class FrmReviews {
 		$user_id = get_current_user_id();
 		$review  = get_user_meta( $user_id, $this->option_name, true );
 
-		if ( empty( $review ) ) {
+		if ( ! $review ) {
 			$review = array();
 		}
 

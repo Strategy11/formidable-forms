@@ -145,7 +145,7 @@ class FrmXMLController {
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
 
-		if ( empty( $form ) ) {
+		if ( ! $form ) {
 			return $form;
 		}
 		return json_decode( $form, true );
@@ -164,13 +164,13 @@ class FrmXMLController {
 	private static function override_url( $form, &$url ) {
 		$selected_form = self::get_selected_in_form( $form, 'form' );
 
-		if ( empty( $selected_form ) ) {
+		if ( ! $selected_form ) {
 			return;
 		}
 
 		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 
-		if ( empty( $selected_xml ) || ! str_starts_with( $selected_xml, 'http' ) ) {
+		if ( ! $selected_xml || ! str_starts_with( $selected_xml, 'http' ) ) {
 			return;
 		}
 

@@ -213,7 +213,7 @@ class FrmSMTPController {
 
 		$step = $this->get_data_step_install();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 
@@ -262,7 +262,7 @@ class FrmSMTPController {
 
 		$step = $this->get_data_step_setup();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 

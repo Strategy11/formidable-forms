@@ -362,7 +362,7 @@ abstract class FrmFormMigrator {
 	protected function maybe_add_end_fields( &$fields ) {
 		$with_end = $this->fields_with_end();
 
-		if ( empty( $with_end ) ) {
+		if ( ! $with_end ) {
 			return;
 		}
 
@@ -379,7 +379,7 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			if ( ! empty( $open ) ) {
+			if ( $open ) {
 				$this->insert_end_section( $fields, $order );
 				$open = array();
 			}
@@ -389,7 +389,7 @@ abstract class FrmFormMigrator {
 			}
 		}
 
-		if ( ! empty( $open ) ) {
+		if ( $open ) {
 			$this->insert_end_section( $fields, $order );
 		}
 	}
@@ -439,7 +439,7 @@ abstract class FrmFormMigrator {
 	 * @return string
 	 */
 	protected function convert_field_type( $type, $field = array(), $use = '' ) {
-		if ( empty( $field ) ) {
+		if ( ! $field ) {
 			// For reverse compatibility.
 			return $type;
 		}
@@ -460,7 +460,7 @@ abstract class FrmFormMigrator {
 		// Create empty form so we have an ID to work with.
 		$form_id = $this->create_form( $form );
 
-		if ( empty( $form_id ) ) {
+		if ( ! $form_id ) {
 			return $this->form_creation_error_response( $form );
 		}
 
@@ -614,7 +614,7 @@ abstract class FrmFormMigrator {
 
 		$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
 
-		if ( ! empty( $new_form_id ) && empty( FrmForm::get_key_by_id( $new_form_id ) ) ) {
+		if ( $new_form_id && ! FrmForm::get_key_by_id( $new_form_id ) ) {
 			// Allow reimport if the form was deleted.
 			$new_form_id = 0;
 		}
@@ -637,9 +637,7 @@ abstract class FrmFormMigrator {
 	 * @return bool
 	 */
 	private function is_unsupported_field( $type ) {
-		$fields = $this->unsupported_field_types();
-
-		return in_array( $type, $fields, true );
+		return in_array( $type, $this->unsupported_field_types(), true );
 	}
 
 	/**
@@ -657,9 +655,11 @@ abstract class FrmFormMigrator {
 	 * @return bool
 	 */
 	protected function should_skip_field( $type ) {
-		$skip_pro_fields = $this->skip_pro_fields();
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
 
-		return ( ! FrmAppHelper::pro_is_installed() && in_array( $type, $skip_pro_fields, true ) );
+		return in_array( $type, $this->skip_pro_fields(), true );
 	}
 
 	/**
@@ -727,7 +727,7 @@ abstract class FrmFormMigrator {
 	protected function get_field_label( $field ) {
 		$label = $field['label'] ?? '';
 
-		if ( ! empty( $label ) ) {
+		if ( $label ) {
 			return $label;
 		}
 

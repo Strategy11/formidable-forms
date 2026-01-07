@@ -144,7 +144,7 @@ class FrmFormMigratorsHelper {
 	private static function install_button( $install, $label = '' ) {
 		$primary = 'button-secondary frm-button-secondary ';
 
-		if ( empty( $label ) ) {
+		if ( ! $label ) {
 			$label   = __( 'Get Started', 'formidable' );
 			$primary = 'button-primary frm-button-primary ';
 		}
@@ -179,9 +179,10 @@ class FrmFormMigratorsHelper {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		$dismissed = get_option( 'frm_dismissed' );
 
-		if ( empty( $dismissed ) ) {
+		if ( ! $dismissed ) {
 			$dismissed = array();
 		}
+
 		$dismissed[] = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
 		update_option( 'frm_dismissed', array_filter( $dismissed ), 'no' );
 		wp_die();

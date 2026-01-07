@@ -201,7 +201,7 @@ class FrmAddon {
 
 		$item_id = $this->download_id;
 
-		if ( empty( $item_id ) ) {
+		if ( ! $item_id ) {
 			$_data = array(
 				'name'      => $this->plugin_name,
 				'excerpt'   => '',
@@ -239,7 +239,7 @@ class FrmAddon {
 
 		$license = trim( get_option( $this->option_name . 'key' ) );
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			$license = $this->activate_defined_license();
 		}
 
@@ -263,7 +263,7 @@ class FrmAddon {
 		$api->get_pro_updater();
 		$license = $api->get_license();
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			return false;
 		}
 
@@ -493,7 +493,7 @@ class FrmAddon {
 			}
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			return;
 		}
 
@@ -771,7 +771,7 @@ class FrmAddon {
 
 		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			wp_send_json(
 				array(
 					'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),
