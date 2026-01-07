@@ -862,7 +862,7 @@ class FrmStylesHelper {
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
 
-		if ( empty( $color ) ) {
+		if ( ! $color ) {
 			$color = $default;
 		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
@@ -1110,7 +1110,7 @@ class FrmStylesHelper {
 	public static function get_submit_image_bg_url( $settings ) {
 		$background_image = $settings['submit_bg_img'];
 
-		if ( empty( $background_image ) ) {
+		if ( ! $background_image ) {
 			return false;
 		}
 

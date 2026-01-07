@@ -815,7 +815,7 @@ class FrmField {
 	 * @return object|null
 	 */
 	public static function getOne( $id, $filter = false ) {
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			return null;
 		}
 
@@ -826,7 +826,7 @@ class FrmField {
 
 		$results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
-		if ( empty( $results ) ) {
+		if ( ! $results ) {
 			self::filter_field( $filter, $results );
 			return $results;
 		}
@@ -958,7 +958,7 @@ class FrmField {
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 
 		if ( ! empty( $results ) ) {
-			if ( empty( $limit ) ) {
+			if ( ! $limit ) {
 				return $results;
 			}
 
@@ -987,7 +987,7 @@ class FrmField {
 
 		self::include_sub_fields( $results, $inc_embed, 'all', $form_id );
 
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
 		}
 

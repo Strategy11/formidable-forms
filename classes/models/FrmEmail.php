@@ -176,7 +176,7 @@ class FrmEmail {
 
 		$this->to = array_unique( (array) $to );
 
-		if ( empty( $this->to ) ) {
+		if ( ! $this->to ) {
 			return;
 		}
 
@@ -676,7 +676,7 @@ class FrmEmail {
 	 * @return array
 	 */
 	private function format_recipients( $recipients ) {
-		if ( empty( $recipients ) ) {
+		if ( ! $recipients ) {
 			return $recipients;
 		}
 

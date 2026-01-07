@@ -255,7 +255,7 @@ class FrmEntry {
 	 */
 	private static function is_duplicate_check_needed( $values, $duplicate_entry_time ) {
 		// If time for checking duplicates is set to an empty value, don't check for duplicates
-		if ( empty( $duplicate_entry_time ) ) {
+		if ( ! $duplicate_entry_time ) {
 			return false;
 		}
 
@@ -513,7 +513,7 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function prepare_entry( &$entry ) {
-		if ( empty( $entry ) ) {
+		if ( ! $entry ) {
 			return;
 		}
 

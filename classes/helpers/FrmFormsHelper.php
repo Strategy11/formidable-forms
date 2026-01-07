@@ -394,7 +394,7 @@ class FrmFormsHelper {
 	 * @return array
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
-		if ( empty( $post_values ) ) {
+		if ( ! $post_values ) {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -812,7 +812,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return;
 		}
 
@@ -1000,7 +1000,7 @@ BEFORE_HTML;
 		$style = self::get_form_style( $form );
 		$class = ' with_frm_style';
 
-		if ( empty( $style ) ) {
+		if ( ! $style ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
 			}
@@ -1145,7 +1145,7 @@ BEFORE_HTML;
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
 
-		if ( empty( $invalid_msg ) ) {
+		if ( ! $invalid_msg ) {
 			$show_img = false;
 		} else {
 			echo wp_kses_post( $invalid_msg );
@@ -1507,7 +1507,7 @@ BEFORE_HTML;
 	public static function style_class_label( $style, $class ) {
 		$label = '';
 
-		if ( empty( $style ) ) {
+		if ( ! $style ) {
 			$label = $class;
 		} elseif ( ! is_array( $style ) ) {
 			$label = $style;
@@ -1700,7 +1700,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
-		if ( empty( $requires ) ) {
+		if ( ! $requires ) {
 			return;
 		}
 

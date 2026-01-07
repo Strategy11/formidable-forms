@@ -345,7 +345,7 @@ class FrmForm {
 
 		$all_fields = FrmField::get_all_for_form( $id );
 
-		if ( empty( $all_fields ) ) {
+		if ( ! $all_fields ) {
 			return $values;
 		}
 
@@ -762,7 +762,7 @@ class FrmForm {
 			return 0;
 		}
 
-		if ( empty( $delete_timestamp ) ) {
+		if ( ! $delete_timestamp ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
 		}
 

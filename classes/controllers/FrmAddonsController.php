@@ -267,7 +267,7 @@ class FrmAddonsController {
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
 
 			return;
@@ -285,7 +285,7 @@ class FrmAddonsController {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = self::fallback_plugin_list();
 		} else {
 			foreach ( $addons as $k => $addon ) {
@@ -447,7 +447,7 @@ class FrmAddonsController {
 
 		$license = $creds['license'];
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			return '';
 		}
 
@@ -567,7 +567,7 @@ class FrmAddonsController {
 
 			$folder = $plugin->plugin;
 
-			if ( empty( $folder ) ) {
+			if ( ! $folder ) {
 				continue;
 			}
 

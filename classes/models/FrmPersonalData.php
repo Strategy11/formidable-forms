@@ -72,7 +72,7 @@ class FrmPersonalData {
 
 		$entries = $this->get_user_entries( $email );
 
-		if ( empty( $entries ) ) {
+		if ( ! $entries ) {
 			return $data_to_export;
 		}
 
@@ -104,14 +104,14 @@ class FrmPersonalData {
 			'done'           => true,
 		);
 
-		if ( empty( $email ) ) {
+		if ( ! $email ) {
 			return $data_removed;
 		}
 
 		$this->page = absint( $page );
 		$entries    = $this->get_user_entries( $email );
 
-		if ( empty( $entries ) ) {
+		if ( ! $entries ) {
 			return $data_removed;
 		}
 
@@ -150,7 +150,7 @@ class FrmPersonalData {
 
 		$entries_by_email = FrmDb::get_col( 'frm_item_metas', array( 'meta_value' => $email ), 'item_id', $query_args );
 
-		if ( empty( $user ) ) {
+		if ( ! $user ) {
 			// no matching user, so return the entry ids we have
 			return $entries_by_email;
 		}
