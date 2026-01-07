@@ -37,7 +37,6 @@
 		cardElement.innerHTML = `
 			<div id="paypal-button-container"></div>
 			<div class="separator">OR</div>
-			<div class="frm-paypal-card-name frm12" id="frm-paypal-card-name"></div>
 			<div class="frm-paypal-card-number frm6" id="frm-paypal-card-number"></div>
 			<div class="frm-paypal-card-expiry frm3" id="frm-paypal-card-expiry"></div>
 			<div class="frm-paypal-card-cvv frm3" id="frm-paypal-card-cvv"></div>
@@ -82,7 +81,6 @@
 		}
 
 		// Render individual card fields
-		cardFields.NameField().render( '#frm-paypal-card-name' );
 		cardFields.NumberField().render( '#frm-paypal-card-number' );
 		cardFields.ExpiryField().render( '#frm-paypal-card-expiry' );
 		cardFields.CVVField().render( '#frm-paypal-card-cvv' );
@@ -164,12 +162,17 @@
 
 		const orderData = await response.json();
 
-		if ( ! orderData.success || ! orderData.data.orderID ) {
+		if ( ! orderData.success || ! orderData.data.subscriptionID ) {
 			thisForm.classList.remove( 'frm_loading_form' );
-			throw new Error( orderData.data || 'Failed to create PayPal order' );
+
+			if ( 'string' === typeof orderData.data ) {
+				throw new Error( orderData.data );
+			}
+
+			throw new Error( 'Failed to create PayPal subscription' );
 		}
 
-		return orderData.data.orderID;
+		return orderData.data.subscriptionID;
 	}
 
 	/**
@@ -324,20 +327,31 @@
 		running++;
 		disableSubmit( thisForm );
 
+		const meta = addName( jQuery( thisForm ) );
+
+		const submitArgs = {};
+
+		if ( meta.name ) {
+			submitArgs.cardholderName = meta.name;
+		}
+
+		/*
+		TODO Add the billing address here as well.
+		Stripe calls a window.frmProForm.addAddressMeta function.
+
+		billingAddress: {
+			addressLine1: '555 Billing Ave',
+			adminArea1: 'NY',
+			adminArea2: 'New York',
+			postalCode: '10001',
+			countryCode: 'US'
+		}
+		*/
+
 		try {
 			// Submit the card fields - this triggers createOrder and onApprove
 			// TODO: Stop hard coding the billing address and use actual form data.
-			await cardFieldsInstance.submit(
-				{
-					billingAddress: {
-						addressLine1: '555 Billing Ave',
-						adminArea1: 'NY',
-						adminArea2: 'New York',
-						postalCode: '10001',
-						countryCode: 'US'
-					}
-				}
-			);
+			await cardFieldsInstance.submit( submitArgs );
 		} catch ( err ) {
 			running--;
 			if ( running === 0 && thisForm ) {
@@ -379,6 +393,97 @@
 			console.error( 'Initializing PayPal Card Fields failed', e );
 			displayPaymentFailure( 'Failed to initialize payment form.' );
 		}
+	}
+
+	function addName( $form ) {
+		let i,
+			firstField,
+			lastField,
+			firstFieldContainer,
+			lastFieldContainer,
+			firstNameID = '',
+			lastNameID = '',
+			subFieldEl;
+
+		const cardObject = {};
+		const settings = frmPayPalVars.settings;
+
+		/**
+		 * Gets first, middle or last name from the given field.
+		 *
+		 * @param {number|HTMLElement} field        Field ID or Field element.
+		 * @param {string}             subFieldName Subfield name.
+		 * @return {string} Name field value.
+		 */
+		const getNameFieldValue = function( field, subFieldName ) {
+			if ( 'object' !== typeof field ) {
+				field = document.getElementById( 'frm_field_' + field + '_container' );
+			}
+
+			if ( ! field || 'object' !== typeof field || 'function' !== typeof field.querySelector ) {
+				return '';
+			}
+
+			subFieldEl = field.querySelector( '.frm_combo_inputs_container .frm_form_subfield-' + subFieldName + ' input' );
+			if ( ! subFieldEl ) {
+				return '';
+			}
+
+			return subFieldEl.value;
+		};
+
+		for ( i = 0; i < settings.length; i++ ) {
+			firstNameID = settings[ i ].first_name;
+			lastNameID = settings[ i ].last_name;
+		}
+
+		/**
+		 * Returns a name field container or element.
+		 *
+		 * @param {number}      fieldID
+		 * @param {string}      type    Either 'container' or 'field'
+		 * @param {object|null} $form
+		 * @return {HTMLElement|null} Name field container or element.
+		 */
+		function getNameFieldItem( fieldID, type, $form = null ) {
+			const queryForNameFieldIsFound = 'object' === typeof window.frmProForm && 'function' === typeof window.frmProForm.queryForNameField;
+
+			if ( type === 'container' ) {
+				return queryForNameFieldIsFound
+					? window.frmProForm.queryForNameField( fieldID, 'container' )
+					: document.querySelector( '#frm_field_' + fieldID + '_container, .frm_field_' + fieldID + '_container' );
+			}
+
+			return queryForNameFieldIsFound
+				? window.frmProForm.queryForNameField( fieldID, 'field', $form[ 0 ] )
+				: $form[ 0 ].querySelector( '#frm_field_' + fieldID + '_container input, input[name="item_meta[' + fieldID + ']"], .frm_field_' + fieldID + '_container input' );
+		}
+
+		if ( firstNameID !== '' ) {
+			firstFieldContainer = getNameFieldItem( firstNameID, 'container' );
+			if ( firstFieldContainer && firstFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+				cardObject.name = getNameFieldValue( firstFieldContainer, 'first' );
+			} else {
+				firstField = getNameFieldItem( firstNameID, 'field', $form );
+				if ( firstField && firstField.value ) {
+					cardObject.name = firstField.value;
+				}
+			}
+		}
+
+		if ( lastNameID !== '' ) {
+			lastFieldContainer = getNameFieldItem( lastNameID, 'container' );
+			if ( lastFieldContainer && lastFieldContainer.querySelector( '.frm_combo_inputs_container' ) ) { // This is a name field.
+				cardObject.name = cardObject.name + ' ' + getNameFieldValue( lastFieldContainer, 'last' );
+			} else {
+				lastField = getNameFieldItem( lastNameID, 'field', $form );
+				if ( lastField && lastField.value ) {
+					cardObject.name = cardObject.name + ' ' + lastField.value;
+				}
+			}
+		}
+
+		return cardObject;
 	}
 
 	document.addEventListener( 'DOMContentLoaded', async function() {
