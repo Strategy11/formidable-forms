@@ -514,9 +514,7 @@ class FrmForm {
 		// $3 an equals sign (optional) that follows the < operator for <= comparisons.
 		// $4 another space (optional).
 		// $5 \d|\[ the second comparison digit or the start of a comparison shortcode.
-		$calc = preg_replace( '/(\d|\])( ){0,1}<(=){0,1}( ){0,1}(\d|\[)/', '$1 <$3 $5', $calc );
-
-		return $calc;
+		return preg_replace( '/(\d|\])( ){0,1}<(=){0,1}( ){0,1}(\d|\[)/', '$1 <$3 $5', $calc );
 	}
 
 	/**
@@ -801,9 +799,7 @@ class FrmForm {
 		$r         = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
 
 		// An empty form name can result in a null value.
-		$r = is_null( $r ) ? '' : stripslashes( $r );
-
-		return $r;
+		return is_null( $r ) ? '' : stripslashes( $r );
 	}
 
 	/**

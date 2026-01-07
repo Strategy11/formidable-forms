@@ -96,6 +96,7 @@
 
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
 
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
 		<properties>
