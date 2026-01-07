@@ -388,7 +388,7 @@ class FrmFieldsHelper {
 	private static function get_original_field( $field ) {
 		$original_type = FrmField::get_option( $field, 'original_type' );
 
-		if ( $original_type && $field->type != $original_type ) {
+		if ( $original_type && $field->type !== $original_type ) {
 			$field->type = $original_type;
 		}
 
