@@ -69,6 +69,7 @@
 			createSubscription: createSubscription,
 			onApprove: onApprove,
 			onError: onError,
+			// TODO: Add onCancel? We can remove the loading spinner from the submit button.
 			style: {},
 		} ).render( '#paypal-button-container' );
 
