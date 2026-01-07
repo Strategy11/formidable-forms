@@ -25,6 +25,13 @@ if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 ?>
 
 <div class="frm_grid_container">
+	<p class="show_paypal<?php echo in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) ? '' : ' frm_hidden'; ?>">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
+			<?php esc_html_e( 'Product Name', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ); ?>" class="frm_not_email_subject large-text" />
+	</p>
+
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
 			<?php esc_html_e( 'Description', 'formidable' ); ?>

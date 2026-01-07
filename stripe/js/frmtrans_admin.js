@@ -34,16 +34,22 @@
 
 		toggleOpts( this, checked, '.show_' + gateway );
 
-		const toggleOff = 'stripe' === gateway ? 'square' : 'stripe';
+		const gateways  = [ 'stripe', 'square', 'paypal' ];
+		const toggleOff = gateways.filter( g => g !== gateway );
+
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
 		const showClass = 'show_' + settings.find( '.frm_gateway_opt input:checked' ).attr( 'value' );
-		const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + toggleOff );
 
-		gatewaySettings.forEach(
-			setting => {
-				if ( ! setting.classList.contains( showClass ) ) {
-					setting.style.display = 'none';
+		toggleOff.forEach(
+			function( gateway ) {
+				const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + gateway );
+				gatewaySettings.forEach(
+				setting => {
+					if ( ! setting.classList.contains( showClass ) ) {
+						setting.style.display = 'none';
+					}
 				}
+			);
 			}
 		);
 
