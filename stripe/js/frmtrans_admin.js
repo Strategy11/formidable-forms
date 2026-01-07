@@ -34,7 +34,7 @@
 
 		toggleOpts( this, checked, '.show_' + gateway );
 
-		const gateways  = [ 'stripe', 'square', 'paypal' ];
+		const gateways = [ 'stripe', 'square', 'paypal' ];
 		const toggleOff = gateways.filter( g => g !== gateway );
 
 		const settings = jQuery( this ).closest( '.frm_form_action_settings' );
@@ -44,12 +44,12 @@
 			function( gateway ) {
 				const gatewaySettings = settings.get( 0 ).querySelectorAll( '.show_' + gateway );
 				gatewaySettings.forEach(
-				setting => {
-					if ( ! setting.classList.contains( showClass ) ) {
-						setting.style.display = 'none';
+					setting => {
+						if ( ! setting.classList.contains( showClass ) ) {
+							setting.style.display = 'none';
+						}
 					}
-				}
-			);
+				);
 			}
 		);
 

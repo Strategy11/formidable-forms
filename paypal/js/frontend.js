@@ -167,7 +167,7 @@
 			thisForm.classList.remove( 'frm_loading_form' );
 
 			if ( 'string' === typeof orderData.data ) {
-				throw new Error( orderData.data );
+				throw new TypeError( orderData.data );
 			}
 
 			throw new Error( 'Failed to create PayPal subscription' );
