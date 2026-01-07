@@ -374,6 +374,20 @@ class FrmFieldsController {
 			$field['placeholder'] = implode( ', ', $field['placeholder'] );
 		}
 
+		$pro_is_installed = FrmAppHelper::pro_is_installed();
+
+		if ( ! $pro_is_installed ) {
+			$show_upsell_for_unique_value          = in_array(
+				$field['type'],
+				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
+				true
+			);
+			$show_upsell_for_read_only             = in_array( $field['type'], array( 'email', 'hidden', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ), true );
+			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
+			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
+			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
+		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
 
