@@ -23,7 +23,6 @@ class FrmSquareLiteConnectHelper {
 		self::register_settings_scripts();
 
 		FrmSquareLiteAppHelper::fee_education( 'square-global-settings-tip' );
-
 		?>
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">

@@ -22,6 +22,8 @@ class FrmPayPalLiteConnectHelper {
 
 		self::register_settings_scripts();
 
+		FrmPayPalLiteAppHelper::fee_education( 'paypal-global-settings-tip' );
+
 		?>
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">

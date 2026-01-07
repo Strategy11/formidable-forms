@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 $square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
 
 if ( $stripe_connected ) {
 	FrmStrpLiteAppHelper::fee_education( 'stripe-action-tip', $form_action->post_content['gateway'] );
@@ -14,7 +15,11 @@ if ( $square_connected ) {
 	FrmSquareLiteAppHelper::fee_education( 'square-action-tip', $form_action->post_content['gateway'] );
 }
 
-if ( ! $stripe_connected && ! $square_connected ) {
+if ( $paypal_connected ) {
+	FrmPayPalLiteAppHelper::fee_education( 'paypal-action-tip', $form_action->post_content['gateway'] );
+}
+
+if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	FrmStrpLiteAppHelper::not_connected_warning();
 }
 ?>
