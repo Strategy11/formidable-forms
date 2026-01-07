@@ -650,7 +650,9 @@ legend.frm_hidden{
 	margin-bottom:8px !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm-edit-page-btn,
+<?php } ?>
 .with_frm_style .frm_submit input[type=submit],
 .with_frm_style .frm_submit input[type=button],
 .with_frm_style .frm_submit button{
