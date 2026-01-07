@@ -367,9 +367,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		// TODO: Stop hard coding this here.
-		// It should be in a function.
-		$client_id = 'AV8DLwHFtnUai9Yuy8B5ocRSgtlCBiRAh6Vkl4vhgeuiKRLzilt-vzjd6O1tjIVI_5AiPG0H-HtBssrE';
+		$client_id = self::get_client_id();
 
 		// Build the PayPal SDK URL with required parameters.
 		$sdk_url = add_query_arg(
@@ -582,6 +580,8 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	}
 
 	/**
+	 * @since x.x
+	 *
 	 * @return void
 	 */
 	public static function actions_js() {
@@ -591,5 +591,16 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			array( 'wp-hooks', 'wp-i18n' ),
 			FrmAppHelper::plugin_version()
 		);
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return string
+	 */
+	private static function get_client_id() {
+		// TODO: This will need logic for a production client ID as well.
+		// This is currently just for testing.
+		return 'AV8DLwHFtnUai9Yuy8B5ocRSgtlCBiRAh6Vkl4vhgeuiKRLzilt-vzjd6O1tjIVI_5AiPG0H-HtBssrE';
 	}
 }
