@@ -194,12 +194,12 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 <?php if ( ! $submit_style ) { ?>
 	<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn,
 	<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
-.frm_form_submit_style,
-.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
+.frm_form_submit_style {
 	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
@@ -251,7 +251,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php } ?>
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
@@ -264,7 +266,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:focus,
