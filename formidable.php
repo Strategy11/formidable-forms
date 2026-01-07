@@ -98,7 +98,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	} else {
 		$filepath .= 'models/';
 
-		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+		if ( str_contains( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
 			$filepath .= 'fields/';
 		}
 	}

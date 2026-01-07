@@ -262,7 +262,7 @@ class FrmCreateFile {
 		// Strip any schemes off.
 		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] );
 
-		if ( strpos( $credentials['hostname'], ':' ) ) {
+		if ( str_contains( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
 
 			if ( ! is_numeric( $credentials['port'] ) ) {

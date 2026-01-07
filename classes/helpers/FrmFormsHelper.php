@@ -551,7 +551,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 
-		if ( ! strpos( $button, '[button_action]' ) ) {
+		if ( ! str_contains( $button, '[button_action]' ) ) {
 			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
@@ -931,7 +931,7 @@ BEFORE_HTML;
 		// Replace [frmurl].
 		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
-		if ( strpos( $html, '[button_label]' ) ) {
+		if ( str_contains( $html, '[button_label]' ) ) {
 			add_filter( 'frm_submit_button', 'FrmFormsHelper::submit_button_label', 1 );
 			$submit_label = apply_filters( 'frm_submit_button', $title, $form );
 			$submit_label = esc_attr( do_shortcode( $submit_label ) );
@@ -940,15 +940,15 @@ BEFORE_HTML;
 
 		$html = apply_filters( 'frm_form_replace_shortcodes', $html, $form, $values );
 
-		if ( strpos( $html, '[if back_button]' ) ) {
+		if ( str_contains( $html, '[if back_button]' ) ) {
 			$html = preg_replace( '/(\[if\s+back_button\])(.*?)(\[\/if\s+back_button\])/mis', '', $html );
 		}
 
-		if ( strpos( $html, '[if save_draft]' ) ) {
+		if ( str_contains( $html, '[if save_draft]' ) ) {
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
 		}
 
-		if ( strpos( $html, '[if start_over]' ) ) {
+		if ( str_contains( $html, '[if start_over]' ) ) {
 			$html = preg_replace( '/(\[if\s+start_over\])(.*?)(\[\/if\s+start_over\])/mis', '', $html );
 		}
 

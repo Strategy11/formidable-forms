@@ -268,7 +268,7 @@ class FrmFieldFormHtml {
 		}
 
 		if ( is_string( $inner_html[2] ) ) {
-			$has_id = strpos( $inner_html[2], ' id=' );
+			$has_id = str_contains( $inner_html[2], ' id=' );
 
 			if ( ! $has_id ) {
 				$id         = 'frm_' . $id . '_' . $this->html_id;
@@ -407,7 +407,7 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	public function remove_collapse_shortcode( &$html ) {
-		if ( strpos( $html, '[collapse_this]' ) ) {
+		if ( str_contains( $html, '[collapse_this]' ) ) {
 			$html = str_replace( '[collapse_this]', '', $html );
 		}
 	}
@@ -543,7 +543,7 @@ class FrmFieldFormHtml {
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 
 		if ( ! empty( $extra_classes ) ) {
-			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
+			if ( ! str_contains( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
 

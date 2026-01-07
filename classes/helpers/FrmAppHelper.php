@@ -734,7 +734,7 @@ class FrmAppHelper {
 	 * @return mixed
 	 */
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
-		if ( strpos( $param, '[' ) ) {
+		if ( str_contains( $param, '[' ) ) {
 			$params = explode( '[', $param );
 			$param  = $params[0];
 		}
@@ -1390,7 +1390,7 @@ class FrmAppHelper {
 		} else {
 			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
 
-			if ( strpos( $icon, ' ' ) ) {
+			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
@@ -3682,29 +3682,25 @@ class FrmAppHelper {
 	 * Decode a JSON string.
 	 * Do not switch shortcodes like [24] to array unless intentional ie XML values.
 	 *
-	 * @param mixed $string
-	 * @param bool  $single_to_array
+	 * @param array|string|null $string
+	 * @param bool              $single_to_array
 	 *
-	 * @return mixed
+	 * @return array|string|null
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
 		if ( is_array( $string ) || is_null( $string ) ) {
 			return $string;
 		}
 
-		$new_string = json_decode( $string, true );
+		$new_string   = json_decode( $string, true );
+		$single_value = false;
 
-		if ( function_exists( 'json_last_error' ) ) {
-			// php 5.3+
-			$single_value = false;
+		if ( ! $single_to_array ) {
+			$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+		}
 
-			if ( ! $single_to_array ) {
-				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
-			}
-
-			if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-				$string = $new_string;
-			}
+		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
+			$string = $new_string;
 		}
 
 		return $string;
