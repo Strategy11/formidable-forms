@@ -561,7 +561,7 @@ class FrmDb {
 		$order      = trim( reset( $order_query ) );
 		$safe_order = array( 'count(*)' );
 
-		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
+		if ( ! in_array( strtolower( $order ), $safe_order, true ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 

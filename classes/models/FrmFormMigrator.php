@@ -303,7 +303,7 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break';
+			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
 
 			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];
@@ -311,7 +311,7 @@ abstract class FrmFormMigrator {
 
 			$form['fields'][] = $new_field;
 
-			if ( in_array( $new_type, $this->fields_with_end() ) ) {
+			if ( in_array( $new_type, $this->fields_with_end(), true ) ) {
 				$this->current_section = $field;
 			} elseif ( $new_type === 'break' || $new_type === 'end_divider' ) {
 				$this->current_section = array();
@@ -375,7 +375,7 @@ abstract class FrmFormMigrator {
 			$type     = $this->get_field_type( $field );
 			$new_type = $this->convert_field_type( $type, $field );
 
-			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
+			if ( ! in_array( $new_type, $with_end, true ) && $new_type !== 'break' ) {
 				continue;
 			}
 
@@ -384,7 +384,7 @@ abstract class FrmFormMigrator {
 				$open = array();
 			}
 
-			if ( in_array( $new_type, $with_end ) ) {
+			if ( in_array( $new_type, $with_end, true ) ) {
 				$open = $field;
 			}
 		}

@@ -145,7 +145,7 @@ class FrmFormActionsController {
 		}
 
 		foreach ( $action_controls as $action ) {
-			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped ) ) {
+			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped, true ) ) {
 				continue;
 			}
 

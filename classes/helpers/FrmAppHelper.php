@@ -3353,7 +3353,7 @@ class FrmAppHelper {
 		}
 
 		foreach ( $units as $u => $strings ) {
-			if ( in_array( $unit, $strings ) ) {
+			if ( in_array( $unit, $strings, true ) ) {
 				return $u;
 			}
 		}
