@@ -200,7 +200,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
 .frm_form_submit_style {
-	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
+	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); // phpcs:ignore Universal.Operators.StrictComparisons ?>;
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
 	<?php } ?>

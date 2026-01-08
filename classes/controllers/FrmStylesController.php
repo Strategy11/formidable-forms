@@ -1226,6 +1226,7 @@ class FrmStylesController {
 	public static function get_form_style( $form = 'default' ) {
 		$style = FrmFormsHelper::get_form_style( $form );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( empty( $style ) || 1 == $style ) {
 			$style = 'default';
 		}
@@ -1241,6 +1242,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function get_form_style_class( $class, $style ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( 1 == $style ) {
 			$style = 'default';
 		}
@@ -1339,7 +1341,7 @@ class FrmStylesController {
 	 *
 	 * @return int
 	 */
-	public static function do_accordion_sections( $screen, $context, $data_object ) {
+	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
 		// the symbol id from icons.svg

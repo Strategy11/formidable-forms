@@ -94,6 +94,14 @@
 		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
 
+	<!-- Set rules for Cyclomatic Complexity -->
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="complexity" value="10"/>
+			<property name="absoluteComplexity" value="20"/>
+		</properties>
+	</rule>
+
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
@@ -216,21 +224,6 @@
 			<property name="errorThreshold" value="10" />
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
-		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
-	</rule>
 
 	<rule ref="WordPressVIPMinimum">
 		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
@@ -282,51 +275,6 @@
 	<rule ref="Universal.Operators.StrictComparisons">
 		<severity>8</severity>
 		<type>error</type>
-		<exclude-pattern>FrmStrpLiteAuth.php</exclude-pattern>
-		<exclude-pattern>errors.php</exclude-pattern>
-		<exclude-pattern>_sidebar-shared-pub.php</exclude-pattern>
-		<exclude-pattern>FrmTransLiteDb.php</exclude-pattern>
-		<exclude-pattern>text-toggle.php</exclude-pattern>
-		<exclude-pattern>sidebar-shared.php</exclude-pattern>
-		<exclude-pattern>_single_theme.css.php</exclude-pattern>
-		<exclude-pattern>FrmForm.php</exclude-pattern>
-		<exclude-pattern>mb_adv_info.php</exclude-pattern>
-		<exclude-pattern>FrmStrpLiteActionsController.php</exclude-pattern>
-		<exclude-pattern>toggle.php</exclude-pattern>
-		<exclude-pattern>dropdown-field.php</exclude-pattern>
-		<exclude-pattern>FrmEntriesListHelper.php</exclude-pattern>
-		<exclude-pattern>FrmDb.php</exclude-pattern>
-		<exclude-pattern>FrmStrpLiteEventsController.php</exclude-pattern>
-		<exclude-pattern>FrmFieldFormHtml.php</exclude-pattern>
-		<exclude-pattern>FrmTransLiteAppController.php</exclude-pattern>
-		<exclude-pattern>FrmUnitTest.php</exclude-pattern>
-		<exclude-pattern>FrmStylesController.php</exclude-pattern>
-		<exclude-pattern>FrmMigrate.php</exclude-pattern>
-		<exclude-pattern>FrmFormsListHelper.php</exclude-pattern>
-		<exclude-pattern>FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>FrmTransLiteActionsController.php</exclude-pattern>
-		<exclude-pattern>FrmEntry.php</exclude-pattern>
-		<exclude-pattern>FrmAppHelper.php</exclude-pattern>
-		<exclude-pattern>FrmFieldValueSelector.php</exclude-pattern>
-		<exclude-pattern>FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>FrmFieldUserID.php</exclude-pattern>
-		<exclude-pattern>FrmFieldUrl.php</exclude-pattern>
-		<exclude-pattern>FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>FrmTransLiteAppHelper.php</exclude-pattern>
-		<exclude-pattern>FrmField.php</exclude-pattern>
-		<exclude-pattern>FrmStylesHelper.php</exclude-pattern>
-		<exclude-pattern>FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>FrmFieldsController.php</exclude-pattern>
-		<exclude-pattern>FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>FrmSquareLiteActionsController.php</exclude-pattern>
-		<exclude-pattern>FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>FrmFormAction.php</exclude-pattern>
-		<exclude-pattern>FrmEntriesHelper.php</exclude-pattern>
-		<exclude-pattern>FrmEntriesController.php</exclude-pattern>
-		<exclude-pattern>FrmStyle.php</exclude-pattern>
-		<exclude-pattern>FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>test_FrmShowEntryShortcode.php</exclude-pattern>
 	</rule> 
 
 	<!-- Custom Formidable sniffs -->

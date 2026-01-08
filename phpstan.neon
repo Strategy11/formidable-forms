@@ -368,3 +368,7 @@ parameters:
 			paths:
 				- classes/helpers/FrmCSVExportHelper.php
 				- classes/models/FrmStyle.php
+		-
+			message: "#Casting to int something that's already int#"
+			paths:
+				- classes/helpers/FrmXMLHelper.php

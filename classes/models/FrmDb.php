@@ -387,7 +387,7 @@ class FrmDb {
 		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
-		if ( $group == $table ) {
+		if ( $group === $table ) {
 			$table = $wpdb->prefix . $table;
 		}
 
@@ -434,6 +434,7 @@ class FrmDb {
 		$temp_args = $args;
 
 		foreach ( $temp_args as $k => $v ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $v == '' ) {
 				unset( $args[ $k ] );
 				continue;
@@ -517,6 +518,7 @@ class FrmDb {
 				$args[ $param ] = self::esc_limit( $value );
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $args[ $param ] == '' ) {
 				unset( $args[ $param ] );
 			}

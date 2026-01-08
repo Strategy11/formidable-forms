@@ -89,6 +89,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 		<?php } ?>
 
+		<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
 		<?php if ( $entry->updated_by && $entry->updated_by != $entry->user_id ) { ?>
 			<div class="misc-pub-section">
 				<?php

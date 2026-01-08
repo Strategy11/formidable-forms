@@ -74,7 +74,7 @@ class FrmFormsHelper {
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
 			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
-				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
+				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; // phpcs:ignore Universal.Operators.StrictComparisons ?></option>
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
@@ -105,7 +105,7 @@ class FrmFormsHelper {
 	 *
 	 * @return void
 	 */
-	public static function form_switcher( $selected = false ) {
+	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -243,8 +243,8 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
-		echo $sort_col == $col ? 'sorted' : 'sortable';
-		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
+		echo $sort_col == $col ? 'sorted' : 'sortable'; // phpcs:ignore Universal.Operators.StrictComparisons
+		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc'; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**
@@ -414,7 +414,7 @@ class FrmFormsHelper {
 	 *
 	 * @return array
 	 */
-	public static function fill_default_opts( $values, $record, $post_values ) {
+	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
 		$defaults = self::get_default_opts();
 
@@ -922,7 +922,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
+			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons
 		}
 
 		// Replace [form_key].
@@ -1206,6 +1206,7 @@ BEFORE_HTML;
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4, array( 'form_id' => $id ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $offset != - 1 ) {
 			self::get_scroll_js( $id );
 		}

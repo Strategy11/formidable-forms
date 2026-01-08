@@ -715,6 +715,7 @@ class FrmFormsController {
 	private static function load_direct_preview() {
 		$key = FrmAppHelper::simple_get( 'form', 'sanitize_title' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $key == '' ) {
 			$key = FrmAppHelper::get_post_param( 'form', '', 'sanitize_title' );
 		}
@@ -1380,7 +1381,7 @@ class FrmFormsController {
 
 		$edit_message = __( 'Form was successfully updated.', 'formidable' );
 
-		if ( $form->is_template && $message == $edit_message ) {
+		if ( $form->is_template && $message === $edit_message ) {
 			$message = __( 'Template was successfully updated.', 'formidable' );
 		}
 
@@ -2027,6 +2028,7 @@ class FrmFormsController {
 
 		$bulkaction = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $bulkaction == - 1 ) {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 		}
@@ -2090,7 +2092,7 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 
-	public static function route() {
+	public static function route() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
 		FrmAppHelper::include_svg();
@@ -2156,6 +2158,7 @@ class FrmFormsController {
 
 				$action = FrmAppHelper::get_param( 'action', '', 'get', 'sanitize_text_field' );
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $action == - 1 ) {
 					$action = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 				}
@@ -2552,7 +2555,8 @@ class FrmFormsController {
 		$pass_args = compact( 'form', 'fields', 'errors', 'title', 'description', 'reset' );
 
 		$pass_args['action'] = $params['action'];
-		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
+		$handle_process_here = $params['action'] === 'create' && $params['posted_form_id'] == $form->id && $_POST;
 
 		if ( ! $handle_process_here ) {
 			FrmFormState::set_initial_value( 'title', $title );
@@ -2601,7 +2605,8 @@ class FrmFormsController {
 	private static function get_saved_errors( $form, $params ) {
 		global $frm_vars;
 
-		if ( $params['posted_form_id'] == $form->id && $_POST && isset( $frm_vars['created_entries'][ $form->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
+		if ( $params['posted_form_id'] == $form->id && $_POST && isset( $frm_vars['created_entries'][ $form->id ] ) ) {
 			$errors = $frm_vars['created_entries'][ $form->id ]['errors'];
 		} else {
 			$errors = array();
@@ -3010,6 +3015,7 @@ class FrmFormsController {
 		global $post;
 		$opt = $args['success_opt'];
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! $post || $args['form']->options[ $opt . '_page_id' ] != $post->ID ) {
 			$page     = get_post( $args['form']->options[ $opt . '_page_id' ] );
 			$old_post = $post;

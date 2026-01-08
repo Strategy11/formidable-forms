@@ -563,6 +563,7 @@ class FrmMigrate {
 	private function migrate_to_90() {
 		$form = FrmForm::getOne( 'contact' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form && $form->default_template == 1 ) {
 			FrmForm::destroy( 'contact' );
 		}
@@ -863,6 +864,7 @@ DEFAULT_HTML;
 				continue;
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
 				$form->options['submit_html'] = $new_default_html;
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );

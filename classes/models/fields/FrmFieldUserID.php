@@ -72,6 +72,7 @@ class FrmFieldUserID extends FrmFieldType {
 	}
 
 	public function validate( $args ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $args['value'] ) {
 			return array();
 		}

@@ -227,6 +227,7 @@ class FrmFieldFormHtml {
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
 		$description = FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'description' ) );
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
 	}
 
@@ -241,6 +242,7 @@ class FrmFieldFormHtml {
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $description != '' ) {
 			$this->add_element_id( 'description', 'desc' );
 		}

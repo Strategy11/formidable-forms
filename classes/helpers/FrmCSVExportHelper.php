@@ -375,7 +375,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @return void
 	 */
-	private static function csv_headings( &$headings ) {
+	private static function csv_headings( &$headings ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$fields_by_repeater_id = array();
 		$repeater_ids          = array();
 

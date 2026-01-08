@@ -82,6 +82,7 @@ class FrmEntry {
 
 		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
@@ -563,7 +564,7 @@ class FrmEntry {
 		foreach ( $metas as $meta_val ) {
 			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 
-			if ( $meta_val->item_id == $entry->id ) {
+			if ( (int) $meta_val->item_id === (int) $entry->id ) {
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 
 				if ( $include_key ) {
@@ -659,6 +660,7 @@ class FrmEntry {
 
 		$meta_where = array( 'field_id !' => 0 );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $limit == '' && is_array( $where ) && count( $where ) === 1 && isset( $where['it.form_id'] ) ) {
 			$meta_where['fi.form_id'] = $where['it.form_id'];
 		} else {

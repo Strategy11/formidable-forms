@@ -91,6 +91,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	private static function set_item_key( &$values ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $values['item_key'] ) || $values['item_key'] == '' ) {
 			global $wpdb;
 			$values['item_key'] = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
@@ -156,7 +157,7 @@ class FrmEntryValidate {
 
 		self::maybe_clear_value_for_default_blank_setting( $posted_field, $value );
 
-		$should_trim = is_array( $value ) && count( $value ) == 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
+		$should_trim = is_array( $value ) && count( $value ) === 1 && isset( $value[0] ) && $posted_field->type !== 'checkbox';
 
 		if ( $should_trim ) {
 			$value = reset( $value );
@@ -166,6 +167,7 @@ class FrmEntryValidate {
 			$value = trim( $value );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $posted_field->required == '1' && FrmAppHelper::is_empty_value( $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $posted_field, 'blank' );
 		} elseif ( ! isset( $_POST['item_name'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -181,6 +183,7 @@ class FrmEntryValidate {
 		// e.g. trim off excess values like in the case of fields with limit.
 		$value = apply_filters( 'frm_modify_posted_field_value', $value, $errors, $posted_field, $args );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value != '' ) {
 			self::validate_phone_field( $errors, $posted_field, $value, $args );
 		}
@@ -235,7 +238,7 @@ class FrmEntryValidate {
 	 *
 	 * @return bool
 	 */
-	private static function option_is_valid( $field, $value, $options ) {
+	private static function option_is_valid( $field, $value, $options ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( '' === $value ) {
 			return true;
 		}
@@ -1087,7 +1090,7 @@ class FrmEntryValidate {
 	 *
 	 * @return array Form IDs.
 	 */
-	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+	private static function get_all_form_ids_and_flatten_meta( &$values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.

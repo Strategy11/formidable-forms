@@ -121,6 +121,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( empty( $amount ) || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
@@ -347,6 +348,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}
@@ -374,6 +376,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $params['form_id'] == $params['posted_form_id'] ) {
 			// This form has already been posted, so we aren't on the first page.
 			return;

@@ -99,7 +99,8 @@ class FrmStyle {
 			$new_instance = (array) $new_instance;
 			$this->id     = $new_instance['ID'];
 
-			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
+			if ( $id != $this->id || ! $_POST || ! isset( $_POST['frm_style_setting'] ) ) {
 				// Don't continue if not saving this style.
 				continue;
 			}
@@ -172,7 +173,7 @@ class FrmStyle {
 	 *
 	 * @return void
 	 */
-	private function maybe_sanitize_rgba_value( &$color_val ) {
+	private function maybe_sanitize_rgba_value( &$color_val ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
 			return;
 		}
@@ -606,7 +607,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height'];
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];
