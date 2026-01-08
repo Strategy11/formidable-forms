@@ -26,7 +26,7 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		 * @return string
 		 */
 		public function get_icon() {
-			return 'frm_logo_icon';
+			return FrmAppHelper::get_menu_icon_class();
 		}
 
 		/**
