@@ -333,8 +333,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function update_intent_pricing( $form_id, &$intents ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
-		// phpcs:ignore Universal.Operators.StrictComparisons
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
 		if ( ! isset( $_POST['form_id'] ) || absint( $_POST['form_id'] ) != $form_id ) {
 			return;
 		}

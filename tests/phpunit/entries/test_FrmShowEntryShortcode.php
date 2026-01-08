@@ -782,6 +782,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$header = '<table cellspacing="0"';
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$defaults     = $this->get_defaults();
 			$atts         = array_merge( $defaults, $atts );
@@ -906,7 +907,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		}
 
 		if ( FrmAppHelper::is_empty_value( $field_value, '' ) ) {
-			if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
+				if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
 				$include = false;
 			}
 		}
@@ -919,6 +921,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function user_info_rows( $atts ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
 			$html  = '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
 			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
@@ -931,6 +934,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function user_info_plain_text_rows( $atts ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
 			$content  = "IP Address: 127.0.0.1\r\n";
 			$content .= "User-Agent (Browser/OS): Mozilla Firefox 37.0 / OS X\r\n";
@@ -1136,8 +1140,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'free-user-id-field'      => '',
 		);
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
 			foreach ( $expected as $field_key => $value ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $value == '' || empty( $value ) ) {
 					unset( $expected[ $field_key ] );
 				}
