@@ -94,6 +94,14 @@
 		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
 
+	<!-- Set rules for Cyclomatic Complexity -->
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="complexity" value="10"/>
+			<property name="absoluteComplexity" value="20"/>
+		</properties>
+	</rule>
+
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
 	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
