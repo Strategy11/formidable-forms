@@ -276,7 +276,7 @@ class FrmEntriesController {
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
 
-		if ( $field->form_id != $form_id ) {
+		if ( (int) $field->form_id !== (int) $form_id ) {
 			$col_id .= '-_-form' . $field->form_id;
 		}
 
@@ -338,6 +338,7 @@ class FrmEntriesController {
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
 			return $check;
 		}
@@ -366,6 +367,7 @@ class FrmEntriesController {
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name ) {
 			return;
 		}
@@ -777,6 +779,7 @@ class FrmEntriesController {
 			return;
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $errors == '' && ! $ajax ) {
 			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}

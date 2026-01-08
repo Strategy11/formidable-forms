@@ -399,7 +399,7 @@ class FrmEntryMeta {
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
-		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) );
+		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) ); // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( ! $results || ! $stripslashes ) {
 			return $results;
@@ -573,7 +573,7 @@ class FrmEntryMeta {
 
 		if ( ! $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
-		} elseif ( $args['is_draft'] == 1 ) {
+		} elseif ( $args['is_draft'] == 1 ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 1 );
 		}
 

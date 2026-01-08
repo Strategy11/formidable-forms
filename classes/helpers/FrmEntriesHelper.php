@@ -233,6 +233,7 @@ class FrmEntriesHelper {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
 			return self::display_value( $field_value, $field, $atts );
 		}
@@ -344,6 +345,7 @@ class FrmEntriesHelper {
 			$atts['truncate'] = $atts['pre_truncate'];
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == '' ) {
 			return $value;
 		}
@@ -354,6 +356,7 @@ class FrmEntriesHelper {
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == $unfiltered_value ) {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
@@ -597,7 +600,7 @@ class FrmEntriesHelper {
 						unset( $value[ $other_key ] );
 					}
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) {
+			} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 				$value = $other_vals;
 			}//end if
 		}//end if

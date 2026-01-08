@@ -88,7 +88,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s != '' ) {
+		if ( $s !== '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
 
@@ -202,7 +202,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $statuses as $status => $name ) {
 
-			$class = $status == $form_type ? ' class="current"' : '';
+			$class = $status == $form_type ? ' class="current"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */

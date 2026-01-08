@@ -280,6 +280,7 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	private static function fill_cleared_strings( $field, array &$field_array ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $field_array['blank'] && '1' === $field_array['required'] ) {
 			$field_array['blank'] = self::default_blank_msg();
 		}
@@ -293,6 +294,7 @@ class FrmFieldsHelper {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( '' == $field_array['custom_html'] ) {
 			$field_array['custom_html'] = self::get_default_html( $field->type );
 		}
@@ -620,7 +622,7 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function &label_position( $position, $field, $form ) {
-		if ( $position && $position != '' ) {
+		if ( $position ) {
 			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
 			}
@@ -698,7 +700,7 @@ class FrmFieldsHelper {
 
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
 			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) );
 
 			// If this is an "Other" option, get the HTML for it.
@@ -888,9 +890,9 @@ class FrmFieldsHelper {
 		$m = false;
 
 		if ( $cond === '==' ) {
-			$m = $observed_value == $hide_opt;
+			$m = $observed_value == $hide_opt; // phpcs:ignore Universal.Operators.StrictComparisons
 		} elseif ( $cond === '!=' ) {
-			$m = $observed_value != $hide_opt;
+			$m = $observed_value != $hide_opt; // phpcs:ignore Universal.Operators.StrictComparisons
 		} elseif ( $cond === '>' ) {
 			$m = $observed_value > $hide_opt;
 		} elseif ( $cond === '>=' ) {
@@ -1268,6 +1270,7 @@ class FrmFieldsHelper {
 				$string_value = FrmAppHelper::safe_implode( $sep, $replace_with );
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( ! $string_value && $string_value != '0' ) {
 				$replace_with = '';
 			} else {
@@ -1344,6 +1347,7 @@ class FrmFieldsHelper {
 		$new_value = FrmAppHelper::get_param( $atts['param'], '', 'get', 'sanitize_text_field' );
 		$new_value = FrmAppHelper::get_query_var( $new_value, $atts['param'] );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_value == '' ) {
 			if ( ! isset( $atts['prev_val'] ) ) {
 				$atts['prev_val'] = '';
@@ -1577,6 +1581,7 @@ class FrmFieldsHelper {
 		if ( $field['type'] === 'checkbox' && is_array( $field['value'] ) ) {
 			// Check if there is an "other" val in saved value and make sure the
 			// "other" val is not equal to the Other checkbox option
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( isset( $field['value'][ $opt_key ] ) && $field['options'][ $opt_key ] != $field['value'][ $opt_key ] ) {
 				$other_val = $field['value'][ $opt_key ];
 			}
@@ -1596,7 +1601,7 @@ class FrmFieldsHelper {
 					if ( isset( $field['value'][ $o_key ] ) ) {
 						unset( $field['value'][ $o_key ], $o_key );
 					}
-				} elseif ( $temp_val == $field['value'] ) {
+				} elseif ( $temp_val == $field['value'] ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					// For radio and regular dropdowns
 					return '';
 				} else {

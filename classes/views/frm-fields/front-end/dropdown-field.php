@@ -59,6 +59,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $placeholder && $opt == '' && ! $skipped ) {
 			$skipped = true;
 			continue;

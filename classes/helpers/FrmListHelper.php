@@ -480,6 +480,7 @@ class FrmListHelper {
 			)
 		);
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $action_param && - 1 != $action_param ) {
 			$action = $action_param;
 		}
@@ -534,6 +535,7 @@ class FrmListHelper {
 			foreach ( $this->modes as $mode => $title ) {
 				$classes = array( 'view-' . $mode );
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $current_mode == $mode ) {
 					$classes[] = 'current';
 				}
@@ -717,17 +719,19 @@ class FrmListHelper {
 			'next'  => false,
 		);
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current == 1 ) {
 			$disable['first'] = true;
 			$disable['prev']  = true;
-		} elseif ( $current == 2 ) {
+		} elseif ( $current == 2 ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$disable['first'] = true;
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current == $total_pages ) {
 			$disable['last'] = true;
 			$disable['next'] = true;
-		} elseif ( $current == $total_pages - 1 ) {
+		} elseif ( $current == $total_pages - 1 ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$disable['last'] = true;
 		}
 
@@ -994,6 +998,7 @@ class FrmListHelper {
 			if ( isset( $sortable[ $column_key ] ) ) {
 				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $current_orderby == $orderby ) {
 					// The sorted column. The `aria-sort` attribute must be set only on the sorted column.
 					if ( 'asc' === $current_order ) {
@@ -1271,7 +1276,7 @@ class FrmListHelper {
 	 * @return string The row actions output. In this case, an empty string.
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
-		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : '';
+		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**

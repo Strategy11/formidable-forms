@@ -339,6 +339,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
 			return;
@@ -435,9 +436,9 @@ class FrmFormAction {
 			foreach ( (array) $val as $ck => $cv ) {
 				if ( is_array( $cv ) ) {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
-				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
+				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
-				} elseif ( $ck == $subkey ) {
+				} elseif ( $ck == $subkey ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}

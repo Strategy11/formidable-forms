@@ -789,6 +789,7 @@ class FrmXMLHelper {
 					$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 				}
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $opt == $default_value ) {
 					unset( $options[ $opt_key ] );
 					break;
@@ -819,6 +820,7 @@ class FrmXMLHelper {
 
 		$new_id = FrmField::create( $f );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_id != false ) {
 			++$imported['imported']['fields'];
 			do_action( 'frm_after_field_is_imported', $f, $new_id );
@@ -962,7 +964,7 @@ class FrmXMLHelper {
 			$saved_style                     = $form['options']['custom_style'];
 			$form['options']['custom_style'] = $form['options']['old_style'];
 			self::update_custom_style_setting_on_import( $form );
-			$has_changed = ( $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style'] );
+			$has_changed = ( $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style'] ); // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $has_changed ) {
 				FrmForm::update( $form['id'], $form );
@@ -1072,7 +1074,7 @@ class FrmXMLHelper {
 				$this_type = $post_types[ $post['post_type'] ];
 			}
 
-			if ( isset( $post['ID'] ) && $post_id == $post['ID'] ) {
+			if ( isset( $post['ID'] ) && (int) $post_id === (int) $post['ID'] ) {
 				++$imported['updated'][ $this_type ];
 			} else {
 				++$imported['imported'][ $this_type ];
@@ -1443,6 +1445,7 @@ class FrmXMLHelper {
 
 		$editing = get_posts( $match_by );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! empty( $editing ) && current( $editing )->post_date == $post['post_date'] ) {
 			// set the id of the post to edit
 			$post['ID'] = current( $editing )->ID;
@@ -1691,7 +1694,7 @@ class FrmXMLHelper {
 	public static function prepare_form_options_for_export( $options ) {
 		FrmAppHelper::unserialize_or_decode( $options );
 		// Change custom_style to the post_name instead of ID (1 may be a string)
-		$not_default = isset( $options['custom_style'] ) && 1 != $options['custom_style'];
+		$not_default = isset( $options['custom_style'] ) && 1 != $options['custom_style']; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( $not_default ) {
 			global $wpdb;
@@ -1865,6 +1868,7 @@ class FrmXMLHelper {
 		$old_html     = str_replace( "\r\n", "\n", $options[ $html_name ] );
 		$default_html = $defaults[ $html_name ];
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $old_html == $default_html ) {
 			unset( $options[ $html_name ] );
 
@@ -2237,9 +2241,10 @@ class FrmXMLHelper {
 		// Format event
 		$atts['event'] = array( 'create' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( isset( $notification['update_email'] ) && 1 == $notification['update_email'] ) {
 			$atts['event'][] = 'update';
-		} elseif ( isset( $notification['update_email'] ) && 2 == $notification['update_email'] ) {
+		} elseif ( isset( $notification['update_email'] ) && 2 == $notification['update_email'] ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$atts['event'] = array( 'update' );
 		}
 	}

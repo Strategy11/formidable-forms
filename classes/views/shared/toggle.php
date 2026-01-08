@@ -78,6 +78,7 @@ if ( $use_container ) {
 			<span class="frm_toggle_slider"></span>
 		</span>
 
+		<?php // phpcs:ignore Universal.Operators.StrictComparisons ?>
 		<?php if ( $show_labels && $on_label != 1 ) { ?>
 			<span class="frm_on_label frm_toggle_opt frm-leading-none"><?php FrmAppHelper::kses_echo( $on_label, 'all' ); ?></span>
 		<?php } ?>
