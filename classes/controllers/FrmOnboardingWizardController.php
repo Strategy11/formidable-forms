@@ -461,12 +461,16 @@ class FrmOnboardingWizardController {
 	 *
 	 * @since 6.9
 	 *
-	 * @param array $inbox_messages The array of existing inbox messages.
+	 * @param mixed $inbox_messages The inbox option data.
 	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
 		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' );
+
+		if ( ! is_array( $inbox_messages ) ) {
+			$inbox_messages = array();
+		}
 
 		$inbox_messages['onboarding_wizard'] = array(
 			'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
