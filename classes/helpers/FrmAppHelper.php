@@ -2320,8 +2320,7 @@ class FrmAppHelper {
 				return true;
 			}
 
-			// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $role == $needed_role ) {
+			if ( $role === $needed_role ) {
 				break;
 			}
 		}
