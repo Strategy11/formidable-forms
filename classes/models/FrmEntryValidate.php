@@ -238,7 +238,7 @@ class FrmEntryValidate {
 	 *
 	 * @return bool
 	 */
-	private static function option_is_valid( $field, $value, $options ) {
+	private static function option_is_valid( $field, $value, $options ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( '' === $value ) {
 			return true;
 		}
@@ -1090,7 +1090,7 @@ class FrmEntryValidate {
 	 *
 	 * @return array Form IDs.
 	 */
-	private static function get_all_form_ids_and_flatten_meta( &$values ) {
+	private static function get_all_form_ids_and_flatten_meta( &$values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$values['name_field_ids'] = array();
 
 		// Blacklist check for File field in the old version doesn't contain `form_id`.

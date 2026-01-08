@@ -980,7 +980,7 @@ class FrmXMLHelper {
 	 *
 	 * @return array
 	 */
-	public static function import_xml_views( $views, $imported ) {
+	public static function import_xml_views( $views, $imported ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$imported['posts'] = array();
 		$form_action_type  = FrmFormActionsController::$action_post_type;
 
@@ -1291,7 +1291,7 @@ class FrmXMLHelper {
 	 * @param stdClass $meta
 	 * @param array    $imported
 	 */
-	private static function populate_postmeta( &$post, $meta, $imported ) {
+	private static function populate_postmeta( &$post, $meta, $imported ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $frm_duplicate_ids;
 
 		$m = array(

@@ -499,7 +499,7 @@ class FrmEntryMeta {
 	 *
 	 * @return void
 	 */
-	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
+	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wpdb;
 		$query[]  = 'SELECT';
 		$defaults = array(

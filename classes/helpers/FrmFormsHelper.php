@@ -105,7 +105,7 @@ class FrmFormsHelper {
 	 *
 	 * @return void
 	 */
-	public static function form_switcher( $selected = false ) {
+	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -414,7 +414,7 @@ class FrmFormsHelper {
 	 *
 	 * @return array
 	 */
-	public static function fill_default_opts( $values, $record, $post_values ) {
+	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
 		$defaults = self::get_default_opts();
 

@@ -651,7 +651,7 @@ class FrmFormActionsController {
 	 *
 	 * @return void
 	 */
-	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
+	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$action_status = array(
 			'post_status' => 'publish',
 		);

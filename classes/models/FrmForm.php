@@ -338,7 +338,7 @@ class FrmForm {
 	 *
 	 * @return array
 	 */
-	public static function update_fields( $id, $values ) {
+	public static function update_fields( $id, $values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
 		if ( ! isset( $values['item_meta'] ) && ! isset( $values['field_options'] ) ) {
 			return $values;

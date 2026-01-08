@@ -458,7 +458,7 @@ class FrmXMLController {
 	 *
 	 * @return void
 	 */
-	public static function generate_xml( $type, $args = array() ) {
+	public static function generate_xml( $type, $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wpdb;
 
 		self::prepare_types_array( $type );
