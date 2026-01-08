@@ -1341,7 +1341,7 @@ class FrmStylesController {
 	 *
 	 * @return int
 	 */
-	public static function do_accordion_sections( $screen, $context, $data_object ) {
+	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
 		// the symbol id from icons.svg

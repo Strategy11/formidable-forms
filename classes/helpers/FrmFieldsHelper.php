@@ -1530,7 +1530,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return string
 	 */
-	public static function get_other_val( $args ) {
+	public static function get_other_val( $args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$defaults = array(
 			'opt_key' => 0,
 			'field'   => array(),

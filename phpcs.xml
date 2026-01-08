@@ -216,21 +216,6 @@
 			<property name="errorThreshold" value="10" />
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
-		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
-	</rule>
 
 	<rule ref="WordPressVIPMinimum">
 		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />

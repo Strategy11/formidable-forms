@@ -173,7 +173,7 @@ class FrmStyle {
 	 *
 	 * @return void
 	 */
-	private function maybe_sanitize_rgba_value( &$color_val ) {
+	private function maybe_sanitize_rgba_value( &$color_val ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		if ( preg_match( '/(rgb|rgba)\(/', $color_val ) !== 1 ) {
 			return;
 		}

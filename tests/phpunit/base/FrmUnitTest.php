@@ -479,7 +479,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
-	public static function generate_xml( $type, $xml_args ) {
+	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
