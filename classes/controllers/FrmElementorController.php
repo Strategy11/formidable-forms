@@ -15,14 +15,33 @@ class FrmElementorController {
 		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmElementorWidget.php';
 		\Elementor\Plugin::instance()->widgets_manager->register( new \FrmElementorWidget() );
 
-		if ( is_admin() ) {
-			add_action(
-				'elementor/editor/after_enqueue_styles',
-				function () {
-					wp_enqueue_style( 'font_icons', FrmAppHelper::plugin_url() . '/css/font_icons.css', array(), FrmAppHelper::plugin_version() );
-				}
-			);
+		add_action( 'elementor/editor/after_enqueue_styles', array( self::class, 'enqueue_editor_styles' ) );
+	}
+
+	/**
+	 * Enqueue styles for the Elementor editor to display the Formidable widget icon.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function enqueue_editor_styles() {
+		$icon = rawurlencode( FrmAppHelper::svg_logo() );
+		$css  = '
+		.elementor-element .icon .frm_logo_icon {
+			display: flex;
+			align-items: center;
+			justify-content: center;
 		}
+		.elementor-element .icon .frm_logo_icon::before {
+			content: "";
+			display: block;
+			width: 28px;
+			height: 28px;
+			background: url("data:image/svg+xml,' . $icon . '") center / contain no-repeat;
+		}';
+
+		wp_add_inline_style( 'elementor-editor', $css );
 	}
 
 	/**
