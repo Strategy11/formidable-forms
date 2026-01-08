@@ -461,7 +461,7 @@ class FrmOnboardingWizardController {
 	 *
 	 * @since 6.9
 	 *
-	 * @param mixed $inbox_messages The inbox option data.
+	 * @param mixed $inbox_messages The inbox option data. An array of existing inbox messages if there is valid data set in the option.
 	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
