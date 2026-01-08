@@ -1259,13 +1259,13 @@ class FrmXMLHelper {
 			$post['attachment_url'] = (string) $item->attachment_url;
 		}
 
-		if ( $post['post_type'] == FrmFormActionsController::$action_post_type && isset( $imported['forms'][ (int) $post['menu_order'] ] ) ) {
+		if ( $post['post_type'] === FrmFormActionsController::$action_post_type && isset( $imported['forms'][ (int) $post['menu_order'] ] ) ) {
 			// update to new form id
 			$post['menu_order'] = $imported['forms'][ (int) $post['menu_order'] ];
 		}
 
 		// Don't allow default styles to take over a site's default style
-		if ( 'frm_styles' == $post['post_type'] ) {
+		if ( 'frm_styles' === $post['post_type'] ) {
 			$post['menu_order'] = 0;
 		}
 
@@ -2052,9 +2052,11 @@ class FrmXMLHelper {
 
 		// Do a str_replace with each item to set the new IDs
 		foreach ( $post_content as $key => $setting ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! is_array( $setting ) && in_array( $key, $basic_fields ) ) {
 				// Replace old IDs with new IDs
 				$post_content[ $key ] = str_replace( $old, $new, $setting );
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			} elseif ( is_array( $setting ) && in_array( $key, $array_fields ) ) {
 				foreach ( $setting as $k => $val ) {
 					// Replace old IDs with new IDs
@@ -2223,7 +2225,7 @@ class FrmXMLHelper {
 			if ( isset( $notification[ $f ] ) ) {
 				$atts[ $f ] = $notification[ $f ];
 
-				if ( 'custom' == $notification[ $f ] ) {
+				if ( 'custom' === $notification[ $f ] ) {
 					$atts[ $f ] = $notification[ 'cust_' . $f ];
 				} elseif ( is_numeric( $atts[ $f ] ) && ! empty( $atts[ $f ] ) ) {
 					$atts[ $f ] = '[' . $atts[ $f ] . ']';

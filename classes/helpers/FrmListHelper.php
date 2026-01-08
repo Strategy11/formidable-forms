@@ -242,7 +242,7 @@ class FrmListHelper {
 	 * @return int Number of items that correspond to the given pagination argument.
 	 */
 	public function get_pagination_arg( $key ) {
-		if ( 'page' == $key ) {
+		if ( 'page' === $key ) {
 			return $this->get_pagenum();
 		}
 
@@ -650,7 +650,7 @@ class FrmListHelper {
 			)
 		);
 
-		if ( 'bottom' == $which ) {
+		if ( 'bottom' === $which ) {
 			$html_current_page  = $current;
 			$total_pages_before = '<span class="screen-reader-text">' . __( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
@@ -976,6 +976,7 @@ class FrmListHelper {
 			$aria_sort_attr = '';
 			$order_text     = '';
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
 			}
@@ -1229,6 +1230,7 @@ class FrmListHelper {
 				$classes .= ' has-row-actions column-primary';
 			}
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $column_name, $hidden ) ) {
 				$classes .= ' hidden';
 			}

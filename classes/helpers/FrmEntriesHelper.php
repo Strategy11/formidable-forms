@@ -577,6 +577,7 @@ class FrmEntriesHelper {
 
 			// Multi-select dropdown.
 			if ( is_array( $value ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$o_key = array_search( $field->options[ $other_key ], $value );
 
 				if ( $o_key !== false ) {

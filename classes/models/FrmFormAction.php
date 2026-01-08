@@ -233,7 +233,7 @@ class FrmFormAction {
 			$group = $this->id_base;
 		} else {
 			foreach ( $groups as $name => $check_group ) {
-				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'] ) ) {
+				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'], true ) ) {
 					$group = $name;
 					break;
 				}
@@ -789,7 +789,7 @@ class FrmFormAction {
 			'order'       => 'ASC',
 		);
 
-		if ( $form_id && $form_id != 'all' ) {
+		if ( $form_id && $form_id !== 'all' ) {
 			$args['menu_order'] = $form_id;
 		}
 
@@ -843,7 +843,7 @@ class FrmFormAction {
 			$query['menu_order'] = $form_id;
 		}
 
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
 
@@ -940,7 +940,7 @@ class FrmFormAction {
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( $post_id && 'update' == $update ) {
+		if ( $post_id && 'update' === $update ) {
 			global $wpdb;
 			$form->options = maybe_serialize( $form->options );
 

@@ -154,6 +154,7 @@ class FrmEntryMeta {
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
 				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {

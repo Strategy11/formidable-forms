@@ -292,7 +292,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	protected function validate_against_api( $args ) {
 		$errors       = array();
 		$frm_settings = FrmAppHelper::get_settings();
-		$resp         = $this->send_api_check( $frm_settings );
+		$resp         = $this->send_api_check();
 		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( is_wp_error( $resp ) ) {
@@ -408,11 +408,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 	}
 
 	/**
-	 * @param FrmSettings $frm_settings
-	 *
 	 * @return array|WP_Error
 	 */
-	protected function send_api_check( $frm_settings ) {
+	protected function send_api_check() {
 		$captcha_settings = FrmCaptchaFactory::get_settings_object();
 		$arg_array        = array(
 			'body' => array(
@@ -444,15 +442,5 @@ class FrmFieldCaptcha extends FrmFieldType {
 		}
 
 		return $values;
-	}
-
-	/**
-	 * @param FrmSettings $frm_settings
-	 *
-	 * @return string
-	 */
-	protected function captcha_size( $frm_settings ) {
-		_deprecated_function( __METHOD__, '6.8.4' );
-		return 'normal';
 	}
 }

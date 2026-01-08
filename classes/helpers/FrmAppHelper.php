@@ -2308,7 +2308,7 @@ class FrmAppHelper {
 
 		$can = self::current_user_can( $needed_role );
 
-		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ) ) ) {
+		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ), true ) ) {
 			return $can;
 		}
 
@@ -2382,7 +2382,7 @@ class FrmAppHelper {
 		$permission_error = self::permission_nonce_error( $permission );
 
 		if ( $permission_error !== false ) {
-			if ( 'hide' == $show_message ) {
+			if ( 'hide' === $show_message ) {
 				$permission_error = '';
 			}
 			wp_die( esc_html( $permission_error ) );
@@ -2447,6 +2447,7 @@ class FrmAppHelper {
 
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
 
@@ -3532,7 +3533,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( 'open' == $class ) {
+		if ( 'open' === $class ) {
 			echo ' frm_help"';
 		} else {
 			echo ' class="frm_help"';
@@ -3540,7 +3541,7 @@ class FrmAppHelper {
 
 		echo ' title="' . esc_attr( $tooltips[ $name ] );
 
-		if ( 'open' != $class ) {
+		if ( 'open' !== $class ) {
 			echo '"';
 		}
 	}
@@ -3565,7 +3566,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
+		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}

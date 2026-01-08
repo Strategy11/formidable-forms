@@ -448,7 +448,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$form_name = FrmAppHelper::kses( $form_name );
 
-		if ( 'excerpt' != $mode ) {
+		if ( 'excerpt' !== $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
 		}
 
@@ -475,7 +475,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
-		if ( 'draft' === $item->status && 'draft' != $this->status ) {
+		if ( 'draft' === $item->status && 'draft' !== $this->status ) {
 			$val .= ' - <span class="post-state">' . esc_html__( 'Draft', 'formidable' ) . '</span>';
 		}
 	}

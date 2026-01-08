@@ -267,7 +267,7 @@ class FrmForm {
 		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
-			if ( $value_key && in_array( $value_key, $form_fields ) ) {
+			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = $value;
 			}
 		}
@@ -357,6 +357,7 @@ class FrmForm {
 		$existing_keys = array_keys( $values['item_meta'] );
 
 		foreach ( $all_fields as $fid ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
@@ -610,7 +611,7 @@ class FrmForm {
 	 * @return bool|int
 	 */
 	public static function set_status( $id, $status ) {
-		if ( 'trash' == $status ) {
+		if ( 'trash' === $status ) {
 			return self::trash( $id );
 		}
 
@@ -996,7 +997,7 @@ class FrmForm {
 		$counts   = array_fill_keys( $statuses, 0 );
 
 		foreach ( $results as $row ) {
-			if ( 'trash' != $row->status ) {
+			if ( 'trash' !== $row->status ) {
 				if ( $row->is_template ) {
 					++$counts['template'];
 				} else {
@@ -1006,7 +1007,7 @@ class FrmForm {
 				++$counts['trash'];
 			}
 
-			if ( 'draft' == $row->status ) {
+			if ( 'draft' === $row->status ) {
 				++$counts['draft'];
 			}
 
