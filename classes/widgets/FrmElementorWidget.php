@@ -21,8 +21,6 @@ if ( class_exists( '\Elementor\Widget_Base' ) ) {
 		}
 
 		/**
-		 * Returns the Elementor widget icon.
-		 *
 		 * @return string
 		 */
 		public function get_icon() {
