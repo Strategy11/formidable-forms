@@ -365,7 +365,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_row_classes( $atts ) {
 		$class = 'column-' . $atts['column_name'];
 
-		if ( in_array( $atts['column_name'], $atts['hidden'] ) ) {
+		if ( in_array( $atts['column_name'], $atts['hidden'], true ) ) {
 			$class .= ' frm_hidden';
 		}
 
@@ -485,7 +485,8 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_item_id_column( $item ) {
-		$entry_id         = (int) $item->item_id;
+		$entry_id = (int) $item->item_id;
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$entry_is_deleted = ! in_array( $entry_id, $this->valid_entry_ids );
 
 		if ( $entry_is_deleted ) {

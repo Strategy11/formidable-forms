@@ -608,10 +608,12 @@ abstract class FrmFormMigrator {
 		$imported    = $this->get_tracked_import();
 		$new_form_id = 0;
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! isset( $imported[ $this->slug ] ) || ! in_array( $source_id, $imported[ $this->slug ] ) ) {
 			return $new_form_id;
 		}
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
 
 		if ( $new_form_id && ! FrmForm::get_key_by_id( $new_form_id ) ) {

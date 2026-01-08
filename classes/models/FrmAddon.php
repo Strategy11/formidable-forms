@@ -416,7 +416,7 @@ class FrmAddon {
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $cap_roles ) ) {
+				if ( in_array( $role, $cap_roles, true ) ) {
 					$wp_roles->add_cap( $role, $cap );
 				} else {
 					$wp_roles->remove_cap( $role, $cap );

@@ -275,6 +275,10 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
 
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />

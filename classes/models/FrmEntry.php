@@ -1145,6 +1145,7 @@ class FrmEntry {
 
 		global $frm_vars;
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, $frm_vars['saved_entries'] ) ) {
 			$update = false;
 		}

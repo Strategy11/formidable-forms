@@ -267,7 +267,7 @@ class FrmForm {
 		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
-			if ( $value_key && in_array( $value_key, $form_fields ) ) {
+			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = $value;
 			}
 		}
@@ -357,6 +357,7 @@ class FrmForm {
 		$existing_keys = array_keys( $values['item_meta'] );
 
 		foreach ( $all_fields as $fid ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}

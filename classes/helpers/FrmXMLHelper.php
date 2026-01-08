@@ -2052,9 +2052,11 @@ class FrmXMLHelper {
 
 		// Do a str_replace with each item to set the new IDs
 		foreach ( $post_content as $key => $setting ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! is_array( $setting ) && in_array( $key, $basic_fields ) ) {
 				// Replace old IDs with new IDs
 				$post_content[ $key ] = str_replace( $old, $new, $setting );
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			} elseif ( is_array( $setting ) && in_array( $key, $array_fields ) ) {
 				foreach ( $setting as $k => $val ) {
 					// Replace old IDs with new IDs

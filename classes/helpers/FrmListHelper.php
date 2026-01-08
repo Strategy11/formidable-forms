@@ -976,6 +976,7 @@ class FrmListHelper {
 			$aria_sort_attr = '';
 			$order_text     = '';
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $column_key, $hidden ) ) {
 				$class[] = 'hidden';
 			}
@@ -1229,6 +1230,7 @@ class FrmListHelper {
 				$classes .= ' has-row-actions column-primary';
 			}
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( in_array( $column_name, $hidden ) ) {
 				$classes .= ' hidden';
 			}

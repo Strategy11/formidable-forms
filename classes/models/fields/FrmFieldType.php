@@ -1872,6 +1872,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_multi_opts_for_import( $value ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! $this->field || ! $value || in_array( $value, (array) $this->field->options ) ) {
 			return $value;
 		}
