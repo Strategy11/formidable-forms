@@ -2092,7 +2092,7 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/shared/small-device-message.php';
 	}
 
-	public static function route() {
+	public static function route() { // phpcs:ignore Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
 		$vars   = array();
 		FrmAppHelper::include_svg();

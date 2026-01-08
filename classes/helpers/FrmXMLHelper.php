@@ -1291,7 +1291,7 @@ class FrmXMLHelper {
 	 * @param stdClass $meta
 	 * @param array    $imported
 	 */
-	private static function populate_postmeta( &$post, $meta, $imported ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	private static function populate_postmeta( &$post, $meta, $imported ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		global $frm_duplicate_ids;
 
 		$m = array(
