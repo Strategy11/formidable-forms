@@ -286,11 +286,10 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string      $more_html
 	 *
 	 * @return void
 	 */
-	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+	public static function maybe_render_currency_selector( $frm_settings ) {
 		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
 			FrmProSettingsController::add_currency_settings();
 			return;
