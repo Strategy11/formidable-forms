@@ -2280,8 +2280,7 @@ class FrmAppHelper {
 			return is_user_logged_in();
 		}
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( (int)$role == 1 ) {
+		if ( (int) $role === 1 ) {
 			$role = 'administrator';
 		}
 
