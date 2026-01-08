@@ -322,7 +322,7 @@ class FrmStylesPreviewHelper {
 		$styles->remove( 'edit' );
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies, true );
 
 		if ( false === $edit_key ) {
 			return;
@@ -389,7 +389,8 @@ class FrmStylesPreviewHelper {
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
-		$index        = array_search( $key, $dependencies );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $key, $dependencies );
 
 		if ( false === $index ) {
 			return;

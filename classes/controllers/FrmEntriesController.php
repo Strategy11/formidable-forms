@@ -390,6 +390,7 @@ class FrmEntriesController {
 		$save            = false;
 
 		foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
 				// Don't add blank cols or process included cols.
 				continue;

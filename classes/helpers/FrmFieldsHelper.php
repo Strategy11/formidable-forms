@@ -698,6 +698,7 @@ class FrmFieldsHelper {
 
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) );
 
 			// If this is an "Other" option, get the HTML for it.
@@ -952,9 +953,11 @@ class FrmFieldsHelper {
 				$m = array_intersect( $hide_opt, $observed_value );
 				$m = $m !== array();
 			} else {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$m = in_array( $hide_opt, $observed_value );
 			}
 		} elseif ( $cond === '!=' ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$m = ! in_array( $hide_opt, $observed_value );
 		} elseif ( $cond === '>' ) {
 			$min = min( $observed_value );
@@ -1587,6 +1590,7 @@ class FrmFieldsHelper {
 
 				// Multi-select dropdowns - key is not preserved
 				if ( is_array( $field['value'] ) ) {
+					// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 					$o_key = array_search( $temp_val, $field['value'] );
 
 					if ( isset( $field['value'][ $o_key ] ) ) {

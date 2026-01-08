@@ -15,6 +15,7 @@ class FrmFormMigratorsHelper {
 		if ( $dismissed === null ) {
 			$dismissed = get_option( 'frm_dismissed' );
 		}
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return ! empty( $dismissed ) && in_array( $form['class'], $dismissed );
 	}
 
