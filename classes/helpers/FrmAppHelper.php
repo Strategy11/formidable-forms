@@ -1829,7 +1829,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value; // phpcs:ignore Universal.Operators.StrictComparisons
+		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value;
 	}
 
 	/**
