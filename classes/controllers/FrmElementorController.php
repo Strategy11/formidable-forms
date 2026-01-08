@@ -15,7 +15,7 @@ class FrmElementorController {
 		require_once FrmAppHelper::plugin_path() . '/classes/widgets/FrmElementorWidget.php';
 		\Elementor\Plugin::instance()->widgets_manager->register( new \FrmElementorWidget() );
 
-		add_action( 'elementor/editor/after_enqueue_styles', array( __CLASS__, 'enqueue_editor_styles' ) );
+		add_action( 'elementor/editor/after_enqueue_styles', array( self::class, 'enqueue_editor_styles' ) );
 	}
 
 	/**
