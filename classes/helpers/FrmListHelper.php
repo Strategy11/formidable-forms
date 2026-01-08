@@ -999,7 +999,7 @@ class FrmListHelper {
 				list( $orderby, $desc_first ) = $sortable[ $column_key ];
 
 				// phpcs:ignore Universal.Operators.StrictComparisons
-					if ( $current_orderby == $orderby ) {
+				if ( $current_orderby == $orderby ) {
 					// The sorted column. The `aria-sort` attribute must be set only on the sorted column.
 					if ( 'asc' === $current_order ) {
 						$order          = 'desc';

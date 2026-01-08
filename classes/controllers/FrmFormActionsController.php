@@ -337,7 +337,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' !== $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base === $action ) {
 				return $a;
 			}
 

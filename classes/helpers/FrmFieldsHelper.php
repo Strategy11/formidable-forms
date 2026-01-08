@@ -889,7 +889,6 @@ class FrmFieldsHelper {
 
 		$m = false;
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $cond === '==' ) {
 			$m = $observed_value == $hide_opt; // phpcs:ignore Universal.Operators.StrictComparisons
 		} elseif ( $cond === '!=' ) {

@@ -790,7 +790,7 @@ class FrmXMLHelper {
 				}
 
 				// phpcs:ignore Universal.Operators.StrictComparisons
-					if ( $opt == $default_value ) {
+				if ( $opt == $default_value ) {
 					unset( $options[ $opt_key ] );
 					break;
 				}
