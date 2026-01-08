@@ -1304,9 +1304,9 @@ class FrmStylesController {
 		foreach ( $default_styles as $name => $val ) {
 			$setting = $name;
 
-			if ( 'border_width' == $name ) {
+			if ( 'border_width' === $name ) {
 				$setting = 'field_border_width';
-			} elseif ( 'alt_bg_color' == $name ) {
+			} elseif ( 'alt_bg_color' === $name ) {
 				$setting = 'bg_color_active';
 			}
 			$default_styles[ $name ] = $style->post_content[ $setting ];

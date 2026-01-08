@@ -1025,7 +1025,7 @@ class FrmField {
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
 
-		if ( 'include' != $inc_embed || $no_sub_forms ) {
+		if ( 'include' !== $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
@@ -1039,7 +1039,7 @@ class FrmField {
 		$index_offset = 1;
 
 		foreach ( $form_fields as $k => $field ) {
-			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
+			if ( 'form' !== $field->type || ! isset( $field->field_options['form_select'] ) ) {
 				continue;
 			}
 
@@ -1334,7 +1334,7 @@ class FrmField {
 		$field_type    = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+		if ( ! empty( $original_type ) && $original_type !== $field_type ) {
 			// Check the original type for arrays.
 			$field_type = $original_type;
 		}

@@ -1236,7 +1236,7 @@ BEFORE_HTML;
 		$actions     = array();
 		$trash_links = self::delete_trash_links( $form_id );
 
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$actions['restore'] = $trash_links['restore'];
 
 			if ( current_user_can( 'frm_delete_forms' ) ) {

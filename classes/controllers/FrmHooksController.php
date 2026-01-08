@@ -18,7 +18,7 @@ class FrmHooksController {
 		$trigger_hooks = $hooks;
 		$hooks         = (array) $hooks;
 
-		if ( 'load_hooks' == $trigger_hooks ) {
+		if ( 'load_hooks' === $trigger_hooks ) {
 			if ( is_admin() ) {
 				$hooks[] = 'load_admin_hooks';
 

@@ -747,7 +747,7 @@ class FrmDb {
 			return $results;
 		}
 
-		if ( 'get_posts' == $type ) {
+		if ( 'get_posts' === $type ) {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' === $type ) {
 			global $wpdb;

@@ -610,7 +610,7 @@ class FrmForm {
 	 * @return bool|int
 	 */
 	public static function set_status( $id, $status ) {
-		if ( 'trash' == $status ) {
+		if ( 'trash' === $status ) {
 			return self::trash( $id );
 		}
 
@@ -996,7 +996,7 @@ class FrmForm {
 		$counts   = array_fill_keys( $statuses, 0 );
 
 		foreach ( $results as $row ) {
-			if ( 'trash' != $row->status ) {
+			if ( 'trash' !== $row->status ) {
 				if ( $row->is_template ) {
 					++$counts['template'];
 				} else {
@@ -1006,7 +1006,7 @@ class FrmForm {
 				++$counts['trash'];
 			}
 
-			if ( 'draft' == $row->status ) {
+			if ( 'draft' === $row->status ) {
 				++$counts['draft'];
 			}
 
