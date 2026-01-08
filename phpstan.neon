@@ -365,7 +365,7 @@ parameters:
 			path: classes/helpers/FrmAppHelper.php
 		-
 			message: '#Only numeric types are allowed#'
-			paths:asting to int something that's already int#
+			paths:
 				- classes/helpers/FrmCSVExportHelper.php
 				- classes/models/FrmStyle.php
 		-
