@@ -500,6 +500,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}

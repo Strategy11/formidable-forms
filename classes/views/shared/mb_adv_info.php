@@ -61,6 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $f->type === 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] === 'data' || $f->field_options['data_type'] == '' ) ) {
 					continue;
 				}

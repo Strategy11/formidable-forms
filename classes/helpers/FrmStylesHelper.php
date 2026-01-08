@@ -202,7 +202,7 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons ?>>
 						<a href="javascript:void(0);">
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />

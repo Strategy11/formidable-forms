@@ -607,6 +607,7 @@ class FrmField {
 		foreach ( (array) $fields as $field ) {
 			$new_key = $copy_keys ? $field->field_key : '';
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $copy_keys && substr( $field->field_key, - 1 ) == 2 ) {
 				$new_key = rtrim( $new_key, 2 );
 			}
@@ -634,6 +635,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
 				$values['form_id'] = $new_repeat_form_id;
 			}
@@ -790,7 +792,7 @@ class FrmField {
 
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
+		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== (int) $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
 	}
@@ -906,13 +908,14 @@ class FrmField {
 			$count  = 0;
 
 			foreach ( $results as $result ) {
-				if ( $type != $result->type ) {
+				if ( $type !== $result->type ) {
 					continue;
 				}
 
 				$fields[ $result->id ] = $result;
 				++$count;
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
@@ -1097,7 +1100,7 @@ class FrmField {
 		$limit = FrmDb::esc_limit( $limit );
 
 		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
+		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( is_array( $where ) ) {
 			$args    = array(
@@ -1381,7 +1384,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_required( $field ) {
-		$required = $field['required'] != '0';
+		$required = $field['required'] != '0'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		/**
 		 * @param bool  $required
@@ -1467,7 +1470,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_value_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
+		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != ''; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**

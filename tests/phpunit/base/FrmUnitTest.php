@@ -349,6 +349,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public function set_front_end( $page = '' ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $page == '' ) {
 			$page = home_url( '/' );
 		}

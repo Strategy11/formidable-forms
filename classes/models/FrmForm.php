@@ -153,6 +153,7 @@ class FrmForm {
 
 		$new_opts = apply_filters( 'frm_after_duplicate_form_values', $new_opts, $form_id );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_opts != $values['options'] ) {
 			global $wpdb;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $new_opts ) ), array( 'id' => $form_id ) );
@@ -539,6 +540,7 @@ class FrmForm {
 		if ( isset( $prev_opts ) ) {
 			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $prev_opts != $field->field_options ) {
 				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
 			}
@@ -941,7 +943,7 @@ class FrmForm {
 			}
 		}
 
-		if ( $limit === ' LIMIT 1' || $limit == 1 ) {
+		if ( $limit === ' LIMIT 1' || (int) $limit === 1 ) {
 			// return the first form object if we are only getting one form
 			$results = reset( $results );
 		}
@@ -1084,6 +1086,7 @@ class FrmForm {
 			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form->id == $values['posted_form_id'] ) {
 			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
@@ -1186,7 +1189,7 @@ class FrmForm {
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
-		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || (int) $form_id === (int) $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 

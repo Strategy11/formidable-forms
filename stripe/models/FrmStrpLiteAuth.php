@@ -212,7 +212,7 @@ class FrmStrpLiteAuth {
 	public static function add_hidden_token_field( $form ) {
 		$posted_form = FrmAppHelper::get_param( 'form_id', 0, 'post', 'absint' );
 
-		if ( $posted_form != $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
+		if ( $posted_form !== (int) $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
 			// Check to make sure the correct form was submitted.
 			// Was an entry already created and the form should be loaded fresh?
 
@@ -334,6 +334,7 @@ class FrmStrpLiteAuth {
 	 */
 	private static function update_intent_pricing( $form_id, &$intents ) {
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $_POST['form_id'] ) || absint( $_POST['form_id'] ) != $form_id ) {
 			return;
 		}
@@ -370,6 +371,7 @@ class FrmStrpLiteAuth {
 			}
 
 			foreach ( $actions as $action ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
 				}
@@ -389,6 +391,7 @@ class FrmStrpLiteAuth {
 				$entry  = self::generate_false_entry();
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->amount == $amount || $amount == '000' ) {
 					continue;
 				}
@@ -539,6 +542,7 @@ class FrmStrpLiteAuth {
 		$amount   = $action->post_content['amount'];
 		$currency = $action->post_content['currency'];
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $amount == '000' ) {
 			// Create the intent when the form loads.
 			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000;

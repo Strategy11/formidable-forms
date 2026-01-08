@@ -1339,6 +1339,7 @@ class FrmAppHelper {
 	 * @return array|string
 	 */
 	public static function get_query_var( $value, $param ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value != '' ) {
 			return $value;
 		}
@@ -1828,7 +1829,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return true === $value || 1 == $value || 'true' === $value || 'yes' === $value;
+		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**
@@ -2279,7 +2280,8 @@ class FrmAppHelper {
 			return is_user_logged_in();
 		}
 
-		if ( $role == 1 ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( (int)$role == 1 ) {
 			$role = 'administrator';
 		}
 
@@ -2319,7 +2321,8 @@ class FrmAppHelper {
 				return true;
 			}
 
-			if ( $role == $needed_role ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
+				if ( $role == $needed_role ) {
 				break;
 			}
 		}
@@ -2447,7 +2450,7 @@ class FrmAppHelper {
 
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
-		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
 
@@ -3023,6 +3026,7 @@ class FrmAppHelper {
 		$form_defaults = FrmFormsHelper::get_default_opts();
 
 		foreach ( $form_defaults as $opt => $default ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
 				$values[ $opt ] = $post_values && isset( $post_values['options'][ $opt ] ) ? $post_values['options'][ $opt ] : $default;
 			}
@@ -3428,6 +3432,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current_p == 1 ) {
 			return 1;
 		}
@@ -3502,6 +3507,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function add_value_to_array( $name, $l1, $val, &$vars ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $name == '' ) {
 			$vars[] = $val;
 		} elseif ( ! isset( $vars[ $l1 ] ) ) {
@@ -3556,6 +3562,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function select_current_page( $page, $current_page, $action = array() ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current_page != $page ) {
 			return;
 		}
@@ -3792,11 +3799,12 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
 			return;
 		}
 
-		if ( is_object( $post ) && $post->post_type != $post_type ) {
+		if ( is_object( $post ) && $post->post_type !== $post_type ) {
 			return;
 		}
 
