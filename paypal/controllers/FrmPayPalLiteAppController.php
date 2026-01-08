@@ -80,7 +80,7 @@ class FrmPayPalLiteAppController {
 
 		$actions = FrmPayPalLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
@@ -164,6 +164,11 @@ class FrmPayPalLiteAppController {
 		return $entry;
 	}
 
+	/**
+	 * Create a PayPal subscription object via AJAX.
+	 *
+	 * @return void
+	 */
 	public static function create_subscription() {
 		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
 

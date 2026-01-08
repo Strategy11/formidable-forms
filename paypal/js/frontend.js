@@ -339,6 +339,7 @@
 		/*
 		TODO Add the billing address here as well.
 		Stripe calls a window.frmProForm.addAddressMeta function.
+		That's included in frmstrp.js though, so we need to add a script in Pro for PayPal as well.
 
 		billingAddress: {
 			addressLine1: '555 Billing Ave',
