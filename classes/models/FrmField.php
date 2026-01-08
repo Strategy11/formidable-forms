@@ -792,7 +792,7 @@ class FrmField {
 
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== (int) $form_id ) {
+		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
 	}
