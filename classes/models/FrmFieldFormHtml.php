@@ -374,7 +374,7 @@ class FrmFieldFormHtml {
 		$this->html .= "\n";
 
 		// Stop html filtering on confirmation field to prevent loop
-		if ( $this->field_obj->get_field_column( 'conf_field' ) != 'stop' ) {
+		if ( $this->field_obj->get_field_column( 'conf_field' ) !== 'stop' ) {
 			$this->filter_for_more_shortcodes();
 		}
 	}

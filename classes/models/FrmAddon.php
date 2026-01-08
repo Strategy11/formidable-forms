@@ -188,14 +188,14 @@ class FrmAddon {
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
-		if ( $_action != 'plugin_information' ) {
+		if ( $_action !== 'plugin_information' ) {
 			return $_data;
 		}
 
 		$slug  = basename( $this->plugin_file, '.php' );
 		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
 
-		if ( empty( $_args->slug ) || ( $_args->slug != $slug && $_args->slug !== $slug2 ) ) {
+		if ( empty( $_args->slug ) || ( $_args->slug !== $slug && $_args->slug !== $slug2 ) ) {
 			return $_data;
 		}
 
@@ -253,7 +253,7 @@ class FrmAddon {
 	 */
 	protected function maybe_get_pro_license() {
 		// prevent a loop if $this is the pro plugin
-		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name != 'Formidable Pro';
+		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name !== 'Formidable Pro';
 
 		if ( ! $get_license ) {
 			return false;

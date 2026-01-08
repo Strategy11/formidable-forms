@@ -272,9 +272,9 @@ class FrmCreateFile {
 			unset( $credentials['port'] );
 		}
 
-		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
+		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' === FS_METHOD ) ) {
 			$credentials['connection_type'] = 'ssh';
-		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
+		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' === $type ) {
 			// Only the FTP Extension understands SSL.
 			$credentials['connection_type'] = 'ftps';
 		} elseif ( ! isset( $credentials['connection_type'] ) ) {

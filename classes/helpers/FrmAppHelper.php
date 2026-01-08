@@ -2382,7 +2382,7 @@ class FrmAppHelper {
 		$permission_error = self::permission_nonce_error( $permission );
 
 		if ( $permission_error !== false ) {
-			if ( 'hide' == $show_message ) {
+			if ( 'hide' === $show_message ) {
 				$permission_error = '';
 			}
 			wp_die( esc_html( $permission_error ) );
@@ -3532,7 +3532,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( 'open' == $class ) {
+		if ( 'open' === $class ) {
 			echo ' frm_help"';
 		} else {
 			echo ' class="frm_help"';
@@ -3540,7 +3540,7 @@ class FrmAppHelper {
 
 		echo ' title="' . esc_attr( $tooltips[ $name ] );
 
-		if ( 'open' != $class ) {
+		if ( 'open' !== $class ) {
 			echo '"';
 		}
 	}
