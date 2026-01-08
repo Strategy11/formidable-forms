@@ -87,7 +87,7 @@ class FrmTransLiteAppController {
 			} else {
 				// Get the most recent payment after the gateway has a chance to create one.
 				$check_payment = $frm_payment->get_one_by( $sub->id, 'sub_id' );
-				$new_payment   = (int) $check_payment->id !== (int) $last_payment->id; // phpcs:ignore Universal.Operators.StrictComparisons
+				$new_payment   = (int) $check_payment->id !== (int) $last_payment->id;
 				$last_payment  = $check_payment;
 				$status        = 'no';
 
