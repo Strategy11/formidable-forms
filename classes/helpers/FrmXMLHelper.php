@@ -1959,7 +1959,7 @@ class FrmXMLHelper {
 	 * @param bool   $switch
 	 */
 	private static function migrate_post_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
-		if ( ! isset( $form_options['create_post'] ) || ! $form_options['create_post'] ) {
+		if ( empty( $form_options['create_post'] ) ) {
 			return;
 		}
 

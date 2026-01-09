@@ -2951,7 +2951,7 @@ class FrmAppHelper {
 
 		FrmFieldsHelper::prepare_edit_front_field( $field_array, $field, $values['id'], $args );
 
-		if ( ! isset( $field_array['unique'] ) || ! $field_array['unique'] ) {
+		if ( empty( $field_array['unique'] ) ) {
 			$field_array['unique_msg'] = '';
 		}
 

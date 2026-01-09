@@ -374,7 +374,7 @@ class FrmEntriesController {
 
 		global $frm_vars;
 
-		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
+		if ( empty( $frm_vars['prev_hidden_cols'] ) ) {
 			// Don't continue if there's no previous value.
 			return;
 		}

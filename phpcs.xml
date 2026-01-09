@@ -284,4 +284,5 @@
 	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 </ruleset>
