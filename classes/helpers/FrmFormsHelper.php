@@ -1367,7 +1367,7 @@ BEFORE_HTML;
 				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
 			}
 
-			$label = ( $link_details[ $length ] ?? $link_details['label'] );
+			$label = $link_details[ $length ] ?? $link_details['label'];
 
 			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';

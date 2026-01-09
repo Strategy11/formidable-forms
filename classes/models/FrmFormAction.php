@@ -257,7 +257,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
