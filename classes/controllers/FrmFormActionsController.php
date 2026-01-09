@@ -253,6 +253,7 @@ class FrmFormActionsController {
 				$allowed[] = $action_control->id_base;
 			}
 		}
+
 		return $allowed;
 	}
 

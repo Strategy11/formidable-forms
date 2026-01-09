@@ -876,6 +876,7 @@ class FrmStylesController {
 			if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
 				return $single_style_settings['single_style_custom_css'];
 			}
+
 			return '';
 		}
 

@@ -460,6 +460,7 @@ class FrmTransLiteActionsController {
 		if ( ! $payment_actions ) {
 			$payment_actions = array();
 		}
+
 		return $payment_actions;
 	}
 

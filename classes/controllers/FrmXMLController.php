@@ -148,6 +148,7 @@ class FrmXMLController {
 		if ( ! $form ) {
 			return $form;
 		}
+
 		return json_decode( $form, true );
 	}
 

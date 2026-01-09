@@ -241,6 +241,7 @@ class FrmEntry {
 				unset( $reduced[ $field_id ] );
 			}
 		}
+
 		return $reduced;
 	}
 

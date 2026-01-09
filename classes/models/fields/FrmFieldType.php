@@ -1258,6 +1258,7 @@ DEFAULT_HTML;
 		if ( str_contains( $value, '&lt;' ) ) {
 			$value = htmlentities( $value );
 		}
+
 		return $value;
 	}
 
@@ -1651,6 +1652,7 @@ DEFAULT_HTML;
 			$frm_validated_unique_values[ $field_id ] = array();
 			return false;
 		}
+
 		return in_array( $value, $frm_validated_unique_values[ $field_id ], true );
 	}
 
@@ -1971,6 +1973,7 @@ DEFAULT_HTML;
 					}
 				}
 			}
+
 			return $return_value;
 		}
 

@@ -153,6 +153,7 @@ class FrmFormState {
 		foreach ( $decoded_state as $key => $value ) {
 			self::set_initial_value( self::decompressed_key( $key ), $value );
 		}
+
 		return true;
 	}
 
@@ -208,6 +209,7 @@ class FrmFormState {
 		foreach ( $this->state as $key => $value ) {
 			$compressed[ self::compressed_key( $key ) ] = $value;
 		}
+
 		return $compressed;
 	}
 

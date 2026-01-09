@@ -454,6 +454,7 @@ class FrmTableHTMLGenerator {
 		if ( $class ) {
 			$class = ' class="' . trim( $class ) . '"';
 		}
+
 		return $class;
 	}
 }

@@ -51,6 +51,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 			// phpcs:ignore WordPress.WP.DeprecatedParameterValues.Found
 			$keys = get_option( 'blacklist_keys' );
 		}
+
 		return $keys;
 	}
 

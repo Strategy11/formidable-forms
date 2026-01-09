@@ -286,6 +286,7 @@ class FrmApplicationTemplate {
 		if ( 'plus' === $required_license ) {
 			$required_license = 'personal';
 		}
+
 		return $required_license;
 	}
 

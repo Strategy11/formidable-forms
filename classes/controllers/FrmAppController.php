@@ -142,6 +142,7 @@ class FrmAppController {
 		} elseif ( str_contains( $agent, 'windows' ) ) {
 			$os = ' windows';
 		}
+
 		return $os;
 	}
 
@@ -1459,6 +1460,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
+
 		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 
