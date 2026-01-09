@@ -212,11 +212,7 @@ class FrmEmailSummaryHelper {
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
-		if ( $date instanceof DateTime ) {
-			return $date;
-		}
-
-		return date_create( $date );
+		return $date instanceof DateTime ? $date : date_create( $date );
 	}
 
 	/**
@@ -236,11 +232,7 @@ class FrmEmailSummaryHelper {
 
 		$date2 = self::get_date_obj( $date2 );
 
-		if ( ! $date2 ) {
-			return false;
-		}
-
-		return date_diff( $date1, $date2 )->days;
+		return $date2 ? date_diff( $date1, $date2 )->days : false;
 	}
 
 	/**

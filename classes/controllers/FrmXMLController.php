@@ -143,12 +143,7 @@ class FrmXMLController {
 	 */
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
-
-		if ( ! $form ) {
-			return $form;
-		}
-
-		return json_decode( $form, true );
+		return $form ? json_decode( $form, true ) : $form;
 	}
 
 	/**

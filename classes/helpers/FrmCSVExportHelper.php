@@ -482,11 +482,7 @@ class FrmCSVExportHelper {
 		$section_id = $field->field_options['in_section'];
 		$section    = FrmField::getOne( $section_id );
 
-		if ( ! $section ) {
-			return false;
-		}
-
-		return FrmField::is_repeating_field( $section );
+		return $section ? FrmField::is_repeating_field( $section ) : false;
 	}
 
 	/**

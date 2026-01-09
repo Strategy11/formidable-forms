@@ -612,11 +612,7 @@ class FrmStrpLiteAuth {
 
 		$name = self::strip_special_characters_from_statement_descriptor( $name );
 
-		if ( ! self::statement_descriptor_is_valid( $name ) ) {
-			return false;
-		}
-
-		return $name;
+		return self::statement_descriptor_is_valid( $name ) ? $name : false;
 	}
 
 	/**
