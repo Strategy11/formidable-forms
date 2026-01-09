@@ -3805,8 +3805,7 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
+		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] !== $post_type ) {
 			return;
 		}
 
