@@ -59,8 +59,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
-
-		$frmdb = new FrmMigrate();
+		$frmdb    = new FrmMigrate();
 		update_option( 'frm_db_version', 16 ); // trigger migration 17
 		$frmdb->upgrade();
 
@@ -360,8 +359,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		// migrate data
 		FrmAppController::install();
 
-		$form = FrmForm::getOne( 'contact-db12-copy' );
-
+		$form         = FrmForm::getOne( 'contact-db12-copy' );
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 
 		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );

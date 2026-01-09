@@ -372,10 +372,9 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value, $args = array() ) {
-		$row  = '<tr' . $this->tr_style();
-		$row .= $this->add_row_class( $value === '' );
-		$row .= '>';
-
+		$row   = '<tr' . $this->tr_style();
+		$row  .= $this->add_row_class( $value === '' );
+		$row  .= '>';
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$value = '<td' . $this->td_style . '>' . $this->filter_value_for_display( $value, $args ) . '</td>';
 

@@ -56,8 +56,7 @@ class FrmStrpLiteLinkController {
 	private static function handle_one_time_stripe_link_return_url( $intent_id, $client_secret ) {
 		$redirect_helper = new FrmStrpLiteLinkRedirectHelper( $intent_id, $client_secret );
 		$frm_payment     = new FrmTransLitePayment();
-
-		$payment = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
+		$payment         = $frm_payment->get_one_by( $intent_id, 'receipt_id' );
 
 		if ( ! $payment ) {
 			$redirect_helper->handle_error( 'no_payment_record' );
@@ -437,11 +436,9 @@ class FrmStrpLiteLinkController {
 		$client_secret              = reset( $client_secrets );
 		list( $prefix, $intent_id ) = explode( '_', $client_secret );
 		$intent_id                  = $prefix . '_' . $intent_id;
-
-		$is_setup_intent = str_starts_with( $intent_id, 'seti_' );
-
-		$function_name = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
-		$intent        = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
+		$is_setup_intent            = str_starts_with( $intent_id, 'seti_' );
+		$function_name              = $is_setup_intent ? 'get_setup_intent' : 'get_intent';
+		$intent                     = FrmStrpLiteAppHelper::call_stripe_helper_class( $function_name, $intent_id );
 
 		if ( ! $intent || $intent->client_secret !== $client_secret ) {
 			return false;

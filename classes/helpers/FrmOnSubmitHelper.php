@@ -422,8 +422,7 @@ class FrmOnSubmitHelper {
 	 * @return object
 	 */
 	public static function get_fallback_action( $event = 'create' ) {
-		$action = new stdClass();
-
+		$action      = new stdClass();
 		$default_msg = self::get_default_msg();
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {

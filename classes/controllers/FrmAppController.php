@@ -116,8 +116,7 @@ class FrmAppController {
 	private static function get_full_screen_setting() {
 		global $wpdb;
 		$meta_key = $wpdb->get_blog_prefix() . 'persisted_preferences';
-
-		$prefs = get_user_meta( get_current_user_id(), $meta_key, true );
+		$prefs    = get_user_meta( get_current_user_id(), $meta_key, true );
 
 		if ( $prefs && isset( $prefs['core/edit-post']['fullscreenMode'] ) ) {
 			return $prefs['core/edit-post']['fullscreenMode'];

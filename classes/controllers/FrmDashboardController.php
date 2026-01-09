@@ -124,8 +124,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function route() {
-		$dashboard_view = self::get_dashboard_helper();
-
+		$dashboard_view        = self::get_dashboard_helper();
 		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
@@ -227,8 +226,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_payments() {
-		$prepared_data = array();
-
+		$prepared_data  = array();
 		$model_payments = new FrmTransLitePayment();
 		$payments       = $model_payments->get_payments_stats();
 

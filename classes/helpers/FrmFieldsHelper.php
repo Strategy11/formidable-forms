@@ -373,8 +373,7 @@ class FrmFieldsHelper {
 	public static function get_default_field_options_from_field( $field, $values = array() ) {
 		$field_type = self::get_original_field( $field );
 		$opts       = $field_type->get_default_field_options();
-
-		$opts = apply_filters( 'frm_default_field_opts', $opts, $values, $field );
+		$opts       = apply_filters( 'frm_default_field_opts', $opts, $values, $field );
 
 		return apply_filters( 'frm_default_' . $field->type . '_field_opts', $opts, $values, $field );
 	}
@@ -454,9 +453,8 @@ class FrmFieldsHelper {
 	 */
 	public static function get_error_msg( $field, $error ) {
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$conf_msg = __( 'The entered values do not match', 'formidable' );
-		$defaults = array(
+		$conf_msg     = __( 'The entered values do not match', 'formidable' );
+		$defaults     = array(
 			'unique_msg' => array(
 				'full' => self::default_unique_msg(),
 				/* translators: %s: Field name */
@@ -688,16 +686,14 @@ class FrmFieldsHelper {
 			return;
 		}
 
-		$base_name = 'default_value_' . $field['id'];
-		$html_id   = $field['html_id'] ?? self::get_html_id( $field );
-
+		$base_name     = 'default_value_' . $field['id'];
+		$html_id       = $field['html_id'] ?? self::get_html_id( $field );
 		$default_type  = self::get_default_value_type( $field );
 		$options_count = count( $field['options'] );
 
 		foreach ( $field['options'] as $opt_key => $opt ) {
-			$field_val = self::get_value_from_array( $opt, $opt_key, $field );
-			$opt       = self::get_label_from_array( $opt, $opt_key, $field );
-
+			$field_val  = self::get_value_from_array( $opt, $opt_key, $field );
+			$opt        = self::get_label_from_array( $opt, $opt_key, $field );
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
@@ -733,13 +729,12 @@ class FrmFieldsHelper {
 			return;
 		}
 
-		$opt_key    = '000';
-		$field_val  = __( 'New Option', 'formidable' );
-		$opt        = __( 'New Option', 'formidable' );
-		$checked    = false;
-		$field_name = 'default_value_' . $field['id'];
-		$html_id    = $field['html_id'] ?? self::get_html_id( $field );
-
+		$opt_key      = '000';
+		$field_val    = __( 'New Option', 'formidable' );
+		$opt          = __( 'New Option', 'formidable' );
+		$checked      = false;
+		$field_name   = 'default_value_' . $field['id'];
+		$html_id      = $field['html_id'] ?? self::get_html_id( $field );
 		$default_type = self::get_default_value_type( $field );
 		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
@@ -903,7 +898,6 @@ class FrmFieldsHelper {
 			$m = $observed_value <= $hide_opt;
 		} elseif ( $cond === 'LIKE' || $cond === 'not LIKE' ) {
 			$m = stripos( $observed_value, $hide_opt );
-
 			$m = $cond === 'not LIKE' ? $m === false : $m !== false;
 		} elseif ( $cond === '%LIKE' ) {
 			// ends with
@@ -1374,7 +1368,6 @@ class FrmFieldsHelper {
 	public static function get_display_value( $value, $field, $atts = array() ) {
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
-
 		$value = self::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 
 		return apply_filters( 'frm_display_value', $value, $field, $atts );
@@ -1418,7 +1411,6 @@ class FrmFieldsHelper {
 		);
 
 		$args = wp_parse_args( $args, $defaults );
-
 		$user = get_userdata( $user_id );
 		$info = '';
 
@@ -1531,14 +1523,13 @@ class FrmFieldsHelper {
 	 * @return string
 	 */
 	public static function get_other_val( $args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
-		$defaults = array(
+		$defaults  = array(
 			'opt_key' => 0,
 			'field'   => array(),
 			'parent'  => false,
 			'pointer' => false,
 		);
-		$args     = wp_parse_args( $args, $defaults );
-
+		$args      = wp_parse_args( $args, $defaults );
 		$opt_key   = $args['opt_key'];
 		$field     = $args['field'];
 		$parent    = $args['parent'];
@@ -2515,8 +2506,7 @@ class FrmFieldsHelper {
 	 */
 	public static function show_radio_display_format( $field ) {
 		$options = self::get_display_format_options( $field );
-
-		$args = self::get_display_format_args( $field, $options );
+		$args    = self::get_display_format_args( $field, $options );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/radio-display-format.php';
 	}
@@ -2651,8 +2641,7 @@ class FrmFieldsHelper {
 			return $custom_attrs;
 		}
 
-		$upgrading = FrmAddonsController::install_link( $option['addon'] );
-
+		$upgrading    = FrmAddonsController::install_link( $option['addon'] );
 		$install_data = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
 
 		$custom_attrs['data-oneclick'] = $install_data;

@@ -23,8 +23,7 @@ class Tests_Frm_Ajax extends FrmAjaxUnitTest {
 			'action' => 'frm_uninstall',
 		);
 
-		$response = $this->trigger_action( 'frm_uninstall' );
-
+		$response     = $this->trigger_action( 'frm_uninstall' );
 		$frm_settings = FrmAppHelper::get_settings();
 		$expected     = $frm_settings->admin_permission;
 

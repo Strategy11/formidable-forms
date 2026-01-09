@@ -67,8 +67,7 @@ class FrmNotification {
 
 			$sent_to = array_merge( (array) $atts['to_email'], (array) $atts['cc'], (array) $atts['bcc'] );
 			$sent_to = array_filter( $sent_to );
-
-			$temp = str_replace( '<', '&lt;', $sent_to );
+			$temp    = str_replace( '<', '&lt;', $sent_to );
 			echo ' ' . FrmAppHelper::kses( implode( ', ', $temp ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}

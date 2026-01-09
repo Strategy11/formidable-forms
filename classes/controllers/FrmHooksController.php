@@ -13,8 +13,7 @@ class FrmHooksController {
 	 * @return void
 	 */
 	public static function trigger_load_hook( $hooks = 'load_hooks' ) {
-		$controllers = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
-
+		$controllers   = apply_filters( 'frm_load_controllers', array( 'FrmHooksController' ) );
 		$trigger_hooks = $hooks;
 		$hooks         = (array) $hooks;
 

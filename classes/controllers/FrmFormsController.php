@@ -252,8 +252,7 @@ class FrmFormsController {
 			return;
 		}
 
-		$id = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
-
+		$id       = FrmAppHelper::get_param( 'id', '', 'get', 'absint' );
 		$errors   = FrmForm::validate( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$warnings = FrmFormsHelper::check_for_warnings( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
@@ -985,8 +984,7 @@ class FrmFormsController {
 
 		$count = FrmForm::scheduled_delete( time() );
 		$url   = remove_query_arg( array( 'delete_all' ) );
-
-		$url .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
+		$url  .= '&message=forms_permanently_deleted&forms_deleted=' . $count;
 
 		wp_safe_redirect( $url );
 		die();
@@ -1199,8 +1197,7 @@ class FrmFormsController {
 		 */
 		$table_class   = apply_filters( 'frm_forms_list_class', 'FrmFormsListHelper' );
 		$wp_list_table = new $table_class( compact( 'params' ) );
-
-		$pagenum = $wp_list_table->get_pagenum();
+		$pagenum       = $wp_list_table->get_pagenum();
 
 		$wp_list_table->prepare_items();
 
@@ -1352,8 +1349,7 @@ class FrmFormsController {
 		}
 
 		$frm_field_selection = FrmField::field_selection();
-
-		$fields = FrmField::get_all_for_form( $form->id );
+		$fields              = FrmField::get_all_for_form( $form->id );
 
 		// Automatically add end section fields if they don't exist (2.0 migration).
 		$reset_fields = false;
@@ -1447,10 +1443,9 @@ class FrmFormsController {
 		$args     = array_merge( $defaults, $args );
 		$message  = $args['message'];
 		$warnings = $args['warnings'];
-
-		$form   = FrmForm::getOne( $id );
-		$fields = FrmField::get_all_for_form( $id );
-		$values = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
+		$form     = FrmForm::getOne( $id );
+		$fields   = FrmField::get_all_for_form( $id );
+		$values   = FrmAppHelper::setup_edit_vars( $form, 'forms', $fields, true );
 
 		/**
 		 * Allows changing fields in the form settings.
@@ -1729,14 +1724,12 @@ class FrmFormsController {
 		 * @param array $fields The list of fields.
 		 * @param array $args   The arguments. Contains `form_id`.
 		 */
-		$fields       = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
-		$linked_forms = array();
-		$col          = 'one';
-		$settings_tab = FrmAppHelper::is_admin_page( 'formidable' );
-
+		$fields           = apply_filters( 'frm_fields_in_tags_box', $fields, compact( 'form_id' ) );
+		$linked_forms     = array();
+		$col              = 'one';
+		$settings_tab     = FrmAppHelper::is_admin_page( 'formidable' );
 		$cond_shortcodes  = apply_filters( 'frm_conditional_shortcodes', array() );
 		$entry_shortcodes = self::get_shortcode_helpers( $settings_tab );
-
 		$advanced_helpers = self::advanced_helpers( compact( 'fields', 'form_id' ) );
 
 		if ( 'default' === $template_path || ! file_exists( $template_path ) ) {
@@ -2208,8 +2201,7 @@ class FrmFormsController {
 		// Get posted data
 		$form_id = FrmAppHelper::get_post_param( 'form_id', '', 'absint' );
 		$name    = FrmAppHelper::get_post_param( 'form_name', '', 'sanitize_text_field' );
-
-		$form = FrmForm::getOne( $form_id );
+		$form    = FrmForm::getOne( $form_id );
 
 		if ( ! $form ) {
 			wp_send_json_error( __( 'Form not found', 'formidable' ) );
@@ -2452,8 +2444,7 @@ class FrmFormsController {
 		add_action( 'frm_load_form_hooks', 'FrmHooksController::trigger_load_form_hooks' );
 		FrmAppHelper::trigger_hook_load( 'form', $form );
 
-		$form = apply_filters( 'frm_pre_display_form', $form );
-
+		$form         = apply_filters( 'frm_pre_display_form', $form );
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( self::is_viewable_draft_form( $form ) ) {
@@ -2988,8 +2979,7 @@ class FrmFormsController {
 
 		FrmOnSubmitHelper::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
 
-		$opt = 'update' === $args['action'] ? 'edit_' : 'success_';
-
+		$opt                     = 'update' === $args['action'] ? 'edit_' : 'success_';
 		$new_args['conf_method'] = $new_args['form']->options[ $opt . 'action' ];
 
 		/**
@@ -3057,8 +3047,7 @@ class FrmFormsController {
 
 		add_filter( 'frm_redirect_url', 'FrmEntriesController::prepare_redirect_url' );
 		$success_url = apply_filters( 'frm_redirect_url', $success_url, $args['form'], $args );
-
-		$doing_ajax = FrmAppHelper::doing_ajax();
+		$doing_ajax  = FrmAppHelper::doing_ajax();
 
 		if ( ! empty( $args['ajax'] ) && $doing_ajax && empty( $args['force_delay_redirect'] ) ) {
 			// Is AJAX submit and there is just one Redirect action runs.
@@ -3308,9 +3297,8 @@ class FrmFormsController {
 		unset( $args );
 
 		$include_form_tag = apply_filters( 'frm_include_form_tag', true, $form );
-
-		$frm_settings = FrmAppHelper::get_settings();
-		$submit       = $form->options['submit_value'] ?? $frm_settings->submit_value;
+		$frm_settings     = FrmAppHelper::get_settings();
+		$submit           = $form->options['submit_value'] ?? $frm_settings->submit_value;
 
 		global $frm_vars;
 		self::maybe_load_css( $form, $values['custom_style'], $frm_vars['load_css'] );
@@ -3398,10 +3386,9 @@ class FrmFormsController {
 		self::maybe_load_css( $atts['form'], $values['custom_style'], $frm_vars['load_css'] );
 
 		$include_extra_container = 'frm_forms' . FrmFormsHelper::get_form_style_class( $values );
-
-		$errors  = array();
-		$form    = $atts['form'];
-		$message = $atts['message'];
+		$errors                  = array();
+		$form                    = $atts['form'];
+		$message                 = $atts['message'];
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-entries/errors.php';
 	}

@@ -106,8 +106,7 @@ class FrmReviews {
 		}
 
 		$entries = $entries <= 100 ? floor( $entries / 10 ) * 10 : floor( $entries / 50 ) * 50;
-
-		$name = $user->first_name;
+		$name    = $user->first_name;
 
 		if ( $name ) {
 			$name = ' ' . $name;

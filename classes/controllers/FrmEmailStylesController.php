@@ -164,10 +164,8 @@ class FrmEmailStylesController {
 
 		// Modern and Compact table styles don't have top and bottom border.
 		$should_remove_top_bottom_border = 'classic' !== $style_key;
-
-		$table_generator = self::get_table_generator( $style_key );
-
-		$content = $table_generator->generate_table_header();
+		$table_generator                 = self::get_table_generator( $style_key );
+		$content                         = $table_generator->generate_table_header();
 
 		// By default, table has the bottom border and table cells have top border.
 		if ( $should_remove_top_bottom_border ) {
@@ -316,10 +314,9 @@ class FrmEmailStylesController {
 		}
 
 		$email_style = self::get_default_email_style();
-
-		$subject = __( 'Formidable Test Email', 'formidable' );
-		$content = self::get_test_email_content();
-		$headers = array(
+		$subject     = __( 'Formidable Test Email', 'formidable' );
+		$content     = self::get_test_email_content();
+		$headers     = array(
 			self::get_content_type_header( $email_style ),
 		);
 
@@ -395,8 +392,7 @@ class FrmEmailStylesController {
 	 */
 	public static function wrap_email_message( $message ) {
 		$style_settings = self::get_email_style_settings();
-
-		$header_img = '';
+		$header_img     = '';
 
 		if ( $style_settings['img'] ) {
 			$img_align = $style_settings['img_align'] ? $style_settings['img_align'] : 'center';

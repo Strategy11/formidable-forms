@@ -146,8 +146,7 @@ class FrmPersonalData {
 			'limit'    => $this->get_current_page(),
 		);
 
-		$user = get_user_by( 'email', $email );
-
+		$user             = get_user_by( 'email', $email );
 		$entries_by_email = FrmDb::get_col( 'frm_item_metas', array( 'meta_value' => $email ), 'item_id', $query_args );
 
 		if ( ! $user ) {
@@ -156,10 +155,8 @@ class FrmPersonalData {
 		}
 
 		$query_args['order_by'] = 'id ASC';
-
-		$entries_by_user = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
-
-		$entry_ids = array_merge( $entries_by_user, $entries_by_email );
+		$entries_by_user        = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
+		$entry_ids              = array_merge( $entries_by_user, $entries_by_email );
 
 		return array_unique( array_filter( $entry_ids ) );
 	}
@@ -179,8 +176,7 @@ class FrmPersonalData {
 	 * @return array
 	 */
 	private function prepare_entry_data( $entry ) {
-		$entry = FrmEntry::getOne( $entry, true );
-
+		$entry      = FrmEntry::getOne( $entry, true );
 		$entry_data = array();
 
 		foreach ( $entry->metas as $field_id => $meta ) {

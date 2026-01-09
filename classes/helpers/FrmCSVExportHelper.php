@@ -419,8 +419,7 @@ class FrmCSVExportHelper {
 
 			foreach ( $headings as $key => $heading ) {
 				if ( is_array( $heading ) ) {
-					$repeater_id = str_replace( 'repeater', '', $key );
-
+					$repeater_id       = str_replace( 'repeater', '', $key );
 					$repeater_headings = array();
 
 					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {

@@ -203,8 +203,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
-
-		$lang = $this->get_captcha_language();
+		$lang       = $this->get_captcha_language();
 
 		if ( $lang ) {
 			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.

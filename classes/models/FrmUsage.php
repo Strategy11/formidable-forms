@@ -186,8 +186,7 @@ class FrmUsage {
 	 */
 	private function plugins() {
 		$plugin_list = FrmAppHelper::get_plugins();
-
-		$plugins = array();
+		$plugins     = array();
 
 		foreach ( $plugin_list as $slug => $info ) {
 			$plugins[] = array(
@@ -272,8 +271,7 @@ class FrmUsage {
 			'admin_permission',
 		);
 
-		$default = $settings_list->default_options();
-
+		$default          = $settings_list->default_options();
 		$message_settings = array();
 
 		foreach ( $messages as $message ) {
@@ -471,8 +469,7 @@ class FrmUsage {
 			'numberposts' => 100,
 		);
 
-		$actions = array();
-
+		$actions       = array();
 		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
 
 		foreach ( $saved_actions as $action ) {

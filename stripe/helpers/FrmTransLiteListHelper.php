@@ -120,8 +120,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'subscriptions' => __( 'Subscriptions', 'formidable' ),
 		);
 
-		$links = array();
-
+		$links       = array();
 		$frm_payment = new FrmTransLitePayment();
 		$frm_sub     = new FrmTransLiteSubscription();
 		$counts      = array(
@@ -228,11 +227,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
 		$gateways    = FrmTransLiteAppHelper::get_gateways();
-
-		$alt = 0;
-
-		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format', 'gateways' );
+		$alt         = 0;
+		$form_ids    = $this->get_form_ids();
+		$args        = compact( 'form_ids', 'date_format', 'gateways' );
 		// $form_ids is indexed by entry ID.
 		$this->valid_entry_ids = array_keys( $form_ids );
 

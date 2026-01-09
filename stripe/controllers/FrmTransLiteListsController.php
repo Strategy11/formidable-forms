@@ -92,8 +92,7 @@ class FrmTransLiteListsController {
 			return $show_screen;
 		}
 
-		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
-
+		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
 		if ( $unread_count ) {
@@ -167,17 +166,15 @@ class FrmTransLiteListsController {
 	public static function display_list( $response = array() ) {
 		FrmAppHelper::include_svg();
 
-		$defaults = array(
+		$defaults      = array(
 			'errors'  => array(),
 			'message' => '',
 		);
-		$response = array_merge( $defaults, $response );
-		$errors   = $response['errors'];
-		$message  = $response['message'];
-
+		$response      = array_merge( $defaults, $response );
+		$errors        = $response['errors'];
+		$message       = $response['message'];
 		$wp_list_table = new FrmTransLiteListHelper( self::list_page_params() );
-
-		$pagenum = $wp_list_table->get_pagenum();
+		$pagenum       = $wp_list_table->get_pagenum();
 
 		$wp_list_table->prepare_items();
 

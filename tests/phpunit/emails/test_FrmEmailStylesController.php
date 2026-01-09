@@ -3,8 +3,7 @@
 class test_FrmEmailStylesController extends FrmUnitTest {
 
 	public function test_add_inline_css() {
-		$content = '<div><p style="font-weight:bold;"><a href="#" target="_blank">Test link</a></p></div><div>Second div</div>';
-
+		$content     = '<div><p style="font-weight:bold;"><a href="#" target="_blank">Test link</a></p></div><div>Second div</div>';
 		$css         = 'font-size:14px;';
 		$new_content = '<div style="' . $css . '"><p style="font-weight:bold;"><a href="#" target="_blank">Test link</a></p></div><div style="' . $css . '">Second div</div>';
 		$this->assertEquals(

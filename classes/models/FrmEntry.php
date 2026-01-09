@@ -98,8 +98,7 @@ class FrmEntry {
 
 		global $frm_vars;
 		$frm_vars['checking_duplicates'] = true;
-
-		$is_duplicate = false;
+		$is_duplicate                    = false;
 
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
@@ -278,8 +277,7 @@ class FrmEntry {
 	public static function duplicate( $id ) {
 		global $wpdb;
 
-		$values = self::getOne( $id );
-
+		$values                   = self::getOne( $id );
 		$new_values               = array();
 		$new_values['item_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
 		$new_values['name']       = $values->name;
@@ -345,8 +343,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values = self::package_entry_to_update( $id, $values );
-
+		$new_values    = self::package_entry_to_update( $id, $values );
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -603,8 +600,7 @@ class FrmEntry {
 		}
 
 		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'item_key' => $id );
-
-		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
+		$id    = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
 		return $id && $id > 0;
 	}
@@ -621,8 +617,7 @@ class FrmEntry {
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit     = FrmDb::esc_limit( $limit );
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
@@ -713,8 +708,7 @@ class FrmEntry {
 	 */
 	private static function sort_by_field( $field_id ) {
 		global $wpdb;
-		$field_id = (int) $field_id;
-
+		$field_id      = (int) $field_id;
 		$field_options = FrmDb::get_var( 'frm_fields', array( 'id' => $field_id ), 'field_options' );
 		FrmAppHelper::unserialize_or_decode( $field_options );
 

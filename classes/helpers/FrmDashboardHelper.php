@@ -247,8 +247,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function get_inbox() {
-		$template = $this->view['inbox'];
-
+		$template                    = $this->view['inbox'];
 		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
 		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
 		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';

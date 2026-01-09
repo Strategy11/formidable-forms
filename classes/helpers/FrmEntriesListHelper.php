@@ -31,8 +31,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public function prepare_items() {
 		$this->set_per_page();
-		$s_query = array();
-
+		$s_query            = array();
 		$join_form_in_query = false;
 
 		$this->items = $this->get_entry_items( $s_query, $join_form_in_query );
@@ -297,9 +296,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string $primary_column
 	 */
 	protected function get_primary_column_name() {
-		$columns = get_column_headers( $this->screen );
-		$hidden  = get_hidden_columns( $this->screen );
-
+		$columns        = get_column_headers( $this->screen );
+		$hidden         = get_hidden_columns( $this->screen );
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
@@ -368,8 +366,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 			$attributes = 'class="' . esc_attr( $class ) . '"';
 			unset( $class );
-			$attributes .= ' data-colname="' . $column_display_name . '"';
-
+			$attributes       .= ' data-colname="' . $column_display_name . '"';
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 

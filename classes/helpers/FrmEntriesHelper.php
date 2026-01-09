@@ -49,8 +49,7 @@ class FrmEntriesHelper {
 		foreach ( (array) $fields as $field ) {
 			$original_default = $field->default_value;
 			self::prepare_field_default_value( $field );
-			$new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
-
+			$new_value                       = self::get_field_value_for_new_entry( $field, $reset, $args );
 			$field_array                     = FrmAppHelper::start_field_array( $field );
 			$field_array['value']            = $new_value;
 			$field_array['type']             = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
@@ -200,11 +199,9 @@ class FrmEntriesHelper {
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-
+			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
-
-			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
+			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.
 			$message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -532,8 +529,7 @@ class FrmEntriesHelper {
 			// Save original value
 			$args['temp_value'] = $value;
 			$args['other']      = true;
-
-			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now.

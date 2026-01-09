@@ -15,8 +15,7 @@ class test_FrmFieldName extends FrmUnitTest {
 
 		$field->field_options['name_layout'] = 'first_middle_last';
 
-		$name_field = new FrmFieldName( $field );
-
+		$name_field           = new FrmFieldName( $field );
 		$processed_sub_fields = $this->run_private_method( array( $name_field, 'get_processed_sub_fields' ) );
 
 		$this->assertEquals( array( 'first', 'middle', 'last' ), array_keys( $processed_sub_fields ) );
