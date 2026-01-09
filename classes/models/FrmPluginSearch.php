@@ -68,14 +68,14 @@ class FrmPluginSearch {
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
 		$normalized_term = $this->search_to_array( $args->search );
 
-		if ( empty( $normalized_term ) ) {
+		if ( ! $normalized_term ) {
 			// Don't add anything extra.
 			return $result;
 		}
 
 		$matching_addon = $this->matching_addon( $addon_list, $normalized_term );
 
-		if ( empty( $matching_addon ) || ! $this->should_display_hint( $matching_addon ) ) {
+		if ( ! $matching_addon || ! $this->should_display_hint( $matching_addon ) ) {
 			return $result;
 		}
 
@@ -277,9 +277,7 @@ class FrmPluginSearch {
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
 		// remove strings that don't help matches.
-		$term = trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
-
-		return $term;
+		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
 	/**

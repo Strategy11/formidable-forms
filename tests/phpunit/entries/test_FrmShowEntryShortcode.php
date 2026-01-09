@@ -782,6 +782,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		$header = '<table cellspacing="0"';
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! isset( $atts['inline_style'] ) || $atts['inline_style'] == true ) {
 			$defaults     = $this->get_defaults();
 			$atts         = array_merge( $defaults, $atts );
@@ -905,10 +906,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			}
 		}
 
-		if ( FrmAppHelper::is_empty_value( $field_value, '' ) ) {
-			if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
-				$include = false;
-			}
+		if ( FrmAppHelper::is_empty_value( $field_value, '' ) && empty( $atts['include_blank'] ) ) {
+			$include = false;
 		}
 
 		return $include;
@@ -919,7 +918,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function user_info_rows( $atts ) {
-		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $atts['user_info'] ) ) {
 			$html  = '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>IP Address</th><td' . $this->td_style . '>127.0.0.1</td></tr>' . "\r\n";
 			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>User-Agent (Browser/OS)</th><td' . $this->td_style . '>Mozilla Firefox 37.0 / OS X</td></tr>' . "\r\n";
 			$html .= '<tr' . $this->tr_style . '><th scope="row"' . $this->td_style . '>Referrer</th><td' . $this->td_style . '>' . wp_kses_post( 'http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd' ) . '</td></tr>' . "\r\n";
@@ -931,7 +931,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function user_info_plain_text_rows( $atts ) {
-		if ( isset( $atts['user_info'] ) && $atts['user_info'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $atts['user_info'] ) ) {
 			$content  = "IP Address: 127.0.0.1\r\n";
 			$content .= "User-Agent (Browser/OS): Mozilla Firefox 37.0 / OS X\r\n";
 			$content .= "Referrer: http://localhost:8888/features/wp-admin/admin-ajax.php?action=frm_forms_preview&form=boymfd\r\n";
@@ -1136,8 +1137,10 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'free-user-id-field'      => '',
 		);
 
-		if ( ! isset( $atts['include_blank'] ) || $atts['include_blank'] == false ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( empty( $atts['include_blank'] ) ) {
 			foreach ( $expected as $field_key => $value ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $value == '' || empty( $value ) ) {
 					unset( $expected[ $field_key ] );
 				}

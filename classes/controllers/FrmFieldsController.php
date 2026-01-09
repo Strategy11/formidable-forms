@@ -299,7 +299,8 @@ class FrmFieldsController {
 		}
 
 		// Keep other options after bulk update.
-		if ( isset( $field['field_options']['other'] ) && $field['field_options']['other'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $field['field_options']['other'] ) ) {
 			$other_array = array();
 
 			foreach ( $field['options'] as $opt_key => $opt ) {
@@ -309,7 +310,7 @@ class FrmFieldsController {
 				unset( $opt_key, $opt );
 			}
 
-			if ( ! empty( $other_array ) ) {
+			if ( $other_array ) {
 				$opts = array_merge( $opts, $other_array );
 			}
 		}
@@ -676,6 +677,7 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['default_value'] != '' ) {
 			if ( is_array( $field['default_value'] ) ) {
 				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( json_encode( $field['default_value'] ) ) . '"';
@@ -686,6 +688,7 @@ class FrmFieldsController {
 
 		$field['placeholder'] = self::prepare_placeholder( $field );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['placeholder'] == '' || is_array( $field['placeholder'] ) ) {
 			// don't include a json placeholder
 			return;
@@ -785,6 +788,7 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function add_frmval_to_input( $field, &$add_html ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['placeholder'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
 
@@ -793,6 +797,7 @@ class FrmFieldsController {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['default_value'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
 		}
@@ -1002,7 +1007,7 @@ class FrmFieldsController {
 				continue;
 			}
 
-			if ( is_numeric( $k ) && strpos( $v, '=' ) ) {
+			if ( is_numeric( $k ) && str_contains( $v, '=' ) ) {
 				$add_html[] = $v;
 			} elseif ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
 				$add_html[ $k ] = str_replace( $k . '="', $k . '="' . $v, $add_html[ $k ] );

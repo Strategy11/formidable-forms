@@ -144,7 +144,7 @@
 
 	function setDefaultPostStatus() {
 		const urlQuery = window.location.search.substring( 1 );
-		if ( urlQuery.indexOf( 'action=edit' ) === -1 ) {
+		if ( ! urlQuery.includes( 'action=edit' ) ) {
 			document.getElementById( 'post-visibility-display' ).textContent = frmAdminJs.private_label;
 			document.getElementById( 'hidden-post-visibility' ).value = 'private';
 			document.getElementById( 'visibility-radio-private' ).checked = true;
@@ -364,7 +364,7 @@
 		}
 		c = id;
 
-		if ( id.indexOf( '-search-input' ) !== -1 ) {
+		if ( id.includes( '-search-input' ) ) {
 			return;
 		}
 

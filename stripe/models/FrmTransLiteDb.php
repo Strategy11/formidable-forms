@@ -35,6 +35,7 @@ class FrmTransLiteDb {
 			$old_db_version = get_option( $this->db_opt_name );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $this->db_version == $old_db_version ) {
 			return;
 		}

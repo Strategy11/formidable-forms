@@ -187,6 +187,7 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function maybe_subscription_canceled() {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $this->invoice->cancel_at_period_end == true ) {
 			$this->subscription_canceled( 'future_cancel' );
 		}
@@ -430,7 +431,7 @@ class FrmStrpLiteEventsController {
 		if ( $this->status === 'refunded' ) {
 			$amount          = $this->invoice->amount;
 			$amount_refunded = $this->invoice->amount_refunded;
-			$partial         = $amount != $amount_refunded;
+			$partial         = $amount != $amount_refunded; // phpcs:ignore Universal.Operators.StrictComparisons
 		}
 		return $partial;
 	}

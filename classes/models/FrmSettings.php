@@ -618,7 +618,7 @@ class FrmSettings {
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $this->$frm_role ) ) {
+				if ( in_array( $role, $this->$frm_role, true ) ) {
 					$wp_roles->add_cap( $role, $frm_role );
 				} else {
 					$wp_roles->remove_cap( $role, $frm_role );

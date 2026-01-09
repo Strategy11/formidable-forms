@@ -233,7 +233,7 @@ class FrmFormAction {
 			$group = $this->id_base;
 		} else {
 			foreach ( $groups as $name => $check_group ) {
-				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'] ) ) {
+				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'], true ) ) {
 					$group = $name;
 					break;
 				}
@@ -339,6 +339,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
 			return;
@@ -435,9 +436,9 @@ class FrmFormAction {
 			foreach ( (array) $val as $ck => $cv ) {
 				if ( is_array( $cv ) ) {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
-				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
+				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
-				} elseif ( $ck == $subkey ) {
+				} elseif ( $ck == $subkey ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
@@ -789,7 +790,7 @@ class FrmFormAction {
 			'order'       => 'ASC',
 		);
 
-		if ( $form_id && $form_id != 'all' ) {
+		if ( $form_id && $form_id !== 'all' ) {
 			$args['menu_order'] = $form_id;
 		}
 
@@ -811,7 +812,7 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && ! empty( $vals ) ) {
+			if ( is_array( $vals ) && $vals ) {
 				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
@@ -843,7 +844,7 @@ class FrmFormAction {
 			$query['menu_order'] = $form_id;
 		}
 
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
 
@@ -940,7 +941,7 @@ class FrmFormAction {
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( $post_id && 'update' == $update ) {
+		if ( $post_id && 'update' === $update ) {
 			global $wpdb;
 			$form->options = maybe_serialize( $form->options );
 

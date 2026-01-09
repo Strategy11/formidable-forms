@@ -267,7 +267,7 @@ class FrmAddonsController {
 	public static function license_settings() {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
 
 			return;
@@ -285,7 +285,7 @@ class FrmAddonsController {
 		$api    = new FrmFormApi();
 		$addons = $api->get_api_info();
 
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = self::fallback_plugin_list();
 		} else {
 			foreach ( $addons as $k => $addon ) {
@@ -447,14 +447,15 @@ class FrmAddonsController {
 
 		$license = $creds['license'];
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			return '';
 		}
 
-		if ( strpos( $license, '-' ) ) {
+		if ( str_contains( $license, '-' ) ) {
 			// this is a fix for licenses saved in the past
 			$license = strtoupper( $license );
 		}
+
 		return $license;
 	}
 
@@ -566,7 +567,7 @@ class FrmAddonsController {
 
 			$folder = $plugin->plugin;
 
-			if ( empty( $folder ) ) {
+			if ( ! $folder ) {
 				continue;
 			}
 
@@ -641,7 +642,7 @@ class FrmAddonsController {
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses ) ) {
+			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
@@ -710,7 +711,7 @@ class FrmAddonsController {
 				);
 			}
 
-			if ( ! empty( $link ) ) {
+			if ( $link ) {
 				$link['status'] = $addon['status']['type'];
 			}
 		} elseif ( current_user_can( 'activate_plugins' ) && self::is_installed( 'formidable-' . $plugin . '/formidable-' . $plugin . '.php' ) ) {

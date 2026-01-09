@@ -349,6 +349,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	}
 
 	public function set_front_end( $page = '' ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $page == '' ) {
 			$page = home_url( '/' );
 		}
@@ -478,7 +479,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		);
 	}
 
-	public static function generate_xml( $type, $xml_args ) {
+	public static function generate_xml( $type, $xml_args ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		// Code copied from FrmXMLController::generate_xml
 		global $wpdb;
 
@@ -566,7 +567,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;

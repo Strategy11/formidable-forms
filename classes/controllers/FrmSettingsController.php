@@ -145,7 +145,7 @@ class FrmSettingsController {
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
 			foreach ( $installed_addons as $installed_addon ) {
-				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name !== 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
 					break;
 				}
@@ -286,11 +286,10 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string      $more_html
 	 *
 	 * @return void
 	 */
-	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+	public static function maybe_render_currency_selector( $frm_settings ) {
 		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
 			FrmProSettingsController::add_currency_settings();
 			return;
@@ -447,7 +446,7 @@ class FrmSettingsController {
 
 		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
-		} elseif ( $stop_load != 'stop_load' ) {
+		} elseif ( $stop_load !== 'stop_load' ) {
 			self::display_form();
 		}
 	}

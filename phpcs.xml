@@ -94,8 +94,17 @@
 		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
 	</rule>
 
+	<!-- Set rules for Cyclomatic Complexity -->
+	<rule ref="Generic.Metrics.CyclomaticComplexity">
+		<properties>
+			<property name="complexity" value="10"/>
+			<property name="absoluteComplexity" value="20"/>
+		</properties>
+	</rule>
+
 	<!-- Add some rules from the Slevomat Coding Standard -->
 	<rule ref="SlevomatCodingStandard.PHP.UselessParentheses" />
+	<rule ref="SlevomatCodingStandard.Variables.UselessVariable" />
 
 	<rule ref="SlevomatCodingStandard.Files.LineLength">
 		<properties>
@@ -215,21 +224,6 @@
 			<property name="errorThreshold" value="10" />
 		</properties>
 	</rule>
-	<rule ref="SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh">
-		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>tests/phpunit/base/FrmUnitTest.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
-	</rule>
 
 	<rule ref="WordPressVIPMinimum">
 		<exclude name="Generic.PHP.NoSilencedErrors.Forbidden" />
@@ -274,6 +268,14 @@
 		<severity>8</severity>
 		<type>error</type>
 	</rule>
+	<rule ref="WordPress.PHP.StrictInArray.MissingTrueStrict">
+		<severity>8</severity>
+		<type>error</type>
+	</rule>
+	<rule ref="Universal.Operators.StrictComparisons">
+		<severity>8</severity>
+		<type>error</type>
+	</rule> 
 
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />

@@ -82,6 +82,7 @@ class FrmEntry {
 
 		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
@@ -119,7 +120,7 @@ class FrmEntry {
 			$field_metas   = array_filter( $field_metas );
 
 			// If prev entry is empty and current entry is not, they are not duplicates
-			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
+			if ( ! $field_metas && $filtered_vals ) {
 				return false;
 			}
 
@@ -255,7 +256,7 @@ class FrmEntry {
 	 */
 	private static function is_duplicate_check_needed( $values, $duplicate_entry_time ) {
 		// If time for checking duplicates is set to an empty value, don't check for duplicates
-		if ( empty( $duplicate_entry_time ) ) {
+		if ( ! $duplicate_entry_time ) {
 			return false;
 		}
 
@@ -513,7 +514,7 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function prepare_entry( &$entry ) {
-		if ( empty( $entry ) ) {
+		if ( ! $entry ) {
 			return;
 		}
 
@@ -563,7 +564,7 @@ class FrmEntry {
 		foreach ( $metas as $meta_val ) {
 			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 
-			if ( $meta_val->item_id == $entry->id ) {
+			if ( (int) $meta_val->item_id === (int) $entry->id ) {
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 
 				if ( $include_key ) {
@@ -659,7 +660,8 @@ class FrmEntry {
 
 		$meta_where = array( 'field_id !' => 0 );
 
-		if ( $limit == '' && is_array( $where ) && count( $where ) == 1 && isset( $where['it.form_id'] ) ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( $limit == '' && is_array( $where ) && count( $where ) === 1 && isset( $where['it.form_id'] ) ) {
 			$meta_where['fi.form_id'] = $where['it.form_id'];
 		} else {
 			$meta_where['item_id'] = array_keys( $entries );
@@ -1145,6 +1147,7 @@ class FrmEntry {
 
 		global $frm_vars;
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, $frm_vars['saved_entries'] ) ) {
 			$update = false;
 		}

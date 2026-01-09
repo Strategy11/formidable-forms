@@ -55,7 +55,7 @@ class FrmDb {
 	 * @return void
 	 */
 	public static function get_where_clause_and_values( &$args, $starts_with = ' WHERE ' ) {
-		if ( empty( $args ) ) {
+		if ( ! $args ) {
 			// add an arg to prevent prepare from failing
 			$args = array(
 				'where'  => $starts_with . '1=%d',
@@ -93,7 +93,8 @@ class FrmDb {
 		}
 
 		foreach ( $args as $key => $value ) {
-			$where         .= empty( $where ) ? $base_where : $condition;
+			$where .= empty( $where ) ? $base_where : $condition;
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
 
 			if ( is_numeric( $key ) || $array_inc_null ) {
@@ -159,7 +160,7 @@ class FrmDb {
 				}
 
 				$where .= ')';
-			} elseif ( ! empty( $value ) ) {
+			} elseif ( $value ) {
 				$where .= ' in (' . self::prepare_array_values( $value, '%s' ) . ')';
 				$values = array_merge( $values, $value );
 			}
@@ -386,7 +387,7 @@ class FrmDb {
 		$prefix = $wpdb->base_prefix;
 		self::maybe_remove_prefix( $prefix, $group );
 
-		if ( $group == $table ) {
+		if ( $group === $table ) {
 			$table = $wpdb->prefix . $table;
 		}
 
@@ -433,6 +434,7 @@ class FrmDb {
 		$temp_args = $args;
 
 		foreach ( $temp_args as $k => $v ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $v == '' ) {
 				unset( $args[ $k ] );
 				continue;
@@ -516,6 +518,7 @@ class FrmDb {
 				$args[ $param ] = self::esc_limit( $value );
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $args[ $param ] == '' ) {
 				unset( $args[ $param ] );
 			}
@@ -545,7 +548,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_order( $order_query ) {
-		if ( empty( $order_query ) ) {
+		if ( ! $order_query ) {
 			return '';
 		}
 
@@ -561,7 +564,7 @@ class FrmDb {
 		$order      = trim( reset( $order_query ) );
 		$safe_order = array( 'count(*)' );
 
-		if ( ! in_array( strtolower( $order ), $safe_order ) ) {
+		if ( ! in_array( strtolower( $order ), $safe_order, true ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
 		}
 
@@ -600,7 +603,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function esc_limit( $limit ) {
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			return '';
 		}
 
@@ -648,7 +651,7 @@ class FrmDb {
 	 * @return string
 	 */
 	public static function prepend_and_or_where( $starts_with = ' WHERE ', $where = '' ) {
-		if ( empty( $where ) ) {
+		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
 				global $wpdb;
@@ -747,7 +750,7 @@ class FrmDb {
 			return $results;
 		}
 
-		if ( 'get_posts' == $type ) {
+		if ( 'get_posts' === $type ) {
 			$results = get_posts( $query );
 		} elseif ( 'get_associative_results' === $type ) {
 			global $wpdb;

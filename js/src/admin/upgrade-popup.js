@@ -87,7 +87,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	upgradeMessage.innerHTML = newMessage;
 
 	if ( link.dataset.upsellImage ) {
-		upgradeMessage.appendChild(
+		upgradeMessage.append(
 			frmDom.img( {
 				src: link.dataset.upsellImage,
 				alt: link.dataset.upgrade

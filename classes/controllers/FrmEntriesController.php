@@ -190,7 +190,7 @@ class FrmEntriesController {
 
 		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ) ) ) {
+		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
 			add_screen_option(
 				'per_page',
 				array(
@@ -276,7 +276,7 @@ class FrmEntriesController {
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
 
-		if ( $field->form_id != $form_id ) {
+		if ( (int) $field->form_id !== (int) $form_id ) {
 			$col_id .= '-_-form' . $field->form_id;
 		}
 
@@ -338,6 +338,7 @@ class FrmEntriesController {
 	public static function check_hidden_cols( $check, $object_id, $meta_key, $meta_value, $prev_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name || $meta_value == $prev_value ) {
 			return $check;
 		}
@@ -366,6 +367,7 @@ class FrmEntriesController {
 	public static function update_hidden_cols( $meta_id, $object_id, $meta_key, $meta_value ) {
 		$this_page_name = self::hidden_column_key();
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $meta_key != $this_page_name ) {
 			return;
 		}
@@ -390,6 +392,7 @@ class FrmEntriesController {
 		$save            = false;
 
 		foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
 				// Don't add blank cols or process included cols.
 				continue;
@@ -776,6 +779,7 @@ class FrmEntriesController {
 			return;
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $errors == '' && ! $ajax ) {
 			$errors = FrmEntryValidate::validate( wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}

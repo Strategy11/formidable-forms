@@ -179,9 +179,7 @@ class FrmAppController {
 		 *
 		 * @param bool $is_white_page
 		 */
-		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
-
-		return $is_white_page;
+		return apply_filters( 'frm_is_white_page', $is_white_page );
 	}
 
 	/**

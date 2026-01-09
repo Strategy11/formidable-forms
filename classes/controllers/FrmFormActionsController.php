@@ -145,7 +145,7 @@ class FrmFormActionsController {
 		}
 
 		foreach ( $action_controls as $action ) {
-			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped ) ) {
+			if ( isset( $groups[ $action->id_base ] ) || in_array( $action->id_base, $grouped, true ) ) {
 				continue;
 			}
 
@@ -337,7 +337,7 @@ class FrmFormActionsController {
 		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
-			if ( 'all' !== $action && $a->id_base == $action ) {
+			if ( 'all' !== $action && $a->id_base === $action ) {
 				return $a;
 			}
 
@@ -593,7 +593,7 @@ class FrmFormActionsController {
 		}
 
 		// Only use array_merge if there are new actions.
-		if ( ! empty( $new_actions ) ) {
+		if ( $new_actions ) {
 			$new_actions = call_user_func_array( 'array_merge', $new_actions );
 		}
 
@@ -651,7 +651,7 @@ class FrmFormActionsController {
 	 *
 	 * @return void
 	 */
-	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) {
+	public static function trigger_actions( $event, $form, $entry, $type = 'all', $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$action_status = array(
 			'post_status' => 'publish',
 		);
@@ -699,7 +699,7 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( $entry->form_id != $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms
@@ -724,7 +724,7 @@ class FrmFormActionsController {
 			unset( $action );
 		}//end foreach
 
-		if ( ! empty( $stored_actions ) ) {
+		if ( $stored_actions ) {
 			asort( $action_priority );
 
 			// Make sure hooks are loaded.

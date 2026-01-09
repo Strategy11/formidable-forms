@@ -42,7 +42,7 @@ class FrmEntriesHelper {
 
 		$values['fields'] = array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
 		}
 
@@ -189,11 +189,11 @@ class FrmEntriesHelper {
 	public static function replace_default_message( $message, $atts ) {
 		if ( ! str_contains( $message, '[default-message' ) &&
 			! str_contains( $message, '[default_message' ) &&
-			! empty( $message ) ) {
+			$message ) {
 			return $message;
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = '[default-message]';
 		}
 
@@ -233,6 +233,7 @@ class FrmEntriesHelper {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
 			return self::display_value( $field_value, $field, $atts );
 		}
@@ -344,6 +345,7 @@ class FrmEntriesHelper {
 			$atts['truncate'] = $atts['pre_truncate'];
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == '' ) {
 			return $value;
 		}
@@ -354,6 +356,7 @@ class FrmEntriesHelper {
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == $unfiltered_value ) {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
@@ -567,7 +570,7 @@ class FrmEntriesHelper {
 				}
 			}
 
-			if ( is_array( $value ) && ! empty( $value ) ) {
+			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
 		} else {
@@ -577,6 +580,7 @@ class FrmEntriesHelper {
 
 			// Multi-select dropdown.
 			if ( is_array( $value ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$o_key = array_search( $field->options[ $other_key ], $value );
 
 				if ( $o_key !== false ) {
@@ -596,7 +600,7 @@ class FrmEntriesHelper {
 						unset( $value[ $other_key ] );
 					}
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) {
+			} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 				$value = $other_vals;
 			}//end if
 		}//end if
@@ -889,7 +893,7 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( empty( $status ) ) {
+		if ( ! $status ) {
 			// If the status is empty, let's default to 0.
 			return self::SUBMITTED_ENTRY_STATUS;
 		}

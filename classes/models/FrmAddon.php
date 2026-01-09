@@ -188,20 +188,20 @@ class FrmAddon {
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 
-		if ( $_action != 'plugin_information' ) {
+		if ( $_action !== 'plugin_information' ) {
 			return $_data;
 		}
 
 		$slug  = basename( $this->plugin_file, '.php' );
 		$slug2 = str_replace( '/' . $slug . '.php', '', $this->plugin_folder );
 
-		if ( empty( $_args->slug ) || ( $_args->slug != $slug && $_args->slug !== $slug2 ) ) {
+		if ( empty( $_args->slug ) || ( $_args->slug !== $slug && $_args->slug !== $slug2 ) ) {
 			return $_data;
 		}
 
 		$item_id = $this->download_id;
 
-		if ( empty( $item_id ) ) {
+		if ( ! $item_id ) {
 			$_data = array(
 				'name'      => $this->plugin_name,
 				'excerpt'   => '',
@@ -239,7 +239,7 @@ class FrmAddon {
 
 		$license = trim( get_option( $this->option_name . 'key' ) );
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			$license = $this->activate_defined_license();
 		}
 
@@ -253,7 +253,7 @@ class FrmAddon {
 	 */
 	protected function maybe_get_pro_license() {
 		// prevent a loop if $this is the pro plugin
-		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name != 'Formidable Pro';
+		$get_license = FrmAppHelper::pro_is_installed() && is_callable( 'FrmProAppHelper::get_updater' ) && $this->plugin_name !== 'Formidable Pro';
 
 		if ( ! $get_license ) {
 			return false;
@@ -263,7 +263,7 @@ class FrmAddon {
 		$api->get_pro_updater();
 		$license = $api->get_license();
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			return false;
 		}
 
@@ -416,7 +416,7 @@ class FrmAddon {
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $cap_roles ) ) {
+				if ( in_array( $role, $cap_roles, true ) ) {
 					$wp_roles->add_cap( $role, $cap );
 				} else {
 					$wp_roles->remove_cap( $role, $cap );
@@ -493,7 +493,7 @@ class FrmAddon {
 			}
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			return;
 		}
 
@@ -771,7 +771,7 @@ class FrmAddon {
 
 		$license = stripslashes( FrmAppHelper::get_param( 'license', '', 'post', 'sanitize_text_field' ) );
 
-		if ( empty( $license ) ) {
+		if ( ! $license ) {
 			wp_send_json(
 				array(
 					'message' => __( 'Oops! You forgot to enter your license number.', 'formidable' ),

@@ -229,7 +229,7 @@ class FrmOnSubmitHelper {
 			}
 		}
 
-		if ( ! empty( $form_options ) ) {
+		if ( $form_options ) {
 			$_POST['options'] += $form_options;
 		}
 	}

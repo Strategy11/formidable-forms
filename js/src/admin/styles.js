@@ -63,7 +63,7 @@ class frmStyleOptions {
 		}
 
 		this.cssInlineStyleElement = document.createElement( 'style' );
-		document.head.appendChild( this.cssInlineStyleElement );
+		document.head.append( this.cssInlineStyleElement );
 		return this.cssInlineStyleElement;
 	}
 
@@ -133,7 +133,7 @@ class frmStyleOptions {
 		const hoverElement = document.createElement( 'div' );
 		hoverElement.classList.add( 'frm_hidden' );
 		hoverElement.classList.add( 'frm-style-settings-hover' );
-		settingsWrapper.appendChild( hoverElement );
+		settingsWrapper.append( hoverElement );
 
 		const styleOptionsMenu = settingsWrapper.querySelector( ':scope > ul' );
 
@@ -218,7 +218,7 @@ class frmStyleOptions {
 		temp.setAttribute( 'type', 'text' );
 		temp.value = couponCode;
 
-		copyButton.parentElement.appendChild( temp );
+		copyButton.parentElement.append( temp );
 
 		temp.focus();
 		temp.select();

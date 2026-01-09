@@ -461,23 +461,27 @@ class FrmOnboardingWizardController {
 	 *
 	 * @since 6.9
 	 *
-	 * @param array $inbox_messages The array of existing inbox messages.
+	 * @param mixed $inbox_messages The inbox option data. An array of existing inbox messages if there is valid data set in the option.
 	 *
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
 		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' );
 
-		return array(
-			'onboarding_wizard' => array(
-				'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
-				'message' => esc_html( $message ),
-				'slidein' => esc_html( $message ),
-				'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
-				'created' => time(),
-				'key'     => 'onboarding_wizard',
-			),
+		if ( ! is_array( $inbox_messages ) ) {
+			$inbox_messages = array();
+		}
+
+		$inbox_messages['onboarding_wizard'] = array(
+			'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
+			'message' => esc_html( $message ),
+			'slidein' => esc_html( $message ),
+			'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
+			'created' => time(),
+			'key'     => 'onboarding_wizard',
 		);
+
+		return $inbox_messages;
 	}
 
 	/**

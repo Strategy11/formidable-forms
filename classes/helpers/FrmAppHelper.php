@@ -519,7 +519,7 @@ class FrmAppHelper {
 	public static function is_view_builder_page() {
 		global $pagenow;
 
-		if ( $pagenow !== 'post.php' && $pagenow !== 'post-new.php' && $pagenow !== 'edit.php' ) {
+		if ( ! in_array( $pagenow, array( 'post.php', 'post-new.php', 'edit.php' ), true ) ) {
 			return false;
 		}
 
@@ -605,7 +605,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_empty_value( $value, $empty = '' ) {
-		return ( is_array( $value ) && empty( $value ) ) || $value === $empty;
+		return $value === array() || $value === $empty;
 	}
 
 	/**
@@ -734,7 +734,7 @@ class FrmAppHelper {
 	 * @return mixed
 	 */
 	public static function get_param( $param, $default = '', $src = 'get', $sanitize = '' ) {
-		if ( strpos( $param, '[' ) ) {
+		if ( str_contains( $param, '[' ) ) {
 			$params = explode( '[', $param );
 			$param  = $params[0];
 		}
@@ -758,7 +758,7 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( isset( $params ) && is_array( $value ) && ! empty( $value ) ) {
+		if ( isset( $params ) && is_array( $value ) && $value ) {
 			foreach ( $params as $k => $p ) {
 				if ( ! $k || ! is_array( $value ) ) {
 					continue;
@@ -1339,6 +1339,7 @@ class FrmAppHelper {
 	 * @return array|string
 	 */
 	public static function get_query_var( $value, $param ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value != '' ) {
 			return $value;
 		}
@@ -1390,7 +1391,7 @@ class FrmAppHelper {
 		} else {
 			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
 
-			if ( strpos( $icon, ' ' ) ) {
+			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
 				$icon = reset( $icon );
 			}
@@ -1828,7 +1829,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return true === $value || 1 == $value || 'true' === $value || 'yes' === $value;
+		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value;
 	}
 
 	/**
@@ -2279,7 +2280,7 @@ class FrmAppHelper {
 			return is_user_logged_in();
 		}
 
-		if ( $role == 1 ) {
+		if ( (int) $role === 1 ) {
 			$role = 'administrator';
 		}
 
@@ -2308,7 +2309,7 @@ class FrmAppHelper {
 
 		$can = self::current_user_can( $needed_role );
 
-		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ) ) ) {
+		if ( $can || in_array( $needed_role, array( '-1', 'loggedout' ), true ) ) {
 			return $can;
 		}
 
@@ -2319,7 +2320,7 @@ class FrmAppHelper {
 				return true;
 			}
 
-			if ( $role == $needed_role ) {
+			if ( $role === $needed_role ) {
 				break;
 			}
 		}
@@ -2382,7 +2383,7 @@ class FrmAppHelper {
 		$permission_error = self::permission_nonce_error( $permission );
 
 		if ( $permission_error !== false ) {
-			if ( 'hide' == $show_message ) {
+			if ( 'hide' === $show_message ) {
 				$permission_error = '';
 			}
 			wp_die( esc_html( $permission_error ) );
@@ -2447,6 +2448,7 @@ class FrmAppHelper {
 
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
 		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
 	}
 
@@ -2596,9 +2598,7 @@ class FrmAppHelper {
 		$val = str_replace( array( '&#8220;', '&#8221;', '&#8243;' ), '"', $val );
 
 		// Replace single quotes.
-		$val = str_replace( array( '&#8216;', '&#8217;', '&#8242;', '&prime;', '&rsquo;', '&lsquo;' ), "'", $val );
-
-		return $val;
+		return str_replace( array( '&#8216;', '&#8217;', '&#8242;', '&prime;', '&rsquo;', '&lsquo;' ), "'", $val );
 	}
 
 	/**
@@ -3024,6 +3024,7 @@ class FrmAppHelper {
 		$form_defaults = FrmFormsHelper::get_default_opts();
 
 		foreach ( $form_defaults as $opt => $default ) {
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
 				$values[ $opt ] = $post_values && isset( $post_values['options'][ $opt ] ) ? $post_values['options'][ $opt ] : $default;
 			}
@@ -3076,7 +3077,7 @@ class FrmAppHelper {
 		$str          = wp_strip_all_tags( (string) $original_string );
 		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
-		if ( $length == 0 ) {
+		if ( $length === 0 ) {
 			return '';
 		}
 
@@ -3168,11 +3169,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_formatted_time( $date, $date_format = '', $time_format = '' ) {
-		if ( empty( $date ) ) {
+		if ( ! $date ) {
 			return $date;
 		}
 
-		if ( empty( $date_format ) ) {
+		if ( ! $date_format ) {
 			$date_format = get_option( 'date_format' );
 		}
 
@@ -3199,7 +3200,7 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	private static function add_time_to_date( $time_format, $date ) {
-		if ( empty( $time_format ) ) {
+		if ( ! $time_format ) {
 			$time_format = get_option( 'time_format' );
 		}
 
@@ -3353,7 +3354,7 @@ class FrmAppHelper {
 		}
 
 		foreach ( $units as $u => $strings ) {
-			if ( in_array( $unit, $strings ) ) {
+			if ( in_array( $unit, $strings, true ) ) {
 				return $u;
 			}
 		}
@@ -3429,6 +3430,7 @@ class FrmAppHelper {
 	 * @return int
 	 */
 	public static function get_first_record_num( $r_count, $current_p, $p_size ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current_p == 1 ) {
 			return 1;
 		}
@@ -3462,7 +3464,7 @@ class FrmAppHelper {
 					$l3 = $name;
 				}
 
-				$this_val = $p == $last ? $jv['value'] : array();
+				$this_val = $p === $last ? $jv['value'] : array();
 
 				switch ( $p ) {
 					case 0:
@@ -3503,6 +3505,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function add_value_to_array( $name, $l1, $val, &$vars ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $name == '' ) {
 			$vars[] = $val;
 		} elseif ( ! isset( $vars[ $l1 ] ) ) {
@@ -3534,7 +3537,7 @@ class FrmAppHelper {
 			return;
 		}
 
-		if ( 'open' == $class ) {
+		if ( 'open' === $class ) {
 			echo ' frm_help"';
 		} else {
 			echo ' class="frm_help"';
@@ -3542,7 +3545,7 @@ class FrmAppHelper {
 
 		echo ' title="' . esc_attr( $tooltips[ $name ] );
 
-		if ( 'open' != $class ) {
+		if ( 'open' !== $class ) {
 			echo '"';
 		}
 	}
@@ -3557,6 +3560,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function select_current_page( $page, $current_page, $action = array() ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $current_page != $page ) {
 			return;
 		}
@@ -3567,7 +3571,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action ) ) ) {
+		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}
@@ -3600,9 +3604,7 @@ class FrmAppHelper {
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
 		// allow for &quot
-		$post_content = str_replace( '&quot;', '\\"', $post_content );
-
-		return $post_content;
+		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
 	/**
@@ -3682,29 +3684,25 @@ class FrmAppHelper {
 	 * Decode a JSON string.
 	 * Do not switch shortcodes like [24] to array unless intentional ie XML values.
 	 *
-	 * @param mixed $string
-	 * @param bool  $single_to_array
+	 * @param array|string|null $string
+	 * @param bool              $single_to_array
 	 *
-	 * @return mixed
+	 * @return array|string|null
 	 */
 	public static function maybe_json_decode( $string, $single_to_array = true ) {
 		if ( is_array( $string ) || is_null( $string ) ) {
 			return $string;
 		}
 
-		$new_string = json_decode( $string, true );
+		$new_string   = json_decode( $string, true );
+		$single_value = false;
 
-		if ( function_exists( 'json_last_error' ) ) {
-			// php 5.3+
-			$single_value = false;
+		if ( ! $single_to_array ) {
+			$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
+		}
 
-			if ( ! $single_to_array ) {
-				$single_value = is_array( $new_string ) && count( $new_string ) === 1 && isset( $new_string[0] );
-			}
-
-			if ( json_last_error() == JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
-				$string = $new_string;
-			}
+		if ( json_last_error() === JSON_ERROR_NONE && is_array( $new_string ) && ! $single_value ) {
+			$string = $new_string;
 		}
 
 		return $string;
@@ -3799,11 +3797,12 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
 			return;
 		}
 
-		if ( is_object( $post ) && $post->post_type != $post_type ) {
+		if ( is_object( $post ) && $post->post_type !== $post_type ) {
 			return;
 		}
 
@@ -4217,9 +4216,7 @@ class FrmAppHelper {
 		 *     @type string $type
 		 * }
 		 */
-		$locales = apply_filters( 'frm_locales', $locales, compact( 'type' ) );
-
-		return $locales;
+		return apply_filters( 'frm_locales', $locales, compact( 'type' ) );
 	}
 
 	/**

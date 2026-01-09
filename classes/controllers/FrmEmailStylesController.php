@@ -311,7 +311,7 @@ class FrmEmailStylesController {
 			$valid_emails[] = $email;
 		}
 
-		if ( empty( $valid_emails ) ) {
+		if ( ! $valid_emails ) {
 			wp_send_json_error( __( 'Invalid email address', 'formidable' ) );
 		}
 

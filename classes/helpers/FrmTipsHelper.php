@@ -48,8 +48,8 @@ class FrmTipsHelper {
 		);
 		$tip      = array_merge( $defaults, $tip );
 
-		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
-			$tip['link']['medium'] = 'tip';
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) && ! isset( $tip['link']['campaign'] ) ) {
+			$tip['link']['campaign'] = 'tip';
 		}
 
 		if ( 'p' === $html ) {

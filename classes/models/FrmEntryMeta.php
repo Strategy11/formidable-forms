@@ -154,9 +154,10 @@ class FrmEntryMeta {
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
 
-				if ( ( is_array( $meta_value ) && empty( $meta_value ) ) || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
+				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );
 				} else {
@@ -398,7 +399,7 @@ class FrmEntryMeta {
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
-		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) );
+		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) ); // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( ! $results || ! $stripslashes ) {
 			return $results;
@@ -498,7 +499,7 @@ class FrmEntryMeta {
 	 *
 	 * @return void
 	 */
-	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) {
+	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wpdb;
 		$query[]  = 'SELECT';
 		$defaults = array(
@@ -572,7 +573,7 @@ class FrmEntryMeta {
 
 		if ( ! $args['is_draft'] ) {
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 0 );
-		} elseif ( $args['is_draft'] == 1 ) {
+		} elseif ( $args['is_draft'] == 1 ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$draft_where = $wpdb->prepare( ' AND e.is_draft=%d', 1 );
 		}
 
@@ -580,7 +581,7 @@ class FrmEntryMeta {
 			$user_where = $wpdb->prepare( ' AND e.user_id=%d', $args['user_id'] );
 		}
 
-		if ( strpos( $where, ' GROUP BY ' ) ) {
+		if ( str_contains( $where, ' GROUP BY ' ) ) {
 			// don't inject WHERE filtering after GROUP BY
 			$parts  = explode( ' GROUP BY ', $where );
 			$where  = $parts[0];

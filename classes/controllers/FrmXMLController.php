@@ -145,7 +145,7 @@ class FrmXMLController {
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
 
-		if ( empty( $form ) ) {
+		if ( ! $form ) {
 			return $form;
 		}
 		return json_decode( $form, true );
@@ -164,13 +164,13 @@ class FrmXMLController {
 	private static function override_url( $form, &$url ) {
 		$selected_form = self::get_selected_in_form( $form, 'form' );
 
-		if ( empty( $selected_form ) ) {
+		if ( ! $selected_form ) {
 			return;
 		}
 
 		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 
-		if ( empty( $selected_xml ) || ! str_starts_with( $selected_xml, 'http' ) ) {
+		if ( ! $selected_xml || ! str_starts_with( $selected_xml, 'http' ) ) {
 			return;
 		}
 
@@ -458,7 +458,7 @@ class FrmXMLController {
 	 *
 	 * @return void
 	 */
-	public static function generate_xml( $type, $args = array() ) {
+	public static function generate_xml( $type, $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wpdb;
 
 		self::prepare_types_array( $type );
@@ -550,7 +550,7 @@ class FrmXMLController {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles.
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;
