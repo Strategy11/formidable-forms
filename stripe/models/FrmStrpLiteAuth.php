@@ -474,7 +474,6 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
-
 		$details = self::check_request_params( $form_id );
 
 		if ( is_array( $details ) ) {

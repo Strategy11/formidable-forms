@@ -231,8 +231,7 @@ class FrmSolution {
 			return;
 		}
 
-		$all_imported = $this->is_complete( 'all' );
-
+		$all_imported   = $this->is_complete( 'all' );
 		$step           = $steps['import'];
 		$step['label']  = '';
 		$step['nested'] = true;
@@ -561,9 +560,8 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
-		$addons = $api->get_api_info();
-
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 

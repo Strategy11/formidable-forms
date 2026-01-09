@@ -23,8 +23,7 @@ class FrmXMLController {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$files = apply_filters( 'frm_default_templates_files', array() );
+		$files   = apply_filters( 'frm_default_templates_files', array() );
 
 		foreach ( (array) $files as $file ) {
 			FrmXMLHelper::import_xml( $file );
@@ -208,8 +207,7 @@ class FrmXMLController {
 
 		$form_key  = self::get_selected_in_form( $form, 'form' );
 		$view_keys = self::get_selected_in_form( $form, 'view' );
-
-		$page_ids = array();
+		$page_ids  = array();
 
 		foreach ( (array) $form['pages'] as $for => $name ) {
 			if ( empty( $name ) ) {
@@ -346,9 +344,8 @@ class FrmXMLController {
 	 * @return void
 	 */
 	public static function import_xml() {
-		$errors  = array();
-		$message = '';
-
+		$errors           = array();
+		$message          = '';
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'import-xml', 'import-xml-nonce' );
 
 		if ( false !== $permission_error ) {
@@ -409,8 +406,7 @@ class FrmXMLController {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$result = FrmXMLHelper::import_xml( $file );
+		$result  = FrmXMLHelper::import_xml( $file );
 		FrmXMLHelper::parse_message( $result, $message, $errors );
 
 		unset( $file );
@@ -492,10 +488,9 @@ class FrmXMLController {
 		$records = array();
 
 		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join  = '';
-			$table = $tables[ $tb_type ];
-
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
 			$select     = $table . '.id';
 			$query_vars = array();
 
@@ -727,8 +722,7 @@ class FrmXMLController {
 
 		$form_id   = $form->id;
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
-
-		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
+		$item_id   = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 
 		if ( $item_id ) {
 			$item_id = explode( ',', $item_id );

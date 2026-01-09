@@ -762,10 +762,9 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function maybe_redirect_after_save( $ids ) {
-		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
-		$parsed  = parse_url( $referer );
-		$query   = $parsed['query'];
-
+		$referer             = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$parsed              = parse_url( $referer );
+		$query               = $parsed['query'];
 		$current_action      = false;
 		$actions_to_redirect = array( 'duplicate', 'new_style' );
 
@@ -782,8 +781,7 @@ class FrmStylesController {
 		}
 
 		parse_str( $query, $parsed_query );
-		$form_id = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
-
+		$form_id   = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
 		$style     = new stdClass();
 		$style->ID = end( $ids );
 		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style, $form_id ) ) );
@@ -1377,8 +1375,7 @@ class FrmStylesController {
 						}
 
 						++$i;
-						$icon_id = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
-
+						$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
 						$open_class = '';
 
 						if ( ! $first_open ) {

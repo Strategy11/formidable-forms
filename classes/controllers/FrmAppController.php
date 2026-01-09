@@ -59,8 +59,7 @@ class FrmAppController {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
 			$classes .= self::get_os();
-
-			$page = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
+			$page     = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
 
 			if ( ! $page || $page === 'formidable' ) {
 				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
@@ -116,8 +115,7 @@ class FrmAppController {
 	private static function get_full_screen_setting() {
 		global $wpdb;
 		$meta_key = $wpdb->get_blog_prefix() . 'persisted_preferences';
-
-		$prefs = get_user_meta( get_current_user_id(), $meta_key, true );
+		$prefs    = get_user_meta( get_current_user_id(), $meta_key, true );
 
 		if ( $prefs && isset( $prefs['core/edit-post']['fullscreenMode'] ) ) {
 			return $prefs['core/edit-post']['fullscreenMode'];

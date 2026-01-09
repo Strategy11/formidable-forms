@@ -122,8 +122,7 @@ class FrmHoneypot extends FrmValidate {
 		global $frm_vars;
 		$offset            = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
 		$honeypot_field_id = $max_field_id ? $max_field_id + $offset : $offset;
-
-		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
 		$honeypot->render_field( $honeypot_field_id );

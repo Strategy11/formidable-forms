@@ -148,8 +148,7 @@ class FrmEntryValidate {
 			'exclude'         => array(),
 
 		);
-		$args = wp_parse_args( $args, $defaults );
-
+		$args  = wp_parse_args( $args, $defaults );
 		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
 
 		// Check for values in "Other" fields

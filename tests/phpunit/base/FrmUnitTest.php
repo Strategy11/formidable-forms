@@ -274,11 +274,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 			$this->repeat_sec_form_key  => 3,
 		);
 		$expected_field_num = $field_totals[ $form_key ] ?? 0;
-
-		$form_id = $this->factory->form->get_id_by_key( $form_key );
-		$fields  = FrmField::get_all_for_form( $form_id, '', 'include' );
-
-		$actual_field_num = count( $fields );
+		$form_id            = $this->factory->form->get_id_by_key( $form_key );
+		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
+		$actual_field_num   = count( $fields );
 		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' );
 
 		return $fields;
@@ -514,10 +512,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$records = array();
 
 		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join  = '';
-			$table = $tables[ $tb_type ];
-
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
 			$select     = $table . '.id';
 			$query_vars = array();
 
@@ -594,8 +591,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$xml_body = ob_get_contents();
 		ob_end_clean();
 
-		$xml = $xml_header . $xml_body;
-
+		$xml  = $xml_header . $xml_body;
 		$cwd  = getcwd();
 		$path = "{$cwd}/temp.xml";
 		@chmod( $path, 0755 );

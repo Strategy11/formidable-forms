@@ -109,8 +109,7 @@ class FrmFieldsController {
 			return false;
 		}
 
-		$field = self::get_field_array_from_id( $field_id );
-
+		$field  = self::get_field_array_from_id( $field_id );
 		$values = array();
 
 		if ( FrmAppHelper::pro_is_installed() ) {
@@ -132,9 +131,8 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
-		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-
+		$field_id  = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
 		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
@@ -177,9 +175,8 @@ class FrmFieldsController {
 			$field_object = FrmField::getOne( $field['id'] );
 		}
 
-		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
-		$display   = self::display_field_options( array(), $field_obj );
-
+		$field_obj       = FrmFieldFactory::get_field_factory( $field_object );
+		$display         = self::display_field_options( array(), $field_obj );
 		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
 
@@ -276,11 +273,10 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field = FrmFieldsHelper::setup_edit_vars( $field );
-		$opts  = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts  = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts  = array_map( 'trim', $opts );
-
+		$field                   = FrmFieldsHelper::setup_edit_vars( $field );
+		$opts                    = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
+		$opts                    = explode( "\n", rtrim( $opts, "\n" ) );
+		$opts                    = array_map( 'trim', $opts );
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
 
@@ -921,8 +917,7 @@ class FrmFieldsController {
 
 		$custom_html = $field['custom_html'];
 		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, $errors, $form );
-
-		$start = strpos( $custom_html, '[if error]' );
+		$start       = strpos( $custom_html, '[if error]' );
 
 		if ( false === $start ) {
 			return false;

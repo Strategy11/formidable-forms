@@ -291,8 +291,7 @@ class FrmStylesCardHelper {
 				continue;
 			}
 
-			$value = $style->post_content[ $key ];
-
+			$value  = $style->post_content[ $key ];
 			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
 
 			if ( $is_hex ) {
@@ -383,14 +382,13 @@ class FrmStylesCardHelper {
 	private function get_style_attribute_value_for_wrapper() {
 		$frm_style = new FrmStyle();
 		$defaults  = $frm_style->get_defaults();
-
-		$styles   = array();
-		$styles[] = '--field-font-size: ' . $defaults['field_font_size'];
-		$styles[] = '--field-height: ' . $defaults['field_height'];
-		$styles[] = '--field-pad: ' . $defaults['field_pad'];
-		$styles[] = '--font-size: ' . $defaults['font_size'];
-		$styles[] = '--label-padding: ' . $defaults['label_padding'];
-		$styles[] = '--form-align: ' . $defaults['form_align'];
+		$styles    = array();
+		$styles[]  = '--field-font-size: ' . $defaults['field_font_size'];
+		$styles[]  = '--field-height: ' . $defaults['field_height'];
+		$styles[]  = '--field-pad: ' . $defaults['field_pad'];
+		$styles[]  = '--font-size: ' . $defaults['font_size'];
+		$styles[]  = '--label-padding: ' . $defaults['label_padding'];
+		$styles[]  = '--form-align: ' . $defaults['form_align'];
 
 		return implode( ';', $styles );
 	}

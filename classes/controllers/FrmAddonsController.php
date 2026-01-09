@@ -807,10 +807,8 @@ class FrmAddonsController {
 				$slug      = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
 				$file_name = $addon['plugin'];
 			} else {
-				$slug = $id;
-
+				$slug      = $id;
 				$base_file = $addon['file'] ?? 'formidable-' . $slug;
-
 				$file_name = $base_file . '/' . $base_file . '.php';
 
 				if ( ! isset( $addon['plugin'] ) ) {
@@ -1250,8 +1248,7 @@ class FrmAddonsController {
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
-
-		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+		$message         = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
 
 		return array(
 			'message'       => $message,

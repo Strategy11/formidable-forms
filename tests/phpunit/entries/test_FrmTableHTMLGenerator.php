@@ -15,8 +15,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 	public function test_init_style_settings() {
 		$colors          = $this->_get_colors();
 		$table_generator = new FrmTableHTMLGenerator( 'entry', $colors['start'] );
-
-		$style_settings = $this->get_private_property( $table_generator, 'style_settings' );
+		$style_settings  = $this->get_private_property( $table_generator, 'style_settings' );
 
 		foreach ( $colors['expected'] as $name => $color ) {
 			$actual = $style_settings[ $name ];
@@ -29,8 +28,7 @@ class test_FrmTableHTMLGenerator extends FrmUnitTest {
 	 */
 	public function test_is_color_setting() {
 		$table_generator = new FrmTableHTMLGenerator( 'entry' );
-
-		$colors = array( 'border_color', 'bg_color', 'text_color', 'alt_bg_color' );
+		$colors          = array( 'border_color', 'bg_color', 'text_color', 'alt_bg_color' );
 
 		foreach ( $colors as $color ) {
 			$is_color = $this->run_private_method( array( $table_generator, 'is_color_setting' ), array( $color ) );

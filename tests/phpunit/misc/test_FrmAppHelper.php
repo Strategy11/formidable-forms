@@ -307,10 +307,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses
 	 */
 	public function test_kses() {
-		$start_value  = '<script><script>';
-		$safe_value   = 'Hello, <a href="/test">click here</a>';
-		$start_value .= $safe_value;
-
+		$start_value    = '<script><script>';
+		$safe_value     = 'Hello, <a href="/test">click here</a>';
+		$start_value   .= $safe_value;
 		$stripped_value = FrmAppHelper::kses( $start_value );
 		$this->assertEquals( $stripped_value, 'Hello, click here' );
 
@@ -533,9 +532,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 		// Test field keys
 		$table_name = 'frm_fields';
 		$column     = 'field_key';
-
-		$name = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
-		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$name       = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
+		$key        = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertTrue( strlen( $key ) < 100, 'field key length should never be over 100' );
 
 		$name = 'key';

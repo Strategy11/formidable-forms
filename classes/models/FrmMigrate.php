@@ -358,8 +358,7 @@ class FrmMigrate {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
+		$file    = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
@@ -680,8 +679,7 @@ class FrmMigrate {
 		}
 
 		$pixel_conversion = 9;
-
-		$size = round( (int) $int_size / $pixel_conversion );
+		$size             = round( (int) $int_size / $pixel_conversion );
 	}
 
 	/**
@@ -782,9 +780,8 @@ class FrmMigrate {
 	 */
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
-
-		$size  = round( $pixel_conversion * (int) $size );
-		$size .= 'px';
+		$size             = round( $pixel_conversion * (int) $size );
+		$size            .= 'px';
 	}
 
 	/**
@@ -840,8 +837,7 @@ class FrmMigrate {
 	private function migrate_to_11() {
 		global $wpdb;
 
-		$forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
-
+		$forms            = FrmDb::get_results( $this->forms, array(), 'id, options' );
 		$sending          = __( 'Sending', 'formidable' );
 		$img              = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
 		$old_default_html = <<<DEFAULT_HTML

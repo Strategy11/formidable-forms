@@ -130,8 +130,7 @@ class FrmPluginSearch {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
-
+			$addon_terms   = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
 			if ( count( $matched_terms ) === count( $normalized_term ) ) {

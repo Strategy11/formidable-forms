@@ -136,11 +136,10 @@ class FrmSquareLiteAppController {
 		$first_name_setting = $action->post_content['billing_first_name'];
 		$last_name_setting  = $action->post_content['billing_last_name'];
 		$address_setting    = $action->post_content['billing_address'];
-
-		$entry      = self::generate_false_entry();
-		$first_name = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
-		$last_name  = $last_name_setting && isset( $entry->metas[ $last_name_setting ] ) ? $entry->metas[ $last_name_setting ] : '';
-		$address    = $address_setting && isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
+		$entry              = self::generate_false_entry();
+		$first_name         = $first_name_setting && isset( $entry->metas[ $first_name_setting ] ) ? $entry->metas[ $first_name_setting ] : '';
+		$last_name          = $last_name_setting && isset( $entry->metas[ $last_name_setting ] ) ? $entry->metas[ $last_name_setting ] : '';
+		$address            = $address_setting && isset( $entry->metas[ $address_setting ] ) ? $entry->metas[ $address_setting ] : '';
 
 		if ( is_array( $first_name ) && isset( $first_name['first'] ) ) {
 			$first_name = $first_name['first'];

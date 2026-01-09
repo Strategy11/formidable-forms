@@ -277,7 +277,6 @@ abstract class FrmFormMigrator {
 
 		foreach ( $fields as $field ) {
 			$field = (array) $field;
-
 			$label = $this->get_field_label( $field );
 			$type  = $this->get_field_type( $field );
 
@@ -292,8 +291,7 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_type = $this->convert_field_type( $type, $field );
-
+			$new_type                 = $this->convert_field_type( $type, $field );
 			$new_field                = FrmFieldsHelper::setup_new_vars( $new_type );
 			$new_field['name']        = $label;
 			$new_field['field_order'] = $field_order;
@@ -364,8 +362,7 @@ abstract class FrmFormMigrator {
 			return;
 		}
 
-		$open = array();
-
+		$open  = array();
 		$order = 0;
 
 		foreach ( $fields as $field ) {

@@ -192,7 +192,6 @@ class FrmStyle {
 		// Remove all leading ')' braces, then add one back. This way there's always a single brace.
 		$color_val  = rtrim( $color_val, ')' );
 		$color_val .= ')';
-
 		$color_rgba = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
 		// Remove any excessive braces from the rgba like rgba((.
 		$color_rgba            = trim( $color_rgba, '()' );
@@ -249,7 +248,6 @@ class FrmStyle {
 		// Limit the number of opening braces after rgb/rgba. There should only be one.
 		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';
-
 		$color_val = $new_color;
 	}
 
@@ -432,8 +430,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	private function get_css_content( $filename ) {
-		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
-
+		$css       = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 		$saving    = true;
 		$frm_style = $this;
 
@@ -546,8 +543,7 @@ class FrmStyle {
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
-
-		$styles = array();
+		$styles         = array();
 
 		foreach ( $temp_styles as $style ) {
 			$this->id = $style->ID;

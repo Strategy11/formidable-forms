@@ -126,8 +126,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	public function test_maybe_fix_xml() {
 		$wp_comment        = '<!-- generator="WordPress/5.2.4" created="2019-10-23 19:33" -->';
 		$simple_xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . '<channel></channel>';
-
-		$xml_string = chr( 13 ) . $simple_xml_string;
+		$xml_string        = chr( 13 ) . $simple_xml_string;
 		$this->maybe_fix_xml( $xml_string );
 
 		$this->assertEquals( $simple_xml_string, $xml_string );

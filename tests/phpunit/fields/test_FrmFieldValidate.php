@@ -71,8 +71,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		foreach ( $test_formats as $test_format ) {
 			$field_key = $this->get_field_key( $test_format['type'] );
 			$field_id  = FrmField::get_id_by_key( $field_key );
-
-			$errors = $this->check_single_value( array( $field_id => $test_format['value'] ) );
+			$errors    = $this->check_single_value( array( $field_id => $test_format['value'] ) );
 
 			if ( $test_format['invalid'] ) {
 				$this->assertNotEmpty( $errors, $test_format['type'] . ' value ' . $test_format['value'] . ' passed validation' );
@@ -151,10 +150,8 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	public function test_filled_required_fields() {
-		$_POST = $this->factory->field->generate_entry_array( $this->form );
-
-		$errors = FrmEntryValidate::validate( $_POST );
-
+		$_POST        = $this->factory->field->generate_entry_array( $this->form );
+		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
 		if ( $errors ) {

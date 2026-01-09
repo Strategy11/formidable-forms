@@ -265,8 +265,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'fields'     => implode( ',', $this->include_fields ),
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content                     = $this->get_formatted_content( $atts );
 		$pass_atts                   = $atts;
 		$pass_atts['include_fields'] = $atts['fields'];
 		unset( $pass_atts['fields'] );
@@ -740,8 +739,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function expected_html_content( $atts ) {
-		$table = $this->table_header( $atts );
-
+		$table  = $this->table_header( $atts );
 		$table .= $this->two_cell_table_row( 'free-text-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-paragraph-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-checkboxes', $atts );
@@ -753,7 +751,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$table .= $this->two_cell_table_row( 'free-phone-field', $atts );
 		$table .= $this->two_cell_table_row( 'free-hidden-field', $atts );
 		$table .= $this->one_cell_table_row( 'free-html-field', $atts );
-
 		$table .= $this->user_info_rows( $atts );
 
 		return $table . $this->table_footer();
@@ -789,9 +786,8 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$font_size    = $atts['font_size'];
 			$border_width = $atts['border_width'] ?? $atts['field_border_width'];
 			$border_color = $atts['border_color'];
-
-			$header .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
-			$header .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
+			$header      .= ' style="border-spacing:0;font-size:' . $font_size . ';line-height:135%;';
+			$header      .= 'border-bottom:' . $border_width . ' solid ' . $border_color . ';"';
 		}
 
 		return $header . '><tbody>' . "\r\n";
@@ -826,8 +822,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			$html .= ' class="frm-child-row"';
 		}
 
-		$html .= '>';
-
+		$html       .= '>';
 		$label       = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$field_value = '<td' . $this->td_style . '>' . wp_kses_post( $field_value ) . '</td>';
 
@@ -1054,8 +1049,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 */
 	protected function get_expected_default_shortcodes( $type, $atts ) {
 		$content = '';
-
-		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
+		$fields  = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 
 		if ( $type === 'html' ) {
 			$content .= $this->table_header( $atts );
@@ -1101,8 +1095,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function expected_default_array( $atts ) {
-		$fields = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
-
+		$fields   = FrmField::get_all_for_form( $atts['form_id'], '', 'include' );
 		$expected = array();
 
 		foreach ( $fields as $field ) {

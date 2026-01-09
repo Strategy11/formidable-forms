@@ -46,12 +46,10 @@ class FrmSettingsController {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
-
-		$sections = self::get_settings_tabs();
-		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$uploads      = wp_upload_dir();
+		$target_path  = $uploads['basedir'] . '/formidable/css';
+		$sections     = self::get_settings_tabs();
+		$current      = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$current = 'payments_settings';
@@ -353,8 +351,7 @@ class FrmSettingsController {
 	 */
 	public static function payments_settings() {
 		$payment_sections = self::$removed_payments_sections;
-
-		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$tab              = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$tab = str_replace( '_settings', '', $tab );
@@ -506,8 +503,7 @@ class FrmSettingsController {
 			'order_by' => 'post_title',
 		);
 
-		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
-
+		$pages   = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
 		$results = array();
 
 		foreach ( $pages as $page ) {

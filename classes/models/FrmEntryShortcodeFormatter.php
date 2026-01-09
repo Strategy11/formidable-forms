@@ -265,8 +265,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_two_cell_shortcode_row( $field, $value = null ) {
-		$row = '[if ' . $field->id . ']';
-
+		$row   = '[if ' . $field->id . ']';
 		$label = '[' . $field->id . ' show=field_label]';
 
 		if ( $value === null ) {

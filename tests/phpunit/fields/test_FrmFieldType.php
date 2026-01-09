@@ -314,8 +314,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field        = FrmField::getOne( $field->id );
 		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
 		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
-
-		$html = $field_object->prepare_field_html( $args );
+		$html         = $field_object->prepare_field_html( $args );
 		$this->assertEquals( '', $html );
 
 		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).

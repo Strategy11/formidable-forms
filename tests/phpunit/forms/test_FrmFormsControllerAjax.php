@@ -36,8 +36,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 
 	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
-
-		$form = FrmForm::getOne( $form_id );
+		$form   = FrmForm::getOne( $form_id );
 		$this->assertNotEmpty( $form, 'Form not found with id ' . $form_id );
 
 		$_POST = array(

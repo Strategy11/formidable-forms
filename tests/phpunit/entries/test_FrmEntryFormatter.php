@@ -11,8 +11,7 @@ class test_FrmEntryFormatter extends FrmUnitTest {
 	 * @covers FrmEntryFormatter::flatten_array
 	 */
 	public function test_flatten_array() {
-		$values = array( 'Option 1', 'Option 2', 'Option 3' );
-
+		$values     = array( 'Option 1', 'Option 2', 'Option 3' );
 		$form       = $this->factory->form->create_and_get();
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry_id   = $this->factory->entry->create( $entry_data );

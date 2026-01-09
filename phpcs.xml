@@ -282,6 +282,7 @@
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
 	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
+	<rule ref="Formidable.WhiteSpace.ConsecutiveAssignmentSpacing" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />

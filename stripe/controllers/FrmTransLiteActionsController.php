@@ -262,10 +262,8 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$entry = FrmEntry::getOne( $payment->item_id );
-
-		$trigger_event = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
-
+		$entry            = FrmEntry::getOne( $payment->item_id );
+		$trigger_event    = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
@@ -312,8 +310,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$currency = self::get_currency_for_action( $atts );
-
-		$total = 0;
+		$total    = 0;
 
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );

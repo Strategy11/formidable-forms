@@ -221,7 +221,6 @@ class FrmXMLHelper {
 
 		if ( $parent ) {
 			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
-
 			$parent = $parent ? $parent['term_id'] : 0;
 		}
 
@@ -245,8 +244,7 @@ class FrmXMLHelper {
 
 			self::update_custom_style_setting_on_import( $form );
 
-			$this_form = self::maybe_get_form( $form );
-
+			$this_form   = self::maybe_get_form( $form );
 			$old_id      = false;
 			$form_fields = false;
 
@@ -347,8 +345,7 @@ class FrmXMLHelper {
 		}
 
 		$edit_query = apply_filters( 'frm_match_xml_form', $edit_query, $form );
-
-		$form = FrmForm::getAll( $edit_query, '', 1 );
+		$form       = FrmForm::getAll( $edit_query, '', 1 );
 
 		if ( is_object( $form ) && $form->status === 'trash' ) {
 			FrmForm::destroy( $form->id );
@@ -1134,8 +1131,7 @@ class FrmXMLHelper {
 				'post_type' => FrmStylesController::$post_type,
 			);
 
-			$select = 'ID';
-
+			$select    = 'ID';
 			$cache_key = FrmDb::generate_cache_key( $where, array( 'limit' => 1 ), $select, 'var' );
 			FrmDb::delete_cache_and_transient( $cache_key, 'post' );
 		}
@@ -1678,8 +1674,7 @@ class FrmXMLHelper {
 		if ( $primary_form ) {
 			$primary_form = FrmForm::getOne( $primary_form );
 			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
-
-			$message .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
+			$message     .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
 		}
 	}
 
@@ -1699,10 +1694,9 @@ class FrmXMLHelper {
 
 		if ( $not_default ) {
 			global $wpdb;
-			$table  = $wpdb->prefix . 'posts';
-			$where  = array( 'ID' => $options['custom_style'] );
-			$select = 'post_name';
-
+			$table      = $wpdb->prefix . 'posts';
+			$where      = array( 'ID' => $options['custom_style'] );
+			$select     = 'post_name';
 			$style_name = FrmDb::get_var( $table, $where, $select );
 
 			$options['custom_style'] = $style_name ? $style_name : 1;

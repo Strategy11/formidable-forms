@@ -114,9 +114,8 @@ class FrmFormActionsController {
 	 * @param array $values
 	 */
 	public static function email_settings( $values ) {
-		$form   = FrmForm::getOne( $values['id'] );
-		$groups = self::form_action_groups();
-
+		$form            = FrmForm::getOne( $values['id'] );
+		$groups          = self::form_action_groups();
 		$action_controls = self::get_form_actions();
 		self::maybe_add_action_to_group( $action_controls, $groups );
 
@@ -266,9 +265,8 @@ class FrmFormActionsController {
 	 * @param array  $allowed
 	 */
 	public static function show_action_icon_link( $action_control, $allowed ) {
-		$data    = array();
-		$classes = ' frm_' . $action_control->id_base . '_action frm_single_action';
-
+		$data        = array();
+		$classes     = ' frm_' . $action_control->id_base . '_action frm_single_action';
 		$group_class = ' frm-group-' . $action_control->action_options['group'];
 
 		/* translators: %s: Name of form action */
@@ -465,13 +463,11 @@ class FrmFormActionsController {
 		$action_control = self::get_form_actions( $action_type );
 		$action_control->_set( $action_key );
 
-		$form_id = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
-
+		$form_id     = FrmAppHelper::get_param( 'form_id', '', 'post', 'absint' );
 		$form_action = $action_control->prepare_new( $form_id );
 		$use_logging = self::should_show_log_message( $action_type );
-
-		$values = array();
-		$form   = self::fields_to_values( $form_id, $values );
+		$values      = array();
+		$form        = self::fields_to_values( $form_id, $values );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/form_action.php';
 		wp_die();
@@ -481,9 +477,8 @@ class FrmFormActionsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$action_key  = FrmAppHelper::get_param( 'action_id', '', 'post', 'absint' );
-		$action_type = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
-
+		$action_key     = FrmAppHelper::get_param( 'action_id', '', 'post', 'absint' );
+		$action_type    = FrmAppHelper::get_param( 'action_type', '', 'post', 'sanitize_text_field' );
 		$action_control = self::get_form_actions( $action_type );
 
 		if ( ! $action_control ) {
@@ -491,10 +486,8 @@ class FrmFormActionsController {
 		}
 
 		$form_action = $action_control->get_single_action( $action_key );
-
-		$values = array();
-		$form   = self::fields_to_values( $form_action->menu_order, $values );
-
+		$values      = array();
+		$form        = self::fields_to_values( $form_action->menu_order, $values );
 		$use_logging = self::should_show_log_message( $action_type );
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/_action_inside.php';
