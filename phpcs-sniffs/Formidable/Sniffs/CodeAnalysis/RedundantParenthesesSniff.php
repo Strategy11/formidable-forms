@@ -103,6 +103,7 @@ class RedundantParenthesesSniff implements Sniff {
 
 			// Remove whitespace after opening parenthesis.
 			$next = $stackPtr + 1;
+
 			while ( $next < $closeParen && $tokens[ $next ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $next, '' );
 				++$next;
@@ -110,6 +111,7 @@ class RedundantParenthesesSniff implements Sniff {
 
 			// Remove whitespace before closing parenthesis.
 			$prev = $closeParen - 1;
+
 			while ( $prev > $stackPtr && $tokens[ $prev ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $prev, '' );
 				--$prev;
