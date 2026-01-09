@@ -109,7 +109,6 @@ class FrmAddon {
 	protected $should_clear_cache = true;
 
 	public function __construct() {
-
 		if ( empty( $this->plugin_slug ) ) {
 			$this->plugin_slug = preg_replace( '/[^a-zA-Z0-9_\s]/', '', str_replace( ' ', '_', strtolower( $this->plugin_name ) ) );
 		}
@@ -159,7 +158,6 @@ class FrmAddon {
 	 * @return void
 	 */
 	public function edd_plugin_updater() {
-
 		$this->is_license_revoked();
 		$license = $this->license;
 
@@ -187,7 +185,6 @@ class FrmAddon {
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
-
 		if ( $_action !== 'plugin_information' ) {
 			return $_data;
 		}

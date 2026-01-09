@@ -207,7 +207,6 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::is_not_unique
 	 */
 	public function test_is_not_unique() {
-
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
 			array(

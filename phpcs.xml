@@ -46,6 +46,8 @@
 		<exclude-pattern>views/frm-forms/preview/header.php</exclude-pattern>
 	</rule>
 
+	<rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace" />
+
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
 		<exclude-pattern>views/*</exclude-pattern>

@@ -577,7 +577,6 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_86() {
-
 		$fields = $this->get_fields_with_size();
 
 		foreach ( $fields as $f ) {

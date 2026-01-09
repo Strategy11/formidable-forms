@@ -105,7 +105,6 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::compare_for_update
 	 */
 	public function test_compare_for_update() {
-
 		$tests = array(
 			array(
 				'version'  => '',

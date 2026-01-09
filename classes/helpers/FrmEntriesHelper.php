@@ -301,7 +301,6 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -926,7 +925,6 @@ class FrmEntriesHelper {
 	 * @return array<string>
 	 */
 	public static function get_entry_statuses() {
-
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),
