@@ -4,9 +4,9 @@ import style from './frm-colorpicker-component.css';
 class frmColorpickerLiteComponent extends frmWebComponent {
 	constructor() {
 		super();
-		this.input          = document.createElement( 'input' );
+		this.input = document.createElement( 'input' );
 		this.componentStyle = style;
-		this._onChange      = null;
+		this._onChange = () => {};
 	}
 
 	initView() {
@@ -49,6 +49,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 
 	/**
 	 * A method to get the color value.
+	 *
 	 * @return {string} - The color value.
 	 */
 	get color() {
@@ -57,6 +58,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the color value.
+	 *
 	 * @param {string} value - The value to set the color value for.
 	 * @return {void}
 	 */
@@ -66,6 +68,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the change event listener for the color picker component.
+	 *
 	 * @param {Function} callback - The callback function to call when the color picker component is changed.
 	 * @return {void}
 	 */

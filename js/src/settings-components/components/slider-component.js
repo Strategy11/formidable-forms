@@ -13,8 +13,8 @@ import frmDependentUpdaterComponent from '../../admin/components/dependent-updat
 export default class frmSliderComponent {
 	constructor( sliderElements = [], settings = {} ) {
 		this.loadedByWebComponent = sliderElements.length > 0;
-		this.sliderElements       = sliderElements.length > 0 ? sliderElements : document.querySelectorAll( '.frm-slider-component' );
-		this.settings             = settings;
+		this.sliderElements = sliderElements.length > 0 ? sliderElements : document.querySelectorAll( '.frm-slider-component' );
+		this.settings = settings;
 
 		if ( 0 === this.sliderElements.length ) {
 			return;

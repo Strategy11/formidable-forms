@@ -6,7 +6,7 @@ export class frmWebComponent extends HTMLElement {
 		super();
 
 		if ( this.useShadowDom() ) {
-			this.attachShadow({ mode: 'open' });
+			this.attachShadow( { mode: 'open' } );
 		}
 	}
 
@@ -59,7 +59,7 @@ export class frmWebComponent extends HTMLElement {
 		}
 
 		const wrapper = this.getWrapper();
-        wrapper.innerHTML = '';
+		wrapper.innerHTML = '';
 
 		view.classList.add( 'frm-component' );
 		wrapper.append( ...this.getViewItems( view ) );
@@ -116,7 +116,7 @@ export class frmWebComponent extends HTMLElement {
 			if ( element ) {
 				observer.observe( this );
 			}
-		});
+		} );
 	}
 
 	set frmLabel( text ) {

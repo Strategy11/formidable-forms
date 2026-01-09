@@ -16,6 +16,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the change event listener for the slider component.
+	 *
 	 * @param {Function} callback - The callback function to call when the slider component is changed.
 	 * @return {void}
 	 */
@@ -29,6 +30,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the has multiple values flag. This flag is used to determine if the slider component should display multiple values.
+	 *
 	 * @param {boolean} value - The value to set.
 	 * @return {void}
 	 */
@@ -38,6 +40,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the default multiple values. This values are used to determine the default values for the slider component.
+	 *
 	 * @param {Object} value - The value to set.
 	 * @return {void}
 	 */
@@ -47,6 +50,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the default value for the single slider component. This value is used to determine the default value for the single slider component.
+	 *
 	 * @param {string} value - The value to set.
 	 * @return {void}
 	 */
@@ -56,6 +60,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the available units for the slider component. This units are used to determine the available units for the slider component.
+	 *
 	 * @param {Array} value - The value to set.
 	 * @return {void}
 	 */
@@ -111,6 +116,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to get the available units for the slider component. It will checke the data-units attribute first and if it is not set, it will return the default available units.
+	 *
 	 * @return {Array} - The available units.
 	 */
 	getAvailableUnits() {
@@ -120,12 +126,12 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		return attr.split( ',' ).map( u => u.trim() );
-
 	}
 
 	/**
 	 * A method to parse the default values for the multiple values slider component. It will check the data-values attribute first and if it is not set, it will return the default values.
 	 * If the values haven't been set via data-values attribute or dynamically via this._sliderDefaultMultipleValues it will return the default values.
+	 *
 	 * @return {Object} - The default values.
 	 */
 	parseDefaultValues() {
@@ -171,6 +177,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to check if the slider component has multiple values. It will check the data-has-multiple-values attribute first and if it is not set, it will return the default value.
+	 *
 	 * @return {boolean} - The has multiple values flag.
 	 */
 	hasMultipleSliderValues() {
@@ -215,13 +222,14 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to create the hidden input value for the slider component. This hidden input value is used to store the value of the slider component.
+	 *
 	 * @param {Object} options - The options for the slider.
 	 * @return {Element} - The hidden input value element.
 	 */
 	createSliderHiddenInputValue( options ) {
 		const { fieldName, fieldValue, componentId } = options;
 		const hiddenInput = document.createElement( 'input' );
-		hiddenInput.type  = 'hidden';
+		hiddenInput.type = 'hidden';
 		hiddenInput.value = fieldValue;
 
 		if ( fieldName ) {
@@ -235,7 +243,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		if ( this._onChange ) {
 			hiddenInput.addEventListener( 'change', () => {
 				this._onChange( hiddenInput.value );
-			});
+			} );
 		}
 
 		return hiddenInput;
@@ -243,6 +251,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to create the slider group. This method is used to create the slider group.
+	 *
 	 * @param {Object} options - The options for the slider.
 	 * @return {Element} - The slider group element.
 	 */
@@ -270,6 +279,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 	/**
 	 * A method to create the slider. This method is used to create the slider.
+	 *
 	 * @param {Object} options - The options for the slider.
 	 * @return {Element} - The slider element.
 	 */
@@ -299,7 +309,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		if ( iconSvgId ) {
 			const svg = document.createElementNS( 'http://www.w3.org/2000/svg', 'svg' );
 			svg.classList.add( 'frmsvg' );
-			
+
 			const use = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
 			use.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', `#${ iconSvgId }` );
 			svg.appendChild( use );

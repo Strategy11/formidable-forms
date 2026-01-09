@@ -5,9 +5,9 @@ import style from './frm-border-radius-component.css';
 export class frmBorderRadiusComponent extends frmWebComponent {
 	constructor() {
 		super();
-		this._onChange       = null;
-		this.componentStyle  = style;
-		this.unitTypeOptions = ['px', 'em', '%'];
+		this._onChange = () => {};
+		this.componentStyle = style;
+		this.unitTypeOptions = [ 'px', 'em', '%' ];
 		this.value = '0px';
 		this._defaultValue = '0px';
 		this.usesMultipleValues = false;
@@ -45,7 +45,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		return {
 			top: this.parseValueUnit( parts[ 0 ] || '0px' ),
 			bottom: this.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
-			left: this.parseValueUnit( parts[ 3 ] || parts[ 1 ] || parts[ 0 ]|| '0px' ),
+			left: this.parseValueUnit( parts[ 3 ] || parts[ 1 ] || parts[ 0 ] || '0px' ),
 			right: this.parseValueUnit( parts[ 1 ] || parts[ 0 ] || '0px' )
 		};
 	}
@@ -97,7 +97,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			this.borderInputLeft.value = this.inputValue.value;
 			this.borderInputRight.value = this.inputValue.value;
 			this.updateValue( value );
-		});
+		} );
 		return this.inputValue;
 	}
 
@@ -109,11 +109,11 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			opt.value = option;
 			opt.textContent = option;
 			this.inputUnit.appendChild( opt );
-		});
+		} );
 
 		this.inputUnit.addEventListener( 'change', () => {
 			this.hiddenInput.value = this.inputValue.value + this.inputUnit.value;
-		});
+		} );
 
 		return this.inputUnit;
 	}
@@ -192,27 +192,24 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	}
 
 	buildBorderRadiusIndividualValue() {
-		const unit  = this.inputUnit.value;
-		const value = `${this.borderInputTop.value}${unit} ${this.borderInputRight.value}${unit} ${this.borderInputBottom.value}${unit} ${this.borderInputLeft.value}${unit}`;
+		const unit = this.inputUnit.value;
+		const value = `${ this.borderInputTop.value }${ unit } ${ this.borderInputRight.value }${ unit } ${ this.borderInputBottom.value }${ unit } ${ this.borderInputLeft.value }${ unit }`;
 		this.updateValue( value );
 	}
 
 	updateValue( value ) {
 		this.hiddenInput.value = value;
 
-		if ( ! this._onChange ) {
-			return;
-		}
-
 		this._onChange( value );
 	}
 
 	getButton() {
 		this.button = document.createElement( 'button' );
+		this.button.type = 'button';
 		this.button.textContent = __( 'Border Radius', 'formidable' );
 		this.button.addEventListener( 'click', () => {
 			this.borderIndividualInputsWrapper.classList.toggle( 'frm_hidden' );
-		});
+		} );
 
 		return this.button;
 	}

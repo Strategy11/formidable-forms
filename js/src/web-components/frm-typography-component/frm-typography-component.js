@@ -33,13 +33,13 @@ export class frmTypographyComponent extends frmWebComponent {
 			},
 		];
 		this.value = '21px';
-		this.unitTypeOptions = ['px', 'em', '%'];
-		this._onChange = null;
+		this.unitTypeOptions = [ 'px', 'em', '%' ];
+		this._onChange = () => {};
 		this._defaultValue = '21px';
 	}
 
 	initView() {
-		this.wrapper   = document.createElement( 'div' );
+		this.wrapper = document.createElement( 'div' );
 		this.container = document.createElement( 'div' );
 
 		this.wrapper.classList.add( 'frm-typography-component', 'frm-typography' );
@@ -57,6 +57,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to get the select element.
+	 *
 	 * @return {Element} - The select element.
 	 */
 	getSelect() {
@@ -65,7 +66,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.select.id = this.componentId;
 		}
 		if ( null !== this.fieldName ) {
-			this.select.name = `${this.fieldName}[size]`;
+			this.select.name = `${ this.fieldName }[size]`;
 		}
 		this.getDefaultOptions( this.select );
 		return this.select;
@@ -73,6 +74,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to get the default options for the select element.
+	 *
 	 * @param {Element} select - The select element.
 	 * @return {void}
 	 */
@@ -83,11 +85,12 @@ export class frmTypographyComponent extends frmWebComponent {
 			opt.textContent = option.label;
 			opt.selected = option.value === this._defaultValue;
 			select.appendChild( opt );
-		});
+		} );
 	}
 
 	/**
 	 * A method to get the unit value wrapper element.
+	 *
 	 * @return {Element} - The unit value wrapper element.
 	 */
 	getUnitValueWrapper() {
@@ -100,6 +103,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to get the unit value input element.
+	 *
 	 * @return {Element} - The unit value input element.
 	 */
 	getUnitValueInput() {
@@ -108,11 +112,11 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.unitValueInput.id = this.componentId + '-unit';
 		}
 		if ( null !== this.fieldName ) {
-			this.unitValueInput.name = `${this.fieldName}[unit]`;
+			this.unitValueInput.name = `${ this.fieldName }[unit]`;
 		}
 
-		this.unitValueInput.type  = 'text';
-		this.unitValueInput.value = `${parseInt( this.defaultOptions.find( option => option.value === this._defaultValue )?.value ) || 21}`;
+		this.unitValueInput.type = 'text';
+		this.unitValueInput.value = `${ parseInt( this.defaultOptions.find( option => option.value === this._defaultValue )?.value ) || 21 }`;
 
 		this.unitValueInput.addEventListener( 'change', event => {
 			const selectValue = this.select.value;
@@ -120,13 +124,14 @@ export class frmTypographyComponent extends frmWebComponent {
 				return;
 			}
 			this._onChange( event.target.value + this.unitTypeSelect.value );
-		});
+		} );
 
 		return this.unitValueInput;
 	}
 
 	/**
 	 * A method to get the unit type select element.
+	 *
 	 * @return {Element} - The unit type select element.
 	 */
 	getUnitTypeSelect() {
@@ -136,7 +141,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.unitTypeSelect.id = this.componentId + '-unit-type';
 		}
 		if ( null !== this.fieldName ) {
-			this.unitTypeSelect.name = `${this.fieldName}[unit-type]`;
+			this.unitTypeSelect.name = `${ this.fieldName }[unit-type]`;
 		}
 
 		this.unitTypeOptions.forEach( option => {
@@ -144,19 +149,20 @@ export class frmTypographyComponent extends frmWebComponent {
 			opt.value = option;
 			opt.textContent = option;
 			this.unitTypeSelect.appendChild( opt );
-		});
+		} );
 		return this.unitTypeSelect;
 	}
 
 	/**
 	 * A method to get the hidden input element.
+	 *
 	 * @return {Element} - The hidden input element.
 	 */
 	getHiddenInput() {
 		this.hiddenInput = document.createElement( 'input' );
 		this.hiddenInput.type = 'hidden';
 		if ( null !== this.fieldName ) {
-			this.hiddenInput.name = `${this.fieldName}[value]`;
+			this.hiddenInput.name = `${ this.fieldName }[value]`;
 		}
 		this.hiddenInput.value = this.value;
 		return this.hiddenInput;
@@ -164,6 +170,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the change event listener for the select element.
+	 *
 	 * @return {void} - The unit value.
 	 */
 	afterViewInit() {
@@ -173,16 +180,26 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.hiddenInput.value = value.value + value.unit;
 			this._onChange( this.hiddenInput.value );
 			this.unitTypeSelect.value = value.unit;
-		});
+		} );
 	}
 
 	/**
 	 * A method to get the unit value.
+	 *
 	 * @param {string} value - The value to get the unit value for.
 	 * @return {Object} - The unit value.
 	 */
 	getUnitValue( value ) {
-		const unitType = value.match( /^([\d.]+)(px|em|%)?$/ )[2] || 'px';
+		const defaultValue = { value: 0, unit: 'px' };
+		if ( ! value ) {
+			return defaultValue;
+		}
+		const unitType = value.match( /^([\d.]+)(px|em|%)?$/ )[ 2 ] || 'px';
+
+		if ( ! unitType ) {
+			return defaultValue;
+		}
+
 		return {
 			value: parseInt( value ),
 			unit: unitType
@@ -191,6 +208,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to set the change event listener for the select element.
+	 *
 	 * @param {Function} callback - The callback function to call when the select element is changed.
 	 * @return {void}
 	 */
@@ -204,6 +222,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 	/**
 	 * A method to set dynamically the default value for the typography component.
+	 *
 	 * @param {string} value - The value to set dynamically the default value for.
 	 * @return {void}
 	 */
