@@ -406,8 +406,9 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_six() {
-		$name_id                         = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id                        = FrmField::get_id_by_key( $this->email_field_key );
+		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id = FrmField::get_id_by_key( $this->email_field_key );
+
 		$entry_clone                     = clone $this->entry;
 		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
 		$entry_clone->metas[ $email_id ] = 'tester@mail.com';

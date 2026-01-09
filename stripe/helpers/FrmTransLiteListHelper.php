@@ -444,9 +444,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	private function get_row_actions( $item ) {
-		$base_link       = '?page=formidable-payments&action=';
-		$view_link       = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
-		$delete_link     = $base_link . 'destroy&id=' . $item->id . '&type=' . $this->table;
+		$base_link   = '?page=formidable-payments&action=';
+		$view_link   = $base_link . 'show&id=' . $item->id . '&type=' . $this->table;
+		$delete_link = $base_link . 'destroy&id=' . $item->id . '&type=' . $this->table;
+
 		$actions         = array();
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 

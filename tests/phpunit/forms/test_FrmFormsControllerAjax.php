@@ -77,8 +77,7 @@ class test_FrmFormsControllerAjax extends FrmAjaxUnitTest {
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
-
-			$_REQUEST = $_POST;
+			$_REQUEST               = $_POST;
 		}
 	}
 
