@@ -301,7 +301,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
+					if ( ! empty( $item->options['no_save'] ) ) {
 						$val = FrmAppHelper::icon_by_class(
 							'frmfont frm_forbid_icon frm_bstooltip',
 							array(

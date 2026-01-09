@@ -532,7 +532,7 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 
-		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
+		if ( ! empty( $settings['label_position'] ) ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
 
