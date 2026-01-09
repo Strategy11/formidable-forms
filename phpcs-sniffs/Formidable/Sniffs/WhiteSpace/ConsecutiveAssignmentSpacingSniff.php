@@ -157,12 +157,6 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 				break;
 			}
 
-			// Check if there's a comment before this assignment.
-			// If so, this assignment should start a new group, not continue the current one.
-			if ( count( $group ) > 0 && $this->hasCommentBeforeVariable( $phpcsFile, $currentVar ) ) {
-				break;
-			}
-
 			$group[] = array(
 				'variable'  => $currentVar,
 				'semicolon' => $semicolon,
@@ -172,12 +166,6 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 			$nextStatement = $this->findNextStatement( $phpcsFile, $semicolon );
 
 			if ( false === $nextStatement ) {
-				break;
-			}
-
-			// Check if there's a comment between this assignment and the next.
-			// If so, stop the group here - comments indicate intentional separation.
-			if ( $this->hasCommentBetween( $phpcsFile, $semicolon, $nextStatement ) ) {
 				break;
 			}
 
@@ -225,75 +213,6 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 			}
 
 			$baseVariables[ $baseVarName ] = true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if there's a comment before the variable on the same or previous lines.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $varPtr    The position of the variable token.
-	 *
-	 * @return bool True if there's a comment before the variable.
-	 */
-	private function hasCommentBeforeVariable( File $phpcsFile, $varPtr ) {
-		$tokens       = $phpcsFile->getTokens();
-		$commentTypes = array(
-			T_COMMENT,
-			T_DOC_COMMENT,
-			T_DOC_COMMENT_OPEN_TAG,
-			T_DOC_COMMENT_CLOSE_TAG,
-			T_DOC_COMMENT_STAR,
-			T_DOC_COMMENT_STRING,
-			T_DOC_COMMENT_TAG,
-			T_DOC_COMMENT_WHITESPACE,
-		);
-
-		// Look backwards from the variable to find the previous semicolon or brace.
-		$prevStatement = $phpcsFile->findPrevious( array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET ), $varPtr - 1 );
-
-		if ( false === $prevStatement ) {
-			return false;
-		}
-
-		// Check if there's a comment between the previous statement and this variable.
-		for ( $i = $prevStatement + 1; $i < $varPtr; $i++ ) {
-			if ( in_array( $tokens[ $i ]['code'], $commentTypes, true ) ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check if there's a comment between two token positions.
-	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $startPtr  The start position.
-	 * @param int  $endPtr    The end position.
-	 *
-	 * @return bool True if there's a comment between the positions.
-	 */
-	private function hasCommentBetween( File $phpcsFile, $startPtr, $endPtr ) {
-		$tokens       = $phpcsFile->getTokens();
-		$commentTypes = array(
-			T_COMMENT,
-			T_DOC_COMMENT,
-			T_DOC_COMMENT_OPEN_TAG,
-			T_DOC_COMMENT_CLOSE_TAG,
-			T_DOC_COMMENT_STAR,
-			T_DOC_COMMENT_STRING,
-			T_DOC_COMMENT_TAG,
-			T_DOC_COMMENT_WHITESPACE,
-		);
-
-		for ( $i = $startPtr + 1; $i < $endPtr; $i++ ) {
-			if ( in_array( $tokens[ $i ]['code'], $commentTypes, true ) ) {
-				return true;
-			}
 		}
 
 		return false;
