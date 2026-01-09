@@ -222,7 +222,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the current token.
 	 *
-	 * @return int|false The position of the function token, or false if not found.
+	 * @return false|int The position of the function token, or false if not found.
 	 */
 	private function findContainingFunction( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -302,7 +302,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the current token.
 	 *
-	 * @return int|false The position of the if/elseif token, or false if not found.
+	 * @return false|int The position of the if/elseif token, or false if not found.
 	 */
 	private function findContainingIf( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
