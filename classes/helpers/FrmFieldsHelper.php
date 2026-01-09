@@ -19,7 +19,6 @@ class FrmFieldsHelper {
 	 * @return array
 	 */
 	public static function setup_new_vars( $type = '', $form_id = '' ) {
-
 		if ( str_contains( $type, '|' ) ) {
 			list( $type, $setting ) = explode( '|', $type );
 		}
@@ -1371,7 +1370,6 @@ class FrmFieldsHelper {
 	 * @return mixed
 	 */
 	public static function get_display_value( $value, $field, $atts = array() ) {
-
 		$value = apply_filters( 'frm_get_' . $field->type . '_display_value', $value, $field, $atts );
 		$value = apply_filters( 'frm_get_display_value', $value, $field, $atts );
 

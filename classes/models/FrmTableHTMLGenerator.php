@@ -291,7 +291,6 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function tr_style() {
-
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
 		} elseif ( $this->use_inline_style ) {

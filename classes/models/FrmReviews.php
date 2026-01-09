@@ -28,7 +28,6 @@ class FrmReviews {
 	 * @return void
 	 */
 	public function review_request() {
-
 		// Only show the review request to high-level users on Formidable pages
 		if ( ! current_user_can( 'frm_change_settings' ) || ! FrmAppHelper::is_formidable_admin() ) {
 			return;
@@ -85,7 +84,6 @@ class FrmReviews {
 	 * @return void
 	 */
 	private function review() {
-
 		// show the review request 3 times, depending on the number of entries
 		$show_intervals = array( 50, 200, 500 );
 		$asked          = $this->review_status['asked'];

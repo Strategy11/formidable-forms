@@ -1346,7 +1346,6 @@ class FrmForm {
 	 * @return object
 	 */
 	public static function get_latest_form() {
-
 		$args = array(
 			array(
 				'or'               => 1,
@@ -1368,7 +1367,6 @@ class FrmForm {
 	 * @return int
 	 */
 	public static function get_forms_count() {
-
 		$args = array(
 			array(
 				'or'               => 1,

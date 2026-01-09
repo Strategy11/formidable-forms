@@ -829,7 +829,6 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function handle_phone_numbers() {
-
 		foreach ( $this->to as $key => $recipient ) {
 			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
 				$recipient = explode( ' ', $recipient );
