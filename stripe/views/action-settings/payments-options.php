@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $stripe_connected = FrmStrpLiteConnectHelper::at_least_one_mode_is_setup();
 $square_connected = FrmSquareLiteConnectHelper::at_least_one_mode_is_setup();
+$paypal_connected = FrmPayPalLiteConnectHelper::at_least_one_mode_is_setup();
 
 if ( $stripe_connected ) {
 	FrmStrpLiteAppHelper::fee_education( 'stripe-action-tip', $form_action->post_content['gateway'] );
@@ -14,12 +15,23 @@ if ( $square_connected ) {
 	FrmSquareLiteAppHelper::fee_education( 'square-action-tip', $form_action->post_content['gateway'] );
 }
 
-if ( ! $stripe_connected && ! $square_connected ) {
+if ( $paypal_connected ) {
+	FrmPayPalLiteAppHelper::fee_education( 'paypal-action-tip', $form_action->post_content['gateway'] );
+}
+
+if ( ! $stripe_connected && ! $square_connected && ! $paypal_connected ) {
 	FrmStrpLiteAppHelper::not_connected_warning();
 }
 ?>
 
 <div class="frm_grid_container">
+	<p class="show_paypal<?php echo in_array( 'paypal', (array) $form_action->post_content['gateway'], true ) ? '' : ' frm_hidden'; ?>">
+		<label for="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>">
+			<?php esc_html_e( 'Product Name', 'formidable' ); ?>
+		</label>
+		<input type="text" name="<?php echo esc_attr( $this->get_field_name( 'product_name' ) ); ?>" id="<?php echo esc_attr( $action_control->get_field_id( 'product_name' ) ); ?>" value="<?php echo esc_attr( $form_action->post_content['product_name'] ); ?>" class="frm_not_email_subject large-text" />
+	</p>
+
 	<p>
 		<label for="<?php echo esc_attr( $action_control->get_field_id( 'description' ) ); ?>">
 			<?php esc_html_e( 'Description', 'formidable' ); ?>
