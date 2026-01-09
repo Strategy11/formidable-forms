@@ -121,6 +121,7 @@ class SimplifyIfReturnSniff implements Sniff {
 		// Check if condition starts with ! and flip if so.
 		$isNegated = false;
 		$firstNonWs = $phpcsFile->findNext( T_WHITESPACE, $conditionStart + 1, $conditionEnd, true );
+
 		if ( false !== $firstNonWs && $tokens[ $firstNonWs ]['code'] === T_BOOLEAN_NOT ) {
 			$isNegated = true;
 			// Get condition without the leading !
