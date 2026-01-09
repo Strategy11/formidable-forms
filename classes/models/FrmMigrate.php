@@ -544,7 +544,7 @@ class FrmMigrate {
 			FrmAppHelper::unserialize_or_decode( $field->options );
 			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
 
-			if ( empty( $update_values ) ) {
+			if ( ! $update_values ) {
 				continue;
 			}
 
@@ -596,7 +596,7 @@ class FrmMigrate {
 		// reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -641,7 +641,7 @@ class FrmMigrate {
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -697,7 +697,7 @@ class FrmMigrate {
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 
-		if ( empty( $styles ) ) {
+		if ( ! $styles ) {
 			return;
 		}
 
@@ -723,7 +723,7 @@ class FrmMigrate {
 		global $wpdb;
 		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( empty( $exists ) ) {
+		if ( ! $exists ) {
 			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
@@ -760,7 +760,7 @@ class FrmMigrate {
 	private function adjust_widget_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 

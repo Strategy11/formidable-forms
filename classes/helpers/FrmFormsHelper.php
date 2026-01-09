@@ -569,7 +569,7 @@ BEFORE_HTML;
 
 		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
 
-		if ( ! empty( $classes ) ) {
+		if ( $classes ) {
 			$classes      = implode( ' ', $classes );
 			$button_class = 'frm_button_submit';
 

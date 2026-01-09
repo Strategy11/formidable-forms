@@ -335,7 +335,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
 
-		if ( empty( $result ) ) {
+		if ( ! $result ) {
 			return;
 		}
 

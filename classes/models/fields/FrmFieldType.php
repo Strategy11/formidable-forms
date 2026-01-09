@@ -270,7 +270,7 @@ DEFAULT_HTML;
 		$field        = FrmFieldsHelper::setup_edit_vars( $this->field );
 		$include_file = $this->include_form_builder_file();
 
-		if ( ! empty( $include_file ) ) {
+		if ( $include_file ) {
 			$this->include_on_form_builder( $name, $field );
 		} elseif ( $this->has_input ) {
 			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -1073,7 +1073,7 @@ DEFAULT_HTML;
 
 		$class = '';
 
-		if ( ! empty( $align ) && ( $is_radio || $is_checkbox ) ) {
+		if ( $align && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
 			$class .= ' ' . $align;
 		}
@@ -1114,7 +1114,7 @@ DEFAULT_HTML;
 		$input_class   = FrmField::get_option( $this->field, 'input_class' );
 		$extra_classes = $this->get_input_class();
 
-		if ( ! empty( $extra_classes ) ) {
+		if ( $extra_classes ) {
 			$input_class .= ' ' . $extra_classes;
 		}
 
@@ -1161,7 +1161,7 @@ DEFAULT_HTML;
 	public function include_front_field_input( $args, $shortcode_atts ) {
 		$include_file = $this->include_front_form_file();
 
-		if ( ! empty( $include_file ) ) {
+		if ( $include_file ) {
 			$input = $this->include_on_front_form( $args, $shortcode_atts );
 		} else {
 			$input = $this->front_field_input( $args, $shortcode_atts );
@@ -1190,7 +1190,7 @@ DEFAULT_HTML;
 
 		$include_file = $this->include_front_form_file();
 
-		if ( empty( $include_file ) ) {
+		if ( ! $include_file ) {
 			return null;
 		}
 

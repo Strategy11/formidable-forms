@@ -408,7 +408,7 @@ class FrmSolution {
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
 			$steps['complete']['num'] = 3;
@@ -682,7 +682,7 @@ class FrmSolution {
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
 
-		if ( empty( $pages ) ) {
+		if ( ! $pages ) {
 			return;
 		}
 

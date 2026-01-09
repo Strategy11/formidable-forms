@@ -219,7 +219,7 @@ class FrmXMLHelper {
 	private static function get_term_parent_id( $t ) {
 		$parent = (string) $t->term_parent;
 
-		if ( ! empty( $parent ) ) {
+		if ( $parent ) {
 			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
 
 			$parent = $parent ? $parent['term_id'] : 0;
@@ -250,7 +250,7 @@ class FrmXMLHelper {
 			$old_id      = false;
 			$form_fields = false;
 
-			if ( ! empty( $this_form ) ) {
+			if ( $this_form ) {
 				$form_id = $this_form->id;
 				$old_id  = $this_form->id;
 				self::update_form( $this_form, $form, $imported );
@@ -1447,7 +1447,7 @@ class FrmXMLHelper {
 		$editing = get_posts( $match_by );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! empty( $editing ) && current( $editing )->post_date == $post['post_date'] ) {
+		if ( $editing && current( $editing )->post_date == $post['post_date'] ) {
 			// set the id of the post to edit
 			$post['ID'] = current( $editing )->ID;
 		}
@@ -1552,7 +1552,7 @@ class FrmXMLHelper {
 				}
 			}
 
-			if ( ! empty( $error_details ) ) {
+			if ( $error_details ) {
 				$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
 			}
 
@@ -1675,7 +1675,7 @@ class FrmXMLHelper {
 
 		$primary_form = reset( $result['forms'] );
 
-		if ( ! empty( $primary_form ) ) {
+		if ( $primary_form ) {
 			$primary_form = FrmForm::getOne( $primary_form );
 			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
 
@@ -2132,7 +2132,7 @@ class FrmXMLHelper {
 				)
 			);
 
-			if ( empty( $exists ) ) {
+			if ( ! $exists ) {
 				FrmDb::save_json_post( $new_notification );
 				++$imported['imported']['actions'];
 			}
@@ -2390,11 +2390,11 @@ class FrmXMLHelper {
 			$reply_to      = $notification['ar_reply_to'] ?? '';
 			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
-			if ( ! empty( $reply_to ) ) {
+			if ( $reply_to ) {
 				$new_notification2['post_content']['reply_to'] = $reply_to;
 			}
 
-			if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
+			if ( $reply_to || ! empty( $reply_to_name ) ) {
 				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>';
 			}
 

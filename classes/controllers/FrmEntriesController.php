@@ -250,7 +250,7 @@ class FrmEntriesController {
 	private static function add_subform_cols( $field, $form_id, &$columns ) {
 		$sub_form_cols = FrmField::get_all_for_form( $field->field_options['form_select'] );
 
-		if ( empty( $sub_form_cols ) ) {
+		if ( ! $sub_form_cols ) {
 			return;
 		}
 
@@ -526,7 +526,7 @@ class FrmEntriesController {
 		$i           = isset( $frm_vars['cols'] ) ? count( $frm_vars['cols'] ) : 0;
 		$max_columns = 11;
 
-		if ( ! empty( $hidden ) ) {
+		if ( $hidden ) {
 			$result = $hidden;
 			$i      = $i - count( $result );
 		}

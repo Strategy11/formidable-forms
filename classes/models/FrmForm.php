@@ -277,7 +277,7 @@ class FrmForm {
 			$new_values['status'] = $values['new_status'];
 		}
 
-		if ( ! empty( $new_values ) ) {
+		if ( $new_values ) {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $id ) );
 
 			if ( $query_results ) {

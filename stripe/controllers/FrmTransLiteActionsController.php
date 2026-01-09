@@ -159,7 +159,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$message = $frm_vars['frm_trans']['error'] ?? '';
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
 
@@ -285,7 +285,7 @@ class FrmTransLiteActionsController {
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
 
-		if ( ! empty( $description ) ) {
+		if ( $description ) {
 			$atts['value']                       = $description;
 			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
 			$action->post_content['description'] = $description;
@@ -502,7 +502,7 @@ class FrmTransLiteActionsController {
 		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
+		if ( ! $previous_entry || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}
 

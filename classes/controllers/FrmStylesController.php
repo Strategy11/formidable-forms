@@ -855,7 +855,7 @@ class FrmStylesController {
 			'id'   => $id,
 		);
 
-		if ( ! empty( $settings ) ) {
+		if ( $settings ) {
 			$textarea_params['class'] = 'hide-if-js';
 		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
@@ -1228,7 +1228,7 @@ class FrmStylesController {
 		$style = FrmFormsHelper::get_form_style( $form );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( empty( $style ) || 1 == $style ) {
+		if ( ! $style || 1 == $style ) {
 			$style = 'default';
 		}
 

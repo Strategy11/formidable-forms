@@ -80,7 +80,7 @@ class FrmFieldUrl extends FrmFieldType {
 		$errors = array();
 
 		// validate the url format
-		if ( ! empty( $value ) && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
+		if ( $value && ! preg_match( '/^http(s)?:\/\/(?:localhost|(?:[\da-z\.-]+\.[\da-z\.-]+))/i', $value ) ) {
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'invalid' );
 		} elseif ( $this->field->required == '1' && empty( $value ) ) { // phpcs:ignore Universal.Operators.StrictComparisons
 			$errors[ 'field' . $args['id'] ] = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );

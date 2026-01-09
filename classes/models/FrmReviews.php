@@ -109,7 +109,7 @@ class FrmReviews {
 
 		$name = $user->first_name;
 
-		if ( ! empty( $name ) ) {
+		if ( $name ) {
 			$name = ' ' . $name;
 		}
 
