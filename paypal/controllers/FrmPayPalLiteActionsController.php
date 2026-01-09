@@ -22,7 +22,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return $callback;
 		}
 
@@ -110,7 +110,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 
 		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
 
-		if ( empty( $amount ) || $amount == 000 ) {
+		if ( ! $amount || $amount === 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
@@ -148,7 +148,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	private static function trigger_one_time_payment( $atts ) {
 		$paypal_order_id = FrmAppHelper::get_post_param( 'paypal_order_id', '', 'sanitize_text_field' );
 
-		if ( empty( $paypal_order_id ) ) {
+		if ( ! $paypal_order_id ) {
 			return 'No PayPal order ID found.';
 		}
 

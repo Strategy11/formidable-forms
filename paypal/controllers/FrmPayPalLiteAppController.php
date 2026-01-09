@@ -180,7 +180,7 @@ class FrmPayPalLiteAppController {
 
 		$actions = FrmPayPalLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			wp_send_json_error( __( 'No PayPal actions found for this form', 'formidable' ) );
 		}
 
