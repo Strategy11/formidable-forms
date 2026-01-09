@@ -120,10 +120,7 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		if ( property_exists( $this, $key ) ) {
-			return $this->{$key};
-		}
-		return '';
+		return property_exists( $this, $key ) ? $this->{$key} : '';
 	}
 
 	/**

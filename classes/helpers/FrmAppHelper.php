@@ -203,11 +203,7 @@ class FrmAppHelper {
 
 		$query_args = wp_parse_args( $parsed['query'] );
 
-		if ( empty( $query_args['utm_medium'] ) ) {
-			return '';
-		}
-
-		return $query_args['utm_medium'];
+		return empty( $query_args['utm_medium'] ) ? '' : $query_args['utm_medium'];
 	}
 
 	/**
@@ -2282,11 +2278,7 @@ class FrmAppHelper {
 			$role = 'administrator';
 		}
 
-		if ( ! is_user_logged_in() ) {
-			return false;
-		}
-
-		return current_user_can( $role );
+		return is_user_logged_in() ? current_user_can( $role ) : false;
 	}
 
 	/**
@@ -5004,11 +4996,7 @@ class FrmAppHelper {
 		}
 
 		// As of WP 6.9, seems_utf8 is deprecated.
-		if ( function_exists( 'seems_utf8' ) ) {
-			return seems_utf8( $string );
-		}
-
-		return false;
+		return function_exists( 'seems_utf8' ) ? seems_utf8( $string ) : false;
 	}
 
 	/**

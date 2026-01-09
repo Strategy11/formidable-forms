@@ -1153,10 +1153,6 @@ class FrmStylesHelper {
 
 		$parts = explode( ' ', $value );
 
-		if ( count( $parts ) < 3 ) {
-			return $parts[0];
-		}
-
-		return $parts[2];
+		return count( $parts ) < 3 ? $parts[0] : $parts[2];
 	}
 }

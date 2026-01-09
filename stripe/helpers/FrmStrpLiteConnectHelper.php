@@ -706,11 +706,7 @@ class FrmStrpLiteConnectHelper {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		if ( empty( $data->customer_id ) ) {
-			return false;
-		}
-
-		return $data->customer_id;
+		return empty( $data->customer_id ) ? false : $data->customer_id;
 	}
 
 	/**
@@ -762,11 +758,7 @@ class FrmStrpLiteConnectHelper {
 		$data    = self::post_with_authenticated_body( 'create_intent', compact( 'new_charge' ) );
 		$success = false !== $data;
 
-		if ( ! $success ) {
-			return false;
-		}
-
-		return $data;
+		return $success ? $data : false;
 	}
 
 	/**
@@ -828,11 +820,7 @@ class FrmStrpLiteConnectHelper {
 		$customer_id = get_user_meta( $user_id, $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
-		if ( false === $data ) {
-			return false;
-		}
-
-		return $data->subscriptions;
+		return false === $data ? false : $data->subscriptions;
 	}
 
 	/**

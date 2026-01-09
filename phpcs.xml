@@ -289,4 +289,5 @@
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
 	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
 </ruleset>

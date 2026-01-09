@@ -73,9 +73,6 @@ class FrmFieldGdprHelper {
 	 * @return string
 	 */
 	public static function get_gdpr_field_class( $field_type = '' ) {
-		if ( self::FIELD_TYPE === $field_type ) {
-			return self::FIELD_CLASS;
-		}
-		return '';
+		return self::FIELD_TYPE === $field_type ? self::FIELD_CLASS : '';
 	}
 }

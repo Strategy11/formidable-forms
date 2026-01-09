@@ -376,10 +376,7 @@ class FrmTransLiteAppHelper {
 	 * @return int
 	 */
 	public static function get_user_id_for_current_payment() {
-		if ( is_user_logged_in() ) {
-			return get_current_user_id();
-		}
-		return 0;
+		return is_user_logged_in() ? get_current_user_id() : 0;
 	}
 
 	/**

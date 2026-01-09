@@ -526,11 +526,7 @@ class FrmDashboardController {
 			return array();
 		}
 
-		if ( null !== $option_name ) {
-			return $options[ $option_name ];
-		}
-
-		return $options;
+		return null !== $option_name ? $options[ $option_name ] : $options;
 	}
 
 	/**
