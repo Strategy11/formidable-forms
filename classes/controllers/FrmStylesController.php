@@ -630,14 +630,11 @@ class FrmStylesController {
 				break;
 
 			case 'duplicate':
-				$style                            = clone $active_style;
-				$new_style                        = $frm_style->get_new();
-				$style->ID                        = $new_style->ID;
-				// Stores the original post_name when duplicating a style to maintain custom CSS scoping compatibility.
-				//** @psalm-suppress UndefinedPropertyAssignment */
-				$style->old_name_before_duplicate = $active_style->post_name;
-				$style->post_name                 = $new_style->post_name;
-
+				$style                                            = clone $active_style;
+				$new_style                                        = $frm_style->get_new();
+				$style->ID                                        = $new_style->ID;
+				$style->post_content['old_name_before_duplicate'] = $active_style->post_name;
+				$style->post_name                                 = $new_style->post_name;
 				unset( $new_style );
 				break;
 
