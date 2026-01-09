@@ -183,7 +183,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the empty token.
 	 *
-	 * @return int|false The statement token position, or false if not in a valid context.
+	 * @return false|int The statement token position, or false if not in a valid context.
 	 */
 	private function getStatementContext( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -205,7 +205,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the empty token.
 	 *
-	 * @return int|false The if/elseif token position, or false if not in an if condition.
+	 * @return false|int The if/elseif token position, or false if not in an if condition.
 	 */
 	private function isInIfCondition( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -249,7 +249,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the empty token.
 	 *
-	 * @return int|false The statement token position, or false if not in a boolean expression.
+	 * @return false|int The statement token position, or false if not in a boolean expression.
 	 */
 	private function isInBooleanExpression( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -292,7 +292,7 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the current token.
 	 *
-	 * @return int|false The statement start token position, or false if not found.
+	 * @return false|int The statement start token position, or false if not found.
 	 */
 	private function findStatementStart( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
