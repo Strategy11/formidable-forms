@@ -99,7 +99,7 @@ class FrmSquareLiteEventsController {
 
 		$option = get_option( self::$events_to_skip_option_name );
 
-		return is_array( $option ) ? in_array( $event_id, $option, true ) : false;
+		return is_array( $option ) && in_array( $event_id, $option, true );
 	}
 
 	/**
