@@ -1517,7 +1517,6 @@ class FrmField {
 	 */
 	public static function is_repeating_field( $field ) {
 		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
-
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
@@ -1528,7 +1527,6 @@ class FrmField {
 	 */
 	public static function get_id_by_key( $key ) {
 		$id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
-
 		return (int) $id;
 	}
 
@@ -1548,7 +1546,6 @@ class FrmField {
 	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
-
 		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
 	}
 
@@ -1619,7 +1616,6 @@ class FrmField {
 	 */
 	public static function is_combo_field( $field ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
-
 		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

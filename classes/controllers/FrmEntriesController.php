@@ -424,7 +424,6 @@ class FrmEntriesController {
 	 */
 	private static function hidden_column_key( $menu_name = '' ) {
 		$base = self::base_column_key( $menu_name );
-
 		return 'manage' . $base . 'columnshidden';
 	}
 
@@ -835,7 +834,6 @@ class FrmEntriesController {
 	 */
 	public static function delete_entry_before_redirect( $url, $form, $atts ) {
 		self::_delete_entry( $atts['id'], $form );
-
 		return $url;
 	}
 

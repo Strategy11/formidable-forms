@@ -944,7 +944,6 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
-
 		return $this->strip_html( $display_value );
 	}
 

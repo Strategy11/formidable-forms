@@ -617,7 +617,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
-
 		return empty( $ip );
 	}
 
@@ -628,7 +627,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
-
 		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
 	}
 
@@ -639,7 +637,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
-
 		return ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() );
 	}
 

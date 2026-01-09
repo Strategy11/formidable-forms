@@ -9,7 +9,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	public function setUp(): void {
 		parent::setUp();
-
 		$this->create_validation_form();
 	}
 

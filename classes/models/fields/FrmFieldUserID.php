@@ -97,7 +97,6 @@ class FrmFieldUserID extends FrmFieldType {
 	 */
 	protected function prepare_display_value( $value, $atts ) {
 		$user_info = $this->prepare_user_info_attribute( $atts );
-
 		return FrmFieldsHelper::get_user_display_name( $value, $user_info, $atts );
 	}
 

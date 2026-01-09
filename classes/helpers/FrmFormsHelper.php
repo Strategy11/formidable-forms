@@ -31,7 +31,6 @@ class FrmFormsHelper {
 	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-
 		return apply_filters( 'frm_direct_link', $target_url, $key, $form );
 	}
 
@@ -1101,7 +1100,6 @@ BEFORE_HTML;
 	 */
 	private static function field_has_top_label( $field, $form ) {
 		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
-
 		return in_array( $label_position, array( 'top', 'inside', 'hidden' ), true );
 	}
 
@@ -1340,7 +1338,6 @@ BEFORE_HTML;
 	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
-
 		return self::format_link_html( $link_details, $length );
 	}
 

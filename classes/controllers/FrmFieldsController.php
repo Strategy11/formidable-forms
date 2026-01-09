@@ -150,7 +150,6 @@ class FrmFieldsController {
 	 */
 	public static function get_field_array_from_id( $field_id ) {
 		$field = FrmField::getOne( $field_id );
-
 		return FrmFieldsHelper::setup_edit_vars( $field );
 	}
 

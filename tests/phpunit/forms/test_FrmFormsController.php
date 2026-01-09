@@ -109,7 +109,6 @@ class test_FrmFormsController extends FrmUnitTest {
 	 */
 	private function _check_doing_ajax() {
 		$doing_ajax = defined( 'DOING_AJAX' );
-
 		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
 	}
 

@@ -938,7 +938,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	protected function get_field_html_value( $entry, $field, $atts ) {
 		$field_value = $this->get_field_value( $entry, $field, $atts );
-
 		return str_replace( array( "\r\n", "\n" ), '<br/>', $field_value );
 	}
 

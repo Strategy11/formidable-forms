@@ -85,7 +85,6 @@ class FrmFormsController {
 	 */
 	public static function prevent_divi_conflict( $shortcodes ) {
 		$shortcodes[] = 'formidable';
-
 		return $shortcodes;
 	}
 
@@ -1635,7 +1634,6 @@ class FrmFormsController {
 	 */
 	public static function advanced_settings( $values ) {
 		$first_h3 = 'frm_first_h3';
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/settings-advanced.php';
 	}
 
@@ -2236,7 +2234,6 @@ class FrmFormsController {
 	 */
 	public static function json_error( $errors ) {
 		$errors['json'] = __( 'Abnormal HTML characters prevented your form from saving correctly', 'formidable' );
-
 		return $errors;
 	}
 
@@ -2623,7 +2620,6 @@ class FrmFormsController {
 	 */
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
-
 		return isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
 	}
 

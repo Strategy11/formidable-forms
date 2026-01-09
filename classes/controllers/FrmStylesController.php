@@ -1211,7 +1211,6 @@ class FrmStylesController {
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
-
 		return $frm_style->get_all();
 	}
 
@@ -1325,7 +1324,6 @@ class FrmStylesController {
 	 */
 	public static function &important_style( $important, $field ) {
 		$important = self::get_style_val( 'important_style', $field['form_id'] );
-
 		return $important;
 	}
 

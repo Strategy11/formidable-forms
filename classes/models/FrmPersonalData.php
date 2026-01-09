@@ -166,7 +166,6 @@ class FrmPersonalData {
 	 */
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
-
 		return FrmDb::esc_limit( $start . ',' . $this->limit );
 	}
 

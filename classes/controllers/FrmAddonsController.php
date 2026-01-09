@@ -307,7 +307,6 @@ class FrmAddonsController {
 	 */
 	public static function get_addons_count() {
 		$addons = self::get_api_addons();
-
 		return count( $addons );
 	}
 

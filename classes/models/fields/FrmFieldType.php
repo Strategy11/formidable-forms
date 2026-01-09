@@ -371,7 +371,6 @@ DEFAULT_HTML;
 	 */
 	protected function html_name( $name = '' ) {
 		$prefix = empty( $name ) ? 'item_meta' : $name;
-
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
@@ -475,7 +474,6 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
-
 		return $this->alter_builder_classes( $classes );
 	}
 
@@ -934,7 +932,6 @@ DEFAULT_HTML;
 	 */
 	public function prepare_front_field( $values, $atts ) {
 		$values['value'] = $this->prepare_field_value( $values['value'], $atts );
-
 		return $values;
 	}
 

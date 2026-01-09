@@ -94,7 +94,6 @@ class FrmFormAction {
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
-
 		return 'noform';
 	}
 
@@ -562,7 +561,6 @@ class FrmFormAction {
 	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
-
 		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 

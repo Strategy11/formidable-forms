@@ -139,7 +139,6 @@ class FrmAddon {
 	 */
 	public function insert_installed_addon( $plugins ) {
 		$plugins[ $this->plugin_slug ] = $this;
-
 		return $plugins;
 	}
 
@@ -150,7 +149,6 @@ class FrmAddon {
 	 */
 	public static function get_addon( $plugin_slug ) {
 		$plugins = apply_filters( 'frm_installed_addons', array() );
-
 		return $plugins[ $plugin_slug ] ?? false;
 	}
 
@@ -303,7 +301,6 @@ class FrmAddon {
 	 */
 	public function get_defined_license() {
 		$constant_name = 'FRM_' . strtoupper( $this->plugin_slug ) . '_LICENSE';
-
 		return defined( $constant_name ) ? constant( $constant_name ) : false;
 	}
 
