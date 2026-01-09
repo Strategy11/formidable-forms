@@ -250,9 +250,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div id="frm_single_style_custom_css_editor" class="frm12 frm_form_field frm-style-component <?php echo empty( $style->post_content['enable_style_custom_css'] ) ? 'frm_hidden' : ''; ?>">
 	<?php
-	$css_scope_helper = new FrmCssScopeHelper();
-	$custom_css       = $style->post_content['single_style_custom_css'] ?? '';
-	$scoped_style_name       = ! empty( $style->old_name_before_duplicate ) ? $style->old_name_before_duplicate : $style->post_name;
+	$css_scope_helper  = new FrmCssScopeHelper();
+	$custom_css        = $style->post_content['single_style_custom_css'] ?? '';
+	$scoped_style_name = ! empty( $style->old_name_before_duplicate ) ? $style->old_name_before_duplicate : $style->post_name;
 
 	if ( ! empty( $custom_css ) ) {
 		$custom_css = $css_scope_helper->unnest( $custom_css, 'frm_style_' . $scoped_style_name );

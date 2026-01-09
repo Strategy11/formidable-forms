@@ -47,13 +47,14 @@ class FrmStyle {
 		$key            = base_convert( random_int( $min_slug_value, $max_slug_value ), 10, 36 );
 
 		$style = array(
-			'post_type'    => FrmStylesController::$post_type,
-			'ID'           => '',
-			'post_title'   => __( 'New Style', 'formidable' ),
-			'post_name'    => $key,
-			'post_content' => $this->get_defaults(),
-			'menu_order'   => '',
-			'post_status'  => 'publish',
+			'post_type'                 => FrmStylesController::$post_type,
+			'ID'                        => '',
+			'post_title'                => __( 'New Style', 'formidable' ),
+			'post_name'                 => $key,
+			'post_content'              => $this->get_defaults(),
+			'menu_order'                => '',
+			'post_status'               => 'publish',
+			'old_name_before_duplicate' => null, // Stores the original post_name when duplicating a style to maintain custom CSS scoping compatibility.
 		);
 
 		return (object) $style;
