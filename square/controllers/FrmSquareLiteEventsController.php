@@ -124,11 +124,9 @@ class FrmSquareLiteEventsController {
 	 * @return void
 	 */
 	private function count_failed_event( $event_id ) {
-		$transient_name = 'frm_square_failed_event_' . $event_id;
-		$transient      = get_transient( $transient_name );
-
-		$failed_count = is_int( $transient ) ? $transient + 1 : 1;
-
+		$transient_name  = 'frm_square_failed_event_' . $event_id;
+		$transient       = get_transient( $transient_name );
+		$failed_count    = is_int( $transient ) ? $transient + 1 : 1;
 		$maximum_retries = 3;
 
 		if ( $failed_count >= $maximum_retries ) {
@@ -233,8 +231,7 @@ class FrmSquareLiteEventsController {
 	 * @return void
 	 */
 	private function add_subscription_payment( $subscription_id ) {
-		$payment_id = $this->event->data->id;
-
+		$payment_id  = $this->event->data->id;
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one_by( $payment_id, 'receipt_id' );
 

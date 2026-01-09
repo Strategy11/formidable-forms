@@ -208,8 +208,7 @@ class FrmCreateFile {
 	private function get_needed_dirs() {
 		$dir_names   = explode( '/', $this->folder_name );
 		$needed_dirs = array();
-
-		$next_dir = '';
+		$next_dir    = '';
 
 		foreach ( $dir_names as $dir ) {
 			$next_dir     .= '/' . $dir;

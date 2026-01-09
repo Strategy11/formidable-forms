@@ -295,7 +295,6 @@ class FrmAppHelper {
 	 */
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
-
 		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
 	}
 
@@ -833,8 +832,7 @@ class FrmAppHelper {
 			'serialized' => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
-
-		$value = $args['default'];
+		$value    = $args['default'];
 
 		if ( $args['type'] === 'get' ) {
 			if ( $_GET && isset( $_GET[ $args['param'] ] ) ) {
@@ -1051,7 +1049,6 @@ class FrmAppHelper {
 	 */
 	public static function kses( $value, $allowed = array() ) {
 		$allowed_html = self::allowed_html( $allowed );
-
 		return wp_kses( $value, $allowed_html );
 	}
 
@@ -1374,8 +1371,7 @@ class FrmAppHelper {
 		}
 
 		$html_atts = self::array_to_html_params( $atts );
-
-		$icon = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
+		$icon      = trim( str_replace( array( 'frm_icon_font', 'frmfont ' ), '', $class ) );
 
 		// Replace icons that have been removed or renamed.
 		$deprecated = array(
@@ -1891,8 +1887,7 @@ class FrmAppHelper {
 	 * @param array $args Selection arguments.
 	 */
 	public static function maybe_autocomplete_pages_options( $args ) {
-		$args = self::preformat_selection_args( $args );
-
+		$args        = self::preformat_selection_args( $args );
 		$pages_count = wp_count_posts( $args['post_type'] );
 
 		if ( ! isset( $pages_count->publish ) || $pages_count->publish <= 50 ) {
@@ -1941,8 +1936,7 @@ class FrmAppHelper {
 			'label_key'                => 'label',
 		);
 
-		$args = wp_parse_args( $args, $defaults );
-
+		$args       = wp_parse_args( $args, $defaults );
 		$html_attrs = array();
 
 		if ( ! empty( $args['name'] ) ) {
@@ -2447,9 +2441,8 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function check_selected( $values, $current ) {
-		$values = self::recursive_function_map( $values, 'trim' );
-		$values = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
-
+		$values  = self::recursive_function_map( $values, 'trim' );
+		$values  = self::recursive_function_map( $values, 'htmlspecialchars_decode' );
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
@@ -2465,8 +2458,7 @@ class FrmAppHelper {
 	public static function recursive_function_map( $value, $function ) {
 		if ( is_array( $value ) ) {
 			$original_function = $function;
-
-			$function = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
+			$function          = count( $value ) ? explode( ', ', FrmDb::prepare_array_values( $value, $function ) ) : array( $function );
 
 			if ( ! self::is_assoc( $value ) ) {
 				$value = array_map( array( 'FrmAppHelper', 'recursive_function_map' ), $value, $function );
@@ -3092,9 +3084,8 @@ class FrmAppHelper {
 			return $sub . ( $length < $original_len ? $continue : '' );
 		}
 
-		$sub = '';
-		$len = 0;
-
+		$sub   = '';
+		$len   = 0;
 		$words = self::mb_function( array( 'mb_split', 'explode' ), array( ' ', $str ) );
 
 		if ( ! is_array( $words ) ) {
@@ -3189,8 +3180,7 @@ class FrmAppHelper {
 		}
 
 		$formatted = self::get_localized_date( $date_format, $date );
-
-		$do_time = ( gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00' );
+		$do_time   = ( gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00' );
 
 		if ( $do_time ) {
 			$formatted .= self::add_time_to_date( $time_format, $date );
@@ -3229,7 +3219,6 @@ class FrmAppHelper {
 	 */
 	public static function get_localized_date( $date_format, $date ) {
 		$date = get_date_from_gmt( $date );
-
 		return date_i18n( $date_format, strtotime( $date ) );
 	}
 
@@ -3244,7 +3233,6 @@ class FrmAppHelper {
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
 		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
-
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference
@@ -3309,7 +3297,6 @@ class FrmAppHelper {
 		}
 
 		$total = $diff['days'] * self::convert_time( 'd', $unit );
-
 		$times = array( 'h', 'i', 's' );
 
 		foreach ( $times as $time ) {
@@ -4257,8 +4244,7 @@ class FrmAppHelper {
 	 * }
 	 */
 	public static function images_dropdown( $args ) {
-		$args = self::fill_default_images_dropdown_args( $args );
-
+		$args            = self::fill_default_images_dropdown_args( $args );
 		$input_attrs_str = self::get_images_dropdown_input_attrs( $args );
 		ob_start();
 		include self::plugin_path() . '/classes/views/shared/images-dropdown.php';
@@ -4901,7 +4887,6 @@ class FrmAppHelper {
 	 */
 	public static function copy_for_lite_license() {
 		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
-
 		return apply_filters( 'frm_license_type_text', $message );
 	}
 

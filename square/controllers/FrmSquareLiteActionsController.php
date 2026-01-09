@@ -107,8 +107,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
-
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( ! $amount || $amount == 000 ) {

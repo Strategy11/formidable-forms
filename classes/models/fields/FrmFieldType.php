@@ -335,8 +335,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function builder_text_field( $name = '' ) {
-		$read_only = FrmField::get_option( $this->field, 'read_only' );
-
+		$read_only   = FrmField::get_option( $this->field, 'read_only' );
 		$placeholder = FrmField::get_option( $this->field, 'placeholder' );
 
 		if ( is_array( $placeholder ) ) {
@@ -372,7 +371,6 @@ DEFAULT_HTML;
 	 */
 	protected function html_name( $name = '' ) {
 		$prefix = empty( $name ) ? 'item_meta' : $name;
-
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
@@ -476,7 +474,6 @@ DEFAULT_HTML;
 	 */
 	public function form_builder_classes( $display_type ) {
 		$classes = 'form-field edit_form_item frm_field_box frm_top_container frm_not_divider edit_field_type_' . $display_type;
-
 		return $this->alter_builder_classes( $classes );
 	}
 
@@ -814,8 +811,7 @@ DEFAULT_HTML;
 			return;
 		}
 
-		$is_empty = array_filter( $default_value );
-
+		$is_empty      = array_filter( $default_value );
 		$default_value = $is_empty === array() ? '' : implode( ',', $default_value );
 	}
 
@@ -936,7 +932,6 @@ DEFAULT_HTML;
 	 */
 	public function prepare_front_field( $values, $atts ) {
 		$values['value'] = $this->prepare_field_value( $values['value'], $atts );
-
 		return $values;
 	}
 
@@ -1070,8 +1065,7 @@ DEFAULT_HTML;
 		$is_radio    = FrmField::is_radio( $this->field );
 		$is_checkbox = FrmField::is_checkbox( $this->field );
 		$align       = FrmField::get_option( $this->field, 'align' );
-
-		$class = '';
+		$class       = '';
 
 		if ( $align && ( $is_radio || $is_checkbox ) ) {
 			self::prepare_align_class( $align );
@@ -1549,13 +1543,10 @@ DEFAULT_HTML;
 	 */
 	protected function add_aria_description( $args, &$input_html ) {
 		$aria_describedby_exists = preg_match_all( '/aria-describedby=\"([^\"]*)\"/', $input_html, $matches ) === 1;
-
-		$describedby = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
-
-		$error_comes_first = true;
-
-		$custom_error_fields = preg_grep( '/frm_error_field_*/', $describedby );
-		$custom_desc_fields  = preg_grep( '/frm_desc_field_*/', $describedby );
+		$describedby             = $aria_describedby_exists ? preg_split( '/\s+/', esc_attr( trim( $matches[1][0] ) ) ) : array();
+		$error_comes_first       = true;
+		$custom_error_fields     = preg_grep( '/frm_error_field_*/', $describedby );
+		$custom_desc_fields      = preg_grep( '/frm_desc_field_*/', $describedby );
 
 		if ( $custom_desc_fields && $custom_error_fields ) {
 			if ( array_key_first( $custom_error_fields ) > array_key_first( $custom_desc_fields ) ) {
@@ -1897,8 +1888,7 @@ DEFAULT_HTML;
 			}
 
 			$csv_values_checked = array_reverse( $csv_values_checked );
-
-			$checked = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
+			$checked            = array_merge( $csv_values_checked, array_filter( explode( ',', $filtered_checked ) ) );
 		}
 
 		if ( count( $checked ) > 1 ) {

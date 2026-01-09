@@ -103,10 +103,9 @@ class FrmApplicationsController {
 	 * @return array<array>
 	 */
 	private static function get_prepared_template_data() {
-		$api          = new FrmApplicationApi();
-		$applications = $api->get_api_info();
-		$applications = array_filter( $applications, 'is_array' );
-
+		$api                = new FrmApplicationApi();
+		$applications       = $api->get_api_info();
+		$applications       = array_filter( $applications, 'is_array' );
 		$unlocked_templates = array();
 		$locked_templates   = array();
 
@@ -124,8 +123,7 @@ class FrmApplicationsController {
 		}
 
 		$unlocked_templates = self::sort_templates( $unlocked_templates );
-
-		$applications = $unlocked_templates;
+		$applications       = $unlocked_templates;
 
 		if ( current_user_can( 'administrator' ) || current_user_can( 'frm_change_settings' ) ) {
 			$locked_templates = self::sort_templates( $locked_templates );
@@ -144,8 +142,7 @@ class FrmApplicationsController {
 	 * @return array<array>
 	 */
 	private static function reduce_template( $total, $current ) {
-		$template = new FrmApplicationTemplate( $current );
-
+		$template  = new FrmApplicationTemplate( $current );
 		$js_object = $template->as_js_object();
 
 		if ( $js_object ) {

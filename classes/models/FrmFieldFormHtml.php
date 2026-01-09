@@ -426,8 +426,7 @@ class FrmFieldFormHtml {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
-
-			$replace_with = '';
+			$replace_with   = '';
 
 			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
@@ -446,7 +445,6 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
-
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 

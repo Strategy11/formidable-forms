@@ -49,8 +49,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 			FrmEntry::destroy( $exists );
 		}
 
-		$new_post = $this->factory->post->create_and_get();
-
+		$new_post          = $this->factory->post->create_and_get();
 		$_POST             = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key'] = $entry_key;
 		$_POST['action']   = 'create';

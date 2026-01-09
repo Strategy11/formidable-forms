@@ -155,8 +155,7 @@ class FrmStyle {
 			}
 
 			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
-
-			$action_ids[] = $this->save( $new_instance );
+			$action_ids[]                 = $this->save( $new_instance );
 		}//end foreach
 
 		$this->save_settings();
@@ -249,7 +248,6 @@ class FrmStyle {
 		// Limit the number of opening braces after rgb/rgba. There should only be one.
 		$prefix    = rtrim( $prefix, '(' ) . '(';
 		$new_color = $prefix . $new_color . ')';
-
 		$color_val = $new_color;
 	}
 
@@ -432,8 +430,7 @@ class FrmStyle {
 	 * @return string
 	 */
 	private function get_css_content( $filename ) {
-		$css = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
-
+		$css       = '/* ' . __( 'WARNING: Any changes made to this file will be lost when your Formidable settings are updated', 'formidable' ) . ' */' . "\n";
 		$saving    = true;
 		$frm_style = $this;
 
@@ -539,15 +536,13 @@ class FrmStyle {
 				$this->update( 'default' );
 
 				$post_atts['include'] = $new;
-
-				$temp_styles = get_posts( $post_atts );
+				$temp_styles          = get_posts( $post_atts );
 			}
 		}
 
 		$default_values = $this->get_defaults();
 		$default_style  = false;
-
-		$styles = array();
+		$styles         = array();
 
 		foreach ( $temp_styles as $style ) {
 			$this->id = $style->ID;

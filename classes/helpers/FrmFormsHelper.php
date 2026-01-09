@@ -31,7 +31,6 @@ class FrmFormsHelper {
 	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-
 		return apply_filters( 'frm_direct_link', $target_url, $key, $form );
 	}
 
@@ -566,8 +565,7 @@ BEFORE_HTML;
 		}
 
 		$button_parts = explode( '[button_action]', $button );
-
-		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
+		$classes      = apply_filters( 'frm_submit_button_class', array(), $form );
 
 		if ( $classes ) {
 			$classes      = implode( ' ', $classes );
@@ -1102,7 +1100,6 @@ BEFORE_HTML;
 	 */
 	private static function field_has_top_label( $field, $form ) {
 		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
-
 		return in_array( $label_position, array( 'top', 'inside', 'hidden' ), true );
 	}
 
@@ -1341,7 +1338,6 @@ BEFORE_HTML;
 	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
-
 		return self::format_link_html( $link_details, $length );
 	}
 
@@ -1769,12 +1765,11 @@ BEFORE_HTML;
 	 * @return array
 	 */
 	public static function get_license_types( $args = array() ) {
-		$defaults = array(
+		$defaults      = array(
 			'include_all' => true,
 			'case_lower'  => false,
 		);
-		$args     = wp_parse_args( $args, $defaults );
-
+		$args          = wp_parse_args( $args, $defaults );
 		$license_types = array( 'Basic', 'Plus', 'Business', 'Elite' );
 
 		if ( $args['include_all'] ) {
@@ -1798,8 +1793,7 @@ BEFORE_HTML;
 	 * @return array An array of warnings or an empty array.
 	 */
 	public static function check_for_warnings( $values ) {
-		$warnings = array();
-
+		$warnings         = array();
 		$redirect_warning = self::check_redirect_url_for_unsafe_params( $values );
 
 		if ( $redirect_warning ) {
@@ -1971,8 +1965,7 @@ BEFORE_HTML;
 
 		$original_query = $parsed['query'];
 		$query          = $parsed['query'];
-
-		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+		$shortcodes     = FrmFieldsHelper::get_shortcodes( $query, $form_id );
 
 		if ( empty( $shortcodes[0] ) ) {
 			// No shortcodes found, do nothing.
@@ -1999,8 +1992,7 @@ BEFORE_HTML;
 			}
 
 			$new_shortcode .= ' sanitize_url=1]';
-
-			$query = str_replace( $shortcode, $new_shortcode, $query );
+			$query          = str_replace( $shortcode, $new_shortcode, $query );
 		}//end foreach
 
 		if ( $query === $original_query ) {

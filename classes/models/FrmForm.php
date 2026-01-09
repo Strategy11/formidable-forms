@@ -264,8 +264,7 @@ class FrmForm {
 		}
 
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
-
-		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
+		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
@@ -480,7 +479,6 @@ class FrmForm {
 		}
 
 		$value = $opt === 'calc' ? self::sanitize_calc( $value ) : FrmAppHelper::kses( $value, 'all' );
-
 		$value = trim( $value );
 	}
 
@@ -874,8 +872,7 @@ class FrmForm {
 			}
 		}
 
-		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
-
+		$where   = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
 		$results = FrmDb::get_row( $table_name, $where );
 
 		if ( isset( $results->options ) ) {
@@ -979,8 +976,7 @@ class FrmForm {
 	 */
 	public static function get_count() {
 		$cache_key = 'frm_form_counts';
-
-		$counts = wp_cache_get( $cache_key, 'frm_form' );
+		$counts    = wp_cache_get( $cache_key, 'frm_form' );
 
 		if ( false !== $counts ) {
 			return $counts;
@@ -1178,7 +1174,6 @@ class FrmForm {
 	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		$form = 'first' === $default_form ? self::get_current_form() : self::maybe_get_current_form();
-
 		return $form ? $form->id : 0;
 	}
 
@@ -1295,7 +1290,6 @@ class FrmForm {
 	 */
 	public static function show_submit( $form ) {
 		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
-
 		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 

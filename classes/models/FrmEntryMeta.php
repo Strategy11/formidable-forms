@@ -29,8 +29,7 @@ class FrmEntryMeta {
 		);
 
 		self::set_value_before_save( $new_values );
-		$new_values = apply_filters( 'frm_add_entry_meta', $new_values );
-
+		$new_values    = apply_filters( 'frm_add_entry_meta', $new_values );
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_item_metas', $new_values );
 
 		if ( $query_results ) {
@@ -89,8 +88,7 @@ class FrmEntryMeta {
 		$field = FrmField::getOne( $values['field_id'] );
 
 		if ( $field ) {
-			$field_obj = FrmFieldFactory::get_field_object( $field );
-
+			$field_obj            = FrmFieldFactory::get_field_object( $field );
 			$values['meta_value'] = $field_obj->set_value_before_save( $values['meta_value'] );
 		}
 	}
@@ -294,8 +292,7 @@ class FrmEntryMeta {
 			$query['fi.field_key'] = $field_id;
 		}
 
-		$result = FrmDb::get_var( $get_table, $query, 'meta_value' );
-
+		$result     = FrmDb::get_var( $get_table, $query, 'meta_value' );
 		$field_type = FrmField::get_type( $field_id );
 		FrmFieldsHelper::prepare_field_value( $result, $field_type );
 
@@ -318,11 +315,9 @@ class FrmEntryMeta {
 			'is_draft'     => false,
 		);
 		$args     = wp_parse_args( $args, $defaults );
-
-		$query = array();
+		$query    = array();
 		self::meta_field_query( $field_id, $order, $limit, $args, $query );
-		$query = implode( ' ', $query );
-
+		$query     = implode( ' ', $query );
 		$cache_key = 'entry_metas_for_field_' . $field_id . $order . $limit . FrmAppHelper::maybe_json_encode( $args );
 		$values    = FrmDb::check_cache( $cache_key, 'frm_entry', $query, 'get_col' );
 
@@ -430,11 +425,9 @@ class FrmEntryMeta {
 			'group_by' => '',
 		);
 		$args     = wp_parse_args( $args, $defaults );
-
-		$query = array();
+		$query    = array();
 		self::get_ids_query( $where, $order_by, $limit, $unique, $args, $query );
-		$query = implode( ' ', $query );
-
+		$query     = implode( ' ', $query );
 		$cache_key = 'ids_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'u' . $unique . FrmAppHelper::maybe_json_encode( $args );
 		$type      = 'get_' . ( ' LIMIT 1' === $limit ? 'var' : 'col' );
 		return FrmDb::check_cache( $cache_key, 'frm_entry', $query, $type );
@@ -521,8 +514,7 @@ class FrmEntryMeta {
 			$query[] = 'it.item_id';
 		}
 
-		$from = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
-
+		$from                               = 'FROM ' . $wpdb->prefix . 'frm_item_metas it';
 		$should_join_fields_table__where    = self::should_join_fields_table( $where );
 		$should_join_fields_table__order_by = self::should_join_fields_table( $order_by );
 

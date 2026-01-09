@@ -89,7 +89,6 @@ class FrmSubmitHelper {
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
 		global $frm_vars;
-
 		return $frm_vars['form_params'][ $form_id ]['action'] ?? 'create';
 	}
 
@@ -162,8 +161,7 @@ class FrmSubmitHelper {
 			return;
 		}
 
-		$field_data = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
-
+		$field_data                  = FrmFieldsHelper::setup_new_vars( self::FIELD_TYPE, $form->id );
 		$submit_settings             = self::get_submit_settings_from_form( $form );
 		$field_data['field_options'] = $submit_settings + $field_data['field_options'];
 		$field_data['name']          = FrmForm::get_option(

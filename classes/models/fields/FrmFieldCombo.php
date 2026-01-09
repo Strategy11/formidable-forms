@@ -436,8 +436,7 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-
+		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Validate not empty.

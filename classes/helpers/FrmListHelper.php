@@ -500,8 +500,7 @@ class FrmListHelper {
 	 */
 	protected function row_actions( $actions, $always_visible = false ) {
 		$action_count = count( $actions );
-
-		$i = 0;
+		$i            = 0;
 
 		if ( ! $action_count ) {
 			return '';
@@ -625,14 +624,11 @@ class FrmListHelper {
 		/* translators: %s: Number of items */
 		$output = '<span class="displaying-num">' . sprintf( _n( '%s item', '%s items', $total_items, 'formidable' ), number_format_i18n( $total_items ) ) . '</span>';
 
-		$current = $this->get_pagenum();
-
-		$page_links = array();
-
+		$current            = $this->get_pagenum();
+		$page_links         = array();
 		$total_pages_before = '<span class="paging-input">';
 		$total_pages_after  = '</span>';
-
-		$disable = $this->disabled_pages( $total_pages );
+		$disable            = $this->disabled_pages( $total_pages );
 
 		$page_links[] = $this->add_page_link(
 			array(
@@ -756,7 +752,6 @@ class FrmListHelper {
 
 	private function current_url() {
 		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
-
 		return remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 	}
 
@@ -892,9 +887,8 @@ class FrmListHelper {
 			return $column_headers;
 		}
 
-		$columns = get_column_headers( $this->screen );
-		$hidden  = get_hidden_columns( $this->screen );
-
+		$columns          = get_column_headers( $this->screen );
+		$hidden           = get_hidden_columns( $this->screen );
 		$sortable_columns = $this->get_sortable_columns();
 		/**
 		 * Filter the list table sortable columns for a specific screen.
@@ -959,12 +953,10 @@ class FrmListHelper {
 	public function print_column_headers( $with_id = true ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
-		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
-		$current_url = remove_query_arg( 'paged', $current_url );
-
+		$current_url     = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
+		$current_url     = remove_query_arg( 'paged', $current_url );
 		$current_orderby = isset( $_GET['orderby'] ) ? sanitize_text_field( wp_unslash( $_GET['orderby'] ) ) : '';
-
-		$current_order = isset( $_GET['order'] ) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
+		$current_order   = isset( $_GET['order'] ) && 'desc' === $_GET['order'] ? 'desc' : 'asc';
 
 		FrmAppController::apply_saved_sort_preference( $current_orderby, $current_order );
 
@@ -1295,8 +1287,7 @@ class FrmListHelper {
 			$this->display_rows_or_placeholder();
 		}
 
-		$rows = ob_get_clean();
-
+		$rows     = ob_get_clean();
 		$response = array( 'rows' => $rows );
 
 		if ( isset( $this->_pagination_args['total_items'] ) ) {

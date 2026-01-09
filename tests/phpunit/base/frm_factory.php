@@ -38,8 +38,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	public function create_object( $args ) {
-		$form = FrmForm::create( $args );
-
+		$form         = FrmForm::create( $args );
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
 
 		if ( isset( $args['field_options'] ) ) {

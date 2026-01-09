@@ -367,8 +367,7 @@ class FrmField {
 			return false;
 		}
 
-		$release_date = $release_dates[ $type ];
-
+		$release_date               = $release_dates[ $type ];
 		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
 		return gmdate( 'Y-m-d' ) < $three_months_after_release;
 	}
@@ -561,8 +560,7 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
+		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 		$field_id = self::create( $values );
 
 		/**
@@ -708,8 +706,7 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
-
-		$form_id = 0;
+		$form_id       = 0;
 
 		if ( isset( $values['form_id'] ) ) {
 			$form_id = absint( $values['form_id'] );
@@ -1084,8 +1081,7 @@ class FrmField {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			$prefix = $wpdb->get_blog_prefix( $blog_id );
-
+			$prefix          = $wpdb->get_blog_prefix( $blog_id );
 			$table_name      = $prefix . 'frm_fields';
 			$form_table_name = $prefix . 'frm_forms';
 		} else {
@@ -1097,8 +1093,7 @@ class FrmField {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit      = FrmDb::esc_limit( $limit );
 		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
 		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results'; // phpcs:ignore Universal.Operators.StrictComparisons
 
@@ -1522,7 +1517,6 @@ class FrmField {
 	 */
 	public static function is_repeating_field( $field ) {
 		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
-
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
@@ -1533,7 +1527,6 @@ class FrmField {
 	 */
 	public static function get_id_by_key( $key ) {
 		$id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
-
 		return (int) $id;
 	}
 
@@ -1553,7 +1546,6 @@ class FrmField {
 	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
-
 		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
 	}
 
@@ -1624,7 +1616,6 @@ class FrmField {
 	 */
 	public static function is_combo_field( $field ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
-
 		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

@@ -256,8 +256,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-
-		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$r         = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -269,7 +268,6 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
-
 			$style = '';
 
 			if ( in_array( $column_name, $hidden, true ) ) {

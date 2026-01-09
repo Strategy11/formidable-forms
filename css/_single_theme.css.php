@@ -9,10 +9,8 @@ extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
-$important = empty( $important_style ) ? '' : ' !important';
-
-$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
-
+$important        = empty( $important_style ) ? '' : ' !important';
+$submit_bg_img    = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js    = $use_chosen_js ?? FrmStylesHelper::use_chosen_js();
 $pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
 ?>

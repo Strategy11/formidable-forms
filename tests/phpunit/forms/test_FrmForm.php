@@ -25,8 +25,7 @@ class test_FrmForm extends FrmUnitTest {
 	 */
 	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
-
-		$id = FrmForm::duplicate( $form->id );
+		$id   = FrmForm::duplicate( $form->id );
 		$this->assertTrue( is_numeric( $id ) );
 		$this->assertNotEmpty( $id );
 

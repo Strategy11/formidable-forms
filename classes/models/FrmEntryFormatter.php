@@ -172,8 +172,7 @@ class FrmEntryFormatter {
 	 * @return array
 	 */
 	protected function prepare_entry_attributes( $atts ) {
-		$entry_atts = array();
-
+		$entry_atts        = array();
 		$conditionally_add = array( 'include_fields', 'fields', 'exclude_fields', 'entry' );
 
 		foreach ( $conditionally_add as $index ) {
@@ -557,11 +556,9 @@ class FrmEntryFormatter {
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
 
-			$displayed_value = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
-
+			$displayed_value                                = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
-
-			$has_separate_value = (bool) $field_value->get_field_option( 'separate_value' );
+			$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
 
 			if ( $has_separate_value || $displayed_value !== $field_value->get_saved_value() ) {
 				$output[ $this->get_key_or_id( $field_value ) . '-value' ] = $field_value->get_saved_value();
@@ -947,7 +944,6 @@ class FrmEntryFormatter {
 	 */
 	protected function prepare_display_value_for_plain_text_content( $display_value ) {
 		$display_value = $this->flatten_array( $display_value );
-
 		return $this->strip_html( $display_value );
 	}
 

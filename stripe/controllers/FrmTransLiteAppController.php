@@ -59,9 +59,8 @@ class FrmTransLiteAppController {
 	 * @return void
 	 */
 	public static function run_payment_cron() {
-		$frm_sub     = new FrmTransLiteSubscription();
-		$frm_payment = new FrmTransLitePayment();
-
+		$frm_sub               = new FrmTransLiteSubscription();
+		$frm_payment           = new FrmTransLitePayment();
 		$overdue_subscriptions = $frm_sub->get_overdue_subscriptions();
 		FrmTransLiteLog::log_message( 'Stripe Cron Message', count( $overdue_subscriptions ) . ' subscriptions found to be processed.', false );
 

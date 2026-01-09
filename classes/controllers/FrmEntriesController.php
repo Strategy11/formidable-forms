@@ -85,8 +85,7 @@ class FrmEntriesController {
 	 */
 	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
 		$query_args['show_nav'] = FrmAppHelper::simple_get( 'show_nav', 'absint', 0 );
-
-		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		$form_id                = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 
 		if ( $form_id ) {
 			$query_args['form'] = $form_id;
@@ -187,8 +186,7 @@ class FrmEntriesController {
 		self::maybe_add_ip_col( $form_id, $columns );
 
 		$frm_vars['cols'] = $columns;
-
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
 			add_screen_option(
@@ -426,7 +424,6 @@ class FrmEntriesController {
 	 */
 	private static function hidden_column_key( $menu_name = '' ) {
 		$base = self::base_column_key( $menu_name );
-
 		return 'manage' . $base . 'columnshidden';
 	}
 
@@ -584,8 +581,7 @@ class FrmEntriesController {
 			$atts['form_id'] . '_id'       => '',
 		);
 		$cols         = $remove_first + array_reverse( $frm_vars['cols'], true );
-
-		$i = $atts['i'];
+		$i            = $atts['i'];
 
 		foreach ( $cols as $col_key => $col ) {
 			if ( $i <= $atts['max_columns'] ) {
@@ -620,11 +616,9 @@ class FrmEntriesController {
 			self::get_delete_form_time( $form, $errors );
 		}
 
-		$table_class = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
-
+		$table_class   = apply_filters( 'frm_entries_list_class', 'FrmEntriesListHelper' );
 		$wp_list_table = new $table_class( array( 'params' => $params ) );
-
-		$pagenum = $wp_list_table->get_pagenum();
+		$pagenum       = $wp_list_table->get_pagenum();
 
 		$wp_list_table->prepare_items();
 
@@ -840,7 +834,6 @@ class FrmEntriesController {
 	 */
 	public static function delete_entry_before_redirect( $url, $form, $atts ) {
 		self::_delete_entry( $atts['id'], $form );
-
 		return $url;
 	}
 
@@ -926,8 +919,7 @@ class FrmEntriesController {
 			'array_separator' => ', ',
 		);
 		$defaults = apply_filters( 'frm_show_entry_defaults', $defaults );
-
-		$atts = shortcode_atts( $defaults, $atts );
+		$atts     = shortcode_atts( $defaults, $atts );
 
 		if ( $atts['default_email'] ) {
 			$shortcode_atts  = array(
@@ -949,9 +941,8 @@ class FrmEntriesController {
 	 * @return void
 	 */
 	public static function entry_sidebar( $entry = false ) {
-		$data = array();
-		$id   = 0;
-
+		$data        = array();
+		$id          = 0;
 		$date_format = get_option( 'date_format' );
 		$time_format = get_option( 'time_format' );
 

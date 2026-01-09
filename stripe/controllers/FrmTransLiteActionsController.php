@@ -262,10 +262,8 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$entry = FrmEntry::getOne( $payment->item_id );
-
-		$trigger_event = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
-
+		$entry            = FrmEntry::getOne( $payment->item_id );
+		$trigger_event    = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
@@ -312,8 +310,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$currency = self::get_currency_for_action( $atts );
-
-		$total = 0;
+		$total    = 0;
 
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
@@ -511,8 +508,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$frm_vars['trans_filled'] = true;
-
-		$previous_entry_id = $previous_entry->id;
+		$previous_entry_id        = $previous_entry->id;
 		self::destroy_entry_later( $previous_entry_id );
 
 		return $values;
@@ -568,8 +564,7 @@ class FrmTransLiteActionsController {
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		if ( in_array( 'square', $settings['gateway'], true ) ) {
-			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
-
+			$currency             = FrmSquareLiteConnectHelper::get_merchant_currency();
 			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
 		} else {
 			$settings['currency'] = strtolower( $settings['currency'] );

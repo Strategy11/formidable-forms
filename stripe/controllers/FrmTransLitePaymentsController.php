@@ -52,10 +52,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function route() {
-		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-		$type   = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
-
+		$action     = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		$action     = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+		$type       = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
 
 		if ( method_exists( $class_name, $action ) ) {
@@ -160,11 +159,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$link = esc_html__( 'Refunded', 'formidable' );
 		} else {
 			$confirm = __( 'Are you sure you want to refund that payment?', 'formidable' );
-
-			$link  = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
-			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $confirm ) . '">';
-			$link .= esc_html__( 'Refund', 'formidable' );
-			$link .= '</a>';
+			$link    = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
+			$link    = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $confirm ) . '">';
+			$link   .= esc_html__( 'Refund', 'formidable' );
+			$link   .= '</a>';
 		}
 
 		$paysys = $payment->paysys;
