@@ -630,10 +630,12 @@ class FrmStylesController {
 				break;
 
 			case 'duplicate':
-				$style            = clone $active_style;
-				$new_style        = $frm_style->get_new();
-				$style->ID        = $new_style->ID;
-				$style->post_name = $new_style->post_name;
+				$style                            = clone $active_style;
+				$new_style                        = $frm_style->get_new();
+				$style->ID                        = $new_style->ID;
+				$style->old_name_before_duplicate = $active_style->post_name;
+				$style->post_name                 = $new_style->post_name;
+
 				unset( $new_style );
 				break;
 
