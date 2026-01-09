@@ -231,7 +231,6 @@ class FrmDb {
 	 */
 	public static function get_count( $table, $where = array(), $args = array() ) {
 		$count = self::get_var( $table, $where, 'COUNT(*)', $args );
-
 		return (int) $count;
 	}
 
@@ -534,7 +533,6 @@ class FrmDb {
 	 */
 	public static function esc_like( $term ) {
 		global $wpdb;
-
 		return $wpdb->esc_like( $term );
 	}
 
@@ -635,7 +633,6 @@ class FrmDb {
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
-
 		return implode( ', ', $placeholders );
 	}
 

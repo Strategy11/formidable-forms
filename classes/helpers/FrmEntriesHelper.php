@@ -908,7 +908,6 @@ class FrmEntriesHelper {
 	 */
 	public static function get_entry_status_label( $status ) {
 		$statuses = self::get_entry_statuses();
-
 		return $statuses[ self::get_entry_status( $status ) ];
 	}
 

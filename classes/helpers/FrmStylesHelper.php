@@ -281,7 +281,6 @@ class FrmStylesHelper {
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
-
 		return 'rgba(' . $rgb . ',' . $a . ')';
 	}
 

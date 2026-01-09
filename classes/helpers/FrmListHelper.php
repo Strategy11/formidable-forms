@@ -752,7 +752,6 @@ class FrmListHelper {
 
 	private function current_url() {
 		$current_url = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
-
 		return remove_query_arg( array( 'hotkeys_highlight_last', 'hotkeys_highlight_first' ), $current_url );
 	}
 

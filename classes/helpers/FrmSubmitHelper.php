@@ -89,7 +89,6 @@ class FrmSubmitHelper {
 	 */
 	public static function get_current_action_from_global_var( $form_id ) {
 		global $frm_vars;
-
 		return $frm_vars['form_params'][ $form_id ]['action'] ?? 'create';
 	}
 

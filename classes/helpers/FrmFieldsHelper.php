@@ -71,7 +71,6 @@ class FrmFieldsHelper {
 	 */
 	public static function setup_edit_vars( $field, $doing_ajax = false ) {
 		$values = self::field_object_to_array( $field );
-
 		return apply_filters( 'frm_setup_edit_field_vars', $values, array( 'doing_ajax' => $doing_ajax ) );
 	}
 
@@ -186,7 +185,6 @@ class FrmFieldsHelper {
 	 */
 	public static function get_default_field_options( $type ) {
 		$field_type = FrmFieldFactory::get_field_type( $type );
-
 		return $field_type->get_default_field_options();
 	}
 
@@ -418,7 +416,6 @@ class FrmFieldsHelper {
 	 */
 	public static function get_default_field( $type ) {
 		$field_type = FrmFieldFactory::get_field_type( $type );
-
 		return $field_type->get_new_field_defaults();
 	}
 
@@ -764,7 +761,6 @@ class FrmFieldsHelper {
 	 */
 	public static function get_value_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_value_saved', $opt, $opt_key, $field );
-
 		return FrmFieldsController::check_value( $opt, $opt_key, $field );
 	}
 
@@ -777,7 +773,6 @@ class FrmFieldsHelper {
 	 */
 	public static function get_label_from_array( $opt, $opt_key, $field ) {
 		$opt = apply_filters( 'frm_field_label_seen', $opt, $opt_key, $field );
-
 		return FrmFieldsController::check_label( $opt );
 	}
 

@@ -288,4 +288,5 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
+	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
 </ruleset>

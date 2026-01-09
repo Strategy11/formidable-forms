@@ -445,7 +445,6 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
-
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 

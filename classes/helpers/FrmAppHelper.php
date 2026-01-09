@@ -295,7 +295,6 @@ class FrmAppHelper {
 	 */
 	public static function get_menu_name() {
 		$frm_settings = self::get_settings();
-
 		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
 	}
 
@@ -1050,7 +1049,6 @@ class FrmAppHelper {
 	 */
 	public static function kses( $value, $allowed = array() ) {
 		$allowed_html = self::allowed_html( $allowed );
-
 		return wp_kses( $value, $allowed_html );
 	}
 
@@ -3221,7 +3219,6 @@ class FrmAppHelper {
 	 */
 	public static function get_localized_date( $date_format, $date ) {
 		$date = get_date_from_gmt( $date );
-
 		return date_i18n( $date_format, strtotime( $date ) );
 	}
 
@@ -4890,7 +4887,6 @@ class FrmAppHelper {
 	 */
 	public static function copy_for_lite_license() {
 		$message = __( 'You\'re using Formidable Forms Lite - no license needed. Enjoy!', 'formidable' ) . ' 🙂';
-
 		return apply_filters( 'frm_license_type_text', $message );
 	}
 

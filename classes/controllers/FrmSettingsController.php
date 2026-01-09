@@ -305,7 +305,6 @@ class FrmSettingsController {
 	 */
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
@@ -330,7 +329,6 @@ class FrmSettingsController {
 	 */
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
@@ -369,7 +367,6 @@ class FrmSettingsController {
 	 */
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
