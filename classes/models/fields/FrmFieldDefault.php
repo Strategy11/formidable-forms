@@ -41,7 +41,7 @@ class FrmFieldDefault extends FrmFieldType {
 		$input_html = ob_get_contents();
 		ob_end_clean();
 
-		if ( empty( $input_html ) ) {
+		if ( ! $input_html ) {
 			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		} else {
 			echo $input_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

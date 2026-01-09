@@ -498,7 +498,7 @@ class FrmAddonsController {
 
 		$expires = $version_info['error']['expires'] ?? 0;
 
-		if ( empty( $expires ) || $expires > time() ) {
+		if ( ! $expires || $expires > time() ) {
 			return false;
 		}
 
@@ -521,7 +521,7 @@ class FrmAddonsController {
 	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
+		if ( ! $installed_addons || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
 		}
 
@@ -551,7 +551,7 @@ class FrmAddonsController {
 
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) ) {
+		if ( ! $installed_addons ) {
 			return $transient;
 		}
 
@@ -643,7 +643,7 @@ class FrmAddonsController {
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses, true ) ) {
+			if ( ! $new_license || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
@@ -658,13 +658,13 @@ class FrmAddonsController {
 
 			$plugin = $api->get_addon_for_license( $addon, $version_info );
 
-			if ( empty( $plugin ) ) {
+			if ( ! $plugin ) {
 				continue;
 			}
 
 			$download_id = $plugin['id'] ?? 0;
 
-			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
+			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
@@ -775,7 +775,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -1303,7 +1303,7 @@ class FrmAddonsController {
 	public static function connect_link() {
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( empty( $auth ) ) {
+		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}

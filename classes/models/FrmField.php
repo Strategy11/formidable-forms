@@ -903,7 +903,7 @@ class FrmField {
 			)
 		);
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			$fields = array();
 			$count  = 0;
 
@@ -960,7 +960,7 @@ class FrmField {
 
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			if ( ! $limit ) {
 				return $results;
 			}
@@ -1337,7 +1337,7 @@ class FrmField {
 		$field_type    = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $original_type !== $field_type ) {
+		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
 			$field_type = $original_type;
 		}

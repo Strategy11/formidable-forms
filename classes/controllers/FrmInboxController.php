@@ -59,7 +59,7 @@ class FrmInboxController {
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
 
-		if ( ! empty( $key ) ) {
+		if ( $key ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
 

@@ -50,7 +50,7 @@ class FrmFormApi {
 		if ( $license === null ) {
 			$edd_update = $this->get_pro_updater();
 
-			if ( ! empty( $edd_update ) ) {
+			if ( $edd_update ) {
 				$license = $edd_update->license;
 			}
 		}
@@ -260,7 +260,7 @@ class FrmFormApi {
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -297,7 +297,7 @@ class FrmFormApi {
 	protected function get_cached() {
 		$cache = $this->get_cached_option();
 
-		if ( empty( $cache ) ) {
+		if ( ! $cache ) {
 			return false;
 		}
 

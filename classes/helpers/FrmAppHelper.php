@@ -101,7 +101,7 @@ class FrmAppHelper {
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 
-		if ( ! empty( $affiliate_id ) ) {
+		if ( $affiliate_id ) {
 			$url = str_replace( array( 'http://', 'https://' ), '', $url );
 			$url = 'http://www.shareasale.com/r.cfm?u=' . absint( $affiliate_id ) . '&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
@@ -438,7 +438,7 @@ class FrmAppHelper {
 	public static function is_formidable_admin() {
 		$page = self::simple_get( 'page', 'sanitize_title' );
 
-		if ( empty( $page ) ) {
+		if ( ! $page ) {
 			return self::is_view_builder_page();
 		}
 
@@ -526,7 +526,7 @@ class FrmAppHelper {
 
 		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 
-		if ( empty( $post_type ) ) {
+		if ( ! $post_type ) {
 			$post_id   = self::simple_get( 'post', 'absint' );
 			$post      = get_post( $post_id );
 			$post_type = $post ? $post->post_type : '';
@@ -1320,13 +1320,13 @@ class FrmAppHelper {
 
 		$action_name = isset( $_GET['action'] ) ? 'action' : ( isset( $_GET['action2'] ) ? 'action2' : '' );
 
-		if ( empty( $action_name ) ) {
+		if ( ! $action_name ) {
 			return;
 		}
 
 		$new_action = self::get_param( $action_name, '', 'get', 'sanitize_text_field' );
 
-		if ( ! empty( $new_action ) ) {
+		if ( $new_action ) {
 			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', self::get_server_value( 'REQUEST_URI' ) );
 		}
 	}

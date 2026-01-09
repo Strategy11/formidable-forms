@@ -171,7 +171,7 @@ class FrmStrpLiteEventsController {
 		global $wpdb;
 		$customer_id = $this->invoice->id;
 
-		if ( empty( $customer_id ) ) {
+		if ( ! $customer_id ) {
 			return;
 		}
 		$wpdb->query(

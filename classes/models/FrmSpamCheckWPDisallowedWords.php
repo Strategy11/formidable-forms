@@ -16,7 +16,7 @@ class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 	public function check() {
 		$mod_keys = trim( $this->get_disallowed_words() );
 
-		if ( empty( $mod_keys ) ) {
+		if ( ! $mod_keys ) {
 			return false;
 		}
 

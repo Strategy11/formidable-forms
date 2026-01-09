@@ -1131,7 +1131,7 @@ class FrmFormsController {
 
 		$shortcode = FrmAppHelper::get_post_param( 'shortcode', '', 'sanitize_text_field' );
 
-		if ( empty( $shortcode ) ) {
+		if ( ! $shortcode ) {
 			wp_die();
 		}
 
@@ -2033,7 +2033,7 @@ class FrmFormsController {
 			$bulkaction = FrmAppHelper::get_param( 'action2', '', 'get', 'sanitize_title' );
 		}
 
-		if ( ! empty( $bulkaction ) && str_starts_with( $bulkaction, 'bulk_' ) ) {
+		if ( $bulkaction && str_starts_with( $bulkaction, 'bulk_' ) ) {
 			FrmAppHelper::remove_get_action();
 
 			$bulkaction = str_replace( 'bulk_', '', $bulkaction );
@@ -2041,7 +2041,7 @@ class FrmFormsController {
 
 		$ids = FrmAppHelper::get_param( 'item-action', '', 'get', 'sanitize_text_field' );
 
-		if ( empty( $ids ) ) {
+		if ( ! $ids ) {
 			$errors[] = __( 'No forms were specified', 'formidable' );
 
 			return $errors;
@@ -2105,7 +2105,7 @@ class FrmFormsController {
 			$json_vars = htmlspecialchars_decode( nl2br( str_replace( '&quot;', '"', wp_unslash( $_POST['frm_compact_fields'] ) ) ) );
 			$json_vars = json_decode( $json_vars, true );
 
-			if ( empty( $json_vars ) ) {
+			if ( ! $json_vars ) {
 				// json decoding failed so we should return an error message.
 				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 
@@ -2567,7 +2567,7 @@ class FrmFormsController {
 			if ( apply_filters( 'frm_continue_to_new', true, $form->id, $params['action'] ) ) {
 				self::show_form_after_submit( $pass_args );
 			}
-		} elseif ( ! empty( $errors ) ) {
+		} elseif ( $errors ) {
 			self::show_form_after_submit( $pass_args );
 
 		} else {
@@ -2848,7 +2848,7 @@ class FrmFormsController {
 		 */
 		$met_actions = apply_filters( 'frm_get_met_on_submit_actions', $met_actions, $args );
 
-		if ( empty( $met_actions ) ) {
+		if ( ! $met_actions ) {
 			$met_actions = array( FrmOnSubmitHelper::get_fallback_action( $event ) );
 		}
 
@@ -3442,7 +3442,7 @@ class FrmFormsController {
 		$version = FrmAppHelper::plugin_version();
 		$suffix  = FrmAppHelper::js_suffix();
 
-		if ( ! empty( $suffix ) && self::has_combo_js_file() ) {
+		if ( $suffix && self::has_combo_js_file() ) {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . '/js/frm.min.js', array( 'jquery' ), $version, true );
 		} else {
 			wp_register_script( 'formidable', FrmAppHelper::plugin_url() . "/js/formidable{$suffix}.js", array( 'jquery' ), $version, true );

@@ -601,7 +601,7 @@ class FrmFormAction {
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 
-		if ( empty( $action_controls ) ) {
+		if ( ! $action_controls ) {
 			// don't continue if there are no available actions
 			return array();
 		}
@@ -754,7 +754,7 @@ class FrmFormAction {
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return array();
 		}
 
@@ -938,7 +938,7 @@ class FrmFormAction {
 			)
 		);
 
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			// create action now
 			$post_id = $this->save_settings( $action );
 		}
