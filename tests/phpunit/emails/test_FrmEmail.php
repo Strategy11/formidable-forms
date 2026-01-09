@@ -708,7 +708,7 @@ LINE 1<br>LINE 2<br></body></html>'
 	}
 
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
-		if ( empty( $property ) ) {
+		if ( ! $property ) {
 			$property = $setting_name;
 		}
 

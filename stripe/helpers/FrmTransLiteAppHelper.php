@@ -364,7 +364,7 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
-		if ( empty( $format ) ) {
+		if ( ! $format ) {
 			$format = self::get_date_format();
 		}
 		return date_i18n( $format, strtotime( $date ) );
@@ -408,7 +408,7 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( ! empty( $value ) ) { ?>
+		if ( $value ) { ?>
 			<tr>
 				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
 				<td>

@@ -197,7 +197,7 @@ class FrmDashboardController {
 			'type'    => 'default',
 		);
 
-		if ( ! empty( $cta ) ) {
+		if ( $cta ) {
 			$counter_args['cta'] = $cta;
 		}
 

@@ -21,7 +21,7 @@ class FrmFieldDefault extends FrmFieldType {
 	 * @return void
 	 */
 	protected function set_type( $type ) {
-		if ( empty( $type ) ) {
+		if ( ! $type ) {
 			$type = 'text';
 		}
 		parent::set_type( $type );

@@ -357,7 +357,7 @@ class FrmFormActionsController {
 	 * @return void
 	 */
 	public static function list_actions( $form, $values ) {
-		if ( empty( $form ) ) {
+		if ( ! $form ) {
 			return;
 		}
 
@@ -611,7 +611,7 @@ class FrmFormActionsController {
 	 * @return void
 	 */
 	public static function delete_missing_actions( $old_actions ) {
-		if ( ! empty( $old_actions ) ) {
+		if ( $old_actions ) {
 			foreach ( $old_actions as $old_id ) {
 				wp_delete_post( $old_id );
 			}
@@ -696,7 +696,7 @@ class FrmFormActionsController {
 				$entry = FrmEntry::getOne( $entry, true );
 			}
 
-			if ( empty( $entry ) || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
+			if ( ! $entry || ( FrmEntriesHelper::DRAFT_ENTRY_STATUS === (int) $entry->is_draft && 'draft' !== $event ) ) {
 				continue;
 			}
 

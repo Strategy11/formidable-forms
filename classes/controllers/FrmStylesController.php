@@ -1353,7 +1353,7 @@ class FrmStylesController {
 
 		wp_enqueue_script( 'accordion' );
 
-		if ( empty( $screen ) ) {
+		if ( ! $screen ) {
 			$screen = get_current_screen();
 		} elseif ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );

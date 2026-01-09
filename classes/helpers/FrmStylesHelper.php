@@ -472,7 +472,7 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
