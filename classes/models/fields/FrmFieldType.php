@@ -1879,8 +1879,9 @@ DEFAULT_HTML;
 		if ( ! is_array( $checked ) ) {
 			$filtered_checked   = $checked;
 			$csv_values_checked = array();
-			$options            = (array) $this->field->options;
-			$options            = array_reverse( $options );
+
+			$options = (array) $this->field->options;
+			$options = array_reverse( $options );
 
 			foreach ( $options as $option ) {
 				if ( isset( $option['value'] ) && str_contains( $filtered_checked, $option['value'] ) ) {
