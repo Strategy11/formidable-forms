@@ -272,10 +272,12 @@ class FrmFieldsController {
 			return;
 		}
 
-		$field                   = FrmFieldsHelper::setup_edit_vars( $field );
-		$opts                    = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts                    = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts                    = array_map( 'trim', $opts );
+		$field = FrmFieldsHelper::setup_edit_vars( $field );
+
+		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
+		$opts = explode( "\n", rtrim( $opts, "\n" ) );
+		$opts = array_map( 'trim', $opts );
+
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
 

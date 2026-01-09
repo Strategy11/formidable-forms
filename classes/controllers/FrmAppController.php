@@ -59,7 +59,8 @@ class FrmAppController {
 		if ( self::is_white_page() ) {
 			$classes .= ' frm-white-body ';
 			$classes .= self::get_os();
-			$page     = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
+
+			$page = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
 
 			if ( ! $page || $page === 'formidable' ) {
 				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
