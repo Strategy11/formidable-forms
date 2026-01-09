@@ -108,7 +108,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function register() {
-
 		// Getting started - shows after installation.
 		add_dashboard_page(
 			esc_html( $this->page_title() ),
@@ -166,7 +165,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function redirect() {
-
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		if ( $current_page === $this->page ) {
