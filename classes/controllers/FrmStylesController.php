@@ -857,7 +857,7 @@ class FrmStylesController {
 			'id'   => $id,
 		);
 
-		if ( ! empty( $settings ) ) {
+		if ( $settings ) {
 			$textarea_params['class'] = 'hide-if-js';
 		}
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
@@ -878,6 +878,7 @@ class FrmStylesController {
 			if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
 				return $single_style_settings['single_style_custom_css'];
 			}
+
 			return '';
 		}
 
@@ -1194,7 +1195,7 @@ class FrmStylesController {
 	public static function enqueue_style() {
 		global $frm_vars;
 
-		if ( isset( $frm_vars['css_loaded'] ) && $frm_vars['css_loaded'] ) {
+		if ( ! empty( $frm_vars['css_loaded'] ) ) {
 			// The CSS has already been loaded.
 			return;
 		}
@@ -1229,7 +1230,7 @@ class FrmStylesController {
 		$style = FrmFormsHelper::get_form_style( $form );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( empty( $style ) || 1 == $style ) {
+		if ( ! $style || 1 == $style ) {
 			$style = 'default';
 		}
 
@@ -1354,7 +1355,7 @@ class FrmStylesController {
 
 		wp_enqueue_script( 'accordion' );
 
-		if ( empty( $screen ) ) {
+		if ( ! $screen ) {
 			$screen = get_current_screen();
 		} elseif ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );

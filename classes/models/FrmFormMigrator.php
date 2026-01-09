@@ -175,7 +175,6 @@ abstract class FrmFormMigrator {
 	 * @return void
 	 */
 	public function import_forms() {
-
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -208,7 +207,6 @@ abstract class FrmFormMigrator {
 	 * @return array
 	 */
 	protected function import_form( $source_id ) {
-
 		$source_form      = $this->get_form( $source_id );
 		$source_form_name = $this->get_form_name( $source_form );
 		$source_fields    = $this->get_form_fields( $source_form );
@@ -217,7 +215,7 @@ abstract class FrmFormMigrator {
 		$this->current_source_form = $source_form;
 
 		// If form does not contain fields, bail.
-		if ( empty( $source_fields ) ) {
+		if ( ! $source_fields ) {
 			wp_send_json_success(
 				array(
 					'error' => true,
@@ -456,7 +454,6 @@ abstract class FrmFormMigrator {
 	 * @return array
 	 */
 	protected function add_form( $form, $upgrade_omit = array() ) {
-
 		// Create empty form so we have an ID to work with.
 		$form_id = $this->create_form( $form );
 
@@ -584,7 +581,6 @@ abstract class FrmFormMigrator {
 	 * @return void
 	 */
 	protected function track_import( $source_id, $new_form_id ) {
-
 		$imported = $this->get_tracked_import();
 
 		$imported[ $this->slug ][ $new_form_id ] = $source_id;

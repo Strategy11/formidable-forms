@@ -290,6 +290,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 					return true;
 				}
 			}
+
 			return false;
 		}
 

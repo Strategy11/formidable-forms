@@ -903,7 +903,7 @@ class FrmField {
 			)
 		);
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			$fields = array();
 			$count  = 0;
 
@@ -921,7 +921,7 @@ class FrmField {
 					break;
 				}
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 
@@ -960,7 +960,7 @@ class FrmField {
 
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			if ( ! $limit ) {
 				return $results;
 			}
@@ -972,7 +972,7 @@ class FrmField {
 				++$count;
 				$fields[ $result->id ] = $result;
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 			}
@@ -1093,7 +1093,7 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && ! str_contains( $order_by, 'ORDER BY' ) ) {
+		if ( $order_by && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
@@ -1337,7 +1337,7 @@ class FrmField {
 		$field_type    = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $original_type !== $field_type ) {
+		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
 			$field_type = $original_type;
 		}
@@ -1440,7 +1440,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
+		return ! empty( $field->field_options[ $option ] );
 	}
 
 	/**

@@ -241,6 +241,7 @@ class FrmEntry {
 				unset( $reduced[ $field_id ] );
 			}
 		}
+
 		return $reduced;
 	}
 
@@ -465,7 +466,7 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
-		} elseif ( empty( $entry ) || 'false' === $entry ) {
+		} elseif ( ! $entry || 'false' === $entry ) {
 			$entry = false;
 		}
 	}
@@ -783,7 +784,6 @@ class FrmEntry {
 	 * @return array $new_values
 	 */
 	private static function before_insert_entry_in_database( &$values, $type ) {
-
 		self::sanitize_entry_post( $values );
 
 		if ( $type !== 'xml' ) {
@@ -1121,7 +1121,6 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function after_insert_entry_in_database( $values, $new_values, $entry_id ) {
-
 		self::add_new_entry_to_frm_vars( $entry_id );
 
 		self::maybe_add_entry_metas( $values, $entry_id );

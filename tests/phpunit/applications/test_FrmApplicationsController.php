@@ -24,7 +24,7 @@ class test_FrmApplicationsController extends FrmUnitTest {
 		$data = $this->get_prepared_template_data();
 		$this->assertIsArray( $data );
 
-		if ( empty( $data ) ) {
+		if ( ! $data ) {
 			$this->markTestSkipped( 'We cannot currently reach the API, so skip the test.' );
 		}
 

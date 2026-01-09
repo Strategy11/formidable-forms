@@ -224,7 +224,7 @@ class FrmStrpLiteAuth {
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
 
-		if ( ! empty( $intents ) ) {
+		if ( $intents ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
 			$intents = self::maybe_create_intents( $form->id );
@@ -302,7 +302,7 @@ class FrmStrpLiteAuth {
 		$form_id = absint( $form['form_id'] );
 		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
-		if ( empty( $intents ) ) {
+		if ( ! $intents ) {
 			wp_die();
 		}
 
@@ -340,7 +340,7 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) || empty( $intents ) ) {
+		if ( ! $actions || empty( $intents ) ) {
 			return;
 		}
 
@@ -659,6 +659,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
+
 		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
@@ -695,7 +696,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
@@ -787,6 +788,7 @@ class FrmStrpLiteAuth {
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
+
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
 	}
 

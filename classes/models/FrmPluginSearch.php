@@ -209,7 +209,7 @@ class FrmPluginSearch {
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
 
-		if ( ! empty( $addon ) ) {
+		if ( $addon ) {
 			$this->add_to_dismissed_hints( $addon );
 		}
 	}
@@ -223,7 +223,7 @@ class FrmPluginSearch {
 	 */
 	protected function get_dismissed_hints() {
 		$dismissed_hints = get_option( self::$dismissed_opt );
-		return ! empty( $dismissed_hints ) && is_array( $dismissed_hints ) ? $dismissed_hints : array();
+		return $dismissed_hints && is_array( $dismissed_hints ) ? $dismissed_hints : array();
 	}
 
 	/**

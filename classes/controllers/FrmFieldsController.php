@@ -20,7 +20,7 @@ class FrmFieldsController {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			wp_die();
 		}
 
@@ -92,7 +92,7 @@ class FrmFieldsController {
 	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
-		if ( ! empty( $field_options ) ) {
+		if ( $field_options ) {
 			$field_values['field_options'] = array_merge( $field_values['field_options'], $field_options );
 		}
 
@@ -738,7 +738,7 @@ class FrmFieldsController {
 	public static function add_placeholder_to_select( $field ) {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
 
-		if ( empty( $placeholder ) ) {
+		if ( ! $placeholder ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
@@ -903,6 +903,7 @@ class FrmFieldsController {
 				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
 			}
 		}
+
 		return false;
 	}
 

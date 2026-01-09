@@ -25,6 +25,7 @@ class FrmCurrencyHelper {
 		} else {
 			$currency = $currencies['USD'];
 		}
+
 		return $currency;
 	}
 

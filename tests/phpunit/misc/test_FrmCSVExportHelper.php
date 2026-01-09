@@ -165,7 +165,7 @@ class test_FrmCSVExportHelper extends FrmUnitTest {
 				'form_cols' => FrmField::get_all_for_form( $form->id, '', 'include' ),
 			)
 		);
-		$this->assertTrue( is_string( $csv_path ) && ! empty( $csv_path ) && file_exists( $csv_path ) );
+		$this->assertTrue( is_string( $csv_path ) && $csv_path && file_exists( $csv_path ) );
 		$csv_content = file_get_contents( $csv_path );
 		unlink( $csv_path );
 

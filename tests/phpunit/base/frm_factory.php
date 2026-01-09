@@ -113,6 +113,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		foreach ( $form_fields as $field ) {
 			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
 		}
+
 		return $entry_data;
 	}
 

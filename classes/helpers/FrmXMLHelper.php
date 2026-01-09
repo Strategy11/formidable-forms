@@ -219,7 +219,7 @@ class FrmXMLHelper {
 	private static function get_term_parent_id( $t ) {
 		$parent = (string) $t->term_parent;
 
-		if ( ! empty( $parent ) ) {
+		if ( $parent ) {
 			$parent = term_exists( (string) $t->term_parent, (string) $t->term_taxonomy );
 
 			$parent = $parent ? $parent['term_id'] : 0;
@@ -250,7 +250,7 @@ class FrmXMLHelper {
 			$old_id      = false;
 			$form_fields = false;
 
-			if ( ! empty( $this_form ) ) {
+			if ( $this_form ) {
 				$form_id = $this_form->id;
 				$old_id  = $this_form->id;
 				self::update_form( $this_form, $form, $imported );
@@ -404,7 +404,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
-		if ( ! empty( $form_fields ) ) {
+		if ( $form_fields ) {
 			foreach ( $form_fields as $field ) {
 				if ( is_object( $field ) ) {
 					FrmField::destroy( $field->id );
@@ -500,7 +500,7 @@ class FrmXMLHelper {
 			self::maybe_update_get_values_form_setting( $imported, $f );
 			self::migrate_placeholders( $f );
 
-			if ( ! empty( $this_form ) ) {
+			if ( $this_form ) {
 				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
 					FrmField::update( $f['id'], $f );
@@ -1246,6 +1246,7 @@ class FrmXMLHelper {
 		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
 			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
 		}
+
 		return $content;
 	}
 
@@ -1446,7 +1447,7 @@ class FrmXMLHelper {
 		$editing = get_posts( $match_by );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( ! empty( $editing ) && current( $editing )->post_date == $post['post_date'] ) {
+		if ( $editing && current( $editing )->post_date == $post['post_date'] ) {
 			// set the id of the post to edit
 			$post['ID'] = current( $editing )->ID;
 		}
@@ -1551,7 +1552,7 @@ class FrmXMLHelper {
 				}
 			}
 
-			if ( ! empty( $error_details ) ) {
+			if ( $error_details ) {
 				$errors[] = '<br />' . esc_html_x( 'Error details:', 'import xml message', 'formidable' ) . '<br />' . esc_html( print_r( $error_details, 1 ) );
 			}
 
@@ -1674,7 +1675,7 @@ class FrmXMLHelper {
 
 		$primary_form = reset( $result['forms'] );
 
-		if ( ! empty( $primary_form ) ) {
+		if ( $primary_form ) {
 			$primary_form = FrmForm::getOne( $primary_form );
 			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
 
@@ -1827,6 +1828,7 @@ class FrmXMLHelper {
 		if ( empty( $defaults['custom_html'] ) ) {
 			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $type );
 		}
+
 		return $defaults;
 	}
 
@@ -1957,7 +1959,7 @@ class FrmXMLHelper {
 	 * @param bool   $switch
 	 */
 	private static function migrate_post_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
-		if ( ! isset( $form_options['create_post'] ) || ! $form_options['create_post'] ) {
+		if ( empty( $form_options['create_post'] ) ) {
 			return;
 		}
 
@@ -2130,7 +2132,7 @@ class FrmXMLHelper {
 				)
 			);
 
-			if ( empty( $exists ) ) {
+			if ( ! $exists ) {
 				FrmDb::save_json_post( $new_notification );
 				++$imported['imported']['actions'];
 			}
@@ -2194,7 +2196,7 @@ class FrmXMLHelper {
 				// Format the email data
 				self::format_email_data( $atts, $notification );
 
-				if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
+				if ( ! empty( $notification['twilio'] ) ) {
 					do_action( 'frm_create_twilio_action', $atts, $notification );
 				}
 
@@ -2355,7 +2357,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
-		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
+		if ( ! empty( $form_options['auto_responder'] ) && ! empty( $form_options['ar_email_message'] ) ) {
 			// migrate autoresponder
 
 			$email_field = $form_options['ar_email_to'] ?? 0;
@@ -2369,7 +2371,7 @@ class FrmXMLHelper {
 				}
 			}
 
-			if ( is_numeric( $email_field ) && ! empty( $email_field ) ) {
+			if ( is_numeric( $email_field ) && $email_field ) {
 				$email_field = '[' . $email_field . ']';
 			}
 
@@ -2388,11 +2390,11 @@ class FrmXMLHelper {
 			$reply_to      = $notification['ar_reply_to'] ?? '';
 			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
-			if ( ! empty( $reply_to ) ) {
+			if ( $reply_to ) {
 				$new_notification2['post_content']['reply_to'] = $reply_to;
 			}
 
-			if ( ! empty( $reply_to ) || ! empty( $reply_to_name ) ) {
+			if ( $reply_to || $reply_to_name ) {
 				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>';
 			}
 
@@ -2440,6 +2442,7 @@ class FrmXMLHelper {
 			// CSV Importing is only available in Pro.
 			$file_types[] = '.csv';
 		}
+
 		return $file_types;
 	}
 }

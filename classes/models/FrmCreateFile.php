@@ -157,7 +157,7 @@ class FrmCreateFile {
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
 
-		if ( empty( $file ) ) {
+		if ( ! $file ) {
 			$file = $this->new_file_path;
 		}
 
@@ -174,7 +174,7 @@ class FrmCreateFile {
 
 		$this->has_permission = true;
 
-		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
+		if ( ! $creds || ! WP_Filesystem( $creds ) ) {
 			// initialize the API - any problems and we exit
 			$this->show_error_message();
 			$this->has_permission = false;

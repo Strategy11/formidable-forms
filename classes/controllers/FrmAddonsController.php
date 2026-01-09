@@ -407,6 +407,7 @@ class FrmAddonsController {
 			$info['slug'] = $k;
 			$list[ $k ]   = array_merge( $defaults, $info );
 		}
+
 		return $list;
 	}
 
@@ -497,7 +498,7 @@ class FrmAddonsController {
 
 		$expires = $version_info['error']['expires'] ?? 0;
 
-		if ( empty( $expires ) || $expires > time() ) {
+		if ( ! $expires || $expires > time() ) {
 			return false;
 		}
 
@@ -520,7 +521,7 @@ class FrmAddonsController {
 	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
+		if ( ! $installed_addons || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
 		}
 
@@ -550,7 +551,7 @@ class FrmAddonsController {
 
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) ) {
+		if ( ! $installed_addons ) {
 			return $transient;
 		}
 
@@ -642,7 +643,7 @@ class FrmAddonsController {
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses, true ) ) {
+			if ( ! $new_license || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
@@ -657,13 +658,13 @@ class FrmAddonsController {
 
 			$plugin = $api->get_addon_for_license( $addon, $version_info );
 
-			if ( empty( $plugin ) ) {
+			if ( ! $plugin ) {
 				continue;
 			}
 
 			$download_id = $plugin['id'] ?? 0;
 
-			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
+			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
@@ -742,6 +743,7 @@ class FrmAddonsController {
 				return $addon;
 			}
 		}
+
 		return false;
 	}
 
@@ -757,6 +759,7 @@ class FrmAddonsController {
 		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
 			$license_type = $addons['error']['type'];
 		}
+
 		return $license_type;
 	}
 
@@ -772,7 +775,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -827,7 +830,7 @@ class FrmAddonsController {
 
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
+			if ( $addon['installed'] && $activate_url && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -1113,6 +1116,7 @@ class FrmAddonsController {
 				'success' => false,
 			);
 		}
+
 		return $plugin;
 	}
 
@@ -1230,6 +1234,7 @@ class FrmAddonsController {
 				if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
 				}
+
 				return array(
 					'message' => $result->get_error_message(),
 					'success' => false,
@@ -1298,7 +1303,7 @@ class FrmAddonsController {
 	public static function connect_link() {
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( empty( $auth ) ) {
+		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}
@@ -1332,7 +1337,7 @@ class FrmAddonsController {
 
 		// The download link is not required if already installed.
 		$is_installed = FrmAppHelper::pro_is_included();
-		$file_missing = ! $is_installed && empty( $post_url );
+		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
 			return false;
@@ -1340,7 +1345,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
+		return $auth && hash_equals( $auth, $post_auth );
 	}
 
 	/**

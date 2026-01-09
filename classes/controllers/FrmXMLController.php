@@ -148,6 +148,7 @@ class FrmXMLController {
 		if ( ! $form ) {
 			return $form;
 		}
+
 		return json_decode( $form, true );
 	}
 
@@ -186,7 +187,7 @@ class FrmXMLController {
 	 * @return string
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
+		if ( $form && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -426,7 +427,7 @@ class FrmXMLController {
 	public static function export_xml() {
 		$error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'export-xml', 'export-xml-nonce' );
 
-		if ( ! empty( $error ) ) {
+		if ( $error ) {
 			wp_die( esc_html( $error ) );
 		}
 
@@ -655,7 +656,7 @@ class FrmXMLController {
 		} else {
 			$sitename = sanitize_key( get_bloginfo( 'name' ) );
 
-			if ( ! empty( $sitename ) ) {
+			if ( $sitename ) {
 				$sitename .= '.';
 			}
 
@@ -678,7 +679,7 @@ class FrmXMLController {
 	public static function generate_csv( $atts ) {
 		$form_ids = $atts['ids'];
 
-		if ( empty( $form_ids ) ) {
+		if ( ! $form_ids ) {
 			wp_die( esc_html__( 'Please select a form', 'formidable' ) );
 		}
 		self::csv( reset( $form_ids ) );
@@ -729,7 +730,7 @@ class FrmXMLController {
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 
-		if ( ! empty( $item_id ) ) {
+		if ( $item_id ) {
 			$item_id = explode( ',', $item_id );
 		}
 
@@ -752,7 +753,7 @@ class FrmXMLController {
 		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
-		if ( empty( $entry_ids ) ) {
+		if ( ! $entry_ids ) {
 			esc_html_e( 'There are no entries for that form.', 'formidable' );
 		} else {
 			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );

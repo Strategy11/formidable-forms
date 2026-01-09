@@ -332,7 +332,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 			)
 		);
 
-		if ( empty( $users ) ) {
+		if ( ! $users ) {
 			$this->fail( 'No users with this role currently exist.' );
 			return null;
 		}

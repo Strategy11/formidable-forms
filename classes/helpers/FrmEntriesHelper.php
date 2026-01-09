@@ -150,7 +150,7 @@ class FrmEntriesHelper {
 		$value_is_posted = false;
 
 		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+			$repeating = ! empty( $args['repeating'] );
 
 			if ( $repeating ) {
 				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -301,7 +301,6 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -926,7 +925,6 @@ class FrmEntriesHelper {
 	 * @return array<string>
 	 */
 	public static function get_entry_statuses() {
-
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),

@@ -213,6 +213,7 @@ class FrmFormAction {
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
+
 		return $updated_action;
 	}
 
@@ -256,7 +257,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -600,7 +601,7 @@ class FrmFormAction {
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 
-		if ( empty( $action_controls ) ) {
+		if ( ! $action_controls ) {
 			// don't continue if there are no available actions
 			return array();
 		}
@@ -609,6 +610,7 @@ class FrmFormAction {
 			if ( is_array( $action_controls ) ) {
 				return array();
 			}
+
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
@@ -752,7 +754,7 @@ class FrmFormAction {
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return array();
 		}
 
@@ -936,7 +938,7 @@ class FrmFormAction {
 			)
 		);
 
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			// create action now
 			$post_id = $this->save_settings( $action );
 		}

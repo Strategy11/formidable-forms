@@ -423,11 +423,11 @@ class FrmDb {
 			$args = array( 'order_by' => $args );
 		}
 
-		if ( ! empty( $order_by ) ) {
+		if ( $order_by ) {
 			$args['order_by'] = $order_by;
 		}
 
-		if ( ! empty( $limit ) ) {
+		if ( $limit ) {
 			$args['limit'] = $limit;
 		}
 
@@ -841,7 +841,7 @@ class FrmDb {
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
 
-		if ( ! empty( $cached_keys ) ) {
+		if ( $cached_keys ) {
 			foreach ( $cached_keys as $key ) {
 				wp_cache_delete( $key, $group );
 			}

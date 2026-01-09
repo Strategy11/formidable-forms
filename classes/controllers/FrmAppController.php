@@ -62,7 +62,7 @@ class FrmAppController {
 
 			$page = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
 
-			if ( empty( $page ) || $page === 'formidable' ) {
+			if ( ! $page || $page === 'formidable' ) {
 				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
 				if ( in_array( $action, array( 'settings', 'edit', 'list' ), true ) ) {
@@ -72,7 +72,7 @@ class FrmAppController {
 				}
 			}
 
-			if ( ! empty( $page ) ) {
+			if ( $page ) {
 				$classes .= ' frm-admin-page-' . $page;
 			}
 		}
@@ -142,6 +142,7 @@ class FrmAppController {
 		} elseif ( str_contains( $agent, 'windows' ) ) {
 			$os = ' windows';
 		}
+
 		return $os;
 	}
 
@@ -257,7 +258,7 @@ class FrmAppController {
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
 
-		if ( empty( $show_nav ) || ! $form ) {
+		if ( ! $show_nav || ! $form ) {
 			return;
 		}
 
@@ -1459,6 +1460,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
+
 		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 

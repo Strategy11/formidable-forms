@@ -247,7 +247,7 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_is_plain_text( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			$this->is_plain_text = true;
 		} elseif ( $atts['format'] !== 'text' ) {
 			$this->is_plain_text = true;
@@ -264,7 +264,7 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_include_blank( $atts ) {
-		if ( isset( $atts['include_blank'] ) && $atts['include_blank'] ) {
+		if ( ! empty( $atts['include_blank'] ) ) {
 			$this->include_blank = true;
 		}
 	}
@@ -294,7 +294,7 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_include_user_info( $atts ) {
-		if ( isset( $atts['user_info'] ) && $atts['user_info'] ) {
+		if ( ! empty( $atts['user_info'] ) ) {
 			$this->include_user_info = true;
 		}
 	}
@@ -320,7 +320,7 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_include_extras( $atts ) {
-		if ( isset( $atts['include_extras'] ) && $atts['include_extras'] ) {
+		if ( ! empty( $atts['include_extras'] ) ) {
 			$this->include_extras = array_map( 'strtolower', array_map( 'trim', explode( ',', $atts['include_extras'] ) ) );
 		}
 	}
@@ -359,7 +359,7 @@ class FrmEntryFormatter {
 	 * @return void
 	 */
 	protected function init_is_clickable( $atts ) {
-		if ( isset( $atts['clickable'] ) && $atts['clickable'] ) {
+		if ( ! empty( $atts['clickable'] ) ) {
 			$this->is_clickable = true;
 		}
 	}

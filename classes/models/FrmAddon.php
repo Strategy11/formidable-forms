@@ -109,7 +109,6 @@ class FrmAddon {
 	protected $should_clear_cache = true;
 
 	public function __construct() {
-
 		if ( empty( $this->plugin_slug ) ) {
 			$this->plugin_slug = preg_replace( '/[^a-zA-Z0-9_\s]/', '', str_replace( ' ', '_', strtolower( $this->plugin_name ) ) );
 		}
@@ -159,13 +158,12 @@ class FrmAddon {
 	 * @return void
 	 */
 	public function edd_plugin_updater() {
-
 		$this->is_license_revoked();
 		$license = $this->license;
 
 		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
-		if ( ! empty( $license ) ) {
+		if ( $license ) {
 
 			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
 				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
@@ -187,7 +185,6 @@ class FrmAddon {
 	 * @return object $_data
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
-
 		if ( $_action !== 'plugin_information' ) {
 			return $_data;
 		}
@@ -233,7 +230,7 @@ class FrmAddon {
 	public function get_license() {
 		$license = $this->maybe_get_pro_license();
 
-		if ( ! empty( $license ) ) {
+		if ( $license ) {
 			return $license;
 		}
 
@@ -286,7 +283,7 @@ class FrmAddon {
 	public function activate_defined_license() {
 		$license = $this->get_defined_license();
 
-		if ( ! empty( $license ) && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
+		if ( $license && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
 			$response = $this->activate_license( $license );
 
 			if ( ! $response['success'] ) {
@@ -488,7 +485,7 @@ class FrmAddon {
 			$api    = new FrmFormApi( $this->license );
 			$errors = $api->error_for_license();
 
-			if ( ! empty( $errors ) ) {
+			if ( $errors ) {
 				$message = reset( $errors );
 			}
 		}
@@ -608,7 +605,7 @@ class FrmAddon {
 	private function clear_old_plugin_version( &$version_info ) {
 		$timeout = ! empty( $version_info->timeout ) ? $version_info->timeout : 0;
 
-		if ( ! empty( $timeout ) && time() > $timeout ) {
+		if ( $timeout && time() > $timeout ) {
 			// Cache is expired.
 			$version_info = false;
 			$api          = new FrmFormApi( $this->license );

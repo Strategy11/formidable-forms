@@ -776,7 +776,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function table_header( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			return '';
 		}
 
@@ -961,7 +961,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	 * @return mixed|string
 	 */
 	protected function get_field_value( $entry, $field, $atts ) {
-
 		if ( $field->field_key === 'free-html-field' ) {
 			$field_value = 'Lorem ipsum.';
 		} else {

@@ -46,6 +46,8 @@
 		<exclude-pattern>views/frm-forms/preview/header.php</exclude-pattern>
 	</rule>
 
+	<rule ref="Squiz.WhiteSpace.FunctionOpeningBraceSpace" />
+
 	<!-- MEDIUM PRIORITY ITEMS TO FIX -->
 	<rule ref="Squiz.PHP.EmbeddedPhp.ContentBeforeOpen">
 		<exclude-pattern>views/*</exclude-pattern>
@@ -279,4 +281,10 @@
 
 	<!-- Custom Formidable sniffs -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
+	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
 </ruleset>

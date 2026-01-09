@@ -170,7 +170,7 @@ class FrmEntryMeta {
 			}
 		}//end foreach
 
-		if ( empty( $previous_field_ids ) ) {
+		if ( ! $previous_field_ids ) {
 			return;
 		}
 
@@ -486,6 +486,7 @@ class FrmEntryMeta {
 			$where['e.form_id'] = $where['fi.form_id'];
 			unset( $where['fi.form_id'] );
 		}
+
 		return false;
 	}
 

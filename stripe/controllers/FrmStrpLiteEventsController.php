@@ -171,7 +171,7 @@ class FrmStrpLiteEventsController {
 		global $wpdb;
 		$customer_id = $this->invoice->id;
 
-		if ( empty( $customer_id ) ) {
+		if ( ! $customer_id ) {
 			return;
 		}
 		$wpdb->query(
@@ -433,6 +433,7 @@ class FrmStrpLiteEventsController {
 			$amount_refunded = $this->invoice->amount_refunded;
 			$partial         = $amount != $amount_refunded; // phpcs:ignore Universal.Operators.StrictComparisons
 		}
+
 		return $partial;
 	}
 

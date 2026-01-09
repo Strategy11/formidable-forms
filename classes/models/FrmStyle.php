@@ -272,6 +272,7 @@ class FrmStyle {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
 			}
 		}
+
 		return $sanitized_settings;
 	}
 
@@ -343,6 +344,7 @@ class FrmStyle {
 				$output .= ')';
 			}
 		}
+
 		return $output;
 	}
 
@@ -521,13 +523,13 @@ class FrmStyle {
 
 		$temp_styles = FrmDb::check_cache( json_encode( $post_atts ), 'frm_styles', $post_atts, 'get_posts' );
 
-		if ( empty( $temp_styles ) ) {
+		if ( ! $temp_styles ) {
 			global $wpdb;
 			// make sure there wasn't a conflict with the query
 			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
-			if ( empty( $temp_styles ) ) {
+			if ( ! $temp_styles ) {
 				// create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
@@ -835,6 +837,7 @@ class FrmStyle {
 				$value .= $char;
 			}
 		}
+
 		return $value;
 	}
 
@@ -850,9 +853,10 @@ class FrmStyle {
 	public function get_default_template_style( $style_id ) {
 		$default_template = get_post_meta( (int) $style_id, $this->default_template_style_meta_name, true );
 
-		if ( empty( $default_template ) ) {
+		if ( ! $default_template ) {
 			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
 		}
+
 		return $default_template;
 	}
 }

@@ -30,7 +30,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return $callback;
 		}
 
@@ -81,6 +81,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -122,7 +123,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( empty( $amount ) || $amount == 000 ) {
+		if ( ! $amount || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}

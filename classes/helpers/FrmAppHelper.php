@@ -101,7 +101,7 @@ class FrmAppHelper {
 	public static function make_affiliate_url( $url ) {
 		$affiliate_id = self::get_affiliate();
 
-		if ( ! empty( $affiliate_id ) ) {
+		if ( $affiliate_id ) {
 			$url = str_replace( array( 'http://', 'https://' ), '', $url );
 			$url = 'http://www.shareasale.com/r.cfm?u=' . absint( $affiliate_id ) . '&b=841990&m=64739&afftrack=plugin&urllink=' . urlencode( $url );
 		}
@@ -428,6 +428,7 @@ class FrmAppHelper {
 		if ( $check_for_settings ) {
 			$check_actions[] = 'settings';
 		}
+
 		return self::is_admin_page( 'formidable' ) && in_array( $action, $check_actions, true );
 	}
 
@@ -437,7 +438,7 @@ class FrmAppHelper {
 	public static function is_formidable_admin() {
 		$page = self::simple_get( 'page', 'sanitize_title' );
 
-		if ( empty( $page ) ) {
+		if ( ! $page ) {
 			return self::is_view_builder_page();
 		}
 
@@ -525,7 +526,7 @@ class FrmAppHelper {
 
 		$post_type = self::simple_get( 'post_type', 'sanitize_title' );
 
-		if ( empty( $post_type ) ) {
+		if ( ! $post_type ) {
 			$post_id   = self::simple_get( 'post', 'absint' );
 			$post      = get_post( $post_id );
 			$post_type = $post ? $post->post_type : '';
@@ -903,6 +904,7 @@ class FrmAppHelper {
 			foreach ( $temp_values as $k => $v ) {
 				self::sanitize_value( $sanitize, $value[ $k ] );
 			}
+
 			return;
 		}
 
@@ -1002,7 +1004,7 @@ class FrmAppHelper {
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
-		if ( empty( $string ) || ! str_contains( $string, '&' ) ) {
+		if ( ! $string || ! str_contains( $string, '&' ) ) {
 			return;
 		}
 
@@ -1103,6 +1105,7 @@ class FrmAppHelper {
 		if ( $included_draft_hook ) {
 			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
+
 		return $html;
 	}
 
@@ -1152,7 +1155,7 @@ class FrmAppHelper {
 
 		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
-		} elseif ( ! empty( $allowed ) ) {
+		} elseif ( $allowed ) {
 			foreach ( (array) $allowed as $a ) {
 				$allowed_html[ $a ] = $html[ $a ] ?? array();
 			}
@@ -1317,13 +1320,13 @@ class FrmAppHelper {
 
 		$action_name = isset( $_GET['action'] ) ? 'action' : ( isset( $_GET['action2'] ) ? 'action2' : '' );
 
-		if ( empty( $action_name ) ) {
+		if ( ! $action_name ) {
 			return;
 		}
 
 		$new_action = self::get_param( $action_name, '', 'get', 'sanitize_text_field' );
 
-		if ( ! empty( $new_action ) ) {
+		if ( $new_action ) {
 			$_SERVER['REQUEST_URI'] = str_replace( '&action=' . $new_action, '', self::get_server_value( 'REQUEST_URI' ) );
 		}
 	}
@@ -1484,6 +1487,7 @@ class FrmAppHelper {
 		} elseif ( str_starts_with( $value, '#' ) ) {
 			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
 		}
+
 		return (bool) $match;
 	}
 
@@ -2402,7 +2406,7 @@ class FrmAppHelper {
 	 * @return false|string The permission message or false if allowed
 	 */
 	public static function permission_nonce_error( $permission, $nonce_name = '', $nonce = '' ) {
-		if ( ! empty( $permission ) && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
+		if ( $permission && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
 
 			return $frm_settings->admin_permission;
@@ -2410,7 +2414,7 @@ class FrmAppHelper {
 
 		$error = false;
 
-		if ( empty( $nonce_name ) ) {
+		if ( ! $nonce_name ) {
 			return $error;
 		}
 
@@ -2767,6 +2771,7 @@ class FrmAppHelper {
 				}
 			}
 		}
+
 		return $key;
 	}
 
@@ -2823,6 +2828,7 @@ class FrmAppHelper {
 				$key .= 'a';
 			}
 		}
+
 		return $key;
 	}
 
@@ -2843,7 +2849,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		if ( empty( $post_values ) ) {
+		if ( ! $post_values ) {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -2882,7 +2888,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( ! empty( $fields ) ) {
+		if ( $fields ) {
 			foreach ( (array) $fields as $field ) {
 				if ( ! self::is_admin_page() ) {
 					// Don't prep default values on the form settings page.
@@ -2907,7 +2913,7 @@ class FrmAppHelper {
 
 		if ( $args['default'] ) {
 			$meta_value = $field->default_value;
-		} elseif ( $record->post_id && self::pro_is_installed() && isset( $field->field_options['post_field'] ) && $field->field_options['post_field'] ) {
+		} elseif ( $record->post_id && self::pro_is_installed() && ! empty( $field->field_options['post_field'] ) ) {
 			if ( ! isset( $field->field_options['custom_field'] ) ) {
 				$field->field_options['custom_field'] = '';
 			}
@@ -2945,7 +2951,7 @@ class FrmAppHelper {
 
 		FrmFieldsHelper::prepare_edit_front_field( $field_array, $field, $values['id'], $args );
 
-		if ( ! isset( $field_array['unique'] ) || ! $field_array['unique'] ) {
+		if ( empty( $field_array['unique'] ) ) {
 			$field_array['unique_msg'] = '';
 		}
 
@@ -3026,7 +3032,7 @@ class FrmAppHelper {
 		foreach ( $form_defaults as $opt => $default ) {
 			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
-				$values[ $opt ] = $post_values && isset( $post_values['options'][ $opt ] ) ? $post_values['options'][ $opt ] : $default;
+				$values[ $opt ] = $post_values['options'][ $opt ] ?? $default;
 			}
 
 			unset( $opt, $default );
@@ -3038,7 +3044,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
-				$values[ $h . '_html' ] = ( $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h ) );
+				$values[ $h . '_html' ] = $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h );
 			}
 			unset( $h );
 		}
@@ -3052,7 +3058,7 @@ class FrmAppHelper {
 	 * @return bool|int
 	 */
 	public static function custom_style_value( $post_values ) {
-		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
+		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
 			return absint( $post_values['options']['custom_style'] );
 		}
 
@@ -3206,7 +3212,7 @@ class FrmAppHelper {
 
 		$trimmed_format = trim( $time_format );
 
-		if ( $time_format && ! empty( $trimmed_format ) ) {
+		if ( $time_format && $trimmed_format ) {
 			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
@@ -3268,7 +3274,7 @@ class FrmAppHelper {
 		}
 
 		foreach ( $time_strings as $k => $v ) {
-			if ( isset( $diff[ $k ] ) && $diff[ $k ] ) {
+			if ( ! empty( $diff[ $k ] ) ) {
 				$time_strings[ $k ] = $diff[ $k ] . ' ' . ( $diff[ $k ] > 1 ? $v[1] : $v[0] );
 			} elseif ( isset( $diff[ $k ] ) && count( $time_strings ) === 1 ) {
 				// Account for 0.
@@ -3358,6 +3364,7 @@ class FrmAppHelper {
 				return $u;
 			}
 		}
+
 		return 1;
 	}
 
@@ -3571,7 +3578,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
+		if ( ! $action || ( $frm_action && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}
@@ -3723,6 +3730,7 @@ class FrmAppHelper {
 			if ( mb_check_encoding( $value, $from_format ) ) {
 				return mb_convert_encoding( $value, $to_format, $from_format );
 			}
+
 			return $value;
 		}
 
@@ -3797,8 +3805,7 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
+		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] !== $post_type ) {
 			return;
 		}
 
@@ -4230,6 +4237,7 @@ class FrmAppHelper {
 				return $settings->menu_icon;
 			}
 		}
+
 		return 'frmfont frm_logo_icon';
 	}
 
@@ -5014,6 +5022,7 @@ class FrmAppHelper {
 		if ( function_exists( 'seems_utf8' ) ) {
 			return seems_utf8( $string );
 		}
+
 		return false;
 	}
 
