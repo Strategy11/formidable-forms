@@ -253,7 +253,7 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_addon_for_license( $license_plugin, $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
 
@@ -409,7 +409,7 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
 

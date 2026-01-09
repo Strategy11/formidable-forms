@@ -958,7 +958,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	public function get_options( $values ) {
-		if ( empty( $values ) ) {
+		if ( ! $values ) {
 			$values = (array) $this->field;
 		}
 

@@ -185,7 +185,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public static function show_connect_links( $buttons = array(), $button_classes = '' ) {
-		if ( empty( $buttons ) ) {
+		if ( ! $buttons ) {
 			$buttons = self::get_license_buttons();
 		}
 

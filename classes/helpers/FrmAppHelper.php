@@ -1004,7 +1004,7 @@ class FrmAppHelper {
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
-		if ( empty( $string ) || ! str_contains( $string, '&' ) ) {
+		if ( ! $string || ! str_contains( $string, '&' ) ) {
 			return;
 		}
 
@@ -1155,7 +1155,7 @@ class FrmAppHelper {
 
 		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
-		} elseif ( ! empty( $allowed ) ) {
+		} elseif ( $allowed ) {
 			foreach ( (array) $allowed as $a ) {
 				$allowed_html[ $a ] = $html[ $a ] ?? array();
 			}
@@ -2406,7 +2406,7 @@ class FrmAppHelper {
 	 * @return false|string The permission message or false if allowed
 	 */
 	public static function permission_nonce_error( $permission, $nonce_name = '', $nonce = '' ) {
-		if ( ! empty( $permission ) && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
+		if ( $permission && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
 
 			return $frm_settings->admin_permission;
@@ -2414,7 +2414,7 @@ class FrmAppHelper {
 
 		$error = false;
 
-		if ( empty( $nonce_name ) ) {
+		if ( ! $nonce_name ) {
 			return $error;
 		}
 
@@ -2849,7 +2849,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		if ( empty( $post_values ) ) {
+		if ( ! $post_values ) {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -2888,7 +2888,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( ! empty( $fields ) ) {
+		if ( $fields ) {
 			foreach ( (array) $fields as $field ) {
 				if ( ! self::is_admin_page() ) {
 					// Don't prep default values on the form settings page.
@@ -3058,7 +3058,7 @@ class FrmAppHelper {
 	 * @return bool|int
 	 */
 	public static function custom_style_value( $post_values ) {
-		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
+		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
 			return absint( $post_values['options']['custom_style'] );
 		}
 
@@ -3578,7 +3578,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
+		if ( ! $action || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}

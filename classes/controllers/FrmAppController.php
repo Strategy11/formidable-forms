@@ -258,7 +258,7 @@ class FrmAppController {
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
 
-		if ( empty( $show_nav ) || ! $form ) {
+		if ( ! $show_nav || ! $form ) {
 			return;
 		}
 

@@ -112,7 +112,7 @@ class FrmEntryValidate {
 		$where['fr.parent_form_id'] = array( null, 0 );
 
 		// Don't get excluded fields (like file upload fields in the ajax validation)
-		if ( ! empty( $exclude ) ) {
+		if ( $exclude ) {
 			$where['fi.type not'] = $exclude;
 		}
 
@@ -523,7 +523,7 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( empty( $pattern ) ) {
+				if ( ! $pattern ) {
 					$pattern .= $part;
 				} else {
 					$pattern .= '(' . $part . ')?';
@@ -549,7 +549,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( $exclude || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}

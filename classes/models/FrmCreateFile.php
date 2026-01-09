@@ -157,7 +157,7 @@ class FrmCreateFile {
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
 
-		if ( empty( $file ) ) {
+		if ( ! $file ) {
 			$file = $this->new_file_path;
 		}
 

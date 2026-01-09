@@ -696,7 +696,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
