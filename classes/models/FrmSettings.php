@@ -425,6 +425,7 @@ class FrmSettings {
 				// Avoid changing the false default value to an empty string.
 				return $value;
 			}
+
 			return sanitize_textarea_field( $value );
 		}
 

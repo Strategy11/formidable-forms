@@ -272,6 +272,7 @@ class FrmStyle {
 				$sanitized_settings[ $key ] = $this->strip_invalid_characters( $sanitized_settings[ $key ] );
 			}
 		}
+
 		return $sanitized_settings;
 	}
 
@@ -343,6 +344,7 @@ class FrmStyle {
 				$output .= ')';
 			}
 		}
+
 		return $output;
 	}
 
@@ -835,6 +837,7 @@ class FrmStyle {
 				$value .= $char;
 			}
 		}
+
 		return $value;
 	}
 
@@ -853,6 +856,7 @@ class FrmStyle {
 		if ( empty( $default_template ) ) {
 			return FrmAppHelper::prepare_and_encode( $this->get_defaults() );
 		}
+
 		return $default_template;
 	}
 }

@@ -869,6 +869,7 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
+
 				return self::prepare_form_row_data( $cache );
 			}
 		}

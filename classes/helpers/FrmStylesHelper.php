@@ -252,6 +252,7 @@ class FrmStylesHelper {
 			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
 		}
+
 		return $rgb;
 	}
 
@@ -471,7 +472,7 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
@@ -1156,6 +1157,7 @@ class FrmStylesHelper {
 		if ( count( $parts ) < 3 ) {
 			return $parts[0];
 		}
+
 		return $parts[2];
 	}
 }

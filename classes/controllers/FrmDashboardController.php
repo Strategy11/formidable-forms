@@ -197,7 +197,7 @@ class FrmDashboardController {
 			'type'    => 'default',
 		);
 
-		if ( ! empty( $cta ) ) {
+		if ( $cta ) {
 			$counter_args['cta'] = $cta;
 		}
 
@@ -531,6 +531,7 @@ class FrmDashboardController {
 		if ( null !== $option_name ) {
 			return $options[ $option_name ];
 		}
+
 		return $options;
 	}
 

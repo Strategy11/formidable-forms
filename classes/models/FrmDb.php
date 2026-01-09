@@ -423,11 +423,11 @@ class FrmDb {
 			$args = array( 'order_by' => $args );
 		}
 
-		if ( ! empty( $order_by ) ) {
+		if ( $order_by ) {
 			$args['order_by'] = $order_by;
 		}
 
-		if ( ! empty( $limit ) ) {
+		if ( $limit ) {
 			$args['limit'] = $limit;
 		}
 

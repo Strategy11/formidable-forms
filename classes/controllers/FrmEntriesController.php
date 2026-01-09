@@ -343,7 +343,7 @@ class FrmEntriesController {
 			return $check;
 		}
 
-		if ( empty( $prev_value ) ) {
+		if ( ! $prev_value ) {
 			$prev_value = get_metadata( 'user', $object_id, $meta_key, true );
 		}
 
@@ -438,7 +438,7 @@ class FrmEntriesController {
 	 * @return string
 	 */
 	private static function base_column_key( $menu_name = '' ) {
-		if ( empty( $menu_name ) ) {
+		if ( ! $menu_name ) {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
@@ -592,7 +592,7 @@ class FrmEntriesController {
 				break;
 			}
 
-			if ( empty( $result ) || ! in_array( $col_key, $result, true ) ) {
+			if ( ! $result || ! in_array( $col_key, $result, true ) ) {
 				$result[] = $col_key;
 				--$i;
 			}
@@ -641,7 +641,7 @@ class FrmEntriesController {
 			die();
 		}
 
-		if ( empty( $message ) && isset( $_GET['import-message'] ) ) {
+		if ( ! $message && isset( $_GET['import-message'] ) ) {
 			$message = __( 'Your import is complete', 'formidable' );
 		}
 
@@ -794,7 +794,7 @@ class FrmEntriesController {
 
 		$frm_vars['created_entries'][ $form_id ] = array( 'errors' => $errors );
 
-		if ( empty( $errors ) ) {
+		if ( ! $errors ) {
 			$_POST['frm_skip_cookie'] = 1;
 			$do_success               = false;
 

@@ -86,6 +86,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -571,6 +572,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( 'live' === $mode ) {
 			return 'sq0idp-eR4XI1xgNduJAXcBvjemTg';
 		}
+
 		return 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
 	}
 

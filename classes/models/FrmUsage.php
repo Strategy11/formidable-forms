@@ -456,6 +456,7 @@ class FrmUsage {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
 			$fields[ $k ]->field_options = json_encode( $field->field_options );
 		}
+
 		return $fields;
 	}
 

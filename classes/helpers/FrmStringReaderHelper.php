@@ -55,6 +55,7 @@ class FrmStringReaderHelper {
 		while ( $this->pos <= $this->max && ( $one = $this->string[ $this->pos++ ] ) !== $char ) {
 			$value .= $one;
 		}
+
 		return $value;
 	}
 

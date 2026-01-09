@@ -404,7 +404,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function delete_removed_fields( $form_fields ) {
-		if ( ! empty( $form_fields ) ) {
+		if ( $form_fields ) {
 			foreach ( $form_fields as $field ) {
 				if ( is_object( $field ) ) {
 					FrmField::destroy( $field->id );
@@ -500,7 +500,7 @@ class FrmXMLHelper {
 			self::maybe_update_get_values_form_setting( $imported, $f );
 			self::migrate_placeholders( $f );
 
-			if ( ! empty( $this_form ) ) {
+			if ( $this_form ) {
 				// check for field to edit by field id
 				if ( isset( $form_fields[ $f['id'] ] ) ) {
 					FrmField::update( $f['id'], $f );
@@ -1246,6 +1246,7 @@ class FrmXMLHelper {
 		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
 			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
 		}
+
 		return $content;
 	}
 
@@ -1827,6 +1828,7 @@ class FrmXMLHelper {
 		if ( empty( $defaults['custom_html'] ) ) {
 			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $type );
 		}
+
 		return $defaults;
 	}
 
@@ -2440,6 +2442,7 @@ class FrmXMLHelper {
 			// CSV Importing is only available in Pro.
 			$file_types[] = '.csv';
 		}
+
 		return $file_types;
 	}
 }

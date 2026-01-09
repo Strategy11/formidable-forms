@@ -95,6 +95,7 @@ class FrmTipsHelper {
 			if ( is_array( $tip['link'] ) ) {
 				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
 			}
+
 			return $cta_link;
 		}
 
@@ -114,6 +115,7 @@ class FrmTipsHelper {
 		if ( $cta_text ) {
 			return $cta_text;
 		}
+
 		return FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro.', 'formidable' );
 	}
 

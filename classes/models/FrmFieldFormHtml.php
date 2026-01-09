@@ -319,6 +319,7 @@ class FrmFieldFormHtml {
 		if ( false === $end ) {
 			return false;
 		}
+
 		return substr( $html, $start + 10, $end - $start - 10 );
 	}
 

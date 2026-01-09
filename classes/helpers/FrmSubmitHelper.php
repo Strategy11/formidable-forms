@@ -212,6 +212,7 @@ class FrmSubmitHelper {
 
 			$submit_field = $field;
 		}
+
 		return $submit_field;
 	}
 
