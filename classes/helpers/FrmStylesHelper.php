@@ -699,7 +699,7 @@ class FrmStylesHelper {
 
 			$settings['style_class'] = '';
 
-			if ( ! empty( $style_name ) ) {
+			if ( $style_name ) {
 				$settings['style_class'] = $style_name . '.';
 			}
 		} else {

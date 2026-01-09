@@ -98,12 +98,12 @@ class FrmXMLController {
 				$pages = $imported['posts'];
 			}
 
-			if ( ! empty( $form ) ) {
+			if ( $form ) {
 				// Create selected pages with the correct shortcodes.
 				$pages = self::create_pages_for_import( $form );
 			}
 
-			if ( ! empty( $pages ) ) {
+			if ( $pages ) {
 				$post_id              = end( $pages );
 				$response['redirect'] = get_permalink( $post_id );
 			}
@@ -228,7 +228,7 @@ class FrmXMLController {
 				$shortcode = '[' . esc_html( $for ) . ' id=%1$s]';
 			}
 
-			if ( empty( $item_key ) ) {
+			if ( ! $item_key ) {
 				// Don't create it if the shortcode won't show anything.
 				continue;
 			}
@@ -427,7 +427,7 @@ class FrmXMLController {
 	public static function export_xml() {
 		$error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'export-xml', 'export-xml-nonce' );
 
-		if ( ! empty( $error ) ) {
+		if ( $error ) {
 			wp_die( esc_html( $error ) );
 		}
 
@@ -656,7 +656,7 @@ class FrmXMLController {
 		} else {
 			$sitename = sanitize_key( get_bloginfo( 'name' ) );
 
-			if ( ! empty( $sitename ) ) {
+			if ( $sitename ) {
 				$sitename .= '.';
 			}
 
@@ -679,7 +679,7 @@ class FrmXMLController {
 	public static function generate_csv( $atts ) {
 		$form_ids = $atts['ids'];
 
-		if ( empty( $form_ids ) ) {
+		if ( ! $form_ids ) {
 			wp_die( esc_html__( 'Please select a form', 'formidable' ) );
 		}
 		self::csv( reset( $form_ids ) );
@@ -730,7 +730,7 @@ class FrmXMLController {
 
 		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 
-		if ( ! empty( $item_id ) ) {
+		if ( $item_id ) {
 			$item_id = explode( ',', $item_id );
 		}
 
@@ -753,7 +753,7 @@ class FrmXMLController {
 		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
-		if ( empty( $entry_ids ) ) {
+		if ( ! $entry_ids ) {
 			esc_html_e( 'There are no entries for that form.', 'formidable' );
 		} else {
 			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );

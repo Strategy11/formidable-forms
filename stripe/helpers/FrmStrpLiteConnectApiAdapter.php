@@ -113,7 +113,7 @@ class FrmStrpLiteConnectApiAdapter {
 				delete_user_meta( $user_id, $meta_name );
 			}
 
-			if ( ! empty( $customer_id_error_message ) ) {
+			if ( $customer_id_error_message ) {
 				return $customer_id_error_message;
 			}
 

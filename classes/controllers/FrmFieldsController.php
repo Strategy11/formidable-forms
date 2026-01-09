@@ -20,7 +20,7 @@ class FrmFieldsController {
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			wp_die();
 		}
 
@@ -738,7 +738,7 @@ class FrmFieldsController {
 	public static function add_placeholder_to_select( $field ) {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
 
-		if ( empty( $placeholder ) ) {
+		if ( ! $placeholder ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
@@ -1010,7 +1010,7 @@ class FrmFieldsController {
 
 			if ( is_numeric( $k ) && str_contains( $v, '=' ) ) {
 				$add_html[] = $v;
-			} elseif ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
+			} elseif ( $k && isset( $add_html[ $k ] ) ) {
 				$add_html[ $k ] = str_replace( $k . '="', $k . '="' . $v, $add_html[ $k ] );
 			} else {
 				$add_html[ $k ] = $k . '="' . esc_attr( $v ) . '"';

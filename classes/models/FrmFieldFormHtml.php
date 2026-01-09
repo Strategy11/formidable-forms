@@ -288,7 +288,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( ! empty( $error ) && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( $error && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 
 			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
@@ -545,7 +545,7 @@ class FrmFieldFormHtml {
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 
-		if ( ! empty( $extra_classes ) ) {
+		if ( $extra_classes ) {
 			if ( ! str_contains( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}

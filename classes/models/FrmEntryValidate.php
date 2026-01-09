@@ -437,7 +437,7 @@ class FrmEntryValidate {
 
 		$new_errors = $field_obj->validate( $args );
 
-		if ( ! empty( $new_errors ) ) {
+		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
 	}

@@ -261,7 +261,7 @@ class FrmEntriesHelper {
 
 		$field_value = array();
 
-		if ( empty( $child_entries ) ) {
+		if ( ! $child_entries ) {
 			return '';
 		}
 

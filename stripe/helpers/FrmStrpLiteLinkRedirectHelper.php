@@ -57,7 +57,7 @@ class FrmStrpLiteLinkRedirectHelper {
 			$referer = FrmStrpLiteAuth::get_referer_url( $this->entry_id );
 		}
 
-		if ( empty( $referer ) ) {
+		if ( ! $referer ) {
 			$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
 

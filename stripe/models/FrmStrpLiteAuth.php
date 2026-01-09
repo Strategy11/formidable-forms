@@ -224,7 +224,7 @@ class FrmStrpLiteAuth {
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
 
-		if ( ! empty( $intents ) ) {
+		if ( $intents ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
 			$intents = self::maybe_create_intents( $form->id );
@@ -302,7 +302,7 @@ class FrmStrpLiteAuth {
 		$form_id = absint( $form['form_id'] );
 		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
-		if ( empty( $intents ) ) {
+		if ( ! $intents ) {
 			wp_die();
 		}
 
@@ -340,7 +340,7 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) || empty( $intents ) ) {
+		if ( ! $actions || empty( $intents ) ) {
 			return;
 		}
 
@@ -760,7 +760,7 @@ class FrmStrpLiteAuth {
 			$success_url = reset( $actions )->post_content['success_url'];
 		}
 
-		if ( empty( $success_url ) ) {
+		if ( ! $success_url ) {
 			$success_url = $atts['form']->options['success_url'];
 		}
 

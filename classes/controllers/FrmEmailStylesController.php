@@ -305,7 +305,7 @@ class FrmEmailStylesController {
 		foreach ( $emails as $email ) {
 			$email = trim( $email );
 
-			if ( empty( $email ) || ! is_email( $email ) ) {
+			if ( ! $email || ! is_email( $email ) ) {
 				continue;
 			}
 			$valid_emails[] = $email;

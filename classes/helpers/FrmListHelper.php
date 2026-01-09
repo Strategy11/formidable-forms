@@ -332,7 +332,7 @@ class FrmListHelper {
 		 */
 		$views = apply_filters( 'views_' . $this->screen->id, $views );
 
-		if ( empty( $views ) ) {
+		if ( ! $views ) {
 			return;
 		}
 
@@ -689,7 +689,7 @@ class FrmListHelper {
 
 		$pagination_links_class = 'pagination-links';
 
-		if ( ! empty( $infinite_scroll ) ) {
+		if ( $infinite_scroll ) {
 			$pagination_links_class = ' hide-if-js';
 		}
 
@@ -864,7 +864,7 @@ class FrmListHelper {
 		 */
 		$column = apply_filters( 'list_table_primary_column', $default, $this->screen->id );
 
-		if ( empty( $column ) || ! isset( $columns[ $column ] ) ) {
+		if ( ! $column || ! isset( $columns[ $column ] ) ) {
 			$column = $default;
 		}
 
