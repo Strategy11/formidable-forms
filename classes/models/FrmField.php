@@ -1440,7 +1440,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
+		return ! empty( $field->field_options[ $option ] );
 	}
 
 	/**

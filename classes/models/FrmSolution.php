@@ -463,7 +463,7 @@ class FrmSolution {
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
 			<?php
-			if ( isset( $step['complete'] ) && $step['complete'] ) {
+			if ( ! empty( $step['complete'] ) ) {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(

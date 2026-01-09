@@ -249,7 +249,7 @@ class FrmFormActionsController {
 		$allowed = array();
 
 		foreach ( $action_controls as $action_control ) {
-			if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+			if ( ! empty( $action_control->action_options['active'] ) ) {
 				$allowed[] = $action_control->id_base;
 			}
 		}
@@ -279,7 +279,7 @@ class FrmFormActionsController {
 		$default_position = array_search( $action_control->id_base, $default_shown, true );
 		$allowed_count    = count( $allowed );
 
-		if ( isset( $action_control->action_options['active'] ) && $action_control->action_options['active'] ) {
+		if ( ! empty( $action_control->action_options['active'] ) ) {
 			$classes .= ' frm_active_action';
 		} else {
 			$classes .= ' frm_inactive_action';

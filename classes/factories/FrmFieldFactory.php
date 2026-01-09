@@ -42,7 +42,7 @@ class FrmFieldFactory {
 	public static function get_field_factory( $field ) {
 		if ( is_object( $field ) ) {
 			$field_info = self::get_field_object( $field );
-		} elseif ( isset( $field['id'] ) && $field['id'] ) {
+		} elseif ( ! empty( $field['id'] ) ) {
 			$field_info = self::get_field_object( $field['id'] );
 		} else {
 			$field_info = self::get_field_type( $field['type'], $field );

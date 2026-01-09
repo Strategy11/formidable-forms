@@ -150,7 +150,7 @@ class FrmEntriesHelper {
 		$value_is_posted = false;
 
 		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+			$repeating = ! empty( $args['repeating'] );
 
 			if ( $repeating ) {
 				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing

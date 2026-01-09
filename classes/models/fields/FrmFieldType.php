@@ -993,7 +993,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function get_field_scripts_hook( $args ) {
-		$form_id = isset( $args['parent_form_id'] ) && $args['parent_form_id'] ? $args['parent_form_id'] : $args['form']->id;
+		$form_id = ! empty( $args['parent_form_id'] ) ? $args['parent_form_id'] : $args['form']->id;
 		do_action( 'frm_get_field_scripts', $this->field, $args['form'], $form_id );
 	}
 

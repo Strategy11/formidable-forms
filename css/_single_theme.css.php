@@ -183,7 +183,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 	border-color:var(--border-color-active)<?php echo esc_html( $important ); ?>;
 	color:var(--text-color);
-	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
+	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
