@@ -137,7 +137,7 @@ class BlankLineBeforeReturnAfterBraceSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the current token.
 	 *
-	 * @return int|false The position of the function token, or false if not found.
+	 * @return false|int The position of the function token, or false if not found.
 	 */
 	private function findContainingFunction( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -176,6 +176,7 @@ class BlankLineBeforeReturnAfterBraceSniff implements Sniff {
 
 		// Build a map of which lines have non-whitespace content.
 		$linesWithContent = array();
+
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
 			if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
 				$linesWithContent[ $tokens[ $i ]['line'] ] = true;
