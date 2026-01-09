@@ -801,10 +801,7 @@ class FrmFormActionsController {
 	 * @return bool|null
 	 */
 	public static function prevent_wpml_translations( $null, $post_type ) {
-		if ( self::$action_post_type === $post_type ) {
-			return false;
-		}
-		return $null;
+		return self::$action_post_type === $post_type ? false : $null;
 	}
 }
 

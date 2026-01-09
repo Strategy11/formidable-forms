@@ -166,12 +166,7 @@ class FrmMigrate {
 	 */
 	public function collation() {
 		global $wpdb;
-
-		if ( ! $wpdb->has_cap( 'collation' ) ) {
-			return '';
-		}
-
-		return $wpdb->get_charset_collate();
+		return $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
 	}
 
 	/**

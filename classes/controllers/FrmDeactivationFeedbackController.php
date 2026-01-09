@@ -39,11 +39,7 @@ class FrmDeactivationFeedbackController {
 
 		$expired_date = strtotime( $feedback_expired );
 
-		if ( ! $expired_date ) {
-			return true;
-		}
-
-		return $expired_date < time();
+		return $expired_date ? $expired_date < time() : true;
 	}
 
 	/**

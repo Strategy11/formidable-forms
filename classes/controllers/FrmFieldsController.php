@@ -936,11 +936,7 @@ class FrmFieldsController {
 			'<div class="frm_error" role="alert">[error]</div>',
 		);
 
-		if ( in_array( $error_body, $default_html, true ) ) {
-			return false;
-		}
-
-		return $error_body;
+		return in_array( $error_body, $default_html, true ) ? false : $error_body;
 	}
 
 	/**

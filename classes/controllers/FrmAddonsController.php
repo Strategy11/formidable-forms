@@ -984,11 +984,7 @@ class FrmAddonsController {
 		self::deactivate_plugin( $plugin, true );
 		$result = delete_plugins( array( $plugin ) );
 
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		return true;
+		return is_wp_error( $result ) ? $result : true;
 	}
 
 	/**
@@ -1267,11 +1263,7 @@ class FrmAddonsController {
 			return 'settings';
 		}
 
-		if ( str_contains( $referer, 'frm_action=edit' ) ) {
-			return 'form_builder';
-		}
-
-		return '';
+		return str_contains( $referer, 'frm_action=edit' ) ? 'form_builder' : '';
 	}
 
 	/**

@@ -120,10 +120,7 @@ abstract class FrmFieldType {
 	 * @return string
 	 */
 	public function __get( $key ) {
-		if ( property_exists( $this, $key ) ) {
-			return $this->{$key};
-		}
-		return '';
+		return property_exists( $this, $key ) ? $this->{$key} : '';
 	}
 
 	/**
@@ -2017,21 +2014,6 @@ DEFAULT_HTML;
 	 */
 	public function filter_value_for_table_html( $value ) {
 		return wp_kses_post( $value );
-	}
-
-	/**
-	 * This function is deprecated since it has a typo in the name.
-	 *
-	 * @since 3.0
-	 * @deprecated 6.11.2
-	 *
-	 * @param array $values
-	 *
-	 * @return array
-	 */
-	protected function get_select_atributes( $values ) {
-		_deprecated_function( __METHOD__, '6.11.2', 'FrmFieldType::get_select_attributes' );
-		return $this->get_select_attributes( $values );
 	}
 
 	/**

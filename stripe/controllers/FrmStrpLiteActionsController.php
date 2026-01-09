@@ -30,11 +30,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( ! $actions ) {
-			return $callback;
-		}
-
-		return self::class . '::show_card';
+		return $actions ? self::class . '::show_card' : $callback;
 	}
 
 	/**

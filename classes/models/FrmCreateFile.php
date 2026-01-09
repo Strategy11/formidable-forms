@@ -141,10 +141,7 @@ class FrmCreateFile {
 	 * @return string
 	 */
 	public function get_file_contents() {
-		if ( $this->has_permission ) {
-			return $this->get_contents();
-		}
-		return '';
+		return $this->has_permission ? $this->get_contents() : '';
 	}
 
 	/**

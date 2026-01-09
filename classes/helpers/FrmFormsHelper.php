@@ -999,11 +999,7 @@ BEFORE_HTML;
 		$class = ' with_frm_style';
 
 		if ( ! $style ) {
-			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				return $class;
-			}
-
-			return null;
+			return FrmAppHelper::is_admin_page( 'formidable-entries' ) ? $class : null;
 		}
 
 		// If submit button needs to be inline or centered.
@@ -2139,20 +2135,6 @@ BEFORE_HTML;
 			}
 		}
 
-		return false;
-	}
-
-	/**
-	 * Check if Pro isn't up to date yet.
-	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
-	 *
-	 * @since 6.2
-	 * @deprecated 6.20
-	 *
-	 * @return bool
-	 */
-	public static function should_use_pro_for_ajax_submit() {
-		_deprecated_function( __METHOD__, '6.20' );
 		return false;
 	}
 }
