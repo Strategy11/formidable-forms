@@ -207,7 +207,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( ! empty( $s ) ) {
+		if ( $s ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
 
 			return;

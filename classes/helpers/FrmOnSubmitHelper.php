@@ -303,7 +303,7 @@ class FrmOnSubmitHelper {
 		// Check if form already has form actions to avoid creating duplicates.
 		$has_actions = FrmFormAction::form_has_action_type( $form_id, $action_type );
 
-		if ( ! empty( $has_actions ) ) {
+		if ( $has_actions ) {
 			// Don't migrate again.
 			self::save_migrated_success_actions( $form );
 			return;

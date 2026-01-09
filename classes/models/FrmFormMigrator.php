@@ -215,7 +215,7 @@ abstract class FrmFormMigrator {
 		$this->current_source_form = $source_form;
 
 		// If form does not contain fields, bail.
-		if ( empty( $source_fields ) ) {
+		if ( ! $source_fields ) {
 			wp_send_json_success(
 				array(
 					'error' => true,

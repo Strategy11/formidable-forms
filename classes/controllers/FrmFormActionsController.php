@@ -328,7 +328,7 @@ class FrmFormActionsController {
 	public static function get_form_actions( $action = 'all' ) {
 		$temp_actions = self::$registered_actions;
 
-		if ( empty( $temp_actions ) ) {
+		if ( ! $temp_actions ) {
 			self::actions_init();
 			$temp_actions = self::$registered_actions->actions;
 		} else {
@@ -486,7 +486,7 @@ class FrmFormActionsController {
 
 		$action_control = self::get_form_actions( $action_type );
 
-		if ( empty( $action_control ) ) {
+		if ( ! $action_control ) {
 			wp_die();
 		}
 
@@ -588,7 +588,7 @@ class FrmFormActionsController {
 		foreach ( $registered_actions as $registered_action ) {
 			$action_ids = $registered_action->update_callback( $form_id );
 
-			if ( ! empty( $action_ids ) ) {
+			if ( $action_ids ) {
 				$new_actions[] = $action_ids;
 			}
 		}
@@ -658,7 +658,7 @@ class FrmFormActionsController {
 		);
 		$form_actions  = FrmFormAction::get_action_for_form( ( is_object( $form ) ? $form->id : $form ), $type, $action_status );
 
-		if ( empty( $form_actions ) ) {
+		if ( ! $form_actions ) {
 			return;
 		}
 

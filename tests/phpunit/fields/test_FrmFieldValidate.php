@@ -47,7 +47,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
 
 			foreach ( $error_field_ids as $error_field ) {
@@ -139,7 +139,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertNotEmpty( $errors );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			foreach ( $fields as $field ) {
 				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;
@@ -157,7 +157,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
 
 			foreach ( $error_field_ids as $error_field ) {

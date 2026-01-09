@@ -170,7 +170,7 @@ class FrmEntryMeta {
 			}
 		}//end foreach
 
-		if ( empty( $previous_field_ids ) ) {
+		if ( ! $previous_field_ids ) {
 			return;
 		}
 
