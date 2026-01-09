@@ -101,6 +101,12 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 			return;
 		}
 
+		// If the first assignment has a comment before it, don't suggest grouping.
+		// The comment indicates intentional separation from what comes after.
+		if ( $this->hasCommentBeforeVariable( $phpcsFile, $group[0]['variable'] ) ) {
+			return;
+		}
+
 		// Now check for blank lines between consecutive assignments in the group.
 		for ( $i = 0; $i < count( $group ) - 1; $i++ ) {
 			$current = $group[ $i ];
@@ -213,6 +219,44 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 			}
 
 			$baseVariables[ $baseVarName ] = true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if there's a comment before the variable on the same or previous lines.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $varPtr    The position of the variable token.
+	 *
+	 * @return bool True if there's a comment before the variable.
+	 */
+	private function hasCommentBeforeVariable( File $phpcsFile, $varPtr ) {
+		$tokens       = $phpcsFile->getTokens();
+		$commentTypes = array(
+			T_COMMENT,
+			T_DOC_COMMENT,
+			T_DOC_COMMENT_OPEN_TAG,
+			T_DOC_COMMENT_CLOSE_TAG,
+			T_DOC_COMMENT_STAR,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT_TAG,
+			T_DOC_COMMENT_WHITESPACE,
+		);
+
+		// Look backwards from the variable to find the previous semicolon or brace.
+		$prevStatement = $phpcsFile->findPrevious( array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET ), $varPtr - 1 );
+
+		if ( false === $prevStatement ) {
+			return false;
+		}
+
+		// Check if there's a comment between the previous statement and this variable.
+		for ( $i = $prevStatement + 1; $i < $varPtr; $i++ ) {
+			if ( in_array( $tokens[ $i ]['code'], $commentTypes, true ) ) {
+				return true;
+			}
 		}
 
 		return false;

@@ -780,8 +780,9 @@ class FrmMigrate {
 	 */
 	private function convert_character_to_px( &$size ) {
 		$pixel_conversion = 9;
-		$size             = round( $pixel_conversion * (int) $size );
-		$size            .= 'px';
+
+		$size  = round( $pixel_conversion * (int) $size );
+		$size .= 'px';
 	}
 
 	/**
