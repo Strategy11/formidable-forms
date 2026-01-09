@@ -21,8 +21,7 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		ob_start();
 		wp_head();
-		$styles = ob_get_contents();
-		ob_end_clean();
+		$styles = ob_get_clean();
 		$this->assertNotEmpty( $styles );
 
 		$frm_settings    = FrmAppHelper::get_settings();
@@ -72,8 +71,7 @@ class test_FrmStylesController extends FrmUnitTest {
 
 		ob_start();
 		FrmStylesController::save();
-		$returned = ob_get_contents();
-		ob_end_clean();
+		$returned = ob_get_clean();
 
 		$this->assertNotFalse( strpos( $returned, 'Your styling settings have been saved.' ) );
 		$frm_style     = new FrmStyle( $style->ID );

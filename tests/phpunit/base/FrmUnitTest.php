@@ -462,10 +462,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 	public function get_footer_output() {
 		ob_start();
 		do_action( 'wp_footer' );
-		$output = ob_get_contents();
-		ob_end_clean();
-
-		return $output;
+		return ob_get_clean();
 	}
 
 	public static function install_data() {
@@ -588,12 +585,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$xml_header = '<?xml version="1.0" encoding="' . esc_attr( get_bloginfo( 'charset' ) ) . "\" ?>\n";
 		ob_start();
 		include FrmAppHelper::plugin_path() . '/classes/views/xml/xml.php';
-		$xml_body = ob_get_contents();
-		ob_end_clean();
-
-		$xml  = $xml_header . $xml_body;
-		$cwd  = getcwd();
-		$path = "{$cwd}/temp.xml";
+		$xml_body = ob_get_clean();
+		$xml      = $xml_header . $xml_body;
+		$cwd      = getcwd();
+		$path     = "{$cwd}/temp.xml";
 		@chmod( $path, 0755 );
 		$fw = fopen( $path, 'w' );
 		fwrite( $fw, $xml, strlen( $xml ) );

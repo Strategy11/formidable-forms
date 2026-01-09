@@ -2510,8 +2510,7 @@ class FrmFormsController {
 		self::get_form_contents( $form, $title, $description, $atts );
 		self::enqueue_scripts( FrmForm::get_params( $form ) );
 
-		$contents = ob_get_contents();
-		ob_end_clean();
+		$contents = ob_get_clean();
 
 		self::maybe_minimize_form( $atts, $contents );
 

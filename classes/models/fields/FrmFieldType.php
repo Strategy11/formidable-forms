@@ -1200,8 +1200,7 @@ DEFAULT_HTML;
 
 		ob_start();
 		include $include_file;
-		$input_html = ob_get_contents();
-		ob_end_clean();
+		$input_html = ob_get_clean();
 
 		return $hidden . $input_html;
 	}
@@ -1522,10 +1521,7 @@ DEFAULT_HTML;
 
 		ob_start();
 		do_action( 'frm_field_input_html', $field );
-		$input_html = ob_get_contents();
-		ob_end_clean();
-
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**

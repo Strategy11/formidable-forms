@@ -38,8 +38,7 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_start();
 		do_action( 'frm_display_added_fields', $field );
 		do_action( 'frm_display_added_' . $this->type . '_field', $field );
-		$input_html = ob_get_contents();
-		ob_end_clean();
+		$input_html = ob_get_clean();
 
 		if ( ! $input_html ) {
 			echo $this->builder_text_field( $name ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
@@ -62,8 +61,7 @@ class FrmFieldDefault extends FrmFieldType {
 		ob_start();
 		do_action( 'frm_form_fields', $this->field, $args['field_name'], $pass_args );
 		do_action( 'frm_form_field_' . $this->type, $this->field, $args['field_name'], $pass_args );
-		$input_html = ob_get_contents();
-		ob_end_clean();
+		$input_html = ob_get_clean();
 
 		return is_string( $input_html ) ? $input_html : '';
 	}

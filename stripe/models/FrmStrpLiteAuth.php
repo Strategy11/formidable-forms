@@ -70,8 +70,7 @@ class FrmStrpLiteAuth {
 
 		ob_start();
 		FrmFormsController::run_on_submit_actions( $atts );
-		$message = ob_get_contents();
-		ob_end_clean();
+		$message = ob_get_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
 		if ( $intent_is_processing ) {
