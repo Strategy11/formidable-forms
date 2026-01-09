@@ -201,6 +201,7 @@ class FrmPayPalLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -282,6 +283,7 @@ class FrmPayPalLiteConnectHelper {
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
+
 		return $url;
 	}
 
@@ -315,6 +317,7 @@ class FrmPayPalLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -514,6 +517,7 @@ class FrmPayPalLiteConnectHelper {
 		} else {
 			self::$latest_error_from_paypal_api = '';
 		}
+
 		return false;
 	}
 
@@ -560,6 +564,7 @@ class FrmPayPalLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
