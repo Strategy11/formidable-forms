@@ -462,8 +462,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_wp_roles_dropdown() {
 		ob_start();
 		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, 'name="field_options"' );
 		$this->assert_output_contains( $output, 'id="field_options"' );
@@ -479,8 +478,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_roles_options() {
 		ob_start();
 		FrmAppHelper::roles_options( 'editor' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, '>Administrator' );
 		$this->assert_output_contains( $output, "selected='selected'>Editor" );
@@ -497,8 +495,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_roles_options_empty_string_option() {
 		ob_start();
 		FrmAppHelper::roles_options( '' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, '>Editor' );
 		$this->assert_output_not_contains( $output, "selected='selected'>Editor" );

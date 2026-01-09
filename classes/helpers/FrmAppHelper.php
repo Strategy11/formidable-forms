@@ -1541,13 +1541,7 @@ class FrmAppHelper {
 			$echo_function();
 		}
 
-		if ( $echo ) {
-			return null;
-		}
-
-		$return = ob_get_contents();
-		ob_end_clean();
-		return $return;
+		return $echo ? null : ob_get_clean();
 	}
 
 	/**
@@ -2672,10 +2666,7 @@ class FrmAppHelper {
 		extract( $atts ); // phpcs:ignore WordPress.PHP.DontExtract
 		ob_start();
 		include $filename;
-		$contents = ob_get_contents();
-		ob_end_clean();
-
-		return $contents;
+		return ob_get_clean();
 	}
 
 	/**
