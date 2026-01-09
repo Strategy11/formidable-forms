@@ -147,6 +147,7 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 
 			// Remove whitespace after opening paren.
 			$nextAfterOpen = $openParen + 1;
+
 			while ( $nextAfterOpen < $variablePtr && $tokens[ $nextAfterOpen ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $nextAfterOpen, '' );
 				++$nextAfterOpen;
@@ -159,6 +160,7 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 
 			// Remove whitespace before closing paren.
 			$prevBeforeClose = $closeParen - 1;
+
 			while ( $prevBeforeClose > $variablePtr && $tokens[ $prevBeforeClose ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $prevBeforeClose, '' );
 				--$prevBeforeClose;
@@ -177,7 +179,7 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the current token.
 	 *
-	 * @return int|false The position of the function token, or false if not found.
+	 * @return false|int The position of the function token, or false if not found.
 	 */
 	private function findContainingFunction( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
