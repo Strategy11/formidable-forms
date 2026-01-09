@@ -1246,6 +1246,7 @@ class FrmXMLHelper {
 		if ( is_array( $maybe_decoded ) && isset( $maybe_decoded[0] ) && isset( $maybe_decoded[0]['box'] ) ) {
 			return FrmAppHelper::prepare_and_encode( $maybe_decoded );
 		}
+
 		return $content;
 	}
 
@@ -1827,6 +1828,7 @@ class FrmXMLHelper {
 		if ( empty( $defaults['custom_html'] ) ) {
 			$defaults['custom_html'] = FrmFieldsHelper::get_default_html( $type );
 		}
+
 		return $defaults;
 	}
 
@@ -2440,6 +2442,7 @@ class FrmXMLHelper {
 			// CSV Importing is only available in Pro.
 			$file_types[] = '.csv';
 		}
+
 		return $file_types;
 	}
 }

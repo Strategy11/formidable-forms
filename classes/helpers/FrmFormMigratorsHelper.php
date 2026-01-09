@@ -86,6 +86,7 @@ class FrmFormMigratorsHelper {
 
 			$forms[] = $form;
 		}
+
 		return $forms;
 	}
 

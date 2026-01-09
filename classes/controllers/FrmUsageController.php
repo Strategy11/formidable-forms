@@ -32,6 +32,7 @@ class FrmUsageController {
 				// Remove the scheduled event if it's not allowed and it's scheduled.
 				wp_unschedule_event( $timestamp, 'formidable_send_usage' );
 			}
+
 			return;
 		}
 

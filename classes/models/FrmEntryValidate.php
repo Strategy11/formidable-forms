@@ -340,6 +340,7 @@ class FrmEntryValidate {
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		return trim( $value ) === trim( $filtered_option );
 	}
 

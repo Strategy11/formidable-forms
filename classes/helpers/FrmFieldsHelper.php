@@ -502,6 +502,7 @@ class FrmFieldsHelper {
 		if ( ! $field_name ) {
 			$field_name = 'unique_msg' === $error ? __( 'This value', 'formidable' ) : __( 'This field', 'formidable' );
 		}
+
 		return str_replace( $substrings, $field_name, $msg );
 	}
 
@@ -1130,6 +1131,7 @@ class FrmFieldsHelper {
 			$function     = 'atts_' . $included_att;
 			$replace_with = self::$function( $replace_with );
 		}
+
 		return $replace_with;
 	}
 
@@ -1862,6 +1864,7 @@ class FrmFieldsHelper {
 			unset( $replace[ $index ] );
 			unset( $replace_with[ $index ] );
 		}
+
 		return str_replace( $replace, $replace_with, $value );
 	}
 

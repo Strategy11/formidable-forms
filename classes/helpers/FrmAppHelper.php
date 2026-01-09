@@ -428,6 +428,7 @@ class FrmAppHelper {
 		if ( $check_for_settings ) {
 			$check_actions[] = 'settings';
 		}
+
 		return self::is_admin_page( 'formidable' ) && in_array( $action, $check_actions, true );
 	}
 
@@ -903,6 +904,7 @@ class FrmAppHelper {
 			foreach ( $temp_values as $k => $v ) {
 				self::sanitize_value( $sanitize, $value[ $k ] );
 			}
+
 			return;
 		}
 
@@ -1103,6 +1105,7 @@ class FrmAppHelper {
 		if ( $included_draft_hook ) {
 			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
+
 		return $html;
 	}
 
@@ -1484,6 +1487,7 @@ class FrmAppHelper {
 		} elseif ( str_starts_with( $value, '#' ) ) {
 			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
 		}
+
 		return (bool) $match;
 	}
 
@@ -2767,6 +2771,7 @@ class FrmAppHelper {
 				}
 			}
 		}
+
 		return $key;
 	}
 
@@ -2823,6 +2828,7 @@ class FrmAppHelper {
 				$key .= 'a';
 			}
 		}
+
 		return $key;
 	}
 
@@ -3358,6 +3364,7 @@ class FrmAppHelper {
 				return $u;
 			}
 		}
+
 		return 1;
 	}
 
@@ -3723,6 +3730,7 @@ class FrmAppHelper {
 			if ( mb_check_encoding( $value, $from_format ) ) {
 				return mb_convert_encoding( $value, $to_format, $from_format );
 			}
+
 			return $value;
 		}
 
@@ -4230,6 +4238,7 @@ class FrmAppHelper {
 				return $settings->menu_icon;
 			}
 		}
+
 		return 'frmfont frm_logo_icon';
 	}
 
@@ -5014,6 +5023,7 @@ class FrmAppHelper {
 		if ( function_exists( 'seems_utf8' ) ) {
 			return seems_utf8( $string );
 		}
+
 		return false;
 	}
 

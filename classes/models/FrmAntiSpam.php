@@ -212,6 +212,7 @@ class FrmAntiSpam extends FrmValidate {
 				// add an exception for the entries page.
 				return true;
 			}
+
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 

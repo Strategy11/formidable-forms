@@ -199,6 +199,7 @@ class FrmSquareLiteEventsController {
 							)
 						);
 					}
+
 					return;
 				}
 				break;

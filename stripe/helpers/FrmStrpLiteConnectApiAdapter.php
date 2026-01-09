@@ -34,6 +34,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 			$customer_id = $customer->id;
 		}
+
 		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id, $customer_id );
 	}
 

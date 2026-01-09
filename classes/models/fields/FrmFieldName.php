@@ -97,6 +97,7 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $name_layout ) {
 			$name_layout = 'first_last';
 		}
+
 		return $name_layout;
 	}
 

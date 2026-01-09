@@ -531,6 +531,7 @@ class FrmDashboardController {
 		if ( null !== $option_name ) {
 			return $options[ $option_name ];
 		}
+
 		return $options;
 	}
 

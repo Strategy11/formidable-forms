@@ -1004,6 +1004,7 @@ BEFORE_HTML;
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
 			}
+
 			return null;
 		}
 
@@ -1304,6 +1305,7 @@ BEFORE_HTML;
 		if ( ! $name ) {
 			return self::get_no_title_text();
 		}
+
 		return FrmAppHelper::truncate( $name, 40 );
 	}
 
@@ -2077,6 +2079,7 @@ BEFORE_HTML;
 		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
 			return true;
 		}
+
 		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 

@@ -903,6 +903,7 @@ class FrmFieldsController {
 				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
 			}
 		}
+
 		return false;
 	}
 

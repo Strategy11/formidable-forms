@@ -64,6 +64,7 @@ class FrmInbox extends FrmFormApi {
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
+
 		return $messages;
 	}
 
@@ -359,6 +360,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $t ] );
 			}
 		}
+
 		return $messages;
 	}
 

@@ -243,6 +243,7 @@ class FrmSettingsController {
 		if ( false === $first_key || false === $second_key ) {
 			return 0;
 		}
+
 		return $first_key - $second_key;
 	}
 
