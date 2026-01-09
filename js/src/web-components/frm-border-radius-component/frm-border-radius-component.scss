@@ -1,0 +1,127 @@
+@import '../frm-web-component.scss';
+
+.frm-border-radius-component {
+	.frm-border-radius-container {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+		flex-wrap: wrap;
+
+		button {
+			overflow: hidden;
+			text-indent: -9999px;
+			cursor: pointer;
+			width: 36px;
+			height: 36px;
+			border-radius: var(--small-radius);
+			border: 1px solid var(--grey-300);
+			background: white;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			box-sizing: border-box;
+			background: url('data:image/svg+xml,<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M3.95837 12.2915V14.3748C3.95837 15.2953 4.70457 16.0415 5.62504 16.0415H7.70837" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.0416 12.2915V14.3748C16.0416 15.2953 15.2955 16.0415 14.375 16.0415H12.2916" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M16.0416 7.7085V5.62516C16.0416 4.70469 15.2955 3.9585 14.375 3.9585H12.2916" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3.95837 7.7085V5.62516C3.95837 4.70469 4.70457 3.9585 5.62504 3.9585H7.70837" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') no-repeat center center;
+			background-size: 20px;
+		}
+		.frm-border-individual-inputs-wrapper {
+			&:not( .frm_hidden ) {
+				display: flex;
+			}
+			width: 100%;
+			justify-content: space-between;
+			flex-wrap: wrap;
+			span {
+				position: relative;
+				display: block;
+				overflow: hidden;
+				width: calc( 50% - 6px );
+				height: 36px;
+				border-radius: var(--small-radius);
+				border: 1px solid var(--grey-300);
+				margin-top: 12px;
+
+				input {
+					width: 100%;
+					height: 100%;
+					padding: 0;
+					font-size: var(--text-sm);
+					color: rgba(16, 24, 40, 1);
+					padding: 0 12px 0px 20px;
+					box-sizing: border-box;
+					border: none;
+					text-align: right;
+					&:focus {
+						outline: none;
+					}
+				}
+				&:before {
+					content: '';
+					position: absolute;
+					display: block;
+					width: 12px;
+					height: 12px;
+					left: 12px;
+					top: 0;
+					bottom: 0;
+					right: auto;
+					margin: auto;
+					background: url('data:image/svg+xml,<svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M10.75 3.25V3.25833M0.75 5.75V5.75833M5.75 5.75V5.75833M0.75 8.25V8.25833M0.75 3.25833V3.25M3.25 0.758334V0.75M0.75 0.758334V0.75M3.25 10.75V10.7583M8.25 0.75V0.758334M0.75 10.75V10.7583M10.75 0.75V0.758334M5.75 0.758334V0.75M6.375 10.9583H7.625C8.50905 10.9583 9.3569 10.6071 9.98202 9.98202C10.6071 9.3569 10.9583 8.50905 10.9583 7.625V6.375" stroke="%23667085" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>') center center no-repeat;
+					background-size: 12px;
+				}
+				&.frm-border-input-top:before {
+					transform: rotate(180deg);
+				}
+				&.frm-border-input-bottom:before {
+					transform: rotate(0deg);
+				}
+				&.frm-border-input-left:before {
+					transform: rotate(90deg);
+				}
+				&.frm-border-input-right:before {
+					transform: rotate(-90deg);
+				}
+			}
+		}
+		.frm-input-wrapper {
+			width: calc( 100% - 36px - 12px );
+			height: 36px;
+			display: flex;
+			justify-content: center;
+			box-sizing: border-box;
+			background: white;
+			border-radius: var(--small-radius);
+			border: 1px solid var(--grey-300);
+			overflow: hidden;
+
+			> * {
+				border: none;
+			}
+
+			input {
+				width: calc( 100% - 44px );
+				height: 100%;
+				padding: 0;
+				font-size: var(--text-sm);
+				color: rgba(16, 24, 40, 1);
+				padding-left: 12px;
+				box-sizing: border-box;
+				&:focus {
+					outline: none;
+				}
+			}
+
+			select {
+				text-align: right;
+				padding: 0;
+				font-size: var(--text-sm);
+				color: rgba(102, 112, 133, 1);
+				width: 44px;
+				background: url('../../images/style/small-arrow.svg') no-repeat;
+				background-position: center right 12px;
+				&:focus {
+					outline: none;
+				}
+			}
+		}
+	}
+}
