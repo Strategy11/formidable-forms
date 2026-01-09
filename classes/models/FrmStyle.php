@@ -191,6 +191,7 @@ class FrmStyle {
 		// Remove all leading ')' braces, then add one back. This way there's always a single brace.
 		$color_val  = rtrim( $color_val, ')' );
 		$color_val .= ')';
+
 		$color_rgba = substr( $color_val, strpos( $color_val, '(' ) + 1, strlen( $color_val ) - strpos( $color_val, '(' ) - 2 );
 		// Remove any excessive braces from the rgba like rgba((.
 		$color_rgba            = trim( $color_rgba, '()' );
