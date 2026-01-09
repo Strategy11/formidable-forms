@@ -107,8 +107,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
-
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
 		if ( ! $amount || $amount === 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
