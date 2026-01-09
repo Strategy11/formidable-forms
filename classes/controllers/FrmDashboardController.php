@@ -362,7 +362,7 @@ class FrmDashboardController {
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
-		return ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true );
+		return $banner_closed_by_users && in_array( $user_id, $banner_closed_by_users, true );
 	}
 
 	/**
