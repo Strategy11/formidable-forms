@@ -830,7 +830,7 @@ class FrmAddonsController {
 
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
+			if ( $addon['installed'] && $activate_url && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -1337,7 +1337,7 @@ class FrmAddonsController {
 
 		// The download link is not required if already installed.
 		$is_installed = FrmAppHelper::pro_is_included();
-		$file_missing = ! $is_installed && empty( $post_url );
+		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
 			return false;
@@ -1345,7 +1345,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
+		return $auth && hash_equals( $auth, $post_auth );
 	}
 
 	/**

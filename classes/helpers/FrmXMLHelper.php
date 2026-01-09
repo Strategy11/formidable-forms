@@ -2371,7 +2371,7 @@ class FrmXMLHelper {
 				}
 			}
 
-			if ( is_numeric( $email_field ) && ! empty( $email_field ) ) {
+			if ( is_numeric( $email_field ) && $email_field ) {
 				$email_field = '[' . $email_field . ']';
 			}
 
@@ -2394,7 +2394,7 @@ class FrmXMLHelper {
 				$new_notification2['post_content']['reply_to'] = $reply_to;
 			}
 
-			if ( $reply_to || ! empty( $reply_to_name ) ) {
+			if ( $reply_to || $reply_to_name ) {
 				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>';
 			}
 

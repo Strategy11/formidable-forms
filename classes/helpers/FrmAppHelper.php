@@ -3212,7 +3212,7 @@ class FrmAppHelper {
 
 		$trimmed_format = trim( $time_format );
 
-		if ( $time_format && ! empty( $trimmed_format ) ) {
+		if ( $time_format && $trimmed_format ) {
 			return ' ' . __( 'at', 'formidable' ) . ' ' . self::get_localized_date( $time_format, $date );
 		}
 
@@ -3578,7 +3578,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( ! $action || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
+		if ( ! $action || ( $frm_action && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}
@@ -3805,8 +3805,7 @@ class FrmAppHelper {
 	public static function maybe_highlight_menu( $post_type ) {
 		global $post;
 
-		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] != $post_type ) {
+		if ( isset( $_REQUEST['post_type'] ) && $_REQUEST['post_type'] !== $post_type ) {
 			return;
 		}
 

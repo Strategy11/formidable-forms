@@ -54,7 +54,7 @@ class FrmUsage {
 		$uuid_key = 'frm-usage-uuid';
 		$uuid     = get_option( $uuid_key );
 
-		if ( $regenerate || empty( $uuid ) ) {
+		if ( $regenerate || ! $uuid ) {
 			// Definitely not cryptographically secure but
 			// close enough to provide an unique id
 			$uuid = md5( uniqid() . site_url() );

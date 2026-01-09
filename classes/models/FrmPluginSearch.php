@@ -223,7 +223,7 @@ class FrmPluginSearch {
 	 */
 	protected function get_dismissed_hints() {
 		$dismissed_hints = get_option( self::$dismissed_opt );
-		return ! empty( $dismissed_hints ) && is_array( $dismissed_hints ) ? $dismissed_hints : array();
+		return $dismissed_hints && is_array( $dismissed_hints ) ? $dismissed_hints : array();
 	}
 
 	/**
