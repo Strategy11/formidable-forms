@@ -642,8 +642,7 @@ class FrmStrpLiteConnectHelper {
 
 			ob_start();
 			require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/connect.php';
-			$html .= ob_get_contents();
-			ob_end_clean();
+			$html .= ob_get_clean();
 		}
 
 		$response_data = array(

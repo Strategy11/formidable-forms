@@ -369,10 +369,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmEntriesController::process_entry();
-		$response = ob_get_contents();
-		ob_end_clean();
-
-		return $response;
+		return ob_get_clean();
 	}
 
 	public function test_redirect_in_new_tab() {
