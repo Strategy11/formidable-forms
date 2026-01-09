@@ -792,6 +792,9 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function prepare_addons( &$addons ) {
+		// Reset categories to prevent count accumulation across multiple calls.
+		self::$categories = array();
+
 		$activate_url = '';
 
 		if ( current_user_can( 'activate_plugins' ) ) {
