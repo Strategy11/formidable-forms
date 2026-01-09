@@ -114,8 +114,7 @@ class FrmFieldsController {
 
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$values['post_type'] = FrmProFormsHelper::post_type( $form_id );
-
-			$parent_form_id = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
+			$parent_form_id      = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 
 			if ( $parent_form_id ) {
 				$field['parent_form_id'] = $parent_form_id;
@@ -633,8 +632,7 @@ class FrmFieldsController {
 			return;
 		}
 
-		$size = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
-
+		$size             = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
 		$add_html['cols'] = 'cols="' . absint( $size ) . '"';
 	}
 

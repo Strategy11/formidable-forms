@@ -85,8 +85,7 @@ class FrmEntriesController {
 	 */
 	private static function add_url_params_to_views_redirect_query_args( $query_args ) {
 		$query_args['show_nav'] = FrmAppHelper::simple_get( 'show_nav', 'absint', 0 );
-
-		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+		$form_id                = FrmAppHelper::simple_get( 'form', 'absint', 0 );
 
 		if ( $form_id ) {
 			$query_args['form'] = $form_id;
@@ -187,8 +186,7 @@ class FrmEntriesController {
 		self::maybe_add_ip_col( $form_id, $columns );
 
 		$frm_vars['cols'] = $columns;
-
-		$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$action           = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
 		if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) && in_array( $action, array( '', 'list', 'destroy' ), true ) ) {
 			add_screen_option(

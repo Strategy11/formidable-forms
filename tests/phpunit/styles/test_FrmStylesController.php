@@ -44,8 +44,7 @@ class test_FrmStylesController extends FrmUnitTest {
 	private function get_custom_stylesheet() {
 		global $frm_vars;
 		$frm_vars['css_loaded'] = false;
-
-		$stylesheet_urls = FrmStylesController::custom_stylesheet();
+		$stylesheet_urls        = FrmStylesController::custom_stylesheet();
 		$this->assertTrue( isset( $stylesheet_urls['formidable'] ), 'The stylesheet array is empty' );
 		return $stylesheet_urls;
 	}

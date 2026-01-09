@@ -179,8 +179,7 @@ class FrmEmailSummaryHelper {
 		$license_info = FrmAddonsController::get_primary_license_info();
 
 		if ( ! empty( $license_info['expires'] ) ) {
-			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
-
+			$renewal_date            = gmdate( 'Y-m-d', $license_info['expires'] );
 			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;

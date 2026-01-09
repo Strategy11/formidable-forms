@@ -111,8 +111,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'user_info'  => false,
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content          = $this->get_formatted_content( $atts );
 		$atts['entry']    = $entry;
 		$expected_content = $this->expected_html_content( $atts );
 
@@ -136,8 +135,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 			'user_info'  => false,
 		);
 
-		$content = $this->get_formatted_content( $atts );
-
+		$content          = $this->get_formatted_content( $atts );
 		$atts['entry']    = FrmEntry::getOne( $entry->id, true );
 		$expected_content = $this->expected_html_content( $atts );
 

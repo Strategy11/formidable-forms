@@ -508,8 +508,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$frm_vars['trans_filled'] = true;
-
-		$previous_entry_id = $previous_entry->id;
+		$previous_entry_id        = $previous_entry->id;
 		self::destroy_entry_later( $previous_entry_id );
 
 		return $values;
@@ -565,8 +564,7 @@ class FrmTransLiteActionsController {
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		if ( in_array( 'square', $settings['gateway'], true ) ) {
-			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
-
+			$currency             = FrmSquareLiteConnectHelper::get_merchant_currency();
 			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
 		} else {
 			$settings['currency'] = strtolower( $settings['currency'] );

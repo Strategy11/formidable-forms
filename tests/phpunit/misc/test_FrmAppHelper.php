@@ -131,9 +131,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 
 		$_GET['page'] = '';
-
-		$page = $this->factory->post->create( array( 'post_type' => 'post' ) );
-		$view = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
+		$page         = $this->factory->post->create( array( 'post_type' => 'post' ) );
+		$view         = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
 
 		$admin_pages = array(
 			'index.php'                               => false,
@@ -207,8 +206,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
 		$_POST['test3'] = $set_value;
-
-		$result = FrmAppHelper::get_post_param( 'test3', '', 'sanitize_text_field' );
+		$result         = FrmAppHelper::get_post_param( 'test3', '', 'sanitize_text_field' );
 		$this->assertEquals( $result, $expected_value );
 	}
 
@@ -247,8 +245,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
 		$_GET['test4']  = $set_value;
-
-		$result = FrmAppHelper::simple_get( 'test4' );
+		$result         = FrmAppHelper::simple_get( 'test4' );
 		$this->assertEquals( $result, $expected_value );
 	}
 

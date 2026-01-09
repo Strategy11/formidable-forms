@@ -3243,9 +3243,8 @@ class FrmAppHelper {
 		$diff        = get_object_vars( $diff_object );
 
 		// Add week amount and update day amount
-		$diff['w']  = floor( $diff['d'] / 7 );
-		$diff['d'] -= $diff['w'] * 7;
-
+		$diff['w']    = floor( $diff['d'] / 7 );
+		$diff['d']   -= $diff['w'] * 7;
 		$time_strings = self::get_time_strings();
 
 		if ( ! is_numeric( $levels ) ) {

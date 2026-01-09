@@ -155,8 +155,7 @@ class FrmStyle {
 			}
 
 			$new_instance['post_content'] = FrmStylesHelper::update_base_font_size( $new_instance['post_content'], $this->get_defaults() );
-
-			$action_ids[] = $this->save( $new_instance );
+			$action_ids[]                 = $this->save( $new_instance );
 		}//end foreach
 
 		$this->save_settings();
@@ -536,8 +535,7 @@ class FrmStyle {
 				$this->update( 'default' );
 
 				$post_atts['include'] = $new;
-
-				$temp_styles = get_posts( $post_atts );
+				$temp_styles          = get_posts( $post_atts );
 			}
 		}
 

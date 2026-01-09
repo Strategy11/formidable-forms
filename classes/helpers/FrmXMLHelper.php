@@ -511,8 +511,7 @@ class FrmXMLHelper {
 					}
 				} elseif ( isset( $form_fields[ $f['field_key'] ] ) ) {
 					$keys_by_original_field_id[ $f['id'] ] = $f['field_key'];
-
-					$old_field_id = $f['id'];
+					$old_field_id                          = $f['id'];
 
 					// check for field to edit by field key
 					unset( $f['id'] );
@@ -1694,11 +1693,10 @@ class FrmXMLHelper {
 
 		if ( $not_default ) {
 			global $wpdb;
-			$table      = $wpdb->prefix . 'posts';
-			$where      = array( 'ID' => $options['custom_style'] );
-			$select     = 'post_name';
-			$style_name = FrmDb::get_var( $table, $where, $select );
-
+			$table                   = $wpdb->prefix . 'posts';
+			$where                   = array( 'ID' => $options['custom_style'] );
+			$select                  = 'post_name';
+			$style_name              = FrmDb::get_var( $table, $where, $select );
 			$options['custom_style'] = $style_name ? $style_name : 1;
 		}
 		self::remove_default_form_options( $options );

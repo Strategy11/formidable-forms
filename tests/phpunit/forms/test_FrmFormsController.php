@@ -100,8 +100,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
-
-			$_REQUEST = $_POST;
+			$_REQUEST               = $_POST;
 		}
 	}
 

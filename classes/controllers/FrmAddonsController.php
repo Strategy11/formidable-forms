@@ -648,8 +648,7 @@ class FrmAddonsController {
 			}
 
 			$checked_licenses[] = $new_license;
-
-			$api = new FrmFormApi( $new_license );
+			$api                = new FrmFormApi( $new_license );
 
 			if ( empty( $version_info ) ) {
 				$version_info = $api->get_api_info();

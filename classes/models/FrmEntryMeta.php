@@ -88,8 +88,7 @@ class FrmEntryMeta {
 		$field = FrmField::getOne( $values['field_id'] );
 
 		if ( $field ) {
-			$field_obj = FrmFieldFactory::get_field_object( $field );
-
+			$field_obj            = FrmFieldFactory::get_field_object( $field );
 			$values['meta_value'] = $field_obj->set_value_before_save( $values['meta_value'] );
 		}
 	}

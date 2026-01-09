@@ -31,6 +31,20 @@ use PHP_CodeSniffer\Files\File;
 class ConsecutiveAssignmentSpacingSniff implements Sniff {
 
 	/**
+	 * Maximum number of assignments to group together.
+	 *
+	 * @var int
+	 */
+	const MAX_GROUP_SIZE = 5;
+
+	/**
+	 * Track processed tokens to avoid duplicate errors.
+	 *
+	 * @var array
+	 */
+	private $processedTokens = array();
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -48,65 +62,269 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 	 * @return void
 	 */
 	public function process( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+		$tokens   = $phpcsFile->getTokens();
+		$filename = $phpcsFile->getFilename();
+
+		// Skip if we've already processed this token as part of a group.
+		$tokenKey = $filename . ':' . $stackPtr;
+
+		if ( isset( $this->processedTokens[ $tokenKey ] ) ) {
+			return;
+		}
 
 		// Check if this is a simple assignment (variable at start of statement).
 		if ( ! $this->isSimpleAssignmentStart( $phpcsFile, $stackPtr ) ) {
 			return;
 		}
 
-		// Find the end of this assignment (the semicolon).
-		$semicolon = $this->findAssignmentEnd( $phpcsFile, $stackPtr );
+		// Collect the entire group of consecutive simple assignments.
+		$group = $this->collectAssignmentGroup( $phpcsFile, $stackPtr );
 
-		if ( false === $semicolon ) {
+		// Mark all tokens in the group as processed.
+		foreach ( $group as $assignment ) {
+			$key = $filename . ':' . $assignment['variable'];
+			$this->processedTokens[ $key ] = true;
+		}
+
+		// If group is too large (more than MAX_GROUP_SIZE), don't suggest grouping.
+		if ( count( $group ) > self::MAX_GROUP_SIZE ) {
 			return;
 		}
 
-		// Check if this assignment spans multiple lines (not simple).
-		if ( ! $this->isSingleLineAssignment( $phpcsFile, $stackPtr, $semicolon ) ) {
+		// Single-item groups don't need checking.
+		if ( count( $group ) < 2 ) {
 			return;
 		}
 
-		// Look for the next statement.
-		$nextStatement = $this->findNextStatement( $phpcsFile, $semicolon );
-
-		if ( false === $nextStatement ) {
+		// Check if the same variable is assigned multiple times.
+		if ( $this->hasDuplicateVariables( $phpcsFile, $group ) ) {
 			return;
 		}
 
-		// Check if the next statement is also a simple one-line assignment.
-		if ( ! $this->isSimpleAssignmentStart( $phpcsFile, $nextStatement ) ) {
-			return;
+		// Now check for blank lines between consecutive assignments in the group.
+		for ( $i = 0; $i < count( $group ) - 1; $i++ ) {
+			$current = $group[ $i ];
+			$next    = $group[ $i + 1 ];
+
+			$currentLine = $tokens[ $current['semicolon'] ]['line'];
+			$nextLine    = $tokens[ $next['variable'] ]['line'];
+
+			// If there's more than one line difference, there are blank lines.
+			if ( $nextLine - $currentLine <= 1 ) {
+				continue;
+			}
+
+			$fix = $phpcsFile->addFixableError(
+				'Blank lines found between consecutive simple assignments. Remove blank lines to group related assignments.',
+				$next['variable'],
+				'BlankLineBetweenAssignments'
+			);
+
+			if ( true === $fix ) {
+				$this->removeBlankLines( $phpcsFile, $current['semicolon'], $next['variable'] );
+			}
+		}
+	}
+
+	/**
+	 * Collect all consecutive simple one-line assignments starting from the given token.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the first variable token.
+	 *
+	 * @return array Array of assignments with 'variable' and 'semicolon' keys.
+	 */
+	private function collectAssignmentGroup( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$group  = array();
+
+		$currentVar = $stackPtr;
+
+		while ( false !== $currentVar ) {
+			// Check if this is a simple assignment.
+			if ( ! $this->isSimpleAssignmentStart( $phpcsFile, $currentVar ) ) {
+				break;
+			}
+
+			$semicolon = $this->findAssignmentEnd( $phpcsFile, $currentVar );
+
+			if ( false === $semicolon ) {
+				break;
+			}
+
+			// Must be single line.
+			if ( ! $this->isSingleLineAssignment( $phpcsFile, $currentVar, $semicolon ) ) {
+				break;
+			}
+
+			// Check if there's a comment before this assignment.
+			// If so, this assignment should start a new group, not continue the current one.
+			if ( count( $group ) > 0 && $this->hasCommentBeforeVariable( $phpcsFile, $currentVar ) ) {
+				break;
+			}
+
+			$group[] = array(
+				'variable'  => $currentVar,
+				'semicolon' => $semicolon,
+			);
+
+			// Find the next statement.
+			$nextStatement = $this->findNextStatement( $phpcsFile, $semicolon );
+
+			if ( false === $nextStatement ) {
+				break;
+			}
+
+			// Check if there's a comment between this assignment and the next.
+			// If so, stop the group here - comments indicate intentional separation.
+			if ( $this->hasCommentBetween( $phpcsFile, $semicolon, $nextStatement ) ) {
+				break;
+			}
+
+			// Check if there's a blank line - if not, they're already grouped, keep collecting.
+			// If there is a blank line, we still want to collect to check the full group size.
+			$currentLine = $tokens[ $semicolon ]['line'];
+			$nextLine    = $tokens[ $nextStatement ]['line'];
+
+			// If more than 2 blank lines, consider it a separate group.
+			if ( $nextLine - $currentLine > 2 ) {
+				break;
+			}
+
+			$currentVar = $nextStatement;
 		}
 
-		$nextSemicolon = $this->findAssignmentEnd( $phpcsFile, $nextStatement );
+		return $group;
+	}
 
-		if ( false === $nextSemicolon ) {
-			return;
+	/**
+	 * Check if the group has duplicate variable assignments (same variable assigned multiple times).
+	 *
+	 * This checks for:
+	 * 1. Same variable assigned multiple times (e.g., $styles[] = ... multiple times)
+	 * 2. Base variable and array push (e.g., $styles = array(); followed by $styles[] = ...)
+	 *
+	 * @param File  $phpcsFile The file being scanned.
+	 * @param array $group     The group of assignments.
+	 *
+	 * @return bool True if there are duplicate variables.
+	 */
+	private function hasDuplicateVariables( File $phpcsFile, $group ) {
+		$tokens        = $phpcsFile->getTokens();
+		$baseVariables = array();
+
+		foreach ( $group as $assignment ) {
+			$varPtr      = $assignment['variable'];
+			$baseVarName = $tokens[ $varPtr ]['content'];
+
+			// Check if we've seen this base variable before.
+			// This catches $styles = array(); followed by $styles[] = ...
+			// as well as multiple $styles[] = ... assignments.
+			if ( isset( $baseVariables[ $baseVarName ] ) ) {
+				return true;
+			}
+
+			$baseVariables[ $baseVarName ] = true;
 		}
 
-		if ( ! $this->isSingleLineAssignment( $phpcsFile, $nextStatement, $nextSemicolon ) ) {
-			return;
-		}
+		return false;
+	}
 
-		// Check if there are blank lines between the two assignments.
-		$currentLine = $tokens[ $semicolon ]['line'];
-		$nextLine    = $tokens[ $nextStatement ]['line'];
-
-		// If there's more than one line difference, there are blank lines.
-		if ( $nextLine - $currentLine <= 1 ) {
-			return;
-		}
-
-		$fix = $phpcsFile->addFixableError(
-			'Blank lines found between consecutive simple assignments. Remove blank lines to group related assignments.',
-			$nextStatement,
-			'BlankLineBetweenAssignments'
+	/**
+	 * Check if there's a comment before the variable on the same or previous lines.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $varPtr    The position of the variable token.
+	 *
+	 * @return bool True if there's a comment before the variable.
+	 */
+	private function hasCommentBeforeVariable( File $phpcsFile, $varPtr ) {
+		$tokens       = $phpcsFile->getTokens();
+		$commentTypes = array(
+			T_COMMENT,
+			T_DOC_COMMENT,
+			T_DOC_COMMENT_OPEN_TAG,
+			T_DOC_COMMENT_CLOSE_TAG,
+			T_DOC_COMMENT_STAR,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT_TAG,
+			T_DOC_COMMENT_WHITESPACE,
 		);
 
-		if ( true === $fix ) {
-			$this->removeBlankLines( $phpcsFile, $semicolon, $nextStatement );
+		// Look backwards from the variable to find the previous semicolon or brace.
+		$prevStatement = $phpcsFile->findPrevious( array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_CLOSE_CURLY_BRACKET ), $varPtr - 1 );
+
+		if ( false === $prevStatement ) {
+			return false;
 		}
+
+		// Check if there's a comment between the previous statement and this variable.
+		for ( $i = $prevStatement + 1; $i < $varPtr; $i++ ) {
+			if ( in_array( $tokens[ $i ]['code'], $commentTypes, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if there's a comment between two token positions.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $startPtr  The start position.
+	 * @param int  $endPtr    The end position.
+	 *
+	 * @return bool True if there's a comment between the positions.
+	 */
+	private function hasCommentBetween( File $phpcsFile, $startPtr, $endPtr ) {
+		$tokens       = $phpcsFile->getTokens();
+		$commentTypes = array(
+			T_COMMENT,
+			T_DOC_COMMENT,
+			T_DOC_COMMENT_OPEN_TAG,
+			T_DOC_COMMENT_CLOSE_TAG,
+			T_DOC_COMMENT_STAR,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT_TAG,
+			T_DOC_COMMENT_WHITESPACE,
+		);
+
+		for ( $i = $startPtr + 1; $i < $endPtr; $i++ ) {
+			if ( in_array( $tokens[ $i ]['code'], $commentTypes, true ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get a signature for the variable being assigned.
+	 * This includes array access like $styles[] or $data['key'].
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $varPtr    The position of the variable token.
+	 *
+	 * @return string The variable signature.
+	 */
+	private function getVariableSignature( File $phpcsFile, $varPtr ) {
+		$tokens    = $phpcsFile->getTokens();
+		$signature = $tokens[ $varPtr ]['content'];
+
+		// Check for array access after the variable.
+		$next = $phpcsFile->findNext( T_WHITESPACE, $varPtr + 1, null, true );
+
+		if ( false !== $next && $tokens[ $next ]['code'] === T_OPEN_SQUARE_BRACKET ) {
+			// Include the array access in the signature.
+			$closeBracket = $tokens[ $next ]['bracket_closer'];
+
+			for ( $i = $next; $i <= $closeBracket; $i++ ) {
+				$signature .= $tokens[ $i ]['content'];
+			}
+		}
+
+		return $signature;
 	}
 
 	/**
@@ -126,7 +344,20 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 		}
 
 		// Check what's before the variable - should be start of statement.
-		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+		// Skip whitespace and comments.
+		$skip = array(
+			T_WHITESPACE,
+			T_COMMENT,
+			T_DOC_COMMENT,
+			T_DOC_COMMENT_OPEN_TAG,
+			T_DOC_COMMENT_CLOSE_TAG,
+			T_DOC_COMMENT_STAR,
+			T_DOC_COMMENT_STRING,
+			T_DOC_COMMENT_TAG,
+			T_DOC_COMMENT_WHITESPACE,
+		);
+
+		$prevToken = $phpcsFile->findPrevious( $skip, $stackPtr - 1, null, true );
 
 		if ( false === $prevToken ) {
 			return true;
@@ -146,11 +377,26 @@ class ConsecutiveAssignmentSpacingSniff implements Sniff {
 			return false;
 		}
 
-		// Check what's after the variable - should be an assignment operator.
+		// Check what's after the variable - should be an assignment operator or array access.
 		$nextToken = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
 
 		if ( false === $nextToken ) {
 			return false;
+		}
+
+		// Handle array access like $styles[] or $data['key'].
+		if ( $tokens[ $nextToken ]['code'] === T_OPEN_SQUARE_BRACKET ) {
+			// Skip past the array access to find the assignment operator.
+			if ( ! isset( $tokens[ $nextToken ]['bracket_closer'] ) ) {
+				return false;
+			}
+
+			$closeBracket = $tokens[ $nextToken ]['bracket_closer'];
+			$nextToken    = $phpcsFile->findNext( T_WHITESPACE, $closeBracket + 1, null, true );
+
+			if ( false === $nextToken ) {
+				return false;
+			}
 		}
 
 		// Must be followed by an assignment operator.

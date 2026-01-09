@@ -281,7 +281,6 @@ class FrmStylesCardHelper {
 
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
-
 		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 

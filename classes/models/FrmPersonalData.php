@@ -155,9 +155,8 @@ class FrmPersonalData {
 		}
 
 		$query_args['order_by'] = 'id ASC';
-
-		$entries_by_user = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
-		$entry_ids       = array_merge( $entries_by_user, $entries_by_email );
+		$entries_by_user        = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
+		$entry_ids              = array_merge( $entries_by_user, $entries_by_email );
 
 		return array_unique( array_filter( $entry_ids ) );
 	}

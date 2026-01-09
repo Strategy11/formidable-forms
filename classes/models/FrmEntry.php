@@ -98,8 +98,7 @@ class FrmEntry {
 
 		global $frm_vars;
 		$frm_vars['checking_duplicates'] = true;
-
-		$is_duplicate = false;
+		$is_duplicate                    = false;
 
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;

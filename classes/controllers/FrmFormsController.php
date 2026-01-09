@@ -2979,8 +2979,7 @@ class FrmFormsController {
 
 		FrmOnSubmitHelper::populate_on_submit_data( $new_args['form']->options, $action, $args['action'] );
 
-		$opt = 'update' === $args['action'] ? 'edit_' : 'success_';
-
+		$opt                     = 'update' === $args['action'] ? 'edit_' : 'success_';
 		$new_args['conf_method'] = $new_args['form']->options[ $opt . 'action' ];
 
 		/**

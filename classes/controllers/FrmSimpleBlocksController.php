@@ -225,8 +225,7 @@ class FrmSimpleBlocksController {
 		// so a default doesn't overwrite the block option.
 		$params['title']       = ! empty( $params['title'] );
 		$params['description'] = ! empty( $params['description'] );
-
-		$form .= FrmFormsController::get_form_shortcode( $params );
+		$form                 .= FrmFormsController::get_form_shortcode( $params );
 
 		if ( ! empty( $attributes['className'] ) ) {
 			$form = preg_replace( '/\bfrm_forms\b/', 'frm_forms ' . esc_attr( $attributes['className'] ), $form, 1 );
