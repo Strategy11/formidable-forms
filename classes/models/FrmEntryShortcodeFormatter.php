@@ -124,7 +124,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function init_plain_text( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			$this->is_plain_text = true;
 		}
 	}

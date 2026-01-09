@@ -374,7 +374,7 @@ class FrmEntriesController {
 
 		global $frm_vars;
 
-		if ( ! isset( $frm_vars['prev_hidden_cols'] ) || ! $frm_vars['prev_hidden_cols'] ) {
+		if ( empty( $frm_vars['prev_hidden_cols'] ) ) {
 			// Don't continue if there's no previous value.
 			return;
 		}
@@ -728,7 +728,7 @@ class FrmEntriesController {
 
 		$params = FrmForm::get_admin_params();
 
-		if ( isset( $params['keep_post'] ) && $params['keep_post'] ) {
+		if ( ! empty( $params['keep_post'] ) ) {
 			self::unlink_post( $params['id'] );
 		}
 
@@ -870,7 +870,7 @@ class FrmEntriesController {
 
 		FrmAppHelper::unserialize_or_decode( $form->options );
 
-		if ( isset( $form->options['no_save'] ) && $form->options['no_save'] ) {
+		if ( ! empty( $form->options['no_save'] ) ) {
 			self::unlink_post( $entry_id );
 			FrmEntry::destroy( $entry_id );
 		}

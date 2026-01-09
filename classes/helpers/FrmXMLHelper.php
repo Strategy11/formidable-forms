@@ -1959,7 +1959,7 @@ class FrmXMLHelper {
 	 * @param bool   $switch
 	 */
 	private static function migrate_post_settings_to_action( $form_options, $form_id, $post_type, &$imported, $switch ) {
-		if ( ! isset( $form_options['create_post'] ) || ! $form_options['create_post'] ) {
+		if ( empty( $form_options['create_post'] ) ) {
 			return;
 		}
 
@@ -2196,7 +2196,7 @@ class FrmXMLHelper {
 				// Format the email data
 				self::format_email_data( $atts, $notification );
 
-				if ( isset( $notification['twilio'] ) && $notification['twilio'] ) {
+				if ( ! empty( $notification['twilio'] ) ) {
 					do_action( 'frm_create_twilio_action', $atts, $notification );
 				}
 
@@ -2357,7 +2357,7 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
-		if ( isset( $form_options['auto_responder'] ) && $form_options['auto_responder'] && isset( $form_options['ar_email_message'] ) && $form_options['ar_email_message'] ) {
+		if ( ! empty( $form_options['auto_responder'] ) && ! empty( $form_options['ar_email_message'] ) ) {
 			// migrate autoresponder
 
 			$email_field = $form_options['ar_email_to'] ?? 0;

@@ -1193,7 +1193,7 @@ class FrmStylesController {
 	public static function enqueue_style() {
 		global $frm_vars;
 
-		if ( isset( $frm_vars['css_loaded'] ) && $frm_vars['css_loaded'] ) {
+		if ( ! empty( $frm_vars['css_loaded'] ) ) {
 			// The CSS has already been loaded.
 			return;
 		}
