@@ -659,6 +659,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
+
 		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
@@ -695,7 +696,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
@@ -787,6 +788,7 @@ class FrmStrpLiteAuth {
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
+
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
 	}
 

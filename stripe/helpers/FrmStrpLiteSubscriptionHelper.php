@@ -108,6 +108,7 @@ class FrmStrpLiteSubscriptionHelper {
 			$plan_opts                      = self::prepare_plan_options( $action->post_content );
 			$plan_id                        = self::maybe_create_plan( $plan_opts );
 		}
+
 		return $plan_id;
 	}
 

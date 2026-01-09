@@ -113,7 +113,6 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return array
 	 */
 	public function get_field_options( $form_id ) {
-
 		$form_id  = absint( $form_id );
 		$form_ids = $form_id;
 

@@ -876,6 +876,7 @@ class FrmStylesController {
 			if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
 				return $single_style_settings['single_style_custom_css'];
 			}
+
 			return '';
 		}
 
@@ -1352,7 +1353,7 @@ class FrmStylesController {
 
 		wp_enqueue_script( 'accordion' );
 
-		if ( empty( $screen ) ) {
+		if ( ! $screen ) {
 			$screen = get_current_screen();
 		} elseif ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );

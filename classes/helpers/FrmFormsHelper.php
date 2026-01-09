@@ -95,7 +95,7 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
-		if ( ! empty( $class ) ) {
+		if ( $class ) {
 			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
 		}
 	}
@@ -338,7 +338,7 @@ class FrmFormsHelper {
 	public static function setup_new_vars( $values = array() ) {
 		global $wpdb;
 
-		if ( ! empty( $values ) ) {
+		if ( $values ) {
 			$post_values = $values;
 		} else {
 			$values      = array();
@@ -1004,6 +1004,7 @@ BEFORE_HTML;
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
 				return $class;
 			}
+
 			return null;
 		}
 
@@ -1113,7 +1114,7 @@ BEFORE_HTML;
 	public static function get_form_style( $form ) {
 		$style = 1;
 
-		if ( empty( $form ) || 'default' === $form ) {
+		if ( ! $form || 'default' === $form ) {
 			return $style;
 		}
 
@@ -1304,6 +1305,7 @@ BEFORE_HTML;
 		if ( ! $name ) {
 			return self::get_no_title_text();
 		}
+
 		return FrmAppHelper::truncate( $name, 40 );
 	}
 
@@ -1354,7 +1356,7 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 
-		if ( ! empty( $link_details ) ) {
+		if ( $link_details ) {
 			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
 
 			if ( isset( $link_details['data'] ) ) {
@@ -1365,7 +1367,7 @@ BEFORE_HTML;
 				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
 			}
 
-			$label = ( $link_details[ $length ] ?? $link_details['label'] );
+			$label = $link_details[ $length ] ?? $link_details['label'];
 
 			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
 				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
@@ -2077,6 +2079,7 @@ BEFORE_HTML;
 		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
 			return true;
 		}
+
 		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 

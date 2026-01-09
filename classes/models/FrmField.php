@@ -921,7 +921,7 @@ class FrmField {
 					break;
 				}
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 
@@ -972,7 +972,7 @@ class FrmField {
 				++$count;
 				$fields[ $result->id ] = $result;
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 			}
@@ -1093,7 +1093,7 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && ! str_contains( $order_by, 'ORDER BY' ) ) {
+		if ( $order_by && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 

@@ -486,6 +486,7 @@ class FrmEntryMeta {
 			$where['e.form_id'] = $where['fi.form_id'];
 			unset( $where['fi.form_id'] );
 		}
+
 		return false;
 	}
 

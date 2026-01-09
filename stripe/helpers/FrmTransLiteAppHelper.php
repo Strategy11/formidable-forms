@@ -207,6 +207,7 @@ class FrmTransLiteAppHelper {
 
 			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 		}
+
 		return do_shortcode( $value );
 	}
 
@@ -222,6 +223,7 @@ class FrmTransLiteAppHelper {
 		if ( (int) $sub->interval_count === 1 ) {
 			return $amount . '/' . $interval;
 		}
+
 		return $amount . ' every ' . $sub->interval_count . ' ' . $interval;
 	}
 
@@ -267,6 +269,7 @@ class FrmTransLiteAppHelper {
 		if ( isset( $times[ $value ] ) ) {
 			$value = $times[ $value ];
 		}
+
 		return $value;
 	}
 
@@ -361,7 +364,7 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function format_the_date( $date, $format = '' ) {
-		if ( empty( $format ) ) {
+		if ( ! $format ) {
 			$format = self::get_date_format();
 		}
 		return date_i18n( $format, strtotime( $date ) );
@@ -394,6 +397,7 @@ class FrmTransLiteAppHelper {
 				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 			}
 		}
+
 		return $user_link;
 	}
 
@@ -404,7 +408,7 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( ! empty( $value ) ) { ?>
+		if ( $value ) { ?>
 			<tr>
 				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
 				<td>
@@ -535,6 +539,7 @@ class FrmTransLiteAppHelper {
 		if ( isset( $gateways[ $gateway ] ) ) {
 			$value = $gateways[ $gateway ][ $setting ];
 		}
+
 		return $value;
 	}
 

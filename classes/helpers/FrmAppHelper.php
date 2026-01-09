@@ -428,6 +428,7 @@ class FrmAppHelper {
 		if ( $check_for_settings ) {
 			$check_actions[] = 'settings';
 		}
+
 		return self::is_admin_page( 'formidable' ) && in_array( $action, $check_actions, true );
 	}
 
@@ -903,6 +904,7 @@ class FrmAppHelper {
 			foreach ( $temp_values as $k => $v ) {
 				self::sanitize_value( $sanitize, $value[ $k ] );
 			}
+
 			return;
 		}
 
@@ -1002,7 +1004,7 @@ class FrmAppHelper {
 	 */
 	private static function decode_amp( &$string ) {
 		// Don't bother if there are no entities - saves a lot of processing
-		if ( empty( $string ) || ! str_contains( $string, '&' ) ) {
+		if ( ! $string || ! str_contains( $string, '&' ) ) {
 			return;
 		}
 
@@ -1103,6 +1105,7 @@ class FrmAppHelper {
 		if ( $included_draft_hook ) {
 			$html = str_replace( 'class="frm_save_draft"', 'class="frm_save_draft" [draft_hook]', $html );
 		}
+
 		return $html;
 	}
 
@@ -1152,7 +1155,7 @@ class FrmAppHelper {
 
 		if ( $allowed === 'all' ) {
 			$allowed_html = $html;
-		} elseif ( ! empty( $allowed ) ) {
+		} elseif ( $allowed ) {
 			foreach ( (array) $allowed as $a ) {
 				$allowed_html[ $a ] = $html[ $a ] ?? array();
 			}
@@ -1484,6 +1487,7 @@ class FrmAppHelper {
 		} elseif ( str_starts_with( $value, '#' ) ) {
 			$match = preg_match( '/^#([a-f0-9]{6}|[a-f0-9]{3})\b$/', $value );
 		}
+
 		return (bool) $match;
 	}
 
@@ -2402,7 +2406,7 @@ class FrmAppHelper {
 	 * @return false|string The permission message or false if allowed
 	 */
 	public static function permission_nonce_error( $permission, $nonce_name = '', $nonce = '' ) {
-		if ( ! empty( $permission ) && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
+		if ( $permission && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
 
 			return $frm_settings->admin_permission;
@@ -2410,7 +2414,7 @@ class FrmAppHelper {
 
 		$error = false;
 
-		if ( empty( $nonce_name ) ) {
+		if ( ! $nonce_name ) {
 			return $error;
 		}
 
@@ -2767,6 +2771,7 @@ class FrmAppHelper {
 				}
 			}
 		}
+
 		return $key;
 	}
 
@@ -2823,6 +2828,7 @@ class FrmAppHelper {
 				$key .= 'a';
 			}
 		}
+
 		return $key;
 	}
 
@@ -2843,7 +2849,7 @@ class FrmAppHelper {
 			return false;
 		}
 
-		if ( empty( $post_values ) ) {
+		if ( ! $post_values ) {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -2882,7 +2888,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	private static function prepare_field_arrays( $fields, $record, array &$values, $args ) {
-		if ( ! empty( $fields ) ) {
+		if ( $fields ) {
 			foreach ( (array) $fields as $field ) {
 				if ( ! self::is_admin_page() ) {
 					// Don't prep default values on the form settings page.
@@ -3026,7 +3032,7 @@ class FrmAppHelper {
 		foreach ( $form_defaults as $opt => $default ) {
 			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( ! isset( $values[ $opt ] ) || $values[ $opt ] == '' ) {
-				$values[ $opt ] = $post_values && isset( $post_values['options'][ $opt ] ) ? $post_values['options'][ $opt ] : $default;
+				$values[ $opt ] = $post_values['options'][ $opt ] ?? $default;
 			}
 
 			unset( $opt, $default );
@@ -3038,7 +3044,7 @@ class FrmAppHelper {
 
 		foreach ( array( 'before', 'after', 'submit' ) as $h ) {
 			if ( ! isset( $values[ $h . '_html' ] ) ) {
-				$values[ $h . '_html' ] = ( $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h ) );
+				$values[ $h . '_html' ] = $post_values['options'][ $h . '_html' ] ?? FrmFormsHelper::get_default_html( $h );
 			}
 			unset( $h );
 		}
@@ -3052,7 +3058,7 @@ class FrmAppHelper {
 	 * @return bool|int
 	 */
 	public static function custom_style_value( $post_values ) {
-		if ( ! empty( $post_values ) && isset( $post_values['options']['custom_style'] ) ) {
+		if ( $post_values && isset( $post_values['options']['custom_style'] ) ) {
 			return absint( $post_values['options']['custom_style'] );
 		}
 
@@ -3358,6 +3364,7 @@ class FrmAppHelper {
 				return $u;
 			}
 		}
+
 		return 1;
 	}
 
@@ -3571,7 +3578,7 @@ class FrmAppHelper {
 			$frm_action = 'reports';
 		}
 
-		if ( empty( $action ) || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
+		if ( ! $action || ( ! empty( $frm_action ) && in_array( $frm_action, $action, true ) ) ) {
 			echo ' class="current_page"';
 		}
 	}
@@ -3723,6 +3730,7 @@ class FrmAppHelper {
 			if ( mb_check_encoding( $value, $from_format ) ) {
 				return mb_convert_encoding( $value, $to_format, $from_format );
 			}
+
 			return $value;
 		}
 
@@ -4230,6 +4238,7 @@ class FrmAppHelper {
 				return $settings->menu_icon;
 			}
 		}
+
 		return 'frmfont frm_logo_icon';
 	}
 
@@ -5014,6 +5023,7 @@ class FrmAppHelper {
 		if ( function_exists( 'seems_utf8' ) ) {
 			return seems_utf8( $string );
 		}
+
 		return false;
 	}
 

@@ -335,6 +335,7 @@ class FrmHoneypot extends FrmValidate {
 			// For backward compatibility use the old class name.
 			return 'frm_verify';
 		}
+
 		return $option;
 	}
 }

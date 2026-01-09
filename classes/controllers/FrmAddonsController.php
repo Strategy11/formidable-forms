@@ -407,6 +407,7 @@ class FrmAddonsController {
 			$info['slug'] = $k;
 			$list[ $k ]   = array_merge( $defaults, $info );
 		}
+
 		return $list;
 	}
 
@@ -742,6 +743,7 @@ class FrmAddonsController {
 				return $addon;
 			}
 		}
+
 		return false;
 	}
 
@@ -757,6 +759,7 @@ class FrmAddonsController {
 		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
 			$license_type = $addons['error']['type'];
 		}
+
 		return $license_type;
 	}
 
@@ -1116,6 +1119,7 @@ class FrmAddonsController {
 				'success' => false,
 			);
 		}
+
 		return $plugin;
 	}
 
@@ -1233,6 +1237,7 @@ class FrmAddonsController {
 				if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
 				}
+
 				return array(
 					'message' => $result->get_error_message(),
 					'success' => false,

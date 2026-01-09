@@ -54,6 +54,7 @@ class FrmEmailHelper {
 		if ( $settings->from_email && is_email( $settings->from_email ) ) {
 			return $settings->from_email;
 		}
+
 		return get_option( 'admin_email' );
 	}
 }

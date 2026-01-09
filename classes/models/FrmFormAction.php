@@ -213,6 +213,7 @@ class FrmFormAction {
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
+
 		return $updated_action;
 	}
 
@@ -256,7 +257,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -609,6 +610,7 @@ class FrmFormAction {
 			if ( is_array( $action_controls ) ) {
 				return array();
 			}
+
 			return $action_controls->get_all( $form_id, $atts );
 		}
 

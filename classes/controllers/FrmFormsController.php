@@ -295,7 +295,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function update( $values = array() ) {
-		if ( empty( $values ) ) {
+		if ( ! $values ) {
 			$values = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -2485,7 +2485,7 @@ class FrmFormsController {
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
 
-		if ( ! empty( $id ) ) {
+		if ( $id ) {
 			// Form id or key is set.
 			$form = FrmForm::getOne( $id );
 

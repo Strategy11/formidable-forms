@@ -39,6 +39,7 @@ class FrmStrpLiteConnectHelper {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
 			}
+
 			return;
 		}
 
@@ -175,6 +176,7 @@ class FrmStrpLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -481,6 +483,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $success ) {
 			self::set_stripe_details_as_submitted( $mode );
 		}
+
 		return $success;
 	}
 
@@ -566,6 +569,7 @@ class FrmStrpLiteConnectHelper {
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
+
 		return $url;
 	}
 
@@ -583,6 +587,7 @@ class FrmStrpLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -704,6 +709,7 @@ class FrmStrpLiteConnectHelper {
 		if ( empty( $data->customer_id ) ) {
 			return false;
 		}
+
 		return $data->customer_id;
 	}
 
@@ -743,6 +749,7 @@ class FrmStrpLiteConnectHelper {
 		} else {
 			self::$latest_error_from_stripe_connect = '';
 		}
+
 		return false;
 	}
 
@@ -758,6 +765,7 @@ class FrmStrpLiteConnectHelper {
 		if ( ! $success ) {
 			return false;
 		}
+
 		return $data;
 	}
 
@@ -869,6 +877,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->plan_id ) ) {
 			return false;
 		}
+
 		return $data->plan_id;
 	}
 
@@ -901,6 +910,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 

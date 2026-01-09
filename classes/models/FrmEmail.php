@@ -663,7 +663,7 @@ class FrmEmail {
 	 * @return array|string $emails
 	 */
 	private function explode_emails( $emails ) {
-		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
+		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';
 
 		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
@@ -829,7 +829,6 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function handle_phone_numbers() {
-
 		foreach ( $this->to as $key => $recipient ) {
 			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
 				$recipient = explode( ' ', $recipient );

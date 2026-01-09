@@ -869,6 +869,7 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
+
 				return self::prepare_form_row_data( $cache );
 			}
 		}
@@ -1346,7 +1347,6 @@ class FrmForm {
 	 * @return object
 	 */
 	public static function get_latest_form() {
-
 		$args = array(
 			array(
 				'or'               => 1,
@@ -1368,7 +1368,6 @@ class FrmForm {
 	 * @return int
 	 */
 	public static function get_forms_count() {
-
 		$args = array(
 			array(
 				'or'               => 1,

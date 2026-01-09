@@ -72,6 +72,7 @@ class FrmStrpLiteAppHelper {
 		if ( 'test' === self::active_mode() ) {
 			$meta_name .= '_test';
 		}
+
 		return $meta_name;
 	}
 
