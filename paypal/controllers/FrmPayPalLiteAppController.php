@@ -224,4 +224,20 @@ class FrmPayPalLiteAppController {
 
 		wp_send_json_success( array( 'subscriptionID' => $response->subscription_id ) );
 	}
+
+	public static function create_vault_setup_token() {
+		check_ajax_referer( 'frm_paypal_ajax', 'nonce' );
+
+		$response = FrmPayPalLiteConnectHelper::create_vault_setup_token();
+
+		if ( false === $response ) {
+			wp_send_json_error( 'Failed to create PayPal vault setup token' );
+		}
+
+		if ( ! isset( $response->token ) ) {
+			wp_send_json_error( 'Failed to create PayPal vault setup token' );
+		}
+
+		wp_send_json_success( array( 'token' => $response->token ) );
+	}
 }

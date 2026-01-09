@@ -45,7 +45,9 @@
 		thisForm = cardElement.closest( 'form' );
 
 		const cardFieldsConfig = {
-			createOrder: createOrder,
+		//	createOrder: createOrder,
+		//	createSubscription: createSubscription,
+			createVaultSetupToken: createVaultSetupToken,
 			onApprove: onApprove,
 			onError: onError,
 			style: getCardFieldStyles(),
@@ -176,12 +178,41 @@
 		return orderData.data.subscriptionID;
 	}
 
+	async function createVaultSetupToken() {
+		const formData = new FormData( thisForm );
+		formData.append( 'action', 'frm_paypal_create_vault_setup_token' );
+		formData.append( 'nonce', frmPayPalVars.nonce );
+
+		// Remove a few fields so form validation does not incorrectly trigger.
+		formData.delete( 'frm_action' );
+		formData.delete( 'form_key' );
+		formData.delete( 'item_key' );
+
+		const response = await fetch( frmPayPalVars.ajax, {
+			method: 'POST',
+			body: formData
+		} );
+
+		if ( ! response.ok ) {
+			throw new Error( 'Failed to create PayPal vault setup token' );
+		}
+
+		const tokenData = await response.json();
+
+		if ( ! tokenData.success || ! tokenData.data.token ) {
+			throw new Error( tokenData.data || 'Failed to create PayPal vault setup token' );
+		}
+
+		return tokenData.data.token;
+	}
+
 	/**
 	 * Handle approved payment.
 	 *
 	 * @param {Object} data The approval data containing orderID.
 	 */
 	async function onApprove( data ) {
+		console.log( 'onApprove', data );
 		// Add the order ID to the form
 		const orderInput = document.createElement( 'input' );
 		orderInput.type = 'hidden';

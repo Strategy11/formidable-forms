@@ -251,6 +251,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 	 * @return bool|string True on success, error message on failure
 	 */
 	private static function trigger_recurring_payment( $atts ) {
+		// TODO
 		return 'Recurring payments are not yet implemented for PayPal Lite.';
 	}
 
@@ -378,7 +379,7 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				'components' => 'buttons,card-fields',
 				// Use capture for one time payments.
 				// 'intent'     => 'capture',
-				// Subscriptions require vault=true.
+				// Subscriptions appear to require vault=true.
 				'intent'     => 'subscription',
 				'vault'      => 'true',
 			),
@@ -405,12 +406,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$paypal_vars = array(
-			'clientId' => $client_id,
-			'formId'   => $form_id,
-			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
-			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings' => $action_settings,
-			'style'    => self::get_style_for_js( $form_id ),
+			'clientId'    => $client_id,
+			'formId'      => $form_id,
+			'nonce'       => wp_create_nonce( 'frm_paypal_ajax' ),
+			'ajax'        => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings'    => $action_settings,
+			'style'       => self::get_style_for_js( $form_id ),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );

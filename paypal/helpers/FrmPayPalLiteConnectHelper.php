@@ -709,4 +709,8 @@ class FrmPayPalLiteConnectHelper {
 	public static function create_subscription( $data ) {
 		return self::post_with_authenticated_body( 'create_subscription', compact( 'data' ) );
 	}
+
+	public static function create_vault_setup_token() {
+		return self::post_with_authenticated_body( 'create_vault_setup_token' );
+	}
 }
