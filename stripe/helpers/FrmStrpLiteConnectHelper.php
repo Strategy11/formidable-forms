@@ -338,6 +338,7 @@ class FrmStrpLiteConnectHelper {
 			if ( self::check_server_for_connected_account_status() ) {
 				wp_send_json_success();
 			}
+
 			wp_send_json_error();
 		}
 
@@ -959,6 +960,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 }

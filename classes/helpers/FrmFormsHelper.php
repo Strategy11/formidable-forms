@@ -1840,6 +1840,7 @@ BEFORE_HTML;
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
+
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
 		$reserved_words            = self::reserved_words();

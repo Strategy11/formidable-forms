@@ -263,6 +263,7 @@ class FrmSettingsController {
 		} else {
 			call_user_func( ( $section['function'] ?? $section ) );
 		}
+
 		wp_die();
 	}
 
