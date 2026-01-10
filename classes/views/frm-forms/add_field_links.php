@@ -85,7 +85,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$field_sections = array();
 
 								foreach ( $pro_fields as $field_key => $field_type ) {
-
 									if ( isset( $field_type['section'] ) ) {
 										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
 											$field_sections[ $field_type['section'] ] = array();

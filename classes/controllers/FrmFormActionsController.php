@@ -677,7 +677,6 @@ class FrmFormActionsController {
 		}
 
 		foreach ( $form_actions as $action ) {
-
 			$skip_this_action = ! in_array( $this_event, $action->post_content['event'], true ) || FrmOnSubmitAction::$slug === $action->post_excerpt;
 			$skip_this_action = apply_filters( 'frm_skip_form_action', $skip_this_action, compact( 'action', 'entry', 'form', 'event' ) );
 
