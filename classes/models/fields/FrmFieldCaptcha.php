@@ -325,6 +325,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
 				$invalid_message = '';
 			}
+
 			$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
 		}
 

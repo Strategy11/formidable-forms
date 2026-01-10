@@ -566,6 +566,7 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
+
 		$special_categories['all-items'] = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),

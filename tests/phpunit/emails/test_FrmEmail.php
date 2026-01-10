@@ -370,6 +370,7 @@ class test_FrmEmail extends FrmUnitTest {
 		if ( str_starts_with( $sitename, 'www.' ) ) {
 			$sitename = substr( $sitename, 4 );
 		}
+
 		$expected['from'] = 'Yahoo <wordpress@' . $sitename . '>';
 
 		// Reply to

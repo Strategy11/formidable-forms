@@ -697,6 +697,7 @@ class FrmField {
 				if ( 'field_options' === $opt ) {
 					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
 				}
+
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}

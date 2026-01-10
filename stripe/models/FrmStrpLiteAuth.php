@@ -373,6 +373,7 @@ class FrmStrpLiteAuth {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
 				}
+
 				$intents[ $k ] = array(
 					'id'     => $intent,
 					'action' => $action->ID,

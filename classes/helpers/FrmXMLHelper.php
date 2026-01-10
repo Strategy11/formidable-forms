@@ -791,8 +791,9 @@ class FrmXMLHelper {
 					break;
 				}
 			}
+
 			$changes['options'] = $options;
-		}
+		}//end if
 
 		return $changes;
 	}
@@ -2004,6 +2005,7 @@ class FrmXMLHelper {
 
 			$new_action['post_content'] = self::switch_action_field_ids( $new_action['post_content'], $basic_fields, $array_fields );
 		}
+
 		$new_action['post_content'] = json_encode( $new_action['post_content'] );
 
 		$exists = get_posts(
@@ -2112,6 +2114,7 @@ class FrmXMLHelper {
 				// Switch all other field IDs in email
 				$new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
 			}
+
 			$new_notification['post_content'] = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
 
 			$exists = get_posts(
@@ -2274,6 +2277,7 @@ class FrmXMLHelper {
 				unset( $email_opt );
 			}
 		}
+
 		$atts['email_to'] = implode( ', ', $atts['email_to'] );
 	}
 

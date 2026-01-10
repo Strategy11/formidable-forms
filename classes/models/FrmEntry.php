@@ -111,6 +111,7 @@ class FrmEntry {
 				if ( 0 === (int) $meta->field_id ) {
 					continue;
 				}
+
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 

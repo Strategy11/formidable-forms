@@ -365,6 +365,7 @@ class FrmEntryMeta {
 		if ( $args['value'] ) {
 			$query[] = $wpdb->prepare( ' AND meta_value=%s', $args['value'] );
 		}
+
 		$query[] = $order . $limit;
 	}
 
@@ -551,6 +552,7 @@ class FrmEntryMeta {
 			if ( ! empty( $args['user_id'] ) ) {
 				$where['e.user_id'] = $args['user_id'];
 			}
+
 			$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			if ( $args['group_by'] ) {
