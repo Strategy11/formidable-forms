@@ -2370,6 +2370,7 @@ class FrmAppHelper {
 			if ( 'hide' === $show_message ) {
 				$permission_error = '';
 			}
+
 			wp_die( esc_html( $permission_error ) );
 		}
 	}
@@ -4654,6 +4655,7 @@ class FrmAppHelper {
 			// $hook_suffix gets used in substr so make sure it's not null. PHP 8.1 deprecates null in substr.
 			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
+
 		set_current_screen();
 	}
 
