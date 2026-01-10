@@ -820,7 +820,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function auto_width_setting( $args ) {
-		$use_style = ( ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'] );
+		$use_style = ! isset( $args['values']['custom_style'] ) || $args['values']['custom_style'];
 
 		if ( $use_style ) {
 			$field = $args['field'];
@@ -1462,7 +1462,7 @@ DEFAULT_HTML;
 	 * @return array
 	 */
 	protected function get_select_attributes( $values ) {
-		$readonly    = ( FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin() );
+		$readonly    = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 		$select_atts = array();
 
 		if ( ! $readonly ) {

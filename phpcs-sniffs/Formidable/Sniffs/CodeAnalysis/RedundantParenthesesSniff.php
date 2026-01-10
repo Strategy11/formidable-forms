@@ -182,22 +182,14 @@ class RedundantParenthesesSniff implements Sniff {
 			}
 		}
 
-		// If there are logical or comparison operators combined with other operators, it's complex.
-		if ( $hasLogicalOp || $hasComparisonOp ) {
-			return false;
-		}
-
 		// If there are arithmetic operators, it might need parentheses for precedence.
 		if ( $hasArithmeticOp ) {
 			return false;
 		}
 
-		// A simple null coalesce or ternary without other operators is fine.
-		if ( $hasCoalesce || $hasTernary ) {
-			return true;
-		}
-
-		// If there are no operators at all, it's a simple value - parentheses are redundant.
+		// Logical and comparison operators don't need parentheses in a simple assignment.
+		// The parentheses are only needed when there's an operator precedence issue outside.
+		// Since we already checked that this is followed by ; or , the parentheses are redundant.
 		return true;
 	}
 }

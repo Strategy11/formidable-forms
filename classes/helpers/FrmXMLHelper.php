@@ -960,7 +960,7 @@ class FrmXMLHelper {
 			$saved_style                     = $form['options']['custom_style'];
 			$form['options']['custom_style'] = $form['options']['old_style'];
 			self::update_custom_style_setting_on_import( $form );
-			$has_changed = ( $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style'] ); // phpcs:ignore Universal.Operators.StrictComparisons
+			$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $has_changed ) {
 				FrmForm::update( $form['id'], $form );

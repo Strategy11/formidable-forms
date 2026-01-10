@@ -1030,7 +1030,7 @@ class FrmField {
 		}
 
 		$form_fields         = $results;
-		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
+		$should_get_subforms = $type !== 'all' && $type !== 'form' && ! empty( $form_id );
 
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
@@ -1589,12 +1589,10 @@ class FrmField {
 		$field_type = self::get_original_field_type( $field );
 		$data_type  = self::get_option( $field, 'data_type' );
 
-		$is_field_type = (
-			$is_type === $field_type ||
+		$is_field_type = $is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
 			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type )
-		);
+			( 'product' === $field_type && $is_type === $data_type );
 
 		/**
 		 * When a field type is checked, allow individual fields
