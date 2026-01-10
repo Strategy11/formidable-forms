@@ -3570,6 +3570,7 @@ class FrmFormsController {
 		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
 			$dir = self::get_form_views_path();
 		}
+
 		include $dir . 'landing-page-preview-option.php';
 	}
 

@@ -303,6 +303,7 @@ class FrmDashboardHelper {
 		if ( null === $template['id'] ) {
 			return;
 		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
 	}
 

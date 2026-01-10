@@ -857,6 +857,7 @@ class FrmStylesController {
 		if ( $settings ) {
 			$textarea_params['class'] = 'hide-if-js';
 		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 

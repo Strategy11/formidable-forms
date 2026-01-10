@@ -36,7 +36,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array( T_VARIABLE, T_STRING );
+		return array( T_VARIABLE, T_STRING, T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE );
 	}
 
 	/**
@@ -101,6 +101,8 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 			if ( $tokens[ $nextToken ]['code'] !== T_OPEN_PARENTHESIS ) {
 				return;
 			}
+		} elseif ( in_array( $tokens[ $stackPtr ]['code'], array( T_INCLUDE, T_INCLUDE_ONCE, T_REQUIRE, T_REQUIRE_ONCE ), true ) ) {
+			// Include/require statements are valid statement starts, no additional check needed.
 		}
 
 		// Find the first token on the current line.
