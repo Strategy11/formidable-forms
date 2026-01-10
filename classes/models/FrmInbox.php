@@ -459,6 +459,7 @@ class FrmInbox extends FrmFormApi {
 				if ( isset( $parts['query'] ) ) {
 					parse_str( $parts['query'], $query );
 				}
+
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
 				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';

@@ -1231,6 +1231,7 @@ class FrmFormsController {
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
+
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		add_screen_option(
@@ -1609,6 +1610,7 @@ class FrmFormsController {
 			if ( ! isset( $section['anchor'] ) ) {
 				$section['anchor'] = $key;
 			}
+
 			$section['anchor'] .= '_settings';
 
 			if ( ! isset( $section['title'] ) ) {

@@ -199,6 +199,7 @@ class FrmApplicationTemplate {
 					// Strip off the " Template" text at the end of the name as it takes up space.
 					$value = substr( $value, 0, -9 );
 				}
+
 				$application[ $key ] = $value;
 			}//end if
 		}//end foreach
@@ -219,6 +220,7 @@ class FrmApplicationTemplate {
 			if ( false !== $purchase_url ) {
 				$application['forPurchase'] = true;
 			}
+
 			$application['upgradeUrl'] = $this->get_admin_upgrade_link();
 			$application['link']       = $application['upgradeUrl'];
 		}

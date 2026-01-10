@@ -245,6 +245,7 @@ class FrmStylesController {
 		} else {
 			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
+
 		$stylesheet_urls['formidable'] = $url;
 	}
 
@@ -1309,6 +1310,7 @@ class FrmStylesController {
 			} elseif ( 'alt_bg_color' === $name ) {
 				$setting = 'bg_color_active';
 			}
+
 			$default_styles[ $name ] = $style->post_content[ $setting ];
 			unset( $name, $val );
 		}

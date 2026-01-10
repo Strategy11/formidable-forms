@@ -361,6 +361,7 @@ class FrmForm {
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
+
 			$field_array[ $fid->id ] = $fid;
 		}
 		unset( $all_fields );

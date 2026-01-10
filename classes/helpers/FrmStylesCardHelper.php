@@ -273,6 +273,7 @@ class FrmStylesCardHelper {
 		} else {
 			$background_color = str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'];
 		}
+
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		if ( empty( $style->post_content['submit_border_color'] ) ) {

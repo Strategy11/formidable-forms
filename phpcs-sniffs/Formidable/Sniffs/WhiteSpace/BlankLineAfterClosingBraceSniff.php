@@ -57,7 +57,7 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 			return;
 		}
 
-		// For variables, check if followed by an assignment operator.
+		// For variables, check if followed by an assignment operator (or array access then assignment).
 		if ( $tokens[ $stackPtr ]['code'] === T_VARIABLE ) {
 			$assignmentTokens = array(
 				T_EQUAL,
@@ -76,7 +76,24 @@ class BlankLineAfterClosingBraceSniff implements Sniff {
 				T_COALESCE_EQUAL,
 			);
 
-			if ( ! in_array( $tokens[ $nextToken ]['code'], $assignmentTokens, true ) ) {
+			$checkToken = $nextToken;
+
+			// If followed by array access, skip to after the closing bracket.
+			if ( $tokens[ $nextToken ]['code'] === T_OPEN_SQUARE_BRACKET ) {
+				// Find the matching closing bracket.
+				if ( isset( $tokens[ $nextToken ]['bracket_closer'] ) ) {
+					$closeBracket = $tokens[ $nextToken ]['bracket_closer'];
+					$checkToken   = $phpcsFile->findNext( T_WHITESPACE, $closeBracket + 1, null, true );
+
+					if ( false === $checkToken ) {
+						return;
+					}
+				} else {
+					return;
+				}
+			}
+
+			if ( ! in_array( $tokens[ $checkToken ]['code'], $assignmentTokens, true ) ) {
 				return;
 			}
 		} elseif ( $tokens[ $stackPtr ]['code'] === T_STRING ) {
