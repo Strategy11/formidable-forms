@@ -24,7 +24,6 @@ class FrmEntryValidate {
 
 		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
 			$errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
-
 			return $errors;
 		}
 
@@ -1128,8 +1127,7 @@ class FrmEntryValidate {
 
 					// Convert name array to string.
 					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
-						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
-
+						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}
 

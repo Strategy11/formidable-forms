@@ -1726,7 +1726,6 @@ BEFORE_HTML;
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
-
 				return self::convert_legacy_package_names( $category );
 			}
 		}

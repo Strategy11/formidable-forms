@@ -1865,7 +1865,6 @@ class FrmXMLHelper {
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $old_html == $default_html ) {
 			unset( $options[ $html_name ] );
-
 			return;
 		}
 
