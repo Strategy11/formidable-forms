@@ -978,7 +978,6 @@ class FrmFormsController {
 
 		if ( $permission_error !== false ) {
 			self::display_forms_list( array(), '', array( $permission_error ) );
-
 			return;
 		}
 
@@ -2027,7 +2026,6 @@ class FrmFormsController {
 
 		if ( $bulkaction && str_starts_with( $bulkaction, 'bulk_' ) ) {
 			FrmAppHelper::remove_get_action();
-
 			$bulkaction = str_replace( 'bulk_', '', $bulkaction );
 		}
 
@@ -2035,7 +2033,6 @@ class FrmFormsController {
 
 		if ( ! $ids ) {
 			$errors[] = __( 'No forms were specified', 'formidable' );
-
 			return $errors;
 		}
 
@@ -2043,7 +2040,6 @@ class FrmFormsController {
 
 		if ( $permission_error !== false ) {
 			$errors[] = $permission_error;
-
 			return $errors;
 		}
 

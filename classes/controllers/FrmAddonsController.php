@@ -269,7 +269,6 @@ class FrmAddonsController {
 
 		if ( ! $plugins ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
-
 			return;
 		}
 
@@ -1546,7 +1545,6 @@ class FrmAddonsController {
 
 		if ( ! is_array( $allowed_url_list ) ) {
 			_doing_it_wrong( __METHOD__, 'Only an array of URLs could be used within this filter.', '6.3.1' );
-
 			return array();
 		}
 

@@ -2082,7 +2082,6 @@ class FrmAppHelper {
 
 		if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
 		}
 
@@ -2389,7 +2388,6 @@ class FrmAppHelper {
 	public static function permission_nonce_error( $permission, $nonce_name = '', $nonce = '' ) {
 		if ( $permission && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
-
 			return $frm_settings->admin_permission;
 		}
 

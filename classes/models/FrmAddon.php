@@ -867,7 +867,6 @@ class FrmAddon {
 
 		if ( empty( $this->license ) ) {
 			$response['error'] = false;
-
 			return $response;
 		}
 
