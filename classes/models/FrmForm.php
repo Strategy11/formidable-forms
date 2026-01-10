@@ -372,7 +372,7 @@ class FrmForm {
 				continue;
 			}
 
-			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+			$is_settings_page = isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] );
 
 			if ( $is_settings_page ) {
 				self::get_settings_page_html( $values, $field );
@@ -1289,7 +1289,7 @@ class FrmForm {
 	 * @return bool
 	 */
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
+		$show = ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin();
 		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 

@@ -694,7 +694,7 @@ class FrmFieldsHelper {
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
-			$checked = ( isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) ) );
+			$checked = isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) );
 
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -733,7 +733,7 @@ class FrmFieldsHelper {
 		$field_name   = 'default_value_' . $field['id'];
 		$html_id      = $field['html_id'] ?? self::get_html_id( $field );
 		$default_type = self::get_default_value_type( $field );
-		$field_name  .= ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
+		$field_name  .= $default_type === 'checkbox' ? '[' . $opt_key . ']' : '';
 
 		require FrmAppHelper::plugin_path() . '/classes/views/frm-fields/single-option.php';
 	}

@@ -680,7 +680,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] === 'true' );
+		return is_array( $response ) && $response[1] === 'true';
 	}
 
 	/**

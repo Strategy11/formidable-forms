@@ -278,8 +278,8 @@ class FrmCreateFile {
 			$credentials['connection_type'] = 'ftp';
 		}
 
-		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$has_creds = ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] );
+		$can_ssh   = 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] );
 
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;

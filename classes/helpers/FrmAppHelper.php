@@ -3163,7 +3163,7 @@ class FrmAppHelper {
 		}
 
 		$formatted = self::get_localized_date( $date_format, $date );
-		$do_time   = ( gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00' );
+		$do_time   = gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00';
 
 		if ( $do_time ) {
 			$formatted .= self::add_time_to_date( $time_format, $date );

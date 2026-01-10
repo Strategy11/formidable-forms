@@ -278,7 +278,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	private function table_row_background_color() {
-		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
+		return $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'];
 	}
 
 	/**
