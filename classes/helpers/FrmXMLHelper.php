@@ -2177,7 +2177,6 @@ class FrmXMLHelper {
 
 		if ( isset( $form_options['notification'] ) && is_array( $form_options['notification'] ) ) {
 			foreach ( $form_options['notification'] as $email_key => $notification ) {
-
 				$atts = array(
 					'email_to'      => '',
 					'reply_to'      => '',
@@ -2263,7 +2262,6 @@ class FrmXMLHelper {
 		}
 
 		foreach ( $atts['email_to'] as $key => $email_field ) {
-
 			if ( is_numeric( $email_field ) ) {
 				$atts['email_to'][ $key ] = '[' . $email_field . ']';
 			}

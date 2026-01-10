@@ -9,7 +9,6 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 } elseif ( is_array( $field['options'] ) ) {
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
-
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		?>
