@@ -58,17 +58,18 @@ class RedundantParenthesesSniff implements Sniff {
 			return;
 		}
 
-		// We only care about parentheses after an assignment operator or array arrow.
-		$assignmentTokens = array(
+		// We only care about parentheses after an assignment operator, array arrow, or return.
+		$validPrecedingTokens = array(
 			T_EQUAL,
 			T_DOUBLE_ARROW,
 			T_COALESCE_EQUAL,
 			T_PLUS_EQUAL,
 			T_MINUS_EQUAL,
 			T_CONCAT_EQUAL,
+			T_RETURN,
 		);
 
-		if ( ! in_array( $tokens[ $prevToken ]['code'], $assignmentTokens, true ) ) {
+		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPrecedingTokens, true ) ) {
 			return;
 		}
 

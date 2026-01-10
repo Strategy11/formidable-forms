@@ -1546,7 +1546,7 @@ class FrmField {
 	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
-		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
+		return $type === 'url' && self::get_option( $field, 'show_image' );
 	}
 
 	/**
