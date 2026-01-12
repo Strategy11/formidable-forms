@@ -2591,11 +2591,11 @@ input[type="submit"]:focus {
 @keyframes spin {
 
   0% {
-    transform: rotate(0deg);
+	transform: rotate(0deg);
   }
 
   100% {
-    transform: rotate(360deg);
+	transform: rotate(360deg);
   }
 }
 
@@ -2851,26 +2851,26 @@ body.frm_preview_page .ui-widget-overlay {
 @media (max-width: 1024px) {
 
   #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
-    width: 100%;
-    display: block !important;
-    margin-left: 0 !important;
+	width: 100%;
+	display: block !important;
+	margin-left: 0 !important;
   }
 
   #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
-    margin-top: var(--gap-sm);
+	margin-top: var(--gap-sm);
   }
 
   #frm_testmode_fill_in_empty_form_fields {
-    display: block;
+	display: block;
   }
 
   #frm_testing_mode > div:nth-of-type(2) {
-    flex-direction: column;
-    align-items: normal;
+	flex-direction: column;
+	align-items: normal;
   }
 
   #frm_test_mode_pagination {
-    margin-left: 0;
+	margin-left: 0;
   }
 }
 
