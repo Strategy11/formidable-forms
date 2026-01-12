@@ -28,7 +28,6 @@ class FrmReviews {
 	 * @return void
 	 */
 	public function review_request() {
-
 		// Only show the review request to high-level users on Formidable pages
 		if ( ! current_user_can( 'frm_change_settings' ) || ! FrmAppHelper::is_formidable_admin() ) {
 			return;
@@ -46,7 +45,7 @@ class FrmReviews {
 
 		$week_ago = $this->review_status['time'] + WEEK_IN_SECONDS <= time();
 
-		if ( empty( $dismissed ) && $week_ago ) {
+		if ( ! $dismissed && $week_ago ) {
 			$this->review();
 		}
 	}
@@ -67,7 +66,7 @@ class FrmReviews {
 			'asked'     => 0,
 		);
 
-		if ( empty( $review ) ) {
+		if ( ! $review ) {
 			// Set the review request to show in a week
 			update_user_meta( $user_id, $this->option_name, $default );
 		}
@@ -85,7 +84,6 @@ class FrmReviews {
 	 * @return void
 	 */
 	private function review() {
-
 		// show the review request 3 times, depending on the number of entries
 		$show_intervals = array( 50, 200, 500 );
 		$asked          = $this->review_status['asked'];
@@ -108,10 +106,9 @@ class FrmReviews {
 		}
 
 		$entries = $entries <= 100 ? floor( $entries / 10 ) * 10 : floor( $entries / 50 ) * 50;
+		$name    = $user->first_name;
 
-		$name = $user->first_name;
-
-		if ( ! empty( $name ) ) {
+		if ( $name ) {
 			$name = ' ' . $name;
 		}
 
@@ -238,7 +235,7 @@ class FrmReviews {
 		$user_id = get_current_user_id();
 		$review  = get_user_meta( $user_id, $this->option_name, true );
 
-		if ( empty( $review ) ) {
+		if ( ! $review ) {
 			$review = array();
 		}
 

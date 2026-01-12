@@ -250,8 +250,7 @@ class test_FrmFieldsHelper extends FrmUnitTest {
 			'Option 1',
 			'Option 2',
 		);
-		$entry = $this->factory->entry->create_and_get( $entry_data );
-
+		$entry      = $this->factory->entry->create_and_get( $entry_data );
 		$shortcode  = '[' . $checkbox_field->id . ' sep="</div><div>"]';
 		$shortcodes = FrmFieldsHelper::get_shortcodes( $shortcode, $form->id );
 		$this->assertEquals(

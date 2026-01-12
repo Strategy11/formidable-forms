@@ -70,8 +70,7 @@ class FrmStrpLiteAuth {
 
 		ob_start();
 		FrmFormsController::run_on_submit_actions( $atts );
-		$message = ob_get_contents();
-		ob_end_clean();
+		$message = ob_get_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
 		if ( $intent_is_processing ) {
@@ -117,7 +116,7 @@ class FrmStrpLiteAuth {
 		foreach ( self::$form_ids as $form_id ) {
 			$substring = '<input type="hidden" name="form_id" value="' . $form_id . '"';
 
-			if ( strpos( $html, $substring ) ) {
+			if ( str_contains( $html, $substring ) ) {
 				return $form_id;
 			}
 		}
@@ -212,7 +211,7 @@ class FrmStrpLiteAuth {
 	public static function add_hidden_token_field( $form ) {
 		$posted_form = FrmAppHelper::get_param( 'form_id', 0, 'post', 'absint' );
 
-		if ( $posted_form != $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
+		if ( $posted_form !== (int) $form->id || FrmFormsController::just_created_entry( $form->id ) ) {
 			// Check to make sure the correct form was submitted.
 			// Was an entry already created and the form should be loaded fresh?
 
@@ -224,7 +223,7 @@ class FrmStrpLiteAuth {
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
 
-		if ( ! empty( $intents ) ) {
+		if ( $intents ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
 			$intents = self::maybe_create_intents( $form->id );
@@ -302,7 +301,7 @@ class FrmStrpLiteAuth {
 		$form_id = absint( $form['form_id'] );
 		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
-		if ( empty( $intents ) ) {
+		if ( ! $intents ) {
 			wp_die();
 		}
 
@@ -333,14 +332,14 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function update_intent_pricing( $form_id, &$intents ) {
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, Universal.Operators.StrictComparisons
 		if ( ! isset( $_POST['form_id'] ) || absint( $_POST['form_id'] ) != $form_id ) {
 			return;
 		}
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) || empty( $intents ) ) {
+		if ( ! $actions || empty( $intents ) ) {
 			return;
 		}
 
@@ -370,9 +369,11 @@ class FrmStrpLiteAuth {
 			}
 
 			foreach ( $actions as $action ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
 				}
+
 				$intents[ $k ] = array(
 					'id'     => $intent,
 					'action' => $action->ID,
@@ -389,6 +390,7 @@ class FrmStrpLiteAuth {
 				$entry  = self::generate_false_entry();
 				$amount = FrmStrpLiteActionsController::prepare_amount( $amount, compact( 'form', 'entry', 'action' ) );
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $saved->amount == $amount || $amount == '000' ) {
 					continue;
 				}
@@ -472,7 +474,6 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
-
 		$details = self::check_request_params( $form_id );
 
 		if ( is_array( $details ) ) {
@@ -539,6 +540,7 @@ class FrmStrpLiteAuth {
 		$amount   = $action->post_content['amount'];
 		$currency = $action->post_content['currency'];
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $amount == '000' ) {
 			// Create the intent when the form loads.
 			$amount = in_array( strtolower( $currency ), array( 'aud', 'cad', 'eur', 'gbp', 'usd' ), true ) ? 100 : 1000;
@@ -610,11 +612,7 @@ class FrmStrpLiteAuth {
 
 		$name = self::strip_special_characters_from_statement_descriptor( $name );
 
-		if ( ! self::statement_descriptor_is_valid( $name ) ) {
-			return false;
-		}
-
-		return $name;
+		return self::statement_descriptor_is_valid( $name ) ? $name : false;
 	}
 
 	/**
@@ -656,6 +654,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
+
 		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
@@ -692,7 +691,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
@@ -784,6 +783,7 @@ class FrmStrpLiteAuth {
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
+
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
 	}
 

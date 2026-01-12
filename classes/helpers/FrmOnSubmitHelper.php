@@ -229,7 +229,7 @@ class FrmOnSubmitHelper {
 			}
 		}
 
-		if ( ! empty( $form_options ) ) {
+		if ( $form_options ) {
 			$_POST['options'] += $form_options;
 		}
 	}
@@ -303,7 +303,7 @@ class FrmOnSubmitHelper {
 		// Check if form already has form actions to avoid creating duplicates.
 		$has_actions = FrmFormAction::form_has_action_type( $form_id, $action_type );
 
-		if ( ! empty( $has_actions ) ) {
+		if ( $has_actions ) {
 			// Don't migrate again.
 			self::save_migrated_success_actions( $form );
 			return;
@@ -422,8 +422,7 @@ class FrmOnSubmitHelper {
 	 * @return object
 	 */
 	public static function get_fallback_action( $event = 'create' ) {
-		$action = new stdClass();
-
+		$action      = new stdClass();
 		$default_msg = self::get_default_msg();
 
 		if ( current_user_can( 'frm_edit_forms' ) ) {

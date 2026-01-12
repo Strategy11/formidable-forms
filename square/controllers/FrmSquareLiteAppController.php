@@ -80,7 +80,7 @@ class FrmSquareLiteAppController {
 
 		$actions = FrmSquareLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			wp_send_json_error( __( 'No Square actions found for this form', 'formidable' ) );
 		}
 

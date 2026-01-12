@@ -64,9 +64,7 @@ class FrmAntiSpam extends FrmValidate {
 		$token_date = gmdate( 'dmYzW', $time );
 
 		// Combine our token date and our token salt, and md5 it.
-		$form_token_string = md5( $token_date . $this->get_antispam_secret_key() );
-
-		return $form_token_string;
+		return md5( $token_date . $this->get_antispam_secret_key() );
 	}
 
 	/**
@@ -214,6 +212,7 @@ class FrmAntiSpam extends FrmValidate {
 				// add an exception for the entries page.
 				return true;
 			}
+
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 

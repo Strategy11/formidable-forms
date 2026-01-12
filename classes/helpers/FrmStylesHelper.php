@@ -202,7 +202,7 @@ class FrmStylesHelper {
 			</button>
 			<ul class="multiselect-container frm-dropdown-menu">
 				<?php foreach ( $icons as $key => $icon ) { ?>
-					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; ?>>
+					<li <?php echo $style->post_content['collapse_icon'] == $key ? 'class="active"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons ?>>
 						<a href="javascript:void(0);">
 							<label>
 								<input type="radio" value="<?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $frm_style->get_field_name( $name ) ); ?>" <?php checked( $style->post_content[ $name ], $key ); ?> />
@@ -252,6 +252,7 @@ class FrmStylesHelper {
 			// Drop the alpha. The function is expected to only return r,g,b with no alpha.
 			array_pop( $rgb );
 		}
+
 		return $rgb;
 	}
 
@@ -280,7 +281,6 @@ class FrmStylesHelper {
 	 */
 	public static function hex2rgba( $hex, $a ) {
 		$rgb = self::hex2rgb( $hex );
-
 		return 'rgba(' . $rgb . ',' . $a . ')';
 	}
 
@@ -358,9 +358,7 @@ class FrmStylesHelper {
 		$b = round( ( $b + $m ) * 255 );
 
 		// Convert RGB to hex
-		$hex = sprintf( '%02x%02x%02x', $r, $g, $b );
-
-		return $hex;
+		return sprintf( '%02x%02x%02x', $r, $g, $b );
 	}
 
 	/**
@@ -473,7 +471,7 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function output_vars( $settings, $defaults = array(), $vars = array() ) {
-		if ( empty( $vars ) ) {
+		if ( ! $vars ) {
 			$vars = self::get_css_vars( array_keys( $settings ) );
 		}
 
@@ -862,7 +860,7 @@ class FrmStylesHelper {
 	private static function get_color_output( $default, &$color ) {
 		$color = trim( $color );
 
-		if ( empty( $color ) ) {
+		if ( ! $color ) {
 			$color = $default;
 		} elseif ( str_contains( $color, 'rgb(' ) ) {
 			$color = str_replace( 'rgb(', 'rgba(', $color );
@@ -1090,7 +1088,7 @@ class FrmStylesHelper {
 	 * @return string The style editor wrapper classname.
 	 */
 	public static function style_editor_get_wrapper_classname( $section_type ) {
-		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$is_quick_settings = 'quick-settings' === $section_type;
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
 
@@ -1110,7 +1108,7 @@ class FrmStylesHelper {
 	public static function get_submit_image_bg_url( $settings ) {
 		$background_image = $settings['submit_bg_img'];
 
-		if ( empty( $background_image ) ) {
+		if ( ! $background_image ) {
 			return false;
 		}
 
@@ -1155,9 +1153,6 @@ class FrmStylesHelper {
 
 		$parts = explode( ' ', $value );
 
-		if ( count( $parts ) < 3 ) {
-			return $parts[0];
-		}
-		return $parts[2];
+		return count( $parts ) < 3 ? $parts[0] : $parts[2];
 	}
 }

@@ -153,6 +153,7 @@ class FrmForm {
 
 		$new_opts = apply_filters( 'frm_after_duplicate_form_values', $new_opts, $form_id );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_opts != $values['options'] ) {
 			global $wpdb;
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => maybe_serialize( $new_opts ) ), array( 'id' => $form_id ) );
@@ -235,7 +236,7 @@ class FrmForm {
 			}
 		}//end foreach
 
-		if ( ! empty( $new_values ) ) {
+		if ( $new_values ) {
 			FrmField::update( $field['id'], $new_values );
 		}
 	}
@@ -263,11 +264,10 @@ class FrmForm {
 		}
 
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
-
-		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
+		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
-			if ( $value_key && in_array( $value_key, $form_fields ) ) {
+			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
 				$new_values[ $value_key ] = $value;
 			}
 		}
@@ -276,7 +276,7 @@ class FrmForm {
 			$new_values['status'] = $values['new_status'];
 		}
 
-		if ( ! empty( $new_values ) ) {
+		if ( $new_values ) {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $id ) );
 
 			if ( $query_results ) {
@@ -337,7 +337,7 @@ class FrmForm {
 	 *
 	 * @return array
 	 */
-	public static function update_fields( $id, $values ) {
+	public static function update_fields( $id, $values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
 		if ( ! isset( $values['item_meta'] ) && ! isset( $values['field_options'] ) ) {
 			return $values;
@@ -345,7 +345,7 @@ class FrmForm {
 
 		$all_fields = FrmField::get_all_for_form( $id );
 
-		if ( empty( $all_fields ) ) {
+		if ( ! $all_fields ) {
 			return $values;
 		}
 
@@ -357,9 +357,11 @@ class FrmForm {
 		$existing_keys = array_keys( $values['item_meta'] );
 
 		foreach ( $all_fields as $fid ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
+
 			$field_array[ $fid->id ] = $fid;
 		}
 		unset( $all_fields );
@@ -371,7 +373,7 @@ class FrmForm {
 				continue;
 			}
 
-			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+			$is_settings_page = isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] );
 
 			if ( $is_settings_page ) {
 				self::get_settings_page_html( $values, $field );
@@ -478,7 +480,6 @@ class FrmForm {
 		}
 
 		$value = $opt === 'calc' ? self::sanitize_calc( $value ) : FrmAppHelper::kses( $value, 'all' );
-
 		$value = trim( $value );
 	}
 
@@ -514,9 +515,7 @@ class FrmForm {
 		// $3 an equals sign (optional) that follows the < operator for <= comparisons.
 		// $4 another space (optional).
 		// $5 \d|\[ the second comparison digit or the start of a comparison shortcode.
-		$calc = preg_replace( '/(\d|\])( ){0,1}<(=){0,1}( ){0,1}(\d|\[)/', '$1 <$3 $5', $calc );
-
-		return $calc;
+		return preg_replace( '/(\d|\])( ){0,1}<(=){0,1}( ){0,1}(\d|\[)/', '$1 <$3 $5', $calc );
 	}
 
 	/**
@@ -540,6 +539,7 @@ class FrmForm {
 		if ( isset( $prev_opts ) ) {
 			$field->field_options = apply_filters( 'frm_update_form_field_options', $field->field_options, $field, $values );
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $prev_opts != $field->field_options ) {
 				FrmField::update( $field->id, array( 'field_options' => $field->field_options ) );
 			}
@@ -612,7 +612,7 @@ class FrmForm {
 	 * @return bool|int
 	 */
 	public static function set_status( $id, $status ) {
-		if ( 'trash' == $status ) {
+		if ( 'trash' === $status ) {
 			return self::trash( $id );
 		}
 
@@ -762,7 +762,7 @@ class FrmForm {
 			return 0;
 		}
 
-		if ( empty( $delete_timestamp ) ) {
+		if ( ! $delete_timestamp ) {
 			$delete_timestamp = time() - ( DAY_IN_SECONDS * EMPTY_TRASH_DAYS );
 		}
 
@@ -801,9 +801,7 @@ class FrmForm {
 		$r         = FrmDb::get_var( 'frm_forms', array( $query_key => $id ), 'name' );
 
 		// An empty form name can result in a null value.
-		$r = is_null( $r ) ? '' : stripslashes( $r );
-
-		return $r;
+		return is_null( $r ) ? '' : stripslashes( $r );
 	}
 
 	/**
@@ -870,12 +868,12 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
+
 				return self::prepare_form_row_data( $cache );
 			}
 		}
 
-		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
-
+		$where   = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
 		$results = FrmDb::get_row( $table_name, $where );
 
 		if ( isset( $results->options ) ) {
@@ -922,7 +920,7 @@ class FrmForm {
 	 * @return array|object of objects
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
-		if ( is_array( $where ) && ! empty( $where ) ) {
+		if ( is_array( $where ) && $where ) {
 			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
 				// don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
@@ -944,7 +942,7 @@ class FrmForm {
 			}
 		}
 
-		if ( $limit === ' LIMIT 1' || $limit == 1 ) {
+		if ( $limit === ' LIMIT 1' || (int) $limit === 1 ) {
 			// return the first form object if we are only getting one form
 			$results = reset( $results );
 		}
@@ -979,8 +977,7 @@ class FrmForm {
 	 */
 	public static function get_count() {
 		$cache_key = 'frm_form_counts';
-
-		$counts = wp_cache_get( $cache_key, 'frm_form' );
+		$counts    = wp_cache_get( $cache_key, 'frm_form' );
 
 		if ( false !== $counts ) {
 			return $counts;
@@ -1000,7 +997,7 @@ class FrmForm {
 		$counts   = array_fill_keys( $statuses, 0 );
 
 		foreach ( $results as $row ) {
-			if ( 'trash' != $row->status ) {
+			if ( 'trash' !== $row->status ) {
 				if ( $row->is_template ) {
 					++$counts['template'];
 				} else {
@@ -1010,7 +1007,7 @@ class FrmForm {
 				++$counts['trash'];
 			}
 
-			if ( 'draft' == $row->status ) {
+			if ( 'draft' === $row->status ) {
 				++$counts['draft'];
 			}
 
@@ -1087,6 +1084,7 @@ class FrmForm {
 			$values['posted_form_id'] = FrmAppHelper::get_param( 'form', '', 'get', 'absint' );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form->id == $values['posted_form_id'] ) {
 			// If there are two forms on the same page, make sure not to submit both.
 			foreach ( $default_values as $var => $default ) {
@@ -1104,7 +1102,7 @@ class FrmForm {
 			}
 		}
 
-		if ( in_array( $values['action'], array( 'create', 'update' ) ) &&
+		if ( in_array( $values['action'], array( 'create', 'update' ), true ) &&
 			( ! $_POST || ( ! isset( $_POST['action'] ) && ! isset( $_POST['frm_action'] ) ) ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			) {
 			$values['action'] = 'new';
@@ -1177,7 +1175,6 @@ class FrmForm {
 	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		$form = 'first' === $default_form ? self::get_current_form() : self::maybe_get_current_form();
-
 		return $form ? $form->id : 0;
 	}
 
@@ -1189,7 +1186,7 @@ class FrmForm {
 	public static function maybe_get_current_form( $form_id = 0 ) {
 		global $frm_vars;
 
-		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || $form_id == $frm_vars['current_form']->id ) ) {
+		if ( ! empty( $frm_vars['current_form'] ) && ( ! $form_id || (int) $form_id === (int) $frm_vars['current_form']->id ) ) {
 			return $frm_vars['current_form'];
 		}
 
@@ -1293,8 +1290,7 @@ class FrmForm {
 	 * @return bool
 	 */
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
-
+		$show = ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin();
 		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 
@@ -1346,7 +1342,6 @@ class FrmForm {
 	 * @return object
 	 */
 	public static function get_latest_form() {
-
 		$args = array(
 			array(
 				'or'               => 1,
@@ -1368,7 +1363,6 @@ class FrmForm {
 	 * @return int
 	 */
 	public static function get_forms_count() {
-
 		$args = array(
 			array(
 				'or'               => 1,

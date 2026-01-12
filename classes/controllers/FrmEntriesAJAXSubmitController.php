@@ -80,8 +80,7 @@ class FrmEntriesAJAXSubmitController {
 			if ( ! empty( $frm_vars['forms_loaded'] ) ) {
 				ob_start();
 				self::print_ajax_scripts();
-				$response['content'] .= ob_get_contents();
-				ob_end_clean();
+				$response['content'] .= ob_get_clean();
 
 				// Mark the end of added footer content.
 				$response['content'] .= '<span class="frm_end_ajax_' . $form->id . '"></span>';

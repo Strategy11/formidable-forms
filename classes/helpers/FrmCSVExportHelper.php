@@ -375,7 +375,7 @@ class FrmCSVExportHelper {
 	 *
 	 * @return void
 	 */
-	private static function csv_headings( &$headings ) {
+	private static function csv_headings( &$headings ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		$fields_by_repeater_id = array();
 		$repeater_ids          = array();
 
@@ -419,8 +419,7 @@ class FrmCSVExportHelper {
 
 			foreach ( $headings as $key => $heading ) {
 				if ( is_array( $heading ) ) {
-					$repeater_id = str_replace( 'repeater', '', $key );
-
+					$repeater_id       = str_replace( 'repeater', '', $key );
 					$repeater_headings = array();
 
 					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
@@ -483,11 +482,7 @@ class FrmCSVExportHelper {
 		$section_id = $field->field_options['in_section'];
 		$section    = FrmField::getOne( $section_id );
 
-		if ( ! $section ) {
-			return false;
-		}
-
-		return FrmField::is_repeating_field( $section );
+		return $section && FrmField::is_repeating_field( $section );
 	}
 
 	/**
@@ -649,6 +644,7 @@ class FrmCSVExportHelper {
 				return $field;
 			}
 		}
+
 		return false;
 	}
 

@@ -310,6 +310,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 				'files'  => array(),
 			);
 		}
+
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 
@@ -329,6 +330,7 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 				'files'  => array( __DIR__ . '/denylist-ip.txt' ),
 			);
 		}
+
 		add_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );
 		$this->assertTrue( $this->run_private_method( array( $this->spam_check, 'check_ip' ) ) );
 		remove_filter( 'frm_denylist_ips_data', 'frm_test_filter_denylist_ip_data_2' );

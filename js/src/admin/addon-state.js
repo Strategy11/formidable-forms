@@ -138,7 +138,7 @@ export function afterAddonInstall( response, button, message, el, saveAndReload,
 		addonStatuses.forEach(
 			addonStatus => {
 				const inModal = null !== addonStatus.closest( '#frm_upgrade_modal' );
-				addonStatus.appendChild( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
+				addonStatus.append( getSaveAndReloadSettingsOptions( saveAndReload, inModal ) );
 			}
 		);
 	}

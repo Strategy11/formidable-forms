@@ -35,6 +35,7 @@ class FrmTransLiteDb {
 			$old_db_version = get_option( $this->db_opt_name );
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $this->db_version == $old_db_version ) {
 			return;
 		}
@@ -334,7 +335,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
 
-		if ( empty( $result ) ) {
+		if ( ! $result ) {
 			return;
 		}
 

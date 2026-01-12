@@ -94,7 +94,6 @@ class FrmFormAction {
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
-
 		return 'noform';
 	}
 
@@ -213,6 +212,7 @@ class FrmFormAction {
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
+
 		return $updated_action;
 	}
 
@@ -233,7 +233,7 @@ class FrmFormAction {
 			$group = $this->id_base;
 		} else {
 			foreach ( $groups as $name => $check_group ) {
-				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'] ) ) {
+				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'], true ) ) {
 					$group = $name;
 					break;
 				}
@@ -256,7 +256,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -339,6 +339,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
 			return;
@@ -435,9 +436,9 @@ class FrmFormAction {
 			foreach ( (array) $val as $ck => $cv ) {
 				if ( is_array( $cv ) ) {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
-				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
+				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
-				} elseif ( $ck == $subkey ) {
+				} elseif ( $ck == $subkey ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
@@ -560,7 +561,6 @@ class FrmFormAction {
 	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
-
 		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 
@@ -599,7 +599,7 @@ class FrmFormAction {
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 
-		if ( empty( $action_controls ) ) {
+		if ( ! $action_controls ) {
 			// don't continue if there are no available actions
 			return array();
 		}
@@ -608,13 +608,13 @@ class FrmFormAction {
 			if ( is_array( $action_controls ) ) {
 				return array();
 			}
+
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
 		self::prepare_get_action( $atts );
 
-		$limit = self::get_action_limit( $form_id, $atts['limit'] );
-
+		$limit               = self::get_action_limit( $form_id, $atts['limit'] );
 		$args                = self::action_args( $form_id, $limit );
 		$args['post_status'] = $atts['post_status'];
 		$actions             = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
@@ -751,7 +751,7 @@ class FrmFormAction {
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return array();
 		}
 
@@ -762,8 +762,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			$action = $this->prepare_action( $action );
-
+			$action                  = $this->prepare_action( $action );
 			$settings[ $action->ID ] = $action;
 		}
 
@@ -789,7 +788,7 @@ class FrmFormAction {
 			'order'       => 'ASC',
 		);
 
-		if ( $form_id && $form_id != 'all' ) {
+		if ( $form_id && $form_id !== 'all' ) {
 			$args['menu_order'] = $form_id;
 		}
 
@@ -811,7 +810,7 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && ! empty( $vals ) ) {
+			if ( is_array( $vals ) && $vals ) {
 				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
@@ -843,7 +842,7 @@ class FrmFormAction {
 			$query['menu_order'] = $form_id;
 		}
 
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
 
@@ -935,12 +934,12 @@ class FrmFormAction {
 			)
 		);
 
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			// create action now
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( $post_id && 'update' == $update ) {
+		if ( $post_id && 'update' === $update ) {
 			global $wpdb;
 			$form->options = maybe_serialize( $form->options );
 

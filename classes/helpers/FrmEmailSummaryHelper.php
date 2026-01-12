@@ -179,8 +179,7 @@ class FrmEmailSummaryHelper {
 		$license_info = FrmAddonsController::get_primary_license_info();
 
 		if ( ! empty( $license_info['expires'] ) ) {
-			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
-
+			$renewal_date            = gmdate( 'Y-m-d', $license_info['expires'] );
 			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
@@ -213,11 +212,7 @@ class FrmEmailSummaryHelper {
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
-		if ( $date instanceof DateTime ) {
-			return $date;
-		}
-
-		return date_create( $date );
+		return $date instanceof DateTime ? $date : date_create( $date );
 	}
 
 	/**
@@ -237,11 +232,7 @@ class FrmEmailSummaryHelper {
 
 		$date2 = self::get_date_obj( $date2 );
 
-		if ( ! $date2 ) {
-			return false;
-		}
-
-		return date_diff( $date1, $date2 )->days;
+		return $date2 ? date_diff( $date1, $date2 )->days : false;
 	}
 
 	/**
@@ -531,13 +522,13 @@ class FrmEmailSummaryHelper {
 		// Replace link utm.
 		$button_html = str_replace( 'utm_medium=inbox', 'utm_medium=summary-email', $button_html );
 
-		if ( strpos( $button_html, 'style="' ) ) {
+		if ( str_contains( $button_html, 'style="' ) ) {
 			// Maybe this button contains inline style.
 			return $button_html;
 		}
 
 		// Add inline CSS for specific button types.
-		if ( strpos( $button_html, 'frm-button-primary' ) ) {
+		if ( str_contains( $button_html, 'frm-button-primary' ) ) {
 			$button_html = str_replace( '<a', '<a style="' . self::get_button_style() . '"', $button_html );
 		}
 

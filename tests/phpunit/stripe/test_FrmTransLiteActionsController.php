@@ -29,8 +29,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 		);
 		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
 		$action  = reset( $actions );
-
-		$fields = $this->get_fields_for_price( $action );
+		$fields  = $this->get_fields_for_price( $action );
 
 		$this->assertIsArray( $fields );
 		$this->assertNotEmpty( $fields );

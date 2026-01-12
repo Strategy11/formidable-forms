@@ -278,7 +278,7 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	private function table_row_background_color() {
-		return ( $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'] );
+		return $this->odd ? $this->style_settings['bg_color'] : $this->style_settings['alt_bg_color'];
 	}
 
 	/**
@@ -291,7 +291,6 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function tr_style() {
-
 		if ( $this->type === 'shortcode' ) {
 			$tr_style = ' style="[frm-alt-color]"';
 		} elseif ( $this->use_inline_style ) {
@@ -373,14 +372,13 @@ class FrmTableHTMLGenerator {
 	 * @return string
 	 */
 	public function generate_two_cell_table_row( $label, $value, $args = array() ) {
-		$row  = '<tr' . $this->tr_style();
-		$row .= $this->add_row_class( $value === '' );
-		$row .= '>';
-
+		$row   = '<tr' . $this->tr_style();
+		$row  .= $this->add_row_class( $value === '' );
+		$row  .= '>';
 		$label = '<th scope="row"' . $this->td_style . '>' . wp_kses_post( $label ) . '</th>';
 		$value = '<td' . $this->td_style . '>' . $this->filter_value_for_display( $value, $args ) . '</td>';
 
-		if ( 'rtl' == $this->direction ) {
+		if ( 'rtl' === $this->direction ) {
 			$row .= $value;
 			$row .= $label;
 		} else {
@@ -455,6 +453,7 @@ class FrmTableHTMLGenerator {
 		if ( $class ) {
 			$class = ' class="' . trim( $class ) . '"';
 		}
+
 		return $class;
 	}
 }

@@ -124,8 +124,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function route() {
-		$dashboard_view = self::get_dashboard_helper();
-
+		$dashboard_view        = self::get_dashboard_helper();
 		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
@@ -191,14 +190,13 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	public static function view_args_build_counter( $heading, $cta = array(), $value = 0, $type = 'default' ) {
-
 		$counter_args = array(
 			'heading' => $heading,
 			'counter' => $value,
 			'type'    => 'default',
 		);
 
-		if ( ! empty( $cta ) ) {
+		if ( $cta ) {
 			$counter_args['cta'] = $cta;
 		}
 
@@ -228,9 +226,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_payments() {
-
-		$prepared_data = array();
-
+		$prepared_data  = array();
 		$model_payments = new FrmTransLitePayment();
 		$payments       = $model_payments->get_payments_stats();
 
@@ -254,7 +250,6 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
-
 		if ( ! $forms_count ) {
 			$copy = sprintf(
 				/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
@@ -365,7 +360,7 @@ class FrmDashboardController {
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
-		return ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true );
+		return $banner_closed_by_users && in_array( $user_id, $banner_closed_by_users, true );
 	}
 
 	/**
@@ -405,7 +400,6 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-
 		if ( ! self::is_dashboard_page() ) {
 			return;
 		}
@@ -450,7 +444,6 @@ class FrmDashboardController {
 	 * @return string
 	 */
 	private static function inbox_clean_messages_cta( $cta ) {
-
 		// remove dismiss button
 		$pattern = '/<a[^>]*class="[^"]*frm_inbox_dismiss[^"]*"[^>]*>.*?<\/a>/is';
 		return preg_replace( $pattern, ' ', $cta );
@@ -533,10 +526,7 @@ class FrmDashboardController {
 			return array();
 		}
 
-		if ( null !== $option_name ) {
-			return $options[ $option_name ];
-		}
-		return $options;
+		return null !== $option_name ? $options[ $option_name ] : $options;
 	}
 
 	/**

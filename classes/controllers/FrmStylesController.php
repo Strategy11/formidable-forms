@@ -245,6 +245,7 @@ class FrmStylesController {
 		} else {
 			$url = admin_url( 'admin-ajax.php?action=frmpro_css' );
 		}
+
 		$stylesheet_urls['formidable'] = $url;
 	}
 
@@ -762,10 +763,9 @@ class FrmStylesController {
 	 * @return void
 	 */
 	private static function maybe_redirect_after_save( $ids ) {
-		$referer = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
-		$parsed  = parse_url( $referer );
-		$query   = $parsed['query'];
-
+		$referer             = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
+		$parsed              = parse_url( $referer );
+		$query               = $parsed['query'];
 		$current_action      = false;
 		$actions_to_redirect = array( 'duplicate', 'new_style' );
 
@@ -782,8 +782,7 @@ class FrmStylesController {
 		}
 
 		parse_str( $query, $parsed_query );
-		$form_id = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
-
+		$form_id   = ! empty( $parsed_query['form'] ) ? absint( $parsed_query['form'] ) : 0;
 		$style     = new stdClass();
 		$style->ID = end( $ids );
 		wp_safe_redirect( esc_url_raw( FrmStylesHelper::get_edit_url( $style, $form_id ) ) );
@@ -855,9 +854,10 @@ class FrmStylesController {
 			'id'   => $id,
 		);
 
-		if ( ! empty( $settings ) ) {
+		if ( $settings ) {
 			$textarea_params['class'] = 'hide-if-js';
 		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/styles/custom_css.php';
 	}
 
@@ -876,6 +876,7 @@ class FrmStylesController {
 			if ( ! empty( $single_style_settings['single_style_custom_css'] ) && ! empty( $single_style_settings['enable_style_custom_css'] ) ) {
 				return $single_style_settings['single_style_custom_css'];
 			}
+
 			return '';
 		}
 
@@ -1192,7 +1193,7 @@ class FrmStylesController {
 	public static function enqueue_style() {
 		global $frm_vars;
 
-		if ( isset( $frm_vars['css_loaded'] ) && $frm_vars['css_loaded'] ) {
+		if ( ! empty( $frm_vars['css_loaded'] ) ) {
 			// The CSS has already been loaded.
 			return;
 		}
@@ -1212,7 +1213,6 @@ class FrmStylesController {
 	 */
 	public static function get_style_opts() {
 		$frm_style = new FrmStyle();
-
 		return $frm_style->get_all();
 	}
 
@@ -1226,7 +1226,8 @@ class FrmStylesController {
 	public static function get_form_style( $form = 'default' ) {
 		$style = FrmFormsHelper::get_form_style( $form );
 
-		if ( empty( $style ) || 1 == $style ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $style || 1 == $style ) {
 			$style = 'default';
 		}
 
@@ -1241,6 +1242,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function get_form_style_class( $class, $style ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( 1 == $style ) {
 			$style = 'default';
 		}
@@ -1304,11 +1306,12 @@ class FrmStylesController {
 		foreach ( $default_styles as $name => $val ) {
 			$setting = $name;
 
-			if ( 'border_width' == $name ) {
+			if ( 'border_width' === $name ) {
 				$setting = 'field_border_width';
-			} elseif ( 'alt_bg_color' == $name ) {
+			} elseif ( 'alt_bg_color' === $name ) {
 				$setting = 'bg_color_active';
 			}
+
 			$default_styles[ $name ] = $style->post_content[ $setting ];
 			unset( $name, $val );
 		}
@@ -1324,7 +1327,6 @@ class FrmStylesController {
 	 */
 	public static function &important_style( $important, $field ) {
 		$important = self::get_style_val( 'important_style', $field['form_id'] );
-
 		return $important;
 	}
 
@@ -1339,7 +1341,7 @@ class FrmStylesController {
 	 *
 	 * @return int
 	 */
-	public static function do_accordion_sections( $screen, $context, $data_object ) {
+	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
 		// the symbol id from icons.svg
@@ -1350,7 +1352,7 @@ class FrmStylesController {
 
 		wp_enqueue_script( 'accordion' );
 
-		if ( empty( $screen ) ) {
+		if ( ! $screen ) {
 			$screen = get_current_screen();
 		} elseif ( is_string( $screen ) ) {
 			$screen = convert_to_screen( $screen );
@@ -1374,8 +1376,7 @@ class FrmStylesController {
 						}
 
 						++$i;
-						$icon_id = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
-
+						$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
 						$open_class = '';
 
 						if ( ! $first_open ) {

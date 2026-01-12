@@ -124,7 +124,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function init_plain_text( $atts ) {
-		if ( isset( $atts['plain_text'] ) && $atts['plain_text'] ) {
+		if ( ! empty( $atts['plain_text'] ) ) {
 			$this->is_plain_text = true;
 		}
 	}
@@ -247,7 +247,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_field_content( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return '';
 		}
 
@@ -265,8 +265,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_two_cell_shortcode_row( $field, $value = null ) {
-		$row = '[if ' . $field->id . ']';
-
+		$row   = '[if ' . $field->id . ']';
 		$label = '[' . $field->id . ' show=field_label]';
 
 		if ( $value === null ) {
@@ -298,7 +297,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function add_field_array( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return;
 		}
 

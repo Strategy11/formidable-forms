@@ -166,12 +166,7 @@ class FrmMigrate {
 	 */
 	public function collation() {
 		global $wpdb;
-
-		if ( ! $wpdb->has_cap( 'collation' ) ) {
-			return '';
-		}
-
-		return $wpdb->get_charset_collate();
+		return $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
 	}
 
 	/**
@@ -358,8 +353,7 @@ class FrmMigrate {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
+		$file    = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
@@ -376,7 +370,7 @@ class FrmMigrate {
 			$old_db_version = get_option( 'frm_db_version' );
 		}
 
-		if ( strpos( $old_db_version, '-' ) ) {
+		if ( str_contains( $old_db_version, '-' ) ) {
 			$last_upgrade   = explode( '-', $old_db_version );
 			$old_db_version = (int) $last_upgrade[1];
 		}
@@ -544,7 +538,7 @@ class FrmMigrate {
 			FrmAppHelper::unserialize_or_decode( $field->options );
 			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
 
-			if ( empty( $update_values ) ) {
+			if ( ! $update_values ) {
 				continue;
 			}
 
@@ -563,6 +557,7 @@ class FrmMigrate {
 	private function migrate_to_90() {
 		$form = FrmForm::getOne( 'contact' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form && $form->default_template == 1 ) {
 			FrmForm::destroy( 'contact' );
 		}
@@ -576,7 +571,6 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_86() {
-
 		$fields = $this->get_fields_with_size();
 
 		foreach ( $fields as $f ) {
@@ -596,7 +590,7 @@ class FrmMigrate {
 		// reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -641,7 +635,7 @@ class FrmMigrate {
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -654,6 +648,7 @@ class FrmMigrate {
 
 			$this->maybe_convert_migrated_size( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
@@ -667,7 +662,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
-		$has_px_size = ! empty( $size ) && strpos( $size, 'px' );
+		$has_px_size = ! empty( $size ) && str_contains( $size, 'px' );
 
 		if ( ! $has_px_size ) {
 			return;
@@ -680,8 +675,7 @@ class FrmMigrate {
 		}
 
 		$pixel_conversion = 9;
-
-		$size = round( (int) $int_size / $pixel_conversion );
+		$size             = round( (int) $int_size / $pixel_conversion );
 	}
 
 	/**
@@ -697,7 +691,7 @@ class FrmMigrate {
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 
-		if ( empty( $styles ) ) {
+		if ( ! $styles ) {
 			return;
 		}
 
@@ -723,7 +717,7 @@ class FrmMigrate {
 		global $wpdb;
 		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( empty( $exists ) ) {
+		if ( ! $exists ) {
 			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
@@ -760,7 +754,7 @@ class FrmMigrate {
 	private function adjust_widget_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -772,6 +766,7 @@ class FrmMigrate {
 			}
 			$this->convert_character_to_px( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
@@ -840,8 +835,7 @@ class FrmMigrate {
 	private function migrate_to_11() {
 		global $wpdb;
 
-		$forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
-
+		$forms            = FrmDb::get_results( $this->forms, array(), 'id, options' );
 		$sending          = __( 'Sending', 'formidable' );
 		$img              = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
 		$old_default_html = <<<DEFAULT_HTML
@@ -863,10 +857,11 @@ DEFAULT_HTML;
 				continue;
 			}
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $form->options['submit_html'] != $new_default_html && $form->options['submit_html'] == $old_default_html ) {
 				$form->options['submit_html'] = $new_default_html;
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
-			} elseif ( ! strpos( $form->options['submit_html'], 'save_draft' ) ) {
+			} elseif ( ! str_contains( $form->options['submit_html'], 'save_draft' ) ) {
 				$form->options['submit_html'] = preg_replace( '~\<\/div\>(?!.*\<\/div\>)~', $draft_link . "\r\n</div>", $form->options['submit_html'] );
 				$wpdb->update( $this->forms, array( 'options' => serialize( $form->options ) ), array( 'id' => $form->id ) );
 			}

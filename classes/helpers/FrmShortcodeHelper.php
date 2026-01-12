@@ -79,6 +79,7 @@ class FrmShortcodeHelper {
 		foreach ( $contextual_shortcodes as $type => $shortcodes ) {
 			$result[ $type ] = array_keys( $shortcodes );
 		}
+
 		return $result;
 	}
 

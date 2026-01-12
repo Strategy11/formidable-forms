@@ -39,6 +39,7 @@ class FrmApiHelper {
 		if ( in_array( 'free_not_first_30', $who, true ) && self::is_free_not_first_30() ) {
 			return true;
 		}
+
 		return self::check_free_segments( $who );
 	}
 

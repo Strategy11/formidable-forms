@@ -19,7 +19,8 @@
 		"plugin:sonarjs/recommended",
 		"plugin:cypress/recommended",
 		"plugin:no-jquery/deprecated",
-		"plugin:compat/recommended"
+		"plugin:compat/recommended",
+		"plugin:unicorn/all"
 	],
 	"env": {
 		"browser": true,
@@ -34,7 +35,7 @@
 		"window": true,
 		"document": true
 	},
-	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "jsdoc"],
+	"plugins": ["react", "jsx-a11y", "sonarjs", "cypress", "no-jquery", "compat", "jsdoc", "unicorn"],
 	"settings": {
 		"import/resolver": {
 			"webpack": {
@@ -149,7 +150,56 @@
 		"no-jquery/no-when": "error",
 		"react/jsx-no-target-blank": "off",
 		"comma-dangle": "off",
-		"arrow-parens": ["error", "as-needed"]
+		"arrow-parens": ["error", "as-needed"],
+		"unicorn/filename-case": "off",
+		"unicorn/prefer-query-selector": "off",
+		"unicorn/no-null": "off",
+		"unicorn/prefer-module": "off",
+		"unicorn/explicit-length-check": "off",
+		"unicorn/better-regex": "off",
+		"unicorn/no-keyword-prefix": "off",
+		"unicorn/no-array-for-each": "off",
+		"unicorn/prevent-abbreviations": "off",
+		"unicorn/no-this-assignment": "off",
+		"unicorn/no-document-cookie": "off",
+		"unicorn/prefer-number-properties": "off",
+		"unicorn/prefer-spread": "off",
+		"unicorn/consistent-function-scoping": "off",
+		"unicorn/prefer-export-from": "off",
+		"unicorn/no-array-callback-reference": "off",
+		"unicorn/prefer-ternary": "off",
+		"unicorn/no-for-loop": "off",
+		"unicorn/no-array-reduce": "off",
+		"unicorn/prefer-at": "off",
+		"unicorn/consistent-destructuring": "off",
+		"unicorn/prefer-string-slice": "off",
+		"unicorn/catch-error-name": "off",
+		"unicorn/no-static-only-class": "off",
+		"unicorn/prefer-optional-catch-binding": "off",
+		"unicorn/no-lonely-if": "off",
+		"unicorn/prefer-set-has": "off",
+		"unicorn/prefer-switch": "off",
+		"unicorn/no-useless-switch-case": "off",
+		"unicorn/prefer-prototype-methods": "off",
+		// Fix this soon
+		"unicorn/prefer-dom-node-dataset": "off",
+		// Look more into this one.
+		"unicorn/numeric-separators-style": "off",
+		// Look into this
+		"unicorn/no-unsafe-regex": "off",
+		// Consider this one.
+		"unicorn/prefer-regexp-test": "off",
+		"unicorn/prefer-logical-operator-over-ternary": "off",
+		// Maybe fix
+		"unicorn/prefer-dom-node-text-content": "off",
+		"unicorn/empty-brace-spaces": "off",
+		// Probably fix
+		"unicorn/no-array-push-push": "off",
+		"unicorn/prefer-array-find": "off",
+		"unicorn/prefer-add-event-listener": "off",
+		"unicorn/text-encoding-identifier-case": "off",
+		"unicorn/prefer-string-replace-all": "off",
+		"unicorn/no-useless-promise-resolve-reject": "off"
 	},
 	"overrides": [
 		{
@@ -165,7 +215,14 @@
 				"no-jquery/no-prop": "error",
 				"no-jquery/no-filter": "error",
 				"no-jquery/no-data": "error",
-				"no-jquery/no-parents": "error"
+				"no-jquery/no-parents": "error",
+				"no-jquery/no-val": "error",
+				"no-jquery/no-serialize": "error",
+				"no-jquery/no-class": "error",
+				"no-jquery/no-closest": "error",
+				"no-jquery/no-ajax": "error",
+				"no-jquery/no-fade": "error",
+				"no-jquery/no-is": "error"
 			}
 		}
 	]
