@@ -1541,7 +1541,7 @@ class FrmFieldsHelper {
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero
 		if ( $parent && isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			if ( FrmField::is_field_with_multiple_values( $field ) ) {
-				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ) : '';              // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$other_val = isset( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ? sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ][ $opt_key ] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			} else {
 				// phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$other_val = sanitize_text_field( wp_unslash( $_POST['item_meta'][ $parent ][ $pointer ]['other'][ $field['id'] ] ) );
