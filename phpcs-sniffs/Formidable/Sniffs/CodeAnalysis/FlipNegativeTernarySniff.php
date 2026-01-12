@@ -131,7 +131,7 @@ class FlipNegativeTernarySniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the ? token.
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	private function findStatementStart( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -166,7 +166,7 @@ class FlipNegativeTernarySniff implements Sniff {
 	 * @param int  $start     Start position to search.
 	 * @param int  $end       End position to search.
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	private function findNegativeOperator( File $phpcsFile, $start, $end ) {
 		$tokens = $phpcsFile->getTokens();
@@ -207,7 +207,7 @@ class FlipNegativeTernarySniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The position of the ? token.
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	private function findTernaryColon( File $phpcsFile, $stackPtr ) {
 		$tokens      = $phpcsFile->getTokens();
@@ -241,7 +241,7 @@ class FlipNegativeTernarySniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $colonPtr  The position of the : token.
 	 *
-	 * @return int|false
+	 * @return false|int
 	 */
 	private function findTernaryEnd( File $phpcsFile, $colonPtr ) {
 		$tokens       = $phpcsFile->getTokens();
@@ -365,6 +365,7 @@ class FlipNegativeTernarySniff implements Sniff {
 		// Check for empty string.
 		if ( $token['code'] === T_CONSTANT_ENCAPSED_STRING ) {
 			$content = $token['content'];
+
 			if ( $content === "''" || $content === '""' ) {
 				return true;
 			}
