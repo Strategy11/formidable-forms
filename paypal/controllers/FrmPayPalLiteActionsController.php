@@ -406,12 +406,12 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$paypal_vars = array(
-			'clientId'    => $client_id,
-			'formId'      => $form_id,
-			'nonce'       => wp_create_nonce( 'frm_paypal_ajax' ),
-			'ajax'        => esc_url_raw( FrmAppHelper::get_ajax_url() ),
-			'settings'    => $action_settings,
-			'style'       => self::get_style_for_js( $form_id ),
+			'clientId' => $client_id,
+			'formId'   => $form_id,
+			'nonce'    => wp_create_nonce( 'frm_paypal_ajax' ),
+			'ajax'     => esc_url_raw( FrmAppHelper::get_ajax_url() ),
+			'settings' => $action_settings,
+			'style'    => self::get_style_for_js( $form_id ),
 		);
 
 		wp_localize_script( 'formidable-paypal', 'frmPayPalVars', $paypal_vars );

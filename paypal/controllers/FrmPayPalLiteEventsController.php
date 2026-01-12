@@ -55,6 +55,7 @@ class FrmPayPalLiteEventsController {
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
+
 		wp_send_json_success();
 	}
 
@@ -99,11 +100,7 @@ class FrmPayPalLiteEventsController {
 
 		$option = get_option( self::$events_to_skip_option_name );
 
-		if ( ! is_array( $option ) ) {
-			return false;
-		}
-
-		return in_array( $event_id, $option, true );
+		return is_array( $option ) ? in_array( $event_id, $option, true ) : false;
 	}
 
 	/**
