@@ -929,7 +929,8 @@ class FrmStylesHelper {
 	 * @return bool
 	 */
 	public static function previewing_style() {
-		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$ajax_change = isset( $_POST['action'] ) && $_POST['action'] === 'frm_change_styling' && isset( $_POST['frm_style_setting'] );
 
 		return $ajax_change || isset( $_GET['flat'] );
 	}
