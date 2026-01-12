@@ -2184,7 +2184,7 @@ body.frm-body-with-open-modal {
   line-height: var(--leading);
 }
 
-.frm-dialog input[type=text],
+.frm-dialog input[type="text"],
 .frm-dialog textarea {
   font-size: var(--text-md);
 }
@@ -2211,7 +2211,7 @@ h2 .frm-sub-label {
 .frm-views-editor-body .ui-widget-overlay,
 .frm-white-body .ui-widget-overlay,
 .toplevel_page_formidable .ui-widget-overlay,
-body[class*=formidable-payments] .ui-widget-overlay,
+body[class*="formidable-payments"] .ui-widget-overlay,
 body.plugins-php .ui-widget-overlay {
   position: fixed;
   width: 100%;
@@ -2248,6 +2248,7 @@ body.plugins-php .ui-widget-overlay {
   width: 21px;
   height: 24px;
 }
+
 .frm-circled-icon .frmsvg.frm_svg32 {
   width: 32px !important;
   height: 32px !important;
@@ -2411,10 +2412,11 @@ body.plugins-php .ui-widget-overlay {
   display: flex !important;
   align-items: center;
 }
-.frm-h-stack-sm > input[type=checkbox], .frm-h-stack-xs > input[type=checkbox], .frm-h-stack > input[type=checkbox],
-.frm-h-stack-sm > input[type=radio],
-.frm-h-stack-xs > input[type=radio],
-.frm-h-stack > input[type=radio] {
+
+.frm-h-stack-sm > input[type="checkbox"], .frm-h-stack-xs > input[type="checkbox"], .frm-h-stack > input[type="checkbox"],
+.frm-h-stack-sm > input[type="radio"],
+.frm-h-stack-xs > input[type="radio"],
+.frm-h-stack > input[type="radio"] {
   margin: 0 !important;
 }
 
@@ -2581,19 +2583,22 @@ body.plugins-php .ui-widget-overlay {
   border-right-color: var(--primary-500);
 }
 
-input[type=submit]:focus {
+input[type="submit"]:focus {
   outline: none !important;
 }
 
 /* Effects */
 @keyframes spin {
+
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
 .frmsvg {
   fill: currentColor;
   width: 18px;
@@ -2624,41 +2629,50 @@ body.frm_preview_page .ui-widget-overlay {
   margin-bottom: 40px;
   position: relative;
 }
+
 #frm_testing_mode h2 {
   font-size: 18px;
   font-weight: 600;
   color: rgb(0, 0, 0);
   margin-bottom: 0;
 }
+
 #frm_testing_mode label {
   font-size: 12px;
   font-weight: 600;
 }
+
 #frm_testing_mode label span.frm_toggle_opt {
   color: var(--grey-800);
   font-weight: 600;
 }
+
 #frm_testing_mode label:not(:first-child) {
   margin-left: var(--gap-xs);
 }
+
 #frm_testing_mode a.frm_button {
   margin-left: auto;
   border-radius: 20px;
   font-size: 14px;
 }
+
 #frm_testing_mode hr {
   color: unset;
   background: var(--grey-200);
   height: 1px;
   border: none;
 }
+
 #frm_testing_mode > div:nth-of-type(2) {
   display: flex;
   align-items: center;
 }
-#frm_testing_mode .multiselect.dropdown-toggle:after {
+
+#frm_testing_mode .multiselect.dropdown-toggle::after {
   border: none;
 }
+
 #frm_testing_mode .frmsvg {
   width: 11px;
   height: 11px;
@@ -2666,12 +2680,15 @@ body.frm_preview_page .ui-widget-overlay {
   position: relative;
   top: 1px;
 }
+
 #frm_testing_mode .frm_toggle_block {
   gap: var(--gap-xs);
 }
+
 #frm_testing_mode label:not(.frm_toggle_block) {
   margin-right: 2px;
 }
+
 #frm_testing_mode select {
   width: auto !important;
   min-height: auto !important;
@@ -2689,9 +2706,11 @@ body.frm_preview_page .ui-widget-overlay {
   background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='none'%3E%3Cpath stroke='%2398A2B3' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M12.708 8.959 10 11.875 7.292 8.96'/%3E%3C/svg%3E") no-repeat right 8px top 50%;
   padding-right: var(--gap-lg) !important;
 }
+
 #frm_testing_mode select:focus {
   background-color: transparent !important;
 }
+
 #frm_testing_mode select,
 #frm_testing_mode .btn-group button.multiselect.dropdown-toggle {
   border-radius: var(--medium-radius);
@@ -2699,19 +2718,23 @@ body.frm_preview_page .ui-widget-overlay {
   font-weight: 600;
   height: 30px;
 }
+
 #frm_testing_mode .btn-group button.multiselect.dropdown-toggle {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 #frm_testing_mode .multiselect-selected-text {
   position: relative;
   top: 2px;
 }
+
 #frm_testing_mode #frm_testmode_fill_in_empty_form_fields {
   background-color: var(--primary-500);
   color: #fff;
   padding: 8px 18px;
 }
+
 #frm_testing_mode .frm_help {
   vertical-align: top;
 }
@@ -2725,6 +2748,7 @@ body.frm_preview_page .ui-widget-overlay {
   box-shadow: none !important;
   outline: none !important;
 }
+
 #frm_testing_mode a,
 #frm_testmode_disable_required_fields_modal a,
 #frm_ai_autofill_error_modal a {
@@ -2739,19 +2763,22 @@ body.frm_preview_page .ui-widget-overlay {
   display: inline-block;
   margin-left: var(--gap-xs);
 }
-#frm_test_mode_pagination input[type=button] {
+
+#frm_test_mode_pagination input[type="button"] {
   border: 1px solid var(--grey-300);
   padding: 8px 12px;
   border-radius: 8px;
   font-size: 12px;
   background-color: #fff;
 }
-#frm_test_mode_pagination input[type=button].frm_test_mode_active_page {
+
+#frm_test_mode_pagination input[type="button"].frm_test_mode_active_page {
   background-color: var(--primary-500);
   border-color: var(--primary-500);
   color: #fff;
 }
-#frm_test_mode_pagination input[type=button]:not(.frm_noallow) {
+
+#frm_test_mode_pagination input[type="button"]:not(.frm_noallow) {
   cursor: pointer;
 }
 
@@ -2766,6 +2793,7 @@ body.frm_preview_page .ui-widget-overlay {
   border-color: var(--grey-300);
   font-weight: 600;
 }
+
 #frm_testmode_start_over img {
   vertical-align: middle;
   position: relative;
@@ -2783,7 +2811,6 @@ body.frm_preview_page .ui-widget-overlay {
 }
 
 #frm_testmode_upgrade {
-  border-radius: 16px;
   padding: var(--gap-xs) var(--gap-sm);
   text-align: center;
   font-size: var(--text-xs);
@@ -2822,21 +2849,26 @@ body.frm_preview_page .ui-widget-overlay {
 }
 
 @media (max-width: 1024px) {
+
   #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
     width: 100%;
     display: block !important;
     margin-left: 0 !important;
   }
+
   #frm_testing_mode > div > label:not(#frm_quick_jump_label) {
     margin-top: var(--gap-sm);
   }
+
   #frm_testmode_fill_in_empty_form_fields {
     display: block;
   }
+
   #frm_testing_mode > div:nth-of-type(2) {
     flex-direction: column;
     align-items: normal;
   }
+
   #frm_test_mode_pagination {
     margin-left: 0;
   }
