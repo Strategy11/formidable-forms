@@ -222,6 +222,7 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 		// Also remove the newline after the semicolon if it exists.
 		if ( isset( $tokens[ $assignmentEnd + 1 ] ) && $tokens[ $assignmentEnd + 1 ]['code'] === T_WHITESPACE ) {
 			$wsContent = $tokens[ $assignmentEnd + 1 ]['content'];
+
 			// Remove one newline from the whitespace.
 			if ( strpos( $wsContent, "\n" ) === 0 ) {
 				$phpcsFile->fixer->replaceToken( $assignmentEnd + 1, substr( $wsContent, 1 ) );
