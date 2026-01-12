@@ -1817,12 +1817,12 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $value The value to compare.
+	 * @param int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value;
+		return true === $value || '1' === (string) $value || 'true' === $value || 'yes' === $value;
 	}
 
 	/**
