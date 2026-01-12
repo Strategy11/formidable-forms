@@ -222,8 +222,9 @@ class FrmEntry {
 
 	/**
 	 * Convert form data to the actual value that would be saved into the database.
-	 * phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}' (a signature value) is actually an empty string and does not get saved.
+	 *
+	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}'
+	 * (a signature value) is actually an empty string and does not get saved.
 	 *
 	 * @param array $filter_vals
 	 * @param int   $entry_id
