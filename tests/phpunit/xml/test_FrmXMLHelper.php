@@ -153,7 +153,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals( '<![CDATA[["Red","Blue"]]]>', FrmXMLHelper::cdata( serialize( array( 'Red', 'Blue' ) ) ) );
 		$this->assertEquals( '<![CDATA[[60418,60419,60420]]]>', FrmXMLHelper::cdata( serialize( array( 60418, 60419, 60420 ) ) ) );
 		$this->assertEquals(
-			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>',
+			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			FrmXMLHelper::cdata(
 				serialize(
 					array(

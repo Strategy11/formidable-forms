@@ -27,7 +27,7 @@ class FrmEntryValidate {
 			return $errors;
 		}
 
-		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) {
+		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
 		}

@@ -256,7 +256,8 @@ class FrmCSVExportHelper {
 		self::get_csv_format();
 		self::$charset = get_option( 'blog_charset' );
 
-		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$col_sep = ! empty( $_POST['csv_col_sep'] ) ? sanitize_text_field( wp_unslash( $_POST['csv_col_sep'] ) ) : self::$column_separator;
 
 		self::$column_separator = apply_filters( 'frm_csv_column_sep', $col_sep, $args );
 	}
@@ -589,6 +590,7 @@ class FrmCSVExportHelper {
 		if ( ! isset( $entries[ self::$entry->parent_item_id ]->embedded_fields ) ) {
 			$entries[ self::$entry->parent_item_id ]->embedded_fields = array();
 		}
+
 		$entries[ self::$entry->parent_item_id ]->embedded_fields[ self::$entry->id ] = self::$entry->form_id;
 	}
 
@@ -620,7 +622,7 @@ class FrmCSVExportHelper {
 			if ( ! isset( $metas[ $repeater_child->id ] ) ) {
 				$metas[ $repeater_child->id ] = '';
 
-				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) {
+				if ( ! isset( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) || ! is_array( $entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					$entries[ self::$entry->parent_item_id ]->metas[ $repeater_child->id ] = array();
 				}
 
@@ -712,7 +714,7 @@ class FrmCSVExportHelper {
 				'show_icon'         => false,
 				'entry_id'          => self::$entry->id,
 				'sep'               => self::$separator,
-				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0,
+				'embedded_field_id' => isset( self::$entry->embedded_fields ) && isset( self::$entry->embedded_fields[ self::$entry->id ] ) ? 'form' . self::$entry->embedded_fields[ self::$entry->id ] : 0, // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			)
 		);
 	}
@@ -845,7 +847,7 @@ class FrmCSVExportHelper {
 				// this map was derived from the differences between the MacRoman and UTF-8 Charsets
 				// Reference:
 				// http://www.alanwood.net/demos/macroman.html.
-				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff );
+				$convmap = array( 256, 304, 0, 0xffff, 306, 337, 0, 0xffff, 340, 375, 0, 0xffff, 377, 401, 0, 0xffff, 403, 709, 0, 0xffff, 712, 727, 0, 0xffff, 734, 936, 0, 0xffff, 938, 959, 0, 0xffff, 961, 8210, 0, 0xffff, 8213, 8215, 0, 0xffff, 8219, 8219, 0, 0xffff, 8227, 8229, 0, 0xffff, 8231, 8239, 0, 0xffff, 8241, 8248, 0, 0xffff, 8251, 8259, 0, 0xffff, 8261, 8363, 0, 0xffff, 8365, 8481, 0, 0xffff, 8483, 8705, 0, 0xffff, 8707, 8709, 0, 0xffff, 8711, 8718, 0, 0xffff, 8720, 8720, 0, 0xffff, 8722, 8729, 0, 0xffff, 8731, 8733, 0, 0xffff, 8735, 8746, 0, 0xffff, 8748, 8775, 0, 0xffff, 8777, 8799, 0, 0xffff, 8801, 8803, 0, 0xffff, 8806, 9673, 0, 0xffff, 9675, 63742, 0, 0xffff, 63744, 64256, 0, 0xffff ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				break;
 			case 'ISO-8859-1':
 				$convmap = array( 256, 10000, 0, 0xffff );

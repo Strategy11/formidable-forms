@@ -414,7 +414,7 @@ class FrmEmailSummaryHelper {
 	 * @return string
 	 */
 	public static function get_button_style( $display_block = false ) {
-		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none; padding-left: 1em; padding-right: 1em;';
+		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none; padding-left: 1em; padding-right: 1em;'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -428,7 +428,7 @@ class FrmEmailSummaryHelper {
 	public static function section_heading_with_icon( $icon, $text ) {
 		?>
 		<h2 style="<?php echo esc_attr( self::get_heading2_style() ); ?>">
-			<img style="vertical-align: bottom; height: 24px; width: auto;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" />
+			<img style="vertical-align: bottom; height: 24px; width: auto;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<span style="display: inline-block; vertical-align: text-bottom;"><?php echo esc_html( $text ); ?></span>
 		</h2>
 		<?php

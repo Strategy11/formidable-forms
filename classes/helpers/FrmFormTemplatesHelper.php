@@ -186,7 +186,7 @@ class FrmFormTemplatesHelper {
 			FrmTipsHelper::show_admin_cta(
 				array(
 					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
-					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
+					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
 					'link_url'    => $args['renew_link'],
 					'id'          => 'frm-renew-subscription-banner',
