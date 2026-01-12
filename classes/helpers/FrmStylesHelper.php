@@ -677,7 +677,8 @@ class FrmStylesHelper {
 			if ( isset( $_POST['frm_style_setting'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
 				// Sanitizing is done later.
-				$posted = wp_unslash( $_POST['frm_style_setting'] ); //phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+				//phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+				$posted = wp_unslash( $_POST['frm_style_setting'] );
 
 				if ( ! is_array( $posted ) ) {
 					$posted = json_decode( $posted, true );
