@@ -222,7 +222,9 @@ class FrmEntry {
 
 	/**
 	 * Convert form data to the actual value that would be saved into the database.
-	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}' (a signature value) is actually an empty string and does not get saved.
+	 *
+	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}'
+	 * (a signature value) is actually an empty string and does not get saved.
 	 *
 	 * @param array $filter_vals
 	 * @param int   $entry_id
@@ -623,7 +625,7 @@ class FrmEntry {
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
-			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description';
+			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$table  = $wpdb->prefix . 'frm_items it ';
 
 			if ( $inc_form ) {

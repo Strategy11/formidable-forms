@@ -995,7 +995,7 @@ class FrmAppController {
 			'
 		);
 		wp_enqueue_style( 'formidable-admin' );
-		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() );
+		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		FrmAppHelper::localize_script( 'admin' );
 		self::include_info_overlay();
 	}

@@ -157,11 +157,11 @@ class FrmReviews {
 		$message->add_message(
 			array(
 				'key'     => $key,
-				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' .
+				'message' => __( 'If you are enjoying Formidable, could you do me a BIG favor and give us a review to help me grow my little business and boost our motivation?', 'formidable' ) . '<br/>' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'- Steph Wells<br/>' .
 					'<span>' . esc_html__( 'Co-Founder and CTO of Formidable Forms', 'formidable' ) . '<span>',
 				'subject' => str_replace( $name, '', $title ),
-				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' .
+				'cta'     => '<a href="https://wordpress.org/support/plugin/formidable/reviews/?filter=5#new-post" class="frm-dismiss-review-notice frm-review-out button frm-button-secondary" data-link="yes" target="_blank" rel="noopener noreferrer">' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					esc_html__( 'Ok, you deserve it', 'formidable' ) . '</a>',
 				'type'    => 'feedback',
 			)

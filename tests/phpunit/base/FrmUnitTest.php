@@ -277,7 +277,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$form_id            = $this->factory->form->get_id_by_key( $form_key );
 		$fields             = FrmField::get_all_for_form( $form_id, '', 'include' );
 		$actual_field_num   = count( $fields );
-		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' );
+		$this->assertEquals( $actual_field_num, $expected_field_num, $actual_field_num . ' fields were retrieved for ' . $form_key . ' form, but ' . $expected_field_num . ' were expected. This could mean that certain fields were not imported correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $fields;
 	}

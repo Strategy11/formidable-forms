@@ -104,7 +104,6 @@ class FrmCreateFile {
 	 */
 	public function append_file( $file_content ) {
 		if ( $this->has_permission ) {
-
 			if ( file_exists( $this->new_file_path ) ) {
 				$existing_content = $this->get_contents();
 				$file_content     = $existing_content . $file_content;
