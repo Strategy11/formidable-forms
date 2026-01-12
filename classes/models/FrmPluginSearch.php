@@ -322,7 +322,7 @@ class FrmPluginSearch {
 					),
 					admin_url( 'plugins.php' )
 				);
-				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>';
+				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 		} elseif ( ! $is_active && isset( $plugin['url'] ) ) {
 			// Go to the add-ons page to install.

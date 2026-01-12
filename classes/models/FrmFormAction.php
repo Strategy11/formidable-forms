@@ -998,7 +998,7 @@ class FrmFormAction {
 	public function render_conditional_logic_call_to_action() {
 		?>
 			<h3>
-				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>">
+				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
 				</a>
 			</h3>

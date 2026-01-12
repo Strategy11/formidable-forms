@@ -41,7 +41,7 @@ class test_FrmOnboardingWizardController extends FrmUnitTest {
 		add_filter( 'wp_redirect', '__return_false' ); // Bypasses redirect and exit for uninterrupted PHPUnit execution.
 		$_GET['page'] = 'formidable';
 		$this->controller::do_admin_redirects();
-		$this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' );
+		$this->assertEquals( 'no', get_transient( $this->controller::TRANSIENT_NAME ), 'Transient should be set to "no" to indicate a redirect to the Onboarding Wizard is expected.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		// Reset for the next case.
 		unset( $_GET['page'] );
 
