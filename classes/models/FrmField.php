@@ -633,7 +633,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) {
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
