@@ -36,6 +36,7 @@ class FrmAppController {
 		global $menu;
 
 		$badge = wp_kses_post( FrmInboxController::get_notice_count() );
+
 		if ( ! $badge ) {
 			return;
 		}
