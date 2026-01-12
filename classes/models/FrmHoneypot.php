@@ -56,7 +56,6 @@ class FrmHoneypot extends FrmValidate {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 
 		if ( ! $is_honeypot_spam ) {
-
 			$field_id = $this->get_honeypot_field_id();
 
 			if ( ! $field_id ) {

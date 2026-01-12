@@ -154,7 +154,6 @@ class FrmEntryMeta {
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
-
 				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );

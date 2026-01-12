@@ -531,7 +531,6 @@ class FrmXMLHelper {
 					self::create_imported_field( $f, $imported );
 				}//end if
 			} else {
-
 				self::create_imported_field( $f, $imported );
 			}//end if
 		}//end foreach
@@ -1307,7 +1306,6 @@ class FrmXMLHelper {
 					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
 				} elseif ( 'frm_options' === $m['key'] ) {
-
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
 							$m['value'][ $setting_name ] = $frm_duplicate_ids[ $m['value'][ $setting_name ] ];
@@ -2107,7 +2105,6 @@ class FrmXMLHelper {
 
 			// Switch field IDs and keys, if needed
 			if ( $switch ) {
-
 				// Switch field IDs in email conditional logic
 				self::switch_email_condition_field_ids( $new_notification['post_content'] );
 

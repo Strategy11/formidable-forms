@@ -555,7 +555,6 @@ class FrmEntryFormatter {
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
-
 			$displayed_value                                = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 			$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
@@ -821,7 +820,6 @@ class FrmEntryFormatter {
 	 */
 	protected function add_user_info_to_plain_text_content( &$content ) {
 		if ( $this->include_user_info ) {
-
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
 				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
 			}
