@@ -228,19 +228,23 @@
 	</rule> 
 
 	<!-- Custom Formidable sniffs -->
+	<!-- Whitespace -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
 	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
 	<rule ref="Formidable.WhiteSpace.ConsecutiveAssignmentSpacing" />
+	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
+
+	<!-- Code Analysis -->
+	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
+	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
-	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
-	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
-	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
-	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
-	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
-	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 </ruleset>
