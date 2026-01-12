@@ -294,4 +294,5 @@
 	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
 	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
 	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 </ruleset>
