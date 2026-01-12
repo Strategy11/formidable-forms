@@ -1817,7 +1817,7 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $value The value to compare.
+	 * @param int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
