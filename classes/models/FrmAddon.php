@@ -162,7 +162,6 @@ class FrmAddon {
 		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
 		if ( $license ) {
-
 			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
 				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
 			}

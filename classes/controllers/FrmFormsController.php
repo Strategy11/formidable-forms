@@ -2556,7 +2556,6 @@ class FrmFormsController {
 			self::show_form_after_submit( $pass_args );
 
 		} else {
-
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
@@ -3692,18 +3691,5 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @deprecated 6.16.3
-	 *
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		_deprecated_function( __METHOD__, '6.16.3' );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

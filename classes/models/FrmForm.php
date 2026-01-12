@@ -442,7 +442,6 @@ class FrmForm {
 		if ( $field->type === 'textarea' &&
 			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
 			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
-
 			$new_field['field_options']['max'] = '';
 
 			/**
