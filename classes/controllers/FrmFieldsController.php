@@ -376,6 +376,20 @@ class FrmFieldsController {
 
 		$pro_is_installed = FrmAppHelper::pro_is_installed();
 
+		$unique_values_label_atts = array(
+			'for'          => 'frm_uniq_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ),
+			'data-trigger' => 'hover',
+		);
+
+		$read_only_label_atts = array(
+			'for'          => 'frm_read_only_field_' . $field['id'],
+			'class'        => 'frm_help frm-mb-0',
+			'title'        => __( 'Read Only: Show this field but do not allow the field value to be edited from the front-end.', 'formidable' ),
+			'data-trigger' => 'hover',
+		);
+
 		if ( ! $pro_is_installed ) {
 			$show_upsell_for_unique_value          = in_array(
 				$field['type'],
@@ -386,9 +400,31 @@ class FrmFieldsController {
 			$show_upsell_for_before_after_contents = in_array( $field['type'], array( 'email', 'number', 'phone', 'select', 'tag', 'text', 'url' ), true );
 			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
+
+			$unique_values_label_atts = self::add_upgrade_modal_atts( $unique_values_label_atts, 'unique_values', __( 'Unique Values', 'formidable' ) );
+			$read_only_label_atts     = self::add_upgrade_modal_atts( $read_only_label_atts, 'read_only', __( 'Read Only Values', 'formidable' ) );
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $atts
+	 * @param string $utm_content
+	 * @param string $upgrade_text
+	 *
+	 * @return array
+	 */
+	private static function add_upgrade_modal_atts( $atts, $utm_content, $upgrade_text ) {
+		$atts['class']          .= ' frm_show_upgrade';
+		$atts['data-medium']     = 'lite';
+		$atts['data-content']    = $utm_content;
+		$atts['data-upgrade']    = $upgrade_text;
+		$atts['data-learn-more'] = 'https://formidableforms.com/knowledgebase/field-options/#kb-pro-field-options';
+
+		return $atts;
 	}
 
 	/**
