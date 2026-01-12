@@ -243,10 +243,10 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
-	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
-	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 </ruleset>
