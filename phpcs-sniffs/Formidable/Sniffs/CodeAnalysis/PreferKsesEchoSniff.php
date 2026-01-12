@@ -183,6 +183,7 @@ class PreferKsesEchoSniff implements Sniff {
 		$phpcsFile->fixer->replaceToken( $echoPtr, '' );
 
 		$next = $echoPtr + 1;
+
 		while ( isset( $tokens[ $next ] ) && $tokens[ $next ]['code'] === T_WHITESPACE ) {
 			$phpcsFile->fixer->replaceToken( $next, '' );
 			$next++;
@@ -231,6 +232,7 @@ class PreferKsesEchoSniff implements Sniff {
 			if ( preg_match( '/phpcs:ignore\s+WordPress\.Security\.EscapeOutput\.[A-Za-z]+\s*$/', $content ) ) {
 				// Remove the entire comment but keep the newline if present.
 				$commentContent = $tokens[ $i ]['content'];
+
 				if ( strpos( $commentContent, "\n" ) !== false ) {
 					// Keep the newline.
 					$phpcsFile->fixer->replaceToken( $i, "\n" );
@@ -240,6 +242,7 @@ class PreferKsesEchoSniff implements Sniff {
 
 				// Also remove leading whitespace/tabs before the comment (but not the semicolon).
 				$prev = $i - 1;
+
 				while ( isset( $tokens[ $prev ] ) && $tokens[ $prev ]['line'] === $line && $tokens[ $prev ]['code'] === T_WHITESPACE ) {
 					$phpcsFile->fixer->replaceToken( $prev, '' );
 					$prev--;
