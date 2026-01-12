@@ -17,11 +17,34 @@ class FrmAppController {
 
 		$menu_name = FrmAppHelper::get_menu_name();
 
+		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
+
+		// Add the badge after `add_menu_page` to keep WP screen IDs stable they use `sanitize_title( $menu_title )`.
 		if ( in_array( $menu_name, array( 'Formidable', 'Forms' ), true ) ) {
-			$menu_name .= wp_kses_post( FrmInboxController::get_notice_count() );
+			self::add_menu_badge();
+		}
+	}
+
+	/**
+	 * Add the inbox count badge to the Formidable menu.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public static function add_menu_badge() {
+		global $menu;
+
+		$badge = wp_kses_post( FrmInboxController::get_notice_count() );
+		if ( ! $badge ) {
+			return;
 		}
 
-		add_menu_page( 'Formidable', $menu_name, 'frm_view_forms', 'formidable', 'FrmFormsController::route', self::menu_icon(), self::get_menu_position() );
+		$menu_item = wp_list_filter( $menu, array( 2 => 'formidable' ) );
+		if ( $menu_item ) {
+			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Standard pattern for adding menu badges.
+			$menu[ key( $menu_item ) ][0] .= $badge;
+		}
 	}
 
 	/**
