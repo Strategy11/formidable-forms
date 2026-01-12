@@ -12,7 +12,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	initView() {
 		const wrapper = document.createElement( 'div' );
 		wrapper.classList.add( 'frm-colorpicker-component', 'frm-colorpicker' );
-		wrapper.appendChild( this.getInput() );
+		wrapper.append( this.getInput() );
 		return wrapper;
 	}
 
@@ -74,7 +74,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
-			throw new Error( 'Callback must be a function' );
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
 		this._onChange = callback;

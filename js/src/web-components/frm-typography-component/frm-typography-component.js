@@ -51,7 +51,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.getHiddenInput()
 		);
 
-		this.wrapper.appendChild( this.container );
+		this.wrapper.append( this.container );
 		return this.wrapper;
 	}
 
@@ -84,7 +84,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			opt.value = option.value;
 			opt.textContent = option.label;
 			opt.selected = option.value === this._defaultValue;
-			select.appendChild( opt );
+			select.append( opt );
 		} );
 	}
 
@@ -96,8 +96,8 @@ export class frmTypographyComponent extends frmWebComponent {
 	getUnitValueWrapper() {
 		this.unitValueWrapper = document.createElement( 'div' );
 		this.unitValueWrapper.classList.add( 'frm-unit-value' );
-		this.unitValueWrapper.appendChild( this.getUnitValueInput() );
-		this.unitValueWrapper.appendChild( this.getUnitTypeSelect() );
+		this.unitValueWrapper.append( this.getUnitValueInput() );
+		this.unitValueWrapper.append( this.getUnitTypeSelect() );
 		return this.unitValueWrapper;
 	}
 
@@ -120,7 +120,7 @@ export class frmTypographyComponent extends frmWebComponent {
 
 		this.unitValueInput.addEventListener( 'change', event => {
 			const selectValue = this.select.value;
-			if ( this.defaultOptions.find( option => option.value === selectValue ) && '' !== selectValue ) {
+			if ( this.defaultOptions.some( option => option.value === selectValue ) && '' !== selectValue ) {
 				return;
 			}
 			this._onChange( event.target.value + this.unitTypeSelect.value );
@@ -148,7 +148,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			const opt = document.createElement( 'option' );
 			opt.value = option;
 			opt.textContent = option;
-			this.unitTypeSelect.appendChild( opt );
+			this.unitTypeSelect.append( opt );
 		} );
 		return this.unitTypeSelect;
 	}
@@ -214,7 +214,7 @@ export class frmTypographyComponent extends frmWebComponent {
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
-			throw new Error( 'Callback must be a function' );
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
 		this._onChange = callback;

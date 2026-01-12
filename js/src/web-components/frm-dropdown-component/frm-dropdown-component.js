@@ -17,7 +17,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	initView() {
 		this.wrapper = document.createElement( 'div' );
 		this.wrapper.classList.add( 'frm-dropdown-component' );
-		this.wrapper.appendChild( this.getSelect() );
+		this.wrapper.append( this.getSelect() );
 		return this.wrapper;
 	}
 
@@ -53,7 +53,7 @@ export class frmDropdownComponent extends frmWebComponent {
 			opt.value = option.value;
 			opt.textContent = option.textContent;
 			option.remove();
-			this.select.appendChild( opt );
+			this.select.append( opt );
 		} );
 	}
 
@@ -81,7 +81,7 @@ export class frmDropdownComponent extends frmWebComponent {
 			opt.value = option.value;
 			opt.textContent = option.label;
 			opt.selected = option.selected;
-			this.select.appendChild( opt );
+			this.select.append( opt );
 		} );
 	}
 
@@ -103,7 +103,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
-			throw new Error( 'Callback must be a function' );
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
 		this._onChange = callback;

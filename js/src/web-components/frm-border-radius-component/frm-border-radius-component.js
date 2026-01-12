@@ -26,7 +26,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			this.getBorderIndividualInputsWrapper()
 		);
 
-		this.wrapper.appendChild( this.container );
+		this.wrapper.append( this.container );
 
 		return this.wrapper;
 	}
@@ -108,7 +108,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			const opt = document.createElement( 'option' );
 			opt.value = option;
 			opt.textContent = option;
-			this.inputUnit.appendChild( opt );
+			this.inputUnit.append( opt );
 		} );
 
 		this.inputUnit.addEventListener( 'change', () => {
@@ -144,7 +144,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.borderInputTop = document.createElement( 'input' );
 		this.borderInputTop.type = 'text';
 		this.borderInputTop.value = parseInt( defaultValues.top.value );
-		span.appendChild( this.borderInputTop );
+		span.append( this.borderInputTop );
 
 		this.borderInputTop.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 		return span;
@@ -157,7 +157,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.borderInputBottom = document.createElement( 'input' );
 		this.borderInputBottom.type = 'text';
 		this.borderInputBottom.value = parseInt( defaultValues.bottom.value );
-		span.appendChild( this.borderInputBottom );
+		span.append( this.borderInputBottom );
 
 		this.borderInputBottom.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 		return span;
@@ -170,7 +170,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.borderInputLeft = document.createElement( 'input' );
 		this.borderInputLeft.type = 'text';
 		this.borderInputLeft.value = parseInt( defaultValues.left.value );
-		span.appendChild( this.borderInputLeft );
+		span.append( this.borderInputLeft );
 
 		this.borderInputLeft.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 
@@ -184,7 +184,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.borderInputRight = document.createElement( 'input' );
 		this.borderInputRight.type = 'text';
 		this.borderInputRight.value = parseInt( defaultValues.right.value );
-		span.appendChild( this.borderInputRight );
+		span.append( this.borderInputRight );
 
 		this.borderInputRight.addEventListener( 'change', () => this.buildBorderRadiusIndividualValue() );
 
@@ -216,7 +216,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
-			throw new Error( 'Callback must be a function' );
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
 		this._onChange = callback;

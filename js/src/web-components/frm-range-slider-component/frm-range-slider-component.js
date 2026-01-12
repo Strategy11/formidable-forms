@@ -22,7 +22,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 */
 	set onChange( callback ) {
 		if ( 'function' !== typeof callback ) {
-			throw new Error( 'Callback must be a function' );
+			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
 		this._onChange = callback;
@@ -99,18 +99,18 @@ export class frmRangeSliderComponent extends frmWebComponent {
 				defaultValues
 			} );
 
-			this.wrapper.appendChild( this.slidersContainer );
+			this.wrapper.append( this.slidersContainer );
 			return this.wrapper;
 		}
 
-		this.slidersContainer.appendChild( this.createSlider( {
+		this.slidersContainer.append( this.createSlider( {
 			maxValue,
 			units,
 			value: this.parseValueUnit( fieldValue ),
 			addHiddenInputValue: true
 		} ) );
 
-		this.wrapper.appendChild( this.slidersContainer );
+		this.wrapper.append( this.slidersContainer );
 		return this.wrapper;
 	}
 
@@ -192,7 +192,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		// Vertical slider (group)
-		wrapper.appendChild( this.createSliderGroup( {
+		wrapper.append( this.createSliderGroup( {
 			type: 'vertical',
 			displaySliders: 'top,bottom',
 			maxValue,
@@ -205,7 +205,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		} ) );
 
 		// Horizontal slider (group)
-		wrapper.appendChild( this.createSliderGroup( {
+		wrapper.append( this.createSliderGroup( {
 			type: 'horizontal',
 			displaySliders: 'left,right',
 			maxValue,
@@ -217,7 +217,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			addHiddenInputValue: false
 		} ) );
 
-		wrapper.appendChild( this.createSliderHiddenInputValue( { fieldName, fieldValue, componentId } ) );
+		wrapper.append( this.createSliderHiddenInputValue( { fieldName, fieldValue, componentId } ) );
 	}
 
 	/**
@@ -262,7 +262,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 		const slidersGroupItems = options.displaySliders.split( ',' );
 		slidersGroupItems.forEach( item => {
-			slider.appendChild( this.createSlider( {
+			slider.append( this.createSlider( {
 				type: item,
 				maxValue: options.maxValue,
 				units: options.units,
@@ -312,9 +312,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 
 			const use = document.createElementNS( 'http://www.w3.org/2000/svg', 'use' );
 			use.setAttributeNS( 'http://www.w3.org/1999/xlink', 'xlink:href', `#${ iconSvgId }` );
-			svg.appendChild( use );
+			svg.append( use );
 
-			sliderContainer.appendChild( svg );
+			sliderContainer.append( svg );
 		}
 
 		// Slider track
@@ -332,11 +332,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		valueLabel.classList.add( 'frm-slider-value-label' );
 		valueLabel.textContent = value.value.toString();
 
-		bullet.appendChild( valueLabel );
-		activeTrack.appendChild( bullet );
-		slider.appendChild( activeTrack );
-		sliderContainer.appendChild( slider );
-		flexContainer.appendChild( sliderContainer );
+		bullet.append( valueLabel );
+		activeTrack.append( bullet );
+		slider.append( activeTrack );
+		sliderContainer.append( slider );
+		flexContainer.append( sliderContainer );
 
 		// Value input and unit select
 		const valueContainer = document.createElement( 'div' );
@@ -356,19 +356,19 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			if ( value.unit === unit ) {
 				option.selected = true;
 			}
-			unitSelect.appendChild( option );
+			unitSelect.append( option );
 		} );
 
-		valueContainer.appendChild( valueInput );
-		valueContainer.appendChild( unitSelect );
+		valueContainer.append( valueInput );
+		valueContainer.append( unitSelect );
 
 		if ( addHiddenInputValue ) {
-			valueContainer.appendChild( this.createSliderHiddenInputValue( options ) );
+			valueContainer.append( this.createSliderHiddenInputValue( options ) );
 		}
 
-		flexContainer.appendChild( valueContainer );
+		flexContainer.append( valueContainer );
 
-		sliderWrapper.appendChild( flexContainer );
+		sliderWrapper.append( flexContainer );
 		return sliderWrapper;
 	}
 
