@@ -5,7 +5,7 @@
 * New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
 * New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
 * New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
-* New: Several styles have been optimized in the generated formdiableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
+* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
 * Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
 * Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
 * Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.

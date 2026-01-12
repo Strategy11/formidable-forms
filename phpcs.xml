@@ -249,4 +249,5 @@
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
+	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeIdentical" />
 </ruleset>
