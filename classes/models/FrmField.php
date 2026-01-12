@@ -633,8 +633,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			// phpcs:ignore Universal.Operators.StrictComparisons
-			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) {
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
