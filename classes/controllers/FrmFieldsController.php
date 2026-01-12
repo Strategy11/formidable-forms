@@ -403,7 +403,7 @@ class FrmFieldsController {
 			array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
 			'autocomplete',
 			__( 'Autocomplete options', 'formidable' ),
-			'/email-address/#kb-autocomplete-attribute',
+			'/email-address/#kb-autocomplete-attribute'
 		);
 
 		$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -429,7 +429,8 @@ class FrmFieldsController {
 
 			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
 				$unique_values_label_atts,
-				'unique_values', __( 'Unique Values', 'formidable' ),
+				'unique_values',
+				__( 'Unique Values', 'formidable' ),
 				'/field-options/#kb-unique'
 			);
 			$read_only_label_atts     = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
@@ -438,7 +439,7 @@ class FrmFieldsController {
 				__( 'Read Only Values', 'formidable' ),
 				'/field-options/#kb-read-only'
 			);
-		}
+		}//end if
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
 	}
