@@ -51,6 +51,7 @@ zip -r $zipname $destination \
 	-x "*/.wordpress-org/*" \
 	-x "*/.wp-env.json" \
 	-x "*/.prettierrc" \
+	-x "*/.scannerwork" \
 	-x "*/.jscsrc" \
 	-x "*/.jshintrc" \
 	-x "*/.jshintignore" \

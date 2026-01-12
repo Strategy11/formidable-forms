@@ -72,7 +72,7 @@ class FrmPersonalData {
 
 		$entries = $this->get_user_entries( $email );
 
-		if ( empty( $entries ) ) {
+		if ( ! $entries ) {
 			return $data_to_export;
 		}
 
@@ -104,14 +104,14 @@ class FrmPersonalData {
 			'done'           => true,
 		);
 
-		if ( empty( $email ) ) {
+		if ( ! $email ) {
 			return $data_removed;
 		}
 
 		$this->page = absint( $page );
 		$entries    = $this->get_user_entries( $email );
 
-		if ( empty( $entries ) ) {
+		if ( ! $entries ) {
 			return $data_removed;
 		}
 
@@ -146,20 +146,17 @@ class FrmPersonalData {
 			'limit'    => $this->get_current_page(),
 		);
 
-		$user = get_user_by( 'email', $email );
-
+		$user             = get_user_by( 'email', $email );
 		$entries_by_email = FrmDb::get_col( 'frm_item_metas', array( 'meta_value' => $email ), 'item_id', $query_args );
 
-		if ( empty( $user ) ) {
+		if ( ! $user ) {
 			// no matching user, so return the entry ids we have
 			return $entries_by_email;
 		}
 
 		$query_args['order_by'] = 'id ASC';
-
-		$entries_by_user = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
-
-		$entry_ids = array_merge( $entries_by_user, $entries_by_email );
+		$entries_by_user        = FrmDb::get_col( 'frm_items', array( 'user_id' => $user->ID ), 'id', $query_args );
+		$entry_ids              = array_merge( $entries_by_user, $entries_by_email );
 
 		return array_unique( array_filter( $entry_ids ) );
 	}
@@ -169,7 +166,6 @@ class FrmPersonalData {
 	 */
 	private function get_current_page() {
 		$start = ( $this->page - 1 ) * $this->limit;
-
 		return FrmDb::esc_limit( $start . ',' . $this->limit );
 	}
 
@@ -179,8 +175,7 @@ class FrmPersonalData {
 	 * @return array
 	 */
 	private function prepare_entry_data( $entry ) {
-		$entry = FrmEntry::getOne( $entry, true );
-
+		$entry      = FrmEntry::getOne( $entry, true );
 		$entry_data = array();
 
 		foreach ( $entry->metas as $field_id => $meta ) {

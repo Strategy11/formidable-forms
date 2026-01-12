@@ -227,6 +227,7 @@ class FrmFieldFormHtml {
 	private function replace_description_shortcode() {
 		$this->maybe_add_description_id();
 		$description = FrmAppHelper::maybe_kses( $this->field_obj->get_field_column( 'description' ) );
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		FrmShortcodeHelper::remove_inline_conditions( ( $description && $description != '' ), 'description', $description, $this->html );
 	}
 
@@ -241,6 +242,7 @@ class FrmFieldFormHtml {
 	private function maybe_add_description_id() {
 		$description = $this->field_obj->get_field_column( 'description' );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $description != '' ) {
 			$this->add_element_id( 'description', 'desc' );
 		}
@@ -268,7 +270,7 @@ class FrmFieldFormHtml {
 		}
 
 		if ( is_string( $inner_html[2] ) ) {
-			$has_id = strpos( $inner_html[2], ' id=' );
+			$has_id = str_contains( $inner_html[2], ' id=' );
 
 			if ( ! $has_id ) {
 				$id         = 'frm_' . $id . '_' . $this->html_id;
@@ -286,7 +288,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( ! empty( $error ) && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( $error && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 
 			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
@@ -317,6 +319,7 @@ class FrmFieldFormHtml {
 		if ( false === $end ) {
 			return false;
 		}
+
 		return substr( $html, $start + 10, $end - $start - 10 );
 	}
 
@@ -374,7 +377,7 @@ class FrmFieldFormHtml {
 		$this->html .= "\n";
 
 		// Stop html filtering on confirmation field to prevent loop
-		if ( $this->field_obj->get_field_column( 'conf_field' ) != 'stop' ) {
+		if ( $this->field_obj->get_field_column( 'conf_field' ) !== 'stop' ) {
 			$this->filter_for_more_shortcodes();
 		}
 	}
@@ -407,7 +410,7 @@ class FrmFieldFormHtml {
 	 * @return void
 	 */
 	public function remove_collapse_shortcode( &$html ) {
-		if ( strpos( $html, '[collapse_this]' ) ) {
+		if ( str_contains( $html, '[collapse_this]' ) ) {
 			$html = str_replace( '[collapse_this]', '', $html );
 		}
 	}
@@ -423,8 +426,7 @@ class FrmFieldFormHtml {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
-
-			$replace_with = '';
+			$replace_with   = '';
 
 			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
@@ -443,7 +445,6 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
-
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 
@@ -529,7 +530,7 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 
-		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
+		if ( ! empty( $settings['label_position'] ) ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
 
@@ -542,8 +543,8 @@ class FrmFieldFormHtml {
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 
-		if ( ! empty( $extra_classes ) ) {
-			if ( ! strpos( $this->html, 'frm_form_field ' ) ) {
+		if ( $extra_classes ) {
+			if ( ! str_contains( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}
 
@@ -556,9 +557,7 @@ class FrmFieldFormHtml {
 		$classes = apply_filters( 'frm_field_div_classes', $classes, $this->field_obj->get_field(), array( 'field_id' => $this->field_id ) );
 
 		// Remove unexpected characters from class.
-		$classes = implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
-
-		return $classes;
+		return implode( ' ', array_map( 'FrmFormsHelper::sanitize_layout_class', explode( ' ', $classes ) ) );
 	}
 
 	/**

@@ -62,7 +62,7 @@ class FrmAppController {
 
 			$page = str_replace( 'formidable-', '', FrmAppHelper::simple_get( 'page', 'sanitize_title' ) );
 
-			if ( empty( $page ) || $page === 'formidable' ) {
+			if ( ! $page || $page === 'formidable' ) {
 				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
 				if ( in_array( $action, array( 'settings', 'edit', 'list' ), true ) ) {
@@ -72,7 +72,7 @@ class FrmAppController {
 				}
 			}
 
-			if ( ! empty( $page ) ) {
+			if ( $page ) {
 				$classes .= ' frm-admin-page-' . $page;
 			}
 		}
@@ -116,8 +116,7 @@ class FrmAppController {
 	private static function get_full_screen_setting() {
 		global $wpdb;
 		$meta_key = $wpdb->get_blog_prefix() . 'persisted_preferences';
-
-		$prefs = get_user_meta( get_current_user_id(), $meta_key, true );
+		$prefs    = get_user_meta( get_current_user_id(), $meta_key, true );
 
 		if ( $prefs && isset( $prefs['core/edit-post']['fullscreenMode'] ) ) {
 			return $prefs['core/edit-post']['fullscreenMode'];
@@ -142,6 +141,7 @@ class FrmAppController {
 		} elseif ( str_contains( $agent, 'windows' ) ) {
 			$os = ' windows';
 		}
+
 		return $os;
 	}
 
@@ -179,9 +179,7 @@ class FrmAppController {
 		 *
 		 * @param bool $is_white_page
 		 */
-		$is_white_page = apply_filters( 'frm_is_white_page', $is_white_page );
-
-		return $is_white_page;
+		return apply_filters( 'frm_is_white_page', $is_white_page );
 	}
 
 	/**
@@ -259,7 +257,7 @@ class FrmAppController {
 	public static function get_form_nav( $form, $show_nav = false, $title = 'show' ) {
 		$show_nav = FrmAppHelper::get_param( 'show_nav', $show_nav, 'get', 'absint' );
 
-		if ( empty( $show_nav ) || ! $form ) {
+		if ( ! $show_nav || ! $form ) {
 			return;
 		}
 
@@ -1461,6 +1459,7 @@ class FrmAppController {
 		if ( ! empty( $current_screen->post_type ) && 'frm_logs' === $current_screen->post_type ) {
 			return true;
 		}
+
 		return in_array( $pagenow, array( 'term.php', 'edit-tags.php' ), true ) && 'frm_application' === FrmAppHelper::simple_get( 'taxonomy' );
 	}
 

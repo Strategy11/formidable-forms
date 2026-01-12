@@ -184,9 +184,8 @@ class test_FrmEmail extends FrmUnitTest {
 	public function test_trigger_email_three() {
 		$entry_clone = clone $this->entry;
 		$expected    = array();
-
-		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id = FrmField::get_id_by_key( $this->email_field_key );
+		$name_id     = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id    = FrmField::get_id_by_key( $this->email_field_key );
 
 		// Adjust entry values
 		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
@@ -371,6 +370,7 @@ class test_FrmEmail extends FrmUnitTest {
 		if ( str_starts_with( $sitename, 'www.' ) ) {
 			$sitename = substr( $sitename, 4 );
 		}
+
 		$expected['from'] = 'Yahoo <wordpress@' . $sitename . '>';
 
 		// Reply to
@@ -407,9 +407,8 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_six() {
-		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id = FrmField::get_id_by_key( $this->email_field_key );
-
+		$name_id                         = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id                        = FrmField::get_id_by_key( $this->email_field_key );
 		$entry_clone                     = clone $this->entry;
 		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
 		$entry_clone->metas[ $email_id ] = 'tester@mail.com';
@@ -443,8 +442,7 @@ class test_FrmEmail extends FrmUnitTest {
 	protected function create_entry( $form ) {
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry_id   = $this->factory->entry->create( $entry_data );
-
-		$entry = FrmEntry::getOne( $entry_id, true );
+		$entry      = FrmEntry::getOne( $entry_id, true );
 		$this->assertNotEmpty( $entry );
 
 		return $entry;
@@ -708,7 +706,7 @@ LINE 1<br>LINE 2<br></body></html>'
 	}
 
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
-		if ( empty( $property ) ) {
+		if ( ! $property ) {
 			$property = $setting_name;
 		}
 

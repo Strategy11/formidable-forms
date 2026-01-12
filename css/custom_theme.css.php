@@ -192,6 +192,12 @@ legend.frm_hidden{
 	height:auto;
 }
 
+<?php if ( $use_chosen_js ) { ?>
+.with_frm_style .chosen-container-multi .chosen-choices,
+.with_frm_style .chosen-container-single .chosen-single,
+<?php } elseif ( $pro_is_installed ) { ?>
+.with_frm_style .frm_slimselect.ss-main,
+<?php } ?>
 .with_frm_style input[type=text],
 .with_frm_style input[type=password],
 .with_frm_style input[type=email],
@@ -206,12 +212,7 @@ legend.frm_hidden{
 .with_frm_style .frm_scroll_box .frm_opt_container,
 .frm_form_fields_active_style,
 .frm_form_fields_error_style,
-.with_frm_style .frm-card-element.StripeElement,
-<?php if ( $use_chosen_js ) { ?>
-.with_frm_style .chosen-container-multi .chosen-choices,
-.with_frm_style .chosen-container-single .chosen-single,
-<?php } ?>
-.with_frm_style .frm_slimselect.ss-main {
+.with_frm_style .frm-card-element.StripeElement {
 	color: var(--text-color)<?php echo esc_html( $important ); ?>;
 	background-color: var(--bg-color)<?php echo esc_html( $important ); ?>;
 	border-color: var(--border-color)<?php echo esc_html( $important ); ?>;
@@ -506,7 +507,7 @@ legend.frm_hidden{
 	clear:both;
 }
 
-.with_frm_style input[type=number][readonly]{
+.with_frm_style input[type=number][readonly] {
 	-moz-appearance: textfield;
 }
 
@@ -649,7 +650,9 @@ legend.frm_hidden{
 	margin-bottom:8px !important;
 }
 
+<?php if ( $pro_is_installed ) { ?>
 .with_frm_style .frm-edit-page-btn,
+<?php } ?>
 .with_frm_style .frm_submit input[type=submit],
 .with_frm_style .frm_submit input[type=button],
 .with_frm_style .frm_submit button{

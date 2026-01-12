@@ -149,6 +149,7 @@ class FrmStyleComponent {
 		if ( ! empty( $this->data['will_change'] ) ) {
 			return $class . ' frm-style-dependent-updater-component';
 		}
+
 		return $class;
 	}
 
@@ -176,6 +177,7 @@ class FrmStyleComponent {
 		if ( ! empty( $this->data['will_change'] ) ) {
 			$attributes .= 'data-will-change=' . wp_json_encode( $this->data['will_change'] );
 		}
+
 		return $attributes;
 	}
 

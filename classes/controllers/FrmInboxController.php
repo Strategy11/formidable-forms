@@ -59,7 +59,7 @@ class FrmInboxController {
 
 		$key = FrmAppHelper::get_param( 'key', '', 'post', 'sanitize_text_field' );
 
-		if ( ! empty( $key ) ) {
+		if ( $key ) {
 			$message = new FrmInbox();
 			$message->dismiss( $key );
 
@@ -89,8 +89,7 @@ class FrmInboxController {
 			return;
 		}
 
-		$link = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
-
+		$link    = admin_url( 'admin.php?page=formidable-settings&t=misc_settings' );
 		$message = new FrmInbox();
 		$message->add_message(
 			array(

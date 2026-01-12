@@ -156,11 +156,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return bool
 	 */
 	public function check() {
-		if ( $this->check_ip() ) {
-			return true;
-		}
-
-		return $this->check_values();
+		return $this->check_ip() ? true : $this->check_values();
 	}
 
 	/**
@@ -290,6 +286,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 					return true;
 				}
 			}
+
 			return false;
 		}
 

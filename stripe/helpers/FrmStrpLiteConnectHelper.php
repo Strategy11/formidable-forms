@@ -39,6 +39,7 @@ class FrmStrpLiteConnectHelper {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
 			}
+
 			return;
 		}
 
@@ -175,6 +176,7 @@ class FrmStrpLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -336,6 +338,7 @@ class FrmStrpLiteConnectHelper {
 			if ( self::check_server_for_connected_account_status() ) {
 				wp_send_json_success();
 			}
+
 			wp_send_json_error();
 		}
 
@@ -481,6 +484,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $success ) {
 			self::set_stripe_details_as_submitted( $mode );
 		}
+
 		return $success;
 	}
 
@@ -566,6 +570,7 @@ class FrmStrpLiteConnectHelper {
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
+
 		return $url;
 	}
 
@@ -583,6 +588,7 @@ class FrmStrpLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -637,8 +643,7 @@ class FrmStrpLiteConnectHelper {
 
 			ob_start();
 			require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/connect.php';
-			$html .= ob_get_contents();
-			ob_end_clean();
+			$html .= ob_get_clean();
 		}
 
 		$response_data = array(
@@ -701,10 +706,7 @@ class FrmStrpLiteConnectHelper {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		if ( empty( $data->customer_id ) ) {
-			return false;
-		}
-		return $data->customer_id;
+		return empty( $data->customer_id ) ? false : $data->customer_id;
 	}
 
 	/**
@@ -743,6 +745,7 @@ class FrmStrpLiteConnectHelper {
 		} else {
 			self::$latest_error_from_stripe_connect = '';
 		}
+
 		return false;
 	}
 
@@ -755,10 +758,7 @@ class FrmStrpLiteConnectHelper {
 		$data    = self::post_with_authenticated_body( 'create_intent', compact( 'new_charge' ) );
 		$success = false !== $data;
 
-		if ( ! $success ) {
-			return false;
-		}
-		return $data;
+		return $success ? $data : false;
 	}
 
 	/**
@@ -820,11 +820,7 @@ class FrmStrpLiteConnectHelper {
 		$customer_id = get_user_meta( $user_id, $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
-		if ( false === $data ) {
-			return false;
-		}
-
-		return $data->subscriptions;
+		return false === $data ? false : $data->subscriptions;
 	}
 
 	/**
@@ -869,6 +865,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->plan_id ) ) {
 			return false;
 		}
+
 		return $data->plan_id;
 	}
 
@@ -901,6 +898,7 @@ class FrmStrpLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
@@ -962,6 +960,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 }

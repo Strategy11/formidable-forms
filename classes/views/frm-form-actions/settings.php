@@ -40,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<ul class="frm_actions_list">
 			<?php
 			foreach ( $action_controls as $action_control ) {
-				if ( in_array( $action_control->id_base, $displayed_actions ) || ! in_array( $action_control->id_base, $group['actions'] ) ) {
+				if ( in_array( $action_control->id_base, $displayed_actions, true ) || ! in_array( $action_control->id_base, $group['actions'], true ) ) {
 					continue;
 				}
 
@@ -49,7 +49,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $group['actions'] as $action ) {
-				if ( in_array( $action, $displayed_actions ) ) {
+				if ( in_array( $action, $displayed_actions, true ) ) {
 					continue;
 				}
 				?>

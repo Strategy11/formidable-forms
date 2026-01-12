@@ -367,8 +367,7 @@ class FrmField {
 			return false;
 		}
 
-		$release_date = $release_dates[ $type ];
-
+		$release_date               = $release_dates[ $type ];
 		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
 		return gmdate( 'Y-m-d' ) < $three_months_after_release;
 	}
@@ -561,8 +560,7 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
+		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 		$field_id = self::create( $values );
 
 		/**
@@ -607,6 +605,7 @@ class FrmField {
 		foreach ( (array) $fields as $field ) {
 			$new_key = $copy_keys ? $field->field_key : '';
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $copy_keys && substr( $field->field_key, - 1 ) == 2 ) {
 				$new_key = rtrim( $new_key, 2 );
 			}
@@ -634,6 +633,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
 				$values['form_id'] = $new_repeat_form_id;
 			}
@@ -697,6 +697,7 @@ class FrmField {
 				if ( 'field_options' === $opt ) {
 					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
 				}
+
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
@@ -706,8 +707,7 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
-
-		$form_id = 0;
+		$form_id       = 0;
 
 		if ( isset( $values['form_id'] ) ) {
 			$form_id = absint( $values['form_id'] );
@@ -790,7 +790,7 @@ class FrmField {
 
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
+		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
 	}
@@ -815,7 +815,7 @@ class FrmField {
 	 * @return object|null
 	 */
 	public static function getOne( $id, $filter = false ) {
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			return null;
 		}
 
@@ -826,7 +826,7 @@ class FrmField {
 
 		$results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
-		if ( empty( $results ) ) {
+		if ( ! $results ) {
 			self::filter_field( $filter, $results );
 			return $results;
 		}
@@ -901,24 +901,25 @@ class FrmField {
 			)
 		);
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			$fields = array();
 			$count  = 0;
 
 			foreach ( $results as $result ) {
-				if ( $type != $result->type ) {
+				if ( $type !== $result->type ) {
 					continue;
 				}
 
 				$fields[ $result->id ] = $result;
 				++$count;
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
 				}
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 
@@ -957,8 +958,8 @@ class FrmField {
 
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 
-		if ( ! empty( $results ) ) {
-			if ( empty( $limit ) ) {
+		if ( $results ) {
+			if ( ! $limit ) {
 				return $results;
 			}
 
@@ -969,7 +970,7 @@ class FrmField {
 				++$count;
 				$fields[ $result->id ] = $result;
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 			}
@@ -987,7 +988,7 @@ class FrmField {
 
 		self::include_sub_fields( $results, $inc_embed, 'all', $form_id );
 
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
 		}
 
@@ -1025,12 +1026,12 @@ class FrmField {
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
 
-		if ( 'include' != $inc_embed || $no_sub_forms ) {
+		if ( 'include' !== $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
 		$form_fields         = $results;
-		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
+		$should_get_subforms = $type !== 'all' && $type !== 'form' && ! empty( $form_id );
 
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
@@ -1039,7 +1040,7 @@ class FrmField {
 		$index_offset = 1;
 
 		foreach ( $form_fields as $k => $field ) {
-			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
+			if ( 'form' !== $field->type || ! isset( $field->field_options['form_select'] ) ) {
 				continue;
 			}
 
@@ -1081,8 +1082,7 @@ class FrmField {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			$prefix = $wpdb->get_blog_prefix( $blog_id );
-
+			$prefix          = $wpdb->get_blog_prefix( $blog_id );
 			$table_name      = $prefix . 'frm_fields';
 			$form_table_name = $prefix . 'frm_forms';
 		} else {
@@ -1090,14 +1090,13 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && ! str_contains( $order_by, 'ORDER BY' ) ) {
+		if ( $order_by && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit      = FrmDb::esc_limit( $limit );
 		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
+		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( is_array( $where ) ) {
 			$args    = array(
@@ -1334,7 +1333,7 @@ class FrmField {
 		$field_type    = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
 			$field_type = $original_type;
 		}
@@ -1381,15 +1380,13 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_required( $field ) {
-		$required = $field['required'] != '0';
+		$required = $field['required'] != '0'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		/**
 		 * @param bool  $required
 		 * @param array $field
 		 */
-		$required = (bool) apply_filters( 'frm_is_field_required', $required, $field );
-
-		return $required;
+		return (bool) apply_filters( 'frm_is_field_required', $required, $field );
 	}
 
 	/**
@@ -1439,7 +1436,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
+		return ! empty( $field->field_options[ $option ] );
 	}
 
 	/**
@@ -1469,7 +1466,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_value_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
+		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != ''; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**
@@ -1521,7 +1518,6 @@ class FrmField {
 	 */
 	public static function is_repeating_field( $field ) {
 		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
-
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
@@ -1532,7 +1528,6 @@ class FrmField {
 	 */
 	public static function get_id_by_key( $key ) {
 		$id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
-
 		return (int) $id;
 	}
 
@@ -1552,8 +1547,7 @@ class FrmField {
 	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
-
-		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
+		return $type === 'url' && self::get_option( $field, 'show_image' );
 	}
 
 	/**
@@ -1596,12 +1590,10 @@ class FrmField {
 		$field_type = self::get_original_field_type( $field );
 		$data_type  = self::get_option( $field, 'data_type' );
 
-		$is_field_type = (
-			$is_type === $field_type ||
+		$is_field_type = $is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
 			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type )
-		);
+			( 'product' === $field_type && $is_type === $data_type );
 
 		/**
 		 * When a field type is checked, allow individual fields
@@ -1623,7 +1615,6 @@ class FrmField {
 	 */
 	public static function is_combo_field( $field ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
-
 		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

@@ -42,15 +42,14 @@ class FrmEntriesHelper {
 
 		$values['fields'] = array();
 
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return apply_filters( 'frm_setup_new_entry', $values );
 		}
 
 		foreach ( (array) $fields as $field ) {
 			$original_default = $field->default_value;
 			self::prepare_field_default_value( $field );
-			$new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
-
+			$new_value                       = self::get_field_value_for_new_entry( $field, $reset, $args );
 			$field_array                     = FrmAppHelper::start_field_array( $field );
 			$field_array['value']            = $new_value;
 			$field_array['type']             = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
@@ -150,7 +149,7 @@ class FrmEntriesHelper {
 		$value_is_posted = false;
 
 		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+			$repeating = ! empty( $args['repeating'] );
 
 			if ( $repeating ) {
 				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -189,22 +188,20 @@ class FrmEntriesHelper {
 	public static function replace_default_message( $message, $atts ) {
 		if ( ! str_contains( $message, '[default-message' ) &&
 			! str_contains( $message, '[default_message' ) &&
-			! empty( $message ) ) {
+			$message ) {
 			return $message;
 		}
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = '[default-message]';
 		}
 
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-
+			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
-
-			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
+			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.
 			$message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -233,6 +230,7 @@ class FrmEntriesHelper {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field->form_id == $entry->form_id || empty( $atts['embedded_field_id'] ) ) {
 			return self::display_value( $field_value, $field, $atts );
 		}
@@ -300,7 +298,6 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -344,6 +341,7 @@ class FrmEntriesHelper {
 			$atts['truncate'] = $atts['pre_truncate'];
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == '' ) {
 			return $value;
 		}
@@ -354,6 +352,7 @@ class FrmEntriesHelper {
 		$value = apply_filters( 'frm_display_value_custom', $unfiltered_value, $field, $atts );
 		$value = apply_filters( 'frm_display_' . $field->type . '_value_custom', $value, compact( 'field', 'atts' ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $value == $unfiltered_value ) {
 			$value = FrmFieldsHelper::get_unfiltered_display_value( compact( 'value', 'field', 'atts' ) );
 		}
@@ -530,8 +529,7 @@ class FrmEntriesHelper {
 			// Save original value
 			$args['temp_value'] = $value;
 			$args['other']      = true;
-
-			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now.
@@ -567,7 +565,7 @@ class FrmEntriesHelper {
 				}
 			}
 
-			if ( is_array( $value ) && ! empty( $value ) ) {
+			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
 		} else {
@@ -577,6 +575,7 @@ class FrmEntriesHelper {
 
 			// Multi-select dropdown.
 			if ( is_array( $value ) ) {
+				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 				$o_key = array_search( $field->options[ $other_key ], $value );
 
 				if ( $o_key !== false ) {
@@ -596,7 +595,7 @@ class FrmEntriesHelper {
 						unset( $value[ $other_key ] );
 					}
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) {
+			} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
 				$value = $other_vals;
 			}//end if
 		}//end if
@@ -889,7 +888,7 @@ class FrmEntriesHelper {
 			return $status;
 		}
 
-		if ( empty( $status ) ) {
+		if ( ! $status ) {
 			// If the status is empty, let's default to 0.
 			return self::SUBMITTED_ENTRY_STATUS;
 		}
@@ -909,7 +908,6 @@ class FrmEntriesHelper {
 	 */
 	public static function get_entry_status_label( $status ) {
 		$statuses = self::get_entry_statuses();
-
 		return $statuses[ self::get_entry_status( $status ) ];
 	}
 
@@ -922,7 +920,6 @@ class FrmEntriesHelper {
 	 * @return array<string>
 	 */
 	public static function get_entry_statuses() {
-
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),

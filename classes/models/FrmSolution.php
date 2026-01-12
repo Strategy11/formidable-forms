@@ -108,7 +108,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function register() {
-
 		// Getting started - shows after installation.
 		add_dashboard_page(
 			esc_html( $this->page_title() ),
@@ -166,7 +165,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function redirect() {
-
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		if ( $current_page === $this->page ) {
@@ -233,8 +231,7 @@ class FrmSolution {
 			return;
 		}
 
-		$all_imported = $this->is_complete( 'all' );
-
+		$all_imported   = $this->is_complete( 'all' );
 		$step           = $steps['import'];
 		$step['label']  = '';
 		$step['nested'] = true;
@@ -410,7 +407,7 @@ class FrmSolution {
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
 			$steps['complete']['num'] = 3;
@@ -435,9 +432,9 @@ class FrmSolution {
 			}
 		}
 
-		if ( empty( $rel ) && empty( $missing ) ) {
+		if ( ! $rel && ! $missing ) {
 			$steps['plugin']['complete'] = true;
-		} elseif ( ! empty( $missing ) ) {
+		} elseif ( $missing ) {
 			$steps['plugin']['error'] = sprintf(
 				/* translators: %1$s: Plugin name */
 				esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),
@@ -465,7 +462,7 @@ class FrmSolution {
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
 			<?php
-			if ( isset( $step['complete'] ) && $step['complete'] ) {
+			if ( ! empty( $step['complete'] ) ) {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(
@@ -563,9 +560,8 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
-		$addons = $api->get_api_info();
-
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
@@ -656,7 +652,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function show_import_options( $options, $importing, $xml = '' ) {
-		if ( empty( $options ) ) {
+		if ( ! $options ) {
 			return;
 		}
 
@@ -684,7 +680,7 @@ class FrmSolution {
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
 
-		if ( empty( $pages ) ) {
+		if ( ! $pages ) {
 			return;
 		}
 
@@ -748,6 +744,7 @@ class FrmSolution {
 		if ( $count === 'all' ) {
 			return count( $imported ) >= count( $this->form_options() );
 		}
+
 		return ! empty( $imported );
 	}
 

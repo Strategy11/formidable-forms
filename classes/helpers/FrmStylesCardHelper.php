@@ -271,8 +271,9 @@ class FrmStylesCardHelper {
 		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
-			$background_color = ( str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'] );
+			$background_color = str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'];
 		}
+
 		$styles[] = '--preview-background-color: ' . $background_color;
 
 		if ( empty( $style->post_content['submit_border_color'] ) ) {
@@ -281,7 +282,6 @@ class FrmStylesCardHelper {
 
 		// Apply additional styles from the style.
 		$rules_to_apply = self::get_style_keys_for_card();
-
 		$frm_style      = new FrmStyle();
 		$color_settings = $frm_style->get_color_settings();
 
@@ -291,8 +291,7 @@ class FrmStylesCardHelper {
 				continue;
 			}
 
-			$value = $style->post_content[ $key ];
-
+			$value  = $style->post_content[ $key ];
 			$is_hex = in_array( $key, $color_settings, true ) && $value && '#' !== $value[0] && ! str_contains( $value, 'rgb' ) && $value !== 'transparent';
 
 			if ( $is_hex ) {

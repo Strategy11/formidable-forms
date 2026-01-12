@@ -490,7 +490,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<?php
 		$hidden_invalid = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' ) && FrmField::is_option_empty( $field, 'max' );
-		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
+		$has_validation = ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">

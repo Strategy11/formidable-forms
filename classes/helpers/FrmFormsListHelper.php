@@ -88,7 +88,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s != '' ) {
+		if ( $s !== '' ) {
 			preg_match_all( '/".*?("|$)|((?<=[\\s",+])|^)[^\\s",+]+/', $s, $matches );
 			$search_terms = array_map( 'trim', $matches[0] );
 
@@ -201,8 +201,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-
-			$class = $status == $form_type ? ' class="current"' : '';
+			$class = $status == $form_type ? ' class="current"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $counts->{$status} || 'draft' !== $status ) {
 				/* translators: %1$s: Status, %2$s: Number of items */
@@ -256,8 +255,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		$checkbox .= '<label for="cb-item-action-' . absint( $item->id ) . '"><span class="screen-reader-text">' . esc_html( $checkbox_label_text ) . '</span></label>';
-
-		$r = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
+		$r         = '<tr id="item-action-' . absint( $item->id ) . '"' . $style . '>';
 
 		list( $columns, $hidden ) = $this->get_column_info();
 
@@ -269,7 +267,6 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		foreach ( $columns as $column_name => $column_display_name ) {
 			$class = $column_name . ' column-' . $column_name . ( 'name' === $column_name ? ' post-title page-title column-title' : '' );
-
 			$style = '';
 
 			if ( in_array( $column_name, $hidden, true ) ) {
@@ -301,7 +298,7 @@ class FrmFormsListHelper extends FrmListHelper {
 					$val  = '<abbr title="' . esc_attr( gmdate( 'Y/m/d g:i:s A', strtotime( $item->created_at ) ) ) . '">' . $date . '</abbr>';
 					break;
 				case 'entries':
-					if ( isset( $item->options['no_save'] ) && $item->options['no_save'] ) {
+					if ( ! empty( $item->options['no_save'] ) ) {
 						$val = FrmAppHelper::icon_by_class(
 							'frmfont frm_forbid_icon frm_bstooltip',
 							array(
@@ -329,9 +326,7 @@ class FrmFormsListHelper extends FrmListHelper {
 			}
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**
@@ -450,7 +445,7 @@ class FrmFormsListHelper extends FrmListHelper {
 
 		$form_name = FrmAppHelper::kses( $form_name );
 
-		if ( 'excerpt' != $mode ) {
+		if ( 'excerpt' !== $mode ) {
 			$form_name = FrmAppHelper::truncate( $form_name, 50 );
 		}
 
@@ -477,7 +472,7 @@ class FrmFormsListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function add_draft_label( $item, &$val ) {
-		if ( 'draft' === $item->status && 'draft' != $this->status ) {
+		if ( 'draft' === $item->status && 'draft' !== $this->status ) {
 			$val .= ' - <span class="post-state">' . esc_html__( 'Draft', 'formidable' ) . '</span>';
 		}
 	}

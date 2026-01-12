@@ -74,7 +74,6 @@ class FrmFieldTextarea extends FrmFieldType {
 
 	protected function prepare_display_value( $value, $atts ) {
 		FrmFieldsHelper::run_wpautop( $atts, $value );
-
 		return $value;
 	}
 

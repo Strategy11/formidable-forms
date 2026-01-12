@@ -61,6 +61,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					continue;
 				}
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $f->type === 'data' && ( ! isset( $f->field_options['data_type'] ) || $f->field_options['data_type'] === 'data' || $f->field_options['data_type'] == '' ) ) {
 					continue;
 				}
@@ -237,8 +238,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			}
 
 			foreach ( $helper['codes'] as $code => $code_label ) {
-				$code = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
-
+				$code      = isset( $uid ) ? str_replace( '|user_id|', $uid, $code ) : str_replace( '|user_id|', 'x', $code );
 				$include_x = strpos( $code, ' ' ) ? '' : 'x ';
 
 				if ( ! is_array( $code_label ) ) {

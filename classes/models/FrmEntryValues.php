@@ -115,7 +115,6 @@ class FrmEntryValues {
 	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
-
 		// For reverse compatibility with the fields parameter.
 		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
 			if ( ! is_array( $atts['fields'] ) ) {
@@ -336,6 +335,7 @@ class FrmEntryValues {
 	 * @return bool
 	 */
 	protected function is_field_in_array( $field, $array ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return in_array( $field->id, $array ) || in_array( (string) $field->field_key, $array, true );
 	}
 

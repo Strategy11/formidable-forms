@@ -64,6 +64,7 @@ class FrmInbox extends FrmFormApi {
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
+
 		return $messages;
 	}
 
@@ -95,7 +96,7 @@ class FrmInbox extends FrmFormApi {
 	private function add_api_messages() {
 		$api = $this->get_api_info();
 
-		if ( empty( $api ) ) {
+		if ( ! $api ) {
 			return;
 		}
 
@@ -228,11 +229,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function has_started( $message ) {
-		if ( empty( $message['starts'] ) ) {
-			return true;
-		}
-
-		return $message['starts'] <= time();
+		return empty( $message['starts'] ) ? true : $message['starts'] <= time();
 	}
 
 	/**
@@ -359,6 +356,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $t ] );
 			}
 		}
+
 		return $messages;
 	}
 
@@ -461,6 +459,7 @@ class FrmInbox extends FrmFormApi {
 				if ( isset( $parts['query'] ) ) {
 					parse_str( $parts['query'], $query );
 				}
+
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
 				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';

@@ -9,10 +9,8 @@ extract( $settings ); // phpcs:ignore WordPress.PHP.DontExtract
 $is_loaded_via_ajax = $is_loaded_via_ajax ?? false;
 FrmStylesPreviewHelper::get_additional_preview_style( $settings, $is_loaded_via_ajax );
 
-$important = empty( $important_style ) ? '' : ' !important';
-
-$submit_bg_img = FrmStylesHelper::get_submit_image_bg_url( $settings );
-
+$important        = empty( $important_style ) ? '' : ' !important';
+$submit_bg_img    = FrmStylesHelper::get_submit_image_bg_url( $settings );
 $use_chosen_js    = $use_chosen_js ?? FrmStylesHelper::use_chosen_js();
 $pro_is_installed = $pro_is_installed ?? FrmAppHelper::pro_is_installed();
 ?>
@@ -183,7 +181,7 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	background-color:var(--bg-color-active)<?php echo esc_html( $important ); ?>;
 	border-color:var(--border-color-active)<?php echo esc_html( $important ); ?>;
 	color:var(--text-color);
-	<?php if ( isset( $remove_box_shadow_active ) && $remove_box_shadow_active ) { ?>
+	<?php if ( ! empty( $remove_box_shadow_active ) ) { ?>
 	box-shadow:none;
 	outline: none;
 	<?php } else { ?>
@@ -194,13 +192,13 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 <?php if ( ! $submit_style ) { ?>
 	<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm_compact .frm_dropzone.dz-clickable .dz-message,
+.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn,
 	<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit],
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button],
 .<?php echo esc_html( $style_class ); ?> .frm_submit button,
-.frm_form_submit_style,
-.<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn {
-	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); ?>;
+.frm_form_submit_style {
+	width:<?php echo esc_html( ( $submit_width == '' ? 'auto' : $submit_width ) . $important ); // phpcs:ignore Universal.Operators.StrictComparisons ?>;
 	<?php if ( ! empty( $font ) ) { ?>
 		font-family:<?php FrmAppHelper::kses_echo( $font ); ?>;
 	<?php } ?>
@@ -251,7 +249,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	<?php } ?>
 
 	<?php if ( empty( $submit_bg_img ) ) { ?>
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:hover,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:hover,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:hover{
@@ -264,7 +264,9 @@ if ( '' === $field_height || 'auto' === $field_height ) {
 	margin-bottom:<?php echo esc_html( FrmStylesHelper::get_bottom_value( $submit_margin ) ); ?>;
 }
 
+		<?php if ( $pro_is_installed ) { ?>
 .<?php echo esc_html( $style_class ); ?> .frm-edit-page-btn:focus,
+		<?php } ?>
 .<?php echo esc_html( $style_class ); ?> input[type=submit]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit input[type=button]:focus,
 .<?php echo esc_html( $style_class ); ?> .frm_submit button:focus,

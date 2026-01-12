@@ -82,6 +82,7 @@ class FrmEntry {
 
 		unset( $check_val['created_at'], $check_val['updated_at'], $check_val['is_draft'], $check_val['id'], $check_val['item_key'] );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $new_values['item_key'] == $new_values['name'] ) {
 			unset( $check_val['name'] );
 		}
@@ -97,8 +98,7 @@ class FrmEntry {
 
 		global $frm_vars;
 		$frm_vars['checking_duplicates'] = true;
-
-		$is_duplicate = false;
+		$is_duplicate                    = false;
 
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
@@ -111,6 +111,7 @@ class FrmEntry {
 				if ( 0 === (int) $meta->field_id ) {
 					continue;
 				}
+
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
@@ -119,7 +120,7 @@ class FrmEntry {
 			$field_metas   = array_filter( $field_metas );
 
 			// If prev entry is empty and current entry is not, they are not duplicates
-			if ( empty( $field_metas ) && ! empty( $filtered_vals ) ) {
+			if ( ! $field_metas && $filtered_vals ) {
 				return false;
 			}
 
@@ -240,6 +241,7 @@ class FrmEntry {
 				unset( $reduced[ $field_id ] );
 			}
 		}
+
 		return $reduced;
 	}
 
@@ -255,7 +257,7 @@ class FrmEntry {
 	 */
 	private static function is_duplicate_check_needed( $values, $duplicate_entry_time ) {
 		// If time for checking duplicates is set to an empty value, don't check for duplicates
-		if ( empty( $duplicate_entry_time ) ) {
+		if ( ! $duplicate_entry_time ) {
 			return false;
 		}
 
@@ -276,8 +278,7 @@ class FrmEntry {
 	public static function duplicate( $id ) {
 		global $wpdb;
 
-		$values = self::getOne( $id );
-
+		$values                   = self::getOne( $id );
 		$new_values               = array();
 		$new_values['item_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
 		$new_values['name']       = $values->name;
@@ -343,8 +344,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values = self::package_entry_to_update( $id, $values );
-
+		$new_values    = self::package_entry_to_update( $id, $values );
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -464,7 +464,7 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
-		} elseif ( empty( $entry ) || 'false' === $entry ) {
+		} elseif ( ! $entry || 'false' === $entry ) {
 			$entry = false;
 		}
 	}
@@ -513,7 +513,7 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function prepare_entry( &$entry ) {
-		if ( empty( $entry ) ) {
+		if ( ! $entry ) {
 			return;
 		}
 
@@ -563,7 +563,7 @@ class FrmEntry {
 		foreach ( $metas as $meta_val ) {
 			FrmFieldsHelper::prepare_field_value( $meta_val->meta_value, $meta_val->type );
 
-			if ( $meta_val->item_id == $entry->id ) {
+			if ( (int) $meta_val->item_id === (int) $entry->id ) {
 				$entry->metas[ $meta_val->field_id ] = $meta_val->meta_value;
 
 				if ( $include_key ) {
@@ -601,8 +601,7 @@ class FrmEntry {
 		}
 
 		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'item_key' => $id );
-
-		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
+		$id    = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
 
 		return $id && $id > 0;
 	}
@@ -619,8 +618,7 @@ class FrmEntry {
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit     = FrmDb::esc_limit( $limit );
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
@@ -659,7 +657,8 @@ class FrmEntry {
 
 		$meta_where = array( 'field_id !' => 0 );
 
-		if ( $limit == '' && is_array( $where ) && count( $where ) == 1 && isset( $where['it.form_id'] ) ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( $limit == '' && is_array( $where ) && count( $where ) === 1 && isset( $where['it.form_id'] ) ) {
 			$meta_where['fi.form_id'] = $where['it.form_id'];
 		} else {
 			$meta_where['item_id'] = array_keys( $entries );
@@ -710,8 +709,7 @@ class FrmEntry {
 	 */
 	private static function sort_by_field( $field_id ) {
 		global $wpdb;
-		$field_id = (int) $field_id;
-
+		$field_id      = (int) $field_id;
 		$field_options = FrmDb::get_var( 'frm_fields', array( 'id' => $field_id ), 'field_options' );
 		FrmAppHelper::unserialize_or_decode( $field_options );
 
@@ -781,7 +779,6 @@ class FrmEntry {
 	 * @return array $new_values
 	 */
 	private static function before_insert_entry_in_database( &$values, $type ) {
-
 		self::sanitize_entry_post( $values );
 
 		if ( $type !== 'xml' ) {
@@ -1119,7 +1116,6 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function after_insert_entry_in_database( $values, $new_values, $entry_id ) {
-
 		self::add_new_entry_to_frm_vars( $entry_id );
 
 		self::maybe_add_entry_metas( $values, $entry_id );
@@ -1145,6 +1141,7 @@ class FrmEntry {
 
 		global $frm_vars;
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( isset( $frm_vars['saved_entries'] ) && is_array( $frm_vars['saved_entries'] ) && in_array( (int) $id, $frm_vars['saved_entries'] ) ) {
 			$update = false;
 		}
@@ -1265,7 +1262,6 @@ class FrmEntry {
 	 */
 	public static function get_id_by_key( $key ) {
 		$entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
-
 		return (int) $entry_id;
 	}
 
