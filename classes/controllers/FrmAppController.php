@@ -41,6 +41,7 @@ class FrmAppController {
 		}
 
 		$menu_item = wp_list_filter( $menu, array( 2 => 'formidable' ) );
+
 		if ( $menu_item ) {
 			// phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited -- Standard pattern for adding menu badges.
 			$menu[ key( $menu_item ) ][0] .= $badge;
