@@ -3692,17 +3692,4 @@ class FrmFormsController {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
 	}
-
-	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @deprecated 6.16.3
-	 *
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		_deprecated_function( __METHOD__, '6.16.3' );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
-	}
 }
