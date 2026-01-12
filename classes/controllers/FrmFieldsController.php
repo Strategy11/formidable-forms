@@ -375,7 +375,10 @@ class FrmFieldsController {
 		$unique_values_label_atts = array(
 			'for'          => 'frm_uniq_field_' . $field['id'],
 			'class'        => 'frm_help frm-mb-0',
-			'title'        => __( 'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.', 'formidable' ),
+			'title'        => __(
+				'Unique: Do not allow the same response multiple times. For example, if one user enters \'Joe\', then no one else will be allowed to enter the same name.',
+				'formidable'
+			),
 			'data-trigger' => 'hover',
 		);
 
@@ -407,7 +410,7 @@ class FrmFieldsController {
 	/**
 	 * @since x.x
 	 *
-	 * @param array $atts
+	 * @param array  $atts
 	 * @param string $utm_content
 	 * @param string $upgrade_text
 	 *
