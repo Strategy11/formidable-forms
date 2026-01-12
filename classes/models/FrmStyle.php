@@ -116,7 +116,7 @@ class FrmStyle {
 				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
 			}
 
-			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
@@ -522,7 +522,7 @@ class FrmStyle {
 		if ( ! $temp_styles ) {
 			global $wpdb;
 			// make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
+			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
 			if ( ! $temp_styles ) {
@@ -602,7 +602,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];

@@ -950,7 +950,7 @@ class FrmListHelper {
 	 *
 	 * @return void
 	 */
-	public function print_column_headers( $with_id = true ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
+	public function print_column_headers( $with_id = true ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$current_url     = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
@@ -1268,7 +1268,7 @@ class FrmListHelper {
 	 * @return string The row actions output. In this case, an empty string.
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
-		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
+		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : ''; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

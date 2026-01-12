@@ -264,16 +264,16 @@ class test_FrmFieldType extends FrmUnitTest {
 
 		$input_html_actual_expected = array(
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="my_custom_aria_describedby" aria-invalid="true" ' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_error_field_' . $field->field_key . ' my_custom_aria_describedby frm_desc_field_' . $field->field_key . '" aria-invalid="true" ', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-invalid="true" aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' =>
-			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"',
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_custom frm_error_field_custom" aria-invalid="true"' => // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			' data-reqmsg="This field cannot be blank." aria-required="true" data-invmsg="Name is invalid" aria-describedby="frm_desc_field_' . $field->field_key . ' frm_desc_field_custom frm_error_field_custom" aria-invalid="true" data-error-first="0"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			// Make sure that a duplicate description ID is not added.
-			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"',
+			'aria-describedby="frm_desc_field_' . $field->field_key . '"' => 'aria-describedby="frm_error_field_' . $field->field_key . ' frm_desc_field_' . $field->field_key . '"', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		);
 
 		foreach ( $input_html_actual_expected as $actual => $expected ) {

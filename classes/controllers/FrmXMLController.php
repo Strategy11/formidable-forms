@@ -9,7 +9,7 @@ class FrmXMLController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -350,7 +350,7 @@ class FrmXMLController {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
 
 		if ( ! $has_file ) {

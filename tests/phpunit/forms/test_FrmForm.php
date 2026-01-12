@@ -45,7 +45,7 @@ class test_FrmForm extends FrmUnitTest {
 		$new_child_form_fields = FrmField::get_all_for_form( $new_child_form->id );
 
 		// Check if there are the same number of child form fields in the duplicated child form
-		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' );
+		$this->assertEquals( count( $old_child_form_fields ), count( $new_child_form_fields ), 'When a form is duplicated, the fields in the repeating section are not duplicated correctly.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -150,7 +150,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_sanitize_field_opt_calc( $safe_less_than_comparison, '50< 100 ? 1 : 0' );
 
 		$original_value = '50>100 ? 1 : 0';
-		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' );
+		$this->assert_sanitize_field_opt_calc( $original_value, $original_value, 'greater than comparisons do not get stripped, so they do not get any additional string padding.' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$original_value = '50 >100 ? 1 : 0';
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );

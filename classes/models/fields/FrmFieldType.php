@@ -1217,7 +1217,7 @@ DEFAULT_HTML;
 		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
-		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>';
+		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
