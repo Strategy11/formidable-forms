@@ -271,7 +271,7 @@ class FrmStrpLiteAuth {
 			return array();
 		}
 
-		// // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 		$intents = $_POST[ $name ];
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
