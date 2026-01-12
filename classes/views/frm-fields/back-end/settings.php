@@ -107,7 +107,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				?>
 				<div class="frm_form_field">
 					<label <?php FrmAppHelper::array_to_html_params( $unique_values_label_atts, true ); ?>>
-						<input <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
+						<input readonly='1' <?php FrmAppHelper::array_to_html_params( FrmSettingsUpsellHelper::get_unique_element_atts( $field ), true ); ?> />
 						<?php esc_html_e( 'Unique', 'formidable' ); ?>
 					</label>
 				</div>

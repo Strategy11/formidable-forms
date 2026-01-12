@@ -32,6 +32,7 @@ class FrmSettingsUpsellHelper {
 
 		if ( ! $pro_is_installed ) {
 			$unique_element_atts['data-upgrade'] = __( 'Unique fields', 'formidable' );
+			$unique_element_atts['disabled']     = '1';
 		}
 
 		return $unique_element_atts;
@@ -59,8 +60,33 @@ class FrmSettingsUpsellHelper {
 
 		if ( ! $pro_is_installed ) {
 			$read_only_element_atts['data-upgrade'] = __( 'Read only fields', 'formidable' );
+			$read_only_element_atts['disabled']     = '1';
 		}
 
 		return $read_only_element_atts;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array  $atts
+	 * @param string $utm_content
+	 * @param string $upgrade_text
+	 * @param string $kb_slug
+	 *
+	 * @return array
+	 */
+	public static function add_upgrade_modal_atts( $atts, $utm_content, $upgrade_text, $kb_slug = '' ) {
+		if ( empty( $atts['class'] ) ) {
+			$atts['class'] = '';
+		}
+
+		$atts['class']          .= ' frm_show_upgrade';
+		$atts['data-medium']     = 'lite';
+		$atts['data-content']    = $utm_content;
+		$atts['data-upgrade']    = $upgrade_text;
+		$atts['data-learn-more'] = 'https://formidableforms.com/knowledgebase' . $kb_slug;
+
+		return $atts;
 	}
 }

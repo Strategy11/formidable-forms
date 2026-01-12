@@ -389,6 +389,33 @@ class FrmFieldsController {
 			'data-trigger' => 'hover',
 		);
 
+		$visibility_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+			array(
+				'id'       => 'field_options_admin_only_' . $field['id'],
+				'readonly' => '1',
+			),
+			'field_visibility',
+			__( 'Visibility options', 'formidable' ),
+			'/field-options/#kb-visibility'
+		);
+
+		$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+			array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
+			'autocomplete',
+			__( 'Autocomplete options', 'formidable' ),
+			'/email-address/#kb-autocomplete-attribute',
+		);
+
+		$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+			array(
+				'type'     => 'text',
+				'readonly' => '1',
+			),
+			'before_after_contents',
+			__( 'Before and after field contents', 'formidable' ),
+			'/field-options/#kb-before-after-input'
+		);
+
 		if ( ! $pro_is_installed ) {
 			$show_upsell_for_unique_value          = in_array(
 				$field['type'],
@@ -400,30 +427,20 @@ class FrmFieldsController {
 			$show_upsell_for_autocomplete          = in_array( $field['type'], array( 'text', 'email', 'number' ), true );
 			$show_upsell_for_visibility            = $field['type'] !== 'hidden';
 
-			$unique_values_label_atts = self::add_upgrade_modal_atts( $unique_values_label_atts, 'unique_values', __( 'Unique Values', 'formidable' ) );
-			$read_only_label_atts     = self::add_upgrade_modal_atts( $read_only_label_atts, 'read_only', __( 'Read Only Values', 'formidable' ) );
+			$unique_values_label_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$unique_values_label_atts,
+				'unique_values', __( 'Unique Values', 'formidable' ),
+				'/field-options/#kb-unique'
+			);
+			$read_only_label_atts     = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				$read_only_label_atts,
+				'read_only',
+				__( 'Read Only Values', 'formidable' ),
+				'/field-options/#kb-read-only'
+			);
 		}
 
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/settings.php';
-	}
-
-	/**
-	 * @since x.x
-	 *
-	 * @param array  $atts
-	 * @param string $utm_content
-	 * @param string $upgrade_text
-	 *
-	 * @return array
-	 */
-	private static function add_upgrade_modal_atts( $atts, $utm_content, $upgrade_text ) {
-		$atts['class']          .= ' frm_show_upgrade';
-		$atts['data-medium']     = 'lite';
-		$atts['data-content']    = $utm_content;
-		$atts['data-upgrade']    = $upgrade_text;
-		$atts['data-learn-more'] = 'https://formidableforms.com/knowledgebase/field-options/#kb-pro-field-options';
-
-		return $atts;
 	}
 
 	/**

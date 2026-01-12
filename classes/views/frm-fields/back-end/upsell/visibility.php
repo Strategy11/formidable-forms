@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</label>
-	<select readonly name="field_options[admin_only_<?php echo absint( $field['id'] ); ?>][]" id="field_options_admin_only_<?php echo absint( $field['id'] ); ?>" class="" data-upgrade="<?php esc_attr_e( 'Visibility options', 'formidable' ); ?>">
+	<select <?php FrmAppHelper::array_to_html_params( $visibility_upsell_atts, true ); ?> >
 		<option value=""><?php esc_html_e( 'Everyone', 'formidable' ); ?></option>
 	</select>
 </p>
