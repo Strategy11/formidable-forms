@@ -489,7 +489,8 @@ class FrmStylesHelper {
 			$prepared_value = '';
 
 			if ( self::should_add_css_var( $settings, $defaults, $var, $prepared_value ) ) {
-				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped, SlevomatCodingStandard.Files.LineLength.LineTooLong
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo '--' . esc_html( self::clean_var_name( str_replace( '_', '-', $var ) ) ) . ':' . $prepared_value . ';';
 			}
 		}
 	}
