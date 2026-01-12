@@ -152,11 +152,11 @@ class FrmUsageController {
 	 * @return void
 	 */
 	public static function update_flows_data( $key, $value ) {
-		$flows_data = self::get_flows_data();
-
 		if ( '' === $key || '' === $value ) {
 			return;
 		}
+
+		$flows_data = self::get_flows_data();
 
 		if ( ! isset( $flows_data[ $key ] ) ) {
 			$flows_data[ $key ] = array();
