@@ -531,7 +531,6 @@ class FrmXMLHelper {
 					self::create_imported_field( $f, $imported );
 				}//end if
 			} else {
-
 				self::create_imported_field( $f, $imported );
 			}//end if
 		}//end foreach
@@ -791,8 +790,9 @@ class FrmXMLHelper {
 					break;
 				}
 			}
+
 			$changes['options'] = $options;
-		}
+		}//end if
 
 		return $changes;
 	}
@@ -960,7 +960,7 @@ class FrmXMLHelper {
 			$saved_style                     = $form['options']['custom_style'];
 			$form['options']['custom_style'] = $form['options']['old_style'];
 			self::update_custom_style_setting_on_import( $form );
-			$has_changed = ( $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style'] ); // phpcs:ignore Universal.Operators.StrictComparisons
+			$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $has_changed ) {
 				FrmForm::update( $form['id'], $form );
@@ -1306,7 +1306,6 @@ class FrmXMLHelper {
 					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
 				} elseif ( 'frm_options' === $m['key'] ) {
-
 					foreach ( array( 'date_field_id', 'edate_field_id' ) as $setting_name ) {
 						if ( isset( $m['value'][ $setting_name ] ) && is_numeric( $m['value'][ $setting_name ] ) && isset( $frm_duplicate_ids[ $m['value'][ $setting_name ] ] ) ) {
 							$m['value'][ $setting_name ] = $frm_duplicate_ids[ $m['value'][ $setting_name ] ];
@@ -1865,7 +1864,6 @@ class FrmXMLHelper {
 		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $old_html == $default_html ) {
 			unset( $options[ $html_name ] );
-
 			return;
 		}
 
@@ -2005,6 +2003,7 @@ class FrmXMLHelper {
 
 			$new_action['post_content'] = self::switch_action_field_ids( $new_action['post_content'], $basic_fields, $array_fields );
 		}
+
 		$new_action['post_content'] = json_encode( $new_action['post_content'] );
 
 		$exists = get_posts(
@@ -2106,13 +2105,13 @@ class FrmXMLHelper {
 
 			// Switch field IDs and keys, if needed
 			if ( $switch ) {
-
 				// Switch field IDs in email conditional logic
 				self::switch_email_condition_field_ids( $new_notification['post_content'] );
 
 				// Switch all other field IDs in email
 				$new_notification['post_content'] = FrmFieldsHelper::switch_field_ids( $new_notification['post_content'] );
 			}
+
 			$new_notification['post_content'] = FrmAppHelper::prepare_and_encode( $new_notification['post_content'] );
 
 			$exists = get_posts(
@@ -2175,7 +2174,6 @@ class FrmXMLHelper {
 
 		if ( isset( $form_options['notification'] ) && is_array( $form_options['notification'] ) ) {
 			foreach ( $form_options['notification'] as $email_key => $notification ) {
-
 				$atts = array(
 					'email_to'      => '',
 					'reply_to'      => '',
@@ -2261,7 +2259,6 @@ class FrmXMLHelper {
 		}
 
 		foreach ( $atts['email_to'] as $key => $email_field ) {
-
 			if ( is_numeric( $email_field ) ) {
 				$atts['email_to'][ $key ] = '[' . $email_field . ']';
 			}
@@ -2275,6 +2272,7 @@ class FrmXMLHelper {
 				unset( $email_opt );
 			}
 		}
+
 		$atts['email_to'] = implode( ', ', $atts['email_to'] );
 	}
 

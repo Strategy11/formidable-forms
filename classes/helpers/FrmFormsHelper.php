@@ -1726,7 +1726,6 @@ BEFORE_HTML;
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
-
 				return self::convert_legacy_package_names( $category );
 			}
 		}
@@ -1840,6 +1839,7 @@ BEFORE_HTML;
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
+
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
 		$reserved_words            = self::reserved_words();

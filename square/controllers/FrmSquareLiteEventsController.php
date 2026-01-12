@@ -55,6 +55,7 @@ class FrmSquareLiteEventsController {
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
+
 		wp_send_json_success();
 	}
 

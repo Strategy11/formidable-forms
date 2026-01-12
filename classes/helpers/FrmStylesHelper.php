@@ -1088,7 +1088,7 @@ class FrmStylesHelper {
 	 * @return string The style editor wrapper classname.
 	 */
 	public static function style_editor_get_wrapper_classname( $section_type ) {
-		$is_quick_settings = ( 'quick-settings' === $section_type );
+		$is_quick_settings = 'quick-settings' === $section_type;
 		$classname         = 'frm-style-editor-form';
 		$classname        .= ( ! self::is_advanced_settings() xor $is_quick_settings ) ? ' frm_hidden' : '';
 

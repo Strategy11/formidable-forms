@@ -154,7 +154,6 @@ class FrmEntryMeta {
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
-
 				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
 					// Remove blank fields.
 					unset( $values_indexed_by_field_id[ $field_id ] );
@@ -276,7 +275,6 @@ class FrmEntryMeta {
 
 		if ( $cached && isset( $cached->metas ) && isset( $cached->metas[ $field_id ] ) ) {
 			$result = $cached->metas[ $field_id ];
-
 			return wp_unslash( $result );
 		}
 
@@ -366,6 +364,7 @@ class FrmEntryMeta {
 		if ( $args['value'] ) {
 			$query[] = $wpdb->prepare( ' AND meta_value=%s', $args['value'] );
 		}
+
 		$query[] = $order . $limit;
 	}
 
@@ -552,6 +551,7 @@ class FrmEntryMeta {
 			if ( ! empty( $args['user_id'] ) ) {
 				$where['e.user_id'] = $args['user_id'];
 			}
+
 			$query[] = FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			if ( $args['group_by'] ) {

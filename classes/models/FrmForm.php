@@ -361,6 +361,7 @@ class FrmForm {
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
+
 			$field_array[ $fid->id ] = $fid;
 		}
 		unset( $all_fields );
@@ -372,7 +373,7 @@ class FrmForm {
 				continue;
 			}
 
-			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+			$is_settings_page = isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] );
 
 			if ( $is_settings_page ) {
 				self::get_settings_page_html( $values, $field );
@@ -441,7 +442,6 @@ class FrmForm {
 		if ( $field->type === 'textarea' &&
 			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
 			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
-
 			$new_field['field_options']['max'] = '';
 
 			/**
@@ -1289,7 +1289,7 @@ class FrmForm {
 	 * @return bool
 	 */
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
+		$show = ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin();
 		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 

@@ -201,7 +201,6 @@ class FrmFormsListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-
 			$class = $status == $form_type ? ' class="current"' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
 
 			if ( $counts->{$status} || 'draft' !== $status ) {

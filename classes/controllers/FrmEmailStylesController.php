@@ -306,6 +306,7 @@ class FrmEmailStylesController {
 			if ( ! $email || ! is_email( $email ) ) {
 				continue;
 			}
+
 			$valid_emails[] = $email;
 		}
 

@@ -104,9 +104,7 @@ class FrmCreateFile {
 	 */
 	public function append_file( $file_content ) {
 		if ( $this->has_permission ) {
-
 			if ( file_exists( $this->new_file_path ) ) {
-
 				$existing_content = $this->get_contents();
 				$file_content     = $existing_content . $file_content;
 			}
@@ -278,8 +276,8 @@ class FrmCreateFile {
 			$credentials['connection_type'] = 'ftp';
 		}
 
-		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$has_creds = ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] );
+		$can_ssh   = 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] );
 
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;

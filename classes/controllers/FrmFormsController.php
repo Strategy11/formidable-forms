@@ -31,6 +31,7 @@ class FrmFormsController {
 		if ( ! FrmAppHelper::pro_is_installed() ) {
 			$menu_label .= ' (Lite)';
 		}
+
 		add_submenu_page( 'formidable', 'Formidable | ' . $menu_label, $menu_label, 'frm_view_forms', 'formidable', 'FrmFormsController::route' );
 
 		self::maybe_load_listing_hooks();
@@ -977,7 +978,6 @@ class FrmFormsController {
 
 		if ( $permission_error !== false ) {
 			self::display_forms_list( array(), '', array( $permission_error ) );
-
 			return;
 		}
 
@@ -1231,6 +1231,7 @@ class FrmFormsController {
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
 			$columns['shortcode'] = esc_html__( 'Actions', 'formidable' );
 		}
+
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		add_screen_option(
@@ -1609,6 +1610,7 @@ class FrmFormsController {
 			if ( ! isset( $section['anchor'] ) ) {
 				$section['anchor'] = $key;
 			}
+
 			$section['anchor'] .= '_settings';
 
 			if ( ! isset( $section['title'] ) ) {
@@ -2026,7 +2028,6 @@ class FrmFormsController {
 
 		if ( $bulkaction && str_starts_with( $bulkaction, 'bulk_' ) ) {
 			FrmAppHelper::remove_get_action();
-
 			$bulkaction = str_replace( 'bulk_', '', $bulkaction );
 		}
 
@@ -2034,7 +2035,6 @@ class FrmFormsController {
 
 		if ( ! $ids ) {
 			$errors[] = __( 'No forms were specified', 'formidable' );
-
 			return $errors;
 		}
 
@@ -2042,7 +2042,6 @@ class FrmFormsController {
 
 		if ( $permission_error !== false ) {
 			$errors[] = $permission_error;
-
 			return $errors;
 		}
 
@@ -2350,7 +2349,6 @@ class FrmFormsController {
 		asort( $actions );
 
 		foreach ( $actions as $form_id => $name ) {
-
 			$wp_admin_bar->add_node(
 				array(
 					'parent' => 'frm-forms',
@@ -2558,7 +2556,6 @@ class FrmFormsController {
 			self::show_form_after_submit( $pass_args );
 
 		} else {
-
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
@@ -3572,6 +3569,7 @@ class FrmFormsController {
 		if ( false === $dir || ! file_exists( $dir . 'landing-page-preview-option.php' ) ) {
 			$dir = self::get_form_views_path();
 		}
+
 		include $dir . 'landing-page-preview-option.php';
 	}
 
@@ -3693,18 +3691,5 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @deprecated 6.16.3
-	 *
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		_deprecated_function( __METHOD__, '6.16.3' );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

@@ -799,6 +799,7 @@ class FrmSquareLiteConnectHelper {
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 

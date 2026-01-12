@@ -65,7 +65,7 @@ class FrmFieldUserID extends FrmFieldType {
 	protected function get_field_value( $args ) {
 		$user_ID      = get_current_user_id();
 		$user_ID      = $user_ID ? $user_ID : '';
-		$posted_value = ( FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$posted_value = FrmAppHelper::is_admin() && $_POST && isset( $_POST['item_meta'][ $this->field['id'] ] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$action       = $args['action'] ?? $args['form_action'] ?? '';
 		$updating     = $action === 'update';
 		return is_numeric( $this->field['value'] ) || $posted_value || $updating ? $this->field['value'] : $user_ID;

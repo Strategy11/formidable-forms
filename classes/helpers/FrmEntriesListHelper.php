@@ -208,7 +208,6 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( $s ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
-
 			return;
 		}
 
@@ -247,7 +246,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
-		$is_footer = ( $which !== 'top' );
+		$is_footer = $which !== 'top';
 
 		if ( $is_footer && ! empty( $this->items ) ) {
 			$utm = array(

@@ -648,6 +648,7 @@ class FrmMigrate {
 
 			$this->maybe_convert_migrated_size( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
@@ -765,6 +766,7 @@ class FrmMigrate {
 			}
 			$this->convert_character_to_px( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 

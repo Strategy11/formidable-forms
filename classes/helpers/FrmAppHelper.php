@@ -2082,7 +2082,6 @@ class FrmAppHelper {
 
 		if ( $post ) {
 			$post_url = admin_url( 'post.php?post=' . $post_id . '&action=edit' );
-
 			return '<a href="' . esc_url( $post_url ) . '">' . self::truncate( $post->post_title, 50 ) . '</a>';
 		}
 
@@ -2370,6 +2369,7 @@ class FrmAppHelper {
 			if ( 'hide' === $show_message ) {
 				$permission_error = '';
 			}
+
 			wp_die( esc_html( $permission_error ) );
 		}
 	}
@@ -2388,7 +2388,6 @@ class FrmAppHelper {
 	public static function permission_nonce_error( $permission, $nonce_name = '', $nonce = '' ) {
 		if ( $permission && ! current_user_can( $permission ) && ! current_user_can( 'administrator' ) ) {
 			$frm_settings = self::get_settings();
-
 			return $frm_settings->admin_permission;
 		}
 
@@ -3163,7 +3162,7 @@ class FrmAppHelper {
 		}
 
 		$formatted = self::get_localized_date( $date_format, $date );
-		$do_time   = ( gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00' );
+		$do_time   = gmdate( 'H:i:s', strtotime( $date ) ) !== '00:00:00';
 
 		if ( $do_time ) {
 			$formatted .= self::add_time_to_date( $time_format, $date );
@@ -4654,6 +4653,7 @@ class FrmAppHelper {
 			// $hook_suffix gets used in substr so make sure it's not null. PHP 8.1 deprecates null in substr.
 			$hook_suffix = ''; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 		}
+
 		set_current_screen();
 	}
 

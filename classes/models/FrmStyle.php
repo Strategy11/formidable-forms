@@ -566,8 +566,7 @@ class FrmStyle {
 		}//end foreach
 
 		if ( ! $default_style ) {
-			$default_style = reset( $styles );
-
+			$default_style                            = reset( $styles );
 			$styles[ $default_style->ID ]->menu_order = 1;
 		}
 

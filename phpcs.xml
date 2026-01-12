@@ -291,4 +291,8 @@
 	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 </ruleset>

@@ -24,7 +24,6 @@ class FrmEntryValidate {
 
 		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
 			$errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
-
 			return $errors;
 		}
 
@@ -680,7 +679,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] === 'true' );
+		return is_array( $response ) && $response[1] === 'true';
 	}
 
 	/**
@@ -1128,8 +1127,7 @@ class FrmEntryValidate {
 
 					// Convert name array to string.
 					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
-						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
-
+						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}
 
