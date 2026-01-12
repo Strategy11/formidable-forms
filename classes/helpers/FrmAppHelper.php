@@ -343,7 +343,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		self::kses_echo( self::svg_logo( $atts ), 'all' );
 	}
 
 	/**
@@ -369,7 +369,7 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
-		echo self::kses( $icon, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		self::kses_echo( $icon, 'all' );
 	}
 
 	/**
