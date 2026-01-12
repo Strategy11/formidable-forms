@@ -65,7 +65,7 @@ class FrmAppController {
 			if ( empty( $page ) || $page === 'formidable' ) {
 				$action = FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
 
-				if ( in_array( $action, array( 'settings', 'edit', 'list' ) ) ) {
+				if ( in_array( $action, array( 'settings', 'edit', 'list' ), true ) ) {
 					$page .= $action;
 				} else {
 					$page = $action;

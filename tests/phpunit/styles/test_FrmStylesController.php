@@ -15,7 +15,7 @@ class test_FrmStylesController extends FrmUnitTest {
 		$frm_vars['css_loaded'] = false;
 
 		if ( in_array( 'formidable', $wp_styles->done, true ) ) {
-			$k = array_search( 'formidable', $wp_styles->done );
+			$k = array_search( 'formidable', $wp_styles->done, true );
 			unset( $wp_styles->done[ $k ] );
 		}
 

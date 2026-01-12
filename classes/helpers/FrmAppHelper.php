@@ -4426,7 +4426,7 @@ class FrmAppHelper {
 			$html_attrs_arr = array();
 
 			foreach ( $option['custom_attrs'] as $key => $value ) {
-				if ( in_array( $key, array( 'type', 'class', 'data-value' ) ) ) {
+				if ( in_array( $key, array( 'type', 'class', 'data-value' ), true ) ) {
 					continue;
 				}
 

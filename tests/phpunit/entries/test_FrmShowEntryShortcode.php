@@ -1063,7 +1063,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		foreach ( $fields as $field ) {
 
-			if ( in_array( $field->type, array( 'html', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'captcha' ), true ) ) {
 				continue;
 			}
 
@@ -1107,7 +1107,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 		foreach ( $fields as $field ) {
 
-			if ( in_array( $field->type, array( 'html', 'captcha' ) ) ) {
+			if ( in_array( $field->type, array( 'html', 'captcha' ), true ) ) {
 				continue;
 			}
 

@@ -615,7 +615,7 @@ class FrmEntryMeta {
 			$where = '';
 
 			foreach ( $search as $field => $value ) {
-				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ) ) ) {
+				if ( $value <= 0 || ! in_array( $field, array( 'year', 'month', 'day' ), true ) ) {
 					continue;
 				}
 

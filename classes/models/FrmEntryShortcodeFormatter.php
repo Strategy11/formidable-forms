@@ -247,7 +247,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return string
 	 */
 	protected function generate_field_content( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return '';
 		}
 
@@ -298,7 +298,7 @@ class FrmEntryShortcodeFormatter {
 	 * @return void
 	 */
 	protected function add_field_array( $field ) {
-		if ( in_array( $field->type, $this->skip_fields ) ) {
+		if ( in_array( $field->type, $this->skip_fields, true ) ) {
 			return;
 		}
 
