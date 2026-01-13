@@ -144,7 +144,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<div class="clear"></div>
 							<?php } ?>
 						</div>
-						<?php do_action( 'frm_extra_form_instructions' ); ?>
 					</div>
 
 					<div>
@@ -197,6 +196,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</form>
 						</div>
 					</div>
+					<?php do_action( 'frm_extra_form_instructions' ); ?>
 				</div>
 			</div>
 		</div>
