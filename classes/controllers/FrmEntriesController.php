@@ -1,9 +1,8 @@
-<?php
+<?php // phpcs:disable SlevomatCodingStandard.Files.FileLength.FileTooLong
 if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-// phpcs:disable SlevomatCodingStandard.Files.FileLength.FileTooLong
 class FrmEntriesController {
 
 	/**
@@ -1022,14 +1021,11 @@ class FrmEntriesController {
 			);
 
 			$entry_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $shortcode_atts );
-			$formatted_entry = $entry_formatter->content();
-
-		} else {
-			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
-			$formatted_entry = $entry_formatter->get_formatted_entry_values();
+			return $entry_formatter->content();
 		}
+		$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
 
-		return $formatted_entry;
+		return $entry_formatter->get_formatted_entry_values();
 	}
 
 	public static function entry_sidebar( $entry = false ) {

@@ -638,15 +638,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return array
 	 */
 	public function get_bulk_actions() {
-		$actions = array();
-
 		if ( current_user_can( 'frm_delete_entries' ) ) {
-			$actions = array(
+			return array(
 				'bulk_delete' => __( 'Delete', 'formidable' ),
 			);
 		}
 
-		return $actions;
+		return array();
 	}
 
 	/**
