@@ -2727,9 +2727,10 @@ class FrmFieldsHelper {
 	 */
 	public static function render_ai_generate_options_button( $args, $should_hide_bulk_edit = false ) {
 		$attributes = array(
-			'type'  => 'button',
-			'class' => self::get_ai_generate_options_button_class(),
+			'type' => 'button',
 		);
+
+		$attributes['class'] = empty( $args['class'] ) ? self::get_ai_generate_options_button_class() : $args['class'];
 
 		if ( $should_hide_bulk_edit ) {
 			$attributes['class'] .= ' frm-force-hidden';
@@ -2739,7 +2740,7 @@ class FrmFieldsHelper {
 			'ai',
 			array(
 				'requires' => 'Business',
-				'upgrade'  => __( 'Generate options with AI', 'formidable' ),
+				'upgrade'  => $args['upgrade_text'] ?? __( 'Generate options with AI', 'formidable' ),
 				'medium'   => 'builder',
 				'content'  => 'generate-options-with-ai',
 			),
