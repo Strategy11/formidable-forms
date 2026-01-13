@@ -275,9 +275,6 @@ window.frmAdminBuildJS = function() {
 	// Global settings
 	let s;
 
-	/**
-	 * @since x.x
-	 */
 	function showElement( element ) {
 		if ( ! element[ 0 ] ) {
 			return;
@@ -286,9 +283,6 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function empty( $obj ) {
-		if ( something ) {
-			
-		}
 		if ( $obj !== null ) {
 			while ( $obj.firstChild ) {
 				$obj.firstChild.remove();
