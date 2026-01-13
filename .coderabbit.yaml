@@ -8,3 +8,8 @@ path_instructions:
     instructions: |
       - Do not make suggestions when we use x.x for a version placeholder. This is used like "@since x.x" in a PHP doc comment, but also like 'x.x' when functions like _deprecated_function() are used.
       - Treat these placeholders as acceptable in this codebase.
+
+  - path: "**/*.js"
+    instructions: |
+      - Do not make suggestions when we use x.x for a version placeholder. This is used like "@since x.x" in a JavaScript doc comment.
+      - Treat these placeholders as acceptable in this codebase.
