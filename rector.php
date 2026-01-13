@@ -62,6 +62,7 @@ use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 
 // TypeDeclarationDocblocks
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
@@ -208,5 +209,6 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromAssignsParamToParamReferenceRector::class,
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
+			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
 		)
 	);
