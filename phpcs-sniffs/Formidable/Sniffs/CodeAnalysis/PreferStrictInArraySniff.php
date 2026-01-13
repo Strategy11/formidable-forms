@@ -202,6 +202,7 @@ class PreferStrictInArraySniff implements Sniff {
 		// Check for short array syntax [ ].
 		if ( $tokens[ $arrayStart ]['code'] === T_OPEN_SHORT_ARRAY ) {
 			$arrayOpen = $arrayStart;
+
 			if ( isset( $tokens[ $arrayStart ]['bracket_closer'] ) ) {
 				$arrayClose = $tokens[ $arrayStart ]['bracket_closer'];
 			}
@@ -210,8 +211,10 @@ class PreferStrictInArraySniff implements Sniff {
 		// Check for long array syntax array( ).
 		if ( $tokens[ $arrayStart ]['code'] === T_ARRAY ) {
 			$parenOpen = $phpcsFile->findNext( T_WHITESPACE, $arrayStart + 1, null, true );
+
 			if ( false !== $parenOpen && $tokens[ $parenOpen ]['code'] === T_OPEN_PARENTHESIS ) {
 				$arrayOpen = $parenOpen;
+
 				if ( isset( $tokens[ $parenOpen ]['parenthesis_closer'] ) ) {
 					$arrayClose = $tokens[ $parenOpen ]['parenthesis_closer'];
 				}
