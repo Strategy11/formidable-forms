@@ -246,7 +246,9 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetEmptyCheck" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
+	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 </ruleset>

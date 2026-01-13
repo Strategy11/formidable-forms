@@ -543,7 +543,7 @@ class FrmAppHelper {
 		global $pagenow;
 		$action = self::simple_get( 'action', 'sanitize_title' );
 
-		return $pagenow && $pagenow === 'admin-ajax.php' && $action === 'frm_forms_preview';
+		return $pagenow === 'admin-ajax.php' && $action === 'frm_forms_preview';
 	}
 
 	/**
