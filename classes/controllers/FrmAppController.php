@@ -188,7 +188,7 @@ class FrmAppController {
 	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
 	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -808,7 +808,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */

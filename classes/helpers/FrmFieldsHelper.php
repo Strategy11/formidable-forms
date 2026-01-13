@@ -2464,7 +2464,7 @@ class FrmFieldsHelper {
 	 * Updates the params with limit data (the data-limit attribute, and possibly the frm_at_limit class).
 	 * Some field types are limited to a certain number per form, including coupon fields.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param array  $li_params  The params.
 	 * @param int    $form_id    The form ID.
