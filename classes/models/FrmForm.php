@@ -6,8 +6,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 class FrmForm {
 
 	/**
-	 * @since x.x
-	 *
 	 * @param array $values
 	 *
 	 * @return bool|int id on success or false on failure.
