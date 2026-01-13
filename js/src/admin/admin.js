@@ -275,6 +275,9 @@ window.frmAdminBuildJS = function() {
 	// Global settings
 	let s;
 
+	/**
+	 * @since x.x
+	 */
 	function showElement( element ) {
 		if ( ! element[ 0 ] ) {
 			return;
