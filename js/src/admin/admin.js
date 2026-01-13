@@ -2385,6 +2385,11 @@ window.frmAdminBuildJS = function() {
 			fieldOrder = this.getAttribute( 'frm-field-order' );
 		}
 
+		const getSectionField = $fieldObject => {
+			const liElement = $fieldObject.get( 0 ).querySelector( 'ul li[data-ftype="divider"]' );
+			return liElement ? jQuery( liElement ) : $fieldObject;
+		};
+
 		jQuery.ajax( {
 			type: 'POST',
 			url: ajaxurl,
@@ -2404,7 +2409,10 @@ window.frmAdminBuildJS = function() {
 					newRow = document.getElementById( newRowId );
 					if ( null !== newRow ) {
 						replaceWith = msgAsjQueryObject( msg );
-						jQuery( newRow ).append( replaceWith );
+						const newField = getSectionField( replaceWith );
+
+						jQuery( newRow ).append( newField );
+
 						makeDraggable( replaceWith.get( 0 ), '.frm-move' );
 						if ( null !== fieldOrder ) {
 							newRow.lastElementChild.setAttribute( 'frm-field-order', fieldOrder );
@@ -2424,12 +2432,18 @@ window.frmAdminBuildJS = function() {
 
 				if ( $field.siblings( 'li.form-field' ).length ) {
 					replaceWith = msgAsjQueryObject( msg );
-					$field.after( replaceWith );
+					const newField = getSectionField( replaceWith );
+					$field.after( newField );
 					syncLayoutClasses( $field );
 					makeDraggable( replaceWith.get( 0 ), '.frm-move' );
+
+					const layoutClass = getLayoutClassName( $field.get( 0 ).classList );
+					if ( ! newField.get( 0 ).classList.contains( layoutClass ) ) {
+						newField.get( 0 ).classList.add( layoutClass );
+					}
 				} else {
 					replaceWith = wrapFieldLi( msg );
-					$field.parent().parent().after( replaceWith );
+					$field.parent().parent().after( getSectionField( replaceWith ) );
 					makeDroppable( replaceWith.get( 0 ).querySelector( 'ul.frm_sorting' ) );
 					makeDraggable( replaceWith.get( 0 ).querySelector( 'li.form-field' ), '.frm-move' );
 				}
@@ -6888,7 +6902,7 @@ window.frmAdminBuildJS = function() {
 			replaceWith = replaceWith.trim();
 		}
 
-		field.className = field.className.replace( replace, replaceWith );
+		field.className = field.className.replace( /\s+/g, ' ' ).replace( replace, replaceWith );
 	}
 
 	function maybeShowInlineModal( e ) {
