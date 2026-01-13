@@ -294,6 +294,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
 		}
+
 		if ( self::has_moved_entries_bulk_delete_from_pro() ) {
 			$is_footer    = $which !== 'top';
 			$entries_args = array(
@@ -326,10 +327,23 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		$entries_count = $args['entries_count'] ?? 0;
 		$verify        = $args['bulk_delete_confirmation_message'] ?? '';
-
 		?>
 		<span class="frm_uninstall">
-			<a href="<?php echo esc_url( wp_nonce_url( '?page=formidable-entries&frm_action=destroy_all&form=' . $form_id ) ); ?>" class="button frm-button-secondary" data-loaded-from="entries-list" data-total-entries="<?php echo esc_attr( $entries_count ); ?>" data-frmverify="<?php echo esc_attr( $verify ); ?>" data-frmverify-btn="frm-button-red">
+			<a
+				<?php
+				FrmAppHelper::array_to_html_params(
+					array(
+						'href'               => esc_url( wp_nonce_url( '?page=formidable-entries&frm_action=destroy_all&form=' . $form_id ) ),
+						'class'              => 'button frm-button-secondary',
+						'data-loaded-from'   => 'entries-list',
+						'data-total-entries' => esc_attr( $entries_count ),
+						'data-frmverify'     => esc_attr( $verify ),
+						'data-frmverify-btn' => 'frm-button-red',
+					),
+					true
+				);
+				?>
+			>
 				<?php esc_html_e( 'Delete All Entries', 'formidable' ); ?>
 			</a>
 		</span>
@@ -625,6 +639,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public function get_bulk_actions() {
 		$actions = array();
+
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$actions = array(
 				'bulk_delete' => __( 'Delete', 'formidable' ),

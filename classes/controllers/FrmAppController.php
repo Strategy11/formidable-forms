@@ -596,6 +596,7 @@ class FrmAppController {
 			FrmEntriesController::destroy_all();
 			die();
 		}
+
 		if ( FrmAppHelper::get_param( 'delete_all' ) && FrmAppHelper::is_admin_page( 'formidable' ) && 'trash' === FrmAppHelper::get_param( 'form_type' ) ) {
 			FrmFormsController::delete_all();
 		}
