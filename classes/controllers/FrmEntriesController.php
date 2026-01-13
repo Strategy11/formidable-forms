@@ -3,6 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
+// phpcs:disable SlevomatCodingStandard.Files.FileLength.FileTooLong
 class FrmEntriesController {
 
 	/**
