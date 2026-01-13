@@ -67,8 +67,8 @@ class FrmFormsController {
 	public static function logic_tip() {
 		$images_url    = FrmAppHelper::plugin_url() . '/images/';
 		$data_message  = __( 'Only show the fields you need and create branching forms. Upgrade to get conditional logic and question branching.', 'formidable' );
-		$data_message .= ' <img src="' . esc_url( $images_url ) . '/survey-logic.png" srcset="' . esc_url( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>';
-		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link frm-collapsed frm-flex-justify" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">';
+		$data_message .= ' <img src="' . esc_url( $images_url ) . '/survey-logic.png" srcset="' . esc_url( $images_url ) . 'survey-logic@2x.png 2x" alt="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '"/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		echo '<a href="javascript:void(0)" class="frm_noallow frm_show_upgrade frm_add_logic_link frm-collapsed frm-flex-justify" data-upgrade="' . esc_attr__( 'Conditional Logic options', 'formidable' ) . '" data-message="' . esc_attr( $data_message ) . '" data-medium="builder" data-content="logic">'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		esc_html_e( 'Conditional Logic', 'formidable' );
 		FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon', array( 'aria-hidden' => 'true' ) );
 		echo '</a>';
@@ -880,7 +880,7 @@ class FrmFormsController {
 		$available_status['untrash']['message'] = sprintf( _n( '%1$s form restored from the Trash.', '%1$s forms restored from the Trash.', $count, 'formidable' ), $count );
 
 		/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
-		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' );
+		$available_status['trash']['message'] = sprintf( _n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ), $count, '<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=untrash&form_type=' . $form_type . '&id=' . $params['id'], 'untrash_form_' . $params['id'] ) ) . '">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$message = $available_status[ $status ]['message'];
 
@@ -918,7 +918,7 @@ class FrmFormsController {
 			/* translators: %1$s: Number of forms, %2$s: Start link HTML, %3$s: End link HTML */
 			_n( '%1$s form moved to the Trash. %2$sUndo%3$s', '%1$s forms moved to the Trash. %2$sUndo%3$s', $count, 'formidable' ),
 			$count,
-			'<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">',
+			'<a href="' . esc_url( wp_nonce_url( '?page=formidable&frm_action=list&action=bulk_untrash&form_type=' . $current_page . '&item-action=' . implode( ',', $ids ), 'bulk-toplevel_page_formidable' ) ) . '">', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'</a>'
 		);
 	}
@@ -1069,7 +1069,7 @@ class FrmFormsController {
 				FrmAppHelper::load_admin_wide_js();
 				$menu_name                       = FrmAppHelper::get_menu_name();
 				$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>';
+				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 			echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
@@ -1345,7 +1345,7 @@ class FrmFormsController {
 
 		if ( $form->parent_form_id ) {
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( FrmForm::get_edit_link( $form->parent_form_id ) ) . '">', '</a>' ) );
+			wp_die( sprintf( esc_html__( 'You are trying to edit a child form. Please edit from %1$shere%2$s', 'formidable' ), '<a href="' . esc_url( FrmForm::get_edit_link( $form->parent_form_id ) ) . '">', '</a>' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$frm_field_selection = FrmField::field_selection();
@@ -1705,7 +1705,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x Added $template_path parameter.
+	 * @since 6.27 Added $template_path parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class
@@ -2556,7 +2556,6 @@ class FrmFormsController {
 			self::show_form_after_submit( $pass_args );
 
 		} else {
-
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
 			if ( apply_filters( 'frm_continue_to_create', true, $form->id ) ) {
@@ -2617,7 +2616,7 @@ class FrmFormsController {
 	 */
 	public static function just_created_entry( $form_id ) {
 		global $frm_vars;
-		return isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0;
+		return isset( $frm_vars['created_entries'] ) && isset( $frm_vars['created_entries'][ $form_id ] ) && isset( $frm_vars['created_entries'][ $form_id ]['entry_id'] ) ? $frm_vars['created_entries'][ $form_id ]['entry_id'] : 0; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -3194,7 +3193,7 @@ class FrmFormsController {
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
 		$success_msg  = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
 		$success_msg  = do_shortcode( FrmAppHelper::use_wpautop( $success_msg ) );
-		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' .
+		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
 
@@ -3692,18 +3691,5 @@ class FrmFormsController {
 	public static function create( $values = array() ) {
 		_deprecated_function( __METHOD__, '4.0', 'FrmFormsController::update' );
 		self::update( $values );
-	}
-
-	/**
-	 * Education for premium features.
-	 *
-	 * @since 4.05
-	 * @deprecated 6.16.3
-	 *
-	 * @return void
-	 */
-	public static function add_form_style_tab_options() {
-		_deprecated_function( __METHOD__, '6.16.3' );
-		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/add_form_style_options.php';
 	}
 }

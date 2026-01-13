@@ -162,7 +162,6 @@ class FrmAddon {
 		add_action( 'after_plugin_row_' . plugin_basename( $this->plugin_file ), array( $this, 'maybe_show_license_message' ), 10, 2 );
 
 		if ( $license ) {
-
 			if ( 'formidable/formidable.php' !== $this->plugin_folder ) {
 				add_filter( 'plugins_api', array( &$this, 'plugins_api_filter' ), 10, 3 );
 			}
@@ -477,7 +476,7 @@ class FrmAddon {
 
 		if ( empty( $this->license ) ) {
 			/* translators: %1$s: Plugin name, %2$s: Start link HTML, %3$s: end link HTML */
-			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">', '</a>' );
+			$message = sprintf( esc_html__( 'Your %1$s license key is missing. Please add it on the %2$slicenses page%3$s.', 'formidable' ), esc_html( $this->plugin_name ), '<a href="' . esc_url( admin_url( 'admin.php?page=formidable-settings' ) ) . '">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$api    = new FrmFormApi( $this->license );
 			$errors = $api->error_for_license();
@@ -494,9 +493,9 @@ class FrmAddon {
 		$wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 		$id            = sanitize_title( $plugin['Name'] ) . '-next';
 
-		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>';
+		echo '<tr class="plugin-update-tr active" id="' . esc_attr( $id ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice error inline notice-error notice-alt"><p>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		FrmAppHelper::kses_echo( $message, 'a' );
-		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>';
+		echo '<script type="text/javascript">var d = document.getElementById("' . esc_attr( $id ) . '").previousSibling;if ( d !== null ){ d.className = d.className + " update"; }</script>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		echo '</p></div></td></tr>';
 	}
 
@@ -647,7 +646,7 @@ class FrmAddon {
 			return true;
 		}
 
-		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] === $transient->response[ $this->plugin_folder ]->new_version;
+		return isset( $transient->response ) && isset( $transient->response[ $this->plugin_folder ] ) && $transient->checked[ $this->plugin_folder ] === $transient->response[ $this->plugin_folder ]->new_version; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -1010,7 +1009,7 @@ class FrmAddon {
 		if ( is_wp_error( $resp ) ) {
 			$link = FrmAppHelper::admin_upgrade_link( 'api', 'knowledgebase/why-cant-i-activate-formidable-pro/' );
 			/* translators: %1$s: Start link HTML, %2$s: End link HTML */
-			$message  = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' );
+			$message  = sprintf( __( 'You had an error communicating with the Formidable API. %1$sClick here%2$s for more information.', 'formidable' ), '<a href="' . esc_url( $link ) . '" target="_blank">', '</a>' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$message .= ' ' . $resp->get_error_message();
 		} elseif ( 'error' === $body || is_wp_error( $body ) ) {
 			$message = __( 'You had an HTTP error connecting to the Formidable API', 'formidable' );

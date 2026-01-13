@@ -47,6 +47,8 @@ use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveVoidDocblockFromMagicMethodRector;
+use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
 // EarlyReturn
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
@@ -62,6 +64,7 @@ use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 
 // TypeDeclarationDocblocks
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
@@ -183,6 +186,8 @@ return RectorConfig::configure()
 			RemoveUnusedForeachKeyRector::class,
 			RemoveUnusedPrivateMethodParameterRector::class,
 			RemoveUnusedPrivateMethodRector::class,
+			RemoveVoidDocblockFromMagicMethodRector::class,
+			RemoveNonExistingVarAnnotationRector::class,
 			// We never want to remove a valid param tag. Leave this exception.
 			RemoveUselessParamTagRector::class,
 			RemoveUselessReturnTagRector::class,
@@ -208,5 +213,6 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromAssignsParamToParamReferenceRector::class,
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
+			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
 		)
 	);

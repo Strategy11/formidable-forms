@@ -692,7 +692,7 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $child_entry ) {
 				// maybe trigger actions for sub forms

@@ -113,59 +113,7 @@
 			<property name="lineLengthLimit" value="180" />
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
-		<exclude-pattern>tests/phpunit/*</exclude-pattern>
-		<exclude-pattern>helpers/FrmAppHelper.php</exclude-pattern>
-		<exclude-pattern>fields/FrmFieldUserID.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmStylesController.php</exclude-pattern>
-		<exclude-pattern>fields/FrmFieldType.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmStrpLiteAppHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFormsListHelper.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmSMTPController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmInboxController.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntry.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmSettingsController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmAddonsController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmAppController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmDashboardController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmEntriesController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmFormActionsController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmOnboardingWizardController.php</exclude-pattern>
-		<exclude-pattern>controllers/FrmXMLController.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmCSVExportHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmEmailSummaryHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmEntriesHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmEntriesListHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFormMigratorsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFormsHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmFormTemplatesHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmListHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmStylesCardHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmStylesHelper.php</exclude-pattern>
-		<exclude-pattern>helpers/FrmXMLHelper.php</exclude-pattern>
-		<exclude-pattern>models/FrmAddon.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryMeta.php</exclude-pattern>
-		<exclude-pattern>models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>models/FrmField.php</exclude-pattern>
-		<exclude-pattern>models/FrmForm.php</exclude-pattern>
-		<exclude-pattern>models/FrmFormAction.php</exclude-pattern>
-		<exclude-pattern>models/FrmInbox.php</exclude-pattern>
-		<exclude-pattern>models/FrmMigrate.php</exclude-pattern>
-		<exclude-pattern>models/FrmPluginSearch.php</exclude-pattern>
-		<exclude-pattern>models/FrmRecaptchaSettings.php</exclude-pattern>
-		<exclude-pattern>models/FrmReviews.php</exclude-pattern>
-		<exclude-pattern>models/FrmSettings.php</exclude-pattern>
-		<exclude-pattern>models/FrmSolution.php</exclude-pattern>
-		<exclude-pattern>models/FrmStyle.php</exclude-pattern>
-		<exclude-pattern>models/FrmTurnstileSettings.php</exclude-pattern>
-		<exclude-pattern>widgets/FrmShowForm.php</exclude-pattern>
-		<exclude-pattern>css/_single_theme.css.php</exclude-pattern>
-		<exclude-pattern>css/custom_theme.css.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmStrpLiteConnectHelper.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
-		<exclude-pattern>stripe/models/FrmStrpLiteAuth.php</exclude-pattern>
-		<exclude-pattern>stripe/models/FrmTransLiteAction.php</exclude-pattern>
+		<exclude-pattern>css/*</exclude-pattern>
 	</rule>
 
 	<rule ref="SlevomatCodingStandard.Functions.FunctionLength">
@@ -280,17 +228,27 @@
 	</rule> 
 
 	<!-- Custom Formidable sniffs -->
+	<!-- Whitespace -->
 	<rule ref="Formidable.WhiteSpace.BlankLineAfterClosingBrace" />
 	<rule ref="Formidable.WhiteSpace.BlankLineBeforeReturnAfterBrace" />
 	<rule ref="Formidable.WhiteSpace.ConsecutiveAssignmentSpacing" />
+	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
+	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterIfOpen" />
+
+	<!-- Code Analysis -->
+	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
+	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetTruthyCheck" />
-	<rule ref="Formidable.WhiteSpace.ShortFunctionBlankLine" />
-	<rule ref="Formidable.CodeAnalysis.SimplifyIfReturn" />
-	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
-	<rule ref="Formidable.WhiteSpace.NoBlankLineInShortIf" />
-	<rule ref="Formidable.WhiteSpace.NoBlankLineAfterLoopOpen" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyIssetEmptyCheck" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
+	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 </ruleset>

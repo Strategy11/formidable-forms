@@ -723,7 +723,6 @@ class FrmEmail {
 
 		// if sending the email from a yahoo address, change it to the WordPress default
 		if ( str_contains( $from_email, '@yahoo.com' ) ) {
-
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 

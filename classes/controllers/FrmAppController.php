@@ -188,7 +188,7 @@ class FrmAppController {
 	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
 	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -813,7 +813,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */
@@ -977,7 +977,7 @@ class FrmAppController {
 			'
 		);
 		wp_enqueue_style( 'formidable-admin' );
-		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() );
+		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		FrmAppHelper::localize_script( 'admin' );
 		self::include_info_overlay();
 	}

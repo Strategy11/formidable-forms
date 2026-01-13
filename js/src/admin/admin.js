@@ -2114,7 +2114,7 @@ window.frmAdminBuildJS = function() {
 			}
 
 			/**
-			 * @since x.x
+			 * @since 6.27
 			 *
 			 * @param {boolean}     denyDropInRepeater
 			 * @param {HTMLElement} draggable
@@ -3060,7 +3060,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param {string} type
 	 * @return {void}
@@ -5422,7 +5422,7 @@ window.frmAdminBuildJS = function() {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param {string} type
 	 * @return {void}

@@ -137,35 +137,35 @@ class FrmField {
 			'date'            => array(
 				'name'         => __( 'Date', 'formidable' ),
 				'icon'         => 'frmfont frm_calendar2_icon',
-				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
+				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'date-field-preview.webp',
 				'learn-more'   => 'date',
 			),
 			'time'            => array(
 				'name'         => __( 'Time', 'formidable' ),
 				'icon'         => 'frmfont frm_clock_icon',
-				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
+				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'time-field-preview.webp',
 				'learn-more'   => 'time',
 			),
 			'scale'           => array(
 				'name'         => __( 'Scale', 'formidable' ),
 				'icon'         => 'frmfont frm_linear_scale_icon',
-				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
+				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'scale-field-preview.webp',
 				'learn-more'   => 'scale',
 			),
 			'star'            => array(
 				'name'         => __( 'Star Rating', 'formidable' ),
 				'icon'         => 'frmfont frm_star2_icon',
-				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
+				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'star-field-preview.webp',
 				'learn-more'   => 'star-ratings',
 			),
 			'range'           => array(
 				'name'         => __( 'Slider', 'formidable' ),
 				'icon'         => 'frmfont frm_code_commit_icon',
-				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
+				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'slider-field-preview.webp',
 				'learn-more'   => 'slider',
 			),
@@ -193,7 +193,7 @@ class FrmField {
 			'divider|repeat'  => array(
 				'name'         => __( 'Repeater', 'formidable' ),
 				'icon'         => 'frmfont frm_refresh_icon',
-				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
+				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'repeater-field-preview.webp',
 				'learn-more'   => 'repeatable-section',
 			),
@@ -204,21 +204,21 @@ class FrmField {
 			'divider'         => array(
 				'name'         => __( 'Section', 'formidable' ),
 				'icon'         => 'frmfont frm_header_icon',
-				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'section-field-preview.webp',
 				'learn-more'   => 'section-heading',
 			),
 			'break'           => array(
 				'name'         => __( 'Page Break', 'formidable' ),
 				'icon'         => 'frmfont frm_page_break_icon',
-				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'page-break-field-preview.webp',
 				'learn-more'   => 'page-breaks',
 			),
 			'form'            => array(
 				'name'         => __( 'Embed Form', 'formidable' ),
 				'icon'         => 'frmfont frm_file_text2_icon',
-				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
+				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'embed-form-field-preview.webp',
 				'learn-more'   => 'embed-form',
 			),
@@ -226,7 +226,7 @@ class FrmField {
 				'name'         => __( 'Likert Scale', 'formidable' ),
 				'icon'         => 'frmfont frm_likert_scale frm_show_upgrade',
 				'addon'        => 'surveys',
-				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
+				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'likert-field-preview.webp',
 				'learn-more'   => 'likert-scale',
 			),
@@ -234,21 +234,21 @@ class FrmField {
 				'name'         => __( 'NPS', 'formidable' ),
 				'icon'         => 'frmfont frm_nps frm_show_upgrade',
 				'addon'        => 'surveys',
-				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
+				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
 				'learn-more'   => 'net-promoter-score',
 			),
 			'password'        => array(
 				'name'         => __( 'Password', 'formidable' ),
 				'icon'         => 'frmfont frm_lock_closed2_icon',
-				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
+				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'password-field-preview.webp',
 				'learn-more'   => 'password-2',
 			),
 			'tag'             => array(
 				'name'         => __( 'Tags', 'formidable' ),
 				'icon'         => 'frmfont frm_price_tags2_icon',
-				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
+				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'tags-field-preview.webp',
 				'learn-more'   => 'tags',
 			),
@@ -261,14 +261,14 @@ class FrmField {
 			'address'         => array(
 				'name'         => __( 'Address', 'formidable' ),
 				'icon'         => 'frmfont frm_location2_icon',
-				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
+				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'address-field-preview.webp',
 				'learn-more'   => 'address',
 			),
 			'summary'         => array(
 				'name'         => __( 'Summary', 'formidable' ),
 				'icon'         => 'frmfont frm_file_text3_icon',
-				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
+				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'summary-field-preview.webp',
 				'learn-more'   => 'summary-review-before-submit',
 			),
@@ -294,7 +294,7 @@ class FrmField {
 				'require'      => 'Simply Schedule Appointments',
 				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
-					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
+					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/" target="_blank" rel="noopener">',
 					'</a>'
 				),
@@ -306,7 +306,7 @@ class FrmField {
 				'name'         => __( 'Product', 'formidable' ),
 				'icon'         => 'frmfont frm_product2_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
@@ -314,7 +314,7 @@ class FrmField {
 				'name'         => __( 'Quantity', 'formidable' ),
 				'icon'         => 'frmfont frm_quantity_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
@@ -322,7 +322,7 @@ class FrmField {
 				'name'         => __( 'Total', 'formidable' ),
 				'icon'         => 'frmfont frm_total2_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
@@ -633,8 +633,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			// phpcs:ignore Universal.Operators.StrictComparisons
-			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
@@ -784,7 +783,7 @@ class FrmField {
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		FrmDb::cache_delete_group( 'frm_field' );
 

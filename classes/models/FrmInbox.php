@@ -171,7 +171,7 @@ class FrmInbox extends FrmFormApi {
 
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
 				unset( self::$messages[ $t ] );
