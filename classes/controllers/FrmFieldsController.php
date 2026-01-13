@@ -19,7 +19,8 @@ class FrmFieldsController {
 		// Javascript may be included in some field settings.
 		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		$fields = isset( $_POST['field'] ) ? wp_unslash( $_POST['field'] ) : array();
-		if ( empty( $fields ) ) {
+
+		if ( ! $fields ) {
 			wp_die();
 		}
 
@@ -34,6 +35,7 @@ class FrmFieldsController {
 		foreach ( $fields as $field ) {
 			$field = htmlspecialchars_decode( nl2br( $field ) );
 			$field = json_decode( $field );
+
 			if ( ! isset( $field->id ) || ! is_numeric( $field->id ) ) {
 				// this field may have already been loaded
 				continue;
@@ -48,9 +50,8 @@ class FrmFieldsController {
 
 			ob_start();
 			self::load_single_field( $field, $values );
-			$field_html[ absint( $field->id ) ] = ob_get_contents();
-			ob_end_clean();
-		}
+			$field_html[ absint( $field->id ) ] = ob_get_clean();
+		}//end foreach
 
 		echo json_encode( $field_html );
 
@@ -90,7 +91,7 @@ class FrmFieldsController {
 	public static function include_new_field( $field_type, $form_id, $field_options = array() ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $field_type, $form_id );
 
-		if ( ! empty( $field_options ) ) {
+		if ( $field_options ) {
 			$field_values['field_options'] = array_merge( $field_values['field_options'], $field_options );
 		}
 
@@ -107,13 +108,13 @@ class FrmFieldsController {
 			return false;
 		}
 
-		$field = self::get_field_array_from_id( $field_id );
-
+		$field  = self::get_field_array_from_id( $field_id );
 		$values = array();
+
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$values['post_type'] = FrmProFormsHelper::post_type( $form_id );
+			$parent_form_id      = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 
-			$parent_form_id = FrmDb::get_var( 'frm_forms', array( 'id' => $form_id ), 'parent_form_id' );
 			if ( $parent_form_id ) {
 				$field['parent_form_id'] = $parent_form_id;
 			}
@@ -128,9 +129,8 @@ class FrmFieldsController {
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
-		$field_id = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
-		$form_id  = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
-
+		$field_id  = FrmAppHelper::get_post_param( 'field_id', 0, 'absint' );
+		$form_id   = FrmAppHelper::get_post_param( 'form_id', 0, 'absint' );
 		$new_field = FrmField::duplicate_single_field( $field_id, $form_id );
 
 		if ( is_array( $new_field ) && ! empty( $new_field['field_id'] ) ) {
@@ -149,7 +149,6 @@ class FrmFieldsController {
 	 */
 	public static function get_field_array_from_id( $field_id ) {
 		$field = FrmField::getOne( $field_id );
-
 		return FrmFieldsHelper::setup_edit_vars( $field );
 	}
 
@@ -159,6 +158,8 @@ class FrmFieldsController {
 	 * @param array|int|object $field_object
 	 * @param array            $values
 	 * @param int              $form_id
+	 *
+	 * @return void
 	 */
 	public static function load_single_field( $field_object, $values, $form_id = 0 ) {
 		global $frm_vars;
@@ -171,9 +172,8 @@ class FrmFieldsController {
 			$field_object = FrmField::getOne( $field['id'] );
 		}
 
-		$field_obj = FrmFieldFactory::get_field_factory( $field_object );
-		$display   = self::display_field_options( array(), $field_obj );
-
+		$field_obj       = FrmFieldFactory::get_field_factory( $field_object );
+		$display         = self::display_field_options( array(), $field_obj );
 		$ajax_loading    = ! empty( $values['ajax_load'] );
 		$ajax_this_field = isset( $values['count'] ) && $values['count'] > 10 && ! in_array( $field_object->type, array( 'divider', 'end_divider' ), true );
 
@@ -211,6 +211,7 @@ class FrmFieldsController {
 	 * @param array        $field
 	 * @param array        $display
 	 * @param FrmFieldType $field_info
+	 *
 	 * @return string
 	 */
 	private static function get_classes_for_builder_field( $field, $display, $field_info ) {
@@ -260,6 +261,7 @@ class FrmFieldsController {
 		 * @since 6.8.4
 		 *
 		 * @param array $bulk_edit_types
+		 *
 		 * @return array
 		 */
 		$bulk_edit_types = apply_filters( 'frm_bulk_edit_field_types', $bulk_edit_types );
@@ -269,16 +271,17 @@ class FrmFieldsController {
 		}
 
 		$field = FrmFieldsHelper::setup_edit_vars( $field );
-		$opts  = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
-		$opts  = explode( "\n", rtrim( $opts, "\n" ) );
-		$opts  = array_map( 'trim', $opts );
+
+		$opts = FrmAppHelper::get_param( 'opts', '', 'post', 'wp_kses_post' );
+		$opts = explode( "\n", rtrim( $opts, "\n" ) );
+		$opts = array_map( 'trim', $opts );
 
 		$separate                = FrmAppHelper::get_param( 'separate', '', 'post', 'sanitize_text_field' );
 		$field['separate_value'] = $separate === 'true';
 
 		if ( $field['separate_value'] ) {
 			foreach ( $opts as $opt_key => $opt ) {
-				if ( strpos( $opt, '|' ) !== false ) {
+				if ( str_contains( $opt, '|' ) ) {
 					$vals             = explode( '|', $opt );
 					$opts[ $opt_key ] = array(
 						'label' => trim( $vals[0] ),
@@ -291,15 +294,18 @@ class FrmFieldsController {
 		}
 
 		// Keep other options after bulk update.
-		if ( isset( $field['field_options']['other'] ) && $field['field_options']['other'] == true ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! empty( $field['field_options']['other'] ) ) {
 			$other_array = array();
+
 			foreach ( $field['options'] as $opt_key => $opt ) {
 				if ( FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 					$other_array[ $opt_key ] = $opt;
 				}
 				unset( $opt_key, $opt );
 			}
-			if ( ! empty( $other_array ) ) {
+
+			if ( $other_array ) {
 				$opts = array_merge( $opts, $other_array );
 			}
 		}
@@ -315,6 +321,7 @@ class FrmFieldsController {
 	 * @since 4.0
 	 *
 	 * @param array $atts - Includes field array, field_obj, display array, values array.
+	 *
 	 * @return void
 	 */
 	public static function load_single_field_settings( $atts ) {
@@ -342,7 +349,7 @@ class FrmFieldsController {
 			// Add fallback for an add-on field type that has been deactivated.
 			$all_field_types[ $field['type'] ] = array(
 				'name' => ucfirst( $field['type'] ),
-				'icon' => 'frm_icon_font frm_pencil_icon',
+				'icon' => 'frmfont frm_pencil_icon',
 			);
 		} elseif ( ! is_array( $all_field_types[ $field['type'] ] ) ) {
 			// Fallback for fields added in a more basic way.
@@ -350,6 +357,7 @@ class FrmFieldsController {
 		}
 
 		$type_name = $all_field_types[ $field['type'] ]['name'];
+
 		if ( $field['type'] === 'divider' && FrmField::is_option_true( $field, 'repeat' ) ) {
 			$type_name = $all_field_types['divider|repeat']['name'];
 		}
@@ -384,13 +392,14 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $atts
+	 *
 	 * @return array
 	 */
 	private static function default_value_types( $field, $atts ) {
 		$types = array(
 			'default_value'    => array(
 				'class' => '',
-				'icon'  => 'frm_icon_font frm_text2_icon',
+				'icon'  => 'frmfont frm_text2_icon',
 				'title' => __( 'Default Value', 'formidable' ),
 				'data'  => array(
 					'frmshow' => '#default-value-for-',
@@ -399,7 +408,7 @@ class FrmFieldsController {
 			'calc'             => array(
 				'class'   => 'frm_show_upgrade frm_noallow',
 				'title'   => __( 'Calculate Value', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_calculator_icon',
+				'icon'    => 'frmfont frm_calculator_icon',
 				'data'    => array(
 					'medium'  => 'calculations',
 					'upgrade' => __( 'Calculator forms', 'formidable' ),
@@ -409,7 +418,7 @@ class FrmFieldsController {
 			'get_values_field' => array(
 				'class'   => 'frm_show_upgrade frm_noallow',
 				'title'   => __( 'Lookup', 'formidable' ),
-				'icon'    => 'frm_icon_font frm_search_icon',
+				'icon'    => 'frmfont frm_search_icon',
 				'data'    => array(
 					'medium'  => 'lookup',
 					'upgrade' => __( 'Lookup fields', 'formidable' ),
@@ -440,6 +449,7 @@ class FrmFieldsController {
 
 	/**
 	 * @param string $type
+	 *
 	 * @return string
 	 */
 	public static function change_type( $type ) {
@@ -451,6 +461,7 @@ class FrmFieldsController {
 			'website' => 'url',
 			'image'   => 'url',
 		);
+
 		if ( isset( $type_switch[ $type ] ) ) {
 			$type = $type_switch[ $type ];
 		}
@@ -491,6 +502,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field Field data.
 	 * @param bool  $is_hidden Whether the format option should be hidden.
+	 *
 	 * @return void
 	 */
 	public static function show_format_option( $field, $is_hidden = false ) {
@@ -506,6 +518,12 @@ class FrmFieldsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-fields/back-end/value-format.php';
 	}
 
+	/**
+	 * @param array $field
+	 * @param bool  $echo
+	 *
+	 * @return string
+	 */
 	public static function input_html( $field, $echo = true ) {
 		$class = array();
 		self::add_input_classes( $field, $class );
@@ -536,6 +554,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $class
+	 *
 	 * @return void
 	 */
 	private static function add_input_classes( $field, array &$class ) {
@@ -555,6 +574,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_size( $field, array &$add_html ) {
@@ -589,6 +609,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_cols( $field, array &$add_html ) {
@@ -611,14 +632,14 @@ class FrmFieldsController {
 			return;
 		}
 
-		$size = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
-
+		$size             = (float) str_replace( $unit, '', $field['size'] ) / $calc[ $unit ];
 		$add_html['cols'] = 'cols="' . absint( $size ) . '"';
 	}
 
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_html_length( $field, array &$add_html ) {
@@ -646,9 +667,11 @@ class FrmFieldsController {
 	 * @param array $field
 	 * @param array $add_html
 	 * @param array $class
+	 *
 	 * @return void
 	 */
 	private static function add_html_placeholder( $field, array &$add_html, array &$class ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['default_value'] != '' ) {
 			if ( is_array( $field['default_value'] ) ) {
 				$add_html['data-frmval'] = 'data-frmval="' . esc_attr( json_encode( $field['default_value'] ) ) . '"';
@@ -658,6 +681,8 @@ class FrmFieldsController {
 		}
 
 		$field['placeholder'] = self::prepare_placeholder( $field );
+
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['placeholder'] == '' || is_array( $field['placeholder'] ) ) {
 			// don't include a json placeholder
 			return;
@@ -672,12 +697,11 @@ class FrmFieldsController {
 	 * @since 5.4 This doesn't call `FrmFieldsController::get_default_value_from_name()` anymore.
 	 *
 	 * @param array $field Field array.
+	 *
 	 * @return string
 	 */
 	private static function prepare_placeholder( $field ) {
-		$placeholder = $field['placeholder'] ?? '';
-
-		return $placeholder;
+		return $field['placeholder'] ?? '';
 	}
 
 	/**
@@ -700,11 +724,15 @@ class FrmFieldsController {
 	 * in a dropdown.
 	 *
 	 * @since 4.04
+	 *
+	 * @param array|object $field
+	 *
 	 * @return bool True if placeholder was added.
 	 */
 	public static function add_placeholder_to_select( $field ) {
 		$placeholder = FrmField::get_option( $field, 'placeholder' );
-		if ( empty( $placeholder ) ) {
+
+		if ( ! $placeholder ) {
 			$placeholder = self::get_default_value_from_name( $field );
 		}
 
@@ -713,6 +741,7 @@ class FrmFieldsController {
 
 		if ( $autocomplete ) {
 			$use_chosen = ! is_callable( 'FrmProAppHelper::use_chosen_js' ) || FrmProAppHelper::use_chosen_js();
+
 			if ( $use_chosen ) {
 				$use_placeholder = '';
 			}
@@ -737,6 +766,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_placeholder_to_input( $field, &$add_html ) {
@@ -748,9 +778,11 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_frmval_to_input( $field, &$add_html ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['placeholder'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['placeholder'] ) . '"';
 
@@ -759,11 +791,18 @@ class FrmFieldsController {
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $field['default_value'] != '' ) {
 			$add_html['data-frmval'] = 'data-frmval="' . esc_attr( $field['default_value'] ) . '"';
 		}
 	}
 
+	/**
+	 * @param array $field
+	 * @param array $add_html
+	 *
+	 * @return void
+	 */
 	private static function add_validation_messages( $field, array &$add_html ) {
 		$field_validation_messages_status = self::get_validation_data_attribute_visibility_info( $field );
 
@@ -789,6 +828,7 @@ class FrmFieldsController {
 	 * @since 6.9
 	 *
 	 * @param array|object $field
+	 *
 	 * @return array
 	 */
 	private static function get_validation_data_attribute_visibility_info( $field ) {
@@ -820,15 +860,18 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_error_html_for_js_validation( $field, array &$add_html ) {
 		$form = self::get_form_for_js_validation( $field );
+
 		if ( false === $form ) {
 			return;
 		}
 
 		$error_body = self::pull_custom_error_body_from_custom_html( $form, $field );
+
 		if ( false !== $error_body ) {
 			$error_body                  = urlencode( $error_body );
 			$add_html['data-error-html'] = 'data-error-html="' . esc_attr( $error_body ) . '"';
@@ -839,18 +882,22 @@ class FrmFieldsController {
 	 * @since 5.0.03
 	 *
 	 * @param array $field
+	 *
 	 * @return false|stdClass false if there is no form object found with JS validation active.
 	 */
 	private static function get_form_for_js_validation( $field ) {
 		global $frm_vars;
+
 		if ( ! empty( $frm_vars['js_validate_forms'] ) ) {
 			if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
 				return $frm_vars['js_validate_forms'][ $field['form_id'] ];
 			}
+
 			if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
 				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
 			}
 		}
+
 		return false;
 	}
 
@@ -858,6 +905,7 @@ class FrmFieldsController {
 	 * @param stdClass $form
 	 * @param array    $field
 	 * @param array    $errors
+	 *
 	 * @return false|string
 	 */
 	public static function pull_custom_error_body_from_custom_html( $form, $field, $errors = array() ) {
@@ -867,13 +915,14 @@ class FrmFieldsController {
 
 		$custom_html = $field['custom_html'];
 		$custom_html = apply_filters( 'frm_before_replace_shortcodes', $custom_html, $field, $errors, $form );
+		$start       = strpos( $custom_html, '[if error]' );
 
-		$start = strpos( $custom_html, '[if error]' );
 		if ( false === $start ) {
 			return false;
 		}
 
 		$end = strpos( $custom_html, '[/if error]' );
+
 		if ( false === $end || $end < $start ) {
 			return false;
 		}
@@ -886,11 +935,7 @@ class FrmFieldsController {
 			'<div class="frm_error" role="alert">[error]</div>',
 		);
 
-		if ( in_array( $error_body, $default_html, true ) ) {
-			return false;
-		}
-
-		return $error_body;
+		return in_array( $error_body, $default_html, true ) ? false : $error_body;
 	}
 
 	/**
@@ -899,8 +944,10 @@ class FrmFieldsController {
 	 * remove it is present if needed.
 	 *
 	 * @since 3.06.01
+	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
@@ -921,6 +968,7 @@ class FrmFieldsController {
 	/**
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_shortcodes_to_html( $field, array &$add_html ) {
@@ -933,8 +981,9 @@ class FrmFieldsController {
 		}
 
 		foreach ( $field['shortcodes'] as $k => $v ) {
-			if ( isset( $field['subfield_name'] ) && 0 === strpos( $k, 'aria-invalid' ) ) {
+			if ( isset( $field['subfield_name'] ) && str_starts_with( $k, 'aria-invalid' ) ) {
 				$subfield_name = $field['subfield_name'];
+
 				if ( ! isset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] ) ) {
 					continue;
 				}
@@ -943,11 +992,12 @@ class FrmFieldsController {
 				$v = $field['shortcodes'][ 'aria-invalid-' . $subfield_name ];
 				unset( $field['shortcodes'][ 'aria-invalid-' . $subfield_name ] );
 			}
+
 			if ( 'opt' === $k || ! self::should_allow_input_attribute( $k ) ) {
 				continue;
 			}
 
-			if ( is_numeric( $k ) && strpos( $v, '=' ) ) {
+			if ( is_numeric( $k ) && str_contains( $v, '=' ) ) {
 				$add_html[] = $v;
 			} elseif ( ! empty( $k ) && isset( $add_html[ $k ] ) ) {
 				$add_html[ $k ] = str_replace( $k . '="', $k . '="' . $v, $add_html[ $k ] );
@@ -965,6 +1015,7 @@ class FrmFieldsController {
 	 * @since 6.11.2
 	 *
 	 * @param string $key The option key.
+	 *
 	 * @return bool
 	 */
 	private static function should_allow_input_attribute( $key ) {
@@ -981,6 +1032,7 @@ class FrmFieldsController {
 	 *
 	 * @param array $field
 	 * @param array $add_html
+	 *
 	 * @return void
 	 */
 	private static function add_pattern_attribute( $field, array &$add_html ) {
@@ -996,6 +1048,13 @@ class FrmFieldsController {
 		}
 	}
 
+	/**
+	 * @param mixed        $opt
+	 * @param mixed        $opt_key
+	 * @param array|object $field
+	 *
+	 * @return mixed
+	 */
 	public static function check_value( $opt, $opt_key, $field ) {
 		if ( is_array( $opt ) ) {
 			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
@@ -1008,6 +1067,11 @@ class FrmFieldsController {
 		return $opt;
 	}
 
+	/**
+	 * @param mixed $opt
+	 *
+	 * @return mixed
+	 */
 	public static function check_label( $opt ) {
 		if ( is_array( $opt ) ) {
 			$opt = $opt['label'] ?? reset( $opt );

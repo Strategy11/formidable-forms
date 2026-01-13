@@ -34,11 +34,12 @@ class FrmStrpLiteConnectHelper {
 		$action = FrmAppHelper::get_param( 'action', '', 'post', 'sanitize_text_field' );
 		$prefix = 'frm_stripe_connect_';
 
-		if ( ! $action || 0 !== strpos( $action, $prefix ) ) {
+		if ( ! $action || ! str_starts_with( $action, $prefix ) ) {
 			if ( 'frm_strp_connect_get_settings_button' === $action ) {
 				FrmAppHelper::permission_check( 'frm_change_settings' );
 				self::render_settings();
 			}
+
 			return;
 		}
 
@@ -129,6 +130,7 @@ class FrmStrpLiteConnectHelper {
 	 * Generate a new client password for authenticating with Connect Service and save it locally as an option.
 	 *
 	 * @param string $mode 'live' or 'test'.
+	 *
 	 * @return string the client password.
 	 */
 	private static function generate_client_password( $mode ) {
@@ -140,6 +142,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $action
 	 * @param array  $additional_body
+	 *
 	 * @return object|string
 	 */
 	private static function post_to_connect_server( $action, $additional_body = array() ) {
@@ -168,10 +171,12 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		$body = self::pull_response_body( $response );
+
 		if ( empty( $body->success ) ) {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -193,6 +198,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string either _test or _live.
 	 */
 	private static function get_active_mode_option_name_suffix( $mode = 'auto' ) {
@@ -205,6 +211,7 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $key 'account_id', 'client_password', 'server_password', 'details_submitted'.
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_strp_connect_option_name( $key, $mode = 'auto' ) {
@@ -213,6 +220,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_account_id_option_name( $mode = 'auto' ) {
@@ -221,6 +229,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_client_side_token_option_name( $mode = 'auto' ) {
@@ -229,6 +238,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_server_side_token_option_name( $mode = 'auto' ) {
@@ -237,6 +247,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode either 'auto', 'live', or 'test'.
+	 *
 	 * @return string
 	 */
 	private static function get_stripe_details_submitted_option_name( $mode = 'auto' ) {
@@ -298,6 +309,7 @@ class FrmStrpLiteConnectHelper {
 
 		$event     = 'frm_payment_cron';
 		$timestamp = wp_next_scheduled( $event );
+
 		if ( false !== $timestamp ) {
 			wp_unschedule_event( $timestamp, $event );
 		}
@@ -326,6 +338,7 @@ class FrmStrpLiteConnectHelper {
 			if ( self::check_server_for_connected_account_status() ) {
 				wp_send_json_success();
 			}
+
 			wp_send_json_error();
 		}
 
@@ -364,6 +377,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function check_server_for_oauth_account_id() {
 		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+
 		if ( 'live' !== $mode ) {
 			$mode = 'test';
 		}
@@ -397,6 +411,7 @@ class FrmStrpLiteConnectHelper {
 	 * On a successful account status check, set details_submitted option.
 	 *
 	 * @param string $mode 'live' or 'test'.
+	 *
 	 * @return void
 	 */
 	private static function set_stripe_details_as_submitted( $mode ) {
@@ -455,22 +470,27 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function check_server_for_connected_account_status() {
 		$mode = FrmAppHelper::get_param( 'mode', '', 'get', 'sanitize_text_field' );
+
 		if ( 'live' !== $mode ) {
 			$mode = 'test';
 		}
+
 		$additional_body = array(
 			'frm_strp_connect_mode' => $mode,
 		);
 		$data            = self::post_with_authenticated_body( 'account_status', $additional_body );
 		$success         = false !== $data && ! empty( $data->details_submitted );
+
 		if ( $success ) {
 			self::set_stripe_details_as_submitted( $mode );
 		}
+
 		return $success;
 	}
 
 	/**
 	 * @param string $mode
+	 *
 	 * @return bool
 	 */
 	public static function stripe_connect_is_setup( $mode = 'auto' ) {
@@ -479,12 +499,18 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param mixed $response
+	 *
 	 * @return bool
 	 */
 	private static function validate_response( $response ) {
 		return ! is_wp_error( $response ) && is_array( $response ) && isset( $response['http_response'] );
 	}
 
+	/**
+	 * @param array $response
+	 *
+	 * @return object|null
+	 */
 	private static function pull_response_body( $response ) {
 		$http_response   = $response['http_response'];
 		$response_object = $http_response->get_response_object();
@@ -496,6 +522,7 @@ class FrmStrpLiteConnectHelper {
 	 */
 	private static function build_headers_for_post() {
 		$password = self::maybe_get_pro_license();
+
 		if ( false === $password ) {
 			$password = 'lite_' . self::get_uuid();
 		}
@@ -519,6 +546,7 @@ class FrmStrpLiteConnectHelper {
 	 * If it is active, use the WPML "absolute home" URL which is not modified.
 	 *
 	 * @param string $url
+	 *
 	 * @return string
 	 */
 	private static function maybe_fix_wpml_url( $url ) {
@@ -531,12 +559,18 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * WPML might add a language to the url. Don't send that to the server.
+	 *
+	 * @param string $url URL.
+	 *
+	 * @return string
 	 */
 	private static function strip_lang_from_url( $url ) {
 		$split_on_language = explode( '/?lang=', $url );
+
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
+
 		return $url;
 	}
 
@@ -549,10 +583,12 @@ class FrmStrpLiteConnectHelper {
 	private static function maybe_get_pro_license() {
 		if ( FrmAppHelper::pro_is_installed() ) {
 			$pro_license = FrmAddonsController::get_pro_license();
+
 			if ( $pro_license ) {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -568,6 +604,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param bool $connected
+	 *
 	 * @return string
 	 */
 	private static function get_url_for_stripe_settings( $connected ) {
@@ -597,6 +634,7 @@ class FrmStrpLiteConnectHelper {
 	private static function render_settings() {
 		$modes = array( 'test', 'live' );
 		$html  = '';
+
 		foreach ( $modes as $mode ) {
 			$account_id = self::get_account_id( $mode );
 			$connected  = self::stripe_connect_is_setup( $mode );
@@ -605,8 +643,7 @@ class FrmStrpLiteConnectHelper {
 
 			ob_start();
 			require FrmStrpLiteAppHelper::plugin_path() . '/views/settings/connect.php';
-			$html .= ob_get_contents();
-			ob_end_clean();
+			$html .= ob_get_clean();
 		}
 
 		$response_data = array(
@@ -616,7 +653,6 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @todo I can probably remove this.
 	 * @return void
 	 */
 	public static function stripe_icon() {
@@ -635,6 +671,7 @@ class FrmStrpLiteConnectHelper {
 		if ( empty( $_POST ) || ! array_key_exists( 'testMode', $_POST ) ) {
 			return FrmStrpLiteAppHelper::active_mode();
 		}
+
 		$test_mode = FrmAppHelper::get_param( 'testMode', '', 'post', 'absint' );
 		return $test_mode ? 'test' : 'live';
 	}
@@ -649,6 +686,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $mode
+	 *
 	 * @return bool|string
 	 */
 	public static function get_account_id( $mode = 'auto' ) {
@@ -657,22 +695,23 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $options
+	 *
 	 * @return false|string
 	 */
 	public static function get_customer_id( $options ) {
 		$data    = self::post_with_authenticated_body( 'get_customer', compact( 'options' ) );
 		$success = false !== $data;
+
 		if ( ! $success ) {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
-		if ( empty( $data->customer_id ) ) {
-			return false;
-		}
-		return $data->customer_id;
+
+		return empty( $data->customer_id ) ? false : $data->customer_id;
 	}
 
 	/**
 	 * @param string $customer_id
+	 *
 	 * @return bool
 	 */
 	public static function validate_customer( $customer_id ) {
@@ -689,57 +728,62 @@ class FrmStrpLiteConnectHelper {
 	private static function post_with_authenticated_body( $action, $additional_body = array() ) {
 		$body     = array_merge( self::get_standard_authenticated_body(), $additional_body );
 		$response = self::post_to_connect_server( $action, $body );
+
 		if ( is_object( $response ) ) {
 			return $response;
 		}
+
 		if ( is_array( $response ) ) {
 			// reformat empty arrays as empty objects
 			// if the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
+
 		if ( is_string( $response ) ) {
 			self::$latest_error_from_stripe_connect = $response;
 			FrmTransLiteLog::log_message( 'Stripe Connect Error', $response );
 		} else {
 			self::$latest_error_from_stripe_connect = '';
 		}
+
 		return false;
 	}
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return mixed
 	 */
 	public static function create_intent( $new_charge ) {
 		$data    = self::post_with_authenticated_body( 'create_intent', compact( 'new_charge' ) );
 		$success = false !== $data;
-		if ( ! $success ) {
-			return false;
-		}
-		return $data;
+
+		return $success ? $data : false;
 	}
 
 	/**
 	 * @param string $payment_id
+	 *
 	 * @return bool
 	 */
 	public static function refund_payment( $payment_id ) {
-		$data     = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
-		$refunded = is_object( $data );
-		return $refunded;
+		$data = self::post_with_authenticated_body( 'refund_payment', compact( 'payment_id' ) );
+		return is_object( $data );
 	}
 
 	/**
 	 * @param array $new_charge
+	 *
 	 * @return mixed
 	 */
 	public static function create_subscription( $new_charge ) {
 		$data = self::post_with_authenticated_body( 'create_subscription', compact( 'new_charge' ) );
+
 		if ( is_object( $data ) ) {
 			return $data;
 		}
 
-		if ( isset( self::$latest_error_from_stripe_connect ) && 0 === strpos( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
+		if ( isset( self::$latest_error_from_stripe_connect ) && str_starts_with( self::$latest_error_from_stripe_connect, 'No such plan: ' ) ) {
 			return self::$latest_error_from_stripe_connect;
 		}
 
@@ -749,17 +793,18 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 *
 	 * @return bool
 	 */
 	public static function cancel_subscription( $sub_id, $customer_id = false ) {
 		$cancel_at_period_end = FrmStrpLiteSubscriptionHelper::should_cancel_at_period_end();
 		$data                 = self::post_with_authenticated_body( 'cancel_subscription', compact( 'sub_id', 'customer_id', 'cancel_at_period_end' ) );
-		$canceled             = false !== $data;
-		return $canceled;
+		return false !== $data;
 	}
 
 	/**
 	 * @param string $payment_id
+	 *
 	 * @return mixed
 	 */
 	public static function get_intent( $payment_id ) {
@@ -775,24 +820,23 @@ class FrmStrpLiteConnectHelper {
 		$customer_id = get_user_meta( $user_id, $meta_name, true );
 		$data        = self::post_with_authenticated_body( 'get_customer_subscriptions', compact( 'customer_id' ) );
 
-		if ( false === $data ) {
-			return false;
-		}
-
-		return $data->subscriptions;
+		return false === $data ? false : $data->subscriptions;
 	}
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return false|object
 	 */
 	public static function get_event( $event_id ) {
 		$event = wp_cache_get( $event_id, 'frm_strp' );
+
 		if ( is_object( $event ) ) {
 			return $event;
 		}
 
 		$event = self::post_with_authenticated_body( 'get_event', compact( 'event_id' ) );
+
 		if ( false === $event || empty( $event->event ) ) {
 			return false;
 		}
@@ -803,6 +847,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return mixed
 	 */
 	public static function process_event( $event_id ) {
@@ -811,18 +856,22 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param array $plan
+	 *
 	 * @return false|string
 	 */
 	public static function maybe_create_plan( $plan ) {
 		$data = self::post_with_authenticated_body( 'maybe_create_plan', compact( 'plan' ) );
+
 		if ( false === $data || empty( $data->plan_id ) ) {
 			return false;
 		}
+
 		return $data->plan_id;
 	}
 
 	/**
 	 * @param array $plan
+	 *
 	 * @return mixed
 	 */
 	public static function create_plan( $plan ) {
@@ -832,12 +881,12 @@ class FrmStrpLiteConnectHelper {
 	/**
 	 * @param string $intent_id
 	 * @param array  $data
+	 *
 	 * @return bool
 	 */
 	public static function update_intent( $intent_id, $data ) {
-		$data    = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
-		$success = false !== $data;
-		return $success;
+		$data = self::post_with_authenticated_body( 'update_intent', compact( 'intent_id', 'data' ) );
+		return false !== $data;
 	}
 
 	/**
@@ -845,9 +894,11 @@ class FrmStrpLiteConnectHelper {
 	 */
 	public static function get_unprocessed_event_ids() {
 		$data = self::post_with_authenticated_body( 'get_unprocessed_event_ids' );
+
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
@@ -859,6 +910,7 @@ class FrmStrpLiteConnectHelper {
 	 *
 	 * @param string      $customer_id
 	 * @param array|false $payment_method_types
+	 *
 	 * @return false|object|string
 	 */
 	public static function create_setup_intent( $customer_id, $payment_method_types = false ) {
@@ -881,6 +933,7 @@ class FrmStrpLiteConnectHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string $setup_id
+	 *
 	 * @return false|object|string
 	 */
 	public static function get_setup_intent( $setup_id ) {
@@ -907,6 +960,7 @@ class FrmStrpLiteConnectHelper {
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 }

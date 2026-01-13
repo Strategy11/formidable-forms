@@ -9,13 +9,10 @@ class FrmTransLiteEntriesController {
 	 * Include payment details in the entry sidebar.
 	 *
 	 * @param stdClass $entry
+	 *
 	 * @return void
 	 */
 	public static function sidebar_list( $entry ) {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		// This line removes PayPal actions from the entries sidebar.
 		remove_action( 'frm_show_entry_sidebar', 'FrmPaymentsController::sidebar_list' );
 		add_action( 'frm_entry_shared_sidebar_middle', self::class . '::show_sidebar_list' );
@@ -25,11 +22,13 @@ class FrmTransLiteEntriesController {
 	 * Show the payment details in the entry sidebar.
 	 *
 	 * @param stdClass $entry
+	 *
 	 * @return void
 	 */
 	public static function show_sidebar_list( $entry ) {
 		$frm_payment = new FrmTransLitePayment();
 		$payments    = $frm_payment->get_all_for_entry( $entry->id );
+
 		if ( ! $payments ) {
 			return;
 		}

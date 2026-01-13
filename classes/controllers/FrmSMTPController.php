@@ -48,10 +48,10 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	public static function load_hooks() {
-
 		add_filter( 'wp_mail_smtp_is_white_labeled', '__return_true' );
 
 		$self = new self();
+
 		if ( wp_doing_ajax() ) {
 			add_action( 'wp_ajax_frm_smtp_page_check_plugin_status', array( $self, 'ajax_check_plugin_status' ) );
 		}
@@ -74,23 +74,28 @@ class FrmSMTPController {
 	/**
 	 * Customize the upgrade link.
 	 *
+	 * @param string $link
+	 *
 	 * @return string
 	 */
 	public function link( $link ) {
 		$new_link = 'formidableforms.com/go-wp-mail-smtp/?urllink=wpmailsmtp%2Ecom%2Flite%2Dupgrade&';
-		$link     = str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
-		return $link;
+		return str_replace( 'wpmailsmtp.com/lite-upgrade/?', $new_link, $link );
 	}
 
 	/**
 	 * Don't nag people to install WPForms
 	 *
 	 * @since 4.04.04
+	 *
+	 * @param array $upsell
+	 *
+	 * @return array
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
 		if ( is_array( $upsell ) ) {
 			foreach ( $upsell as $k => $plugin ) {
-				if ( strpos( $plugin['slug'], 'wpforms' ) !== false ) {
+				if ( str_contains( $plugin['slug'], 'wpforms' ) ) {
 					unset( $upsell[ $k ] );
 				}
 			}
@@ -173,7 +178,6 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_screenshot() {
-
 		printf(
 			'<section class="screenshot">
 				<div class="cont">
@@ -204,10 +208,9 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_step_install() {
-
 		$step = $this->get_data_step_install();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 
@@ -253,10 +256,9 @@ class FrmSMTPController {
 	 * @return void
 	 */
 	protected function output_section_step_setup() {
-
 		$step = $this->get_data_step_setup();
 
-		if ( empty( $step ) ) {
+		if ( ! $step ) {
 			return;
 		}
 
@@ -299,7 +301,6 @@ class FrmSMTPController {
 	 * @return array Step data.
 	 */
 	protected function get_data_step_install() {
-
 		$lite_plugin = new FrmInstallPlugin( array( 'plugin_file' => $this->config['lite_plugin'] ) );
 		$pro_plugin  = new FrmInstallPlugin( array( 'plugin_file' => $this->config['pro_plugin'] ) );
 
@@ -314,6 +315,7 @@ class FrmSMTPController {
 		);
 
 		$is_installed = $this->output_data['plugin_installed'] || $this->output_data['pro_plugin_installed'];
+
 		if ( ! $is_installed ) {
 			// Return the download url.
 			$step['button_text']   = __( 'Install WP Mail SMTP', 'formidable' );
@@ -349,7 +351,6 @@ class FrmSMTPController {
 	 * @return array Step data.
 	 */
 	protected function get_data_step_setup() {
-
 		$step = array();
 
 		$step['icon']          = 'frm_step2_icon';
@@ -376,13 +377,11 @@ class FrmSMTPController {
 	 * @return bool True if some mailer is selected and configured properly.
 	 */
 	protected function is_smtp_configured() {
-
 		if ( ! $this->is_smtp_activated() ) {
 			return false;
 		}
 
-		$phpmailer = $this->get_phpmailer();
-
+		$phpmailer          = $this->get_phpmailer();
 		$mailer             = WPMailSMTP\Options::init()->get( 'mail', 'mailer' );
 		$is_mailer_complete = wp_mail_smtp()->get_providers()->get_mailer( $mailer, $phpmailer )->is_mailer_complete();
 

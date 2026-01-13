@@ -88,6 +88,7 @@ class FrmDashboardHelper {
 	 */
 	public function __construct( $data ) {
 		$sections = array( 'counters', 'license', 'get_free_templates', 'payments', 'entries', 'inbox', 'video', 'payments' );
+
 		foreach ( $sections as $section ) {
 			if ( isset( $data[ $section ] ) ) {
 				$this->view[ $section ] = $data[ $section ];
@@ -153,6 +154,7 @@ class FrmDashboardHelper {
 	 */
 	public function get_license_management() {
 		$template = $this->view['license'];
+
 		if ( is_callable( 'FrmProDashboardHelper::load_license_management' ) ) {
 			FrmProDashboardHelper::load_license_management( $template );
 			return;
@@ -183,11 +185,11 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public static function show_connect_links( $buttons = array(), $button_classes = '' ) {
-		if ( empty( $buttons ) ) {
+		if ( ! $buttons ) {
 			$buttons = self::get_license_buttons();
 		}
 
-		foreach ( $buttons as $i => $button ) {
+		foreach ( $buttons as $button ) {
 			$add_classes = ! empty( $button['classes'] ) ? ' ' . $button['classes'] : ' frm-button-secondary';
 			?>
 			<a href="<?php echo esc_url( $button['link'] ); ?>" target="_blank"
@@ -208,6 +210,7 @@ class FrmDashboardHelper {
 	 */
 	public static function get_license_buttons() {
 		$cta_text = FrmSalesApi::get_best_sale_value( 'dashboard_license_cta_text' );
+
 		if ( ! $cta_text ) {
 			$cta_text = __( 'Get Formidable PRO', 'formidable' );
 		}
@@ -244,8 +247,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function get_inbox() {
-		$template = $this->view['inbox'];
-
+		$template                    = $this->view['inbox'];
 		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
 		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
 		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
@@ -297,9 +299,11 @@ class FrmDashboardHelper {
 	 */
 	public function get_youtube_video( $classes ) {
 		$template = $this->view['video'];
+
 		if ( null === $template['id'] ) {
 			return;
 		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
 	}
 
@@ -359,6 +363,8 @@ class FrmDashboardHelper {
 
 	/**
 	 * Dashboard - load the entries list template.
+	 *
+	 * @param array $template
 	 *
 	 * @return void
 	 */

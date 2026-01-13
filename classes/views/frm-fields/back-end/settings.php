@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === 'captcha' && ! FrmFieldCaptcha::should_show_captcha() ) {
 			?>
 			<div class="frm_warning_style frm-with-icon">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -33,13 +33,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 			</div>
 			<?php
 		}
+
 		if ( $field['type'] === 'credit_card' && ! FrmAppHelper::pro_is_installed() ) {
 			if ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) {
 				FrmStrpLiteAppHelper::not_connected_warning();
 			} elseif ( ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 				?>
 				<div class="frm_warning_style frm-with-icon">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 					<span>
 						<?php
 						/* translators: %1$s: Link HTML, %2$s: End link */
@@ -56,7 +57,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		if ( $field['type'] === FrmFieldGdprHelper::FIELD_TYPE && FrmFieldGdprHelper::hide_gdpr_field() ) {
 			?>
 			<div class="frm_note_style">
-				<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
+				<?php FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) ); ?>
 				<span>
 					<?php
 					/* translators: %1$s: Link HTML, %2$s: End link */
@@ -163,7 +164,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<input <?php FrmAppHelper::array_to_html_params( $css_layout_classes_attrs, true ); ?> />
 					<?php
 					FrmAppHelper::icon_by_class(
-						'frm_icon_font frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
+						'frmfont frm_more_horiz_solid_icon frm-show-inline-modal frm-input-icon',
 						array(
 							'data-open' => 'frm-layout-classes-box',
 							'title'     => esc_attr__( 'Toggle Options', 'formidable' ),
@@ -218,7 +219,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						if ( FrmAppHelper::pro_is_connected() && ! is_callable( array( 'FrmProHtmlHelper', 'echo_radio_group' ) ) ) {
 							switch ( $type ) {
 								case 'calc':
-									$default_value_type['data']  = array(
+									$default_value_type['data'] = array(
 										'show'    => '#calc-for-{id}',
 										'disable' => '#default-value-for-{id}',
 									);
@@ -245,7 +246,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						);
 
 						foreach ( $default_value_type['data'] as $data_key => $data_value ) {
-							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( substr( $data_value, -1 ) === '-' ? $field['id'] : '' );
+							$toggle_args['input_html'][ 'data-' . $data_key ] = $data_value . ( str_ends_with( $data_value, '-' ) ? $field['id'] : '' );
 						}
 
 						?>
@@ -409,6 +410,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 							)
 						);
 					}
+
 					if ( $field['type'] === 'divider' ) {
 						FrmHtmlHelper::echo_dropdown_option(
 							__( 'Center', 'formidable' ),
@@ -444,6 +446,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 						// When "dropdown" is sent as a type value, we'll map it back to "select" with PHP.
 						$type_option_value  = 'select' === $fkey ? 'dropdown' : $fkey;
 						$type_option_params = array( 'value' => $type_option_value );
+
 						if ( array_key_exists( $fkey, $disabled_fields ) ) {
 							$type_option_params['disabled'] = 'disabled';
 						}
@@ -475,7 +478,7 @@ do_action( 'frm_before_field_options', $field, compact( 'field_obj', 'display', 
 	<?php if ( $display['required'] || $display['invalid'] || $display['unique'] || $display['conf_field'] ) { ?>
 		<?php
 		$hidden_invalid = FrmField::is_field_type( $field, 'text' ) && ! FrmField::is_option_true( $field, 'format' ) && FrmField::is_option_empty( $field, 'max' );
-		$has_validation = ( ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' ) );
+		$has_validation = ( $display['invalid'] && ! $hidden_invalid ) || $field['required'] || FrmField::is_option_true( $field, 'unique' ) || FrmField::is_option_true( $field, 'conf_field' );
 		?>
 		<div class="frm_validation_msg <?php echo esc_attr( $has_validation ? '' : 'frm_hidden' ); ?>">
 			<h3 class="frm-collapsed" aria-expanded="false" tabindex="0" role="button" aria-label="<?php esc_attr_e( 'Collapsible Validation Messages Settings', 'formidable' ); ?>" aria-controls="collapsible-section">

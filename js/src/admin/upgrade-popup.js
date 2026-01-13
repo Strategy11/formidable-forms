@@ -1,5 +1,7 @@
 import { __ } from '@wordpress/i18n';
 
+const { svg } = frmDom;
+
 function getShowLinkHrefValue( link, showLink ) {
 	let customLink = link.getAttribute( 'data-link' );
 	if ( customLink === null || typeof customLink === 'undefined' || customLink === '' ) {
@@ -17,7 +19,6 @@ function getShowLinkHrefValue( link, showLink ) {
  */
 export function addOneClick( link, context, upgradeLabel ) {
 	let container;
-
 	if ( 'modal' === context ) {
 		container = document.getElementById( 'frm_upgrade_modal' );
 	} else if ( 'tab' === context ) {
@@ -38,6 +39,17 @@ export function addOneClick( link, context, upgradeLabel ) {
 	let showMsg = 'block';
 	let hideIt = 'none';
 
+	const modalIconWrapper = container.querySelector( '.frm-circled-icon' );
+	if ( modalIconWrapper ) {
+		modalIconWrapper.classList.remove( 'frm-circled-icon-green' );
+		modalIconWrapper.querySelector( 'svg' )?.replaceWith( svg( { href: '#frm_filled_lock_icon' } ) );
+	}
+
+	const learnMoreLink = container.querySelector( '.frm-learn-more' );
+	if ( learnMoreLink ) {
+		learnMoreLink.href = link.dataset.learnMore;
+	}
+
 	// If one click upgrade, hide other content.
 	if ( oneclickMessage !== null && typeof oneclick !== 'undefined' && oneclick ) {
 		if ( newMessage === null ) {
@@ -51,12 +63,17 @@ export function addOneClick( link, context, upgradeLabel ) {
 		button.className = button.className + ' ' + oneclick.class;
 		button.rel = oneclick.url;
 
-		if ( oneclick.class === 'frm-activate-addon' ) {
-			oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
-			button.textContent = __( 'Activate', 'formidable' );
-		} else {
-			oneclickMessage.textContent = __( 'That add-on is not installed. Would you like to install it now?', 'formidable' );
-			button.textContent = __( 'Install', 'formidable' );
+		oneclickMessage.textContent = __( 'This plugin is not activated. Would you like to activate it now?', 'formidable' );
+		button.textContent = __( 'Activate', 'formidable' );
+
+		const linkIcon = link.querySelector( 'use' );
+		if ( linkIcon ) {
+			modalIconWrapper?.querySelector( 'svg' ).replaceWith(
+				svg( {
+					href: linkIcon.getAttribute( 'href' ) || linkIcon.getAttribute( 'xlink:href' ), // Get the icon from xlink:href if it has not been updated to use href
+					classList: [ 'frm_svg32' ]
+				} )
+			);
 		}
 	}
 
@@ -70,7 +87,7 @@ export function addOneClick( link, context, upgradeLabel ) {
 	upgradeMessage.innerHTML = newMessage;
 
 	if ( link.dataset.upsellImage ) {
-		upgradeMessage.appendChild(
+		upgradeMessage.append(
 			frmDom.img( {
 				src: link.dataset.upsellImage,
 				alt: link.dataset.upgrade
@@ -87,6 +104,11 @@ export function addOneClick( link, context, upgradeLabel ) {
 	button.style.display = hideIt === 'block' ? 'inline-block' : hideIt;
 	upgradeMessage.style.display = showMsg;
 	showLink.style.display = showIt === 'block' ? 'inline-block' : showIt;
+
+	const showLinkParent = showLink.closest( '.frm-upgrade-modal-actions' );
+	if ( showLinkParent ) {
+		showLinkParent.style.display = showIt === 'block' ? 'flex' : showIt;
+	}
 }
 
 export function initModal( id, width ) {
@@ -96,7 +118,7 @@ export function initModal( id, width ) {
 	}
 
 	if ( typeof width === 'undefined' ) {
-		width = '550px';
+		width = '552px';
 	}
 
 	const dialogArgs = {
@@ -223,8 +245,10 @@ export function initUpgradeModal() {
 		// If one click upgrade, hide other content
 		addOneClick( element, 'modal', upgradeLabel );
 
-		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image ? 'none' : 'inline-block';
+		modal.querySelector( '.frm_are_not_installed' ).style.display = element.dataset.image || element.dataset.oneclick ? 'none' : 'inline-block';
+		modal.querySelector( '.frm-upgrade-modal-title-prefix' ).style.display = element.dataset.oneclick ? 'inline' : 'none';
 		modal.querySelector( '.frm_feature_label' ).textContent = upgradeLabel;
+		modal.querySelector( '.frm-upgrade-modal-title-suffix' ).style.display = 'none';
 		modal.querySelector( 'h2' ).style.display = 'block';
 
 		$info.dialog( 'open' );

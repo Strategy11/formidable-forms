@@ -44,7 +44,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$orderby = FrmAppHelper::get_param( 'orderby', 'id', 'get', 'sanitize_title' );
 		$order   = FrmAppHelper::get_param( 'order', 'DESC', 'get', 'sanitize_text_field' );
-		if ( ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
+
+		if ( ! is_string( $orderby ) ) {
+			$orderby = 'id';
+		}
+
+		if ( ! is_string( $order ) || ! in_array( strtoupper( $order ), array( 'ASC', 'DESC' ), true ) ) {
 			$order = 'DESC';
 		}
 
@@ -115,8 +120,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'subscriptions' => __( 'Subscriptions', 'formidable' ),
 		);
 
-		$links = array();
-
+		$links       = array();
 		$frm_payment = new FrmTransLitePayment();
 		$frm_sub     = new FrmTransLiteSubscription();
 		$counts      = array(
@@ -132,11 +136,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		);
 
 		foreach ( $statuses as $status => $name ) {
-			if ( $status === $type ) {
-				$class = ' class="current"';
-			} else {
-				$class = '';
-			}
+			$class = $status === $type ? ' class="current"' : '';
 
 			if ( $counts[ $status ] || 'published' === $status ) {
 				$links[ $status ] = '<a href="' . esc_url( '?page=formidable-payments&trans_type=' . $status ) . '" ' . $class . '>'
@@ -176,16 +176,36 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * If the Payments submodule or the PayPal add-on is active, add a bulk delete action.
+	 *
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_bulk_actions() {
+		$actions = array();
+
+		if ( $this->payments_addon_list_helper_exists() ) {
+			$actions['bulk_delete'] = __( 'Delete', 'formidable' );
+		}
+
+		return $actions;
+	}
+
+	/**
 	 * @param string $which
+	 *
 	 * @return void
 	 */
 	public function extra_tablenav( $which ) {
 		$footer = $which !== 'top';
+
 		if ( $footer ) {
 			return;
 		}
 
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint', 0 );
+
 		if ( $form_id ) {
 			// Don't show the switcher if it's already in the header.
 			return;
@@ -206,11 +226,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
-
-		$alt = 0;
-
-		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format' );
+		$gateways    = FrmTransLiteAppHelper::get_gateways();
+		$alt         = 0;
+		$form_ids    = $this->get_form_ids();
+		$args        = compact( 'form_ids', 'date_format', 'gateways' );
 		// $form_ids is indexed by entry ID.
 		$this->valid_entry_ids = array_keys( $form_ids );
 
@@ -253,14 +272,31 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	protected function get_column_info() {
 		$column_info = parent::get_column_info();
-		// Remove the checkbox column.
-		unset( $column_info[0]['cb'] );
+
+		if ( ! $this->payments_addon_list_helper_exists() ) {
+			// Remove the checkbox column for Lite only.
+			unset( $column_info[0]['cb'] );
+		}
+
 		return $column_info;
+	}
+
+	/**
+	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
+	 *
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function payments_addon_list_helper_exists() {
+		return class_exists( 'FrmTransListHelper' ) || class_exists( 'FrmPaymentsListHelper' );
 	}
 
 	/**
 	 * @param object $item
 	 * @param array  $args
+	 *
+	 * @return string
 	 */
 	private function get_column_value( $item, $args ) {
 		$column_name   = $args['column_name'];
@@ -271,7 +307,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		} else {
 			$val = $item->$column_name ? $item->$column_name : '';
 
-			if ( strpos( $column_name, '_date' ) !== false ) {
+			if ( str_contains( $column_name, '_date' ) ) {
 				if ( ! empty( $item->$column_name ) && $item->$column_name !== '0000-00-00' ) {
 					$val = FrmTransLiteAppHelper::format_the_date( $item->$column_name, $args['date_format'] );
 				} else {
@@ -288,6 +324,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private function get_form_ids() {
 		$entry_ids = array();
+
 		foreach ( $this->items as $item ) {
 			$entry_ids[] = absint( $item->item_id );
 			unset( $item );
@@ -308,6 +345,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		unset( $entry_ids );
 
 		$form_ids = array();
+
 		foreach ( $forms as $form ) {
 			$form_ids[ $form->id ] = $form;
 			unset( $form );
@@ -324,11 +362,25 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	private function get_row_classes( $atts ) {
 		$class = 'column-' . $atts['column_name'];
 
-		if ( in_array( $atts['column_name'], $atts['hidden'] ) ) {
+		if ( in_array( $atts['column_name'], $atts['hidden'], true ) ) {
 			$class .= ' frm_hidden';
 		}
 
 		return 'class="' . esc_attr( $class ) . '"';
+	}
+
+	/**
+	 * Get the checkbox for bulk actions.
+	 * This is only required when the Payments submodule or PayPal is active.
+	 *
+	 * @since x.x
+	 *
+	 * @param object $item
+	 *
+	 * @return string
+	 */
+	private function get_cb_column( $item ) {
+		return '<input type="checkbox" name="item-action[]" value="' . esc_attr( $item->id ) . '" />';
 	}
 
 	/**
@@ -347,32 +399,48 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @return string
 	 */
 	private function get_action_column( $item, $field ) {
-		$link = add_query_arg(
+		$link = $this->get_view_payment_link( $item, $field );
+		return '<strong>' . $link . '</strong><br />' . $this->row_actions( $this->get_row_actions( $item ) );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param object $item
+	 * @param string $field
+	 *
+	 * @return string
+	 */
+	private function get_view_payment_link( $item, $field ) {
+		$link_params = array(
+			'class' => 'rot-title',
+			'href'  => esc_url( $this->get_url_to_payment( $item->id, 'show' ) ),
+			'title' => __( 'View', 'formidable' ),
+		);
+		return '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>' . esc_html( $item->{ $field } ) . '</a>';
+	}
+
+	/**
+	 * @param int|string $payment_id
+	 * @param string     $action Supports 'show' and 'edit'.
+	 *
+	 * @return string
+	 */
+	private function get_url_to_payment( $payment_id, $action = 'show' ) {
+		return add_query_arg(
 			array(
-				'action' => 'show',
-				'id'     => $item->id,
+				'action' => $action,
+				'id'     => $payment_id,
 				'type'   => $this->table,
 				'page'   => FrmAppHelper::simple_get( 'page' ),
 			),
 			admin_url( 'admin.php' )
 		);
-
-		$link_params = array(
-			'class' => 'rot-title',
-			'href'  => esc_url( $link ),
-			'title' => __( 'View', 'formidable' ),
-		);
-		$link        = '<a ' . FrmAppHelper::array_to_html_params( $link_params ) . '>'
-			. $item->{$field}
-			. '</a>';
-
-		return '<strong>' . $link . '</strong>'
-			. '<br />'
-			. $this->row_actions( $this->get_row_actions( $item ) );
 	}
 
 	/**
 	 * @param object $item
+	 *
 	 * @return array
 	 */
 	private function get_row_actions( $item ) {
@@ -383,7 +451,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$actions         = array();
 		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
-		if ( $this->table !== 'subscriptions' && 'stripe' !== $item->paysys && class_exists( 'FrmPaymentsController', false ) ) {
+		if ( $this->supports_edit_link() ) {
 			$edit_link       = $base_link . 'edit&id=' . $item->id;
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
 		}
@@ -394,13 +462,28 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	private function supports_edit_link() {
+		if ( $this->table === 'subscriptions' ) {
+			return false;
+		}
+
+		return class_exists( 'FrmTransAppController', false ) || class_exists( 'FrmPaymentsController', false );
+	}
+
+	/**
 	 * Get the column value for displaying an entry ID.
 	 *
 	 * @param object $item A payment or subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_item_id_column( $item ) {
-		$entry_id         = (int) $item->item_id;
+		$entry_id = (int) $item->item_id;
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$entry_is_deleted = ! in_array( $entry_id, $this->valid_entry_ids );
 
 		if ( $entry_is_deleted ) {
@@ -414,12 +497,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return mixed
 	 */
 	private function get_form_id_column( $item, $atts ) {
 		if ( isset( $atts['form_ids'][ $item->item_id ] ) ) {
-			$form_link = FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
-			return $form_link;
+			return FrmFormsHelper::edit_form_link( $atts['form_ids'][ $item->item_id ]->form_id );
 		}
 
 		return '';
@@ -427,10 +510,10 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_user_id_column( $item ) {
-		global $wpdb;
 		$val = FrmDb::get_var( 'frm_items', array( 'id' => $item->item_id ), 'user_id' );
 		return FrmTransLiteAppHelper::get_user_link( $val );
 	}
@@ -438,6 +521,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_created_at_column( $item, $atts ) {
@@ -447,11 +531,12 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 		$date       = FrmAppHelper::get_localized_date( $atts['date_format'], $item->created_at );
 		$date_title = FrmAppHelper::get_localized_date( $atts['date_format'] . ' g:i:s A', $item->created_at );
-		$val        = '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
-		return $val;
+		return '<abbr title="' . esc_attr( $date_title ) . '">' . $date . '</abbr>';
 	}
 
 	/**
+	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_amount_column( $item ) {
@@ -476,10 +561,15 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		return sprintf( __( '%1$s of %2$s', 'formidable' ), $count, $limit );
 	}
 
+	/**
+	 * @param object $item
+	 *
+	 * @return string
+	 */
 	private function get_status_column( $item ) {
 		$status = esc_html( FrmTransLiteAppHelper::show_status( FrmTransLiteAppHelper::get_payment_status( $item ) ) );
 
-		if ( 'processing' === $item->status ) {
+		if ( 'processing' === ( $item->status ?? '' ) ) {
 			$status .= $this->get_processing_tooltip();
 		}
 
@@ -501,6 +591,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private function get_sub_id_column( $item ) {
@@ -521,17 +612,21 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 *
 	 * @param object $item
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	private function get_paysys_column( $item, $atts ) {
-		switch ( $item->paysys ) {
-			case 'stripe':
-				return 'Stripe';
-			case 'paypal':
-				return 'PayPal';
-			case 'square':
-				return 'Square';
+		if ( isset( $atts['gateways'][ $item->paysys ] ) ) {
+			return $atts['gateways'][ $item->paysys ]['label'];
 		}
+
+		if ( 'paypal' === $item->paysys ) {
+			// The PayPal add-on does not use a gateway.
+			// This should be safe to remove once we release
+			// PayPal Commerce in Lite.
+			return 'PayPal';
+		}
+
 		return $item->paysys;
 	}
 
@@ -542,9 +637,30 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * @since 6.6
 	 *
 	 * @param stdClass $item Payment or Subscription object.
+	 *
 	 * @return string
 	 */
 	private function get_mode_column( $item ) {
 		return esc_html( FrmTransLiteAppHelper::get_test_mode_display_string( $item ) );
+	}
+
+	/**
+	 * Render the tabs for the payments list, if the user has access to coupons.
+	 *
+	 * @since x.x
+	 *
+	 * @param string $active_tab
+	 *
+	 * @return void
+	 */
+	public static function render_tabs( $active_tab = 'payments' ) {
+		if ( ! current_user_can( 'frm_change_settings' ) ) {
+			// Coupons are only available to people who can access global settings.
+			return;
+		}
+
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			include FrmTransLiteAppHelper::plugin_path() . '/views/lists/tabs.php';
+		}
 	}
 }

@@ -14,6 +14,9 @@ class FrmEntriesController {
 	 */
 	private static $has_displayed_list;
 
+	/**
+	 * @return void
+	 */
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 

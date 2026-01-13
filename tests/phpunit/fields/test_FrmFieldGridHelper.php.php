@@ -60,6 +60,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	private function sync_current_field_once( $assert_size = false, $assert_message = '' ) {
 		$this->helper->maybe_begin_field_wrapper();
 		$this->helper->sync_list_size();
+
 		if ( false !== $assert_size ) {
 			$this->assert_current_list_size( $assert_size, $assert_message );
 		}
@@ -82,9 +83,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	public function test_with_sections() {
-		$this->form_id         = $this->factory->form->create();
-		$half_width_field      = $this->create_field_with_classes( 'text', 'frm_half' );
-		$quarter_width_field   = $this->create_field_with_classes( 'text', 'frm_fourth' );
+		$this->form_id    = $this->factory->form->create();
+		$half_width_field = $this->create_field_with_classes( 'text', 'frm_half' );
+		$this->create_field_with_classes( 'text', 'frm_fourth' );
 		$half_width_section    = $this->create_field_with_classes( 'divider', 'frm_half' );
 		$quarter_width_section = $this->create_field_with_classes( 'divider', 'frm_fourth' );
 		$end_divider           = $this->create_field_with_classes( 'end_divider' );

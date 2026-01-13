@@ -26,6 +26,7 @@ class FrmAddonsHelper {
 	 * Show the CTA to upgrade or renew.
 	 *
 	 * @since 6.15
+	 *
 	 * @return void
 	 */
 	public static function show_upgrade_renew_cta() {
@@ -48,6 +49,7 @@ class FrmAddonsHelper {
 	 * Show 'Renew' banner for expired users.
 	 *
 	 * @since 6.15
+	 *
 	 * @return void
 	 */
 	private static function show_expired_cta() {
@@ -68,6 +70,7 @@ class FrmAddonsHelper {
 	 * Show 'Upgrade to Pro' banner for users not connected to Pro.
 	 *
 	 * @since 6.15
+	 *
 	 * @return void
 	 */
 	private static function show_lite_cta() {
@@ -93,6 +96,7 @@ class FrmAddonsHelper {
 	 * Show 'Upgrade' banner for non-elite users.
 	 *
 	 * @since 6.15
+	 *
 	 * @return void
 	 */
 	private static function show_elite_cta() {
@@ -121,6 +125,7 @@ class FrmAddonsHelper {
 	 * Displays a reconnect link for checking add-ons status.
 	 *
 	 * @since 6.15
+	 *
 	 * @return void
 	 */
 	public static function get_reconnect_link() {
@@ -141,7 +146,9 @@ class FrmAddonsHelper {
 	 * Get the icon for a specific addon.
 	 *
 	 * @since 6.15
+	 *
 	 * @param string $slug The slug of the addon.
+	 *
 	 * @return void
 	 */
 	public static function get_addon_icon( $slug ) {
@@ -169,9 +176,11 @@ class FrmAddonsHelper {
 			'woocommerce'                     => 'woocommerce',
 			'zapier'                          => 'zapier',
 			'convertkit'                      => 'convertkit',
+			'n8n'                             => 'n8n',
 		);
 
 		$icon = array_key_exists( $slug, $icons_map ) ? 'frm_' . $icons_map[ $slug ] . '_icon' : 'frm_logo_icon';
+
 		if ( 'ai' === $slug ) {
 			$icon = str_replace( '_', '-', $icon );
 		}
@@ -185,6 +194,7 @@ class FrmAddonsHelper {
 	 * @since 6.15
 	 *
 	 * @param array $addon
+	 *
 	 * @return void
 	 */
 	public static function add_addon_attributes( $addon ) {
@@ -216,6 +226,7 @@ class FrmAddonsHelper {
 	 * @since 6.15
 	 *
 	 * @param array $addon
+	 *
 	 * @return string
 	 */
 	private static function prepare_single_addon_classes( $addon ) {
@@ -249,6 +260,7 @@ class FrmAddonsHelper {
 	 * @since 6.15
 	 *
 	 * @param array $addon The addon array that will be modified by reference.
+	 *
 	 * @return void
 	 */
 	private static function set_plan_required( $addon ) {
@@ -272,6 +284,7 @@ class FrmAddonsHelper {
 	 * @since 6.17
 	 *
 	 * @param string $color Star color.
+	 *
 	 * @return void
 	 */
 	public static function show_five_star_rating( $color = 'black' ) {
@@ -307,6 +320,7 @@ class FrmAddonsHelper {
 	 *
 	 * @param string $count Review count.
 	 * @param string $site  Site name.
+	 *
 	 * @return string
 	 */
 	public static function get_reviews_text( $count, $site ) {

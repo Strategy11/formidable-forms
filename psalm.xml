@@ -14,7 +14,6 @@
 		<directory name="classes" />
 		<directory name="stripe" />
 		<directory name="square" />
-		<directory name="deprecated" />
 		<ignoreFiles>
 			<directory name="vendor" />
 		</ignoreFiles>
@@ -43,7 +42,6 @@
 		</UndefinedDocblockClass>
 		<UndefinedFunction>
 			 <errorLevel type="suppress">
-				<referencedFunction name="WP_Optimize" />
 				<referencedFunction name="bp_core_email_from_address_filter" />
 				<referencedFunction name="bp_core_email_from_name_filter" />
 				<referencedFunction name="__autoload" />
@@ -88,7 +86,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</MissingParamType>
@@ -104,7 +101,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RiskyTruthyFalsyComparison>
@@ -113,7 +109,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</MissingReturnType>
 		<InvalidArgument>
@@ -172,6 +167,7 @@
 			<errorLevel type="suppress">
 				<file name="stripe/models/FrmStrpLiteSettings.php" />
 				<file name="square/models/FrmSquareLiteSettings.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyNullPropertyAssignment>
 		<MissingPropertyType>
@@ -179,7 +175,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</MissingPropertyType>
 		<TooManyArguments>
@@ -266,7 +261,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 				<file name="formidable.php" />
 			</errorLevel>
 		</RedundantConditionGivenDocblockType>
@@ -303,7 +297,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</InvalidPropertyFetch>
 		<InvalidStringClass>
@@ -368,13 +361,9 @@
 		<PossiblyInvalidPropertyAssignment>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmFormAction.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
 			</errorLevel>
 		</PossiblyInvalidPropertyAssignment>
-		<PossiblyInvalidArgument>
-			<errorLevel type="suppress">
-				<directory name="deprecated" />
-			</errorLevel>
-		</PossiblyInvalidArgument>
 		<InvalidPropertyAssignmentValue>
 			<errorLevel type="suppress">
 				<directory name="classes" />
@@ -412,6 +401,8 @@
 		<NoValue>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmEntryValidate.php" />
+				<file name="classes/helpers/FrmEntriesHelper.php" />
+				<file name="square/controllers/FrmSquareLiteActionsController.php" />
 			</errorLevel>
 		</NoValue>
 		<UnsafeInstantiation>
@@ -448,7 +439,6 @@
 		</DeprecatedMethod>
 		<DeprecatedFunction>
 			<errorLevel type="suppress">
-				<directory name="deprecated" />
 				<file name="classes/models/FrmEntryValidate.php" />
 			</errorLevel>
 		</DeprecatedFunction>
@@ -470,6 +460,7 @@
 		<PossiblyFalseIterator>
 			<errorLevel type="suppress">
 				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="classes/models/FrmInbox.php" />
 			</errorLevel>
 		</PossiblyFalseIterator>
 		<UndefinedMethod>
@@ -507,7 +498,6 @@
 				<directory name="classes" />
 				<directory name="stripe" />
 				<directory name="square" />
-				<directory name="deprecated" />
 			</errorLevel>
 		</ClassMustBeFinal>
 		<MissingOverrideAttribute>
@@ -527,5 +517,23 @@
 				<file name="classes/models/FrmSpamCheckWPDisallowedWords.php" />
 			</errorLevel>
 		</DeprecatedFunction>
+		<PossiblyNullArrayAccess>
+			<errorLevel type="suppress">
+				<file name="classes/controllers/FrmStylesController.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+			</errorLevel>
+		</PossiblyNullArrayAccess>
+		<PossiblyNullArrayAssignment>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+			</errorLevel>
+		</PossiblyNullArrayAssignment>
+		<PossiblyNullIterator>
+			<errorLevel type="suppress">
+				<file name="classes/models/FrmPersonalData.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
+				<file name="stripe/controllers/FrmStrpLiteEventsController.php" />
+			</errorLevel>
+		</PossiblyNullIterator>
 	</issueHandlers>
 </psalm>

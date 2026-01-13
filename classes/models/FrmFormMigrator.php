@@ -5,18 +5,50 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 abstract class FrmFormMigrator {
 
+	/**
+	 * @var bool
+	 */
 	public $source_active;
 
+	/**
+	 * @var string
+	 */
 	public $slug;
+
+	/**
+	 * @var string
+	 */
 	public $path;
+
+	/**
+	 * @var string
+	 */
 	public $name;
 
+	/**
+	 * @var array
+	 */
 	public $response = array();
+
+	/**
+	 * @var string
+	 */
 	public $tracking = 'frm_forms_imported';
 
-	protected $fields_map          = array();
+	/**
+	 * @var array
+	 */
+	protected $fields_map = array();
+
+	/**
+	 * @var mixed
+	 */
 	protected $current_source_form;
-	protected $current_section     = array();
+
+	/**
+	 * @var array
+	 */
+	protected $current_section = array();
 
 	/**
 	 * Define required properties.
@@ -31,6 +63,7 @@ abstract class FrmFormMigrator {
 		}
 
 		$this->source_active = is_plugin_active( $this->path );
+
 		if ( ! $this->source_active ) {
 			// if source plugin is not installed, do nothing
 			return;
@@ -44,11 +77,17 @@ abstract class FrmFormMigrator {
 		);
 	}
 
+	/**
+	 * @return void
+	 */
 	private function maybe_add_to_import_page() {
 		add_action( 'frm_import_settings', array( $this, 'import_page' ) );
 		add_action( 'wp_ajax_frm_import_' . $this->slug, array( $this, 'import_forms' ) );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function import_page() {
 		$forms = $this->get_forms();
 		?>
@@ -92,6 +131,7 @@ abstract class FrmFormMigrator {
 							'type'  => 'submit',
 							'class' => 'button button-primary frm-button-primary',
 						);
+
 						if ( ! $forms ) {
 							$button_atts['disabled'] = 'disabled';
 						}
@@ -131,9 +171,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Import all forms using ajax
+	 *
+	 * @return void
 	 */
 	public function import_forms() {
-
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 		FrmAppHelper::permission_check( 'frm_edit_forms' );
 
@@ -147,6 +188,7 @@ abstract class FrmFormMigrator {
 
 		if ( is_array( $forms ) ) {
 			$imported = array();
+
 			foreach ( $forms as $form_id ) {
 				$imported[] = $this->import_form( $form_id );
 			}
@@ -159,9 +201,12 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * Import a single form
+	 *
+	 * @param int $source_id Source form ID.
+	 *
+	 * @return array
 	 */
 	protected function import_form( $source_id ) {
-
 		$source_form      = $this->get_form( $source_id );
 		$source_form_name = $this->get_form_name( $source_form );
 		$source_fields    = $this->get_form_fields( $source_form );
@@ -170,7 +215,7 @@ abstract class FrmFormMigrator {
 		$this->current_source_form = $source_form;
 
 		// If form does not contain fields, bail.
-		if ( empty( $source_fields ) ) {
+		if ( ! $source_fields ) {
 			wp_send_json_success(
 				array(
 					'error' => true,
@@ -194,6 +239,12 @@ abstract class FrmFormMigrator {
 		return $response;
 	}
 
+	/**
+	 * @param int|string $source_id
+	 * @param string     $source_form_name
+	 *
+	 * @return array
+	 */
 	protected function prepare_new_form( $source_id, $source_form_name ) {
 		return array(
 			'import_form_id' => $source_id,
@@ -205,16 +256,27 @@ abstract class FrmFormMigrator {
 		);
 	}
 
+	/**
+	 * @param array|object $form
+	 * @param array        $new_form
+	 *
+	 * @return void
+	 */
 	protected function prepare_form( $form, &$new_form ) {
 		// customize this function
 	}
 
+	/**
+	 * @param array $fields
+	 * @param array $form
+	 *
+	 * @return void
+	 */
 	protected function prepare_fields( $fields, &$form ) {
 		$field_order = 1;
 
 		foreach ( $fields as $field ) {
 			$field = (array) $field;
-
 			$label = $this->get_field_label( $field );
 			$type  = $this->get_field_type( $field );
 
@@ -229,8 +291,7 @@ abstract class FrmFormMigrator {
 				continue;
 			}
 
-			$new_type = $this->convert_field_type( $type, $field );
-
+			$new_type                 = $this->convert_field_type( $type, $field );
 			$new_field                = FrmFieldsHelper::setup_new_vars( $new_type );
 			$new_field['name']        = $label;
 			$new_field['field_order'] = $field_order;
@@ -238,14 +299,15 @@ abstract class FrmFormMigrator {
 
 			$this->prepare_field( $field, $new_field );
 
-			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end() ) && $new_type !== 'break';
+			$in_section = ! empty( $this->current_section ) && ! in_array( $new_type, $this->fields_with_end(), true ) && $new_type !== 'break';
+
 			if ( $in_section ) {
 				$new_field['field_options']['in_section'] = $this->current_section['id'];
 			}
 
 			$form['fields'][] = $new_field;
 
-			if ( in_array( $new_type, $this->fields_with_end() ) ) {
+			if ( in_array( $new_type, $this->fields_with_end(), true ) ) {
 				$this->current_section = $field;
 			} elseif ( $new_type === 'break' || $new_type === 'end_divider' ) {
 				$this->current_section = array();
@@ -265,6 +327,12 @@ abstract class FrmFormMigrator {
 		}//end foreach
 	}
 
+	/**
+	 * @param array|object $field
+	 * @param array        $new_field
+	 *
+	 * @return void
+	 */
 	protected function prepare_field( $field, &$new_field ) {
 		// customize this function
 	}
@@ -273,6 +341,8 @@ abstract class FrmFormMigrator {
 	 * Add any field types that will need an end section field.
 	 *
 	 * @since 4.04.03
+	 *
+	 * @return array
 	 */
 	protected function fields_with_end() {
 		return array( 'divider' );
@@ -280,41 +350,52 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $fields
+	 *
+	 * @return void
 	 */
 	protected function maybe_add_end_fields( &$fields ) {
 		$with_end = $this->fields_with_end();
-		if ( empty( $with_end ) ) {
+
+		if ( ! $with_end ) {
 			return;
 		}
 
-		$open = array();
-
+		$open  = array();
 		$order = 0;
+
 		foreach ( $fields as $field ) {
 			++$order;
 			$type     = $this->get_field_type( $field );
 			$new_type = $this->convert_field_type( $type, $field );
-			if ( ! in_array( $new_type, $with_end ) && $new_type !== 'break' ) {
+
+			if ( ! in_array( $new_type, $with_end, true ) && $new_type !== 'break' ) {
 				continue;
 			}
 
-			if ( ! empty( $open ) ) {
+			if ( $open ) {
 				$this->insert_end_section( $fields, $order );
 				$open = array();
 			}
 
-			if ( in_array( $new_type, $with_end ) ) {
+			if ( in_array( $new_type, $with_end, true ) ) {
 				$open = $field;
 			}
 		}
 
-		if ( ! empty( $open ) ) {
+		if ( $open ) {
 			$this->insert_end_section( $fields, $order );
 		}
 	}
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $fields
+	 * @param int   $order
+	 *
+	 * @return void
 	 */
 	protected function insert_end_section( &$fields, &$order ) {
 		$sub         = FrmFieldsHelper::setup_new_vars( 'end_divider' );
@@ -329,6 +410,13 @@ abstract class FrmFormMigrator {
 	 * This switches the name field to individual fields.
 	 *
 	 * @since 4.04.03
+	 *
+	 * @param array $subs
+	 * @param int   $start
+	 * @param int   $remove
+	 * @param array $fields
+	 *
+	 * @return void
 	 */
 	protected function insert_fields_in_array( $subs, $start, $remove, &$fields ) {
 		array_splice( $fields, $start, $remove, $subs );
@@ -342,9 +430,11 @@ abstract class FrmFormMigrator {
 	 *                      particularly the overrides in child classes, as
 	 *                      there will be no need to rebuild the converter
 	 *                      array at usage locations.
+	 *
+	 * @return string
 	 */
 	protected function convert_field_type( $type, $field = array(), $use = '' ) {
-		if ( empty( $field ) ) {
+		if ( ! $field ) {
 			// For reverse compatibility.
 			return $type;
 		}
@@ -353,17 +443,18 @@ abstract class FrmFormMigrator {
 	}
 
 	/**
-	 * Add the new form to the database and return AJAX data.å
+	 * Add the new form to the database and return AJAX data.
 	 *
 	 * @param array $form Form to import.
 	 * @param array $upgrade_omit No field alternative.
+	 *
+	 * @return array
 	 */
 	protected function add_form( $form, $upgrade_omit = array() ) {
-
 		// Create empty form so we have an ID to work with.
 		$form_id = $this->create_form( $form );
 
-		if ( empty( $form_id ) ) {
+		if ( ! $form_id ) {
 			return $this->form_creation_error_response( $form );
 		}
 
@@ -400,6 +491,10 @@ abstract class FrmFormMigrator {
 
 	/**
 	 * @since 4.04.03
+	 *
+	 * @param array $form
+	 *
+	 * @return array
 	 */
 	protected function form_creation_error_response( $form ) {
 		return array(
@@ -414,6 +509,8 @@ abstract class FrmFormMigrator {
 	 *
 	 * @param int   $form_id
 	 * @param array $form
+	 *
+	 * @return void
 	 */
 	protected function create_fields( $form_id, &$form ) {
 		foreach ( $form['fields'] as $key => $new_field ) {
@@ -425,7 +522,10 @@ abstract class FrmFormMigrator {
 	/**
 	 * @since 4.04.03
 	 *
-	 * @param array $form
+	 * @param array      $form
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	protected function create_emails( $form, $form_id ) {
 		foreach ( $form['actions'] as $action ) {
@@ -439,6 +539,8 @@ abstract class FrmFormMigrator {
 	 * @param array $action
 	 * @param array $form
 	 * @param int   $form_id
+	 *
+	 * @return int|WP_Error
 	 */
 	protected function save_action( $action, $form, $form_id ) {
 		/**
@@ -447,6 +549,7 @@ abstract class FrmFormMigrator {
 		$action_control = FrmFormActionsController::get_form_actions( $action['type'] );
 		unset( $action['type'] );
 		$new_action = $action_control->prepare_new( $form_id );
+
 		foreach ( $action as $key => $value ) {
 			if ( $key === 'post_title' ) {
 				$new_action->post_title = $value;
@@ -471,9 +574,10 @@ abstract class FrmFormMigrator {
 	 *
 	 * @param int $source_id Imported plugin form ID.
 	 * @param int $new_form_id Formidable form ID.
+	 *
+	 * @return void
 	 */
 	protected function track_import( $source_id, $new_form_id ) {
-
 		$imported = $this->get_tracked_import();
 
 		$imported[ $this->slug ][ $new_form_id ] = $source_id;
@@ -496,12 +600,16 @@ abstract class FrmFormMigrator {
 	private function is_imported( $source_id ) {
 		$imported    = $this->get_tracked_import();
 		$new_form_id = 0;
+
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		if ( ! isset( $imported[ $this->slug ] ) || ! in_array( $source_id, $imported[ $this->slug ] ) ) {
 			return $new_form_id;
 		}
 
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		$new_form_id = array_search( $source_id, array_reverse( $imported[ $this->slug ], true ) );
-		if ( ! empty( $new_form_id ) && empty( FrmForm::get_key_by_id( $new_form_id ) ) ) {
+
+		if ( $new_form_id && ! FrmForm::get_key_by_id( $new_form_id ) ) {
 			// Allow reimport if the form was deleted.
 			$new_form_id = 0;
 		}
@@ -518,10 +626,13 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	private function is_unsupported_field( $type ) {
-		$fields = $this->unsupported_field_types();
-
-		return in_array( $type, $fields, true );
+		return in_array( $type, $this->unsupported_field_types(), true );
 	}
 
 	/**
@@ -533,10 +644,17 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param string $type
+	 *
+	 * @return bool
+	 */
 	protected function should_skip_field( $type ) {
-		$skip_pro_fields = $this->skip_pro_fields();
+		if ( FrmAppHelper::pro_is_installed() ) {
+			return false;
+		}
 
-		return ( ! FrmAppHelper::pro_is_installed() && in_array( $type, $skip_pro_fields, true ) );
+		return in_array( $type, $this->skip_pro_fields(), true );
 	}
 
 	/**
@@ -560,6 +678,11 @@ abstract class FrmFormMigrator {
 		return array();
 	}
 
+	/**
+	 * @param int|string $id
+	 *
+	 * @return array
+	 */
 	public function get_form( $id ) {
 		return array();
 	}
@@ -598,7 +721,8 @@ abstract class FrmFormMigrator {
 	 */
 	protected function get_field_label( $field ) {
 		$label = $field['label'] ?? '';
-		if ( ! empty( $label ) ) {
+
+		if ( $label ) {
 			return $label;
 		}
 

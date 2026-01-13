@@ -14,35 +14,40 @@ class FrmApiHelper {
 	 * @since 6.17
 	 *
 	 * @param array $item Inbox or Sale item.
+	 *
 	 * @return bool
 	 */
 	public static function is_for_user( $item ) {
 		if ( ! isset( $item['who'] ) || $item['who'] === 'all' ) {
 			return true;
 		}
+
 		$who = (array) $item['who'];
+
 		if ( self::is_for_everyone( $who ) ) {
 			return true;
 		}
+
 		if ( self::is_user_type( $who ) ) {
 			return true;
 		}
+
 		if ( in_array( 'free_first_30', $who, true ) && self::is_free_first_30() ) {
 			return true;
 		}
+
 		if ( in_array( 'free_not_first_30', $who, true ) && self::is_free_not_first_30() ) {
 			return true;
 		}
-		if ( self::check_free_segments( $who ) ) {
-			return true;
-		}
-		return false;
+
+		return self::check_free_segments( $who );
 	}
 
 	/**
 	 * @since 6.17
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function is_for_everyone( $who ) {
@@ -53,6 +58,7 @@ class FrmApiHelper {
 	 * @since 6.17
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function is_user_type( $who ) {
@@ -91,11 +97,13 @@ class FrmApiHelper {
 	 */
 	private static function is_first_30() {
 		$activation_timestamp = get_option( 'frm_first_activation' );
+
 		if ( false === $activation_timestamp ) {
 			// If the option does not exist, assume that it is
 			// because the user was active before this option was introduced.
 			return false;
 		}
+
 		$cutoff = strtotime( '-30 days' );
 		return $activation_timestamp > $cutoff;
 	}
@@ -124,6 +132,7 @@ class FrmApiHelper {
 	 * @since 6.18
 	 *
 	 * @param array $who
+	 *
 	 * @return bool
 	 */
 	private static function check_free_segments( $who ) {
@@ -161,11 +170,13 @@ class FrmApiHelper {
 	 *
 	 * @param string $key
 	 * @param int    $activation_timestamp
+	 *
 	 * @return bool
 	 */
 	private static function matches_segment( $key, $activation_timestamp ) {
 		$range_part  = str_replace( 'free_first_', '', $key );
 		$range_parts = explode( '_', $range_part );
+
 		if ( ! $range_parts ) {
 			return false;
 		}

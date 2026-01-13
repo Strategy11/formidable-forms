@@ -45,8 +45,7 @@ class test_FrmPersonalData extends FrmUnitTest {
 
 		$user_id_field = $this->factory->field->get_id_by_key( 'contact-user-id' );
 		$email_field   = $this->factory->field->get_id_by_key( 'contact-email' );
-
-		$entry_ids = $this->create_entries_for_email( $entry_data, $email );
+		$entry_ids     = $this->create_entries_for_email( $entry_data, $email );
 
 		// with user id and matching email
 		$entry_data['item_meta'][ $email_field ]   = $email;
@@ -61,6 +60,12 @@ class test_FrmPersonalData extends FrmUnitTest {
 		return $entry_ids;
 	}
 
+	/**
+	 * @param mixed $entry_data
+	 * @param mixed $email
+	 *
+	 * @return string[]
+	 */
 	private function create_entries_for_email( $entry_data, $email ) {
 		$email_field = $this->factory->field->get_id_by_key( 'contact-email' );
 

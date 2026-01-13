@@ -2,17 +2,11 @@
 
 class test_FrmOverlayController extends FrmUnitTest {
 
-	private $time_mock;
-
 	public function setUp(): void {
 		parent::setUp();
-		$this->time_mock = $this->getMockBuilder( 'FrmOverlayController' )
-			->setMethods( array( 'time', 'strtotime', 'date' ) )
-			->getMock();
 	}
 
 	public function test_open_overlay() {
-
 		$test_data                                   = array(
 			'hero_image' => FrmAppHelper::plugin_url() . '/images/overlay/lock.svg',
 			'heading'    => 'Overlay Heading Test',

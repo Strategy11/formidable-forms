@@ -53,7 +53,6 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmFormsController::update();
-		$html = ob_get_contents();
 		ob_end_clean();
 
 		self::_check_updated_values( $form_id );
@@ -61,8 +60,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	private function _setup_post_values( $form_id ) {
 		$fields = FrmField::get_all_for_form( $form_id );
-
-		$form = FrmForm::getOne( $form_id );
+		$form   = FrmForm::getOne( $form_id );
 
 		$_POST = array(
 			'page'                 => 'formidable',
@@ -102,8 +100,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			);
 
 			$_POST['field_options'] = array_merge( $_POST['field_options'], $field_options );
-
-			$_REQUEST = $_POST;
+			$_REQUEST               = $_POST;
 		}
 	}
 
@@ -111,12 +108,7 @@ class test_FrmFormsController extends FrmUnitTest {
 	 * Make sure DOING_AJAX is false.
 	 */
 	private function _check_doing_ajax() {
-		if ( defined( 'DOING_AJAX' ) ) {
-			$doing_ajax = true;
-		} else {
-			$doing_ajax = false;
-		}
-
+		$doing_ajax = defined( 'DOING_AJAX' );
 		$this->assertFalse( $doing_ajax, 'DOING_AJAX must be false for this test to work. Maybe run this test individually to make sure DOING_AJAX is false.' );
 	}
 
@@ -150,7 +142,8 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		if ( FrmAppHelper::js_suffix() === '.min' ) {
 			$file = 'frm.min.js';
-			if ( strpos( $formidable_js->src, $file ) === false ) {
+
+			if ( ! str_contains( $formidable_js->src, $file ) ) {
 				$file = 'formidable.min.js';
 			}
 		} else {
@@ -246,6 +239,7 @@ class test_FrmFormsController extends FrmUnitTest {
 			'window.location="http://example.com"',
 			'Test page content',
 		);
+
 		foreach ( $contains as $c ) {
 			$this->assertStringContainsString( $c, $response );
 		}
@@ -272,11 +266,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		wp_cache_delete( $form_id, 'frm_form' );
 		$this->trigger_migrate_actions( $form_id );
 
-		$form = $this->factory->form->get_object_by_id( $form_id );
-
-		$entry_key = 'submit-redirect';
-		$response  = $this->post_new_entry( $form, $entry_key );
-
+		$form             = $this->factory->form->get_object_by_id( $form_id );
+		$entry_key        = 'submit-redirect';
+		$response         = $this->post_new_entry( $form, $entry_key );
 		$created_entry_id = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry_id, 'No entry found with key ' . $entry_key );
 
@@ -291,6 +283,10 @@ class test_FrmFormsController extends FrmUnitTest {
 
 	/**
 	 * Trigger migration check and the flag.
+	 *
+	 * @param int|string $form_id
+	 *
+	 * @return void
 	 */
 	private function trigger_migrate_actions( $form_id ) {
 		FrmOnSubmitHelper::maybe_migrate_submit_settings_to_action( $form_id );
@@ -357,10 +353,10 @@ class test_FrmFormsController extends FrmUnitTest {
 	}
 
 	private function post_new_entry( $form, $entry_key ) {
-		$fields = FrmField::get_all_for_form( $form->id, '', 'include' );
-		$class  = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
-
+		$fields       = FrmField::get_all_for_form( $form->id, '', 'include' );
+		$class        = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$max_field_id = 0;
+
 		foreach ( $fields as $field ) {
 			$max_field_id = max( (int) $field->id, $max_field_id );
 		}
@@ -373,10 +369,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		ob_start();
 		FrmEntriesController::process_entry();
-		$response = ob_get_contents();
-		ob_end_clean();
-
-		return $response;
+		return ob_get_clean();
 	}
 
 	public function test_redirect_in_new_tab() {
@@ -394,8 +387,7 @@ class test_FrmFormsController extends FrmUnitTest {
 
 		wp_cache_delete( $form_id, 'frm_form' );
 		$this->trigger_migrate_actions( $form_id );
-		$form = $this->factory->form->get_object_by_id( $form_id );
-
+		$form      = $this->factory->form->get_object_by_id( $form_id );
 		$entry_key = 'submit-redirect';
 		$response  = $this->post_new_entry( $form, $entry_key );
 

@@ -7,6 +7,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 	/**
 	 * @covers FrmMigrate::upgrade
+	 *
 	 * @todo Check if style was created
 	 */
 	public function test_upgrade() {
@@ -58,8 +59,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
-
-		$frmdb = new FrmMigrate();
+		$frmdb    = new FrmMigrate();
 		update_option( 'frm_db_version', 16 ); // trigger migration 17
 		$frmdb->upgrade();
 
@@ -105,6 +105,7 @@ class test_FrmMigrate extends FrmUnitTest {
 			'1024px' => round( 1024 / 9 ),
 		);
 		$field_ids = array();
+
 		foreach ( $sizes as $start_size => $new_size ) {
 			$field_id                 = $this->factory->field->create(
 				array(
@@ -261,9 +262,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		);
 
 		$field_ids = array();
+
 		foreach ( $settings as $key => $setting ) {
 			$new_field            = $setting['start'];
 			$new_field['form_id'] = $form_id;
+
 			if ( ! isset( $new_field['type'] ) ) {
 				$new_field['type'] = 'text';
 			}
@@ -300,6 +303,7 @@ class test_FrmMigrate extends FrmUnitTest {
 	 */
 	public function test_collation() {
 		global $wpdb;
+
 		if ( $wpdb->has_cap( 'collation' ) ) {
 			$this->assert_collation();
 		}
@@ -311,11 +315,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		$collation = $frmdb->collation();
 
 		if ( ! empty( $wpdb->charset ) ) {
-			$this->assertTrue( strpos( $collation, 'DEFAULT CHARACTER SET' ) !== false );
+			$this->assertTrue( str_contains( $collation, 'DEFAULT CHARACTER SET' ) );
 		}
 
 		if ( ! empty( $wpdb->collate ) ) {
-			$this->assertTrue( strpos( $collation, 'COLLATE' ) !== false );
+			$this->assertTrue( str_contains( $collation, 'COLLATE' ) );
 		}
 	}
 
@@ -355,15 +359,15 @@ class test_FrmMigrate extends FrmUnitTest {
 		// migrate data
 		FrmAppController::install();
 
-		$form = FrmForm::getOne( 'contact-db12-copy' );
-
+		$form         = FrmForm::getOne( 'contact-db12-copy' );
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 
 		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );
 
 		$this->assertEquals( 1, count( $form_actions ), 'Old form settings are not converted to email action.' );
+
 		foreach ( $form_actions as $action ) {
-			$this->assertTrue( strpos( $action->post_content['email_to'], 'emailto@test.com' ) !== false );
+			$this->assertTrue( str_contains( $action->post_content['email_to'], 'emailto@test.com' ) );
 		}
 	}
 

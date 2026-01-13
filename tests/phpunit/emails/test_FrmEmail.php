@@ -24,17 +24,17 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @var stdClass
 	 */
-	protected $contact_form = null;
+	protected $contact_form;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $email_action = null;
+	protected $email_action;
 
 	/**
 	 * @var stdClass
 	 */
-	protected $entry = null;
+	protected $entry;
 
 	public static function wpSetUpBeforeClass() {
 		$_POST = array();
@@ -93,7 +93,6 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_message_body( $expected, $mock_email );
 		$this->check_content_type( $expected, $mock_email );
 	}
-
 
 	/**
 	 * Tests multiple to addresses, double quotes, user-defined subject
@@ -185,9 +184,8 @@ class test_FrmEmail extends FrmUnitTest {
 	public function test_trigger_email_three() {
 		$entry_clone = clone $this->entry;
 		$expected    = array();
-
-		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id = FrmField::get_id_by_key( $this->email_field_key );
+		$name_id     = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id    = FrmField::get_id_by_key( $this->email_field_key );
 
 		// Adjust entry values
 		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
@@ -368,9 +366,11 @@ class test_FrmEmail extends FrmUnitTest {
 		// From
 		$this->email_action->post_content['from'] = '"Yahoo" test@yahoo.com';
 		$sitename                                 = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
-		if ( substr( $sitename, 0, 4 ) === 'www.' ) {
+
+		if ( str_starts_with( $sitename, 'www.' ) ) {
 			$sitename = substr( $sitename, 4 );
 		}
+
 		$expected['from'] = 'Yahoo <wordpress@' . $sitename . '>';
 
 		// Reply to
@@ -407,9 +407,8 @@ class test_FrmEmail extends FrmUnitTest {
 	 * @covers FrmNotification::trigger_email
 	 */
 	public function test_trigger_email_six() {
-		$name_id  = FrmField::get_id_by_key( $this->name_field_key );
-		$email_id = FrmField::get_id_by_key( $this->email_field_key );
-
+		$name_id                         = FrmField::get_id_by_key( $this->name_field_key );
+		$email_id                        = FrmField::get_id_by_key( $this->email_field_key );
 		$entry_clone                     = clone $this->entry;
 		$entry_clone->metas[ $name_id ]  = 'Test Testerson';
 		$entry_clone->metas[ $email_id ] = 'tester@mail.com';
@@ -430,12 +429,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function prepare_subject( $subject ) {
-		$subject = wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
-		return $subject;
-
-		// TODO: Run this with the frm_encode_subject filter.
-		$charset = get_option( 'blog_charset' );
-		return '=?' . $charset . '?B?' . base64_encode( $subject ) . '?=';
+		return wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
 	}
 
 	protected function get_email_action_for_form( $form_id ) {
@@ -448,8 +442,7 @@ class test_FrmEmail extends FrmUnitTest {
 	protected function create_entry( $form ) {
 		$entry_data = $this->factory->field->generate_entry_array( $form );
 		$entry_id   = $this->factory->entry->create( $entry_data );
-
-		$entry = FrmEntry::getOne( $entry_id, true );
+		$entry      = FrmEntry::getOne( $entry_id, true );
 		$this->assertNotEmpty( $entry );
 
 		return $entry;
@@ -507,8 +500,7 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	public function change_email_subject( $subject, $args ) {
-		$subject = 'New subject';
-		return $subject;
+		return 'New subject';
 	}
 
 	public function send_separate_emails( $is_single, $args ) {
@@ -649,6 +641,7 @@ LINE 1<br>LINE 2<br></body></html>'
 			=>
 			'<html><head><style>label{font-size:14px;font-weight:bold;padding-bottom:5px;}</style></head><body><p>LINE 1<br />LINE 2</p></body></html>',
 		);
+
 		foreach ( $messages as $message => $expected ) {
 			$action->post_content['email_message'] = $message;
 			$email                                 = new FrmEmail( $action, $this->entry, $this->contact_form );
@@ -713,7 +706,7 @@ LINE 1<br>LINE 2<br></body></html>'
 	}
 
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
-		if ( empty( $property ) ) {
+		if ( ! $property ) {
 			$property = $setting_name;
 		}
 

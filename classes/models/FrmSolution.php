@@ -4,6 +4,7 @@
  * This page is shown when a Formidable plugin is activated.
  *
  * @since 4.06.02
+ *
  * @package Formidable
  */
 
@@ -13,20 +14,33 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSolution {
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_slug = '';
 
+	/**
+	 * @var string
+	 */
 	protected $plugin_file = '';
 
 	/**
 	 * Hidden welcome page slug.
 	 *
 	 * @since 4.06.02
+	 *
 	 * @var string
 	 */
 	protected $page = '';
 
-	protected $icon = 'frm_icon_font frm_settings_icon';
+	/**
+	 * @var string
+	 */
+	protected $icon = 'frmfont frm_settings_icon';
 
+	/**
+	 * @param array $atts
+	 */
 	public function __construct( $atts = array() ) {
 		if ( empty( $this->plugin_slug ) ) {
 			return;
@@ -69,6 +83,11 @@ class FrmSolution {
 		add_action( 'admin_head', array( $this, 'hide_menu' ) );
 	}
 
+	/**
+	 * @param array $links
+	 *
+	 * @return array
+	 */
 	public function plugin_links( $links ) {
 		if ( ! $this->is_complete() ) {
 			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
@@ -89,7 +108,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function register() {
-
 		// Getting started - shows after installation.
 		add_dashboard_page(
 			esc_html( $this->page_title() ),
@@ -147,8 +165,8 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function redirect() {
-
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+
 		if ( $current_page === $this->page ) {
 			// Prevent endless loop.
 			return;
@@ -180,6 +198,10 @@ class FrmSolution {
 
 	/**
 	 * Add page to global settings.
+	 *
+	 * @param array $sections Sections.
+	 *
+	 * @return array
 	 */
 	public function add_settings( $sections ) {
 		wp_enqueue_style( 'formidable-pro-fields' );
@@ -201,6 +223,7 @@ class FrmSolution {
 	 */
 	public function settings_page() {
 		$steps = $this->get_steps_data();
+
 		if ( ! $steps['license']['complete'] || ( isset( $steps['plugin'] ) && ! $steps['plugin']['complete'] ) ) {
 			// Redirect to the welcome page if install hasn't been done.
 			$url = $this->settings_link();
@@ -208,8 +231,7 @@ class FrmSolution {
 			return;
 		}
 
-		$all_imported = $this->is_complete( 'all' );
-
+		$all_imported   = $this->is_complete( 'all' );
 		$step           = $steps['import'];
 		$step['label']  = '';
 		$step['nested'] = true;
@@ -221,6 +243,7 @@ class FrmSolution {
 			$new_class            = $all_imported ? ' button frm_hidden' : '';
 			$step['button_class'] = str_replace( 'frm_grey disabled', $new_class, $step['button_class'] );
 		}
+
 		if ( $all_imported ) {
 			$step['description'] = __( 'The following form(s) have been created.', 'formidable' );
 		}
@@ -299,6 +322,7 @@ class FrmSolution {
 	protected function main_content() {
 		$steps = $this->get_steps_data();
 		$this->license_box( $steps['license'] );
+
 		if ( isset( $steps['plugin'] ) ) {
 			$this->show_plugin_install( $steps['plugin'] );
 		}
@@ -306,6 +330,9 @@ class FrmSolution {
 		$this->show_page_links( $steps['complete'] );
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function get_steps_data() {
 		$pro_installed = FrmAppHelper::pro_is_connected();
 
@@ -345,6 +372,7 @@ class FrmSolution {
 		$this->adjust_plugin_install_step( $steps );
 
 		$has_current = false;
+
 		foreach ( $steps as $k => $step ) {
 			// Set the current step.
 			if ( ! isset( $step['current'] ) ) {
@@ -361,6 +389,7 @@ class FrmSolution {
 			// Set disabled buttons.
 			$class  = $step['button_class'] ?? '';
 			$class .= ' button-primary frm-button-primary';
+
 			if ( ! $steps[ $k ]['current'] ) {
 				$class .= ' frm_grey disabled';
 			}
@@ -377,7 +406,8 @@ class FrmSolution {
 	 */
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
-		if ( empty( $plugins ) ) {
+
+		if ( ! $plugins ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
 			$steps['complete']['num'] = 3;
@@ -386,11 +416,14 @@ class FrmSolution {
 
 		$missing = array();
 		$rel     = array();
+
 		foreach ( $plugins as $plugin_key ) {
 			$plugin = FrmAddonsController::install_link( $plugin_key );
+
 			if ( $plugin['status'] === 'active' ) {
 				continue;
 			}
+
 			if ( isset( $plugin['url'] ) ) {
 				$rel[] = $plugin['url'];
 			} else {
@@ -398,9 +431,10 @@ class FrmSolution {
 				$missing[] = $plugin_key;
 			}
 		}
-		if ( empty( $rel ) && empty( $missing ) ) {
+
+		if ( ! $rel && ! $missing ) {
 			$steps['plugin']['complete'] = true;
-		} elseif ( ! empty( $missing ) ) {
+		} elseif ( $missing ) {
 			$steps['plugin']['error'] = sprintf(
 				/* translators: %1$s: Plugin name */
 				esc_html__( 'You need permission to download the Formidable %1$s plugin', 'formidable' ),
@@ -417,6 +451,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function step_top( $step ) {
@@ -426,7 +462,7 @@ class FrmSolution {
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
 			<?php
-			if ( isset( $step['complete'] ) && $step['complete'] ) {
+			if ( ! empty( $step['complete'] ) ) {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(
@@ -455,6 +491,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
@@ -466,6 +504,8 @@ class FrmSolution {
 
 	/**
 	 * Generate and output Connect step section HTML.
+	 *
+	 * @param array $step Step.
 	 *
 	 * @return void
 	 */
@@ -486,6 +526,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function show_plugin_install( $step ) {
@@ -505,19 +547,21 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step Step.
+	 *
 	 * @return void
 	 */
 	protected function show_app_install( $step ) {
 		$is_complete = $step['complete'];
+
 		if ( ! empty( $this->form_options() ) && ! $is_complete ) {
 			$step['description'] = __( 'Select the form or view you would like to create.', 'formidable' );
 		}
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
-		$addons = $api->get_api_info();
-
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
@@ -538,6 +582,7 @@ class FrmSolution {
 			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
 		} else {
 			$xml = $addons[ $id ]['beta']['package'];
+
 			if ( is_array( $xml ) ) {
 				$xml = reset( $xml );
 			}
@@ -582,6 +627,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param string $xml
+	 *
 	 * @return void
 	 */
 	protected function show_form_options( $xml ) {
@@ -605,18 +652,20 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function show_import_options( $options, $importing, $xml = '' ) {
-		if ( empty( $options ) ) {
+		if ( ! $options ) {
 			return;
 		}
 
 		$imported = $this->previously_imported_forms();
 		$count    = count( $options );
+
 		foreach ( $options as $info ) {
 			// Count the number of options displayed for css.
 			if ( $count > 1 && ! isset( $info['img'] ) ) {
 				--$count;
 			}
 		}
+
 		$width = floor( ( 533 - ( ( $count - 1 ) * 20 ) ) / $count );
 		unset( $count );
 
@@ -630,11 +679,13 @@ class FrmSolution {
 	 */
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
-		if ( empty( $pages ) ) {
+
+		if ( ! $pages ) {
 			return;
 		}
 
 		echo '<h3>Choose New Page Title</h3>';
+
 		foreach ( $pages as $page ) {
 			?>
 			<p>
@@ -648,6 +699,8 @@ class FrmSolution {
 	}
 
 	/**
+	 * @param array $step
+	 *
 	 * @return void
 	 */
 	protected function show_page_links( $step ) {
@@ -687,9 +740,11 @@ class FrmSolution {
 	 */
 	protected function is_complete( $count = 1 ) {
 		$imported = $this->previously_imported_forms();
+
 		if ( $count === 'all' ) {
 			return count( $imported ) >= count( $this->form_options() );
 		}
+
 		return ! empty( $imported );
 	}
 
@@ -701,8 +756,10 @@ class FrmSolution {
 	protected function previously_imported_forms() {
 		$imported = array();
 		$forms    = $this->form_options();
+
 		foreach ( $forms as $form ) {
 			$was_imported = isset( $form['form'] ) ? FrmForm::get_id_by_key( $form['form'] ) : false;
+
 			if ( $was_imported ) {
 				$imported[ $form['form'] ] = $was_imported;
 			}

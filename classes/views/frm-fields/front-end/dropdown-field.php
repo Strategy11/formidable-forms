@@ -27,8 +27,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		<?php
 	}
 
-	$placeholder = FrmFieldsController::add_placeholder_to_select( $field );
-
+	$placeholder   = FrmFieldsController::add_placeholder_to_select( $field );
 	$skipped       = false;
 	$other_opt     = false;
 	$other_checked = false;
@@ -50,13 +49,16 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		$field_val = FrmFieldsHelper::get_value_from_array( $opt, $opt_key, $field );
 		$opt       = FrmFieldsHelper::get_label_from_array( $opt, $opt_key, $field );
 		$selected  = FrmAppHelper::check_selected( $field['value'], $field_val );
+
 		if ( $other_opt === false ) {
 			$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key' ), $other_opt, $selected );
+
 			if ( FrmFieldsHelper::is_other_opt( $opt_key ) && $selected ) {
 				$other_checked = true;
 			}
 		}
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $placeholder && $opt == '' && ! $skipped ) {
 			$skipped = true;
 			continue;

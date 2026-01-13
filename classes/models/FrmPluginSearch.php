@@ -27,6 +27,7 @@ class FrmPluginSearch {
 	 * Add actions and filters only if this is the plugin installation screen and it's the first page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param object $screen WP Screen object.
 	 *
 	 * @return void
@@ -66,14 +67,15 @@ class FrmPluginSearch {
 
 		// Lowercase, trim, remove punctuation/special chars, decode url, remove 'formidable'.
 		$normalized_term = $this->search_to_array( $args->search );
-		if ( empty( $normalized_term ) ) {
+
+		if ( ! $normalized_term ) {
 			// Don't add anything extra.
 			return $result;
 		}
 
 		$matching_addon = $this->matching_addon( $addon_list, $normalized_term );
 
-		if ( empty( $matching_addon ) || ! $this->should_display_hint( $matching_addon ) ) {
+		if ( ! $matching_addon || ! $this->should_display_hint( $matching_addon ) ) {
 			return $result;
 		}
 
@@ -128,8 +130,7 @@ class FrmPluginSearch {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
-
+			$addon_terms   = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
 			if ( count( $matched_terms ) === count( $normalized_term ) ) {
@@ -188,6 +189,7 @@ class FrmPluginSearch {
 	 * Modify URL used to fetch to plugin information so it pulls Formidable plugin page.
 	 *
 	 * @since 4.12
+	 *
 	 * @param string $url URL to load in dialog pulling the plugin page from wporg.
 	 *
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
@@ -205,7 +207,8 @@ class FrmPluginSearch {
 	 */
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
-		if ( ! empty( $addon ) ) {
+
+		if ( $addon ) {
 			$this->add_to_dismissed_hints( $addon );
 		}
 	}
@@ -219,7 +222,7 @@ class FrmPluginSearch {
 	 */
 	protected function get_dismissed_hints() {
 		$dismissed_hints = get_option( self::$dismissed_opt );
-		return ! empty( $dismissed_hints ) && is_array( $dismissed_hints ) ? $dismissed_hints : array();
+		return $dismissed_hints && is_array( $dismissed_hints ) ? $dismissed_hints : array();
 	}
 
 	/**
@@ -263,6 +266,7 @@ class FrmPluginSearch {
 	 * easy to work with.
 	 *
 	 * @param  string $term The raw search term.
+	 *
 	 * @return string A simplified/sanitized version.
 	 */
 	private function sanitize_search_term( $term ) {
@@ -272,15 +276,14 @@ class FrmPluginSearch {
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
 		// remove strings that don't help matches.
-		$term = trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
-
-		return $term;
+		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
 	/**
 	 * @since 4.12
 	 *
 	 * @param string $terms
+	 *
 	 * @return array
 	 */
 	private function search_to_array( $terms ) {
@@ -351,6 +354,7 @@ class FrmPluginSearch {
 
 	/**
 	 * @param string $plugin
+	 *
 	 * @return bool
 	 */
 	protected function is_installed( $plugin ) {

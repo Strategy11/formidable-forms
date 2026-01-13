@@ -3,6 +3,7 @@
  * Stats email class
  *
  * @since 6.7
+ *
  * @package Formidable
  */
 
@@ -91,8 +92,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	}
 
 	protected function get_content_args() {
-		$args = parent::get_content_args();
-
+		$args          = parent::get_content_args();
 		$entries_count = FrmEmailSummaryHelper::get_entries_count( $this->from_date, $this->to_date );
 		$entries_stat  = array(
 			'entries' => array(
@@ -125,6 +125,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Adds entries comparison data.
 	 *
 	 * @param array $stats Statistics section data.
+	 *
+	 * @return void
 	 */
 	protected function add_entries_comparison_data( &$stats ) {
 		if ( ! $this->has_comparison ) {
@@ -139,6 +141,8 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 * Adds payments count and total data.
 	 *
 	 * @param array $stats Statistics section data.
+	 *
+	 * @return void
 	 */
 	protected function add_payments_data( &$stats ) {
 		$payment_data            = FrmEmailSummaryHelper::get_payments_data( $this->from_date, $this->to_date );
@@ -199,6 +203,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 *
 	 * @param float        $amount Amount.
 	 * @param array|string $currency Currency string value or array.
+	 *
 	 * @return string
 	 */
 	protected function get_formatted_price( $amount, $currency ) {
@@ -214,6 +219,7 @@ abstract class FrmEmailStats extends FrmEmailSummary {
 	 *
 	 * @param float $current Current value.
 	 * @param float $prev    Previous value.
+	 *
 	 * @return float
 	 */
 	public function get_compare_diff( $current, $prev ) {

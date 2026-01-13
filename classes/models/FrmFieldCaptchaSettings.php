@@ -195,6 +195,7 @@ class FrmFieldCaptchaSettings {
 	 *
 	 * @param array $attributes
 	 * @param array $field
+	 *
 	 * @return array
 	 */
 	public function add_front_end_element_attributes( $attributes, $field ) {
@@ -211,6 +212,7 @@ class FrmFieldCaptchaSettings {
 	 * @since 6.8.4
 	 *
 	 * @param array $field
+	 *
 	 * @return string Either 'normal' or 'compact'.
 	 */
 	protected function get_captcha_size( $field ) {
@@ -260,6 +262,7 @@ class FrmFieldCaptchaSettings {
 	 * @since 6.25.1
 	 *
 	 * @param bool $allow_multiple
+	 *
 	 * @return string
 	 */
 	public function get_class_prefix( $allow_multiple ) {

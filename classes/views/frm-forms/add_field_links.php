@@ -44,6 +44,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								foreach ( $frm_field_selection as $field_key => $field_type ) {
 									$field_label = FrmFormsHelper::get_field_link_name( $field_type );
 									$classes     = 'frmbutton frm6 frm_t' . $field_key;
+
 									if ( ! empty( $field_type['hide'] ) ) {
 										$classes .= ' frm_hidden';
 									}
@@ -72,6 +73,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<ul class="field_type_list frm_grid_container">
 								<?php
 								$no_allow_class = apply_filters( 'frm_noallow_class', 'frm_noallow' );
+
 								if ( $no_allow_class === 'frm_noallow' ) {
 									$no_allow_class .= ' frm_show_upgrade';
 								}
@@ -81,8 +83,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 								unset( $pro_fields['credit_card'] );
 
 								$field_sections = array();
-								foreach ( $pro_fields as $field_key => $field_type ) {
 
+								foreach ( $pro_fields as $field_key => $field_type ) {
 									if ( isset( $field_type['section'] ) ) {
 										if ( ! isset( $field_sections[ $field_type['section'] ] ) ) {
 											$field_sections[ $field_type['section'] ] = array();

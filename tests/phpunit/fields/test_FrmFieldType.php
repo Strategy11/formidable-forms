@@ -130,6 +130,7 @@ class test_FrmFieldType extends FrmUnitTest {
 				),
 			),
 		);
+
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
@@ -154,6 +155,7 @@ class test_FrmFieldType extends FrmUnitTest {
 				'expected' => '<p>Here</p>',
 			),
 		);
+
 		foreach ( $values as $value ) {
 			$frm_field_type = FrmFieldFactory::get_field_type( $value['type'] );
 			$frm_field_type->sanitize_value( $value['value'] );
@@ -205,7 +207,6 @@ class test_FrmFieldType extends FrmUnitTest {
 	 * @covers FrmFieldType::is_not_unique
 	 */
 	public function test_is_not_unique() {
-
 		$form_id = $this->factory->form->create();
 		$field1  = $this->factory->field->create_and_get(
 			array(
@@ -313,8 +314,7 @@ class test_FrmFieldType extends FrmUnitTest {
 		$field        = FrmField::getOne( $field->id );
 		$field_array  = FrmFieldsHelper::setup_edit_vars( $field );
 		$field_object = FrmFieldFactory::get_field_type( 'text', $field_array );
-
-		$html = $field_object->prepare_field_html( $args );
+		$html         = $field_object->prepare_field_html( $args );
 		$this->assertEquals( '', $html );
 
 		// Test a draft field on a preview page for a privileged user (the HTML should not be empty).
@@ -353,6 +353,7 @@ class test_FrmFieldType extends FrmUnitTest {
 	/**
 	 * @param string   $html
 	 * @param stdClass $field
+	 *
 	 * @return void
 	 */
 	private function make_text_field_html_assertions( $html, $field ) {

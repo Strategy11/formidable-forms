@@ -7,6 +7,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 
 	/**
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function load_sidebar_actions( $subscription ) {
@@ -24,10 +25,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @since 6.5
 	 *
 	 * @param object $subscription
+	 *
 	 * @return void
 	 */
 	public static function show_receipt_link( $subscription ) {
 		$link = esc_html( $subscription->sub_id );
+
 		if ( $subscription->sub_id !== 'None' ) {
 			/**
 			 * Filter a receipt link for a specific gateway.
@@ -46,6 +49,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return void
 	 */
 	public static function show_cancel_link( $sub, $atts = array() ) {
@@ -61,6 +65,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	/**
 	 * @param object $sub
 	 * @param array  $atts
+	 *
 	 * @return string
 	 */
 	public static function cancel_link( $sub, $atts = array() ) {
@@ -92,9 +97,11 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 		check_ajax_referer( 'frm_trans_ajax', 'nonce' );
 
 		$sub_id = FrmAppHelper::get_param( 'sub', '', 'get', 'sanitize_text_field' );
+
 		if ( $sub_id ) {
 			$frm_sub = new FrmTransLiteSubscription();
 			$sub     = $frm_sub->get_one( $sub_id );
+
 			if ( $sub ) {
 				switch ( $sub->paysys ) {
 					case 'stripe':
@@ -135,6 +142,7 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	 * @since 6.5, introduced in v1.12 of the Payments submodule.
 	 *
 	 * @param array $atts
+	 *
 	 * @return void
 	 */
 	public static function change_subscription_status( $atts ) {
@@ -146,26 +154,12 @@ class FrmTransLiteSubscriptionsController extends FrmTransLiteCRUDController {
 	}
 
 	/**
+	 * @deprecated x.x
+	 *
 	 * @return string|null
 	 */
 	public static function list_subscriptions_shortcode() {
-		if ( ! is_user_logged_in() ) {
-			return;
-		}
-
-		$frm_sub       = new FrmTransLiteSubscription();
-		$subscriptions = $frm_sub->get_all_for_user( get_current_user_id() );
-		if ( empty( $subscriptions ) ) {
-			return;
-		}
-
-		FrmTransLiteActionsController::actions_js();
-
-		ob_start();
-		include FrmTransLiteAppHelper::plugin_path() . '/views/subscriptions/list_shortcode.php';
-		$content = ob_get_contents();
-		ob_end_clean();
-
-		return $content;
+		_deprecated_function( __METHOD__, 'x.x' );
+		return null;
 	}
 }

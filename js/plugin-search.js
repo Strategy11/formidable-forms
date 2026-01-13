@@ -35,8 +35,8 @@ function frmPS() {
 
 				// Remove link and parent li from action links and move it to bottom row
 				const dismissLink = document.querySelector( '.frm-plugin-search__dismiss' );
-				dismissLink.parentNode.parentNode.removeChild( dismissLink.parentNode );
-				document.querySelector( '.frm-plugin-search__bottom' ).appendChild( dismissLink );
+				dismissLink.parentNode.remove();
+				document.querySelector( '.frm-plugin-search__bottom' ).append( dismissLink );
 			}
 		},
 

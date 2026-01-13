@@ -14,11 +14,10 @@ class FrmStrpLiteSubscriptionHelper {
 	 * Prepare a charge object for a Stripe subscription.
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
-	 * @todo I removed the $charge_object->paid = false; line from here is it isn't required for Stripe link.
-	 *       Make sure that if/when we re-use this in Stripe that we still include that.
 	 *
 	 * @param object $subscription A Stripe Subscription object.
 	 * @param string $amount
+	 *
 	 * @return stdClass
 	 */
 	public static function prepare_charge_object_for_subscription( $subscription, $amount ) {
@@ -37,6 +36,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param array $atts
+	 *
 	 * @return int|string $sub_id
 	 */
 	public static function create_new_subscription( $atts ) {
@@ -61,14 +61,14 @@ class FrmStrpLiteSubscriptionHelper {
 				(int) $atts['entry']->form_id,
 				(int) $atts['entry']->id
 			);
+
 			if ( is_int( $end_count ) ) {
 				$new_values['end_count'] = $end_count;
 			}
 		}
 
 		$frm_sub = new FrmTransLiteSubscription();
-		$sub_id  = $frm_sub->create( $new_values );
-		return $sub_id;
+		return $frm_sub->create( $new_values );
 	}
 
 	/**
@@ -82,7 +82,8 @@ class FrmStrpLiteSubscriptionHelper {
 	 *    @type WP_Post $action
 	 *    @type string  $amount
 	 * }
-	 * @return string Plan id.
+	 *
+	 * @return false|string Plan id.
 	 */
 	public static function get_plan_from_atts( $atts ) {
 		$action                         = $atts['action'];
@@ -94,10 +95,12 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param WP_Post $action
+	 *
 	 * @return false|string
 	 */
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
+
 		if ( ! $plan_id ) {
 			// The amount has already been formatted, so add the decimal back in.
 			$amount                         = $action->post_content['amount'];
@@ -105,6 +108,7 @@ class FrmStrpLiteSubscriptionHelper {
 			$plan_opts                      = self::prepare_plan_options( $action->post_content );
 			$plan_id                        = self::maybe_create_plan( $plan_opts );
 		}
+
 		return $plan_id;
 	}
 
@@ -112,6 +116,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param array $settings
+	 *
 	 * @return array
 	 */
 	public static function prepare_plan_options( $settings ) {
@@ -138,6 +143,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 3.0 This was moved from FrmStrpLiteActionsController.
 	 *
 	 * @param array $plan
+	 *
 	 * @return mixed
 	 */
 	public static function maybe_create_plan( $plan ) {
@@ -153,6 +159,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.5
 	 *
 	 * @param mixed $trial
+	 *
 	 * @return int
 	 */
 	private static function get_trial_with_default( $trial ) {
@@ -172,10 +179,11 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @param array               $charge_data
 	 * @param WP_Post             $action
 	 * @param int                 $amount
+	 *
 	 * @return false|object|string
 	 */
 	public static function maybe_create_missing_plan_and_create_subscription( $subscription, $charge_data, $action, $amount ) {
-		if ( ! is_string( $subscription ) || 0 !== strpos( $subscription, 'No such plan: ' ) ) {
+		if ( ! is_string( $subscription ) || ! str_starts_with( $subscription, 'No such plan: ' ) ) {
 			// Only retry when there is a No such plan string error.
 			return $subscription;
 		}
@@ -183,8 +191,7 @@ class FrmStrpLiteSubscriptionHelper {
 		// The full error message looks like "No such plan: '_399_1month_usd".
 		$action->post_content['plan_id'] = '';
 		$charge_data['plan']             = self::get_plan_from_atts( compact( 'action', 'amount' ) );
-		$subscription                    = FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
-		return $subscription;
+		return FrmStrpLiteAppHelper::call_stripe_helper_class( 'create_subscription', $charge_data );
 	}
 
 	/**
@@ -209,6 +216,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @param string $payment_limit The raw payment value string. It is not empty.
 	 * @param int    $form_id       Required for processing shortcodes.
 	 * @param int    $entry_id      Required for processing shortcodes.
+	 *
 	 * @return int|WP_Error
 	 */
 	public static function prepare_payment_limit( $payment_limit, $form_id, $entry_id ) {
@@ -216,7 +224,7 @@ class FrmStrpLiteSubscriptionHelper {
 			return (int) $payment_limit;
 		}
 
-		if ( false === strpos( $payment_limit, '[' ) ) {
+		if ( ! str_contains( $payment_limit, '[' ) ) {
 			return self::get_invalid_payment_limit_error( $payment_limit );
 		}
 
@@ -227,6 +235,7 @@ class FrmStrpLiteSubscriptionHelper {
 				'entry' => $entry_id,
 			)
 		);
+
 		if ( ! is_numeric( $payment_limit ) ) {
 			return self::get_invalid_payment_limit_error( $payment_limit );
 		}
@@ -238,6 +247,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 * @since 6.11
 	 *
 	 * @param string $payment_limit
+	 *
 	 * @return WP_Error
 	 */
 	private static function get_invalid_payment_limit_error( $payment_limit ) {

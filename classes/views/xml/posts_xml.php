@@ -53,6 +53,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		endif;
 
 		$postmeta = FrmDb::get_results( $wpdb->postmeta, array( 'post_id' => $post->ID ) );
+
 		foreach ( $postmeta as $meta ) :
 			if ( apply_filters( 'wxr_export_skip_postmeta', false, $meta->meta_key, $meta ) ) {
 				continue;
@@ -66,6 +67,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 		endforeach;
 
 		$taxonomies = get_object_taxonomies( $post->post_type );
+
 		if ( ! empty( $taxonomies ) ) {
 			$terms = wp_get_object_terms( $post->ID, $taxonomies );
 
@@ -78,6 +80,7 @@ while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 
 		if ( 'frm_display' === $post->post_type && is_callable( 'FrmViewsLayout::get_layouts_for_view' ) ) {
 			$layouts = FrmViewsLayout::get_layouts_for_view( $post->ID );
+
 			if ( is_array( $layouts ) ) {
 				foreach ( $layouts as $layout ) {
 					?>
@@ -100,6 +103,7 @@ if ( empty( $taxonomies ) ) {
 }
 
 global $frm_inc_tax;
+
 if ( empty( $frm_inc_tax ) ) {
 	$frm_inc_tax = array();
 }
@@ -112,15 +116,16 @@ foreach ( (array) $terms as $term ) {
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label         = 'category' === $term->taxonomy || 'tag' === $term->taxonomy ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {
 		echo '<term_parent>' . esc_html( $parent_slugs[ $term->parent ] ) . '</term_parent>';
 	}
+
 	if ( ! empty( $term->name ) ) {
 		echo '<term_name>' . FrmXMLHelper::cdata( $term->name ) . '</term_name>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
+
 	if ( ! empty( $term->description ) ) {
 		echo '<term_description>' . FrmXMLHelper::cdata( $term->description ) . '</term_description>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}

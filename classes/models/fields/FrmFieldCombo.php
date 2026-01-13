@@ -3,6 +3,7 @@
  * Combo field - Field contains sub fields
  *
  * @package Formidable
+ *
  * @since 4.11
  */
 
@@ -16,6 +17,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Does the html for this field label need to include "for"?
 	 *
 	 * @var bool
+	 *
 	 * @since 3.0
 	 */
 	protected $has_for_label = false;
@@ -163,6 +165,7 @@ class FrmFieldCombo extends FrmFieldType {
 		foreach ( $this->sub_fields as $name => $sub_field ) {
 			$sub_field['name'] = $name;
 			$wrapper_classes   = 'frm_grid_container frm_sub_field_options frm_sub_field_options-' . $sub_field['name'];
+
 			if ( ! isset( $processed_sub_fields[ $name ] ) ) {
 				// Options for this subfield should be hidden.
 				$wrapper_classes .= ' frm_hidden';
@@ -222,7 +225,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'description'    => false,
 			'default'        => false,
 			// Don't use the regular placeholder option.
@@ -230,8 +233,6 @@ class FrmFieldCombo extends FrmFieldType {
 			'logic'          => true,
 			'visibility'     => true,
 		);
-
-		return $settings;
 	}
 
 	/**
@@ -267,12 +268,14 @@ class FrmFieldCombo extends FrmFieldType {
 	 *
 	 * @param array $args           Arguments.
 	 * @param array $shortcode_atts Shortcode attributes.
+	 *
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
 		$field = (array) $this->field;
 
 		$field['default_value'] = $this->get_default_value();
+
 		if ( empty( $field['value'] ) ) {
 			$field['value'] = $field['default_value'];
 		}
@@ -282,9 +285,8 @@ class FrmFieldCombo extends FrmFieldType {
 
 		ob_start();
 		$this->load_field_output( $args );
-		$input_html = ob_get_clean();
 
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -375,6 +377,7 @@ class FrmFieldCombo extends FrmFieldType {
 		// Placeholder.
 		if ( in_array( 'placeholder', $sub_field['options'], true ) ) {
 			$placeholders = FrmField::get_option( $field, 'placeholder' );
+
 			if ( ! empty( $placeholders[ $sub_field['name'] ] ) ) {
 				$field['placeholder'] = $placeholders[ $sub_field['name'] ];
 			}
@@ -382,6 +385,7 @@ class FrmFieldCombo extends FrmFieldType {
 
 		// Add optional class.
 		$classes = $sub_field['classes'] ?? '';
+
 		if ( is_array( $classes ) ) {
 			$classes = implode( ' ', $classes );
 		}
@@ -400,6 +404,7 @@ class FrmFieldCombo extends FrmFieldType {
 		if ( ! empty( $sub_field['name'] ) ) {
 			$field['subfield_name'] = $sub_field['name'];
 		}
+
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
@@ -414,6 +419,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * Validate field.
 	 *
 	 * @param array $args Arguments. Includes `errors`, `value`.
+	 *
 	 * @return array Errors array.
 	 */
 	public function validate( $args ) {
@@ -431,8 +437,7 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-
+		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Validate not empty.
@@ -457,6 +462,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$field_name = $this->field->name ?? $this->field['name'];
 		$field_key  = $this->field->field_key ?? $this->field['field_key'];
 		$sub_fields = $this->get_processed_sub_fields();
+
 		foreach ( $sub_fields as $name => $sub_field ) {
 			$headings[ $field_id . '_' . $name ] = $field_name . ' (' . $field_key . ') - ' . $sub_field['label'];
 		}
@@ -503,5 +509,34 @@ class FrmFieldCombo extends FrmFieldType {
 			'class' => 'frm_combo_inputs_container',
 			'id'    => 'frm_combo_inputs_container_' . $this->field_id,
 		);
+	}
+
+	/**
+	 * Gets subfield input attributes.
+	 *
+	 * @since 6.26
+	 *
+	 * @param array $sub_field Subfield data.
+	 * @param array $args      Field output args. See {@see FrmFieldCombo::load_field_output()}.
+	 *
+	 * @return array
+	 */
+	protected function get_sub_field_input_attrs( $sub_field, $args ) {
+		$attrs = array(
+			'type'  => $sub_field['type'],
+			'id'    => $args['html_id'] . '_' . $sub_field['name'],
+			'value' => '',
+		);
+
+		if ( ! empty( $args['field']['value'][ $sub_field['name'] ] ) ) {
+			$attrs['value']       = $args['field']['value'][ $sub_field['name'] ];
+			$attrs['data-frmval'] = $args['field']['value'][ $sub_field['name'] ];
+		}
+
+		if ( empty( $args['remove_names'] ) ) {
+			$attrs['name'] = $args['field_name'] . '[' . $sub_field['name'] . ']';
+		}
+
+		return $attrs;
 	}
 }

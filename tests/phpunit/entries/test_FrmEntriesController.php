@@ -44,12 +44,12 @@ class test_FrmEntriesController extends FrmUnitTest {
 
 	private function create_post_entry( $form, $entry_key ) {
 		$exists = FrmEntry::get_id_by_key( $entry_key );
+
 		if ( $exists ) {
 			FrmEntry::destroy( $exists );
 		}
 
-		$new_post = $this->factory->post->create_and_get();
-
+		$new_post          = $this->factory->post->create_and_get();
 		$_POST             = $this->factory->field->generate_entry_array( $form );
 		$_POST['item_key'] = $entry_key;
 		$_POST['action']   = 'create';

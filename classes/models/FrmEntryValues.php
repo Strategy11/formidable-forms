@@ -87,6 +87,7 @@ class FrmEntryValues {
 	 * Gets entry property.
 	 *
 	 * @since 5.0.16
+	 *
 	 * @return stdClass
 	 */
 	public function get_entry() {
@@ -114,7 +115,6 @@ class FrmEntryValues {
 	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
-
 		// For reverse compatibility with the fields parameter.
 		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
 			if ( ! is_array( $atts['fields'] ) ) {
@@ -178,17 +178,10 @@ class FrmEntryValues {
 	 */
 	private function prepare_array_property( $index, $atts ) {
 		if ( ! empty( $atts[ $index ] ) ) {
-
-			if ( is_array( $atts[ $index ] ) ) {
-				$property = $atts[ $index ];
-			} else {
-				$property = explode( ',', $atts[ $index ] );
-			}
-		} else {
-			$property = array();
+			return is_array( $atts[ $index ] ) ? $atts[ $index ] : explode( ',', $atts[ $index ] );
 		}
 
-		return $property;
+		return array();
 	}
 
 	/**
@@ -315,12 +308,14 @@ class FrmEntryValues {
 	 */
 	protected function is_field_included( $field ) {
 		$is_included = true;
+
 		if ( ! empty( $this->include_fields ) ) {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
 		}
 
 		if ( ! empty( $this->exclude_fields ) ) {
 			$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+
 			if ( $is_excluded ) {
 				$is_included = false;
 			}
@@ -340,6 +335,7 @@ class FrmEntryValues {
 	 * @return bool
 	 */
 	protected function is_field_in_array( $field, $array ) {
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
 		return in_array( $field->id, $array ) || in_array( (string) $field->field_key, $array, true );
 	}
 

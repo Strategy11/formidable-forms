@@ -24,8 +24,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 		ob_start();
 		require ABSPATH . 'wp-admin/menu.php';
-		$menu = ob_get_contents();
-		ob_end_clean();
+		$menu = ob_get_clean();
 		echo $menu;
 		$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user cannot frm_view_forms' );
 
@@ -49,6 +48,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 		foreach ( $expected as $name => $value ) {
 			$menu_page = menu_page_url( $name, false );
+
 			if ( $allow === 'allow' ) {
 				$this->assertEquals( $value, $menu_page );
 			} else {
@@ -65,14 +65,14 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->set_admin_screen();
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
+		$this->assertTrue( str_contains( $filtered_class, $class ), '"' . $class . '" is missing from admin classes' );
 		$this->assertFalse( strpos( $filtered_class, 'frm-white-body' ), '"frm-white-body" was added to admin classes' );
 
 		$this->set_admin_screen( 'admin.php?page=formidable' );
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertTrue( strpos( $filtered_class, $class ) !== false, '"' . $class . '" is missing from admin classes' );
-		$this->assertTrue( strpos( $filtered_class, ' frm-white-body' ) !== false, '"frm-white-body" is missing from admin classes' );
+		$this->assertTrue( str_contains( $filtered_class, $class ), '"' . $class . '" is missing from admin classes' );
+		$this->assertTrue( str_contains( $filtered_class, ' frm-white-body' ), '"frm-white-body" is missing from admin classes' );
 	}
 
 	/**
@@ -84,11 +84,10 @@ class test_FrmAppController extends FrmUnitTest {
 		ob_start();
 		do_action( 'admin_enqueue_scripts' );
 		do_action( 'admin_print_styles' );
-		$styles = ob_get_contents();
-		ob_end_clean();
+		$styles = ob_get_clean();
 
 		$this->assertNotEmpty( $styles );
-		$this->assertTrue( strpos( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ) !== false, 'The frm_fonts stylesheet is missing' );
+		$this->assertTrue( str_contains( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ), 'The frm_fonts stylesheet is missing' );
 	}
 
 	/**
@@ -104,7 +103,6 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::compare_for_update
 	 */
 	public function test_compare_for_update() {
-
 		$tests = array(
 			array(
 				'version'  => '',

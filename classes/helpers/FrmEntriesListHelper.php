@@ -5,12 +5,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmEntriesListHelper extends FrmListHelper {
 
+	/**
+	 * @var string|null
+	 */
 	protected $column_name;
-	protected $item;
-	protected $field;
 
 	/**
 	 * @since 4.07
+	 *
 	 * @var bool|int
 	 */
 	public $total_items = 0;
@@ -29,8 +31,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public function prepare_items() {
 		$this->set_per_page();
-		$s_query = array();
-
+		$s_query            = array();
 		$join_form_in_query = false;
 
 		$this->items = $this->get_entry_items( $s_query, $join_form_in_query );
@@ -38,6 +39,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 		$this->prepare_pagination();
 	}
 
+	/**
+	 * @param array $s_query
+	 *
+	 * @return void
+	 */
 	protected function set_total_items( $s_query ) {
 		$this->total_items = FrmEntry::getRecordCount( $s_query );
 	}
@@ -46,6 +52,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Prepares pagination.
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function prepare_pagination() {
 		global $per_page;
@@ -62,6 +70,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * Sets the global $per_page variable
 	 *
 	 * @since 6.5.4
+	 *
+	 * @return void
 	 */
 	protected function set_per_page() {
 		global $per_page;
@@ -87,6 +97,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @since 6.5.4
+	 *
 	 * @return string
 	 */
 	protected function get_order_by() {
@@ -105,7 +116,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		if ( strpos( $orderby, 'meta' ) !== false ) {
+		if ( str_contains( $orderby, 'meta' ) ) {
 			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
 
 			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
@@ -120,6 +131,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int $per_page
+	 *
 	 * @return string
 	 */
 	protected function get_limit( $per_page ) {
@@ -138,6 +150,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param bool $join_form_in_query
+	 *
 	 * @return array
 	 */
 	protected function get_search_query( &$join_form_in_query ) {
@@ -163,7 +176,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
+		if ( $s !== '' && FrmAppHelper::pro_is_installed() ) {
 			$fid     = self::get_param( array( 'param' => 'fid' ) );
 			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 		}
@@ -175,6 +188,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.5.4
 	 *
 	 * @param int|string $form_id
+	 *
 	 * @return array<int>
 	 */
 	protected function get_form_ids( $form_id ) {
@@ -191,9 +205,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'sanitize' => 'sanitize_text_field',
 			)
 		);
-		if ( ! empty( $s ) ) {
-			esc_html_e( 'No Entries Found', 'formidable' );
 
+		if ( $s ) {
+			esc_html_e( 'No Entries Found', 'formidable' );
 			return;
 		}
 
@@ -203,6 +217,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		if ( $form_id ) {
 			$form = FrmForm::getOne( $form_id );
 		}
+
 		$has_form = ! empty( $form );
 
 		if ( ! $has_form ) {
@@ -216,6 +231,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $text    Text.
+	 * @param string $input_id Input ID.
+	 *
 	 * @return void
 	 */
 	public function search_box( $text, $input_id ) {
@@ -223,10 +241,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
-		$is_footer = ( $which !== 'top' );
+		$is_footer = $which !== 'top';
+
 		if ( $is_footer && ! empty( $this->items ) ) {
 			$utm = array(
 				'campaign' => 'spam-protection',
@@ -254,10 +275,13 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param string $which
+	 *
 	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
 		$form_id = FrmAppHelper::simple_get( 'form', 'absint' );
+
 		if ( $which === 'top' && ! $form_id ) {
 			echo '<div class="alignleft actions">';
 
@@ -338,13 +362,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return string $primary_column
 	 */
 	protected function get_primary_column_name() {
-		$columns = get_column_headers( $this->screen );
-		$hidden  = get_hidden_columns( $this->screen );
-
+		$columns        = get_column_headers( $this->screen );
+		$hidden         = get_hidden_columns( $this->screen );
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden ) ) {
+			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden, true ) ) {
 				$primary_column = $column_key;
 				break;
 			}
@@ -357,6 +380,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.12
 	 *
 	 * @param object $item
+	 *
 	 * @return string
 	 */
 	private static function get_entry_label( $item ) {
@@ -368,6 +392,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @param object $item
+	 * @param string $style
+	 *
 	 * @return string
 	 */
 	public function single_row( $item, $style = '' ) {
@@ -405,21 +432,17 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 			$attributes = 'class="' . esc_attr( $class ) . '"';
 			unset( $class );
-			$attributes .= ' data-colname="' . $column_display_name . '"';
-
+			$attributes       .= ' data-colname="' . $column_display_name . '"';
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
 			if ( $this->column_name === 'cb' ) {
 				$r .= "<th scope='row' class='check-column'>$checkbox</th>";
 			} else {
-				if ( in_array( $column_name, $hidden, true ) ) {
-					$val = '';
-				} else {
-					$val = $this->column_value( $item );
-				}
+				$val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
+				$r  .= "<td $attributes>";
 
-				$r .= "<td $attributes>";
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
@@ -427,13 +450,12 @@ class FrmEntriesListHelper extends FrmListHelper {
 				} else {
 					$r .= $val;
 				}
+
 				$r .= '</td>';
-			}
+			}//end if
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**
@@ -447,6 +469,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
+	 *
+	 * @return mixed
 	 */
 	private function column_value( $item ) {
 		$col_name = $this->maybe_fix_column_name( $this->column_name );
@@ -476,6 +500,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			case 'form_id':
 				$form_id             = $item->form_id;
 				$user_can_edit_forms = false === FrmAppHelper::permission_nonce_error( 'frm_edit_forms' );
+
 				if ( $user_can_edit_forms ) {
 					$val = FrmFormsHelper::edit_form_link( $form_id );
 				} else {
@@ -494,6 +519,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				break;
 			default:
 				$val = apply_filters( 'frm_entries_' . $col_name . '_column', false, compact( 'item' ) );
+
 				if ( $val === false ) {
 					$this->get_column_value( $item, $val );
 				}
@@ -518,10 +544,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @since 6.11.2
 	 *
 	 * @param string $column_name
+	 *
 	 * @return string
 	 */
 	private function maybe_fix_column_name( $column_name ) {
-		if ( 0 === strpos( $column_name, '0_' ) ) {
+		if ( str_starts_with( $column_name, '0_' ) ) {
 			$column_name = substr( $column_name, 2 );
 		}
 		return $column_name;
@@ -547,25 +574,26 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 	/**
 	 * @param object $item
-	 * @param false  $val
+	 * @param mixed  $val
 	 *
 	 * @return void
 	 */
 	private function get_column_value( $item, &$val ) {
 		$col_name = $this->column_name;
 
-		if ( strpos( $col_name, 'frmsep_' ) === 0 ) {
+		if ( str_starts_with( $col_name, 'frmsep_' ) ) {
 			$sep_val  = true;
 			$col_name = str_replace( 'frmsep_', '', $col_name );
 		} else {
 			$sep_val = false;
 		}
 
-		if ( strpos( $col_name, '-_-' ) ) {
+		if ( str_contains( $col_name, '-_-' ) ) {
 			list( $col_name, $embedded_field_id ) = explode( '-_-', $col_name );
 		}
 
 		$field = FrmField::getOne( $col_name );
+
 		if ( ! $field ) {
 			return;
 		}

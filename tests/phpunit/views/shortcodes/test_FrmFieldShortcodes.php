@@ -26,8 +26,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 		$field_values = $this->get_expected_field_values();
 
 		foreach ( $field_values as $field_key => $expected_value ) {
-			$shortcode = '[' . FrmField::get_id_by_key( $field_key ) . ']';
-
+			$shortcode    = '[' . FrmField::get_id_by_key( $field_key ) . ']';
 			$actual_value = $this->get_actual_value( $shortcode );
 
 			$this->assertSame( $expected_value, $actual_value, 'The [' . $field_key . '] shortcode is not returning the expected value.' );
@@ -71,7 +70,7 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 	}
 
 	protected function get_expected_field_values() {
-		$expected = array(
+		return array(
 			'free-text-field'         => 'Test Testerson',
 			'free-paragraph-field'    => "<p>Test<br />\nMiddle<br />\nTesterson</p>\n",
 			'free-checkboxes'         => 'Red, Green',
@@ -84,8 +83,6 @@ class test_FrmFieldShortcodes extends FrmUnitTest {
 			'free-hidden-field'       => '',
 			'free-user-id-field'      => '',
 		);
-
-		return $expected;
 	}
 
 	protected function get_actual_value( $value ) {

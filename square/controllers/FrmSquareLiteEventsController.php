@@ -10,6 +10,9 @@ class FrmSquareLiteEventsController {
 	 */
 	public static $events_to_skip_option_name = 'frm_square_events_to_skip';
 
+	/**
+	 * @var object|null
+	 */
 	private $event;
 
 	/**
@@ -52,6 +55,7 @@ class FrmSquareLiteEventsController {
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
+
 		wp_send_json_success();
 	}
 
@@ -59,6 +63,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param array<string> $event_ids
+	 *
 	 * @return void
 	 */
 	private function process_event_ids( $event_ids ) {
@@ -85,6 +90,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return bool True if the event should be skipped.
 	 */
 	private function should_skip_event( $event_id ) {
@@ -93,15 +99,13 @@ class FrmSquareLiteEventsController {
 		}
 
 		$option = get_option( self::$events_to_skip_option_name );
-		if ( ! is_array( $option ) ) {
-			return false;
-		}
 
-		return in_array( $event_id, $option, true );
+		return is_array( $option ) && in_array( $event_id, $option, true );
 	}
 
 	/**
 	 * @param string $event_id
+	 *
 	 * @return bool
 	 */
 	private function last_attempt_to_process_event_is_too_recent( $event_id ) {
@@ -113,18 +117,15 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function count_failed_event( $event_id ) {
-		$transient_name = 'frm_square_failed_event_' . $event_id;
-		$transient      = get_transient( $transient_name );
-		if ( is_int( $transient ) ) {
-			$failed_count = $transient + 1;
-		} else {
-			$failed_count = 1;
-		}
-
+		$transient_name  = 'frm_square_failed_event_' . $event_id;
+		$transient       = get_transient( $transient_name );
+		$failed_count    = is_int( $transient ) ? $transient + 1 : 1;
 		$maximum_retries = 3;
+
 		if ( $failed_count >= $maximum_retries ) {
 			$this->track_handled_event( $event_id );
 		} else {
@@ -139,6 +140,7 @@ class FrmSquareLiteEventsController {
 	 * @since 6.22
 	 *
 	 * @param string $event_id
+	 *
 	 * @return void
 	 */
 	private function track_handled_event( $event_id ) {
@@ -192,6 +194,7 @@ class FrmSquareLiteEventsController {
 							)
 						);
 					}
+
 					return;
 				}
 				break;
@@ -221,11 +224,11 @@ class FrmSquareLiteEventsController {
 	 * Add a payment row for the payments table.
 	 *
 	 * @param string $subscription_id The Square ID for the current subscription.
+	 *
 	 * @return void
 	 */
 	private function add_subscription_payment( $subscription_id ) {
-		$payment_id = $this->event->data->id;
-
+		$payment_id  = $this->event->data->id;
 		$frm_payment = new FrmTransLitePayment();
 		$payment     = $frm_payment->get_one_by( $payment_id, 'receipt_id' );
 
@@ -236,6 +239,7 @@ class FrmSquareLiteEventsController {
 
 		$frm_sub = new FrmTransLiteSubscription();
 		$sub     = $frm_sub->get_one_by( $subscription_id, 'sub_id' );
+
 		if ( ! $sub ) {
 			return;
 		}
@@ -267,7 +271,6 @@ class FrmSquareLiteEventsController {
 				);
 			}
 		}
-
 
 		$frm_payment = new FrmTransLitePayment();
 		$frm_payment->create(

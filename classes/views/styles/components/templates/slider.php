@@ -1,12 +1,13 @@
 <?php if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
+
 if ( $component['has-multiple-values'] ) : ?>
 	<div class="<?php echo esc_attr( $component_class ); ?>" <?php echo esc_attr( $component_attr ); ?> >
 		<div class="frm-slider-component frm-has-multiple-values frm-group-sliders" data-display-sliders="top,bottom" data-type="vertical" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top-bottom' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top-bottom' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -28,7 +29,7 @@ if ( $component['has-multiple-values'] ) : ?>
 		<div class="frm-slider-component frm-has-multiple-values frm_hidden" data-type="top" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -50,7 +51,7 @@ if ( $component['has-multiple-values'] ) : ?>
 		<div class="frm-slider-component frm-has-multiple-values frm_hidden" data-type="bottom" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-bottom' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-bottom' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -72,7 +73,7 @@ if ( $component['has-multiple-values'] ) : ?>
 		<div class="frm-slider-component frm-has-multiple-values frm-group-sliders" data-display-sliders="left,right" data-type="horizontal" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-left-right' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-left-right' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -94,7 +95,7 @@ if ( $component['has-multiple-values'] ) : ?>
 		<div class="frm-slider-component frm-has-multiple-values frm_hidden" data-type="left" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-left' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-left' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -116,7 +117,7 @@ if ( $component['has-multiple-values'] ) : ?>
 		<div class="frm-slider-component frm-has-multiple-values frm_hidden" data-type="right" data-max-value="<?php echo (int) $component['max_value']; ?>">
 			<div class="frm-flex-justify">
 				<div class="frm-slider-container">
-					<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-right' ); ?>
+					<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-right' ); ?>
 					<span class="frm-slider" tabindex="0">
 						<span class="frm-slider-active-track">
 							<span class="frm-slider-bullet">
@@ -170,7 +171,7 @@ if ( $component['has-multiple-values'] ) : ?>
 				<div class="frm-slider-component frm-group-sliders frm-has-independent-fields" data-display-sliders="top,bottom" data-max-value="<?php echo (int) $component['max_value']; ?>">
 					<div class="frm-flex-justify">
 						<div class="frm-slider-container">
-							<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-top-bottom' ); ?>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-top-bottom' ); ?>
 							<span class="frm-slider" tabindex="0">
 								<span class="frm-slider-active-track">
 									<span class="frm-slider-bullet">
@@ -189,14 +190,14 @@ if ( $component['has-multiple-values'] ) : ?>
 						</div>
 					</div>
 
-					<?php 
+					<?php
 					foreach ( $component['independent_fields'] as $field ) :
 						?>
 						<div class="frm-slider-component frm-independent-slider-field frm_hidden" data-type="<?php echo esc_attr( $field['type'] ); ?>" data-max-value="<?php echo (int) $component['max_value']; ?>">
 							<div class="frm-flex-justify">
 								<div class="frm-slider-container">
 									<?php if ( ! empty( $component['icon'] ) ) : ?>
-										<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm-margin-' . $field['type'] ); ?>
+										<?php FrmAppHelper::icon_by_class( 'frmfont frm-margin-' . $field['type'] ); ?>
 									<?php endif; ?>
 									<span class="frm-slider" tabindex="0">
 										<span class="frm-slider-active-track">
