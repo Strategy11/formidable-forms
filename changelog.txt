@@ -9,7 +9,7 @@
 * Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
 * Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
 * Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
-* Fix: A PHP warning would get logged when checking data for a rank field as spam.
+* Fix: A PHP warning would get logged when checking data for a ranking field as spam.
 * Fix: Add-on category counts were not always correct.
 * Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
 * Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
