@@ -1023,6 +1023,7 @@ class FrmEntriesController {
 			$entry_formatter = FrmEntryFactory::entry_shortcode_formatter_instance( $atts['form_id'], $shortcode_atts );
 			return $entry_formatter->content();
 		}
+
 		$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
 
 		return $entry_formatter->get_formatted_entry_values();
