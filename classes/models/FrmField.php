@@ -16,6 +16,8 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
+	 * @since x.x
+	 *
 	 * @return array
 	 */
 	public static function field_selection() {
