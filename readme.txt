@@ -5,7 +5,7 @@ Tags: forms, form builder, survey, payment form, custom form, contact form, form
 Requires at least: 6.3
 Tested up to: 6.9
 Requires PHP: 7.0
-Stable tag: 6.26.1
+Stable tag: 6.27
 
 The most advanced WordPress forms plugin. Go beyond contact forms with our drag and drop form builder for surveys, quizzes, and more.
 
@@ -372,6 +372,23 @@ Using our Zapier integration, you can easily connect your website with over 5,00
 See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/integrations).
 
 == Changelog ==
+= 6.27 =
+* New: Displaying payments is now handled by this plugin, instead of falling back to Stripe, Authorize.Net, and PayPal. In cases where these add-ons were active, the payments table should now appear more modern.
+* New: A new coupons tab is available on the payments page.
+* New: Required updates to support a new View-Specific CSS setting in the Visual Views add-on.
+* New: The submit button will now be enabled when a Square postal code is successfully completed. This fixes issues where the submit button would never get enabled when a Square card field was auto-filled.
+* New: Many references to old font icons have been removed, removing about 10KB of data from admin CSS.
+* New: Several styles have been optimized in the generated formidableforms.css file when Pro is not active, helping to reduce file size by removing references to features that only exist in Pro.
+* Fix: Global custom CSS would incorrectly get added to the formidableforms.css more than once on some sites with multiple styles.
+* Fix: The style-specific custom CSS setting would incorrectly get output in the formidableforms.css file as CSS variable data.
+* Fix: The htaccess file included in this plugin is now automatically deleted when migrating to a new plugin version if a request to load CSS is blocked, fixing a conflict on some servers that are not configured to allow overwriting file permissions.
+* Fix: A PHP warning would get logged when checking data for a rank field as spam.
+* Fix: Add-on category counts were not always correct.
+* Breaking: Many modern PHP functions are now being used including str_contains, str_starts_with, str_ends_with, array_key_last, and array_key_first. If you are using both a WordPress version older than 5.9, and a PHP version lower than 8.0, this will introduce fatal errors. Note that the minimum required WordPress version is already set to 6.3.
+* Breaking: The deprecated functions FrmFieldCaptcha::captcha_size, FrmFormsHelper::should_use_pro_for_ajax_submit, FrmFormsController::add_form_style_tab_options, and FrmFieldType::get_select_atributes have been removed.
+* Breaking: The deprecated FrmFormsHelper::actions_dropdown function and actions-dropdown.php view file have been removed.
+* An unused FrmTransLiteSubscriptionsController::list_subscriptions_shortcode function and its related view file have been deprecated.
+
 = 6.26.1 =
 * New: The cached data for license checks is now set to autoload to help reduce calls to the database, and an option check for a request lock has been moved so it only happens when the option data has expired. These changes should help with performance.
 * New: SVG icon updates have been made to avoid use of the deprecated xlink:href attribute.
@@ -404,22 +421,6 @@ See all [Formidable Zapier Integrations](https://zapier.com/apps/formidable/inte
 * Fix: Some icons used in the form builder would appear in the incorrect position in Firefox.
 * Fix: Captcha labels would incorrectly use the same for attribute when multiple captchas were rendered, causing accessibility issues.
 * Fix: In some cases, new fields would get inserted below the submit button unexpectedly after saving and reloading.
-
-= 6.25 =
-* New: Style settings have been added to Email actions.
-* New: reCAPTCHA and Turnstile now support a new frm_captcha_lang filter for modifying the captcha language.
-* New: Square forms will now automatically enforce JavaScript validation before attempting to make the Square payment.
-* New: Payment hooks like frm_payment_status_complete are now called even when no payments add-ons (Stripe or Authorize.Net) are active.
-* Fix: An empty address will no longer be sent to Square when verifying the buyer to help reduce buyer verification issues.
-* Fix: Square location IDs could be incorrectly set when connecting when another mode was active.
-* Fix: Calculation settings would not properly load if the field was loaded using AJAX.
-* Fix: Checkbox and radio button fields no longer include the aria-invalid attribute. Instead, this is applied to the group for better accessibility.
-* Fix: Buttons could be cut off in an application pop-up when there was a lot of content in the description.
-* Fix: Field unit dropdowns would lose its unit value.
-* Fix: An Undefined property: stdClass::$item_key PHP warning when making Square payments has been fixed.
-* Fix: The country code would not properly get sent to Square when using US as the address type.
-* Fix: A Cannot access offset of type string on string fatal error that occurs when field options data is in an unexpected format has been fixed.
-* Fix: Font sizes would not scale as expected after changing the base font size style setting for a second time.
 
 [See changelog for all versions](https://raw.githubusercontent.com/Strategy11/formidable-forms/master/changelog.txt)
 
