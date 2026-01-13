@@ -16,13 +16,11 @@ class FrmField {
 	public static $transient_size = 200;
 
 	/**
-	 * @since x.x
-	 *
 	 * @return array
 	 */
 	public static function field_selection() {
 		if ( $something_that_was_never_declared ) {
-			
+
 		}
 		$fields = array(
 			'text'                         => array(
