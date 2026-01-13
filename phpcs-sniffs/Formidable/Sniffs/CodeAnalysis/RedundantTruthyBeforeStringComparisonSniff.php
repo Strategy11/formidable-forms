@@ -105,6 +105,7 @@ class RedundantTruthyBeforeStringComparisonSniff implements Sniff {
 
 			// Also remove whitespace after &&.
 			$afterAndToken = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
 			for ( $i = $stackPtr + 1; $i < $afterAndToken; $i++ ) {
 				$phpcsFile->fixer->replaceToken( $i, '' );
 			}
@@ -337,7 +338,7 @@ class RedundantTruthyBeforeStringComparisonSniff implements Sniff {
 	 * @param File  $phpcsFile The file being scanned.
 	 * @param array $expr      The expression info with 'start' and 'end'.
 	 *
-	 * @return string|false
+	 * @return false|string
 	 */
 	private function getVariableName( File $phpcsFile, $expr ) {
 		$tokens = $phpcsFile->getTokens();
