@@ -133,6 +133,7 @@ class FrmEntriesController {
 			self::display_list( '', array( __( 'No entries were specified', 'formidable' ) ) );
 			return;
 		}
+
 		$bulk_action = self::get_bulk_action( $action );
 
 		if ( 'delete' !== $bulk_action ) {
@@ -410,7 +411,7 @@ class FrmEntriesController {
 				unset( $sub_form_cols[ $k ] );
 				continue;
 			}
-	
+
 			$columns[ $form_id . '_' . $sub_form_col->field_key . '-_-' . $field->id ] = FrmAppHelper::truncate( $sub_form_col->name, 35 );
 			unset( $sub_form_col );
 		}
@@ -426,7 +427,7 @@ class FrmEntriesController {
 	private static function add_field_cols( $field, $form_id, &$columns ) {
 		$col_id = $field->field_key;
 
-		if ( $field->form_id != $form_id ) {
+		if ( absint( $field->form_id ) !== absint( $form_id ) ) {
 			$col_id .= '-_-form' . $field->form_id;
 		}
 
@@ -458,6 +459,7 @@ class FrmEntriesController {
 		if ( ! $include_column_for_sep_val || ! in_array( $field->type, array( 'select', 'radio', 'checkbox' ), true ) ) {
 			return $field_name;
 		}
+
 		$append_text = $is_value ? esc_html__( 'value', 'formidable' ) : esc_html__( 'label', 'formidable' );
 
 		return sprintf( '%s (%s)', $field_name, $append_text );
@@ -1024,7 +1026,6 @@ class FrmEntriesController {
 		} else {
 			$entry_formatter = FrmEntryFactory::entry_formatter_instance( $atts );
 			$formatted_entry = $entry_formatter->get_formatted_entry_values();
-
 		}
 
 		return $formatted_entry;
