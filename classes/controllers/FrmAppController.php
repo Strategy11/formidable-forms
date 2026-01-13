@@ -733,9 +733,20 @@ class FrmAppController {
 
 		wp_register_script( 'formidable_admin', $plugin_url . '/js/formidable_admin.js', $dependencies, $version, true );
 
+		wp_register_script(
+			'formidable_forms_list',
+			$plugin_url . '/js/admin/forms-list.js',
+			array(
+				'formidable_dom',
+			),
+			$version,
+			true
+		);
+
 		if ( FrmAppHelper::on_form_listing_page() ) {
 			// For the existing page dropdown in the Form embed modal.
 			wp_enqueue_script( 'jquery-ui-autocomplete' );
+			wp_enqueue_script( 'formidable_forms_list' );
 		}
 
 		wp_register_script( 'bootstrap-multiselect', $plugin_url . '/js/bootstrap-multiselect.js', array( 'jquery', 'bootstrap_tooltip', 'popper' ), '2.0', true );

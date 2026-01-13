@@ -1239,7 +1239,14 @@ class FrmFormsController {
 		$columns['created_at'] = esc_html__( 'Date', 'formidable' );
 
 		if ( 'trash' !== FrmAppHelper::simple_get( 'form_type' ) ) {
-			$columns['settings'] = '<a href="#" id="frm-forms-list-settings-btn"><span class="dashicons dashicons-admin-generic"></span><span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span></a>';
+			$columns['style']    = esc_html__( 'Style', 'formidable' );
+			$columns['embeds']   = esc_html__( 'Embeds', 'formidable' );
+			$columns['settings'] = '<div id="frm-forms-list-settings-btn-wrappper">
+				<a href="#" id="frm-forms-list-settings-btn">
+					<span class="dashicons dashicons-admin-generic"></span>
+					<span class="screen-reader-text">' . esc_html__( 'List settings', 'formidable' ) . '</span>
+				</a>
+			</div>';
 		}
 
 		add_screen_option(
@@ -3707,30 +3714,33 @@ class FrmFormsController {
 		$columns   = get_column_headers( $screen );
 		$skip_cols = array( 'cb', 'settings' );
 		?>
-		<div id="frm-forms-list-settings">
-			<div class="frm-collapsible">
-				<div class="frm-collapsible__header">
-					<a href="#" class="frm-collapsible__btn"><?php esc_html_e( 'Columns', 'formidable' ); ?></a>
+		<div id="frm-forms-list-settings" class="frm_hidden">
+			<div class="frm-collapsible-box">
+				<div class="frm-collapsible-box__header">
+					<a href="#" class="frm-collapsible-box__btn"><?php esc_html_e( 'Columns', 'formidable' ); ?></a>
 				</div>
 
-				<div class="frm-collapsible__content">
-					<?php
-					foreach ( $columns as $key => $label ) {
-						if ( in_array( $key, $skip_cols, true ) ) {
-							continue;
-						}
-						?>
-						<label>
-							<input type="checkbox" name="frm_forms_list_columns[]" value="<?php echo esc_attr( $key ); ?>" <?php // checked( in_array( $key, $frm_vars['forms_list_columns'], true ) ); ?> />
-							<?php echo esc_html( $label ); ?>
-						</label>
+				<div class="frm-collapsible-box__content">
+					<ul>
 						<?php
-					}//end foreach
-					?>
+						foreach ( $columns as $key => $label ) {
+							if ( in_array( $key, $skip_cols, true ) ) {
+								continue;
+							}
+							?>
+							<li>
+								<label>
+									<input type="checkbox" name="frm_forms_list_columns[]" value="<?php echo esc_attr( $key ); ?>" <?php // checked( in_array( $key, $frm_vars['forms_list_columns'], true ) ); ?> />
+									<?php echo esc_html( $label ); ?>
+								</label>
+							</li>
+							<?php
+						}//end foreach
+						?>
+					</ul>
 				</div>
 			</div>
 		</div>
-		<script type="text/html" id="tmpl-frm-forms-list-settings"></script>
 		<?php
 	}
 
