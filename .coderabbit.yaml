@@ -1,6 +1,5 @@
 reviews:
   # High-level instructions for all reviews
-  profile: "strict" 
   request_changes_workflow: false
 
 path_instructions:
