@@ -251,4 +251,6 @@
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
+	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 </ruleset>
