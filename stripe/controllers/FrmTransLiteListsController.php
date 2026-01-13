@@ -122,7 +122,7 @@ class FrmTransLiteListsController {
 		}
 
 		/**
-		 * @since x.x
+		 * @since 6.27
 		 *
 		 * @param bool   $route_handled
 		 * @param string $action

@@ -21,7 +21,7 @@ class FrmElementorController {
 	/**
 	 * Enqueue styles for the Elementor editor to display the Formidable widget icon.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return void
 	 */

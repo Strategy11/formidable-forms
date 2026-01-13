@@ -178,7 +178,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * If the Payments submodule or the PayPal add-on is active, add a bulk delete action.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */
@@ -284,7 +284,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -373,7 +373,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Get the checkbox for bulk actions.
 	 * This is only required when the Payments submodule or PayPal is active.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 *
@@ -404,7 +404,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 * @param string $field
@@ -462,7 +462,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -647,7 +647,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Render the tabs for the payments list, if the user has access to coupons.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param string $active_tab
 	 *

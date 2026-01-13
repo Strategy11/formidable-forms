@@ -1705,7 +1705,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @since x.x Added $template_path parameter.
+	 * @since 6.27 Added $template_path parameter.
 	 *
 	 * @param int|string $form_id
 	 * @param string     $class

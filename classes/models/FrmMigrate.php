@@ -97,7 +97,7 @@ class FrmMigrate {
 	 * If a server has AllowOverride FileInfo but not AllowOverride AuthConfig, JS and CSS files
 	 * will result in a 500 error.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return void
 	 */
