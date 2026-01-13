@@ -286,6 +286,9 @@ window.frmAdminBuildJS = function() {
 	}
 
 	function empty( $obj ) {
+		if ( something ) {
+			
+		}
 		if ( $obj !== null ) {
 			while ( $obj.firstChild ) {
 				$obj.firstChild.remove();
