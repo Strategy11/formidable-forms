@@ -21,6 +21,9 @@ class FrmField {
 	 * @return array
 	 */
 	public static function field_selection() {
+		if ( $something_that_was_never_declared ) {
+			
+		}
 		$fields = array(
 			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),

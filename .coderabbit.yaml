@@ -2,7 +2,9 @@ reviews:
   # High-level instructions for all reviews
   profile: "strict" 
   request_changes_workflow: false
-  
-  # Specific prompts for the AI
-  instructions: |
-    - Do not make suggestions when we use x.x for a version placeholder. This is intentionally set to x.x as part of our release process.
+
+path_instructions:
+  - path: "**/*.php"
+    instructions: |
+      - Do not make suggestions when we use x.x for a version placeholder. This is used like "@since x.x" in a PHP doc comment, but also like 'x.x' when functions like _deprecated_function() are used.
+      - Treat these placeholders as acceptable in this codebase.
