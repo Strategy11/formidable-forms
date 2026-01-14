@@ -378,10 +378,10 @@ class FrmPayPalLiteActionsController extends FrmTransLiteActionsController {
 				'client-id'  => $client_id,
 				'components' => 'buttons,card-fields',
 				// Use capture for one time payments.
-				// 'intent'     => 'capture',
+				'intent'     => 'capture',
 				// Subscriptions appear to require vault=true.
-				'intent'     => 'subscription',
-				'vault'      => 'true',
+			//	'intent'     => 'subscription',
+			//	'vault'      => 'true',
 			),
 			'https://www.paypal.com/sdk/js'
 		);

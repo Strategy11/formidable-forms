@@ -45,9 +45,9 @@
 		thisForm = cardElement.closest( 'form' );
 
 		const cardFieldsConfig = {
-		//	createOrder: createOrder,
+			createOrder: createOrder,
 		//	createSubscription: createSubscription,
-			createVaultSetupToken: createVaultSetupToken,
+		//	createVaultSetupToken: createVaultSetupToken,
 			onApprove: onApprove,
 			onError: onError,
 			style: getCardFieldStyles(),
@@ -67,8 +67,8 @@
 		disableSubmit( thisForm );
 
 		paypal.Buttons( {
-		//	createOrder: createOrder,
-			createSubscription: createSubscription,
+			createOrder: createOrder,
+		//	createSubscription: createSubscription,
 			onApprove: onApprove,
 			onError: onError,
 			// TODO: Add onCancel? We can remove the loading spinner from the submit button.

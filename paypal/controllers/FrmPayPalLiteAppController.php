@@ -88,6 +88,16 @@ class FrmPayPalLiteAppController {
 		$currency       = strtoupper( $action->post_content['currency'] );
 		$order_response = FrmPayPalLiteConnectHelper::create_order( $amount, $currency );
 
+		if ( class_exists( 'FrmLog' ) ) {
+			$log = new FrmLog();
+			$log->add(
+				array(
+					'title'   => 'PayPal Order Response',
+					'content' => print_r( $order_response, true ),
+				)
+			);
+		}
+
 		if ( false === $order_response ) {
 			wp_send_json_error( 'Failed to create PayPal order' );
 		}
