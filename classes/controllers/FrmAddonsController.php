@@ -269,7 +269,6 @@ class FrmAddonsController {
 
 		if ( ! $plugins ) {
 			esc_html_e( 'There are no plugins on your site that require a license', 'formidable' );
-
 			return;
 		}
 
@@ -307,7 +306,6 @@ class FrmAddonsController {
 	 */
 	public static function get_addons_count() {
 		$addons = self::get_api_addons();
-
 		return count( $addons );
 	}
 
@@ -328,17 +326,17 @@ class FrmAddonsController {
 			),
 			'mailchimp'      => array(
 				'title'   => 'Mailchimp Forms',
-				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.',
+				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'registration'   => array(
 				'title'   => 'User Registration Forms',
 				'link'    => 'downloads/user-registration/',
-				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
+				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'paypal'         => array(
 				'title'   => 'PayPal Standard Forms',
 				'link'    => 'downloads/paypal-standard/',
-				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
+				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'stripe'         => array(
 				'title'   => 'Stripe Forms',
@@ -372,7 +370,7 @@ class FrmAddonsController {
 			),
 			'zapier'         => array(
 				'title'   => 'Zapier Forms',
-				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
+				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'signature'      => array(
 				'title'   => 'Digital Signature Forms',
@@ -407,6 +405,7 @@ class FrmAddonsController {
 			$info['slug'] = $k;
 			$list[ $k ]   = array_merge( $defaults, $info );
 		}
+
 		return $list;
 	}
 
@@ -497,7 +496,7 @@ class FrmAddonsController {
 
 		$expires = $version_info['error']['expires'] ?? 0;
 
-		if ( empty( $expires ) || $expires > time() ) {
+		if ( ! $expires || $expires > time() ) {
 			return false;
 		}
 
@@ -520,7 +519,7 @@ class FrmAddonsController {
 	public static function get_primary_license_info() {
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) || ! isset( $installed_addons['formidable_pro'] ) ) {
+		if ( ! $installed_addons || ! isset( $installed_addons['formidable_pro'] ) ) {
 			return false;
 		}
 
@@ -550,7 +549,7 @@ class FrmAddonsController {
 
 		$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
-		if ( empty( $installed_addons ) ) {
+		if ( ! $installed_addons ) {
 			return $transient;
 		}
 
@@ -642,13 +641,12 @@ class FrmAddonsController {
 
 			$new_license = $addon->license;
 
-			if ( empty( $new_license ) || in_array( $new_license, $checked_licenses, true ) ) {
+			if ( ! $new_license || in_array( $new_license, $checked_licenses, true ) ) {
 				continue;
 			}
 
 			$checked_licenses[] = $new_license;
-
-			$api = new FrmFormApi( $new_license );
+			$api                = new FrmFormApi( $new_license );
 
 			if ( empty( $version_info ) ) {
 				$version_info = $api->get_api_info();
@@ -657,13 +655,13 @@ class FrmAddonsController {
 
 			$plugin = $api->get_addon_for_license( $addon, $version_info );
 
-			if ( empty( $plugin ) ) {
+			if ( ! $plugin ) {
 				continue;
 			}
 
 			$download_id = $plugin['id'] ?? 0;
 
-			if ( ! empty( $download_id ) && ! isset( $version_info[ $download_id ]['package'] ) ) {
+			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
 				// if this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
@@ -742,6 +740,7 @@ class FrmAddonsController {
 				return $addon;
 			}
 		}
+
 		return false;
 	}
 
@@ -757,6 +756,7 @@ class FrmAddonsController {
 		if ( isset( $addons['error'] ) && isset( $addons['error']['type'] ) ) {
 			$license_type = $addons['error']['type'];
 		}
+
 		return $license_type;
 	}
 
@@ -772,7 +772,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -791,6 +791,9 @@ class FrmAddonsController {
 	 * @return void
 	 */
 	protected static function prepare_addons( &$addons ) {
+		// Reset categories to prevent count accumulation across multiple calls.
+		self::$categories = array();
+
 		$activate_url = '';
 
 		if ( current_user_can( 'activate_plugins' ) ) {
@@ -804,10 +807,8 @@ class FrmAddonsController {
 				$slug      = str_replace( array( '-wordpress-plugin', '-wordpress' ), '', $addon['slug'] );
 				$file_name = $addon['plugin'];
 			} else {
-				$slug = $id;
-
+				$slug      = $id;
 				$base_file = $addon['file'] ?? 'formidable-' . $slug;
-
 				$file_name = $base_file . '/' . $base_file . '.php';
 
 				if ( ! isset( $addon['plugin'] ) ) {
@@ -827,7 +828,7 @@ class FrmAddonsController {
 
 			$addon['activate_url'] = '';
 
-			if ( $addon['installed'] && ! empty( $activate_url ) && ! self::is_plugin_active( $file_name, $slug ) ) {
+			if ( $addon['installed'] && $activate_url && ! self::is_plugin_active( $file_name, $slug ) ) {
 				$addon['activate_url'] = add_query_arg(
 					array(
 						'_wpnonce' => wp_create_nonce( 'activate-plugin_' . $file_name ),
@@ -985,11 +986,7 @@ class FrmAddonsController {
 		self::deactivate_plugin( $plugin, true );
 		$result = delete_plugins( array( $plugin ) );
 
-		if ( is_wp_error( $result ) ) {
-			return $result;
-		}
-
-		return true;
+		return is_wp_error( $result ) ? $result : true;
 	}
 
 	/**
@@ -1113,6 +1110,7 @@ class FrmAddonsController {
 				'success' => false,
 			);
 		}
+
 		return $plugin;
 	}
 
@@ -1230,6 +1228,7 @@ class FrmAddonsController {
 				if ( wp_doing_ajax() ) {
 					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
 				}
+
 				return array(
 					'message' => $result->get_error_message(),
 					'success' => false,
@@ -1245,8 +1244,7 @@ class FrmAddonsController {
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
-
-		$message = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+		$message         = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return array(
 			'message'       => $message,
@@ -1267,11 +1265,7 @@ class FrmAddonsController {
 			return 'settings';
 		}
 
-		if ( str_contains( $referer, 'frm_action=edit' ) ) {
-			return 'form_builder';
-		}
-
-		return '';
+		return str_contains( $referer, 'frm_action=edit' ) ? 'form_builder' : '';
 	}
 
 	/**
@@ -1298,7 +1292,7 @@ class FrmAddonsController {
 	public static function connect_link() {
 		$auth = get_option( 'frm_connect_token' );
 
-		if ( empty( $auth ) ) {
+		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
 			update_option( 'frm_connect_token', $auth, 'no' );
 		}
@@ -1332,7 +1326,7 @@ class FrmAddonsController {
 
 		// The download link is not required if already installed.
 		$is_installed = FrmAppHelper::pro_is_included();
-		$file_missing = ! $is_installed && empty( $post_url );
+		$file_missing = ! $is_installed && ! $post_url;
 
 		if ( ! $post_auth || $file_missing ) {
 			return false;
@@ -1340,7 +1334,7 @@ class FrmAddonsController {
 
 		// Verify auth.
 		$auth = get_option( 'frm_connect_token' );
-		return ! empty( $auth ) && hash_equals( $auth, $post_auth );
+		return $auth && hash_equals( $auth, $post_auth );
 	}
 
 	/**
@@ -1501,7 +1495,7 @@ class FrmAddonsController {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php
@@ -1551,7 +1545,6 @@ class FrmAddonsController {
 
 		if ( ! is_array( $allowed_url_list ) ) {
 			_doing_it_wrong( __METHOD__, 'Only an array of URLs could be used within this filter.', '6.3.1' );
-
 			return array();
 		}
 

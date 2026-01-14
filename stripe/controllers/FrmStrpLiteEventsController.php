@@ -171,7 +171,7 @@ class FrmStrpLiteEventsController {
 		global $wpdb;
 		$customer_id = $this->invoice->id;
 
-		if ( empty( $customer_id ) ) {
+		if ( ! $customer_id ) {
 			return;
 		}
 		$wpdb->query(
@@ -320,6 +320,7 @@ class FrmStrpLiteEventsController {
 				)
 			);
 		}
+
 		remove_filter( $hook, $filter, 99 );
 	}
 
@@ -433,6 +434,7 @@ class FrmStrpLiteEventsController {
 			$amount_refunded = $this->invoice->amount_refunded;
 			$partial         = $amount != $amount_refunded; // phpcs:ignore Universal.Operators.StrictComparisons
 		}
+
 		return $partial;
 	}
 
@@ -457,6 +459,7 @@ class FrmStrpLiteEventsController {
 		if ( $unprocessed_event_ids ) {
 			$this->process_event_ids( $unprocessed_event_ids );
 		}
+
 		wp_send_json_success();
 	}
 
@@ -501,11 +504,7 @@ class FrmStrpLiteEventsController {
 
 		$option = get_option( self::$events_to_skip_option_name );
 
-		if ( ! is_array( $option ) ) {
-			return false;
-		}
-
-		return in_array( $event_id, $option, true );
+		return is_array( $option ) && in_array( $event_id, $option, true );
 	}
 
 	/**
@@ -526,11 +525,9 @@ class FrmStrpLiteEventsController {
 	 * @return void
 	 */
 	private function count_failed_event( $event_id ) {
-		$transient_name = 'frm_failed_event_' . $event_id;
-		$transient      = get_transient( $transient_name );
-
-		$failed_count = is_int( $transient ) ? $transient + 1 : 1;
-
+		$transient_name  = 'frm_failed_event_' . $event_id;
+		$transient       = get_transient( $transient_name );
+		$failed_count    = is_int( $transient ) ? $transient + 1 : 1;
 		$maximum_retries = 3;
 
 		if ( $failed_count >= $maximum_retries ) {

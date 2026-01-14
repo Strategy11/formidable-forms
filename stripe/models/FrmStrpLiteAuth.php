@@ -70,8 +70,7 @@ class FrmStrpLiteAuth {
 
 		ob_start();
 		FrmFormsController::run_on_submit_actions( $atts );
-		$message = ob_get_contents();
-		ob_end_clean();
+		$message = ob_get_clean();
 
 		// Clean up the filter we added above so no other success messages get altered if there are multiple forms.
 		if ( $intent_is_processing ) {
@@ -224,7 +223,7 @@ class FrmStrpLiteAuth {
 
 		$intents = self::get_payment_intents( 'frmintent' . $form->id );
 
-		if ( ! empty( $intents ) ) {
+		if ( $intents ) {
 			self::update_intent_pricing( $form->id, $intents );
 		} else {
 			$intents = self::maybe_create_intents( $form->id );
@@ -272,7 +271,8 @@ class FrmStrpLiteAuth {
 			return array();
 		}
 
-		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		$intents = $_POST[ $name ];
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -291,7 +291,8 @@ class FrmStrpLiteAuth {
 			wp_die();
 		}
 
-		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$form = json_decode( stripslashes( $_POST['form'] ), true );
 
 		if ( ! is_array( $form ) ) {
 			wp_die();
@@ -302,7 +303,7 @@ class FrmStrpLiteAuth {
 		$form_id = absint( $form['form_id'] );
 		$intents = $form[ 'frmintent' . $form_id ] ?? array();
 
-		if ( empty( $intents ) ) {
+		if ( ! $intents ) {
 			wp_die();
 		}
 
@@ -340,7 +341,7 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) || empty( $intents ) ) {
+		if ( ! $actions || empty( $intents ) ) {
 			return;
 		}
 
@@ -374,6 +375,7 @@ class FrmStrpLiteAuth {
 				if ( $saved->metadata->action != $action->ID ) {
 					continue;
 				}
+
 				$intents[ $k ] = array(
 					'id'     => $intent,
 					'action' => $action->ID,
@@ -474,7 +476,6 @@ class FrmStrpLiteAuth {
 	 */
 	private static function maybe_create_intents( $form_id ) {
 		$intents = array();
-
 		$details = self::check_request_params( $form_id );
 
 		if ( is_array( $details ) ) {
@@ -613,11 +614,7 @@ class FrmStrpLiteAuth {
 
 		$name = self::strip_special_characters_from_statement_descriptor( $name );
 
-		if ( ! self::statement_descriptor_is_valid( $name ) ) {
-			return false;
-		}
-
-		return $name;
+		return self::statement_descriptor_is_valid( $name ) ? $name : false;
 	}
 
 	/**
@@ -659,6 +656,7 @@ class FrmStrpLiteAuth {
 		if ( strlen( $name ) > 22 ) {
 			$name = substr( $name, 0, 22 );
 		}
+
 		return (bool) preg_match( '/^[a-zA-Z0-9\s\p{P}]+$/', $name );
 	}
 
@@ -695,7 +693,7 @@ class FrmStrpLiteAuth {
 	 * @return void
 	 */
 	private static function add_amount_to_actions( $form_id, &$actions ) {
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return;
 		}
 
@@ -787,6 +785,7 @@ class FrmStrpLiteAuth {
 		if ( false === $url ) {
 			$url = FrmAppHelper::get_server_value( 'HTTP_REFERER' );
 		}
+
 		return add_query_arg( array( 'frmstrp' => $atts['entry_id'] ), $url );
 	}
 

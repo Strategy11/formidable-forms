@@ -404,6 +404,7 @@ class FrmFieldCombo extends FrmFieldType {
 		if ( ! empty( $sub_field['name'] ) ) {
 			$field['subfield_name'] = $sub_field['name'];
 		}
+
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
@@ -436,8 +437,7 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-
+		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Validate not empty.

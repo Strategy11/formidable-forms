@@ -126,8 +126,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 	public function test_maybe_fix_xml() {
 		$wp_comment        = '<!-- generator="WordPress/5.2.4" created="2019-10-23 19:33" -->';
 		$simple_xml_string = '<?xml version="1.0" encoding="UTF-8" ?>' . PHP_EOL . $wp_comment . PHP_EOL . '<channel></channel>';
-
-		$xml_string = chr( 13 ) . $simple_xml_string;
+		$xml_string        = chr( 13 ) . $simple_xml_string;
 		$this->maybe_fix_xml( $xml_string );
 
 		$this->assertEquals( $simple_xml_string, $xml_string );
@@ -154,7 +153,7 @@ class test_FrmXMLHelper extends FrmUnitTest {
 		$this->assertEquals( '<![CDATA[["Red","Blue"]]]>', FrmXMLHelper::cdata( serialize( array( 'Red', 'Blue' ) ) ) );
 		$this->assertEquals( '<![CDATA[[60418,60419,60420]]]>', FrmXMLHelper::cdata( serialize( array( 60418, 60419, 60420 ) ) ) );
 		$this->assertEquals(
-			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>',
+			'<![CDATA[{"browser":"Mozilla\/5.0 (Macintosh; Intel Mac OS X 10.10; rv:37.0) Gecko\/20100101 Firefox\/37.0","referrer":"http:\/\/localhost:8888\/features\/wp-admin\/admin-ajax.php?action=frm_forms_preview&form=boymfd"}]]>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			FrmXMLHelper::cdata(
 				serialize(
 					array(

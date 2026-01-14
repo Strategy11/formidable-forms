@@ -87,10 +87,8 @@ class FrmEntry {
 			unset( $check_val['name'] );
 		}
 
-		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
-
-		global $wpdb;
-		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
+		$check_val    = apply_filters( 'frm_duplicate_check_val', $check_val );
+		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
 			return false;
@@ -98,8 +96,7 @@ class FrmEntry {
 
 		global $frm_vars;
 		$frm_vars['checking_duplicates'] = true;
-
-		$is_duplicate = false;
+		$is_duplicate                    = false;
 
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
@@ -112,6 +109,7 @@ class FrmEntry {
 				if ( 0 === (int) $meta->field_id ) {
 					continue;
 				}
+
 				$field_metas[ $meta->field_id ] = $meta->meta_value;
 			}
 
@@ -222,7 +220,9 @@ class FrmEntry {
 
 	/**
 	 * Convert form data to the actual value that would be saved into the database.
-	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}' (a signature value) is actually an empty string and does not get saved.
+	 *
+	 * This is important for the duplicate check as something like 'a:2:{s:5:"typed";s:0:"";s:6:"output";s:0:"";}'
+	 * (a signature value) is actually an empty string and does not get saved.
 	 *
 	 * @param array $filter_vals
 	 * @param int   $entry_id
@@ -241,6 +241,7 @@ class FrmEntry {
 				unset( $reduced[ $field_id ] );
 			}
 		}
+
 		return $reduced;
 	}
 
@@ -277,8 +278,7 @@ class FrmEntry {
 	public static function duplicate( $id ) {
 		global $wpdb;
 
-		$values = self::getOne( $id );
-
+		$values                   = self::getOne( $id );
 		$new_values               = array();
 		$new_values['item_key']   = FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_items', 'item_key' );
 		$new_values['name']       = $values->name;
@@ -344,8 +344,7 @@ class FrmEntry {
 			return false;
 		}
 
-		$new_values = self::package_entry_to_update( $id, $values );
-
+		$new_values    = self::package_entry_to_update( $id, $values );
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_items', $new_values, compact( 'id' ) );
 
 		self::after_update_entry( $query_results, $id, $values, $new_values );
@@ -465,7 +464,7 @@ class FrmEntry {
 	public static function maybe_get_entry( &$entry ) {
 		if ( $entry && is_numeric( $entry ) ) {
 			$entry = self::getOne( $entry );
-		} elseif ( empty( $entry ) || 'false' === $entry ) {
+		} elseif ( ! $entry || 'false' === $entry ) {
 			$entry = false;
 		}
 	}
@@ -595,15 +594,12 @@ class FrmEntry {
 	 * @return bool
 	 */
 	public static function exists( $id ) {
-		global $wpdb;
-
 		if ( FrmDb::check_cache( $id, 'frm_entry' ) ) {
 			return true;
 		}
 
 		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'item_key' => $id );
-
-		$id = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
+		$id    = FrmDb::get_var( 'frm_items', $where );
 
 		return $id && $id > 0;
 	}
@@ -620,13 +616,12 @@ class FrmEntry {
 	public static function getAll( $where, $order_by = '', $limit = '', $meta = false, $inc_form = true ) {
 		global $wpdb;
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit     = FrmDb::esc_limit( $limit );
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit . $inc_form;
 		$entries   = wp_cache_get( $cache_key, 'frm_entry' );
 
 		if ( false === $entries ) {
-			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description';
+			$fields = 'it.id, it.item_key, it.name, it.ip, it.form_id, it.post_id, it.user_id, it.parent_item_id, it.updated_by, it.created_at, it.updated_at, it.is_draft, it.description'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$table  = $wpdb->prefix . 'frm_items it ';
 
 			if ( $inc_form ) {
@@ -712,8 +707,7 @@ class FrmEntry {
 	 */
 	private static function sort_by_field( $field_id ) {
 		global $wpdb;
-		$field_id = (int) $field_id;
-
+		$field_id      = (int) $field_id;
 		$field_options = FrmDb::get_var( 'frm_fields', array( 'id' => $field_id ), 'field_options' );
 		FrmAppHelper::unserialize_or_decode( $field_options );
 
@@ -783,7 +777,6 @@ class FrmEntry {
 	 * @return array $new_values
 	 */
 	private static function before_insert_entry_in_database( &$values, $type ) {
-
 		self::sanitize_entry_post( $values );
 
 		if ( $type !== 'xml' ) {
@@ -1121,7 +1114,6 @@ class FrmEntry {
 	 * @return void
 	 */
 	private static function after_insert_entry_in_database( $values, $new_values, $entry_id ) {
-
 		self::add_new_entry_to_frm_vars( $entry_id );
 
 		self::maybe_add_entry_metas( $values, $entry_id );
@@ -1268,7 +1260,6 @@ class FrmEntry {
 	 */
 	public static function get_id_by_key( $key ) {
 		$entry_id = FrmDb::get_var( 'frm_items', array( 'item_key' => sanitize_title( $key ) ) );
-
 		return (int) $entry_id;
 	}
 

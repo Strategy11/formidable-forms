@@ -94,7 +94,6 @@ class FrmFormAction {
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
-
 		return 'noform';
 	}
 
@@ -213,6 +212,7 @@ class FrmFormAction {
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
+
 		return $updated_action;
 	}
 
@@ -256,7 +256,7 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
 		return $name . ( '[' . $field_name . ']' );
 	}
@@ -561,7 +561,6 @@ class FrmFormAction {
 	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
-
 		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 
@@ -600,7 +599,7 @@ class FrmFormAction {
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 
-		if ( empty( $action_controls ) ) {
+		if ( ! $action_controls ) {
 			// don't continue if there are no available actions
 			return array();
 		}
@@ -609,13 +608,13 @@ class FrmFormAction {
 			if ( is_array( $action_controls ) ) {
 				return array();
 			}
+
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
 		self::prepare_get_action( $atts );
 
-		$limit = self::get_action_limit( $form_id, $atts['limit'] );
-
+		$limit               = self::get_action_limit( $form_id, $atts['limit'] );
 		$args                = self::action_args( $form_id, $limit );
 		$args['post_status'] = $atts['post_status'];
 		$actions             = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
@@ -752,7 +751,7 @@ class FrmFormAction {
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return array();
 		}
 
@@ -763,8 +762,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			$action = $this->prepare_action( $action );
-
+			$action                  = $this->prepare_action( $action );
 			$settings[ $action->ID ] = $action;
 		}
 
@@ -936,7 +934,7 @@ class FrmFormAction {
 			)
 		);
 
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			// create action now
 			$post_id = $this->save_settings( $action );
 		}
@@ -1000,7 +998,7 @@ class FrmFormAction {
 	public function render_conditional_logic_call_to_action() {
 		?>
 			<h3>
-				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>">
+				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
 				</a>
 			</h3>

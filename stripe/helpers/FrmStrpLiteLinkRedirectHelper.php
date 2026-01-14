@@ -133,6 +133,7 @@ class FrmStrpLiteLinkRedirectHelper {
 		if ( is_array( $parsed ) ) {
 			$home_url = $parsed['scheme'] . '://' . $parsed['host'];
 		}
+
 		return ! str_starts_with( $url, $home_url );
 	}
 

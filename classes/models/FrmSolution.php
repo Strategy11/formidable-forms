@@ -108,7 +108,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function register() {
-
 		// Getting started - shows after installation.
 		add_dashboard_page(
 			esc_html( $this->page_title() ),
@@ -166,7 +165,6 @@ class FrmSolution {
 	 * @return void
 	 */
 	public function redirect() {
-
 		$current_page = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
 
 		if ( $current_page === $this->page ) {
@@ -233,8 +231,7 @@ class FrmSolution {
 			return;
 		}
 
-		$all_imported = $this->is_complete( 'all' );
-
+		$all_imported   = $this->is_complete( 'all' );
 		$step           = $steps['import'];
 		$step['label']  = '';
 		$step['nested'] = true;
@@ -410,7 +407,7 @@ class FrmSolution {
 	protected function adjust_plugin_install_step( &$steps ) {
 		$plugins = $this->required_plugins();
 
-		if ( empty( $plugins ) ) {
+		if ( ! $plugins ) {
 			unset( $steps['plugin'] );
 			$steps['import']['num']   = 2;
 			$steps['complete']['num'] = 3;
@@ -465,7 +462,7 @@ class FrmSolution {
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
 			<?php
-			if ( isset( $step['complete'] ) && $step['complete'] ) {
+			if ( ! empty( $step['complete'] ) ) {
 				FrmAppHelper::icon_by_class(
 					'frmfont frm_step_complete_icon',
 					array(
@@ -476,7 +473,7 @@ class FrmSolution {
 				);
 			} else {
 				?>
-				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#ccc"/><text x="50%" y="50%" text-anchor="middle" fill="#fff" stroke="#fff" stroke-width="2px" dy=".3em" font-size="3.7em"><?php echo esc_html( $step['num'] ); ?></text></svg>
+				<svg xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 100 100"><circle cx="50" cy="50" r="50" fill="#ccc"/><text x="50%" y="50%" text-anchor="middle" fill="#fff" stroke="#fff" stroke-width="2px" dy=".3em" font-size="3.7em"><?php echo esc_html( $step['num'] ); ?></text></svg><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<?php
 			}
 			?>
@@ -563,9 +560,8 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
-		$api    = new FrmFormApi();
-		$addons = $api->get_api_info();
-
+		$api      = new FrmFormApi();
+		$addons   = $api->get_api_info();
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
@@ -583,7 +579,7 @@ class FrmSolution {
 		if ( ! $has_file ) {
 			echo '<p class="frm_error_style">' . esc_html__( 'We didn\'t find anything to import. Please contact our team.', 'formidable' ) . '</p>';
 		} elseif ( ! isset( $addons[ $id ]['beta']['package'] ) ) {
-			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>';
+			echo '<p class="frm_error_style">' . esc_html__( 'Looks like you may not have a current subscription for this solution. Please check your account.', 'formidable' ) . '</p>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$xml = $addons[ $id ]['beta']['package'];
 
@@ -656,7 +652,7 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function show_import_options( $options, $importing, $xml = '' ) {
-		if ( empty( $options ) ) {
+		if ( ! $options ) {
 			return;
 		}
 
@@ -684,7 +680,7 @@ class FrmSolution {
 	protected function show_page_options() {
 		$pages = $this->needed_pages();
 
-		if ( empty( $pages ) ) {
+		if ( ! $pages ) {
 			return;
 		}
 
@@ -696,7 +692,7 @@ class FrmSolution {
 				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
 					<?php echo esc_html( $page['label'] ); ?>
 				</label>
-				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required />
+				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			</p>
 			<?php
 		}
@@ -748,6 +744,7 @@ class FrmSolution {
 		if ( $count === 'all' ) {
 			return count( $imported ) >= count( $this->form_options() );
 		}
+
 		return ! empty( $imported );
 	}
 

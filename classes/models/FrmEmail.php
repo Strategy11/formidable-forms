@@ -224,7 +224,6 @@ class FrmEmail {
 	private function prepare_additional_recipients( $recipients, $user_id_args ) {
 		$recipients = $this->prepare_email_setting( $recipients, $user_id_args );
 		$recipients = $this->explode_emails( $recipients );
-
 		$recipients = array_unique( (array) $recipients );
 
 		return $this->format_recipients( $recipients );
@@ -561,8 +560,7 @@ class FrmEmail {
 		);
 
 		$subject = $this->encode_subject( $this->subject );
-
-		$sent = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
+		$sent    = wp_mail( $recipient, $subject, $this->message, $header, $this->attachments );
 
 		if ( ! $sent ) {
 			if ( is_array( $header ) ) {
@@ -663,8 +661,7 @@ class FrmEmail {
 	 * @return array|string $emails
 	 */
 	private function explode_emails( $emails ) {
-		$emails = ( ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '' );
-
+		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';
 		return is_array( $emails ) ? array_map( 'trim', $emails ) : trim( $emails );
 	}
 
@@ -726,7 +723,6 @@ class FrmEmail {
 
 		// if sending the email from a yahoo address, change it to the WordPress default
 		if ( str_contains( $from_email, '@yahoo.com' ) ) {
-
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 
@@ -829,7 +825,6 @@ class FrmEmail {
 	 * @return void
 	 */
 	private function handle_phone_numbers() {
-
 		foreach ( $this->to as $key => $recipient ) {
 			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
 				$recipient = explode( ' ', $recipient );

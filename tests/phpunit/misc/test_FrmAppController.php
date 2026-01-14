@@ -24,8 +24,7 @@ class test_FrmAppController extends FrmUnitTest {
 
 		ob_start();
 		require ABSPATH . 'wp-admin/menu.php';
-		$menu = ob_get_contents();
-		ob_end_clean();
+		$menu = ob_get_clean();
 		echo $menu;
 		$this->assertTrue( current_user_can( 'frm_view_forms' ), 'The user cannot frm_view_forms' );
 
@@ -85,8 +84,7 @@ class test_FrmAppController extends FrmUnitTest {
 		ob_start();
 		do_action( 'admin_enqueue_scripts' );
 		do_action( 'admin_print_styles' );
-		$styles = ob_get_contents();
-		ob_end_clean();
+		$styles = ob_get_clean();
 
 		$this->assertNotEmpty( $styles );
 		$this->assertTrue( str_contains( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ), 'The frm_fonts stylesheet is missing' );
@@ -105,7 +103,6 @@ class test_FrmAppController extends FrmUnitTest {
 	 * @covers FrmAppController::compare_for_update
 	 */
 	public function test_compare_for_update() {
-
 		$tests = array(
 			array(
 				'version'  => '',
@@ -172,7 +169,7 @@ class test_FrmAppController extends FrmUnitTest {
 					'new_plugin_version' => FrmAppHelper::plugin_version(),
 				)
 			);
-			$this->assertEquals( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option );
+			$this->assertEquals( $test['expected'], $upgrade, $test['version'] . ' db: ' . $test['db'] . ' => ' . $current . ( $upgrade ? ' needs no update ' : ' needs an update' ) . ' from ' . $option ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 	}
 

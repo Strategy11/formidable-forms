@@ -14,7 +14,6 @@ if ( ! isset( $entry ) ) {
 	<?php
 
 	$date_format = get_option( 'date_format' );
-
 	$date_format = $date_format ? str_replace( 'F', 'M', $date_format ) : __( 'M j, Y', 'formidable' );
 
 	/**

@@ -28,7 +28,6 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @param array  $data
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
-
 		$this->init_field_data( $data, $field_name, $field_value );
 
 		if ( true === $this->hide_component() ) {
@@ -162,11 +161,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			return 'em';
 		}
 
-		if ( preg_match( '/px$/', $value ) ) {
-			return 'px';
-		}
-
-		return '';
+		return preg_match( '/px$/', $value ) ? 'px' : '';
 	}
 
 	/**
@@ -177,7 +172,6 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @return array
 	 */
 	private function init_icon() {
-
 		if ( ! empty( $this->data['icon'] ) ) {
 			return;
 		}

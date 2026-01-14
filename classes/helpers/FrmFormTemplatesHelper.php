@@ -46,8 +46,7 @@ class FrmFormTemplatesHelper {
 		if ( $template['is_custom'] ) {
 			$template['use_template'] = $template['url'];
 		} elseif ( ! $template['plan_required'] ) {
-			$link = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
-
+			$link                     = FrmFormsHelper::get_template_install_link( $template, compact( 'pricing', 'license_type' ) );
 			$template['use_template'] = esc_url( $link['url'] );
 		}
 	}
@@ -187,7 +186,7 @@ class FrmFormTemplatesHelper {
 			FrmTipsHelper::show_admin_cta(
 				array(
 					'title'       => esc_html__( 'Get Super Powers with Pre-built Forms', 'formidable' ),
-					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ),
+					'description' => esc_html__( 'Unleash the potential of hundreds of form templates and save precious time. Renew today for unparalleled form-building speed.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'link_text'   => esc_html__( 'Renew Now', 'formidable' ),
 					'link_url'    => $args['renew_link'],
 					'id'          => 'frm-renew-subscription-banner',

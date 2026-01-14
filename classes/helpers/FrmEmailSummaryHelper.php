@@ -179,8 +179,7 @@ class FrmEmailSummaryHelper {
 		$license_info = FrmAddonsController::get_primary_license_info();
 
 		if ( ! empty( $license_info['expires'] ) ) {
-			$renewal_date = gmdate( 'Y-m-d', $license_info['expires'] );
-
+			$renewal_date            = gmdate( 'Y-m-d', $license_info['expires'] );
 			$options['renewal_date'] = $renewal_date;
 			self::save_options( $options );
 			return $renewal_date;
@@ -213,11 +212,7 @@ class FrmEmailSummaryHelper {
 	 * @return DateTime|false
 	 */
 	private static function get_date_obj( $date ) {
-		if ( $date instanceof DateTime ) {
-			return $date;
-		}
-
-		return date_create( $date );
+		return $date instanceof DateTime ? $date : date_create( $date );
 	}
 
 	/**
@@ -237,11 +232,7 @@ class FrmEmailSummaryHelper {
 
 		$date2 = self::get_date_obj( $date2 );
 
-		if ( ! $date2 ) {
-			return false;
-		}
-
-		return date_diff( $date1, $date2 )->days;
+		return $date2 ? date_diff( $date1, $date2 )->days : false;
 	}
 
 	/**
@@ -423,7 +414,7 @@ class FrmEmailSummaryHelper {
 	 * @return string
 	 */
 	public static function get_button_style( $display_block = false ) {
-		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none; padding-left: 1em; padding-right: 1em;';
+		return 'display: ' . ( $display_block ? 'block' : 'inline-block' ) . '; font-size: 0.875em; line-height: 2.4; border-radius: 1.2em; border: 1px solid #d0d5dd; font-weight: 600; text-align: center; margin-top: 2.6em; color: #1d2939; text-decoration: none; padding-left: 1em; padding-right: 1em;'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -437,7 +428,7 @@ class FrmEmailSummaryHelper {
 	public static function section_heading_with_icon( $icon, $text ) {
 		?>
 		<h2 style="<?php echo esc_attr( self::get_heading2_style() ); ?>">
-			<img style="vertical-align: bottom; height: 24px; width: auto;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" />
+			<img style="vertical-align: bottom; height: 24px; width: auto;" src="<?php echo esc_url( FrmAppHelper::plugin_url() . '/images/' . $icon . '.png' ); ?>" alt="<?php echo esc_attr( $icon ); ?>" /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<span style="display: inline-block; vertical-align: text-bottom;"><?php echo esc_html( $text ); ?></span>
 		</h2>
 		<?php

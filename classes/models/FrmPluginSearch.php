@@ -130,8 +130,7 @@ class FrmPluginSearch {
 				$addon_opts['search_terms'] = '';
 			}
 
-			$addon_terms = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
-
+			$addon_terms   = $this->search_to_array( $addon_opts['search_terms'] . ' ' . $addon_opts['name'] );
 			$matched_terms = array_intersect( $addon_terms, $normalized_term );
 
 			if ( count( $matched_terms ) === count( $normalized_term ) ) {
@@ -209,7 +208,7 @@ class FrmPluginSearch {
 	private function maybe_dismiss() {
 		$addon = FrmAppHelper::get_param( 'frm-dismiss', '', 'get', 'absint' );
 
-		if ( ! empty( $addon ) ) {
+		if ( $addon ) {
 			$this->add_to_dismissed_hints( $addon );
 		}
 	}
@@ -223,7 +222,7 @@ class FrmPluginSearch {
 	 */
 	protected function get_dismissed_hints() {
 		$dismissed_hints = get_option( self::$dismissed_opt );
-		return ! empty( $dismissed_hints ) && is_array( $dismissed_hints ) ? $dismissed_hints : array();
+		return $dismissed_hints && is_array( $dismissed_hints ) ? $dismissed_hints : array();
 	}
 
 	/**
@@ -323,7 +322,7 @@ class FrmPluginSearch {
 					),
 					admin_url( 'plugins.php' )
 				);
-				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>';
+				$links['frm_get_started'] = '<a href="' . esc_url( $activate_url ) . '" class="button activate-now" aria-label="Activate ' . esc_attr( $plugin['name'] ) . '">' . __( 'Activate', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 		} elseif ( ! $is_active && isset( $plugin['url'] ) ) {
 			// Go to the add-ons page to install.

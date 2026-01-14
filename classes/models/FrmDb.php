@@ -95,7 +95,7 @@ class FrmDb {
 		foreach ( $args as $key => $value ) {
 			$where .= empty( $where ) ? $base_where : $condition;
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			$array_inc_null = ( ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value ) );
+			$array_inc_null = ! is_numeric( $key ) && is_array( $value ) && in_array( null, $value );
 
 			if ( is_numeric( $key ) || $array_inc_null ) {
 				$where       .= ' ( ';
@@ -231,7 +231,6 @@ class FrmDb {
 	 */
 	public static function get_count( $table, $where = array(), $args = array() ) {
 		$count = self::get_var( $table, $where, 'COUNT(*)', $args );
-
 		return (int) $count;
 	}
 
@@ -254,8 +253,7 @@ class FrmDb {
 			$args['limit'] = 1;
 		}
 
-		$query = self::generate_query_string_from_pieces( $field, $table, $where, $args );
-
+		$query     = self::generate_query_string_from_pieces( $field, $table, $where, $args );
 		$cache_key = self::generate_cache_key( $where, $args, $field, $type );
 
 		return self::check_cache( $cache_key, $group, $query, 'get_' . $type );
@@ -423,11 +421,11 @@ class FrmDb {
 			$args = array( 'order_by' => $args );
 		}
 
-		if ( ! empty( $order_by ) ) {
+		if ( $order_by ) {
 			$args['order_by'] = $order_by;
 		}
 
-		if ( ! empty( $limit ) ) {
+		if ( $limit ) {
 			$args['limit'] = $limit;
 		}
 
@@ -470,8 +468,7 @@ class FrmDb {
 		$group = '';
 		self::get_group_and_table_name( $table, $group );
 
-		$query = self::generate_query_string_from_pieces( $columns, $table, $where );
-
+		$query     = self::generate_query_string_from_pieces( $columns, $table, $where );
 		$cache_key = str_replace( array( ' ', ',' ), '_', trim( implode( '_', FrmAppHelper::array_flatten( $where ) ) . $columns . '_results_ARRAY_A', ' WHERE' ) );
 
 		return self::check_cache( $cache_key, $group, $query, 'get_associative_results' );
@@ -536,7 +533,6 @@ class FrmDb {
 	 */
 	public static function esc_like( $term ) {
 		global $wpdb;
-
 		return $wpdb->esc_like( $term );
 	}
 
@@ -560,9 +556,8 @@ class FrmDb {
 		}
 
 		$order_query = explode( ' ', trim( $order_query ) );
-
-		$order      = trim( reset( $order_query ) );
-		$safe_order = array( 'count(*)' );
+		$order       = trim( reset( $order_query ) );
+		$safe_order  = array( 'count(*)' );
 
 		if ( ! in_array( strtolower( $order ), $safe_order, true ) ) {
 			$order = preg_replace( '/[^a-zA-Z0-9\-\_\.\+]/', '', $order );
@@ -638,7 +633,6 @@ class FrmDb {
 	 */
 	public static function prepare_array_values( $array, $type = '%s' ) {
 		$placeholders = array_fill( 0, count( $array ), $type );
-
 		return implode( ', ', $placeholders );
 	}
 
@@ -841,7 +835,7 @@ class FrmDb {
 	public static function cache_delete_group( $group ) {
 		$cached_keys = self::get_group_cached_keys( $group );
 
-		if ( ! empty( $cached_keys ) ) {
+		if ( $cached_keys ) {
 			foreach ( $cached_keys as $key ) {
 				wp_cache_delete( $key, $group );
 			}

@@ -264,8 +264,7 @@ class FrmForm {
 		}
 
 		$form_fields = array( 'form_key', 'name', 'description', 'status', 'parent_form_id' );
-
-		$new_values = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
+		$new_values  = self::set_update_options( array(), $values, array( 'form_id' => $id ) );
 
 		foreach ( $values as $value_key => $value ) {
 			if ( $value_key && in_array( $value_key, $form_fields, true ) ) {
@@ -277,7 +276,7 @@ class FrmForm {
 			$new_values['status'] = $values['new_status'];
 		}
 
-		if ( ! empty( $new_values ) ) {
+		if ( $new_values ) {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', $new_values, array( 'id' => $id ) );
 
 			if ( $query_results ) {
@@ -314,7 +313,7 @@ class FrmForm {
 		$options['custom_style'] = $values['options']['custom_style'] ?? 0;
 		$options['before_html']  = $values['options']['before_html'] ?? FrmFormsHelper::get_default_html( 'before' );
 		$options['after_html']   = $values['options']['after_html'] ?? FrmFormsHelper::get_default_html( 'after' );
-		$options['submit_html']  = isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' );
+		$options['submit_html']  = isset( $values['options']['submit_html'] ) && '' !== $values['options']['submit_html'] ? $values['options']['submit_html'] : FrmFormsHelper::get_default_html( 'submit' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * Allows modifying form options before updating or creating.
@@ -358,10 +357,11 @@ class FrmForm {
 		$existing_keys = array_keys( $values['item_meta'] );
 
 		foreach ( $all_fields as $fid ) {
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			if ( ! in_array( $fid->id, $existing_keys ) && ( isset( $values['frm_fields_submitted'] ) && in_array( $fid->id, $values['frm_fields_submitted'] ) ) || isset( $values['options'] ) ) {
 				$values['item_meta'][ $fid->id ] = '';
 			}
+
 			$field_array[ $fid->id ] = $fid;
 		}
 		unset( $all_fields );
@@ -373,7 +373,7 @@ class FrmForm {
 				continue;
 			}
 
-			$is_settings_page = ( isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] ) );
+			$is_settings_page = isset( $values['options'] ) || isset( $values['field_options'][ 'custom_html_' . $field_id ] );
 
 			if ( $is_settings_page ) {
 				self::get_settings_page_html( $values, $field );
@@ -405,7 +405,7 @@ class FrmForm {
 				'default_value' => isset( $values[ 'default_value_' . $field_id ] ) ? FrmAppHelper::maybe_json_encode( $values[ 'default_value_' . $field_id ] ) : '',
 			);
 
-			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) {
+			if ( ! FrmAppHelper::allow_unfiltered_html() && isset( $values['field_options'][ 'options_' . $field_id ] ) && is_array( $values['field_options'][ 'options_' . $field_id ] ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				foreach ( $values['field_options'][ 'options_' . $field_id ] as $option_key => $option ) {
 					if ( is_array( $option ) ) {
 						foreach ( $option as $key => $item ) {
@@ -442,7 +442,6 @@ class FrmForm {
 		if ( $field->type === 'textarea' &&
 			! empty( $values['field_options'][ 'type_' . $field->id ] ) &&
 			in_array( $values['field_options'][ 'type_' . $field->id ], array( 'text', 'email', 'url', 'password', 'phone' ), true ) ) {
-
 			$new_field['field_options']['max'] = '';
 
 			/**
@@ -480,7 +479,6 @@ class FrmForm {
 		}
 
 		$value = $opt === 'calc' ? self::sanitize_calc( $value ) : FrmAppHelper::kses( $value, 'all' );
-
 		$value = trim( $value );
 	}
 
@@ -634,7 +632,7 @@ class FrmForm {
 			FrmDb::get_where_clause_and_values( $where );
 			array_unshift( $where['values'], $status );
 
-			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			$query_results = $wpdb->query( $wpdb->prepare( 'UPDATE ' . $wpdb->prefix . 'frm_forms SET status = %s ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
 			$query_results = $wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'id' => $id ) );
 			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'status' => $status ), array( 'parent_form_id' => $id ) );
@@ -717,7 +715,7 @@ class FrmForm {
 		$id = $form->id;
 
 		// Disconnect the entries from this form
-		$entries = FrmDb::get_col( $wpdb->prefix . 'frm_items', array( 'form_id' => $id ) );
+		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 
 		foreach ( $entries as $entry_id ) {
 			FrmEntry::destroy( $entry_id );
@@ -725,7 +723,7 @@ class FrmForm {
 		}
 
 		// Disconnect the fields from this form
-		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM ' . $wpdb->prefix . 'frm_fields AS fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE fi FROM ' . $wpdb->prefix . 'frm_fields AS fi LEFT JOIN ' . $wpdb->prefix . 'frm_forms fr ON (fi.form_id = fr.id) WHERE fi.form_id=%d OR parent_form_id=%d', $id, $id ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
 
@@ -755,9 +753,7 @@ class FrmForm {
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
-		global $wpdb;
-
-		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
+		$trash_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
 
 		if ( ! $trash_forms ) {
 			return 0;
@@ -869,12 +865,12 @@ class FrmForm {
 				if ( isset( $cache->options ) ) {
 					FrmAppHelper::unserialize_or_decode( $cache->options );
 				}
+
 				return self::prepare_form_row_data( $cache );
 			}
 		}
 
-		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
-
+		$where   = is_numeric( $id ) ? array( 'id' => $id ) : array( 'form_key' => $id );
 		$results = FrmDb::get_row( $table_name, $where );
 
 		if ( isset( $results->options ) ) {
@@ -932,7 +928,7 @@ class FrmForm {
 			global $wpdb;
 
 			// The query has already been prepared if this is not an array.
-			$query   = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit );
+			$query   = 'SELECT * FROM ' . $wpdb->prefix . 'frm_forms' . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . FrmDb::esc_order( $order_by ) . FrmDb::esc_limit( $limit ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$results = $wpdb->get_results( $query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 
@@ -978,8 +974,7 @@ class FrmForm {
 	 */
 	public static function get_count() {
 		$cache_key = 'frm_form_counts';
-
-		$counts = wp_cache_get( $cache_key, 'frm_form' );
+		$counts    = wp_cache_get( $cache_key, 'frm_form' );
 
 		if ( false !== $counts ) {
 			return $counts;
@@ -1177,7 +1172,6 @@ class FrmForm {
 	 */
 	public static function get_current_form_id( $default_form = 'none' ) {
 		$form = 'first' === $default_form ? self::get_current_form() : self::maybe_get_current_form();
-
 		return $form ? $form->id : 0;
 	}
 
@@ -1293,8 +1287,7 @@ class FrmForm {
 	 * @return bool
 	 */
 	public static function show_submit( $form ) {
-		$show = ( ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin() );
-
+		$show = ! $form->is_template && $form->status === 'published' && ! FrmAppHelper::is_admin();
 		return apply_filters( 'frm_show_submit_button', $show, $form );
 	}
 
@@ -1346,7 +1339,6 @@ class FrmForm {
 	 * @return object
 	 */
 	public static function get_latest_form() {
-
 		$args = array(
 			array(
 				'or'               => 1,
@@ -1368,7 +1360,6 @@ class FrmForm {
 	 * @return int
 	 */
 	public static function get_forms_count() {
-
 		$args = array(
 			array(
 				'or'               => 1,

@@ -215,6 +215,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 				'action' => $action_id,
 			);
 		}
+
 		return $new_charge;
 	}
 

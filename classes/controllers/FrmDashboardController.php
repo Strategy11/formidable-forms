@@ -30,7 +30,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . wp_kses_post( FrmInboxController::get_notice_count() ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Dashboard', 'formidable' ), esc_html__( 'Dashboard', 'formidable' ) . wp_kses_post( FrmInboxController::get_notice_count() ), 'frm_view_forms', 'formidable-dashboard', 'FrmDashboardController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -46,7 +46,7 @@ class FrmDashboardController {
 
 		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
 
-		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' );
+		add_filter( 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-dashboard_columns', 'FrmDashboardController::entries_columns' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		add_filter( 'frm_show_footer_links', '__return_false' );
 		add_filter( 'screen_options_show_screen', '__return_false' );
 	}
@@ -124,8 +124,7 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function route() {
-		$dashboard_view = self::get_dashboard_helper();
-
+		$dashboard_view        = self::get_dashboard_helper();
 		$should_display_videos = is_callable( 'FrmProDashboardHelper::should_display_videos' ) ? FrmProDashboardHelper::should_display_videos() : true;
 
 		require FrmAppHelper::plugin_path() . '/classes/views/dashboard/dashboard.php';
@@ -140,7 +139,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_counters( $latest_available_form, $counters_value ) {
-		$add_entry_cta_link = false !== $latest_available_form && isset( $latest_available_form->id ) ? admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ) : '';
+		$add_entry_cta_link = false !== $latest_available_form && isset( $latest_available_form->id ) ? admin_url( 'admin.php?page=formidable-entries&frm_action=new&form=' . $latest_available_form->id ) : ''; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$lite_counters = array(
 			self::view_args_build_counter( __( 'Total Forms', 'formidable' ), array(), $counters_value['forms'] ),
@@ -191,14 +190,13 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	public static function view_args_build_counter( $heading, $cta = array(), $value = 0, $type = 'default' ) {
-
 		$counter_args = array(
 			'heading' => $heading,
 			'counter' => $value,
 			'type'    => 'default',
 		);
 
-		if ( ! empty( $cta ) ) {
+		if ( $cta ) {
 			$counter_args['cta'] = $cta;
 		}
 
@@ -228,9 +226,7 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_payments() {
-
-		$prepared_data = array();
-
+		$prepared_data  = array();
 		$model_payments = new FrmTransLitePayment();
 		$payments       = $model_payments->get_payments_stats();
 
@@ -254,7 +250,6 @@ class FrmDashboardController {
 	 * @return array
 	 */
 	private static function view_args_entries_placeholder( $forms_count ) {
-
 		if ( ! $forms_count ) {
 			$copy = sprintf(
 				/* translators: %1$s: HTML start of a tag, %2$s: HTML close a tag */
@@ -292,7 +287,8 @@ class FrmDashboardController {
 	 *
 	 * @param string       $counter_type
 	 * @param int          $counter_value
-	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one form available we show "Add Entry" cta for entries counter.
+	 * @param false|object $latest_available_form The form object of the latest form available. If there are at least one
+	 *                                            form available we show "Add Entry" cta for entries counter.
 	 *
 	 * @return array
 	 */
@@ -365,7 +361,7 @@ class FrmDashboardController {
 	public static function welcome_banner_has_closed() {
 		$user_id                = get_current_user_id();
 		$banner_closed_by_users = self::get_closed_welcome_banner_user_ids();
-		return ! empty( $banner_closed_by_users ) && in_array( $user_id, $banner_closed_by_users, true );
+		return $banner_closed_by_users && in_array( $user_id, $banner_closed_by_users, true );
 	}
 
 	/**
@@ -405,7 +401,6 @@ class FrmDashboardController {
 	 * @return void
 	 */
 	public static function enqueue_assets() {
-
 		if ( ! self::is_dashboard_page() ) {
 			return;
 		}
@@ -450,7 +445,6 @@ class FrmDashboardController {
 	 * @return string
 	 */
 	private static function inbox_clean_messages_cta( $cta ) {
-
 		// remove dismiss button
 		$pattern = '/<a[^>]*class="[^"]*frm_inbox_dismiss[^"]*"[^>]*>.*?<\/a>/is';
 		return preg_replace( $pattern, ' ', $cta );
@@ -533,10 +527,7 @@ class FrmDashboardController {
 			return array();
 		}
 
-		if ( null !== $option_name ) {
-			return $options[ $option_name ];
-		}
-		return $options;
+		return null !== $option_name ? $options[ $option_name ] : $options;
 	}
 
 	/**

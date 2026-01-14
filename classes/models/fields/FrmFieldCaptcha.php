@@ -91,12 +91,11 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return string
 	 */
 	public function front_field_input( $args, $shortcode_atts ) {
-		$frm_settings = FrmAppHelper::get_settings();
-
 		if ( ! self::should_show_captcha() ) {
 			return '';
 		}
 
+		$frm_settings   = FrmAppHelper::get_settings();
 		$settings       = FrmCaptchaFactory::get_settings_object();
 		$div_attributes = array(
 			'id'           => $args['html_id'],
@@ -203,8 +202,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 */
 	protected function hcaptcha_api_url() {
 		$api_js_url = 'https://js.hcaptcha.com/1/api.js';
-
-		$lang = $this->get_captcha_language();
+		$lang       = $this->get_captcha_language();
 
 		if ( $lang ) {
 			// Language might be in the format of en-US, fr-FR, etc. In that case, we need to extract the first part to comply with the hcaptcha api request format.
@@ -326,7 +324,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
 				$invalid_message = '';
 			}
-			$errors[ 'field' . $args['id'] ] = ( $invalid_message === '' ? $frm_settings->re_msg : $invalid_message );
+
+			$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
 		}
 
 		return $errors;

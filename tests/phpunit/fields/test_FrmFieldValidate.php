@@ -9,7 +9,6 @@ class test_FrmFieldValidate extends FrmUnitTest {
 
 	public function setUp(): void {
 		parent::setUp();
-
 		$this->create_validation_form();
 	}
 
@@ -47,7 +46,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
 
 			foreach ( $error_field_ids as $error_field ) {
@@ -71,8 +70,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		foreach ( $test_formats as $test_format ) {
 			$field_key = $this->get_field_key( $test_format['type'] );
 			$field_id  = FrmField::get_id_by_key( $field_key );
-
-			$errors = $this->check_single_value( array( $field_id => $test_format['value'] ) );
+			$errors    = $this->check_single_value( array( $field_id => $test_format['value'] ) );
 
 			if ( $test_format['invalid'] ) {
 				$this->assertNotEmpty( $errors, $test_format['type'] . ' value ' . $test_format['value'] . ' passed validation' );
@@ -139,7 +137,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		$this->assertNotEmpty( $errors );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			foreach ( $fields as $field ) {
 				if ( ! isset( $errors[ 'field' . $field->id ] ) ) {
 					$error_fields[] = $field->type;
@@ -151,13 +149,11 @@ class test_FrmFieldValidate extends FrmUnitTest {
 	}
 
 	public function test_filled_required_fields() {
-		$_POST = $this->factory->field->generate_entry_array( $this->form );
-
-		$errors = FrmEntryValidate::validate( $_POST );
-
+		$_POST        = $this->factory->field->generate_entry_array( $this->form );
+		$errors       = FrmEntryValidate::validate( $_POST );
 		$error_fields = array();
 
-		if ( ! empty( $errors ) ) {
+		if ( $errors ) {
 			$error_field_ids = array_keys( $errors );
 
 			foreach ( $error_field_ids as $error_field ) {

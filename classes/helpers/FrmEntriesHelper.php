@@ -49,8 +49,7 @@ class FrmEntriesHelper {
 		foreach ( (array) $fields as $field ) {
 			$original_default = $field->default_value;
 			self::prepare_field_default_value( $field );
-			$new_value = self::get_field_value_for_new_entry( $field, $reset, $args );
-
+			$new_value                       = self::get_field_value_for_new_entry( $field, $reset, $args );
 			$field_array                     = FrmAppHelper::start_field_array( $field );
 			$field_array['value']            = $new_value;
 			$field_array['type']             = apply_filters( 'frm_field_type', $field->type, $field, $new_value );
@@ -150,7 +149,7 @@ class FrmEntriesHelper {
 		$value_is_posted = false;
 
 		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = isset( $args['repeating'] ) && $args['repeating'];
+			$repeating = ! empty( $args['repeating'] );
 
 			if ( $repeating ) {
 				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -200,11 +199,9 @@ class FrmEntriesHelper {
 		preg_match_all( "/\[(default-message|default_message)\b(.*?)(?:(\/))?\]/s", $message, $shortcodes, PREG_PATTERN_ORDER );
 
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
-			$add_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
-
+			$add_atts  = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$this_atts = ! empty( $add_atts ) ? array_merge( $atts, $add_atts ) : $atts;
-
-			$default = FrmEntriesController::show_entry_shortcode( $this_atts );
+			$default   = FrmEntriesController::show_entry_shortcode( $this_atts );
 
 			// Add the default message.
 			$message = str_replace( $shortcodes[0][ $short_key ], $default, $message );
@@ -301,7 +298,6 @@ class FrmEntriesHelper {
 	 * @return string
 	 */
 	public static function display_value( $value, $field, $atts = array() ) {
-
 		$defaults = array(
 			'type'          => '',
 			'html'          => false,
@@ -404,8 +400,8 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	private static function set_parent_field_posted_value( $field, $value, $args ) {
-		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ] ) && is_array( $_POST['item_meta'][ $args['parent_field_id'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
+			if ( ! isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) || ! is_array( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ] = array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			}
 		} else {
@@ -461,9 +457,9 @@ class FrmEntriesHelper {
 	private static function get_posted_meta( $field_id, $args ) {
 		if ( empty( $args['parent_field_id'] ) ) {
 			// Sanitizing is done next.
-			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST['item_meta'][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		} else {
-			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$value = isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) ? wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field_id ] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 		return $value;
 	}
@@ -504,7 +500,7 @@ class FrmEntriesHelper {
 			$args['other']      = true;
 
 			// Sanitizing is done next.
-			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$other_vals = wp_unslash( $_POST['item_meta']['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now
@@ -529,12 +525,11 @@ class FrmEntriesHelper {
 		}
 
 		// Check if there are any other posted "other" values for this field.
-		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( FrmField::is_option_true( $field, 'other' ) && isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			// Save original value
 			$args['temp_value'] = $value;
 			$args['other']      = true;
-
-			$other_vals = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$other_vals         = wp_unslash( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ]['other'][ $field->id ] ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			FrmAppHelper::sanitize_value( 'sanitize_text_field', $other_vals );
 
 			// Set the validation value now.
@@ -913,7 +908,6 @@ class FrmEntriesHelper {
 	 */
 	public static function get_entry_status_label( $status ) {
 		$statuses = self::get_entry_statuses();
-
 		return $statuses[ self::get_entry_status( $status ) ];
 	}
 
@@ -926,7 +920,6 @@ class FrmEntriesHelper {
 	 * @return array<string>
 	 */
 	public static function get_entry_statuses() {
-
 		$default_entry_statuses = array(
 			self::SUBMITTED_ENTRY_STATUS => __( 'Submitted', 'formidable' ),
 			self::DRAFT_ENTRY_STATUS     => __( 'Draft', 'formidable' ),

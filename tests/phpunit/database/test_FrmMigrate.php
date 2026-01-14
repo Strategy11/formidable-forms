@@ -59,8 +59,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
-
-		$frmdb = new FrmMigrate();
+		$frmdb    = new FrmMigrate();
 		update_option( 'frm_db_version', 16 ); // trigger migration 17
 		$frmdb->upgrade();
 
@@ -290,8 +289,8 @@ class test_FrmMigrate extends FrmUnitTest {
 			$field = $this->factory->field->get_object_by_id( $field_ids[ $key ] );
 			$this->assertNotEmpty( $field );
 
-			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key );
-			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key );
+			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( isset( $setting['start']['options'] ) ) {
 				$this->assertNotContains( $setting['start']['default_value'], $field->options );
@@ -360,8 +359,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		// migrate data
 		FrmAppController::install();
 
-		$form = FrmForm::getOne( 'contact-db12-copy' );
-
+		$form         = FrmForm::getOne( 'contact-db12-copy' );
 		$form_actions = FrmFormAction::get_action_for_form( $form->id, 'email' );
 
 		$this->assertTrue( ! isset( $form->options['notification'] ), 'The migrated notification settings are not cleared from form.' );

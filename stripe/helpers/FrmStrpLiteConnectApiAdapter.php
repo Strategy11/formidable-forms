@@ -34,6 +34,7 @@ class FrmStrpLiteConnectApiAdapter {
 
 			$customer_id = $customer->id;
 		}
+
 		return FrmStrpLiteConnectHelper::cancel_subscription( $sub_id, $customer_id );
 	}
 
@@ -70,9 +71,8 @@ class FrmStrpLiteConnectApiAdapter {
 	 * @return object|string
 	 */
 	public static function get_customer( $options = array() ) {
-		$user_id   = ! empty( $options['user_id'] ) ? $options['user_id'] : get_current_user_id();
-		$meta_name = FrmStrpLiteAppHelper::get_customer_id_meta_name();
-
+		$user_id                   = ! empty( $options['user_id'] ) ? $options['user_id'] : get_current_user_id();
+		$meta_name                 = FrmStrpLiteAppHelper::get_customer_id_meta_name();
 		$customer_id_error_message = '';
 
 		if ( $user_id ) {

@@ -19,6 +19,7 @@ class FrmTransLiteLog {
 			if ( $is_error ) {
 				error_log( $title . ': ' . $text );
 			}
+
 			return;
 		}
 

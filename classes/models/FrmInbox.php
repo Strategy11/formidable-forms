@@ -64,6 +64,7 @@ class FrmInbox extends FrmFormApi {
 		if ( $filter === 'filter' ) {
 			$this->filter_messages( $messages );
 		}
+
 		return $messages;
 	}
 
@@ -170,7 +171,7 @@ class FrmInbox extends FrmFormApi {
 
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
 				unset( self::$messages[ $t ] );
@@ -228,11 +229,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return bool
 	 */
 	private function has_started( $message ) {
-		if ( empty( $message['starts'] ) ) {
-			return true;
-		}
-
-		return $message['starts'] <= time();
+		return empty( $message['starts'] ) ? true : $message['starts'] <= time();
 	}
 
 	/**
@@ -359,6 +356,7 @@ class FrmInbox extends FrmFormApi {
 				unset( $messages[ $t ] );
 			}
 		}
+
 		return $messages;
 	}
 
@@ -461,6 +459,7 @@ class FrmInbox extends FrmFormApi {
 				if ( isset( $parts['query'] ) ) {
 					parse_str( $parts['query'], $query );
 				}
+
 				$query['utm_medium'] = 'banner';
 				$parts['query']      = http_build_query( $query );
 				return 'href="' . $parts['scheme'] . '://' . $parts['host'] . $parts['path'] . '?' . $parts['query'] . '"';

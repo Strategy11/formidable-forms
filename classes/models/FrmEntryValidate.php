@@ -24,11 +24,10 @@ class FrmEntryValidate {
 
 		if ( ! isset( $values['form_id'] ) || ! isset( $values['item_meta'] ) ) {
 			$errors['form'] = __( 'There was a problem with your submission. Please try again.', 'formidable' );
-
 			return $errors;
 		}
 
-		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) {
+		if ( FrmAppHelper::is_admin() && is_user_logged_in() && ( ! isset( $values[ 'frm_submit_entry_' . $values['form_id'] ] ) || ! wp_verify_nonce( $values[ 'frm_submit_entry_' . $values['form_id'] ], 'frm_submit_entry_nonce' ) ) ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$frm_settings   = FrmAppHelper::get_settings();
 			$errors['form'] = $frm_settings->admin_permission;
 		}
@@ -112,7 +111,7 @@ class FrmEntryValidate {
 		$where['fr.parent_form_id'] = array( null, 0 );
 
 		// Don't get excluded fields (like file upload fields in the ajax validation)
-		if ( ! empty( $exclude ) ) {
+		if ( $exclude ) {
 			$where['fi.type not'] = $exclude;
 		}
 
@@ -148,8 +147,7 @@ class FrmEntryValidate {
 			'exclude'         => array(),
 
 		);
-		$args = wp_parse_args( $args, $defaults );
-
+		$args  = wp_parse_args( $args, $defaults );
 		$value = empty( $args['parent_field_id'] ) ? ( $values['item_meta'][ $args['id'] ] ?? '' ) : $values;
 
 		// Check for values in "Other" fields
@@ -340,6 +338,7 @@ class FrmEntryValidate {
 		if ( is_numeric( $filter_priority ) ) {
 			add_filter( 'the_content', 'wpautop', $filter_priority );
 		}
+
 		return trim( $value ) === trim( $filtered_option );
 	}
 
@@ -436,7 +435,7 @@ class FrmEntryValidate {
 
 		$new_errors = $field_obj->validate( $args );
 
-		if ( ! empty( $new_errors ) ) {
+		if ( $new_errors ) {
 			$errors = array_merge( $errors, $new_errors );
 		}
 	}
@@ -522,7 +521,7 @@ class FrmEntryValidate {
 			$pattern = '';
 
 			foreach ( $parts as $part ) {
-				if ( empty( $pattern ) ) {
+				if ( ! $pattern ) {
 					$pattern .= $part;
 				} else {
 					$pattern .= '(' . $part . ')?';
@@ -548,7 +547,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( ! empty( $exclude ) || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( $exclude || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
 			// only check spam if there are no other errors
 			return;
 		}
@@ -617,7 +616,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_spam_bot() {
 		$ip = FrmAppHelper::get_ip_address();
-
 		return empty( $ip );
 	}
 
@@ -628,7 +626,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_spam( $values ) {
 		global $wpcom_api_key;
-
 		return is_callable( 'Akismet::http_post' ) && ( get_option( 'wordpress_api_key' ) || $wpcom_api_key ) && self::akismet( $values );
 	}
 
@@ -639,7 +636,6 @@ class FrmEntryValidate {
 	 */
 	private static function is_akismet_enabled_for_user( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
-
 		return ! empty( $form->options['akismet'] ) && ( $form->options['akismet'] !== 'logged' || ! is_user_logged_in() );
 	}
 
@@ -683,7 +679,7 @@ class FrmEntryValidate {
 		$query_string = _http_build_query( $datas, '', '&' );
 		$response     = Akismet::http_post( $query_string, 'comment-check' );
 
-		return ( is_array( $response ) && $response[1] === 'true' );
+		return is_array( $response ) && $response[1] === 'true';
 	}
 
 	/**
@@ -1131,8 +1127,7 @@ class FrmEntryValidate {
 
 					// Convert name array to string.
 					if ( isset( $subsubvalue['first'] ) && isset( $subsubvalue['last'] ) ) {
-						$subsubvalue = trim( implode( ' ', $subsubvalue ) );
-
+						$subsubvalue                = trim( implode( ' ', $subsubvalue ) );
 						$values['name_field_ids'][] = $subsubindex;
 					}
 

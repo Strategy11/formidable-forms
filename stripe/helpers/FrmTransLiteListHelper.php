@@ -120,8 +120,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			'subscriptions' => __( 'Subscriptions', 'formidable' ),
 		);
 
-		$links = array();
-
+		$links       = array();
 		$frm_payment = new FrmTransLitePayment();
 		$frm_sub     = new FrmTransLiteSubscription();
 		$counts      = array(
@@ -179,7 +178,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * If the Payments submodule or the PayPal add-on is active, add a bulk delete action.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */
@@ -228,11 +227,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	public function display_rows() {
 		$date_format = FrmTransLiteAppHelper::get_date_format();
 		$gateways    = FrmTransLiteAppHelper::get_gateways();
-
-		$alt = 0;
-
-		$form_ids = $this->get_form_ids();
-		$args     = compact( 'form_ids', 'date_format', 'gateways' );
+		$alt         = 0;
+		$form_ids    = $this->get_form_ids();
+		$args        = compact( 'form_ids', 'date_format', 'gateways' );
 		// $form_ids is indexed by entry ID.
 		$this->valid_entry_ids = array_keys( $form_ids );
 
@@ -287,7 +284,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Check for Payments submodule (Stripe, Authorize.Net add-ons), as well as PayPal.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -376,7 +373,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 * Get the checkbox for bulk actions.
 	 * This is only required when the Payments submodule or PayPal is active.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 *
@@ -407,7 +404,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param object $item
 	 * @param string $field
@@ -459,13 +456,13 @@ class FrmTransLiteListHelper extends FrmListHelper {
 			$actions['edit'] = '<a href="' . esc_url( $edit_link ) . '">' . esc_html__( 'Edit', 'formidable' ) . '</a>';
 		}
 
-		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>';
+		$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" data-frmverify="' . esc_attr__( 'Permanently delete this payment?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return $actions;
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -650,7 +647,7 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	/**
 	 * Render the tabs for the payments list, if the user has access to coupons.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param string $active_tab
 	 *
