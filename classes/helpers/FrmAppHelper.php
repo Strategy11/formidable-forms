@@ -2434,7 +2434,7 @@ class FrmAppHelper {
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
-		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+		return is_array( $values ) ? in_array( $current, $values ) : $values == $current;
 	}
 
 	/**
