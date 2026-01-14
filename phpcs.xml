@@ -249,11 +249,11 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIssetBeforeNotEmpty" />
 	<rule ref="Formidable.CodeAnalysis.RedundantNotIssetBeforeEmpty" />
-	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
-	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
-	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 </ruleset>
