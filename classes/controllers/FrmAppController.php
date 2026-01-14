@@ -583,6 +583,7 @@ class FrmAppController {
 			return true;
 		}
 
+		// New plugin version.
 		return version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 	}
 
