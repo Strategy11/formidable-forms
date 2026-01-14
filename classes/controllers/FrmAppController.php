@@ -579,9 +579,11 @@ class FrmAppController {
 
 		$last_upgrade     = explode( '-', $db_version );
 		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
+		if ( $needs_db_upgrade ) {
+			return true;
+		}
 
-		return $needs_db_upgrade || $new_version;
+		return version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 	}
 
 	/**

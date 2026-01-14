@@ -290,8 +290,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_menu_name() {
-		$frm_settings = self::get_settings();
-		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
+		if ( FrmAddonsController::is_license_expired() ) {
+			return true;
+		}
+
+		return self::pro_is_installed() ? self::get_settings()->menu : 'Formidable';
 	}
 
 	/**
