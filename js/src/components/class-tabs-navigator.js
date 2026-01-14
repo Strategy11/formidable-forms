@@ -57,7 +57,6 @@ export class frmTabsNavigator {
 	}
 
 	initSlideTrackUnderline( nav ) {
-		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
 	}
