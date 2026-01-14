@@ -24,6 +24,73 @@ use PHP_CodeSniffer\Files\File;
 class SimplifyDualConditionToTernarySniff implements Sniff {
 
 	/**
+	 * Functions that return boolean values.
+	 *
+	 * @var array
+	 */
+	private $booleanFunctions = array(
+		'is_array',
+		'is_string',
+		'is_int',
+		'is_integer',
+		'is_bool',
+		'is_float',
+		'is_numeric',
+		'is_object',
+		'is_null',
+		'is_callable',
+		'is_resource',
+		'isset',
+		'empty',
+		'in_array',
+		'array_key_exists',
+		'key_exists',
+		'property_exists',
+		'method_exists',
+		'class_exists',
+		'function_exists',
+		'defined',
+		'file_exists',
+		'is_file',
+		'is_dir',
+		'is_readable',
+		'is_writable',
+		'is_writeable',
+		'is_uploaded_file',
+		'preg_match',
+		'strpos',
+		'stripos',
+		'has_filter',
+		'has_action',
+		'did_action',
+		'doing_action',
+		'doing_filter',
+		'wp_doing_ajax',
+		'is_admin',
+		'is_user_logged_in',
+		'current_user_can',
+		'user_can',
+		'check_ajax_referer',
+		'wp_verify_nonce',
+	);
+
+	/**
+	 * Comparison operators that indicate a boolean expression.
+	 *
+	 * @var array
+	 */
+	private $comparisonOperators = array(
+		T_IS_EQUAL,
+		T_IS_NOT_EQUAL,
+		T_IS_IDENTICAL,
+		T_IS_NOT_IDENTICAL,
+		T_IS_SMALLER_OR_EQUAL,
+		T_IS_GREATER_OR_EQUAL,
+		T_LESS_THAN,
+		T_GREATER_THAN,
+	);
+
+	/**
 	 * Returns an array of tokens this test wants to listen for.
 	 *
 	 * @return array
@@ -95,6 +162,15 @@ class SimplifyDualConditionToTernarySniff implements Sniff {
 		$falseExpr = $this->getRestOfCondition( $phpcsFile, $negativeGroupStart, $negativeGroupEnd );
 
 		if ( false === $trueExpr || false === $falseExpr ) {
+			return;
+		}
+
+		// Ensure both B and C expressions are boolean (comparisons or bool-returning functions).
+		if ( ! $this->isBooleanExpression( $phpcsFile, $positiveGroupStart, $positiveGroupEnd ) ) {
+			return;
+		}
+
+		if ( ! $this->isBooleanExpression( $phpcsFile, $negativeGroupStart, $negativeGroupEnd ) ) {
 			return;
 		}
 
@@ -286,6 +362,101 @@ class SimplifyDualConditionToTernarySniff implements Sniff {
 
 		// The content must match.
 		return $cond1['content'] === $cond2['content'];
+	}
+
+	/**
+	 * Check if the "rest" part of a condition group (B or C) is a boolean expression.
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  Opening parenthesis of the group.
+	 * @param int  $closeParen Closing parenthesis of the group.
+	 *
+	 * @return bool
+	 */
+	private function isBooleanExpression( File $phpcsFile, $openParen, $closeParen ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find first non-whitespace token inside the group.
+		$firstToken = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, $closeParen, true );
+
+		if ( false === $firstToken ) {
+			return false;
+		}
+
+		// Skip negation if present.
+		if ( $tokens[ $firstToken ]['code'] === T_BOOLEAN_NOT ) {
+			$firstToken = $phpcsFile->findNext( T_WHITESPACE, $firstToken + 1, $closeParen, true );
+
+			if ( false === $firstToken ) {
+				return false;
+			}
+		}
+
+		// Find the && operator.
+		$andOperator = $this->findAndOperator( $phpcsFile, $firstToken, $closeParen );
+
+		if ( false === $andOperator ) {
+			return false;
+		}
+
+		// Get the range of the "rest" expression (after &&).
+		$restStart = $phpcsFile->findNext( T_WHITESPACE, $andOperator + 1, $closeParen, true );
+
+		if ( false === $restStart ) {
+			return false;
+		}
+
+		$restEnd = $phpcsFile->findPrevious( T_WHITESPACE, $closeParen - 1, $restStart, true );
+
+		if ( false === $restEnd ) {
+			return false;
+		}
+
+		// Check for comparison operators in the rest expression (at top level).
+		$depth = 0;
+
+		for ( $i = $restStart; $i <= $restEnd; $i++ ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( $code === T_OPEN_PARENTHESIS ) {
+				++$depth;
+				continue;
+			}
+
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				--$depth;
+				continue;
+			}
+
+			// Check for comparison operators at top level.
+			if ( $depth === 0 && in_array( $code, $this->comparisonOperators, true ) ) {
+				return true;
+			}
+		}
+
+		// Check if the expression starts with a boolean-returning function.
+		if ( $tokens[ $restStart ]['code'] === T_STRING ) {
+			$funcName = strtolower( $tokens[ $restStart ]['content'] );
+
+			if ( in_array( $funcName, $this->booleanFunctions, true ) ) {
+				return true;
+			}
+		}
+
+		// Check for negated function call: ! funcName().
+		if ( $tokens[ $restStart ]['code'] === T_BOOLEAN_NOT ) {
+			$afterNot = $phpcsFile->findNext( T_WHITESPACE, $restStart + 1, $restEnd + 1, true );
+
+			if ( false !== $afterNot && $tokens[ $afterNot ]['code'] === T_STRING ) {
+				$funcName = strtolower( $tokens[ $afterNot ]['content'] );
+
+				if ( in_array( $funcName, $this->booleanFunctions, true ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
