@@ -29,7 +29,7 @@ class FrmAppHelper {
 	 *
 	 * @var string
 	 */
-	public static $plug_version = '6.26.1';
+	public static $plug_version = '6.27';
 
 	/**
 	 * @var bool
@@ -290,8 +290,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_menu_name() {
-		$frm_settings = self::get_settings();
-		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
+		if ( ! self::pro_is_installed() || FrmAddonsController::is_license_expired() ) {
+			return 'Formidable';
+		}
+
+		return self::get_settings()->menu;
 	}
 
 	/**
@@ -343,7 +346,7 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function show_logo( $atts = array() ) {
-		echo self::kses( self::svg_logo( $atts ), 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		self::kses_echo( self::svg_logo( $atts ), 'all' );
 	}
 
 	/**
@@ -369,7 +372,7 @@ class FrmAppHelper {
 				$icon = '<div style="height:39px"></div>';
 			}
 		}
-		echo self::kses( $icon, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		self::kses_echo( $icon, 'all' );
 	}
 
 	/**
@@ -543,7 +546,7 @@ class FrmAppHelper {
 		global $pagenow;
 		$action = self::simple_get( 'action', 'sanitize_title' );
 
-		return $pagenow && $pagenow === 'admin-ajax.php' && $action === 'frm_forms_preview';
+		return $pagenow === 'admin-ajax.php' && $action === 'frm_forms_preview';
 	}
 
 	/**
@@ -1817,12 +1820,12 @@ class FrmAppHelper {
 	 *
 	 * @since 1.07.10
 	 *
-	 * @param string $value The value to compare.
+	 * @param int|string $value The value to compare.
 	 *
 	 * @return bool
 	 */
 	public static function is_true( $value ) {
-		return true === $value || 1 === (int) $value || 'true' === $value || 'yes' === $value;
+		return true === $value || '1' === (string) $value || 'true' === $value || 'yes' === $value;
 	}
 
 	/**
@@ -2434,7 +2437,7 @@ class FrmAppHelper {
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
-		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+		return is_array( $values ) ? in_array( $current, $values ) : $values == $current;
 	}
 
 	/**

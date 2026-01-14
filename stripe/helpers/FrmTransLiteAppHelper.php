@@ -596,7 +596,7 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -605,12 +605,12 @@ class FrmTransLiteAppHelper {
 	}
 
 	/**
-	 * @deprecated x.x
+	 * @deprecated 6.27
 	 *
 	 * @return bool
 	 */
 	public static function should_fallback_to_paypal() {
-		_deprecated_function( __METHOD__, 'x.x' );
+		_deprecated_function( __METHOD__, '6.27' );
 		return false;
 	}
 }

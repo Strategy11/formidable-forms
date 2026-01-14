@@ -694,7 +694,7 @@ class FrmFieldsHelper {
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$checked = isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) );
+			$checked = isset( $field['default_value'] ) && ( is_array( $field['default_value'] ) ? in_array( $field_val, $field['default_value'] ) : $field['default_value'] == $field_val );
 
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -2464,7 +2464,7 @@ class FrmFieldsHelper {
 	 * Updates the params with limit data (the data-limit attribute, and possibly the frm_at_limit class).
 	 * Some field types are limited to a certain number per form, including coupon fields.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @param array  $li_params  The params.
 	 * @param int    $form_id    The form ID.

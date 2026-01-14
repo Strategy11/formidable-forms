@@ -188,7 +188,7 @@ class FrmAppController {
 	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
 	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -579,9 +579,13 @@ class FrmAppController {
 
 		$last_upgrade     = explode( '-', $db_version );
 		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 
-		return $needs_db_upgrade || $new_version;
+		if ( $needs_db_upgrade ) {
+			return true;
+		}
+
+		// New plugin version.
+		return version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 	}
 
 	/**
@@ -808,7 +812,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */

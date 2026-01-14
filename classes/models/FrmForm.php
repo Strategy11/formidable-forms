@@ -715,7 +715,7 @@ class FrmForm {
 		$id = $form->id;
 
 		// Disconnect the entries from this form
-		$entries = FrmDb::get_col( $wpdb->prefix . 'frm_items', array( 'form_id' => $id ) );
+		$entries = FrmDb::get_col( 'frm_items', array( 'form_id' => $id ) );
 
 		foreach ( $entries as $entry_id ) {
 			FrmEntry::destroy( $entry_id );
@@ -753,9 +753,7 @@ class FrmForm {
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
-		global $wpdb;
-
-		$trash_forms = FrmDb::get_results( $wpdb->prefix . 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
+		$trash_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
 
 		if ( ! $trash_forms ) {
 			return 0;
