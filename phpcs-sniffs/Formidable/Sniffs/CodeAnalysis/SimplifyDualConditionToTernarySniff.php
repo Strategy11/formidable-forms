@@ -134,7 +134,7 @@ class SimplifyDualConditionToTernarySniff implements Sniff {
 	 * @param int  $openParen  Opening parenthesis position.
 	 * @param int  $closeParen Closing parenthesis position.
 	 *
-	 * @return string|false The rest of the condition or false.
+	 * @return false|string The rest of the condition or false.
 	 */
 	private function getRestOfCondition( File $phpcsFile, $openParen, $closeParen ) {
 		$tokens = $phpcsFile->getTokens();
