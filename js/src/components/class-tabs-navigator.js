@@ -28,7 +28,11 @@ export class frmTabsNavigator {
 
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
+			if ( nav.classList.contains( 'frm-active' ) ) {
+				this.initSlideTrackUnderline( nav );
+			}
 		} );
+		this.slideTrackLine.style.display = 'block';
 
 		this.setupScrollbarObserver();
 		// Cleanup observers when page unloads to prevent memory leaks
