@@ -67,9 +67,8 @@ export class frmTabsNavigator {
 	 * Automatically repositions the underline indicator when layout changes occur.
 	 */
 	setupScrollbarObserver() {
-		const scrollbarWrapper = this.wrapper.closest( '.frm-scrollbar-wrapper' );
-
-		if ( ! scrollbarWrapper || ! ( 'ResizeObserver' in window ) ) {
+		const resizeObserverTarget = document.querySelector( '.frm-scrollbar-wrapper, .styling_settings' ) || document.body;
+		if ( ! resizeObserverTarget || ! ( 'ResizeObserver' in window ) ) {
 			return;
 		}
 
@@ -79,8 +78,7 @@ export class frmTabsNavigator {
 				this.positionUnderlineIndicator( activeNav );
 			}
 		} );
-
-		this.resizeObserver.observe( scrollbarWrapper );
+		this.resizeObserver.observe( resizeObserverTarget );
 	}
 
 	/**
