@@ -164,6 +164,7 @@ class RemoveRedundantWpdbPrefixSniff implements Sniff {
 
 			// Also remove any whitespace between concat and string.
 			$nextNonWhitespace = $phpcsFile->findNext( T_WHITESPACE, $concatOp + 1, $stringToken, true );
+
 			if ( false === $nextNonWhitespace ) {
 				for ( $i = $concatOp + 1; $i < $stringToken; $i++ ) {
 					$phpcsFile->fixer->replaceToken( $i, '' );

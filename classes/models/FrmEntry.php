@@ -87,8 +87,7 @@ class FrmEntry {
 			unset( $check_val['name'] );
 		}
 
-		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
-
+		$check_val    = apply_filters( 'frm_duplicate_check_val', $check_val );
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
