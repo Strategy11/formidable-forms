@@ -2,11 +2,14 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-colorpicker-component.css';
 
 class frmColorpickerLiteComponent extends frmWebComponent {
+
+	#onChange = () => {};
+	#defaultValue = '';
+
 	constructor() {
 		super();
 		this.input = document.createElement( 'input' );
 		this.componentStyle = style;
-		this._onChange = () => {};
 	}
 
 	initView() {
@@ -24,8 +27,8 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 			this.input.name = this.fieldName;
 		}
 
-		if ( null !== this.defaultValue ) {
-			this.input.value = this.defaultValue;
+		if ( null !== this.#defaultValue ) {
+			this.input.value = this.#defaultValue;
 		}
 
 		if ( null !== this.componentId ) {
@@ -40,8 +43,8 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		const colorPickerOptions = 'function' === typeof this._onChange ? {
-			change: ( event, ui ) => this._onChange( event, ui ),
+		const colorPickerOptions = 'function' === typeof this.#onChange ? {
+			change: ( event, ui ) => this.#onChange( event, ui ),
 		} : {};
 
 		jQuery( this.input ).wpColorPicker( colorPickerOptions );
@@ -77,7 +80,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
-		this._onChange = callback;
+		this.#onChange = callback;
 	}
 }
 

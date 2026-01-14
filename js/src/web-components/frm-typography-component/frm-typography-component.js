@@ -3,10 +3,22 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-typography-component.css';
 
 export class frmTypographyComponent extends frmWebComponent {
+
+	#onChange = () => {};
+	#defaultOptions = [
+		{
+			value: '21px',
+			label: __( 'Default', 'formidable' )
+		},
+	];
+	#unitTypeOptions = [ 'px', 'em', '%' ];
+	#value = '21px';
+	#defaultValue = '21px';
+
 	constructor() {
 		super();
 		this.componentStyle = style;
-		this.defaultOptions = [
+		this.#defaultOptions = [
 			{
 				value: '21px',
 				label: __( 'Default', 'formidable' )
@@ -32,10 +44,6 @@ export class frmTypographyComponent extends frmWebComponent {
 				label: __( 'Custom', 'formidable' )
 			},
 		];
-		this.value = '21px';
-		this.unitTypeOptions = [ 'px', 'em', '%' ];
-		this._onChange = () => {};
-		this._defaultValue = '21px';
 	}
 
 	initView() {
@@ -79,11 +87,11 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	getDefaultOptions( select ) {
-		this.defaultOptions.forEach( option => {
+		this.#defaultOptions.forEach( option => {
 			const opt = document.createElement( 'option' );
 			opt.value = option.value;
 			opt.textContent = option.label;
-			opt.selected = option.value === this._defaultValue;
+			opt.selected = option.value === this.#defaultValue;
 			select.append( opt );
 		} );
 	}
@@ -116,14 +124,14 @@ export class frmTypographyComponent extends frmWebComponent {
 		}
 
 		this.unitValueInput.type = 'text';
-		this.unitValueInput.value = `${ parseInt( this.defaultOptions.find( option => option.value === this._defaultValue )?.value ) || 21 }`;
+		this.unitValueInput.value = `${ parseInt( this.#defaultOptions.find( option => option.value === this.#defaultValue )?.value ) || 21 }`;
 
 		this.unitValueInput.addEventListener( 'change', event => {
 			const selectValue = this.select.value;
-			if ( this.defaultOptions.some( option => option.value === selectValue ) && '' !== selectValue ) {
+			if ( this.#defaultOptions.some( option => option.value === selectValue ) && '' !== selectValue ) {
 				return;
 			}
-			this._onChange( event.target.value + this.unitTypeSelect.value );
+			this.#onChange( event.target.value + this.unitTypeSelect.value );
 		} );
 
 		return this.unitValueInput;
@@ -144,7 +152,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			this.unitTypeSelect.name = `${ this.fieldName }[unit-type]`;
 		}
 
-		this.unitTypeOptions.forEach( option => {
+		this.#unitTypeOptions.forEach( option => {
 			const opt = document.createElement( 'option' );
 			opt.value = option;
 			opt.textContent = option;
@@ -164,7 +172,7 @@ export class frmTypographyComponent extends frmWebComponent {
 		if ( null !== this.fieldName ) {
 			this.hiddenInput.name = `${ this.fieldName }[value]`;
 		}
-		this.hiddenInput.value = this.value;
+		this.hiddenInput.value = this.#value;
 		return this.hiddenInput;
 	}
 
@@ -178,7 +186,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			const value = this.getUnitValue( this.select.value );
 			this.unitValueInput.value = value.value;
 			this.hiddenInput.value = value.value + value.unit;
-			this._onChange( this.hiddenInput.value );
+			this.#onChange( this.hiddenInput.value );
 			this.unitTypeSelect.value = value.unit;
 		} );
 	}
@@ -217,7 +225,7 @@ export class frmTypographyComponent extends frmWebComponent {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
-		this._onChange = callback;
+		this.#onChange = callback;
 	}
 
 	/**
@@ -227,6 +235,6 @@ export class frmTypographyComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	set typographyDefaultValue( value ) {
-		this._defaultValue = value;
+		this.#defaultValue = value;
 	}
 }

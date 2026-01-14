@@ -2,11 +2,13 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-dropdown-component.css';
 
 export class frmDropdownComponent extends frmWebComponent {
+
+	#onChange = () => {};
+	#select = document.createElement( 'select' );
+
 	constructor() {
 		super();
-		this.select = document.createElement( 'select' );
 		this.componentStyle = style;
-		this._onChange = () => {};
 	}
 
 	/**
@@ -27,9 +29,15 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @return {Element} - The select element.
 	 */
 	getSelect() {
-		this.select.id = this.componentId;
-		this.select.name = this.fieldName;
-		return this.select;
+		if ( this.componentId ) {
+			this.#select.id = this.componentId;
+		}
+
+		if ( this.fieldName ) {
+			this.#select.name = this.fieldName;
+		}
+
+		return this.#select;
 	}
 
 	/**
@@ -53,7 +61,7 @@ export class frmDropdownComponent extends frmWebComponent {
 			opt.value = option.value;
 			opt.textContent = option.textContent;
 			option.remove();
-			this.select.append( opt );
+			this.#select.append( opt );
 		} );
 	}
 
@@ -64,8 +72,8 @@ export class frmDropdownComponent extends frmWebComponent {
 	 */
 	afterViewInit() {
 		this.initSelectOptions();
-		this.select.addEventListener( 'change', () => {
-			this._onChange( this.select.value );
+		this.#select.addEventListener( 'change', () => {
+			this.#onChange( this.#select.value );
 		} );
 	}
 
@@ -81,7 +89,7 @@ export class frmDropdownComponent extends frmWebComponent {
 			opt.value = option.value;
 			opt.textContent = option.label;
 			opt.selected = option.selected;
-			this.select.append( opt );
+			this.#select.append( opt );
 		} );
 	}
 
@@ -92,7 +100,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	set disabled( value ) {
-		this.select.disabled = value;
+		this.#select.disabled = value;
 	}
 
 	/**
@@ -106,7 +114,7 @@ export class frmDropdownComponent extends frmWebComponent {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
-		this._onChange = callback;
+		this.#onChange = callback;
 	}
 
 	/**
@@ -116,7 +124,7 @@ export class frmDropdownComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	set selectedValue( value ) {
-		const option = Array.from( this.select.options ).find( option => option.value === value );
+		const option = Array.from( this.#select.options ).find( option => option.value === value );
 		if ( option ) {
 			option.selected = true;
 		}

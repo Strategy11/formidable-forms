@@ -3,14 +3,15 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-border-radius-component.css';
 
 export class frmBorderRadiusComponent extends frmWebComponent {
+
+	#onChange = () => {};
+	#unitTypeOptions = [ 'px', 'em', '%' ];
+	#value = '0px';
+	#defaultValue = '0px';
+	#usesMultipleValues = false;
 	constructor() {
 		super();
-		this._onChange = () => {};
 		this.componentStyle = style;
-		this.unitTypeOptions = [ 'px', 'em', '%' ];
-		this.value = '0px';
-		this._defaultValue = '0px';
-		this.usesMultipleValues = false;
 	}
 
 	initView() {
@@ -32,7 +33,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	}
 
 	parseDefaultValues() {
-		if ( ! this._defaultValue ) {
+		if ( ! this.#defaultValue ) {
 			return {
 				top: { value: 0, unit: 'px' },
 				bottom: { value: 0, unit: 'px' },
@@ -41,7 +42,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			};
 		}
 
-		const parts = this._defaultValue.split( ' ' );
+		const parts = this.#defaultValue.split( ' ' );
 		return {
 			top: this.parseValueUnit( parts[ 0 ] || '0px' ),
 			bottom: this.parseValueUnit( parts[ 2 ] || parts[ 0 ] || '0px' ),
@@ -76,7 +77,12 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	getHiddenInput() {
 		this.hiddenInput = document.createElement( 'input' );
 		this.hiddenInput.type = 'hidden';
-		this.hiddenInput.value = this.value;
+		this.hiddenInput.value = this.#value;
+
+		if ( this.fieldName ) {
+			this.hiddenInput.name = this.fieldName;
+		}
+
 		return this.hiddenInput;
 	}
 
@@ -85,8 +91,8 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.inputValue.type = 'text';
 		this.inputValue.classList.add( 'frm-input-value' );
 
-		if ( ! this.usesMultipleValues ) {
-			this.inputValue.value = parseInt( this._defaultValue ) || 0;
+		if ( ! this.#usesMultipleValues ) {
+			this.inputValue.value = parseInt( this.#defaultValue ) || 0;
 		}
 
 		this.inputValue.addEventListener( 'change', () => {
@@ -104,7 +110,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	getInputUnit() {
 		this.inputUnit = document.createElement( 'select' );
 		this.inputUnit.classList.add( 'frm-input-unit' );
-		this.unitTypeOptions.forEach( option => {
+		this.#unitTypeOptions.forEach( option => {
 			const opt = document.createElement( 'option' );
 			opt.value = option;
 			opt.textContent = option;
@@ -122,7 +128,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 		this.borderIndividualInputsWrapper = document.createElement( 'div' );
 		this.borderIndividualInputsWrapper.classList.add( 'frm-border-individual-inputs-wrapper' );
 
-		if ( ! this.usesMultipleValues ) {
+		if ( ! this.#usesMultipleValues ) {
 			this.borderIndividualInputsWrapper.classList.add( 'frm_hidden' );
 		}
 
@@ -200,7 +206,7 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 	updateValue( value ) {
 		this.hiddenInput.value = value;
 
-		this._onChange( value );
+		this.#onChange( value );
 	}
 
 	getButton() {
@@ -219,11 +225,11 @@ export class frmBorderRadiusComponent extends frmWebComponent {
 			throw new TypeError( `Expected a function, but received ${ typeof callback }` );
 		}
 
-		this._onChange = callback;
+		this.#onChange = callback;
 	}
 
 	set borderRadiusDefaultValue( value ) {
-		this._defaultValue = value;
-		this.usesMultipleValues = ! value.match( /^(\d+)(px|em|%)?$/ ) && '' !== value;
+		this.#defaultValue = value;
+		this.#usesMultipleValues = ! value.match( /^(\d+)(px|em|%)?$/ ) && '' !== value;
 	}
 }
