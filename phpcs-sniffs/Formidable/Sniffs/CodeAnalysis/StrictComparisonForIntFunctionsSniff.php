@@ -104,7 +104,7 @@ class StrictComparisonForIntFunctionsSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $tokenPtr  The position of the token to check.
 	 *
-	 * @return string|false 'function' if it's an int function, 'literal' if it's an int literal, false otherwise.
+	 * @return false|string 'function' if it's an int function, 'literal' if it's an int literal, false otherwise.
 	 */
 	private function isIntExpression( File $phpcsFile, $tokenPtr ) {
 		if ( false === $tokenPtr ) {
@@ -145,7 +145,7 @@ class StrictComparisonForIntFunctionsSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $closePtr  The position of the closing parenthesis.
 	 *
-	 * @return string|false 'function' if it's an int function call, false otherwise.
+	 * @return false|string 'function' if it's an int function call, false otherwise.
 	 */
 	private function isIntFunctionCall( File $phpcsFile, $closePtr ) {
 		$tokens = $phpcsFile->getTokens();
