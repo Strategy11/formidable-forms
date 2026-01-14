@@ -294,7 +294,6 @@ class FrmEntriesController {
 	 */
 	private static function get_child_form_ids( $form_id ) {
 		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
-
 		return array_filter( $child_form_ids, 'is_numeric' );
 	}
 
