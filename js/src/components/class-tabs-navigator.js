@@ -26,7 +26,6 @@ export class frmTabsNavigator {
 			return;
 		}
 
-		this.initDefaultSlideTrackerWidth();
 		this.navs.forEach( ( nav, index ) => {
 			nav.addEventListener( 'click', event => this.onNavClick( event, index ) );
 		} );
@@ -43,7 +42,7 @@ export class frmTabsNavigator {
 
 		this.removeActiveClassnameFromNavs();
 		navItem.classList.add( 'frm-active' );
-		this.initSlideTrackUnderline( navItem, index );
+		this.initSlideTrackUnderline( navItem );
 		this.changeSlide( index );
 
 		// Handle special case for frm_insert_fields_tab
@@ -53,13 +52,7 @@ export class frmTabsNavigator {
 		}
 	}
 
-	initDefaultSlideTrackerWidth() {
-		if ( ! this.slideTrackLine.dataset.initialWidth ) {
-			return;
-		}
-		this.slideTrackLine.style.width = `${ this.slideTrackLine.dataset.initialWidth }px`;
-	}
-	initSlideTrackUnderline( nav, index ) {
+	initSlideTrackUnderline( nav ) {
 		this.slideTrackLine.classList.remove( 'frm-first', 'frm-last' );
 		const activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter( nav => nav.classList.contains( 'frm-active' ) );
 		this.positionUnderlineIndicator( activeNav );
