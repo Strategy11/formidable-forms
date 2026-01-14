@@ -753,8 +753,6 @@ class FrmForm {
 	 * @return int The number of forms deleted
 	 */
 	public static function scheduled_delete( $delete_timestamp = '' ) {
-		global $wpdb;
-
 		$trash_forms = FrmDb::get_results( 'frm_forms', array( 'status' => 'trash' ), 'id, parent_form_id, options' );
 
 		if ( ! $trash_forms ) {

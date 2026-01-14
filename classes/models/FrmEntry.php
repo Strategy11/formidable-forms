@@ -89,7 +89,6 @@ class FrmEntry {
 
 		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
 
-		global $wpdb;
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
@@ -596,8 +595,6 @@ class FrmEntry {
 	 * @return bool
 	 */
 	public static function exists( $id ) {
-		global $wpdb;
-
 		if ( FrmDb::check_cache( $id, 'frm_entry' ) ) {
 			return true;
 		}
