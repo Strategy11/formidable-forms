@@ -90,7 +90,7 @@ class FrmEntry {
 		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
 
 		global $wpdb;
-		$entry_exists = FrmDb::get_col( $wpdb->prefix . 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
+		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
 			return false;
@@ -603,7 +603,7 @@ class FrmEntry {
 		}
 
 		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'item_key' => $id );
-		$id    = FrmDb::get_var( $wpdb->prefix . 'frm_items', $where );
+		$id    = FrmDb::get_var( 'frm_items', $where );
 
 		return $id && $id > 0;
 	}

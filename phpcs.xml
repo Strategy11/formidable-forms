@@ -255,4 +255,5 @@
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
 </ruleset>
