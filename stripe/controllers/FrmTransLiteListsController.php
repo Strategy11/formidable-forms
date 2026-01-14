@@ -9,8 +9,7 @@ class FrmTransLiteListsController {
 	 * @return void
 	 */
 	public static function add_list_hooks() {
-		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
-		$hook_name    = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-payments_columns';
+		$hook_name = 'manage_' . sanitize_title( FrmAppHelper::get_menu_name() ) . '_page_formidable-payments_columns';
 
 		add_filter( $hook_name, self::class . '::payment_columns' );
 		add_filter( 'screen_options_show_screen', self::class . '::remove_screen_options', 10, 2 );
@@ -92,12 +91,7 @@ class FrmTransLiteListsController {
 			return $show_screen;
 		}
 
-		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
-		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
-
-		if ( $unread_count ) {
-			$menu_name .= '-' . $unread_count;
-		}
+		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
 		if ( $screen->id === $menu_name . '_page_formidable-payments' ) {
 			$show_screen = false;
