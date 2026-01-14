@@ -80,13 +80,24 @@ class RedundantParenthesesSniff implements Sniff {
 			return;
 		}
 
-		// The expression should end with a semicolon or comma (for array elements).
-		if ( $tokens[ $afterClose ]['code'] !== T_SEMICOLON && $tokens[ $afterClose ]['code'] !== T_COMMA && $tokens[ $afterClose ]['code'] !== T_CLOSE_PARENTHESIS ) {
+		// The expression should end with a semicolon, comma (for array elements), close parenthesis, or ternary operator.
+		$validFollowingTokens = array(
+			T_SEMICOLON,
+			T_COMMA,
+			T_CLOSE_PARENTHESIS,
+			T_INLINE_THEN,
+		);
+
+		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowingTokens, true ) ) {
 			return;
 		}
 
 		// Check if the content inside is a simple expression (no complex operators that would need grouping).
-		if ( ! $this->isSimpleExpression( $phpcsFile, $stackPtr, $closeParen ) ) {
+		// Exception: if this is a direct assignment followed by semicolon, arithmetic is fine too.
+		$isDirectAssignment = in_array( $tokens[ $prevToken ]['code'], array( T_EQUAL, T_PLUS_EQUAL, T_MINUS_EQUAL, T_CONCAT_EQUAL, T_COALESCE_EQUAL ), true )
+			&& $tokens[ $afterClose ]['code'] === T_SEMICOLON;
+
+		if ( ! $this->isSimpleExpression( $phpcsFile, $stackPtr, $closeParen, $isDirectAssignment ) ) {
 			return;
 		}
 
@@ -133,13 +144,14 @@ class RedundantParenthesesSniff implements Sniff {
 	 * - Contains only a ternary operator
 	 * - Is a single value/variable/function call
 	 *
-	 * @param File $phpcsFile  The file being scanned.
-	 * @param int  $openParen  The position of the opening parenthesis.
-	 * @param int  $closeParen The position of the closing parenthesis.
+	 * @param File $phpcsFile          The file being scanned.
+	 * @param int  $openParen          The position of the opening parenthesis.
+	 * @param int  $closeParen         The position of the closing parenthesis.
+	 * @param bool $allowArithmetic    Whether to allow arithmetic operators (for direct assignments).
 	 *
 	 * @return bool True if the expression is simple, false otherwise.
 	 */
-	private function isSimpleExpression( File $phpcsFile, $openParen, $closeParen ) {
+	private function isSimpleExpression( File $phpcsFile, $openParen, $closeParen, $allowArithmetic = false ) {
 		$tokens = $phpcsFile->getTokens();
 
 		// Count operators that would make this a complex expression.
@@ -174,8 +186,11 @@ class RedundantParenthesesSniff implements Sniff {
 				$hasCoalesce = true;
 			} elseif ( $code === T_INLINE_THEN || $code === T_INLINE_ELSE ) {
 				$hasTernary = true;
-			} elseif ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR, T_LOGICAL_XOR ), true ) ) {
+			} elseif ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR ), true ) ) {
 				$hasLogicalOp = true;
+			} elseif ( $code === T_LOGICAL_XOR ) {
+				// xor has unusual precedence, so parentheses are helpful for clarity.
+				return false;
 			} elseif ( in_array( $code, array( T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL, T_LESS_THAN, T_GREATER_THAN, T_IS_SMALLER_OR_EQUAL, T_IS_GREATER_OR_EQUAL, T_SPACESHIP ), true ) ) {
 				$hasComparisonOp = true;
 			} elseif ( in_array( $code, array( T_PLUS, T_MINUS, T_MULTIPLY, T_DIVIDE, T_MODULUS ), true ) ) {
@@ -184,7 +199,8 @@ class RedundantParenthesesSniff implements Sniff {
 		}
 
 		// If there are arithmetic operators, it might need parentheses for precedence.
-		if ( $hasArithmeticOp ) {
+		// Exception: direct assignments don't need grouping.
+		if ( $hasArithmeticOp && ! $allowArithmetic ) {
 			return false;
 		}
 
