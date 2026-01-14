@@ -105,6 +105,8 @@ class FrmEntriesController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @return void
 	 */
 	private static function load_manage_entries_hooks() {
 		if ( ! in_array( FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ), array( 'edit', 'show', 'new', 'duplicate' ), true ) ) {
@@ -222,6 +224,8 @@ class FrmEntriesController {
 	 * Delete all entries in a form when the 'delete all' button is clicked.
 	 *
 	 * @since x.x
+	 *
+	 * @return void
 	 */
 	public static function destroy_all() {
 		if ( ! current_user_can( 'frm_delete_entries' ) || ! wp_verify_nonce( FrmAppHelper::simple_get( '_wpnonce', '', 'sanitize_text_field' ), '-1' ) ) {
@@ -263,6 +267,7 @@ class FrmEntriesController {
 		global $wpdb;
 
 		$form_ids    = self::get_child_form_ids( $form_id );
+		$form_ids    = implode( ',', $form_ids );
 		$meta_query  = $wpdb->prepare(
 			"DELETE em.* FROM {$wpdb->prefix}frm_item_metas AS em INNER JOIN {$wpdb->prefix}frm_items AS e ON (em.item_id=e.id) WHERE form_id=%d",
 			$form_id
@@ -283,26 +288,14 @@ class FrmEntriesController {
 	/**
 	 * @since x.x
 	 *
-	 * @param int         $form_id
-	 * @param bool|string $implode
+	 * @param int $form_id
 	 *
-	 * @return array|string
+	 * @return array
 	 */
-	private static function get_child_form_ids( $form_id, $implode = ',' ) {
-		$form_ids       = array();
+	private static function get_child_form_ids( $form_id ) {
 		$child_form_ids = FrmDb::get_col( 'frm_forms', array( 'parent_form_id' => $form_id ) );
 
-		if ( $child_form_ids ) {
-			$form_ids = $child_form_ids;
-		}
-
-		$form_ids = array_filter( $form_ids, 'is_numeric' );
-
-		if ( $implode ) {
-			$form_ids = implode( $implode, $form_ids );
-		}
-
-		return $form_ids;
+		return array_filter( $child_form_ids, 'is_numeric' );
 	}
 
 	/**
