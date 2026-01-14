@@ -255,5 +255,6 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 </ruleset>
