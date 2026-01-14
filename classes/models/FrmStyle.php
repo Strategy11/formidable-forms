@@ -380,8 +380,11 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function is_color( $setting ) {
-		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return str_contains( $setting, 'color' ) || in_array( $setting, $extra_colors, true );
+		if ( str_contains( $setting, 'color' ) ) {
+			return true;
+		}
+
+		return in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ), true );
 	}
 
 	/**
