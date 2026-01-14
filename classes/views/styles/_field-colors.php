@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 ?>
 <div class="frm-style-tabs-wrapper">
 	<div class="frm-tabs-delimiter">
-		<span data-initial-width="88" class="frm-tabs-active-underline frm-first"></span>
+		<span class="frm-tabs-active-underline frm-first"></span>
 	</div>
 	<div class="frm-tabs-navs">
 		<ul class="frm-flex-box">
