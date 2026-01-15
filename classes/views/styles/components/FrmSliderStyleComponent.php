@@ -82,7 +82,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_multiple_values() {
 		if ( ! $this->data['has-multiple-values'] ) {
@@ -169,7 +169,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_icon() {
 		if ( ! empty( $this->data['icon'] ) ) {
