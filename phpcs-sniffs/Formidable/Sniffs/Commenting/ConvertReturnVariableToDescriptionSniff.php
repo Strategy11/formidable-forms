@@ -115,7 +115,7 @@ class ConvertReturnVariableToDescriptionSniff implements Sniff {
 			}
 
 			// Check for common abbreviations that should be uppercase.
-			$upperAbbreviations = array( 'id', 'url', 'html', 'css', 'js', 'api', 'db', 'sql', 'xml', 'json', 'php', 'wp' );
+			$upperAbbreviations = array( 'id', 'url', 'html', 'css', 'js', 'api', 'db', 'sql', 'xml', 'json', 'php', 'wp', 'csv', 'http', 'https', 'ajax', 'dom', 'ui', 'ux', 'ip', 'ftp', 'smtp', 'ssl', 'tls', 'pdf', 'svg', 'png', 'jpg', 'gif' );
 
 			if ( in_array( strtolower( $part ), $upperAbbreviations, true ) ) {
 				$words[] = strtoupper( $part );
