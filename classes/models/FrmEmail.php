@@ -658,7 +658,7 @@ class FrmEmail {
 	 *
 	 * @param string $emails
 	 *
-	 * @return array|string $emails
+	 * @return array|string Emails.
 	 */
 	private function explode_emails( $emails ) {
 		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';

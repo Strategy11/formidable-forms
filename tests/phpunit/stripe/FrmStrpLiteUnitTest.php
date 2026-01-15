@@ -193,7 +193,7 @@ class FrmStrpLiteUnitTest extends FrmUnitTest {
 	}
 
 	/**
-	 * @return string $customer_id
+	 * @return string Customer ID.
 	 */
 	protected function get_customer_id() {
 		$options = array();

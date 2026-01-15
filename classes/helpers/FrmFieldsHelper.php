@@ -1615,7 +1615,7 @@ class FrmFieldsHelper {
 	 * @param bool   $other_opt
 	 * @param string $checked
 	 *
-	 * @return array $other_args
+	 * @return array Other args.
 	 */
 	public static function prepare_other_input( $args, &$other_opt, &$checked ) {
 		$other_args = array(
@@ -1753,7 +1753,7 @@ class FrmFieldsHelper {
 	 * @param string      $html_id
 	 * @param bool|string $opt_key
 	 *
-	 * @return string $other_id
+	 * @return string Other ID.
 	 */
 	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ) {
 		$other_id = $html_id;

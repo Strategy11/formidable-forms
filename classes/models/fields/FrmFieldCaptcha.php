@@ -429,7 +429,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 *
 	 * @param array $values
 	 *
-	 * @return array $values
+	 * @return array Values.
 	 */
 	public static function update_field_name( $values ) {
 		if ( $values['type'] === 'captcha' ) {

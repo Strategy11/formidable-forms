@@ -17,7 +17,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	public static function create( $values ) {
 		return self::create_entry( $values, 'standard' );
@@ -29,7 +29,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function create_entry( $values, $type ) {
 		$new_values = self::before_insert_entry_in_database( $values, $type );
@@ -318,7 +318,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return bool|int $update_results
+	 * @return bool|int Update results.
 	 */
 	public static function update( $id, $values ) {
 		return self::update_entry( $id, $values, 'standard' );
@@ -333,7 +333,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $update_type
 	 *
-	 * @return bool|int $query_results
+	 * @return bool|int Query results.
 	 */
 	private static function update_entry( $id, $values, $update_type ) {
 		global $wpdb;
@@ -774,7 +774,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function before_insert_entry_in_database( &$values, $type ) {
 		self::sanitize_entry_post( $values );
@@ -794,7 +794,7 @@ class FrmEntry {
 	 * @param array $values
 	 * @param array $new_values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
 		$entry_id = self::insert_entry_into_database( $new_values );
@@ -842,7 +842,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function package_entry_data( &$values ) {
 		global $wpdb;
@@ -996,7 +996,7 @@ class FrmEntry {
 	 *
 	 * @param array $new_values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function insert_entry_into_database( $new_values ) {
 		global $wpdb;
@@ -1132,7 +1132,7 @@ class FrmEntry {
 	 * @param array      $values
 	 * @param string     $update_type
 	 *
-	 * @return bool $update
+	 * @return bool Update.
 	 */
 	private static function before_update_entry( $id, &$values, $update_type ) {
 		$update = true;
@@ -1159,7 +1159,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function package_entry_to_update( $id, $values ) {
 		global $wpdb;
@@ -1232,7 +1232,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	public static function create_entry_from_xml( $values ) {
 		return self::create_entry( $values, 'xml' );
@@ -1247,7 +1247,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return bool|int $updated
+	 * @return bool|int Updated.
 	 */
 	public static function update_entry_from_xml( $id, $values ) {
 		return self::update_entry( $id, $values, 'xml' );

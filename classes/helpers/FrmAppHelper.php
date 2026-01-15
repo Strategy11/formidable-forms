@@ -271,7 +271,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $args - May include the form id when values need translation.
 	 *
-	 * @return FrmSettings $frm_settings
+	 * @return FrmSettings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
@@ -868,7 +868,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $value
 	 *
-	 * @return string $value
+	 * @return string Value.
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
@@ -3217,7 +3217,7 @@ class FrmAppHelper {
 	 * @param int|string $to     In seconds.
 	 * @param int|string $levels Number of time units to include or a specific unit.
 	 *
-	 * @return string $time_ago
+	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
 		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );

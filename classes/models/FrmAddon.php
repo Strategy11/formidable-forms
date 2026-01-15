@@ -179,7 +179,7 @@ class FrmAddon {
 	 * @param string $_action
 	 * @param object $_args
 	 *
-	 * @return object $_data
+	 * @return object Data.
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 		if ( $_action !== 'plugin_information' ) {
