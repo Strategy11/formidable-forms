@@ -229,4 +229,8 @@
 
 	<!-- Custom Formidable sniffs (defined in phpcs-sniffs/Formidable/ruleset.xml) -->
 	<rule ref="Formidable" />
+
+	<rule ref="Formidable.Commenting.AddReturnVoid">
+		<exclude-pattern>FrmListHelper.php</exclude-pattern>
+	</rule>
 </ruleset>
