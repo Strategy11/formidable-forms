@@ -246,6 +246,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 
 		// Try to flip comparison operators.
 		$flipped = $this->flipComparisonOperator( $condition );
+
 		if ( $flipped !== false ) {
 			return $flipped;
 		}
@@ -265,7 +266,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 	 *
 	 * @param string $condition The condition to flip.
 	 *
-	 * @return string|false The flipped condition, or false if not a simple comparison.
+	 * @return false|string The flipped condition, or false if not a simple comparison.
 	 */
 	private function flipComparisonOperator( $condition ) {
 		// Map of operators to their opposites.
@@ -283,6 +284,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 		// Check for each operator (check longer ones first).
 		foreach ( $operatorMap as $op => $opposite ) {
 			$pos = strpos( $condition, $op );
+
 			if ( $pos !== false ) {
 				// Make sure this is a simple comparison (no && or ||).
 				if ( strpos( $condition, '&&' ) !== false || strpos( $condition, '||' ) !== false ) {
