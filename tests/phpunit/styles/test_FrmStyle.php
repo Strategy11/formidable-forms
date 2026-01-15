@@ -77,7 +77,7 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '12px', $sanitized_post_content['section_border_width'] );
 		$this->assertEquals( '16px', $sanitized_post_content['section_font_size'] );
 		$this->assertEquals( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
-		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
+		$this->assertArrayNotHasKey( 'unsupported_key', $sanitized_post_content );
 	}
 
 	/**

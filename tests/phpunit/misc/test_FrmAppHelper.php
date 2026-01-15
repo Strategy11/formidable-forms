@@ -96,7 +96,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_get_settings() {
 		$settings = FrmAppHelper::get_settings();
 		$this->assertNotEmpty( $settings );
-		$this->assertTrue( is_object( $settings ) );
+		$this->assertIsObject( $settings );
 		$this->assertNotEmpty( $settings->success_msg );
 	}
 
@@ -536,7 +536,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
+		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
 		// reserve the form key so one has to be generated with this as the base.

@@ -36,6 +36,10 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 
+	<!-- PHPUnit -->
+	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferAssertArrayHasKey" />
+
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
 	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
