@@ -184,7 +184,6 @@ class FrmDb {
 
 			$where   .= ' %s';
 			$values[] = $start . self::esc_like( $value ) . $end;
-
 		} elseif ( $value === null ) {
 			$where .= ' IS NULL';
 		} else {

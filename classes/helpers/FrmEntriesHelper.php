@@ -871,7 +871,6 @@ class FrmEntriesHelper {
 			echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
 			echo '</div>';
 			return;
-
 		}
 	}
 

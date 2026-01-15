@@ -2556,7 +2556,6 @@ class FrmFormsController {
 			}
 		} elseif ( $errors ) {
 			self::show_form_after_submit( $pass_args );
-
 		} else {
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
