@@ -33,7 +33,7 @@ class PreferAssertIsArraySniff implements Sniff {
 	 *
 	 * @var array
 	 */
-	private const FUNCTION_MAP = array(
+	const FUNCTION_MAP = array(
 		'is_array'   => array( 'assertIsArray', 'assertIsNotArray' ),
 		'is_object'  => array( 'assertIsObject', 'assertIsNotObject' ),
 		'is_string'  => array( 'assertIsString', 'assertIsNotString' ),
