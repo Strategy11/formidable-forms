@@ -521,7 +521,7 @@ class FrmFieldFormHtml {
 	 *
 	 * @since 3.0
 	 *
-	 * @return string $classes
+	 * @return string Classes.
 	 */
 	private function get_field_div_classes() {
 		// Add error class

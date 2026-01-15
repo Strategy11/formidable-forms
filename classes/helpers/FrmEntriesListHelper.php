@@ -292,7 +292,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since 2.0.14
 	 *
-	 * @return string $primary_column
+	 * @return string Primary column.
 	 */
 	protected function get_primary_column_name() {
 		$columns        = get_column_headers( $this->screen );

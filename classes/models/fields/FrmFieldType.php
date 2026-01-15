@@ -1837,7 +1837,7 @@ DEFAULT_HTML;
 	 *     @type array $saved_entries
 	 * }
 	 *
-	 * @return array $new_value
+	 * @return array New value.
 	 */
 	protected function get_new_child_ids( $value, $atts ) {
 		$saved_entries = $atts['ids'];

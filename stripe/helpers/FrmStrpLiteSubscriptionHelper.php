@@ -37,7 +37,7 @@ class FrmStrpLiteSubscriptionHelper {
 	 *
 	 * @param array $atts
 	 *
-	 * @return int|string $sub_id
+	 * @return int|string Sub ID.
 	 */
 	public static function create_new_subscription( $atts ) {
 		$atts['charge'] = (object) $atts['charge'];

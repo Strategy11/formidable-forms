@@ -119,7 +119,7 @@ class FrmEntriesHelper {
 	 * @param bool   $reset
 	 * @param array  $args
 	 *
-	 * @return array|string $new_value
+	 * @return array|string New value.
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
@@ -143,7 +143,7 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 * @param array  $args
 	 *
-	 * @return bool $value_is_posted
+	 * @return bool Value is posted.
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;

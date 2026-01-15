@@ -760,7 +760,7 @@ class FrmXMLController {
 	 * @param int    $form_id
 	 * @param object $form
 	 *
-	 * @return array $csv_fields
+	 * @return array Csv fields.
 	 */
 	public static function get_fields_for_csv_export( $form_id, $form ) {
 		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );
