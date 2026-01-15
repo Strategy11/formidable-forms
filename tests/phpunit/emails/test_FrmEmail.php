@@ -678,9 +678,9 @@ LINE 1<br>LINE 2<br></body></html>'
 			$actual = $this->get_private_property( $email, 'message' );
 
 			if ( $setting['compare'] === 'Contains' ) {
-				$this->assertNotFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringContainsString( 'Referrer:', $actual );
 			} else {
-				$this->assertFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringNotContainsString( 'Referrer:', $actual );
 			}
 		}
 	}

@@ -315,11 +315,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		$collation = $frmdb->collation();
 
 		if ( ! empty( $wpdb->charset ) ) {
-			$this->assertTrue( str_contains( $collation, 'DEFAULT CHARACTER SET' ) );
+			$this->assertStringContainsString( 'DEFAULT CHARACTER SET', $collation );
 		}
 
 		if ( ! empty( $wpdb->collate ) ) {
-			$this->assertTrue( str_contains( $collation, 'COLLATE' ) );
+			$this->assertStringContainsString( 'COLLATE', $collation );
 		}
 	}
 
@@ -367,7 +367,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertEquals( 1, count( $form_actions ), 'Old form settings are not converted to email action.' );
 
 		foreach ( $form_actions as $action ) {
-			$this->assertTrue( str_contains( $action->post_content['email_to'], 'emailto@test.com' ) );
+			$this->assertStringContainsString( 'emailto@test.com', $action->post_content['email_to'] );
 		}
 	}
 

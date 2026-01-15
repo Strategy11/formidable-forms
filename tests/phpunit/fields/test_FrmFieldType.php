@@ -28,9 +28,9 @@ class test_FrmFieldType extends FrmUnitTest {
 				'id' => $form_id,
 			)
 		);
-		$this->assertNotFalse( strpos( $form, ' min="10"' ) );
-		$this->assertNotFalse( strpos( $form, ' max="999"' ) );
-		$this->assertNotFalse( strpos( $form, ' step="any"' ) );
+		$this->assertStringContainsString( ' min="10"', $form );
+		$this->assertStringContainsString( ' max="999"', $form );
+		$this->assertStringContainsString( ' step="any"', $form );
 	}
 
 	/**
