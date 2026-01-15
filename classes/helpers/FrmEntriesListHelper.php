@@ -266,6 +266,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 	}
 
 	/**
+	 * @since x.x
+	 *
+	 * @return bool
+	 */
+	public static function has_moved_entries_bulk_delete_from_pro() {
+		return ! method_exists( 'FrmProEntriesHelper', 'delete_all_button' );
+	}
+
+	/**
 	 * @param string $which
 	 *
 	 * @return void
@@ -284,6 +293,78 @@ class FrmEntriesListHelper extends FrmListHelper {
 			FrmFormsHelper::forms_dropdown( 'form', $form_id, array( 'blank' => __( 'View all forms', 'formidable' ) ) );
 			submit_button( __( 'Filter', 'formidable' ), 'filter_action action', '', false, array( 'id' => 'post-query-submit' ) );
 			echo '</div>';
+		}
+
+		if ( self::has_moved_entries_bulk_delete_from_pro() ) {
+			$is_footer    = $which !== 'top';
+			$entries_args = array(
+				'entries_count'                    => $this->total_items,
+				'bulk_delete_confirmation_message' => $this->confirm_bulk_delete(),
+			);
+			self::before_table( $is_footer, $this->params['form'], $entries_args );
+		}
+	}
+
+	/**
+	 * @since 4.0
+	 * @since x.x Moved from FrmProEntriesHelper to FrmEntriesHelper
+	 *
+	 * @param int|object $form The form or form ID.
+	 * @param array      $args Additional arguments.
+	 *
+	 * @return void
+	 */
+	private static function delete_all_button( $form, $args = array() ) {
+		if ( ! $form ) {
+			return;
+		}
+
+		$form_id = is_numeric( $form ) ? $form : $form->id;
+
+		if ( ! apply_filters( 'frm_show_delete_all', current_user_can( 'frm_delete_entries' ), $form_id ) ) {
+			return;
+		}
+
+		$entries_count = $args['entries_count'] ?? 0;
+		$verify        = $args['bulk_delete_confirmation_message'] ?? '';
+		?>
+		<span class="frm_uninstall">
+			<a
+				<?php
+				FrmAppHelper::array_to_html_params(
+					array(
+						'href'               => esc_url( wp_nonce_url( '?page=formidable-entries&frm_action=destroy_all&form=' . $form_id ) ),
+						'class'              => 'button frm-button-secondary',
+						'data-loaded-from'   => 'entries-list',
+						'data-total-entries' => esc_attr( $entries_count ),
+						'data-frmverify'     => esc_attr( $verify ),
+						'data-frmverify-btn' => 'frm-button-red',
+					),
+					true
+				);
+				?>
+			>
+				<?php esc_html_e( 'Delete All Entries', 'formidable' ); ?>
+			</a>
+		</span>
+		<?php
+	}
+
+	/**
+	 * @param bool            $footer
+	 * @param bool|int|object $form
+	 * @param array           $args
+	 *
+	 * @return void
+	 */
+	private static function before_table( $footer, $form, $args = array() ) {
+		if ( FrmAppHelper::simple_get( 'page', 'sanitize_title' ) !== 'formidable-entries' || ! $form ) {
+			return;
+		}
+
+		if ( ! $footer ) {
+			$form_id = is_numeric( $form ) ? $form : $form->id;
+			self::delete_all_button( $form_id, $args );
 		}
 	}
 
@@ -549,6 +630,21 @@ class FrmEntriesListHelper extends FrmListHelper {
 		}
 
 		$val = FrmEntriesHelper::prepare_display_value( $item, $field, $atts );
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return array
+	 */
+	public function get_bulk_actions() {
+		if ( current_user_can( 'frm_delete_entries' ) ) {
+			return array(
+				'bulk_delete' => __( 'Delete', 'formidable' ),
+			);
+		}
+
+		return array();
 	}
 
 	/**

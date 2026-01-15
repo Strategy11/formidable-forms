@@ -69,6 +69,9 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFrom
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
 
+// Php80
+use Rector\Php80\Rector\Identical\StrStartsWithRector;
+
 define( 'ABSPATH', '' );
 
 return RectorConfig::configure()
@@ -214,5 +217,8 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
 			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
+
+			// Php80
+			StrStartsWithRector::class,
 		)
 	);
