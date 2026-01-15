@@ -1,1 +1,590 @@
-(()=>{"use strict";function e(t){return e="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},e(t)}function t(e,t){for(var n=0;n<t.length;n++){var i=t[n];i.enumerable=i.enumerable||!1,i.configurable=!0,"value"in i&&(i.writable=!0),Object.defineProperty(e,r(i.key),i)}}function r(t){var r=function(t){if("object"!=e(t)||!t)return t;var r=t[Symbol.toPrimitive];if(void 0!==r){var n=r.call(t,"string");if("object"!=e(n))return n;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(t)}(t);return"symbol"==e(r)?r:r+""}var n=function(){return e=function e(t){!function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,e),void 0!==t&&(this.wrapper=t instanceof Element?t:document.querySelector(t),null!==this.wrapper&&(this.flexboxSlidesGap="16px",this.navs=this.wrapper.querySelectorAll(".frm-tabs-navs ul > li"),this.slideTrackLine=this.wrapper.querySelector(".frm-tabs-active-underline"),this.slideTrack=this.wrapper.querySelector(".frm-tabs-slide-track"),this.slides=this.wrapper.querySelectorAll(".frm-tabs-slide-track > div"),this.isRTL="rtl"===document.documentElement.dir||"rtl"===document.body.dir,this.resizeObserver=null,this.init()))},(r=[{key:"init",value:function(){var e=this;null!==this.wrapper&&this.navs.length&&null!==this.slideTrackLine&&null!==this.slideTrack&&this.slides.length&&(this.initDefaultSlideTrackerWidth(),this.navs.forEach(function(t,r){t.addEventListener("click",function(t){return e.onNavClick(t,r)})}),this.setupScrollbarObserver(),window.addEventListener("beforeunload",this.cleanupObservers))}},{key:"onNavClick",value:function(e,t){var r=e.currentTarget;e.preventDefault(),this.removeActiveClassnameFromNavs(),r.classList.add("frm-active"),this.initSlideTrackUnderline(r,t),this.changeSlide(t);var n,i,o=r.querySelector("a");o&&"frm_insert_fields_tab"===o.id&&!o.closest("#frm_adv_info")&&(null===(n=window.frmAdminBuild)||void 0===n||null===(i=n.clearSettingsBox)||void 0===i||i.call(n))}},{key:"initDefaultSlideTrackerWidth",value:function(){this.slideTrackLine.dataset.initialWidth&&(this.slideTrackLine.style.width="".concat(this.slideTrackLine.dataset.initialWidth,"px"))}},{key:"initSlideTrackUnderline",value:function(e,t){this.slideTrackLine.classList.remove("frm-first","frm-last");var r=void 0!==e?e:this.navs.filter(function(e){return e.classList.contains("frm-active")});this.positionUnderlineIndicator(r)}},{key:"setupScrollbarObserver",value:function(){var e=this,t=this.wrapper.closest(".frm-scrollbar-wrapper");t&&"ResizeObserver"in window&&(this.resizeObserver=new ResizeObserver(function(){var t=e.wrapper.querySelector(".frm-tabs-navs ul > li.frm-active");t&&e.positionUnderlineIndicator(t)}),this.resizeObserver.observe(t))}},{key:"cleanupObservers",value:function(){this.resizeObserver&&(this.resizeObserver.disconnect(),this.resizeObserver=null)}},{key:"positionUnderlineIndicator",value:function(e){var t=this;requestAnimationFrame(function(){var r=t.isRTL?-(e.parentElement.offsetWidth-e.offsetLeft-e.offsetWidth):e.offsetLeft;t.slideTrackLine.style.transform="translateX(".concat(r,"px)"),t.slideTrackLine.style.width=e.clientWidth+"px"})}},{key:"changeSlide",value:function(e){this.removeActiveClassnameFromSlides();var t=0==e?"0px":"calc( ( ".concat(100*e,"% + ").concat(parseInt(this.flexboxSlidesGap,10)*e,"px ) * ").concat(this.isRTL?1:-1," )");"0px"!==t?this.slideTrack.style.transform="translateX(".concat(t,")"):this.slideTrack.style.removeProperty("transform"),e in this.slides&&this.slides[e].classList.add("frm-active")}},{key:"removeActiveClassnameFromSlides",value:function(){this.slides.forEach(function(e){return e.classList.remove("frm-active")})}},{key:"removeActiveClassnameFromNavs",value:function(){this.navs.forEach(function(e){return e.classList.remove("frm-active")})}}])&&t(e.prototype,r),Object.defineProperty(e,"prototype",{writable:!1}),e;var e,r}();function i(e){return i="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},i(e)}function o(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,a(n.key),n)}}function a(e){var t=function(e){if("object"!=i(e)||!e)return e;var t=e[Symbol.toPrimitive];if(void 0!==t){var r=t.call(e,"string");if("object"!=i(r))return r;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return"symbol"==i(t)?t:t+""}function s(e){var t="function"==typeof Map?new Map:void 0;return s=function(e){if(null===e||!function(e){try{return-1!==Function.toString.call(e).indexOf("[native code]")}catch(t){return"function"==typeof e}}(e))return e;if("function"!=typeof e)throw new TypeError("Super expression must either be null or a function");if(void 0!==t){if(t.has(e))return t.get(e);t.set(e,r)}function r(){return function(e,t,r){if(c())return Reflect.construct.apply(null,arguments);var n=[null];n.push.apply(n,t);var i=new(e.bind.apply(e,n));return r&&l(i,r.prototype),i}(e,arguments,u(this).constructor)}return r.prototype=Object.create(e.prototype,{constructor:{value:r,enumerable:!1,writable:!0,configurable:!0}}),l(r,e)},s(e)}function c(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){}))}catch(e){}return(c=function(){return!!e})()}function l(e,t){return l=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},l(e,t)}function u(e){return u=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},u(e)}function f(e){return f="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},f(e)}function d(e,t){for(var r=0;r<t.length;r++){var n=t[r];n.enumerable=n.enumerable||!1,n.configurable=!0,"value"in n&&(n.writable=!0),Object.defineProperty(e,p(n.key),n)}}function p(e){var t=function(e){if("object"!=f(e)||!e)return e;var t=e[Symbol.toPrimitive];if(void 0!==t){var r=t.call(e,"string");if("object"!=f(r))return r;throw new TypeError("@@toPrimitive must return a primitive value.")}return String(e)}(e);return"symbol"==f(t)?t:t+""}function m(){try{var e=!Boolean.prototype.valueOf.call(Reflect.construct(Boolean,[],function(){}))}catch(e){}return(m=function(){return!!e})()}function v(e){return v=Object.setPrototypeOf?Object.getPrototypeOf.bind():function(e){return e.__proto__||Object.getPrototypeOf(e)},v(e)}function b(e,t){return b=Object.setPrototypeOf?Object.setPrototypeOf.bind():function(e,t){return e.__proto__=t,e},b(e,t)}var h=function(e){function t(){var e;return function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t),(e=function(e,t,r){return t=v(t),function(e,t){if(t&&("object"==f(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(e,m()?Reflect.construct(t,r||[],v(e).constructor):t.apply(e,r))}(this,t)).componentStyle=".frm-tabs-wrapper{position:relative;overflow:hidden}.frm-tabs-wrapper .frm-tabs-navigator{margin:0;padding:0;display:flex;gap:var(--gap-xs);justify-content:space-between;align-items:center;background:#f2f4f7;border-radius:var(--small-radius);box-sizing:border-box;height:44px;position:relative;z-index:2}.frm-tabs-wrapper .frm-tabs-navigator .frm-tab-item{flex:1;text-align:center;cursor:pointer}.frm-tabs-wrapper .frm-tabs-navigator .frm-active-background{display:block;height:100%;background:#fff;position:absolute;top:0;left:0;z-index:1}.frm-tabs-navs{padding:0;min-height:44px}.frm-tabs-navs ul{margin:0;height:var(--h-md);position:relative;display:flex;justify-content:space-between;list-style-type:none;padding:0px}.frm-tabs-navs ul li,.frm-tabs-navs ul li a{color:var(--grey-500);font-weight:500;font-size:var(--text-sm);line-height:28px}.frm-tabs-navs ul li{flex:1;height:28px;text-align:center;margin-top:var(--gap-xs);margin-bottom:0;cursor:pointer}.frm-tabs-navs ul li.frm-active,.frm-style-tabs-wrapper .frm-tabs-navs ul li.frm-active a{color:var(--grey-900)}.frm-tabs-navs ul li:first-child{margin-left:var(--gap-xs)}.frm-tabs-navs ul li:last-child{margin-right:var(--gap-xs)}.frm-tabs-delimiter{position:absolute;top:0;left:0;width:100%;background:#f2f4f7;height:44px;margin:0;border-radius:var(--small-radius)}.frm-tabs-delimiter .frm-tabs-active-underline{height:28px;background:#fff;position:absolute;left:0;bottom:8px;width:45px;transition:.4s transform cubic-bezier(0.25, 0.46, 0.45, 0.94);border-radius:var(--small-radius);box-shadow:var(--button-shadow)}.frm-tabs-delimiter .frm-tabs-active-underline.frm-first{left:var(--gap-xs)}.frm-tabs-delimiter .frm-tabs-active-underline.frm-last{left:calc(-1*var(--gap-xs))}.frm-tabs-container{position:relative;overflow:hidden;margin-top:var(--gap-md);height:100%}.frm-tabs-container .frm-tabs-slide-track{display:flex;transition:.32s transform cubic-bezier(0.25, 0.46, 0.45, 0.94)}.frm-tabs-slide-track>div{flex:0 0 100%;opacity:0;transition:.25s opacity linear;position:relative;height:auto;max-height:unset;overflow:hidden;box-sizing:border-box}.frm-tabs-slide-track>div>div{overflow:auto;position:relative;width:100%;padding:0;box-sizing:border-box}.frm-tabs-slide-track>div>div:first-child{height:100%}.frm-tabs-slide-track>div.frm-active{opacity:1;transition:.35s opacity linear}\n",e}return function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&b(e,t)}(t,e),r=t,(i=[{key:"initView",value:function(){if(this.tabs=this.querySelectorAll(".frm-tab"),0===this.tabs.length)return null;var e=document.createElement("div");return e.classList.add("frm-tabs-wrapper"),e.append(this.getTabDelimiter()),e.append(this.getTabs()),e.append(this.getTabContainer()),new n(e),e}},{key:"afterViewInit",value:function(e){this.setInitialUnderlineWidth(e)}},{key:"setInitialUnderlineWidth",value:function(e){var t=e.querySelector("li.frm-active"),r=e.querySelector(".frm-tabs-delimiter .frm-tabs-active-underline");t&&r&&(r.style.width="".concat(t.clientWidth,"px"))}},{key:"getTabDelimiter",value:function(){var e=document.createElement("div"),t=document.createElement("span");return t.setAttribute("data-initial-width","123"),t.classList.add("frm-tabs-active-underline","frm-first"),e.className="frm-tabs-delimiter",e.append(t),e}},{key:"getTabs",value:function(){var e=this,t=document.createElement("div"),r=document.createElement("ul");return t.className="frm-tabs-navs",t.append(r),Array.from(this.tabs).forEach(function(t,n){r.append(e.createTabHeading(t,n))}),t}},{key:"getTabContainer",value:function(){var e=this,t=document.createElement("div"),r=document.createElement("div");return t.className="frm-tabs-container",r.className="frm-tabs-slide-track frm-flex-box",t.append(r),Array.from(this.tabs).forEach(function(t,n){r.append(e.createTabContainer(t,n))}),t}},{key:"createTabHeading",value:function(e,t){var r=0===t?"frm-active":"",n=document.createElement("li");return n.className=r,n.innerText=e.getAttribute("data-tab-title"),n}},{key:"createTabContainer",value:function(e,t){var r=0===t?"frm-active":"",n=document.createElement("div");return n.className="frm-tab-container ".concat(r),Array.from(e.children).forEach(function(e){n.append(e)}),n}},{key:"getTabUnderline",value:function(){return this.shadowRoot.querySelector(".frm-tabs-active-underline")}}])&&d(r.prototype,i),Object.defineProperty(r,"prototype",{writable:!1}),r;var r,i}(function(e){function t(){var e;if(function(e,t){if(!(e instanceof t))throw new TypeError("Cannot call a class as a function")}(this,t),(this instanceof t?this.constructor:void 0)===t)throw new Error("frmWebComponent is an abstract class and cannot be instantiated directly");return(e=function(e,t,r){return t=u(t),function(e,t){if(t&&("object"==i(t)||"function"==typeof t))return t;if(void 0!==t)throw new TypeError("Derived constructors may only return object or undefined");return function(e){if(void 0===e)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return e}(e)}(e,c()?Reflect.construct(t,r||[],u(e).constructor):t.apply(e,r))}(this,t)).initOptions(),e.useShadowDom&&e.attachShadow({mode:"open"}),e}return function(e,t){if("function"!=typeof t&&null!==t)throw new TypeError("Super expression must either be null or a function");e.prototype=Object.create(t&&t.prototype,{constructor:{value:e,writable:!0,configurable:!0}}),Object.defineProperty(e,"prototype",{writable:!1}),t&&l(e,t)}(t,e),r=t,(n=[{key:"initOptions",value:function(){this.useShadowDom="false"!==this.getAttribute("data-shadow-dom")}},{key:"loadStyle",value:function(){var e=document.createElement("style");return e.textContent=this.componentStyle,e}},{key:"render",value:function(){var e=this,t=this.initView();if(t){var r=this.useShadowDom?this.shadowRoot:this;r.innerHTML="",r.append(this.loadStyle()),r.append(t),this.whenElementBecomesVisible().then(function(){e.afterViewInit(e)})}}},{key:"whenElementBecomesVisible",value:function(){var e=this;return new Promise(function(t){if(void 0!==window.IntersectionObserver){var r=new IntersectionObserver(function(e){e.forEach(function(e){e.isIntersecting&&e.intersectionRatio>0&&(r.disconnect(),requestAnimationFrame(function(){return t()}))})},{threshold:.1}),n=e.useShadowDom?e.shadowRoot:e;r.observe(n)}else requestAnimationFrame(function(){return t()})})}},{key:"afterViewInit",value:function(e){}},{key:"initView",value:function(){}},{key:"connectedCallback",value:function(){this.render()}},{key:"disconnectedCallback",value:function(){}}])&&o(r.prototype,n),Object.defineProperty(r,"prototype",{writable:!1}),r;var r,n}(s(HTMLElement)));customElements.define("frm-tab-navigator-component",h)})();
+/******/ (() => { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./js/src/components/class-tabs-navigator.js":
+/*!***************************************************!*\
+  !*** ./js/src/components/class-tabs-navigator.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   frmTabsNavigator: () => (/* binding */ frmTabsNavigator)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+var frmTabsNavigator = /*#__PURE__*/function () {
+  function frmTabsNavigator(wrapper) {
+    _classCallCheck(this, frmTabsNavigator);
+    if ('undefined' === typeof wrapper) {
+      return;
+    }
+    this.wrapper = wrapper instanceof Element ? wrapper : document.querySelector(wrapper);
+    if (null === this.wrapper) {
+      return;
+    }
+    this.flexboxSlidesGap = '16px';
+    this.navs = this.wrapper.querySelectorAll('.frm-tabs-navs ul > li');
+    this.slideTrackLine = this.wrapper.querySelector('.frm-tabs-active-underline');
+    this.slideTrack = this.wrapper.querySelector('.frm-tabs-slide-track');
+    this.slides = this.wrapper.querySelectorAll('.frm-tabs-slide-track > div');
+    this.isRTL = document.documentElement.dir === 'rtl' || document.body.dir === 'rtl';
+    this.resizeObserver = null;
+    this.init();
+  }
+  return _createClass(frmTabsNavigator, [{
+    key: "init",
+    value: function init() {
+      var _this = this;
+      if (null === this.wrapper || !this.navs.length || null === this.slideTrackLine || null === this.slideTrack || !this.slides.length) {
+        return;
+      }
+      this.initDefaultSlideTrackerWidth();
+      this.navs.forEach(function (nav, index) {
+        nav.addEventListener('click', function (event) {
+          return _this.onNavClick(event, index);
+        });
+      });
+      this.setupScrollbarObserver();
+      // Cleanup observers when page unloads to prevent memory leaks
+      window.addEventListener('beforeunload', this.cleanupObservers);
+    }
+  }, {
+    key: "onNavClick",
+    value: function onNavClick(event, index) {
+      var navItem = event.currentTarget;
+      event.preventDefault();
+      this.removeActiveClassnameFromNavs();
+      navItem.classList.add('frm-active');
+      this.initSlideTrackUnderline(navItem, index);
+      this.changeSlide(index);
+
+      // Handle special case for frm_insert_fields_tab
+      var navLink = navItem.querySelector('a');
+      if (navLink && navLink.id === 'frm_insert_fields_tab' && !navLink.closest('#frm_adv_info')) {
+        var _window$frmAdminBuild, _window$frmAdminBuild2;
+        (_window$frmAdminBuild = window.frmAdminBuild) === null || _window$frmAdminBuild === void 0 || (_window$frmAdminBuild2 = _window$frmAdminBuild.clearSettingsBox) === null || _window$frmAdminBuild2 === void 0 || _window$frmAdminBuild2.call(_window$frmAdminBuild);
+      }
+    }
+  }, {
+    key: "initDefaultSlideTrackerWidth",
+    value: function initDefaultSlideTrackerWidth() {
+      if (!this.slideTrackLine.dataset.initialWidth) {
+        return;
+      }
+      this.slideTrackLine.style.width = "".concat(this.slideTrackLine.dataset.initialWidth, "px");
+    }
+  }, {
+    key: "initSlideTrackUnderline",
+    value: function initSlideTrackUnderline(nav, index) {
+      this.slideTrackLine.classList.remove('frm-first', 'frm-last');
+      var activeNav = 'undefined' !== typeof nav ? nav : this.navs.filter(function (nav) {
+        return nav.classList.contains('frm-active');
+      });
+      this.positionUnderlineIndicator(activeNav);
+    }
+
+    /**
+     * Sets up a ResizeObserver to watch for scrollbar changes in the parent container.
+     * Automatically repositions the underline indicator when layout changes occur.
+     */
+  }, {
+    key: "setupScrollbarObserver",
+    value: function setupScrollbarObserver() {
+      var _this2 = this;
+      var scrollbarWrapper = this.wrapper.closest('.frm-scrollbar-wrapper');
+      if (!scrollbarWrapper || !('ResizeObserver' in window)) {
+        return;
+      }
+      this.resizeObserver = new ResizeObserver(function () {
+        var activeNav = _this2.wrapper.querySelector('.frm-tabs-navs ul > li.frm-active');
+        if (activeNav) {
+          _this2.positionUnderlineIndicator(activeNav);
+        }
+      });
+      this.resizeObserver.observe(scrollbarWrapper);
+    }
+
+    /**
+     * Cleans up observers to prevent memory leaks.
+     */
+  }, {
+    key: "cleanupObservers",
+    value: function cleanupObservers() {
+      if (this.resizeObserver) {
+        this.resizeObserver.disconnect();
+        this.resizeObserver = null;
+      }
+    }
+
+    /**
+     * Positions the underline indicator based on the active navigation element.
+     *
+     * @param {HTMLElement} activeNav The active navigation element to position the underline under
+     */
+  }, {
+    key: "positionUnderlineIndicator",
+    value: function positionUnderlineIndicator(activeNav) {
+      var _this3 = this;
+      requestAnimationFrame(function () {
+        var position = _this3.isRTL ? -(activeNav.parentElement.offsetWidth - activeNav.offsetLeft - activeNav.offsetWidth) : activeNav.offsetLeft;
+        _this3.slideTrackLine.style.transform = "translateX(".concat(position, "px)");
+        _this3.slideTrackLine.style.width = activeNav.clientWidth + 'px';
+      });
+    }
+  }, {
+    key: "changeSlide",
+    value: function changeSlide(index) {
+      this.removeActiveClassnameFromSlides();
+      var translate = index == 0 ? '0px' : "calc( ( ".concat(index * 100, "% + ").concat(parseInt(this.flexboxSlidesGap, 10) * index, "px ) * ").concat(this.isRTL ? 1 : -1, " )");
+      if ('0px' !== translate) {
+        this.slideTrack.style.transform = "translateX(".concat(translate, ")");
+      } else {
+        this.slideTrack.style.removeProperty('transform');
+      }
+      if (index in this.slides) {
+        this.slides[index].classList.add('frm-active');
+      }
+    }
+  }, {
+    key: "removeActiveClassnameFromSlides",
+    value: function removeActiveClassnameFromSlides() {
+      this.slides.forEach(function (slide) {
+        return slide.classList.remove('frm-active');
+      });
+    }
+  }, {
+    key: "removeActiveClassnameFromNavs",
+    value: function removeActiveClassnameFromNavs() {
+      this.navs.forEach(function (nav) {
+        return nav.classList.remove('frm-active');
+      });
+    }
+  }]);
+}();
+
+/***/ }),
+
+/***/ "./js/src/web-components/frm-tab-navigator-component/frm-tab-navigator-component.js":
+/*!******************************************************************************************!*\
+  !*** ./js/src/web-components/frm-tab-navigator-component/frm-tab-navigator-component.js ***!
+  \******************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   frmTabNavigatorComponent: () => (/* binding */ frmTabNavigatorComponent)
+/* harmony export */ });
+/* harmony import */ var _components_class_tabs_navigator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../components/class-tabs-navigator */ "./js/src/components/class-tabs-navigator.js");
+/* harmony import */ var _frm_web_component__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../frm-web-component */ "./js/src/web-components/frm-web-component.js");
+Object(function webpackMissingModule() { var e = new Error("Cannot find module './frm-tab-navigator-component.css'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+
+
+
+var frmTabNavigatorComponent = /*#__PURE__*/function (_frmWebComponent) {
+  function frmTabNavigatorComponent() {
+    var _this;
+    _classCallCheck(this, frmTabNavigatorComponent);
+    _this = _callSuper(this, frmTabNavigatorComponent);
+    _this.componentStyle = Object(function webpackMissingModule() { var e = new Error("Cannot find module './frm-tab-navigator-component.css'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+    return _this;
+  }
+
+  /**
+   * Initializes the view.
+   *
+   * @return {Element} - The wrapper element.
+   */
+  _inherits(frmTabNavigatorComponent, _frmWebComponent);
+  return _createClass(frmTabNavigatorComponent, [{
+    key: "initView",
+    value: function initView() {
+      this.tabs = this.querySelectorAll('.frm-tab');
+      if (0 === this.tabs.length) {
+        return null;
+      }
+      var wrapper = document.createElement('div');
+      wrapper.classList.add('frm-tabs-wrapper');
+      wrapper.append(this.getTabDelimiter());
+      wrapper.append(this.getTabs());
+      wrapper.append(this.getTabContainer());
+      new _components_class_tabs_navigator__WEBPACK_IMPORTED_MODULE_0__.frmTabsNavigator(wrapper);
+      return wrapper;
+    }
+  }, {
+    key: "afterViewInit",
+    value: function afterViewInit(wrapper) {
+      this.setInitialUnderlineWidth(wrapper);
+    }
+
+    /**
+     * Sets the initial underline width of active tab nav item.
+     *
+     * @param {Element} wrapper - The wrapper element.
+     */
+  }, {
+    key: "setInitialUnderlineWidth",
+    value: function setInitialUnderlineWidth(wrapper) {
+      var li = wrapper.querySelector('li.frm-active');
+      var tabActiveUnderline = wrapper.querySelector('.frm-tabs-delimiter .frm-tabs-active-underline');
+      if (!li || !tabActiveUnderline) {
+        return;
+      }
+      tabActiveUnderline.style.width = "".concat(li.clientWidth, "px");
+    }
+
+    /**
+     * Gets the tab delimiter.
+     *
+     * @return {string} - The tab delimiter.
+     */
+  }, {
+    key: "getTabDelimiter",
+    value: function getTabDelimiter() {
+      var delimiter = document.createElement('div');
+      var underline = document.createElement('span');
+      underline.setAttribute('data-initial-width', '123');
+      underline.classList.add('frm-tabs-active-underline', 'frm-first');
+      delimiter.className = 'frm-tabs-delimiter';
+      delimiter.append(underline);
+      return delimiter;
+    }
+
+    /**
+     * Gets the tab headings.
+     *
+     * @return {string} - The tab headings.
+     */
+  }, {
+    key: "getTabs",
+    value: function getTabs() {
+      var _this2 = this;
+      var tabHeadings = document.createElement('div');
+      var ul = document.createElement('ul');
+      tabHeadings.className = 'frm-tabs-navs';
+      tabHeadings.append(ul);
+      Array.from(this.tabs).forEach(function (tab, index) {
+        ul.append(_this2.createTabHeading(tab, index));
+      });
+      return tabHeadings;
+    }
+
+    /**
+     * Gets the tab container.
+     *
+     * @return {string} - The tab container.
+     */
+  }, {
+    key: "getTabContainer",
+    value: function getTabContainer() {
+      var _this3 = this;
+      var tabContainer = document.createElement('div');
+      var slideTrack = document.createElement('div');
+      tabContainer.className = 'frm-tabs-container';
+      slideTrack.className = 'frm-tabs-slide-track frm-flex-box';
+      tabContainer.append(slideTrack);
+      Array.from(this.tabs).forEach(function (tab, index) {
+        slideTrack.append(_this3.createTabContainer(tab, index));
+      });
+      return tabContainer;
+    }
+
+    /**
+     * Creates a tab heading.
+     *
+     * @param {Element} tab   - The tab element.
+     * @param {number}  index - The index of the tab.
+     * @return {string} - The tab heading.
+     */
+  }, {
+    key: "createTabHeading",
+    value: function createTabHeading(tab, index) {
+      var className = index === 0 ? 'frm-active' : '';
+      var li = document.createElement('li');
+      li.className = className;
+      li.innerText = tab.getAttribute('data-tab-title');
+      return li;
+    }
+
+    /**
+     * Creates a tab container.
+     *
+     * @param {Element} tab   - The tab element.
+     * @param {number}  index - The index of the tab.
+     * @return {string} - The tab container.
+     */
+  }, {
+    key: "createTabContainer",
+    value: function createTabContainer(tab, index) {
+      var className = index === 0 ? 'frm-active' : '';
+      var container = document.createElement('div');
+      container.className = "frm-tab-container ".concat(className);
+      Array.from(tab.children).forEach(function (child) {
+        container.append(child);
+      });
+      return container;
+    }
+
+    /**
+     * Gets the tab underline.
+     *
+     * @return {Element} - The tab underline.
+     */
+  }, {
+    key: "getTabUnderline",
+    value: function getTabUnderline() {
+      return this.shadowRoot.querySelector('.frm-tabs-active-underline');
+    }
+  }]);
+}(_frm_web_component__WEBPACK_IMPORTED_MODULE_1__.frmWebComponent);
+
+/***/ }),
+
+/***/ "./js/src/web-components/frm-web-component.js":
+/*!****************************************************!*\
+  !*** ./js/src/web-components/frm-web-component.js ***!
+  \****************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   frmWebComponent: () => (/* binding */ frmWebComponent)
+/* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _classCallCheck(a, n) { if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function"); }
+function _defineProperties(e, r) { for (var t = 0; t < r.length; t++) { var o = r[t]; o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, _toPropertyKey(o.key), o); } }
+function _createClass(e, r, t) { return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", { writable: !1 }), e; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : i + ""; }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+function _callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function _possibleConstructorReturn(t, e) { if (e && ("object" == _typeof(e) || "function" == typeof e)) return e; if (void 0 !== e) throw new TypeError("Derived constructors may only return object or undefined"); return _assertThisInitialized(t); }
+function _assertThisInitialized(e) { if (void 0 === e) throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); return e; }
+function _inherits(t, e) { if ("function" != typeof e && null !== e) throw new TypeError("Super expression must either be null or a function"); t.prototype = Object.create(e && e.prototype, { constructor: { value: t, writable: !0, configurable: !0 } }), Object.defineProperty(t, "prototype", { writable: !1 }), e && _setPrototypeOf(t, e); }
+function _wrapNativeSuper(t) { var r = "function" == typeof Map ? new Map() : void 0; return _wrapNativeSuper = function _wrapNativeSuper(t) { if (null === t || !_isNativeFunction(t)) return t; if ("function" != typeof t) throw new TypeError("Super expression must either be null or a function"); if (void 0 !== r) { if (r.has(t)) return r.get(t); r.set(t, Wrapper); } function Wrapper() { return _construct(t, arguments, _getPrototypeOf(this).constructor); } return Wrapper.prototype = Object.create(t.prototype, { constructor: { value: Wrapper, enumerable: !1, writable: !0, configurable: !0 } }), _setPrototypeOf(Wrapper, t); }, _wrapNativeSuper(t); }
+function _construct(t, e, r) { if (_isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments); var o = [null]; o.push.apply(o, e); var p = new (t.bind.apply(t, o))(); return r && _setPrototypeOf(p, r.prototype), p; }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
+function _isNativeFunction(t) { try { return -1 !== Function.toString.call(t).indexOf("[native code]"); } catch (n) { return "function" == typeof t; } }
+function _setPrototypeOf(t, e) { return _setPrototypeOf = Object.setPrototypeOf ? Object.setPrototypeOf.bind() : function (t, e) { return t.__proto__ = e, t; }, _setPrototypeOf(t, e); }
+function _getPrototypeOf(t) { return _getPrototypeOf = Object.setPrototypeOf ? Object.getPrototypeOf.bind() : function (t) { return t.__proto__ || Object.getPrototypeOf(t); }, _getPrototypeOf(t); }
+var frmWebComponent = /*#__PURE__*/function (_HTMLElement) {
+  function frmWebComponent() {
+    var _this;
+    _classCallCheck(this, frmWebComponent);
+    if ((this instanceof frmWebComponent ? this.constructor : void 0) === frmWebComponent) {
+      throw new Error('frmWebComponent is an abstract class and cannot be instantiated directly');
+    }
+    _this = _callSuper(this, frmWebComponent);
+    _this.initOptions();
+    if (_this.useShadowDom) {
+      _this.attachShadow({
+        mode: 'open'
+      });
+    }
+    return _this;
+  }
+  _inherits(frmWebComponent, _HTMLElement);
+  return _createClass(frmWebComponent, [{
+    key: "initOptions",
+    value: function initOptions() {
+      this.useShadowDom = 'false' !== this.getAttribute('data-shadow-dom');
+    }
+
+    /*
+    * Load the component style.
+    * @return string
+    */
+  }, {
+    key: "loadStyle",
+    value: function loadStyle() {
+      var style = document.createElement('style');
+      style.textContent = this.componentStyle;
+      return style;
+    }
+
+    /*
+    * Render the component inside the shadow root.
+    * @return void
+    */
+  }, {
+    key: "render",
+    value: function render() {
+      var _this2 = this;
+      var view = this.initView();
+      if (!view) {
+        return;
+      }
+      var wrapper = this.useShadowDom ? this.shadowRoot : this;
+      wrapper.innerHTML = '';
+      wrapper.append(this.loadStyle());
+      wrapper.append(view);
+      this.whenElementBecomesVisible().then(function () {
+        _this2.afterViewInit(_this2);
+      });
+    }
+
+    /**
+     * Waits for the element to become visible in the viewport.
+     *
+     * @return {Promise} - A promise that resolves when the element is visible.
+     */
+  }, {
+    key: "whenElementBecomesVisible",
+    value: function whenElementBecomesVisible() {
+      var _this3 = this;
+      // eslint-disable-next-line compat/compat
+      return new Promise(function (resolve) {
+        // eslint-disable-next-line compat/compat
+        if ('undefined' === typeof window.IntersectionObserver) {
+          requestAnimationFrame(function () {
+            return resolve();
+          });
+          return;
+        }
+
+        // eslint-disable-next-line compat/compat
+        var observer = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            // The element is in viewport and its visibility is greater than 0.
+            if (entry.isIntersecting && entry.intersectionRatio > 0) {
+              observer.disconnect();
+              requestAnimationFrame(function () {
+                return resolve();
+              });
+            }
+          });
+        }, {
+          threshold: 0.1
+        });
+        var element = _this3.useShadowDom ? _this3.shadowRoot : _this3;
+        observer.observe(element);
+      });
+    }
+
+    /**
+     * After the view is initialized and the element/wrapper is visible in the viewport.
+     *
+     * @param {Element} wrapper - The wrapper element.
+     */
+  }, {
+    key: "afterViewInit",
+    value: function afterViewInit(wrapper) {
+      // Override in child class.
+    }
+
+    /**
+     * Constructs the view in the DOM.
+     * return {Element} - The wrapper element.
+     */
+  }, {
+    key: "initView",
+    value: function initView() {
+      // Override in child class.
+    }
+
+    /*
+    * Called by browser when the component is rendered to the DOM.
+    * @return void
+    */
+  }, {
+    key: "connectedCallback",
+    value: function connectedCallback() {
+      this.render();
+    }
+
+    /*
+    * Called by browser when the component is removed from the DOM.
+    * @return void
+    */
+  }, {
+    key: "disconnectedCallback",
+    value: function disconnectedCallback() {}
+  }]);
+}(/*#__PURE__*/_wrapNativeSuper(HTMLElement));
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+var __webpack_exports__ = {};
+/*!****************************************!*\
+  !*** ./js/src/web-components/index.js ***!
+  \****************************************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _frm_tab_navigator_component_frm_tab_navigator_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./frm-tab-navigator-component/frm-tab-navigator-component */ "./js/src/web-components/frm-tab-navigator-component/frm-tab-navigator-component.js");
+
+customElements.define('frm-tab-navigator-component', _frm_tab_navigator_component_frm_tab_navigator_component__WEBPACK_IMPORTED_MODULE_0__.frmTabNavigatorComponent);
+/******/ })()
+;
+//# sourceMappingURL=formidable-web-components.js.map

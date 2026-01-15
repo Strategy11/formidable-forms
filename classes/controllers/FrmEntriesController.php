@@ -266,23 +266,22 @@ class FrmEntriesController {
 	private static function delete_form_entries( $form_id ) {
 		global $wpdb;
 
-		$form_ids    = self::get_child_form_ids( $form_id );
-		$form_ids    = implode( ',', $form_ids );
-		$meta_query  = $wpdb->prepare(
-			"DELETE em.* FROM {$wpdb->prefix}frm_item_metas AS em INNER JOIN {$wpdb->prefix}frm_items AS e ON (em.item_id=e.id) WHERE form_id=%d",
-			$form_id
+		$form_ids   = self::get_child_form_ids( $form_id );
+		$form_ids[] = $form_id;
+
+		$wpdb->query(
+			$wpdb->prepare(
+				"DELETE em.* FROM {$wpdb->prefix}frm_item_metas AS em INNER JOIN {$wpdb->prefix}frm_items AS e ON (em.item_id=e.id) WHERE form_id IN (%s)",
+				implode( ',', $form_ids ),
+			)
 		);
-		$entry_query = $wpdb->prepare( "DELETE FROM {$wpdb->prefix}frm_items WHERE form_id=%d", $form_id );
 
-		if ( $form_ids ) {
-			$form_query   = ' OR form_id in (' . $form_ids . ')';
-			$meta_query  .= $form_query;
-			$entry_query .= $form_query;
-		}
-
-		$wpdb->query( $meta_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-
-		return $wpdb->query( $entry_query ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->query(
+			$wpdb->prepare(
+				"DELETE FROM {$wpdb->prefix}frm_items WHERE form_id IN (%s)",
+				implode( ',', $form_ids ),
+			)
+		);
 	}
 
 	/**
