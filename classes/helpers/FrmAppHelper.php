@@ -271,7 +271,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $args - May include the form id when values need translation.
 	 *
-	 * @return FrmSettings Frm settings.
+	 * @return FrmSettings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
