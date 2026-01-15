@@ -32,4 +32,5 @@
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturn" />
 </ruleset>

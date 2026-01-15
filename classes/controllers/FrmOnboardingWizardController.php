@@ -203,19 +203,21 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function maybe_load_page() {
-		if ( self::is_onboarding_wizard_page() ) {
-			// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
-			$message = new FrmInbox();
-			$message->dismiss( 'onboarding_wizard' );
-
-			add_action( 'admin_menu', self::class . '::menu', 99 );
-			add_action( 'admin_init', self::class . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_action( 'admin_head', self::class . '::remove_menu' );
-
-			add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! self::is_onboarding_wizard_page() ) {
+			return;
 		}
+
+		// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
+		$message = new FrmInbox();
+		$message->dismiss( 'onboarding_wizard' );
+
+		add_action( 'admin_menu', self::class . '::menu', 99 );
+		add_action( 'admin_init', self::class . '::assign_properties' );
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_action( 'admin_head', self::class . '::remove_menu' );
+
+		add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
