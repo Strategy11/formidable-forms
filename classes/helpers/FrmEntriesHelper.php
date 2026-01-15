@@ -554,7 +554,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
-		// Checkboxes and multi-select dropdowns.
+		// Checkboxes.
 		if ( is_array( $value ) && $field->type === 'checkbox' ) {
 			// Combine "Other" values with checked values. "Other" values will override checked box values.
 			foreach ( $other_vals as $k => $v ) {
