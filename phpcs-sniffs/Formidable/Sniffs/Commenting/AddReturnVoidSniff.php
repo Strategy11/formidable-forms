@@ -193,7 +193,7 @@ class AddReturnVoidSniff implements Sniff {
 	 * @param int  $docStart   The docblock opener position.
 	 * @param int  $docEnd     The docblock closer position.
 	 *
-	 * @return int|false The position to insert after, or false if not found.
+	 * @return false|int The position to insert after, or false if not found.
 	 */
 	private function findInsertPosition( File $phpcsFile, $docStart, $docEnd ) {
 		$tokens = $phpcsFile->getTokens();
