@@ -27,7 +27,6 @@ foreach ( $nav_items as $nav_item ) {
 		</a>
 	</li>
 	<?php
-
 }
 ?>
 </ul>
