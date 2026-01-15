@@ -1133,6 +1133,8 @@ class FrmAddonsController {
 	 * @since 3.04.02
 	 *
 	 * @param string $installed The plugin folder name with file name.
+	 *
+	 * @return void
 	 */
 	protected static function maybe_activate_addon( $installed ) {
 		self::ajax_activate_addon();

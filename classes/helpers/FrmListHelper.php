@@ -264,6 +264,8 @@ class FrmListHelper {
 	 * Message to be displayed when there are no items
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function no_items() {
 		esc_html_e( 'No items found.', 'formidable' );
@@ -525,6 +527,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $current_mode
+	 *
+	 * @return void
 	 */
 	protected function view_switcher( $current_mode ) {
 		?>
@@ -1178,6 +1182,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param string $which
+	 *
+	 * @return void
 	 */
 	protected function extra_tablenav( $which ) {
 	}
@@ -1186,6 +1192,8 @@ class FrmListHelper {
 	 * Generate the tbody element for the list table.
 	 *
 	 * @since 2.0.18
+	 *
+	 * @return void
 	 */
 	public function display_rows_or_placeholder() {
 		if ( $this->has_items() ) {
@@ -1203,6 +1211,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param object $item The current item.
+	 *
+	 * @return void
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';
@@ -1216,6 +1226,8 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param object $item The current item.
+	 *
+	 * @return void
 	 */
 	protected function single_row_columns( $item ) {
 		list( $columns, $hidden,, $primary ) = $this->get_column_info();

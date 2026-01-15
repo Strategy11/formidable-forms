@@ -417,6 +417,8 @@ class FrmXMLHelper {
 	 * @since 2.0.16
 	 *
 	 * @param array $forms
+	 *
+	 * @return void
 	 */
 	private static function put_child_forms_first( &$forms ) {
 		$child_forms   = array();
@@ -443,6 +445,8 @@ class FrmXMLHelper {
 	 * @param int   $form_id
 	 * @param int   $parent_form_id
 	 * @param array $child_forms
+	 *
+	 * @return void
 	 */
 	private static function track_imported_child_forms( $form_id, $parent_form_id, &$child_forms ) {
 		if ( $parent_form_id ) {
@@ -458,6 +462,8 @@ class FrmXMLHelper {
 	 *
 	 * @param array $imported_forms
 	 * @param array $child_forms
+	 *
+	 * @return void
 	 */
 	private static function maybe_update_child_form_parent_id( $imported_forms, $child_forms ) {
 		foreach ( $child_forms as $child_form_id => $old_parent_form_id ) {
@@ -482,6 +488,8 @@ class FrmXMLHelper {
 	 * @param object           $this_form
 	 * @param array            $form_fields
 	 * @param array            $imported
+	 *
+	 * @return void
 	 */
 	private static function import_xml_fields( $xml_fields, $form_id, $this_form, &$form_fields, &$imported ) {
 		$in_section                = 0;
@@ -1286,6 +1294,8 @@ class FrmXMLHelper {
 	 * @param array    $post
 	 * @param stdClass $meta
 	 * @param array    $imported
+	 *
+	 * @return void
 	 */
 	private static function populate_postmeta( &$post, $meta, $imported ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		global $frm_duplicate_ids;
@@ -1386,6 +1396,8 @@ class FrmXMLHelper {
 	 *
 	 * @param array  $post By reference.
 	 * @param object $item The XML object data.
+	 *
+	 * @return void
 	 */
 	private static function populate_taxonomies( &$post, $item ) {
 		foreach ( $item->category as $c ) {
@@ -1487,6 +1499,8 @@ class FrmXMLHelper {
 	/**
 	 * @param array $post
 	 * @param int   $post_id
+	 *
+	 * @return void
 	 */
 	private static function update_layout( &$post, $post_id ) {
 		if ( is_callable( 'FrmViewsLayout::maybe_create_layouts_for_view' ) ) {

@@ -45,6 +45,8 @@ class FrmOnSubmitAction extends FrmFormAction {
 	/**
 	 * @param object $instance
 	 * @param array  $args
+	 *
+	 * @return void
 	 */
 	public function form( $instance, $args = array() ) {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-form-actions/on_submit_settings.php';

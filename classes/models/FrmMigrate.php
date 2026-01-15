@@ -784,6 +784,8 @@ class FrmMigrate {
 
 	/**
 	 * Migrate post and email notification settings into actions
+	 *
+	 * @return void
 	 */
 	private function migrate_to_16() {
 		$forms = FrmDb::get_results( $this->forms, array(), 'id, options, is_template, default_template' );
