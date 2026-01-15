@@ -25,7 +25,6 @@ use PHP_CodeSniffer\Files\File;
  * }
  *
  * Good:
- * /**
  *  * @return void
  *  * /
  * function example() {
@@ -172,7 +171,7 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The function token position.
 	 *
-	 * @return int|false The docblock opener position, or false.
+	 * @return false|int The docblock opener position, or false.
 	 */
 	private function findDocblock( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
@@ -203,7 +202,7 @@ class FixIncorrectReturnTypeSniff implements Sniff {
 	 * @param File $phpcsFile     The file being scanned.
 	 * @param int  $docblockStart The docblock opener position.
 	 *
-	 * @return int|false The @return tag position, or false.
+	 * @return false|int The @return tag position, or false.
 	 */
 	private function findReturnTag( File $phpcsFile, $docblockStart ) {
 		$tokens = $phpcsFile->getTokens();
