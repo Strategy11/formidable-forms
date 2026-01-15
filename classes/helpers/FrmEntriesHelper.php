@@ -861,14 +861,17 @@ class FrmEntriesHelper {
 		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
 
 		foreach ( $metas_without_a_field as $meta ) {
-			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
-				echo '<div class="misc-pub-section">';
-				FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
-				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
-				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
-				echo '</div>';
-				return;
+			if ( empty( $meta->meta_value['captcha_score'] ) ) {
+				continue;
 			}
+
+			echo '<div class="misc-pub-section">';
+			FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+			echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
+			echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
+			echo '</div>';
+			return;
+
 		}
 	}
 
