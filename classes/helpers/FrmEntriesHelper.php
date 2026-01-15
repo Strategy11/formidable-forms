@@ -568,36 +568,38 @@ class FrmEntriesHelper {
 			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
-		} else {
-			// Radio and dropdowns.
-			$other_key = array_filter( array_keys( $field->options ), 'is_string' );
-			$other_key = reset( $other_key );
 
-			// Multi-select dropdown.
-			if ( is_array( $value ) ) {
-				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				$o_key = array_search( $field->options[ $other_key ], $value );
+			return;
+		}
 
-				if ( $o_key !== false ) {
-					// Modify the original value so other key will be preserved.
-					$value[ $other_key ] = $value[ $o_key ];
+		// Radio and dropdowns.
+		$other_key = array_filter( array_keys( $field->options ), 'is_string' );
+		$other_key = reset( $other_key );
 
-					// By default, the array keys will be numeric for multi-select dropdowns.
-					// If going backwards and forwards between pages, the array key will match the other key.
-					if ( $o_key !== $other_key ) {
-						unset( $value[ $o_key ] );
-					}
+		// Multi-select dropdown.
+		if ( is_array( $value ) ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$o_key = array_search( $field->options[ $other_key ], $value );
 
-					$args['temp_value']  = $value;
-					$value[ $other_key ] = reset( $other_vals );
+			if ( $o_key !== false ) {
+				// Modify the original value so other key will be preserved.
+				$value[ $other_key ] = $value[ $o_key ];
 
-					if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
-						unset( $value[ $other_key ] );
-					}
+				// By default, the array keys will be numeric for multi-select dropdowns.
+				// If going backwards and forwards between pages, the array key will match the other key.
+				if ( $o_key !== $other_key ) {
+					unset( $value[ $o_key ] );
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
-				$value = $other_vals;
-			}//end if
+
+				$args['temp_value']  = $value;
+				$value[ $other_key ] = reset( $other_vals );
+
+				if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
+					unset( $value[ $other_key ] );
+				}
+			}
+		} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
+			$value = $other_vals;
 		}//end if
 	}
 

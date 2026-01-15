@@ -90,6 +90,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		);
 
 		$firstStatement = $funcOpener + 1;
+
 		while ( $firstStatement < $funcCloser && in_array( $tokens[ $firstStatement ]['code'], $skipTokens, true ) ) {
 			++$firstStatement;
 		}
@@ -133,6 +134,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 			T_COMMENT,
 		);
 		$afterElse = $elseCloser + 1;
+
 		while ( $afterElse < $funcCloser && in_array( $tokens[ $afterElse ]['code'], $skipTokens, true ) ) {
 			++$afterElse;
 		}
@@ -307,6 +309,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 			true
 		);
 		$innerIndent = $ifIndent . "\t";
+
 		if ( false !== $firstInIf ) {
 			$innerIndent = $this->getIndentation( $phpcsFile, $firstInIf );
 		}
