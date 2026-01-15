@@ -1211,8 +1211,6 @@ class FrmListHelper {
 	 * @since 2.0.18
 	 *
 	 * @param object $item The current item.
-	 *
-	 * @return void
 	 */
 	public function single_row( $item ) {
 		echo '<tr>';
