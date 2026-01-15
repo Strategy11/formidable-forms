@@ -123,6 +123,15 @@ class PreferAssertIsArraySniff implements Sniff {
 		}
 		$assertCloseParen = $tokens[ $openParen ]['parenthesis_closer'];
 
+		// Check that the is_* function is the only argument (no && or || after it).
+		// The next non-whitespace token after is_*()'s closing paren should be assertTrue's closing paren.
+		$nextAfterFunc = $phpcsFile->findNext( T_WHITESPACE, $isFuncCloseParen + 1, $assertCloseParen, true );
+
+		if ( false !== $nextAfterFunc ) {
+			// There's something else after the is_* call - skip this.
+			return;
+		}
+
 		// Determine the new method name.
 		$assertMethods = self::FUNCTION_MAP[ $functionName ];
 		$newMethodName = 'asserttrue' === $methodName ? $assertMethods[0] : $assertMethods[1];
