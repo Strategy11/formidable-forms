@@ -90,6 +90,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 		// Check if this if has an else or elseif - skip those.
 		if ( isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
 			$next = $phpcsFile->findNext( T_WHITESPACE, $tokens[ $ifToken ]['scope_closer'] + 1, null, true );
+
 			if ( false !== $next && in_array( $tokens[ $next ]['code'], array( T_ELSE, T_ELSEIF ), true ) ) {
 				return;
 			}
@@ -158,6 +159,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 
 		// Get the original condition.
 		$originalCondition = '';
+
 		for ( $i = $conditionOpener + 1; $i < $conditionCloser; $i++ ) {
 			$originalCondition .= $tokens[ $i ]['content'];
 		}
@@ -168,6 +170,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 
 		// Get the if body content (without the braces), and dedent by one level.
 		$ifBodyContent = '';
+
 		for ( $i = $ifOpener + 1; $i < $ifCloser; $i++ ) {
 			$ifBodyContent .= $tokens[ $i ]['content'];
 		}
@@ -236,6 +239,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 		if ( strpos( $condition, '! ' ) === 0 ) {
 			return substr( $condition, 2 );
 		}
+
 		if ( strpos( $condition, '!' ) === 0 ) {
 			return substr( $condition, 1 );
 		}
@@ -284,6 +288,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 
 		// Find the first token on this line.
 		$lineStart = $stackPtr;
+
 		while ( $lineStart > 0 && $tokens[ $lineStart - 1 ]['line'] === $tokens[ $stackPtr ]['line'] ) {
 			--$lineStart;
 		}
@@ -329,6 +334,7 @@ class FlipForeachIfToContinueSniff implements Sniff {
 			if ( in_array( $tokens[ $i ]['code'], array( T_IF, T_FOREACH, T_FOR, T_WHILE, T_SWITCH, T_TRY ), true ) ) {
 				if ( $tokens[ $i ]['level'] === $targetLevel ) {
 					++$count;
+
 					// Skip to the end of this control structure.
 					if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
 						$i = $tokens[ $i ]['scope_closer'];
