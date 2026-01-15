@@ -39,6 +39,10 @@ export default class frmRadioComponent {
 
 		// Cleanup observers when page unloads to prevent memory leaks
 		window.addEventListener( 'beforeunload', () => this.cleanupObservers() );
+
+		// Handle window resize with throttling
+		this.resizeTimeout = null;
+		window.addEventListener( 'resize', () => this.throttledUpdateAllTrackers() );
 	}
 
 	/**
@@ -145,6 +149,26 @@ export default class frmRadioComponent {
 		elements.forEach( element => {
 			show( element );
 			element.classList.add( 'frm-element-is-visible' );
+		} );
+	}
+
+	/**
+	 * Throttled update of all radio trackers on window resize.
+	 *
+	 * @return {void}
+	 */
+	throttledUpdateAllTrackers() {
+		if ( this.resizeTimeout ) {
+			return;
+		}
+		this.resizeTimeout = requestAnimationFrame( () => {
+			this.resizeTimeout = null;
+			document.querySelectorAll( '.frm-radio-component input[type="radio"]:checked' ).forEach( radio => {
+				const wrapper = radio.closest( '.frm-radio-component' );
+				if ( wrapper && wrapper.offsetWidth > 0 ) {
+					this.onRadioChange( radio );
+				}
+			} );
 		} );
 	}
 
