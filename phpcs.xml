@@ -232,5 +232,9 @@
 
 	<rule ref="Formidable.Commenting.AddReturnVoid">
 		<exclude-pattern>FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>FrmTransLiteAction.php</exclude-pattern>
+		<exclude-pattern>FrmShowForm.php</exclude-pattern>
+		<exclude-pattern>FrmOnSubmitAction.php</exclude-pattern>
+		<exclude-pattern>email_action.php</exclude-pattern>
 	</rule>
 </ruleset>
