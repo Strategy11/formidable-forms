@@ -432,9 +432,9 @@ class FrmForm {
 	 *
 	 * @since 6.7
 	 *
-	 * @param array $field
-	 * @param array $values
-	 * @param array $new_field
+	 * @param object $field
+	 * @param array  $values
+	 * @param array  $new_field
 	 *
 	 * @return void
 	 */
