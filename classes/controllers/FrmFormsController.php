@@ -596,23 +596,25 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
-		if ( have_posts() ) {
-			the_post();
-			self::get_template( 'header' );
-
-			// add some generic class names to the container to add some natural padding to the content.
-			// .entry-content catches the WordPress TwentyTwenty theme.
-			// .container catches Customizr content.
-			echo '<div class="container entry-content">';
-			the_content();
-			echo '</div>';
-
-			// Prevent extra unexpected forms in the footer.
-			// For some reason this happens in the Twenty Twenty Five theme.
-			add_filter( 'frm_filter_final_form', '__return_empty_string' );
-
-			self::get_template( 'footer' );
+		if ( ! have_posts() ) {
+			return;
 		}
+
+		the_post();
+		self::get_template( 'header' );
+
+		// add some generic class names to the container to add some natural padding to the content.
+		// .entry-content catches the WordPress TwentyTwenty theme.
+		// .container catches Customizr content.
+		echo '<div class="container entry-content">';
+		the_content();
+		echo '</div>';
+
+		// Prevent extra unexpected forms in the footer.
+		// For some reason this happens in the Twenty Twenty Five theme.
+		add_filter( 'frm_filter_final_form', '__return_empty_string' );
+
+		self::get_template( 'footer' );
 	}
 
 	/**
