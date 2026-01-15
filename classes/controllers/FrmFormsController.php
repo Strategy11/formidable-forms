@@ -22,6 +22,8 @@ class FrmFormsController {
 	 * @since 6.11
 	 *
 	 * @var string|null
+	 *
+	 * @return void
 	 */
 	private static $formidable_tinymce_button;
 
@@ -63,6 +65,8 @@ class FrmFormsController {
 	 * Show a message about conditional logic
 	 *
 	 * @since 4.06.03
+	 *
+	 * @return void
 	 */
 	public static function logic_tip() {
 		$images_url    = FrmAppHelper::plugin_url() . '/images/';
@@ -824,6 +828,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 3.06
+	 *
+	 * @return void
 	 */
 	public static function ajax_trash() {
 		FrmAppHelper::permission_check( 'frm_delete_forms' );
@@ -1901,6 +1907,8 @@ class FrmFormsController {
 	 * @since 5.0.03
 	 *
 	 * @param stdClass $form
+	 *
+	 * @return void
 	 */
 	public static function add_js_validate_form_to_global_vars( $form ) {
 		global $frm_vars;
@@ -2287,6 +2295,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 4.05.02
+	 *
+	 * @return void
 	 */
 	private static function move_menu_to_footer() {
 		$settings = FrmAppHelper::get_settings();
@@ -2322,6 +2332,8 @@ class FrmFormsController {
 
 	/**
 	 * @since 2.05.07
+	 *
+	 * @return void
 	 */
 	public static function add_menu_to_admin_bar() {
 		global $wp_admin_bar;
@@ -2690,6 +2702,8 @@ class FrmFormsController {
 	 * @param object       $form        Form object.
 	 * @param array        $params      See {@see FrmFormsController::maybe_trigger_redirect()}.
 	 * @param array        $args        See {@see FrmFormsController::maybe_trigger_redirect()}.
+	 *
+	 * @return void
 	 */
 	public static function maybe_trigger_redirect_with_action( $conf_method, $form, $params, $args ) {
 		if ( is_array( $conf_method ) && 1 === count( $conf_method ) ) {
@@ -2743,6 +2757,8 @@ class FrmFormsController {
 	 *     @type array  $fields               The array of fields.
 	 *     @type int    $force_delay_redirect Force to show the message before redirecting in case redirect method runs.
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function run_success_action( $args ) {
 		global $frm_vars;
@@ -2921,6 +2937,8 @@ class FrmFormsController {
 	 * @since 6.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
+	 * @return void
 	 */
 	public static function run_multi_on_submit_actions( $args ) {
 		$redirect_action = null;
@@ -2951,6 +2969,8 @@ class FrmFormsController {
 	 *
 	 * @param array  $args   See {@see FrmFormsController::run_success_action()}.
 	 * @param object $action On Submit action object.
+	 *
+	 * @return void
 	 */
 	public static function run_single_on_submit_action( $args, $action ) {
 		$new_args = self::get_run_success_action_args( $args, $action );
@@ -3072,6 +3092,8 @@ class FrmFormsController {
 	 *
 	 * @param string $success_url Success URL.
 	 * @param array  $args        See {@see FrmFormsController::redirect_after_submit()}.
+	 *
+	 * @return void
 	 */
 	private static function print_open_in_new_tab_js_with_fallback_handler( $success_url, $args ) {
 		echo '<script>var newTab = window.open("' . esc_url_raw( $success_url ) . '", "_blank");';
@@ -3146,6 +3168,8 @@ class FrmFormsController {
 	 * @since 6.0
 	 *
 	 * @param array $args See {@see FrmFormsController::run_success_action()}.
+	 *
+	 * @return void
 	 */
 	private static function redirect_after_submit_using_js( $args ) {
 		$success_msg  = $args['form']->options['redirect_delay_msg'];

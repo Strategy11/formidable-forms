@@ -20,6 +20,8 @@ class FrmFormActionsController {
 	 * post_content: json settings
 	 * menu_order: form id
 	 * post_excerpt: action type
+	 *
+	 * @return void
 	 */
 	public static function register_post_types() {
 		register_post_type(
@@ -112,6 +114,8 @@ class FrmFormActionsController {
 	 * @since 4.0
 	 *
 	 * @param array $values
+	 *
+	 * @return void
 	 */
 	public static function email_settings( $values ) {
 		$form            = FrmForm::getOne( $values['id'] );
@@ -263,6 +267,8 @@ class FrmFormActionsController {
 	 *
 	 * @param object $action_control
 	 * @param array  $allowed
+	 *
+	 * @return void
 	 */
 	public static function show_action_icon_link( $action_control, $allowed ) {
 		$data        = array();

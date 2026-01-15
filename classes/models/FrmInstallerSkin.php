@@ -51,6 +51,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * been performed or not.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public function header() {}
 
@@ -58,6 +60,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 * Empty out the footer of its HTML contents.
 	 *
 	 * @since 3.04.02
+	 *
+	 * @return void
 	 */
 	public function footer() {}
 
@@ -100,6 +104,8 @@ class FrmInstallerSkin extends WP_Upgrader_Skin {
 	 *
 	 * @param string $string The feedback string.
 	 * @param mixed  ...$args Optional text replacements.
+	 *
+	 * @return void
 	 */
 	public function feedback( $string, ...$args ) {}
 }

@@ -129,6 +129,8 @@ class FrmFieldRadio extends FrmFieldType {
 	 *
 	 * @param array $shortcode_atts
 	 * @param array $args
+	 *
+	 * @return void
 	 */
 	public function set_aria_invalid_error( &$shortcode_atts, $args ) {
 		unset( $shortcode_atts['aria-invalid'] );

@@ -78,6 +78,8 @@ DEFAULT_HTML;
 
 	/**
 	 * Shows label on form builder.
+	 *
+	 * @return void
 	 */
 	public function show_label_on_form_builder() {
 		// Do nothing.

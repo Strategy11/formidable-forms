@@ -46,6 +46,18 @@ class AddReturnVoidSniff implements Sniff {
 		$funcOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$funcCloser = $tokens[ $stackPtr ]['scope_closer'];
 
+		// Skip constructors and test methods.
+		$funcName = $phpcsFile->getDeclarationName( $stackPtr );
+		if ( $funcName === '__construct' || strpos( $funcName, 'test_' ) === 0 ) {
+			return;
+		}
+
+		// Skip all functions in test files.
+		$fileName = $phpcsFile->getFilename();
+		if ( strpos( $fileName, '/tests/' ) !== false || strpos( $fileName, 'test_' ) !== false ) {
+			return;
+		}
+
 		// Check if function has any return statements.
 		if ( $this->hasReturnStatement( $phpcsFile, $funcOpener, $funcCloser ) ) {
 			return;

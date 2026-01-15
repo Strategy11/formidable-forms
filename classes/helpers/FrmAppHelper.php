@@ -980,6 +980,8 @@ class FrmAppHelper {
 	 * @since 4.0.04
 	 *
 	 * @param mixed $value Value to decode, passed by reference.
+	 *
+	 * @return void
 	 */
 	public static function decode_specialchars( &$value ) {
 		if ( is_array( $value ) ) {
@@ -1917,6 +1919,8 @@ class FrmAppHelper {
 	 * @since 6.21
 	 *
 	 * @param array $args Args. See the method for details.
+	 *
+	 * @return void
 	 */
 	public static function maybe_autocomplete_options( $args ) {
 		$defaults = array(
@@ -2013,6 +2017,8 @@ class FrmAppHelper {
 	 * @param array  $args
 	 * @param string $page_id Deprecated.
 	 * @param bool   $truncate Deprecated.
+	 *
+	 * @return void
 	 */
 	public static function wp_pages_dropdown( $args = array(), $page_id = '', $truncate = false ) {
 		self::prep_page_dropdown_params( $page_id, $truncate, $args );
@@ -2153,6 +2159,8 @@ class FrmAppHelper {
 	 * @param string       $field_name
 	 * @param array|string $capability
 	 * @param string       $multiple 'single' and 'multiple'.
+	 *
+	 * @return void
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
 		?>
@@ -2169,6 +2177,8 @@ class FrmAppHelper {
 	 *
 	 * @param array|string $selected
 	 * @param string       $current
+	 *
+	 * @return void
 	 */
 	private static function selected( $selected, $current ) {
 		if ( is_callable( 'FrmProAppHelper::selected' ) ) {
@@ -2180,6 +2190,8 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $capability
+	 *
+	 * @return void
 	 */
 	public static function roles_options( $capability ) {
 		global $frm_vars;
@@ -4230,6 +4242,8 @@ class FrmAppHelper {
 	 *     @type string  $classes     Custom CSS classes for the wrapper element.
 	 *     @type array   $input_attrs Attributes of value input.
 	 * }
+	 *
+	 * @return void
 	 */
 	public static function images_dropdown( $args ) {
 		$args            = self::fill_default_images_dropdown_args( $args );
@@ -4651,6 +4665,8 @@ class FrmAppHelper {
 	 * Set the current screen to avoid undefined notices.
 	 *
 	 * @since 5.2.01
+	 *
+	 * @return void
 	 */
 	public static function set_current_screen_and_hook_suffix() {
 		global $hook_suffix;
@@ -4669,6 +4685,8 @@ class FrmAppHelper {
 	 * @since 5.2.02
 	 *
 	 * @param string $text Text in the pill. Default is NEW.
+	 *
+	 * @return void
 	 */
 	public static function show_pill_text( $text = null ) {
 		if ( null === $text ) {
