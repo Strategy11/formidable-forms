@@ -14,10 +14,11 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Converts assertTrue(str_contains()) to assertStringContainsString().
+ * Converts assertTrue(str_contains()) and assertNotFalse(strpos()) to assertStringContainsString().
  *
  * Bad:
  * $this->assertTrue( str_contains( $haystack, $needle ) );
+ * $this->assertNotFalse( strpos( $haystack, $needle ) );
  *
  * Good:
  * $this->assertStringContainsString( $needle, $haystack );
@@ -45,10 +46,12 @@ class PreferAssertStringContainsSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 		$token  = $tokens[ $stackPtr ];
 
-		// Check for assertTrue or assertFalse.
+		// Check for assertTrue, assertFalse, assertNotFalse.
 		$methodName = strtolower( $token['content'] );
 
-		if ( 'asserttrue' !== $methodName && 'assertfalse' !== $methodName ) {
+		$validMethods = array( 'asserttrue', 'assertfalse', 'assertnotfalse' );
+
+		if ( ! in_array( $methodName, $validMethods, true ) ) {
 			return;
 		}
 
@@ -77,14 +80,14 @@ class PreferAssertStringContainsSniff implements Sniff {
 			return;
 		}
 
-		// Check if first argument is str_contains function call.
+		// Check if first argument is str_contains or strpos function call.
 		if ( $tokens[ $firstArg ]['code'] !== T_STRING ) {
 			return;
 		}
 
 		$functionName = strtolower( $tokens[ $firstArg ]['content'] );
 
-		if ( 'str_contains' !== $functionName ) {
+		if ( 'str_contains' !== $functionName && 'strpos' !== $functionName ) {
 			return;
 		}
 
@@ -123,13 +126,21 @@ class PreferAssertStringContainsSniff implements Sniff {
 		}
 
 		// Determine the new method name.
-		$newMethodName = 'asserttrue' === $methodName ? 'assertStringContainsString' : 'assertStringNotContainsString';
+		// assertTrue(str_contains()) -> assertStringContainsString
+		// assertFalse(str_contains()) -> assertStringNotContainsString
+		// assertNotFalse(strpos()) -> assertStringContainsString
+		// assertFalse(strpos()) -> assertStringNotContainsString
+		if ( 'asserttrue' === $methodName || 'assertnotfalse' === $methodName ) {
+			$newMethodName = 'assertStringContainsString';
+		} else {
+			$newMethodName = 'assertStringNotContainsString';
+		}
 
 		$fix = $phpcsFile->addFixableError(
-			'Use %s() instead of %s(str_contains()).',
+			'Use %s() instead of %s(%s()).',
 			$stackPtr,
 			'Found',
-			array( $newMethodName, $token['content'] )
+			array( $newMethodName, $token['content'], $functionName )
 		);
 
 		if ( true === $fix ) {

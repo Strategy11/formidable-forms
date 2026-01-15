@@ -12,7 +12,7 @@ class test_FrmSimpleBlocksController extends FrmUnitTest {
 		$_SERVER['CONTENT_TYPE'] = 'application/json';
 
 		if ( is_callable( 'wp_is_json_request' ) ) {
-			$this->assertFalse( strpos( $this->maybe_remove_fade_on_load_for_block_preview( $form ), 'frm_logic_form' ) );
+			$this->assertStringNotContainsString( 'frm_logic_form', $this->maybe_remove_fade_on_load_for_block_preview( $form ) );
 		}
 
 		unset( $_SERVER['HTTP_ACCEPT'], $_SERVER['CONTENT_TYPE'] );
