@@ -38,6 +38,7 @@
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
+	<rule ref="Formidable.PHPUnit.PreferAssertArrayHasKey" />
 
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />

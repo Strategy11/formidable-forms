@@ -1,9 +1,8 @@
 <?php
 /**
- * Formidable_Sniffs_PHPUnit_PreferAssertIsArraySniff
+ * Formidable_Sniffs_PHPUnit_PreferAssertArrayHasKeySniff
  *
- * Detects $this->assertTrue(is_array(...)) and converts to $this->assertIsArray(...).
- * Also handles is_object, is_string, and assertFalse variants.
+ * Detects $this->assertTrue(array_key_exists(...)) and converts to $this->assertArrayHasKey(...).
  *
  * @package Formidable\Sniffs
  */
@@ -14,31 +13,15 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Converts assertTrue(is_array/is_object/is_string()) to specific assert methods.
+ * Converts assertTrue(array_key_exists()) to assertArrayHasKey().
  *
  * Bad:
- * $this->assertTrue( is_array( $value ) );
- * $this->assertTrue( is_object( $value ) );
- * $this->assertTrue( is_string( $value ) );
+ * $this->assertTrue( array_key_exists( 'key', $array ) );
  *
  * Good:
- * $this->assertIsArray( $value );
- * $this->assertIsObject( $value );
- * $this->assertIsString( $value );
+ * $this->assertArrayHasKey( 'key', $array );
  */
-class PreferAssertIsArraySniff implements Sniff {
-
-	/**
-	 * Mapping of is_* functions to their assert method names.
-	 *
-	 * @var array
-	 */
-	private const FUNCTION_MAP = array(
-		'is_array'   => array( 'assertIsArray', 'assertIsNotArray' ),
-		'is_object'  => array( 'assertIsObject', 'assertIsNotObject' ),
-		'is_string'  => array( 'assertIsString', 'assertIsNotString' ),
-		'is_numeric' => array( 'assertIsNumeric', 'assertIsNotNumeric' ),
-	);
+class PreferAssertArrayHasKeySniff implements Sniff {
 
 	/**
 	 * Returns an array of tokens this test wants to listen for.
@@ -93,29 +76,29 @@ class PreferAssertIsArraySniff implements Sniff {
 			return;
 		}
 
-		// Check if first argument is a supported is_* function call.
+		// Check if first argument is array_key_exists function call.
 		if ( $tokens[ $firstArg ]['code'] !== T_STRING ) {
 			return;
 		}
 
 		$functionName = strtolower( $tokens[ $firstArg ]['content'] );
 
-		if ( ! isset( self::FUNCTION_MAP[ $functionName ] ) ) {
+		if ( 'array_key_exists' !== $functionName ) {
 			return;
 		}
 
-		// Find the opening parenthesis of the is_* function.
-		$isFuncOpenParen = $phpcsFile->findNext( T_WHITESPACE, $firstArg + 1, null, true );
+		// Find the opening parenthesis of array_key_exists.
+		$funcOpenParen = $phpcsFile->findNext( T_WHITESPACE, $firstArg + 1, null, true );
 
-		if ( false === $isFuncOpenParen || $tokens[ $isFuncOpenParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+		if ( false === $funcOpenParen || $tokens[ $funcOpenParen ]['code'] !== T_OPEN_PARENTHESIS ) {
 			return;
 		}
 
-		// Find the matching closing parenthesis of the is_* function.
-		if ( ! isset( $tokens[ $isFuncOpenParen ]['parenthesis_closer'] ) ) {
+		// Find the matching closing parenthesis of array_key_exists.
+		if ( ! isset( $tokens[ $funcOpenParen ]['parenthesis_closer'] ) ) {
 			return;
 		}
-		$isFuncCloseParen = $tokens[ $isFuncOpenParen ]['parenthesis_closer'];
+		$funcCloseParen = $tokens[ $funcOpenParen ]['parenthesis_closer'];
 
 		// Find the closing parenthesis of assertTrue/assertFalse.
 		if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
@@ -124,36 +107,35 @@ class PreferAssertIsArraySniff implements Sniff {
 		$assertCloseParen = $tokens[ $openParen ]['parenthesis_closer'];
 
 		// Determine the new method name.
-		$assertMethods = self::FUNCTION_MAP[ $functionName ];
-		$newMethodName = 'asserttrue' === $methodName ? $assertMethods[0] : $assertMethods[1];
+		$newMethodName = 'asserttrue' === $methodName ? 'assertArrayHasKey' : 'assertArrayNotHasKey';
 
 		$fix = $phpcsFile->addFixableError(
-			'Use %s() instead of %s(%s()).',
+			'Use %s() instead of %s(array_key_exists()).',
 			$stackPtr,
 			'Found',
-			array( $newMethodName, $token['content'], $functionName )
+			array( $newMethodName, $token['content'] )
 		);
 
 		if ( true === $fix ) {
-			$this->applyFix( $phpcsFile, $stackPtr, $openParen, $firstArg, $isFuncOpenParen, $isFuncCloseParen, $assertCloseParen, $newMethodName );
+			$this->applyFix( $phpcsFile, $stackPtr, $openParen, $firstArg, $funcOpenParen, $funcCloseParen, $assertCloseParen, $newMethodName );
 		}
 	}
 
 	/**
-	 * Apply the fix to convert assertTrue(is_*($x)) to assert*($x).
+	 * Apply the fix to convert assertTrue(array_key_exists($key, $array)) to assertArrayHasKey($key, $array).
 	 *
 	 * @param File   $phpcsFile        The file being scanned.
 	 * @param int    $methodNamePtr    The assertTrue/assertFalse token position.
 	 * @param int    $openParen        The opening parenthesis of assertTrue.
-	 * @param int    $isFuncPtr        The is_* function token position.
-	 * @param int    $isFuncOpenParen  The opening parenthesis of is_*.
-	 * @param int    $isFuncCloseParen The closing parenthesis of is_*.
+	 * @param int    $funcPtr          The array_key_exists token position.
+	 * @param int    $funcOpenParen    The opening parenthesis of array_key_exists.
+	 * @param int    $funcCloseParen   The closing parenthesis of array_key_exists.
 	 * @param int    $assertCloseParen The closing parenthesis of assertTrue.
 	 * @param string $newMethodName    The new method name.
 	 *
 	 * @return void
 	 */
-	private function applyFix( File $phpcsFile, $methodNamePtr, $openParen, $isFuncPtr, $isFuncOpenParen, $isFuncCloseParen, $assertCloseParen, $newMethodName ) {
+	private function applyFix( File $phpcsFile, $methodNamePtr, $openParen, $funcPtr, $funcOpenParen, $funcCloseParen, $assertCloseParen, $newMethodName ) {
 		$tokens = $phpcsFile->getTokens();
 		$fixer  = $phpcsFile->fixer;
 
@@ -162,18 +144,18 @@ class PreferAssertIsArraySniff implements Sniff {
 		// Replace the method name.
 		$fixer->replaceToken( $methodNamePtr, $newMethodName );
 
-		// Remove everything from after ( to before the inner content of is_*.
-		// We want to keep: assertIs*( <inner content> )
-		// Remove: is_*(
-		for ( $i = $openParen + 1; $i <= $isFuncOpenParen; $i++ ) {
+		// Remove everything from after ( to before the inner content of array_key_exists.
+		// We want to keep: assertArrayHasKey( <inner content> )
+		// Remove: array_key_exists(
+		for ( $i = $openParen + 1; $i <= $funcOpenParen; $i++ ) {
 			$fixer->replaceToken( $i, '' );
 		}
 
-		// Remove the closing parenthesis of is_* and any whitespace after it.
-		$fixer->replaceToken( $isFuncCloseParen, '' );
+		// Remove the closing parenthesis of array_key_exists.
+		$fixer->replaceToken( $funcCloseParen, '' );
 
-		// Remove whitespace between is_*'s closing paren and assertTrue's closing paren.
-		for ( $i = $isFuncCloseParen + 1; $i < $assertCloseParen; $i++ ) {
+		// Remove whitespace between array_key_exists's closing paren and assertTrue's closing paren.
+		for ( $i = $funcCloseParen + 1; $i < $assertCloseParen; $i++ ) {
 			if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
 				$fixer->replaceToken( $i, '' );
 			} else {

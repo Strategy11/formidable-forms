@@ -19,12 +19,12 @@ class test_FrmApplicationApi extends FrmUnitTest {
 		}
 
 		$business_hours_id = 28067848;
-		$this->assertTrue( array_key_exists( $business_hours_id, $applications ) );
+		$this->assertArrayHasKey( $business_hours_id, $applications );
 
 		$business_hours = $applications[ $business_hours_id ];
 		$this->assertIsArray( $business_hours );
 		$this->assertEquals( 'business-hours-template', $business_hours['slug'] );
-		$this->assertTrue( array_key_exists( 'name', $business_hours ) );
+		$this->assertArrayHasKey( 'name', $business_hours );
 		$this->assertNotEmpty( $business_hours['name'] );
 	}
 }

@@ -97,9 +97,9 @@ class test_FrmXMLHelper extends FrmUnitTest {
 
 		$this->populate_postmeta( $post, $meta, $imported );
 
-		$this->assertTrue( array_key_exists( 'postmeta', $post ) );
+		$this->assertArrayHasKey( 'postmeta', $post );
 		$this->assertTrue( ! empty( $post['postmeta'] ) );
-		$this->assertTrue( array_key_exists( 'frm_dyncontent', $post['postmeta'] ) );
+		$this->assertArrayHasKey( 'frm_dyncontent', $post['postmeta'] );
 		$this->assertIsArray( $post['postmeta']['frm_dyncontent'] );
 		$this->assertEquals(
 			array(
