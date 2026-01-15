@@ -22,8 +22,6 @@ class FrmFormsController {
 	 * @since 6.11
 	 *
 	 * @var string|null
-	 *
-	 * @return void
 	 */
 	private static $formidable_tinymce_button;
 

@@ -24,7 +24,7 @@ class AddReturnVoidSniff implements Sniff {
 	 * @return array
 	 */
 	public function register() {
-		return array( T_FUNCTION );
+		return array( T_FUNCTION, T_CLOSURE );
 	}
 
 	/**
@@ -92,6 +92,11 @@ class AddReturnVoidSniff implements Sniff {
 
 		// Check if docblock already has @return tag.
 		if ( $this->hasReturnTag( $phpcsFile, $docStart, $docComment ) ) {
+			return;
+		}
+
+		// Skip if docblock has @var tag (it's for a property, not a function).
+		if ( $this->hasVarTag( $phpcsFile, $docStart, $docComment ) ) {
 			return;
 		}
 
@@ -193,6 +198,27 @@ class AddReturnVoidSniff implements Sniff {
 
 		for ( $i = $docStart; $i <= $docEnd; $i++ ) {
 			if ( $tokens[ $i ]['code'] === T_DOC_COMMENT_TAG && $tokens[ $i ]['content'] === '@return' ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if docblock has @var tag (indicating it's for a property).
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $docStart   The docblock opener position.
+	 * @param int  $docEnd     The docblock closer position.
+	 *
+	 * @return bool
+	 */
+	private function hasVarTag( File $phpcsFile, $docStart, $docEnd ) {
+		$tokens = $phpcsFile->getTokens();
+
+		for ( $i = $docStart; $i <= $docEnd; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_DOC_COMMENT_TAG && $tokens[ $i ]['content'] === '@var' ) {
 				return true;
 			}
 		}
