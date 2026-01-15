@@ -82,6 +82,7 @@ class AddReturnVoidSniff implements Sniff {
 
 		// Check that there's no other function/closure between the docblock and this function.
 		$prevFunc = $phpcsFile->findPrevious( array( T_FUNCTION, T_CLOSURE ), $stackPtr - 1, $docComment );
+
 		if ( false !== $prevFunc ) {
 			// There's another function between the docblock and this function, so the docblock doesn't belong to us.
 			return;

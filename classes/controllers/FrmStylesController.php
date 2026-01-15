@@ -159,8 +159,8 @@ class FrmStylesController {
 			'frm_update_settings',
 			/**
 			 * Update the form data on the "Manage Styles" tab after global settings are saved.
-			  *
-			  * @return void
+			 *
+			 * @return void
 			 */
 			function () {
 				self::manage_styles();
