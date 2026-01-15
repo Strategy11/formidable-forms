@@ -43,6 +43,7 @@
 	<rule ref="Formidable.PHPUnit.PreferAssertStringContains" />
 
 	<!-- Commenting -->
+	<rule ref="Formidable.Commenting.AddReturnVoid" />
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
 	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
 </ruleset>
