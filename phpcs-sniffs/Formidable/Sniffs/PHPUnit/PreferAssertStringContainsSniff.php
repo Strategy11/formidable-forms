@@ -175,6 +175,7 @@ class PreferAssertStringContainsSniff implements Sniff {
 
 		// Add the last argument.
 		$trimmed = trim( $currentArg );
+
 		if ( '' !== $trimmed ) {
 			$args[] = $trimmed;
 		}
