@@ -914,7 +914,7 @@ class FrmForm {
 	 * @param string       $order_by Order by clause.
 	 * @param int|string   $limit    Limit clause or number.
 	 *
-	 * @return array|object of objects
+	 * @return array|object Array of objects. If $limit is 1, a single object is returned.
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && $where ) {
@@ -956,7 +956,7 @@ class FrmForm {
 	 * @param int    $limit
 	 * @param string $inc_children
 	 *
-	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
+	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
