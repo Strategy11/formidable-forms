@@ -143,7 +143,7 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 * @param array  $args
 	 *
-	 * @return bool Value is posted.
+	 * @return bool True if a value is posted.
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;

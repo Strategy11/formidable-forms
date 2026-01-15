@@ -16,6 +16,7 @@ use PHP_CodeSniffer\Files\File;
  * Detects @return tags with variable names and converts them to descriptions.
  *
  * Bad:
+ *
  * @return string $classes
  * @return bool|int $entry_id
  * @return array $new_value
