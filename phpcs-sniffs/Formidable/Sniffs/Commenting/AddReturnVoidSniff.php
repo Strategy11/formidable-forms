@@ -49,7 +49,7 @@ class AddReturnVoidSniff implements Sniff {
 		// Skip constructors and test methods.
 		$funcName = $phpcsFile->getDeclarationName( $stackPtr );
 
-		if ( $funcName === '__construct' || strpos( $funcName, 'test_' ) === 0 ) {
+		if ( $funcName !== null && ( $funcName === '__construct' || strpos( $funcName, 'test_' ) === 0 ) ) {
 			return;
 		}
 
