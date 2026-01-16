@@ -243,30 +243,75 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	private function negateCondition( $condition ) {
 		$condition = trim( $condition );
 
-		// If condition starts with !, remove it.
-		if ( strpos( $condition, '! ' ) === 0 ) {
-			return substr( $condition, 2 );
-		}
+		// Check if this is a compound condition (has && or || at top level).
+		$isCompound = $this->hasTopLevelOperator( $condition );
 
-		if ( strpos( $condition, '!' ) === 0 && strpos( $condition, '!=' ) !== 0 ) {
-			return substr( $condition, 1 );
-		}
+		// Only remove leading ! if it's a simple condition (not compound).
+		if ( ! $isCompound ) {
+			// If condition starts with !, remove it.
+			if ( strpos( $condition, '! ' ) === 0 ) {
+				return substr( $condition, 2 );
+			}
 
-		// Try to flip comparison operators.
-		$flipped = $this->flipComparisonOperator( $condition );
+			if ( strpos( $condition, '!' ) === 0 && strpos( $condition, '!=' ) !== 0 ) {
+				return substr( $condition, 1 );
+			}
 
-		if ( $flipped !== false ) {
-			return $flipped;
-		}
+			// Try to flip comparison operators.
+			$flipped = $this->flipComparisonOperator( $condition );
 
-		// Otherwise, add negation.
-		// If condition is simple (no spaces or operators at top level), just add !
-		// If complex, wrap in parentheses.
-		if ( $this->isSimpleCondition( $condition ) ) {
+			if ( $flipped !== false ) {
+				return $flipped;
+			}
+
+			// Simple condition, just add !
 			return '! ' . $condition;
 		}
 
+		// For compound conditions, wrap in parentheses and negate.
 		return '! ( ' . $condition . ' )';
+	}
+
+	/**
+	 * Check if a condition has && or || at the top level (not inside parentheses).
+	 *
+	 * @param string $condition The condition to check.
+	 *
+	 * @return bool
+	 */
+	private function hasTopLevelOperator( $condition ) {
+		$parenDepth = 0;
+		$len        = strlen( $condition );
+
+		for ( $i = 0; $i < $len; $i++ ) {
+			$char = $condition[ $i ];
+
+			if ( $char === '(' ) {
+				++$parenDepth;
+				continue;
+			}
+
+			if ( $char === ')' ) {
+				--$parenDepth;
+				continue;
+			}
+
+			// Only check at top level.
+			if ( $parenDepth !== 0 ) {
+				continue;
+			}
+
+			// Check for && or ||.
+			if ( $i < $len - 1 ) {
+				$twoChars = $condition[ $i ] . $condition[ $i + 1 ];
+
+				if ( $twoChars === '&&' || $twoChars === '||' ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 
 	/**
