@@ -726,28 +726,30 @@ class FrmCSVExportHelper {
 	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
-		if ( is_array( $atts['field_value'] ) ) {
-			foreach ( $atts['field_value'] as $key => $sub_value ) {
-				if ( is_array( $sub_value ) ) {
-					// This is combo field inside repeater. The heading key has this format: [86_first[0]].
-					foreach ( $sub_value as $sub_key => $sub_sub_value ) {
-						$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+		if ( ! is_array( $atts['field_value'] ) ) {
+			return;
+		}
 
-						if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
-							$row[ $column_key ] = $sub_sub_value;
-						}
+		foreach ( $atts['field_value'] as $key => $sub_value ) {
+			if ( is_array( $sub_value ) ) {
+				// This is combo field inside repeater. The heading key has this format: [86_first[0]].
+				foreach ( $sub_value as $sub_key => $sub_sub_value ) {
+					$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+
+					if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
+						$row[ $column_key ] = $sub_sub_value;
 					}
-
-					continue;
 				}
 
-				$column_key = $atts['col']->id . '_' . $key;
-
-				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
-					$row[ $column_key ] = $sub_value;
-				}
+				continue;
 			}
-		}//end if
+
+			$column_key = $atts['col']->id . '_' . $key;
+
+			if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
+				$row[ $column_key ] = $sub_value;
+			}
+		}
 	}
 
 	/**
