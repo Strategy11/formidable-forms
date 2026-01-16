@@ -148,11 +148,10 @@ class FrmEntriesHelper {
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;
 
-		if ( ! $_POST ) {
+		if ( ! $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			return $value_is_posted;
 		}
 
-        // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$repeating = ! empty( $args['repeating'] );
 
 		if ( $repeating ) {
