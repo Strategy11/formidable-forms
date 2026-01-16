@@ -107,10 +107,7 @@ class FrmFieldUrl extends FrmFieldType {
 			}
 		}
 
-		$value = $images;
-
-
-		return $value;
+		return $images;
 	}
 
 	/**

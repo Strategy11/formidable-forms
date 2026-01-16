@@ -744,7 +744,6 @@ class FrmForm {
 		do_action( 'frm_destroy_form', $id );
 		do_action( 'frm_destroy_form_' . $id );
 
-
 		return $query_results;
 	}
 

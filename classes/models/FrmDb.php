@@ -495,11 +495,9 @@ class FrmDb {
 		}
 
 		self::get_where_clause_and_values( $where );
-		global $wpdb;
-		$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		global $wpdb; // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-
-		return $query;
+		return $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
 	}
 
 	/**

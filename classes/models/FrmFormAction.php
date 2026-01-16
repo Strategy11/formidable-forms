@@ -950,7 +950,6 @@ class FrmFormAction {
 		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
 		FrmForm::clear_form_cache();
 
-
 		return $post_id;
 	}
 

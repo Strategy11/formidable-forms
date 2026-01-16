@@ -773,7 +773,6 @@ class FrmAppHelper {
 			$value = $value[ $p ] ?? $default;
 		}
 
-
 		return $value;
 	}
 
@@ -2757,7 +2756,6 @@ class FrmAppHelper {
 				$key .= 'a';
 			}
 		}
-
 
 		return $key;
 	}

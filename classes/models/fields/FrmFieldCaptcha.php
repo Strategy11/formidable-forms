@@ -330,7 +330,6 @@ class FrmFieldCaptcha extends FrmFieldType {
 
 		$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
 
-
 		return $errors;
 	}
 

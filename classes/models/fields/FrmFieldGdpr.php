@@ -190,7 +190,6 @@ class FrmFieldGdpr extends FrmFieldType {
 			$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'], $frm_settings->blank_msg );
 		}
 
-
 		return $errors;
 	}
 

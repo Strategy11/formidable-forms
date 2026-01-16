@@ -420,7 +420,6 @@ class FrmSMTPController {
             $phpmailer = new PHPMailer( true ); // phpcs:ignore
 		}
 
-
 		return $phpmailer;
 	}
 

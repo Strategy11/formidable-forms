@@ -78,9 +78,6 @@ class FrmEmailSummaryHelper {
 
 		self::save_options( $default_options );
 		return $default_options;
-
-
-		return $options;
 	}
 
 	/**

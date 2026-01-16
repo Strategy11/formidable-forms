@@ -163,7 +163,6 @@ class FrmEntriesHelper {
 			$value_is_posted = true;
 		}
 
-
 		return $value_is_posted;
 	}
 

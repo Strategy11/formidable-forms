@@ -1477,7 +1477,6 @@ DEFAULT_HTML;
 		$select_atts['name'] = $values['field_name'];
 		$select_atts['id']   = $values['html_id'];
 
-
 		return $select_atts;
 	}
 
@@ -1723,7 +1722,6 @@ DEFAULT_HTML;
 			$sep   = $atts['sep'] ?? ', ';
 			$value = FrmAppHelper::safe_implode( $sep, $value );
 		}
-
 
 		return $value;
 	}

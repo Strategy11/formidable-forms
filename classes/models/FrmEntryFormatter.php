@@ -985,7 +985,6 @@ class FrmEntryFormatter {
 			$value = strip_tags( $value );
 		}
 
-
 		return $value;
 	}
 }

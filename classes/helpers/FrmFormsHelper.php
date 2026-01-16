@@ -1364,10 +1364,7 @@ BEFORE_HTML;
 			$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
 		}
 
-		$link .= '>' . $label . '</a>';
-
-
-		return $link;
+		return $link . ('>' . $label . '</a>');
 	}
 
 	/**

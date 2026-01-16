@@ -427,7 +427,6 @@ class FrmFormApi {
 
 		do_action( 'frm_license_error', $addons['error'] );
 
-
 		return $errors;
 	}
 
