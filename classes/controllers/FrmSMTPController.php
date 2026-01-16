@@ -409,7 +409,7 @@ class FrmSMTPController {
 	protected function get_phpmailer() {
 		global $phpmailer;
 
-		if ( $phpmailer instanceof PHPMailer ) {
+		if ( is_object( $phpmailer ) && is_a( $phpmailer, 'PHPMailer' ) ) {
 			return $phpmailer;
 		}
 
