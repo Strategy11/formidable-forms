@@ -90,22 +90,25 @@ class FrmFieldUrl extends FrmFieldType {
 	}
 
 	protected function prepare_display_value( $value, $atts ) {
-		if ( $atts['html'] ) {
-			$images = '';
-
-			foreach ( (array) $value as $url ) {
-				$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
-				$is_image    = preg_match( $image_regex, $url );
-
-				if ( $is_image ) {
-					$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
-				} else {
-					$images .= strip_tags( $url );
-				}
-			}
-
-			$value = $images;
+		if ( ! $atts['html'] ) {
+			return $value;
 		}
+
+		$images = '';
+
+		foreach ( (array) $value as $url ) {
+			$image_regex = '/(\.(?i)(jpg|jpeg|png|gif))$/';
+			$is_image    = preg_match( $image_regex, $url );
+
+			if ( $is_image ) {
+				$images .= '<img src="' . esc_url( $url ) . '" class="frm_image_from_url" alt="" /> ';
+			} else {
+				$images .= strip_tags( $url );
+			}
+		}
+
+		$value = $images;
+
 
 		return $value;
 	}

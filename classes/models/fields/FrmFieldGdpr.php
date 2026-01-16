@@ -179,14 +179,17 @@ class FrmFieldGdpr extends FrmFieldType {
 	public function validate( $args ) {
 		$errors = parent::validate( $args );
 
-		if ( ! $errors && ! FrmFieldGdprHelper::hide_gdpr_field() ) {
-			$required = FrmField::get_option( $this->field, 'required' );
-
-			if ( ! $required && empty( $args['value'] ) ) {
-				$frm_settings                    = FrmAppHelper::get_settings();
-				$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'], $frm_settings->blank_msg );
-			}
+		if ( ! ( ! $errors && ! FrmFieldGdprHelper::hide_gdpr_field() ) ) {
+			return $errors;
 		}
+
+		$required = FrmField::get_option( $this->field, 'required' );
+
+		if ( ! $required && empty( $args['value'] ) ) {
+			$frm_settings                    = FrmAppHelper::get_settings();
+			$errors[ 'field' . $args['id'] ] = str_replace( '[field_name]', is_object( $this->field ) ? $this->field->name : $this->field['name'], $frm_settings->blank_msg );
+		}
+
 
 		return $errors;
 	}

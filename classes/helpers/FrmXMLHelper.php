@@ -772,27 +772,30 @@ class FrmXMLHelper {
 		// If a dropdown placeholder was used, remove the option so it won't be included twice.
 		$options = $field['options'];
 
-		if ( $type === 'default_blank' && is_array( $options ) ) {
-			$default_value = $field['default_value'];
+		if ( ! ( $type === 'default_blank' && is_array( $options ) ) ) {
+			return $changes;
+		}
 
-			if ( is_array( $default_value ) ) {
-				$default_value = reset( $default_value );
+		$default_value = $field['default_value'];
+
+		if ( is_array( $default_value ) ) {
+			$default_value = reset( $default_value );
+		}
+
+		foreach ( $options as $opt_key => $opt ) {
+			if ( is_array( $opt ) ) {
+				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 			}
 
-			foreach ( $options as $opt_key => $opt ) {
-				if ( is_array( $opt ) ) {
-					$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
-				}
-
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $opt == $default_value ) {
-					unset( $options[ $opt_key ] );
-					break;
-				}
+            // phpcs:ignore Universal.Operators.StrictComparisons
+			if ( $opt == $default_value ) {
+				unset( $options[ $opt_key ] );
+				break;
 			}
+		}
 
-			$changes['options'] = $options;
-		}//end if
+		$changes['options'] = $options;
+		// end if
 
 		return $changes;
 	}

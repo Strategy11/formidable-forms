@@ -1465,15 +1465,18 @@ DEFAULT_HTML;
 		$readonly    = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 		$select_atts = array();
 
-		if ( ! $readonly ) {
-			if ( isset( $values['combo_name'] ) ) {
-				$values['field_name'] .= '[' . $values['combo_name'] . ']';
-				$values['html_id']    .= '_' . $values['combo_name'];
-			}
-
-			$select_atts['name'] = $values['field_name'];
-			$select_atts['id']   = $values['html_id'];
+		if ( $readonly ) {
+			return $select_atts;
 		}
+
+		if ( isset( $values['combo_name'] ) ) {
+			$values['field_name'] .= '[' . $values['combo_name'] . ']';
+			$values['html_id']    .= '_' . $values['combo_name'];
+		}
+
+		$select_atts['name'] = $values['field_name'];
+		$select_atts['id']   = $values['html_id'];
+
 
 		return $select_atts;
 	}
@@ -1710,14 +1713,17 @@ DEFAULT_HTML;
 
 		$value = $this->prepare_display_value( $value, $atts );
 
-		if ( is_array( $value ) ) {
-			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
-				$value = $value[ $atts['show'] ];
-			} elseif ( empty( $atts['return_array'] ) ) {
-				$sep   = $atts['sep'] ?? ', ';
-				$value = FrmAppHelper::safe_implode( $sep, $value );
-			}
+		if ( ! is_array( $value ) ) {
+			return $value;
 		}
+
+		if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
+			$value = $value[ $atts['show'] ];
+		} elseif ( empty( $atts['return_array'] ) ) {
+			$sep   = $atts['sep'] ?? ', ';
+			$value = FrmAppHelper::safe_implode( $sep, $value );
+		}
+
 
 		return $value;
 	}

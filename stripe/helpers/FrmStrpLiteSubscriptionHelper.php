@@ -101,15 +101,15 @@ class FrmStrpLiteSubscriptionHelper {
 	private static function get_plan_for_action( $action ) {
 		$plan_id = $action->post_content['plan_id'];
 
-		if ( ! $plan_id ) {
-			// The amount has already been formatted, so add the decimal back in.
-			$amount                         = $action->post_content['amount'];
-			$action->post_content['amount'] = number_format( $amount / 100, 2, '.', '' );
-			$plan_opts                      = self::prepare_plan_options( $action->post_content );
-			$plan_id                        = self::maybe_create_plan( $plan_opts );
+		if ( $plan_id ) {
+			return $plan_id;
 		}
 
-		return $plan_id;
+		// The amount has already been formatted, so add the decimal back in.
+		$amount                         = $action->post_content['amount'];
+		$action->post_content['amount'] = number_format( $amount / 100, 2, '.', '' );
+		$plan_opts                      = self::prepare_plan_options( $action->post_content );
+		return self::maybe_create_plan( $plan_opts );
 	}
 
 	/**

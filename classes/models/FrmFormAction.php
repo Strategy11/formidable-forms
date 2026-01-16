@@ -939,14 +939,17 @@ class FrmFormAction {
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( $post_id && 'update' === $update ) {
-			global $wpdb;
-			$form->options = maybe_serialize( $form->options );
-
-			// update form options
-			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
-			FrmForm::clear_form_cache();
+		if ( ! ( $post_id && 'update' === $update ) ) {
+			return $post_id;
 		}
+
+		global $wpdb;
+		$form->options = maybe_serialize( $form->options );
+
+		// update form options
+		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
+		FrmForm::clear_form_cache();
+
 
 		return $post_id;
 	}

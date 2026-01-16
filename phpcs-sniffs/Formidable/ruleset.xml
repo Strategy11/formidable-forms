@@ -41,6 +41,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfElseToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
 
 	<!-- PHPUnit -->
