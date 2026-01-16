@@ -155,7 +155,7 @@ class FrmCSVExportHelper {
 
 		unset( $filename );
 
-		$comment_count       = FrmDb::get_count(
+		self::$comment_count = FrmDb::get_count(
 			'frm_item_metas',
 			array(
 				'item_id'         => $atts['entry_ids'],
@@ -168,7 +168,6 @@ class FrmCSVExportHelper {
 				'limit'    => 1,
 			)
 		);
-		self::$comment_count = $comment_count;
 
 		self::prepare_csv_headings();
 
