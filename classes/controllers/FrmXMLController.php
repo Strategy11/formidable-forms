@@ -476,7 +476,7 @@ class FrmXMLController {
 		$args     = wp_parse_args( $args, $defaults );
 
 		// Make sure ids are numeric.
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
 

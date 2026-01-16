@@ -2223,7 +2223,7 @@ class FrmXMLHelper {
 
 				if ( 'custom' === $notification[ $f ] ) {
 					$atts[ $f ] = $notification[ 'cust_' . $f ];
-				} elseif ( is_numeric( $atts[ $f ] ) && ! empty( $atts[ $f ] ) ) {
+				} elseif ( is_numeric( $atts[ $f ] ) && $atts[ $f ] ) {
 					$atts[ $f ] = '[' . $atts[ $f ] . ']';
 				}
 			}

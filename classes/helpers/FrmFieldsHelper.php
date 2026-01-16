@@ -1597,7 +1597,7 @@ class FrmFieldsHelper {
 			}
 
 			// For multi-select dropdowns only
-			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
+			if ( is_array( $field['value'] ) && $field['value'] ) {
 				$other_val = reset( $field['value'] );
 			}
 		}//end if
