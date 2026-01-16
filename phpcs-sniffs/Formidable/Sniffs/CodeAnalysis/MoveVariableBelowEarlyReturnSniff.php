@@ -36,6 +36,36 @@ use PHP_CodeSniffer\Files\File;
  *
  *     return $style;
  * }
+ *
+ * Also handles variables declared before an early return that are only used after it:
+ *
+ * Bad:
+ * function example($id, $form_id) {
+ *     $entry_ids = get_entries($form_id);
+ *     $total = count($entry_ids);
+ *     $position = array_search($id, $entry_ids);
+ *
+ *     if ($position === false) {
+ *         return;
+ *     }
+ *
+ *     $prev = $position > 0 ? $entry_ids[$position - 1] : null;
+ *     $next = $position < $total - 1 ? $entry_ids[$position + 1] : null;
+ * }
+ *
+ * Good:
+ * function example($id, $form_id) {
+ *     $entry_ids = get_entries($form_id);
+ *     $position = array_search($id, $entry_ids);
+ *
+ *     if ($position === false) {
+ *         return;
+ *     }
+ *
+ *     $total = count($entry_ids);
+ *     $prev = $position > 0 ? $entry_ids[$position - 1] : null;
+ *     $next = $position < $total - 1 ? $entry_ids[$position + 1] : null;
+ * }
  */
 class MoveVariableBelowEarlyReturnSniff implements Sniff {
 
@@ -67,113 +97,234 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 		$functionOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$functionCloser = $tokens[ $stackPtr ]['scope_closer'];
 
-		// Find the first statement in the function.
-		$firstStatement = $phpcsFile->findNext( T_WHITESPACE, $functionOpener + 1, $functionCloser, true );
+		// Find all early return if statements in the function.
+		$earlyReturns = $this->findEarlyReturns( $phpcsFile, $functionOpener, $functionCloser );
 
-		if ( false === $firstStatement ) {
+		if ( empty( $earlyReturns ) ) {
 			return;
 		}
 
-		// Check if the first statement is a variable assignment.
-		if ( $tokens[ $firstStatement ]['code'] !== T_VARIABLE ) {
-			return;
+		// For each early return, check if there are variables before it that should be moved after.
+		foreach ( $earlyReturns as $earlyReturn ) {
+			$this->checkVariablesBeforeEarlyReturn( $phpcsFile, $stackPtr, $functionOpener, $functionCloser, $earlyReturn );
+		}
+	}
+
+	/**
+	 * Find all early return if statements in a function.
+	 *
+	 * @param File $phpcsFile      The file being scanned.
+	 * @param int  $functionOpener The function scope opener.
+	 * @param int  $functionCloser The function scope closer.
+	 *
+	 * @return array Array of early return info: ['if' => token, 'ifOpener' => token, 'ifCloser' => token].
+	 */
+	private function findEarlyReturns( File $phpcsFile, $functionOpener, $functionCloser ) {
+		$tokens       = $phpcsFile->getTokens();
+		$earlyReturns = array();
+
+		$current = $functionOpener + 1;
+
+		while ( $current < $functionCloser ) {
+			$current = $phpcsFile->findNext( T_IF, $current, $functionCloser );
+
+			if ( false === $current ) {
+				break;
+			}
+
+			// Make sure the if has a scope.
+			if ( ! isset( $tokens[ $current ]['scope_opener'] ) || ! isset( $tokens[ $current ]['scope_closer'] ) ) {
+				++$current;
+				continue;
+			}
+
+			$ifOpener = $tokens[ $current ]['scope_opener'];
+			$ifCloser = $tokens[ $current ]['scope_closer'];
+
+			// Check if the if body contains only a return statement.
+			$ifFirstStatement = $phpcsFile->findNext( T_WHITESPACE, $ifOpener + 1, $ifCloser, true );
+
+			if ( false === $ifFirstStatement || $tokens[ $ifFirstStatement ]['code'] !== T_RETURN ) {
+				++$current;
+				continue;
+			}
+
+			// Check if there's anything else in the if body after the return.
+			$returnEnd = $phpcsFile->findNext( T_SEMICOLON, $ifFirstStatement + 1, $ifCloser );
+
+			if ( false === $returnEnd ) {
+				++$current;
+				continue;
+			}
+
+			$afterReturn = $phpcsFile->findNext( T_WHITESPACE, $returnEnd + 1, $ifCloser, true );
+
+			if ( false !== $afterReturn ) {
+				// There's more than just a return in the if body.
+				++$current;
+				continue;
+			}
+
+			// Check if the if has an else/elseif - skip those.
+			$afterIfClose = $phpcsFile->findNext( T_WHITESPACE, $ifCloser + 1, $functionCloser, true );
+
+			if ( false !== $afterIfClose && in_array( $tokens[ $afterIfClose ]['code'], array( T_ELSE, T_ELSEIF ), true ) ) {
+				++$current;
+				continue;
+			}
+
+			$earlyReturns[] = array(
+				'if'        => $current,
+				'ifOpener'  => $ifOpener,
+				'ifCloser'  => $ifCloser,
+				'returnEnd' => $returnEnd,
+			);
+
+			$current = $ifCloser + 1;
 		}
 
-		// Get the variable name.
-		$variableName = $tokens[ $firstStatement ]['content'];
+		return $earlyReturns;
+	}
 
-		// Check if this variable is a function parameter (skip those, especially by-reference params).
-		if ( $this->isVariableAParameter( $phpcsFile, $tokens, $stackPtr, $variableName ) ) {
-			return;
-		}
+	/**
+	 * Check variables declared before an early return to see if they should be moved after.
+	 *
+	 * @param File  $phpcsFile      The file being scanned.
+	 * @param int   $stackPtr       The function token position.
+	 * @param int   $functionOpener The function scope opener.
+	 * @param int   $functionCloser The function scope closer.
+	 * @param array $earlyReturn    Info about the early return.
+	 *
+	 * @return void
+	 */
+	private function checkVariablesBeforeEarlyReturn( File $phpcsFile, $stackPtr, $functionOpener, $functionCloser, array $earlyReturn ) {
+		$tokens = $phpcsFile->getTokens();
 
-		// Find the semicolon ending this assignment.
-		$assignmentEnd = $phpcsFile->findNext( T_SEMICOLON, $firstStatement + 1, $functionCloser );
+		$ifToken   = $earlyReturn['if'];
+		$ifOpener  = $earlyReturn['ifOpener'];
+		$ifCloser  = $earlyReturn['ifCloser'];
+		$returnEnd = $earlyReturn['returnEnd'];
 
-		if ( false === $assignmentEnd ) {
-			return;
-		}
+		// Find all variable assignments before this early return.
+		$current          = $functionOpener + 1;
+		$seenVariables    = array();
 
-		// Find the next statement after the assignment.
-		$nextStatement = $phpcsFile->findNext( T_WHITESPACE, $assignmentEnd + 1, $functionCloser, true );
+		while ( $current < $ifToken ) {
+			$varToken = $phpcsFile->findNext( T_VARIABLE, $current, $ifToken );
 
-		if ( false === $nextStatement ) {
-			return;
-		}
+			if ( false === $varToken ) {
+				break;
+			}
 
-		// Check if the next statement is an if with an early return.
-		if ( $tokens[ $nextStatement ]['code'] !== T_IF ) {
-			return;
-		}
+			// Skip static property assignments (self::$var, static::$var, ClassName::$var).
+			$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $varToken - 1, null, true );
 
-		// Make sure the if has a scope.
-		if ( ! isset( $tokens[ $nextStatement ]['scope_opener'] ) || ! isset( $tokens[ $nextStatement ]['scope_closer'] ) ) {
-			return;
-		}
+			if ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_DOUBLE_COLON ) {
+				$current = $varToken + 1;
+				continue;
+			}
 
-		$ifOpener = $tokens[ $nextStatement ]['scope_opener'];
-		$ifCloser = $tokens[ $nextStatement ]['scope_closer'];
+			// Check if this is an assignment (next non-whitespace is =).
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $varToken + 1, null, true );
 
-		// Check if the if body contains only a return statement.
-		$ifFirstStatement = $phpcsFile->findNext( T_WHITESPACE, $ifOpener + 1, $ifCloser, true );
+			if ( false === $nextToken || $tokens[ $nextToken ]['code'] !== T_EQUAL ) {
+				$current = $varToken + 1;
+				continue;
+			}
 
-		if ( false === $ifFirstStatement || $tokens[ $ifFirstStatement ]['code'] !== T_RETURN ) {
-			return;
-		}
+			$variableName = $tokens[ $varToken ]['content'];
 
-		// Check if there's anything else in the if body after the return.
-		$returnEnd = $phpcsFile->findNext( T_SEMICOLON, $ifFirstStatement + 1, $ifCloser );
+			// Skip if we've already seen this variable (only consider first declaration).
+			if ( isset( $seenVariables[ $variableName ] ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
+			$seenVariables[ $variableName ] = true;
 
-		if ( false === $returnEnd ) {
-			return;
-		}
+			// Skip if this is a function parameter.
+			if ( $this->isVariableAParameter( $phpcsFile, $tokens, $stackPtr, $variableName ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
 
-		$afterReturn = $phpcsFile->findNext( T_WHITESPACE, $returnEnd + 1, $ifCloser, true );
+			// Find the semicolon ending this assignment.
+			$assignmentEnd = $phpcsFile->findNext( T_SEMICOLON, $varToken + 1, $ifToken );
 
-		if ( false !== $afterReturn ) {
-			// There's more than just a return in the if body.
-			return;
-		}
+			if ( false === $assignmentEnd ) {
+				$current = $varToken + 1;
+				continue;
+			}
 
-		// Check if the if has an else/elseif - skip those.
-		$afterIfClose = $phpcsFile->findNext( T_WHITESPACE, $ifCloser + 1, $functionCloser, true );
+			// Check if the variable is used in the if condition or the return statement.
+			$variableUsedInCondition = $this->isVariableUsedInRange(
+				$phpcsFile,
+				$tokens,
+				$ifToken,
+				$ifOpener,
+				$variableName
+			);
 
-		if ( false !== $afterIfClose && in_array( $tokens[ $afterIfClose ]['code'], array( T_ELSE, T_ELSEIF ), true ) ) {
-			return;
-		}
+			$variableUsedInReturn = $this->isVariableUsedInRange(
+				$phpcsFile,
+				$tokens,
+				$ifOpener + 1,
+				$returnEnd,
+				$variableName
+			);
 
-		// Now check if the variable is used in the if condition or the return statement.
-		$variableUsedInCondition = $this->isVariableUsedInRange(
-			$phpcsFile,
-			$tokens,
-			$nextStatement,
-			$ifOpener,
-			$variableName
-		);
+			// Check if the variable is used between its declaration and the early return.
+			$variableUsedBefore = $this->isVariableUsedInRange(
+				$phpcsFile,
+				$tokens,
+				$assignmentEnd + 1,
+				$ifToken - 1,
+				$variableName
+			);
 
-		$variableUsedInReturn = $this->isVariableUsedInRange(
-			$phpcsFile,
-			$tokens,
-			$ifFirstStatement,
-			$returnEnd,
-			$variableName
-		);
+			// Check if the variable is reassigned anywhere between its declaration and the early return.
+			// This handles cases like: $is_setup = false; if (!$x) { $is_setup = true; if (!$y) { return; } }
+			$variableReassignedBefore = $this->isVariableAssignedInRange(
+				$phpcsFile,
+				$tokens,
+				$assignmentEnd + 1,
+				$ifCloser - 1,
+				$variableName
+			);
 
-		if ( $variableUsedInCondition || $variableUsedInReturn ) {
-			// The variable is used in the early return check, so it's fine where it is.
-			return;
-		}
+			// Check if the variable is used after the early return.
+			$variableUsedAfter = $this->isVariableUsedInRange(
+				$phpcsFile,
+				$tokens,
+				$ifCloser + 1,
+				$functionCloser - 1,
+				$variableName
+			);
 
-		// The variable is not used in the early return - it should be moved below.
-		$fix = $phpcsFile->addFixableError(
-			'Variable %s should be declared after the early return condition, not before.',
-			$firstStatement,
-			'VariableBeforeEarlyReturn',
-			array( $variableName )
-		);
+			if ( $variableUsedInCondition || $variableUsedInReturn || $variableUsedBefore || $variableReassignedBefore ) {
+				// The variable is used before or in the early return check, so it's fine where it is.
+				$current = $assignmentEnd + 1;
+				continue;
+			}
 
-		if ( true === $fix ) {
-			$this->applyFix( $phpcsFile, $tokens, $firstStatement, $assignmentEnd, $ifCloser );
+			if ( ! $variableUsedAfter ) {
+				// Variable is not used at all after declaration - skip (might be a different issue).
+				$current = $assignmentEnd + 1;
+				continue;
+			}
+
+			// The variable is only used after the early return - it should be moved below.
+			$fix = $phpcsFile->addFixableError(
+				'Variable %s should be declared after the early return condition, not before.',
+				$varToken,
+				'VariableBeforeEarlyReturn',
+				array( $variableName )
+			);
+
+			if ( true === $fix ) {
+				$this->applyFix( $phpcsFile, $tokens, $varToken, $assignmentEnd, $ifCloser );
+			}
+
+			$current = $assignmentEnd + 1;
 		}
 	}
 
@@ -191,31 +342,85 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 	private function applyFix( File $phpcsFile, array $tokens, $varStart, $assignmentEnd, $ifCloser ) {
 		$phpcsFile->fixer->beginChangeset();
 
-		// Get the variable declaration content.
-		$varDeclaration = '';
+		// Check if there's a comment on the line before the variable.
+		$varLine      = $tokens[ $varStart ]['line'];
+		$commentStart = null;
+		$commentEnd   = null;
 
-		for ( $i = $varStart; $i <= $assignmentEnd; $i++ ) {
-			$varDeclaration .= $tokens[ $i ]['content'];
-		}
-
-		// Find the start of the line for the variable (to get indentation).
-		$lineStart = $varStart;
-
+		// Look backwards for a comment on the previous line.
 		for ( $i = $varStart - 1; $i >= 0; $i-- ) {
-			if ( $tokens[ $i ]['line'] < $tokens[ $varStart ]['line'] ) {
+			if ( $tokens[ $i ]['line'] < $varLine - 1 ) {
 				break;
 			}
-			$lineStart = $i;
+
+			if ( $tokens[ $i ]['line'] === $varLine - 1 && $tokens[ $i ]['code'] === T_COMMENT ) {
+				$commentEnd = $i;
+
+				// Find the start of this comment line.
+				for ( $j = $i; $j >= 0; $j-- ) {
+					if ( $tokens[ $j ]['line'] < $varLine - 1 ) {
+						break;
+					}
+					$commentStart = $j;
+				}
+				break;
+			}
 		}
 
-		// Get the indentation based on the variable's column position.
-		// Column is 1-indexed, so column 2 means 1 character of indentation.
-		$column   = $tokens[ $varStart ]['column'];
-		$tabCount = (int) floor( ( $column - 1 ) / 4 );
-		$indent   = str_repeat( "\t", $tabCount );
+		// Get the indentation from the whitespace before the variable.
+		$indent = '';
 
-		// Remove the variable declaration line (from line start to semicolon).
-		for ( $i = $lineStart; $i <= $assignmentEnd; $i++ ) {
+		for ( $i = $varStart - 1; $i >= 0; $i-- ) {
+			if ( $tokens[ $i ]['line'] < $varLine ) {
+				break;
+			}
+
+			if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
+				$indent = $tokens[ $i ]['content'];
+			}
+		}
+
+		// Build the content to move.
+		$contentToMove = '';
+
+		// Include the comment if found.
+		if ( null !== $commentStart ) {
+			// Get comment indentation.
+			$commentIndent = '';
+
+			for ( $i = $commentStart; $i <= $commentEnd; $i++ ) {
+				if ( $tokens[ $i ]['code'] === T_WHITESPACE && $tokens[ $i ]['line'] === $varLine - 1 ) {
+					$commentIndent = $tokens[ $i ]['content'];
+				} elseif ( $tokens[ $i ]['code'] === T_COMMENT ) {
+					$contentToMove .= $commentIndent . rtrim( $tokens[ $i ]['content'] ) . "\n";
+				}
+			}
+		}
+
+		// Add the variable declaration.
+		$contentToMove .= $indent;
+
+		for ( $i = $varStart; $i <= $assignmentEnd; $i++ ) {
+			$contentToMove .= $tokens[ $i ]['content'];
+		}
+
+		// Determine what to remove - start from comment if present, otherwise from line start.
+		$removeStart = $varStart;
+
+		if ( null !== $commentStart ) {
+			$removeStart = $commentStart;
+		} else {
+			// Find the start of the variable line.
+			for ( $i = $varStart - 1; $i >= 0; $i-- ) {
+				if ( $tokens[ $i ]['line'] < $varLine ) {
+					break;
+				}
+				$removeStart = $i;
+			}
+		}
+
+		// Remove the content (comment + variable declaration).
+		for ( $i = $removeStart; $i <= $assignmentEnd; $i++ ) {
 			$phpcsFile->fixer->replaceToken( $i, '' );
 		}
 
@@ -229,19 +434,15 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 			}
 		}
 
-		// Add the variable declaration after the if closing brace.
-		// Find the whitespace after the if closer.
+		// Add the content after the if closing brace.
 		$afterIfCloser = $ifCloser + 1;
 
 		if ( isset( $tokens[ $afterIfCloser ] ) && $tokens[ $afterIfCloser ]['code'] === T_WHITESPACE ) {
 			$existingWs = $tokens[ $afterIfCloser ]['content'];
-			// Add the variable declaration with proper formatting.
-			// Keep the existing whitespace structure but insert the variable declaration.
-			$newContent = "\n\n" . $indent . $varDeclaration . $existingWs;
+			$newContent = "\n\n" . $contentToMove . $existingWs;
 			$phpcsFile->fixer->replaceToken( $afterIfCloser, $newContent );
 		} else {
-			// No whitespace after if closer, add it.
-			$phpcsFile->fixer->addContent( $ifCloser, "\n\n" . $indent . $varDeclaration );
+			$phpcsFile->fixer->addContent( $ifCloser, "\n\n" . $contentToMove );
 		}
 
 		$phpcsFile->fixer->endChangeset();
@@ -261,6 +462,34 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 	private function isVariableUsedInRange( File $phpcsFile, array $tokens, $start, $end, $variableName ) {
 		for ( $i = $start; $i <= $end; $i++ ) {
 			if ( $tokens[ $i ]['code'] === T_VARIABLE && $tokens[ $i ]['content'] === $variableName ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a variable is assigned within a range of tokens.
+	 *
+	 * @param File   $phpcsFile    The file being scanned.
+	 * @param array  $tokens       The token stack.
+	 * @param int    $start        Start position.
+	 * @param int    $end          End position.
+	 * @param string $variableName The variable name to look for.
+	 *
+	 * @return bool
+	 */
+	private function isVariableAssignedInRange( File $phpcsFile, array $tokens, $start, $end, $variableName ) {
+		for ( $i = $start; $i <= $end; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_VARIABLE || $tokens[ $i ]['content'] !== $variableName ) {
+				continue;
+			}
+
+			// Check if the next non-whitespace token is an assignment operator.
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $i + 1, null, true );
+
+			if ( false !== $nextToken && $tokens[ $nextToken ]['code'] === T_EQUAL ) {
 				return true;
 			}
 		}

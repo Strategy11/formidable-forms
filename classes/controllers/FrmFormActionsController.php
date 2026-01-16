@@ -333,12 +333,13 @@ class FrmFormActionsController {
 			$temp_actions = $temp_actions->actions;
 		}
 
-		$actions = array();
 
 		foreach ( $temp_actions as $a ) {
 			if ( 'all' !== $action && $a->id_base === $action ) {
 				return $a;
 			}
+
+			$actions = array();
 
 			$actions[ $a->id_base ] = $a;
 		}

@@ -279,7 +279,6 @@ class FrmWelcomeTourController {
 	 * @return void
 	 */
 	public static function render() {
-		$view_path         = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 		$is_tour_completed = self::is_tour_completed();
 		$current_form_id   = self::get_current_form_id();
 
@@ -287,6 +286,8 @@ class FrmWelcomeTourController {
 			if ( ! $current_form_id ) {
 				return;
 			}
+
+			$view_path = FrmAppHelper::plugin_path() . '/classes/views/welcome-tour/';
 			self::mark_completed_as_seen();
 			$steps_path = $view_path . 'steps/step-completed.php';
 		} else {

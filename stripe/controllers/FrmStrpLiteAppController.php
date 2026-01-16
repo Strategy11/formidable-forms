@@ -140,7 +140,6 @@ class FrmStrpLiteAppController {
 			return $errors;
 		}
 
-		$entry          = $details['entry'];
 		$intent         = $details['intent'];
 		$payment        = $details['payment'];
 		$payment_failed = FrmStrpLiteAuth::payment_failed( $payment, $intent );
@@ -149,6 +148,8 @@ class FrmStrpLiteAppController {
 		if ( ! $payment_failed ) {
 			return $errors;
 		}
+
+		$entry = $details['entry'];
 
 		$cc_field_id = FrmDb::get_var(
 			'frm_fields',

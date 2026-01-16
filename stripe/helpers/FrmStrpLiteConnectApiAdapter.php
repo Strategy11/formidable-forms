@@ -23,7 +23,6 @@ class FrmStrpLiteConnectApiAdapter {
 	 */
 	public static function cancel_subscription( $sub_id ) {
 		if ( current_user_can( 'administrator' ) ) {
-			$customer_id = false;
 		} else {
 			$user_id  = get_current_user_id();
 			$customer = self::get_customer_by_id( $user_id );
@@ -31,6 +30,8 @@ class FrmStrpLiteConnectApiAdapter {
 			if ( ! is_object( $customer ) ) {
 				return false;
 			}
+
+			$customer_id = false;
 
 			$customer_id = $customer->id;
 		}

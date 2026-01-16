@@ -151,12 +151,13 @@ class FrmStrpLiteConnectHelper {
 			'frm_strp_connect_mode'   => FrmStrpLiteAppHelper::active_mode(),
 		);
 		$body    = array_merge( $body, $additional_body );
-		$url     = self::get_url_to_connect_server();
 		$headers = self::build_headers_for_post();
 
 		if ( ! $headers ) {
 			return 'Unable to build headers for post. Is your pro license configured properly?';
 		}
+
+		$url = self::get_url_to_connect_server();
 
 		// (Seconds) default timeout is 5. we want a bit more time to work with.
 		$timeout = 45;

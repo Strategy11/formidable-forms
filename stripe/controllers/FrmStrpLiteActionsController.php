@@ -425,8 +425,6 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			return;
 		}
 
-		$settings    = FrmStrpLiteAppHelper::get_settings();
-		$publishable = $settings->get_active_publishable_key();
 
 		wp_register_script(
 			'stripe',
@@ -470,6 +468,9 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		if ( ! $found_gateway ) {
 			return;
 		}
+
+		$settings    = FrmStrpLiteAppHelper::get_settings();
+		$publishable = $settings->get_active_publishable_key();
 
 		wp_enqueue_script(
 			'formidable-stripe',

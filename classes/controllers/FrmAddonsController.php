@@ -769,13 +769,14 @@ class FrmAddonsController {
 	 */
 	public static function get_addon_for_license( $addons, $license ) {
 		$download_id = $license->download_id;
-		$plugin      = array();
 
 		if ( ! $download_id && ! empty( $addons ) ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
 				}
+
+				$plugin = array();
 			}
 		} elseif ( isset( $addons[ $download_id ] ) ) {
 			$plugin = $addons[ $download_id ];

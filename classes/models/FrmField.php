@@ -433,11 +433,12 @@ class FrmField {
 		}
 
 		self::delete_form_transient( $new_values['form_id'] );
-		$new_id = $wpdb->insert_id;
 
 		if ( ! $return ) {
 			return false;
 		}
+
+		$new_id = $wpdb->insert_id;
 
 		if ( isset( $values['id'] ) ) {
 			$frm_duplicate_ids[ $values['id'] ] = $new_id;

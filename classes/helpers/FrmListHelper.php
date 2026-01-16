@@ -500,12 +500,12 @@ class FrmListHelper {
 	 */
 	protected function row_actions( $actions, $always_visible = false ) {
 		$action_count = count( $actions );
-		$i            = 0;
 
 		if ( ! $action_count ) {
 			return '';
 		}
 
+		$i   = 0;
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 
 		foreach ( $actions as $action => $link ) {

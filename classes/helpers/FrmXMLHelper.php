@@ -1796,13 +1796,14 @@ class FrmXMLHelper {
 			return;
 		}
 
-		$updated = false;
 		$options = $field->options;
 		FrmAppHelper::unserialize_or_decode( $options );
 
 		if ( ! $options || ! is_array( $options ) ) {
 			return;
 		}
+
+		$updated = false;
 
 		foreach ( $options as $key => $option ) {
 			if ( is_array( $option ) && ! empty( $option['image'] ) ) {

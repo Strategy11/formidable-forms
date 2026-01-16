@@ -31,12 +31,13 @@ class FrmSpamCheckUseWPComments extends FrmSpamCheck {
 		$ip_address      = FrmAppHelper::get_ip_address();
 		$whitelist_ip    = FrmAntiSpamController::get_allowed_ips();
 		$is_whitelist_ip = in_array( $ip_address, $whitelist_ip, true );
-		$item_meta       = FrmAppHelper::array_flatten( $this->values['item_meta'] );
 
 		foreach ( $spam_comments as $comment ) {
 			if ( ! $is_whitelist_ip && $ip_address === $comment->comment_author_IP ) {
 				return true;
 			}
+
+			$item_meta = FrmAppHelper::array_flatten( $this->values['item_meta'] );
 
 			foreach ( $item_meta as $value ) {
 				if ( ! $value ) {

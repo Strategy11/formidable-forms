@@ -459,12 +459,13 @@ class FrmFormAction {
 	public function update_callback( $form_id ) {
 		$this->form_id = $form_id;
 
-		$all_instances = $this->get_settings();
 
 		// We need to update the data
 		if ( $this->updated ) {
 			return null;
 		}
+
+		$all_instances = $this->get_settings();
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
 		if ( isset( $_POST[ $this->option_name ] ) && is_array( $_POST[ $this->option_name ] ) ) {

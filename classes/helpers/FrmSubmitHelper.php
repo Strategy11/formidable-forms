@@ -201,12 +201,12 @@ class FrmSubmitHelper {
 	 * @return false|object Return the last found submit field, or `false` if there is at least another field.
 	 */
 	public static function only_contains_submit_field( $fields ) {
-		$submit_field = false;
-
 		foreach ( $fields as $field ) {
 			if ( self::FIELD_TYPE !== FrmField::get_field_type( $field ) ) {
 				return false;
 			}
+
+			$submit_field = false;
 
 			$submit_field = $field;
 		}

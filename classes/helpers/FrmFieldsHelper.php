@@ -227,45 +227,46 @@ class FrmFieldsHelper {
 		if ( isset( self::$context_is_safe_to_load_field_options_from_request_data ) ) {
 			return self::$context_is_safe_to_load_field_options_from_request_data;
 		}
+	}
+
+	if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return false;
+	}
+
+	if ( ! current_user_can( 'frm_edit_forms' ) ) {
+		return false;
+	}
 
 		$function = function () {
 			if ( ! FrmAppHelper::is_admin_page() ) {
 				return false;
-			}
 
-			if ( ! $_POST || ! isset( $_POST['field_options'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-				return false;
-			}
+				$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
 
-			if ( ! current_user_can( 'frm_edit_forms' ) ) {
-				return false;
-			}
+				if ( 'frm_forms_preview' === $action ) {
+					// Never trigger when previewing.
+					return false;
+				}
 
-			$action = FrmAppHelper::get_post_param( 'action', '', 'sanitize_title' );
+				// Confirm an allowed action is being used, and that the correct nonce is being used.
+				if ( 'update' === $action ) {
+					$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
+					return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
+				}
 
-			if ( 'frm_forms_preview' === $action ) {
-				// Never trigger when previewing.
-				return false;
-			}
+				$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
 
-			// Confirm an allowed action is being used, and that the correct nonce is being used.
-			if ( 'update' === $action ) {
-				$nonce = FrmAppHelper::get_post_param( 'frm_save_form', '', 'sanitize_text_field' );
-				return wp_verify_nonce( $nonce, 'frm_save_form_nonce' );
-			}
+				if ( 'update_settings' === $action ) {
+					$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
+					return wp_verify_nonce( $nonce, 'process_form_nonce' );
+				}
+			};//end if
 
-			$action = FrmAppHelper::get_post_param( 'frm_action', '', 'sanitize_title' );
 
-			if ( 'update_settings' === $action ) {
-				$nonce = FrmAppHelper::get_post_param( 'process_form', '', 'sanitize_text_field' );
-				return wp_verify_nonce( $nonce, 'process_form_nonce' );
-			}
-		};
+			self::$context_is_safe_to_load_field_options_from_request_data = $function();
 
-		self::$context_is_safe_to_load_field_options_from_request_data = $function();
-
-		return self::$context_is_safe_to_load_field_options_from_request_data;
-	}
+			return self::$context_is_safe_to_load_field_options_from_request_data;
+		}
 
 	/**
 	 * Fill the required message, invalid message,
@@ -1529,8 +1530,6 @@ class FrmFieldsHelper {
 		$args      = wp_parse_args( $args, $defaults );
 		$opt_key   = $args['opt_key'];
 		$field     = $args['field'];
-		$parent    = $args['parent'];
-		$pointer   = $args['pointer'];
 		$other_val = '';
 
 		// If option is an "other" option and there is a value set for this field,
@@ -1538,6 +1537,9 @@ class FrmFieldsHelper {
 		if ( ! self::is_other_opt( $opt_key ) || ! FrmField::is_option_true( $field, 'value' ) ) {
 			return $other_val;
 		}
+
+		$pointer = $args['pointer'];
+		$parent  = $args['parent'];
 
 		// Check posted vals before checking saved values
 		// For fields inside repeating sections - note, don't check if $pointer is true because it will often be zero

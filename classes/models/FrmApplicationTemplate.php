@@ -246,9 +246,8 @@ class FrmApplicationTemplate {
 			return false;
 		}
 
-		$license_type = '';
-		$api          = new FrmFormApi();
-		$addons       = $api->get_api_info();
+		$api    = new FrmFormApi();
+		$addons = $api->get_api_info();
 
 		if ( ! array_key_exists( 93790, $addons ) ) {
 			return false;
@@ -259,6 +258,8 @@ class FrmApplicationTemplate {
 		if ( ! array_key_exists( 'type', $pro ) ) {
 			return false;
 		}
+
+		$license_type = '';
 
 		$license_type = strtolower( $pro['type'] );
 		$args         = array(

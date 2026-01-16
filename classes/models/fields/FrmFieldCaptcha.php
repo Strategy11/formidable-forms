@@ -288,10 +288,9 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array
 	 */
 	protected function validate_against_api( $args ) {
-		$errors       = array();
-		$frm_settings = FrmAppHelper::get_settings();
-		$resp         = $this->send_api_check();
-		$response     = json_decode( wp_remote_retrieve_body( $resp ), true );
+		$errors   = array();
+		$resp     = $this->send_api_check();
+		$response = json_decode( wp_remote_retrieve_body( $resp ), true );
 
 		if ( is_wp_error( $resp ) ) {
 			$error_string                     = $resp->get_error_message();
@@ -303,6 +302,8 @@ class FrmFieldCaptcha extends FrmFieldType {
 		if ( ! is_array( $response ) ) {
 			return $errors;
 		}
+
+		$frm_settings = FrmAppHelper::get_settings();
 
 		if ( $frm_settings->active_captcha === 'recaptcha' ) {
 			if ( 'v3' === $frm_settings->re_type && array_key_exists( 'score', $response ) ) {
