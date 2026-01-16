@@ -14,8 +14,9 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 use PHP_CodeSniffer\Files\File;
 
 /**
- * Converts if/else to early return in void functions.
+ * Converts if/else to early return in functions.
  *
+ * Case 1 - Void function, else is large:
  * Bad:
  * function example($value) {
  *     if ($condition) {
@@ -32,6 +33,28 @@ use PHP_CodeSniffer\Files\File;
  *         return;
  *     }
  *     // 5+ lines of code
+ * }
+ *
+ * Case 2 - Else ends with return, if doesn't:
+ * Bad:
+ * function example($value) {
+ *     $opt = 'create';
+ *     if ($condition) {
+ *         do_something();
+ *     } else {
+ *         // code that returns
+ *         return $result;
+ *     }
+ * }
+ *
+ * Good:
+ * function example($value) {
+ *     $opt = 'create';
+ *     if (! $condition) {
+ *         // code that returns
+ *         return $result;
+ *     }
+ *     do_something();
  * }
  */
 class FlipIfElseToEarlyReturnSniff implements Sniff {
@@ -63,11 +86,6 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Check if function returns void.
-		if ( ! $this->isVoidFunction( $phpcsFile, $stackPtr ) ) {
-			return;
-		}
-
 		// Get the function's scope opener and closer.
 		if ( ! isset( $tokens[ $stackPtr ]['scope_opener'] ) || ! isset( $tokens[ $stackPtr ]['scope_closer'] ) ) {
 			return;
@@ -76,35 +94,12 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		$funcOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$funcCloser = $tokens[ $stackPtr ]['scope_closer'];
 
-		// Find the first non-whitespace, non-comment token inside the function.
-		$skipTokens = array(
-			T_WHITESPACE,
-			T_COMMENT,
-			T_DOC_COMMENT,
-			T_DOC_COMMENT_OPEN_TAG,
-			T_DOC_COMMENT_CLOSE_TAG,
-			T_DOC_COMMENT_STAR,
-			T_DOC_COMMENT_WHITESPACE,
-			T_DOC_COMMENT_STRING,
-			T_DOC_COMMENT_TAG,
-		);
+		// Find an if statement that has an else as the last thing in the function.
+		$ifToken = $this->findIfElseAtEndOfFunction( $phpcsFile, $funcOpener, $funcCloser );
 
-		$firstStatement = $funcOpener + 1;
-
-		while ( $firstStatement < $funcCloser && in_array( $tokens[ $firstStatement ]['code'], $skipTokens, true ) ) {
-			++$firstStatement;
-		}
-
-		if ( $firstStatement >= $funcCloser ) {
+		if ( false === $ifToken ) {
 			return;
 		}
-
-		// Check if the first statement is an if.
-		if ( $tokens[ $firstStatement ]['code'] !== T_IF ) {
-			return;
-		}
-
-		$ifToken = $firstStatement;
 
 		// Get the if's scope closer.
 		if ( ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
@@ -143,6 +138,38 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 			return;
 		}
 
+		// Check if the else block ends with a return.
+		$elseEndsWithReturn = $this->blockEndsWithReturn( $phpcsFile, $elseToken );
+		$ifEndsWithReturn   = $this->blockEndsWithReturn( $phpcsFile, $ifToken );
+
+		// Case 1: Void function where else is large - add return to if, unwrap else.
+		// Case 2: Else ends with return, if doesn't - flip the condition.
+		if ( $elseEndsWithReturn && ! $ifEndsWithReturn ) {
+			// Case 2: Flip the if/else so else returns early.
+			$elseLineCount = $this->countLinesInScope( $phpcsFile, $elseOpener, $elseCloser );
+
+			if ( $elseLineCount < $this->minElseLines ) {
+				return;
+			}
+
+			$fix = $phpcsFile->addFixableError(
+				'Consider using early return pattern. Flip the condition so the else returns early.',
+				$elseToken,
+				'FlipElseReturn'
+			);
+
+			if ( true === $fix ) {
+				$this->applyFlipFix( $phpcsFile, $ifToken, $elseToken, $elseOpener, $elseCloser );
+			}
+
+			return;
+		}
+
+		// Case 1: Void function, else is large.
+		if ( ! $this->isVoidFunction( $phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		// Count lines in the else block.
 		$elseLineCount = $this->countLinesInScope( $phpcsFile, $elseOpener, $elseCloser );
 
@@ -151,7 +178,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		}
 
 		// Check that the if block doesn't already end with return.
-		if ( $this->blockEndsWithReturn( $phpcsFile, $ifToken ) ) {
+		if ( $ifEndsWithReturn ) {
 			return;
 		}
 
@@ -164,6 +191,68 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		if ( true === $fix ) {
 			$this->applyFix( $phpcsFile, $ifToken, $elseToken, $elseOpener, $elseCloser, $funcCloser );
 		}
+	}
+
+	/**
+	 * Find an if statement with an else that is the last thing in the function.
+	 *
+	 * @param File $phpcsFile   The file being scanned.
+	 * @param int  $funcOpener  The function scope opener.
+	 * @param int  $funcCloser  The function scope closer.
+	 *
+	 * @return int|false The if token position, or false if not found.
+	 */
+	private function findIfElseAtEndOfFunction( File $phpcsFile, $funcOpener, $funcCloser ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Search backwards from the function closer to find the last if/else.
+		$current = $funcCloser - 1;
+
+		// Skip whitespace and comments.
+		while ( $current > $funcOpener && in_array( $tokens[ $current ]['code'], array( T_WHITESPACE, T_COMMENT ), true ) ) {
+			--$current;
+		}
+
+		// Should be a closing brace.
+		if ( $tokens[ $current ]['code'] !== T_CLOSE_CURLY_BRACKET ) {
+			return false;
+		}
+
+		// Find what this brace belongs to.
+		if ( ! isset( $tokens[ $current ]['scope_condition'] ) ) {
+			return false;
+		}
+
+		$scopeCondition = $tokens[ $current ]['scope_condition'];
+
+		// Must be an else.
+		if ( $tokens[ $scopeCondition ]['code'] !== T_ELSE ) {
+			return false;
+		}
+
+		// Find the if that this else belongs to.
+		$elseToken = $scopeCondition;
+
+		// Look backwards from the else to find the if's closing brace.
+		$beforeElse = $phpcsFile->findPrevious( T_WHITESPACE, $elseToken - 1, null, true );
+
+		if ( false === $beforeElse || $tokens[ $beforeElse ]['code'] !== T_CLOSE_CURLY_BRACKET ) {
+			return false;
+		}
+
+		// Find the if token.
+		if ( ! isset( $tokens[ $beforeElse ]['scope_condition'] ) ) {
+			return false;
+		}
+
+		$ifToken = $tokens[ $beforeElse ]['scope_condition'];
+
+		// Must be an if (not elseif).
+		if ( $tokens[ $ifToken ]['code'] !== T_IF ) {
+			return false;
+		}
+
+		return $ifToken;
 	}
 
 	/**
@@ -246,37 +335,56 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 	/**
 	 * Check if a block ends with a return statement.
 	 *
-	 * @param File $phpcsFile The file being scanned.
-	 * @param int  $ifToken   The if token position.
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $blockToken The if or else token position.
 	 *
 	 * @return bool
 	 */
-	private function blockEndsWithReturn( File $phpcsFile, $ifToken ) {
+	private function blockEndsWithReturn( File $phpcsFile, $blockToken ) {
 		$tokens = $phpcsFile->getTokens();
 
-		if ( ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
+		if ( ! isset( $tokens[ $blockToken ]['scope_closer'] ) ) {
 			return false;
 		}
 
-		$scopeCloser = $tokens[ $ifToken ]['scope_closer'];
+		$scopeCloser = $tokens[ $blockToken ]['scope_closer'];
+		$scopeOpener = $tokens[ $blockToken ]['scope_opener'];
 
 		// Find the last non-whitespace token before the closing brace.
-		$lastToken = $phpcsFile->findPrevious( T_WHITESPACE, $scopeCloser - 1, null, true );
+		$lastToken = $phpcsFile->findPrevious( T_WHITESPACE, $scopeCloser - 1, $scopeOpener, true );
 
 		if ( false === $lastToken ) {
 			return false;
 		}
 
-		// Check if it's a semicolon after a return.
-		if ( $tokens[ $lastToken ]['code'] === T_SEMICOLON ) {
-			$beforeSemi = $phpcsFile->findPrevious( T_WHITESPACE, $lastToken - 1, null, true );
-
-			if ( false !== $beforeSemi && $tokens[ $beforeSemi ]['code'] === T_RETURN ) {
-				return true;
-			}
+		// Check if it's a semicolon.
+		if ( $tokens[ $lastToken ]['code'] !== T_SEMICOLON ) {
+			return false;
 		}
 
-		return false;
+		// Find the statement before the semicolon.
+		$statementEnd = $lastToken - 1;
+
+		// Skip whitespace.
+		while ( $statementEnd > $scopeOpener && $tokens[ $statementEnd ]['code'] === T_WHITESPACE ) {
+			--$statementEnd;
+		}
+
+		// Look for a return token on this statement's line or find the return keyword.
+		$returnToken = $phpcsFile->findPrevious(
+			T_RETURN,
+			$lastToken - 1,
+			$scopeOpener
+		);
+
+		if ( false === $returnToken ) {
+			return false;
+		}
+
+		// Make sure the return is on the same statement (no semicolons between return and our semicolon).
+		$semiCheck = $phpcsFile->findNext( T_SEMICOLON, $returnToken + 1, $lastToken );
+
+		return false === $semiCheck;
 	}
 
 	/**
@@ -334,9 +442,14 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 			true
 		);
 
-		// Add return; before the if's closing brace.
+		// Clear tokens between last statement and closing brace, then add return with proper formatting.
+		for ( $i = $lastInIf + 1; $i < $ifCloser; $i++ ) {
+			$fixer->replaceToken( $i, '' );
+		}
+
+		// Add return; after the last statement, with newline so brace is on its own line.
 		if ( false !== $lastInIf ) {
-			$fixer->addContent( $lastInIf, $phpcsFile->eolChar . $phpcsFile->eolChar . $innerIndent . 'return;' );
+			$fixer->addContent( $lastInIf, $phpcsFile->eolChar . $phpcsFile->eolChar . $innerIndent . 'return;' . $phpcsFile->eolChar . $ifIndent );
 		}
 
 		// Remove everything from after the if's closing brace to the function's closing brace.
@@ -346,9 +459,113 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		}
 
 		// Add the dedented else body after the if's closing brace.
-		$fixer->addContent( $ifCloser, $phpcsFile->eolChar . $phpcsFile->eolChar . $ifIndent . ltrim( $elseBodyContent ) );
+		// Get function indentation for the closing brace (one level less than if).
+		$funcIndent = $this->getIndentation( $phpcsFile, $funcCloser );
+		$fixer->addContent( $ifCloser, $phpcsFile->eolChar . $phpcsFile->eolChar . $ifIndent . ltrim( rtrim( $elseBodyContent ) ) . $phpcsFile->eolChar . $funcIndent );
 
 		$fixer->endChangeset();
+	}
+
+	/**
+	 * Apply the flip fix - negate condition, swap if/else bodies.
+	 *
+	 * @param File $phpcsFile   The file being scanned.
+	 * @param int  $ifToken     The if token position.
+	 * @param int  $elseToken   The else token position.
+	 * @param int  $elseOpener  The else scope opener position.
+	 * @param int  $elseCloser  The else scope closer position.
+	 *
+	 * @return void
+	 */
+	private function applyFlipFix( File $phpcsFile, $ifToken, $elseToken, $elseOpener, $elseCloser ) {
+		$tokens = $phpcsFile->getTokens();
+		$fixer  = $phpcsFile->fixer;
+
+		$ifOpener        = $tokens[ $ifToken ]['scope_opener'];
+		$ifCloser        = $tokens[ $ifToken ]['scope_closer'];
+		$conditionOpener = $tokens[ $ifToken ]['parenthesis_opener'];
+		$conditionCloser = $tokens[ $ifToken ]['parenthesis_closer'];
+
+		// Get the original condition.
+		$originalCondition = '';
+
+		for ( $i = $conditionOpener + 1; $i < $conditionCloser; $i++ ) {
+			$originalCondition .= $tokens[ $i ]['content'];
+		}
+		$originalCondition = trim( $originalCondition );
+
+		// Negate the condition.
+		$negatedCondition = $this->negateCondition( $originalCondition );
+
+		// Get the if body content.
+		$ifBodyContent = '';
+
+		for ( $i = $ifOpener + 1; $i < $ifCloser; $i++ ) {
+			$ifBodyContent .= $tokens[ $i ]['content'];
+		}
+
+		// Get the else body content.
+		$elseBodyContent = '';
+
+		for ( $i = $elseOpener + 1; $i < $elseCloser; $i++ ) {
+			$elseBodyContent .= $tokens[ $i ]['content'];
+		}
+
+		// Dedent the if body (it will become the code after the early return).
+		$ifBodyContent = $this->dedentCode( $ifBodyContent );
+
+		// Get the indentation.
+		$ifIndent = $this->getIndentation( $phpcsFile, $ifToken );
+
+		$fixer->beginChangeset();
+
+		// Replace the condition.
+		for ( $i = $conditionOpener + 1; $i < $conditionCloser; $i++ ) {
+			$fixer->replaceToken( $i, '' );
+		}
+		$fixer->addContent( $conditionOpener, ' ' . $negatedCondition . ' ' );
+
+		// Replace the if body with the else body.
+		// We need to ensure the closing brace ends up on its own line.
+		$elseBodyContent = rtrim( $elseBodyContent );
+		for ( $i = $ifOpener + 1; $i < $ifCloser; $i++ ) {
+			$fixer->replaceToken( $i, '' );
+		}
+		$fixer->addContent( $ifOpener, $phpcsFile->eolChar . $elseBodyContent . $phpcsFile->eolChar . $ifIndent );
+
+		// Remove the else keyword and braces, add the dedented if body.
+		for ( $i = $ifCloser + 1; $i <= $elseCloser; $i++ ) {
+			$fixer->replaceToken( $i, '' );
+		}
+
+		// Add the dedented if body after the if's closing brace.
+		$ifBodyContent = rtrim( $ifBodyContent );
+		$fixer->addContent( $ifCloser, $phpcsFile->eolChar . $phpcsFile->eolChar . $ifIndent . ltrim( $ifBodyContent ) . $phpcsFile->eolChar . $ifIndent );
+
+		$fixer->endChangeset();
+	}
+
+	/**
+	 * Negate a condition string.
+	 *
+	 * @param string $condition The original condition.
+	 *
+	 * @return string The negated condition.
+	 */
+	private function negateCondition( $condition ) {
+		$condition = trim( $condition );
+
+		// If condition starts with !, remove it.
+		if ( strpos( $condition, '! ' ) === 0 ) {
+			return substr( $condition, 2 );
+		}
+
+		if ( strpos( $condition, '!' ) === 0 && strpos( $condition, '!=' ) !== 0 ) {
+			return substr( $condition, 1 );
+		}
+
+		// For complex conditions, wrap in parentheses and negate.
+		return '! ( ' . $condition . ' )';
 	}
 
 	/**

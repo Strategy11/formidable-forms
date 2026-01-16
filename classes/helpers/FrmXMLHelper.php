@@ -919,27 +919,30 @@ class FrmXMLHelper {
 		if ( is_numeric( $form['options']['custom_style'] ) && 1 === intval( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
-		} else {
-			// Replace the style name with the style ID on import
-			global $wpdb;
-			$table    = $wpdb->prefix . 'posts';
-			$where    = array(
-				'post_name' => $form['options']['custom_style'],
-				'post_type' => 'frm_styles',
-			);
-			$select   = 'ID';
-			$style_id = FrmDb::get_var( $table, $where, $select );
 
-			if ( $style_id ) {
-				$form['options']['custom_style'] = $style_id;
-			} else {
-				// save the old style to maybe update after styles import
-				$form['options']['old_style'] = $form['options']['custom_style'];
+			return;
+		}
 
-				// Set to default
-				$form['options']['custom_style'] = 1;
-			}
-		}//end if
+		// Replace the style name with the style ID on import
+		global $wpdb;
+		$table    = $wpdb->prefix . 'posts';
+		$where    = array(
+			'post_name' => $form['options']['custom_style'],
+			'post_type' => 'frm_styles',
+		);
+		$select   = 'ID';
+		$style_id = FrmDb::get_var( $table, $where, $select );
+
+		if ( $style_id ) {
+			$form['options']['custom_style'] = $style_id;
+			return;
+		}
+
+		// save the old style to maybe update after styles import
+		$form['options']['old_style'] = $form['options']['custom_style'];
+
+		// Set to default
+		$form['options']['custom_style'] = 1;
 	}
 
 	/**
@@ -1524,6 +1527,8 @@ class FrmXMLHelper {
 	 * @param mixed  $result
 	 * @param string $message
 	 * @param array  $errors
+	 *
+	 * @return void
 	 */
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
@@ -1592,24 +1597,28 @@ class FrmXMLHelper {
 		if ( $message === '<ul>' ) {
 			$message  = '';
 			$errors[] = __( 'Nothing was imported or updated', 'formidable' );
-		} else {
-			self::add_form_link_to_message( $result, $message );
 
-			/**
-			 * @since 5.3
-			 *
-			 * @param string $message
-			 * @param array  $result
-			 */
-			$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
-			$message .= '</ul>';
+			return;
 		}
+
+		self::add_form_link_to_message( $result, $message );
+
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $message
+		 * @param array  $result
+		 */
+		$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
+		$message .= '</ul>';
 	}
 
 	/**
 	 * @param int           $m
 	 * @param string        $type
 	 * @param array<string> $s_message
+	 *
+	 * @return void
 	 */
 	public static function item_count_message( $m, $type, &$s_message ) {
 		if ( ! $m ) {
@@ -1637,19 +1646,20 @@ class FrmXMLHelper {
 
 		if ( isset( $strings[ $type ] ) ) {
 			$s_message[] = $strings[ $type ];
-		} else {
-			$string = ' ' . $m . ' ' . ucfirst( $type );
-
-			/**
-			 * @since 5.3
-			 *
-			 * @param string $string Message string for imported item.
-			 * @param int    $m      Number of item that was imported.
-			 * }
-			 */
-			$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
-			$s_message[] = $string;
+			return;
 		}
+
+		$string = ' ' . $m . ' ' . ucfirst( $type );
+
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $string Message string for imported item.
+		 * @param int    $m      Number of item that was imported.
+		 * }
+		 */
+		$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
+		$s_message[] = $string;
 	}
 
 	/**
