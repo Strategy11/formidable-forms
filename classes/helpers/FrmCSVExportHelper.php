@@ -604,9 +604,8 @@ class FrmCSVExportHelper {
 	 * @return array
 	 */
 	private static function fill_missing_repeater_metas( $metas, &$entries ) {
-		$field_ids = array_keys( $metas );
-		$field_id  = end( $field_ids );
-		$field     = self::get_field( $field_id );
+		$field_id = array_key_last( $metas );
+		$field    = self::get_field( $field_id );
 
 		if ( ! $field || empty( $field->field_options['in_section'] ) ) {
 			return $metas;
