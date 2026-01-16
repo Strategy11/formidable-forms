@@ -1959,8 +1959,6 @@ class FrmAppHelper {
 				<?php endforeach; ?>
 			</select>
 			<?php
-
-
 			return;
 		}
 
