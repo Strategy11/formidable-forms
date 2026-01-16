@@ -200,7 +200,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 	 * @param int  $funcOpener  The function scope opener.
 	 * @param int  $funcCloser  The function scope closer.
 	 *
-	 * @return int|false The if token position, or false if not found.
+	 * @return false|int The if token position, or false if not found.
 	 */
 	private function findIfElseAtEndOfFunction( File $phpcsFile, $funcOpener, $funcCloser ) {
 		$tokens = $phpcsFile->getTokens();
@@ -528,6 +528,7 @@ class FlipIfElseToEarlyReturnSniff implements Sniff {
 		// Replace the if body with the else body.
 		// We need to ensure the closing brace ends up on its own line.
 		$elseBodyContent = rtrim( $elseBodyContent );
+
 		for ( $i = $ifOpener + 1; $i < $ifCloser; $i++ ) {
 			$fixer->replaceToken( $i, '' );
 		}
