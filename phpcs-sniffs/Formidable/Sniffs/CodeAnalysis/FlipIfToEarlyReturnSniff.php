@@ -381,7 +381,7 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	}
 
 	/**
-	 * Count the number of statements inside a scope.
+	 * Count the number of statements inside a scope (recursively).
 	 *
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $scopeToken The token with the scope to count.
@@ -398,27 +398,12 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		$scopeOpener = $tokens[ $scopeToken ]['scope_opener'];
 		$scopeCloser = $tokens[ $scopeToken ]['scope_closer'];
 
-		// The target level is the level inside the scope (opener level + 1).
-		$targetLevel = $tokens[ $scopeOpener ]['level'] + 1;
-
 		$count = 0;
 
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
-			// Only count semicolons at the immediate scope level (not nested).
-			if ( $tokens[ $i ]['code'] === T_SEMICOLON && $tokens[ $i ]['level'] === $targetLevel ) {
+			// Count all semicolons (statements) at any nesting level.
+			if ( $tokens[ $i ]['code'] === T_SEMICOLON ) {
 				++$count;
-			}
-
-			// Also count control structures as statements.
-			if ( in_array( $tokens[ $i ]['code'], array( T_IF, T_FOREACH, T_FOR, T_WHILE, T_SWITCH, T_TRY ), true ) ) {
-				if ( $tokens[ $i ]['level'] === $targetLevel ) {
-					++$count;
-
-					// Skip to the end of this control structure.
-					if ( isset( $tokens[ $i ]['scope_closer'] ) ) {
-						$i = $tokens[ $i ]['scope_closer'];
-					}
-				}
 			}
 		}
 
