@@ -111,9 +111,9 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 		$ifScopeCloser = $tokens[ $ifToken ]['scope_closer'];
 
 		// Check if the if statement is the only thing in the function body.
-		// The next non-whitespace token after the if's closing brace should be the function's closing brace.
+		// The next non-whitespace/non-comment token after the if's closing brace should be the function's closing brace.
 		$afterIf = $phpcsFile->findNext(
-			T_WHITESPACE,
+			array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT, T_DOC_COMMENT_OPEN_TAG, T_DOC_COMMENT_CLOSE_TAG, T_DOC_COMMENT_STAR, T_DOC_COMMENT_STRING, T_DOC_COMMENT_TAG, T_DOC_COMMENT_WHITESPACE ),
 			$ifScopeCloser + 1,
 			null,
 			true

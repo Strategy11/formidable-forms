@@ -2357,50 +2357,53 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
-		if ( ! empty( $form_options['auto_responder'] ) && ! empty( $form_options['ar_email_message'] ) ) {
-			// migrate autoresponder
+		if ( empty( $form_options['auto_responder'] ) || empty( $form_options['ar_email_message'] ) ) {
+			return;
+		}
 
-			$email_field = $form_options['ar_email_to'] ?? 0;
+		// migrate autoresponder
 
-			if ( str_contains( $email_field, '|' ) ) {
-				// data from entries field
-				$email_field = explode( '|', $email_field );
+		$email_field = $form_options['ar_email_to'] ?? 0;
 
-				if ( isset( $email_field[1] ) ) {
-					$email_field = $email_field[1];
-				}
+		if ( str_contains( $email_field, '|' ) ) {
+			// data from entries field
+			$email_field = explode( '|', $email_field );
+
+			if ( isset( $email_field[1] ) ) {
+				$email_field = $email_field[1];
 			}
+		}
 
-			if ( is_numeric( $email_field ) && $email_field ) {
-				$email_field = '[' . $email_field . ']';
-			}
+		if ( is_numeric( $email_field ) && $email_field ) {
+			$email_field = '[' . $email_field . ']';
+		}
 
-			$notification      = $form_options;
-			$new_notification2 = array(
-				'post_content' => array(
-					'email_message' => $notification['ar_email_message'],
-					'email_subject' => $notification['ar_email_subject'] ?? '',
-					'email_to'      => $email_field,
-					'plain_text'    => $notification['ar_plain_text'] ?? 0,
-					'inc_user_info' => 0,
-				),
-				'post_name'    => $form_id . '_email_' . count( $notifications ),
-			);
+		$notification      = $form_options;
+		$new_notification2 = array(
+			'post_content' => array(
+				'email_message' => $notification['ar_email_message'],
+				'email_subject' => $notification['ar_email_subject'] ?? '',
+				'email_to'      => $email_field,
+				'plain_text'    => $notification['ar_plain_text'] ?? 0,
+				'inc_user_info' => 0,
+			),
+			'post_name'    => $form_id . '_email_' . count( $notifications ),
+		);
 
-			$reply_to      = $notification['ar_reply_to'] ?? '';
-			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
+		$reply_to      = $notification['ar_reply_to'] ?? '';
+		$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
-			if ( $reply_to ) {
-				$new_notification2['post_content']['reply_to'] = $reply_to;
-			}
+		if ( $reply_to ) {
+			$new_notification2['post_content']['reply_to'] = $reply_to;
+		}
 
-			if ( $reply_to || $reply_to_name ) {
-				$new_notification2['post_content']['from'] = ( $reply_to_name ? $reply_to_name : '[sitename]' ) . ' <' . ( $reply_to ? $reply_to : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			}
+		if ( $reply_to || $reply_to_name ) {
+			$new_notification2['post_content']['from'] = ( $reply_to_name ? $reply_to_name : '[sitename]' ) . ' <' . ( $reply_to ? $reply_to : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		}
 
-			$notifications[] = $new_notification2;
-			unset( $new_notification2 );
-		}//end if
+		$notifications[] = $new_notification2;
+		unset( $new_notification2 );
+		// end if
 	}
 
 	/**
