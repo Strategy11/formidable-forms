@@ -557,6 +557,12 @@ class FlipIfToEarlyReturnVariableSniff implements Sniff {
 	 * @return false|string The flipped condition, or false if not a simple comparison.
 	 */
 	private function flipComparisonOperator( $condition ) {
+		// Skip if condition contains object operators (->), array access, or method calls.
+		// These can be confused with comparison operators.
+		if ( strpos( $condition, '->' ) !== false || strpos( $condition, '::' ) !== false ) {
+			return false;
+		}
+
 		// Map of operators to their opposites.
 		$operatorMap = array(
 			'!==' => '===',
