@@ -194,7 +194,7 @@ class FrmXMLHelper {
 				array(
 					'slug'        => (string) $t->term_slug,
 					'description' => (string) $t->term_description,
-					'parent'      => empty( $parent ) ? 0 : $parent,
+					'parent'      => $parent ? $parent : 0,
 				)
 			);
 
@@ -2385,7 +2385,7 @@ class FrmXMLHelper {
 			}
 
 			if ( $reply_to || $reply_to_name ) {
-				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				$new_notification2['post_content']['from'] = ( $reply_to_name ? $reply_to_name : '[sitename]' ) . ' <' . ( $reply_to ? $reply_to : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 
 			$notifications[] = $new_notification2;

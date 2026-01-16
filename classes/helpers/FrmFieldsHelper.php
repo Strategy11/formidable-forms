@@ -473,7 +473,7 @@ class FrmFieldsHelper {
 		);
 
 		$msg = FrmField::get_option( $field, $error );
-		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
+		$msg = $msg ? $msg : $defaults[ $error ]['part'];
 		$msg = do_shortcode( $msg );
 
 		return self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
