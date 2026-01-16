@@ -367,7 +367,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function html_name( $name = '' ) {
-		$prefix = empty( $name ) ? 'item_meta' : $name;
+		$prefix = $name ? $name : 'item_meta';
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
