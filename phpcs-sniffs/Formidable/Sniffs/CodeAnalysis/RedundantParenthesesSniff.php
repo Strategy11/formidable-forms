@@ -58,6 +58,20 @@ class RedundantParenthesesSniff implements Sniff {
 			return;
 		}
 
+		// Check what's after the closing parenthesis.
+		$afterClose = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+
+		if ( false === $afterClose ) {
+			return;
+		}
+
+		// Check for redundant parentheses around negated function calls in conditions.
+		// Pattern: ( ! empty( $x ) ) or ( ! isset( $x ) ) within a larger condition.
+		if ( $this->isRedundantNegatedFunctionCall( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
+			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
+			return;
+		}
+
 		// We only care about parentheses after an assignment operator, array arrow, or return.
 		$validPrecedingTokens = array(
 			T_EQUAL,
@@ -70,13 +84,6 @@ class RedundantParenthesesSniff implements Sniff {
 		);
 
 		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPrecedingTokens, true ) ) {
-			return;
-		}
-
-		// Check what's after the closing parenthesis.
-		$afterClose = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
-
-		if ( false === $afterClose ) {
 			return;
 		}
 
@@ -101,9 +108,103 @@ class RedundantParenthesesSniff implements Sniff {
 			return;
 		}
 
+		$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
+	}
+
+	/**
+	 * Check if this is a redundant parentheses around a negated function call.
+	 *
+	 * Pattern: ( ! empty( $x ) ) or ( ! isset( $x ) ) or ( ! function( $x ) )
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  The position of the opening parenthesis.
+	 * @param int  $closeParen The position of the closing parenthesis.
+	 * @param int  $prevToken  The token before the opening parenthesis.
+	 * @param int  $afterClose The token after the closing parenthesis.
+	 *
+	 * @return bool
+	 */
+	private function isRedundantNegatedFunctionCall( File $phpcsFile, $openParen, $closeParen, $prevToken, $afterClose ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Must be preceded by a logical operator (&&, ||) or another open parenthesis.
+		$validPreceding = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_OPEN_PARENTHESIS );
+
+		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPreceding, true ) ) {
+			return false;
+		}
+
+		// Must be followed by a logical operator (&&, ||) or a close parenthesis.
+		$validFollowing = array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_CLOSE_PARENTHESIS );
+
+		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowing, true ) ) {
+			return false;
+		}
+
+		// Check the content inside: should be ! followed by a function call with no other operators.
+		$firstInside = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, $closeParen, true );
+
+		if ( false === $firstInside ) {
+			return false;
+		}
+
+		// Should start with !
+		if ( $tokens[ $firstInside ]['code'] !== T_BOOLEAN_NOT ) {
+			return false;
+		}
+
+		// Next should be a function call (empty, isset, or a T_STRING function).
+		$funcToken = $phpcsFile->findNext( T_WHITESPACE, $firstInside + 1, $closeParen, true );
+
+		if ( false === $funcToken ) {
+			return false;
+		}
+
+		$validFuncTokens = array( T_EMPTY, T_ISSET, T_STRING );
+
+		if ( ! in_array( $tokens[ $funcToken ]['code'], $validFuncTokens, true ) ) {
+			return false;
+		}
+
+		// Find the function's opening parenthesis.
+		$funcOpenParen = $phpcsFile->findNext( T_WHITESPACE, $funcToken + 1, $closeParen, true );
+
+		if ( false === $funcOpenParen || $tokens[ $funcOpenParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		if ( ! isset( $tokens[ $funcOpenParen ]['parenthesis_closer'] ) ) {
+			return false;
+		}
+
+		$funcCloseParen = $tokens[ $funcOpenParen ]['parenthesis_closer'];
+
+		// The function's closing paren should be followed only by whitespace until our outer closing paren.
+		$afterFuncClose = $phpcsFile->findNext( T_WHITESPACE, $funcCloseParen + 1, $closeParen, true );
+
+		// If there's anything else between the function close and our close, it's not a simple pattern.
+		if ( false !== $afterFuncClose ) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Report the error and apply the fix.
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  The position of the opening parenthesis.
+	 * @param int  $closeParen The position of the closing parenthesis.
+	 *
+	 * @return void
+	 */
+	private function reportAndFix( File $phpcsFile, $openParen, $closeParen ) {
+		$tokens = $phpcsFile->getTokens();
+
 		$fix = $phpcsFile->addFixableError(
 			'Redundant parentheses around simple expression',
-			$stackPtr,
+			$openParen,
 			'Found'
 		);
 
@@ -111,10 +212,10 @@ class RedundantParenthesesSniff implements Sniff {
 			$phpcsFile->fixer->beginChangeset();
 
 			// Remove opening parenthesis.
-			$phpcsFile->fixer->replaceToken( $stackPtr, '' );
+			$phpcsFile->fixer->replaceToken( $openParen, '' );
 
 			// Remove whitespace after opening parenthesis.
-			$next = $stackPtr + 1;
+			$next = $openParen + 1;
 
 			while ( $next < $closeParen && $tokens[ $next ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $next, '' );
@@ -124,7 +225,7 @@ class RedundantParenthesesSniff implements Sniff {
 			// Remove whitespace before closing parenthesis.
 			$prev = $closeParen - 1;
 
-			while ( $prev > $stackPtr && $tokens[ $prev ]['code'] === T_WHITESPACE ) {
+			while ( $prev > $openParen && $tokens[ $prev ]['code'] === T_WHITESPACE ) {
 				$phpcsFile->fixer->replaceToken( $prev, '' );
 				--$prev;
 			}
