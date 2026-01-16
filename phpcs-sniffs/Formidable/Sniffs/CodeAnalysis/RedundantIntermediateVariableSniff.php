@@ -129,7 +129,7 @@ class RedundantIntermediateVariableSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $stackPtr  The token position.
 	 *
-	 * @return int|false The function token position or false.
+	 * @return false|int The function token position or false.
 	 */
 	private function getFunctionScope( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
