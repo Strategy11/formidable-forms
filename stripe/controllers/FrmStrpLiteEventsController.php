@@ -427,10 +427,8 @@ class FrmStrpLiteEventsController {
 	 * @return bool
 	 */
 	private function is_partial_refund() {
-		$partial = false;
-
 		if ( $this->status !== 'refunded' ) {
-			return $partial;
+			return false;
 		}
 
 		$amount          = $this->invoice->amount;
