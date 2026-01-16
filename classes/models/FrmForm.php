@@ -840,7 +840,7 @@ class FrmForm {
 	 * @return void
 	 */
 	public static function maybe_get_form( &$form ) {
-		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
+		if ( ! is_object( $form ) && ! is_array( $form ) && $form ) {
 			$form = self::getOne( $form );
 		}
 	}

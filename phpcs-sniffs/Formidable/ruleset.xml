@@ -39,6 +39,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfElseToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterIsArray" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
