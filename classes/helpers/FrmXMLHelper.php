@@ -2403,7 +2403,6 @@ class FrmXMLHelper {
 
 		$notifications[] = $new_notification2;
 		unset( $new_notification2 );
-		// end if
 	}
 
 	/**
