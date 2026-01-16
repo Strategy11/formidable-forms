@@ -968,19 +968,21 @@ class FrmEntryFormatter {
 	 * @return mixed
 	 */
 	protected function strip_html( $value ) {
-		if ( $this->is_plain_text ) {
-			if ( is_array( $value ) ) {
-				foreach ( $value as $key => $single_value ) {
-					$value[ $key ] = $this->strip_html( $single_value );
-				}
-			} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
-				if ( str_contains( $value, '<img' ) ) {
-					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
-					$value = trim( $value );
-				}
+		if ( ! $this->is_plain_text ) {
+			return $value;
+		}
 
-				$value = strip_tags( $value );
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $single_value ) {
+				$value[ $key ] = $this->strip_html( $single_value );
 			}
+		} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
+			if ( str_contains( $value, '<img' ) ) {
+				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
+				$value = trim( $value );
+			}
+
+			$value = strip_tags( $value );
 		}
 
 		return $value;

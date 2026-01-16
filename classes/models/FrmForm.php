@@ -727,20 +727,22 @@ class FrmForm {
 
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
 
-		if ( $query_results ) {
-			// Delete all form actions linked to this form
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( 'email' );
-			$action_control->destroy( $id, 'all' );
-
-			// Clear form caching
-			self::clear_form_cache();
-
-			do_action( 'frm_destroy_form', $id );
-			do_action( 'frm_destroy_form_' . $id );
+		if ( ! $query_results ) {
+			return $query_results;
 		}
+
+		// Delete all form actions linked to this form
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( 'email' );
+		$action_control->destroy( $id, 'all' );
+
+		// Clear form caching
+		self::clear_form_cache();
+
+		do_action( 'frm_destroy_form', $id );
+		do_action( 'frm_destroy_form_' . $id );
 
 		return $query_results;
 	}

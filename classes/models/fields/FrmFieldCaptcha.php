@@ -317,16 +317,18 @@ class FrmFieldCaptcha extends FrmFieldType {
 			}
 		}
 
-		if ( isset( $response['success'] ) && ! $response['success'] ) {
-			// What happens when the CAPTCHA was entered incorrectly
-			$invalid_message = FrmField::get_option( $this->field, 'invalid' );
-
-			if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
-				$invalid_message = '';
-			}
-
-			$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
+		if ( ! isset( $response['success'] ) || $response['success'] ) {
+			return $errors;
 		}
+
+		// What happens when the CAPTCHA was entered incorrectly
+		$invalid_message = FrmField::get_option( $this->field, 'invalid' );
+
+		if ( $invalid_message === __( 'The reCAPTCHA was not entered correctly', 'formidable' ) ) {
+			$invalid_message = '';
+		}
+
+		$errors[ 'field' . $args['id'] ] = $invalid_message === '' ? $frm_settings->re_msg : $invalid_message;
 
 		return $errors;
 	}

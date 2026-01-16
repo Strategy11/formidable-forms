@@ -1343,28 +1343,28 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 
-		if ( $link_details ) {
-			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
-
-			if ( isset( $link_details['data'] ) ) {
-				foreach ( $link_details['data'] as $data => $value ) {
-					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
-				}
-			} elseif ( isset( $link_details['confirm'] ) ) {
-				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
-			}
-
-			$label = $link_details[ $length ] ?? $link_details['label'];
-
-			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
-				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
-				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
-			}
-
-			$link .= '>' . $label . '</a>';
+		if ( ! $link_details ) {
+			return $link;
 		}
 
-		return $link;
+		$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
+
+		if ( isset( $link_details['data'] ) ) {
+			foreach ( $link_details['data'] as $data => $value ) {
+				$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+			}
+		} elseif ( isset( $link_details['confirm'] ) ) {
+			$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+		}
+
+		$label = $link_details[ $length ] ?? $link_details['label'];
+
+		if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
+			$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
+			$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
+		}
+
+		return $link . ( '>' . $label . '</a>' );
 	}
 
 	/**

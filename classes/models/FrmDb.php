@@ -490,13 +490,15 @@ class FrmDb {
 
 		self::esc_query_args( $args );
 
-		if ( is_array( $where ) || empty( $where ) ) {
-			self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! is_array( $where ) && $where ) {
+			return $query;
 		}
 
-		return $query;
+		self::get_where_clause_and_values( $where );
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
 	}
 
 	/**

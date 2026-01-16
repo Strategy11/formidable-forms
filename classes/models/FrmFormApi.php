@@ -415,15 +415,17 @@ class FrmFormApi {
 
 		$errors = array();
 
-		if ( isset( $addons['error'] ) ) {
-			if ( is_string( $addons['error'] ) ) {
-				$errors[] = $addons['error'];
-			} elseif ( ! empty( $addons['error']['message'] ) ) {
-				$errors[] = $addons['error']['message'];
-			}
-
-			do_action( 'frm_license_error', $addons['error'] );
+		if ( ! isset( $addons['error'] ) ) {
+			return $errors;
 		}
+
+		if ( is_string( $addons['error'] ) ) {
+			$errors[] = $addons['error'];
+		} elseif ( ! empty( $addons['error']['message'] ) ) {
+			$errors[] = $addons['error']['message'];
+		}
+
+		do_action( 'frm_license_error', $addons['error'] );
 
 		return $errors;
 	}
