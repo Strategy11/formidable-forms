@@ -968,7 +968,7 @@ class FrmEntryFormatter {
 	 * @return mixed
 	 */
 	protected function strip_html( $value ) {
-		if ( $this - <= is_plain_text ) {
+		if ( ! $this->is_plain_text ) {
 			return $value;
 		}
 

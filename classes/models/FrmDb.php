@@ -490,7 +490,7 @@ class FrmDb {
 
 		self::esc_query_args( $args );
 
-		if ( ! ( is_array( $where ) || empty( $where ) ) ) {
+		if ( ! is_array( $where ) && ! empty( $where ) ) {
 			return $query;
 		}
 

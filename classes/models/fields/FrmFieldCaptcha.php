@@ -317,7 +317,7 @@ class FrmFieldCaptcha extends FrmFieldType {
 			}
 		}
 
-		if ( ! ( isset( $response['success'] ) && ! $response['success'] ) ) {
+		if ( ! isset( $response['success'] ) || $response['success'] ) {
 			return $errors;
 		}
 

@@ -760,7 +760,7 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( ! ( isset( $params ) && is_array( $value ) && $value ) ) {
+		if ( ! isset( $params ) || ! is_array( $value ) || ! $value ) {
 			return $value;
 		}
 

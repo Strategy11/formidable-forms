@@ -939,7 +939,7 @@ class FrmFormAction {
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( ! ( $post_id && 'update' === $update ) ) {
+		if ( ! $post_id || 'update' !== $update ) {
 			return $post_id;
 		}
 

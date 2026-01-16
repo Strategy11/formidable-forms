@@ -772,7 +772,7 @@ class FrmXMLHelper {
 		// If a dropdown placeholder was used, remove the option so it won't be included twice.
 		$options = $field['options'];
 
-		if ( ! ( $type === 'default_blank' && is_array( $options ) ) ) {
+		if ( $type !== 'default_blank' || ! is_array( $options ) ) {
 			return $changes;
 		}
 

@@ -179,7 +179,7 @@ class FrmFieldGdpr extends FrmFieldType {
 	public function validate( $args ) {
 		$errors = parent::validate( $args );
 
-		if ( ! ( ! $errors && ! FrmFieldGdprHelper::hide_gdpr_field() ) ) {
+		if ( $errors || FrmFieldGdprHelper::hide_gdpr_field() ) {
 			return $errors;
 		}
 
