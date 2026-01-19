@@ -1326,8 +1326,7 @@ class FrmStylesController {
 	 * @return string
 	 */
 	public static function important_style( $important, $field ) {
-		$important = self::get_style_val( 'important_style', $field['form_id'] );
-		return $important;
+		return self::get_style_val( 'important_style', $field['form_id'] );
 	}
 
 	/**
