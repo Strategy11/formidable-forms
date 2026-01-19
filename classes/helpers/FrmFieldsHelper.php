@@ -1773,9 +1773,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param string $val
+	 * @param array|string $val
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	public static function switch_field_ids( $val ) {
 		global $frm_duplicate_ids;
