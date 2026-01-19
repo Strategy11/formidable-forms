@@ -1812,8 +1812,7 @@ class FrmFieldsHelper {
 		}//end foreach
 
 		if ( ! is_array( $val ) ) {
-			$val = str_replace( $replace, $replace_with, $val );
-			return $val;
+			return str_replace( $replace, $replace_with, $val );
 		}
 
 		foreach ( $val as $k => $v ) {
