@@ -195,8 +195,46 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 			return $ifContext;
 		}
 
+		// Check if in a ternary condition.
+		$ternaryContext = $this->isInTernaryCondition( $phpcsFile, $stackPtr );
+
+		if ( false !== $ternaryContext ) {
+			return $ternaryContext;
+		}
+
 		// Check if in a boolean expression (with && or ||).
 		return $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+	}
+
+	/**
+	 * Check if the empty() call is in a ternary condition.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return false|int The statement start position, or false if not in a ternary.
+	 */
+	private function isInTernaryCondition( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the end of the empty() call.
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+		// Look for ? after the empty() call.
+		$nextToken = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+
+		if ( false !== $nextToken && $tokens[ $nextToken ]['code'] === T_INLINE_THEN ) {
+			// Find the statement start.
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		return false;
 	}
 
 	/**
