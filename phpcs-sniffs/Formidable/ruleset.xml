@@ -37,6 +37,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
+	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
