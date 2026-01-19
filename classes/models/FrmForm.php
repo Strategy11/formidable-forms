@@ -1265,7 +1265,7 @@ class FrmForm {
 	 *
 	 * @return bool
 	 */
-	public static function &is_visible_to_user( $form ) {
+	public static function is_visible_to_user( $form ) {
 		if ( $form->logged_in && isset( $form->options['logged_in_role'] ) ) {
 			$visible = FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
 		} else {
@@ -1278,9 +1278,7 @@ class FrmForm {
 		 * @param bool   $visible
 		 * @param object $form
 		 */
-		$visible = (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
-
-		return $visible;
+		return (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
 	}
 
 	/**
