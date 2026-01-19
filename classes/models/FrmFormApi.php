@@ -411,7 +411,12 @@ class FrmFormApi {
 			}
 
 			if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
+				error_log( 'Omitting ' . $addon['slug'] . ' (Version)' );
 				// If version is set but blank, the plugin is not actually live.
+				continue;
+			}
+
+			if ( isset( $addon['categories'] ) && ( ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' ) ) && 'views' !== $addon['slug'] ) {
 				continue;
 			}
 
