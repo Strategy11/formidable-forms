@@ -29,6 +29,7 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantNotIssetBeforeEmpty" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
@@ -42,7 +43,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfElseToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
-	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
