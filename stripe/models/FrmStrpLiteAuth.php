@@ -421,14 +421,15 @@ class FrmStrpLiteAuth {
 			$k = sanitize_text_field( stripslashes( $k ) );
 			$v = wp_unslash( $v );
 
-			if ( $k === 'item_meta' ) {
-				foreach ( $v as $f => $value ) {
-					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-					$entry->metas[ absint( $f ) ] = $value;
-				}
-			} else {
+			if ( $k !== 'item_meta' ) {
 				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );
 				$entry->{$k} = $v;
+				continue;
+			}
+
+			foreach ( $v as $f => $value ) {
+				FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+				$entry->metas[ absint( $f ) ] = $value;
 			}
 		}
 
@@ -450,14 +451,15 @@ class FrmStrpLiteAuth {
 		foreach ( $form as $input ) {
 			$key = $input['name'];
 
-			if ( isset( $formatted[ $key ] ) ) {
-				if ( is_array( $formatted[ $key ] ) ) {
-					$formatted[ $key ][] = $input['value'];
-				} else {
-					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
-				}
-			} else {
+			if ( ! isset( $formatted[ $key ] ) ) {
 				$formatted[ $key ] = $input['value'];
+				continue;
+			}
+
+			if ( is_array( $formatted[ $key ] ) ) {
+				$formatted[ $key ][] = $input['value'];
+			} else {
+				$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
 			}
 		}
 

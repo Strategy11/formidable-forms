@@ -418,21 +418,22 @@ class FrmCSVExportHelper {
 			$flat = array();
 
 			foreach ( $headings as $key => $heading ) {
-				if ( is_array( $heading ) ) {
-					$repeater_id       = str_replace( 'repeater', '', $key );
-					$repeater_headings = array();
-
-					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
-						$repeater_headings += self::field_headings( $col );
-					}
-
-					for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
-						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
-							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
-						}
-					}
-				} else {
+				if ( ! is_array( $heading ) ) {
 					$flat[ $key ] = $heading;
+					continue;
+				}
+
+				$repeater_id       = str_replace( 'repeater', '', $key );
+				$repeater_headings = array();
+
+				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+					$repeater_headings += self::field_headings( $col );
+				}
+
+				for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
+					foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
+						$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
+					}
 				}
 			}
 
