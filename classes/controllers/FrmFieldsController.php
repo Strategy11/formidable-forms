@@ -888,14 +888,16 @@ class FrmFieldsController {
 	private static function get_form_for_js_validation( $field ) {
 		global $frm_vars;
 
-		if ( ! empty( $frm_vars['js_validate_forms'] ) ) {
-			if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
-				return $frm_vars['js_validate_forms'][ $field['form_id'] ];
-			}
+		if ( empty( $frm_vars['js_validate_forms'] ) ) {
+			return false;
+		}
 
-			if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
-				return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
-			}
+		if ( isset( $frm_vars['js_validate_forms'][ $field['form_id'] ] ) ) {
+			return $frm_vars['js_validate_forms'][ $field['form_id'] ];
+		}
+
+		if ( ! empty( $field['parent_form_id'] ) && isset( $frm_vars['js_validate_forms'][ $field['parent_form_id'] ] ) ) {
+			return $frm_vars['js_validate_forms'][ $field['parent_form_id'] ];
 		}
 
 		return false;
@@ -1056,12 +1058,14 @@ class FrmFieldsController {
 	 * @return mixed
 	 */
 	public static function check_value( $opt, $opt_key, $field ) {
-		if ( is_array( $opt ) ) {
-			if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
-				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
-			} else {
-				$opt = $opt['label'] ?? reset( $opt );
-			}
+		if ( ! is_array( $opt ) ) {
+			return $opt;
+		}
+
+		if ( FrmField::is_option_true( $field, 'separate_value' ) ) {
+			$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
+		} else {
+			$opt = $opt['label'] ?? reset( $opt );
 		}
 
 		return $opt;

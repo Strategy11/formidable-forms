@@ -93,11 +93,13 @@ class FrmSMTPController {
 	 * @return array
 	 */
 	public static function remove_wpforms_nag( $upsell ) {
-		if ( is_array( $upsell ) ) {
-			foreach ( $upsell as $k => $plugin ) {
-				if ( str_contains( $plugin['slug'], 'wpforms' ) ) {
-					unset( $upsell[ $k ] );
-				}
+		if ( ! is_array( $upsell ) ) {
+			return $upsell;
+		}
+
+		foreach ( $upsell as $k => $plugin ) {
+			if ( str_contains( $plugin['slug'], 'wpforms' ) ) {
+				unset( $upsell[ $k ] );
 			}
 		}
 

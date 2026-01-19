@@ -720,12 +720,14 @@ class FrmField {
 		}
 		unset( $values );
 
-		if ( $query_results ) {
-			wp_cache_delete( $id, 'frm_field' );
+		if ( ! $query_results ) {
+			return $query_results;
+		}
 
-			if ( $form_id ) {
-				self::delete_form_transient( $form_id );
-			}
+		wp_cache_delete( $id, 'frm_field' );
+
+		if ( $form_id ) {
+			self::delete_form_transient( $form_id );
 		}
 
 		return $query_results;

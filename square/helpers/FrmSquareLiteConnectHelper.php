@@ -197,13 +197,15 @@ class FrmSquareLiteConnectHelper {
 
 		$body = self::pull_response_body( $response );
 
-		if ( empty( $body->success ) ) {
-			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
-				return $body->data;
-			}
-
-			return 'Response from server was not successful';
+		if ( ! empty( $body->success ) ) {
+			return $body->data ?? array();
 		}
+
+		if ( ! empty( $body->data ) && is_string( $body->data ) ) {
+			return $body->data;
+		}
+
+		return 'Response from server was not successful';
 
 		return $body->data ?? array();
 	}
@@ -309,12 +311,14 @@ class FrmSquareLiteConnectHelper {
 	 * @return false|string
 	 */
 	private static function maybe_get_pro_license() {
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$pro_license = FrmAddonsController::get_pro_license();
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return ! empty( $password ) ? $password : false;
+		}
 
-			if ( $pro_license ) {
-				$password = $pro_license;
-			}
+		$pro_license = FrmAddonsController::get_pro_license();
+
+		if ( $pro_license ) {
+			$password = $pro_license;
 		}
 
 		return ! empty( $password ) ? $password : false;
@@ -479,24 +483,26 @@ class FrmSquareLiteConnectHelper {
 		);
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
-		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
-			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
-
-			$currency    = self::get_merchant_currency( true, $mode );
-			$location_id = self::get_location_id( true, $mode );
-
-			if ( $currency ) {
-				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
-			}
-
-			if ( $location_id ) {
-				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
-			}
-
-			FrmTransLiteAppController::install();
-
-			return true;
+		if ( ! ( is_object( $data ) && ! empty( $data->merchant_id ) ) ) {
+			return false;
 		}
+
+		update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+
+		$currency    = self::get_merchant_currency( true, $mode );
+		$location_id = self::get_location_id( true, $mode );
+
+		if ( $currency ) {
+			update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
+		}
+
+		if ( $location_id ) {
+			update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
+		}
+
+		FrmTransLiteAppController::install();
+
+		return true;
 
 		return false;
 	}

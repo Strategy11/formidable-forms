@@ -2475,13 +2475,15 @@ class FrmFormsController {
 	private static function maybe_get_form_to_show( $id ) {
 		$form = false;
 
-		if ( $id ) {
-			// Form id or key is set.
-			$form = FrmForm::getOne( $id );
+		if ( ! $id ) {
+			return $form;
+		}
 
-			if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
-				$form = false;
-			}
+		// Form id or key is set.
+		$form = FrmForm::getOne( $id );
+
+		if ( ! $form || $form->parent_form_id || $form->status === 'trash' ) {
+			$form = false;
 		}
 
 		return $form;
@@ -2867,16 +2869,18 @@ class FrmFormsController {
 			return ! empty( $action->post_content['success_url'] );
 		}
 
-		if ( 'page' === $action_type ) {
-			if ( empty( $action->post_content['success_page_id'] ) ) {
-				return false;
-			}
+		if ( 'page' !== $action_type ) {
+			return true;
+		}
 
-			$page = get_post( $action->post_content['success_page_id'] );
+		if ( empty( $action->post_content['success_page_id'] ) ) {
+			return false;
+		}
 
-			if ( ! $page || 'trash' === $page->post_status ) {
-				return false;
-			}
+		$page = get_post( $action->post_content['success_page_id'] );
+
+		if ( ! $page || 'trash' === $page->post_status ) {
+			return false;
 		}
 
 		return true;

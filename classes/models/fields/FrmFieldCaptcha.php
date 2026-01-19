@@ -434,12 +434,14 @@ class FrmFieldCaptcha extends FrmFieldType {
 	 * @return array Values.
 	 */
 	public static function update_field_name( $values ) {
-		if ( $values['type'] === 'captcha' ) {
-			$name = $values['name'];
+		if ( $values['type'] !== 'captcha' ) {
+			return $values;
+		}
 
-			if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
-				$values['name'] = __( 'Captcha', 'formidable' );
-			}
+		$name = $values['name'];
+
+		if ( in_array( $name, array( __( 'reCAPTCHA', 'formidable' ), __( 'hCaptcha', 'formidable' ) ), true ) ) {
+			$values['name'] = __( 'Captcha', 'formidable' );
 		}
 
 		return $values;

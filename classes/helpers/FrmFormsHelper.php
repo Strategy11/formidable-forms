@@ -2122,14 +2122,12 @@ BEFORE_HTML;
 			return true;
 		}
 
-		if ( is_callable( 'FrmProFormState::get_from_request' ) ) {
-			$api = FrmProFormState::get_from_request( 'a', 0 );
-
-			if ( $api ) {
-				return true;
-			}
+		if ( ! is_callable( 'FrmProFormState::get_from_request' ) ) {
+			return false;
 		}
 
-		return false;
+		$api = FrmProFormState::get_from_request( 'a', 0 );
+
+		return $api ? true : false;
 	}
 }

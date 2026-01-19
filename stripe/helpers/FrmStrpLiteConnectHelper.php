@@ -172,13 +172,15 @@ class FrmStrpLiteConnectHelper {
 
 		$body = self::pull_response_body( $response );
 
-		if ( empty( $body->success ) ) {
-			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
-				return $body->data;
-			}
-
-			return 'Response from server was not successful';
+		if ( ! empty( $body->success ) ) {
+			return $body->data ?? array();
 		}
+
+		if ( ! empty( $body->data ) && is_string( $body->data ) ) {
+			return $body->data;
+		}
+
+		return 'Response from server was not successful';
 
 		return $body->data ?? array();
 	}
@@ -394,15 +396,17 @@ class FrmStrpLiteConnectHelper {
 		);
 		$data = self::post_to_connect_server( 'oauth_account_status', $body );
 
-		if ( is_object( $data ) && ! empty( $data->account_id ) ) {
-			update_option( self::get_account_id_option_name( $mode ), $data->account_id, 'no' );
-
-			if ( ! empty( $data->details_submitted ) ) {
-				self::set_stripe_details_as_submitted( $mode );
-			}
-
-			return true;
+		if ( ! ( is_object( $data ) && ! empty( $data->account_id ) ) ) {
+			return false;
 		}
+
+		update_option( self::get_account_id_option_name( $mode ), $data->account_id, 'no' );
+
+		if ( ! empty( $data->details_submitted ) ) {
+			self::set_stripe_details_as_submitted( $mode );
+		}
+
+		return true;
 
 		return false;
 	}
@@ -581,12 +585,14 @@ class FrmStrpLiteConnectHelper {
 	 * @return false|string
 	 */
 	private static function maybe_get_pro_license() {
-		if ( FrmAppHelper::pro_is_installed() ) {
-			$pro_license = FrmAddonsController::get_pro_license();
+		if ( ! FrmAppHelper::pro_is_installed() ) {
+			return ! empty( $password ) ? $password : false;
+		}
 
-			if ( $pro_license ) {
-				$password = $pro_license;
-			}
+		$pro_license = FrmAddonsController::get_pro_license();
+
+		if ( $pro_license ) {
+			$password = $pro_license;
 		}
 
 		return ! empty( $password ) ? $password : false;

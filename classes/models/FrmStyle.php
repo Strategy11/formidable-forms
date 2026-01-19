@@ -335,12 +335,14 @@ class FrmStyle {
 		}
 
 		// Remove extra braces from the end.
-		if ( in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
-			$output = rtrim( $output, '()' );
+		if ( ! in_array( substr( $output, -1 ), array( '(', ')' ), true ) ) {
+			return $output;
+		}
 
-			if ( str_contains( $output, '(' ) ) {
-				$output .= ')';
-			}
+		$output = rtrim( $output, '()' );
+
+		if ( str_contains( $output, '(' ) ) {
+			$output .= ')';
 		}
 
 		return $output;

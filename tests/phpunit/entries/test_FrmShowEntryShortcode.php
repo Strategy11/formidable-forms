@@ -1125,12 +1125,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		);
 
 		// phpcs:ignore Universal.Operators.StrictComparisons
-		if ( empty( $atts['include_blank'] ) ) {
-			foreach ( $expected as $field_key => $value ) {
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $value == '' || empty( $value ) ) {
-					unset( $expected[ $field_key ] );
-				}
+		if ( ! empty( $atts['include_blank'] ) ) {
+			return $expected;
+		}
+
+		foreach ( $expected as $field_key => $value ) {
+            // phpcs:ignore Universal.Operators.StrictComparisons
+			if ( $value == '' || empty( $value ) ) {
+				unset( $expected[ $field_key ] );
 			}
 		}
 

@@ -497,16 +497,14 @@ class FrmAppHelper {
 		global $pagenow;
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 
-		if ( $pagenow ) {
-			// allow this to be true during ajax load i.e. ajax form builder loading
-			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
-
-			if ( $is_page ) {
-				return true;
-			}
+		if ( ! $pagenow ) {
+			return is_admin() && $get_page === $page;
 		}
 
-		return is_admin() && $get_page === $page;
+		// allow this to be true during ajax load i.e. ajax form builder loading
+		$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
+
+		return $is_page ? true : is_admin() && $get_page === $page;
 	}
 
 	/**
@@ -2749,12 +2747,14 @@ class FrmAppHelper {
 
 		$max_key_length_before_truncating = 60;
 
-		if ( strlen( $key ) > $max_key_length_before_truncating ) {
-			$key = substr( $key, 0, $max_key_length_before_truncating );
+		if ( strlen( $key ) <= $max_key_length_before_truncating ) {
+			return $key;
+		}
 
-			if ( is_numeric( $key ) ) {
-				$key .= 'a';
-			}
+		$key = substr( $key, 0, $max_key_length_before_truncating );
+
+		if ( is_numeric( $key ) ) {
+			$key .= 'a';
 		}
 
 		return $key;
@@ -3716,16 +3716,14 @@ class FrmAppHelper {
 			return $value;
 		}
 
-		if ( function_exists( 'iconv' ) ) {
-			$converted = iconv( $from_format, $to_format, $value );
-
-			// Value is false if $value is not ISO-8859-1.
-			if ( false !== $converted ) {
-				return $converted;
-			}
+		if ( ! function_exists( 'iconv' ) ) {
+			return $value;
 		}
 
-		return $value;
+		$converted = iconv( $from_format, $to_format, $value );
+
+		// Value is false if $value is not ISO-8859-1.
+		return false !== $converted ? $converted : $value;
 	}
 
 	/**
@@ -4212,12 +4210,14 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_menu_icon_class() {
-		if ( is_callable( 'FrmProAppHelper::get_settings' ) ) {
-			$settings = FrmProAppHelper::get_settings();
+		if ( ! is_callable( 'FrmProAppHelper::get_settings' ) ) {
+			return 'frmfont frm_logo_icon';
+		}
 
-			if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
-				return $settings->menu_icon;
-			}
+		$settings = FrmProAppHelper::get_settings();
+
+		if ( is_object( $settings ) && ! empty( $settings->menu_icon ) ) {
+			return $settings->menu_icon;
 		}
 
 		return 'frmfont frm_logo_icon';

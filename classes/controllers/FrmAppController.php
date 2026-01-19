@@ -1196,14 +1196,16 @@ class FrmAppController {
 	public static function api_install() {
 		delete_transient( 'frm_updating_api' );
 
-		if ( self::needs_update() ) {
-			$running = get_option( 'frm_install_running' );
+		if ( ! self::needs_update() ) {
+			return true;
+		}
 
-			if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
-				update_option( 'frm_install_running', time(), 'no' );
-				self::install();
-				delete_option( 'frm_install_running' );
-			}
+		$running = get_option( 'frm_install_running' );
+
+		if ( false === $running || $running < strtotime( '-5 minutes' ) ) {
+			update_option( 'frm_install_running', time(), 'no' );
+			self::install();
+			delete_option( 'frm_install_running' );
 		}
 
 		return true;

@@ -349,12 +349,14 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$field_id = (int) ( is_array( $args['field'] ) ? $args['field']['id'] : $args['field']->id );
 
-		if ( intval( self::$first_name_field_ids[ $form_id ] ) === $field_id ) {
-			if ( 'first' === $sub_field['name'] ) {
-				$attrs['autocomplete'] = 'given-name';
-			} elseif ( 'last' === $sub_field['name'] ) {
-				$attrs['autocomplete'] = 'family-name';
-			}
+		if ( intval( self::$first_name_field_ids[ $form_id ] ) !== $field_id ) {
+			return $attrs;
+		}
+
+		if ( 'first' === $sub_field['name'] ) {
+			$attrs['autocomplete'] = 'given-name';
+		} elseif ( 'last' === $sub_field['name'] ) {
+			$attrs['autocomplete'] = 'family-name';
 		}
 
 		return $attrs;

@@ -970,14 +970,12 @@ class FrmEntriesHelper {
 			return 0;
 		}
 
-		if ( is_callable( 'FrmProSettingsController::inbox_badge' ) ) {
-			$inbox_count = FrmProSettingsController::inbox_badge( $inbox_count );
-
-			if ( ! $inbox_count ) {
-				return 0;
-			}
+		if ( ! is_callable( 'FrmProSettingsController::inbox_badge' ) ) {
+			return $inbox_count;
 		}
 
-		return $inbox_count;
+		$inbox_count = FrmProSettingsController::inbox_badge( $inbox_count );
+
+		return $inbox_count ? $inbox_count : 0;
 	}
 }

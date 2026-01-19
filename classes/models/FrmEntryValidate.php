@@ -516,16 +516,18 @@ class FrmEntryValidate {
 		$pattern = str_replace( '*', 'w', $pattern );
 		$pattern = str_replace( '/', '\/', $pattern );
 
-		if ( str_contains( $pattern, '\?' ) ) {
-			$parts   = explode( '\?', $pattern );
-			$pattern = '';
+		if ( ! str_contains( $pattern, '\?' ) ) {
+			return '^' . $pattern . '$';
+		}
 
-			foreach ( $parts as $part ) {
-				if ( ! $pattern ) {
-					$pattern .= $part;
-				} else {
-					$pattern .= '(' . $part . ')?';
-				}
+		$parts   = explode( '\?', $pattern );
+		$pattern = '';
+
+		foreach ( $parts as $part ) {
+			if ( ! $pattern ) {
+				$pattern .= $part;
+			} else {
+				$pattern .= '(' . $part . ')?';
 			}
 		}
 

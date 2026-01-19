@@ -608,15 +608,18 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function get_border_radius( $settings ) {
-		if ( ! empty( $settings['field_shape_type'] ) ) {
-			switch ( $settings['field_shape_type'] ) {
-				case 'underline':
-				case 'regular':
-					return '0px';
-				case 'circle':
-					return '30px';
-			}
+		if ( empty( $settings['field_shape_type'] ) ) {
+			return $settings['border_radius'];
 		}
+
+		switch ( $settings['field_shape_type'] ) {
+			case 'underline':
+			case 'regular':
+				return '0px';
+			case 'circle':
+				return '30px';
+		}
+
 		return $settings['border_radius'];
 	}
 

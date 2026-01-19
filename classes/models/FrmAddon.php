@@ -290,12 +290,14 @@ class FrmAddon {
 	public function activate_defined_license() {
 		$license = $this->get_defined_license();
 
-		if ( $license && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) {
-			$response = $this->activate_license( $license );
+		if ( ! ( $license && ! $this->is_active() && ! $this->checked_recently( '1 day' ) ) ) {
+			return $license;
+		}
 
-			if ( ! $response['success'] ) {
-				$license = '';
-			}
+		$response = $this->activate_license( $license );
+
+		if ( ! $response['success'] ) {
+			$license = '';
 		}
 
 		return $license;

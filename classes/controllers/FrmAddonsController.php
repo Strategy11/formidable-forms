@@ -1221,19 +1221,23 @@ class FrmAddonsController {
 				break;
 		}
 
-		if ( is_wp_error( $result ) ) {
-			// Ignore the invalid header message that shows with nested plugins.
-			if ( $result->get_error_code() !== 'no_plugin_header' ) {
-				if ( wp_doing_ajax() ) {
-					wp_send_json_error( array( 'error' => $result->get_error_message() ) );
-				}
-
-				return array(
-					'message' => $result->get_error_message(),
-					'success' => false,
-				);
-			}
+		if ( ! is_wp_error( $result ) ) {
+			return $result;
 		}
+
+		// Ignore the invalid header message that shows with nested plugins.
+		if ( $result->get_error_code() === 'no_plugin_header' ) {
+			return $result;
+		}
+
+		if ( wp_doing_ajax() ) {
+			wp_send_json_error( array( 'error' => $result->get_error_message() ) );
+		}
+
+		return array(
+			'message' => $result->get_error_message(),
+			'success' => false,
+		);
 
 		return $result;
 	}
@@ -1362,23 +1366,27 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
-			load_formidable_pro();
-			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
+		if ( ! ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) ) {
+			return array(
+				'success' => true,
+			);
+		}
 
-			if ( ! $license ) {
-				return array(
-					'success' => false,
-					'error'   => 'That site does not have a valid license key.',
-				);
-			}
+		load_formidable_pro();
+		$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 
-			$response = FrmAddon::activate_license_for_plugin( $license, 'formidable_pro' );
+		if ( ! $license ) {
+			return array(
+				'success' => false,
+				'error'   => 'That site does not have a valid license key.',
+			);
+		}
 
-			if ( ! $response['success'] ) {
-				// Could not activate license.
-				return $response;
-			}
+		$response = FrmAddon::activate_license_for_plugin( $license, 'formidable_pro' );
+
+		if ( ! $response['success'] ) {
+			// Could not activate license.
+			return $response;
 		}
 
 		return array(

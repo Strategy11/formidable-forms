@@ -722,16 +722,18 @@ class FrmEmail {
 		}
 
 		// if sending the email from a yahoo address, change it to the WordPress default
-		if ( str_contains( $from_email, '@yahoo.com' ) ) {
-			// Get the site domain and get rid of www.
-			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
-
-			if ( str_starts_with( $sitename, 'www.' ) ) {
-				$sitename = substr( $sitename, 4 );
-			}
-
-			$from_email = 'wordpress@' . $sitename;
+		if ( ! str_contains( $from_email, '@yahoo.com' ) ) {
+			return $this->format_from_email( $from_name, $from_email );
 		}
+
+		// Get the site domain and get rid of www.
+		$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
+
+		if ( str_starts_with( $sitename, 'www.' ) ) {
+			$sitename = substr( $sitename, 4 );
+		}
+
+		$from_email = 'wordpress@' . $sitename;
 
 		return $this->format_from_email( $from_name, $from_email );
 	}

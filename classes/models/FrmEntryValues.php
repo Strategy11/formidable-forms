@@ -313,12 +313,14 @@ class FrmEntryValues {
 			$is_included = $this->is_field_in_array( $field, $this->include_fields );
 		}
 
-		if ( ! empty( $this->exclude_fields ) ) {
-			$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+		if ( empty( $this->exclude_fields ) ) {
+			return $is_included;
+		}
 
-			if ( $is_excluded ) {
-				$is_included = false;
-			}
+		$is_excluded = $this->is_field_in_array( $field, $this->exclude_fields );
+
+		if ( $is_excluded ) {
+			$is_included = false;
 		}
 
 		return $is_included;

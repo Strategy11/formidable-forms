@@ -279,18 +279,20 @@ class FrmCreateFile {
 		$has_creds = ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] );
 		$can_ssh   = 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] );
 
-		if ( $has_creds || $can_ssh ) {
-			$stored_credentials = $credentials;
-
-			if ( ! empty( $stored_credentials['port'] ) ) {
-				// Save port as part of hostname to simplify above code.
-				$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
-			}
-
-			unset( $stored_credentials['password'], $stored_credentials['port'], $stored_credentials['private_key'], $stored_credentials['public_key'] );
-
-			return $credentials;
+		if ( ! ( $has_creds || $can_ssh ) ) {
+			return false;
 		}
+
+		$stored_credentials = $credentials;
+
+		if ( ! empty( $stored_credentials['port'] ) ) {
+			// Save port as part of hostname to simplify above code.
+			$stored_credentials['hostname'] .= ':' . $stored_credentials['port'];
+		}
+
+		unset( $stored_credentials['password'], $stored_credentials['port'], $stored_credentials['private_key'], $stored_credentials['public_key'] );
+
+		return $credentials;
 
 		return false;
 	}

@@ -188,18 +188,20 @@ class FrmEmailSummaryHelper {
 		// If renewal date doesn't exist, get from the first form creation date.
 		$first_form_date = self::get_earliest_form_created_date();
 
-		if ( $first_form_date ) {
-			$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
-
-			// If the first form is more than 1 year in the past, set renewal date to the next 45 days.
-			if ( $renewal_date < self::get_date_from_today() ) {
-				$renewal_date = self::get_date_from_today( '+' . self::BEFORE_RENEWAL_PERIOD . ' days' );
-			}
-
-			$options['renewal_date'] = $renewal_date;
-			self::save_options( $options );
-			return $renewal_date;
+		if ( ! $first_form_date ) {
+			return false;
 		}
+
+		$renewal_date = gmdate( 'Y-m-d', strtotime( $first_form_date . '+' . self::YEARLY_PERIOD . ' days' ) );
+
+		// If the first form is more than 1 year in the past, set renewal date to the next 45 days.
+		if ( $renewal_date < self::get_date_from_today() ) {
+			$renewal_date = self::get_date_from_today( '+' . self::BEFORE_RENEWAL_PERIOD . ' days' );
+		}
+
+		$options['renewal_date'] = $renewal_date;
+		self::save_options( $options );
+		return $renewal_date;
 
 		return false;
 	}

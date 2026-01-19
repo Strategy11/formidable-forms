@@ -350,15 +350,13 @@ class FrmFormApi {
 	 * @return mixed
 	 */
 	protected function get_cached_option() {
-		if ( is_multisite() ) {
-			$cached = get_site_option( $this->cache_key );
-
-			if ( $cached ) {
-				return $cached;
-			}
+		if ( ! is_multisite() ) {
+			return get_option( $this->cache_key );
 		}
 
-		return get_option( $this->cache_key );
+		$cached = get_site_option( $this->cache_key );
+
+		return $cached ? $cached : get_option( $this->cache_key );
 	}
 
 	/**
@@ -437,21 +435,19 @@ class FrmFormApi {
 			return false;
 		}
 
-		if ( isset( $addon['categories'] ) ) {
-			if ( 'views' === $addon['slug'] ) {
-				// Legacy views has no categories set, but we should still
-				// include it in cache since it is a valid add-on.
-				return true;
-			}
-
-			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
-
-			if ( $categories_are_empty ) {
-				return false;
-			}
+		if ( ! isset( $addon['categories'] ) ) {
+			return true;
 		}
 
-		return true;
+		if ( 'views' === $addon['slug'] ) {
+			// Legacy views has no categories set, but we should still
+			// include it in cache since it is a valid add-on.
+			return true;
+		}
+
+		$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
+
+		return $categories_are_empty ? false : true;
 	}
 
 	/**

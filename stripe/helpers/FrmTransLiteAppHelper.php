@@ -44,15 +44,13 @@ class FrmTransLiteAppHelper {
 			return true;
 		}
 
-		if ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) {
-			$option = get_option( FrmPaymentsController::$db_opt_name );
-
-			if ( false !== $option ) {
-				return true;
-			}
+		if ( ! ( class_exists( 'FrmPaymentsController' ) && isset( FrmPaymentsController::$db_opt_name ) ) ) {
+			return false;
 		}
 
-		return false;
+		$option = get_option( FrmPaymentsController::$db_opt_name );
+
+		return false !== $option ? true : false;
 	}
 
 	/**
@@ -200,13 +198,15 @@ class FrmTransLiteAppHelper {
 			FrmProFieldsHelper::replace_non_standard_formidable_shortcodes( array(), $value );
 		}
 
-		if ( ! empty( $atts['entry'] ) ) {
-			if ( ! isset( $atts['form'] ) ) {
-				$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
-			}
-
-			$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
+		if ( empty( $atts['entry'] ) ) {
+			return do_shortcode( $value );
 		}
+
+		if ( ! isset( $atts['form'] ) ) {
+			$atts['form'] = FrmForm::getOne( $atts['entry']->form_id );
+		}
+
+		$value = apply_filters( 'frm_content', $value, $atts['form'], $atts['entry'] );
 
 		return do_shortcode( $value );
 	}
@@ -386,12 +386,14 @@ class FrmTransLiteAppHelper {
 	public static function get_user_link( $user_id ) {
 		$user_link = esc_html__( 'Guest', 'formidable' );
 
-		if ( $user_id ) {
-			$user = get_userdata( $user_id );
+		if ( ! $user_id ) {
+			return $user_link;
+		}
 
-			if ( $user ) {
-				$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
-			}
+		$user = get_userdata( $user_id );
+
+		if ( $user ) {
+			$user_link = '<a href="' . esc_url( admin_url( 'user-edit.php?user_id=' . $user_id ) ) . '">' . esc_html( $user->display_name ) . '</a>';
 		}
 
 		return $user_link;

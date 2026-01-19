@@ -667,10 +667,12 @@ class FrmFormTemplatesController {
 		$is_new_template = FrmAppHelper::simple_get( 'new_template' );
 
 		// Append 'new_template=true' to each nav item's link if 'new_template' exists in the URL.
-		if ( $is_new_template ) {
-			foreach ( $nav_items as &$item ) {
-				$item['link'] .= '&new_template=true';
-			}
+		if ( ! $is_new_template ) {
+			return $nav_items;
+		}
+
+		foreach ( $nav_items as &$item ) {
+			$item['link'] .= '&new_template=true';
 		}
 
 		return $nav_items;

@@ -197,12 +197,17 @@ class FrmHoneypot extends FrmValidate {
 
 		$selectors = $frm_vars['honeypot_selectors'];
 
-		if ( self::$printed_honeypot_selectors ) {
-			$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+		if ( ! self::$printed_honeypot_selectors ) {
+			return sprintf(
+				'%s {visibility:hidden;overflow:hidden;width:0;height:0;position:absolute;}',
+				implode( ',', $selectors )
+			);
+		}
 
-			if ( ! $selectors ) {
-				return '';
-			}
+		$selectors = array_diff( $selectors, self::$printed_honeypot_selectors );
+
+		if ( ! $selectors ) {
+			return '';
 		}
 
 		return sprintf(

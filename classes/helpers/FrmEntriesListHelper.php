@@ -116,12 +116,14 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		FrmAppController::apply_saved_sort_preference( $orderby, $order );
 
-		if ( str_contains( $orderby, 'meta' ) ) {
-			$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+		if ( ! str_contains( $orderby, 'meta' ) ) {
+			return FrmDb::esc_order( $orderby . ' ' . $order );
+		}
 
-			if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
-				$orderby .= '+0';
-			}
+		$order_field_type = FrmField::get_type( str_replace( 'meta_', '', $orderby ) );
+
+		if ( in_array( $order_field_type, array( 'number', 'scale', 'star' ), true ) ) {
+			$orderby .= '+0';
 		}
 
 		return FrmDb::esc_order( $orderby . ' ' . $order );
