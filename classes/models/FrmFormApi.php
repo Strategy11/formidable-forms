@@ -439,10 +439,15 @@ class FrmFormApi {
 		}
 
 		if ( isset( $addon['categories'] ) ) {
-			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
-			$is_legacy_views      = 'views' === $addon['slug'];
+			if ( 'views' === $addon['slug'] ) {
+				// Legacy views has no categories set, but we should still
+				// include it in cache since it is a valid add-on.
+				return true;
+			}
 
-			if ( $categories_are_empty && ! $is_legacy_views ) {
+			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
+
+			if ( $categories_are_empty ) {
 				return false;
 			}
 		}
