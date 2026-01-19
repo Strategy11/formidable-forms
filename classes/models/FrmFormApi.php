@@ -107,6 +107,7 @@ class FrmFormApi {
 
 		if ( $this->force ) {
 			$addons = false;
+			$this->force = false;
 		} else {
 			$addons = $this->get_cached();
 		}
