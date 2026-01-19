@@ -314,7 +314,6 @@ class FrmFormAction {
 			'post_name'    => $this->form_id . '_' . $this->id_base . '_' . $this->number,
 			'menu_order'   => $this->form_id,
 		);
-		unset( $post_content );
 
 		return (object) $form_action;
 	}
