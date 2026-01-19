@@ -198,7 +198,7 @@ class FrmUsage {
 		$long_text_keys = apply_filters( 'frm_usage_long_text_keys', $long_text_keys );
 
 		foreach ( $data as $key => &$value ) {
-			if ( ! $value || in_array( $key, $skip_keys, true ) || '_url' === substr( $key, -4 ) ) {
+			if ( ! $value || in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
 				continue;
 			}
 
@@ -207,14 +207,14 @@ class FrmUsage {
 				continue;
 			}
 
-			if ( in_array( $key, $long_text_keys, true ) || '_msg' === substr( $key, -4 ) ) {
+			if ( in_array( $key, $long_text_keys, true ) || str_ends_with( $key, '_msg' ) ) {
 				// Replace it with a placeholder.
 				$value = '{{long_text}}';
 				continue;
 			}
 
 			// If key ends with `_email`, or value contains `@`, this might contain an email address.
-			if ( '_email' === substr( $key, -6 ) || false !== strpos( $value, '@' ) ) {
+			if ( str_ends_with( $key, '_email' ) || str_contains( $value, '@' ) ) {
 				// Replace it with a placeholder.
 				$value = '{{contain_email}}';
 			}
