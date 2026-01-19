@@ -93,7 +93,9 @@ class RedundantUnsetBeforeReturnSniff implements Sniff {
 				if ( in_array( $tokens[ $i ]['code'], array( T_OPEN_SQUARE_BRACKET, T_OBJECT_OPERATOR ), true ) ) {
 					$hasComplexUnset = true;
 					break;
-				} elseif ( $tokens[ $i ]['code'] !== T_WHITESPACE && $tokens[ $i ]['code'] !== T_COMMA ) {
+				}
+
+				if ( $tokens[ $i ]['code'] !== T_WHITESPACE && $tokens[ $i ]['code'] !== T_COMMA ) {
 					$lastWasVariable = false;
 				}
 			}
