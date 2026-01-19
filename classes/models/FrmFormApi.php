@@ -117,7 +117,7 @@ class FrmFormApi {
 		}
 
 		if ( $this->force ) {
-			$addons = false;
+			$addons      = false;
 			$this->force = false;
 		} else {
 			$addons = $this->get_cached();
@@ -397,13 +397,13 @@ class FrmFormApi {
 	 * @return array
 	 */
 	private function reduce_addon_data_before_caching( $addons ) {
-		$is_subclass = is_subclass_of( $this, 'FrmFormApi' );
-		if ( $is_subclass ) {
+		if ( is_subclass_of( $this, 'FrmFormApi' ) ) {
 			// We only want to modify FrmFormApi. Leave the other APIs alone for now.
 			return $addons;
 		}
 
 		$reduced_addons = array();
+
 		foreach ( $addons as $key => $addon ) {
 			if ( ! is_array( $addon ) ) {
 				$reduced_addons[ $key ] = $addon;
