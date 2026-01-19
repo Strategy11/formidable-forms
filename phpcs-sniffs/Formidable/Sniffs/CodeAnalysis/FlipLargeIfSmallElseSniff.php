@@ -388,6 +388,11 @@ class FlipLargeIfSmallElseSniff implements Sniff {
 					return false;
 				}
 
+				// Skip if this is part of -> (object operator).
+				if ( $op === '>' && $pos > 0 && $condition[ $pos - 1 ] === '-' ) {
+					continue;
+				}
+
 				return substr( $condition, 0, $pos ) . $opposite . substr( $condition, $pos + strlen( $op ) );
 			}
 		}
