@@ -410,13 +410,7 @@ class FrmFormApi {
 				continue;
 			}
 
-			if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
-				error_log( 'Omitting ' . $addon['slug'] . ' (Version)' );
-				// If version is set but blank, the plugin is not actually live.
-				continue;
-			}
-
-			if ( isset( $addon['categories'] ) && ( ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' ) ) && 'views' !== $addon['slug'] ) {
+			if ( ! $this->should_include_addon_in_cached_data( $addon ) ) {
 				continue;
 			}
 
@@ -428,6 +422,32 @@ class FrmFormApi {
 		}
 
 		return $reduced_addons;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 *
+	 * @return bool True if the add-on should be included in cached data.
+	 */
+	private static function should_include_addon_in_cached_data( $addon ) {
+		if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
+			error_log( 'Omitting ' . $addon['slug'] . ' (Version)' );
+			// If version is set but blank, the plugin is not actually live.
+			return false;
+		}
+
+		if ( isset( $addon['categories'] ) ) {
+			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
+			$is_legacy_views      = 'views' === $addon['slug'];
+
+			if ( $categories_are_empty && ! $is_legacy_views ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
