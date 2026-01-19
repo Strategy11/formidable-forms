@@ -1002,7 +1002,7 @@ DEFAULT_HTML;
 
 		$args = $this->fill_display_field_values( $args );
 
-		if ( $this - <= has_html ) {
+		if ( ! $this->has_html ) {
 			return $this->include_front_field_input( $args, array() );
 		}
 
