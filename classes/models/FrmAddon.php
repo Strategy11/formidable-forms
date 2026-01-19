@@ -211,7 +211,8 @@ class FrmAddon {
 			// Force new API info so we can pull changelog data.
 			// Change log data is intentionally omitted from the cached API response
 			// to help reduce the size of the autoloaded option.
-			$plugins = $api->get_api_info( true );
+			$api->force_api_request();
+			$plugins = $api->get_api_info();
 			$_data   = $plugins[ $item_id ];
 		}
 

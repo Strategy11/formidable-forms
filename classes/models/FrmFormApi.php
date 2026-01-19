@@ -28,6 +28,11 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
+	 * @var bool
+	 */
+	protected $force = false;
+
+	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -84,21 +89,23 @@ class FrmFormApi {
 		return $this->cache_key;
 	}
 
+	public function force_api_request() {
+		$this->force = true;
+	}
+
 	/**
 	 * @since 3.06
 	 *
-	 * @param bool $force
-	 *
 	 * @return array
 	 */
-	public function get_api_info( $force = false ) {
+	public function get_api_info() {
 		$url = $this->api_url();
 
 		if ( ! empty( $this->license ) ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
-		if ( $force ) {
+		if ( $this->force ) {
 			$addons = false;
 		} else {
 			$addons = $this->get_cached();
@@ -354,7 +361,6 @@ class FrmFormApi {
 		foreach ( $addons as $key => $addon ) {
 			if ( is_array( $addon ) ) {
 				unset( $addon['changelog'] );
-				$addon['changelog'] = '<h4>2.0.0</h4><ul><li>Fixed a critical bug.</li><li>Added changelog support!</li></ul>';
 			}
 
 			$reduced_addons[ $key ] = $addon;
