@@ -1002,23 +1002,21 @@ DEFAULT_HTML;
 
 		$args = $this->fill_display_field_values( $args );
 
-		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
-			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
-			$args['field_obj'] = $this;
-
-			$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
-			$this->set_field_column( 'label', $label );
-
-			$html_shortcode = new FrmFieldFormHtml( $args );
-			$html           = $html_shortcode->get_html();
-			$html           = $this->after_replace_html_shortcodes( $args, $html );
-			$html_shortcode->remove_collapse_shortcode( $html );
-		} else {
-			$html = $this->include_front_field_input( $args, array() );
+		if ( $this - <= has_html ) {
+			return $this->include_front_field_input( $args, array() );
 		}
 
-		return $html;
+		$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
+		$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
+		$args['field_obj'] = $this;
+
+		$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+		$this->set_field_column( 'label', $label );
+
+		$html_shortcode = new FrmFieldFormHtml( $args );
+		$html           = $html_shortcode->get_html();
+		$html           = $this->after_replace_html_shortcodes( $args, $html );
+		$html_shortcode->remove_collapse_shortcode( $html );
 	}
 
 	/**
@@ -1380,18 +1378,16 @@ DEFAULT_HTML;
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
 
-		if ( is_array( $selected_value ) ) {
-			$args['save_array'] = true;
-
-			foreach ( $selected_value as $selected ) {
-				$hidden .= $this->show_single_hidden( $selected, $args );
-			}
-		} else {
+		if ( ! is_array( $selected_value ) ) {
 			$args['save_array'] = $this->is_readonly_array();
-			$hidden            .= $this->show_single_hidden( $selected_value, $args );
+			return $hidden . $this->show_single_hidden( $selected_value, $args );
 		}
 
-		return $hidden;
+		$args['save_array'] = true;
+
+		foreach ( $selected_value as $selected ) {
+			$hidden .= $this->show_single_hidden( $selected, $args );
+		}
 	}
 
 	/**

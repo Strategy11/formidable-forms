@@ -43,6 +43,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />

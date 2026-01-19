@@ -1811,24 +1811,23 @@ class FrmFieldsHelper {
 			unset( $old, $new );
 		}//end foreach
 
-		if ( is_array( $val ) ) {
-			foreach ( $val as $k => $v ) {
-				if ( is_string( $v ) ) {
-					if ( 'custom_html' === $k ) {
-						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
-						unset( $k, $v );
-						continue;
-					}
-
-					$val[ $k ] = str_replace( $replace, $replace_with, $v );
-					unset( $k, $v );
-				}
-			}
-		} else {
+		if ( ! is_array( $val ) ) {
 			$val = str_replace( $replace, $replace_with, $val );
+			return $val;
 		}
 
-		return $val;
+		foreach ( $val as $k => $v ) {
+			if ( is_string( $v ) ) {
+				if ( 'custom_html' === $k ) {
+					$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
+					unset( $k, $v );
+					continue;
+				}
+
+				$val[ $k ] = str_replace( $replace, $replace_with, $v );
+				unset( $k, $v );
+			}
+		}
 	}
 
 	/**

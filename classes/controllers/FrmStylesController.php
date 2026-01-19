@@ -272,17 +272,15 @@ class FrmStylesController {
 	 * @return string
 	 */
 	private static function get_css_version( $css_key, $version ) {
-		if ( 'formidable' === $css_key ) {
-			$this_version = get_option( 'frm_last_style_update' );
-
-			if ( ! $this_version ) {
-				$this_version = $version;
-			}
-		} else {
-			$this_version = $version;
+		if ( 'formidable' !== $css_key ) {
+			return $version;
 		}
 
-		return $this_version;
+		$this_version = get_option( 'frm_last_style_update' );
+
+		if ( ! $this_version ) {
+			$this_version = $version;
+		}
 	}
 
 	/**

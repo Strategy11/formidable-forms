@@ -88,20 +88,18 @@ class FrmTransLiteListHelper extends FrmListHelper {
 		$table_name = $this->table === 'subscriptions' ? 'frm_subscriptions' : 'frm_payments';
 		$form_id    = FrmAppHelper::get_param( 'form', 0, 'get', 'absint' );
 
-		if ( $form_id ) {
-			// @codingStandardsIgnoreStart
-			$query = $wpdb->prepare(
-				"FROM `{$wpdb->prefix}{$table_name}` p
-				JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
-				WHERE i.form_id = %d",
-				$form_id
-			);
-			// @codingStandardsIgnoreEnd
-		} else {
-			$query = "FROM `{$wpdb->prefix}{$table_name}` p";
+		if ( ! $form_id ) {
+			return "FROM `{$wpdb->prefix}{$table_name}` p";
 		}
 
-		return $query;
+        // @codingStandardsIgnoreStart
+        $query = $wpdb->prepare(
+            "FROM `{$wpdb->prefix}{$table_name}` p
+            JOIN `{$wpdb->prefix}frm_items` i ON p.item_id = i.id
+            WHERE i.form_id = %d",
+            $form_id
+        );
+        // @codingStandardsIgnoreEnd
 	}
 
 	/**
