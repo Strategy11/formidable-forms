@@ -20,7 +20,6 @@ class FrmUsage {
 
 		$snapshot = $this->snapshot();
 		$this->clean_before_send( $snapshot );
-		error_log( print_r( $snapshot, true ) );
 
 		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
