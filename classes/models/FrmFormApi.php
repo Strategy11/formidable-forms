@@ -433,7 +433,6 @@ class FrmFormApi {
 	 */
 	private function should_include_addon_in_cached_data( $addon ) {
 		if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
-			error_log( 'Omitting ' . $addon['slug'] . ' (Version)' );
 			// If version is set but blank, the plugin is not actually live.
 			return false;
 		}
