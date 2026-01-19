@@ -1278,9 +1278,7 @@ class FrmForm {
 		 * @param bool   $visible
 		 * @param object $form
 		 */
-		$visible = (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
-
-		return $visible;
+		return (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
 	}
 
 	/**

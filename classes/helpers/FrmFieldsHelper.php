@@ -638,9 +638,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = $position ? $position : 'top';
-
-		return $position;
+		return $position ? $position : 'top';
 	}
 
 	/**
