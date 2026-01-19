@@ -87,16 +87,22 @@ class FrmFormApi {
 	/**
 	 * @since 3.06
 	 *
+	 * @param bool $force
+	 *
 	 * @return array
 	 */
-	public function get_api_info() {
+	public function get_api_info( $force = false ) {
 		$url = $this->api_url();
 
 		if ( ! empty( $this->license ) ) {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
-		$addons = $this->get_cached();
+		if ( $force ) {
+			$addons = false;
+		} else {
+			$addons = $this->get_cached();
+		}
 
 		if ( is_array( $addons ) ) {
 			return $addons;
@@ -344,6 +350,18 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
+		$reduced_addons = array();
+		foreach ( $addons as $key => $addon ) {
+			if ( is_array( $addon ) ) {
+				unset( $addon['changelog'] );
+				$addon['changelog'] = '<h4>2.0.0</h4><ul><li>Fixed a critical bug.</li><li>Added changelog support!</li></ul>';
+			}
+
+			$reduced_addons[ $key ] = $addon;
+		}
+
+		$addons = $reduced_addons;
+
 		$data = array(
 			'timeout' => strtotime( $this->get_cache_timeout( $addons ), time() ),
 			'value'   => wp_json_encode( $addons ),
