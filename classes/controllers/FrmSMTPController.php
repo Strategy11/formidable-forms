@@ -409,13 +409,15 @@ class FrmSMTPController {
 	protected function get_phpmailer() {
 		global $phpmailer;
 
-		if ( ! is_object( $phpmailer ) || ! is_a( $phpmailer, 'PHPMailer' ) ) {
-			if ( is_callable( array( wp_mail_smtp(), 'generate_mail_catcher' ) ) ) {
-				$phpmailer = wp_mail_smtp()->generate_mail_catcher( true ); // phpcs:ignore
-			} else {
-				require_once ABSPATH . WPINC . '/class-phpmailer.php';
-				$phpmailer = new PHPMailer( true ); // phpcs:ignore
-			}
+		if ( is_object( $phpmailer ) && is_a( $phpmailer, 'PHPMailer' ) ) {
+			return $phpmailer;
+		}
+
+		if ( is_callable( array( wp_mail_smtp(), 'generate_mail_catcher' ) ) ) {
+            $phpmailer = wp_mail_smtp()->generate_mail_catcher( true ); // phpcs:ignore
+		} else {
+			require_once ABSPATH . WPINC . '/class-phpmailer.php';
+            $phpmailer = new PHPMailer( true ); // phpcs:ignore
 		}
 
 		return $phpmailer;

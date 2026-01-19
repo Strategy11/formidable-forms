@@ -194,7 +194,7 @@ class FrmXMLHelper {
 				array(
 					'slug'        => (string) $t->term_slug,
 					'description' => (string) $t->term_description,
-					'parent'      => empty( $parent ) ? 0 : $parent,
+					'parent'      => $parent ? $parent : 0,
 				)
 			);
 
@@ -772,27 +772,30 @@ class FrmXMLHelper {
 		// If a dropdown placeholder was used, remove the option so it won't be included twice.
 		$options = $field['options'];
 
-		if ( $type === 'default_blank' && is_array( $options ) ) {
-			$default_value = $field['default_value'];
+		if ( $type !== 'default_blank' || ! is_array( $options ) ) {
+			return $changes;
+		}
 
-			if ( is_array( $default_value ) ) {
-				$default_value = reset( $default_value );
+		$default_value = $field['default_value'];
+
+		if ( is_array( $default_value ) ) {
+			$default_value = reset( $default_value );
+		}
+
+		foreach ( $options as $opt_key => $opt ) {
+			if ( is_array( $opt ) ) {
+				$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
 			}
 
-			foreach ( $options as $opt_key => $opt ) {
-				if ( is_array( $opt ) ) {
-					$opt = $opt['value'] ?? $opt['label'] ?? reset( $opt );
-				}
-
-				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $opt == $default_value ) {
-					unset( $options[ $opt_key ] );
-					break;
-				}
+            // phpcs:ignore Universal.Operators.StrictComparisons
+			if ( $opt == $default_value ) {
+				unset( $options[ $opt_key ] );
+				break;
 			}
+		}
 
-			$changes['options'] = $options;
-		}//end if
+		$changes['options'] = $options;
+		// end if
 
 		return $changes;
 	}
@@ -919,27 +922,30 @@ class FrmXMLHelper {
 		if ( is_numeric( $form['options']['custom_style'] ) && 1 === intval( $form['options']['custom_style'] ) ) {
 			// Set to default
 			$form['options']['custom_style'] = 1;
-		} else {
-			// Replace the style name with the style ID on import
-			global $wpdb;
-			$table    = $wpdb->prefix . 'posts';
-			$where    = array(
-				'post_name' => $form['options']['custom_style'],
-				'post_type' => 'frm_styles',
-			);
-			$select   = 'ID';
-			$style_id = FrmDb::get_var( $table, $where, $select );
 
-			if ( $style_id ) {
-				$form['options']['custom_style'] = $style_id;
-			} else {
-				// save the old style to maybe update after styles import
-				$form['options']['old_style'] = $form['options']['custom_style'];
+			return;
+		}
 
-				// Set to default
-				$form['options']['custom_style'] = 1;
-			}
-		}//end if
+		// Replace the style name with the style ID on import
+		global $wpdb;
+		$table    = $wpdb->prefix . 'posts';
+		$where    = array(
+			'post_name' => $form['options']['custom_style'],
+			'post_type' => 'frm_styles',
+		);
+		$select   = 'ID';
+		$style_id = FrmDb::get_var( $table, $where, $select );
+
+		if ( $style_id ) {
+			$form['options']['custom_style'] = $style_id;
+			return;
+		}
+
+		// save the old style to maybe update after styles import
+		$form['options']['old_style'] = $form['options']['custom_style'];
+
+		// Set to default
+		$form['options']['custom_style'] = 1;
 	}
 
 	/**
@@ -1524,6 +1530,8 @@ class FrmXMLHelper {
 	 * @param mixed  $result
 	 * @param string $message
 	 * @param array  $errors
+	 *
+	 * @return void
 	 */
 	public static function parse_message( $result, &$message, &$errors ) {
 		if ( is_wp_error( $result ) ) {
@@ -1592,24 +1600,28 @@ class FrmXMLHelper {
 		if ( $message === '<ul>' ) {
 			$message  = '';
 			$errors[] = __( 'Nothing was imported or updated', 'formidable' );
-		} else {
-			self::add_form_link_to_message( $result, $message );
 
-			/**
-			 * @since 5.3
-			 *
-			 * @param string $message
-			 * @param array  $result
-			 */
-			$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
-			$message .= '</ul>';
+			return;
 		}
+
+		self::add_form_link_to_message( $result, $message );
+
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $message
+		 * @param array  $result
+		 */
+		$message  = apply_filters( 'frm_xml_parsed_message', $message, $result );
+		$message .= '</ul>';
 	}
 
 	/**
 	 * @param int           $m
 	 * @param string        $type
 	 * @param array<string> $s_message
+	 *
+	 * @return void
 	 */
 	public static function item_count_message( $m, $type, &$s_message ) {
 		if ( ! $m ) {
@@ -1637,19 +1649,20 @@ class FrmXMLHelper {
 
 		if ( isset( $strings[ $type ] ) ) {
 			$s_message[] = $strings[ $type ];
-		} else {
-			$string = ' ' . $m . ' ' . ucfirst( $type );
-
-			/**
-			 * @since 5.3
-			 *
-			 * @param string $string Message string for imported item.
-			 * @param int    $m      Number of item that was imported.
-			 * }
-			 */
-			$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
-			$s_message[] = $string;
+			return;
 		}
+
+		$string = ' ' . $m . ' ' . ucfirst( $type );
+
+		/**
+		 * @since 5.3
+		 *
+		 * @param string $string Message string for imported item.
+		 * @param int    $m      Number of item that was imported.
+		 * }
+		 */
+		$string      = apply_filters( 'frm_xml_' . $type . '_count_message', $string, $m );
+		$s_message[] = $string;
 	}
 
 	/**
@@ -2223,7 +2236,7 @@ class FrmXMLHelper {
 
 				if ( 'custom' === $notification[ $f ] ) {
 					$atts[ $f ] = $notification[ 'cust_' . $f ];
-				} elseif ( is_numeric( $atts[ $f ] ) && ! empty( $atts[ $f ] ) ) {
+				} elseif ( is_numeric( $atts[ $f ] ) && $atts[ $f ] ) {
 					$atts[ $f ] = '[' . $atts[ $f ] . ']';
 				}
 			}
@@ -2347,50 +2360,52 @@ class FrmXMLHelper {
 	 * @return void
 	 */
 	private static function migrate_autoresponder_to_action( $form_options, $form_id, &$notifications ) {
-		if ( ! empty( $form_options['auto_responder'] ) && ! empty( $form_options['ar_email_message'] ) ) {
-			// migrate autoresponder
+		if ( empty( $form_options['auto_responder'] ) || empty( $form_options['ar_email_message'] ) ) {
+			return;
+		}
 
-			$email_field = $form_options['ar_email_to'] ?? 0;
+		// migrate autoresponder
 
-			if ( str_contains( $email_field, '|' ) ) {
-				// data from entries field
-				$email_field = explode( '|', $email_field );
+		$email_field = $form_options['ar_email_to'] ?? 0;
 
-				if ( isset( $email_field[1] ) ) {
-					$email_field = $email_field[1];
-				}
+		if ( str_contains( $email_field, '|' ) ) {
+			// data from entries field
+			$email_field = explode( '|', $email_field );
+
+			if ( isset( $email_field[1] ) ) {
+				$email_field = $email_field[1];
 			}
+		}
 
-			if ( is_numeric( $email_field ) && $email_field ) {
-				$email_field = '[' . $email_field . ']';
-			}
+		if ( is_numeric( $email_field ) && $email_field ) {
+			$email_field = '[' . $email_field . ']';
+		}
 
-			$notification      = $form_options;
-			$new_notification2 = array(
-				'post_content' => array(
-					'email_message' => $notification['ar_email_message'],
-					'email_subject' => $notification['ar_email_subject'] ?? '',
-					'email_to'      => $email_field,
-					'plain_text'    => $notification['ar_plain_text'] ?? 0,
-					'inc_user_info' => 0,
-				),
-				'post_name'    => $form_id . '_email_' . count( $notifications ),
-			);
+		$notification      = $form_options;
+		$new_notification2 = array(
+			'post_content' => array(
+				'email_message' => $notification['ar_email_message'],
+				'email_subject' => $notification['ar_email_subject'] ?? '',
+				'email_to'      => $email_field,
+				'plain_text'    => $notification['ar_plain_text'] ?? 0,
+				'inc_user_info' => 0,
+			),
+			'post_name'    => $form_id . '_email_' . count( $notifications ),
+		);
 
-			$reply_to      = $notification['ar_reply_to'] ?? '';
-			$reply_to_name = $notification['ar_reply_to_name'] ?? '';
+		$reply_to      = $notification['ar_reply_to'] ?? '';
+		$reply_to_name = $notification['ar_reply_to_name'] ?? '';
 
-			if ( $reply_to ) {
-				$new_notification2['post_content']['reply_to'] = $reply_to;
-			}
+		if ( $reply_to ) {
+			$new_notification2['post_content']['reply_to'] = $reply_to;
+		}
 
-			if ( $reply_to || $reply_to_name ) {
-				$new_notification2['post_content']['from'] = ( empty( $reply_to_name ) ? '[sitename]' : $reply_to_name ) . ' <' . ( empty( $reply_to ) ? '[admin_email]' : $reply_to ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			}
+		if ( $reply_to || $reply_to_name ) {
+			$new_notification2['post_content']['from'] = ( $reply_to_name ? $reply_to_name : '[sitename]' ) . ' <' . ( $reply_to ? $reply_to : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		}
 
-			$notifications[] = $new_notification2;
-			unset( $new_notification2 );
-		}//end if
+		$notifications[] = $new_notification2;
+		unset( $new_notification2 );
 	}
 
 	/**

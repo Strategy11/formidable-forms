@@ -586,7 +586,6 @@ class FrmAddonsController {
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
-
 		}//end foreach
 
 		return $transient;

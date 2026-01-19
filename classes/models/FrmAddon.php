@@ -179,7 +179,7 @@ class FrmAddon {
 	 * @param string $_action
 	 * @param object $_args
 	 *
-	 * @return object $_data
+	 * @return object Data.
 	 */
 	public function plugins_api_filter( $_data, $_action = '', $_args = null ) {
 		if ( $_action !== 'plugin_information' ) {
@@ -195,7 +195,21 @@ class FrmAddon {
 
 		$item_id = $this->download_id;
 
-		if ( ! $item_id ) {
+		if ( $item_id ) {
+			$api = new FrmFormApi( $this->license );
+
+			// Force new API info so we can pull changelog data.
+			// Change log data is intentionally omitted from the cached API response
+			// to help reduce the size of the autoloaded option.
+			$api->force_api_request();
+			$plugins = $api->get_api_info();
+
+			if ( $plugins ) {
+				$_data = $plugins[ $item_id ];
+			}
+		}
+
+		if ( empty( $plugins ) ) {
 			$_data = array(
 				'name'      => $this->plugin_name,
 				'excerpt'   => '',
@@ -205,10 +219,6 @@ class FrmAddon {
 					'low'  => 'https://ps.w.org/formidable/assets/banner-1544x500.png',
 				),
 			);
-		} else {
-			$api     = new FrmFormApi( $this->license );
-			$plugins = $api->get_api_info();
-			$_data   = $plugins[ $item_id ];
 		}
 
 		$_data['sections'] = array(

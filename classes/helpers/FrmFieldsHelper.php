@@ -166,14 +166,16 @@ class FrmFieldsHelper {
 			 * @param array      $args
 			 */
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
-		} else {
-			/**
-			 * @param array      $field_array
-			 * @param stdClass   $field
-			 * @param array      $args
-			 */
-			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
+
+			return;
 		}
+
+		/**
+		 * @param array      $field_array
+		 * @param stdClass   $field
+		 * @param array      $args
+		 */
+		$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 	}
 
 	/**
@@ -473,7 +475,7 @@ class FrmFieldsHelper {
 		);
 
 		$msg = FrmField::get_option( $field, $error );
-		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
+		$msg = $msg ? $msg : $defaults[ $error ]['part'];
 		$msg = do_shortcode( $msg );
 
 		return self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
@@ -1597,7 +1599,7 @@ class FrmFieldsHelper {
 			}
 
 			// For multi-select dropdowns only
-			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
+			if ( is_array( $field['value'] ) && $field['value'] ) {
 				$other_val = reset( $field['value'] );
 			}
 		}//end if
@@ -1615,7 +1617,7 @@ class FrmFieldsHelper {
 	 * @param bool   $other_opt
 	 * @param string $checked
 	 *
-	 * @return array $other_args
+	 * @return array Other args.
 	 */
 	public static function prepare_other_input( $args, &$other_opt, &$checked ) {
 		$other_args = array(
@@ -1753,7 +1755,7 @@ class FrmFieldsHelper {
 	 * @param string      $html_id
 	 * @param bool|string $opt_key
 	 *
-	 * @return string $other_id
+	 * @return string Other ID.
 	 */
 	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ) {
 		$other_id = $html_id;
@@ -1771,9 +1773,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param string $val
+	 * @param array|string $val
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	public static function switch_field_ids( $val ) {
 		global $frm_duplicate_ids;
@@ -1809,21 +1811,21 @@ class FrmFieldsHelper {
 			unset( $old, $new );
 		}//end foreach
 
-		if ( is_array( $val ) ) {
-			foreach ( $val as $k => $v ) {
-				if ( is_string( $v ) ) {
-					if ( 'custom_html' === $k ) {
-						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
-						unset( $k, $v );
-						continue;
-					}
+		if ( ! is_array( $val ) ) {
+			return str_replace( $replace, $replace_with, $val );
+		}
 
-					$val[ $k ] = str_replace( $replace, $replace_with, $v );
+		foreach ( $val as $k => $v ) {
+			if ( is_string( $v ) ) {
+				if ( 'custom_html' === $k ) {
+					$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
 					unset( $k, $v );
+					continue;
 				}
+
+				$val[ $k ] = str_replace( $replace, $replace_with, $v );
+				unset( $k, $v );
 			}
-		} else {
-			$val = str_replace( $replace, $replace_with, $val );
 		}
 
 		return $val;

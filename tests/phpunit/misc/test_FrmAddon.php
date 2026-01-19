@@ -89,7 +89,6 @@ class test_FrmAddon extends FrmUnitTest {
 
 			$should_run = $this->run_private_method( array( $this->addon, 'checked_recently' ), array( '1 day' ) );
 			$this->assertEquals( $time['expected'], $should_run, $time['time'] . 'not properly checking' );
-
 		}
 	}
 

@@ -476,7 +476,7 @@ class FrmXMLController {
 		$args     = wp_parse_args( $args, $defaults );
 
 		// Make sure ids are numeric.
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
 
@@ -760,7 +760,7 @@ class FrmXMLController {
 	 * @param int    $form_id
 	 * @param object $form
 	 *
-	 * @return array $csv_fields
+	 * @return array CSV fields.
 	 */
 	public static function get_fields_for_csv_export( $form_id, $form ) {
 		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );

@@ -119,7 +119,7 @@ class FrmEntriesHelper {
 	 * @param bool   $reset
 	 * @param array  $args
 	 *
-	 * @return array|string $new_value
+	 * @return array|string New value.
 	 */
 	private static function get_field_value_for_new_entry( $field, $reset, $args ) {
 		$new_value = $field->default_value;
@@ -143,21 +143,23 @@ class FrmEntriesHelper {
 	 * @param object $field
 	 * @param array  $args
 	 *
-	 * @return bool $value_is_posted
+	 * @return bool True if a value is posted.
 	 */
 	public static function value_is_posted( $field, $args ) {
 		$value_is_posted = false;
 
-		if ( $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			$repeating = ! empty( $args['repeating'] );
+		if ( ! $_POST ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			return $value_is_posted;
+		}
 
-			if ( $repeating ) {
-				if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-					$value_is_posted = true;
-				}
-			} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$repeating = ! empty( $args['repeating'] );
+
+		if ( $repeating ) {
+			if ( isset( $_POST['item_meta'][ $args['parent_field_id'] ][ $args['key_pointer'] ][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
 				$value_is_posted = true;
 			}
+		} elseif ( isset( $_POST['item_meta'][ $field->id ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			$value_is_posted = true;
 		}
 
 		return $value_is_posted;
@@ -554,7 +556,7 @@ class FrmEntriesHelper {
 	 * @return void
 	 */
 	public static function set_other_validation_val( &$value, $other_vals, $field, &$args ) {
-		// Checkboxes and multi-select dropdowns.
+		// Checkboxes.
 		if ( is_array( $value ) && $field->type === 'checkbox' ) {
 			// Combine "Other" values with checked values. "Other" values will override checked box values.
 			foreach ( $other_vals as $k => $v ) {
@@ -568,36 +570,38 @@ class FrmEntriesHelper {
 			if ( is_array( $value ) && $value ) {
 				$value = array_merge( $value, $other_vals );
 			}
-		} else {
-			// Radio and dropdowns.
-			$other_key = array_filter( array_keys( $field->options ), 'is_string' );
-			$other_key = reset( $other_key );
 
-			// Multi-select dropdown.
-			if ( is_array( $value ) ) {
-				// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-				$o_key = array_search( $field->options[ $other_key ], $value );
+			return;
+		}
 
-				if ( $o_key !== false ) {
-					// Modify the original value so other key will be preserved.
-					$value[ $other_key ] = $value[ $o_key ];
+		// Radio and dropdowns.
+		$other_key = array_filter( array_keys( $field->options ), 'is_string' );
+		$other_key = reset( $other_key );
 
-					// By default, the array keys will be numeric for multi-select dropdowns.
-					// If going backwards and forwards between pages, the array key will match the other key.
-					if ( $o_key !== $other_key ) {
-						unset( $value[ $o_key ] );
-					}
+		// Multi-select dropdown.
+		if ( is_array( $value ) ) {
+			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+			$o_key = array_search( $field->options[ $other_key ], $value );
 
-					$args['temp_value']  = $value;
-					$value[ $other_key ] = reset( $other_vals );
+			if ( $o_key !== false ) {
+				// Modify the original value so other key will be preserved.
+				$value[ $other_key ] = $value[ $o_key ];
 
-					if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
-						unset( $value[ $other_key ] );
-					}
+				// By default, the array keys will be numeric for multi-select dropdowns.
+				// If going backwards and forwards between pages, the array key will match the other key.
+				if ( $o_key !== $other_key ) {
+					unset( $value[ $o_key ] );
 				}
-			} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
-				$value = $other_vals;
-			}//end if
+
+				$args['temp_value']  = $value;
+				$value[ $other_key ] = reset( $other_vals );
+
+				if ( FrmAppHelper::is_empty_value( $value[ $other_key ] ) ) {
+					unset( $value[ $other_key ] );
+				}
+			}
+		} elseif ( $field->options[ $other_key ] == $value ) { // phpcs:ignore Universal.Operators.StrictComparisons
+			$value = $other_vals;
 		}//end if
 	}
 
@@ -861,14 +865,16 @@ class FrmEntriesHelper {
 		$metas_without_a_field = (array) FrmEntryMeta::getAll( $query, ' ORDER BY it.created_at DESC', '', true );
 
 		foreach ( $metas_without_a_field as $meta ) {
-			if ( ! empty( $meta->meta_value['captcha_score'] ) ) {
-				echo '<div class="misc-pub-section">';
-				FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
-				echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
-				echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
-				echo '</div>';
-				return;
+			if ( empty( $meta->meta_value['captcha_score'] ) ) {
+				continue;
 			}
+
+			echo '<div class="misc-pub-section">';
+			FrmAppHelper::icon_by_class( 'frmfont frm_shield_check_icon', array( 'aria-hidden' => 'true' ) );
+			echo ' ' . esc_html__( 'reCAPTCHA Score', 'formidable' ) . ': ';
+			echo '<b>' . esc_html( $meta->meta_value['captcha_score'] ) . '</b>';
+			echo '</div>';
+			return;
 		}
 	}
 

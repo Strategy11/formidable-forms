@@ -110,6 +110,11 @@ class SimplifyDualConditionToTernarySniff implements Sniff {
 	public function process( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
+		// Skip if the statement already contains a ternary operator.
+		if ( $this->statementContainsTernary( $phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		// Find the closing paren before || (end of first group).
 		$leftGroupEnd = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
 
@@ -477,5 +482,50 @@ class SimplifyDualConditionToTernarySniff implements Sniff {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Check if the statement containing the || already has a ternary operator.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the || token.
+	 *
+	 * @return bool True if the statement already contains a ternary.
+	 */
+	private function statementContainsTernary( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the start of the statement (look for = or semicolon or opening brace).
+		$statementStart = $stackPtr;
+
+		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( $code === T_SEMICOLON || $code === T_OPEN_CURLY_BRACKET || $code === T_CLOSE_CURLY_BRACKET ) {
+				$statementStart = $i + 1;
+				break;
+			}
+
+			if ( $code === T_OPEN_TAG ) {
+				$statementStart = $i;
+				break;
+			}
+		}
+
+		// Find the end of the statement.
+		$statementEnd = $phpcsFile->findNext( T_SEMICOLON, $stackPtr + 1 );
+
+		if ( false === $statementEnd ) {
+			$statementEnd = count( $tokens ) - 1;
+		}
+
+		// Check if there's a ternary operator (T_INLINE_THEN) in the statement.
+		for ( $i = $statementStart; $i <= $statementEnd; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_INLINE_THEN ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 }

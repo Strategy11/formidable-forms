@@ -330,7 +330,6 @@ class FrmPluginSearch {
 				class="button-secondary"
 				href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '"
 				>' . __( 'Install Now', 'formidable' ) . '</a>';
-
 		} elseif ( ! empty( $plugin['link'] ) ) {
 			// Add link pointing to a relevant doc page in formidable.com.
 			$links[] = '<a

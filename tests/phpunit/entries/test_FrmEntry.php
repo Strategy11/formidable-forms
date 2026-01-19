@@ -22,7 +22,7 @@ class test_FrmEntry extends FrmUnitTest {
 		$entry      = $this->factory->entry->create_object( $entry_data );
 
 		$this->assertNotEmpty( $entry );
-		$this->assertTrue( is_numeric( $entry ) );
+		$this->assertIsNumeric( $entry );
 
 		$entry = $this->factory->entry->create_object( $entry_data );
 		$this->assertEmpty( $entry, 'Failed to detect duplicate entry' );
