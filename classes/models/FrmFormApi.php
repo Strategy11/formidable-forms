@@ -28,6 +28,9 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
+	 * If true, calls to get_api_info will bypass cache.
+	 * This is set true by calling force_api_request.
+	 *
 	 * @var bool
 	 */
 	protected $force = false;
@@ -89,6 +92,14 @@ class FrmFormApi {
 		return $this->cache_key;
 	}
 
+	/**
+	 * Flag the force property as true, so the next API request bypasses cache.
+	 * This is used to pull API data for change logs, which are excluded from the cached data.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
 	public function force_api_request() {
 		$this->force = true;
 	}
