@@ -357,16 +357,7 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
-		$reduced_addons = array();
-		foreach ( $addons as $key => $addon ) {
-			if ( is_array( $addon ) ) {
-				unset( $addon['changelog'] );
-			}
-
-			$reduced_addons[ $key ] = $addon;
-		}
-
-		$addons = $reduced_addons;
+		$addons = $this->reduce_addon_data_before_caching( $addons );
 
 		$data = array(
 			'timeout' => strtotime( $this->get_cache_timeout( $addons ), time() ),
@@ -381,6 +372,45 @@ class FrmFormApi {
 			$autoload = str_starts_with( $this->cache_key, 'frm_addons_l' );
 			update_option( $this->cache_key, $data, $autoload );
 		}
+	}
+
+	/**
+	 * Remove certain add-on API data that we don't need to cache.
+	 * This is to help keep the option data (which is auto-loaded) small.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addons
+	 *
+	 * @return array
+	 */
+	private function reduce_addon_data_before_caching( $addons ) {
+		$is_subclass = is_subclass_of( $this, 'FrmFormApi' );
+		if ( $is_subclass ) {
+			// We only want to modify FrmFormApi. Leave the other APIs alone for now.
+			return $addons;
+		}
+
+		$reduced_addons = array();
+		foreach ( $addons as $key => $addon ) {
+			if ( ! is_array( $addon ) ) {
+				$reduced_addons[ $key ] = $addon;
+				continue;
+			}
+
+			if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
+				// If version is set but blank, the plugin is not actually live.
+				continue;
+			}
+
+			if ( isset( $addon['changelog'] ) ) {
+				unset( $addon['changelog'], $addon['banners'] );
+			}
+
+			$reduced_addons[ $key ] = $addon;
+		}
+
+		return $reduced_addons;
 	}
 
 	/**
