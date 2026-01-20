@@ -20,6 +20,7 @@
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetEmptyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyRedundantFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnLoopVariable" />
