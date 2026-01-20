@@ -557,13 +557,7 @@ class FlipIfToEarlyReturnVariableSniff implements Sniff {
 	 * @return false|string The flipped condition, or false if not a simple comparison.
 	 */
 	private function flipComparisonOperator( $condition ) {
-		// Skip if condition contains object operators (->), array access, or method calls.
-		// These can be confused with comparison operators.
-		if ( strpos( $condition, '->' ) !== false || strpos( $condition, '::' ) !== false ) {
-			return false;
-		}
-
-		// Map of operators to their opposites.
+		// Map of operators to their opposites (check longer ones first).
 		$operatorMap = array(
 			'!==' => '===',
 			'===' => '!==',
@@ -571,22 +565,72 @@ class FlipIfToEarlyReturnVariableSniff implements Sniff {
 			'=='  => '!=',
 			'>='  => '<',
 			'<='  => '>',
-			'>'   => '<=',
-			'<'   => '>=',
 		);
+
+		// Make sure this is a simple comparison (no && or ||).
+		if ( strpos( $condition, '&&' ) !== false || strpos( $condition, '||' ) !== false ) {
+			return false;
+		}
 
 		// Check for each operator (check longer ones first).
 		foreach ( $operatorMap as $op => $opposite ) {
 			$pos = strpos( $condition, $op );
 
-			if ( $pos !== false ) {
-				// Make sure this is a simple comparison (no && or ||).
-				if ( strpos( $condition, '&&' ) !== false || strpos( $condition, '||' ) !== false ) {
-					return false;
-				}
-
+			if ( false !== $pos ) {
 				return substr( $condition, 0, $pos ) . $opposite . substr( $condition, $pos + strlen( $op ) );
 			}
+		}
+
+		// Handle single < and > separately to avoid matching -> or =>.
+		$pos = $this->findComparisonOperator( $condition, '>' );
+
+		if ( false !== $pos ) {
+			return substr( $condition, 0, $pos ) . '<=' . substr( $condition, $pos + 1 );
+		}
+
+		$pos = $this->findComparisonOperator( $condition, '<' );
+
+		if ( false !== $pos ) {
+			return substr( $condition, 0, $pos ) . '>=' . substr( $condition, $pos + 1 );
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find a single comparison operator (< or >) that is not part of -> or =>.
+	 *
+	 * @param string $condition The condition string.
+	 * @param string $operator  The operator to find (< or >).
+	 *
+	 * @return false|int The position of the operator, or false if not found.
+	 */
+	private function findComparisonOperator( $condition, $operator ) {
+		$pos = 0;
+
+		while ( ( $pos = strpos( $condition, $operator, $pos ) ) !== false ) {
+			// Check character before to avoid matching -> or =>.
+			if ( $pos > 0 ) {
+				$charBefore = $condition[ $pos - 1 ];
+
+				// Skip if this is part of ->, =>, <=, >=, or a multi-char comparison.
+				if ( $charBefore === '-' || $charBefore === '=' || $charBefore === '<' || $charBefore === '>' || $charBefore === '!' ) {
+					++$pos;
+					continue;
+				}
+			}
+
+			// Check character after to avoid matching <=, >=, =>.
+			if ( $pos < strlen( $condition ) - 1 ) {
+				$charAfter = $condition[ $pos + 1 ];
+
+				if ( $charAfter === '=' || $charAfter === '>' ) {
+					++$pos;
+					continue;
+				}
+			}
+
+			return $pos;
 		}
 
 		return false;
