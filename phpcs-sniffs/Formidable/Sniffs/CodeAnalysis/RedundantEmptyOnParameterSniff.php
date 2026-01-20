@@ -295,6 +295,11 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 				|| $code === T_LESS_THAN
 				|| $code === T_IS_GREATER_OR_EQUAL
 				|| $code === T_IS_SMALLER_OR_EQUAL
+				|| $code === T_OBJECT_OPERATOR
+				|| $code === T_NULLSAFE_OBJECT_OPERATOR
+				|| $code === T_OPEN_SQUARE_BRACKET
+				|| $code === T_CLOSE_SQUARE_BRACKET
+				|| $code === T_DOUBLE_COLON
 			) {
 				continue;
 			}
