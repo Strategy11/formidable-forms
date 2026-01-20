@@ -218,12 +218,15 @@ class PreferEmptyArrayComparisonSniff implements Sniff {
 		$fixer      = $phpcsFile->fixer;
 		$comparison = $isStrict ? '===' : '==';
 
+		$fixer->beginChangeset();
+
 		// Replace from count to 0 with $var === array().
 		for ( $i = $countStart; $i <= $zeroToken; $i++ ) {
 			$fixer->replaceToken( $i, '' );
 		}
 
-		$fixer->addContent( $countStart, $varContent . ' ' . $comparison . ' array()' );
+		$fixer->replaceToken( $countStart, $varContent . ' ' . $comparison . ' array()' );
+		$fixer->endChangeset();
 	}
 
 	/**
