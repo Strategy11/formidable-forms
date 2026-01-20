@@ -88,6 +88,7 @@ class FrmEntry {
 		}
 
 		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
+
 		if ( ! isset( $values['item_meta'] ) ) {
 			return false;
 		}

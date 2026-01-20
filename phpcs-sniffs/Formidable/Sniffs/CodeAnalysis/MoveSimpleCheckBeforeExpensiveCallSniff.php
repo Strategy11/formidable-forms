@@ -407,7 +407,7 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 	 *
 	 * @param string $content The condition content.
 	 *
-	 * @return string|false The variable name or false.
+	 * @return false|string The variable name or false.
 	 */
 	private function extractVariableName( $content ) {
 		$content = trim( $content );
@@ -490,7 +490,7 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 	 * @param File $phpcsFile The file being scanned.
 	 * @param int  $semicolon The semicolon position.
 	 *
-	 * @return int|false The statement start position or false.
+	 * @return false|int The statement start position or false.
 	 */
 	private function findStatementStart( File $phpcsFile, $semicolon ) {
 		$tokens = $phpcsFile->getTokens();
