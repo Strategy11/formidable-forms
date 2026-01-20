@@ -237,7 +237,7 @@ class FrmEntry {
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 
-			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && array() === $reduced[ $field_id ] ) ) {
 				unset( $reduced[ $field_id ] );
 			}
 		}
