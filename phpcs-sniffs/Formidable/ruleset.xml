@@ -52,6 +52,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIsArrayBeforeEmptyArrayCheck" />
+	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
