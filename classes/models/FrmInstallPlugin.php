@@ -82,7 +82,7 @@ class FrmInstallPlugin {
 		// Get posted data.
 		$plugin_slug = FrmAppHelper::get_post_param( 'plugin', '', 'sanitize_text_field' );
 
-		if ( (bool) get_plugins()[ $plugin_slug ] ) {
+		if ( ! empty( get_plugins()[ $plugin_slug ] ) ) {
 			$activate = activate_plugin( $plugin_slug );
 		} else {
 			// Include necessary files for plugin installation.
