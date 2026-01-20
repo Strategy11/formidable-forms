@@ -341,7 +341,7 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( ! $actions || empty( $intents ) ) {
+		if ( ! $actions || ! $intents ) {
 			return;
 		}
 

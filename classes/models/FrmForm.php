@@ -1250,7 +1250,7 @@ class FrmForm {
 
 		$frm_vars['forms_loaded'][] = $small_form;
 
-		if ( $this_load && empty( $global_load ) ) {
+		if ( $this_load && ! $global_load ) {
 			$global_load          = true;
 			$frm_vars['load_css'] = true;
 		}

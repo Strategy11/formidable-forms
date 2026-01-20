@@ -237,19 +237,25 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 	private function isInIfCondition( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Find the opening parenthesis that contains this empty() call.
-		// We need to find the parenthesis that belongs to an if/elseif statement.
+		// Track parenthesis nesting to find the outermost condition parenthesis.
+		$parenDepth = 0;
+
 		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
 			$code = $tokens[ $i ]['code'];
 
-			// Skip whitespace and the "!" operator.
-			if ( $code === T_WHITESPACE || $code === T_BOOLEAN_NOT ) {
+			// Track parenthesis nesting.
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				++$parenDepth;
 				continue;
 			}
 
-			// If we hit an open parenthesis, check if it belongs to if/elseif.
 			if ( $code === T_OPEN_PARENTHESIS ) {
-				// Check what's before this parenthesis.
+				if ( $parenDepth > 0 ) {
+					--$parenDepth;
+					continue;
+				}
+
+				// This is an unmatched open paren - check if it belongs to if/elseif.
 				$beforeParen = $phpcsFile->findPrevious( T_WHITESPACE, $i - 1, null, true );
 
 				if ( false !== $beforeParen ) {
@@ -264,10 +270,37 @@ class RedundantEmptyOnParameterSniff implements Sniff {
 				return false;
 			}
 
-			// If we hit something else (like another function call), stop.
-			if ( $code !== T_OPEN_PARENTHESIS ) {
-				return false;
+			// Skip tokens that are valid inside an if condition.
+			if ( $code === T_WHITESPACE
+				|| $code === T_BOOLEAN_NOT
+				|| $code === T_BOOLEAN_AND
+				|| $code === T_BOOLEAN_OR
+				|| $code === T_LOGICAL_AND
+				|| $code === T_LOGICAL_OR
+				|| $code === T_VARIABLE
+				|| $code === T_STRING
+				|| $code === T_LNUMBER
+				|| $code === T_DNUMBER
+				|| $code === T_CONSTANT_ENCAPSED_STRING
+				|| $code === T_TRUE
+				|| $code === T_FALSE
+				|| $code === T_NULL
+				|| $code === T_ISSET
+				|| $code === T_EMPTY
+				|| $code === T_IS_EQUAL
+				|| $code === T_IS_NOT_EQUAL
+				|| $code === T_IS_IDENTICAL
+				|| $code === T_IS_NOT_IDENTICAL
+				|| $code === T_GREATER_THAN
+				|| $code === T_LESS_THAN
+				|| $code === T_IS_GREATER_OR_EQUAL
+				|| $code === T_IS_SMALLER_OR_EQUAL
+			) {
+				continue;
 			}
+
+			// Hit something unexpected, stop searching.
+			return false;
 		}
 
 		return false;
