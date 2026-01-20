@@ -30,11 +30,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
-			return $callback;
-		}
-
-		return self::class . '::show_card';
+		return $actions ? self::class . '::show_card' : $callback;
 	}
 
 	/**
@@ -81,6 +77,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -118,10 +115,10 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
-
-		if ( empty( $amount ) || $amount == 000 ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $amount || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
@@ -193,7 +190,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 
@@ -317,7 +314,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// Gateway is a radio button but it should always be an array in the database for
 		// compatibility with the payments submodule where it is a checkbox.
-		$settings['gateway']  = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
+		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
 
@@ -327,9 +324,8 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		// In Lite Stripe link is always used.
 		$settings['stripe_link'] = 1;
-		$settings                = self::create_plans( $settings );
 
-		return $settings;
+		return self::create_plans( $settings );
 	}
 
 	/**
@@ -348,6 +344,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 
 		$plan_opts = FrmStrpLiteSubscriptionHelper::prepare_plan_options( $settings );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $plan_opts['id'] != $settings['plan_id'] ) {
 			$settings['plan_id'] = FrmStrpLiteSubscriptionHelper::maybe_create_plan( $plan_opts );
 		}
@@ -364,8 +361,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 */
 	public static function create_plan_id( $settings ) {
 		$amount = self::prepare_amount( $settings['amount'], $settings );
-		$id     = sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
-		return $id;
+		return sanitize_title_with_dashes( $settings['description'] ) . '_' . $amount . '_' . $settings['interval_count'] . $settings['interval'] . '_' . $settings['currency'];
 	}
 
 	/**
@@ -376,6 +372,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $params['form_id'] == $params['posted_form_id'] ) {
 			// This form has already been posted, so we aren't on the first page.
 			return;
@@ -582,8 +579,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		 * @param array $rules
 		 * @param array $settings
 		 */
-		$rules = apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
-		return $rules;
+		return apply_filters( 'frm_stripe_appearance_rules', $rules, $settings );
 	}
 
 	/**

@@ -20,7 +20,7 @@ class FrmOnSubmitAction extends FrmFormAction {
 
 	public function __construct() {
 		$action_ops = array(
-			'classes'  => 'frm_icon_font frm_checkmark_icon',
+			'classes'  => 'frmfont frm_checkmark_icon',
 			'active'   => true,
 			'event'    => array( 'create' ),
 			'limit'    => 99,

@@ -22,6 +22,8 @@ class FrmSquareLiteConnectHelper {
 
 		self::register_settings_scripts();
 
+		FrmSquareLiteAppHelper::fee_education( 'square-global-settings-tip' );
+
 		?>
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">
@@ -76,20 +78,13 @@ class FrmSquareLiteConnectHelper {
 					</span>
 					<?php
 
-					$connected = (bool) self::get_merchant_id( $mode );
-
-					$tag_classes = '';
-
-					if ( $connected ) {
-						$tag_classes = 'frm-lt-green-tag';
-					} else {
-						$tag_classes = 'frm-grey-tag';
-					}
+					$connected   = (bool) self::get_merchant_id( $mode );
+					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
 					?>
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
 						<?php
 						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
+							FrmAppHelper::icon_by_class( 'frmfont frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
 							echo 'Connected';
 						} else {
 							echo 'Not configured';
@@ -206,6 +201,7 @@ class FrmSquareLiteConnectHelper {
 			if ( ! empty( $body->data ) && is_string( $body->data ) ) {
 				return $body->data;
 			}
+
 			return 'Response from server was not successful';
 		}
 
@@ -286,6 +282,7 @@ class FrmSquareLiteConnectHelper {
 		if ( 2 === count( $split_on_language ) ) {
 			$url = $split_on_language[0];
 		}
+
 		return $url;
 	}
 
@@ -319,6 +316,7 @@ class FrmSquareLiteConnectHelper {
 				$password = $pro_license;
 			}
 		}
+
 		return ! empty( $password ) ? $password : false;
 	}
 
@@ -551,6 +549,7 @@ class FrmSquareLiteConnectHelper {
 		} else {
 			self::$latest_error_from_square_api = '';
 		}
+
 		return false;
 	}
 
@@ -647,6 +646,7 @@ class FrmSquareLiteConnectHelper {
 		if ( false === $data || empty( $data->event_ids ) ) {
 			return array();
 		}
+
 		return $data->event_ids;
 	}
 
@@ -800,6 +800,7 @@ class FrmSquareLiteConnectHelper {
 		if ( $site_identifier === $uuid ) {
 			wp_send_json_success();
 		}
+
 		wp_send_json_error();
 	}
 
@@ -814,6 +815,7 @@ class FrmSquareLiteConnectHelper {
 		if ( is_object( $response ) && is_object( $response->subscription ) ) {
 			return $response->subscription;
 		}
+
 		return false;
 	}
 }

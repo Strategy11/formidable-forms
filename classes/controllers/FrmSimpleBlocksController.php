@@ -23,7 +23,7 @@ class FrmSimpleBlocksController {
 
 		$icon = apply_filters( 'frm_icon', 'svg' );
 
-		if ( 0 === strpos( $icon, 'data:image/svg+xml;base64,' ) ) {
+		if ( str_starts_with( $icon, 'data:image/svg+xml;base64,' ) ) {
 			$icon = ' ' . FrmAppHelper::get_menu_icon_class();
 		} else {
 			$icon = str_replace( 'dashicons-', '', $icon );
@@ -231,6 +231,7 @@ class FrmSimpleBlocksController {
 		if ( ! empty( $attributes['className'] ) ) {
 			$form = preg_replace( '/\bfrm_forms\b/', 'frm_forms ' . esc_attr( $attributes['className'] ), $form, 1 );
 		}
+
 		return self::maybe_remove_fade_on_load_for_block_preview( $form );
 	}
 

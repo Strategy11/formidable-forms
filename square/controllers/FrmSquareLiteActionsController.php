@@ -22,7 +22,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		$form_id = is_object( $field ) ? $field->form_id : $field['form_id'];
 		$actions = self::get_actions_before_submit( $form_id );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return $callback;
 		}
 
@@ -86,6 +86,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 				unset( $payment_actions[ $k ] );
 			}
 		}
+
 		return $payment_actions;
 	}
 
@@ -106,10 +107,10 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			'show_errors'  => true,
 		);
 		$atts     = compact( 'action', 'entry', 'form' );
+		$amount   = self::prepare_amount( $action->post_content['amount'], $atts );
 
-		$amount = self::prepare_amount( $action->post_content['amount'], $atts );
-
-		if ( empty( $amount ) || $amount == 000 ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $amount || $amount == 000 ) {
 			$response['error'] = __( 'Please specify an amount for the payment', 'formidable' );
 			return $response;
 		}
@@ -202,8 +203,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLitePayment();
-		$payment_id  = $frm_payment->create( $new_values );
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
@@ -326,9 +326,8 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		);
 
 		$frm_payment = new FrmTransLiteSubscription();
-		$payment_id  = $frm_payment->create( $new_values );
 
-		return $payment_id;
+		return $frm_payment->create( $new_values );
 	}
 
 	/**
@@ -411,7 +410,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function replace_email_shortcode( $email ) {
-		if ( false === strpos( $email, '[email]' ) ) {
+		if ( ! str_contains( $email, '[email]' ) ) {
 			return $email;
 		}
 
@@ -445,6 +444,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return void
 	 */
 	public static function maybe_load_scripts( $params ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $params['form_id'] == $params['posted_form_id'] ) {
 			// This form has already been posted, so we aren't on the first page.
 			return;
@@ -547,7 +547,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 			false
 		);
 
-		$square_vars     = array(
+		$square_vars = array(
 			'formId'     => $form_id,
 			'nonce'      => wp_create_nonce( 'frm_square_ajax' ),
 			'ajax'       => esc_url_raw( FrmAppHelper::get_ajax_url() ),
@@ -571,6 +571,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 		if ( 'live' === $mode ) {
 			return 'sq0idp-eR4XI1xgNduJAXcBvjemTg';
 		}
+
 		return 'sandbox-sq0idb-MXl8ilzmhAgsHWKV9c6ycQ';
 	}
 
@@ -632,7 +633,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	 * @return string
 	 */
 	private static function prepare_font_family_setting( $font ) {
-		if ( false === strpos( $font, ',' ) ) {
+		if ( ! str_contains( $font, ',' ) ) {
 			return $font;
 		}
 

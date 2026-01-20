@@ -21,7 +21,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$form = $this->factory->form->create_and_get();
 		$this->assertNotEmpty( $form );
 		$this->form_id = $form->id;
-		$this->assertTrue( is_numeric( $this->form_id ) );
+		$this->assertIsNumeric( $this->form_id );
 	}
 
 	/**
@@ -44,12 +44,12 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		global $wpdb;
 		$this->field_id = $wpdb->insert_id;
 
-		$this->assertTrue( is_numeric( $this->field_id ) );
+		$this->assertIsNumeric( $this->field_id );
 		$this->assertNotEmpty( $this->field_id );
 
 		// make sure the field exists
 		$field = FrmField::getOne( $this->field_id );
-		$this->assertTrue( is_object( $field ) );
+		$this->assertIsObject( $field );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		);
 
 		$response = $this->trigger_action( 'frm_duplicate_field' );
-		$this->assertNotFalse( strpos( $response, '<input type="hidden" name="frm_fields_submitted[]" ' ), 'Field was not created in form ' . $original_field->form_id . ' duplicated from field ' . $original_field->id );
+		$this->assertNotFalse( strpos( $response, '<input type="hidden" name="frm_fields_submitted[]" ' ), 'Field was not created in form ' . $original_field->form_id . ' duplicated from field ' . $original_field->id ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		global $frm_duplicate_ids;
 		$this->assertNotEmpty( $frm_duplicate_ids );
@@ -92,7 +92,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 
 		// Make sure the field exists.
 		$field = FrmField::getOne( $newest_field_id );
-		$this->assertTrue( is_object( $field ), 'Field id ' . $newest_field_id . ' does not exist' );
+		$this->assertIsObject( $field, 'Field id ' . $newest_field_id . ' does not exist' );
 		$this->assertEquals( $format, $field->field_options['format'] );
 
 		self::check_in_section_variable( $field, 0 );
@@ -132,7 +132,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 	 * @return void
 	 */
 	protected function check_if_field_id_is_created_correctly( $newest_field_id ) {
-		$this->assertTrue( is_numeric( $newest_field_id ) );
+		$this->assertIsNumeric( $newest_field_id );
 		$this->assertNotEmpty( $newest_field_id );
 	}
 

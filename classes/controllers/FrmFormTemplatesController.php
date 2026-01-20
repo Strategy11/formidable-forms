@@ -407,7 +407,7 @@ class FrmFormTemplatesController {
 
 		$email = FrmAppHelper::get_post_param( 'email', '', 'sanitize_email' );
 
-		if ( empty( $email ) || ! is_email( $email ) ) {
+		if ( ! $email || ! is_email( $email ) ) {
 			wp_send_json_error(
 				array( 'message' => __( 'Please enter a valid email address.', 'formidable' ) ),
 				WP_Http::BAD_REQUEST
@@ -566,7 +566,8 @@ class FrmFormTemplatesController {
 				'count' => 0,
 			);
 		}
-		$special_categories['all-items']      = array(
+
+		$special_categories['all-items'] = array(
 			'name'  => __( 'All Templates', 'formidable' ),
 			'count' => self::get_template_count(),
 		);

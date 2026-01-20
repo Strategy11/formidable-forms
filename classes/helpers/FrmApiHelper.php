@@ -40,10 +40,7 @@ class FrmApiHelper {
 			return true;
 		}
 
-		if ( self::check_free_segments( $who ) ) {
-			return true;
-		}
-		return false;
+		return self::check_free_segments( $who );
 	}
 
 	/**

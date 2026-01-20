@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 if ( ( ! FrmStrpLiteConnectHelper::at_least_one_mode_is_setup() && ! FrmSquareLiteConnectHelper::at_least_one_mode_is_setup() ) || ! FrmTransLiteActionsController::get_actions_for_form( $field['form_id'] ) ) {
 	?>
 	<span class="frm-with-icon frm-not-set frm_note_style">
-		<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_report_problem_solid_icon' ); ?>
+		<?php FrmAppHelper::icon_by_class( 'frmfont frm_report_problem_solid_icon' ); ?>
 		<?php esc_attr_e( 'This field is not set up yet.', 'formidable' ); ?>
 	</span>
 	<?php

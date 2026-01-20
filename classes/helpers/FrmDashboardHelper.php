@@ -185,11 +185,11 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public static function show_connect_links( $buttons = array(), $button_classes = '' ) {
-		if ( empty( $buttons ) ) {
+		if ( ! $buttons ) {
 			$buttons = self::get_license_buttons();
 		}
 
-		foreach ( $buttons as $i => $button ) {
+		foreach ( $buttons as $button ) {
 			$add_classes = ! empty( $button['classes'] ) ? ' ' . $button['classes'] : ' frm-button-secondary';
 			?>
 			<a href="<?php echo esc_url( $button['link'] ); ?>" target="_blank"
@@ -247,8 +247,7 @@ class FrmDashboardHelper {
 	 * @return void
 	 */
 	public function get_inbox() {
-		$template = $this->view['inbox'];
-
+		$template                    = $this->view['inbox'];
 		$subscribe_inbox_classnames  = 'frm-inbox-subscribe frmcenter';
 		$subscribe_inbox_classnames .= ! empty( $template['unread'] ) ? ' frm_hidden' : '';
 		$subscribe_inbox_classnames .= true === FrmDashboardController::email_is_subscribed( $template['user']->user_email ) ? ' frm-inbox-hide-form' : '';
@@ -304,6 +303,7 @@ class FrmDashboardHelper {
 		if ( null === $template['id'] ) {
 			return;
 		}
+
 		include FrmAppHelper::plugin_path() . '/classes/views/dashboard/templates/youtube-video.php';
 	}
 

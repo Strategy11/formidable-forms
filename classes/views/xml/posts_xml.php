@@ -116,7 +116,6 @@ foreach ( (array) $terms as $term ) {
 	}
 
 	$frm_inc_tax[] = $term->term_id;
-	$label         = 'category' === $term->taxonomy || 'tag' === $term->taxonomy ? $term->taxonomy : 'term';
 	?>
 	<term><term_id><?php echo esc_html( $term->term_id ); ?></term_id><term_taxonomy><?php echo esc_html( $term->taxonomy ); ?></term_taxonomy><?php
 	if ( ! empty( $parent_slugs[ $term->parent ] ) ) {

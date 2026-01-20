@@ -20,17 +20,17 @@ $success_action = $instance->post_content['success_action'];
 $types = array(
 	'message'  => array(
 		'label'        => __( 'Show Message', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_chat_forms_icon frm_svg20',
+		'icon'         => 'frmfont frm_chat_forms_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_message_settings' ),
 	),
 	'redirect' => array(
 		'label'        => __( 'Redirect to URL', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_globe_icon frm_svg20',
+		'icon'         => 'frmfont frm_globe_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_redirect_settings' ),
 	),
 	'page'     => array(
 		'label'        => __( 'Show Page Content', 'formidable' ),
-		'icon'         => 'frm_icon_font frm_file_text_icon frm_svg20',
+		'icon'         => 'frmfont frm_file_text_icon frm_svg20',
 		'sub_settings' => array( 'FrmOnSubmitHelper', 'show_page_settings' ),
 	),
 );
@@ -58,7 +58,7 @@ if ( $col_count <= 4 ) {
 					<?php checked( $type, $success_action ); ?>
 				/>
 				<label for="<?php echo esc_attr( $input_id ); ?>">
-					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>
+					<?php FrmAppHelper::icon_by_class( $type_data['icon'] ); ?>
 					<?php echo esc_html( $type_data['label'] ); ?>
 				</label>
 			</div>

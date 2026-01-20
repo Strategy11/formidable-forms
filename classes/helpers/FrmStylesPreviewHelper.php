@@ -189,13 +189,10 @@ class FrmStylesPreviewHelper {
 	/**
 	 * @since 6.0
 	 *
-	 * @todo Only show the note once for a form per user per month or something.
-	 *
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
-		$notes = array();
-
+		$notes              = array();
 		$fallback_form_note = $this->get_fallback_form_note();
 
 		if ( is_string( $fallback_form_note ) ) {
@@ -213,10 +210,6 @@ class FrmStylesPreviewHelper {
 					'</a>'
 				);
 			};
-		}
-
-		if ( class_exists( 'FrmProStylesController' ) && ! class_exists( 'FrmProStylesPreviewHelper' ) ) {
-			$notes[] = __( 'You are using an outdated version of Formidable Pro. Please update to version 6.0 to get access to all styler features.', 'formidable' );
 		}
 
 		if ( is_callable( 'FrmProStylesController::get_notes_for_styler_preview' ) ) {
@@ -328,7 +321,7 @@ class FrmStylesPreviewHelper {
 		$styles->remove( 'edit' );
 
 		$wp_admin_dependencies = $styles->registered['wp-admin']->deps;
-		$edit_key              = array_search( 'edit', $wp_admin_dependencies );
+		$edit_key              = array_search( 'edit', $wp_admin_dependencies, true );
 
 		if ( false === $edit_key ) {
 			return;
@@ -395,7 +388,8 @@ class FrmStylesPreviewHelper {
 	 */
 	private static function remove_wp_admin_dependency( $styles, $key ) {
 		$dependencies = $styles->registered['wp-admin']->deps;
-		$index        = array_search( $key, $dependencies );
+		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
+		$index = array_search( $key, $dependencies );
 
 		if ( false === $index ) {
 			return;

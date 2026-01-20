@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Formidable Forms
  * Description: Quickly and easily create drag-and-drop forms
- * Version: 6.26
+ * Version: 6.27
  * Plugin URI: https://formidableforms.com/
  * Author URI: https://formidableforms.com/
  * Author: Strategy11 Form Builder Team
@@ -98,7 +98,7 @@ function frm_class_autoloader( $class_name, $filepath ) {
 	} else {
 		$filepath .= 'models/';
 
-		if ( strpos( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
+		if ( str_contains( $class_name, 'Field' ) && ! file_exists( $filepath . $class_name . '.php' ) ) {
 			$filepath .= 'fields/';
 		}
 	}

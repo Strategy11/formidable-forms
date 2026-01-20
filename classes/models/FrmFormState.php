@@ -153,6 +153,7 @@ class FrmFormState {
 		foreach ( $decoded_state as $key => $value ) {
 			self::set_initial_value( self::decompressed_key( $key ), $value );
 		}
+
 		return true;
 	}
 
@@ -183,8 +184,7 @@ class FrmFormState {
 		$secret           = self::get_encryption_secret();
 		$compressed_state = $this->compressed_state();
 		$json_encoded     = json_encode( $compressed_state );
-		$encrypted        = openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
-		return $encrypted;
+		return openssl_encrypt( $json_encoded, 'AES-128-ECB', $secret );
 	}
 
 	/**
@@ -209,6 +209,7 @@ class FrmFormState {
 		foreach ( $this->state as $key => $value ) {
 			$compressed[ self::compressed_key( $key ) ] = $value;
 		}
+
 		return $compressed;
 	}
 

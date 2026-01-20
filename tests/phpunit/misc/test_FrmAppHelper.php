@@ -96,7 +96,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_get_settings() {
 		$settings = FrmAppHelper::get_settings();
 		$this->assertNotEmpty( $settings );
-		$this->assertTrue( is_object( $settings ) );
+		$this->assertIsObject( $settings );
 		$this->assertNotEmpty( $settings->success_msg );
 	}
 
@@ -131,9 +131,8 @@ class test_FrmAppHelper extends FrmUnitTest {
 		}
 
 		$_GET['page'] = '';
-
-		$page = $this->factory->post->create( array( 'post_type' => 'post' ) );
-		$view = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
+		$page         = $this->factory->post->create( array( 'post_type' => 'post' ) );
+		$view         = $this->factory->post->create( array( 'post_type' => 'frm_display' ) );
 
 		$admin_pages = array(
 			'index.php'                               => false,
@@ -207,8 +206,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
 		$_POST['test3'] = $set_value;
-
-		$result = FrmAppHelper::get_post_param( 'test3', '', 'sanitize_text_field' );
+		$result         = FrmAppHelper::get_post_param( 'test3', '', 'sanitize_text_field' );
 		$this->assertEquals( $result, $expected_value );
 	}
 
@@ -247,8 +245,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$set_value      = '<script></script>test';
 		$expected_value = 'test';
 		$_GET['test4']  = $set_value;
-
-		$result = FrmAppHelper::simple_get( 'test4' );
+		$result         = FrmAppHelper::simple_get( 'test4' );
 		$this->assertEquals( $result, $expected_value );
 	}
 
@@ -307,10 +304,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::kses
 	 */
 	public function test_kses() {
-		$start_value  = '<script><script>';
-		$safe_value   = 'Hello, <a href="/test">click here</a>';
-		$start_value .= $safe_value;
-
+		$start_value    = '<script><script>';
+		$safe_value     = 'Hello, <a href="/test">click here</a>';
+		$start_value   .= $safe_value;
 		$stripped_value = FrmAppHelper::kses( $start_value );
 		$this->assertEquals( $stripped_value, 'Hello, click here' );
 
@@ -367,7 +363,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use href="#frm_wordpress_icon" /></svg>';
@@ -466,8 +462,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_wp_roles_dropdown() {
 		ob_start();
 		FrmAppHelper::wp_roles_dropdown( 'field_options', 'administrator' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, 'name="field_options"' );
 		$this->assert_output_contains( $output, 'id="field_options"' );
@@ -483,8 +478,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_roles_options() {
 		ob_start();
 		FrmAppHelper::roles_options( 'editor' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, '>Administrator' );
 		$this->assert_output_contains( $output, "selected='selected'>Editor" );
@@ -501,8 +495,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_roles_options_empty_string_option() {
 		ob_start();
 		FrmAppHelper::roles_options( '' );
-		$output = ob_get_contents();
-		ob_end_clean();
+		$output = ob_get_clean();
 
 		$this->assert_output_contains( $output, '>Editor' );
 		$this->assert_output_not_contains( $output, "selected='selected'>Editor" );
@@ -514,7 +507,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( strpos( $output, $substring ) !== false, $message );
+		$this->assertTrue( str_contains( $output, $substring ), $message );
 	}
 
 	/**
@@ -523,21 +516,18 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_not_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( strpos( $output, $substring ) === false, $message );
+		$this->assertTrue( ! str_contains( $output, $substring ), $message );
 	}
 
 	/**
 	 * @covers FrmAppHelper::get_unique_key
 	 */
 	public function test_get_unique_key() {
-		global $wpdb;
-
 		// Test field keys
 		$table_name = 'frm_fields';
 		$column     = 'field_key';
-
-		$name = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
-		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
+		$name       = 'lrk2p3994ed7b17086290a2b7c3ca5e65c944451f9c2d457602cae34661ec7f32998cc21b037a67695662e4b9fb7e177a5b28a6c0f';
+		$key        = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertTrue( strlen( $key ) < 100, 'field key length should never be over 100' );
 
 		$name = 'key';
@@ -546,7 +536,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
+		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
 		// reserve the form key so one has to be generated with this as the base.
@@ -566,7 +556,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertEquals( $name . 3, $key, 'Key value should increment' );
 
-		add_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+		add_filter( 'frm_unique_field_key_separator', array( self::class, 'underscore_key_separator' ) );
 
 		$key = FrmAppHelper::get_unique_key( $name, $table_name, $column );
 		$this->assertNotEquals( $name, $key, 'Field key should be unique' );
@@ -574,7 +564,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( strlen( $name ) + 4, strlen( $key ), 'Field key should be the previous key + 3 character separator + "2" incremented counter value' );
 		$this->assertEquals( $name . '___2', $key );
 
-		remove_filter( 'frm_unique_field_key_separator', array( __CLASS__, 'underscore_key_separator' ) );
+		remove_filter( 'frm_unique_field_key_separator', array( self::class, 'underscore_key_separator' ) );
 
 		// Test form keys
 		$table_name = 'frm_forms';
@@ -620,8 +610,6 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @covers FrmAppHelper::get_ip_address
 	 */
 	public function test_get_ip_address() {
-		$ip_address = FrmAppHelper::get_ip_address();
-
 		$this->assertEquals( $_SERVER['REMOTE_ADDR'], FrmAppHelper::get_ip_address() );
 
 		$_SERVER['HTTP_X_FORWARDED_FOR'] = '1.2.3.4';
@@ -696,13 +684,13 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertEquals( '<div>My html</div>', $html );
 
 		// Test a callable string.
-		$echo_function = __CLASS__ . '::echo_function';
+		$echo_function = self::class . '::echo_function';
 		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '<div>My echo function content</div>', $html );
 
 		// Test something uncallable.
 		// Make sure it isn't fatal just in case.
-		$echo_function = __CLASS__ . '::something_uncallable';
+		$echo_function = self::class . '::something_uncallable';
 		$html          = FrmAppHelper::clip( $echo_function );
 		$this->assertEquals( '', $html );
 	}
@@ -753,7 +741,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				'expected' => 'This is my...',
 			),
 			array(
-				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ),
+				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'length'   => 60,
 				'expected' => '&lt;img src=&quot;data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAA',
 			),

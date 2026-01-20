@@ -14,7 +14,7 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 			)
 		);
 
-		$action_id = $this->factory->post->create(
+		$this->factory->post->create(
 			array(
 				'post_content' => json_encode(
 					array(
@@ -27,10 +27,9 @@ class test_FrmTransLiteActionsController extends FrmUnitTest {
 				'post_excerpt' => 'payment',
 			)
 		);
-		$actions   = FrmTransLiteActionsController::get_actions_for_form( $form_id );
-		$action    = reset( $actions );
-
-		$fields = $this->get_fields_for_price( $action );
+		$actions = FrmTransLiteActionsController::get_actions_for_form( $form_id );
+		$action  = reset( $actions );
+		$fields  = $this->get_fields_for_price( $action );
 
 		$this->assertIsArray( $fields );
 		$this->assertNotEmpty( $fields );

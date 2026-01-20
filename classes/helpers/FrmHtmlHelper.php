@@ -99,7 +99,7 @@ class FrmHtmlHelper {
 			}
 		}
 
-		$input_number_attrs          = array_merge(
+		$input_number_attrs = array_merge(
 			$args['input_number_attrs'],
 			array(
 				'type'  => ! empty( $selected_unit ) ? 'number' : 'text',

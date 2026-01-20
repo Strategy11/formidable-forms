@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php FrmAppHelper::array_to_html_params( $data, true ); ?>
 		>
 		<span class="frm-outer-circle">
-			<span class="frm-inner-circle<?php echo esc_attr( strpos( $action_control->action_options['classes'], 'frm-inverse' ) === false ? '' : ' frm-inverse' ); ?>" <?php
+			<span class="frm-inner-circle<?php echo esc_attr( ! str_contains( $action_control->action_options['classes'], 'frm-inverse' ) ? '' : ' frm-inverse' ); ?>" <?php
 				FrmAppHelper::array_to_html_params( $icon_atts, true );
 			?>>
 				<?php FrmAppHelper::icon_by_class( $action_control->action_options['classes'], $icon_atts ); ?>

@@ -8,6 +8,7 @@ if ( isset( $include_extra_container ) ) { ?>
 	<?php
 }
 
+// phpcs:ignore Universal.Operators.StrictComparisons
 if ( isset( $message ) && $message != '' ) {
 	if ( FrmAppHelper::is_admin() ) {
 		?>

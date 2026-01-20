@@ -57,7 +57,7 @@ class FrmUsage {
 		$uuid_key = 'frm-usage-uuid';
 		$uuid     = get_option( $uuid_key );
 
-		if ( $regenerate || empty( $uuid ) ) {
+		if ( $regenerate || ! $uuid ) {
 			// Definitely not cryptographically secure but
 			// close enough to provide an unique id
 			$uuid = md5( uniqid() . site_url() );
@@ -294,8 +294,7 @@ class FrmUsage {
 	 */
 	private function plugins() {
 		$plugin_list = FrmAppHelper::get_plugins();
-
-		$plugins = array();
+		$plugins     = array();
 
 		foreach ( $plugin_list as $slug => $info ) {
 			$plugins[] = array(
@@ -380,8 +379,7 @@ class FrmUsage {
 			'admin_permission',
 		);
 
-		$default = $settings_list->default_options();
-
+		$default          = $settings_list->default_options();
 		$message_settings = array();
 
 		foreach ( $messages as $message ) {
@@ -564,6 +562,7 @@ class FrmUsage {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
 			$fields[ $k ]->field_options = $field->field_options;
 		}
+
 		return $fields;
 	}
 
@@ -578,8 +577,7 @@ class FrmUsage {
 			'numberposts' => 100,
 		);
 
-		$actions = array();
-
+		$actions       = array();
 		$saved_actions = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
 
 		foreach ( $saved_actions as $action ) {

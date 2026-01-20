@@ -35,7 +35,7 @@
 				?>
 				<div <?php FrmAppHelper::array_to_html_params( $image_preview_wrapper_attrs, true ); ?>>
 					<button type="button" class="frm_choose_image_box frm_button frm-flex-center frm_no_style_button frm_noallow" tabindex="0">
-						<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_upload_icon' ); ?>
+						<?php FrmAppHelper::icon_by_class( 'frmfont frm_upload_icon' ); ?>
 						<?php esc_attr_e( 'Upload background image', 'formidable' ); ?>
 					</button>
 				</div>

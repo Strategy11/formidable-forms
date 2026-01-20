@@ -9,7 +9,7 @@ class FrmXMLController {
 	 * @return void
 	 */
 	public static function menu() {
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Import/Export', 'formidable' ), __( 'Import/Export', 'formidable' ), 'frm_edit_forms', 'formidable-import', 'FrmXMLController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -23,8 +23,7 @@ class FrmXMLController {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$files = apply_filters( 'frm_default_templates_files', array() );
+		$files   = apply_filters( 'frm_default_templates_files', array() );
 
 		foreach ( (array) $files as $file ) {
 			FrmXMLHelper::import_xml( $file );
@@ -86,8 +85,7 @@ class FrmXMLController {
 
 		if ( ! empty( $imported['form_status'] ) ) {
 			// Get the last form id in case there are child forms.
-			end( $imported['form_status'] );
-			$form_id  = key( $imported['form_status'] );
+			$form_id  = array_key_last( $imported['form_status'] );
 			$response = array(
 				'id'       => $form_id,
 				'redirect' => FrmForm::get_edit_link( $form_id ) . '&new_template=true',
@@ -109,16 +107,10 @@ class FrmXMLController {
 				$response['redirect'] = get_permalink( $post_id );
 			}
 		} else {
-			if ( isset( $imported['error'] ) ) {
-				$message = $imported['error'];
-			} else {
-				$message = __( 'There was an error importing form', 'formidable' );
-			}
-
+			$message  = $imported['error'] ?? __( 'There was an error importing form', 'formidable' );
 			$response = array(
 				'message' => $message,
 			);
-
 		}//end if
 
 		/**
@@ -151,13 +143,7 @@ class FrmXMLController {
 	 */
 	private static function get_posted_form() {
 		$form = FrmAppHelper::get_param( 'form', '', 'post', 'wp_unslash' );
-
-		if ( empty( $form ) ) {
-			return $form;
-		}
-
-		$form = json_decode( $form, true );
-		return $form;
+		return $form ? json_decode( $form, true ) : $form;
 	}
 
 	/**
@@ -173,13 +159,13 @@ class FrmXMLController {
 	private static function override_url( $form, &$url ) {
 		$selected_form = self::get_selected_in_form( $form, 'form' );
 
-		if ( empty( $selected_form ) ) {
+		if ( ! $selected_form ) {
 			return;
 		}
 
 		$selected_xml = isset( $form['xml'] ) && isset( $form['xml'][ $selected_form ] ) ? $form['xml'][ $selected_form ] : '';
 
-		if ( empty( $selected_xml ) || strpos( $selected_xml, 'http' ) !== 0 ) {
+		if ( ! $selected_xml || ! str_starts_with( $selected_xml, 'http' ) ) {
 			return;
 		}
 
@@ -195,7 +181,7 @@ class FrmXMLController {
 	 * @return string
 	 */
 	private static function get_selected_in_form( $form, $value = 'form' ) {
-		if ( ! empty( $form ) && ! empty( $form[ $value ] ) ) {
+		if ( $form && ! empty( $form[ $value ] ) ) {
 			return $form[ $value ];
 		}
 
@@ -216,11 +202,10 @@ class FrmXMLController {
 
 		$form_key  = self::get_selected_in_form( $form, 'form' );
 		$view_keys = self::get_selected_in_form( $form, 'view' );
-
-		$page_ids = array();
+		$page_ids  = array();
 
 		foreach ( (array) $form['pages'] as $for => $name ) {
-			if ( empty( $name ) ) {
+			if ( ! $name ) {
 				// Don't create a page if no title is given.
 				continue;
 			}
@@ -354,9 +339,8 @@ class FrmXMLController {
 	 * @return void
 	 */
 	public static function import_xml() {
-		$errors  = array();
-		$message = '';
-
+		$errors           = array();
+		$message          = '';
 		$permission_error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'import-xml', 'import-xml-nonce' );
 
 		if ( false !== $permission_error ) {
@@ -366,7 +350,7 @@ class FrmXMLController {
 			return;
 		}
 
-		// phpcs:ignore WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$has_file = ! empty( $_FILES['frm_import_file'] ) && ! empty( $_FILES['frm_import_file']['name'] ) && ! empty( $_FILES['frm_import_file']['size'] ) && (int) $_FILES['frm_import_file']['size'] > 0;
 
 		if ( ! $has_file ) {
@@ -417,8 +401,7 @@ class FrmXMLController {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$result = FrmXMLHelper::import_xml( $file );
+		$result  = FrmXMLHelper::import_xml( $file );
 		FrmXMLHelper::parse_message( $result, $message, $errors );
 
 		unset( $file );
@@ -435,7 +418,7 @@ class FrmXMLController {
 	public static function export_xml() {
 		$error = FrmAppHelper::permission_nonce_error( 'frm_edit_forms', 'export-xml', 'export-xml-nonce' );
 
-		if ( ! empty( $error ) ) {
+		if ( $error ) {
 			wp_die( esc_html( $error ) );
 		}
 
@@ -467,7 +450,7 @@ class FrmXMLController {
 	 *
 	 * @return void
 	 */
-	public static function generate_xml( $type, $args = array() ) {
+	public static function generate_xml( $type, $args = array() ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wpdb;
 
 		self::prepare_types_array( $type );
@@ -493,17 +476,16 @@ class FrmXMLController {
 		$args     = wp_parse_args( $args, $defaults );
 
 		// Make sure ids are numeric.
-		if ( is_array( $args['ids'] ) && ! empty( $args['ids'] ) ) {
+		if ( is_array( $args['ids'] ) && $args['ids'] ) {
 			$args['ids'] = array_filter( $args['ids'], 'is_numeric' );
 		}
 
 		$records = array();
 
 		foreach ( $type as $tb_type ) {
-			$where = array();
-			$join  = '';
-			$table = $tables[ $tb_type ];
-
+			$where      = array();
+			$join       = '';
+			$table      = $tables[ $tb_type ];
 			$select     = $table . '.id';
 			$query_vars = array();
 
@@ -559,7 +541,7 @@ class FrmXMLController {
 					$where['post_type'] = 'frm_styles';
 
 					// Only export selected styles.
-					if ( ! empty( $style_ids ) ) {
+					if ( $style_ids ) {
 						$where['ID'] = $style_ids;
 					}
 					break;
@@ -606,10 +588,9 @@ class FrmXMLController {
 			return $parent_slugs;
 		}
 
-		$results      = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
-		$parent_slugs = wp_list_pluck( $results, 'slug', 'term_id' );
+		$results = FrmDb::get_results( 'terms', array( 'term_id' => $parent_term_ids ), 'term_id, slug' );
 
-		return $parent_slugs;
+		return wp_list_pluck( $results, 'slug', 'term_id' );
 	}
 
 	/**
@@ -665,7 +646,7 @@ class FrmXMLController {
 		} else {
 			$sitename = sanitize_key( get_bloginfo( 'name' ) );
 
-			if ( ! empty( $sitename ) ) {
+			if ( $sitename ) {
 				$sitename .= '.';
 			}
 
@@ -688,7 +669,7 @@ class FrmXMLController {
 	public static function generate_csv( $atts ) {
 		$form_ids = $atts['ids'];
 
-		if ( empty( $form_ids ) ) {
+		if ( ! $form_ids ) {
 			wp_die( esc_html__( 'Please select a form', 'formidable' ) );
 		}
 		self::csv( reset( $form_ids ) );
@@ -736,10 +717,9 @@ class FrmXMLController {
 
 		$form_id   = $form->id;
 		$form_cols = self::get_fields_for_csv_export( $form_id, $form );
+		$item_id   = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
 
-		$item_id = FrmAppHelper::get_param( 'item_id', 0, 'get', 'sanitize_text_field' );
-
-		if ( ! empty( $item_id ) ) {
+		if ( $item_id ) {
 			$item_id = explode( ',', $item_id );
 		}
 
@@ -762,7 +742,7 @@ class FrmXMLController {
 		$entry_ids = FrmDb::get_col( $wpdb->prefix . 'frm_items it', $query );
 		unset( $query );
 
-		if ( empty( $entry_ids ) ) {
+		if ( ! $entry_ids ) {
 			esc_html_e( 'There are no entries for that form.', 'formidable' );
 		} else {
 			FrmCSVExportHelper::generate_csv( compact( 'form', 'entry_ids', 'form_cols' ) );
@@ -780,7 +760,7 @@ class FrmXMLController {
 	 * @param int    $form_id
 	 * @param object $form
 	 *
-	 * @return array $csv_fields
+	 * @return array CSV fields.
 	 */
 	public static function get_fields_for_csv_export( $form_id, $form ) {
 		$csv_fields       = FrmField::get_all_for_form( $form_id, '', 'include', 'include' );

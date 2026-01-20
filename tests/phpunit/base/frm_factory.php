@@ -38,8 +38,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 	}
 
 	public function create_object( $args ) {
-		$form = FrmForm::create( $args );
-
+		$form         = FrmForm::create( $args );
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
 
 		if ( isset( $args['field_options'] ) ) {
@@ -113,6 +112,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		foreach ( $form_fields as $field ) {
 			$entry_data['item_meta'][ $field->id ] = $this->set_field_value( $field );
 		}
+
 		return $entry_data;
 	}
 
@@ -141,7 +141,7 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 			'url'      => 'http://sometest.com',
 			'number'   => 120,
 			'scale'    => 8,
-			'date'     => '2015-01-01',
+			'date'     => '2026-01-01',
 			'time'     => '13:30:00',
 			'user_id'  => get_current_user_id(),
 			'phone'    => '222-222-2222',

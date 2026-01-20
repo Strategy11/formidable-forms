@@ -8,7 +8,7 @@ class FrmField {
 	/**
 	 * @var bool
 	 */
-	public static $use_cache      = true;
+	public static $use_cache = true;
 
 	/**
 	 * @var int
@@ -22,63 +22,63 @@ class FrmField {
 		$fields = array(
 			'text'                         => array(
 				'name' => __( 'Text', 'formidable' ),
-				'icon' => 'frm_icon_font frm_text2_icon',
+				'icon' => 'frmfont frm_text2_icon',
 			),
 			'textarea'                     => array(
 				'name' => __( 'Paragraph', 'formidable' ),
-				'icon' => 'frm_icon_font frm_paragraph_icon',
+				'icon' => 'frmfont frm_paragraph_icon',
 			),
 			'checkbox'                     => array(
 				'name' => __( 'Checkboxes', 'formidable' ),
-				'icon' => 'frm_icon_font frm_check_square_icon',
+				'icon' => 'frmfont frm_check_square_icon',
 			),
 			'radio'                        => array(
 				'name' => __( 'Radio Buttons', 'formidable' ),
-				'icon' => 'frm_icon_font frm_radio_checked_icon',
+				'icon' => 'frmfont frm_radio_checked_icon',
 			),
 			'select'                       => array(
 				'name' => __( 'Dropdown', 'formidable' ),
-				'icon' => 'frm_icon_font frm_dropdown_icon',
+				'icon' => 'frmfont frm_dropdown_icon',
 			),
 			'email'                        => array(
 				'name' => __( 'Email', 'formidable' ),
-				'icon' => 'frm_icon_font frm_email2_icon',
+				'icon' => 'frmfont frm_email2_icon',
 			),
 			'url'                          => array(
 				'name' => __( 'Website/URL', 'formidable' ),
-				'icon' => 'frm_icon_font frm_link2_icon',
+				'icon' => 'frmfont frm_link2_icon',
 			),
 			'number'                       => array(
 				'name' => __( 'Number', 'formidable' ),
-				'icon' => 'frm_icon_font frm_hashtag_icon',
+				'icon' => 'frmfont frm_hashtag_icon',
 			),
 			'name'                         => array(
 				'name' => __( 'Name', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user_name_icon',
+				'icon' => 'frmfont frm_user_name_icon',
 			),
 			'phone'                        => array(
 				'name' => __( 'Phone', 'formidable' ),
-				'icon' => 'frm_icon_font frm_phone_icon',
+				'icon' => 'frmfont frm_phone_icon',
 			),
 			'html'                         => array(
 				'name' => __( 'HTML', 'formidable' ),
-				'icon' => 'frm_icon_font frm_code2_icon',
+				'icon' => 'frmfont frm_code2_icon',
 			),
 			'hidden'                       => array(
 				'name' => __( 'Hidden', 'formidable' ),
-				'icon' => 'frm_icon_font frm_eye_slash2_icon',
+				'icon' => 'frmfont frm_eye_slash2_icon',
 			),
 			'user_id'                      => array(
 				'name' => __( 'User ID', 'formidable' ),
-				'icon' => 'frm_icon_font frm_user2_icon',
+				'icon' => 'frmfont frm_user2_icon',
 			),
 			'captcha'                      => array(
 				'name' => self::get_captcha_field_name(),
-				'icon' => 'frm_icon_font frm_shield_check2_icon',
+				'icon' => 'frmfont frm_shield_check2_icon',
 			),
 			'credit_card'                  => array(
 				'name' => __( 'Payment', 'formidable' ),
-				'icon' => 'frm_icon_font frm_credit_card2_icon',
+				'icon' => 'frmfont frm_credit_card2_icon',
 			),
 			FrmSubmitHelper::FIELD_TYPE    => array(
 				'name' => __( 'Submit', 'formidable' ),
@@ -86,7 +86,7 @@ class FrmField {
 			),
 			FrmFieldGdprHelper::FIELD_TYPE => array(
 				'name' => __( 'GDPR', 'formidable' ),
-				'icon' => 'frm_icon_font frm-gdpr-icon',
+				'icon' => 'frmfont frm-gdpr-icon',
 				'hide' => FrmFieldGdprHelper::hide_gdpr_field(),
 			),
 		);
@@ -114,14 +114,14 @@ class FrmField {
 		$fields            = array(
 			'file'            => array(
 				'name'         => __( 'File Upload', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_upload3_icon',
+				'icon'         => 'frmfont frm_upload3_icon',
 				'message'      => __( 'Add file uploads to save time and cut down on back-and-forth. Upgrade to Pro to get Upload fields and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'file-upload-field-preview.webp',
 				'learn-more'   => 'features/wordpress-multiple-file-upload-form',
 			),
 			'ranking'         => array(
 				'name'         => __( 'Ranking', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_chart_bar_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_chart_bar_icon frm_show_upgrade',
 				'message'      => __( 'Now you can effortlessly gather insights, preferences, and opinions by allowing users to rank options.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ranking-field-preview.webp',
 				'addon'        => 'surveys',
@@ -129,71 +129,71 @@ class FrmField {
 			),
 			'rte'             => array(
 				'name'         => __( 'Rich Text', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_align_right_icon',
+				'icon'         => 'frmfont frm_align_right_icon',
 				'message'      => __( 'Go beyond plain text, let your users format their content with bolding, italics, links, lists and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'rich-text-field-preview.webp',
 				'learn-more'   => 'rich-text',
 			),
 			'date'            => array(
 				'name'         => __( 'Date', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_calendar2_icon',
-				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ),
+				'icon'         => 'frmfont frm_calendar2_icon',
+				'message'      => __( 'Capture exact calendar dates effortlessly with a sleek pop-up date picker, ensuring clarity and consistency for scheduling, tracking deadlines, and more.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'date-field-preview.webp',
 				'learn-more'   => 'date',
 			),
 			'time'            => array(
 				'name'         => __( 'Time', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_clock_icon',
-				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ),
+				'icon'         => 'frmfont frm_clock_icon',
+				'message'      => __( 'Precisely log important moments with an intuitive time selection tool, perfect for managing events, availability, or operational hours.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'time-field-preview.webp',
 				'learn-more'   => 'time',
 			),
 			'scale'           => array(
 				'name'         => __( 'Scale', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_linear_scale_icon',
-				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ),
+				'icon'         => 'frmfont frm_linear_scale_icon',
+				'message'      => esc_html__( 'Easily measure satisfaction or quantity using a simple, clear numerical scale, giving you fast, quantifiable insights into user feedback.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'scale-field-preview.webp',
 				'learn-more'   => 'scale',
 			),
 			'star'            => array(
 				'name'         => __( 'Star Rating', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_star2_icon',
-				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ),
+				'icon'         => 'frmfont frm_star2_icon',
+				'message'      => esc_html__( 'Capture instant, appealing feedback with a familiar visual star system, providing immediate and engaging quality assessments from your users.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'star-field-preview.webp',
 				'learn-more'   => 'star-ratings',
 			),
 			'range'           => array(
 				'name'         => __( 'Slider', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_code_commit_icon',
-				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ),
+				'icon'         => 'frmfont frm_code_commit_icon',
+				'message'      => esc_html__( 'Let users quickly select values within a range using a dynamic, interactive slider, creating a modern and enjoyable data input experience.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'slider-field-preview.webp',
 				'learn-more'   => 'slider',
 			),
 			'toggle'          => array(
 				'name'         => __( 'Toggle', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_toggle_on_icon',
+				'icon'         => 'frmfont frm_toggle_on_icon',
 				'message'      => esc_html__( 'Quickly and easily create cascading fields, populate fields by search and more.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'toggle-field-preview.webp',
 				'learn-more'   => 'toggle',
 			),
 			'data'            => array(
 				'name'         => __( 'Dynamic', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_dynamic_icon',
+				'icon'         => 'frmfont frm_dynamic_icon',
 				'message'      => __( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'dynamic-field-preview.webp',
 				'learn-more'   => 'dynamic',
 			),
 			'lookup'          => array(
 				'name'         => __( 'Lookup', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_search_icon',
+				'icon'         => 'frmfont frm_search_icon',
 				'message'      => esc_html__( 'Link entries together, dynamic display information, and even make selections from data entered on another form.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'lookup-field-preview.webp',
 				'learn-more'   => 'lookup',
 			),
 			'divider|repeat'  => array(
 				'name'         => __( 'Repeater', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_refresh_icon',
-				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ),
+				'icon'         => 'frmfont frm_refresh_icon',
+				'message'      => esc_html__( 'Allow users to add rows of fields dynamically as needed (like for multiple attendees or items), making complex data entry flexible and intuitive.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'repeater-field-preview.webp',
 				'learn-more'   => 'repeatable-section',
 			),
@@ -203,52 +203,52 @@ class FrmField {
 			),
 			'divider'         => array(
 				'name'         => __( 'Section', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_header_icon',
-				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'icon'         => 'frmfont frm_header_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'section-field-preview.webp',
 				'learn-more'   => 'section-heading',
 			),
 			'break'           => array(
 				'name'         => __( 'Page Break', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_page_break_icon',
-				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ),
+				'icon'         => 'frmfont frm_page_break_icon',
+				'message'      => esc_html__( 'Enhance the user experience and improve completion rates by dividing long surveys into clean, manageable steps with distinct pages.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'page-break-field-preview.webp',
 				'learn-more'   => 'page-breaks',
 			),
 			'form'            => array(
 				'name'         => __( 'Embed Form', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_file_text2_icon',
-				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ),
+				'icon'         => 'frmfont frm_file_text2_icon',
+				'message'      => esc_html__( 'Seamlessly integrate other existing forms or external content directly inside your current form, creating powerful, interconnected workflows.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'embed-form-field-preview.webp',
 				'learn-more'   => 'embed-form',
 			),
 			'likert'          => array(
 				'name'         => __( 'Likert Scale', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_likert_scale frm_show_upgrade',
+				'icon'         => 'frmfont frm_likert_scale frm_show_upgrade',
 				'addon'        => 'surveys',
-				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ),
+				'message'      => esc_html__( 'Get nuanced, detailed opinions using standardized agreement scales, unlocking deeper insights beyond simple yes/no answers.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'likert-field-preview.webp',
 				'learn-more'   => 'likert-scale',
 			),
 			'nps'             => array(
 				'name'         => __( 'NPS', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_nps frm_show_upgrade',
+				'icon'         => 'frmfont frm_nps frm_show_upgrade',
 				'addon'        => 'surveys',
-				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ),
+				'message'      => esc_html__( 'Directly measure customer loyalty with the industry-standard Net Promoter Score® field, giving you a single, vital metric for business growth.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
 				'learn-more'   => 'net-promoter-score',
 			),
 			'password'        => array(
 				'name'         => __( 'Password', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_lock_closed2_icon',
-				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ),
+				'icon'         => 'frmfont frm_lock_closed2_icon',
+				'message'      => esc_html__( 'Confidently collect sensitive credentials or create secure sections with a dedicated field that masks input for privacy and security.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'password-field-preview.webp',
 				'learn-more'   => 'password-2',
 			),
 			'tag'             => array(
 				'name'         => __( 'Tags', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_price_tags2_icon',
-				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ),
+				'icon'         => 'frmfont frm_price_tags2_icon',
+				'message'      => esc_html__( 'Facilitate easy categorization and analysis by letting users select or create multiple relevant keywords or labels for their entry.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'tags-field-preview.webp',
 				'learn-more'   => 'tags',
 			),
@@ -260,21 +260,21 @@ class FrmField {
 			),
 			'address'         => array(
 				'name'         => __( 'Address', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_location2_icon',
-				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ),
+				'icon'         => 'frmfont frm_location2_icon',
+				'message'      => esc_html__( 'Instantly capture location information, simplifying logistics and contact collection. (Or go further with our Geolocation add-on!)', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'address-field-preview.webp',
 				'learn-more'   => 'address',
 			),
 			'summary'         => array(
 				'name'         => __( 'Summary', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_file_text3_icon',
-				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ),
+				'icon'         => 'frmfont frm_file_text3_icon',
+				'message'      => __( 'Provide users with a clean, final review of all their entered data before submission, reducing errors and improving data quality.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'summary-field-preview.webp',
 				'learn-more'   => 'summary-review-before-submit',
 			),
 			'signature'       => array(
 				'name'         => __( 'Signature', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_signature_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_signature_icon frm_show_upgrade',
 				'addon'        => 'signature',
 				'message'      => __( 'Capture digital e-signatures directly within your form, making official agreements and authorizations straightforward.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'signature-field-preview.webp',
@@ -282,7 +282,7 @@ class FrmField {
 			),
 			'ai'              => array(
 				'name'         => __( 'AI', 'formidable' ),
-				'icon'         => 'frm_icon_font frm-ai-icon frm_show_upgrade',
+				'icon'         => 'frmfont frm-ai-icon frm_show_upgrade',
 				'addon'        => 'ai',
 				'message'      => __( 'Harness artificial intelligence by taking user input and let the model of your choice create an output, quickly and easily.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'ai-field-preview.webp',
@@ -290,11 +290,11 @@ class FrmField {
 			),
 			'ssa-appointment' => array(
 				'name'         => __( 'Appointment', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_schedule_icon frm_show_upgrade',
+				'icon'         => 'frmfont frm_schedule_icon frm_show_upgrade',
 				'require'      => 'Simply Schedule Appointments',
 				'message'      => sprintf(
 					/* translators: %1$s: Link opening HTML, %2$s: Link tag closing */
-					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ),
+					esc_html__( 'Appointment fields are an integration with %1$sSimply Schedule Appointments%2$s. Get started now to schedule appointments directly from your forms.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 					'<a class="frm-inline-flex" href="https://simplyscheduleappointments.com/meet/formidable/" target="_blank" rel="noopener">',
 					'</a>'
 				),
@@ -304,29 +304,40 @@ class FrmField {
 			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_product2_icon',
+				'icon'         => 'frmfont frm_product2_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'product-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
 			'quantity'        => array(
 				'name'         => __( 'Quantity', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_quantity_icon',
+				'icon'         => 'frmfont frm_quantity_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'quantity-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
 			'total'           => array(
 				'name'         => __( 'Total', 'formidable' ),
-				'icon'         => 'frm_icon_font frm_total2_icon',
+				'icon'         => 'frmfont frm_total2_icon',
 				'section'      => 'pricing',
-				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ),
+				'message'      => __( 'Turn your form into a simple storefront by adding fields to list products, choose quantities, and calculate totals, enabling direct sales.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'upsell_image' => $upsell_images_url . 'total-field-preview.webp',
 				'learn-more'   => 'features/pricing-fields',
 			),
 		);
+
+		if ( FrmAppHelper::show_new_feature( 'coupons' ) ) {
+			$fields['coupon'] = array(
+				'name'    => __( 'Coupon', 'formidable' ),
+				'icon'    => 'frm_icon_font frm_coupon_icon frm_show_upgrade',
+				'addon'   => 'coupons',
+				'section' => 'pricing',
+				'limit'   => 1,
+				'is_new'  => self::field_is_new( 'coupon' ),
+			);
+		}
 
 		// Since the signature field may be in a different section, don't show it twice.
 		$lite_fields = self::field_selection();
@@ -349,15 +360,14 @@ class FrmField {
 	 */
 	private static function field_is_new( $type ) {
 		$release_dates = array(
-			'ranking' => '2024-03-12',
+			'coupon' => '2026-01-13',
 		);
 
 		if ( ! isset( $release_dates[ $type ] ) ) {
 			return false;
 		}
 
-		$release_date = $release_dates[ $type ];
-
+		$release_date               = $release_dates[ $type ];
 		$three_months_after_release = gmdate( 'Y-m-d', strtotime( $release_date . ' + 90 days' ) );
 		return gmdate( 'Y-m-d' ) < $three_months_after_release;
 	}
@@ -411,11 +421,7 @@ class FrmField {
 
 		foreach ( $new_values as $k => $v ) {
 			if ( is_array( $v ) ) {
-				if ( $k === 'default_value' ) {
-					$new_values[ $k ] = FrmAppHelper::maybe_json_encode( $v );
-				} else {
-					$new_values[ $k ] = serialize( $v );
-				}
+				$new_values[ $k ] = $k === 'default_value' ? FrmAppHelper::maybe_json_encode( $v ) : serialize( $v );
 			}
 			unset( $k, $v );
 		}
@@ -554,8 +560,7 @@ class FrmField {
 			'id' => $copy_field->id,
 		);
 		FrmFieldsHelper::fill_field( $values, $copy_field, $copy_field->form_id );
-		$values = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
-
+		$values   = apply_filters( 'frm_prepare_single_field_for_duplication', $values );
 		$field_id = self::create( $values );
 
 		/**
@@ -600,6 +605,7 @@ class FrmField {
 		foreach ( (array) $fields as $field ) {
 			$new_key = $copy_keys ? $field->field_key : '';
 
+			// phpcs:ignore Universal.Operators.StrictComparisons
 			if ( $copy_keys && substr( $field->field_key, - 1 ) == 2 ) {
 				$new_key = rtrim( $new_key, 2 );
 			}
@@ -627,7 +633,7 @@ class FrmField {
 			}
 
 			// If this is a field inside of a repeating section, associate it with the correct form
-			if ( $field->form_id != $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && $field->form_id == $old_repeat_form_id ) {
+			if ( (int) $field->form_id !== (int) $old_form_id && isset( $old_repeat_form_id ) && isset( $new_repeat_form_id ) && (int) $field->form_id === (int) $old_repeat_form_id ) { // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				$values['form_id'] = $new_repeat_form_id;
 			}
 
@@ -690,6 +696,7 @@ class FrmField {
 				if ( 'field_options' === $opt ) {
 					$values[ $opt ] = self::maybe_filter_options( $values[ $opt ] );
 				}
+
 				$values[ $opt ] = serialize( $values[ $opt ] );
 			}
 		}
@@ -699,8 +706,7 @@ class FrmField {
 		}
 
 		$query_results = $wpdb->update( $wpdb->prefix . 'frm_fields', $values, array( 'id' => $id ) );
-
-		$form_id = 0;
+		$form_id       = 0;
 
 		if ( isset( $values['form_id'] ) ) {
 			$form_id = absint( $values['form_id'] );
@@ -777,13 +783,13 @@ class FrmField {
 		delete_transient( 'frm_form_fields_' . $form_id . 'excludeexclude' );
 
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_' . $form_id . 'ex%', '_transient_frm_form_fields_' . $form_id . 'ex%', '_transient_timeout_frm_form_fields_' . $form_id . 'in%', '_transient_frm_form_fields_' . $form_id . 'in%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		FrmDb::cache_delete_group( 'frm_field' );
 
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && $form->parent_form_id && $form->parent_form_id != $form_id ) {
+		if ( $form && $form->parent_form_id && (int) $form->parent_form_id !== $form_id ) {
 			self::delete_form_transient( $form->parent_form_id );
 		}
 	}
@@ -808,7 +814,7 @@ class FrmField {
 	 * @return object|null
 	 */
 	public static function getOne( $id, $filter = false ) {
-		if ( empty( $id ) ) {
+		if ( ! $id ) {
 			return null;
 		}
 
@@ -819,7 +825,7 @@ class FrmField {
 
 		$results = FrmDb::check_cache( $id, 'frm_field', $query, 'get_row', 0 );
 
-		if ( empty( $results ) ) {
+		if ( ! $results ) {
 			self::filter_field( $filter, $results );
 			return $results;
 		}
@@ -865,18 +871,12 @@ class FrmField {
 		$field = FrmDb::check_cache( $id, 'frm_field' );
 
 		if ( $field ) {
-			$type = $field->{$col};
-		} else {
-			if ( is_numeric( $id ) ) {
-				$where = array( 'id' => $id );
-			} else {
-				$where = array( 'field_key' => $id );
-			}
-
-			$type = FrmDb::get_var( 'frm_fields', $where, $col );
+			return $field->{$col};
 		}
 
-		return $type;
+		$where = is_numeric( $id ) ? array( 'id' => $id ) : array( 'field_key' => $id );
+
+		return FrmDb::get_var( 'frm_fields', $where, $col );
 	}
 
 	/**
@@ -900,24 +900,25 @@ class FrmField {
 			)
 		);
 
-		if ( ! empty( $results ) ) {
+		if ( $results ) {
 			$fields = array();
 			$count  = 0;
 
 			foreach ( $results as $result ) {
-				if ( $type != $result->type ) {
+				if ( $type !== $result->type ) {
 					continue;
 				}
 
 				$fields[ $result->id ] = $result;
 				++$count;
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $limit == 1 ) {
 					$fields = $result;
 					break;
 				}
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 
@@ -956,8 +957,8 @@ class FrmField {
 
 		$results = self::get_fields_from_transients( $form_id, compact( 'inc_embed', 'inc_repeat' ) );
 
-		if ( ! empty( $results ) ) {
-			if ( empty( $limit ) ) {
+		if ( $results ) {
+			if ( ! $limit ) {
 				return $results;
 			}
 
@@ -968,7 +969,7 @@ class FrmField {
 				++$count;
 				$fields[ $result->id ] = $result;
 
-				if ( ! empty( $limit ) && $count >= $limit ) {
+				if ( $limit && $count >= $limit ) {
 					break;
 				}
 			}
@@ -986,7 +987,7 @@ class FrmField {
 
 		self::include_sub_fields( $results, $inc_embed, 'all', $form_id );
 
-		if ( empty( $limit ) ) {
+		if ( ! $limit ) {
 			self::set_field_transient( $results, $form_id, 0, compact( 'inc_embed', 'inc_repeat' ) );
 		}
 
@@ -1024,12 +1025,12 @@ class FrmField {
 	public static function include_sub_fields( &$results, $inc_embed, $type = 'all', $form_id = '' ) {
 		$no_sub_forms = empty( $results ) && $type === 'all';
 
-		if ( 'include' != $inc_embed || $no_sub_forms ) {
+		if ( 'include' !== $inc_embed || $no_sub_forms ) {
 			return;
 		}
 
 		$form_fields         = $results;
-		$should_get_subforms = ( $type !== 'all' && $type !== 'form' && ! empty( $form_id ) );
+		$should_get_subforms = $type !== 'all' && $type !== 'form' && ! empty( $form_id );
 
 		if ( $should_get_subforms ) {
 			$form_fields = self::get_all_types_in_form( $form_id, 'form' );
@@ -1038,7 +1039,7 @@ class FrmField {
 		$index_offset = 1;
 
 		foreach ( $form_fields as $k => $field ) {
-			if ( 'form' != $field->type || ! isset( $field->field_options['form_select'] ) ) {
+			if ( 'form' !== $field->type || ! isset( $field->field_options['form_select'] ) ) {
 				continue;
 			}
 
@@ -1080,8 +1081,7 @@ class FrmField {
 		global $wpdb;
 
 		if ( $blog_id && is_multisite() ) {
-			$prefix = $wpdb->get_blog_prefix( $blog_id );
-
+			$prefix          = $wpdb->get_blog_prefix( $blog_id );
 			$table_name      = $prefix . 'frm_fields';
 			$form_table_name = $prefix . 'frm_forms';
 		} else {
@@ -1089,14 +1089,13 @@ class FrmField {
 			$form_table_name = $wpdb->prefix . 'frm_forms';
 		}
 
-		if ( ! empty( $order_by ) && strpos( $order_by, 'ORDER BY' ) === false ) {
+		if ( $order_by && ! str_contains( $order_by, 'ORDER BY' ) ) {
 			$order_by = ' ORDER BY ' . $order_by;
 		}
 
-		$limit = FrmDb::esc_limit( $limit );
-
+		$limit      = FrmDb::esc_limit( $limit );
 		$query      = "SELECT fi.*, fr.name as form_name FROM {$table_name} fi JOIN {$form_table_name} fr ON fi.form_id=fr.id";
-		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results';
+		$query_type = $limit === ' LIMIT 1' || $limit == 1 ? 'row' : 'results'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		if ( is_array( $where ) ) {
 			$args    = array(
@@ -1190,7 +1189,7 @@ class FrmField {
 		if ( $field_object->should_unserialize_value() ) {
 			FrmAppHelper::unserialize_or_decode( $results->default_value );
 
-			if ( $before === $results->default_value && is_string( $before ) && strpos( $before, '["' ) === 0 ) {
+			if ( $before === $results->default_value && is_string( $before ) && str_starts_with( $before, '["' ) ) {
 				$results->default_value = FrmAppHelper::maybe_json_decode( $results->default_value );
 			}
 		}
@@ -1306,13 +1305,9 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		$is_multi_value_field = (
-			self::is_checkbox( $field ) ||
+		return self::is_checkbox( $field ) ||
 			$field_type === 'address' ||
-			self::is_multiple_select( $field )
-		);
-
-		return $is_multi_value_field;
+			self::is_multiple_select( $field );
 	}
 
 	/**
@@ -1337,7 +1332,7 @@ class FrmField {
 		$field_type    = self::get_field_type( $field );
 		$original_type = self::get_option( $field, 'original_type' );
 
-		if ( ! empty( $original_type ) && $original_type != $field_type ) {
+		if ( $original_type && $original_type !== $field_type ) {
 			// Check the original type for arrays.
 			$field_type = $original_type;
 		}
@@ -1384,15 +1379,13 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_required( $field ) {
-		$required = $field['required'] != '0';
+		$required = $field['required'] != '0'; // phpcs:ignore Universal.Operators.StrictComparisons
 
 		/**
 		 * @param bool  $required
 		 * @param array $field
 		 */
-		$required = (bool) apply_filters( 'frm_is_field_required', $required, $field );
-
-		return $required;
+		return (bool) apply_filters( 'frm_is_field_required', $required, $field );
 	}
 
 	/**
@@ -1442,7 +1435,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_true_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ];
+		return ! empty( $field->field_options[ $option ] );
 	}
 
 	/**
@@ -1472,7 +1465,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_option_value_in_object( $field, $option ) {
-		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != '';
+		return isset( $field->field_options[ $option ] ) && $field->field_options[ $option ] != ''; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**
@@ -1484,13 +1477,7 @@ class FrmField {
 	 * @return mixed
 	 */
 	public static function get_option( $field, $option ) {
-		if ( is_array( $field ) ) {
-			$option = self::get_option_in_array( $field, $option );
-		} else {
-			$option = self::get_option_in_object( $field, $option );
-		}
-
-		return $option;
+		return is_array( $field ) ? self::get_option_in_array( $field, $option ) : self::get_option_in_object( $field, $option );
 	}
 
 	/**
@@ -1529,12 +1516,7 @@ class FrmField {
 	 * @return bool
 	 */
 	public static function is_repeating_field( $field ) {
-		if ( is_array( $field ) ) {
-			$is_repeating_field = ( 'divider' === $field['type'] );
-		} else {
-			$is_repeating_field = ( 'divider' === $field->type );
-		}
-
+		$is_repeating_field = is_array( $field ) ? 'divider' === $field['type'] : 'divider' === $field->type;
 		return $is_repeating_field && self::is_option_true( $field, 'repeat' );
 	}
 
@@ -1545,7 +1527,6 @@ class FrmField {
 	 */
 	public static function get_id_by_key( $key ) {
 		$id = FrmDb::get_var( 'frm_fields', array( 'field_key' => sanitize_title( $key ) ) );
-
 		return (int) $id;
 	}
 
@@ -1565,8 +1546,7 @@ class FrmField {
 	 */
 	public static function is_image( $field ) {
 		$type = self::get_field_type( $field );
-
-		return ( $type === 'url' && self::get_option( $field, 'show_image' ) );
+		return $type === 'url' && self::get_option( $field, 'show_image' );
 	}
 
 	/**
@@ -1609,12 +1589,10 @@ class FrmField {
 		$field_type = self::get_original_field_type( $field );
 		$data_type  = self::get_option( $field, 'data_type' );
 
-		$is_field_type = (
-			$is_type === $field_type ||
+		$is_field_type = $is_type === $field_type ||
 			( 'data' === $field_type && $is_type === $data_type ) ||
 			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type )
-		);
+			( 'product' === $field_type && $is_type === $data_type );
 
 		/**
 		 * When a field type is checked, allow individual fields
@@ -1636,7 +1614,6 @@ class FrmField {
 	 */
 	public static function is_combo_field( $field ) {
 		$field_type_obj = FrmFieldFactory::get_field_factory( $field );
-
 		return ! empty( $field_type_obj->is_combo_field );
 	}
 }

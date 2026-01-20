@@ -56,7 +56,6 @@ class FrmHoneypot extends FrmValidate {
 		$is_honeypot_spam = $this->is_legacy_honeypot_spam();
 
 		if ( ! $is_honeypot_spam ) {
-
 			$field_id = $this->get_honeypot_field_id();
 
 			if ( ! $field_id ) {
@@ -122,8 +121,7 @@ class FrmHoneypot extends FrmValidate {
 		global $frm_vars;
 		$offset            = isset( $frm_vars['honeypot_selectors'] ) ? count( $frm_vars['honeypot_selectors'] ) + 1 : 1;
 		$honeypot_field_id = $max_field_id ? $max_field_id + $offset : $offset;
-
-		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
 		$class::set_initial_value( 'honeypot_field_id', $honeypot_field_id );
 
 		$honeypot->render_field( $honeypot_field_id );
@@ -271,9 +269,8 @@ class FrmHoneypot extends FrmValidate {
 	 * @return int
 	 */
 	private function get_honeypot_field_id() {
-		$class             = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
-		$honeypot_field_id = $class::get_from_request( 'honeypot_field_id', 0 );
-		return $honeypot_field_id;
+		$class = class_exists( 'FrmProFormState' ) ? 'FrmProFormState' : 'FrmFormState';
+		return $class::get_from_request( 'honeypot_field_id', 0 );
 	}
 
 	/**
@@ -336,6 +333,7 @@ class FrmHoneypot extends FrmValidate {
 			// For backward compatibility use the old class name.
 			return 'frm_verify';
 		}
+
 		return $option;
 	}
 }

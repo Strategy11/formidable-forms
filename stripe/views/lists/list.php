@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="frm_wrap">
 	<?php
-	$should_show_add_new_button = class_exists( 'FrmPaymentsController', false );
+	$should_show_add_new_button = class_exists( 'FrmTransAppController', false ) || class_exists( 'FrmPaymentsController', false );
 	FrmAppHelper::get_admin_header(
 		array(
 			'label'   => __( 'Payments', 'formidable' ),
@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'publish' => ! $should_show_add_new_button ? true : array(
 				'FrmAppHelper::add_new_item_link',
 				array(
-					'new_link' => admin_url( 'admin.php?page=formidable-payments&amp;action=new' ),
+					'new_link' => admin_url( 'admin.php?page=formidable-payments&action=new' ),
 				),
 			),
 		)
@@ -22,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	?>
 
 	<div class="wrap">
-
 		<?php
+		FrmTransLiteListHelper::render_tabs();
 		$wp_list_table->views();
 		?>
 

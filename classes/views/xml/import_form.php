@@ -69,7 +69,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<h2 class="frm-h2"><?php esc_html_e( 'Export', 'formidable' ); ?></h2>
 		<p class="howto">
-			<?php echo esc_html( __( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ) ); ?>
+			<?php esc_html_e( 'Export your forms, entries, views, and styles so you can easily import them on another site.', 'formidable' ); ?>
 		</p>
 		<form method="post" action="<?php echo esc_url( admin_url( 'admin-ajax.php' ) ); ?>" id="frm_export_xml" class="frm-fields frm_grid_container">
 			<input type="hidden" name="action" value="frm_export_xml" />

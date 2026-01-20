@@ -9,16 +9,12 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function menu() {
-		if ( FrmTransLiteAppHelper::should_fallback_to_paypal() ) {
-			return;
-		}
-
 		$frm_settings = FrmAppHelper::get_settings();
 
 		// Remove the PayPal submenu (PayPal payments will just appear in the regular Payments page).
 		remove_action( 'admin_menu', 'FrmPaymentsController::menu', 26 );
 
-		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
+		if ( in_array( FrmAppHelper::simple_get( 'action' ), array( 'edit', 'new', 'bulk_delete' ), true ) && is_callable( 'FrmPaymentsController::route' ) ) {
 			// Use the PayPal addon for add new and edit routing if it is active.
 			// This is required to support the "edit" link when using the Stripe Lite table view.
 			// It is also required for the "Add New" button to work on the payments table page.
@@ -56,10 +52,9 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 	 * @return void
 	 */
 	public static function route() {
-		$action = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
-		$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
-		$type   = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
-
+		$action     = isset( $_REQUEST['frm_action'] ) ? 'frm_action' : 'action';
+		$action     = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
+		$type       = FrmAppHelper::get_param( 'type', '', 'get', 'sanitize_title' );
 		$class_name = $type === 'subscriptions' ? 'FrmTransLiteSubscriptionsController' : 'FrmTransLitePaymentsController';
 
 		if ( method_exists( $class_name, $action ) ) {
@@ -164,11 +159,10 @@ class FrmTransLitePaymentsController extends FrmTransLiteCRUDController {
 			$link = esc_html__( 'Refunded', 'formidable' );
 		} else {
 			$confirm = __( 'Are you sure you want to refund that payment?', 'formidable' );
-
-			$link  = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
-			$link  = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $confirm ) . '">';
-			$link .= esc_html__( 'Refund', 'formidable' );
-			$link .= '</a>';
+			$link    = admin_url( 'admin-ajax.php?action=frm_trans_refund&payment_id=' . $payment->id . '&nonce=' . wp_create_nonce( 'frm_trans_ajax' ) );
+			$link    = '<a href="' . esc_url( $link ) . '" class="frm_trans_ajax_link" data-frmverify="' . esc_attr( $confirm ) . '">';
+			$link   .= esc_html__( 'Refund', 'formidable' );
+			$link   .= '</a>';
 		}
 
 		$paysys = $payment->paysys;

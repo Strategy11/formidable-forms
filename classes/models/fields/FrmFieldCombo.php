@@ -56,7 +56,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$defaults = $this->get_default_sub_field();
 
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field ) ) {
+			if ( ! $sub_field ) {
 				continue;
 			}
 
@@ -225,7 +225,7 @@ class FrmFieldCombo extends FrmFieldType {
 	 * @return array
 	 */
 	protected function field_settings_for_type() {
-		$settings = array(
+		return array(
 			'description'    => false,
 			'default'        => false,
 			// Don't use the regular placeholder option.
@@ -233,8 +233,6 @@ class FrmFieldCombo extends FrmFieldType {
 			'logic'          => true,
 			'visibility'     => true,
 		);
-
-		return $settings;
 	}
 
 	/**
@@ -287,9 +285,8 @@ class FrmFieldCombo extends FrmFieldType {
 
 		ob_start();
 		$this->load_field_output( $args );
-		$input_html = ob_get_clean();
 
-		return $input_html;
+		return ob_get_clean();
 	}
 
 	/**
@@ -407,6 +404,7 @@ class FrmFieldCombo extends FrmFieldType {
 		if ( ! empty( $sub_field['name'] ) ) {
 			$field['subfield_name'] = $sub_field['name'];
 		}
+
 		do_action( 'frm_field_input_html', $field );
 
 		// Print custom attributes.
@@ -439,8 +437,7 @@ class FrmFieldCombo extends FrmFieldType {
 			return $errors;
 		}
 
-		$blank_msg = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
-
+		$blank_msg  = FrmFieldsHelper::get_error_msg( $this->field, 'blank' );
 		$sub_fields = $this->get_processed_sub_fields();
 
 		// Validate not empty.

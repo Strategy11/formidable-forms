@@ -57,7 +57,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</tr>
 							<?php } ?>
 
-							<?php FrmTransLiteAppHelper::show_in_table( $payment->invoice_id, __( 'Invoice #', 'formidable' ) ); ?>
+							<?php
+							if ( isset( $payment->invoice_id ) ) {
+								FrmTransLiteAppHelper::show_in_table( $payment->invoice_id, __( 'Invoice #', 'formidable' ) );
+							}
+							?>
 
 							<?php if ( ! empty( $payment->sub_id ) ) { ?>
 								<tr>
@@ -152,9 +156,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 					<?php FrmTransLitePaymentsController::load_sidebar_actions( $payment ); ?>
 					<div class="clear"></div>
 
+					<?php if ( FrmTransLiteAppHelper::payments_submodule_or_paypal_is_active() ) : ?>
+						<div class="misc-pub-section">
+							<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-payments&action=edit&id=' . $payment->id ) ); ?>" title="<?php esc_attr_e( 'Edit', 'formidable' ); ?>">
+								<?php
+								FrmAppHelper::icon_by_class( 'frm_icon_font frm_pencil_icon' );
+								echo ' ';
+								esc_html_e( 'Edit Payment', 'formidable' );
+								?>
+							</a>
+							<div class="clear"></div>
+						</div>
+					<?php endif; ?>
+
 					<div class="misc-pub-section">
 						<a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'frm_action', 'destroy' ) ) ); ?>" data-frmverify="<?php echo esc_attr__( 'Permanently delete this payment?', 'formidable' ); ?>" data-frmverify-btn="frm-button-red" title="<?php esc_attr_e( 'Delete', 'formidable' ); ?>">
-							<?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_delete_icon' ); ?>
+							<?php FrmAppHelper::icon_by_class( 'frmfont frm_delete_icon' ); ?>
 							<span class="frm_link_label">
 								<?php esc_html_e( 'Delete Payment', 'formidable' ); ?>
 							</span>

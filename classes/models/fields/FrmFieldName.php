@@ -64,8 +64,7 @@ class FrmFieldName extends FrmFieldCombo {
 		$name_layout = $this->get_name_layout();
 		$names       = explode( '_', $name_layout );
 		$col_class   = 'frm' . intval( 12 / count( $names ) );
-
-		$result = array();
+		$result      = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -97,6 +96,7 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $name_layout ) {
 			$name_layout = 'first_last';
 		}
+
 		return $name_layout;
 	}
 
@@ -281,7 +281,7 @@ class FrmFieldName extends FrmFieldCombo {
 
 		$show_warning = false;
 
-		foreach ( $this->sub_fields as $name => $sub_field ) {
+		foreach ( $this->sub_fields as $sub_field ) {
 			$description = FrmField::get_option( $field, $sub_field['name'] . '_desc' );
 
 			if ( in_array( $description, array( 'First', 'Last' ), true ) ) {
@@ -296,7 +296,7 @@ class FrmFieldName extends FrmFieldCombo {
 		?>
 		<div class="frm_warning_style">
 			<?php
-			FrmAppHelper::icon_by_class( 'frm_icon_font frm_alert_icon', array( 'style' => 'width:24px' ) );
+			FrmAppHelper::icon_by_class( 'frmfont frm_alert_icon', array( 'style' => 'width:24px' ) );
 			echo ' ';
 			esc_html_e( 'Subfield descriptions are read by screen readers. Enhance accessibility by using complete labels, like "First Name" instead of "First".', 'formidable' );
 			?>
@@ -333,8 +333,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
-		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
-
+		$attrs   = parent::get_sub_field_input_attrs( $sub_field, $args );
 		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 
 		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {

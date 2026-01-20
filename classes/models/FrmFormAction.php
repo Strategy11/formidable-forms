@@ -94,7 +94,6 @@ class FrmFormAction {
 	 */
 	public function form( $instance, $args = array() ) {
 		echo '<p class="no-options-widget">' . esc_html__( 'There are no options for this action.', 'formidable' ) . '</p>';
-
 		return 'noform';
 	}
 
@@ -174,7 +173,7 @@ class FrmFormAction {
 		$upgrade_class = isset( $action_options['classes'] ) && $action_options['classes'] === 'frm_show_upgrade';
 
 		if ( $action_options['group'] === $id_base ) {
-			$upgrade_class             = strpos( $action_options['classes'], 'frm_show_upgrade' ) !== false;
+			$upgrade_class             = str_contains( $action_options['classes'], 'frm_show_upgrade' );
 			$action_options['classes'] = $group['icon'];
 		} elseif ( empty( $action_options['classes'] ) || $upgrade_class ) {
 			$action_options['classes'] = $group['icon'];
@@ -213,6 +212,7 @@ class FrmFormAction {
 		if ( $updated_action === $action ) {
 			$updated_action = FrmFieldsHelper::switch_field_ids( $action );
 		}
+
 		return $updated_action;
 	}
 
@@ -233,7 +233,7 @@ class FrmFormAction {
 			$group = $this->id_base;
 		} else {
 			foreach ( $groups as $name => $check_group ) {
-				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'] ) ) {
+				if ( isset( $check_group['actions'] ) && in_array( $this->id_base, $check_group['actions'], true ) ) {
 					$group = $name;
 					break;
 				}
@@ -256,10 +256,9 @@ class FrmFormAction {
 	 */
 	public function get_field_name( $field_name, $post_field = 'post_content' ) {
 		$name  = $this->option_name . '[' . $this->number . ']';
-		$name .= ( empty( $post_field ) ? '' : '[' . $post_field . ']' );
-		$name .= '[' . $field_name . ']';
+		$name .= empty( $post_field ) ? '' : '[' . $post_field . ']';
 
-		return $name;
+		return $name . ( '[' . $field_name . ']' );
 	}
 
 	/**
@@ -315,7 +314,6 @@ class FrmFormAction {
 			'post_name'    => $this->form_id . '_' . $this->id_base . '_' . $this->number,
 			'menu_order'   => $this->form_id,
 		);
-		unset( $post_content );
 
 		return (object) $form_action;
 	}
@@ -340,6 +338,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function duplicate_form_actions( $form_id, $old_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $form_id == $old_id ) {
 			// don't duplicate the actions if this is a template getting updated
 			return;
@@ -364,20 +363,17 @@ class FrmFormAction {
 	 * @param array $action
 	 * @param array $forms
 	 *
-	 * @return int $post_id
+	 * @return int Post ID.
 	 */
 	public function maybe_create_action( $action, $forms ) {
 		if ( isset( $action['ID'] ) && is_numeric( $action['ID'] ) && isset( $forms[ $action['menu_order'] ] ) && $forms[ $action['menu_order'] ] === 'updated' ) {
 			// Update action only
 			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->save_settings( $action );
-		} else {
-			// Create action
-			$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
-			$post_id                = $this->duplicate_one( (object) $action, $action['menu_order'] );
+			return $this->save_settings( $action );
 		}
-
-		return $post_id;
+		// Create action
+		$action['post_content'] = FrmAppHelper::maybe_json_decode( $action['post_content'] );
+		return $this->duplicate_one( (object) $action, $action['menu_order'] );
 	}
 
 	/**
@@ -439,9 +435,9 @@ class FrmFormAction {
 			foreach ( (array) $val as $ck => $cv ) {
 				if ( is_array( $cv ) ) {
 					$action[ $ck ] = $this->duplicate_array_walk( $action[ $ck ], $subkey, $cv );
-				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) {
+				} elseif ( $ck == $subkey && isset( $frm_duplicate_ids[ $cv ] ) ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $frm_duplicate_ids[ $cv ];
-				} elseif ( $ck == $subkey ) {
+				} elseif ( $ck == $subkey ) { // phpcs:ignore Universal.Operators.StrictComparisons
 					$action[ $ck ] = $this->maybe_switch_field_ids( $action[ $ck ] );
 				}
 			}
@@ -466,7 +462,7 @@ class FrmFormAction {
 
 		// We need to update the data
 		if ( $this->updated ) {
-			return;
+			return null;
 		}
 
 		// phpcs:ignore WordPress.Security.NonceVerification.Missing
@@ -475,7 +471,7 @@ class FrmFormAction {
 			// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
 			$settings = wp_unslash( $_POST[ $this->option_name ] );
 		} else {
-			return;
+			return null;
 		}
 
 		$action_ids = array();
@@ -564,7 +560,6 @@ class FrmFormAction {
 	 */
 	public function save_settings( $settings ) {
 		self::clear_cache();
-
 		return FrmDb::save_settings( $settings, 'frm_actions' );
 	}
 
@@ -603,7 +598,7 @@ class FrmFormAction {
 	public static function get_action_for_form( $form_id, $type = 'all', $atts = array() ) {
 		$action_controls = FrmFormActionsController::get_form_actions( $type );
 
-		if ( empty( $action_controls ) ) {
+		if ( ! $action_controls ) {
 			// don't continue if there are no available actions
 			return array();
 		}
@@ -612,13 +607,13 @@ class FrmFormAction {
 			if ( is_array( $action_controls ) ) {
 				return array();
 			}
+
 			return $action_controls->get_all( $form_id, $atts );
 		}
 
 		self::prepare_get_action( $atts );
 
-		$limit = self::get_action_limit( $form_id, $atts['limit'] );
-
+		$limit               = self::get_action_limit( $form_id, $atts['limit'] );
 		$args                = self::action_args( $form_id, $limit );
 		$args['post_status'] = $atts['post_status'];
 		$actions             = FrmDb::check_cache( json_encode( $args ), 'frm_actions', $args, 'get_posts' );
@@ -664,7 +659,7 @@ class FrmFormAction {
 	 * @return int The filtered limit value.
 	 */
 	public static function get_action_limit( $form_id, $limit = 99 ) {
-		$type  = 'all';
+		$type = 'all';
 		return (int) apply_filters( 'frm_form_action_limit', (int) $limit, compact( 'type', 'form_id' ) );
 	}
 
@@ -755,7 +750,7 @@ class FrmFormAction {
 
 		remove_filter( 'posts_where', 'FrmFormActionsController::limit_by_type' );
 
-		if ( empty( $actions ) ) {
+		if ( ! $actions ) {
 			return array();
 		}
 
@@ -766,8 +761,7 @@ class FrmFormAction {
 				continue;
 			}
 
-			$action = $this->prepare_action( $action );
-
+			$action                  = $this->prepare_action( $action );
 			$settings[ $action->ID ] = $action;
 		}
 
@@ -793,7 +787,7 @@ class FrmFormAction {
 			'order'       => 'ASC',
 		);
 
-		if ( $form_id && $form_id != 'all' ) {
+		if ( $form_id && $form_id !== 'all' ) {
 			$args['menu_order'] = $form_id;
 		}
 
@@ -815,7 +809,7 @@ class FrmFormAction {
 		$action->post_content += $default_values;
 
 		foreach ( $default_values as $k => $vals ) {
-			if ( is_array( $vals ) && ! empty( $vals ) ) {
+			if ( is_array( $vals ) && $vals ) {
 				if ( 'event' === $k && ! $this->action_options['force_event'] && ! empty( $action->post_content[ $k ] ) ) {
 					continue;
 				}
@@ -847,7 +841,7 @@ class FrmFormAction {
 			$query['menu_order'] = $form_id;
 		}
 
-		if ( 'all' != $type ) {
+		if ( 'all' !== $type ) {
 			$query['post_excerpt'] = $this->id_base;
 		}
 
@@ -904,9 +898,7 @@ class FrmFormAction {
 		$switch               = $this->get_switch_fields();
 		$switch['conditions'] = array( 'hide_field' );
 
-		$switch = apply_filters( 'frm_global_switch_fields', $switch );
-
-		return $switch;
+		return apply_filters( 'frm_global_switch_fields', $switch );
 	}
 
 	/**
@@ -941,19 +933,21 @@ class FrmFormAction {
 			)
 		);
 
-		if ( empty( $post_id ) ) {
+		if ( ! $post_id ) {
 			// create action now
 			$post_id = $this->save_settings( $action );
 		}
 
-		if ( $post_id && 'update' == $update ) {
-			global $wpdb;
-			$form->options = maybe_serialize( $form->options );
-
-			// update form options
-			$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
-			FrmForm::clear_form_cache();
+		if ( ! $post_id || 'update' !== $update ) {
+			return $post_id;
 		}
+
+		global $wpdb;
+		$form->options = maybe_serialize( $form->options );
+
+		// update form options
+		$wpdb->update( $wpdb->prefix . 'frm_forms', array( 'options' => $form->options ), array( 'id' => $form->id ) );
+		FrmForm::clear_form_cache();
 
 		return $post_id;
 	}
@@ -968,39 +962,7 @@ class FrmFormAction {
 		if ( is_callable( 'FrmProFormActionsController::action_conditions_met' ) ) {
 			return FrmProFormActionsController::action_conditions_met( $action, $entry );
 		}
-
-		$stop = false;
-		return $stop;
-	}
-
-	/**
-	 * Get the value from a specific field and entry
-	 *
-	 * @since 2.01.02
-	 *
-	 * @param object $entry
-	 * @param int    $field_id
-	 *
-	 * @return array|bool|mixed|string
-	 */
-	private static function get_value_from_entry( $entry, $field_id ) {
-		$observed_value = '';
-
-		if ( isset( $entry->metas[ $field_id ] ) ) {
-			$observed_value = $entry->metas[ $field_id ];
-		} elseif ( $entry->post_id && FrmAppHelper::pro_is_installed() ) {
-			$field          = FrmField::getOne( $field_id );
-			$observed_value = FrmProEntryMetaHelper::get_post_or_meta_value(
-				$entry,
-				$field,
-				array(
-					'links'    => false,
-					'truncate' => false,
-				)
-			);
-		}
-
-		return $observed_value;
+		return false;
 	}
 
 	/**
@@ -1010,7 +972,7 @@ class FrmFormAction {
 	 */
 	public static function default_action_opts( $class = '' ) {
 		return array(
-			'classes' => 'frm_icon_font ' . $class,
+			'classes' => 'frmfont ' . $class,
 			'active'  => false,
 			'limit'   => 0,
 		);
@@ -1037,7 +999,7 @@ class FrmFormAction {
 	public function render_conditional_logic_call_to_action() {
 		?>
 			<h3>
-				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>">
+				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 					<?php esc_html_e( 'Use Conditional Logic', 'formidable' ); ?>
 				</a>
 			</h3>

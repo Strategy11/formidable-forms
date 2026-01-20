@@ -79,7 +79,7 @@ class FrmSalesApi extends FrmFormApi {
 
 		$api = $this->get_api_info();
 
-		if ( empty( $api ) ) {
+		if ( ! $api ) {
 			return;
 		}
 
@@ -345,6 +345,7 @@ class FrmSalesApi extends FrmFormApi {
 			$option = mt_rand( 0, 1 );
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
+
 		return (int) $option;
 	}
 
@@ -454,7 +455,7 @@ class FrmSalesApi extends FrmFormApi {
 					<?php echo esc_html( $banner_cta_text ); ?>
 				</a>
 			</div>
-			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frm_icon_font frm_close_icon' ); ?></a>
+			<a <?php FrmAppHelper::array_to_html_params( $dismiss_attrs, true ); ?>><?php FrmAppHelper::icon_by_class( 'frmfont frm_close_icon' ); ?></a>
 		</div>
 		<?php
 

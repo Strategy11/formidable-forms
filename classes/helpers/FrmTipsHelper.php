@@ -48,8 +48,8 @@ class FrmTipsHelper {
 		);
 		$tip      = array_merge( $defaults, $tip );
 
-		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) ) {
-			$tip['link']['medium'] = 'tip';
+		if ( isset( $tip['link'] ) && ! isset( $tip['link']['medium'] ) && ! isset( $tip['link']['campaign'] ) ) {
+			$tip['link']['campaign'] = 'tip';
 		}
 
 		if ( 'p' === $html ) {
@@ -95,6 +95,7 @@ class FrmTipsHelper {
 			if ( is_array( $tip['link'] ) ) {
 				$cta_link = FrmAppHelper::maybe_add_missing_utm( $cta_link, $tip['link'] );
 			}
+
 			return $cta_link;
 		}
 
@@ -114,6 +115,7 @@ class FrmTipsHelper {
 		if ( $cta_text ) {
 			return $cta_text;
 		}
+
 		return FrmAddonsController::is_license_expired() ? __( 'Renew', 'formidable' ) : __( 'Upgrade to Pro.', 'formidable' );
 	}
 
@@ -121,7 +123,7 @@ class FrmTipsHelper {
 	 * @return array
 	 */
 	public static function get_builder_tip() {
-		$tips = array(
+		return array(
 			array(
 				'link' => array(
 					'content' => 'conditional-logic',
@@ -171,15 +173,13 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-
-		return $tips;
 	}
 
 	/**
 	 * @return array
 	 */
 	public static function get_form_settings_tip() {
-		$tips = array(
+		return array(
 			array(
 				'link' => array(
 					'content' => 'front-edit-b',
@@ -205,15 +205,13 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-
-		return $tips;
 	}
 
 	/**
 	 * @return array
 	 */
 	public static function get_form_action_tip() {
-		$tips = array(
+		return array(
 			array(
 				'link' => array(
 					'content' => 'email-routing',
@@ -303,15 +301,13 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-
-		return $tips;
 	}
 
 	/**
 	 * @return array
 	 */
 	public static function get_styling_tip() {
-		$tips = array(
+		return array(
 			array(
 				'link' => array(
 					'content' => 'style',
@@ -337,8 +333,6 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-
-		return $tips;
 	}
 
 	/**
@@ -371,16 +365,15 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-		$tips = array_merge( $tips, self::get_import_tip() );
 
-		return $tips;
+		return array_merge( $tips, self::get_import_tip() );
 	}
 
 	/**
 	 * @return array
 	 */
 	public static function get_import_tip() {
-		$tips = array(
+		return array(
 			array(
 				'link' => array(
 					'content' => 'import',
@@ -390,8 +383,6 @@ class FrmTipsHelper {
 				'call' => self::cta_label(),
 			),
 		);
-
-		return $tips;
 	}
 
 	/**

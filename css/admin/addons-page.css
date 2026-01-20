@@ -98,6 +98,10 @@
 	color: #F22F46;
 }
 
+.plugin-card-n8n .frm-border-icon svg {
+	color: #EA4B71;
+}
+
 .plugin-card-formidable-pro.frm-addon-active .frm_toggle_block {
 	pointer-events: none;
 }
