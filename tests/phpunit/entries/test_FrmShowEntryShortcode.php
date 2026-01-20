@@ -907,7 +907,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	}
 
 	protected function is_self_or_parent_in_array( $field_key, $array ) {
-		return in_array( $field_key, array_keys( $array ), true );
+		return array_key_exists( $field_key, $array );
 	}
 
 	protected function user_info_rows( $atts ) {
@@ -1128,7 +1128,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( empty( $atts['include_blank'] ) ) {
 			foreach ( $expected as $field_key => $value ) {
 				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $value == '' || empty( $value ) ) {
+				if ( ! $value ) {
 					unset( $expected[ $field_key ] );
 				}
 			}

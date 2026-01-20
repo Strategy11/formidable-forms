@@ -741,7 +741,7 @@ class FrmDb {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
 
-		if ( ( $found === true && $results !== false ) || empty( $query ) ) {
+		if ( ( $found === true && $results !== false ) || ! $query ) {
 			return $results;
 		}
 

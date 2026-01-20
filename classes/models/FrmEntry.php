@@ -139,7 +139,7 @@ class FrmEntry {
 			$diff = array_diff_assoc( $field_metas, $new_meta );
 
 			foreach ( $diff as $meta_value ) {
-				if ( ! empty( $meta_value ) ) {
+				if ( $meta_value ) {
 					$is_duplicate = false;
 				}
 			}

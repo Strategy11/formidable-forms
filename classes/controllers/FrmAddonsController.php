@@ -771,7 +771,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( ! $download_id && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;

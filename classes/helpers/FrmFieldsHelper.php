@@ -618,7 +618,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return string
 	 */
-	public static function &label_position( $position, $field, $form ) {
+	public static function label_position( $position, $field, $form ) {
 		if ( $position ) {
 			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
@@ -638,9 +638,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = ! empty( $position ) ? $position : 'top';
-
-		return $position;
+		return $position ? $position : 'top';
 	}
 
 	/**
@@ -851,7 +849,7 @@ class FrmFieldsHelper {
 			return '';
 		}
 
-		$link = sprintf(
+		return sprintf(
 			/* translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link */
 			esc_html__( 'Options are dynamically created from your %1$s%2$s: %3$s%4$s', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">',
@@ -859,9 +857,6 @@ class FrmFieldsHelper {
 			empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name,
 			'</a>'
 		);
-		unset( $tax );
-
-		return $link;
 	}
 
 	/**

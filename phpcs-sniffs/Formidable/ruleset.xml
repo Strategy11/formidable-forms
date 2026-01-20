@@ -20,9 +20,11 @@
 	<rule ref="Formidable.CodeAnalysis.SimplifyIssetEmptyCheck" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyDualConditionToTernary" />
 	<rule ref="Formidable.CodeAnalysis.SimplifyEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.SimplifyRedundantFalsyCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnParameter" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnAssignedVariable" />
-	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnLoopVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIssetBeforeNotEmpty" />
@@ -30,12 +32,14 @@
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
+	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
@@ -44,6 +48,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
+	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />

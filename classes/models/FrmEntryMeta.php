@@ -152,18 +152,18 @@ class FrmEntryMeta {
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
-				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
-					// Remove blank fields.
-					unset( $values_indexed_by_field_id[ $field_id ] );
-				} else {
-					// if value exists, then update it
-					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
-				}
-			} else {
+			if ( ! $previous_field_ids || ! in_array( $field_id, $previous_field_ids, true ) ) {
 				// if value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
+				continue;
+			}
+
+			if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
+				// Remove blank fields.
+				unset( $values_indexed_by_field_id[ $field_id ] );
+			} else {
+				// if value exists, then update it
+				self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 			}
 		}//end foreach
 

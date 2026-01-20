@@ -196,7 +196,7 @@ class FrmInbox extends FrmFormApi {
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
 
-			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
