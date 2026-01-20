@@ -205,7 +205,7 @@ class FrmXMLController {
 		$page_ids  = array();
 
 		foreach ( (array) $form['pages'] as $for => $name ) {
-			if ( empty( $name ) ) {
+			if ( ! $name ) {
 				// Don't create a page if no title is given.
 				continue;
 			}
