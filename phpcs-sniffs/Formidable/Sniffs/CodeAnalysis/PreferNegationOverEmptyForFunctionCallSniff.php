@@ -80,6 +80,11 @@ class PreferNegationOverEmptyForFunctionCallSniff implements Sniff {
 			return;
 		}
 
+		// Skip if the expression ends with array access like function()['key'] - the key might not exist.
+		if ( $this->endsWithArrayAccess( $phpcsFile, $firstInner, $innerEnd ) ) {
+			return;
+		}
+
 		// Get the function call content.
 		$functionCallContent = $this->getContentBetween( $phpcsFile, $firstInner, $innerEnd );
 
@@ -156,6 +161,32 @@ class PreferNegationOverEmptyForFunctionCallSniff implements Sniff {
 				// Walk through potential chained access to find if it ends with a method call.
 				return $this->isMethodCallChain( $phpcsFile, $next, $end );
 			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if the expression ends with array access like function()['key'].
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $start     Start position.
+	 * @param int  $end       End position.
+	 *
+	 * @return bool True if expression ends with array access.
+	 */
+	private function endsWithArrayAccess( File $phpcsFile, $start, $end ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the last non-whitespace token.
+		$lastToken = $end;
+		while ( $lastToken > $start && $tokens[ $lastToken ]['code'] === T_WHITESPACE ) {
+			--$lastToken;
+		}
+
+		// Check if it ends with ] (closing square bracket).
+		if ( $tokens[ $lastToken ]['code'] === T_CLOSE_SQUARE_BRACKET ) {
+			return true;
 		}
 
 		return false;
