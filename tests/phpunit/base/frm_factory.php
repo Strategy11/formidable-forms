@@ -37,6 +37,9 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$this->default_generation_definitions['protect_files_role'] = '';
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
 		$form         = FrmForm::create( $args );
 		$field_values = FrmFieldsHelper::setup_new_vars( 'text', $form );
@@ -75,6 +78,9 @@ class Field_Factory extends WP_UnitTest_Factory_For_Thing {
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
 		$field_values = FrmFieldsHelper::setup_new_vars( $args['type'], $args['form_id'] );
 		unset( $args['type'], $args['form_id'] );
@@ -173,6 +179,9 @@ class Entry_Factory extends WP_UnitTest_Factory_For_Thing {
 		);
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function create_object( $args ) {
 		$default_values = array(
 			'form_id'   => $args['form_id'],

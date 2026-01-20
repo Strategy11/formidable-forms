@@ -58,4 +58,5 @@
 	<!-- Commenting -->
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
 	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
+	<rule ref="Formidable.Commenting.AddMissingTypeComments" />
 </ruleset>

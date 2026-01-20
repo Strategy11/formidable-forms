@@ -20,6 +20,9 @@ class FrmTransLiteListHelper extends FrmListHelper {
 	 */
 	private $valid_entry_ids = array();
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->table = FrmAppHelper::get_simple_request(
 			array(

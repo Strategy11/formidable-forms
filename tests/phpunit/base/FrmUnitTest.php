@@ -465,6 +465,9 @@ class FrmUnitTest extends WP_UnitTestCase {
 		return ob_get_clean();
 	}
 
+	/**
+	 * @return array
+	 */
 	public static function install_data() {
 		return array(
 			__DIR__ . '/testdata.xml',
@@ -639,6 +642,10 @@ class FrmUnitTest extends WP_UnitTestCase {
 		$this->assertNotEmpty( $subscriber );
 	}
 
+	/**
+	 * @param array $args
+	 * @param mixed $method
+	 */
 	protected function run_private_method( $method, $args = array() ) {
 		$m = new ReflectionMethod( $method[0], $method[1] );
 		$m->setAccessible( true );

@@ -91,6 +91,10 @@ class FrmFieldSelect extends FrmFieldType {
 		return true;
 	}
 
+	/**
+	 * @param array $atts
+	 * @param mixed $value
+	 */
 	protected function prepare_import_value( $value, $atts ) {
 		if ( FrmField::is_option_true( $this->field, 'multiple' ) ) {
 			$value = $this->get_multi_opts_for_import( $value );

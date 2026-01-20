@@ -162,6 +162,9 @@ class FrmListHelper {
 		return current_user_can( 'administrator' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_columns() {
 		return array();
 	}

@@ -579,6 +579,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function underscore_key_separator() {
 		return '___';
 	}

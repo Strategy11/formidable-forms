@@ -493,16 +493,32 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertFalse( strpos( $mock_email['header'], 'Bcc:' ), 'BCC is included when it should not be.' );
 	}
 
+	/**
+	 * @param array $args
+	 * @param mixed $to_emails
+	 * @param mixed $values
+	 * @param mixed $form_id
+	 */
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
 		$to_emails[] = 'test3@mail.com';
 		$to_emails[] = '1231231234';
 		return $to_emails;
 	}
 
+	/**
+	 * @param array $args
+	 * @param mixed $subject
+	 *
+	 * @return string
+	 */
 	public function change_email_subject( $subject, $args ) {
 		return 'New subject';
 	}
 
+	/**
+	 * @param array $args
+	 * @param mixed $is_single
+	 */
 	public function send_separate_emails( $is_single, $args ) {
 		return true;
 	}
