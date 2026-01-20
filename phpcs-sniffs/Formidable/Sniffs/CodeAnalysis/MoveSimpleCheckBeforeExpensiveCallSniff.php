@@ -255,6 +255,9 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 		// Get the indentation from the original if statement.
 		$indent = $this->getIndentation( $phpcsFile, $stackPtr );
 
+		// Get the original return statement content.
+		$returnStatement = $this->getReturnStatement( $phpcsFile, $scopeOpener, $scopeCloser );
+
 		// Get the assignment statement content (trimmed).
 		$assignmentContent = '';
 
@@ -282,13 +285,13 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 		// 3. Modified if with only the variable check
 		$newCode  = $phpcsFile->eolChar;
 		$newCode .= $indent . 'if ( ' . $simpleCheckPart['content'] . ' ) {' . $phpcsFile->eolChar;
-		$newCode .= $indent . "\treturn;" . $phpcsFile->eolChar;
+		$newCode .= $indent . "\t" . $returnStatement . $phpcsFile->eolChar;
 		$newCode .= $indent . '}' . $phpcsFile->eolChar;
 		$newCode .= $phpcsFile->eolChar;
 		$newCode .= $indent . $assignmentContent . $phpcsFile->eolChar;
 		$newCode .= $phpcsFile->eolChar;
 		$newCode .= $indent . 'if ( ' . $variableCheckPart['content'] . ' ) {' . $phpcsFile->eolChar;
-		$newCode .= $indent . "\treturn;" . $phpcsFile->eolChar;
+		$newCode .= $indent . "\t" . $returnStatement . $phpcsFile->eolChar;
 		$newCode .= $indent . '}';
 
 		// Replace the original if statement with the new code.
@@ -300,6 +303,42 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 		}
 
 		$fixer->endChangeset();
+	}
+
+	/**
+	 * Get the return statement from the if body.
+	 *
+	 * @param File $phpcsFile   The file being scanned.
+	 * @param int  $scopeOpener The scope opener position.
+	 * @param int  $scopeCloser The scope closer position.
+	 *
+	 * @return string The return statement (e.g., "return;", "return false;").
+	 */
+	private function getReturnStatement( File $phpcsFile, $scopeOpener, $scopeCloser ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the return token.
+		$returnToken = $phpcsFile->findNext( T_RETURN, $scopeOpener + 1, $scopeCloser );
+
+		if ( false === $returnToken ) {
+			return 'return;';
+		}
+
+		// Find the semicolon.
+		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $returnToken + 1, $scopeCloser );
+
+		if ( false === $semicolon ) {
+			return 'return;';
+		}
+
+		// Get everything from return to semicolon.
+		$statement = '';
+
+		for ( $i = $returnToken; $i <= $semicolon; $i++ ) {
+			$statement .= $tokens[ $i ]['content'];
+		}
+
+		return trim( $statement );
 	}
 
 	/**
@@ -387,6 +426,8 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 	/**
 	 * Find a preceding assignment to a variable.
 	 *
+	 * The assignment must be immediately before the if statement (only whitespace/newlines between).
+	 *
 	 * @param File   $phpcsFile    The file being scanned.
 	 * @param int    $stackPtr     The if token position.
 	 * @param string $variableName The variable name to find.
@@ -396,53 +437,51 @@ class MoveSimpleCheckBeforeExpensiveCallSniff implements Sniff {
 	private function findPrecedingAssignment( File $phpcsFile, $stackPtr, $variableName ) {
 		$tokens = $phpcsFile->getTokens();
 
-		// Go backwards to find the variable assignment.
+		// Find the semicolon immediately before the if (skipping only whitespace).
 		$current = $stackPtr - 1;
 
-		while ( $current > 0 ) {
-			// Skip whitespace and comments.
-			if ( in_array( $tokens[ $current ]['code'], array( T_WHITESPACE, T_COMMENT, T_DOC_COMMENT ), true ) ) {
-				--$current;
-				continue;
-			}
-
-			// Look for a semicolon (end of previous statement).
-			if ( $tokens[ $current ]['code'] === T_SEMICOLON ) {
-				$semicolon = $current;
-
-				// Find the start of this statement.
-				$statementStart = $this->findStatementStart( $phpcsFile, $current );
-
-				if ( false === $statementStart ) {
-					return false;
-				}
-
-				// Check if this statement is an assignment to our variable.
-				$firstToken = $phpcsFile->findNext( T_WHITESPACE, $statementStart, $current, true );
-
-				if ( false !== $firstToken && $tokens[ $firstToken ]['code'] === T_VARIABLE ) {
-					if ( $tokens[ $firstToken ]['content'] === $variableName ) {
-						// Check for = after the variable.
-						$equals = $phpcsFile->findNext( T_WHITESPACE, $firstToken + 1, $current, true );
-
-						if ( false !== $equals && $tokens[ $equals ]['code'] === T_EQUAL ) {
-							return array(
-								'variable'  => $firstToken,
-								'start'     => $statementStart,
-								'end'       => $semicolon,
-								'semicolon' => $semicolon,
-							);
-						}
-					}
-				}
-
-				return false;
-			}
-
+		while ( $current > 0 && $tokens[ $current ]['code'] === T_WHITESPACE ) {
 			--$current;
 		}
 
-		return false;
+		// Must be a semicolon.
+		if ( $tokens[ $current ]['code'] !== T_SEMICOLON ) {
+			return false;
+		}
+
+		$semicolon = $current;
+
+		// Find the start of this statement.
+		$statementStart = $this->findStatementStart( $phpcsFile, $current );
+
+		if ( false === $statementStart ) {
+			return false;
+		}
+
+		// Check if this statement is an assignment to our variable.
+		$firstToken = $phpcsFile->findNext( T_WHITESPACE, $statementStart, $current, true );
+
+		if ( false === $firstToken || $tokens[ $firstToken ]['code'] !== T_VARIABLE ) {
+			return false;
+		}
+
+		if ( $tokens[ $firstToken ]['content'] !== $variableName ) {
+			return false;
+		}
+
+		// Check for = after the variable.
+		$equals = $phpcsFile->findNext( T_WHITESPACE, $firstToken + 1, $current, true );
+
+		if ( false === $equals || $tokens[ $equals ]['code'] !== T_EQUAL ) {
+			return false;
+		}
+
+		return array(
+			'variable'  => $firstToken,
+			'start'     => $statementStart,
+			'end'       => $semicolon,
+			'semicolon' => $semicolon,
+		);
 	}
 
 	/**

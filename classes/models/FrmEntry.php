@@ -89,13 +89,13 @@ class FrmEntry {
 
 		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
 		if ( ! isset( $values['item_meta'] ) ) {
-			return;
+			return false;
 		}
 
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
 		if ( ! $entry_exists ) {
-			return;
+			return false;
 		}
 
 		global $frm_vars;
