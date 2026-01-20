@@ -49,6 +49,7 @@
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
 	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
+	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
