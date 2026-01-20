@@ -285,7 +285,7 @@ class FrmFormApi {
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
 
-		if ( ! $download_id && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
 				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;

@@ -132,7 +132,7 @@ abstract class FrmFieldType {
 		if ( empty( $this->type ) ) {
 			$this->type = $this->get_field_column( 'type' );
 
-			if ( empty( $this->type ) && ! empty( $type ) ) {
+			if ( empty( $this->type ) && $type ) {
 				$this->type = $type;
 			}
 		}
