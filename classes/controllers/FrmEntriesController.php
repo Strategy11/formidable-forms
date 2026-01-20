@@ -380,7 +380,7 @@ class FrmEntriesController {
 
 		foreach ( $meta_value as $mk => $mv ) {
 			// Remove blank values.
-			if ( empty( $mv ) ) {
+			if ( ! $mv ) {
 				unset( $meta_value[ $mk ] );
 			}
 		}
@@ -392,7 +392,7 @@ class FrmEntriesController {
 
 		foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
+			if ( ! $prev_hidden || in_array( $prev_hidden, $meta_value ) ) {
 				// Don't add blank cols or process included cols.
 				continue;
 			}
@@ -550,7 +550,7 @@ class FrmEntriesController {
 		$hidden = array();
 
 		foreach ( (array) $result as $r ) {
-			if ( ! empty( $r ) ) {
+			if ( $r ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
 				if ( (int) $form_prefix === (int) $form_id ) {

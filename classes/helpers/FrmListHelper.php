@@ -905,7 +905,7 @@ class FrmListHelper {
 		$sortable = array();
 
 		foreach ( $_sortable as $id => $data ) {
-			if ( empty( $data ) ) {
+			if ( ! $data ) {
 				continue;
 			}
 

@@ -1128,7 +1128,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		if ( empty( $atts['include_blank'] ) ) {
 			foreach ( $expected as $field_key => $value ) {
 				// phpcs:ignore Universal.Operators.StrictComparisons
-				if ( $value == '' || empty( $value ) ) {
+				if ( $value == '' || ! $value ) {
 					unset( $expected[ $field_key ] );
 				}
 			}
