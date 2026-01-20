@@ -46,6 +46,7 @@ class PreferNegationOverEmptyForFunctionCallSniff implements Sniff {
 
 		// Skip "! empty()" patterns - the alternative (bool) isn't better.
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
 		if ( false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT ) {
 			return;
 		}
@@ -180,6 +181,7 @@ class PreferNegationOverEmptyForFunctionCallSniff implements Sniff {
 
 		// Find the last non-whitespace token.
 		$lastToken = $end;
+
 		while ( $lastToken > $start && $tokens[ $lastToken ]['code'] === T_WHITESPACE ) {
 			--$lastToken;
 		}
