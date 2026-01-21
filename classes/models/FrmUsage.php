@@ -18,9 +18,12 @@ class FrmUsage {
 			return;
 		}
 
+		$snapshot = $this->snapshot();
+		$this->clean_before_send( $snapshot );
+
 		$ep = 'aHR0cHM6Ly91c2FnZTIuZm9ybWlkYWJsZWZvcm1zLmNvbS9zbmFwc2hvdA==';
 		// $ep = base64_encode( 'http://localhost:4567/snapshot' ); // Uncomment for testing
-		$body = json_encode( $this->snapshot() );
+		$body = json_encode( $snapshot );
 
 		// Setup variable for wp_remote_request.
 		$post = array(
@@ -77,8 +80,6 @@ class FrmUsage {
 
 		$snap = array(
 			'uuid'              => $this->uuid(),
-			// Let's keep it anonymous.
-			'admin_email'       => '',
 			'wp_version'        => $wp_version,
 			'php_version'       => phpversion(),
 			'mysql_version'     => $wpdb->db_version(),
@@ -111,6 +112,113 @@ class FrmUsage {
 		}
 
 		return apply_filters( 'frm_usage_snapshot', $snap );
+	}
+
+	/**
+	 * Cleans the snapshot data before sending.
+	 *
+	 * @param array $data Snapshot data.
+	 *
+	 * @return void
+	 */
+	private function clean_before_send( &$data ) {
+		$skip_keys = array(
+			'plan_id',
+			'paypal_item_name',
+			'account_num',
+			'routing_num',
+			'bank_name',
+			'business_email',
+
+			// Form action settings.
+			'quiz',
+			'email_to',
+			'cc',
+			'bcc',
+			'from',
+			'email_subject',
+			'email_msg',
+			'email_message',
+			'success_msg',
+			'success_url',
+			'success_page_id',
+			'redirect_msg',
+			'conditions',
+			'list_id',
+			'api_key',
+			'url',
+			'data_fields',
+			'reg_email_msg',
+
+			// Form settings.
+			'form_id',
+			'description',
+			'submit_conditions-hide_field',
+			'submit_conditions-hide_field_cond',
+			'submit_conditions-hide_opt',
+			'submit_conditions-show_hide',
+			'submit_conditions-any_all',
+
+			// Field settings.
+			'show_hide',
+			'any_all',
+			'hide_field',
+			'hide_field_cond',
+			'hide_opt',
+			'custom_html',
+			'blank',
+			'required_indicator',
+			'invalid',
+			'unique_msg',
+			'edit_text',
+			'start_over_label',
+			'add_label',
+			'remove_label',
+			'draft',
+		);
+
+		/**
+		 * Filter the keys to skip when cleaning the snapshot data before sending.
+		 *
+		 * @since x.x
+		 *
+		 * @param array $skip_keys Data keys.
+		 */
+		$skip_keys = apply_filters( 'frm_usage_skip_keys', $skip_keys );
+
+		$long_text_keys = array( 'description' );
+
+		/**
+		 * Filter the keys to replace with a long text placeholder before sending.
+		 *
+		 * @since x.x
+		 *
+		 * @paramm array $long_text_keys Data keys.
+		 */
+		$long_text_keys = apply_filters( 'frm_usage_long_text_keys', $long_text_keys );
+
+		foreach ( $data as $key => &$value ) {
+			if ( ! $value || in_array( $key, $skip_keys, true ) || str_ends_with( $key, '_url' ) ) {
+				continue;
+			}
+
+			if ( is_array( $value ) ) {
+				$this->clean_before_send( $value );
+				continue;
+			}
+
+			if ( in_array( $key, $long_text_keys, true ) || str_ends_with( $key, '_msg' ) ) {
+				// Replace it with a placeholder.
+				$value = '{{long_text}}';
+				continue;
+			}
+
+			// If key ends with `_email`, or value contains `@`, this might contain an email address.
+			if ( str_ends_with( $key, '_email' ) || str_contains( $value, '@' ) ) {
+				// Replace it with a placeholder.
+				$value = '{{contain_email}}';
+			}
+		}//end foreach
 	}
 
 	/**
@@ -452,7 +560,7 @@ class FrmUsage {
 
 		foreach ( $fields as $k => $field ) {
 			FrmAppHelper::unserialize_or_decode( $field->field_options );
-			$fields[ $k ]->field_options = json_encode( $field->field_options );
+			$fields[ $k ]->field_options = $field->field_options;
 		}
 
 		return $fields;
@@ -477,7 +585,7 @@ class FrmUsage {
 				'form_id'  => $action->menu_order,
 				'type'     => $action->post_excerpt,
 				'status'   => $action->post_status,
-				'settings' => $action->post_content,
+				'settings' => FrmAppHelper::maybe_json_decode( $action->post_content ),
 			);
 		}
 

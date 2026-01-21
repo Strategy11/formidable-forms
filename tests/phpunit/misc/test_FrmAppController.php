@@ -65,14 +65,14 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->set_admin_screen();
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertTrue( str_contains( $filtered_class, $class ), '"' . $class . '" is missing from admin classes' );
-		$this->assertFalse( strpos( $filtered_class, 'frm-white-body' ), '"frm-white-body" was added to admin classes' );
+		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringNotContainsString( 'frm-white-body', $filtered_class, '"frm-white-body" was added to admin classes' );
 
 		$this->set_admin_screen( 'admin.php?page=formidable' );
 		$class          = 'other-class';
 		$filtered_class = apply_filters( 'admin_body_class', $class );
-		$this->assertTrue( str_contains( $filtered_class, $class ), '"' . $class . '" is missing from admin classes' );
-		$this->assertTrue( str_contains( $filtered_class, ' frm-white-body' ), '"frm-white-body" is missing from admin classes' );
+		$this->assertStringContainsString( $class, $filtered_class, '"' . $class . '" is missing from admin classes' );
+		$this->assertStringContainsString( ' frm-white-body', $filtered_class, '"frm-white-body" is missing from admin classes' );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class test_FrmAppController extends FrmUnitTest {
 		$styles = ob_get_clean();
 
 		$this->assertNotEmpty( $styles );
-		$this->assertTrue( str_contains( $styles, FrmAppHelper::plugin_url() . '/css/frm_fonts.css' ), 'The frm_fonts stylesheet is missing' );
+		$this->assertStringContainsString( FrmAppHelper::plugin_url() . '/css/frm_fonts.css', $styles, 'The frm_fonts stylesheet is missing' );
 	}
 
 	/**
