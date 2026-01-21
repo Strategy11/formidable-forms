@@ -258,7 +258,6 @@ class FrmEntriesHelper {
 			}
 		}
 
-
 		if ( empty( $child_entries ) ) {
 			return '';
 		}

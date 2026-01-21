@@ -148,7 +148,6 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value;
 		}
 
-
 		if ( ! empty( $atts['show'] ) ) {
 			return $value[ $atts['show'] ] ?? '';
 		}
