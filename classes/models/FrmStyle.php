@@ -120,16 +120,16 @@ class FrmStyle {
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
-			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
-				$css_scope = 'frm_style_' . $new_instance['post_name'];
-				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
-			}
-
 			$new_instance['post_type']   = FrmStylesController::$post_type;
 			$new_instance['post_status'] = 'publish';
 
 			if ( ! $id ) {
-				$new_instance['post_name'] = $new_instance['post_title'];
+				$new_instance['post_name'] = sanitize_title( $new_instance['post_title'] );
+			}
+
+			if ( ! empty( $new_instance['post_content']['single_style_custom_css'] ) ) {
+				$css_scope = 'frm_style_' . $new_instance['post_name'];
+				$new_instance['post_content']['single_style_custom_css'] = $css_scope_helper->nest( $new_instance['post_content']['single_style_custom_css'], $css_scope );
 			}
 
 			$default_settings = $this->get_defaults();
