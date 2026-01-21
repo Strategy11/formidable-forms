@@ -793,7 +793,6 @@ class FrmFieldsHelper {
 	 * @return void
 	 */
 	public static function after_choice_input( $field, $choice_key ) {
-
 		/**
 		 * Allows adding content after the checkbox input.
 		 *
