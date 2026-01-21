@@ -101,7 +101,8 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 			}
 
 			// Find the semicolon ending this assignment.
-			$assignmentEnd = $phpcsFile->findNext( T_SEMICOLON, $varToken + 1, $functionCloser );
+			// If the assignment is a closure, we need to find the semicolon after the closure, not inside it.
+			$assignmentEnd = $this->findAssignmentEnd( $phpcsFile, $tokens, $varToken, $functionCloser );
 
 			if ( false === $assignmentEnd ) {
 				$current = $varToken + 1;
@@ -336,6 +337,39 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 			if ( $tokens[ $i ]['code'] === T_VARIABLE && $tokens[ $i ]['content'] === $variableName ) {
 				return true;
 			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the semicolon ending an assignment, skipping over closure bodies.
+	 *
+	 * @param File  $phpcsFile       The file being scanned.
+	 * @param array $tokens          The token stack.
+	 * @param int   $varToken        The variable token position.
+	 * @param int   $functionCloser  The function's closing brace.
+	 *
+	 * @return false|int The semicolon position, or false if not found.
+	 */
+	private function findAssignmentEnd( File $phpcsFile, array $tokens, $varToken, $functionCloser ) {
+		$current = $varToken + 1;
+
+		while ( $current < $functionCloser ) {
+			// If we hit a closure or anonymous function, skip to after its closing brace.
+			if ( $tokens[ $current ]['code'] === T_CLOSURE || $tokens[ $current ]['code'] === T_FN ) {
+				if ( isset( $tokens[ $current ]['scope_closer'] ) ) {
+					$current = $tokens[ $current ]['scope_closer'] + 1;
+					continue;
+				}
+			}
+
+			// If we hit a semicolon at this level, we found the end.
+			if ( $tokens[ $current ]['code'] === T_SEMICOLON ) {
+				return $current;
+			}
+
+			++$current;
 		}
 
 		return false;
