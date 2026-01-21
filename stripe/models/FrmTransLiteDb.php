@@ -137,7 +137,7 @@ class FrmTransLiteDb {
 	 *
 	 * @return bool|int
 	 */
-	public function &destroy( $id ) {
+	public function destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
 
 		global $wpdb;
@@ -335,7 +335,7 @@ class FrmTransLiteDb {
 		global $wpdb;
 		$result = $wpdb->get_results( $wpdb->prepare( 'SHOW COLUMNS FROM ' . $wpdb->prefix . 'frm_payments LIKE %s', 'completed' ) );
 
-		if ( empty( $result ) ) {
+		if ( ! $result ) {
 			return;
 		}
 

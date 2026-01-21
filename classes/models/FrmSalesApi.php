@@ -345,6 +345,7 @@ class FrmSalesApi extends FrmFormApi {
 			$option = mt_rand( 0, 1 );
 			update_option( 'frm_sale_ab_group', $option, false );
 		}
+
 		return (int) $option;
 	}
 

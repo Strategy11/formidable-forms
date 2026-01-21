@@ -14,16 +14,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <?php
-$div_class    = $args['div_class'] ?? false;
-$show_labels  = $args['show_labels'] ?? false;
-$off_label    = $args['off_label'] ?? '';
-$on_label     = $args['on_label'] ?? 1;
-$value        = $args['value'] ?? $on_label;
-$checked      = isset( $args['checked'] ) && ( true === $args['checked'] || str_contains( $args['checked'], 'checked="checked"' ) );
-$disabled     = ! empty( $args['disabled'] );
-$aria_checked = $checked ? 'true' : 'false';
-$input_html   = $args['input_html'] ?? array();
-
+$div_class     = $args['div_class'] ?? false;
+$show_labels   = $args['show_labels'] ?? false;
+$off_label     = $args['off_label'] ?? '';
+$on_label      = $args['on_label'] ?? 1;
+$value         = $args['value'] ?? $on_label;
+$checked       = isset( $args['checked'] ) && ( true === $args['checked'] || str_contains( $args['checked'], 'checked="checked"' ) );
+$disabled      = ! empty( $args['disabled'] );
+$aria_checked  = $checked ? 'true' : 'false';
+$input_html    = $args['input_html'] ?? array();
 $use_container = false;
 
 $div_params = array(

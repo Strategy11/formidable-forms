@@ -32,6 +32,7 @@ class FrmUsageController {
 				// Remove the scheduled event if it's not allowed and it's scheduled.
 				wp_unschedule_event( $timestamp, 'formidable_send_usage' );
 			}
+
 			return;
 		}
 
@@ -118,7 +119,7 @@ class FrmUsageController {
 
 		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		return $form_type && 'published' === $form_type;
+		return 'published' === $form_type;
 	}
 
 	/**
@@ -151,11 +152,11 @@ class FrmUsageController {
 	 * @return void
 	 */
 	public static function update_flows_data( $key, $value ) {
-		$flows_data = self::get_flows_data();
-
 		if ( '' === $key || '' === $value ) {
 			return;
 		}
+
+		$flows_data = self::get_flows_data();
 
 		if ( ! isset( $flows_data[ $key ] ) ) {
 			$flows_data[ $key ] = array();

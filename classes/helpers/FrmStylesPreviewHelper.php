@@ -192,8 +192,7 @@ class FrmStylesPreviewHelper {
 	 * @return array<string>
 	 */
 	public function get_notes_for_styler_preview() {
-		$notes = array();
-
+		$notes              = array();
 		$fallback_form_note = $this->get_fallback_form_note();
 
 		if ( is_string( $fallback_form_note ) ) {

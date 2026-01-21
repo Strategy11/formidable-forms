@@ -115,7 +115,6 @@ class FrmEntryValues {
 	 * @return void
 	 */
 	protected function init_include_fields( $atts ) {
-
 		// For reverse compatibility with the fields parameter.
 		if ( empty( $atts['include_fields'] ) && ! empty( $atts['fields'] ) ) {
 			if ( ! is_array( $atts['fields'] ) ) {

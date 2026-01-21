@@ -212,7 +212,7 @@ class FrmFieldFormHtml {
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
-		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+		$should_replace = $is_html ? $wp_processed : ! $wp_processed;
 
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
@@ -288,7 +288,7 @@ class FrmFieldFormHtml {
 		$this->maybe_add_error_id();
 		$error = $this->pass_args['errors'][ 'field' . $this->field_id ] ?? false;
 
-		if ( ! empty( $error ) && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
+		if ( $error && ! str_contains( $this->html, 'role="alert"' ) && FrmAppHelper::should_include_alert_role_on_field_errors() ) {
 			$error_body = self::get_error_body( $this->html );
 
 			if ( is_string( $error_body ) && ! str_contains( $error_body, 'role=' ) ) {
@@ -319,6 +319,7 @@ class FrmFieldFormHtml {
 		if ( false === $end ) {
 			return false;
 		}
+
 		return substr( $html, $start + 10, $end - $start - 10 );
 	}
 
@@ -425,8 +426,7 @@ class FrmFieldFormHtml {
 		foreach ( $shortcodes[0] as $short_key => $tag ) {
 			$shortcode_atts = FrmShortcodeHelper::get_shortcode_attribute_array( $shortcodes[2][ $short_key ] );
 			$tag            = FrmShortcodeHelper::get_shortcode_tag( $shortcodes, $short_key );
-
-			$replace_with = '';
+			$replace_with   = '';
 
 			if ( $tag === 'deletelink' && FrmAppHelper::pro_is_installed() ) {
 				$replace_with = FrmProEntriesController::entry_delete_link( $shortcode_atts );
@@ -445,7 +445,6 @@ class FrmFieldFormHtml {
 	 */
 	private function replace_input_shortcode( $shortcode_atts ) {
 		$shortcode_atts = $this->prepare_input_shortcode_atts( $shortcode_atts );
-
 		return $this->field_obj->include_front_field_input( $this->pass_args, $shortcode_atts );
 	}
 
@@ -522,7 +521,7 @@ class FrmFieldFormHtml {
 	 *
 	 * @since 3.0
 	 *
-	 * @return string $classes
+	 * @return string Classes.
 	 */
 	private function get_field_div_classes() {
 		// Add error class
@@ -531,7 +530,7 @@ class FrmFieldFormHtml {
 		// Add label position class
 		$settings = $this->field_obj->display_field_settings();
 
-		if ( isset( $settings['label_position'] ) && $settings['label_position'] ) {
+		if ( ! empty( $settings['label_position'] ) ) {
 			$label_position = $this->field_obj->get_field_column( 'label' );
 			$classes       .= ' frm_' . $label_position . '_container';
 
@@ -544,7 +543,7 @@ class FrmFieldFormHtml {
 		// Add CSS layout classes
 		$extra_classes = $this->field_obj->get_field_column( 'classes' );
 
-		if ( ! empty( $extra_classes ) ) {
+		if ( $extra_classes ) {
 			if ( ! str_contains( $this->html, 'frm_form_field ' ) ) {
 				$classes .= ' frm_form_field';
 			}

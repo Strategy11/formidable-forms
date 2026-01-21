@@ -113,7 +113,6 @@ class FrmTransLiteAction extends FrmFormAction {
 	 * @return array
 	 */
 	public function get_field_options( $form_id ) {
-
 		$form_id  = absint( $form_id );
 		$form_ids = $form_id;
 
@@ -180,6 +179,7 @@ class FrmTransLiteAction extends FrmFormAction {
 
 		$has_field = false;
 		?>
+		<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 		<select class="frm_with_left_label" name="<?php echo esc_attr( $this->get_field_name( $field_atts['name'] ) ); ?>" id="<?php echo esc_attr( $this->get_field_id( $field_atts['name'] ) ); ?>">
 			<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 			<?php
@@ -197,6 +197,7 @@ class FrmTransLiteAction extends FrmFormAction {
 				$has_field  = true;
 				$key_exists = array_key_exists( $field_atts['name'], $form_atts['form_action']->post_content );
 				?>
+				<?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<option value="<?php echo esc_attr( $field->id ); ?>" <?php selected( $key_exists ? $form_atts['form_action']->post_content[ $field_atts['name'] ] : 0, $field->id ); ?>>
 					<?php
 					echo esc_attr( FrmAppHelper::truncate( $field->name, 50, 1 ) );

@@ -203,19 +203,21 @@ class FrmOnboardingWizardController {
 	 * @return void
 	 */
 	public static function maybe_load_page() {
-		if ( self::is_onboarding_wizard_page() ) {
-			// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
-			$message = new FrmInbox();
-			$message->dismiss( 'onboarding_wizard' );
-
-			add_action( 'admin_menu', self::class . '::menu', 99 );
-			add_action( 'admin_init', self::class . '::assign_properties' );
-			add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
-			add_action( 'admin_head', self::class . '::remove_menu' );
-
-			add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
-			add_filter( 'frm_show_footer_links', '__return_false' );
+		if ( ! self::is_onboarding_wizard_page() ) {
+			return;
 		}
+
+		// Dismiss the onboarding wizard message so it stops appearing after it is clicked.
+		$message = new FrmInbox();
+		$message->dismiss( 'onboarding_wizard' );
+
+		add_action( 'admin_menu', self::class . '::menu', 99 );
+		add_action( 'admin_init', self::class . '::assign_properties' );
+		add_action( 'admin_enqueue_scripts', self::class . '::enqueue_assets', 15 );
+		add_action( 'admin_head', self::class . '::remove_menu' );
+
+		add_filter( 'admin_body_class', self::class . '::add_admin_body_classes', 999 );
+		add_filter( 'frm_show_footer_links', '__return_false' );
 	}
 
 	/**
@@ -466,7 +468,7 @@ class FrmOnboardingWizardController {
 	 * @return array Configuration for the onboarding wizard slide-in notification.
 	 */
 	public static function add_wizard_to_floating_links( $inbox_messages ) {
-		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' );
+		$message = __( 'Welcome to Formidable Forms! Click here to run the Onboarding Wizard and it will guide you through the basic settings and get you started in 2 minutes.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		if ( ! is_array( $inbox_messages ) ) {
 			$inbox_messages = array();
@@ -476,7 +478,7 @@ class FrmOnboardingWizardController {
 			'subject' => esc_html__( 'Begin With Ease!', 'formidable' ),
 			'message' => esc_html( $message ),
 			'slidein' => esc_html( $message ),
-			'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>',
+			'cta'     => '<a href="' . esc_url( self::$page_url ) . '" class="button-primary frm-button-primary" target="_blank" rel="noopener noreferrer">' . esc_html__( 'Begin Setup', 'formidable' ) . '</a>', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'created' => time(),
 			'key'     => 'onboarding_wizard',
 		);

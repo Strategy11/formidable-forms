@@ -156,11 +156,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 	 * @return bool
 	 */
 	public function check() {
-		if ( $this->check_ip() ) {
-			return true;
-		}
-
-		return $this->check_values();
+		return $this->check_ip() ? true : $this->check_values();
 	}
 
 	/**
@@ -231,7 +227,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 		// Some field types should never be checked.
 		$denylist['skip_field_types'] = array_merge(
 			$denylist['skip_field_types'],
-			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select' )
+			array( 'password', 'captcha', 'signature', 'checkbox', 'radio', 'select', 'ranking' )
 		);
 	}
 
@@ -290,6 +286,7 @@ class FrmSpamCheckDenylist extends FrmSpamCheck {
 					return true;
 				}
 			}
+
 			return false;
 		}
 

@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 ?>
 <div class="frmcenter frm_no_entries_form frm_placeholder_block">
-<?php if ( $form && isset( $form->options['no_save'] ) && $form->options['no_save'] ) { ?>
+<?php if ( $form && ! empty( $form->options['no_save'] ) ) { ?>
 <h3><?php esc_html_e( 'This form is not set to save any entries.', 'formidable' ); ?></h3>
 <p>
 	<?php

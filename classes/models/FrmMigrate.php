@@ -97,7 +97,7 @@ class FrmMigrate {
 	 * If a server has AllowOverride FileInfo but not AllowOverride AuthConfig, JS and CSS files
 	 * will result in a 500 error.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return void
 	 */
@@ -152,7 +152,7 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.',
+			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">Learn More</a>',
 			'type'    => 'error',
 		);
@@ -166,12 +166,7 @@ class FrmMigrate {
 	 */
 	public function collation() {
 		global $wpdb;
-
-		if ( ! $wpdb->has_cap( 'collation' ) ) {
-			return '';
-		}
-
-		return $wpdb->get_charset_collate();
+		return $wpdb->has_cap( 'collation' ) ? $wpdb->get_charset_collate() : '';
 	}
 
 	/**
@@ -358,8 +353,7 @@ class FrmMigrate {
 
 		$set_err = libxml_use_internal_errors( true );
 		$loader  = FrmXMLHelper::maybe_libxml_disable_entity_loader( true );
-
-		$file = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
+		$file    = FrmAppHelper::plugin_path() . '/classes/views/xml/default-templates.xml';
 		FrmXMLHelper::import_xml( $file );
 
 		libxml_use_internal_errors( $set_err );
@@ -438,7 +432,7 @@ class FrmMigrate {
 		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
-		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
+		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
@@ -452,7 +446,7 @@ class FrmMigrate {
 		delete_transient( 'frmpro_options' );
 		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		do_action( 'frm_after_uninstall' );
 
@@ -544,7 +538,7 @@ class FrmMigrate {
 			FrmAppHelper::unserialize_or_decode( $field->options );
 			$update_values = FrmXMLHelper::migrate_field_placeholder( $field, $type );
 
-			if ( empty( $update_values ) ) {
+			if ( ! $update_values ) {
 				continue;
 			}
 
@@ -577,7 +571,6 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_86() {
-
 		$fields = $this->get_fields_with_size();
 
 		foreach ( $fields as $f ) {
@@ -597,7 +590,7 @@ class FrmMigrate {
 		// reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -642,7 +635,7 @@ class FrmMigrate {
 	private function revert_widget_field_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -655,6 +648,7 @@ class FrmMigrate {
 
 			$this->maybe_convert_migrated_size( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
@@ -681,8 +675,7 @@ class FrmMigrate {
 		}
 
 		$pixel_conversion = 9;
-
-		$size = round( (int) $int_size / $pixel_conversion );
+		$size             = round( (int) $int_size / $pixel_conversion );
 	}
 
 	/**
@@ -698,7 +691,7 @@ class FrmMigrate {
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 
-		if ( empty( $styles ) ) {
+		if ( ! $styles ) {
 			return;
 		}
 
@@ -724,7 +717,7 @@ class FrmMigrate {
 		global $wpdb;
 		$exists = $wpdb->get_row( 'SHOW COLUMNS FROM ' . $this->forms . ' LIKE "parent_form_id"' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 
-		if ( empty( $exists ) ) {
+		if ( ! $exists ) {
 			$wpdb->query( 'ALTER TABLE ' . $this->forms . ' ADD parent_form_id int(11) default 0' ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		}
 	}
@@ -761,7 +754,7 @@ class FrmMigrate {
 	private function adjust_widget_size() {
 		$widgets = get_option( 'widget_frm_show_form' );
 
-		if ( empty( $widgets ) ) {
+		if ( ! $widgets ) {
 			return;
 		}
 
@@ -773,6 +766,7 @@ class FrmMigrate {
 			}
 			$this->convert_character_to_px( $widgets[ $k ]['size'] );
 		}
+
 		update_option( 'widget_frm_show_form', $widgets );
 	}
 
@@ -841,8 +835,7 @@ class FrmMigrate {
 	private function migrate_to_11() {
 		global $wpdb;
 
-		$forms = FrmDb::get_results( $this->forms, array(), 'id, options' );
-
+		$forms            = FrmDb::get_results( $this->forms, array(), 'id, options' );
 		$sending          = __( 'Sending', 'formidable' );
 		$img              = FrmAppHelper::plugin_url() . '/images/ajax_loader.gif';
 		$old_default_html = <<<DEFAULT_HTML

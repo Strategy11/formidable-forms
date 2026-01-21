@@ -27,8 +27,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		<?php
 	}
 
-	$placeholder = FrmFieldsController::add_placeholder_to_select( $field );
-
+	$placeholder   = FrmFieldsController::add_placeholder_to_select( $field );
 	$skipped       = false;
 	$other_opt     = false;
 	$other_checked = false;
