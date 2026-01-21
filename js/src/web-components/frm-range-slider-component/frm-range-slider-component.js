@@ -4,7 +4,6 @@ import style from './frm-range-slider-component.css';
 import { __ } from '@wordpress/i18n';
 
 export class frmRangeSliderComponent extends frmWebComponent {
-
 	#onChange = () => {};
 	#sliderDefaultValue = '0px';
 	#sliderDefaultMultipleValues = {
@@ -17,6 +16,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	};
 	#hasMultipleValues = false;
 	#sliderAvailableUnits = [ 'px', 'em', '%' ];
+	#sliderMaxValue = 100;
+	#sliderSteps = null;
 
 	constructor() {
 		super();
@@ -60,11 +61,11 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to set the default value for the single slider component. This value is used to determine the default value for the single slider component.
 	 *
-	 * @param {string} value - The value to set.
+	 * @param {string|number} value - The value to set.
 	 * @return {void}
 	 */
 	set sliderDefaultValue( value ) {
-		this.#sliderDefaultValue = value;
+		this.#sliderDefaultValue = String( value );
 	}
 
 	/**
@@ -75,6 +76,20 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 */
 	set sliderAvailableUnits( value ) {
 		this.#sliderAvailableUnits = value;
+	}
+
+	/**
+	 * A method to set the max value that the slider can take.
+	 *
+	 * @param {string|number} value - The value to set.
+	 * @return {void}
+	 */
+	set sliderMaxValue( value ) {
+		this.#sliderMaxValue = value.toString();
+	}
+
+	set steps( value ) {
+		this.#sliderSteps = value;
 	}
 
 	useShadowDom() {
@@ -89,7 +104,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		this.wrapper.classList.add( 'frm-style-component' );
 
 		const config = {
-			maxValue: parseInt( this.getAttribute( 'data-max-value' ) || '100', 10 ),
+			maxValue: parseInt( this.getAttribute( 'data-max-value' ) || this.#sliderMaxValue, 10 ),
 			units: this.getAvailableUnits(),
 			componentClass: this.getAttribute( 'data-component-class' ) || '',
 			componentId: this.componentId,
@@ -163,7 +178,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 			return defaultValue;
 		}
 
-		const match = valueStr.match( /^(\d+)(px|em|%)?$/ );
+		const match = valueStr.match( /^(\d+)(px|em|%|\s)?$/ );
 		if ( ! match ) {
 			return defaultValue;
 		}
@@ -186,7 +201,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	 * A method to create the multiple values slider.
 	 *
 	 * @param {Element} wrapper - The wrapper element.
-	 * @param {Object} options - The options for the slider.
+	 * @param {Object}  options - The options for the slider.
 	 * @return {void}
 	 */
 	createMultipleValuesSlider( wrapper, options ) {
@@ -234,7 +249,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the hidden input value for the slider component. This hidden input value is used to store the value of the slider component.
 	 *
-	 * @param {Object} options - The options for the slider.
+	 * @param {string} fieldValue - The field value to set.
 	 * @return {Element} - The hidden input value element.
 	 */
 	createSliderHiddenInputValue( fieldValue ) {
@@ -243,7 +258,7 @@ export class frmRangeSliderComponent extends frmWebComponent {
 		}
 
 		const input = document.createElement( 'input' );
-		Object.assign( input, { type: 'hidden', value: fieldValue });
+		Object.assign( input, { type: 'hidden', value: fieldValue } );
 
 		if ( this.fieldName ) {
 			input.setAttribute( 'name', this.fieldName );
@@ -321,9 +336,9 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the value and unit selection. This method is used to create the value and unit selection.
 	 *
-	 * @param {Object} value - The value of the slider.
+	 * @param {Object} value     - The value of the slider.
 	 * @param {string} ariaLabel - The aria label of the slider.
-	 * @param {Array} units - The units of the slider.
+	 * @param {Array}  units     - The units of the slider.
 	 * @return {Element} - The value and unit selection element.
 	 */
 	createSliderValueAndUnitSelection( value, ariaLabel, units ) {
@@ -351,8 +366,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	/**
 	 * A method to create the dropdown option. This method is used to create the dropdown option.
 	 *
-	 * @param {string} value - The value of the option.
-	 * @param {string} label - The label of the option.
+	 * @param {string}  value    - The value of the option.
+	 * @param {string}  label    - The label of the option.
 	 * @param {boolean} selected - Whether the option is selected.
 	 * @return {Element} - The dropdown option element.
 	 */
@@ -432,7 +447,8 @@ export class frmRangeSliderComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultValues() : this.parseValueUnit( this.defaultValue );
-		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), { defaultValues } );
+		const defaultValues = this.hasMultipleSliderValues() ? this.parseDefaultMultipleValues() : this.parseValueUnit( this.defaultValue );
+		const options = Object.assign( { defaultValues }, { steps: this.#sliderSteps } );
+		new frmSliderComponent( this.wrapper.querySelectorAll( '.frm-slider-component' ), options );
 	}
 }

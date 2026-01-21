@@ -3,7 +3,6 @@ import { __ } from '@wordpress/i18n';
 import style from './frm-typography-component.css';
 
 export class frmTypographyComponent extends frmWebComponent {
-
 	#onChange = () => {};
 	#defaultOptions = [
 		{

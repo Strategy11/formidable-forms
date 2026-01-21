@@ -2,7 +2,6 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-dropdown-component.css';
 
 export class frmDropdownComponent extends frmWebComponent {
-
 	#onChange = () => {};
 	#select = document.createElement( 'select' );
 

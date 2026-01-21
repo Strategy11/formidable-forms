@@ -2,9 +2,8 @@ import { frmWebComponent } from '../frm-web-component';
 import style from './frm-colorpicker-component.css';
 
 class frmColorpickerLiteComponent extends frmWebComponent {
-
 	#onChange = () => {};
-	#defaultValue = '';
+	#defaultValue = '#ffffff';
 
 	constructor() {
 		super();
@@ -43,9 +42,12 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	}
 
 	afterViewInit() {
-		const colorPickerOptions = 'function' === typeof this.#onChange ? {
-			change: ( event, ui ) => this.#onChange( event, ui ),
-		} : {};
+		const colorPickerOptions = {
+			defaultColor: this.#defaultValue,
+		};
+		if ( 'function' === typeof this.#onChange ) {
+			colorPickerOptions.change = ( event, ui ) => this.#onChange( event, ui );
+		}
 
 		jQuery( this.input ).wpColorPicker( colorPickerOptions );
 	}
@@ -66,6 +68,7 @@ class frmColorpickerLiteComponent extends frmWebComponent {
 	 * @return {void}
 	 */
 	set color( value ) {
+		this.#defaultValue = value;
 		this.input.value = value;
 	}
 
