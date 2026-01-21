@@ -16,6 +16,14 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		self::frm_install();
 	}
 
+	public function setUp(): void {
+		parent::setUp();
+
+		$defaults       = $this->get_defaults();
+		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
+		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
+	}
+
 	protected $include_fields = array();
 	protected $exclude_fields = array();
 	protected $include_extras = array();
@@ -25,14 +33,6 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 	protected $td_style     = ' style="text-align:left;color:#1D2939;padding:7px 9px;vertical-align:top;border-top:1px solid #cccccc;"';
 
 	protected $is_repeater_child = false;
-
-	public function __construct() {
-		parent::__construct();
-
-		$defaults       = $this->get_defaults();
-		$this->td_style = str_replace( '#1D2939', $defaults['text_color'], $this->td_style );
-		$this->td_style = str_replace( '#cccccc', $defaults['border_color'], $this->td_style );
-	}
 
 	/**
 	 * Tests no entry or id passed
