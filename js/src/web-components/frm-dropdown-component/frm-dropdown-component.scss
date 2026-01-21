@@ -1,0 +1,15 @@
+@import '../frm-web-component.scss';
+
+.frm-dropdown-component select {
+	width: 100%;
+	outline: 0;
+    box-shadow: var(--box-shadow-xs);
+    border-radius: var(--small-radius);
+    padding: 5px 14px;
+    border-color: var(--grey-300);
+    color: var(--grey-800);
+    font-size: var(--text-md);
+    margin: 0;
+    background-color: #fff;
+    line-height: var(--leading);
+}

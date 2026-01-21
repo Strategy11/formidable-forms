@@ -51,6 +51,7 @@ new FrmBackgroundImageStyleComponent(
 		class="frm-style-item-heading"><?php esc_html_e( 'Border Color', 'formidable' ); ?></label>
 </div>
 <div class="frm7 frm_form_field">
+<input type="text" id="frm_fieldset_color" class="hex" data-alpha-color-type="rgba" data-alpha-enabled="true" value="<?php echo esc_attr( $style->post_content['fieldset_color'] ); ?>"/>
 	<?php
 	new FrmColorpickerStyleComponent(
 		$frm_style->get_field_name( 'fieldset_color' ),
