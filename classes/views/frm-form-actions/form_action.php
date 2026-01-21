@@ -3,8 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die( 'You are not allowed to call this page directly.' );
 }
 
-$a = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
-
+$a           = FrmAppHelper::simple_get( 't', 'sanitize_title', 'advanced_settings' );
 $form_action = apply_filters( 'frm_form_action_settings', $form_action, $form_action->post_excerpt );
 $form_action = apply_filters( 'frm_form_' . $form_action->post_excerpt . '_action_settings', $form_action );
 

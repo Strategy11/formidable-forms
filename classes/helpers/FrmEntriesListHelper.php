@@ -31,8 +31,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public function prepare_items() {
 		$this->set_per_page();
-		$s_query = array();
-
+		$s_query            = array();
 		$join_form_in_query = false;
 
 		$this->items = $this->get_entry_items( $s_query, $join_form_in_query );
@@ -177,7 +176,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( $s != '' && FrmAppHelper::pro_is_installed() ) {
+		if ( $s !== '' && FrmAppHelper::pro_is_installed() ) {
 			$fid     = self::get_param( array( 'param' => 'fid' ) );
 			$s_query = FrmProEntriesHelper::get_search_str( $s_query, $s, $form_id, $fid );
 		}
@@ -207,9 +206,8 @@ class FrmEntriesListHelper extends FrmListHelper {
 			)
 		);
 
-		if ( ! empty( $s ) ) {
+		if ( $s ) {
 			esc_html_e( 'No Entries Found', 'formidable' );
-
 			return;
 		}
 
@@ -248,7 +246,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	protected function display_tablenav( $which ) {
-		$is_footer = ( $which !== 'top' );
+		$is_footer = $which !== 'top';
 
 		if ( $is_footer && ! empty( $this->items ) ) {
 			$utm = array(
@@ -294,16 +292,15 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since 2.0.14
 	 *
-	 * @return string $primary_column
+	 * @return string Primary column.
 	 */
 	protected function get_primary_column_name() {
-		$columns = get_column_headers( $this->screen );
-		$hidden  = get_hidden_columns( $this->screen );
-
+		$columns        = get_column_headers( $this->screen );
+		$hidden         = get_hidden_columns( $this->screen );
 		$primary_column = '';
 
 		foreach ( $columns as $column_key => $column_display_name ) {
-			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden ) ) {
+			if ( 'cb' !== $column_key && ! in_array( $column_key, $hidden, true ) ) {
 				$primary_column = $column_key;
 				break;
 			}
@@ -345,7 +342,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 		// Set up the checkbox ( because the user is editable, otherwise its empty )
 		$checkbox = "<input type='checkbox' name='item-action[]' id='cb-item-action-{$item->id}' value='{$item->id}' />";
 		/* translators: %s: Form name */
-		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . esc_html( sprintf( __( 'Select %s', 'formidable' ), self::get_entry_label( $item ) ) ) . '</span></label>';
+		$checkbox .= "<label for='cb-item-action-{$item->id}'><span class='screen-reader-text'>" . esc_html( sprintf( __( 'Select %s', 'formidable' ), self::get_entry_label( $item ) ) ) . '</span></label>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$r = "<tr id='item-action-{$item->id}'$style>";
 
@@ -368,8 +365,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 			$attributes = 'class="' . esc_attr( $class ) . '"';
 			unset( $class );
-			$attributes .= ' data-colname="' . $column_display_name . '"';
-
+			$attributes       .= ' data-colname="' . $column_display_name . '"';
 			$form_id           = $this->params['form'] ? $this->params['form'] : 0;
 			$this->column_name = preg_replace( '/^(' . $form_id . '_)/', '', $column_name );
 
@@ -379,6 +375,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				$val = in_array( $column_name, $hidden, true ) ? '' : $this->column_value( $item );
 				$r  .= "<td $attributes>";
 
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $column_name == $action_col ) {
 					$edit_link = admin_url( 'admin.php?page=formidable-entries&frm_action=edit&id=' . $item->id );
 					$r        .= '<a href="' . esc_url( isset( $actions['edit'] ) ? $edit_link : $view_link ) . '" class="row-title" >' . $val . '</a> ';
@@ -391,9 +388,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			}//end if
 			unset( $val );
 		}//end foreach
-		$r .= '</tr>';
-
-		return $r;
+		return $r . '</tr>';
 	}
 
 	/**
@@ -504,7 +499,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete', 'formidable' ) . '</a>';
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );
@@ -526,7 +521,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 			$sep_val = false;
 		}
 
-		if ( strpos( $col_name, '-_-' ) ) {
+		if ( str_contains( $col_name, '-_-' ) ) {
 			list( $col_name, $embedded_field_id ) = explode( '-_-', $col_name );
 		}
 

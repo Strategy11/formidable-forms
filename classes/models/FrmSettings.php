@@ -350,7 +350,7 @@ class FrmSettings {
 		if ( is_multisite() && is_admin() ) {
 			$mu_menu = get_site_option( 'frm_admin_menu_name' );
 
-			if ( $mu_menu && ! empty( $mu_menu ) ) {
+			if ( $mu_menu && $mu_menu ) {
 				$this->menu    = $mu_menu;
 				$this->mu_menu = 1;
 			}
@@ -425,6 +425,7 @@ class FrmSettings {
 				// Avoid changing the false default value to an empty string.
 				return $value;
 			}
+
 			return sanitize_textarea_field( $value );
 		}
 
@@ -618,7 +619,7 @@ class FrmSettings {
 			}
 
 			foreach ( $roles as $role => $details ) {
-				if ( in_array( $role, $this->$frm_role ) ) {
+				if ( in_array( $role, $this->$frm_role, true ) ) {
 					$wp_roles->add_cap( $role, $frm_role );
 				} else {
 					$wp_roles->remove_cap( $role, $frm_role );

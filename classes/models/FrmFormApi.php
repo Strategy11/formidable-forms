@@ -28,6 +28,14 @@ class FrmFormApi {
 	protected $new_days = 90;
 
 	/**
+	 * If true, calls to get_api_info will bypass cache.
+	 * This is set true by calling force_api_request.
+	 *
+	 * @var bool
+	 */
+	protected $force = false;
+
+	/**
 	 * @since 3.06
 	 *
 	 * @param string|null $license The license key.
@@ -50,7 +58,7 @@ class FrmFormApi {
 		if ( $license === null ) {
 			$edd_update = $this->get_pro_updater();
 
-			if ( ! empty( $edd_update ) ) {
+			if ( $edd_update ) {
 				$license = $edd_update->license;
 			}
 		}
@@ -85,6 +93,18 @@ class FrmFormApi {
 	}
 
 	/**
+	 * Flag the force property as true, so the next API request bypasses cache.
+	 * This is used to pull API data for change logs, which are excluded from the cached data.
+	 *
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	public function force_api_request() {
+		$this->force = true;
+	}
+
+	/**
 	 * @since 3.06
 	 *
 	 * @return array
@@ -96,7 +116,12 @@ class FrmFormApi {
 			$url .= '?l=' . urlencode( base64_encode( $this->license ) );
 		}
 
-		$addons = $this->get_cached();
+		if ( $this->force ) {
+			$addons      = false;
+			$this->force = false;
+		} else {
+			$addons = $this->get_cached();
+		}
 
 		if ( is_array( $addons ) ) {
 			return $addons;
@@ -142,7 +167,7 @@ class FrmFormApi {
 			if ( isset( $addon['categories'] ) ) {
 				$cats = array_intersect( $this->skip_categories(), $addon['categories'] );
 
-				if ( ! empty( $cats ) ) {
+				if ( $cats ) {
 					unset( $addons[ $k ] );
 					continue;
 				}
@@ -253,14 +278,14 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_addon_for_license( $license_plugin, $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
 
 		$download_id = $license_plugin->download_id;
 		$plugin      = array();
 
-		if ( empty( $download_id ) && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
 				if ( is_array( $addon ) && ! empty( $addon['title'] ) && strtolower( $license_plugin->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -297,7 +322,7 @@ class FrmFormApi {
 	protected function get_cached() {
 		$cache = $this->get_cached_option();
 
-		if ( empty( $cache ) ) {
+		if ( ! $cache ) {
 			return false;
 		}
 
@@ -344,6 +369,8 @@ class FrmFormApi {
 	 * @return void
 	 */
 	protected function set_cached( $addons ) {
+		$addons = $this->reduce_addon_data_before_caching( $addons );
+
 		$data = array(
 			'timeout' => strtotime( $this->get_cache_timeout( $addons ), time() ),
 			'value'   => wp_json_encode( $addons ),
@@ -357,6 +384,74 @@ class FrmFormApi {
 			$autoload = str_starts_with( $this->cache_key, 'frm_addons_l' );
 			update_option( $this->cache_key, $data, $autoload );
 		}
+	}
+
+	/**
+	 * Remove certain add-on API data that we don't need to cache.
+	 * This is to help keep the option data (which is auto-loaded) small.
+	 *
+	 * @since x.x
+	 *
+	 * @param array $addons
+	 *
+	 * @return array
+	 */
+	private function reduce_addon_data_before_caching( $addons ) {
+		if ( is_subclass_of( $this, 'FrmFormApi' ) ) {
+			// We only want to modify FrmFormApi. Leave the other APIs alone for now.
+			return $addons;
+		}
+
+		$reduced_addons = array();
+
+		foreach ( $addons as $key => $addon ) {
+			if ( ! is_array( $addon ) ) {
+				$reduced_addons[ $key ] = $addon;
+				continue;
+			}
+
+			if ( ! $this->should_include_addon_in_cached_data( $addon ) ) {
+				continue;
+			}
+
+			if ( isset( $addon['changelog'] ) ) {
+				unset( $addon['changelog'], $addon['banners'] );
+			}
+
+			$reduced_addons[ $key ] = $addon;
+		}
+
+		return $reduced_addons;
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @param array $addon
+	 *
+	 * @return bool True if the add-on should be included in cached data.
+	 */
+	private function should_include_addon_in_cached_data( $addon ) {
+		if ( isset( $addon['version'] ) && '' === $addon['version'] ) {
+			// If version is set but blank, the plugin is not actually live.
+			return false;
+		}
+
+		if ( isset( $addon['categories'] ) ) {
+			if ( 'views' === $addon['slug'] ) {
+				// Legacy views has no categories set, but we should still
+				// include it in cache since it is a valid add-on.
+				return true;
+			}
+
+			$categories_are_empty = ! $addon['categories'] || $addon['categories'] === array( 'Strategy11' );
+
+			if ( $categories_are_empty ) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**
@@ -409,21 +504,23 @@ class FrmFormApi {
 	 * @return array
 	 */
 	public function get_error_from_response( $addons = array() ) {
-		if ( empty( $addons ) ) {
+		if ( ! $addons ) {
 			$addons = $this->get_api_info();
 		}
 
 		$errors = array();
 
-		if ( isset( $addons['error'] ) ) {
-			if ( is_string( $addons['error'] ) ) {
-				$errors[] = $addons['error'];
-			} elseif ( ! empty( $addons['error']['message'] ) ) {
-				$errors[] = $addons['error']['message'];
-			}
-
-			do_action( 'frm_license_error', $addons['error'] );
+		if ( ! isset( $addons['error'] ) ) {
+			return $errors;
 		}
+
+		if ( is_string( $addons['error'] ) ) {
+			$errors[] = $addons['error'];
+		} elseif ( ! empty( $addons['error']['message'] ) ) {
+			$errors[] = $addons['error']['message'];
+		}
+
+		do_action( 'frm_license_error', $addons['error'] );
 
 		return $errors;
 	}

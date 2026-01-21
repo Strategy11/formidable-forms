@@ -34,7 +34,7 @@ if ( ! is_array( $action_control->action_options['event'] ) ) {
 	$action_control->action_options['event'] = explode( ',', $action_control->action_options['event'] );
 }
 
-if ( count( $action_control->action_options['event'] ) == 1 || $action_control->action_options['force_event'] ) {
+if ( count( $action_control->action_options['event'] ) === 1 || $action_control->action_options['force_event'] ) {
 	foreach ( $action_control->action_options['event'] as $e ) {
 		?>
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'event' ) ); ?>[]" value="<?php echo esc_attr( $e ); ?>" />
@@ -53,7 +53,7 @@ if ( count( $action_control->action_options['event'] ) == 1 || $action_control->
 
 	foreach ( $action_control->action_options['event'] as $event ) {
 		?>
-		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'] ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
+		<option value="<?php echo esc_attr( $event ); ?>" <?php echo in_array( $event, (array) $form_action->post_content['event'], true ) ? ' selected="selected"' : ''; ?> ><?php echo esc_html( $event_labels[ $event ] ?? $event ); ?></option>
 <?php } ?>
 		</select>
 	</p>

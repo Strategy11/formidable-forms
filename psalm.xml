@@ -520,8 +520,14 @@
 		<PossiblyNullArrayAccess>
 			<errorLevel type="suppress">
 				<file name="classes/controllers/FrmStylesController.php" />
+				<file name="classes/helpers/FrmXMLHelper.php" />
 			</errorLevel>
 		</PossiblyNullArrayAccess>
+		<PossiblyNullArrayAssignment>
+			<errorLevel type="suppress">
+				<file name="classes/helpers/FrmXMLHelper.php" />
+			</errorLevel>
+		</PossiblyNullArrayAssignment>
 		<PossiblyNullIterator>
 			<errorLevel type="suppress">
 				<file name="classes/models/FrmPersonalData.php" />

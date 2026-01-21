@@ -271,7 +271,6 @@
 
 		if ( target.classList.contains( 'frm-edit-style' ) || null !== target.closest( '.frm-edit-style' ) || 'frm_edit_style' === target.id ) {
 			modifyStylerUrl( target );
-			return; // eslint-disable-line
 		}
 	}
 
@@ -327,7 +326,6 @@
 
 		if ( target.classList.contains( 'frm-style-card' ) || target.closest( '.frm-style-card' ) ) {
 			handleStyleCardClick( event );
-			return; // eslint-disable-line
 		}
 	}
 
@@ -588,7 +586,7 @@
 			return;
 		}
 
-		card.appendChild( getHamburgerMenu( card.dataset ) );
+		card.append( getHamburgerMenu( card.dataset ) );
 	}
 
 	/**
@@ -1126,13 +1124,13 @@
 		newStyle.addEventListener(
 			'load',
 			() => {
-				style.parentNode.removeChild( style );
+				style.remove();
 				newStyle.id = 'frm-custom-theme-css'; // Assign the old ID to the new style so it can be removed in the next reset action.
 			}
 		);
 
 		const head = document.getElementsByTagName( 'HEAD' )[ 0 ];
-		head.appendChild( newStyle );
+		head.append( newStyle );
 	}
 
 	/**

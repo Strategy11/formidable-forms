@@ -417,7 +417,7 @@ function frmFrontFormJS() {
 				return errors;
 			}
 
-			val = jQuery( field ).val();
+			val = jQuery( field ).val(); // eslint-disable-line no-jquery/no-val
 
 			if ( val === null ) {
 				val = '';
@@ -851,7 +851,7 @@ function frmFrontFormJS() {
 		const fieldsets = object.querySelectorAll( '.frm_form_field' );
 		fieldsets.forEach( field => field.classList.add( 'frm_doing_ajax' ) );
 
-		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line camelcase
+		data = jQuery( object ).serialize() + '&action=frm_entries_' + action + '&nonce=' + frm_js.nonce; // eslint-disable-line no-jquery/no-serialize, camelcase
 		shouldTriggerEvent = object.classList.contains( 'frm_trigger_event_on_submit' );
 
 		const doRedirect = response => {
@@ -923,7 +923,7 @@ function frmFrontFormJS() {
 				const formIdInput = object.querySelector( 'input[name="form_id"]' );
 				formID = formIdInput ? formIdInput.value : '';
 				response.content = response.content.replace( / frm_pro_form /g, ' frm_pro_form frm_no_hide ' );
-				replaceContent = jQuery( object ).closest( '.frm_forms' );
+				replaceContent = jQuery( object ).closest( '.frm_forms' ); // eslint-disable-line no-jquery/no-closest
 				removeAddedScripts( replaceContent, formID );
 				delay = maybeSlideOut( replaceContent, response.content );
 
@@ -964,8 +964,8 @@ function frmFrontFormJS() {
 					$fieldCont = fieldContEl ? jQuery( fieldContEl ) : jQuery();
 
 					if ( $fieldCont.length ) {
-						if ( ! $fieldCont.is( ':visible' ) ) {
-							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' );
+						if ( ! $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
+							inCollapsedSection = $fieldCont.closest( '.frm_toggle_container' ); // eslint-disable-line no-jquery/no-closest
 							if ( inCollapsedSection.length ) {
 								frmTrigger = inCollapsedSection.prev();
 								if ( ! frmTrigger.hasClass( 'frm_trigger' ) ) {
@@ -976,7 +976,7 @@ function frmFrontFormJS() {
 							}
 						}
 
-						if ( $fieldCont.is( ':visible' ) ) {
+						if ( $fieldCont.is( ':visible' ) ) { // eslint-disable-line no-jquery/no-is
 							addFieldError( $fieldCont, key, response.errors );
 							contSubmit = false;
 						}
@@ -1056,7 +1056,7 @@ function frmFrontFormJS() {
 			ajaxParams.error = error;
 		}
 
-		jQuery.ajax( ajaxParams );
+		jQuery.ajax( ajaxParams ); // eslint-disable-line no-jquery/no-ajax
 	}
 
 	function afterFormSubmitted( object, response ) {
@@ -1099,9 +1099,9 @@ function frmFrontFormJS() {
 	function maybeSlideOut( oldContent, newContent ) {
 		let c,
 			newClass = 'frm_slideout';
-		if ( newContent.indexOf( ' frm_slide' ) !== -1 ) {
+		if ( newContent.includes( ' frm_slide' ) ) {
 			c = oldContent.children();
-			if ( newContent.indexOf( ' frm_going_back' ) !== -1 ) {
+			if ( newContent.includes( ' frm_going_back' ) ) {
 				newClass += ' frm_going_back';
 			}
 			c.removeClass( 'frm_going_back' );
@@ -1173,7 +1173,7 @@ function frmFrontFormJS() {
 			if ( input ) {
 				if ( ! describedBy ) {
 					describedBy = id;
-				} else if ( describedBy.indexOf( id ) === -1 && describedBy.indexOf( 'frm_error_field_' ) === -1 ) {
+				} else if ( ! describedBy.includes( id ) && ! describedBy.includes( 'frm_error_field_' ) ) {
 					const errorFirst = input.dataset.errorFirst;
 					if ( errorFirst === '0' ) {
 						describedBy = describedBy + ' ' + id;
@@ -1290,7 +1290,7 @@ function frmFrontFormJS() {
 	}
 
 	function showLoadingIndicator( $object ) {
-		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) {
+		if ( ! $object.hasClass( 'frm_loading_form' ) && ! $object.hasClass( 'frm_loading_prev' ) ) { // eslint-disable-line no-jquery/no-class
 			addLoadingClass( $object );
 			$object.trigger( 'frmStartFormLoading' );
 		}
@@ -1299,7 +1299,7 @@ function frmFrontFormJS() {
 	function addLoadingClass( $object ) {
 		const loadingClass = isGoingToPrevPage( $object ) ? 'frm_loading_prev' : 'frm_loading_form';
 
-		$object.addClass( loadingClass );
+		$object.addClass( loadingClass ); // eslint-disable-line no-jquery/no-class
 	}
 
 	function isGoingToPrevPage( $object ) {
@@ -1332,7 +1332,7 @@ function frmFrontFormJS() {
 		const fileval = fileInput ? fileInput.value : '';
 		if ( fileval !== '' ) {
 			setTimeout( function() {
-				jQuery( loading ).fadeIn( 'slow' );
+				jQuery( loading ).fadeIn( 'slow' ); // eslint-disable-line no-jquery/no-fade
 			}, 2000 );
 		}
 	}
@@ -1356,7 +1356,7 @@ function frmFrontFormJS() {
 		/*jshint validthis:true */
 		const css = window.getComputedStyle( this ).boxShadow;
 		if ( css && css.match( /inset/ ) ) {
-			this.parentNode.removeChild( this );
+			this.remove();
 		}
 	}
 
@@ -1892,7 +1892,7 @@ function frmFrontFormJS() {
 				antispamInput.type = 'hidden';
 				antispamInput.name = 'antispam_token';
 				antispamInput.value = object.getAttribute( 'data-token' );
-				object.appendChild( antispamInput );
+				object.append( antispamInput );
 			}
 
 			// Add a unique ID, used for duplicate checks.
@@ -1900,9 +1900,9 @@ function frmFrontFormJS() {
 			uniqueIDInput.type = 'hidden';
 			uniqueIDInput.name = 'unique_id';
 			uniqueIDInput.value = getUniqueKey();
-			object.appendChild( uniqueIDInput );
+			object.append( uniqueIDInput );
 
-			if ( classList.indexOf( 'frm_ajax_submit' ) > -1 ) {
+			if ( classList.includes( 'frm_ajax_submit' ) ) {
 				const fileInputs = object.querySelectorAll( 'input[type="file"]' );
 				hasFileFields = Array.from( fileInputs ).filter( input => !! input.value ).length;
 				if ( hasFileFields < 1 ) {

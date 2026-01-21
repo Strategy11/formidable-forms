@@ -28,7 +28,6 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @param array  $data
 	 */
 	public function __construct( $field_name, $field_value, $data ) {
-
 		$this->init_field_data( $data, $field_name, $field_value );
 
 		if ( true === $this->hide_component() ) {
@@ -83,7 +82,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_multiple_values() {
 		if ( ! $this->data['has-multiple-values'] ) {
@@ -162,11 +161,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 			return 'em';
 		}
 
-		if ( preg_match( '/px$/', $value ) ) {
-			return 'px';
-		}
-
-		return '';
+		return preg_match( '/px$/', $value ) ? 'px' : '';
 	}
 
 	/**
@@ -174,10 +169,9 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 *
 	 * @since 6.14
 	 *
-	 * @return array
+	 * @return void
 	 */
 	private function init_icon() {
-
 		if ( ! empty( $this->data['icon'] ) ) {
 			return;
 		}

@@ -70,5 +70,5 @@ export function createTokenElement( value, tokensWrapper ) {
 		]
 	} );
 
-	tokensWrapper.appendChild( tokenElement );
+	tokensWrapper.append( tokenElement );
 }

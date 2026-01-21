@@ -39,11 +39,7 @@ class FrmDeactivationFeedbackController {
 
 		$expired_date = strtotime( $feedback_expired );
 
-		if ( ! $expired_date ) {
-			return true;
-		}
-
-		return $expired_date < time();
+		return $expired_date ? $expired_date < time() : true;
 	}
 
 	/**
@@ -58,9 +54,10 @@ class FrmDeactivationFeedbackController {
 			return;
 		}
 
-		if ( ! strpos( $plugin, 'formidable.php' ) && ! strpos( $plugin, 'formidable-pro.php' ) ) {
+		if ( ! str_contains( $plugin, 'formidable.php' ) && ! str_contains( $plugin, 'formidable-pro.php' ) ) {
 			return;
 		}
+
 		update_option( 'frm_feedback_expired', gmdate( 'Y-m-d', strtotime( '+ 1 day' ) ) );
 	}
 

@@ -25,6 +25,7 @@ $rules  = array(
 	'no_whitespace_in_blank_line'          => true,
 	'ternary_to_null_coalescing'           => true,
 	'no_null_property_initialization'      => true,
+	'return_assignment'                    => true,
 	'blank_line_before_statement'          => array(
 		'statements' => array(
 			'try',

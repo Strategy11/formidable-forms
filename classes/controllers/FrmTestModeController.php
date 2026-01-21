@@ -223,7 +223,7 @@ class FrmTestModeController {
 			return false;
 		}
 
-		return ! in_array( FrmAddonsController::license_type(), array( 'plus', 'business', 'elite' ) );
+		return ! in_array( FrmAddonsController::license_type(), array( 'plus', 'business', 'elite' ), true );
 	}
 
 	/**

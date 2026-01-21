@@ -31,7 +31,6 @@ class FrmFormsHelper {
 	 */
 	public static function get_direct_link( $key, $form = false ) {
 		$target_url = esc_url( admin_url( 'admin-ajax.php?action=frm_forms_preview&form=' . $key ) );
-
 		return apply_filters( 'frm_direct_link', $target_url, $key, $form );
 	}
 
@@ -74,11 +73,11 @@ class FrmFormsHelper {
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
 			<?php echo wp_strip_all_tags( implode( ' ', $add_html ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php if ( $args['blank'] ) { ?>
-				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; ?></option>
+				<option value=""><?php echo $args['blank'] == 1 ? ' ' : '- ' . esc_attr( $args['blank'] ) . ' -'; // phpcs:ignore Universal.Operators.StrictComparisons ?></option>
 			<?php } ?>
 			<?php foreach ( $forms as $form ) { ?>
 				<option value="<?php echo esc_attr( $form->id ); ?>" <?php selected( $field_value, $form->id ); ?>>
-					<?php echo esc_html( '' === $form->name ? self::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); ?>
+					<?php echo esc_html( '' === $form->name ? self::get_no_title_text() : FrmAppHelper::truncate( $form->name, 50 ) . ( $form->parent_form_id ? __( ' (child)', 'formidable' ) : '' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				</option>
 			<?php } ?>
 		</select>
@@ -95,7 +94,7 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function add_html_attr( $class, $param, &$add_html ) {
-		if ( ! empty( $class ) ) {
+		if ( $class ) {
 			$add_html[ $param ] = sanitize_title( $param ) . '="' . esc_attr( trim( sanitize_text_field( $class ) ) ) . '"';
 		}
 	}
@@ -105,7 +104,7 @@ class FrmFormsHelper {
 	 *
 	 * @return void
 	 */
-	public static function form_switcher( $selected = false ) {
+	public static function form_switcher( $selected = false ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$where = apply_filters( 'frm_forms_dropdown', array(), '' );
 		$forms = FrmForm::get_published_forms( $where );
 
@@ -243,8 +242,8 @@ class FrmFormsHelper {
 	 * @return void
 	 */
 	public static function get_sortable_classes( $col, $sort_col, $sort_dir ) {
-		echo $sort_col == $col ? 'sorted' : 'sortable';
-		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc';
+		echo $sort_col == $col ? 'sorted' : 'sortable'; // phpcs:ignore Universal.Operators.StrictComparisons
+		echo $sort_col == $col && $sort_dir === 'desc' ? ' asc' : ' desc'; // phpcs:ignore Universal.Operators.StrictComparisons
 	}
 
 	/**
@@ -338,7 +337,7 @@ class FrmFormsHelper {
 	public static function setup_new_vars( $values = array() ) {
 		global $wpdb;
 
-		if ( ! empty( $values ) ) {
+		if ( $values ) {
 			$post_values = $values;
 		} else {
 			$values      = array();
@@ -375,7 +374,7 @@ class FrmFormsHelper {
 		unset( $defaults );
 
 		if ( ! isset( $values['form_key'] ) ) {
-			$values['form_key'] = $post_values && isset( $post_values['form_key'] ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' );
+			$values['form_key'] = $post_values && isset( $post_values['form_key'] ) ? $post_values['form_key'] : FrmAppHelper::get_unique_key( '', $wpdb->prefix . 'frm_forms', 'form_key' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$values                 = self::fill_default_opts( $values, false, $post_values );
@@ -394,7 +393,7 @@ class FrmFormsHelper {
 	 * @return array
 	 */
 	public static function setup_edit_vars( $values, $record, $post_values = array() ) {
-		if ( empty( $post_values ) ) {
+		if ( ! $post_values ) {
 			$post_values = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		}
 
@@ -414,7 +413,7 @@ class FrmFormsHelper {
 	 *
 	 * @return array
 	 */
-	public static function fill_default_opts( $values, $record, $post_values ) {
+	public static function fill_default_opts( $values, $record, $post_values ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 
 		$defaults = self::get_default_opts();
 
@@ -425,11 +424,11 @@ class FrmFormsHelper {
 				}
 
 				foreach ( $default as $k => $v ) {
-					$values[ $var ][ $k ] = $post_values && isset( $post_values[ $var ][ $k ] ) ? $post_values[ $var ][ $k ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ? $record->options[ $var ][ $k ] : $v );
+					$values[ $var ][ $k ] = $post_values && isset( $post_values[ $var ][ $k ] ) ? $post_values[ $var ][ $k ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) ? $record->options[ $var ][ $k ] : $v ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 					if ( is_array( $v ) ) {
 						foreach ( $v as $k1 => $v1 ) {
-							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 );
+							$values[ $var ][ $k ][ $k1 ] = $post_values && isset( $post_values[ $var ][ $k ][ $k1 ] ) ? $post_values[ $var ][ $k ][ $k1 ] : ( $record && isset( $record->options[ $var ] ) && isset( $record->options[ $var ][ $k ] ) && isset( $record->options[ $var ][ $k ][ $k1 ] ) ? $record->options[ $var ][ $k ][ $k1 ] : $v1 ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 							unset( $k1, $v1 );
 						}
 					}
@@ -437,7 +436,7 @@ class FrmFormsHelper {
 					unset( $k, $v );
 				}
 			} else {
-				$values[ $var ] = $post_values && isset( $post_values['options'][ $var ] ) ? $post_values['options'][ $var ] : ( $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : $default );
+				$values[ $var ] = $post_values && isset( $post_values['options'][ $var ] ) ? $post_values['options'][ $var ] : ( $record && isset( $record->options[ $var ] ) ? $record->options[ $var ] : $default ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			}
 
 			unset( $var, $default );
@@ -551,7 +550,7 @@ BEFORE_HTML;
 	public static function get_custom_submit( $html, $form, $submit, $form_action, $values ) {
 		$button = self::replace_shortcodes( $html, $form, $submit, $form_action, $values );
 
-		if ( ! strpos( $button, '[button_action]' ) ) {
+		if ( ! str_contains( $button, '[button_action]' ) ) {
 			echo FrmAppHelper::maybe_kses( $button ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			return;
 		}
@@ -566,10 +565,9 @@ BEFORE_HTML;
 		}
 
 		$button_parts = explode( '[button_action]', $button );
+		$classes      = apply_filters( 'frm_submit_button_class', array(), $form );
 
-		$classes = apply_filters( 'frm_submit_button_class', array(), $form );
-
-		if ( ! empty( $classes ) ) {
+		if ( $classes ) {
 			$classes      = implode( ' ', $classes );
 			$button_class = 'frm_button_submit';
 
@@ -703,29 +701,24 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 
-		if ( isset( $field['icon'] ) ) {
-			$icon = FrmAppHelper::icon_by_class(
-				$field['icon'],
-				array(
-					'aria-hidden' => 'true',
-					'echo'        => false,
-				)
-			);
-		} else {
-			$icon = '';
-		}
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
 				<?php
-				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+
 				echo esc_html( $truncated_name );
 				?>
 				<span>[<?php echo esc_attr( $args['id_label'] ?? $args['id'] ); ?>]</span>
 			</a>
 			<a href="javascript:void(0)" class="frmkeys frm_insert_code frm_hidden" data-code="<?php echo esc_attr( $args['key'] ); ?>">
 				<?php
-				echo FrmAppHelper::kses_icon( $icon ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				if ( isset( $field['icon'] ) ) {
+					FrmAppHelper::icon_by_class( $field['icon'], array( 'aria-hidden' => 'true' ) );
+				}
+
 				echo esc_html( $truncated_name );
 				?>
 				<span>[<?php echo esc_attr( FrmAppHelper::truncate( $args['key_label'] ?? $args['key'], 7 ) ); ?>]</span>
@@ -812,7 +805,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function auto_add_end_section_fields( $form, $fields, &$reset_fields ) {
-		if ( empty( $fields ) ) {
+		if ( ! $fields ) {
 			return;
 		}
 
@@ -922,7 +915,7 @@ BEFORE_HTML;
 				$replace_with = '';
 			}
 
-			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html );
+			FrmShortcodeHelper::remove_inline_conditions( ( FrmAppHelper::is_true( $show ) && $replace_with != '' ), $code, $replace_with, $html ); // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		// Replace [form_key].
@@ -931,7 +924,7 @@ BEFORE_HTML;
 		// Replace [frmurl].
 		$html = str_replace( '[frmurl]', FrmFieldsHelper::dynamic_default_values( 'frmurl' ), $html );
 
-		if ( strpos( $html, '[button_label]' ) ) {
+		if ( str_contains( $html, '[button_label]' ) ) {
 			add_filter( 'frm_submit_button', 'FrmFormsHelper::submit_button_label', 1 );
 			$submit_label = apply_filters( 'frm_submit_button', $title, $form );
 			$submit_label = esc_attr( do_shortcode( $submit_label ) );
@@ -940,15 +933,15 @@ BEFORE_HTML;
 
 		$html = apply_filters( 'frm_form_replace_shortcodes', $html, $form, $values );
 
-		if ( strpos( $html, '[if back_button]' ) ) {
+		if ( str_contains( $html, '[if back_button]' ) ) {
 			$html = preg_replace( '/(\[if\s+back_button\])(.*?)(\[\/if\s+back_button\])/mis', '', $html );
 		}
 
-		if ( strpos( $html, '[if save_draft]' ) ) {
+		if ( str_contains( $html, '[if save_draft]' ) ) {
 			$html = preg_replace( '/(\[if\s+save_draft\])(.*?)(\[\/if\s+save_draft\])/mis', '', $html );
 		}
 
-		if ( strpos( $html, '[if start_over]' ) ) {
+		if ( str_contains( $html, '[if start_over]' ) ) {
 			$html = preg_replace( '/(\[if\s+start_over\])(.*?)(\[\/if\s+start_over\])/mis', '', $html );
 		}
 
@@ -1000,11 +993,8 @@ BEFORE_HTML;
 		$style = self::get_form_style( $form );
 		$class = ' with_frm_style';
 
-		if ( empty( $style ) ) {
-			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				return $class;
-			}
-			return null;
+		if ( ! $style ) {
+			return FrmAppHelper::is_admin_page( 'formidable-entries' ) ? $class : null;
 		}
 
 		// If submit button needs to be inline or centered.
@@ -1101,8 +1091,7 @@ BEFORE_HTML;
 	 */
 	private static function field_has_top_label( $field, $form ) {
 		$label_position = FrmFieldsHelper::label_position( $field['label'], $field, $form );
-
-		return in_array( $label_position, array( 'top', 'inside', 'hidden' ) );
+		return in_array( $label_position, array( 'top', 'inside', 'hidden' ), true );
 	}
 
 	/**
@@ -1113,7 +1102,7 @@ BEFORE_HTML;
 	public static function get_form_style( $form ) {
 		$style = 1;
 
-		if ( empty( $form ) || 'default' === $form ) {
+		if ( ! $form || 'default' === $form ) {
 			return $style;
 		}
 
@@ -1145,7 +1134,7 @@ BEFORE_HTML;
 	public static function show_errors( $args ) {
 		$invalid_msg = self::get_invalid_error_message( $args );
 
-		if ( empty( $invalid_msg ) ) {
+		if ( ! $invalid_msg ) {
 			$show_img = false;
 		} else {
 			echo wp_kses_post( $invalid_msg );
@@ -1206,6 +1195,7 @@ BEFORE_HTML;
 	public static function maybe_get_scroll_js( $id ) {
 		$offset = apply_filters( 'frm_scroll_offset', 4, array( 'form_id' => $id ) );
 
+		// phpcs:ignore Universal.Operators.StrictComparisons
 		if ( $offset != - 1 ) {
 			self::get_scroll_js( $id );
 		}
@@ -1236,7 +1226,7 @@ BEFORE_HTML;
 		$actions     = array();
 		$trash_links = self::delete_trash_links( $form_id );
 
-		if ( 'trash' == $form->status ) {
+		if ( 'trash' === $form->status ) {
 			$actions['restore'] = $trash_links['restore'];
 
 			if ( current_user_can( 'frm_delete_forms' ) ) {
@@ -1303,6 +1293,7 @@ BEFORE_HTML;
 		if ( ! $name ) {
 			return self::get_no_title_text();
 		}
+
 		return FrmAppHelper::truncate( $name, 40 );
 	}
 
@@ -1338,7 +1329,6 @@ BEFORE_HTML;
 	 */
 	public static function delete_trash_link( $id, $status, $length = 'label' ) {
 		$link_details = self::delete_trash_info( $id, $status );
-
 		return self::format_link_html( $link_details, $length );
 	}
 
@@ -1353,28 +1343,28 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 
-		if ( ! empty( $link_details ) ) {
-			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
-
-			if ( isset( $link_details['data'] ) ) {
-				foreach ( $link_details['data'] as $data => $value ) {
-					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
-				}
-			} elseif ( isset( $link_details['confirm'] ) ) {
-				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
-			}
-
-			$label = ( $link_details[ $length ] ?? $link_details['label'] );
-
-			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
-				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
-				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
-			}
-
-			$link .= '>' . $label . '</a>';
+		if ( ! $link_details ) {
+			return $link;
 		}
 
-		return $link;
+		$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
+
+		if ( isset( $link_details['data'] ) ) {
+			foreach ( $link_details['data'] as $data => $value ) {
+				$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+			}
+		} elseif ( isset( $link_details['confirm'] ) ) {
+			$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+		}
+
+		$label = $link_details[ $length ] ?? $link_details['label'];
+
+		if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
+			$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
+			$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
+		}
+
+		return $link . ( '>' . $label . '</a>' );
 	}
 
 	/**
@@ -1457,7 +1447,7 @@ BEFORE_HTML;
 			),
 			'frm_scroll_box'  => array(
 				'label' => __( 'Scroll Box', 'formidable' ),
-				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ),
+				'title' => __( 'If you have many checkbox or radio button options, you may add this class to allow your user to easily scroll through the options. Or add a scrolling area around content in an HTML field.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'frm_first'       => array(
 				'label' => __( 'First', 'formidable' ),
@@ -1507,7 +1497,7 @@ BEFORE_HTML;
 	public static function style_class_label( $style, $class ) {
 		$label = '';
 
-		if ( empty( $style ) ) {
+		if ( ! $style ) {
 			$label = $class;
 		} elseif ( ! is_array( $style ) ) {
 			$label = $style;
@@ -1530,7 +1520,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
+		if ( ! array_key_exists( $status, $nice_names ) ) {
 			$status = 'publish';
 		}
 
@@ -1599,7 +1589,7 @@ BEFORE_HTML;
 		if ( count( $categories ) === 1 ) {
 			$category = reset( $categories );
 			$icon     = $icons[ $category ] ?? $icon;
-		} elseif ( ! empty( $categories ) ) {
+		} elseif ( $categories ) {
 			$icons = array_intersect_key( $icons, array_flip( $categories ) );
 			$icon  = reset( $icons );
 		}
@@ -1700,7 +1690,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_plan_required( $requires, $link ) {
-		if ( empty( $requires ) ) {
+		if ( ! $requires ) {
 			return;
 		}
 
@@ -1731,7 +1721,6 @@ BEFORE_HTML;
 		foreach ( $item['categories'] as $k => $category ) {
 			if ( in_array( $category, $plans, true ) ) {
 				unset( $item['categories'][ $k ] );
-
 				return self::convert_legacy_package_names( $category );
 			}
 		}
@@ -1766,12 +1755,11 @@ BEFORE_HTML;
 	 * @return array
 	 */
 	public static function get_license_types( $args = array() ) {
-		$defaults = array(
+		$defaults      = array(
 			'include_all' => true,
 			'case_lower'  => false,
 		);
-		$args     = wp_parse_args( $args, $defaults );
-
+		$args          = wp_parse_args( $args, $defaults );
 		$license_types = array( 'Basic', 'Plus', 'Business', 'Elite' );
 
 		if ( $args['include_all'] ) {
@@ -1795,8 +1783,7 @@ BEFORE_HTML;
 	 * @return array An array of warnings or an empty array.
 	 */
 	public static function check_for_warnings( $values ) {
-		$warnings = array();
-
+		$warnings         = array();
 		$redirect_warning = self::check_redirect_url_for_unsafe_params( $values );
 
 		if ( $redirect_warning ) {
@@ -1847,6 +1834,7 @@ BEFORE_HTML;
 		if ( empty( $redirect_components['query'] ) ) {
 			return array();
 		}
+
 		parse_str( $redirect_components['query'], $redirect_params );
 		$redirect_param_names      = array_keys( $redirect_params );
 		$reserved_words            = self::reserved_words();
@@ -1874,15 +1862,15 @@ BEFORE_HTML;
 			return false;
 		}
 
-		if ( $count == 1 ) {
+		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */
-			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link;
+			return sprintf( esc_html__( 'The redirect URL is using the parameter "%s", which is reserved by WordPress. ', 'formidable' ), $unsafe_params_in_redirect[0] ) . $caution . $reserved_words_link; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$unsafe_params_string = implode( '", "', $unsafe_params_in_redirect );
 
 		/* translators: %s: the names of two or more parameters in the redirect URL, separated by commas */
-		return sprintf( esc_html__( 'The redirect URL is using the parameters "%s", which are reserved by WordPress. ', 'formidable' ), $unsafe_params_string ) . $caution . $reserved_words_link;
+		return sprintf( esc_html__( 'The redirect URL is using the parameters "%s", which are reserved by WordPress. ', 'formidable' ), $unsafe_params_string ) . $caution . $reserved_words_link; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -1968,8 +1956,7 @@ BEFORE_HTML;
 
 		$original_query = $parsed['query'];
 		$query          = $parsed['query'];
-
-		$shortcodes = FrmFieldsHelper::get_shortcodes( $query, $form_id );
+		$shortcodes     = FrmFieldsHelper::get_shortcodes( $query, $form_id );
 
 		if ( empty( $shortcodes[0] ) ) {
 			// No shortcodes found, do nothing.
@@ -1996,8 +1983,7 @@ BEFORE_HTML;
 			}
 
 			$new_shortcode .= ' sanitize_url=1]';
-
-			$query = str_replace( $shortcode, $new_shortcode, $query );
+			$query          = str_replace( $shortcode, $new_shortcode, $query );
 		}//end foreach
 
 		if ( $query === $original_query ) {
@@ -2038,9 +2024,7 @@ BEFORE_HTML;
 		$sanitized = preg_replace( '|%[a-fA-F0-9][a-fA-F0-9]|', '', $classname );
 
 		// Limit to A-Z, a-z, 0-9, '_', '-', '[', ']'.
-		$sanitized = preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
-
-		return $sanitized;
+		return preg_replace( '/[^A-Za-z0-9_\-\[\]]/', '', $sanitized );
 	}
 
 	/**
@@ -2062,8 +2046,7 @@ BEFORE_HTML;
 		 * @param bool   $should_block
 		 * @param string $form_key
 		 */
-		$should_block = (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
-		return $should_block;
+		return (bool) apply_filters( 'frm_block_preview', $should_block, $form_key );
 	}
 
 	/**
@@ -2079,6 +2062,7 @@ BEFORE_HTML;
 		if ( ! empty( $frm_vars['inplace_edit'] ) ) {
 			return true;
 		}
+
 		return self::is_formidable_api_form() || self::is_gutenberg_editor() || self::is_elementor_ajax() || self::is_visual_views_preview();
 	}
 
@@ -2146,20 +2130,6 @@ BEFORE_HTML;
 			}
 		}
 
-		return false;
-	}
-
-	/**
-	 * Check if Pro isn't up to date yet.
-	 * If Pro is active but using a version earlier than v6.2 fallback to Pro for AJAX submit (so things don't all happen twice).
-	 *
-	 * @since 6.2
-	 * @deprecated 6.20
-	 *
-	 * @return bool
-	 */
-	public static function should_use_pro_for_ajax_submit() {
-		_deprecated_function( __METHOD__, '6.20' );
 		return false;
 	}
 }

@@ -284,6 +284,7 @@ class FrmFieldValueSelector {
 			$truncate = $this->truncate ?? 25;
 
 			foreach ( $this->options as $key => $value ) {
+				// phpcs:ignore Universal.Operators.StrictComparisons
 				if ( $value == '' ) {
 					continue;
 				}

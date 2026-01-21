@@ -73,7 +73,7 @@ class FrmCssScopeHelper {
 						}
 					}
 
-					if ( ! empty( $prefixed_selectors ) ) {
+					if ( $prefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $prefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}
@@ -161,7 +161,7 @@ class FrmCssScopeHelper {
 							: $single_selector;
 					}
 
-					if ( ! empty( $unprefixed_selectors ) ) {
+					if ( $unprefixed_selectors ) {
 						$output[] = "\n" . implode( ',' . "\n", $unprefixed_selectors ) . ' {' . $declarations . '}' . "\n";
 					}
 				}

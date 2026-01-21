@@ -21,7 +21,7 @@ class FrmSettingsController {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -46,12 +46,10 @@ class FrmSettingsController {
 		global $frm_vars;
 
 		$frm_settings = FrmAppHelper::get_settings();
-
-		$uploads     = wp_upload_dir();
-		$target_path = $uploads['basedir'] . '/formidable/css';
-
-		$sections = self::get_settings_tabs();
-		$current  = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$uploads      = wp_upload_dir();
+		$target_path  = $uploads['basedir'] . '/formidable/css';
+		$sections     = self::get_settings_tabs();
+		$current      = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( in_array( $current, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$current = 'payments_settings';
@@ -145,7 +143,7 @@ class FrmSettingsController {
 			$installed_addons = apply_filters( 'frm_installed_addons', array() );
 
 			foreach ( $installed_addons as $installed_addon ) {
-				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name != 'Formidable Pro' && $installed_addon->needs_license ) {
+				if ( ! $installed_addon->is_parent_licence && $installed_addon->plugin_name !== 'Formidable Pro' && $installed_addon->needs_license ) {
 					$show_licenses = true;
 					break;
 				}
@@ -237,12 +235,13 @@ class FrmSettingsController {
 	 */
 	private static function payment_sections_sort_callback( $a, $b ) {
 		$order      = array( 'stripe', 'square', 'paypal', 'authorize_net' );
-		$first_key  = array_search( $a, $order );
-		$second_key = array_search( $b, $order );
+		$first_key  = array_search( $a, $order, true );
+		$second_key = array_search( $b, $order, true );
 
 		if ( false === $first_key || false === $second_key ) {
 			return 0;
 		}
+
 		return $first_key - $second_key;
 	}
 
@@ -264,6 +263,7 @@ class FrmSettingsController {
 		} else {
 			call_user_func( ( $section['function'] ?? $section ) );
 		}
+
 		wp_die();
 	}
 
@@ -286,11 +286,10 @@ class FrmSettingsController {
 	 * Render the global currency selector if Pro is up to date.
 	 *
 	 * @param FrmSettings $frm_settings
-	 * @param string      $more_html
 	 *
 	 * @return void
 	 */
-	public static function maybe_render_currency_selector( $frm_settings, $more_html ) {
+	public static function maybe_render_currency_selector( $frm_settings ) {
 		if ( is_callable( 'FrmProSettingsController::add_currency_settings' ) ) {
 			FrmProSettingsController::add_currency_settings();
 			return;
@@ -307,7 +306,6 @@ class FrmSettingsController {
 	 */
 	public static function message_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/messages.php';
 	}
 
@@ -332,7 +330,6 @@ class FrmSettingsController {
 	 */
 	public static function email_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/email/email-styles.php';
 	}
 
@@ -353,8 +350,7 @@ class FrmSettingsController {
 	 */
 	public static function payments_settings() {
 		$payment_sections = self::$removed_payments_sections;
-
-		$tab = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
+		$tab              = FrmAppHelper::simple_get( 't', 'sanitize_title', 'general_settings' );
 
 		if ( $tab && in_array( $tab, array( 'stripe_settings', 'square_settings', 'authorize_net_settings', 'paypal_settings' ), true ) ) {
 			$tab = str_replace( '_settings', '', $tab );
@@ -372,7 +368,6 @@ class FrmSettingsController {
 	 */
 	public static function misc_settings() {
 		$frm_settings = FrmAppHelper::get_settings();
-
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-settings/misc.php';
 	}
 
@@ -447,7 +442,7 @@ class FrmSettingsController {
 
 		if ( $action === 'process-form' ) {
 			self::process_form( $stop_load );
-		} elseif ( $stop_load != 'stop_load' ) {
+		} elseif ( $stop_load !== 'stop_load' ) {
 			self::display_form();
 		}
 	}
@@ -506,8 +501,7 @@ class FrmSettingsController {
 			'order_by' => 'post_title',
 		);
 
-		$pages = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
-
+		$pages   = FrmDb::get_results( $wpdb->posts, $where, 'ID, post_title', $atts );
 		$results = array();
 
 		foreach ( $pages as $page ) {
@@ -532,7 +526,7 @@ class FrmSettingsController {
 	public static function fake_color_picker( $color ) {
 		?>
 		<div class="wp-picker-container">
-			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
 			</button>
 		</div>

@@ -64,8 +64,7 @@ class FrmFieldName extends FrmFieldCombo {
 		$name_layout = $this->get_name_layout();
 		$names       = explode( '_', $name_layout );
 		$col_class   = 'frm' . intval( 12 / count( $names ) );
-
-		$result = array();
+		$result      = array();
 
 		foreach ( $names as $name ) {
 			if ( empty( $this->sub_fields[ $name ] ) ) {
@@ -97,6 +96,7 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $name_layout ) {
 			$name_layout = 'first_last';
 		}
+
 		return $name_layout;
 	}
 
@@ -333,8 +333,7 @@ class FrmFieldName extends FrmFieldCombo {
 	 * @return array
 	 */
 	protected function get_sub_field_input_attrs( $sub_field, $args ) {
-		$attrs = parent::get_sub_field_input_attrs( $sub_field, $args );
-
+		$attrs   = parent::get_sub_field_input_attrs( $sub_field, $args );
 		$form_id = (int) ( is_array( $args['field'] ) ? $args['field']['form_id'] : $args['field']->form_id );
 
 		if ( ! self::$first_name_field_ids || empty( self::$first_name_field_ids[ $form_id ] ) ) {

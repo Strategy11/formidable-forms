@@ -56,7 +56,7 @@ class FrmAntiSpam extends FrmValidate {
 	private function get( $current = true ) {
 		// If $current was not passed, or it is true, we use the current timestamp.
 		// If $current was passed in as a string, we'll use that passed in timestamp.
-		$time = $current !== true ? $current : time();
+		$time = $current === true ? time() : $current;
 
 		// Format the timestamp to be less exact, as we want to deal in days.
 		// June 19th, 2020 would get formatted as: 1906202017125.
@@ -64,9 +64,7 @@ class FrmAntiSpam extends FrmValidate {
 		$token_date = gmdate( 'dmYzW', $time );
 
 		// Combine our token date and our token salt, and md5 it.
-		$form_token_string = md5( $token_date . $this->get_antispam_secret_key() );
-
-		return $form_token_string;
+		return md5( $token_date . $this->get_antispam_secret_key() );
 	}
 
 	/**
@@ -214,6 +212,7 @@ class FrmAntiSpam extends FrmValidate {
 				// add an exception for the entries page.
 				return true;
 			}
+
 			return $this->process_antispam_filter( $this->get_missing_token_message() );
 		}
 

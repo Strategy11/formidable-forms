@@ -159,7 +159,7 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$message = $frm_vars['frm_trans']['error'] ?? '';
 
-		if ( empty( $message ) ) {
+		if ( ! $message ) {
 			$message = __( 'There was an error processing your payment.', 'formidable' );
 		}
 
@@ -262,10 +262,8 @@ class FrmTransLiteActionsController {
 			return;
 		}
 
-		$entry = FrmEntry::getOne( $payment->item_id );
-
-		$trigger_event = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
-
+		$entry            = FrmEntry::getOne( $payment->item_id );
+		$trigger_event    = isset( $atts['trigger'] ) ? 'payment-' . $atts['trigger'] : 'payment-' . $payment->status;
 		$allowed_triggers = array_keys( self::add_payment_trigger( array() ) );
 
 		if ( ! in_array( $trigger_event, $allowed_triggers, true ) ) {
@@ -285,7 +283,7 @@ class FrmTransLiteActionsController {
 	public static function prepare_description( &$action, $atts ) {
 		$description = $action->post_content['description'];
 
-		if ( ! empty( $description ) ) {
+		if ( $description ) {
 			$atts['value']                       = $description;
 			$description                         = FrmTransLiteAppHelper::process_shortcodes( $atts );
 			$action->post_content['description'] = $description;
@@ -312,8 +310,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$currency = self::get_currency_for_action( $atts );
-
-		$total = 0;
+		$total    = 0;
 
 		foreach ( (array) $amount as $a ) {
 			$this_amount = self::get_amount_from_string( $a );
@@ -460,6 +457,7 @@ class FrmTransLiteActionsController {
 		if ( ! $payment_actions ) {
 			$payment_actions = array();
 		}
+
 		return $payment_actions;
 	}
 
@@ -500,7 +498,8 @@ class FrmTransLiteActionsController {
 		global $frm_vars;
 		$previous_entry = $frm_vars['frm_trans']['pay_entry'] ?? false;
 
-		if ( empty( $previous_entry ) || $previous_entry->form_id != $field->form_id ) {
+		// phpcs:ignore Universal.Operators.StrictComparisons
+		if ( ! $previous_entry || $previous_entry->form_id != $field->form_id ) {
 			return $values;
 		}
 
@@ -509,8 +508,7 @@ class FrmTransLiteActionsController {
 		}
 
 		$frm_vars['trans_filled'] = true;
-
-		$previous_entry_id = $previous_entry->id;
+		$previous_entry_id        = $previous_entry->id;
 		self::destroy_entry_later( $previous_entry_id );
 
 		return $values;
@@ -565,9 +563,8 @@ class FrmTransLiteActionsController {
 	public static function before_save_settings( $settings, $action ) {
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
-		if ( in_array( 'square', $settings['gateway'] ) ) {
-			$currency = FrmSquareLiteConnectHelper::get_merchant_currency();
-
+		if ( in_array( 'square', $settings['gateway'], true ) ) {
+			$currency             = FrmSquareLiteConnectHelper::get_merchant_currency();
 			$settings['currency'] = false !== $currency ? strtolower( $currency ) : 'usd';
 		} else {
 			$settings['currency'] = strtolower( $settings['currency'] );

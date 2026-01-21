@@ -104,9 +104,7 @@ class FrmCreateFile {
 	 */
 	public function append_file( $file_content ) {
 		if ( $this->has_permission ) {
-
 			if ( file_exists( $this->new_file_path ) ) {
-
 				$existing_content = $this->get_contents();
 				$file_content     = $existing_content . $file_content;
 			}
@@ -141,10 +139,7 @@ class FrmCreateFile {
 	 * @return string
 	 */
 	public function get_file_contents() {
-		if ( $this->has_permission ) {
-			return $this->get_contents();
-		}
-		return '';
+		return $this->has_permission ? $this->get_contents() : '';
 	}
 
 	/**
@@ -157,7 +152,7 @@ class FrmCreateFile {
 	private function get_contents( $file = '' ) {
 		global $wp_filesystem;
 
-		if ( empty( $file ) ) {
+		if ( ! $file ) {
 			$file = $this->new_file_path;
 		}
 
@@ -174,7 +169,7 @@ class FrmCreateFile {
 
 		$this->has_permission = true;
 
-		if ( empty( $creds ) || ! WP_Filesystem( $creds ) ) {
+		if ( ! $creds || ! WP_Filesystem( $creds ) ) {
 			// initialize the API - any problems and we exit
 			$this->show_error_message();
 			$this->has_permission = false;
@@ -208,8 +203,7 @@ class FrmCreateFile {
 	private function get_needed_dirs() {
 		$dir_names   = explode( '/', $this->folder_name );
 		$needed_dirs = array();
-
-		$next_dir = '';
+		$next_dir    = '';
 
 		foreach ( $dir_names as $dir ) {
 			$next_dir     .= '/' . $dir;
@@ -262,7 +256,7 @@ class FrmCreateFile {
 		// Strip any schemes off.
 		$credentials['hostname'] = preg_replace( '|\w+://|', '', $credentials['hostname'] );
 
-		if ( strpos( $credentials['hostname'], ':' ) ) {
+		if ( str_contains( $credentials['hostname'], ':' ) ) {
 			list( $credentials['hostname'], $credentials['port'] ) = explode( ':', $credentials['hostname'], 2 );
 
 			if ( ! is_numeric( $credentials['port'] ) ) {
@@ -272,9 +266,9 @@ class FrmCreateFile {
 			unset( $credentials['port'] );
 		}
 
-		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' == FS_METHOD ) ) {
+		if ( ( defined( 'FTP_SSH' ) && FTP_SSH ) || ( defined( 'FS_METHOD' ) && 'ssh2' === FS_METHOD ) ) {
 			$credentials['connection_type'] = 'ssh';
-		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' == $type ) {
+		} elseif ( ( defined( 'FTP_SSL' ) && FTP_SSL ) && 'ftpext' === $type ) {
 			// Only the FTP Extension understands SSL.
 			$credentials['connection_type'] = 'ftps';
 		} elseif ( ! isset( $credentials['connection_type'] ) ) {
@@ -282,8 +276,8 @@ class FrmCreateFile {
 			$credentials['connection_type'] = 'ftp';
 		}
 
-		$has_creds = ( ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] ) );
-		$can_ssh   = ( 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] ) );
+		$has_creds = ! empty( $credentials['password'] ) && ! empty( $credentials['username'] ) && ! empty( $credentials['hostname'] );
+		$can_ssh   = 'ssh' === $credentials['connection_type'] && ! empty( $credentials['public_key'] ) && ! empty( $credentials['private_key'] );
 
 		if ( $has_creds || $can_ssh ) {
 			$stored_credentials = $credentials;
