@@ -240,8 +240,8 @@ class FrmField {
 			),
 			'virtual'         => array(
 				'name'         => __( 'Virtual Field', 'formidable' ),
-				'icon'         => 'frmfont frm_code2_icon',
-				'message'      => esc_html__( 'Store server-side calculated values without displaying on the form.', 'formidable' ),
+				'icon'         => 'frmfont frm-virtual-field-icon',
+				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ),
 				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
 				'learn-more'   => 'virtual-field',
 			),
