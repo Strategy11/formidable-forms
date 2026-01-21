@@ -20,7 +20,7 @@ jobs:
           - php: 7.4
             wordpress: 6.9
             multisite: 0
-          - php: 8.0
+          - php: 8.4
             wordpress: 6.9
             multisite: 0
 
