@@ -155,7 +155,7 @@ class FrmCSVExportHelper {
 
 		unset( $filename );
 
-		$comment_count       = FrmDb::get_count(
+		self::$comment_count = FrmDb::get_count(
 			'frm_item_metas',
 			array(
 				'item_id'         => $atts['entry_ids'],
@@ -168,7 +168,6 @@ class FrmCSVExportHelper {
 				'limit'    => 1,
 			)
 		);
-		self::$comment_count = $comment_count;
 
 		self::prepare_csv_headings();
 
@@ -419,21 +418,22 @@ class FrmCSVExportHelper {
 			$flat = array();
 
 			foreach ( $headings as $key => $heading ) {
-				if ( is_array( $heading ) ) {
-					$repeater_id       = str_replace( 'repeater', '', $key );
-					$repeater_headings = array();
-
-					foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
-						$repeater_headings += self::field_headings( $col );
-					}
-
-					for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
-						foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
-							$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
-						}
-					}
-				} else {
+				if ( ! is_array( $heading ) ) {
 					$flat[ $key ] = $heading;
+					continue;
+				}
+
+				$repeater_id       = str_replace( 'repeater', '', $key );
+				$repeater_headings = array();
+
+				foreach ( $fields_by_repeater_id[ $repeater_id ] as $col ) {
+					$repeater_headings += self::field_headings( $col );
+				}
+
+				for ( $i = 0; $i < $max[ $repeater_id ]; $i++ ) {
+					foreach ( $repeater_headings as $repeater_key => $repeater_name ) {
+						$flat[ $repeater_key . '[' . $i . ']' ] = $repeater_name;
+					}
 				}
 			}
 
@@ -604,9 +604,8 @@ class FrmCSVExportHelper {
 	 * @return array
 	 */
 	private static function fill_missing_repeater_metas( $metas, &$entries ) {
-		$field_ids = array_keys( $metas );
-		$field_id  = end( $field_ids );
-		$field     = self::get_field( $field_id );
+		$field_id = array_key_last( $metas );
+		$field    = self::get_field( $field_id );
 
 		if ( ! $field || empty( $field->field_options['in_section'] ) ) {
 			return $metas;
@@ -728,28 +727,30 @@ class FrmCSVExportHelper {
 	 * @return void
 	 */
 	private static function add_array_values_to_columns( &$row, $atts ) {
-		if ( is_array( $atts['field_value'] ) ) {
-			foreach ( $atts['field_value'] as $key => $sub_value ) {
-				if ( is_array( $sub_value ) ) {
-					// This is combo field inside repeater. The heading key has this format: [86_first[0]].
-					foreach ( $sub_value as $sub_key => $sub_sub_value ) {
-						$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+		if ( ! is_array( $atts['field_value'] ) ) {
+			return;
+		}
 
-						if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
-							$row[ $column_key ] = $sub_sub_value;
-						}
+		foreach ( $atts['field_value'] as $key => $sub_value ) {
+			if ( is_array( $sub_value ) ) {
+				// This is combo field inside repeater. The heading key has this format: [86_first[0]].
+				foreach ( $sub_value as $sub_key => $sub_sub_value ) {
+					$column_key = $atts['col']->id . '_' . $sub_key . '[' . $key . ']';
+
+					if ( ! is_numeric( $sub_key ) && isset( self::$headings[ $column_key ] ) ) {
+						$row[ $column_key ] = $sub_sub_value;
 					}
-
-					continue;
 				}
 
-				$column_key = $atts['col']->id . '_' . $key;
-
-				if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
-					$row[ $column_key ] = $sub_value;
-				}
+				continue;
 			}
-		}//end if
+
+			$column_key = $atts['col']->id . '_' . $key;
+
+			if ( ! is_numeric( $key ) && isset( self::$headings[ $column_key ] ) ) {
+				$row[ $column_key ] = $sub_value;
+			}
+		}
 	}
 
 	/**

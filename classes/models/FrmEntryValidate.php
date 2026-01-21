@@ -547,7 +547,7 @@ class FrmEntryValidate {
 			return;
 		}
 
-		if ( $exclude || empty( $values['item_meta'] ) || ! empty( $errors ) ) {
+		if ( $exclude || empty( $values['item_meta'] ) || $errors ) {
 			// only check spam if there are no other errors
 			return;
 		}

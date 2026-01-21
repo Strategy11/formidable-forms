@@ -196,7 +196,7 @@ class FrmInbox extends FrmFormApi {
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
 
-			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
@@ -447,13 +447,13 @@ class FrmInbox extends FrmFormApi {
 			 * @return string
 			 */
 			function ( $matches ) {
-				$url   = $matches[2];
-				$parts = parse_url( $url );
+				$url = $matches[2];
 
 				if ( '#' === $url ) {
 					return 'href="#"';
 				}
 
+				$parts = parse_url( $url );
 				$query = array();
 
 				if ( isset( $parts['query'] ) ) {

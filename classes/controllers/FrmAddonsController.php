@@ -586,7 +586,6 @@ class FrmAddonsController {
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
-
 		}//end foreach
 
 		return $transient;
@@ -772,7 +771,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( ! $download_id && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -1363,7 +1362,7 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+		if ( ! self::get_pro_license() && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 

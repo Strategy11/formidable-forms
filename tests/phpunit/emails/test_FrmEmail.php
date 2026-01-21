@@ -463,8 +463,8 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_senders( $expected, $mock_email ) {
-		$this->assertNotFalse( strpos( $mock_email['header'], 'From: ' . $expected['from'] ), 'From does not match expected.' );
-		$this->assertNotFalse( strpos( $mock_email['header'], 'Reply-To: ' . $expected['reply_to'] ), 'Reply-to does not match expected.' );
+		$this->assertStringContainsString( 'From: ' . $expected['from'], $mock_email['header'], 'From does not match expected.' );
+		$this->assertStringContainsString( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'], 'Reply-to does not match expected.' );
 	}
 
 	protected function check_subject( $expected, $mock_email ) {
@@ -482,15 +482,15 @@ class test_FrmEmail extends FrmUnitTest {
 	}
 
 	protected function check_content_type( $expected, $mock_email ) {
-		$this->assertNotFalse( strpos( $mock_email['header'], $expected['content_type'] ), 'Content type does not match expected.' );
+		$this->assertStringContainsString( $expected['content_type'], $mock_email['header'], 'Content type does not match expected.' );
 	}
 
 	protected function check_no_cc_included( $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'], 'Cc:' ), 'CC is included when it should not be.' );
+		$this->assertStringNotContainsString( 'Cc:', $mock_email['header'], 'CC is included when it should not be.' );
 	}
 
 	protected function check_no_bcc_included( $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'], 'Bcc:' ), 'BCC is included when it should not be.' );
+		$this->assertStringNotContainsString( 'Bcc:', $mock_email['header'], 'BCC is included when it should not be.' );
 	}
 
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
@@ -678,9 +678,9 @@ LINE 1<br>LINE 2<br></body></html>'
 			$actual = $this->get_private_property( $email, 'message' );
 
 			if ( $setting['compare'] === 'Contains' ) {
-				$this->assertNotFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringContainsString( 'Referrer:', $actual );
 			} else {
-				$this->assertFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringNotContainsString( 'Referrer:', $actual );
 			}
 		}
 	}

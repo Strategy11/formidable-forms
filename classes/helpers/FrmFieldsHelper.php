@@ -166,14 +166,16 @@ class FrmFieldsHelper {
 			 * @param array      $args
 			 */
 			$field_array = apply_filters( 'frm_setup_edit_fields_vars', $field_array, $field, $args['entry_id'], $args );
-		} else {
-			/**
-			 * @param array      $field_array
-			 * @param stdClass   $field
-			 * @param array      $args
-			 */
-			$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
+
+			return;
 		}
+
+		/**
+		 * @param array      $field_array
+		 * @param stdClass   $field
+		 * @param array      $args
+		 */
+		$field_array = apply_filters( 'frm_setup_new_fields_vars', $field_array, $field, $args );
 	}
 
 	/**
@@ -473,7 +475,7 @@ class FrmFieldsHelper {
 		);
 
 		$msg = FrmField::get_option( $field, $error );
-		$msg = empty( $msg ) ? $defaults[ $error ]['part'] : $msg;
+		$msg = $msg ? $msg : $defaults[ $error ]['part'];
 		$msg = do_shortcode( $msg );
 
 		return self::maybe_replace_substrings_with_field_name( $msg, $error, $field );
@@ -616,7 +618,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return string
 	 */
-	public static function &label_position( $position, $field, $form ) {
+	public static function label_position( $position, $field, $form ) {
 		if ( $position ) {
 			if ( $position === 'inside' && ! self::is_placeholder_field_type( $field['type'] ) ) {
 				$position = 'top';
@@ -636,9 +638,7 @@ class FrmFieldsHelper {
 		}
 
 		$position = apply_filters( 'frm_html_label_position', $position, $field, $form );
-		$position = ! empty( $position ) ? $position : 'top';
-
-		return $position;
+		return $position ? $position : 'top';
 	}
 
 	/**
@@ -694,7 +694,7 @@ class FrmFieldsHelper {
 			$field_name = $base_name . ( $default_type === 'checkbox' ? '[' . $opt_key . ']' : '' );
 
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
-			$checked = isset( $field['default_value'] ) && ( ( ! is_array( $field['default_value'] ) && $field['default_value'] == $field_val ) || ( is_array( $field['default_value'] ) && in_array( $field_val, $field['default_value'] ) ) );
+			$checked = isset( $field['default_value'] ) && ( is_array( $field['default_value'] ) ? in_array( $field_val, $field['default_value'] ) : $field['default_value'] == $field_val );
 
 			// If this is an "Other" option, get the HTML for it.
 			if ( self::is_other_opt( $opt_key ) ) {
@@ -849,7 +849,7 @@ class FrmFieldsHelper {
 			return '';
 		}
 
-		$link = sprintf(
+		return sprintf(
 			/* translators: %1$s: Start HTML link, %2$s: Content type label, %3$s: Content type, %4$s: End HTML link */
 			esc_html__( 'Options are dynamically created from your %1$s%2$s: %3$s%4$s', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">',
@@ -857,9 +857,6 @@ class FrmFieldsHelper {
 			empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name,
 			'</a>'
 		);
-		unset( $tax );
-
-		return $link;
 	}
 
 	/**
@@ -1597,7 +1594,7 @@ class FrmFieldsHelper {
 			}
 
 			// For multi-select dropdowns only
-			if ( is_array( $field['value'] ) && ! empty( $field['value'] ) ) {
+			if ( is_array( $field['value'] ) && $field['value'] ) {
 				$other_val = reset( $field['value'] );
 			}
 		}//end if
@@ -1615,7 +1612,7 @@ class FrmFieldsHelper {
 	 * @param bool   $other_opt
 	 * @param string $checked
 	 *
-	 * @return array $other_args
+	 * @return array Other args.
 	 */
 	public static function prepare_other_input( $args, &$other_opt, &$checked ) {
 		$other_args = array(
@@ -1753,7 +1750,7 @@ class FrmFieldsHelper {
 	 * @param string      $html_id
 	 * @param bool|string $opt_key
 	 *
-	 * @return string $other_id
+	 * @return string Other ID.
 	 */
 	public static function get_other_field_html_id( $type, $html_id, $opt_key = false ) {
 		$other_id = $html_id;
@@ -1771,9 +1768,9 @@ class FrmFieldsHelper {
 	}
 
 	/**
-	 * @param string $val
+	 * @param array|string $val
 	 *
-	 * @return string
+	 * @return array|string
 	 */
 	public static function switch_field_ids( $val ) {
 		global $frm_duplicate_ids;
@@ -1809,21 +1806,21 @@ class FrmFieldsHelper {
 			unset( $old, $new );
 		}//end foreach
 
-		if ( is_array( $val ) ) {
-			foreach ( $val as $k => $v ) {
-				if ( is_string( $v ) ) {
-					if ( 'custom_html' === $k ) {
-						$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
-						unset( $k, $v );
-						continue;
-					}
+		if ( ! is_array( $val ) ) {
+			return str_replace( $replace, $replace_with, $val );
+		}
 
-					$val[ $k ] = str_replace( $replace, $replace_with, $v );
+		foreach ( $val as $k => $v ) {
+			if ( is_string( $v ) ) {
+				if ( 'custom_html' === $k ) {
+					$val[ $k ] = self::switch_ids_except_strings( $replace, $replace_with, array( '[if description]', '[description]', '[/if description]' ), $v );
 					unset( $k, $v );
+					continue;
 				}
+
+				$val[ $k ] = str_replace( $replace, $replace_with, $v );
+				unset( $k, $v );
 			}
-		} else {
-			$val = str_replace( $replace, $replace_with, $val );
 		}
 
 		return $val;

@@ -16,7 +16,7 @@ class test_FrmForm extends FrmUnitTest {
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
-		$this->assertTrue( is_numeric( $form_id ) );
+		$this->assertIsNumeric( $form_id );
 		$this->assertNotEmpty( $form_id );
 	}
 
@@ -26,7 +26,7 @@ class test_FrmForm extends FrmUnitTest {
 	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
 		$id   = FrmForm::duplicate( $form->id );
-		$this->assertTrue( is_numeric( $id ) );
+		$this->assertIsNumeric( $id );
 		$this->assertNotEmpty( $id );
 
 		// check the number of form actions

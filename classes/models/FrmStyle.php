@@ -203,7 +203,7 @@ class FrmStyle {
 			$new_value             = null;
 			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
-			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+			if ( 3 === $length_of_color_codes || $index !== $length_of_color_codes - 1 ) {
 				// Insert a value for r, g, or b.
 				if ( $value < 0 ) {
 					$new_value = 0;
@@ -380,8 +380,11 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function is_color( $setting ) {
-		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return str_contains( $setting, 'color' ) || in_array( $setting, $extra_colors, true );
+		if ( str_contains( $setting, 'color' ) ) {
+			return true;
+		}
+
+		return in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ), true );
 	}
 
 	/**

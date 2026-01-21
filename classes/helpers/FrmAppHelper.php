@@ -271,7 +271,7 @@ class FrmAppHelper {
 	 *
 	 * @param array $args - May include the form id when values need translation.
 	 *
-	 * @return FrmSettings $frm_settings
+	 * @return FrmSettings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
@@ -290,8 +290,11 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	public static function get_menu_name() {
-		$frm_settings = self::get_settings();
-		return FrmAddonsController::is_license_expired() || ! self::pro_is_installed() ? 'Formidable' : $frm_settings->menu;
+		if ( ! self::pro_is_installed() || FrmAddonsController::is_license_expired() ) {
+			return 'Formidable';
+		}
+
+		return self::get_settings()->menu;
 	}
 
 	/**
@@ -757,15 +760,17 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( isset( $params ) && is_array( $value ) && $value ) {
-			foreach ( $params as $k => $p ) {
-				if ( ! $k || ! is_array( $value ) ) {
-					continue;
-				}
+		if ( ! isset( $params ) || ! is_array( $value ) || ! $value ) {
+			return $value;
+		}
 
-				$p     = trim( $p, ']' );
-				$value = $value[ $p ] ?? $default;
+		foreach ( $params as $k => $p ) {
+			if ( ! $k || ! is_array( $value ) ) {
+				continue;
 			}
+
+			$p     = trim( $p, ']' );
+			$value = $value[ $p ] ?? $default;
 		}
 
 		return $value;
@@ -865,7 +870,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $value
 	 *
-	 * @return string $value
+	 * @return string Value.
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
@@ -1956,31 +1961,32 @@ class FrmAppHelper {
 				<?php endforeach; ?>
 			</select>
 			<?php
-		} else {
-			$options            = array();
-			$autocomplete_value = '';
+			return;
+		}
 
-			foreach ( $args['source'] as $key => $source ) {
-				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+		$options            = array();
+		$autocomplete_value = '';
 
-				if ( $value_label['value'] === $args['selected'] ) {
-					$autocomplete_value = $value_label['label'];
-				}
+		foreach ( $args['source'] as $key => $source ) {
+			$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
 
-				$options[] = $value_label;
+			if ( $value_label['value'] === $args['selected'] ) {
+				$autocomplete_value = $value_label['label'];
 			}
 
-			$html_attrs['type']  = 'hidden';
-			$html_attrs['class'] = 'frm_autocomplete_value_input';
-			$html_attrs['value'] = $args['selected'];
-			?>
-			<input type="text" class="frm-custom-search"
-				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
-				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
-				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
-			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
-			<?php
-		}//end if
+			$options[] = $value_label;
+		}
+
+		$html_attrs['type']  = 'hidden';
+		$html_attrs['class'] = 'frm_autocomplete_value_input';
+		$html_attrs['value'] = $args['selected'];
+		?>
+		<input type="text" class="frm-custom-search"
+			   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
+			   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
+			   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
+		<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
+		<?php
 	}
 
 	/**
@@ -2434,7 +2440,7 @@ class FrmAppHelper {
 		$current = is_null( $current ) ? '' : htmlspecialchars_decode( trim( $current ) );
 
 		// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict, Universal.Operators.StrictComparisons
-		return ( is_array( $values ) && in_array( $current, $values ) ) || ( ! is_array( $values ) && $values == $current );
+		return is_array( $values ) ? in_array( $current, $values ) : $values == $current;
 	}
 
 	/**
@@ -2702,29 +2708,29 @@ class FrmAppHelper {
 		);
 
 		// Create a unique field id if it has already been used.
-		if ( in_array( $key, $similar_keys, true ) ) {
-			$key = self::maybe_truncate_key_before_appending( $column, $key );
+		if ( ! in_array( $key, $similar_keys, true ) ) {
+			return $key;
+		}
 
-			/**
-			 * Allow for a custom separator between the attempted key and the generated suffix.
-			 *
-			 * @since 5.2.03
-			 *
-			 * @param string $separator. Default empty.
-			 * @param string $key the key without the added suffix.
-			 */
-			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
+		$key = self::maybe_truncate_key_before_appending( $column, $key );
 
-			$suffix = 2;
-			do {
-				$key_check = $key . $separator . $suffix;
-				++$suffix;
-			} while ( in_array( $key_check, $similar_keys, true ) );
+		/**
+		 * Allow for a custom separator between the attempted key and the generated suffix.
+		 *
+		 * @since 5.2.03
+		 *
+		 * @param string $separator. Default empty.
+		 * @param string $key the key without the added suffix.
+		 */
+		$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
 
-			$key = $key_check;
-		}//end if
+		$suffix = 2;
+		do {
+			$key_check = $key . $separator . $suffix;
+			++$suffix;
+		} while ( in_array( $key_check, $similar_keys, true ) );
 
-		return $key;
+		return $key_check;
 	}
 
 	/**
@@ -2737,15 +2743,17 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	private static function maybe_truncate_key_before_appending( $column, $key ) {
-		if ( in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
-			$max_key_length_before_truncating = 60;
+		if ( ! in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
+			return $key;
+		}
 
-			if ( strlen( $key ) > $max_key_length_before_truncating ) {
-				$key = substr( $key, 0, $max_key_length_before_truncating );
+		$max_key_length_before_truncating = 60;
 
-				if ( is_numeric( $key ) ) {
-					$key .= 'a';
-				}
+		if ( strlen( $key ) > $max_key_length_before_truncating ) {
+			$key = substr( $key, 0, $max_key_length_before_truncating );
+
+			if ( is_numeric( $key ) ) {
+				$key .= 'a';
 			}
 		}
 
@@ -3056,13 +3064,14 @@ class FrmAppHelper {
 			return '';
 		}
 
-		$length       = (int) $length;
-		$str          = wp_strip_all_tags( (string) $original_string );
-		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
+		$length = (int) $length;
 
 		if ( $length === 0 ) {
 			return '';
 		}
+
+		$str          = wp_strip_all_tags( (string) $original_string );
+		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
@@ -3214,7 +3223,7 @@ class FrmAppHelper {
 	 * @param int|string $to     In seconds.
 	 * @param int|string $levels Number of time units to include or a specific unit.
 	 *
-	 * @return string $time_ago
+	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
 		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
@@ -3603,13 +3612,15 @@ class FrmAppHelper {
 				self::prepare_action_slashes( $v1, $k1, $post_content[ $key ] );
 				unset( $k1, $v1 );
 			}
-		} else {
-			// Strip all slashes so everything is the same, no matter where the value is coming from
-			$val = stripslashes( $val );
 
-			// Add backslashes before double quotes and forward slashes only
-			$post_content[ $key ] = addcslashes( $val, '"\\/' );
+			return;
 		}
+
+		// Strip all slashes so everything is the same, no matter where the value is coming from
+		$val = stripslashes( $val );
+
+		// Add backslashes before double quotes and forward slashes only
+		$post_content[ $key ] = addcslashes( $val, '"\\/' );
 	}
 
 	/**
@@ -3737,14 +3748,15 @@ class FrmAppHelper {
 
 			$key = $input['name'];
 
-			if ( isset( $formatted[ $key ] ) ) {
-				if ( is_array( $formatted[ $key ] ) ) {
-					$formatted[ $key ][] = $input['value'];
-				} else {
-					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
-				}
-			} else {
+			if ( ! isset( $formatted[ $key ] ) ) {
 				$formatted[ $key ] = $input['value'];
+				continue;
+			}
+
+			if ( is_array( $formatted[ $key ] ) ) {
+				$formatted[ $key ][] = $input['value'];
+			} else {
+				$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
 			}
 		}
 

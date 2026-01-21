@@ -726,7 +726,7 @@ class FrmSolution {
 	 */
 	protected function is_current_plugin() {
 		$to_redirect = get_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
-		return $to_redirect === $this->plugin_slug && empty( $this->is_complete() );
+		return $to_redirect === $this->plugin_slug && ! $this->is_complete();
 	}
 
 	/**

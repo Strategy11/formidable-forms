@@ -342,16 +342,15 @@ class FrmTransLiteAppHelper {
 	 * @return string
 	 */
 	public static function get_date_format() {
-		$date_format = 'm/d/Y';
+		if ( ! class_exists( 'FrmProAppHelper' ) ) {
+			return get_option( 'date_format' );
+		}
 
-		if ( class_exists( 'FrmProAppHelper' ) ) {
-			$frmpro_settings = FrmProAppHelper::get_settings();
+		$date_format     = 'm/d/Y';
+		$frmpro_settings = FrmProAppHelper::get_settings();
 
-			if ( $frmpro_settings ) {
-				$date_format = $frmpro_settings->date_format;
-			}
-		} else {
-			$date_format = get_option( 'date_format' );
+		if ( $frmpro_settings ) {
+			$date_format = $frmpro_settings->date_format;
 		}
 
 		return $date_format;

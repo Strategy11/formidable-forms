@@ -184,7 +184,6 @@ class FrmDb {
 
 			$where   .= ' %s';
 			$values[] = $start . self::esc_like( $value ) . $end;
-
 		} elseif ( $value === null ) {
 			$where .= ' IS NULL';
 		} else {
@@ -491,13 +490,15 @@ class FrmDb {
 
 		self::esc_query_args( $args );
 
-		if ( is_array( $where ) || empty( $where ) ) {
-			self::get_where_clause_and_values( $where );
-			global $wpdb;
-			$query = $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		if ( ! is_array( $where ) && $where ) {
+			return $query;
 		}
 
-		return $query;
+		self::get_where_clause_and_values( $where );
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		return $wpdb->prepare( $query . $where['where'] . ' ' . implode( ' ', $args ), $where['values'] );
 	}
 
 	/**
@@ -740,7 +741,7 @@ class FrmDb {
 		$found   = null;
 		$results = wp_cache_get( $cache_key, $group, false, $found );
 
-		if ( ( $found === true && $results !== false ) || empty( $query ) ) {
+		if ( ( $found === true && $results !== false ) || ! $query ) {
 			return $results;
 		}
 

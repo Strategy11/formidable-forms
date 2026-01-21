@@ -56,7 +56,7 @@ class FrmFieldCombo extends FrmFieldType {
 		$defaults = $this->get_default_sub_field();
 
 		foreach ( $sub_fields as $name => $sub_field ) {
-			if ( empty( $sub_field ) ) {
+			if ( ! $sub_field ) {
 				continue;
 			}
 

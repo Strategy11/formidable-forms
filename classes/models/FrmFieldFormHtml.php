@@ -212,7 +212,7 @@ class FrmFieldFormHtml {
 	 */
 	private function maybe_replace_description_shortcode( $wp_processed = false ) {
 		$is_html        = 'html' === $this->field_obj->get_field_column( 'type' );
-		$should_replace = ( $is_html && $wp_processed ) || ( ! $is_html && ! $wp_processed );
+		$should_replace = $is_html ? $wp_processed : ! $wp_processed;
 
 		if ( $should_replace ) {
 			$this->replace_description_shortcode();
@@ -521,7 +521,7 @@ class FrmFieldFormHtml {
 	 *
 	 * @since 3.0
 	 *
-	 * @return string $classes
+	 * @return string Classes.
 	 */
 	private function get_field_div_classes() {
 		// Add error class

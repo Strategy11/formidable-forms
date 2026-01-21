@@ -272,13 +272,13 @@ class FrmStylesController {
 	 * @return string
 	 */
 	private static function get_css_version( $css_key, $version ) {
-		if ( 'formidable' === $css_key ) {
-			$this_version = get_option( 'frm_last_style_update' );
+		if ( 'formidable' !== $css_key ) {
+			return $version;
+		}
 
-			if ( ! $this_version ) {
-				$this_version = $version;
-			}
-		} else {
+		$this_version = get_option( 'frm_last_style_update' );
+
+		if ( ! $this_version ) {
 			$this_version = $version;
 		}
 
@@ -1325,9 +1325,8 @@ class FrmStylesController {
 	 *
 	 * @return string
 	 */
-	public static function &important_style( $important, $field ) {
-		$important = self::get_style_val( 'important_style', $field['form_id'] );
-		return $important;
+	public static function important_style( $important, $field ) {
+		return self::get_style_val( 'important_style', $field['form_id'] );
 	}
 
 	/**
