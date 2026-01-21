@@ -258,11 +258,12 @@ class FrmEntriesHelper {
 			}
 		}
 
-		$field_value = array();
 
 		if ( empty( $child_entries ) ) {
 			return '';
 		}
+
+		$field_value = array();
 
 		foreach ( $child_entries as $child_entry ) {
 			$atts['item_id'] = $child_entry->id;

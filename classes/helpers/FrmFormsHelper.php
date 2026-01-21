@@ -1853,14 +1853,15 @@ BEFORE_HTML;
 	 * @return bool|string A string with an unsafe param message or false.
 	 */
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
-		$count                = count( $unsafe_params_in_redirect );
-		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
-		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
+		$count = count( $unsafe_params_in_redirect );
 
 		if ( $count === 0 ) {
 			return false;
 		}
+
+		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
 
 		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */

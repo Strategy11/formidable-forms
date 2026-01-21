@@ -3064,13 +3064,14 @@ class FrmAppHelper {
 			return '';
 		}
 
-		$length       = (int) $length;
-		$str          = wp_strip_all_tags( (string) $original_string );
-		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
+		$length = (int) $length;
 
 		if ( $length === 0 ) {
 			return '';
 		}
+
+		$str          = wp_strip_all_tags( (string) $original_string );
+		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
