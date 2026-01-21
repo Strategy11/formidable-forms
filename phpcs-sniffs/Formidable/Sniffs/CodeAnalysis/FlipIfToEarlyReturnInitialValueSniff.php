@@ -428,6 +428,7 @@ class FlipIfToEarlyReturnInitialValueSniff implements Sniff {
 
 		// Get the original condition.
 		$originalCondition = '';
+
 		for ( $i = $conditionOpener + 1; $i < $conditionCloser; $i++ ) {
 			$originalCondition .= $tokens[ $i ]['content'];
 		}
@@ -438,6 +439,7 @@ class FlipIfToEarlyReturnInitialValueSniff implements Sniff {
 
 		// Get the if body content (without the braces), and dedent by one level.
 		$ifBodyContent = '';
+
 		for ( $i = $ifOpener + 1; $i < $ifCloser; $i++ ) {
 			$ifBodyContent .= $tokens[ $i ]['content'];
 		}
@@ -453,6 +455,7 @@ class FlipIfToEarlyReturnInitialValueSniff implements Sniff {
 
 		// Get the variable assignment line.
 		$assignmentContent = '';
+
 		for ( $i = $varToken; $i <= $assignSemicolon; $i++ ) {
 			$assignmentContent .= $tokens[ $i ]['content'];
 		}
