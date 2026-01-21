@@ -67,86 +67,143 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 		$functionOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$functionCloser = $tokens[ $stackPtr ]['scope_closer'];
 
-		// Find the first statement in the function.
-		$firstStatement = $phpcsFile->findNext( T_WHITESPACE, $functionOpener + 1, $functionCloser, true );
+		// Scan through the function looking for variable assignments followed by early returns.
+		$current = $functionOpener + 1;
 
-		if ( false === $firstStatement ) {
-			return;
+		while ( $current < $functionCloser ) {
+			// Find the next variable at the function's top level.
+			$varToken = $phpcsFile->findNext( T_VARIABLE, $current, $functionCloser );
+
+			if ( false === $varToken ) {
+				break;
+			}
+
+			// Make sure this variable is at the function's top level (not nested).
+			if ( ! $this->isAtFunctionTopLevel( $tokens, $varToken, $functionOpener, $functionCloser ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			// Check if this is an assignment (not just a variable reference).
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $varToken + 1, $functionCloser, true );
+
+			if ( false === $nextToken || $tokens[ $nextToken ]['code'] !== T_EQUAL ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			$variableName = $tokens[ $varToken ]['content'];
+
+			// Check if this variable is a function parameter.
+			if ( $this->isVariableAParameter( $phpcsFile, $tokens, $stackPtr, $variableName ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			// Find the semicolon ending this assignment.
+			$assignmentEnd = $phpcsFile->findNext( T_SEMICOLON, $varToken + 1, $functionCloser );
+
+			if ( false === $assignmentEnd ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			// Check if the assignment involves apply_filters or do_action - skip those for safety.
+			if ( $this->assignmentInvolvesFilter( $phpcsFile, $tokens, $varToken, $assignmentEnd ) ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			// Find the next statement after the assignment.
+			$nextStatement = $phpcsFile->findNext( T_WHITESPACE, $assignmentEnd + 1, $functionCloser, true );
+
+			if ( false === $nextStatement ) {
+				break;
+			}
+
+			// Check if the next statement is an if with an early return.
+			$earlyReturnIf = $this->findEarlyReturnIf( $phpcsFile, $tokens, $nextStatement, $functionCloser, $variableName );
+
+			if ( false === $earlyReturnIf ) {
+				$current = $varToken + 1;
+				continue;
+			}
+
+			// The variable is not used in the early return - it should be moved below.
+			$fix = $phpcsFile->addFixableError(
+				'Variable %s should be declared after the early return condition, not before.',
+				$varToken,
+				'VariableBeforeEarlyReturn',
+				array( $variableName )
+			);
+
+			if ( true === $fix ) {
+				$this->applyFix( $phpcsFile, $tokens, $varToken, $assignmentEnd, $earlyReturnIf );
+			}
+
+			// Move past this variable to continue scanning.
+			$current = $assignmentEnd + 1;
 		}
+	}
 
-		// Check if the first statement is a variable assignment.
-		if ( $tokens[ $firstStatement ]['code'] !== T_VARIABLE ) {
-			return;
-		}
-
-		// Get the variable name.
-		$variableName = $tokens[ $firstStatement ]['content'];
-
-		// Check if this variable is a function parameter (skip those, especially by-reference params).
-		if ( $this->isVariableAParameter( $phpcsFile, $tokens, $stackPtr, $variableName ) ) {
-			return;
-		}
-
-		// Find the semicolon ending this assignment.
-		$assignmentEnd = $phpcsFile->findNext( T_SEMICOLON, $firstStatement + 1, $functionCloser );
-
-		if ( false === $assignmentEnd ) {
-			return;
-		}
-
-		// Find the next statement after the assignment.
-		$nextStatement = $phpcsFile->findNext( T_WHITESPACE, $assignmentEnd + 1, $functionCloser, true );
-
-		if ( false === $nextStatement ) {
-			return;
-		}
-
-		// Check if the next statement is an if with an early return.
-		if ( $tokens[ $nextStatement ]['code'] !== T_IF ) {
-			return;
+	/**
+	 * Find an early return if statement that doesn't use the variable.
+	 *
+	 * @param File   $phpcsFile       The file being scanned.
+	 * @param array  $tokens          The token stack.
+	 * @param int    $startToken      Where to start looking.
+	 * @param int    $functionCloser  The function's closing brace.
+	 * @param string $variableName    The variable name to check.
+	 *
+	 * @return false|int The if closer position, or false if not found.
+	 */
+	private function findEarlyReturnIf( File $phpcsFile, array $tokens, $startToken, $functionCloser, $variableName ) {
+		// Check if this is an if statement.
+		if ( $tokens[ $startToken ]['code'] !== T_IF ) {
+			return false;
 		}
 
 		// Make sure the if has a scope.
-		if ( ! isset( $tokens[ $nextStatement ]['scope_opener'] ) || ! isset( $tokens[ $nextStatement ]['scope_closer'] ) ) {
-			return;
+		if ( ! isset( $tokens[ $startToken ]['scope_opener'] ) || ! isset( $tokens[ $startToken ]['scope_closer'] ) ) {
+			return false;
 		}
 
-		$ifOpener = $tokens[ $nextStatement ]['scope_opener'];
-		$ifCloser = $tokens[ $nextStatement ]['scope_closer'];
+		$ifOpener = $tokens[ $startToken ]['scope_opener'];
+		$ifCloser = $tokens[ $startToken ]['scope_closer'];
 
 		// Check if the if body contains only a return statement.
 		$ifFirstStatement = $phpcsFile->findNext( T_WHITESPACE, $ifOpener + 1, $ifCloser, true );
 
 		if ( false === $ifFirstStatement || $tokens[ $ifFirstStatement ]['code'] !== T_RETURN ) {
-			return;
+			return false;
 		}
 
 		// Check if there's anything else in the if body after the return.
 		$returnEnd = $phpcsFile->findNext( T_SEMICOLON, $ifFirstStatement + 1, $ifCloser );
 
 		if ( false === $returnEnd ) {
-			return;
+			return false;
 		}
 
 		$afterReturn = $phpcsFile->findNext( T_WHITESPACE, $returnEnd + 1, $ifCloser, true );
 
 		if ( false !== $afterReturn ) {
 			// There's more than just a return in the if body.
-			return;
+			return false;
 		}
 
 		// Check if the if has an else/elseif - skip those.
 		$afterIfClose = $phpcsFile->findNext( T_WHITESPACE, $ifCloser + 1, $functionCloser, true );
 
 		if ( false !== $afterIfClose && in_array( $tokens[ $afterIfClose ]['code'], array( T_ELSE, T_ELSEIF ), true ) ) {
-			return;
+			return false;
 		}
 
-		// Now check if the variable is used in the if condition or the return statement.
+		// Check if the variable is used in the if condition or the return statement.
 		$variableUsedInCondition = $this->isVariableUsedInRange(
 			$phpcsFile,
 			$tokens,
-			$nextStatement,
+			$startToken,
 			$ifOpener,
 			$variableName
 		);
@@ -160,21 +217,36 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 		);
 
 		if ( $variableUsedInCondition || $variableUsedInReturn ) {
-			// The variable is used in the early return check, so it's fine where it is.
-			return;
+			// The variable is used in this early return check.
+			return false;
 		}
 
-		// The variable is not used in the early return - it should be moved below.
-		$fix = $phpcsFile->addFixableError(
-			'Variable %s should be declared after the early return condition, not before.',
-			$firstStatement,
-			'VariableBeforeEarlyReturn',
-			array( $variableName )
-		);
+		// This is a valid early return that doesn't use the variable.
+		return $ifCloser;
+	}
 
-		if ( true === $fix ) {
-			$this->applyFix( $phpcsFile, $tokens, $firstStatement, $assignmentEnd, $ifCloser );
+	/**
+	 * Check if a token is at the function's top level (not nested in another scope).
+	 *
+	 * @param array $tokens          The token stack.
+	 * @param int   $stackPtr        The token position.
+	 * @param int   $functionOpener  The function's opening brace.
+	 * @param int   $functionCloser  The function's closing brace.
+	 *
+	 * @return bool
+	 */
+	private function isAtFunctionTopLevel( array $tokens, $stackPtr, $functionOpener, $functionCloser ) {
+		$depth = 0;
+
+		for ( $i = $functionOpener + 1; $i < $stackPtr; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_OPEN_CURLY_BRACKET ) {
+				++$depth;
+			} elseif ( $tokens[ $i ]['code'] === T_CLOSE_CURLY_BRACKET ) {
+				--$depth;
+			}
 		}
+
+		return 0 === $depth;
 	}
 
 	/**
@@ -208,11 +280,12 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 			$lineStart = $i;
 		}
 
-		// Get the indentation based on the variable's column position.
-		// Column is 1-indexed, so column 2 means 1 character of indentation.
-		$column   = $tokens[ $varStart ]['column'];
-		$tabCount = (int) floor( ( $column - 1 ) / 4 );
-		$indent   = str_repeat( "\t", $tabCount );
+		// Get the actual indentation from the whitespace token at line start.
+		$indent = '';
+
+		if ( $tokens[ $lineStart ]['code'] === T_WHITESPACE ) {
+			$indent = $tokens[ $lineStart ]['content'];
+		}
 
 		// Remove the variable declaration line (from line start to semicolon).
 		for ( $i = $lineStart; $i <= $assignmentEnd; $i++ ) {
@@ -291,6 +364,35 @@ class MoveVariableBelowEarlyReturnSniff implements Sniff {
 		// Look for the variable in the parameter list.
 		for ( $i = $openParen + 1; $i < $closeParen; $i++ ) {
 			if ( $tokens[ $i ]['code'] === T_VARIABLE && $tokens[ $i ]['content'] === $variableName ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if an assignment involves apply_filters, do_action, or similar filter/action calls.
+	 *
+	 * @param File  $phpcsFile     The file being scanned.
+	 * @param array $tokens        The token stack.
+	 * @param int   $varToken      The variable token position.
+	 * @param int   $assignmentEnd The semicolon ending the assignment.
+	 *
+	 * @return bool
+	 */
+	private function assignmentInvolvesFilter( File $phpcsFile, array $tokens, $varToken, $assignmentEnd ) {
+		$filterFunctions = array(
+			'apply_filters',
+			'apply_filters_ref_array',
+			'apply_filters_deprecated',
+			'do_action',
+			'do_action_ref_array',
+			'do_action_deprecated',
+		);
+
+		for ( $i = $varToken; $i <= $assignmentEnd; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_STRING && in_array( $tokens[ $i ]['content'], $filterFunctions, true ) ) {
 				return true;
 			}
 		}
