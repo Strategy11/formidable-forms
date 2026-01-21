@@ -33,26 +33,27 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantEmptyAfterTypeCheck" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
+	<rule ref="Formidable.CodeAnalysis.RedundantIsArrayBeforeEmptyArrayCheck" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
-	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferEscHtmlE" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyFirstLast" />
 	<rule ref="Formidable.CodeAnalysis.PreferArrayKeyExists" />
-	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
+	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
+	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
+	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
+	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipNegativeTernary" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfElseToEarlyReturn" />
 	<rule ref="Formidable.CodeAnalysis.FlipForeachIfToContinue" />
 	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnVariable" />
+	<rule ref="Formidable.CodeAnalysis.FlipIfToEarlyReturnInitialValue" />
 	<rule ref="Formidable.CodeAnalysis.FlipLargeIfSmallElse" />
 	<rule ref="Formidable.CodeAnalysis.FlipLoopIfElseToContinue" />
-	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
-	<rule ref="Formidable.CodeAnalysis.RedundantIsArrayBeforeEmptyArrayCheck" />
-	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 
 	<!-- PHPUnit -->
 	<rule ref="Formidable.PHPUnit.PreferAssertIsArray" />
