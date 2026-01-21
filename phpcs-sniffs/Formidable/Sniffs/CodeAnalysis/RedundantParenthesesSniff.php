@@ -148,6 +148,11 @@ class RedundantParenthesesSniff implements Sniff {
 			return false;
 		}
 
+		// Check for simple comparison expression: ( array() === $var ) or ( $var === array() ).
+		if ( $this->isSimpleComparisonExpression( $phpcsFile, $openParen, $closeParen ) ) {
+			return true;
+		}
+
 		// Should start with !
 		if ( $tokens[ $firstInside ]['code'] !== T_BOOLEAN_NOT ) {
 			return false;
@@ -188,6 +193,58 @@ class RedundantParenthesesSniff implements Sniff {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if this is a simple comparison expression that doesn't need parentheses.
+	 *
+	 * Pattern: ( array() === $var ) or ( $var === array() ) or similar simple comparisons.
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  The position of the opening parenthesis.
+	 * @param int  $closeParen The position of the closing parenthesis.
+	 *
+	 * @return bool
+	 */
+	private function isSimpleComparisonExpression( File $phpcsFile, $openParen, $closeParen ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Look for exactly one comparison operator at the top level.
+		$comparisonCount  = 0;
+		$logicalCount     = 0;
+		$nestedParenDepth = 0;
+
+		for ( $i = $openParen + 1; $i < $closeParen; $i++ ) {
+			$code = $tokens[ $i ]['code'];
+
+			if ( $code === T_OPEN_PARENTHESIS ) {
+				++$nestedParenDepth;
+				continue;
+			}
+
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				--$nestedParenDepth;
+				continue;
+			}
+
+			// Skip tokens inside nested parentheses.
+			if ( $nestedParenDepth > 0 ) {
+				continue;
+			}
+
+			// Count comparison operators.
+			if ( in_array( $code, array( T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL ), true ) ) {
+				++$comparisonCount;
+			}
+
+			// Check for logical operators - if present, parentheses might be needed.
+			if ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR ), true ) ) {
+				++$logicalCount;
+			}
+		}
+
+		// Simple comparison: exactly one comparison operator and no logical operators.
+		return 1 === $comparisonCount && 0 === $logicalCount;
 	}
 
 	/**

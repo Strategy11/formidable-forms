@@ -87,10 +87,15 @@ class FrmEntry {
 			unset( $check_val['name'] );
 		}
 
-		$check_val    = apply_filters( 'frm_duplicate_check_val', $check_val );
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
+
+		if ( ! isset( $values['item_meta'] ) ) {
+			return false;
+		}
+
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists ) {
 			return false;
 		}
 
@@ -237,7 +242,7 @@ class FrmEntry {
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 
-			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+			if ( '' === $reduced[ $field_id ] || array() === $reduced[ $field_id ] ) {
 				unset( $reduced[ $field_id ] );
 			}
 		}

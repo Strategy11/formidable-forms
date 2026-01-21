@@ -1362,7 +1362,7 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+		if ( ! self::get_pro_license() && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 

@@ -148,11 +148,11 @@ class FrmFieldName extends FrmFieldCombo {
 			return $value;
 		}
 
-		$name_layout = $this->get_name_layout();
-
 		if ( ! empty( $atts['show'] ) ) {
 			return $value[ $atts['show'] ] ?? '';
 		}
+
+		$name_layout = $this->get_name_layout();
 
 		$value = wp_parse_args(
 			$value,
