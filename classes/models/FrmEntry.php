@@ -1008,7 +1008,7 @@ class FrmEntry {
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
 
-		return ! $query_results ? false : $wpdb->insert_id;
+		return $query_results ? $wpdb->insert_id : false;
 	}
 
 	/**
