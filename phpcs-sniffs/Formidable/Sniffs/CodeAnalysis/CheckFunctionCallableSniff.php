@@ -139,16 +139,154 @@ class CheckFunctionCallableSniff implements Sniff {
 		}
 
 		// Check if we're inside an if statement's body that checks for this function.
-		if ( ! isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+		if ( isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+			foreach ( $tokens[ $stackPtr ]['conditions'] as $scopePtr => $scopeType ) {
+				if ( $scopeType !== T_IF ) {
+					continue;
+				}
+
+				if ( $this->conditionChecksFunction( $phpcsFile, $tokens, $scopePtr, $functionName ) ) {
+					return true;
+				}
+			}
+		}
+
+		// Check if there's an earlier if ( ! function_exists() ) that exits/returns.
+		if ( $this->hasEarlyExitCheck( $phpcsFile, $tokens, $stackPtr, $functionName ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if there's an earlier if ( ! function_exists() ) block that exits or returns.
+	 *
+	 * @param File   $phpcsFile    The file being scanned.
+	 * @param array  $tokens       The token stack.
+	 * @param int    $stackPtr     The position of the function call.
+	 * @param string $functionName The function name to check for.
+	 *
+	 * @return bool
+	 */
+	private function hasEarlyExitCheck( File $phpcsFile, array $tokens, $stackPtr, $functionName ) {
+		// Find the function/method scope we're in.
+		$functionScope = null;
+
+		if ( isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+			foreach ( $tokens[ $stackPtr ]['conditions'] as $scopePtr => $scopeType ) {
+				if ( in_array( $scopeType, array( T_FUNCTION, T_CLOSURE ), true ) ) {
+					$functionScope = $scopePtr;
+				}
+			}
+		}
+
+		// Determine the search start position.
+		$searchStart = 0;
+
+		if ( null !== $functionScope && isset( $tokens[ $functionScope ]['scope_opener'] ) ) {
+			$searchStart = $tokens[ $functionScope ]['scope_opener'];
+		}
+
+		// Look for if statements before our position.
+		$current = $searchStart;
+
+		while ( $current < $stackPtr ) {
+			$ifToken = $phpcsFile->findNext( T_IF, $current, $stackPtr );
+
+			if ( false === $ifToken ) {
+				break;
+			}
+
+			// Check if this if has a negated function_exists check for our function.
+			if ( $this->isNegatedFunctionExistsCheck( $phpcsFile, $tokens, $ifToken, $functionName ) ) {
+				// Check if the if body contains an exit, die, or return.
+				if ( $this->ifBodyExits( $phpcsFile, $tokens, $ifToken ) ) {
+					return true;
+				}
+			}
+
+			$current = $ifToken + 1;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if an if statement has a negated function_exists check (! function_exists()).
+	 *
+	 * @param File   $phpcsFile    The file being scanned.
+	 * @param array  $tokens       The token stack.
+	 * @param int    $ifToken      The if token position.
+	 * @param string $functionName The function name to check for.
+	 *
+	 * @return bool
+	 */
+	private function isNegatedFunctionExistsCheck( File $phpcsFile, array $tokens, $ifToken, $functionName ) {
+		if ( ! isset( $tokens[ $ifToken ]['parenthesis_opener'] ) || ! isset( $tokens[ $ifToken ]['parenthesis_closer'] ) ) {
 			return false;
 		}
 
-		foreach ( $tokens[ $stackPtr ]['conditions'] as $scopePtr => $scopeType ) {
-			if ( $scopeType !== T_IF ) {
+		$conditionStart = $tokens[ $ifToken ]['parenthesis_opener'];
+		$conditionEnd   = $tokens[ $ifToken ]['parenthesis_closer'];
+
+		// Look for ! function_exists in the condition.
+		for ( $i = $conditionStart; $i <= $conditionEnd; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_BOOLEAN_NOT ) {
 				continue;
 			}
 
-			if ( $this->conditionChecksFunction( $phpcsFile, $tokens, $scopePtr, $functionName ) ) {
+			// Found !, look for function_exists after it.
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $conditionEnd, true );
+
+			if ( false === $nextToken || $tokens[ $nextToken ]['code'] !== T_STRING || $tokens[ $nextToken ]['content'] !== 'function_exists' ) {
+				continue;
+			}
+
+			// Found function_exists, check if it's checking our function.
+			$openParen = $phpcsFile->findNext( T_WHITESPACE, $nextToken + 1, $conditionEnd, true );
+
+			if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+				continue;
+			}
+
+			$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+			// Look for the function name as a string.
+			for ( $j = $openParen + 1; $j < $closeParen; $j++ ) {
+				if ( $tokens[ $j ]['code'] === T_CONSTANT_ENCAPSED_STRING ) {
+					$checkedName = trim( $tokens[ $j ]['content'], '"\'' );
+
+					if ( $checkedName === $functionName ) {
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if an if statement's body contains an exit, die, or return.
+	 *
+	 * @param File  $phpcsFile The file being scanned.
+	 * @param array $tokens    The token stack.
+	 * @param int   $ifToken   The if token position.
+	 *
+	 * @return bool
+	 */
+	private function ifBodyExits( File $phpcsFile, array $tokens, $ifToken ) {
+		if ( ! isset( $tokens[ $ifToken ]['scope_opener'] ) || ! isset( $tokens[ $ifToken ]['scope_closer'] ) ) {
+			return false;
+		}
+
+		$scopeStart = $tokens[ $ifToken ]['scope_opener'];
+		$scopeEnd   = $tokens[ $ifToken ]['scope_closer'];
+
+		// Look for exit, die, or return in the if body.
+		for ( $i = $scopeStart; $i < $scopeEnd; $i++ ) {
+			if ( in_array( $tokens[ $i ]['code'], array( T_EXIT, T_RETURN ), true ) ) {
 				return true;
 			}
 		}
