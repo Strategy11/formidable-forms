@@ -1071,8 +1071,7 @@ class FrmEntryValidate {
 	 * @return void
 	 */
 	public static function prepare_values_for_spam_check( &$values ) {
-		$form_ids           = self::get_all_form_ids_and_flatten_meta( $values );
-		$values['form_ids'] = $form_ids;
+		$values['form_ids'] = self::get_all_form_ids_and_flatten_meta( $values );
 	}
 
 	/**
