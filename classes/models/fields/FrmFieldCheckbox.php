@@ -116,9 +116,6 @@ class FrmFieldCheckbox extends FrmFieldType {
 		return true;
 	}
 
-	/**
-	 * @param array $atts
-	 */
 	protected function prepare_import_value( $value, $atts ) {
 		return $this->get_multi_opts_for_import( $value );
 	}

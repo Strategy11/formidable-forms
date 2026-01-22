@@ -92,9 +92,6 @@ class FrmFieldUrl extends FrmFieldType {
 		return $errors;
 	}
 
-	/**
-	 * @param array $atts
-	 */
 	protected function prepare_display_value( $value, $atts ) {
 		if ( ! $atts['html'] ) {
 			return $value;
