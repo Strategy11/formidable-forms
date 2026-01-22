@@ -30,6 +30,7 @@ use PHP_CodeSniffer\Files\File;
  * - ! empty() checks (common pattern)
  * - ! isset() checks
  * - ! is_null() checks (falsy check pattern)
+ * - Compound conditions with && or ||
  */
 class PreferPositiveTernaryConditionSniff implements Sniff {
 
@@ -90,10 +91,18 @@ class PreferPositiveTernaryConditionSniff implements Sniff {
 		}
 
 		// Make sure there's nothing between condition end and ternary operator except whitespace.
+		// Also skip if there are logical operators (compound conditions).
 		for ( $i = $conditionEnd + 1; $i < $ternaryOperator; $i++ ) {
 			if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
 				return;
 			}
+		}
+
+		// Skip compound conditions - find the start of the full condition and check for logical operators.
+		$conditionStart = $this->findConditionStart( $phpcsFile, $stackPtr );
+
+		if ( false !== $conditionStart && $this->hasLogicalOperators( $phpcsFile, $conditionStart, $ternaryOperator ) ) {
+			return;
 		}
 
 		// Find the colon (:) for the else part.
@@ -455,6 +464,94 @@ class PreferPositiveTernaryConditionSniff implements Sniff {
 
 		for ( $i = $start; $i <= $end; $i++ ) {
 			if ( $tokens[ $i ]['code'] === T_INLINE_THEN ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the start of the condition (after assignment or return).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the ! token.
+	 *
+	 * @return false|int
+	 */
+	private function findConditionStart( File $phpcsFile, $stackPtr ) {
+		$tokens     = $phpcsFile->getTokens();
+		$parenDepth = 0;
+
+		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
+			$code = $tokens[ $i ]['code'];
+
+			// Track parentheses (going backwards).
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				++$parenDepth;
+				continue;
+			}
+
+			if ( $code === T_OPEN_PARENTHESIS ) {
+				if ( $parenDepth > 0 ) {
+					--$parenDepth;
+					continue;
+				}
+
+				return $i + 1;
+			}
+
+			if ( $parenDepth > 0 ) {
+				continue;
+			}
+
+			// Found statement start.
+			if ( in_array( $code, array( T_RETURN, T_ECHO, T_PRINT, T_EQUAL, T_DOUBLE_ARROW, T_CONCAT_EQUAL ), true ) ) {
+				return $i + 1;
+			}
+
+			// Hit a semicolon or opening brace.
+			if ( in_array( $code, array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_COMMA ), true ) ) {
+				return $i + 1;
+			}
+		}
+
+		return 0;
+	}
+
+	/**
+	 * Check if a range contains logical operators (&& or ||).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $start     Start position.
+	 * @param int  $end       End position.
+	 *
+	 * @return bool
+	 */
+	private function hasLogicalOperators( File $phpcsFile, $start, $end ) {
+		$tokens     = $phpcsFile->getTokens();
+		$parenDepth = 0;
+
+		for ( $i = $start; $i < $end; $i++ ) {
+			$code = $tokens[ $i ]['code'];
+
+			// Track parentheses.
+			if ( $code === T_OPEN_PARENTHESIS ) {
+				++$parenDepth;
+				continue;
+			}
+
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				--$parenDepth;
+				continue;
+			}
+
+			// Only check at the top level (not inside function calls).
+			if ( $parenDepth > 0 ) {
+				continue;
+			}
+
+			if ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR ), true ) ) {
 				return true;
 			}
 		}
