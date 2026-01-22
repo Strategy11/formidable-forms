@@ -3226,7 +3226,7 @@ class FrmAppHelper {
 	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
+		$now = ! $to && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference

@@ -662,7 +662,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
-		$has_px_size = ! empty( $size ) && str_contains( $size, 'px' );
+		$has_px_size = $size && str_contains( $size, 'px' );
 
 		if ( ! $has_px_size ) {
 			return;
