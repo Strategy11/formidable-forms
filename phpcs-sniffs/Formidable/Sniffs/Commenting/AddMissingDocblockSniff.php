@@ -292,8 +292,9 @@ class AddMissingDocblockSniff implements Sniff {
 		$scopeOpener = $tokens[ $stackPtr ]['scope_opener'];
 		$scopeCloser = $tokens[ $stackPtr ]['scope_closer'];
 
-		$returnTypes = array();
-		$current     = $scopeOpener;
+		$returnTypes      = array();
+		$hasUncertainType = false;
+		$current          = $scopeOpener;
 
 		while ( $current < $scopeCloser ) {
 			$return = $phpcsFile->findNext( T_RETURN, $current + 1, $scopeCloser );
@@ -312,6 +313,8 @@ class AddMissingDocblockSniff implements Sniff {
 
 			if ( null !== $type ) {
 				$returnTypes[] = $type;
+			} else {
+				$hasUncertainType = true;
 			}
 
 			$current = $return;
@@ -325,7 +328,14 @@ class AddMissingDocblockSniff implements Sniff {
 		$uniqueTypes = array_unique( $returnTypes );
 
 		if ( count( $uniqueTypes ) === 1 ) {
-			return $uniqueTypes[0];
+			$type = $uniqueTypes[0];
+
+			// Skip int if there's an uncertain return type (e.g., return $variable).
+			if ( 'int' === $type && $hasUncertainType ) {
+				return null;
+			}
+
+			return $type;
 		}
 
 		// Multiple types - check if they're compatible.
