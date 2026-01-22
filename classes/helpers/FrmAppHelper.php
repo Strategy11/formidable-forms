@@ -1392,7 +1392,7 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
+			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
 
 			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );

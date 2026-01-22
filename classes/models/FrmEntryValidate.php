@@ -1021,7 +1021,7 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
 
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
