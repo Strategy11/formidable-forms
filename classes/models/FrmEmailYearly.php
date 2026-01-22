@@ -25,6 +25,8 @@ class FrmEmailYearly extends FrmEmailStats {
 
 	/**
 	 * @since 6.8
+	 *
+	 * @return bool
 	 */
 	protected function get_content_args() {
 		// Do not send yearly email if there is no entries this year.

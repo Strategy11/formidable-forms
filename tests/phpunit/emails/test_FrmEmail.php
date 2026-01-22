@@ -448,6 +448,10 @@ class test_FrmEmail extends FrmUnitTest {
 		return $entry;
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_recipients( $expected, $mock_email, $cc_status = 'yes_cc', $bcc_status = 'yes_bcc' ) {
 		$this->assertSame( $expected['to'], $mock_email['to'], 'To does not match expected.' );
 		$this->assertSame( $expected['cc'], $mock_email['cc'], 'CC does not match expected.' );
@@ -462,17 +466,29 @@ class test_FrmEmail extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_senders( $expected, $mock_email ) {
 		$this->assertStringContainsString( 'From: ' . $expected['from'], $mock_email['header'], 'From does not match expected.' );
 		$this->assertStringContainsString( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'], 'Reply-to does not match expected.' );
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_subject( $expected, $mock_email ) {
 		if ( isset( $mock_email['subject'] ) ) {
 			$this->assertSame( $expected['subject'], $mock_email['subject'], 'Subject does not match expected.' );
 		}
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_message_body( $expected, $mock_email ) {
 		// Remove line breaks from body for comparison
 		$expected['body']   = preg_replace( "/\r|\n/", '', $expected['body'] );
@@ -481,28 +497,52 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertSame( $expected['body'], $mock_email['body'], 'Message body does not match expected.' );
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_content_type( $expected, $mock_email ) {
 		$this->assertStringContainsString( $expected['content_type'], $mock_email['header'], 'Content type does not match expected.' );
 	}
 
+	/**
+	 * @param array $mock_email
+	 */
 	protected function check_no_cc_included( $mock_email ) {
 		$this->assertStringNotContainsString( 'Cc:', $mock_email['header'], 'CC is included when it should not be.' );
 	}
 
+	/**
+	 * @param array $mock_email
+	 */
 	protected function check_no_bcc_included( $mock_email ) {
 		$this->assertStringNotContainsString( 'Bcc:', $mock_email['header'], 'BCC is included when it should not be.' );
 	}
 
+	/**
+	 * @param array $to_emails
+	 * @param array $args
+	 */
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
 		$to_emails[] = 'test3@mail.com';
 		$to_emails[] = '1231231234';
 		return $to_emails;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public function change_email_subject( $subject, $args ) {
 		return 'New subject';
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
 	public function send_separate_emails( $is_single, $args ) {
 		return true;
 	}

@@ -60,6 +60,8 @@ class test_FrmSpamCheckWPDisallowedWords extends FrmUnitTest {
 
 	/**
 	 * The name of the disallowed list of words was changed in WP 5.5.
+	 *
+	 * @return bool
 	 */
 	private function get_disallowed_option_name() {
 		$keys = get_option( 'disallowed_keys' );

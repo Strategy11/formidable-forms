@@ -65,6 +65,9 @@ class FrmFieldUrl extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$value = $args['value'];
 
@@ -89,6 +92,9 @@ class FrmFieldUrl extends FrmFieldType {
 		return $errors;
 	}
 
+	/**
+	 * @param array $atts
+	 */
 	protected function prepare_display_value( $value, $atts ) {
 		if ( ! $atts['html'] ) {
 			return $value;

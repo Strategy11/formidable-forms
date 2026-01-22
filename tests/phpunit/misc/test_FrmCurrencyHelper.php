@@ -27,6 +27,9 @@ class test_FrmCurrencyHelper extends FrmUnitTest {
 		$this->assert_cad( $cad );
 	}
 
+	/**
+	 * @param array $currency
+	 */
 	private function assert_currency( $currency ) {
 		$this->assertIsArray( $currency );
 		$this->assertIsString( $currency['name'] );

@@ -12,6 +12,9 @@ class FrmFormsListHelper extends FrmListHelper {
 
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		$this->status = self::get_param( array( 'param' => 'form_type' ) );
 

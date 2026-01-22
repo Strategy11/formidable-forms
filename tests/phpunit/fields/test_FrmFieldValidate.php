@@ -80,6 +80,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function expected_format_errors() {
 		return array(
 			array(
