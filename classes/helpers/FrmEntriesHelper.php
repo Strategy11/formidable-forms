@@ -272,7 +272,7 @@ class FrmEntriesHelper {
 			$entry_val = FrmProEntryMetaHelper::get_post_or_meta_value( $child_entry, $field );
 
 			if ( $entry_val || '0' === $entry_val ) {
-				// Foreach entry get display_value.
+				// For each entry get display_value.
 				$field_value[] = self::display_value( $entry_val, $field, $atts );
 			}
 

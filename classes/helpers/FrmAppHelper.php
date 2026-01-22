@@ -3585,7 +3585,7 @@ class FrmAppHelper {
 			unset( $key, $val );
 		}
 
-		// Json_encode the array.
+		// json_encode the array.
 		$post_content = json_encode( $post_content );
 
 		// Add extra slashes for \r\n since WP strips them.
@@ -4996,7 +4996,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
-		// Wp_is_valid_utf8 is added in WP 6.9.
+		// wp_is_valid_utf8 is added in WP 6.9.
 		if ( function_exists( 'wp_is_valid_utf8' ) ) {
 			return wp_is_valid_utf8( $string );
 		}
