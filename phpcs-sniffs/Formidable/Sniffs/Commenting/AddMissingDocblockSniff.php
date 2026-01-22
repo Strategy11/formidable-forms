@@ -230,6 +230,11 @@ class AddMissingDocblockSniff implements Sniff {
 		foreach ( $params as $param ) {
 			$paramName = $param['name'];
 
+			// Skip if param is checked with is_array() - type is uncertain.
+			if ( $this->hasIsArrayCheck( $phpcsFile, $paramName, $scopeOpener, $scopeCloser ) ) {
+				continue;
+			}
+
 			// Check if param name is in our known array names.
 			if ( in_array( $paramName, $this->arrayParamNames, true ) ) {
 				$certainTypes[ $paramName ] = 'array';
@@ -243,6 +248,45 @@ class AddMissingDocblockSniff implements Sniff {
 		}
 
 		return $certainTypes;
+	}
+
+	/**
+	 * Check if a variable is checked with is_array().
+	 *
+	 * @param File   $phpcsFile   The file being scanned.
+	 * @param string $varName     The variable name.
+	 * @param int    $scopeOpener The function scope opener.
+	 * @param int    $scopeCloser The function scope closer.
+	 *
+	 * @return bool
+	 */
+	private function hasIsArrayCheck( File $phpcsFile, $varName, $scopeOpener, $scopeCloser ) {
+		$tokens = $phpcsFile->getTokens();
+
+		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_STRING ) {
+				continue;
+			}
+
+			if ( $tokens[ $i ]['content'] !== 'is_array' ) {
+				continue;
+			}
+
+			// Check if followed by ( $varName ).
+			$openParen = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $scopeCloser, true );
+
+			if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+				continue;
+			}
+
+			$varToken = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, $scopeCloser, true );
+
+			if ( false !== $varToken && $tokens[ $varToken ]['code'] === T_VARIABLE && $tokens[ $varToken ]['content'] === $varName ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**
