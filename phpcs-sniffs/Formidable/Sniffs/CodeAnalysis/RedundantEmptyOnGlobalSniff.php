@@ -20,13 +20,15 @@ use PHP_CodeSniffer\Files\File;
  * Bad:
  * global $post;
  * if ( is_singular() && ! empty( $post ) ) { ... }
+ * if ( empty( $post ) ) { ... }
  *
  * Good:
  * global $post;
  * if ( is_singular() && $post ) { ... }
+ * if ( ! $post ) { ... }
  *
  * Since global variables are always defined (even if null), empty() is redundant
- * for checking if they have a value. A simple truthy check is sufficient.
+ * for checking if they have a value. A simple truthy/falsy check is sufficient.
  */
 class RedundantEmptyOnGlobalSniff implements Sniff {
 
@@ -136,12 +138,8 @@ class RedundantEmptyOnGlobalSniff implements Sniff {
 
 		// Check if this empty() is preceded by a negation (!).
 		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
-
-		if ( false === $prevToken || $tokens[ $prevToken ]['code'] !== T_BOOLEAN_NOT ) {
-			return;
-		}
-
-		$notToken = $prevToken;
+		$isNegated = false !== $prevToken && $tokens[ $prevToken ]['code'] === T_BOOLEAN_NOT;
+		$notToken  = $isNegated ? $prevToken : null;
 
 		// Find the opening parenthesis after empty.
 		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
@@ -180,9 +178,20 @@ class RedundantEmptyOnGlobalSniff implements Sniff {
 			return;
 		}
 
+		// Determine the replacement and error message based on negation.
+		if ( $isNegated ) {
+			// ! empty( $var ) -> $var
+			$replacement = $varName;
+			$message     = 'Redundant "! empty( %s )" on global variable. Use "%s" instead.';
+		} else {
+			// empty( $var ) -> ! $var
+			$replacement = '! ' . $varName;
+			$message     = 'Redundant "empty( %s )" on global variable. Use "! %s" instead.';
+		}
+
 		// We have a match! Report the error.
 		$fix = $phpcsFile->addFixableError(
-			'Redundant "! empty( %s )" on global variable. Use "%s" instead.',
+			$message,
 			$stackPtr,
 			'Found',
 			array( $varName, $varName )
@@ -191,18 +200,20 @@ class RedundantEmptyOnGlobalSniff implements Sniff {
 		if ( true === $fix ) {
 			$phpcsFile->fixer->beginChangeset();
 
-			// Remove the "!" token.
-			$phpcsFile->fixer->replaceToken( $notToken, '' );
+			if ( $isNegated ) {
+				// Remove the "!" token.
+				$phpcsFile->fixer->replaceToken( $notToken, '' );
 
-			// Remove whitespace between ! and empty if present.
-			for ( $i = $notToken + 1; $i < $stackPtr; $i++ ) {
-				if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
-					$phpcsFile->fixer->replaceToken( $i, '' );
+				// Remove whitespace between ! and empty if present.
+				for ( $i = $notToken + 1; $i < $stackPtr; $i++ ) {
+					if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
+						$phpcsFile->fixer->replaceToken( $i, '' );
+					}
 				}
 			}
 
-			// Replace "empty( $var )" with just "$var".
-			$phpcsFile->fixer->replaceToken( $stackPtr, $varName );
+			// Replace "empty( $var )" with the replacement.
+			$phpcsFile->fixer->replaceToken( $stackPtr, $replacement );
 
 			// Remove everything from after "empty" to end of closing paren.
 			for ( $i = $stackPtr + 1; $i <= $closeParen; $i++ ) {
