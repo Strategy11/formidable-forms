@@ -414,15 +414,7 @@ class FrmStyle {
 
 		$this->clear_cache();
 
-		$css = $this->get_css_content( $filename );
-
-		// Debug logging for CSS regeneration.
-		self::debug_css_log( '=== FrmStyle::save_settings() called ===' );
-		self::debug_css_log( 'CSS length: ' . strlen( $css ) );
-		self::debug_css_log( 'Contains .frm_dropzone: ' . ( strpos( $css, '.frm_dropzone' ) !== false ? 'YES' : 'NO' ) );
-		self::debug_css_log( 'Contains .frm_rootline: ' . ( strpos( $css, '.frm_rootline' ) !== false ? 'YES' : 'NO' ) );
-		self::debug_css_log( 'Contains flatpickr: ' . ( strpos( $css, 'flatpickr' ) !== false ? 'YES' : 'NO' ) );
-
+		$css         = $this->get_css_content( $filename );
 		$create_file = new FrmCreateFile(
 			array(
 				'file_name'     => FrmStylesController::get_file_name(),
@@ -431,29 +423,8 @@ class FrmStyle {
 		);
 		$create_file->create_file( $css );
 
-		self::debug_css_log( 'CSS file saved: ' . FrmStylesController::get_file_name() );
-
 		update_option( 'frmpro_css', $css, 'no' );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
-	}
-
-	/**
-	 * Debug logging for CSS regeneration troubleshooting.
-	 *
-	 * @since x.x
-	 *
-	 * @param string $message The message to log.
-	 * @return void
-	 */
-	private static function debug_css_log( $message ) {
-		if ( ! defined( 'WP_DEBUG' ) || ! WP_DEBUG ) {
-			return;
-		}
-
-		$log_file  = WP_CONTENT_DIR . '/frm-css-debug03.log';
-		$timestamp = gmdate( 'Y-m-d H:i:s' );
-		$log_entry = "[{$timestamp}] [FrmStyle] {$message}\n";
-		file_put_contents( $log_file, $log_entry, FILE_APPEND );
 	}
 
 	/**
