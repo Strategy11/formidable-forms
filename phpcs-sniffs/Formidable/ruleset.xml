@@ -34,6 +34,7 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.RedundantEmptyOnGlobal" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
 	<rule ref="Formidable.CodeAnalysis.PreferObGetClean" />
