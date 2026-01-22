@@ -39,6 +39,9 @@ class test_FrmPersonalData extends FrmUnitTest {
 		$this->assertSame( asort( $expected ), asort( $entries ) );
 	}
 
+	/**
+	 * @param array $entry_data
+	 */
 	private function create_entries_for_user( $entry_data, $email ) {
 		$user = get_user_by( 'email', $email );
 		$this->assertNotEmpty( $user );

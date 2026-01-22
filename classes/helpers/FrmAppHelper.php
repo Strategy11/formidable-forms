@@ -1167,6 +1167,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.05.03
+	 *
+	 * @return array
 	 */
 	private static function safe_html() {
 		$allow_class = array(

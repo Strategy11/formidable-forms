@@ -65,6 +65,9 @@ class FrmFieldUrl extends FrmFieldType {
 		}
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$value = $args['value'];
 

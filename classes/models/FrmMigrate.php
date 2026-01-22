@@ -390,6 +390,9 @@ class FrmMigrate {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
