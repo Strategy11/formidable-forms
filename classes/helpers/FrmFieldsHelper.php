@@ -2634,10 +2634,9 @@ class FrmFieldsHelper {
 			return $custom_attrs;
 		}
 
-		$upgrading    = FrmAddonsController::install_link( $option['addon'] );
-		$install_data = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
+		$upgrading = FrmAddonsController::install_link( $option['addon'] );
 
-		$custom_attrs['data-oneclick'] = $install_data;
+		$custom_attrs['data-oneclick'] = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
 		$custom_attrs['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 
 		return $custom_attrs;

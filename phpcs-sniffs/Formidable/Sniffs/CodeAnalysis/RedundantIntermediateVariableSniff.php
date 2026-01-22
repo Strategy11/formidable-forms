@@ -21,8 +21,12 @@ use PHP_CodeSniffer\Files\File;
  * $comment_count = FrmDb::get_count(...);
  * self::$comment_count = $comment_count;
  *
+ * $form_ids = self::get_all_form_ids(...);
+ * $values['form_ids'] = $form_ids;
+ *
  * Good:
  * self::$comment_count = FrmDb::get_count(...);
+ * $values['form_ids'] = self::get_all_form_ids(...);
  */
 class RedundantIntermediateVariableSniff implements Sniff {
 
@@ -160,7 +164,7 @@ class RedundantIntermediateVariableSniff implements Sniff {
 	 * @return array|false Array with 'target' and 'end' keys, or false.
 	 */
 	private function getTargetAssignment( File $phpcsFile, array $tokens, $nextStatement, $variableName ) {
-		// Check for self::$property, static::$property, or $this->property.
+		// Check for self::$property, static::$property, $this->property, or $var['key'].
 		$target     = '';
 		$targetEnd  = $nextStatement;
 		$equalToken = false;
@@ -209,6 +213,33 @@ class RedundantIntermediateVariableSniff implements Sniff {
 			$targetEnd = $propertyToken;
 
 			$equalToken = $phpcsFile->findNext( T_WHITESPACE, $propertyToken + 1, null, true );
+		} elseif ( $tokens[ $nextStatement ]['code'] === T_VARIABLE ) {
+			// Check for $var['key'] array assignment.
+			$target = $tokens[ $nextStatement ]['content'];
+
+			$openBracket = $phpcsFile->findNext( T_WHITESPACE, $nextStatement + 1, null, true );
+
+			if ( false === $openBracket || $tokens[ $openBracket ]['code'] !== T_OPEN_SQUARE_BRACKET ) {
+				return false;
+			}
+
+			if ( ! isset( $tokens[ $openBracket ]['bracket_closer'] ) ) {
+				return false;
+			}
+
+			$closeBracket = $tokens[ $openBracket ]['bracket_closer'];
+
+			// Get the key content.
+			$keyContent = '';
+
+			for ( $i = $openBracket; $i <= $closeBracket; $i++ ) {
+				$keyContent .= $tokens[ $i ]['content'];
+			}
+
+			$target   .= $keyContent;
+			$targetEnd = $closeBracket;
+
+			$equalToken = $phpcsFile->findNext( T_WHITESPACE, $closeBracket + 1, null, true );
 		} else {
 			return false;
 		}

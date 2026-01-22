@@ -89,8 +89,7 @@ class FrmStyle {
 		$css_scope_helper = new FrmCssScopeHelper();
 
 		if ( ! $id ) {
-			$new_style       = (array) $this->get_new();
-			$all_instances[] = $new_style;
+			$all_instances[] = (array) $this->get_new();
 		}
 
 		$action_ids = array();

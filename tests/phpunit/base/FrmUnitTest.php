@@ -240,8 +240,7 @@ class FrmUnitTest extends WP_UnitTestCase {
 						$media_ids = array();
 					}
 
-					$id          = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
-					$media_ids[] = $id;
+					$media_ids[] = $test->run_private_method( array( 'FrmProFileImport', 'attach_existing_image' ), array( $filename ) );
 				}
 			}
 

@@ -107,7 +107,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$field_ids = array();
 
 		foreach ( $sizes as $start_size => $new_size ) {
-			$field_id                 = $this->factory->field->create(
+			$field_ids[ $start_size ] = $this->factory->field->create(
 				array(
 					'type'          => 'text',
 					'form_id'       => $form_id,
@@ -116,7 +116,6 @@ class test_FrmMigrate extends FrmUnitTest {
 					),
 				)
 			);
-			$field_ids[ $start_size ] = $field_id;
 		}
 
 		$frmdb = new FrmMigrate();
