@@ -474,7 +474,7 @@ class FrmFormsController {
 		global $frm_vars;
 		$frm_vars['preview'] = true;
 
-		// Print_emoji_styles is deprecated.
+		// print_emoji_styles is deprecated.
 		remove_action( 'wp_print_styles', 'print_emoji_styles' );
 
 		if ( FrmTestModeController::should_add_test_mode_container() ) {

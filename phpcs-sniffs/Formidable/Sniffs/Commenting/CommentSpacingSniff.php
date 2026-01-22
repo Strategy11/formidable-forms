@@ -73,13 +73,15 @@ class CommentSpacingSniff implements Sniff {
 		$firstChar          = substr( $trimmedText, 0, 1 );
 
 		// Check if first character should be capitalized.
-		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, or is a single word.
-		$looksLikeCode = $this->looksLikeCode( $trimmedText );
-		$isSingleWord  = $this->isSingleWord( $trimmedText );
+		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, single word, or starts with underscore word.
+		$looksLikeCode       = $this->looksLikeCode( $trimmedText );
+		$isSingleWord        = $this->isSingleWord( $trimmedText );
+		$startsWithUnderscoreWord = $this->startsWithUnderscoreWord( $trimmedText );
 		$shouldCapitalize = $hasSpaceAfterSlash
 			&& preg_match( '/^[a-z]/', $firstChar )
 			&& ! $looksLikeCode
 			&& ! $isSingleWord
+			&& ! $startsWithUnderscoreWord
 			&& ! preg_match( '/^(end\b|phpcs:|eslint|TODO|FIXME|translators:)/i', $trimmedText );
 
 		if ( ! $hasSpaceAfterSlash ) {
@@ -92,8 +94,8 @@ class CommentSpacingSniff implements Sniff {
 			if ( true === $fix ) {
 				$newText = $trimmedText;
 
-				// Also capitalize if needed (but not for code-like comments or single words).
-				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! preg_match( '/^(end\b|phpcs:|eslint|translators:)/i', $trimmedText ) ) {
+				// Also capitalize if needed (but not for code-like comments, single words, or underscore words).
+				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithUnderscoreWord && ! preg_match( '/^(end\b|phpcs:|eslint|translators:)/i', $trimmedText ) ) {
 					$newText = ucfirst( $trimmedText );
 				}
 
@@ -176,5 +178,26 @@ class CommentSpacingSniff implements Sniff {
 
 		// Single word: no spaces, just letters/numbers/underscores.
 		return preg_match( '/^\S+$/', $text ) && ! preg_match( '/\s/', $text );
+	}
+
+	/**
+	 * Check if the comment starts with a word containing underscores (function name).
+	 *
+	 * @param string $text The comment text to check.
+	 *
+	 * @return bool True if the first word contains underscores.
+	 */
+	private function startsWithUnderscoreWord( $text ) {
+		// Get the first word.
+		$parts = preg_split( '/\s+/', $text, 2 );
+
+		if ( empty( $parts[0] ) ) {
+			return false;
+		}
+
+		$firstWord = $parts[0];
+
+		// Check if the first word contains an underscore.
+		return strpos( $firstWord, '_' ) !== false;
 	}
 }
