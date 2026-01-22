@@ -1627,7 +1627,7 @@ DEFAULT_HTML;
 	private function value_has_already_been_validated_as_unique( $value ) {
 		global $frm_validated_unique_values;
 
-		if ( empty( $frm_validated_unique_values ) ) {
+		if ( ! $frm_validated_unique_values ) {
 			$frm_validated_unique_values = array();
 			return false;
 		}

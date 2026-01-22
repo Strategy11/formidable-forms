@@ -276,7 +276,7 @@ class FrmAppHelper {
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
 
-		if ( empty( $frm_settings ) ) {
+		if ( ! $frm_settings ) {
 			$frm_settings = new FrmSettings( $args );
 		} elseif ( isset( $args['current_form'] ) ) {
 			// If the global has already been set, allow strings to be filtered.

@@ -104,7 +104,7 @@ if ( empty( $taxonomies ) ) {
 
 global $frm_inc_tax;
 
-if ( empty( $frm_inc_tax ) ) {
+if ( ! $frm_inc_tax ) {
 	$frm_inc_tax = array();
 }
 
