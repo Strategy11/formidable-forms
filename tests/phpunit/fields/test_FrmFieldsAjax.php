@@ -47,7 +47,7 @@ class test_FrmFieldsAjax extends FrmAjaxUnitTest {
 		$this->assertIsNumeric( $this->field_id );
 		$this->assertNotEmpty( $this->field_id );
 
-		// make sure the field exists
+		// Make sure the field exists
 		$field = FrmField::getOne( $this->field_id );
 		$this->assertIsObject( $field );
 	}

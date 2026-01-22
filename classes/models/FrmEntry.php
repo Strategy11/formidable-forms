@@ -106,7 +106,7 @@ class FrmEntry {
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
 
-			// make sure it's a duplicate
+			// Make sure it's a duplicate
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 
@@ -127,7 +127,7 @@ class FrmEntry {
 				return false;
 			}
 
-			// compare serialized values and not arrays
+			// Compare serialized values and not arrays
 			$new_meta = array_map( 'maybe_serialize', $filtered_vals );
 
 			if ( $field_metas === $new_meta ) {
@@ -577,7 +577,7 @@ class FrmEntry {
 				continue;
 			}
 
-			// include sub entries in an array
+			// Include sub entries in an array
 			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
@@ -639,7 +639,7 @@ class FrmEntry {
 				unset( $order_matches );
 			}
 
-			// prepare the query
+			// Prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$entries = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

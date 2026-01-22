@@ -150,7 +150,7 @@ class FrmPersonalData {
 		$entries_by_email = FrmDb::get_col( 'frm_item_metas', array( 'meta_value' => $email ), 'item_id', $query_args );
 
 		if ( ! $user ) {
-			// no matching user, so return the entry ids we have
+			// No matching user, so return the entry ids we have
 			return $entries_by_email;
 		}
 

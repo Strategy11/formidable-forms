@@ -539,7 +539,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
-		// reserve the form key so one has to be generated with this as the base.
+		// Reserve the form key so one has to be generated with this as the base.
 		$this->factory->form->create(
 			array( 'form_key' => $super_long_form_key )
 		);

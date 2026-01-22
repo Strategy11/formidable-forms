@@ -634,7 +634,7 @@ class FrmAppController {
 		}
 
 		if ( ! FrmAppHelper::doing_ajax() ) {
-			// don't continue during ajax calls
+			// Don't continue during ajax calls
 			self::admin_js();
 		}
 
@@ -1167,7 +1167,7 @@ class FrmAppController {
 		}
 
 		if ( $response->is_error() ) {
-			// if the remove post fails, use javascript instead
+			// If the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
 	}

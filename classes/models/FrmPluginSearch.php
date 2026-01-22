@@ -272,10 +272,10 @@ class FrmPluginSearch {
 	private function sanitize_search_term( $term ) {
 		$term = strtolower( urldecode( $term ) );
 
-		// remove non-alpha/space chars.
+		// Remove non-alpha/space chars.
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
-		// remove strings that don't help matches.
+		// Remove strings that don't help matches.
 		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 

@@ -43,7 +43,7 @@ class FrmHoneypot extends FrmValidate {
 	 */
 	public function validate() {
 		if ( ! $this->is_option_on() || ! $this->check_honeypot_filter() ) {
-			// never flag as honeypot spam if disabled.
+			// Never flag as honeypot spam if disabled.
 			return true;
 		}
 		return ! $this->is_honeypot_spam();

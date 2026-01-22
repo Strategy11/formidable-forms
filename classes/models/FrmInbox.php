@@ -112,8 +112,8 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function add_message( $message ) {
 		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
-			// if the API response is invalid, $message may not be an array.
-			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $message may not be an array.
+			// If there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -475,7 +475,7 @@ class FrmInbox extends FrmFormApi {
 		self::$banner_messages = self::get_banner_messages();
 
 		if ( self::$banner_messages ) {
-			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			// Disable screen options tab when displaying banner messages because it gets in the way of the banner.
 			add_filter( 'screen_options_show_screen', '__return_false' );
 		}
 	}

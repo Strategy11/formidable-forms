@@ -616,7 +616,7 @@ class FrmField {
 
 			// If this is a repeating section, create new form
 			if ( self::is_repeating_field( $field ) ) {
-				// create the repeatable form
+				// Create the repeatable form
 				$new_repeat_form_id = apply_filters(
 					'frm_create_repeat_form',
 					0,
@@ -686,12 +686,12 @@ class FrmField {
 			$values = apply_filters( 'frm_clean_' . $values['type'] . '_field_options_before_update', $values, $id );
 
 			if ( $values['type'] === 'hidden' && isset( $values['field_options'] ) && isset( $values['field_options']['clear_on_focus'] ) ) {
-				// don't keep the old placeholder setting for hidden fields
+				// Don't keep the old placeholder setting for hidden fields
 				$values['field_options']['clear_on_focus'] = 0;
 			}
 		}
 
-		// serialize array values
+		// Serialize array values
 		foreach ( array( 'field_options', 'options' ) as $opt ) {
 			if ( isset( $values[ $opt ] ) && is_array( $values[ $opt ] ) ) {
 				if ( 'field_options' === $opt ) {
@@ -1071,7 +1071,7 @@ class FrmField {
 		$cache_key = FrmAppHelper::maybe_json_encode( $where ) . $order_by . 'l' . $limit . 'b' . $blog_id;
 
 		if ( self::$use_cache ) {
-			// make sure old cache doesn't get saved as a transient
+			// Make sure old cache doesn't get saved as a transient
 			$results = wp_cache_get( $cache_key, 'frm_field' );
 
 			if ( false !== $results ) {
@@ -1105,7 +1105,7 @@ class FrmField {
 			);
 			$results = FrmDb::get_var( $table_name . ' fi JOIN ' . $form_table_name . ' fr ON fi.form_id=fr.id', $where, 'fi.*, fr.name as form_name', $args, '', $query_type );
 		} else {
-			// if the query is not an array, then it has already been prepared
+			// If the query is not an array, then it has already been prepared
 			$query .= FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$function_name = $query_type === 'row' ? 'get_row' : 'get_results';
@@ -1233,7 +1233,7 @@ class FrmField {
 			$fields = array_merge( $fields, $next_fields );
 
 			if ( count( $next_fields ) >= self::$transient_size ) {
-				// if this transient is full, check for another
+				// If this transient is full, check for another
 				++$next;
 				self::get_next_transient( $fields, $base_name, $next );
 			}
@@ -1261,9 +1261,9 @@ class FrmField {
 			$set  = set_transient( $name, $field, 60 * 60 * 6 );
 
 			if ( ! $set ) {
-				// the transient didn't save
+				// The transient didn't save
 				if ( $name !== $base_name ) {
-					// if the first saved an others fail, this will show an incomplete form
+					// If the first saved an others fail, this will show an incomplete form
 					self::delete_form_transient( $form_id );
 				}
 

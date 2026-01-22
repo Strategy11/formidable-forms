@@ -497,7 +497,7 @@ class FrmStyle {
 
 		$default_values = $this->get_defaults();
 
-		// fill default values
+		// Fill default values
 		$style->post_content = $this->override_defaults( $style->post_content );
 		$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
@@ -524,12 +524,12 @@ class FrmStyle {
 
 		if ( ! $temp_styles ) {
 			global $wpdb;
-			// make sure there wasn't a conflict with the query
+			// Make sure there wasn't a conflict with the query
 			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
 			if ( ! $temp_styles ) {
-				// create a new style if there are none
+				// Create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
 				$new->post_name  = $new->post_title;
@@ -551,17 +551,17 @@ class FrmStyle {
 
 			if ( $style->menu_order ) {
 				if ( $default_style ) {
-					// only return one default
+					// Only return one default
 					$style->menu_order = 0;
 				} else {
-					// check for a default style
+					// Check for a default style
 					$default_style = $style->ID;
 				}
 			}
 
 			$style->post_content = FrmAppHelper::maybe_json_decode( $style->post_content );
 
-			// fill default values
+			// Fill default values
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 

@@ -17,7 +17,7 @@ class FrmEntryMeta {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
-			// don't save blank fields
+			// Don't save blank fields
 			return 0;
 		}
 
@@ -153,7 +153,7 @@ class FrmEntryMeta {
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
 			if ( ! $previous_field_ids || ! in_array( $field_id, $previous_field_ids, true ) ) {
-				// if value does not exist, then create it
+				// If value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
 				continue;
 			}
@@ -162,7 +162,7 @@ class FrmEntryMeta {
 				// Remove blank fields.
 				unset( $values_indexed_by_field_id[ $field_id ] );
 			} else {
-				// if value exists, then update it
+				// If value exists, then update it
 				self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 			}
 		}//end foreach
@@ -177,7 +177,7 @@ class FrmEntryMeta {
 			return;
 		}
 
-		// prepare the query
+		// Prepare the query
 		$where = array(
 			'item_id'  => $entry_id,
 			'field_id' => $field_ids_to_remove,
@@ -575,7 +575,7 @@ class FrmEntryMeta {
 		}
 
 		if ( str_contains( $where, ' GROUP BY ' ) ) {
-			// don't inject WHERE filtering after GROUP BY
+			// Don't inject WHERE filtering after GROUP BY
 			$parts  = explode( ' GROUP BY ', $where );
 			$where  = $parts[0];
 			$where .= $draft_where . $user_where;

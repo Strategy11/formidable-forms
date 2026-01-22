@@ -62,10 +62,10 @@ if ( FrmOnSubmitAction::$slug === $form_action->post_excerpt ) {
 	<div class="widget-inside">
 		<?php
 		if ( defined( 'DOING_AJAX' ) && DOING_AJAX ) {
-			// only load settings if they are just added or are open
+			// Only load settings if they are just added or are open
 			include __DIR__ . '/_action_inside.php';
 		} else {
-			// include hidden settings so action won't get lost on update
+			// Include hidden settings so action won't get lost on update
 			?>
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'post_excerpt', '' ) ); ?>" class="frm_action_name" value="<?php echo esc_attr( $form_action->post_excerpt ); ?>" />
 		<input type="hidden" name="<?php echo esc_attr( $action_control->get_field_name( 'ID', '' ) ); ?>" value="<?php echo esc_attr( $form_action->ID ); ?>" />

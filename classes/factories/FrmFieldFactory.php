@@ -122,7 +122,7 @@ class FrmFieldFactory {
 	public static function field_has_html( $type ) {
 		$has_html = self::field_has_property( $type, 'has_html' );
 
-		// this hook is here for reverse compatibility since 3.0
+		// This hook is here for reverse compatibility since 3.0
 		return apply_filters( 'frm_show_custom_html', $has_html, $type );
 	}
 
