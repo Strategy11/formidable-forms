@@ -734,8 +734,8 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Reformat empty arrays as empty objects
+			// If the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
 

@@ -26,7 +26,7 @@ class Form_Factory extends WP_UnitTest_Factory_For_Thing {
 		$defaults = FrmFormsHelper::setup_new_vars( false );
 
 		if ( isset( $defaults['submit_conditions'] ) ) {
-			// the array default is causing errors with unit test code
+			// The array default is causing errors with unit test code
 			unset( $defaults['submit_conditions'] );
 		}
 		$this->default_generation_definitions = $defaults;

@@ -385,7 +385,7 @@ class FrmXMLController {
 		$file_type = strtolower( pathinfo( $file_type, PATHINFO_EXTENSION ) );
 
 		if ( 'xml' !== $file_type && isset( $export_format[ $file_type ] ) ) {
-			// allow other file types to be imported
+			// Allow other file types to be imported
 			do_action( 'frm_before_import_' . $file_type );
 
 			return;
@@ -604,12 +604,12 @@ class FrmXMLController {
 		$type = (array) $type;
 
 		if ( ! in_array( 'forms', $type, true ) && ( in_array( 'items', $type, true ) || in_array( 'posts', $type, true ) ) ) {
-			// make sure the form is included if there are entries
+			// Make sure the form is included if there are entries
 			$type[] = 'forms';
 		}
 
 		if ( in_array( 'forms', $type, true ) ) {
-			// include actions with forms
+			// Include actions with forms
 			$type[] = 'actions';
 		}
 	}
@@ -629,7 +629,7 @@ class FrmXMLController {
 		$has_one_form = ! empty( $records['forms'] ) && count( $args['ids'] ) === 1;
 
 		if ( $has_one_form ) {
-			// one form is being exported
+			// One form is being exported
 			$selected_form_id = reset( $args['ids'] );
 			$filename         = 'form-' . $selected_form_id . '.xml';
 
@@ -782,12 +782,12 @@ class FrmXMLController {
 	 */
 	public static function allow_mime( $mimes ) {
 		if ( ! isset( $mimes['csv'] ) ) {
-			// allow csv files
+			// Allow csv files
 			$mimes['csv'] = 'text/csv';
 		}
 
 		if ( ! isset( $mimes['xml'] ) ) {
-			// allow xml
+			// Allow xml
 			$mimes['xml'] = 'text/xml';
 		}
 

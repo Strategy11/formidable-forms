@@ -146,12 +146,12 @@ class test_FrmAppController extends FrmUnitTest {
 			),
 			array(
 				'version'  => FrmAppHelper::plugin_version(),
-				'db'       => FrmAppHelper::$db_version - 1, // previous version
+				'db'       => FrmAppHelper::$db_version - 1, // Previous version
 				'expected' => true,
 			),
 			array(
 				'version'  => FrmAppHelper::plugin_version(),
-				'db'       => FrmAppHelper::$db_version + 1, // next version
+				'db'       => FrmAppHelper::$db_version + 1, // Next version
 				'expected' => false,
 			),
 		);

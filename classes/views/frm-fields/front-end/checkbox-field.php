@@ -41,7 +41,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		if ( ! FrmFieldsHelper::is_other_opt( $opt_key ) ) {
 			// Let the checked state of 'Other' fields be determined solely by FrmFieldsHelper::prepare_other_input as below.
 			// Without this check, one 'Other' field being checked leads to making all 'Other' fields checked on submit error
-			// since they all have the same value attr of 'Other'.
+			// Since they all have the same value attr of 'Other'.
 			$checked = FrmAppHelper::check_selected( $field['value'], $field_val ) ? ' checked="checked"' : '';
 		}
 
@@ -71,13 +71,13 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		do_action( 'frm_field_input_html', $field );
 
 		if ( 0 === $option_index && FrmField::is_required( $field ) ) {
-			echo ' aria-required="true" ';
+	echo ' aria-required="true" ';
 		}
 
 		?> /><?php
 
 		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-			echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	echo ' ' . FrmAppHelper::kses( $label, 'all' ) . '</label>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
 		$other_args = array(

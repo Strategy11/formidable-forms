@@ -53,28 +53,28 @@ class test_FrmMigrate extends FrmUnitTest {
 				'type'          => 'text',
 				'form_id'       => $form_id,
 				'field_options' => array(
-					'size' => '10', // the old size in characters
+					'size' => '10', // The old size in characters
 				),
 			)
 		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
 		$frmdb    = new FrmMigrate();
-		update_option( 'frm_db_version', 16 ); // trigger migration 17
+		update_option( 'frm_db_version', 16 ); // Trigger migration 17
 		$frmdb->upgrade();
 
 		$field         = $this->factory->field->get_object_by_id( $field_id );
 		$expected_size = '90px';
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
 
-		// set it to a numeric value
+		// Set it to a numeric value
 		$expected_size                = '10';
 		$field->field_options['size'] = $expected_size;
 		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
 		$field = $this->factory->field->get_object_by_id( $field_id );
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
 
-		// make sure 17 does not fire and change the size again
+		// Make sure 17 does not fire and change the size again
 		update_option( 'frm_db_version', 20 );
 		$frmdb->upgrade();
 
@@ -356,7 +356,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		FrmForm::create( $form_values );
 
-		// migrate data
+		// Migrate data
 		FrmAppController::install();
 
 		$form         = FrmForm::getOne( 'contact-db12-copy' );

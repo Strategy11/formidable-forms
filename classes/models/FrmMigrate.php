@@ -54,7 +54,7 @@ class FrmMigrate {
 		if ( $needs_upgrade ) {
 			$this->maybe_delete_htaccess_file();
 
-			// update rewrite rules for views and other custom post types
+			// Update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -85,7 +85,7 @@ class FrmMigrate {
 
 		FrmAppHelper::save_combined_js();
 
-		// update the styling settings
+		// Update the styling settings
 		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
@@ -376,7 +376,7 @@ class FrmMigrate {
 		}
 
 		if ( ! is_numeric( $old_db_version ) ) {
-			// bail if we don't know the previous version
+			// Bail if we don't know the previous version
 			return;
 		}
 
@@ -426,9 +426,9 @@ class FrmMigrate {
 		}
 		unset( $roles, $frm_roles );
 
-		// delete actions, views, and styles
+		// Delete actions, views, and styles
 
-		// prevent the post deletion from triggering entries to be deleted
+		// Prevent the post deletion from triggering entries to be deleted
 		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
@@ -440,7 +440,7 @@ class FrmMigrate {
 		}
 		unset( $post_ids );
 
-		// delete transients
+		// Delete transients
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
@@ -587,7 +587,7 @@ class FrmMigrate {
 			unset( $f );
 		}
 
-		// reverse the extra size changes in widgets
+		// Reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
 
 		if ( ! $widgets ) {
@@ -687,7 +687,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_25() {
-		// get the style that was created with the style migration
+		// Get the style that was created with the style migration
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 
@@ -819,7 +819,7 @@ class FrmMigrate {
 		 */
 		foreach ( $forms as $form ) {
 			if ( $form->is_template && $form->default_template ) {
-				// don't migrate the default templates since the email will be added anyway
+				// Don't migrate the default templates since the email will be added anyway
 				continue;
 			}
 

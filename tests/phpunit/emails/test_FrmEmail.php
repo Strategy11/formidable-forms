@@ -537,8 +537,8 @@ class test_FrmEmail extends FrmUnitTest {
 		);
 		$this->check_private_properties( $reply_to, 'reply_to' );
 
-		// create an entry with no email and then try to use its shortcode to get a reply_to value.
-		// the default should use the from email, not the admin "default email".
+		// Create an entry with no email and then try to use its shortcode to get a reply_to value.
+		// The default should use the from email, not the admin "default email".
 		$email_field_key                             = 'free_field_types' === $this->contact_form->form_key ? 'free-email-field' : 'contact-email';
 		$entry_data                                  = $this->factory->field->generate_entry_array( $this->contact_form );
 		$email_field                                 = FrmField::getOne( $email_field_key );

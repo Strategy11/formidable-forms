@@ -181,8 +181,8 @@ class FrmTransLiteListsController {
 		$total_pages = $wp_list_table->get_pagination_arg( 'total_pages' );
 
 		if ( $pagenum > $total_pages && $total_pages > 0 ) {
-			// if the current page is higher than the total pages,
-			// reset it and prepare again to get the right entries.
+			// If the current page is higher than the total pages,
+			// Reset it and prepare again to get the right entries.
 			$_GET['paged']     = $total_pages;
 			$_REQUEST['paged'] = $total_pages;
 			$pagenum           = $wp_list_table->get_pagenum();

@@ -232,7 +232,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
 
 		// Test the output.
-		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$response = FrmFormsController::show_form( $form->id ); // This is where the message is returned
 		$contains = array(
 			'frmFrontForm.scrollMsg(' . $form->id . ')',
 			'Done!',
@@ -341,7 +341,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
-		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$response = FrmFormsController::show_form( $form->id ); // This is where the message is returned
 		$this->assertStringContainsString( '<div class="frm_message" role="status">Done!</div>', $response );
 		$this->assertStringContainsString( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 

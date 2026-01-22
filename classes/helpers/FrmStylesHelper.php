@@ -1116,8 +1116,8 @@ class FrmStylesHelper {
 		}
 
 		// Handle the case where the submit_bg_img is a full URL string. If the
-		// settings were saved with the older styler version prior to 6.14, the
-		// submit_bg_img will be a full URL string.
+		// Settings were saved with the older styler version prior to 6.14, the
+		// Submit_bg_img will be a full URL string.
 		if ( ! is_numeric( $background_image ) ) {
 			return $background_image;
 		}

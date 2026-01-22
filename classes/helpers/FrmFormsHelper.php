@@ -879,7 +879,7 @@ BEFORE_HTML;
 		FrmField::create( $end_section_values );
 
 		if ( $move === 'move' ) {
-			// bump the order of current field unless we're at the end of the form
+			// Bump the order of current field unless we're at the end of the form
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
 
@@ -1031,7 +1031,7 @@ BEFORE_HTML;
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
 		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
-			// not missing class, avoid adding it twice.
+			// Not missing class, avoid adding it twice.
 			return false;
 		}
 		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
@@ -1107,7 +1107,7 @@ BEFORE_HTML;
 		}
 
 		if ( is_object( $form ) && $form->parent_form_id ) {
-			// get the parent form if this is a child
+			// Get the parent form if this is a child
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
@@ -1162,7 +1162,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_error( $args ) {
-		// remove any blank messages
+		// Remove any blank messages
 		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];

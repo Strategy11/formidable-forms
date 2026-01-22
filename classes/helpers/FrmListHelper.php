@@ -819,7 +819,7 @@ class FrmListHelper {
 		$column  = '';
 
 		// We need a primary defined so responsive views show something,
-		// so let's fall back to the first non-checkbox column.
+		// So let's fall back to the first non-checkbox column.
 		foreach ( $columns as $col => $column_name ) {
 			if ( 'cb' === $col ) {
 				continue;
@@ -844,7 +844,7 @@ class FrmListHelper {
 		$default = $this->get_default_primary_column_name();
 
 		// If the primary column doesn't exist fall back to the
-		// first non-checkbox column.
+		// First non-checkbox column.
 		if ( ! isset( $columns[ $default ] ) ) {
 			$default = self::get_default_primary_column_name();
 		}
@@ -1139,7 +1139,7 @@ class FrmListHelper {
 				return;
 			}
 		} elseif ( ! $this->has_min_items() ) {
-			// don't show the bulk actions when there aren't many rows.
+			// Don't show the bulk actions when there aren't many rows.
 			return;
 		}
 		?>

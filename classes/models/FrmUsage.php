@@ -59,7 +59,7 @@ class FrmUsage {
 
 		if ( $regenerate || ! $uuid ) {
 			// Definitely not cryptographically secure but
-			// close enough to provide an unique id
+			// Close enough to provide an unique id
 			$uuid = md5( uniqid() . site_url() );
 			update_option( $uuid_key, $uuid, 'no' );
 		}

@@ -498,7 +498,7 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( $pagenow ) {
-			// allow this to be true during ajax load i.e. ajax form builder loading
+			// Allow this to be true during ajax load i.e. ajax form builder loading
 			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 
 			if ( $is_page ) {
@@ -3585,13 +3585,13 @@ class FrmAppHelper {
 			unset( $key, $val );
 		}
 
-		// json_encode the array.
+		// Json_encode the array.
 		$post_content = json_encode( $post_content );
 
 		// Add extra slashes for \r\n since WP strips them.
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
-		// allow for &quot
+		// Allow for &quot
 		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
@@ -3939,7 +3939,7 @@ class FrmAppHelper {
 				'noTitleText'                        => FrmFormsHelper::get_no_title_text(),
 
 				// In older versions this event listener causes the section to immediately close again
-				// when the h3 element is clicked. It's only required in WP 6.7+.
+				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
 			/**
@@ -4187,10 +4187,10 @@ class FrmAppHelper {
 		);
 
 		if ( $type === 'captcha' ) {
-			// remove the languages unavailable for the captcha
+			// Remove the languages unavailable for the captcha
 			$unset = array( 'sq', 'bs', 'eo', 'fo', 'fr-CH', 'sr-SR', 'ar-DZ', 'be', 'cy-GB', 'kk', 'km', 'ky', 'lb', 'mk', 'nb', 'nn', 'rm', 'tj' );
 		} else {
-			// remove the languages unavailable for the datepicker
+			// Remove the languages unavailable for the datepicker
 			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'mr', 'lo', 'kn', 'si', 'gu', 'bn', 'zu', 'ur', 'te', 'sw', 'am' );
 		}
 
@@ -4996,7 +4996,7 @@ class FrmAppHelper {
 	 * @return bool
 	 */
 	public static function is_valid_utf8( $string ) {
-		// wp_is_valid_utf8 is added in WP 6.9.
+		// Wp_is_valid_utf8 is added in WP 6.9.
 		if ( function_exists( 'wp_is_valid_utf8' ) ) {
 			return wp_is_valid_utf8( $string );
 		}

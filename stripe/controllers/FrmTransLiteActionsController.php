@@ -106,7 +106,7 @@ class FrmTransLiteActionsController {
 		$response   = $class_name::trigger_gateway( $action, $entry, $form );
 
 		if ( ! $response['success'] && $response['show_errors'] ) {
-			// the payment failed
+			// The payment failed
 			self::show_failed_message( compact( 'action', 'entry', 'form', 'response' ) );
 		}
 	}

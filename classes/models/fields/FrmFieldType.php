@@ -1264,7 +1264,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
-		// override from other fields
+		// Override from other fields
 	}
 
 	/**
