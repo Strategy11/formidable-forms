@@ -54,6 +54,11 @@ class AddMissingDocblockSniff implements Sniff {
 			return;
 		}
 
+		// Skip if function is inside a class that extends another class.
+		if ( $this->isInChildClass( $phpcsFile, $stackPtr ) ) {
+			return;
+		}
+
 		// Check if function already has a docblock.
 		$existingDocblock = $this->findDocblock( $phpcsFile, $stackPtr );
 
@@ -454,6 +459,38 @@ class AddMissingDocblockSniff implements Sniff {
 		}
 
 		return null;
+	}
+
+	/**
+	 * Check if a function is inside a class that extends another class.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The function token position.
+	 *
+	 * @return bool
+	 */
+	private function isInChildClass( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the class this function belongs to.
+		if ( ! isset( $tokens[ $stackPtr ]['conditions'] ) ) {
+			return false;
+		}
+
+		foreach ( $tokens[ $stackPtr ]['conditions'] as $scopePtr => $scopeType ) {
+			if ( $scopeType !== T_CLASS ) {
+				continue;
+			}
+
+			// Found the class - check if it extends another class.
+			$extendsToken = $phpcsFile->findNext( T_EXTENDS, $scopePtr, $tokens[ $scopePtr ]['scope_opener'] );
+
+			if ( false !== $extendsToken ) {
+				return true;
+			}
+		}
+
+		return false;
 	}
 
 	/**

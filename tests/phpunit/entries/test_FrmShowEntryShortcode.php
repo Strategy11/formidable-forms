@@ -1135,18 +1135,30 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $content;
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function table_row_start_tags( $type, $field ) {
 		return $type === 'html' ? '<tr style="[frm-alt-color]"><th scope="row"' . $this->td_style . '>' : '';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function cell_separator( $type ) {
 		return $type === 'html' ? '</th><td' . $this->td_style . '>' : ': ';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function table_row_end_tags( $type ) {
 		return $type === 'html' ? '</td></tr>' : '';
 	}
 
+	/**
+	 * @return string
+	 */
 	protected function after_table_row_tags( $type ) {
 		return $type === 'html' ? "\r\n" : '';
 	}
