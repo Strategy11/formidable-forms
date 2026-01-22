@@ -340,13 +340,85 @@ class AddMissingDocblockSniff implements Sniff {
 	private function getReturnValueType( File $phpcsFile, $returnPtr, $scopeCloser ) {
 		$tokens = $phpcsFile->getTokens();
 
-		$next = $phpcsFile->findNext( T_WHITESPACE, $returnPtr + 1, $scopeCloser, true );
+		// Find the semicolon that ends this return statement.
+		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $returnPtr + 1, $scopeCloser );
+
+		if ( false === $semicolon ) {
+			return null;
+		}
+
+		// Check if this return contains a ternary.
+		$ternaryThen = $phpcsFile->findNext( T_INLINE_THEN, $returnPtr + 1, $semicolon );
+
+		if ( false !== $ternaryThen ) {
+			return $this->getTernaryReturnType( $phpcsFile, $ternaryThen, $semicolon );
+		}
+
+		$next = $phpcsFile->findNext( T_WHITESPACE, $returnPtr + 1, $semicolon, true );
 
 		if ( false === $next ) {
 			return null;
 		}
 
-		$code = $tokens[ $next ]['code'];
+		return $this->getSimpleValueType( $phpcsFile, $next, $semicolon );
+	}
+
+	/**
+	 * Get the type from a ternary expression if both branches return the same type.
+	 *
+	 * @param File $phpcsFile   The file being scanned.
+	 * @param int  $ternaryThen The position of the ? token.
+	 * @param int  $semicolon   The position of the semicolon.
+	 *
+	 * @return string|null The type if both branches match, null otherwise.
+	 */
+	private function getTernaryReturnType( File $phpcsFile, $ternaryThen, $semicolon ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the : that separates the two branches.
+		$ternaryElse = $phpcsFile->findNext( T_INLINE_ELSE, $ternaryThen + 1, $semicolon );
+
+		if ( false === $ternaryElse ) {
+			return null;
+		}
+
+		// Get the "then" value (between ? and :).
+		$thenValue = $phpcsFile->findNext( T_WHITESPACE, $ternaryThen + 1, $ternaryElse, true );
+
+		if ( false === $thenValue ) {
+			return null;
+		}
+
+		// Get the "else" value (between : and ;).
+		$elseValue = $phpcsFile->findNext( T_WHITESPACE, $ternaryElse + 1, $semicolon, true );
+
+		if ( false === $elseValue ) {
+			return null;
+		}
+
+		$thenType = $this->getSimpleValueType( $phpcsFile, $thenValue, $ternaryElse );
+		$elseType = $this->getSimpleValueType( $phpcsFile, $elseValue, $semicolon );
+
+		// Only return type if both branches have the same certain type.
+		if ( null !== $thenType && $thenType === $elseType ) {
+			return $thenType;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Get the type of a simple value token.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $valuePtr  The value token position.
+	 * @param int  $endPtr    The end boundary.
+	 *
+	 * @return string|null The type if certain, null otherwise.
+	 */
+	private function getSimpleValueType( File $phpcsFile, $valuePtr, $endPtr ) {
+		$tokens = $phpcsFile->getTokens();
+		$code   = $tokens[ $valuePtr ]['code'];
 
 		// Hardcoded string.
 		if ( $code === T_CONSTANT_ENCAPSED_STRING ) {
@@ -358,9 +430,17 @@ class AddMissingDocblockSniff implements Sniff {
 			return 'array';
 		}
 
-		// Hardcoded boolean.
+		// Hardcoded boolean - only if it's the only thing being returned.
 		if ( $code === T_TRUE || $code === T_FALSE ) {
-			return 'bool';
+			// Make sure the next non-whitespace is the end boundary.
+			$afterBool = $phpcsFile->findNext( T_WHITESPACE, $valuePtr + 1, $endPtr, true );
+
+			if ( false === $afterBool ) {
+				return 'bool';
+			}
+
+			// There's more after the bool (like a comparison), skip.
+			return null;
 		}
 
 		// Hardcoded integer.
