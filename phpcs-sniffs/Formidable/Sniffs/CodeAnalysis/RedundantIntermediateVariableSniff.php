@@ -229,6 +229,13 @@ class RedundantIntermediateVariableSniff implements Sniff {
 
 			$closeBracket = $tokens[ $openBracket ]['bracket_closer'];
 
+			// Check if the variable is used in the array key - if so, skip.
+			for ( $i = $openBracket + 1; $i < $closeBracket; $i++ ) {
+				if ( $tokens[ $i ]['code'] === T_VARIABLE && $tokens[ $i ]['content'] === $variableName ) {
+					return false;
+				}
+			}
+
 			// Get the key content.
 			$keyContent = '';
 
