@@ -45,6 +45,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferNegationOverEmptyForFunctionCall" />
 	<rule ref="Formidable.CodeAnalysis.PreferEmptyArrayComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
+	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
 	<rule ref="Formidable.CodeAnalysis.MoveVariableBelowEarlyReturn" />

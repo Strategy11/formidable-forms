@@ -815,7 +815,7 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
+			$field_id = is_null( $custom_index ) ? $index : $custom_index;
 
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
@@ -1021,7 +1021,7 @@ class FrmEntryValidate {
 
 		// Check if submitted value is same as one of field option.
 		foreach ( $field_data->options as $option ) {
-			$option_value = ! is_array( $option ) ? $option : ( $option['value'] ?? '' );
+			$option_value = is_array( $option ) ? ( $option['value'] ?? '' ) : $option;
 
 			if ( $values['item_meta']['other'][ $field_data->id ] === $option_value ) {
 				return true;
