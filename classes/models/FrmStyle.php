@@ -450,7 +450,7 @@ class FrmStyle {
 			return;
 		}
 
-		$log_file  = WP_CONTENT_DIR . '/frm-css-debug02.log';
+		$log_file  = WP_CONTENT_DIR . '/frm-css-debug03.log';
 		$timestamp = gmdate( 'Y-m-d H:i:s' );
 		$log_entry = "[{$timestamp}] [FrmStyle] {$message}\n";
 		file_put_contents( $log_file, $log_entry, FILE_APPEND );
