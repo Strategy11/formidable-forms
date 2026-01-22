@@ -23,7 +23,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 			// Pro isn't up to date.
 			// Fallback to Stripe Lite if we do not know the form.
 			// This way we do not display the default credit card field
-			// When Pro is not up to version 6.21.
+			// when Pro is not up to version 6.21.
 			return self::class . '::show_card';
 		}
 
@@ -313,7 +313,7 @@ class FrmStrpLiteActionsController extends FrmTransLiteActionsController {
 		$settings['currency'] = strtolower( $settings['currency'] );
 
 		// Gateway is a radio button but it should always be an array in the database for
-		// Compatibility with the payments submodule where it is a checkbox.
+		// compatibility with the payments submodule where it is a checkbox.
 		$settings['gateway'] = ! empty( $settings['gateway'] ) ? (array) $settings['gateway'] : array( 'stripe' );
 
 		$is_stripe = in_array( 'stripe', $settings['gateway'], true );
