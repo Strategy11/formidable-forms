@@ -1307,7 +1307,7 @@ class FrmXMLHelper {
 		} else {
 			$m['value'] = FrmAppHelper::maybe_json_decode( $m['value'] );
 
-			if ( ! empty( $frm_duplicate_ids ) ) {
+			if ( $frm_duplicate_ids ) {
 				if ( 'frm_dyncontent' === $m['key'] ) {
 					$m['value'] = self::maybe_prepare_json_view_content( $m['value'] );
 					$m['value'] = FrmFieldsHelper::switch_field_ids( $m['value'] );
