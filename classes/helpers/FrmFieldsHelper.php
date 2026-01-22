@@ -854,7 +854,7 @@ class FrmFieldsHelper {
 			esc_html__( 'Options are dynamically created from your %1$s%2$s: %3$s%4$s', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">',
 			esc_html__( 'taxonomy', 'formidable' ),
-			empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name,
+			! empty( $tax->labels->name ) ? $tax->labels->name : esc_html__( 'Categories', 'formidable' ),
 			'</a>'
 		);
 	}

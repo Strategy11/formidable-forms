@@ -203,7 +203,7 @@ class FrmAppHelper {
 
 		$query_args = wp_parse_args( $parsed['query'] );
 
-		return empty( $query_args['utm_medium'] ) ? '' : $query_args['utm_medium'];
+		return ! empty( $query_args['utm_medium'] ) ? $query_args['utm_medium'] : '';
 	}
 
 	/**

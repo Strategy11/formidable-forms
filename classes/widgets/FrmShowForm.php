@@ -17,7 +17,7 @@ class FrmShowForm extends WP_Widget {
 	 * @return void
 	 */
 	public function widget( $args, $instance ) {
-		$title = apply_filters( 'widget_title', empty( $instance['title'] ) ? '' : $instance['title'], $instance, $this->id_base );
+		$title = apply_filters( 'widget_title', ! empty( $instance['title'] ) ? $instance['title'] : '', $instance, $this->id_base );
 
 		FrmAppHelper::kses_echo( $args['before_widget'], 'all' );
 
