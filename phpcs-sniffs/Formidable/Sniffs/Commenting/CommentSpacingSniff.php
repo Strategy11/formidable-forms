@@ -73,16 +73,18 @@ class CommentSpacingSniff implements Sniff {
 		$firstChar          = substr( $trimmedText, 0, 1 );
 
 		// Check if first character should be capitalized.
-		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, single word, or starts with underscore word.
-		$looksLikeCode       = $this->looksLikeCode( $trimmedText );
-		$isSingleWord        = $this->isSingleWord( $trimmedText );
+		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, single word, underscore word, abbreviations, or is a continuation comment.
+		$looksLikeCode            = $this->looksLikeCode( $trimmedText );
+		$isSingleWord             = $this->isSingleWord( $trimmedText );
 		$startsWithUnderscoreWord = $this->startsWithUnderscoreWord( $trimmedText );
+		$isContinuationComment    = $this->isContinuationComment( $phpcsFile, $stackPtr );
 		$shouldCapitalize = $hasSpaceAfterSlash
 			&& preg_match( '/^[a-z]/', $firstChar )
 			&& ! $looksLikeCode
 			&& ! $isSingleWord
 			&& ! $startsWithUnderscoreWord
-			&& ! preg_match( '/^(end\b|phpcs:|eslint|TODO|FIXME|translators:)/i', $trimmedText );
+			&& ! $isContinuationComment
+			&& ! preg_match( '/^(end\b|phpcs:|eslint|TODO|FIXME|translators:|e\.g\.|i\.e\.|etc\.)/i', $trimmedText );
 
 		if ( ! $hasSpaceAfterSlash ) {
 			$fix = $phpcsFile->addFixableError(
@@ -94,8 +96,8 @@ class CommentSpacingSniff implements Sniff {
 			if ( true === $fix ) {
 				$newText = $trimmedText;
 
-				// Also capitalize if needed (but not for code-like comments, single words, or underscore words).
-				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithUnderscoreWord && ! preg_match( '/^(end\b|phpcs:|eslint|translators:)/i', $trimmedText ) ) {
+				// Also capitalize if needed (but not for code-like comments, single words, underscore words, abbreviations, or continuation comments).
+				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithUnderscoreWord && ! $isContinuationComment && ! preg_match( '/^(end\b|phpcs:|eslint|translators:|e\.g\.|i\.e\.|etc\.)/i', $trimmedText ) ) {
 					$newText = ucfirst( $trimmedText );
 				}
 
@@ -199,5 +201,46 @@ class CommentSpacingSniff implements Sniff {
 
 		// Check if the first word contains an underscore.
 		return strpos( $firstWord, '_' ) !== false;
+	}
+
+	/**
+	 * Check if this comment is a continuation of a previous comment (multiline comment using //).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the current token.
+	 *
+	 * @return bool True if this comment follows another comment on the previous line.
+	 */
+	private function isContinuationComment( File $phpcsFile, $stackPtr ) {
+		$tokens      = $phpcsFile->getTokens();
+		$currentLine = $tokens[ $stackPtr ]['line'];
+
+		// Look for a comment on the previous line.
+		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
+			$tokenLine = $tokens[ $i ]['line'];
+
+			// Stop if we've gone back more than one line.
+			if ( $tokenLine < $currentLine - 1 ) {
+				return false;
+			}
+
+			// Skip whitespace on the same or previous line.
+			if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
+				continue;
+			}
+
+			// If we find a comment on the previous line, this is a continuation.
+			if ( $tokenLine === $currentLine - 1 && $tokens[ $i ]['code'] === T_COMMENT ) {
+				// Make sure it's also a // style comment.
+				if ( strpos( $tokens[ $i ]['content'], '//' ) === 0 ) {
+					return true;
+				}
+			}
+
+			// Found something else, not a continuation.
+			return false;
+		}
+
+		return false;
 	}
 }
