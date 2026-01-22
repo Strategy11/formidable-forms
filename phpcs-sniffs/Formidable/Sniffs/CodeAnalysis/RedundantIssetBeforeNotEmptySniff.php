@@ -107,6 +107,13 @@ class RedundantIssetBeforeNotEmptySniff implements Sniff {
 			return;
 		}
 
+		// For array access, the isset() may be necessary to prevent undefined index warnings.
+		// While empty() technically checks if a variable is set, it can still trigger warnings
+		// in some PHP configurations. Skip array access patterns to be safe.
+		if ( strpos( $issetVarContent, '[' ) !== false ) {
+			return;
+		}
+
 		$fix = $phpcsFile->addFixableError(
 			'Redundant isset() before ! empty(). The empty() function already checks if a variable is set. Use "! empty( %s )" instead.',
 			$stackPtr,
