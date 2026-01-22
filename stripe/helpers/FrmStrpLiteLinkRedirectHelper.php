@@ -197,7 +197,7 @@ class FrmStrpLiteLinkRedirectHelper {
 			$url = add_query_arg( 'setup_intent_client_secret', $this->client_secret, $url );
 		}
 
-		// IDeal redirects URLs are incorrectly encoded.
+		// iDeal redirects URLs are incorrectly encoded.
 		// This str_replace reverts that encoding issue.
 		$url = str_replace( '%3Ffrmstrp%3D', '&frmstrp=', $url );
 
