@@ -28,7 +28,8 @@ use PHP_CodeSniffer\Files\File;
  *
  * Excludes:
  * - ! empty() checks (common pattern)
- * - Comparisons against falsy values (false, null, '', 0)
+ * - ! isset() checks
+ * - ! is_null() checks (falsy check pattern)
  */
 class PreferPositiveTernaryConditionSniff implements Sniff {
 
@@ -66,6 +67,11 @@ class PreferPositiveTernaryConditionSniff implements Sniff {
 
 		// Skip isset() - also common.
 		if ( $tokens[ $nextToken ]['code'] === T_ISSET ) {
+			return;
+		}
+
+		// Skip is_null() - it's a falsy check pattern.
+		if ( $tokens[ $nextToken ]['code'] === T_STRING && strtolower( $tokens[ $nextToken ]['content'] ) === 'is_null' ) {
 			return;
 		}
 

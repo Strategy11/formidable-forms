@@ -815,7 +815,7 @@ class FrmEntryValidate {
 				continue;
 			}
 
-			$field_id = is_null( $custom_index ) ? $index : $custom_index;
+			$field_id = ! is_null( $custom_index ) ? $custom_index : $index;
 
 			foreach ( $datas['missing_keys'] as $key_index => $key ) {
 				$found = self::is_akismet_guest_info_value( $key, $value, $field_id, $datas['name_field_ids'], $values );
