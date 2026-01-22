@@ -11,6 +11,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
+$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
+
 if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
@@ -50,7 +52,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$checked                  = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $checked );
 
-		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+		if ( $include_label ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
@@ -77,13 +79,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		}
 		?>/><?php
 
-		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
-	echo ' ' . FrmAppHelper::kses( $label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( $include_label ) {
+			echo ' ' . FrmAppHelper::kses( $label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			FrmFieldsHelper::after_choice_input( $field, $opt_key );
+			echo '</label>';
 		}
-
-		FrmFieldsHelper::after_choice_input( $field, $opt_key );
-
-		echo '</label>';
 
 		$other_args = array(
 			'other_opt' => $other_opt,

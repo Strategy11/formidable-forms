@@ -65,7 +65,8 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
-		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+		$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
+		if ( $include_label ) {
 			$label_attributes = array(
 				'for' => $html_id . '-' . $opt_key,
 			);
@@ -94,13 +95,11 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		?> /><?php
 
-		if ( ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'] ) {
+		if ( $include_label ) {
 			echo ' ' . FrmAppHelper::kses( $label, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			FrmFieldsHelper::after_choice_input( $field, $opt_key );
+			echo '</label>';
 		}
-
-		FrmFieldsHelper::after_choice_input( $field, $opt_key );
-
-		echo '</label>';
 
 		$other_args = array(
 			'other_opt' => $other_opt,
