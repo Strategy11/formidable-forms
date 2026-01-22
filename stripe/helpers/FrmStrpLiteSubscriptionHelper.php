@@ -127,7 +127,7 @@ class FrmStrpLiteSubscriptionHelper {
 			'interval'       => $settings['interval'],
 			'interval_count' => $settings['interval_count'],
 			'currency'       => $settings['currency'],
-			'name'           => empty( $settings['description'] ) ? $default_description : $settings['description'],
+			'name'           => ! empty( $settings['description'] ) ? $settings['description'] : $default_description,
 		);
 
 		if ( ! empty( $settings['trial_interval_count'] ) ) {

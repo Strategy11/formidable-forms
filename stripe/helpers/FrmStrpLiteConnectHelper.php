@@ -706,7 +706,7 @@ class FrmStrpLiteConnectHelper {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		return empty( $data->customer_id ) ? false : $data->customer_id;
+		return ! empty( $data->customer_id ) ? $data->customer_id : false;
 	}
 
 	/**

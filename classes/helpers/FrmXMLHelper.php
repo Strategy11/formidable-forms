@@ -1684,7 +1684,7 @@ class FrmXMLHelper {
 
 		if ( $primary_form ) {
 			$primary_form = FrmForm::getOne( $primary_form );
-			$form_id      = empty( $primary_form->parent_form_id ) ? $primary_form->id : $primary_form->parent_form_id;
+			$form_id      = ! empty( $primary_form->parent_form_id ) ? $primary_form->parent_form_id : $primary_form->id;
 			$message     .= '<li><a href="' . esc_url( FrmForm::get_edit_link( $form_id ) ) . '">' . esc_html__( 'Go to imported form', 'formidable' ) . '</a></li>';
 		}
 	}
@@ -2327,7 +2327,7 @@ class FrmXMLHelper {
 
 		// Set from
 		if ( ! empty( $atts['reply_to'] ) || ! empty( $atts['reply_to_name'] ) ) {
-			$new_notification['post_content']['from'] = ( empty( $atts['reply_to_name'] ) ? '[sitename]' : $atts['reply_to_name'] ) . ' <' . ( empty( $atts['reply_to'] ) ? '[admin_email]' : $atts['reply_to'] ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$new_notification['post_content']['from'] = ( ! empty( $atts['reply_to_name'] ) ? $atts['reply_to_name'] : '[sitename]' ) . ' <' . ( ! empty( $atts['reply_to'] ) ? $atts['reply_to'] : '[admin_email]' ) . '>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 	}
 

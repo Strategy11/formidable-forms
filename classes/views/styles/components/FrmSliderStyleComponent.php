@@ -73,7 +73,7 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 	 * @return void
 	 */
 	private function init_defaults() {
-		$this->data['max_value'] = empty( $this->data['max_value'] ) ? 100 : $this->data['max_value'];
+		$this->data['max_value'] = ! empty( $this->data['max_value'] ) ? $this->data['max_value'] : 100;
 	}
 
 	/**
@@ -91,8 +91,8 @@ class FrmSliderStyleComponent extends FrmStyleComponent {
 
 		$values = $this->get_values();
 		$top    = $values[0];
-		$bottom = empty( $values[2] ) ? $values[0] : $values[2];
-		$left   = empty( $values[3] ) ? $values[1] : $values[3];
+		$bottom = ! empty( $values[2] ) ? $values[2] : $values[0];
+		$left   = ! empty( $values[3] ) ? $values[3] : $values[1];
 		$right  = $values[1];
 
 		$this->data['vertical'] = array(
