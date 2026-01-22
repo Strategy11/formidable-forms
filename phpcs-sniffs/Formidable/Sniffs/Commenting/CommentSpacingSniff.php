@@ -73,16 +73,16 @@ class CommentSpacingSniff implements Sniff {
 		$firstChar          = substr( $trimmedText, 0, 1 );
 
 		// Check if first character should be capitalized.
-		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, single word, underscore word, abbreviations, or is a continuation comment.
+		// Skip if it starts with: $variable, @annotation, numbers, special chars, looks like code, single word, underscore/hyphen word, abbreviations, or is a continuation comment.
 		$looksLikeCode            = $this->looksLikeCode( $trimmedText );
 		$isSingleWord             = $this->isSingleWord( $trimmedText );
-		$startsWithUnderscoreWord = $this->startsWithUnderscoreWord( $trimmedText );
+		$startsWithSpecialWord    = $this->startsWithSpecialWord( $trimmedText );
 		$isContinuationComment    = $this->isContinuationComment( $phpcsFile, $stackPtr );
 		$shouldCapitalize = $hasSpaceAfterSlash
 			&& preg_match( '/^[a-z]/', $firstChar )
 			&& ! $looksLikeCode
 			&& ! $isSingleWord
-			&& ! $startsWithUnderscoreWord
+			&& ! $startsWithSpecialWord
 			&& ! $isContinuationComment
 			&& ! preg_match( '/^(end\b|phpcs:|eslint|TODO|FIXME|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText );
 
@@ -96,8 +96,8 @@ class CommentSpacingSniff implements Sniff {
 			if ( true === $fix ) {
 				$newText = $trimmedText;
 
-				// Also capitalize if needed (but not for code-like comments, single words, underscore words, abbreviations, or continuation comments).
-				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithUnderscoreWord && ! $isContinuationComment && ! preg_match( '/^(end\b|phpcs:|eslint|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText ) ) {
+				// Also capitalize if needed (but not for code-like comments, single words, underscore/hyphen words, abbreviations, or continuation comments).
+				if ( preg_match( '/^[a-z]/', $firstChar ) && ! $looksLikeCode && ! $isSingleWord && ! $startsWithSpecialWord && ! $isContinuationComment && ! preg_match( '/^(end\b|phpcs:|eslint|translators:|e\.g\.|i\.e\.|etc\.|iDeal)/i', $trimmedText ) ) {
 					$newText = ucfirst( $trimmedText );
 				}
 
@@ -183,13 +183,13 @@ class CommentSpacingSniff implements Sniff {
 	}
 
 	/**
-	 * Check if the comment starts with a word containing underscores (function name).
+	 * Check if the comment starts with a word containing underscores or hyphens (function name, CSS class, etc.).
 	 *
 	 * @param string $text The comment text to check.
 	 *
-	 * @return bool True if the first word contains underscores.
+	 * @return bool True if the first word contains underscores or hyphens.
 	 */
-	private function startsWithUnderscoreWord( $text ) {
+	private function startsWithSpecialWord( $text ) {
 		// Get the first word.
 		$parts = preg_split( '/\s+/', $text, 2 );
 
@@ -199,8 +199,8 @@ class CommentSpacingSniff implements Sniff {
 
 		$firstWord = $parts[0];
 
-		// Check if the first word contains an underscore.
-		return strpos( $firstWord, '_' ) !== false;
+		// Check if the first word contains an underscore or hyphen.
+		return strpos( $firstWord, '_' ) !== false || strpos( $firstWord, '-' ) !== false;
 	}
 
 	/**
