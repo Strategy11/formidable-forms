@@ -390,6 +390,7 @@ class PreferPositiveTernaryConditionSniff implements Sniff {
 			// Track parentheses.
 			if ( $code === T_OPEN_PARENTHESIS ) {
 				++$parenDepth;
+
 				if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
 					$end = $i;
 				}
@@ -399,6 +400,7 @@ class PreferPositiveTernaryConditionSniff implements Sniff {
 			if ( $code === T_CLOSE_PARENTHESIS ) {
 				if ( $parenDepth > 0 ) {
 					--$parenDepth;
+
 					if ( $tokens[ $i ]['code'] !== T_WHITESPACE ) {
 						$end = $i;
 					}
