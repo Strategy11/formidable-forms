@@ -150,10 +150,9 @@ class FrmEntriesController {
 	 * @return bool
 	 */
 	public static function remove_screen_options( $show_screen, $screen ) {
-		$menu_name    = sanitize_title( FrmAppHelper::get_menu_name() );
-		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
+		$menu_name = sanitize_title( FrmAppHelper::get_menu_name() );
 
-		if ( $screen->id === $menu_name . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries' ) {
+		if ( $screen->id === $menu_name . '_page_formidable-entries' ) {
 			$show_screen = false;
 		}
 
@@ -440,9 +439,7 @@ class FrmEntriesController {
 			$menu_name = FrmAppHelper::get_menu_name();
 		}
 
-		$unread_count = FrmEntriesHelper::get_visible_unread_inbox_count();
-
-		return sanitize_title( $menu_name ) . ( $unread_count ? '-' . $unread_count : '' ) . '_page_formidable-entries';
+		return sanitize_title( $menu_name ) . '_page_formidable-entries';
 	}
 
 	/**
