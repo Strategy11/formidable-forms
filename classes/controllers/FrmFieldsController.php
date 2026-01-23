@@ -155,9 +155,9 @@ class FrmFieldsController {
 	/**
 	 * @since 3.0
 	 *
-	 * @param array|int|object $field_object
-	 * @param array            $values
-	 * @param int              $form_id
+	 * @param array|int|object|string $field_object
+	 * @param array                   $values
+	 * @param int                     $form_id
 	 *
 	 * @return void
 	 */
