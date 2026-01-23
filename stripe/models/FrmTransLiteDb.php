@@ -26,7 +26,7 @@ class FrmTransLiteDb {
 	public $singular = '';
 
 	/**
-	 * @param mixed|bool $old_db_version
+	 * @param mixed $old_db_version
 	 *
 	 * @return void
 	 */

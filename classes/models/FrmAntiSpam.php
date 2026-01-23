@@ -49,7 +49,7 @@ class FrmAntiSpam extends FrmValidate {
 	 *
 	 * @since 4.11
 	 *
-	 * @param mixed|bool $current True to use current time, otherwise a timestamp string.
+	 * @param mixed $current True to use current time, otherwise a timestamp string.
 	 *
 	 * @return string Token.
 	 */

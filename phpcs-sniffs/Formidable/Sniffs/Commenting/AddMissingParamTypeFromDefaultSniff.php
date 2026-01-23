@@ -91,13 +91,21 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 
 		// Report and fix each missing type.
 		foreach ( $missingTypes as $paramName => $info ) {
-			$newType = $info['existing'] . '|' . $info['missing'];
+			$existingType = $info['existing'];
+			$missingType  = $info['missing'];
+
+			// If adding 'bool', remove 'false' from the existing type.
+			if ( $missingType === 'bool' ) {
+				$existingType = $this->removeFalseFromType( $existingType );
+			}
+
+			$newType = $existingType . '|' . $missingType;
 
 			$fix = $phpcsFile->addFixableError(
 				'@param %s is missing type "%s" based on default value',
 				$info['token'],
 				'MissingParamTypeFromDefault',
-				array( $paramName, $info['missing'] )
+				array( $paramName, $missingType )
 			);
 
 			if ( $fix ) {
@@ -212,9 +220,14 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 			return 'null';
 		}
 
-		// Boolean.
-		if ( $code === T_TRUE || $code === T_FALSE ) {
+		// Boolean true - add bool type.
+		if ( $code === T_TRUE ) {
 			return 'bool';
+		}
+
+		// Boolean false - only add if 'false' is not already in the type.
+		if ( $code === T_FALSE ) {
+			return 'false';
 		}
 
 		// Integer.
@@ -300,6 +313,11 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 	 * @return bool
 	 */
 	private function typeIncludesType( $existingType, $checkType ) {
+		// If existing type is 'mixed', everything is covered.
+		if ( strtolower( trim( $existingType ) ) === 'mixed' ) {
+			return true;
+		}
+
 		// Split existing type by | for checking.
 		$existingTypes = explode( '|', $existingType );
 
@@ -329,12 +347,25 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 			return false;
 		}
 
-		// If checking for 'bool', also accept 'true' or 'false' as covering it.
+		// If checking for 'bool', accept 'bool' or 'true' as covering it (but not 'false' alone).
 		if ( $checkType === 'bool' ) {
 			foreach ( $existingTypes as $existing ) {
 				$normalized = $this->normalizeType( $existing );
 
-				if ( $normalized === 'bool' || $normalized === 'true' || $normalized === 'false' ) {
+				if ( $normalized === 'bool' || $normalized === 'true' ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		// If checking for 'false', accept 'false' or 'bool' as covering it.
+		if ( $checkType === 'false' ) {
+			foreach ( $existingTypes as $existing ) {
+				$normalized = $this->normalizeType( $existing );
+
+				if ( $normalized === 'false' || $normalized === 'bool' ) {
 					return true;
 				}
 			}
@@ -431,6 +462,25 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 		}
 
 		return $type;
+	}
+
+	/**
+	 * Remove 'false' from a type string.
+	 *
+	 * @param string $type The type string.
+	 *
+	 * @return string The type string without 'false'.
+	 */
+	private function removeFalseFromType( $type ) {
+		$types = explode( '|', $type );
+		$types = array_filter(
+			$types,
+			function ( $t ) {
+				return strtolower( trim( $t ) ) !== 'false';
+			}
+		);
+
+		return implode( '|', $types );
 	}
 
 	/**
