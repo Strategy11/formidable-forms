@@ -416,9 +416,9 @@ class FrmEntriesHelper {
 	}
 
 	/**
-	 * @param array|int|object $field
-	 * @param mixed            $value
-	 * @param array            $args
+	 * @param array|int|object|string $field
+	 * @param mixed                   $value
+	 * @param array                   $args
 	 *
 	 * @return void
 	 */

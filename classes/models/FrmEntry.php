@@ -462,7 +462,7 @@ class FrmEntry {
 	 *
 	 * @since 2.0.9
 	 *
-	 * @param int|object $entry By reference.
+	 * @param int|object|string $entry By reference.
 	 *
 	 * @return void
 	 */

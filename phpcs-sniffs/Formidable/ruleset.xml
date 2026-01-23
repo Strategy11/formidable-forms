@@ -71,4 +71,7 @@
 	<rule ref="Formidable.Commenting.FixIncorrectReturnType" />
 	<rule ref="Formidable.Commenting.ConvertReturnVariableToDescription" />
 	<rule ref="Formidable.Commenting.AddMissingDocblock" />
+	<rule ref="Formidable.Commenting.AddMissingParamType" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromDefault" />
+	<rule ref="Formidable.Commenting.AddMissingParamTypeFromCalls" />
 </ruleset>

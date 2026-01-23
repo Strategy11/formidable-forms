@@ -38,6 +38,9 @@ class test_FrmAppController extends FrmUnitTest {
 		$this->check_menu( 'block' );
 	}
 
+	/**
+	 * @param string $allow
+	 */
 	private function check_menu( $allow = 'allow' ) {
 		$url = get_option( 'siteurl', true );
 		do_action( 'admin_menu' );

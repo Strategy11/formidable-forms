@@ -152,6 +152,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
+	/**
+	 * @param array $post_content
+	 */
 	private function create_on_submit_action( $form_id, $post_content ) {
 		$post_data = array(
 			'post_type'    => FrmFormActionsController::$action_post_type,
@@ -306,6 +309,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->run_message_after_create( 1 );
 	}
 
+	/**
+	 * @param int $show_form
+	 */
 	public function run_message_after_create( $show_form = 0 ) {
 		$form = $this->factory->form->create_and_get(
 			array(

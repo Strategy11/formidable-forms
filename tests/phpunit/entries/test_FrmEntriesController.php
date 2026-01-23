@@ -34,6 +34,9 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertEquals( 'publish', $post->post_status );
 	}
 
+	/**
+	 * @param array $options
+	 */
 	private function create_form( $options = array() ) {
 		return $this->factory->form->create_and_get(
 			array(

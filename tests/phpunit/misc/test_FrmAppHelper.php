@@ -382,6 +382,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
 	}
 
+	/**
+	 * @param string $value
+	 */
 	private function is_a_valid_color( $value ) {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}

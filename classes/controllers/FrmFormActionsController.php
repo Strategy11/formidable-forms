@@ -639,7 +639,7 @@ class FrmFormActionsController {
 	/**
 	 * @param string            $event
 	 * @param int|object|string $form
-	 * @param int|string        $entry
+	 * @param int|object|string $entry
 	 * @param string            $type
 	 * @param array             $args
 	 *

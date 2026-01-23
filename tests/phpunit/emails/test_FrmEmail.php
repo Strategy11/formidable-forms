@@ -428,6 +428,9 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_senders( $expected, $mock_email );
 	}
 
+	/**
+	 * @param string $subject
+	 */
 	protected function prepare_subject( $subject ) {
 		return wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
 	}
@@ -451,6 +454,8 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @param array $expected
 	 * @param array $mock_email
+	 * @param string $cc_status
+	 * @param string $bcc_status
 	 */
 	protected function check_recipients( $expected, $mock_email, $cc_status = 'yes_cc', $bcc_status = 'yes_bcc' ) {
 		$this->assertSame( $expected['to'], $mock_email['to'], 'To does not match expected.' );
@@ -745,6 +750,10 @@ LINE 1<br>LINE 2<br></body></html>'
 		}
 	}
 
+	/**
+	 * @param string $setting_name
+	 * @param string $property
+	 */
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
 		if ( ! $property ) {
 			$property = $setting_name;

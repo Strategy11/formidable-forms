@@ -666,8 +666,8 @@ class FrmFormAction {
 	/**
 	 * @since 3.04
 	 *
-	 * @param array  $args
-	 * @param string $default_status
+	 * @param array|string $args
+	 * @param string       $default_status
 	 *
 	 * @return void
 	 */

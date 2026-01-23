@@ -2432,7 +2432,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $values
-	 * @param string       $current
+	 * @param string|null  $current
 	 *
 	 * @return bool
 	 */
@@ -4679,7 +4679,7 @@ class FrmAppHelper {
 	 *
 	 * @since 5.2.02
 	 *
-	 * @param string $text Text in the pill. Default is NEW.
+	 * @param string|null $text Text in the pill. Default is NEW.
 	 */
 	public static function show_pill_text( $text = null ) {
 		if ( null === $text ) {

@@ -175,9 +175,9 @@ class FrmAddon {
 	 *
 	 * @uses api_request()
 	 *
-	 * @param mixed  $_data
-	 * @param string $_action
-	 * @param object $_args
+	 * @param mixed       $_data
+	 * @param string      $_action
+	 * @param object|null $_args
 	 *
 	 * @return object Data.
 	 */
