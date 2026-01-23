@@ -238,13 +238,6 @@ class FrmField {
 				'upsell_image' => $upsell_images_url . 'nps-field-preview.webp',
 				'learn-more'   => 'net-promoter-score',
 			),
-			'virtual'         => array(
-				'name'         => __( 'Virtual Field', 'formidable' ),
-				'icon'         => 'frmfont frm-virtual-field-icon',
-				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
-				'learn-more'   => 'virtual-field',
-			),
 			'password'        => array(
 				'name'         => __( 'Password', 'formidable' ),
 				'icon'         => 'frmfont frm_lock_closed2_icon',
@@ -308,6 +301,13 @@ class FrmField {
 				'link'         => 'https://simplyscheduleappointments.com/meet/formidable/',
 				'upsell_image' => $upsell_images_url . 'appointment-field-preview.webp',
 				'learn-more'   => 'simply-schedule-appointments-forms',
+			),
+			'virtual'         => array(
+				'name'         => __( 'Virtual Field', 'formidable' ),
+				'icon'         => 'frmfont frm-virtual-field-icon',
+				'message'      => esc_html__( 'Protect sensitive data by storing field values server-side only, preventing users from viewing or manipulating them in their browser.', 'formidable' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+				'upsell_image' => $upsell_images_url . 'virtual-field-preview.webp',
+				'learn-more'   => '/virtual',
 			),
 			'product'         => array(
 				'name'         => __( 'Product', 'formidable' ),
