@@ -81,6 +81,11 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 		$existingParams = array();
 
 		if ( $hasDocblock ) {
+			// Skip if docblock contains {@inheritdoc}.
+			if ( $this->hasInheritdoc( $phpcsFile, $docblock ) ) {
+				return;
+			}
+
 			// Get existing @param tags with their types.
 			$existingParams = $this->getExistingParamTags( $phpcsFile, $docblock );
 		}
@@ -202,6 +207,36 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 
 		if ( false !== $prev && $tokens[ $prev ]['code'] === T_DOC_COMMENT_CLOSE_TAG ) {
 			return $tokens[ $prev ]['comment_opener'];
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a docblock contains {@inheritdoc}.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $docblock  The docblock opener position.
+	 *
+	 * @return bool
+	 */
+	private function hasInheritdoc( File $phpcsFile, $docblock ) {
+		$tokens = $phpcsFile->getTokens();
+
+		if ( ! isset( $tokens[ $docblock ]['comment_closer'] ) ) {
+			return false;
+		}
+
+		$closer = $tokens[ $docblock ]['comment_closer'];
+
+		for ( $i = $docblock; $i < $closer; $i++ ) {
+			if ( $tokens[ $i ]['code'] === T_DOC_COMMENT_TAG && stripos( $tokens[ $i ]['content'], '@inheritdoc' ) !== false ) {
+				return true;
+			}
+
+			if ( $tokens[ $i ]['code'] === T_DOC_COMMENT_STRING && stripos( $tokens[ $i ]['content'], '{@inheritdoc}' ) !== false ) {
+				return true;
+			}
 		}
 
 		return false;
