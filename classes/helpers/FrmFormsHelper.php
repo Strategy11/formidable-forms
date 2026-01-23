@@ -24,7 +24,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param string            $key
+	 * @param string       $key
 	 * @param false|object $form
 	 *
 	 * @return string

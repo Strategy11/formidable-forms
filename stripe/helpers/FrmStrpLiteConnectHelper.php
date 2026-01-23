@@ -791,7 +791,7 @@ class FrmStrpLiteConnectHelper {
 	}
 
 	/**
-	 * @param string            $sub_id
+	 * @param string       $sub_id
 	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
 	 *
 	 * @return bool

@@ -220,8 +220,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param mixed  $id
-	 * @param string $message
+	 * @param mixed|bool $id
+	 * @param string     $message
 	 *
 	 * @return void
 	 */
@@ -1928,8 +1928,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param string                         $content
-	 * @param int|stdClass|string            $form
+	 * @param string                    $content
+	 * @param int|stdClass|string       $form
 	 * @param false|int|stdClass|string $entry
 	 *
 	 * @return string

@@ -8,7 +8,7 @@ class FrmSquareLiteActionsController extends FrmTransLiteActionsController {
 	/**
 	 * @since 6.22
 	 *
-	 * @param string                  $callback
+	 * @param string             $callback
 	 * @param array|false|object $field
 	 *
 	 * @return string

@@ -33,7 +33,7 @@ class FrmStrpLiteSettings {
 	}
 
 	/**
-	 * @param mixed $settings
+	 * @param mixed|bool $settings
 	 *
 	 * @return void
 	 */

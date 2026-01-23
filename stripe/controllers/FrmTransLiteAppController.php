@@ -8,7 +8,7 @@ class FrmTransLiteAppController {
 	/**
 	 * Install or upgrade database structures.
 	 *
-	 * @param mixed $old_db_version Previous database version, or false on fresh install.
+	 * @param mixed|bool $old_db_version Previous database version, or false on fresh install.
 	 *
 	 * @return void
 	 */

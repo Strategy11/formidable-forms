@@ -2192,7 +2192,7 @@ class FrmFieldsHelper {
 	 *
 	 * @since 5.0.04 Add `$include_class` param.
 	 *
-	 * @param array            $prepop        Bulk options.
+	 * @param array       $prepop        Bulk options.
 	 * @param array|false $include_class Include the class in the bulk options.
 	 *
 	 * @return void

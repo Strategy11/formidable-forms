@@ -99,7 +99,7 @@ class FrmStrpLiteAppHelper {
 	/**
 	 * Add education about Stripe fees.
 	 *
-	 * @param string                  $content UTM Content for the admin upgrade link.
+	 * @param string             $content UTM Content for the admin upgrade link.
 	 * @param array|false|string $gateway Gateway or list of gateways this applies to.
 	 *
 	 * @return void

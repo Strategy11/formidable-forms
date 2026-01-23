@@ -74,9 +74,9 @@ class FrmForm {
 	/**
 	 * Duplicate a form.
 	 *
-	 * @param int            $id        Form ID to duplicate.
-	 * @param bool           $template  Whether the duplicated form is a template.
-	 * @param bool           $copy_keys Whether to copy the original form key.
+	 * @param int       $id        Form ID to duplicate.
+	 * @param bool      $template  Whether the duplicated form is a template.
+	 * @param bool      $copy_keys Whether to copy the original form key.
 	 * @param false|int $blog_id   Blog ID when duplicating across sites, or false for current site.
 	 *
 	 * @return bool|int ID on success or false on failure
@@ -848,8 +848,8 @@ class FrmForm {
 	}
 
 	/**
-	 * @param int|string     $id
-	 * @param false|int $blog_id
+	 * @param int|string $id
+	 * @param false|int  $blog_id
 	 *
 	 * @return stdClass|null
 	 */

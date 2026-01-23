@@ -31,7 +31,7 @@ class FrmSquareLiteSettings {
 	}
 
 	/**
-	 * @param mixed $settings
+	 * @param mixed|bool $settings
 	 *
 	 * @return void
 	 */

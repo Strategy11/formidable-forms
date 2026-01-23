@@ -681,8 +681,8 @@ class FrmXMLController {
 	 * @since 2.0.19
 	 *
 	 * @param false|int|string $form_id
-	 * @param string                $search
-	 * @param string                $fid
+	 * @param string           $search
+	 * @param string           $fid
 	 *
 	 * @return void
 	 */
