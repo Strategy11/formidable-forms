@@ -152,6 +152,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( FrmAppHelper::plugin_url() . '/js/' . $file, $formidable_js->src, $file . ' was not loaded' );
 	}
 
+	/**
+	 * @param array $post_content
+	 */
 	private function create_on_submit_action( $form_id, $post_content ) {
 		$post_data = array(
 			'post_type'    => FrmFormActionsController::$action_post_type,
@@ -232,7 +235,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->assertEquals( wp_list_pluck( $actions, 'ID' ), array( $page_action->ID, $redirect_action_2->ID ) );
 
 		// Test the output.
-		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$response = FrmFormsController::show_form( $form->id ); // This is where the message is returned
 		$contains = array(
 			'frmFrontForm.scrollMsg(' . $form->id . ')',
 			'Done!',
@@ -306,6 +309,9 @@ class test_FrmFormsController extends FrmUnitTest {
 		$this->run_message_after_create( 1 );
 	}
 
+	/**
+	 * @param int $show_form
+	 */
 	public function run_message_after_create( $show_form = 0 ) {
 		$form = $this->factory->form->create_and_get(
 			array(
@@ -341,7 +347,7 @@ class test_FrmFormsController extends FrmUnitTest {
 		$created_entry = FrmEntry::get_id_by_key( $entry_key );
 		$this->assertNotEmpty( $created_entry, 'No entry found with key ' . $entry_key );
 
-		$response = FrmFormsController::show_form( $form->id ); // this is where the message is returned
+		$response = FrmFormsController::show_form( $form->id ); // This is where the message is returned
 		$this->assertStringContainsString( '<div class="frm_message" role="status">Done!</div>', $response );
 		$this->assertStringContainsString( 'frmFrontForm.scrollMsg(' . $form->id . ')', $response );
 

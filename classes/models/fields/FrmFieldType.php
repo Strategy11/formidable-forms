@@ -132,7 +132,7 @@ abstract class FrmFieldType {
 		if ( empty( $this->type ) ) {
 			$this->type = $this->get_field_column( 'type' );
 
-			if ( empty( $this->type ) && ! empty( $type ) ) {
+			if ( empty( $this->type ) && $type ) {
 				$this->type = $type;
 			}
 		}
@@ -367,7 +367,7 @@ DEFAULT_HTML;
 	 * @return string
 	 */
 	protected function html_name( $name = '' ) {
-		$prefix = empty( $name ) ? 'item_meta' : $name;
+		$prefix = $name ? $name : 'item_meta';
 		return $prefix . '[' . $this->get_field_column( 'id' ) . ']';
 	}
 
@@ -1002,21 +1002,21 @@ DEFAULT_HTML;
 
 		$args = $this->fill_display_field_values( $args );
 
-		if ( $this->has_html ) {
-			$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
-			$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
-			$args['field_obj'] = $this;
-
-			$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
-			$this->set_field_column( 'label', $label );
-
-			$html_shortcode = new FrmFieldFormHtml( $args );
-			$html           = $html_shortcode->get_html();
-			$html           = $this->after_replace_html_shortcodes( $args, $html );
-			$html_shortcode->remove_collapse_shortcode( $html );
-		} else {
-			$html = $this->include_front_field_input( $args, array() );
+		if ( ! $this->has_html ) {
+			return $this->include_front_field_input( $args, array() );
 		}
+
+		$args['html']      = $this->before_replace_html_shortcodes( $args, FrmAppHelper::maybe_kses( FrmField::get_option( $this->field, 'custom_html' ) ) );
+		$args['errors']    = is_array( $args['errors'] ) ? $args['errors'] : array();
+		$args['field_obj'] = $this;
+
+		$label = FrmFieldsHelper::label_position( $this->field['label'], $this->field, $args['form'] );
+		$this->set_field_column( 'label', $label );
+
+		$html_shortcode = new FrmFieldFormHtml( $args );
+		$html           = $html_shortcode->get_html();
+		$html           = $this->after_replace_html_shortcodes( $args, $html );
+		$html_shortcode->remove_collapse_shortcode( $html );
 
 		return $html;
 	}
@@ -1217,7 +1217,7 @@ DEFAULT_HTML;
 		$this->add_aria_description( $args, $input_html );
 		$this->add_extra_html_atts( $args, $input_html );
 
-		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>';
+		return '<input type="' . esc_attr( $field_type ) . '" id="' . esc_attr( $args['html_id'] ) . '" name="' . esc_attr( $args['field_name'] ) . '" value="' . esc_attr( $this->prepare_esc_value() ) . '" ' . $input_html . '/>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -1264,7 +1264,7 @@ DEFAULT_HTML;
 	 * @return void
 	 */
 	protected function add_extra_html_atts( $args, &$input_html ) {
-		// override from other fields
+		// Override from other fields
 	}
 
 	/**
@@ -1380,15 +1380,15 @@ DEFAULT_HTML;
 		$selected_value = $args['field_value'] ?? $this->field['value'];
 		$hidden         = '';
 
-		if ( is_array( $selected_value ) ) {
-			$args['save_array'] = true;
-
-			foreach ( $selected_value as $selected ) {
-				$hidden .= $this->show_single_hidden( $selected, $args );
-			}
-		} else {
+		if ( ! is_array( $selected_value ) ) {
 			$args['save_array'] = $this->is_readonly_array();
-			$hidden            .= $this->show_single_hidden( $selected_value, $args );
+			return $hidden . $this->show_single_hidden( $selected_value, $args );
+		}
+
+		$args['save_array'] = true;
+
+		foreach ( $selected_value as $selected ) {
+			$hidden .= $this->show_single_hidden( $selected, $args );
 		}
 
 		return $hidden;
@@ -1465,15 +1465,17 @@ DEFAULT_HTML;
 		$readonly    = FrmField::is_read_only( $this->field ) && ! FrmAppHelper::is_admin();
 		$select_atts = array();
 
-		if ( ! $readonly ) {
-			if ( isset( $values['combo_name'] ) ) {
-				$values['field_name'] .= '[' . $values['combo_name'] . ']';
-				$values['html_id']    .= '_' . $values['combo_name'];
-			}
-
-			$select_atts['name'] = $values['field_name'];
-			$select_atts['id']   = $values['html_id'];
+		if ( $readonly ) {
+			return $select_atts;
 		}
+
+		if ( isset( $values['combo_name'] ) ) {
+			$values['field_name'] .= '[' . $values['combo_name'] . ']';
+			$values['html_id']    .= '_' . $values['combo_name'];
+		}
+
+		$select_atts['name'] = $values['field_name'];
+		$select_atts['id']   = $values['html_id'];
 
 		return $select_atts;
 	}
@@ -1625,7 +1627,7 @@ DEFAULT_HTML;
 	private function value_has_already_been_validated_as_unique( $value ) {
 		global $frm_validated_unique_values;
 
-		if ( empty( $frm_validated_unique_values ) ) {
+		if ( ! $frm_validated_unique_values ) {
 			$frm_validated_unique_values = array();
 			return false;
 		}
@@ -1710,13 +1712,15 @@ DEFAULT_HTML;
 
 		$value = $this->prepare_display_value( $value, $atts );
 
-		if ( is_array( $value ) ) {
-			if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
-				$value = $value[ $atts['show'] ];
-			} elseif ( empty( $atts['return_array'] ) ) {
-				$sep   = $atts['sep'] ?? ', ';
-				$value = FrmAppHelper::safe_implode( $sep, $value );
-			}
+		if ( ! is_array( $value ) ) {
+			return $value;
+		}
+
+		if ( ! empty( $atts['show'] ) && isset( $value[ $atts['show'] ] ) ) {
+			$value = $value[ $atts['show'] ];
+		} elseif ( empty( $atts['return_array'] ) ) {
+			$sep   = $atts['sep'] ?? ', ';
+			$value = FrmAppHelper::safe_implode( $sep, $value );
 		}
 
 		return $value;
@@ -1837,7 +1841,7 @@ DEFAULT_HTML;
 	 *     @type array $saved_entries
 	 * }
 	 *
-	 * @return array $new_value
+	 * @return array New value.
 	 */
 	protected function get_new_child_ids( $value, $atts ) {
 		$saved_entries = $atts['ids'];

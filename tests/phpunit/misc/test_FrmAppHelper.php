@@ -27,7 +27,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_plugin_folder() {
 		$folder   = FrmAppHelper::plugin_folder();
 		$expected = array( 'formidable', 'formidable-forms' );
-		$this->assertTrue( in_array( $folder, $expected, true ) );
+		$this->assertContains( $folder, $expected );
 	}
 
 	/**
@@ -36,7 +36,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_plugin_path() {
 		$path          = FrmAppHelper::plugin_path();
 		$expected_file = $path . '/formidable.php';
-		$this->assertTrue( file_exists( $expected_file ) );
+		$this->assertFileExists( $expected_file );
 	}
 
 	/**
@@ -96,7 +96,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	public function test_get_settings() {
 		$settings = FrmAppHelper::get_settings();
 		$this->assertNotEmpty( $settings );
-		$this->assertTrue( is_object( $settings ) );
+		$this->assertIsObject( $settings );
 		$this->assertNotEmpty( $settings->success_msg );
 	}
 
@@ -363,7 +363,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$icon = '<svg class="frmsvg frm_zapier_icon frm_show_upgrade" style="--primary-700:#efefef"><use href="#frm_zapier_icon" /></svg>';
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
-		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>';
+		$icon = '<svg class="frmsvg frm_more_horiz_solid_icon frm-show-inline-modal" data-open="frm-layout-classes-box" title="Toggle Options" tabindex="0"><use href="#frm_more_horiz_solid_icon" /></svg>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		$this->assertEquals( $icon, FrmAppHelper::kses_icon( $icon ) );
 
 		$icon = '<svg class="frmsvg" aria-label="WordPress" style="width:90px;height:90px"><use href="#frm_wordpress_icon" /></svg>';
@@ -382,6 +382,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->assertFalse( $this->is_a_valid_color( 'Not a color' ) );
 	}
 
+	/**
+	 * @param string $value
+	 */
 	private function is_a_valid_color( $value ) {
 		return $this->run_private_method( array( 'FrmAppHelper', 'is_a_valid_color' ), array( $value ) );
 	}
@@ -507,7 +510,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( str_contains( $output, $substring ), $message );
+		$this->assertStringContainsString( $substring, $output, $message );
 	}
 
 	/**
@@ -516,7 +519,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 	 * @param string $message
 	 */
 	private function assert_output_not_contains( $output, $substring, $message = '' ) {
-		$this->assertTrue( ! str_contains( $output, $substring ), $message );
+		$this->assertStringNotContainsString( $substring, $output, $message );
 	}
 
 	/**
@@ -536,10 +539,10 @@ class test_FrmAppHelper extends FrmUnitTest {
 
 		$name = 123;
 		$key  = FrmAppHelper::get_unique_key( $name, $table_name, $column );
-		$this->assertFalse( is_numeric( $key ), 'key should never be numeric.' );
+		$this->assertIsNotNumeric( $key, 'key should never be numeric.' );
 
 		$super_long_form_key = 'formkeywithlikeseventycharacterscanyouevenimaginehavingthismanyletters';
-		// reserve the form key so one has to be generated with this as the base.
+		// Reserve the form key so one has to be generated with this as the base.
 		$this->factory->form->create(
 			array( 'form_key' => $super_long_form_key )
 		);
@@ -579,6 +582,9 @@ class test_FrmAppHelper extends FrmUnitTest {
 		$this->factory->field->create( compact( 'type', 'form_id', 'field_key' ) );
 	}
 
+	/**
+	 * @return string
+	 */
 	public static function underscore_key_separator() {
 		return '___';
 	}
@@ -741,7 +747,7 @@ class test_FrmAppHelper extends FrmUnitTest {
 				'expected' => 'This is my...',
 			),
 			array(
-				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ),
+				'string'   => htmlentities( '<img src="data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAZCAYAAADE6YVjAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyJpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuMy1jMDExIDY2LjE0NTY2MSwgMjAxMi8wMi8wNi0xNDo1NjoyNyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENTNiAoV2luZG93cykiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6MEVBMTczNDg3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6MEVBMTczNDk3QzA5MTFFNjk3ODM5NjQyRjE2RjA3QTkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDowRUExNzM0NjdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDowRUExNzM0NzdDMDkxMUU2OTc4Mzk2NDJGMTZGMDdBOSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PjjUmssAAAGASURBVHjatJaxTsMwEIbpIzDA6FaMMPYJkDKzVYU+QFeEGPIKfYU8AETkCYI6wANkZQwIKRNDB1hA0Jrf0rk6WXZ8BvWkb4kv99vn89kDrfVexBSYgVNwDA7AN+jAK3gEd+AlGMGIBFDgFvzouK3JV/lihQTOwLtOtw9wIRG5pJn91Tbgqk9kSk7GViADrTD4HCyZ0NQnomi51sb0fUyCMQEbp2WpU67IjfNjwcYyoUDhjJVcZBjYBy40j4wXgaobWoe8Z6Y80CJBwFpunepIzt2AUgFjtXXshNXjVmMh+K+zzp/CMs0CqeuzrxSRpbOKfdCkiMTS1VBQ41uxMyQR2qbrXiiwYN3ACh1FDmsdK2Eu4J6Tlo31dYVtCY88h5ELZIJJ+IRMzBHfyJINrigNkt5VsRiub9nXICdsYyVd2NcVvA3ScE5t2rb5JuEeyZnAhmLt9NK63vX1O5Pe8XaPSuGq1uTrfUgMEp9EJ+CQvr+BJ/AAKvAcCiAR+bf9CjAAluzmdX4AEIIAAAAASUVORK5CYII=">' ), // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 				'length'   => 60,
 				'expected' => '&lt;img src=&quot;data:image/jpeg;base64,iVBORw0KGgoAAAANSUhEUgAAABkAA',
 			),

@@ -19,7 +19,6 @@ $rules  = array(
 	'no_useless_else'                      => true,
 	'no_superfluous_elseif'                => true,
 	'elseif'                               => true,
-	'phpdoc_add_missing_param_annotation'  => true,
 	'no_extra_blank_lines'                 => true,
 	'no_trailing_whitespace'               => true,
 	'no_whitespace_in_blank_line'          => true,

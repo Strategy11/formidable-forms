@@ -188,7 +188,7 @@ class FrmAppController {
 	 * Stripe Lite does not have an edit view. Also fallback for bulk deleting, since that
 	 * isn't built into Lite. The pages we fall back to should not be styled as white pages.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return bool
 	 */
@@ -278,12 +278,12 @@ class FrmAppController {
 	 * @return string
 	 */
 	private static function get_current_page() {
-		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
-		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
-
 		if ( FrmAppHelper::is_view_builder_page() ) {
 			return 'frm_display';
 		}
+
+		$page      = FrmAppHelper::simple_get( 'page', 'sanitize_title' );
+		$post_type = FrmAppHelper::simple_get( 'post_type', 'sanitize_title', 'None' );
 
 		return isset( $_GET['page'] ) ? $page : $post_type;
 	}
@@ -579,9 +579,13 @@ class FrmAppController {
 
 		$last_upgrade     = explode( '-', $db_version );
 		$needs_db_upgrade = (int) $last_upgrade[1] < (int) $atts['new_db_version'];
-		$new_version      = version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 
-		return $needs_db_upgrade || $new_version;
+		if ( $needs_db_upgrade ) {
+			return true;
+		}
+
+		// New plugin version.
+		return version_compare( $last_upgrade[0], $atts['new_plugin_version'], '<' );
 	}
 
 	/**
@@ -630,7 +634,7 @@ class FrmAppController {
 		}
 
 		if ( ! FrmAppHelper::doing_ajax() ) {
-			// don't continue during ajax calls
+			// Don't continue during ajax calls
 			self::admin_js();
 		}
 
@@ -808,7 +812,7 @@ class FrmAppController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return array
 	 */
@@ -972,7 +976,7 @@ class FrmAppController {
 			'
 		);
 		wp_enqueue_style( 'formidable-admin' );
-		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() );
+		wp_enqueue_script( 'formidable_legacy_views', FrmAppHelper::plugin_url() . '/js/admin/legacy-views.js', array( 'jquery', 'formidable_admin' ), FrmAppHelper::plugin_version() ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		FrmAppHelper::localize_script( 'admin' );
 		self::include_info_overlay();
 	}
@@ -1163,7 +1167,7 @@ class FrmAppController {
 		}
 
 		if ( $response->is_error() ) {
-			// if the remove post fails, use javascript instead
+			// If the remove post fails, use javascript instead
 			add_action( 'admin_notices', 'FrmAppController::install_js_fallback' );
 		}
 	}

@@ -417,16 +417,12 @@ class FrmEntryFormatter {
 
 		if ( $this->format === 'json' ) {
 			$content = json_encode( $this->prepare_array() );
-
 		} elseif ( $this->format === 'array' ) {
 			$content = $this->prepare_array();
-
 		} elseif ( $this->format === 'table' ) {
 			$content = $this->prepare_html_table();
-
 		} elseif ( $this->format === 'plain_text_block' ) {
 			$content = $this->prepare_plain_text_block();
-
 		} else {
 			$content = '';
 		}
@@ -555,7 +551,6 @@ class FrmEntryFormatter {
 	 */
 	protected function push_single_field_to_array( $field_value, &$output ) {
 		if ( $this->include_field_in_content( $field_value ) ) {
-
 			$displayed_value                                = $this->prepare_display_value_for_array( $field_value->get_displayed_value() );
 			$output[ $this->get_key_or_id( $field_value ) ] = $displayed_value;
 			$has_separate_value                             = (bool) $field_value->get_field_option( 'separate_value' );
@@ -600,7 +595,6 @@ class FrmEntryFormatter {
 	protected function add_field_value_to_content( $field_value, &$content ) {
 		if ( $this->is_extra_field( $field_value ) ) {
 			$this->add_row_for_extra_field( $field_value, $content );
-
 		} else {
 			$this->add_row_for_standard_field( $field_value, $content );
 		}
@@ -821,7 +815,6 @@ class FrmEntryFormatter {
 	 */
 	protected function add_user_info_to_plain_text_content( &$content ) {
 		if ( $this->include_user_info ) {
-
 			foreach ( $this->entry_values->get_user_info() as $user_info ) {
 				$this->add_plain_text_row( $user_info['label'], $user_info['value'], $content );
 			}
@@ -975,19 +968,21 @@ class FrmEntryFormatter {
 	 * @return mixed
 	 */
 	protected function strip_html( $value ) {
-		if ( $this->is_plain_text ) {
-			if ( is_array( $value ) ) {
-				foreach ( $value as $key => $single_value ) {
-					$value[ $key ] = $this->strip_html( $single_value );
-				}
-			} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
-				if ( str_contains( $value, '<img' ) ) {
-					$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
-					$value = trim( $value );
-				}
+		if ( ! $this->is_plain_text ) {
+			return $value;
+		}
 
-				$value = strip_tags( $value );
+		if ( is_array( $value ) ) {
+			foreach ( $value as $key => $single_value ) {
+				$value[ $key ] = $this->strip_html( $single_value );
 			}
+		} elseif ( $this->is_plain_text && ! is_array( $value ) ) {
+			if ( str_contains( $value, '<img' ) ) {
+				$value = str_replace( array( '<img', 'src=', '/>', '"' ), '', $value );
+				$value = trim( $value );
+			}
+
+			$value = strip_tags( $value );
 		}
 
 		return $value;

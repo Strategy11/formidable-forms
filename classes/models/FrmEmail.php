@@ -658,7 +658,7 @@ class FrmEmail {
 	 *
 	 * @param string $emails
 	 *
-	 * @return array|string $emails
+	 * @return array|string Emails.
 	 */
 	private function explode_emails( $emails ) {
 		$emails = ! empty( $emails ) ? preg_split( '/(,|;)/', $emails ) : '';
@@ -721,9 +721,8 @@ class FrmEmail {
 			list( $from_name, $from_email ) = $this->get_name_and_email_for_sender( $from );
 		}
 
-		// if sending the email from a yahoo address, change it to the WordPress default
+		// If sending the email from a yahoo address, change it to the WordPress default
 		if ( str_contains( $from_email, '@yahoo.com' ) ) {
-
 			// Get the site domain and get rid of www.
 			$sitename = strtolower( FrmAppHelper::get_server_value( 'SERVER_NAME' ) );
 

@@ -162,6 +162,9 @@ class FrmListHelper {
 		return current_user_can( 'administrator' );
 	}
 
+	/**
+	 * @return array
+	 */
 	public function get_columns() {
 		return array();
 	}
@@ -500,12 +503,12 @@ class FrmListHelper {
 	 */
 	protected function row_actions( $actions, $always_visible = false ) {
 		$action_count = count( $actions );
-		$i            = 0;
 
 		if ( ! $action_count ) {
 			return '';
 		}
 
+		$i   = 0;
 		$out = '<div class="' . ( $always_visible ? 'row-actions visible' : 'row-actions' ) . '">';
 
 		foreach ( $actions as $action => $link ) {
@@ -819,7 +822,7 @@ class FrmListHelper {
 		$column  = '';
 
 		// We need a primary defined so responsive views show something,
-		// so let's fall back to the first non-checkbox column.
+		// So let's fall back to the first non-checkbox column.
 		foreach ( $columns as $col => $column_name ) {
 			if ( 'cb' === $col ) {
 				continue;
@@ -844,7 +847,7 @@ class FrmListHelper {
 		$default = $this->get_default_primary_column_name();
 
 		// If the primary column doesn't exist fall back to the
-		// first non-checkbox column.
+		// First non-checkbox column.
 		if ( ! isset( $columns[ $default ] ) ) {
 			$default = self::get_default_primary_column_name();
 		}
@@ -905,7 +908,7 @@ class FrmListHelper {
 		$sortable = array();
 
 		foreach ( $_sortable as $id => $data ) {
-			if ( empty( $data ) ) {
+			if ( ! $data ) {
 				continue;
 			}
 
@@ -950,7 +953,7 @@ class FrmListHelper {
 	 *
 	 * @return void
 	 */
-	public function print_column_headers( $with_id = true ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded
+	public function print_column_headers( $with_id = true ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, Generic.Metrics.CyclomaticComplexity.MaxExceeded, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		list( $columns, $hidden, $sortable, $primary ) = $this->get_column_info();
 
 		$current_url     = set_url_scheme( 'http://' . FrmAppHelper::get_server_value( 'HTTP_HOST' ) . FrmAppHelper::get_server_value( 'REQUEST_URI' ) );
@@ -1139,7 +1142,7 @@ class FrmListHelper {
 				return;
 			}
 		} elseif ( ! $this->has_min_items() ) {
-			// don't show the bulk actions when there aren't many rows.
+			// Don't show the bulk actions when there aren't many rows.
 			return;
 		}
 		?>
@@ -1268,7 +1271,7 @@ class FrmListHelper {
 	 * @return string The row actions output. In this case, an empty string.
 	 */
 	protected function handle_row_actions( $item, $column_name, $primary ) {
-		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : ''; // phpcs:ignore Universal.Operators.StrictComparisons
+		return $column_name == $primary ? '<button type="button" class="toggle-row"><span class="screen-reader-text">' . esc_html__( 'Show more details', 'formidable' ) . '</span></button>' : ''; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**

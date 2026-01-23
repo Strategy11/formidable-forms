@@ -21,7 +21,7 @@ class FrmSettingsController {
 		// Make sure admins can see the menu items
 		FrmAppHelper::force_capability( 'frm_change_settings' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Global Settings', 'formidable' ), __( 'Global Settings', 'formidable' ), 'frm_change_settings', 'formidable-settings', 'FrmSettingsController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
@@ -526,7 +526,7 @@ class FrmSettingsController {
 	public static function fake_color_picker( $color ) {
 		?>
 		<div class="wp-picker-container">
-			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;">
+			<button type="button" class="button wp-color-result" aria-expanded="false" aria-disabled="true" tabindex="-1" style="background-color:<?php echo esc_attr( $color ); ?>;"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				<span class="wp-color-result-text" style="color:#a7aaad;"><?php esc_html_e( 'Select Color', 'formidable' ); ?></span>
 			</button>
 		</div>

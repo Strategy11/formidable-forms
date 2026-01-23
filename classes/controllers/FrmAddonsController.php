@@ -103,7 +103,7 @@ class FrmAddonsController {
 
 		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Add-Ons', 'formidable' ), $label, 'frm_view_forms', 'formidable-addons', 'FrmAddonsController::list_addons' );
 
-		// remove default created subpage, make the page with highest priority as default.
+		// Remove default created subpage, make the page with highest priority as default.
 		remove_submenu_page( 'formidable', 'formidable' );
 
 		if ( ! FrmAppHelper::pro_is_installed() ) {
@@ -326,17 +326,17 @@ class FrmAddonsController {
 			),
 			'mailchimp'      => array(
 				'title'   => 'Mailchimp Forms',
-				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.',
+				'excerpt' => 'Get on the path to more sales and leads in a matter of minutes. Add leads to a Mailchimp mailing list when they submit forms and update their information along with the entry.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'registration'   => array(
 				'title'   => 'User Registration Forms',
 				'link'    => 'downloads/user-registration/',
-				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.',
+				'excerpt' => 'Give new users access to your site as quickly and painlessly as possible. Allow users to register, edit and be able to login to their profiles on your site from the front end in a clean, customized registration form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'paypal'         => array(
 				'title'   => 'PayPal Standard Forms',
 				'link'    => 'downloads/paypal-standard/',
-				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.',
+				'excerpt' => 'Automate your business by collecting instant payments from your clients. Collect information, calculate a total, and send them on to PayPal. Require a payment before publishing content on your site.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'stripe'         => array(
 				'title'   => 'Stripe Forms',
@@ -370,7 +370,7 @@ class FrmAddonsController {
 			),
 			'zapier'         => array(
 				'title'   => 'Zapier Forms',
-				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.',
+				'excerpt' => 'Connect with hundreds of different applications through Zapier. Insert a new row in a Google docs spreadsheet, post on Twitter, or add a new Dropbox file with your form.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			),
 			'signature'      => array(
 				'title'   => 'Digital Signature Forms',
@@ -451,7 +451,7 @@ class FrmAddonsController {
 		}
 
 		if ( str_contains( $license, '-' ) ) {
-			// this is a fix for licenses saved in the past
+			// This is a fix for licenses saved in the past
 			$license = strtoupper( $license );
 		}
 
@@ -571,7 +571,7 @@ class FrmAddonsController {
 			}
 
 			if ( ! self::is_installed( $folder ) ) {
-				// don't show an update if the plugin isn't installed
+				// Don't show an update if the plugin isn't installed
 				continue;
 			}
 
@@ -586,7 +586,6 @@ class FrmAddonsController {
 			}
 
 			$transient->checked[ $folder ] = $wp_version;
-
 		}//end foreach
 
 		return $transient;
@@ -635,7 +634,7 @@ class FrmAddonsController {
 
 		foreach ( $installed_addons as $addon ) {
 			if ( $addon->store_url !== 'https://formidableforms.com' ) {
-				// check if this is a third-party addon
+				// Check if this is a third-party addon
 				continue;
 			}
 
@@ -662,7 +661,7 @@ class FrmAddonsController {
 			$download_id = $plugin['id'] ?? 0;
 
 			if ( $download_id && ! isset( $version_info[ $download_id ]['package'] ) ) {
-				// if this addon is using its own license, get the update url
+				// If this addon is using its own license, get the update url
 				$addon_info = $api->get_api_info();
 
 				$version_info[ $download_id ] = $addon_info[ $download_id ];
@@ -772,7 +771,7 @@ class FrmAddonsController {
 		$download_id = $license->download_id;
 		$plugin      = array();
 
-		if ( ! $download_id && ! empty( $addons ) ) {
+		if ( ! $download_id && $addons ) {
 			foreach ( $addons as $addon ) {
 				if ( strtolower( $license->plugin_name ) === strtolower( $addon['title'] ) ) {
 					return $addon;
@@ -1244,7 +1243,7 @@ class FrmAddonsController {
 	 */
 	private static function get_addon_activation_response() {
 		$activating_page = self::get_activating_page();
-		$message         = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' );
+		$message         = $activating_page ? __( 'Your plugin has been activated. Would you like to save and reload the page now?', 'formidable' ) : __( 'Your plugin has been activated.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		return array(
 			'message'       => $message,
@@ -1363,7 +1362,7 @@ class FrmAddonsController {
 		}
 
 		// If empty license, save it now.
-		if ( empty( self::get_pro_license() ) && function_exists( 'load_formidable_pro' ) ) {
+		if ( ! self::get_pro_license() && function_exists( 'load_formidable_pro' ) ) {
 			load_formidable_pro();
 			$license = stripslashes( FrmAppHelper::get_param( 'key', '', 'request', 'sanitize_text_field' ) );
 
@@ -1495,7 +1494,7 @@ class FrmAddonsController {
 			$class .= ' frm-button-secondary frm-button-sm';
 		}
 		?>
-		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>">
+		<a class="install-now button <?php echo esc_attr( $class ); ?>" href="<?php echo esc_url( $upgrade_link ); ?>" target="_blank" rel="noopener" aria-label="<?php esc_attr_e( 'Upgrade Now', 'formidable' ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			<?php echo esc_html( $text ); ?>
 		</a>
 		<?php

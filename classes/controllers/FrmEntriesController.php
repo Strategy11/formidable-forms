@@ -11,12 +11,12 @@ class FrmEntriesController {
 	public static function menu() {
 		FrmAppHelper::force_capability( 'frm_view_entries' );
 
-		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' );
+		add_submenu_page( 'formidable', 'Formidable | ' . __( 'Entries', 'formidable' ), __( 'Entries', 'formidable' ), 'frm_view_entries', 'formidable-entries', 'FrmEntriesController::route' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		$views_installed = is_callable( 'FrmProAppHelper::views_is_installed' ) && FrmProAppHelper::views_is_installed();
 
 		if ( ! $views_installed ) {
-			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' );
+			add_submenu_page( 'formidable', 'Formidable | ' . __( 'Views', 'formidable' ), __( 'Views', 'formidable' ), 'frm_view_entries', 'formidable-views', 'FrmFormsController::no_views' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			self::maybe_redirect_to_views_upsell();
 		} else {
 			self::maybe_redirect_to_views_index();
@@ -380,7 +380,7 @@ class FrmEntriesController {
 
 		foreach ( $meta_value as $mk => $mv ) {
 			// Remove blank values.
-			if ( empty( $mv ) ) {
+			if ( ! $mv ) {
 				unset( $meta_value[ $mk ] );
 			}
 		}
@@ -392,7 +392,7 @@ class FrmEntriesController {
 
 		foreach ( (array) $frm_vars['prev_hidden_cols'] as $prev_hidden ) {
 			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( empty( $prev_hidden ) || in_array( $prev_hidden, $meta_value ) ) {
+			if ( ! $prev_hidden || in_array( $prev_hidden, $meta_value ) ) {
 				// Don't add blank cols or process included cols.
 				continue;
 			}
@@ -550,7 +550,7 @@ class FrmEntriesController {
 		$hidden = array();
 
 		foreach ( (array) $result as $r ) {
-			if ( ! empty( $r ) ) {
+			if ( $r ) {
 				list( $form_prefix, $field_key ) = explode( '_', $r );
 
 				if ( (int) $form_prefix === (int) $form_id ) {

@@ -372,3 +372,4 @@ parameters:
 			message: "#Casting to int something that's already int#"
 			paths:
 				- classes/helpers/FrmXMLHelper.php
+		- '#Method FrmShortcodeHelper::get_shortcode_tag\(\) should return string but returns array<string>\|string#'

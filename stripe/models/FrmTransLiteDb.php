@@ -137,7 +137,7 @@ class FrmTransLiteDb {
 	 *
 	 * @return bool|int
 	 */
-	public function &destroy( $id ) {
+	public function destroy( $id ) {
 		FrmAppHelper::permission_check( 'administrator' );
 
 		global $wpdb;

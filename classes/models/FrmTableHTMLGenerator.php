@@ -183,10 +183,8 @@ class FrmTableHTMLGenerator {
 	 */
 	private function init_table_style() {
 		if ( $this->use_inline_style === true ) {
-
 			$this->table_style  = ' style="' . esc_attr( 'border-spacing:0;font-size:' . $this->style_settings['font_size'] . ';line-height:135%;' );
 			$this->table_style .= esc_attr( 'border-bottom:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';' ) . '"';
-
 		}
 
 		if ( ! empty( $this->style_settings['class'] ) ) {
@@ -207,7 +205,6 @@ class FrmTableHTMLGenerator {
 	 */
 	private function init_td_style() {
 		if ( $this->use_inline_style === true ) {
-
 			$td_style_attributes  = 'text-align:' . ( $this->direction === 'rtl' ? 'right' : 'left' ) . ';';
 			$td_style_attributes .= 'color:' . $this->style_settings['text_color'] . ';padding:' . $this->cell_padding . ';vertical-align:top;';
 			$td_style_attributes .= 'border-top:' . $this->style_settings['border_width'] . ' solid ' . $this->style_settings['border_color'] . ';';

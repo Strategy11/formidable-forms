@@ -38,6 +38,9 @@ class test_FrmStrpLiteAuth extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param array $intent_data
+	 */
 	private function maybe_add_statement_descriptor( $intent_data ) {
 		return $this->run_private_method( array( 'FrmStrpLiteAuth', 'maybe_add_statement_descriptor' ), array( $intent_data ) );
 	}
