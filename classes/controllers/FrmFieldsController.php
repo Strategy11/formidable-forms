@@ -389,34 +389,34 @@ class FrmFieldsController {
 			'data-trigger' => 'hover',
 		);
 
-		$visibility_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-			array(
-				'id'       => 'field_options_admin_only_' . $field['id'],
-				'readonly' => '1',
-			),
-			'field_visibility',
-			__( 'Visibility options', 'formidable' ),
-			'/field-options/#kb-visibility'
-		);
-
-		$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-			array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
-			'autocomplete',
-			__( 'Autocomplete options', 'formidable' ),
-			'/email-address/#kb-autocomplete-attribute'
-		);
-
-		$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
-			array(
-				'type'     => 'text',
-				'readonly' => '1',
-			),
-			'before_after_contents',
-			__( 'Before and after field contents', 'formidable' ),
-			'/field-options/#kb-before-after-input'
-		);
-
 		if ( ! $pro_is_installed ) {
+			$visibility_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'id'       => 'field_options_admin_only_' . $field['id'],
+					'readonly' => '1',
+				),
+				'field_visibility',
+				__( 'Visibility options', 'formidable' ),
+				'/field-options/#kb-visibility'
+			);
+
+			$autocomplete_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array( 'id' => 'field_options_autocomplete_' . $field['id'] ),
+				'autocomplete',
+				__( 'Autocomplete options', 'formidable' ),
+				'/email-address/#kb-autocomplete-attribute'
+			);
+
+			$before_after_content_upsell_atts = FrmSettingsUpsellHelper::add_upgrade_modal_atts(
+				array(
+					'type'     => 'text',
+					'readonly' => '1',
+				),
+				'before_after_contents',
+				__( 'Before and after field contents', 'formidable' ),
+				'/field-options/#kb-before-after-input'
+			);
+
 			$show_upsell_for_unique_value          = in_array(
 				$field['type'],
 				array( 'address', 'checkbox', 'email', 'name', 'number', 'phone', 'radio', 'text', 'textarea', 'url' ),
