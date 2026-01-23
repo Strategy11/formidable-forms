@@ -329,7 +329,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @param array|object $form
+	 * @param array $form
 	 *
 	 * @return false|object
 	 */
