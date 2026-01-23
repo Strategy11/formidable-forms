@@ -2847,7 +2847,7 @@ class FrmFieldsHelper {
 		 *
 		 * @return bool
 		 */
-		return apply_filters( 'frm_hide_maxed_out_field_choices', false, $form_id );
+		return apply_filters( 'frm_hide_field_choices', false, $form_id );
 	}
 
 	/**
