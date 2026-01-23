@@ -374,8 +374,8 @@ class AddMissingDocblockSniff implements Sniff {
 		if ( count( $uniqueTypes ) === 1 ) {
 			$type = $uniqueTypes[0];
 
-			// Skip int if there's an uncertain return type (e.g., return $variable).
-			if ( 'int' === $type && $hasUncertainType ) {
+			// Skip int/bool if there's an uncertain return type (e.g., return $variable).
+			if ( in_array( $type, array( 'int', 'bool' ), true ) && $hasUncertainType ) {
 				return null;
 			}
 
