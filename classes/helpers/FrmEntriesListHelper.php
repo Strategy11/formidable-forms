@@ -17,6 +17,9 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 */
 	public $total_items = 0;
 
+	/**
+	 * @param array $args
+	 */
 	public function __construct( $args ) {
 		parent::__construct( $args );
 		$this->screen->set_screen_reader_content(
@@ -292,7 +295,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 *
 	 * @since 2.0.14
 	 *
-	 * @return string $primary_column
+	 * @return string Primary column.
 	 */
 	protected function get_primary_column_name() {
 		$columns        = get_column_headers( $this->screen );

@@ -203,7 +203,7 @@ class FrmAppHelper {
 
 		$query_args = wp_parse_args( $parsed['query'] );
 
-		return empty( $query_args['utm_medium'] ) ? '' : $query_args['utm_medium'];
+		return ! empty( $query_args['utm_medium'] ) ? $query_args['utm_medium'] : '';
 	}
 
 	/**
@@ -271,12 +271,12 @@ class FrmAppHelper {
 	 *
 	 * @param array $args - May include the form id when values need translation.
 	 *
-	 * @return FrmSettings $frm_settings
+	 * @return FrmSettings
 	 */
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
 
-		if ( empty( $frm_settings ) ) {
+		if ( ! $frm_settings ) {
 			$frm_settings = new FrmSettings( $args );
 		} elseif ( isset( $args['current_form'] ) ) {
 			// If the global has already been set, allow strings to be filtered.
@@ -498,7 +498,7 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( $pagenow ) {
-			// allow this to be true during ajax load i.e. ajax form builder loading
+			// Allow this to be true during ajax load i.e. ajax form builder loading
 			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 
 			if ( $is_page ) {
@@ -760,15 +760,17 @@ class FrmAppHelper {
 			);
 		}
 
-		if ( isset( $params ) && is_array( $value ) && $value ) {
-			foreach ( $params as $k => $p ) {
-				if ( ! $k || ! is_array( $value ) ) {
-					continue;
-				}
+		if ( ! isset( $params ) || ! is_array( $value ) || ! $value ) {
+			return $value;
+		}
 
-				$p     = trim( $p, ']' );
-				$value = $value[ $p ] ?? $default;
+		foreach ( $params as $k => $p ) {
+			if ( ! $k || ! is_array( $value ) ) {
+				continue;
 			}
+
+			$p     = trim( $p, ']' );
+			$value = $value[ $p ] ?? $default;
 		}
 
 		return $value;
@@ -868,7 +870,7 @@ class FrmAppHelper {
 	 *
 	 * @param string $value
 	 *
-	 * @return string $value
+	 * @return string Value.
 	 */
 	public static function preserve_backslashes( $value ) {
 		// If backslashes have already been added, don't add them again
@@ -1165,6 +1167,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.05.03
+	 *
+	 * @return array
 	 */
 	private static function safe_html() {
 		$allow_class = array(
@@ -1390,7 +1394,7 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
+			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
 
 			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
@@ -1959,31 +1963,32 @@ class FrmAppHelper {
 				<?php endforeach; ?>
 			</select>
 			<?php
-		} else {
-			$options            = array();
-			$autocomplete_value = '';
+			return;
+		}
 
-			foreach ( $args['source'] as $key => $source ) {
-				$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
+		$options            = array();
+		$autocomplete_value = '';
 
-				if ( $value_label['value'] === $args['selected'] ) {
-					$autocomplete_value = $value_label['label'];
-				}
+		foreach ( $args['source'] as $key => $source ) {
+			$value_label = self::get_dropdown_value_and_label_from_option( $source, $key, $args );
 
-				$options[] = $value_label;
+			if ( $value_label['value'] === $args['selected'] ) {
+				$autocomplete_value = $value_label['label'];
 			}
 
-			$html_attrs['type']  = 'hidden';
-			$html_attrs['class'] = 'frm_autocomplete_value_input';
-			$html_attrs['value'] = $args['selected'];
-			?>
-			<input type="text" class="frm-custom-search"
-				   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
-				   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
-				   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
-			<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
-			<?php
-		}//end if
+			$options[] = $value_label;
+		}
+
+		$html_attrs['type']  = 'hidden';
+		$html_attrs['class'] = 'frm_autocomplete_value_input';
+		$html_attrs['value'] = $args['selected'];
+		?>
+		<input type="text" class="frm-custom-search"
+			   data-source="<?php echo esc_attr( wp_json_encode( $options ) ); ?>"
+			   placeholder="<?php echo esc_attr( $args['autocomplete_placeholder'] ); ?>"
+			   value="<?php echo esc_attr( $autocomplete_value ); ?>" />
+		<input <?php self::array_to_html_params( $html_attrs, true ); ?> />
+		<?php
 	}
 
 	/**
@@ -2705,29 +2710,29 @@ class FrmAppHelper {
 		);
 
 		// Create a unique field id if it has already been used.
-		if ( in_array( $key, $similar_keys, true ) ) {
-			$key = self::maybe_truncate_key_before_appending( $column, $key );
+		if ( ! in_array( $key, $similar_keys, true ) ) {
+			return $key;
+		}
 
-			/**
-			 * Allow for a custom separator between the attempted key and the generated suffix.
-			 *
-			 * @since 5.2.03
-			 *
-			 * @param string $separator. Default empty.
-			 * @param string $key the key without the added suffix.
-			 */
-			$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
+		$key = self::maybe_truncate_key_before_appending( $column, $key );
 
-			$suffix = 2;
-			do {
-				$key_check = $key . $separator . $suffix;
-				++$suffix;
-			} while ( in_array( $key_check, $similar_keys, true ) );
+		/**
+		 * Allow for a custom separator between the attempted key and the generated suffix.
+		 *
+		 * @since 5.2.03
+		 *
+		 * @param string $separator. Default empty.
+		 * @param string $key the key without the added suffix.
+		 */
+		$separator = apply_filters( 'frm_unique_' . $column . '_separator', '', $key );
 
-			$key = $key_check;
-		}//end if
+		$suffix = 2;
+		do {
+			$key_check = $key . $separator . $suffix;
+			++$suffix;
+		} while ( in_array( $key_check, $similar_keys, true ) );
 
-		return $key;
+		return $key_check;
 	}
 
 	/**
@@ -2740,15 +2745,17 @@ class FrmAppHelper {
 	 * @return string
 	 */
 	private static function maybe_truncate_key_before_appending( $column, $key ) {
-		if ( in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
-			$max_key_length_before_truncating = 60;
+		if ( ! in_array( $column, array( 'form_key', 'field_key' ), true ) ) {
+			return $key;
+		}
 
-			if ( strlen( $key ) > $max_key_length_before_truncating ) {
-				$key = substr( $key, 0, $max_key_length_before_truncating );
+		$max_key_length_before_truncating = 60;
 
-				if ( is_numeric( $key ) ) {
-					$key .= 'a';
-				}
+		if ( strlen( $key ) > $max_key_length_before_truncating ) {
+			$key = substr( $key, 0, $max_key_length_before_truncating );
+
+			if ( is_numeric( $key ) ) {
+				$key .= 'a';
 			}
 		}
 
@@ -3059,13 +3066,14 @@ class FrmAppHelper {
 			return '';
 		}
 
-		$length       = (int) $length;
-		$str          = wp_strip_all_tags( (string) $original_string );
-		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
+		$length = (int) $length;
 
 		if ( $length === 0 ) {
 			return '';
 		}
+
+		$str          = wp_strip_all_tags( (string) $original_string );
+		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
@@ -3217,10 +3225,10 @@ class FrmAppHelper {
 	 * @param int|string $to     In seconds.
 	 * @param int|string $levels Number of time units to include or a specific unit.
 	 *
-	 * @return string $time_ago
+	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
+		$now = ! $to && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference
@@ -3585,7 +3593,7 @@ class FrmAppHelper {
 		// Add extra slashes for \r\n since WP strips them.
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
-		// allow for &quot
+		// Allow for &quot
 		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
@@ -3606,13 +3614,15 @@ class FrmAppHelper {
 				self::prepare_action_slashes( $v1, $k1, $post_content[ $key ] );
 				unset( $k1, $v1 );
 			}
-		} else {
-			// Strip all slashes so everything is the same, no matter where the value is coming from
-			$val = stripslashes( $val );
 
-			// Add backslashes before double quotes and forward slashes only
-			$post_content[ $key ] = addcslashes( $val, '"\\/' );
+			return;
 		}
+
+		// Strip all slashes so everything is the same, no matter where the value is coming from
+		$val = stripslashes( $val );
+
+		// Add backslashes before double quotes and forward slashes only
+		$post_content[ $key ] = addcslashes( $val, '"\\/' );
 	}
 
 	/**
@@ -3740,14 +3750,15 @@ class FrmAppHelper {
 
 			$key = $input['name'];
 
-			if ( isset( $formatted[ $key ] ) ) {
-				if ( is_array( $formatted[ $key ] ) ) {
-					$formatted[ $key ][] = $input['value'];
-				} else {
-					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
-				}
-			} else {
+			if ( ! isset( $formatted[ $key ] ) ) {
 				$formatted[ $key ] = $input['value'];
+				continue;
+			}
+
+			if ( is_array( $formatted[ $key ] ) ) {
+				$formatted[ $key ][] = $input['value'];
+			} else {
+				$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
 			}
 		}
 
@@ -3930,7 +3941,7 @@ class FrmAppHelper {
 				'noTitleText'                        => FrmFormsHelper::get_no_title_text(),
 
 				// In older versions this event listener causes the section to immediately close again
-				// when the h3 element is clicked. It's only required in WP 6.7+.
+				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
 			/**
@@ -4178,10 +4189,10 @@ class FrmAppHelper {
 		);
 
 		if ( $type === 'captcha' ) {
-			// remove the languages unavailable for the captcha
+			// Remove the languages unavailable for the captcha
 			$unset = array( 'sq', 'bs', 'eo', 'fo', 'fr-CH', 'sr-SR', 'ar-DZ', 'be', 'cy-GB', 'kk', 'km', 'ky', 'lb', 'mk', 'nb', 'nn', 'rm', 'tj' );
 		} else {
-			// remove the languages unavailable for the datepicker
+			// Remove the languages unavailable for the datepicker
 			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'mr', 'lo', 'kn', 'si', 'gu', 'bn', 'zu', 'ur', 'te', 'sw', 'am' );
 		}
 

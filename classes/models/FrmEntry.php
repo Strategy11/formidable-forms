@@ -17,7 +17,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	public static function create( $values ) {
 		return self::create_entry( $values, 'standard' );
@@ -29,7 +29,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function create_entry( $values, $type ) {
 		$new_values = self::before_insert_entry_in_database( $values, $type );
@@ -87,10 +87,15 @@ class FrmEntry {
 			unset( $check_val['name'] );
 		}
 
-		$check_val    = apply_filters( 'frm_duplicate_check_val', $check_val );
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
+
+		if ( ! isset( $values['item_meta'] ) ) {
+			return false;
+		}
+
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists ) {
 			return false;
 		}
 
@@ -101,7 +106,7 @@ class FrmEntry {
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
 
-			// make sure it's a duplicate
+			// Make sure it's a duplicate
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 
@@ -122,7 +127,7 @@ class FrmEntry {
 				return false;
 			}
 
-			// compare serialized values and not arrays
+			// Compare serialized values and not arrays
 			$new_meta = array_map( 'maybe_serialize', $filtered_vals );
 
 			if ( $field_metas === $new_meta ) {
@@ -139,7 +144,7 @@ class FrmEntry {
 			$diff = array_diff_assoc( $field_metas, $new_meta );
 
 			foreach ( $diff as $meta_value ) {
-				if ( ! empty( $meta_value ) ) {
+				if ( $meta_value ) {
 					$is_duplicate = false;
 				}
 			}
@@ -237,7 +242,7 @@ class FrmEntry {
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 
-			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+			if ( '' === $reduced[ $field_id ] || array() === $reduced[ $field_id ] ) {
 				unset( $reduced[ $field_id ] );
 			}
 		}
@@ -318,7 +323,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return bool|int $update_results
+	 * @return bool|int Update results.
 	 */
 	public static function update( $id, $values ) {
 		return self::update_entry( $id, $values, 'standard' );
@@ -333,7 +338,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $update_type
 	 *
-	 * @return bool|int $query_results
+	 * @return bool|int Query results.
 	 */
 	private static function update_entry( $id, $values, $update_type ) {
 		global $wpdb;
@@ -572,7 +577,7 @@ class FrmEntry {
 				continue;
 			}
 
-			// include sub entries in an array
+			// Include sub entries in an array
 			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
@@ -634,7 +639,7 @@ class FrmEntry {
 				unset( $order_matches );
 			}
 
-			// prepare the query
+			// Prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$entries = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -774,7 +779,7 @@ class FrmEntry {
 	 * @param array  $values
 	 * @param string $type
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function before_insert_entry_in_database( &$values, $type ) {
 		self::sanitize_entry_post( $values );
@@ -794,7 +799,7 @@ class FrmEntry {
 	 * @param array $values
 	 * @param array $new_values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function continue_to_create_entry( $values, $new_values ) {
 		$entry_id = self::insert_entry_into_database( $new_values );
@@ -842,7 +847,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function package_entry_data( &$values ) {
 		global $wpdb;
@@ -996,14 +1001,14 @@ class FrmEntry {
 	 *
 	 * @param array $new_values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	private static function insert_entry_into_database( $new_values ) {
 		global $wpdb;
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
 
-		return ! $query_results ? false : $wpdb->insert_id;
+		return $query_results ? $wpdb->insert_id : false;
 	}
 
 	/**
@@ -1132,7 +1137,7 @@ class FrmEntry {
 	 * @param array      $values
 	 * @param string     $update_type
 	 *
-	 * @return bool $update
+	 * @return bool Update.
 	 */
 	private static function before_update_entry( $id, &$values, $update_type ) {
 		$update = true;
@@ -1159,7 +1164,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return array $new_values
+	 * @return array New values.
 	 */
 	private static function package_entry_to_update( $id, $values ) {
 		global $wpdb;
@@ -1232,7 +1237,7 @@ class FrmEntry {
 	 *
 	 * @param array $values
 	 *
-	 * @return bool|int $entry_id
+	 * @return bool|int Entry ID.
 	 */
 	public static function create_entry_from_xml( $values ) {
 		return self::create_entry( $values, 'xml' );
@@ -1247,7 +1252,7 @@ class FrmEntry {
 	 * @param int   $id
 	 * @param array $values
 	 *
-	 * @return bool|int $updated
+	 * @return bool|int Updated.
 	 */
 	public static function update_entry_from_xml( $id, $values ) {
 		return self::update_entry( $id, $values, 'xml' );

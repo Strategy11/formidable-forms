@@ -180,7 +180,7 @@ class FrmFieldFormHtml {
 		// Replace [id].
 		$this->html = str_replace( '[id]', $this->field_id, $this->html );
 
-		// set the label for
+		// Set the label for
 		$this->html = str_replace( 'field_[key]', $this->html_id, $this->html );
 
 		// Replace [key].
@@ -508,7 +508,7 @@ class FrmFieldFormHtml {
 		$classes = $this->get_field_div_classes();
 
 		if ( in_array( $this->field_obj->get_field_column( 'type' ), array( 'html', 'summary' ), true ) && ! str_contains( $this->html, '[error_class]' ) ) {
-			// there is no error_class shortcode for HTML fields
+			// There is no error_class shortcode for HTML fields
 			$this->html = str_replace( 'class="frm_form_field', 'class="frm_form_field ' . esc_attr( $classes ), $this->html );
 			return;
 		}
@@ -521,7 +521,7 @@ class FrmFieldFormHtml {
 	 *
 	 * @since 3.0
 	 *
-	 * @return string $classes
+	 * @return string Classes.
 	 */
 	private function get_field_div_classes() {
 		// Add error class

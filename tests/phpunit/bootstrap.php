@@ -28,12 +28,9 @@ if ( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 
 require_once __DIR__ . '/base/frm_factory.php';
 
-// include unit test base class
+// Include unit test base class
 require_once __DIR__ . '/base/FrmUnitTest.php';
 require_once __DIR__ . '/base/FrmAjaxUnitTest.php';
-
-// include our Stripe unit helper base class
-require_once __DIR__ . '/stripe/FrmStrpLiteUnitTest.php';
 
 // Ensure that the plugin has been installed and activated.
 FrmUnitTest::frm_install();

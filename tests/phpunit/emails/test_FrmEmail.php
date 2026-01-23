@@ -448,6 +448,10 @@ class test_FrmEmail extends FrmUnitTest {
 		return $entry;
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_recipients( $expected, $mock_email, $cc_status = 'yes_cc', $bcc_status = 'yes_bcc' ) {
 		$this->assertSame( $expected['to'], $mock_email['to'], 'To does not match expected.' );
 		$this->assertSame( $expected['cc'], $mock_email['cc'], 'CC does not match expected.' );
@@ -462,17 +466,29 @@ class test_FrmEmail extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_senders( $expected, $mock_email ) {
-		$this->assertNotFalse( strpos( $mock_email['header'], 'From: ' . $expected['from'] ), 'From does not match expected.' );
-		$this->assertNotFalse( strpos( $mock_email['header'], 'Reply-To: ' . $expected['reply_to'] ), 'Reply-to does not match expected.' );
+		$this->assertStringContainsString( 'From: ' . $expected['from'], $mock_email['header'], 'From does not match expected.' );
+		$this->assertStringContainsString( 'Reply-To: ' . $expected['reply_to'], $mock_email['header'], 'Reply-to does not match expected.' );
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_subject( $expected, $mock_email ) {
 		if ( isset( $mock_email['subject'] ) ) {
 			$this->assertSame( $expected['subject'], $mock_email['subject'], 'Subject does not match expected.' );
 		}
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_message_body( $expected, $mock_email ) {
 		// Remove line breaks from body for comparison
 		$expected['body']   = preg_replace( "/\r|\n/", '', $expected['body'] );
@@ -481,28 +497,52 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->assertSame( $expected['body'], $mock_email['body'], 'Message body does not match expected.' );
 	}
 
+	/**
+	 * @param array $expected
+	 * @param array $mock_email
+	 */
 	protected function check_content_type( $expected, $mock_email ) {
-		$this->assertNotFalse( strpos( $mock_email['header'], $expected['content_type'] ), 'Content type does not match expected.' );
+		$this->assertStringContainsString( $expected['content_type'], $mock_email['header'], 'Content type does not match expected.' );
 	}
 
+	/**
+	 * @param array $mock_email
+	 */
 	protected function check_no_cc_included( $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'], 'Cc:' ), 'CC is included when it should not be.' );
+		$this->assertStringNotContainsString( 'Cc:', $mock_email['header'], 'CC is included when it should not be.' );
 	}
 
+	/**
+	 * @param array $mock_email
+	 */
 	protected function check_no_bcc_included( $mock_email ) {
-		$this->assertFalse( strpos( $mock_email['header'], 'Bcc:' ), 'BCC is included when it should not be.' );
+		$this->assertStringNotContainsString( 'Bcc:', $mock_email['header'], 'BCC is included when it should not be.' );
 	}
 
+	/**
+	 * @param array $to_emails
+	 * @param array $args
+	 */
 	public function add_to_emails( $to_emails, $values, $form_id, $args ) {
 		$to_emails[] = 'test3@mail.com';
 		$to_emails[] = '1231231234';
 		return $to_emails;
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return string
+	 */
 	public function change_email_subject( $subject, $args ) {
 		return 'New subject';
 	}
 
+	/**
+	 * @param array $args
+	 *
+	 * @return bool
+	 */
 	public function send_separate_emails( $is_single, $args ) {
 		return true;
 	}
@@ -537,8 +577,8 @@ class test_FrmEmail extends FrmUnitTest {
 		);
 		$this->check_private_properties( $reply_to, 'reply_to' );
 
-		// create an entry with no email and then try to use its shortcode to get a reply_to value.
-		// the default should use the from email, not the admin "default email".
+		// Create an entry with no email and then try to use its shortcode to get a reply_to value.
+		// The default should use the from email, not the admin "default email".
 		$email_field_key                             = 'free_field_types' === $this->contact_form->form_key ? 'free-email-field' : 'contact-email';
 		$entry_data                                  = $this->factory->field->generate_entry_array( $this->contact_form );
 		$email_field                                 = FrmField::getOne( $email_field_key );
@@ -678,9 +718,9 @@ LINE 1<br>LINE 2<br></body></html>'
 			$actual = $this->get_private_property( $email, 'message' );
 
 			if ( $setting['compare'] === 'Contains' ) {
-				$this->assertNotFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringContainsString( 'Referrer:', $actual );
 			} else {
-				$this->assertFalse( strpos( $actual, 'Referrer:' ) );
+				$this->assertStringNotContainsString( 'Referrer:', $actual );
 			}
 		}
 	}

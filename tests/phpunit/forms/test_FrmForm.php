@@ -16,7 +16,7 @@ class test_FrmForm extends FrmUnitTest {
 	public function test_create() {
 		$values  = FrmFormsHelper::setup_new_vars( false );
 		$form_id = FrmForm::create( $values );
-		$this->assertTrue( is_numeric( $form_id ) );
+		$this->assertIsNumeric( $form_id );
 		$this->assertNotEmpty( $form_id );
 	}
 
@@ -26,10 +26,10 @@ class test_FrmForm extends FrmUnitTest {
 	public function test_duplicate() {
 		$form = $this->factory->form->get_object_by_id( $this->all_fields_form_key );
 		$id   = FrmForm::duplicate( $form->id );
-		$this->assertTrue( is_numeric( $id ) );
+		$this->assertIsNumeric( $id );
 		$this->assertNotEmpty( $id );
 
-		// check the number of form actions
+		// Check the number of form actions
 		$original_actions = FrmFormAction::get_action_for_form( $form->id );
 		$new_actions      = FrmFormAction::get_action_for_form( $id );
 		$this->assertEquals( count( $original_actions ), count( $new_actions ) );
@@ -93,7 +93,7 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_form_is_hidden( 'subscriber', array( 'editor', 'author' ), 'Contributors should not set a form assigned to editors and authors' );
 		$this->assert_form_is_hidden( 'subscriber', array( 'author', 'administrator' ), 'Contributors should not set a form assigned to authors and administrators' );
 
-		// test custom roles
+		// Test custom roles
 		$this->assert_form_is_visible( 'formidable_custom_role', 'formidable_custom_role', 'Custom role should be able to see a form assigned to it' );
 		$this->assert_form_is_visible( 'formidable_custom_role', '', 'Custom role should be able to see a form assigned to logged in users' );
 		$this->assert_form_is_hidden( 'formidable_custom_role', array( 'administrator' ), 'Custom role should not be able to see a form not assigned to it' );

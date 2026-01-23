@@ -706,7 +706,7 @@ class FrmStrpLiteConnectHelper {
 			return ! empty( self::$latest_error_from_stripe_connect ) ? self::$latest_error_from_stripe_connect : false;
 		}
 
-		return empty( $data->customer_id ) ? false : $data->customer_id;
+		return ! empty( $data->customer_id ) ? $data->customer_id : false;
 	}
 
 	/**
@@ -734,8 +734,8 @@ class FrmStrpLiteConnectHelper {
 		}
 
 		if ( is_array( $response ) ) {
-			// reformat empty arrays as empty objects
-			// if the response is an array, it's because it's empty. Everything with data is already an object.
+			// Reformat empty arrays as empty objects
+			// If the response is an array, it's because it's empty. Everything with data is already an object.
 			return new stdClass();
 		}
 

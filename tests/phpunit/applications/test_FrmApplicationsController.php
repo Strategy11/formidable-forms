@@ -32,7 +32,7 @@ class test_FrmApplicationsController extends FrmUnitTest {
 
 		$template = reset( $data );
 		$this->assertIsArray( $template );
-		$this->assertTrue( array_key_exists( 'key', $template ) );
+		$this->assertArrayHasKey( 'key', $template );
 		$this->assertNotEmpty( $template['key'] );
 	}
 

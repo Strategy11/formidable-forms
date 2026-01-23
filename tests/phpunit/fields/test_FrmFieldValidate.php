@@ -80,6 +80,9 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @return array
+	 */
 	protected function expected_format_errors() {
 		return array(
 			array(
@@ -282,7 +285,7 @@ class test_FrmFieldValidate extends FrmUnitTest {
 			array(
 				'field_key' => 'phone_with_regex',
 				'format'    => '^\d{3}-\d{4}$',
-				'expected'  => '^\d{3}-\d{4}$', // leave it alone
+				'expected'  => '^\d{3}-\d{4}$', // Leave it alone
 			),
 		);
 

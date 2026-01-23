@@ -596,23 +596,25 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function fallback_when_page_template_part_is_not_supported_by_theme() {
-		if ( have_posts() ) {
-			the_post();
-			self::get_template( 'header' );
-
-			// add some generic class names to the container to add some natural padding to the content.
-			// .entry-content catches the WordPress TwentyTwenty theme.
-			// .container catches Customizr content.
-			echo '<div class="container entry-content">';
-			the_content();
-			echo '</div>';
-
-			// Prevent extra unexpected forms in the footer.
-			// For some reason this happens in the Twenty Twenty Five theme.
-			add_filter( 'frm_filter_final_form', '__return_empty_string' );
-
-			self::get_template( 'footer' );
+		if ( ! have_posts() ) {
+			return;
 		}
+
+		the_post();
+		self::get_template( 'header' );
+
+		// Add some generic class names to the container to add some natural padding to the content.
+		// .entry-content catches the WordPress TwentyTwenty theme.
+		// .container catches Customizr content.
+		echo '<div class="container entry-content">';
+		the_content();
+		echo '</div>';
+
+		// Prevent extra unexpected forms in the footer.
+		// For some reason this happens in the Twenty Twenty Five theme.
+		add_filter( 'frm_filter_final_form', '__return_empty_string' );
+
+		self::get_template( 'footer' );
 	}
 
 	/**
@@ -1060,19 +1062,21 @@ class FrmFormsController {
 	 * @return void
 	 */
 	public static function insert_form_button() {
-		if ( current_user_can( 'frm_view_forms' ) ) {
-			// Store the result in memory and re-use it when this function is called multiple times.
-			// This helps speed up the form builder when there are a lot of HTML fields, where this
-			// button is inserted once per HTML field.
-			// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
-			if ( ! isset( self::$formidable_tinymce_button ) ) {
-				FrmAppHelper::load_admin_wide_js();
-				$menu_name                       = FrmAppHelper::get_menu_name();
-				$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
-				self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
-			}
-			echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		if ( ! current_user_can( 'frm_view_forms' ) ) {
+			return;
 		}
+
+		// Store the result in memory and re-use it when this function is called multiple times.
+		// This helps speed up the form builder when there are a lot of HTML fields, where this
+		// Button is inserted once per HTML field.
+		// In a form with 66 HTML fields, this saves 0.5 seconds on page load time, tested locally.
+		if ( ! isset( self::$formidable_tinymce_button ) ) {
+			FrmAppHelper::load_admin_wide_js();
+			$menu_name                       = FrmAppHelper::get_menu_name();
+			$icon                            = apply_filters( 'frm_media_icon', FrmAppHelper::svg_logo() );
+			self::$formidable_tinymce_button = '<a href="#TB_inline?width=50&height=50&inlineId=frm_insert_form" class="thickbox button add_media frm_insert_form" title="' . esc_attr__( 'Add forms and content', 'formidable' ) . '">' . FrmAppHelper::kses( $icon, 'all' ) . ' ' . esc_html( $menu_name ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+		}
+		echo self::$formidable_tinymce_button; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -1096,7 +1100,7 @@ class FrmFormsController {
 		include FrmAppHelper::plugin_path() . '/classes/views/frm-forms/insert_form_popup.php';
 
 		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
-			// initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
+			// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
 			require ABSPATH . WPINC . '/class-wp-editor.php';
 			?>
 			<div class="frm_hidden">
@@ -1159,7 +1163,7 @@ class FrmFormsController {
 		$opts = apply_filters( 'frm_sc_popup_opts', $opts, $shortcode );
 
 		if ( isset( $opts['form_id'] ) && is_string( $opts['form_id'] ) ) {
-			// allow other shortcodes to use the required form id option
+			// Allow other shortcodes to use the required form id option
 			$form_id = $opts['form_id'];
 			unset( $opts['form_id'] );
 		}
@@ -2096,7 +2100,7 @@ class FrmFormsController {
 			$json_vars = json_decode( $json_vars, true );
 
 			if ( ! $json_vars ) {
-				// json decoding failed so we should return an error message.
+				// Json decoding failed so we should return an error message.
 				$action = FrmAppHelper::get_param( $action, '', 'get', 'sanitize_title' );
 
 				if ( 'edit' === $action ) {
@@ -2353,7 +2357,7 @@ class FrmFormsController {
 				array(
 					'parent' => 'frm-forms',
 					'id'     => 'edit_form_' . $form_id,
-					'title'  => empty( $name ) ? FrmFormsHelper::get_no_title_text() : $name,
+					'title'  => $name ? $name : FrmFormsHelper::get_no_title_text(),
 					'href'   => FrmForm::get_edit_link( $form_id ),
 				)
 			);
@@ -2443,7 +2447,7 @@ class FrmFormsController {
 		$frm_settings = FrmAppHelper::get_settings( array( 'current_form' => $form->id ) );
 
 		if ( self::is_viewable_draft_form( $form ) ) {
-			// don't show a draft form on a page
+			// Don't show a draft form on a page
 			$form = __( 'Please select a valid form', 'formidable' );
 		} elseif ( ! FrmForm::is_visible_to_user( $form ) ) {
 			$form = do_shortcode( $frm_settings->login_msg );
@@ -2554,7 +2558,6 @@ class FrmFormsController {
 			}
 		} elseif ( $errors ) {
 			self::show_form_after_submit( $pass_args );
-
 		} else {
 			do_action( 'frm_validate_form_creation', $params, $fields, $form, $title, $description );
 
@@ -3430,7 +3433,7 @@ class FrmFormsController {
 		add_filter( 'script_loader_tag', 'FrmFormsController::defer_script_loading', 10, 2 );
 
 		if ( FrmAppHelper::is_admin() ) {
-			// don't load this in back-end
+			// Don't load this in back-end
 			return;
 		}
 
@@ -3525,7 +3528,7 @@ class FrmFormsController {
 		FrmStylesController::enqueue_css();
 
 		if ( ! FrmAppHelper::is_admin() && $location !== 'header' && ! empty( $frm_vars['forms_loaded'] ) ) {
-			// load formidable js
+			// Load formidable js
 			wp_enqueue_script( 'formidable' );
 
 			FrmHoneypot::maybe_print_honeypot_js();
@@ -3541,7 +3544,7 @@ class FrmFormsController {
 	 * @return void
 	 */
 	private static function maybe_minimize_form( $atts, &$content ) {
-		// check if minimizing is turned on
+		// Check if minimizing is turned on
 		if ( self::is_minification_on( $atts ) ) {
 			$content = str_replace( array( "\r\n", "\r", "\n", "\t", '    ' ), '', $content );
 		}

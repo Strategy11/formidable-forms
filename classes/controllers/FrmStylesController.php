@@ -272,13 +272,13 @@ class FrmStylesController {
 	 * @return string
 	 */
 	private static function get_css_version( $css_key, $version ) {
-		if ( 'formidable' === $css_key ) {
-			$this_version = get_option( 'frm_last_style_update' );
+		if ( 'formidable' !== $css_key ) {
+			return $version;
+		}
 
-			if ( ! $this_version ) {
-				$this_version = $version;
-			}
-		} else {
+		$this_version = get_option( 'frm_last_style_update' );
+
+		if ( ! $this_version ) {
 			$this_version = $version;
 		}
 
@@ -1045,7 +1045,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function add_meta_boxes() {
-		// setup meta boxes
+		// Setup meta boxes
 		$meta_boxes = array(
 			'general'                => __( 'General', 'formidable' ),
 			'form-title'             => __( 'Form Title', 'formidable' ),
@@ -1325,9 +1325,8 @@ class FrmStylesController {
 	 *
 	 * @return string
 	 */
-	public static function &important_style( $important, $field ) {
-		$important = self::get_style_val( 'important_style', $field['form_id'] );
-		return $important;
+	public static function important_style( $important, $field ) {
+		return self::get_style_val( 'important_style', $field['form_id'] );
 	}
 
 	/**
@@ -1344,7 +1343,7 @@ class FrmStylesController {
 	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
-		// the symbol id from icons.svg
+		// The symbol id from icons.svg
 		$icon_ids = array(
 			'ranking-fields-style' => 'frm_chart_bar_icon',
 			'section-fields-style' => 'frm-form-title-style',

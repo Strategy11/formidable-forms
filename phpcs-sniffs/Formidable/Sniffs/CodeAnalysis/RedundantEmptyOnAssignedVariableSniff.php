@@ -195,8 +195,46 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 			return $ifContext;
 		}
 
+		// Check if in a ternary condition.
+		$ternaryContext = $this->isInTernaryCondition( $phpcsFile, $stackPtr );
+
+		if ( false !== $ternaryContext ) {
+			return $ternaryContext;
+		}
+
 		// Check if in a boolean expression (with && or ||).
 		return $this->isInBooleanExpression( $phpcsFile, $stackPtr );
+	}
+
+	/**
+	 * Check if the empty() call is in a ternary condition.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $stackPtr  The position of the empty token.
+	 *
+	 * @return false|int The statement start position, or false if not in a ternary.
+	 */
+	private function isInTernaryCondition( File $phpcsFile, $stackPtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the end of the empty() call.
+		$openParen = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
+		if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+			return false;
+		}
+
+		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+		// Look for ? after the empty() call.
+		$nextToken = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, null, true );
+
+		if ( false !== $nextToken && $tokens[ $nextToken ]['code'] === T_INLINE_THEN ) {
+			// Find the statement start.
+			return $this->findStatementStart( $phpcsFile, $stackPtr );
+		}
+
+		return false;
 	}
 
 	/**
@@ -363,6 +401,9 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 		// The statement's level is what we compare against.
 		$statementLevel = $tokens[ $statementToken ]['level'];
 
+		$hasUnconditionalAssignment = false;
+		$hasAnyAssignment           = false;
+
 		// Search from the function start to the statement.
 		for ( $i = $scopeOpener + 1; $i < $statementToken; $i++ ) {
 			if ( $tokens[ $i ]['code'] !== T_VARIABLE ) {
@@ -380,13 +421,113 @@ class RedundantEmptyOnAssignedVariableSniff implements Sniff {
 				continue;
 			}
 
+			$hasAnyAssignment = true;
+
 			// Check if the assignment is at the same scope level as the statement.
 			// This ensures the variable was assigned unconditionally before the statement.
 			$assignmentLevel = $tokens[ $i ]['level'];
 
-			if ( $assignmentLevel === $statementLevel ) {
-				return true;
+			if ( $assignmentLevel !== $statementLevel ) {
+				continue;
 			}
+
+			// Even if levels match, check if this assignment is inside a conditional block.
+			// If it is, the variable might not be set.
+			if ( $this->isInsideConditionalBlock( $phpcsFile, $functionToken, $i ) ) {
+				continue;
+			}
+
+			$hasUnconditionalAssignment = true;
+		}
+
+		// If there's any assignment but no unconditional one, the variable might not be set.
+		// Only flag if we found an unconditional assignment.
+		return $hasUnconditionalAssignment;
+	}
+
+	/**
+	 * Check if a token position is inside a conditional block (if/else/elseif).
+	 *
+	 * @param File $phpcsFile     The file being scanned.
+	 * @param int  $functionToken The position of the containing function.
+	 * @param int  $tokenPtr      The position to check.
+	 *
+	 * @return bool True if inside a conditional block, false otherwise.
+	 */
+	private function isInsideConditionalBlock( File $phpcsFile, $functionToken, $tokenPtr ) {
+		$tokens      = $phpcsFile->getTokens();
+		$scopeOpener = $tokens[ $functionToken ]['scope_opener'];
+
+		// Walk backwards from the token to find if it's inside an if/else/elseif block.
+		for ( $i = $tokenPtr - 1; $i > $scopeOpener; $i-- ) {
+			$code = $tokens[ $i ]['code'];
+
+			// Check for opening braces that belong to if/else/elseif.
+			if ( $code === T_OPEN_CURLY_BRACKET ) {
+				// Check if the token is inside this brace's scope.
+				if ( ! isset( $tokens[ $i ]['bracket_closer'] ) ) {
+					continue;
+				}
+
+				$closer = $tokens[ $i ]['bracket_closer'];
+
+				if ( $tokenPtr <= $i || $tokenPtr >= $closer ) {
+					// Token is not inside this brace pair.
+					continue;
+				}
+
+				// Find what this brace belongs to.
+				$owner = $this->findBraceOwner( $phpcsFile, $i );
+
+				if ( false === $owner ) {
+					continue;
+				}
+
+				$ownerCode = $tokens[ $owner ]['code'];
+
+				// If this brace belongs to an if/else/elseif, the token is inside a conditional.
+				if ( in_array( $ownerCode, array( T_IF, T_ELSE, T_ELSEIF ), true ) ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Find the owner of an opening brace (if, else, function, etc.).
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $bracePtr  The position of the opening brace.
+	 *
+	 * @return false|int The position of the owner token, or false if not found.
+	 */
+	private function findBraceOwner( File $phpcsFile, $bracePtr ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Check if the brace has a recorded owner.
+		if ( isset( $tokens[ $bracePtr ]['scope_condition'] ) ) {
+			return $tokens[ $bracePtr ]['scope_condition'];
+		}
+
+		// Look backwards for the owner.
+		$prevToken = $phpcsFile->findPrevious( T_WHITESPACE, $bracePtr - 1, null, true );
+
+		if ( false === $prevToken ) {
+			return false;
+		}
+
+		$code = $tokens[ $prevToken ]['code'];
+
+		// Direct owners (else, do, try, etc.).
+		if ( in_array( $code, array( T_ELSE, T_DO, T_TRY, T_FINALLY ), true ) ) {
+			return $prevToken;
+		}
+
+		// Check for closing parenthesis (if, elseif, while, for, foreach, switch, catch).
+		if ( $code === T_CLOSE_PARENTHESIS && isset( $tokens[ $prevToken ]['parenthesis_owner'] ) ) {
+			return $tokens[ $prevToken ]['parenthesis_owner'];
 		}
 
 		return false;

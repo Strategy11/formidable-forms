@@ -254,7 +254,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								$frm_style->get_field_name( 'submit_style' ),
 								array(
 									'div_class'       => 'with_frm_style frm_toggle',
-									'checked'         => empty( $frm_style->get_field_name( 'submit_style' ) ),
+									'checked'         => ! $frm_style->get_field_name( 'submit_style' ),
 									'echo'            => true,
 									'aria-label-attr' => __( 'Disable submit button styling', 'formidable' ),
 								)

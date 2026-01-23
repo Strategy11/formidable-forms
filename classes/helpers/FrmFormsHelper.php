@@ -208,7 +208,7 @@ class FrmFormsHelper {
 					}
 
 					$url       = isset( $base ) ? add_query_arg( $args, $base ) : add_query_arg( $args );
-					$form_name = empty( $form->name ) ? self::get_no_title_text() : $form->name;
+					$form_name = ! empty( $form->name ) ? $form->name : self::get_no_title_text();
 					?>
 					<li class="frm-dropdown-form">
 						<a href="<?php echo esc_url( $url ); ?>" tabindex="-1" class="frm-justify-between">
@@ -879,7 +879,7 @@ BEFORE_HTML;
 		FrmField::create( $end_section_values );
 
 		if ( $move === 'move' ) {
-			// bump the order of current field unless we're at the end of the form
+			// Bump the order of current field unless we're at the end of the form
 			FrmField::update( $field->id, array( 'field_order' => $field->field_order + 2 ) );
 		}
 
@@ -1031,7 +1031,7 @@ BEFORE_HTML;
 	 */
 	private static function form_should_be_inline_and_missing_class( $form ) {
 		if ( isset( $form['form_class'] ) && str_contains( ' ' . $form['form_class'] . ' ', ' frm_inline_form ' ) ) {
-			// not missing class, avoid adding it twice.
+			// Not missing class, avoid adding it twice.
 			return false;
 		}
 		return ! empty( $form['submit_html'] ) && str_contains( $form['submit_html'], 'frm_inline_submit' );
@@ -1107,7 +1107,7 @@ BEFORE_HTML;
 		}
 
 		if ( is_object( $form ) && $form->parent_form_id ) {
-			// get the parent form if this is a child
+			// Get the parent form if this is a child
 			$form = $form->parent_form_id;
 		} elseif ( is_array( $form ) && ! empty( $form['parent_form_id'] ) ) {
 			$form = $form['parent_form_id'];
@@ -1162,7 +1162,7 @@ BEFORE_HTML;
 	 * @return void
 	 */
 	public static function show_error( $args ) {
-		// remove any blank messages
+		// Remove any blank messages
 		$args['errors'] = array_filter( (array) $args['errors'] );
 
 		$line_break_first = $args['show_img'];
@@ -1343,28 +1343,28 @@ BEFORE_HTML;
 	public static function format_link_html( $link_details, $length = 'label' ) {
 		$link = '';
 
-		if ( $link_details ) {
-			$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
-
-			if ( isset( $link_details['data'] ) ) {
-				foreach ( $link_details['data'] as $data => $value ) {
-					$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
-				}
-			} elseif ( isset( $link_details['confirm'] ) ) {
-				$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
-			}
-
-			$label = $link_details[ $length ] ?? $link_details['label'];
-
-			if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
-				$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
-				$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
-			}
-
-			$link .= '>' . $label . '</a>';
+		if ( ! $link_details ) {
+			return $link;
 		}
 
-		return $link;
+		$link = '<a href="' . esc_url( $link_details['url'] ) . '" class="frm-trash-link"';
+
+		if ( isset( $link_details['data'] ) ) {
+			foreach ( $link_details['data'] as $data => $value ) {
+				$link .= ' data-' . esc_attr( $data ) . '="' . esc_attr( $value ) . '"';
+			}
+		} elseif ( isset( $link_details['confirm'] ) ) {
+			$link .= ' onclick="return confirm(\'' . esc_attr( $link_details['confirm'] ) . '\')"';
+		}
+
+		$label = $link_details[ $length ] ?? $link_details['label'];
+
+		if ( $length === 'icon' && isset( $link_details[ $length ] ) ) {
+			$label = '<span class="' . $label . '" title="' . esc_attr( $link_details['label'] ) . '" aria-hidden="true"></span>';
+			$link .= ' aria-label="' . esc_attr( $link_details['label'] ) . '"';
+		}
+
+		return $link . ( '>' . $label . '</a>' );
 	}
 
 	/**
@@ -1520,7 +1520,7 @@ BEFORE_HTML;
 			'publish' => __( 'Published', 'formidable' ),
 		);
 
-		if ( ! in_array( $status, array_keys( $nice_names ), true ) ) {
+		if ( ! array_key_exists( $status, $nice_names ) ) {
 			$status = 'publish';
 		}
 
@@ -1853,14 +1853,15 @@ BEFORE_HTML;
 	 * @return bool|string A string with an unsafe param message or false.
 	 */
 	private static function create_unsafe_param_warning( $unsafe_params_in_redirect ) {
-		$count                = count( $unsafe_params_in_redirect );
-		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
-		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
-		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
+		$count = count( $unsafe_params_in_redirect );
 
 		if ( $count === 0 ) {
 			return false;
 		}
+
+		$caution              = esc_html__( 'Is this intentional?', 'formidable' );
+		$reserved_words_intro = esc_html__( 'See the list of reserved words in WordPress.', 'formidable' );
+		$reserved_words_link  = '<a href="https://codex.wordpress.org/WordPress_Query_Vars" target="_blank"> ' . $reserved_words_intro . '</a>';
 
 		if ( $count === 1 ) {
 			/* translators: %s: the name of a single parameter in the redirect URL */

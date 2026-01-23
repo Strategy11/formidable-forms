@@ -272,10 +272,10 @@ class FrmPluginSearch {
 	private function sanitize_search_term( $term ) {
 		$term = strtolower( urldecode( $term ) );
 
-		// remove non-alpha/space chars.
+		// Remove non-alpha/space chars.
 		$term = preg_replace( '/[^a-z ]/', '', $term );
 
-		// remove strings that don't help matches.
+		// Remove strings that don't help matches.
 		return trim( str_replace( array( 'formidable', 'free', 'wordpress', 'wp ', 'plugin' ), '', $term ) );
 	}
 
@@ -330,7 +330,6 @@ class FrmPluginSearch {
 				class="button-secondary"
 				href="' . esc_url( admin_url( 'admin.php?page=formidable-addons' ) ) . '"
 				>' . __( 'Install Now', 'formidable' ) . '</a>';
-
 		} elseif ( ! empty( $plugin['link'] ) ) {
 			// Add link pointing to a relevant doc page in formidable.com.
 			$links[] = '<a

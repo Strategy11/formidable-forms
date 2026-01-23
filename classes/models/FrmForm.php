@@ -127,7 +127,7 @@ class FrmForm {
 			$form_id = $wpdb->insert_id;
 			FrmField::duplicate( $id, $form_id, $copy_keys, $blog_id );
 
-			// update form settings after fields are created
+			// Update form settings after fields are created
 			do_action( 'frm_after_duplicate_form', $form_id, $new_values, array( 'old_id' => $id ) );
 
 			return $form_id;
@@ -432,9 +432,9 @@ class FrmForm {
 	 *
 	 * @since 6.7
 	 *
-	 * @param array $field
-	 * @param array $values
-	 * @param array $new_field
+	 * @param object $field
+	 * @param array  $values
+	 * @param array  $new_field
 	 *
 	 * @return void
 	 */
@@ -727,20 +727,22 @@ class FrmForm {
 
 		$query_results = $wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_forms WHERE id=%d OR parent_form_id=%d', $id, $id ) );
 
-		if ( $query_results ) {
-			// Delete all form actions linked to this form
-			/**
-			 * @var FrmFormAction
-			 */
-			$action_control = FrmFormActionsController::get_form_actions( 'email' );
-			$action_control->destroy( $id, 'all' );
-
-			// Clear form caching
-			self::clear_form_cache();
-
-			do_action( 'frm_destroy_form', $id );
-			do_action( 'frm_destroy_form_' . $id );
+		if ( ! $query_results ) {
+			return $query_results;
 		}
+
+		// Delete all form actions linked to this form
+		/**
+		 * @var FrmFormAction
+		 */
+		$action_control = FrmFormActionsController::get_form_actions( 'email' );
+		$action_control->destroy( $id, 'all' );
+
+		// Clear form caching
+		self::clear_form_cache();
+
+		do_action( 'frm_destroy_form', $id );
+		do_action( 'frm_destroy_form_' . $id );
 
 		return $query_results;
 	}
@@ -840,7 +842,7 @@ class FrmForm {
 	 * @return void
 	 */
 	public static function maybe_get_form( &$form ) {
-		if ( ! is_object( $form ) && ! is_array( $form ) && ! empty( $form ) ) {
+		if ( ! is_object( $form ) && ! is_array( $form ) && $form ) {
 			$form = self::getOne( $form );
 		}
 	}
@@ -914,12 +916,12 @@ class FrmForm {
 	 * @param string       $order_by Order by clause.
 	 * @param int|string   $limit    Limit clause or number.
 	 *
-	 * @return array|object of objects
+	 * @return array|object Array of objects. If $limit is 1, a single object is returned.
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '' ) {
 		if ( is_array( $where ) && $where ) {
 			if ( ! empty( $where['is_template'] ) && ! isset( $where['status'] ) && ! isset( $where['status !'] ) ) {
-				// don't get trashed templates
+				// Don't get trashed templates
 				$where['status'] = array( null, '', 'published' );
 			}
 
@@ -940,7 +942,7 @@ class FrmForm {
 		}
 
 		if ( $limit === ' LIMIT 1' || (int) $limit === 1 ) {
-			// return the first form object if we are only getting one form
+			// Return the first form object if we are only getting one form
 			$results = reset( $results );
 		}
 
@@ -956,7 +958,7 @@ class FrmForm {
 	 * @param int    $limit
 	 * @param string $inc_children
 	 *
-	 * @return array|object of forms A single form object would be passed if $limit was set to 1.
+	 * @return array|object Array of forms. A single form object is returned if $limit is set to 1.
 	 */
 	public static function get_published_forms( $query = array(), $limit = 999, $inc_children = 'exclude' ) {
 		$query['is_template'] = 0;
@@ -1248,7 +1250,7 @@ class FrmForm {
 
 		$frm_vars['forms_loaded'][] = $small_form;
 
-		if ( $this_load && empty( $global_load ) ) {
+		if ( $this_load && ! $global_load ) {
 			$global_load          = true;
 			$frm_vars['load_css'] = true;
 		}
@@ -1263,7 +1265,7 @@ class FrmForm {
 	 *
 	 * @return bool
 	 */
-	public static function &is_visible_to_user( $form ) {
+	public static function is_visible_to_user( $form ) {
 		if ( $form->logged_in && isset( $form->options['logged_in_role'] ) ) {
 			$visible = FrmAppHelper::user_has_permission( $form->options['logged_in_role'] );
 		} else {
@@ -1276,9 +1278,7 @@ class FrmForm {
 		 * @param bool   $visible
 		 * @param object $form
 		 */
-		$visible = (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
-
-		return $visible;
+		return (bool) apply_filters( 'frm_form_is_visible', $visible, $form );
 	}
 
 	/**
