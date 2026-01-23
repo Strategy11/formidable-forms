@@ -451,6 +451,8 @@ class test_FrmEmail extends FrmUnitTest {
 	/**
 	 * @param array $expected
 	 * @param array $mock_email
+	 * @param string $cc_status
+	 * @param string $bcc_status
 	 */
 	protected function check_recipients( $expected, $mock_email, $cc_status = 'yes_cc', $bcc_status = 'yes_bcc' ) {
 		$this->assertSame( $expected['to'], $mock_email['to'], 'To does not match expected.' );

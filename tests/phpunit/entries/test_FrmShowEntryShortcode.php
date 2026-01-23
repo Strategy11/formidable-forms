@@ -824,6 +824,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	/**
 	 * @param array $atts
+	 * @param string $field_key
 	 *
 	 * @return string
 	 */
@@ -865,6 +866,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	/**
 	 * @param array $atts
+	 * @param string $field_key
 	 *
 	 * @return string
 	 */
@@ -884,6 +886,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	/**
 	 * @param array $atts
+	 * @param string $field_key
 	 *
 	 * @return string
 	 */
@@ -906,6 +909,7 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 
 	/**
 	 * @param array $atts
+	 * @param string $field_key
 	 *
 	 * @return string
 	 */
