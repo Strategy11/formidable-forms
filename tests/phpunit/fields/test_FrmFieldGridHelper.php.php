@@ -61,7 +61,7 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 	}
 
 	/**
-	 * @param int|false $assert_size
+	 * @param false|int $assert_size
 	 * @param string $assert_message
 	 */
 	private function sync_current_field_once( $assert_size = false, $assert_message = '' ) {
