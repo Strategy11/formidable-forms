@@ -329,6 +329,19 @@ class AddMissingParamTypeFromDefaultSniff implements Sniff {
 			return false;
 		}
 
+		// If checking for 'bool', also accept 'true' or 'false' as covering it.
+		if ( $checkType === 'bool' ) {
+			foreach ( $existingTypes as $existing ) {
+				$normalized = $this->normalizeType( $existing );
+
+				if ( $normalized === 'bool' || $normalized === 'true' || $normalized === 'false' ) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		foreach ( $existingTypes as $existing ) {
 			$normalizedExisting = $this->normalizeType( $existing );
 			$normalizedCheck    = $this->normalizeType( $checkType );

@@ -285,7 +285,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param bool|false|int|string $form_id
+	 * @param false|int|string $form_id
 	 *
 	 * @return object
 	 */
@@ -717,7 +717,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param bool|false|int|string $form_id
+	 * @param false|int|string $form_id
 	 * @param array                 $atts
 	 *
 	 * @return array
@@ -825,7 +825,7 @@ class FrmFormAction {
 	}
 
 	/**
-	 * @param bool|false|int|string $form_id
+	 * @param false|int|string $form_id
 	 * @param string                $type
 	 *
 	 * @return void

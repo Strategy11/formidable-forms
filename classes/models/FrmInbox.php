@@ -54,7 +54,7 @@ class FrmInbox extends FrmFormApi {
 	/**
 	 * @since 4.05
 	 *
-	 * @param array|bool|false $filter
+	 * @param array|false $filter
 	 *
 	 * @return array
 	 */

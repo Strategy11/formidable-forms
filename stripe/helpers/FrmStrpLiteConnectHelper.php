@@ -792,7 +792,7 @@ class FrmStrpLiteConnectHelper {
 
 	/**
 	 * @param string            $sub_id
-	 * @param bool|false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
+	 * @param false|string $customer_id if specified, this will enforce a customer id match (bypassed for users with administrator permission).
 	 *
 	 * @return bool
 	 */
@@ -909,7 +909,7 @@ class FrmStrpLiteConnectHelper {
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
 	 * @param string           $customer_id
-	 * @param array|bool|false $payment_method_types
+	 * @param array|false $payment_method_types
 	 *
 	 * @return false|object|string
 	 */

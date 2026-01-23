@@ -207,7 +207,7 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param array|bool|false $values
+	 * @param array|false $values
 	 *
 	 * @return void
 	 */
@@ -1930,7 +1930,7 @@ class FrmFormsController {
 	/**
 	 * @param string                         $content
 	 * @param int|stdClass|string            $form
-	 * @param bool|false|int|stdClass|string $entry
+	 * @param false|int|stdClass|string $entry
 	 *
 	 * @return string
 	 */

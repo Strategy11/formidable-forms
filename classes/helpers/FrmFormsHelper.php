@@ -25,7 +25,7 @@ class FrmFormsHelper {
 
 	/**
 	 * @param string            $key
-	 * @param bool|false|object $form
+	 * @param false|object $form
 	 *
 	 * @return string
 	 */
@@ -100,7 +100,7 @@ class FrmFormsHelper {
 	}
 
 	/**
-	 * @param bool|false|object|string $selected - The label for the placeholder, or the form object.
+	 * @param false|object|string $selected - The label for the placeholder, or the form object.
 	 *
 	 * @return void
 	 */

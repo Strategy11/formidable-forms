@@ -937,7 +937,7 @@ class FrmEntriesController {
 	}
 
 	/**
-	 * @param bool|false|object $entry
+	 * @param false|object $entry
 	 *
 	 * @return void
 	 */
