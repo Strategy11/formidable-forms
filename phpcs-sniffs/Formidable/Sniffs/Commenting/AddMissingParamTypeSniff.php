@@ -36,7 +36,6 @@ class AddMissingParamTypeSniff implements Sniff {
 		'is_bool'     => 'bool',
 		'is_null'     => 'null',
 		'is_numeric'  => 'string',
-		'is_callable' => 'callable',
 		'is_iterable' => 'iterable',
 		'is_resource' => 'resource',
 	);
