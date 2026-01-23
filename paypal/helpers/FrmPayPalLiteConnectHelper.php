@@ -70,7 +70,7 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function render_seller_status() {
 		// TODO: Only render when we visit the PayPal tab.
-		// TODO: If all 3 validate, we should be able to save this to an option and stop making requests.
+		// TODO: If all 3 validate, we should be able to save this to an option and stop making 
 		$status = self::get_seller_status();
 
 		if ( ! is_object( $status ) ) {
