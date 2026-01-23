@@ -205,9 +205,9 @@ class FrmDb {
 	 *
 	 * @since 2.02.05
 	 *
-	 * @param string     $key
-	 * @param int|string $value
-	 * @param string     $where
+	 * @param string           $key
+	 * @param int|string|float $value
+	 * @param string           $where
 	 *
 	 * @return void
 	 */

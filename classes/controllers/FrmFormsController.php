@@ -3394,9 +3394,9 @@ class FrmFormsController {
 	 * @since 2.05
 	 * @since 6.0.x Added the third parameter.
 	 *
-	 * @param object $form     Form object.
-	 * @param int    $entry_id Entry ID.
-	 * @param array  $args     See {@see FrmFormsController::run_success_action()}.
+	 * @param object     $form     Form object.
+	 * @param int|string $entry_id Entry ID.
+	 * @param array      $args     See {@see FrmFormsController::run_success_action()}.
 	 *
 	 * @return string
 	 */

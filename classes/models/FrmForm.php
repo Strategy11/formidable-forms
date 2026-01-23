@@ -605,8 +605,8 @@ class FrmForm {
 	}
 
 	/**
-	 * @param int    $id
-	 * @param string $status
+	 * @param int|array $id
+	 * @param string    $status
 	 *
 	 * @return bool|int
 	 */
@@ -837,7 +837,7 @@ class FrmForm {
 	 *
 	 * @since 2.0.9
 	 *
-	 * @param int|object $form
+	 * @param int|object|array $form
 	 *
 	 * @return void
 	 */

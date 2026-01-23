@@ -2432,7 +2432,7 @@ class FrmAppHelper {
 
 	/**
 	 * @param array|string $values
-	 * @param string       $current
+	 * @param string|null  $current
 	 *
 	 * @return bool
 	 */

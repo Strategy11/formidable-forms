@@ -656,7 +656,7 @@ class FrmEmail {
 	 *
 	 * @since 2.03.04
 	 *
-	 * @param string $emails
+	 * @param string|array $emails
 	 *
 	 * @return array|string Emails.
 	 */
