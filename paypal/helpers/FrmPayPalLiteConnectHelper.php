@@ -69,16 +69,39 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_seller_status() {
+		// TODO: Only render when we visit the PayPal tab.
+		// TODO: If all 3 validate, we should be able to save this to an option and stop making requests.
 		$status = self::get_seller_status();
-		echo '<pre>';
-		var_dump( array_keys( (array) $status ) );
-		echo 'Primary email confirmed: ';
-		var_dump( $status->primary_email_confirmed );
-		echo 'Payments receivable: ';
-		var_dump( $status->payments_receivable );
-		echo 'OAuth integrations: ';
-		var_dump( $status->oauth_integrations );
-		echo '</pre>';
+
+		if ( ! is_object( $status ) ) {
+			self::render_error( __( 'Unable to retrieve seller status', 'formidable' ) );
+			return;
+		}
+
+		if ( ! $status->primary_email_confirmed ) {
+			self::render_error( __( 'Primary email not confirmed', 'formidable' ) );
+			return;
+		}
+
+		if ( ! $status->payments_receivable ) {
+			self::render_error( __( 'Payments are not receiable',  'formidable' ) );
+			return;
+		}
+
+		if ( ! $status->oauth_integrations ) {
+			self::render_error( __( 'OAuth integrations are not enabled',  'formidable' ) );
+			return;
+		}
+
+		echo '<div class="frm_message">';
+		esc_html_e( 'Your seller status is valid', 'formidable' );
+		echo '</div>';
+	}
+
+	private static function render_error( $message ) {
+		echo '<div class="frm_error_style">';
+		echo esc_html( $message );
+		echo '</div>';
 	}
 
 	/**
