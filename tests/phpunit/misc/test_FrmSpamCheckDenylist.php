@@ -90,6 +90,9 @@ class test_FrmSpamCheckDenylist extends FrmUnitTest {
 		);
 	}
 
+	/**
+	 * @param array $denylist_data
+	 */
 	private function set_denylist_data( $denylist_data ) {
 		$this->set_private_property( $this->spam_check, 'denylist', $denylist_data );
 	}

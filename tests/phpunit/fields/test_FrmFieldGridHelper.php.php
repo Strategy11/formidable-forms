@@ -27,6 +27,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->assertEquals( 12, $this->get_size_of_class( 'frm_full' ) );
 	}
 
+	/**
+	 * @param string $class
+	 */
 	private function get_size_of_class( $class ) {
 		return $this->run_private_method( array( 'FrmFieldGridHelper', 'get_size_of_class' ), array( $class ) );
 	}
@@ -57,6 +60,10 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		ob_end_clean();
 	}
 
+	/**
+	 * @param int|false $assert_size
+	 * @param string $assert_message
+	 */
 	private function sync_current_field_once( $assert_size = false, $assert_message = '' ) {
 		$this->helper->maybe_begin_field_wrapper();
 		$this->helper->sync_list_size();
@@ -70,6 +77,10 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		$this->assertEquals( $expected, $this->get_private_property( $this->helper, 'current_list_size' ), $message );
 	}
 
+	/**
+	 * @param string $type
+	 * @param string $classes
+	 */
 	private function create_field_with_classes( $type, $classes = '' ) {
 		return $this->factory->field->create_and_get(
 			array(
@@ -129,6 +140,9 @@ class test_FrmFieldGridHelper extends FrmUnitTest {
 		ob_end_clean();
 	}
 
+	/**
+	 * @param int $expected
+	 */
 	private function assert_section_helper_size( $expected ) {
 		$this->assertEquals( $expected, $this->get_private_property( $this->section_helper, 'current_list_size' ) );
 	}

@@ -107,6 +107,9 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( 'calc(100%/6)', $this->strip_invalid_characters( 'calc(100%/6)' ) );
 	}
 
+	/**
+	 * @param string $input
+	 */
 	private function strip_invalid_characters( $input ) {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );
