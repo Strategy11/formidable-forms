@@ -47,7 +47,7 @@ class FrmEntryMeta {
 	 * @param string       $meta_key   Deprecated.
 	 * @param array|string $meta_value
 	 *
-	 * @return bool|false|int
+	 * @return bool|int
 	 */
 	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		if ( ! $field_id ) {
