@@ -40,20 +40,14 @@ Use code_search to find relevant code based on the bug description.
   - Understand WHY it fails (not just WHERE)
   - Document the root cause before proceeding
 
-## Phase 3: Analyze All Fix Locations
+## Phase 3: Find the Right Pattern and Location
 
-- **List ALL possible fix locations:**
-  - Where could this be fixed? (may be multiple places)
-  - Which location is closest to the root cause?
-  - Which location has the smallest blast radius?
+Follow the **Pattern Discovery Process** from formidable-core rules:
 
-- **Search for existing patterns:**
-
-```text
-grep_search for similar functionality in the codebase.
-Look for helper methods in FrmAppHelper, FrmDb, FrmFieldsHelper.
-Check how similar issues were solved elsewhere.
-```
+- **Step 1: Find existing patterns** - Search models, controllers, helpers for similar functionality
+- **Step 2: Study pattern usage** - Search ALL places that use the pattern to understand best usage
+- **Step 3: Trace parent hierarchy** - Search parent files up to plugin root to understand logic
+- **Step 4: Iterate** - If better pattern/location found, repeat from Step 1
 
 - **Research WordPress best practices:**
 
@@ -78,6 +72,8 @@ Check how similar issues were solved elsewhere.
   - Follows existing Formidable patterns
   - Maintains backward compatibility
   - Works with Pro active AND inactive
+
+- **Verify not overkill:** If changes affect several areas, analyze all related places to ensure the flow and behavior are correct and the fix is not excessive.
 
 - **Get user approval** before implementing if:
   - Multiple valid approaches exist
@@ -161,9 +157,13 @@ vendor/bin/phpunit tests/phpunit/[relevant_test_file].php
 <important_reminders>
 
 - NEVER guess - always search and verify before making changes
+- NEVER invent custom solutions - use existing Formidable patterns
 - Fix at the MOST SPECIFIC location, closest to the problem
+- Iterate through Pattern Discovery until best pattern AND location found
+- Verify changes are not overkill if affecting multiple areas
 - Maintain 100% backward compatibility
 - Code must work with AND without Pro active
 - Remove ALL debug code before completion
+- If user makes manual changes after your updates, those are final
 
 </important_reminders>
