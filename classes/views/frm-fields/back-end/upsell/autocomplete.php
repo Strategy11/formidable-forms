@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		);
 		?>
 	</label>
-	<select name="field_options[autocomplete_<?php echo absint( $field['id'] ); ?>]" id="field_options_autocomplete_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Autocomplete options', 'formidable' ); ?>">
+	<select <?php FrmAppHelper::array_to_html_params( $autocomplete_upsell_atts, true ); ?>>
 		<option value=""><?php esc_html_e( '&mdash; Select &mdash;' ); ?></option>
 	</select>
 </p>

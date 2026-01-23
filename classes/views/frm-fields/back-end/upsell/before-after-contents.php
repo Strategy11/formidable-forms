@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 	</label>
 
-	<input type="text" readonly name="field_options[prepend_<?php echo absint( $field['id'] ); ?>]" id="prepend_<?php echo absint( $field['id'] ); ?>" aria-invalid="false"  data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+	<input id="prepend_<?php echo absint( $field['id'] ); ?>" <?php FrmAppHelper::array_to_html_params( $before_after_content_upsell_atts, true ); ?>/>
 </p>
 
 <p class="frm_form_field frm6">
@@ -30,5 +30,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php esc_html_e( 'After Input', 'formidable' ); ?>
 	</label>
 
-	<input type="text" readonly name="field_options[append_<?php echo absint( $field['id'] ); ?>]" id="append_<?php echo absint( $field['id'] ); ?>" data-upgrade="<?php esc_attr_e( 'Before and after contents', 'formidable' ); ?>"/>
+	<input id="append_<?php echo absint( $field['id'] ); ?>" <?php FrmAppHelper::array_to_html_params( $before_after_content_upsell_atts, true ); ?>/>
 </p>
