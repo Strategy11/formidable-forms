@@ -426,6 +426,15 @@ class AddMissingParamTypeSniff implements Sniff {
 			}
 		}
 
+		// If checking for 'object', treat any class name as covering it.
+		if ( $checkType === 'object' ) {
+			foreach ( $existingTypes as $existing ) {
+				if ( $this->isClassName( $existing ) ) {
+					return true;
+				}
+			}
+		}
+
 		foreach ( $checkTypes as $singleType ) {
 			foreach ( $existingTypes as $existing ) {
 				// Normalize types for comparison.
@@ -441,6 +450,42 @@ class AddMissingParamTypeSniff implements Sniff {
 					return true;
 				}
 			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a type string looks like a class name.
+	 *
+	 * @param string $type The type to check.
+	 *
+	 * @return bool
+	 */
+	private function isClassName( $type ) {
+		$type = trim( $type );
+
+		// Skip primitive types and known non-class types.
+		$primitives = array(
+			'int', 'integer', 'float', 'double', 'real', 'string', 'bool', 'boolean',
+			'array', 'object', 'null', 'mixed', 'void', 'callable', 'iterable',
+			'resource', 'true', 'false', 'self', 'static', 'parent',
+		);
+
+		$lowerType = strtolower( $type );
+
+		if ( in_array( $lowerType, $primitives, true ) ) {
+			return false;
+		}
+
+		// Skip if it's an array notation.
+		if ( preg_match( '/\[\]$/', $type ) || preg_match( '/^array\s*[<{]/', $lowerType ) ) {
+			return false;
+		}
+
+		// If it starts with uppercase or contains backslash (namespace), it's likely a class.
+		if ( preg_match( '/^[A-Z]/', $type ) || strpos( $type, '\\' ) !== false ) {
+			return true;
 		}
 
 		return false;
@@ -473,6 +518,11 @@ class AddMissingParamTypeSniff implements Sniff {
 
 		// Normalize typed arrays (array<string>, array<int>, etc.) to just 'array'.
 		if ( preg_match( '/^array\s*</', $type ) || preg_match( '/^array\s*\{/', $type ) ) {
+			return 'array';
+		}
+
+		// Normalize shorthand array notation (int[], string[], etc.) to just 'array'.
+		if ( preg_match( '/\[\]$/', $type ) ) {
 			return 'array';
 		}
 
