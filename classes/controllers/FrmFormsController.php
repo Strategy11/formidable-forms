@@ -220,8 +220,8 @@ class FrmFormsController {
 	}
 
 	/**
-	 * @param mixed $id
-	 * @param string     $message
+	 * @param mixed  $id
+	 * @param string $message
 	 *
 	 * @return void
 	 */
