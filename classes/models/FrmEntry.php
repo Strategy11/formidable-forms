@@ -87,10 +87,15 @@ class FrmEntry {
 			unset( $check_val['name'] );
 		}
 
-		$check_val    = apply_filters( 'frm_duplicate_check_val', $check_val );
+		$check_val = apply_filters( 'frm_duplicate_check_val', $check_val );
+
+		if ( ! isset( $values['item_meta'] ) ) {
+			return false;
+		}
+
 		$entry_exists = FrmDb::get_col( 'frm_items', $check_val, 'id', array( 'order_by' => 'created_at DESC' ) );
 
-		if ( ! $entry_exists || ! isset( $values['item_meta'] ) ) {
+		if ( ! $entry_exists ) {
 			return false;
 		}
 
@@ -101,7 +106,7 @@ class FrmEntry {
 		foreach ( $entry_exists as $entry_exist ) {
 			$is_duplicate = true;
 
-			// make sure it's a duplicate
+			// Make sure it's a duplicate
 			$metas       = FrmEntryMeta::get_entry_meta_info( $entry_exist );
 			$field_metas = array();
 
@@ -122,7 +127,7 @@ class FrmEntry {
 				return false;
 			}
 
-			// compare serialized values and not arrays
+			// Compare serialized values and not arrays
 			$new_meta = array_map( 'maybe_serialize', $filtered_vals );
 
 			if ( $field_metas === $new_meta ) {
@@ -237,7 +242,7 @@ class FrmEntry {
 			$reduced[ $field_id ] = $field->get_value_to_save( $value, array( 'entry_id' => $entry_id ) );
 			$reduced[ $field_id ] = $field->set_value_before_save( $reduced[ $field_id ] );
 
-			if ( '' === $reduced[ $field_id ] || ( is_array( $reduced[ $field_id ] ) && 0 === count( $reduced[ $field_id ] ) ) ) {
+			if ( '' === $reduced[ $field_id ] || array() === $reduced[ $field_id ] ) {
 				unset( $reduced[ $field_id ] );
 			}
 		}
@@ -572,7 +577,7 @@ class FrmEntry {
 				continue;
 			}
 
-			// include sub entries in an array
+			// Include sub entries in an array
 			if ( ! isset( $entry->metas[ $meta_val->field_id ] ) ) {
 				$entry->metas[ $meta_val->field_id ] = array();
 			}
@@ -634,7 +639,7 @@ class FrmEntry {
 				unset( $order_matches );
 			}
 
-			// prepare the query
+			// Prepare the query
 			$query = 'SELECT ' . $fields . ' FROM ' . $table . FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 			$entries = $wpdb->get_results( $query, OBJECT_K ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
@@ -1003,7 +1008,7 @@ class FrmEntry {
 
 		$query_results = $wpdb->insert( $wpdb->prefix . 'frm_items', $new_values );
 
-		return ! $query_results ? false : $wpdb->insert_id;
+		return $query_results ? $wpdb->insert_id : false;
 	}
 
 	/**

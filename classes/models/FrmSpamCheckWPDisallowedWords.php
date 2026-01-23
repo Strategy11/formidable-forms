@@ -13,6 +13,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class FrmSpamCheckWPDisallowedWords extends FrmSpamCheck {
 
+	/**
+	 * @return bool
+	 */
 	public function check() {
 		$mod_keys = trim( $this->get_disallowed_words() );
 

@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</label>
 </p>
 
-<p class="frm_summary_emails_recipients_wrapper frm_indent_opt <?php echo ! $frm_settings->summary_emails ? 'frm_hidden' : ''; ?>">
+<p class="frm_summary_emails_recipients_wrapper frm_indent_opt <?php echo $frm_settings->summary_emails ? '' : 'frm_hidden'; ?>">
 	<label for="frm_summary_emails_recipients"><?php esc_html_e( 'Summary email recipients', 'formidable' ); ?></label>
 	<input type="text" name="frm_summary_emails_recipients" id="frm_summary_emails_recipients" value="<?php echo esc_attr( $frm_settings->summary_emails_recipients ); ?>" />
 	<?php if ( FrmAppHelper::is_formidable_branding() && in_array( FrmAddonsController::license_type(), array( 'elite', 'business' ), true ) ) { ?>

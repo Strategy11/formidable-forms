@@ -47,18 +47,6 @@ class FlipNegativeTernarySniff implements Sniff {
 			return;
 		}
 
-		// Look for !== or != in the condition (between statement start and ?).
-		$negativeOperator = $this->findNegativeOperator( $phpcsFile, $statementStart, $stackPtr );
-
-		if ( false === $negativeOperator ) {
-			return;
-		}
-
-		// Skip if the comparison is against an excluded value (empty string, false, or null).
-		if ( $this->isExcludedComparison( $phpcsFile, $negativeOperator ) ) {
-			return;
-		}
-
 		// Make sure there's no && or || in the condition (complex conditions).
 		if ( $this->hasLogicalOperators( $phpcsFile, $statementStart, $stackPtr ) ) {
 			return;
@@ -88,6 +76,26 @@ class FlipNegativeTernarySniff implements Sniff {
 		}
 
 		if ( $this->hasNestedTernary( $phpcsFile, $colonPtr + 1, $ternaryEnd - 1 ) ) {
+			return;
+		}
+
+		// Check for negated condition pattern: ! function() ? false : value or ! $var ? false : value.
+		$negationInfo = $this->findNegatedCondition( $phpcsFile, $statementStart, $stackPtr );
+
+		if ( false !== $negationInfo ) {
+			$this->processNegatedCondition( $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch );
+			return;
+		}
+
+		// Look for !== or != in the condition (between statement start and ?).
+		$negativeOperator = $this->findNegativeOperator( $phpcsFile, $statementStart, $stackPtr );
+
+		if ( false === $negativeOperator ) {
+			return;
+		}
+
+		// Skip if the comparison is against an excluded value (empty string, false, or null).
+		if ( $this->isExcludedComparison( $phpcsFile, $negativeOperator ) ) {
 			return;
 		}
 
@@ -126,6 +134,173 @@ class FlipNegativeTernarySniff implements Sniff {
 	}
 
 	/**
+	 * Find a negated condition pattern: ! function() or ! $variable.
+	 *
+	 * @param File $phpcsFile The file being scanned.
+	 * @param int  $start     Start position to search.
+	 * @param int  $end       End position to search.
+	 *
+	 * @return array|false Array with 'negation' and 'condition_end' keys, or false.
+	 */
+	private function findNegatedCondition( File $phpcsFile, $start, $end ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Look for ! operator.
+		for ( $i = $start; $i < $end; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_BOOLEAN_NOT ) {
+				continue;
+			}
+
+			// Found !, now check what follows.
+			$nextToken = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $end, true );
+
+			if ( false === $nextToken ) {
+				continue;
+			}
+
+			// Skip T_EMPTY - ! empty() is a common pattern that shouldn't be flipped.
+			if ( $tokens[ $nextToken ]['code'] === T_EMPTY ) {
+				continue;
+			}
+
+			// Check for variable: ! $var.
+			if ( $tokens[ $nextToken ]['code'] === T_VARIABLE ) {
+				// Check there's nothing significant between variable and ?.
+				$afterVar = $phpcsFile->findNext( T_WHITESPACE, $nextToken + 1, $end, true );
+
+				if ( false !== $afterVar ) {
+					// There's something else - not a simple negated variable.
+					continue;
+				}
+
+				return array(
+					'negation'      => $i,
+					'condition'     => $nextToken,
+					'condition_end' => $nextToken,
+				);
+			}
+
+			// Check for function call (T_STRING followed by open paren).
+			if ( $tokens[ $nextToken ]['code'] !== T_STRING ) {
+				continue;
+			}
+
+			$openParen = $phpcsFile->findNext( T_WHITESPACE, $nextToken + 1, null, true );
+
+			if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+				continue;
+			}
+
+			if ( ! isset( $tokens[ $openParen ]['parenthesis_closer'] ) ) {
+				continue;
+			}
+
+			$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
+
+			// Make sure the function call ends before the ternary ?.
+			if ( $closeParen >= $end ) {
+				continue;
+			}
+
+			// Check there's nothing significant between close paren and ?.
+			$afterClose = $phpcsFile->findNext( T_WHITESPACE, $closeParen + 1, $end, true );
+
+			if ( false !== $afterClose ) {
+				// There's something else - not a simple negated function call.
+				continue;
+			}
+
+			return array(
+				'negation'      => $i,
+				'condition'     => $nextToken,
+				'condition_end' => $closeParen,
+			);
+		}
+
+		return false;
+	}
+
+	/**
+	 * Process a negated condition ternary: ! function() ? false : value or ! $var ? false : value.
+	 *
+	 * @param File   $phpcsFile   The file being scanned.
+	 * @param int    $stackPtr    The position of the ? token.
+	 * @param int    $colonPtr    The position of the : token.
+	 * @param int    $ternaryEnd  The end of the ternary.
+	 * @param array  $negationInfo Info about the negation.
+	 * @param string $trueBranch  The true branch content.
+	 * @param string $falseBranch The false branch content.
+	 *
+	 * @return void
+	 */
+	private function processNegatedCondition( File $phpcsFile, $stackPtr, $colonPtr, $ternaryEnd, $negationInfo, $trueBranch, $falseBranch ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Only flip if the true branch is false/null.
+		$trueBranchToken = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, $colonPtr, true );
+
+		if ( false === $trueBranchToken ) {
+			return;
+		}
+
+		// Check if true branch is false or null.
+		$isFalseOrNull = in_array( $tokens[ $trueBranchToken ]['code'], array( T_FALSE, T_NULL ), true );
+
+		// Also check for T_STRING with 'false' or 'null' content (PHP version differences).
+		if ( ! $isFalseOrNull && $tokens[ $trueBranchToken ]['code'] === T_STRING ) {
+			$content = strtolower( $tokens[ $trueBranchToken ]['content'] );
+			$isFalseOrNull = in_array( $content, array( 'false', 'null' ), true );
+		}
+
+		if ( ! $isFalseOrNull ) {
+			return;
+		}
+
+		// Make sure there's nothing else in the true branch.
+		$afterTrueBranch = $phpcsFile->findNext( T_WHITESPACE, $trueBranchToken + 1, $colonPtr, true );
+
+		if ( false !== $afterTrueBranch ) {
+			return;
+		}
+
+		$fix = $phpcsFile->addFixableError(
+			'Ternary condition uses negation. Flip to use positive condition instead.',
+			$negationInfo['negation'],
+			'NegatedTernary'
+		);
+
+		if ( true === $fix ) {
+			$phpcsFile->fixer->beginChangeset();
+
+			// Remove the ! operator.
+			$phpcsFile->fixer->replaceToken( $negationInfo['negation'], '' );
+
+			// Remove whitespace after ! if present.
+			$afterNegation = $negationInfo['negation'] + 1;
+
+			if ( $tokens[ $afterNegation ]['code'] === T_WHITESPACE ) {
+				$phpcsFile->fixer->replaceToken( $afterNegation, '' );
+			}
+
+			// Clear the true branch tokens.
+			for ( $i = $stackPtr + 1; $i < $colonPtr; $i++ ) {
+				$phpcsFile->fixer->replaceToken( $i, '' );
+			}
+
+			// Clear the false branch tokens.
+			for ( $i = $colonPtr + 1; $i < $ternaryEnd; $i++ ) {
+				$phpcsFile->fixer->replaceToken( $i, '' );
+			}
+
+			// Insert swapped branches.
+			$phpcsFile->fixer->addContent( $stackPtr, ' ' . trim( $falseBranch ) . ' ' );
+			$phpcsFile->fixer->addContent( $colonPtr, ' ' . trim( $trueBranch ) . ' ' );
+
+			$phpcsFile->fixer->endChangeset();
+		}
+	}
+
+	/**
 	 * Find the start of the statement containing the ternary.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -134,11 +309,33 @@ class FlipNegativeTernarySniff implements Sniff {
 	 * @return false|int
 	 */
 	private function findStatementStart( File $phpcsFile, $stackPtr ) {
-		$tokens = $phpcsFile->getTokens();
+		$tokens     = $phpcsFile->getTokens();
+		$parenDepth = 0;
 
 		// Walk backwards to find return, =, or start of expression.
 		for ( $i = $stackPtr - 1; $i >= 0; $i-- ) {
 			$code = $tokens[ $i ]['code'];
+
+			// Track parenthesis depth (going backwards, so close increases, open decreases).
+			if ( $code === T_CLOSE_PARENTHESIS ) {
+				++$parenDepth;
+				continue;
+			}
+
+			if ( $code === T_OPEN_PARENTHESIS ) {
+				if ( $parenDepth > 0 ) {
+					--$parenDepth;
+					continue;
+				}
+
+				// At depth 0, this is a statement boundary.
+				return $i + 1;
+			}
+
+			// Skip tokens inside parentheses.
+			if ( $parenDepth > 0 ) {
+				continue;
+			}
 
 			// Found statement start.
 			if ( in_array( $code, array( T_RETURN, T_ECHO, T_PRINT ), true ) ) {
@@ -151,7 +348,7 @@ class FlipNegativeTernarySniff implements Sniff {
 			}
 
 			// Hit a semicolon or opening brace - we've gone too far.
-			if ( in_array( $code, array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_OPEN_PARENTHESIS, T_COMMA ), true ) ) {
+			if ( in_array( $code, array( T_SEMICOLON, T_OPEN_CURLY_BRACKET, T_COMMA ), true ) ) {
 				return $i + 1;
 			}
 		}

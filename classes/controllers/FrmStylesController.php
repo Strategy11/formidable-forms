@@ -1045,7 +1045,7 @@ class FrmStylesController {
 	 * @return void
 	 */
 	public static function add_meta_boxes() {
-		// setup meta boxes
+		// Setup meta boxes
 		$meta_boxes = array(
 			'general'                => __( 'General', 'formidable' ),
 			'form-title'             => __( 'Form Title', 'formidable' ),
@@ -1343,7 +1343,7 @@ class FrmStylesController {
 	public static function do_accordion_sections( $screen, $context, $data_object ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
 		global $wp_meta_boxes;
 
-		// the symbol id from icons.svg
+		// The symbol id from icons.svg
 		$icon_ids = array(
 			'ranking-fields-style' => 'frm_chart_bar_icon',
 			'section-fields-style' => 'frm-form-title-style',

@@ -203,7 +203,7 @@ class FrmAppHelper {
 
 		$query_args = wp_parse_args( $parsed['query'] );
 
-		return empty( $query_args['utm_medium'] ) ? '' : $query_args['utm_medium'];
+		return ! empty( $query_args['utm_medium'] ) ? $query_args['utm_medium'] : '';
 	}
 
 	/**
@@ -276,7 +276,7 @@ class FrmAppHelper {
 	public static function get_settings( $args = array() ) {
 		global $frm_settings;
 
-		if ( empty( $frm_settings ) ) {
+		if ( ! $frm_settings ) {
 			$frm_settings = new FrmSettings( $args );
 		} elseif ( isset( $args['current_form'] ) ) {
 			// If the global has already been set, allow strings to be filtered.
@@ -498,7 +498,7 @@ class FrmAppHelper {
 		$get_page = self::simple_get( 'page', 'sanitize_title' );
 
 		if ( $pagenow ) {
-			// allow this to be true during ajax load i.e. ajax form builder loading
+			// Allow this to be true during ajax load i.e. ajax form builder loading
 			$is_page = ( $pagenow === 'admin.php' || $pagenow === 'admin-ajax.php' ) && $get_page === $page;
 
 			if ( $is_page ) {
@@ -1167,6 +1167,8 @@ class FrmAppHelper {
 
 	/**
 	 * @since 2.05.03
+	 *
+	 * @return array
 	 */
 	private static function safe_html() {
 		$allow_class = array(
@@ -1392,7 +1394,7 @@ class FrmAppHelper {
 		if ( $icon === $class ) {
 			$icon = '<i class="' . esc_attr( $class ) . '"' . $html_atts . '></i>';
 		} else {
-			$class = ! str_contains( $icon, ' ' ) ? '' : ' ' . $icon;
+			$class = str_contains( $icon, ' ' ) ? ' ' . $icon : '';
 
 			if ( str_contains( $icon, ' ' ) ) {
 				$icon = explode( ' ', $icon );
@@ -3064,13 +3066,14 @@ class FrmAppHelper {
 			return '';
 		}
 
-		$length       = (int) $length;
-		$str          = wp_strip_all_tags( (string) $original_string );
-		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
+		$length = (int) $length;
 
 		if ( $length === 0 ) {
 			return '';
 		}
+
+		$str          = wp_strip_all_tags( (string) $original_string );
+		$original_len = self::mb_function( array( 'mb_strlen', 'strlen' ), array( $str ) );
 
 		if ( $length <= 10 ) {
 			$sub = self::mb_function( array( 'mb_substr', 'substr' ), array( $str, 0, $length ) );
@@ -3225,7 +3228,7 @@ class FrmAppHelper {
 	 * @return string Time ago.
 	 */
 	public static function human_time_diff( $from, $to = '', $levels = 1 ) {
-		$now = empty( $to ) && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
+		$now = ! $to && 0 !== $to ? new DateTime() : new DateTime( '@' . $to );
 		$ago = new DateTime( '@' . $from );
 
 		// Get the time difference
@@ -3590,7 +3593,7 @@ class FrmAppHelper {
 		// Add extra slashes for \r\n since WP strips them.
 		$post_content = str_replace( array( '\\r', '\\n', '\\u', '\\t' ), array( '\\\\r', '\\\\n', '\\\\u', '\\\\t' ), $post_content );
 
-		// allow for &quot
+		// Allow for &quot
 		return str_replace( '&quot;', '\\"', $post_content );
 	}
 
@@ -3938,7 +3941,7 @@ class FrmAppHelper {
 				'noTitleText'                        => FrmFormsHelper::get_no_title_text(),
 
 				// In older versions this event listener causes the section to immediately close again
-				// when the h3 element is clicked. It's only required in WP 6.7+.
+				// When the h3 element is clicked. It's only required in WP 6.7+.
 				'requireAccordionTitleClickListener' => version_compare( $wp_version, '6.7', '>=' ),
 			);
 			/**
@@ -4186,10 +4189,10 @@ class FrmAppHelper {
 		);
 
 		if ( $type === 'captcha' ) {
-			// remove the languages unavailable for the captcha
+			// Remove the languages unavailable for the captcha
 			$unset = array( 'sq', 'bs', 'eo', 'fo', 'fr-CH', 'sr-SR', 'ar-DZ', 'be', 'cy-GB', 'kk', 'km', 'ky', 'lb', 'mk', 'nb', 'nn', 'rm', 'tj' );
 		} else {
-			// remove the languages unavailable for the datepicker
+			// Remove the languages unavailable for the datepicker
 			$unset = array( 'fil', 'fr-CA', 'de-AT', 'de-CH', 'iw', 'hi', 'pt', 'pt-PT', 'es-419', 'mr', 'lo', 'kn', 'si', 'gu', 'bn', 'zu', 'ur', 'te', 'sw', 'am' );
 		}
 

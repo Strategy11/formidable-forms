@@ -170,7 +170,7 @@ class FrmCreateFile {
 		$this->has_permission = true;
 
 		if ( ! $creds || ! WP_Filesystem( $creds ) ) {
-			// initialize the API - any problems and we exit
+			// Initialize the API - any problems and we exit
 			$this->show_error_message();
 			$this->has_permission = false;
 		}

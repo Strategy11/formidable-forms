@@ -101,7 +101,7 @@ class FrmAntiSpam extends FrmValidate {
 		$current_date = time();
 
 		// Create our array of times to check before today. A user with a longer
-		// cache time can extend this. A user with a shorter cache time can remove times.
+		// Cache time can extend this. A user with a shorter cache time can remove times.
 		$valid_token_times_before = apply_filters(
 			'frm_form_token_check_before_today',
 			array(
@@ -209,7 +209,7 @@ class FrmAntiSpam extends FrmValidate {
 		// If the antispam setting is enabled and we don't have a token, bail.
 		if ( ! $token ) {
 			if ( FrmAppHelper::is_admin_page( 'formidable-entries' ) ) {
-				// add an exception for the entries page.
+				// Add an exception for the entries page.
 				return true;
 			}
 
@@ -274,7 +274,7 @@ class FrmAntiSpam extends FrmValidate {
 
 		// If the user is an admin, return text with a link to support.
 		// We add a space here to separate the sentences, but outside of the localized
-		// text to avoid it being removed.
+		// Text to avoid it being removed.
 		return ' ' . sprintf(
 			// translators: %1$s start link, %2$s end link.
 			esc_html__( 'Please check out our %1$stroubleshooting guide%2$s for details on resolving this issue.', 'formidable' ),

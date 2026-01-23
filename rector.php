@@ -81,7 +81,7 @@ return RectorConfig::configure()
 			__DIR__ . '/tests',
 		)
 	)
-	// here we can define, what prepared sets of rules will be applied
+	// Here we can define, what prepared sets of rules will be applied
 	->withPreparedSets(
 		// deadCode
 		true,
@@ -180,7 +180,7 @@ return RectorConfig::configure()
 			RemoveAlwaysTrueIfConditionRector::class,
 			// The FrmFieldType.php file has a few empty functions with only a return; line.
 			// We may want to remove that at some point, but I think it's there to prevent another
-			// static analysis error.
+			// Static analysis error.
 			RemoveDeadReturnRector::class,
 			RemoveParentCallWithoutParentRector::class,
 			RemoveUnusedConstructorParamRector::class,

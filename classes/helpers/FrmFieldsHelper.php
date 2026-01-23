@@ -564,7 +564,7 @@ class FrmFieldsHelper {
 		$field        = FrmFieldFactory::get_field_type( $type );
 		$default_html = $field->default_html();
 
-		// these hooks are here for reverse compatibility since 3.0
+		// These hooks are here for reverse compatibility since 3.0
 		if ( ! apply_filters( 'frm_normal_field_type_html', true, $type ) ) {
 			$default_html = apply_filters( 'frm_other_custom_html', '', $type );
 		}
@@ -854,7 +854,7 @@ class FrmFieldsHelper {
 			esc_html__( 'Options are dynamically created from your %1$s%2$s: %3$s%4$s', 'formidable' ),
 			'<a href="' . esc_url( admin_url( 'edit-tags.php?taxonomy=' . $tax->name ) ) . '" target="_blank">',
 			esc_html__( 'taxonomy', 'formidable' ),
-			empty( $tax->labels->name ) ? esc_html__( 'Categories', 'formidable' ) : $tax->labels->name,
+			! empty( $tax->labels->name ) ? $tax->labels->name : esc_html__( 'Categories', 'formidable' ),
 			'</a>'
 		);
 	}
@@ -892,12 +892,12 @@ class FrmFieldsHelper {
 			$m = stripos( $observed_value, $hide_opt );
 			$m = $cond === 'not LIKE' ? $m === false : $m !== false;
 		} elseif ( $cond === '%LIKE' ) {
-			// ends with
+			// Ends with
 			$length = strlen( $hide_opt );
 			$substr = substr( $observed_value, strlen( $observed_value ) - $length );
 			$m      = 0 === strcasecmp( $substr, $hide_opt );
 		} elseif ( 'LIKE%' === $cond ) {
-			// starts with
+			// Starts with
 			$length = strlen( $hide_opt );
 			$substr = substr( $observed_value, 0, $length );
 			$m      = 0 === strcasecmp( $substr, $hide_opt );
@@ -967,7 +967,7 @@ class FrmFieldsHelper {
 				$m = $m === false;
 			}
 		} elseif ( $cond === '%LIKE' ) {
-			// ends with
+			// Ends with
 			foreach ( $observed_value as $ob ) {
 				if ( $hide_opt === substr( $ob, strlen( $ob ) - strlen( $hide_opt ) ) ) {
 					$m = true;
@@ -975,7 +975,7 @@ class FrmFieldsHelper {
 				}
 			}
 		} elseif ( $cond === 'LIKE%' ) {
-			// starts with
+			// Starts with
 			foreach ( $observed_value as $ob ) {
 				if ( str_starts_with( $ob, $hide_opt ) ) {
 					$m = true;
@@ -1529,7 +1529,7 @@ class FrmFieldsHelper {
 		$other_val = '';
 
 		// If option is an "other" option and there is a value set for this field,
-		// check if the value belongs in the current "Other" option text field
+		// Check if the value belongs in the current "Other" option text field
 		if ( ! self::is_other_opt( $opt_key ) || ! FrmField::is_option_true( $field, 'value' ) ) {
 			return $other_val;
 		}
@@ -1719,7 +1719,7 @@ class FrmFieldsHelper {
 		$classes = array( 'frm_other_input' );
 
 		if ( ! $args['checked'] || trim( $args['checked'] ) === '' ) {
-			// hide the field if the other option is not selected
+			// Hide the field if the other option is not selected
 			$classes[] = 'frm_pos_none';
 		}
 
@@ -2634,10 +2634,9 @@ class FrmFieldsHelper {
 			return $custom_attrs;
 		}
 
-		$upgrading    = FrmAddonsController::install_link( $option['addon'] );
-		$install_data = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
+		$upgrading = FrmAddonsController::install_link( $option['addon'] );
 
-		$custom_attrs['data-oneclick'] = $install_data;
+		$custom_attrs['data-oneclick'] = isset( $upgrading['url'] ) ? wp_json_encode( $upgrading ) : '';
 		$custom_attrs['data-requires'] = FrmFormsHelper::get_plan_required( $upgrading );
 
 		return $custom_attrs;

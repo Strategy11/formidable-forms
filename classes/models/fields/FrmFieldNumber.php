@@ -59,6 +59,9 @@ class FrmFieldNumber extends FrmFieldType {
 		$this->add_min_max( $args, $input_html );
 	}
 
+	/**
+	 * @param array $args
+	 */
 	public function validate( $args ) {
 		$errors = array();
 
