@@ -47,6 +47,8 @@ use Rector\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector;
 use Rector\DeadCode\Rector\FunctionLike\RemoveDeadReturnRector;
 use Rector\DeadCode\Rector\If_\RemoveAlwaysTrueIfConditionRector;
 use Rector\DeadCode\Rector\StaticCall\RemoveParentCallWithoutParentRector;
+use Rector\DeadCode\Rector\ClassMethod\RemoveVoidDocblockFromMagicMethodRector;
+use Rector\DeadCode\Rector\Node\RemoveNonExistingVarAnnotationRector;
 
 // EarlyReturn
 use Rector\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector;
@@ -62,6 +64,7 @@ use Rector\Php70\Rector\FuncCall\MultiDirnameRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
 
 // TypeDeclarationDocblocks
+use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromAssignsParamToParamReferenceRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddParamArrayDocblockFromDimFetchAccessRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
@@ -77,7 +80,7 @@ return RectorConfig::configure()
 			__DIR__ . '/tests',
 		)
 	)
-	// here we can define, what prepared sets of rules will be applied
+	// Here we can define, what prepared sets of rules will be applied
 	->withPreparedSets(
 		// deadCode
 		true,
@@ -176,13 +179,15 @@ return RectorConfig::configure()
 			RemoveAlwaysTrueIfConditionRector::class,
 			// The FrmFieldType.php file has a few empty functions with only a return; line.
 			// We may want to remove that at some point, but I think it's there to prevent another
-			// static analysis error.
+			// Static analysis error.
 			RemoveDeadReturnRector::class,
 			RemoveParentCallWithoutParentRector::class,
 			RemoveUnusedConstructorParamRector::class,
 			RemoveUnusedForeachKeyRector::class,
 			RemoveUnusedPrivateMethodParameterRector::class,
 			RemoveUnusedPrivateMethodRector::class,
+			RemoveVoidDocblockFromMagicMethodRector::class,
+			RemoveNonExistingVarAnnotationRector::class,
 			// We never want to remove a valid param tag. Leave this exception.
 			RemoveUselessParamTagRector::class,
 			RemoveUselessReturnTagRector::class,
@@ -208,5 +213,6 @@ return RectorConfig::configure()
 			AddParamArrayDocblockFromAssignsParamToParamReferenceRector::class,
 			AddParamArrayDocblockFromDimFetchAccessRector::class,
 			DocblockReturnArrayFromDirectArrayInstanceRector::class,
+			AddReturnDocblockForDimFetchArrayFromAssignsRector::class,
 		)
 	);

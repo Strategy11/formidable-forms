@@ -89,8 +89,7 @@ class FrmStyle {
 		$css_scope_helper = new FrmCssScopeHelper();
 
 		if ( ! $id ) {
-			$new_style       = (array) $this->get_new();
-			$all_instances[] = $new_style;
+			$all_instances[] = (array) $this->get_new();
 		}
 
 		$action_ids = array();
@@ -116,7 +115,7 @@ class FrmStyle {
 				$new_instance['post_title'] = sanitize_text_field( wp_unslash( $_POST['frm_style_setting']['post_title'] ) );
 			}
 
-			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+			$new_instance['post_content']               = isset( $_POST['frm_style_setting']['post_content'] ) ? $this->sanitize_post_content( wp_unslash( $_POST['frm_style_setting']['post_content'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing, SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$new_instance['post_content']['custom_css'] = $custom_css;
 			unset( $custom_css );
 
@@ -203,7 +202,7 @@ class FrmStyle {
 			$new_value             = null;
 			$value_is_empty_string = '' === trim( $value ) || '' === $value;
 
-			if ( 3 === $length_of_color_codes || ( $index !== $length_of_color_codes - 1 ) ) {
+			if ( 3 === $length_of_color_codes || $index !== $length_of_color_codes - 1 ) {
 				// Insert a value for r, g, or b.
 				if ( $value < 0 ) {
 					$new_value = 0;
@@ -380,8 +379,11 @@ class FrmStyle {
 	 * @return bool
 	 */
 	private function is_color( $setting ) {
-		$extra_colors = array( 'error_bg', 'error_border', 'error_text' );
-		return str_contains( $setting, 'color' ) || in_array( $setting, $extra_colors, true );
+		if ( str_contains( $setting, 'color' ) ) {
+			return true;
+		}
+
+		return in_array( $setting, array( 'error_bg', 'error_border', 'error_text' ), true );
 	}
 
 	/**
@@ -494,7 +496,7 @@ class FrmStyle {
 
 		$default_values = $this->get_defaults();
 
-		// fill default values
+		// Fill default values
 		$style->post_content = $this->override_defaults( $style->post_content );
 		$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
@@ -521,12 +523,12 @@ class FrmStyle {
 
 		if ( ! $temp_styles ) {
 			global $wpdb;
-			// make sure there wasn't a conflict with the query
-			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' );
+			// Make sure there wasn't a conflict with the query
+			$query       = $wpdb->prepare( 'SELECT * FROM ' . $wpdb->posts . ' WHERE post_type=%s AND post_status=%s ORDER BY post_title ASC LIMIT 99', FrmStylesController::$post_type, 'publish' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			$temp_styles = FrmDb::check_cache( 'frm_backup_style_check', 'frm_styles', $query, 'get_results' );
 
 			if ( ! $temp_styles ) {
-				// create a new style if there are none
+				// Create a new style if there are none
 				$new             = $this->get_new();
 				$new->post_title = __( 'Formidable Style', 'formidable' );
 				$new->post_name  = $new->post_title;
@@ -548,17 +550,17 @@ class FrmStyle {
 
 			if ( $style->menu_order ) {
 				if ( $default_style ) {
-					// only return one default
+					// Only return one default
 					$style->menu_order = 0;
 				} else {
-					// check for a default style
+					// Check for a default style
 					$default_style = $style->ID;
 				}
 			}
 
 			$style->post_content = FrmAppHelper::maybe_json_decode( $style->post_content );
 
-			// fill default values
+			// Fill default values
 			$style->post_content = $this->override_defaults( $style->post_content );
 			$style->post_content = wp_parse_args( $style->post_content, $default_values );
 
@@ -602,7 +604,7 @@ class FrmStyle {
 			return $settings;
 		}
 
-		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons
+		$settings['line_height'] = ! isset( $settings['field_height'] ) || $settings['field_height'] == '' || $settings['field_height'] === 'auto' ? 'normal' : $settings['field_height']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		if ( ! isset( $settings['form_desc_size'] ) && isset( $settings['description_font_size'] ) ) {
 			$settings['form_desc_size']  = $settings['description_font_size'];

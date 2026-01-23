@@ -66,7 +66,7 @@ class FrmTransLiteHooksController {
 	}
 
 	/**
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return void
 	 */

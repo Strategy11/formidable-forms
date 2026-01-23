@@ -77,7 +77,7 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( '12px', $sanitized_post_content['section_border_width'] );
 		$this->assertEquals( '16px', $sanitized_post_content['section_font_size'] );
 		$this->assertEquals( '.my-class { color: red; }', $sanitized_post_content['custom_css'] );
-		$this->assertFalse( array_key_exists( 'unsupported_key', $sanitized_post_content ) );
+		$this->assertArrayNotHasKey( 'unsupported_key', $sanitized_post_content );
 	}
 
 	/**
@@ -107,6 +107,9 @@ class test_FrmStyle extends FrmUnitTest {
 		$this->assertEquals( 'calc(100%/6)', $this->strip_invalid_characters( 'calc(100%/6)' ) );
 	}
 
+	/**
+	 * @param string $input
+	 */
 	private function strip_invalid_characters( $input ) {
 		$frm_style = new FrmStyle();
 		return $this->run_private_method( array( $frm_style, 'strip_invalid_characters' ), array( $input ) );

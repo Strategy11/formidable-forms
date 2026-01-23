@@ -112,8 +112,8 @@ class FrmInbox extends FrmFormApi {
 	 */
 	public function add_message( $message ) {
 		if ( ! is_array( $message ) || ! isset( $message['key'] ) ) {
-			// if the API response is invalid, $message may not be an array.
-			// if there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
+			// If the API response is invalid, $message may not be an array.
+			// If there are no messages from the API, it is returning a "No Entries Found" item with no key, so check for a key as well.
 			return;
 		}
 
@@ -171,7 +171,7 @@ class FrmInbox extends FrmFormApi {
 
 		foreach ( self::$messages as $t => $message ) {
 			$read      = ! empty( $message['read'] ) && isset( $message['read'][ get_current_user_id() ] ) && $message['read'][ get_current_user_id() ] < strtotime( '-1 month' );
-			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' );
+			$dismissed = ! empty( $message['dismissed'] ) && isset( $message['dismissed'][ get_current_user_id() ] ) && $message['dismissed'][ get_current_user_id() ] < strtotime( '-1 week' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $read || $dismissed || ! $this->within_valid_timeframe( $message ) ) {
 				unset( self::$messages[ $t ] );
@@ -196,7 +196,7 @@ class FrmInbox extends FrmFormApi {
 		foreach ( $messages as $k => $message ) {
 			$dismissed = isset( $message['dismissed'] ) && isset( $message['dismissed'][ $user_id ] );
 
-			if ( empty( $k ) || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
+			if ( ! $k || ! $this->within_valid_timeframe( $message ) || ( $type === 'dismissed' ) !== $dismissed ) {
 				unset( $messages[ $k ] );
 			} elseif ( ! $this->is_for_user( $message ) ) {
 				unset( $messages[ $k ] );
@@ -447,13 +447,13 @@ class FrmInbox extends FrmFormApi {
 			 * @return string
 			 */
 			function ( $matches ) {
-				$url   = $matches[2];
-				$parts = parse_url( $url );
+				$url = $matches[2];
 
 				if ( '#' === $url ) {
 					return 'href="#"';
 				}
 
+				$parts = parse_url( $url );
 				$query = array();
 
 				if ( isset( $parts['query'] ) ) {
@@ -475,7 +475,7 @@ class FrmInbox extends FrmFormApi {
 		self::$banner_messages = self::get_banner_messages();
 
 		if ( self::$banner_messages ) {
-			// disable screen options tab when displaying banner messages because it gets in the way of the banner.
+			// Disable screen options tab when displaying banner messages because it gets in the way of the banner.
 			add_filter( 'screen_options_show_screen', '__return_false' );
 		}
 	}

@@ -58,7 +58,7 @@ if ( $col_count <= 4 ) {
 					<?php checked( $type, $success_action ); ?>
 				/>
 				<label for="<?php echo esc_attr( $input_id ); ?>">
-					<?php FrmAppHelper::icon_by_class( $type_data['icon'], array( 'echo' => true ) ); ?>
+					<?php FrmAppHelper::icon_by_class( $type_data['icon'] ); ?>
 					<?php echo esc_html( $type_data['label'] ); ?>
 				</label>
 			</div>

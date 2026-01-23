@@ -34,6 +34,9 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertEquals( 'publish', $post->post_status );
 	}
 
+	/**
+	 * @param array $options
+	 */
 	private function create_form( $options = array() ) {
 		return $this->factory->form->create_and_get(
 			array(
@@ -60,7 +63,7 @@ class test_FrmEntriesController extends FrmUnitTest {
 		$this->assertNotEmpty( $entry );
 		$this->assertEquals( $entry->post_id, $new_post->ID );
 
-		FrmFormsController::get_form( $form, false, false ); // this is where the entry is deleted
+		FrmFormsController::get_form( $form, false, false ); // This is where the entry is deleted
 
 		return $new_post->ID;
 	}

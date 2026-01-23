@@ -19,7 +19,7 @@ global $wp_query;
 // Fake being in the loop.
 $wp_query->in_the_loop = true;
 
-// fetch 20 posts at a time rather than loading the entire table into memory
+// Fetch 20 posts at a time rather than loading the entire table into memory
 while ( $next_posts = array_splice( $item_ids, 0, 20 ) ) {
 	$posts = FrmDb::get_results( $wpdb->posts, array( 'ID' => $next_posts ) );
 
@@ -104,7 +104,7 @@ if ( empty( $taxonomies ) ) {
 
 global $frm_inc_tax;
 
-if ( empty( $frm_inc_tax ) ) {
+if ( ! $frm_inc_tax ) {
 	$frm_inc_tax = array();
 }
 

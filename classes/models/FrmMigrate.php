@@ -54,7 +54,7 @@ class FrmMigrate {
 		if ( $needs_upgrade ) {
 			$this->maybe_delete_htaccess_file();
 
-			// update rewrite rules for views and other custom post types
+			// Update rewrite rules for views and other custom post types
 			flush_rewrite_rules();
 
 			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
@@ -85,7 +85,7 @@ class FrmMigrate {
 
 		FrmAppHelper::save_combined_js();
 
-		// update the styling settings
+		// Update the styling settings
 		if ( function_exists( 'get_filesystem_method' ) ) {
 			$frm_style = new FrmStyle();
 			$frm_style->update( 'default' );
@@ -97,7 +97,7 @@ class FrmMigrate {
 	 * If a server has AllowOverride FileInfo but not AllowOverride AuthConfig, JS and CSS files
 	 * will result in a 500 error.
 	 *
-	 * @since x.x
+	 * @since 6.27
 	 *
 	 * @return void
 	 */
@@ -152,7 +152,7 @@ class FrmMigrate {
 		$message = array(
 			'key'     => 'failed-to-create-tables',
 			'subject' => 'Something went wrong setting up the database',
-			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.',
+			'message' => 'For steps to continue, see our <a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">documentation</a>. If you need assistance, we recommend that you reach out to your hosting provider. Then <a href="' . esc_url( admin_url( 'admin.php?page=formidable&frm_add_tables=1' ) ) . '">click here</a> to try again.', // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			'cta'     => '<a href="https://formidableforms.com/knowledgebase/install-formidable-forms/#kb-missing-database-tables">Learn More</a>',
 			'type'    => 'error',
 		);
@@ -376,7 +376,7 @@ class FrmMigrate {
 		}
 
 		if ( ! is_numeric( $old_db_version ) ) {
-			// bail if we don't know the previous version
+			// Bail if we don't know the previous version
 			return;
 		}
 
@@ -390,6 +390,9 @@ class FrmMigrate {
 		}
 	}
 
+	/**
+	 * @return bool
+	 */
 	public function uninstall() {
 		if ( ! current_user_can( 'administrator' ) ) {
 			$frm_settings = FrmAppHelper::get_settings();
@@ -426,13 +429,13 @@ class FrmMigrate {
 		}
 		unset( $roles, $frm_roles );
 
-		// delete actions, views, and styles
+		// Delete actions, views, and styles
 
-		// prevent the post deletion from triggering entries to be deleted
+		// Prevent the post deletion from triggering entries to be deleted
 		remove_action( 'before_delete_post', 'FrmProDisplaysController::before_delete_post' );
 		remove_action( 'deleted_post', 'FrmProEntriesController::delete_entry' );
 
-		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) );
+		$post_ids = $wpdb->get_col( $wpdb->prepare( 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_type in (%s, %s, %s)', FrmFormActionsController::$action_post_type, FrmStylesController::$post_type, 'frm_display' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		foreach ( $post_ids as $post_id ) {
 			// Delete's each post.
@@ -440,13 +443,13 @@ class FrmMigrate {
 		}
 		unset( $post_ids );
 
-		// delete transients
+		// Delete transients
 		delete_transient( 'frmpro_css' );
 		delete_transient( 'frm_options' );
 		delete_transient( 'frmpro_options' );
 		delete_transient( FrmOnboardingWizardController::TRANSIENT_NAME );
 
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) );
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->options . ' WHERE option_name LIKE %s OR option_name LIKE %s', '_transient_timeout_frm_form_fields_%', '_transient_frm_form_fields_%' ) ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		do_action( 'frm_after_uninstall' );
 
@@ -587,7 +590,7 @@ class FrmMigrate {
 			unset( $f );
 		}
 
-		// reverse the extra size changes in widgets
+		// Reverse the extra size changes in widgets
 		$widgets = get_option( 'widget_frm_show_form' );
 
 		if ( ! $widgets ) {
@@ -662,7 +665,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function maybe_convert_migrated_size( &$size ) {
-		$has_px_size = ! empty( $size ) && str_contains( $size, 'px' );
+		$has_px_size = $size && str_contains( $size, 'px' );
 
 		if ( ! $has_px_size ) {
 			return;
@@ -687,7 +690,7 @@ class FrmMigrate {
 	 * @return void
 	 */
 	private function migrate_to_25() {
-		// get the style that was created with the style migration
+		// Get the style that was created with the style migration
 		$frm_style = new FrmStyle();
 		$styles    = $frm_style->get_all( 'post_date', 'ASC', 1 );
 
@@ -819,7 +822,7 @@ class FrmMigrate {
 		 */
 		foreach ( $forms as $form ) {
 			if ( $form->is_template && $form->default_template ) {
-				// don't migrate the default templates since the email will be added anyway
+				// Don't migrate the default templates since the email will be added anyway
 				continue;
 			}
 

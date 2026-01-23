@@ -222,7 +222,7 @@ class FrmSimpleBlocksController {
 		unset( $params['formId'] );
 
 		// Still pass false for title and description options if nothing is set,
-		// so a default doesn't overwrite the block option.
+		// So a default doesn't overwrite the block option.
 		$params['title']       = ! empty( $params['title'] );
 		$params['description'] = ! empty( $params['description'] );
 

@@ -53,28 +53,28 @@ class test_FrmMigrate extends FrmUnitTest {
 				'type'          => 'text',
 				'form_id'       => $form_id,
 				'field_options' => array(
-					'size' => '10', // the old size in characters
+					'size' => '10', // The old size in characters
 				),
 			)
 		);
 		$this->assertNotEmpty( $field );
 		$field_id = $field->id;
 		$frmdb    = new FrmMigrate();
-		update_option( 'frm_db_version', 16 ); // trigger migration 17
+		update_option( 'frm_db_version', 16 ); // Trigger migration 17
 		$frmdb->upgrade();
 
 		$field         = $this->factory->field->get_object_by_id( $field_id );
 		$expected_size = '90px';
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
 
-		// set it to a numeric value
+		// Set it to a numeric value
 		$expected_size                = '10';
 		$field->field_options['size'] = $expected_size;
 		FrmField::update( $field_id, array( 'field_options' => $field->field_options ) );
 		$field = $this->factory->field->get_object_by_id( $field_id );
 		$this->assertEquals( $expected_size, $field->field_options['size'] );
 
-		// make sure 17 does not fire and change the size again
+		// Make sure 17 does not fire and change the size again
 		update_option( 'frm_db_version', 20 );
 		$frmdb->upgrade();
 
@@ -107,7 +107,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$field_ids = array();
 
 		foreach ( $sizes as $start_size => $new_size ) {
-			$field_id                 = $this->factory->field->create(
+			$field_ids[ $start_size ] = $this->factory->field->create(
 				array(
 					'type'          => 'text',
 					'form_id'       => $form_id,
@@ -116,7 +116,6 @@ class test_FrmMigrate extends FrmUnitTest {
 					),
 				)
 			);
-			$field_ids[ $start_size ] = $field_id;
 		}
 
 		$frmdb = new FrmMigrate();
@@ -289,8 +288,8 @@ class test_FrmMigrate extends FrmUnitTest {
 			$field = $this->factory->field->get_object_by_id( $field_ids[ $key ] );
 			$this->assertNotEmpty( $field );
 
-			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key );
-			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key );
+			$this->assertEquals( $setting['expected']['default_value'], $field->default_value, print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['default_value'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$this->assertEquals( $setting['expected']['placeholder'], $field->field_options['placeholder'], print_r( $setting['start'], 1 ) . ' did not result in "' . $setting['expected']['placeholder'] . '" in test ' . $key ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( isset( $setting['start']['options'] ) ) {
 				$this->assertNotContains( $setting['start']['default_value'], $field->options );
@@ -315,11 +314,11 @@ class test_FrmMigrate extends FrmUnitTest {
 		$collation = $frmdb->collation();
 
 		if ( ! empty( $wpdb->charset ) ) {
-			$this->assertTrue( str_contains( $collation, 'DEFAULT CHARACTER SET' ) );
+			$this->assertStringContainsString( 'DEFAULT CHARACTER SET', $collation );
 		}
 
 		if ( ! empty( $wpdb->collate ) ) {
-			$this->assertTrue( str_contains( $collation, 'COLLATE' ) );
+			$this->assertStringContainsString( 'COLLATE', $collation );
 		}
 	}
 
@@ -356,7 +355,7 @@ class test_FrmMigrate extends FrmUnitTest {
 
 		FrmForm::create( $form_values );
 
-		// migrate data
+		// Migrate data
 		FrmAppController::install();
 
 		$form         = FrmForm::getOne( 'contact-db12-copy' );
@@ -367,7 +366,7 @@ class test_FrmMigrate extends FrmUnitTest {
 		$this->assertEquals( 1, count( $form_actions ), 'Old form settings are not converted to email action.' );
 
 		foreach ( $form_actions as $action ) {
-			$this->assertTrue( str_contains( $action->post_content['email_to'], 'emailto@test.com' ) );
+			$this->assertStringContainsString( 'emailto@test.com', $action->post_content['email_to'] );
 		}
 	}
 

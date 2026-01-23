@@ -12,7 +12,7 @@ $field_option_count = is_array( $args['field']['options'] ) ? count( $args['fiel
 			FrmAppHelper::icon_by_class(
 				'frmfont frm_simple_pencil_icon frm_svg24',
 				array(
-					'echo'       => true,
+
 					'aria-label' => __( 'Bulk Edit', 'formidable' ),
 				)
 			);

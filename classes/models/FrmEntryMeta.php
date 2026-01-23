@@ -17,7 +17,7 @@ class FrmEntryMeta {
 		global $wpdb;
 
 		if ( FrmAppHelper::is_empty_value( $meta_value ) ) {
-			// don't save blank fields
+			// Don't save blank fields
 			return 0;
 		}
 
@@ -47,7 +47,7 @@ class FrmEntryMeta {
 	 * @param string       $meta_key   Deprecated.
 	 * @param array|string $meta_value
 	 *
-	 * @return bool|false|int
+	 * @return bool|int
 	 */
 	public static function update_entry_meta( $entry_id, $field_id, $meta_key, $meta_value ) {
 		if ( ! $field_id ) {
@@ -152,18 +152,18 @@ class FrmEntryMeta {
 
 			self::get_value_to_save( compact( 'field', 'field_id', 'entry_id' ), $meta_value );
 
-			// phpcs:ignore WordPress.PHP.StrictInArray.MissingTrueStrict
-			if ( $previous_field_ids && in_array( $field_id, $previous_field_ids ) ) {
-				if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
-					// Remove blank fields.
-					unset( $values_indexed_by_field_id[ $field_id ] );
-				} else {
-					// if value exists, then update it
-					self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
-				}
-			} else {
-				// if value does not exist, then create it
+			if ( ! $previous_field_ids || ! in_array( $field_id, $previous_field_ids, true ) ) {
+				// If value does not exist, then create it
 				self::add_entry_meta( $entry_id, $field_id, '', $meta_value );
+				continue;
+			}
+
+			if ( $meta_value === array() || ( ! is_array( $meta_value ) && trim( $meta_value ) === '' ) ) {
+				// Remove blank fields.
+				unset( $values_indexed_by_field_id[ $field_id ] );
+			} else {
+				// If value exists, then update it
+				self::update_entry_meta( $entry_id, $field_id, '', $meta_value );
 			}
 		}//end foreach
 
@@ -177,7 +177,7 @@ class FrmEntryMeta {
 			return;
 		}
 
-		// prepare the query
+		// Prepare the query
 		$where = array(
 			'item_id'  => $entry_id,
 			'field_id' => $field_ids_to_remove,
@@ -185,7 +185,7 @@ class FrmEntryMeta {
 		FrmDb::get_where_clause_and_values( $where );
 
 		// Delete any leftovers
-		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . $wpdb->prefix . 'frm_item_metas ' . $where['where'], $where['values'] ) ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		self::clear_cache();
 	}
 
@@ -393,7 +393,7 @@ class FrmEntryMeta {
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
-		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit == ' LIMIT 1' ? 'get_row' : 'get_results' ) ); // phpcs:ignore Universal.Operators.StrictComparisons
+		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit === ' LIMIT 1' ? 'get_row' : 'get_results' ) );
 
 		if ( ! $results || ! $stripslashes ) {
 			return $results;
@@ -492,7 +492,7 @@ class FrmEntryMeta {
 	 *
 	 * @return void
 	 */
-	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh
+	private static function get_ids_query( $where, $order_by, $limit, $unique, $args, array &$query ) { // phpcs:ignore SlevomatCodingStandard.Complexity.Cognitive.ComplexityTooHigh, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		global $wpdb;
 		$query[]  = 'SELECT';
 		$defaults = array(
@@ -575,7 +575,7 @@ class FrmEntryMeta {
 		}
 
 		if ( str_contains( $where, ' GROUP BY ' ) ) {
-			// don't inject WHERE filtering after GROUP BY
+			// Don't inject WHERE filtering after GROUP BY
 			$parts  = explode( ' GROUP BY ', $where );
 			$where  = $parts[0];
 			$where .= $draft_where . $user_where;
@@ -634,7 +634,7 @@ class FrmEntryMeta {
 				$search = '%' . $search . '%';
 			}
 
-			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			$query = $wpdb->prepare( "SELECT DISTINCT item_id FROM {$wpdb->prefix}frm_item_metas WHERE meta_value {$operator} %s and field_id = %d", $search, $field_id ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}//end if
 
 		$results = $wpdb->get_col( $query, 0 ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared

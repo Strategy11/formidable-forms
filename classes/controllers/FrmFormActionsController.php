@@ -386,7 +386,7 @@ class FrmFormActionsController {
 
 		foreach ( $form_actions as $action ) {
 			if ( ! isset( $action_map[ $action->post_excerpt ] ) ) {
-				// don't try and show settings if action no longer exists
+				// Don't try and show settings if action no longer exists
 				continue;
 			}
 
@@ -639,7 +639,7 @@ class FrmFormActionsController {
 	/**
 	 * @param string            $event
 	 * @param int|object|string $form
-	 * @param int|string        $entry
+	 * @param int|object|string $entry
 	 * @param string            $type
 	 * @param array             $args
 	 *
@@ -692,10 +692,10 @@ class FrmFormActionsController {
 				continue;
 			}
 
-			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] );
+			$child_entry = ( is_numeric( $form->parent_form_id ) && $form->parent_form_id ) || ( $entry && ( (int) $entry->form_id !== (int) $form->id || $entry->parent_item_id ) ) || ! empty( $args['is_child'] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 			if ( $child_entry ) {
-				// maybe trigger actions for sub forms
+				// Maybe trigger actions for sub forms
 				$trigger_children = apply_filters( 'frm_use_embedded_form_actions', false, compact( 'form', 'entry' ) );
 
 				if ( ! $trigger_children ) {
@@ -839,7 +839,7 @@ class Frm_Form_Action_Factory {
 		$keys = array_keys( $this->actions );
 
 		foreach ( $keys as $key ) {
-			// don't register new action if old action with the same id is already registered
+			// Don't register new action if old action with the same id is already registered
 			if ( ! isset( $this->actions[ $key ] ) ) {
 				$this->actions[ $key ]->_register();
 			}

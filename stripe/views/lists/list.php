@@ -11,12 +11,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 		array(
 			'label'   => __( 'Payments', 'formidable' ),
 			'form'    => FrmAppHelper::simple_get( 'form', 'absint', 0 ),
-			'publish' => ! $should_show_add_new_button ? true : array(
+			'publish' => $should_show_add_new_button ? array(
 				'FrmAppHelper::add_new_item_link',
 				array(
 					'new_link' => admin_url( 'admin.php?page=formidable-payments&action=new' ),
 				),
-			),
+			) : true,
 		)
 	);
 	?>

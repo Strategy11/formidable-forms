@@ -271,7 +271,7 @@ class FrmStylesCardHelper {
 		if ( empty( $style->post_content['fieldset_bg_color'] ) ) {
 			$background_color = '#fff';
 		} else {
-			$background_color = str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color'];
+			$background_color = str_starts_with( $style->post_content['fieldset_bg_color'], 'rgb' ) ? $style->post_content['fieldset_bg_color'] : '#' . $style->post_content['fieldset_bg_color']; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$styles[] = '--preview-background-color: ' . $background_color;

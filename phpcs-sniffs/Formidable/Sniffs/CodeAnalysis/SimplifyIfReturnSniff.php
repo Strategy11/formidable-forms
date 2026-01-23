@@ -192,6 +192,8 @@ class SimplifyIfReturnSniff implements Sniff {
 				T_CLASS,
 				T_ARRAY,       // array() syntax - could be long.
 				T_OPEN_SHORT_ARRAY, // [] syntax - could be long.
+				T_INLINE_THEN, // ? - already a ternary, don't nest.
+				T_INLINE_ELSE, // : - part of a ternary.
 			);
 
 			if ( in_array( $tokens[ $i ]['code'], $complexTokens, true ) ) {

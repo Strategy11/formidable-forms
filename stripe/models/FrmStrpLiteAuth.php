@@ -271,7 +271,8 @@ class FrmStrpLiteAuth {
 			return array();
 		}
 
-		$intents = $_POST[ $name ]; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.NonceVerification.Missing
+		$intents = $_POST[ $name ];
 		FrmAppHelper::sanitize_value( 'sanitize_text_field', $intents );
 		return $intents;
 	}
@@ -290,7 +291,8 @@ class FrmStrpLiteAuth {
 			wp_die();
 		}
 
-		$form = json_decode( stripslashes( $_POST['form'] ), true ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		// phpcs:ignore WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$form = json_decode( stripslashes( $_POST['form'] ), true );
 
 		if ( ! is_array( $form ) ) {
 			wp_die();
@@ -339,7 +341,7 @@ class FrmStrpLiteAuth {
 
 		$actions = FrmStrpLiteActionsController::get_actions_before_submit( $form_id );
 
-		if ( ! $actions || empty( $intents ) ) {
+		if ( ! $actions || ! $intents ) {
 			return;
 		}
 
@@ -419,14 +421,15 @@ class FrmStrpLiteAuth {
 			$k = sanitize_text_field( stripslashes( $k ) );
 			$v = wp_unslash( $v );
 
-			if ( $k === 'item_meta' ) {
-				foreach ( $v as $f => $value ) {
-					FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
-					$entry->metas[ absint( $f ) ] = $value;
-				}
-			} else {
+			if ( $k !== 'item_meta' ) {
 				FrmAppHelper::sanitize_value( 'wp_kses_post', $v );
 				$entry->{$k} = $v;
+				continue;
+			}
+
+			foreach ( $v as $f => $value ) {
+				FrmAppHelper::sanitize_value( 'wp_kses_post', $value );
+				$entry->metas[ absint( $f ) ] = $value;
 			}
 		}
 
@@ -448,14 +451,15 @@ class FrmStrpLiteAuth {
 		foreach ( $form as $input ) {
 			$key = $input['name'];
 
-			if ( isset( $formatted[ $key ] ) ) {
-				if ( is_array( $formatted[ $key ] ) ) {
-					$formatted[ $key ][] = $input['value'];
-				} else {
-					$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
-				}
-			} else {
+			if ( ! isset( $formatted[ $key ] ) ) {
 				$formatted[ $key ] = $input['value'];
+				continue;
+			}
+
+			if ( is_array( $formatted[ $key ] ) ) {
+				$formatted[ $key ][] = $input['value'];
+			} else {
+				$formatted[ $key ] = array( $formatted[ $key ], $input['value'] );
 			}
 		}
 

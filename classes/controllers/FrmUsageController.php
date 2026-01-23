@@ -119,7 +119,7 @@ class FrmUsageController {
 
 		// Exclude Trash page.
 		$form_type = FrmAppHelper::simple_get( 'form_type' );
-		return $form_type && 'published' === $form_type;
+		return 'published' === $form_type;
 	}
 
 	/**

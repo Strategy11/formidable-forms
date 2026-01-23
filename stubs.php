@@ -93,7 +93,7 @@ namespace {
 		 *
 		 * @return array|object|string|null
 		 */
-		public static function &value_exists( $field_id, $value, $entry_id = false ) {
+		public static function value_exists( $field_id, $value, $entry_id = false ) {
 		}
 		public static function get_post_value( $post_id, $post_field, $custom_field, $atts ) {
 		}
@@ -249,7 +249,7 @@ namespace {
 		}
 	}
 	class FrmProFormsHelper {
-		public static function &post_type( $form ) {
+		public static function post_type( $form ) {
 		}
 		/**
 		 * @return array
@@ -306,7 +306,7 @@ namespace {
 		 *
 		 * @return bool
 		 */
-		public static function &is_field_visible_to_user( $field ) {
+		public static function is_field_visible_to_user( $field ) {
 		}
 	}
 	class FrmViewsAppHelper {

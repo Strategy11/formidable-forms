@@ -237,9 +237,9 @@ class FrmOnSubmitHelper {
 	/**
 	 * Populates the On Submit data to form options.
 	 *
-	 * @param array  $form_options Form options.
-	 * @param object $action       Optional. The On Submit action object.
-	 * @param string $event        Form event. Default is `create`.
+	 * @param array       $form_options Form options.
+	 * @param object|null $action       Optional. The On Submit action object.
+	 * @param string      $event        Form event. Default is `create`.
 	 *
 	 * @return void
 	 */
