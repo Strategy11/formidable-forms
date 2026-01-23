@@ -1889,7 +1889,7 @@ class FrmXMLHelper {
 	}
 
 	/**
-	 * @param string|array $str
+	 * @param string $str
 	 *
 	 * @return string
 	 */

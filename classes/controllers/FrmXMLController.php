@@ -443,8 +443,8 @@ class FrmXMLController {
 	}
 
 	/**
-	 * @param array<string>|string|array $type
-	 * @param array                      $args
+	 * @param array<string>|string $type
+	 * @param array                $args
 	 *
 	 * @psalm-param array{ids?: mixed} $args
 	 *

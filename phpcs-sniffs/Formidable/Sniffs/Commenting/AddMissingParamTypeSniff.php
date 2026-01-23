@@ -265,6 +265,9 @@ class AddMissingParamTypeSniff implements Sniff {
 		$tokens       = $phpcsFile->getTokens();
 		$checkedTypes = array();
 
+		// Find the first reassignment of this variable (if any).
+		$reassignmentPos = $this->findFirstReassignment( $phpcsFile, $varName, $scopeOpener, $scopeCloser );
+
 		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
 			if ( $tokens[ $i ]['code'] !== T_STRING ) {
 				continue;
@@ -301,10 +304,101 @@ class AddMissingParamTypeSniff implements Sniff {
 				}
 			}
 
+			// Skip if this is_* check occurs after the variable has been reassigned.
+			if ( false !== $reassignmentPos && $i > $reassignmentPos ) {
+				continue;
+			}
+
 			$checkedTypes[] = $this->isCheckToType[ $functionName ];
 		}
 
 		return array_unique( $checkedTypes );
+	}
+
+	/**
+	 * Find the first reassignment of a variable in the function body.
+	 *
+	 * @param File   $phpcsFile   The file being scanned.
+	 * @param string $varName     The variable name.
+	 * @param int    $scopeOpener The function scope opener.
+	 * @param int    $scopeCloser The function scope closer.
+	 *
+	 * @return false|int The position of the first reassignment, or false if none.
+	 */
+	private function findFirstReassignment( File $phpcsFile, $varName, $scopeOpener, $scopeCloser ) {
+		$tokens            = $phpcsFile->getTokens();
+		$reassignmentPos   = false;
+
+		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_VARIABLE ) {
+				continue;
+			}
+
+			if ( $tokens[ $i ]['content'] !== $varName ) {
+				continue;
+			}
+
+			// Check if this is an assignment ($var = ...).
+			$next = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $scopeCloser, true );
+
+			if ( false !== $next && $tokens[ $next ]['code'] === T_EQUAL ) {
+				$reassignmentPos = $i;
+				break;
+			}
+		}
+
+		// Also check for FrmAppHelper::unserialize_or_decode( $var ) which changes the type.
+		$typeChangingCall = $this->findTypeChangingCall( $phpcsFile, $varName, $scopeOpener, $scopeCloser );
+
+		// Return the earliest position.
+		if ( false === $reassignmentPos ) {
+			return $typeChangingCall;
+		}
+
+		if ( false === $typeChangingCall ) {
+			return $reassignmentPos;
+		}
+
+		return min( $reassignmentPos, $typeChangingCall );
+	}
+
+	/**
+	 * Find calls that change a variable's type (like FrmAppHelper::unserialize_or_decode).
+	 *
+	 * @param File   $phpcsFile   The file being scanned.
+	 * @param string $varName     The variable name.
+	 * @param int    $scopeOpener The function scope opener.
+	 * @param int    $scopeCloser The function scope closer.
+	 *
+	 * @return false|int The position of the call, or false if none.
+	 */
+	private function findTypeChangingCall( File $phpcsFile, $varName, $scopeOpener, $scopeCloser ) {
+		$tokens = $phpcsFile->getTokens();
+
+		for ( $i = $scopeOpener + 1; $i < $scopeCloser; $i++ ) {
+			if ( $tokens[ $i ]['code'] !== T_STRING ) {
+				continue;
+			}
+
+			if ( $tokens[ $i ]['content'] !== 'unserialize_or_decode' ) {
+				continue;
+			}
+
+			// Check if followed by ( $varName ).
+			$openParen = $phpcsFile->findNext( T_WHITESPACE, $i + 1, $scopeCloser, true );
+
+			if ( false === $openParen || $tokens[ $openParen ]['code'] !== T_OPEN_PARENTHESIS ) {
+				continue;
+			}
+
+			$varToken = $phpcsFile->findNext( T_WHITESPACE, $openParen + 1, $scopeCloser, true );
+
+			if ( false !== $varToken && $tokens[ $varToken ]['code'] === T_VARIABLE && $tokens[ $varToken ]['content'] === $varName ) {
+				return $i;
+			}
+		}
+
+		return false;
 	}
 
 	/**
@@ -376,6 +470,11 @@ class AddMissingParamTypeSniff implements Sniff {
 
 		if ( isset( $aliases[ $type ] ) ) {
 			return $aliases[ $type ];
+		}
+
+		// Normalize typed arrays (array<string>, array<int>, etc.) to just 'array'.
+		if ( preg_match( '/^array\s*</', $type ) || preg_match( '/^array\s*\{/', $type ) ) {
+			return 'array';
 		}
 
 		return $type;
