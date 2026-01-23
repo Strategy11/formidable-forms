@@ -106,7 +106,7 @@ class FrmEmailStylesController {
 	/**
 	 * Gets the test email content.
 	 *
-	 * @param false|string $style_key Default is `false`, using the one in settings.
+	 * @param bool|false|string $style_key Default is `false`, using the one in settings.
 	 *
 	 * @return string
 	 */
@@ -229,7 +229,7 @@ class FrmEmailStylesController {
 	/**
 	 * Gets table generator object for an email style.
 	 *
-	 * @param false|string $email_style Email style. Default is `false`: using the one in global settings.
+	 * @param bool|false|string $email_style Email style. Default is `false`: using the one in global settings.
 	 *
 	 * @return FrmTableHTMLGenerator
 	 */

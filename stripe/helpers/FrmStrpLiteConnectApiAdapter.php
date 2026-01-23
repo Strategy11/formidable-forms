@@ -211,8 +211,8 @@ class FrmStrpLiteConnectApiAdapter {
 	 *
 	 * @since 6.5, introduced in v3.0 of the Stripe add on.
 	 *
-	 * @param string      $customer_id Customer ID beginning with cus_.
-	 * @param array|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
+	 * @param string           $customer_id Customer ID beginning with cus_.
+	 * @param array|bool|false $payment_method_types If false the types will defaults to array( 'card', 'link' ).
 	 *
 	 * @return false|object|string
 	 */

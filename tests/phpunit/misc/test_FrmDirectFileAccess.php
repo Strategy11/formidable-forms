@@ -6,7 +6,7 @@
 class test_FrmDirectFileAccess extends FrmUnitTest {
 
 	/**
-	 * @param string $dir
+	 * @param bool|string $dir
 	 * @param array $results
 	 *
 	 * @return array
