@@ -635,7 +635,7 @@ class FrmSettings {
 	 *
 	 * @param string          $key The setting key to update.
 	 * @param mixed           $value The new value for the setting.
-	 * @param string|callable $sanitize The name of the sanitization function to apply to the new value.
+	 * @param callable|string $sanitize The name of the sanitization function to apply to the new value.
 	 *
 	 * @return bool True on success, false on failure.
 	 */
