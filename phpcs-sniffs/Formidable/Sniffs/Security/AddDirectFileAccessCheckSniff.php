@@ -55,6 +55,11 @@ class AddDirectFileAccessCheckSniff implements Sniff {
 			return $phpcsFile->numTokens;
 		}
 
+		// Skip rector.php.
+		if ( basename( $filename ) === 'rector.php' ) {
+			return $phpcsFile->numTokens;
+		}
+
 		// Only process the first T_OPEN_TAG in the file.
 		$firstOpenTag = $phpcsFile->findNext( T_OPEN_TAG, 0 );
 
