@@ -18,6 +18,8 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	public static function render_settings_container() {
+		self::render_seller_status();
+
 		$settings = FrmPayPalLiteAppHelper::get_settings();
 
 		self::register_settings_scripts();
@@ -59,6 +61,24 @@ class FrmPayPalLiteConnectHelper {
 			</div>
 		<?php } ?>
 		<?php
+	}
+
+	/**
+	 * @since x.x
+	 *
+	 * @return void
+	 */
+	private static function render_seller_status() {
+		$status = self::get_seller_status();
+		echo '<pre>';
+		var_dump( array_keys( (array) $status ) );
+		echo 'Primary email confirmed: ';
+		var_dump( $status->primary_email_confirmed );
+		echo 'Payments receivable: ';
+		var_dump( $status->payments_receivable );
+		echo 'OAuth integrations: ';
+		var_dump( $status->oauth_integrations );
+		echo '</pre>';
 	}
 
 	/**
@@ -713,5 +733,9 @@ class FrmPayPalLiteConnectHelper {
 
 	public static function create_vault_setup_token() {
 		return self::post_with_authenticated_body( 'create_vault_setup_token' );
+	}
+
+	public static function get_seller_status() {
+		return self::post_with_authenticated_body( 'get_seller_status' );
 	}
 }
