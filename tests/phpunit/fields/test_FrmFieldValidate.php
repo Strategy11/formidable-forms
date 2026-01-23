@@ -253,10 +253,16 @@ class test_FrmFieldValidate extends FrmUnitTest {
 		}
 	}
 
+	/**
+	 * @param string $field_type
+	 */
 	protected function get_field_key( $field_type ) {
 		return $field_type . '-form' . $this->form->id;
 	}
 
+	/**
+	 * @param array $item_meta
+	 */
 	protected function check_single_value( $item_meta ) {
 		$_POST = array(
 			'form_id'   => $this->form->id,

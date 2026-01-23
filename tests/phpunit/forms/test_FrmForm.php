@@ -169,12 +169,20 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assert_sanitize_field_opt_calc( $original_value, $original_value );
 	}
 
+	/**
+	 * @param string $expected
+	 * @param string $original_value
+	 * @param string $message
+	 */
 	private function assert_sanitize_field_opt_calc( $expected, $original_value, $message = '' ) {
 		$value = $original_value;
 		$this->sanitize_field_opt( 'calc', $value );
 		$this->assertEquals( $expected, $value, $message );
 	}
 
+	/**
+	 * @param string $opt
+	 */
 	private function sanitize_field_opt( $opt, &$value ) {
 		return $this->run_private_method(
 			array( 'FrmForm', 'sanitize_field_opt' ),
@@ -196,6 +204,9 @@ class test_FrmForm extends FrmUnitTest {
 		$this->assertEquals( '1 <= 2 && 3 <= 4 && 5 <= 6', $this->normalize_calc_spaces( '1<=2 && 3<=4 && 5<=6' ) );
 	}
 
+	/**
+	 * @param string $calc
+	 */
 	private function normalize_calc_spaces( $calc ) {
 		return $this->run_private_method( array( 'FrmForm', 'normalize_calc_spaces' ), array( $calc ) );
 	}

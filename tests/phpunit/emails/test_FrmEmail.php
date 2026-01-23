@@ -428,6 +428,9 @@ class test_FrmEmail extends FrmUnitTest {
 		$this->check_senders( $expected, $mock_email );
 	}
 
+	/**
+	 * @param string $subject
+	 */
 	protected function prepare_subject( $subject ) {
 		return wp_specialchars_decode( strip_tags( stripslashes( $subject ) ), ENT_QUOTES );
 	}
@@ -747,6 +750,10 @@ LINE 1<br>LINE 2<br></body></html>'
 		}
 	}
 
+	/**
+	 * @param string $setting_name
+	 * @param string $property
+	 */
 	private function check_private_properties( $settings, $setting_name, $property = '' ) {
 		if ( ! $property ) {
 			$property = $setting_name;

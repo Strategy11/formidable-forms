@@ -68,13 +68,6 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 
 		$functionName = $tokens[ $functionNamePtr ]['content'];
 
-		// Check if function has a docblock.
-		$docblock = $this->findDocblock( $phpcsFile, $stackPtr );
-
-		if ( false === $docblock ) {
-			return;
-		}
-
 		// Get function parameters.
 		$params = $this->getParameters( $phpcsFile, $stackPtr );
 
@@ -82,8 +75,15 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 			return;
 		}
 
-		// Get existing @param tags with their types.
-		$existingParams = $this->getExistingParamTags( $phpcsFile, $docblock );
+		// Check if function has a docblock.
+		$docblock       = $this->findDocblock( $phpcsFile, $stackPtr );
+		$hasDocblock    = ( false !== $docblock );
+		$existingParams = array();
+
+		if ( $hasDocblock ) {
+			// Get existing @param tags with their types.
+			$existingParams = $this->getExistingParamTags( $phpcsFile, $docblock );
+		}
 
 		// Find parameters that are missing @param comments entirely.
 		$missingParamComments = array();
@@ -142,6 +142,21 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 		}
 
 		if ( empty( $paramsToAdd ) ) {
+			return;
+		}
+
+		// If no docblock exists, create one with the detected @param tags.
+		if ( ! $hasDocblock ) {
+			$fix = $phpcsFile->addFixableError(
+				'Missing docblock with @param tags (detected types from call site literals)',
+				$stackPtr,
+				'MissingDocblockFromCalls'
+			);
+
+			if ( $fix ) {
+				$this->addDocblock( $phpcsFile, $stackPtr, $paramsToAdd );
+			}
+
 			return;
 		}
 
@@ -511,6 +526,75 @@ class AddMissingParamTypeFromCallsSniff implements Sniff {
 
 		$phpcsFile->fixer->beginChangeset();
 		$phpcsFile->fixer->replaceToken( $lastParamEnd, $newContent );
+		$phpcsFile->fixer->endChangeset();
+	}
+
+	/**
+	 * Add a new docblock with @param tags.
+	 *
+	 * @param File  $phpcsFile   The file being scanned.
+	 * @param int   $stackPtr    The function token position.
+	 * @param array $paramsToAdd Array of param name => array('types' => array, 'index' => int).
+	 *
+	 * @return void
+	 */
+	private function addDocblock( File $phpcsFile, $stackPtr, $paramsToAdd ) {
+		$tokens = $phpcsFile->getTokens();
+
+		// Find the position to insert the docblock (before any modifiers or the function keyword).
+		$insertBefore = $stackPtr;
+
+		$prev = $phpcsFile->findPrevious(
+			array( T_WHITESPACE, T_STATIC, T_PUBLIC, T_PRIVATE, T_PROTECTED, T_ABSTRACT, T_FINAL ),
+			$stackPtr - 1,
+			null,
+			true
+		);
+
+		if ( false !== $prev ) {
+			// Find the first modifier/keyword after $prev.
+			$next = $phpcsFile->findNext( T_WHITESPACE, $prev + 1, $stackPtr, true );
+
+			if ( false !== $next ) {
+				$insertBefore = $next;
+			}
+		}
+
+		// Determine indentation from the function line.
+		$indent = '';
+
+		for ( $i = $insertBefore - 1; $i >= 0; $i-- ) {
+			if ( $tokens[ $i ]['code'] === T_WHITESPACE ) {
+				if ( strpos( $tokens[ $i ]['content'], "\n" ) !== false || strpos( $tokens[ $i ]['content'], "\r" ) !== false ) {
+					// Get the part after the newline.
+					$indent = preg_replace( '/^.*[\r\n]/', '', $tokens[ $i ]['content'] );
+					break;
+				}
+			} else {
+				break;
+			}
+		}
+
+		// Build the docblock.
+		$docblock = "/**\n";
+
+		// Sort params by index to maintain order.
+		uasort(
+			$paramsToAdd,
+			function ( $a, $b ) {
+				return $a['index'] - $b['index'];
+			}
+		);
+
+		foreach ( $paramsToAdd as $paramName => $info ) {
+			$typeString = implode( '|', $info['types'] );
+			$docblock  .= $indent . "\t * @param " . $typeString . ' ' . $paramName . "\n";
+		}
+
+		$docblock .= $indent . "\t */\n" . $indent . "\t";
+
+		$phpcsFile->fixer->beginChangeset();
+		$phpcsFile->fixer->addContentBefore( $insertBefore, $docblock );
 		$phpcsFile->fixer->endChangeset();
 	}
 }

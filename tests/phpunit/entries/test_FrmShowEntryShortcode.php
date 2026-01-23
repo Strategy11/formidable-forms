@@ -700,6 +700,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		$this->assertSame( $expected_json, $actual_json );
 	}
 
+	/**
+	 * @param bool $include_meta
+	 */
 	protected function get_test_entry( $include_meta ) {
 		$new_entry = array(
 			'form_id'     => FrmForm::get_id_by_key( 'free_field_types' ),
@@ -1025,10 +1028,16 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $field_value;
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function set_included_fields( $type ) {
 		$this->include_fields = $this->set_field_array( $type );
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function set_excluded_fields( $type ) {
 		$this->exclude_fields = $this->set_field_array( $type );
 	}
@@ -1043,6 +1052,9 @@ class test_FrmShowEntryShortcode extends FrmUnitTest {
 		return $fields;
 	}
 
+	/**
+	 * @param string $type
+	 */
 	protected function get_single_included_field( $type ) {
 		$include_fields = array(
 			'free-text-field' => 'free-text-field',
