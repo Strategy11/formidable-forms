@@ -4963,7 +4963,7 @@ class FrmAppHelper {
 			if ( is_array( $args['errors'] ) ) {
 				foreach ( $args['errors'] as $key => $msg ) {
 					?>
-						<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
+					<span frm-error="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $msg ); ?></span>
 					<?php
 				}
 			} else {
