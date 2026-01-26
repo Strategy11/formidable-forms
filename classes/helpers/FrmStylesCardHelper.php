@@ -360,13 +360,11 @@ class FrmStylesCardHelper {
 		?>
 		<div <?php FrmAppHelper::array_to_html_params( $card_wrapper_params, true ); ?>>
 			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			if ( $is_template_wrapper ) {
 				$this->echo_template_cards( $styles );
 			} else {
 				$this->echo_custom_cards( $styles );
 			}
-			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 		</div>
 		<?php
@@ -473,13 +471,11 @@ class FrmStylesCardHelper {
 		<div class="frm-style-card-pagination frm_wrap">
 			<a href="#" class="frm-show-all-styles">
 				<?php
-				// phpcs:enable Generic.WhiteSpace.ScopeIndent
 				printf(
 					/* translators: %d: The number of styles */
 					esc_html__( 'Show all (%d)', 'formidable' ),
 					esc_html( $count - self::PAGE_SIZE )
 				);
-				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				?>
 			</a>
 		</div>

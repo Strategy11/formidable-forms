@@ -306,7 +306,6 @@ class FrmSolution {
 						'style'      => 'width:90px;height:90px;',
 					)
 				);
-				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				?>
 			</div>
 			<h1><?php echo esc_html( $this->page_title() ); ?></h1>
