@@ -236,11 +236,9 @@
 			</property>
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmAppController.php</exclude-pattern>
 		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
 		<exclude-pattern>classes/models/fields/FrmFieldTextarea.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+
 		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
 		<exclude-pattern>classes/controllers/FrmFieldsController.php</exclude-pattern>
 		<exclude-pattern>classes/helpers/FrmStylesCardHelper.php</exclude-pattern>
