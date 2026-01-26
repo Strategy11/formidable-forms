@@ -404,7 +404,9 @@ class FrmTransLiteAppHelper {
 	 * @return void
 	 */
 	public static function show_in_table( $value, $label ) {
-		if ( $value ) { ?>
+		if ( $value ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
+			?>
 			<tr>
 				<th scope="row"><?php echo esc_html( $label ); ?>:</th>
 				<td>
@@ -412,6 +414,7 @@ class FrmTransLiteAppHelper {
 				</td>
 			</tr>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 

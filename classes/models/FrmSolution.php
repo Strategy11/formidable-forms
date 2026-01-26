@@ -519,11 +519,13 @@ class FrmSolution {
 		$this->step_top( $step );
 
 		if ( $step['complete'] ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		} else {
 			FrmSettingsController::license_box();
 		}
@@ -542,11 +544,13 @@ class FrmSolution {
 		if ( ! isset( $step['error'] ) ) {
 			$rel = $step['links'] ?? array();
 
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a rel="<?php echo esc_attr( implode( ',', $rel ) ); ?>" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 				<?php echo esc_html( $step['button_label'] ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 
 		$this->step_bottom( $step );
@@ -571,6 +575,7 @@ class FrmSolution {
 		$id       = $this->download_id();
 		$has_file = isset( $addons[ $id ] ) && isset( $addons[ $id ]['beta'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( ! $step['current'] ) {
 			?>
 			<a href="#" class="<?php echo esc_attr( $step['button_class'] ); ?>">
@@ -628,6 +633,7 @@ class FrmSolution {
 				echo '</form>';
 			}
 		}//end if
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}
@@ -693,6 +699,7 @@ class FrmSolution {
 		echo '<h3>Choose New Page Title</h3>';
 
 		foreach ( $pages as $page ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<p>
 				<label for="pages_<?php echo esc_html( $page['type'] ); ?>">
@@ -701,6 +708,7 @@ class FrmSolution {
 				<input type="text" name="pages[<?php echo esc_html( $page['type'] ); ?>]" value="<?php echo esc_attr( $page['name'] ); ?>" id="pages_<?php echo esc_html( $page['type'] ); ?>" required /><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 			</p>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -716,11 +724,13 @@ class FrmSolution {
 
 		$this->step_top( $step );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="#" target="_blank" rel="noopener" id="frm-redirect-link" class="<?php echo esc_attr( $step['button_class'] ); ?>">
 			<?php echo esc_html( $step['button_label'] ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$this->step_bottom( $step );
 	}

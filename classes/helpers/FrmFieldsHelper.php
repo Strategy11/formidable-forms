@@ -1732,12 +1732,14 @@ class FrmFieldsHelper {
 
 		$label = $args['opt_label'] ?? $args['field']['name'];
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		echo '<label for="' . esc_attr( $other_id ) . '" class="frm_screen_reader frm_hidden">' .
 			esc_html( $label ) .
 			'</label>' .
 			'<input type="text" id="' . esc_attr( $other_id ) . '" class="' . esc_attr( implode( ' ', $classes ) ) . '" ' .
 			( $args['read_only'] ? ' readonly="readonly" disabled="disabled"' : '' ) .
 			' name="' . esc_attr( $args['name'] ) . '" value="' . esc_attr( $args['value'] ) . '" />';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

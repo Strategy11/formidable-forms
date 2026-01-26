@@ -236,22 +236,6 @@
 			</property>
 		</properties>
 		<exclude-pattern>views/*</exclude-pattern>
-		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
-		<exclude-pattern>classes/models/fields/FrmFieldTextarea.php</exclude-pattern>
-
-		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
-		<exclude-pattern>classes/controllers/FrmFieldsController.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmStylesCardHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
-		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormTemplatesHelper.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmCssScopeHelper.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmSolution.php</exclude-pattern>
-		<exclude-pattern>classes/models/FrmPluginSearch.php</exclude-pattern>
-		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
 	</rule>
 
 	<!-- Custom Formidable sniffs (defined in phpcs-sniffs/Formidable/ruleset.xml) -->

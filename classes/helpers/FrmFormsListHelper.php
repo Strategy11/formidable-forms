@@ -402,9 +402,11 @@ class FrmFormsListHelper extends FrmListHelper {
 			'target' => '_blank',
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return '<a ' . FrmAppHelper::array_to_html_params( $attributes ) . '>
 					' . FrmAppHelper::icon_by_class( 'frmfont frm_eye_icon', array( 'echo' => false ) ) .
 				'</a>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

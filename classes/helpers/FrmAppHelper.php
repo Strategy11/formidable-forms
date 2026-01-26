@@ -2031,6 +2031,7 @@ class FrmAppHelper {
 
 		$pages    = self::get_post_ids_and_titles( $args['post_type'] );
 		$selected = self::get_post_param( $args['field_name'], $args['page_id'], 'absint' );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
@@ -2041,6 +2042,7 @@ class FrmAppHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
