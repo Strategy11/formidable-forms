@@ -2515,7 +2515,7 @@ class FrmAppHelper {
 			if ( is_array( $value ) ) {
 				$return = array_merge( $return, self::array_flatten( $value, $keys ) );
 			} elseif ( $keys === 'keep' ) {
-					$return[ $key ] = $value;
+				$return[ $key ] = $value;
 			} else {
 				$return[] = $value;
 			}
