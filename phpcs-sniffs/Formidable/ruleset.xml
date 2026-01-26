@@ -31,8 +31,10 @@
 	<rule ref="Formidable.CodeAnalysis.RedundantNotIssetBeforeEmpty" />
 	<rule ref="Formidable.CodeAnalysis.RedundantTruthyBeforeStringComparison" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIntermediateVariable" />
+	<rule ref="Formidable.CodeAnalysis.RedundantParentheses" />
 	<rule ref="Formidable.CodeAnalysis.RedundantUnsetBeforeReturn" />
 	<rule ref="Formidable.CodeAnalysis.RemoveRedundantWpdbPrefix" />
+	<rule ref="Formidable.CodeAnalysis.RemoveRedundantEmptyAfterTruthy" />
 	<rule ref="Formidable.CodeAnalysis.RedundantIconEchoArg" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictComparison" />
 	<rule ref="Formidable.CodeAnalysis.PreferStrictInArray" />
