@@ -1637,7 +1637,6 @@ class FrmAppHelper {
 					esc_html( $cta_text ),
 					'</a>'
 				);
-				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				?>
 			</div>
 		</div>
@@ -2035,9 +2034,9 @@ class FrmAppHelper {
 		?>
 		<select name="<?php echo esc_attr( $args['field_name'] ); ?>" id="<?php echo esc_attr( $args['field_name'] ); ?>" class="frm-pages-dropdown">
 			<option value=""><?php echo esc_html( $args['placeholder'] ); ?></option>
-		<?php foreach ( $pages as $page ) { ?>
+			<?php foreach ( $pages as $page ) { ?>
 				<option value="<?php echo esc_attr( $page->ID ); ?>" <?php selected( $selected, $page->ID ); ?>>
-			<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
+					<?php echo esc_html( $args['truncate'] ? self::truncate( $page->post_title, $args['truncate'] ) : $page->post_title ); ?>
 				</option>
 			<?php } ?>
 		</select>
