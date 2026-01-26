@@ -72,7 +72,6 @@ class EscapeInHtmlSniff implements Sniff {
 			return;
 		}
 
-		
 		$expectedFunc = $this->getExpectedFunction( $context );
 
 		if ( $functionName !== $expectedFunc ) {
