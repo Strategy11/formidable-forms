@@ -2166,13 +2166,15 @@ class FrmAppHelper {
 	 * @param string       $multiple 'single' and 'multiple'.
 	 */
 	public static function wp_roles_dropdown( $field_name, $capability, $multiple = 'single' ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>" id="<?php echo esc_attr( $field_name ); ?>"
-		<?php echo 'multiple' === $multiple ? 'multiple="multiple"' : ''; ?>
+			<?php echo 'multiple' === $multiple ? 'multiple="multiple"' : ''; ?>
 			class="frm_multiselect">
-		<?php self::roles_options( $capability ); ?>
+			<?php self::roles_options( $capability ); ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -4928,11 +4930,13 @@ class FrmAppHelper {
 		} else {
 			$atts['class'] = 'frm_help';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span <?php self::array_to_html_params( $atts, true ); ?>>
-		<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
+			<?php self::icon_by_class( 'frmfont frm_tooltip_icon' ); ?>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
