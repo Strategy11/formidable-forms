@@ -649,9 +649,9 @@ class FrmDb {
 		if ( ! $where ) {
 			$where = '';
 		} elseif ( is_array( $where ) ) {
-				global $wpdb;
-				self::get_where_clause_and_values( $where, $starts_with );
-				$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+			global $wpdb;
+			self::get_where_clause_and_values( $where, $starts_with );
+			$where = $wpdb->prepare( $where['where'], $where['values'] ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
 		} else {
 			$where = $starts_with . $where;
 		}

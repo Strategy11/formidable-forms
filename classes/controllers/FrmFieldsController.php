@@ -951,12 +951,14 @@ class FrmFieldsController {
 	 * @return void
 	 */
 	private static function maybe_add_html_required( $field, array &$add_html ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		$excluded_field_types =
 			FrmField::is_radio( $field ) ||
 			FrmField::is_checkbox( $field ) ||
 			FrmField::is_field_type( $field, 'file' ) ||
 			FrmField::is_field_type( $field, 'nps' ) ||
 			FrmField::is_field_type( $field, 'scale' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		if ( $excluded_field_types ) {
 			return;

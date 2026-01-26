@@ -717,6 +717,7 @@ class FrmEntriesHelper {
 		$links = self::get_action_links( $id, $atts['entry'] );
 
 		foreach ( $links as $link ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 		<div class="misc-pub-section">
 			<a href="<?php echo esc_url( $link['url'] ); ?>"
@@ -741,6 +742,7 @@ class FrmEntriesHelper {
 			</a>
 		</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}//end foreach
 	}
 

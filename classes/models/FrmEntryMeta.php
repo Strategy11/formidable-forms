@@ -387,10 +387,12 @@ class FrmEntryMeta {
 	 */
 	public static function getAll( $where = array(), $order_by = '', $limit = '', $stripslashes = false ) {
 		global $wpdb;
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		$query = 'SELECT it.*, fi.type as field_type, fi.field_key as field_key,
             fi.required as required, fi.form_id as field_form_id, fi.name as field_name, fi.options as fi_options
 			FROM ' . $wpdb->prefix . 'frm_item_metas it LEFT OUTER JOIN ' . $wpdb->prefix . 'frm_fields fi ON it.field_id=fi.id' .
 			FrmDb::prepend_and_or_where( ' WHERE ', $where ) . $order_by . $limit;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$cache_key = 'all_' . FrmAppHelper::maybe_json_encode( $where ) . $order_by . $limit;
 		$results   = FrmDb::check_cache( $cache_key, 'frm_entry', $query, ( $limit === ' LIMIT 1' ? 'get_row' : 'get_results' ) );

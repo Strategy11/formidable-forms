@@ -195,9 +195,11 @@ class FrmPluginSearch {
 	 * @return string The URL with 'formidable' instead of 'frm-plugin-search'.
 	 */
 	public function plugin_details( $url ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return false !== stripos( $url, 'tab=plugin-information&amp;plugin=' . self::$slug )
 			? 'plugin-install.php?tab=plugin-information&amp;plugin=formidable&amp;TB_iframe=true&amp;width=600&amp;height=550'
 			: $url;
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

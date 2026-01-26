@@ -1102,11 +1102,13 @@ class FrmFormsController {
 		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
 			// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
 			require ABSPATH . WPINC . '/class-wp-editor.php';
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<div class="frm_hidden">
 				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
 			</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
@@ -3194,11 +3196,14 @@ class FrmFormsController {
 	 * @param array  $args
 	 */
 	private static function get_redirect_message( $success_url, $success_msg, $args ) {
-		$success_msg  = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
-		$success_msg  = do_shortcode( FrmAppHelper::use_wpautop( $success_msg ) );
+		$success_msg = apply_filters( 'frm_content', $success_msg, $args['form'], $args['entry_id'] );
+		$success_msg = do_shortcode( FrmAppHelper::use_wpautop( $success_msg ) );
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		$redirect_msg = '<div class="' . esc_attr( FrmFormsHelper::get_form_style_class( $args['form'] ) ) . '"><div class="frm-redirect-msg" role="status">' . $success_msg . '<br/>' . // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 			self::get_redirect_fallback_message( $success_url, $args ) .
 			'</div></div>';
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$redirect_args = array(
 			'entry_id' => $args['entry_id'],

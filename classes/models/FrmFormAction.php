@@ -997,6 +997,7 @@ class FrmFormAction {
 	 * @return void
 	 */
 	public function render_conditional_logic_call_to_action() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<h3>
 				<a href="javascript:void(0)" class="frm_show_upgrade frm_noallow" data-upgrade="<?php echo esc_attr( $this->get_upgrade_text() ); ?>" data-medium="conditional-<?php echo esc_attr( $this->id_base ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
@@ -1004,6 +1005,7 @@ class FrmFormAction {
 				</a>
 			</h3>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

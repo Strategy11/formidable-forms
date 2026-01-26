@@ -90,6 +90,7 @@ abstract class FrmFormMigrator {
 	 */
 	public function import_page() {
 		$forms = $this->get_forms();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="wrap">
 			<h2 class="frm-h2"><?php echo esc_html( $this->name ); ?> Importer</h2>
@@ -167,6 +168,7 @@ abstract class FrmFormMigrator {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

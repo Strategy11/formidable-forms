@@ -23,6 +23,8 @@ class FrmSquareLiteConnectHelper {
 		self::register_settings_scripts();
 
 		FrmSquareLiteAppHelper::fee_education( 'square-global-settings-tip' );
+
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">
@@ -58,6 +60,7 @@ class FrmSquareLiteConnectHelper {
 			</div>
 		<?php } ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -66,6 +69,7 @@ class FrmSquareLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_settings_for_mode( $mode ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm4">
 			<div class="frm-flex-col" style="width: 100%;">
@@ -114,6 +118,7 @@ class FrmSquareLiteConnectHelper {
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
