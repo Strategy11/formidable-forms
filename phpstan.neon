@@ -375,4 +375,3 @@ parameters:
 			message: '#always exists and is not falsy.#'
 			paths:
 				- classes/models/FrmAddon.php
-				- classes/views/frm-entries/errors.php
