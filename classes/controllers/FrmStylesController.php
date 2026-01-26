@@ -1407,7 +1407,6 @@ class FrmStylesController {
 					</li><!-- .accordion-section -->
 					<?php
 				}//end foreach
-			// end if
 			}//end foreach
 		}//end if
 		?>
