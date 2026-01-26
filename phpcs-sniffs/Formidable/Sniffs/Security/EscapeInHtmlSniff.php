@@ -57,7 +57,6 @@ class EscapeInHtmlSniff implements Sniff {
 		$leftIsTranslation  = $this->isTranslationFunction( $phpcsFile, $leftSide );
 		$rightIsTranslation = $this->isTranslationFunction( $phpcsFile, $rightSide );
 
-		
 		// Check if either side is a translation function and the other side contains HTML
 		if ( $leftIsTranslation && $this->containsHtml( $phpcsFile, $rightSide ) ) {
 			// Pattern: __('text') . HTML string
@@ -101,8 +100,7 @@ class EscapeInHtmlSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		// Find the previous non-whitespace token
-		$prev = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
-		return $prev;
+		return $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
 	}
 
 	/**
@@ -117,8 +115,7 @@ class EscapeInHtmlSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		// Find the next non-whitespace token
-		$next = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
-		return $next;
+		return $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
 	}
 
 	/**
@@ -138,10 +135,7 @@ class EscapeInHtmlSniff implements Sniff {
 		}
 
 		$functionName = $tokens[ $stackPtr ]['content'];
-		$isTranslation = in_array( $functionName, array( '__', '_x', '_n', '_nx' ), true );
-		
-				
-		return $isTranslation;
+		return in_array( $functionName, array( '__', '_x', '_n', '_nx' ), true );
 	}
 
 	/**
@@ -275,6 +269,7 @@ class EscapeInHtmlSniff implements Sniff {
 			if ( $tokens[ $i ]['code'] === T_EQUAL ) {
 				// Found assignment, check what's being assigned
 				$next = $phpcsFile->findNext( T_WHITESPACE, $i + 1, null, true );
+
 				if ( false !== $next && $this->containsHtml( $phpcsFile, $next ) ) {
 					return true;
 				}
