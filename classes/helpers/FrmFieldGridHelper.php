@@ -36,12 +36,12 @@ class FrmFieldGridHelper {
 	private $is_frm_first;
 
 	/**
-	 * @var stdClass
+	 * @var stdClass|null
 	 */
 	private $field;
 
 	/**
-	 * @var FrmFieldGridHelper
+	 * @var FrmFieldGridHelper|null
 	 */
 	private $section_helper;
 
