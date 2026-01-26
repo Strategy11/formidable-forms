@@ -2829,16 +2829,12 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool       $choice_limit_is_reached
-	 * @param int|string $form_id
+	 * @param bool  $choice_key
+	 * @param array $field
 	 *
 	 * @return bool
 	 */
-	public static function should_hide_field_choice( $choice_limit_is_reached, $form_id ) {
-		if ( ! $choice_limit_is_reached ) {
-			return false;
-		}
-
+	public static function should_hide_field_choice( $choice_key, $field ) {
 		/**
 		 * @since x.x
 		 *
@@ -2847,7 +2843,7 @@ class FrmFieldsHelper {
 		 *
 		 * @return bool
 		 */
-		return apply_filters( 'frm_hide_field_choices', false, $form_id );
+		return apply_filters( 'frm_hide_field_choice', false, $choice_key, $field );
 	}
 
 	/**
@@ -2858,7 +2854,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) {
+	public static function should_skip_rendering_options_for_field( $field ) {
 		/**
 		 * @since x.x
 		 *
@@ -2866,7 +2862,7 @@ class FrmFieldsHelper {
 		 * @param array $field_choices_limit_reached_statuses
 		 * @param array $field
 		 */
-		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field_choices_limit_reached_statuses, $field );
+		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field );
 	}
 
 	/**
@@ -2874,20 +2870,21 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool $choice_limit_reached
-	 * @param bool $choice_selected
+	 * @param string $choice_key
+	 * @param bool   $is_selected_choice
+	 * @param array  $field
 	 *
 	 * @return bool
 	 */
-	public static function should_echo_disabled_attribute( $choice_limit_reached, $choice_selected ) {
+	public static function should_echo_disabled_attribute( $choice_key, $is_selected_choice, $field ) {
 		/**
 		 * @since x.x
 		 *
 		 * @param bool $should_echo_disabled_attribute
 		 * @param bool $choice_limit_reached
-		 * @param bool $choice_selected
+		 * @param bool $is_selected_choice
 		 */
-		return (bool) apply_filters( 'frm_should_echo_disabled_attribute', false, $choice_limit_reached, $choice_selected );
+		return (bool) apply_filters( 'frm_echo_disabled_attribute', false, $choice_key, $is_selected_choice, $field );
 	}
 
 	/**
@@ -2899,7 +2896,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return array
 	 */
-	public static function get_choices_limit_reached_statuses( $field ) {
+	public static function get_skipped_options( $field ) {
 		$statuses = array_fill_keys( array_keys( $field['options'] ), false );
 
 		/**

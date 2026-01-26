@@ -19,9 +19,9 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		)
 	);
 } else {
-	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
+	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_skipped_options( $field );
 
-	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) ) {
+	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
 		return;
 	}
 
@@ -52,9 +52,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	}
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
-
-		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
+		if ( FrmFieldsHelper::should_hide_field_choice( $opt_key, $field ) ) {
 			continue;
 		}
 
@@ -84,7 +82,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['class'] = 'frm_other_trigger';
 		}
 
-		if ( FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, $selected ) ) {
+		if ( FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, ! empty( $checked ), $field ) ) {
 			$option_params['disabled'] = 'disabled';
 		}
 		$option_params['field']   = $field;

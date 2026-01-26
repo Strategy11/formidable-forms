@@ -15,9 +15,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
 } elseif ( $field['options'] ) {
-	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_choices_limit_reached_statuses( $field );
-
-	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field_choices_limit_reached_statuses, $field ) ) {
+	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
 		return;
 	}
 
@@ -28,9 +26,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			continue;
 		}
 
-		$choice_limit_reached = $field_choices_limit_reached_statuses[ $opt_key ] ?? false;
-
-		if ( FrmFieldsHelper::should_hide_field_choice( $choice_limit_reached, $field['form_id'] ) ) {
+		if ( FrmFieldsHelper::should_hide_field_choice( $opt_key, $field ) ) {
 			continue;
 		}
 
@@ -61,7 +57,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		$other_opt  = false;
 		$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field', 'field_name', 'opt_key', 'field_val' ), $other_opt, $checked );
 
-		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $choice_limit_reached, ! empty( $checked ) );
+		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, ! empty( $checked ), $field );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_checkbox_class', 'frm_checkbox', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key ) ); ?>"><?php
 
