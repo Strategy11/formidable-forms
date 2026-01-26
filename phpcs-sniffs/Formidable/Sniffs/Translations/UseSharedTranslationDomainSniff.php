@@ -56,7 +56,7 @@ class UseSharedTranslationDomainSniff implements Sniff {
 	 *
 	 * @var array<string, bool>|null
 	 */
-	private static $potStrings = null;
+	private static $potStrings;
 
 	/**
 	 * Translation functions to check.
@@ -312,9 +312,7 @@ class UseSharedTranslationDomainSniff implements Sniff {
 		$string = str_replace( '\\n', "\n", $string );
 		$string = str_replace( '\\t', "\t", $string );
 		$string = str_replace( '\\"', '"', $string );
-		$string = str_replace( '\\\\', '\\', $string );
-
-		return $string;
+		return str_replace( '\\\\', '\\', $string );
 	}
 
 	/**
