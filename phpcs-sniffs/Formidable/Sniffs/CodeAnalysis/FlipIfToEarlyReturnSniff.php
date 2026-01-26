@@ -101,7 +101,7 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 			// If the first statement isn't an if, check if it's a simple assignment
 			// followed by an if statement (pattern: $var = value; if ($var && condition) {...})
 			$ifToken = $this->findIfAfterSimpleSetup( $phpcsFile, $firstStatement, $scopeCloser );
-			
+
 			if ( false === $ifToken ) {
 				return;
 			}
@@ -565,43 +565,44 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	 */
 	private function findIfAfterSimpleSetup( File $phpcsFile, $firstToken, $scopeCloser ) {
 		$tokens = $phpcsFile->getTokens();
-		
+
 		// Allow simple assignments: $var = value;
 		$current = $firstToken;
 		$setupStatements = 0;
 		$maxSetupStatements = 3; // Allow up to 3 simple setup statements
-		
+
 		while ( $current < $scopeCloser && $setupStatements < $maxSetupStatements ) {
 			// Skip whitespace
 			if ( $tokens[ $current ]['code'] === T_WHITESPACE ) {
 				$current++;
 				continue;
 			}
-			
+
 			// Check if this is a simple assignment
 			if ( $this->isSimpleAssignment( $phpcsFile, $current ) ) {
 				$setupStatements++;
 				// Move to the end of this statement (semicolon)
 				$semicolon = $phpcsFile->findNext( T_SEMICOLON, $current + 1, $scopeCloser );
+
 				if ( false === $semicolon ) {
 					return false;
 				}
 				$current = $semicolon + 1;
 				continue;
 			}
-			
+
 			// If we find an if after the setup, return it
 			if ( $tokens[ $current ]['code'] === T_IF ) {
 				return $current;
 			}
-			
+
 			// Anything else means this pattern doesn't match
 			return false;
 		}
-		
+
 		return false;
 	}
-	
+
 	/**
 	 * Check if a token represents a simple assignment statement.
 	 *
@@ -612,18 +613,19 @@ class FlipIfToEarlyReturnSniff implements Sniff {
 	 */
 	private function isSimpleAssignment( File $phpcsFile, $stackPtr ) {
 		$tokens = $phpcsFile->getTokens();
-		
+
 		// Look for pattern: $variable = value;
 		if ( $tokens[ $stackPtr ]['code'] !== T_VARIABLE ) {
 			return false;
 		}
-		
+
 		// Next non-whitespace should be =
 		$next = $phpcsFile->findNext( T_WHITESPACE, $stackPtr + 1, null, true );
+
 		if ( false === $next || $tokens[ $next ]['code'] !== T_EQUAL ) {
 			return false;
 		}
-		
+
 		// Find the semicolon to confirm this is a complete assignment
 		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $next + 1, null );
 		return false !== $semicolon;
