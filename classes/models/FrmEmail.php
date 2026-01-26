@@ -826,31 +826,34 @@ class FrmEmail {
 	 */
 	private function handle_phone_numbers() {
 		foreach ( $this->to as $key => $recipient ) {
-			if ( '[admin_email]' !== $recipient && ! is_email( $recipient ) ) {
-				$recipient = explode( ' ', $recipient );
+			if ( '[admin_email]' === $recipient || is_email( $recipient ) ) {
+				continue;
+			}
 
-				if ( is_email( end( $recipient ) ) ) {
-					continue;
-				}
+			$recipient = explode( ' ', $recipient );
 
-				do_action(
-					'frm_send_to_not_email',
-					array(
-						'e'           => $recipient,
-						'subject'     => $this->subject,
-						'mail_body'   => $this->message,
-						'reply_to'    => $this->reply_to,
-						'from'        => $this->from,
-						'plain_text'  => $this->is_plain_text,
-						'attachments' => $this->attachments,
-						'form'        => $this->form,
-						'email_key'   => $key,
-					)
-				);
+			if ( is_email( end( $recipient ) ) ) {
+				continue;
+			}
 
-				// Remove phone number from to addresses
-				unset( $this->to[ $key ] );
-			}//end if
+			do_action(
+				'frm_send_to_not_email',
+				array(
+					'e'           => $recipient,
+					'subject'     => $this->subject,
+					'mail_body'   => $this->message,
+					'reply_to'    => $this->reply_to,
+					'from'        => $this->from,
+					'plain_text'  => $this->is_plain_text,
+					'attachments' => $this->attachments,
+					'form'        => $this->form,
+					'email_key'   => $key,
+				)
+			);
+
+			// Remove phone number from to addresses
+			unset( $this->to[ $key ] );
+		// end if
 		}//end foreach
 	}
 
