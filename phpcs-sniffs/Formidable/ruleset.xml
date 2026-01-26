@@ -79,4 +79,5 @@
 
 	<!-- Security -->
 	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
+	<rule ref="Formidable.Security.EscapeInHtml" />
 </ruleset>

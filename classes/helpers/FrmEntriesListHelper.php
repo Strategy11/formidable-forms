@@ -502,11 +502,11 @@ class FrmEntriesListHelper extends FrmListHelper {
 	 * @return void
 	 */
 	private function get_actions( &$actions, $item, $view_link ) {
-		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . __( 'View', 'formidable' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( $view_link ) . '">' . esc_html__( 'View', 'formidable' ) . '</a>';
 
 		if ( current_user_can( 'frm_delete_entries' ) ) {
 			$delete_link       = '?page=formidable-entries&frm_action=destroy&id=' . $item->id . '&form=' . $this->params['form'];
-			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . __( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
+			$actions['delete'] = '<a href="' . esc_url( wp_nonce_url( $delete_link ) ) . '" class="submitdelete" data-frmverify="' . esc_attr__( 'Permanently delete this entry?', 'formidable' ) . '" data-frmverify-btn="frm-button-red">' . esc_html__( 'Delete', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 		}
 
 		$actions = apply_filters( 'frm_row_actions', $actions, $item );

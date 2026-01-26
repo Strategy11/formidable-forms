@@ -396,7 +396,7 @@ class FrmAppController {
 			$settings[] = '<a href="' . esc_url( $upgrade_link ) . '" target="_blank" rel="noopener"><b style="color:#1da867;font-weight:700;">' . esc_html( $label ) . '</b></a>';
 		}//end if
 
-		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . __( 'Build a Form', 'formidable' ) . '</a>';
+		$settings[] = '<a href="' . esc_url( admin_url( 'admin.php?page=formidable' ) ) . '">' . esc_html__( 'Build a Form', 'formidable' ) . '</a>';
 
 		return array_merge( $settings, $links );
 	}
