@@ -28,7 +28,6 @@ parameters:
 		- '#only iterables are supported#'
 		- '#will always evaluate to#'
 		- '#in isset\(\) does not exist.#'
-		- '#always exists and is not falsy.#'
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
 		-
 			message: '#has an unused parameter#'
@@ -372,3 +371,7 @@ parameters:
 			paths:
 				- classes/helpers/FrmXMLHelper.php
 		- '#Method FrmShortcodeHelper::get_shortcode_tag\(\) should return string but returns array<string>\|string#'
+		-
+			message: '#always exists and is not falsy.#'
+			path: classes/models/FrmAddon.php
+			path: classes/views/frm-entries/errors.php
