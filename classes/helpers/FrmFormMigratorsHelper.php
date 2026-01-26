@@ -122,6 +122,7 @@ class FrmFormMigratorsHelper {
 			return '';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-feature-banner">
 			<a href="#" class="dismiss alignright" id="<?php echo esc_attr( $install['class'] ); ?>" title="<?php esc_attr_e( 'Dismiss this message', 'formidable' ); ?>">
@@ -134,6 +135,7 @@ class FrmFormMigratorsHelper {
 			<?php self::install_button( $install ); ?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return null;
 	}
 
@@ -151,6 +153,7 @@ class FrmFormMigratorsHelper {
 			$primary = 'button-primary frm-button-primary ';
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( $install['installed'] ) {
 			?>
 			<a rel="<?php echo esc_attr( $install['importer'] ); ?>" class="button frm-activate-addon <?php echo esc_attr( $primary . ( empty( $install['link'] ) ? 'frm_hidden' : '' ) ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
@@ -172,6 +175,7 @@ class FrmFormMigratorsHelper {
 		<?php echo esc_html( $label ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

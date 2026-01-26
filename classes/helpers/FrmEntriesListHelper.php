@@ -256,6 +256,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				'campaign' => 'spam-protection',
 				'content'  => 'entries-list-spam-protection',
 			);
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<p>
 				<?php esc_html_e( 'Getting spam form submissions?', 'formidable' ); ?>
@@ -264,6 +265,7 @@ class FrmEntriesListHelper extends FrmListHelper {
 				</a>
 			</p>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 		parent::display_tablenav( $which );
 	}

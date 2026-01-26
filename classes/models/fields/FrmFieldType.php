@@ -283,6 +283,7 @@ DEFAULT_HTML;
 	 */
 	public function show_label_on_form_builder() {
 		$field = FrmFieldsHelper::setup_edit_vars( $this->field );
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<label class="frm_primary_label" id="field_label_<?php echo esc_attr( $field['id'] ); ?>">
 			<?php FrmAppHelper::kses_echo( force_balance_tags( $field['name'] ), 'all' ); ?>
@@ -294,6 +295,7 @@ DEFAULT_HTML;
 			</span>
 		</label>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -718,6 +720,7 @@ DEFAULT_HTML;
 	 */
 	protected function field_choices_heading( $args ) {
 		$all_field_types = self::get_all_field_types();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<h3 <?php $this->field_choices_heading_attrs( $args ); ?>>
 			<?php
@@ -730,6 +733,7 @@ DEFAULT_HTML;
 			?>
 		</h3>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

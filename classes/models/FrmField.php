@@ -1306,9 +1306,7 @@ class FrmField {
 
 		$field_type = self::get_original_field_type( $field );
 
-		return self::is_checkbox( $field ) ||
-			$field_type === 'address' ||
-			self::is_multiple_select( $field );
+		return self::is_checkbox( $field ) || $field_type === 'address' || self::is_multiple_select( $field );
 	}
 
 	/**
@@ -1587,13 +1585,9 @@ class FrmField {
 	 * @return bool true if field type is checkbox or Dynamic checkbox
 	 */
 	public static function is_field_type( $field, $is_type ) {
-		$field_type = self::get_original_field_type( $field );
-		$data_type  = self::get_option( $field, 'data_type' );
-
-		$is_field_type = $is_type === $field_type ||
-			( 'data' === $field_type && $is_type === $data_type ) ||
-			( 'lookup' === $field_type && $is_type === $data_type ) ||
-			( 'product' === $field_type && $is_type === $data_type );
+		$field_type    = self::get_original_field_type( $field );
+		$data_type     = self::get_option( $field, 'data_type' );
+		$is_field_type = $is_type === $field_type || ( 'data' === $field_type && $is_type === $data_type ) || ( 'lookup' === $field_type && $is_type === $data_type ) || ( 'product' === $field_type && $is_type === $data_type ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * When a field type is checked, allow individual fields

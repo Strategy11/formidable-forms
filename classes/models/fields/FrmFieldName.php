@@ -293,6 +293,7 @@ class FrmFieldName extends FrmFieldCombo {
 		if ( ! $show_warning ) {
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm_warning_style">
 			<?php
@@ -302,6 +303,7 @@ class FrmFieldName extends FrmFieldCombo {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

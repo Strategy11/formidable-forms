@@ -68,6 +68,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
@@ -82,6 +83,7 @@ class FrmFormsHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -154,6 +156,7 @@ class FrmFormsHelper {
 		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $forms ) < 2 ) {
 			?>
 			<div id="frm_bs_dropdown">
@@ -232,6 +235,7 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -701,6 +705,7 @@ BEFORE_HTML;
 
 		$truncated_name = FrmAppHelper::truncate( $args['name'], 60 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $class ); ?>">
 			<a href="javascript:void(0)" class="frmids frm_insert_code" data-code="<?php echo esc_attr( $args['id'] ); ?>">
@@ -725,6 +730,7 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -760,6 +766,7 @@ BEFORE_HTML;
 		$args        = array_merge( $defaults, $args );
 		$has_tooltip = ! empty( $args['title'] );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li class="<?php echo esc_attr( $args['class'] ); ?>">
 			<a href="javascript:void(0)" class="frm_insert_code <?php echo $has_tooltip ? 'frm_help' : ''; ?>"
@@ -772,6 +779,7 @@ BEFORE_HTML;
 			</a>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1604,8 +1612,9 @@ BEFORE_HTML;
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
+
 		echo '>';
-			FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
+		FrmAppHelper::icon_by_class( 'frmfont frm_' . $icon_name . '_icon' );
 		echo '</span>';
 	}
 
@@ -1694,6 +1703,7 @@ BEFORE_HTML;
 			return;
 		}
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm_plan_required">
 			<?php esc_html_e( 'Plan required:', 'formidable' ); ?>
@@ -1702,6 +1712,7 @@ BEFORE_HTML;
 			</a>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

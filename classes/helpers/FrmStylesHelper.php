@@ -26,9 +26,11 @@ class FrmStylesHelper {
 	 * @return void
 	 */
 	public static function save_button() {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="submit" name="submit" class="button button-primary frm-button-primary" value="<?php esc_attr_e( 'Update', 'formidable' ); ?>" />
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -193,6 +195,7 @@ class FrmStylesHelper {
 		unset( $function_name );
 
 		$name = 'arrow' === $type ? 'collapse_icon' : 'repeat_icon';
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="btn-group" id="frm_<?php echo esc_attr( $name ); ?>_select">
 			<button class="multiselect dropdown-toggle btn btn-default" data-toggle="dropdown" type="button">
@@ -219,6 +222,7 @@ class FrmStylesHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1137,9 +1141,7 @@ class FrmStylesHelper {
 			return false;
 		}
 
-		return is_callable( 'FrmProAppHelper::use_chosen_js' )
-			? FrmProAppHelper::use_chosen_js()
-			: true;
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 	}
 
 	/**

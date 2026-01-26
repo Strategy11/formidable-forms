@@ -113,6 +113,7 @@ class FrmHtmlHelper {
 		if ( is_numeric( $hidden_value ) ) {
 			$hidden_value .= $args['default_unit'];
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<span class="frm-unit-input">
 			<input type="hidden" value="<?php echo esc_attr( $hidden_value ); ?>" <?php FrmAppHelper::array_to_html_params( $args['field_attrs'], true ); ?> />
@@ -128,5 +129,6 @@ class FrmHtmlHelper {
 			</span>
 		</span>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 }

@@ -586,9 +586,11 @@ class FrmEntryValidate {
 	 * @return bool
 	 */
 	private static function form_is_in_progress( $values ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		return FrmAppHelper::pro_is_installed() &&
 			( isset( $values[ 'frm_page_order_' . $values['form_id'] ] ) || FrmAppHelper::get_post_param( 'frm_next_page' ) ) &&
 			FrmField::get_all_types_in_form( $values['form_id'], 'break' );
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
