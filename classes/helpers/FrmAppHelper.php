@@ -1969,9 +1969,9 @@ class FrmAppHelper {
 				<?php endforeach; ?>
 			</select>
 			<?php
-			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			return;
 		}
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 
 		$options            = array();
 		$autocomplete_value = '';
