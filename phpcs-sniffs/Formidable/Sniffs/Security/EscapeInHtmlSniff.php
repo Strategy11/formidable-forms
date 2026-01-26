@@ -72,6 +72,7 @@ class EscapeInHtmlSniff implements Sniff {
 			return;
 		}
 
+		
 		$expectedFunc = $this->getExpectedFunction( $context );
 
 		if ( $functionName !== $expectedFunc ) {
@@ -193,13 +194,30 @@ class EscapeInHtmlSniff implements Sniff {
 		$content = trim( $token['content'], "'\"" );
 
 		// Check for attribute patterns: class=", href=", etc.
-		if ( preg_match( '/\w+\s*=\s*["\'][^"\']*["\']?$/', $content ) ) {
+		// This should match things like: class="value" or href="value"
+		if ( preg_match( '/^\w+\s*=\s*["\'][^"\']*["\']?$/', $content ) ) {
 			return 'attribute';
 		}
 
-		// Check if we're inside an HTML tag (between < and >)
-		if ( preg_match( '/<[^>]*["\'][^"\']*["\']?$/', $content ) ) {
+		// Special case: screen-reader-text spans are always content, even if they have attributes
+		if ( strpos( $content, 'screen-reader-text' ) !== false ) {
+			return 'content';
+		}
+
+		// Check if we're inside an opening HTML tag but NOT in a closing tag or content
+		// This should match things like: <div class="value"> but NOT <span>content</span>
+		if ( preg_match( '/^<[^\/>][^>]*["\'][^"\']*["\']?$/', $content ) ) {
 			return 'attribute';
+		}
+
+		// Check if this looks like the start of HTML content (opening tag followed by >)
+		if ( preg_match( '/^<[^>]+>/', $content ) ) {
+			return 'content';
+		}
+
+		// Check if this looks like HTML content (between > and <)
+		if ( preg_match( '/>/', $content ) && ! preg_match( '/<[^\/]*$/', $content ) ) {
+			return 'content';
 		}
 
 		return 'content';

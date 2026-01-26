@@ -655,11 +655,11 @@ class FrmListHelper {
 
 		if ( 'bottom' === $which ) {
 			$html_current_page  = $current;
-			$total_pages_before = '<span class="screen-reader-text">' . esc_attr__( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
+			$total_pages_before = '<span class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</span><span id="table-paging" class="paging-input">';
 		} else {
 			$html_current_page = sprintf(
 				"%s<input class='current-page' id='current-page-selector' type='text' name='paged' value='%s' size='%d' aria-describedby='table-paging' />",
-				'<label for="current-page-selector" class="screen-reader-text">' . esc_attr__( 'Current Page', 'formidable' ) . '</label>',
+				'<label for="current-page-selector" class="screen-reader-text">' . esc_html__( 'Current Page', 'formidable' ) . '</label>',
 				$current,
 				strlen( $total_pages )
 			);
