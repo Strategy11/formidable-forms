@@ -1608,6 +1608,7 @@ BEFORE_HTML;
 
 		// Render the icon.
 		echo '<span class="frm-category-icon frm-icon-wrapper"';
+
 		if ( $bg_color && $atts['bg'] ) {
 			echo ' style="background-color:' . esc_attr( $bg_color ) . '"';
 		}
