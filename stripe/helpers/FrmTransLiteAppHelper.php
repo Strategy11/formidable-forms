@@ -565,6 +565,7 @@ class FrmTransLiteAppHelper {
 		}
 
 		$currencies = FrmCurrencyHelper::get_currencies();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select <?php FrmAppHelper::array_to_html_params( $select_attrs, true ); ?>>
 			<?php
@@ -592,6 +593,7 @@ class FrmTransLiteAppHelper {
 			?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

@@ -1583,11 +1583,13 @@ class FrmAppHelper {
 	 * @return void
 	 */
 	public static function import_link( $type = 'secondary' ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable-import' ) ); ?>" class="button frm-button-<?php echo esc_attr( $type ); ?> frm_animate_bg">
 			<?php esc_html_e( 'Import', 'formidable' ); ?>
 		</a>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1610,6 +1612,7 @@ class FrmAppHelper {
 			// And exit before printing the upgrade bar if it shouldn't be shown.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-upgrade-bar">
 			<div class="frm-upgrade-bar-inner">
@@ -1635,10 +1638,12 @@ class FrmAppHelper {
 					esc_html( $cta_text ),
 					'</a>'
 				);
+				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				?>
 			</div>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1738,6 +1743,7 @@ class FrmAppHelper {
 		if ( ! empty( $atts['tosearch'] ) ) {
 			$input_atts['autocomplete'] = 'off';
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<p class="frm-search <?php echo esc_attr( $atts['class'] ); ?>">
 			<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>">
@@ -1752,6 +1758,7 @@ class FrmAppHelper {
 			?>
 		</p>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

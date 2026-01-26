@@ -530,6 +530,7 @@ class FrmListHelper {
 	 * @param string $current_mode
 	 */
 	protected function view_switcher( $current_mode ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<input type="hidden" name="mode" value="<?php echo esc_attr( $current_mode ); ?>"/>
 		<div class="view-switch">
@@ -552,6 +553,7 @@ class FrmListHelper {
 			?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -1075,6 +1077,7 @@ class FrmListHelper {
 		}
 		$this->screen->render_screen_reader_content( 'heading_list' );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<table class="wp-list-table <?php echo esc_attr( implode( ' ', $this->get_table_classes() ) ); ?>">
 			<?php if ( $this->has_min_items( 1 ) ) { ?>
@@ -1098,6 +1101,8 @@ class FrmListHelper {
 			<?php } ?>
 		</table>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+
 		if ( $this->should_display( $args, 'display-bottom-nav' ) ) {
 			$this->display_tablenav( 'bottom' );
 		}
@@ -1145,6 +1150,7 @@ class FrmListHelper {
 			// Don't show the bulk actions when there aren't many rows.
 			return;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="tablenav <?php echo esc_attr( $which ); ?>">
 
@@ -1159,6 +1165,7 @@ class FrmListHelper {
 			<br class="clear"/>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

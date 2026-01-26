@@ -1102,11 +1102,13 @@ class FrmFormsController {
 		if ( FrmAppHelper::is_form_builder_page() && ! class_exists( '_WP_Editors', false ) ) {
 			// Initialize a wysiwyg so we have usable settings defined in tinyMCEPreInit.mceInit
 			require ABSPATH . WPINC . '/class-wp-editor.php';
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<div class="frm_hidden">
 				<?php wp_editor( '', 'frm_description_placeholder', array() ); ?>
 			</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 

@@ -68,6 +68,7 @@ class FrmFormsHelper {
 		self::add_html_attr( $args['onchange'], 'onchange', $add_html );
 		self::add_html_attr( $args['class'], 'class', $add_html );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<select name="<?php echo esc_attr( $field_name ); ?>"
 			id="<?php echo esc_attr( $args['field_id'] ); ?>"
@@ -82,6 +83,7 @@ class FrmFormsHelper {
 			<?php } ?>
 		</select>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -154,6 +156,7 @@ class FrmFormsHelper {
 		$name           = '' === $name || is_null( $name ) ? self::get_no_title_text() : strip_tags( $name );
 		$truncated_name = FrmAppHelper::truncate( $name, 25 );
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		if ( count( $forms ) < 2 ) {
 			?>
 			<div id="frm_bs_dropdown">
@@ -232,6 +235,7 @@ class FrmFormsHelper {
 			</ul>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

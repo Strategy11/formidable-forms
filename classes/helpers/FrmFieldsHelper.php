@@ -2445,6 +2445,7 @@ class FrmFieldsHelper {
 		} elseif ( $upgrade_message ) {
 			$li_params['data-message'] = $upgrade_message;
 		}
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<li <?php FrmAppHelper::array_to_html_params( $li_params, true ); ?>>
 		<?php
@@ -2455,6 +2456,7 @@ class FrmFieldsHelper {
 		?>
 		</li>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

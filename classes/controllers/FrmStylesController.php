@@ -1359,6 +1359,7 @@ class FrmStylesController {
 
 		$page = $screen->id;
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div id="side-sortables" class="accordion-container">
 			<ul class="outer-border">
@@ -1410,6 +1411,7 @@ class FrmStylesController {
 			</ul><!-- .outer-border -->
 		</div><!-- .accordion-container -->
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		return $i;
 	}
 

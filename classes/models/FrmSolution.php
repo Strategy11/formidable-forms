@@ -286,6 +286,7 @@ class FrmSolution {
 			'width'  => 90,
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="top">
 			<div class="frm-smtp-logos">
@@ -305,12 +306,14 @@ class FrmSolution {
 						'style'      => 'width:90px;height:90px;',
 					)
 				);
+				// phpcs:disable Generic.WhiteSpace.ScopeIndent
 				?>
 			</div>
 			<h1><?php echo esc_html( $this->page_title() ); ?></h1>
 			<p><?php echo esc_html( $this->page_description() ); ?></p>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -458,6 +461,7 @@ class FrmSolution {
 	protected function step_top( $step ) {
 		$section_class = empty( $step['current'] ) ? 'frm_grey' : '';
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<section class="step step-install <?php echo esc_attr( $section_class ); ?>">
 			<aside class="num">
@@ -488,6 +492,7 @@ class FrmSolution {
 					<p class="frm_error"><?php echo esc_html( $step['error'] ); ?></p>
 				<?php } ?>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**
@@ -496,10 +501,12 @@ class FrmSolution {
 	 * @return void
 	 */
 	protected function step_bottom( $step ) {
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			</div>
 		</section>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

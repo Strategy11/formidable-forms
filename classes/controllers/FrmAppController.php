@@ -532,10 +532,12 @@ class FrmAppController {
 	 */
 	public static function install_js_fallback() {
 		FrmAppHelper::load_admin_wide_js();
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 			<div id="frm_install_message"></div>
 			<script>jQuery(document).ready( frm_install_now );</script>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

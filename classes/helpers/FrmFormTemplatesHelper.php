@@ -228,11 +228,13 @@ class FrmFormTemplatesHelper {
 			'direction' => 'vertical',
 		);
 
+		// phpcs:disable Generic.WhiteSpace.ScopeIndent
 		?>
 		<div class="frm-card-item frm-px-sm">
 			<?php require FrmAppHelper::plugin_path() . '/classes/views/shared/get-free-templates-banner.php'; ?>
 		</div>
 		<?php
+		// phpcs:enable Generic.WhiteSpace.ScopeIndent
 	}
 
 	/**

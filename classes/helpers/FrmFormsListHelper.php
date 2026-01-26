@@ -127,11 +127,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		if ( $this->status === 'trash' ) {
 			echo '<p>';
 			esc_html_e( 'No forms found in the trash.', 'formidable' );
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<a href="<?php echo esc_url( admin_url( 'admin.php?page=formidable' ) ); ?>">
 				<?php esc_html_e( 'See all forms.', 'formidable' ); ?>
 			</a>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 			echo '</p>';
 		} else {
 			$title = __( 'No Forms Found', 'formidable' );
@@ -170,11 +172,13 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		if ( 'trash' === $this->status && current_user_can( 'frm_delete_forms' ) ) {
+			// phpcs:disable Generic.WhiteSpace.ScopeIndent
 			?>
 			<div class="alignleft actions frm_visible_overflow">
 				<?php submit_button( __( 'Empty Trash', 'formidable' ), 'apply', 'delete_all', false ); ?>
 			</div>
 			<?php
+			// phpcs:enable Generic.WhiteSpace.ScopeIndent
 		}
 	}
 
