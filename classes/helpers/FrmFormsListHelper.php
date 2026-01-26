@@ -434,7 +434,7 @@ class FrmFormsListHelper extends FrmListHelper {
 		}
 
 		$actions         = array_merge( $actions, $new_actions );
-		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>';
+		$actions['view'] = '<a href="' . esc_url( FrmFormsHelper::get_direct_link( $item->form_key, $item ) ) . '" target="_blank">' . esc_html__( 'Preview', 'formidable' ) . '</a>'; // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
