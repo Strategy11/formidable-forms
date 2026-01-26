@@ -18,8 +18,6 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	public static function render_settings_container() {
-		self::render_seller_status();
-
 		$settings = FrmPayPalLiteAppHelper::get_settings();
 
 		self::register_settings_scripts();
@@ -68,37 +66,41 @@ class FrmPayPalLiteConnectHelper {
 	 *
 	 * @return void
 	 */
-	private static function render_seller_status() {
-		if ( ! self::get_merchant_id() ) {
+	private static function render_seller_status( $mode ) {
+		if ( ! self::get_merchant_id( $mode ) ) {
 			// If not connected, show no status.
 			return;
 		}
 
-		$info = self::get_seller_info();
-		echo '<pre>';
-		var_dump( $info );
-		echo '</pre>';
-
 		// TODO: Only render when we visit the PayPal tab.
 		// TODO: If all 3 validate, we should be able to save this to an option and stop making 
-		$status = self::get_seller_status();
+		$status = self::get_seller_status( $mode );
 
-		echo '<pre>';
-		var_dump( $status );
-		echo '</pre>';
+/*
+		$status = new stdClass();
+		$status->payments_receivable = true;
+		$status->primary_email_confirmed = true;
+		$status->oauth_integrations = true;
+		$status->primary_email = 'test@example.com';*/
+
+		$status->primary_email_confirmed = false;
 
 		if ( ! is_object( $status ) ) {
 			self::render_error( __( 'Unable to retrieve seller status', 'formidable' ) );
 			return;
 		}
 
+		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
+
 		if ( ! $status->primary_email_confirmed ) {
-			self::render_error( __( 'Primary email not confirmed', 'formidable' ) );
+		//	self::render_error( __( 'Primary email not confirmed', 'formidable' ) );
+		//	self::render_error( sprintf( __( 'Primary email (%s) not confirmed', 'formidable' ), $email ) );
+			self::render_error( __( 'Primary email not confirmed', 'formidable' ) . '<br><b>Connected account:</b><br>' . $email );
 			return;
 		}
 
 		if ( ! $status->payments_receivable ) {
-			self::render_error( __( 'Payments are not receiable',  'formidable' ) );
+			self::render_error( __( 'Payments are not receivable',  'formidable' ) );
 			return;
 		}
 
@@ -107,14 +109,19 @@ class FrmPayPalLiteConnectHelper {
 			return;
 		}
 
+		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
+
 		echo '<div class="frm_message">';
 		esc_html_e( 'Your seller status is valid', 'formidable' );
+		if ( $email ) {
+			echo '<br><b>Connected account:</b><br>' . $email;
+		}
 		echo '</div>';
 	}
 
 	private static function render_error( $message ) {
 		echo '<div class="frm_error_style">';
-		echo esc_html( $message );
+		echo wp_kses_post( $message );
 		echo '</div>';
 	}
 
@@ -125,7 +132,7 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function render_settings_for_mode( $mode ) {
 		?>
-		<div class="frm-card-item frm4">
+		<div class="frm-card-item frm6">
 			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
@@ -158,6 +165,7 @@ class FrmPayPalLiteConnectHelper {
 					}
 					?>
 				</div>
+				<?php self::render_seller_status( $mode ); ?>
 				<div class="frm-card-bottom">
 					<?php if ( $connected ) { ?>
 						<a id="frm_disconnect_paypal_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
@@ -772,11 +780,10 @@ class FrmPayPalLiteConnectHelper {
 		return self::post_with_authenticated_body( 'create_vault_setup_token' );
 	}
 
-	public static function get_seller_status() {
-		return self::post_with_authenticated_body( 'get_seller_status' );
-	}
-
-	public static function get_seller_info() {
-		return self::post_with_authenticated_body( 'get_seller_info' ); 
+	public static function get_seller_status( $mode ) {
+		$additional_body = array(
+			'frm_paypal_api_mode' => $mode,
+		);
+		return self::post_with_authenticated_body( 'get_seller_status', $additional_body );
 	}
 }
