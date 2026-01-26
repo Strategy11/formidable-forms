@@ -69,9 +69,23 @@ class FrmPayPalLiteConnectHelper {
 	 * @return void
 	 */
 	private static function render_seller_status() {
+		if ( ! self::get_merchant_id() ) {
+			// If not connected, show no status.
+			return;
+		}
+
+		$info = self::get_seller_info();
+		echo '<pre>';
+		var_dump( $info );
+		echo '</pre>';
+
 		// TODO: Only render when we visit the PayPal tab.
 		// TODO: If all 3 validate, we should be able to save this to an option and stop making 
 		$status = self::get_seller_status();
+
+		echo '<pre>';
+		var_dump( $status );
+		echo '</pre>';
 
 		if ( ! is_object( $status ) ) {
 			self::render_error( __( 'Unable to retrieve seller status', 'formidable' ) );
@@ -760,5 +774,9 @@ class FrmPayPalLiteConnectHelper {
 
 	public static function get_seller_status() {
 		return self::post_with_authenticated_body( 'get_seller_status' );
+	}
+
+	public static function get_seller_info() {
+		return self::post_with_authenticated_body( 'get_seller_info' ); 
 	}
 }
