@@ -27,7 +27,14 @@ parameters:
 		- '#no value type specified.#'
 		- '#only iterables are supported#'
 		- '#will always evaluate to#'
-		- '#in isset\(\) does not exist.#'
+		-
+			message: '#in isset\(\) does not exist.#'
+			paths:
+				- classes/controllers/FrmEntriesController.php
+				- classes/controllers/FrmStylesController.php
+				- stripe/controllers/FrmTransLiteActionsController.php
+				- stripe/helpers/FrmTransLiteAppHelper.php
+				- stripe/models/FrmTransLiteAction.php
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
 		-
 			message: '#has an unused parameter#'
@@ -318,15 +325,29 @@ parameters:
 		- message: '#Cannot use \+\+ on mixed#'
 		- message: '#Cannot use -- on mixed#'
 		- message: '#Cannot use array destructuring on mixed#'
-		- message: '#always exists and is not nullable#'
+		-
+			message: '#always exists and is not nullable#'
+			paths:
+				- classes/helpers/FrmFormsHelper.php
+				- classes/helpers/FrmXMLHelper.php
+				- classes/models/FrmEntryValidate.php
 		- message: '#Possibly invalid array key#'
-		- message: '#should return array<(string|array)> but returns array#'
+		-
+			message: '#should return array<(string|array)> but returns array#'
+			paths:
+				- classes/controllers/FrmApplicationsController.php
+				- stripe/models/FrmStrpLitePaymentTypeHandler.php
 		-
 			message: '#should return string but returns float#'
 			path: classes/models/FrmEmailStats.php
 		- message: '#on a separate line has no effect#'
 		- message: '#Cannot clone non-object variable#'
-		- message: '#so it can be removed from the by-ref type#'
+		-
+			message: '#so it can be removed from the by-ref type#'
+			paths:
+				- classes/controllers/FrmFormsController.php
+				- classes/controllers/FrmXMLController.php
+				- classes/models/FrmDb.php
 		-
 			message: '#function array_map expects#'
 			paths:
