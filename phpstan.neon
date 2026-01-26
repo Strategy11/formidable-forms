@@ -28,7 +28,7 @@ parameters:
 		- '#only iterables are supported#'
 		- '#will always evaluate to#'
 		- '#in isset\(\) does not exist.#'
-		- '#in empty\(\) is not falsy.#'
+
 		- '#always exists and is not falsy.#'
 		- '#get_gateway_for_action\(\) never returns array so it can be removed from the return type#'
 		-
