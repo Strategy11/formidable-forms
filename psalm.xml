@@ -430,6 +430,7 @@
 				<file name="classes/models/FrmEntryShortcodeFormatter.php" />
 				<file name="classes/helpers/FrmAppHelper.php" />
 				<file name="classes/controllers/FrmFormActionsController.php" />
+				<file name="classes/models/FrmFormState.php" />
 			</errorLevel>
 		</PossiblyNullReference>
 		<DeprecatedMethod>
