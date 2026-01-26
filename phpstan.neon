@@ -373,5 +373,6 @@ parameters:
 		- '#Method FrmShortcodeHelper::get_shortcode_tag\(\) should return string but returns array<string>\|string#'
 		-
 			message: '#always exists and is not falsy.#'
-			path: classes/models/FrmAddon.php
-			path: classes/views/frm-entries/errors.php
+			paths:
+				- classes/models/FrmAddon.php
+				- classes/views/frm-entries/errors.php
