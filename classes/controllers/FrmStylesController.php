@@ -1369,42 +1369,45 @@ class FrmStylesController {
 
 		if ( isset( $wp_meta_boxes[ $page ][ $context ] ) ) {
 			foreach ( array( 'high', 'core', 'default', 'low' ) as $priority ) {
-				if ( isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
-					foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
-						if ( false === $box || ! $box['title'] ) {
-							continue;
-						}
+				if ( ! isset( $wp_meta_boxes[ $page ][ $context ][ $priority ] ) ) {
+					continue;
+				}
 
-						++$i;
-						$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
-						$open_class = '';
+				foreach ( $wp_meta_boxes[ $page ][ $context ][ $priority ] as $box ) {
+					if ( false === $box || ! $box['title'] ) {
+						continue;
+					}
 
-						if ( ! $first_open ) {
-							$first_open = true;
-							$open_class = 'open';
-						}
+					++$i;
+					$icon_id    = array_key_exists( $box['id'], $icon_ids ) ? $icon_ids[ $box['id'] ] : 'frm-' . $box['id'];
+					$open_class = '';
 
-						$accordion_content_id = 'frm_style_section_' . $box['id'];
-						?>
-						<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-							<h3 class="accordion-section-title hndle">
-								<?php
-								FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
-								echo esc_html( $box['title'] );
-								?>
-								<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
-									<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
-								</button>
-							</h3>
-							<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
-								<div class="inside">
-									<?php call_user_func( $box['callback'], $data_object, $box ); ?>
-								</div><!-- .inside -->
-							</div><!-- .accordion-section-content -->
-						</li><!-- .accordion-section -->
-						<?php
-					}//end foreach
-				}//end if
+					if ( ! $first_open ) {
+						$first_open = true;
+						$open_class = 'open';
+					}
+
+					$accordion_content_id = 'frm_style_section_' . $box['id'];
+					?>
+					<li class="control-section accordion-section <?php echo esc_attr( $open_class ); ?> <?php echo esc_attr( $box['id'] ); ?>" id="<?php echo esc_attr( $box['id'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+						<h3 class="accordion-section-title hndle">
+							<?php
+							FrmAppHelper::icon_by_class( 'frmfont ' . $icon_id . ' frm_svg24' );
+							echo esc_html( $box['title'] );
+							?>
+							<button type="button" aria-expanded="<?php echo esc_attr( 'open' === $open_class ? 'true' : 'false' ); ?>" aria-controls="<?php echo esc_attr( $accordion_content_id ); ?>" aria-label="<?php echo esc_attr( $box['title'] ); ?>"><?php // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+								<?php FrmAppHelper::icon_by_class( 'frmfont frm_arrowdown8_icon' ); ?>
+							</button>
+						</h3>
+						<div class="accordion-section-content <?php postbox_classes( $box['id'], $page ); ?>" id="<?php echo esc_attr( $accordion_content_id ); ?>">
+							<div class="inside">
+								<?php call_user_func( $box['callback'], $data_object, $box ); ?>
+							</div><!-- .inside -->
+						</div><!-- .accordion-section-content -->
+					</li><!-- .accordion-section -->
+					<?php
+				}//end foreach
+			// end if
 			}//end foreach
 		}//end if
 		?>
