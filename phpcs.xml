@@ -225,7 +225,65 @@
 	<rule ref="Universal.Operators.StrictComparisons">
 		<severity>8</severity>
 		<type>error</type>
-	</rule> 
+	</rule>
+
+	<rule ref="Generic.WhiteSpace.ScopeIndent">
+		<properties>
+			<property name="exact" value="true" />
+			<property name="ignoreIndentationTokens" type="array">
+				<element value="T_COMMENT" />
+				<element value="T_DOC_COMMENT_OPEN_TAG" />
+			</property>
+		</properties>
+		<exclude-pattern>views/*</exclude-pattern>
+		<!-- Most of these files include inline HTML. Ideally we would move this code to view files. -->
+		<exclude-pattern>helpers/FrmEntriesHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/models/FrmTransLiteAction.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmAddonsController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmAddonsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmDb.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmTipsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmOnSubmitHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmSalesApi.php</exclude-pattern>
+		<exclude-pattern>stripe/controllers/FrmTransLitePaymentsController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmStylesCardHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmAppController.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryValidate.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmEntriesListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmWelcomeTourController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmDashboardHelper.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmStrpLiteAppHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmField.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmSMTPController.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmStrpLiteConnectHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmHoneypot.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteAppHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/fields/FrmFieldType.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmStylesController.php</exclude-pattern>
+		<exclude-pattern>stripe/helpers/FrmTransLiteListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmSolution.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFieldsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/fields/FrmFieldTextarea.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmPluginSearch.php</exclude-pattern>
+		<exclude-pattern>classes/models/fields/FrmFieldPhone.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmStylesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/fields/FrmFieldName.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmListHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormTemplatesHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmFormAction.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmHtmlHelper.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmFormMigratorsHelper.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFormsController.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmCssScopeHelper.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmFormMigrator.php</exclude-pattern>
+		<exclude-pattern>classes/controllers/FrmFieldsController.php</exclude-pattern>
+		<exclude-pattern>classes/models/FrmEntryMeta.php</exclude-pattern>
+		<exclude-pattern>classes/helpers/FrmAppHelper.php</exclude-pattern>
+		<exclude-pattern>classes/widgets/FrmShowForm.php</exclude-pattern>
+		<exclude-pattern>square/helpers/FrmSquareLiteConnectHelper.php</exclude-pattern>
+	</rule>
 
 	<!-- Custom Formidable sniffs (defined in phpcs-sniffs/Formidable/ruleset.xml) -->
 	<rule ref="Formidable" />
