@@ -912,7 +912,7 @@ class FrmAppController {
 			return false;
 		}
 
-		$should_show = FrmAppHelper::is_formidable_admin() && ! FrmAppHelper::is_style_editor_page() && ! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' );
+		$should_show = FrmAppHelper::is_formidable_admin() && ! FrmAppHelper::is_style_editor_page() && ! FrmAppHelper::is_admin_page( 'formidable-views-editor' ) && ! FrmAppHelper::simple_get( 'frm_action', 'sanitize_title' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 
 		/**
 		 * Filters whether the floating links should be displayed.
@@ -1636,7 +1636,7 @@ class FrmAppController {
 	 * @return bool
 	 */
 	private static function is_our_callback_array( $callback ) {
-		return ! empty( $callback['function'] ) && is_array( $callback['function'] ) && ! empty( $callback['function'][0] ) && self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] );
+		return ! empty( $callback['function'] ) && is_array( $callback['function'] ) && ! empty( $callback['function'][0] ) && self::is_our_callback_string( is_object( $callback['function'][0] ) ? get_class( $callback['function'][0] ) : $callback['function'][0] ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong
 	}
 
 	/**
