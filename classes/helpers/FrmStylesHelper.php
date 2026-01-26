@@ -1141,11 +1141,7 @@ class FrmStylesHelper {
 			return false;
 		}
 
-		// phpcs:disable Generic.WhiteSpace.ScopeIndent
-		return is_callable( 'FrmProAppHelper::use_chosen_js' )
-			? FrmProAppHelper::use_chosen_js()
-			: true;
-		// phpcs:enable Generic.WhiteSpace.ScopeIndent
+		return is_callable( 'FrmProAppHelper::use_chosen_js' ) ? FrmProAppHelper::use_chosen_js() : true;
 	}
 
 	/**
