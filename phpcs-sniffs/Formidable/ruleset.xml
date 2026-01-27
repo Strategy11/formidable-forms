@@ -48,6 +48,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
 	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
+	<rule ref="Formidable.Commenting.AlignFilterParamTypesWithFunction" />
 	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
