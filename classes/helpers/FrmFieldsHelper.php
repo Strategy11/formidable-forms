@@ -2838,18 +2838,16 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool $should_hide_field_choice
-		 * @param int  $form_id
-		 *
-		 * @return bool
+		 * @param bool   hide_field_choice
+		 * @param string $choice_key
+		 * @param array  $field
 		 */
-		return apply_filters( 'frm_hide_field_choice', false, $choice_key, $field );
+		return (bool) apply_filters( 'frm_hide_field_choice', false, $choice_key, $field );
 	}
 
 	/**
 	 * @since x.x
 	 *
-	 * @param array $field_choices_limit_reached_statuses
 	 * @param array $field
 	 *
 	 * @return bool
@@ -2858,15 +2856,14 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool  $should_skip_rendering_options_for_field
-		 * @param array $field_choices_limit_reached_statuses
+		 * @param bool  $skip_rendering_options_for_field
 		 * @param array $field
 		 */
 		return (bool) apply_filters( 'frm_should_skip_rendering_options_for_field', false, $field );
 	}
 
 	/**
-	 * Determine if 'disabled' attribute should be echoed for a field choice.
+	 * Determine if 'disabled' attribute should be echoed in a field choice's HTML.
 	 *
 	 * @since x.x
 	 *
@@ -2880,31 +2877,11 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool $should_echo_disabled_attribute
-		 * @param bool $choice_limit_reached
-		 * @param bool $is_selected_choice
-		 */
-		return (bool) apply_filters( 'frm_echo_disabled_attribute', false, $choice_key, $is_selected_choice, $field );
-	}
-
-	/**
-	 * Returns array that contains whether each field choice has reached its limit.
-	 *
-	 * @since x.x
-	 *
-	 * @param array $field
-	 *
-	 * @return array
-	 */
-	public static function get_skipped_options( $field ) {
-		$statuses = array_fill_keys( array_keys( $field['options'] ), false );
-
-		/**
-		 * @since x.x
-		 *
-		 * @param array $statuses
+		 * @param bool  $echo_disabled_attribute
+		 * @param bool  $choice_key
+		 * @param bool  $is_selected_choice
 		 * @param array $field
 		 */
-		return apply_filters( 'frm_choices_limit_reached_statuses', $statuses, $field );
+		return (bool) apply_filters( 'frm_echo_disabled_attribute', false, $choice_key, $is_selected_choice, $field );
 	}
 }

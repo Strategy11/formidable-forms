@@ -19,8 +19,6 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		)
 	);
 } else {
-	$field_choices_limit_reached_statuses = FrmFieldsHelper::get_skipped_options( $field );
-
 	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
 		return;
 	}
