@@ -2812,8 +2812,8 @@ class FrmFieldsHelper {
 	 *
 	 * @since x.x
 	 *
-	 * @param bool  $choice_key
-	 * @param array $field
+	 * @param string $choice_key
+	 * @param array  $field
 	 *
 	 * @return bool
 	 */

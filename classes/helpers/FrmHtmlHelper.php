@@ -42,25 +42,18 @@ class FrmHtmlHelper {
 	 *
 	 * @since 6.3.1
 	 *
-	 * @param string      $option   The string used as the option label.
-	 * @param bool        $selected True if the option should be selected.
-	 * @param array       $params   Other HTML params for the option.
-	 * @param array|null  $field    The field array.
-	 * @param string|null $opt_key  The option key.
+	 * @param string $option   The string used as the option label.
+	 * @param bool   $selected True if the option should be selected.
+	 * @param array  $params   Other HTML params for the option.
 	 *
 	 * @return void
 	 */
-	public static function echo_dropdown_option( $option, $selected, $params = array(), $field = null, $opt_key = null ) {
+	public static function echo_dropdown_option( $option, $selected, $params = array() ) {
 		echo '<option ';
 		FrmAppHelper::array_to_html_params( $params, true );
 		selected( $selected );
 		echo '>';
 		echo esc_html( $option === '' ? ' ' : $option );
-
-		if ( $field && $opt_key ) {
-			FrmFieldsHelper::after_choice_input( $field, $opt_key );
-		}
-
 		echo '</option>';
 	}
 

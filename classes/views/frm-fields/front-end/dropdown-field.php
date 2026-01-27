@@ -83,7 +83,15 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 		if ( FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, $selected, $field ) ) {
 			$option_params['disabled'] = 'disabled';
 		}
-		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params, $field, $opt_key );
+
+		echo '<option ';
+		FrmAppHelper::array_to_html_params( $option_params, true );
+		selected( $selected );
+		echo '>';
+		echo esc_html( $opt === '' ? ' ' : $opt );
+		FrmFieldsHelper::after_choice_input( $field, $opt_key );
+
+		echo '</option>';
 
 		unset( $option_params );
 	}//end foreach

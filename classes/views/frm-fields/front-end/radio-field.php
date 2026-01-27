@@ -11,8 +11,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @phpcs:disable Generic.WhiteSpace.ScopeIndent
  */
 
-$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
-
 if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' ) {
 	$type = $field['type'];
 	do_action( 'frm_after_checkbox', compact( 'field', 'field_name', 'type' ) );
@@ -20,6 +18,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 	if ( FrmFieldsHelper::should_skip_rendering_options_for_field( $field ) ) {
 		return;
 	}
+	$include_label = ! isset( $shortcode_atts ) || ! isset( $shortcode_atts['label'] ) || $shortcode_atts['label'];
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
 		if ( isset( $shortcode_atts ) && isset( $shortcode_atts['opt'] ) && $shortcode_atts['opt'] !== $opt_key ) {
@@ -39,14 +38,14 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		 * @since 5.0.04
 		 *
 		 * @param string $label Label HTML.
-		 * @param array  $args  The arguments. Contains `field`.
+		 * @param array  $args  The arguments. Contains `field` and `field_val`.
 		 */
 		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field', 'field_val' ) );
 		?>
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
 		$checked                  = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
-		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, trim( $checked ), $field );
+		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, trim( $checked ) !== '', $field );
 
 		if ( $include_label ) {
 			$label_attributes = array(
