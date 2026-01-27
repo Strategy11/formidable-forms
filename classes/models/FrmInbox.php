@@ -406,7 +406,7 @@ class FrmInbox extends FrmFormApi {
 	 * @return void
 	 */
 	private function update_list() {
-		update_option( $this->option, self::$messages, 'no' );
+		update_option( $this->option, self::$messages, false );
 	}
 
 	/**

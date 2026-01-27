@@ -422,7 +422,7 @@ class FrmStyle {
 		);
 		$create_file->create_file( $css );
 
-		update_option( 'frmpro_css', $css, 'no' );
+		update_option( 'frmpro_css', $css, false );
 		set_transient( 'frmpro_css', $css, MONTH_IN_SECONDS );
 	}
 

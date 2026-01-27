@@ -190,7 +190,7 @@ class FrmFormMigratorsHelper {
 		}
 
 		$dismissed[] = FrmAppHelper::get_param( 'plugin', '', 'post', 'sanitize_text_field' );
-		update_option( 'frm_dismissed', array_filter( $dismissed ), 'no' );
+		update_option( 'frm_dismissed', array_filter( $dismissed ), false );
 		wp_die();
 	}
 }

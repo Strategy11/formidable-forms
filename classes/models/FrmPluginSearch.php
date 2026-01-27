@@ -238,7 +238,7 @@ class FrmPluginSearch {
 	 */
 	protected function add_to_dismissed_hints( $hint ) {
 		$hints = array_merge( $this->get_dismissed_hints(), array( $hint ) );
-		return update_option( self::$dismissed_opt, $hints, 'no' );
+		return update_option( self::$dismissed_opt, $hints, false );
 	}
 
 	/**
