@@ -23,7 +23,10 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 				echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				do_action( 'frm_field_input_html', $field );
 				?>/>
-				<?php echo ' ' . FrmAppHelper::kses( $opt, 'all' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+				<?php
+				echo ' ';
+				FrmAppHelper::kses_echo( $opt, 'all' );
+ ?>
 			</label>
 			<?php
 			FrmFieldsHelper::include_other_input(
