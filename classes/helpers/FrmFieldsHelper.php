@@ -2865,7 +2865,7 @@ class FrmFieldsHelper {
 		 * @param bool   $is_selected_choice
 		 * @param array  $field
 		 */
-		return (bool) apply_filters( 'frm_echo_disabled_attribute', false, $choice_key, $is_selected_choice, $field );
+		return (bool) apply_filters( 'frm_disable_option', false, $choice_key, $is_selected_choice, $field );
 	}
 
 	/**
@@ -2878,7 +2878,7 @@ class FrmFieldsHelper {
 	 */
 	public static function after_choice_input( $field, $choice_key ) {
 		/**
-		 * Allows adding content after the checkbox input.
+		 * Allows adding content after checkbox, radio button, or dropdown fields.
 		 *
 		 * @since x.x
 		 *
