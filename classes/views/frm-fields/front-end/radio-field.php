@@ -77,7 +77,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 
 		if ( $include_label ) {
 			echo ' ';
-			FrmAppHelper::kses( $label, 'all' );
+			FrmAppHelper::kses_echo( $label, 'all' );
 			FrmFieldsHelper::after_choice_input( $field, $opt_key );
 			echo '</label>';
 		}
