@@ -84,8 +84,6 @@ class FrmPayPalLiteConnectHelper {
 		$status->primary_email = 'test@example.com';
 		*/
 
-		$status->primary_email_confirmed = false;
-
 		if ( ! is_object( $status ) ) {
 			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ) );
 			return;
@@ -107,6 +105,8 @@ class FrmPayPalLiteConnectHelper {
 			self::render_error( __( 'OAuth integrations are not enabled.',  'formidable' ), $email );
 			return;
 		}
+
+		update_option( self::get_paypal_seller_status_option_name( $mode ), $status, false );
 
 		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
 
@@ -445,6 +445,10 @@ class FrmPayPalLiteConnectHelper {
 		return self::get_paypal_connect_option_name( 'client_password', $mode );
 	}
 
+	private static function get_paypal_seller_status_option_name( $mode = 'auto' ) {
+		return self::get_paypal_connect_option_name( 'seller_status', $mode );
+	}
+
 	/**
 	 * @return string
 	 */
@@ -708,6 +712,7 @@ class FrmPayPalLiteConnectHelper {
 		delete_option( self::get_client_side_token_option_name( $mode ) );
 		delete_option( self::get_merchant_currency_option_name( $mode ) );
 		delete_option( self::get_location_id_option_name( $mode ) );
+		delete_option( self::get_paypal_seller_status_option_name( $mode ) );
 	}
 
 	/**
@@ -796,6 +801,11 @@ class FrmPayPalLiteConnectHelper {
 	}
 
 	public static function get_seller_status( $mode ) {
+		$status = get_option( self::get_paypal_seller_status_option_name( $mode ) );
+		if ( is_object( $status ) ) {
+			return $status;
+		}
+
 		$additional_body = array(
 			'frm_paypal_api_mode' => $mode,
 		);
