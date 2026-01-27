@@ -80,12 +80,12 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 			$option_params['class'] = 'frm_other_trigger';
 		}
 
-		if ( FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, ! empty( $checked ), $field ) ) {
+		if ( FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, $selected, $field ) ) {
 			$option_params['disabled'] = 'disabled';
 		}
 		$option_params['field']   = $field;
 		$option_params['opt_key'] = $opt_key;
-		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params );
+		FrmHtmlHelper::echo_dropdown_option( $opt, (bool) $selected, $option_params, true );
 
 		unset( $option_params );
 	}//end foreach

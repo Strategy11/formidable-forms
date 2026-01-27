@@ -46,7 +46,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<div class="<?php echo esc_attr( apply_filters( 'frm_radio_class', 'frm_radio', $field, $field_val ) ); ?>" id="<?php echo esc_attr( FrmFieldsHelper::get_checkbox_id( $field, $opt_key, 'radio' ) ); ?>"><?php
 
 		$checked                  = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
-		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, ! empty( $checked ), $field );
+		$should_echo_disabled_att = FrmFieldsHelper::should_echo_disabled_attribute( $opt_key, trim( $checked ), $field );
 
 		if ( $include_label ) {
 			$label_attributes = array(
