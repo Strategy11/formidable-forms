@@ -254,7 +254,7 @@ class InlineFrmSettingsReturnSniff implements Sniff {
 	 *
 	 * @param File    $phpcsFile File reference.
 	 * @param int     $stackPtr  Starting position.
-	 * @param integer $end       Optional end pointer.
+	 * @param int $end       Optional end pointer.
 	 *
 	 * @return false|int
 	 */
