@@ -541,7 +541,7 @@ class FrmDashboardController {
 	private static function update_dashboard_options( $data, $option_name ) {
 		$options                 = self::get_dashboard_options();
 		$options[ $option_name ] = $data;
-		update_option( self::OPTION_META_NAME, $options, 'no' );
+		update_option( self::OPTION_META_NAME, $options, false );
 	}
 
 	/**
