@@ -2860,10 +2860,10 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool  $echo_disabled_attribute
-		 * @param bool  $choice_key
-		 * @param bool  $is_selected_choice
-		 * @param array $field
+		 * @param bool   $echo_disabled_attribute
+		 * @param string $choice_key
+		 * @param bool   $is_selected_choice
+		 * @param array  $field
 		 */
 		return (bool) apply_filters( 'frm_echo_disabled_attribute', false, $choice_key, $is_selected_choice, $field );
 	}
