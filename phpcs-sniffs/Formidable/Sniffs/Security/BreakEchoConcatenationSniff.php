@@ -53,29 +53,34 @@ class BreakEchoConcatenationSniff implements Sniff {
 
 		// Check if this is FrmAppHelper::kses
 		$prev = $phpcsFile->findPrevious( T_WHITESPACE, $stackPtr - 1, null, true );
+
 		if ( false === $prev || $tokens[ $prev ]['content'] !== '::' ) {
 			return;
 		}
 
 		$prevPrev = $phpcsFile->findPrevious( T_WHITESPACE, $prev - 1, null, true );
+
 		if ( false === $prevPrev || $tokens[ $prevPrev ]['content'] !== 'FrmAppHelper' ) {
 			return;
 		}
 
 		// Check if this is inside an echo statement
 		$echoPtr = $this->findEnclosingEcho( $phpcsFile, $stackPtr );
+
 		if ( false === $echoPtr ) {
 			return;
 		}
 
 		// Determine the semicolon that ends this echo statement.
 		$semicolon = $phpcsFile->findNext( T_SEMICOLON, $stackPtr + 1 );
+
 		if ( false === $semicolon ) {
 			return;
 		}
 
 		// Determine the start of the echo expression.
 		$expressionStart = $phpcsFile->findNext( T_WHITESPACE, $echoPtr + 1, null, true );
+
 		if ( false === $expressionStart || $expressionStart >= $semicolon ) {
 			return;
 		}
@@ -87,6 +92,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 
 		// Only act when there's a phpcs ignore comment for the missing escaping warning.
 		$hasIgnoreComment = $this->hasSecurityIgnoreComment( $phpcsFile, $expressionStart, $semicolon );
+
 		if ( ! $hasIgnoreComment ) {
 			return;
 		}
@@ -119,6 +125,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 			if ( $tokens[ $i ]['code'] === T_ECHO ) {
 				return $i;
 			}
+
 			if ( $tokens[ $i ]['code'] === T_SEMICOLON || $tokens[ $i ]['code'] === T_OPEN_CURLY_BRACKET ) {
 				break;
 			}
@@ -141,12 +148,14 @@ class BreakEchoConcatenationSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		$openParen = $phpcsFile->findNext( T_OPEN_PARENTHESIS, $stackPtr + 1 );
+
 		if ( false === $openParen ) {
 			return false;
 		}
 		$closeParen = $tokens[ $openParen ]['parenthesis_closer'];
 
 		$beforeConcat = $phpcsFile->findPrevious( T_STRING_CONCAT, $stackPtr - 1, $expressionStart );
+
 		if ( false !== $beforeConcat ) {
 			return true;
 		}
@@ -210,11 +219,13 @@ class BreakEchoConcatenationSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		$segments = $this->splitEchoSegments( $phpcsFile, $expressionStart, $semicolon );
+
 		if ( count( $segments ) < 2 ) {
 			return;
 		}
 
 		$targetSegmentIndex = null;
+
 		foreach ( $segments as $index => $segment ) {
 			if ( $stackPtr >= $segment['start'] && $stackPtr <= $segment['end'] ) {
 				$targetSegmentIndex = $index;
@@ -228,17 +239,20 @@ class BreakEchoConcatenationSniff implements Sniff {
 
 		$indentation = $this->getIndentationForToken( $phpcsFile, $echoPtr );
 		$args        = $this->getKsesArguments( $phpcsFile, $stackPtr );
+
 		if ( null === $args ) {
 			return;
 		}
 
 		$leadingWhitespace = $this->getLeadingWhitespaceBeforeToken( $phpcsFile, $echoPtr );
+
 		if ( '' === $indentation && '' !== $leadingWhitespace ) {
 			$indentation = $leadingWhitespace;
 		}
 
 		$prevNonWhitespace = $phpcsFile->findPrevious( T_WHITESPACE, $echoPtr - 1, null, true );
 		$inlineWithPhpTag  = false;
+
 		if ( false !== $prevNonWhitespace && T_OPEN_TAG === $tokens[ $prevNonWhitespace ]['code'] && $tokens[ $prevNonWhitespace ]['line'] === $tokens[ $echoPtr ]['line'] ) {
 			$inlineWithPhpTag = true;
 			$indentation = $this->getIndentationForToken( $phpcsFile, $prevNonWhitespace );
@@ -283,6 +297,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 
 		foreach ( $newLines as $index => $line ) {
 			$needsIndent = $inlineWithPhpTag || $index > 0 || ! $hasLeadingWhitespace;
+
 			if ( $needsIndent ) {
 				$newContent .= $lineIndent;
 			}
@@ -293,6 +308,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 		$fixer = $phpcsFile->fixer;
 		$fixer->beginChangeset();
 		$fixer->replaceToken( $echoPtr, $newContent );
+
 		for ( $i = $echoPtr + 1; $i <= $semicolon; $i++ ) {
 			$fixer->replaceToken( $i, '' );
 		}
@@ -300,6 +316,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 
 		if ( $inlineWithPhpTag ) {
 			$nextNonWhitespace = $phpcsFile->findNext( T_WHITESPACE, $semicolon + 1, null, true );
+
 			if ( false !== $nextNonWhitespace && T_CLOSE_TAG === $tokens[ $nextNonWhitespace ]['code'] ) {
 				$prefix = $eol;
 				$prefix .= $lineIndent;
@@ -428,11 +445,13 @@ class BreakEchoConcatenationSniff implements Sniff {
 		}
 
 		$prefix = '';
+
 		for ( $i = $firstPtr; $i < $stackPtr; $i++ ) {
 			$prefix .= $tokens[ $i ]['content'];
 		}
 
 		$lastBreak = strrpos( $prefix, $eolChar );
+
 		if ( false !== $lastBreak ) {
 			return substr( $prefix, $lastBreak + strlen( $eolChar ) );
 		}
@@ -465,7 +484,7 @@ class BreakEchoConcatenationSniff implements Sniff {
 		$tokens = $phpcsFile->getTokens();
 
 		$currentLine = $tokens[ $semicolon ]['line'];
-		
+
 		for ( $i = $semicolon + 1; $i < count( $tokens ); $i++ ) {
 			if ( $tokens[ $i ]['line'] > $currentLine + 1 ) {
 				break;
@@ -491,9 +510,11 @@ class BreakEchoConcatenationSniff implements Sniff {
 		if ( defined( 'T_PHPCS_IGNORE' ) ) {
 			$matchCodes[] = T_PHPCS_IGNORE;
 		}
+
 		if ( defined( 'T_PHPCS_IGNORE_ON' ) ) {
 			$matchCodes[] = T_PHPCS_IGNORE_ON;
 		}
+
 		if ( defined( 'T_PHPCS_IGNORE_FILE' ) ) {
 			$matchCodes[] = T_PHPCS_IGNORE_FILE;
 		}
