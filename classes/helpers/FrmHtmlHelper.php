@@ -42,10 +42,10 @@ class FrmHtmlHelper {
 	 *
 	 * @since 6.3.1
 	 *
-	 * @param string     $option   The string used as the option label.
-	 * @param bool       $selected True if the option should be selected.
-	 * @param array      $params   Other HTML params for the option.
-	 * @param array|null $field    The field array.
+	 * @param string      $option   The string used as the option label.
+	 * @param bool        $selected True if the option should be selected.
+	 * @param array       $params   Other HTML params for the option.
+	 * @param array|null  $field    The field array.
 	 * @param string|null $opt_key  The option key.
 	 *
 	 * @return void
