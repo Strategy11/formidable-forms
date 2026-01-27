@@ -14,7 +14,6 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		<div class="frm_radio">
 			<label for="<?php echo esc_attr( $html_id . '-' . $opt_key ); ?>">
 				<?php
-
 				$checked    = FrmAppHelper::check_selected( $field['value'], $field_val ) ? 'checked="checked" ' : ' ';
 				$other_opt  = false;
 				$other_args = FrmFieldsHelper::prepare_other_input( compact( 'field_name', 'opt_key', 'field' ), $other_opt, $checked );
@@ -26,7 +25,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 				<?php
 				echo ' ';
 				FrmAppHelper::kses_echo( $opt, 'all' );
- ?>
+				?>
 			</label>
 			<?php
 			FrmFieldsHelper::include_other_input(
