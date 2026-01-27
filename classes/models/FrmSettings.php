@@ -280,7 +280,7 @@ class FrmSettings {
 		// If unserializing didn't work.
 		$settings = $this;
 
-		update_option( $this->option_name, $settings, 'yes' );
+		update_option( $this->option_name, $settings, true );
 
 		return $settings;
 	}

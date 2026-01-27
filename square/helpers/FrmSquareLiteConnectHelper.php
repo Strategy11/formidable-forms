@@ -158,7 +158,7 @@ class FrmSquareLiteConnectHelper {
 		}
 
 		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, 'no' );
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
 		}
 
 		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
@@ -355,7 +355,7 @@ class FrmSquareLiteConnectHelper {
 	 */
 	private static function generate_client_password( $mode ) {
 		$client_password = wp_generate_password();
-		update_option( self::get_client_side_token_option_name( $mode ), $client_password, 'no' );
+		update_option( self::get_client_side_token_option_name( $mode ), $client_password, false );
 		return $client_password;
 	}
 
@@ -484,17 +484,17 @@ class FrmSquareLiteConnectHelper {
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
-			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, false );
 
 			$currency    = self::get_merchant_currency( true, $mode );
 			$location_id = self::get_location_id( true, $mode );
 
 			if ( $currency ) {
-				update_option( self::get_merchant_currency_option_name( $mode ), $currency, 'no' );
+				update_option( self::get_merchant_currency_option_name( $mode ), $currency, false );
 			}
 
 			if ( $location_id ) {
-				update_option( self::get_location_id_option_name( $mode ), $location_id, 'no' );
+				update_option( self::get_location_id_option_name( $mode ), $location_id, false );
 			}
 
 			FrmTransLiteAppController::install();
@@ -634,7 +634,7 @@ class FrmSquareLiteConnectHelper {
 		$response = self::post_with_authenticated_body( 'get_location_id', $request_body );
 
 		if ( is_object( $response ) ) {
-			update_option( self::get_location_id_option_name( $mode ), $response->id, 'no' );
+			update_option( self::get_location_id_option_name( $mode ), $response->id, false );
 			return $response->id;
 		}
 
@@ -768,7 +768,7 @@ class FrmSquareLiteConnectHelper {
 		$response = self::post_with_authenticated_body( 'get_merchant_currency', $request_body );
 
 		if ( is_object( $response ) && ! empty( $response->currency ) ) {
-			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, 'no' );
+			update_option( self::get_merchant_currency_option_name( $mode ), $response->currency, false );
 			return $response->currency;
 		}
 

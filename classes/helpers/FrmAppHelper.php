@@ -4882,7 +4882,7 @@ class FrmAppHelper {
 		check_ajax_referer( 'frm_ajax', 'nonce' );
 
 		if ( $option ) {
-			update_option( $option, true, 'no' );
+			update_option( $option, true, false );
 		}
 
 		wp_send_json_success();

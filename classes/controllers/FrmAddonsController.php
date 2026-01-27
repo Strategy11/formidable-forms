@@ -1293,7 +1293,7 @@ class FrmAddonsController {
 
 		if ( ! $auth ) {
 			$auth = hash( 'sha512', wp_rand() );
-			update_option( 'frm_connect_token', $auth, 'no' );
+			update_option( 'frm_connect_token', $auth, false );
 		}
 
 		$page = FrmAppHelper::simple_get( 'page', 'sanitize_title', 'formidable-settings' );
