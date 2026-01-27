@@ -73,39 +73,38 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		// TODO: Only render when we visit the PayPal tab.
-		// TODO: If all 3 validate, we should be able to save this to an option and stop making 
+		// TODO: If all 3 validate, we should be able to save this to an option and stop making requests.
 		$status = self::get_seller_status( $mode );
 
-/*
+		/*
 		$status = new stdClass();
 		$status->payments_receivable = true;
 		$status->primary_email_confirmed = true;
 		$status->oauth_integrations = true;
-		$status->primary_email = 'test@example.com';*/
+		$status->primary_email = 'test@example.com';
+		*/
 
 		$status->primary_email_confirmed = false;
 
 		if ( ! is_object( $status ) ) {
-			self::render_error( __( 'Unable to retrieve seller status', 'formidable' ) );
+			self::render_error( __( 'Unable to retrieve seller status.', 'formidable' ) );
 			return;
 		}
 
 		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
 
 		if ( ! $status->primary_email_confirmed ) {
-		//	self::render_error( __( 'Primary email not confirmed', 'formidable' ) );
-		//	self::render_error( sprintf( __( 'Primary email (%s) not confirmed', 'formidable' ), $email ) );
-			self::render_error( __( 'Primary email not confirmed', 'formidable' ) . '<br><b>Connected account:</b><br>' . $email );
+			self::render_error( __( 'Primary email not confirmed.', 'formidable' ), $email );
 			return;
 		}
 
 		if ( ! $status->payments_receivable ) {
-			self::render_error( __( 'Payments are not receivable',  'formidable' ) );
+			self::render_error( __( 'Payments are not receivable.',  'formidable' ), $email );
 			return;
 		}
 
 		if ( ! $status->oauth_integrations ) {
-			self::render_error( __( 'OAuth integrations are not enabled',  'formidable' ) );
+			self::render_error( __( 'OAuth integrations are not enabled.',  'formidable' ), $email );
 			return;
 		}
 
@@ -113,15 +112,31 @@ class FrmPayPalLiteConnectHelper {
 
 		echo '<div class="frm_message">';
 		esc_html_e( 'Your seller status is valid', 'formidable' );
-		if ( $email ) {
-			echo '<br><b>Connected account:</b><br>' . $email;
-		}
+		self::echo_email( $email );
 		echo '</div>';
 	}
 
-	private static function render_error( $message ) {
+	private static function echo_email( $email ) {
+		if ( ! $email ) {
+			return;
+		}
+
+		echo '<br>';
+		echo '<b>' . esc_html__( 'Connected account:', 'formidable' ) . '</b>';
+		echo '<br>';
+		echo esc_html( $email );
+	}
+
+	/**
+	 * @param string $message
+	 * @param string $email
+	 *
+	 * @return void
+	 */
+	private static function render_error( $message, $email = '' ) {
 		echo '<div class="frm_error_style">';
 		echo wp_kses_post( $message );
+		self::echo_email( $email );
 		echo '</div>';
 	}
 
