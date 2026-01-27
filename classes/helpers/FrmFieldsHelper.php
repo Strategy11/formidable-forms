@@ -2817,7 +2817,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function should_disable_option( $choice_key, $field ) {
+	public static function should_hide_field_choice( $choice_key, $field ) {
 		/**
 		 * @since x.x
 		 *
@@ -2856,7 +2856,7 @@ class FrmFieldsHelper {
 	 *
 	 * @return bool
 	 */
-	public static function should_echo_disabled_attribute( $choice_key, $is_selected_choice, $field ) {
+	public static function should_disable_option( $choice_key, $is_selected_choice, $field ) {
 		/**
 		 * @since x.x
 		 *
