@@ -90,7 +90,7 @@ class FrmSolution {
 	 */
 	public function plugin_links( $links ) {
 		if ( ! $this->is_complete() ) {
-			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . __( 'Setup', 'formidable' ) . '</a>';
+			$settings = '<a href="' . esc_url( $this->settings_link() ) . '">' . esc_html__( 'Setup', 'formidable' ) . '</a>';
 			array_unshift( $links, $settings );
 		}
 

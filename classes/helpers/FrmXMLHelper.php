@@ -961,16 +961,18 @@ class FrmXMLHelper {
 	private static function update_custom_style_setting_after_import( $form_id ) {
 		$form = FrmForm::getOne( $form_id );
 
-		if ( $form && isset( $form->options['old_style'] ) ) {
-			$form                            = (array) $form;
-			$saved_style                     = $form['options']['custom_style'];
-			$form['options']['custom_style'] = $form['options']['old_style'];
-			self::update_custom_style_setting_on_import( $form );
-			$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+		if ( ! $form || ! isset( $form->options['old_style'] ) ) {
+			return;
+		}
 
-			if ( $has_changed ) {
-				FrmForm::update( $form['id'], $form );
-			}
+		$form                            = (array) $form;
+		$saved_style                     = $form['options']['custom_style'];
+		$form['options']['custom_style'] = $form['options']['old_style'];
+		self::update_custom_style_setting_on_import( $form );
+		$has_changed = $form['options']['custom_style'] != $saved_style && $form['options']['custom_style'] != $form['options']['old_style']; // phpcs:ignore Universal.Operators.StrictComparisons, SlevomatCodingStandard.Files.LineLength.LineTooLong
+
+		if ( $has_changed ) {
+			FrmForm::update( $form['id'], $form );
 		}
 	}
 

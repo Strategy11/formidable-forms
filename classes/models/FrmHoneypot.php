@@ -34,8 +34,7 @@ class FrmHoneypot extends FrmValidate {
 	 * @return bool
 	 */
 	private static function is_enabled() {
-		$frm_settings = FrmAppHelper::get_settings();
-		return $frm_settings->honeypot;
+		return (bool) FrmAppHelper::get_settings()->honeypot;
 	}
 
 	/**

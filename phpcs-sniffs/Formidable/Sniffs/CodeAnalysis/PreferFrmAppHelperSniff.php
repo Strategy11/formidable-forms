@@ -27,6 +27,7 @@ class PreferFrmAppHelperSniff implements Sniff {
 	private $methods = array(
 		'icon_by_class',
 		'unserialize_or_decode',
+		'tooltip_icon',
 	);
 
 	/**

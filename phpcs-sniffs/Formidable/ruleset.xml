@@ -47,6 +47,7 @@
 	<rule ref="Formidable.CodeAnalysis.PreferNotEmptyTernary" />
 	<rule ref="Formidable.CodeAnalysis.PreferKsesEcho" />
 	<rule ref="Formidable.CodeAnalysis.PreferFrmAppHelper" />
+	<rule ref="Formidable.CodeAnalysis.InlineFrmSettingsReturn" />
 	<rule ref="Formidable.CodeAnalysis.PreferPositiveTernaryCondition" />
 	<rule ref="Formidable.CodeAnalysis.StrictComparisonForIntFunctions" />
 	<rule ref="Formidable.CodeAnalysis.MoveSimpleCheckBeforeExpensiveCall" />
@@ -76,7 +77,10 @@
 	<rule ref="Formidable.Commenting.AddMissingParamType" />
 	<rule ref="Formidable.Commenting.AddMissingParamTypeFromDefault" />
 	<rule ref="Formidable.Commenting.AddMissingParamTypeFromCalls" />
+	<rule ref="Formidable.Commenting.AlignFilterParamTypesWithFunction" />
 
 	<!-- Security -->
 	<rule ref="Formidable.Security.AddDirectFileAccessCheck" />
+	<rule ref="Formidable.Security.EscapeInHtml" />
+	<rule ref="Formidable.Security.BreakEchoConcatenation" />
 </ruleset>
