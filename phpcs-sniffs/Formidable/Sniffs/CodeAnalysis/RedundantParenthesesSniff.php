@@ -34,6 +34,49 @@ class RedundantParenthesesSniff implements Sniff {
 	}
 
 	/**
+	 * Detect parentheses that only wrap a simple comparison within a logical expression.
+	 *
+	 * Example: ( $start_year <= $year ) where the surrounding tokens are ||/&& or parentheses.
+	 *
+	 * @param File $phpcsFile  The file being scanned.
+	 * @param int  $openParen  Opening parenthesis token.
+	 * @param int  $closeParen Closing parenthesis token.
+	 * @param int  $prevToken  Token before the opening parenthesis.
+	 * @param int  $afterClose Token after the closing parenthesis.
+	 *
+	 * @return bool
+	 */
+	private function isRedundantComparisonInLogicalExpression( File $phpcsFile, $openParen, $closeParen, $prevToken, $afterClose ) {
+		$tokens = $phpcsFile->getTokens();
+
+		$validPreceding = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_OPEN_PARENTHESIS,
+		);
+
+		if ( ! in_array( $tokens[ $prevToken ]['code'], $validPreceding, true ) ) {
+			return false;
+		}
+
+		$validFollowing = array(
+			T_BOOLEAN_AND,
+			T_BOOLEAN_OR,
+			T_LOGICAL_AND,
+			T_LOGICAL_OR,
+			T_CLOSE_PARENTHESIS,
+		);
+
+		if ( ! in_array( $tokens[ $afterClose ]['code'], $validFollowing, true ) ) {
+			return false;
+		}
+
+		return $this->isSimpleComparisonExpression( $phpcsFile, $openParen, $closeParen );
+	}
+
+	/**
 	 * Processes this test, when one of its tokens is encountered.
 	 *
 	 * @param File $phpcsFile The file being scanned.
@@ -68,6 +111,12 @@ class RedundantParenthesesSniff implements Sniff {
 		// Check for redundant parentheses around negated function calls in conditions.
 		// Pattern: ( ! empty( $x ) ) or ( ! isset( $x ) ) within a larger condition.
 		if ( $this->isRedundantNegatedFunctionCall( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
+			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
+			return;
+		}
+
+		// Check for redundant parentheses around a simple comparison inside a logical expression.
+		if ( $this->isRedundantComparisonInLogicalExpression( $phpcsFile, $stackPtr, $closeParen, $prevToken, $afterClose ) ) {
 			$this->reportAndFix( $phpcsFile, $stackPtr, $closeParen );
 			return;
 		}
@@ -213,6 +262,24 @@ class RedundantParenthesesSniff implements Sniff {
 		$comparisonCount  = 0;
 		$logicalCount     = 0;
 		$nestedParenDepth = 0;
+		$arithmeticCount  = 0;
+
+		$comparisonTokens = array(
+			T_IS_EQUAL,
+			T_IS_NOT_EQUAL,
+			T_IS_IDENTICAL,
+			T_IS_NOT_IDENTICAL,
+			T_IS_SMALLER_OR_EQUAL,
+			T_IS_GREATER_OR_EQUAL,
+		);
+
+		$arithmeticTokens = array(
+			T_PLUS,
+			T_MINUS,
+			T_MULTIPLY,
+			T_DIVIDE,
+			T_MODULUS,
+		);
 
 		for ( $i = $openParen + 1; $i < $closeParen; $i++ ) {
 			$code = $tokens[ $i ]['code'];
@@ -233,7 +300,7 @@ class RedundantParenthesesSniff implements Sniff {
 			}
 
 			// Count comparison operators.
-			if ( in_array( $code, array( T_IS_EQUAL, T_IS_NOT_EQUAL, T_IS_IDENTICAL, T_IS_NOT_IDENTICAL ), true ) ) {
+			if ( in_array( $code, $comparisonTokens, true ) ) {
 				++$comparisonCount;
 			}
 
@@ -241,10 +308,15 @@ class RedundantParenthesesSniff implements Sniff {
 			if ( in_array( $code, array( T_BOOLEAN_AND, T_BOOLEAN_OR, T_LOGICAL_AND, T_LOGICAL_OR ), true ) ) {
 				++$logicalCount;
 			}
+
+			// Arithmetic on either side means the grouping might be required.
+			if ( in_array( $code, $arithmeticTokens, true ) ) {
+				++$arithmeticCount;
+			}
 		}
 
 		// Simple comparison: exactly one comparison operator and no logical operators.
-		return 1 === $comparisonCount && 0 === $logicalCount;
+		return 1 === $comparisonCount && 0 === $logicalCount && 0 === $arithmeticCount;
 	}
 
 	/**
