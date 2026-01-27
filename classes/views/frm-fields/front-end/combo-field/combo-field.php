@@ -67,9 +67,7 @@ $inputs_attrs = $this->get_inputs_container_attrs();
 				}
 
 				if ( $sub_field['label'] && ( $sub_field_desc || $this->should_print_hidden_sub_fields() ) ) {
-					echo '<div class="frm_description" id="frm_field_';
-					echo esc_attr( $field_id . '_' . $sub_field['name'] );
-					echo '_desc">';
+					echo '<div class="frm_description" id="frm_field_' . esc_attr( $field_id . '_' . $sub_field['name'] ) . '_desc">';
 					FrmAppHelper::kses_echo( $sub_field_desc );
 					echo '</div>';
 				}
