@@ -50,7 +50,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' &
 	}
 
 	foreach ( $field['options'] as $opt_key => $opt ) {
-		if ( FrmFieldsHelper::should_hide_field_choice( $opt_key, $field ) ) {
+		if ( FrmFieldsHelper::should_disable_option( $opt_key, $field ) ) {
 			continue;
 		}
 

@@ -26,7 +26,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 			continue;
 		}
 
-		if ( FrmFieldsHelper::should_hide_field_choice( $opt_key, $field ) ) {
+		if ( FrmFieldsHelper::should_disable_option( $opt_key, $field ) ) {
 			continue;
 		}
 
