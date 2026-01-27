@@ -2838,7 +2838,7 @@ class FrmFieldsHelper {
 		/**
 		 * @since x.x
 		 *
-		 * @param bool   hide_field_choice
+		 * @param bool   $hide_field_choice
 		 * @param string $choice_key
 		 * @param array  $field
 		 */
