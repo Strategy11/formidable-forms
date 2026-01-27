@@ -28,12 +28,12 @@ class FrmPayPalLiteConnectHelper {
 		<table class="form-table" style="width: 400px;">
 			<tr class="form-field">
 				<td>
-					<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
+		<?php esc_html_e( 'Test Mode', 'formidable' ); ?>
 				</td>
 				<td>
 					<label>
 						<input type="checkbox" name="frm_paypal_test_mode" id="frm_paypal_test_mode" value="1" <?php checked( $settings->settings->test_mode, 1 ); ?> />
-						<?php esc_html_e( 'Use the PayPal test mode', 'formidable' ); ?>
+		<?php esc_html_e( 'Use the PayPal test mode', 'formidable' ); ?>
 					</label>
 				</td>
 			</tr>
@@ -41,20 +41,20 @@ class FrmPayPalLiteConnectHelper {
 
 		<div>
 			<div class="frm_grid_container">
-			<?php
+		<?php
 
-			$modes = array( 'live', 'test' );
+		$modes = array( 'live', 'test' );
 
-			foreach ( $modes as $mode ) {
-				self::render_settings_for_mode( $mode );
-			}
-			?>
+		foreach ( $modes as $mode ) {
+			self::render_settings_for_mode( $mode );
+		}
+		?>
 			</div>
 		</div>
 		<?php if ( ! is_ssl() ) { ?>
 			<div>
 				<em>
-					<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
+			<?php esc_html_e( 'Your site is not using SSL. Before using PayPal to collect payments, you will need to install an SSL certificate on your site.', 'formidable' ); // phpcs:ignore SlevomatCodingStandard.Files.LineLength.LineTooLong ?>
 				</em>
 			</div>
 		<?php } ?>
@@ -97,12 +97,12 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		if ( ! $status->payments_receivable ) {
-			self::render_error( __( 'Payments are not receivable.',  'formidable' ), $email );
+			self::render_error( __( 'Payments are not receivable.', 'formidable' ), $email );
 			return;
 		}
 
 		if ( ! $status->oauth_integrations ) {
-			self::render_error( __( 'OAuth integrations are not enabled.',  'formidable' ), $email );
+			self::render_error( __( 'OAuth integrations are not enabled.', 'formidable' ), $email );
 			return;
 		}
 
@@ -151,44 +151,44 @@ class FrmPayPalLiteConnectHelper {
 			<div class="frm-flex-col" style="width: 100%;">
 				<div>
 					<span style="font-size: var(--text-lg); font-weight: 500; margin-right: 5px;">
-						<?php
-						echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
-						?>
+		<?php
+		echo $mode === 'test' ? esc_html__( 'Test', 'formidable' ) : esc_html__( 'Live', 'formidable' );
+		?>
 					</span>
-					<?php
+		<?php
 
-					$connected   = (bool) self::get_merchant_id( $mode );
-					$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
-					?>
+		$connected   = (bool) self::get_merchant_id( $mode );
+		$tag_classes = $connected ? 'frm-lt-green-tag' : 'frm-grey-tag';
+		?>
 					<div class="frm-meta-tag <?php echo esc_attr( $tag_classes ); ?>" style="font-size: var(--text-sm); font-weight: 600;">
-						<?php
-						if ( $connected ) {
-							FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
-							echo 'Connected';
-						} else {
-							echo 'Not configured';
-						}
-						?>
+		<?php
+		if ( $connected ) {
+			FrmAppHelper::icon_by_class( 'frm_icon_font frm_checkmark_icon', array( 'style' => 'width: 10px; position: relative; top: 2px; margin-right: 5px;' ) );
+			echo 'Connected';
+		} else {
+			echo 'Not configured';
+		}
+		?>
 					</div>
 				</div>
 				<div style="margin-top: 5px; flex: 1;">
-					<?php
-					if ( 'live' === $mode ) {
-						esc_html_e( 'Live version to process real customer transactions', 'formidable' );
-					} else {
-						esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
-					}
-					?>
+		<?php
+		if ( 'live' === $mode ) {
+			esc_html_e( 'Live version to process real customer transactions', 'formidable' );
+		} else {
+			esc_html_e( 'Simulate payments and ensure everything works smoothly before going live.', 'formidable' );
+		}
+		?>
 				</div>
-				<?php self::render_seller_status( $mode ); ?>
+		<?php self::render_seller_status( $mode ); ?>
 				<div class="frm-card-bottom">
-					<?php if ( $connected ) { ?>
+		<?php if ( $connected ) { ?>
 						<a id="frm_disconnect_paypal_<?php echo esc_attr( $mode ); ?>" class="button-secondary frm-button-secondary" href="#">
-							<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
+			<?php esc_html_e( 'Disconnect', 'formidable' ); ?>
 						</a>
 					<?php } else { ?>
 						<a class="frm-connect-paypal-with-oauth button-secondary frm-button-secondary" data-mode="<?php echo esc_attr( $mode ); ?>" href="#">
-							<?php esc_html_e( 'Connect', 'formidable' ); ?>
+			<?php esc_html_e( 'Connect', 'formidable' ); ?>
 						</a>
 					<?php } ?>
 				</div>
@@ -234,7 +234,7 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		if ( ! empty( $data->password ) ) {
-			update_option( self::get_server_side_token_option_name( $mode ), $data->password, 'no' );
+			update_option( self::get_server_side_token_option_name( $mode ), $data->password, false );
 		}
 
 		if ( ! is_object( $data ) || empty( $data->redirect_url ) ) {
@@ -312,7 +312,7 @@ class FrmPayPalLiteConnectHelper {
 	 * @return string
 	 */
 	private static function get_url_to_connect_server() {
-		// return 'https://api.strategy11.com/';
+		// Return 'https://api.strategy11.com/';
 		return 'https://dev-site.local/';
 	}
 
@@ -432,7 +432,7 @@ class FrmPayPalLiteConnectHelper {
 	 */
 	private static function generate_client_password( $mode ) {
 		$client_password = wp_generate_password();
-		update_option( self::get_client_side_token_option_name( $mode ), $client_password, 'no' );
+		update_option( self::get_client_side_token_option_name( $mode ), $client_password, false );
 		return $client_password;
 	}
 
@@ -565,7 +565,7 @@ class FrmPayPalLiteConnectHelper {
 		$data = self::post_to_connect_server( 'oauth_merchant_status', $body );
 
 		if ( is_object( $data ) && ! empty( $data->merchant_id ) ) {
-			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, 'no' );
+			update_option( self::get_merchant_id_option_name( $mode ), $data->merchant_id, false );
 
 			FrmTransLiteAppController::install();
 
