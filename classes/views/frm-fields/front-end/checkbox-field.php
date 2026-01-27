@@ -39,7 +39,7 @@ if ( isset( $field['post_field'] ) && $field['post_field'] === 'post_category' )
 		 * @since 5.0.04
 		 *
 		 * @param string $label Label HTML.
-		 * @param array  $args  The arguments. Contains `field`.
+		 * @param array  $args  The arguments. Contains `field` and `field_val`.
 		 */
 		$label = apply_filters( 'frm_choice_field_option_label', $opt, compact( 'field', 'field_val' ) );
 
