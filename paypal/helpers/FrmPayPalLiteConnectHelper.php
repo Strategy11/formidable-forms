@@ -73,7 +73,6 @@ class FrmPayPalLiteConnectHelper {
 		}
 
 		// TODO: Only render when we visit the PayPal tab.
-		// TODO: If all 3 validate, we should be able to save this to an option and stop making requests.
 		$status = self::get_seller_status( $mode );
 
 		/*
@@ -106,9 +105,11 @@ class FrmPayPalLiteConnectHelper {
 			return;
 		}
 
-		update_option( self::get_paypal_seller_status_option_name( $mode ), $status, false );
+		$email = $status->primary_email ?? '';
 
-		$email = ! empty( $status->primary_email ) ? $status->primary_email : '';
+		if ( $email ) {
+			update_option( self::get_paypal_seller_status_option_name( $mode ), $status, false );
+		}
 
 		echo '<div class="frm_message">';
 		esc_html_e( 'Your seller status is valid', 'formidable' );
